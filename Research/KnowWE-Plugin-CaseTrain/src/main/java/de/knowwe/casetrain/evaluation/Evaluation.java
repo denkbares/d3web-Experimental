@@ -40,7 +40,7 @@ import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Link;
 import de.knowwe.casetrain.type.multimedia.Video;
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
@@ -80,7 +80,7 @@ public class Evaluation extends BlockMarkupType {
 						+ ((SubblockMarkup) sec.get()).getCSSClass()
 						+ "'>"));
 				string.append(KnowWEUtils.maskHTML("<div class='Evaluationstart'></div>"));
-				KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
+				Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 				Utils.renderKDOMReportMessageBlock(
 						Messages.getErrors(Messages.getMessagesFromSubtree(
 								article, sec)), string);
@@ -103,7 +103,7 @@ public class Evaluation extends BlockMarkupType {
 		this.addSubtreeHandler(new GeneralSubtreeHandler<Evaluation>() {
 
 			@Override
-			public Collection<Message> create(KnowWEArticle article, Section<Evaluation> s) {
+			public Collection<Message> create(Article article, Section<Evaluation> s) {
 
 				List<Message> messages = new ArrayList<Message>(0);
 

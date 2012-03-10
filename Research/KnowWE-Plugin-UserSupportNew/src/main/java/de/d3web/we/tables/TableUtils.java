@@ -27,7 +27,7 @@ import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.renderer.TableRenderer;
 import de.d3web.we.tables.action.TableExportAction;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 
@@ -142,9 +142,9 @@ public class TableUtils
 	 * @param id
 	 * @return
 	 */
-	public static Section<ITable> getTableWithId(KnowWEArticle article, String id)
+	public static Section<ITable> getTableWithId(Article article, String id)
 	{
-		Section<KnowWEArticle> articleSection = article.getSection();
+		Section<Article> articleSection = article.getSection();
 
 		List<Section<ITable>> tables = new ArrayList<Section<ITable>>();
 		Sections.findSuccessorsOfType(articleSection, ITable.class, tables);

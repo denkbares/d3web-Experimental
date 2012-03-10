@@ -21,9 +21,9 @@ package de.knowwe.defi.readbutton;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -119,7 +119,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				// pipeline
 				// => render here
 				link = link.substring(1, link.length() - 1).trim();
-				link = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
+				link = Environment.getInstance().getWikiConnector().getBaseUrl()
 						+ "Wiki.jsp?page=" + link;
 			}
 
@@ -133,7 +133,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			if (checkID(id, section.getArticle()) == 2) return KnowWEUtils.maskHTML("<p>Fehler: Das Attribut 'id' muss einmalig sein!");
 
 			// Get the readpages-annotation
-			KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(
+			ArticleManager mgr = Environment.getInstance().getArticleManager(
 					web);
 			Section<DataMarkup> child = null;
 			String readpages = "";
@@ -150,9 +150,9 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				String pagePermissions = "[{ALLOW view All}]\r\n[{ALLOW delete "
 						+ username + "}]\r\n\r\n";
 				String content = pagePermissions + "%%data\r\n%\r\n";
-				KnowWEEnvironment.getInstance().buildAndRegisterArticle(content,
-						title, KnowWEEnvironment.DEFAULT_WEB);
-				KnowWEEnvironment.getInstance().getWikiConnector()
+				Environment.getInstance().buildAndRegisterArticle(content,
+						title, Environment.DEFAULT_WEB);
+				Environment.getInstance().getWikiConnector()
 						.createWikiPage(title, content, username);
 
 				Section<?> sec = mgr.getArticle(title).getSection();
@@ -285,7 +285,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 	 * 
 	 * @return 0 = no error, 1 = illegal characters, 2 = double id
 	 */
-	private int checkID(String id, KnowWEArticle article) {
+	private int checkID(String id, Article article) {
 		List<Section<? extends Type>> allNodes = article.getAllNodesPreOrder();
 		Section<? extends Type> node;
 		int count = 0;

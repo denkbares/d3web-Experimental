@@ -32,7 +32,7 @@ import de.d3web.we.drools.kdom.rendering.DroolsRuleWarningRenderer;
 import de.d3web.we.drools.rules.Rule;
 import de.d3web.we.drools.terminology.DroolsKnowledgeHandler;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -74,7 +74,7 @@ public class DroolsRule extends AbstractType {
 	static class DroolsRuleSubtreeHandler extends SubtreeHandler<DroolsRule> {
 
 		@Override
-		public Collection<Message> create(KnowWEArticle article, Section<DroolsRule> s) {
+		public Collection<Message> create(Article article, Section<DroolsRule> s) {
 			Collection<Message> messages = new LinkedList<Message>();
 			Section<DroolsRule> section = s;
 
@@ -114,7 +114,7 @@ public class DroolsRule extends AbstractType {
 		}
 
 		@Override
-		public void destroy(KnowWEArticle article, Section<DroolsRule> s) {
+		public void destroy(Article article, Section<DroolsRule> s) {
 			Rule rule = (Rule) s.getSectionStore().getObject(article, rule_store_key);
 			if (rule != null) {
 				if (rule.getName() == null) {

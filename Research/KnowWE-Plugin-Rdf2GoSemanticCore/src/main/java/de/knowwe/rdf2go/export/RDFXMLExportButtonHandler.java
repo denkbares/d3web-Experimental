@@ -21,8 +21,8 @@ package de.knowwe.rdf2go.export;
 
 import java.util.Map;
 
-import de.knowwe.core.KnowWEAttributes;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Attributes;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -45,8 +45,8 @@ public class RDFXMLExportButtonHandler extends AbstractTagHandler {
 		String action = "KNOWWE.plugin.semantic.actions.downloadOntology()";
 
 		String jsAction = "window.location='action/RDFXMLExportAction" +
-				"?" + KnowWEAttributes.TOPIC + "=" + "RDF" +
-				"&" + KnowWEAttributes.WEB + "=" + KnowWEEnvironment.DEFAULT_WEB +
+				"?" + Attributes.TOPIC + "=" + "RDF" +
+				"&" + Attributes.WEB + "=" + Environment.DEFAULT_WEB +
 				"&" + "filename" + "=" + "ontology" + ".xml'";
 		StringBuilder html = new StringBuilder();
 

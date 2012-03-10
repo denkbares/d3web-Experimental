@@ -47,7 +47,7 @@ public class TimeTableMarkup extends DefaultMarkupType {
 	// public KnowWEDomRenderer getRenderer() {
 	// return new KnowWEDomRenderer() {
 	// @Override
-	// public void render(KnowWEArticle article, Section sec, UserContext user,
+	// public void render(Article article, Section sec, UserContext user,
 	// StringBuilder string) {
 	// user.getParameters().put(TableRenderer.QUICK_EDIT_FLAG, "false");
 	// DelegateRenderer.getInstance().render(article, sec, user, string);

@@ -23,8 +23,8 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
@@ -54,7 +54,7 @@ public class AboutMeSaveAction extends AbstractAction {
 		String username = context.getUserName();
 		String web = context.getWeb();
 
-		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
+		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
 		Section<?> section = mgr.getArticle(title).getSection();
 		Section<AboutMe> child = Sections.findSuccessor(section, AboutMe.class);
 

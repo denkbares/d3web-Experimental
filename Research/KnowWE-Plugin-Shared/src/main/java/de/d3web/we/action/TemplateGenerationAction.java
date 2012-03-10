@@ -28,8 +28,8 @@ import java.util.logging.Logger;
 
 import de.d3web.we.kdom.wikiTemplate.Template;
 import de.d3web.we.taghandler.TemplateTagHandler;
-import de.knowwe.core.KnowWEAttributes;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Attributes;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.basicType.PlainText;
@@ -53,17 +53,17 @@ public class TemplateGenerationAction extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 
 		Map<String, String> map = context.getParameters();
-		ResourceBundle rb = KnowWEEnvironment.getInstance().getKwikiBundle();
+		ResourceBundle rb = Environment.getInstance().getMessageBundle();
 		context.setContentType("text/html; charset=UTF-8");
 
 		try {
 
 			int templateNum = Integer.parseInt(map.get(
-					KnowWEAttributes.TEMPLATE_NAME).replace("Template", ""));
-			String pageName = map.get(KnowWEAttributes.NEW_PAGE_NAME);
+					Attributes.TEMPLATE_NAME).replace("Template", ""));
+			String pageName = map.get(Attributes.NEW_PAGE_NAME);
 
 			List<Section<Template>> temps = TemplateTagHandler
-					.getTemplateTypes(KnowWEEnvironment.getInstance()
+					.getTemplateTypes(Environment.getInstance()
 							.getArticle(context.getWeb(), context.getTopic()));
 
 			if (pageName == null || pageName == ""
@@ -79,7 +79,7 @@ public class TemplateGenerationAction extends AbstractAction {
 
 			Section<Template> renderMe = temps.get(templateNum);
 
-			if (KnowWEEnvironment.getInstance().getArticle(context.getWeb(),
+			if (Environment.getInstance().getArticle(context.getWeb(),
 					pageName) != null) {
 				context.getWriter()
 						.write(
@@ -92,10 +92,10 @@ public class TemplateGenerationAction extends AbstractAction {
 
 			Section<PlainText> text = Sections
 					.findChildOfType(renderMe, PlainText.class);
-			KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(
+			Environment.getInstance().getWikiConnector().createWikiPage(
 					pageName, text.getText(), context.getUserName());
 
-			String baseUrl = KnowWEEnvironment.getInstance().getWikiConnector()
+			String baseUrl = Environment.getInstance().getWikiConnector()
 					.getBaseUrl();
 
 			context.getWriter()

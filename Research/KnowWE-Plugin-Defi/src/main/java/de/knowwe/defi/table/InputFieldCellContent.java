@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
@@ -131,11 +131,11 @@ public class InputFieldCellContent extends AbstractType {
 
 		public static Section<TableEntryType> findTableToShow(String id, String username) {
 			String dataArticleNameForUser = SubmitTableContentAction.getDataArticleNameForUser(username);
-			KnowWEArticle knowWEArticle = KnowWEEnvironment.getInstance().getArticleManager(
-					KnowWEEnvironment.DEFAULT_WEB).getArticle(dataArticleNameForUser);
-			if (knowWEArticle == null) return null;
+			Article article = Environment.getInstance().getArticleManager(
+					Environment.DEFAULT_WEB).getArticle(dataArticleNameForUser);
+			if (article == null) return null;
 			List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
-			Sections.findSuccessorsOfType(knowWEArticle.getSection(),
+			Sections.findSuccessorsOfType(article.getSection(),
 						TableEntryType.class,
 						tables);
 			for (Section<TableEntryType> table : tables) {

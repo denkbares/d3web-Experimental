@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -132,7 +132,7 @@ public class MenuItemRenderer implements Renderer {
 		// Link nur wenn freigeschaltet
 		if (!className.equals(CSS_CLASS_MENULINKROOTCLOSED)) {
 			string.append("<a  href='"
-					+ KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
+					+ Environment.getInstance().getWikiConnector().getBaseUrl()
 					+ "Wiki.jsp?page=" + pagename + "'>");
 		}
 
@@ -177,8 +177,8 @@ public class MenuItemRenderer implements Renderer {
 			}
 		}
 
-		KnowWEArticle zeitplanArticle = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).getArticle(
+		Article zeitplanArticle = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB).getArticle(
 				"Zeitplan");
 		if (zeitplanArticle != null) {
 			Section<TimeTableMarkup> timetable = Sections.findSuccessor(

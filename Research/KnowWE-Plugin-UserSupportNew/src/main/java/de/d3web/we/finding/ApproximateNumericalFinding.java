@@ -34,7 +34,7 @@ import de.d3web.we.kdom.condition.D3webCondition;
 import de.d3web.we.kdom.condition.QuestionNumReference;
 import de.d3web.we.object.QuestionReference;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.basicType.Number;
 import de.knowwe.core.kdom.parsing.Section;
@@ -105,7 +105,7 @@ public class ApproximateNumericalFinding extends D3webCondition<ApproximateNumer
 	}
 
 	@Override
-	protected Condition createCondition(KnowWEArticle article, Section<ApproximateNumericalFinding> s) {
+	protected Condition createCondition(Article article, Section<ApproximateNumericalFinding> s) {
 		Section<QuestionReference> qRef = Sections.findSuccessor(s, QuestionReference.class);
 
 		Section<Number> numberSec = Sections.findSuccessor(s, Number.class);

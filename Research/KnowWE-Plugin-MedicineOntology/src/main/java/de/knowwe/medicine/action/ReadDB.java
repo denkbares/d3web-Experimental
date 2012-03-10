@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.medicine.DbConnection;
@@ -138,13 +138,13 @@ public class ReadDB extends AbstractAction {
 
 			String page = createPageString(x);
 
-			KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(title, page,
+			Environment.getInstance().getWikiConnector().createWikiPage(title, page,
 					context.getUserName());
-			KnowWEEnvironment.getInstance().buildAndRegisterArticle(page, title, context.getWeb());
+			Environment.getInstance().buildAndRegisterArticle(page, title, context.getWeb());
 		}
 
 		// Generate and write Main page
-		KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage("Main", generateMain(),
+		Environment.getInstance().getWikiConnector().createWikiPage("Main", generateMain(),
 				context.getUserName());
 
 	}

@@ -37,8 +37,8 @@ import de.d3web.owl.OWLOntologyUtil;
 import de.d3web.owl.OntologyProvider;
 import de.d3web.owl.Vocabulary;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
@@ -58,7 +58,7 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 	private final String STOREKEY = "Ontology-Provider-Store-Key";
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<OntologyProviderType> section) {
+	public Collection<Message> create(Article article, Section<OntologyProviderType> section) {
 		KnowledgeBase kb = getKB(article);
 		if (kb == null) {
 			return Messages.asList(Messages.error(
@@ -156,7 +156,7 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 	}
 
 	@Override
-	public void destroy(KnowWEArticle article, Section<OntologyProviderType> s) {
+	public void destroy(Article article, Section<OntologyProviderType> s) {
 		OntologyProvider provider =
 				(OntologyProvider) s.getSectionStore().getObject(article, STOREKEY);
 		if (provider != null) {
@@ -189,7 +189,7 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 		}
 		// do the search
 		Collection<ConnectorAttachment> attachments =
-				KnowWEEnvironment.getInstance().getWikiConnector().getAttachments();
+				Environment.getInstance().getWikiConnector().getAttachments();
 		for (ConnectorAttachment attachment : attachments) {
 			if (!attachment.getFileName().equalsIgnoreCase(sourceFile)) continue;
 			if (!attachment.getParentName().equalsIgnoreCase(sourceArticle)) continue;

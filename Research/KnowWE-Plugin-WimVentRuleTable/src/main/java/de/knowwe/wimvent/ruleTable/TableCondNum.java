@@ -32,7 +32,7 @@ import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.we.kdom.condition.D3webCondition;
 import de.d3web.we.object.QuestionReference;
 import de.knowwe.core.kdom.ExclusiveType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -54,7 +54,7 @@ public abstract class TableCondNum extends D3webCondition<TableCondNum> implemen
 	}
 
 	@Override
-	protected Condition createCondition(KnowWEArticle article, Section<TableCondNum> section) {
+	protected Condition createCondition(Article article, Section<TableCondNum> section) {
 		Section<de.knowwe.core.kdom.basicType.Number> numberSec = Sections.findChildOfType(
 				section, de.knowwe.core.kdom.basicType.Number.class);
 		if (numberSec != null) {

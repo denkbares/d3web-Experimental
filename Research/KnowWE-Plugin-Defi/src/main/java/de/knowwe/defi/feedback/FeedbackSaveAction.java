@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -41,7 +41,7 @@ public class FeedbackSaveAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
-		String path = KnowWEEnvironment.getInstance().getWikiConnector().getSavePath();
+		String path = Environment.getInstance().getWikiConnector().getSavePath();
 		String filename = context.getUserName().toLowerCase() + ".xml";
 
 		StringBuilder xml = new StringBuilder();

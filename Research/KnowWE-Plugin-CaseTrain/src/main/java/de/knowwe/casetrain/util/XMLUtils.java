@@ -93,8 +93,8 @@ import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Link;
 import de.knowwe.casetrain.type.multimedia.MultimediaItem;
 import de.knowwe.casetrain.type.multimedia.Video;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -109,15 +109,15 @@ import de.knowwe.kdom.AnonymousType;
  */
 public class XMLUtils {
 
-	public static void createXML(KnowWEArticle article, String user) {
-		Section<KnowWEArticle> articleSec = article.getSection();
+	public static void createXML(Article article, String user) {
+		Section<Article> articleSec = article.getSection();
 
 		ObjectFactory fac = new ObjectFactory();
 		Case c = fac.createCase();
 
 		// TODO how to get the webapp path?
 		try {
-			String path = KnowWEEnvironment.getInstance().
+			String path = Environment.getInstance().
 					getKnowWEExtensionPath().replaceAll("/KnowWEExtension", "");
 			LoadSave.initialise(path);
 		}
@@ -140,7 +140,7 @@ public class XMLUtils {
 		// TODO Evaluation
 		XMLUtils.addEvaluation(c, articleSec, fac);
 
-		String webapp = KnowWEEnvironment.getInstance().getKnowWEExtensionPath();
+		String webapp = Environment.getInstance().getKnowWEExtensionPath();
 		try {
 			File f = new File(webapp + "/tmp/case.xml");
 			f.createNewFile();
@@ -150,7 +150,7 @@ public class XMLUtils {
 			stream.close();
 
 			// Store File in Attachments
-			KnowWEEnvironment.getInstance().getWikiConnector().
+			Environment.getInstance().getWikiConnector().
 					storeAttachment(article.getTitle(), user, f);
 
 		}
@@ -169,7 +169,7 @@ public class XMLUtils {
 	 * @param articleSec
 	 * @param fac
 	 */
-	private static void addEvaluation(Case c, Section<KnowWEArticle> articleSec, ObjectFactory fac) {
+	private static void addEvaluation(Case c, Section<Article> articleSec, ObjectFactory fac) {
 		Evaluation evo = fac.createCaseEvaluation();
 		EvaluationSections evoSecs = fac.createCaseEvaluationEvaluationSections();
 
@@ -271,7 +271,7 @@ public class XMLUtils {
 		c.setEvaluation(evo);
 	}
 
-	private static void addTitledMM(Case c, Section<KnowWEArticle> sec,
+	private static void addTitledMM(Case c, Section<Article> sec,
 			ObjectFactory fac, String elementName) {
 
 		Section<?> introSec = null;
@@ -363,7 +363,7 @@ public class XMLUtils {
 	 * @param articleSec
 	 */
 	private static void addMetaData(
-			Case c, Section<KnowWEArticle> articleSec, ObjectFactory fac) {
+			Case c, Section<Article> articleSec, ObjectFactory fac) {
 		Metadata metaObj = fac.createCaseMetadata();
 
 		Section<MetaData> meta = Sections.findSuccessor(articleSec, MetaData.class);
@@ -483,7 +483,7 @@ public class XMLUtils {
 	 * @param articleSec
 	 * @param fac
 	 */
-	private static void addSections(Case c, Section<KnowWEArticle> articleSec,
+	private static void addSections(Case c, Section<Article> articleSec,
 			ObjectFactory fac) {
 
 		List<Section<Info>> infoSecs = new ArrayList<Section<Info>>();

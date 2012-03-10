@@ -35,13 +35,13 @@ import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysis;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysisReport;
 import de.d3web.we.testcase.action.TestCaseRunAction;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.wikiConnector.ConnectorAttachment;
-import de.knowwe.core.wikiConnector.KnowWEWikiConnector;
+import de.knowwe.core.wikiConnector.WikiConnector;
 
 /**
  * 
@@ -71,7 +71,7 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 		String topic = context.getTitle();
 		String[] cases = testCases.split(TESTCASEEXECUTOR_SEPARATOR);
 
-		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
+		WikiConnector connector = Environment.getInstance().getWikiConnector();
 		Collection<String> attachments = connector.getAttachmentFilenamesForPage(topic);
 		ConnectorAttachment selectedAttachment = null;
 

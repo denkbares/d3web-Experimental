@@ -41,7 +41,7 @@ import de.d3web.we.kdom.condition.KDOMConditionFactory;
 import de.d3web.we.kdom.rules.action.SetQuestionValue;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.compile.Priority;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
@@ -79,14 +79,14 @@ public class DecisionTable extends ITable
 	public class DecisionTableSubtreeHandlerNew extends GeneralSubtreeHandler<DecisionTable>
 	{
 		@Override
-		public Collection<Message> create(KnowWEArticle article, Section<DecisionTable> decisionSec)
+		public Collection<Message> create(Article article, Section<DecisionTable> decisionSec)
 		{
 			Section<InnerTable> innerTable =
 					Sections.findChildOfType(decisionSec, InnerTable.class);
 			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty())
 				return null;
 
-			KnowWEArticle compilingArticle = KnowWEUtils.getCompilingArticles(decisionSec).iterator().next();
+			Article compilingArticle = KnowWEUtils.getCompilingArticles(decisionSec).iterator().next();
 			KnowledgeBase kb = D3webUtils.getKnowledgeBase(decisionSec.getWeb(), article.getTitle());
 
 			// Get all conditions and SetQuestionValues from firstColumn

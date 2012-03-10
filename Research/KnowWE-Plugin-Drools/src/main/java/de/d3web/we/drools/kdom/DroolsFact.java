@@ -33,7 +33,7 @@ import de.d3web.we.drools.terminology.SolutionInput;
 import de.d3web.we.drools.terminology.TextValue;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -58,7 +58,7 @@ public class DroolsFact extends AbstractType {
 	static class DroolsFactSubtreeHandler extends SubtreeHandler<DroolsFact> {
 
 		@Override
-		public Collection<Message> create(KnowWEArticle article, Section<DroolsFact> s) {
+		public Collection<Message> create(Article article, Section<DroolsFact> s) {
 
 			Collection<Message> messages = new LinkedList<Message>();
 
@@ -175,7 +175,7 @@ public class DroolsFact extends AbstractType {
 		}
 
 		@Override
-		public void destroy(KnowWEArticle article, Section<DroolsFact> s) {
+		public void destroy(Article article, Section<DroolsFact> s) {
 			article.setFullParse(getClass());
 		}
 

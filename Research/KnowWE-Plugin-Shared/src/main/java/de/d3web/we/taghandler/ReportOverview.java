@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
@@ -90,11 +90,11 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 		StringBuilder errorHTML = new StringBuilder();
 		StringBuilder warningHTML = new StringBuilder();
 
-		KnowWEArticleManager manager = KnowWEEnvironment.getInstance().getArticleManager(web);
-		Collection<KnowWEArticle> articles = manager.getArticles();
+		ArticleManager manager = Environment.getInstance().getArticleManager(web);
+		Collection<Article> articles = manager.getArticles();
 
-		for (KnowWEArticle article : articles) {
-			Section<KnowWEArticle> root = article.getSection();
+		for (Article article : articles) {
+			Section<Article> root = article.getSection();
 
 			Map<Section<?>, Collection<Message>> errors = new HashMap<Section<?>, Collection<Message>>();
 			Map<Section<?>, Collection<Message>> warnings = new HashMap<Section<?>, Collection<Message>>();
@@ -130,12 +130,12 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 	 * @created 12.10.2010
 	 * @param messages A {@link HashMap} containing the {@link Message} and the
 	 *        section the message occurred in.
-	 * @param article The {@link KnowWEArticle} containing the erroneous
+	 * @param article The {@link Article} containing the erroneous
 	 *        {@link Section}
 	 * @param result The StringBuilder the verbalized {@link Message} should
 	 *        stored in.
 	 */
-	private void renderMessages(Map<Section<?>, Collection<Message>> messages, StringBuilder result, KnowWEArticle article) {
+	private void renderMessages(Map<Section<?>, Collection<Message>> messages, StringBuilder result, Article article) {
 		if (messages.size() > 0) {
 
 			result.append("<dt><a href=\"Wiki.jsp?page=");
@@ -165,13 +165,13 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 	 * according StringBuilder.
 	 * 
 	 * @created 12.10.2010
-	 * @param section The root section of an {@link KnowWEArticle}.
-	 * @param article The {@link KnowWEArticle} containing erroneous
+	 * @param section The root section of an {@link Article}.
+	 * @param article The {@link Article} containing erroneous
 	 *        {@link Section}'s
 	 * @param errors {@link StringBuilder} containing all error messages
 	 * @param warnings {@link StringBuilder} containing all warning messages
 	 */
-	private void findMessages(Section<?> section, KnowWEArticle article,
+	private void findMessages(Section<?> section, Article article,
 			Map<Section<?>, Collection<Message>> errors, Map<Section<?>, Collection<Message>> warnings) {
 
 		List<Section<? extends Type>> children = section.getChildren();

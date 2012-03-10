@@ -20,17 +20,17 @@
 
 package de.d3web.we.kdom.renderer;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.rendering.Renderer;
 
 public abstract class ColorRenderer implements Renderer {
 
 	public String spanColorTitle(String text, String color, String title) {
-		return KnowWEEnvironment.HTML_ST + "span title='" + title
+		return Environment.HTML_ST + "span title='" + title
 					+ "' style='background-color:" + color
-					+ ";'" + KnowWEEnvironment.HTML_GT + text
-					+ KnowWEEnvironment.HTML_ST + "/span"
-					+ KnowWEEnvironment.HTML_GT;
+					+ ";'" + Environment.HTML_GT + text
+					+ Environment.HTML_ST + "/span"
+					+ Environment.HTML_GT;
 	}
 
 }

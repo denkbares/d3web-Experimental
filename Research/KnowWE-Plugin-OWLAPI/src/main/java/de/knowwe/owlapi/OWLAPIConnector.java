@@ -37,7 +37,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 
 /**
  * This class enables KnowWE to connect to the OWLAPI. In general everything can
@@ -64,7 +64,7 @@ public class OWLAPIConnector {
 	private static final IRI globalBaseIRI;
 
 	static {
-		globalBaseIRI = IRI.create(KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl());
+		globalBaseIRI = IRI.create(Environment.getInstance().getWikiConnector().getBaseUrl());
 		connectors = new HashMap<IRI, OWLAPIConnector>();
 	}
 

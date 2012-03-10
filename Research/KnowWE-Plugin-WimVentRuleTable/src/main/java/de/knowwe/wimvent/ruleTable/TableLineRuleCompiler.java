@@ -39,7 +39,7 @@ import de.d3web.we.object.AnswerReference;
 import de.d3web.we.object.QuestionReference;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.basicType.Number;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -55,7 +55,7 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 	public static final String ruleStoreKey = "RULE_STORE_KEY";
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<WimVentRuleTableRuleLine> s) {
+	public Collection<Message> create(Article article, Section<WimVentRuleTableRuleLine> s) {
 
 		if (s.hasErrorInSubtree(article)) {
 			return Messages.asList(Messages.creationFailedWarning("Rule"));

@@ -12,11 +12,11 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.lod.HermesData;
@@ -85,7 +85,7 @@ public class ParseDataAction extends AbstractAction {
 			String lightParse = "[" + hermes.get(i) + ":: " + value.get(i) + "]";
 
 			// ################## Only for logging purposes
-			String path = KnowWEEnvironment.getInstance().getWikiConnector().getSavePath();
+			String path = Environment.getInstance().getWikiConnector().getSavePath();
 			File log = new File(path + "/temp");
 			log.mkdir();
 			try {
@@ -113,34 +113,34 @@ public class ParseDataAction extends AbstractAction {
 
 				lightParse = lightParse + System.getProperty("line.separator");
 
-				if (!KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+				if (!Environment.getInstance().getWikiConnector().doesPageExist(
 						conceptTopic)
-						&& !KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+						&& !Environment.getInstance().getWikiConnector().doesPageExist(
 								concept)) {
 
-					KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(
+					Environment.getInstance().getWikiConnector().createWikiPage(
 							concept, lightParse, user);
 
-					KnowWEArticle article = KnowWEArticle.createArticle(lightParse,
-							concept, KnowWEEnvironment.getInstance().getRootType(),
+					Article article = Article.createArticle(lightParse,
+							concept, Environment.getInstance().getRootType(),
 							web, true);
 
-					KnowWEEnvironment.getInstance().getArticleManager(web)
+					Environment.getInstance().getArticleManager(web)
 							.registerArticle(article);
 
 					conceptTopic = concept;
 
 				}
 				else {
-					if (KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+					if (Environment.getInstance().getWikiConnector().doesPageExist(
 								concept)) {
 						conceptTopic = concept;
 					}
-					KnowWEEnvironment.getInstance().getWikiConnector().appendContentToPage(
+					Environment.getInstance().getWikiConnector().appendContentToPage(
 							conceptTopic,
 							lightParse);
 
-					KnowWEEnvironment.getInstance().getArticleManager(web).addArticleToUpdate(
+					Environment.getInstance().getArticleManager(web).addArticleToUpdate(
 							conceptTopic);
 				}
 
@@ -154,28 +154,28 @@ public class ParseDataAction extends AbstractAction {
 
 				parse = "~" + parse;
 
-				if (!KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+				if (!Environment.getInstance().getWikiConnector().doesPageExist(
 						noParseTopic)) {
 
 					String temp = "%%Mapping " + System.getProperty("line.separator")
 							+ parse
 							+ System.getProperty("line.separator") + "%";
 
-					KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(
+					Environment.getInstance().getWikiConnector().createWikiPage(
 							noParseTopic, temp, user);
 
-					KnowWEArticle article = KnowWEArticle.createArticle(temp,
-							noParseTopic, KnowWEEnvironment.getInstance().getRootType(),
+					Article article = Article.createArticle(temp,
+							noParseTopic, Environment.getInstance().getRootType(),
 							web, true);
 
-					KnowWEEnvironment.getInstance().getArticleManager(web)
+					Environment.getInstance().getArticleManager(web)
 							.registerArticle(article);
 
 				}
 				else {
 
 					// append triple to noParseTopic.
-					KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
+					Article article = Environment.getInstance().getArticle(
 							web, noParseTopic);
 
 					List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
@@ -203,7 +203,7 @@ public class ParseDataAction extends AbstractAction {
 
 				String ignoredTopic = HermesData.getIgnoredTopic();
 
-				if (!KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+				if (!Environment.getInstance().getWikiConnector().doesPageExist(
 						ignoredTopic)) {
 
 					// #concept
@@ -214,21 +214,21 @@ public class ParseDataAction extends AbstractAction {
 							+ " == " + value.get(i)
 							+ System.getProperty("line.separator") + "%";
 
-					KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(
+					Environment.getInstance().getWikiConnector().createWikiPage(
 							ignoredTopic, temp, user);
 
-					KnowWEArticle article = KnowWEArticle.createArticle(temp,
-							ignoredTopic, KnowWEEnvironment.getInstance().getRootType(),
+					Article article = Article.createArticle(temp,
+							ignoredTopic, Environment.getInstance().getRootType(),
 							web, true);
 
-					KnowWEEnvironment.getInstance().getArticleManager(web)
+					Environment.getInstance().getArticleManager(web)
 							.registerArticle(article);
 
 				}
 				// hasChild concept : add ? else new rootNode.
 				else {
 
-					KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(
+					ArticleManager mgr = Environment.getInstance().getArticleManager(
 							web);
 
 					List<Section<IgnoreContentType>> found = new Vector<Section<IgnoreContentType>>();
@@ -291,7 +291,7 @@ public class ParseDataAction extends AbstractAction {
 			}
 			i++;
 			// Refresh
-			KnowWEEnvironment.getInstance().getArticleManager(web).updateQueuedArticles();
+			Environment.getInstance().getArticleManager(web).updateQueuedArticles();
 		}
 
 		if (countData != 0) {
@@ -300,7 +300,7 @@ public class ParseDataAction extends AbstractAction {
 				// Add node for created Article.
 				String mappingTopic = HermesData.getMappingTopic();
 
-				KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
+				Article article = Environment.getInstance().getArticle(
 						web, mappingTopic);
 
 				List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();

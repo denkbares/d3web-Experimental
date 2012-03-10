@@ -22,7 +22,7 @@ package de.d3web.we.taghandler;
 
 import java.util.Map;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -42,7 +42,7 @@ public class ParseFullLocalPageButton extends AbstractHTMLTagHandler {
 		// might be placed in 'secondary' pages (i.e., leftmenu, moremenu...)
 		String theMainTopic = user.getTopic();
 
-		String baseURL = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+		String baseURL = Environment.getInstance().getWikiConnector().getBaseUrl();
 
 		String link = KnowWEUtils.maskHTML("<a href=\"" + baseURL + "Wiki.jsp?page="
 				+ theMainTopic

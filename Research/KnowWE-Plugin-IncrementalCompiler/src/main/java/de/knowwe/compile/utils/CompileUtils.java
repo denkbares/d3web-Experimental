@@ -32,7 +32,7 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
@@ -57,7 +57,7 @@ public class CompileUtils {
 	 * @param parsedArticle
 	 * @return
 	 */
-	public static Collection<Section<? extends Type>> findSectionsNotReused(KnowWEArticle parsedArticle) {
+	public static Collection<Section<? extends Type>> findSectionsNotReused(Article parsedArticle) {
 		Collection<Section<? extends Type>> result = new HashSet<Section<? extends Type>>();
 		addNonReusedSection(parsedArticle.getSection(), result);
 
@@ -91,7 +91,7 @@ public class CompileUtils {
 	 * @param lastVersionOfArticle
 	 * @return
 	 */
-	public static Collection<Section<? extends Type>> findOldNonReusedSections(KnowWEArticle lastVersionOfArticle) {
+	public static Collection<Section<? extends Type>> findOldNonReusedSections(Article lastVersionOfArticle) {
 		Collection<Section<? extends Type>> result = new HashSet<Section<? extends Type>>();
 		if (lastVersionOfArticle == null) return result;
 		addOldNonReusedSection(lastVersionOfArticle.getSection(), result,
@@ -105,7 +105,7 @@ public class CompileUtils {
 		return result;
 	}
 
-	private static void addOldNonReusedSection(Section<? extends Type> section, Collection<Section<? extends Type>> result, KnowWEArticle lastVersionOfArticle) {
+	private static void addOldNonReusedSection(Section<? extends Type> section, Collection<Section<? extends Type>> result, Article lastVersionOfArticle) {
 		List<Section<? extends Type>> children = section.getChildren();
 		for (Section<? extends Type> child : children) {
 			if (child.getArticle() == lastVersionOfArticle) {
@@ -203,7 +203,7 @@ public class CompileUtils {
 	}
 
 	protected static String createLinkToDef(Section<?> definition, String linktext) {
-		KnowWEArticle defArticle = definition.getArticle();
+		Article defArticle = definition.getArticle();
 
 		if (defArticle == null) {
 			return linktext; // predefined/imported/undefined Term !?

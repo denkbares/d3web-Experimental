@@ -39,7 +39,7 @@ import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.Attributes;
 import de.knowwe.core.utils.KnowWEUtils;
 
 
@@ -65,8 +65,8 @@ public class FindingHTMLWriter {
 
 		String rel = "url : '" + targetUrlPrefix + "',"
 		+ "namespace : '" + java.net.URLEncoder.encode(namespace) + "',"
-		+ KnowWEAttributes.WEB + ": '" + webname + "',"
-		+ KnowWEAttributes.TOPIC + ": '" + topic + "',";
+		+ Attributes.WEB + ": '" + webname + "',"
+		+ Attributes.TOPIC + ": '" + topic + "',";
 
 		if (theQC.getAllAlternatives() != null) {
 			buffy.append("<form action='#' name='semano_oc'>");
@@ -133,8 +133,8 @@ public class FindingHTMLWriter {
 
 		String rel = "url : '" + targetUrlPrefix + "',"
 		+ "namespace : '" + java.net.URLEncoder.encode(namespace) + "',"
-		+ KnowWEAttributes.WEB + ": '" + webname + "',"
-		+ KnowWEAttributes.TOPIC + ": '" + topic + "',";
+		+ Attributes.WEB + ": '" + webname + "',"
+		+ Attributes.TOPIC + ": '" + topic + "',";
 
 		Value sessionValue = session.getBlackboard().getValue(theQuestion);
 
@@ -189,8 +189,8 @@ public class FindingHTMLWriter {
 
 		String rel = "url : '" + targetUrlPrefix + "',"
 		+ "namespace : '" + java.net.URLEncoder.encode(namespace) + "',"
-		+ KnowWEAttributes.WEB + ": '" + webname + "',"
-		+ KnowWEAttributes.TOPIC + ": '" + topic + "',";
+		+ Attributes.WEB + ": '" + webname + "',"
+		+ Attributes.TOPIC + ": '" + topic + "',";
 
 		if (theMC.getAllAlternatives() != null) {
 

@@ -31,7 +31,7 @@ import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
 import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 
 /**
  * Anomaly detection: test for inconsistent indications
@@ -52,7 +52,7 @@ public class AnomalyInconsistentInd extends AbstractCITest {
 		// get the KB of this article
 		KnowledgeBase kb =
 				D3webUtils.getKnowledgeBase(
-						KnowWEEnvironment.DEFAULT_WEB, articleName);
+						Environment.DEFAULT_WEB, articleName);
 
 		CITestResult res = new CITestResult(Type.SUCCESSFUL, null, config);
 		StringBuffer buf = new StringBuffer();

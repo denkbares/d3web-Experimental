@@ -26,8 +26,8 @@ import de.d3web.diaflux.coverage.DefaultCoverageResult;
 import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
 import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.KnowWERessourceLoader;
-import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.core.RessourceLoader;
+import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.diaflux.type.FlowchartType;
@@ -51,8 +51,8 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 
 		MARKUP = new DefaultMarkup("DiaFluxCoverage");
 		MARKUP.addContentType(new FlowchartType());
-		MARKUP.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
-		MARKUP.addAnnotationRenderer(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME,
+		MARKUP.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotationRenderer(PackageManager.PACKAGE_ATTRIBUTE_NAME,
 				StyleRenderer.ANNOTATION);
 		MARKUP.addAnnotation(ANNOTATION_MASTER, false);
 		MARKUP.addAnnotation(ANNOTATION_TEST, false);
@@ -61,8 +61,8 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 
 	public DiaFluxCoverageType() {
 		super(MARKUP);
-		KnowWERessourceLoader.getInstance().add("diafluxcoverage.js",
-				KnowWERessourceLoader.RESOURCE_SCRIPT);
+		RessourceLoader.getInstance().add("diafluxcoverage.js",
+				RessourceLoader.RESOURCE_SCRIPT);
 
 		setRenderer(new DiaFluxCoverageRenderer());
 	}

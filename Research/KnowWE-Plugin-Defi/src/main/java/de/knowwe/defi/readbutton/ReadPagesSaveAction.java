@@ -21,8 +21,8 @@ package de.knowwe.defi.readbutton;
 import java.io.IOException;
 import java.util.HashMap;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
@@ -49,7 +49,7 @@ public class ReadPagesSaveAction extends AbstractAction {
 		String id = context.getParameter("id");
 
 		// Get the readpages-annotation
-		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
+		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
 		Section<?> section = mgr.getArticle(title).getSection();
 		Section<DataMarkup> child = Sections.findSuccessor(section, DataMarkup.class);
 

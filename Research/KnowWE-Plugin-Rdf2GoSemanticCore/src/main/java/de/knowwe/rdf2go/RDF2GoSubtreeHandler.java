@@ -25,7 +25,7 @@ package de.knowwe.rdf2go;
 
 import de.knowwe.core.compile.ConstraintModule;
 import de.knowwe.core.compile.SuccessorNotReusedConstraint;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
@@ -48,7 +48,7 @@ public abstract class RDF2GoSubtreeHandler<T extends Type> extends
 	}
 
 	@Override
-	public void destroy(KnowWEArticle article, Section<T> section) {
+	public void destroy(Article article, Section<T> section) {
 		try {
 			Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
 		}
@@ -64,7 +64,7 @@ public abstract class RDF2GoSubtreeHandler<T extends Type> extends
 		}
 
 		@Override
-		public boolean violatedConstraints(KnowWEArticle article, Section<T2> section) {
+		public boolean violatedConstraints(Article article, Section<T2> section) {
 			return !section.getTitle().equals(article.getTitle());
 		}
 

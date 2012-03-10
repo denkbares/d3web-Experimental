@@ -27,14 +27,14 @@ import java.io.OutputStreamWriter;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
 import de.knowwe.core.user.UserContext;
 
 public class PageLoggerHandler implements PageAppendHandler {
 
 	public boolean log = true;
-	private final static String path = KnowWEEnvironment.getInstance().getWikiConnector().getSavePath()
+	private final static String path = Environment.getInstance().getWikiConnector().getSavePath()
 			+ "/Pagelogger.log";
 
 	@Override

@@ -21,7 +21,7 @@ package de.knowwe.defi.mailform;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
@@ -83,7 +83,7 @@ public class MailFormTagHandler extends AbstractTagHandler {
 	 * 
 	 * @return true = double id
 	 */
-	boolean checkID(String id, KnowWEArticle article) {
+	boolean checkID(String id, Article article) {
 		List<Section<? extends Type>> allNodes = article.getAllNodesPreOrder();
 		Section<? extends Type> node;
 		int count = 0;

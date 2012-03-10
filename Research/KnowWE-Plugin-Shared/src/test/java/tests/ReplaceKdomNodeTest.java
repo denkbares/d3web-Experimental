@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -28,19 +28,19 @@ import junit.framework.TestCase;
 import objectTypes.SplitObjectType;
 import objectTypes.WordObjectType;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.KnowWEAttributes;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Attributes;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.ActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
-import dummies.KnowWETestWikiConnector;
+import dummies.TestWikiConnector;
 
 /**
  * Name speaks for functionality.
- *
+ * 
  * @author Johannes Dienst
- *
+ * 
  */
 public class ReplaceKdomNodeTest extends TestCase {
 
@@ -52,11 +52,11 @@ public class ReplaceKdomNodeTest extends TestCase {
 	public void testReplaceKdomNode() throws IOException {
 
 		/**
-		 * Initialise KnowWEEnvironment
+		 * Initialise Environment
 		 */
-		KnowWEEnvironment _env;
-		KnowWEEnvironment.initKnowWE(new KnowWETestWikiConnector());
-		_env = KnowWEEnvironment.getInstance();
+		Environment _env;
+		Environment.initKnowWE(new TestWikiConnector());
+		_env = Environment.getInstance();
 		_env.getArticle("default_web", "Test_Article");
 
 		/**
@@ -73,16 +73,16 @@ public class ReplaceKdomNodeTest extends TestCase {
 		/**
 		 * Replace KdomNode.
 		 */
-		KnowWEArticle article = _env.getArticle("default_web", "Test_Article");
+		Article article = _env.getArticle("default_web", "Test_Article");
 		Section<?> artSec = article.getSection();
 		String toReplace = ((Section) artSec.getChildren().get(0)).getID();
 		Map<String, String> map = new HashMap<String, String>();
-		map.put(KnowWEAttributes.WEB, "default_web");
-		map.put(KnowWEAttributes.TARGET, toReplace);
-		map.put(KnowWEAttributes.TOPIC, "Test_Article");
-		map.put(KnowWEAttributes.TEXT, "Ersetzt");
+		map.put(Attributes.WEB, "default_web");
+		map.put(Attributes.TARGET, toReplace);
+		map.put(Attributes.TOPIC, "Test_Article");
+		map.put(Attributes.TEXT, "Ersetzt");
 		map.put("action", "ReplaceKDOMNodeAction");
-		map.put(KnowWEAttributes.USER, "testuser");
+		map.put(Attributes.USER, "testuser");
 		ActionContext actionContext = new ActionContext("ReplaceKDOMNodeAction", "", map, null,
 				null, null, null);
 		actionContext.getAction().execute(actionContext);
@@ -109,9 +109,9 @@ public class ReplaceKdomNodeTest extends TestCase {
 		 * 2. Build new subtree.
 		 */
 		toReplace = ((Section<?>) artSec.getChildren().get(0)).getID();
-		map.put(KnowWEAttributes.TARGET, toReplace);
-		map.put(KnowWEAttributes.TOPIC, "Test_Article");
-		map.put(KnowWEAttributes.TEXT, "-aa-");
+		map.put(Attributes.TARGET, toReplace);
+		map.put(Attributes.TOPIC, "Test_Article");
+		map.put(Attributes.TEXT, "-aa-");
 		ActionContext actionContext2 = new ActionContext("ReplaceKDOMNodeAction", "", map, null,
 				null, null, null);
 		actionContext2.getAction().execute(actionContext2);

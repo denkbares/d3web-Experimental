@@ -41,7 +41,7 @@ import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.object.ScoreValue;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.compile.Priority;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
@@ -84,7 +84,7 @@ public class HeuristicDiagnosisTable extends ITable
 	{
 
 		@Override
-		public Collection<Message> create(KnowWEArticle article, Section<HeuristicDiagnosisTable> heuristicSec)
+		public Collection<Message> create(Article article, Section<HeuristicDiagnosisTable> heuristicSec)
 		{
 
 			Section<InnerTable> innerTable =

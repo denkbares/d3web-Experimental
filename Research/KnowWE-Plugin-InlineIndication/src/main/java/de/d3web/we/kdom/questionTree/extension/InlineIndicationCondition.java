@@ -18,7 +18,7 @@ import de.d3web.we.kdom.rules.RuleContentType;
 import de.d3web.we.object.QASetDefinition;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -97,7 +97,7 @@ public class InlineIndicationCondition extends AbstractType {
 	static class CreateIndicationRulesHandler extends D3webSubtreeHandler<InlineIndicationCondition> {
 
 		@Override
-		public Collection<Message> create(KnowWEArticle article, Section<InlineIndicationCondition> s) {
+		public Collection<Message> create(Article article, Section<InlineIndicationCondition> s) {
 
 			if (s.hasErrorInSubtree(article)) {
 				return Messages.asList(Messages.creationFailedWarning("Rule"));

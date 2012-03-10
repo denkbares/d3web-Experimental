@@ -23,10 +23,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import utils.MyTestArticleManager;
+import utils.TestArticleManager;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -71,7 +71,7 @@ public class TestLauncher {
 
 		InitPluginManager.init();
 
-		KnowWEArticle art = MyTestArticleManager.getArticle(markupFile
+		Article art = TestArticleManager.getArticle(markupFile
 				.getPath());
 
 		StringBuilder sb = new StringBuilder();

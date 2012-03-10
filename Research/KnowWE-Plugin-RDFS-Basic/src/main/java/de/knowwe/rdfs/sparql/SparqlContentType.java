@@ -28,7 +28,7 @@ import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.Statement;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.report.Message;
@@ -47,7 +47,7 @@ public class SparqlContentType extends AbstractType {
 	private class SparqlConstructHandler extends RDF2GoSubtreeHandler<SparqlContentType> {
 
 		@Override
-		public Collection<Message> create(KnowWEArticle article, Section<SparqlContentType> section) {
+		public Collection<Message> create(Article article, Section<SparqlContentType> section) {
 			List<Message> msgs = new ArrayList<Message>(1);
 			String sparqlString = section.getText();
 			sparqlString = sparqlString.trim();

@@ -26,10 +26,10 @@ import de.d3web.we.kdom.questionTree.QuestionTypeDeclaration;
 import de.d3web.we.object.QASetDefinition;
 import de.d3web.we.object.QuestionDefinition;
 import de.d3web.we.util.UserSupportUtil;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
@@ -100,20 +100,20 @@ public class QuestionDefinitionArea extends AbstractType {
 		}
 
 		@Override
-		public Collection<Message> create(KnowWEArticle article, Section<QuestionDefinitionArea> markupSection) {
+		public Collection<Message> create(Article article, Section<QuestionDefinitionArea> markupSection) {
 
-			KnowWEEnvironment.getInstance().getPackageManager(
+			Environment.getInstance().getPackageManager(
 					article.getWeb()).addSectionToPackage(
 							markupSection, "default");
 			return new ArrayList<Message>();
 		}
 
 		@Override
-		public void destroy(KnowWEArticle article, Section markupSection) {
+		public void destroy(Article article, Section markupSection) {
 			// unregister section in the package manager
 			// TODO: refactor this to somewhere else
 			if (!markupSection.get().isIgnoringPackageCompile()) {
-				KnowWEEnvironment.getInstance().getPackageManager(article.getWeb()).removeSectionFromAllPackages(
+				Environment.getInstance().getPackageManager(article.getWeb()).removeSectionFromAllPackages(
 						markupSection);
 			}
 		}

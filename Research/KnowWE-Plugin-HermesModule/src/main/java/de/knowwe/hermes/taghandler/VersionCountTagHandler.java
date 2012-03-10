@@ -23,10 +23,10 @@ package de.knowwe.hermes.taghandler;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.wikiConnector.KnowWEWikiConnector;
+import de.knowwe.core.wikiConnector.WikiConnector;
 
 public class VersionCountTagHandler extends AbstractHTMLTagHandler {
 
@@ -37,7 +37,7 @@ public class VersionCountTagHandler extends AbstractHTMLTagHandler {
 	@Override
 	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
-		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance()
+		WikiConnector connector = Environment.getInstance()
 				.getWikiConnector();
 
 		String result = "<div class=\"versionCounts\">";

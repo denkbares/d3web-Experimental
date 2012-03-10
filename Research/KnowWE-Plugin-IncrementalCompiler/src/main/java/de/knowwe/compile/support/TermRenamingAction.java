@@ -29,9 +29,9 @@ import java.util.Set;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEAttributes;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Attributes;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
@@ -59,7 +59,7 @@ public class TermRenamingAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
-		String web = context.getParameter(KnowWEAttributes.WEB);
+		String web = context.getParameter(Attributes.WEB);
 		String term = context.getParameter(TERMNAME);
 		String replacement = context.getParameter(REPLACEMENT);
 
@@ -96,7 +96,7 @@ public class TermRenamingAction extends AbstractAction {
 			articleSecs.add(section);
 		}
 
-		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
+		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
 		Set<String> failures = new HashSet<String>();
 		Set<String> success = new HashSet<String>();
 		renameTerms(allTerms, replacement, mgr, context, failures,
@@ -105,7 +105,7 @@ public class TermRenamingAction extends AbstractAction {
 	}
 
 	private void generateMessage(Set<String> failures, Set<String> success, UserActionContext context) throws IOException {
-		ResourceBundle rb = KnowWEEnvironment.getInstance().getKwikiBundle();
+		ResourceBundle rb = Environment.getInstance().getMessageBundle();
 		Writer w = context.getWriter();
 		if (failures.size() == 0) {
 			w.write("<p style=\"color:green;\">");
@@ -135,13 +135,13 @@ public class TermRenamingAction extends AbstractAction {
 
 	private void renameTerms(Map<String, Set<Section<?>>> allTerms,
 			String replacement,
-			KnowWEArticleManager mgr,
+			ArticleManager mgr,
 			UserActionContext context,
 			Set<String> failures,
 			Set<String> success) throws IOException {
 
 		for (String articlename : allTerms.keySet()) {
-			if (KnowWEEnvironment.getInstance().getWikiConnector().userCanEditPage(
+			if (Environment.getInstance().getWikiConnector().userCanEditPage(
 					articlename, context.getRequest())) {
 
 				Map<String, String> nodesMap = new HashMap<String, String>();

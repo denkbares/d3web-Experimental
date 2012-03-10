@@ -33,7 +33,7 @@ import com.ecyrd.jspwiki.auth.user.UserProfile;
 import com.ecyrd.jspwiki.util.MailUtil;
 
 import de.d3web.we.event.NewCommentEvent;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
 
@@ -84,7 +84,7 @@ public class CommentListener implements EventListener {
 		content = content.replaceAll("@page@", topic);
 
 		// replace @ink@
-		String link = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+		String link = Environment.getInstance().getWikiConnector().getBaseUrl();
 		link += "/Wiki.jsp?page=" + topic;
 		content = content.replaceAll("@link@", link);
 
@@ -116,7 +116,7 @@ public class CommentListener implements EventListener {
 	 */
 	private boolean notifyMail(String to, String subject, String content) {
 		try {
-			ServletContext sc = KnowWEEnvironment.getInstance().getWikiConnector().getServletContext();
+			ServletContext sc = Environment.getInstance().getWikiConnector().getServletContext();
 			WikiEngine engine = WikiEngine.getInstance(sc, null);
 			MailUtil.sendMessage(engine, to, subject, content);
 		}
@@ -141,7 +141,7 @@ public class CommentListener implements EventListener {
 
 		UserProfile profile;
 		try {
-			ServletContext sc = KnowWEEnvironment.getInstance().getWikiConnector().getServletContext();
+			ServletContext sc = Environment.getInstance().getWikiConnector().getServletContext();
 			WikiEngine engine = WikiEngine.getInstance(sc, null);
 			profile = engine.getUserManager().getUserDatabase().find(loginName);
 			if (profile != null) {

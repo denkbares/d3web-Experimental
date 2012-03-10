@@ -31,10 +31,10 @@ import de.d3web.empiricaltesting.SequentialTestCase;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysis;
 import de.d3web.we.testcaseexecutor.TestCaseExecutorType;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -63,7 +63,7 @@ public class CalculateCoverageAction extends AbstractAction {
 
 		Pattern pattern = Pattern.compile(tests, Pattern.CASE_INSENSITIVE);
 
-		Map<String, String> articles = KnowWEEnvironment.getInstance().getWikiConnector().getAllArticles(
+		Map<String, String> articles = Environment.getInstance().getWikiConnector().getAllArticles(
 				context.getWeb());
 
 		TestCaseAnalysis analysis = new TestCaseAnalysis();
@@ -71,7 +71,7 @@ public class CalculateCoverageAction extends AbstractAction {
 		analysis.addTestListener(listener);
 
 		for (String title : articles.keySet()) {
-			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(context.getWeb(),
+			Article article = Environment.getInstance().getArticle(context.getWeb(),
 					title);
 			if (!pattern.matcher(title).matches()) continue;
 

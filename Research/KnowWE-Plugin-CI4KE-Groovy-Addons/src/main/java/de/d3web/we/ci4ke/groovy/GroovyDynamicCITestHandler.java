@@ -32,8 +32,8 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 
 import de.d3web.we.ci4ke.testing.CITest;
 import de.d3web.we.ci4ke.testing.DynamicCITestHandler;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -101,10 +101,10 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 		List<Section<GroovyCITestType>> sectionsList = new
 				ArrayList<Section<GroovyCITestType>>();
 		// a collection containing all wiki-articles
-		Collection<KnowWEArticle> allWikiArticles = KnowWEEnvironment.getInstance().
-				getArticleManager(KnowWEEnvironment.DEFAULT_WEB).getArticles();
+		Collection<Article> allWikiArticles = Environment.getInstance().
+				getArticleManager(Environment.DEFAULT_WEB).getArticles();
 		// iterate over all articles
-		for (KnowWEArticle article : allWikiArticles) {
+		for (Article article : allWikiArticles) {
 			// find all GroovyCITestType sections on this article...
 			Sections.findSuccessorsOfType(article.getSection(),
 					GroovyCITestType.class, sectionsList);

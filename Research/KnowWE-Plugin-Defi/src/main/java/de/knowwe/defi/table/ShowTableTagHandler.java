@@ -23,8 +23,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
@@ -111,11 +111,11 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 	}
 
 	private Section<DefineTableMarkup> findTableToShow(String id) {
-		Collection<KnowWEArticle> articles = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).getArticles();
-		for (KnowWEArticle knowWEArticle : articles) {
+		Collection<Article> articles = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB).getArticles();
+		for (Article article : articles) {
 			List<Section<DefineTableMarkup>> tables = new ArrayList<Section<DefineTableMarkup>>();
-			Sections.findSuccessorsOfType(knowWEArticle.getSection(),
+			Sections.findSuccessorsOfType(article.getSection(),
 					DefineTableMarkup.class,
 					tables);
 			for (Section<DefineTableMarkup> table : tables) {

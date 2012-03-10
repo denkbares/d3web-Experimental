@@ -25,11 +25,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 
@@ -39,15 +39,15 @@ public class InsertAdditionalTableVersionAction extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 		String username = context.getUserName();
 		String articleName = SubmitTableContentAction.getDataArticleNameForUser(username);
-		KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB);
-		KnowWEArticle knowWEArticle = articleManager.getArticle(
+		ArticleManager articleManager = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB);
+		Article article = articleManager.getArticle(
 				articleName);
 
 		// find table for tableid
 		String tableid = context.getParameter(SubmitTableContentAction.TABLE_ID);
 		Section<TableEntryContentType> contentSectionForTableID = SubmitTableContentAction.findContentSectionForTableID(
-				tableid, knowWEArticle);
+				tableid, article);
 
 		// find version blocks
 		List<Section<VersionEntry>> versionEntries = new ArrayList<Section<VersionEntry>>();

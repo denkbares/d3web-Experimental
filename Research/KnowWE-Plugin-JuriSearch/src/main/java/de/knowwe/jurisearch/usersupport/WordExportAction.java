@@ -24,10 +24,10 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ResourceBundle;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 
 
 /**
@@ -46,8 +46,8 @@ public class WordExportAction extends AbstractAction
 		String title = context.getTitle();
 		String user = context.getUserName();
 
-		KnowWEArticle article =
-				KnowWEEnvironment.getInstance().getArticle(context.getWeb(), context.getTitle());
+		Article article =
+				Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
 
 		String extensionPath = System.getProperty("java.io.tmpdir") + "/docbook-" + title + ".docx";
 		File file = new File(extensionPath);
@@ -58,7 +58,7 @@ public class WordExportAction extends AbstractAction
 		out.flush();
 		out.close();
 
-		KnowWEEnvironment.getInstance().getWikiConnector().setPageLocked(title, user);
+		Environment.getInstance().getWikiConnector().setPageLocked(title, user);
 
 		// write the downloadlink beneath the exportbutton
 		Writer writer = context.getWriter();

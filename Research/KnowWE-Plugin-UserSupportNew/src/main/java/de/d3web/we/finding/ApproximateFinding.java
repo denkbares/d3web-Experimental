@@ -30,7 +30,7 @@ import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.we.kdom.condition.D3webCondition;
 import de.d3web.we.object.AnswerReference;
 import de.d3web.we.object.QuestionReference;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -81,7 +81,7 @@ public class ApproximateFinding extends D3webCondition<ApproximateFinding> {
 	}
 
 	@Override
-	protected Condition createCondition(KnowWEArticle article, Section<ApproximateFinding> s) {
+	protected Condition createCondition(Article article, Section<ApproximateFinding> s) {
 
 		Section<QuestionReference> qRef = Sections.findSuccessor(s,
 				QuestionReference.class);

@@ -29,7 +29,7 @@ import java.util.List;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.user.UserContext;
 
 /**
@@ -66,7 +66,7 @@ public class ToolbarUtils {
 	 * @param userContext
 	 * @return
 	 */
-	public static ToolbarButton[] getButtons(KnowWEArticle article, UserContext userContext) {
+	public static ToolbarButton[] getButtons(Article article, UserContext userContext) {
 		List<ToolbarButton> tools = new LinkedList<ToolbarButton>();
 		for (ToolbarButtonProvider provider : getProviders()) {
 			Collections.addAll(tools, provider.getButtons(article, userContext));

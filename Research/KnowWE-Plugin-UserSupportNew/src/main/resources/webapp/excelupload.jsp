@@ -12,7 +12,7 @@
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
 <%
         //to get the content type information from JSP Request Header
-        String extensionPath = KnowWEEnvironment.getInstance().getKnowWEExtensionPath();
+        String extensionPath = Environment.getInstance().getKnowWEExtensionPath();
 			extensionPath += "/workbook-test.xls";
         String contentType = request.getContentType();
         //here we are checking the content type is not equal to Null and

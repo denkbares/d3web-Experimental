@@ -30,7 +30,7 @@ import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -60,7 +60,7 @@ public class MapType extends AbstractXMLType {
 	private class MapTypeOWLSubTreeHandler extends RDF2GoSubtreeHandler<MapType> {
 
 		@Override
-		public Collection<Message> create(KnowWEArticle article, Section<MapType> s) {
+		public Collection<Message> create(Article article, Section<MapType> s) {
 			List<Statement> ioo = new ArrayList<Statement>();
 			String url = getIFrameSrcURL(s);
 			KMLLoader kmlLoader = new KMLLoader(url);

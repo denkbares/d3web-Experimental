@@ -30,7 +30,7 @@ import javax.swing.JOptionPane;
 import com.ecyrd.jspwiki.WikiEngine;
 import com.ecyrd.jspwiki.util.MailUtil;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 
@@ -57,7 +57,7 @@ public class MailFormAction extends AbstractAction {
 				"Vielen Dank!\nIhre Nachricht wurde erfolgreich versandt.");
 
 		try {
-			ServletContext sc = KnowWEEnvironment.getInstance().getWikiConnector().getServletContext();
+			ServletContext sc = Environment.getInstance().getWikiConnector().getServletContext();
 			WikiEngine engine = WikiEngine.getInstance(sc, null);
 			MailUtil.sendMessage(engine, mailTo, subject, nachricht);
 		}

@@ -1,5 +1,5 @@
-<%@page import="de.knowwe.core.KnowWEEnvironment"%>
-<%@page import="de.knowwe.jspwiki.JSPWikiKnowWEConnector"%>
+<%@page import="de.knowwe.core.Environment"%>
+<%@page import="de.knowwe.jspwiki.JSPWikiConnector"%>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@page import="java.util.HashMap"%>
@@ -8,7 +8,7 @@
 <%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
 <%@page import="de.knowwe.core.kdom.parsing.Section"%>
 <%@page import="de.knowwe.core.kdom.parsing.Sections" %>
-<%@page import="de.knowwe.core.kdom.KnowWEArticle"%>
+<%@page import="de.knowwe.core.kdom.Article"%>
 <%@ page import="de.knowwe.defi.*"%>
 <%@page import="de.knowwe.defi.utils.DefiUtils"%><fmt:setLocale
 	value="${prefs.Language}" />
@@ -21,8 +21,8 @@
 	WikiContext c = WikiContext.findContext(pageContext);
 	String frontpage = c.getEngine().getFrontPage();
 	JSPWikiUserContext user = new JSPWikiUserContext(c, new HashMap<String, String>());
-	JSPWikiKnowWEConnector wc = new JSPWikiKnowWEConnector(WikiEngine.getInstance(
-			KnowWEEnvironment.getInstance().getContext(), null));
+	JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
+	Environment.getInstance().getContext(), null));
 	String[] activeUsers = wc.getAllActiveUsers();
 	boolean beraterOnline = false;
 
@@ -36,26 +36,26 @@
 		welcomePage_firstTime = true;
 		String[] readpages = new String[0];
 		
-		KnowWEArticle userData = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).getArticle(user.getUserName() + "_data");
+		Article userData = Environment.getInstance().getArticleManager(
+		Environment.DEFAULT_WEB).getArticle(user.getUserName() + "_data");
 		if (userData != null) {
-			Section<DataMarkup> data = Sections.findSuccessor(
-					userData.getSection(), DataMarkup.class);
-			if (data != null && DataMarkup.getAnnotation(data, "readpages") != null) {
-				// Hole alle gelesenen Readbuttons
-				readpages = DataMarkup.getAnnotation(data, "readpages").split(";");
-				// Ist gesuchter dabei?
-				for (String s : readpages) {
-					// Vergleiche pagenames und ids 
-					if (s.split("::")[0].equals(WELCOME_PAGE_FIRSTTIME)) {
-						welcomePage_firstTime = false;
-					}
-				}
-			}
+	Section<DataMarkup> data = Sections.findSuccessor(
+	userData.getSection(), DataMarkup.class);
+	if (data != null && DataMarkup.getAnnotation(data, "readpages") != null) {
+		// Hole alle gelesenen Readbuttons
+		readpages = DataMarkup.getAnnotation(data, "readpages").split(";");
+		// Ist gesuchter dabei?
+		for (String s : readpages) {
+	// Vergleiche pagenames und ids 
+	if (s.split("::")[0].equals(WELCOME_PAGE_FIRSTTIME)) {
+		welcomePage_firstTime = false;
+	}
+		}
+	}
 		}
 	}
 	
-if(welcomePage_firstTime) { 
+if(welcomePage_firstTime) {
 %>
 <script type="text/javascript">
 	window.location = "Wiki.jsp?page=<%=WELCOME_PAGE_FIRSTTIME%>";

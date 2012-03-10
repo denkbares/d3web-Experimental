@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.AbstractType;
@@ -21,11 +21,11 @@ public class OnteRemoveImportedOntologyAction extends AbstractAction {
 		String sectionID = context.getParameter("section");
 
 		if (sectionID != null && !sectionID.trim().isEmpty()) {
-			Section<? extends AbstractType> section = (Section<? extends AbstractType>)Sections.getSection(sectionID);
+			Section<? extends AbstractType> section = (Section<? extends AbstractType>) Sections.getSection(sectionID);
 			String articleName = section.getTitle();
 
 			// ... lock the page to avoid changes by other users ...
-			boolean isPageLocked = KnowWEEnvironment.getInstance().getWikiConnector()
+			boolean isPageLocked = Environment.getInstance().getWikiConnector()
 										.isPageLocked(articleName);
 
 			if (isPageLocked) {
@@ -35,11 +35,11 @@ public class OnteRemoveImportedOntologyAction extends AbstractAction {
 				return;
 			}
 			else {
-				KnowWEEnvironment.getInstance().getWikiConnector().setPageLocked(articleName,
+				Environment.getInstance().getWikiConnector().setPageLocked(articleName,
 							context.getUserName());
 
-				// KnowWEArticleManager mgr =
-				// KnowWEEnvironment.getInstance().getArticleManager(
+				// ArticleManager mgr =
+				// Environment.getInstance().getArticleManager(
 				// context.getWeb());
 
 				Map<String, String> nodesMap = new HashMap<String, String>();
@@ -48,7 +48,7 @@ public class OnteRemoveImportedOntologyAction extends AbstractAction {
 				// mgr.replaceKDOMNodesSaveAndBuild(context, articleName,
 				// nodesMap);
 
-				KnowWEEnvironment.getInstance().getWikiConnector().undoPageLocked(articleName);
+				Environment.getInstance().getWikiConnector().undoPageLocked(articleName);
 				context.getWriter().write("{msg : 'import deleted', success : 'true'}");
 				ImportedOntologyManager.getInstance().removeOntology(section);
 			}

@@ -24,12 +24,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEAttributes;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Attributes;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Sections;
 
 /**
@@ -45,9 +45,9 @@ public class AppendToPageContentAction extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 		String web = context.getWeb();
 		String name = context.getTopic();
-		String appendText = context.getParameter(KnowWEAttributes.TEXT);
-		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
-		KnowWEArticle art = mgr.getArticle(name);
+		String appendText = context.getParameter(Attributes.TEXT);
+		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
+		Article art = mgr.getArticle(name);
 
 		// replaces old article content with old article content + text to
 		// append

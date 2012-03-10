@@ -24,8 +24,8 @@ import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 
@@ -43,8 +43,8 @@ public class PersonalMessageAction extends AbstractAction {
 		String user2 = context.getParameter("user2");
 		GregorianCalendar now = new GregorianCalendar();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB);
+		ArticleManager mgr = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB);
 
 		String topic = "Persönliche Nachrichten(" + user1 + "," + user2 + ")";
 		String name = "Gespräch zwischen " + user1 + " und " + user2;
@@ -59,9 +59,9 @@ public class PersonalMessageAction extends AbstractAction {
 
 			content += "<br /><br />\n<a href=\"Wiki.jsp?page=Diskussion\"><< zur&uuml;ck zur Diskussion</a>";
 
-			KnowWEEnvironment.getInstance().buildAndRegisterArticle(content,
-						topic, KnowWEEnvironment.DEFAULT_WEB);
-			KnowWEEnvironment.getInstance().getWikiConnector()
+			Environment.getInstance().buildAndRegisterArticle(content,
+						topic, Environment.DEFAULT_WEB);
+			Environment.getInstance().getWikiConnector()
 						.createWikiPage(topic, content, username);
 		}
 

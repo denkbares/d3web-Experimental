@@ -2,10 +2,10 @@ package de.knowwe.diaflux.refactoring;
 
 import java.io.IOException;
 
-import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.diaflux.type.DiaFluxType;
@@ -24,12 +24,12 @@ public class GetPackageName extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 
 		// get parameters
-		String nodeID = context.getParameter(KnowWEAttributes.TARGET);
+		String nodeID = context.getParameter(Attributes.TARGET);
 
 		Section<DiaFluxType> diaFluxSection = (Section<DiaFluxType>) Sections.getSection(
 				nodeID);
 		String packageName = DefaultMarkupType.getAnnotation(diaFluxSection,
-				KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME);
+				PackageManager.PACKAGE_ATTRIBUTE_NAME);
 
 		context.setContentType("text/plain; charset=UTF-8");
 		context.getWriter().write(packageName != null ? packageName : "#undefined#");

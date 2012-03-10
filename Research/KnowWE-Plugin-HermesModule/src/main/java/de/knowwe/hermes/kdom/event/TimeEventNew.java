@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.AssertSingleTermDefinitionHandler;
 import de.knowwe.core.kdom.objects.SimpleTerm;
@@ -181,7 +181,7 @@ public class TimeEventNew extends AbstractType {
 
 				@Override
 				public Collection<Message> createAttribute(
-						KnowWEArticle article, Section<DateType> s) {
+						Article article, Section<DateType> s) {
 					// TimeStamp t = DateType.getTimeStamp(s);
 					// if (false /* t is invalid */) { // TODO: set appropriate
 					// error
@@ -257,7 +257,7 @@ public class TimeEventNew extends AbstractType {
 			this.addSubtreeHandler(new TimeEventAttributeHandler<ImportanceType>() {
 
 				@Override
-				protected Collection<Message> createAttribute(KnowWEArticle article, Section<ImportanceType> s) {
+				protected Collection<Message> createAttribute(Article article, Section<ImportanceType> s) {
 					Integer i = ImportanceType.getImportance(s);
 					if (i == null || i < 1 || i > 3) {
 						return Messages.asList(Messages.invalidNumberError(

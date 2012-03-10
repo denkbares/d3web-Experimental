@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -67,7 +67,7 @@ public class CreateMapHandler extends AbstractHTMLTagHandler {
 				+ "<textarea id='tag' name='tag' cols='35' rows='4' readonly='readonly'>Hier entsteht der Tag</textarea>\n"
 				+ "<br><br>\n"
 				+ "Hier Seite zum Anhängen des Orts-Tags auswählen:<br>\n";
-		ArrayList<String> seiten = new ArrayList<String>(KnowWEEnvironment
+		ArrayList<String> seiten = new ArrayList<String>(Environment
 				.getInstance().getWikiConnector().getVersionCounts().keySet());
 		Collections.sort(seiten);
 

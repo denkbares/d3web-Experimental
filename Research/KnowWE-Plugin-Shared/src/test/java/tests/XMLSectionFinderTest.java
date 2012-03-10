@@ -30,15 +30,15 @@ import java.util.List;
 import junit.framework.TestCase;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.kdom.xml.GenericXMLObjectType;
 import de.knowwe.kdom.xml.XMLSectionFinder;
-import dummies.KnowWETestWikiConnector;
+import dummies.TestWikiConnector;
 
 public class XMLSectionFinderTest extends TestCase {
 
@@ -50,17 +50,17 @@ public class XMLSectionFinderTest extends TestCase {
 	public void testXMLSectionFinder() {
 
 		/**
-		 * Initialise KnowWEEnvironment
+		 * Initialise Environment
 		 */
-		KnowWEEnvironment.initKnowWE(new KnowWETestWikiConnector());
-		KnowWEEnvironment.getInstance().getArticle("default_web", "Test_Article");
+		Environment.initKnowWE(new TestWikiConnector());
+		Environment.getInstance().getArticle("default_web", "Test_Article");
 
 		/**
 		 * Setup
 		 */
 		String content = this.readXMLFile("2");
 
-		KnowWEArticle article = KnowWEArticle.createArticle(content, "Test_Article",
+		Article article = Article.createArticle(content, "Test_Article",
 				RootType.getInstance(), "default_web");
 		Section artSec = article.getSection();
 
@@ -135,7 +135,7 @@ public class XMLSectionFinderTest extends TestCase {
 		rootType.addChildType(GenericXMLObjectType.getInstance());
 
 		content = this.readXMLFile("0");
-		article = KnowWEArticle.createArticle(content, "Test_Article2", rootType,
+		article = Article.createArticle(content, "Test_Article2", rootType,
 				"default_web");
 		artSec = article.getSection();
 

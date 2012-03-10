@@ -38,12 +38,12 @@ import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.packaging.KnowWEPackageManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
@@ -145,13 +145,13 @@ public class TestcaseTableEditAction extends AbstractAction {
 	private static List<Question> getQuestions(Section<TestcaseTableType> section, UserContext user) {
 		Collection<Question> questions = new HashSet<Question>();
 		String[] kbpackages = getPackages(section);
-		KnowWEEnvironment env = KnowWEEnvironment.getInstance();
-		KnowWEPackageManager packageManager = env.getPackageManager(section.getWeb());
-		KnowWEArticleManager articleManager = env.getArticleManager(user.getWeb());
+		Environment env = Environment.getInstance();
+		PackageManager packageManager = env.getPackageManager(section.getWeb());
+		ArticleManager articleManager = env.getArticleManager(user.getWeb());
 		for (String kbpackage : kbpackages) {
 			Set<String> articlesReferringTo = packageManager.getCompilingArticles(kbpackage);
 			for (String masterTitle : articlesReferringTo) {
-				KnowWEArticle masterArticle = articleManager.getArticle(masterTitle);
+				Article masterArticle = articleManager.getArticle(masterTitle);
 				KnowledgeBase kb = D3webUtils.getKnowledgeBase(masterArticle.getWeb(),
 						masterArticle.getTitle());
 				questions.addAll(kb.getManager().getQuestions());
@@ -162,9 +162,9 @@ public class TestcaseTableEditAction extends AbstractAction {
 
 	private static String[] getPackages(Section<TestcaseTableType> section) {
 		String[] kbpackages = DefaultMarkupType.getAnnotations(section,
-				KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME);
+				PackageManager.PACKAGE_ATTRIBUTE_NAME);
 		if (kbpackages.length == 0) {
-			kbpackages = new String[] { KnowWEPackageManager.DEFAULT_PACKAGE };
+			kbpackages = new String[] { PackageManager.DEFAULT_PACKAGE };
 		}
 		return kbpackages;
 	}

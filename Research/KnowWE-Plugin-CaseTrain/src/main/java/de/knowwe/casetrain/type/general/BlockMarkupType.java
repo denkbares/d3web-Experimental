@@ -1,8 +1,8 @@
 /*
  * Copyright (C) 2009 Chair of Aimport java.util.regex.Pattern;
  * 
- * import de.d3web.we.kdom.AbstractType; import de.d3web.we.kdom.KnowWEArticle;
- * import de.d3web.we.kdom.Section; import de.d3web.we.kdom.Type; import
+ * import de.d3web.we.kdom.AbstractType; import de.d3web.we.kdom.Article; import
+ * de.d3web.we.kdom.Section; import de.d3web.we.kdom.Type; import
  * de.d3web.we.kdom.rendering.DelegateRenderer; import
  * de.d3web.we.kdom.rendering.KnowWEDomRenderer; import
  * de.d3web.we.kdom.report.KDOMError; import

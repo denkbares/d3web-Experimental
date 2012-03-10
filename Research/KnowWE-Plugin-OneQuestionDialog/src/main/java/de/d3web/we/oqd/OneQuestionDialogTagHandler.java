@@ -25,7 +25,7 @@ import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.KnowWERessourceLoader;
+import de.knowwe.core.RessourceLoader;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 
@@ -38,10 +38,10 @@ public class OneQuestionDialogTagHandler extends AbstractHTMLTagHandler {
 
 	public OneQuestionDialogTagHandler() {
 		super("onequestiondialog");
-		KnowWERessourceLoader.getInstance().add("onequestiondialog.js",
-				KnowWERessourceLoader.RESOURCE_SCRIPT);
-		KnowWERessourceLoader.getInstance().add("onequestiondialog.css",
-				KnowWERessourceLoader.RESOURCE_STYLESHEET);
+		RessourceLoader.getInstance().add("onequestiondialog.js",
+				RessourceLoader.RESOURCE_SCRIPT);
+		RessourceLoader.getInstance().add("onequestiondialog.css",
+				RessourceLoader.RESOURCE_STYLESHEET);
 	}
 
 	@Override

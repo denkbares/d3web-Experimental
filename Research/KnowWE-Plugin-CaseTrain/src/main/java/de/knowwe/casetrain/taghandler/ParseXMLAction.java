@@ -24,10 +24,10 @@ import java.util.ResourceBundle;
 
 import de.knowwe.casetrain.type.MetaData;
 import de.knowwe.casetrain.util.XMLUtils;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -66,8 +66,8 @@ public class ParseXMLAction extends AbstractAction {
 
 		String topic = context.getTopic();
 		String web = context.getWeb();
-		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web, topic);
-		Section<KnowWEArticle> sec = article.getSection();
+		Article article = Environment.getInstance().getArticle(web, topic);
+		Section<Article> sec = article.getSection();
 
 		if (Sections.findSuccessor(sec, MetaData.class) == null) {
 			buildi.append("<span class=\"error\">" +

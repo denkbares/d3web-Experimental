@@ -41,7 +41,7 @@ import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.TextValue;
 import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.event.EventManager;
@@ -60,20 +60,20 @@ public class SetFindingAction extends AbstractAction {
 
 	private String setValue(UserActionContext context) {
 
-		String objectid = context.getParameter(KnowWEAttributes.SEMANO_OBJECT_ID);
-		String valuenum = context.getParameter(KnowWEAttributes.SEMANO_VALUE_NUM);
-		String valuedate = context.getParameter(KnowWEAttributes.SEMANO_VALUE_DATE);
-		String valueText = context.getParameter(KnowWEAttributes.SEMANO_VALUE_TEXT);
+		String objectid = context.getParameter(Attributes.SEMANO_OBJECT_ID);
+		String valuenum = context.getParameter(Attributes.SEMANO_VALUE_NUM);
+		String valuedate = context.getParameter(Attributes.SEMANO_VALUE_DATE);
+		String valueText = context.getParameter(Attributes.SEMANO_VALUE_TEXT);
 		String topic = context.getTitle();
 		String user = context.getUserName();
 		String web = context.getWeb();
 		String namespace = null;
-		String term = context.getParameter(KnowWEAttributes.SEMANO_TERM_NAME);
+		String term = context.getParameter(Attributes.SEMANO_TERM_NAME);
 		String valueid = null;
 		try {
 			namespace = java.net.URLDecoder.decode(
-					context.getParameter(KnowWEAttributes.SEMANO_NAMESPACE), "UTF-8");
-			String tempValueID = context.getParameter(KnowWEAttributes.SEMANO_VALUE_ID);
+					context.getParameter(Attributes.SEMANO_NAMESPACE), "UTF-8");
+			String tempValueID = context.getParameter(Attributes.SEMANO_VALUE_ID);
 			if (tempValueID != null) valueid = URLDecoder.decode(tempValueID, "UTF-8");
 			if (term != null) term = URLDecoder.decode(term, "UTF-8");
 		}

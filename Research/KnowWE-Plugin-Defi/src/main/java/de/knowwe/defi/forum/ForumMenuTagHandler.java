@@ -45,8 +45,8 @@ import org.xml.sax.InputSource;
 import com.ecyrd.jspwiki.WikiEngine;
 
 import de.knowwe.comment.forum.Forum;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -57,7 +57,7 @@ import de.knowwe.defi.aboutMe.AboutMe;
 import de.knowwe.defi.logger.PageLoggerHandler;
 import de.knowwe.defi.menu.DynamicMenuMarkup;
 import de.knowwe.defi.time.TimeTableMarkup;
-import de.knowwe.jspwiki.JSPWikiKnowWEConnector;
+import de.knowwe.jspwiki.JSPWikiConnector;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -103,8 +103,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	@Override
 	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder fm = new StringBuilder();
-		Iterator<KnowWEArticle> it = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).getArticleIterator();
+		Iterator<Article> it = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB).getArticleIterator();
 		List<Section<? extends Forum>> forums = new LinkedList<Section<? extends Forum>>();
 		List<Section<? extends Forum>> chats = new LinkedList<Section<? extends Forum>>();
 		List<Section<? extends Forum>> other = new LinkedList<Section<? extends Forum>>();
@@ -265,8 +265,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		/* # ------------BENUTZER-CHAT------------ # */
 		/* ######################################### */
 		fm.append("<tr><th colspan=2>" + USER_CHAT_LABEL + "</th></tr>");
-		JSPWikiKnowWEConnector wc = new JSPWikiKnowWEConnector(WikiEngine.getInstance(
-				KnowWEEnvironment.getInstance().getContext(), null));
+		JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
+				Environment.getInstance().getContext(), null));
 		String[] users = wc.getAllUsers();
 		String[] activeUsers = wc.getAllActiveUsers();
 
@@ -325,7 +325,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 				// Username + status
 				fm.append("<span class='userchat'><a href='"
-						+ JSPWikiKnowWEConnector.LINK_PREFIX
+						+ JSPWikiConnector.LINK_PREFIX
 						+ users[i] + "'>"
 						+ users[i] + "</a><br />- " + getStatus(activeUsers, users[i])
 						+ " -</span>");
@@ -436,8 +436,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	 */
 	private List<Section<DashTreeElement>> getAllUnits() {
 		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
-		KnowWEArticle leftMenu = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).getArticle("LeftMenu");
+		Article leftMenu = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB).getArticle("LeftMenu");
 
 		if (leftMenu != null) {
 			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
@@ -455,8 +455,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	private List<Section<DashTreeElement>> getAllRootUnits() {
 		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
 		List<Section<DashTreeElement>> rootUnits = new LinkedList<Section<DashTreeElement>>();
-		KnowWEArticle leftMenu = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).getArticle("LeftMenu");
+		Article leftMenu = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB).getArticle("LeftMenu");
 
 		if (leftMenu != null) {
 			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
@@ -505,8 +505,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 			}
 		}
 
-		KnowWEArticle zeitplanArticle = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).getArticle(
+		Article zeitplanArticle = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB).getArticle(
 				"Zeitplan");
 		if (zeitplanArticle != null) {
 			Section<TimeTableMarkup> timetable = Sections.findSuccessor(
@@ -663,8 +663,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		String avatar = "";
 
 		try {
-			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
-					KnowWEEnvironment.DEFAULT_WEB, userName);
+			Article article = Environment.getInstance().getArticle(
+					Environment.DEFAULT_WEB, userName);
 			Section<?> s = article.getSection();
 			Section<AboutMe> sec = Sections.findSuccessor(s, AboutMe.class);
 			avatar = DefaultMarkupType.getAnnotation(sec, "avatar");

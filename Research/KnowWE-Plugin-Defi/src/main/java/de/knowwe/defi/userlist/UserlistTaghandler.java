@@ -22,15 +22,15 @@ import java.util.Map;
 
 import com.ecyrd.jspwiki.WikiEngine;
 
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.defi.aboutMe.AboutMe;
-import de.knowwe.jspwiki.JSPWikiKnowWEConnector;
+import de.knowwe.jspwiki.JSPWikiConnector;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -50,8 +50,8 @@ public class UserlistTaghandler extends AbstractTagHandler {
 	@Override
 	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder userlist = new StringBuilder();
-		JSPWikiKnowWEConnector wc = new JSPWikiKnowWEConnector(WikiEngine.getInstance(
-				KnowWEEnvironment.getInstance().getContext(), null));
+		JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
+				Environment.getInstance().getContext(), null));
 		String[] users = wc.getAllUsers();
 		String[] activeUsers = wc.getAllActiveUsers();
 
@@ -62,7 +62,7 @@ public class UserlistTaghandler extends AbstractTagHandler {
 				userlist.append("<td><img src=\"KnowWEExtension/images/avatars/"
 						+ getAvatar(users[i])
 						+ "\" height=\"80px\" width=\"80px\" alt=\"avatar\" /></td>");
-			userlist.append("<td><a href='" + JSPWikiKnowWEConnector.LINK_PREFIX + users[i] + "'>"
+			userlist.append("<td><a href='" + JSPWikiConnector.LINK_PREFIX + users[i] + "'>"
 					+ users[i]
 					+ "</a><br />- " + getStatus(activeUsers, users[i])
 					+ " -</td>");
@@ -84,8 +84,8 @@ public class UserlistTaghandler extends AbstractTagHandler {
 		String avatar = "";
 
 		try {
-			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
-				KnowWEEnvironment.DEFAULT_WEB, userName);
+			Article article = Environment.getInstance().getArticle(
+				Environment.DEFAULT_WEB, userName);
 			Section<?> s = article.getSection();
 			Section<AboutMe> sec = Sections.findSuccessor(s, AboutMe.class);
 			avatar = DefaultMarkupType.getAnnotation(sec, "avatar");

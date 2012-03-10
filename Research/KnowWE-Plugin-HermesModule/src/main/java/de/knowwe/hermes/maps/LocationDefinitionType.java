@@ -25,7 +25,7 @@ import java.util.Collection;
 import org.ontoware.rdf2go.model.Statement;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -49,7 +49,7 @@ public class LocationDefinitionType extends AbstractType {
 	private class LocationDefinitionTypeOWLSubTreeHandler extends RDF2GoSubtreeHandler<LocationDefinitionType> {
 
 		@Override
-		public Collection<Message> create(KnowWEArticle article, Section<LocationDefinitionType> s) {
+		public Collection<Message> create(Article article, Section<LocationDefinitionType> s) {
 			ArrayList<Statement> ioo = new ArrayList<Statement>();
 			Placemark placem = extractPlacemark(s);
 			MapType.addPlacemarkToOwlObject(placem, ioo);

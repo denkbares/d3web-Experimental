@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.plugin.Instantiation;
 
@@ -45,7 +45,7 @@ public class CalendarModule implements Instantiation {
 
 	public static ResourceBundle getCalendarBundle(UserContext user) {
 
-		Locale.setDefault(KnowWEEnvironment.getInstance().getWikiConnector().getLocale(
+		Locale.setDefault(Environment.getInstance().getWikiConnector().getLocale(
 				user.getRequest()));
 		return getCalendarBundle();
 	}

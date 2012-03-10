@@ -31,7 +31,7 @@ import de.d3web.owl.assignment.Quantifier;
 import de.d3web.owl.assignment.RatingAssignment;
 import de.d3web.we.kdom.auxiliary.Equals;
 import de.knowwe.core.compile.Priority;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -62,7 +62,7 @@ public class RatingAssignmentType extends AssignmentType {
 	private class RatingAssignmentCompiler extends AssignmentCompiler<RatingAssignmentType> {
 
 		@Override
-		protected Assignment createAssignment(KnowWEArticle article, Section<RatingAssignmentType> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<Message> messages) {
+		protected Assignment createAssignment(Article article, Section<RatingAssignmentType> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<Message> messages) {
 			/* Get the rating */
 			Rating rating = getRating(article, s, messages);
 			if (rating == null) {
@@ -81,7 +81,7 @@ public class RatingAssignmentType extends AssignmentType {
 			return new RatingAssignment(owlClassIRI, rating);
 		}
 
-		private Rating getRating(KnowWEArticle article, Section<RatingAssignmentType> s, Collection<Message> messages) {
+		private Rating getRating(Article article, Section<RatingAssignmentType> s, Collection<Message> messages) {
 			// Get Rating section
 			Section<RatingType> ratingSection = Sections.findSuccessor(s, RatingType.class);
 			// Get textual representation of the desired state

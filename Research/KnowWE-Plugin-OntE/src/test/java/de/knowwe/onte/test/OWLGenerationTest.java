@@ -35,9 +35,9 @@ import org.junit.Test;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
-import utils.MyTestArticleManager;
+import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.onte.test.util.OWLGenerationVocabulary;
 import de.knowwe.onte.test.util.OWLReasoningUtils;
 
@@ -60,8 +60,8 @@ import de.knowwe.onte.test.util.OWLReasoningUtils;
  @BeforeClass
  public static void setUp() throws IOException {
  InitPluginManager.init();
- KnowWEPackageManager.overrideAutocompileArticle(true);
- MyTestArticleManager.getArticle(TESTFILE);
+ PackageManager.overrideAutocompileArticle(true);
+ TestArticleManager.getArticle(TESTFILE);
 
  // OWLEntailment.write();
  }
@@ -197,7 +197,7 @@ import de.knowwe.onte.test.util.OWLReasoningUtils;
 
  @AfterClass
  public static void tearDown() {
- MyTestArticleManager.clear();
+ TestArticleManager.clear();
  }
 
  /**

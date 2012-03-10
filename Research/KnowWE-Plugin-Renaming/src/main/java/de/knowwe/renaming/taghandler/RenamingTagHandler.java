@@ -44,7 +44,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -63,7 +63,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String getDescription(UserContext user) {
-		return KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
+		return Environment.getInstance().getMessageBundle(user).getString(
 				"KnowWE.RenamingTagHandler.description");
 	}
 
@@ -76,7 +76,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 		StringBuffer html = new StringBuffer();
 
-		ResourceBundle rb = KnowWEEnvironment.getInstance().getKwikiBundle(user);
+		ResourceBundle rb = Environment.getInstance().getMessageBundle(user);
 
 		html.append("<div id=\"rename-panel\" class=\"panel\"><h3>"
 				+ rb.getString("KnowWE.renamingtool.redefine") + "</h3>");
@@ -175,7 +175,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 		}
 		// fill
 		// TODO
-		KnowWEEnvironment ke = KnowWEEnvironment.getInstance();
+		Environment ke = Environment.getInstance();
 		// set div and ul
 		Element div = dom.createElement("div");
 		div.setAttribute("id", "typeTree");

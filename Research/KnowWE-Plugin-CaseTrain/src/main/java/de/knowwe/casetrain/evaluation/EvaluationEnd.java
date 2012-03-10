@@ -27,7 +27,7 @@ import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.type.general.SubblockMarkupContent;
 import de.knowwe.casetrain.type.general.Title;
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -47,7 +47,7 @@ public class EvaluationEnd extends SubblockMarkup {
 		this.addSubtreeHandler(new GeneralSubtreeHandler<Closure>() {
 
 			@Override
-			public Collection<Message> create(KnowWEArticle article, Section<Closure> s) {
+			public Collection<Message> create(Article article, Section<Closure> s) {
 
 				List<Message> messages = new ArrayList<Message>(0);
 

@@ -34,7 +34,7 @@ import com.ecyrd.jspwiki.event.WikiEventListener;
 import com.ecyrd.jspwiki.event.WikiEventManager;
 import com.ecyrd.jspwiki.event.WikiSecurityEvent;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -90,7 +90,7 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 		this.setRenderer(new AboutMeRenderer());
 		this.setIgnorePackageCompile(true);
 
-		ServletContext context = KnowWEEnvironment.getInstance().getContext();
+		ServletContext context = Environment.getInstance().getContext();
 		WikiEngine en = WikiEngine.getInstance(context, null);
 		WikiEventManager.addWikiEventListener(en.getAuthenticationManager(), this);
 	}
@@ -117,14 +117,14 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 			}
 
 			if (fullName != ""
-					&& !KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+					&& !Environment.getInstance().getWikiConnector().doesPageExist(
 							fullName)) {
 
 				// create user page
 				String pagePermissions = "[{ALLOW view All}]\n[{ALLOW delete "
 						+ fullName + "}]\n\n";
 				String content = pagePermissions + "%%aboutme\n%\n";
-				KnowWEEnvironment.getInstance().getWikiConnector()
+				Environment.getInstance().getWikiConnector()
 						.createWikiPage(fullName, content, loginName);
 
 				// create comment page / talks with the therapist
@@ -135,7 +135,7 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 						+ "}]\n<forum name=\"Mit dem Berater sprechen\">\n<box></box></forum>\n";
 
 				String commentPage = fullName + "_comment_therapist";
-				KnowWEEnvironment.getInstance().getWikiConnector()
+				Environment.getInstance().getWikiConnector()
 						.createWikiPage(commentPage, content, loginName);
 			}
 		}

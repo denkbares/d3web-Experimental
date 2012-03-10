@@ -27,12 +27,12 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-import de.knowwe.core.KnowWEAttributes;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Attributes;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.action.WordBasedRenameFinding;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -63,20 +63,20 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 	@SuppressWarnings("unchecked")
 	private String perform(UserActionContext context) {
 
-		rb = KnowWEEnvironment.getInstance().getKwikiBundle(context.getRequest());
+		rb = Environment.getInstance().getMessageBundle(context.getRequest());
 
-		String atmUrl = context.getParameter(KnowWEAttributes.ATM_URL);
-		String query = context.getParameter(KnowWEAttributes.TYPE_BROWSER_QUERY);
+		String atmUrl = context.getParameter(Attributes.ATM_URL);
+		String query = context.getParameter(Attributes.TYPE_BROWSER_QUERY);
 
 		// handle show additional text
 		if (atmUrl != null) {
 			String web = context.getWeb();
 
 			if (web == null) {
-				web = KnowWEEnvironment.DEFAULT_WEB;
+				web = Environment.DEFAULT_WEB;
 			}
 			int queryLength = Integer.valueOf(query);
-			return getAdditionalMatchText(context.getParameter(KnowWEAttributes.ATM_URL), web,
+			return getAdditionalMatchText(context.getParameter(Attributes.ATM_URL), web,
 					queryLength);
 		}
 
@@ -87,14 +87,14 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 		String types = context.getParameter("TypeBrowserQuery");
 		try {
 			Type typ = null;
-			typ = KnowWEEnvironment.getInstance().searchType(
+			typ = Environment.getInstance().searchType(
 					(Class<? extends Type>) Class.forName(types));
 
 			if (typ != null) {
-				Iterator<KnowWEArticle> it = KnowWEEnvironment.getInstance().getArticleManager(
+				Iterator<Article> it = Environment.getInstance().getArticleManager(
 						context.getWeb()).getArticleIterator();
 				while (it.hasNext()) {
-					KnowWEArticle art = it.next();
+					Article art = it.next();
 					Sections.findSuccessorsOfTypeUntyped(art.getSection(),
 							Class.forName(types), found);
 				}
@@ -204,7 +204,7 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 	 * @param queryLength length of the first word of the found section
 	 * @return
 	 */
-	private String createAdditionalMatchingTextSpan(KnowWEArticle article,
+	private String createAdditionalMatchingTextSpan(Article article,
 			String section, int start, int curWords, char direction, boolean span,
 			int wordCount, int queryLength) {
 
@@ -264,7 +264,7 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 	 * can view the result in a larger context.
 	 * 
 	 * @param amtURL additional text parameters
-	 * @param web KnowWEEnvironment
+	 * @param web Environment
 	 * @param query user query string
 	 * @return additional text area
 	 */
@@ -282,10 +282,10 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 		String additionalText = "";
 
 		// find article
-		Iterator<KnowWEArticle> iter = KnowWEEnvironment.getInstance()
+		Iterator<Article> iter = Environment.getInstance()
 										.getArticleManager(web).getArticleIterator();
 		while (iter.hasNext()) {
-			KnowWEArticle article = iter.next();
+			Article article = iter.next();
 			if (article.getTitle().equals(articleTitle)) {
 
 				// get the Section needed for additional Context
@@ -363,7 +363,7 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 		StringBuffer fstringbuffy = new StringBuffer();
 
 		for (Section s : fathers) {
-			if (!(s.get() instanceof KnowWEArticle)) {
+			if (!(s.get() instanceof Article)) {
 				String name = s.get().getName() + ", ";
 				if (name.contains(".")) {
 					name = name.substring(name.indexOf('.') + 1);

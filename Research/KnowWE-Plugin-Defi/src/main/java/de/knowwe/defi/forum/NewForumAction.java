@@ -24,8 +24,8 @@ import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 
@@ -49,8 +49,8 @@ public class NewForumAction extends AbstractAction {
 		String responseString = "\n";
 		GregorianCalendar now = new GregorianCalendar();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB);
+		ArticleManager mgr = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB);
 		String content = "<a href=\"Wiki.jsp?page=Diskussion\"><< zur&uuml;ck zur Diskussion</a><br />\n";
 
 		if (pageName == "") {
@@ -70,9 +70,9 @@ public class NewForumAction extends AbstractAction {
 		if (pageName == "") title = "Forum zu " + " \"" + topic + "\"";
 		else title = "Forum zu " + pageName + " (" + topic + ")";
 		if (mgr.getArticle(title) == null) {
-			KnowWEEnvironment.getInstance().buildAndRegisterArticle(content,
-						title, KnowWEEnvironment.DEFAULT_WEB);
-			KnowWEEnvironment.getInstance().getWikiConnector()
+			Environment.getInstance().buildAndRegisterArticle(content,
+						title, Environment.DEFAULT_WEB);
+			Environment.getInstance().getWikiConnector()
 						.createWikiPage(title, content, username);
 		}
 		else {

@@ -23,7 +23,7 @@ package de.knowwe.comment.forum;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.user.UserContext;
 
 public class ForumModule {
@@ -35,7 +35,7 @@ public class ForumModule {
 
 	public static ResourceBundle getForumBundle(UserContext user) {
 
-		Locale.setDefault(KnowWEEnvironment.getInstance().getWikiConnector().getLocale(
+		Locale.setDefault(Environment.getInstance().getWikiConnector().getLocale(
 				user.getRequest()));
 		return getForumBundle();
 

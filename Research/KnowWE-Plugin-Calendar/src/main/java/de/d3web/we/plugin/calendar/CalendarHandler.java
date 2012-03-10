@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
@@ -68,7 +68,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 
 		List<CalendarEntry> result = new ArrayList<CalendarEntry>();
 
-		KnowWEEnvironment instance = KnowWEEnvironment.getInstance();
+		Environment instance = Environment.getInstance();
 
 		Map<String, String> articleMap = instance.getWikiConnector().getAllArticles(web);
 
@@ -76,7 +76,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 
 			Map<String, Section<Appointment>> found = new HashMap<String, Section<Appointment>>();
 
-			KnowWEArticle article = instance.getArticle(web, elem);
+			Article article = instance.getArticle(web, elem);
 
 			if (article == null) continue; // TODO perhaps some dates are not
 											// imported

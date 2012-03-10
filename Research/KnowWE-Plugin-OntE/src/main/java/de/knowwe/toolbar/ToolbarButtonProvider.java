@@ -19,7 +19,7 @@
  */
 package de.knowwe.toolbar;
 
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.user.UserContext;
 
 /**
@@ -31,12 +31,12 @@ public interface ToolbarButtonProvider {
 
 	/**
 	 * Returns the button depending on the current {@link UserContext} and
-	 * {@link KnowWEArticle}.
+	 * {@link Article}.
 	 *
-	 * @param KnowWEArticle article The article the button is requested for
+	 * @param Article article The article the button is requested for
 	 * @param UserContext userContext The user's context the button is requested
 	 *        for
 	 * @return ToolbarButton The button that can be provided by this provider
 	 */
-	ToolbarButton[] getButtons(KnowWEArticle article, UserContext userContext);
+	ToolbarButton[] getButtons(Article article, UserContext userContext);
 }

@@ -28,7 +28,7 @@ import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.we.kdom.condition.D3webCondition;
 import de.d3web.we.object.QuestionReference;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -50,7 +50,7 @@ public class ApproximateNumericalIntervallFinding extends D3webCondition<Approxi
 	}
 
 	@Override
-	protected Condition createCondition(KnowWEArticle article, Section<ApproximateNumericalFinding> s) {
+	protected Condition createCondition(Article article, Section<ApproximateNumericalFinding> s) {
 		Section<QuestionReference> qRef = Sections.findSuccessor(s,
 				QuestionReference.class);
 

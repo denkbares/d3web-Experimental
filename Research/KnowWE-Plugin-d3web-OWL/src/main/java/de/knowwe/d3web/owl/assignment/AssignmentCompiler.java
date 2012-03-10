@@ -31,7 +31,7 @@ import de.d3web.owl.assignment.Assignment;
 import de.d3web.owl.assignment.AssignmentSet;
 import de.d3web.owl.assignment.Quantifier;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -50,7 +50,7 @@ public abstract class AssignmentCompiler<T extends AssignmentType> extends D3web
 	private final String STOREKEY = "Assignment-Store-Key";
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<T> s) {
+	public Collection<Message> create(Article article, Section<T> s) {
 		// Load the underlying knowledge base
 		KnowledgeBase kb = getKB(article);
 		if (kb == null) {
@@ -84,7 +84,7 @@ public abstract class AssignmentCompiler<T extends AssignmentType> extends D3web
 	}
 
 	@Override
-	public void destroy(KnowWEArticle article, Section<T> s) {
+	public void destroy(Article article, Section<T> s) {
 		Assignment assignment =
 				(Assignment) s.getSectionStore().getObject(article, STOREKEY);
 		if (assignment != null) {
@@ -98,7 +98,7 @@ public abstract class AssignmentCompiler<T extends AssignmentType> extends D3web
 		}
 	}
 
-	protected abstract Assignment createAssignment(KnowWEArticle article, Section<T> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<Message> messages);
+	protected abstract Assignment createAssignment(Article article, Section<T> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<Message> messages);
 
 	protected IRI getOWLClassIRI(Section<T> assignment, String baseURI, OWLOntologyUtil util, Collection<Message> messages) {
 		Section<ComplexOWLClassType> owlClass = Sections.findSuccessor(assignment,

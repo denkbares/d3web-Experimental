@@ -38,7 +38,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import de.d3web.we.tables.poi.PoiUtils;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.ActionContext;
 
 
@@ -125,7 +125,7 @@ public class UploadReceptorServlet extends HttpServlet {
 
 					// import the file to Wiki via PoiUtils
 					Map<String, String> parameters= new HashMap<String, String>();
-					parameters.put("KWikiWeb", KnowWEEnvironment.DEFAULT_WEB);
+					parameters.put("KWikiWeb", Environment.DEFAULT_WEB);
 					ActionContext context = new ActionContext(null, null, parameters, req, res, null, null);
 					if (fileType.equals("word"))
 						PoiUtils.importWordFromFile(file, tableId, article, context);

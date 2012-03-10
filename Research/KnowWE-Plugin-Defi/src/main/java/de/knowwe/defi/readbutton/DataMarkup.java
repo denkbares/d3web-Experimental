@@ -28,7 +28,7 @@ import com.ecyrd.jspwiki.event.WikiEventListener;
 import com.ecyrd.jspwiki.event.WikiEventManager;
 import com.ecyrd.jspwiki.event.WikiSecurityEvent;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -57,7 +57,7 @@ public class DataMarkup extends DefaultMarkupType implements WikiEventListener {
 		this.setRenderer(new DataRenderer<AbstractType>());
 		this.setIgnorePackageCompile(true);
 
-		ServletContext context = KnowWEEnvironment.getInstance().getContext();
+		ServletContext context = Environment.getInstance().getContext();
 		WikiEngine en = WikiEngine.getInstance(context, null);
 		WikiEventManager.addWikiEventListener(en.getAuthenticationManager(), this);
 	}
@@ -84,15 +84,15 @@ public class DataMarkup extends DefaultMarkupType implements WikiEventListener {
 			}
 
 			if (fullName != ""
-					&& !KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+					&& !Environment.getInstance().getWikiConnector().doesPageExist(
 							fullName + "_data")) {
 
 				String pagePermissions = "[{ALLOW view All}]\r\n[{ALLOW delete "
 						+ fullName + "}]\r\n\r\n";
 				String content = pagePermissions + "%%data\r\n%\r\n";
-				KnowWEEnvironment.getInstance().buildAndRegisterArticle(content,
-						fullName + "_data", KnowWEEnvironment.DEFAULT_WEB);
-				KnowWEEnvironment.getInstance().getWikiConnector()
+				Environment.getInstance().buildAndRegisterArticle(content,
+						fullName + "_data", Environment.DEFAULT_WEB);
+				Environment.getInstance().getWikiConnector()
 						.createWikiPage(fullName + "_data", content, loginName);
 			}
 		}

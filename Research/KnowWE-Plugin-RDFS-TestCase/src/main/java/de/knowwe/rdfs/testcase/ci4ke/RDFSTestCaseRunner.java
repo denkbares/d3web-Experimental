@@ -21,7 +21,7 @@ package de.knowwe.rdfs.testcase.ci4ke;
 import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
 import de.d3web.we.ci4ke.testing.CITestResult.Type;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.rdfs.testcase.RDFSTestCase;
 import de.knowwe.rdfs.testcase.analysis.RDFSTestCaseAnalysis;
 import de.knowwe.rdfs.testcase.analysis.RDFSTestCaseAnalysisReport;
@@ -48,7 +48,7 @@ public class RDFSTestCaseRunner extends AbstractCITest {
 
 		// load test case
 		RDFSTestCase testCase = RDFSTestCaseLoader.loadTestCase(
-				monitoredArticleTitle, KnowWEEnvironment.DEFAULT_WEB, testCaseName);
+				monitoredArticleTitle, Environment.DEFAULT_WEB, testCaseName);
 
 		if (testCase == null) {
 			return new CITestResult(Type.ERROR, "No test case with name '" + testCaseName

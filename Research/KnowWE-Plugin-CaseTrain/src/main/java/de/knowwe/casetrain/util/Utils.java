@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.ResourceBundle;
 
 import de.casetrain.cleanup.Cleaner;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
@@ -161,7 +161,7 @@ public class Utils {
 	}
 
 	public static String wikiSyntaxToHtml(String syntax) {
-		syntax = KnowWEEnvironment.getInstance().getWikiConnector().wikiSyntaxToHtml(syntax);
+		syntax = Environment.getInstance().getWikiConnector().wikiSyntaxToHtml(syntax);
 		syntax = Cleaner.removeTagsExceptIUB(syntax);
 		return syntax;
 	}

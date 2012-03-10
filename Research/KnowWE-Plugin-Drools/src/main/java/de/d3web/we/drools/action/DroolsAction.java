@@ -42,11 +42,11 @@ import de.d3web.we.drools.terminology.ChoiceInput;
 import de.d3web.we.drools.terminology.DroolsKnowledgeHandler;
 import de.d3web.we.drools.terminology.NumInput;
 import de.d3web.we.drools.terminology.SolutionInput;
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -244,8 +244,8 @@ public class DroolsAction extends AbstractAction {
 	}
 
 	private void doStoreAction(UserActionContext context) throws IOException {
-		KnowWEArticle article = DroolsUtils.loadArticle(context);
-		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(
+		Article article = DroolsUtils.loadArticle(context);
+		ArticleManager mgr = Environment.getInstance().getArticleManager(
 				article.getWeb());
 		String desiredSessionName = extractSessionName(context.getParameter("command"));
 		Section<DroolsSessionType> session = findDroolsSessionSection(context,
@@ -287,7 +287,7 @@ public class DroolsAction extends AbstractAction {
 			String desiredSessionName) {
 
 		// load the article
-		KnowWEArticle article = DroolsUtils.loadArticle(context);
+		Article article = DroolsUtils.loadArticle(context);
 
 		if (article != null) {
 

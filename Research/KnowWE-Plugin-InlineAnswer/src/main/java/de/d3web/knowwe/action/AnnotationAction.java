@@ -26,7 +26,7 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 
@@ -59,11 +59,11 @@ public class AnnotationAction extends AbstractAction {
 
 	private String perform(UserActionContext context) {
 
-		String namespace = context.getParameter(KnowWEAttributes.SEMANO_NAMESPACE);
-		String termName = context.getParameter(KnowWEAttributes.SEMANO_TERM_NAME);
-		String user = context.getParameter(KnowWEAttributes.USER);
-		String webname = context.getParameter(KnowWEAttributes.WEB);
-		String id = context.getParameter(KnowWEAttributes.SEMANO_OBJECT_ID);
+		String namespace = context.getParameter(Attributes.SEMANO_NAMESPACE);
+		String termName = context.getParameter(Attributes.SEMANO_TERM_NAME);
+		String user = context.getParameter(Attributes.USER);
+		String webname = context.getParameter(Attributes.WEB);
+		String id = context.getParameter(Attributes.SEMANO_OBJECT_ID);
 		String targetUrlPrefix = context.getParameter("sendToUrl");
 		String topic = context.getTitle();
 		if (topic == null) {

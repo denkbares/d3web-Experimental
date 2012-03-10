@@ -18,7 +18,7 @@
  */
 package de.knowwe.jurisearch.usersupport;
 
-import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -39,7 +39,7 @@ public class WordDefaultMarkup extends DefaultMarkupType
 	{
 		m = new DefaultMarkup("WordExportImport");
 		m.addContentType(new WordDefaultMarkupContent());
-		m.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, true);
+		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME, true);
 	}
 
 	public WordDefaultMarkup()

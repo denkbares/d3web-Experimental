@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.lod.markup.IgnoreContentType;
@@ -37,7 +37,7 @@ public class HermesData {
 	// Topic, on which unparsed triples are saved.
 	public static final String wikiTopicNoParse = "NoParse";
 
-	private static final String web = KnowWEEnvironment.DEFAULT_WEB;
+	private static final String web = Environment.DEFAULT_WEB;
 
 	// Type which is used to save (object)'s specified in property files.
 	private static final String objectType = "rdf:type";
@@ -102,7 +102,7 @@ public class HermesData {
 
 		String topic = getMappingTopic();
 
-		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web,
+		Article article = Environment.getInstance().getArticle(web,
 				topic);
 
 		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
@@ -141,7 +141,7 @@ public class HermesData {
 
 		String topic = getMappingTopic();
 
-		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web,
+		Article article = Environment.getInstance().getArticle(web,
 				topic);
 
 		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
@@ -168,7 +168,7 @@ public class HermesData {
 
 		String topic = getMappingTopic();
 
-		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web,
+		Article article = Environment.getInstance().getArticle(web,
 				topic);
 
 		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
@@ -199,10 +199,10 @@ public class HermesData {
 
 		String topic = getNoParseTopic();
 
-		if (KnowWEEnvironment.getInstance().getWikiConnector()
+		if (Environment.getInstance().getWikiConnector()
 				.doesPageExist(topic)) {
 
-			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
+			Article article = Environment.getInstance().getArticle(
 					web, topic);
 
 			List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
@@ -234,10 +234,10 @@ public class HermesData {
 
 		String topic = getIgnoredTopic();
 
-		if (KnowWEEnvironment.getInstance().getWikiConnector()
+		if (Environment.getInstance().getWikiConnector()
 				.doesPageExist(topic)) {
 
-			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
+			Article article = Environment.getInstance().getArticle(
 					web, topic);
 
 			List<Section<IgnoreContentType>> found = new Vector<Section<IgnoreContentType>>();
@@ -291,7 +291,7 @@ public class HermesData {
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			String baseURL = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+			String baseURL = Environment.getInstance().getWikiConnector().getBaseUrl();
 
 			return "<a href=\"" + baseURL + "Wiki.jsp?page=" + url
 					+ "\" class=\"wikipage\">" + concept + "</a>";
@@ -318,7 +318,7 @@ public class HermesData {
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			String baseURL = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+			String baseURL = Environment.getInstance().getWikiConnector().getBaseUrl();
 			return "<a id=\"" + id + "\" href=\"" + baseURL + "Wiki.jsp?page=" + url
 					+ "\" class=\"wikipage\">" + concept + "</a>";
 		}

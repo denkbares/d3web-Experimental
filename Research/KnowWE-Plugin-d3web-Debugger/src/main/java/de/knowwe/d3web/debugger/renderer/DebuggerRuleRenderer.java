@@ -49,7 +49,7 @@ import de.d3web.scoring.ActionHeuristicPS;
 import de.d3web.we.kdom.rules.RuleContentType;
 import de.d3web.we.kdom.rules.action.RuleAction;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
@@ -79,7 +79,7 @@ public class DebuggerRuleRenderer implements Renderer{
 	@Override
 	public void render(Section<?> sec, UserContext user,
 			StringBuilder string) {
-		KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
+		Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 		Session session = D3webUtils.getSession(article.getTitle(), user,
 				article.getWeb());
 		Section<RuleAction> ruleAction = Sections.findSuccessor(sec,

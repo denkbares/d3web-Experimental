@@ -33,14 +33,14 @@ import de.d3web.empiricaltesting.TestPersistence;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysis;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysisReport;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.KnowWERessourceLoader;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.RessourceLoader;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
-import de.knowwe.core.wikiConnector.KnowWEWikiConnector;
+import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -63,10 +63,10 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_MASTER, false);
 		MARKUP.addAnnotation(ANNOTATION_FILE, false);
 
-		KnowWERessourceLoader.getInstance().add("testcaseexecutor.js",
-				KnowWERessourceLoader.RESOURCE_SCRIPT);
-		KnowWERessourceLoader.getInstance().add("testcaseexecutor.css",
-				KnowWERessourceLoader.RESOURCE_STYLESHEET);
+		RessourceLoader.getInstance().add("testcaseexecutor.js",
+				RessourceLoader.RESOURCE_SCRIPT);
+		RessourceLoader.getInstance().add("testcaseexecutor.css",
+				RessourceLoader.RESOURCE_STYLESHEET);
 	}
 
 	public TestCaseExecutorType() {
@@ -74,11 +74,11 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 		addSubtreeHandler(new SubtreeHandler<TestCaseExecutorType>() {
 
 			@Override
-			public Collection<Message> create(KnowWEArticle article, Section<TestCaseExecutorType> section) {
+			public Collection<Message> create(Article article, Section<TestCaseExecutorType> section) {
 				List<Message> errors = new LinkedList<Message>();
 
 				String[] files = DefaultMarkupType.getAnnotations(section, ANNOTATION_FILE);
-				KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
+				WikiConnector connector = Environment.getInstance().getWikiConnector();
 				List<String> attachments = connector.getAttachmentFilenamesForPage(section.getArticle().getTitle());
 
 				for (String file : files) {
@@ -109,7 +109,7 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 		String[] files = DefaultMarkupType.getAnnotations(section, ANNOTATION_FILE);
 		if (files == null) return 0;
 
-		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
+		WikiConnector connector = Environment.getInstance().getWikiConnector();
 		String title = section.getArticle().getTitle();
 		List<String> attachments = connector.getAttachmentFilenamesForPage(title);
 		String master = getMaster(section);

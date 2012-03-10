@@ -13,10 +13,10 @@ import java.util.Vector;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.lod.HermesData;
@@ -80,16 +80,16 @@ public class MappingsAction extends AbstractAction {
 						+ buffy.toString()
 						+ "%";
 
-			KnowWEEnvironment
+			Environment
 						.getInstance()
 						.getWikiConnector()
 						.createWikiPage(mappingTopic, output,
 								user);
 
-			KnowWEArticle article = KnowWEArticle.createArticle(output,
-						mappingTopic, KnowWEEnvironment.getInstance()
+			Article article = Article.createArticle(output,
+						mappingTopic, Environment.getInstance()
 								.getRootType(), web, true);
-			KnowWEEnvironment.getInstance().getArticleManager(web)
+			Environment.getInstance().getArticleManager(web)
 						.registerArticle(article);
 
 			context.getWriter().write(
@@ -103,7 +103,7 @@ public class MappingsAction extends AbstractAction {
 		// user link.
 		else if (type.equals("refresh")) {
 
-			KnowWEArticle article = KnowWEEnvironment.getInstance()
+			Article article = Environment.getInstance()
 					.getArticle(web, mappingTopic);
 
 			List<Section<MappingContentType>> found1 = new

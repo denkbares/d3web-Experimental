@@ -25,11 +25,11 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import de.knowwe.core.KnowWEAttributes;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Attributes;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.utils.KnowWEUtils;
 
 public class ParseWebOfflineRenderer extends AbstractAction {
@@ -46,21 +46,21 @@ public class ParseWebOfflineRenderer extends AbstractAction {
 	}
 
 	private String perform(UserActionContext context) {
-		String webname = context.getParameter(KnowWEAttributes.WEB);
+		String webname = context.getParameter(Attributes.WEB);
 
-		ResourceBundle rb = KnowWEEnvironment.getInstance().getKwikiBundle(
+		ResourceBundle rb = Environment.getInstance().getMessageBundle(
 				context.getRequest());
 
-		Map<String, String> articles = KnowWEEnvironment.getInstance()
+		Map<String, String> articles = Environment.getInstance()
 				.getWikiConnector().getAllArticles(webname);
 		Set<String> articleNames = articles.keySet();
 		StringBuffer reports = new StringBuffer();
 		int problems = 0;
 		for (String name : articleNames) {
-			KnowWEArticle article = KnowWEArticle.createArticle(articles.get(name),
-					name, KnowWEEnvironment.getInstance().getRootType(),
+			Article article = Article.createArticle(articles.get(name),
+					name, Environment.getInstance().getRootType(),
 					webname, true);
-			KnowWEEnvironment.getInstance()
+			Environment.getInstance()
 					.getArticleManager(webname).registerArticle(
 							article);
 

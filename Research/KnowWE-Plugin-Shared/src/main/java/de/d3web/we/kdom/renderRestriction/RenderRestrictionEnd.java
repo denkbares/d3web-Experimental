@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.renderRestriction;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
@@ -66,7 +66,7 @@ public class RenderRestrictionEnd extends DefaultMarkupType {
 
 				// hide content (i.e., remove from rendered StringBuffer)
 				if (group != null
-						&& !KnowWEEnvironment.getInstance().getWikiConnector().userIsMemberOfGroup(
+						&& !Environment.getInstance().getWikiConnector().userIsMemberOfGroup(
 								user.getUserName(), group, user.getRequest())) {
 					String toFind = RenderRestrictionStart.createString(group);
 					int index = string.indexOf(toFind);

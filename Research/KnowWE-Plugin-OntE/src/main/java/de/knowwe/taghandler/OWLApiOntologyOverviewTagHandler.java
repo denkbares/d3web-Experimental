@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
@@ -64,15 +64,15 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 			return html.toString();
 		}
 
-		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
-		Collection<KnowWEArticle> articles = mgr.getArticles();
+		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
+		Collection<Article> articles = mgr.getArticles();
 		StringBuilder anchors = new StringBuilder();
 		StringBuilder concepts = new StringBuilder();
 
 		Map<String, List<Section<DefaultFrame>>> frames = new HashMap<String, List<Section<DefaultFrame>>>();
 
 		// look for DefaultFrame sections
-		for (KnowWEArticle article : articles) {
+		for (Article article : articles) {
 
 			List<Section<DefaultFrame>> defaultFrames = Sections.findSuccessorsOfType(
 					article.getSection(), DefaultFrame.class);

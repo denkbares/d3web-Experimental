@@ -33,7 +33,7 @@ import org.semanticweb.owlapi.model.OWLIndividual;
 
 import de.d3web.core.session.blackboard.Facts;
 import de.knowwe.core.event.EventManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -75,7 +75,7 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 	}
 
 	@Override
-	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<IndividualFrame> s, Collection<Message> messages) {
+	public Set<OWLAxiom> createOWLAxioms(Article article, Section<IndividualFrame> s, Collection<Message> messages) {
 
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 		OWLIndividual i = null;

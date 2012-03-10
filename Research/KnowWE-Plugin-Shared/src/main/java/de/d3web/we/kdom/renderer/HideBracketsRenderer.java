@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.renderer;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
@@ -33,8 +33,8 @@ public class HideBracketsRenderer implements Renderer {
 		StringBuilder b = new StringBuilder();
 		DelegateRenderer.getInstance().render(sec, user, b);
 		String text = b.toString();
-		text = text.replaceAll("\\[", KnowWEEnvironment.HTML_BRACKET_OPEN);
-		text = text.replaceAll("\\]", KnowWEEnvironment.HTML_BRACKET_CLOSE);
+		text = text.replaceAll("\\[", Environment.HTML_BRACKET_OPEN);
+		text = text.replaceAll("\\]", Environment.HTML_BRACKET_CLOSE);
 		string.append(text);
 	}
 

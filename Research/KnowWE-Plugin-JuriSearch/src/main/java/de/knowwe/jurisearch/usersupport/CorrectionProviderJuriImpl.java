@@ -26,7 +26,7 @@ import de.d3web.we.algorithm.DialogComponent;
 import de.d3web.we.algorithm.Suggestion;
 import de.d3web.we.correction.ApproximateCorrectionProvider;
 import de.d3web.we.util.UserSupportUtil;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 
 
@@ -39,7 +39,7 @@ public class CorrectionProviderJuriImpl implements ApproximateCorrectionProvider
 {
 
 	@Override
-	public List<Suggestion> getSuggestions(KnowWEArticle article, Section<?> section)
+	public List<Suggestion> getSuggestions(Article article, Section<?> section)
 	{
 		Collection<Section<?>> localTermMatches =
 				UserSupportUtil.getTermReferencesCompilingArticle(section.getArticle(), section);

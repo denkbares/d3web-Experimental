@@ -27,11 +27,11 @@ import junit.framework.TestCase;
 import objectTypes.SplitObjectType;
 import objectTypes.WordObjectType;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
-import dummies.KnowWETestWikiConnector;
+import dummies.TestWikiConnector;
 
 /**
  * Sectionizer Test Class.
@@ -49,10 +49,10 @@ public class SectionizerTest extends TestCase {
 	public void testKdom() {
 
 		/**
-		 * Initialise KnowWEEnvironment
+		 * Initialise Environment
 		 */
-		KnowWEEnvironment.initKnowWE(new KnowWETestWikiConnector());
-		KnowWEEnvironment.getInstance().getArticle("default_web", "Test_Article");
+		Environment.initKnowWE(new TestWikiConnector());
+		Environment.getInstance().getArticle("default_web", "Test_Article");
 
 		/**
 		 * Build an Article.
@@ -65,7 +65,7 @@ public class SectionizerTest extends TestCase {
 
 		// System.out.println(rootType.getAllowedChildrenTypes());;
 
-		KnowWEArticle article = KnowWEArticle.createArticle(content, "Test_Article", rootType,
+		Article article = Article.createArticle(content, "Test_Article", rootType,
 				"default_web");
 
 		/**
@@ -153,31 +153,31 @@ public class SectionizerTest extends TestCase {
 		// assertEquals(WordObjectType.getInstance(), children.get(0));
 		// Section typeSec = children.get(1);
 		// assertEquals(PlainText.getInstance() ,typeSec.get());
-		//		
+		//
 		// typeSec = children.get(3);
 		// assertEquals(PlainText.getInstance() ,typeSec.get());
-		//		
+		//
 		// // WordObjectType with AStarChildren
 		// typeSec = children.get(0);
 		// assertEquals(WordObjectType.getInstance() ,typeSec.get());
-		//		
+		//
 		// typeSec = typeSec.getChildren().get(0);
 		// assertEquals(AStarObjectType.getInstance() ,typeSec.get());
-		//		
+		//
 		// typeSec = typeSec.getChildren().get(0);
 		// assertEquals(AObjectType.getInstance() ,typeSec.get());
-		//		
+		//
 		// // WOT with BStarChildren
 		// typeSec = children.get(2).getChildren().get(0);
 		// assertEquals(BStarObjectType.getInstance() ,typeSec.get());
-		//		
+		//
 		// typeSec = typeSec.getChildren().get(0);
 		// assertEquals(AObjectType.getInstance() ,typeSec.get());
-		//		
+		//
 		// // SplitObjectType
 		// typeSec = children.get(4);
 		// assertEquals(SplitObjectType.getInstance(), typeSec.get());
-		//		
+		//
 		// ArrayList<Section> splitChildren = new
 		// ArrayList<Section>(typeSec.getChildren());
 		// child = splitChildren.get(0);

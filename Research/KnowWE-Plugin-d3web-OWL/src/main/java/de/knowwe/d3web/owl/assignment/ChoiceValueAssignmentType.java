@@ -33,7 +33,7 @@ import de.d3web.owl.assignment.Quantifier;
 import de.d3web.we.kdom.auxiliary.Equals;
 import de.d3web.we.object.QuestionReference;
 import de.knowwe.core.compile.Priority;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -68,7 +68,7 @@ public class ChoiceValueAssignmentType extends AssignmentType {
 	private class ChoiceValueAssignmentCompiler extends AssignmentCompiler<ChoiceValueAssignmentType> {
 
 		@Override
-		protected Assignment createAssignment(KnowWEArticle article, Section<ChoiceValueAssignmentType> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<Message> messages) {
+		protected Assignment createAssignment(Article article, Section<ChoiceValueAssignmentType> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<Message> messages) {
 			/* Get the question */
 			QuestionChoice question = getQuestion(article, s, messages);
 			if (question == null) {
@@ -87,7 +87,7 @@ public class ChoiceValueAssignmentType extends AssignmentType {
 			return new ChoiceValueAssignment(owlClassIRI, question);
 		}
 
-		private QuestionChoice getQuestion(KnowWEArticle article, Section<ChoiceValueAssignmentType> s, Collection<Message> messages) {
+		private QuestionChoice getQuestion(Article article, Section<ChoiceValueAssignmentType> s, Collection<Message> messages) {
 			// Get Question section
 			Section<QuestionReference> questionSection = Sections.findSuccessor(s,
 					QuestionReference.class);

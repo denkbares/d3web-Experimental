@@ -1,6 +1,6 @@
 package de.knowwe.d3web.proket.deploy;
 
-import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.Attributes;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.d3web.action.DownloadKnowledgeBase;
@@ -25,8 +25,8 @@ public class KnowledgebaseDeployProvider implements ToolProvider {
 			kbName = "knowledgebase";
 		}
 		String jsAction = "window.location='action/DeployAction" +
-				"?" + KnowWEAttributes.TOPIC + "=" + section.getTitle() +
-				"&" + KnowWEAttributes.WEB + "=" + section.getWeb() +
+				"?" + Attributes.TOPIC + "=" + section.getTitle() +
+				"&" + Attributes.WEB + "=" + section.getWeb() +
 				"&" + DownloadKnowledgeBase.PARAM_FILENAME + "=" + kbName + ".d3web'";
 		return new DefaultTool(
 				"KnowWEExtension/images/export_wiz.gif",

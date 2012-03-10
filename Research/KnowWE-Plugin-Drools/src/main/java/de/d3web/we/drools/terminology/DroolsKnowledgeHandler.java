@@ -16,7 +16,7 @@ import de.d3web.we.drools.action.utils.DroolsUtils;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.event.ArticleCreatedEvent;
 import de.knowwe.event.FullParseEvent;
 import de.knowwe.logging.Logging;
@@ -105,7 +105,7 @@ public class DroolsKnowledgeHandler implements EventListener {
 
 		String user = context.getUserName();
 		// Load the Article
-		KnowWEArticle article = DroolsUtils.loadArticle(context);
+		Article article = DroolsUtils.loadArticle(context);
 		String title = article.getTitle();
 
 		Map<String, StatefulKnowledgeSession> sessionsForArticle = knowledgeSessions.get(title);
@@ -179,7 +179,7 @@ public class DroolsKnowledgeHandler implements EventListener {
 	 *
 	 * @param article the current article
 	 */
-	private void addFacts(KnowWEArticle article, StatefulKnowledgeSession session) {
+	private void addFacts(Article article, StatefulKnowledgeSession session) {
 
 		// Load all facts into the session
 		for (Object o : DroolsKnowledgeHandler.getInstance().getFactsStore(article.getTitle()).values()) {

@@ -21,7 +21,7 @@ package de.d3web.we.taghandler;
 import java.util.HashSet;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
@@ -44,7 +44,7 @@ public class ObjectTypeTreeHandler extends AbstractTagHandler {
 
 	@Override
 	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
-		Type t = KnowWEEnvironment.getInstance().getRootType();
+		Type t = Environment.getInstance().getRootType();
 
 		return visitNode(t, 1, new HashSet<String>(), false);
 	}

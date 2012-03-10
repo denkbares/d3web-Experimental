@@ -27,7 +27,7 @@ import de.knowwe.casetrain.renderer.SpanClassRenderer;
 import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -57,7 +57,7 @@ public class AnswersBlock extends SubblockMarkup {
 		this.addSubtreeHandler(new GeneralSubtreeHandler<Question>() {
 
 			@Override
-			public Collection<Message> create(KnowWEArticle article, Section<Question> s) {
+			public Collection<Message> create(Article article, Section<Question> s) {
 
 				List<Message> messages = new ArrayList<Message>(0);
 				List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();

@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import utils.MyTestArticleManager;
+import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.casetrain.evaluation.Evaluation;
 import de.knowwe.casetrain.evaluation.EvaluationEnd;
@@ -40,7 +40,7 @@ import de.knowwe.casetrain.type.multimedia.Link;
 import de.knowwe.casetrain.type.multimedia.Link.Url;
 import de.knowwe.casetrain.type.multimedia.MultimediaItem.MultimediaItemContent;
 import de.knowwe.casetrain.type.multimedia.Video;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -78,7 +78,7 @@ public class CaseTrainArticleTest extends TestCase {
 	private final String TESTSUITEARTICLE = "src/test/resources/CaseTrainWikipage.txt";
 
 	private final String missingComponent = "Missing component: ";
-	private Section<KnowWEArticle> articleSec;
+	private Section<Article> articleSec;
 	private Section<MetaData> meta;
 	private Section<Introduction> intro;
 	private Section<Info> info;
@@ -108,7 +108,7 @@ public class CaseTrainArticleTest extends TestCase {
 	@Override
 	protected void setUp() throws IOException {
 		InitPluginManager.init();
-		KnowWEArticle article = MyTestArticleManager.getArticle(TESTSUITEARTICLE);
+		Article article = TestArticleManager.getArticle(TESTSUITEARTICLE);
 		articleSec = article.getSection();
 		meta = Sections.findSuccessor(articleSec, MetaData.class);
 		intro = Sections.findSuccessor(articleSec, Introduction.class);

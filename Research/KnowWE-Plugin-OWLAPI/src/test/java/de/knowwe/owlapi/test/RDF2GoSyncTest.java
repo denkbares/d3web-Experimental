@@ -34,16 +34,16 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.core.Environment;
+import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.event.EventManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.event.ArticleUpdatesFinishedEvent;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.owlapi.RDF2GoSync;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import dummies.KnowWETestWikiConnector;
+import dummies.TestWikiConnector;
 
 /**
  * Test for the @link{RDF2GoSync} class.
@@ -58,8 +58,8 @@ public class RDF2GoSyncTest {
 	@BeforeClass
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
-		KnowWEPackageManager.overrideAutocompileArticle(true);
-		KnowWEEnvironment.initKnowWE(new KnowWETestWikiConnector());
+		PackageManager.overrideAutocompileArticle(true);
+		Environment.initKnowWE(new TestWikiConnector());
 	}
 
 	@Test
@@ -90,8 +90,8 @@ public class RDF2GoSyncTest {
 	}
 
 	private Section<?> getDummySection() {
-		KnowWEArticle article = KnowWEArticle.createArticle("Wayne", "Juckts",
-				KnowWEEnvironment.getInstance().getRootType(), "default_web");
+		Article article = Article.createArticle("Wayne", "Juckts",
+				Environment.getInstance().getRootType(), "default_web");
 		return Section.createSection("Wayne Juckts", article, article.getSection());
 	}
 

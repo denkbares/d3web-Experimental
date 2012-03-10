@@ -22,7 +22,7 @@ package de.knowwe.util;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
@@ -38,12 +38,12 @@ public class DelegateDestroyHandler extends GeneralSubtreeHandler<Type> {
 	}
 
 	@Override
-	public void destroy(KnowWEArticle article, Section<Type> s) {
+	public void destroy(Article article, Section<Type> s) {
 		handler.destroy(article, s);
 	}
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<Type> s) {
+	public Collection<Message> create(Article article, Section<Type> s) {
 		return new ArrayList<Message>(0);
 	}
 

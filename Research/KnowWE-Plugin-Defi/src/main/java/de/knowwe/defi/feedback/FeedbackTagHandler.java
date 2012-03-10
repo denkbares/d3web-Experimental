@@ -21,7 +21,7 @@ package de.knowwe.defi.feedback;
 import java.io.File;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 
@@ -86,7 +86,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		// +
 		// "Bitte Antworten Sie so ehrlich wie möglich und seien Sie ruhig kritisch.");
 
-		String path = KnowWEEnvironment.getInstance().getWikiConnector().getSavePath();
+		String path = Environment.getInstance().getWikiConnector().getSavePath();
 		String filename = user.getUserName().toLowerCase() + ".xml";
 		File f = new File(path + filename);
 

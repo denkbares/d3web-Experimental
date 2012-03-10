@@ -18,7 +18,7 @@
  */
 package de.knowwe.jurisearch.tree;
 
-import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -38,7 +38,7 @@ public class QuestionTreeMarkup extends DefaultMarkupType {
 	static {
 		m = new DefaultMarkup("baum");
 		m.addContentType(new QuestionTree());
-		m.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
+		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME, false);
 	}
 
 	public QuestionTreeMarkup() {

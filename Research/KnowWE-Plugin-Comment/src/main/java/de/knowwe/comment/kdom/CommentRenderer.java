@@ -25,15 +25,15 @@ import java.util.List;
 import java.util.Map;
 
 import de.knowwe.comment.forum.ForumRenderer;
-import de.knowwe.core.KnowWEAttributes;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Attributes;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.wikiConnector.KnowWEWikiConnector;
+import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.kdom.xml.XMLTail;
 
 public class CommentRenderer implements Renderer {
@@ -68,8 +68,8 @@ public class CommentRenderer implements Renderer {
 
 		try { // check whether WikiEngine is properly started yet
 
-			KnowWEEnvironment instance = KnowWEEnvironment.getInstance();
-			KnowWEWikiConnector wikiConnector = instance.getWikiConnector();
+			Environment instance = Environment.getInstance();
+			WikiConnector wikiConnector = instance.getWikiConnector();
 
 			String commentTag = Sections.findChildOfType(
 					Sections.findChildOfType(sec, CommentTypeTag.class), CommentTypeTagName.class).getText();
@@ -140,13 +140,13 @@ public class CommentRenderer implements Renderer {
 
 					StringBuilder buffi = new StringBuilder();
 					forumSec.collectTextsFromLeaves(buffi);
-					user.getParameters().put(KnowWEAttributes.WEB, forumSec.getWeb());
+					user.getParameters().put(Attributes.WEB, forumSec.getWeb());
 					instance.getWikiConnector().writeArticleToWikiEnginePersistence(
 							sec.getTitle(), buffy.toString(), user);
 
 				}
 
-				user.getParameters().put(KnowWEAttributes.WEB, sec.getWeb());
+				user.getParameters().put(Attributes.WEB, sec.getWeb());
 				instance.getWikiConnector().writeArticleToWikiEnginePersistence(
 						sec.getTitle(), buffy.toString(), user);
 

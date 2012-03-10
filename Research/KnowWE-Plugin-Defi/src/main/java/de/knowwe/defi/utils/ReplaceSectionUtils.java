@@ -26,13 +26,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.wikiConnector.KnowWEWikiConnector;
-import dummies.KnowWETestWikiConnector;
+import de.knowwe.core.wikiConnector.WikiConnector;
+import dummies.TestWikiConnector;
 
 /**
  * 
@@ -69,17 +69,17 @@ public class ReplaceSectionUtils {
 			Map<String, String> sectionsMapForCurrentTitle,
 			UserActionContext context) {
 
-		KnowWEWikiConnector wikiConnector = KnowWEEnvironment.getInstance().getWikiConnector();
+		WikiConnector wikiConnector = Environment.getInstance().getWikiConnector();
 
 		String newArticleText = getNewArticleText(title, sectionsMapForCurrentTitle,
 				context);
 		wikiConnector.writeArticleToWikiEnginePersistence(title, newArticleText, context);
 
-		if (wikiConnector instanceof KnowWETestWikiConnector) {
+		if (wikiConnector instanceof TestWikiConnector) {
 			// This is only needed for the test environment. In the running
 			// wiki, this is automatically called after the change to the
 			// persistence.
-			KnowWEEnvironment.getInstance().buildAndRegisterArticle(newArticleText,
+			Environment.getInstance().buildAndRegisterArticle(newArticleText,
 					title, context.getWeb());
 		}
 	}
@@ -90,7 +90,7 @@ public class ReplaceSectionUtils {
 			UserActionContext context) {
 
 		StringBuffer newText = new StringBuffer();
-		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
+		Article article = Environment.getInstance().getArticle(
 				context.getWeb(),
 				title);
 		collectTextAndReplaceNode(article.getSection(), sectionsMapForCurrentTitle,

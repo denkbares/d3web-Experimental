@@ -13,7 +13,7 @@ import de.d3web.scoring.inference.PSMethodHeuristic;
 import de.d3web.we.kdom.condition.KDOMConditionFactory;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -30,7 +30,7 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 	}
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article,
+	public Collection<Message> create(Article article,
 			Section<ScoreCell> section) {
 
 		List<Message> messages = new ArrayList<Message>();

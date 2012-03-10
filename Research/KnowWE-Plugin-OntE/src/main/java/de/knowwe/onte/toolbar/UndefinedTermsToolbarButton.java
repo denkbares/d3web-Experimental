@@ -1,6 +1,6 @@
 package de.knowwe.onte.toolbar;
 
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
 import de.knowwe.toolbar.DefaultToolbarButton;
@@ -11,7 +11,7 @@ import de.knowwe.tools.DefaultTool;
 public class UndefinedTermsToolbarButton implements ToolbarButtonProvider {
 
 	@Override
-	public ToolbarButton[] getButtons(KnowWEArticle article, UserContext userContext) {
+	public ToolbarButton[] getButtons(Article article, UserContext userContext) {
 		return new ToolbarButton[] { getToolbarButton() };
 	}
 

@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -45,7 +45,7 @@ import de.knowwe.rdfs.testcase.RDFSTestCase;
 public class RDFSTestCaseHandler extends SubtreeHandler<RDFSTestCaseType> {
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<RDFSTestCaseType> section) {
+	public Collection<Message> create(Article article, Section<RDFSTestCaseType> section) {
 
 		// Get name
 		String name = DefaultMarkupType.getAnnotation(section,

@@ -25,7 +25,7 @@ import java.util.List;
 
 import de.knowwe.core.correction.CorrectionProvider;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
@@ -50,7 +50,7 @@ public class MisspelledSyntaxConstruct extends AbstractType {
 		this.addSubtreeHandler(new GeneralSubtreeHandler<MisspelledSyntaxConstruct>() {
 
 			@Override
-			public Collection<Message> create(KnowWEArticle article, Section<MisspelledSyntaxConstruct> s) {
+			public Collection<Message> create(Article article, Section<MisspelledSyntaxConstruct> s) {
 
 				String messageText = "";
 				StringBuilder corrections = new StringBuilder();

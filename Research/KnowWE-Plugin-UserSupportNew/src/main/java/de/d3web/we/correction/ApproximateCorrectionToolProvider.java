@@ -27,7 +27,7 @@ import de.d3web.we.algorithm.Suggestion;
 import de.d3web.we.tables.CausalDiagnosisScore;
 import de.d3web.we.tables.DecisionTable;
 import de.d3web.we.tables.HeuristicDiagnosisTable;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -71,8 +71,8 @@ public class ApproximateCorrectionToolProvider implements ToolProvider
 
 		tools[0] = new DefaultTool(
 				"KnowWEExtension/images/quickfix.gif",
-				KnowWEEnvironment.getInstance().getKwikiBundle().getString("KnowWE.Correction.do"),
-				KnowWEEnvironment.getInstance().getKwikiBundle().getString("KnowWE.Correction.do"),
+				Environment.getInstance().getMessageBundle().getString("KnowWE.Correction.do"),
+				Environment.getInstance().getMessageBundle().getString("KnowWE.Correction.do"),
 				null,
 				"correct"
 				);

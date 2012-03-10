@@ -22,7 +22,7 @@ package de.d3web.we.taghandler;
 
 import java.util.Map;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -37,7 +37,7 @@ public class OwlDownloadHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String getDescription(UserContext user) {
-		return KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
+		return Environment.getInstance().getMessageBundle(user).getString(
 				"KnowWE.OwlDownloadHandler.description");
 	}
 

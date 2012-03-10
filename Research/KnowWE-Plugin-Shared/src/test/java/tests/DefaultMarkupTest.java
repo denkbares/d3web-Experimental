@@ -30,14 +30,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import dummies.KnowWETestWikiConnector;
+import dummies.TestWikiConnector;
 
 /**
  * This class contains some tests for the DefaultMarkup.
@@ -70,8 +70,8 @@ public class DefaultMarkupTest {
 		}
 	}
 
-	private KnowWEEnvironment env;
-	private final String web = KnowWEEnvironment.DEFAULT_WEB;
+	private Environment env;
+	private final String web = Environment.DEFAULT_WEB;
 
 	/**
 	 * @throws java.lang.Exception
@@ -80,8 +80,8 @@ public class DefaultMarkupTest {
 	public void setUp() throws Exception {
 		InitPluginManager.init();
 		RootType.getInstance().addChildType(new DefaultMarkupTestType());
-		KnowWEEnvironment.initKnowWE(new KnowWETestWikiConnector());
-		env = KnowWEEnvironment.getInstance();
+		Environment.initKnowWE(new TestWikiConnector());
+		env = Environment.getInstance();
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class DefaultMarkupTest {
 						"BLUUUUUUUBB";
 
 		env.buildAndRegisterArticle(text, "Test_Article", web);
-		KnowWEArticle article = env.getArticle(web, "Test_Article");
+		Article article = env.getArticle(web, "Test_Article");
 
 		Section<DefaultMarkupTestType> sec = Sections.
 				findSuccessor(article.getSection(), DefaultMarkupTestType.class);
@@ -163,7 +163,7 @@ public class DefaultMarkupTest {
 						"BLUUUUUUUBB";
 
 		env.buildAndRegisterArticle(text, "Test_Article", web);
-		KnowWEArticle article = env.getArticle(web, "Test_Article");
+		Article article = env.getArticle(web, "Test_Article");
 
 		Section<DefaultMarkupTestType> sec = Sections.
 				findSuccessor(article.getSection(), DefaultMarkupTestType.class);
@@ -204,7 +204,7 @@ public class DefaultMarkupTest {
 					"%";
 
 		env.buildAndRegisterArticle(text, "Test_Article", web);
-		KnowWEArticle article = env.getArticle(web, "Test_Article");
+		Article article = env.getArticle(web, "Test_Article");
 		Section<DefaultMarkupTestType> sec = Sections.
 				findSuccessor(article.getSection(), DefaultMarkupTestType.class);
 
@@ -248,7 +248,7 @@ public class DefaultMarkupTest {
 					"%";
 
 		env.buildAndRegisterArticle(text, "Test_Article", web);
-		KnowWEArticle article = env.getArticle(web, "Test_Article");
+		Article article = env.getArticle(web, "Test_Article");
 		Section<DefaultMarkupTestType> sec = Sections.
 				findSuccessor(article.getSection(), DefaultMarkupTestType.class);
 

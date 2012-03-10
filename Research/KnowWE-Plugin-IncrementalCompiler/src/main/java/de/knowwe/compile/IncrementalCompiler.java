@@ -41,7 +41,7 @@ import de.knowwe.core.compile.terminology.TerminologyExtension;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.AssertSingleTermDefinitionHandler;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
@@ -206,9 +206,9 @@ public class IncrementalCompiler implements EventListener {
 	}
 
 	private void compileChanges(KDOMCreatedEvent event) {
-		KnowWEArticle modifiedArticle = event.getArticle();
+		Article modifiedArticle = event.getArticle();
 		Collection<Section<? extends Type>> newSectionsNotReused = CompileUtils.findSectionsNotReused(modifiedArticle);
-		KnowWEArticle lastVersionOfArticle = modifiedArticle.getLastVersionOfArticle();
+		Article lastVersionOfArticle = modifiedArticle.getLastVersionOfArticle();
 		Collection<Section<? extends Type>> oldSectionsNotReused = CompileUtils.findOldNonReusedSections(lastVersionOfArticle);
 
 		// reset knowledge slice sets

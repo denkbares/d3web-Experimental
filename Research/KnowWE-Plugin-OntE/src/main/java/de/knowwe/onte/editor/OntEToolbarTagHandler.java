@@ -21,9 +21,9 @@ package de.knowwe.onte.editor;
 
 import java.util.Map;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
@@ -54,9 +54,9 @@ public class OntEToolbarTagHandler extends AbstractHTMLTagHandler {
 			return html.toString();
 		}
 
-		KnowWEArticleManager mgr =
-				KnowWEEnvironment.getInstance().getArticleManager(web);
-		KnowWEArticle article = mgr.getArticle(user.getTitle());
+		ArticleManager mgr =
+				Environment.getInstance().getArticleManager(web);
+		Article article = mgr.getArticle(user.getTitle());
 
 		ToolbarButton[] buttons = ToolbarUtils.getButtons(article, user);
 

@@ -31,8 +31,8 @@ import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
 import de.d3web.we.kdom.rules.RuleContentType;
 import de.d3web.we.kdom.rules.action.RuleAction;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -153,13 +153,13 @@ public class DebugUtilities {
 	 */
 	public static String getRuleResource(Rule r, Session session) {
 		KnowledgeBase kb = session.getKnowledgeBase();
-		KnowWEArticle kbArticle = null;
+		Article kbArticle = null;
 		Rule rule;
 		List<Section<RuleAction>> rules;
 		
 		// get the knowledgebase's article
-		for (KnowWEArticle article : KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).getArticles()) {
+		for (Article article : Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB).getArticles()) {
 			
 			if (article.getTitle().equals(kb.getId())) {
 				kbArticle = article;
@@ -167,8 +167,8 @@ public class DebugUtilities {
 			}
 		}
 
-		for (KnowWEArticle article : KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).getArticles()) {
+		for (Article article : Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB).getArticles()) {
 
 			rules = Sections.findSuccessorsOfType(article.getSection(), RuleAction.class);
 			for (Section<RuleAction> ruleAction : rules) {

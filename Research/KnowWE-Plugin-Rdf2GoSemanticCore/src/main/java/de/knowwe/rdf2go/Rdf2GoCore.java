@@ -61,11 +61,11 @@ import org.ontoware.rdf2go.util.RDFTool;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
 import de.knowwe.core.event.EventManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -80,7 +80,7 @@ import de.knowwe.event.FullParseEvent;
 public class Rdf2GoCore implements EventListener {
 
 	public static final String basens = "http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#";
-	public static final String localns = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
+	public static final String localns = Environment.getInstance().getWikiConnector().getBaseUrl()
 			+ "OwlDownload.jsp#";
 
 	public static final URI HASTAG = Rdf2GoCore.getInstance().createURI(basens, "hasTag");
@@ -436,9 +436,9 @@ public class Rdf2GoCore implements EventListener {
 						erg = erg.substring(4);
 					}
 					try {
-						if (KnowWEEnvironment.getInstance()
+						if (Environment.getInstance()
 								.getWikiConnector().doesPageExist(erg)
-								|| KnowWEEnvironment.getInstance()
+								|| Environment.getInstance()
 										.getWikiConnector().doesPageExist(
 												URLDecoder.decode(erg,
 														"UTF-8"))) {
@@ -469,7 +469,7 @@ public class Rdf2GoCore implements EventListener {
 		}
 
 		if (empty) {
-			ResourceBundle rb = KnowWEEnvironment.getInstance().getKwikiBundle();
+			ResourceBundle rb = Environment.getInstance().getMessageBundle();
 			result = rb.getString("KnowWE.owl.query.no_result");
 		}
 		else {
@@ -829,7 +829,7 @@ public class Rdf2GoCore implements EventListener {
 		addCache.clear();
 	}
 
-	public void removeArticleStatementsRecursive(KnowWEArticle art) {
+	public void removeArticleStatementsRecursive(Article art) {
 		WeakHashMap<Section<? extends Type>, List<Statement>> oldStatementsOfArticle =
 				statementcache.get(art.getTitle());
 		if (oldStatementsOfArticle != null) {
@@ -939,15 +939,15 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public List<Statement> getTopicStatements(String topic) {
-		Section<? extends Type> rootsection = KnowWEEnvironment.getInstance().getArticle(
-				KnowWEEnvironment.DEFAULT_WEB, topic).getSection();
+		Section<? extends Type> rootsection = Environment.getInstance().getArticle(
+				Environment.DEFAULT_WEB, topic).getSection();
 		return getSectionStatementsRecursive(rootsection);
 	}
 
 	public File[] getImportList() {
-		KnowWEEnvironment knowWEEnvironment = KnowWEEnvironment.getInstance();
-		String p = knowWEEnvironment.getWikiConnector().getSavePath();
-		String inpath = (p != null) ? p : (knowWEEnvironment.getKnowWEExtensionPath()
+		Environment environment = Environment.getInstance();
+		String p = environment.getWikiConnector().getSavePath();
+		String inpath = (p != null) ? p : (environment.getKnowWEExtensionPath()
 				+ File.separatorChar + "owlincludes");
 		File includes = new File(inpath);
 		if (includes.exists()) {

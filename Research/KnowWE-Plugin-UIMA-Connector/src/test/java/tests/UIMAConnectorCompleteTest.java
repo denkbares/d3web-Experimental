@@ -34,10 +34,10 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 import utils.Utils;
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.core.ArticleManager;
+import de.d3web.we.core.Environment;
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Article;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.knowwetypes.BuildingType;
@@ -46,7 +46,7 @@ import de.d3web.we.logging.Logging;
 import de.d3web.we.uimaconnector.UIMAConnector;
 import de.d3web.we.utils.AnnotationStore;
 import de.d3web.we.utils.KnowWEUtils;
-import dummies.KnowWETestWikiConnector;
+import dummies.TestWikiConnector;
 
 /**
  * This is a complete test.
@@ -73,8 +73,8 @@ public class UIMAConnectorCompleteTest extends TestCase {
 	private final static String WRONG_THIRD_END = "Wrong end at third finding";
 	private final static String WRONG_FOURTH_START = "Wrong start at fourth finding";
 	private final static String WRONG_FOURTH_END = "Wrong end at fourth finding";
-	private KnowWEArticleManager am;
-	private KnowWEEnvironment ke;
+	private ArticleManager am;
+	private Environment ke;
 
 	/*
 	 * (non-Javadoc)
@@ -84,8 +84,8 @@ public class UIMAConnectorCompleteTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		InitPluginManager.init();
-		KnowWEEnvironment.initKnowWE(new KnowWETestWikiConnector());
-		ke = KnowWEEnvironment.getInstance();
+		Environment.initKnowWE(new TestWikiConnector());
+		ke = Environment.getInstance();
 		am = ke.getArticleManager("default_web");
 
 	}
@@ -99,9 +99,9 @@ public class UIMAConnectorCompleteTest extends TestCase {
 		};
 		
 		this.initialiseCAS(content);
-		KnowWEArticle test = ke.getArticle("default_web", "Test_Article");
+		Article test = ke.getArticle("default_web", "Test_Article");
 		ke.processAndUpdateArticleJunit("TestUser", content, "Test_Article", "default_web", rootType);
-//		KnowWEArticle article = new KnowWEArticle(content, "Test_Article", rootType, "default_web");
+//		Article article = new Article(content, "Test_Article", rootType, "default_web");
 		Section articleSec = ke.getArticle("default_web", "Test_Article").getSection();
 		List<Section> children = articleSec.getChildren();
 		children = children.get(0).getChildren();

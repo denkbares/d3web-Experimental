@@ -23,8 +23,8 @@ package de.knowwe.comment.forum;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import de.knowwe.core.KnowWEAttributes;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Attributes;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
@@ -81,11 +81,11 @@ public class BoxRenderer implements Renderer {
 				String topic = sec.getTitle();
 				String web = sec.getWeb();
 
-				KnowWEEnvironment instance = KnowWEEnvironment.getInstance();
+				Environment instance = Environment.getInstance();
 				instance.getArticle(web, topic).getSection().collectTextsFromLeaves(buffi);
-				user.getParameters().put(KnowWEAttributes.WEB, web);
-				user.getParameters().put(KnowWEAttributes.TOPIC, topic);
-				user.getParameters().put(KnowWEAttributes.USER, user.toString());
+				user.getParameters().put(Attributes.WEB, web);
+				user.getParameters().put(Attributes.TOPIC, topic);
+				user.getParameters().put(Attributes.USER, user.toString());
 				instance.getWikiConnector().writeArticleToWikiEnginePersistence(topic,
 						buffi.toString(), user);
 			}
@@ -103,7 +103,7 @@ public class BoxRenderer implements Renderer {
 		ret.append("<th align=\"right\" width=\"100\">\n");
 
 		// String link =
-		// KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+		// Environment.getInstance().getWikiConnector().getBaseUrl();
 		// link += "/Wiki.jsp?page=" + user.getTopic() + "&amp;reply=" +
 		// sec.getID();
 		// Nested link not used at the moment

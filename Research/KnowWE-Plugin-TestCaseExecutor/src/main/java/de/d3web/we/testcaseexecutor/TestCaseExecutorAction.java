@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.wikiConnector.ConnectorAttachment;
@@ -42,7 +42,7 @@ public class TestCaseExecutorAction extends AbstractAction {
 		String master = context.getParameter("master");
 
 		Collection<ConnectorAttachment> attachments =
-				KnowWEEnvironment.getInstance().getWikiConnector().getAttachments();
+				Environment.getInstance().getWikiConnector().getAttachments();
 		List<String> testCases = new LinkedList<String>();
 		for (ConnectorAttachment att : attachments) {
 			if (att.getFileName().equalsIgnoreCase(filename)) {

@@ -11,7 +11,7 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Article;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
@@ -74,7 +74,7 @@ public class IDPropertyType extends AbstractType {
 			this.addSubtreeHandler(new SubtreeHandler<AnonymousType>() {
 
 				@Override
-				public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<AnonymousType> s) {
+				public Collection<KDOMReportMessage> create(KnowWEArtArticleicle article, Section<AnonymousType> s) {
 					TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(article.getWeb());
 					String termName = KnowWEUtils.trimQuotes(s.getOriginalText());
 					if (terminologyHandler.isDefinedTerm(article, termName,
@@ -147,7 +147,7 @@ public class IDPropertyType extends AbstractType {
 	class ChangeWarningSubtreeHandler extends SubtreeHandler<IDPropertyDefinition> {
 
 		@Override
-		public Collection create(KnowWEArticle article, Section<IDPropertyDefinition> s) {
+		public Collection create(Article article, Section<IDPropertyDefinition> s) {
 
 			/*
 			 * NOTICE: here 'null' needs to be returned!
@@ -161,7 +161,7 @@ public class IDPropertyType extends AbstractType {
 		}
 
 		@Override
-		public void destroy(KnowWEArticle article, Section<IDPropertyDefinition> s) {
+		public void destroy(Article article, Section<IDPropertyDefinition> s) {
 
 			Section<? extends Type> sectionToStoreFor = article.findSection(s.getID());
 			String text = " removed: " + s.getOriginalText();
@@ -206,7 +206,7 @@ public class IDPropertyType extends AbstractType {
 	class CreateIDPropertyHandler extends D3webSubtreeHandler<IDPropertyDefinition> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<IDPropertyDefinition> s) {
+		public Collection<KDOMReportMessage> create(Article article, Section<IDPropertyDefinition> s) {
 
 			Section<D3webTermReference> idobjectSection = Sections.findSuccessor(
 					s.getFather(),
@@ -245,7 +245,7 @@ public class IDPropertyType extends AbstractType {
 		}
 
 		@Override
-		public void destroy(KnowWEArticle article, Section<IDPropertyDefinition> s) {
+		public void destroy(Article article, Section<IDPropertyDefinition> s) {
 			Section<D3webTermReference> idobjectSection = Sections.findSuccessor(
 					s.getFather(), D3webTermReference.class);
 			Section<IDPropertyDefinition> propertySection = Sections.findSuccessor(

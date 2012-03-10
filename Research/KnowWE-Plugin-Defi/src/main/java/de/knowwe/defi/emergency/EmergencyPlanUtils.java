@@ -20,8 +20,8 @@ package de.knowwe.defi.emergency;
 
 import java.util.List;
 
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.defi.table.TableEntryType;
@@ -206,8 +206,8 @@ public class EmergencyPlanUtils {
 		List<Section<TableEntryType>> tableEntries;
 
 		try {
-			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
-					KnowWEEnvironment.DEFAULT_WEB, user + "_data");
+			Article article = Environment.getInstance().getArticle(
+					Environment.DEFAULT_WEB, user + "_data");
 			tableEntries = Sections.findSuccessorsOfType(article.getSection(), TableEntryType.class);
 			for (Section<TableEntryType> sec : tableEntries) {
 				if (TableEntryType.getAnnotation(sec, "tableid").equals(id)) return sec.getText();

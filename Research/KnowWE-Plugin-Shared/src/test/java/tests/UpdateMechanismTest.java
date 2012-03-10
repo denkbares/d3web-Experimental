@@ -26,14 +26,14 @@ import java.util.List;
 import junit.framework.TestCase;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.KnowWEEnvironment.CompilationMode;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.Environment.CompilationMode;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.kdom.xml.GenericXMLObjectType;
-import dummies.KnowWETestWikiConnector;
+import dummies.TestWikiConnector;
 
 public class UpdateMechanismTest extends TestCase {
 
@@ -44,10 +44,10 @@ public class UpdateMechanismTest extends TestCase {
 
 	public void testUpdatingKDOM() {
 		/*
-		 * Initialise KnowWEEnvironment
+		 * Initialise Environment
 		 */
-		KnowWEEnvironment.initKnowWE(new KnowWETestWikiConnector());
-		KnowWEEnvironment.getInstance().setCompilationMode(CompilationMode.INCREMENTAL);
+		Environment.initKnowWE(new TestWikiConnector());
+		Environment.getInstance().setCompilationMode(CompilationMode.INCREMENTAL);
 
 		/*
 		 * Setup
@@ -62,15 +62,15 @@ public class UpdateMechanismTest extends TestCase {
 		RootType rootType = RootType.getInstance();
 		rootType.clearChildrenTypes();
 		rootType.addChildType(GenericXMLObjectType.getInstance());
-		KnowWEArticle article1 = KnowWEArticle.createArticle(content, "UpdatingTest",
+		Article article1 = Article.createArticle(content, "UpdatingTest",
 				rootType, "default_web");
-		KnowWEEnvironment.getInstance().getArticleManager("default_web").registerArticle(
+		Environment.getInstance().getArticleManager("default_web").registerArticle(
 				article1);
 
 		/*
 		 * Init a second, identical Article
 		 */
-		KnowWEArticle article2 = KnowWEArticle.createArticle(content, "UpdatingTest",
+		Article article2 = Article.createArticle(content, "UpdatingTest",
 				rootType, "default_web");
 
 		List<Section<? extends Type>> sections1 = article1.getAllNodesPreOrder();

@@ -29,10 +29,10 @@ import de.d3web.we.tables.DecisionTable;
 import de.d3web.we.tables.HeuristicDiagnosisTable;
 import de.d3web.we.tables.TableUtils;
 import de.d3web.we.tables.poi.PoiUtils;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 
 
@@ -63,8 +63,8 @@ public class TableExportAction extends AbstractAction
 		String user = context.getUserName();
 
 		// Get the table to be exported
-		KnowWEArticle article =
-				KnowWEEnvironment.getInstance().getArticle(context.getWeb(), context.getTitle());
+		Article article =
+				Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
 		Section<?> table = TableUtils.getTableWithId(article, tableId);
 
 		String extensionPath = System.getProperty("java.io.tmpdir") + "/workbook-" +tableId+ ".xls";
@@ -88,7 +88,7 @@ public class TableExportAction extends AbstractAction
 		out.close();
 
 		// set page lock
-		KnowWEEnvironment.getInstance().getWikiConnector().setPageLocked(title, user);
+		Environment.getInstance().getWikiConnector().setPageLocked(title, user);
 
 		// write the downloadlink beneath the exportbutton
 		Writer writer = context.getWriter();

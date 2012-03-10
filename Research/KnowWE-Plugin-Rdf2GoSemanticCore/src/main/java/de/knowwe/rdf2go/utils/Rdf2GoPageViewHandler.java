@@ -27,7 +27,7 @@ import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -40,7 +40,7 @@ public class Rdf2GoPageViewHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String getDescription(UserContext user) {
-		return KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
+		return Environment.getInstance().getMessageBundle(user).getString(
 				"KnowWE.PageViewHandler.description");
 	}
 

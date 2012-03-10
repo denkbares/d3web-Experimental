@@ -33,7 +33,7 @@ import de.d3web.owl.assignment.YesNoAssignment;
 import de.d3web.we.kdom.auxiliary.Equals;
 import de.d3web.we.object.QuestionReference;
 import de.knowwe.core.compile.Priority;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -68,7 +68,7 @@ public class YesNoAssignmentType extends AssignmentType {
 	private class YesNoAssignmentCompiler extends AssignmentCompiler<YesNoAssignmentType> {
 
 		@Override
-		protected Assignment createAssignment(KnowWEArticle article, Section<YesNoAssignmentType> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<Message> messages) {
+		protected Assignment createAssignment(Article article, Section<YesNoAssignmentType> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<Message> messages) {
 			/* Get the question */
 			QuestionYN question = getQuestion(article, s, messages);
 			if (question == null) {
@@ -87,7 +87,7 @@ public class YesNoAssignmentType extends AssignmentType {
 			return new YesNoAssignment(owlClassIRI, question);
 		}
 
-		private QuestionYN getQuestion(KnowWEArticle article, Section<YesNoAssignmentType> s, Collection<Message> messages) {
+		private QuestionYN getQuestion(Article article, Section<YesNoAssignmentType> s, Collection<Message> messages) {
 			// Get Question section
 			Section<QuestionReference> questionSection = Sections.findSuccessor(s,
 					QuestionReference.class);

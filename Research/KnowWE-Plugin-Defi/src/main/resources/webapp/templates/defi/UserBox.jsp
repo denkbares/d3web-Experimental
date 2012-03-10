@@ -9,8 +9,8 @@
 <%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
 <%@page import="de.knowwe.core.kdom.parsing.Section"%>
 <%@page import="de.knowwe.core.kdom.parsing.Sections" %>
-<%@page import="de.knowwe.core.kdom.KnowWEArticle"%>
-<%@page import="de.knowwe.core.KnowWEEnvironment"%>
+<%@page import="de.knowwe.core.kdom.Article"%>
+<%@page import="de.knowwe.core.Environment"%>
 <%@ page import="com.ecyrd.jspwiki.WikiContext"%>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -22,14 +22,14 @@
 	String avatar = "1000px-Comic_image_missing.svg.jpg";
 	JSPWikiUserContext user = new JSPWikiUserContext(c, new HashMap<String, String>());
 	if (user.userIsAsserted()) {
-		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
-				KnowWEEnvironment.DEFAULT_WEB, user.getUserName());
+		Article article = Environment.getInstance().getArticle(
+		Environment.DEFAULT_WEB, user.getUserName());
 		if (article != null) {
-			Section<?> s = article.getSection();
-			if (s != null && s.toString().contains("@avatar:")) {
-				Section<AboutMe> sec = Sections.findSuccessor(s, AboutMe.class);
-				avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
-			}
+	Section<?> s = article.getSection();
+	if (s != null && s.toString().contains("@avatar:")) {
+		Section<AboutMe> sec = Sections.findSuccessor(s, AboutMe.class);
+		avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
+	}
 		}
 	}
 

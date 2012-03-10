@@ -23,7 +23,7 @@ package de.d3web.we.action;
 import java.io.IOException;
 import java.util.List;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Type;
@@ -51,7 +51,7 @@ public class KnowWETypeActivationAction extends AbstractAction {
 	private String perform(UserActionContext context) {
 
 		// get the one needed and change its Activation state.
-		List<Type> types = KnowWEEnvironment.getInstance()
+		List<Type> types = Environment.getInstance()
 				.getAllTypes();
 		int index = this.findIndexOfType(context.getParameter("Type"),
 				types);

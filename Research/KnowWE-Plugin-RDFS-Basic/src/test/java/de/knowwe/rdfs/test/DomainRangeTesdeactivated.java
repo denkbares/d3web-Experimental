@@ -22,32 +22,26 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import utils.MyTestArticleManager;
+import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.compile.ReferenceManager;
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.compile.packaging.KnowWEPackageManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.test.util.Query;
 import de.knowwe.rdfs.test.util.Vocabulary;
 
 /**
- * Tests rdfs:domain and rdfs:range with reasoning 
+ * Tests rdfs:domain and rdfs:range with reasoning
  * 
  * @see Query, Vocabulary
  * @author Jochen Reutelshoefer
  * @created Sept 21, 2011
  */
 public class DomainRangeTesdeactivated {
-
 
 	private final Rdf2GoCore core = Rdf2GoCore.getInstance();
 
@@ -56,46 +50,51 @@ public class DomainRangeTesdeactivated {
 	@BeforeClass
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
-		KnowWEPackageManager.overrideAutocompileArticle(true);
-		
-		//System.out.println(IncrementalCompiler.getInstance().getTerminology().toString());
-		
-		MyTestArticleManager.getArticle(TESTFILE);
+		PackageManager.overrideAutocompileArticle(true);
+
+		// System.out.println(IncrementalCompiler.getInstance().getTerminology().toString());
+
+		TestArticleManager.getArticle(TESTFILE);
 	}
 
 	@Test
 	public void testDomainAndRange() {
-		
-		//core.dumpModel();
-		
-		// asserted
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.EATS, Vocabulary.RDFS_RANGE,Vocabulary.FOOD )));
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.EATS, Vocabulary.RDFS_DOMAIN,Vocabulary.ANIMAL )));
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.BOB, Vocabulary.EATS,Vocabulary.REDAPPLE )));
-		
-		// class membership reasoning
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.BOB, Vocabulary.RDF_TYPE,Vocabulary.ANIMAL )));
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.REDAPPLE, Vocabulary.RDF_TYPE,Vocabulary.FOOD )));
-		
-		// reflexivity
-		//assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.ISFRIENDOF, Vocabulary.RDFS_SUBPROPERTYOF,Vocabulary.ISFRIENDOF )));
-		//assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.KNOWS, Vocabulary.RDFS_SUBPROPERTYOF,Vocabulary.KNOWS )));
 
-		
+		// core.dumpModel();
+
+		// asserted
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.EATS, Vocabulary.RDFS_RANGE,
+				Vocabulary.FOOD)));
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.EATS, Vocabulary.RDFS_DOMAIN,
+				Vocabulary.ANIMAL)));
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.BOB, Vocabulary.EATS,
+				Vocabulary.REDAPPLE)));
+
+		// class membership reasoning
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.BOB, Vocabulary.RDF_TYPE,
+				Vocabulary.ANIMAL)));
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.REDAPPLE, Vocabulary.RDF_TYPE,
+				Vocabulary.FOOD)));
+
+		// reflexivity
+		// assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.ISFRIENDOF,
+		// Vocabulary.RDFS_SUBPROPERTYOF,Vocabulary.ISFRIENDOF )));
+		// assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.KNOWS,
+		// Vocabulary.RDFS_SUBPROPERTYOF,Vocabulary.KNOWS )));
+
 	}
 
-	
 	@AfterClass
 	public static void tearDown() {
 		// Remove the statements created in the test to avoid problems
-		KnowWEArticle article = MyTestArticleManager.getArticle(TESTFILE);
+		Article article = TestArticleManager.getArticle(TESTFILE);
 		Rdf2GoCore.getInstance().removeArticleStatementsRecursive(article);
 		Rdf2GoCore.getInstance().removeAllCachedStatements();
 		// Finally remove the formerly created article
-		//MyTestArticleManager.deleteArticle(TESTFILE);
-		//IncrementalCompiler.getInstance().reset();
-		MyTestArticleManager.clear();
-		
+		// TestArticleManager.deleteArticle(TESTFILE);
+		// IncrementalCompiler.getInstance().reset();
+		TestArticleManager.clear();
+
 		System.out.println("teardown!");
 	}
 

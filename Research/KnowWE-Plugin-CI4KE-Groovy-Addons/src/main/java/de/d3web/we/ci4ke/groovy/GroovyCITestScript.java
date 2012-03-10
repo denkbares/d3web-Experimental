@@ -28,8 +28,8 @@ import java.util.List;
 import de.d3web.we.ci4ke.handling.CIConfig;
 import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITest;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 
 /**
  * Abstract {@link Script}-based implementation of a {@link CITest}.
@@ -67,14 +67,14 @@ public abstract class GroovyCITestScript extends Script implements CITest {
 		return parameters.get(index);
 	}
 
-	public Collection<KnowWEArticle> getAllArticles() {
-		return KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).getArticles();
+	public Collection<Article> getAllArticles() {
+		return Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB).getArticles();
 	}
 
-	// public KnowWEArticle getArticle() {
+	// public Article getArticle() {
 	// return
-	// KnowWEEnvironment.getInstance().getArticle(KnowWEEnvironment.DEFAULT_WEB,
+	// Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 	// this.config.getMonitoredArticleTitle());
 	// }
 
@@ -95,7 +95,8 @@ public abstract class GroovyCITestScript extends Script implements CITest {
 	// List<String> sectionIDs = new ArrayList<String>();
 	//
 	// List<Section<XCList>> found = new ArrayList<Section<XCList>>();
-	// getArticle().getSection() Sections.findSuccessorsOfType(XCList.class, found);
+	// getArticle().getSection() Sections.findSuccessorsOfType(XCList.class,
+	// found);
 	//
 	// for (Section<XCList> xclSection : found) {
 	// List<Section<XCLRelation>> relations = new

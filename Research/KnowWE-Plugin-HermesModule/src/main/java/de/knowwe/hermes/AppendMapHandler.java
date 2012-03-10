@@ -32,7 +32,7 @@ import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -48,10 +48,10 @@ public class AppendMapHandler implements PageAppendHandler {
 	@Override
 	public String getDataToAppend(String topic, String web, UserContext user) {
 
-		if (KnowWEEnvironment.getInstance().getWikiConnector().userIsMemberOfGroup(
+		if (Environment.getInstance().getWikiConnector().userIsMemberOfGroup(
 				user.getUserName(), group, user.getRequest())) {
 
-			String content = KnowWEEnvironment.getInstance().getArticle(web, topic).getSection().getText();
+			String content = Environment.getInstance().getArticle(web, topic).getSection().getText();
 
 			List<Placemark> l = getPlacemarks(content);
 

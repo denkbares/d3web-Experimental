@@ -19,7 +19,7 @@
 package de.d3web.we.ci4ke.groovy;
 
 import de.d3web.we.knowledgebase.KnowledgeBaseType;
-import de.knowwe.core.KnowWERessourceLoader;
+import de.knowwe.core.RessourceLoader;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -40,17 +40,17 @@ public class GroovyCITestRenderer extends DefaultMarkupRenderer {
 
 	@Override
 	protected void renderContents(Section<?> section, UserContext user, StringBuilder string) {
-		KnowWERessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shCore.css",
-				KnowWERessourceLoader.RESOURCE_STYLESHEET);
-		KnowWERessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shThemeEclipse.css",
-				KnowWERessourceLoader.RESOURCE_STYLESHEET);
+		RessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shCore.css",
+				RessourceLoader.RESOURCE_STYLESHEET);
+		RessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shThemeEclipse.css",
+				RessourceLoader.RESOURCE_STYLESHEET);
 
-		KnowWERessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shCore.js",
-				KnowWERessourceLoader.RESOURCE_SCRIPT);
-		KnowWERessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shBrushGroovy.js",
-				KnowWERessourceLoader.RESOURCE_SCRIPT);
-		KnowWERessourceLoader.getInstance().add("SyntaxHighlighter.js",
-				KnowWERessourceLoader.RESOURCE_SCRIPT);
+		RessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shCore.js",
+				RessourceLoader.RESOURCE_SCRIPT);
+		RessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shBrushGroovy.js",
+				RessourceLoader.RESOURCE_SCRIPT);
+		RessourceLoader.getInstance().add("SyntaxHighlighter.js",
+				RessourceLoader.RESOURCE_SCRIPT);
 
 		String testname = KnowledgeBaseType.getAnnotation(section,
 				GroovyCITestType.ANNOTATION_NAME);

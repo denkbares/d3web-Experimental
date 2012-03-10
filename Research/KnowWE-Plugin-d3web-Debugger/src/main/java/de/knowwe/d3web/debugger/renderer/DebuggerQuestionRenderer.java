@@ -31,7 +31,7 @@ import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.UndefinedValue;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 
 /**
  * Get the HTML-output for debugging a question.
@@ -99,7 +99,7 @@ public class DebuggerQuestionRenderer {
 	 */
 	private static String renderQuestionOC(QuestionOC q, String valueText, String kbid, String title, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
-		String web = KnowWEEnvironment.DEFAULT_WEB;
+		String web = Environment.DEFAULT_WEB;
 		for (Choice choice : q.getAllAlternatives()) {
 			buffer.append("<p onClick='KNOWWE.plugin.debuggr.questionOCclicked(this, " + inside
 					+ ")' ");
@@ -124,7 +124,7 @@ public class DebuggerQuestionRenderer {
 	 */
 	private static String renderQuestionMC(QuestionMC q, String valueText, String kbid, String title, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
-		String web = KnowWEEnvironment.DEFAULT_WEB;
+		String web = Environment.DEFAULT_WEB;
 		boolean active;
 		String[] values = valueText.substring(1, valueText.length() - 1).split(", ");
 
@@ -155,7 +155,7 @@ public class DebuggerQuestionRenderer {
 	 */
 	private static String renderQuestionNum(QuestionNum q, String valueText, String kbid, String title, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
-		String web = KnowWEEnvironment.DEFAULT_WEB;
+		String web = Environment.DEFAULT_WEB;
 		String unit = "";
 		Double rangeMin = Double.MAX_VALUE * -1;
 		Double rangeMax = Double.MAX_VALUE;
@@ -191,7 +191,7 @@ public class DebuggerQuestionRenderer {
 	 */
 	private static String renderQuestionText(QuestionText q, String valueText, String kbid, String title, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
-		String web = KnowWEEnvironment.DEFAULT_WEB;
+		String web = Environment.DEFAULT_WEB;
 
 		buffer.append("<p class='dQtext'><input value='" + valueText
 				+ "' type='text' size='20' />"

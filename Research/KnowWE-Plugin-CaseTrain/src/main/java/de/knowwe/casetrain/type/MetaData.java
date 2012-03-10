@@ -28,7 +28,7 @@ import de.knowwe.casetrain.info.Info;
 import de.knowwe.casetrain.type.general.BlockMarkupContent;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
@@ -67,7 +67,7 @@ public class MetaData extends BlockMarkupType {
 
 			@Override
 			public void render(Section<?> sec, UserContext user, StringBuilder string) {
-				KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
+				Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 				Utils.renderKDOMReportMessageBlock(
 						Messages.getErrors(Messages.getMessagesFromSubtree(
 								article, sec)), string);
@@ -120,7 +120,7 @@ public class MetaData extends BlockMarkupType {
 		this.addSubtreeHandler(new GeneralSubtreeHandler<MetaData>() {
 
 			@Override
-			public Collection<Message> create(KnowWEArticle article, Section<MetaData> s) {
+			public Collection<Message> create(Article article, Section<MetaData> s) {
 
 				List<Message> messages = new ArrayList<Message>(0);
 				Section<Info> infoSection = Sections.findSuccessor(s.getArticle().getSection(),

@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.lod.ConceptType;
@@ -38,7 +38,7 @@ public class GetDataAction extends AbstractAction {
 		String web = context.getWeb();
 
 		// #################### Only for logging purposes
-		String path = KnowWEEnvironment.getInstance().getWikiConnector().getSavePath();
+		String path = Environment.getInstance().getWikiConnector().getSavePath();
 		File log = new File(path + "/temp");
 		log.mkdir();
 		try {
@@ -59,7 +59,7 @@ public class GetDataAction extends AbstractAction {
 			context.getWriter().write(
 					"<br/><div style='margin-left:10px;'><p><b>Bitte Konzept eingeben.</b></p></div>");
 		}
-		else if (!KnowWEEnvironment.getInstance().getWikiConnector()
+		else if (!Environment.getInstance().getWikiConnector()
 				.doesPageExist(HermesData.getMappingTopic())) {
 			context.getWriter().write(
 					"<br/><div style='margin-left:10px;'><p><b>Seite für Mappings nicht vorhanden. "
@@ -101,7 +101,7 @@ public class GetDataAction extends AbstractAction {
 					context.getWriter().write(
 							"<br/><div style='margin-left:10px;'><p><b>Kein externes Konzept als Referenz gefunden.</b></p></div>");
 				}
-				else if (KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+				else if (Environment.getInstance().getWikiConnector().doesPageExist(
 						concept)) {
 					String ask = "<br/><div id='creationWizard'><p><img src='KnowWEExtension/images/newdoc.png' align='top'> Konzept <b>"
 							+ concept
@@ -128,7 +128,7 @@ public class GetDataAction extends AbstractAction {
 					// change links provided in mappings. -> afterwards query.
 					String mappingTopic = HermesData.getMappingTopic();
 
-					KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
+					Article article = Environment.getInstance().getArticle(
 							web, mappingTopic);
 
 					List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
@@ -261,7 +261,7 @@ public class GetDataAction extends AbstractAction {
 					int i = 0;
 
 					boolean noValues = true;
-					String baseURL = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+					String baseURL = Environment.getInstance().getWikiConnector().getBaseUrl();
 
 					if (result.size() > 0) {
 						while (it.hasNext()) {

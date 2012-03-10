@@ -25,7 +25,7 @@ import de.d3web.we.ci4ke.handling.CIConfig;
 import de.d3web.we.ci4ke.testing.CITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
 import de.d3web.we.ci4ke.testing.CITestResult.Type;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
@@ -43,7 +43,7 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 						"import static " + Type.class.getName() + ".*;\n";
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<GroovyCITestType> s) {
+	public Collection<Message> create(Article article, Section<GroovyCITestType> s) {
 		// create collection for return messages
 		Collection<Message> messages = new ArrayList<Message>();
 		// parse name of test and check if its name is unique in the wiki

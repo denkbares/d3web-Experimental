@@ -34,7 +34,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.plugin.Instantiation;
 import de.knowwe.plugin.Plugins;
 import de.knowwe.search.GenericSearchResult;
-import de.knowwe.search.KnowWESearchProvider;
+import de.knowwe.search.SearchProvider;
 import de.knowwe.search.SearchTerm;
 import de.knowwe.tagging.TaggingMangler;
 
@@ -54,9 +54,9 @@ public class MultiSearchEngine implements Instantiation {
 	}
 
 
-	private final Map<String, KnowWESearchProvider> searchProvider = new HashMap<String, KnowWESearchProvider>();
+	private final Map<String, SearchProvider> searchProvider = new HashMap<String, SearchProvider>();
 
-	public Map<String, KnowWESearchProvider> getSearchProvider() {
+	public Map<String, SearchProvider> getSearchProvider() {
 		return searchProvider;
 	}
 
@@ -67,7 +67,7 @@ public class MultiSearchEngine implements Instantiation {
 	 * @created 16.09.2010
 	 * @param p
 	 */
-	public void addProvider(KnowWESearchProvider p) {
+	public void addProvider(SearchProvider p) {
 		this.searchProvider.put(p.getID(), p);
 	}
 
@@ -78,7 +78,7 @@ public class MultiSearchEngine implements Instantiation {
 	 * @param id
 	 * @return
 	 */
-	public KnowWESearchProvider getProvider(String id) {
+	public SearchProvider getProvider(String id) {
 		if (id == null) return null;
 		return searchProvider.get(id);
 	}
@@ -113,7 +113,7 @@ public class MultiSearchEngine implements Instantiation {
 
 		searchSet.addAll(terms);
 
-		for (KnowWESearchProvider provider : searchProvider.values()) {
+		for (SearchProvider provider : searchProvider.values()) {
 			Collection<GenericSearchResult> singleResultSet = provider.search(
 					searchSet, context);
 			all.put(provider.getID(), singleResultSet);
@@ -134,8 +134,8 @@ public class MultiSearchEngine implements Instantiation {
 				Plugins.EXTENDED_POINT_SearchProvider);
 		for (Extension extension : exts) {
 			Object o = extension.getSingleton();
-			if (o instanceof KnowWESearchProvider) {
-				addProvider(((KnowWESearchProvider) o));
+			if (o instanceof SearchProvider) {
+				addProvider(((SearchProvider) o));
 			}
 		}
 

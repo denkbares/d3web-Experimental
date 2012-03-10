@@ -26,7 +26,7 @@ import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
 import de.knowwe.core.event.EventManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
 import de.knowwe.event.ArticleCreatedEvent;
@@ -46,7 +46,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 	}
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<JuriTreeExpression> section) {
+	public Collection<Message> create(Article article, Section<JuriTreeExpression> section) {
 		/*
 		 * In the moment, do nothing.
 		 *
@@ -82,8 +82,8 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 	@Override
 	public void notify(Event event) {
 		ArticleCreatedEvent e = (ArticleCreatedEvent)event;
-		KnowWEArticle article = e.getArticle();
-		Section<KnowWEArticle> section = article.getSection();
+		Article article = e.getArticle();
+		Section<Article> section = article.getSection();
 		JuriTreeXmlGenerator jtxg = new JuriTreeXmlGenerator(section);
 	}
 

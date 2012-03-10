@@ -13,7 +13,7 @@ import org.ontoware.rdf2go.model.node.Node;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.utils.CompileUtils;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -79,7 +79,7 @@ public class SparqlResultSetRenderer {
 		}
 
 		if (empty) {
-			ResourceBundle rb = KnowWEEnvironment.getInstance().getKwikiBundle();
+			ResourceBundle rb = Environment.getInstance().getMessageBundle();
 			result = rb.getString("KnowWE.owl.query.no_result");
 		}
 		else {
@@ -119,9 +119,9 @@ public class SparqlResultSetRenderer {
 				if (termDefinitions != null && termDefinitions.size() > 0) {
 					erg = CompileUtils.createLinkToDefinition(erg);
 				}
-				else if (KnowWEEnvironment.getInstance()
+				else if (Environment.getInstance()
 						.getWikiConnector().doesPageExist(erg)
-						|| KnowWEEnvironment.getInstance()
+						|| Environment.getInstance()
 								.getWikiConnector().doesPageExist(
 										URLDecoder.decode(erg,
 												"UTF-8"))) {

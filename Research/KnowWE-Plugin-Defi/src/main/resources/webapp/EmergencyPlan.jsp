@@ -12,15 +12,15 @@
 	WikiContext wikiContext = wiki.createContext( request, WikiContext.VIEW );
 
 	// Check if KnowWE is initialized
-	if (!KnowWEEnvironment.isInitialized()) {
-		KnowWEEnvironment.initKnowWE(new JSPWikiKnowWEConnector(wiki));
+	if (!Environment.isInitialized()) {
+		Environment.initKnowWE(new JSPWikiConnector(wiki));
 	}
 	// We need to do this, because the paramterMap is locked!
 	Map<String, String> parameters = UserContextUtil.getParameters(request);
 	
 	// Add user
-	if (!parameters.containsKey(KnowWEAttributes.USER)) {
-		parameters.put(KnowWEAttributes.USER, wikiContext.getWikiSession().getUserPrincipal().getName());
+	if (!parameters.containsKey(Attributes.USER)) {
+		parameters.put(Attributes.USER, wikiContext.getWikiSession().getUserPrincipal().getName());
 	}
 	// Create AuthenticationManager instance
 	AuthenticationManager manager = new JSPAuthenticationManager(wikiContext);

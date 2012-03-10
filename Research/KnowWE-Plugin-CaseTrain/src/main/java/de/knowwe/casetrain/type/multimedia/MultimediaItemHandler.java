@@ -25,8 +25,8 @@ import java.util.ResourceBundle;
 
 import de.knowwe.casetrain.type.multimedia.MultimediaItem.MultimediaItemContent;
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -42,11 +42,11 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 	private final ResourceBundle bundle = ResourceBundle.getBundle("casetrain_messages");
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<MultimediaItem> s) {
+	public Collection<Message> create(Article article, Section<MultimediaItem> s) {
 
 		List<Message> messages = new ArrayList<Message>(0);
 
-		List<String> attachments = KnowWEEnvironment.getInstance().getWikiConnector()
+		List<String> attachments = Environment.getInstance().getWikiConnector()
 				.getAttachmentFilenamesForPage(article.getTitle());
 		Section<MultimediaItemContent> mmI = Sections.findChildOfType(s,
 				MultimediaItemContent.class);

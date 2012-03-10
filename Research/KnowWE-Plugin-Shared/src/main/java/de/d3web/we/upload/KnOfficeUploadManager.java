@@ -26,7 +26,7 @@ import java.util.Collection;
 import org.apache.commons.fileupload.FileItem;
 
 import de.d3web.we.taghandler.ImportKnOfficeHandler;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.utils.KopicWriter;
 
 public class KnOfficeUploadManager {
@@ -91,7 +91,7 @@ public class KnOfficeUploadManager {
 			if (fileItem.getFieldName().equals(
 					ImportKnOfficeHandler.KEY_DECISIONTABLE)) {
 				String text = fileItem.getString();
-				String path = KnowWEEnvironment.getInstance().getContext()
+				String path = Environment.getInstance().getContext()
 						.getRealPath("");
 				if (text != null && text.length() > 0) {
 					File file = new File(
@@ -118,7 +118,7 @@ public class KnOfficeUploadManager {
 			if (fileItem.getFieldName().equals(
 					ImportKnOfficeHandler.KEY_SCORETABLE)) {
 				String text = fileItem.getString();
-				String path = KnowWEEnvironment.getInstance().getContext()
+				String path = Environment.getInstance().getContext()
 						.getRealPath("");
 				if (text != null && text.length() > 0) {
 					File file = new File(
@@ -141,7 +141,7 @@ public class KnOfficeUploadManager {
 			if (fileItem.getFieldName().equals(
 					ImportKnOfficeHandler.KEY_COVERINGTABLE)) {
 				String text = fileItem.getString();
-				String path = KnowWEEnvironment.getInstance().getContext()
+				String path = Environment.getInstance().getContext()
 						.getRealPath("");
 				if (text != null && text.length() > 0) {
 					File file = new File(
@@ -170,7 +170,7 @@ public class KnOfficeUploadManager {
 					|| fileItem.getFieldName().equals(
 							ImportKnOfficeHandler.KEY_DIALOG_PIC)) {
 
-				String path = KnowWEEnvironment.getInstance().getContext()
+				String path = Environment.getInstance().getContext()
 						.getRealPath("");
 				String text = fileItem.getString();
 				String name = fileItem.getName();
@@ -196,14 +196,14 @@ public class KnOfficeUploadManager {
 
 		String kopicText = kopicWriter.getKopicText();
 
-		boolean exists = KnowWEEnvironment.getInstance().getWikiConnector()
+		boolean exists = Environment.getInstance().getWikiConnector()
 				.doesPageExist(pagename);
 		if (exists) {
-			KnowWEEnvironment.getInstance().getWikiConnector()
+			Environment.getInstance().getWikiConnector()
 					.appendContentToPage(pagename, kopicText);
 		}
 		else {
-			KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(
+			Environment.getInstance().getWikiConnector().createWikiPage(
 					pagename, kopicText, "KnOfficeUpload");
 		}
 

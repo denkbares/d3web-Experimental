@@ -56,10 +56,10 @@ import de.d3web.we.tables.TableHeaderCell;
 import de.d3web.we.tables.TableHeaderLine;
 import de.d3web.we.tables.TableLine;
 import de.d3web.we.tables.TableUtils;
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.ActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -151,9 +151,9 @@ public class PoiUtils
 		}
 
 		// Replace the old table with the new one
-		KnowWEArticleManager manager =
-				KnowWEEnvironment.getInstance().getArticleManager(KnowWEEnvironment.DEFAULT_WEB);
-		KnowWEArticle art = manager.getArticle(article);
+		ArticleManager manager =
+				Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
+		Article art = manager.getArticle(article);
 		List<Section<ITable>> itables = Sections.findSuccessorsOfType(art.getSection(), ITable.class);
 
 		for (Section<ITable> table : itables)
@@ -269,11 +269,11 @@ public class PoiUtils
 
 	public static String importWordFromFile(File in, String tableId, String article, ActionContext context) throws IOException
 	{
-		KnowWEArticleManager manager =
-				KnowWEEnvironment.getInstance().getArticleManager(KnowWEEnvironment.DEFAULT_WEB);
-		KnowWEArticle art = manager.getArticle(article);
-		Section<KnowWEArticle> artSec = art.getSection();
-		KnowWEEnvironment.getInstance().getWikiConnector();
+		ArticleManager manager =
+				Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
+		Article art = manager.getArticle(article);
+		Section<Article> artSec = art.getSection();
+		Environment.getInstance().getWikiConnector();
 
 		// Save {@link KnowledgeBaseType} and {@link WordDefaultMarkup}
 		StringBuilder recovery = new StringBuilder();
@@ -378,7 +378,7 @@ public class PoiUtils
 			c = row.createCell(i);
 
 			// get the article compiling this cell
-			KnowWEArticle compilingArticle = KnowWEUtils.getCompilingArticles(line).iterator().next();
+			Article compilingArticle = KnowWEUtils.getCompilingArticles(line).iterator().next();
 
 			Collection<Message> allmsgs = Messages.getMessagesFromSubtree(compilingArticle, cell);
 

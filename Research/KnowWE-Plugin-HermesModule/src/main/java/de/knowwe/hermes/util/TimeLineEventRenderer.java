@@ -22,7 +22,7 @@ package de.knowwe.hermes.util;
 
 import java.util.List;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.hermes.TimeEvent;
 
 public class TimeLineEventRenderer {
@@ -111,9 +111,9 @@ public class TimeLineEventRenderer {
 		String result = sb.toString();
 
 		if (maskHTMLTags) {
-			result = result.replaceAll(">", KnowWEEnvironment.HTML_GT);
-			result = result.replaceAll("<", KnowWEEnvironment.HTML_ST);
-			result = result.replaceAll("\"", KnowWEEnvironment.HTML_QUOTE);
+			result = result.replaceAll(">", Environment.HTML_GT);
+			result = result.replaceAll("<", Environment.HTML_ST);
+			result = result.replaceAll("\"", Environment.HTML_QUOTE);
 		}
 		return result;
 	}

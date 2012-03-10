@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEAttributes;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Attributes;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.KDOMReplaceTermNameAction;
 import de.knowwe.core.action.UserActionContext;
@@ -50,13 +50,13 @@ public class KeywordReplaceAction extends AbstractAction {
 		}
 
 		String web = context.getWeb();
-		String nodeID = context.getParameter(KnowWEAttributes.TARGET);
-		String name = context.getParameter(KnowWEAttributes.TOPIC);
-		String newText = context.getParameter(KnowWEAttributes.TEXT);
-		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
+		String nodeID = context.getParameter(Attributes.TARGET);
+		String name = context.getParameter(Attributes.TOPIC);
+		String newText = context.getParameter(Attributes.TEXT);
+		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
 
 		// Check for user access
-		if (!KnowWEEnvironment.getInstance().getWikiConnector().userCanEditPage(name,
+		if (!Environment.getInstance().getWikiConnector().userCanEditPage(name,
 				context.getRequest())) {
 			context.sendError(403, "You do not have the permission to edit this page.");
 			return;

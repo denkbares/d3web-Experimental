@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -30,14 +30,13 @@ import junit.framework.TestCase;
 import objectTypes.SplitObjectType;
 import objectTypes.WordObjectType;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.KnowWEAttributes;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Attributes;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.WordBasedRenameFinding;
 import de.knowwe.core.action.WordBasedRenamingAction;
-import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
-import dummies.KnowWETestWikiConnector;
+import dummies.TestWikiConnector;
 
 public class RenamingToolTest extends TestCase {
 
@@ -49,10 +48,10 @@ public class RenamingToolTest extends TestCase {
 	public void testFindings() {
 
 		/**
-		 * Initialise KnowWEEnvironment
+		 * Initialise Environment
 		 */
-		KnowWEEnvironment.initKnowWE(new KnowWETestWikiConnector());
-		KnowWEEnvironment _env = KnowWEEnvironment.getInstance();
+		Environment.initKnowWE(new TestWikiConnector());
+		Environment _env = Environment.getInstance();
 		_env.getArticle("default_web", "Test_Article");
 
 		/**
@@ -74,16 +73,16 @@ public class RenamingToolTest extends TestCase {
 		 * make the requests
 		 */
 		Map<String, String> map = new HashMap<String, String>();
-		map.put(KnowWEAttributes.TARGET, "ccc");
-		map.put(KnowWEAttributes.CONTEXT_PREVIOUS, "");
-		map.put(KnowWEAttributes.CONTEXT_AFTER, "");
-		map.put(KnowWEAttributes.WEB, "default_web");
-		Map<KnowWEArticle, Collection<WordBasedRenameFinding>> findings = renamingToolTest(map);
+		map.put(Attributes.TARGET, "ccc");
+		map.put(Attributes.CONTEXT_PREVIOUS, "");
+		map.put(Attributes.CONTEXT_AFTER, "");
+		map.put(Attributes.WEB, "default_web");
+		Map<Article, Collection<WordBasedRenameFinding>> findings = renamingToolTest(map);
 
 		/**
 		 * Test_Article1
 		 */
-		KnowWEArticle article = _env.getArticle("default_web", "Test_Article1");
+		Article article = _env.getArticle("default_web", "Test_Article1");
 		ArrayList<WordBasedRenameFinding> r = new ArrayList<WordBasedRenameFinding>(
 				findings.get(article));
 		WordBasedRenameFinding finding = r.get(0);
@@ -151,11 +150,11 @@ public class RenamingToolTest extends TestCase {
 		}
 	}
 
-	private Map<KnowWEArticle, Collection<WordBasedRenameFinding>> renamingToolTest(
+	private Map<Article, Collection<WordBasedRenameFinding>> renamingToolTest(
 			Map<String, String> map) {
 		WordBasedRenamingAction action = new WordBasedRenamingAction();
-		return action.scanForFindings(map.get(KnowWEAttributes.WEB),
-				map.get(KnowWEAttributes.TARGET), map.get(
-				KnowWEAttributes.CONTEXT_PREVIOUS).length(), null);
+		return action.scanForFindings(map.get(Attributes.WEB),
+				map.get(Attributes.TARGET), map.get(
+						Attributes.CONTEXT_PREVIOUS).length(), null);
 	}
 }

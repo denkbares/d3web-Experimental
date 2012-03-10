@@ -26,8 +26,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -153,8 +153,8 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	 */
 	private List<Section<DashTreeElement>> getALlUnits() {
 		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
-		KnowWEArticle leftMenu = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).getArticle("LeftMenu");
+		Article leftMenu = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB).getArticle("LeftMenu");
 
 		if (leftMenu != null) {
 			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
@@ -173,8 +173,8 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	 */
 	private List<Date> getTimeTable() {
 		List<Date> dates = new ArrayList<Date>();
-		KnowWEArticle zeitplanArticle = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).getArticle("Zeitplan");
+		Article zeitplanArticle = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB).getArticle("Zeitplan");
 
 		if (zeitplanArticle != null) {
 			Section<TimeTableMarkup> timetable = Sections.findSuccessor(
@@ -222,8 +222,8 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 		List<String> readbuttons = new LinkedList<String>();
 
 		for (Section<DashTreeElement> s : units) {
-			KnowWEArticle unit = KnowWEEnvironment.getInstance().getArticleManager(
-					KnowWEEnvironment.DEFAULT_WEB).getArticle(getPageName(s));
+			Article unit = Environment.getInstance().getArticleManager(
+					Environment.DEFAULT_WEB).getArticle(getPageName(s));
 
 			if (unit != null) {
 				List<Section<? extends Type>> allNodes = unit.getAllNodesPreOrder();
@@ -251,8 +251,8 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	 */
 	private boolean getReadbuttonStatus(String readbutton, String userName) {
 		String[] readpages = new String[0];
-		KnowWEArticle userData = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).getArticle(userName + "_data");
+		Article userData = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB).getArticle(userName + "_data");
 
 		if (userData != null) {
 			Section<DataMarkup> data = Sections.findSuccessor(

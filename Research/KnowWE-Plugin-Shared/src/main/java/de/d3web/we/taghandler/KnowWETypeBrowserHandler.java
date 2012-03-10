@@ -23,7 +23,7 @@ package de.d3web.we.taghandler;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -44,7 +44,7 @@ public class KnowWETypeBrowserHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String getDescription(UserContext user) {
-		return KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
+		return Environment.getInstance().getMessageBundle(user).getString(
 				"KnowWE.TypeBrowser.description");
 	}
 
@@ -60,7 +60,7 @@ public class KnowWETypeBrowserHandler extends AbstractHTMLTagHandler {
 			}
 		}
 
-		List<Type> types = KnowWEEnvironment.getInstance().getAllTypes();
+		List<Type> types = Environment.getInstance().getAllTypes();
 		StringBuilder html = new StringBuilder();
 
 		// Header

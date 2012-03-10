@@ -29,7 +29,7 @@ import org.semanticweb.owlapi.model.OWLAnnotationAxiom;
 import org.semanticweb.owlapi.model.OWLAxiom;
 
 import de.knowwe.core.event.EventManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
@@ -68,7 +68,7 @@ public class MiscFrameSubtreeHandler extends OWLAPISubtreeHandler<MiscFrame> {
 	}
 
 	@Override
-	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<MiscFrame> s, Collection<Message> messages) {
+	public Set<OWLAxiom> createOWLAxioms(Article article, Section<MiscFrame> s, Collection<Message> messages) {
 
 		OWLAxiom a = null;
 		MiscFrame type = (MiscFrame) s.get();

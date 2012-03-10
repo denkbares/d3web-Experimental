@@ -32,7 +32,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -67,7 +67,7 @@ public class DefaultMarkupOwlHandlerForRdf2Go extends RDF2GoSubtreeHandler<Defau
 	private URI conceptURI = null;
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<DefaultMarkupType> section) {
+	public Collection<Message> create(Article article, Section<DefaultMarkupType> section) {
 		DefaultMarkup defaultMarkupType = section.get().getMarkup();
 		String markupName = defaultMarkupType.getName();
 		List<Statement> io = new ArrayList<Statement>();

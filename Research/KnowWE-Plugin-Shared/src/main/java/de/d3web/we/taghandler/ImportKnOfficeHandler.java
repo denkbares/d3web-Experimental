@@ -23,7 +23,7 @@ package de.d3web.we.taghandler;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 
@@ -51,14 +51,14 @@ public class ImportKnOfficeHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String getDescription(UserContext user) {
-		return KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
+		return Environment.getInstance().getMessageBundle(user).getString(
 				"KnowWE.ImportKnOfficeHandler.description");
 	}
 
 	@Override
 	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 
-		ResourceBundle rb = KnowWEEnvironment.getInstance().getKwikiBundle(user);
+		ResourceBundle rb = Environment.getInstance().getMessageBundle(user);
 
 		Object[][] fields = {
 				{

@@ -27,14 +27,14 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import utils.MyTestArticleManager;
+import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.compile.packaging.KnowWEPackageManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
+import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.test.util.Query;
 import de.knowwe.rdfs.test.util.Vocabulary;
@@ -56,8 +56,8 @@ public class SubClassOfTest {
 	@BeforeClass
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
-		KnowWEPackageManager.overrideAutocompileArticle(true);
-		MyTestArticleManager.getArticle(TESTFILE);
+		PackageManager.overrideAutocompileArticle(true);
+		TestArticleManager.getArticle(TESTFILE);
 	}
 
 	@Test
@@ -82,11 +82,11 @@ public class SubClassOfTest {
 	@AfterClass
 	public static void tearDown() {
 		// Remove the statements created in the test to avoid problems
-		KnowWEArticle article = MyTestArticleManager.getArticle(TESTFILE);
+		Article article = TestArticleManager.getArticle(TESTFILE);
 		Rdf2GoCore.getInstance().removeArticleStatementsRecursive(article);
 		Rdf2GoCore.getInstance().removeAllCachedStatements();
 		// Finally remove the formerly created article
-		MyTestArticleManager.clear();
+		TestArticleManager.clear();
 	}
 
 }

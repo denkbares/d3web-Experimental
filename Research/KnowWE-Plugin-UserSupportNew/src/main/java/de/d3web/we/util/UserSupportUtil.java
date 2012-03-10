@@ -24,7 +24,7 @@ import java.util.List;
 
 import de.d3web.we.algorithm.Suggestion;
 import de.knowwe.core.compile.terminology.TerminologyManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -47,7 +47,7 @@ public class UserSupportUtil {
 	 * @param markup
 	 * @return
 	 */
-	public static Collection<Section<?>> getTermReferencesCompilingArticle(KnowWEArticle article, Section<?> markup)
+	public static Collection<Section<?>> getTermReferencesCompilingArticle(Article article, Section<?> markup)
 	{
 
 		article = KnowWEUtils.getCompilingArticles(markup).iterator().next();

@@ -28,11 +28,11 @@ import java.util.Map;
 import de.d3web.we.event.NewCommentEvent;
 import de.knowwe.comment.forum.Forum;
 import de.knowwe.comment.forum.ForumRenderer;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.event.EventManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.xml.XMLTail;
@@ -62,7 +62,7 @@ public class ForumBoxAction extends AbstractAction {
 		String topic = map.get("ForumArticleTopic");
 		String web = context.getWeb();
 
-		boolean canEditPage = KnowWEEnvironment.getInstance().getWikiConnector().userCanEditPage(
+		boolean canEditPage = Environment.getInstance().getWikiConnector().userCanEditPage(
 				topic, context.getRequest());
 
 		if (canEditPage) {
@@ -83,7 +83,7 @@ public class ForumBoxAction extends AbstractAction {
 
 				text = text.replace("\n", "\\\\ ");
 
-				KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web, topic);
+				Article article = Environment.getInstance().getArticle(web, topic);
 				Section<?> sec = article.getSection();
 				List<Section<XMLTail>> found = new ArrayList<Section<XMLTail>>();
 
@@ -114,13 +114,13 @@ public class ForumBoxAction extends AbstractAction {
 
 				StringBuilder buffi = new StringBuilder();
 				sec.collectTextsFromLeaves(buffi);
-				KnowWEEnvironment.getInstance().getWikiConnector().writeArticleToWikiEnginePersistence(
+				Environment.getInstance().getWikiConnector().writeArticleToWikiEnginePersistence(
 						topic, buffi.toString(), context);
 
 				// fire new comment event
 				EventManager.getInstance().fireEvent(new NewCommentEvent(text, topic));
 
-				String refreshUrl = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+				String refreshUrl = Environment.getInstance().getWikiConnector().getBaseUrl();
 				refreshUrl += "Wiki.jsp?page=" + topic;
 
 				return "{\"msg\" : \"success\", \"url\" : \"" + refreshUrl + "\"}";

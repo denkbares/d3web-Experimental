@@ -20,7 +20,7 @@ package de.knowwe.defi.links;
 
 import java.util.Map;
 
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -38,7 +38,7 @@ public class TabMenuFakeHandler extends AbstractTagHandler {
 			String pages = parameters.get("pages");
 			String[] pageNames = pages.split("\\|");
 
-			String baseUrl = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+			String baseUrl = Environment.getInstance().getWikiConnector().getBaseUrl();
 
 			StringBuffer buffy = new StringBuffer();
 			buffy.append(KnowWEUtils.maskHTML("<div class='tabmenu'>"));

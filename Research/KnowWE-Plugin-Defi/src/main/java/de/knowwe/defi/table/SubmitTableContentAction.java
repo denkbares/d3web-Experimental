@@ -25,11 +25,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.defi.utils.ReplaceSectionUtils;
@@ -91,35 +91,35 @@ public class SubmitTableContentAction extends AbstractAction {
 
 
 		String username = context.getParameter("user");
-		String defaultWeb = KnowWEEnvironment.DEFAULT_WEB;
-		KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(
+		String defaultWeb = Environment.DEFAULT_WEB;
+		ArticleManager articleManager = Environment.getInstance().getArticleManager(
 				defaultWeb);
 		String articleNameForData = getDataArticleNameForUser(username);
-		KnowWEArticle knowWEArticle = articleManager.getArticle(
+		Article article2 = articleManager.getArticle(
 				articleNameForData);
-		if (knowWEArticle == null) {
+		if (article2 == null) {
 			// create new article
 			String newContent = createNewMarkupString(tableid, inputDataAll);
-			KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(
+			Environment.getInstance().getWikiConnector().createWikiPage(
 					articleNameForData, newContent.toString(), "Defi-system");
-			KnowWEArticle article = KnowWEArticle.createArticle(newContent.toString(),
-					articleNameForData, KnowWEEnvironment.getInstance().getRootType(),
+			Article article = Article.createArticle(newContent.toString(),
+					articleNameForData, Environment.getInstance().getRootType(),
 					defaultWeb, true);
 
-			KnowWEEnvironment.getInstance().getArticleManager(
+			Environment.getInstance().getArticleManager(
 					defaultWeb)
 					.registerArticle(article);
-			knowWEArticle = articleManager.getArticle(
+			article2 = articleManager.getArticle(
 					articleNameForData);
 		}
 		else {
 			Section<TableEntryContentType> contentSection = findContentSectionForTableID(
-					tableid, knowWEArticle);
+					tableid, article2);
 			Map<String, String> nodesMap = new HashMap<String, String>();
 			if (contentSection == null) {
 				// append entire block to page
-				nodesMap.put(knowWEArticle.getSection().getID(),
-						knowWEArticle.getSection().getText() + "\n"
+				nodesMap.put(article2.getSection().getID(),
+						article2.getSection().getText() + "\n"
 								+ createNewMarkupString(
 						tableid, inputDataAll));
 			}
@@ -154,9 +154,9 @@ public class SubmitTableContentAction extends AbstractAction {
 		return inputDataAll;
 	}
 
-	public static Section<TableEntryContentType> findContentSectionForTableID(String tableid, KnowWEArticle knowWEArticle) {
+	public static Section<TableEntryContentType> findContentSectionForTableID(String tableid, Article article) {
 		List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
-		Sections.findSuccessorsOfType(knowWEArticle.getSection(),
+		Sections.findSuccessorsOfType(article.getSection(),
 				TableEntryType.class, tables);
 		Section<TableEntryContentType> contentSection = null;
 		for (Section<TableEntryType> section : tables) {

@@ -14,29 +14,29 @@ import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryRow;
 
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
+import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import dummies.KnowWETestWikiConnector;
+import dummies.TestWikiConnector;
 
 public class TimeEventTest extends TestCase {
 
-	private KnowWEEnvironment ke;
-	private KnowWEArticleManager am;
+	private Environment ke;
+	private ArticleManager am;
 	private RootType type;
 
 	@Override
 	@Before
 	public void setUp() throws Exception {
 		InitPluginManager.init();
-		KnowWEPackageManager.overrideAutocompileArticle(true);
-		KnowWEEnvironment.initKnowWE(new KnowWETestWikiConnector());
-		ke = KnowWEEnvironment.getInstance();
+		PackageManager.overrideAutocompileArticle(true);
+		Environment.initKnowWE(new TestWikiConnector());
+		ke = Environment.getInstance();
 		type = ke.getRootType();
-		am = ke.getArticleManager(KnowWEEnvironment.DEFAULT_WEB);
+		am = ke.getArticleManager(Environment.DEFAULT_WEB);
 		am.setArticlesInitialized(true);
 	}
 
@@ -79,7 +79,7 @@ public class TimeEventTest extends TestCase {
 		// compile error in the wiki
 		eventsInput.remove(1);
 
-		ke.processAndUpdateArticleJunit(null, content, testtopic, KnowWEEnvironment.DEFAULT_WEB,
+		ke.processAndUpdateArticleJunit(null, content, testtopic, Environment.DEFAULT_WEB,
 				type);
 
 		String querystring = "select ?x ?t ?desc ?dd ?imp  where {?x lns:hasDescription ?desc . ?x lns:hasTitle ?t . ?x lns:hasDateDescription ?dd . ?x lns:hasImportance ?imp }";

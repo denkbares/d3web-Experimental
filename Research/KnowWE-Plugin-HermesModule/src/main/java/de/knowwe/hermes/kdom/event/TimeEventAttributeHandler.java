@@ -3,7 +3,7 @@ package de.knowwe.hermes.kdom.event;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
@@ -20,7 +20,7 @@ import de.knowwe.core.report.Message;
 public abstract class TimeEventAttributeHandler<T extends Type> extends SubtreeHandler<T> {
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<T> s) {
+	public Collection<Message> create(Article article, Section<T> s) {
 		if (s.getFather().hasErrorInSubtree(article)) {
 			return new ArrayList<Message>(0);
 		}
@@ -30,16 +30,16 @@ public abstract class TimeEventAttributeHandler<T extends Type> extends SubtreeH
 		return null;
 	}
 
-	protected abstract Collection<Message> createAttribute(KnowWEArticle article, Section<T> s);
+	protected abstract Collection<Message> createAttribute(Article article, Section<T> s);
 
 	// @Override
-	// public boolean needsToCreate(KnowWEArticle article, Section<T> s) {
+	// public boolean needsToCreate(Article article, Section<T> s) {
 	// return super.needsToCreate(article, s)
 	// || DashTreeUtils.isChangeInAncestorSubtree(article, s, 1);
 	// }
 	//
 	// @Override
-	// public boolean needsToDestroy(KnowWEArticle article, Section<T> s) {
+	// public boolean needsToDestroy(Article article, Section<T> s) {
 	// return super.needsToDestroy(article, s)
 	// || DashTreeUtils.isChangeInAncestorSubtree(article, s, 1);
 	//

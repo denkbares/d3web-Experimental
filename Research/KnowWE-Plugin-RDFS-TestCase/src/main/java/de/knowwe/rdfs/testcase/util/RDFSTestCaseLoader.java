@@ -21,8 +21,8 @@ package de.knowwe.rdfs.testcase.util;
 import java.util.List;
 import java.util.logging.Logger;
 
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -49,7 +49,7 @@ public class RDFSTestCaseLoader {
 	 */
 	public static RDFSTestCase loadTestCase(String article, String web, String testCaseName) {
 
-		KnowWEArticle a = KnowWEEnvironment.getInstance().getArticleManager(web).getArticle(article);
+		Article a = Environment.getInstance().getArticleManager(web).getArticle(article);
 
 		RDFSTestCase testCase = null;
 

@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.d3web.we.correction.ApproximateCorrectionProvider;
-import de.knowwe.core.KnowWEAttributes;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Attributes;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.KDOMReplaceTermNameAction;
 import de.knowwe.core.action.UserActionContext;
@@ -54,12 +54,12 @@ public class KDOMReplaceTermUserSupportAction extends AbstractAction {
 		}
 
 		String web = context.getWeb();
-		String nodeID = context.getParameter(KnowWEAttributes.TARGET);
+		String nodeID = context.getParameter(Attributes.TARGET);
 		String name = context.getTitle();
-		String newText = context.getParameter(KnowWEAttributes.TEXT);
+		String newText = context.getParameter(Attributes.TEXT);
 
 		// Check for user access
-		if (!KnowWEEnvironment.getInstance().getWikiConnector().userCanEditPage(name,
+		if (!Environment.getInstance().getWikiConnector().userCanEditPage(name,
 				context.getRequest())) {
 			context.sendError(403, "You do not have the permission to edit this page.");
 			return;

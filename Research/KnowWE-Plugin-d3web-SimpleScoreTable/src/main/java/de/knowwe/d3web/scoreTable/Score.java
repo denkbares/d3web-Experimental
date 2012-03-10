@@ -23,7 +23,7 @@
 package de.knowwe.d3web.scoreTable;
 
 import de.d3web.we.object.ScoreValue;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;

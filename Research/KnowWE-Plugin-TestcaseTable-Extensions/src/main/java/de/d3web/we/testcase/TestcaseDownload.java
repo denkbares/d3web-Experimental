@@ -23,10 +23,10 @@ import java.io.IOException;
 
 import de.d3web.empiricaltesting.TestCase;
 import de.d3web.empiricaltesting.writer.TestSuiteXMLWriter;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -52,7 +52,7 @@ public class TestcaseDownload extends AbstractAction {
 
 		Section<TestcaseTable> table = Sections.findSuccessor(tableDMType, TestcaseTable.class);
 
-		KnowWEArticle master = KnowWEEnvironment.getInstance().getArticleManager(
+		Article master = Environment.getInstance().getArticleManager(
 				web).getArticle(context.getTitle());
 
 		TestCase t = (TestCase) KnowWEUtils.getStoredObject(master, table,

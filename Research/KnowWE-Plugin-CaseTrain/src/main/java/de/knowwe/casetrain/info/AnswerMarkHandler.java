@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 
 import de.knowwe.casetrain.info.AnswerLine.AnswerMark;
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
@@ -55,7 +55,7 @@ public class AnswerMarkHandler extends GeneralSubtreeHandler<AnswerMark> {
 	}
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<AnswerMark> s) {
+	public Collection<Message> create(Article article, Section<AnswerMark> s) {
 
 		List<Message> messages = new ArrayList<Message>();
 		String content = s.getText().substring(1, s.getText().length() - 1).trim();

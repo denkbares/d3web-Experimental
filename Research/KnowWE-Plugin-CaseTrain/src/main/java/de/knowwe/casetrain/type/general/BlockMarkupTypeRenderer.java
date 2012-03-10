@@ -19,7 +19,7 @@
 package de.knowwe.casetrain.type.general;
 
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
@@ -40,7 +40,7 @@ public class BlockMarkupTypeRenderer implements Renderer {
 		string.append(KnowWEUtils.maskHTML("<div class='"
 				+ ((BlockMarkupType) sec.get()).getCSSClass()
 				+ "'>"));
-		KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
+		Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 		Utils.renderKDOMReportMessageBlock(Messages.getErrors(Messages.getMessagesFromSubtree(
 				article, sec)), string);
 

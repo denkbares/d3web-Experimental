@@ -26,7 +26,7 @@ import java.util.WeakHashMap;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
@@ -118,10 +118,10 @@ public abstract class OWLAPISubtreeHandler<T extends Type> extends SubtreeHandle
 	 * @return a @link{Set} of @link{OWLAxiom}s which will be added to the
 	 *         ontology.
 	 */
-	public abstract Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<T> s, Collection<Message> messages);
+	public abstract Set<OWLAxiom> createOWLAxioms(Article article, Section<T> s, Collection<Message> messages);
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<T> s) {
+	public Collection<Message> create(Article article, Section<T> s) {
 		Collection<Message> messages = new LinkedList<Message>();
 		Set<OWLAxiom> axioms = createOWLAxioms(article, s, messages);
 		connector.addAxioms(axioms);
@@ -133,7 +133,7 @@ public abstract class OWLAPISubtreeHandler<T extends Type> extends SubtreeHandle
 	}
 
 	@Override
-	public void destroy(KnowWEArticle article, Section<T> s) {
+	public void destroy(Article article, Section<T> s) {
 		Set<OWLAxiom> axioms = axiomCache.remove(s);
 		connector.removeAxioms(axioms);
 		if (sync) {

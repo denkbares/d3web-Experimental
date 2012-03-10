@@ -27,8 +27,8 @@ import java.util.ResourceBundle;
 
 import de.d3web.we.action.TemplateGenerationAction;
 import de.d3web.we.kdom.wikiTemplate.Template;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -50,7 +50,7 @@ public class TemplateTagHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String getDescription(UserContext user) {
-		return KnowWEEnvironment.getInstance().getKwikiBundle(user).
+		return Environment.getInstance().getMessageBundle(user).
 				getString("KnowWE.TemplateTagHandler.description");
 	}
 
@@ -58,10 +58,10 @@ public class TemplateTagHandler extends AbstractHTMLTagHandler {
 	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
-		ResourceBundle rb = KnowWEEnvironment.getInstance()
-				.getKwikiBundle(user);
+		ResourceBundle rb = Environment.getInstance()
+				.getMessageBundle(user);
 
-		List<Section<Template>> templates = getTemplateTypes(KnowWEEnvironment
+		List<Section<Template>> templates = getTemplateTypes(Environment
 				.getInstance().getArticle(web, topic));
 
 		StringBuffer html = new StringBuffer();
@@ -136,7 +136,7 @@ public class TemplateTagHandler extends AbstractHTMLTagHandler {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Section<Template>> getTemplateTypes(KnowWEArticle article) {
+	public static List<Section<Template>> getTemplateTypes(Article article) {
 		ArrayList<Section<?>> found =
 				new ArrayList<Section<?>>();
 		Sections.getAllNodesPreOrder(article.getSection(), found);

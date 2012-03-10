@@ -23,7 +23,7 @@ import java.util.Set;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
@@ -35,7 +35,7 @@ public class ObjectInfoTagHandlerIncr extends de.knowwe.core.taghandler.ObjectIn
 	}
 
 	@Override
-	protected void getTermDefinitions(KnowWEArticle currentArticle, String objectName, Set<Section<?>> definitions) {
+	protected void getTermDefinitions(Article currentArticle, String objectName, Set<Section<?>> definitions) {
 
 		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = terminology.getTermDefinitions(objectName);
@@ -49,7 +49,7 @@ public class ObjectInfoTagHandlerIncr extends de.knowwe.core.taghandler.ObjectIn
 	}
 
 	@Override
-	protected void getTermReferences(KnowWEArticle currentArticle, String objectName, Set<Section<?>> references) {
+	protected void getTermReferences(Article currentArticle, String objectName, Set<Section<?>> references) {
 		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
 		Collection<Section<? extends SimpleReference>> termReferences = terminology.getTermReferences(objectName);
 		if (termReferences != null) {

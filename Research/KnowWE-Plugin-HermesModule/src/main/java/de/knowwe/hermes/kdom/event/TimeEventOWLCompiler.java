@@ -12,7 +12,7 @@ import org.ontoware.rdf2go.vocabulary.RDF;
 
 import de.knowwe.core.contexts.ContextManager;
 import de.knowwe.core.contexts.DefaultSubjectContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
 import de.knowwe.hermes.TimeEvent;
@@ -24,7 +24,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class TimeEventOWLCompiler extends RDF2GoSubtreeHandler<TimeEventNew> {
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<TimeEventNew> s) {
+	public Collection<Message> create(Article article, Section<TimeEventNew> s) {
 
 		TimeEvent event = TimeEventNew.createTimeEvent(s);
 		if (s.hasErrorInSubtree(article) || event == null) {

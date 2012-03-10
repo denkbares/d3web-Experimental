@@ -20,7 +20,7 @@ import de.d3web.we.drools.terminology.SolutionInput;
 import de.d3web.we.drools.terminology.TextValue;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -224,7 +224,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 	private List<String> getSessionSuggestions(UserActionContext context, String value) {
 		List<String> suggestions = new ArrayList<String>();
 
-		KnowWEArticle article = DroolsUtils.loadArticle(context);
+		Article article = DroolsUtils.loadArticle(context);
 
 		if (article != null) {
 

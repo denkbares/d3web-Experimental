@@ -31,7 +31,7 @@ import java.util.Set;
 
 import com.wcohen.ss.Levenstein;
 
-import de.knowwe.search.KnowWESearchProvider;
+import de.knowwe.search.SearchProvider;
 import de.knowwe.search.SearchTerm;
 
 /**
@@ -89,10 +89,10 @@ public class SearchTerminologyHandler {
 		
 		//Collect all known terms from the installed searchProviders
 		List<SearchTerm> generalSystemTerms = new ArrayList<SearchTerm>();
-		Collection<KnowWESearchProvider> providers = MultiSearchEngine
+		Collection<SearchProvider> providers = MultiSearchEngine
 				.getInstance().getSearchProvider().values();
 		if (providers != null) {
-			for (KnowWESearchProvider knowWESearchProvider : providers) {
+			for (SearchProvider knowWESearchProvider : providers) {
 				Collection<SearchTerm> allTerms = knowWESearchProvider
 						.getAllTerms();
 				if (allTerms != null) {
@@ -170,9 +170,9 @@ public class SearchTerminologyHandler {
 	private Collection<SearchTerm> expandSearchTermForRecommendationByProviders(
 			SearchTerm term) {
 		Set<SearchTerm> result = new HashSet<SearchTerm>();
-		Set<Entry<String, KnowWESearchProvider>> entrySet = MultiSearchEngine
+		Set<Entry<String, SearchProvider>> entrySet = MultiSearchEngine
 				.getInstance().getSearchProvider().entrySet();
-		for (Entry<String, KnowWESearchProvider> entry : entrySet) {
+		for (Entry<String, SearchProvider> entry : entrySet) {
 			Collection<SearchTerm> expanded = entry.getValue()
 					.expandTermForRecommendation(term);
 			if (expanded != null) {
@@ -186,9 +186,9 @@ public class SearchTerminologyHandler {
 			SearchTerm term) {
 		Set<SearchTerm> result = new HashSet<SearchTerm>();
 		result.add(term);
-		Set<Entry<String, KnowWESearchProvider>> entrySet = MultiSearchEngine
+		Set<Entry<String, SearchProvider>> entrySet = MultiSearchEngine
 				.getInstance().getSearchProvider().entrySet();
-		for (Entry<String, KnowWESearchProvider> entry : entrySet) {
+		for (Entry<String, SearchProvider> entry : entrySet) {
 			Collection<SearchTerm> expanded = entry.getValue()
 					.expandTermForSearch(term);
 			if (expanded != null) {
@@ -210,9 +210,9 @@ public class SearchTerminologyHandler {
 		List<SearchTerm> generalSystemTerms = new ArrayList<SearchTerm>();
 		List<String> filtered = new ArrayList<String>();
 
-		Collection<KnowWESearchProvider> providers = MultiSearchEngine.getInstance().getSearchProvider().values();
+		Collection<SearchProvider> providers = MultiSearchEngine.getInstance().getSearchProvider().values();
 		if (providers != null) {
-			for (KnowWESearchProvider knowWESearchProvider : providers) {
+			for (SearchProvider knowWESearchProvider : providers) {
 				Collection<SearchTerm> allTerms = knowWESearchProvider
 						.getAllTerms();
 				if (allTerms != null) {

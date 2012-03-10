@@ -80,7 +80,7 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 	 * Renders possible messages returned by the {@link SubtreeHandler}.
 	 * 
 	 * @created 18.10.2011
-	 * @param KnowWEArticle article
+	 * @param Article article
 	 * @param Section<? extends Type> section
 	 * @param StringBuilder string
 	 */

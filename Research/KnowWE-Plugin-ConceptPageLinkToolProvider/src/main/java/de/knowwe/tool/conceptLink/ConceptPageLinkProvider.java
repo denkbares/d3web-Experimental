@@ -24,7 +24,7 @@ import java.util.Collection;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.IncrementalTermReference;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
@@ -48,7 +48,7 @@ public class ConceptPageLinkProvider implements ToolProvider {
 							termIdentifier);
 			if (definitions != null && definitions.size() > 0) {
 				Section<?> definition = definitions.iterator().next();
-				KnowWEArticle defArticle = definition.getArticle();
+				Article defArticle = definition.getArticle();
 
 				if (defArticle == null) {
 					return new Tool[] {}; // predefined term

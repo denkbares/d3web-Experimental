@@ -25,7 +25,7 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import utils.MyTestArticleManager;
+import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.kdom.rules.action.SetQuestionValue;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
@@ -43,7 +43,7 @@ import de.d3web.we.tables.TableHeaderCell;
 import de.d3web.we.tables.TableHeaderLine;
 import de.d3web.we.tables.TableLine;
 import de.d3web.we.tables.TableNormalCell;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 
@@ -56,7 +56,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 public class TableTest extends TestCase {
 
 	private final String TESTSUITEARTICLE = "src/test/resources/TableMarkup.txt";
-	private Section<KnowWEArticle> articleSec = null;
+	private Section<Article> articleSec = null;
 
 	private Section<CausalDiagnosisScoreMarkup> causalTable = null;
 	private final int causalHeaderLineCount = 1;
@@ -84,7 +84,7 @@ public class TableTest extends TestCase {
 	@Override
 	protected void setUp() throws IOException {
 		InitPluginManager.init();
-		KnowWEArticle article = MyTestArticleManager.getArticle(TESTSUITEARTICLE);
+		Article article = TestArticleManager.getArticle(TESTSUITEARTICLE);
 		articleSec = article.getSection();
 		causalTable = Sections.findSuccessor(articleSec, CausalDiagnosisScoreMarkup.class);
 		decisionTable = Sections.findSuccessor(articleSec, DecisionTableMarkup.class);

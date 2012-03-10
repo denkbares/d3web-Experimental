@@ -32,17 +32,17 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import utils.MyTestArticleManager;
+import utils.TestArticleManager;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.compile.test.util.Query;
 import de.knowwe.compile.test.util.Vocabulary;
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.compile.packaging.KnowWEPackageManager;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
+import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -69,21 +69,21 @@ public class IncrementalCompilerTest {
 	private static final String TESTFILE = "src/main/resources/" + Vocabulary.ARTICLENAME + ".txt";
 
 	/* Just for convenience */
-	private final KnowWEEnvironment environment = KnowWEEnvironment.getInstance();
-	private final KnowWEArticleManager articleManager = environment.getArticleManager(KnowWEEnvironment.DEFAULT_WEB);
+	private final Environment environment = Environment.getInstance();
+	private final ArticleManager articleManager = environment.getArticleManager(Environment.DEFAULT_WEB);
 
 	private final ReferenceManager manager = IncrementalCompiler.getInstance().getTerminology();
 	private final Rdf2GoCore core = Rdf2GoCore.getInstance();
 
-	private KnowWEArticle getArticle() {
+	private Article getArticle() {
 		return articleManager.getArticle(Vocabulary.ARTICLENAME);
 	}
 
 	@BeforeClass
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
-		KnowWEPackageManager.overrideAutocompileArticle(true);
-		MyTestArticleManager.getArticle(TESTFILE);
+		PackageManager.overrideAutocompileArticle(true);
+		TestArticleManager.getArticle(TESTFILE);
 	}
 
 	@Test
@@ -211,11 +211,11 @@ public class IncrementalCompilerTest {
 	@AfterClass
 	public static void tearDown() {
 		// Remove the statements created in the test to avoid problems
-		KnowWEArticle article = MyTestArticleManager.getArticle(TESTFILE);
+		Article article = TestArticleManager.getArticle(TESTFILE);
 		Rdf2GoCore.getInstance().removeArticleStatementsRecursive(article);
 		Rdf2GoCore.getInstance().removeAllCachedStatements();
 		// Finally remove the formerly created article
-		MyTestArticleManager.clear();
+		TestArticleManager.clear();
 	}
 
 }

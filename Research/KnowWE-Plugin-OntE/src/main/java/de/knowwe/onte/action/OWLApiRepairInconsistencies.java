@@ -32,8 +32,8 @@ import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLObject;
 
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Type;
@@ -79,7 +79,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 
 
 			// ... then lock the page to avoid changes by other users ...
-			boolean isPageLocked = KnowWEEnvironment.getInstance().getWikiConnector()
+			boolean isPageLocked = Environment.getInstance().getWikiConnector()
 										.isPageLocked(articlename);
 			 if (isPageLocked) {
 				context.sendError(
@@ -88,11 +88,11 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 				return;
 			 }
 			 else {
-				KnowWEEnvironment.getInstance().getWikiConnector().setPageLocked(articlename,
+				Environment.getInstance().getWikiConnector().setPageLocked(articlename,
 							context.getUserName());
 
 				// ... create the according replacements
-				KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(
+				ArticleManager mgr = Environment.getInstance().getArticleManager(
 							context.getWeb());
 
 				String replacement = getReplacementText(sectionID);
@@ -110,7 +110,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 				Sections.replaceSections(context, nodesMap);
 
 				// .. and finally delete the page lock
-				KnowWEEnvironment.getInstance().getWikiConnector().undoPageLocked(articlename);
+				Environment.getInstance().getWikiConnector().undoPageLocked(articlename);
 				context.getWriter().write("{msg : 'axioms deleted', success : 'true'}");
 			}
 		}

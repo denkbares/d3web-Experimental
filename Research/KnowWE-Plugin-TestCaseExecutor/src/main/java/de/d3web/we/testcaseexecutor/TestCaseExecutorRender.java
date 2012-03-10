@@ -9,12 +9,12 @@ import de.d3web.empiricaltesting.TestCase;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysisReport;
 import de.d3web.we.testcase.action.TestCaseRunAction;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.ConnectorAttachment;
-import de.knowwe.core.wikiConnector.KnowWEWikiConnector;
+import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -93,7 +93,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 
 		for (String file : files) {
 
-			KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
+			WikiConnector connector = Environment.getInstance().getWikiConnector();
 			ConnectorAttachment attachment = connector.getAttachment(section.getArticle().getTitle()
 					+ "/" + file);
 
@@ -119,7 +119,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 	 * @return
 	 */
 	private String renderSelection(Section<?> section, String master) {
-		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
+		WikiConnector connector = Environment.getInstance().getWikiConnector();
 
 		Collection<String> attachments = connector.getAttachmentFilenamesForPage(section.getArticle().getTitle());
 

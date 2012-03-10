@@ -21,7 +21,7 @@ package de.d3web.we.drools.taghandler;
 
 import java.util.Map;
 
-import de.knowwe.core.KnowWERessourceLoader;
+import de.knowwe.core.RessourceLoader;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -45,8 +45,8 @@ public class DroolsTagHandler extends AbstractTagHandler {
 	 */
 	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 
-		KnowWERessourceLoader rl = KnowWERessourceLoader.getInstance();
-		rl.add("drools.css", KnowWERessourceLoader.RESOURCE_STYLESHEET);
+		RessourceLoader rl = RessourceLoader.getInstance();
+		rl.add("drools.css", RessourceLoader.RESOURCE_STYLESHEET);
 
 		StringBuilder bob = new StringBuilder();
 		bob.append("<div class=\"panel\"><h3>Drools Shell</h3>");
