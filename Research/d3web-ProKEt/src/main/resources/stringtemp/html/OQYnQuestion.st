@@ -9,8 +9,7 @@
         </div> 
         
         <div id="titletext-$fullId$" class="titletext" onclick="toggleDetails($fullId$)">
-                $questioncount$
-                $title$
+                <div id="solutiontitle-$fullId$" class="solutiontitle">$questioncount$ $title$</div>
                 $Tooltip()$
                 $Image()$
                 $text$

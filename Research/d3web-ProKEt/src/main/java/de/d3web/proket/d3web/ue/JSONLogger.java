@@ -118,6 +118,14 @@ public class JSONLogger {
     public void logEndValue(String value) {
         logfile.put(UETerm.END.toString(), value);
     }
+    
+    public void logDialogType(String type) {
+        logfile.put(UETerm.TYPE.toString(), type);
+    }
+    
+    public void logQuestionToggle(String questiontext, String logtime , String expandshut) {
+        logfile.put(expandshut + "_" + logtime, questiontext);
+    }
 
     /**
      * Adds a new JSONObject representing a clicked widget to the
@@ -174,6 +182,8 @@ public class JSONLogger {
     public JSONObject getLogAsJSON() {
         return logfile;
     }
+    
+    
 
     /**
      * Restore values from a given existing JSON file into this currently logged
@@ -215,7 +225,8 @@ public class JSONLogger {
 
             Writer w = new OutputStreamWriter(new FileOutputStream(filepath), "UTF8");
             bw = new BufferedWriter(w);
-            bw.write(getLogAsJSON().toString());
+            //TODO: refactor: method "decorate JSON to file string" or so
+            bw.write(getLogAsJSON().toString().replace("\\", ""));
 
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();

@@ -213,7 +213,7 @@ public class ServletLogUtils {
      * @param value
      * @param logtime
      */
-    protected static void logQuestionValue(String question, String value, String logtime,
+    public static void logQuestionValue(String question, String value, String logtime,
             JSONLogger logger) {
         logger.logClickedObjects(question, logtime, value);
         logger.writeJSONToFile();
@@ -250,4 +250,13 @@ public class ServletLogUtils {
          logger.writeJSONToFile();
     }
     
+    public static void logDialogType(String type, JSONLogger logger){
+        logger.logDialogType(type);
+        logger.writeJSONToFile();
+    }
+    
+     public static void logQuestionToggle(String questiontext, String logtime,  String toggleType, JSONLogger logger){
+        logger.logQuestionToggle(questiontext, toggleType, logtime);
+        logger.writeJSONToFile();
+    }
 }

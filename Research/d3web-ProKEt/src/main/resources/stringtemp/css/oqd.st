@@ -97,7 +97,7 @@ table{
     font-weight: bold;
     line-height: 1.75em;
     margin-left: 15px;
-    min-height: 16px;
+    min-height: 24px;
     padding-bottom: 1px;
     padding-left: 15px;
 }
@@ -222,6 +222,8 @@ area {
     line-height: 1.1em;
     margin-top: 5px;
     font-weight: normal;
+    clear: both;
+    margin-right: 15px;
 }
 
 .detailButton{width: 50px; height: 18px; 
@@ -232,9 +234,10 @@ area {
 	-webkit-box-shadow: 0 0 5px black; 
         box-shadow: 0 0 5px black; 
         margin-bottom: 12px;
-        margin-top: 7px;
+        margin-top: 2px;
         margin-right: 10px;
-        
+        clear: both;
+        float: left;
         }
 
 .solution{
@@ -277,4 +280,12 @@ area {
 #solutiontext{
      float: left;
     padding: 2px 0;
+}
+
+.solutiontitle{
+    float: left;
+    min-height: 16px;
+	line-height: 1.75em;
+        margin-left: 15px;
+        margin-bottom: 5px;
 }

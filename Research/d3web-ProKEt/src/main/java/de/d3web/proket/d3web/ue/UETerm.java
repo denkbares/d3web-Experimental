@@ -18,6 +18,7 @@ public enum UETerm {
     SOL("SOLUTION"),
     UEQ("UE_Questionnaire"),
     UEF("UE_Feedback"),
+    TYPE("dialogtype"),
     LOAD("LOAD");
     
     private String stringrep;

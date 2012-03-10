@@ -97,9 +97,9 @@ public class DialogServlet extends HttpServlet {
 
         HttpSession httpSession = request.getSession(true);
 
-       String source = getSource(request);
-       
-       // set SRC store attribute to "" per default for avoiding nullpointers
+        String source = getSource(request);
+
+        // set SRC store attribute to "" per default for avoiding nullpointers
         if (sourceSave == null) {
             sourceSave = "";
         }
@@ -149,7 +149,7 @@ public class DialogServlet extends HttpServlet {
             JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
             String feedback = request.getParameter("ueFeedback").toString().replace("+", " ");
             String logtime =
-                request.getParameter("timestring").replace("+", " ");
+                    request.getParameter("timestring").replace("+", " ");
             ServletLogUtils.logUEFeedback(feedback, logtime, logger);
 
         } else if (action.equalsIgnoreCase("logUEQuestionnaire")) {
@@ -157,6 +157,28 @@ public class DialogServlet extends HttpServlet {
             JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
             String qData = request.getParameter("ueQData").toString().replace("_", " ");
             ServletLogUtils.logUEQuestionnaire(qData, logger);
+
+        } else if (action.equalsIgnoreCase("logQuestion")) {
+
+            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            String qtext = request.getParameter("qtext").toString().replace("+", " ").replace("\\", "");
+            String qvalue = request.getParameter("qvalue").toString().replace("+", " ").replace("\\", "");
+            String logtime = request.getParameter("timestring").toString().replace("+", " ");
+            ServletLogUtils.logQuestionValue(qtext, qvalue, logtime, logger);
+
+        } else if (action.equalsIgnoreCase("logDialogType")) {
+
+            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            String type = request.getParameter("type").toString();
+            ServletLogUtils.logDialogType(type, logger);
+
+        } else if (action.equalsIgnoreCase("logQuestionToggle")) {
+
+            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            String questionText = request.getParameter("qtext").toString().replace("+"," ");
+            String toggleType = request.getParameter("ttype").toString();
+            String logtime = request.getParameter("timestring").toString().replace("+", " ");
+            ServletLogUtils.logQuestionToggle(questionText, toggleType, logtime, logger);
 
         } else if (action.equalsIgnoreCase("sendFeedbackMail")) {
             String state = "";
@@ -438,7 +460,7 @@ public class DialogServlet extends HttpServlet {
 
     }
 
-       protected String getSource(HttpServletRequest request) {
+    protected String getSource(HttpServletRequest request) {
 
         // Overwrite if necessary
         String source = "Default.xml"; // default
@@ -446,9 +468,9 @@ public class DialogServlet extends HttpServlet {
             source = request.getParameter("src");
         }
         return source.endsWith(".xml") ? source : source + ".xml";
-        
-        
-        
-        
+
+
+
+
     }
 }

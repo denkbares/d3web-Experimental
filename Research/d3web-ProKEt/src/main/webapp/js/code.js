@@ -85,6 +85,9 @@ function setup() {
     
 
     if(hierarchy){
+        // remove yn panel etc for first question
+        removeInputFacilitiesForFirst();
+        
         expandFirstmostElement();
     
         exchangeReadflowTextFirstSubQuestion();
@@ -98,8 +101,7 @@ function setup() {
         // remove the field containing the propagation value info for 1st q
         removePropagationInfoInQuestionForFirst();
         
-        // remove yn panel etc for first question
-        removeInputFacilitiesForFirst();
+        
         
     // some more styling of diagnosis element
     }
@@ -193,7 +195,7 @@ function expandFirstmostElement(){
     
     var rootId = retrieveRootQuestionIdInHierarchyPrototype();
 
-   $("#" + rootId).addClass('solutiontext');
+    $("#" + rootId).addClass('solutiontext');
     toggle_sub_4boxes(rootId);   // expand the first element
 }
 
@@ -1090,22 +1092,29 @@ function toggle_folder_image_4boxes(id) {
 	
     // ids of the arrow/folder image is 2-typeimg, when question is q_2    
     var typeimgID = id.replace("q_", "") + '-typeimg';
-	
+    
     // get the div of the arrow/folder image
     var imgDiv = $("[id^="+ typeimgID + "]");
     
-    if (imgDiv.attr('src') == 'img/closedArrowOr.png') {
-        imgDiv.attr('src', 'img/openedArrowOr.png');
-    } else if (imgDiv.attr('src') == 'img/openedArrowOr.png') {
-        imgDiv.attr('src', 'img/closedArrowOr.png');
-    } else if (imgDiv.attr('src') == 'img/openedArrowAnd.png') {
-        imgDiv.attr('src', 'img/closedArrowAnd.png');
-    } else if (imgDiv.attr('src') == 'img/closedArrowAnd.png') {
-        imgDiv.attr('src', 'img/openedArrowAnd.png');
-    } else if (imgDiv.attr('src') == 'img/openedArrow.png') {
+    var qtext = $('#solutiontitle-' + id).html();
+    
+    var topelem = false;  
+    if($('#' + id.replace("q_", "") + "-imagebox").html().indexOf("solutionboxtext") != -1){
+        topelem = true;
+    };
+    
+    if (imgDiv.attr('src') == 'img/openedArrow.png') {
+        
         imgDiv.attr('src', 'img/closedArrow.png');
+        if(logging){
+            ue_logQuestionToggle(qtext, "SHUT");
+        }
+        
     } else if (imgDiv.attr('src') == 'img/closedArrow.png') {
         imgDiv.attr('src', 'img/openedArrow.png');
+        if(logging && !topelem){
+            ue_logQuestionToggle(qtext, "EXPAND");
+        }
     } 
 }
 
@@ -1118,6 +1127,7 @@ function toggle_folder_image_4boxes(id) {
  */
 function h4boxes(value, id) {
     	
+    ue_logDialogType("ClariHIE");    
     // get dialog item
     var item = $("#" + id);
 	
@@ -1135,6 +1145,8 @@ function h4boxes(value, id) {
             }
         }*/
         
+    prepareQuestionLogging(id, value);
+    
     //alert(target.attr("id") + " " + value);    
     setColorForQuestion(target, item, value);
     
@@ -1150,6 +1162,48 @@ function h4boxes(value, id) {
     
 }
 
+
+function prepareQuestionLogging(question, value){
+    if(question.indexOf("ynNo-" != -1)){
+        question = question.replace("ynNo-", "");
+    } 
+    if(question.indexOf("ynYes-" != -1)){
+        question = question.replace("ynYes-", "");
+    } 
+    if(question.indexOf("ynUn-" != -1)){
+        question = question.replace("ynUn-", "");
+    }
+    if(question.indexOf("ynNan-" != -1)){
+        question = question.replace("ynNan-", "");
+    }
+    if(question.indexOf("panel-" != -1)){
+        question = question.replace("panel-", "");
+    }
+    
+    var qtext = $('#solutiontitle-' + question).html();
+    var qtextSplit = qtext.split(" ");
+    var questiontext = qtext.replace(qtextSplit[0] + " ", "");
+    
+    var valueVerbalization = "";
+    
+    switch(value){
+        case "1":
+            valueVerbalization = "Ja";
+            break;
+        case "2":
+            valueVerbalization = "Unentschieden";
+            break;
+        case "3":
+            valueVerbalization = "Nein";
+            break;
+        case "0":
+            valueVerbalization = "Unbewertet";
+            break;
+    }
+    
+    ue_logQuestionValueClariPrototype(questiontext, valueVerbalization);
+}
+  
 function storeUserVal(question, value){
     
     switch(value){
@@ -1945,10 +1999,13 @@ function showAuxInfoOQD(id, title){
  * i.e., and answer is provided
  */
 function handleOQYNQuestions(fullId, rating){
+    ue_logDialogType("ClariOQD");    
     
     // retrieve follow up element to current element
     var splitID = fullId.split("-")[1];
     var questionEl = $("#"+splitID);
+    
+    prepareQuestionLogging(fullId, rating);
     
     setColorForQuestion(questionEl, questionEl, rating);
     setPropagationColor(questionEl, rating);
@@ -2076,6 +2133,12 @@ function retrieveFollowUpParent(questionEl){
 
 /* Make first detail-sub question visible for the given question */
 function stepIntoDetail(questionId){
+    
+    var qtext = $('#solutiontitle-' + questionId).html();
+    var qtextSplit = qtext.split(" ");
+    qtext = qtext.replace(qtextSplit[0] + " ", "");
+    
+    ue_logQuestionToggle(qtext, "EXPAND");
     
     var question = $("#"+questionId);
     

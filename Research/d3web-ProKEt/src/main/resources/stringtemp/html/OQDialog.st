@@ -12,6 +12,9 @@ $HTMLHeader()$
                 $ButtonUEQuestionnaire()$
             </div>
         $endif$
+<div class="rightButton">
+            $FeedbackButton()$
+        </div>
 </div>
 
 <div id="content">

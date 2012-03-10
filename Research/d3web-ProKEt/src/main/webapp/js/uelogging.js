@@ -531,3 +531,56 @@ function ue_logUEQData(user, contact, questionnaireData){
         }
     });
 }
+
+function ue_logQuestionValueClariPrototype(questiontext, value){
+    
+    var now = ue_getCurrentDate();
+        
+    var link = $.query.set("action", "logQuestion")
+    .set("qtext", questiontext)
+    .set("qvalue", value)
+    .set("timestring", now).toString();
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+             
+        }
+    });
+}
+
+function ue_logDialogType(type){
+    
+    var now = ue_getCurrentDate();
+        
+    var link = $.query.set("action", "logDialogType")
+    .set("type", type).toString();
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+             
+        }
+    });
+}
+
+function ue_logQuestionToggle(qtext, ttype){
+    
+    var now = ue_getCurrentDate();
+        
+    var link = $.query.set("action", "logQuestionToggle")
+    .set("ttype", ttype).set("qtext", qtext).set("timestring", now).toString();
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+             
+        }
+    });
+}
