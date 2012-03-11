@@ -37,7 +37,6 @@ import de.d3web.scoring.Score;
 import de.d3web.scoring.inference.PSMethodHeuristic;
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.KDOMConditionFactory;
-import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.object.ScoreValue;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.compile.Priority;
@@ -64,7 +63,8 @@ public class HeuristicDiagnosisTable extends ITable
 	{
 		this.sectionFinder = new AllTextSectionFinder();
 		this.addSubtreeHandler(Priority.LOWEST, new HeuristicDiagnosisTableSubtreeHandler());
-		this.addChildType(new ListSolutionType());
+		//		this.addChildType(new ListSolutionType());
+		this.addChildType(new TableSolutionType());
 
 		// cut the optional closing }
 		AnonymousTypeInvisible closing = new AnonymousTypeInvisible("closing-bracket");

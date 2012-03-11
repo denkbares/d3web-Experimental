@@ -24,7 +24,6 @@ import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.renderer.TableRenderer;
 import de.d3web.we.tables.action.TableExportAction;
 import de.knowwe.core.kdom.Article;
@@ -244,8 +243,8 @@ public class TableUtils
 	 */
 	public static Solution findSolutionInKB(Section<?> sec, KnowledgeBase kb)
 	{
-		Section<ListSolutionType> sol =
-				Sections.findChildOfType(sec, ListSolutionType.class);
+		Section<TableSolutionType> sol =
+				Sections.findChildOfType(sec, TableSolutionType.class);
 		String solText = sol.getText();
 		solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
 		Solution solution = kb.getManager().searchSolution(solText);
