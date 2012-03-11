@@ -55,4 +55,9 @@ public class MongeElkanAlgorithm implements MatchingAlgorithm
 		return toReturn;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "MongeElkanAlgorithm";
+	}
 }

@@ -54,4 +54,9 @@ public class JaroWinklerAlgorithm implements MatchingAlgorithm
 		return toReturn;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "JaroWinklerAlgorithm";
+	}
 }

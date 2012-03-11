@@ -66,4 +66,9 @@ public class LevenshteinAlgorithm implements MatchingAlgorithm {
 		return toReturn;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "LevenshteinAlgorithm";
+	}
 }

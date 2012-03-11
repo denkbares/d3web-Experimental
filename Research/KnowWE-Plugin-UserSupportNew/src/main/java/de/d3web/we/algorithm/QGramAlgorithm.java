@@ -52,4 +52,9 @@ public class QGramAlgorithm implements MatchingAlgorithm
 		return toReturn;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "QGramAlgorithm";
+	}
 }

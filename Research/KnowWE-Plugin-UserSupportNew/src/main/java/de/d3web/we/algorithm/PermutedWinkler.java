@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 
  * @author Johannes Dienst
- * @created 21.02.2012 
+ * @created 21.02.2012
  */
 public class PermutedWinkler implements MatchingAlgorithm
 {
@@ -34,6 +34,12 @@ public class PermutedWinkler implements MatchingAlgorithm
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "PermutedWinklerAlgorithm";
 	}
 
 }

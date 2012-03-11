@@ -52,4 +52,9 @@ public class JaccardAlgorithm implements MatchingAlgorithm
 		return toReturn;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "JaccardAlgorithm";
+	}
 }

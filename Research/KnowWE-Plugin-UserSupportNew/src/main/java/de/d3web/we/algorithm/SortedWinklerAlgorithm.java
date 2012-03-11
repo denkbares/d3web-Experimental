@@ -41,7 +41,6 @@ public class SortedWinklerAlgorithm implements MatchingAlgorithm
 	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
 	{
 		JaroWinkler jW = new JaroWinkler();
-
 		if (toMatch.contains(" "))
 		{
 			String[] a = toMatch.split(" ");
@@ -82,8 +81,13 @@ public class SortedWinklerAlgorithm implements MatchingAlgorithm
 		}
 
 		List<Suggestion> toReturn = AlgorithmUtil.reduceSuggestionCount(maxCount, suggestions);
-
 		return toReturn;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "SortedWinklerAlgorithm";
 	}
 
 }

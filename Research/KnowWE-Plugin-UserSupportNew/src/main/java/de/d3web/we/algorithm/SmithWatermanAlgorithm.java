@@ -58,4 +58,9 @@ public class SmithWatermanAlgorithm implements MatchingAlgorithm
 		return toReturn;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "SmithWatermanAlgorithm";
+	}
 }
