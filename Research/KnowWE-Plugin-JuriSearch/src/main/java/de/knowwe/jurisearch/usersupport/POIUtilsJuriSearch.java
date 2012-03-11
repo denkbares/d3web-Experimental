@@ -21,7 +21,10 @@ package de.knowwe.jurisearch.usersupport;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -55,8 +58,7 @@ public class POIUtilsJuriSearch
 				Section<DashSubtree> subtree = Sections.findSuccessor(tree, DashSubtree.class);
 				Section<?> sub = subtree.getChildren().get(1);
 				XWPFParagraph par = doc.createParagraph();
-				XWPFRun run = par.createRun();
-				run.setText(sub.getText());
+				POIUtilsJuriSearch.createAndSetStyles(par, sub.getText());
 			}
 
 			// write all {@link QuestionDefinitionArea}
@@ -75,5 +77,70 @@ public class POIUtilsJuriSearch
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * 
+	 * Reads out the styles from the text and creates runs accordingly in paragraph.
+	 * Supported styles and markup are
+	 * Italic: ''italic'', html-tag i
+	 * Bold:   __bold__, html-tag b
+	 * Underlined: html-tag u
+	 * 
+	 * @created 09.03.2012
+	 * @param par
+	 * @param text
+	 */
+	private static void createAndSetStyles(XWPFParagraph par, String text)
+	{
+		text = text.replaceAll("''", "<i>");
+		text = text.replaceAll("</i>", "<i>");
+		text = text.replaceAll("__", "<b>");
+		text = text.replaceAll("</b>", "<b>");
+		text = text.replaceAll("</u>", "<u>");
+
+		Pattern p = Pattern.compile("<");
+		Matcher m = p.matcher(text);
+
+		int start = 0;
+		int end = 0;
+		int startNormalText = 0;
+		int endNormalText;
+		while (m.find())
+		{
+			// Set run with normally styles text
+			endNormalText = m.start();
+			String runText = text.substring(startNormalText, endNormalText);
+			XWPFRun run = par.createRun();
+			run.setText(runText);
+
+			// Styled text
+			start = m.start()+3;
+			m.find();
+			end = m.start();
+			runText = text.substring(start, end);
+			run = par.createRun();
+			run.setText(runText);
+
+			char styleTag = text.charAt(m.start()+1);
+			if (styleTag == 'i')
+				run.setItalic(true);
+			if (styleTag == 'b')
+				run.setBold(true);
+			if (styleTag == 'u')
+				run.setUnderline(UnderlinePatterns.SINGLE);
+
+			startNormalText = end + 3;
+		}
+
+
+
+		XWPFRun run = par.createRun();
+
+		if (end != 0)
+			end += 3;
+
+		String restText = text.substring(end);
+		run.setText(restText + "\r\n");
 	}
 }
