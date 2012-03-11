@@ -18,8 +18,8 @@ import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.jurisearch.JuriModel;
-import de.d3web.jurisearch.JuriRule;
 import de.d3web.jurisearch.JuriModelPersistenceHandler;
+import de.d3web.jurisearch.JuriRule;
 import de.d3web.plugin.test.InitPluginManager;
 
 public class JuriTest extends TestCase {
@@ -89,8 +89,12 @@ public class JuriTest extends TestCase {
 		}
 	}
 
+	/**
+	 * testing some rule inferences
+	 * 
+	 * @created 09.03.2012
+	 */
 	public void testRules() {
-
 		Session s = SessionFactory.createSession(kb);
 		changeFact(s, c1, JuriRule.YES_VALUE);
 		checkMap(s);
@@ -113,6 +117,11 @@ public class JuriTest extends TestCase {
 		}
 	}
 
+	/**
+	 * creates kb and adds rules
+	 * 
+	 * @created 09.03.2012
+	 */
 	private void createKnowledgebase() {
 		f = new QuestionOC(kb, "Ist das Wetter heute gut?");
 		c1 = new QuestionOC(kb, "Ist es warm?");
@@ -123,21 +132,11 @@ public class JuriTest extends TestCase {
 
 		model = new JuriModel();
 
-		f.addAlternative(JuriRule.YES);
-		f.addAlternative(JuriRule.NO);
-		f.addAlternative(JuriRule.MAYBE);
-		c1.addAlternative(JuriRule.YES);
-		c1.addAlternative(JuriRule.NO);
-		c1.addAlternative(JuriRule.MAYBE);
-		c2.addAlternative(JuriRule.YES);
-		c2.addAlternative(JuriRule.NO);
-		c2.addAlternative(JuriRule.MAYBE);
-		c21.addAlternative(JuriRule.YES);
-		c21.addAlternative(JuriRule.NO);
-		c21.addAlternative(JuriRule.MAYBE);
-		c22.addAlternative(JuriRule.YES);
-		c22.addAlternative(JuriRule.NO);
-		c22.addAlternative(JuriRule.MAYBE);
+		addAlternatives(f);
+		addAlternatives(c1);
+		addAlternatives(c2);
+		addAlternatives(c21);
+		addAlternatives(c22);
 
 		JuriRule jurirule = new JuriRule();
 		jurirule.setFather(f);
@@ -155,10 +154,25 @@ public class JuriTest extends TestCase {
 
 	}
 
+	/**
+	 * set Value v for Question o in Session s
+	 * 
+	 * @created 09.03.2012
+	 * @param s
+	 * @param o
+	 * @param v
+	 */
 	private void changeFact(Session s, QuestionOC o, Value v) {
 		map.put(o, v);
-		System.out.println("Ändere Fakt " + o.getName() + " zu " + v.toString());
+		// System.out.println("Ändere Fakt " + o.getName() + " zu " +
+		// v.toString());
 		Fact f = FactFactory.createUserEnteredFact(o, v);
 		s.getBlackboard().addValueFact(f);
+	}
+
+	private void addAlternatives(QuestionOC q) {
+		q.addAlternative(JuriRule.YES);
+		q.addAlternative(JuriRule.NO);
+		q.addAlternative(JuriRule.MAYBE);
 	}
 }

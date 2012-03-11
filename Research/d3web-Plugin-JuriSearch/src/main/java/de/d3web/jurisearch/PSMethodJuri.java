@@ -45,7 +45,7 @@ public class PSMethodJuri implements PSMethod {
 
 		Set<JuriRule> rulesToUpdate = new HashSet<JuriRule>();
 		for (PropagationEntry change : changes) {
-			System.out.println(change.toString());
+			// System.out.println(change.toString());
 			if (change.hasChanged()) {
 				Collection<JuriModel> models = session.getKnowledgeBase().getAllKnowledgeSlicesFor(
 						JuriModel.KNOWLEDGE_KIND);

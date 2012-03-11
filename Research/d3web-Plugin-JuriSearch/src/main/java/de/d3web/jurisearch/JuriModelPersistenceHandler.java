@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Set;
 
 import org.w3c.dom.Document;
@@ -57,8 +56,6 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 		root.setAttribute("type", JuriModelPersistenceHandler.ID);
 		root.setAttribute("system", "d3web");
 		doc.appendChild(root);
-		Element ksNode = doc.createElement("JuriRules");
-		root.appendChild(ksNode);
 
 		ArrayList<JuriModel> models = new ArrayList<JuriModel>(
 				knowledgeBase.getAllKnowledgeSlicesFor(JuriModel.KNOWLEDGE_KIND));
@@ -67,7 +64,7 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 			float cur = 0;
 			int max = getEstimatedSize(knowledgeBase);
 			for (JuriRule rule : rules) {
-				ksNode.appendChild(getRuleElement(rule, doc));
+				root.appendChild(getRuleElement(rule, doc));
 				listener.updateProgress(++cur / max, "Saving knowledge base: Juri Rules");
 			}
 		}
@@ -76,7 +73,7 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 
 	@Override
 	public int getEstimatedSize(KnowledgeBase knowledgeBase) {
-		return knowledgeBase.getAllKnowledgeSlicesFor(JuriRule.KNOWLEDGE_KIND).size();
+		return knowledgeBase.getAllKnowledgeSlicesFor(JuriModel.KNOWLEDGE_KIND).size();
 	}
 
 	@Override
@@ -117,7 +114,6 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 			rule.setDisjunctive(Boolean.parseBoolean(isDisjunctive));
 		}
 		if (fatherquestion != null) {
-			// TODO
 			QuestionOC father = (QuestionOC) kb.getManager().search(fatherquestion);
 			rule.setFather(father);
 		}
@@ -137,28 +133,15 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 
 		ruleelement.setAttribute("FatherQuestion", jurirule.getFather().getName());
 
-		// Element children = doc.createElement("Children");
-
 		for (QuestionOC child : jurirule.getChildren()) {
 			Element childelement = doc.createElement("Child");
 			childelement.setAttribute("Question", child.getName());
-			// children.appendChild(childelement);
 			ruleelement.appendChild(childelement);
 		}
-		// ruleelement.appendChild(children);
 
 		ruleelement.setAttribute("Disjuntice", "" + jurirule.isDisjunctive());
 
 		return ruleelement;
-	}
-
-	private class JuriRuleComparator implements Comparator<JuriRule> {
-
-		@Override
-		public int compare(JuriRule r1, JuriRule r2) {
-			return (r1.getFather().getName().compareTo(r2.getFather().getName()));
-		}
-
 	}
 
 	private String getAttribute(String name, Node node) {
