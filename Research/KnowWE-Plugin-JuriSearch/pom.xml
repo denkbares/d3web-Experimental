@@ -45,5 +45,10 @@
   		<artifactId>KnowWE-Plugin-UserSupportNew</artifactId>
   		<version>0.2-SNAPSHOT</version>
   	</dependency>
+  	<dependency>
+		<groupId>OfficeConverter</groupId>
+		<artifactId>OfficeConverter</artifactId>
+		<version>OfficeConverter</version>
+	</dependency> 
   </dependencies>
 </project>
