@@ -21,7 +21,6 @@ package de.d3web.we.algorithm;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.language.RefinedSoundex;
 
 
@@ -52,9 +51,9 @@ public class RefinedSoundexAlgorithm implements MatchingAlgorithm
 				}
 
 			}
-			catch (EncoderException e)
+			catch (Exception e)
 			{
-				// TODO Auto-generated catch block
+				// Nothing
 			}
 		}
 
@@ -63,4 +62,9 @@ public class RefinedSoundexAlgorithm implements MatchingAlgorithm
 		return toReturn;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "RefinedSoundexAlgorithm";
+	}
 }
