@@ -63,7 +63,7 @@ public class QuestionDefinitionArea extends AbstractType {
 		//				BoxRenderer("defaultMarkupFrame")));
 		this.setRenderer(new JuriInstantEditRenderer());
 		this.addChildType(new QuestionDefinitionContent());
-		this.addSubtreeHandler(Priority.PRECOMPILE_HIGH,
+		this.addSubtreeHandler(Priority.PRECOMPILE_MIDDLE,
 				new RegisterPackageSubtreeHandler());
 	}
 

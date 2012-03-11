@@ -144,7 +144,7 @@ public class TestcaseTableEditAction extends AbstractAction {
 
 	private static List<Question> getQuestions(Section<TestcaseTableType> section, UserContext user) {
 		Collection<Question> questions = new HashSet<Question>();
-		String[] kbpackages = getPackages(section);
+		String[] kbpackages = DefaultMarkupType.getPackages(section);
 		Environment env = Environment.getInstance();
 		PackageManager packageManager = env.getPackageManager(section.getWeb());
 		ArticleManager articleManager = env.getArticleManager(user.getWeb());
@@ -158,15 +158,6 @@ public class TestcaseTableEditAction extends AbstractAction {
 			}
 		}
 		return new ArrayList<Question>(questions);
-	}
-
-	private static String[] getPackages(Section<TestcaseTableType> section) {
-		String[] kbpackages = DefaultMarkupType.getAnnotations(section,
-				PackageManager.PACKAGE_ATTRIBUTE_NAME);
-		if (kbpackages.length == 0) {
-			kbpackages = new String[] { PackageManager.DEFAULT_PACKAGE };
-		}
-		return kbpackages;
 	}
 
 }
