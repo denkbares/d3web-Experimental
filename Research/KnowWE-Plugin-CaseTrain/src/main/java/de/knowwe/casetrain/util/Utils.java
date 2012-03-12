@@ -103,8 +103,8 @@ public class Utils {
 
 		Message msg = messages.iterator().next();
 		String className = "";
-		if (msg.getType() == Message.Type.NOTICE) {
-			className = "information";
+		if (msg.getType() == Message.Type.INFO) {
+			className = "info";
 		}
 		else if (msg.getType() == Message.Type.WARNING) {
 			className = "warning";
