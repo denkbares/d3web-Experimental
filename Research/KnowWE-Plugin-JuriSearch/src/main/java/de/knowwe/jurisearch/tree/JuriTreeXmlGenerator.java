@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
@@ -70,8 +71,10 @@ public class JuriTreeXmlGenerator {
 	}
 
 	private Writer getWriter() {
+		ResourceBundle properties = ResourceBundle.getBundle("JuriSearch");
+
 		try {
-			String path = "../webapps/Juri/WEB-INF/classes/specs/prototypes/juritest.xml";
+			String path = properties.getString("writer-path");
 			PrintWriter w = new
 					PrintWriter(path);
 
