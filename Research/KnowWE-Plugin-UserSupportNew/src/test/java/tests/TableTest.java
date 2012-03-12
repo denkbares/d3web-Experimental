@@ -43,6 +43,7 @@ import de.d3web.we.tables.TableHeaderCell;
 import de.d3web.we.tables.TableHeaderLine;
 import de.d3web.we.tables.TableLine;
 import de.d3web.we.tables.TableNormalCell;
+import de.d3web.we.tables.TableSolutionType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -163,7 +164,7 @@ public class TableTest extends TestCase {
 				Sections.findSuccessor(heuristicTable, HeuristicDiagnosisTable.class);
 		assertNotNull(score);
 
-		Section<ListSolutionType> solution = Sections.findSuccessor(score, ListSolutionType.class);
+		Section<TableSolutionType> solution = Sections.findSuccessor(score, TableSolutionType.class);
 		assertNotNull(solution);
 		assertEquals("HeuristischeDiagnoseTabelle {\r\n", solution.getText());
 
