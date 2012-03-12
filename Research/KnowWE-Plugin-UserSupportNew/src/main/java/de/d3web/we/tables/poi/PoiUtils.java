@@ -18,9 +18,11 @@
  */
 package de.d3web.we.tables.poi;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,8 +44,6 @@ import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
 import de.d3web.we.knowledgebase.KnowledgeBaseType;
 import de.d3web.we.tables.CausalDiagnosisScore;
@@ -288,27 +288,62 @@ public class PoiUtils
 		recovery.append("% \r\n");
 
 
-		FileInputStream input = new FileInputStream(in);
-		XWPFDocument doc = new XWPFDocument(input);
-		List<XWPFParagraph> paragraphs = doc.getParagraphs();
-		StringBuilder docText = new StringBuilder();
+		//		FileInputStream input = new FileInputStream(in);
+		//		XWPFDocument doc = new XWPFDocument(input);
+		//		List<XWPFParagraph> paragraphs = doc.getParagraphs();
+		//		StringBuilder docText = new StringBuilder();
 
+		String dirPath = in.getParent();
+		String absolutePath = in.getAbsolutePath();
+		//		Config conf = new Config("html", false, "UTF-8", dirPath , true, false, true);
+		//		Converter.convertFile2File(new File(absolutePath),
+		//				new File(absolutePath + "test.html"), conf);
+
+		File testFile = new File(absolutePath + "test.html");
+		BufferedReader r = new BufferedReader(new FileReader(testFile));
+		StringBuilder buildi = new StringBuilder();
+
+		List<String> docLines = new ArrayList<String>();
+		String readMe;
+		while ( (readMe = r.readLine()) != null) {
+			String cleaned = PoiUtils.cleanHTMLLine(readMe);
+			docLines.add(cleaned);
+		}
+
+		StringBuilder docText = new StringBuilder();
 		boolean isTree = false;
-		for (XWPFParagraph par : paragraphs)
+		for (String line : docLines)
 		{
-			String parText = par.getParagraphText();
-			if (parText.startsWith("-") && !isTree)
+			if (line.startsWith("-") && !isTree)
 			{
 				isTree = true;
 				docText.append("%%baum \r\n start \r\n");
 			}
-			if (!parText.startsWith("-") && isTree)
+			if (!line.startsWith("-") && isTree)
 			{
 				docText.append("% \r\n");
 			}
 
-			docText.append(parText + "\r\n");
+			docText.append(line + "\r\n");
 		}
+
+		//		boolean isTree = false;
+		//		for (XWPFParagraph par : paragraphs)
+		//		{
+		//			String parText = par.getParagraphText();
+		//			if (parText.startsWith("-") && !isTree)
+		//			{
+		//				isTree = true;
+		//				docText.append("%%baum \r\n start \r\n");
+		//			}
+		//			if (!parText.startsWith("-") && isTree)
+		//			{
+		//				docText.append("% \r\n");
+		//			}
+		//
+		//			docText.append(parText + "\r\n");
+		//		}
+
 		recovery.append(docText);
 
 		Map<String, String> nodeMap = new HashMap<String, String>();
@@ -316,6 +351,23 @@ public class PoiUtils
 
 		Sections.replaceSections(context, nodeMap);
 		return null;
+	}
+
+	/**
+	 * 
+	 * @created 11.03.2012
+	 * @param s
+	 * @return
+	 */
+	private static String cleanHTMLLine(String s)
+	{
+		s = s.replaceAll("\\<p\\>FRAGE\\</p\\>", "FRAGE\\<br/\\>");
+		s = s.replaceAll("\\<li\\>\\<p\\>", "\\<li\\>");
+		s = s.replaceAll("\\</p\\>\\</li\\>", "\\</li\\>");
+		s = s.replaceAll("\\<p\\>", "");
+		s = s.replaceAll("\\</p\\>", "\\<br/\\>");
+		s = s.replaceAll("\\<br/\\>", "\r\n");
+		return s;
 	}
 
 	/**

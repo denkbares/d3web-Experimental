@@ -51,11 +51,27 @@ public class ApproximateCorrectionProviderImpl implements ApproximateCorrectionP
 
 		String toMatch = section.getText().trim();
 
+		//		for (int j = 0; j < 4; j++)
+		//		{
+		//			for (int i = 0; i < 10; i++)
+		//			{
+		//				MatchingAlgorithm algo =
+		//						DialogComponent.getInstance().getPossibleMatchingAlgorithms().get(5+j);
+		//				List<Suggestion> suggestions =
+		//						DialogComponent.getInstance().
+		//						getSuggestions(toMatch, localStrings, algo);
+		//			}
+		//
+		//		}
+
+
 		List<Suggestion> suggestions =
 				DialogComponent.getInstance().
 				getBestSuggestionsAllAlgorithms(toMatch, localStrings);
 
+
 		return suggestions;
+		//		return new ArrayList<Suggestion>();
 	}
 
 }

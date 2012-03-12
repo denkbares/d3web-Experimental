@@ -125,6 +125,9 @@ public class DialogComponent
 	public List<Suggestion> getBestSuggestions(String toMatch, List<String> termDefinitions)
 	{
 
+		System.out.println("<== toMatch:" + toMatch + "==>");
+		long current = System.currentTimeMillis();
+
 		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
 
 		// Put all Suggestions in List
@@ -146,6 +149,11 @@ public class DialogComponent
 		Collections.sort(matchList, new SuggestionValuePairComparator());
 		for (int i = 0; (i < maxSuggestions) && (i < matchList.size()); i++)
 			bestSuggs.add(matchList.get(i).getSuggestion());
+
+		long after = System.currentTimeMillis();
+
+		System.out.println(after - current);
+
 		return bestSuggs;
 	}
 
@@ -162,6 +170,9 @@ public class DialogComponent
 	 * @return
 	 */
 	public List<Suggestion> getBestSuggestionsAllAlgorithms(String toMatch, List<String> termDefinitions) {
+
+		//		System.out.println("<== toMatchAll:" + toMatch + "==>");
+		//		long current = System.currentTimeMillis();
 
 		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
 
@@ -184,6 +195,10 @@ public class DialogComponent
 		Collections.sort(matchList, new SuggestionValuePairComparator());
 		for (int i = 0; (i < maxSuggestions) && (i < matchList.size()); i++)
 			bestSuggs.add(matchList.get(i).getSuggestion());
+
+		//		long after = System.currentTimeMillis();
+		//		System.out.println(after - current);
+
 		return bestSuggs;
 	}
 
@@ -306,6 +321,8 @@ public class DialogComponent
 		if (algorithm == null)
 			return getBestSuggestionsAllAlgorithms(toMatch, termDefinitions);
 
+		System.out.println("<== toMatchSingle: " + algorithm.toString() + " " + toMatch + "==>");
+		long current = System.currentTimeMillis();
 		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
 
 		// Put all Suggestions in List
@@ -332,6 +349,10 @@ public class DialogComponent
 		Collections.sort(matchList, new SuggestionValuePairComparator());
 		for (int i = 0; (i < maxSuggestions) && (i < matchList.size()); i++)
 			bestSuggs.add(matchList.get(i).getSuggestion());
+
+		long after = System.currentTimeMillis();
+		System.out.println(after - current);
+
 		return bestSuggs;
 	}
 
