@@ -4,6 +4,7 @@
     <artifactId>Research</artifactId>
     <groupId>de.uniwue.d3web</groupId>
     <version>0.2-SNAPSHOT</version>
+    <relativePath>..</relativePath>
   </parent>
   <groupId>de.uniwue.d3web</groupId>
   <artifactId>KnowWE-Plugin-JuriSearch</artifactId>
@@ -45,10 +46,15 @@
   		<artifactId>KnowWE-Plugin-UserSupportNew</artifactId>
   		<version>0.2-SNAPSHOT</version>
   	</dependency>
+  	 <dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>d3web-Plugin-JuriSearch</artifactId>
+  		<version>0.2-SNAPSHOT</version>
+  	</dependency>
   	<dependency>
 		<groupId>OfficeConverter</groupId>
 		<artifactId>OfficeConverter</artifactId>
 		<version>OfficeConverter</version>
-	</dependency> 
+	</dependency>
   </dependencies>
 </project>
