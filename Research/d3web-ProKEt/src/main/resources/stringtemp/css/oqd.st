@@ -21,6 +21,8 @@ body,div {
     clear: both;
     min-height: 35px;
     width: 100%;
+    position: fixed;
+    margin-top: -10px;
 }
 
 #headertext{
@@ -34,29 +36,33 @@ body,div {
         width: 70%;
 }
 
-#intro{ 
-    background-color: white;
-    font-family: Arial;
-    font-size: 8pt;
-    left: 0;
-    padding-bottom: 20px;
-    position: fixed;
-    right: 0;
-}
 
 #introtext{
 background-color: white;
     font-family: Arial;
-    font-size: 8pt;
-    left: 10%;
+    font-size: 9pt;
     padding: 10px;
     position: fixed;
-    right: 10%;
+    line-height: 1.3em;
+    padding-bottom: 10px;
+}
+
+#intro{ 
+    font-family: Arial;
+	font-size: 9pt;
+	text-color: darkgrey;
+        position: fixed; 
+        background-color: white;
+    padding: 10px;
+    top: 35px;
+    line-height: 1.3em;
+width: 100%;
+    padding-top: 0px;
 }
 
 #dialog{
     float: left;
-    margin-top: 190px;
+    margin-top: 205px;
 }
 
 
@@ -247,17 +253,19 @@ area {
     font-weight: bold;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 110px;
+    margin-top: 115px;
     padding: 30px;
-    width: 60%;
+    width: 65%;
 }
 
 .solRating {
       background-color: #DEDEDE;
     float: right;
     font-weight: bold;
-    padding: 2px 30px;
-    margin-top: -12px;
+    padding: 2px 15px;
+    margin-top: -16px;
+    margin-right: -20px;
+    min-height: 32px;
 }
 
 .solRating.rating-high { 
@@ -284,7 +292,7 @@ area {
 }
 
 .solutiontitle{
-    float: left;
+    float: none;
     min-height: 16px;
 	line-height: 1.75em;
         margin-left: 15px;

@@ -8,9 +8,8 @@
         </div>
     $endif$
     $if(own)$
-        <div id="ueqexplanation" class="margBott"> 
-            Bitte beantworten Sie die <b>Fragen 1-7 komplett</b>. <br /> Optional können Sie bei Punkt
-8 weitere Anmerkungen (zB. Benutzung, Design, Browserprobleme...) eintragen.
+        <div id="ueqexplanation"> 
+            Bitte beantworten Sie die folgenden Fragen:
         </div>
     $endif$
     

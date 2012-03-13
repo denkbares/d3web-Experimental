@@ -93,7 +93,12 @@ public class DialogServlet extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
 
         HttpSession httpSession = request.getSession(true);
-
+        
+        if(httpSession.getAttribute("newload")==null ||
+                httpSession.getAttribute("newload").equals("")){
+            httpSession.setAttribute("newload", "true");
+        }
+                
         String source = getSource(request);
 
         // set SRC store attribute to "" per default for avoiding nullpointers
@@ -113,16 +118,40 @@ public class DialogServlet extends HttpServlet {
         String action = request.getParameter("action");
         if (action == null) {
             action = "show";
+            httpSession.setAttribute("newload", "first");
         }
 
+         System.out.println(action);
+        System.out.println(httpSession.getAttribute("newload"));
+        
+        
+        if (!action.equalsIgnoreCase("logInit") && 
+                !httpSession.getAttribute("newload").equals("first")){
+            httpSession.setAttribute("newload", "false");
+        }
+        
+        if (action.equalsIgnoreCase("logInit")&&
+                httpSession.getAttribute("newload").equals("first")){
+            httpSession.setAttribute("newload", "true");
+        }  else if (action.equalsIgnoreCase("logInit")&&
+                !httpSession.getAttribute("newload").equals("first")) {
+            httpSession.setAttribute("newload", "false");
+        }
+        
+        System.out.println(httpSession.getAttribute("newload") + "\n");
+         
+        //if(action.equalsIgnoreCase("logInit") &&
+          //      httpSession.getAttribute("newload").equals("")){
+        //}
+        
         if (action.equalsIgnoreCase("show")) {
             show(httpSession, response, request);
             return;
         } else if (action.equalsIgnoreCase("logInit")) {
 
-            if (httpSession.getAttribute("initlogged") == null) {
+            if (httpSession.getAttribute("newload").equals("true")) {
                 response.getWriter().append("firsttime");
-                httpSession.setAttribute("initlogged", "true");
+                httpSession.setAttribute("newload", "false");
             } else {
                 logInitially(request, response, httpSession);
             }
@@ -226,6 +255,7 @@ public class DialogServlet extends HttpServlet {
         DialogTree dialogTree = parseInput(request);
         GlobalSettings.getInstance().setQuestionCount("0");
 
+        System.out.println(dialogTree.getRoot());
         IRenderer rootRenderer = Renderer.getRenderer(dialogTree.getRoot());
         ContainerCollection cc = rootRenderer.renderRoot(dialogTree);
         String html = cc.html.toString();
@@ -254,7 +284,7 @@ public class DialogServlet extends HttpServlet {
         PrintWriter writer = response.getWriter();
         GlobalSettings.getInstance().setLogFolder(
                 GlobalSettings.getInstance().getServletBasePath()
-                + "../../Study-Data-G1/logs");
+                + "../../StudyG1-Data/logs");
         
         /*GlobalSettings.getInstance().setLogFolder(
                 GlobalSettings.getInstance().getServletBasePath()
@@ -266,7 +296,7 @@ public class DialogServlet extends HttpServlet {
          * etc info has been done successfully and now those values can be
          * processed further
          */
-
+         
         Date now = new Date();
         JSONLogger logger = new JSONLogger(createLogfileName(now, httpSession));
 
@@ -279,6 +309,7 @@ public class DialogServlet extends HttpServlet {
         ServletLogUtils.logBaseInfo(browser, user, start, logger);
         httpSession.setAttribute("logger", logger);
 
+        //response.getWriter().append(GlobalSettings.getInstance().getLogFolder());
     }
 
     /**
@@ -395,7 +426,7 @@ public class DialogServlet extends HttpServlet {
 
         final String username = request.getParameter("user").toString();
         final String contact = request.getParameter("contact").toString();
-        final String qData = request.getParameter("questionnaireData").toString();
+        final String qData = request.getParameter("questionnaireData").toString().replace("+", " ");
 
         /*
          * setup properties for mail server

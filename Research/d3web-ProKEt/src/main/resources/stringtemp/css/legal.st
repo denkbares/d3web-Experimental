@@ -21,6 +21,7 @@ body,div {
     clear: both;
     min-height: 35px;
     width: 100%;
+    position: fixed;
 }
 
 #headertext{
@@ -36,18 +37,18 @@ body,div {
 
 #intro{ 
     font-family: Arial;
-	font-size: 8pt;
+	font-size: 9pt;
 	text-color: darkgrey;
         position: fixed; 
-        left: 10%; right: 10%;
         background-color: white;
-padding: 10px;
-    top: 40px;
+    padding: 10px;
+    top: 35px;
+    line-height: 1.3em;
 }
 
 #dialog{
     float: left;
-    margin-top: 80px;
+    margin-top: 100px;
 }
 
 
@@ -60,7 +61,7 @@ padding: 10px;
     position: fixed;
     right: 20px;
     padding: 10px;
-    margin-top: 90px;
+    margin-top: 110px;
     height: 75%;
     overflow: auto; /* for scrolling */
 }
@@ -122,10 +123,10 @@ table{
 }
 
 .question .title {
-	min-height: 23px;
-	padding-left: 90px;
-	line-height: 1.75em;
-        margin-left: 15px;
+	float: none;
+    line-height: 1.75em;
+    margin-left: 10px;
+    min-height: 23px;
 }
 
 
@@ -155,7 +156,10 @@ table{
 
 /* Styles the box containing the button panel */
 .question-imagebox { 
-    line-height: 1.5em; padding: 2px; float: left; margin-left: 8px; margin-right: 8px;
+    float: left;
+    line-height: 1.75em;
+    padding: 2px;
+    width: 120px;
 }
 
 
@@ -173,7 +177,7 @@ area {
 
 /* Styling of the div within questions that displays the currently propagated value */
 .propagation{
-    display: block; width: 150px; height: 22px; float: right; pading-right: 4px;
+    display: block; width: 110px; height: 23px; float: right; pading-right: 4px; margin-top:-24px;
 }
 .propagation.rating-high { 
     background-color: #C3DAA8; border: 1px solid grey; 
@@ -233,8 +237,5 @@ area {
 }
 
 .solutiontitle{
-    float: left;
-    min-height: 16px;
-	line-height: 1.75em;
-        margin-left: 15px;
+float: none;
 }

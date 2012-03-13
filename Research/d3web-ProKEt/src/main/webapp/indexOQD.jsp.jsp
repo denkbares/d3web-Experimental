@@ -169,7 +169,7 @@ function handleUnsupportedBrowsers() {
         message = message + "</div>";
 		document.body.innerHTML = message;
 	} else {
-            var link = window.location + "Dialog?src=Study1HIE.xml";
+            var link = window.location + "Dialog?src=Study1OQD.xml";
             window.location = link;    
         }
 }

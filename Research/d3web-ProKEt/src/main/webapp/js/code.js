@@ -121,6 +121,8 @@ function setup() {
     
     if(ueq){
         handleUEQ();
+        
+        initUEQFreeFeedback();
     }
     
     if(feedback){
@@ -128,6 +130,30 @@ function setup() {
     }
     
 }
+
+function initUEQFreeFeedback(){
+
+    $('#UE_QFreeFeedback').unbind('focus').focus(function(event) {
+        var text = $("#UE_QFreeFeedback").html();
+        if(text.indexOf("z.B.: was hat mir gut gefallen, was hat mir nicht gefallen, sind Probleme aufgetreten (technische, bez. der Interaktion oder Verständnis)...")
+            !=-1){
+            $('#UE_QFreeFeedback').html("");
+        }
+    
+        $('#UE_QFreeFeedback').addClass("longTextareaInputColor");
+    });
+    
+    $('#UE_QUIRating').unbind('focus').focus(function(event) {
+        var text = $("#UE_QUIRating").val();
+        if(text.indexOf("Hierarchische-UI ODER Einfrage-UI")
+            !=-1){
+            $('#UE_QUIRating').val("");
+        }
+    
+        $('#UE_QUIRating').addClass("longTextfieldInputColor");
+    });
+}
+
 
 function handleUEQ(){
     $('#UEQButton').unbind('click').click(function(event) {

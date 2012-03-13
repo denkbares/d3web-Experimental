@@ -682,6 +682,7 @@ public class D3webDialog extends HttpServlet {
             prevV = val;
 
             // also log newly set abstraction values
+            // TODO ERROR FOR YES NO ABSTRACTION e.g Question 81 Single Dose
             for (TerminologyObject to : newAbstractions) {
                 Question qa =
                         D3webConnector.getInstance().getKb().getManager().searchQuestion(to.getName());

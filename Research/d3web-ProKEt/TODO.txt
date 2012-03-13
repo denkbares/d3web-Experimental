@@ -203,7 +203,7 @@ DONE - switch usability questionnaires by property, e.g allow "uequestionnaire=S
 - property based configuration of usability metrics / evaluation
 - visualization of appropriate results (WHICH ONES?)
 - Logging: when end session logtime is BEFORE save button click
-
+- Logging Questionnaire: remove + from free field
 
 
 - Refactor language stuff for prototypes (ger/eng) bzw. generally

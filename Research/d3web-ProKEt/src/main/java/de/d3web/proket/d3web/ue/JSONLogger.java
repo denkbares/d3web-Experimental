@@ -222,7 +222,7 @@ public class JSONLogger {
                 dir.mkdirs();
             }
             String filepath = dir + "/" + filename;
-
+            
             Writer w = new OutputStreamWriter(new FileOutputStream(filepath), "UTF8");
             bw = new BufferedWriter(w);
             //TODO: refactor: method "decorate JSON to file string" or so

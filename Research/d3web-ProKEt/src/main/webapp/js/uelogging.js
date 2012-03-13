@@ -59,9 +59,9 @@ $(function(){
             autoOpen: false,
             position : top,
             width : 720,
-            height : 620,
+            height : 520,
             minWidth : 720,
-            minHeight : 620,
+            minHeight : 520,
             draggable : false,
             resizable : false,
             modal : false,
@@ -345,14 +345,14 @@ function ue_sendUEQ(){
     }
         
     var questionnaireData = ue_retrieveQuestionnaireData();
-    if(!ue_dataComplete(questionnaireData)){
+    /*if(!ue_dataComplete(questionnaireData)){
         
         // display message that feedback is NOT optional 
         message = "Please fill in the complete survey!";
         $("#ueqMessage").html(message);
         $("#ueqMessage").addClass("errorRed");
         
-    } else {
+    } else { */
         
         var link = $.query.set("action", "sendUEQMail")
         .set("user", user)
@@ -379,7 +379,7 @@ function ue_sendUEQ(){
         });
     
         ue_logUEQData(user, contact, questionnaireData); 
-    }
+    //}
 
 }
 
@@ -396,8 +396,16 @@ function ue_retrieveQuestionnaireData(){
     $("#ueq input:radio:checked").each(function(){
         qData += $(this).attr("id").replace("UE_", "") + "---" + $(this).attr("value") + "###"; 
     });
-    var freeFBField = $("#UE_QFreeFeedback"); 
+    
     var freeFeedback = "/";
+    var uiRating = $("#UE_QUIRating"); 
+    if(uiRating.val()!=undefined && uiRating.val()!=""){
+        freeFeedback = uiRating.val();
+    }
+    qData += uiRating.attr("id").replace("UE_", "") + "---" + freeFeedback + "###";
+    
+    
+    var freeFBField = $("#UE_QFreeFeedback"); 
     if(freeFBField.val()!=undefined && freeFBField.val()!=""){
         freeFeedback = freeFBField.val();
     }

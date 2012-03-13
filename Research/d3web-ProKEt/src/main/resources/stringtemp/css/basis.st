@@ -134,9 +134,13 @@ body,table,div {
 
 .textAlignRight {text-align: right; padding-right: 10px;}
 
-.longTextfield {width: 250px;}
+.longTextfield {width: 250px; color: #4C4C4C;}
 
-.longTextarea {width:250px; height: 100px; resize: none;}
+.longTextfieldInputColor{color: black;}
+
+.longTextarea {width:250px; resize: none; color: #4C4C4C;}
+
+.longTextareaInputColor {color: black;}
 
 .margBott {margin-bottom: 10px;}
 
@@ -153,3 +157,5 @@ body,table,div {
 .leftPadd{padding-left: 15px;}
 
 .tableNoTopMargin{margin-top: 0px;}
+
+.fontOnePointTwo{font-size: 1.2em;}
