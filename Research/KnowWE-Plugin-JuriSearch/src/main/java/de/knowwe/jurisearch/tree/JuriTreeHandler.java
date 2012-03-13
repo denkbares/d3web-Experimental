@@ -55,7 +55,8 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 
 	@Override
 	public Collection<Message> create(Article article, Section<JuriTreeExpression> section) {
-		KnowledgeBase kb = D3webUtils.getKnowledgeBase(article.getWeb(), article.getTitle());
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(article.getWeb(),
+				article.getTitle());
 		JuriModel model = getModelOrCreate(kb);
 		model.addRule(createJuriRule(kb, section));
 		kb.getKnowledgeStore().addKnowledge(JuriModel.KNOWLEDGE_KIND, model);
@@ -104,11 +105,13 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 	 * @param section
 	 */
 	private JuriRule createJuriRule(KnowledgeBase kb, Section<JuriTreeExpression> s) {
-		Section<QuestionIdentifier> section = Sections.findSuccessor(s, QuestionIdentifier.class);
+		Section<QuestionIdentifier> section = Sections.findSuccessor(s,
+				QuestionIdentifier.class);
 		JuriRule rule = new JuriRule();
 		QuestionOC father = getQuestionOrCreate(kb, section.getText());
 		rule.setFather(father);
-		List<Section<QuestionIdentifier>> children = section.get().getChildrenQuestion(section);
+		List<Section<QuestionIdentifier>> children = section.get().getChildrenQuestion(
+				section);
 		for (Section<QuestionIdentifier> child : children) {
 			QuestionOC question = getQuestionOrCreate(kb, child.getText());
 			rule.addChild(question);
@@ -146,10 +149,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 	private QuestionOC getQuestionOrCreate(KnowledgeBase kb, String name) {
 		QuestionOC question = (QuestionOC) kb.getManager().search(name);
 		if (question == null) {
-			question = new QuestionOC(kb, name);
-			question.addAlternative(JuriRule.YES);
-			question.addAlternative(JuriRule.NO);
-			question.addAlternative(JuriRule.MAYBE);
+			// TODO: Error handling
 		}
 		return question;
 	}

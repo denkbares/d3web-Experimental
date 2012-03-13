@@ -22,22 +22,30 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.QASet;
+import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.QuestionOC;
+import de.d3web.jurisearch.JuriRule;
 import de.d3web.we.kdom.questionTree.QuestionTypeDeclaration;
 import de.d3web.we.object.QASetDefinition;
 import de.d3web.we.object.QuestionDefinition;
+import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.d3web.we.util.UserSupportUtil;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.Priority;
+import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.jurisearch.BoxRenderer;
@@ -59,8 +67,8 @@ public class QuestionDefinitionArea extends AbstractType {
 		super(null);
 		this.setSectionFinder(new RegexSectionFinder(Q_AREA_REGEX,
 				Pattern.MULTILINE | Pattern.DOTALL, 0));
-		//		this.setRenderer(new PreDecoratingRenderer(new
-		//				BoxRenderer("defaultMarkupFrame")));
+		// this.setRenderer(new PreDecoratingRenderer(new
+		// BoxRenderer("defaultMarkupFrame")));
 		this.setRenderer(new JuriInstantEditRenderer());
 		this.addChildType(new QuestionDefinitionContent());
 		this.addSubtreeHandler(Priority.PRECOMPILE_MIDDLE,
@@ -76,7 +84,7 @@ public class QuestionDefinitionArea extends AbstractType {
 		@Override
 		public void render(Section<?> section, UserContext user, StringBuilder string)
 		{
-			string.append(KnowWEUtils.maskHTML("<div id=\""+section.getID() +"\">"));
+			string.append(KnowWEUtils.maskHTML("<div id=\"" + section.getID() + "\">"));
 			string.append(KnowWEUtils.maskHTML("<div class=\"defaultMarkupFrame\">"));
 
 			string.append(KnowWEUtils.maskHTML("<div class=\"jurisearch-instantedit\">"
@@ -104,7 +112,7 @@ public class QuestionDefinitionArea extends AbstractType {
 
 			Environment.getInstance().getPackageManager(
 					article.getWeb()).addSectionToPackage(
-							markupSection, "default");
+					markupSection, "default");
 			return new ArrayList<Message>();
 		}
 
@@ -143,7 +151,7 @@ public class QuestionDefinitionArea extends AbstractType {
 
 			this.addChildType(new QuestionTypeDeclaration());
 
-			QuestionDefinition qRef = new QAreaQuestionDefinition();
+			QASetDefinition<Question> qRef = new QAreaQuestionDefinition();
 			ConstraintSectionFinder qcsf = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
 			csf.addConstraint(SingleChildConstraint.getInstance());
@@ -152,23 +160,61 @@ public class QuestionDefinitionArea extends AbstractType {
 			this.addChildType(qRef);
 		}
 
-		private final class QAreaQuestionDefinition extends QuestionDefinition {
+		private final class QAreaQuestionDefinition extends QASetDefinition {
 
-			@Override
-			public QuestionType getQuestionType(Section<QuestionDefinition> s) {
-				return QuestionTypeDeclaration
-						.getQuestionType(Sections.findSuccessor(
-								s.getFather(), QuestionTypeDeclaration.class));
+			public QAreaQuestionDefinition() {
+				this.addSubtreeHandler(Priority.HIGHER, new CreateYNMQuestionHandler());
+				this.setRenderer(StyleRenderer.Question);
+				this.setOrderSensitive(true);
 			}
 
 			@Override
-			public int getPosition(Section<QuestionDefinition> s) {
-				return 0;
+			public Class<?> getTermObjectClass(Section<? extends SimpleTerm> section) {
+				return Question.class;
 			}
 
+		}
+
+		class CreateYNMQuestionHandler extends D3webSubtreeHandler<QuestionDefinition> {
+
 			@Override
-			public Section<? extends QASetDefinition> getParentQASetSection(Section<? extends QuestionDefinition> qdef) {
-				return null;
+			@SuppressWarnings("unchecked")
+			public Collection<Message> create(Article article,
+					Section<QuestionDefinition> section) {
+
+				String name = section.get().getTermIdentifier(section);
+				Class<?> termObjectClass = section.get().getTermObjectClass(section);
+				TerminologyManager terminologyHandler = KnowWEUtils.getTerminologyManager(article);
+				terminologyHandler.registerTermDefinition(section, termObjectClass, name);
+
+				Collection<Message> msgs = section.get().canAbortTermObjectCreation(
+						article, section);
+				if (msgs != null) return msgs;
+
+				KnowledgeBase kb = getKB(article);
+
+				@SuppressWarnings("rawtypes")
+				Section<? extends QASetDefinition> parentQASetSection =
+						section.get().getParentQASetSection(section);
+
+				QASet parent = null;
+				if (parentQASetSection != null) {
+					parent = (QASet) parentQASetSection.get().getTermObject(article,
+							parentQASetSection);
+				}
+				if (parent == null) {
+					parent = kb.getRootQASet();
+				}
+
+				QuestionOC questionYNM = new QuestionOC(parent, name);
+				questionYNM.addAlternative(JuriRule.MAYBE);
+				questionYNM.addAlternative(JuriRule.NO);
+				questionYNM.addAlternative(JuriRule.YES);
+
+				// return success message
+				return Messages.asList(Messages.objectCreatedNotice(
+						termObjectClass.getSimpleName() + " " + name));
+
 			}
 		}
 	}
@@ -180,7 +226,5 @@ public class QuestionDefinitionArea extends AbstractType {
 			this.addChildType(new ExplanationText());
 		}
 	}
-
-
 
 }
