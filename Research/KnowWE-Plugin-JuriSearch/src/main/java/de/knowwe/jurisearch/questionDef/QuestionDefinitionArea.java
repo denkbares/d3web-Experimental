@@ -27,9 +27,7 @@ import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.jurisearch.JuriRule;
-import de.d3web.we.kdom.questionTree.QuestionTypeDeclaration;
 import de.d3web.we.object.QASetDefinition;
-import de.d3web.we.object.QuestionDefinition;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.d3web.we.util.UserSupportUtil;
 import de.knowwe.core.Environment;
@@ -149,7 +147,7 @@ public class QuestionDefinitionArea extends AbstractType {
 
 			this.setRenderer(new StyleRenderer("color:green;"));
 
-			this.addChildType(new QuestionTypeDeclaration());
+			// this.addChildType(new QuestionTypeDeclaration());
 
 			QASetDefinition<Question> qRef = new QAreaQuestionDefinition();
 			ConstraintSectionFinder qcsf = new ConstraintSectionFinder(
@@ -160,7 +158,7 @@ public class QuestionDefinitionArea extends AbstractType {
 			this.addChildType(qRef);
 		}
 
-		private final class QAreaQuestionDefinition extends QASetDefinition {
+		private final class QAreaQuestionDefinition extends QASetDefinition<Question> {
 
 			public QAreaQuestionDefinition() {
 				this.addSubtreeHandler(Priority.HIGHER, new CreateYNMQuestionHandler());
@@ -175,12 +173,10 @@ public class QuestionDefinitionArea extends AbstractType {
 
 		}
 
-		class CreateYNMQuestionHandler extends D3webSubtreeHandler<QuestionDefinition> {
+		class CreateYNMQuestionHandler extends D3webSubtreeHandler<QASetDefinition<Question>> {
 
 			@Override
-			@SuppressWarnings("unchecked")
-			public Collection<Message> create(Article article,
-					Section<QuestionDefinition> section) {
+			public Collection<Message> create(Article article, Section<QASetDefinition<Question>> section) {
 
 				String name = section.get().getTermIdentifier(section);
 				Class<?> termObjectClass = section.get().getTermObjectClass(section);
@@ -193,13 +189,11 @@ public class QuestionDefinitionArea extends AbstractType {
 
 				KnowledgeBase kb = getKB(article);
 
-				@SuppressWarnings("rawtypes")
-				Section<? extends QASetDefinition> parentQASetSection =
-						section.get().getParentQASetSection(section);
+				Section<? extends QASetDefinition<Question>> parentQASetSection = section;
 
 				QASet parent = null;
 				if (parentQASetSection != null) {
-					parent = (QASet) parentQASetSection.get().getTermObject(article,
+					parent = parentQASetSection.get().getTermObject(article,
 							parentQASetSection);
 				}
 				if (parent == null) {

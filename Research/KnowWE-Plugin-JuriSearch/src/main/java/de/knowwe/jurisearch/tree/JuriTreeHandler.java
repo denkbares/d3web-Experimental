@@ -28,7 +28,6 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.jurisearch.JuriModel;
 import de.d3web.jurisearch.JuriRule;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
 import de.knowwe.core.event.EventManager;
@@ -55,12 +54,12 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 
 	@Override
 	public Collection<Message> create(Article article, Section<JuriTreeExpression> section) {
-		KnowledgeBase kb = D3webUtils.getKnowledgeBase(article.getWeb(),
-				article.getTitle());
-		JuriModel model = getModelOrCreate(kb);
-		model.addRule(createJuriRule(kb, section));
-		kb.getKnowledgeStore().addKnowledge(JuriModel.KNOWLEDGE_KIND, model);
-
+		if (!section.hasErrorInSubtree(article)) {
+			KnowledgeBase kb = getKB(article);
+			JuriModel model = getModelOrCreate(kb);
+			model.addRule(createJuriRule(kb, section));
+			kb.getKnowledgeStore().addKnowledge(JuriModel.KNOWLEDGE_KIND, model);
+		}
 		// Section<QuestionIdentifier> question =
 		// Sections.findSuccessor(section, QuestionIdentifier.class);
 		//
@@ -108,12 +107,12 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 		Section<QuestionIdentifier> section = Sections.findSuccessor(s,
 				QuestionIdentifier.class);
 		JuriRule rule = new JuriRule();
-		QuestionOC father = getQuestionOrCreate(kb, section.getText());
+		QuestionOC father = (QuestionOC) kb.getManager().search(section.getText());
 		rule.setFather(father);
 		List<Section<QuestionIdentifier>> children = section.get().getChildrenQuestion(
 				section);
 		for (Section<QuestionIdentifier> child : children) {
-			QuestionOC question = getQuestionOrCreate(kb, child.getText());
+			QuestionOC question = (QuestionOC) kb.getManager().search(child.getText());
 			rule.addChild(question);
 		}
 
@@ -134,24 +133,6 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 		}
 		// System.out.println(rule.toString());
 		return rule;
-	}
-
-	/**
-	 * Tries to retrieve an QuestionOC with the specified name, that is
-	 * contained in the knowledge base. Otherwise create the question with the
-	 * value alternatives yes, no and maybe.
-	 * 
-	 * @created 12.03.2012
-	 * @param kb
-	 * @param name
-	 * @return
-	 */
-	private QuestionOC getQuestionOrCreate(KnowledgeBase kb, String name) {
-		QuestionOC question = (QuestionOC) kb.getManager().search(name);
-		if (question == null) {
-			// TODO: Error handling
-		}
-		return question;
 	}
 
 	/**
