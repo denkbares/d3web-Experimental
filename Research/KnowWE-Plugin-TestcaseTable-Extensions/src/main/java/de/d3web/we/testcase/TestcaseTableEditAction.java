@@ -88,7 +88,7 @@ public class TestcaseTableEditAction extends AbstractAction {
 
 		StringBuilder bui = new StringBuilder();
 		bui.append("[");
-		for (Iterator<Question> it = questions.iterator(); it.hasNext(); it.next()) {
+		for (Iterator<Question> it = questions.iterator(); it.hasNext();) {
 
 			Question q = it.next();
 			if (q.getName().toLowerCase().equals("start")
@@ -144,10 +144,12 @@ public class TestcaseTableEditAction extends AbstractAction {
 
 	private static List<Question> getQuestions(Section<TestcaseTableType> section, UserContext user) {
 		Collection<Question> questions = new HashSet<Question>();
+
 		String[] kbpackages = DefaultMarkupType.getPackages(section);
 		Environment env = Environment.getInstance();
 		PackageManager packageManager = env.getPackageManager(section.getWeb());
 		ArticleManager articleManager = env.getArticleManager(user.getWeb());
+
 		for (String kbpackage : kbpackages) {
 			Set<String> articlesReferringTo = packageManager.getCompilingArticles(kbpackage);
 			for (String masterTitle : articlesReferringTo) {

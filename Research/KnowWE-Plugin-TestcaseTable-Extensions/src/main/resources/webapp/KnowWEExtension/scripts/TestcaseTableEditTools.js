@@ -88,7 +88,14 @@ KNOWWE.plugin.testcasetable.editProvider = (function(){
 		isValidText: function(value) {
 			//there are no restrictions for texts to be valid
 			return true;
-		},		
+		},
+		
+		isValidDropdown: function(el) {
+			var valid = !el.options[el.selectedIndex].disabled;
+			//alert(el.selectedIndex);
+			//alert(el.options[el.selectedIndex].selected);
+			return valid;
+		},
 		
 		/**
 		* checks for the HTML-Object el if its value is a valid value
@@ -108,7 +115,7 @@ KNOWWE.plugin.testcasetable.editProvider = (function(){
 					valid = KNOWWE.plugin.testcasetable.editProvider.isValidDate(el.value);
 					break;
 				case "oc":
-					valid = !el.options[el.selectedIndex].disabled;
+					valid = KNOWWE.plugin.testcasetable.editProvider.isValidDropdown(el);
 					break;
 			}
 			//HTML 5 attribut "classList"
@@ -339,7 +346,7 @@ KNOWWE.plugin.testcasetable.editProvider = (function(){
 			for (var i = 1; i < tmp.length; i++) {
 				//get old value, remove the input-box, save the old inner-HTML
 				oldInput = tmp[i].childNodes[colNr].firstChild;
-				value = KNOWWE.plugin.testcasetable.editProvider.getValue(oldInput, i, colNr);
+				value = KNOWWE.table.edit.getValue(editId, oldInput, i, colNr);
 				tmp[i].childNodes[colNr].removeChild(oldInput);
 				tmpInnerHtml = tmp[i].childNodes[colNr].innerHTML;
 				
@@ -444,7 +451,9 @@ KNOWWE.plugin.testcasetable.editProvider = (function(){
 								result = KNOWWE.plugin.testcasetable.editProvider.renderNum(value).html;
 								break;					
 							case "oc":
-								result = KNOWWE.plugin.testcasetable.editProvider.renderOC(qtype.alternatives, value).html;
+								var arr = qtype.alternatives.slice(0);
+								arr.push("-");
+								result = KNOWWE.plugin.testcasetable.editProvider.renderOC(arr, value).html;
 								break;
 						}
 					}
@@ -463,38 +472,10 @@ KNOWWE.plugin.testcasetable.editProvider = (function(){
 			if (row <= 1) {
 				return "";
 			} else {
-				return KNOWWE.plugin.testcasetable.editProvider.getValue(undefined, (row-1), col);
+				return KNOWWE.table.edit.getValue(editId, undefined, (row-1), col);
 			}
 		},
 		
-		/**
-		 * This method returns the value that has been entered at the supplied position in the table, as a string. 
-		 * The returned string representation is written into the article.
-		 * As a convenience, the first child of the cell at that position is supplied
-		 * row/col: position in the table of the cell
-		 * el: the first child of the td/th at (row, col)
-		 */
-		getValue : function(el, row, col) {
-			if (el != undefined) {
-				if (el.tagName.toLowerCase() == "span") {
-					return el.innerHTML;
-				} else if (el.tagName.toLowerCase() == "select") {
-					return el.options[el.selectedIndex].value;
-				} else if (el.tagName.toLowerCase() == "input") {
-					return el.value;
-				}
-				return el.value;
-			} else {
-				var tmp = document.getElementById(editId).childNodes;
-				while (true) {
-					if (tmp[0].tagName == "TR") {
-						break;
-					}
-					tmp = tmp[0].childNodes;
-				}
-				return KNOWWE.plugin.testcasetable.editProvider.getValue(tmp[row].childNodes[col].firstChild);
-			}
-		},
 		
 		/**
 		 * Returns an array of actions, that are available for the cell at the specified coordinates.
