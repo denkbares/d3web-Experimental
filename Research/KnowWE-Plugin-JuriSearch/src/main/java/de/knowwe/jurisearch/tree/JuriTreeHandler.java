@@ -36,8 +36,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.event.ArticleCreatedEvent;
-import de.knowwe.jurisearch.tree.JuriTreeExpression.RoundBracketExp;
-import de.knowwe.jurisearch.tree.JuriTreeExpression.RoundExpBracketExpContent;
+import de.knowwe.jurisearch.tree.JuriTreeExpression.Operator;
 
 /**
  * 
@@ -56,9 +55,12 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 	public Collection<Message> create(Article article, Section<JuriTreeExpression> section) {
 		if (!section.hasErrorInSubtree(article)) {
 			KnowledgeBase kb = getKB(article);
-			JuriModel model = getModelOrCreate(kb);
-			model.addRule(createJuriRule(kb, section));
-			kb.getKnowledgeStore().addKnowledge(JuriModel.KNOWLEDGE_KIND, model);
+			JuriRule rule = createJuriRule(kb, section);
+			if (rule != null) {
+				JuriModel model = getModelOrCreate(kb);
+				model.addRule(rule);
+				kb.getKnowledgeStore().addKnowledge(JuriModel.KNOWLEDGE_KIND, model);
+			}
 		}
 		// Section<QuestionIdentifier> question =
 		// Sections.findSuccessor(section, QuestionIdentifier.class);
@@ -104,27 +106,45 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 	 * @param section
 	 */
 	private JuriRule createJuriRule(KnowledgeBase kb, Section<JuriTreeExpression> s) {
-		Section<QuestionIdentifier> section = Sections.findSuccessor(s,
-				QuestionIdentifier.class);
+		Section<QuestionIdentifier> section = Sections.findSuccessor(s, QuestionIdentifier.class);
+		List<Section<QuestionIdentifier>> children = section.get().getChildrenQuestion(section);
+		List<QuestionOC> childrenQuestion = new LinkedList<QuestionOC>();
+
+		// Get all children questions
+		for (Section<QuestionIdentifier> child : children) {
+			QuestionOC question = (QuestionOC) kb.getManager().search(child.getText());
+			if (question == null) {
+				// if a child question is not defined, return null
+				return null;
+			}
+			childrenQuestion.add(question);
+		}
+		if (children.isEmpty()) {
+			// if father is a leaf, return null
+			return null;
+		}
+
 		JuriRule rule = new JuriRule();
 		QuestionOC father = (QuestionOC) kb.getManager().search(section.getText());
 		rule.setFather(father);
-		List<Section<QuestionIdentifier>> children = section.get().getChildrenQuestion(
-				section);
-		for (Section<QuestionIdentifier> child : children) {
-			QuestionOC question = (QuestionOC) kb.getManager().search(child.getText());
-			rule.addChild(question);
+
+		for (QuestionOC childQuestion : childrenQuestion) {
+			// remove children questions from RootQASet
+			father.getKnowledgeBase().getRootQASet().removeChild(childQuestion);
+
+			// add children questions to father question
+			father.addChild(childQuestion);
+
+			// add children questions to rule
+			rule.addChild(childQuestion);
 		}
 
 		/*
 		 * get the content of round bracket exp and mark rule as disjunctive if
 		 * required. default is conjunctive, disjunctive = false
 		 */
-		Section<RoundBracketExp> rbe = Sections.findChildOfType(s,
-				RoundBracketExp.class);
-		if (rbe != null) {
-			Section<RoundExpBracketExpContent> rebec = Sections.findChildOfType(rbe,
-					JuriTreeExpression.RoundExpBracketExpContent.class);
+		Section<Operator> rebec = Sections.findSuccessor(s, JuriTreeExpression.Operator.class);
+		if (rebec != null) {
 			String expr = rebec.getText().toLowerCase();
 
 			if (expr.equals(OR)) {
