@@ -117,7 +117,7 @@ public class UploadReceptorServlet extends HttpServlet {
 					 */
 					File file;
 					if (fileType.equals("word"))
-						file = new File(destinationDir, "docbook-" + tableId + ".docx");
+						file = new File(destinationDir, "docbook-" + tableId + ".doc");
 					else
 						file = new File(destinationDir, "workbook-" + tableId + ".xls");
 					file.deleteOnExit();

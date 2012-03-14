@@ -31,6 +31,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import officeconverter.Config;
+import officeconverter.Converter;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -295,19 +298,24 @@ public class PoiUtils
 
 		String dirPath = in.getParent();
 		String absolutePath = in.getAbsolutePath();
-		//		Config conf = new Config("html", false, "UTF-8", dirPath , true, false, true);
-		//		Converter.convertFile2File(new File(absolutePath),
-		//				new File(absolutePath + "test.html"), conf);
+		Config conf = new Config("html", false, "UTF-8", dirPath , true, false, true);
+		File inputFile = new File(absolutePath);
+		boolean inputExists = inputFile.exists();
+		File outputFile = new File(dirPath + "/test.html");
+//		inputFile = new File("C:/ConverterTestDir/docbook-395f91f4.doc");
+		boolean outputExists = outputFile.exists();
+//		outputFile = new File("C:/ConverterTestDir/test.html");
+		Converter.convertFile2File(inputFile,
+						outputFile, conf);
 
-		File testFile = new File(absolutePath + "test.html");
+		File testFile = new File(dirPath + "/test.html");
 		BufferedReader r = new BufferedReader(new FileReader(testFile));
 		StringBuilder buildi = new StringBuilder();
 
 		List<String> docLines = new ArrayList<String>();
 		String readMe;
 		while ( (readMe = r.readLine()) != null) {
-			String cleaned = PoiUtils.cleanHTMLLine(readMe);
-			docLines.add(cleaned);
+			PoiUtils.cleanHTMLLine(readMe, docLines);
 		}
 
 		StringBuilder docText = new StringBuilder();
@@ -322,6 +330,7 @@ public class PoiUtils
 			if (!line.startsWith("-") && isTree)
 			{
 				docText.append("% \r\n");
+				isTree = false;
 			}
 
 			docText.append(line + "\r\n");
@@ -359,14 +368,17 @@ public class PoiUtils
 	 * @param s
 	 * @return
 	 */
-	private static String cleanHTMLLine(String s)
+	private static String cleanHTMLLine(String s, List<String> docLines)
 	{
 		s = s.replaceAll("\\<p\\>FRAGE\\</p\\>", "FRAGE\\<br/\\>");
 		s = s.replaceAll("\\<li\\>\\<p\\>", "\\<li\\>");
 		s = s.replaceAll("\\</p\\>\\</li\\>", "\\</li\\>");
 		s = s.replaceAll("\\<p\\>", "");
 		s = s.replaceAll("\\</p\\>", "\\<br/\\>");
-		s = s.replaceAll("\\<br/\\>", "\r\n");
+		
+		String[] lines = s.split("\\<br/\\>");
+		for (String l : lines)
+			docLines.add(l);
 		return s;
 	}
 

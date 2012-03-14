@@ -200,10 +200,25 @@
 			<version>0.9.6</version>
 		</dependency>
 		<dependency>
+  			<groupId>CaseTrain-CleanUp</groupId>
+  			<artifactId>CaseTrain-CleanUp</artifactId>
+  			<version>CaseTrain-CleanUp</version>
+  	    </dependency>
+		<dependency>
 			<groupId>OfficeConverter</groupId>
 			<artifactId>OfficeConverter</artifactId>
 			<version>OfficeConverter</version>
-		</dependency> 
+		</dependency>
+		<dependency>
+			<groupId>org.openoffice</groupId>
+			<artifactId>juh</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openoffice</groupId>
+			<artifactId>unoil</artifactId>
+			<version>3.2.1</version>
+		</dependency>
 	</dependencies>
 	<distributionManagement>
 		<snapshotRepository>
