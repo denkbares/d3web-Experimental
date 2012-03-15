@@ -39,7 +39,7 @@ KNOWWE.plugin.usersupportinstantedit = function() {
 		    	+ KNOWWE.plugin.instantEditHook.getSaveCancelDeleteButtons(id, "KNOWWE.plugin.usersupportinstantedit");
 	    },
 	    
-	    postProcessHTML : function(id, coloringmode, completeFunction) {
+	    postProcessHTML : function(id, coloringmode, completeFunction, extraKeys) {
 	    	var textarea = $(createTextAreaID(id));
 	    	if (typeof AutoComplete != "undefined") AutoComplete.initialize(textarea);
 	        TextArea.initialize(textarea);
@@ -59,17 +59,22 @@ KNOWWE.plugin.usersupportinstantedit = function() {
 	        {
 	        	f = KNOWWE.plugin.usersupport;
 	        }
+	        
+	        var keys = extraKeys;
+	        if (keys == null)
+	        {
+	        	keys = {"Ctrl-Space": function(cm)
+	 		             {
+		        		   f.gatherDialogComponentCompletions(cm, CodeMirror.usersupportHint, id)
+		        	     }
+		               };
+	        }
             editor = CodeMirror.fromTextArea(document.getElementById(editorID), {
             	lineNumbers: true,
 //            	mode: "usersupportmode",
             	mode: coloringmode,
             	theme: "elegant",
-//            	extraKeys: {"Ctrl-Space": f
- 		        extraKeys: {"Ctrl-Space": function(cm)
- 		        	{
- 		        		f.gatherDialogComponentCompletions(cm, CodeMirror.usersupportHint, id)
- 		        	}
- 		        }
+ 		        extraKeys: keys
             });
 	        
 	    },
@@ -86,6 +91,10 @@ KNOWWE.plugin.usersupportinstantedit = function() {
 	    
 	    generateWikiText : function(id) {
 	    	return $(createTextAreaID(id)).value;
+	    },
+	    
+	    getSelectedRange : function() {
+	      return { from: editor.getCursor(true), to: editor.getCursor(false) };
 	    }
     }
 }();
