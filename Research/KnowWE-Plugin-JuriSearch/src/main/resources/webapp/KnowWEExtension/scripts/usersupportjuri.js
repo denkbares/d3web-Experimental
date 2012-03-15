@@ -32,7 +32,7 @@ KNOWWE.plugin.usersupportjuri = function() {
 	
 	return {
 		
-				/**
+		/**
 		 * Function:    init
 		 * Description: inits import and export buttons
 		 */
@@ -45,7 +45,7 @@ KNOWWE.plugin.usersupportjuri = function() {
 
         },
         
-        		/**
+        /**
 		 * Function     : exportActionWord
 		 * @param event
 		 * Description  : adds the WordExportAction for Articles to the Button.
@@ -127,7 +127,42 @@ KNOWWE.plugin.usersupportjuri = function() {
 				}
 			}
 			new _KA(options).send();
+		},
+		
+		formatDashTree : function(cmInstance, cut) {
+		  var range = KNOWWE.plugin.usersupportinstantedit.getSelectedRange();
+	      var from = range.from;
+		  var to = range.to;
+		  var currentText = cmInstance.getValue();
+		  var formattedText = KNOWWE.plugin.usersupportjuri.formatHierarchy(cmInstance, from, to, cut);
+		  cmInstance.replaceRange(formattedText, from, to);
+		},
+		  
+		formatHierarchy : function(cmInstance, from, to, cut) {
+			var res = "";
+			var range = cmInstance.getRange(from, to);
+			
+			var lines = range.split("\n");
+			for (var i = 0; i < lines.length; i++) {
+			  var line = lines[i];	  
+			  if (!cut) {
+			    var length = line.length;
+			    lines[i] = ("-" + line);
+			  }
+			  if ( (line.charAt(0) == '-') && cut) {
+			    var length = line.length;
+			    lines[i] = line.substring(1, length);
+			  }
+			}
+			
+			for (var i = 0; i < lines.length; i++) {
+			  res = res + lines[i] + "\n";
+			  if (i == (lines.length-1)) {
+				    res = res.substring(0,res.length-1);
+				  }
+			}
+		    return res;
+		  }
 
-		}
 	}
 }();

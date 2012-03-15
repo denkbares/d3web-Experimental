@@ -34,10 +34,25 @@ KNOWWE.plugin.jurimarkup = function() {
 	    },
 	    
 	    postProcessHTML : function(id) {
+	    	var extraKeys = {
+	    			"Ctrl-Space": function(cm)
+		             {
+	    				KNOWWE.plugin.usersupportjuri.gatherDialogComponentCompletions(cm, CodeMirror.usersupportHint, id)
+	        	     },
+	        	     "Ctrl-Left": function(cm)
+						{
+	        	    	 KNOWWE.plugin.usersupportjuri.formatDashTree(cm, true);
+						},
+					"Ctrl-Right": function(cm)
+					    {
+						KNOWWE.plugin.usersupportjuri.formatDashTree(cm, false);
+						}
+	    	}
 			KNOWWE.plugin.usersupportinstantedit.postProcessHTML(
 				id,
 				"juricodemirrormode",
-				KNOWWE.plugin.usersupportjuri
+				KNOWWE.plugin.usersupportjuri,
+				extraKeys
 				);
 	    },
     	
