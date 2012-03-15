@@ -18,6 +18,8 @@
  */
 package de.d3web.knowwe.renderer;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -108,7 +110,7 @@ public class AnnotationInlineAnswerRenderer implements Renderer {
 				// .getErrorUnknownConcept(op, text));
 				// }
 				String s = "<a href=\"#" + sec.getID() + "\"></a>"
-						+ KnowWEUtils.getRenderedInput(q.getName(), q.getName(),
+						+ getRenderedInput(q.getName(), q.getName(),
 								kb.getId(), user, "Annotation", text, op);
 				String masked = KnowWEUtils.maskHTML(s);
 				return masked;
@@ -119,6 +121,24 @@ public class AnnotationInlineAnswerRenderer implements Renderer {
 			}
 		}
 		return null;
+	}
+
+	private static String getRenderedInput(String questionid, String question,
+			String namespace, String userName, String title, String text,
+			String type) {
+		try {
+			question = URLEncoder.encode(question, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		// text=URLEncoder.encode(text);
+
+		String rendering = "<span class=\"semLink\" "
+				+ "rel=\"{type: '" + type + "', objectID: '" + questionid
+				+ "', termName: '" + text + "', user:'" + userName + "'}\">"
+				+ text + "</span>";
+		return rendering;
 	}
 
 }
