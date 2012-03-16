@@ -58,7 +58,7 @@ public class TalkAboutTaghandler extends AbstractTagHandler {
 			title = " &raquo; " + talkPage;
 		}
 		if (subject == null || subject.equals("")) {
-			subject = userContext.getTopic();
+			subject = userContext.getTitle();
 		}
 
 		talkAbout.append("<a href=\"Wiki.jsp?page=");
