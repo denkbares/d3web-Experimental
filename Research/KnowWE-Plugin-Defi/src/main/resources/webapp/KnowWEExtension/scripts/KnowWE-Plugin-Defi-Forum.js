@@ -20,20 +20,11 @@ function sendforumForm(id) {
 		return;
 	}
 			
-	if (id == "Sonstiges") {
-		var params = {
-				action : 'NewForumAction',
-				pagename : "",
-				topic : document.getElementsByName(id+"_topic")[0].value,
-				message : document.getElementsByName(id+"_text")[0].value
-		}
-	} else {
-		var params = {
-				action : 'NewForumAction',
-				pagename : document.getElementsByName(id+"_select")[0].value,
-				topic : document.getElementsByName(id+"_topic")[0].value,
-				message : document.getElementsByName(id+"_text")[0].value
-		}
+	var params = {
+			action : 'NewForumAction',
+			pagename : id,
+			topic : document.getElementsByName(id+"_topic")[0].value,
+			message : document.getElementsByName(id+"_text")[0].value
 	}
 	
 	document.getElementsByName(id+"_topic")[0].value = "";

@@ -72,19 +72,18 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 public class ForumMenuTagHandler extends AbstractTagHandler {
 
 	/** Label für Einheiten-Foren */
-	private static final String UNIT_DISCUSSION_LABEL = "Foren zu Einheiten";
+	private static final String UNIT_DISCUSSION_LABEL = "Themenüberblick";
 	/** Label für sonstige Foren */
 	private static final String LEFTOVER_LABEL = "Sonstige Themen";
 	/** Label für User-Chat */
 	private static final String USER_CHAT_LABEL = "Mit anderen Benutzern diskutieren";
 
 	/** Beschriftungen für das "Neues Forum"-Formular */
-	private static final String OPEN_FORM_BUTTON = "Neues Forum";
+	private static final String OPEN_FORM_BUTTON = "Neues Thema";
 	private static final String CLOSE_FORM_BUTTON = "Abbrechen";
 	private static final String SEND_BUTTON = "Abschicken";
 	private static final String FORM_LABEL = "Neues Forum erstellen:";
 	private static final String TEXTAREA_LABEL = "Geben Sie bitte Ihre Nachricht ein:";
-	private static final String OPTION_LABEL = "W&auml;hlen Sie ein Thema aus:";
 	private static final String TOPIC_LABEL = "Geben Sie bitte eine &Uuml;berschrift ein:";
 
 	/** Button für persönliche Nachricht an Benutzer */
@@ -117,19 +116,16 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		// Hole Lektionen aus dem Left Menu
 		List<Section<DashTreeElement>> rootUnits = getAllRootUnits();
-		List<Section<DashTreeElement>> units = getAllUnits();
 
 		// Hole alle Foren
 		while (it.hasNext()) {
 			for (Section<? extends Type> sec : it.next().getAllNodesPreOrder()) {
-				if (Sections.findSuccessor(sec, Forum.class) != null
-						&& !forums.contains(Sections.findSuccessor(sec, Forum.class))
-						&& !Sections.findSuccessor(sec, Forum.class).getTitle().endsWith(
-								"comment_therapist"))
-					forums.add(Sections.findSuccessor(sec, Forum.class));
+				Section<? extends Forum> forum = Sections.findSuccessor(sec, Forum.class);
+				if (forum != null && !forums.contains(forum)) forums.add(forum);
 			}
 
 		}
+		// Kopiere Forum-Liste
 		other.addAll(forums);
 
 		/* ######################################### */
@@ -140,9 +136,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		for (Section<DashTreeElement> rootUnit : rootUnits) {
 			newEntry = false;
 			pageName = getPageName(rootUnit);
-			fm.append("\n"); // fixes JSPWiki's
-								// "10000 characters without linebreak-bug"
-
+			fm.append("\n"); // "10000 characters without linebreak-bug"
 			if (isFree(rootUnit)) {
 				fm.append("<tr class='active'><td>" + pageName);
 
@@ -181,12 +175,10 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 								numberOfNewEntries = getNumberOfNewEntries(sec.getText(),
 										lastVisit);
 							}
-
 							if (numberOfNewEntries != 0) newEntry = true;
 						}
 
-						fm.append("<li><a href='Wiki.jsp?page=" + sec.getTitle() + "'>"
-								+ topic + " (" + unit + ")"
+						fm.append("<li><a href='Wiki.jsp?page=" + sec.getTitle() + "'>" + topic
 								+ "</a>");
 						if (numberOfNewEntries == -1) fm.append("&nbsp;<span class='fm_new'>(ungelesenes Thema)</span>");
 						else if (numberOfNewEntries == 1) fm.append("&nbsp;<span class='fm_new'>(1 neuer Beitrag)</span>");
@@ -207,55 +199,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 				fm.append("</ul></div>");
 
 				// Formular zur Erstellung eines neuen Forums
-				fm.append("<br /><form style='display:none' name='" + pageName
-						+ "'><br /><h4>" + FORM_LABEL + "</h4>");
-
-				// ++ Select-Tag zur Lektionsauswahl
-				fm.append("<p class='fm_newforum'>" + OPTION_LABEL
-						+ "<br /><select name='"
-						+ pageName
-						+ "_select'>");
-				fm.append("<option value='" + pageName + "'>" + pageName + "</option>");
-
-				for (Section<DashTreeElement> unitSec : units) {
-					if (DashTreeUtils.getFatherDashTreeElement(unitSec) != null
-							&& DashTreeUtils.getFatherDashTreeElement(unitSec).equals(
-									rootUnit)) fm.append("<option value='"
-							+ pageName
-							+ ": "
-							+ getPageName(unitSec)
-							+ "'>"
-							+ pageName
-							+ ": "
-							+ getPageName(unitSec) + "</option>");
-				}
-
-				fm.append("</select></p>");
-
-				// ++ Ueberschrift
-				fm.append("<p class='fm_newforum'>" + TOPIC_LABEL
-						+ "<br /><input type='text' size='" + TOPIC_PANEL_SIZE
-						+ "' name='"
-						+ pageName
-						+ "_topic' /></p>");
-
-				// ++ Nachrichteneingabe
-				fm.append("<p>" + TEXTAREA_LABEL + "</p><textarea name='" + pageName
-						+ "_text' rows='" + TEXTAREA_ROWS + "' cols='" + TEXTAREA_COLS
-						+ "'></textarea><br />");
-				fm.append("<input type='button' value='" + SEND_BUTTON +
-						"' onclick='sendforumForm(\""
-						+ pageName +
-						"\");return false' /><input type='button' onclick='forumForm(\""
-						+ pageName
-						+ "\");return false' value='" + CLOSE_FORM_BUTTON + "' /></form>");
-
-				if (newEntry) {
-					fm.append("</td><td class='fm_new'></td></tr>");
-				}
-				else {
-					fm.append("</td><td class='fm_old'></td></tr>");
-				}
+				fm.append("<br />" + buildForm(pageName, newEntry));
+				fm.append("</tr>");
 			}
 			else {
 				fm.append("<tr class='inactive'><td colspan='2'>" + pageName
@@ -404,32 +349,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		fm.append("</ul></div>");
 
 		// Formular zur Erstellung eines neuen Forums
-		fm.append("<br /><form style='display:none' name='" + pageName
-				+ "'><br /><h4>" + FORM_LABEL + "</h4>");
-
-		// ++ Ueberschrift
-		fm.append("<p class='fm_newforum'>" + TOPIC_LABEL
-				+ ":<br /><input type='text' size='" + TOPIC_PANEL_SIZE + "' name='"
-				+ pageName
-				+ "_topic' /></p>");
-
-		// ++ Nachrichteneingabe
-		fm.append("<p>" + TEXTAREA_LABEL + "</p><textarea name='" + pageName
-				+ "_text' rows='" + TEXTAREA_ROWS + "' cols='" + TEXTAREA_COLS
-				+ "'></textarea><br />");
-		fm.append("<input type='button' value='" + SEND_BUTTON +
-				"' onclick='sendforumForm(\""
-				+ pageName +
-				"\");return false' /><input type='button' onclick='forumForm(\""
-				+ pageName
-				+ "\");return false' value='" + CLOSE_FORM_BUTTON + "' /></form>");
-
-		if (newEntry) {
-			fm.append("</td><td class='fm_new'></td></tr>");
-		}
-		else {
-			fm.append("</td><td class='fm_old'></td></tr>");
-		}
+		fm.append("<br />" + buildForm(pageName, newEntry));
+		fm.append("</tr>");
 
 		fm.append("</table>");
 
@@ -437,25 +358,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	}
 
 	/**
-	 * 
-	 */
-	private List<Section<DashTreeElement>> getAllUnits() {
-		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
-		Article leftMenu = Environment.getInstance().getArticleManager(
-				Environment.DEFAULT_WEB).getArticle("LeftMenu");
-
-		if (leftMenu != null) {
-			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
-					leftMenu.getSection(),
-					DynamicMenuMarkup.class);
-			Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
-		}
-
-		return units;
-	}
-
-	/**
-	 * 
+	 * Get all root units
 	 */
 	private List<Section<DashTreeElement>> getAllRootUnits() {
 		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
@@ -478,7 +381,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	}
 
 	/**
-	 * 
+	 * Get the page's name.
 	 */
 	private static String getPageName(Section<DashTreeElement> sec) {
 		String pagename = sec.getText().trim();
@@ -496,6 +399,46 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		return pagename;
 	}
 
+	/**
+	 * Get HTML-Form for a new forum.
+	 */
+	private String buildForm(String pageName, boolean newEntry) {
+		StringBuilder builder = new StringBuilder();
+
+		// Formular zur Erstellung eines neuen Forums
+		builder.append("<form style='display:none' name='" + pageName
+				+ "'><br /><h4>" + FORM_LABEL + "</h4>");
+
+		// ++ Ueberschrift
+		builder.append("<p class='fm_newforum'>" + TOPIC_LABEL
+				+ ":<br /><input type='text' size='" + TOPIC_PANEL_SIZE + "' name='"
+				+ pageName
+				+ "_topic' /></p>");
+
+		// ++ Nachrichteneingabe
+		builder.append("<p>" + TEXTAREA_LABEL + "</p><textarea name='" + pageName
+				+ "_text' rows='" + TEXTAREA_ROWS + "' cols='" + TEXTAREA_COLS
+				+ "'></textarea><br />");
+		builder.append("<input type='button' value='" + SEND_BUTTON +
+				"' onclick='sendforumForm(\""
+				+ pageName +
+				"\");return false' /><input type='button' onclick='forumForm(\""
+				+ pageName
+				+ "\");return false' value='" + CLOSE_FORM_BUTTON + "' /></form>");
+
+		if (newEntry) {
+			builder.append("</td><td class='fm_new'></td>");
+		}
+		else {
+			builder.append("</td><td class='fm_old'></td>");
+		}
+
+		return builder.toString();
+	}
+
+	/**
+	 * 
+	 */
 	private boolean isFree(Section<DashTreeElement> sec) {
 		Section<? extends Type> dashtree = sec.getFather().getFather().getFather();
 		List<Section<DashTreeElement>> found = new ArrayList<Section<DashTreeElement>>();
@@ -533,6 +476,9 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		return false;
 	}
 
+	/**
+	 * Get a forum's attribute.
+	 */
 	private String getForumAttribute(String attribute, String forumXML) {
 		String attributeContent = "";
 
@@ -557,6 +503,9 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		return attributeContent;
 	}
 
+	/**
+	 * Get the number of new entries in a forum.
+	 */
 	private int getNumberOfNewEntries(String forumXML, String date) {
 		int number = 0;
 		Date thresholdDate, entryDate;
@@ -589,6 +538,9 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		return number;
 	}
 
+	/**
+	 * Get a forum's author.
+	 */
 	private String getAuthor(String forumXML) {
 		String author = "";
 
@@ -611,6 +563,9 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		return author;
 	}
 
+	/**
+	 * Get all admins.
+	 */
 	@SuppressWarnings("unchecked")
 	private List<String> getAdmins(String wikiPath) {
 		List<String> admins = new LinkedList<String>();
@@ -640,6 +595,9 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		return admins;
 	}
 
+	/**
+	 * Transform loginName into WikiName.
+	 */
 	@SuppressWarnings("unchecked")
 	private String getWikiName(String loginName, String wikiPath) {
 		SAXBuilder sxbuild = new SAXBuilder();
@@ -663,6 +621,9 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		return "";
 	}
 
+	/**
+	 * check the log.
+	 */
 	private HashMap<String, String> checkLog(UserContext uc) {
 		HashMap<String, String> logPages = new HashMap<String, String>();
 		String log = PageLoggerHandler.getPath();
@@ -684,6 +645,9 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		return logPages;
 	}
 
+	/**
+	 * String into Date.
+	 */
 	private Date stringToDate(String s) {
 		SimpleDateFormat sdfToDate = new SimpleDateFormat(
 				"yyyy-MM-dd HH:mm:ss");
@@ -737,10 +701,6 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 	/**
 	 * Get the user's status.
-	 * 
-	 * @param activeUsers
-	 * @param userName
-	 * @return
 	 */
 	private String getStatus(String[] activeUsers, String userName) {
 

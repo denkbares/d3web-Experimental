@@ -184,11 +184,13 @@ table.forumMenu span.online {
 table.forumMenu span.offline {
 	color:red;
 }
+table.forumMenu li {
+	list-style: square;	
+}
 p.fm_newforum {
 	margin:0 0 8px 0;
 }
-
-
+/* aboutme */
 h1.aboutme, h2.aboutme
 {color:#063d79;}
 

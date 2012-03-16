@@ -36,6 +36,8 @@ import de.knowwe.core.action.UserActionContext;
  */
 public class NewForumAction extends AbstractAction {
 
+	private static final String BACK_BUTTON = "<< zur&uuml;ck zum Diskussionsforum";
+
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String username = context.getUserName();
@@ -51,9 +53,9 @@ public class NewForumAction extends AbstractAction {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 		ArticleManager mgr = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB);
-		String content = "<a href=\"Wiki.jsp?page=Diskussion\"><< zur&uuml;ck zur Diskussion</a><br />\n";
+		String content = "<a href=\"Wiki.jsp?page=Diskussion\">" + BACK_BUTTON + "</a><br />\n";
 
-		if (pageName == "") {
+		if (pageName == "Sonstiges") {
 			content += "\n<forum topic='" + topic + "' name='" + topic + "'>\n" +
 					"<box name=\"" + username + "\" date=\"" + sdf.format(now.getTime()) + "\">"
 					+ message + "</box>\n</forum>";
@@ -65,7 +67,7 @@ public class NewForumAction extends AbstractAction {
 					+ message + "</box>\n</forum>";
 		}
 
-		content += "<br /><br />\n<a href=\"Wiki.jsp?page=Diskussion\"><< zur&uuml;ck zur Diskussion</a>";
+		content += "<br /><br />\n<a href=\"Wiki.jsp?page=Diskussion\">" + BACK_BUTTON + "</a>";
 
 		if (pageName == "") title = "Forum zu " + " \"" + topic + "\"";
 		else title = "Forum zu " + pageName + " (" + topic + ")";
