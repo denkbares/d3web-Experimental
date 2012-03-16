@@ -54,10 +54,11 @@
 		}
 	}
 	
-if(welcomePage_firstTime && user.userIsAsserted()) {
+if(welcomePage_firstTime) {
 %>
 <script type="text/javascript">
-	window.location.href = "Wiki.jsp?page=<%=WELCOME_PAGE_FIRSTTIME%>";
+	if(!document.URL.match(/Login.jsp/))
+		window.location.href = "Wiki.jsp?page=<%=WELCOME_PAGE_FIRSTTIME%>";
 </script>
 <% } %>
 
