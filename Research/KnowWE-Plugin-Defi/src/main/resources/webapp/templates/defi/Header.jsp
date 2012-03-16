@@ -1,3 +1,4 @@
+<%@page import="java.util.ResourceBundle"%>
 <%@page import="de.knowwe.core.Environment"%>
 <%@page import="de.knowwe.jspwiki.JSPWikiConnector"%>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki"%>
@@ -14,7 +15,6 @@
 	value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default" />
 <%
-	final String BERATER = "Dr. Stefan M. Schulz";
 	final String WELCOME_PAGE = "Startseite";
 	final String WELCOME_PAGE_FIRSTTIME = WELCOME_PAGE + "_firstTime";
 
@@ -25,9 +25,11 @@
 	Environment.getInstance().getContext(), null));
 	String[] activeUsers = wc.getAllActiveUsers();
 	boolean beraterOnline = false;
+	String berater = ResourceBundle.getBundle("KnowWE_Defi_config").getString(
+	"defi.berater");
 
 	for (String s : activeUsers) {
-		if (s.equals(BERATER)) beraterOnline = true;
+		if (s.equals(berater)) beraterOnline = true;
 	}
 	
 	// if user has visited welcomepage, redirect him to welcomepage_firsttime
@@ -81,7 +83,7 @@ if(welcomePage_firstTime) {
 		<div class="infobox">
 			<span>Kontaktfunktion</span>
 			<div>
-				<a href=""  onclick="newChat('<%= BERATER %>', '<%= user.getUserName() %>');return false" class="infobox_link" onmouseover="document.getElementById('infobox1').style.backgroundColor = '#eeeeee';" onmouseout="document.getElementById('infobox1').style.backgroundColor = '#F9F9F9';">
+				<a href=""  onclick="newChat('<%= berater %>', '<%= user.getUserName() %>');return false" class="infobox_link" onmouseover="document.getElementById('infobox1').style.backgroundColor = '#eeeeee';" onmouseout="document.getElementById('infobox1').style.backgroundColor = '#F9F9F9';">
 				<img src="KnowWEExtension/images/
 				<% if (beraterOnline) { %>
 					berater_farbig.jpg

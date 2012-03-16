@@ -20,6 +20,7 @@ package de.knowwe.defi.readbutton;
 
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
@@ -44,7 +45,6 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 	private static final int DEFAULT_NUMBER = 4;
 	private static final String DEFAULT_HIDE = "false";
-	private static final String BERATER = "Dr. Stefan M. Schulz";
 
 	/** tagattributes **/
 	private static final String THRESHOLD = "threshold";
@@ -83,8 +83,10 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			// Get parameters
 			String username = userContext.getUserName();
 			String title = username + "_data";
-			String pagename = userContext.getTopic();
+			String pagename = userContext.getTitle();
 			String web = userContext.getWeb();
+			String berater = ResourceBundle.getBundle("KnowWE_Defi_config").getString(
+					"defi.berater");
 
 			// Get Tagattributes
 			if (parameters.containsKey(NUMBER)) number = Integer.parseInt(parameters.get(NUMBER));
@@ -208,7 +210,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				}
 
 				// subject = pagename
-				readbutton.append("<p><a href='' onclick=\"newChat('" + BERATER + "', '"
+				readbutton.append("<p><a href='' onclick=\"newChat('" + berater + "', '"
 						+ userContext.getUserName() + "');return false\">");
 				readbutton.append("Mit dem Berater dar&uuml;ber sprechen");
 				readbutton.append("</a>");
