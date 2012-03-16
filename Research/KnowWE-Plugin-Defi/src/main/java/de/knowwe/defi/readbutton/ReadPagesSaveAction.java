@@ -43,7 +43,7 @@ public class ReadPagesSaveAction extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 		String username = context.getUserName();
 		String title = username + "_data";
-		String pagename = context.getTopic();
+		String pagename = context.getTitle();
 		String web = context.getWeb();
 		String value = context.getParameter("value");
 		String id = context.getParameter("id");

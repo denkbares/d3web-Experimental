@@ -50,7 +50,7 @@ public class AboutMeSaveAction extends AbstractAction {
 			return;
 		}
 
-		String title = context.getTopic();
+		String title = context.getTitle();
 		String username = context.getUserName();
 		String web = context.getWeb();
 

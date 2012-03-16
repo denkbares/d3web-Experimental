@@ -44,7 +44,7 @@ public class MailFormAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String username = context.getUserName();
-		String pagename = context.getTopic();
+		String pagename = context.getTitle();
 		String id = context.getParameter("id");
 
 		String nachricht = username + " schrieb über das Formular( " + id + " ) der Seite \""
