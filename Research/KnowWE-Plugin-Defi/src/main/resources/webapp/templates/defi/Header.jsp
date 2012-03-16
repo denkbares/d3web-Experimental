@@ -30,7 +30,7 @@
 		if (s.equals(BERATER)) beraterOnline = true;
 	}
 	
-	// if user has visited welcomepage, link him to welcomepage_firsttime
+	// if user has visited welcomepage, redirect him to welcomepage_firsttime
 	boolean welcomePage_firstTime = false;
 	if (user.getTitle().equals(WELCOME_PAGE)) {
 		welcomePage_firstTime = true;
@@ -39,26 +39,25 @@
 		Article userData = Environment.getInstance().getArticleManager(
 		Environment.DEFAULT_WEB).getArticle(user.getUserName() + "_data");
 		if (userData != null) {
-	Section<DataMarkup> data = Sections.findSuccessor(
-	userData.getSection(), DataMarkup.class);
-	if (data != null && DataMarkup.getAnnotation(data, "readpages") != null) {
-		// Hole alle gelesenen Readbuttons
-		readpages = DataMarkup.getAnnotation(data, "readpages").split(";");
-		// Ist gesuchter dabei?
-		for (String s : readpages) {
-	// Vergleiche pagenames und ids 
-	if (s.split("::")[0].equals(WELCOME_PAGE_FIRSTTIME)) {
-		welcomePage_firstTime = false;
-	}
-		}
-	}
+			Section<DataMarkup> data = Sections.findSuccessor(
+			userData.getSection(), DataMarkup.class);
+			if (data != null && DataMarkup.getAnnotation(data, "readpages") != null) {
+				// Hole alle gelesenen Readbuttons
+				readpages = DataMarkup.getAnnotation(data, "readpages").split(";");
+				// Ist gesuchter dabei?
+				for (String s : readpages) {
+					// Vergleiche pagenames und ids 
+					if (s.split("::")[0].equals(WELCOME_PAGE_FIRSTTIME))
+						welcomePage_firstTime = false;
+				}
+			}
 		}
 	}
 	
-if(welcomePage_firstTime) {
+if(welcomePage_firstTime && user.userIsAsserted()) {
 %>
 <script type="text/javascript">
-	window.location = "Wiki.jsp?page=<%=WELCOME_PAGE_FIRSTTIME%>";
+	window.location.href = "Wiki.jsp?page=<%=WELCOME_PAGE_FIRSTTIME%>";
 </script>
 <% } %>
 
