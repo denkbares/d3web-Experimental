@@ -120,8 +120,8 @@ public class ForumRenderer implements Renderer {
 
 			// append sort links / images
 			ret.append("<div id=\"knowwe-plugin-comment-sorting\" style=\"float:right;padding-right:30px;\">\n");
-			ret.append(this.sortLink("down", topic, rb));
-			ret.append(this.sortLink("up", topic, rb));
+			// ret.append(this.sortLink("down", topic, rb));
+			// ret.append(this.sortLink("up", topic, rb));
 			ret.append("</div>\n");
 			ret.append("<br /><hr />\n");
 
