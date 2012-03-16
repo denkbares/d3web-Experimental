@@ -44,6 +44,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 	private static final int DEFAULT_NUMBER = 4;
 	private static final String DEFAULT_HIDE = "false";
+	private static final String BERATER = "Dr. Stefan M. Schulz";
 
 	/** tagattributes **/
 	private static final String THRESHOLD = "threshold";
@@ -207,13 +208,8 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				}
 
 				// subject = pagename
-				readbutton.append("<p><a href=\"Wiki.jsp?page=");
-				readbutton.append(KnowWEUtils.urlencode(talkPage.trim()));
-				readbutton.append("&amp;talkabout=");
-				readbutton.append(KnowWEUtils.urlencode(pagename.trim()));
-				readbutton.append("\" title=\"Title:");
-				readbutton.append(title);
-				readbutton.append("\" rel=\"nofollow\">");
+				readbutton.append("<p><a href='' onclick=\"newChat('" + BERATER + "', '"
+						+ userContext.getUserName() + "');return false\">");
 				readbutton.append("Mit dem Berater dar&uuml;ber sprechen");
 				readbutton.append("</a>");
 				readbutton.append(" - <a href='#' onclick='getReadButtonValue(1,"
