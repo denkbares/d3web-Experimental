@@ -37,6 +37,8 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -269,10 +271,13 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 				Environment.getInstance().getContext(), null));
 		String[] users = wc.getAllUsers();
 		String[] activeUsers = wc.getAllActiveUsers();
+		List<String> admins = getAdmins(wc.getSavePath());
 
 		for (int i = 0; i < users.length; i++) {
-			if (!users[i].startsWith("Patient")
-					&& !users[i].equals(userContext.getUserName())) {
+			// filter displayed users
+			if (admins.contains(users[i]) || users[i].startsWith("Patient")
+					|| users[i].equals(userContext.getUserName())) continue;
+			else {
 				newEntry = false;
 				noForum = true;
 				// Sortiere Namen alphabetisch
@@ -604,6 +609,58 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		}
 
 		return author;
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<String> getAdmins(String wikiPath) {
+		List<String> admins = new LinkedList<String>();
+
+		SAXBuilder sxbuild = new SAXBuilder();
+		InputSource is = new InputSource(wikiPath + "groupdatabase.xml");
+		org.jdom.Document doc;
+		try {
+			doc = sxbuild.build(is);
+			org.jdom.Element root = doc.getRootElement();
+			List<org.jdom.Element> elms, groups;
+			elms = root.getChildren("group");
+			for (org.jdom.Element elm : elms) {
+				if (elm.getAttributeValue("name").equals("Admin")) {
+					groups = elm.getChildren();
+					for (org.jdom.Element elem : groups) {
+						admins.add(getWikiName(elem.getAttributeValue("principal"), wikiPath));
+					}
+				}
+			}
+		}
+		catch (JDOMException e) {
+		}
+		catch (IOException e) {
+		}
+
+		return admins;
+	}
+
+	@SuppressWarnings("unchecked")
+	private String getWikiName(String loginName, String wikiPath) {
+		SAXBuilder sxbuild = new SAXBuilder();
+		InputSource is = new InputSource(wikiPath + "userdatabase.xml");
+		org.jdom.Document doc;
+		try {
+			doc = sxbuild.build(is);
+			org.jdom.Element root = doc.getRootElement();
+			List<org.jdom.Element> elms = root.getChildren("user");
+			for (org.jdom.Element elm : elms) {
+				if (elm.getAttributeValue("loginName").equals(loginName)) {
+					return elm.getAttributeValue("fullName");
+				}
+			}
+		}
+		catch (JDOMException e) {
+		}
+		catch (IOException e) {
+		}
+
+		return "";
 	}
 
 	private HashMap<String, String> checkLog(UserContext uc) {
