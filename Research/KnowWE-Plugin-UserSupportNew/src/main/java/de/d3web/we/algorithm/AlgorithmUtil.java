@@ -46,9 +46,9 @@ public class AlgorithmUtil
 	 * @return
 	 */
 	public static int containsSuggestion(
-			List<SuggestionValuePair> matchList, Suggestion s)
+			List<SuggestionCountPair> matchList, Suggestion s)
 	{
-		for (SuggestionValuePair pair : matchList)
+		for (SuggestionCountPair pair : matchList)
 		{
 			if (pair.getSuggestion().equals(s))
 				return matchList.indexOf(pair);

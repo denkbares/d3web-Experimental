@@ -18,24 +18,59 @@
  */
 package de.d3web.we.algorithm;
 
-import java.util.Comparator;
-
 
 /**
- * 
- * To sort {@link SuggestionValuePairs} according to their value.
+ * Stores a Suggestion with a count-Value to
+ * count how often a Suggestion was proposed
+ * by a bunch of MatchingAlgorithms
  * 
  * @author Johannes Dienst
  * @created 22.11.2011
  */
-public class SuggestionValuePairComparator implements Comparator<SuggestionValuePair>
+public class SuggestionCountPair
 {
+	private Suggestion s;
+	private int count;
 
-	@Override
-	public int compare(SuggestionValuePair o1, SuggestionValuePair o2) {
-		if (o1.getValue() > o2.getValue()) return -1;
-		if (o1.getValue() < o2.getValue()) return 1;
-		return 0;
+	public SuggestionCountPair(Suggestion suggestion)
+	{
+		this(suggestion, 0);
+	}
+	public SuggestionCountPair(Suggestion suggestion, int value)
+	{
+		s = suggestion;
+		count = value;
+	}
+	public Suggestion getSuggestion()
+	{
+		return s;
+	}
+	public int getCount()
+	{
+		return count;
+	}
+	public void increment()
+	{
+		count++;
 	}
 
+	/**
+	 * When the s2 is the same Suggestion as
+	 * stored in this container. The distance
+	 * value is set to the better of the two
+	 * 
+	 * @created 09.02.2012
+	 * @param s2
+	 */
+	public void updateDistance(Suggestion s2)
+	{
+		if (s.compareTo(s2) == -1)
+			this.s = s2;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return s.toString() + " Count: " + count;
+	}
 }

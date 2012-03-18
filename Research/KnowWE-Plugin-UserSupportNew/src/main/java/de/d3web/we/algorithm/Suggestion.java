@@ -95,4 +95,10 @@ public class Suggestion implements Comparable<Suggestion>
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return suggestion + " distance: " + distance;
+	}
 }
