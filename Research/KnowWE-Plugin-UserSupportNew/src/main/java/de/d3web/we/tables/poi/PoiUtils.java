@@ -82,6 +82,14 @@ import de.knowwe.core.utils.KnowWEUtils;
 public class PoiUtils
 {
 
+
+	private static int idPostfix = 0;
+	
+	public static int getIdPostfix()
+	{
+		return idPostfix++;
+	}
+	
 	private static CellStyle getErrorCellStyle(Workbook wb)
 	{
 		CellStyle cs = wb.createCellStyle();
@@ -112,6 +120,9 @@ public class PoiUtils
 	 */
 	public static String importTableFromFile(File in, String tableId, String article, ActionContext context) throws IOException
 	{
+		StringBuilder buildi = new StringBuilder();
+		try
+		{
 		FileInputStream input = new FileInputStream(in);
 		Workbook wb = new HSSFWorkbook(input);
 
@@ -141,7 +152,6 @@ public class PoiUtils
 		int maxCellLength = TableUtils.getWidestTableCellLengthPoiUtils(rowsList);
 
 		// Rebuild the Table with the arrays
-		StringBuilder buildi = new StringBuilder();
 		for ( String[] arr : rowsList )
 		{
 			for (String c : arr)
@@ -170,7 +180,11 @@ public class PoiUtils
 				Sections.findSuccessor(table, InnerTable.class);
 			}
 		}
-
+		}
+		catch (NullPointerException e1)
+		{
+			throw new IOException();
+		}
 
 		return buildi.toString();
 	}

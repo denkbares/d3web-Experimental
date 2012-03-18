@@ -86,7 +86,6 @@ public class HeuristicDiagnosisTable extends ITable
 		@Override
 		public Collection<Message> create(Article article, Section<HeuristicDiagnosisTable> heuristicSec)
 		{
-
 			Section<InnerTable> innerTable =
 					Sections.findChildOfType(heuristicSec, InnerTable.class);
 			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty())
@@ -100,8 +99,6 @@ public class HeuristicDiagnosisTable extends ITable
 			Solution solution = TableUtils.findSolutionInKB(heuristicSec, kb);
 
 			// Create all Conditions: 1st column
-			// TODO First + Second Cell is no Question: Removed it! But what if empty?
-			// TODO no checks or whatsoever. Write security check!
 			List<Section<TableCellFirstColumn>> firstColumn =
 					Sections.findSuccessorsOfType(innerTable, TableCellFirstColumn.class);
 
@@ -123,10 +120,11 @@ public class HeuristicDiagnosisTable extends ITable
 
 			for (int i = 1; i < cellCount; i++)
 			{
-				column = new LinkedList<Section<TableCell>>(
-						TableUtils.getColumnCells(
-								i, Sections.findChildOfType(heuristicSec, InnerTable.class)));
-
+				List<Section<TableCell>> columnCells = TableUtils.getColumnCells(
+						i, Sections.findChildOfType(heuristicSec, InnerTable.class));
+				if (columnCells == null) break;
+				column = new LinkedList<Section<TableCell>>(columnCells);
+				
 				// get conjunction type
 				String conjunctionType = headerCells.get(i).getText().trim();
 

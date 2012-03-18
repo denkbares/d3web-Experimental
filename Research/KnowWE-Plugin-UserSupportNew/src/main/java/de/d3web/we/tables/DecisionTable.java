@@ -87,7 +87,6 @@ public class DecisionTable extends ITable
 				return null;
 
 			Article compilingArticle = KnowWEUtils.getCompilingArticles(decisionSec).iterator().next();
-			KnowledgeBase kb = D3webUtils.getKnowledgeBase(decisionSec.getWeb(), article.getTitle());
 
 			// Get all conditions and SetQuestionValues from firstColumn
 			List<Section<TableCell>> firstColumn = new LinkedList<Section<TableCell>>(
@@ -125,9 +124,11 @@ public class DecisionTable extends ITable
 			LinkedList<Section<TableCell>> column = null;
 			for (int j = 1; j < cellCount; j++)
 			{
-				column = new LinkedList<Section<TableCell>>(
-						TableUtils.getColumnCells(
-								j, Sections.findChildOfType(decisionSec, InnerTable.class)));
+				List<Section<TableCell>> columnCells = TableUtils.getColumnCells(
+						j, Sections.findChildOfType(decisionSec, InnerTable.class));
+				if (columnCells == null) break;
+				
+				column = new LinkedList<Section<TableCell>>(columnCells);
 
 				// Collect all conditions and create final ConditionAnd
 				List<Condition> conditions = new ArrayList<Condition>();

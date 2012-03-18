@@ -86,6 +86,8 @@ public class TableUtils
 	 * Gets all TableCells for a given column. Columns numeration starts at 0.
 	 * It includes the TableHeader.
 	 * 
+	 * Returns null if the column does not exist (ArrayOutOfBoundsException)
+	 * 
 	 * @created 18.10.2011
 	 * @param rowNumber
 	 * @return
@@ -93,14 +95,13 @@ public class TableUtils
 	public static List<Section<TableCell>> getColumnCells(
 			int columnNumber, Section<InnerTable> table) {
 		List<Section<TableCell>> cells = new ArrayList<Section<TableCell>>();
-
-		// get all TableLines
 		List<Section<TableLine>> lines = Sections.findSuccessorsOfType(table, TableLine.class);
 
+		List<Section<TableCell>> lineCells = null;
 		for (Section<TableLine> line : lines) {
-			cells.add(
-					Sections.findSuccessorsOfType(line, TableCell.class).
-					get(columnNumber));
+			lineCells = Sections.findSuccessorsOfType(line, TableCell.class);
+			if (columnNumber >= lineCells.size()) return null;
+			cells.add(lineCells.get(columnNumber));
 		}
 
 		return cells;

@@ -117,9 +117,11 @@ public class UploadReceptorServlet extends HttpServlet {
 					 */
 					File file;
 					if (fileType.equals("word"))
-						file = new File(destinationDir, "docbook-" + tableId + ".doc");
+						file = new File(destinationDir,
+								"docbook-" + tableId + "-" + PoiUtils.getIdPostfix() + ".doc");
 					else
-						file = new File(destinationDir, "workbook-" + tableId + ".xls");
+						file = new File(destinationDir,
+								"workbook-" + tableId + "-" + PoiUtils.getIdPostfix() + ".xls");
 					file.deleteOnExit();
 					item.write(file);
 
@@ -136,9 +138,9 @@ public class UploadReceptorServlet extends HttpServlet {
 			}
 
 		} catch(FileUploadException ex) {
-			log("Error encountered while parsing the request",ex);
+			log("Error encountered while parsing the request");
 		} catch(Exception ex) {
-			log("Error encountered while uploading file",ex);
+			log("Error encountered while uploading file");
 		}
 
 	}

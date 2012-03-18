@@ -120,7 +120,8 @@ public class CausalDiagnosisScore extends AbstractType
 			for (int i = 1; i < cellCount; i++)
 			{
 				column = TableUtils.getColumnCells(i, Sections.findChildOfType(scoreSec, InnerTable.class));
-
+				if (column == null) break;
+				
 				// Get Solution from headerCells and create it, if necessary, in kb
 				Section<TableHeaderCell> solutionCell = headerCells.get(i);
 				String solText = solutionCell.getText();
