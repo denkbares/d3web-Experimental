@@ -123,7 +123,6 @@ public class ForumRenderer implements Renderer {
 			// ret.append(this.sortLink("down", topic, rb));
 			// ret.append(this.sortLink("up", topic, rb));
 			ret.append("</div>\n");
-			ret.append("<br /><hr />\n");
 
 			// render posts
 			if (sortUpwards) {
