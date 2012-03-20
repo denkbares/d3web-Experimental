@@ -1,34 +1,80 @@
-function getReadButtonValue(hide,number,id) {
+function sendReadbutton(id, threshold) {
+	container = document.getElementById('rb_' + id);
+	radiobuttons = $ES('input[type=radio]' , 'rb_' + id);
+	labels = $ES('tr', 'rb_' + id)[1].childNodes;
+	checked = -1;
 	
-	// hide tells the function whether to hide the Readbutton(value = 0) or deliver the checked radiobutton
-	if (hide == 0) {
-		var form = document.getElementById(id);
-		var checked = null;
-		for (i = 0; i < number; i++) {
-			
-			if (form.elements[i].checked) {
-				checked = form.elements[i].value;
+	for (i = 0; i < radiobuttons.length; i++) {
+		if (radiobuttons[i].checked)
+			checked = i;
+	}
+	
+	if (checked == -1) {
+		alert('Bitte wählen Sie eine Bewertung aus')
+		return;
+	}
+	
+	realvalue = checked + 1;
+	
+	discussed = '';
+	close = '';
+	if (realvalue <= threshold) {
+		discussed = 'Noch nicht';
+		close = 'Nein';
+	}
+	else {
+		discussed = 'Kein Link';
+		close = 'Ja';
+	}
+	
+	var params = {
+			action : 'ReadbuttonSubmitAction',
+			realvalue : realvalue,
+			value : radiobuttons[checked].value,
+			label : labels[checked].innerHTML,
+			discussed : discussed,
+			closed : close,
+			id : id
+	}
+	
+	var options = {
+			url : KNOWWE.core.util.getURL(params),
+			response : {
+				action : '',
+				ids : [ '' ],
+				fn : function(){ setTimeout ( 'document.location.reload()', 100 ); }
 			}
-		}
-		
-		if (checked == null) {
-			alert('Bitte wählen Sie eine Bewertung aus')
-			return;
-		} else {
-			
-			var params = {
-					action : 'ReadPagesSaveAction',
-					value : checked,
-					id : id
+	}
+	
+	new _KA(options).send();
+}
+
+function readbuttonDiscuss(id) {
+	
+	var params = {
+			action : 'ReadbuttonLinkClickedAction',
+			discussed : 'Ja',
+			id : id
+	}
+	
+	var options = {
+			url : KNOWWE.core.util.getURL(params),
+			response : {
+				action : '',
+				ids : [ '' ],
+				fn : function(){ }
 			}
-		}
-		
-	} else {
-		var params = {
-				action : 'ReadPagesSaveAction',
-				value : 0,
-				id : id
-		}
+	}
+	
+	new _KA(options).send();
+}
+
+function readbuttonCloseLink(id) {
+	
+	var params = {
+			action : 'ReadbuttonLinkClickedAction',
+			discussed : 'Nein',
+			id : id
 	}
 	
 	var options = {

@@ -1,3 +1,7 @@
+<%@page import="de.knowwe.kdom.defaultMarkup.DefaultMarkupType"%>
+<%@page import="java.util.List"%>
+<%@page import="de.knowwe.core.ArticleManager"%>
+<%@page import="de.knowwe.defi.readbutton.ReadbuttonType"%>
 <%@page import="java.util.ResourceBundle"%>
 <%@page import="de.knowwe.core.Environment"%>
 <%@page import="de.knowwe.jspwiki.JSPWikiConnector"%>
@@ -5,7 +9,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@page import="java.util.HashMap"%>
 <%@ page import="com.ecyrd.jspwiki.*"%>
-<%@page import="de.knowwe.defi.readbutton.DataMarkup"%>
 <%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
 <%@page import="de.knowwe.core.kdom.parsing.Section"%>
 <%@page import="de.knowwe.core.kdom.parsing.Sections" %>
@@ -17,6 +20,7 @@
 <%
 	final String WELCOME_PAGE = "Startseite";
 	final String WELCOME_PAGE_FIRSTTIME = WELCOME_PAGE + "_firstTime";
+	final String BUTTON_ID = "firstpage";
 
 	WikiContext c = WikiContext.findContext(pageContext);
 	String frontpage = c.getEngine().getFrontPage();
@@ -27,7 +31,6 @@
 	boolean beraterOnline = false;
 	String berater = ResourceBundle.getBundle("KnowWE_Defi_config").getString(
 	"defi.berater");
-
 	for (String s : activeUsers) {
 		if (s.equals(berater)) beraterOnline = true;
 	}
@@ -37,21 +40,15 @@
 	if (user.getTitle().equals(WELCOME_PAGE)) {
 		welcomePage_firstTime = true;
 		String[] readpages = new String[0];
-		
-		Article userData = Environment.getInstance().getArticleManager(
-		Environment.DEFAULT_WEB).getArticle(user.getUserName() + "_data");
-		if (userData != null) {
-			Section<DataMarkup> data = Sections.findSuccessor(
-			userData.getSection(), DataMarkup.class);
-			if (data != null && DataMarkup.getAnnotation(data, "readpages") != null) {
-				// Hole alle gelesenen Readbuttons
-				readpages = DataMarkup.getAnnotation(data, "readpages").split(";");
-				// Ist gesuchter dabei?
-				for (String s : readpages) {
-					// Vergleiche pagenames und ids 
-					if (s.split("::")[0].equals(WELCOME_PAGE_FIRSTTIME))
-						welcomePage_firstTime = false;
-				}
+		String dataPagename = user.getUserName() + "_data";
+		ArticleManager mgr = Environment.getInstance().getArticleManager(user.getWeb());
+		if (Environment.getInstance().getWikiConnector().doesPageExist(dataPagename)) {
+			Section<?> sec = mgr.getArticle(dataPagename).getSection();
+			List<Section<ReadbuttonType>> rbSecs = Sections.findSuccessorsOfType(sec,
+					ReadbuttonType.class);
+			for (Section<ReadbuttonType> rbSec : rbSecs) {
+				if (BUTTON_ID.equals(DefaultMarkupType.getAnnotation(rbSec, "id")))
+					welcomePage_firstTime = false;
 			}
 		}
 	}

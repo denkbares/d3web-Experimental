@@ -26,19 +26,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.defi.menu.DynamicMenuMarkup;
-import de.knowwe.defi.readbutton.DataMarkup;
+import de.knowwe.defi.readbutton.ReadbuttonType;
 import de.knowwe.defi.time.TimeTableMarkup;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * 
@@ -59,9 +61,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	@Override
 	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder readstatus = new StringBuilder();
-		// Hole alle Einheiten
 		List<Section<DashTreeElement>> units = getALlUnits();
-		// Hole Zeitplan
 		List<Date> dates = getTimeTable();
 		List<String> readbuttons = new ArrayList<String>();
 		// Zählt Rooteinheiten
@@ -120,18 +120,14 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 				/* AUSGABE */
 				/* ------------------------------------------------------------ */
 				if (!read) {
-					readstatus.append("<li class='readstatus'>In ");
+					readstatus.append("<li class='readstatus'>");
+					if (timeStatus == -1 || (timeStatus == 0 && !current.before(warning))) readstatus.append("In ");
 					readstatus.append("<a href='Wiki.jsp?page="
 							+ getPageName(rootUnit) + "'>" + getLabel(rootUnit)
 							+ "</a> ");
 
-					if (timeStatus == -1) {
+					if (timeStatus == -1 || (timeStatus == 0 && !current.before(warning)))
 						readstatus.append(" haben Sie noch nicht alle Seiten bearbeitet!");
-					}
-
-					if (timeStatus == 0 && !current.before(warning)) {
-						readstatus.append(" haben Sie noch nicht alle Seiten bearbeitet!");
-					}
 
 					readstatus.append("</li>");
 				}
@@ -226,16 +222,10 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 					Environment.DEFAULT_WEB).getArticle(getPageName(s));
 
 			if (unit != null) {
-				List<Section<? extends Type>> allNodes = unit.getAllNodesPreOrder();
-				Section<? extends Type> node;
-
-				for (int i = 0; i < allNodes.size(); i++) {
-					node = allNodes.get(i);
-
-					if (node.get().toString().contains("TagHandlerType")
-							&& node.toString().contains("KnowWEPlugin readbutton"))
-						readbuttons.add(getPageName(s)
-								+ "::" + getReadButtonID(node.toString()));
+				for (Section<AbstractType> sec : Sections.findSuccessorsOfType(
+						unit.getSection(),
+						AbstractType.class)) {
+					if (sec.getText().matches("\\[\\{KnowWEPlugin readbutton[^}]*}]")) readbuttons.add(getReadButtonID(sec.getText()));
 				}
 			}
 
@@ -250,24 +240,14 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	 * @return true = geklickt, false = noch nicht geklickt
 	 */
 	private boolean getReadbuttonStatus(String readbutton, String userName) {
-		String[] readpages = new String[0];
-		Article userData = Environment.getInstance().getArticleManager(
-				Environment.DEFAULT_WEB).getArticle(userName + "_data");
-
-		if (userData != null) {
-			Section<DataMarkup> data = Sections.findSuccessor(
-					userData.getSection(), DataMarkup.class);
-			if (data != null && DataMarkup.getAnnotation(data, "readpages") != null) {
-				// Hole alle gelesenen Readbuttons
-				readpages = DataMarkup.getAnnotation(data, "readpages").split(";");
-				// Ist gesuchter dabei?
-				for (String s : readpages) {
-					// Vergleiche pagenames und ids
-					if (s.split("::")[0].equals(readbutton.split("::")[0])
-							&& s.split("::")[1].equals(readbutton.split("::")[1])) {
-						return true;
-					}
-				}
+		String dataPagename = userName + "_data";
+		ArticleManager mgr = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
+		if (Environment.getInstance().getWikiConnector().doesPageExist(dataPagename)) {
+			Section<?> sec = mgr.getArticle(dataPagename).getSection();
+			List<Section<ReadbuttonType>> rbSecs = Sections.findSuccessorsOfType(sec,
+					ReadbuttonType.class);
+			for (Section<ReadbuttonType> rbSec : rbSecs) {
+				if (readbutton.equals(DefaultMarkupType.getAnnotation(rbSec, "id"))) return true;
 			}
 		}
 

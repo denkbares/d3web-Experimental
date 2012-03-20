@@ -38,12 +38,12 @@
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
 		<parameter id="css" value="defi.css" />
 	</extension>
-
-    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="DataMarkup">
-		<parameter id="class" value="de.knowwe.defi.readbutton.DataMarkup" />
-		<parameter id="name" value="DataMarkup" />
-		<parameter id="description" value="Type DataMarkup" />
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ReadbuttonType">
+		<parameter id="class" value="de.knowwe.defi.readbutton.ReadbuttonType" />
+		<parameter id="name" value="ReadbuttonType" />
+		<parameter id="description" value="Type ReadbuttonType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />
@@ -275,11 +275,21 @@
     </extension>
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-        id="ReadPagesSaveAction">
+        id="ReadbuttonSubmitAction">
         <parameter id="class"
-            value="de.knowwe.defi.readbutton.ReadPagesSaveAction" />
-        <parameter id="name" value="ReadPagesSaveAction" />
-        <parameter id="description" value="Action ReadPagesSaveAction" />
+            value="de.knowwe.defi.readbutton.ReadbuttonSubmitAction" />
+        <parameter id="name" value="ReadbuttonSubmitAction" />
+        <parameter id="description" value="Action ReadbuttonSubmitAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="ReadbuttonLinkClickedAction">
+        <parameter id="class"
+            value="de.knowwe.defi.readbutton.ReadbuttonLinkClickedAction" />
+        <parameter id="name" value="ReadbuttonLinkClickedAction" />
+        <parameter id="description" value="Action ReadbuttonLinkClickedAction" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>

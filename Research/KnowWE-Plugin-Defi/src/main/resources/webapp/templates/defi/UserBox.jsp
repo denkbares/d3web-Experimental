@@ -5,7 +5,6 @@
 <%@page import="de.knowwe.kdom.defaultMarkup.DefaultMarkupType"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="de.knowwe.defi.aboutMe.AboutMe"%>
-<%@page import="de.knowwe.defi.readbutton.DataMarkup"%>
 <%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
 <%@page import="de.knowwe.core.kdom.parsing.Section"%>
 <%@page import="de.knowwe.core.kdom.parsing.Sections" %>
