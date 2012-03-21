@@ -42,6 +42,7 @@ public class TableEntryType extends DefaultMarkupType {
 	static {
 		m = new DefaultMarkup("Tabellendaten");
 		m.addContentType(new TableEntryContentType());
+		m.addAnnotation("date", false);
 		m.addAnnotation("tableid", true);
 	}
 

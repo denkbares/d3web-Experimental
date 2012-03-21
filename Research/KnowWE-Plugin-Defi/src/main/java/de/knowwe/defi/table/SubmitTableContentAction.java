@@ -20,7 +20,9 @@
 package de.knowwe.defi.table;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,8 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.defi.utils.ReplaceSectionUtils;
+import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 public class SubmitTableContentAction extends AbstractAction {
 
@@ -40,8 +44,10 @@ public class SubmitTableContentAction extends AbstractAction {
 
 	private String createNewMarkupString(String tableid, List<Map<Integer, String>> inputData) {
 		StringBuffer newContent = new StringBuffer();
+		String date = (new SimpleDateFormat("dd.MM.yyy, hh:mm")).format(new Date());
 		newContent.append("%%Tabellendaten\n");
 		newContent.append(createMarkupContent(inputData));
+		newContent.append("@date:" + date + "\n");
 		newContent.append("@tableid:" + tableid + "\n");
 		newContent.append("%\n");
 		return newContent.toString();
@@ -126,6 +132,11 @@ public class SubmitTableContentAction extends AbstractAction {
 			else {
 				// override content block
 				nodesMap.put(contentSection.getID(), createMarkupContent(inputDataAll));
+				// override date
+				String date = (new SimpleDateFormat("dd.MM.yyy, HH:mm")).format(new Date());
+				Section<? extends AnnotationContentType> dateSec = DefaultMarkupType.getAnnotationContentSection(
+						contentSection.getFather().getFather(), "date");
+				nodesMap.put(dateSec.getID(), date);
 			}
 
 			// submit change
