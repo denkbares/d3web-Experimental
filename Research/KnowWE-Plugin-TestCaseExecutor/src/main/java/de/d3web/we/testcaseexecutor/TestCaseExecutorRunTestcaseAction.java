@@ -112,7 +112,7 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 			// render the result
 			t.setKb(kb);
 			t.setRepository(repo);
-			TestCaseRunAction.renderTests(context, t);
+			TestCaseExecutorUtils.renderTests(context, t);
 
 			// append back button
 			result.append("<br />");
@@ -138,7 +138,8 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 	 */
 	private void executeFromSection(UserActionContext context, String sectionID) throws IOException {
 
-		Section<TestCaseExecutorType> section = (Section<TestCaseExecutorType>) Sections.getSection(sectionID);
+		Section<TestCaseExecutorType> section = Sections.cast(Sections.getSection(sectionID),
+				TestCaseExecutorType.class);
 
 		TestCaseAnalysis analysis = new TestCaseAnalysis();
 		TestCaseExecutorType.execute(section, analysis);
@@ -150,7 +151,7 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 
 		ResourceBundle rb = D3webUtils.getD3webBundle(context);
 		MessageFormat mf = new MessageFormat("");
-		String result2 = TestCaseRunAction.renderTestAnalysisResult(t, result, rb, mf);
+		String result2 = TestCaseExecutorUtils.renderTestAnalysisResult(t, result, rb, mf);
 
 		context.getWriter().write(result2);
 

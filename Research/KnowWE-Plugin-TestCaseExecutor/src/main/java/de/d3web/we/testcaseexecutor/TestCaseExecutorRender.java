@@ -73,7 +73,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 
 		ResourceBundle rb = D3webUtils.getD3webBundle(context);
 		MessageFormat mf = new MessageFormat("");
-		String analysisResult = TestCaseRunAction.renderTestAnalysisResult(t, result, rb, mf);
+		String analysisResult = TestCaseExecutorUtils.renderTestAnalysisResult(t, result, rb, mf);
 		string.append(KnowWEUtils.maskHTML(analysisResult));
 
 	}
