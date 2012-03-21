@@ -64,7 +64,7 @@ public class InsertAdditionalTableVersionAction extends AbstractAction {
 		// generate empty inputs
 		Map<Integer, String> emptyInputData = new HashMap<Integer, String>();
 		for (int i = 0; i < numberOfInputs; i++) {
-			emptyInputData.put(new Integer(i), "-");
+			emptyInputData.put(new Integer(i), "");
 		}
 
 		// create new markup for empty input data
