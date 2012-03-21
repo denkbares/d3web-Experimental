@@ -46,7 +46,7 @@ public class SubmitTableContentAction extends AbstractAction {
 		StringBuffer newContent = new StringBuffer();
 		String date = (new SimpleDateFormat("dd.MM.yyy, hh:mm")).format(new Date());
 		newContent.append("%%Tabellendaten\n");
-		newContent.append(createMarkupContent(inputData));
+		newContent.append(createMarkupContent(inputData) + "\n");
 		newContent.append("@date:" + date + "\n");
 		newContent.append("@tableid:" + tableid + "\n");
 		newContent.append("%\n");
@@ -60,7 +60,7 @@ public class SubmitTableContentAction extends AbstractAction {
 			newContent.append(renderMarkupForOneVersion(versionCounter, map));
 			versionCounter++;
 		}
-		newContent.append("-\n");
+		newContent.append("-");
 		return newContent.toString();
 	}
 
