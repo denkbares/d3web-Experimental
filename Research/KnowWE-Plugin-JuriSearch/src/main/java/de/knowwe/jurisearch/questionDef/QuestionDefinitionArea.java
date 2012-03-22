@@ -29,7 +29,6 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.jurisearch.JuriRule;
 import de.d3web.we.object.QASetDefinition;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.d3web.we.util.UserSupportUtil;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.compile.terminology.TerminologyManager;
@@ -52,6 +51,7 @@ import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
+import de.knowwe.usersupport.util.UserSupportUtil;
 
 public class QuestionDefinitionArea extends AbstractType {
 
