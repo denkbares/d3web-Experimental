@@ -216,7 +216,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 				Environment.getInstance().getContext(), null));
 		String[] users = wc.getAllUsers();
 		String[] activeUsers = wc.getAllActiveUsers();
-		List<String> admins = getAdmins(wc.getSavePath());
+		List<String> admins = getAdmins();
 
 		for (int i = 0; i < users.length; i++) {
 			// filter displayed users
@@ -567,11 +567,12 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	 * Get all admins.
 	 */
 	@SuppressWarnings("unchecked")
-	private List<String> getAdmins(String wikiPath) {
+	private List<String> getAdmins() {
+		JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
+				Environment.getInstance().getContext(), null));
 		List<String> admins = new LinkedList<String>();
-
 		SAXBuilder sxbuild = new SAXBuilder();
-		InputSource is = new InputSource(wikiPath + "groupdatabase.xml");
+		InputSource is = new InputSource(wc.getWikiProperty("jspwiki.xmlGroupDatabaseFile"));
 		org.jdom.Document doc;
 		try {
 			doc = sxbuild.build(is);
@@ -582,7 +583,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 				if (elm.getAttributeValue("name").equals("Admin")) {
 					groups = elm.getChildren();
 					for (org.jdom.Element elem : groups) {
-						admins.add(getWikiName(elem.getAttributeValue("principal"), wikiPath));
+						admins.add(getWikiName(elem.getAttributeValue("principal")));
 					}
 				}
 			}
@@ -599,9 +600,11 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	 * Transform loginName into WikiName.
 	 */
 	@SuppressWarnings("unchecked")
-	private String getWikiName(String loginName, String wikiPath) {
+	private String getWikiName(String loginName) {
+		JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
+				Environment.getInstance().getContext(), null));
 		SAXBuilder sxbuild = new SAXBuilder();
-		InputSource is = new InputSource(wikiPath + "userdatabase.xml");
+		InputSource is = new InputSource(wc.getWikiProperty("jspwiki.xmlUserDatabaseFile"));
 		org.jdom.Document doc;
 		try {
 			doc = sxbuild.build(is);
