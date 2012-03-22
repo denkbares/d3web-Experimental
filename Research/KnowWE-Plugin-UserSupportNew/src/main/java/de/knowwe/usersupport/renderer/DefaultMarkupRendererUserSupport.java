@@ -16,28 +16,34 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.we.renderer;
+package de.knowwe.usersupport.renderer;
 
+import de.d3web.we.tables.InnerTable;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 
 /**
+ * This is a workaround class. Because the import/export-buttons will not be
+ * functional inside the DefaultMarkup.
  * 
  * @author Johannes Dienst
- * @created 14.10.2011
+ * @created 15.12.2011
  */
-public class SpanIDRenderer implements Renderer
+public class DefaultMarkupRendererUserSupport implements Renderer
 {
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string)
+	public void render(Section<?> section, UserContext user, StringBuilder string)
 	{
-		string.append(KnowWEUtils.maskHTML("<span id='" + sec.getID() + "'>"));
-		DelegateRenderer.getInstance().render(sec, user, string);
-		string.append(KnowWEUtils.maskHTML("</span>"));
+		new DefaultMarkupRenderer().render(section, user, string);
+		Section<InnerTable> iT = Sections.findSuccessor(section, InnerTable.class);
+		StringBuilder buildi = new StringBuilder();
+		TableRenderer.renderExportImportButton(buildi, iT);
+		string.append(KnowWEUtils.maskHTML(buildi.toString()));
 	}
 
 }

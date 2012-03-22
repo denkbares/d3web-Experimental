@@ -18,10 +18,10 @@
  */
 package de.d3web.we.tables;
 
-import de.d3web.we.renderer.DefaultMarkupRendererUserSupport;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.usersupport.renderer.DefaultMarkupRendererUserSupport;
 
 /**
  * Header: Contains the rules Leftcolumn is divided in 2 sections: 1.

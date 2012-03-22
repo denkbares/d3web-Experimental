@@ -18,7 +18,6 @@
  */
 package de.d3web.we.tables;
 
-import de.d3web.we.renderer.TableRenderer;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.basicType.CommentLineType;
 import de.knowwe.core.kdom.basicType.LineBreak;
@@ -27,6 +26,7 @@ import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.UnquotedExpressionFinder;
+import de.knowwe.usersupport.renderer.TableRenderer;
 
 
 /**

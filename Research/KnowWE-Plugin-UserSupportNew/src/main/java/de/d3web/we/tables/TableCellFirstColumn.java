@@ -23,7 +23,6 @@ import java.util.List;
 
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.Finding;
-import de.d3web.we.renderer.TableCellFirstColumnRenderer;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -31,6 +30,7 @@ import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
+import de.knowwe.usersupport.renderer.TableCellFirstColumnRenderer;
 
 /**
  * 
