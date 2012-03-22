@@ -25,10 +25,10 @@ import java.util.List;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.we.renderer.TableRenderer;
-import de.d3web.we.tables.action.TableExportAction;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.usersupport.tables.action.TableExportAction;
 
 /**
  * Utils class that offers static-methods for tables.

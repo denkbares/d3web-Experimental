@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.we.tables.action;
+package de.knowwe.usersupport.tables.action;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,12 +28,12 @@ import de.d3web.we.tables.CausalDiagnosisScore;
 import de.d3web.we.tables.DecisionTable;
 import de.d3web.we.tables.HeuristicDiagnosisTable;
 import de.d3web.we.tables.TableUtils;
-import de.d3web.we.tables.poi.PoiUtils;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.usersupport.poi.PoiUtils;
 
 
 /**

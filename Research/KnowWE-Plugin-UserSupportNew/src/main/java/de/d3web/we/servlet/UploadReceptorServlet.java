@@ -37,9 +37,9 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import de.d3web.we.tables.poi.PoiUtils;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.ActionContext;
+import de.knowwe.usersupport.poi.PoiUtils;
 
 
 /**
