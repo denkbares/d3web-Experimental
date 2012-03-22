@@ -18,7 +18,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
         id="UserSupportInstantEditToolProvider">
         <parameter id="class"
-            value="de.d3web.we.instantedit.UserSupportInstantEditToolProvider" />
+            value="de.knowwe.usersupport.instantedit.UserSupportInstantEditToolProvider" />
         <parameter id="name" value="UserSupportInstantEditToolProvider" />
         <parameter id="description"
             value="Offers a button for quick editing a certain section." />
