@@ -44,7 +44,7 @@ public class SubmitTableContentAction extends AbstractAction {
 
 	private String createNewMarkupString(String tableid, List<Map<Integer, String>> inputData) {
 		StringBuffer newContent = new StringBuffer();
-		String date = (new SimpleDateFormat("dd.MM.yyy, hh:mm")).format(new Date());
+		String date = (new SimpleDateFormat("dd.MM.yyy, HH:mm")).format(new Date());
 		newContent.append("%%Tabellendaten\n");
 		newContent.append(createMarkupContent(inputData) + "\n");
 		newContent.append("@date:" + date + "\n");
