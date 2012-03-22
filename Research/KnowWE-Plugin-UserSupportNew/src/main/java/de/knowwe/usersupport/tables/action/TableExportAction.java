@@ -24,16 +24,16 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ResourceBundle;
 
-import de.d3web.we.tables.CausalDiagnosisScore;
-import de.d3web.we.tables.DecisionTable;
-import de.d3web.we.tables.HeuristicDiagnosisTable;
-import de.d3web.we.tables.TableUtils;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.usersupport.poi.PoiUtils;
+import de.knowwe.usersupport.tables.CausalDiagnosisScore;
+import de.knowwe.usersupport.tables.DecisionTable;
+import de.knowwe.usersupport.tables.HeuristicDiagnosisTable;
+import de.knowwe.usersupport.tables.TableUtils;
 
 
 /**

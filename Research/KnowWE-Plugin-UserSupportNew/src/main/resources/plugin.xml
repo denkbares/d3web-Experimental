@@ -48,7 +48,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="CausalDiagnosisScoreMarkup">
 		<parameter id="class"
-			value="de.d3web.we.tables.CausalDiagnosisScoreMarkup" />
+			value="de.knowwe.usersupport.tables.CausalDiagnosisScoreMarkup" />
 		<parameter id="name" value="CausalDiagnosisScoreMarkup" />
 		<parameter id="description" value="Type CausalDiagnosisScoreMarkup" />
 		<parameter id="version" value="1.0" />
@@ -61,7 +61,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="DecisionTableMarkup">
 		<parameter id="class"
-			value="de.d3web.we.tables.DecisionTableMarkup" />
+			value="de.knowwe.usersupport.tables.DecisionTableMarkup" />
 		<parameter id="name" value="DecisionTableMarkup" />
 		<parameter id="description" value="Type DecisionTableMarkup" />
 		<parameter id="version" value="1.0" />
@@ -75,7 +75,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="HeuristicDiagnosisTableMarkup">
 		<parameter id="class"
-			value="de.d3web.we.tables.HeuristicDiagnosisTableMarkup" />
+			value="de.knowwe.usersupport.tables.HeuristicDiagnosisTableMarkup" />
 		<parameter id="name" value="HeuristicDiagnosisMarkup" />
 		<parameter id="description" value="Type HeuristicDiagnosisTableMarkup" />
 		<parameter id="version" value="1.0" />

@@ -16,34 +16,30 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.usersupport.renderer;
+package de.knowwe.usersupport.tables;
 
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
+import de.d3web.we.kdom.rules.action.SetQuestionValue;
+import de.d3web.we.object.ScoreValue;
 import de.knowwe.core.kdom.rendering.Renderer;
-import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
-import de.knowwe.usersupport.tables.InnerTable;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
- * This is a workaround class. Because the import/export-buttons will not be
- * functional inside the DefaultMarkup.
+ * 
+ * Normal cell of an {@link InnerTable}. Can
+ * contain {@link SetQuestionValue} and {@link ScoreValue}
  * 
  * @author Johannes Dienst
- * @created 15.12.2011
+ * @created 28.11.2011
  */
-public class DefaultMarkupRendererUserSupport implements Renderer
+public class TableNormalCell extends TableCell
 {
 
-	@Override
-	public void render(Section<?> section, UserContext user, StringBuilder string)
-	{
-		new DefaultMarkupRenderer().render(section, user, string);
-		Section<InnerTable> iT = Sections.findSuccessor(section, InnerTable.class);
-		StringBuilder buildi = new StringBuilder();
-		TableRenderer.renderExportImportButton(buildi, iT);
-		string.append(KnowWEUtils.maskHTML(buildi.toString()));
-	}
+	public static final Renderer INDIVIDUAL_RENDERER = StyleRenderer.CONTENT;
 
+	public TableNormalCell()
+	{
+		super();
+		this.addChildType(new SetQuestionValue());
+		this.addChildType(new ScoreValue());
+	}
 }

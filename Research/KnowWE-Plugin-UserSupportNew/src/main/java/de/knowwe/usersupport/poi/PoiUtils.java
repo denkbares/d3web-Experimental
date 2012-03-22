@@ -49,16 +49,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import de.d3web.we.knowledgebase.KnowledgeBaseType;
-import de.d3web.we.tables.CausalDiagnosisScore;
-import de.d3web.we.tables.DecisionTable;
-import de.d3web.we.tables.HeuristicDiagnosisTable;
-import de.d3web.we.tables.ITable;
-import de.d3web.we.tables.InnerTable;
-import de.d3web.we.tables.TableCell;
-import de.d3web.we.tables.TableHeaderCell;
-import de.d3web.we.tables.TableHeaderLine;
-import de.d3web.we.tables.TableLine;
-import de.d3web.we.tables.TableUtils;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.ActionContext;
@@ -68,6 +58,16 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.usersupport.tables.CausalDiagnosisScore;
+import de.knowwe.usersupport.tables.DecisionTable;
+import de.knowwe.usersupport.tables.HeuristicDiagnosisTable;
+import de.knowwe.usersupport.tables.ITable;
+import de.knowwe.usersupport.tables.InnerTable;
+import de.knowwe.usersupport.tables.TableCell;
+import de.knowwe.usersupport.tables.TableHeaderCell;
+import de.knowwe.usersupport.tables.TableHeaderLine;
+import de.knowwe.usersupport.tables.TableLine;
+import de.knowwe.usersupport.tables.TableUtils;
 
 
 /**

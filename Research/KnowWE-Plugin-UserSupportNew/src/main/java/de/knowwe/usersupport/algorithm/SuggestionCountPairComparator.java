@@ -16,32 +16,34 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.usersupport.correction;
+package de.knowwe.usersupport.algorithm;
 
-import java.util.List;
-
-import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.usersupport.algorithm.Suggestion;
+import java.util.Comparator;
 
 
 /**
  * 
+ * To sort {@link SuggestionValuePairs} according to their value.
+ * 
  * @author Johannes Dienst
- * @created 19.09.2011
+ * @created 22.11.2011
  */
-public interface ApproximateCorrectionProvider {
+public class SuggestionCountPairComparator implements Comparator<SuggestionCountPair>
+{
 
-
-	/**
-	 * Returns a list of suggestions for a given section of an article,
-	 * that have a levenshtein distance of no more than <tt>threshold</tt>.
-	 * 
-	 * @param article The article the misspelled reference is in
-	 * @param section The section the misspelled reference is in
-	 * @param threshold The maximium Levenshtein distance suggestions can have. (KnowWE includes an implementation in secondstring/com.wcohen.ss.Levenstein)
-	 * @return A list of {@link Suggestion} objects containing the found suggestions and their distances.
-	 */
-	public List<Suggestion> getSuggestions(Article article, Section<?> section);
+	@Override
+	public int compare(SuggestionCountPair o1, SuggestionCountPair o2) {
+		
+		// compare the count first
+		if (o1.getCount() > o2.getCount()) return -1;
+		else if (o1.getCount() < o2.getCount()) return 1;
+		
+		// compare the distance if count is equal
+		double d1 = o1.getSuggestion().getDistance();
+		double d2 = o2.getSuggestion().getDistance();
+		if (d1 > d2) return -1;
+		else if (d1 < d2) return 1;
+		else return 0;
+	}
 
 }

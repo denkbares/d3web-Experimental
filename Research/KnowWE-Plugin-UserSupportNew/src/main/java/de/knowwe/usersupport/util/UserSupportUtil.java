@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.d3web.we.algorithm.Suggestion;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -30,6 +29,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolUtils;
+import de.knowwe.usersupport.algorithm.Suggestion;
 
 /**
  * 

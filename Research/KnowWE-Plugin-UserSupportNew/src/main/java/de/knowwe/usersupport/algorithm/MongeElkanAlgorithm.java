@@ -16,32 +16,48 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.usersupport.correction;
+package de.knowwe.usersupport.algorithm;
 
 import java.util.List;
+import java.util.PriorityQueue;
 
-import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.usersupport.algorithm.Suggestion;
+import com.wcohen.ss.MongeElkan;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 19.09.2011
+ * @created 04.10.2011
  */
-public interface ApproximateCorrectionProvider {
+public class MongeElkanAlgorithm implements MatchingAlgorithm
+{
 
+	@Override
+	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> termDefinitions)
+	{
 
-	/**
-	 * Returns a list of suggestions for a given section of an article,
-	 * that have a levenshtein distance of no more than <tt>threshold</tt>.
-	 * 
-	 * @param article The article the misspelled reference is in
-	 * @param section The section the misspelled reference is in
-	 * @param threshold The maximium Levenshtein distance suggestions can have. (KnowWE includes an implementation in secondstring/com.wcohen.ss.Levenstein)
-	 * @return A list of {@link Suggestion} objects containing the found suggestions and their distances.
-	 */
-	public List<Suggestion> getSuggestions(Article article, Section<?> section);
+		MongeElkan mE = new MongeElkan();
 
+		PriorityQueue<Suggestion> suggestions =
+				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
+
+		for (String match : termDefinitions)
+		{
+			double score = mE.score(toMatch, match);
+			// TODO threshold is experimental
+			if (score >= threshold) {
+				suggestions.add(new Suggestion(match, score));
+			}
+		}
+
+		List<Suggestion> toReturn = AlgorithmUtil.reduceSuggestionCount(maxCount, suggestions);
+
+		return toReturn;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "MongeElkanAlgorithm";
+	}
 }

@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import de.d3web.we.algorithm.DialogComponent;
-import de.d3web.we.algorithm.Suggestion;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.usersupport.algorithm.DialogComponent;
+import de.knowwe.usersupport.algorithm.Suggestion;
 import de.knowwe.usersupport.util.UserSupportUtil;
 
 /**

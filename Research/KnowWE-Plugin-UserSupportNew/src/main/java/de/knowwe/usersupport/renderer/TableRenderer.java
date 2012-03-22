@@ -21,19 +21,19 @@ package de.knowwe.usersupport.renderer;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import de.d3web.we.tables.InnerTable;
-import de.d3web.we.tables.TableCell;
-import de.d3web.we.tables.TableCellFirstColumn;
-import de.d3web.we.tables.TableHeaderCell;
-import de.d3web.we.tables.TableHeaderLine;
-import de.d3web.we.tables.TableLine;
-import de.d3web.we.tables.TableNormalCell;
-import de.d3web.we.tables.TableUtils;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.usersupport.tables.InnerTable;
+import de.knowwe.usersupport.tables.TableCell;
+import de.knowwe.usersupport.tables.TableCellFirstColumn;
+import de.knowwe.usersupport.tables.TableHeaderCell;
+import de.knowwe.usersupport.tables.TableHeaderLine;
+import de.knowwe.usersupport.tables.TableLine;
+import de.knowwe.usersupport.tables.TableNormalCell;
+import de.knowwe.usersupport.tables.TableUtils;
 
 /**
  * For Rendering the Tables to HTML.

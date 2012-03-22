@@ -16,32 +16,23 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.usersupport.correction;
+package de.knowwe.usersupport.algorithm;
 
-import java.util.List;
-
-import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.usersupport.algorithm.Suggestion;
+import java.util.Comparator;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 19.09.2011
+ * @created 22.11.2011
  */
-public interface ApproximateCorrectionProvider {
+public class SuggestionComparator implements Comparator<Suggestion>
+{
 
-
-	/**
-	 * Returns a list of suggestions for a given section of an article,
-	 * that have a levenshtein distance of no more than <tt>threshold</tt>.
-	 * 
-	 * @param article The article the misspelled reference is in
-	 * @param section The section the misspelled reference is in
-	 * @param threshold The maximium Levenshtein distance suggestions can have. (KnowWE includes an implementation in secondstring/com.wcohen.ss.Levenstein)
-	 * @return A list of {@link Suggestion} objects containing the found suggestions and their distances.
-	 */
-	public List<Suggestion> getSuggestions(Article article, Section<?> section);
+	@Override
+	public int compare(Suggestion o1, Suggestion o2)
+	{
+		return o1.compareTo(o2);
+	}
 
 }
