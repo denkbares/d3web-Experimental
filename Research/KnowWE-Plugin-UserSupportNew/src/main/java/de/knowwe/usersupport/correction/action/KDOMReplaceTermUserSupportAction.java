@@ -16,13 +16,12 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.we.correction.action;
+package de.knowwe.usersupport.correction.action;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.d3web.we.correction.ApproximateCorrectionProvider;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
@@ -32,6 +31,7 @@ import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.usersupport.correction.ApproximateCorrectionProvider;
 
 /**
  * 
