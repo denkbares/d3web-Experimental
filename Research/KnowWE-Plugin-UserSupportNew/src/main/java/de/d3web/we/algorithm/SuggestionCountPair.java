@@ -57,7 +57,7 @@ public class SuggestionCountPair
 	/**
 	 * When the s2 is the same Suggestion as
 	 * stored in this container. The distance
-	 * value is set to the better of the two
+	 * value is set to the higher of the two.
 	 * 
 	 * @created 09.02.2012
 	 * @param s2

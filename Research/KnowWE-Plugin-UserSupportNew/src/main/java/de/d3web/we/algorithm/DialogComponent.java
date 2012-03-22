@@ -86,7 +86,7 @@ public class DialogComponent
 		}
 
 		// Add all known Algorithms
-		algorithmsToken.add(new DoubleMetaphoneAlgorithm());
+//		algorithmsToken.add(new DoubleMetaphoneAlgorithm());
 		algorithmsToken.add(new JaroWinklerAlgorithm());
 		algorithmsToken.add(new LevenshteinAlgorithm());
 		algorithmsToken.add(new QGramAlgorithm());
@@ -96,6 +96,8 @@ public class DialogComponent
 		algorithmsPhrase.add(new MongeElkanAlgorithm());
 		algorithmsPhrase.add(new SmithWatermanAlgorithm());
 		algorithmsPhrase.add(new SortedWinklerAlgorithm());
+//		algorithmsPhrase.add(new PermutedWinkler());
+		algorithmsPhrase.add(new NeedlemanWunschAlgorithm());
 	}
 
 	/**

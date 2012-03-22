@@ -24,9 +24,9 @@ import java.util.List;
 
 import de.d3web.we.algorithm.DialogComponent;
 import de.d3web.we.algorithm.Suggestion;
-import de.d3web.we.util.UserSupportUtil;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.usersupport.util.UserSupportUtil;
 
 /**
  * 
