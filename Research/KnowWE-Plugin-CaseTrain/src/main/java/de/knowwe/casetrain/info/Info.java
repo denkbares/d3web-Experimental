@@ -22,8 +22,10 @@ package de.knowwe.casetrain.info;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import de.knowwe.casetrain.info.Question.QuestionType;
 import de.knowwe.casetrain.type.Closure;
@@ -31,7 +33,6 @@ import de.knowwe.casetrain.type.Introduction;
 import de.knowwe.casetrain.type.general.BlockMarkupContent;
 import de.knowwe.casetrain.type.general.BlockMarkupContentRenderer;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
-import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.type.general.Title;
 import de.knowwe.casetrain.type.multimedia.Audio;
 import de.knowwe.casetrain.type.multimedia.Image;
@@ -79,7 +80,7 @@ public class Info extends BlockMarkupType {
 			@Override
 			public void render(Section<?> sec, UserContext user, StringBuilder string) {
 				string.append(KnowWEUtils.maskHTML("<div class='"
-						+ ((SubblockMarkup) sec.get()).getCSSClass()
+						+ ((Info) sec.get()).getCSSClass()
 						+ "'>"));
 				string.append(KnowWEUtils.maskHTML("<div class='Infostart'></div>"));
 				Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
@@ -139,14 +140,19 @@ public class Info extends BlockMarkupType {
 				if (einleitung == null) {
 					messages.add(Utils.missingComponentError(Introduction.class.getSimpleName()));
 				}
-				Section<Closure> abschluss = Sections.findSuccessor(s.getArticle().getSection(),
+				Section<Closure> abschluss = Sections.findSuccessor(
+						s.getArticle().getSection(),
 						Closure.class);
 				if (abschluss == null) {
 					messages.add(Utils.missingComponentError(Introduction.class.getSimpleName()));
 				}
 				// ///////////////////////////////////////////////////////////////
 
-				return messages;
+				// reduce duplicate messages
+				Set<Message> set = new HashSet<Message>();
+				set.addAll(messages);
+				return set;
+
 			}
 
 			/**
@@ -229,8 +235,8 @@ public class Info extends BlockMarkupType {
 							if (!(AnswersBlockValidator.getInstance()
 									.getTypesMultiple().contains(typ))) {
 								messages.add(Utils.invalidArgumentError(
-												bundle.getString("NO_MULTIPLE_ANSWERS")
-														+ typ)
+										bundle.getString("NO_MULTIPLE_ANSWERS")
+												+ typ)
 										);
 							}
 
@@ -262,11 +268,11 @@ public class Info extends BlockMarkupType {
 
 				if (erklMissing) {
 					messages.add(Utils.missingComponentWarning(
-									Explanation.class.getSimpleName()));
+							Explanation.class.getSimpleName()));
 				}
 				if (antwortenMissing) {
 					messages.add(Utils.missingComponentWarning(
-									AnswersBlock.class.getSimpleName()));
+							AnswersBlock.class.getSimpleName()));
 				}
 				String typ =
 						Sections.findSuccessor(actual, QuestionType.class)
