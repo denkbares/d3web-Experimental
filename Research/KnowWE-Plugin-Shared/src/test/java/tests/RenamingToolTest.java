@@ -100,7 +100,7 @@ public class RenamingToolTest extends TestCase {
 		for (int i = 0; i < 3; i++) {
 			actual = WordBasedRenameFinding.getAdditionalContext
 						(start, "a", i, 3,
-								article.getSection().getText());
+								article.getRootSection().getText());
 			assertEquals("After context wrong", expected[i], actual);
 		}
 
@@ -110,7 +110,7 @@ public class RenamingToolTest extends TestCase {
 		for (int i = 0; i < 4; i++) {
 			actual = WordBasedRenameFinding.getAdditionalContext
 						(start, "p", i, 3,
-								article.getSection().getText());
+								article.getRootSection().getText());
 			assertEquals("Previous context wrong", expected[i], actual);
 		}
 
@@ -134,7 +134,7 @@ public class RenamingToolTest extends TestCase {
 		for (int i = 0; i < 5; i++) {
 			actual = WordBasedRenameFinding.getAdditionalContext
 						(start, "a", i, 3,
-								article.getSection().getText());
+								article.getRootSection().getText());
 			assertEquals("After context wrong", expected[i], actual);
 		}
 
@@ -145,7 +145,7 @@ public class RenamingToolTest extends TestCase {
 		for (int i = 0; i < 5; i++) {
 			actual = WordBasedRenameFinding.getAdditionalContext
 						(start, "p", i, 3,
-								article.getSection().getText());
+								article.getRootSection().getText());
 			assertEquals("Previous context wrong", expected[i], actual);
 		}
 	}

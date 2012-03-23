@@ -92,7 +92,7 @@ public class RDF2GoSyncTest {
 	private Section<?> getDummySection() {
 		Article article = Article.createArticle("Wayne", "Juckts",
 				Environment.getInstance().getRootType(), "default_web");
-		return Section.createSection("Wayne Juckts", article, article.getSection());
+		return Section.createSection("Wayne Juckts", article, article.getRootSection());
 	}
 
 	@Test

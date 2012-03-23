@@ -106,7 +106,7 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 		// iterate over all articles
 		for (Article article : allWikiArticles) {
 			// find all GroovyCITestType sections on this article...
-			Sections.findSuccessorsOfType(article.getSection(),
+			Sections.findSuccessorsOfType(article.getRootSection(),
 					GroovyCITestType.class, sectionsList);
 		}
 		return sectionsList;

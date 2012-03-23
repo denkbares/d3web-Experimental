@@ -94,7 +94,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 	public void notify(Event event) {
 		ArticleCreatedEvent e = (ArticleCreatedEvent) event;
 		Article article = e.getArticle();
-		Section<Article> section = article.getSection();
+		Section<Article> section = article.getRootSection();
 		JuriTreeXmlGenerator jtxg = new JuriTreeXmlGenerator(section);
 	}
 

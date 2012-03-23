@@ -99,7 +99,7 @@ public class CommentRenderer implements Renderer {
 
 				// save id:
 				StringBuilder buffy = new StringBuilder();
-				sec.getArticle().getSection().collectTextsFromLeaves(buffy);
+				sec.getArticle().getRootSection().collectTextsFromLeaves(buffy);
 
 				if (title.length() > 0) {
 					pageName = clean(title);
@@ -128,7 +128,7 @@ public class CommentRenderer implements Renderer {
 									+ sec.getTitle() + "]:\\\\ \\\\" + commentContent
 							+ "</box>\n</forum>";
 
-					Section<?> forumSec = instance.getArticle(sec.getWeb(), pageName).getSection();
+					Section<?> forumSec = instance.getArticle(sec.getWeb(), pageName).getRootSection();
 
 					List<Section<XMLTail>> found = new ArrayList<Section<XMLTail>>();
 					Sections.findSuccessorsOfType(forumSec, XMLTail.class, found);

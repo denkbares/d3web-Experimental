@@ -93,7 +93,7 @@ public class ReplaceSectionUtils {
 		Article article = Environment.getInstance().getArticle(
 				context.getWeb(),
 				title);
-		collectTextAndReplaceNode(article.getSection(), sectionsMapForCurrentTitle,
+		collectTextAndReplaceNode(article.getRootSection(), sectionsMapForCurrentTitle,
 				newText);
 		return newText.toString();
 	}

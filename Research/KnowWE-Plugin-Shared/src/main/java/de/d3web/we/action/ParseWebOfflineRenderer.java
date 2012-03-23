@@ -64,7 +64,7 @@ public class ParseWebOfflineRenderer extends AbstractAction {
 					.getArticleManager(webname).registerArticle(
 							article);
 
-			boolean hasErrors = article.getSection().hasErrorInSubtree(article);
+			boolean hasErrors = article.getRootSection().hasErrorInSubtree(article);
 
 			if (hasErrors) {
 				reports.append("<p class=\"box error\">");

@@ -106,7 +106,7 @@ public class HermesData {
 				topic);
 
 		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-		Sections.findSuccessorsOfType(article.getSection(),
+		Sections.findSuccessorsOfType(article.getRootSection(),
 				MappingContentType.class, found);
 
 		String dbpediaMapping = "";
@@ -145,7 +145,7 @@ public class HermesData {
 				topic);
 
 		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-		Sections.findSuccessorsOfType(article.getSection(),
+		Sections.findSuccessorsOfType(article.getRootSection(),
 				MappingContentType.class, found);
 
 		for (Section<MappingContentType> t : found) {
@@ -172,7 +172,7 @@ public class HermesData {
 				topic);
 
 		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-		Sections.findSuccessorsOfType(article.getSection(),
+		Sections.findSuccessorsOfType(article.getRootSection(),
 				MappingContentType.class, found);
 
 		String hermesMapping = "";
@@ -206,7 +206,7 @@ public class HermesData {
 					web, topic);
 
 			List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-			Sections.findSuccessorsOfType(article.getSection(),
+			Sections.findSuccessorsOfType(article.getRootSection(),
 					MappingContentType.class, found);
 
 			for (Section<MappingContentType> t : found) {
@@ -241,7 +241,7 @@ public class HermesData {
 					web, topic);
 
 			List<Section<IgnoreContentType>> found = new Vector<Section<IgnoreContentType>>();
-			Sections.findSuccessorsOfType(article.getSection(),
+			Sections.findSuccessorsOfType(article.getRootSection(),
 					IgnoreContentType.class, found);
 
 			for (Section<IgnoreContentType> t : found) {

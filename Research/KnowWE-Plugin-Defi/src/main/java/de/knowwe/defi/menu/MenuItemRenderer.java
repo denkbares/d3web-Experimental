@@ -182,7 +182,7 @@ public class MenuItemRenderer implements Renderer {
 				"Zeitplan");
 		if (zeitplanArticle != null) {
 			Section<TimeTableMarkup> timetable = Sections.findSuccessor(
-					zeitplanArticle.getSection(), TimeTableMarkup.class);
+					zeitplanArticle.getRootSection(), TimeTableMarkup.class);
 			if (timetable != null) {
 				List<Date> dates = TimeTableMarkup.getDates(timetable);
 				Date current = new Date();

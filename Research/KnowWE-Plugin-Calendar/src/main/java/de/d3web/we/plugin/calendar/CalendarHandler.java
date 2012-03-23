@@ -81,7 +81,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 			if (article == null) continue; // TODO perhaps some dates are not
 											// imported
 
-			Sections.findSuccessorsOfTypeAsMap(article.getSection(), Appointment.class, found);
+			Sections.findSuccessorsOfTypeAsMap(article.getRootSection(), Appointment.class, found);
 
 			for (java.util.Map.Entry<String, Section<Appointment>> mapEntry : found.entrySet()) {
 				Section<?>[] s = new Section[4];

@@ -59,7 +59,7 @@ public class CompileUtils {
 	 */
 	public static Collection<Section<? extends Type>> findSectionsNotReused(Article parsedArticle) {
 		Collection<Section<? extends Type>> result = new HashSet<Section<? extends Type>>();
-		addNonReusedSection(parsedArticle.getSection(), result);
+		addNonReusedSection(parsedArticle.getRootSection(), result);
 
 		Map<Section<? extends AbstractType>, Set<Section<?>>> newImports = ImportManager.fetchNewImports();
 		for (Set<Section<?>> anImport : newImports.values()) {
@@ -94,7 +94,7 @@ public class CompileUtils {
 	public static Collection<Section<? extends Type>> findOldNonReusedSections(Article lastVersionOfArticle) {
 		Collection<Section<? extends Type>> result = new HashSet<Section<? extends Type>>();
 		if (lastVersionOfArticle == null) return result;
-		addOldNonReusedSection(lastVersionOfArticle.getSection(), result,
+		addOldNonReusedSection(lastVersionOfArticle.getRootSection(), result,
 				lastVersionOfArticle);
 
 		Map<Section<? extends AbstractType>, Set<Section<?>>> removedImports = ImportManager.fetchRemovedImports();

@@ -76,7 +76,7 @@ public class CalculateCoverageAction extends AbstractAction {
 			if (!pattern.matcher(title).matches()) continue;
 
 			List<Section<TestCaseExecutorType>> testcases = Sections.findSuccessorsOfType(
-					article.getSection(), TestCaseExecutorType.class);
+					article.getRootSection(), TestCaseExecutorType.class);
 
 			for (Section<TestCaseExecutorType> section : testcases) {
 

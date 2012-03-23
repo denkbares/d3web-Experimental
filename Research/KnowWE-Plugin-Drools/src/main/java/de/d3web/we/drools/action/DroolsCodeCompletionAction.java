@@ -230,7 +230,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 
 			// Get the RootType sections
 			List<Section<DroolsSessionRootType>> rootTypes = new ArrayList<Section<DroolsSessionRootType>>();
-			Sections.findSuccessorsOfType(article.getSection(), DroolsSessionRootType.class,
+			Sections.findSuccessorsOfType(article.getRootSection(), DroolsSessionRootType.class,
 					rootTypes);
 
 			// Search for the correct session

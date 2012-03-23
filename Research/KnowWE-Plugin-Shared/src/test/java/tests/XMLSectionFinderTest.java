@@ -62,7 +62,7 @@ public class XMLSectionFinderTest extends TestCase {
 
 		Article article = Article.createArticle(content, "Test_Article",
 				RootType.getInstance(), "default_web");
-		Section artSec = article.getSection();
+		Section artSec = article.getRootSection();
 
 		/**
 		 * The Tests.
@@ -137,7 +137,7 @@ public class XMLSectionFinderTest extends TestCase {
 		content = this.readXMLFile("0");
 		article = Article.createArticle(content, "Test_Article2", rootType,
 				"default_web");
-		artSec = article.getSection();
+		artSec = article.getRootSection();
 
 		// Test children counts
 		int expected = 3;

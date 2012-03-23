@@ -179,7 +179,7 @@ public class ParseDataAction extends AbstractAction {
 							web, noParseTopic);
 
 					List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-					 Sections.findSuccessorsOfType(article.getSection(),
+					 Sections.findSuccessorsOfType(article.getRootSection(),
 							MappingContentType.class, found);
 
 					Section<MappingContentType> lastNode = found.get(found.size() - 1);
@@ -233,7 +233,7 @@ public class ParseDataAction extends AbstractAction {
 
 					List<Section<IgnoreContentType>> found = new Vector<Section<IgnoreContentType>>();
 				    Sections.findSuccessorsOfType(
-							mgr.getArticle(ignoredTopic).getSection(), IgnoreContentType.class, found);
+							mgr.getArticle(ignoredTopic).getRootSection(), IgnoreContentType.class, found);
 
 					Map<String, String> nodesMap = new HashMap<String, String>();
 
@@ -304,7 +304,7 @@ public class ParseDataAction extends AbstractAction {
 						web, mappingTopic);
 
 				List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-				Sections.findSuccessorsOfType(article.getSection(),
+				Sections.findSuccessorsOfType(article.getRootSection(),
 						MappingContentType.class, found);
 
 				Section<MappingContentType> lastNode = found.get(found.size() - 1);

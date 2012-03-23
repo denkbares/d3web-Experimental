@@ -272,7 +272,7 @@ public class DroolsAction extends AbstractAction {
 
 			// Save the article
 			Map<String, String> map = new HashMap<String, String>();
-			map.put(article.getSection().getID(), article.getSection().getText()
+			map.put(article.getRootSection().getID(), article.getRootSection().getText()
 					+ sessionText.toString());
 			Sections.replaceSections(context, map);
 			returnMessage(context, "Session was successfully saved.", ResponseType.OK);
@@ -293,7 +293,7 @@ public class DroolsAction extends AbstractAction {
 
 			// Get the RootType sections
 			List<Section<DroolsSessionRootType>> rootTypes = new ArrayList<Section<DroolsSessionRootType>>();
-			Sections.findSuccessorsOfType(article.getSection(),
+			Sections.findSuccessorsOfType(article.getRootSection(),
 					DroolsSessionRootType.class,
 					rootTypes);
 

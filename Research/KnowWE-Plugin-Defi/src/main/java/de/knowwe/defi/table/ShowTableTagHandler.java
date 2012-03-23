@@ -115,7 +115,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 				Environment.DEFAULT_WEB).getArticles();
 		for (Article article : articles) {
 			List<Section<DefineTableMarkup>> tables = new ArrayList<Section<DefineTableMarkup>>();
-			Sections.findSuccessorsOfType(article.getSection(),
+			Sections.findSuccessorsOfType(article.getRootSection(),
 					DefineTableMarkup.class,
 					tables);
 			for (Section<DefineTableMarkup> table : tables) {

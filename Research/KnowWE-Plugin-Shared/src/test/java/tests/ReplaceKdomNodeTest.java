@@ -74,7 +74,7 @@ public class ReplaceKdomNodeTest extends TestCase {
 		 * Replace KdomNode.
 		 */
 		Article article = _env.getArticle("default_web", "Test_Article");
-		Section<?> artSec = article.getSection();
+		Section<?> artSec = article.getRootSection();
 		String toReplace = ((Section) artSec.getChildren().get(0)).getID();
 		Map<String, String> map = new HashMap<String, String>();
 		map.put(Attributes.WEB, "default_web");
@@ -88,7 +88,7 @@ public class ReplaceKdomNodeTest extends TestCase {
 		actionContext.getAction().execute(actionContext);
 
 		article = _env.getArticle("default_web", "Test_Article");
-		artSec = article.getSection();
+		artSec = article.getRootSection();
 		String original = artSec.getText();
 
 		/**
@@ -122,7 +122,7 @@ public class ReplaceKdomNodeTest extends TestCase {
 		// assertEquals("Article no longer valid", true, actual);
 
 		article = _env.getArticle("default_web", "Test_Article");
-		artSec = article.getSection();
+		artSec = article.getRootSection();
 		original = artSec.getText();
 
 		actual = original.contains("-aa-");

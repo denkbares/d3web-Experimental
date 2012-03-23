@@ -30,8 +30,8 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.Environment.CompilationMode;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.xml.GenericXMLObjectType;
 import dummies.TestWikiConnector;
 
@@ -73,9 +73,9 @@ public class UpdateMechanismTest extends TestCase {
 		Article article2 = Article.createArticle(content, "UpdatingTest",
 				rootType, "default_web");
 
-		List<Section<? extends Type>> sections1 = article1.getAllNodesPreOrder();
+		List<Section<?>> sections1 = Sections.getSubtreePreOrder(article1.getRootSection());
 
-		List<Section<? extends Type>> sections2 = article2.getAllNodesPreOrder();
+		List<Section<?>> sections2 = Sections.getSubtreePreOrder(article2.getRootSection());
 
 		assertEquals("Articles dont have the same amount of sections:", sections1.size(),
 				sections2.size());

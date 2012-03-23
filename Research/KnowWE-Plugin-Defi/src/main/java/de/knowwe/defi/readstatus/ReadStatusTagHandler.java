@@ -154,7 +154,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 
 		if (leftMenu != null) {
 			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
-					leftMenu.getSection(),
+					leftMenu.getRootSection(),
 					DynamicMenuMarkup.class);
 			Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
 		}
@@ -174,7 +174,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 
 		if (zeitplanArticle != null) {
 			Section<TimeTableMarkup> timetable = Sections.findSuccessor(
-					zeitplanArticle.getSection(), TimeTableMarkup.class);
+					zeitplanArticle.getRootSection(), TimeTableMarkup.class);
 			if (timetable != null) {
 				dates = TimeTableMarkup.getDates(timetable);
 			}
@@ -223,7 +223,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 
 			if (unit != null) {
 				for (Section<AbstractType> sec : Sections.findSuccessorsOfType(
-						unit.getSection(),
+						unit.getRootSection(),
 						AbstractType.class)) {
 					if (sec.getText().matches("\\[\\{KnowWEPlugin readbutton[^}]*}]")) readbuttons.add(getReadButtonID(sec.getText()));
 				}
@@ -243,7 +243,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 		String dataPagename = userName + "_data";
 		ArticleManager mgr = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
 		if (Environment.getInstance().getWikiConnector().doesPageExist(dataPagename)) {
-			Section<?> sec = mgr.getArticle(dataPagename).getSection();
+			Section<?> sec = mgr.getArticle(dataPagename).getRootSection();
 			List<Section<ReadbuttonType>> rbSecs = Sections.findSuccessorsOfType(sec,
 					ReadbuttonType.class);
 			for (Section<ReadbuttonType> rbSec : rbSecs) {

@@ -94,7 +94,7 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 		Collection<Article> articles = manager.getArticles();
 
 		for (Article article : articles) {
-			Section<Article> root = article.getSection();
+			Section<Article> root = article.getRootSection();
 
 			Map<Section<?>, Collection<Message>> errors = new HashMap<Section<?>, Collection<Message>>();
 			Map<Section<?>, Collection<Message>> warnings = new HashMap<Section<?>, Collection<Message>>();

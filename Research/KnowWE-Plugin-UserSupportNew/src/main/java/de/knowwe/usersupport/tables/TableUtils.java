@@ -144,7 +144,7 @@ public class TableUtils
 	 */
 	public static Section<ITable> getTableWithId(Article article, String id)
 	{
-		Section<Article> articleSection = article.getSection();
+		Section<Article> articleSection = article.getRootSection();
 
 		List<Section<ITable>> tables = new ArrayList<Section<ITable>>();
 		Sections.findSuccessorsOfType(articleSection, ITable.class, tables);

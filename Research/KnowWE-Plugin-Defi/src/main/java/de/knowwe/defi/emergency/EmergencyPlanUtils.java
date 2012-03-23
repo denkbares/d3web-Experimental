@@ -208,7 +208,7 @@ public class EmergencyPlanUtils {
 		try {
 			Article article = Environment.getInstance().getArticle(
 					Environment.DEFAULT_WEB, user + "_data");
-			tableEntries = Sections.findSuccessorsOfType(article.getSection(), TableEntryType.class);
+			tableEntries = Sections.findSuccessorsOfType(article.getRootSection(), TableEntryType.class);
 			for (Section<TableEntryType> sec : tableEntries) {
 				if (TableEntryType.getAnnotation(sec, "tableid").equals(id)) return sec.getText();
 			}

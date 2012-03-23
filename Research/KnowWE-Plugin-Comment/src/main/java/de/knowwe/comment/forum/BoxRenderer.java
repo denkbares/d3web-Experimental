@@ -82,7 +82,7 @@ public class BoxRenderer implements Renderer {
 				String web = sec.getWeb();
 
 				Environment instance = Environment.getInstance();
-				instance.getArticle(web, topic).getSection().collectTextsFromLeaves(buffi);
+				instance.getArticle(web, topic).getRootSection().collectTextsFromLeaves(buffi);
 				user.getParameters().put(Attributes.WEB, web);
 				user.getParameters().put(Attributes.TOPIC, topic);
 				user.getParameters().put(Attributes.USER, user.toString());

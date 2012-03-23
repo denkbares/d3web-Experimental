@@ -159,7 +159,7 @@ public class IncrementalCompilerTest {
 	@Test
 	public void testChangeAll() throws IOException {
 		/* replace the whole text */
-		String oldText = getArticle().getSection().getText();
+		String oldText = getArticle().getRootSection().getText();
 		String newText = "def Schnurtzelpieper livesIn:: Dingenskirchen" + "\n\n" + "def is"
 				+ "\n\n" + "def livesIn" + "\n\n" + "def Dingenskirchen" + "\n\n"
 				+ "def inDaHouse" + "\n\n"
@@ -197,7 +197,7 @@ public class IncrementalCompilerTest {
 
 	private <T extends Type> Section<T> findSectionWithText(String text, Class<T>
 			sectionType) {
-		Section<?> root = getArticle().getSection();
+		Section<?> root = getArticle().getRootSection();
 		List<Section<T>> typedSections = new LinkedList<Section<T>>();
 		Sections.findSuccessorsOfType(root, sectionType, typedSections);
 		for (Section<T> section : typedSections) {

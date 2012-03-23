@@ -137,10 +137,9 @@ public class TemplateTagHandler extends AbstractHTMLTagHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<Section<Template>> getTemplateTypes(Article article) {
-		ArrayList<Section<?>> found =
-				new ArrayList<Section<?>>();
-		Sections.getAllNodesPreOrder(article.getSection(), found);
-		// article.getSection() Sections.findSuccessorsOfType(TemplateType.class, found);
+		List<Section<?>> found = Sections.getSubtreePreOrder(article.getRootSection());
+		// article.getSection()
+		// Sections.findSuccessorsOfType(TemplateType.class, found);
 		ArrayList<Section<Template>> cleaned = new ArrayList<Section<Template>>();
 		for (Section<? extends Type> s : found) {
 			if (s.get() instanceof Template) cleaned.add((Section<Template>) s);

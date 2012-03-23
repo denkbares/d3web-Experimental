@@ -112,7 +112,7 @@ public class XMLUtils {
 	public static final String TMP_CASE_XML = "/tmp/case.xml";
 
 	public static void createXML(Article article, String user) {
-		Section<Article> articleSec = article.getSection();
+		Section<Article> articleSec = article.getRootSection();
 
 		ObjectFactory fac = new ObjectFactory();
 		Case c = fac.createCase();

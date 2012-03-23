@@ -135,7 +135,7 @@ public class InputFieldCellContent extends AbstractType {
 					Environment.DEFAULT_WEB).getArticle(dataArticleNameForUser);
 			if (article == null) return null;
 			List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
-			Sections.findSuccessorsOfType(article.getSection(),
+			Sections.findSuccessorsOfType(article.getRootSection(),
 						TableEntryType.class,
 						tables);
 			for (Section<TableEntryType> table : tables) {

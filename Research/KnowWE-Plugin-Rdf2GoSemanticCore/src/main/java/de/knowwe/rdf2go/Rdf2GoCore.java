@@ -940,7 +940,7 @@ public class Rdf2GoCore implements EventListener {
 
 	public List<Statement> getTopicStatements(String topic) {
 		Section<? extends Type> rootsection = Environment.getInstance().getArticle(
-				Environment.DEFAULT_WEB, topic).getSection();
+				Environment.DEFAULT_WEB, topic).getRootSection();
 		return getSectionStatementsRecursive(rootsection);
 	}
 

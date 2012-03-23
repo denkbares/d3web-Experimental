@@ -119,7 +119,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		// Hole alle Foren
 		while (it.hasNext()) {
-			for (Section<? extends Type> sec : it.next().getAllNodesPreOrder()) {
+			for (Section<? extends Type> sec : Sections.getSubtreePreOrder(it.next().getRootSection())) {
 				Section<? extends Forum> forum = Sections.findSuccessor(sec, Forum.class);
 				if (forum != null && !forums.contains(forum)) forums.add(forum);
 			}
@@ -182,8 +182,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 								+ "</a>");
 						if (numberOfNewEntries == -1) fm.append("&nbsp;<span class='fm_new'>(ungelesenes Thema)</span>");
 						else if (numberOfNewEntries == 1) fm.append("&nbsp;<span class='fm_new'>(1 neuer Beitrag)</span>");
-						else if (numberOfNewEntries > 0)
-							fm.append("&nbsp;<span class='fm_new'>("
+						else if (numberOfNewEntries > 0) fm.append("&nbsp;<span class='fm_new'>("
 									+ numberOfNewEntries + " neue Beiträge)</span>");
 						fm.append("</li>");
 						other.remove(sec);
@@ -368,7 +367,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		if (leftMenu != null) {
 			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
-					leftMenu.getSection(),
+					leftMenu.getRootSection(),
 					DynamicMenuMarkup.class);
 			Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
 		}
@@ -458,7 +457,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 				"Zeitplan");
 		if (zeitplanArticle != null) {
 			Section<TimeTableMarkup> timetable = Sections.findSuccessor(
-					zeitplanArticle.getSection(), TimeTableMarkup.class);
+					zeitplanArticle.getRootSection(), TimeTableMarkup.class);
 			if (timetable != null) {
 				List<Date> dates = TimeTableMarkup.getDates(timetable);
 				Date current = new Date();
@@ -689,15 +688,14 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		try {
 			Article article = Environment.getInstance().getArticle(
 					Environment.DEFAULT_WEB, userName);
-			Section<?> s = article.getSection();
+			Section<?> s = article.getRootSection();
 			Section<AboutMe> sec = Sections.findSuccessor(s, AboutMe.class);
 			avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
 		}
 		catch (NullPointerException e) {
 			// e.printStackTrace();
 		}
-		if (avatar == null || avatar == "")
-			avatar = "1000px-Comic_image_missing.svg.jpg";
+		if (avatar == null || avatar == "") avatar = "1000px-Comic_image_missing.svg.jpg";
 
 		return avatar;
 	}

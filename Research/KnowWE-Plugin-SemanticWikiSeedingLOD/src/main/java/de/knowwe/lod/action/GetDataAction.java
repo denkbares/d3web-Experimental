@@ -132,7 +132,7 @@ public class GetDataAction extends AbstractAction {
 							web, mappingTopic);
 
 					List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-					Sections.findSuccessorsOfType(article.getSection(),
+					Sections.findSuccessorsOfType(article.getRootSection(),
 							MappingContentType.class, found);
 
 					Map<String, String> nodesMap = new HashMap<String, String>();

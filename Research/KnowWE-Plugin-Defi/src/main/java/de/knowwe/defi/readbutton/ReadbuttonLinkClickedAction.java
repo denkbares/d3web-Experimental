@@ -62,8 +62,8 @@ public class ReadbuttonLinkClickedAction extends AbstractAction {
 	}
 
 	private static Section<ReadbuttonType> findContentSectionForReadbuttonID(String id, Article article) {
-		Sections.findSuccessorsOfType(article.getSection(), ReadbuttonType.class);
-		for (Section<ReadbuttonType> section : Sections.findSuccessorsOfType(article.getSection(),
+		Sections.findSuccessorsOfType(article.getRootSection(), ReadbuttonType.class);
+		for (Section<ReadbuttonType> section : Sections.findSuccessorsOfType(article.getRootSection(),
 				ReadbuttonType.class)) {
 			if (id.equals(DefaultMarkupType.getAnnotation(section, "id"))) return section;
 		}

@@ -95,7 +95,7 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 						context.getWeb()).getArticleIterator();
 				while (it.hasNext()) {
 					Article art = it.next();
-					Sections.findSuccessorsOfTypeUntyped(art.getSection(),
+					Sections.findSuccessorsOfTypeUntyped(art.getRootSection(),
 							Class.forName(types), found);
 				}
 			}
@@ -292,7 +292,7 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 				Section<?> section = Sections.getSection(sectionId);
 				additionalText = WordBasedRenameFinding.getAdditionalContextTypeBrowser(pos,
 									direction, curWords, queryLength,
-									section.getArticle().getSection().getText(), wordCount);
+									section.getArticle().getRootSection().getText(), wordCount);
 
 				// add highlighting when needed
 				additionalText = this.replaceSpecialCharacters(additionalText);

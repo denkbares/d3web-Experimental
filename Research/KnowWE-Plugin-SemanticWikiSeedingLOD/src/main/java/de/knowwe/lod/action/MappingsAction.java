@@ -109,7 +109,7 @@ public class MappingsAction extends AbstractAction {
 			List<Section<MappingContentType>> found1 = new
 					Vector<Section<MappingContentType>>();
 			Sections.findSuccessorsOfType(
-						article.getSection(), MappingContentType.class, found1);
+						article.getRootSection(), MappingContentType.class, found1);
 
 			Map<String, String> nodesMap = new HashMap<String, String>();
 

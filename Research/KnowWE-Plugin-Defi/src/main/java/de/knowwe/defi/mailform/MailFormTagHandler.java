@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -84,8 +84,8 @@ public class MailFormTagHandler extends AbstractTagHandler {
 	 * @return true = double id
 	 */
 	boolean checkID(String id, Article article) {
-		List<Section<? extends Type>> allNodes = article.getAllNodesPreOrder();
-		Section<? extends Type> node;
+		List<Section<?>> allNodes = Sections.getSubtreePreOrder(article.getRootSection());
+		Section<?> node;
 		int count = 0;
 		id = id.substring(3);
 

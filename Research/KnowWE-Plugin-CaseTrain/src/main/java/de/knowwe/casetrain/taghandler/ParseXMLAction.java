@@ -67,7 +67,7 @@ public class ParseXMLAction extends AbstractAction {
 		String topic = context.getTopic();
 		String web = context.getWeb();
 		Article article = Environment.getInstance().getArticle(web, topic);
-		Section<Article> sec = article.getSection();
+		Section<Article> sec = article.getRootSection();
 
 		if (Sections.findSuccessor(sec, MetaData.class) == null) {
 			buildi.append("<span class=\"error\">" +

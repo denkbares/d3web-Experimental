@@ -167,7 +167,7 @@ public class PoiUtils
 		ArticleManager manager =
 				Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
 		Article art = manager.getArticle(article);
-		List<Section<ITable>> itables = Sections.findSuccessorsOfType(art.getSection(), ITable.class);
+		List<Section<ITable>> itables = Sections.findSuccessorsOfType(art.getRootSection(), ITable.class);
 
 		for (Section<ITable> table : itables)
 		{
@@ -289,7 +289,7 @@ public class PoiUtils
 		ArticleManager manager =
 				Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
 		Article art = manager.getArticle(article);
-		Section<Article> artSec = art.getSection();
+		Section<Article> artSec = art.getRootSection();
 		Environment.getInstance().getWikiConnector();
 
 		// Save {@link KnowledgeBaseType} and {@link WordDefaultMarkup}

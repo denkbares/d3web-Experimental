@@ -63,7 +63,7 @@ public class DroolsFact extends AbstractType {
 			Collection<Message> messages = new LinkedList<Message>();
 
 			Section<? extends DroolsFactsType> factsSection =
-					Sections.findSuccessor(article.getSection(), DroolsFactsType.class);
+					Sections.findSuccessor(article.getRootSection(), DroolsFactsType.class);
 
 			if (factsSection != null) {
 				Section<DroolsFact> section = s;

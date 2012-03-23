@@ -55,7 +55,7 @@ public class AboutMeSaveAction extends AbstractAction {
 		String web = context.getWeb();
 
 		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
-		Section<?> section = mgr.getArticle(title).getSection();
+		Section<?> section = mgr.getArticle(title).getRootSection();
 		Section<AboutMe> child = Sections.findSuccessor(section, AboutMe.class);
 
 		StringBuilder params = new StringBuilder();

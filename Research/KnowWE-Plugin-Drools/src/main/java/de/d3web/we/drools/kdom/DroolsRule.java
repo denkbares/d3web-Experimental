@@ -79,7 +79,7 @@ public class DroolsRule extends AbstractType {
 			Section<DroolsRule> section = s;
 
 			Section<? extends DroolsRulesRootType> rtSection =
-					Sections.findSuccessor(section.getArticle().getSection(),
+					Sections.findSuccessor(section.getArticle().getRootSection(),
 							DroolsRulesRootType.class);
 
 			if (rtSection == null) {

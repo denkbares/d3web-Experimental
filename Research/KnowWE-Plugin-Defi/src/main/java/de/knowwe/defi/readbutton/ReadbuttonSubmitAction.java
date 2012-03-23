@@ -58,7 +58,7 @@ public class ReadbuttonSubmitAction extends AbstractAction {
 					context.getWeb()).registerArticle(article);
 		}
 
-		Section<?> sec = mgr.getArticle(dataPagename).getSection();
+		Section<?> sec = mgr.getArticle(dataPagename).getRootSection();
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		nodesMap.put(sec.getID(), sec.getText() + "\n" + createNewMarkupString(context));
 

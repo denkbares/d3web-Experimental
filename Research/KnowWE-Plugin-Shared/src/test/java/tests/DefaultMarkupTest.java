@@ -128,7 +128,7 @@ public class DefaultMarkupTest {
 		Article article = env.getArticle(web, "Test_Article");
 
 		Section<DefaultMarkupTestType> sec = Sections.
-				findSuccessor(article.getSection(), DefaultMarkupTestType.class);
+				findSuccessor(article.getRootSection(), DefaultMarkupTestType.class);
 
 		assertNotNull("DefaultMarkup Section was null!", sec);
 
@@ -166,7 +166,7 @@ public class DefaultMarkupTest {
 		Article article = env.getArticle(web, "Test_Article");
 
 		Section<DefaultMarkupTestType> sec = Sections.
-				findSuccessor(article.getSection(), DefaultMarkupTestType.class);
+				findSuccessor(article.getRootSection(), DefaultMarkupTestType.class);
 		assertNotNull("DefaultMarkup Section was null!", sec);
 
 		String content = DefaultMarkupType.getContent(sec);
@@ -206,7 +206,7 @@ public class DefaultMarkupTest {
 		env.buildAndRegisterArticle(text, "Test_Article", web);
 		Article article = env.getArticle(web, "Test_Article");
 		Section<DefaultMarkupTestType> sec = Sections.
-				findSuccessor(article.getSection(), DefaultMarkupTestType.class);
+				findSuccessor(article.getRootSection(), DefaultMarkupTestType.class);
 
 		assertNotNull("DefaultMarkup Section was null!", sec);
 
@@ -250,7 +250,7 @@ public class DefaultMarkupTest {
 		env.buildAndRegisterArticle(text, "Test_Article", web);
 		Article article = env.getArticle(web, "Test_Article");
 		Section<DefaultMarkupTestType> sec = Sections.
-				findSuccessor(article.getSection(), DefaultMarkupTestType.class);
+				findSuccessor(article.getRootSection(), DefaultMarkupTestType.class);
 
 		assertNotNull("DefaultMarkup Section was null!", sec);
 

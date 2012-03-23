@@ -124,8 +124,8 @@ public class SubmitTableContentAction extends AbstractAction {
 			Map<String, String> nodesMap = new HashMap<String, String>();
 			if (contentSection == null) {
 				// append entire block to page
-				nodesMap.put(article2.getSection().getID(),
-						article2.getSection().getText() + "\n"
+				nodesMap.put(article2.getRootSection().getID(),
+						article2.getRootSection().getText() + "\n"
 								+ createNewMarkupString(
 						tableid, inputDataAll));
 			}
@@ -167,7 +167,7 @@ public class SubmitTableContentAction extends AbstractAction {
 
 	public static Section<TableEntryContentType> findContentSectionForTableID(String tableid, Article article) {
 		List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
-		Sections.findSuccessorsOfType(article.getSection(),
+		Sections.findSuccessorsOfType(article.getRootSection(),
 				TableEntryType.class, tables);
 		Section<TableEntryContentType> contentSection = null;
 		for (Section<TableEntryType> section : tables) {

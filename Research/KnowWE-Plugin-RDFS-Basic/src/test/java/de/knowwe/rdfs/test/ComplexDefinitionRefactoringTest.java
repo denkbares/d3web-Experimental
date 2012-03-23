@@ -99,7 +99,7 @@ public class ComplexDefinitionRefactoringTest {
 
 	private <T extends Type> Section<T> findSectionWithText(String text, Class<T>
 			sectionType) {
-		Section<?> root = getArticle().getSection();
+		Section<?> root = getArticle().getRootSection();
 		List<Section<T>> typedSections = new LinkedList<Section<T>>();
 		Sections.findSuccessorsOfType(root, sectionType, typedSections);
 		for (Section<T> section : typedSections) {

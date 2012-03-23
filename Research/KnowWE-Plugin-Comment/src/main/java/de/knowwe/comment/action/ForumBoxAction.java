@@ -84,7 +84,7 @@ public class ForumBoxAction extends AbstractAction {
 				text = text.replace("\n", "\\\\ ");
 
 				Article article = Environment.getInstance().getArticle(web, topic);
-				Section<?> sec = article.getSection();
+				Section<?> sec = article.getRootSection();
 				List<Section<XMLTail>> found = new ArrayList<Section<XMLTail>>();
 
 				String save = "";
@@ -97,7 +97,7 @@ public class ForumBoxAction extends AbstractAction {
 
 					sec = Sections.getSection(reply);
 					Sections.findSuccessorsOfType(sec, XMLTail.class, found);
-					sec = article.getSection();
+					sec = article.getRootSection();
 				}
 				else {
 					save = "<box name=\"" + context.getUserName() + "\" date=\""

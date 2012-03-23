@@ -135,13 +135,13 @@ public class Info extends BlockMarkupType {
 
 				// TODO: This is right, as long as a Page contains ONLY ONE Info
 				Section<Introduction> einleitung = Sections.findSuccessor(
-						s.getArticle().getSection(),
+						s.getArticle().getRootSection(),
 						Introduction.class);
 				if (einleitung == null) {
 					messages.add(Utils.missingComponentError(Introduction.class.getSimpleName()));
 				}
 				Section<Closure> abschluss = Sections.findSuccessor(
-						s.getArticle().getSection(),
+						s.getArticle().getRootSection(),
 						Closure.class);
 				if (abschluss == null) {
 					messages.add(Utils.missingComponentError(Introduction.class.getSimpleName()));

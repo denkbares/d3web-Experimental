@@ -86,7 +86,7 @@ public class TableTest extends TestCase {
 	protected void setUp() throws IOException {
 		InitPluginManager.init();
 		Article article = TestArticleManager.getArticle(TESTSUITEARTICLE);
-		articleSec = article.getSection();
+		articleSec = article.getRootSection();
 		causalTable = Sections.findSuccessor(articleSec, CausalDiagnosisScoreMarkup.class);
 		decisionTable = Sections.findSuccessor(articleSec, DecisionTableMarkup.class);
 		heuristicTable = Sections.findSuccessor(articleSec, HeuristicDiagnosisTableMarkup.class);

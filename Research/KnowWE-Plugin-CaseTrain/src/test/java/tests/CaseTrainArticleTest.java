@@ -109,7 +109,7 @@ public class CaseTrainArticleTest extends TestCase {
 	protected void setUp() throws IOException {
 		InitPluginManager.init();
 		Article article = TestArticleManager.getArticle(TESTSUITEARTICLE);
-		articleSec = article.getSection();
+		articleSec = article.getRootSection();
 		meta = Sections.findSuccessor(articleSec, MetaData.class);
 		intro = Sections.findSuccessor(articleSec, Introduction.class);
 		info = Sections.findSuccessor(articleSec, Info.class);

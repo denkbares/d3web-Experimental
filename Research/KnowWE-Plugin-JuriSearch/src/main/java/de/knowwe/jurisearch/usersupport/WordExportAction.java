@@ -53,7 +53,7 @@ public class WordExportAction extends AbstractAction
 		File file = new File(extensionPath);
 		FileOutputStream out = new FileOutputStream(file);
 
-		POIUtilsJuriSearch.writeSectionToWord(article.getSection(), out);
+		POIUtilsJuriSearch.writeSectionToWord(article.getRootSection(), out);
 
 		out.flush();
 		out.close();

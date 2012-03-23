@@ -99,7 +99,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 		dataPagename = userContext.getUserName() + "_data";
 		ArticleManager mgr = Environment.getInstance().getArticleManager(userContext.getWeb());
 		if (Environment.getInstance().getWikiConnector().doesPageExist(dataPagename)) {
-			Section<?> sec = mgr.getArticle(dataPagename).getSection();
+			Section<?> sec = mgr.getArticle(dataPagename).getRootSection();
 			List<Section<ReadbuttonType>> rbSecs = Sections.findSuccessorsOfType(sec,
 					ReadbuttonType.class);
 			for (Section<ReadbuttonType> rbSec : rbSecs) {

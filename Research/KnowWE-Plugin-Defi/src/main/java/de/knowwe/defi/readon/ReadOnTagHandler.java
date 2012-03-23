@@ -101,7 +101,7 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 
 		if (leftMenu != null) {
 			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
-					leftMenu.getSection(),
+					leftMenu.getRootSection(),
 					DynamicMenuMarkup.class);
 			Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
 		}

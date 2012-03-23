@@ -123,7 +123,7 @@ public class MetaData extends BlockMarkupType {
 			public Collection<Message> create(Article article, Section<MetaData> s) {
 
 				List<Message> messages = new ArrayList<Message>(0);
-				Section<Info> infoSection = Sections.findSuccessor(s.getArticle().getSection(),
+				Section<Info> infoSection = Sections.findSuccessor(s.getArticle().getRootSection(),
 						Info.class);
 				if (infoSection == null) {
 					messages.add(
