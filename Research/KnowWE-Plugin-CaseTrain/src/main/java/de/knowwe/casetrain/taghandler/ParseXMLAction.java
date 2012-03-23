@@ -80,25 +80,34 @@ public class ParseXMLAction extends AbstractAction {
 		Collection<Message> warnings = Messages.getWarnings(allmsgs);
 		Collection<Message> notices = Messages.getNotices(allmsgs);
 
+		String servletContext = Environment.getInstance().getWikiConnector().getServletContext().getContextPath();
+		String link = "<br> <a href='" + servletContext
+				+ "/KnowWEExtension/"
+				+ XMLUtils.TMP_CASE_XML + "'>zur neuesten erstellten XML-Datei</a>";
+
 		if (!errors.isEmpty()) {
 			buildi.append("<span class=\"error\">" +
 					bundle.getString("ERROR_PARSE") +
+					link +
 					"</span>");
 			return buildi.toString();
 		}
 		else if (!warnings.isEmpty()) {
 			buildi.append("<span class=\"warning\">" +
 					bundle.getString("WARNING_PARSE") +
+					link +
 					"</span>");
 		}
 		else if (!notices.isEmpty()) {
 			buildi.append("<span class=\"information\">" +
 					bundle.getString("NOTICE_PARSE") +
+					link +
 					"</span>");
 		}
 		else {
 			buildi.append("<span class=\"information\">" +
 					bundle.getString("CORRECT_PARSE") +
+					link +
 					"</span>");
 		}
 

@@ -33,7 +33,6 @@ import de.knowwe.casetrain.info.Question.QuestionType;
 import de.knowwe.casetrain.type.general.BlockMarkupContent;
 import de.knowwe.casetrain.type.general.BlockMarkupContentRenderer;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
-import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.type.general.Title;
 import de.knowwe.casetrain.type.multimedia.Audio;
 import de.knowwe.casetrain.type.multimedia.Image;
@@ -77,7 +76,7 @@ public class Evaluation extends BlockMarkupType {
 			public void render(Section<?> sec, UserContext user,
 					StringBuilder string) {
 				string.append(KnowWEUtils.maskHTML("<div class='"
-						+ ((SubblockMarkup) sec.get()).getCSSClass()
+						+ ((Evaluation) sec.get()).getCSSClass()
 						+ "'>"));
 				string.append(KnowWEUtils.maskHTML("<div class='Evaluationstart'></div>"));
 				Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
@@ -192,8 +191,8 @@ public class Evaluation extends BlockMarkupType {
 							if (!(AnswersBlockValidator.getInstance()
 									.getTypesMultiple().contains(typ))) {
 								messages.add(Utils.invalidArgumentError(
-												bundle.getString("NO_MULTIPLE_ANSWERS")
-														+ typ)
+										bundle.getString("NO_MULTIPLE_ANSWERS")
+												+ typ)
 										);
 							}
 
@@ -224,7 +223,7 @@ public class Evaluation extends BlockMarkupType {
 
 				if (antwortenMissing) {
 					messages.add(Utils.missingComponentWarning(
-									AnswersBlock.class.getSimpleName()));
+							AnswersBlock.class.getSimpleName()));
 				}
 				String typ =
 						Sections.findSuccessor(actual, QuestionType.class)

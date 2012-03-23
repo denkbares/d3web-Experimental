@@ -109,6 +109,8 @@ import de.knowwe.kdom.AnonymousType;
  */
 public class XMLUtils {
 
+	public static final String TMP_CASE_XML = "/tmp/case.xml";
+
 	public static void createXML(Article article, String user) {
 		Section<Article> articleSec = article.getSection();
 
@@ -142,7 +144,7 @@ public class XMLUtils {
 
 		String webapp = Environment.getInstance().getKnowWEExtensionPath();
 		try {
-			File f = new File(webapp + "/tmp/case.xml");
+			File f = new File(webapp + TMP_CASE_XML);
 			f.createNewFile();
 			FileOutputStream stream = new FileOutputStream(f);
 			stream.flush();
@@ -235,7 +237,8 @@ public class XMLUtils {
 
 			}
 
-			if (!frageChilds.isEmpty()) XMLUtils.addQuestions(simpleSec, frageChilds, fac);
+			if (!frageChilds.isEmpty())
+				XMLUtils.addQuestions(simpleSec, frageChilds, fac);
 
 			// Add the EvaluationEnd
 			EvaluationEnd end = fac.createCaseEvaluationEvaluationEnd();
@@ -276,8 +279,10 @@ public class XMLUtils {
 
 		Section<?> introSec = null;
 
-		if (elementName.equals("Intro")) introSec = Sections.findSuccessor(sec, Introduction.class);
-		if (elementName.equals("Extro")) introSec = Sections.findSuccessor(sec, Closure.class);
+		if (elementName.equals("Intro"))
+			introSec = Sections.findSuccessor(sec, Introduction.class);
+		if (elementName.equals("Extro"))
+			introSec = Sections.findSuccessor(sec, Closure.class);
 
 		if (introSec == null) return;
 		XMLUtils.addTitledmmmixedcontent(c, introSec, fac);
@@ -379,7 +384,11 @@ public class XMLUtils {
 		String attName = "";
 		String attContent = "";
 		for (Section<MetaLine> line : lines) {
-			attName = Sections.findSuccessor(line, AttributeName.class).getText().trim();
+			Section<AttributeName> attributeName = Sections.findSuccessor(line,
+					AttributeName.class);
+			if (attributeName == null) continue;
+
+			attName = attributeName.getText().trim();
 			attContent = Sections.findSuccessor(line, AttributeContent.class).getText().trim();
 
 			if (attName.equals(MetaAttributes.CASE_TODO)) {
@@ -398,25 +407,32 @@ public class XMLUtils {
 			}
 
 			// Misc
-			if (attName.equals(MetaAttributes.FEEDBACK) || attName.equals(MetaAttributes.LANGUAGE)
+			if (attName.equals(MetaAttributes.FEEDBACK)
+					|| attName.equals(MetaAttributes.LANGUAGE)
 					|| attName.equals(MetaAttributes.SHOW_TIME)) {
 				miscAtts.put(attName, attContent);
 				continue;
 			}
 
 			if (attName.equals(MetaAttributes.CASE_ID_KEY)) metaObj.setID(attContent);
-			if (attName.equals(MetaAttributes.CASE_AUTHOR)) metaObj.setAuthor(attContent);
+			if (attName.equals(MetaAttributes.CASE_AUTHOR))
+				metaObj.setAuthor(attContent);
 			if (attName.equals(MetaAttributes.CASE_DATE)) metaObj.setDate(attContent);
 			if (attName.equals(MetaAttributes.CASE_TITLE)) metaObj.setTitle(attContent);
-			if (attName.equals(MetaAttributes.CASE_VERSION)) metaObj.setVersion(attContent);
-			if (attName.equals(MetaAttributes.DURATION_MIN)) metaObj.setDurationMinutes(new Long(
-					attContent));
-			if (attName.equals(MetaAttributes.DIFFICULTY)) metaObj.setDifficulty(attContent);
-			if (attName.equals(MetaAttributes.REQUIREMENTS)) metaObj.setPrereqs(attContent);
+			if (attName.equals(MetaAttributes.CASE_VERSION))
+				metaObj.setVersion(attContent);
+			if (attName.equals(MetaAttributes.DURATION_MIN))
+				metaObj.setDurationMinutes(new Long(
+						attContent));
+			if (attName.equals(MetaAttributes.DIFFICULTY))
+				metaObj.setDifficulty(attContent);
+			if (attName.equals(MetaAttributes.REQUIREMENTS))
+				metaObj.setPrereqs(attContent);
 			if (attName.equals(MetaAttributes.HINT)) metaObj.setNotice(attContent);
 			if (attName.equals(MetaAttributes.COMMENT)) metaObj.setComment(attContent);
 			if (attName.equals(MetaAttributes.KEYWORDS)) metaObj.setKeywords(attContent);
-			if (attName.equals(MetaAttributes.CASE_HISTORY)) metaObj.setHistory(attContent);
+			if (attName.equals(MetaAttributes.CASE_HISTORY))
+				metaObj.setHistory(attContent);
 
 			// TODO Background and setURL?
 			// if (attName.equals(MetaAttributes.BACKGROUND))
@@ -430,20 +446,25 @@ public class XMLUtils {
 			Score score = fac.createCaseMetadataScore();
 			for (Map.Entry<String, String> e : scoreAtts.entrySet()) {
 
-				if (e.getKey().equals(MetaAttributes.TIME_LIMIT0)) score.setMaxTimeSeconds(new Long(
-						e.getValue()));
+				if (e.getKey().equals(MetaAttributes.TIME_LIMIT0))
+					score.setMaxTimeSeconds(new Long(
+							e.getValue()));
 
-				if (e.getKey().equals(MetaAttributes.CASE_PASS)) score.setMinScoreForSuccess(new BigDecimal(
-						e.getValue()));
+				if (e.getKey().equals(MetaAttributes.CASE_PASS))
+					score.setMinScoreForSuccess(new BigDecimal(
+							e.getValue()));
 
-				if (e.getKey().equals(MetaAttributes.TIME_LIMIT100)) score.setOkTimeSeconds(new Long(
-						e.getValue()));
+				if (e.getKey().equals(MetaAttributes.TIME_LIMIT100))
+					score.setOkTimeSeconds(new Long(
+							e.getValue()));
 
-				if (e.getKey().equals(MetaAttributes.CASE_POINTS)) score.setWeight(new BigDecimal(
-						e.getValue()));
+				if (e.getKey().equals(MetaAttributes.CASE_POINTS))
+					score.setWeight(new BigDecimal(
+							e.getValue()));
 
-				if (e.getKey().equals(MetaAttributes.TIME_WEIGHT)) score.setWeightTime(new BigDecimal(
-						e.getValue()));
+				if (e.getKey().equals(MetaAttributes.TIME_WEIGHT))
+					score.setWeightTime(new BigDecimal(
+							e.getValue()));
 			}
 			metaObj.setScore(score);
 		}
@@ -454,12 +475,15 @@ public class XMLUtils {
 			Misc misc = fac.createCaseMetadataMisc();
 			for (Map.Entry<String, String> e : miscAtts.entrySet()) {
 
-				if (e.getKey().equals(MetaAttributes.FEEDBACK)) misc.setFeedback(e.getValue());
+				if (e.getKey().equals(MetaAttributes.FEEDBACK))
+					misc.setFeedback(e.getValue());
 
-				if (e.getKey().equals(MetaAttributes.LANGUAGE)) misc.setLanguage(e.getValue());
+				if (e.getKey().equals(MetaAttributes.LANGUAGE))
+					misc.setLanguage(e.getValue());
 
-				if (e.getKey().equals(MetaAttributes.SHOW_TIME)) misc.setShowClock(new Boolean(
-						e.getValue()));
+				if (e.getKey().equals(MetaAttributes.SHOW_TIME))
+					misc.setShowClock(new Boolean(
+							e.getValue()));
 			}
 			metaObj.setMisc(misc);
 		}
@@ -490,7 +514,8 @@ public class XMLUtils {
 		Sections.findSuccessorsOfType(articleSec, Info.class, infoSecs);
 
 		for (Section<Info> infoSec : infoSecs) {
-			List<Section<?>> childs = Sections.findSuccessor(infoSec, BlockMarkupContent.class).getChildren();
+			List<Section<?>> childs = Sections.findSuccessor(infoSec,
+					BlockMarkupContent.class).getChildren();
 			SimpleSection simpleSec = fac.createSimpleSection();
 			simpleSec.setQuestions(fac.createBasicSectionQuestions());
 
@@ -539,7 +564,8 @@ public class XMLUtils {
 
 			}
 
-			if (!frageChilds.isEmpty()) XMLUtils.addQuestions(simpleSec, frageChilds, fac);
+			if (!frageChilds.isEmpty())
+				XMLUtils.addQuestions(simpleSec, frageChilds, fac);
 			c.setSections(fac.createCaseSections());
 			c.getSections().getSimpleSectionOrInfoSection().add(simpleSec);
 		}
@@ -681,7 +707,8 @@ public class XMLUtils {
 		for (Section<?> s : Sections.findSuccessor(
 				antworten, SubblockMarkupContent.class).getChildren()) {
 
-			if (s.get().isType(PlainText.class) || s.get().isType(AnswersBlockWeightMark.class)
+			if (s.get().isType(PlainText.class)
+					|| s.get().isType(AnswersBlockWeightMark.class)
 					|| s.get().isType(AnonymousType.class)) continue;
 
 			// PosFactor and NegFactor
@@ -733,7 +760,8 @@ public class XMLUtils {
 				if (store.getNegFactor() != null) a.setNegFactor(new BigDecimal(
 						store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
-				if (store.getSimplefeedback() != null) a.setSimpleFeedback(store.getSimplefeedback());
+				if (store.getSimplefeedback() != null)
+					a.setSimpleFeedback(store.getSimplefeedback());
 				a.setText(store.getText());
 				ans.getAnswer().add(a);
 			}
@@ -750,12 +778,14 @@ public class XMLUtils {
 
 			for (AnswerAttributeStore store : ants) {
 				WordAnswer a = fac.createWordAnswersWordAnswer();
-				a.setEditDistance(new Long(AnswersBlock.getEditDistance(store.getTextArgument())));
+				a.setEditDistance(new Long(
+						AnswersBlock.getEditDistance(store.getTextArgument())));
 				a.setIsRegularExpression(AnswersBlock.getIsRegularExpression(store.getTextArgument()));
 				if (store.getNegFactor() != null) a.setNegFactor(new BigDecimal(
 						store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
-				if (store.getSimplefeedback() != null) a.setSimpleFeedback(store.getSimplefeedback());
+				if (store.getSimplefeedback() != null)
+					a.setSimpleFeedback(store.getSimplefeedback());
 				a.setText(store.getText());
 				ans.getWordAnswer().add(a);
 			}
@@ -773,16 +803,18 @@ public class XMLUtils {
 			Section<AnswersBlockWeightMark> aBWMark =
 					Sections.findSuccessor(antworten, AnswersBlockWeightMark.class);
 			if (aBWMark != null) ans.setWeight(new BigDecimal(
-						AnswersBlock.getWeight(aBWMark.getText())));
+					AnswersBlock.getWeight(aBWMark.getText())));
 
 			for (AnswerAttributeStore store : ants) {
 				WordAnswer a = fac.createWordAnswersWordAnswer();
-				a.setEditDistance(new Long(AnswersBlock.getEditDistance(store.getTextArgument())));
+				a.setEditDistance(new Long(
+						AnswersBlock.getEditDistance(store.getTextArgument())));
 				a.setIsRegularExpression(AnswersBlock.getIsRegularExpression(store.getTextArgument()));
 				if (store.getNegFactor() != null) a.setNegFactor(new BigDecimal(
 						store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
-				if (store.getSimplefeedback() != null) a.setSimpleFeedback(store.getSimplefeedback());
+				if (store.getSimplefeedback() != null)
+					a.setSimpleFeedback(store.getSimplefeedback());
 				a.setText(store.getText());
 				ans.getWordAnswer().add(a);
 			}
@@ -816,7 +848,7 @@ public class XMLUtils {
 			Section<AnswersBlockWeightMark> aBWMark =
 					Sections.findSuccessor(antworten, AnswersBlockWeightMark.class);
 			if (aBWMark != null) ans.setWeight(new BigDecimal(
-						AnswersBlock.getWeight(aBWMark.getText())));
+					AnswersBlock.getWeight(aBWMark.getText())));
 
 			for (AnswerAttributeStore store : ants) {
 				XMLUtils.addNumAnswerInstance(ans, store, fac);
@@ -871,14 +903,17 @@ public class XMLUtils {
 			if (store.getNegFactor() != null) inter.setNegFactor(new BigDecimal(
 					store.getNegFactor()));
 			inter.setPosFactor(new BigDecimal(store.getPosFactor()));
-			if (store.getSimplefeedback() != null) inter.setSimpleFeedback(store.getSimplefeedback());
+			if (store.getSimplefeedback() != null)
+				inter.setSimpleFeedback(store.getSimplefeedback());
 			ans.getNumAnswerOrNumAnswerInterval().add(inter);
 		}
 
 		NumAnswer a = fac.createNumAnswersNumAnswer();
-		if (store.getNegFactor() != null) a.setNegFactor(new BigDecimal(store.getNegFactor()));
+		if (store.getNegFactor() != null)
+			a.setNegFactor(new BigDecimal(store.getNegFactor()));
 		a.setPosFactor(new BigDecimal(store.getPosFactor()));
-		if (store.getSimplefeedback() != null) a.setSimpleFeedback(store.getSimplefeedback());
+		if (store.getSimplefeedback() != null)
+			a.setSimpleFeedback(store.getSimplefeedback());
 		a.setValue(new BigDecimal(store.getText()));
 		ans.getNumAnswerOrNumAnswerInterval().add(a);
 	}
