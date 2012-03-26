@@ -45,7 +45,7 @@ class ContentEntry extends AbstractType {
 			return section.getText();
 		}
 
-		return null;
+		return "";
 	}
 
 	public ContentEntry() {
