@@ -24,7 +24,7 @@
 		Article article = Environment.getInstance().getArticle(
 		Environment.DEFAULT_WEB, user.getUserName());
 		if (article != null) {
-	Section<?> s = article.getSection();
+	Section<?> s = article.getRootSection();
 	if (s != null && s.toString().contains("@avatar:")) {
 		Section<AboutMe> sec = Sections.findSuccessor(s, AboutMe.class);
 		avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
