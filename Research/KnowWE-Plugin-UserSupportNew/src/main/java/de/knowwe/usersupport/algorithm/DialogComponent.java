@@ -54,11 +54,15 @@ public class DialogComponent
 
 	private static DialogComponent uniqueInstance;
 
+	private SuggestionCache cache; 
+	
 	/**
 	 * To avoid instantiation
 	 */
 	private DialogComponent()
 	{
+		cache = SuggestionCache.getInstance();
+		
 		maxSuggestions =
 				Integer.parseInt(
 						bundle.getString("usersupport.dialogcomponent.maxSuggestions"));
@@ -114,82 +118,32 @@ public class DialogComponent
 
 	/**
 	 * 
-	 * Collects the best suggestions found by
-	 * usedPhraseAlgorithm and usedTokenAlgorithm
-	 * all Matching in the terminology.
-	 * 
-	 * 
-	 * @created 21.11.2011
-	 * @param toMatch
-	 * @param termDefinitions
-	 * @return
-	 */
-	public List<Suggestion> getBestSuggestions(String toMatch, List<String> termDefinitions)
-	{
-
-		System.out.println("<== toMatch:" + toMatch + "==>");
-		long current = System.currentTimeMillis();
-
-		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
-
-		// Put all Suggestions in List
-		List<SuggestionCountPair> matchList = new ArrayList<SuggestionCountPair>();
-
-		// When toMatch contains Whitespace then use algorithmsPhrase
-		if (toMatch.contains(" "))
-		{
-			this.getBestSuggestionsPhrase(toMatch, termDefinitions, matchList, false);
-		}
-
-		if (!toMatch.contains(" "))
-		{
-			this.getBestSuggestionsToken(toMatch, termDefinitions, matchList, false);
-		}
-
-		// Sort the matchList and add the count of
-		// maxSuggestions to best Suggestions
-		Collections.sort(matchList, new SuggestionCountPairComparator());
-		for (int i = 0; (i < maxSuggestions) && (i < matchList.size()); i++)
-			bestSuggs.add(matchList.get(i).getSuggestion());
-
-		long after = System.currentTimeMillis();
-
-		System.out.println(after - current);
-
-		return bestSuggs;
-	}
-
-	/**
-	 * 
 	 * Collects the best suggestions found by all MatchingAlgorithms
 	 * in the terminology.
 	 * 
 	 * This is slow but will probably find the Best matches!
 	 * 
 	 * @created 21.11.2011
-	 * @param toMatch
+	 * @param query
 	 * @param termDefinitions
 	 * @return
 	 */
-	public List<Suggestion> getBestSuggestionsAllAlgorithms(String toMatch, List<String> termDefinitions) {
+	public List<Suggestion> getBestSuggestionsAllAlgorithms(String query, List<String> termDefinitions) {
 
-		//		System.out.println("<== toMatchAll:" + toMatch + "==>");
-		//		long current = System.currentTimeMillis();
-
-		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
-
-		// Put all Suggestions in List
+		List<Suggestion> bestSuggs = this.cache.getSuggestionsFromCache(query, termDefinitions);
+		if (bestSuggs != null)
+			return bestSuggs;
+		
 		List<SuggestionCountPair> matchList = new ArrayList<SuggestionCountPair>();
-
-		// When toMatch contains Whitespace then use algorithmsPhrase
-		if (toMatch.contains(" "))
+		bestSuggs = new ArrayList<Suggestion>();
+		// When query contains Whitespace then use algorithmsPhrase
+		if (query.contains(" "))
 		{
-			this.getBestSuggestionsPhrase(toMatch, termDefinitions, matchList, true);
+			this.getBestSuggestionsPhrase(query, termDefinitions, matchList, true);
 		}
-
-		if (!toMatch.contains(" "))
+		else if (!query.contains(" "))
 		{
-			this.getBestSuggestionsToken(toMatch, termDefinitions, matchList, true);
+			this.getBestSuggestionsToken(query, termDefinitions, matchList, true);
 		}
 
 		// Sort the matchList and add the count of
@@ -198,27 +152,24 @@ public class DialogComponent
 		for (int i = 0; (i < maxSuggestions) && (i < matchList.size()); i++)
 			bestSuggs.add(matchList.get(i).getSuggestion());
 
-		//		long after = System.currentTimeMillis();
-		//		System.out.println(after - current);
-
+		this.cache.storeQueryResult(query, termDefinitions, bestSuggs);
+		
 		return bestSuggs;
 	}
 
 	/**
-	 * Collects the best suggestions if toMatch is a Token.
+	 * Collects the best suggestions if query is a Token.
 	 * So it only uses Matching-Algorithms for phrases.
 	 * 
 	 * @created 20.02.2012
-	 * @param toMatch
+	 * @param query
 	 * @param termDefinitions
 	 * @param matchList
 	 * @param useAllAlgorithms
 	 */
-	private void getBestSuggestionsToken(String toMatch, List<String> termDefinitions,
+	private void getBestSuggestionsToken(String query, List<String> termDefinitions,
 			List<SuggestionCountPair> matchList, boolean useAllAlgorithms)
 	{
-
-		// Sort terms to token and phrase
 		List<String> tokenTerms = new ArrayList<String>();
 		List<String> phraseTerms = new ArrayList<String>();
 		for (String s : termDefinitions)
@@ -227,7 +178,7 @@ public class DialogComponent
 			else
 				tokenTerms.add(s);
 
-		this.getBestSuggestionsPhrase(toMatch, phraseTerms, matchList, useAllAlgorithms);
+		this.getBestSuggestionsPhrase(query, phraseTerms, matchList, useAllAlgorithms);
 
 		List<Suggestion> suggs = new ArrayList<Suggestion>();
 
@@ -243,7 +194,7 @@ public class DialogComponent
 
 		for (MatchingAlgorithm algo : algorithms)
 		{
-			suggs = algo.getMatches(maxSuggestions, threshold, toMatch, tokenTerms);
+			suggs = algo.getMatches(maxSuggestions, threshold, query, tokenTerms);
 			boolean remove = true;
 			suggs = this.removeExactMatches(suggs);
 			while(remove) remove = suggs.remove(null);
@@ -263,6 +214,8 @@ public class DialogComponent
 
 	/**
 	 * 
+	 * Cleans the given list from exact matches.
+	 * 
 	 * @created 20.02.2012
 	 * @param suggs
 	 */
@@ -276,16 +229,16 @@ public class DialogComponent
 	}
 
 	/**
-	 * Collects the best suggestions if toMatch is a Phrase.
+	 * Collects the best suggestions if query is a Phrase.
 	 * So it only uses Matching-Algorithms for phrases.
 	 * 
 	 * @created 20.02.2012
-	 * @param toMatch
+	 * @param query
 	 * @param termDefinitions
 	 * @param matchList
 	 * @param useAllAlgorithms
 	 */
-	private void getBestSuggestionsPhrase(String toMatch, List<String> termDefinitions, List<SuggestionCountPair> matchList, boolean useAllAlgorithms)
+	private void getBestSuggestionsPhrase(String query, List<String> termDefinitions, List<SuggestionCountPair> matchList, boolean useAllAlgorithms)
 	{
 		List<MatchingAlgorithm> algorithms = new ArrayList<MatchingAlgorithm>();
 		if (!useAllAlgorithms)
@@ -300,7 +253,7 @@ public class DialogComponent
 		List<Suggestion> suggs = new ArrayList<Suggestion>();
 		for (MatchingAlgorithm algo : algorithms)
 		{
-			suggs = algo.getMatches(maxSuggestions, threshold, toMatch, termDefinitions);
+			suggs = algo.getMatches(maxSuggestions, threshold, query, termDefinitions);
 			boolean remove = true;
 			while(remove) remove = suggs.remove(null);
 			suggs = this.removeExactMatches(suggs);
@@ -317,21 +270,31 @@ public class DialogComponent
 		}
 	}
 
-	public List<Suggestion> getSuggestions(String toMatch,
-			List<String> termDefinitions, MatchingAlgorithm algorithm) {
-
+	/**
+	 * Collects suggestions using the given MatchingAlgorithm
+	 * 
+	 * @param query
+	 * @param termDefinitions
+	 * @param algorithm
+	 * @return
+	 */
+	public List<Suggestion> getSuggestions(String query,
+			List<String> termDefinitions, MatchingAlgorithm algorithm)
+	{
 		if (algorithm == null)
-			return getBestSuggestionsAllAlgorithms(toMatch, termDefinitions);
+			return getBestSuggestionsAllAlgorithms(query, termDefinitions);
 
-		System.out.println("<== toMatchSingle: " + algorithm.toString() + " " + toMatch + "==>");
-		long current = System.currentTimeMillis();
-		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
+		List<Suggestion> bestSuggs = this.cache.getSuggestionsFromCache(query, termDefinitions);
+		if (bestSuggs != null)
+			return bestSuggs;
+		
+		bestSuggs = new ArrayList<Suggestion>();
 
 		// Put all Suggestions in List
 		List<Suggestion> suggs = new ArrayList<Suggestion>();
 		List<SuggestionCountPair> matchList = new ArrayList<SuggestionCountPair>();
 
-		suggs = algorithm.getMatches(maxSuggestions, threshold, toMatch, termDefinitions);
+		suggs = algorithm.getMatches(maxSuggestions, threshold, query, termDefinitions);
 		boolean remove = true;
 		while(remove) remove = suggs.remove(null);
 		suggs = this.removeExactMatches(suggs);
@@ -352,9 +315,8 @@ public class DialogComponent
 		for (int i = 0; (i < maxSuggestions) && (i < matchList.size()); i++)
 			bestSuggs.add(matchList.get(i).getSuggestion());
 
-		long after = System.currentTimeMillis();
-		System.out.println(after - current);
-
+		this.cache.storeQueryResult(query, termDefinitions, bestSuggs);
+		
 		return bestSuggs;
 	}
 
