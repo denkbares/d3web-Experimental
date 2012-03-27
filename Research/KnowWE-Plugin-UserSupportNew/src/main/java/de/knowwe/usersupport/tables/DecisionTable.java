@@ -158,7 +158,7 @@ public class DecisionTable extends ITable
 				for (int h = 0; h < qValList.size(); h++, k++)
 				{
 					qVal = qValList.get(h);
-
+					if (qVal == null) continue;
 					// Create no action
 					if (column.get(k).getText().equals("")) continue;
 
