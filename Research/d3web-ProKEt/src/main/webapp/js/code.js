@@ -145,7 +145,7 @@ function initUEQFreeFeedback(){
     
     $('#UE_QUIRating').unbind('focus').focus(function(event) {
         var text = $("#UE_QUIRating").val();
-        if(text.indexOf("Hierarchische-UI ODER Einfrage-UI")
+        if(text.indexOf("Hierarchisch ODER Einfrage ODER Beide gleich")
             !=-1){
             $('#UE_QUIRating').val("");
         }

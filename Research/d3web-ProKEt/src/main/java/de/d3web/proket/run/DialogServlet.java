@@ -284,7 +284,7 @@ public class DialogServlet extends HttpServlet {
         PrintWriter writer = response.getWriter();
         GlobalSettings.getInstance().setLogFolder(
                 GlobalSettings.getInstance().getServletBasePath()
-                + "../../StudyG1-Data/logs");
+                + "../../StudyG2-Data/logs");
         
         /*GlobalSettings.getInstance().setLogFolder(
                 GlobalSettings.getInstance().getServletBasePath()

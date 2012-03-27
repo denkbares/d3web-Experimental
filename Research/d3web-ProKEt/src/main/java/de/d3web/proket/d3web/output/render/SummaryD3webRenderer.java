@@ -63,18 +63,21 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                 continue;
             }
 
+            // get .txt definition of grid. Always start with grid, as example:
+            // Grid Incisional Ventral Hernia.txt
             int lastSlash = pathName.lastIndexOf('/') + 1;
             isGrid = pathName.substring(lastSlash).toLowerCase().startsWith("grid");
             if (!isGrid) {
                 continue;
             }
 
+            // get the text of the grid.txt file
             StringBuilder content = getText(resource);
-
             List<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> result = parse(content.toString());
             if (result.isEmpty()) {
                 continue;
             }
+            
 
             boolean nothingAnswered = enrichGrid(d3webSession, content, result);
             if (nothingAnswered) {
@@ -166,12 +169,22 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
         return val.getValue().toString().equals(targetValue);
     }
 
+    /**
+     * Fill the grid structure with content.
+     * 
+     * @param d3webSession
+     * @param content the grid base structure
+     * @param result 
+     * @return 
+     */
     private boolean enrichGrid(Session d3webSession,
             StringBuilder content,
             List<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> result) {
 
         boolean nothingAnswered = true;
         for (Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>> parsePair : result) {
+            
+            
             int matchStart = parsePair.getA().getA();
             int matchEnd = parsePair.getA().getB();
 
@@ -207,12 +220,14 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
         }
 
         String questionName = questionAnswerPair.getA();
+       
 
         Value value = getValue(d3webSession, questionName);
 
         if (value == null || UndefinedValue.isUndefinedValue(value)) {
             return false;
         }
+       
 
         Object answerTypeObject = questionAnswerPair.getB();
 

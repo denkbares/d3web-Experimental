@@ -152,20 +152,33 @@ DONE - Refactor Hierarchy prototypes as to use own attributes AND/OR instead of 
 --------------
 --- EuraHS ---
 --------------
-
-- Frage 139 Intrahospital complications 
-    if answered with "no complications", question 148 Classification of surgical complications 
-    should be disabled
+DONE - Ajax Error Add facts bei Bildfragen --> Logging?! 
+ 	[Muysoms]
+DONE - Hernien Bild: klären, welche Seite per Klick gewählt wird (r/l vertauscht)
+	[Simmermacher]
+DONE - if I do not do a QoL score preop, but I want to answer all questions as unknown, I need 9 clicks. 
+	Is it possible to have in one click decided not to do the QoL?
+DONE - Zusätzliches "Additional Visits" für "irgendwelche" Infos nach dem 2. Follow Up, s. mail 	
+DONE - Follow Up mark "done" checken (selber mal ein Beispiel eingeben)
+DONE - Folgefrage 115: bei primary route nicht anzeigen --> Mesh Scar kommt aber jetzt ganz am Ende...
 DONE - Question 148 	Classification of surgical complications --> answer Grade 0
 DONE - Question 148 --> Popup adaption?!
 DONE - In this session question 115: "Was the complete scar repaired?" was shown.
-    --> For the primary ventral route this question is not relevant and should not be shown.
-    -->> Ist abhängig von der Frage "Mesh Repair", nicht von der Route --> ULI
 DONE - >IE Meldung englisch
 DONE - Internet Explorer 9
 DONE - (Basis) Images Upload (Frank spricht hierfür erstmal mit Alex H.)
 DONE - Grid Summary --> download .txt Button deaktivieren
 DONE - Kopfzeile Grid: Leerzeichen fehlt
+DONE - Summary --> incisional recurrent hernia "problem"
+
+ - Frage 139 Intrahospital complications 
+    if answered with "no complications", question 148 Classification of surgical complications 
+    should be disabled
+
+- mention imageupload [muysoms] --> link or session timeout
+- test IE8 and mail to [craessarts]
+- check firefox 3 [uli]
+
 
 
 INTERNET EXPLORER QUIRKS
@@ -181,11 +194,11 @@ INTERNET EXPLORER QUIRKS
 
 LOGGING
 -------
-- Dateinamen für Logfiles? Currently: Date(yyMMdd)_Session.txt
-- Unter welchem Namen gecklickte Widgets speichern?! (für Fragen momentan Fragename)
 DONE - Umlaute (zB Mediastinitis)
 DONE - Logging of image answers
 - check sind alle wichtigen Elemente geloggt?
+- check logging completely, also for productive systems as EuraHS
+- redeploy EuraHS and Mediastinitis if done
 
 
 USABILITY EXTENSION

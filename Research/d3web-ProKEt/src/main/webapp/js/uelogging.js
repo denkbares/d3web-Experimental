@@ -388,6 +388,7 @@ function ue_sendUEQ(){
      * usability questionnaire in div "ueq"
      * returns Questionnaire Data in format: 
      *  questionID1***value1###questionID2***value2###
+     *  TODO: retrieve also not answered questions for logging
      */
 function ue_retrieveQuestionnaireData(){
     

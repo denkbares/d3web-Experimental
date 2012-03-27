@@ -118,6 +118,12 @@ public class JSONReader implements Serializable {
         if (logdata.get(UETerm.LOAD.toString()) != null) {
             ob.put(UETerm.LOAD.toString(), logdata.get(UETerm.LOAD.toString()).toString());
         }
+        if (logdata.get(UETerm.TYPE.toString()) != null) {
+            ob.put(UETerm.TYPE.toString(), logdata.get(UETerm.TYPE.toString()).toString());
+        }
+        if (logdata.get(UETerm.SOL.toString()) != null) {
+            ob.put(UETerm.SOL.toString(), logdata.get(UETerm.SOL.toString()).toString());
+        }
         return ob;
     }
 
@@ -135,14 +141,15 @@ public class JSONReader implements Serializable {
         // opening the file and reading it
         int ch;
         StringBuffer jsonstring = new StringBuffer("");
-        FileInputStream fin = null;
-
+      
         try {
-            fin = new FileInputStream(file);
-            while ((ch = fin.read()) != -1) {
+            Reader r = new InputStreamReader(new FileInputStream(file), "UTF8");
+            BufferedReader in = new BufferedReader(r);
+            
+            while ((ch = in.read()) != -1) {
                 jsonstring.append((char) ch);
             }
-            fin.close();
+            in.close();
 
         } catch (FileNotFoundException e) {
         } catch (IOException ioe) {
@@ -170,12 +177,19 @@ public class JSONReader implements Serializable {
                     logdata.put(UETerm.END.toString(), value);
                 } else if (keyval.equals(UETerm.CLICKED.toString())) {
                     logdata.put(UETerm.CLICKED.toString(), value);
+                } else if (keyval.equals(UETerm.TYPE.toString())) {
+                    logdata.put(UETerm.TYPE.toString(), value);
+                } else if (keyval.equals(UETerm.SOL.toString())) {
+                    logdata.put(UETerm.SOL.toString(), value);
+                }
+                // TODO refactor: only for first study
+                 else if (keyval.equals("SOLUTION::Ist das Arbeitsverhältnis wirksam gekündigt worden?")) {
+                    logdata.put(UETerm.SOL.toString(), value);
                 }
             }
         } catch (ParseException pe) {
             System.out.println(pe);
         }
-
         return logdata;
     }
     

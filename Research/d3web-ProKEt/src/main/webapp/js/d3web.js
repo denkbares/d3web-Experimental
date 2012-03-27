@@ -34,11 +34,11 @@ $(function() {
    
     // check browser and warn if the wrong one is used
     
-        var link = $.query.set("action", "checkHandleBrowsers").toString();
+    var link = $.query.set("action", "checkHandleBrowsers").toString();
         
-        link = window.location.href.replace(window.location.search, "") + link;
+    link = window.location.href.replace(window.location.search, "") + link;
         
-      /*$.ajax({
+    /*$.ajax({
             type : "GET",
             url : link,
             asynch: true,
@@ -360,26 +360,29 @@ function initFunctionality() {
     // elements were clicked
     markIsWidget("false");
     
-    link = $.query.set("action", "checkWidgetClicked").toString();
-    link = window.location.href.replace(window.location.search, "") + link;
+    if(logging){
+        link = $.query.set("action", "checkWidgetClicked").toString();
+        link = window.location.href.replace(window.location.search, "") + link;
 		
-    $.ajax({
-        type: "GET",
-        async: false,
-        cache : false, // needed for IE, call is not made otherwise
-        url: link,
-        success : function(html) {
-            if (html == "true") {
-            // a widget was clicked, thus we need no logging of end session
-            // value
-            } else {
-                ue_logEnd();
-            // potential end session value is only logged if there was some
-            // data entry before, NOT if there was sthg like "save" button
-            // clicked
+        $.ajax({
+            type: "GET",
+            async: false,
+            cache : false, // needed for IE, call is not made otherwise
+            url: link,
+            success : function(html) {
+                if (html == "true") {
+                // a widget was clicked, thus we need no logging of end session
+                // value
+                } else {
+                
+                    ue_logEnd();
+                // potential end session value is only logged if there was some
+                // data entry before, NOT if there was sthg like "save" button
+                // clicked
+                }
             }
-        }
-    });
+        });
+    }
    
         
     $(window).resize(function() {

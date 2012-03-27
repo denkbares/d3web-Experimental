@@ -25,7 +25,7 @@
         <tr><td colspan="3"><hr></td></tr>
         <tr>
             <td class="topText fontOnePointTwo">4</td>
-            <td class="leftPadd topText fontOnePointTwo">Ich denke, ich konnte mithilfe des Systems den Sachverhalt korrekt einschätzen/lösen.</td>
+            <td class="leftPadd topText fontOnePointTwo">Ich denke, ich konnte mithilfe des Systems den Sachverhalt zutreffend einschätzen/lösen.</td>
             <td>$UE_ScaleLikert7(id="UE_Ich_denke,_ich_konnte_mithilfe_des_Systems_den_Sachverhalt_korrekt_einschätzen/lösen.")$</td> 
 	</tr>
         <tr><td colspan="3"><hr></td></tr>
@@ -38,7 +38,7 @@
         <tr>
             <td class="topText fontOnePointTwo">6</td>
             <td class="topText leftPadd fontOnePointTwo">Welche der beiden UI-Formen hat mir besser gefallen? (Nur nach Bearbeitung beider Fälle beantworten!)</td>
-            <td><input type="text" id="UE_QUIRating" class="longTextfield" value="Hierarchische-UI ODER Einfrage-UI"> </input></td> 
+            <td><input type="text" id="UE_QUIRating" class="longTextfield" value="Hierarchisch ODER Einfrage ODER Beide gleich"> </input></td> 
 	</tr>
         <tr><td colspan="3"><hr></td></tr>
 	<tr>

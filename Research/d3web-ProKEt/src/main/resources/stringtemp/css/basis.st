@@ -134,11 +134,11 @@ body,table,div {
 
 .textAlignRight {text-align: right; padding-right: 10px;}
 
-.longTextfield {width: 250px; color: #4C4C4C;}
+.longTextfield {width: 258px; color: #4C4C4C;}
 
 .longTextfieldInputColor{color: black;}
 
-.longTextarea {width:250px; resize: none; color: #4C4C4C;}
+.longTextarea {width:258px; resize: none; color: #4C4C4C;}
 
 .longTextareaInputColor {color: black;}
 

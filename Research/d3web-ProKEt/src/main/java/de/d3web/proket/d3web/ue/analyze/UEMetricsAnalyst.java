@@ -176,26 +176,29 @@ public class UEMetricsAnalyst {
     public float getErrorRate() {
         return (float) getTotalNrUnsuccessfulCases() / (float) getTotalNrOfCases() * 100;
     }
-    
+
     /**
-     * Calculate and retrieve the (arithmethic) mean duration of all
-     * successful tasks (i.e., tasks complete with start and end time)
-     * Retrieves the task duration of each successful task in milliseconds,
-     * adds them up, and divides them by the number of all successful cases.
-     *  
+     * Calculate and retrieve the (arithmethic) mean duration of all successful
+     * tasks (i.e., tasks complete with start and end time) Retrieves the task
+     * duration of each successful task in milliseconds, adds them up, and
+     * divides them by the number of all successful cases.
+     *
      * @return the mean task duration in seconds
      */
-    public String getMeanTaskDuration(){
+    public String getMeanTaskDuration() {
         float dur = 0;
         List<JSONObject> allCases = globa.getAllSuccessfulCases(filea);
-        for(JSONObject jcase: allCases){
-            dur += filea.getTotalTaskDurationInMilliSecs(jcase);            
+
+        if (allCases.size() != 0) {
+            for (JSONObject jcase : allCases) {
+                dur += filea.getTotalTaskDurationInMilliSecs(jcase);            
+            }
         }
-        
-        long millis = (long)dur/allCases.size(); 
-        
+
+        long millis = (long) dur / allCases.size();
+
         return getHoursMinutesSecondsFromMilliseconds(millis);
-        
+
     }
 
     public String getAnalysisResults() {
@@ -228,13 +231,12 @@ public class UEMetricsAnalyst {
     }
 
     public static void main(String[] args) {
-        UEMetricsAnalyst ue = new UEMetricsAnalyst("DEFAULT-DATA");
+        UEMetricsAnalyst ue = new UEMetricsAnalyst("TestLog-Data");
         System.out.println(ue.getAnalysisResults());
     }
 
-
     // TODO; move; general utilit METHODS
-      public String getHoursMinutesSecondsFromMilliseconds(long millis) {
+    public String getHoursMinutesSecondsFromMilliseconds(long millis) {
 
         String format = String.format("%%0%dd", 2);
         millis = millis / 1000;
