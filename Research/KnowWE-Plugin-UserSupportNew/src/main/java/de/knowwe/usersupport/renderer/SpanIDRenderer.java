@@ -26,6 +26,9 @@ import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * 
+ * Renders a span with an an id attribute around
+ * a section.
+ * 
  * @author Johannes Dienst
  * @created 14.10.2011
  */

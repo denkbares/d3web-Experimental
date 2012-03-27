@@ -145,6 +145,13 @@ public class TableRenderer implements Renderer {
 		buildi.append("</tbody>");
 	}
 
+	/**
+	 * 
+	 * Renders export and import-form for Tables.
+	 * 
+	 * @param buildi
+	 * @param section
+	 */
 	public static void renderExportImportButton(StringBuilder buildi, Section<InnerTable> section) {
 
 		String rel = "rel=\"{ " +
