@@ -27,6 +27,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.jurisearch.Error;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
@@ -71,6 +72,8 @@ public class JuriTreeExpression extends DashTreeElementContent {
 					BRACKET_OPEN + SCORE + BRACKET_CLOSE });
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
 			csf.addConstraint(SingleChildConstraint.getInstance());
+			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
+
 			this.setSectionFinder(csf);
 			this.setRenderer(new BracketRenderer());
 
@@ -84,6 +87,8 @@ public class JuriTreeExpression extends DashTreeElementContent {
 			SectionFinder sf = new RegexSectionFinder(BRACKET_OPEN + NOT + BRACKET_CLOSE);
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
 			csf.addConstraint(SingleChildConstraint.getInstance());
+			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
+
 			this.setSectionFinder(csf);
 			this.setRenderer(new BracketRenderer());
 
@@ -97,6 +102,8 @@ public class JuriTreeExpression extends DashTreeElementContent {
 			SectionFinder sf = new RegexSectionFinder(BRACKET_OPEN + DUMMY + BRACKET_CLOSE);
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
 			csf.addConstraint(SingleChildConstraint.getInstance());
+			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
+
 			this.setSectionFinder(csf);
 			this.setRenderer(new BracketRenderer());
 			this.addChildType(new BracketContent());
