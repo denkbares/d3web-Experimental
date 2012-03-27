@@ -30,6 +30,6 @@ import java.util.List;
 public interface MatchingAlgorithm
 {
 
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> termDefinitions);
+	public List<Suggestion> getMatches(int maxCount, double threshold, String query, List<String> termDefinitions);
 
 }

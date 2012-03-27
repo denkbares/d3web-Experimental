@@ -39,19 +39,19 @@ public class PermutedWinkler implements MatchingAlgorithm
 {
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> termDefinitions)
+	public List<Suggestion> getMatches(int maxCount, double threshold, String query, List<String> termDefinitions)
 	{
 		JaroWinkler jW = new JaroWinkler();
 		List<String> toMatchPermutations = new ArrayList<String>();
-		String[] a = toMatch.split(" ");
+		String[] a = query.split(" ");
 		List<String> permutedMatch = Arrays.asList(a);
-		if (toMatch.contains(" "))
+		if (query.contains(" "))
 		{
 			toMatchPermutations.addAll(PermutedWinkler.permuteListRecursive(permutedMatch));
 		}
 		else
 		{
-			toMatchPermutations.add(toMatch);
+			toMatchPermutations.add(query);
 		}
 		
 		PriorityQueue<Suggestion> suggestions =

@@ -17,7 +17,7 @@ public class NeedlemanWunschAlgorithm implements MatchingAlgorithm
 
 	@Override
 	public List<Suggestion> getMatches(int maxCount, double threshold,
-			String toMatch, List<String> termDefinitions)
+			String query, List<String> termDefinitions)
 	{
 		NeedlemanWunch nW = new NeedlemanWunch();
 
@@ -26,7 +26,7 @@ public class NeedlemanWunschAlgorithm implements MatchingAlgorithm
 
 		for (String match : termDefinitions)
 		{
-			double score = nW.getSimilarity(toMatch, match);
+			double score = nW.getSimilarity(query, match);
 			if (score >= threshold) {
 				suggestions.add(new Suggestion(match, score));
 			}

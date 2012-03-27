@@ -38,22 +38,22 @@ public class SortedWinklerAlgorithm implements MatchingAlgorithm
 {
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	public List<Suggestion> getMatches(int maxCount, double threshold, String query, List<String> localTermMatches)
 	{
 		JaroWinkler jW = new JaroWinkler();
-		if (toMatch.contains(" "))
+		if (query.contains(" "))
 		{
-			String[] a = toMatch.split(" ");
+			String[] a = query.split(" ");
 			List<String> sortMe = Arrays.asList(a);
 			Collections.sort(sortMe);
-			toMatch = "";
+			query = "";
 			for (String s : a)
 			{
-				toMatch += s;
-				toMatch += " ";
+				query += s;
+				query += " ";
 			}
 
-			toMatch = toMatch.substring(0, toMatch.length()-1);
+			query = query.substring(0, query.length()-1);
 		}
 
 		PriorityQueue<Suggestion> suggestions =
@@ -74,7 +74,7 @@ public class SortedWinklerAlgorithm implements MatchingAlgorithm
 				}
 				term2 = term2.substring(0, term2.length()- 1);
 			}
-			double score = jW.score(toMatch, term2);
+			double score = jW.score(query, term2);
 			if (score >= threshold) {
 				suggestions.add(new Suggestion(term, score ));
 			}

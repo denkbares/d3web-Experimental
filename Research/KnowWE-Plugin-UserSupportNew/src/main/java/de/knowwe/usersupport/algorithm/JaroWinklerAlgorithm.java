@@ -32,7 +32,7 @@ public class JaroWinklerAlgorithm implements MatchingAlgorithm
 {
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	public List<Suggestion> getMatches(int maxCount, double threshold, String query, List<String> localTermMatches)
 	{
 
 		JaroWinkler jW = new JaroWinkler();
@@ -41,7 +41,7 @@ public class JaroWinklerAlgorithm implements MatchingAlgorithm
 
 		for (String match : localTermMatches)
 		{
-			double score = jW.score(toMatch, match);
+			double score = jW.score(query, match);
 			// TODO threshold is experimental
 			if (score >= threshold)
 			{

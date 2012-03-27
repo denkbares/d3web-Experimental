@@ -32,7 +32,7 @@ import org.apache.commons.codec.language.DoubleMetaphone;
 public class DoubleMetaphoneAlgorithm implements MatchingAlgorithm {
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	public List<Suggestion> getMatches(int maxCount, double threshold, String query, List<String> localTermMatches)
 	{
 
 		List<Suggestion> toReturn = new ArrayList<Suggestion>();
@@ -45,7 +45,7 @@ public class DoubleMetaphoneAlgorithm implements MatchingAlgorithm {
 
 			for (String match : localTermMatches)
 			{
-				if (dM.isDoubleMetaphoneEqual(toMatch, match) && !toMatch.equals(match))
+				if (dM.isDoubleMetaphoneEqual(query, match) && !query.equals(match))
 				{
 					suggestions.add(new Suggestion(match, 0.99));
 				}

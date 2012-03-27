@@ -33,7 +33,7 @@ public class RefinedSoundexAlgorithm implements MatchingAlgorithm
 {
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	public List<Suggestion> getMatches(int maxCount, double threshold, String query, List<String> localTermMatches)
 	{
 
 		RefinedSoundex rS = new RefinedSoundex();
@@ -44,10 +44,10 @@ public class RefinedSoundexAlgorithm implements MatchingAlgorithm
 		{
 			try
 			{
-				int diff = rS.difference(toMatch, match);
+				int diff = rS.difference(query, match);
 				if (diff <= 1)
 				{
-					suggestions.add(new Suggestion(toMatch, diff));
+					suggestions.add(new Suggestion(query, diff));
 				}
 
 			}

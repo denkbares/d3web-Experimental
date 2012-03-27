@@ -33,7 +33,7 @@ public class MongeElkanAlgorithm implements MatchingAlgorithm
 {
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> termDefinitions)
+	public List<Suggestion> getMatches(int maxCount, double threshold, String query, List<String> termDefinitions)
 	{
 
 		MongeElkan mE = new MongeElkan();
@@ -43,7 +43,7 @@ public class MongeElkanAlgorithm implements MatchingAlgorithm
 
 		for (String match : termDefinitions)
 		{
-			double score = mE.score(toMatch, match);
+			double score = mE.score(query, match);
 			// TODO threshold is experimental
 			if (score >= threshold) {
 				suggestions.add(new Suggestion(match, score));

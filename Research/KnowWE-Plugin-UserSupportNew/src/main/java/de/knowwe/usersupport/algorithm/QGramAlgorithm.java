@@ -33,7 +33,7 @@ public class QGramAlgorithm implements MatchingAlgorithm
 {
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	public List<Suggestion> getMatches(int maxCount, double threshold, String query, List<String> localTermMatches)
 	{
 		QGramsDistance qG = new QGramsDistance();
 
@@ -41,7 +41,7 @@ public class QGramAlgorithm implements MatchingAlgorithm
 				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
 		for (String term : localTermMatches) {
-			double score = qG.getSimilarity(toMatch, term);
+			double score = qG.getSimilarity(query, term);
 			if (score >= threshold) {
 				suggestions.add(new Suggestion(term, score));
 			}

@@ -33,7 +33,7 @@ public class JaccardAlgorithm implements MatchingAlgorithm
 {
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	public List<Suggestion> getMatches(int maxCount, double threshold, String query, List<String> localTermMatches)
 	{
 		Jaccard jC = new Jaccard();
 		PriorityQueue<Suggestion> suggestions =
@@ -41,7 +41,7 @@ public class JaccardAlgorithm implements MatchingAlgorithm
 
 		for (String match : localTermMatches)
 		{
-			double score = jC.score(toMatch, match);
+			double score = jC.score(query, match);
 			if (score >= threshold) {
 				suggestions.add(new Suggestion(match, score));
 			}

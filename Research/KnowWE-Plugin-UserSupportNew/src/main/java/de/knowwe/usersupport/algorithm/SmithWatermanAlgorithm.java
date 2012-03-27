@@ -33,7 +33,7 @@ public class SmithWatermanAlgorithm implements MatchingAlgorithm
 {
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	public List<Suggestion> getMatches(int maxCount, double threshold, String query, List<String> localTermMatches)
 	{
 
 		SmithWaterman sM = new SmithWaterman();
@@ -43,8 +43,8 @@ public class SmithWatermanAlgorithm implements MatchingAlgorithm
 
 		for (String term : localTermMatches)
 		{
-			double score = sM.score(toMatch, term);
-			int div = Math.max(term.length(), toMatch.length()); // could also be min or 0.5*(s1+s2)
+			double score = sM.score(query, term);
+			int div = Math.max(term.length(), query.length()); // could also be min or 0.5*(s1+s2)
 			double exactMatchScore = 5.0; // TODO where is this from?
 			double result = score / (div * exactMatchScore);
 			if (result >= threshold)

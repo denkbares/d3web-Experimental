@@ -31,18 +31,8 @@ import com.wcohen.ss.Levenstein;
  */
 public class LevenshteinAlgorithm implements MatchingAlgorithm {
 
-	private final double threshold;
-
-	public LevenshteinAlgorithm(int threshold) {
-		this.threshold = threshold;
-	}
-
-	public LevenshteinAlgorithm() {
-		this.threshold = 5;
-	}
-
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	public List<Suggestion> getMatches(int maxCount, double threshold, String query, List<String> localTermMatches)
 	{
 
 		Levenstein l = new Levenstein();
@@ -52,8 +42,8 @@ public class LevenshteinAlgorithm implements MatchingAlgorithm {
 
 		for (String term : localTermMatches)
 		{
-			double score = l.score(toMatch, term);
-			int max = Math.max(term.length(), toMatch.length());
+			double score = l.score(query, term);
+			int max = Math.max(term.length(), query.length());
 			double minuend = score / max;
 			double result = 1.0 + (minuend);
 			if (result >= threshold) {
