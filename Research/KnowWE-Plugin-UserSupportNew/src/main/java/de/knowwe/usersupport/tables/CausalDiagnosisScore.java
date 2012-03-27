@@ -86,9 +86,6 @@ public class CausalDiagnosisScore extends AbstractType
 	 */
 	public class CausalDiagnosisSubtreeHandler extends GeneralSubtreeHandler<CausalDiagnosisScore>
 	{
-
-		private static final String NO_WEIGHT = "Weightless";
-
 		@Override
 		public Collection<Message> create(Article article, Section<CausalDiagnosisScore> scoreSec)
 		{

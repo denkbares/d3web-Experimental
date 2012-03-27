@@ -22,24 +22,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
-import de.d3web.abstraction.ActionSetValue;
 import de.d3web.abstraction.inference.PSMethodAbstraction;
 import de.d3web.core.inference.PSAction;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.RuleSet;
 import de.d3web.core.inference.condition.CondAnd;
-import de.d3web.core.inference.condition.CondEqual;
 import de.d3web.core.inference.condition.CondNot;
 import de.d3web.core.inference.condition.Condition;
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.QuestionYN;
-import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.KDOMConditionFactory;
 import de.d3web.we.kdom.rules.action.SetQuestionValue;
-import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -53,8 +47,6 @@ import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
  * 
- * TODO Add ReportMessages
- * 
  * @author Johannes Dienst
  * @created 14.10.2011
  */
@@ -64,7 +56,7 @@ public class DecisionTable extends ITable
 	public DecisionTable()
 	{
 		this.sectionFinder = new AllTextSectionFinder();
-		this.addSubtreeHandler(Priority.LOWEST, new DecisionTableSubtreeHandlerNew());
+		this.addSubtreeHandler(Priority.LOWEST, new DecisionTableSubtreeHandler());
 
 		this.addChildType(new TableDescriptionType());
 
@@ -76,7 +68,7 @@ public class DecisionTable extends ITable
 		this.addChildType(new InnerTable());
 	}
 
-	public class DecisionTableSubtreeHandlerNew extends GeneralSubtreeHandler<DecisionTable>
+	public class DecisionTableSubtreeHandler extends GeneralSubtreeHandler<DecisionTable>
 	{
 		@Override
 		public Collection<Message> create(Article article, Section<DecisionTable> decisionSec)
@@ -108,6 +100,7 @@ public class DecisionTable extends ITable
 				}
 
 				Section<CompositeCondition> cond = Sections.findChildOfType(cell, CompositeCondition.class);
+				Set<String> packageNames = cond.getPackageNames();
 				Condition d3Cond = KDOMConditionFactory.createCondition(compilingArticle, cond);
 				conditionList.add(d3Cond);
 			}
