@@ -107,25 +107,36 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 
 	private void addRule(KnowledgeBase kb, JuriModel model, Node current) throws IOException {
 		String isDisjunctive = getAttribute("Disjunctive", current);
+		String isDummy = getAttribute("Dummy", current);
 		String fatherquestion = getAttribute("FatherQuestion", current);
 
-		JuriRule rule = new JuriRule();
-		if (isDisjunctive != null) {
-			rule.setDisjunctive(Boolean.parseBoolean(isDisjunctive));
-		}
+		JuriRule rule;
 		if (fatherquestion != null) {
 			QuestionOC father = (QuestionOC) kb.getManager().search(fatherquestion);
-			rule.setFather(father);
-		}
-		NodeList elements = current.getChildNodes();
-		for (int i = 0; i < elements.getLength(); i++) {
-			if (elements.item(i).getNodeName().equals("Child")) {
-				String childquestion = getAttribute("Question", elements.item(i));
-				QuestionOC child = (QuestionOC) kb.getManager().search(childquestion);
-				rule.addChild(child);
+			rule = new JuriRule(father);
+			if (isDisjunctive != null) {
+				rule.setDisjunctive(Boolean.parseBoolean(isDisjunctive));
 			}
+			if (isDummy != null) {
+				rule.setDummy(Boolean.parseBoolean(isDummy));
+			}
+
+			NodeList elements = current.getChildNodes();
+			for (int i = 0; i < elements.getLength(); i++) {
+				if (elements.item(i).getNodeName().equals("Child")) {
+					String isNegative = getAttribute("Negation", elements.item(i));
+					String childquestion = getAttribute("Question", elements.item(i));
+					QuestionOC child = (QuestionOC) kb.getManager().search(childquestion);
+					if (isNegative != null && Boolean.parseBoolean(isNegative)) {
+						rule.addNegatedChild(child);
+					}
+					else {
+						rule.addChild(child);
+					}
+				}
+			}
+			model.addRule(rule);
 		}
-		model.addRule(rule);
 	}
 
 	public Element getRuleElement(JuriRule jurirule, Document doc) throws IOException {
@@ -138,8 +149,19 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 			childelement.setAttribute("Question", child.getName());
 			ruleelement.appendChild(childelement);
 		}
+		for (QuestionOC child : jurirule.getNegatedChildren()) {
+			Element childelement = doc.createElement("Child");
+			childelement.setAttribute("Question", child.getName());
+			childelement.setAttribute("Negation", "" + true);
+			ruleelement.appendChild(childelement);
+		}
 
-		ruleelement.setAttribute("Disjuntice", "" + jurirule.isDisjunctive());
+		if (jurirule.isDisjunctive()) {
+			ruleelement.setAttribute("Disjuntive", "" + true);
+		}
+		if (jurirule.isDummy()) {
+			ruleelement.setAttribute("Dummy", "" + true);
+		}
 
 		return ruleelement;
 	}

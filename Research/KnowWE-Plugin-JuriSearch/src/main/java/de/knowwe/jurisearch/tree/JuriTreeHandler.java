@@ -36,6 +36,8 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.event.ArticleCreatedEvent;
+import de.knowwe.jurisearch.tree.JuriTreeExpression.BracketContent;
+import de.knowwe.jurisearch.tree.JuriTreeExpression.NegationFlag;
 import de.knowwe.jurisearch.tree.JuriTreeExpression.Operator;
 
 /**
@@ -44,8 +46,6 @@ import de.knowwe.jurisearch.tree.JuriTreeExpression.Operator;
  * @created 19.01.2012
  */
 public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> implements EventListener {
-
-	private static final String OR = "oder";
 
 	public JuriTreeHandler() {
 		EventManager.getInstance().registerListener(this);
@@ -62,19 +62,6 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 				kb.getKnowledgeStore().addKnowledge(JuriModel.KNOWLEDGE_KIND, model);
 			}
 		}
-		// Section<QuestionIdentifier> question =
-		// Sections.findSuccessor(section, QuestionIdentifier.class);
-		//
-		// Section<QuestionIdentifier> fatherQuestion =
-		// question.get().getFatherQuestion(question);
-		// List<Section<QuestionIdentifier>> childrenQuestion =
-		// question.get().getChildrenQuestion(question);
-		//
-		// System.out.println("Frage: "+question);
-		// System.out.println("- Vater: "+fatherQuestion); for
-		// (Section<QuestionIdentifier> child : childrenQuestion) {
-		// System.out.println("- Kind: "+child); } System.out.println("");
-
 		return new ArrayList<Message>(0);
 	}
 
@@ -95,7 +82,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 		ArticleCreatedEvent e = (ArticleCreatedEvent) event;
 		Article article = e.getArticle();
 		Section<Article> section = article.getRootSection();
-		//JuriTreeXmlGenerator jtxg = new JuriTreeXmlGenerator(section);
+		// JuriTreeXmlGenerator jtxg = new JuriTreeXmlGenerator(section);
 	}
 
 	/**
@@ -109,6 +96,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 		Section<QuestionIdentifier> section = Sections.findSuccessor(s, QuestionIdentifier.class);
 		List<Section<QuestionIdentifier>> children = section.get().getChildrenQuestion(section);
 		List<QuestionOC> childrenQuestion = new LinkedList<QuestionOC>();
+		List<QuestionOC> negatedChildrenQuestion = new LinkedList<QuestionOC>();
 
 		// Get all children questions
 		for (Section<QuestionIdentifier> child : children) {
@@ -118,15 +106,33 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 				return null;
 			}
 			childrenQuestion.add(question);
+
+			/*
+			 * get the content of the negation flag and mark child as negative
+			 * if required.
+			 */
+			Section<JuriTreeExpression> jte = Sections.findAncestorOfType(child,
+					JuriTreeExpression.class);
+			Section<NegationFlag> negation = Sections.findSuccessor(jte,
+					JuriTreeExpression.NegationFlag.class);
+			if (negation != null) {
+				Section<BracketContent> negation_content =
+						Sections.findSuccessor(negation,
+								JuriTreeExpression.BracketContent.class);
+				String negation_str = negation_content.getText().toLowerCase();
+				if (negation_str.equals(JuriTreeExpression.NOT)) {
+					negatedChildrenQuestion.add(question);
+				}
+			}
 		}
 		if (children.isEmpty()) {
 			// if father is a leaf, return null
 			return null;
 		}
 
-		JuriRule rule = new JuriRule();
+		JuriRule rule;
 		QuestionOC father = (QuestionOC) kb.getManager().search(section.getText());
-		rule.setFather(father);
+		rule = new JuriRule(father);
 
 		for (QuestionOC childQuestion : childrenQuestion) {
 			// remove children questions from RootQASet
@@ -135,22 +141,48 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 			// add children questions to father question
 			father.addChild(childQuestion);
 
-			// add children questions to rule
-			rule.addChild(childQuestion);
 		}
+
+		// add children to rule
+		childrenQuestion.removeAll(negatedChildrenQuestion);
+		rule.addChildren(childrenQuestion);
+		rule.addNegatedChildren(negatedChildrenQuestion);
 
 		/*
-		 * get the content of round bracket exp and mark rule as disjunctive if
+		 * get the content of operator flag and mark rule as disjunctive if
 		 * required. default is conjunctive, disjunctive = false
 		 */
-		Section<Operator> rebec = Sections.findSuccessor(s, JuriTreeExpression.Operator.class);
-		if (rebec != null) {
-			String expr = rebec.getText().toLowerCase();
+		Section<Operator> operator = Sections.findSuccessor(s, JuriTreeExpression.Operator.class);
+		if (operator != null) {
+			Section<BracketContent> operator_content = Sections.findSuccessor(operator,
+					JuriTreeExpression.BracketContent.class);
+			String operator_str = operator_content.getText().toLowerCase();
 
-			if (expr.equals(OR)) {
+			if (operator_str.equals(JuriTreeExpression.OR)) {
 				rule.setDisjunctive(true);
 			}
+			else if (operator_str.equals(JuriTreeExpression.SCORE)) {
+				// TODO
+			}
 		}
+
+		// /*
+		// * get the content of the negation flag and mark rule as negative if
+		// * required.
+		// */
+		// Section<NegationFlag> negation = Sections.findSuccessor(s,
+		// JuriTreeExpression.NegationFlag.class);
+		// if (negation != null) {
+		//
+		// Section<BracketContent> negation_content =
+		// Sections.findSuccessor(negation,
+		// JuriTreeExpression.BracketContent.class);
+		// String negation_str = negation_content.getText().toLowerCase();
+		// if (negation_str.equals(JuriTreeExpression.NOT)) {
+		// rule.setNegative(true);
+		// }
+		// }
+
 		// System.out.println(rule.toString());
 		return rule;
 	}

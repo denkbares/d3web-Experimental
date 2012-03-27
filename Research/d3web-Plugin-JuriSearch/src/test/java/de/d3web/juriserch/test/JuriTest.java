@@ -138,13 +138,11 @@ public class JuriTest extends TestCase {
 		addAlternatives(c21);
 		addAlternatives(c22);
 
-		JuriRule jurirule = new JuriRule();
-		jurirule.setFather(f);
+		JuriRule jurirule = new JuriRule(f);
 		jurirule.addChild(c1);
 		jurirule.addChild(c2);
 
-		JuriRule jurirule2 = new JuriRule();
-		jurirule2.setFather(c2);
+		JuriRule jurirule2 = new JuriRule(c2);
 		jurirule2.addChild(c21);
 		jurirule2.addChild(c22);
 

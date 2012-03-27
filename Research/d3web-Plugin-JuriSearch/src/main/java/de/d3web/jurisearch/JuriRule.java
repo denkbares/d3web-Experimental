@@ -19,6 +19,7 @@
 package de.d3web.jurisearch;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import de.d3web.core.inference.KnowledgeKind;
@@ -51,18 +52,25 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 
 	private QuestionOC father;
 	private List<QuestionOC> children;
+	private List<QuestionOC> negatedChildren;
 	private boolean disjunctive; // default type is conjunction
+	private boolean dummy;
 
-	public JuriRule() {
-		children = new ArrayList<QuestionOC>();
-		disjunctive = false;
+	public JuriRule(QuestionOC father) {
+		this(father, new ArrayList<QuestionOC>(), new ArrayList<QuestionOC>());
 	}
 
 	public JuriRule(QuestionOC father, List<QuestionOC> children) {
+		this(father, children, new ArrayList<QuestionOC>());
+	}
+
+	public JuriRule(QuestionOC father, List<QuestionOC> children, List<QuestionOC> negatedChildren) {
 		this.father = father;
 		this.children = children;
+		this.negatedChildren = negatedChildren;
 
 		disjunctive = false;
+		dummy = false;
 	}
 
 	public QuestionOC getFather() {
@@ -85,8 +93,32 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 		children.add(q);
 	}
 
+	public void addChildren(Collection<QuestionOC> c) {
+		children.addAll(c);
+	}
+
 	public void removeChild(QuestionOC q) {
 		children.remove(q);
+	}
+
+	public List<QuestionOC> getNegatedChildren() {
+		return negatedChildren;
+	}
+
+	public void setNegatedChildren(List<QuestionOC> negatedChildren) {
+		this.negatedChildren = negatedChildren;
+	}
+
+	public void addNegatedChild(QuestionOC q) {
+		negatedChildren.add(q);
+	}
+
+	public void addNegatedChildren(Collection<QuestionOC> c) {
+		negatedChildren.addAll(c);
+	}
+
+	public void removeNegatedChild(QuestionOC q) {
+		negatedChildren.remove(q);
 	}
 
 	public boolean isDisjunctive() {
@@ -95,6 +127,14 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 
 	public void setDisjunctive(boolean disjunctive) {
 		this.disjunctive = disjunctive;
+	}
+
+	public boolean isDummy() {
+		return dummy;
+	}
+
+	public void setDummy(boolean dummy) {
+		this.dummy = dummy;
 	}
 
 	public Fact fire(Session session) {
@@ -112,7 +152,34 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 					}
 				}
 				else {
-					if (value.equals(YES)) {
+					if (value.equals(YES_VALUE)) {
+						return createFact(session, YES_VALUE);
+					}
+				}
+				if (value.equals(MAYBE_VALUE)) {
+					maybe = true;
+				}
+			}
+			else {
+				if (!disjunctive) {
+					return null;
+				}
+			}
+		}
+		for (QuestionOC child : negatedChildren) {
+			ChoiceValue value = null;
+			if (session.getBlackboard().getAnsweredQuestions().contains(child)) {
+				value = (ChoiceValue) session.getBlackboard().getValue(child);
+			}
+
+			if (value != null) {
+				if (!disjunctive) {
+					if (value.equals(YES_VALUE)) {
+						return createFact(session, NO_VALUE);
+					}
+				}
+				else {
+					if (value.equals(NO_VALUE)) {
 						return createFact(session, YES_VALUE);
 					}
 				}
@@ -182,5 +249,4 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 		// TODO Auto-generated method stub
 		return hashCode() - o.hashCode();
 	}
-
 }
