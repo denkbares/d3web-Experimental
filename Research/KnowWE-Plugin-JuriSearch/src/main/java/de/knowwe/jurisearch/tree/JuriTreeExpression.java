@@ -63,31 +63,6 @@ public class JuriTreeExpression extends DashTreeElementContent {
 		this.addSubtreeHandler(new JuriTreeHandler());
 	}
 
-	// class RoundBracketExp extends AbstractType {
-	// RoundBracketExp() {
-	// this.setSectionFinder(new EmbracedContentFinder(BRACKET_OPEN,
-	// BRACKET_CLOSE));
-	// this.addChildType(new RoundExpBracketExpContent());
-	// }
-	// }
-	//
-	// class RoundExpBracketExpContent extends AbstractType {
-	// RoundExpBracketExpContent() {
-	// ConstraintSectionFinder csf = new ConstraintSectionFinder(new
-	// EmbracedContentFinder(BRACKET_OPEN, BRACKET_CLOSE,
-	// true));
-	// csf.addConstraint(SingleChildConstraint.getInstance());
-	// this.setSectionFinder(csf);
-	// // this.setSectionFinder(new EmbracedContentFinder(BRACKET_OPEN,
-	// BRACKET_CLOSE,
-	// // true));
-	// this.addChildType(new Operator());
-	// this.addChildType(new DummyFlag());
-	// this.addChildType(new NegationFlag());
-	// this.addChildType(new Error());
-	// }
-	// }
-
 	class Operator extends AbstractType {
 
 		Operator() {

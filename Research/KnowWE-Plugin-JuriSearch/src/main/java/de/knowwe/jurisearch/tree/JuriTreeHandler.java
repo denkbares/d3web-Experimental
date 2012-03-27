@@ -166,24 +166,6 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 			}
 		}
 
-		// /*
-		// * get the content of the negation flag and mark rule as negative if
-		// * required.
-		// */
-		// Section<NegationFlag> negation = Sections.findSuccessor(s,
-		// JuriTreeExpression.NegationFlag.class);
-		// if (negation != null) {
-		//
-		// Section<BracketContent> negation_content =
-		// Sections.findSuccessor(negation,
-		// JuriTreeExpression.BracketContent.class);
-		// String negation_str = negation_content.getText().toLowerCase();
-		// if (negation_str.equals(JuriTreeExpression.NOT)) {
-		// rule.setNegative(true);
-		// }
-		// }
-
-		// System.out.println(rule.toString());
 		return rule;
 	}
 
