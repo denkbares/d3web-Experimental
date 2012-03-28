@@ -54,7 +54,7 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 	private List<QuestionOC> children;
 	private List<QuestionOC> negatedChildren;
 	private boolean disjunctive; // default type is conjunction
-	private boolean dummy;
+	// private boolean dummy;
 
 	public JuriRule(QuestionOC father) {
 		this(father, new ArrayList<QuestionOC>(), new ArrayList<QuestionOC>());
@@ -70,7 +70,7 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 		this.negatedChildren = negatedChildren;
 
 		disjunctive = false;
-		dummy = false;
+		// dummy = false;
 	}
 
 	public QuestionOC getFather() {
@@ -129,13 +129,13 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 		this.disjunctive = disjunctive;
 	}
 
-	public boolean isDummy() {
-		return dummy;
-	}
-
-	public void setDummy(boolean dummy) {
-		this.dummy = dummy;
-	}
+	// public boolean isDummy() {
+	// return dummy;
+	// }
+	//
+	// public void setDummy(boolean dummy) {
+	// this.dummy = dummy;
+	// }
 
 	public Fact fire(Session session) {
 		boolean maybe = false;

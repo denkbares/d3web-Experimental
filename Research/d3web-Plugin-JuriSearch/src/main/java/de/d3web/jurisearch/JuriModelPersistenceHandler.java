@@ -47,6 +47,12 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
 public class JuriModelPersistenceHandler implements KnowledgeReader,
 		KnowledgeWriter {
 
+	private static final String JURI_RULE = "JuriRule";
+	private static final String DISJUNCTIVE = "Disjunctive";
+	private static final String FATHER_QUESTION = "FatherQuestion";
+	private static final String CHILD = "Child";
+	private static final String NEGATION = "Negation";
+	private static final String QUESTION = "Question";
 	public final static String ID = "juripattern";
 
 	@Override
@@ -91,7 +97,7 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 	 */
 	public KnowledgeBase loadKnowledgeSlices(KnowledgeBase kb, Document doc, ProgressListener listener) throws IOException {
 		listener.updateProgress(0, "Loading knowledge base");
-		NodeList jurirules = doc.getElementsByTagName("JuriRule");
+		NodeList jurirules = doc.getElementsByTagName(JURI_RULE);
 		int cur = 0;
 		int max = jurirules.getLength();
 		JuriModel model = new JuriModel();
@@ -106,9 +112,9 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 	}
 
 	private void addRule(KnowledgeBase kb, JuriModel model, Node current) throws IOException {
-		String isDisjunctive = getAttribute("Disjunctive", current);
-		String isDummy = getAttribute("Dummy", current);
-		String fatherquestion = getAttribute("FatherQuestion", current);
+		String isDisjunctive = getAttribute(DISJUNCTIVE, current);
+		// String isDummy = getAttribute("Dummy", current);
+		String fatherquestion = getAttribute(FATHER_QUESTION, current);
 
 		JuriRule rule;
 		if (fatherquestion != null) {
@@ -117,15 +123,15 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 			if (isDisjunctive != null) {
 				rule.setDisjunctive(Boolean.parseBoolean(isDisjunctive));
 			}
-			if (isDummy != null) {
-				rule.setDummy(Boolean.parseBoolean(isDummy));
-			}
+			// if (isDummy != null) {
+			// rule.setDummy(Boolean.parseBoolean(isDummy));
+			// }
 
 			NodeList elements = current.getChildNodes();
 			for (int i = 0; i < elements.getLength(); i++) {
-				if (elements.item(i).getNodeName().equals("Child")) {
-					String isNegative = getAttribute("Negation", elements.item(i));
-					String childquestion = getAttribute("Question", elements.item(i));
+				if (elements.item(i).getNodeName().equals(CHILD)) {
+					String isNegative = getAttribute(NEGATION, elements.item(i));
+					String childquestion = getAttribute(QUESTION, elements.item(i));
 					QuestionOC child = (QuestionOC) kb.getManager().search(childquestion);
 					if (isNegative != null && Boolean.parseBoolean(isNegative)) {
 						rule.addNegatedChild(child);
@@ -140,28 +146,28 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 	}
 
 	public Element getRuleElement(JuriRule jurirule, Document doc) throws IOException {
-		Element ruleelement = doc.createElement("JuriRule");
+		Element ruleelement = doc.createElement(JURI_RULE);
 
-		ruleelement.setAttribute("FatherQuestion", jurirule.getFather().getName());
+		ruleelement.setAttribute(FATHER_QUESTION, jurirule.getFather().getName());
 
 		for (QuestionOC child : jurirule.getChildren()) {
-			Element childelement = doc.createElement("Child");
-			childelement.setAttribute("Question", child.getName());
+			Element childelement = doc.createElement(CHILD);
+			childelement.setAttribute(QUESTION, child.getName());
 			ruleelement.appendChild(childelement);
 		}
 		for (QuestionOC child : jurirule.getNegatedChildren()) {
-			Element childelement = doc.createElement("Child");
-			childelement.setAttribute("Question", child.getName());
-			childelement.setAttribute("Negation", "" + true);
+			Element childelement = doc.createElement(CHILD);
+			childelement.setAttribute(QUESTION, child.getName());
+			childelement.setAttribute(NEGATION, "" + true);
 			ruleelement.appendChild(childelement);
 		}
 
 		if (jurirule.isDisjunctive()) {
-			ruleelement.setAttribute("Disjuntive", "" + true);
+			ruleelement.setAttribute(DISJUNCTIVE, "" + true);
 		}
-		if (jurirule.isDummy()) {
-			ruleelement.setAttribute("Dummy", "" + true);
-		}
+		// if (jurirule.isDummy()) {
+		// ruleelement.setAttribute("Dummy", "" + true);
+		// }
 
 		return ruleelement;
 	}
