@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.usersupport.tables.action;
 
@@ -35,14 +35,11 @@ import de.knowwe.usersupport.tables.DecisionTable;
 import de.knowwe.usersupport.tables.HeuristicDiagnosisTable;
 import de.knowwe.usersupport.tables.TableUtils;
 
-
 /**
- * Exports a Table to a file on the server.
- * The user can download it and edit the file.
- * Meanwhile the page is locked for a given time.
- * The user has to manually reimport the file. See {@link TableImportAction}.
+ * Exports a Table to a file on the server. The user can download it and edit
+ * the file. Meanwhile the page is locked for a given time. The user has to
+ * manually reimport the file. See {@link TableImportAction}.
  * 
- * TODO Storing the file on the server: Now hardcoded for testing
  * TODO Get the downloadlink to work properly
  * 
  * @author Johannes Dienst
@@ -67,22 +64,20 @@ public class TableExportAction extends AbstractAction
 				Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
 		Section<?> table = TableUtils.getTableWithId(article, tableId);
 
-		String extensionPath = System.getProperty("java.io.tmpdir") + "/workbook-" +tableId+ ".xls";
+		String extensionPath = Environment.getInstance().getKnowWEExtensionPath() + "/workbook-"
+				+ tableId + "-" + PoiUtils.getIdPostfix() + ".xls";
 		File file = new File(extensionPath);
 		FileOutputStream out = new FileOutputStream(file);
 
 		// Export the Table via PoiUtils
-		if (table.getFather().get().isType(CausalDiagnosisScore.class))
-			PoiUtils.writeCausalDiagnosisScoreToFile(
-					(Section<CausalDiagnosisScore>) table, out);
+		if (table.getFather().get().isType(CausalDiagnosisScore.class)) PoiUtils.writeCausalDiagnosisScoreToFile(
+				(Section<CausalDiagnosisScore>) table, out);
 
-		if (table.getFather().get().isType(DecisionTable.class))
-			PoiUtils.writeDecisionTableToFile(
-					(Section<DecisionTable>) table, out);
+		if (table.getFather().get().isType(DecisionTable.class)) PoiUtils.writeDecisionTableToFile(
+				(Section<DecisionTable>) table, out);
 
-		if (table.getFather().get().isType(HeuristicDiagnosisTable.class))
-			PoiUtils.writeHeuristicDiagnosTableToFile(
-					(Section<HeuristicDiagnosisTable>) table, out);
+		if (table.getFather().get().isType(HeuristicDiagnosisTable.class)) PoiUtils.writeHeuristicDiagnosTableToFile(
+				(Section<HeuristicDiagnosisTable>) table, out);
 
 		out.flush();
 		out.close();
@@ -93,10 +88,11 @@ public class TableExportAction extends AbstractAction
 		// write the downloadlink beneath the exportbutton
 		Writer writer = context.getWriter();
 		writer.append(
-				"<a href=\"file://"+ extensionPath + "\" target=\"_blank\">" +
-						bundle.getString("download-export") +  "</a>"
+				"<a href=\"file://" + extensionPath + "\" target=\"_blank\">" +
+						bundle.getString("download-export") + "</a>"
 				);
-		//		writer.append("<a href=\"" + extensionPath + "\">" + bundle.getString("download-export") +"</a>");
+		// writer.append("<a href=\"temp/test-zip.zip\">" +
+		// bundle.getString("download-export") +"</a>");
 
 	}
 
