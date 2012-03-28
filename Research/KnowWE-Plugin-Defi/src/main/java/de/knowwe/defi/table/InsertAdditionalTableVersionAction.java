@@ -32,6 +32,7 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.defi.utils.ReplaceSectionUtils;
 
 public class InsertAdditionalTableVersionAction extends AbstractAction {
 
@@ -79,8 +80,7 @@ public class InsertAdditionalTableVersionAction extends AbstractAction {
 				+ newContent + "\n-";
 		nodesMap.put(contentSectionForTableID.getID(),
 				completeNewText);
-		Sections.replaceSections(context,
-				nodesMap);
+		ReplaceSectionUtils.replaceSections(context, nodesMap);
 	}
 
 }
