@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.w3c.dom.Document;
@@ -37,6 +38,7 @@ import de.d3web.core.io.progress.ProgressListener;
 import de.d3web.core.io.utilities.Util;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.QuestionOC;
+import de.d3web.core.session.values.ChoiceValue;
 
 /**
  * PersistenceHandler for XCLModels
@@ -51,9 +53,9 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 	private static final String DISJUNCTIVE = "Disjunctive";
 	private static final String FATHER_QUESTION = "FatherQuestion";
 	private static final String CHILD = "Child";
-	private static final String NEGATION = "Negation";
 	private static final String QUESTION = "Question";
 	public final static String ID = "juripattern";
+	private static final String CONFIRMING_ANSWER = "ConfirmingAnswer";
 
 	@Override
 	public void write(KnowledgeBase knowledgeBase, OutputStream stream, ProgressListener listener) throws IOException {
@@ -130,15 +132,10 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 			NodeList elements = current.getChildNodes();
 			for (int i = 0; i < elements.getLength(); i++) {
 				if (elements.item(i).getNodeName().equals(CHILD)) {
-					String isNegative = getAttribute(NEGATION, elements.item(i));
+					String confirmingAnswer = getAttribute(CONFIRMING_ANSWER, elements.item(i));
 					String childquestion = getAttribute(QUESTION, elements.item(i));
 					QuestionOC child = (QuestionOC) kb.getManager().search(childquestion);
-					if (isNegative != null && Boolean.parseBoolean(isNegative)) {
-						rule.addNegatedChild(child);
-					}
-					else {
-						rule.addChild(child);
-					}
+					rule.addChild(child, new ChoiceValue(confirmingAnswer));
 				}
 			}
 			model.addRule(rule);
@@ -150,15 +147,10 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 
 		ruleelement.setAttribute(FATHER_QUESTION, jurirule.getFather().getName());
 
-		for (QuestionOC child : jurirule.getChildren()) {
+		for (Entry<QuestionOC, ChoiceValue> child : jurirule.getChildren().entrySet()) {
 			Element childelement = doc.createElement(CHILD);
-			childelement.setAttribute(QUESTION, child.getName());
-			ruleelement.appendChild(childelement);
-		}
-		for (QuestionOC child : jurirule.getNegatedChildren()) {
-			Element childelement = doc.createElement(CHILD);
-			childelement.setAttribute(QUESTION, child.getName());
-			childelement.setAttribute(NEGATION, "" + true);
+			childelement.setAttribute(QUESTION, child.getKey().getName());
+			childelement.setAttribute(CONFIRMING_ANSWER, child.getValue().getAnswerChoiceID());
 			ruleelement.appendChild(childelement);
 		}
 

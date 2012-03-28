@@ -20,13 +20,16 @@ package de.knowwe.jurisearch.tree;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.QuestionOC;
+import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.jurisearch.JuriModel;
 import de.d3web.jurisearch.JuriRule;
+import de.d3web.we.object.AnswerReference;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
@@ -37,8 +40,6 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.event.ArticleCreatedEvent;
 import de.knowwe.jurisearch.BracketContent;
-import de.knowwe.jurisearch.tree.JuriTreeExpression.DummyFlag;
-import de.knowwe.jurisearch.tree.JuriTreeExpression.NegationFlag;
 import de.knowwe.jurisearch.tree.JuriTreeExpression.Operator;
 
 /**
@@ -96,8 +97,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 	private JuriRule createJuriRule(KnowledgeBase kb, Section<JuriTreeExpression> s) {
 		Section<QuestionIdentifier> section = Sections.findSuccessor(s, QuestionIdentifier.class);
 		List<Section<QuestionIdentifier>> children = section.get().getChildrenQuestion(section);
-		List<QuestionOC> childrenQuestion = new LinkedList<QuestionOC>();
-		List<QuestionOC> negatedChildrenQuestion = new LinkedList<QuestionOC>();
+		HashMap<QuestionOC, ChoiceValue> childrenQuestion = new HashMap<QuestionOC, ChoiceValue>();
 
 		// Get all children questions
 		for (Section<QuestionIdentifier> child : children) {
@@ -106,24 +106,27 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 				// if a child question is not defined, return null
 				return null;
 			}
-			childrenQuestion.add(question);
 
 			/*
-			 * get the content of the negation flag and mark child as negative
-			 * if required.
+			 * get the content of the answer identifier flag, otherwise YES is
+			 * the confirming answer
 			 */
 			Section<JuriTreeExpression> jte = Sections.findAncestorOfType(child,
 					JuriTreeExpression.class);
-			Section<NegationFlag> negation = Sections.findSuccessor(jte,
-					JuriTreeExpression.NegationFlag.class);
-			if (negation != null) {
-				Section<BracketContent> negation_content =
-						Sections.findSuccessor(negation, BracketContent.class);
-				String negation_str = negation_content.getText().toLowerCase();
-				if (negation_str.toLowerCase().equals(JuriTreeExpression.NOT)) {
-					negatedChildrenQuestion.add(question);
-				}
+			Section<AnswerReference> answer = Sections.findSuccessor(jte, AnswerReference.class);
+			ChoiceValue value = JuriRule.YES_VALUE;
+			if (answer != null) {
+				// TODO sollte so funktionieren, wenn die antwort richtig
+				// gefunden wird
+				// String id = answer.get().getTermIdentifier(answer);
+				// Choice c = KnowledgeBaseUtils.findChoice(question, id);
+
+				// workaround
+				String c = answer.getText();
+				value = new ChoiceValue(c);
 			}
+			childrenQuestion.put(question, value);
+
 		}
 		if (children.isEmpty()) {
 			// if father is a leaf, return null
@@ -132,21 +135,15 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 
 		JuriRule rule;
 		QuestionOC father = (QuestionOC) kb.getManager().search(section.getText());
-		rule = new JuriRule(father);
 
-		for (QuestionOC childQuestion : childrenQuestion) {
+		rule = new JuriRule(father, childrenQuestion);
+		for (QuestionOC childQuestion : childrenQuestion.keySet()) {
 			// remove children questions from RootQASet
 			father.getKnowledgeBase().getRootQASet().removeChild(childQuestion);
 
 			// add children questions to father question
 			father.addChild(childQuestion);
-
 		}
-
-		// add children to rule
-		childrenQuestion.removeAll(negatedChildrenQuestion);
-		rule.addChildren(childrenQuestion);
-		rule.addNegatedChildren(negatedChildrenQuestion);
 
 		/*
 		 * get the content of operator flag and mark rule as disjunctive if
@@ -166,16 +163,18 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 			}
 		}
 
-		Section<DummyFlag> dummysec = Sections.findSuccessor(s, JuriTreeExpression.DummyFlag.class);
-		if (dummysec != null) {
-			Section<BracketContent> dummy_content = Sections.findSuccessor(dummysec,
-					BracketContent.class);
-			String dummyflag = dummy_content.getText().toLowerCase();
-
-			if (dummyflag.toLowerCase().equals(JuriTreeExpression.DUMMY)) {
-				father.getInfoStore().addValue(JuriModel.DUMMY, true);
-			}
-		}
+		// Section<DummyFlag> dummysec = Sections.findSuccessor(s,
+		// JuriTreeExpression.DummyFlag.class);
+		// if (dummysec != null) {
+		// Section<BracketContent> dummy_content =
+		// Sections.findSuccessor(dummysec,
+		// BracketContent.class);
+		// String dummyflag = dummy_content.getText().toLowerCase();
+		//
+		// if (dummyflag.toLowerCase().equals(DummyExpression.DUMMY)) {
+		// father.getInfoStore().addValue(JuriModel.DUMMY, true);
+		// }
+		// }
 
 		return rule;
 	}

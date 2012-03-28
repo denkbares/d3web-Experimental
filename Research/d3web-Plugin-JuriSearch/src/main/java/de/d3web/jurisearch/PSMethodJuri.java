@@ -51,7 +51,7 @@ public class PSMethodJuri implements PSMethod {
 						JuriModel.KNOWLEDGE_KIND);
 				for (JuriModel model : models) {
 					for (JuriRule rule : model.getRules()) {
-						if (rule.getChildren().contains(change.getObject())) {
+						if (rule.getChildren().keySet().contains(change.getObject())) {
 							rulesToUpdate.add(rule);
 						}
 					}

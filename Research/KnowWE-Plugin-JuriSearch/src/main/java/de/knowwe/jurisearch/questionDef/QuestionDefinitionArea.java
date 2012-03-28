@@ -230,8 +230,9 @@ public class QuestionDefinitionArea extends AbstractType {
 					// add default alternatives
 					questionYNM.addAlternative(JuriRule.YES);
 					questionYNM.addAlternative(JuriRule.NO);
-					questionYNM.addAlternative(JuriRule.MAYBE);
 				}
+				// maybe is allways an answer
+				questionYNM.addAlternative(JuriRule.MAYBE);
 
 				// set description as MMInfo.Description
 				List<Section<ExplanationText>> expsecs = Sections.findSuccessorsOfType(qdc,

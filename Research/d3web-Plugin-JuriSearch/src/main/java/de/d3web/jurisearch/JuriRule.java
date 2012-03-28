@@ -18,9 +18,10 @@
  */
 package de.d3web.jurisearch;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import de.d3web.core.inference.KnowledgeKind;
 import de.d3web.core.inference.KnowledgeSlice;
@@ -42,35 +43,33 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 	public final static KnowledgeKind<JuriRule> KNOWLEDGE_KIND = new KnowledgeKind<JuriRule>(
 			"JuriRule", JuriRule.class);
 
-	public static final Choice YES = new Choice("yes");
-	public static final Choice NO = new Choice("no");
-	public static final Choice MAYBE = new Choice("maybe");
+	public static final Choice YES = new Choice("ja");
+	public static final Choice NO = new Choice("nein");
+	public static final Choice MAYBE = new Choice("vielleicht");
 
 	public static final ChoiceValue YES_VALUE = new ChoiceValue(YES);
 	public static final ChoiceValue NO_VALUE = new ChoiceValue(NO);
 	public static final ChoiceValue MAYBE_VALUE = new ChoiceValue(MAYBE);
 
 	private QuestionOC father;
-	private List<QuestionOC> children;
-	private List<QuestionOC> negatedChildren;
+	private HashMap<QuestionOC, ChoiceValue> children;
+
 	private boolean disjunctive; // default type is conjunction
-	// private boolean dummy;
 
 	public JuriRule(QuestionOC father) {
-		this(father, new ArrayList<QuestionOC>(), new ArrayList<QuestionOC>());
+		this(father, new HashMap<QuestionOC, ChoiceValue>());
 	}
 
 	public JuriRule(QuestionOC father, List<QuestionOC> children) {
-		this(father, children, new ArrayList<QuestionOC>());
+		this(father, new HashMap<QuestionOC, ChoiceValue>());
+		addChildren(children);
 	}
 
-	public JuriRule(QuestionOC father, List<QuestionOC> children, List<QuestionOC> negatedChildren) {
+	public JuriRule(QuestionOC father, HashMap<QuestionOC, ChoiceValue> children) {
 		this.father = father;
 		this.children = children;
-		this.negatedChildren = negatedChildren;
 
 		disjunctive = false;
-		// dummy = false;
 	}
 
 	public QuestionOC getFather() {
@@ -81,44 +80,34 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 		this.father = father;
 	}
 
-	public List<QuestionOC> getChildren() {
+	public HashMap<QuestionOC, ChoiceValue> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<QuestionOC> children) {
+	public void setChildren(HashMap<QuestionOC, ChoiceValue> children) {
 		this.children = children;
 	}
 
 	public void addChild(QuestionOC q) {
-		children.add(q);
+		children.put(q, YES_VALUE);
+	}
+
+	public void addChild(QuestionOC q, ChoiceValue value) {
+		children.put(q, value);
 	}
 
 	public void addChildren(Collection<QuestionOC> c) {
-		children.addAll(c);
+		for (QuestionOC q : c) {
+			addChild(q);
+		}
+	}
+
+	public void addChildren(HashMap<QuestionOC, ChoiceValue> m) {
+		children.putAll(m);
 	}
 
 	public void removeChild(QuestionOC q) {
 		children.remove(q);
-	}
-
-	public List<QuestionOC> getNegatedChildren() {
-		return negatedChildren;
-	}
-
-	public void setNegatedChildren(List<QuestionOC> negatedChildren) {
-		this.negatedChildren = negatedChildren;
-	}
-
-	public void addNegatedChild(QuestionOC q) {
-		negatedChildren.add(q);
-	}
-
-	public void addNegatedChildren(Collection<QuestionOC> c) {
-		negatedChildren.addAll(c);
-	}
-
-	public void removeNegatedChild(QuestionOC q) {
-		negatedChildren.remove(q);
 	}
 
 	public boolean isDisjunctive() {
@@ -129,30 +118,22 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 		this.disjunctive = disjunctive;
 	}
 
-	// public boolean isDummy() {
-	// return dummy;
-	// }
-	//
-	// public void setDummy(boolean dummy) {
-	// this.dummy = dummy;
-	// }
-
 	public Fact fire(Session session) {
 		boolean maybe = false;
-		for (QuestionOC child : children) {
+		for (Entry<QuestionOC, ChoiceValue> child : children.entrySet()) {
 			ChoiceValue value = null;
-			if (session.getBlackboard().getAnsweredQuestions().contains(child)) {
-				value = (ChoiceValue) session.getBlackboard().getValue(child);
+			if (session.getBlackboard().getAnsweredQuestions().contains(child.getKey())) {
+				value = (ChoiceValue) session.getBlackboard().getValue(child.getKey());
 			}
 
 			if (value != null) {
 				if (!disjunctive) {
-					if (value.equals(NO_VALUE)) {
+					if (!value.equals(child.getValue())) {
 						return createFact(session, NO_VALUE);
 					}
 				}
 				else {
-					if (value.equals(YES_VALUE)) {
+					if (value.equals(child.getValue())) {
 						return createFact(session, YES_VALUE);
 					}
 				}
@@ -166,33 +147,7 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 				}
 			}
 		}
-		for (QuestionOC child : negatedChildren) {
-			ChoiceValue value = null;
-			if (session.getBlackboard().getAnsweredQuestions().contains(child)) {
-				value = (ChoiceValue) session.getBlackboard().getValue(child);
-			}
 
-			if (value != null) {
-				if (!disjunctive) {
-					if (value.equals(YES_VALUE)) {
-						return createFact(session, NO_VALUE);
-					}
-				}
-				else {
-					if (value.equals(NO_VALUE)) {
-						return createFact(session, YES_VALUE);
-					}
-				}
-				if (value.equals(MAYBE_VALUE)) {
-					maybe = true;
-				}
-			}
-			else {
-				if (!disjunctive) {
-					return null;
-				}
-			}
-		}
 		if (maybe) {
 			return createFact(session, MAYBE_VALUE);
 		}
@@ -235,7 +190,6 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 	private Fact createFact(Session session, Value value) {
 		return FactFactory.createFact(session, father, value, this,
 				session.getPSMethodInstance(PSMethodJuri.class));
-		// return FactFactory.createUserEnteredFact(father, value)
 	}
 
 	@Override
