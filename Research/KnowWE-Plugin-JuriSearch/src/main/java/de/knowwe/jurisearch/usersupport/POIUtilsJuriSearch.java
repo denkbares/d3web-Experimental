@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.jurisearch.usersupport;
 
@@ -35,7 +35,6 @@ import de.knowwe.jurisearch.questionDef.QuestionDefinitionArea;
 import de.knowwe.jurisearch.tree.QuestionTree;
 import de.knowwe.kdom.dashtree.DashSubtree;
 
-
 /**
  * 
  * @author Johannes Dienst
@@ -43,6 +42,7 @@ import de.knowwe.kdom.dashtree.DashSubtree;
  */
 public class POIUtilsJuriSearch
 {
+
 	public static void writeSectionToWord(Section<?> markup, FileOutputStream out)
 	{
 		try
@@ -58,7 +58,11 @@ public class POIUtilsJuriSearch
 				Section<DashSubtree> subtree = Sections.findSuccessor(tree, DashSubtree.class);
 				Section<?> sub = subtree.getChildren().get(1);
 				XWPFParagraph par = doc.createParagraph();
-				POIUtilsJuriSearch.createAndSetStyles(par, sub.getText());
+				String[] subLines = sub.getText().split("\\r\\n");
+				for (String line : subLines)
+				{
+					POIUtilsJuriSearch.createAndSetStyles(par, line);
+				}
 			}
 
 			// write all {@link QuestionDefinitionArea}
@@ -68,7 +72,12 @@ public class POIUtilsJuriSearch
 			{
 				XWPFParagraph par = doc.createParagraph();
 				XWPFRun run = par.createRun();
-				run.setText("\r\n" + area.getText() + "\r\n");
+				String[] areaLines = area.getText().split("\\r\\n");
+				for (String line : areaLines)
+				{
+					run.setText(line);
+					run.addBreak();
+				}
 			}
 			doc.write(out);
 		}
@@ -81,11 +90,9 @@ public class POIUtilsJuriSearch
 
 	/**
 	 * 
-	 * Reads out the styles from the text and creates runs accordingly in paragraph.
-	 * Supported styles and markup are
-	 * Italic: ''italic'', html-tag i
-	 * Bold:   __bold__, html-tag b
-	 * Underlined: html-tag u
+	 * Reads out the styles from the text and creates runs accordingly in
+	 * paragraph. Supported styles and markup are Italic: ''italic'', html-tag i
+	 * Bold: __bold__, html-tag b Underlined: html-tag u
 	 * 
 	 * @created 09.03.2012
 	 * @param par
@@ -108,39 +115,34 @@ public class POIUtilsJuriSearch
 		int endNormalText;
 		while (m.find())
 		{
-			// Set run with normally styles text
+			// Set run with normally styled text
 			endNormalText = m.start();
 			String runText = text.substring(startNormalText, endNormalText);
 			XWPFRun run = par.createRun();
 			run.setText(runText);
 
 			// Styled text
-			start = m.start()+3;
+			start = m.start() + 3;
 			m.find();
 			end = m.start();
 			runText = text.substring(start, end);
 			run = par.createRun();
 			run.setText(runText);
 
-			char styleTag = text.charAt(m.start()+1);
-			if (styleTag == 'i')
-				run.setItalic(true);
-			if (styleTag == 'b')
-				run.setBold(true);
-			if (styleTag == 'u')
-				run.setUnderline(UnderlinePatterns.SINGLE);
+			char styleTag = text.charAt(m.start() + 1);
+			if (styleTag == 'i') run.setItalic(true);
+			if (styleTag == 'b') run.setBold(true);
+			if (styleTag == 'u') run.setUnderline(UnderlinePatterns.SINGLE);
 
 			startNormalText = end + 3;
 		}
 
-
-
 		XWPFRun run = par.createRun();
 
-		if (end != 0)
-			end += 3;
+		if (end != 0) end += 3;
 
 		String restText = text.substring(end);
-		run.setText(restText + "\r\n");
+		run.setText(restText);
+		run.addBreak();
 	}
 }
