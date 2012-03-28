@@ -29,6 +29,7 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.defi.utils.ReplaceSectionUtils;
 
 /**
  * The AboutMeSaveAction stores the information provided in the AboutMe-Edit
@@ -88,7 +89,7 @@ public class AboutMeSaveAction extends AbstractAction {
 		nodesMap.put(child.getID(), "%%aboutme\n"
 				+ params.toString()
 				+ "%\n");
-		Sections.replaceSections(context, nodesMap);
+		ReplaceSectionUtils.replaceSections(context, nodesMap);
 
 		HttpServletResponse response = context.getResponse();
 		response.sendRedirect("Wiki.jsp?page=" + username);
