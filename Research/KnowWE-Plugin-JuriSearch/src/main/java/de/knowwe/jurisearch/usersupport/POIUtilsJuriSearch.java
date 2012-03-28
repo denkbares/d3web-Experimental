@@ -75,8 +75,7 @@ public class POIUtilsJuriSearch
 				String[] areaLines = area.getText().split("\\r\\n");
 				for (String line : areaLines)
 				{
-					run.setText(line);
-					run.addBreak();
+					POIUtilsJuriSearch.createAndSetStyles(par, line);
 				}
 			}
 			doc.write(out);
@@ -119,6 +118,7 @@ public class POIUtilsJuriSearch
 			endNormalText = m.start();
 			String runText = text.substring(startNormalText, endNormalText);
 			XWPFRun run = par.createRun();
+			if (runText.startsWith("*") || runText.startsWith("#")) runText = "    " + runText;
 			run.setText(runText);
 
 			// Styled text
@@ -139,7 +139,10 @@ public class POIUtilsJuriSearch
 
 		XWPFRun run = par.createRun();
 
+		// some styling
 		if (end != 0) end += 3;
+		// no styling
+		else if (end == 0 && (text.startsWith("*") || text.startsWith("#"))) text = "    " + text;
 
 		String restText = text.substring(end);
 		run.setText(restText);
