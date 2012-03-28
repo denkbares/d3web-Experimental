@@ -78,7 +78,7 @@ if(welcomePage_firstTime) {
 	<div class="companylogo"></div>
 
 		<div class="infobox">
-			<span>Kontaktfunktion</span>
+			<span>Kontakt-Funktionen</span>
 			<div>
 				<a href=""  onclick="newChat('<%= berater %>', '<%= user.getUserName() %>');return false" class="infobox_link" onmouseover="document.getElementById('infobox1').style.backgroundColor = '#eeeeee';" onmouseout="document.getElementById('infobox1').style.backgroundColor = '#F9F9F9';">
 				<img src="KnowWEExtension/images/
