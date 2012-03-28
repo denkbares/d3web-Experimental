@@ -239,7 +239,9 @@ public class QuestionDefinitionArea extends AbstractType {
 						ExplanationText.class);
 				for (Section<ExplanationText> expsec : expsecs) {
 					String text = expsec.getText();
-					questionYNM.getInfoStore().addValue(ProKEtProperties.POPUP, text);
+					String html = Environment.getInstance().getWikiConnector().wikiSyntaxToHtml(
+							text);
+					questionYNM.getInfoStore().addValue(ProKEtProperties.POPUP, html);
 				}
 
 				// return success message
