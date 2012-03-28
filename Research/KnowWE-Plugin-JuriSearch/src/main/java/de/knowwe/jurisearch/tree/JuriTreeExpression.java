@@ -19,20 +19,16 @@
 package de.knowwe.jurisearch.tree;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
-import de.knowwe.core.user.UserContext;
+import de.knowwe.jurisearch.BracketContent;
+import de.knowwe.jurisearch.BracketRenderer;
 import de.knowwe.jurisearch.Error;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
-import de.knowwe.kdom.renderer.StyleRenderer;
-import de.knowwe.kdom.sectionFinder.EmbracedContentFinder;
 import de.knowwe.kdom.sectionFinder.OneOfStringEnumFinder;
 
 /**
@@ -47,9 +43,6 @@ public class JuriTreeExpression extends DashTreeElementContent {
 	public static final Object NOT = "nein";
 	public static final Object SCORE = "score";
 	public static final Object DUMMY = "dummy";
-
-	public static final String BRACKET_OPEN = "\\[";
-	public static final String BRACKET_CLOSE = "\\]";
 
 	public JuriTreeExpression() {
 		this.setSectionFinder(new AllTextFinderTrimmed());
@@ -68,8 +61,9 @@ public class JuriTreeExpression extends DashTreeElementContent {
 
 		Operator() {
 			SectionFinder sf = new OneOfStringEnumFinder(new String[] {
-					BRACKET_OPEN + OR + BRACKET_CLOSE, BRACKET_OPEN + AND + BRACKET_CLOSE,
-					BRACKET_OPEN + SCORE + BRACKET_CLOSE });
+					BracketContent.BRACKET_OPEN + OR + BracketContent.BRACKET_CLOSE,
+					BracketContent.BRACKET_OPEN + AND + BracketContent.BRACKET_CLOSE,
+					BracketContent.BRACKET_OPEN + SCORE + BracketContent.BRACKET_CLOSE });
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
 			csf.addConstraint(SingleChildConstraint.getInstance());
 			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
@@ -84,7 +78,8 @@ public class JuriTreeExpression extends DashTreeElementContent {
 	class NegationFlag extends AbstractType {
 
 		NegationFlag() {
-			SectionFinder sf = new RegexSectionFinder(BRACKET_OPEN + NOT + BRACKET_CLOSE);
+			SectionFinder sf = new RegexSectionFinder(BracketContent.BRACKET_OPEN + NOT
+					+ BracketContent.BRACKET_CLOSE);
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
 			csf.addConstraint(SingleChildConstraint.getInstance());
 			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
@@ -99,7 +94,8 @@ public class JuriTreeExpression extends DashTreeElementContent {
 	class DummyFlag extends AbstractType {
 
 		DummyFlag() {
-			SectionFinder sf = new RegexSectionFinder(BRACKET_OPEN + DUMMY + BRACKET_CLOSE);
+			SectionFinder sf = new RegexSectionFinder(BracketContent.BRACKET_OPEN + DUMMY
+					+ BracketContent.BRACKET_CLOSE);
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
 			csf.addConstraint(SingleChildConstraint.getInstance());
 			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
@@ -108,24 +104,5 @@ public class JuriTreeExpression extends DashTreeElementContent {
 			this.setRenderer(new BracketRenderer());
 			this.addChildType(new BracketContent());
 		}
-	}
-
-	class BracketContent extends AbstractType {
-
-		BracketContent() {
-			this.setSectionFinder(new EmbracedContentFinder(BRACKET_OPEN.charAt(1),
-					BRACKET_CLOSE.charAt(1), true));
-			this.setRenderer(new StyleRenderer("font-weight:bold"));
-		}
-	}
-
-	class BracketRenderer implements Renderer {
-
-		@Override
-		public void render(Section<?> section, UserContext user, StringBuilder string) {
-			string.append("~");
-			DelegateRenderer.getInstance().render(section, user, string);
-		}
-
 	}
 }

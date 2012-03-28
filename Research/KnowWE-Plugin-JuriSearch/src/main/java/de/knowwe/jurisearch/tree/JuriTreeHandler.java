@@ -36,7 +36,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.event.ArticleCreatedEvent;
-import de.knowwe.jurisearch.tree.JuriTreeExpression.BracketContent;
+import de.knowwe.jurisearch.BracketContent;
 import de.knowwe.jurisearch.tree.JuriTreeExpression.NegationFlag;
 import de.knowwe.jurisearch.tree.JuriTreeExpression.Operator;
 
@@ -117,8 +117,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 					JuriTreeExpression.NegationFlag.class);
 			if (negation != null) {
 				Section<BracketContent> negation_content =
-						Sections.findSuccessor(negation,
-								JuriTreeExpression.BracketContent.class);
+						Sections.findSuccessor(negation, BracketContent.class);
 				String negation_str = negation_content.getText().toLowerCase();
 				if (negation_str.equals(JuriTreeExpression.NOT)) {
 					negatedChildrenQuestion.add(question);
@@ -155,7 +154,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 		Section<Operator> operator = Sections.findSuccessor(s, JuriTreeExpression.Operator.class);
 		if (operator != null) {
 			Section<BracketContent> operator_content = Sections.findSuccessor(operator,
-					JuriTreeExpression.BracketContent.class);
+					BracketContent.class);
 			String operator_str = operator_content.getText().toLowerCase();
 
 			if (operator_str.equals(JuriTreeExpression.OR)) {

@@ -20,9 +20,11 @@ package de.knowwe.jurisearch.questionDef;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionOC;
@@ -36,6 +38,7 @@ import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -46,6 +49,8 @@ import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.jurisearch.BoxRenderer;
+import de.knowwe.jurisearch.BracketContent;
+import de.knowwe.jurisearch.BracketRenderer;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
@@ -132,6 +137,7 @@ public class QuestionDefinitionArea extends AbstractType {
 					Pattern.MULTILINE | Pattern.DOTALL, 1));
 			this.setRenderer(new BoxRenderer("markupText"));
 			this.addChildType(new QuestionTermDefinitionLine());
+			this.addChildType(new AnswerDefinitionLine());
 			this.addChildType(new ExplanationTextArea());
 		}
 	}
@@ -179,6 +185,7 @@ public class QuestionDefinitionArea extends AbstractType {
 			public Collection<Message> create(Article article, Section<QASetDefinition<Question>> section) {
 
 				String name = section.get().getTermIdentifier(section);
+
 				Class<?> termObjectClass = section.get().getTermObjectClass(section);
 				TerminologyManager terminologyHandler = KnowWEUtils.getTerminologyManager(article);
 				terminologyHandler.registerTermDefinition(section, termObjectClass, name);
@@ -201,9 +208,28 @@ public class QuestionDefinitionArea extends AbstractType {
 				}
 
 				QuestionOC questionYNM = new QuestionOC(parent, name);
-				questionYNM.addAlternative(JuriRule.MAYBE);
-				questionYNM.addAlternative(JuriRule.NO);
-				questionYNM.addAlternative(JuriRule.YES);
+
+				// get answer sections
+				Section<QuestionDefinitionContent> qdc = Sections.findAncestorOfType(section,
+						QuestionDefinitionContent.class);
+				List<Section<AnswerDefinitionLine>> answer_sections = Sections.findChildrenOfType(
+						qdc, AnswerDefinitionLine.class);
+
+				// add answers as alternatives
+				if (answer_sections != null && !answer_sections.isEmpty()) {
+					for (Section<AnswerDefinitionLine> s : answer_sections) {
+						Section<BracketContent> answer = Sections.findChildOfType(s,
+								BracketContent.class);
+						Choice choice = new Choice(answer.getText());
+						questionYNM.addAlternative(choice);
+					}
+				}
+				else {
+					// add default alternatives
+					questionYNM.addAlternative(JuriRule.YES);
+					questionYNM.addAlternative(JuriRule.NO);
+					questionYNM.addAlternative(JuriRule.MAYBE);
+				}
 
 				// return success message
 				return Messages.asList(Messages.objectCreatedNotice(
@@ -218,6 +244,16 @@ public class QuestionDefinitionArea extends AbstractType {
 		public ExplanationTextArea() {
 			this.setSectionFinder(new AllTextFinderTrimmed());
 			this.addChildType(new ExplanationText());
+		}
+	}
+
+	class AnswerDefinitionLine extends AbstractType {
+
+		public AnswerDefinitionLine() {
+			this.setSectionFinder(new RegexSectionFinder(BracketContent.BRACKET_OPEN + "(.)+"
+					+ BracketContent.BRACKET_CLOSE));
+			this.addChildType(new BracketContent());
+			this.setRenderer(new BracketRenderer());
 		}
 	}
 
