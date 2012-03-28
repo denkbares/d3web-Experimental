@@ -159,7 +159,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 			q.append("<br />");
 			html.append(q);
 
-			html.append("<p><input type=\"submit\" value=\"Speichern\"/></p>\n");
+			html.append("<p><center><input type=\"submit\" value=\"Speichern\"/></center></p>\n");
 			html.append("<input type=\"hidden\" name=\"action\" value=\"FeedbackSaveAction\" />");
 			html.append("<input type=\"hidden\" name=\"KWiki_Topic\" value=\""
 					+ topic + "\" />");
