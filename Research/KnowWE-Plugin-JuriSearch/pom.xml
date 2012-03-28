@@ -56,5 +56,10 @@
 		<artifactId>OfficeConverter</artifactId>
 		<version>OfficeConverter</version>
 	</dependency>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>d3web-Plugin-ProKEtProperties</artifactId>
+  		<version>0.2-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
 </project>

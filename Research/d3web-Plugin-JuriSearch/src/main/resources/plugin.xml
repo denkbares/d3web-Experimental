@@ -44,4 +44,15 @@
 		<parameter id="priority" value="5" />
 		<parameter id="filename" value="kb/juri.xml" />
 	</extension>
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="dummy">
+		<parameter id="name" value="dummy" />
+		<parameter id="description" value="Set to true if a question should be a dummy" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.Boolean" />
+	</extension>
+
 </plugin>

@@ -29,6 +29,7 @@ import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.jurisearch.JuriRule;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.we.object.QASetDefinition;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.knowwe.core.Environment;
@@ -209,9 +210,10 @@ public class QuestionDefinitionArea extends AbstractType {
 
 				QuestionOC questionYNM = new QuestionOC(parent, name);
 
-				// get answer sections
 				Section<QuestionDefinitionContent> qdc = Sections.findAncestorOfType(section,
 						QuestionDefinitionContent.class);
+
+				// get answer sections
 				List<Section<AnswerDefinitionLine>> answer_sections = Sections.findChildrenOfType(
 						qdc, AnswerDefinitionLine.class);
 
@@ -229,6 +231,14 @@ public class QuestionDefinitionArea extends AbstractType {
 					questionYNM.addAlternative(JuriRule.YES);
 					questionYNM.addAlternative(JuriRule.NO);
 					questionYNM.addAlternative(JuriRule.MAYBE);
+				}
+
+				// set description as MMInfo.Description
+				List<Section<ExplanationText>> expsecs = Sections.findSuccessorsOfType(qdc,
+						ExplanationText.class);
+				for (Section<ExplanationText> expsec : expsecs) {
+					String text = expsec.getText();
+					questionYNM.getInfoStore().addValue(ProKEtProperties.POPUP, text);
 				}
 
 				// return success message

@@ -37,6 +37,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.event.ArticleCreatedEvent;
 import de.knowwe.jurisearch.BracketContent;
+import de.knowwe.jurisearch.tree.JuriTreeExpression.DummyFlag;
 import de.knowwe.jurisearch.tree.JuriTreeExpression.NegationFlag;
 import de.knowwe.jurisearch.tree.JuriTreeExpression.Operator;
 
@@ -119,7 +120,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 				Section<BracketContent> negation_content =
 						Sections.findSuccessor(negation, BracketContent.class);
 				String negation_str = negation_content.getText().toLowerCase();
-				if (negation_str.equals(JuriTreeExpression.NOT)) {
+				if (negation_str.toLowerCase().equals(JuriTreeExpression.NOT)) {
 					negatedChildrenQuestion.add(question);
 				}
 			}
@@ -157,11 +158,22 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 					BracketContent.class);
 			String operator_str = operator_content.getText().toLowerCase();
 
-			if (operator_str.equals(JuriTreeExpression.OR)) {
+			if (operator_str.toLowerCase().equals(JuriTreeExpression.OR)) {
 				rule.setDisjunctive(true);
 			}
-			else if (operator_str.equals(JuriTreeExpression.SCORE)) {
+			else if (operator_str.toLowerCase().equals(JuriTreeExpression.SCORE)) {
 				// TODO
+			}
+		}
+
+		Section<DummyFlag> dummysec = Sections.findSuccessor(s, JuriTreeExpression.DummyFlag.class);
+		if (dummysec != null) {
+			Section<BracketContent> dummy_content = Sections.findSuccessor(dummysec,
+					BracketContent.class);
+			String dummyflag = dummy_content.getText().toLowerCase();
+
+			if (dummyflag.toLowerCase().equals(JuriTreeExpression.DUMMY)) {
+				father.getInfoStore().addValue(JuriModel.DUMMY, true);
 			}
 		}
 

@@ -24,6 +24,7 @@ import java.util.Set;
 
 import de.d3web.core.inference.KnowledgeKind;
 import de.d3web.core.inference.KnowledgeSlice;
+import de.d3web.core.knowledge.terminology.info.Property;
 
 /**
  * 
@@ -31,6 +32,8 @@ import de.d3web.core.inference.KnowledgeSlice;
  * @created 09.03.2012
  */
 public class JuriModel implements KnowledgeSlice {
+
+	public static final Property<Boolean> DUMMY = Property.getProperty("dummy", Boolean.class);
 
 	public final static KnowledgeKind<JuriModel> KNOWLEDGE_KIND = new KnowledgeKind<JuriModel>(
 			"JuriModel", JuriModel.class);
