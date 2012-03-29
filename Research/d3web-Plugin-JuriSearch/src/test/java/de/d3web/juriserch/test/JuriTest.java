@@ -10,6 +10,7 @@ import junit.framework.TestCase;
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.io.progress.DummyProgressListener;
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
@@ -17,6 +18,7 @@ import de.d3web.core.session.SessionFactory;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
+import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.jurisearch.JuriModel;
 import de.d3web.jurisearch.JuriModelPersistenceHandler;
 import de.d3web.jurisearch.JuriRule;
@@ -98,7 +100,7 @@ public class JuriTest extends TestCase {
 		Session s = SessionFactory.createSession(kb);
 		changeFact(s, c1, JuriRule.YES_VALUE);
 		checkMap(s);
-		changeFact(s, c21, JuriRule.YES_VALUE);
+		changeFact(s, c21, new ChoiceValue(new Choice("sehr")));
 		checkMap(s);
 		changeFact(s, c22, JuriRule.YES_VALUE);
 		checkMap(s);
@@ -125,31 +127,33 @@ public class JuriTest extends TestCase {
 	private void createKnowledgebase() {
 		f = new QuestionOC(kb, "Ist das Wetter heute gut?");
 		c1 = new QuestionOC(kb, "Ist es warm?");
-		c2 = new QuestionOC(kb, "Ist es trocken?");
+		c2 = new QuestionOC(kb, "Ist es nass?");
 
-		c21 = new QuestionOC(kb, "Regnet es nicht?");
-		c22 = new QuestionOC(kb, "Schneit es nicht?");
+		c21 = new QuestionOC(kb, "Regnet es?");
+		c21.addAlternative(new Choice("sehr"));
+		c21.addAlternative(new Choice("kaum"));
+		c21.addAlternative(new Choice("garnicht"));
+		c22 = new QuestionOC(kb, "Schneit es?");
 
 		model = new JuriModel();
 
 		addAlternatives(f);
 		addAlternatives(c1);
 		addAlternatives(c2);
-		addAlternatives(c21);
+		// addAlternatives(c21);
 		addAlternatives(c22);
 
 		JuriRule jurirule = new JuriRule(f);
 		jurirule.addChild(c1);
-		jurirule.addChild(c2);
+		jurirule.addChild(c2, JuriRule.NO_VALUE);
 
 		JuriRule jurirule2 = new JuriRule(c2);
-		jurirule2.addChild(c21);
+		jurirule2.addChild(c21, new ChoiceValue(new Choice("sehr")));
 		jurirule2.addChild(c22);
 
 		model.addRule(jurirule);
 		model.addRule(jurirule2);
 		kb.getKnowledgeStore().addKnowledge(JuriModel.KNOWLEDGE_KIND, model);
-
 	}
 
 	/**
