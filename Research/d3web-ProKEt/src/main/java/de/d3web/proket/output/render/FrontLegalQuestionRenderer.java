@@ -20,6 +20,7 @@
 package de.d3web.proket.output.render;
 
 import de.d3web.proket.data.IDialogObject;
+import de.d3web.proket.data.LegalQuestion;
 import de.d3web.proket.output.container.ContainerCollection;
 import java.util.Vector;
 import org.antlr.stringtemplate.StringTemplate;
@@ -38,7 +39,8 @@ public class FrontLegalQuestionRenderer extends Renderer {
         IDialogObject parent = dialogObject.getParent();
         String pTitle = parent.getTitle();
 
-        if (pTitle != null && parent != null) {
+        if ( (pTitle != null && parent != null) ||
+                (pTitle == null && parent instanceof LegalQuestion && ((LegalQuestion)parent).getDummy()) ) {
 
             Vector<IDialogObject> children = parent.getChildren();
             StringBuffer childrenHTML = new StringBuffer();
@@ -61,7 +63,6 @@ public class FrontLegalQuestionRenderer extends Renderer {
             } else {
                 st.setAttribute("typeimg", "img/transpSquare.png");
             }
-
 
             String andOrTypePar = parent.getInheritableAttributes().getAndOrType();
             st.removeAttribute("readimg");
@@ -93,7 +94,6 @@ public class FrontLegalQuestionRenderer extends Renderer {
                 st.setAttribute("noChildren", "");
             }
         } else {
-
             st.setAttribute("readimg", "img/transpSquare.png");
             
             if (!dialogObject.getChildren().isEmpty()) {

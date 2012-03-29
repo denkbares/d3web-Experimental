@@ -14,19 +14,28 @@ public class LegalQuestion extends Question {
 
     protected String defining;
     protected String choices;
+    protected Boolean dummy = false;
 
     public LegalQuestion() {
         super();
         style = new InheritableAttributes(this);
         VCNbase = "Question";
     }
-
+    
     public void setDefining(String defining) {
         this.defining = defining;
     }
 
     public String getDefining() {
         return this.defining;
+    }
+
+    public void setDummy(Boolean dummy) {
+        this.dummy = dummy;
+    }
+
+    public Boolean getDummy() {
+        return this.dummy;
     }
     
     public void setChoices(String cs) {

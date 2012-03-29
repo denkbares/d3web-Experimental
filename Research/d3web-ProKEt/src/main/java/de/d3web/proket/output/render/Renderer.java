@@ -25,11 +25,7 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webUtils;
-import de.d3web.proket.data.Answer;
-import de.d3web.proket.data.Dialog;
-import de.d3web.proket.data.DialogTree;
-import de.d3web.proket.data.IDialogObject;
-import de.d3web.proket.data.Question;
+import de.d3web.proket.data.*;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.ClassUtils;
 import de.d3web.proket.utils.GlobalSettings;
@@ -238,21 +234,20 @@ public class Renderer implements IRenderer {
 
             // Setup for the hierarchical counter of questions
             count++;
-            
+
             // skip the topmost question (=diagnosis) 
-            if (dialogObject instanceof Question 
+            if (dialogObject instanceof Question
                     && dialogObject.getParent() instanceof Dialog) {
                 ((Question) child).setCounter(Integer.toString(count));
-            } else 
-                
-                // otherwise only count, if dialog Objects are questions
-            if (!(dialogObject instanceof Dialog)){
+            } else // otherwise only count, if dialog Objects are questions
+            if (!(dialogObject instanceof Dialog)) {
                 addCount(dialogObject, child, count);
             }
 
 
             // get the matching renderer
             IRenderer childRenderer = Renderer.getRenderer(child);
+
 
             // receive the matching HTML from the Renderer and append
             String childHTML =
@@ -331,8 +326,15 @@ public class Renderer implements IRenderer {
         StringBuilder result = new StringBuilder();
 
         // get the HTML template for the dialog object
-        StringTemplate st = TemplateUtils.getStringTemplate(
+        StringTemplate st;
+
+        if (dialogObject instanceof LegalQuestion
+                && ((LegalQuestion) dialogObject).getDummy()) {
+            st = TemplateUtils.getStringTemplate("Dummy" + dialogObject.getVirtualClassName(), "html");
+        } else {
+            st = TemplateUtils.getStringTemplate(
                 dialogObject.getVirtualClassName(), "html");
+        }
 
         // get the inh.attributes of this objects and inherit missing
         // attributes where needed from parents

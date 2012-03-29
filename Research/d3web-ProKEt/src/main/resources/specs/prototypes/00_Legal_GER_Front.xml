@@ -65,4 +65,10 @@
                 bonus-text="Frage gilt als bestätigt, wenn der eingegebene Wert zwischen 1 und 99 liegt."/>
                 <legalQuestion title="Test OC Frage" id="55" parent-id="1" answer-type="oc" choices="c1###c2###c3" defining="c3"/>
                 <legalQuestion title="Test OC Frage 2" id="56" parent-id="1" answer-type="oc" choices="c1###c2###c3###c4###c5###c6###letzte Choice" defining="c1"/>
-</dialog>
+                <legalQuestion title="Spezielle Ja Nein Frage, NEIN defining" id="57" parent-id="1" defining="nein"/>
+                <legalQuestion  bonus-text="Dummy Frage" id="58" parent-id="1" dummy="true" defining="xy" and-or-type="OR"/>
+                <legalQuestion title="Dummy Child1" id="59" parent-id="58" and-or-type="OR"/>
+                <legalQuestion title="Dummy Child2" id="60" parent-id="58" and-or-type="OR"/>
+                <legalQuestion  bonus-text="Dummy Frage2" id="61" parent-id="60" dummy="true" defining="xy" and-or-type="OR"/>
+                <legalQuestion title="Dummy Child3" id="62" parent-id="61" and-or-type="OR"/>
+</dialog>       

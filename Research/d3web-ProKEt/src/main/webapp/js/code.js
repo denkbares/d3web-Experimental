@@ -101,7 +101,7 @@ function setup() {
         // remove the field containing the propagation value info for 1st q
         removePropagationInfoInQuestionForFirst();
         
-        
+        alwaysExpandDummyNodes();
         
     // some more styling of diagnosis element
     }
@@ -234,6 +234,13 @@ function exchangeReadflowTextFirstSubQuestion(){
         $(this).attr('src', 'img/If.png');
     });
 }
+
+
+    function alwaysExpandDummyNodes(){
+    $(".dummy").each(function(){
+        toggle_sub_4boxes($(this).attr("id"));
+    });
+};
 
 
 /**
