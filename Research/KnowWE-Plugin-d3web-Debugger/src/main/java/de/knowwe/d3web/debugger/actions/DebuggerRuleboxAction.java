@@ -24,7 +24,7 @@ import java.util.List;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
-import de.d3web.we.basic.SessionBroker;
+import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -53,14 +53,14 @@ public class DebuggerRuleboxAction extends AbstractAction {
 	public String renderRule(UserActionContext context) {
 		StringBuffer buffer = new StringBuffer();
 		String title = context.getTitle();
+		KnowledgeBase kb = null;
 		try {
 			String kbID = context.getParameter("kbid");
 			String ruleArticle;
 			if (context.getParameter("ruleid") == null) return "";
 			int ruleid = Integer.parseInt(context.getParameter("ruleid"));
-			SessionBroker broker = D3webUtils.getBroker(context.getUserName(), context.getWeb());
-			Session session = broker.getSession(kbID);
-			KnowledgeBase kb = session.getKnowledgeBase();
+			kb = D3webUtils.getKnowledgeBase(context.getWeb(), kbID);
+			Session session = SessionProvider.getSession(context, kb);
 			List<Rule> rules = DebugUtilities.getRulesFromKB(kb);
 			DebuggerRuleRenderer drr = new DebuggerRuleRenderer();
 

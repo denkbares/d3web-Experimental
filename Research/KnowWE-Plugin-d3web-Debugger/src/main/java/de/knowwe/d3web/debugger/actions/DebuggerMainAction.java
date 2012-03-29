@@ -30,7 +30,7 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
-import de.d3web.we.basic.SessionBroker;
+import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -79,9 +79,8 @@ public class DebuggerMainAction extends AbstractAction {
 			int ruleid;
 			if (context.getParameters().containsKey("ruleid")) ruleid = Integer.parseInt(context.getParameter("ruleid"));
 			else ruleid = 0;
-			SessionBroker broker = D3webUtils.getBroker(context.getUserName(), context.getWeb());
-			Session session = broker.getSession(kbID);
-			KnowledgeBase kb = session.getKnowledgeBase();
+			KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(), kbID);
+			Session session = SessionProvider.getSession(context, kb);
 			TerminologyObject to = null;
 			List<Rule> rules;
 

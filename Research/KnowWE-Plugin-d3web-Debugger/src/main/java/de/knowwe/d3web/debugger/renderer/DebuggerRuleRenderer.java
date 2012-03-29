@@ -40,12 +40,14 @@ import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.inference.condition.NoAnswerException;
 import de.d3web.core.inference.condition.NonTerminalCondition;
 import de.d3web.core.inference.condition.UnknownAnswerException;
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
 import de.d3web.indication.ActionContraIndication;
 import de.d3web.indication.ActionInstantIndication;
 import de.d3web.indication.ActionNextQASet;
 import de.d3web.indication.ActionSuppressAnswer;
 import de.d3web.scoring.ActionHeuristicPS;
+import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.kdom.rules.RuleContentType;
 import de.d3web.we.kdom.rules.action.RuleAction;
 import de.d3web.we.utils.D3webUtils;
@@ -80,8 +82,8 @@ public class DebuggerRuleRenderer implements Renderer{
 	public void render(Section<?> sec, UserContext user,
 			StringBuilder string) {
 		Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
-		Session session = D3webUtils.getSession(article.getTitle(), user,
-				article.getWeb());
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(article.getWeb(), article.getTitle());
+		Session session = SessionProvider.getSession(user, kb);
 		Section<RuleAction> ruleAction = Sections.findSuccessor(sec,
 				RuleAction.class);
 		Rule r = null;

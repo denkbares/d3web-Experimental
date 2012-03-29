@@ -22,7 +22,7 @@ import java.util.Map;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
-import de.d3web.we.basic.SessionBroker;
+import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
@@ -58,25 +58,21 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 		String title = userContext.getTitle();
 		String web = userContext.getParameter(Attributes.WEB);
 		// If article already contains a debugger, return error.
-		String articleText = Environment.getInstance().getArticle(web, title).getSection().getText();
+		String articleText = Environment.getInstance().getArticle(web, title).getRootSection().getText();
 		if (articleText.split("KnowWEPlugin debugger").length > 2) return KnowWEUtils.maskHTML("<p class='info box'>Fehler: Nur ein Debugger pro Artikel!</p>");
 		// Get knowledgebase
-		SessionBroker broker;
-		Session session = null;
 		KnowledgeBase kb = null;
+		Session session = null;
 		String kbID = "";
 		try {
 			// If knowledgebase's id is given
 			if (parameters.containsKey("kbID")) {
 				kbID = parameters.get("kbID");
-				broker = D3webUtils.getBroker(userContext.getUserName(), web);
-				session = broker.getSession(kbID);
-				kb = session.getKnowledgeBase();
+				kb = D3webUtils.getKnowledgeBase(web, kbID);
 			}
 			// If knowledgebase was not found or id not given, try to get a
 			// local one
-			if (kb == null || session == null) {
-				session = D3webUtils.getSession(title, userContext, web);
+			if (kb == null) {
 				kb = D3webUtils.getKnowledgeBase(web, title);
 			}
 		}
@@ -84,8 +80,9 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 		}
 		// If finally no knowledgebase was found => return error
 		finally {
-			if (kb == null || session == null) return KnowWEUtils.maskHTML("Error: No knowledgebase was found.");
+			if (kb == null) return KnowWEUtils.maskHTML("Error: No knowledgebase was found.");
 		}
+		session = SessionProvider.getSession(userContext, kb);
 
 		buffer.append("<div id='debugger' class='debugger'>");
 		// trace

@@ -170,7 +170,7 @@ public class DebugUtilities {
 		for (Article article : Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB).getArticles()) {
 
-			rules = Sections.findSuccessorsOfType(article.getSection(), RuleAction.class);
+			rules = Sections.findSuccessorsOfType(article.getRootSection(), RuleAction.class);
 			for (Section<RuleAction> ruleAction : rules) {
 
 				rule = (Rule) KnowWEUtils.getStoredObject(kbArticle, ruleAction,

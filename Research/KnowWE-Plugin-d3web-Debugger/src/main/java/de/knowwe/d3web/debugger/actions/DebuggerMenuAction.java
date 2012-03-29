@@ -25,7 +25,7 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
-import de.d3web.we.basic.SessionBroker;
+import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -46,8 +46,13 @@ public class DebuggerMenuAction extends AbstractAction {
 		String kbID = context.getParameter("kbid");
 		// question id
 		String qid = context.getParameter("qid");
-		SessionBroker broker = D3webUtils.getBroker(context.getUserName(), context.getWeb());
-		Session session = broker.getSession(kbID);
+		KnowledgeBase kb = null;
+		Session session = null;
+		if (context.getParameters().containsKey("kbID")) {
+			kbID = context.getParameter("kbID");
+			kb = D3webUtils.getKnowledgeBase(context.getWeb(), kbID);
+			session = SessionProvider.getSession(context, kb);
+		}
 		String result = getMenuRendering(kbID, qid, session);
 
 		if (result != null && context.getWriter() != null) {
