@@ -23,10 +23,10 @@
 		$Image()$
 		$text$
 		<map name="panel-$fullId$">
-			<area href="javascript:h4boxes('1','panel-$fullId$')" coords="0,0,21,16" shape="rect">
-			<area href="javascript:h4boxes('3','panel-$fullId$')" coords="21,0,42,16" shape="rect">
-			<area href="javascript:h4boxes('2','panel-$fullId$')" coords="42,0,63,16" shape="rect">
-			<area href="javascript:h4boxes('0','panel-$fullId$')" coords="63,0,84.0,16" shape="rect">
+			<area href="javascript:h4boxes('1','panel-$fullId$')" coords="0,0,26,18" shape="rect">
+			<area href="javascript:h4boxes('3','panel-$fullId$')" coords="26,0,51,18" shape="rect">
+			<area href="javascript:h4boxes('2','panel-$fullId$')" coords="51,0,70,18" shape="rect">
+			<area href="javascript:h4boxes('0','panel-$fullId$')" coords="70,0,86,18" shape="rect">
 		</map>
                 <div id="propagation-$fullId$" class="propagation hide"></div>
 	</div>

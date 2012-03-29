@@ -236,7 +236,7 @@ function exchangeReadflowTextFirstSubQuestion(){
 }
 
 
-    function alwaysExpandDummyNodes(){
+function alwaysExpandDummyNodes(){
     $(".dummy").each(function(){
         toggle_sub_4boxes($(this).attr("id"));
     });
@@ -826,22 +826,22 @@ function prepare_question_marking() {
  * Defines actions when a tooltip is triggered for an element 
  * 
  * @param id
- * @param element
  */
-function tooltip_over(id, element) {
+function tooltip_over(id) {
+    targetid = "tt-" + id;
 	
-    // get target element
-    target = $("#tt-" + id).filter(":not(:animated)");
-
+    //target = $("#tt-" + id).filter(":not(:animated)");
+    var target = $("[id^=" + targetid + "]");
+        
+        
+        
     if (target.size() == 0) {
         return;
     }
+	
     // if target element is not currently shown
     if (target !== tooltipShown) {
 		
-        // get the triggering element
-        targetTrigger = $("." + id + "-tt-trigger");
-
         // hide old tooltip if existing
         if (tooltipShown !== undefined) {
             tooltip_out(tooltipShown);
@@ -849,15 +849,87 @@ function tooltip_over(id, element) {
 		
         // store currently shown tooltip and tooltipShownTrigger
         tooltipShown = target;
-        // REM tooltipShownTrigger = targetTrigger;
+		
+        target.css("position", "absolute");
+        var height = target.height();
+        var width = target.width();
+        if (height > 0 && width > 0 && height > width) {
+            target.css("width", height);
+            target.css("height", width);
+        }
+        //tooltip_move(element);
 
-        target.css({
-            position : "absolute"
+        target.fadeIn(300);
+        setLeftOffset(target);
+    }
+}
+
+function tooltip_over_hierarchy_buttons(id, button) {
+   
+    switch(button){
+        case "1":
+            targetid = "tt-" + id + "-Y";
+            break;
+        case "2":
+            targetid = "tt-" + id + "-U";
+            break;
+        case "3":
+            targetid = "tt-" + id + "-NO";
+            break;
+        case "0":
+            targetid = "tt-" + id + "-NAN";
+            break;
+    }
+    
+   	
+    //target = $("#tt-" + id).filter(":not(:animated)");
+    var target = $("[id^=" + targetid + "]");
+        
+        
+        
+    if (target.size() == 0) {
+        return;
+    }
+	
+    // if target element is not currently shown
+    if (target !== tooltipShown) {
+		
+        // hide old tooltip if existing
+        if (tooltipShown !== undefined) {
+            tooltip_out(tooltipShown);
+        }
+		
+        // store currently shown tooltip and tooltipShownTrigger
+        tooltipShown = target;
+		
+        target.css("position", "absolute");
+        var height = target.height();
+        var width = target.width();
+        if (height > 0 && width > 0 && height > width) {
+            target.css("width", height);
+            target.css("height", width);
+        }
+        //tooltip_move(element);
+
+        target.fadeIn(300);
+        setLeftOffset(target);
+    }
+}
+
+function setLeftOffset(target) {
+    var pOffset = target.parent().offset();
+    var width = target.width();
+    var widthW = $(window).width() - 25; // remove some for the scrollbar
+    var overlap = pOffset.left + width - widthW;
+    var leftOffset = pOffset.left;
+    if (overlap > 0){
+        leftOffset = pOffset.left - overlap;
+        if (leftOffset < 0) leftOffset = 0;
+        target.offset({
+            top: pOffset.top + target.parent().height(), 
+            left: leftOffset
         });
-        tooltip_move(element);
-
-        // show for 500 ms if not moved anymore
-        target.show(500);
+        target.width(width);
     }
 }
 
@@ -875,14 +947,48 @@ function tooltip_move(e) {
             "collision" : "fit flip",
             "bgiframe" : false
         });
+    
     }
 }
+
 
 /**
  * Hide the tooltip
  * 
  * @param object
+ *  @param button
  */
+function tooltip_out_hierarchy_buttons(object, button) {
+	
+    switch(button){
+        case "1":
+            targetid = "tt-" + object + "-Y";
+            break;
+        case "2":
+            targetid = "tt-" + object + "-U";
+            break;
+        case "3":
+            targetid = "tt-" + object + "-NO";
+            break;
+        case "0":
+            targetid = "tt-" + object + "-NAN";
+            break;
+    }
+
+    // if a jquery tooltip or
+    if (object instanceof jQuery) {
+        target = object;
+    } else {
+		
+        // a specifically marked element
+        target = $("#" + targetid);
+    }
+
+    target.hide(500);
+    tooltipShown = undefined;
+//tooltipShownTrigger = undefined;
+}
+
 function tooltip_out(object) {
 	
     // if a jquery tooltip or
@@ -904,7 +1010,6 @@ function tooltip_out(object) {
  */
 function generate_tooltip_functions() {
 	
-    // get all triggering elements
     triggers = $("[class*='-tt-trigger']");
 	
     // if mouse is moved over an element define potential tooltips position
@@ -915,15 +1020,68 @@ function generate_tooltip_functions() {
     // go through all existing tooltip triggers
     triggers.each(function() {
 		
-        // TODO try this out for curiosity
-        var classes = /(\w*)-tt-trigger/;	// regex
-        var result = classes.exec($(this).attr('class'));
-        var id = result[1];	// id of the tooltip trigger
-        $(this).mouseover(function(e) {
-            tooltip_over(id, e);
+        // complete class name
+        var classComplete = $(this).attr("class");
+        
+        var id = classComplete.replace("-tt-trigger tooltip-trigger", "");
+        
+        var ttstart, ttend;
+        var now;
+                
+        $(this).unbind('mouseover').mouseover(function() {
+            //if logging is activated get the time tooltip is triggered
+            if(logging){
+                now = new Date();
+                ttstart = now.getTime();
+            }
+            
+            if(hierarchy){
+                var fullId = $(this).attr("id");
+                if(fullId.indexOf("ynYes")!=-1){
+                    id = $(this).attr("id").replace("ynYes-", "");
+                    tooltip_over_hierarchy_buttons(id, "1");
+                } else if(fullId.indexOf("ynNo")!=-1){
+                    id = $(this).attr("id").replace("ynNo-", "");
+                    tooltip_over_hierarchy_buttons(id, "3");
+                } else if(fullId.indexOf("ynUn")!=-1){
+                    id = $(this).attr("id").replace("ynUn-", "");
+                    tooltip_over_hierarchy_buttons(id, "2");
+                } else if(fullId.indexOf("ynNan")!=-1){
+                    id = $(this).attr("id").replace("ynNan-", "");
+                    tooltip_over_hierarchy_buttons(id, "0");
+                }
+                
+            } else {
+                tooltip_over(id);
+            }
+            
         });
-        $(this).mouseout(function() {
-            tooltip_out(id);
+        $(this).unbind('mouseout').mouseout(function() {
+            //if logging is activated get the time tooltip is deactivated again
+            if(logging){
+                now = new Date();
+                ttend = now.getTime();
+                ue_logInfoPopup(ttstart, ttend, $(this));
+            }
+            if(hierarchy){
+                var fullId = $(this).attr("id");
+                if(fullId.indexOf("ynYes")!=-1){
+                    id = $(this).attr("id").replace("ynYes-", "");
+                    tooltip_out_hierarchy_buttons(id, "1");
+                } else if(fullId.indexOf("ynNo")!=-1){
+                    id = $(this).attr("id").replace("ynNo-", "");
+                    tooltip_out_hierarchy_buttons(id, "3");
+                } else if(fullId.indexOf("ynUn")!=-1){
+                    id = $(this).attr("id").replace("ynUn-", "");
+                    tooltip_out_hierarchy_buttons(id, "2");
+                } else if(fullId.indexOf("ynNan")!=-1){
+                    id = $(this).attr("id").replace("ynNan-", "");
+                    tooltip_out_hierarchy_buttons(id, "0");
+                }
+                
+            } else {
+                tooltip_out(id);
+            }
         });
     });
 }
@@ -1139,13 +1297,15 @@ function toggle_folder_image_4boxes(id) {
     if (imgDiv.attr('src') == 'img/openedArrow.png') {
         
         imgDiv.attr('src', 'img/closedArrow.png');
-        if(logging){
+       
+        if(logging && !$("#" + id).hasClass("dummy")){
             ue_logQuestionToggle(qtext, "SHUT");
         }
         
     } else if (imgDiv.attr('src') == 'img/closedArrow.png') {
+
         imgDiv.attr('src', 'img/openedArrow.png');
-        if(logging && !topelem){
+        if(logging && !topelem && !$("#" + id).hasClass("dummy")){
             ue_logQuestionToggle(qtext, "EXPAND");
         }
     } 
@@ -1161,6 +1321,8 @@ function toggle_folder_image_4boxes(id) {
 function h4boxes(value, id) {
     	
     ue_logDialogType("ClariHIE");    
+    
+    
     // get dialog item
     var item = $("#" + id);
 	
@@ -1263,7 +1425,10 @@ function setPropagationColor(question, userval){
     var prop = $("#propagation-"+question.attr("id"));
     var propColor = calculateRatingForQuestion(question);
     
-    setPropColor(prop, propColor);
+    if(propColor != 0 && propColor != userval){
+        setPropColor(prop, userval);
+        setColorForQuestion($("#" + question.attr("id")), question, propColor);
+    }
     if(userval != propColor && propColor != 0 && userval != undefined){
         prop.removeClass("hide");
         prop.addClass("show");

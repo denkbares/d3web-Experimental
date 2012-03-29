@@ -32,6 +32,13 @@ import org.antlr.stringtemplate.StringTemplate;
  */
 public class FrontLegalQuestionRenderer extends Renderer {
 
+    private static String TT_YES = "Wertet Eltern-Frage <b>positiv</b>.";
+    private static String TT_NO = "Wertet Eltern-Frage <b>negativ</b>.";
+    private static String TT_UN = "Wertet Eltern-Frage <b>unsicher/neutral</b>.";
+    private static String TT_NAN = "Antwort <b>zurücksetzen</b>.";
+    private static String TT_YES_REV = "Wertet übergeordnete Frage <b>negativ</b>.";
+    private static String TT_NO_REV = "Wertet übergeordnete Frage <b>positiv</b>.";
+
     @Override
     protected void renderChildren(StringTemplate st, ContainerCollection cc,
             IDialogObject dialogObject, boolean force) {
@@ -39,8 +46,8 @@ public class FrontLegalQuestionRenderer extends Renderer {
         IDialogObject parent = dialogObject.getParent();
         String pTitle = parent.getTitle();
 
-        if ( (pTitle != null && parent != null) ||
-                (pTitle == null && parent instanceof LegalQuestion && ((LegalQuestion)parent).getDummy()) ) {
+        if ((pTitle != null && parent != null)
+                || (pTitle == null && parent instanceof LegalQuestion && ((LegalQuestion) parent).getDummy())) {
 
             Vector<IDialogObject> children = parent.getChildren();
             StringBuffer childrenHTML = new StringBuffer();
@@ -75,7 +82,7 @@ public class FrontLegalQuestionRenderer extends Renderer {
             // workaround for removing a doubled-answertype setting in template
             st.removeAttribute("answerType");
             st.setAttribute("answerType", dialogObject.getInheritableAttributes().getAnswerType());
-            
+
             st.removeAttribute("andOrType");
             st.setAttribute("andOrType", dialogObject.getInheritableAttributes().getAndOrType());
 
@@ -95,7 +102,7 @@ public class FrontLegalQuestionRenderer extends Renderer {
             }
         } else {
             st.setAttribute("readimg", "img/transpSquare.png");
-            
+
             if (!dialogObject.getChildren().isEmpty()) {
                 st.setAttribute("typeimg", "img/closedArrow.png");
             } else {
@@ -103,6 +110,40 @@ public class FrontLegalQuestionRenderer extends Renderer {
             }
 
         }
+
+        st.removeAttribute("ratingY");
+        st.removeAttribute("ratingN");
+        st.removeAttribute("ratingNrY");
+        st.removeAttribute("ratingNrN");
+
+        st.removeAttribute("tty");
+        st.removeAttribute("ttn");
+        st.removeAttribute("ttu");
+        st.removeAttribute("ttnan");
+
+
+        if (dialogObject instanceof LegalQuestion
+                && ((LegalQuestion) dialogObject).getDefining() != null
+                && ((LegalQuestion) dialogObject).getDefining().equals("nein")) {
+
+            st.setAttribute("ratingY", "rating-low");
+            st.setAttribute("ratingN", "rating-high");
+            st.setAttribute("ratingNrY", "3");
+            st.setAttribute("ratingNrN", "1");
+
+            st.setAttribute("tty", TT_YES_REV);
+            st.setAttribute("ttn", TT_NO_REV);
+        } else {
+            st.setAttribute("ratingY", "rating-high");
+            st.setAttribute("ratingN", "rating-low");
+            st.setAttribute("ratingNrY", "1");
+            st.setAttribute("ratingNrN", "3");
+
+            st.setAttribute("tty", TT_YES);
+            st.setAttribute("ttn", TT_NO);
+        }
+        st.setAttribute("ttu", TT_UN);
+        st.setAttribute("ttnan", TT_NAN);
 
         super.renderChildren(st, cc, dialogObject, force);
     }

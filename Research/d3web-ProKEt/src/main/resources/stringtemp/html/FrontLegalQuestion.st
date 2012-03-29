@@ -7,23 +7,30 @@
     
     <div id="$id$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')">
         <img id="$id$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes('$fullId$')">
-        <img height="20" 
-            $if(noChildren)$usemap="#panel-$fullId$"$endif$ 
-            src="img/pane.png" style="border: medium none;" id="panel-$fullId$" 
-            $if(hasChildren)$onclick="toggle_sub_4boxes('$fullId$')"$endif$>
+            <div id="ynYes-$fullId$" class="ynbutton $ratingY$ $fullId$-tt-trigger" onclick="handleOQYNQuestions('ynYes-$fullId$', '$ratingNrY$')">
+                Ja
+                $TooltipButtonJA()$
+            </div>
+            <div id="ynNo-$fullId$" class="ynbutton $ratingN$ $fullId$-tt-trigger" onclick="handleOQYNQuestions('ynNo-$fullId$', '$ratingNrN$')">
+                Nein
+                $TooltipButtonNEIN()$
+            </div>
+            <div id="ynUn-$fullId$" class="ynbutton rating-medium $fullId$-tt-trigger" onclick="handleOQYNQuestions('ynUn-$fullId$', '2')">
+                -?-
+                $TooltipButtonWN()$
+            </div>
+            <div id="ynNan-$fullId$" class="ynbutton rating-none $fullId$-tt-trigger" onclick="handleOQYNQuestions('ynNan-$fullId$', '0')">
+                X
+                $TooltipButtonZ()$    
+            </div>
+            
     </div> 
     <div class="title t-$fullId$" id="t-$fullId$" onmouseover="showAuxInfo('$fullId$', '$title$')">
         <div id="solutiontitle-$fullId$" class="solutiontitle">$title$</div>
-		$Tooltip()$
-		$Image()$
+            $Tooltip()$		
+            $Image()$
 		$text$
-		<map name="panel-$fullId$">
-			<area href="javascript:h4boxes('1','panel-$fullId$')" coords="0,0,21,16" shape="rect">
-			<area href="javascript:h4boxes('3','panel-$fullId$')" coords="21,0,42,16" shape="rect">
-			<area href="javascript:h4boxes('2','panel-$fullId$')" coords="42,0,63,16" shape="rect">
-			<area href="javascript:h4boxes('0','panel-$fullId$')" coords="63,0,84.0,16" shape="rect">
-		</map>
-                <div id="propagation-$fullId$" class="propagation hide" onmouseover="showAuxPropInfo()" onmouseout="hideAuxPropInfo()"></div>
+		<div id="propagation-$fullId$" class="propagation hide" onmouseover="showAuxPropInfo()" onmouseout="hideAuxPropInfo()"></div>
 	</div>
         
         

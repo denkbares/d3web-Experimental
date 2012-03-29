@@ -553,6 +553,7 @@ function ue_logQuestionValueClariPrototype(questiontext, value){
     .set("qtext", questiontext)
     .set("qvalue", value)
     .set("timestring", now).toString();
+    
     $.ajax({
         type : "GET",
         // async : false,

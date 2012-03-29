@@ -100,19 +100,12 @@ table{
         margin-left: 20px;
 }
 
-.tooltip {
-	z-index: 100;
-	background-color: rgb(255, 255, 66);
-	background-color: rgba(255, 255, 66, 0.925);
-	padding: 5px;
-	-moz-border-radius-bottomright: 5px;
-	-webkit-border-bottom-right-radius: 5px;
-	-moz-box-shadow: 3px 3px 3px #888;
-	-webkit-box-shadow: 3px 3px 3px #888;
-	box-shadow: 3px 3px 3px #888;
-	border: 1px solid black;
-	font-weight: normal;
-}
+
+/* TOOLTIPS, ADD STUFF */
+.tooltip { z-index: 100; background-color: #fffacd;
+	padding: 2px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px;
+	-moz-box-shadow: 3px 3px 3px #888; -webkit-box-shadow: 3px 3px 3px #888; box-shadow: 3px 3px 3px #888;
+	border: 1px solid #BBB; font-weight: normal; color: #555; font-size: 1.4em; }
 
 .title {
 	vertical-align: middle;
@@ -140,7 +133,7 @@ table{
 
 
 /* rating colors for question backgrounds */
-.rating-high, .rating-medium, .rating-low { 
+/*.rating-high, .rating-medium, .rating-low { 
     border: 0px solid black; 
 }
 .rating-high > .title { 
@@ -153,13 +146,55 @@ table{
     background-color: #E0B59E; border: none; 
 }
 
+.ynbutton.rating-high { 
+    background-color: #C3DAA8; border: none; 
+}
+.ynbutton.rating-medium { 
+    background-color: #F4F4C7; border: none; 
+}
+.ynbutton.rating-low { 
+    background-color: #E0B59E; border: none; 
+}
+
+.ynbutton.rating-none { 
+    background-color: #DCDFF3; border: none; 
+}*/
+
+
+.rating-high, .rating-medium, .rating-low { 
+    border: 0px solid black; 
+}
+.rating-high > .title { 
+    background-color: #B0C4DE; border: none; 
+}
+.rating-medium > .title { 
+    background-color: #FAF0E6; border: none; 
+}
+.rating-low > .title { 
+    background-color: #ffdead; border: none; 
+}
+
+.ynbutton.rating-high { 
+    background-color: #B0C4DE; border: none; 
+}
+.ynbutton.rating-medium { 
+    background-color: #FAF0E6; border: none; 
+}
+.ynbutton.rating-low { 
+    background-color: #ffdead; border: none; 
+}
+
+.ynbutton.rating-none { 
+    background-color: #DDDDDD; border: none; 
+}
+
 
 /* Styles the box containing the button panel */
 .question-imagebox { 
     float: left;
-    line-height: 1.75em;
+    line-height: 1em;
     padding: 2px;
-    width: 120px;
+    width: 130px;
 }
 
 
@@ -204,15 +239,6 @@ area {
 
 .floatingCDrop select{width: 54px; margin-left: 17px;}
 
-.ynbutton{width: 14px; height: 14px; 
-        border: 1px solid #696969; font-size: 0.8em; font-weight: bold;
-        text-align: center; cursor: pointer; 
-	background-color: #DCDFF3; 
-        -moz-box-shadow: -2px -2px 5px black;	
-	-webkit-box-shadow: 0 0 5px black; 
-        box-shadow: 0 0 5px black; 
-        margin-bottom: 10px;
-        }
 
 .dialogCompleteWidth{
     width: 99%;
@@ -238,4 +264,22 @@ area {
 
 .solutiontitle{
 float: none;
+}
+
+.ynbutton {
+    box-shadow: 0 0 2px black;
+    cursor: pointer;
+    float: left;
+    font-size: 0.6em;
+    font-weight: bold;
+    height: 12px;
+    margin-right: 3px;
+    margin-top: 3px;
+    text-align: center;
+    width: 20px;
+}
+
+img{
+    float: left;
+    margin-right: 5px;
 }
