@@ -40,6 +40,7 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.event.ArticleCreatedEvent;
 import de.knowwe.jurisearch.EmbracedContent;
 import de.knowwe.jurisearch.tree.DummyExpression.NegationFlag;
@@ -150,34 +151,44 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 		JuriRule rule;
 		QuestionOC father = (QuestionOC) kb.getManager().search(section.getText());
 
-		rule = new JuriRule(father, childrenQuestion);
-		for (QuestionOC childQuestion : childrenQuestion.keySet()) {
-			// remove children questions from RootQASet
-			father.getKnowledgeBase().getRootQASet().removeChild(childQuestion);
+		// father nodes MUST have the answers yes, no and maybe
+		List<Choice> alloweredAnswers = father.getAlternatives();
+		if (alloweredAnswers.contains(JuriRule.YES) & alloweredAnswers.contains(JuriRule.NO)
+				& alloweredAnswers.contains(JuriRule.MAYBE)) {
 
-			// add children questions to father question
-			father.addChild(childQuestion);
-		}
+			rule = new JuriRule(father, childrenQuestion);
+			for (QuestionOC childQuestion : childrenQuestion.keySet()) {
+				// remove children questions from RootQASet
+				father.getKnowledgeBase().getRootQASet().removeChild(childQuestion);
 
-		/*
-		 * get the content of operator flag and mark rule as disjunctive if
-		 * required. default is conjunctive, disjunctive = false
-		 */
-		Section<Operator> operator = Sections.findSuccessor(s, JuriTreeExpression.Operator.class);
-		if (operator != null) {
-			Section<EmbracedContent> operator_content = Sections.findSuccessor(operator,
-					EmbracedContent.class);
-			String operator_str = operator_content.getText().toLowerCase();
-
-			if (operator_str.toLowerCase().equals(JuriTreeExpression.OR)) {
-				rule.setDisjunctive(true);
+				// add children questions to father question
+				father.addChild(childQuestion);
 			}
-			else if (operator_str.toLowerCase().equals(JuriTreeExpression.SCORE)) {
-				messages.add(new Message(Message.Type.ERROR, section.getText()
-						+ ": Scoring not implemented yet."));
+
+			/*
+			 * get the content of operator flag and mark rule as disjunctive if
+			 * required. default is conjunctive, disjunctive = false
+			 */
+			Section<Operator> operator = Sections.findSuccessor(s,
+					JuriTreeExpression.Operator.class);
+			if (operator != null) {
+				Section<EmbracedContent> operator_content = Sections.findSuccessor(operator,
+						EmbracedContent.class);
+				String operator_str = operator_content.getText().toLowerCase();
+
+				if (operator_str.toLowerCase().equals(JuriTreeExpression.OR)) {
+					rule.setDisjunctive(true);
+				}
+				else if (operator_str.toLowerCase().equals(JuriTreeExpression.SCORE)) {
+					messages.add(new Message(Message.Type.ERROR, section.getText()
+							+ ": Scoring not implemented yet."));
+				}
 			}
+			return rule;
 		}
-		return rule;
+		messages.add(Messages.objectCreationError(
+				"Inner nodes must have the answer alternatives yes, no and maybe."));
+		return null;
 	}
 
 	/**
