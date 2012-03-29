@@ -48,7 +48,7 @@ body,div {
 
 #dialog{
     float: left;
-    margin-top: 100px;
+    margin-top: 25px;
 }
 
 
@@ -212,7 +212,10 @@ area {
 
 /* Styling of the div within questions that displays the currently propagated value */
 .propagation{
-    display: block; width: 110px; height: 23px; float: right; pading-right: 4px; margin-top:-24px;
+    display: block; float: right;
+    height: 23px;
+    margin-top: -28px;
+    width: 25%;
 }
 .propagation.rating-high { 
     background-color: #C3DAA8; border: 1px solid grey; 
@@ -254,12 +257,11 @@ area {
 
 .show{display: block;}
 
-#solutionboxtext{
+#solutionboxtextInTree{
     font-size: 0.7em;
     font-variant: small-caps;
     font-weight: normal;
     margin-left: 5px;
-    margin-top: -5px;
 }
 
 .solutiontitle{
@@ -282,4 +284,80 @@ float: none;
 img{
     float: left;
     margin-right: 5px;
+}
+
+.solution{
+    box-shadow: 0 0 3.5px black;
+    clear: both;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 105px;
+    padding: 30px;
+    width: 65%;
+}
+
+.solRating {
+      background-color: #DEDEDE;
+    float: right;
+    font-weight: bold;
+    padding: 2px 15px;
+    margin-top: -16px;
+    margin-right: -20px;
+    min-height: 32px;
+}
+
+/*.solRating.rating-high { 
+    background-color: #C3DAA8; 
+}
+.solRating.rating-medium { 
+    background-color: #F4F4C7; 
+}
+.solRating.rating-low { 
+    background-color: #E0B59E;  
+}*/
+
+.solRating.rating-high { 
+    background-color: #B0C4DE; 
+}
+.solRating.rating-medium { 
+    background-color: #FAF0E6; 
+}
+.solRating.rating-low { 
+    background-color: #ffdead;  
+}
+
+
+#solutionboxtext{
+    font-size: 0.6em;
+    font-variant: small-caps;
+    font-weight: normal;
+    margin-left: -25px;
+    margin-top: -25px;
+}
+
+#solutiontext{
+     float: left;
+    padding: 2px 0;
+}
+
+.solutiontitle{
+    float: none;
+    min-height: 16px;
+	line-height: 1.75em;
+        margin-left: 15px;
+        margin-bottom: 5px;
+}
+
+.prop1and3{
+    background: url('/img/1and3.png');
+}
+
+.prop1and2{
+    background: url('/img/1and2.png');
+}
+
+.prop2and3{
+    background: url('/img/2and3.png');
 }

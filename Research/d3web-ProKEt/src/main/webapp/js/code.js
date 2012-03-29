@@ -1354,7 +1354,7 @@ function h4boxes(value, id) {
     // also mark parents of the target while excluding target
     h4boxes_mark(target, true);
 		
-    
+    calculateAndHandleSolutionRating();
 }
 
 
@@ -1426,10 +1426,29 @@ function setPropagationColor(question, userval){
     var propColor = calculateRatingForQuestion(question);
     
     if(propColor != 0 && propColor != userval){
-        setPropColor(prop, userval);
-        setColorForQuestion($("#" + question.attr("id")), question, propColor);
+        
+        // visually present the "error" to the user
+        if((propColor=="1" && userval=="3") || (propColor=="3" && userval=="1")){
+            prop.addClass("prop1and3");
+            prop.removeClass("prop1and2");
+            prop.removeClass("prop2and3");
+        } 
+        else if((propColor=="1" && userval=="2") || (propColor=="2" && userval=="1")){
+            prop.addClass("prop1and2");
+            prop.removeClass("prop1and3");
+            prop.removeClass("prop2and3");
+        } 
+        else if((propColor=="2" && userval=="3") || (propColor=="3" && userval=="2")){
+            prop.addClass("prop2and3");
+            prop.removeClass("prop1and2");
+            prop.removeClass("prop1and3");
+        } 
+       
+       // set the calculated value of the inner questions as question main rating
+       // for further calculation
+       setColorForQuestion($("#" + question.attr("id")), question, propColor);
     }
-    if(userval != propColor && propColor != 0 && userval != undefined){
+    if(userval != propColor && propColor != 0 && userval != undefined && userval != 0){
         prop.removeClass("hide");
         prop.addClass("show");
     } else {
@@ -1767,7 +1786,7 @@ function removeInputFacilitiesForFirst(){
             // the imagebox div, that contains input buttons normally
             var prop = $(id);
             
-            prop.html("<div id='solutionboxtext'>Hauptfrage</div>");
+            prop.html("<div id='solutionboxtextInTree'>Hauptfrage</div>");
         }
     });
 }
@@ -2218,8 +2237,38 @@ function handleOQYNQuestions(fullId, rating){
         followUp = retrieveFollowUpParent(questionEl);
     }
     
-    // the top question = solution
-    var solQuestion = $("#dialog").children().first();  
+    // calculate solution rating and display
+    calculateAndHandleSolutionRating();
+ 
+    // close all child questions (aux info etc) if a question is answered   
+    closeAllChildren(questionEl);
+        
+    // toggle follow up element to be visible by toggling its super-sub element
+    // and then toggling the follow up itself
+    if(followUp != undefined && followUp.attr("id") != undefined){
+        var fpar = followUp.parents().closest('[id^="sub-q_"]');
+        fpar.removeClass("hide");
+        fpar.addClass("show");
+        followUp.removeClass("hide");
+        followUp.addClass("show");
+    }
+       
+    // toggle auxinfo and styling for current element
+    questionEl.children().first().children().closest('[id^=auxpanel]').addClass("hide");
+    questionEl.children().first().children().closest('[id^=detail]').addClass("hide");
+    questionEl.children().first().children().closest('[id^=auxpanel]').removeClass("show");
+    questionEl.children().first().children().closest('[id^=detail]').removeClass("show");
+}
+
+
+function calculateAndHandleSolutionRating(){
+    
+    var solQuestion;  
+    if(hierarchy){
+        solQuestion = $("#dialog").children().first().next();
+    } else {
+        solQuestion = $("#dialog").children().first();
+    }
     var rating = calculateRatingForQuestion($(solQuestion));
     // color solution panel indicator according to solution rating
     switch (rating) {
@@ -2272,27 +2321,8 @@ function handleOQYNQuestions(fullId, rating){
             //$("#solLow").html(baseText);
             break;
     }
-    
-       
-    // close all child questions (aux info etc) if a question is answered   
-    closeAllChildren(questionEl);
-        
-    // toggle follow up element to be visible by toggling its super-sub element
-    // and then toggling the follow up itself
-    if(followUp != undefined && followUp.attr("id") != undefined){
-        var fpar = followUp.parents().closest('[id^="sub-q_"]');
-        fpar.removeClass("hide");
-        fpar.addClass("show");
-        followUp.removeClass("hide");
-        followUp.addClass("show");
-    }
-       
-    // toggle auxinfo and styling for current element
-    questionEl.children().first().children().closest('[id^=auxpanel]').addClass("hide");
-    questionEl.children().first().children().closest('[id^=detail]').addClass("hide");
-    questionEl.children().first().children().closest('[id^=auxpanel]').removeClass("show");
-    questionEl.children().first().children().closest('[id^=detail]').removeClass("show");
 }
+
 
 /**
  * Toggle all sub-elements of the given question --> also sub-questions, again

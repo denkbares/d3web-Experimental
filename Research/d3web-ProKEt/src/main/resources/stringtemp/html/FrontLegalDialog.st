@@ -39,6 +39,25 @@ $HTMLHeader()$
         den Button <i>End Session</i> und beantworten Sie den anschließend angezeigten Kurzfragebogen!</b>.
     </div>
     
+    <div id="solution" class="solution">
+            <div id="solutionboxtext">Bewertung Hauptfrage</div>
+
+            <div id="solutiontext">Ist das Arbeitsverhältnis wirksam gekündigt worden?</div>
+
+            <div id="solHigh" class="solRating rating-high hide">
+                Sachverhalt bestätigt, <br />weil Frage 1 und Frage 2 bestätigt werden konnten.
+            </div>
+            <div id="solMed" class="solRating rating-medium hide">
+                Sachverhalt nicht sicher entscheidbar, <br />weil Frage 1 oder Frage 2 nicht sicher entschieden werden konnten.
+            </div>
+            <div id="solLow" class="solRating rating-low hide">
+                Sachverhalt trifft nicht zu, <br />weil Frage 1 oder Frage 2 nicht bestätigt werden konnte.
+            </div>
+            <div id="solUn" class="solRating"><br />
+                Zu wenig Informationen für eine Bewertung.
+            </div>
+        </div>
+
     <div id="dialog" class="dialog75Width">
          $children$	
     </div>
