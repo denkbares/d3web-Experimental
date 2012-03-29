@@ -31,7 +31,7 @@ import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.jurisearch.BracketContent;
+import de.knowwe.jurisearch.EmbracedContent;
 import de.knowwe.jurisearch.questionDef.ExplanationText;
 import de.knowwe.jurisearch.questionDef.QuestionDefinitionArea;
 import de.knowwe.kdom.dashtree.DashSubtree;
@@ -119,7 +119,7 @@ public class JuriTreeXmlGenerator {
 		String explanation = getExplanationText(section, text);
 		Section nodeMode =
 				getFirstSectionWithPath(jexp, JuriTreeExpression.Operator.class,
-						BracketContent.class);
+						EmbracedContent.class);
 		String booleanTypeAdd = getAnswerTypeAttribute(nodeMode);
 		String id = getNextUniqueID();
 		String parentString = "";

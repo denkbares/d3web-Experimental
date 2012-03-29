@@ -20,38 +20,27 @@ package de.knowwe.jurisearch.questionDef;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.regex.Pattern;
 
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.terminology.Choice;
-import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.QuestionOC;
-import de.d3web.jurisearch.JuriRule;
-import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.we.object.QASetDefinition;
-import de.d3web.we.reviseHandler.D3webSubtreeHandler;
+import de.d3web.we.object.QuestionDefinition;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.Priority;
-import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
-import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.jurisearch.BoxRenderer;
-import de.knowwe.jurisearch.BracketContent;
 import de.knowwe.jurisearch.BracketRenderer;
+import de.knowwe.jurisearch.EmbracedContent;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
@@ -114,8 +103,7 @@ public class QuestionDefinitionArea extends AbstractType {
 		@Override
 		public Collection<Message> create(Article article, Section<QuestionDefinitionArea> markupSection) {
 
-			Environment.getInstance().getPackageManager(
-					article.getWeb()).addSectionToPackage(
+			Environment.getInstance().getPackageManager(article.getWeb()).addSectionToPackage(
 					markupSection, "default");
 			return new ArrayList<Message>();
 		}
@@ -137,9 +125,13 @@ public class QuestionDefinitionArea extends AbstractType {
 			this.setSectionFinder(new RegexSectionFinder(Q_AREA_REGEX,
 					Pattern.MULTILINE | Pattern.DOTALL, 1));
 			this.setRenderer(new BoxRenderer("markupText"));
+
+			// this.setOrderSensitive(true);
 			this.addChildType(new QuestionTermDefinitionLine());
+
 			this.addChildType(new AnswerDefinitionLine());
 			this.addChildType(new ExplanationTextArea());
+
 		}
 	}
 
@@ -152,102 +144,41 @@ public class QuestionDefinitionArea extends AbstractType {
 			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
 
-			this.setRenderer(new StyleRenderer("color:green;"));
-
 			// this.addChildType(new QuestionTypeDeclaration());
+			this.addChildType(new ShortAnswerDefinitionBracket());
 
 			QASetDefinition<Question> qRef = new QAreaQuestionDefinition();
-			ConstraintSectionFinder qcsf = new ConstraintSectionFinder(
-					new AllTextFinderTrimmed());
+			ConstraintSectionFinder qcsf = new ConstraintSectionFinder(new AllTextFinderTrimmed());
 			csf.addConstraint(SingleChildConstraint.getInstance());
 			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 			qRef.setSectionFinder(qcsf);
 			this.addChildType(qRef);
 		}
 
-		private final class QAreaQuestionDefinition extends QASetDefinition<Question> {
+		public final class QAreaQuestionDefinition extends QuestionDefinition {
 
 			public QAreaQuestionDefinition() {
-				this.addSubtreeHandler(Priority.HIGHER, new CreateYNMQuestionHandler());
-				this.setRenderer(StyleRenderer.Question);
-				this.setOrderSensitive(true);
+				this.setRenderer(new StyleRenderer("color:green;"));
+
+				// this.addSubtreeHandler(Priority.HIGHER, new
+				// CreateYNMQuestionHandler());
+				// this.setRenderer(StyleRenderer.Question);
+				// this.setOrderSensitive(true);
 			}
 
 			@Override
-			public Class<?> getTermObjectClass(Section<? extends SimpleTerm> section) {
-				return Question.class;
+			public QuestionType getQuestionType(Section<QuestionDefinition> s) {
+				return QuestionDefinition.QuestionType.OC;
 			}
 
-		}
-
-		class CreateYNMQuestionHandler extends D3webSubtreeHandler<QASetDefinition<Question>> {
+			@Override
+			public int getPosition(Section<QuestionDefinition> s) {
+				return 0;
+			}
 
 			@Override
-			public Collection<Message> create(Article article, Section<QASetDefinition<Question>> section) {
-
-				String name = section.get().getTermIdentifier(section);
-
-				Class<?> termObjectClass = section.get().getTermObjectClass(section);
-				TerminologyManager terminologyHandler = KnowWEUtils.getTerminologyManager(article);
-				terminologyHandler.registerTermDefinition(section, termObjectClass, name);
-
-				Collection<Message> msgs = section.get().canAbortTermObjectCreation(
-						article, section);
-				if (msgs != null) return msgs;
-
-				KnowledgeBase kb = getKB(article);
-
-				Section<? extends QASetDefinition<Question>> parentQASetSection = section;
-
-				QASet parent = null;
-				if (parentQASetSection != null) {
-					parent = parentQASetSection.get().getTermObject(article,
-							parentQASetSection);
-				}
-				if (parent == null) {
-					parent = kb.getRootQASet();
-				}
-
-				QuestionOC questionYNM = new QuestionOC(parent, name);
-
-				Section<QuestionDefinitionContent> qdc = Sections.findAncestorOfType(section,
-						QuestionDefinitionContent.class);
-
-				// get answer sections
-				List<Section<AnswerDefinitionLine>> answer_sections = Sections.findChildrenOfType(
-						qdc, AnswerDefinitionLine.class);
-
-				// add answers as alternatives
-				if (answer_sections != null && !answer_sections.isEmpty()) {
-					for (Section<AnswerDefinitionLine> s : answer_sections) {
-						Section<BracketContent> answer = Sections.findChildOfType(s,
-								BracketContent.class);
-						Choice choice = new Choice(answer.getText());
-						questionYNM.addAlternative(choice);
-					}
-				}
-				else {
-					// add default alternatives
-					questionYNM.addAlternative(JuriRule.YES);
-					questionYNM.addAlternative(JuriRule.NO);
-				}
-				// maybe is allways an answer
-				questionYNM.addAlternative(JuriRule.MAYBE);
-
-				// set description as MMInfo.Description
-				List<Section<ExplanationText>> expsecs = Sections.findSuccessorsOfType(qdc,
-						ExplanationText.class);
-				for (Section<ExplanationText> expsec : expsecs) {
-					String text = expsec.getText();
-					String html = Environment.getInstance().getWikiConnector().wikiSyntaxToHtml(
-							text);
-					questionYNM.getInfoStore().addValue(ProKEtProperties.POPUP, html);
-				}
-
-				// return success message
-				return Messages.asList(Messages.objectCreatedNotice(
-						termObjectClass.getSimpleName() + " " + name));
-
+			public Section<? extends QASetDefinition> getParentQASetSection(Section<? extends QuestionDefinition> qdef) {
+				return null;
 			}
 		}
 	}
@@ -263,11 +194,23 @@ public class QuestionDefinitionArea extends AbstractType {
 	class AnswerDefinitionLine extends AbstractType {
 
 		public AnswerDefinitionLine() {
-			this.setSectionFinder(new RegexSectionFinder(BracketContent.BRACKET_OPEN + "(.)+"
-					+ BracketContent.BRACKET_CLOSE));
-			this.addChildType(new BracketContent());
+			this.setSectionFinder(new RegexSectionFinder(EmbracedContent.BRACKET_OPEN_REGEX
+					+ "(.)+"
+					+ EmbracedContent.BRACKET_CLOSE_REGEX));
+			this.addChildType(new JuriAnswerDefinition());
 			this.setRenderer(new BracketRenderer());
 		}
 	}
 
+	class ShortAnswerDefinitionBracket extends AbstractType {
+
+		ShortAnswerDefinitionBracket() {
+			this.setSectionFinder(new RegexSectionFinder(EmbracedContent.BRACKET_OPEN_REGEX
+					+ JuriAnswerDefinitionShort.YES + JuriAnswerDefinitionShort.NO
+					+ JuriAnswerDefinitionShort.MAYBE
+					+ EmbracedContent.BRACKET_CLOSE_REGEX));
+			this.addChildType(new JuriAnswerDefinitionShort());
+			this.setRenderer(new BracketRenderer());
+		}
+	}
 }

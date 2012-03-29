@@ -21,8 +21,8 @@ package de.knowwe.jurisearch.tree;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
-import de.knowwe.jurisearch.BracketContent;
 import de.knowwe.jurisearch.BracketRenderer;
+import de.knowwe.jurisearch.EmbracedContent;
 import de.knowwe.jurisearch.Error;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
@@ -59,9 +59,10 @@ public class JuriTreeExpression extends DashTreeElementContent {
 
 		Operator() {
 			SectionFinder sf = new OneOfStringEnumFinder(new String[] {
-					BracketContent.BRACKET_OPEN + OR + BracketContent.BRACKET_CLOSE,
-					BracketContent.BRACKET_OPEN + AND + BracketContent.BRACKET_CLOSE,
-					BracketContent.BRACKET_OPEN + SCORE + BracketContent.BRACKET_CLOSE });
+					EmbracedContent.BRACKET_OPEN_REGEX + OR + EmbracedContent.BRACKET_CLOSE_REGEX,
+					EmbracedContent.BRACKET_OPEN_REGEX + AND + EmbracedContent.BRACKET_CLOSE_REGEX,
+					EmbracedContent.BRACKET_OPEN_REGEX + SCORE
+							+ EmbracedContent.BRACKET_CLOSE_REGEX });
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
 			csf.addConstraint(SingleChildConstraint.getInstance());
 			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
@@ -69,47 +70,15 @@ public class JuriTreeExpression extends DashTreeElementContent {
 			this.setSectionFinder(csf);
 			this.setRenderer(new BracketRenderer());
 
-			this.addChildType(new BracketContent());
+			this.addChildType(new EmbracedContent());
 		}
 	}
-
-	// class NegationFlag extends AbstractType {
-	//
-	// NegationFlag() {
-	// SectionFinder sf = new RegexSectionFinder(BracketContent.BRACKET_OPEN +
-	// NOT
-	// + BracketContent.BRACKET_CLOSE);
-	// ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
-	// csf.addConstraint(SingleChildConstraint.getInstance());
-	// csf.addConstraint(AtMostOneFindingConstraint.getInstance());
-	//
-	// this.setSectionFinder(csf);
-	// this.setRenderer(new BracketRenderer());
-	//
-	// this.addChildType(new BracketContent());
-	// }
-	// }
-
-	// class DummyFlag extends AbstractType {
-	//
-	// DummyFlag() {
-	// SectionFinder sf = new RegexSectionFinder(BracketContent.BRACKET_OPEN
-	// + DummyExpression.DUMMY + BracketContent.BRACKET_CLOSE);
-	// ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
-	// csf.addConstraint(SingleChildConstraint.getInstance());
-	// csf.addConstraint(AtMostOneFindingConstraint.getInstance());
-	//
-	// this.setSectionFinder(csf);
-	// this.setRenderer(new BracketRenderer());
-	// this.addChildType(new BracketContent());
-	// }
-	// }
 
 	class AnswerBracket extends AbstractType {
 
 		AnswerBracket() {
-			SectionFinder sf = new EmbracedContentFinder(BracketContent.BRACKET_OPEN_CHAR,
-					BracketContent.BRACKET_CLOSE_CHAR);
+			SectionFinder sf = new EmbracedContentFinder(EmbracedContent.BRACKET_OPEN,
+					EmbracedContent.BRACKET_CLOSE);
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
 			csf.addConstraint(SingleChildConstraint.getInstance());
 			csf.addConstraint(AtMostOneFindingConstraint.getInstance());

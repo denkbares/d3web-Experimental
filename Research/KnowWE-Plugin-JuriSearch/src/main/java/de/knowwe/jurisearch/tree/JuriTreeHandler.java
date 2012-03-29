@@ -25,7 +25,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QuestionOC;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.jurisearch.JuriModel;
 import de.d3web.jurisearch.JuriRule;
@@ -39,7 +41,8 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.event.ArticleCreatedEvent;
-import de.knowwe.jurisearch.BracketContent;
+import de.knowwe.jurisearch.EmbracedContent;
+import de.knowwe.jurisearch.tree.DummyExpression.NegationFlag;
 import de.knowwe.jurisearch.tree.JuriTreeExpression.Operator;
 
 /**
@@ -55,16 +58,17 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 
 	@Override
 	public Collection<Message> create(Article article, Section<JuriTreeExpression> section) {
+		ArrayList<Message> messages = new ArrayList<Message>();
 		if (!section.hasErrorInSubtree(article)) {
 			KnowledgeBase kb = getKB(article);
-			JuriRule rule = createJuriRule(kb, section);
+			JuriRule rule = createJuriRule(article, kb, section, messages);
 			if (rule != null) {
 				JuriModel model = getModelOrCreate(kb);
 				model.addRule(rule);
 				kb.getKnowledgeStore().addKnowledge(JuriModel.KNOWLEDGE_KIND, model);
 			}
 		}
-		return new ArrayList<Message>(0);
+		return messages;
 	}
 
 	public Class<? extends Event> getEvent() {
@@ -94,7 +98,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 	 * @param kb
 	 * @param section
 	 */
-	private JuriRule createJuriRule(KnowledgeBase kb, Section<JuriTreeExpression> s) {
+	private JuriRule createJuriRule(Article article, KnowledgeBase kb, Section<JuriTreeExpression> s, ArrayList<Message> messages) {
 		Section<QuestionIdentifier> section = Sections.findSuccessor(s, QuestionIdentifier.class);
 		List<Section<QuestionIdentifier>> children = section.get().getChildrenQuestion(section);
 		HashMap<QuestionOC, ChoiceValue> childrenQuestion = new HashMap<QuestionOC, ChoiceValue>();
@@ -104,6 +108,8 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 			QuestionOC question = (QuestionOC) kb.getManager().search(child.getText());
 			if (question == null) {
 				// if a child question is not defined, return null
+				messages.add(new Message(Message.Type.ERROR, "Child question " + child.getText()
+						+ " of " + section.getText() + " not defined."));
 				return null;
 			}
 
@@ -114,22 +120,30 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 			Section<JuriTreeExpression> jte = Sections.findAncestorOfType(child,
 					JuriTreeExpression.class);
 			Section<AnswerReference> answer = Sections.findSuccessor(jte, AnswerReference.class);
-			ChoiceValue value = JuriRule.YES_VALUE;
+			ChoiceValue value;
 			if (answer != null) {
-				// TODO sollte so funktionieren, wenn die antwort richtig
-				// gefunden wird
-				// String id = answer.get().getTermIdentifier(answer);
-				// Choice c = KnowledgeBaseUtils.findChoice(question, id);
-
-				// workaround
-				String c = answer.getText();
+				Choice c = answer.get().getTermObject(article, answer);
 				value = new ChoiceValue(c);
+			}
+			else {
+				Section<NegationFlag> dummyNegation = Sections.findSuccessor(jte,
+						NegationFlag.class);
+				if (dummyNegation != null) {
+					String name = dummyNegation.get().getName();
+					Choice c = KnowledgeBaseUtils.findChoice(question, name);
+					value = new ChoiceValue(c);
+				}
+				else {
+					value = JuriRule.YES_VALUE;
+				}
 			}
 			childrenQuestion.put(question, value);
 
 		}
 		if (children.isEmpty()) {
 			// if father is a leaf, return null
+			messages.add(new Message(Message.Type.INFO, "Question " + section.getText()
+					+ " is a leaf."));
 			return null;
 		}
 
@@ -151,31 +165,18 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 		 */
 		Section<Operator> operator = Sections.findSuccessor(s, JuriTreeExpression.Operator.class);
 		if (operator != null) {
-			Section<BracketContent> operator_content = Sections.findSuccessor(operator,
-					BracketContent.class);
+			Section<EmbracedContent> operator_content = Sections.findSuccessor(operator,
+					EmbracedContent.class);
 			String operator_str = operator_content.getText().toLowerCase();
 
 			if (operator_str.toLowerCase().equals(JuriTreeExpression.OR)) {
 				rule.setDisjunctive(true);
 			}
 			else if (operator_str.toLowerCase().equals(JuriTreeExpression.SCORE)) {
-				// TODO
+				messages.add(new Message(Message.Type.ERROR, section.getText()
+						+ ": Scoring not implemented yet."));
 			}
 		}
-
-		// Section<DummyFlag> dummysec = Sections.findSuccessor(s,
-		// JuriTreeExpression.DummyFlag.class);
-		// if (dummysec != null) {
-		// Section<BracketContent> dummy_content =
-		// Sections.findSuccessor(dummysec,
-		// BracketContent.class);
-		// String dummyflag = dummy_content.getText().toLowerCase();
-		//
-		// if (dummyflag.toLowerCase().equals(DummyExpression.DUMMY)) {
-		// father.getInfoStore().addValue(JuriModel.DUMMY, true);
-		// }
-		// }
-
 		return rule;
 	}
 
