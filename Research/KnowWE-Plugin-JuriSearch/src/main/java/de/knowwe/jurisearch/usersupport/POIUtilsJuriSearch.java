@@ -56,9 +56,9 @@ public class POIUtilsJuriSearch
 			for (Section<QuestionTree> tree : qTrees)
 			{
 				Section<DashSubtree> subtree = Sections.findSuccessor(tree, DashSubtree.class);
-				Section<?> sub = subtree.getChildren().get(1);
+				// Section<?> sub = subtree.getChildren().get(1);
 				XWPFParagraph par = doc.createParagraph();
-				String[] subLines = sub.getText().split("\\r\\n");
+				String[] subLines = subtree.getText().split("\\r\\n");
 				for (String line : subLines)
 				{
 					POIUtilsJuriSearch.createAndSetStyles(par, line);
