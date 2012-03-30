@@ -38,6 +38,10 @@ public class FrontLegalQuestionRenderer extends Renderer {
     private static String TT_NAN = "Antwort <b>zurücksetzen</b>.";
     private static String TT_YES_REV = "Wertet übergeordnete Frage <b>negativ</b>.";
     private static String TT_NO_REV = "Wertet übergeordnete Frage <b>positiv</b>.";
+    
+    private static String TT_PROP_ERROR = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung.</b> "
+            + "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, "
+            + "wenn Sie eine andere als die bisher hergeleitete Bewertung setzen möchten.";
 
     @Override
     protected void renderChildren(StringTemplate st, ContainerCollection cc,
@@ -144,6 +148,8 @@ public class FrontLegalQuestionRenderer extends Renderer {
         }
         st.setAttribute("ttu", TT_UN);
         st.setAttribute("ttnan", TT_NAN);
+        
+        st.setAttribute("tooltip", TT_PROP_ERROR);
 
         super.renderChildren(st, cc, dialogObject, force);
     }

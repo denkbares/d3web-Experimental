@@ -70,7 +70,6 @@ function setup() {
     }
 
     prepare_question_marking(); // prepare marking of questions
-    hide_all_tooltips(); // hide tooltips
     generate_tooltip_functions(); // generate tooltip functions
     hide_all_subquestions(); // hide subquestions
     make_sidenav();	// make sidenavigation
@@ -85,6 +84,8 @@ function setup() {
     
 
     if(hierarchy){
+        generate_tooltip_functions_ynbuttons();
+        
         // remove yn panel etc for first question
         removeInputFacilitiesForFirst();
         
@@ -105,6 +106,8 @@ function setup() {
         
     // some more styling of diagnosis element
     }
+    
+    hide_all_tooltips(); // hide tooltips
     
     // handle one question dialog
     if(oqd) {
@@ -829,12 +832,10 @@ function prepare_question_marking() {
  */
 function tooltip_over(id) {
     targetid = "tt-" + id;
-	
+    	
     //target = $("#tt-" + id).filter(":not(:animated)");
-    var target = $("[id^=" + targetid + "]");
-        
-        
-        
+    var target = $("[id$=" + targetid + "]");
+             
     if (target.size() == 0) {
         return;
     }
@@ -1005,12 +1006,9 @@ function tooltip_out(object) {
 //tooltipShownTrigger = undefined;
 }
 
-/**
- * Generate functionality for tooltip elements
- */
-function generate_tooltip_functions() {
-	
-    triggers = $("[class*='-tt-trigger']");
+// generates the tooltips for the answer buttons of yes no questions
+function generate_tooltip_functions_ynbuttons(){
+    triggers = $("[class*='-tt-trigger-ynbutton']");
 	
     // if mouse is moved over an element define potential tooltips position
     $(document).mousemove(function(e) {
@@ -1020,10 +1018,81 @@ function generate_tooltip_functions() {
     // go through all existing tooltip triggers
     triggers.each(function() {
 		
+        var ttstart, ttend;
+        var now;
+                
+        $(this).unbind('mouseover').mouseover(function() {
+            //if logging is activated get the time tooltip is triggered
+            if(logging){
+                now = new Date();
+                ttstart = now.getTime();
+            }
+            
+            var fullId = $(this).attr("id");
+            if(fullId.indexOf("ynYes")!=-1){
+                id = $(this).attr("id").replace("ynYes-", "");
+                tooltip_over_hierarchy_buttons(id, "1");
+            } else if(fullId.indexOf("ynNo")!=-1){
+                id = $(this).attr("id").replace("ynNo-", "");
+                tooltip_over_hierarchy_buttons(id, "3");
+            } else if(fullId.indexOf("ynUn")!=-1){
+                id = $(this).attr("id").replace("ynUn-", "");
+                tooltip_over_hierarchy_buttons(id, "2");
+            } else if(fullId.indexOf("ynNan")!=-1){
+                id = $(this).attr("id").replace("ynNan-", "");
+                tooltip_over_hierarchy_buttons(id, "0");
+            }
+        });
+
+        $(this).unbind('mouseout').mouseout(function() {
+            //if logging is activated get the time tooltip is deactivated again
+            if(logging){
+                now = new Date();
+                ttend = now.getTime();
+                ue_logInfoPopup(ttstart, ttend, $(this));
+            }
+            
+            var fullId = $(this).attr("id");
+            if(fullId.indexOf("ynYes")!=-1){
+                id = $(this).attr("id").replace("ynYes-", "");
+                tooltip_out_hierarchy_buttons(id, "1");
+            } else if(fullId.indexOf("ynNo")!=-1){
+                id = $(this).attr("id").replace("ynNo-", "");
+                tooltip_out_hierarchy_buttons(id, "3");
+            } else if(fullId.indexOf("ynUn")!=-1){
+                id = $(this).attr("id").replace("ynUn-", "");
+                tooltip_out_hierarchy_buttons(id, "2");
+            } else if(fullId.indexOf("ynNan")!=-1){
+                id = $(this).attr("id").replace("ynNan-", "");
+                tooltip_out_hierarchy_buttons(id, "0");
+            }
+        });
+    });
+}
+
+/**
+ * Generate functionality for tooltip elements
+ */
+function generate_tooltip_functions() {
+	
+    triggers = $("[class$='-tt-trigger tooltip-trigger']");
+	
+    // if mouse is moved over an element define potential tooltips position
+    $(document).mousemove(function(e) {
+        tooltip_move(e);
+    });
+	
+    // go through all existing tooltip triggers
+    triggers.each(function() {
+        	
         // complete class name
         var classComplete = $(this).attr("class");
         
         var id = classComplete.replace("-tt-trigger tooltip-trigger", "");
+        
+        if(classComplete.indexOf("propagation hide") != -1){
+            id = id.replace("propagation hide ", "");
+        }
         
         var ttstart, ttend;
         var now;
@@ -1035,27 +1104,9 @@ function generate_tooltip_functions() {
                 ttstart = now.getTime();
             }
             
-            if(hierarchy){
-                var fullId = $(this).attr("id");
-                if(fullId.indexOf("ynYes")!=-1){
-                    id = $(this).attr("id").replace("ynYes-", "");
-                    tooltip_over_hierarchy_buttons(id, "1");
-                } else if(fullId.indexOf("ynNo")!=-1){
-                    id = $(this).attr("id").replace("ynNo-", "");
-                    tooltip_over_hierarchy_buttons(id, "3");
-                } else if(fullId.indexOf("ynUn")!=-1){
-                    id = $(this).attr("id").replace("ynUn-", "");
-                    tooltip_over_hierarchy_buttons(id, "2");
-                } else if(fullId.indexOf("ynNan")!=-1){
-                    id = $(this).attr("id").replace("ynNan-", "");
-                    tooltip_over_hierarchy_buttons(id, "0");
-                }
-                
-            } else {
-                tooltip_over(id);
-            }
-            
+            tooltip_over(id);
         });
+     
         $(this).unbind('mouseout').mouseout(function() {
             //if logging is activated get the time tooltip is deactivated again
             if(logging){
@@ -1063,25 +1114,9 @@ function generate_tooltip_functions() {
                 ttend = now.getTime();
                 ue_logInfoPopup(ttstart, ttend, $(this));
             }
-            if(hierarchy){
-                var fullId = $(this).attr("id");
-                if(fullId.indexOf("ynYes")!=-1){
-                    id = $(this).attr("id").replace("ynYes-", "");
-                    tooltip_out_hierarchy_buttons(id, "1");
-                } else if(fullId.indexOf("ynNo")!=-1){
-                    id = $(this).attr("id").replace("ynNo-", "");
-                    tooltip_out_hierarchy_buttons(id, "3");
-                } else if(fullId.indexOf("ynUn")!=-1){
-                    id = $(this).attr("id").replace("ynUn-", "");
-                    tooltip_out_hierarchy_buttons(id, "2");
-                } else if(fullId.indexOf("ynNan")!=-1){
-                    id = $(this).attr("id").replace("ynNan-", "");
-                    tooltip_out_hierarchy_buttons(id, "0");
-                }
-                
-            } else {
-                tooltip_out(id);
-            }
+          
+            tooltip_out(id);
+            
         });
     });
 }
@@ -1444,13 +1479,16 @@ function setPropagationColor(question, userval){
             prop.removeClass("prop1and3");
         } 
        
-       // set the calculated value of the inner questions as question main rating
-       // for further calculation
-       setColorForQuestion($("#" + question.attr("id")), question, propColor);
+        // set the calculated value of the inner questions as question main rating
+        // for further calculation
+        setColorForQuestion($("#" + question.attr("id")), question, propColor);
     }
     if(userval != propColor && propColor != 0 && userval != undefined && userval != 0){
         prop.removeClass("hide");
         prop.addClass("show");
+        // needed to keep the propagation tooltip hidden!
+        prop.children().first().addClass("hide");
+        
     } else {
         prop.removeClass("show");
         prop.addClass("hide");
@@ -1752,8 +1790,10 @@ function hideAuxInfo(){
 }
 
 function showAuxPropInfo(){
-    
-    $("#auxPropagationInfo").html("<b>Beantwortung der Detailfragen widerspricht der Antwort dieser Frage!</b> <br /><br />");
+    var info = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung. ";
+    info += "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, ";
+    info += "wenn Sie eine andere als die bisher hergeleitete Bewertung setzen möchten.";
+    $("#auxPropagationInfo").html(info);
 }
 
 function hideAuxPropInfo(){

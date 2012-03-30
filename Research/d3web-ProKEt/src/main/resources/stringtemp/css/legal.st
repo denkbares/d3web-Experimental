@@ -105,7 +105,9 @@ table{
 .tooltip { z-index: 100; background-color: #fffacd;
 	padding: 2px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px;
 	-moz-box-shadow: 3px 3px 3px #888; -webkit-box-shadow: 3px 3px 3px #888; box-shadow: 3px 3px 3px #888;
-	border: 1px solid #BBB; font-weight: normal; color: #555; font-size: 1.4em; }
+	border: 1px solid #BBB; font-weight: normal; color: #555; font-size: 1.3em; }
+
+.tooltipProp{font-size: 0.8em; line-height: 1.1em;}
 
 .title {
 	vertical-align: middle;
