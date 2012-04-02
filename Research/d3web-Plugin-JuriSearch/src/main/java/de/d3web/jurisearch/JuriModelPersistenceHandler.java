@@ -133,8 +133,10 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 					NodeList confirmingValueNodes = elements.item(i).getChildNodes();
 					List<ChoiceValue> confirmingValues = new LinkedList<ChoiceValue>();
 					for (int j = 0; j < confirmingValueNodes.getLength(); j++) {
-						String confirmingValue = getAttribute(CONFIRMING_VALUE, elements.item(i));
-						confirmingValues.add(new ChoiceValue(confirmingValue));
+						if (confirmingValueNodes.item(j).getNodeName().equals(CONFIRMING_VALUE)) {
+							String confirmingValue = confirmingValueNodes.item(j).getTextContent();
+							confirmingValues.add(new ChoiceValue(confirmingValue));
+						}
 					}
 					String childquestion = getAttribute(QUESTION, elements.item(i));
 					QuestionOC child = (QuestionOC) kb.getManager().search(childquestion);
