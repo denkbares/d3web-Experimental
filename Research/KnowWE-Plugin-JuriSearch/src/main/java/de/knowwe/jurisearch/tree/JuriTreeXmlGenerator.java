@@ -118,7 +118,7 @@ public class JuriTreeXmlGenerator {
 				QuestionIdentifier.class).getFirst().getText();
 		String explanation = getExplanationText(section, text);
 		Section nodeMode =
-				getFirstSectionWithPath(jexp, JuriTreeExpression.Operator.class,
+				getFirstSectionWithPath(jexp, Operator.class,
 						EmbracedContent.class);
 		String booleanTypeAdd = getAnswerTypeAttribute(nodeMode);
 		String id = getNextUniqueID();

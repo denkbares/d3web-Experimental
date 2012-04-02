@@ -4,21 +4,19 @@ import de.d3web.we.object.AnswerReference;
 import de.d3web.we.object.QuestionReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
-import de.knowwe.jurisearch.EmbracedContent;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
-import de.knowwe.kdom.sectionFinder.EmbracedContentFinder;
 
 public class AnswerIdentifier extends AnswerReference {
 
 	public AnswerIdentifier() {
 		super();
 
-		SectionFinder sf = new
-				EmbracedContentFinder(EmbracedContent.BRACKET_OPEN,
-						EmbracedContent.BRACKET_CLOSE, true);
+		SectionFinder sf = new RegexSectionFinder("[^\\[\\]]+");
+
 		// SectionFinder sf = new EmbracedContentFinder('(', ')', true);
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
 		csf.addConstraint(SingleChildConstraint.getInstance());

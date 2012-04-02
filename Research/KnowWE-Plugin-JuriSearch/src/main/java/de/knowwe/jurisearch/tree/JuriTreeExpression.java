@@ -22,14 +22,9 @@ import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
-import de.knowwe.jurisearch.BracketRenderer;
-import de.knowwe.jurisearch.EmbracedContent;
 import de.knowwe.jurisearch.Error;
-import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
-import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
-import de.knowwe.kdom.sectionFinder.OneOfStringEnumFinder;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * 
@@ -38,14 +33,10 @@ import de.knowwe.kdom.sectionFinder.OneOfStringEnumFinder;
  */
 public class JuriTreeExpression extends DashTreeElementContent {
 
-	public static final String AND = "und";
-	public static final String OR = "oder";
-	public static final Object NOT = "nein";
-	public static final Object SCORE = "score";
-
 	public JuriTreeExpression() {
 		this.setSectionFinder(new AllTextFinderTrimmed());
 
+		this.setOrderSensitive(true);
 		this.addChildType(new DummyExpression());
 		this.addChildType(new Operator());
 		this.addChildType(new AnswerBracket());
@@ -56,34 +47,17 @@ public class JuriTreeExpression extends DashTreeElementContent {
 		this.addSubtreeHandler(new JuriTreeHandler());
 	}
 
-	class Operator extends AbstractType {
-
-		Operator() {
-			SectionFinder sf = new OneOfStringEnumFinder(new String[] {
-					EmbracedContent.BRACKET_OPEN_REGEX + OR + EmbracedContent.BRACKET_CLOSE_REGEX,
-					EmbracedContent.BRACKET_OPEN_REGEX + AND + EmbracedContent.BRACKET_CLOSE_REGEX,
-					EmbracedContent.BRACKET_OPEN_REGEX + SCORE
-							+ EmbracedContent.BRACKET_CLOSE_REGEX });
-			ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
-			csf.addConstraint(SingleChildConstraint.getInstance());
-			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
-
-			this.setSectionFinder(csf);
-			this.setRenderer(new BracketRenderer());
-
-			this.addChildType(new EmbracedContent());
-		}
-	}
-
 	class AnswerBracket extends AbstractType {
 
 		AnswerBracket() {
-			SectionFinder sf = new RegexSectionFinder(EmbracedContent.BRACKET_OPEN_REGEX + "(.)+"
-					+ EmbracedContent.BRACKET_CLOSE_REGEX);
+			SectionFinder sf = new
+					RegexSectionFinder("\\[[^\\[\\]]+\\]");
 
+			// SectionFinder sf = new EmbracedContentFinder('[', ']');
 			this.setSectionFinder(sf);
 			this.addChildType(new AnswerIdentifier());
-			this.setRenderer(new BracketRenderer());
+			this.setRenderer(new StyleRenderer("color:yellow"));
+			// this.setRenderer(new BracketRenderer());
 		}
 	}
 }

@@ -38,6 +38,7 @@ class DummyExpression extends AbstractType {
 		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 		this.setSectionFinder(csf);
 		this.addChildType(new DummyFlag());
+		this.addChildType(new Operator());
 		this.addChildType(new NegationFlag());
 
 		// if dummy, all other brackets are ignored

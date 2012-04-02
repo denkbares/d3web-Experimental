@@ -31,7 +31,6 @@ import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.jurisearch.JuriModel;
 import de.d3web.jurisearch.JuriRule;
-import de.d3web.we.object.AnswerReference;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
@@ -44,7 +43,6 @@ import de.knowwe.core.report.Messages;
 import de.knowwe.event.ArticleCreatedEvent;
 import de.knowwe.jurisearch.EmbracedContent;
 import de.knowwe.jurisearch.tree.DummyExpression.NegationFlag;
-import de.knowwe.jurisearch.tree.JuriTreeExpression.Operator;
 
 /**
  * 
@@ -120,12 +118,12 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 			 */
 			Section<JuriTreeExpression> jte = Sections.findAncestorOfType(child,
 					JuriTreeExpression.class);
-			List<Section<AnswerReference>> confirmingValueSections = Sections.findSuccessorsOfType(
-					jte, AnswerReference.class);
+			List<Section<AnswerIdentifier>> confirmingValueSections = Sections.findSuccessorsOfType(
+					jte, AnswerIdentifier.class);
 
 			List<ChoiceValue> confirmingValues = new LinkedList<ChoiceValue>();
-			if (confirmingValues.size() != 0) {
-				for (Section<AnswerReference> sec : confirmingValueSections) {
+			if (confirmingValueSections.size() != 0) {
+				for (Section<AnswerIdentifier> sec : confirmingValueSections) {
 					if (sec != null) {
 						Choice c = sec.get().getTermObject(article, sec);
 						confirmingValues.add(new ChoiceValue(c));
@@ -176,16 +174,16 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 			 * required. default is conjunctive, disjunctive = false
 			 */
 			Section<Operator> operator = Sections.findSuccessor(s,
-					JuriTreeExpression.Operator.class);
+					Operator.class);
 			if (operator != null) {
 				Section<EmbracedContent> operator_content = Sections.findSuccessor(operator,
 						EmbracedContent.class);
 				String operator_str = operator_content.getText().toLowerCase();
 
-				if (operator_str.toLowerCase().equals(JuriTreeExpression.OR)) {
+				if (operator_str.toLowerCase().equals(Operator.OR)) {
 					rule.setDisjunctive(true);
 				}
-				else if (operator_str.toLowerCase().equals(JuriTreeExpression.SCORE)) {
+				else if (operator_str.toLowerCase().equals(Operator.SCORE)) {
 					messages.add(new Message(Message.Type.ERROR, section.getText()
 							+ ": Scoring not implemented yet."));
 				}
