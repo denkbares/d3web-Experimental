@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -55,7 +57,7 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 	private static final String CHILD = "Child";
 	private static final String QUESTION = "Question";
 	public final static String ID = "juripattern";
-	private static final String CONFIRMING_ANSWER = "ConfirmingAnswer";
+	private static final String CONFIRMING_VALUE = "ConfirmingValue";
 
 	@Override
 	public void write(KnowledgeBase knowledgeBase, OutputStream stream, ProgressListener listener) throws IOException {
@@ -115,7 +117,6 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 
 	private void addRule(KnowledgeBase kb, JuriModel model, Node current) throws IOException {
 		String isDisjunctive = getAttribute(DISJUNCTIVE, current);
-		// String isDummy = getAttribute("Dummy", current);
 		String fatherquestion = getAttribute(FATHER_QUESTION, current);
 
 		JuriRule rule;
@@ -125,17 +126,19 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 			if (isDisjunctive != null) {
 				rule.setDisjunctive(Boolean.parseBoolean(isDisjunctive));
 			}
-			// if (isDummy != null) {
-			// rule.setDummy(Boolean.parseBoolean(isDummy));
-			// }
 
 			NodeList elements = current.getChildNodes();
 			for (int i = 0; i < elements.getLength(); i++) {
 				if (elements.item(i).getNodeName().equals(CHILD)) {
-					String confirmingAnswer = getAttribute(CONFIRMING_ANSWER, elements.item(i));
+					NodeList confirmingValueNodes = elements.item(i).getChildNodes();
+					List<ChoiceValue> confirmingValues = new LinkedList<ChoiceValue>();
+					for (int j = 0; j < confirmingValueNodes.getLength(); j++) {
+						String confirmingValue = getAttribute(CONFIRMING_VALUE, elements.item(i));
+						confirmingValues.add(new ChoiceValue(confirmingValue));
+					}
 					String childquestion = getAttribute(QUESTION, elements.item(i));
 					QuestionOC child = (QuestionOC) kb.getManager().search(childquestion);
-					rule.addChild(child, new ChoiceValue(confirmingAnswer));
+					rule.addChild(child, confirmingValues);
 				}
 			}
 			model.addRule(rule);
@@ -147,19 +150,20 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 
 		ruleelement.setAttribute(FATHER_QUESTION, jurirule.getFather().getName());
 
-		for (Entry<QuestionOC, ChoiceValue> child : jurirule.getChildren().entrySet()) {
+		for (Entry<QuestionOC, List<ChoiceValue>> child : jurirule.getChildren().entrySet()) {
 			Element childelement = doc.createElement(CHILD);
 			childelement.setAttribute(QUESTION, child.getKey().getName());
-			childelement.setAttribute(CONFIRMING_ANSWER, child.getValue().getAnswerChoiceID());
+			for (ChoiceValue value : child.getValue()) {
+				Element confirmingValue = doc.createElement(CONFIRMING_VALUE);
+				confirmingValue.setTextContent(value.getAnswerChoiceID());
+				childelement.appendChild(confirmingValue);
+			}
 			ruleelement.appendChild(childelement);
 		}
 
 		if (jurirule.isDisjunctive()) {
 			ruleelement.setAttribute(DISJUNCTIVE, "" + true);
 		}
-		// if (jurirule.isDummy()) {
-		// ruleelement.setAttribute("Dummy", "" + true);
-		// }
 
 		return ruleelement;
 	}

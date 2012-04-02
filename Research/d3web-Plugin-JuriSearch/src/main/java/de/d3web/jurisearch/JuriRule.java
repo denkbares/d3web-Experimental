@@ -20,6 +20,7 @@ package de.d3web.jurisearch;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -52,20 +53,20 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 	public static final ChoiceValue MAYBE_VALUE = new ChoiceValue(MAYBE);
 
 	private QuestionOC father;
-	private HashMap<QuestionOC, ChoiceValue> children;
+	private HashMap<QuestionOC, List<ChoiceValue>> children;
 
 	private boolean disjunctive; // default type is conjunction
 
 	public JuriRule(QuestionOC father) {
-		this(father, new HashMap<QuestionOC, ChoiceValue>());
+		this(father, new HashMap<QuestionOC, List<ChoiceValue>>());
 	}
 
 	public JuriRule(QuestionOC father, List<QuestionOC> children) {
-		this(father, new HashMap<QuestionOC, ChoiceValue>());
+		this(father, new HashMap<QuestionOC, List<ChoiceValue>>());
 		addChildren(children);
 	}
 
-	public JuriRule(QuestionOC father, HashMap<QuestionOC, ChoiceValue> children) {
+	public JuriRule(QuestionOC father, HashMap<QuestionOC, List<ChoiceValue>> children) {
 		this.father = father;
 		this.children = children;
 
@@ -80,29 +81,67 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 		this.father = father;
 	}
 
-	public HashMap<QuestionOC, ChoiceValue> getChildren() {
+	public HashMap<QuestionOC, List<ChoiceValue>> getChildren() {
 		return children;
 	}
 
-	public void setChildren(HashMap<QuestionOC, ChoiceValue> children) {
+	public void setChildren(HashMap<QuestionOC, List<ChoiceValue>> children) {
 		this.children = children;
 	}
 
+	/**
+	 * add a child to the rule with the default confirming value YES
+	 * 
+	 * @created 30.03.2012
+	 * @param q
+	 */
 	public void addChild(QuestionOC q) {
-		children.put(q, YES_VALUE);
+		addChild(q, YES_VALUE);
 	}
 
-	public void addChild(QuestionOC q, ChoiceValue value) {
-		children.put(q, value);
+	/**
+	 * add a child to the rule with the single confirming value
+	 * 
+	 * @created 30.03.2012
+	 * @param q
+	 * @param confirmingValue
+	 */
+	public void addChild(QuestionOC q, ChoiceValue confirmingValue) {
+		List<ChoiceValue> list = new LinkedList<ChoiceValue>();
+		list.add(confirmingValue);
+		children.put(q, list);
 	}
 
+	/**
+	 * add a child to the rule with multiple confirming values
+	 * 
+	 * @created 30.03.2012
+	 * @param q
+	 * @param confirmingValues
+	 */
+	public void addChild(QuestionOC q, List<ChoiceValue> confirmingValues) {
+		children.put(q, confirmingValues);
+	}
+
+	/**
+	 * add multiple children with the default confirming value
+	 * 
+	 * @created 30.03.2012
+	 * @param c
+	 */
 	public void addChildren(Collection<QuestionOC> c) {
 		for (QuestionOC q : c) {
 			addChild(q);
 		}
 	}
 
-	public void addChildren(HashMap<QuestionOC, ChoiceValue> m) {
+	/**
+	 * add multiple children with multiple confirming values
+	 * 
+	 * @created 30.03.2012
+	 * @param m
+	 */
+	public void addChildren(HashMap<QuestionOC, List<ChoiceValue>> m) {
 		children.putAll(m);
 	}
 
@@ -120,20 +159,27 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 
 	public Fact fire(Session session) {
 		boolean maybe = false;
-		for (Entry<QuestionOC, ChoiceValue> child : children.entrySet()) {
+		for (Entry<QuestionOC, List<ChoiceValue>> child : children.entrySet()) {
 			ChoiceValue value = null;
 			if (session.getBlackboard().getAnsweredQuestions().contains(child.getKey())) {
 				value = (ChoiceValue) session.getBlackboard().getValue(child.getKey());
 			}
 
 			if (value != null) {
-				if (!disjunctive) {
-					if (!value.equals(child.getValue())) {
-						return createFact(session, NO_VALUE);
+				boolean oneOfConfirmingValues = false;
+				for (ChoiceValue confirmingValue : child.getValue()) {
+					if (value.equals(confirmingValue)) {
+						oneOfConfirmingValues = true;
 					}
 				}
+				if (!disjunctive) {
+					if (!oneOfConfirmingValues) {
+						return createFact(session, NO_VALUE);
+					}
+
+				}
 				else {
-					if (value.equals(child.getValue())) {
+					if (oneOfConfirmingValues) {
 						return createFact(session, YES_VALUE);
 					}
 				}

@@ -16,12 +16,13 @@ public class AnswerIdentifier extends AnswerReference {
 	public AnswerIdentifier() {
 		super();
 
-		SectionFinder sf = new EmbracedContentFinder(EmbracedContent.BRACKET_OPEN,
-				EmbracedContent.BRACKET_CLOSE, true);
+		SectionFinder sf = new
+				EmbracedContentFinder(EmbracedContent.BRACKET_OPEN,
+						EmbracedContent.BRACKET_CLOSE, true);
+		// SectionFinder sf = new EmbracedContentFinder('(', ')', true);
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
 		csf.addConstraint(SingleChildConstraint.getInstance());
 		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
-
 		this.setSectionFinder(csf);
 	}
 

@@ -20,6 +20,7 @@ package de.knowwe.jurisearch.tree;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.jurisearch.BracketRenderer;
 import de.knowwe.jurisearch.EmbracedContent;
@@ -28,7 +29,6 @@ import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
-import de.knowwe.kdom.sectionFinder.EmbracedContentFinder;
 import de.knowwe.kdom.sectionFinder.OneOfStringEnumFinder;
 
 /**
@@ -49,6 +49,7 @@ public class JuriTreeExpression extends DashTreeElementContent {
 		this.addChildType(new DummyExpression());
 		this.addChildType(new Operator());
 		this.addChildType(new AnswerBracket());
+
 		this.addChildType(new QuestionIdentifier());
 
 		this.addChildType(new Error());
@@ -77,15 +78,12 @@ public class JuriTreeExpression extends DashTreeElementContent {
 	class AnswerBracket extends AbstractType {
 
 		AnswerBracket() {
-			SectionFinder sf = new EmbracedContentFinder(EmbracedContent.BRACKET_OPEN,
-					EmbracedContent.BRACKET_CLOSE);
-			ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
-			csf.addConstraint(SingleChildConstraint.getInstance());
-			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
+			SectionFinder sf = new RegexSectionFinder(EmbracedContent.BRACKET_OPEN_REGEX + "(.)+"
+					+ EmbracedContent.BRACKET_CLOSE_REGEX);
 
-			this.setSectionFinder(csf);
-			this.setRenderer(new BracketRenderer());
+			this.setSectionFinder(sf);
 			this.addChildType(new AnswerIdentifier());
+			this.setRenderer(new BracketRenderer());
 		}
 	}
 }

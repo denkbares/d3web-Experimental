@@ -102,7 +102,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 	private JuriRule createJuriRule(Article article, KnowledgeBase kb, Section<JuriTreeExpression> s, ArrayList<Message> messages) {
 		Section<QuestionIdentifier> section = Sections.findSuccessor(s, QuestionIdentifier.class);
 		List<Section<QuestionIdentifier>> children = section.get().getChildrenQuestion(section);
-		HashMap<QuestionOC, ChoiceValue> childrenQuestion = new HashMap<QuestionOC, ChoiceValue>();
+		HashMap<QuestionOC, List<ChoiceValue>> childrenQuestion = new HashMap<QuestionOC, List<ChoiceValue>>();
 
 		// Get all children questions
 		for (Section<QuestionIdentifier> child : children) {
@@ -120,11 +120,17 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 			 */
 			Section<JuriTreeExpression> jte = Sections.findAncestorOfType(child,
 					JuriTreeExpression.class);
-			Section<AnswerReference> answer = Sections.findSuccessor(jte, AnswerReference.class);
-			ChoiceValue value;
-			if (answer != null) {
-				Choice c = answer.get().getTermObject(article, answer);
-				value = new ChoiceValue(c);
+			List<Section<AnswerReference>> confirmingValueSections = Sections.findSuccessorsOfType(
+					jte, AnswerReference.class);
+
+			List<ChoiceValue> confirmingValues = new LinkedList<ChoiceValue>();
+			if (confirmingValues.size() != 0) {
+				for (Section<AnswerReference> sec : confirmingValueSections) {
+					if (sec != null) {
+						Choice c = sec.get().getTermObject(article, sec);
+						confirmingValues.add(new ChoiceValue(c));
+					}
+				}
 			}
 			else {
 				Section<NegationFlag> dummyNegation = Sections.findSuccessor(jte,
@@ -132,13 +138,13 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 				if (dummyNegation != null) {
 					String name = dummyNegation.get().getName();
 					Choice c = KnowledgeBaseUtils.findChoice(question, name);
-					value = new ChoiceValue(c);
+					confirmingValues.add(new ChoiceValue(c));
 				}
 				else {
-					value = JuriRule.YES_VALUE;
+					confirmingValues.add(JuriRule.YES_VALUE);
 				}
 			}
-			childrenQuestion.put(question, value);
+			childrenQuestion.put(question, confirmingValues);
 
 		}
 		if (children.isEmpty()) {
