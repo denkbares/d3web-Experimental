@@ -22,9 +22,9 @@ import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.jurisearch.BracketRenderer;
 import de.knowwe.jurisearch.Error;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
-import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * 
@@ -53,11 +53,9 @@ public class JuriTreeExpression extends DashTreeElementContent {
 			SectionFinder sf = new
 					RegexSectionFinder("\\[[^\\[\\]]+\\]");
 
-			// SectionFinder sf = new EmbracedContentFinder('[', ']');
 			this.setSectionFinder(sf);
 			this.addChildType(new AnswerIdentifier());
-			this.setRenderer(new StyleRenderer("color:yellow"));
-			// this.setRenderer(new BracketRenderer());
+			this.setRenderer(new BracketRenderer());
 		}
 	}
 }

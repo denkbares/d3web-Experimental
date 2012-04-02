@@ -17,7 +17,6 @@ public class AnswerIdentifier extends AnswerReference {
 
 		SectionFinder sf = new RegexSectionFinder("[^\\[\\]]+");
 
-		// SectionFinder sf = new EmbracedContentFinder('(', ')', true);
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
 		csf.addConstraint(SingleChildConstraint.getInstance());
 		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
