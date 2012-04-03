@@ -114,3 +114,9 @@
 
 </wiki:TabbedSection>
 <h3 style="color:#063d79;margin:1em 0 -1em 1em;">Eine gemeinsame Initiative von</h3>
+<script type="text/javascript">
+	window.onload = function() {
+		if ($$('div.error').length > 0)
+			$$('div.error')[0].innerHTML = "Fehler: Ung&uuml;ltige Benutzerdaten!";
+	}
+</script>
