@@ -36,7 +36,8 @@ import de.knowwe.core.action.UserActionContext;
  */
 public class PersonalMessageAction extends AbstractAction {
 
-	private static final String BACK_BUTTON = "<< zur&uuml;ck zum Diskussionsforum";
+	private static final String FORUM_BUTTON = "Zum Diskussionsforum >>";
+	private static final String BACK_BUTTON = "<< zur&uuml;ck zur letzten Seite";
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -53,13 +54,23 @@ public class PersonalMessageAction extends AbstractAction {
 
 		if (mgr.getArticle(topic) == null) {
 			// Erstelle Forum
-			String content = "<a href=\"Wiki.jsp?page=Diskussion\">" + BACK_BUTTON + "</a><br />\n";
+			String content = "<a style='float:right' href=\"Wiki.jsp?page=Diskussion\">"
+					+ FORUM_BUTTON
+					+ "</a>\n";
+			content += "<a style='float:left' href=\"\" onclick=\"javascript:history.back();return false;\">"
+					+ BACK_BUTTON
+					+ "</a><br />\n";
 
 			content += "\n<forum topic='" + topic + "' name='" + name + "'>\n" +
 					"<box name=\"" + username + "\" date=\"" + sdf.format(now.getTime())
 					+ "\"></box>\n</forum>";
 
-			content += "<br /><br />\n<a href=\"Wiki.jsp?page=Diskussion\">" + BACK_BUTTON + "</a>";
+			content += "<br /><br />\n<a style='float:right' href=\"Wiki.jsp?page=Diskussion\">"
+					+ FORUM_BUTTON
+					+ "</a>\n";
+			content += "<a style='float:left' href=\"\" onclick=\"javascript:history.back();return false;\">"
+					+ BACK_BUTTON
+					+ "</a>";
 
 			Environment.getInstance().buildAndRegisterArticle(content,
 						topic, Environment.DEFAULT_WEB);

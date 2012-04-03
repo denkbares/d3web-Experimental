@@ -36,7 +36,8 @@ import de.knowwe.core.action.UserActionContext;
  */
 public class NewForumAction extends AbstractAction {
 
-	private static final String BACK_BUTTON = "<< zur&uuml;ck zum Diskussionsforum";
+	private static final String FORUM_BUTTON = "Zum Diskussionsforum >>";
+	private static final String BACK_BUTTON = "<< zur&uuml;ck zur letzten Seite";
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -53,7 +54,13 @@ public class NewForumAction extends AbstractAction {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 		ArticleManager mgr = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB);
-		String content = "<a href=\"Wiki.jsp?page=Diskussion\">" + BACK_BUTTON + "</a><br />\n";
+
+		String content = "<a style='float:right' href=\"Wiki.jsp?page=Diskussion\">"
+				+ FORUM_BUTTON
+				+ "</a>\n";
+		content += "<a style='float:left' href=\"\" onclick=\"javascript:history.back();return false;\">"
+				+ BACK_BUTTON
+				+ "</a><br />\n";
 
 		if (pageName == "Sonstiges") {
 			content += "\n<forum topic='" + topic + "' name='" + topic + "'>\n" +
@@ -67,7 +74,11 @@ public class NewForumAction extends AbstractAction {
 					+ message + "</box>\n</forum>";
 		}
 
-		content += "<br /><br />\n<a href=\"Wiki.jsp?page=Diskussion\">" + BACK_BUTTON + "</a>";
+		content += "<br /><br />\n<a style='float:right' href=\"Wiki.jsp?page=Diskussion\">"
+				+ FORUM_BUTTON
+				+ "</a>\n";
+		content += "<a style='float:left' href=\"\" onclick=\"javascript:history.back();return false;\">"
+				+ BACK_BUTTON + "</a>";
 
 		if (pageName == "") title = "Forum zu " + " \"" + topic + "\"";
 		else title = "Forum zu " + pageName + " (" + topic + ")";
