@@ -1,4 +1,5 @@
 package de.knowwe.renaming.taghandler;
+
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
@@ -18,8 +19,6 @@ package de.knowwe.renaming.taghandler;
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-
-
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -44,8 +43,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
-import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 
@@ -63,7 +63,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String getDescription(UserContext user) {
-		return Environment.getInstance().getMessageBundle(user).getString(
+		return Messages.getMessageBundle(user).getString(
 				"KnowWE.RenamingTagHandler.description");
 	}
 
@@ -76,7 +76,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 		StringBuffer html = new StringBuffer();
 
-		ResourceBundle rb = Environment.getInstance().getMessageBundle(user);
+		ResourceBundle rb = Messages.getMessageBundle(user);
 
 		html.append("<div id=\"rename-panel\" class=\"panel\"><h3>"
 				+ rb.getString("KnowWE.renamingtool.redefine") + "</h3>");
@@ -173,9 +173,6 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 			// dump it
 			System.out.println("Error while trying to instantiate DocumentBuilder " + pce);
 		}
-		// fill
-		// TODO
-		Environment ke = Environment.getInstance();
 		// set div and ul
 		Element div = dom.createElement("div");
 		div.setAttribute("id", "typeTree");
@@ -191,7 +188,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 		div.appendChild(ul);
 
 		List<Type> typeList = new ArrayList<Type>(1);
-		typeList.add(ke.getRootType());
+		typeList.add(RootType.getInstance());
 		printULNodes(typeList, dom, li, new HashSet<String>());
 
 		// output
@@ -228,6 +225,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 			Element ul = dom.createElement("ul");
 			boolean ulHasChildren = false;
 			for (Type koType : typeList) {
+				@SuppressWarnings("unchecked")
 				HashSet<String> usedType = (HashSet<String>) usedTypeOrig.clone();
 				if (koType != null) {
 					String koTypeName = koType.getName();

@@ -38,6 +38,7 @@ import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.Messages;
 
 /**
  * Action which renames all Definitions and References of a given Term. The
@@ -105,7 +106,7 @@ public class TermRenamingAction extends AbstractAction {
 	}
 
 	private void generateMessage(Set<String> failures, Set<String> success, UserActionContext context) throws IOException {
-		ResourceBundle rb = Environment.getInstance().getMessageBundle();
+		ResourceBundle rb = Messages.getMessageBundle();
 		Writer w = context.getWriter();
 		if (failures.size() == 0) {
 			w.write("<p style=\"color:green;\">");

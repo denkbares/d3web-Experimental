@@ -43,7 +43,7 @@ import de.knowwe.event.ArticleUpdatesFinishedEvent;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.owlapi.RDF2GoSync;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import dummies.TestWikiConnector;
+import dummies.DummyConnector;
 
 /**
  * Test for the @link{RDF2GoSync} class.
@@ -59,7 +59,7 @@ public class RDF2GoSyncTest {
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
 		PackageManager.overrideAutocompileArticle(true);
-		Environment.initKnowWE(new TestWikiConnector());
+		Environment.initInstance(new DummyConnector());
 	}
 
 	@Test
@@ -90,8 +90,7 @@ public class RDF2GoSyncTest {
 	}
 
 	private Section<?> getDummySection() {
-		Article article = Article.createArticle("Wayne", "Juckts",
-				Environment.getInstance().getRootType(), "default_web");
+		Article article = Article.createArticle("Wayne", "Juckts", "default_web");
 		return Section.createSection("Wayne Juckts", article, article.getRootSection());
 	}
 

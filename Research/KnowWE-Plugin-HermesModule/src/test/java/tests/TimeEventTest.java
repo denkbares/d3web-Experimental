@@ -13,6 +13,7 @@ import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryRow;
 
+import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
@@ -20,7 +21,7 @@ import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import dummies.TestWikiConnector;
+import dummies.DummyConnector;
 
 public class TimeEventTest extends TestCase {
 
@@ -33,9 +34,9 @@ public class TimeEventTest extends TestCase {
 	public void setUp() throws Exception {
 		InitPluginManager.init();
 		PackageManager.overrideAutocompileArticle(true);
-		Environment.initKnowWE(new TestWikiConnector());
+		Environment.initInstance(new DummyConnector());
 		ke = Environment.getInstance();
-		type = ke.getRootType();
+		type = RootType.getInstance();
 		am = ke.getArticleManager(Environment.DEFAULT_WEB);
 		am.setArticlesInitialized(true);
 	}
@@ -79,8 +80,7 @@ public class TimeEventTest extends TestCase {
 		// compile error in the wiki
 		eventsInput.remove(1);
 
-		ke.processAndUpdateArticleJunit(null, content, testtopic, Environment.DEFAULT_WEB,
-				type);
+		TestUtils.processAndUpdateArticleJunit(null, content, testtopic, Environment.DEFAULT_WEB);
 
 		String querystring = "select ?x ?t ?desc ?dd ?imp  where {?x lns:hasDescription ?desc . ?x lns:hasTitle ?t . ?x lns:hasDateDescription ?dd . ?x lns:hasImportance ?imp }";
 		ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance().sparqlSelectIt(querystring);

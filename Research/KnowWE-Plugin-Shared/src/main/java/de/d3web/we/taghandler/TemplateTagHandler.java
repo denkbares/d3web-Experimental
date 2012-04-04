@@ -32,6 +32,7 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.xml.AbstractXMLType;
@@ -50,7 +51,7 @@ public class TemplateTagHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String getDescription(UserContext user) {
-		return Environment.getInstance().getMessageBundle(user).
+		return Messages.getMessageBundle(user).
 				getString("KnowWE.TemplateTagHandler.description");
 	}
 
@@ -58,7 +59,7 @@ public class TemplateTagHandler extends AbstractHTMLTagHandler {
 	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
-		ResourceBundle rb = Environment.getInstance()
+		ResourceBundle rb = Messages
 				.getMessageBundle(user);
 
 		List<Section<Template>> templates = getTemplateTypes(Environment

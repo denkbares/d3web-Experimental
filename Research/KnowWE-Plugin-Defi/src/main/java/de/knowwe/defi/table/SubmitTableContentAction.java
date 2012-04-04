@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -95,7 +95,6 @@ public class SubmitTableContentAction extends AbstractAction {
 		// make up map for input data
 		List<Map<Integer, String>> inputDataAll = buildInputData(data, versions);
 
-
 		String username = context.getParameter("user");
 		String defaultWeb = Environment.DEFAULT_WEB;
 		ArticleManager articleManager = Environment.getInstance().getArticleManager(
@@ -109,8 +108,7 @@ public class SubmitTableContentAction extends AbstractAction {
 			Environment.getInstance().getWikiConnector().createWikiPage(
 					articleNameForData, newContent.toString(), "Defi-system");
 			Article article = Article.createArticle(newContent.toString(),
-					articleNameForData, Environment.getInstance().getRootType(),
-					defaultWeb, true);
+					articleNameForData, defaultWeb, true);
 
 			Environment.getInstance().getArticleManager(
 					defaultWeb)
@@ -127,7 +125,7 @@ public class SubmitTableContentAction extends AbstractAction {
 				nodesMap.put(article2.getRootSection().getID(),
 						article2.getRootSection().getText() + "\n"
 								+ createNewMarkupString(
-						tableid, inputDataAll));
+										tableid, inputDataAll));
 			}
 			else {
 				// override content block

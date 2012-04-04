@@ -20,17 +20,17 @@
 
 package de.d3web.we.taghandler;
 
-import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
-import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Type;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.Types;
 
 /**
- * Renders the Mask for the TypeActivatior. See also
- * TypeActivatorRenderer.
+ * Renders the Mask for the TypeActivatior. See also TypeActivatorRenderer.
  * 
  * @author Johannes Dienst
  * 
@@ -46,17 +46,17 @@ public class KnowWETypeActivationHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String getDescription(UserContext user) {
-		return Environment.getInstance().getMessageBundle(user).getString(
+		return Messages.getMessageBundle(user).getString(
 				"KnowWE.TypeActivator.description");
 	}
 
 	@Override
 	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
-		List<Type> types = Environment.getInstance().getAllTypes();
+		TreeSet<Type> types = Types.getAllTypes();
 		StringBuilder html = new StringBuilder();
 
 		html.append("<div id=\"TypeActivator\" class=\"panel\"><h3>"
-				+ Environment.getInstance().getMessageBundle(user).getString(
+				+ Messages.getMessageBundle(user).getString(
 						"KnowWE.TypeActivator.topic")
 				+ "</h3>");
 		html.append("<form method='post' action='' name='typeactivator'>");
@@ -94,7 +94,7 @@ public class KnowWETypeActivationHandler extends AbstractHTMLTagHandler {
 		// button for changing
 		html.append("<p><input type='button' class='button' "
 				+ "value='"
-				+ Environment.getInstance().getMessageBundle(user).getString(
+				+ Messages.getMessageBundle(user).getString(
 						"KnowWE.TypeActivator.changebutton") + "'/></p>");
 
 		html.append("</fieldset> ");

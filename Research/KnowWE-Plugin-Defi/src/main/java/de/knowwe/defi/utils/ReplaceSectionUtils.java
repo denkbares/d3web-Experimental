@@ -32,7 +32,7 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.wikiConnector.WikiConnector;
-import dummies.TestWikiConnector;
+import dummies.DummyConnector;
 
 /**
  * 
@@ -75,7 +75,7 @@ public class ReplaceSectionUtils {
 				context);
 		wikiConnector.writeArticleToWikiEnginePersistence(title, newArticleText, context);
 
-		if (wikiConnector instanceof TestWikiConnector) {
+		if (wikiConnector instanceof DummyConnector) {
 			// This is only needed for the test environment. In the running
 			// wiki, this is automatically called after the change to the
 			// persistence.

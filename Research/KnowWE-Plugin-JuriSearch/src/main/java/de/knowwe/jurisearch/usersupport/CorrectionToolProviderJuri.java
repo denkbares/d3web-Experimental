@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.jurisearch.usersupport;
 
@@ -23,8 +23,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.tools.DefaultTool;
@@ -37,12 +37,10 @@ import de.knowwe.usersupport.algorithm.Suggestion;
  * @author Johannes Dienst
  * @created 01.03.2012
  */
-public class CorrectionToolProviderJuri implements ToolProvider
-{
+public class CorrectionToolProviderJuri implements ToolProvider {
 
 	@Override
-	public Tool[] getTools(Section<?> section, UserContext userContext)
-	{
+	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		List<Suggestion> suggestions = new LinkedList<Suggestion>();
 
 		CorrectionProviderJuriImpl impl = new CorrectionProviderJuriImpl();
@@ -55,8 +53,7 @@ public class CorrectionToolProviderJuri implements ToolProvider
 		// Sort by ascending distance
 		Collections.sort(suggestions);
 
-		if (suggestions.size() == 0)
-		{
+		if (suggestions.size() == 0) {
 			return new Tool[0];
 		}
 
@@ -64,14 +61,13 @@ public class CorrectionToolProviderJuri implements ToolProvider
 
 		tools[0] = new DefaultTool(
 				"KnowWEExtension/images/quickfix.gif",
-				Environment.getInstance().getMessageBundle().getString("KnowWE.Correction.do"),
-				Environment.getInstance().getMessageBundle().getString("KnowWE.Correction.do"),
+				Messages.getMessageBundle().getString("KnowWE.Correction.do"),
+				Messages.getMessageBundle().getString("KnowWE.Correction.do"),
 				null,
 				"correct"
 				);
 
-		for (int i = 0; i < suggestions.size(); i++)
-		{
+		for (int i = 0; i < suggestions.size(); i++) {
 			tools[i + 1] = new DefaultTool(
 					"KnowWEExtension/images/correction_change.gif",
 					suggestions.get(i).getSuggestion(),

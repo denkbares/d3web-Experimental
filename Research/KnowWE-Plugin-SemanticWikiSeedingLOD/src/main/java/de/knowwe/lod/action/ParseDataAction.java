@@ -22,9 +22,9 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.lod.HermesData;
 import de.knowwe.lod.LinkedOpenData;
 import de.knowwe.lod.markup.IgnoreContentType;
-import de.knowwe.lod.markup.MappingContentType;
 import de.knowwe.lod.markup.IgnoreContentType.IgnoreChild;
 import de.knowwe.lod.markup.IgnoreContentType.IgnoreConcept;
+import de.knowwe.lod.markup.MappingContentType;
 
 public class ParseDataAction extends AbstractAction {
 
@@ -122,8 +122,7 @@ public class ParseDataAction extends AbstractAction {
 							concept, lightParse, user);
 
 					Article article = Article.createArticle(lightParse,
-							concept, Environment.getInstance().getRootType(),
-							web, true);
+							concept, web, true);
 
 					Environment.getInstance().getArticleManager(web)
 							.registerArticle(article);
@@ -165,8 +164,7 @@ public class ParseDataAction extends AbstractAction {
 							noParseTopic, temp, user);
 
 					Article article = Article.createArticle(temp,
-							noParseTopic, Environment.getInstance().getRootType(),
-							web, true);
+							noParseTopic, web, true);
 
 					Environment.getInstance().getArticleManager(web)
 							.registerArticle(article);
@@ -179,7 +177,7 @@ public class ParseDataAction extends AbstractAction {
 							web, noParseTopic);
 
 					List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-					 Sections.findSuccessorsOfType(article.getRootSection(),
+					Sections.findSuccessorsOfType(article.getRootSection(),
 							MappingContentType.class, found);
 
 					Section<MappingContentType> lastNode = found.get(found.size() - 1);
@@ -218,8 +216,7 @@ public class ParseDataAction extends AbstractAction {
 							ignoredTopic, temp, user);
 
 					Article article = Article.createArticle(temp,
-							ignoredTopic, Environment.getInstance().getRootType(),
-							web, true);
+							ignoredTopic, web, true);
 
 					Environment.getInstance().getArticleManager(web)
 							.registerArticle(article);
@@ -232,8 +229,9 @@ public class ParseDataAction extends AbstractAction {
 							web);
 
 					List<Section<IgnoreContentType>> found = new Vector<Section<IgnoreContentType>>();
-				    Sections.findSuccessorsOfType(
-							mgr.getArticle(ignoredTopic).getRootSection(), IgnoreContentType.class, found);
+					Sections.findSuccessorsOfType(
+							mgr.getArticle(ignoredTopic).getRootSection(), IgnoreContentType.class,
+							found);
 
 					Map<String, String> nodesMap = new HashMap<String, String>();
 

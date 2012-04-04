@@ -36,6 +36,8 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.Messages;
+import de.knowwe.core.utils.Types;
 
 /**
  * Renders the Mask for the findings of an Type in the running Wiki.
@@ -63,7 +65,7 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 	@SuppressWarnings("unchecked")
 	private String perform(UserActionContext context) {
 
-		rb = Environment.getInstance().getMessageBundle(context.getRequest());
+		rb = Messages.getMessageBundle(context);
 
 		String atmUrl = context.getParameter(Attributes.ATM_URL);
 		String query = context.getParameter(Attributes.TYPE_BROWSER_QUERY);
@@ -87,7 +89,7 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 		String types = context.getParameter("TypeBrowserQuery");
 		try {
 			Type typ = null;
-			typ = Environment.getInstance().searchType(
+			typ = Types.findType(
 					(Class<? extends Type>) Class.forName(types));
 
 			if (typ != null) {

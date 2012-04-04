@@ -33,7 +33,7 @@ import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.xml.GenericXMLObjectType;
-import dummies.TestWikiConnector;
+import dummies.DummyConnector;
 
 public class UpdateMechanismTest extends TestCase {
 
@@ -46,7 +46,7 @@ public class UpdateMechanismTest extends TestCase {
 		/*
 		 * Initialise Environment
 		 */
-		Environment.initKnowWE(new TestWikiConnector());
+		Environment.initInstance(new DummyConnector());
 		Environment.getInstance().setCompilationMode(CompilationMode.INCREMENTAL);
 
 		/*
@@ -62,16 +62,14 @@ public class UpdateMechanismTest extends TestCase {
 		RootType rootType = RootType.getInstance();
 		rootType.clearChildrenTypes();
 		rootType.addChildType(GenericXMLObjectType.getInstance());
-		Article article1 = Article.createArticle(content, "UpdatingTest",
-				rootType, "default_web");
+		Article article1 = Article.createArticle(content, "UpdatingTest", "default_web");
 		Environment.getInstance().getArticleManager("default_web").registerArticle(
 				article1);
 
 		/*
 		 * Init a second, identical Article
 		 */
-		Article article2 = Article.createArticle(content, "UpdatingTest",
-				rootType, "default_web");
+		Article article2 = Article.createArticle(content, "UpdatingTest", "default_web");
 
 		List<Section<?>> sections1 = Sections.getSubtreePreOrder(article1.getRootSection());
 

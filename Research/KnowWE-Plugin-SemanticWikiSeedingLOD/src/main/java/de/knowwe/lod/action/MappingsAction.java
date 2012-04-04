@@ -87,8 +87,7 @@ public class MappingsAction extends AbstractAction {
 								user);
 
 			Article article = Article.createArticle(output,
-						mappingTopic, Environment.getInstance()
-								.getRootType(), web, true);
+						mappingTopic, web, true);
 			Environment.getInstance().getArticleManager(web)
 						.registerArticle(article);
 

@@ -31,7 +31,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
-import dummies.TestWikiConnector;
+import dummies.DummyConnector;
 
 /**
  * Sectionizer Test Class.
@@ -51,7 +51,7 @@ public class SectionizerTest extends TestCase {
 		/**
 		 * Initialise Environment
 		 */
-		Environment.initKnowWE(new TestWikiConnector());
+		Environment.initInstance(new DummyConnector());
 		Environment.getInstance().getArticle("default_web", "Test_Article");
 
 		/**
@@ -65,8 +65,7 @@ public class SectionizerTest extends TestCase {
 
 		// System.out.println(rootType.getAllowedChildrenTypes());;
 
-		Article article = Article.createArticle(content, "Test_Article", rootType,
-				"default_web");
+		Article article = Article.createArticle(content, "Test_Article", "default_web");
 
 		/**
 		 * The real tests 1. Check some children-Counts

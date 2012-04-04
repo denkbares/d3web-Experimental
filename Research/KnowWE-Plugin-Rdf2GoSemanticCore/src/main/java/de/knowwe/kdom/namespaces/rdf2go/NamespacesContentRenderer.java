@@ -24,9 +24,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
-import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -36,8 +36,7 @@ public class NamespacesContentRenderer implements Renderer {
 	@Override
 	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		StringBuffer buffy = new StringBuffer();
-		ResourceBundle rb = Environment.getInstance()
-				.getMessageBundle(user);
+		ResourceBundle rb = Messages.getMessageBundle(user);
 		String content = sec.getText();
 		Map<String, String> namespaces = Rdf2GoCore.getInstance().getNameSpaces();
 		if (content.trim().length() > 0) {

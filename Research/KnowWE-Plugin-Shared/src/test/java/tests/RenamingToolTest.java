@@ -29,6 +29,7 @@ import java.util.Map;
 import junit.framework.TestCase;
 import objectTypes.SplitObjectType;
 import objectTypes.WordObjectType;
+import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
@@ -36,7 +37,7 @@ import de.knowwe.core.action.WordBasedRenameFinding;
 import de.knowwe.core.action.WordBasedRenamingAction;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
-import dummies.TestWikiConnector;
+import dummies.DummyConnector;
 
 public class RenamingToolTest extends TestCase {
 
@@ -50,7 +51,7 @@ public class RenamingToolTest extends TestCase {
 		/**
 		 * Initialise Environment
 		 */
-		Environment.initKnowWE(new TestWikiConnector());
+		Environment.initInstance(new DummyConnector());
 		Environment _env = Environment.getInstance();
 		_env.getArticle("default_web", "Test_Article");
 
@@ -64,10 +65,8 @@ public class RenamingToolTest extends TestCase {
 		rootType.addChildType(new SplitObjectType());
 		rootType.addChildType(new WordObjectType());
 
-		_env.processAndUpdateArticleJunit("TestUser", content1, "Test_Article1", "default_web",
-				rootType);
-		_env.processAndUpdateArticleJunit("TestUser", content2, "Test_Article2", "default_web",
-				rootType);
+		TestUtils.processAndUpdateArticleJunit("TestUser", content1, "Test_Article1", "default_web");
+		TestUtils.processAndUpdateArticleJunit("TestUser", content2, "Test_Article2", "default_web");
 
 		/*
 		 * make the requests

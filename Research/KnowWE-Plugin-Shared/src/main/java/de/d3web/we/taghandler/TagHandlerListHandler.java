@@ -26,6 +26,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import de.knowwe.core.Environment;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
@@ -49,8 +50,7 @@ public class TagHandlerListHandler extends AbstractHTMLTagHandler {
 		Collection<TagHandler> coll = Environment.getInstance()
 				.getDefaultTagHandlers().values();
 
-		ResourceBundle rb = Environment.getInstance()
-				.getMessageBundle(user);
+		ResourceBundle rb = Messages.getMessageBundle(user);
 
 		StringBuffer html = new StringBuffer();
 		html.append("<div id='taghandlerlist-panel' class='panel'>" + "<h3>"
@@ -96,7 +96,7 @@ public class TagHandlerListHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String getDescription(UserContext user) {
-		return Environment.getInstance().getMessageBundle(user).getString(
+		return Messages.getMessageBundle(user).getString(
 				"KnowWE.TagHandlerList.description");
 	}
 }

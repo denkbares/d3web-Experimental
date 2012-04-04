@@ -38,7 +38,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.kdom.xml.GenericXMLObjectType;
 import de.knowwe.kdom.xml.XMLSectionFinder;
-import dummies.TestWikiConnector;
+import dummies.DummyConnector;
 
 public class XMLSectionFinderTest extends TestCase {
 
@@ -52,7 +52,7 @@ public class XMLSectionFinderTest extends TestCase {
 		/**
 		 * Initialise Environment
 		 */
-		Environment.initKnowWE(new TestWikiConnector());
+		Environment.initInstance(new DummyConnector());
 		Environment.getInstance().getArticle("default_web", "Test_Article");
 
 		/**
@@ -60,8 +60,7 @@ public class XMLSectionFinderTest extends TestCase {
 		 */
 		String content = this.readXMLFile("2");
 
-		Article article = Article.createArticle(content, "Test_Article",
-				RootType.getInstance(), "default_web");
+		Article article = Article.createArticle(content, "Test_Article", "default_web");
 		Section artSec = article.getRootSection();
 
 		/**
@@ -135,8 +134,7 @@ public class XMLSectionFinderTest extends TestCase {
 		rootType.addChildType(GenericXMLObjectType.getInstance());
 
 		content = this.readXMLFile("0");
-		article = Article.createArticle(content, "Test_Article2", rootType,
-				"default_web");
+		article = Article.createArticle(content, "Test_Article2", "default_web");
 		artSec = article.getRootSection();
 
 		// Test children counts

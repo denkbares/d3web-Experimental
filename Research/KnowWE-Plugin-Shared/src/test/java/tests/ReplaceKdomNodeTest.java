@@ -27,6 +27,7 @@ import java.util.Map;
 import junit.framework.TestCase;
 import objectTypes.SplitObjectType;
 import objectTypes.WordObjectType;
+import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
@@ -34,7 +35,7 @@ import de.knowwe.core.action.ActionContext;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
-import dummies.TestWikiConnector;
+import dummies.DummyConnector;
 
 /**
  * Name speaks for functionality.
@@ -55,7 +56,7 @@ public class ReplaceKdomNodeTest extends TestCase {
 		 * Initialise Environment
 		 */
 		Environment _env;
-		Environment.initKnowWE(new TestWikiConnector());
+		Environment.initInstance(new DummyConnector());
 		_env = Environment.getInstance();
 		_env.getArticle("default_web", "Test_Article");
 
@@ -67,8 +68,7 @@ public class ReplaceKdomNodeTest extends TestCase {
 		rootType.addChildType(new SplitObjectType());
 		rootType.addChildType(new WordObjectType());
 
-		_env.processAndUpdateArticleJunit("TestUser", content, "Test_Article", "default_web",
-				rootType);
+		TestUtils.processAndUpdateArticleJunit("TestUser", content, "Test_Article", "default_web");
 
 		/**
 		 * Replace KdomNode.

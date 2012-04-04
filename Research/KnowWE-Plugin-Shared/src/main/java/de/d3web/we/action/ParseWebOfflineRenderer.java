@@ -30,6 +30,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 
 public class ParseWebOfflineRenderer extends AbstractAction {
@@ -48,8 +49,8 @@ public class ParseWebOfflineRenderer extends AbstractAction {
 	private String perform(UserActionContext context) {
 		String webname = context.getParameter(Attributes.WEB);
 
-		ResourceBundle rb = Environment.getInstance().getMessageBundle(
-				context.getRequest());
+		ResourceBundle rb = Messages.getMessageBundle(
+				context);
 
 		Map<String, String> articles = Environment.getInstance()
 				.getWikiConnector().getAllArticles(webname);
@@ -58,8 +59,7 @@ public class ParseWebOfflineRenderer extends AbstractAction {
 		int problems = 0;
 		for (String name : articleNames) {
 			Article article = Article.createArticle(articles.get(name),
-					name, Environment.getInstance().getRootType(),
-					webname, true);
+					name, webname, true);
 			Environment.getInstance()
 					.getArticleManager(webname).registerArticle(
 							article);

@@ -68,6 +68,7 @@ import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.event.ArticleUpdatesFinishedEvent;
 import de.knowwe.event.FullParseEvent;
@@ -221,10 +222,8 @@ public class Rdf2GoCore implements EventListener {
 	/**
 	 * add a namespace to the model
 	 * 
-	 * @param sh
-	 *            prefix
-	 * @param ns
-	 *            url
+	 * @param sh prefix
+	 * @param ns url
 	 */
 	public void addNamespace(String sh, String ns) {
 		namespaces.put(sh, ns);
@@ -469,8 +468,7 @@ public class Rdf2GoCore implements EventListener {
 		}
 
 		if (empty) {
-			ResourceBundle rb = Environment.getInstance().getMessageBundle();
-			result = rb.getString("KnowWE.owl.query.no_result");
+			result = Messages.getMessageBundle().getString("KnowWE.owl.query.no_result");
 		}
 		else {
 			if (tablemode) {
@@ -498,11 +496,9 @@ public class Rdf2GoCore implements EventListener {
 	 * provide a consistent model.
 	 * 
 	 * @created 14.12.2011
-	 * @param query
-	 *            the query to be ask
-	 * @param sec
-	 *            the section determining the statements to be excluded for the
-	 *            query
+	 * @param query the query to be ask
+	 * @param sec the section determining the statements to be excluded for the
+	 *        query
 	 * @return
 	 * @throws ModelRuntimeException
 	 * @throws MalformedQueryException
@@ -1009,13 +1005,10 @@ public class Rdf2GoCore implements EventListener {
 	 * Resource is of the right type if applicable (eg attachto RDF.TYPE
 	 * RDF.STATEMENT)
 	 * 
-	 * @param attachto
-	 *            The Resource that will be annotated bei the TO-Node
-	 * @param source
-	 *            The source section that should be used
-	 * @param io
-	 *            the ex-IntermediateOwlObject (now List<Statements> that should
-	 *            collect the statements
+	 * @param attachto The Resource that will be annotated bei the TO-Node
+	 * @param source The source section that should be used
+	 * @param io the ex-IntermediateOwlObject (now List<Statements> that should
+	 *        collect the statements
 	 */
 	public void attachTextOrigin(Resource attachto, Section source, List<Statement> io) {
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();

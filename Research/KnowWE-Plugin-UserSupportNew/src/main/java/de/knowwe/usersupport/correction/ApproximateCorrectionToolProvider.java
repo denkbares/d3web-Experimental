@@ -23,8 +23,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.tools.DefaultTool;
@@ -37,19 +37,17 @@ import de.knowwe.usersupport.tables.HeuristicDiagnosisTable;
 
 /**
  * 
- * Renders the correction suggestions in the DefaultMarkup
- * of the {@link CausalDiagnosisScore}, {@link DecisionTable},
+ * Renders the correction suggestions in the DefaultMarkup of the
+ * {@link CausalDiagnosisScore}, {@link DecisionTable},
  * {@link HeuristicDiagnosisTable}
  * 
  * @author Johannes Dienst
  * @created 15.09.2011
  */
-public class ApproximateCorrectionToolProvider implements ToolProvider
-{
+public class ApproximateCorrectionToolProvider implements ToolProvider {
 
 	@Override
-	public Tool[] getTools(Section<?> section, UserContext userContext)
-	{
+	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		List<Suggestion> suggestions = new LinkedList<Suggestion>();
 
 		ApproximateCorrectionProviderImpl impl = new ApproximateCorrectionProviderImpl();
@@ -62,8 +60,7 @@ public class ApproximateCorrectionToolProvider implements ToolProvider
 		// Sort by ascending distance
 		Collections.sort(suggestions);
 
-		if (suggestions.size() == 0)
-		{
+		if (suggestions.size() == 0) {
 			return new Tool[0];
 		}
 
@@ -71,14 +68,13 @@ public class ApproximateCorrectionToolProvider implements ToolProvider
 
 		tools[0] = new DefaultTool(
 				"KnowWEExtension/images/quickfix.gif",
-				Environment.getInstance().getMessageBundle().getString("KnowWE.Correction.do"),
-				Environment.getInstance().getMessageBundle().getString("KnowWE.Correction.do"),
+				Messages.getMessageBundle().getString("KnowWE.Correction.do"),
+				Messages.getMessageBundle().getString("KnowWE.Correction.do"),
 				null,
 				"correct"
 				);
 
-		for (int i = 0; i < suggestions.size(); i++)
-		{
+		for (int i = 0; i < suggestions.size(); i++) {
 			tools[i + 1] = new DefaultTool(
 					"KnowWEExtension/images/correction_change.gif",
 					suggestions.get(i).getSuggestion(),

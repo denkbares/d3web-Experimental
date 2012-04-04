@@ -37,7 +37,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import dummies.TestWikiConnector;
+import dummies.DummyConnector;
 
 /**
  * This class contains some tests for the DefaultMarkup.
@@ -80,7 +80,7 @@ public class DefaultMarkupTest {
 	public void setUp() throws Exception {
 		InitPluginManager.init();
 		RootType.getInstance().addChildType(new DefaultMarkupTestType());
-		Environment.initKnowWE(new TestWikiConnector());
+		Environment.initInstance(new DummyConnector());
 		env = Environment.getInstance();
 	}
 

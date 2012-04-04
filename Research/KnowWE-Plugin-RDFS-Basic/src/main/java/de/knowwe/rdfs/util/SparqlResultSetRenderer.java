@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryResultTable;
@@ -16,6 +15,7 @@ import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -79,8 +79,8 @@ public class SparqlResultSetRenderer {
 		}
 
 		if (empty) {
-			ResourceBundle rb = Environment.getInstance().getMessageBundle();
-			result = rb.getString("KnowWE.owl.query.no_result");
+			result = Messages.getMessageBundle().getString(
+					"KnowWE.owl.query.no_result");
 		}
 		else {
 			if (tablemode) {

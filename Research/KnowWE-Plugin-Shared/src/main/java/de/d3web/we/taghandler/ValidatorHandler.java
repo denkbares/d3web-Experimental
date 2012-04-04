@@ -22,7 +22,7 @@ package de.d3web.we.taghandler;
 
 import java.util.Map;
 
-import de.knowwe.core.Environment;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -35,7 +35,7 @@ public class ValidatorHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String getDescription(UserContext user) {
-		return Environment.getInstance().getMessageBundle(user).getString(
+		return Messages.getMessageBundle(user).getString(
 				"KnowWE.ValidatorHandler.description");
 	}
 

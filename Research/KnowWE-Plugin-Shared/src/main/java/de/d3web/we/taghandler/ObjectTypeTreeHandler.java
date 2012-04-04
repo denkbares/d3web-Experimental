@@ -21,7 +21,7 @@ package de.d3web.we.taghandler;
 import java.util.HashSet;
 import java.util.Map;
 
-import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
@@ -29,9 +29,9 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
 /**
- * The ObjectTypeTreeHandler renders the hierarchy of Types,
- * starting with the RootType. Grey items were already printed out somewhere
- * else in the tree, clicking on them jumps to the initial occurrence.
+ * The ObjectTypeTreeHandler renders the hierarchy of Types, starting with the
+ * RootType. Grey items were already printed out somewhere else in the tree,
+ * clicking on them jumps to the initial occurrence.
  * 
  * @author Alex Legler
  * @created 20.10.2010
@@ -44,9 +44,7 @@ public class ObjectTypeTreeHandler extends AbstractTagHandler {
 
 	@Override
 	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
-		Type t = Environment.getInstance().getRootType();
-
-		return visitNode(t, 1, new HashSet<String>(), false);
+		return visitNode(RootType.getInstance(), 1, new HashSet<String>(), false);
 	}
 
 	private String visitNode(Type t, int level, HashSet<String> visitedNodes, boolean doNotRecurse) {
