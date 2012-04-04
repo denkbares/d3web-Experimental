@@ -17,7 +17,8 @@ function mailForm(id) {
 			action : '',
 			ids : [ '' ],
 			fn : function() {
-				setTimeout('document.location.reload()', 100);
+				alert(this.responseText);
+				document.location.reload();
 			}
 		}
 	}

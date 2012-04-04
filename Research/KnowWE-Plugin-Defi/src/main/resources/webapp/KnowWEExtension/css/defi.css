@@ -127,8 +127,21 @@ li.readstatus {
 #login_defi h2 {
 	color:#063d79;	
 }
-
-/* Form Menu */
+/* forum */
+a.forumLinkLeft {
+	float: left;
+	padding-left: 26px;
+	background: url(../images/Pfeil_nach_links_klein.gif) no-repeat scroll left 1px;
+}
+ a.forumLinkRight {
+ 	float: right;
+ 	padding-right: 26px;
+	background: url(../images/Pfeil_nach_rechts_klein.gif) no-repeat scroll right 1px;
+ }
+div.forumTextareaContainer textarea {
+	width: 100%;
+}
+/* Forum Menu */
 table.forumMenu {
 	display:inline-block;
 	width:800px !important;
@@ -211,3 +224,15 @@ h1.aboutme, h2.aboutme
 
 div.aboutme
 {padding-left:40px;padding-right:40px;}
+div.aboutme input, div.aboutme textarea {
+	font-size: 110%;
+	font-family: MS Shell Dlg;
+}
+div.aboutme div.aboutmeChat {
+	border: 1px solid black;
+	padding: 40px;
+	font-weight: bold;
+}
+div.aboutme div.aboutmeChat span {
+	margin-right: 20px;	
+}

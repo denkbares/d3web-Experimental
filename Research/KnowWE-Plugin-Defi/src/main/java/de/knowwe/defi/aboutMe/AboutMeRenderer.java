@@ -18,10 +18,16 @@
  */
 package de.knowwe.defi.aboutMe;
 
+import java.util.Arrays;
+
+import com.ecyrd.jspwiki.WikiEngine;
+
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.jspwiki.JSPWikiConnector;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -155,23 +161,25 @@ public class AboutMeRenderer implements Renderer {
 		html.append(getTextareaDependingOnUserState(sec, AboutMe.HTML_ABOUT, false));
 		html.append("</p>");
 
-		html.append("<form action=\"KnowWE.jsp\" method=\"post\">");
-		html.append(
-				"<div style=\"border: 1px solid rgb(0,0,0); padding:30px; border-right: 30px solid rgb(58,127,22);\">")
-				.append("<p><strong>private Kommunikation mit ")
-				.append(sec.getTitle())
-				.append("</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-				.append(
-						"<input class=\"defi-bttn\" type=\"submit\" value=\"Persönliche Nachricht\" />")
-				.append("</p></div>");
-		html.append("<input type=\"hidden\" name=\"action\" value=\"PersonalMessageAction\" />");
-		html.append("<input type=\"hidden\" name=\"user1\" value=\"").append(sec.getTitle()).append(
-				"\" />");
-		html.append("<input type=\"hidden\" name=\"user2\" value=\"").append(user.getUserName()).append(
-				"\" />");
-		html.append("</form>");
+		// private communication
+		JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
+				Environment.getInstance().getContext(), null));
+		boolean online = false;
+		for (String name : wc.getAllActiveUsers()) {
+			if (name.equals(sec.getTitle())) online = true;
+		}
+		String[] names = {
+				sec.getTitle(), user.getUserName() };
+		Arrays.sort(names);
 
-		// TODO: private communication :)
+		if (online) html.append("<div class='aboutmeChat' style='border-right: 30px solid green'>");
+		else html.append("<div class='aboutmeChat' style='border-right: 30px solid red'>");
+
+		html.append("<span>Private Kommunikation mit " + sec.getTitle() + "</span>");
+		html.append("<input class='fm_open' type='button' value='Pers&ouml;nliche Nachricht' onclick='newChat(\""
+				+ names[0] + "\", \"" + names[1]
+				+ "\");return false' />");
+		html.append("</div>");
 	}
 
 	/**

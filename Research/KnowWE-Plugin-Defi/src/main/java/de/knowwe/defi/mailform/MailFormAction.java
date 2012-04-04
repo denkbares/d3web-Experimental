@@ -24,8 +24,7 @@ import java.util.ResourceBundle;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.servlet.ServletContext;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
+import javax.servlet.http.HttpServletResponse;
 
 import com.ecyrd.jspwiki.WikiEngine;
 import com.ecyrd.jspwiki.util.MailUtil;
@@ -47,30 +46,32 @@ public class MailFormAction extends AbstractAction {
 		String pagename = context.getTitle();
 		String id = context.getParameter("id");
 
-		String nachricht = username + " schrieb über das Formular( " + id + " ) der Seite \""
-				+ pagename + "\" folgende Nachricht: \n\n" + context.getParameter("nachricht");
-		String subject = "Defi - " + username + " schrieb eine Nachricht";
+		String nachricht = "Absender: " + username + "\n";
+		nachricht += "Seite: " + pagename + "\n";
+		nachricht += "Formular: " + id + "\n\n";
+		nachricht += "--------------------------------------\n\n";
+		nachricht += context.getParameter("nachricht") + "\n\n";
+		nachricht += "--------------------------------------\n";
+
+		String subject = "Defi - Nachricht von " + username;
 		ResourceBundle rb = ResourceBundle.getBundle("KnowWE_Defi_config");
 		String mailTo = rb.getString("defi.mailform.to");
-		
-		JOptionPane jop = new JOptionPane(
-				"Vielen Dank!\nIhre Nachricht wurde erfolgreich versandt.");
+		String responseText = "Vielen Dank!\nIhre Nachricht wurde erfolgreich versandt.";
 
 		try {
-			ServletContext sc = Environment.getInstance().getWikiConnector().getServletContext();
+			ServletContext sc =
+					Environment.getInstance().getWikiConnector().getServletContext();
 			WikiEngine engine = WikiEngine.getInstance(sc, null);
 			MailUtil.sendMessage(engine, mailTo, subject, nachricht);
 		}
 		catch (AddressException e) {
-			jop.setMessage("Die Nachricht konnte nicht gesendet werden.");
+			responseText = "Die Nachricht konnte nicht gesendet werden.";
 		}
 		catch (MessagingException e) {
-			jop.setMessage("Die Nachricht konnte nicht gesendet werden.");
+			responseText = "Die Nachricht konnte nicht gesendet werden.";
 		}
 
-		JDialog dialog = jop.createDialog(null, "Hinweis");
-		dialog.setAlwaysOnTop(true);
-		dialog.setModal(true);
-		dialog.setVisible(true);
+		HttpServletResponse response = context.getResponse();
+		response.getWriter().write(responseText);
 	}
 }

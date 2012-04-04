@@ -21,8 +21,15 @@ package de.knowwe.defi.forum;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.ResourceBundle;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ecyrd.jspwiki.WikiEngine;
+import com.ecyrd.jspwiki.util.MailUtil;
 
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
@@ -36,8 +43,8 @@ import de.knowwe.core.action.UserActionContext;
  */
 public class PersonalMessageAction extends AbstractAction {
 
-	private static final String FORUM_BUTTON = "Zum Diskussionsforum >>";
-	private static final String BACK_BUTTON = "<< zur&uuml;ck zur letzten Seite";
+	private static final String FORUM_BUTTON = "Zum Diskussionsforum";
+	private static final String BACK_BUTTON = "Zur&uuml;ck zur letzten Seite";
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -54,28 +61,48 @@ public class PersonalMessageAction extends AbstractAction {
 
 		if (mgr.getArticle(topic) == null) {
 			// Erstelle Forum
-			String content = "<a style='float:right' href=\"Wiki.jsp?page=Diskussion\">"
+			String content = "";
+			// links above the forum
+			content += "<a class=\"forumLinkLeft\" href=\"\" onclick=\"javascript:history.back();return false;\">"
+					+ BACK_BUTTON + "</a>\n";
+			content += "<a class=\"forumLinkRight\" href=\"Wiki.jsp?page=Diskussion\">"
 					+ FORUM_BUTTON
 					+ "</a>\n";
-			content += "<a style='float:left' href=\"\" onclick=\"javascript:history.back();return false;\">"
-					+ BACK_BUTTON
-					+ "</a><br />\n";
+			content += "<div style='clear:both'></div>\n";
 
 			content += "\n<forum topic='" + topic + "' name='" + name + "'>\n" +
 					"<box name=\"" + username + "\" date=\"" + sdf.format(now.getTime())
 					+ "\"></box>\n</forum>";
 
-			content += "<br /><br />\n<a style='float:right' href=\"Wiki.jsp?page=Diskussion\">"
+			// links under the forum
+			content += "\n<br /><br />\n<a class=\"forumLinkLeft\" href=\"\" onclick=\"javascript:history.back();return false;\">"
+					+ BACK_BUTTON + "</a>\n";
+			content += "<a class=\"forumLinkRight\" href=\"Wiki.jsp?page=Diskussion\">"
 					+ FORUM_BUTTON
 					+ "</a>\n";
-			content += "<a style='float:left' href=\"\" onclick=\"javascript:history.back();return false;\">"
-					+ BACK_BUTTON
-					+ "</a>";
+			content += "<div style='clear:both'></div>\n";
 
 			Environment.getInstance().buildAndRegisterArticle(content,
 						topic, Environment.DEFAULT_WEB);
 			Environment.getInstance().getWikiConnector()
 						.createWikiPage(topic, content, username);
+		}
+
+		/* Send mail */
+		String nachricht = "Neuer Forumeintrag auf der Seite '" + topic + "'";
+		String subject = "Defi - neuer Forumeintrag";
+		ResourceBundle rb = ResourceBundle.getBundle("KnowWE_Defi_config");
+		String mailTo = rb.getString("defi.mail.to");
+
+		try {
+			ServletContext sc =
+					Environment.getInstance().getWikiConnector().getServletContext();
+			WikiEngine engine = WikiEngine.getInstance(sc, null);
+			MailUtil.sendMessage(engine, mailTo, subject, nachricht);
+		}
+		catch (AddressException e) {
+		}
+		catch (MessagingException e) {
 		}
 
 		HttpServletResponse response = context.getResponse();
