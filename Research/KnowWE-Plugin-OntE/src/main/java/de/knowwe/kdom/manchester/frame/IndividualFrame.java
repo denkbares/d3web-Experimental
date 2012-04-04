@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -38,6 +38,7 @@ import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.compile.IndividualFrameCompileScript;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
+import de.knowwe.kdom.manchester.types.Delimiter;
 import de.knowwe.kdom.manchester.types.Fact;
 import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
@@ -51,16 +52,16 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * syntax frame. It follows an excerpt from the Manchester OWL syntax definition
  * from the W3C.
  * </p>
- *
- *<code>
+ * 
+ * <code>
  * individualFrame ::= 'Individual:' individual<br />
  * { 'Annotations:' annotationAnnotatedList<br />
  * | 'Types:' descriptionAnnotatedList<br />
  * | 'Facts:' factAnnotatedList<br />
  * | 'SameAs:' individualAnnotatedList<br />
  * | 'DifferentFrom:' individualAnnotatedList }
- *</code>
- *
+ * </code>
+ * 
  * @author Stefan Mark
  * @created 24.06.2011
  */
@@ -98,7 +99,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 	/**
 	 * Checks if the current {@link IndividualFrame} has a {@link Individual}
 	 * section.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<DefaultFrame> section
 	 * @return TRUE if such an section exists, FALSE otherwise
@@ -110,7 +111,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 	/**
 	 * Returns the {@link Individual} section containing the name of the to
 	 * define {@link OWLIndividual}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
@@ -121,7 +122,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 
 	/**
 	 * Returns if the current class definition has a {@link Facts} description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<IndividualFrame> section
 	 * @return The found section
@@ -129,10 +130,11 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 	public boolean hasFacts(Section<IndividualFrame> section) {
 		return Sections.findChildOfType(section, Facts.class) != null;
 	}
+
 	/**
 	 * Returns the {@link FactsItem} sections of the current
 	 * {@link IndividualFrame}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<IndividualFrame> section
 	 * @return The found section
@@ -146,7 +148,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 
 	/**
 	 * Returns if the current class definition has a {@link Facts} description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<IndividualFrame> section
 	 * @return The found section
@@ -158,7 +160,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 	/**
 	 * Returns the {@link SameAs} sections of the current
 	 * {@link IndividualFrame}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<IndividualFrame> section
 	 * @return The found section
@@ -174,7 +176,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 	/**
 	 * Returns if the current class definition has a {@link DifferentFrom}
 	 * description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<IndividualFrame> section
 	 * @return The found section
@@ -186,7 +188,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 	/**
 	 * Returns the {@link DifferentFrom} sections of the current
 	 * {@link IndividualFrame}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<IndividualFrame> section
 	 * @return The found section
@@ -201,7 +203,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 
 	/**
 	 * Returns if the current class definition has a {@link Types} description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<IndividualFrame> section
 	 * @return The found section
@@ -213,7 +215,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 	/**
 	 * Returns the {@link Types} sections of the current {@link IndividualFrame}
 	 * .
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<IndividualFrame> section
 	 * @return The found section
@@ -224,7 +226,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 
 	/**
 	 * Returns if the current class definition has a SubClassOf description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -236,7 +238,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 	/**
 	 * Returns the {@link SubClassOf} section containing a SubClassOf
 	 * description for the current class.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -254,8 +256,9 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 		return new IndividualFrameCompileScript();
 	}
 }
+
 /**
- *
+ * 
  * @author Stefan Mark
  * @created 24.06.2011
  */
@@ -288,8 +291,8 @@ class IndividualDefinition extends AbstractType {
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 24.06.2011
  */
@@ -301,8 +304,8 @@ class Individual extends NamedIndividualIRIDefinition {
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 28.09.2011
  */
@@ -326,8 +329,8 @@ class SameAs extends AbstractType {
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 24.06.2011
  */
@@ -357,8 +360,8 @@ class Types extends AbstractType {
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 28.09.2011
  */
@@ -377,8 +380,8 @@ class DifferentFrom extends AbstractType {
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 28.09.2011
  */
@@ -392,6 +395,7 @@ class Facts extends AbstractType {
 
 		Keyword key = new Keyword(KEYWORD);
 		this.addChildType(key);
-		this.addChildType(ManchesterSyntaxUtil.getMCE());
+		this.addChildType(new Delimiter());
+		this.addChildType(new Fact());
 	}
 }

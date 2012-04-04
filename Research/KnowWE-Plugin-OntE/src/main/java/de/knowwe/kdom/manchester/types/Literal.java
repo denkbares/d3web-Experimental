@@ -10,21 +10,21 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 /**
  * Simple {@link AbstractType} for {@link Literal}s in the Manchester OWL
  * syntax.
- *
+ * 
  * @author Stefan Mark
  * @created 05.10.2011
  */
 public class Literal extends AbstractType {
 
-	public static final String EXPONENT = "(e|E)[+-]?\\d*";
+	static final String EXPONENT = "(e|E)[+-]?\\d*";
 
-	public static final String FLOATING_PATTERN = "[+-]?(\\d+[\\.\\d*]\\s+[" + EXPONENT
+	static final String FLOATING_PATTERN = "\\A+[+-]?(\\d+[\\.\\d*]\\s+[" + EXPONENT
 			+ "]|\\.\\d*["
 			+ EXPONENT + "])(f|F)";
 
-	public static final String DECIMAL_PATTERN = "[+-]?\\d+\\.\\d+";
+	static final String DECIMAL_PATTERN = "\\A+[+-]?\\d+\\.\\d+";
 
-	public static final String INTEGER_PATTERN = "[+-]?\\d+";
+	static final String INTEGER_PATTERN = "\\A+[+-]?\\d+";
 
 	public static final String PATTERN = "(" + TypedLiteral.PATTERN + "|"
 			+ StringLiteral.PATTERN + "|"
@@ -32,9 +32,6 @@ public class Literal extends AbstractType {
 			+ FLOATING_PATTERN + "|"
 			+ DECIMAL_PATTERN + "|"
 			+ INTEGER_PATTERN + ")";
-
-
-
 
 	public Literal() {
 		this.setSectionFinder(new RegexSectionFinder(PATTERN));
@@ -105,13 +102,14 @@ public class Literal extends AbstractType {
 /**
  * Simple {@link AbstractType} for a FloatingPoint in a {@link Literal} in the
  * Manchester OWL syntax.
- *
+ * 
  * @author Stefan Mark
  * @created 05.10.2011
  */
 class FloatingPointLiteral extends AbstractType {
 
-	//floatingPointLiteral ::= [ '+' | '-'] ( digits ['.'digits] [exponent] | '.' digits[exponent]) ( 'f' | 'F' )
+	// floatingPointLiteral ::= [ '+' | '-'] ( digits ['.'digits] [exponent] |
+	// '.' digits[exponent]) ( 'f' | 'F' )
 	// exponent ::= ('e' | 'E') ['+' | '-'] digits
 
 	public FloatingPointLiteral() {
@@ -122,7 +120,7 @@ class FloatingPointLiteral extends AbstractType {
 /**
  * Simple {@link AbstractType} for a Decimal in a {@link Literal} in the
  * Manchester OWL syntax.
- *
+ * 
  * @author Stefan Mark
  * @created 05.10.2011
  */
@@ -138,7 +136,7 @@ class DecimalLiteral extends AbstractType {
 /**
  * Simple {@link AbstractType} for a Integer in a {@link Literal} in the
  * Manchester OWL syntax.
- *
+ * 
  * @author Stefan Mark
  * @created 05.10.2011
  */
@@ -154,7 +152,7 @@ class IntegerLiteral extends AbstractType {
 /**
  * Simple {@link AbstractType} for a string in the Manchester OWL Syntax in a
  * {@link Literal}.
- *
+ * 
  * @author Stefan Mark
  * @created 05.10.2011
  */
@@ -172,7 +170,7 @@ class StringLiteral extends AbstractType {
  * in the Manchester OWl syntax. A language tag is a @ (U+40) followed a
  * nonempty sequence of characters matching the langtag production from
  * http://www.rfc-editor.org/rfc/bcp/bcp47.txt.
- *
+ * 
  * @author Stefan Mark
  * @created 05.10.2011
  */
@@ -189,7 +187,7 @@ class StringLiteralLanguage extends AbstractType {
 /**
  * Simple {@link AbstractType} for a TypedLiteral in a {@link Literal} in the
  * Manchester OWL syntax.
- *
+ * 
  * @author Stefan Mark
  * @created 05.10.2011
  */

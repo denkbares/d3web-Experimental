@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -25,8 +25,8 @@ import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 16.05.2011
  */
@@ -66,9 +66,6 @@ public class Restriction extends AbstractType {
 				false);
 		this.addChildType(value);
 
-		Fact fact = new Fact();
-		this.addChildType(fact);
-
 		this.addChildType(new Delimiter());
 
 		OWLTermReferenceManchester def = new OWLTermReferenceManchester();
@@ -88,7 +85,7 @@ public class Restriction extends AbstractType {
 	/**
 	 * Check whether the current {@link Restriction} is a
 	 * {@link SomeRestriction} section.
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return TRUE if found, FALSE otherwise
 	 */
@@ -98,7 +95,7 @@ public class Restriction extends AbstractType {
 
 	/**
 	 * Retrieves a {@link SomeRestriction} section
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
@@ -109,7 +106,7 @@ public class Restriction extends AbstractType {
 	/**
 	 * Check whether the current {@link Restriction} is a
 	 * {@link SelfRestriction} section.
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return TRUE if found, FALSE otherwise
 	 */
@@ -119,7 +116,7 @@ public class Restriction extends AbstractType {
 
 	/**
 	 * Retrieves a {@link SelfRestriction} section
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
@@ -130,7 +127,7 @@ public class Restriction extends AbstractType {
 	/**
 	 * Check whether the current {@link Restriction} is a
 	 * {@link OnlyRestriction} section.
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return TRUE if found, FALSE otherwise
 	 */
@@ -140,7 +137,7 @@ public class Restriction extends AbstractType {
 
 	/**
 	 * Retrieves a {@link OnlyRestriction} section
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
@@ -151,7 +148,7 @@ public class Restriction extends AbstractType {
 	/**
 	 * Check whether the current {@link Restriction} is a
 	 * {@link CardinalityRestriction} section.
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return TRUE if found, FALSE otherwise
 	 */
@@ -161,7 +158,7 @@ public class Restriction extends AbstractType {
 
 	/**
 	 * Retrieves a {@link CardinalityRestriction} section
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
@@ -172,7 +169,7 @@ public class Restriction extends AbstractType {
 	/**
 	 * Check whether the current {@link Restriction} is a
 	 * {@link ValueRestriction} section.
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return TRUE if found, FALSE otherwise
 	 */
@@ -182,7 +179,7 @@ public class Restriction extends AbstractType {
 
 	/**
 	 * Retrieves a {@link ValueRestriction} section
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
@@ -193,7 +190,7 @@ public class Restriction extends AbstractType {
 	/**
 	 * Check whether the current {@link Restriction} is a
 	 * {@link OWLTermReferenceManchester} section.
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return TRUE if found, FALSE otherwise
 	 */
@@ -203,7 +200,7 @@ public class Restriction extends AbstractType {
 
 	/**
 	 * Retrieves a {@link OWLTermReferenceManchester} section
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
@@ -214,7 +211,7 @@ public class Restriction extends AbstractType {
 	/**
 	 * Check whether the current {@link Restriction} is a
 	 * {@link ObjectPropertyExpression} section.
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return TRUE if found, FALSE otherwise
 	 */
@@ -224,7 +221,7 @@ public class Restriction extends AbstractType {
 
 	/**
 	 * Retrieves a {@link ObjectPropertyExpression} section
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return The found {@link ObjectPropertyExpression} sections
 	 */

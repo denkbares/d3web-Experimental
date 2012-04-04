@@ -1169,6 +1169,9 @@ public class AxiomFactory {
 						OWLIndividual.class);
 				return factory.getOWLObjectPropertyAssertionAxiom(p, i, ind);
 			}
+			else if (lit != null && isDataProperty == false) {
+				messages.add(Messages.syntaxError("ObjectProperty attached with literal value!"));
+			}
 		}
 		else {
 			messages.add(Messages.syntaxError("Data-/ ObjectProperty or Termreference missing!"));
