@@ -27,7 +27,7 @@ import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
-import de.knowwe.core.report.DefaultErrorRenderer;
+import de.knowwe.core.report.DefaultMessageRenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -61,12 +61,12 @@ public abstract class IncrementalTermDefinition<TermObject> extends SimpleDefini
 			for (Message kdomReportMessage : messages) {
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					string.append(
-							DefaultErrorRenderer.INSTANCE_ERROR.preRenderMessage(
+							DefaultMessageRenderer.ERROR_RENDERER.preRenderMessage(
 									kdomReportMessage, user, null));
 				}
 				if (kdomReportMessage.getType() == Message.Type.WARNING) {
 					string.append(
-							DefaultErrorRenderer.INSTANCE_WARNING.preRenderMessage(
+							DefaultMessageRenderer.WARNING_RENDERER.preRenderMessage(
 									kdomReportMessage, user, null));
 				}
 			}
@@ -80,12 +80,12 @@ public abstract class IncrementalTermDefinition<TermObject> extends SimpleDefini
 			for (Message kdomReportMessage : messages) {
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					string.append(
-							DefaultErrorRenderer.INSTANCE_ERROR.postRenderMessage(
+							DefaultMessageRenderer.ERROR_RENDERER.postRenderMessage(
 									kdomReportMessage, user, null));
 				}
 				if (kdomReportMessage.getType() == Message.Type.WARNING) {
 					string.append(
-							DefaultErrorRenderer.INSTANCE_WARNING.postRenderMessage(
+							DefaultMessageRenderer.WARNING_RENDERER.postRenderMessage(
 									kdomReportMessage, user, null));
 				}
 			}

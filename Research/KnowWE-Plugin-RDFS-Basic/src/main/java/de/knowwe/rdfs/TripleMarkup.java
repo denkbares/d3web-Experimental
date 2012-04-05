@@ -42,7 +42,7 @@ import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.report.DefaultErrorRenderer;
+import de.knowwe.core.report.DefaultMessageRenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
@@ -146,14 +146,14 @@ public class TripleMarkup extends AbstractType implements
 
 				if (warningRange) {
 					string.append(
-							DefaultErrorRenderer.INSTANCE_WARNING.preRenderMessage(
+							DefaultMessageRenderer.WARNING_RENDERER.preRenderMessage(
 									new Message(Message.Type.WARNING,
 											"Triple object does not match range definition"),
 									user, null));
 				}
 				if (warningDomain) {
 					string.append(
-							DefaultErrorRenderer.INSTANCE_WARNING.preRenderMessage(
+							DefaultMessageRenderer.WARNING_RENDERER.preRenderMessage(
 									new Message(Message.Type.WARNING,
 											"Triple subject does not match domain definition"),
 									user, null));
@@ -163,13 +163,13 @@ public class TripleMarkup extends AbstractType implements
 
 				if (warningRange) {
 					string.append(
-							DefaultErrorRenderer.INSTANCE_WARNING.postRenderMessage(
+							DefaultMessageRenderer.WARNING_RENDERER.postRenderMessage(
 									new Message(Message.Type.WARNING,
 											""), user, null));
 				}
 				if (warningDomain) {
 					string.append(
-							DefaultErrorRenderer.INSTANCE_WARNING.postRenderMessage(
+							DefaultMessageRenderer.WARNING_RENDERER.postRenderMessage(
 									new Message(Message.Type.WARNING,
 											""), user, null));
 				}
