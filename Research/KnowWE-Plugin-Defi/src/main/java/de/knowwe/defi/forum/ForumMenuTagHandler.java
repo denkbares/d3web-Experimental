@@ -273,10 +273,10 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 						+ "\" height=\"80px\" width=\"80px\" alt=\"avatar\" />");
 
 				// Username + status
-				fm.append("<span class='userchat'><a href='"
+				fm.append("<span class='userchat'><p>" + users[i] + "</p><a href='"
 						+ JSPWikiConnector.LINK_PREFIX
 						+ users[i] + "'>"
-						+ users[i] + "</a><br />- " + getStatus(activeUsers, users[i])
+						+ "Zum Profil</a><br />- " + getStatus(activeUsers, users[i])
 						+ " -</span>");
 
 				// "Persönliche Nachricht"-Button
