@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,14 +38,15 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.ecyrd.jspwiki.WikiEngine;
+import com.ecyrd.jspwiki.auth.NoSuchPrincipalException;
+import com.ecyrd.jspwiki.auth.authorize.GroupManager;
+import com.ecyrd.jspwiki.auth.user.UserDatabase;
 
 import de.knowwe.comment.forum.Forum;
 import de.knowwe.core.Environment;
@@ -219,6 +221,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		for (int i = 0; i < users.length; i++) {
 			// filter displayed users
+			// dont show 1. admins, 2. names starting with "Patient" 3. the user
 			if (admins.contains(users[i]) || users[i].startsWith("Patient")
 					|| users[i].equals(userContext.getUserName())) continue;
 			else {
@@ -565,62 +568,20 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	/**
 	 * Get all admins.
 	 */
-	@SuppressWarnings("unchecked")
 	private List<String> getAdmins() {
-		JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
-				Environment.getInstance().getContext(), null));
 		List<String> admins = new LinkedList<String>();
-		SAXBuilder sxbuild = new SAXBuilder();
-		InputSource is = new InputSource(wc.getWikiProperty("jspwiki.xmlGroupDatabaseFile"));
-		org.jdom.Document doc;
+		WikiEngine eng = WikiEngine.getInstance(Environment.getInstance().getContext(), null);
+		UserDatabase udb = eng.getUserManager().getUserDatabase();
+		GroupManager gm = eng.getGroupManager();
 		try {
-			doc = sxbuild.build(is);
-			org.jdom.Element root = doc.getRootElement();
-			List<org.jdom.Element> elms, groups;
-			elms = root.getChildren("group");
-			for (org.jdom.Element elm : elms) {
-				if (elm.getAttributeValue("name").equals("Admin")) {
-					groups = elm.getChildren();
-					for (org.jdom.Element elem : groups) {
-						admins.add(getWikiName(elem.getAttributeValue("principal")));
-					}
-				}
+			for (Principal p : gm.getGroup("Admin").members()) {
+				 admins.add(udb.findByWikiName(p.getName()).getFullname());
 			}
 		}
-		catch (JDOMException e) {
-		}
-		catch (IOException e) {
+		catch (NoSuchPrincipalException e1) {
 		}
 
 		return admins;
-	}
-
-	/**
-	 * Transform loginName into WikiName.
-	 */
-	@SuppressWarnings("unchecked")
-	private String getWikiName(String loginName) {
-		JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
-				Environment.getInstance().getContext(), null));
-		SAXBuilder sxbuild = new SAXBuilder();
-		InputSource is = new InputSource(wc.getWikiProperty("jspwiki.xmlUserDatabaseFile"));
-		org.jdom.Document doc;
-		try {
-			doc = sxbuild.build(is);
-			org.jdom.Element root = doc.getRootElement();
-			List<org.jdom.Element> elms = root.getChildren("user");
-			for (org.jdom.Element elm : elms) {
-				if (elm.getAttributeValue("loginName").equals(loginName)) {
-					return elm.getAttributeValue("fullName");
-				}
-			}
-		}
-		catch (JDOMException e) {
-		}
-		catch (IOException e) {
-		}
-
-		return "";
 	}
 
 	/**

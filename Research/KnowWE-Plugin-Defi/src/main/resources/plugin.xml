@@ -237,6 +237,17 @@
     </extension>      
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="UserManagerTagHandler">
+        <parameter id="class" value="de.knowwe.defi.usermanager.UserManagerTagHandler" />
+        <parameter id="name" value="UserManagerTagHandler" />
+        <parameter id="description" value="TagHandler UserManagerTagHandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
+        <parameter id="script" value="KnowWE-Plugin-Defi-UserManager.js" />
+    </extension>      
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
         id="EmergencyPlanTagHandler">
         <parameter id="class" value="de.knowwe.defi.emergency.EmergencyPlanTagHandler" />
         <parameter id="name" value="EmergencyPlanTagHandler" />
@@ -250,6 +261,36 @@
         <parameter id="class" value="de.knowwe.defi.UsernameTagHandler" />
         <parameter id="name" value="UsernameTagHandler" />
         <parameter id="description" value="TagHandler UsernameTagHandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>   
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="RegisterUserAction">
+        <parameter id="class"
+            value="de.knowwe.defi.usermanager.RegisterUserAction" />
+        <parameter id="name" value="RegisterUserAction" />
+        <parameter id="description" value="Action RegisterUserAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>    
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="DeleteUserAction">
+        <parameter id="class"
+            value="de.knowwe.defi.usermanager.DeleteUserAction" />
+        <parameter id="name" value="DeleteUserAction" />
+        <parameter id="description" value="Action DeleteUserAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>    
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="EditUserAction">
+        <parameter id="class"
+            value="de.knowwe.defi.usermanager.EditUserAction" />
+        <parameter id="name" value="EditUserAction" />
+        <parameter id="description" value="Action EditUserAction" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>    
