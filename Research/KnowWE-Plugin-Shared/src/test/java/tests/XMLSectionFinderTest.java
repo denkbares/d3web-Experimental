@@ -36,6 +36,7 @@ import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.kdom.xml.GenericXMLContent;
 import de.knowwe.kdom.xml.GenericXMLObjectType;
 import de.knowwe.kdom.xml.XMLSectionFinder;
 import dummies.DummyConnector;
@@ -83,7 +84,7 @@ public class XMLSectionFinderTest extends TestCase {
 		f = new XMLSectionFinder("SubSection");
 		findings = f.lookForSections(content, artSec, null);
 		start = 9;
-		end = 190;
+		end = 189;
 		assertEquals("Element <SubSection> begin index wrong", start, findings.get(0).getStart());
 		assertEquals("Element <SubSection> end index wrong", end, findings.get(0).getEnd());
 
@@ -91,7 +92,7 @@ public class XMLSectionFinderTest extends TestCase {
 		f = new XMLSectionFinder("SubSubSection1");
 		findings = f.lookForSections(content, artSec, null);
 		start = 61;
-		end = 98;
+		end = 97;
 		assertEquals("Element <SubSubSection1> begin index wrong", start,
 				findings.get(0).getStart());
 		assertEquals("Element <SubSubSection1> end index wrong", end, findings.get(0).getEnd());
@@ -99,7 +100,7 @@ public class XMLSectionFinderTest extends TestCase {
 		f = new XMLSectionFinder("SubSubSection2");
 		findings = f.lookForSections(content, artSec, null);
 		start = 100;
-		end = 175;
+		end = 174;
 		assertEquals("Element <SubSubSection2> begin index wrong", start,
 				findings.get(0).getStart());
 		assertEquals("Element <SubSubSection2> end index wrong", end, findings.get(0).getEnd());
@@ -108,11 +109,11 @@ public class XMLSectionFinderTest extends TestCase {
 		f = new XMLSectionFinder("Text2");
 		findings = f.lookForSections(content, artSec, null);
 		start = 120;
-		end = 155;
+		end = 154;
 		assertEquals("Element <Text2> begin index wrong", start, findings.get(0).getStart());
 		assertEquals("Element <Text2> end index wrong", end, findings.get(0).getEnd());
 		start = 191;
-		end = 226;
+		end = 225;
 		assertEquals("Element <Text2> begin index wrong", start, findings.get(1).getStart());
 		assertEquals("Element <Text2> end index wrong", end, findings.get(1).getEnd());
 
@@ -144,29 +145,30 @@ public class XMLSectionFinderTest extends TestCase {
 
 		artChild = (Section) artChild.getChildren().get(1);
 		expected = 2;
-		assertEquals("Wrong subtree count", expected, artChild.getChildren().size());
+		assertEquals("Wrong subtree count", expected,
+				Sections.findChildrenOfType(artChild, GenericXMLObjectType.class).size());
 
 		// Test left subtree
-		Section subRoot = (Section) artChild.getChildren().get(0);
+		Section subRoot = Sections.findChildrenOfType(artChild, GenericXMLObjectType.class).get(0);
 		expected = 3;
 		assertEquals("Error in Left subtree:", expected, subRoot.getChildren().size());
 
-		subRoot = (Section) subRoot.getChildren().get(1);
-		expected = 3;
+		subRoot = Sections.findChildrenOfType(subRoot, GenericXMLContent.class).get(0);
+		expected = 7;
 		assertEquals("Error in Left subtree:", expected, subRoot.getChildren().size());
-
-		expected = 3;
-		assertEquals("Error in Left subtree:", expected,
-				((Section) subRoot.getChildren().get(0)).getChildren().size());
 
 		expected = 3;
 		assertEquals("Error in Left subtree:", expected,
 				((Section) subRoot.getChildren().get(1)).getChildren().size());
 
 		expected = 3;
-		subRoot = (Section) subRoot.getChildren().get(2);
+		assertEquals("Error in Left subtree:", expected,
+				((Section) subRoot.getChildren().get(3)).getChildren().size());
+
+		expected = 3;
+		subRoot = (Section) subRoot.getChildren().get(5);
 		subRoot = (Section) subRoot.getChildren().get(1);
-		subRoot = (Section) subRoot.getChildren().get(0);
+		subRoot = (Section) subRoot.getChildren().get(1);
 		assertEquals("Error in Left subtree:", expected, subRoot.getChildren().size());
 
 		// Test right subtree
