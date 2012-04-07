@@ -47,7 +47,9 @@
 	  <link rel="stylesheet" media="screen" type="text/css" href="KnowWEExtension/css/defi-table.css" />
 	  <script type="text/javascript">
 	  	window.onload = function() {
-	  		$$('div.information')[0].innerHTML = "Diese Seite existiert nicht. Bitte dr&uuml;cken Sie den Zur&uuml;ck-Knopf Ihres Browsers!";
+	  		$$('div.information')[0].innerHTML = "Diese Seite existiert nicht. " 
+	  		+ "<a href='' onclick='history.back();return false'>Hier geht es zur&uuml;ck zur letzten Seite.</a>";
+	  		$$('div#actionsBottom')[0].innerHTML = "";
 	  	}
 	  </script>
   <% } %>

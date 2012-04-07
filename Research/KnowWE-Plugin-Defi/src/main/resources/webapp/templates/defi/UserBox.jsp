@@ -9,8 +9,10 @@
 <%@page import="de.knowwe.core.kdom.parsing.Section"%>
 <%@page import="de.knowwe.core.kdom.parsing.Sections" %>
 <%@page import="de.knowwe.core.kdom.Article"%>
+<%@page import="de.knowwe.jspwiki.JSPWikiConnector"%>
 <%@page import="de.knowwe.core.Environment"%>
 <%@ page import="com.ecyrd.jspwiki.WikiContext"%>
+<%@ page import="com.ecyrd.jspwiki.WikiEngine"%>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page import="javax.servlet.jsp.jstl.fmt.*"%>
@@ -20,6 +22,8 @@
 	WikiContext c = WikiContext.findContext(pageContext);
 	String avatar = "1000px-Comic_image_missing.svg.jpg";
 	JSPWikiUserContext user = new JSPWikiUserContext(c, new HashMap<String, String>());
+	JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
+				Environment.getInstance().getContext(), null));
 	if (user.userIsAsserted()) {
 		Article article = Environment.getInstance().getArticle(
 		Environment.DEFAULT_WEB, user.getUserName());
@@ -33,7 +37,7 @@
 	}
 
 	ResourceBundle rb = ResourceBundle.getBundle("KnowWE_Defi_config");
-	String notfallplan = rb.getString("defi.link.notfall")+user.getUserName();
+	String notfallplan = wc.getBaseUrl() + rb.getString("defi.link.notfall")+user.getUserName();
 %>
 <div class="userbox">
 	<span>Pers&ouml;nliche Funktionen</span>
