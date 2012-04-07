@@ -78,6 +78,9 @@ public class EditUserAction extends AbstractAction {
 				if (adminGrp.getCreated() == null) adminGrp.setCreated(new Date());
 				eng.getGroupManager().getGroupDatabase().save(adminGrp, adminGrp.getPrincipal());
 			}
+			else {
+				if (password == "") responseText = "Die Adminrechte konnten nicht verändert werden.";
+			}
 			
 			// Set user preferences
 			if (password != "") {

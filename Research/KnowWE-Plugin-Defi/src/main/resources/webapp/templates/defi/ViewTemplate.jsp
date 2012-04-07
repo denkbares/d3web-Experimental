@@ -1,6 +1,8 @@
 <%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
+<%@page import="de.knowwe.core.Environment"%>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@page import="de.knowwe.jspwiki.JSPWikiConnector"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="com.ecyrd.jspwiki.*" %>
 <fmt:setBundle basename="templates.default"/>
@@ -8,6 +10,8 @@
   WikiContext c = WikiContext.findContext(pageContext);
   WikiPage wikipage = c.getPage();
   JSPWikiUserContext user = new JSPWikiUserContext(c, new HashMap<String, String>());
+  JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
+			Environment.getInstance().getContext(), null));
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -35,6 +39,17 @@
   	#menu-pagecontent, #menu-attach, #menu-info { display:none; }
   	a.action.edit, a.action.more { display:none; }
   </style>
+  <% } %>
+  <%  if (!wc.doesPageExist(user.getTitle())) { %>
+	  <link rel="stylesheet" media="screen" type="text/css" href="templates/defi/jspwiki.css" />
+	  <link rel="stylesheet" media="screen" type="text/css" href="KnowWEExtension/css/general.css" />
+	  <link rel="stylesheet" media="screen" type="text/css" href="KnowWEExtension/css/defi.css" />
+	  <link rel="stylesheet" media="screen" type="text/css" href="KnowWEExtension/css/defi-table.css" />
+	  <script type="text/javascript">
+	  	window.onload = function() {
+	  		$$('div.information')[0].innerHTML = "Diese Seite existiert nicht. Bitte dr&uuml;cken Sie den Zur&uuml;ck-Knopf Ihres Browsers!";
+	  	}
+	  </script>
   <% } %>
 </head>
 
