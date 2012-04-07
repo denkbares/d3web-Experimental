@@ -19,11 +19,15 @@
 package de.knowwe.defi.usermanager;
 
 import java.io.IOException;
+import java.security.Principal;
 
 import com.ecyrd.jspwiki.WikiEngine;
 import com.ecyrd.jspwiki.auth.NoSuchPrincipalException;
 import com.ecyrd.jspwiki.auth.WikiSecurityException;
+import com.ecyrd.jspwiki.auth.authorize.Group;
+import com.ecyrd.jspwiki.auth.authorize.GroupManager;
 import com.ecyrd.jspwiki.auth.user.UserDatabase;
+import com.ecyrd.jspwiki.auth.user.UserProfile;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
@@ -44,12 +48,20 @@ public class DeleteUserAction extends AbstractAction {
 
 		WikiEngine eng = WikiEngine.getInstance(Environment.getInstance().getContext(), null);
 		UserDatabase udb = eng.getUserManager().getUserDatabase();
-
 		try {
+			UserProfile up = udb.find(user);
+			GroupManager gm = eng.getGroupManager();
+			Group adminGrp = gm.getGroup("Admin");
+
+			for (Principal p : udb.getWikiNames()) {
+				if (p.getName().equals(up.getWikiName()) && adminGrp.isMember(p)) adminGrp.remove(p);
+			}
+			gm.getGroupDatabase().save(adminGrp, adminGrp.getPrincipal());
+
 			udb.deleteByLoginName(udb.find(user).getLoginName());
 		}
 		catch (NoSuchPrincipalException e) {
-			responseText = "Kein Benutzer mit dem Namen " + user + " vorhanden.";
+			responseText = user + " konnte nicht gelöscht werden.";
 		}
 		catch (WikiSecurityException e) {
 			responseText = user + " konnte nicht gelöscht werden.";

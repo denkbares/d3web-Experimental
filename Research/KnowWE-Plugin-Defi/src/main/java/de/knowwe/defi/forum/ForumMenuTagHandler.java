@@ -45,6 +45,7 @@ import org.xml.sax.InputSource;
 
 import com.ecyrd.jspwiki.WikiEngine;
 import com.ecyrd.jspwiki.auth.NoSuchPrincipalException;
+import com.ecyrd.jspwiki.auth.WikiSecurityException;
 import com.ecyrd.jspwiki.auth.authorize.GroupManager;
 import com.ecyrd.jspwiki.auth.user.UserDatabase;
 
@@ -574,11 +575,16 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		UserDatabase udb = eng.getUserManager().getUserDatabase();
 		GroupManager gm = eng.getGroupManager();
 		try {
+			Principal[] users = udb.getWikiNames();
 			for (Principal p : gm.getGroup("Admin").members()) {
-				 admins.add(udb.findByWikiName(p.getName()).getFullname());
+				for (Principal u : users) {
+					if (u.getName().equals(p.getName())) admins.add(udb.findByWikiName(p.getName()).getFullname());
+				}
 			}
 		}
-		catch (NoSuchPrincipalException e1) {
+		catch (NoSuchPrincipalException e) {
+		}
+		catch (WikiSecurityException e) {
 		}
 
 		return admins;
