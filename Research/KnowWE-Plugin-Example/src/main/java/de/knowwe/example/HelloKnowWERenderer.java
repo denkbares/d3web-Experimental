@@ -42,7 +42,7 @@ public class HelloKnowWERenderer implements Renderer {
 	@Override
 	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		string.append("Hello!");
-		string.append(KnowWEUtils.maskHTML("<img src=\"KnowWEExtension/images/helloworld.png\" alt=\":)\"/>"));
+		string.append(KnowWEUtils.maskHTML("<img src=\"KnowWEExtension/images/helloworld.jpg\" alt=\":)\"/>"));
 	}
 
 }
