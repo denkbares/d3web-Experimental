@@ -136,7 +136,7 @@ public class D3webConnector {
     private boolean loggingActive = false;
     private D3webUserSettings usersettings = null;
     private boolean feedbackForm = false;
-    private boolean ueQuestionnaire = false;
+    private String ueQuestionnaire = "NONE";
 
     public static D3webConnector getInstance() {
         if (instance == null) {
@@ -334,11 +334,11 @@ public class D3webConnector {
         return this.feedbackForm;
     }
     
-    public void setUEQuestionnaire(boolean ueq) {
+    public void setUEQuestionnaire(String ueq) {
         this.ueQuestionnaire = ueq;
     }
 
-    public boolean getUEQuestionnaire() {
+    public String getUEQuestionnaire() {
         return this.ueQuestionnaire;
     }
 

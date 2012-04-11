@@ -35,6 +35,12 @@ body,div {
         width: 70%;
 }
 
+/* for d3web hierarchy clarification */
+td > #headertext{
+    position: relative;
+    
+}
+
 #intro{ 
     font-family: Arial;
 	font-size: 9pt;
@@ -61,8 +67,8 @@ body,div {
     position: fixed;
     right: 20px;
     padding: 10px;
-    margin-top: 110px;
-    height: 75%;
+    margin-top: 35px;
+    height: 60%;
     overflow: auto; /* for scrolling */
 }
 
@@ -93,6 +99,9 @@ table{
 	width: 100%;
 }
 
+#head > table{
+    margin: 0;
+}
 
 .question {
 	background-color: transparent;
@@ -363,3 +372,7 @@ img{
 .prop2and3{
     background: url('/img/2and3.png');
 }
+
+.SaveCaseButton{width: 120px; height: 20px; padding-top: 3px; border: 1px solid #696969; text-align: center; cursor: pointer; 
+	background-color: #dddddd; font-weight: bold; color: #224172; -moz-box-shadow: 0 0 5px black;	
+	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; }

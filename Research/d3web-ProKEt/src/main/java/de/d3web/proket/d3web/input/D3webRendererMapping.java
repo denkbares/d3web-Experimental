@@ -110,6 +110,9 @@ public class D3webRendererMapping extends HashMap<String, String> {
 			if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
 				name = IMG_QUESTION;
 			}
+                        if(D3webConnector.getInstance().getUserprefix().equals("Clarihie")){
+                            return (AbstractD3webRenderer) getRenderer(userPref, name); 
+                        }
 		}
 		else if (to instanceof QContainer) {
 			name = Q_CONT;
@@ -171,6 +174,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
 		Class<?> result = null;
 
 		try {
+                    System.out.println("RENDERER: " + prefix + userPrefix + this.get(name));
 			result = Class.forName(prefix + userPrefix + this.get(name));
 		}
 		catch (ClassNotFoundException cne) {

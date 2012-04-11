@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dialog sub-type='front' type='legal' css='legal, nofoot' header='Cancellation Clarification -- iTree' and-or-type='AND' uequest='OWN' study='true' logging='true' feedback='true'>
+<legalQuestion title='Was the working contract terminated effectually?' id='0' and-or-type='AND' bonus-text='null'/>
+<legalQuestion title='Is the dismissal formally legal?' id='1' parent-id='0' and-or-type='AND' bonus-text='For a cancellation to be formally legal, it must:
+&#60;ol&#62;&#60;li&#62;contain the correct contents, &#60;/li&#62;&#60;li&#62;adhere to the correct form of writing,&#60;/li&#62;&#60;li&#62;be signed by an entitled person,&#60;/li&#62;&#60;li&#62;be delivered correctly&#60;/li&#62;&#60;li&#62;not exist a works council or an existing works council must be heard correctly&#60;/li&#62;&#60;/ol&#62;'/>
+<legalQuestion title='Is the declaration of the cancellation legally correct regarding the contents, the writing form, the sign of an entitled person and the delivery?' id='2' parent-id='1' and-or-type='AND' bonus-text='null'/>
+<legalQuestion title='Does no works council exist or was the works council heard correctly?' id='3' parent-id='1' and-or-type='OR' dummy='true' bonus-text='null'/>
+<legalQuestion title='Does a works council exist? ' id='4' parent-id='3' and-or-type='AND' defining='nein' bonus-text='null'/>
+<legalQuestion title='Was the works council heard correctly?' id='5' parent-id='3' and-or-type='AND' bonus-text='null'/>
+<legalQuestion title='Is the cancellation materially/textually legal?' id='6' parent-id='0' and-or-type='AND' bonus-text='null'/>
+<legalQuestion title='Is a cancellation debarred due to a timely limitation?' id='7' parent-id='6' and-or-type='OR' defining='nein' bonus-text='null'/>
+<legalQuestion title='Is the cancellation a case of special termination protection?' id='8' parent-id='6' and-or-type='AND' defining='nein' bonus-text='null'/>
+<legalQuestion title='Is the statutory period of notice adhered to?' id='9' parent-id='6' and-or-type='AND' bonus-text='null'/>
+</dialog>

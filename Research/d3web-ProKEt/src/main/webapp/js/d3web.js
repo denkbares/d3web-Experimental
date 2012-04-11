@@ -707,9 +707,11 @@ function handleNumFields(field){
     }
 }
 
-
+/* move the content part of the dialog further down --> not in hierarchy */
 function moveContentPart() {
-    $('#content').css("margin-top", (getHeaderHeight() + 10) + "px");
+    if(!hierarchy){
+        $('#content').css("margin-top", (getHeaderHeight() + 10) + "px");
+    }
 }
 
 

@@ -113,6 +113,11 @@ CSSs
 - REFACTOR: clean JavaScript: 
     - move jquery dialog definitions to separate file
 
+- UNIFY prototypes and d3web systems with regards to
+    - js
+    - StringTemplate
+    - CSS
+
 -------------------------------------------
 --- MEDIASTINITIS (Projekt Herzmedizin) ---
 -------------------------------------------
@@ -132,10 +137,10 @@ DONE - Refactor IDs: answer type of legal questions is set twice
 DONE - Add notification if user sets parent-rating that contradicts calculated child-rating
 DONE - Andere Fragetypen in hierarchy --> oc mit popup, num
 DONE - Refactor Hierarchy prototypes as to use own attributes AND/OR instead of OC/MC 
+DONE - Panel Images umbenennen --> sind jetzt CSS BUTTONS
+DONE - Panel Areas vergrößern/anpassen --> CSS BUTTONS
 
 - CHECK div styles of hierarichal --> if too small, design is destroyed
-- Panel Images umbenennen
-- Panel Areas vergrößern/anpassen
 - d3web: Introtext über KB
 - Ausprobieren Schrift über Pfeil
 - JS interactivity für num und oc fragen
@@ -145,8 +150,8 @@ DONE - Refactor Hierarchy prototypes as to use own attributes AND/OR instead of 
 - neuer Fall, speichern, reset etc
 
 !!! - d3web Anbindung
-- KnowWE Binding for entering knowledge bases and showing dialogs
 - Styling header: print button, feedback
+- Print Button --> Baum
 
 
 --------------
@@ -174,7 +179,6 @@ DONE - Summary --> incisional recurrent hernia "problem"
  - Frage 139 Intrahospital complications 
     if answered with "no complications", question 148 Classification of surgical complications 
     should be disabled
-
 - mention imageupload [muysoms] --> link or session timeout
 - test IE8 and mail to [craessarts]
 - check firefox 3 [uli]
@@ -192,27 +196,25 @@ INTERNET EXPLORER QUIRKS
 
 
 
-LOGGING
--------
-DONE - Umlaute (zB Mediastinitis)
-DONE - Logging of image answers
-- check sind alle wichtigen Elemente geloggt?
-- check logging completely, also for productive systems as EuraHS
-- redeploy EuraHS and Mediastinitis if done
+
+
 
 
 USABILITY EXTENSION
 -------------------
-- feedback form for prototypes also!
-- write questionnaire data to files --> refactor sendmail to send this file
+DONE - feedback form for prototypes also!
+DONE - write questionnaire data to files 
+DONE - switch usability questionnaires by property, e.g allow "uequestionnaire=SUS" or
+"uequestionnaire=OWN"
+DONE - own questionnaire --> some usability questions with schulnotenskala and freetext "sonstiges"
+
+
+- refactor sendmail to send this file
 -- txtfilename = logfile currently is send in mail, but _ are not displayed
 instead of text in mail?! (needed, files will be stored on server also
 - tweak styling of feedback/questionnaire dialogs
-- own questionnaire --> some usability questions with schulnotenskala and freetext "sonstiges"
 - internationalize questionnaires
-DONE - switch usability questionnaires by property, e.g allow "uequestionnaire=SUS" or
-"uequestionnaire=OWN"
-- for above, also log appropriately WHICH Questionnaier was included
+- for above, also log appropriately WHICH Questionnaire was included
 - property based configuration of usability metrics / evaluation
 - visualization of appropriate results (WHICH ONES?)
 - Logging: when end session logtime is BEFORE save button click
@@ -221,3 +223,14 @@ DONE - switch usability questionnaires by property, e.g allow "uequestionnaire=S
 
 - Refactor language stuff for prototypes (ger/eng) bzw. generally
     (language config file with all texts for dialog elements such as buttons etc?!)
+
+
+---Logging----
+DONE - Umlaute (zB Mediastinitis)
+DONE - Logging of image answers
+
+- check sind alle wichtigen Elemente geloggt?
+- check logging completely, also for productive systems as EuraHS
+- redeploy EuraHS and Mediastinitis if done
+- allow "" in Feedback
+- Feedback Felder größer

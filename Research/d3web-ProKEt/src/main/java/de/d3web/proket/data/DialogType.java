@@ -44,6 +44,9 @@ public enum DialogType {
 
 	/* Pub consultation dialog or medical diagnosis clarification */
 	CLARIFICATION,
+        
+        /* e.g. in JuriSearch, Clarification modules */
+        CLARIFICATIONHIERARCHY,
 
 	/* e.g. QuickI dialog */
 	FREECHOICE,

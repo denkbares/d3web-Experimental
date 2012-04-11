@@ -27,27 +27,34 @@ $HTMLHeader()$
 
     
     <div id="intro">
-        Do derive a rating for the core issue displayed in the solution panel above the tree
-        (and also as top element of the tree itself) please answer the questions underneath in the tree.
-        <b>Please confirm the end of your session by clicking the <i>End Session</i> button!</b>.
+        Um eine Bewertung des Sachverhalts ("Hauptfrage") zu bekommen, beantworten Sie bitte die
+        unterhalb der Hauptfrage angezeigten Fragen.
+        Wenn Sie die Maus über den Text einer Frage bewegen, bekommen Sie dazu im Panel rechts Zusatzinformationen angezeigt 
+        (mittels des <i>Nach unten</i> Button können Sie dieses Panel auch an den unteren Bildschirmrand legen).
+        Wenn Sie eine Frage nicht direkt beantworten können, klicken Sie auf das Dreieck vor der Frage: dann werden
+        detailliertere Fragen dazu eingeblendet. 
+        <br />
+        <b>Wenn Sie die Beratungs-Session als beendet sehen (weil sie alle für den Sachverhalt relevanten Fragen beantwortet
+        haben und/oder mit dem Ergebnis zufrieden sind) bestätigen Sie dies bitte per Klick auf
+        den Button <i>End Session</i> und beantworten Sie den anschließend angezeigten Kurzfragebogen!</b>.
     </div>
     
     <div id="solution" class="solution">
-            <div id="solutionboxtext">Core Issue Rating</div>
+            <div id="solutionboxtext">Bewertung Hauptfrage</div>
 
-            <div id="solutiontext">Was the working contract terminated effectually?</div>
+            <div id="solutiontext">Ist das Arbeitsverhältnis wirksam gekündigt worden?</div>
 
             <div id="solHigh" class="solRating rating-high hide">
-                Core issue confirmed.
+                Sachverhalt bestätigt, <br />weil Frage 1 und Frage 2 bestätigt werden konnten.
             </div>
             <div id="solMed" class="solRating rating-medium hide">
-                Core issue rated not confidently / neutral.
+                Sachverhalt nicht sicher entscheidbar, <br />weil Frage 1 oder Frage 2 nicht sicher entschieden werden konnten.
             </div>
             <div id="solLow" class="solRating rating-low hide">
-                Core issue rejected.
+                Sachverhalt trifft nicht zu, <br />weil Frage 1 oder Frage 2 nicht bestätigt werden konnte.
             </div>
             <div id="solUn" class="solRating"><br />
-                Too little information for rating the core issue.
+                Zu wenig Informationen für eine Bewertung.
             </div>
         </div>
 
@@ -65,7 +72,7 @@ $HTMLHeader()$
             
         </div>
         <div id="auxHeader">
-            <b>Additional information for []:</b>  
+            <b>Informationen zu []:</b>  
             <br /><br />
         </div>
 

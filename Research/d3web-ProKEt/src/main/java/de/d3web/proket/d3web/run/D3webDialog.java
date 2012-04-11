@@ -95,7 +95,7 @@ import java.util.*;
  *
  */
 public class D3webDialog extends HttpServlet {
-    
+
     private static final long serialVersionUID = -2466200526894064976L;
     protected static final String D3WEB_SESSION = "d3webSession";
     protected static final String USER_SETTINGS = "userSettings";
@@ -132,10 +132,10 @@ public class D3webDialog extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        
+
         String servletcontext = config.getServletContext().getRealPath("/");
         GLOBSET.setServletBasePath(servletcontext);
-        
+
         d3webParser = new D3webXMLParser();
     }
 
@@ -149,18 +149,19 @@ public class D3webDialog extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         response.setContentType("text/html; charset=UTF-8");
-        
-        
+
+
         HttpSession httpSession = request.getSession(true);
 
         // try to get the src parameter, i.e. the specification of the dialog
         String source = getSource(request);
+        System.out.println(source);
         d3webParser.setSourceToParse(source);
-        
+
         d3wcon = D3webConnector.getInstance();
-        
+
         d3wcon.setD3webParser(d3webParser);
 
         // set SRC store attribute to "" per default for avoiding nullpointers
@@ -175,7 +176,7 @@ public class D3webDialog extends HttpServlet {
             //httpSession.setAttribute("first", "true");
             sourceSave = source;
             d3webParser.parse();
-            
+
             d3wcon.setKb(d3webParser.getKnowledgeBase());
             d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
             // d3wcon.setDialogStrat(d3webParser.getStrategy());
@@ -191,269 +192,361 @@ public class D3webDialog extends HttpServlet {
             d3wcon.setLoginMode(d3webParser.getLogin());
 
             // switch on/off logging depending on xml specification
-            if (d3webParser.getLogging().contains("ON")) {
+            if (d3webParser.getLogging().contains("TRUE")) {
                 d3wcon.setLogging(true);
             }
-            
-            if (d3webParser.getFeedbackform().contains("ON")) {
+
+            if (d3webParser.getFeedbackform().contains("TRUE")) {
                 d3wcon.setFeedbackForm(true);
             }
-            
-            if (d3webParser.getUEQuestionnaire().contains("ON")) {
-                d3wcon.setUEQuestionnaire(true);
+
+            if (!d3webParser.getUEQuestionnaire().contains("FALSE")) {
+
+                if (d3webParser.getUEQuestionnaire().equals("SUS")) {
+                    d3wcon.setUEQuestionnaire("SUS");
+                } else if (d3webParser.getUEQuestionnaire().equals("OWN")) {
+                    d3wcon.setUEQuestionnaire("OWN");
+                }
             }
 
-            // set dialog language (for internationalization of widgets, NOT
-            // KB elements (specified in knowledge base
-            if (!d3webParser.getLanguage().equals("")) {
-                d3wcon.setLanguage(d3webParser.getLanguage());
-            }
-
-            // Get userprefix specification
-            String userpref = "DEFAULT";
-            if (!(d3wcon.getUserprefix().equals(""))
-                    && !(d3wcon.getUserprefix() == null)) {
-                userpref = d3wcon.getUserprefix();
-            }
-
-            // set necessary paths for saving stuff such as cases, logfiles...
-            GLOBSET.setCaseFolder(
-                    GLOBSET.getServletBasePath()
-                    + "../../" + userpref + "-Data/cases");
-            
-            GLOBSET.setLogFolder(
-                    GLOBSET.getServletBasePath()
-                    + "../../" + userpref + "-Data/logs");
-
-            // if a new dialog is loaded we also need a new session to start
-            //resetD3webSession(httpSession);
-            resetD3webSession(httpSession);
-
-            /*
-             * initialize logging
-             */
-            initializeLoggingMechanism(httpSession);
-            //D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
-            //System.out.println(d3webSession);
-            //httpSession.setAttribute(D3WEB_SESSION, d3webSession);
-
-            //httpSession.setAttribute("lastLoaded", "");
-            //D3webConnector.getInstance().setSession(d3webSession);
-
-            // stream images from KB into webapp
-            GLOBSET.setKbImgFolder(GLOBSET.getServletBasePath() + "kbimg");
-            D3webUtils.streamImages();
-        }
-
-        // if session is null create a session 
-        // THIS IS REALLY NEEDED; OTHERWISE PROBLEMS WITH DIFFERENT SESSIONS ON SAME KB
-        if (httpSession.getAttribute(D3WEB_SESSION) == null) {
-            resetD3webSession(httpSession);
-        }
         
-        if (httpSession.getAttribute(USER_SETTINGS) == null) {
+
+        // set dialog language (for internationalization of widgets, NOT
+        // KB elements (specified in knowledge base
+        if (!d3webParser.getLanguage().equals("")) {
+            d3wcon.setLanguage(d3webParser.getLanguage());
+        }
+
+        // Get userprefix specification
+        String userpref = "DEFAULT";
+        if (!(d3wcon.getUserprefix().equals(""))
+                && !(d3wcon.getUserprefix() == null)) {
+            userpref = d3wcon.getUserprefix();
+        }
+
+        // set necessary paths for saving stuff such as cases, logfiles...
+        GLOBSET.setCaseFolder(
+                GLOBSET.getServletBasePath()
+                + "../../" + userpref + "-Data/cases");
+
+        GLOBSET.setLogFolder(
+                GLOBSET.getServletBasePath()
+                + "../../" + userpref + "-Data/logs");
+
+        // if a new dialog is loaded we also need a new session to start
+        //resetD3webSession(httpSession);
+        resetD3webSession(httpSession);
+
+        /*
+         * initialize logging
+         */
+        initializeLoggingMechanism(httpSession);
+        //D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
+        //System.out.println(d3webSession);
+        //httpSession.setAttribute(D3WEB_SESSION, d3webSession);
+
+        //httpSession.setAttribute("lastLoaded", "");
+        //D3webConnector.getInstance().setSession(d3webSession);
+
+        // stream images from KB into webapp
+        GLOBSET.setKbImgFolder(GLOBSET.getServletBasePath() + "kbimg");
+        D3webUtils.streamImages();
+    }
+
+    // if session is null create a session 
+    // THIS IS REALLY NEEDED; OTHERWISE PROBLEMS WITH DIFFERENT SESSIONS ON SAME KB
+    if (httpSession.getAttribute (D3WEB_SESSION) 
+        == null) {
+            resetD3webSession(httpSession);
+    }
+
+    if (httpSession.getAttribute (USER_SETTINGS) 
+        == null) {
             D3webUserSettings us = new D3webUserSettings();
-            httpSession.setAttribute(USER_SETTINGS, us);
-        }
-        
-        // in case nothing other is provided, "show" is the default action
-        String action = request.getParameter("action");
-        
-        if (action == null) {
+        httpSession.setAttribute(USER_SETTINGS, us);
+    }
+    // in case nothing other is provided, "show" is the default action
+    String action = request.getParameter("action");
+    if (action
+
+    
+        == null) {
             action = "show";
-        }
-        
-        if (action.equalsIgnoreCase("dbLogin")) {
+    }
+
+    if (action.equalsIgnoreCase ( 
+        "dbLogin")) {
             loginDB(request, response, httpSession);
-            return;
-        }
+        return;
+    }
 
-        if (d3wcon.getLoginMode() == LoginMode.db) {
+    if (d3wcon.getLoginMode () 
+        == LoginMode.db) {
             String authenticated = (String) httpSession.getAttribute("authenticated");
-            if (authenticated == null || !authenticated.equals("yes")) {
-                response.sendRedirect("../EuraHS-Login");
-                return;
-            }
+        if (authenticated == null || !authenticated.equals("yes")) {
+            response.sendRedirect("../EuraHS-Login");
+            return;
         }
-        
-        // set handleBrowsers flag null for all actions other than handlecheck
-        // itself; that way, the check can be processed correctly also after 
-        // refreshs or the like
-        if (!action.equalsIgnoreCase("checkHandleBrowsers")) {
-            httpSession.setAttribute("handleBrowsers", null);
-        }
+    }
 
-        // switch action as defined by the servlet call
-        if (action.equalsIgnoreCase("show")) {
+    // set handleBrowsers flag null for all actions other than handlecheck
+    // itself; that way, the check can be processed correctly also after 
+    // refreshs or the like
+    if (!action.equalsIgnoreCase ( 
+        "checkHandleBrowsers")) {
+            httpSession.setAttribute("handleBrowsers", null);
+    }
+
+    // switch action as defined by the servlet call
+    if (action.equalsIgnoreCase ( 
+        "show")) {
             show(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("addfacts")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "addfacts")) {
             addFacts(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("savecase")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "savecase")) {
             saveCase(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("loadcase")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "loadcase")) {
             loadCase(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("deletecase")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "deletecase")) {
             deleteCase(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("updatesummary")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "updatesummary")) {
             updateSummary(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("reset")
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "reset")
                 || action.equalsIgnoreCase("resetNewUser")) {
             resetD3webSession(httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("gotoStatistics")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "gotoStatistics")) {
             gotoStatistics(response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("gotoTxtDownload")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "gotoTxtDownload")) {
             gotoTxtDownload(response, request, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("checkUsrDatLogin")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "checkUsrDatLogin")) {
             checkUsrDatLogin(response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("usrDatlogin")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "usrDatlogin")) {
             loginUsrDat(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("sendmail")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "sendmail")) {
             try {
-                sendMail(request, response, httpSession);
-                response.getWriter().append("success");
-            } catch (MessagingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            return;
-        } else if (action.equalsIgnoreCase("language")) {
+            sendMail(request, response, httpSession);
+            response.getWriter().append("success");
+        } catch (MessagingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "language")) {
             setLanguageID(request, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("logInit")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "logInit")) {
 
             // TODO remove
             //ServletLogUtils.initForD3wDialogs(logger, now);
 
             JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
-            logInitially(request, logger);
-            
-            httpSession.setAttribute("loginit", true);
-            //GLOBSET.setInitLogged(true); // TODO remove
+        logInitially(request, logger);
 
-            return;
-        } else if (action.equalsIgnoreCase("logEnd")) {
+        httpSession.setAttribute("loginit", true);
+        //GLOBSET.setInitLogged(true); // TODO remove
+
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "logEnd")) {
             logSessionEnd(request, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("logNotAllowed")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "logNotAllowed")) {
             logNotAllowed(request, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("logWidget")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "logWidget")) {
             logWidget(request, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("logInfoPopup")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "logInfoPopup")) {
             logInfoPopup(request, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("markWidget")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "markWidget")) {
             markWidget(request, httpSession);
-        } else if (action.equalsIgnoreCase("checkWidgetClicked")) {
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "checkWidgetClicked")) {
             checkWidgetClicked(httpSession, response);
-            return;
-        } else if (action.equalsIgnoreCase("checkInitialLoggingReload")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "checkInitialLoggingReload")) {
             checkInitialLoggingReload(httpSession, response);
-            return;
-        } else if (action.equalsIgnoreCase("checkLoggingEnd")) {
+        return;
+    }
+
+    else if (action.equalsIgnoreCase ( 
+        "checkLoggingEnd")) {
             checkLoggingEnd(httpSession, response);
-            return;
-            
-        } else if (action.equalsIgnoreCase("checkHandleBrowsers")) {
-            PrintWriter writer = response.getWriter();
-            if (httpSession.getAttribute("handleBrowsers") == null) {
-                writer.print("true");
-                httpSession.setAttribute("handleBrowsers", "false");
-            }
-        } else if (action.equalsIgnoreCase("handleBrowsers")) {
-            
-            PrintWriter writer = response.getWriter();
+        return;
 
-            // is the case ONLY when called from handleUnsupportedBrowsers-js method
-            String browser = request.getParameter("browser").replace("+", " ");
-            String version = request.getParameter("version").replace("+", " ");
-            
-            if (browser.equals("Explorer")
-                    && !equalOrHigher(version, "9")) {
-                
-                browser = "Internet Explorer";
-                writer.print(assembleBrowserCompatibilityMessage(browser, version));
-                
-                writer.close();
-                
-            } else {
+    }
 
-                // in case of db login (as for EuraHS) redirect to the EuraHS-Login
-                // Servlet --> TODO refactor: rename EuraHS-Login Servlet or create
-                // superservlet to be overwritten
-                if (d3wcon.getLoginMode() == LoginMode.db) {
-                    String authenticated = (String) httpSession.getAttribute("authenticated");
-                    if (authenticated == null || !authenticated.equals("yes")) {
-                        response.sendRedirect("../EuraHS-Login");
-                        return;
-                    }
-                }
-                
-            }
-            
-            
-            return;
-        } else if (action.equalsIgnoreCase(
-                "sendFeedbackMail")) {
-            String state = "";
-            if (request.getParameter("feedback") != null) {
-                if (request.getParameter("feedback").equals("")) {
-                    state = "nofeedback";
-                } else {
-                    try {
-                        sendFeedbackMail(request, response, httpSession);
-                        state = "success";
-                    } catch (MessagingException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }
-            response.getWriter().append(state);
-            return;
-        } else if (action.equalsIgnoreCase(
-                "sendUEQMail")) {
-            
-            try {
-                sendUEQMail(request, response, httpSession);
-                response.getWriter().append("success");
-            } catch (MessagingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            return;
-        } else {
-            handleDialogSpecificActions(httpSession, request, response, action);
-            return;
+    else if (action.equalsIgnoreCase ( 
+        "checkHandleBrowsers")) {
+            PrintWriter writer = response.getWriter();
+        if (httpSession.getAttribute("handleBrowsers") == null) {
+            writer.print("true");
+            httpSession.setAttribute("handleBrowsers", "false");
         }
     }
 
-    /*
-     * Initial check whether...
-     *
-     * @created 26.07.2011
-     *
-     * @param response
-     *
-     * @param httpSession
-     *
-     * @throws IOException
-     *
-     * TODO: move checkInitialLogging Reload and logInit to ONE method
-     */
-    protected void checkInitialLoggingReload(HttpSession httpSession,
+    else if (action.equalsIgnoreCase ( 
+        "handleBrowsers")) {
+            
+            PrintWriter writer = response.getWriter();
+
+        // is the case ONLY when called from handleUnsupportedBrowsers-js method
+        String browser = request.getParameter("browser").replace("+", " ");
+        String version = request.getParameter("version").replace("+", " ");
+
+        if (browser.equals("Explorer")
+                && !equalOrHigher(version, "9")) {
+
+            browser = "Internet Explorer";
+            writer.print(assembleBrowserCompatibilityMessage(browser, version));
+
+            writer.close();
+
+        } else {
+
+            // in case of db login (as for EuraHS) redirect to the EuraHS-Login
+            // Servlet --> TODO refactor: rename EuraHS-Login Servlet or create
+            // superservlet to be overwritten
+            if (d3wcon.getLoginMode() == LoginMode.db) {
+                String authenticated = (String) httpSession.getAttribute("authenticated");
+                if (authenticated == null || !authenticated.equals("yes")) {
+                    response.sendRedirect("../EuraHS-Login");
+                    return;
+                }
+            }
+
+        }
+
+
+        return;
+    }
+
+    else if (action.equalsIgnoreCase (
+             
+        "sendFeedbackMail")) {
+            String state = "";
+        if (request.getParameter("feedback") != null) {
+            if (request.getParameter("feedback").equals("")) {
+                state = "nofeedback";
+            } else {
+                try {
+                    sendFeedbackMail(request, response, httpSession);
+                    state = "success";
+                } catch (MessagingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+        response.getWriter().append(state);
+        return;
+    }
+
+    else if (action.equalsIgnoreCase (
+             
+        "sendUEQMail")) {
+            
+            try {
+            sendUEQMail(request, response, httpSession);
+            response.getWriter().append("success");
+        } catch (MessagingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return;
+    }
+
+    
+        else {
+            handleDialogSpecificActions(httpSession, request, response, action);
+        return;
+    }
+}
+
+/*
+ * Initial check whether...
+ *
+ * @created 26.07.2011
+ *
+ * @param response
+ *
+ * @param httpSession
+ *
+ * @throws IOException
+ *
+ * TODO: move checkInitialLogging Reload and logInit to ONE method
+ */
+protected void checkInitialLoggingReload(HttpSession httpSession,
             HttpServletResponse response) throws IOException {
         PrintWriter writer = response.getWriter();
         
@@ -1144,6 +1237,7 @@ public class D3webDialog extends HttpServlet {
         DefaultRootD3webRenderer d3webr =
                 (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
 
+        System.out.println(d3webr.getClass());
         // new ContainerCollection needed each time to get an updated dialog
         ContainerCollection cc = new ContainerCollection();
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
@@ -1222,7 +1316,7 @@ public class D3webDialog extends HttpServlet {
                 new javax.mail.Authenticator() {
                     
                     @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
+        protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(user, pw);
                     }
                 });
@@ -1285,7 +1379,7 @@ public class D3webDialog extends HttpServlet {
                 new javax.mail.Authenticator() {
                     
                     @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
+        protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(user, pw);
                     }
                 });
@@ -1346,7 +1440,7 @@ public class D3webDialog extends HttpServlet {
                 new javax.mail.Authenticator() {
                     
                     @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
+        protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(user, pw);
                     }
                 });
@@ -1511,23 +1605,24 @@ public class D3webDialog extends HttpServlet {
         
         
         
-    }
+    
+
+}
     
     private class DialogState {
-        
-        Set<QASet> indicatedQASets;
-        List<Question> answeredQuestions;
-        Set<TerminologyObject> unknownQuestions;
-        
-        DialogState(Session d3webSession) {
-            indicatedQASets = D3webUtils.getActiveSet(d3webSession);
-            answeredQuestions = d3webSession.getBlackboard().getAnsweredQuestions();
-            unknownQuestions = D3webUtils.getUnknownQuestions(d3webSession);
-        }
-    }
-// TODO ingetrate logfilename creation for prototpes
 
-    protected String createLogfileName(Date loggingstart, HttpSession httpSession) {
+    Set<QASet> indicatedQASets;
+    List<Question> answeredQuestions;
+    Set<TerminologyObject> unknownQuestions;
+
+    DialogState(Session d3webSession) {
+        indicatedQASets = D3webUtils.getActiveSet(d3webSession);
+        answeredQuestions = d3webSession.getBlackboard().getAnsweredQuestions();
+        unknownQuestions = D3webUtils.getUnknownQuestions(d3webSession);
+    }
+}
+// TODO ingetrate logfilename creation for prototpes
+protected String createLogfileName(Date loggingstart, HttpSession httpSession) {
         String formatted = SDF_FILENAME_DEFAULT.format(loggingstart);
         Session sid = (Session) httpSession.getAttribute(D3WEB_SESSION);
         //String sid = D3webConnector.getInstance().getSession().getId();

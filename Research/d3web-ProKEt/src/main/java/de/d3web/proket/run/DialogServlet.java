@@ -256,6 +256,7 @@ public class DialogServlet extends HttpServlet {
         GlobalSettings.getInstance().setQuestionCount("0");
 
         System.out.println(dialogTree.getRoot());
+        System.out.println(dialogTree.getRoot().getVirtualClassName());
         IRenderer rootRenderer = Renderer.getRenderer(dialogTree.getRoot());
         ContainerCollection cc = rootRenderer.renderRoot(dialogTree);
         String html = cc.html.toString();

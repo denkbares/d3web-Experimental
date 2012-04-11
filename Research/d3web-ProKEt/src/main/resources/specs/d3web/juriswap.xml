@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="JuriSearch - Swap "  
+	dtype="clarificationhierarchy" 
+	dstrategy="nextuaquestion" 
+	css="legal, nofoot" 
+	dialogcolumns="1"
+	questionnairecolumns="1"
+	questioncolumns = "1"
+	userprefix = "Clarihie" 
+	login = "off"
+	required = ""
+	language = "de"
+        uequestionnaire='OWN' 
+        study='TRUE' 
+        logging='TRUE' 
+        feedbackform="TRUE"
+	>
+	<data kb="juriswap.d3web" />
+</dialog>

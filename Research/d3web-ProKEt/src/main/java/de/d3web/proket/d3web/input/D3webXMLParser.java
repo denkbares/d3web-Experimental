@@ -244,15 +244,15 @@ public class D3webXMLParser {
 	}
 
 	public String getLogging() {
-		return XMLUtils.getStr((Element) dialogSpec, "logging", "OFF");
+		return XMLUtils.getStr((Element) dialogSpec, "logging", "FALSE");
 	}
         
         public String getFeedbackform() {
-		return XMLUtils.getStr((Element) dialogSpec, "feedbackform", "OFF");
+		return XMLUtils.getStr((Element) dialogSpec, "feedbackform", "FALSE");
 	}
         
         public String getUEQuestionnaire() {
-		return XMLUtils.getStr((Element) dialogSpec, "uequestionnaire", "OFF");
+		return XMLUtils.getStr((Element) dialogSpec, "uequestionnaire", "NONE");
 	}
 
 	public HashMap<String, HashMap<String, String>> getSingleSpecs() {
