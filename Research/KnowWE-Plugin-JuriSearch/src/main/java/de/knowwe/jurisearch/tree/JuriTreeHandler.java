@@ -40,6 +40,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.event.ArticleCreatedEvent;
 import de.knowwe.jurisearch.EmbracedContent;
 import de.knowwe.jurisearch.tree.DummyExpression.NegationFlag;
@@ -102,12 +103,27 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 		List<Section<QuestionIdentifier>> children = section.get().getChildrenQuestion(section);
 		HashMap<QuestionOC, List<ChoiceValue>> childrenQuestion = new HashMap<QuestionOC, List<ChoiceValue>>();
 
+		Collection<Section<?>> qReferences = KnowWEUtils.getTerminologyManager(article).getTermReferenceSections(
+				section.getText());
+		if (qReferences.size() > 1) {
+			for (Section<?> sec : qReferences) {
+				if (sec.get() instanceof QuestionIdentifier) {
+					@SuppressWarnings("unchecked")
+					Section<QuestionIdentifier> qSec = (Section<QuestionIdentifier>) sec;
+					if (!qSec.get().getChildrenQuestion(qSec).equals(children)) {
+						messages.add(Messages.error("Question already referenced before with different children questions."));
+						return null;
+					}
+				}
+			}
+		}
+
 		// Get all children questions
 		for (Section<QuestionIdentifier> child : children) {
 			QuestionOC question = (QuestionOC) kb.getManager().search(child.getText());
 			if (question == null) {
 				// if a child question is not defined, return null
-				messages.add(new Message(Message.Type.ERROR, "Child question " + child.getText()
+				messages.add(Messages.error("Child question " + child.getText()
 						+ " of " + section.getText() + " not defined."));
 				return null;
 			}
@@ -134,8 +150,8 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 				Section<NegationFlag> dummyNegation = Sections.findSuccessor(jte,
 						NegationFlag.class);
 				if (dummyNegation != null) {
-					String name = dummyNegation.get().getName();
-					Choice c = KnowledgeBaseUtils.findChoice(question, name);
+					Choice c = KnowledgeBaseUtils.findChoice(question,
+							DummyExpression.NEGATION_FLAG);
 					confirmingValues.add(new ChoiceValue(c));
 				}
 				else {
@@ -184,7 +200,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 					rule.setDisjunctive(true);
 				}
 				else if (operator_str.toLowerCase().equals(Operator.SCORE)) {
-					messages.add(new Message(Message.Type.ERROR, section.getText()
+					messages.add(Messages.error(section.getText()
 							+ ": Scoring not implemented yet."));
 				}
 			}
