@@ -18,11 +18,11 @@
  */
 package de.d3web.diaflux.coverage;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,11 +48,15 @@ public class DefaultCoverageResult implements CoverageResult {
 
 	private final Map<Edge, Integer> edges;
 	private final Map<Node, Integer> nodes;
+	private final Map<Path, Integer> paths;
 	private final KnowledgeBase kb;
 
-	private DefaultCoverageResult(Map<Node, Integer> nodeCount, Map<Edge, Integer> edgeCount, KnowledgeBase kb) {
+	private PathCoverage pathCoverage;
+
+	private DefaultCoverageResult(Map<Node, Integer> nodeCount, Map<Edge, Integer> edgeCount, Map<Path, Integer> pathCount, KnowledgeBase kb) {
 		this.edges = new HashMap<Edge, Integer>(edgeCount);
 		this.nodes = new HashMap<Node, Integer>(nodeCount);
+		this.paths = new HashMap<Path, Integer>(pathCount);
 		this.kb = kb;
 
 		this.flowCoverage = new HashMap<Flow, Double>();
@@ -100,27 +104,37 @@ public class DefaultCoverageResult implements CoverageResult {
 
 	@Override
 	public int getTraceCount(Node node) {
-		Integer count = nodes.get(node);
-		if (count == null) {
-			return 0;
-		}
-		else return count;
+		return getCount(node, nodes);
 
 	}
 
 	@Override
 	public int getTraceCount(Edge edge) {
-		Integer count = edges.get(edge);
+		return getCount(edge, edges);
+
+	}
+	
+	public int getTraceCount(Path path) {
+		return getCount(path, paths);
+
+	}
+
+	private static <T> int getCount(T edge, Map<T, Integer> map) {
+		Integer count = map.get(edge);
 		if (count == null) {
 			return 0;
 		}
 		else return count;
-
+		
 	}
 
 	@Override
 	public Map<Node, Integer> getNodeCounts() {
 		return Collections.unmodifiableMap(nodes);
+	}
+
+	public Map<Path, Integer> getPathCounts() {
+		return Collections.unmodifiableMap(paths);
 	}
 
 	@Override
@@ -164,6 +178,15 @@ public class DefaultCoverageResult implements CoverageResult {
 			setNodeCoverage(flow, nodeCoverage);
 			setFlowCoverage(flow, flowCoverage);
 		}
+
+		this.pathCoverage = new PathCoverage(paths, getKb());
+
+		// Path2GraphViz.createPaths(kb, allPaths);
+
+	}
+
+	public PathCoverage getPathCoverage() {
+		return pathCoverage;
 	}
 
 	public static Collection<Edge> getValidEdges(Collection<Node> validnodes) {
@@ -179,10 +202,9 @@ public class DefaultCoverageResult implements CoverageResult {
 
 	public static Collection<Node> getValidNodes(Flow flow) {
 		Set<Node> nodes = new HashSet<Node>(flow.getNodes());
-		Collection<CommentNode> commentNodes = flow.getNodesOfClass(CommentNode.class);
 
 		// Do not consider Commentnodes, unless they are used to route nodes...
-		for (CommentNode commentNode : commentNodes) {
+		for (CommentNode commentNode : flow.getNodesOfClass(CommentNode.class)) {
 			if (commentNode.getIncomingEdges().isEmpty()) {
 				nodes.remove(commentNode);
 			}
@@ -194,45 +216,42 @@ public class DefaultCoverageResult implements CoverageResult {
 	public static CoverageResult calculateResult(Collection<CoverageSessionObject> coverages, KnowledgeBase kb) {
 		Map<Edge, Integer> edgeSum = new HashMap<Edge, Integer>();
 		Map<Node, Integer> nodeSum = new HashMap<Node, Integer>();
+		Map<Path, Integer> pathSum = new HashMap<Path, Integer>();
 
 		for (CoverageSessionObject coverage : coverages) {
-			Map<Node, Integer> nodeCounts = coverage.getNodeCounts();
-			for (Node node : nodeCounts.keySet()) {
-				Integer integer = nodeSum.get(node);
-
-				if (integer == null) {
-					nodeSum.put(node, nodeCounts.get(node));
-				}
-				else {
-					nodeSum.put(node, nodeCounts.get(node) + integer);
-
-				}
-
-			}
-
-			Map<Edge, Integer> edgeCounts = coverage.getEdgeCounts();
-			for (Edge edge : edgeCounts.keySet()) {
-				Integer integer = edgeSum.get(edge);
-
-				if (integer == null) {
-					edgeSum.put(edge, edgeCounts.get(edge));
-				}
-				else {
-					edgeSum.put(edge, edgeCounts.get(edge) + integer);
-				}
-			}
+			sumUp(nodeSum, coverage.getNodeCounts());
+			sumUp(edgeSum, coverage.getEdgeCounts());
+			sumUp(pathSum, coverage.getPathCounts());
 		}
 
-		DefaultCoverageResult result = new DefaultCoverageResult(nodeSum, edgeSum, kb);
+		DefaultCoverageResult result = new DefaultCoverageResult(nodeSum, edgeSum, pathSum, kb);
 		result.calculate();
 		return result;
 		
 	}
 
+	/**
+	 * 
+	 * @created 05.04.2012
+	 * @param sum
+	 * @param coverage
+	 */
+	private static <T> void sumUp(Map<T, Integer> sum, Map<T, Integer> counts) {
+
+		for (T elem : counts.keySet()) {
+			Integer integer = sum.get(elem);
+
+			if (integer == null) {
+				sum.put(elem, counts.get(elem));
+			}
+			else {
+				sum.put(elem, counts.get(elem) + integer);
+			}
+		}
+	}
+
 	public static CoverageResult calculateResult(CoverageSessionObject coverage, KnowledgeBase kb) {
-		Collection<CoverageSessionObject> coverages = new LinkedList<CoverageSessionObject>();
-		coverages.add(coverage);
-		return calculateResult(coverages, kb);
+		return calculateResult(Arrays.asList(coverage), kb);
 	}
 
 }

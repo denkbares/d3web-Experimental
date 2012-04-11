@@ -47,7 +47,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 	@Override
 	protected void renderContents(Section<?> section, UserContext user, StringBuilder string) {
 
-		CoverageResult result = DiaFluxCoverageType.getResult(section, user);
+		CoverageResult result = DiaFluxCoverageType.getResult(section);
 
 		if (result == null) {
 			renderButton(user, string, section);

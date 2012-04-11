@@ -18,12 +18,19 @@
  */
 package de.d3web.diaflux.coverage;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.SessionObject;
+import de.d3web.diaFlux.flow.DiaFluxCaseObject;
 import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Node;
+import de.d3web.diaFlux.flow.SnapshotNode;
+import de.d3web.diaFlux.inference.DiaFluxTrace;
+import de.d3web.diaFlux.inference.DiaFluxUtils;
+import de.d3web.diaFlux.inference.FluxSolver;
 
 
 /**
@@ -36,26 +43,83 @@ public class CoverageSessionObject implements SessionObject {
 
 	private final Map<Edge, Integer> edges;
 	private final Map<Node, Integer> nodes;
+	private final Map<Path, Integer> paths;
 
-	public CoverageSessionObject() {
+	CoverageSessionObject() {
 		edges = new HashMap<Edge, Integer>();
 		nodes = new HashMap<Node, Integer>();
+		paths = new HashMap<Path, Integer>();
 	}
 
-	public void addTracedNode(Node node) {
-		if (!nodes.containsKey(node)) {
-			nodes.put(node, 0);
-		}
-
-		nodes.put(node, nodes.get(node) + 1);
+	void update(Session session) {
+		traceNodesAndEdges(session);
+		tracePaths(session);
 	}
 
-	public void addTracedEdge(Edge edge) {
-		if (!edges.containsKey(edge)) {
-			edges.put(edge, 0);
+	/**
+	 * 
+	 * @created 05.04.2012
+	 * @param session
+	 */
+	public void tracePaths(Session session) {
+
+		PathGenerator generator = new PathGenerator(session.getKnowledgeBase(),
+				new CoverageEvaluator(session));
+		Collection<Path> paths = generator.createPaths();
+
+		for (Path path : paths) {
+			addTracedPath(path);
 		}
 
-		edges.put(edge, edges.get(edge) + 1);
+		// System.out.println("Covered paths:" + paths.size());
+
+		// for (Path path : this.paths.keySet()) {
+		// System.out.println(path.getHead() + " (" + path.getLength() + ") = "
+		// + this.paths.get(path));
+		//
+		// }
+
+	}
+
+	/**
+	 * 
+	 * @created 05.04.2012
+	 * @param session
+	 */
+	public void traceNodesAndEdges(Session session) {
+		DiaFluxCaseObject caseObject = DiaFluxUtils.getDiaFluxCaseObject(session);
+		Collection<SnapshotNode> enteredSnapshots = caseObject.getActivatedSnapshots(session);
+		Collection<Node> activeNodes = DiaFluxTrace.collectActiveNodes(caseObject, enteredSnapshots);
+
+		for (Node node : activeNodes) {
+			this.addTracedNode(node);
+			for (Edge edge : node.getOutgoingEdges()) {
+				if (FluxSolver.evalEdge(session, edge)) {
+					this.addTracedEdge(edge);
+				}
+			}
+		}
+	}
+
+	private void addTracedNode(Node node) {
+		countElement(node, nodes);
+	}
+
+	private void addTracedEdge(Edge edge) {
+		countElement(edge, edges);
+	}
+
+	private void addTracedPath(Path path) {
+		countElement(path, paths);
+	}
+
+	private static <T> void countElement(T elem, Map<T, Integer> map) {
+		if (!map.containsKey(elem)) {
+			map.put(elem, 0);
+		}
+
+		map.put(elem, map.get(elem) + 1);
+
 	}
 
 	protected Map<Edge, Integer> getEdgeCounts() {
@@ -66,6 +130,8 @@ public class CoverageSessionObject implements SessionObject {
 		return nodes;
 	}
 
-
+	protected Map<Path, Integer> getPathCounts() {
+		return paths;
+	}
 
 }

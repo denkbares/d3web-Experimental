@@ -23,7 +23,6 @@ import java.util.Map;
 
 import de.d3web.core.session.Session;
 import de.d3web.diaflux.coverage.CoverageSessionObject;
-import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.empiricaltesting.SequentialTestCase;
 import de.d3web.empiricaltesting.TestCase;
@@ -70,7 +69,7 @@ public class CoverageTestListener implements TestListener {
 
 	@Override
 	public void sequentialTestcaseFinished(SequentialTestCase stc, Session session, Diff diff) {
-		CoverageSessionObject result = PSMDiaFluxCoverage.getCoverage(session);
+		CoverageSessionObject result = CoverageUtils.getCoverage(session);
 		results.put(stc, result);
 	}
 

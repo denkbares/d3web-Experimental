@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 University Wuerzburg, Computer Science VI
+ * Copyright (C) 2012 University Wuerzburg, Computer Science VI
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -18,49 +18,47 @@
  */
 package de.d3web.diaflux.coverage;
 
-import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
-import de.d3web.core.inference.PSMethodAdapter;
-import de.d3web.core.inference.PropagationEntry;
-import de.d3web.core.session.Session;
-import de.d3web.core.session.blackboard.Fact;
-import de.d3web.core.session.blackboard.Facts;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.diaFlux.flow.Edge;
+import de.d3web.diaFlux.flow.EndNode;
+import de.d3web.diaFlux.flow.Node;
+import de.d3web.diaFlux.inference.DiaFluxUtils;
 
 
 /**
- * This PSM keeps track of the paths taken in the DiaFlux models during a
- * session.
  * 
  * @author Reinhard Hatko
- * @created 05.08.2011
+ * @created 26.03.2012
  */
-public class PSMDiaFluxCoverage extends PSMethodAdapter {
+public class AllPathsEvaluator implements EdgeEvaluator {
 
+	private final KnowledgeBase kb;
 
-
-	@Override
-	public void init(Session session) {
-		session.getSessionObject(DiaFluxCoverageTrace.SOURCE);
+	public AllPathsEvaluator(KnowledgeBase kb) {
+		this.kb = kb;
 	}
 
 	@Override
-	public void propagate(Session session, Collection<PropagationEntry> changes) {
+	public boolean followEdge(Edge edge, Path path) {
+		return !path.contains(edge.getEndNode());
 	}
 
 	@Override
-	public Fact mergeFacts(Fact[] facts) {
-		return Facts.mergeError(facts);
+	public List<Path> getStartPaths() {
+		LinkedList<Path> paths = new LinkedList<Path>();
+
+		for (Node node : DiaFluxUtils.getAutostartNodes(kb)) {
+			paths.add(new Path(node));
+		}
+		return paths;
 	}
 
 	@Override
-	public boolean hasType(Type type) {
-		return type == Type.consumer;
+	public boolean stopPath(Path path) {
+		return path.getTail() instanceof EndNode;
 	}
-
-	@Override
-	public double getPriority() {
-		return 6;
-	}
-
 
 }

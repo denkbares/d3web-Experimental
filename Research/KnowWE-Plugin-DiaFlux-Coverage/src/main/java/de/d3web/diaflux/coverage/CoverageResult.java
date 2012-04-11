@@ -48,5 +48,8 @@ public interface CoverageResult {
 
 	Map<Node, Integer> getNodeCounts();
 
+	Map<Path, Integer> getPathCounts();
+
+
 
 }

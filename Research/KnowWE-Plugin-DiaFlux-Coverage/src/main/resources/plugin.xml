@@ -84,6 +84,15 @@
 		<parameter id="scope" value="/DiaFlux" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="FlowCoverageTest">
+		<parameter id="class" value="de.knowwe.diaflux.coverage.ci.FlowCoverageTest" />
+		<parameter id="name" value="FlowCoverageTest" />
+		<parameter id="description" value="AbstractCITest FlowCoverageTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
 	
 
 </plugin>

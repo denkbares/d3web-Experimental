@@ -18,18 +18,10 @@
  */
 package de.knowwe.diaflux.coverage;
 
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.session.Session;
 import de.d3web.diaflux.coverage.CoverageResult;
-import de.d3web.diaflux.coverage.CoverageSessionObject;
-import de.d3web.diaflux.coverage.DefaultCoverageResult;
-import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
-import de.d3web.we.basic.SessionProvider;
-import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.RessourceLoader;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.user.UserContext;
 import de.knowwe.diaflux.type.FlowchartType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -43,8 +35,6 @@ import de.knowwe.kdom.renderer.StyleRenderer;
 public class DiaFluxCoverageType extends DefaultMarkupType {
 
 	public static final String COVERAGE_RESULT = "coverageResult";
-	public static final String ANNOTATION_TEST = "test";
-	private static final String ANNOTATION_MASTER = "master";
 	private static final DefaultMarkup MARKUP;
 
 	static {
@@ -54,8 +44,6 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 		MARKUP.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME, false);
 		MARKUP.addAnnotationRenderer(PackageManager.PACKAGE_ATTRIBUTE_NAME,
 				StyleRenderer.ANNOTATION);
-		MARKUP.addAnnotation(ANNOTATION_MASTER, false);
-		MARKUP.addAnnotation(ANNOTATION_TEST, false);
 
 	}
 
@@ -67,31 +55,14 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 		setRenderer(new DiaFluxCoverageRenderer());
 	}
 
-	public static String getMaster(Section<?> coverageSection) {
-		String master = DefaultMarkupType.getAnnotation(coverageSection, ANNOTATION_MASTER);
-		if (master != null) return master;
-		else return coverageSection.getTitle();
-	}
+	public static CoverageResult getResult(Section<?> coverageSection) {
+		CoverageResult result = (CoverageResult) coverageSection.getSectionStore().getObject(
+				COVERAGE_RESULT);
 
-	public static CoverageResult getResult(Section<?> coverageSection, UserContext user) {
-		String tests = DefaultMarkupType.getAnnotation(coverageSection,
-				DiaFluxCoverageType.ANNOTATION_TEST);
-		CoverageResult result;
-		if (tests == null) {
-			String master = DiaFluxCoverageType.getMaster(coverageSection);
-			KnowledgeBase kb = D3webUtils.getKnowledgeBase(user.getWeb(), master);
-			Session session = SessionProvider.getSession(user, kb);
-			if (session == null) {
-				return null;
-			}
+//		if (result == null) {
+//			CalculateCoverageAction.calculateCoverage((Section<DiaFluxCoverageType>) coverageSection);
+//		}
 
-			CoverageSessionObject coverage = PSMDiaFluxCoverage.getCoverage(session);
-			result = DefaultCoverageResult.calculateResult(coverage, session.getKnowledgeBase());
-		}
-		else {
-			result = (CoverageResult) coverageSection.getSectionStore().getObject(COVERAGE_RESULT);
-
-		}
 		return result;
 
 	}

@@ -31,16 +31,13 @@ import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.d3web.diaflux.coverage.DefaultCoverageResult;
-import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
 import de.d3web.we.basic.SessionProvider;
-import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.diaflux.FlowchartUtils;
 import de.knowwe.diaflux.GetTraceHighlightAction;
 import de.knowwe.diaflux.type.DiaFluxType;
 import de.knowwe.diaflux.type.FlowchartType;
@@ -59,33 +56,28 @@ public class GetCoverageHighlightAction extends AbstractAction {
 	private CoverageResult getResult(UserContext context) {
 
 		String coverageKdomid = context.getParameter("coveragesection");
-		CoverageResult result;
-
 		if (coverageKdomid != null) { // coverage shown in coverage section
-			@SuppressWarnings("unchecked")
-			Section<DiaFluxCoverageType> coverageSec = (Section<DiaFluxCoverageType>) Sections.getSection(
-					coverageKdomid);
+			Section<DiaFluxCoverageType> coverageSec = Sections.getSection(
+					coverageKdomid, DiaFluxCoverageType.class);
 
-			return DiaFluxCoverageType.getResult(coverageSec, context);
+			return DiaFluxCoverageType.getResult(coverageSec);
 
 		}
 		else { // coverage shown in diaflux section
 			String flowKdomid = context.getParameter("kdomid");
-			@SuppressWarnings("unchecked")
-			Section<DiaFluxType> diaFluxSec = (Section<DiaFluxType>) Sections.getSection(
-					flowKdomid);
 
-			Article article = KnowWEUtils.getCompilingArticles(diaFluxSec).iterator().next();
-			KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(), article.getTitle());
+			Section<FlowchartType> flowchartSec = Sections.getSection(flowKdomid,
+					FlowchartType.class);
+			Section<DiaFluxType> diaFluxSec = Sections.findAncestorOfExactType(flowchartSec,
+					DiaFluxType.class);
+
+			KnowledgeBase kb = FlowchartUtils.getKB(diaFluxSec);
 			Session session = SessionProvider.getSession(context, kb);
 
-			result = DefaultCoverageResult.calculateResult(
-					PSMDiaFluxCoverage.getCoverage(session),
+			return DefaultCoverageResult.calculateResult(
+					CoverageUtils.getCoverage(session),
 					session.getKnowledgeBase());
-
 		}
-
-		return result;
 
 	}
 
@@ -99,11 +91,8 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		}
 		String flowKdomid = context.getParameter("kdomid");
 
-		@SuppressWarnings("unchecked")
-		Section<DiaFluxType> diaFluxSec = (Section<DiaFluxType>) Sections.getSection(
-				flowKdomid);
+		Section<FlowchartType> flowchart = Sections.getSection(flowKdomid, FlowchartType.class);
 
-		Section<FlowchartType> flowchart = Sections.findSuccessor(diaFluxSec, FlowchartType.class);
 		if (flowchart == null) {
 			context.getWriter().write(GetTraceHighlightAction.EMPTY_HIGHLIGHT);
 			return;
@@ -129,7 +118,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 	 * @param flow
 	 * @return
 	 */
-	private StringBuilder createCoverageXML(CoverageResult result, Flow flow) {
+	private static StringBuilder createCoverageXML(CoverageResult result, Flow flow) {
 		StringBuilder builder = new StringBuilder();
 
 		GetTraceHighlightAction.appendHeader(builder, flow.getName(), PREFIX);
