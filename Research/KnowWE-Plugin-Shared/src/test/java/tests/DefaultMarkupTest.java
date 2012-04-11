@@ -29,6 +29,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import connector.DummyConnector;
+
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
@@ -37,7 +39,6 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import dummies.DummyConnector;
 
 /**
  * This class contains some tests for the DefaultMarkup.

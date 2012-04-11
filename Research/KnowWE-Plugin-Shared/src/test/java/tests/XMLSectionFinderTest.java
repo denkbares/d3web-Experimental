@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import connector.DummyConnector;
+
 import junit.framework.TestCase;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
@@ -39,7 +41,6 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.kdom.xml.GenericXMLContent;
 import de.knowwe.kdom.xml.GenericXMLObjectType;
 import de.knowwe.kdom.xml.XMLSectionFinder;
-import dummies.DummyConnector;
 
 public class XMLSectionFinderTest extends TestCase {
 

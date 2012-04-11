@@ -26,6 +26,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import connector.DummyConnector;
+
 import junit.framework.TestCase;
 import objectTypes.SplitObjectType;
 import objectTypes.WordObjectType;
@@ -37,7 +39,6 @@ import de.knowwe.core.action.WordBasedRenameFinding;
 import de.knowwe.core.action.WordBasedRenamingAction;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
-import dummies.DummyConnector;
 
 public class RenamingToolTest extends TestCase {
 

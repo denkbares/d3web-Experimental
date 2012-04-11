@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -32,7 +32,6 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.wikiConnector.WikiConnector;
-import dummies.DummyConnector;
 
 /**
  * 
@@ -50,7 +49,6 @@ public class ReplaceSectionUtils {
 			replaceSectionsForTitle(title, getSectionsMapForCurrentTitle(ids,
 					sectionsMap), context);
 		}
-
 
 	}
 
@@ -75,13 +73,6 @@ public class ReplaceSectionUtils {
 				context);
 		wikiConnector.writeArticleToWikiEnginePersistence(title, newArticleText, context);
 
-		if (wikiConnector instanceof DummyConnector) {
-			// This is only needed for the test environment. In the running
-			// wiki, this is automatically called after the change to the
-			// persistence.
-			Environment.getInstance().buildAndRegisterArticle(newArticleText,
-					title, context.getWeb());
-		}
 	}
 
 	private static String getNewArticleText(
@@ -117,8 +108,6 @@ public class ReplaceSectionUtils {
 			collectTextAndReplaceNode(section, nodesMap, newText);
 		}
 	}
-
-
 
 	private static Map<String, Collection<String>> getIdsByTitle(Collection<String> allIds) {
 		Map<String, Collection<String>> idsByTitle = new HashMap<String, Collection<String>>();

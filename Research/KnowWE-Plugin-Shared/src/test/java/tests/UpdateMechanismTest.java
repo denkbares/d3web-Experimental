@@ -23,6 +23,8 @@ package tests;
 import java.io.IOException;
 import java.util.List;
 
+import connector.DummyConnector;
+
 import junit.framework.TestCase;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
@@ -33,7 +35,6 @@ import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.xml.GenericXMLObjectType;
-import dummies.DummyConnector;
 
 public class UpdateMechanismTest extends TestCase {
 

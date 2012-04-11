@@ -23,6 +23,8 @@ package tests;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import connector.DummyConnector;
+
 import junit.framework.TestCase;
 import objectTypes.SplitObjectType;
 import objectTypes.WordObjectType;
@@ -31,7 +33,6 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
-import dummies.DummyConnector;
 
 /**
  * Sectionizer Test Class.

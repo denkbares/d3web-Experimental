@@ -13,6 +13,8 @@ import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryRow;
 
+import connector.DummyConnector;
+
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.ArticleManager;
@@ -21,7 +23,6 @@ import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import dummies.DummyConnector;
 
 public class TimeEventTest extends TestCase {
 
