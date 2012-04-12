@@ -49,7 +49,7 @@ public class DefaultFrame extends AbstractType {
 		this.setRenderer(new ManchesterSyntaxFrameRenderer());
 
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(keyword);
-		this.setSectionFinder(new RegexSectionFinder(p, 2));
+		this.setSectionFinder(new RegexSectionFinder(p, 0));
 
 		this.addChildType(new MisspelledSyntaxConstruct());
 	}

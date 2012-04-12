@@ -62,15 +62,23 @@ public class ManchesterSyntaxUtil {
 	 * @return
 	 */
 	public static Pattern getFramePattern(String keyword) {
-		String frame = "(?m)" + // multiline flag
-				"(\r\n?|\n)" +
-				"(^$TOKEN$.+$" +
-				"(\r\n?|\n)" +
-				"((^.*$)(\r\n?|\n))" +
-				"*?)" +
-				"(\r\n?|\n)";
+		// Protege Manchester export compatible regex:
+		String frame = "(?ms)" + // MULTILINE + DOTALL flags
+				"^$TOKEN$(.*?)" +
+				"(\n)" +
+				"(\\s*)" +
+				"(\n)" +
+				"(\\s*)" +
+				"(\n)";
+		/*
+		 * at the end three linebreaks possible containing other whitespace
+		 * characters (tabs from protege export)
+		 */
+
 		String regex = frame.replace("$TOKEN$", keyword);
+
 		return Pattern.compile(regex);
+
 	}
 
 	/**
