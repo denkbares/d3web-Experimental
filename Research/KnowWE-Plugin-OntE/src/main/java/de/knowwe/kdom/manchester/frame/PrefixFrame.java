@@ -51,6 +51,7 @@ public class PrefixFrame extends DefaultFrame {
 	 */
 	public PrefixFrame() {
 
+		super("");
 		Pattern p = Pattern.compile(KEYWORD + ".*>");
 		this.setSectionFinder(new RegexSectionFinder(p));
 

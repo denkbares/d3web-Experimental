@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -48,7 +48,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
 /**
  * Simple {@link AbstractType} for an Object Property in the OWL 2
  * Specification. (Object properties connect pairs of individuals.)
- *
+ * 
  * @author Stefan Mark
  * @created 24.05.2011
  */
@@ -62,16 +62,16 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 
 		// add all children's keywords so they can be handled accordingly
 		KEYWORDS = "("
-			+ Annotations.KEYWORD + "|"
-			+ SubPropertyOf.KEYWORD + "|"
-			+ SubPropertyChain.KEYWORD + "|"
-			+ EquivalentTo.KEYWORD + "|"
-			+ DisjointWith.KEYWORD + "|"
-			+ Characteristics.KEYWORD + "|"
-			+ Range.KEYWORD + "|"
-			+ Domain.KEYWORD + "|"
-			+ InverseOf.KEYWORD
-			+ "|\\z)";
+				+ Annotations.KEYWORD + "|"
+				+ SubPropertyOf.KEYWORD + "|"
+				+ SubPropertyChain.KEYWORD + "|"
+				+ EquivalentTo.KEYWORD + "|"
+				+ DisjointWith.KEYWORD + "|"
+				+ Characteristics.KEYWORD + "|"
+				+ Range.KEYWORD + "|"
+				+ Domain.KEYWORD + "|"
+				+ InverseOf.KEYWORD
+				+ "|\\z)";
 	}
 
 	/**
@@ -80,10 +80,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	 */
 	public ObjectPropertyFrame() {
 
-		// this.addSubtreeHandler(new ObjectPropertySubtreeHandler());
-
-		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 3));
+		super(ManchesterSyntaxKeywords.OBJECT_PROPERTY.getKeyword());
 
 		List<Type> types = new ArrayList<Type>();
 
@@ -116,7 +113,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	}
 
 	/**
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -126,7 +123,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	}
 
 	/**
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -138,7 +135,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns the {@link ObjectProperty} section containing the name of the to
 	 * define OWLObjectProperty.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
@@ -150,7 +147,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns the {@link ObjectProperty} section containing the name of the to
 	 * define OWLObjectProperty.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
@@ -161,7 +158,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 
 	/**
 	 * Returns if the current class definition has a {@link Domain} description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -173,7 +170,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns the {@link Domain} sections of the current
 	 * {@link ObjectPropertyFrame}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -184,7 +181,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 
 	/**
 	 * Returns if the current class definition has a {@link Domain} description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -196,7 +193,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns the {@link Domain} sections of the current
 	 * {@link ObjectPropertyFrame}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -208,7 +205,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns if the current class definition has a {@link InverseOf}
 	 * description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -220,7 +217,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns the {@link InverseOf} sections of the current
 	 * {@link ObjectPropertyFrame}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -232,7 +229,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns if the current class definition has a {@link SubPropertyOf}
 	 * description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -244,7 +241,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns the {@link SubPropertyOf} sections of the current
 	 * {@link ObjectPropertyFrame}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -256,7 +253,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns if the current class definition has a {@link EquivalentTo}
 	 * description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -268,7 +265,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns the {@link EquivalentTo} sections of the current
 	 * {@link ObjectPropertyFrame}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -280,7 +277,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns if the current class definition has a {@link DisjointWith}
 	 * description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -292,7 +289,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns the {@link DisjointWith} sections of the current
 	 * {@link ObjectPropertyFrame}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -304,7 +301,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns if the current class definition has a {@link SubPropertyChain}
 	 * description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -316,7 +313,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	/**
 	 * Returns the {@link SubPropertyChain} sections of the current
 	 * {@link ObjectPropertyFrame}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ObjectPropertyFrame> section
 	 * @return The found section
@@ -332,7 +329,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 }
 
 /**
- *
+ * 
  * @author Stefan Mark
  * @created 24.05.2011
  */
@@ -368,8 +365,8 @@ class ObjectPropertyDefinition extends AbstractType {
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 06.06.2011
  */
@@ -381,8 +378,8 @@ class ObjectProperty extends ObjectPropertyIRIDefinition {
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 24.05.2011
  */
@@ -399,8 +396,8 @@ class InverseOf extends DescriptionType {
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 25.10.2011
  */

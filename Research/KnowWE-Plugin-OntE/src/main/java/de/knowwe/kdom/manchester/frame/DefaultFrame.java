@@ -20,10 +20,13 @@
 package de.knowwe.kdom.manchester.frame;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxFrameRenderer;
+import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.types.MisspelledSyntaxConstruct;
 
 /**
@@ -39,53 +42,16 @@ import de.knowwe.kdom.manchester.types.MisspelledSyntaxConstruct;
  */
 public class DefaultFrame extends AbstractType {
 
-	private static final String UNRECOGNIZED_TYPE = "UnrecognizedFrameDescription";
-
 	/**
 	 * Constructor for the {@link DefaultFrame}.
 	 */
-	public DefaultFrame() {
-		this(UNRECOGNIZED_TYPE);
+	public DefaultFrame(String keyword) {
 		this.setRenderer(new ManchesterSyntaxFrameRenderer());
-	}
 
-	/**
-	 * Constructor for the {@link DefaultFrame}. Initializes the children types
-	 * and some other stuff. Note. Adds an UnrecognizedTypeE
-	 * 
-	 * @param typename
-	 * @param messageText
-	 */
-	public DefaultFrame(String typename) {
+		Pattern p = ManchesterSyntaxUtil.getFramePattern(keyword);
+		this.setSectionFinder(new RegexSectionFinder(p, 3));
 
-		// check for misspelled identifiers ...
 		this.addChildType(new MisspelledSyntaxConstruct());
-
-		// ... or check for misplaced identifiers ...
-		// this.addChildType(new MissplacedSyntaxConstruct());
-
-		// anything left over that matches xx: is an unrecognized frame
-		// description and throws an error
-		// AnonymousType unrecognized = new AnonymousType(typename);
-		// unrecognized.setSectionFinder(new AllTextFinderTrimmed());
-		// unrecognized.addSubtreeHandler(new
-		// GeneralSubtreeHandler<DefaultFrame>() {
-		//
-		// @Override
-		// public Collection<KDOMReportMessage> create(Article article,
-		// Section<DefaultFrame> s) {
-		//
-		// if (s.getOriginalText().startsWith("\u003A")) {
-		// return new ArrayList<KDOMReportMessage>(0);
-		// }
-		//
-		// String messageText =
-		// "If this errors occurs together with a misspelled one, just ignore this one.";
-		// return Arrays.asList((KDOMReportMessage) new UnexpectedSequence(
-		// messageText + s.getOriginalText()));
-		// }
-		// });
-		// this.addChildType(unrecognized);
 	}
 
 	public void setKnownDescriptions(List<Type> types) {

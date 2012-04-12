@@ -79,10 +79,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<Indiv
 
 	public IndividualFrame() {
 
-		// this.addSubtreeHandler(new IndividualFrameSubtreeHandler());
-
-		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 3));
+		super(ManchesterSyntaxKeywords.INDIVIDUAL.getKeyword());
 
 		List<Type> types = new ArrayList<Type>();
 

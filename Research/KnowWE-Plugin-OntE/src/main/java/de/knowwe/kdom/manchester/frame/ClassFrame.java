@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -46,7 +46,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * An {@link AbstractType} for the Manchester OWL syntax ClassFrame. Specifies
  * the allowed children and some helper methods used in the
  * {@link SubtreeHandler}.
- *
+ * 
  * @author Stefan Mark
  * @created 24.05.2011
  */
@@ -64,11 +64,8 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 			+ "|\\z)";
 
 	public ClassFrame() {
-
+		super(ManchesterSyntaxKeywords.CLASS.getKeyword());
 		// this.addSubtreeHandler(new ClassFrameSubtreeHandler());
-
-		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 3));
 
 		List<Type> types = new ArrayList<Type>();
 
@@ -89,7 +86,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	/**
 	 * Returns the {@link OWLClass} section containing the name of the to define
 	 * OWLClass.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -101,7 +98,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	/**
 	 * Returns the {@link OWLClass} section containing the name of the to define
 	 * OWLClass.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -112,7 +109,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 
 	/**
 	 * Returns if the current class definition has a SubClassOf description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -124,7 +121,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	/**
 	 * Returns the {@link SubClassOf} section containing a SubClassOf
 	 * description for the current class.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -135,7 +132,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 
 	/**
 	 * Returns if the current class definition has a SubClassOf description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -147,7 +144,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	/**
 	 * Returns the {@link SubClassOf} section containing a SubClassOf
 	 * description for the current class.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -158,7 +155,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 
 	/**
 	 * Returns if the current class definition has a SubClassOf description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -170,7 +167,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	/**
 	 * Returns the {@link SubClassOf} section containing a SubClassOf
 	 * description for the current class.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -181,7 +178,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 
 	/**
 	 * Returns if the current class definition has a SubClassOf description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -193,7 +190,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	/**
 	 * Returns the {@link SubClassOf} section containing a SubClassOf
 	 * description for the current class.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -204,7 +201,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 
 	/**
 	 * Returns if the current class definition has a SubClassOf description.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -216,7 +213,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	/**
 	 * Returns the {@link SubClassOf} section containing a SubClassOf
 	 * description for the current class.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -236,7 +233,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 }
 
 /**
- *
+ * 
  * @author Stefan Mark
  * @created 24.05.2011
  */
@@ -270,7 +267,7 @@ class OWLClassDefinition extends AbstractType {
 
 /**
  * An {@link AbstractType} for the name of an OWLClass.
- *
+ * 
  * @author Stefan Mark
  * @created 06.06.2011
  */
@@ -280,9 +277,10 @@ class OWLClass extends ClassIRIDefinition {
 
 	}
 }
+
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 24.05.2011
  */
@@ -295,9 +293,10 @@ class SubClassOf extends DefaultDescription {
 		this.addChildType(ManchesterSyntaxUtil.getMCE());
 	}
 }
+
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 24.05.2011
  */
@@ -312,8 +311,8 @@ class DisjointWith extends DefaultDescription {
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 24.05.2011
  */

@@ -21,7 +21,6 @@ package de.knowwe.kdom.manchester.frame;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
@@ -32,7 +31,6 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
-import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.compile.ImportFrameCompileScript;
 import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.renderer.IRITypeRenderer;
@@ -56,8 +54,7 @@ public class ImportFrame extends DefaultFrame implements KnowledgeUnit<ImportFra
 	 */
 	public ImportFrame() {
 
-		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 3));
+		super(KEYWORD);
 
 		List<Type> types = new ArrayList<Type>();
 

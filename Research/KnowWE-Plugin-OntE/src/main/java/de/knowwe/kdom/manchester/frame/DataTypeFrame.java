@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -40,8 +40,8 @@ import de.knowwe.termObject.DatatypePropertyIRIDefinition;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 24.05.2011
  */
@@ -62,8 +62,7 @@ public class DataTypeFrame extends DefaultFrame implements KnowledgeUnit<DataTyp
 
 	public DataTypeFrame() {
 
-		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 3));
+		super(ManchesterSyntaxKeywords.DATATYPE.getKeyword());
 
 		List<Type> types = new ArrayList<Type>();
 
@@ -81,7 +80,7 @@ public class DataTypeFrame extends DefaultFrame implements KnowledgeUnit<DataTyp
 	/**
 	 * Returns the {@link Datatype} section containing the name of the to define
 	 * OWLDatatype.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
@@ -93,7 +92,7 @@ public class DataTypeFrame extends DefaultFrame implements KnowledgeUnit<DataTyp
 	/**
 	 * Returns the {@link Datatype} section containing the name of the to define
 	 * OWLDatatype.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
@@ -104,7 +103,7 @@ public class DataTypeFrame extends DefaultFrame implements KnowledgeUnit<DataTyp
 
 	/**
 	 * Returns the {@link EquivalentTo} section
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
@@ -115,7 +114,7 @@ public class DataTypeFrame extends DefaultFrame implements KnowledgeUnit<DataTyp
 
 	/**
 	 * Returns the {@link EquivalentTo} section
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
@@ -131,7 +130,7 @@ public class DataTypeFrame extends DefaultFrame implements KnowledgeUnit<DataTyp
 }
 
 /**
- *
+ * 
  * @author Stefan Mark
  * @created 24.05.2011
  */
@@ -153,8 +152,8 @@ class DatatypeDefinition extends AbstractType {
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 06.06.2011
  */
