@@ -28,6 +28,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.usersupport.poi.PoiUtils;
 
 /**
@@ -35,21 +36,19 @@ import de.knowwe.usersupport.poi.PoiUtils;
  * @author Johannes Dienst
  * @created 04.03.2012
  */
-public class WordExportAction extends AbstractAction
-{
+public class WordExportAction extends AbstractAction {
 
 	private static ResourceBundle bundle = ResourceBundle.getBundle("Usersupport_messages");
 
 	@Override
-	public void execute(UserActionContext context) throws IOException
-	{
+	public void execute(UserActionContext context) throws IOException {
 		String title = context.getTitle();
 		String user = context.getUserName();
 
 		Article article =
 				Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
 
-		String extensionPath = Environment.getInstance().getKnowWEExtensionPath() + "/docbook-"
+		String extensionPath = KnowWEUtils.getKnowWEExtensionPath() + "/docbook-"
 				+ title + "-" + PoiUtils.getIdPostfix() + ".docx";
 		File file = new File(extensionPath);
 		FileOutputStream out = new FileOutputStream(file);

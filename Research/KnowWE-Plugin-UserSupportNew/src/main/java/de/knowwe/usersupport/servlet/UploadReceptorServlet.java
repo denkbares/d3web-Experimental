@@ -38,6 +38,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.ActionContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.usersupport.poi.PoiUtils;
 
 /**
@@ -76,9 +77,9 @@ public class UploadReceptorServlet extends HttpServlet {
 			ServletFileUpload uploadHandler = new ServletFileUpload(fileItemFactory);
 
 			File tmpDir = new
-					File(Environment.getInstance().getKnowWEExtensionPath());
+					File(KnowWEUtils.getKnowWEExtensionPath());
 			File destinationDir = new
-					File(Environment.getInstance().getKnowWEExtensionPath());
+					File(KnowWEUtils.getKnowWEExtensionPath());
 			fileItemFactory.setRepository(tmpDir);
 
 			/*

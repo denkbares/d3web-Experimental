@@ -23,10 +23,8 @@ package tests;
 import java.io.IOException;
 import java.util.List;
 
-import connector.DummyConnector;
-
 import junit.framework.TestCase;
-import utils.TestUtils;
+import connector.DummyConnector;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.Environment.CompilationMode;
@@ -34,6 +32,7 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.GenericXMLObjectType;
 
 public class UpdateMechanismTest extends TestCase {
@@ -53,7 +52,7 @@ public class UpdateMechanismTest extends TestCase {
 		/*
 		 * Setup
 		 */
-		String content = TestUtils.readTxtFile("src/test/resources/UpdatingTest1.txt");
+		String content = KnowWEUtils.readFile("src/test/resources/UpdatingTest1.txt");
 
 		// types.add(DefaultTextType.getInstance());
 

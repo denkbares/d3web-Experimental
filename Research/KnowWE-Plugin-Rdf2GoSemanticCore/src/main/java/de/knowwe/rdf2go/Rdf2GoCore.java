@@ -941,9 +941,8 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public File[] getImportList() {
-		Environment environment = Environment.getInstance();
-		String p = environment.getWikiConnector().getSavePath();
-		String inpath = (p != null) ? p : (environment.getKnowWEExtensionPath()
+		String p = Environment.getInstance().getWikiConnector().getSavePath();
+		String inpath = (p != null) ? p : (KnowWEUtils.getKnowWEExtensionPath()
 				+ File.separatorChar + "owlincludes");
 		File includes = new File(inpath);
 		if (includes.exists()) {

@@ -26,9 +26,9 @@ import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
-import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 
 public class PageLoggerHandler implements PageAppendHandler {
 
@@ -40,11 +40,11 @@ public class PageLoggerHandler implements PageAppendHandler {
 		if (log) {
 			try {
 				BufferedWriter buffy = new BufferedWriter(new FileWriter(
-						Environment.getInstance().getKnowWEExtensionPath()
+						KnowWEUtils.getKnowWEExtensionPath()
 								+ "/tmp/Pagelogger.log", true));
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String uhrzeit = sdf.format(new Date(System.currentTimeMillis()));
-				buffy.append(uhrzeit + ";" + user.getUserName() + ";" + user.getTopic() + "\n");
+				buffy.append(uhrzeit + ";" + user.getUserName() + ";" + user.getTitle() + "\n");
 				buffy.close();
 			}
 			catch (IOException e) {

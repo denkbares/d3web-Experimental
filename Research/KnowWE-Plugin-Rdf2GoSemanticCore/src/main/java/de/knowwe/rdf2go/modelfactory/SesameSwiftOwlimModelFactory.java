@@ -35,7 +35,7 @@ import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.Rio;
 import org.openrdf.rio.helpers.StatementCollector;
 
-import de.knowwe.core.Environment;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class SesameSwiftOwlimModelFactory extends AbstractModelFactory {
@@ -60,12 +60,13 @@ public class SesameSwiftOwlimModelFactory extends AbstractModelFactory {
 	private Repository createRepository(Properties properties)
 			throws ModelRuntimeException {
 		// find out if we need reasoning
-		String reasoningProperty = properties == null ? null : properties.getProperty(REASONING);
+		// String reasoningProperty = properties == null ? null :
+		// properties.getProperty(REASONING);
 
 		// create a Sail stack
 		Repository repository = null;
 
-		String path = Environment.getInstance().getKnowWEExtensionPath();
+		String path = KnowWEUtils.getKnowWEExtensionPath();
 		String ontfile = path + File.separatorChar + "knowwe_base.owl";
 		String reppath = System.getProperty("java.io.tmpdir") + File.separatorChar
 					+ "repository" + System.nanoTime();

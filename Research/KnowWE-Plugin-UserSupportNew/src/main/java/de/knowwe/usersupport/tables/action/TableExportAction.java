@@ -29,6 +29,7 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.usersupport.poi.PoiUtils;
 import de.knowwe.usersupport.tables.CausalDiagnosisScore;
 import de.knowwe.usersupport.tables.DecisionTable;
@@ -45,15 +46,13 @@ import de.knowwe.usersupport.tables.TableUtils;
  * @author Johannes Dienst
  * @created 18.10.2011
  */
-public class TableExportAction extends AbstractAction
-{
+public class TableExportAction extends AbstractAction {
 
 	private static ResourceBundle bundle = ResourceBundle.getBundle("Usersupport_messages");
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void execute(UserActionContext context) throws IOException
-	{
+	public void execute(UserActionContext context) throws IOException {
 
 		String tableId = context.getParameter("tableId");
 		String title = context.getTitle();
@@ -64,7 +63,7 @@ public class TableExportAction extends AbstractAction
 				Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
 		Section<?> table = TableUtils.getTableWithId(article, tableId);
 
-		String extensionPath = Environment.getInstance().getKnowWEExtensionPath() + "/workbook-"
+		String extensionPath = KnowWEUtils.getKnowWEExtensionPath() + "/workbook-"
 				+ tableId + "-" + PoiUtils.getIdPostfix() + ".xls";
 		File file = new File(extensionPath);
 		FileOutputStream out = new FileOutputStream(file);

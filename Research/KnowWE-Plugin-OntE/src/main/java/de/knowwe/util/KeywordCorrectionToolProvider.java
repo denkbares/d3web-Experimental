@@ -24,7 +24,7 @@ public class KeywordCorrectionToolProvider implements ToolProvider {
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		List<CorrectionProvider.Suggestion> suggestions = new LinkedList<CorrectionProvider.Suggestion>();
-		ResourceBundle wikiConfig = ResourceBundle.getBundle("KnowWE_config");
+		ResourceBundle wikiConfig = KnowWEUtils.getConfigBundle();
 
 		int threshold = Integer.valueOf(wikiConfig.getString("knowweplugin.correction.threshold"));
 		Article article = KnowWEUtils.getCompilingArticles(section).iterator().next();

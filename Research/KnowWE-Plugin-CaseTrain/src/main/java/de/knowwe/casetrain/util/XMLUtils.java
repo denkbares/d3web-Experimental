@@ -98,6 +98,7 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.AnonymousType;
 
 /**
@@ -119,8 +120,7 @@ public class XMLUtils {
 
 		// TODO how to get the webapp path?
 		try {
-			String path = Environment.getInstance().
-					getKnowWEExtensionPath().replaceAll("/KnowWEExtension", "");
+			String path = KnowWEUtils.getApplicationRootPath();
 			LoadSave.initialise(path);
 		}
 		catch (URISyntaxException e1) {
@@ -142,7 +142,7 @@ public class XMLUtils {
 		// TODO Evaluation
 		XMLUtils.addEvaluation(c, articleSec, fac);
 
-		String webapp = Environment.getInstance().getKnowWEExtensionPath();
+		String webapp = KnowWEUtils.getKnowWEExtensionPath();
 		try {
 			File f = new File(webapp + TMP_CASE_XML);
 			f.createNewFile();
@@ -237,8 +237,7 @@ public class XMLUtils {
 
 			}
 
-			if (!frageChilds.isEmpty())
-				XMLUtils.addQuestions(simpleSec, frageChilds, fac);
+			if (!frageChilds.isEmpty()) XMLUtils.addQuestions(simpleSec, frageChilds, fac);
 
 			// Add the EvaluationEnd
 			EvaluationEnd end = fac.createCaseEvaluationEvaluationEnd();
@@ -279,10 +278,8 @@ public class XMLUtils {
 
 		Section<?> introSec = null;
 
-		if (elementName.equals("Intro"))
-			introSec = Sections.findSuccessor(sec, Introduction.class);
-		if (elementName.equals("Extro"))
-			introSec = Sections.findSuccessor(sec, Closure.class);
+		if (elementName.equals("Intro")) introSec = Sections.findSuccessor(sec, Introduction.class);
+		if (elementName.equals("Extro")) introSec = Sections.findSuccessor(sec, Closure.class);
 
 		if (introSec == null) return;
 		XMLUtils.addTitledmmmixedcontent(c, introSec, fac);
@@ -415,24 +412,18 @@ public class XMLUtils {
 			}
 
 			if (attName.equals(MetaAttributes.CASE_ID_KEY)) metaObj.setID(attContent);
-			if (attName.equals(MetaAttributes.CASE_AUTHOR))
-				metaObj.setAuthor(attContent);
+			if (attName.equals(MetaAttributes.CASE_AUTHOR)) metaObj.setAuthor(attContent);
 			if (attName.equals(MetaAttributes.CASE_DATE)) metaObj.setDate(attContent);
 			if (attName.equals(MetaAttributes.CASE_TITLE)) metaObj.setTitle(attContent);
-			if (attName.equals(MetaAttributes.CASE_VERSION))
-				metaObj.setVersion(attContent);
-			if (attName.equals(MetaAttributes.DURATION_MIN))
-				metaObj.setDurationMinutes(new Long(
+			if (attName.equals(MetaAttributes.CASE_VERSION)) metaObj.setVersion(attContent);
+			if (attName.equals(MetaAttributes.DURATION_MIN)) metaObj.setDurationMinutes(new Long(
 						attContent));
-			if (attName.equals(MetaAttributes.DIFFICULTY))
-				metaObj.setDifficulty(attContent);
-			if (attName.equals(MetaAttributes.REQUIREMENTS))
-				metaObj.setPrereqs(attContent);
+			if (attName.equals(MetaAttributes.DIFFICULTY)) metaObj.setDifficulty(attContent);
+			if (attName.equals(MetaAttributes.REQUIREMENTS)) metaObj.setPrereqs(attContent);
 			if (attName.equals(MetaAttributes.HINT)) metaObj.setNotice(attContent);
 			if (attName.equals(MetaAttributes.COMMENT)) metaObj.setComment(attContent);
 			if (attName.equals(MetaAttributes.KEYWORDS)) metaObj.setKeywords(attContent);
-			if (attName.equals(MetaAttributes.CASE_HISTORY))
-				metaObj.setHistory(attContent);
+			if (attName.equals(MetaAttributes.CASE_HISTORY)) metaObj.setHistory(attContent);
 
 			// TODO Background and setURL?
 			// if (attName.equals(MetaAttributes.BACKGROUND))
@@ -446,24 +437,19 @@ public class XMLUtils {
 			Score score = fac.createCaseMetadataScore();
 			for (Map.Entry<String, String> e : scoreAtts.entrySet()) {
 
-				if (e.getKey().equals(MetaAttributes.TIME_LIMIT0))
-					score.setMaxTimeSeconds(new Long(
+				if (e.getKey().equals(MetaAttributes.TIME_LIMIT0)) score.setMaxTimeSeconds(new Long(
 							e.getValue()));
 
-				if (e.getKey().equals(MetaAttributes.CASE_PASS))
-					score.setMinScoreForSuccess(new BigDecimal(
+				if (e.getKey().equals(MetaAttributes.CASE_PASS)) score.setMinScoreForSuccess(new BigDecimal(
 							e.getValue()));
 
-				if (e.getKey().equals(MetaAttributes.TIME_LIMIT100))
-					score.setOkTimeSeconds(new Long(
+				if (e.getKey().equals(MetaAttributes.TIME_LIMIT100)) score.setOkTimeSeconds(new Long(
 							e.getValue()));
 
-				if (e.getKey().equals(MetaAttributes.CASE_POINTS))
-					score.setWeight(new BigDecimal(
+				if (e.getKey().equals(MetaAttributes.CASE_POINTS)) score.setWeight(new BigDecimal(
 							e.getValue()));
 
-				if (e.getKey().equals(MetaAttributes.TIME_WEIGHT))
-					score.setWeightTime(new BigDecimal(
+				if (e.getKey().equals(MetaAttributes.TIME_WEIGHT)) score.setWeightTime(new BigDecimal(
 							e.getValue()));
 			}
 			metaObj.setScore(score);
@@ -475,14 +461,11 @@ public class XMLUtils {
 			Misc misc = fac.createCaseMetadataMisc();
 			for (Map.Entry<String, String> e : miscAtts.entrySet()) {
 
-				if (e.getKey().equals(MetaAttributes.FEEDBACK))
-					misc.setFeedback(e.getValue());
+				if (e.getKey().equals(MetaAttributes.FEEDBACK)) misc.setFeedback(e.getValue());
 
-				if (e.getKey().equals(MetaAttributes.LANGUAGE))
-					misc.setLanguage(e.getValue());
+				if (e.getKey().equals(MetaAttributes.LANGUAGE)) misc.setLanguage(e.getValue());
 
-				if (e.getKey().equals(MetaAttributes.SHOW_TIME))
-					misc.setShowClock(new Boolean(
+				if (e.getKey().equals(MetaAttributes.SHOW_TIME)) misc.setShowClock(new Boolean(
 							e.getValue()));
 			}
 			metaObj.setMisc(misc);
@@ -564,8 +547,7 @@ public class XMLUtils {
 
 			}
 
-			if (!frageChilds.isEmpty())
-				XMLUtils.addQuestions(simpleSec, frageChilds, fac);
+			if (!frageChilds.isEmpty()) XMLUtils.addQuestions(simpleSec, frageChilds, fac);
 			c.setSections(fac.createCaseSections());
 			c.getSections().getSimpleSectionOrInfoSection().add(simpleSec);
 		}
@@ -760,8 +742,7 @@ public class XMLUtils {
 				if (store.getNegFactor() != null) a.setNegFactor(new BigDecimal(
 						store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
-				if (store.getSimplefeedback() != null)
-					a.setSimpleFeedback(store.getSimplefeedback());
+				if (store.getSimplefeedback() != null) a.setSimpleFeedback(store.getSimplefeedback());
 				a.setText(store.getText());
 				ans.getAnswer().add(a);
 			}
@@ -784,8 +765,7 @@ public class XMLUtils {
 				if (store.getNegFactor() != null) a.setNegFactor(new BigDecimal(
 						store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
-				if (store.getSimplefeedback() != null)
-					a.setSimpleFeedback(store.getSimplefeedback());
+				if (store.getSimplefeedback() != null) a.setSimpleFeedback(store.getSimplefeedback());
 				a.setText(store.getText());
 				ans.getWordAnswer().add(a);
 			}
@@ -813,8 +793,7 @@ public class XMLUtils {
 				if (store.getNegFactor() != null) a.setNegFactor(new BigDecimal(
 						store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
-				if (store.getSimplefeedback() != null)
-					a.setSimpleFeedback(store.getSimplefeedback());
+				if (store.getSimplefeedback() != null) a.setSimpleFeedback(store.getSimplefeedback());
 				a.setText(store.getText());
 				ans.getWordAnswer().add(a);
 			}
@@ -903,17 +882,14 @@ public class XMLUtils {
 			if (store.getNegFactor() != null) inter.setNegFactor(new BigDecimal(
 					store.getNegFactor()));
 			inter.setPosFactor(new BigDecimal(store.getPosFactor()));
-			if (store.getSimplefeedback() != null)
-				inter.setSimpleFeedback(store.getSimplefeedback());
+			if (store.getSimplefeedback() != null) inter.setSimpleFeedback(store.getSimplefeedback());
 			ans.getNumAnswerOrNumAnswerInterval().add(inter);
 		}
 
 		NumAnswer a = fac.createNumAnswersNumAnswer();
-		if (store.getNegFactor() != null)
-			a.setNegFactor(new BigDecimal(store.getNegFactor()));
+		if (store.getNegFactor() != null) a.setNegFactor(new BigDecimal(store.getNegFactor()));
 		a.setPosFactor(new BigDecimal(store.getPosFactor()));
-		if (store.getSimplefeedback() != null)
-			a.setSimpleFeedback(store.getSimplefeedback());
+		if (store.getSimplefeedback() != null) a.setSimpleFeedback(store.getSimplefeedback());
 		a.setValue(new BigDecimal(store.getText()));
 		ans.getNumAnswerOrNumAnswerInterval().add(a);
 	}

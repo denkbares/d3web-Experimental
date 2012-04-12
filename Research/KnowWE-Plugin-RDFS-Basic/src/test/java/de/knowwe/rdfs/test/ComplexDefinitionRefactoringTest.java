@@ -25,6 +25,7 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class ComplexDefinitionRefactoringTest {
@@ -55,8 +56,8 @@ public class ComplexDefinitionRefactoringTest {
 	@Test
 	public void testRefactoringComplexDef() throws IOException {
 		/* Change text and test */
-		String oldText = TestUtils.readTxtFile(TESTFILE);
-		String newText = TestUtils.readTxtFile(TESTFILE2);
+		String oldText = KnowWEUtils.readFile(TESTFILE);
+		String newText = KnowWEUtils.readFile(TESTFILE2);
 		// change definition of Author and its reference in authorOf's complex
 		// def
 		changeText(oldText, newText, Type.class);
