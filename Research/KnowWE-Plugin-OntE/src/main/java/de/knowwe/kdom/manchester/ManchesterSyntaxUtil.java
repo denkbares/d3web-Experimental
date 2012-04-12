@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -35,7 +35,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * Helper class for storing regular expressions needed in the AbstractTypes of
  * the Manchester Syntax and some other utility functions. For more information
  * read the comment on each function.
- *
+ * 
  * @author Stefan Mark
  * @created 15.08.2011
  */
@@ -43,7 +43,7 @@ public class ManchesterSyntaxUtil {
 
 	/**
 	 * Returns a regular expression that matches the frame keywords.
-	 *
+	 * 
 	 * @created 25.10.2011
 	 * @param keyword
 	 * @return
@@ -56,18 +56,19 @@ public class ManchesterSyntaxUtil {
 	 * Returns a regular expression string that maps a frame of the Manchester
 	 * Syntax. The word boundary expression near the frame keyword is necessary
 	 * due some frames having the same name in their description.
-	 *
+	 * 
 	 * @created 01.07.2011
 	 * @param keyword
 	 * @return
 	 */
 	public static Pattern getFramePattern(String keyword) {
-		String frame = "(?m)(^$)(\r\n?|\n){1}" +
+		String frame = "(?m)" + // multiline flag
+				"(\r\n?|\n)" +
 				"(^$TOKEN$.+$" +
 				"(\r\n?|\n)" +
 				"((^.*$)(\r\n?|\n))" +
 				"*?)" +
-				"((^$)(\r\n?|\n)){1}";
+				"(\r\n?|\n)";
 		String regex = frame.replace("$TOKEN$", keyword);
 		return Pattern.compile(regex);
 	}
@@ -75,28 +76,28 @@ public class ManchesterSyntaxUtil {
 	/**
 	 * Returns a regular expression that matches everything till a certain token
 	 * (keywords).
-	 *
+	 * 
 	 * @created 25.10.2011
 	 * @param keyword
 	 * @return
 	 */
 	public static Pattern getTillKeywordPattern(String keyword) {
 		String pattern = "(.*?)" // Everything, until
-			+ "(?="    //followed by the keywords
-			+ keyword
+				+ "(?=" // followed by the keywords
+				+ keyword
 				+ ")";
 		return Pattern.compile(pattern);
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 01.07.2011
 	 * @param keyword
 	 * @return
 	 */
 	public static Pattern getDescriptionPattern(String clazzKey, String descriptionKey) {
-		if(clazzKey.contains(descriptionKey+"|")) {
+		if (clazzKey.contains(descriptionKey + "|")) {
 			clazzKey = clazzKey.replace(descriptionKey + "|", "");
 		}
 		String regex = "(" + descriptionKey + "(.+?))" + clazzKey;
@@ -104,8 +105,8 @@ public class ManchesterSyntaxUtil {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 02.07.2011
 	 * @return
 	 */
@@ -119,8 +120,8 @@ public class ManchesterSyntaxUtil {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 02.07.2011
 	 * @return
 	 */
