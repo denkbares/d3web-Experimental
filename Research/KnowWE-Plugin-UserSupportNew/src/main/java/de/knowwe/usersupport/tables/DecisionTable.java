@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import de.d3web.abstraction.inference.PSMethodAbstraction;
 import de.d3web.core.inference.PSAction;
@@ -56,7 +55,7 @@ public class DecisionTable extends ITable
 	public DecisionTable()
 	{
 		this.sectionFinder = new AllTextSectionFinder();
-		this.addSubtreeHandler(Priority.LOWEST, new DecisionTableSubtreeHandler());
+		this.addSubtreeHandler(Priority.PRECOMPILE_LOW, new DecisionTableSubtreeHandler());
 
 		this.addChildType(new TableDescriptionType());
 
@@ -70,13 +69,13 @@ public class DecisionTable extends ITable
 
 	public class DecisionTableSubtreeHandler extends GeneralSubtreeHandler<DecisionTable>
 	{
+
 		@Override
 		public Collection<Message> create(Article article, Section<DecisionTable> decisionSec)
 		{
 			Section<InnerTable> innerTable =
 					Sections.findChildOfType(decisionSec, InnerTable.class);
-			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty())
-				return null;
+			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty()) return null;
 
 			Article compilingArticle = KnowWEUtils.getCompilingArticles(decisionSec).iterator().next();
 
@@ -99,8 +98,9 @@ public class DecisionTable extends ITable
 					break;
 				}
 
-				Section<CompositeCondition> cond = Sections.findChildOfType(cell, CompositeCondition.class);
-				Set<String> packageNames = cond.getPackageNames();
+				Section<CompositeCondition> cond = Sections.findChildOfType(cell,
+						CompositeCondition.class);
+				compilingArticle = KnowWEUtils.getCompilingArticles(cell).iterator().next();
 				Condition d3Cond = KDOMConditionFactory.createCondition(compilingArticle, cond);
 				conditionList.add(d3Cond);
 			}
@@ -108,7 +108,8 @@ public class DecisionTable extends ITable
 			for (; i < firstColumn.size(); i++)
 			{
 				cell = firstColumn.get(i);
-				Section<SetQuestionValue> qVal = Sections.findChildOfType(cell, SetQuestionValue.class);
+				Section<SetQuestionValue> qVal = Sections.findChildOfType(cell,
+						SetQuestionValue.class);
 				qValList.add(qVal);
 			}
 
@@ -120,7 +121,7 @@ public class DecisionTable extends ITable
 				List<Section<TableCell>> columnCells = TableUtils.getColumnCells(
 						j, Sections.findChildOfType(decisionSec, InnerTable.class));
 				if (columnCells == null) break;
-				
+
 				column = new LinkedList<Section<TableCell>>(columnCells);
 
 				// Collect all conditions and create final ConditionAnd
@@ -130,7 +131,7 @@ public class DecisionTable extends ITable
 				for (; k < conditionList.size(); k++)
 				{
 					c = conditionList.get(k);
-					if (c == null) break; //Transition: Actions follow
+					if (c == null) break; // Transition: Actions follow
 
 					if (column.get(k).getText().equals("+"))
 					{
@@ -156,10 +157,10 @@ public class DecisionTable extends ITable
 					if (column.get(k).getText().equals("")) continue;
 
 					// TODO what todo if negated?
-					//					else if (column.get(i).getText().equals("-"))
-					//					{
-					//						conditions.add(new CondNot(c));
-					//					}
+					// else if (column.get(i).getText().equals("-"))
+					// {
+					// conditions.add(new CondNot(c));
+					// }
 
 					PSAction action = qVal.get().getAction(compilingArticle, qVal);
 

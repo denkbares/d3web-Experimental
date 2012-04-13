@@ -387,6 +387,21 @@ public class PoiUtils
 		s = s.replaceAll("\\<p\\>FRAGE\\</p\\>", "FRAGE\\<br/\\>");
 		s = s.replaceAll("\\<li\\>\\<p\\>", "\\<li\\>");
 		s = s.replaceAll("\\</p\\>\\</li\\>", "\\</li\\>");
+
+		// bullet lists to wiki-syntax
+		s = s.replaceAll("\\<ol\\>", "");
+		s = s.replaceAll("\\</ol\\>", "");
+		s = s.replaceAll("\\<li\\>", "*");
+		s = s.replaceAll("\\</li\\>", "\\<br/\\>");
+
+		// italic
+		s = s.replaceAll("\\<i\\>", "''");
+		s = s.replaceAll("\\</i\\>", "''");
+
+		// bold
+		s = s.replaceAll("\\<b\\>", "__");
+		s = s.replaceAll("\\</b\\>", "__");
+
 		s = s.replaceAll("\\<p\\>", "");
 		s = s.replaceAll("\\</p\\>", "\\<br/\\>");
 

@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
-
 /**
  * 
  * Searches for Terms in the Terminology of a KnowledgeBase. Can handle
@@ -54,15 +53,15 @@ public class DialogComponent
 
 	private static DialogComponent uniqueInstance;
 
-	private SuggestionCache cache; 
-	
+	private final SuggestionCache cache;
+
 	/**
 	 * To avoid instantiation
 	 */
 	private DialogComponent()
 	{
 		cache = SuggestionCache.getInstance();
-		
+
 		maxSuggestions =
 				Integer.parseInt(
 						bundle.getString("usersupport.dialogcomponent.maxSuggestions"));
@@ -90,17 +89,18 @@ public class DialogComponent
 		}
 
 		// Add all known Algorithms
-//		algorithmsToken.add(new DoubleMetaphoneAlgorithm());
+		// algorithmsToken.add(new DoubleMetaphoneAlgorithm());
 		algorithmsToken.add(new JaroWinklerAlgorithm());
 		algorithmsToken.add(new LevenshteinAlgorithm());
 		algorithmsToken.add(new QGramAlgorithm());
 		algorithmsToken.add(new RefinedSoundexAlgorithm());
+		algorithmsToken.add(new EditexAlgorithm());
 
 		algorithmsPhrase.add(new JaccardAlgorithm());
 		algorithmsPhrase.add(new MongeElkanAlgorithm());
 		algorithmsPhrase.add(new SmithWatermanAlgorithm());
 		algorithmsPhrase.add(new SortedWinklerAlgorithm());
-//		algorithmsPhrase.add(new PermutedWinkler());
+		// algorithmsPhrase.add(new PermutedWinkler());
 		algorithmsPhrase.add(new NeedlemanWunschAlgorithm());
 	}
 
@@ -118,8 +118,8 @@ public class DialogComponent
 
 	/**
 	 * 
-	 * Collects the best suggestions found by all MatchingAlgorithms
-	 * in the terminology.
+	 * Collects the best suggestions found by all MatchingAlgorithms in the
+	 * terminology.
 	 * 
 	 * This is slow but will probably find the Best matches!
 	 * 
@@ -131,9 +131,8 @@ public class DialogComponent
 	public List<Suggestion> getBestSuggestionsAllAlgorithms(String query, List<String> termDefinitions) {
 
 		List<Suggestion> bestSuggs = this.cache.getSuggestionsFromCache(query, termDefinitions);
-		if (bestSuggs != null)
-			return bestSuggs;
-		
+		if (bestSuggs != null) return bestSuggs;
+
 		List<SuggestionCountPair> matchList = new ArrayList<SuggestionCountPair>();
 		bestSuggs = new ArrayList<Suggestion>();
 		// When query contains Whitespace then use algorithmsPhrase
@@ -153,13 +152,13 @@ public class DialogComponent
 			bestSuggs.add(matchList.get(i).getSuggestion());
 
 		this.cache.storeQueryResult(query, termDefinitions, bestSuggs);
-		
+
 		return bestSuggs;
 	}
 
 	/**
-	 * Collects the best suggestions if query is a Token.
-	 * So it only uses Matching-Algorithms for phrases.
+	 * Collects the best suggestions if query is a Token. So it only uses
+	 * Matching-Algorithms for phrases.
 	 * 
 	 * @created 20.02.2012
 	 * @param query
@@ -173,10 +172,8 @@ public class DialogComponent
 		List<String> tokenTerms = new ArrayList<String>();
 		List<String> phraseTerms = new ArrayList<String>();
 		for (String s : termDefinitions)
-			if (s.contains(" "))
-				phraseTerms.add(s);
-			else
-				tokenTerms.add(s);
+			if (s.contains(" ")) phraseTerms.add(s);
+			else tokenTerms.add(s);
 
 		this.getBestSuggestionsPhrase(query, phraseTerms, matchList, useAllAlgorithms);
 
@@ -197,7 +194,8 @@ public class DialogComponent
 			suggs = algo.getMatches(maxSuggestions, threshold, query, tokenTerms);
 			boolean remove = true;
 			suggs = this.removeExactMatches(suggs);
-			while(remove) remove = suggs.remove(null);
+			while (remove)
+				remove = suggs.remove(null);
 			for (Suggestion s : suggs)
 			{
 				int exists = AlgorithmUtil.containsSuggestion(matchList, s);
@@ -206,8 +204,7 @@ public class DialogComponent
 					matchList.get(exists).increment();
 					matchList.get(exists).updateDistance(s);
 				}
-				else
-					matchList.add(new SuggestionCountPair(s));
+				else matchList.add(new SuggestionCountPair(s));
 			}
 		}
 	}
@@ -223,14 +220,13 @@ public class DialogComponent
 	{
 		List<Suggestion> toReturn = new ArrayList<Suggestion>();
 		for (Suggestion s : suggs)
-			if (s.getDistance() != 1.0)
-				toReturn.add(s);
+			if (s.getDistance() != 1.0) toReturn.add(s);
 		return toReturn;
 	}
 
 	/**
-	 * Collects the best suggestions if query is a Phrase.
-	 * So it only uses Matching-Algorithms for phrases.
+	 * Collects the best suggestions if query is a Phrase. So it only uses
+	 * Matching-Algorithms for phrases.
 	 * 
 	 * @created 20.02.2012
 	 * @param query
@@ -255,7 +251,8 @@ public class DialogComponent
 		{
 			suggs = algo.getMatches(maxSuggestions, threshold, query, termDefinitions);
 			boolean remove = true;
-			while(remove) remove = suggs.remove(null);
+			while (remove)
+				remove = suggs.remove(null);
 			suggs = this.removeExactMatches(suggs);
 			for (Suggestion s : suggs) {
 				int exists = AlgorithmUtil.containsSuggestion(matchList, s);
@@ -264,8 +261,7 @@ public class DialogComponent
 					matchList.get(exists).increment();
 					matchList.get(exists).updateDistance(s);
 				}
-				else
-					matchList.add(new SuggestionCountPair(s));
+				else matchList.add(new SuggestionCountPair(s));
 			}
 		}
 	}
@@ -281,13 +277,11 @@ public class DialogComponent
 	public List<Suggestion> getSuggestions(String query,
 			List<String> termDefinitions, MatchingAlgorithm algorithm)
 	{
-		if (algorithm == null)
-			return getBestSuggestionsAllAlgorithms(query, termDefinitions);
+		if (algorithm == null) return getBestSuggestionsAllAlgorithms(query, termDefinitions);
 
 		List<Suggestion> bestSuggs = this.cache.getSuggestionsFromCache(query, termDefinitions);
-		if (bestSuggs != null)
-			return bestSuggs;
-		
+		if (bestSuggs != null) return bestSuggs;
+
 		bestSuggs = new ArrayList<Suggestion>();
 
 		// Put all Suggestions in List
@@ -296,7 +290,8 @@ public class DialogComponent
 
 		suggs = algorithm.getMatches(maxSuggestions, threshold, query, termDefinitions);
 		boolean remove = true;
-		while(remove) remove = suggs.remove(null);
+		while (remove)
+			remove = suggs.remove(null);
 		suggs = this.removeExactMatches(suggs);
 		for (Suggestion s : suggs) {
 			int exists = AlgorithmUtil.containsSuggestion(matchList, s);
@@ -305,8 +300,7 @@ public class DialogComponent
 				matchList.get(exists).increment();
 				matchList.get(exists).updateDistance(s);
 			}
-			else
-				matchList.add(new SuggestionCountPair(s));
+			else matchList.add(new SuggestionCountPair(s));
 		}
 
 		// Sort the matchList and add the count of
@@ -316,7 +310,7 @@ public class DialogComponent
 			bestSuggs.add(matchList.get(i).getSuggestion());
 
 		this.cache.storeQueryResult(query, termDefinitions, bestSuggs);
-		
+
 		return bestSuggs;
 	}
 
@@ -349,6 +343,7 @@ public class DialogComponent
 		toReturn.addAll(algorithmsPhrase);
 		return Collections.unmodifiableList(toReturn);
 	}
+
 	public boolean setUsedTokenMatchingAlgorithm(MatchingAlgorithm algorithm)
 	{
 		if (algorithmsToken.contains(algorithm))
@@ -358,6 +353,7 @@ public class DialogComponent
 		}
 		return false;
 	}
+
 	public boolean setUsedPhraseMatchingAlgorithm(MatchingAlgorithm algorithm)
 	{
 		if (algorithmsPhrase.contains(algorithm))
