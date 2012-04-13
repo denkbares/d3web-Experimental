@@ -118,6 +118,8 @@ table{
 
 .tooltipProp{font-size: 0.8em; line-height: 1.1em;}
 
+.tooltipArrow{font-size: 0.9em; line-height: 1.1em;}
+
 .title {
 	vertical-align: middle;
 	background-color: #e0e0e0;
@@ -143,7 +145,7 @@ table{
 }
 
 
-/* rating colors for question backgrounds */
+/* RED YELLOW GREEN SHEME rating colors for question backgrounds */
 /*.rating-high, .rating-medium, .rating-low { 
     border: 0px solid black; 
 }
@@ -169,9 +171,9 @@ table{
 
 .ynbutton.rating-none { 
     background-color: #DCDFF3; border: none; 
-}*/
-
-
+}
+*/
+/* ALTERNATIVE COLORING SCHEME blue yellow orange*/
 .rating-high, .rating-medium, .rating-low { 
     border: 0px solid black; 
 }
@@ -318,8 +320,8 @@ img{
     margin-right: -20px;
     min-height: 32px;
 }
-
-/*.solRating.rating-high { 
+/*
+.solRating.rating-high { 
     background-color: #C3DAA8; 
 }
 .solRating.rating-medium { 
@@ -327,8 +329,8 @@ img{
 }
 .solRating.rating-low { 
     background-color: #E0B59E;  
-}*/
-
+}
+*/
 .solRating.rating-high { 
     background-color: #B0C4DE; 
 }
@@ -362,17 +364,29 @@ img{
 }
 
 .prop1and3{
-    background: url('/img/1and3.png');
+    background: url('img/1and3.png');
 }
 
 .prop1and2{
-    background: url('/img/1and2.png');
+    background: url('img/1and2.png');
 }
 
 .prop2and3{
-    background: url('/img/2and3.png');
+    background: url('img/2and3.png');
 }
 
 .SaveCaseButton{width: 120px; height: 20px; padding-top: 3px; border: 1px solid #696969; text-align: center; cursor: pointer; 
 	background-color: #dddddd; font-weight: bold; color: #224172; -moz-box-shadow: 0 0 5px black;	
 	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; }
+
+#auxpanelHeadline{
+    font-weight: bold; float:left; font-size: 1.1em;
+}
+
+#auxHeader{
+    margin-top: 35px;
+}
+
+#linkedResources{
+    margin-top: 20px;
+}

@@ -1,4 +1,4 @@
-<div id="FFButton" class="baseButtonOneLetter">
+<div id="FFButton" class="baseButtonOneLetter feedback-tt-trigger">
 	F
     
         $if(study)$
@@ -6,4 +6,8 @@
         $elseif(feedback)$
         $FeedbackForm()$
         $endif$
+        
+        <div id="tt-feedback" class="tooltip tooltipArrow">
+            Formular aufrufen, um jederzeit Feedback abzugeben.
+        </div>
 </div>

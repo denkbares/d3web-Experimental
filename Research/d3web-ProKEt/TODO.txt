@@ -234,3 +234,13 @@ DONE - Logging of image answers
 - redeploy EuraHS and Mediastinitis if done
 - allow "" in Feedback
 - Feedback Felder größer
+
+
+Parser Elmar bzw. testen im Wiki:
+- doppelt vorkommende Fragen werden übergangen?!
+
+
+
+GENERAL
+- Tool Alex Pfade flexibel
+- 

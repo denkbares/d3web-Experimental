@@ -548,7 +548,7 @@ function parseDone(object, options) {
         if (!object.hasClass("question-d")) {
             result = false;
         }
-    } else {
+    }else {
         if (object.find("[id^='q_']").filter(function() {
             return !($(this).hasClass("question-d"));
         }).size() > 0) {
@@ -1006,6 +1006,8 @@ function tooltip_out(object) {
 //tooltipShownTrigger = undefined;
 }
 
+
+
 // generates the tooltips for the answer buttons of yes no questions
 function generate_tooltip_functions_ynbuttons(){
     triggers = $("[class*='-tt-trigger-ynbutton']");
@@ -1075,7 +1077,7 @@ function generate_tooltip_functions_ynbuttons(){
  */
 function generate_tooltip_functions() {
 	
-    triggers = $("[class$='-tt-trigger tooltip-trigger']");
+    triggers = $("[class$='-tt-trigger']");
 	
     // if mouse is moved over an element define potential tooltips position
     $(document).mousemove(function(e) {
@@ -1087,8 +1089,17 @@ function generate_tooltip_functions() {
         	
         // complete class name
         var classComplete = $(this).attr("class");
+        var id;
+        if(classComplete.indexOf("tooltip-trigger")!= -1){
+            id = classComplete.replace("-tt-trigger tooltip-trigger", "");
+        } else if(classComplete.indexOf("feedback-tt-trigger")!= -1){
+            id = "feedback";
+        } else if(classComplete.indexOf("endstudy-tt-trigger") != -1) {
+            id = "endstudy";
+        } else {
+            id = classComplete.replace("-tt-trigger", "");
+        }
         
-        var id = classComplete.replace("-tt-trigger tooltip-trigger", "");
         
         if(classComplete.indexOf("propagation hide") != -1){
             id = id.replace("propagation hide ", "");
@@ -1770,7 +1781,7 @@ function showAuxInfo(id, title){
     if(title==undefined){
         title = "";
     }
-    var auxHeader = "<b>Informationen zu [" + title + "]:</b> <br /><br />";
+    var auxHeader = "<b>FRAGE:</b> " + title + "<br /><br />";
     var auxinfo = $(infoid).html();
     
     // rewrite inner HTML of infopanel widget with info content
@@ -1780,12 +1791,20 @@ function showAuxInfo(id, title){
     
     $("#auxHeader").html(auxHeader);
     $("#auxInfo").html(auxinfo);
+    
+    
+    // similarly write potentially linked resources
+    var lrid = "#lr-" + id;
+    var resinfo = $(lrid).html();
+    //var resif = $(lrid).attr("showif");
+    
+    $("#linkedResources").html(resinfo);
 }
 
 function hideAuxInfo(){
     
     // clear infopanel
-    $("#auxHeader").html("<b>Informationen zu []:</b> <br /><br />");
+    $("#auxHeader").html("<b>FRAGE: </b> <br /><br />");
     $("#auxInfo").html("-");
 }
 
@@ -1936,7 +1955,7 @@ function copy_div(sourceId, destId) {
     var dest = $("#" + destId);
     if (newContent.length == 0) {
         dest.hide(0); // if nothing to copy, hide new element
-    } else {
+    }else {
         // else set content to new element and show it animated
         dest.attr('innerHTML', newContent).show(1000);
     }

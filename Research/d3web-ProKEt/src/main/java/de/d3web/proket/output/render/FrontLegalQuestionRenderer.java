@@ -22,6 +22,7 @@ package de.d3web.proket.output.render;
 import de.d3web.proket.data.IDialogObject;
 import de.d3web.proket.data.LegalQuestion;
 import de.d3web.proket.output.container.ContainerCollection;
+import de.d3web.proket.utils.GlobalSettings;
 import java.util.Vector;
 import org.antlr.stringtemplate.StringTemplate;
 
@@ -150,6 +151,35 @@ public class FrontLegalQuestionRenderer extends Renderer {
         st.setAttribute("ttnan", TT_NAN);
         
         st.setAttribute("tooltip", TT_PROP_ERROR);
+        
+        // get possibly linked resources; are linked in the form [res1##showif]###[res2]
+        String res = dialogObject.getResources();
+        if(res != null && !res.equals("")){
+            String[] splitRes = res.split("###");
+            
+            // go through all resource definitions
+            if(splitRes != null && splitRes.length >0){
+                String linkedResources = "";String rdef = "";String rif = "";
+                
+                for(String r: splitRes){
+                    r = r.replace("[", "").replace("]", "");
+                    
+                    String[] rsplit = r.split("##");
+                    rdef = rsplit[0];
+                    rif = rsplit[1];
+                    
+                    // get the corresponding resources from the resources
+                    // folder in: /webapp/resources
+                    String resource = GlobalSettings.getInstance().getResourcesPath()
+                                + rdef;
+                    String link = "<a href=" + resource + ">" + rdef + "</a><br />";
+                    linkedResources += link;
+                    
+                }
+                st.setAttribute("linkedResources", linkedResources);
+                st.setAttribute("showif", rif);
+            }
+        }
 
         super.renderChildren(st, cc, dialogObject, force);
     }

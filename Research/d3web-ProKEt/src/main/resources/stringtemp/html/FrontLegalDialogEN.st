@@ -27,32 +27,27 @@ $HTMLHeader()$
 
     
     <div id="intro">
-        Um eine Bewertung des Sachverhalts ("Hauptfrage") zu bekommen, beantworten Sie bitte die
-        unterhalb der Hauptfrage angezeigten Fragen.
-        Wenn Sie eine Frage nicht direkt beantworten können, klicken Sie auf das Dreieck vor der Frage um 
-        detailliertere Fragen anzuzeigen. 
-        <br />
-        <b>Wenn Sie die Beratungs-Session als beendet sehen (weil sie alle für den Sachverhalt relevanten Fragen beantwortet
-        haben und/oder mit dem Ergebnis zufrieden sind) bestätigen Sie dies bitte per Klick auf
-        den Button <i>End Session</i> und beantworten Sie den anschließend angezeigten Kurzfragebogen!</b>.
+        Do derive a rating for the core issue displayed in the solution panel above the tree
+        (and also as top element of the tree itself) please answer the questions underneath in the tree.
+        <b>Please confirm the end of your session by clicking the <i>End Session</i> button!</b>.
     </div>
     
     <div id="solution" class="solution">
-            <div id="solutionboxtext">Bewertung Hauptfrage</div>
+            <div id="solutionboxtext">Core Issue Rating</div>
 
-            <div id="solutiontext">Ist das Arbeitsverhältnis wirksam gekündigt worden?</div>
+            <div id="solutiontext">Was the working contract terminated effectually?</div>
 
             <div id="solHigh" class="solRating rating-high hide">
-                Sachverhalt bestätigt, <br />weil Frage 1 und Frage 2 bestätigt werden konnten.
+                Core issue confirmed.
             </div>
             <div id="solMed" class="solRating rating-medium hide">
-                Sachverhalt nicht sicher entscheidbar, <br />weil Frage 1 oder Frage 2 nicht sicher entschieden werden konnten.
+                Core issue rated not confidently / neutral.
             </div>
             <div id="solLow" class="solRating rating-low hide">
-                Sachverhalt trifft nicht zu, <br />weil Frage 1 oder Frage 2 nicht bestätigt werden konnte.
+                Core issue rejected.
             </div>
             <div id="solUn" class="solRating"><br />
-                Zu wenig Informationen für eine Bewertung.
+                Too little information for rating the core issue.
             </div>
         </div>
 
@@ -63,14 +58,18 @@ $HTMLHeader()$
     <div id="auxpanel" class="auxpanelRight">
 
         <div id="auxpanelHeader">
-            <div id="auxpanelHeadline">- Weitere Informationen - </div>
+            <div id="auxpanelHeadline">Additional Information</div>
             <div id="auxpanelToggle" class="auxpanelButton rightButton" onclick="toggleAuxInfoPlacing()">
-                Nach unten
+                To bottom
             </div>
         </div>
+           
         
+        <div id="auxPropagationInfo" class="auxPropagationInfo">
+            
+        </div>
         <div id="auxHeader">
-            <b>FRAGE:</b> 
+            <b>Additional information for []:</b>  
             <br /><br />
         </div>
 

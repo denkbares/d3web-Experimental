@@ -6,7 +6,7 @@ $(function(){
     $(function() {
 
         var sendFF, cancelFF;
-         if(!study==true && language=="en"){
+        if(!study==true && language=="en"){
             sendFF = "Send";
             cancelFF = "Cancel";
         } else if(language=="de" || study==true){
@@ -90,9 +90,9 @@ $(function(){
 
 
 /**
-     * Retrieve the browser information, i.e. the type and version. 
-     * Returns a String in the form "<type> <version>"
-     */
+ * Retrieve the browser information, i.e. the type and version. 
+ * Returns a String in the form "<type> <version>"
+ */
 function retrieveBrowserVal(){
     
     return BrowserDetect.browser + " " + BrowserDetect.version;
@@ -104,9 +104,9 @@ function retrieveUserVal(){
 }
 
 /**
-     * Send Ajax request for logging basic information, currently browser information
-     * type and version, as well as user info
-     */
+ * Send Ajax request for logging basic information, currently browser information
+ * type and version, as well as user info
+ */
 function ue_logBrowserAndUser(browser, user){
     
     var now = ue_getCurrentDate();
@@ -185,8 +185,8 @@ function ue_logLanguageWidgetClicked(el){
 
 
 /**
-     * Send the end-of-logging command
-     */
+ * Send the end-of-logging command
+ */
 function ue_logEnd(){
     
     var now = ue_getCurrentDate();
@@ -205,9 +205,9 @@ function ue_logEnd(){
 }
 
 /**
-     * Log call time (start), time difference (duration), and id
-     * of the parent widget of an info popup.
-     */
+ * Log call time (start), time difference (duration), and id
+ * of the parent widget of an info popup.
+ */
 function ue_logInfoPopup(starttime, endtime, widget){
     
     var start = ue_formatDateString(new Date(starttime));
@@ -218,9 +218,15 @@ function ue_logInfoPopup(starttime, endtime, widget){
     + diffDate.getSeconds();
     
     var parentid = widget.parent().attr("id");
-    if(parentid.indexOf("text-") != -1){
-        parentid = parentid.replace("text-", "");
+    if(parentid != undefined){
+        if(parentid.indexOf("text-") != -1){
+            parentid = parentid.replace("text-", "");
+        }
+    } else {
+        parentid = $(widget).attr("id");
+       
     }
+    
     var id = parentid + "_" + "INFOPOPUP";
  
     var link = $.query.set("action", "logInfoPopup").set("id", id).set("value", timediff).set("timestring", start);
@@ -239,8 +245,8 @@ function ue_logInfoPopup(starttime, endtime, widget){
 
 
 /**
-     * log attempts to set unallowed inputs
-     */
+* log attempts to set unallowed inputs
+*/
 function ue_logNotAllowedInput(numInput){
    
     var now = ue_getCurrentDate();       
@@ -260,9 +266,9 @@ function ue_logNotAllowedInput(numInput){
 }
 
 /**
-     * Retrieves the current date and returns it in the form
-     * Mo 2012_01_24 02:30:59
-     */
+* Retrieves the current date and returns it in the form
+* Mo 2012_01_24 02:30:59
+*/
 function ue_getCurrentDate(){
     
     var now = new Date(); // retrieve the current date
@@ -270,9 +276,9 @@ function ue_getCurrentDate(){
 }
 
 /**
-     * Formats a given date object in the form and res
-     * Mo 2012_01_24 02:30:59
-     */
+* Formats a given date object in the form and res
+* Mo 2012_01_24 02:30:59
+*/
 function ue_formatDateString(date){
     var month = 1+date.getMonth();
     
@@ -283,9 +289,9 @@ function ue_formatDateString(date){
 }
 
 /**
-     * Sends an ajax request to deliver an automatical email with user feedback
-     * to the developers
-     */
+* Sends an ajax request to deliver an automatical email with user feedback
+* to the developers
+*/
 function ue_sendFF(){
     
     var user = $('#ffname').val();
@@ -329,9 +335,9 @@ function ue_sendFF(){
 
 
 /**
-     * Sends an ajax request to deliver an automatical email with user feedback
-     * to the developers
-     */
+* Sends an ajax request to deliver an automatical email with user feedback
+* to the developers
+*/
 function ue_sendUEQ(){
     
     var user = $('#ueqname').val();
@@ -354,42 +360,42 @@ function ue_sendUEQ(){
         
     } else { */
         
-        var link = $.query.set("action", "sendUEQMail")
-        .set("user", user)
-        .set("contact", contact)
-        .set("questionnaireData", questionnaireData).toString();
+    var link = $.query.set("action", "sendUEQMail")
+    .set("user", user)
+    .set("contact", contact)
+    .set("questionnaireData", questionnaireData).toString();
     
-        var message = "";
+    var message = "";
     
-        link = window.location.href.replace(window.location.search, "") + link;
+    link = window.location.href.replace(window.location.search, "") + link;
 
-        $.ajax({
-            type : "GET",
-            async : false,
-            cache : false, // needed for IE, call is not made otherwise
-            url : link,
-            success : function(html) {
-                if(html=="success"){
-                    // display success message to user?"  
-                    $("#ueqMessage").html("");
-                    $("#ueqMessage").removeClass("errorRed");
-                    $('#jqUEQDialog').dialog("close");
-                } 
-            }
-        });
+    $.ajax({
+        type : "GET",
+        async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+            if(html=="success"){
+                // display success message to user?"  
+                $("#ueqMessage").html("");
+                $("#ueqMessage").removeClass("errorRed");
+                $('#jqUEQDialog').dialog("close");
+            } 
+        }
+    });
     
-        ue_logUEQData(user, contact, questionnaireData); 
-    //}
+    ue_logUEQData(user, contact, questionnaireData); 
+//}
 
 }
 
 /**
-     * Retrieves the data = question-value-pairs of the currently integrated
-     * usability questionnaire in div "ueq"
-     * returns Questionnaire Data in format: 
-     *  questionID1***value1###questionID2***value2###
-     *  TODO: retrieve also not answered questions for logging
-     */
+* Retrieves the data = question-value-pairs of the currently integrated
+* usability questionnaire in div "ueq"
+* returns Questionnaire Data in format: 
+*  questionID1***value1###questionID2***value2###
+*  TODO: retrieve also not answered questions for logging
+*/
 function ue_retrieveQuestionnaireData(){
     
     var qData = "";
@@ -416,9 +422,9 @@ function ue_retrieveQuestionnaireData(){
 }
 
 /**
-     * Checks whether the given questionnaire data (q-a-pairs) reflect the complete
-     * questionnaire or whether some questions hadn't been answered
-     */
+* Checks whether the given questionnaire data (q-a-pairs) reflect the complete
+* questionnaire or whether some questions hadn't been answered
+*/
 function ue_dataComplete(qData){
     
     var testid;
@@ -430,7 +436,7 @@ function ue_dataComplete(qData){
             flag = false;
         }
     });
-   return flag;
+    return flag;
 }
 
 function ue_logDiagnosis(){
@@ -509,7 +515,7 @@ function ue_getSolutionRating(solutiontextid){
 }
 
 function ue_logUEFeedback(user, contact, feedback, now){
-     var link = $.query.set("action", "logUEFeedback")
+    var link = $.query.set("action", "logUEFeedback")
     .set("user", user)
     .set("contact", contact)
     .set("ueFeedback", feedback)
@@ -539,7 +545,7 @@ function ue_logUEQData(user, contact, questionnaireData){
         url : link,
         success : function(html) {
             if(html=="success"){
-               ue_logEnd();
+                ue_logEnd();
             } 
         }
     });

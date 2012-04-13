@@ -65,6 +65,8 @@ public interface IDialogObject {
 	public String getTooltip();
 
 	public String getType();
+        
+        public String getResources();
 
 	/**
 	 * Retrieves the so-called VirtualClassName of the {@link IDialogObject}.
@@ -120,6 +122,7 @@ public interface IDialogObject {
 
 	public void setXMLTag(org.w3c.dom.Element tag);
         
+        public void setResources(String resourcesDef);
         //public String getCounter();
         
         //public void setCounter();

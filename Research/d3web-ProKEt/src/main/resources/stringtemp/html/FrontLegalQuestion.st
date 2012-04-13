@@ -6,7 +6,12 @@
 <div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$" >
     
     <div id="$id$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')">
-        <img id="$id$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes('$fullId$')">
+        <img id="$fullId$-typeimg" alt="type" class="$fullId$-tt-trigger" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes('$fullId$')">
+            <div id="tt-$fullId$" class="tt-$fullId$ tooltip tooltipArrow">
+                Detailfragen einblenden
+            </div>
+        </img>
+            
             <div id="ynYes-$fullId$" class="ynbutton $ratingY$ $fullId$-tt-trigger-ynbutton" onclick="handleOQYNQuestions('ynYes-$fullId$', '$ratingNrY$')">
                 Ja
                 $TooltipButtonJA()$
@@ -41,4 +46,6 @@
 	</div>$endif$
 	
 	<div id="bonus-$fullId$" style="display:none">$bonusText$</div>
+
+        <div id="lr-$fullId$" showif="$showif$" style="display:none"> $linkedResources$ </div>
 </div>

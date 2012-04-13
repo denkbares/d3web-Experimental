@@ -59,7 +59,7 @@ public class GlobalSettings {
     private final String d3webRendererPath = "de.d3web.proket.d3web.output.render.";
     private final String rendererBasePath = "de.d3web.proket.output.render";
     private final String applicationBasePath = "/controlcenterResources";
-
+    private final String resourcesPath = "resources/";
     /*
      * File names
      */
@@ -205,9 +205,14 @@ public class GlobalSettings {
     // TODO: factor out to dialog/prototype settings
     public void setQuestionCount(String c) {
         this.questionCount = c;
- }
+    }
 
     public String getQuestionCount() {
         return this.questionCount;
+    }
+
+
+    public String getResourcesPath() {
+        return this.resourcesPath;
     }
 }

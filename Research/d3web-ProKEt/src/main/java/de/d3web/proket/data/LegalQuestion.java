@@ -15,6 +15,7 @@ public class LegalQuestion extends Question {
     protected String defining;
     protected String choices;
     protected Boolean dummy = false;
+    
 
     public LegalQuestion() {
         super();
