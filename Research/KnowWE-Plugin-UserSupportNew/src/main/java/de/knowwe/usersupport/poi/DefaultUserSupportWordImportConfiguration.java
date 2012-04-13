@@ -2,11 +2,10 @@ package de.knowwe.usersupport.poi;
 
 import java.util.List;
 
-public class DefaultUserSupportWordImport implements IWordImport {
+public class DefaultUserSupportWordImportConfiguration implements IWordImportConfiguration {
 
 	@Override
 	public String cleanHTMLLine(String s, List<String> docLines) {
-		s = s.replaceAll("\\<p\\>FRAGE\\</p\\>", "FRAGE\\<br/\\>");
 		s = s.replaceAll("\\<li\\>\\<p\\>", "\\<li\\>");
 		s = s.replaceAll("\\</p\\>\\</li\\>", "\\</li\\>");
 
@@ -36,20 +35,8 @@ public class DefaultUserSupportWordImport implements IWordImport {
 	@Override
 	public String createWikiMarkup(List<String> lines) {
 		StringBuilder docText = new StringBuilder();
-		boolean isTree = false;
 		for (String line : lines)
 		{
-			if (line.startsWith("-") && !isTree)
-			{
-				isTree = true;
-				docText.append("%%baum \r\n start \r\n");
-			}
-			if (!line.startsWith("-") && isTree)
-			{
-				docText.append("% \r\n");
-				isTree = false;
-			}
-
 			docText.append(line + "\r\n");
 		}
 		return docText.toString();

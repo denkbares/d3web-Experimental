@@ -79,7 +79,7 @@ public class WordDefaultMarkupRenderer implements Renderer
 		//						"</span>" +
 		//						"</div>";
 
-		String importButton = "<form class=\"file_upload_form\" id=\"file_upload_form\" action=\"uploadreceptor?" +
+		String importButton = "<form class=\"file_upload_form\" id=\"file_upload_form\" action=\"juriuploadreceptor?" +
 				"tableId=" + section.getID() +
 				"&article=" + section.getTitle() +
 				"&filetype=word\" " +

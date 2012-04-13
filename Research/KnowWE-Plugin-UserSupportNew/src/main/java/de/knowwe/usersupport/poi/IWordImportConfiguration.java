@@ -9,7 +9,7 @@ import java.util.List;
  * @author Johannes Dienst
  * @created 13.04.2012
  */
-public interface IWordImport
+public interface IWordImportConfiguration
 {
 
 	/**

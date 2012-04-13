@@ -39,7 +39,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.ActionContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.usersupport.poi.DefaultUserSupportWordImport;
+import de.knowwe.usersupport.poi.DefaultUserSupportWordImportConfiguration;
 import de.knowwe.usersupport.poi.PoiUtils;
 
 /**
@@ -131,11 +131,11 @@ public class UploadReceptorServlet extends HttpServlet {
 							null, null);
 					if (fileType.equals("word"))
 					{
-						PoiUtils.importWordFromFile(file, tableId, article, context, new DefaultUserSupportWordImport());
+						this.importWord(file, tableId, article, context);
 					}		
 					else
 				    {
-						PoiUtils.importTableFromFile(file, tableId, article, context);
+						this.importTable(file, tableId, article, context);
 				    }
 				}
 				out.close();
@@ -150,5 +150,18 @@ public class UploadReceptorServlet extends HttpServlet {
 		}
 
 	}
+
+	protected void importWord(File file, String tableId, String article,
+			ActionContext context) throws IOException {
+		PoiUtils.importWordFromFile(file, tableId, article, context, new DefaultUserSupportWordImportConfiguration());	
+	}
+	
+	protected void importTable(File file, String tableId, String article,
+			ActionContext context) throws IOException {
+		PoiUtils.importTableFromFile(file, tableId, article, context);
+		
+	}
+
+
 
 }

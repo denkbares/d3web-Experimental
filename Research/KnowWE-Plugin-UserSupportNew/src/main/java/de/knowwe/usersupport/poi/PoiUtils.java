@@ -286,7 +286,7 @@ public class PoiUtils
 	}
 
 	public static String importWordFromFile(File in, String tableId, String article,
-			ActionContext context, IWordImport wordImport) throws IOException
+			ActionContext context, IWordImportConfiguration wordImport) throws IOException
 	{
 		ArticleManager manager =
 				Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
