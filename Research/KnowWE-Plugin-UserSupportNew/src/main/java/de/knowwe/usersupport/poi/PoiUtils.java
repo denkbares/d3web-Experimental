@@ -291,7 +291,6 @@ public class PoiUtils
 				Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
 		Article art = manager.getArticle(article);
 		Section<Article> artSec = art.getRootSection();
-		Environment.getInstance().getWikiConnector();
 
 		// Save {@link KnowledgeBaseType} and {@link WordDefaultMarkup}
 		StringBuilder recovery = new StringBuilder();
@@ -306,25 +305,18 @@ public class PoiUtils
 		recovery.append("@package: default \r\n");
 		recovery.append("% \r\n");
 
-		// FileInputStream input = new FileInputStream(in);
-		// XWPFDocument doc = new XWPFDocument(input);
-		// List<XWPFParagraph> paragraphs = doc.getParagraphs();
-		// StringBuilder docText = new StringBuilder();
-
+		// Run the OfficeConverter
 		String dirPath = in.getParent();
 		String absolutePath = in.getAbsolutePath();
 		Config conf = new Config("html", true, "UTF-8", dirPath, true, false, true);
 		File inputFile = new File(absolutePath);
-		// boolean inputExists = inputFile.exists();
-		File outputFile = new File(dirPath + "/test.html");
-		// inputFile = new File("C:/ConverterTestDir/docbook-395f91f4.doc");
-		// boolean outputExists = outputFile.exists();
-		// outputFile = new File("C:/ConverterTestDir/test.html");
+		File outputFile = new File(dirPath + "/converted.html");
 		Converter.convertFile2File(inputFile,
 				outputFile, conf);
 
-		File testFile = new File(dirPath + "/test.html");
-		BufferedReader r = new BufferedReader(new FileReader(testFile));
+		// Parse the created html to Wikisyntax
+		File convertedFile = new File(dirPath + "/converted.html");
+		BufferedReader r = new BufferedReader(new FileReader(convertedFile));
 
 		List<String> docLines = new ArrayList<String>();
 		String readMe;
@@ -350,29 +342,13 @@ public class PoiUtils
 			docText.append(line + "\r\n");
 		}
 
-		// boolean isTree = false;
-		// for (XWPFParagraph par : paragraphs)
-		// {
-		// String parText = par.getParagraphText();
-		// if (parText.startsWith("-") && !isTree)
-		// {
-		// isTree = true;
-		// docText.append("%%baum \r\n start \r\n");
-		// }
-		// if (!parText.startsWith("-") && isTree)
-		// {
-		// docText.append("% \r\n");
-		// }
-		//
-		// docText.append(parText + "\r\n");
-		// }
-
 		recovery.append(docText);
-
+		
+		// replace the whole article
 		Map<String, String> nodeMap = new HashMap<String, String>();
 		nodeMap.put(artSec.getID(), recovery.toString());
-
 		Sections.replaceSections(context, nodeMap);
+		
 		return null;
 	}
 

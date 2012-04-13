@@ -72,15 +72,14 @@ public class UploadReceptorServlet extends HttpServlet {
 			PrintWriter out = res.getWriter();
 			res.setContentType("text/plain");
 
+			// configure the filesystem
 			DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
 			fileItemFactory.setSizeThreshold(1 * 1024 * 1024); // 1 MB
 			ServletFileUpload uploadHandler = new ServletFileUpload(fileItemFactory);
-
-			File tmpDir = new
-					File(KnowWEUtils.getKnowWEExtensionPath());
 			File destinationDir = new
 					File(KnowWEUtils.getKnowWEExtensionPath());
-			fileItemFactory.setRepository(tmpDir);
+			fileItemFactory.setRepository(new
+					File(KnowWEUtils.getKnowWEExtensionPath()));
 
 			/*
 			 * Parse the request
@@ -122,14 +121,22 @@ public class UploadReceptorServlet extends HttpServlet {
 					file.deleteOnExit();
 					item.write(file);
 
-					// import the file to Wiki via PoiUtils
+					/*
+					 *  import the file to Wiki via PoiUtils
+					 *  Create context here, because we need req and res.
+					 */
 					Map<String, String> parameters = new HashMap<String, String>();
 					parameters.put("KWikiWeb", Environment.DEFAULT_WEB);
 					ActionContext context = new ActionContext(null, null, parameters, req, res,
 							null, null);
-					if (fileType.equals("word")) PoiUtils.importWordFromFile(file, tableId,
-							article, context);
-					else PoiUtils.importTableFromFile(file, tableId, article, context);
+					if (fileType.equals("word"))
+					{
+						PoiUtils.importWordFromFile(file, tableId, article, context);
+					}		
+					else
+				    {
+						PoiUtils.importTableFromFile(file, tableId, article, context);
+				    }
 				}
 				out.close();
 			}
