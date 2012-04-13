@@ -71,7 +71,6 @@ public class POIUtilsJuriSearch
 			for (Section<QuestionDefinitionArea> area : qAreas)
 			{
 				XWPFParagraph par = doc.createParagraph();
-				XWPFRun run = par.createRun();
 				String[] areaLines = area.getText().split("\\r\\n");
 				for (String line : areaLines)
 				{

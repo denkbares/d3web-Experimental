@@ -58,13 +58,13 @@ public class WordDefaultMarkupRenderer implements Renderer
 				"		objectId : '" + section.getID() + "',"
 				+ "}\" ";
 
-		String exportButton =
-				"<div class=\"table_export_div\">" +
-						"<input class=\"button word-export\" type=\"button\" name=\"Export\" " +
-						"value=\"" + bundle.getString("export_button") + "\" id=\"" + section.getID()  + "-Export\"" + rel + ">" +
-						"<span class=\"table_export_result\" id=\"export-download" + section.getID() + "\"> </span>" +
-						"</div>"
-						;
+//		String exportButton =
+//				"<div class=\"table_export_div\">" +
+//						"<input class=\"button word-export\" type=\"button\" name=\"Export\" " +
+//						"value=\"" + bundle.getString("export_button") + "\" id=\"" + section.getID()  + "-Export\"" + rel + ">" +
+//						"<span class=\"table_export_result\" id=\"export-download" + section.getID() + "\"> </span>" +
+//						"</div>"
+//						;
 
 		//		String inputForm = "<form action=\"\" method=\"post\" enctype=\"multipart/form-data\">" +
 		//				"<input name=\"import-textfield-" + section.getID() +"\" type=\"file\" size=\"50\" maxlength=\"100000\" accept=\"application/msexcel/*\">" +
@@ -96,7 +96,7 @@ public class WordDefaultMarkupRenderer implements Renderer
 		StringBuilder buttons = new StringBuilder();
 		buttons.append("<div class=\"table_export_frame\">");
 		buttons.append("<div class=\"defaultMarkup\">");
-		buttons.append(exportButton + importButton);
+		buttons.append(importButton);
 		buttons.append("</div>");
 		buttons.append("</div>");
 
