@@ -33,8 +33,8 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 
+import utils.TestUtils;
 import connector.DummyConnector;
-
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
@@ -60,7 +60,9 @@ public class RDF2GoSyncTest {
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
 		PackageManager.overrideAutocompileArticle(true);
-		Environment.initInstance(new DummyConnector());
+		DummyConnector connector = new DummyConnector();
+		connector.setKnowWEExtensionPath(TestUtils.createKnowWEExtensionPath());
+		Environment.initInstance(connector);
 	}
 
 	@Test

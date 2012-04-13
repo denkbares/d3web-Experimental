@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 import junit.framework.TestCase;
+import utils.TestUtils;
 import connector.DummyConnector;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Environment;
@@ -46,7 +47,9 @@ public class UpdateMechanismTest extends TestCase {
 		/*
 		 * Initialise Environment
 		 */
-		Environment.initInstance(new DummyConnector());
+		DummyConnector connector = new DummyConnector();
+		connector.setKnowWEExtensionPath(TestUtils.createKnowWEExtensionPath());
+		Environment.initInstance(connector);
 		Environment.getInstance().setCompilationMode(CompilationMode.INCREMENTAL);
 
 		/*

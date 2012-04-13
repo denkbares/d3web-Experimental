@@ -13,9 +13,8 @@ import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryRow;
 
-import connector.DummyConnector;
-
 import utils.TestUtils;
+import connector.DummyConnector;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
@@ -35,7 +34,9 @@ public class TimeEventTest extends TestCase {
 	public void setUp() throws Exception {
 		InitPluginManager.init();
 		PackageManager.overrideAutocompileArticle(true);
-		Environment.initInstance(new DummyConnector());
+		DummyConnector connector = new DummyConnector();
+		connector.setKnowWEExtensionPath(TestUtils.createKnowWEExtensionPath());
+		Environment.initInstance(connector);
 		ke = Environment.getInstance();
 		type = RootType.getInstance();
 		am = ke.getArticleManager(Environment.DEFAULT_WEB);

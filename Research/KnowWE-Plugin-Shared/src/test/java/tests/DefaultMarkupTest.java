@@ -29,8 +29,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import utils.TestUtils;
 import connector.DummyConnector;
-
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
@@ -81,7 +81,9 @@ public class DefaultMarkupTest {
 	public void setUp() throws Exception {
 		InitPluginManager.init();
 		RootType.getInstance().addChildType(new DefaultMarkupTestType());
-		Environment.initInstance(new DummyConnector());
+		DummyConnector connector = new DummyConnector();
+		connector.setKnowWEExtensionPath(TestUtils.createKnowWEExtensionPath());
+		Environment.initInstance(connector);
 		env = Environment.getInstance();
 	}
 

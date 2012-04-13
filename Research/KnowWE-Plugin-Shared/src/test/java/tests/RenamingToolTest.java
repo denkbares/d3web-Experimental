@@ -26,12 +26,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import connector.DummyConnector;
-
 import junit.framework.TestCase;
 import objectTypes.SplitObjectType;
 import objectTypes.WordObjectType;
 import utils.TestUtils;
+import connector.DummyConnector;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
@@ -52,7 +51,9 @@ public class RenamingToolTest extends TestCase {
 		/**
 		 * Initialise Environment
 		 */
-		Environment.initInstance(new DummyConnector());
+		DummyConnector connector = new DummyConnector();
+		connector.setKnowWEExtensionPath(TestUtils.createKnowWEExtensionPath());
+		Environment.initInstance(connector);
 		Environment _env = Environment.getInstance();
 		_env.getArticle("default_web", "Test_Article");
 

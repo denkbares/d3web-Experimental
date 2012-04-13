@@ -27,10 +27,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import connector.DummyConnector;
-
 import junit.framework.TestCase;
 import utils.TestUtils;
+import connector.DummyConnector;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
@@ -54,7 +53,9 @@ public class XMLSectionFinderTest extends TestCase {
 		/**
 		 * Initialise Environment
 		 */
-		Environment.initInstance(new DummyConnector());
+		DummyConnector connector = new DummyConnector();
+		connector.setKnowWEExtensionPath(TestUtils.createKnowWEExtensionPath());
+		Environment.initInstance(connector);
 		Environment.getInstance().getArticle("default_web", "Test_Article");
 
 		/**

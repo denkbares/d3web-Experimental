@@ -23,11 +23,11 @@ package tests;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import connector.DummyConnector;
-
 import junit.framework.TestCase;
 import objectTypes.SplitObjectType;
 import objectTypes.WordObjectType;
+import utils.TestUtils;
+import connector.DummyConnector;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
@@ -52,7 +52,9 @@ public class SectionizerTest extends TestCase {
 		/**
 		 * Initialise Environment
 		 */
-		Environment.initInstance(new DummyConnector());
+		DummyConnector connector = new DummyConnector();
+		connector.setKnowWEExtensionPath(TestUtils.createKnowWEExtensionPath());
+		Environment.initInstance(connector);
 		Environment.getInstance().getArticle("default_web", "Test_Article");
 
 		/**
