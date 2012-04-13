@@ -313,7 +313,7 @@ public class PoiUtils
 
 		String dirPath = in.getParent();
 		String absolutePath = in.getAbsolutePath();
-		Config conf = new Config("html", false, "UTF-8", dirPath, true, false, true);
+		Config conf = new Config("html", true, "UTF-8", dirPath, true, false, true);
 		File inputFile = new File(absolutePath);
 		// boolean inputExists = inputFile.exists();
 		File outputFile = new File(dirPath + "/test.html");

@@ -94,7 +94,7 @@ public class DialogComponent
 		algorithmsToken.add(new LevenshteinAlgorithm());
 		algorithmsToken.add(new QGramAlgorithm());
 		algorithmsToken.add(new RefinedSoundexAlgorithm());
-		algorithmsToken.add(new EditexAlgorithm());
+//		algorithmsToken.add(new EditexAlgorithm());
 
 		algorithmsPhrase.add(new JaccardAlgorithm());
 		algorithmsPhrase.add(new MongeElkanAlgorithm());
