@@ -47,8 +47,6 @@ public class DialogRenderer extends Renderer {
         IRenderer renderer = (IRenderer) ClassUtils.getBestObject(
                 dialogObject, "de.d3web.proket.output.render",
                 "Renderer");
-        System.out.println(dialogObject.getClass());
-        System.out.println(renderer.getClass());
         return renderer;
     }
 

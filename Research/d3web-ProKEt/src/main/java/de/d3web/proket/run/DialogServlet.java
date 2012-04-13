@@ -121,8 +121,8 @@ public class DialogServlet extends HttpServlet {
             httpSession.setAttribute("newload", "first");
         }
 
-         System.out.println(action);
-        System.out.println(httpSession.getAttribute("newload"));
+        //System.out.println(action);
+        //System.out.println(httpSession.getAttribute("newload"));
         
         
         if (!action.equalsIgnoreCase("logInit") && 
@@ -138,7 +138,6 @@ public class DialogServlet extends HttpServlet {
             httpSession.setAttribute("newload", "false");
         }
         
-        System.out.println(httpSession.getAttribute("newload") + "\n");
          
         //if(action.equalsIgnoreCase("logInit") &&
           //      httpSession.getAttribute("newload").equals("")){
@@ -255,8 +254,8 @@ public class DialogServlet extends HttpServlet {
         DialogTree dialogTree = parseInput(request);
         GlobalSettings.getInstance().setQuestionCount("0");
 
-        System.out.println(dialogTree.getRoot());
-        System.out.println(dialogTree.getRoot().getVirtualClassName());
+        //System.out.println(dialogTree.getRoot());
+        //System.out.println(dialogTree.getRoot().getVirtualClassName());
         IRenderer rootRenderer = Renderer.getRenderer(dialogTree.getRoot());
         ContainerCollection cc = rootRenderer.renderRoot(dialogTree);
         String html = cc.html.toString();

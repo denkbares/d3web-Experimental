@@ -131,7 +131,6 @@ public class OQQuestionRenderer extends Renderer {
     protected void renderChildren(StringTemplate st, ContainerCollection cc, 
             IDialogObject dialogObject, boolean force) {
 
-        System.out.println("OQRenderer");
         IDialogObject parent = dialogObject.getParent();
         String pTitle = parent.getTitle();
 

@@ -228,7 +228,7 @@ public class HTMLCodeContainer implements ICodeContainer {
 		}
 
 		if (debug) {
-			System.out.println("closing table " + id);
+			//System.out.println("closing table " + id);
 		}
 
 		// and kick data structures
@@ -250,14 +250,14 @@ public class HTMLCodeContainer implements ICodeContainer {
 		// close
 		tableCloseCell(id);
 		if (debug) {
-			System.out.println("opening cell " + id);
+			//System.out.println("opening cell " + id);
 		}
 
 		// open table if necessary
 		if (tableCellCounter.get(id) == null) {
 			tableStart(id, columns, tableAttributes);
 			if (debug) {
-				System.out.println("have to open table for " + id);
+				//System.out.println("have to open table for " + id);
 			}
 		}
 

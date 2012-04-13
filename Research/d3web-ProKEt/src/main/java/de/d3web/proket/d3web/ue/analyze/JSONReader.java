@@ -343,12 +343,8 @@ public class JSONReader implements Serializable {
         //System.out.println(jo.get(BROWSER));
 
         ArrayList test = reader.retrieveAllLogfilesAsJSON("DEFAULT-DATA");
-        System.out.println(test.size());
-        System.out.println(test);
         ArrayList user = reader.getAllJSONForUser(test, "user");
-        System.out.println(user);
-        System.out.println(reader.getSessionsForUser("user", "DEFAULT-DATA"));
-
+        
         /*
          * LATER FOR FORMATTING DATE Date end = null;
          *

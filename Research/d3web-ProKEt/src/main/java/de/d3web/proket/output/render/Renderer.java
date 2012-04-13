@@ -94,7 +94,6 @@ public class Renderer implements IRenderer {
         if (dialogObject instanceof Answer) {
             if (((Answer) dialogObject).getAbstraction()) {
                 // hier d3web abfragen und füllen!
-                System.out.println("Abstraction!");
                 st.setAttribute("selection", "ABSTR");
             }
         }
@@ -209,7 +208,6 @@ public class Renderer implements IRenderer {
 
         if (dialogObject instanceof Answer) {
             if (((Answer) dialogObject).getAbstraction()) {
-                System.out.println("ABSTRACTION: " + dialogObject.getText());
             }
         }
 
@@ -333,7 +331,7 @@ public class Renderer implements IRenderer {
             st = TemplateUtils.getStringTemplate("Dummy" + dialogObject.getVirtualClassName(), "html");
         } else {
             st = TemplateUtils.getStringTemplate(
-                dialogObject.getVirtualClassName(), "html");
+                    dialogObject.getVirtualClassName(), "html");
         }
 
         // get the inh.attributes of this objects and inherit missing

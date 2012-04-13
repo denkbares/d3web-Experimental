@@ -1237,7 +1237,7 @@ protected void checkInitialLoggingReload(HttpSession httpSession,
         DefaultRootD3webRenderer d3webr =
                 (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
 
-        System.out.println(d3webr.getClass());
+        //System.out.println(d3webr.getClass());
         // new ContainerCollection needed each time to get an updated dialog
         ContainerCollection cc = new ContainerCollection();
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);

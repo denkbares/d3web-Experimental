@@ -85,7 +85,7 @@ public class QuickParser {
         for (Pair<String, Integer> p : l) {
             int depth = p.getLast();
             String content = p.getFirst();
-            System.out.println("Bearbeite Frage Nr " + count++ + " im Baum.");
+            //System.out.println("Bearbeite Frage Nr " + count++ + " im Baum.");
             Question actQuestion = buildQuestion(content, qm);
             Question q = stack.peek();
             if (q == null) {

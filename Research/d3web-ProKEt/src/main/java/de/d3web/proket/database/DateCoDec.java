@@ -86,8 +86,8 @@ public class DateCoDec {
 	public static void main(String[] args) throws IOException {
 		String s = getCode();
 
-		System.out.println(s);
-		System.out.println(getDate(s));
+		//System.out.println(s);
+		//System.out.println(getDate(s));
 	}
 
 }

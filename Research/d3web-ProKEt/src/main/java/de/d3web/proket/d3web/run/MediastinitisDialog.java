@@ -94,7 +94,7 @@ public class MediastinitisDialog extends D3webDialog {
                         usrDat.put(nextLine[0], values);
                     }
                 }
-                System.out.println(usrDat);
+                //System.out.println(usrDat);
             } catch (FileNotFoundException fnfe) {
                 fnfe.printStackTrace();
             } catch (IOException ioe) {

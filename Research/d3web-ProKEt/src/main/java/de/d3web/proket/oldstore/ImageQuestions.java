@@ -148,7 +148,7 @@ public class ImageQuestions extends HttpServlet {
 
 			image = ImageIO.read(in);
 			BufferedImage bui = toBufferedImage(image);
-			System.out.println(bui);
+			//System.out.println(bui);
 			ImageIO.write(bui, "jpg", new File("/mymage.jpg"));
 
 			// works...

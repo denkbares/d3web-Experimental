@@ -99,18 +99,16 @@ public class JSONLogger {
     public void logStartValue(String value) {
         logfile.put(UETerm.START.toString(), value);
     }
-    
-    public void logDiagnosis(String solutiontext, String rating){
+
+    public void logDiagnosis(String solutiontext, String rating) {
         logfile.put(UETerm.SOL.toString() + "::" + solutiontext, rating);
     }
-    
-    public void logUEQuestionnaire(String questionnairetext){
+
+    public void logUEQuestionnaire(String questionnairetext) {
         questionnairetext = questionnairetext.toString().replace("\"", "'");
-        System.out.println(questionnairetext);
         logfile.put(UETerm.UEQ.toString(), questionnairetext);
     }
-    
-   
+
     /**
      * Adds the given value to the internal JSONObject representation.
      *
@@ -119,12 +117,12 @@ public class JSONLogger {
     public void logEndValue(String value) {
         logfile.put(UETerm.END.toString(), value);
     }
-    
+
     public void logDialogType(String type) {
         logfile.put(UETerm.TYPE.toString(), type);
     }
-    
-    public void logQuestionToggle(String questiontext, String logtime , String expandshut) {
+
+    public void logQuestionToggle(String questiontext, String logtime, String expandshut) {
         logfile.put(expandshut + "_" + logtime, questiontext);
     }
 
@@ -153,7 +151,7 @@ public class JSONLogger {
 
         logfile.put(UETerm.CLICKED.toString(), existingClickedObjects);
     }
-    
+
     public void logUEFeedback(Object feedbackstring, Object timestamp) {
 
         feedbackstring = feedbackstring.toString().replace("\"", "'");
@@ -171,8 +169,8 @@ public class JSONLogger {
     private JSONArray getClickedObjects() {
         return clickarray;
     }
-    
-     private JSONArray getFeedbackArray() {
+
+    private JSONArray getFeedbackArray() {
         return feedbackarray;
     }
 
@@ -184,8 +182,6 @@ public class JSONLogger {
     public JSONObject getLogAsJSON() {
         return logfile;
     }
-    
-    
 
     /**
      * Restore values from a given existing JSON file into this currently logged
@@ -224,11 +220,9 @@ public class JSONLogger {
                 dir.mkdirs();
             }
             String filepath = dir + "/" + filename;
-            
+
             Writer w = new OutputStreamWriter(new FileOutputStream(filepath), "UTF8");
             bw = new BufferedWriter(w);
-            System.out.println(filepath);
-            System.out.println(getLogAsJSON().toString());
             //TODO: refactor: method "decorate JSON to file string" or so
             bw.write(getLogAsJSON().toString().replace("\\", ""));
 
@@ -250,7 +244,7 @@ public class JSONLogger {
     }
 
     /**
-     * Rewrites an existing end-tag in logfile to a break-tag. This is a flag, 
+     * Rewrites an existing end-tag in logfile to a break-tag. This is a flag,
      * that an already completed logfile is reopened again. Is done only once,
      * as we assume that once completed files remain (mostly) completed.
      */
@@ -258,19 +252,18 @@ public class JSONLogger {
 
         String prevEnd = "";
         if (logfile.get(UETerm.END.toString()) != null) {
-           prevEnd = (String) logfile.get(UETerm.END.toString());
+            prevEnd = (String) logfile.get(UETerm.END.toString());
 
             if (!prevEnd.equals("")) {
-                    logfile.put(UETerm.BREAK.toString(), prevEnd);
-                
+                logfile.put(UETerm.BREAK.toString(), prevEnd);
+
             }
         }
     }
-    
-    public void setEndValOnLoad(String endVal){
+
+    public void setEndValOnLoad(String endVal) {
         endValOnNewLoad = endVal;
     }
-    
 
     public static void main(String[] args) {
         JSONLogger logger = new JSONLogger("tester.txt");
@@ -326,10 +319,7 @@ public class JSONLogger {
         Iterator iter = json.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry entry = (Map.Entry) iter.next();
-            System.out.println(entry.getKey() + "=>" + entry.getValue());
         }
-
-        System.out.println(JSONValue.toJSONString(json));
 
     }
 }
