@@ -155,15 +155,15 @@ public class UEStudyAnalyst {
     public static void main(String[] args) {
 
         StringBuilder bui = new StringBuilder();
-        List<File> logs = JSONReader.getInstance().retrieveAllLogfiles("G1logs");
+        List<File> logs = JSONReader.getInstance().retrieveAllLogfiles("Testlog-Data");
         for (File logfile : logs) {
             UEStudyAnalyst ue = new UEStudyAnalyst(logfile);
         }
 
-        String csv = assembleCSVString("G2logs");
+        String csv = assembleCSVString("Testlog-Data");
         System.out.println(csv);
         try {
-            writeCSV("/Users/mafre/Promotion/Projects/2012JuriSearch/UserStudyMar2012/auswertungG2LogsNew.csv", csv);
+            writeCSV("/Users/mafre/CodingSpace/Testlog/auswertung.csv", csv);
         } catch (IOException io) {
             io.printStackTrace();
         }

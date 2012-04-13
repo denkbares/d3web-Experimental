@@ -1,15 +1,26 @@
-BROWSER ABFRAGE MIT JQUERY
-// Firefox 2/3
-FF=/a/[-1]=='a'
-// Firefox 3
-FF3=(function x(){})[-5]=='x'
-// Firefox 2
-FF2=(function x(){})[-6]=='x'
-// Internet Explorer 6/7/8:
-IE='\v'=='v'
-// Safari:
-Saf=/a/.__proto__=='//'
-// Chrome
-Chr=/source/.test((/a/.toString+''))
-// Opera
-Op=/^function \(/.test([].sort)
+
+- UMLAUTE PROBLEM
+    --> Umlaute wurden - trotz einstellen beim senden via Ajax und empfangen im
+        Servlet auf UTF-8 - nicht korrekt verarbeitet, im Servlet kam immer
+        "Müll" an.
+    LÖSUNG:
+        Der TOMCAT muss explizit eingestellt werden, UTF-8 zu verwenden.
+        Hierzu in der Server.xml Datei das Connector-Element wie folgt 
+        anpassen:
+              <Connector port="8080" protocol="HTTP/1.1" 
+               connectionTimeout="20000" 
+               redirectPort="8443" 
+	       URIEncoding="UTF-8"
+              />
+
+- Dauerschleife Login - Login - Login
+    --> es muss ERST die dbLogin action abgefragt werden bevor man aus der property wieder auf den Login springen lässt!
+    --> es kann auch sein, dass auf dem Server in /tomcat/conf/Catalina/localhost die Dateien
+        EuraHS.xml und EuraHS-Dialog.xml die richtigen DB Daten nicht enthalten
+
+- Tool Alex H Office Doc upload für KnowWE(Juri)
+    --> Tool muss (momentan) erst aus Netbeans raus einmal gestartet werden
+    damit der OO Server läuft, sonst gehts nicht, da der Tomcat (momentan) keine 
+    Berechtigung hat, das zu starten
+    LÖSUNG: evtl OO auf dem Server installieren (bzw nur die nötige Datei ablegen)
+    und dort laufen lassen (ausprobieren)

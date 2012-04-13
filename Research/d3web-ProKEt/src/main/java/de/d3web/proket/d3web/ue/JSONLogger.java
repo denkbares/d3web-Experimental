@@ -105,6 +105,7 @@ public class JSONLogger {
     }
     
     public void logUEQuestionnaire(String questionnairetext){
+        questionnairetext = questionnairetext.toString().replace("\"", "'");
         System.out.println(questionnairetext);
         logfile.put(UETerm.UEQ.toString(), questionnairetext);
     }
@@ -155,6 +156,7 @@ public class JSONLogger {
     
     public void logUEFeedback(Object feedbackstring, Object timestamp) {
 
+        feedbackstring = feedbackstring.toString().replace("\"", "'");
         JSONObject ob = new JSONObject();
         ob.put(UETerm.TS.toString(), timestamp);
         ob.put(UETerm.VAL.toString(), feedbackstring);
@@ -225,6 +227,8 @@ public class JSONLogger {
             
             Writer w = new OutputStreamWriter(new FileOutputStream(filepath), "UTF8");
             bw = new BufferedWriter(w);
+            System.out.println(filepath);
+            System.out.println(getLogAsJSON().toString());
             //TODO: refactor: method "decorate JSON to file string" or so
             bw.write(getLogAsJSON().toString().replace("\\", ""));
 
