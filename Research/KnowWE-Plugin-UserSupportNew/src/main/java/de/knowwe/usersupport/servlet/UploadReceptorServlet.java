@@ -39,6 +39,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.ActionContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.usersupport.poi.DefaultUserSupportWordImport;
 import de.knowwe.usersupport.poi.PoiUtils;
 
 /**
@@ -69,8 +70,6 @@ public class UploadReceptorServlet extends HttpServlet {
 			throws IOException, ServletException {
 
 		try {
-			PrintWriter out = res.getWriter();
-			res.setContentType("text/plain");
 
 			// configure the filesystem
 			DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
@@ -92,8 +91,9 @@ public class UploadReceptorServlet extends HttpServlet {
 			// TODO works everywhere?
 			res.sendRedirect("/KnowWE/Wiki.jsp?page=" + article);
 
+			PrintWriter out = res.getWriter();
+			res.setContentType("text/plain");
 			Iterator itr = items.iterator();
-
 			while (itr.hasNext()) {
 				FileItem item = (FileItem) itr.next();
 				/*
@@ -131,7 +131,7 @@ public class UploadReceptorServlet extends HttpServlet {
 							null, null);
 					if (fileType.equals("word"))
 					{
-						PoiUtils.importWordFromFile(file, tableId, article, context);
+						PoiUtils.importWordFromFile(file, tableId, article, context, new DefaultUserSupportWordImport());
 					}		
 					else
 				    {

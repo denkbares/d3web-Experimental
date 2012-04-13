@@ -285,7 +285,8 @@ public class PoiUtils
 		wb.write(out);
 	}
 
-	public static String importWordFromFile(File in, String tableId, String article, ActionContext context) throws IOException
+	public static String importWordFromFile(File in, String tableId, String article,
+			ActionContext context, IWordImport wordImport) throws IOException
 	{
 		ArticleManager manager =
 				Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
@@ -321,28 +322,9 @@ public class PoiUtils
 		List<String> docLines = new ArrayList<String>();
 		String readMe;
 		while ((readMe = r.readLine()) != null) {
-			PoiUtils.cleanHTMLLine(readMe, docLines);
-		}
-
-		StringBuilder docText = new StringBuilder();
-		boolean isTree = false;
-		for (String line : docLines)
-		{
-			if (line.startsWith("-") && !isTree)
-			{
-				isTree = true;
-				docText.append("%%baum \r\n start \r\n");
-			}
-			if (!line.startsWith("-") && isTree)
-			{
-				docText.append("% \r\n");
-				isTree = false;
-			}
-
-			docText.append(line + "\r\n");
-		}
-
-		recovery.append(docText);
+			wordImport.cleanHTMLLine(readMe, docLines);
+		}	
+		recovery.append(wordImport.createWikiMarkup(docLines));
 		
 		// replace the whole article
 		Map<String, String> nodeMap = new HashMap<String, String>();
@@ -350,41 +332,6 @@ public class PoiUtils
 		Sections.replaceSections(context, nodeMap);
 		
 		return null;
-	}
-
-	/**
-	 * 
-	 * @created 11.03.2012
-	 * @param s
-	 * @return
-	 */
-	private static String cleanHTMLLine(String s, List<String> docLines)
-	{
-		s = s.replaceAll("\\<p\\>FRAGE\\</p\\>", "FRAGE\\<br/\\>");
-		s = s.replaceAll("\\<li\\>\\<p\\>", "\\<li\\>");
-		s = s.replaceAll("\\</p\\>\\</li\\>", "\\</li\\>");
-
-		// bullet lists to wiki-syntax
-		s = s.replaceAll("\\<ol\\>", "");
-		s = s.replaceAll("\\</ol\\>", "");
-		s = s.replaceAll("\\<li\\>", "*");
-		s = s.replaceAll("\\</li\\>", "\\<br/\\>");
-
-		// italic
-		s = s.replaceAll("\\<i\\>", "''");
-		s = s.replaceAll("\\</i\\>", "''");
-
-		// bold
-		s = s.replaceAll("\\<b\\>", "__");
-		s = s.replaceAll("\\</b\\>", "__");
-
-		s = s.replaceAll("\\<p\\>", "");
-		s = s.replaceAll("\\</p\\>", "\\<br/\\>");
-
-		String[] lines = s.split("\\<br/\\>");
-		for (String l : lines)
-			docLines.add(l);
-		return s;
 	}
 
 	/**
