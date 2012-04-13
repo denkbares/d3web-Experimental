@@ -138,7 +138,7 @@ body,table,div {
 
 .longTextfieldInputColor{color: black;}
 
-.longTextarea {width:258px; resize: none; color: #4C4C4C;}
+.longTextarea {width:380px; resize: none; color: #4C4C4C; height:120px;}
 
 .longTextareaInputColor {color: black;}
 

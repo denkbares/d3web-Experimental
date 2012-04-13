@@ -228,19 +228,23 @@ instead of text in mail?! (needed, files will be stored on server also
 ---Logging----
 DONE - Umlaute (zB Mediastinitis)
 DONE - Logging of image answers
+DONE - allow "" in Feedback
 
 - check sind alle wichtigen Elemente geloggt?
 - check logging completely, also for productive systems as EuraHS
 - redeploy EuraHS and Mediastinitis if done
-- allow "" in Feedback
 - Feedback Felder größer
 
 
-Parser Elmar bzw. testen im Wiki:
+
+
+IMPORTANT:
+-----------
+PARSER ELMAR
 - doppelt vorkommende Fragen werden übergangen?!
 
 
-
-GENERAL
+TOOL ALEX und WIKI JURI
 - Tool Alex Pfade flexibel
-- 
+- Tool Alex check in maven proj if done above
+- Check multiple questions in tree
