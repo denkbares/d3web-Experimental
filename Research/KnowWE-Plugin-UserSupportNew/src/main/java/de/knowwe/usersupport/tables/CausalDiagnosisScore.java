@@ -47,6 +47,8 @@ import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
  *
+ * TODO Added ugly bugfix for the problem, that the {@link CondCreateHandler}
+ * gets called after this sections handler.
  * 
  * @author Johannes Dienst
  * @created 14.10.2011
@@ -94,7 +96,7 @@ public class CausalDiagnosisScore extends AbstractType
 					Sections.findChildOfType(scoreSec, InnerTable.class);
 			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty()) return null;
 
-			article = KnowWEUtils.getCompilingArticles(scoreSec).iterator().next();
+			Article compilingArticle = KnowWEUtils.getCompilingArticles(scoreSec).iterator().next();
 			KnowledgeBase kb = D3webUtils.getKnowledgeBase(scoreSec.getWeb(), article.getTitle());
 
 			// Create all Conditions
@@ -102,6 +104,8 @@ public class CausalDiagnosisScore extends AbstractType
 			LinkedList<Condition> conditionList = new LinkedList<Condition>();
 			for (Section<TableCellFirstColumn> cell : firstColumn) {
 				Section<CompositeCondition> cond = Sections.findChildOfType(cell, CompositeCondition.class);
+				// TODO: Ugly Bugfix
+				cond.letSubtreeHandlersCreate(compilingArticle, Priority.LOW);
 				Condition d3Cond = KDOMConditionFactory.createCondition(article, cond);
 				conditionList.add(d3Cond);
 			}
