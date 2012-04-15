@@ -53,6 +53,9 @@ import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
  * 
+ * TODO Added ugly bugfix for the problem, that the {@link CondCreateHandler}
+ * gets called after this sections handler.
+ * 
  * @author Johannes Dienst
  * @created 14.10.2011
  */
@@ -91,7 +94,7 @@ public class HeuristicDiagnosisTable extends ITable
 			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty())
 				return null;
 
-			article = KnowWEUtils.getCompilingArticles(heuristicSec).iterator().next();
+			Article compilingArticle = KnowWEUtils.getCompilingArticles(heuristicSec).iterator().next();
 			KnowledgeBase kb = D3webUtils.getKnowledgeBase(heuristicSec.getWeb(), article.getTitle());
 
 			// First create solution if necessary
@@ -106,6 +109,8 @@ public class HeuristicDiagnosisTable extends ITable
 			for (Section<TableCellFirstColumn> cell : firstColumn)
 			{
 				Section<CompositeCondition> cond = Sections.findChildOfType(cell, CompositeCondition.class);
+				// TODO: Ugly Bugfix
+				cond.letSubtreeHandlersCreate(compilingArticle, Priority.LOW);
 				Condition d3Cond = KDOMConditionFactory.createCondition(article, cond);
 				conditionList.add(d3Cond);
 			}

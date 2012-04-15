@@ -22,7 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.d3web.we.kdom.condition.CompositeCondition;
+import de.d3web.we.kdom.condition.CondKnown;
+import de.d3web.we.kdom.condition.CondKnownUnknown;
+import de.d3web.we.kdom.condition.CondUnknown;
 import de.d3web.we.kdom.condition.Finding;
+import de.d3web.we.kdom.condition.NumericalFinding;
+import de.d3web.we.kdom.condition.NumericalIntervallFinding;
+import de.d3web.we.kdom.condition.SolutionStateCond;
+import de.d3web.we.kdom.condition.UserRatingConditionType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -57,10 +64,19 @@ public class TableCellFirstColumn extends TableCell
 
 		// Add the possible TerminalConditions here
 		CompositeCondition cc = new CompositeCondition();
-		List<Type> types = new ArrayList<Type>();
-		types.add(new Finding());
+		List<Type> termConds = new ArrayList<Type>();
+//		t.add(new Finding());
+		
+		termConds.add(new SolutionStateCond());
+		termConds.add(new UserRatingConditionType());
+		termConds.add(new CondKnownUnknown());
+		termConds.add(new Finding());
+		termConds.add(new CondUnknown());
+		termConds.add(new CondKnown());
+		termConds.add(new NumericalFinding());
+		termConds.add(new NumericalIntervallFinding());
 
-		cc.setAllowedTerminalConditions(types);
+		cc.setAllowedTerminalConditions(termConds);
 		this.addChildType(cc);
 	}
 

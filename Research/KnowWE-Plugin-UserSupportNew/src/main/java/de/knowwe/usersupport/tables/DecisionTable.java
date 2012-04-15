@@ -33,6 +33,7 @@ import de.d3web.core.inference.condition.Condition;
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.KDOMConditionFactory;
 import de.d3web.we.kdom.rules.action.SetQuestionValue;
+import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -42,9 +43,11 @@ import de.knowwe.core.report.Message;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
+ * 
+ * TODO Added ugly bugfix for the problem, that the {@link CondCreateHandler}
+ * gets called after this sections handler.
  * 
  * @author Johannes Dienst
  * @created 14.10.2011
@@ -55,7 +58,7 @@ public class DecisionTable extends ITable
 	public DecisionTable()
 	{
 		this.sectionFinder = new AllTextSectionFinder();
-		this.addSubtreeHandler(Priority.PRECOMPILE_LOW, new DecisionTableSubtreeHandler());
+		this.addSubtreeHandler(Priority.LOW, new DecisionTableSubtreeHandler());
 
 		this.addChildType(new TableDescriptionType());
 
@@ -67,7 +70,7 @@ public class DecisionTable extends ITable
 		this.addChildType(new InnerTable());
 	}
 
-	public class DecisionTableSubtreeHandler extends GeneralSubtreeHandler<DecisionTable>
+	public class DecisionTableSubtreeHandler extends D3webSubtreeHandler<DecisionTable>
 	{
 
 		@Override
@@ -101,6 +104,8 @@ public class DecisionTable extends ITable
 				Section<CompositeCondition> cond = Sections.findChildOfType(cell,
 						CompositeCondition.class);
 				compilingArticle = KnowWEUtils.getCompilingArticles(cell).iterator().next();
+				// TODO: Ugly Bugfix
+				cond.letSubtreeHandlersCreate(compilingArticle, Priority.LOW);
 				Condition d3Cond = KDOMConditionFactory.createCondition(compilingArticle, cond);
 				conditionList.add(d3Cond);
 			}
