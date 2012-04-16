@@ -219,7 +219,7 @@
 		<module>d3web-Plugin-JuriSearch</module>
 		<module>KnowWE-Plugin-d3web-Debugger</module>
 		<module>KnowWE-Plugin-DiaFlux-CoverageCity</module>
-		<module>KnowWE-Plugin-Test</module>
+		<module>KnowWE-Plugin-Wikicontent-Download</module>
 	</modules>
 	<repositories>
 		<repository>
