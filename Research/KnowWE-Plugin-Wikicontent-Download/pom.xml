@@ -8,4 +8,16 @@
   </parent>
   <artifactId>KnowWE-Plugin-Wikicontent-Download</artifactId>
   <name>KnowWE-Plugin-Wikicontent-Download</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>KnowWE-core</artifactId>
+  		<version>0.2-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>javax.servlet</groupId>
+  		<artifactId>servlet-api</artifactId>
+  		<version>3.0-alpha-1</version>
+  	</dependency>
+  </dependencies>
 </project>
