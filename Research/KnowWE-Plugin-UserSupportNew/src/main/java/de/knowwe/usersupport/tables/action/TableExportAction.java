@@ -41,8 +41,6 @@ import de.knowwe.usersupport.tables.TableUtils;
  * the file. Meanwhile the page is locked for a given time. The user has to
  * manually reimport the file. See {@link TableImportAction}.
  * 
- * TODO Get the downloadlink to work properly
- * 
  * @author Johannes Dienst
  * @created 18.10.2011
  */
@@ -63,7 +61,7 @@ public class TableExportAction extends AbstractAction {
 				Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
 		Section<?> table = TableUtils.getTableWithId(article, tableId);
 
-		String extensionPath = KnowWEUtils.getKnowWEExtensionPath() + "/workbook-"
+		String extensionPath = KnowWEUtils.getKnowWEExtensionPath() + "/tmp/uploads/workbook-"
 				+ tableId + "-" + PoiUtils.getIdPostfix() + ".xls";
 		File file = new File(extensionPath);
 		FileOutputStream out = new FileOutputStream(file);
@@ -85,13 +83,12 @@ public class TableExportAction extends AbstractAction {
 		Environment.getInstance().getWikiConnector().setPageLocked(title, user);
 
 		// write the downloadlink beneath the exportbutton
+		extensionPath = extensionPath.substring(extensionPath.indexOf("KnowWEExtension/"));
 		Writer writer = context.getWriter();
 		writer.append(
-				"<a href=\"file://" + extensionPath + "\" target=\"_blank\">" +
+				"<a href=\"" + extensionPath + "\" target=\"_self\">" +
 						bundle.getString("download-export") + "</a>"
 				);
-		// writer.append("<a href=\"temp/test-zip.zip\">" +
-		// bundle.getString("download-export") +"</a>");
 
 	}
 
