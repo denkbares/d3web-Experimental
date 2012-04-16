@@ -75,10 +75,11 @@ public class UploadReceptorServlet extends HttpServlet {
 			DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
 			fileItemFactory.setSizeThreshold(1 * 1024 * 1024); // 1 MB
 			ServletFileUpload uploadHandler = new ServletFileUpload(fileItemFactory);
+			String test = KnowWEUtils.getKnowWEExtensionPath();
 			File destinationDir = new
-					File(KnowWEUtils.getKnowWEExtensionPath());
+					File(KnowWEUtils.getKnowWEExtensionPath()+"/tmp/uploads");
 			fileItemFactory.setRepository(new
-					File(KnowWEUtils.getKnowWEExtensionPath()));
+					File(KnowWEUtils.getKnowWEExtensionPath()+"/tmp/uploads"));
 
 			/*
 			 * Parse the request
@@ -137,6 +138,7 @@ public class UploadReceptorServlet extends HttpServlet {
 				    {
 						this.importTable(file, tableId, article, context);
 				    }
+					file.delete();
 				}
 				out.close();
 			}
