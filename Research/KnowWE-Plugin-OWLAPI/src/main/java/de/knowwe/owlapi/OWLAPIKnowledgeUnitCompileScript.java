@@ -19,13 +19,14 @@
 package de.knowwe.owlapi;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 
+import de.knowwe.compile.CompileSection;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.Type;
@@ -49,7 +50,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 	/**
 	 * Cache for the OWLAxioms. Enables incremental compilation.
 	 */
-	private static final Map<Section<?>, Set<OWLAxiom>> axiomCache = new WeakHashMap<Section<?>, Set<OWLAxiom>>();
+	private static final Map<CompileSection, Set<OWLAxiom>> axiomCache = new HashMap<CompileSection, Set<OWLAxiom>>();
 
 	/**
 	 * The instance of the {@link OWLAPIConnector} handles the access to the
@@ -103,7 +104,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 	@Override
 	public void deleteFromRepository(Section<T> section) {
 		deleteFromOntology(section);
-		Set<OWLAxiom> axioms = axiomCache.remove(section);
+		Set<OWLAxiom> axioms = axiomCache.remove(new CompileSection(section));
 		connector.removeAxioms(axioms);
 		if (sync) {
 			RDF2GoSync.synchronize(axioms, section, RDF2GoSync.Mode.REMOVE);
@@ -115,7 +116,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 		Collection<Message> messages = new LinkedList<Message>();
 		Set<OWLAxiom> axioms = createOWLAxioms(section, messages);
 		connector.addAxioms(axioms);
-		axiomCache.put(section, axioms);
+		axiomCache.put(new CompileSection(section), axioms);
 
 		// store messages found while compiling the current section
 		Messages.storeMessages(section.getArticle(), section, getClass(), messages);
