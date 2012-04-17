@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -32,14 +32,14 @@ import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 24.06.2011
  */
 public class Characteristics extends DescriptionType {
 
-	public static final String KEYWORD = "Characteristics[:]?";
+	public static final String KEYWORD = "\\sCharacteristics[:]?";
 
 	public Characteristics(boolean isObject, String description) {
 
@@ -62,8 +62,9 @@ public class Characteristics extends DescriptionType {
 	}
 
 	/**
-	 * Returns the {@link ObjectPropertyCharacteristic} sections for further handling.
-	 *
+	 * Returns the {@link ObjectPropertyCharacteristic} sections for further
+	 * handling.
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<Characteristics> section
 	 * @return The found section
@@ -76,8 +77,8 @@ public class Characteristics extends DescriptionType {
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 13.08.2011
  */
@@ -105,7 +106,7 @@ class ObjectPropertyCharacteristic extends AbstractType {
 
 /**
  * The {@link DataPropertyCharacteristic} only allows 'Functional' as value.
- *
+ * 
  * @author Stefan Mark
  * @created 13.08.2011
  */

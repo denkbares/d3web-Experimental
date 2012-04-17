@@ -1,15 +1,14 @@
 package de.knowwe.kdom.manchester.types;
 
-
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 24.05.2011
  */
 public class DisjointWith extends DescriptionType {
 
-	public static final String KEYWORD = "DisjointWith[:]?";
+	public static final String KEYWORD = "\\sDisjointWith[:]?";
 
 	public DisjointWith(String description) {
 		super(description, KEYWORD);
@@ -18,7 +17,6 @@ public class DisjointWith extends DescriptionType {
 			throw new IllegalArgumentException(
 					"Empty keywords are not allowed for the DisjointWith description!");
 		}
-
 
 	}
 }
