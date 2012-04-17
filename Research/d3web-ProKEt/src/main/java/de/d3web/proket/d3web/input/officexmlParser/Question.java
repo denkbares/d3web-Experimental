@@ -182,8 +182,8 @@ public class Question {
         }
         String xml =
                 "<legalQuestion ";
-        xml += "title='" + content + "'";
-        xml += "id='" + id + "'" + pid + pt + at + dummyString + negierung + " bonus-text='" + explanation + "'" + "/>";
+        xml += " title='" + content + "'";
+        xml += " id='" + id + "'" + pid + pt + at + dummyString + negierung + " bonus-text='" + explanation + "'" + "/>";
 
         return xml;
     }

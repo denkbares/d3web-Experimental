@@ -146,7 +146,7 @@ table{
 
 
 /* RED YELLOW GREEN SHEME rating colors for question backgrounds */
-/*.rating-high, .rating-medium, .rating-low { 
+.rating-high, .rating-medium, .rating-low { 
     border: 0px solid black; 
 }
 .rating-high > .title { 
@@ -172,9 +172,9 @@ table{
 .ynbutton.rating-none { 
     background-color: #DCDFF3; border: none; 
 }
-*/
+
 /* ALTERNATIVE COLORING SCHEME blue yellow orange*/
-.rating-high, .rating-medium, .rating-low { 
+/*.rating-high, .rating-medium, .rating-low { 
     border: 0px solid black; 
 }
 .rating-high > .title { 
@@ -199,7 +199,7 @@ table{
 
 .ynbutton.rating-none { 
     background-color: #DDDDDD; border: none; 
-}
+}*/
 
 
 /* Styles the box containing the button panel */

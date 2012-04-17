@@ -33,9 +33,9 @@ import org.antlr.stringtemplate.StringTemplate;
  */
 public class FrontLegalQuestionRenderer extends Renderer {
 
-    private static String TT_YES = "Wertet Eltern-Frage <b>positiv</b>.";
-    private static String TT_NO = "Wertet Eltern-Frage <b>negativ</b>.";
-    private static String TT_UN = "Wertet Eltern-Frage <b>unsicher/neutral</b>.";
+    private static String TT_YES = "Wertet übergeordnete Frage <b>positiv</b>.";
+    private static String TT_NO = "Wertet übergeordnete Frage <b>negativ</b>.";
+    private static String TT_UN = "Wertet übergeordnete Frage <b>unsicher/neutral</b>.";
     private static String TT_NAN = "Antwort <b>zurücksetzen</b>.";
     private static String TT_YES_REV = "Wertet übergeordnete Frage <b>negativ</b>.";
     private static String TT_NO_REV = "Wertet übergeordnete Frage <b>positiv</b>.";

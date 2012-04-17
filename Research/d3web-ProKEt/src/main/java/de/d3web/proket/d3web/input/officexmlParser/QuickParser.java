@@ -27,9 +27,9 @@ public class QuickParser {
 
     public static final char LINE_BREAK = '\n';
     private static String wordhtmlFinalOutput =
-            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_Swap_EN_min_final.html";
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_Test.html";
     private static String parsedJuriXml =
-            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/juriSwapEN.xml";
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/juri.xml";
 
     public QuickParser() {
     }

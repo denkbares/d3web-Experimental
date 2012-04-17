@@ -37,16 +37,17 @@ $endif$
                             </div>
             		</td>
 			<td width="40%">
-                            $if(feedback)$
-                                <div class="rightButton">
-                                    $FeedbackButton()$
-                                </div>
-                            $endif$
                             $if(ueq)$
                                 <div class="rightButton">
                                     $ButtonUEQuestionnaire()$
                                 </div>
                             $endif$
+                            $if(feedback)$
+                                <div class="rightButton">
+                                    $FeedbackButton()$
+                                </div>
+                            $endif$
+                            
 			</td>
 		</tr>
 	</table>
@@ -82,15 +83,15 @@ $endif$
 
     <div id="auxpanel" class="auxpanelRight">
 
-        <div id="auxpanelToggle" class="auxpanelButton" onclick="toggleAuxInfoPlacing()">
-            Nach unten
-        </div>   
-        
-        <div id="auxPropagationInfo" class="auxPropagationInfo">
-            
+        <div id="auxpanelHeader">
+            <div id="auxpanelHeadline">- Weitere Informationen - </div>
+            <div id="auxpanelToggle" class="auxpanelButton rightButton" onclick="toggleAuxInfoPlacing()">
+                Nach unten
+            </div>
         </div>
+        
         <div id="auxHeader">
-            <b>Informationen zu []:</b>  
+            <b>FRAGE:</b> 
             <br /><br />
         </div>
 
@@ -99,6 +100,9 @@ $endif$
         -
         </div>
 
+        <div id="linkedResources">
+            
+        </div>
         
     </div>
 </div>

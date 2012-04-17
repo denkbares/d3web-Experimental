@@ -1320,3 +1320,55 @@ if (typeof window.loadFirebugConsole == "undefined"
     }
 }
 
+
+
+/* REFACTOR: ONE BASIC COMMON JS FILE */
+/**
+* Show the auxiliary information for element with id "id" in the infopanel
+* element
+*/
+function showAuxInfo(id, title){
+    
+    // get infotext stored in additional, invisible sub-element of current q
+    var infoid = "#bonus-"+id;
+    if(title==undefined){
+        title = "";
+    }
+    var auxHeader = "<b>FRAGE:</b> " + title + "<br /><br />";
+    var auxinfo = $(infoid).html();
+    
+    // rewrite inner HTML of infopanel widget with info content
+    if(auxinfo==""){
+        auxinfo = "-";
+    } 
+    
+    $("#auxHeader").html(auxHeader);
+    $("#auxInfo").html(auxinfo);
+    
+    
+    // similarly write potentially linked resources
+    var lrid = "#lr-" + id;
+    var resinfo = $(lrid).html();
+    //var resif = $(lrid).attr("showif");
+    
+    $("#linkedResources").html(resinfo);
+}
+
+function hideAuxInfo(){
+    
+    // clear infopanel
+    $("#auxHeader").html("<b>FRAGE: </b> <br /><br />");
+    $("#auxInfo").html("-");
+}
+
+function showAuxPropInfo(){
+    var info = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung. ";
+    info += "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, ";
+    info += "wenn Sie eine andere als die bisher hergeleitete Bewertung setzen möchten.";
+    $("#auxPropagationInfo").html(info);
+}
+
+function hideAuxPropInfo(){
+    $("#auxPropagationInfo").html("");
+}
+

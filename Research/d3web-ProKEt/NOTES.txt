@@ -24,3 +24,9 @@
     Berechtigung hat, das zu starten
     LÖSUNG: evtl OO auf dem Server installieren (bzw nur die nötige Datei ablegen)
     und dort laufen lassen (ausprobieren)
+
+- Nullpointer wenn laden:
+    liegt meist irgendwie am parsen/encoding. Bekannte Probleme:
+    - encoding des .xml passt nicht -> wenn man's im Textmate öffnet und speichert gehts wieder
+    - parser hat nicht richtig zusammengebaut: zb fehlendes Leerzeichen in den LegalQuestions zwischen
+        den Attributen  ...title='test'id='testid'...

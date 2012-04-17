@@ -21,13 +21,13 @@ import officeconverter.Converter;
 public class App {
 
     private static String wordinput = 
-            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_Swap_HALLO.doc";
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_Test.doc";
     private static String cleanedIntermedHtml = 
-            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_Swap_HALLO_cleanedIntermed.html";
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_cleanedIntermed.html";
     private static String embeddedObjectsDir = 
             "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/Resources";
     private static String wordhtmlFinalOutput = 
-            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_Swap_HALLO_final.html";
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_Test.html";
     
     private static String FILETYPE_OUTPUT = "html";
     
@@ -48,7 +48,7 @@ public class App {
 			s = s.replaceAll("\\<br/\\>", "\n");
                         
                         // replace umlauts etc
-			s = replaceCharEntities(s);
+			//s = replaceCharEntities(s);
                         
 			PrintWriter w = new PrintWriter(wordhtmlFinalOutput);
 			w.print(s);

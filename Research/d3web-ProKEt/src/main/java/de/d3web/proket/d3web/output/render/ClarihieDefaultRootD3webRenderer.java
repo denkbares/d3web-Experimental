@@ -201,7 +201,7 @@ public class ClarihieDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         final KnowledgeKind<JuriModel> JURIMODEL = new KnowledgeKind<JuriModel>(
                 "JuriModel", JuriModel.class);
 
-
+        StringBuilder childrenHTML = new StringBuilder();
         D3webConnector d3wcon = D3webConnector.getInstance();
 
         if (to.getName().equals("Q000")) {
@@ -209,19 +209,20 @@ public class ClarihieDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
             
             if (rootNode != null) {
                 
-                StringBuilder childrenHTML = new StringBuilder();
                 IQuestionD3webRenderer childRenderer =
                         AbstractD3webRenderer.getRenderer(rootNode);
 
                 // TODO: how to get parent el in here correctly!?
                 String childHTML =
-                        childRenderer.renderTerminologyObject(d3webSession, cc, rootNode, to, loc, httpSession);
+                       childRenderer.renderTerminologyObject(d3webSession, cc, rootNode, to, loc, httpSession);
                 if (childHTML != null) {
                     childrenHTML.append(childHTML);
                 }
+                     
 
+                renderChildren(st, d3webSession, cc, rootNode, loc, httpSession);    
                 // if children, fill the template attribute children with children-HTML 
-                st.setAttribute("children", childrenHTML.toString());
+                //st.setAttribute("children", childrenHTML.toString());
             }
         } else {
 
@@ -238,7 +239,7 @@ public class ClarihieDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
             if (toChildren != null && !toChildren.isEmpty()) {
 
-                StringBuilder childrenHTML = new StringBuilder();
+                
                 for (Object newChildRoot : toChildren) {
 
                     // render the element as question
@@ -254,12 +255,14 @@ public class ClarihieDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
                     if (childHTML != null) {
                         childrenHTML.append(childHTML);
                     }
+                    
+                    //renderChildren(st, d3webSession, cc, (TerminologyObject) newChildRoot, loc, httpSession);   
 
                 }
                 // if children, fill the template attribute children with children-HTML 
-                st.setAttribute("children", childrenHTML.toString());
             }
         }
+        st.setAttribute("children", childrenHTML.toString());
     }
 
     /**
