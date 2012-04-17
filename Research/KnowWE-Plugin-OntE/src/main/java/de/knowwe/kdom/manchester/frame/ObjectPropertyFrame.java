@@ -40,6 +40,7 @@ import de.knowwe.kdom.manchester.types.DisjointWith;
 import de.knowwe.kdom.manchester.types.Domain;
 import de.knowwe.kdom.manchester.types.EquivalentTo;
 import de.knowwe.kdom.manchester.types.Keyword;
+import de.knowwe.kdom.manchester.types.ObjectPropertyExpression;
 import de.knowwe.kdom.manchester.types.Range;
 import de.knowwe.kdom.manchester.types.SubPropertyOf;
 import de.knowwe.termObject.ObjectPropertyIRIDefinition;
@@ -412,7 +413,7 @@ class SubPropertyChain extends DescriptionType {
 		// objectPropertyExpression 'o' objectPropertyExpression { 'o'
 		// objectPropertyExpression }
 
-		this.addChildType(ManchesterSyntaxUtil.getMCE());
 		this.addChildType(new Keyword("\\s+o\\s+"));
+		this.addChildType(new ObjectPropertyExpression());
 	}
 }
