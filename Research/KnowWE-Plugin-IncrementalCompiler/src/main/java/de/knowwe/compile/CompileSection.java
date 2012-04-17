@@ -57,4 +57,9 @@ public class CompileSection {
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		return section.toString();
+	}
+
 }
