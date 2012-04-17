@@ -1292,11 +1292,11 @@ public class AxiomFactory {
 			return null;
 		}
 
-		Set<OWLClassExpression> parts = new HashSet<OWLClassExpression>();
+		Set<OWLClass> parts = new HashSet<OWLClass>();
 
 		for (Section<OWLTermReferenceManchester> r : references) {
-			OWLEntity clazz = getOWLAPIEntity(r, OWLClassExpression.class);
-			storage.addAxiom(factory.getOWLDeclarationAxiom(clazz));
+			OWLClass clazz = (OWLClass) getOWLAPIEntity(r, OWLClass.class);
+			parts.add(clazz);
 		}
 
 		if (type.isDisjointClasses(section)) {
