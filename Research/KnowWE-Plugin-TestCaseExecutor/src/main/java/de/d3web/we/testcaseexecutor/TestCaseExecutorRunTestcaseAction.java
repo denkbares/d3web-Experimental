@@ -71,12 +71,12 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 		String[] cases = testCases.split(TESTCASEEXECUTOR_SEPARATOR);
 
 		WikiConnector connector = Environment.getInstance().getWikiConnector();
-		Collection<String> attachments = connector.getAttachmentFilenamesForPage(topic);
+		Collection<ConnectorAttachment> attachments = connector.getAttachments(topic);
 		ConnectorAttachment selectedAttachment = null;
 
-		for (String attachment : attachments) {
-			if (attachment.equals(fileName)) {
-				selectedAttachment = connector.getAttachment(topic + "/" + attachment);
+		for (ConnectorAttachment attachment : attachments) {
+			if (attachment.getFileName().equals(fileName)) {
+				selectedAttachment = attachment;
 				break;
 			}
 		}

@@ -46,10 +46,10 @@ public class ReadbuttonSubmitAction extends AbstractAction {
 		// search on "_data"-page for the button
 		dataPagename = context.getUserName() + "_data";
 		ArticleManager mgr = Environment.getInstance().getArticleManager(context.getWeb());
-		if (!Environment.getInstance().getWikiConnector().doesPageExist(dataPagename)) {
+		if (!Environment.getInstance().getWikiConnector().doesArticleExist(dataPagename)) {
 			// create new article
 			String newContent = "[{ALLOW view All}]\n[{ALLOW delete " + username + "}]\n";
-			Environment.getInstance().getWikiConnector().createWikiPage(
+			Environment.getInstance().getWikiConnector().createArticle(
 					dataPagename, newContent.toString(), "Defi-system");
 			Article article = Article.createArticle(newContent.toString(),
 					dataPagename, context.getWeb(), true);

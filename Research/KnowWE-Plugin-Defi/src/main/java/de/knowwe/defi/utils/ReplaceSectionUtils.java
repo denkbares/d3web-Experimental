@@ -71,7 +71,7 @@ public class ReplaceSectionUtils {
 
 		String newArticleText = getNewArticleText(title, sectionsMapForCurrentTitle,
 				context);
-		wikiConnector.writeArticleToWikiEnginePersistence(title, newArticleText, context);
+		wikiConnector.writeArticleToWikiPersistence(title, newArticleText, context);
 
 	}
 

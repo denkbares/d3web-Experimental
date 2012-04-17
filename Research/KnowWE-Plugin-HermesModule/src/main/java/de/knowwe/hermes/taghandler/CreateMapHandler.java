@@ -68,7 +68,7 @@ public class CreateMapHandler extends AbstractHTMLTagHandler {
 				+ "<br><br>\n"
 				+ "Hier Seite zum Anhängen des Orts-Tags auswählen:<br>\n";
 		ArrayList<String> seiten = new ArrayList<String>(Environment
-				.getInstance().getWikiConnector().getVersionCounts().keySet());
+				.getInstance().getArticleManager(web).getTitles());
 		Collections.sort(seiten);
 
 		seiten.remove("SemanticSettings");

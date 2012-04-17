@@ -85,7 +85,7 @@ public class PersonalMessageAction extends AbstractAction {
 			Environment.getInstance().buildAndRegisterArticle(content,
 						topic, Environment.DEFAULT_WEB);
 			Environment.getInstance().getWikiConnector()
-						.createWikiPage(topic, content, username);
+						.createArticle(topic, content, username);
 		}
 
 		/* Send mail */

@@ -62,7 +62,7 @@ public class ForumBoxAction extends AbstractAction {
 		String topic = map.get("ForumArticleTopic");
 		String web = context.getWeb();
 
-		boolean canEditPage = Environment.getInstance().getWikiConnector().userCanEditPage(
+		boolean canEditPage = Environment.getInstance().getWikiConnector().userCanEditArticle(
 				topic, context.getRequest());
 
 		if (canEditPage) {
@@ -114,7 +114,7 @@ public class ForumBoxAction extends AbstractAction {
 
 				StringBuilder buffi = new StringBuilder();
 				sec.collectTextsFromLeaves(buffi);
-				Environment.getInstance().getWikiConnector().writeArticleToWikiEnginePersistence(
+				Environment.getInstance().getWikiConnector().writeArticleToWikiPersistence(
 						topic, buffi.toString(), context);
 
 				// fire new comment event

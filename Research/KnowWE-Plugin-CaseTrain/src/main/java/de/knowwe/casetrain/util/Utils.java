@@ -161,7 +161,7 @@ public class Utils {
 	}
 
 	public static String wikiSyntaxToHtml(String syntax) {
-		syntax = Environment.getInstance().getWikiConnector().wikiSyntaxToHtml(syntax);
+		syntax = Environment.getInstance().getWikiConnector().renderWikiSyntax(syntax, null);
 		syntax = Cleaner.removeTagsExceptIUB(syntax);
 		return syntax;
 	}

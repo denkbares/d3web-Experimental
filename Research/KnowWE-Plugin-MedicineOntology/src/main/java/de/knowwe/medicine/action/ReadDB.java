@@ -138,13 +138,13 @@ public class ReadDB extends AbstractAction {
 
 			String page = createPageString(x);
 
-			Environment.getInstance().getWikiConnector().createWikiPage(title, page,
+			Environment.getInstance().getWikiConnector().createArticle(title, page,
 					context.getUserName());
 			Environment.getInstance().buildAndRegisterArticle(page, title, context.getWeb());
 		}
 
 		// Generate and write Main page
-		Environment.getInstance().getWikiConnector().createWikiPage("Main", generateMain(),
+		Environment.getInstance().getWikiConnector().createArticle("Main", generateMain(),
 				context.getUserName());
 
 	}

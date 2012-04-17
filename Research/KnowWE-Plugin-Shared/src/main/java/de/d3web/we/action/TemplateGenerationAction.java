@@ -93,7 +93,7 @@ public class TemplateGenerationAction extends AbstractAction {
 
 			Section<PlainText> text = Sections
 					.findChildOfType(renderMe, PlainText.class);
-			Environment.getInstance().getWikiConnector().createWikiPage(
+			Environment.getInstance().getWikiConnector().createArticle(
 					pageName, text.getText(), context.getUserName());
 
 			String baseUrl = Environment.getInstance().getWikiConnector()

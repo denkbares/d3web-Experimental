@@ -107,7 +107,7 @@ public class CommentRenderer implements Renderer {
 				else pageName = commentTag + newID;
 
 				// create new wikipage:
-				if (!wikiConnector.doesPageExist(pageName)) {
+				if (!wikiConnector.doesArticleExist(pageName)) {
 
 					StringBuffer saveContent = new StringBuffer();
 					saveContent.append("<forum" + (title == "" ? "" : " name=\"" + title + "\" ")
@@ -116,7 +116,7 @@ public class CommentRenderer implements Renderer {
 					saveContent.append("<box name=" + user.getUserName() + "; date="
 							+ ForumRenderer.getDate() + ">" + commentContent + "</box>\n</forum>");
 
-					instance.getWikiConnector().createWikiPage(pageName, saveContent.toString(),
+					instance.getWikiConnector().createArticle(pageName, saveContent.toString(),
 							user.getUserName());
 
 				}
@@ -141,13 +141,13 @@ public class CommentRenderer implements Renderer {
 					StringBuilder buffi = new StringBuilder();
 					forumSec.collectTextsFromLeaves(buffi);
 					user.getParameters().put(Attributes.WEB, forumSec.getWeb());
-					instance.getWikiConnector().writeArticleToWikiEnginePersistence(
+					instance.getWikiConnector().writeArticleToWikiPersistence(
 							sec.getTitle(), buffy.toString(), user);
 
 				}
 
 				user.getParameters().put(Attributes.WEB, sec.getWeb());
-				instance.getWikiConnector().writeArticleToWikiEnginePersistence(
+				instance.getWikiConnector().writeArticleToWikiPersistence(
 						sec.getTitle(), buffy.toString(), user);
 
 			}
@@ -163,7 +163,7 @@ public class CommentRenderer implements Renderer {
 
 				// create new wikipage with failure message caused by changing
 				// manually the id
-				if (!wikiConnector.doesPageExist(pageName)) {
+				if (!wikiConnector.doesArticleExist(pageName)) {
 					StringBuffer saveContent = new StringBuffer();
 
 					// if you want only one Error-page activate this:
@@ -175,7 +175,7 @@ public class CommentRenderer implements Renderer {
 							+ pageName.replace(" ", "+") + "\">\n");
 					saveContent.append("<box name=System; date=" + ForumRenderer.getDate() + ">"
 							+ commentContent + "</box>\n</forum>");
-					instance.getWikiConnector().createWikiPage(pageName, saveContent.toString(),
+					instance.getWikiConnector().createArticle(pageName, saveContent.toString(),
 							user.getUserName());
 				}
 

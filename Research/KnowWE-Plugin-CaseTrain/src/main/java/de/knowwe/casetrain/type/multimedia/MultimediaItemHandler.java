@@ -30,6 +30,7 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
+import de.knowwe.core.wikiConnector.ConnectorAttachment;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
@@ -46,8 +47,13 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 
 		List<Message> messages = new ArrayList<Message>(0);
 
-		List<String> attachments = Environment.getInstance().getWikiConnector()
-				.getAttachmentFilenamesForPage(article.getTitle());
+		List<ConnectorAttachment> attachments = Environment.getInstance().getWikiConnector()
+				.getAttachments(article.getTitle());
+		List<String> attachmentFileNames = new ArrayList<String>(attachments.size());
+		for (ConnectorAttachment attachment : attachments) {
+			attachmentFileNames.add(attachment.getFileName());
+		}
+
 		Section<MultimediaItemContent> mmI = Sections.findChildOfType(s,
 				MultimediaItemContent.class);
 
@@ -59,7 +65,7 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 		}
 
 		if (s.get().isAssignableFromType(Image.class)) {
-			if (!attachments.contains(t)) {
+			if (!attachmentFileNames.contains(t)) {
 				messages.add(Utils.missingPictureError(t));
 			}
 			if (!(t.endsWith(".gif") || t.endsWith(".jpg") || t.endsWith("png"))) {
@@ -69,7 +75,7 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 
 		}
 		else if (s.get().isAssignableFromType(Video.class)) {
-			if (!attachments.contains(t)) {
+			if (!attachmentFileNames.contains(t)) {
 				messages.add(Utils.missingVideoError(t));
 			}
 			if (!t.endsWith(".flv")) {
@@ -80,7 +86,7 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 
 		}
 		else if (s.get().isAssignableFromType(Audio.class)) {
-			if (!attachments.contains(t)) messages.add(Utils.missingAudioError(t));
+			if (!attachmentFileNames.contains(t)) messages.add(Utils.missingAudioError(t));
 			if (!t.endsWith(".mp3")) {
 				messages.add(
 						Utils.invalidArgumentError(

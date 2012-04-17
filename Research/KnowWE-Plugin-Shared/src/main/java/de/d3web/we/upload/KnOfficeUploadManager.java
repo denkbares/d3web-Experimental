@@ -54,6 +54,7 @@ public class KnOfficeUploadManager {
 		KopicWriter kopicWriter = new KopicWriter();
 
 		String pagename = "DefaultKnOfficeUploadPage";
+		Environment env = Environment.getInstance();
 		for (FileItem fileItem : fileItems) {
 			if (fileItem.getFieldName().equals(
 					ImportKnOfficeHandler.KEY_WIKIPAGE)) {
@@ -91,7 +92,7 @@ public class KnOfficeUploadManager {
 			if (fileItem.getFieldName().equals(
 					ImportKnOfficeHandler.KEY_DECISIONTABLE)) {
 				String text = fileItem.getString();
-				String path = Environment.getInstance().getContext()
+				String path = env.getContext()
 						.getRealPath("");
 				if (text != null && text.length() > 0) {
 					File file = new File(
@@ -118,7 +119,7 @@ public class KnOfficeUploadManager {
 			if (fileItem.getFieldName().equals(
 					ImportKnOfficeHandler.KEY_SCORETABLE)) {
 				String text = fileItem.getString();
-				String path = Environment.getInstance().getContext()
+				String path = env.getContext()
 						.getRealPath("");
 				if (text != null && text.length() > 0) {
 					File file = new File(
@@ -141,7 +142,7 @@ public class KnOfficeUploadManager {
 			if (fileItem.getFieldName().equals(
 					ImportKnOfficeHandler.KEY_COVERINGTABLE)) {
 				String text = fileItem.getString();
-				String path = Environment.getInstance().getContext()
+				String path = env.getContext()
 						.getRealPath("");
 				if (text != null && text.length() > 0) {
 					File file = new File(
@@ -170,7 +171,7 @@ public class KnOfficeUploadManager {
 					|| fileItem.getFieldName().equals(
 							ImportKnOfficeHandler.KEY_DIALOG_PIC)) {
 
-				String path = Environment.getInstance().getContext()
+				String path = env.getContext()
 						.getRealPath("");
 				String text = fileItem.getString();
 				String name = fileItem.getName();
@@ -196,14 +197,16 @@ public class KnOfficeUploadManager {
 
 		String kopicText = kopicWriter.getKopicText();
 
-		boolean exists = Environment.getInstance().getWikiConnector()
-				.doesPageExist(pagename);
+		boolean exists = env.getWikiConnector()
+				.doesArticleExist(pagename);
 		if (exists) {
-			Environment.getInstance().getWikiConnector()
-					.appendContentToPage(pagename, kopicText);
+			String text = env.getArticle(Environment.DEFAULT_WEB, pagename).getRootSection().getText();
+			env.buildAndRegisterArticle(text + kopicText, pagename,
+					Environment.DEFAULT_WEB);
+
 		}
 		else {
-			Environment.getInstance().getWikiConnector().createWikiPage(
+			env.getWikiConnector().createArticle(
 					pagename, kopicText, "KnOfficeUpload");
 		}
 

@@ -83,7 +83,7 @@ public class MappingsAction extends AbstractAction {
 			Environment
 						.getInstance()
 						.getWikiConnector()
-						.createWikiPage(mappingTopic, output,
+						.createArticle(mappingTopic, output,
 								user);
 
 			Article article = Article.createArticle(output,

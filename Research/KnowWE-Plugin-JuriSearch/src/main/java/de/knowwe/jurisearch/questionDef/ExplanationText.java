@@ -39,7 +39,7 @@ public class ExplanationText extends AbstractType {
 				Section<ExplanationText> section) {
 			// TODO Auto-generated method stub
 			String text = section.getText();
-			String html = Environment.getInstance().getWikiConnector().wikiSyntaxToHtml(text);
+			String html = Environment.getInstance().getWikiConnector().renderWikiSyntax(text, null);
 
 			Section<QuestionDefinitionContent> qdc = Sections.findAncestorOfType(section,
 					QuestionDefinitionContent.class);

@@ -436,9 +436,9 @@ public class Rdf2GoCore implements EventListener {
 					}
 					try {
 						if (Environment.getInstance()
-								.getWikiConnector().doesPageExist(erg)
+								.getWikiConnector().doesArticleExist(erg)
 								|| Environment.getInstance()
-										.getWikiConnector().doesPageExist(
+										.getWikiConnector().doesArticleExist(
 												URLDecoder.decode(erg,
 														"UTF-8"))) {
 							erg = KnowWEUtils.maskHTML("<a href=\"Wiki.jsp?page=")

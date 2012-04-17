@@ -22,11 +22,11 @@ package de.knowwe.hermes.taghandler;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.wikiConnector.WikiConnector;
 
 public class VersionCountTagHandler extends AbstractHTMLTagHandler {
 
@@ -37,8 +37,7 @@ public class VersionCountTagHandler extends AbstractHTMLTagHandler {
 	@Override
 	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
-		WikiConnector connector = Environment.getInstance()
-				.getWikiConnector();
+		Environment env = Environment.getInstance();
 
 		String result = "<div class=\"versionCounts\">";
 		result += "<div class=\"sortable\">";
@@ -52,7 +51,11 @@ public class VersionCountTagHandler extends AbstractHTMLTagHandler {
 
 		// result += "<table>";
 		// result += "<th><td>pagename</td><td>versionCount</td></th>";
-		for (Entry<String, Integer> e : connector.getVersionCounts().entrySet()) {
+		Map<String, Integer> versionsMap = new TreeMap<String, Integer>();
+		for (String title : env.getArticleManager(web).getTitles()) {
+			versionsMap.put(title, env.getWikiConnector().getVersionCount(title));
+		}
+		for (Entry<String, Integer> e : versionsMap.entrySet()) {
 			result += "<tr><td>" + e.getKey() + "</td><td>" + e.getValue()
 					+ "</td></tr>";
 		}

@@ -49,7 +49,7 @@ public class AppendMapHandler implements PageAppendHandler {
 	public String getDataToAppend(String topic, String web, UserContext user) {
 
 		if (Environment.getInstance().getWikiConnector().userIsMemberOfGroup(
-				user.getUserName(), group, user.getRequest())) {
+				group, user.getRequest())) {
 
 			String content = Environment.getInstance().getArticle(web, topic).getRootSection().getText();
 

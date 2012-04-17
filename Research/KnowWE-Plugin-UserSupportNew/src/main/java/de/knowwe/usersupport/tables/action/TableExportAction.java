@@ -80,7 +80,7 @@ public class TableExportAction extends AbstractAction {
 		out.close();
 
 		// set page lock
-		Environment.getInstance().getWikiConnector().setPageLocked(title, user);
+		Environment.getInstance().getWikiConnector().lockArticle(title, user);
 
 		// write the downloadlink beneath the exportbutton
 		extensionPath = extensionPath.substring(extensionPath.indexOf("KnowWEExtension/"));

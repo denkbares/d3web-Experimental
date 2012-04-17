@@ -60,7 +60,7 @@ public class GetDataAction extends AbstractAction {
 					"<br/><div style='margin-left:10px;'><p><b>Bitte Konzept eingeben.</b></p></div>");
 		}
 		else if (!Environment.getInstance().getWikiConnector()
-				.doesPageExist(HermesData.getMappingTopic())) {
+				.doesArticleExist(HermesData.getMappingTopic())) {
 			context.getWriter().write(
 					"<br/><div style='margin-left:10px;'><p><b>Seite für Mappings nicht vorhanden. "
 							+
@@ -101,7 +101,7 @@ public class GetDataAction extends AbstractAction {
 					context.getWriter().write(
 							"<br/><div style='margin-left:10px;'><p><b>Kein externes Konzept als Referenz gefunden.</b></p></div>");
 				}
-				else if (Environment.getInstance().getWikiConnector().doesPageExist(
+				else if (Environment.getInstance().getWikiConnector().doesArticleExist(
 						concept)) {
 					String ask = "<br/><div id='creationWizard'><p><img src='KnowWEExtension/images/newdoc.png' align='top'> Konzept <b>"
 							+ concept

@@ -117,7 +117,7 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 			}
 
 			if (fullName != ""
-					&& !Environment.getInstance().getWikiConnector().doesPageExist(
+					&& !Environment.getInstance().getWikiConnector().doesArticleExist(
 							fullName)) {
 
 				// create user page
@@ -125,7 +125,7 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 						+ fullName + "}]\n\n";
 				String content = pagePermissions + "%%aboutme\n%\n";
 				Environment.getInstance().getWikiConnector()
-						.createWikiPage(fullName, content, loginName);
+						.createArticle(fullName, content, loginName);
 
 				// create comment page / talks with the therapist
 				content = "[{ALLOW view "
@@ -136,7 +136,7 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 
 				String commentPage = fullName + "_comment_therapist";
 				Environment.getInstance().getWikiConnector()
-						.createWikiPage(commentPage, content, loginName);
+						.createArticle(commentPage, content, loginName);
 			}
 		}
 		else if ((event instanceof WikiSecurityEvent)

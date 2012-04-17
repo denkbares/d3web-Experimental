@@ -59,7 +59,7 @@ public class ConceptBrowsingHandler implements PageAppendHandler {
 				}
 
 				title = title.substring(title.indexOf("#") + 1);
-				if (Environment.getInstance().getWikiConnector().doesPageExist(title)) {
+				if (Environment.getInstance().getWikiConnector().doesArticleExist(title)) {
 					titleList.add(title);
 				}
 			}

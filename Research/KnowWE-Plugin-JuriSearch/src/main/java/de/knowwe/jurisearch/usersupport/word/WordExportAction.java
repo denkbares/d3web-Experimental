@@ -58,7 +58,7 @@ public class WordExportAction extends AbstractAction {
 		out.flush();
 		out.close();
 
-		Environment.getInstance().getWikiConnector().setPageLocked(title, user);
+		Environment.getInstance().getWikiConnector().lockArticle(title, user);
 
 		// write the downloadlink beneath the exportbutton
 		Writer writer = context.getWriter();

@@ -86,7 +86,7 @@ public class BoxRenderer implements Renderer {
 				user.getParameters().put(Attributes.WEB, web);
 				user.getParameters().put(Attributes.TOPIC, topic);
 				user.getParameters().put(Attributes.USER, user.toString());
-				instance.getWikiConnector().writeArticleToWikiEnginePersistence(topic,
+				instance.getWikiConnector().writeArticleToWikiPersistence(topic,
 						buffi.toString(), user);
 			}
 			catch (Exception e) {

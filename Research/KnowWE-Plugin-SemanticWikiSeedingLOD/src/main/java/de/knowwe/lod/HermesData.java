@@ -200,7 +200,7 @@ public class HermesData {
 		String topic = getNoParseTopic();
 
 		if (Environment.getInstance().getWikiConnector()
-				.doesPageExist(topic)) {
+				.doesArticleExist(topic)) {
 
 			Article article = Environment.getInstance().getArticle(
 					web, topic);
@@ -235,7 +235,7 @@ public class HermesData {
 		String topic = getIgnoredTopic();
 
 		if (Environment.getInstance().getWikiConnector()
-				.doesPageExist(topic)) {
+				.doesArticleExist(topic)) {
 
 			Article article = Environment.getInstance().getArticle(
 					web, topic);

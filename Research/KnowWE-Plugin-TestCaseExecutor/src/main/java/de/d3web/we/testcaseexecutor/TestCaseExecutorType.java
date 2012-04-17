@@ -19,6 +19,7 @@
 package de.d3web.we.testcaseexecutor;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -40,6 +41,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
+import de.knowwe.core.wikiConnector.ConnectorAttachment;
 import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -78,11 +80,16 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 				List<Message> errors = new LinkedList<Message>();
 
 				String[] files = DefaultMarkupType.getAnnotations(section, ANNOTATION_FILE);
-				WikiConnector connector = Environment.getInstance().getWikiConnector();
-				List<String> attachments = connector.getAttachmentFilenamesForPage(section.getArticle().getTitle());
 
+				List<ConnectorAttachment> attachments = Environment.getInstance().getWikiConnector()
+						.getAttachments(section.getTitle());
+				List<String> attachmentFileNames = new ArrayList<String>(attachments.size());
+				for (ConnectorAttachment attachment : attachments) {
+					attachmentFileNames.add(attachment.getFileName());
+				}
 				for (String file : files) {
-					if (!attachments.contains(file)) errors.add(Messages.noSuchObjectError("File",
+					if (!attachmentFileNames.contains(file)) errors.add(Messages.noSuchObjectError(
+							"File",
 							file));
 
 				}
@@ -111,16 +118,15 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 
 		WikiConnector connector = Environment.getInstance().getWikiConnector();
 		String title = section.getArticle().getTitle();
-		List<String> attachments = connector.getAttachmentFilenamesForPage(title);
+		List<ConnectorAttachment> attachments = connector.getAttachments(title);
 		String master = getMaster(section);
 		KnowledgeBase kb = D3webUtils.getKnowledgeBase(section.getWeb(), master);
 		List<SequentialTestCase> cases = new LinkedList<SequentialTestCase>();
 		attachments.retainAll(Arrays.asList(files));
 
-		for (String file : attachments) {
+		for (ConnectorAttachment attachment : attachments) {
 			try {
-				String path = title + "/" + file;
-				InputStream stream = connector.getAttachment(path).getInputStream();
+				InputStream stream = attachment.getInputStream();
 				cases.addAll(TestPersistence.getInstance().loadCases(
 						stream, kb));
 

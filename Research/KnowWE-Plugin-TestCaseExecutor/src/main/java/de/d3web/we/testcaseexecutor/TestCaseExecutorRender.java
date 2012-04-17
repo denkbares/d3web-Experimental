@@ -120,7 +120,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 	private String renderSelection(Section<?> section, String master) {
 		WikiConnector connector = Environment.getInstance().getWikiConnector();
 
-		Collection<String> attachments = connector.getAttachmentFilenamesForPage(section.getArticle().getTitle());
+		Collection<ConnectorAttachment> attachments = connector.getAttachments(section.getArticle().getTitle());
 
 		StringBuilder html = new StringBuilder();
 		// html.append("<h2 class=\"testExecutor\"> TestCase Executor </h2>");
@@ -129,8 +129,8 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 		html.append("<select onChange=\"return TestCaseExecutor.getTestcases(" + null + ",'"
 				+ master + "')\">");
 		html.append("<option value=\"\">-- Choose file --</option>");
-		for (String attachment : attachments) {
-			if (attachment.matches("stc.*\\.xml")) {
+		for (ConnectorAttachment attachment : attachments) {
+			if (attachment.getFileName().matches("stc.*\\.xml")) {
 				html.append("<option value=\"" + attachment + "\">" + attachment + "</option>");
 
 			}

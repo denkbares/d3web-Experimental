@@ -49,7 +49,7 @@ public class ReadbuttonLinkClickedAction extends AbstractAction {
 		// search on "_data"-page for the button
 		dataPagename = context.getUserName() + "_data";
 		ArticleManager mgr = Environment.getInstance().getArticleManager(context.getWeb());
-		if (Environment.getInstance().getWikiConnector().doesPageExist(dataPagename)) {
+		if (Environment.getInstance().getWikiConnector().doesArticleExist(dataPagename)) {
 			Map<String, String> nodesMap = new HashMap<String, String>();
 			Section<ReadbuttonType> sec = findContentSectionForReadbuttonID(id,
 					mgr.getArticle(dataPagename));

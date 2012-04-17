@@ -142,7 +142,7 @@ public class TermRenamingAction extends AbstractAction {
 			Set<String> success) throws IOException {
 
 		for (String articlename : allTerms.keySet()) {
-			if (Environment.getInstance().getWikiConnector().userCanEditPage(
+			if (Environment.getInstance().getWikiConnector().userCanEditArticle(
 					articlename, context.getRequest())) {
 
 				Map<String, String> nodesMap = new HashMap<String, String>();

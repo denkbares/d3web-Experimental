@@ -105,7 +105,7 @@ public class SubmitTableContentAction extends AbstractAction {
 		if (article2 == null) {
 			// create new article
 			String newContent = createNewMarkupString(tableid, inputDataAll);
-			Environment.getInstance().getWikiConnector().createWikiPage(
+			Environment.getInstance().getWikiConnector().createArticle(
 					articleNameForData, newContent.toString(), "Defi-system");
 			Article article = Article.createArticle(newContent.toString(),
 					articleNameForData, defaultWeb, true);

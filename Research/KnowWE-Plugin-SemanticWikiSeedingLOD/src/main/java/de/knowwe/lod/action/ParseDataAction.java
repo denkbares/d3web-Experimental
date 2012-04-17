@@ -67,6 +67,7 @@ public class ParseDataAction extends AbstractAction {
 		}
 
 		int i = 0;
+		Environment env = Environment.getInstance();
 		for (String s : type) {
 
 			// ist vom Typ ... -> predicate = rdf:type, value = hermestype.
@@ -85,7 +86,7 @@ public class ParseDataAction extends AbstractAction {
 			String lightParse = "[" + hermes.get(i) + ":: " + value.get(i) + "]";
 
 			// ################## Only for logging purposes
-			String path = Environment.getInstance().getWikiConnector().getSavePath();
+			String path = env.getWikiConnector().getSavePath();
 			File log = new File(path + "/temp");
 			log.mkdir();
 			try {
@@ -113,33 +114,33 @@ public class ParseDataAction extends AbstractAction {
 
 				lightParse = lightParse + System.getProperty("line.separator");
 
-				if (!Environment.getInstance().getWikiConnector().doesPageExist(
+				if (!env.getWikiConnector().doesArticleExist(
 						conceptTopic)
-						&& !Environment.getInstance().getWikiConnector().doesPageExist(
+						&& !env.getWikiConnector().doesArticleExist(
 								concept)) {
 
-					Environment.getInstance().getWikiConnector().createWikiPage(
+					env.getWikiConnector().createArticle(
 							concept, lightParse, user);
 
 					Article article = Article.createArticle(lightParse,
 							concept, web, true);
 
-					Environment.getInstance().getArticleManager(web)
+					env.getArticleManager(web)
 							.registerArticle(article);
 
 					conceptTopic = concept;
 
 				}
 				else {
-					if (Environment.getInstance().getWikiConnector().doesPageExist(
+					if (env.getWikiConnector().doesArticleExist(
 								concept)) {
 						conceptTopic = concept;
 					}
-					Environment.getInstance().getWikiConnector().appendContentToPage(
-							conceptTopic,
-							lightParse);
+					String text = env.getArticle(Environment.DEFAULT_WEB, conceptTopic).getRootSection().getText();
+					env.buildAndRegisterArticle(text + lightParse, conceptTopic,
+							Environment.DEFAULT_WEB);
 
-					Environment.getInstance().getArticleManager(web).addArticleToUpdate(
+					env.getArticleManager(web).addArticleToUpdate(
 							conceptTopic);
 				}
 
@@ -153,27 +154,27 @@ public class ParseDataAction extends AbstractAction {
 
 				parse = "~" + parse;
 
-				if (!Environment.getInstance().getWikiConnector().doesPageExist(
+				if (!env.getWikiConnector().doesArticleExist(
 						noParseTopic)) {
 
 					String temp = "%%Mapping " + System.getProperty("line.separator")
 							+ parse
 							+ System.getProperty("line.separator") + "%";
 
-					Environment.getInstance().getWikiConnector().createWikiPage(
+					env.getWikiConnector().createArticle(
 							noParseTopic, temp, user);
 
 					Article article = Article.createArticle(temp,
 							noParseTopic, web, true);
 
-					Environment.getInstance().getArticleManager(web)
+					env.getArticleManager(web)
 							.registerArticle(article);
 
 				}
 				else {
 
 					// append triple to noParseTopic.
-					Article article = Environment.getInstance().getArticle(
+					Article article = env.getArticle(
 							web, noParseTopic);
 
 					List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
@@ -201,7 +202,7 @@ public class ParseDataAction extends AbstractAction {
 
 				String ignoredTopic = HermesData.getIgnoredTopic();
 
-				if (!Environment.getInstance().getWikiConnector().doesPageExist(
+				if (!env.getWikiConnector().doesArticleExist(
 						ignoredTopic)) {
 
 					// #concept
@@ -212,20 +213,20 @@ public class ParseDataAction extends AbstractAction {
 							+ " == " + value.get(i)
 							+ System.getProperty("line.separator") + "%";
 
-					Environment.getInstance().getWikiConnector().createWikiPage(
+					env.getWikiConnector().createArticle(
 							ignoredTopic, temp, user);
 
 					Article article = Article.createArticle(temp,
 							ignoredTopic, web, true);
 
-					Environment.getInstance().getArticleManager(web)
+					env.getArticleManager(web)
 							.registerArticle(article);
 
 				}
 				// hasChild concept : add ? else new rootNode.
 				else {
 
-					ArticleManager mgr = Environment.getInstance().getArticleManager(
+					ArticleManager mgr = env.getArticleManager(
 							web);
 
 					List<Section<IgnoreContentType>> found = new Vector<Section<IgnoreContentType>>();
@@ -289,7 +290,7 @@ public class ParseDataAction extends AbstractAction {
 			}
 			i++;
 			// Refresh
-			Environment.getInstance().getArticleManager(web).updateQueuedArticles();
+			env.getArticleManager(web).updateQueuedArticles();
 		}
 
 		if (countData != 0) {
@@ -298,7 +299,7 @@ public class ParseDataAction extends AbstractAction {
 				// Add node for created Article.
 				String mappingTopic = HermesData.getMappingTopic();
 
-				Article article = Environment.getInstance().getArticle(
+				Article article = env.getArticle(
 						web, mappingTopic);
 
 				List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();

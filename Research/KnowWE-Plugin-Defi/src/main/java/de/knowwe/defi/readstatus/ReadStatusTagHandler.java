@@ -242,7 +242,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	private boolean getReadbuttonStatus(String readbutton, String userName) {
 		String dataPagename = userName + "_data";
 		ArticleManager mgr = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
-		if (Environment.getInstance().getWikiConnector().doesPageExist(dataPagename)) {
+		if (Environment.getInstance().getWikiConnector().doesArticleExist(dataPagename)) {
 			Section<?> sec = mgr.getArticle(dataPagename).getRootSection();
 			List<Section<ReadbuttonType>> rbSecs = Sections.findSuccessorsOfType(sec,
 					ReadbuttonType.class);
