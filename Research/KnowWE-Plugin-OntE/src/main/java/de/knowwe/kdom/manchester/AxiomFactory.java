@@ -129,7 +129,7 @@ public class AxiomFactory {
 	/**
 	 * Returns the a {@link OWLDeclarationAxiom} for a {@link OWLEntity} object.
 	 * An entity could be a {@link OWLClass}, {@link OWLDataProperty},
-	 * {@link OWLObjectProperty} or {@link OWLIndividual}.
+	 * {@link OWLObjectProperty} or {@link OWLNamedIndividual}.
 	 * 
 	 * @created 27.09.2011
 	 * @param OWLEntity entity
@@ -151,6 +151,10 @@ public class AxiomFactory {
 		else if (entity instanceof OWLDatatype) {
 			return factory.getOWLDeclarationAxiom(entity);
 		}
+		else if (entity instanceof OWLNamedIndividual) {
+			return factory.getOWLDeclarationAxiom(entity);
+		}
+
 		// should never happen
 		throw new Error("OWL API entity conversion for " + entity + " not supported.");
 	}

@@ -11,6 +11,7 @@ import org.semanticweb.owlapi.model.OWLAnnotationAxiom;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLIndividual;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
 import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Type;
@@ -27,16 +28,9 @@ import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
 import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
 import de.knowwe.owlapi.OWLAPIAbstractKnowledgeUnitCompileScript;
-import de.knowwe.owlapi.OWLAPISubtreeHandler;
-
 
 public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileScript<IndividualFrame> {
 
-	/**
-	 * Constructor for the SubtreeHandler. Here you can set if a sync with
-	 * RDF2Go should occur. For further information see
-	 * {@link OWLAPISubtreeHandler}.
-	 */
 	public IndividualFrameCompileScript() {
 		super(false);
 	}
@@ -44,20 +38,23 @@ public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCom
 	@Override
 	public Set<OWLAxiom> createOWLAxioms(Section<IndividualFrame> section, Collection<Message> messages) {
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
-		OWLIndividual i = null;
-		OWLAxiom axiom = null;
+		OWLNamedIndividual i = null;
 
 		// handle definition, then the rest
 		IndividualFrame type = section.get();
 		if (type.hasIndividualDefinition(section)) {
 			Section<?> def = type.getIndividualDefinition(section);
-			i = (OWLIndividual) AxiomFactory.getOWLAPIEntity(def, OWLIndividual.class);
+
+			i = (OWLNamedIndividual) AxiomFactory.getOWLAPIEntity(def, OWLNamedIndividual.class);
+			OWLAxiom decl = AxiomFactory.getOWLAPIEntityDeclaration(i);
+			axioms.add(decl);
 		}
 
 		if (type.hasAnnotations(section)) { // Handle Annotations
 			for (Section<Annotation> annotation : type.getAnnotations(section)) {
 				IRI annotatetObject = i.asOWLNamedIndividual().getIRI();
-				axiom = AxiomFactory.createAnnotations(annotation, annotatetObject, messages);
+				OWLAxiom axiom = AxiomFactory.createAnnotations(annotation, annotatetObject,
+						messages);
 				if (axiom != null) {
 					EventManager.getInstance().fireEvent(
 							new OWLApiAxiomCacheUpdateEvent(axiom, annotation));
@@ -74,7 +71,7 @@ public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCom
 			}
 
 			for (Section<?> fact : facts) {
-				axiom = AxiomFactory.createFact(fact, i, messages);
+				OWLAxiom axiom = AxiomFactory.createFact(fact, i, messages);
 				if (axiom != null) {
 					EventManager.getInstance().fireEvent(
 							new OWLApiAxiomCacheUpdateEvent(axiom, fact));
@@ -94,7 +91,7 @@ public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCom
 			for (Section<OWLTermReferenceManchester> node : nodes) {
 				OWLIndividual sameInd = (OWLIndividual) AxiomFactory.getOWLAPIEntity(node,
 						OWLIndividual.class);
-				axiom = AxiomFactory.createSameIndividualsAxiom(i, sameInd);
+				OWLAxiom axiom = AxiomFactory.createSameIndividualsAxiom(i, sameInd);
 				if (axiom != null) {
 					EventManager.getInstance().fireEvent(
 							new OWLApiAxiomCacheUpdateEvent(axiom, node));
@@ -114,7 +111,7 @@ public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCom
 			for (Section<OWLTermReferenceManchester> node : nodes) {
 				OWLIndividual two = (OWLIndividual) AxiomFactory.getOWLAPIEntity(node,
 						OWLIndividual.class);
-				axiom = AxiomFactory.createDifferentFromIndividualsAxiom(i, two);
+				OWLAxiom axiom = AxiomFactory.createDifferentFromIndividualsAxiom(i, two);
 				if (axiom != null) {
 					EventManager.getInstance().fireEvent(
 							new OWLApiAxiomCacheUpdateEvent(axiom, node));
@@ -138,7 +135,7 @@ public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCom
 					mce, messages);
 
 			for (OWLClassExpression e : exp.keySet()) {
-				axiom = AxiomFactory.createNamedIndividualAxiom(e, i);
+				OWLAxiom axiom = AxiomFactory.createNamedIndividualAxiom(e, i);
 				if (axiom != null) {
 					EventManager.getInstance().fireEvent(
 							new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
@@ -152,7 +149,7 @@ public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCom
 
 	/**
 	 * Handles the optional {@link Annotations} inside each description.
-	 *
+	 * 
 	 * @created 29.09.2011
 	 * @param Section<? extends Type> section
 	 * @return A Set with {@link OWLAnnotationAxiom}
