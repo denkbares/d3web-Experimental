@@ -31,6 +31,9 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.compile.DatatypeCompileScript;
 import de.knowwe.kdom.manchester.types.Annotations;
@@ -141,7 +144,11 @@ class DatatypeDefinition extends AbstractType {
 	public DatatypeDefinition() {
 
 		Pattern p = Pattern.compile(PATTERN);
-		this.setSectionFinder(new RegexSectionFinder(p, 0));
+		RegexSectionFinder finder = new RegexSectionFinder(p, 0);
+		ConstraintSectionFinder csf = new ConstraintSectionFinder(finder);
+		csf.addConstraint(SingleChildConstraint.getInstance());
+		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
+		this.setSectionFinder(csf);
 
 		Keyword key = new Keyword(DataTypeFrame.KEYWORD);
 		this.addChildType(key);

@@ -33,7 +33,9 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.compile.IndividualFrameCompileScript;
 import de.knowwe.kdom.manchester.types.Annotation;
@@ -268,8 +270,11 @@ class IndividualDefinition extends AbstractType {
 	private IndividualDefinition() {
 
 		Pattern p = Pattern.compile(PATTERN);
-		SectionFinder sf = new RegexSectionFinder(p, 0);
-		this.setSectionFinder(sf);
+		RegexSectionFinder finder = new RegexSectionFinder(p, 0);
+		ConstraintSectionFinder csf = new ConstraintSectionFinder(finder);
+		csf.addConstraint(SingleChildConstraint.getInstance());
+		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
+		this.setSectionFinder(csf);
 
 		Keyword key = new Keyword(IndividualFrame.KEYWORD);
 		this.addChildType(key);
