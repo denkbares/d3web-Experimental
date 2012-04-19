@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.d3web.debugger.renderer;
 
@@ -64,7 +64,7 @@ import de.knowwe.core.utils.KnowWEUtils;
  * 
  * @author dupke
  */
-public class DebuggerRuleRenderer implements Renderer{
+public class DebuggerRuleRenderer implements Renderer {
 
 	/** connectors */
 	private final String AND = "AND";
@@ -95,17 +95,18 @@ public class DebuggerRuleRenderer implements Renderer{
 		String title = user.getTitle();
 
 		if (r != null) {
-		if (r.hasFired(session)) buffer.append("<div class='ruleContentFired' ruleid='"
-				+ r.hashCode() + "'>");
-		else buffer.append("<div class='ruleContent' ruleid='" + r.hashCode() + "'>");
+			if (r.hasFired(session)) buffer.append("<div class='ruleContentFired' ruleid='"
+					+ r.hashCode() + "'>");
+			else buffer.append("<div class='ruleContent' ruleid='" + r.hashCode() + "'>");
 
-		// condition
-		buffer.append("IF " + renderCondition(r.getCondition(), session, title, false) + "<br />");
-		// action
-		buffer.append("THEN " + renderAction(r.getAction()));
-		buffer.append("</div>");
+			// condition
+			buffer.append("IF " + renderCondition(r.getCondition(), session, title, false)
+					+ "<br />");
+			// action
+			buffer.append("THEN " + renderAction(r.getAction()));
+			buffer.append("</div>");
 
-		string.append(KnowWEUtils.maskHTML(buffer.toString()));
+			string.append(KnowWEUtils.maskHTML(buffer.toString()));
 		}
 		else {
 			DelegateRenderer.getInstance().render(sec, user, string);
@@ -201,7 +202,7 @@ public class DebuggerRuleRenderer implements Renderer{
 
 		if (cond instanceof CondDState) {
 			buffer.append("<span class='debuggerSolution'>" + ((CondDState) cond).getSolution()
-					+ "</span> == " + ((CondDState) cond).getStatus());
+					+ "</span> == " + ((CondDState) cond).getRatingState());
 		}
 		else if (cond instanceof CondAnswered) {
 			buffer.append("ANSWERED[");
