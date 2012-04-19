@@ -40,7 +40,7 @@
   	a.action.edit, a.action.more { display:none; }
   </style>
   <% } %>
-  <%  if (!wc.doesPageExist(user.getTitle())) { %>
+  <%  if (Environment.getInstance().getArticle(user.getWeb(), user.getTitle()) == null) { %>
 	  <link rel="stylesheet" media="screen" type="text/css" href="templates/defi/jspwiki.css" />
 	  <link rel="stylesheet" media="screen" type="text/css" href="KnowWEExtension/css/general.css" />
 	  <link rel="stylesheet" media="screen" type="text/css" href="KnowWEExtension/css/defi.css" />

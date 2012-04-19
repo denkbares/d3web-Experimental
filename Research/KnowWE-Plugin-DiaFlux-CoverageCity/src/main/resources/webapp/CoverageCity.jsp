@@ -76,7 +76,7 @@
 	}
 	
 	WikiConnector connector = Environment.getInstance().getWikiConnector();
-	boolean canViewPage = connector.userCanViewPage(topic, context.getRequest());
+	boolean canViewPage = connector.userCanViewArticle(topic, context.getRequest());
 	
 	if (!canViewPage){
 		out.println("<h3>Do not have the permission to view article: '" + topic + "'.</h3>");

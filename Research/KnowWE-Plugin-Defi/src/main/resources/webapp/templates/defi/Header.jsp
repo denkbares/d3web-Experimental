@@ -42,7 +42,7 @@
 		String[] readpages = new String[0];
 		String dataPagename = user.getUserName() + "_data";
 		ArticleManager mgr = Environment.getInstance().getArticleManager(user.getWeb());
-		if (Environment.getInstance().getWikiConnector().doesPageExist(dataPagename)) {
+		if (Environment.getInstance().getArticle(user.getWeb(), dataPagename) != null) {
 			Section<?> sec = mgr.getArticle(dataPagename).getRootSection();
 			List<Section<ReadbuttonType>> rbSecs = Sections.findSuccessorsOfType(sec,
 					ReadbuttonType.class);
