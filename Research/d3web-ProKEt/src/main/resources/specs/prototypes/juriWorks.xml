@@ -17,7 +17,7 @@ Fordert man den Arbeitgeber bei einer au&#223;erordentlichen K&#252;ndigung zur 
 Nicht ausreichend sind insbesondere:
 &#60;ol&#62;&#60;li&#62;eine K&#252;ndigung per Email,&#60;/li&#62;&#60;li&#62;eine m&#252;ndliche K&#252;ndigung.&#60;/li&#62;&#60;/ol&#62;'/>
 <legalQuestion title='Hat ein Berechtigter unterzeichnet? ' id='10' parent-id='2' and-or-type='OR' bonus-text='Die K&#252;ndigung muss von einer berechtigten Person unterzeichnet sein, vgl. hierzu die n&#228;chsten Fragen.'/>
-<legalQuestion title='Hat der Arbeitgeber selbst gek&#252;ndigt oder ist der Unterzeichner direkt berechtigt?' id='11' parent-id='10' and-or-type='AND' bonus-text='null'/>
+<legalQuestion title='Hat der Arbeitgeber selbst gek&#252;ndigt oder ist der Unterzeichner direkt berechtigt?' id='11' parent-id='10' and-or-type='AND' bonus-text=''/>
 <legalQuestion title='Ist der Unterzeichner durch eine Vollmacht legitimiert? ' id='12' parent-id='10' and-or-type='OR' bonus-text='Sollte nicht der Arbeitgeber oder eine direkt berechtigte Person, wie zuvor beschreiben, gek&#252;ndigt haben, kann eine K&#252;ndigung auch durch eine Person gek&#252;ndigt werden, die durch eine Vollmacht legitimiert ist. Dies ist der Fall, wenn 
 &#60;ol&#62;&#60;li&#62;bei Ausspruch der K&#252;ndigung eine Vollmacht vorlag, oder&#60;/li&#62;&#60;li&#62;bei fehlender Vollmacht zum Zeitpunkt des Ausspruchs der K&#252;ndigung die K&#252;ndigung nicht aufgrund dessen zur&#252;ckgeweisen wurde.&#60;/li&#62;&#60;/ol&#62;'/>
 <legalQuestion title='Lag eine Vollmacht bei Ausspruch der K&#252;ndigung vor?' id='13' parent-id='12' and-or-type='AND' bonus-text='Der Unterzeichner ist durch eine Vollmacht legitimiert, wenn er bei Ausspruch der K&#252;ndigung eine solche vorgelegt hat.'/>

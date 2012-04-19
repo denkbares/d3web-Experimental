@@ -242,6 +242,7 @@ IMPORTANT:
 -----------
 PARSER ELMAR
 - doppelt vorkommende Fragen werden übergangen?!
+- Resourcen (zB PDF Links)
 
 
 TOOL ALEX und WIKI JURI
