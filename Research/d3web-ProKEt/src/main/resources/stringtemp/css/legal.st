@@ -320,7 +320,7 @@ img{
     margin-right: -20px;
     min-height: 32px;
 }
-/*
+
 .solRating.rating-high { 
     background-color: #C3DAA8; 
 }
@@ -330,7 +330,7 @@ img{
 .solRating.rating-low { 
     background-color: #E0B59E;  
 }
-*/
+/*
 .solRating.rating-high { 
     background-color: #B0C4DE; 
 }
@@ -339,7 +339,7 @@ img{
 }
 .solRating.rating-low { 
     background-color: #ffdead;  
-}
+}*/
 
 
 #solutionboxtext{

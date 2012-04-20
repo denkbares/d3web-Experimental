@@ -22,6 +22,7 @@ package de.d3web.proket.d3web.run;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.ue.analyze.JSONReader;
 import de.d3web.proket.d3web.ue.JSONLogger;
+import de.d3web.proket.output.render.Renderer;
 import de.d3web.proket.utils.GlobalSettings;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -241,8 +242,31 @@ public class ServletLogUtils {
     }
     
     public static void logUEFeedback(String feedbackString, String logtime, JSONLogger logger){
-        logger.logUEFeedback(feedbackString, logtime);
+         logger.logUEFeedback(feedbackString, logtime);
          logger.writeJSONToFile();
+    }
+    
+    public static void logUEIntermediateSolutions(String iSolCompleteString, JSONLogger logger){
+        
+        String[] splits = iSolCompleteString.split("###");
+        String solTitle = "";
+        String solRating = "0";
+        if(splits.length>0){
+            for(String splitstring : splits){
+                
+                String[] splitIntern = splitstring.split(";;");
+                if(splitIntern.length == 2){
+                    
+                    solTitle = splitIntern[0];
+                   
+                    // TODO: remove getObjectNAme etc from Renderers and move to general util methods
+                    solRating = splitIntern[1];
+                    logger.logIntermedSolution(Renderer.getObjectNameForIDPrototype(solTitle), solRating);
+                }
+            }
+        }
+        
+        logger.writeJSONToFile();
     }
     
     public static void logUEQuestionnaire(String questionnaireString, JSONLogger logger){

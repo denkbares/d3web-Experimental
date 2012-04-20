@@ -54,10 +54,10 @@ import java.util.*;
 public class JSONLogger {
 
     private JSONObject logfile = new JSONObject();
-    private JSONArray clickarray = new JSONArray();
-    private JSONArray feedbackarray = new JSONArray();
+    private JSONArray clickArray = new JSONArray();
+    private JSONArray feedbackArray = new JSONArray();
+    private JSONArray intermediateSolutionsArray = new JSONArray();
     private String filename = "defaultlog.txt";
-    private static final long serialVersionUID = -5766536853041423918L;
     private String endValOnNewLoad = "";
 
     public JSONLogger(String filename) {
@@ -164,14 +164,29 @@ public class JSONLogger {
 
         logfile.put(UETerm.UEF.toString(), existingFeedbacks);
     }
+    
+    public void logIntermedSolution(Object elementid, Object solutionval){
+        JSONObject ob = new JSONObject();
+        ob.put(UETerm.ID.toString(), elementid);
+        ob.put(UETerm.VAL.toString(), solutionval);
+        
+        JSONArray existingISols = getIntermedSolutionsArray();
+        existingISols.add(ob);
+        
+        logfile.put(UETerm.ISOL.toString(), existingISols);
+    }
 
     // get the existing clicked objects already stored in the internal array
     private JSONArray getClickedObjects() {
-        return clickarray;
+        return clickArray;
     }
 
     private JSONArray getFeedbackArray() {
-        return feedbackarray;
+        return feedbackArray;
+    }
+    
+    private JSONArray getIntermedSolutionsArray(){
+        return intermediateSolutionsArray;
     }
 
     /**
@@ -196,7 +211,7 @@ public class JSONLogger {
             if (saved instanceof String) {
                 logfile.put(key, ((String) saved).replace("\"", ""));
             } else if (saved instanceof JSONArray) {
-                clickarray = (JSONArray) saved;
+                clickArray = (JSONArray) saved;
             }
         }
     }

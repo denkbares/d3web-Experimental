@@ -124,6 +124,10 @@ public class JSONReader implements Serializable {
         if (logdata.get(UETerm.SOL.toString()) != null) {
             ob.put(UETerm.SOL.toString(), logdata.get(UETerm.SOL.toString()).toString());
         }
+        
+        if (logdata.get(UETerm.ISOL.toString()) != null) {
+            ob.put(UETerm.ISOL.toString(), getJSONArrayFromString(logdata.get(UETerm.ISOL.toString()).toString()));
+        }
         return ob;
     }
 
@@ -181,6 +185,8 @@ public class JSONReader implements Serializable {
                     logdata.put(UETerm.TYPE.toString(), value);
                 } else if (keyval.equals(UETerm.SOL.toString())) {
                     logdata.put(UETerm.SOL.toString(), value);
+                } else if (keyval.equals(UETerm.ISOL.toString())) {
+                    logdata.put(UETerm.ISOL.toString(), value);
                 }
                 // TODO refactor: only for first study
                  else if (keyval.equals("SOLUTION::Ist das Arbeitsverhältnis wirksam gekündigt worden?")) {

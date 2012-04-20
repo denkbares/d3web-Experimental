@@ -19,6 +19,7 @@
  */
 package de.d3web.proket.output.render;
 
+
 import java.util.Vector;
 
 import org.antlr.stringtemplate.StringTemplate;
@@ -30,6 +31,7 @@ import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.ClassUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.TemplateUtils;
+import java.util.HashMap;
 
 /**
  * General renderer. This renderer is handling the basic things. Overload it if
@@ -42,6 +44,11 @@ public class Renderer implements IRenderer {
     // maximum possible rating value
     protected double maxRating = 100;
 
+     private static HashMap<String, String> nameToIdMap = new HashMap<String, String>();
+    private static HashMap<String, String> idToNameMap = new HashMap<String, String>();
+
+    
+    
     /**
      * TODO: leave that way?!?! gets the renderer appropriate for this given
      * dialogOBject according to its virtual class name
@@ -313,7 +320,7 @@ public class Renderer implements IRenderer {
     public String renderDialogObject(ContainerCollection cc,
             IDialogObject dialogObject, boolean recurseCount, boolean excludeChildren, boolean force, Session session) {
 
-
+        
         // TODO maybe null is not such a good idea here?
         // already rendered somewhere? If yes, and if render-force is not set
         // then return null, i.e. no representation
@@ -325,6 +332,9 @@ public class Renderer implements IRenderer {
 
         // get the HTML template for the dialog object
         StringTemplate st;
+        
+        // fill NameToID and vice versa map
+        getIDForNamePrototype(dialogObject.getTitle(), dialogObject);
 
         if (dialogObject instanceof LegalQuestion
                 && ((LegalQuestion) dialogObject).getDummy()) {
@@ -447,5 +457,21 @@ public class Renderer implements IRenderer {
         String childCount = Integer.toString(count);
         String countTotal = parentCount + "." + childCount;
         ((Question) child).setCounter(countTotal);
+    }
+    
+     public static String getIDForNamePrototype(String element, IDialogObject ido) {
+
+        String id = nameToIdMap.get(element);
+        if (id == null) {
+            nameToIdMap.put(ido.getTitle(), ido.getFullId());
+            idToNameMap.put(ido.getFullId(), ido.getTitle());
+            id = ido.getFullId();
+        }
+        
+        return id;
+    }
+
+    public static String getObjectNameForIDPrototype(String id) {
+        return idToNameMap.get(id);
     }
 }

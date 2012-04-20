@@ -29,6 +29,7 @@ import de.d3web.proket.output.render.Renderer;
 import de.d3web.proket.utils.GlobalSettings;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -116,6 +117,7 @@ public class DialogServlet extends HttpServlet {
 
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
+        System.out.println("ACTION: " + action);
         if (action == null) {
             action = "show";
             httpSession.setAttribute("newload", "first");
@@ -137,6 +139,7 @@ public class DialogServlet extends HttpServlet {
                 !httpSession.getAttribute("newload").equals("first")) {
             httpSession.setAttribute("newload", "false");
         }
+        
         
          
         //if(action.equalsIgnoreCase("logInit") &&
@@ -178,6 +181,11 @@ public class DialogServlet extends HttpServlet {
                     request.getParameter("timestring").replace("+", " ");
             ServletLogUtils.logUEFeedback(feedback, logtime, logger);
 
+        } else if (action.equalsIgnoreCase("logISOLS")) {
+            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            String iSols = URLDecoder.decode(request.getParameter("intermedSolutions").toString(), "UTF-8");
+            ServletLogUtils.logUEIntermediateSolutions(iSols, logger);
+            return;
         } else if (action.equalsIgnoreCase("logUEQuestionnaire")) {
 
             JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");

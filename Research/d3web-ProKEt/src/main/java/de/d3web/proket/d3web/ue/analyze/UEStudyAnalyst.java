@@ -24,9 +24,8 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class UEStudyAnalyst {
@@ -71,7 +70,7 @@ public class UEStudyAnalyst {
         }
         return "/";
     }
-    
+
     private String getBrowser() {
         if (JSON.get(UETerm.BROW.toString()) != null) {
             return JSON.get(UETerm.BROW.toString()).toString().replace("\"", "");
@@ -89,7 +88,6 @@ public class UEStudyAnalyst {
         }
         return "/";
     }
-    
 
     private String getResult() {
         //if(JSON.get(UETerm.SOL.toString()) != null){
@@ -104,6 +102,55 @@ public class UEStudyAnalyst {
             }
         }
         return "/";
+    }
+
+    private JSONArray getCompleteIntermediateResultsString() {
+        if (JSON.get(UETerm.ISOL.toString()) != null) {
+            return (JSONArray) JSON.get(UETerm.ISOL.toString());
+        }
+        return new JSONArray();
+    }
+
+    private TreeMap<String, String> getIntermediateResultsEvalFor(TreeMap<String, String> solutions) {
+
+        // the results as stored in the logfile
+        JSONArray completeInterRes = getCompleteIntermediateResultsString();
+        // for the results
+        TreeMap<String, String> interEval = new TreeMap();
+
+        // go through all intermediateLoggedResults
+        for(Object o: completeInterRes){
+            JSONObject jo = (JSONObject) o;
+            if (jo.get(UETerm.ID.toString()) != null) {
+                
+                // this is the loggedIntermedSolutionID/Name
+                String idToCheck = jo.get(UETerm.ID.toString()).toString();
+            
+                // get corresponding sol/rating definition from TreeMap
+                if(solutions.get(idToCheck) !=null){
+                    String realValue = solutions.get(idToCheck);
+                    String loggedValue = jo.get(UETerm.VAL.toString()).toString();
+                    
+                    if (realValue.equals(loggedValue)) {
+                            interEval.put(idToCheck, "CORRECT: " + jo.get(UETerm.VAL.toString()));
+                        } else {
+                            interEval.put(idToCheck, "INCORRECT: was "
+                                    + loggedValue + " / " + realValue);
+                        }
+                }
+            }
+        }
+        
+        // additionally go through provided solutions and check whether there
+        // are elements that had not been logged
+        for(String key: solutions.keySet()){
+        
+            if(!interEval.containsKey(key)){
+                interEval.put(key, "NaN");
+            }
+        }
+    
+        return interEval;
     }
 
     public String getAnalysisResults() {
@@ -122,16 +169,30 @@ public class UEStudyAnalyst {
         return bui.toString();
     }
 
-    public static String assembleCSVString(String LogFolderName) {
+    public static String assembleCSVString(String LogFolderName, TreeMap<String, String> solAndRat) {
         StringBuilder bui = new StringBuilder();
 
+        // basic csv stuff, always needed
         bui.append("filename , UI type , Duration , ResultUser , ResultOrig , "
-                + "Browser , StartTime , EndTime\n");
+                + "Browser , StartTime , EndTime");
+
+        // if intermed solutions and ratings are given, append corresponding headings
+        if (solAndRat.size() != 0) {
+            Set<String> keys = solAndRat.keySet();
+            for (String key : keys) {
+                bui.append(" , " + key);
+            }
+        }
 
         List<File> logs = JSONReader.getInstance().retrieveAllLogfiles(LogFolderName);
+
         for (File logfile : logs) {
-            System.out.println("parsing: " + logfile.getName());
+            
             UEStudyAnalyst ue = new UEStudyAnalyst(logfile);
+            
+            TreeMap<String, String> interMedSolRatings =
+                    ue.getIntermediateResultsEvalFor(solAndRat);
+                      
             bui.append(logfile.getName());
             bui.append(" , ");
             bui.append(ue.getDialogType());
@@ -147,6 +208,10 @@ public class UEStudyAnalyst {
             bui.append(ue.getStart());
             bui.append(" , ");
             bui.append(ue.getEnd());
+            for (String value : interMedSolRatings.values()) {
+                bui.append(" , ");
+                bui.append(value);
+            }
             bui.append("\n");
         }
         return bui.toString();
@@ -156,12 +221,18 @@ public class UEStudyAnalyst {
 
         StringBuilder bui = new StringBuilder();
         List<File> logs = JSONReader.getInstance().retrieveAllLogfiles("Testlog-Data");
+
+        TreeMap solRatings = new TreeMap();
+        solRatings.put("Ist die Kündigung formell rechtmäßig?", "1");
+        solRatings.put("Ist die Kündigung materiell/inhaltlich rechtmäßig?", "3");
+        solRatings.put("Anderer Test", "1");
+
         for (File logfile : logs) {
             UEStudyAnalyst ue = new UEStudyAnalyst(logfile);
         }
 
-        String csv = assembleCSVString("Testlog-Data");
-        System.out.println(csv);
+        String csv = assembleCSVString("Testlog-Data", solRatings);
+       
         try {
             writeCSV("/Users/mafre/CodingSpace/Testlog/auswertung.csv", csv);
         } catch (IOException io) {

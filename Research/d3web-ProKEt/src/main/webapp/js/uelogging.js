@@ -71,6 +71,7 @@ $(function(){
                 text: sendUEQ,
                 click: function(){
                     if(study && logging){    
+                        ue_logIntermediateSolutions();
                         ue_logDiagnosis();
                         ue_sendUEQ();
                     }
@@ -441,7 +442,6 @@ function ue_dataComplete(qData){
 
 function ue_logDiagnosis(){
     
-    var now = ue_getCurrentDate();  
     var rating;
     var id;
     var rootId = retrieveRootQuestionIdInHierarchyPrototype()
@@ -532,6 +532,59 @@ function ue_logUEFeedback(user, contact, feedback, now){
         }
     });
 }
+
+
+function ue_retrieveIntermedSolutions(){
+    var allquestionelements = $("[id^='q_']");
+    var intermedSolutions = "";
+   
+    
+    allquestionelements.each(function(){
+        var id = $(this).attr("id");
+       
+        if(id.indexOf("typeimg")==-1){
+            var rating = "0";
+           
+            if($(this).hasClass("rating-low")){
+                rating = "3";
+            } else 
+       
+            if($(this).hasClass("rating-medium")){
+                rating = "2";
+            } else
+       
+            if($(this).hasClass("rating-high")){
+                rating = "1";
+            } 
+       
+            intermedSolutions += id + ";;" + rating + "###";
+        }
+    });
+    
+    return intermedSolutions;
+}
+
+
+function ue_logIntermediateSolutions(){
+    
+    var intermedSolutions = encodeURIComponent(ue_retrieveIntermedSolutions());
+    //intermedSolutions = "#;" + encodeURIComponent("Häßlich-nochhüb scher?( Test##;;., ") + encodeURIComponent(" ");
+   
+    var link = $.query.set("action", "logISOLS")
+    .set("intermedSolutions", intermedSolutions).toString();
+    
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        success : function(html) {
+           
+        }
+    });
+}
+
 
 function ue_logUEQData(user, contact, questionnaireData){
     var link = $.query.set("action", "logUEQuestionnaire")
