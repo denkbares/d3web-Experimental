@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import de.knowwe.compile.IncrementalCompiler;
@@ -38,7 +37,6 @@ import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.Messages;
 
 /**
  * Action which renames all Definitions and References of a given Term. The
@@ -106,31 +104,17 @@ public class TermRenamingAction extends AbstractAction {
 	}
 
 	private void generateMessage(Set<String> failures, Set<String> success, UserActionContext context) throws IOException {
-		ResourceBundle rb = Messages.getMessageBundle();
 		Writer w = context.getWriter();
-		if (failures.size() == 0) {
-			w.write("<p style=\"color:green;\">");
-			w.write(rb.getString("KnowWE.ObjectInfoTagHandler.renamingSuccessful"));
-			w.write("</p>");
-			w.write("<ul>");
-			for (String article : success) {
-				w.write("<li>");
-				w.write(article);
-				w.write("</li>");
-			}
-			w.write("</ul>");
+		// successes
+		for (String article : success) {
+			w.write("##");
+			w.write(article);
 		}
-		else {
-			w.write("<p style=\"color:red;\">");
-			w.write(rb.getString("KnowWE.ObjectInfoTagHandler.renamingFailed"));
-			w.write("</p>");
-			w.write("<ul>");
-			for (String article : failures) {
-				w.write("<li>");
-				w.write(article);
-				w.write("</li>");
-			}
-			w.write("</ul>");
+		w.write("###");
+		// failures
+		for (String article : failures) {
+			w.write("##");
+			w.write(article);
 		}
 	}
 
