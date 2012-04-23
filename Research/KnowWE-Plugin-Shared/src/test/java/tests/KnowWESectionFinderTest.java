@@ -28,6 +28,7 @@ import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 import de.knowwe.kdom.sectionFinder.SentenceSectionFinder;
 import de.knowwe.kdom.sectionFinder.StringSectionFinder;
@@ -62,7 +63,7 @@ public class KnowWESectionFinderTest extends TestCase {
 		assertEquals(WRONG_FIRST_END, test.length(), results.get(0).getEnd());
 	}
 
-
+	
 	/**
 	 * Single \r or \n are LineBreaks too for this finder
 	 */
@@ -94,7 +95,7 @@ public class KnowWESectionFinderTest extends TestCase {
 		assertEquals(WRONG_SECOND_END, 72, results.get(1).getEnd());
 	}
 
-
+	
 	public void testRegexSectionFinder() {
 		String text = "<ME> is a ,bad, cruel bastard !! that !! </ME>";
 		RegexSectionFinder f = new RegexSectionFinder("[!!]+[ \\w ]+[!!]+", 0);
@@ -131,7 +132,7 @@ public class KnowWESectionFinderTest extends TestCase {
 		// assertEquals(WRONG_THIRD_END, 99, results.get(2).getEnd());
 	}
 
-
+	
 	// TODO: Should this only find the first occurrence
 	public void testStringSectionFinder() {
 		String text = " bla blublbu bla jetzt nicht bla";
@@ -175,7 +176,8 @@ public class KnowWESectionFinderTest extends TestCase {
 		String text = "| Apple ";
 		SectionFinder f = new TableCellStart().getSectionFinder();
 
-		List<SectionFinderResult> results = f.lookForSections(text, null, null);
+		List<SectionFinderResult> results = f.lookForSections(text, null,
+				new AnonymousType("dummy"));
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());
 		assertEquals(WRONG_FIRST_END, 1, results.get(0).getEnd());
 	}
