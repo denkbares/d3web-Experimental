@@ -240,7 +240,7 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 
 	@Override
 	public String toString() {
-		return "JuriRule [father=" + father + ", children=" + children + ", disjunctive="
+            	return "JuriRule [father=" + father + ", children=" + children + ", disjunctive="
 				+ disjunctive + "]";
 	}
 
