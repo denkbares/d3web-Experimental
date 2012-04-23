@@ -61,6 +61,7 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.SessionFactory;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
+import de.d3web.core.session.blackboard.DefaultFact;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.core.session.interviewmanager.CurrentQContainerFormStrategy;
@@ -72,6 +73,7 @@ import de.d3web.core.session.values.TextValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.indication.inference.PSMethodUserSelected;
+import de.d3web.jurisearch.PSMethodJuri;
 import de.d3web.plugin.JPFPluginManager;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.ImageHandler;
@@ -80,7 +82,6 @@ import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.IDUtils;
-import java.util.*;
 
 /**
  * Util methods for the binding of d3web to the ProKEt system.
@@ -88,6 +89,10 @@ import java.util.*;
  * @author Martina Freiberg Johannes Mitlmeier
  */
 public class D3webUtils {
+
+    public static final String YESSTRING = "ja";
+    public static final String NOSTRING = "nein";
+    public static final String MAYBESTRING = "vielleicht";
 
     /**
      * Create a d3web session with a given knowledge base. Per default creates a
@@ -1221,6 +1226,7 @@ public class D3webUtils {
         if (toId == null || valueString == null) {
             return;
         }
+
         String toName = AbstractD3webRenderer.getObjectNameForId(toId);
         Blackboard blackboard = sess.getBlackboard();
         Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
@@ -1232,6 +1238,15 @@ public class D3webUtils {
         }
 
         String valueName = AbstractD3webRenderer.getObjectNameForId(valueString);
+        if (valueString != null && valueName == null) {
+            if (valueString.equals("1")) {
+                valueString = YESSTRING;
+            } else if (valueString.equals("2")) {
+                valueString = MAYBESTRING;
+            } else if (valueString.equals("3")) {
+                valueString = NOSTRING;
+            }
+        }
 
         // init Value object...
         Value value = null;
@@ -1263,11 +1278,12 @@ public class D3webUtils {
                 if (UndefinedValue.isNotUndefinedValue(value)) {
                     // add new value as UserEnteredFact
                     Fact fact = FactFactory.createUserEnteredFact(question, value);
-                    blackboard.addValueFact(fact);
+                    Fact f2 = new DefaultFact(question, value, PSMethodJuri.getInstance(),
+                            PSMethodJuri.getInstance());
+                    blackboard.addValueFact(f2);
                 }
             }
         }
-
     }
 
     private static Value setQuestionDate(Question to, String valString) {
@@ -1311,6 +1327,7 @@ public class D3webUtils {
 
     private static Value setQuestionChoice(Question to, String valueId) {
         Value value = null;
+
         if (to instanceof QuestionOC) {
             // valueString is the html ID of the selected item
             String valueName = AbstractD3webRenderer.getObjectNameForId(valueId);
@@ -1352,6 +1369,11 @@ public class D3webUtils {
         return value;
     }
 
+    /**
+     * 
+     * @param sess
+     * @return 
+     */
     public static Collection<Question> resetAbandonedPaths(Session sess) {
         Blackboard bb = sess.getBlackboard();
         Collection<Question> resetQuestions = new LinkedList<Question>();
@@ -1440,8 +1462,7 @@ public class D3webUtils {
         return f;
     }
 
-   
-    public static Collection<TerminologyObject> getAbstractions(Session session){
+    public static Collection<TerminologyObject> getAbstractions(Session session) {
         Collection<TerminologyObject> abstractionQuestions =
                 new ArrayList<TerminologyObject>();
 
@@ -1450,31 +1471,31 @@ public class D3webUtils {
                 abstractionQuestions.add(aq);
             }
         }
-        
+
         return abstractionQuestions;
     }
-    
-    public static Collection<TerminologyObject> getValuedAbstractions(Session session){
+
+    public static Collection<TerminologyObject> getValuedAbstractions(Session session) {
         Collection<TerminologyObject> abstractionQuestions =
                 getAbstractions(session);
-        
-         Collection<TerminologyObject> valuedAbstractions =
+
+        Collection<TerminologyObject> valuedAbstractions =
                 new ArrayList<TerminologyObject>();
 
         Collection<TerminologyObject> valuedQuestions =
                 session.getBlackboard().getValuedObjects();
 
-        
+
 
         for (TerminologyObject abstracti : abstractionQuestions) {
             if (valuedQuestions.contains(abstracti)) {
                 valuedAbstractions.add(abstracti);
             }
         }
-        
+
         return valuedAbstractions;
     }
-    
+
     public static boolean hasAnsweredChildren(TerminologyObject questionnaire, Session d3websession) {
         boolean has = false;
         if (questionnaire.getChildren().length > 0) {

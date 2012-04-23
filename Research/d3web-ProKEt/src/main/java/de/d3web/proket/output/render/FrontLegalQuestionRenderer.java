@@ -33,6 +33,7 @@ import org.antlr.stringtemplate.StringTemplate;
  */
 public class FrontLegalQuestionRenderer extends Renderer {
 
+    // TODO remove from here to global config o.ä.
     private static String TT_YES = "Wertet übergeordnete Frage <b>positiv</b>.";
     private static String TT_NO = "Wertet übergeordnete Frage <b>negativ</b>.";
     private static String TT_UN = "Wertet übergeordnete Frage <b>unsicher/neutral</b>.";

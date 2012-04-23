@@ -20,20 +20,27 @@ var scrollHtml = 0;
 ****************************************************************************/
 
 
-function setup() {
-
-    // setup popup stuff
-    // each time the document is clicked somewhere
-    $(document).click(function() {	
-        if (!clariPopupShowing) { // TODO try out 
-            hide_popup(250); // fade out popup in 250 ms
-        }
-        clariPopupShowing = false;	
-    });
-    hide_popup(0); // initially hiding popup per default
+function init_all() {
 
     hide_all_tooltips();
-    generate_tooltip_functions();
+    generate_tooltip_functions_ynButtons();
+    
+        removeInputFacilitiesForFirst();
+        
+        expandFirstmostElement();
+    
+        exchangeReadflowTextFirstSubQuestion();
+        
+        // initialize mechanism for num fields to check entered values etc
+        //initializeNumfields();
+        
+        // initialize mechanism for dropdwons to check entered values etc
+        //initializeDropdownSelects();
+        
+        // remove the field containing the propagation value info for 1st q
+        removePropagationInfoInQuestionForFirst();
+        
+        alwaysExpandDummyNodes();
 }
 
 /**
@@ -653,6 +660,151 @@ function tooltip_out(object) {
 //tooltipShownTrigger = undefined;
 }
 
+// generates the tooltips for the answer buttons of yes no questions
+function generate_tooltip_functions_ynButtons(){
+    triggers = $("[class*='-tt-trigger-ynbutton']");
+	
+    // if mouse is moved over an element define potential tooltips position
+    $(document).mousemove(function(e) {
+        tooltip_move(e);
+    });
+	
+    // go through all existing tooltip triggers
+    triggers.each(function() {
+		
+        var ttstart, ttend;
+        var now;
+                
+        $(this).unbind('mouseover').mouseover(function() {
+            //if logging is activated get the time tooltip is triggered
+            if(logging){
+                now = new Date();
+                ttstart = now.getTime();
+            }
+            
+            var fullId = $(this).attr("id");
+            
+            if(fullId.indexOf("ynYes")!=-1){
+                id = $(this).attr("id").replace("ynYes-", "");
+                tooltip_over_hierarchy_buttons(id, "1");
+            } else if(fullId.indexOf("ynNo")!=-1){
+                id = $(this).attr("id").replace("ynNo-", "");
+                tooltip_over_hierarchy_buttons(id, "3");
+            } else if(fullId.indexOf("ynUn")!=-1){
+                id = $(this).attr("id").replace("ynUn-", "");
+                tooltip_over_hierarchy_buttons(id, "2");
+            } else if(fullId.indexOf("ynNan")!=-1){
+                id = $(this).attr("id").replace("ynNan-", "");
+                tooltip_over_hierarchy_buttons(id, "0");
+            }
+        });
+
+        $(this).unbind('mouseout').mouseout(function() {
+            //if logging is activated get the time tooltip is deactivated again
+            if(logging){
+                now = new Date();
+                ttend = now.getTime();
+                ue_logInfoPopup(ttstart, ttend, $(this));
+            }
+            
+            var fullId = $(this).attr("id");
+            if(fullId.indexOf("ynYes")!=-1){
+                id = $(this).attr("id").replace("ynYes-", "");
+                tooltip_out_hierarchy_buttons(id, "1");
+            } else if(fullId.indexOf("ynNo")!=-1){
+                id = $(this).attr("id").replace("ynNo-", "");
+                tooltip_out_hierarchy_buttons(id, "3");
+            } else if(fullId.indexOf("ynUn")!=-1){
+                id = $(this).attr("id").replace("ynUn-", "");
+                tooltip_out_hierarchy_buttons(id, "2");
+            } else if(fullId.indexOf("ynNan")!=-1){
+                id = $(this).attr("id").replace("ynNan-", "");
+                tooltip_out_hierarchy_buttons(id, "0");
+            }
+        });
+    });
+}
+
+function tooltip_over_hierarchy_buttons(id, button) {
+   
+    switch(button){
+        case "1":
+            targetid = "tt-" + id + "-Y";
+            break;
+        case "2":
+            targetid = "tt-" + id + "-U";
+            break;
+        case "3":
+            targetid = "tt-" + id + "-NO";
+            break;
+        case "0":
+            targetid = "tt-" + id + "-NAN";
+            break;
+    }
+   	
+    //target = $("#tt-" + id).filter(":not(:animated)");
+    var target = $("[id^=" + targetid + "]");
+        
+    if (target.size() == 0) {
+        return;
+    }
+	
+    // if target element is not currently shown
+    if (target !== tooltipShown) {
+		
+        // hide old tooltip if existing
+        if (tooltipShown !== undefined) {
+            tooltip_out(tooltipShown);
+        }
+		
+        // store currently shown tooltip and tooltipShownTrigger
+        tooltipShown = target;
+		
+        target.css("position", "absolute");
+        var height = target.height();
+        var width = target.width();
+        if (height > 0 && width > 0 && height > width) {
+            target.css("width", height);
+            target.css("height", width);
+        }
+        //tooltip_move(element);
+
+        target.fadeIn(300);
+        setLeftOffset(target);
+    }
+}
+
+function tooltip_out_hierarchy_buttons(object, button) {
+	
+    switch(button){
+        case "1":
+            targetid = "tt-" + object + "-Y";
+            break;
+        case "2":
+            targetid = "tt-" + object + "-U";
+            break;
+        case "3":
+            targetid = "tt-" + object + "-NO";
+            break;
+        case "0":
+            targetid = "tt-" + object + "-NAN";
+            break;
+    }
+
+    // if a jquery tooltip or
+    if (object instanceof jQuery) {
+        target = object;
+    } else {
+		
+        // a specifically marked element
+        target = $("#" + targetid);
+    }
+
+    target.hide(500);
+    tooltipShown = undefined;
+//tooltipShownTrigger = undefined;
+}
+
 /**
  * Generate functionality for tooltip elements
  */
@@ -882,20 +1034,6 @@ function toggle_folder_image(id) {
  * @param id
  */
 function toggle_sub_4boxes(id) {
-	
-    // get d3web stuff out of here
-    if (d3web) {
-        d3web_getChildren(id);
-        /*
-		 * get new ratings, they changed at least for the element we are looking
-		 * at
-		 */
-        var ids = "";
-        $("[id^='q_']").each(function() {
-            ids = ids + $(this).attr('id') + ",";
-        });
-        d3web_getRatings(ids);
-    }
     toggle_hide("sub-" + id); 
     toggle_folder_image_4boxes(id);
     hide_all_tooltips();
@@ -905,12 +1043,30 @@ function toggle_sub_4boxes(id) {
  * Toggle folder image (open/close) for the legal dialog style
  */
 function toggle_folder_image_4boxes(id) {
-    var temp = $("#" + id + "-folderimg");
-    if (temp.attr('src') !== 'images/plus.gif') {
-        temp.attr('src', 'images/plus.gif');
-    } else {
-        temp.attr('src', 'images/minus.gif');
-    }
+	
+    // ids of the arrow/folder: in clarihie d3web this still contains the q_
+    var typeimgID = id + '-typeimg';
+    
+    // get the div of the arrow/folder image
+    var imgDiv = $("[id^="+ typeimgID + "]");
+    
+    var qtext = $('#solutiontitle-' + id).html();
+    
+    if (imgDiv.attr('src') == 'img/openedArrow.png') {
+        
+        imgDiv.attr('src', 'img/closedArrow.png');
+       
+        if(logging && !$("#" + id).hasClass("dummy")){
+            ue_logQuestionToggle(qtext, "SHUT");
+        }
+        
+    } else if (imgDiv.attr('src') == 'img/closedArrow.png') {
+
+        imgDiv.attr('src', 'img/openedArrow.png');
+        if(logging && !$("#" + id).hasClass("dummy")){
+            ue_logQuestionToggle(qtext, "EXPAND");
+        }
+    } 
 }
 
 /**
@@ -1344,15 +1500,8 @@ function showAuxInfo(id, title){
     
     $("#auxHeader").html(auxHeader);
     $("#auxInfo").html(auxinfo);
-    
-    
-    // similarly write potentially linked resources
-    var lrid = "#lr-" + id;
-    var resinfo = $(lrid).html();
-    //var resif = $(lrid).attr("showif");
-    
-    $("#linkedResources").html(resinfo);
 }
+
 
 function hideAuxInfo(){
     
@@ -1372,3 +1521,78 @@ function hideAuxPropInfo(){
     $("#auxPropagationInfo").html("");
 }
 
+/**
+ * Retrieve the topmost element in hierarchically specified XML prototypes.
+ * Usually this is the first <question> element.
+ */
+function retrieveRootQuestionIdInHierarchyPrototype(){
+    
+    var first; // get question id
+    
+    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements     
+        if($(this).attr("id")!=undefined){  
+            first = $(this).attr("id");   
+        }   
+    });
+    return first;
+}
+
+// TODO check if that works for num and oc q
+function removeInputFacilitiesForFirst(){
+    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
+        
+        alert($(this).attr("id"));
+        if($(this).attr("id")!=undefined){  
+            var id = "#" + $(this).attr("id") + "-imagebox";
+            
+            // the imagebox div, that contains input buttons normally
+            var prop = $(id);
+            
+            prop.html("<div id='solutionboxtextInTree'>Hauptfrage</div>");
+        }
+    });
+}
+
+/**
+ * Retrieve the first element in hierarchical dialogs and expand it on startup
+ * Used e.g. in hierarchy (legal) dialog
+ */
+function expandFirstmostElement(){
+    
+    var rootId = retrieveRootQuestionIdInHierarchyPrototype();
+
+    $("#" + rootId).addClass('solutiontext');
+    toggle_sub_4boxes(rootId);   // expand the first element
+}
+
+/*Helper function to exchange the text of the first subquestion - usually 
+ *Oder and Und - of a set of subquestions to the given text, e.g. "Wenn" 
+ */
+function exchangeReadflowTextFirstSubQuestion(){
+    
+    $("[id^=sub-] [id^=readFlow]:first-child img").each(function(){     
+        $(this).attr('src', 'img/If.png');
+    });
+}
+
+function alwaysExpandDummyNodes(){
+    $(".dummy").each(function(){
+        toggle_sub_4boxes($(this).attr("id"));
+    });
+};
+
+function removePropagationInfoInQuestionForFirst(){
+    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
+        
+        var first = $(this).attr("id"); // get question id
+        
+        if($(this).attr("id")!=undefined){  
+            var prop = $("#propagation-"+$(this).attr("id"));
+    
+            prop.removeClass("show");
+            prop.addClass("hide");
+        }
+      
+    });
+    
+}

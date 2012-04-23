@@ -157,7 +157,7 @@ public class D3webDialog extends HttpServlet {
 
         // try to get the src parameter, i.e. the specification of the dialog
         String source = getSource(request);
-        System.out.println(source);
+        //System.out.println(source);
         d3webParser.setSourceToParse(source);
 
         d3wcon = D3webConnector.getInstance();
@@ -659,6 +659,7 @@ protected void checkInitialLoggingReload(HttpSession httpSession,
         renderAndUpdateDiff(writer, d3webSession, diff, httpSession);
     }
 
+    
     /**
      * Check, whether a required value (for saving) is specified. If yes, check
      * whether this value has already been set in the KB or is about to be set
@@ -1237,11 +1238,13 @@ protected void checkInitialLoggingReload(HttpSession httpSession,
         DefaultRootD3webRenderer d3webr =
                 (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
 
-        //System.out.println(d3webr.getClass());
         // new ContainerCollection needed each time to get an updated dialog
         ContainerCollection cc = new ContainerCollection();
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
-        //System.out.println(d3webSess);
+        
+        //System.out.println(d3webSess.getBlackboard().toString());
+        //System.out.println("in d3webdialog show: " + d3webSess.toString());
+        
         cc = d3webr.renderRoot(cc, d3webSess, httpSession);
         writer.print(cc.html.toString()); // deliver the rendered output
         writer.close(); // and close

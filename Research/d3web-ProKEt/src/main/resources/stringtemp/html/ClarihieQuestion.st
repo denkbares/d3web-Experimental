@@ -1,25 +1,25 @@
 
 <div id="readFlow-$fullId$" class="readflow">
-    <img id="$fullid$-readimg" alt="readflow" src="$readimg$" height="14" width="25">
+    <img id="$fullId$-readimg" alt="readflow" src="$readimg$" height="14" width="25">
 </div>
  
-<div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$" >
+<div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$ $qrating$ $swap$" >
     
-    <div id="$id$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')">
-        <img id="$id$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes('$fullId$')">
-            <div id="ynYes-$fullId$" class="ynbutton $ratingY$ $fullId$-tt-trigger-ynbutton" onclick="handleOQYNQuestions('ynYes-$fullId$', '$ratingNrY$')">
+    <div id="$fullId$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')">
+        <img id="$fullId$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes('$fullId$')">
+            <div id="ynYes-$fullId$" class="ynbutton $ratingY$ $fullId$-tt-trigger-ynbutton $swap$" ">
                 Ja
                 $TooltipButtonJA()$
             </div>
-            <div id="ynNo-$fullId$" class="ynbutton $ratingN$ $fullId$-tt-trigger-ynbutton" onclick="handleOQYNQuestions('ynNo-$fullId$', '$ratingNrN$')">
+            <div id="ynNo-$fullId$" class="ynbutton $ratingN$ $fullId$-tt-trigger-ynbutton $swap$")">
                 Nein
                 $TooltipButtonNEIN()$
             </div>
-            <div id="ynUn-$fullId$" class="ynbutton rating-medium $fullId$-tt-trigger-ynbutton" onclick="handleOQYNQuestions('ynUn-$fullId$', '2')">
+            <div id="ynUn-$fullId$" class="ynbutton rating-medium $fullId$-tt-trigger-ynbutton" >
                 -?-
                 $TooltipButtonWN()$
             </div>
-            <div id="ynNan-$fullId$" class="ynbutton rating-none $fullId$-tt-trigger-ynbutton" onclick="handleOQYNQuestions('ynNan-$fullId$', '0')">
+            <div id="ynNan-$fullId$" class="ynbutton rating-none $fullId$-tt-trigger-ynbutton">
                 X
                 $TooltipButtonZ()$    
             </div>

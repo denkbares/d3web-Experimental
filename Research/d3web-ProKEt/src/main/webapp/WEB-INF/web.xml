@@ -42,8 +42,8 @@
         <servlet-class>de.d3web.proket.d3web.run.EuraHSDialog</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>JurisearchDialog</servlet-name>
-        <servlet-class>de.d3web.proket.d3web.run.JurisearchDialog</servlet-class>
+        <servlet-name>ClarihieDialog</servlet-name>
+        <servlet-class>de.d3web.proket.d3web.run.ClarihieDialog</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DownloadServlet</servlet-name>
@@ -82,8 +82,8 @@
         <url-pattern>/EuraHS-Dialog</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>JurisearchDialog</servlet-name>
-        <url-pattern>/JurisearchDialog</url-pattern>
+        <servlet-name>ClarihieDialog</servlet-name>
+        <url-pattern>/ClarihieDialog</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DownloadServlet</servlet-name>

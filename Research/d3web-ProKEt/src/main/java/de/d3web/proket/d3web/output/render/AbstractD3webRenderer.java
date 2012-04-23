@@ -19,6 +19,7 @@
  */
 package de.d3web.proket.d3web.output.render;
 
+import de.d3web.core.inference.KnowledgeKind;
 import java.util.HashMap;
 
 import org.antlr.stringtemplate.StringTemplate;
@@ -26,23 +27,20 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.terminology.Choice;
-import de.d3web.core.knowledge.terminology.NamedObject;
-import de.d3web.core.knowledge.terminology.QContainer;
-import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.QuestionChoice;
-import de.d3web.core.knowledge.terminology.QuestionDate;
-import de.d3web.core.knowledge.terminology.QuestionNum;
-import de.d3web.core.knowledge.terminology.QuestionText;
-import de.d3web.core.knowledge.terminology.QuestionZC;
+import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
+import de.d3web.core.session.values.ChoiceValue;
+import de.d3web.jurisearch.JuriModel;
+import de.d3web.jurisearch.JuriRule;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.data.IndicationMode;
 import de.d3web.proket.output.container.ContainerCollection;
+import java.util.*;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -259,10 +257,10 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                     childrenHTML.append(gridString);
                 } // also image upload questions are based on ZC
                 else {
-                    
+
                     // get the suiting child renderer (i.e., for answers)
                     AnswerD3webRenderer childRenderer = getAnswerRenderer(to);
-                    
+
                     // receive the matching HTML from the Renderer and append
                     Choice c = new Choice("uploadimages");
                     String childHTML =
@@ -513,6 +511,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         String id = nameToIdMap.get(no);
         if (id == null) {
             String prefix = "";
+
             if (no instanceof Question) {
                 prefix = "q";
             } else if (no instanceof QContainer) {
@@ -520,12 +519,11 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             } else if (no instanceof Choice) {
                 prefix = "a_" + getID(((Choice) no).getQuestion());
             }
-            if (no!= null && no.getName() != null) {
+            if (no != null && no.getName() != null) {
                 id = prefix + "_" + no.getName().replaceAll("\\W", "_");
                 nameToIdMap.put(no.getName(), id);
                 idToNameMap.put(id, no.getName());
-            }
-            else {
+            } else {
                 // TODO: make generic
                 id = prefix + " " + "imageUpload";
             }
@@ -533,7 +531,162 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         return id;
     }
 
+    // TODO: answer buttons need to be rendered by answer renderer, not within question
     public static String getObjectNameForId(String id) {
         return idToNameMap.get(id);
+    }
+
+    /**
+     * traverse all jurisearch rules and filter out the one(s) containing the
+     * currently rendered Terminology Object as parent
+     *
+     * @param parent the parent element the children of which are searched
+     * @return ArrayList<QuestionOC> the list of child QuestionOCs
+     */
+    protected ArrayList<QuestionOC> getChildQuestionsFromJuriRules(TerminologyObject parent,
+            Set juriRules) {
+
+        ArrayList<QuestionOC> toChildren = new ArrayList<QuestionOC>();
+
+        if (juriRules != null && juriRules.size() != 0) {
+            for (Object o : juriRules) {
+                JuriRule rule = (JuriRule) o;
+                if (rule.getFather().getName().equals(parent.getName())) {
+                    HashMap children = rule.getChildren();
+                    Set childKeys = children.keySet();
+                    for (Object co : childKeys) {
+                        if (co instanceof QuestionOC) {
+                            toChildren.add(((QuestionOC) co));
+                        }
+                    }
+                }
+            }
+        }
+        return toChildren;
+    }
+
+    /**
+     * Check, whether a given terminology object is rated by its children by an
+     * OR connection (default: AND connection)
+     *
+     * @param to
+     * @param juriRules
+     * @return
+     */
+    protected boolean isOrType(TerminologyObject to, Set juriRules) {
+
+        if (juriRules != null && juriRules.size() != 0) {
+            for (Object o : juriRules) {
+                JuriRule rule = (JuriRule) o;
+                if (rule.getChildren().containsKey(to)) {
+                    System.out.println(rule);
+                    System.out.println(rule.isDisjunctive());
+                    return rule.isDisjunctive();
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check whether a given terminology object rates the parent question in a
+     * swapped y/n manner, i.e. "NO" is the positively rating answer.
+     *
+     * @param to
+     * @param juriRules
+     * @return
+     */
+    protected boolean isNoDefining(TerminologyObject to, Set juriRules) {
+        if (juriRules != null && juriRules.size() != 0) {
+            for (Object o : juriRules) {
+                JuriRule rule = (JuriRule) o;
+
+                // get all rules, where to is CHILD
+                if (rule.getChildren().containsKey(to)) {
+
+                    HashMap<QuestionOC, List<ChoiceValue>> children = rule.getChildren();
+                    for (Object ooc : children.keySet()) {
+
+                        QuestionOC qoc = (QuestionOC) ooc;
+                        if (children.get(qoc).contains(JuriRule.NO_VALUE)) {
+                            if (qoc.equals(to)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    protected void renderChildrenClariHIE(StringTemplate st, Session d3webSession, ContainerCollection cc,
+            TerminologyObject to, int loc, HttpSession httpSession) {
+
+        final KnowledgeKind<JuriModel> JURIMODEL = new KnowledgeKind<JuriModel>(
+                "JuriModel", JuriModel.class);
+
+        StringBuilder childrenHTML = new StringBuilder();
+        D3webConnector d3wcon = D3webConnector.getInstance();
+
+        if (to.getName().equals("Q000")) {
+            TerminologyObject rootNode = to.getChildren()[0];
+
+            if (rootNode != null) {
+
+                IQuestionD3webRenderer childRenderer =
+                        AbstractD3webRenderer.getRenderer(rootNode);
+
+                // TODO: how to get parent el in here correctly!?
+                String childHTML =
+                        childRenderer.renderTerminologyObject(d3webSession, cc, rootNode, to, loc, httpSession);
+                if (childHTML != null) {
+                    childrenHTML.append(childHTML);
+                }
+
+                st.setAttribute("children", childrenHTML.toString());
+
+            }
+        } else {
+            JuriModel juriModel =
+                    d3wcon.getKb().getKnowledgeStore().getKnowledge(JURIMODEL);
+            Set juriRules = juriModel.getRules();
+
+            // get the children of the current to from the juri rules
+            List<QuestionOC> toChildren = getChildQuestionsFromJuriRules(to, juriRules);
+
+            if (toChildren != null && !toChildren.isEmpty()) {
+
+                for (Object newChildRoot : toChildren) {
+
+                    IQuestionD3webRenderer childRenderer = null;
+                    TerminologyObject newChild = (TerminologyObject) newChildRoot;
+
+                    Boolean isDummy =
+                            newChild.getInfoStore().getValue(
+                            Property.getProperty("dummy", Boolean.class));
+
+                    // TODO: render dummy nodes specially 
+                    if (isDummy != null && isDummy.equals(true)) {
+                        childRenderer = D3webRendererMapping.getInstance().getDummyClarihieRenderer();
+                    } else {
+                        childRenderer =
+                                AbstractD3webRenderer.getRenderer((TerminologyObject) newChildRoot);
+
+                    }
+
+
+                    String childHTML =
+                            childRenderer.renderTerminologyObject(d3webSession, cc, (TerminologyObject) newChildRoot, to, loc, httpSession);
+                    if (childHTML != null) {
+                        childrenHTML.append(childHTML);
+                    }
+
+                }
+                // if children, fill the template attribute children with children-HTML 
+                st.setAttribute("children", childrenHTML.toString());
+            }
+        }
+
     }
 }

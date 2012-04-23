@@ -593,7 +593,33 @@ function initFunctionality() {
             $("#sumDLTxt").removeClass("hidden");
         }
     });
-
+    
+    
+    /* Clarification Hierarchy Dialog */
+    // bind yes/no/?/retract buttons to d3web corresponding function
+    $('.ynbutton').unbind('click').click(function(event) {
+        if($(this).attr("id").indexOf("ynYes")!=-1){
+            if($(this).hasClass("swap")){
+                d3web_answerYesNoHierarchyQuestions($(this), "3");
+            } else {
+                d3web_answerYesNoHierarchyQuestions($(this), "1");
+            }
+        } else
+        if($(this).attr("id").indexOf("ynNo")!=-1){
+            if($(this).hasClass("swap")){
+                d3web_answerYesNoHierarchyQuestions($(this), "1");
+            } else {
+                d3web_answerYesNoHierarchyQuestions($(this), "3");
+            }
+        } else 
+        if($(this).attr("id").indexOf("ynUn")!=-1){
+            d3web_answerYesNoHierarchyQuestions($(this), "2");
+        }
+        else if($(this).attr("id").indexOf("ynNan")!=-1){
+            d3web_answerYesNoHierarchyQuestions($(this), "0");
+        }
+       
+    });
     
 }
 

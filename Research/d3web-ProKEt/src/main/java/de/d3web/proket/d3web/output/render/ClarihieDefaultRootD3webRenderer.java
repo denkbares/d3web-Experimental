@@ -31,16 +31,11 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import javax.servlet.http.HttpSession;
 import org.antlr.stringtemplate.StringTemplate;
 
 public class ClarihieDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
-
-    private Set juriRules = null;
 
     /**
      * Basic rendering of the root, i.e., the framing stuff of a dialog, like
@@ -121,9 +116,8 @@ public class ClarihieDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         D3webUserSettings us =
                 (D3webUserSettings) http.getAttribute("userSettings");
 
-
         // render the children
-        renderChildren(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet(),
+        renderChildrenClariHIE(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet(),
                 us.getLanguageId(), http);
 
         // global JS initialization
@@ -186,110 +180,9 @@ public class ClarihieDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         if (D3webConnector.getInstance().isLogging()) {
             cc.js.enableClickLogging();
         }
+
         cc.js.add("$(function() {init_all();});", 1);
-        cc.js.add("function init_all() {", 1);
-        cc.js.add("  hide_all_tooltips()", 2);
-        cc.js.add("  generate_tooltip_functions();", 3);
-        cc.js.add("}", 31);
-
     }
 
-    @Override
-    protected void renderChildren(StringTemplate st, Session d3webSession, ContainerCollection cc,
-            TerminologyObject to, int loc, HttpSession httpSession) {
-
-        final KnowledgeKind<JuriModel> JURIMODEL = new KnowledgeKind<JuriModel>(
-                "JuriModel", JuriModel.class);
-
-        StringBuilder childrenHTML = new StringBuilder();
-        D3webConnector d3wcon = D3webConnector.getInstance();
-
-        if (to.getName().equals("Q000")) {
-            TerminologyObject rootNode = to.getChildren()[0];
-            
-            if (rootNode != null) {
-                
-                IQuestionD3webRenderer childRenderer =
-                        AbstractD3webRenderer.getRenderer(rootNode);
-
-                // TODO: how to get parent el in here correctly!?
-                String childHTML =
-                       childRenderer.renderTerminologyObject(d3webSession, cc, rootNode, to, loc, httpSession);
-                if (childHTML != null) {
-                    childrenHTML.append(childHTML);
-                }
-                     
-
-                renderChildren(st, d3webSession, cc, rootNode, loc, httpSession);    
-                // if children, fill the template attribute children with children-HTML 
-                //st.setAttribute("children", childrenHTML.toString());
-            }
-        } else {
-
-
-            if (juriRules == null) {
-                JuriModel juriModel =
-                        d3wcon.getKb().getKnowledgeStore().getKnowledge(JURIMODEL);
-                juriRules = juriModel.getRules();
-            }
-
-            // get the children of the current to from the juri rules
-            List<QuestionOC> toChildren = getChildQuestionsFromJuriRules(to);
-
-
-            if (toChildren != null && !toChildren.isEmpty()) {
-
-                
-                for (Object newChildRoot : toChildren) {
-
-                    // render the element as question
-                     /*
-                     * First and foremost render node itself
-                     */
-                    IQuestionD3webRenderer childRenderer =
-                            AbstractD3webRenderer.getRenderer((TerminologyObject) newChildRoot);
-
-                    // TODO: how to get parent el in here correctly!?
-                    String childHTML =
-                            childRenderer.renderTerminologyObject(d3webSession, cc, (TerminologyObject) newChildRoot, to, loc, httpSession);
-                    if (childHTML != null) {
-                        childrenHTML.append(childHTML);
-                    }
-                    
-                    //renderChildren(st, d3webSession, cc, (TerminologyObject) newChildRoot, loc, httpSession);   
-
-                }
-                // if children, fill the template attribute children with children-HTML 
-            }
-        }
-        st.setAttribute("children", childrenHTML.toString());
-    }
-
-    /**
-     * traverse all jurisearch rules and filter out the one(s) containing the
-     * currently rendered Terminology Object as parent
-     *
-     * @param parent the parent element the children of which are searched
-     * @return ArrayList<QuestionOC> the list of child QuestionOCs
-     */
-    protected ArrayList<QuestionOC> getChildQuestionsFromJuriRules(TerminologyObject parent) {
-
-        ArrayList<QuestionOC> toChildren = new ArrayList<QuestionOC>();
-
-        if (juriRules != null && juriRules.size() != 0) {
-            for (Object o : juriRules) {
-                JuriRule rule = (JuriRule) o;
-                if (rule.getFather().getName().equals(parent.getName())) {
-                    HashMap children = rule.getChildren();
-                    Set childKeys = children.keySet();
-                    for (Object co : childKeys) {
-                        if (co instanceof QuestionOC) {
-                            toChildren.add(((QuestionOC) co));
-                        }
-                    }
-                }
-            }
-        }
-        return toChildren;
-    }
+    
 }

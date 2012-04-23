@@ -9,7 +9,7 @@
 	questioncolumns = "1"
 	userprefix = "Clarihie" 
 	login = "off"
-	required = ""
+	required = "none"
 	language = "de"
         uequestionnaire='OWN' 
         study='TRUE' 

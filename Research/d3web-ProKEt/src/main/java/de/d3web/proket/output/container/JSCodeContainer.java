@@ -45,12 +45,9 @@ public class JSCodeContainer implements ICodeContainer {
     private boolean hierarchy = false;
     private boolean oqd = false;
     private boolean study = false;
-
     private boolean feedback = false;
-
     private boolean ueq = false;
 
-    
     @Override
     public void add(String data) {
         add(data, 0);
@@ -74,6 +71,7 @@ public class JSCodeContainer implements ICodeContainer {
     public void setOneQuestionDialog() {
         oqd = true;
     }
+
     /**
      * Some setters for enabling specific settings: d3web, dateanswers,
      * imagequestions --- for eased usage in the Renderers
@@ -101,16 +99,16 @@ public class JSCodeContainer implements ICodeContainer {
     public void enableClickLogging() {
         logging = true;
     }
-    
+
     public void enableFeedback() {
         feedback = true;
     }
-    
+
     public void enableUEQuestionnaire() {
         ueq = true;
     }
-    
-    public void enableStudy(){
+
+    public void enableStudy() {
         study = true;
     }
 
@@ -134,11 +132,11 @@ public class JSCodeContainer implements ICodeContainer {
         linkedBibs.add("jquery/jquery.customFileInput.js");
         linkedBibs.add("jquery/jquery.print.js");
         linkedBibs.add("jqueryUI/jqueryUi-1.8.10.all.min.js");
-        
-        
+
+
         ownBibs.add("browserInfo.js");
         ownBibs.add("uelogging.js");
-        
+
         // manage language mechanism
         String lang = D3webConnector.getInstance().getLanguage();
         String langString = "var language = \"" + lang + "\";";
@@ -178,6 +176,9 @@ public class JSCodeContainer implements ICodeContainer {
             ownBibs.add("d3webBasic.js");
             ownBibs.add("d3web.js");
 
+            if (hierarchy) {
+                ownBibs.add("d3webClariHie.js");
+            }
             linkedBibs.add("jquery/jquery.object.js");
             add("var d3web = true;", 0);
         } else {
@@ -187,7 +188,7 @@ public class JSCodeContainer implements ICodeContainer {
         }
 
         if (logging) {
-            
+
             add("var logging = true;", 0);
 
         } else {
@@ -200,33 +201,33 @@ public class JSCodeContainer implements ICodeContainer {
         } else {
             add("var hierarchy = false;", 0);
         }
-        
+
         if (oqd) {
             add("var oqd = true;", 0);
         } else {
             add("var oqd = false;", 0);
         }
-        
+
         if (feedback) {
             add("var feedback = true", 0);
         } else {
             add("var feedback = false", 0);
         }
-        
-         if (ueq) {
+
+        if (ueq) {
             add("var ueq = true;", 0);
         } else {
             add("var ueq = false;", 0);
         }
-         
-         if (study) {
+
+        if (study) {
             add("var study = true;", 0);
         } else {
             add("var study = false;", 0);
         }
-        
-        
-        
+
+
+
         // SECOND assemble bibs and singular js data to a string
         // assemble all defined bibs to one String
         for (String filename : linkedBibs) {

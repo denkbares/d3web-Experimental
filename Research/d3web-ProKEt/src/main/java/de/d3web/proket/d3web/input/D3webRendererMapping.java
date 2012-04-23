@@ -51,6 +51,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
 	private static final String OC_ANSWER = "OC";
         private static final String ZC_ANSWER = "ZC";
 	private static final String SUMMARY = "Summary";
+        private static final String DUMMYCLARIHIE = "DummyClarihie";
 	private static final String Q_CONT = "QCont";
 	private static final String IMG_QUESTION = "IMGQuestion";
 	private static final String QUESTION = "Question";
@@ -81,7 +82,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
 		this.put(IMG_QUESTION, ImageQuestionD3webRenderer.class.getSimpleName());
 		this.put(Q_CONT, QuestionnaireD3webRenderer.class.getSimpleName());
 		this.put(SUMMARY, SummaryD3webRenderer.class.getSimpleName());
-
+                this.put(DUMMYCLARIHIE, ClarihieDummyQuestionD3webRenderer.class.getSimpleName());
 		this.put(OC_ANSWER, AnswerOCD3webRenderer.class.getSimpleName());
 		this.put(MC_ANSWER, AnswerMCD3webRenderer.class.getSimpleName());
                 this.put(ZC_ANSWER, AnswerZCD3webRenderer.class.getSimpleName());
@@ -159,6 +160,10 @@ public class D3webRendererMapping extends HashMap<String, String> {
 	public SummaryD3webRenderer getSummaryRenderer() {
 		return (SummaryD3webRenderer) getRenderer(SUMMARY);
 	}
+        
+        public ClarihieDummyQuestionD3webRenderer getDummyClarihieRenderer(){
+            return (ClarihieDummyQuestionD3webRenderer) getRenderer(DUMMYCLARIHIE);
+        }
 
 	public AnswerD3webRenderer getUnknownRenderer() {
 		return (AnswerD3webRenderer) getRenderer(UNKNOWN_ANSWER);

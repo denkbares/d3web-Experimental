@@ -40,7 +40,6 @@ import de.d3web.core.session.interviewmanager.Form;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.jurisearch.JuriModel;
-import de.d3web.jurisearch.JuriRule;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
@@ -52,31 +51,18 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 /**
- * Renderer for rendering basic Questions.
+ * TODO: make super-class for clari hie?!
  *
- * TODO CHECK: 1) basic properties for questions
- *
- * TODO LATER: 1) further question types needed?
- *
- * @author Martina Freiberg @created 15.01.2011
+ * @author Martina Freiberg @created 22.04.2012
  */
-public class ClarihieQuestionD3webRenderer extends AbstractD3webRenderer implements IQuestionD3webRenderer {
+public class ClarihieDummyQuestionD3webRenderer extends AbstractD3webRenderer implements IQuestionD3webRenderer {
 
-    // TODO remove from here to global config o.ä.
-    private static String TT_YES = "Wertet übergeordnete Frage <b>positiv</b>.";
-    private static String TT_NO = "Wertet übergeordnete Frage <b>negativ</b>.";
-    private static String TT_UN = "Wertet übergeordnete Frage <b>unsicher/neutral</b>.";
-    private static String TT_NAN = "Antwort <b>zurücksetzen</b>.";
-    private static String TT_YES_REV = "Wertet übergeordnete Frage <b>negativ</b>.";
-    private static String TT_NO_REV = "Wertet übergeordnete Frage <b>positiv</b>.";
-    private static String TT_PROP_ERROR = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung.</b> "
+    protected final KnowledgeKind<JuriModel> JURIMODEL = new KnowledgeKind<JuriModel>(
+            "JuriModel", JuriModel.class);
+    protected static String TT_PROP_ERROR = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung.</b> "
             + "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, "
             + "wenn Sie eine andere als die bisher hergeleitete Bewertung setzen möchten.";
-    final KnowledgeKind<JuriModel> JURIMODEL = new KnowledgeKind<JuriModel>(
-            "JuriModel", JuriModel.class);
-    public static final String YESSTRING = "ja";
-    public static final String NOSTRING = "nein";
-    public static final String MAYBESTRING = "vielleicht";
+    
 
     @Override
     /**
@@ -85,14 +71,10 @@ public class ClarihieQuestionD3webRenderer extends AbstractD3webRenderer impleme
     public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
             TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession) {
 
-
-        /*
-         * ClariHIE specific stuff
-         */
+        /*  ClariHIE specific */
         JuriModel juriModel =
                 d3webSession.getKnowledgeBase().getKnowledgeStore().getKnowledge(JURIMODEL);
         Set juriRules = juriModel.getRules();
-
 
 
         Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
@@ -106,20 +88,21 @@ public class ClarihieQuestionD3webRenderer extends AbstractD3webRenderer impleme
         // get the fitting template. In case user prefix was specified, the
         // specific TemplateName is returned, otherwise, the base object name.
         StringTemplate st = TemplateUtils.getStringTemplate(
-                super.getTemplateName("ClarihieQuestion"), "html");
+                super.getTemplateName("DummyQuestion"), "html");
 
         // set some basic properties
         st.setAttribute("fullId", getID(to));
         st.setAttribute("title", D3webUtils.getTOPrompt(to, loc).replace("[jnv]", ""));
-
+        
+        
+        // set bonus text: is displayed in auxinfo panel
+        String bonustext = 
+                to.getInfoStore().getValue(ProKEtProperties.POPUP);
+        st.setAttribute("bonusText", bonustext);
+        
         // get d3web properties
         Blackboard bb = d3webSession.getBlackboard();
         Value val = bb.getValue((ValueObject) to);
-
-        // set bonus text: is displayed in auxinfo panel
-        String bonustext =
-                to.getInfoStore().getValue(ProKEtProperties.POPUP);
-        st.setAttribute("bonusText", bonustext);
 
 
         // render arrows: --> check whether question has children,
@@ -129,69 +112,26 @@ public class ClarihieQuestionD3webRenderer extends AbstractD3webRenderer impleme
             st.setAttribute("typeimg", "img/transpSquare.png");
         }
 
-        if (parent.getName().equals("Q000")) {
-            st.setAttribute("readimg", "img/transpSquare.png");
+        // render read flow according to and/or type
+        if (isOrType(to, juriRules)) {
+            st.setAttribute("readimg", "img/Or.png");
+            st.setAttribute("andOrType", "OR");
         } else {
-
-            // render read flow according to and/or type
-            if (isOrType(to, juriRules)) {
-                st.setAttribute("readimg", "img/Or.png");
-            } else {
-                st.setAttribute("readimg", "img/And.png");
-            }
+            st.setAttribute("readimg", "img/And.png");
+            st.setAttribute("andOrType", "AND");
         }
 
         // TODO: render the value i.e. coloring of the question
-        st.removeAttribute("qrating");
-        if (UndefinedValue.isNotUndefinedValue(val)) {
-            if (val.equals(JuriRule.YES_VALUE)) {
-                //System.out.println("YES: " + to.getName());
-                st.setAttribute("qrating", "rating-high");
-            } else if (val.equals(JuriRule.NO_VALUE)) {
-                //System.out.println("NO: " + to.getName());
-                st.setAttribute("qrating", "rating-low");
-            } else if (val.equals(JuriRule.MAYBE_VALUE)) {
-                //System.out.println("MAYBE: " + to.getName());
-                st.setAttribute("qrating", "rating-medium");
-            }
-        } else {
-            //System.out.println("UNDEFINED:  " + to.getName());
-            st.removeAttribute("qrating");
-        }
+        // System.out.println(getID(to) + ": " + val);
 
         st.removeAttribute("tty");
         st.removeAttribute("ttn");
         st.removeAttribute("ttu");
         st.removeAttribute("ttnan");
-        st.removeAttribute("ratingY");
-        st.removeAttribute("ratingN");
-        st.removeAttribute("swap");
-
-        // set coloring of question buttons according to type of question
-        // (normal question or swapped)
-        if (isNoDefining(to, juriRules)) {
-            st.setAttribute("ratingY", "rating-low");
-            st.setAttribute("ratingN", "rating-high");
-            st.setAttribute("swap", "swap");
-            st.setAttribute("ratingNrY", "3");
-            st.setAttribute("ratingNrN", "1");
-
-            st.setAttribute("tty", TT_YES_REV);
-            st.setAttribute("ttn", TT_NO_REV);
-        } else {
-            st.setAttribute("ratingY", "rating-high");
-            st.setAttribute("ratingN", "rating-low");
-            st.setAttribute("ratingNrY", "1");
-            st.setAttribute("ratingNrN", "3");
-
-            st.setAttribute("tty", TT_YES);
-            st.setAttribute("ttn", TT_NO);
-        }
 
 
+     
 
-        st.setAttribute("ttu", TT_UN);
-        st.setAttribute("ttnan", TT_NAN);
         st.setAttribute("tooltip", TT_PROP_ERROR);
 
         super.renderChildrenClariHIE(st, d3webSession, cc, to, loc, httpSession);

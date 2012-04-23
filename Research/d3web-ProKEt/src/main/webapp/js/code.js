@@ -1031,6 +1031,7 @@ function generate_tooltip_functions_ynbuttons(){
             }
             
             var fullId = $(this).attr("id");
+            alert(fullId);
             if(fullId.indexOf("ynYes")!=-1){
                 id = $(this).attr("id").replace("ynYes-", "");
                 tooltip_over_hierarchy_buttons(id, "1");
