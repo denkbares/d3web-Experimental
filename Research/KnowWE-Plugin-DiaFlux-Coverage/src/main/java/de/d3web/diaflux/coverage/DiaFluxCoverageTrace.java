@@ -51,17 +51,17 @@ public class DiaFluxCoverageTrace implements PropagationListener, SessionObject 
 	}
 
 	@Override
-	public void propagationStarted(Collection<PropagationEntry> entries) {
+	public void propagationStarted(Session session, Collection<PropagationEntry> entries) {
 		
 	}
 
 	@Override
-	public void propagationFinished(Collection<PropagationEntry> entries) {
+	public void propagationFinished(Session session, Collection<PropagationEntry> entries) {
 		
 	}
 
 	@Override
-	public void postPropagationStarted(Collection<PropagationEntry> entries) {
+	public void postPropagationStarted(Session session, Collection<PropagationEntry> entries) {
 		if (!DiaFluxUtils.isFlowCase(session)) return;
 
 		sessionObject.update(session);
