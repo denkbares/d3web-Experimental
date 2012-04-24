@@ -1242,8 +1242,6 @@ protected void checkInitialLoggingReload(HttpSession httpSession,
         ContainerCollection cc = new ContainerCollection();
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
         
-        //System.out.println(d3webSess.getBlackboard().toString());
-        //System.out.println("in d3webdialog show: " + d3webSess.toString());
         
         cc = d3webr.renderRoot(cc, d3webSess, httpSession);
         writer.print(cc.html.toString()); // deliver the rendered output

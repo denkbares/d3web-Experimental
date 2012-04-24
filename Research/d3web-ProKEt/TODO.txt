@@ -155,6 +155,8 @@ DONE - Panel Areas vergrößern/anpassen --> CSS BUTTONS
 - Styling header: print button, feedback
 - Print Button --> Baum
 
+LÖSUNG IMMER SICHTBAR
+
 
 --------------
 --- EuraHS ---

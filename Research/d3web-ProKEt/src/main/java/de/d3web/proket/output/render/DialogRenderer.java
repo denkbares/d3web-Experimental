@@ -28,11 +28,13 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.session.Session;
 import de.d3web.proket.data.Dialog;
+import de.d3web.proket.data.DialogType;
 import de.d3web.proket.data.IDialogObject;
 import de.d3web.proket.data.Questionnaire;
 import de.d3web.proket.input.xml.IDialogObjectParser;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.ClassUtils;
+import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.TemplateUtils;
 
 /**
@@ -53,14 +55,27 @@ public class DialogRenderer extends Renderer {
     protected void globalJS(de.d3web.proket.output.container.ContainerCollection cc,
             de.d3web.proket.data.Dialog dialog) {
 
+
         cc.js.add("$(function() {init_all();});", 1);
         cc.js.add("function init_all() {", 1);
         cc.js.add("building = true;", 2);
-        cc.js.add("setup();", 2);
-        cc.js.add("building = false;", 2);
-        cc.js.add("remark();", 2);
-        cc.js.add("generate_tooltip_functions();", 3);
+        
+        // only initialize general js stuff from code.js if "normal" dialog
+        if (dialog.getType().equals("med")
+                || dialog.getType().equals("rheuma")) {
+            cc.js.add("setup();", 2);
+            cc.js.add("remark();", 2);
 
+        }
+        // if hierarchical clarification, initialize specific js
+        if (dialog.getType().equals("legal")
+                || dialog.getType().equals("clarihie")) {
+            cc.js.add("clariHieInit();", 2);
+        }
+        
+        cc.js.add("building = false;", 2);
+       
+        cc.js.add("generate_tooltip_functions();", 3);
         cc.js.add("}", 31);
     }
 
@@ -114,27 +129,31 @@ public class DialogRenderer extends Renderer {
          */
         if (dialogObject instanceof Dialog) {
             Dialog dialog = (Dialog) dialogObject;
+            if (dialog.getType().equals("legal")
+                    || dialog.getType().equals("clarihie")) {
+                cc.js.setHierarchy();
+            }
+
             if (dialog.isLogging()) {
                 cc.js.enableClickLogging();
             }
-
 
             if (dialog.hasFeedback()) {
                 st.setAttribute("feedback", true);
                 cc.js.enableFeedback();
             }
-            
+
             if (!dialog.getUequest().equals("none")) {
-                 st.setAttribute("ueq", true);
-                 cc.js.enableUEQuestionnaire();
-                 
+                st.setAttribute("ueq", true);
+                cc.js.enableUEQuestionnaire();
+
                 if (dialog.getUequest().equals("SUS")) {
                     st.setAttribute("sus", true);
                 } else if (dialog.getUequest().equals("OWN")) {
                     st.setAttribute("own", true);
                 }
             }
-            
+
             if (dialog.isStudy()) {
                 cc.js.enableStudy();
                 st.setAttribute("study", true);

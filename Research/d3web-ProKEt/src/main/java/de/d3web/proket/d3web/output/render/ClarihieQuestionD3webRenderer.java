@@ -158,6 +158,8 @@ public class ClarihieQuestionD3webRenderer extends AbstractD3webRenderer impleme
             //System.out.println("UNDEFINED:  " + to.getName());
             st.removeAttribute("qrating");
         }
+        System.out.println(val);
+        
 
         st.removeAttribute("tty");
         st.removeAttribute("ttn");

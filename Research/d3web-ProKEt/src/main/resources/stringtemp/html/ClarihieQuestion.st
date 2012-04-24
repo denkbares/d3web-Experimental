@@ -11,7 +11,7 @@
                 Ja
                 $TooltipButtonJA()$
             </div>
-            <div id="ynNo-$fullId$" class="ynbutton $ratingN$ $fullId$-tt-trigger-ynbutton $swap$")">
+            <div id="ynNo-$fullId$" class="ynbutton $ratingN$ $fullId$-tt-trigger-ynbutton $swap$">
                 Nein
                 $TooltipButtonNEIN()$
             </div>

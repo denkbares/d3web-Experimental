@@ -171,15 +171,16 @@ public class JSCodeContainer implements ICodeContainer {
             add("var dbLogin = false;", 0);
         }
 
+        if (hierarchy) {
+                ownBibs.add("clariHie.js");
+            }
+            
         if (d3web) {
 
             ownBibs.add("d3webBasic.js");
             ownBibs.add("d3web.js");
-
-            if (hierarchy) {
-                ownBibs.add("d3webClariHie.js");
-            }
             linkedBibs.add("jquery/jquery.object.js");
+            
             add("var d3web = true;", 0);
         } else {
             ownBibs.add("code.js");

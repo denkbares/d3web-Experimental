@@ -46,7 +46,7 @@ public enum DialogType {
 	CLARIFICATION,
         
         /* e.g. in JuriSearch, Clarification modules */
-        CLARIFICATIONHIERARCHY,
+        CLARIHIE,
 
 	/* e.g. QuickI dialog */
 	FREECHOICE,
