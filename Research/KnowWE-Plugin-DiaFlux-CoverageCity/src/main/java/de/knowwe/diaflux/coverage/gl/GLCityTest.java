@@ -33,8 +33,8 @@ import java.util.Map;
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaflux.coverage.CoverageResult;
-import de.d3web.diaflux.coverage.CoverageSessionObject;
 import de.d3web.diaflux.coverage.DefaultCoverageResult;
+import de.d3web.diaflux.coverage.DiaFluxCoverageTrace;
 import de.d3web.empiricaltesting.SequentialTestCase;
 import de.d3web.empiricaltesting.TestCase;
 import de.d3web.empiricaltesting.TestPersistence;
@@ -69,7 +69,7 @@ public class GLCityTest {
 
 			CoverageResult coverage = runTest(kb, kbFile.getParentFile());
 
-			GLCity city = GLCityGenerator.generateCity(kb, coverage);
+			GLCity city = GLCityGenerator.generateCity(coverage);
 
 			System.out.println(city);
 			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -134,7 +134,7 @@ public class GLCityTest {
 			}
 		}), kb);
 		analysis.runAndAnalyze(suite);
-		Map<SequentialTestCase, CoverageSessionObject> results = listener.getResults();
+		Map<SequentialTestCase, DiaFluxCoverageTrace> results = listener.getResults();
 
 		return DefaultCoverageResult.calculateResult(results.values(), kb);
 	}

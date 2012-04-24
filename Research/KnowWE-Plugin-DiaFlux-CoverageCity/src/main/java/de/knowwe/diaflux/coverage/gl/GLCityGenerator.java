@@ -63,10 +63,11 @@ public class GLCityGenerator {
 	 * @param coverage
 	 * @return
 	 */
-	public static GLCity generateCity(KnowledgeBase kb, CoverageResult coverage) {
+	public static GLCity generateCity(CoverageResult coverage) {
 		MetricsAggregator<Node> metrics = createMetrics(coverage);
 
-		Map<Flow, Collection<Flow>> structure = createStructure(kb);
+		KnowledgeBase kb = coverage.getKb();
+		Map<Flow, Collection<Flow>> structure = CoverageUtils.createFlowStructure(kb);
 		Map<Flow, GLDistrict> city = new HashMap<Flow, GLDistrict>();
 
 		while (!structure.isEmpty()) {
@@ -130,7 +131,7 @@ public class GLCityGenerator {
 
 			GLBuilding box;
 			if (node instanceof ComposedNode) {
-				Flow calledFlow = CoverageUtils.getCalledFlow(kb, (ComposedNode) node);
+				Flow calledFlow = DiaFluxUtils.getCalledFlow(kb, (ComposedNode) node);
 				box = city.remove(calledFlow);
 				// can be null in a leaf, that calls a flow, that came in the
 				// tree earlier and is inserted elsewhere
@@ -189,16 +190,5 @@ public class GLCityGenerator {
 		return group;
 	}
 
-
-	/**
-	 * 
-	 * @created 08.02.2012
-	 * @param kb
-	 * @return
-	 */
-	private static Map<Flow, Collection<Flow>> createStructure(KnowledgeBase kb) {
-		Map<Flow, Collection<Flow>> structure = CoverageUtils.createFlowStructure(kb);
-		return structure;
-	}
 
 }
