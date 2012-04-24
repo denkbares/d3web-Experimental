@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.d3web.core.session.Session;
-import de.d3web.diaflux.coverage.CoverageSessionObject;
+import de.d3web.diaflux.coverage.DiaFluxCoverageTrace;
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.empiricaltesting.SequentialTestCase;
 import de.d3web.empiricaltesting.TestCase;
@@ -39,10 +39,10 @@ import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysisReport;
  */
 public class CoverageTestListener implements TestListener {
 
-	private final Map<SequentialTestCase, CoverageSessionObject> results;
+	private final Map<SequentialTestCase, DiaFluxCoverageTrace> results;
 
 	public CoverageTestListener() {
-		this.results = new HashMap<SequentialTestCase, CoverageSessionObject>();
+		this.results = new HashMap<SequentialTestCase, DiaFluxCoverageTrace>();
 	}
 
 	@Override
@@ -69,11 +69,11 @@ public class CoverageTestListener implements TestListener {
 
 	@Override
 	public void sequentialTestcaseFinished(SequentialTestCase stc, Session session, Diff diff) {
-		CoverageSessionObject result = CoverageUtils.getCoverage(session);
+		DiaFluxCoverageTrace result = CoverageUtils.getCoverage(session);
 		results.put(stc, result);
 	}
 
-	public Map<SequentialTestCase, CoverageSessionObject> getResults() {
+	public Map<SequentialTestCase, DiaFluxCoverageTrace> getResults() {
 		return results;
 	}
 

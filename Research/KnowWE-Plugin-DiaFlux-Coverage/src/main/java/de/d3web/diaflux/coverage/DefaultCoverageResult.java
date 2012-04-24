@@ -179,7 +179,7 @@ public class DefaultCoverageResult implements CoverageResult {
 			setFlowCoverage(flow, flowCoverage);
 		}
 
-		this.pathCoverage = new PathCoverage(paths, getKb());
+		// this.pathCoverage = new PathCoverage(paths, getKb());
 
 		// Path2GraphViz.createPaths(kb, allPaths);
 
@@ -213,12 +213,12 @@ public class DefaultCoverageResult implements CoverageResult {
 		return nodes;
 	}
 
-	public static CoverageResult calculateResult(Collection<CoverageSessionObject> coverages, KnowledgeBase kb) {
+	public static CoverageResult calculateResult(Collection<DiaFluxCoverageTrace> coverages, KnowledgeBase kb) {
 		Map<Edge, Integer> edgeSum = new HashMap<Edge, Integer>();
 		Map<Node, Integer> nodeSum = new HashMap<Node, Integer>();
 		Map<Path, Integer> pathSum = new HashMap<Path, Integer>();
 
-		for (CoverageSessionObject coverage : coverages) {
+		for (DiaFluxCoverageTrace coverage : coverages) {
 			sumUp(nodeSum, coverage.getNodeCounts());
 			sumUp(edgeSum, coverage.getEdgeCounts());
 			sumUp(pathSum, coverage.getPathCounts());
@@ -250,7 +250,7 @@ public class DefaultCoverageResult implements CoverageResult {
 		}
 	}
 
-	public static CoverageResult calculateResult(CoverageSessionObject coverage, KnowledgeBase kb) {
+	public static CoverageResult calculateResult(DiaFluxCoverageTrace coverage, KnowledgeBase kb) {
 		return calculateResult(Arrays.asList(coverage), kb);
 	}
 

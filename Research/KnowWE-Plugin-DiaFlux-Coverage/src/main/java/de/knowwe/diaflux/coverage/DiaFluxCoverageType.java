@@ -18,7 +18,9 @@
  */
 package de.knowwe.diaflux.coverage;
 
+import de.d3web.core.session.SessionFactory;
 import de.d3web.diaflux.coverage.CoverageResult;
+import de.d3web.diaflux.coverage.DiaFluxCoverageTrace;
 import de.knowwe.core.RessourceLoader;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
@@ -53,16 +55,13 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 				RessourceLoader.RESOURCE_SCRIPT);
 
 		setRenderer(new DiaFluxCoverageRenderer());
+
+		SessionFactory.addPropagationListener(DiaFluxCoverageTrace.LISTENER);
 	}
 
 	public static CoverageResult getResult(Section<?> coverageSection) {
 		CoverageResult result = (CoverageResult) coverageSection.getSectionStore().getObject(
 				COVERAGE_RESULT);
-
-//		if (result == null) {
-//			CalculateCoverageAction.calculateCoverage((Section<DiaFluxCoverageType>) coverageSection);
-//		}
-
 		return result;
 
 	}

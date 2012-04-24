@@ -30,7 +30,6 @@ import de.d3web.diaFlux.flow.ComposedNode;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.StartNode;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
-import de.d3web.diaflux.coverage.CoverageSessionObject;
 import de.d3web.diaflux.coverage.DiaFluxCoverageTrace;
 
 
@@ -44,8 +43,8 @@ public class CoverageUtils {
 	private CoverageUtils() {
 	}
 
-	public static CoverageSessionObject getCoverage(Session session) {
-		return session.getSessionObject(DiaFluxCoverageTrace.SOURCE).getSessionObject();
+	public static DiaFluxCoverageTrace getCoverage(Session session) {
+		return session.getSessionObject(DiaFluxCoverageTrace.SOURCE);
 	}
 
 

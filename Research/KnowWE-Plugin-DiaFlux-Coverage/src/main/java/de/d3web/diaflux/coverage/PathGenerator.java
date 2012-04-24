@@ -30,7 +30,6 @@ import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.EndNode;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
-import de.d3web.diaFlux.flow.SnapshotNode;
 import de.d3web.diaFlux.flow.StartNode;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaFlux.inference.FlowchartProcessedCondition;
@@ -43,61 +42,66 @@ import de.d3web.diaFlux.inference.NodeActiveCondition;
  */
 public class PathGenerator {
 
-	private final EdgeEvaluator evaluator;
+	private final DFSStrategy strategy;
 	private final KnowledgeBase kb;
-	private final Collection<Path> paths;
 
-	public PathGenerator(KnowledgeBase kb, EdgeEvaluator evaluator) {
-		this.evaluator = evaluator;
+	private final Collection<Path> startPaths;
+
+	public PathGenerator(KnowledgeBase kb, DFSStrategy evaluator) {
+		this.strategy = evaluator;
 		this.kb = kb;
-		this.paths = new HashSet<Path>();
+
+		this.startPaths = new HashSet<Path>();
 	}
 
-	public Collection<Path> createPaths() {
+	public void createPaths() {
 
+		startPaths.addAll(strategy.getInitialStartPaths());
 
-		for (Path path : evaluator.getStartPaths()) {
-			createPath(path);
+		while (!startPaths.isEmpty()) {
+			Path path = startPaths.iterator().next();
+			startPaths.remove(path);
+			System.out.println("Starting at: " + path);
+			continuePath(path);
+
 		}
 
-		return paths;
 
 	}
 
-	private void createPath(Path path) {
+	private boolean addStartPath(Path path) {
+		return startPaths.add(path);
+	}
+
+	private void continuePath(Path path) {
 
 		Node currentNode = path.getTail();
 
 		if (currentNode instanceof ComposedNode) {
 			// we reached a composed node
 			ComposedNode composedNode = (ComposedNode) currentNode;
-			StartNode startNode = DiaFluxUtils.getCalledStartNode(kb, composedNode);
 
-			// as long as it is no wait node, enter it
-			if (!isWaitNode(startNode.getFlow())) {
+			if (strategy.enterSubflow(composedNode, path)) {
+				StartNode startNode = DiaFluxUtils.getCalledStartNode(kb, composedNode);
+				// as long as it is no wait node, enter it
+				// if (!isWaitNode(startNode.getFlow())) {
 				path.enterFlow(composedNode);
-				newPath(path, startNode);
+				continueOnNode(path, startNode);
 				return;
-			} // we reached a wait node
-			// else {
-			// // the wait node is at "the end" of a path, so stop and create a
-			// // new one
-			// if (path.getLength() > 1) {
-			// foundPath(path);
-			// createPath(new Path(currentNode, path.getCallStack()));
-			// return;
-			// }
-			// else {
-			// // we just started a new path, so allow it to continue
-			// }
-			// }
+
+			}
+			else {
+				// just continue with the outgoing edges of the composed node
+			}
+
 		}
 
 		List<Edge> edges = new LinkedList<Edge>();
 		if (currentNode instanceof EndNode) {
 
+			// we reached the end of the main flowchart
 			if (!path.hasEnteredFlow()) {
-				foundPath(path);
+				strategy.found(path);
 				return;
 			}
 
@@ -106,14 +110,14 @@ public class PathGenerator {
 			for (Edge edge : outgoingEdges) {
 				Condition condition = edge.getCondition();
 				if (condition instanceof FlowchartProcessedCondition) {
-					if (evaluator.followEdge(edge, path)) {
+					if (strategy.followEdge(edge, path)) {
 						edges.add(edge);
 					}
 				}
 				else if (condition instanceof NodeActiveCondition) {
 					if (((NodeActiveCondition) condition).getNodeName().equals(
 							currentNode.getName())) {
-						if (evaluator.followEdge(edge, path)) {
+						if (strategy.followEdge(edge, path)) {
 							edges.add(edge);
 						}
 					}
@@ -126,7 +130,7 @@ public class PathGenerator {
 		else {
 
 			for (Edge edge : currentNode.getOutgoingEdges()) {
-				if (evaluator.followEdge(edge, path)) {
+				if (strategy.followEdge(edge, path)) {
 					edges.add(edge);
 				}
 
@@ -155,58 +159,46 @@ public class PathGenerator {
 	 */
 	private void continueOnEdges(Path path, List<Edge> edges) {
 		if (edges.isEmpty()) {
-			foundPath(path);
+			strategy.found(path);
 		}
 		else {
 			for (Edge edge : edges) {
-				newPath(path.append(edge), edge.getEndNode());
-
-			}
-
-		}
-	}
-
-	private boolean foundPath(Path path) {
-		return paths.add(path);
-	}
-
-	private void newPath(Path path, Node node) {
-		Path newPath = path.append(node);
-		if (
-node instanceof SnapshotNode ||
-				path.isFinished()) {
-
-			// we found a new path
-			boolean foundPath = foundPath(path);
-
-			// if it is NOT new, we
-			if (!foundPath) {
-
-			}
-
-			if (node instanceof SnapshotNode) {
-				// if the end was a SnapshotNode, we continue,
-				// unless it was a loop around a single Snapshot
-				//
-				if (newPath.getHead() == newPath.getTail()) {
-					return;
+				Path newPath = path.copy();
+				if (strategy.offer(edge, newPath)) {
+					continueOnNode(newPath, edge.getEndNode());
 				}
 				else {
-					newPath = newPath.newPath();
 
 				}
+
 			}
-			else {
-				// we reached a node, already in the path
-				return;
-			}
+
+		}
+	}
+
+
+	private void continueOnNode(Path path, Node node) {
+
+		Path newPath = path.copy();
+		if (strategy.offer(node, newPath)) {
+			continuePath(newPath);
 		}
 		else {
-			// simply continue path on next node
-			// newPath = path.append(node);
+			foundPath(newPath);
 		}
+	}
 
-		createPath(newPath);
+	/**
+	 * 
+	 * @created 24.04.2012
+	 * @param newPath
+	 */
+	public void foundPath(Path newPath) {
+		strategy.found(newPath);
+		Path startPath = strategy.createStartPath(newPath);
+		if (startPath != null) {
+			addStartPath(startPath);
+		}
 	}
 
 

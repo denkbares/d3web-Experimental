@@ -27,10 +27,10 @@ import java.util.List;
 
 import de.d3web.diaFlux.flow.ComposedNode;
 import de.d3web.diaFlux.flow.DiaFluxElement;
-import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Node;
 
 /**
+ * A sequence of consecutive nodes and edges.
  * 
  * @author Reinhard Hatko
  * @created 12.03.2012
@@ -40,15 +40,17 @@ public class Path implements Iterable<DiaFluxElement> {
 
 	private final List<DiaFluxElement> path;
 	private final Deque<ComposedNode> callStack;
-	private boolean finished;
 
 	private Path(List<DiaFluxElement> path, Deque<ComposedNode> callStack) {
-		this.path = path;
+		this.path = new ArrayList<DiaFluxElement>(path);
 		this.callStack = new LinkedList<ComposedNode>(callStack);
-		this.finished = false;
 	}
 
-	Path(DiaFluxElement node) {
+	private Path(Path path) {
+		this(path.path, path.callStack);
+	}
+
+	public Path(DiaFluxElement node) {
 		this(Arrays.asList(node), new LinkedList<ComposedNode>());
 	}
 	
@@ -56,25 +58,14 @@ public class Path implements Iterable<DiaFluxElement> {
 		this(Arrays.asList(node), callStack);
 	}
 
-	Path append(Node node) {
-		if (path.contains(node)) {
-			finished = true;
-		}
-		return appendElement(node);
-
+	void append(DiaFluxElement el) {
+		this.path.add(el);
 	}
 
-	Path append(Edge edge) {
-		return appendElement(edge);
+	Path copy() {
+		return new Path(this);
 	}
 
-	private Path appendElement(DiaFluxElement el) {
-		ArrayList<DiaFluxElement> newPath = new ArrayList<DiaFluxElement>(this.path);
-		newPath.add(el);
-		Path np = new Path(newPath, this.callStack);
-		return np;
-
-	}
 
 	public Deque<ComposedNode> getCallStack() {
 		return new LinkedList<ComposedNode>(callStack);
@@ -84,6 +75,7 @@ public class Path implements Iterable<DiaFluxElement> {
 		callStack.push(node);
 	}
 
+
 	ComposedNode returnFromFlow() {
 		return callStack.pop();
 	}
@@ -92,17 +84,22 @@ public class Path implements Iterable<DiaFluxElement> {
 		return !callStack.isEmpty();
 	}
 
+	/**
+	 * creates a new Path, that start at the tail of this path and has the same
+	 * callstack.
+	 * 
+	 * @created 12.04.2012
+	 * @return
+	 */
 	Path newPath() {
 		return new Path(getTail(), this.callStack);
 	}
 
-	public boolean isFinished() {
-		return finished;
-	}
 
 	@Override
 	public int hashCode() {
-		return this.path.hashCode();
+		return this.path.hashCode() /** this.callStack.hashCode() */
+		;
 	}
 
 	@Override
@@ -112,7 +109,12 @@ public class Path implements Iterable<DiaFluxElement> {
 			return false;
 		}
 
-		return this.path.equals(((Path) obj).path);
+		Path other = (Path) obj;
+		return this.path.equals(other.path)/*
+											 * &&
+											 * this.callStack.equals(other.callStack
+											 * )
+											 */;
 
 	}
 

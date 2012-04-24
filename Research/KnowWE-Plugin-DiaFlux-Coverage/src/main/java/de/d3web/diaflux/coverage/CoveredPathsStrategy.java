@@ -28,8 +28,8 @@ import java.util.List;
 import de.d3web.core.session.Session;
 import de.d3web.diaFlux.flow.ComposedNode;
 import de.d3web.diaFlux.flow.DiaFluxCaseObject;
+import de.d3web.diaFlux.flow.DiaFluxElement;
 import de.d3web.diaFlux.flow.Edge;
-import de.d3web.diaFlux.flow.EndNode;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.FlowRun;
 import de.d3web.diaFlux.flow.Node;
@@ -38,12 +38,14 @@ import de.d3web.diaFlux.flow.StartNode;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaFlux.inference.FluxSolver;
 
-final class CoverageEvaluator implements EdgeEvaluator {
+final class CoveredPathsStrategy implements DFSStrategy {
 
 	private final Session session;
+	private final Collection<Path> paths;
 
-	public CoverageEvaluator(Session session) {
+	public CoveredPathsStrategy(Session session) {
 		this.session = session;
+		this.paths = new HashSet<Path>();
 	}
 
 	/**
@@ -55,18 +57,33 @@ final class CoverageEvaluator implements EdgeEvaluator {
 	}
 
 	@Override
-	public boolean stopPath(Path path) {
-		Node node = path.getTail();
-		// path must be longer than 1, because most paths start with a Snpashot
-		// node and then would immediately end
-		return path.getLength() > 1 && (node instanceof EndNode || node instanceof SnapshotNode);
+	public boolean offer(DiaFluxElement el, Path path) {
+		boolean finished = false;
+		if (path.contains(el)) {
+			finished = true;
+		}
+		path.append(el);
+		return !finished;
 	}
+
+	/**
+	 * does not create new start paths. Paths stop at snapshots and end there.
+	 */
+	@Override
+	public Path createStartPath(Path path) {
+		return null;
+	}
+
+	public Collection<Path> getPaths() {
+		return paths;
+	}
+
 
 	/**
 	 * Returns a list of nodes, at which the path generation should start.
 	 */
 	@Override
-	public List<Path> getStartPaths() {
+	public List<Path> getInitialStartPaths() {
 		DiaFluxCaseObject caseObject = DiaFluxUtils.getDiaFluxCaseObject(session);
 
 		if (caseObject == null) return Collections.emptyList();
@@ -105,6 +122,12 @@ final class CoverageEvaluator implements EdgeEvaluator {
 
 
 		return startingPaths;
+	}
+
+	@Override
+	public void found(Path path) {
+		// TODO Auto-generated method stub
+
 	}
 
 	/**
@@ -180,4 +203,10 @@ final class CoverageEvaluator implements EdgeEvaluator {
 		}
 
 	}
+
+	@Override
+	public boolean enterSubflow(ComposedNode node, Path path) {
+		return false;
+	}
+
 }

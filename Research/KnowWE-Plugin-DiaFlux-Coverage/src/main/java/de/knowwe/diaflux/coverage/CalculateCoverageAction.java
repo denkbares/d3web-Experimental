@@ -29,8 +29,8 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.SessionFactory;
 import de.d3web.diaflux.coverage.CoverageResult;
-import de.d3web.diaflux.coverage.CoverageSessionObject;
 import de.d3web.diaflux.coverage.DefaultCoverageResult;
+import de.d3web.diaflux.coverage.DiaFluxCoverageTrace;
 import de.d3web.testcase.TestCaseUtils;
 import de.d3web.testcase.model.TestCase;
 import de.d3web.we.utils.D3webUtils;
@@ -149,7 +149,7 @@ public class CalculateCoverageAction extends AbstractAction {
 				sectionsCompiledByArticle.addAll(packageManager.getSectionsOfPackage(packageName));
 			}
 			KnowledgeBase kb = D3webUtils.getKnowledgeBase(coverageSec.getWeb(), article.getTitle());
-			List<CoverageSessionObject> results = new LinkedList<CoverageSessionObject>();
+			List<DiaFluxCoverageTrace> results = new LinkedList<DiaFluxCoverageTrace>();
 			for (Section<?> potentioalTestCaseSection : sectionsCompiledByArticle) {
 				TestCaseProviderStorage testCaseProviderStorage =
 						(TestCaseProviderStorage) potentioalTestCaseSection.getSectionStore().getObject(

@@ -29,6 +29,7 @@ import java.util.Map;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.DiaFluxElement;
+import de.d3web.diaFlux.flow.Flow;
 
 
 /**
@@ -102,11 +103,34 @@ public class PathCoverage {
 	 * @created 10.04.2012
 	 */
 	public void prepareAllPaths() {
-		Collection<Path> allPaths = new PathGenerator(kb,
-				new AllPathsEvaluator(kb)).createPaths();
-
+		AllPathsStrategyShallow strategy = new AllPathsStrategyShallow(kb);
+		new PathGenerator(kb, strategy).createPaths();
+		// allPaths = strategy. TODO
 		int totalPathCount = allPaths.size();
-		System.out.println(allPaths.size());
+
+		Map<Flow, Integer> counts = new HashMap<Flow, Integer>();
+
+		for (Path path : allPaths) {
+			Flow key = path.getHead().getFlow();
+			Integer integer = counts.get(key);
+			if (integer == null) {
+				counts.put(key, 1);
+			}
+			else {
+				counts.put(key, integer + 1);
+
+			}
+
+		}
+
+		int product = 1;
+		for (Flow flow : counts.keySet()) {
+			Integer integer = counts.get(flow);
+			System.out.println(flow.getName() + ": " + integer);
+			product *= integer;
+		}
+		System.err.println(product);
+
 		System.out.println("All paths: " + totalPathCount);
 		System.out.println("Covered paths: " + coveredPaths.size());
 		System.out.println("Ratio: " + ((double) totalPathCount) / coveredPaths.size());

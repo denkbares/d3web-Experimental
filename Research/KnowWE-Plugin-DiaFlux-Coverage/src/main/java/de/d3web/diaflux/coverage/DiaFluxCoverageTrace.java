@@ -19,59 +19,156 @@
 package de.d3web.diaflux.coverage;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.d3web.core.inference.PropagationEntry;
 import de.d3web.core.inference.PropagationListener;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.SessionObjectSource;
 import de.d3web.core.session.blackboard.SessionObject;
+import de.d3web.diaFlux.flow.DiaFluxCaseObject;
+import de.d3web.diaFlux.flow.Edge;
+import de.d3web.diaFlux.flow.Node;
+import de.d3web.diaFlux.flow.SnapshotNode;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
+import de.d3web.diaFlux.inference.FluxSolver;
+import de.knowwe.diaflux.DiaFluxTrace;
+import de.knowwe.diaflux.coverage.CoverageUtils;
 
 /**
  * 
  * @author Reinhard Hatko
  * @created 02.04.2012
  */
-public class DiaFluxCoverageTrace implements PropagationListener, SessionObject {
+public class DiaFluxCoverageTrace implements SessionObject {
 
-	private final Session session;
-	private final CoverageSessionObject sessionObject;
+	public static final PropagationListener LISTENER = new PropagationListener() {
+
+		@Override
+		public void propagationStarted(Session session, Collection<PropagationEntry> entries) {
+		}
+
+		@Override
+		public void propagationFinished(Session session, Collection<PropagationEntry> entries) {
+		}
+
+		@Override
+		public void postPropagationStarted(Session session, Collection<PropagationEntry> entries) {
+			CoverageUtils.getCoverage(session).update(session);
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			return obj.getClass() == getClass();
+		}
+
+		@Override
+		public int hashCode() {
+			return getClass().hashCode();
+		}
+
+	};
+
 	public static final SessionObjectSource<DiaFluxCoverageTrace> SOURCE = new SessionObjectSource<DiaFluxCoverageTrace>() {
 
 		@Override
 		public DiaFluxCoverageTrace createSessionObject(Session session) {
-			return new DiaFluxCoverageTrace(session);
+			return new DiaFluxCoverageTrace();
 		}
 	};
 
-	public DiaFluxCoverageTrace(Session session) {
-		this.session = session;
-		this.sessionObject = new CoverageSessionObject();
-		session.getPropagationManager().addListener(this);
+	private final Map<Edge, Integer> edges;
+	private final Map<Node, Integer> nodes;
+	private final Map<Path, Integer> paths;
+
+	public DiaFluxCoverageTrace() {
+		edges = new HashMap<Edge, Integer>();
+		nodes = new HashMap<Node, Integer>();
+		paths = new HashMap<Path, Integer>();
 	}
 
-	@Override
-	public void propagationStarted(Session session, Collection<PropagationEntry> entries) {
-		
+	void update(Session session) {
+		traceNodesAndEdges(session);
+		tracePaths(session);
 	}
 
-	@Override
-	public void propagationFinished(Session session, Collection<PropagationEntry> entries) {
-		
+	/**
+	 * 
+	 * @created 05.04.2012
+	 * @param session
+	 */
+	public void tracePaths(Session session) {
+
+		CoveredPathsStrategy evaluator = new CoveredPathsStrategy(session);
+		new PathGenerator(session.getKnowledgeBase(), evaluator).createPaths();
+		Collection<Path> paths = evaluator.getPaths(); // TODO
+
+		for (Path path : paths) {
+			addTracedPath(path);
+		}
+
+		// System.out.println("Covered paths:" + paths.size());
+
+		// for (Path path : this.paths.keySet()) {
+		// System.out.println(path.getHead() + " (" + path.getLength() + ") = "
+		// + this.paths.get(path));
+		//
+		// }
+
 	}
 
-	@Override
-	public void postPropagationStarted(Session session, Collection<PropagationEntry> entries) {
-		if (!DiaFluxUtils.isFlowCase(session)) return;
+	/**
+	 * 
+	 * @created 05.04.2012
+	 * @param session
+	 */
+	public void traceNodesAndEdges(Session session) {
+		DiaFluxCaseObject caseObject = DiaFluxUtils.getDiaFluxCaseObject(session);
+		Collection<SnapshotNode> enteredSnapshots = caseObject.getActivatedSnapshots(session);
+		Collection<Node> activeNodes = DiaFluxTrace.collectActiveNodes(caseObject, enteredSnapshots);
 
-		sessionObject.update(session);
-		// session.getSessionObject(session.getPSMethodInstance(PSMDiaFluxCoverage.class)).update(
-		// session);
-		
+		for (Node node : activeNodes) {
+			this.addTracedNode(node);
+			for (Edge edge : node.getOutgoingEdges()) {
+				if (FluxSolver.evalEdge(session, edge)) {
+					this.addTracedEdge(edge);
+				}
+			}
+		}
 	}
 
-	public CoverageSessionObject getSessionObject() {
-		return sessionObject;
+	private void addTracedNode(Node node) {
+		countElement(node, nodes);
+	}
+
+	private void addTracedEdge(Edge edge) {
+		countElement(edge, edges);
+	}
+
+	private void addTracedPath(Path path) {
+		countElement(path, paths);
+	}
+
+	private static <T> void countElement(T elem, Map<T, Integer> map) {
+		if (!map.containsKey(elem)) {
+			map.put(elem, 0);
+		}
+
+		map.put(elem, map.get(elem) + 1);
+
+	}
+
+	protected Map<Edge, Integer> getEdgeCounts() {
+		return edges;
+	}
+
+	protected Map<Node, Integer> getNodeCounts() {
+		return nodes;
+	}
+
+	protected Map<Path, Integer> getPathCounts() {
+		return paths;
 	}
 
 

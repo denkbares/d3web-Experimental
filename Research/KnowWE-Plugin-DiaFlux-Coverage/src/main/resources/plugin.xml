@@ -5,7 +5,6 @@
 	<requires>
 		<import plugin-id="KnowWE-Plugin-DiaFlux" />
 		<import plugin-id="KnowWEExtensionPoints" />
-		<import plugin-id="d3web-Kernel-ExtensionPoints" />
 	</requires>
 	
 	<runtime>
@@ -18,16 +17,6 @@
 	</runtime>
 	
 
-	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="PSMethod"
-		id="PSMDiaFluxCoverage">
-		<parameter id="class"
-			value="de.d3web.diaflux.coverage.PSMDiaFluxCoverage"/>
-		<parameter id="name" value="PSMDiaFluxCoverage" />
-		<parameter id="description" value="PSMDiaFluxCoverage" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="6" />
-	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="DiaFluxCoverageType">
@@ -93,6 +82,4 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	
-
 </plugin>
