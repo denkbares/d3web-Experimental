@@ -14,6 +14,7 @@ var alternatingColors = false;
 var showAllQuestionnaires = false;		// flag whether ALL questionnaires should be visible
 var stopMarking = false;
 var initialization = true;
+var rootQuestionId = "";
 
 /****************************************************************************
  * FUNCTIONS needed for the basic initial setting up of all js functionality *
@@ -86,10 +87,9 @@ function setup() {
     if(hierarchy){
         generate_tooltip_functions_ynbuttons();
         
-        // remove yn panel etc for first question
-        removeInputFacilitiesForFirst();
+        setRootQuestionIdInHierarchyPrototype();
         
-        expandFirstmostElement();
+        expandAndStyleFirstElement();
     
         exchangeReadflowTextFirstSubQuestion();
         
@@ -99,12 +99,7 @@ function setup() {
         // initialize mechanism for dropdwons to check entered values etc
         initializeDropdownSelects();
         
-        // remove the field containing the propagation value info for 1st q
-        removePropagationInfoInQuestionForFirst();
-        
-        alwaysExpandDummyNodes();
-        
-    // some more styling of diagnosis element
+        alwaysExpandDummyNodes();    
     }
     
     hide_all_tooltips(); // hide tooltips
@@ -204,28 +199,30 @@ function handleLogging(){
  * Retrieve the topmost element in hierarchically specified XML prototypes.
  * Usually this is the first <question> element.
  */
-function retrieveRootQuestionIdInHierarchyPrototype(){
+function setRootQuestionIdInHierarchyPrototype(){
     
-    var first; // get question id
-    
-    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements     
-        if($(this).attr("id")!=undefined){  
-            first = $(this).attr("id");   // expand the first element
-        }   
-    });
-    return first;
+    rootQuestionId = $("[id^=dialog] > [id^=q_]").first().attr("id");
 }
 
 /**
  * Retrieve the first element in hierarchical dialogs and expand it on startup
  * Used e.g. in hierarchy (legal) dialog
  */
-function expandFirstmostElement(){
+function expandAndStyleFirstElement(){
     
-    var rootId = retrieveRootQuestionIdInHierarchyPrototype();
-
-    $("#" + rootId).addClass('solutiontext');
-    toggle_sub_4boxes(rootId);   // expand the first element
+    $("#" + rootQuestionId).addClass('solutiontext'); // style first element
+    
+    // reset contents of input facilities part of first element
+    var inputFacilitiesElement = 
+    $("#" + rootQuestionId.replace("q_", "") + "-imagebox");
+    inputFacilitiesElement.html("<div id='solutionboxtextInTree'>Hauptfrage</div>");
+            
+    toggle_sub_4boxes(rootQuestionId);   // expand the first element
+    
+    // remove propagation info fiel for first element
+    var prop = $("#propagation-" + rootQuestionId);
+    prop.removeClass("show");
+    prop.addClass("hide");
 }
 
 /*Helper function to exchange the text of the first subquestion - usually 
@@ -241,7 +238,7 @@ function exchangeReadflowTextFirstSubQuestion(){
 
 function alwaysExpandDummyNodes(){
     $(".dummy").each(function(){
-        toggle_sub_4boxes($(this).attr("id"));
+        toggle_hide_no_alternating_colors("sub-" + $(this).attr("id"));
     });
 };
 
@@ -1031,7 +1028,7 @@ function generate_tooltip_functions_ynbuttons(){
             }
             
             var fullId = $(this).attr("id");
-            alert(fullId);
+           
             if(fullId.indexOf("ynYes")!=-1){
                 id = $(this).attr("id").replace("ynYes-", "");
                 tooltip_over_hierarchy_buttons(id, "1");
@@ -1226,6 +1223,12 @@ function toggle_hide(id) {
     });
 }
 
+function toggle_hide_no_alternating_colors(id){
+     // toggle (0 means no animation as time=0 for animation and on
+    // callback (animation complete) the function is processed
+    $("#" + id).toggle(0);
+}
+
 /**
  * Generate alternating colors for all elements
  */
@@ -1285,7 +1288,8 @@ function toggle_folder_image(id) {
         target.removeClass("question-closed").addClass("question-open");
     } else if (target.attr('class').indexOf("answer-open") != -1) {
         target.removeClass("answer-open").addClass("answer-closed");
-    } else if (target.attr('class').indexOf("answer-closed") != -1) {
+    }
+    else if (target.attr('class').indexOf("answer-closed") != -1) {
         target.removeClass("answer-closed").addClass("answer-open");
     }
 
@@ -1298,7 +1302,8 @@ function toggle_folder_image(id) {
     var target = $("#" + id);
     if (target.attr('class').indexOf("question-open") != -1) {
         target.removeClass("question-open").addClass("question-closed");
-    } else if (target.attr('class').indexOf("question-closed") != -1) {
+    }
+    else if (target.attr('class').indexOf("question-closed") != -1) {
         target.removeClass("question-closed").addClass("question-open");
     } else if (target.attr('class').indexOf("answer-open") != -1) {
         target.removeClass("answer-open").addClass("answer-closed");
@@ -1505,7 +1510,7 @@ function setPropagationColor(question, userval){
         prop.removeClass("show");
         prop.addClass("hide");
     }
-    removePropagationInfoInQuestionForFirst();
+    //removePropagationInfoInQuestionForFirst();
   
 }
 
@@ -1761,7 +1766,8 @@ function handleDropdwonSelects_proto(el){
     if(defining.indexOf(val)!=-1){
         // set color of question --> high rating, as defining = establish
         setColorForQuestion(par, par, "1");
-    } else {
+    }
+    else {
         // remove rating if value outside range
         par.removeClass("rating-high");
     }
@@ -1820,36 +1826,6 @@ function hideAuxPropInfo(){
     $("#auxPropagationInfo").html("");
 }
 
-function removePropagationInfoInQuestionForFirst(){
-    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
-        
-        var first = $(this).attr("id"); // get question id
-        
-        if($(this).attr("id")!=undefined){  
-            var prop = $("#propagation-"+$(this).attr("id"));
-    
-            prop.removeClass("show");
-            prop.addClass("hide");
-        }
-      
-    });
-    
-}
-
-// TODO check if that works for num and oc q
-function removeInputFacilitiesForFirst(){
-    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
-        
-        if($(this).attr("id")!=undefined){  
-            var id = "#" + $(this).attr("id").replace("q_", "") + "-imagebox";
-            
-            // the imagebox div, that contains input buttons normally
-            var prop = $(id);
-            
-            prop.html("<div id='solutionboxtextInTree'>Hauptfrage</div>");
-        }
-    });
-}
 
 /**
 * Function for toggling the display of the info panel.
@@ -1956,7 +1932,8 @@ function copy_div(sourceId, destId) {
     var dest = $("#" + destId);
     if (newContent.length == 0) {
         dest.hide(0); // if nothing to copy, hide new element
-    }else {
+    }
+    else {
         // else set content to new element and show it animated
         dest.attr('innerHTML', newContent).show(1000);
     }
@@ -2091,7 +2068,8 @@ function show_clarification_popup(question_id, e) {
                     && (document.body.scrollLeft || document.body.scrollTop)) {
                     // DOM compliant
                     yOffset = document.body.scrollTop;
-                } else if (document.documentElement
+                }
+                else if (document.documentElement
                     && (document.documentElement.scrollLeft || document.documentElement.scrollTop)) {
                     // IE6 standards compliant mode
                     yOffset = document.documentElement.scrollTop;
@@ -2102,7 +2080,8 @@ function show_clarification_popup(question_id, e) {
                 // show the popup message and hide with fading effect
                 popup.css('left', leftVal);
                 popup.css('top', topVal);
-            } else {
+            }
+            else {
                 // set popup position for other than IE based browsers
                 popup.position({
                     "my" : "left top",
@@ -2275,8 +2254,10 @@ function showAuxInfoOQD(id, title){
  * Handle everything there is to do when a y/n question in the OQDialog is clicked,
  * i.e., and answer is provided
  */
+
+// TODO: curretly called on button click in front legal question -> refactor!!!
 function handleOQYNQuestions(fullId, rating){
-    ue_logDialogType("ClariOQD");    
+    //ue_logDialogType("ClariOQD");    
     
     // retrieve follow up element to current element
     var splitID = fullId.split("-")[1];

@@ -1,14 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.d3web.proket.d3web.input.officexmlParser;
 
+
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
 import de.uniwue.abstracttools.BinaryRelation;
 import de.uniwue.abstracttools.ListUtils;
+import de.uniwue.abstracttools.Pair;
 import de.uniwue.abstracttools.StringUtils;
 
 public class QuestionManager {
@@ -39,31 +38,40 @@ public class QuestionManager {
 	
 	public Question getRoot() {
 		if (questions.size() >0) {
-			return questions.values().iterator().next().getRoot();
+			HashSet<Question> roots = questions.values().iterator().next().getRoots();
+			if (roots.size() > 0) return roots.iterator().next();
+			else return null;
 		} else return null;
 	}
 	
 	public String getXmlEncoding() {
+		return getTreeFormatXml();
+	}
+	
+	private String getTreeFormatXml() {
 		String s = "<?xml version='1.0' encoding='UTF-8'?>\n";
 		s = s + "<dialog sub-type='front' type='legal' css='legal, nofoot' header='K&#252;ndigungsschutz-Beratung -- Hierarchischer-Dialog' and-or-type='AND' uequest='OWN' study='true' logging='true' feedback='true'>";
-		LinkedList<Question> l = new LinkedList<Question>();
-		l.addAll(questions.values());
-		ListUtils.mergeSort(l, new BinaryRelation(){
-			@Override
-			public boolean inRelation(Object a, Object b) {
-				Question qa = (Question)a;
-				Question qb = (Question)b;
-				return (qa.getId() < qb.getId());
-			}
-			
-		});
-		for (Question q : l) s = s + q.getXml() + "\n";
+		Question r = getRoot();
+		Pair<String, Integer> result = getSubTreeXml(r, 0, -1);
+		s = s + result.getFirst();
 		s = s + "</dialog>";
-                
-		s = runCharacterEncoding(s);
-                
+		s = runCharacterEncoding(s); 
 		return s;
 	}
+	
+	private Pair<String, Integer> getSubTreeXml(Question q, int idCounter, int parentId) {
+		int id = ++idCounter;
+		String s = q.getXml(parentId, id);
+		for (Question c : q.getChildren()) {
+			Pair<String, Integer> r = getSubTreeXml(c, idCounter, id);
+			idCounter = r.getLast();
+			s = s + r.getFirst();
+		}
+		return new Pair<String, Integer>(s, idCounter);
+	}
+	
+	
+		
 	
 	private static String runCharacterEncoding(String s) {
 		s = replaceCharsWithUnicodeStrings(s);
@@ -80,8 +88,6 @@ public class QuestionManager {
 		s = s.replaceAll("Ö", "&#214;");
 		s = s.replaceAll("ß", "&#223;");
 		s = s.replaceAll("§", "&#167;");
-                //s = s.replaceAll("<", "&#60;");
-                //s = s.replaceAll(">", "&#62;");
 		s = s.replaceAll("<li>", "&#60;li&#62;");
 		s = s.replaceAll("</li>", "&#60;/li&#62;");
 		s = s.replaceAll("<ol>", "&#60;ol&#62;");
@@ -93,3 +99,4 @@ public class QuestionManager {
 	
 	
 }
+

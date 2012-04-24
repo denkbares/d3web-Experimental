@@ -27,7 +27,7 @@ function init_all() {
     
         removeInputFacilitiesForFirst();
         
-        expandFirstmostElement();
+        expandAndStyleFirstElement();
     
         exchangeReadflowTextFirstSubQuestion();
         
@@ -1541,7 +1541,7 @@ function retrieveRootQuestionIdInHierarchyPrototype(){
 function removeInputFacilitiesForFirst(){
     $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
         
-        alert($(this).attr("id"));
+        //alert($(this).attr("id"));
         if($(this).attr("id")!=undefined){  
             var id = "#" + $(this).attr("id") + "-imagebox";
             
@@ -1557,7 +1557,7 @@ function removeInputFacilitiesForFirst(){
  * Retrieve the first element in hierarchical dialogs and expand it on startup
  * Used e.g. in hierarchy (legal) dialog
  */
-function expandFirstmostElement(){
+function expandAndStyleFirstElement(){
     
     var rootId = retrieveRootQuestionIdInHierarchyPrototype();
 
