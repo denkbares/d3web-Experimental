@@ -1,0 +1,169 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-DiaFlux-Anomalies" version="0.0.1">
+	
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+		<import plugin-id="KnowWE-Plugin-DiaFlux" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+            <export prefix="*" />
+ 		</library>
+	</runtime>
+		
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="DeadlockTest">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.DeadlockTest" />
+		<parameter id="name" value="DeadlockTest" />
+		<parameter id="description" value="AbstractCITest DeadlockTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="DeadPathTest">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.DeadPathTest" />
+		<parameter id="name" value="DeadPathTest" />
+		<parameter id="description" value="AbstractCITest DeadPathTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="IncompletePostconditionTest">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.IncompletePostconditionTest" />
+		<parameter id="name" value="IncompletePostconditionTest" />
+		<parameter id="description" value="AbstractCITest IncompletePostconditionTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="InconsistentQuestionTest">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.InconsistentQuestionTest" />
+		<parameter id="name" value="InconsistentQuestionTest" />
+		<parameter id="description" value="AbstractCITest InconsistentQuestionTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="InconsistentValueTest">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.InconsistentValueTest" />
+		<parameter id="name" value="InconsistentValueTest" />
+		<parameter id="description" value="AbstractCITest InconsistentValueTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="IntersectingPostconditionTest">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.IntersectingPostconditionTest" />
+		<parameter id="name" value="IntersectingPostconditionTest" />
+		<parameter id="description" value="AbstractCITest IntersectingPostconditionTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="LoopWithoutSnapshotTest">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.LoopWithoutSnapshotTest" />
+		<parameter id="name" value="LoopWithoutSnapshotTest" />
+		<parameter id="description" value="AbstractCITest LoopWithoutSnapshotTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+			
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="MissingDataTest">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.MissingDataTest" />
+		<parameter id="name" value="MissingDataTest" />
+		<parameter id="description" value="AbstractCITest MissingDataTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>	
+		
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="NoAutoStartTest">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.NoAutoStartTest" />
+		<parameter id="name" value="NoAutoStartTest" />
+		<parameter id="description" value="AbstractCITest NoAutoStartTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+			
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="RedundantFlowchartTest">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.RedundantFlowchartTest" />
+		<parameter id="name" value="RedundantFlowchartTest" />
+		<parameter id="description" value="AbstractCITest RedundantFlowchartTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="RedundantStartNodeTest">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.RedundantStartNodeTest" />
+		<parameter id="name" value="RedundantStartNodeTest" />
+		<parameter id="description" value="AbstractCITest RedundantStartNodeTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="RedundantValueTest">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.RedundantValueTest" />
+		<parameter id="name" value="RedundantValueTest" />
+		<parameter id="description" value="AbstractCITest RedundantValueTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="UnconNodeTest">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.UnconNodeTest" />
+		<parameter id="name" value="UnconNodeTest" />
+		<parameter id="description" value="AbstractCITest UnconNodeTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWE-Plugin-DiaFlux" point-id="DiaFluxDisplayEnhancement"
+		id="AnomaliesHighlight">
+		<parameter id="class"
+			value="de.d3web.we.diaflux.pathcoloring.AnomaliesHighlight" />
+		<parameter id="name" value="AnomaliesHighlight" />
+		<parameter id="description" value="AnomaliesHighlight" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="diaflux" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="GetAnomaliesHighlightAction">
+		<parameter id="class"
+			value="de.d3web.we.diaflux.pathcoloring.GetAnomaliesHighlightAction" />
+		<parameter id="name" value="GetAnomaliesHighlightAction" />
+		<parameter id="description" value="Action GetAnomaliesHighlightAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="HighlightProvider">
+		<parameter id="class"
+			value="de.d3web.we.diaflux.pathcoloring.HighlightProvider" />
+		<parameter id="name" value="HighlightProvider" />
+		<parameter id="description"
+			value="Enables highlighting for Anomalies." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="/DiaFlux" />
+	</extension>
+
+</plugin>

@@ -1,0 +1,1 @@
+window.alert('anomaly script');
