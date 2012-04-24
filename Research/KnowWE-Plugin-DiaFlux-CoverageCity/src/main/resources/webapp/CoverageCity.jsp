@@ -5,24 +5,24 @@
 <%@page import="de.knowwe.diaflux.coverage.DiaFluxCoverageType"%>
 <%@page import="de.knowwe.kdom.defaultMarkup.DefaultMarkupType"%>
 <%@page import="de.knowwe.diaflux.coverage.gl.GLCityGenerator"%>
-<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="de.knowwe.core.wikiConnector.WikiConnector"%>
-<%@ page import="de.d3web.plugin.Extension"%>
-<%@ page import="de.d3web.plugin.JPFPluginManager"%>
-<%@ page import="de.knowwe.core.kdom.parsing.Section"%>
-<%@ page import="de.knowwe.core.kdom.parsing.Sections"%>
-<%@ page import="de.knowwe.core.kdom.Article"%>
-<%@ page import="de.knowwe.diaflux.type.DiaFluxType"%>
-<%@ page import="com.ecyrd.jspwiki.*" %>
-<%@ page import="de.knowwe.jspwiki.*" %>
-<%@ page import="java.util.*" %>
-<%@ page import="de.knowwe.core.*" %>
-<%@ page import="de.knowwe.core.utils.*" %>
-<%@ page import="de.knowwe.core.action.*" %>
-<%@ page import="de.knowwe.diaflux.kbinfo.*" %>
-<%@ page import="de.knowwe.diaflux.*" %>
-<%@ page import="de.d3web.we.utils.*" %>
-<%@ page import="de.knowwe.core.user.*" %>
+<%@page import="de.d3web.plugin.Extension"%>
+<%@page import="de.d3web.plugin.JPFPluginManager"%>
+<%@page import="de.knowwe.core.kdom.parsing.Section"%>
+<%@page import="de.knowwe.core.kdom.parsing.Sections"%>
+<%@page import="de.knowwe.core.kdom.Article"%>
+<%@page import="de.knowwe.diaflux.type.DiaFluxType"%>
+<%@page import="com.ecyrd.jspwiki.*" %>
+<%@page import="de.knowwe.jspwiki.*" %>
+<%@page import="java.util.*" %>
+<%@page import="de.knowwe.core.*" %>
+<%@page import="de.knowwe.core.utils.*" %>
+<%@page import="de.knowwe.core.action.*" %>
+<%@page import="de.knowwe.diaflux.kbinfo.*" %>
+<%@page import="de.knowwe.diaflux.*" %>
+<%@page import="de.d3web.we.utils.*" %>
+<%@page import="de.knowwe.core.user.*" %>
+<%@page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
 	//Create wiki context; authorization check not needed
@@ -108,18 +108,16 @@
 </div>
 <%
 
-String master = DiaFluxCoverageType.getMaster(coverageSection);
 
-KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(), master);
 
-CoverageResult coverage = DiaFluxCoverageType.getResult(coverageSection, context);
+CoverageResult coverage = DiaFluxCoverageType.getResult(coverageSection);
 
 String city;
 if (coverage == null){
 	city = "{}";
 } else {
 	
-	GLCity glCity = GLCityGenerator.generateCity(kb, coverage);
+	GLCity glCity = GLCityGenerator.generateCity(coverage);
 	
 	city= glCity.toString();
 }

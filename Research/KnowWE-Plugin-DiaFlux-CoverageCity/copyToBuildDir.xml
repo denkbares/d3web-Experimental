@@ -11,7 +11,7 @@ So no need to build after changes in these files. Reloading the page is sufficie
 
 	<property name="flowchartDir" value="${basedir}" />
 
-	<property name="buildDir"  value="${basedir}/../KnowWE-App/target/KnowWE-App-0.2-SNAPSHOT"/>
+	<property name="buildDir"  value="${basedir}/../../KnowWE-App/target/KnowWE-App-0.2-SNAPSHOT"/>
 	
 	<target name="copyToBildDir">
 
