@@ -55,6 +55,9 @@ public class DiaFluxCoverageTrace implements SessionObject {
 
 		@Override
 		public void postPropagationStarted(Session session, Collection<PropagationEntry> entries) {
+			if (!DiaFluxUtils.isFlowCase(session)) {
+				return;
+			}
 			CoverageUtils.getCoverage(session).update(session);
 		}
 		
