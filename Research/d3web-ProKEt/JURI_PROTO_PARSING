@@ -1,0 +1,16 @@
+WICHITG WENN JURISTISCHE PROTOTYPEN GEPARST WERDEN
+-> mit dem Office Converter von Alex und dem Parser von Elmar
+
+(was geht nicht automatisiert)
+- Links auf Resourcen oder andere wieder einfügen (manuell)
+- Numerierung bei mehrfach verschachtelten Fragen anpassen
+- prüfe PDF Links 
+
+
+
+SEIPEL:
+- KEINE Kursivschrift verwenden außer es soll in den Erläuterungen kursiv werden
+- Fragen im Baum UND Hinten umbenennen
+- KEINE doppelten Fragezeichen o.ä.
+- PDFs werden jetzt geparst, wenn sie im Dokument als [LINK: Text_ZUM_PDF.pdf] 
+gekennzeichnet sind

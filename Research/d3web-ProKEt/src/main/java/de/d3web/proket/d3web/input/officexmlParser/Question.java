@@ -166,7 +166,7 @@ public class Question {
 		if (isDummy) dummyString = " dummy='true'";
 		String negierung = "";
 		if (invertiereNein) negierung = " defining='nein'";
-		return "<legalQuestion title='" + content + "' id='" + customId + "'" + pid + pt + at + dummyString + negierung + " bonus-text='" + explanation + "'" + "/>"; 
+		return "<legalQuestion title='" + content + "' id='" + customId + "'" + pid + pt + at + dummyString + negierung + " bonus-text='" + explanation + "'" + "/>\n"; 
 	}
 	
 	

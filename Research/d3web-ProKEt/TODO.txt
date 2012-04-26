@@ -149,11 +149,20 @@ DONE - Panel Areas vergrößern/anpassen --> CSS BUTTONS
 - Install IE check as beforedialog
 - deploy automatically wiki to dialog
 
+- Get Dialog Header, zB Mietrecht-Beratung, from .doc filename or the like
+- Rename specs for pdf links and webapp links in prototype specs in
+    - PDFLINK / .pdf
+    - LINK / .link
+    - WWWLINK / .wwwlink
+
 - neuer Fall, speichern, reset etc
+
 
 !!! - d3web Anbindung
 - Styling header: print button, feedback
 - Print Button --> Baum
+
+-
 
 LÖSUNG IMMER SICHTBAR
 

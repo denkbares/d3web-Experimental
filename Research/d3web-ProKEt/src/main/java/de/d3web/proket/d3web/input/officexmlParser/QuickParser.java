@@ -1,30 +1,30 @@
 package de.d3web.proket.d3web.input.officexmlParser;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.LinkedList;
 
 import de.uniwue.abstracttools.Pair;
 import de.uniwue.abstracttools.StringUtils;
-import de.uniwue.abstracttools.parser.Scanner;
-import de.uniwue.abstracttools.parser.TokenExpression;
+import java.io.BufferedWriter;
+import java.util.ArrayList;
 
 public class QuickParser {
 
 	
 	public static final char LINE_BREAK = '\n';
-    private static String wordhtmlFinalOutput =
-            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_Apr2012_Restruc.html";
+        private static String wordhtmlFinalOutput =
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_Mietrecht_Teil1.html";
     private static String parsedJuriXml =
-            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/juriRestrucTest.xml";
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/juriMietrechtT1.xml";
 	
+      /*  private static String wordhtmlFinalOutput =
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_VTEST.html";
+    private static String parsedJuriXml =
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/juriVTEST.xml";
+    */
+    
 	public QuickParser() {
 	}
 	
@@ -34,7 +34,47 @@ public class QuickParser {
 	
 	
 	public void extractQuestionInformations(String text, QuestionManager qm) {
-		String[] questionTexts = text.split("FRAGE");
+            
+                /* preprocess pdf link definitions : replace with HTML representation */
+                if (text.contains("[LINK:")){
+                    
+                    // get the linked-doc name
+                    ArrayList pdfs = new ArrayList();
+                    String linksplits[] = text.split("\\[LINK: ");
+                    for(String s: linksplits){
+                        String innersplits[] = s.split("\\.pdf]");
+                        pdfs.add(innersplits[0]);
+                    }
+                    
+                    for(Object pdf: pdfs){
+                        String infile = "[LINK: " + pdf.toString() + ".pdf]";
+                        String replaced = "&#60;a href=\"/resources/" + pdf.toString()  + ".pdf\"&#62; " +
+                                pdf.toString() + "&#60;/a&#62;";
+                        text = text.replace(infile, replaced);
+                    }
+                }
+                
+                /* preprocess links to other wepapp parts */
+                if (text.contains("[WEBLINK:")){
+                    
+                    // get the linked-doc name
+                    ArrayList links = new ArrayList();
+                    String linksplits[] = text.split("\\[WEBLINK: ");
+                    for(String s: linksplits){
+                        String innersplits[] = s.split("\\.weblink]");
+                        links.add(innersplits[0]);
+                    }
+                    
+                    for(Object link: links){
+                        String infile = "[WEBLINK: " + link.toString() + ".weblink]";
+                        String replaced = "&#60;a href=\"/Dialog?src=" + link.toString()  + "\"&#62; " +
+                                link.toString() + "&#60;/a&#62;";
+                        text = text.replace(infile, replaced);
+                    }
+                    
+                }
+            
+                String[] questionTexts = text.split("FRAGE");
 		for (String f : questionTexts) {
 			f = f.trim();
 			if (!"".equals(f)) {
@@ -44,7 +84,7 @@ public class QuickParser {
 				if (q == null) handleError("No question '" + questionID + "' in tree, but info for this question was found.");
 				else {
 					String questionInfo = z[1].trim();
-					
+                                       
 					String[] y = questionInfo.split("Erläuterung( )*(:)?( )*\n");
 					
 					String prompt = null;
@@ -56,11 +96,11 @@ public class QuickParser {
 								prompt = y[i].substring(6);
 								if (prompt.startsWith(":")) prompt = prompt.substring(1);
 								prompt = prompt.trim();
-							}
+							} 
 						}
 					}
-					
-					q.setExplanation(erl);
+                                        
+                                        q.setExplanation(erl);
 					q.setPrompt(prompt);
 				}
 			}
@@ -200,7 +240,7 @@ public class QuickParser {
 			String text = StringUtils.readFileString(wordhtmlFinalOutput);
 			QuestionManager qm = qp.parseQuestionTree(qp.getTreePart(text));			 
 			text = qp.getInfoPart(text);
-			qp.extractQuestionInformations(text, qm);
+                        qp.extractQuestionInformations(text, qm);
 			
 			Writer out = new BufferedWriter(new OutputStreamWriter(
 			        new FileOutputStream(parsedJuriXml), "UTF8"));

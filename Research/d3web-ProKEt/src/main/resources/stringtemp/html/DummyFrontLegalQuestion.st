@@ -6,7 +6,7 @@
 <div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$ dummy" >
     
     <div id="$id$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')">
-        <img id="$id$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes('$fullId$')">
+        <img id="$fullId$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes('$fullId$')">
         
     </div> 
     <div class="title t-$fullId$" id="t-$fullId$" onmouseover="showAuxInfo('$fullId$', '$title$')">

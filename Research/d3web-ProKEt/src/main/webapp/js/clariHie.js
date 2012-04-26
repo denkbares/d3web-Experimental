@@ -15,6 +15,8 @@ function clariHieInit() {
     expandAndStyleFirstElement();
     
     exchangeReadflowTextFirstSubQuestion();
+    
+    initializeSolutionBox();
         
     // initialize mechanism for num fields to check entered values etc
     initializeNumfields();
@@ -36,6 +38,15 @@ function clariHieInit() {
     if(feedback){
         handleFB();
     }
+}
+
+function initializeSolutionBox(){
+    
+    var rootSolId = "[id^='solutiontitle-" + rootQuestionId + "']";
+    // get text of the root element of the tree = the solution
+    var soltext = $("#"+rootSolId).html();
+    // set the solutiontext in the box
+    $("#solutiontext").html(soltext);
 }
 
 
@@ -231,6 +242,12 @@ function exchangeReadflowTextFirstSubQuestion(){
 function alwaysExpandDummyNodes(){
     $(".dummy").each(function(){
         toggle_hide_no_alternating_colors("sub-" + $(this).attr("id"));
+        // ids of the arrow/folder image is 2-typeimg, when question is q_2    
+        var typeimgID = $(this).attr("id") + '-typeimg';
+    
+        // get the div of the arrow/folder image
+        var imgDiv = $("[id^="+ typeimgID + "]");
+        imgDiv.attr('src', 'img/openedArrow.png');
     });
 };
 
@@ -414,7 +431,7 @@ function toggle_sub_4boxes(id) {
 function toggle_folder_image_4boxes(id) {
 	
     // ids of the arrow/folder image is 2-typeimg, when question is q_2    
-    var typeimgID = id.replace("q_", "") + '-typeimg';
+    var typeimgID = id + '-typeimg';
     
     // get the div of the arrow/folder image
     var imgDiv = $("[id^="+ typeimgID + "]");
