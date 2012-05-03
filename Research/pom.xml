@@ -220,6 +220,7 @@
 		<module>KnowWE-Plugin-d3web-Debugger</module>
 		<module>KnowWE-Plugin-DiaFlux-CoverageCity</module>
 		<module>KnowWE-Plugin-Wikicontent-Download</module>
+		<module>d3web-OfficeConverterAH</module>
 	</modules>
 	<repositories>
 		<repository>
