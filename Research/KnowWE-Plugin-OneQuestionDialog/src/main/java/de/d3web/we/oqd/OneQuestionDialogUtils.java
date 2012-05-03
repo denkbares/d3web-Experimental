@@ -104,7 +104,7 @@ public class OneQuestionDialogUtils {
 
 		html.append("<div class=\"oqdquestion\" id='oqdquestion'>");
 		html.append(o.getName());
-		html.append("<input type=\"hidden\" name=\"" + o.getId() + "\" value=\"" + o.getId()
+		html.append("<input type=\"hidden\" name=\"" + o.getName() + "\" value=\"" + o.getName()
 				+ "\">");
 		html.append("</div>");
 
@@ -125,8 +125,8 @@ public class OneQuestionDialogUtils {
 				html.append("<input type=\"" + type + "\" name=\"" + o.getName() + "\" value=\""
 						+ c.getName() + "\">"
 						+ c.getName());
-				html.append("<input type=\"hidden\" name=\"" + c.getId() + "\" value=\""
-						+ c.getId() + "\">");
+				html.append("<input type=\"hidden\" name=\"" + c.getName() + "\" value=\""
+						+ c.getName() + "\">");
 				html.append("</td>");
 				html.append("</tr>");
 			}
@@ -168,7 +168,7 @@ public class OneQuestionDialogUtils {
 		int pos = 0;
 
 		for (InterviewObject o : interviewObjects) {
-			if (o.getName().equals(question) && o.getId().equals(questionId)) {
+			if (o.getName().equals(question) && o.getName().equals(questionId)) {
 				pos = interviewObjects.indexOf(o);
 			}
 		}
