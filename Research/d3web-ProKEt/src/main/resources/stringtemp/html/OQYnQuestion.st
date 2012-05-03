@@ -2,10 +2,10 @@
     <div class="title t-$fullId$ $hide$" id="t-$fullId$" onmouseover="showAuxInfoOQD('$fullId$', '$title$')"> 
         
         <div id="$id$-imagebox" class="question-imagebox">
-            <div id="ynYes-$fullId$" class="ynbutton" onclick="handleOQYNQuestions('ynYes-$fullId$', '1')"> Ja </div>
-            <div id="ynNo-$fullId$" class="ynbutton" onclick="handleOQYNQuestions('ynNo-$fullId$', '3')">Nein</div>
-            <div id="ynUn-$fullId$" class="ynbutton" onclick="handleOQYNQuestions('ynUn-$fullId$', '2')">-?-</div>
-            <div id="ynNan-$fullId$" class="ynbutton" onclick="handleOQYNQuestions('ynNan-$fullId$', '0')"> </div>
+            <div id="ynYes-$fullId$" class="ynbutton $ratingY$ $fullId$-tt-trigger-ynbutton" onclick="handleOQYNQuestions('ynYes-$fullId$', '$ratingNrY$')"> Ja $TooltipButtonJA()$</div>
+            <div id="ynNo-$fullId$" class="ynbutton $ratingN$ $fullId$-tt-trigger-ynbutton"" onclick="handleOQYNQuestions('ynNo-$fullId$', '$ratingNrN$')">Nein $TooltipButtonNEIN()$</div>
+            <div id="ynUn-$fullId$" class="ynbutton rating-medium $fullId$-tt-trigger-ynbutton"" onclick="handleOQYNQuestions('ynUn-$fullId$', '2')">-?- $TooltipButtonWN()$</div>
+            <div id="ynNan-$fullId$" class="ynbutton rating-none $fullId$-tt-trigger-ynbutton"" onclick="handleOQYNQuestions('ynNan-$fullId$', '0')"> X $TooltipButtonZ()$</div>
         </div> 
         
         <div id="titletext-$fullId$" class="titletext" onclick="toggleDetails($fullId$)">
@@ -17,8 +17,11 @@
             <div id="propagation-$fullId$" class="propagation hide" onmouseover="" onmouseout=""></div>
         </div>
         
-        <div id="detail-$fullId$" class="detailButton $hideDetails$" onclick="stepIntoDetail('$fullId$')"> 
+        <div id="detail-$fullId$" class="detailButton $hideDetails$ $fullId$-tt-trigger" onclick="stepIntoDetail('$fullId$')"> 
             Details
+            <div id="detail-tt-$fullId$" class="tt-$fullId$ tooltip tooltipArrow">
+                Detailfragen einblenden
+            </div>
         </div>
    
         

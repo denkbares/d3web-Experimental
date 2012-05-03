@@ -119,37 +119,37 @@ public class UEStudyAnalyst {
         TreeMap<String, String> interEval = new TreeMap();
 
         // go through all intermediateLoggedResults
-        for(Object o: completeInterRes){
+        for (Object o : completeInterRes) {
             JSONObject jo = (JSONObject) o;
             if (jo.get(UETerm.ID.toString()) != null) {
-                
+
                 // this is the loggedIntermedSolutionID/Name
                 String idToCheck = jo.get(UETerm.ID.toString()).toString();
-            
+
                 // get corresponding sol/rating definition from TreeMap
-                if(solutions.get(idToCheck) !=null){
+                if (solutions.get(idToCheck) != null) {
                     String realValue = solutions.get(idToCheck);
                     String loggedValue = jo.get(UETerm.VAL.toString()).toString();
-                    
+
                     if (realValue.equals(loggedValue)) {
-                            interEval.put(idToCheck, "CORRECT: " + jo.get(UETerm.VAL.toString()));
-                        } else {
-                            interEval.put(idToCheck, "INCORRECT: was "
-                                    + loggedValue + " / " + realValue);
-                        }
+                        interEval.put(idToCheck, "CORRECT: " + jo.get(UETerm.VAL.toString()));
+                    } else {
+                        interEval.put(idToCheck, "INCORRECT: was "
+                                + loggedValue + " / " + realValue);
+                    }
                 }
             }
         }
-        
+
         // additionally go through provided solutions and check whether there
         // are elements that had not been logged
-        for(String key: solutions.keySet()){
-        
-            if(!interEval.containsKey(key)){
+        for (String key : solutions.keySet()) {
+
+            if (!interEval.containsKey(key)) {
                 interEval.put(key, "NaN");
             }
         }
-    
+
         return interEval;
     }
 
@@ -183,36 +183,44 @@ public class UEStudyAnalyst {
                 bui.append(" , " + key);
             }
         }
+        bui.append("\n");
 
         List<File> logs = JSONReader.getInstance().retrieveAllLogfiles(LogFolderName);
 
         for (File logfile : logs) {
-            
+
             UEStudyAnalyst ue = new UEStudyAnalyst(logfile);
             
-            TreeMap<String, String> interMedSolRatings =
-                    ue.getIntermediateResultsEvalFor(solAndRat);
-                      
-            bui.append(logfile.getName());
-            bui.append(" , ");
-            bui.append(ue.getDialogType());
-            bui.append(" , ");
-            bui.append(ue.getDuration());
-            bui.append(" , ");
-            bui.append(ue.getResult());
-            bui.append(" , ");
-            bui.append(ue.getRealResult());
-            bui.append(" , ");
-            bui.append(ue.getBrowser());
-            bui.append(" , ");
-            bui.append(ue.getStart());
-            bui.append(" , ");
-            bui.append(ue.getEnd());
-            for (String value : interMedSolRatings.values()) {
+            // only include correct logs, i.e. with start end and duration
+            if (!ue.getStart().equals("/")
+                    //&& !ue.getEnd().equals("/")
+                   // && !ue.getDuration().equals("/")
+                    ) {
+
+                TreeMap<String, String> interMedSolRatings =
+                        ue.getIntermediateResultsEvalFor(solAndRat);
+
+                bui.append(logfile.getName());
                 bui.append(" , ");
-                bui.append(value);
+                bui.append(ue.getDialogType());
+                bui.append(" , ");
+                bui.append(ue.getDuration());
+                bui.append(" , ");
+                bui.append(ue.getResult());
+                bui.append(" , ");
+                bui.append(ue.getRealResult());
+                bui.append(" , ");
+                bui.append(ue.getBrowser());
+                bui.append(" , ");
+                bui.append(ue.getStart());
+                bui.append(" , ");
+                bui.append(ue.getEnd());
+                for (String value : interMedSolRatings.values()) {
+                    bui.append(" , ");
+                    bui.append(value);
+                }
+                bui.append("\n");
             }
-            bui.append("\n");
         }
         return bui.toString();
     }
@@ -220,21 +228,33 @@ public class UEStudyAnalyst {
     public static void main(String[] args) {
 
         StringBuilder bui = new StringBuilder();
-        List<File> logs = JSONReader.getInstance().retrieveAllLogfiles("Testlog-Data");
+        List<File> logs = JSONReader.getInstance().retrieveAllLogfiles("Logdata");
+
+        // Study 2, Case 1
+        /*
+         * TreeMap solRatings = new TreeMap(); solRatings.put("Ist das
+         * Arbeitsverhältnis wirksam gekündigt worden?", "1");
+         * solRatings.put("Ist die Kündigung formell rechtmäßig?", "1");
+         * solRatings.put("Ist die Kündigung materiell/inhaltlich rechtmäßig?",
+         * "3");
+         */
+        /*
+         * // Study 2, Case 2 TreeMap solRatings = new TreeMap();
+         * solRatings.put("Ist das Arbeitsverhältnis wirksam gekündigt worden?",
+         * "1"); solRatings.put("Ist die Kündigung formell rechtmäßig?", "1");
+         * solRatings.put("Ist die Kündigung materiell/inhaltlich rechtmäßig?",
+         * "3");
+         */
 
         TreeMap solRatings = new TreeMap();
-        solRatings.put("Ist die Kündigung formell rechtmäßig?", "1");
-        solRatings.put("Ist die Kündigung materiell/inhaltlich rechtmäßig?", "3");
-        solRatings.put("Anderer Test", "1");
-
         for (File logfile : logs) {
             UEStudyAnalyst ue = new UEStudyAnalyst(logfile);
         }
 
-        String csv = assembleCSVString("Testlog-Data", solRatings);
-       
+        String csv = assembleCSVString("Logdata", solRatings);
+
         try {
-            writeCSV("/Users/mafre/CodingSpace/Testlog/auswertung.csv", csv);
+            writeCSV("/Users/mafre/CodingSpace/Research/d3web-ProKEt/Logdata/auswertung.csv", csv);
         } catch (IOException io) {
             io.printStackTrace();
         }

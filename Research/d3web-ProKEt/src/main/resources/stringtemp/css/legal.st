@@ -54,7 +54,7 @@ td > #headertext{
 
 #dialog{
     float: left;
-    margin-top: 25px;
+    margin-top: 165px;
 }
 
 
@@ -67,7 +67,7 @@ td > #headertext{
     position: fixed;
     right: 20px;
     padding: 10px;
-    margin-top: 35px;
+    margin-top: 175px;
     height: 60%;
     overflow: auto; /* for scrolling */
 }
@@ -306,11 +306,12 @@ img{
     font-weight: bold;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 105px;
+    margin-top: 20px;
     padding: 30px;
     width: 65%;
 }
-
+       
+    
 .solRating {
       background-color: #DEDEDE;
     float: right;

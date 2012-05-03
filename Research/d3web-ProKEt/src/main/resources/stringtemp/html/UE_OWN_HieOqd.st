@@ -13,8 +13,8 @@
         <tr><td colspan="3"><hr></td></tr>
         <tr>
             <td class="topText fontOnePointTwo">2</td>
-            <td class="leftPadd topText fontOnePointTwo">Ich empfand die Strukturierung der Fragen als verständlich.</td>
-            <td>$UE_ScaleLikert7(id="UE_Ich_empfand_die_Strukturierung_der Fragen_als_verständlich.")$</td> 
+            <td class="leftPadd topText fontOnePointTwo">Ich konnte die (Re-)Aktionen des Systems immer gut nachvollziehen.</td>
+            <td>$UE_ScaleLikert7(id="UE_Ich_konnte_die_(Re-)Aktionen_des_Systems_immer_gut_nachvollziehen.")$</td> 
 	</tr>
         <tr><td colspan="3"><hr></td></tr>
         <tr>
@@ -37,8 +37,8 @@
         <tr><td colspan="3"><hr></td></tr>
         <tr>
             <td class="topText fontOnePointTwo">6</td>
-            <td class="topText leftPadd fontOnePointTwo">Welche der beiden verwendeten Dialoge hat mir besser gefallen? (Nur nach Bearbeitung beider Fälle beantworten!)</td>
-            <td><input type="text" id="UE_QUIRating" class="longTextfield" value="Dialog 1 ODER Dialog 2 ODER Beide gleich"> </input></td> 
+            <td class="topText leftPadd fontOnePointTwo">Welche der beiden UI-Formen hat mir besser gefallen? (Nur nach Bearbeitung beider Fälle beantworten!)</td>
+            <td><input type="text" id="UE_QUIRating" class="longTextfield" value="Hierarchisch ODER Einfrage ODER Beide gleich"> </input></td> 
 	</tr>
         <tr><td colspan="3"><hr></td></tr>
 	<tr>

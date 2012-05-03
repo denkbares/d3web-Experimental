@@ -290,9 +290,16 @@ public class DialogServlet extends HttpServlet {
             HttpServletResponse response, HttpSession httpSession) throws IOException {
 
         PrintWriter writer = response.getWriter();
-        GlobalSettings.getInstance().setLogFolder(
-                GlobalSettings.getInstance().getServletBasePath()
-                + "../../Testlog-Data/logs");
+        //GlobalSettings.getInstance().setLogFolder(
+          //      GlobalSettings.getInstance().getServletBasePath()
+            //    + "../../LOGS/G1-Data");
+        
+        GlobalSettings.getInstance().setLogBaseFolder(
+                 GlobalSettings.getInstance().getServletBasePath()
+                + "../../LOGS");
+        GlobalSettings.getInstance().setLogSubFolder(
+                "/G1-Data");
+        System.out.println(GlobalSettings.getInstance().getLogFolder());
         
         /*GlobalSettings.getInstance().setLogFolder(
                 GlobalSettings.getInstance().getServletBasePath()
@@ -314,7 +321,16 @@ public class DialogServlet extends HttpServlet {
                 request.getParameter("user").replace("+", " ");
         String start =
                 request.getParameter("timestring").replace("+", " ");
+        String source = 
+                getSource(request);
+        String type="";
+        if(source.contains("juriRestruc")){
+            type = "USER";
+        } else {
+            type = "LEGAL";
+        }
         ServletLogUtils.logBaseInfo(browser, user, start, logger);
+        ServletLogUtils.logDialogType(type, logger);
         httpSession.setAttribute("logger", logger);
 
         //response.getWriter().append(GlobalSettings.getInstance().getLogFolder());

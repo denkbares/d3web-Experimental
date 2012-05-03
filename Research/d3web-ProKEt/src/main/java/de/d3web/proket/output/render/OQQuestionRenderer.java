@@ -21,6 +21,7 @@ package de.d3web.proket.output.render;
 
 import de.d3web.core.session.Session;
 import de.d3web.proket.data.IDialogObject;
+import de.d3web.proket.data.LegalQuestion;
 import de.d3web.proket.data.Question;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
@@ -35,6 +36,19 @@ import org.antlr.stringtemplate.StringTemplate;
  */
 public class OQQuestionRenderer extends Renderer {
 
+     // TODO remove from here to global config o.ä.
+    private static String TT_YES = "Wertet übergeordnete Frage <b>positiv</b>.";
+    private static String TT_NO = "Wertet übergeordnete Frage <b>negativ</b>.";
+    private static String TT_UN = "Wertet übergeordnete Frage <b>unsicher/neutral</b>.";
+    private static String TT_NAN = "Antwort <b>zurücksetzen</b>.";
+    private static String TT_YES_REV = "Wertet übergeordnete Frage <b>negativ</b>.";
+    private static String TT_NO_REV = "Wertet übergeordnete Frage <b>positiv</b>.";
+    
+    private static String TT_PROP_ERROR = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung.</b> "
+            + "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, "
+            + "wenn Sie eine andere als die bisher hergeleitete Bewertung setzen möchten.";
+
+    
     @Override
     public String renderDialogObject(ContainerCollection cc, IDialogObject dialogObject,
             boolean recurseCount, boolean excludeChildren, boolean force, Session session) {
@@ -214,6 +228,43 @@ public class OQQuestionRenderer extends Renderer {
             }
         }
 
+        st.removeAttribute("ratingY");
+        st.removeAttribute("ratingN");
+        st.removeAttribute("ratingNrY");
+        st.removeAttribute("ratingNrN");
+
+        st.removeAttribute("tty");
+        st.removeAttribute("ttn");
+        st.removeAttribute("ttu");
+        st.removeAttribute("ttnan");
+
+
+        if (dialogObject instanceof Question
+                && ((Question) dialogObject).getDefining() != null
+                && ((Question) dialogObject).getDefining().equals("nein")) {
+
+            st.setAttribute("ratingY", "rating-low");
+            st.setAttribute("ratingN", "rating-high");
+            st.setAttribute("ratingNrY", "3");
+            st.setAttribute("ratingNrN", "1");
+
+            st.setAttribute("tty", TT_YES_REV);
+            st.setAttribute("ttn", TT_NO_REV);
+        } else {
+            st.setAttribute("ratingY", "rating-high");
+            st.setAttribute("ratingN", "rating-low");
+            st.setAttribute("ratingNrY", "1");
+            st.setAttribute("ratingNrN", "3");
+
+            st.setAttribute("tty", TT_YES);
+            st.setAttribute("ttn", TT_NO);
+        }
+        st.setAttribute("ttu", TT_UN);
+        st.setAttribute("ttnan", TT_NAN);
+        
+        //st.setAttribute("tooltip", TT_PROP_ERROR);
+        
+        
         super.renderChildren(st, cc, dialogObject, force);
 
     }

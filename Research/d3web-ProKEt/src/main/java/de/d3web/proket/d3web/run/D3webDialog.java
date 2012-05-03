@@ -229,10 +229,17 @@ public class D3webDialog extends HttpServlet {
                 GLOBSET.getServletBasePath()
                 + "../../" + userpref + "-Data/cases");
 
-        GLOBSET.setLogFolder(
-                GLOBSET.getServletBasePath()
-                + "../../" + userpref + "-Data/logs");
-
+        
+        GLOBSET.setLogBaseFolder(
+                 GlobalSettings.getInstance().getServletBasePath()
+                 +  "../../" + userpref + "-Data/LOGS");
+        
+        GLOBSET.setLogSubFolder(
+                "/G1-Data");
+        
+        System.out.println(GLOBSET.getLogFolder());
+        
+        
         // if a new dialog is loaded we also need a new session to start
         //resetD3webSession(httpSession);
         resetD3webSession(httpSession);

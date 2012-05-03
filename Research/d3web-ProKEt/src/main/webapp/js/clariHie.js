@@ -9,6 +9,7 @@ var rootQuestionId = "";
 function clariHieInit() {
     
     generate_tooltip_functions_ynbuttons();
+    generate_tooltip_functions_propagation();
         
     setRootQuestionIdInHierarchyPrototype();
         
@@ -373,17 +374,6 @@ function hideAuxInfo(){
     // clear infopanel
     $("#auxHeader").html("<b>FRAGE: </b> <br /><br />");
     $("#auxInfo").html("-");
-}
-
-function showAuxPropInfo(){
-    var info = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung. ";
-    info += "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, ";
-    info += "wenn Sie eine andere als die bisher hergeleitete Bewertung setzen möchten.";
-    $("#auxPropagationInfo").html(info);
-}
-
-function hideAuxPropInfo(){
-    $("#auxPropagationInfo").html("");
 }
 
 
@@ -843,6 +833,102 @@ function h4boxes_mark(object, skip_self) {
     $(walking).parent(":first").each(function() {
         h4boxes_mark($(this), false);
     });
+    
+    
+}
+
+
+// TODO: refactor this one, it is similarly used in code.js and clariHie.js
+// only in code.js more generally
+function generate_tooltip_functions_propagation() {
+	
+    var triggers = $("[class*='-tt-trigger-prop']");
+           
+    // if mouse is moved over an element define potential tooltips position
+    $(document).mousemove(function(e) {
+        tooltip_move(e);
+    });
+	
+    // go through all existing tooltip triggers
+    triggers.each(function() {
+        	
+        var id = $(this).attr("id").replace("propagation-", "");
+        
+        var ttstart, ttend;
+        var now;
+                
+        $(this).unbind('mouseover').mouseover(function() {
+            //if logging is activated get the time tooltip is triggered
+            if(logging){
+                now = new Date();
+                ttstart = now.getTime();
+            }
+            
+            tooltip_over_prop(id);
+        });
+     
+        $(this).unbind('mouseout').mouseout(function() {
+            //if logging is activated get the time tooltip is deactivated again
+            if(logging){
+                now = new Date();
+                ttend = now.getTime();
+                ue_logInfoPopup(ttstart, ttend, $(this));
+            }
+          
+            tooltip_out_prop(id);
+            
+        });
+    });
+}
+
+function tooltip_over_prop(id) {
+    targetid = "tt-propagation-" + id;
+    	
+    var target = $("[id$=" + targetid + "]");
+             
+    if (target.size() == 0) {
+        return;
+    }
+	
+    // if target element is not currently shown
+    if (target !== tooltipShown) {
+		
+        // hide old tooltip if existing
+        if (tooltipShown !== undefined) {
+            tooltip_out(tooltipShown);
+        }
+		
+        // store currently shown tooltip and tooltipShownTrigger
+        tooltipShown = target;
+		
+        target.css("position", "absolute");
+        var height = target.height();
+        var width = target.width();
+        if (height > 0 && width > 0 && height > width) {
+            target.css("width", height);
+            target.css("height", width);
+        }
+        //tooltip_move(element);
+
+        target.fadeIn(300);
+        setLeftOffset(target);
+    }
+}
+
+function tooltip_out_prop(object) {
+	
+    // if a jquery tooltip or
+    if (object instanceof jQuery) {
+        target = object;
+    } else {
+		
+        // a specifically marked element
+        target = $("#tt-propagation-" + object);
+    }
+
+    target.hide(500);
+    tooltipShown = undefined;
+//tooltipShownTrigger = undefined;
 }
 
 /*--------------------------*/

@@ -36,7 +36,8 @@ public class Question extends DefaultDialogObject {
     protected Boolean sendButton = false;
     protected Boolean selectBox = false;
     protected String counter = "";
-
+    protected String defining;
+    
     // Default simple Constructor that initializes inherit.attributes and
     // the basic description String
     public Question() {
@@ -53,6 +54,14 @@ public class Question extends DefaultDialogObject {
         return id;
     }
 
+    public void setDefining(String defining) {
+        this.defining = defining;
+    }
+
+    public String getDefining() {
+        return this.defining;
+    }
+    
     public Boolean getSendButton() {
         return sendButton;
     }

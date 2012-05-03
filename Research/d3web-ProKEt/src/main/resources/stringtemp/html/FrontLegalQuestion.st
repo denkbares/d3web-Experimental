@@ -34,8 +34,8 @@
         <div id="solutiontitle-$fullId$" class="solutiontitle">$title$</div>
             $Image()$
 		$text$
-		<div id="propagation-$fullId$" class="propagation hide $if(tooltip)$$fullId$-tt-trigger tooltip-trigger$endif$" >
-                    $if(tooltip)$<div id="tt-$fullId$" class=" tooltip tooltipProp tt-$fullId$">$tooltip$</div>$endif$
+		<div id="propagation-$fullId$" class="propagation hide $if(tooltip)$$fullId$-tt-trigger-prop tooltip-trigger$endif$" >
+                    $if(tooltip)$<div id="tt-propagation-$fullId$" class=" tooltip tooltipProp tt-$fullId$">$tooltip$</div>$endif$
                 </div>
 	</div>
         

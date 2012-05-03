@@ -21,13 +21,13 @@ import officeconverter.Converter;
 public class App {
 
     private static String wordinput = 
-            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_Test.doc";
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_M1.doc";
     private static String cleanedIntermedHtml = 
             "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_cleanedIntermed.html";
     private static String embeddedObjectsDir = 
             "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/Resources";
     private static String wordhtmlFinalOutput = 
-            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_Test.html";
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_M1.html";
     
     private static String FILETYPE_OUTPUT = "html";
     

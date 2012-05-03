@@ -12,7 +12,7 @@
     <div class="title t-$fullId$" id="t-$fullId$" onmouseover="showAuxInfo('$fullId$', '$title$')">
         <div id="solutiontitle-$fullId$" class="solutiontitle"></div>
            
-            <div id="propagation-$fullId$" class="propagation hide" onmouseover="showAuxPropInfo()" onmouseout="hideAuxPropInfo()"></div>
+            <div id="propagation-$fullId$" class="propagation hide" onmouseover="showAuxPropInfo('$fullId$')" onmouseout="hideAuxPropInfo('$fullId$')"></div>
 	</div>
         
         

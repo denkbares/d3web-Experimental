@@ -132,6 +132,20 @@ table{
     background-color: #E0B59E; border: none; 
 }
 
+.ynbutton.rating-high { 
+    background-color: #C3DAA8; border: none; 
+}
+.ynbutton.rating-medium { 
+    background-color: #F4F4C7; border: none; 
+}
+.ynbutton.rating-low { 
+    background-color: #E0B59E; border: none; 
+}
+
+.ynbutton.rating-none { 
+    background-color: #DCDFF3; border: none; 
+}
+
 
 /* Styles the box containing the button panel */
 .question-imagebox { 
@@ -298,3 +312,8 @@ area {
         margin-left: 15px;
         margin-bottom: 5px;
 }
+
+.tooltip { z-index: 100; background-color: #fffacd;
+	padding: 2px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px;
+	-moz-box-shadow: 3px 3px 3px #888; -webkit-box-shadow: 3px 3px 3px #888; box-shadow: 3px 3px 3px #888;
+	border: 1px solid #BBB; font-weight: normal; color: #555; font-size: 1.3em; }

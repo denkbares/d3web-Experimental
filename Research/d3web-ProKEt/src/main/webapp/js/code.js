@@ -24,7 +24,6 @@ var initialization = true;
 
 function setup() {
 	
-      
     // load questionnaires and questions into memory
     questionnaires = $('#content [id^="qu_"]');
     questionsDirty = $('#content [id^="q_"]');
@@ -87,10 +86,12 @@ function setup() {
     
     // handle one question dialog
     if(oqd) {
+        
         // init oqd stuff
         OQDhideTopElement();
         OQDexpandFirstQuestion();
-       
+        generate_tooltip_functions_ynbuttons();
+        hide_all_tooltips();
     }
     
     if(logging){
@@ -124,7 +125,8 @@ function initUEQFreeFeedback(){
     
     $('#UE_QUIRating').unbind('focus').focus(function(event) {
         var text = $("#UE_QUIRating").val();
-        if(text.indexOf("Hierarchisch ODER Einfrage ODER Beide gleich")
+        
+        if(text.indexOf("Dialog 1 ODER Dialog 2 ODER Beide gleich")
             !=-1){
             $('#UE_QUIRating').val("");
         }
@@ -148,6 +150,7 @@ function handleUEQ(){
 
 function handleFB(){
     $('#FFButton').unbind('click').click(function(event) {
+        $("#fffeedback").val("");
         $("#jqFFDialog").dialog("open");
     });
 }
@@ -442,7 +445,7 @@ function endsWith(fullString, testString) {
  * Hide all the tooltip elements, starting with an "tt-"
  */
 function hide_all_tooltips() {
-    $("[id^='tt-']").hide(0);
+    $("[id*='tt-']").hide(0);
     tooltipShown = undefined;
     tooltipShownTrigger = undefined;
 }
@@ -763,10 +766,20 @@ function prepare_question_marking() {
  * @param id
  */
 function tooltip_over(id) {
+    
     targetid = "tt-" + id;
     	
-    //target = $("#tt-" + id).filter(":not(:animated)");
-    var target = $("[id$=" + targetid + "]");
+    var target;
+    
+    // catch details button in oqd --> DIRTY HACK
+    if(id.indexOf("detail")!=-1){
+        target = $("#" +id);
+       
+    } else {
+        //target = $("#tt-" + id).filter(":not(:animated)");
+        target = $("[id$=" + targetid + "]");
+    }
+        
              
     if (target.size() == 0) {
         return;
@@ -838,14 +851,19 @@ function tooltip_move(e) {
 
 
 function tooltip_out(object) {
-	
+    
     // if a jquery tooltip or
     if (object instanceof jQuery) {
         target = object;
     } else {
 		
-        // a specifically marked element
+        if($("#"+object).attr("id").indexOf("detail")!=-1){
+            target = $("#"+object);
+        } else {
+                // a specifically marked element
         target = $("#tt-" + object);
+        }
+        
     }
 
     target.hide(500);
@@ -872,6 +890,7 @@ function generate_tooltip_functions() {
     // go through all existing tooltip triggers
     triggers.each(function() {
         	
+               
         // complete class name
         var classComplete = $(this).attr("class");
         var id;
@@ -881,7 +900,10 @@ function generate_tooltip_functions() {
             id = "feedback";
         } else if(classComplete.indexOf("endstudy-tt-trigger") != -1) {
             id = "endstudy";
-        } else {
+        } else if(classComplete.indexOf("detailButton") != -1) {
+            id = $(this).attr("id").replace("detail-", "detail-tt-");
+        }
+        else {
             id = classComplete.replace("-tt-trigger", "");
         }
         
@@ -1411,6 +1433,8 @@ function handleOQYNQuestions(fullId, rating){
     questionEl.children().first().children().closest('[id^=detail]').addClass("hide");
     questionEl.children().first().children().closest('[id^=auxpanel]').removeClass("show");
     questionEl.children().first().children().closest('[id^=detail]').removeClass("show");
+    
+    hide_all_tooltips();
 }
 
 
@@ -1550,6 +1574,8 @@ function stepIntoDetail(questionId){
         question.children().first().children().closest('[id^=detail]').addClass("hide");
         question.children().first().children().closest('[id^=auxpanel]').removeClass("show");
         question.children().first().children().closest('[id^=detail]').removeClass("show");
+        
+        hide_all_tooltips();
     }
 }
 
@@ -1569,4 +1595,588 @@ function toggleDetails(q){
     question.children().first().children().closest('[id^=detail]').addClass("show");
     question.children().first().children().closest('[id^=auxpanel]').removeClass("hide");
     question.children().first().children().closest('[id^=detail]').removeClass("hide");
+}
+
+
+function prepareQuestionLogging(question, value){
+    if(question.indexOf("ynNo-" != -1)){
+        question = question.replace("ynNo-", "");
+    } 
+    if(question.indexOf("ynYes-" != -1)){
+        question = question.replace("ynYes-", "");
+    } 
+    if(question.indexOf("ynUn-" != -1)){
+        question = question.replace("ynUn-", "");
+    }
+    if(question.indexOf("ynNan-" != -1)){
+        question = question.replace("ynNan-", "");
+    }
+    if(question.indexOf("panel-" != -1)){
+        question = question.replace("panel-", "");
+    }
+    
+    var qtext = $('#solutiontitle-' + question).html();
+    var qtextSplit = qtext.split(" ");
+    var questiontext = qtext.replace(qtextSplit[0] + " ", "");
+    
+    var valueVerbalization = "";
+    
+    switch(value){
+        case "1":
+            valueVerbalization = "Ja";
+            break;
+        case "2":
+            valueVerbalization = "Unentschieden";
+            break;
+        case "3":
+            valueVerbalization = "Nein";
+            break;
+        case "0":
+            valueVerbalization = "Unbewertet";
+            break;
+    }
+    
+    ue_logQuestionValueClariPrototype(questiontext, valueVerbalization);
+}
+
+function storeUserVal(question, value){
+    
+    switch(value){
+        case "1":
+            $(question).addClass("uv1").removeClass("uv2").removeClass("uv3").removeClass("uv0");
+            break;
+        case "2":
+            $(question).addClass("uv2").removeClass("uv1").removeClass("uv3").removeClass("uv0");
+            break;
+        case "3":
+            $(question).addClass("uv3").removeClass("uv2").removeClass("uv1").removeClass("uv0");
+            break;
+        case "0":
+            $(question).addClass("uv0").removeClass("uv2").removeClass("uv3").removeClass("uv1");
+            break;
+        
+    }
+        
+}
+
+// set the color for the area indicating the system-propagated value
+function setPropagationColor(question, userval){
+    
+    var prop = $("#propagation-"+question.attr("id"));
+    var propColor = calculateRatingForQuestion(question);
+    
+    if(propColor != 0 && propColor != userval){
+        
+        // visually present the "error" to the user
+        if((propColor=="1" && userval=="3") || (propColor=="3" && userval=="1")){
+            prop.addClass("prop1and3");
+            prop.removeClass("prop1and2");
+            prop.removeClass("prop2and3");
+        } 
+        else if((propColor=="1" && userval=="2") || (propColor=="2" && userval=="1")){
+            prop.addClass("prop1and2");
+            prop.removeClass("prop1and3");
+            prop.removeClass("prop2and3");
+        } 
+        else if((propColor=="2" && userval=="3") || (propColor=="3" && userval=="2")){
+            prop.addClass("prop2and3");
+            prop.removeClass("prop1and2");
+            prop.removeClass("prop1and3");
+        } 
+       
+        // set the calculated value of the inner questions as question main rating
+        // for further calculation
+        setColorForQuestion($("#" + question.attr("id")), question, propColor);
+    }
+    if(userval != propColor && propColor != 0 && userval != undefined && userval != 0){
+        prop.removeClass("hide");
+        prop.addClass("show");
+        // needed to keep the propagation tooltip hidden!
+        prop.children().first().addClass("hide");
+        
+    } else {
+        prop.removeClass("show");
+        prop.addClass("hide");
+    }
+    //removePropagationInfoInQuestionForFirst();
+  
+}
+
+function setPropColor(target, color){
+    // remove existing rating=coloring classes
+    target.removeClass('rating-low rating-medium rating-high');
+    switch (color) {
+        case "1": // approve --> green
+            target.addClass("rating-high");
+            //imgTarget.attr('src', "img/panel1.gif");
+            break;
+            
+        // in case the user retracts the answer (gray) check, if 
+        // there is a calculated rating. If not, set gray
+        case "0": // undecided --> transparent
+            break;
+        case "2": // suggested  --> yellow
+            target.addClass("rating-medium");
+            //imgTarget.attr('src', "img/panel2.gif");
+            break;
+        case "3": // rejected -_> red
+            target.addClass("rating-low");
+            //imgTarget.attr('src', "img/panel3.gif");
+            break;
+    }
+}
+
+/*
+ * Sets the given rating for the given target question
+ */
+function setColorForQuestion(target, imgTarget, color){
+    
+    // remove existing rating=coloring classes
+    target.removeClass('rating-low rating-medium rating-high');
+    
+    switch (color) {
+        case "1": // approve --> green
+            target.addClass("rating-high");
+            //imgTarget.attr('src', "img/panel1.gif");
+            break;
+            
+        // in case the user retracts the answer (gray) check, if 
+        // there is a calculated rating. If not, set gray
+        case "0": // undecided --> transparent
+            
+            var checkCol = calculateRatingForQuestion(target);
+            setColorForQuestionHelper(target, imgTarget, checkCol);
+            break;
+        case "2": // suggested  --> yellow
+            target.addClass("rating-medium");
+            //imgTarget.attr('src', "img/panel2.gif");
+            break;
+        case "3": // rejected -_> red
+            target.addClass("rating-low");
+            //imgTarget.attr('src', "img/panel3.gif");
+            break;
+    }
+}
+
+// similar to setColorForQuestion, except that no 0-option exists
+function setColorForQuestionHelper(target, imgTarget, color){
+    
+    // remove existing rating=coloring classes
+    target.removeClass('rating-low rating-medium rating-high');
+    
+    switch (color) {
+        case "1": // approve --> green
+            target.addClass("rating-high");
+            //imgTarget.attr('src', "img/panel1.gif");
+            break;
+        case "2": // suggested  --> yellow
+            target.addClass("rating-medium");
+            //imgTarget.attr('src', "img/panel2.gif");
+            break;
+        case "3": // rejected -_> red
+            target.addClass("rating-low");
+            //imgTarget.attr('src', "img/panel3.gif");
+            break;
+    }
+}
+
+
+
+/**
+* Calculates the rating for the given question and returns
+* the corresponding color/rating value: 0=undecided, 1=approve, 2=suggest, 3=reject
+*/
+function calculateRatingForQuestion(question){
+    
+    var ocPar = question.hasClass('AND');    // parent has AND connection
+    var mcPar = question.hasClass('OR');    // parent has OR connection
+    var color; 
+        
+    // go through all child-questions and read their ratings into a var
+    var ratings = "";
+        
+    $("#sub-" + question.attr('id')).children("div[id^='q_']").each(
+        function() {
+            var high = $(this).hasClass("rating-high");
+            var med = $(this).hasClass("rating-medium");    
+            var low = $(this).hasClass("rating-low");
+                
+            if(high){
+                ratings += "1 ";
+            } else if (med){
+                ratings += "2 ";
+            } else if (low){
+                ratings += "3 ";
+            } else {
+                ratings += "0 ";
+            }
+        });
+          
+    // AND case
+    if(ocPar){
+       
+        // handle OC questions here, i.e. questions where all children
+        // need to be confirmed to get the parent confirmed
+        if(ratings.indexOf("1") != -1 &&
+            ratings.indexOf("0")==-1 && ratings.indexOf("2")==-1 && ratings.indexOf("3")==-1){
+            color = "1";  // all approved, then parent approve
+        } else if (ratings.indexOf("2") != -1 && 
+            ratings.indexOf("0")==-1 && ratings.indexOf("3")==-1){
+            color = "2";  // all known and at least one suggested, suggest parent
+        } else if(ratings.indexOf("2") != -1 && ratings.indexOf("0") != -1 
+            && ratings.indexOf("3")==-1 ){
+            color = 2;
+        } else if (ratings.indexOf("3") != -1 ){
+            color = "3";    // one rejected, reject parent
+        } else {
+            color = "0";
+        }
+           
+    } 
+    // OR case: here, one single confirmed (1) child is enough to get the
+    // parent confirmed
+    else if (mcPar){
+        
+        if(ratings.indexOf("1") != -1){ 
+            color = "1";    // one confirmed, confirm par
+        }
+        else if (ratings.indexOf("2") != -1 && ratings.indexOf("3") != -1 
+            && ratings.indexOf("1") == -1 && ratings.indexOf("0") == -1){
+            color = "2";    // some undecided and some rejected, undecide parent
+        } else if(ratings.indexOf("2") != -1 && ratings.indexOf("1") == -1
+            && ratings.indexOf("0") == -1 && ratings.indexOf("3") == -1){
+            color = "2";
+        }        
+        else if (ratings.indexOf("3") != -1 && ratings.indexOf("2") == -1
+            && ratings.indexOf("1") == -1 && ratings.indexOf("0") == -1){
+            color = "3";    // all rejected, reject parent
+        } else {
+            color = "0";
+        }
+    }
+    
+    return color;
+}
+
+/*
+* Compares the user-chosen and kbs-calculated color/rating values
+*/
+function equalUserAndKBSRating(question, chosenColor){
+    
+    var col = chosenColor+"";
+    if(col != calculateRatingForQuestion(question)){
+        return false;
+    }
+    
+    
+    return true;
+}
+
+
+
+/**
+* Transfer coloring (in hierarchy dialog) also to parent quesitons
+* @param object the object from where to start marking parents
+* @param skip_self flag indicating whether element itself should
+* 		also be processed
+*/
+function h4boxes_mark(object, skip_self) {
+
+    // check object itself unless skip_self
+    if (!skip_self) {
+		
+        var color; 
+        
+        // retrieve target element and target image
+        var target = $("#" + $(object).attr('id'));
+        
+        var imgTarget = $("#panel-" + $(object).attr('id'));
+        
+        color = calculateRatingForQuestion(object);
+        
+       
+        if(color=="0"){
+            
+            if(object.hasClass("uv1")){
+                color = "1"; 
+            } else if(object.hasClass("uv2")){
+                color = "2"; 
+            } else if(object.hasClass("uv3")){
+                color = "3"; 
+            } else if(object.hasClass("uv0")){
+                color = "0"; 
+            } 
+            
+        }
+        
+        setColorForQuestion(target, imgTarget, color);
+        setPropagationColor(target);
+        // set image attribute to the correctly selected one
+        imgTarget.attr('src', "img/pane.png");
+    }
+
+    // get first parent div
+    var walking = $(object).parent("div:first");
+    var reg = new RegExp(/^sub-.*$/);
+    var counter = 0;
+	
+    // solange die ID von walking nicht dem Pattern sub- s.o. entspricht    
+    while (!reg.test($(walking).attr('id'))) {
+        // gehe weiter und ... zähle hoch
+        counter += 1;
+        if (counter > 6) // falls mehr als 6 mal probiert (dann kommt nix mehr)
+            break; // break if there is no more parent question
+        // ... setze das zu testende div auf das parent div
+        walking = $(walking).parent("div");
+    }
+
+    // get first of walking's parents of element and call 
+    // recursively, also resetting the parents coloring
+    $(walking).parent(":first").each(function() {
+        h4boxes_mark($(this), false);
+    });
+    
+    
+}
+
+
+// TODO: refactor this one, it is similarly used in code.js and clariHie.js
+// only in code.js more generally
+function generate_tooltip_functions_propagation() {
+	
+    var triggers = $("[class*='-tt-trigger-prop']");
+           
+    // if mouse is moved over an element define potential tooltips position
+    $(document).mousemove(function(e) {
+        tooltip_move(e);
+    });
+	
+    // go through all existing tooltip triggers
+    triggers.each(function() {
+        	
+        var id = $(this).attr("id").replace("propagation-", "");
+        
+        var ttstart, ttend;
+        var now;
+                
+        $(this).unbind('mouseover').mouseover(function() {
+            //if logging is activated get the time tooltip is triggered
+            if(logging){
+                now = new Date();
+                ttstart = now.getTime();
+            }
+            
+            tooltip_over_prop(id);
+        });
+     
+        $(this).unbind('mouseout').mouseout(function() {
+            //if logging is activated get the time tooltip is deactivated again
+            if(logging){
+                now = new Date();
+                ttend = now.getTime();
+                ue_logInfoPopup(ttstart, ttend, $(this));
+            }
+          
+            tooltip_out_prop(id);
+            
+        });
+    });
+}
+
+function tooltip_over_prop(id) {
+    targetid = "tt-propagation-" + id;
+    	
+    var target = $("[id$=" + targetid + "]");
+             
+    if (target.size() == 0) {
+        return;
+    }
+	
+    // if target element is not currently shown
+    if (target !== tooltipShown) {
+		
+        // hide old tooltip if existing
+        if (tooltipShown !== undefined) {
+            tooltip_out(tooltipShown);
+        }
+		
+        // store currently shown tooltip and tooltipShownTrigger
+        tooltipShown = target;
+		
+        target.css("position", "absolute");
+        var height = target.height();
+        var width = target.width();
+        if (height > 0 && width > 0 && height > width) {
+            target.css("width", height);
+            target.css("height", width);
+        }
+        //tooltip_move(element);
+
+        target.fadeIn(300);
+        setLeftOffset(target);
+    }
+}
+
+function tooltip_out_prop(object) {
+	
+    // if a jquery tooltip or
+    if (object instanceof jQuery) {
+        target = object;
+    } else {
+		
+        // a specifically marked element
+        target = $("#tt-propagation-" + object);
+    }
+
+    target.hide(500);
+    tooltipShown = undefined;
+//tooltipShownTrigger = undefined;
+}
+
+function generate_tooltip_functions_ynbuttons(){
+    triggers = $("[class*='-tt-trigger-ynbutton']");
+	
+    // if mouse is moved over an element define potential tooltips position
+    $(document).mousemove(function(e) {
+        tooltip_move(e); // in code.js
+    });
+	
+    // go through all existing tooltip triggers
+    triggers.each(function() {
+		
+        var ttstart, ttend;
+        var now;
+                
+        $(this).unbind('mouseover').mouseover(function() {
+            //if logging is activated get the time tooltip is triggered
+            if(logging){
+                now = new Date();
+                ttstart = now.getTime();
+            }
+            
+            var fullId = $(this).attr("id");
+           
+            if(fullId.indexOf("ynYes")!=-1){
+                id = $(this).attr("id").replace("ynYes-", "");
+                tooltip_over_hierarchy_buttons(id, "1");
+            } else if(fullId.indexOf("ynNo")!=-1){
+                id = $(this).attr("id").replace("ynNo-", "");
+                tooltip_over_hierarchy_buttons(id, "3");
+            } else if(fullId.indexOf("ynUn")!=-1){
+                id = $(this).attr("id").replace("ynUn-", "");
+                tooltip_over_hierarchy_buttons(id, "2");
+            } else if(fullId.indexOf("ynNan")!=-1){
+                id = $(this).attr("id").replace("ynNan-", "");
+                tooltip_over_hierarchy_buttons(id, "0");
+            }
+        });
+
+        $(this).unbind('mouseout').mouseout(function() {
+            //if logging is activated get the time tooltip is deactivated again
+            if(logging){
+                now = new Date();
+                ttend = now.getTime();
+                ue_logInfoPopup(ttstart, ttend, $(this));
+            }
+            
+            var fullId = $(this).attr("id");
+            if(fullId.indexOf("ynYes")!=-1){
+                id = $(this).attr("id").replace("ynYes-", "");
+                tooltip_out_hierarchy_buttons(id, "1");
+            } else if(fullId.indexOf("ynNo")!=-1){
+                id = $(this).attr("id").replace("ynNo-", "");
+                tooltip_out_hierarchy_buttons(id, "3");
+            } else if(fullId.indexOf("ynUn")!=-1){
+                id = $(this).attr("id").replace("ynUn-", "");
+                tooltip_out_hierarchy_buttons(id, "2");
+            } else if(fullId.indexOf("ynNan")!=-1){
+                id = $(this).attr("id").replace("ynNan-", "");
+                tooltip_out_hierarchy_buttons(id, "0");
+            }
+        });
+    });
+}
+
+/* Hide the tooltip */
+function tooltip_out_hierarchy_buttons(object, button) {
+	
+    switch(button){
+        case "1":
+            targetid = "tt-" + object + "-Y";
+            break;
+        case "2":
+            targetid = "tt-" + object + "-U";
+            break;
+        case "3":
+            targetid = "tt-" + object + "-NO";
+            break;
+        case "0":
+            targetid = "tt-" + object + "-NAN";
+            break;
+    }
+
+    // if a jquery tooltip or
+    if (object instanceof jQuery) {
+        target = object;
+    } else {
+		
+        // a specifically marked element
+        target = $("#" + targetid);
+    }
+
+    target.hide(500);
+    tooltipShown = undefined;
+}
+
+/* Show the tooltips for buttons in yn questions in clarihie */
+function tooltip_over_hierarchy_buttons(id, button) {
+   
+    switch(button){
+        case "1":
+            targetid = "tt-" + id + "-Y";
+            break;
+        case "2":
+            targetid = "tt-" + id + "-U";
+            break;
+        case "3":
+            targetid = "tt-" + id + "-NO";
+            break;
+        case "0":
+            targetid = "tt-" + id + "-NAN";
+            break;
+    }
+    
+   	
+    //target = $("#tt-" + id).filter(":not(:animated)");
+    var target = $("[id^=" + targetid + "]");
+        
+        
+        
+    if (target.size() == 0) {
+        return;
+    }
+	
+    // if target element is not currently shown
+    if (target !== tooltipShown) {
+		
+        // hide old tooltip if existing
+        if (tooltipShown !== undefined) {
+            tooltip_out(tooltipShown);
+        }
+		
+        // store currently shown tooltip and tooltipShownTrigger
+        tooltipShown = target;
+		
+        target.css("position", "absolute");
+        var height = target.height();
+        var width = target.width();
+        if (height > 0 && width > 0 && height > width) {
+            target.css("width", height);
+            target.css("height", width);
+        }
+        //tooltip_move(element);
+
+        target.fadeIn(300);
+        setLeftOffset(target);
+    }
 }

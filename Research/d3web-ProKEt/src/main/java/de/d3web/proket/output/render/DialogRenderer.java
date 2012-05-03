@@ -73,6 +73,11 @@ public class DialogRenderer extends Renderer {
             cc.js.add("clariHieInit();", 2);
         }
         
+        if(dialog.getType().equals("OQ")){
+             cc.js.add("setup();", 2);
+            cc.js.add("remark();", 2);
+        }
+        
         cc.js.add("building = false;", 2);
        
         cc.js.add("generate_tooltip_functions();", 3);

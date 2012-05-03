@@ -7,6 +7,10 @@ Studies based on Prototypes
     --> adapt in DialogServlet the folder for logfiles
     --> adapt index.jsp to point to respective dialog from beginning on
         - e.g. plain index.jsp or indexOQD.jsp with pre-browser test
+- create log folders on server and give tomcat the write permission:
+    mkdir G1-Data (in /var/lib/tomcat6/)
+    chown -R tomcat6:tomcat6 /var/lib/tomcat6/G1-Data/
+
 
 - Preprocess log data with UEStudyAnalyst.java (or equal own analyzer file)
     --> results in csv with basic log data

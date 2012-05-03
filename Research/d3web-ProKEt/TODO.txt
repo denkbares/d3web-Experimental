@@ -154,6 +154,7 @@ DONE - Panel Areas vergrößern/anpassen --> CSS BUTTONS
     - PDFLINK / .pdf
     - LINK / .link
     - WWWLINK / .wwwlink
+- Create local webapp "Juri"
 
 - neuer Fall, speichern, reset etc
 

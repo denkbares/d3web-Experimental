@@ -14,16 +14,16 @@ public class QuickParser {
 
 	
 	public static final char LINE_BREAK = '\n';
-        private static String wordhtmlFinalOutput =
+    /*    private static String wordhtmlFinalOutput =
             "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_Mietrecht_Teil1.html";
     private static String parsedJuriXml =
-            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/juriMietrechtT1.xml";
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/juriMietrechtT1.xml";*/
 	
-      /*  private static String wordhtmlFinalOutput =
-            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_VTEST.html";
-    private static String parsedJuriXml =
-            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/juriVTEST.xml";
-    */
+        private static String wordhtmlFinalOutput =
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_M1.html";
+        private static String parsedJuriXml =
+            "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/juriMietrechtT1_neu.xml";
+    
     
 	public QuickParser() {
 	}
@@ -33,9 +33,10 @@ public class QuickParser {
 	}
 	
 	
+        /* extract and write information from question "ERLÄUTERUNG" part */
 	public void extractQuestionInformations(String text, QuestionManager qm) {
             
-                /* preprocess pdf link definitions : replace with HTML representation */
+                /* preprocess PDF link definitions : replace with HTML representation */
                 if (text.contains("[LINK:")){
                     
                     // get the linked-doc name
@@ -54,7 +55,7 @@ public class QuickParser {
                     }
                 }
                 
-                /* preprocess links to other wepapp parts */
+                /* preprocess LINKS to other WEBAPP parts */
                 if (text.contains("[WEBLINK:")){
                     
                     // get the linked-doc name

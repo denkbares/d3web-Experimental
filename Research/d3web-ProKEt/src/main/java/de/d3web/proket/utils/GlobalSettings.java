@@ -83,7 +83,9 @@ public class GlobalSettings {
     /*
      * Save log files
      */
-    private String logFolder = "";
+    private String logBaseFolder = "";
+    private String logSubFolder = "";
+    
     private boolean initLog = false;
     private String questionCount = "";
 
@@ -178,12 +180,22 @@ public class GlobalSettings {
         return this.servletBasePath;
     }
 
-    public void setLogFolder(String log) {
-        logFolder = log;
+    public void setLogBaseFolder(String basefolder) {
+        logBaseFolder = basefolder;
     }
 
+    public void setLogSubFolder(String subfolder){
+        this.logSubFolder = subfolder;
+    }
+    
     public String getLogFolder() {
-        return this.logFolder;
+        if(!this.logBaseFolder.equals("") &&
+                !this.logSubFolder.equals("")){
+            return 
+                    logBaseFolder + logSubFolder;
+        } else {
+            return this.logBaseFolder;
+        }
     }
 
     public int getLocaleIdentifier() {

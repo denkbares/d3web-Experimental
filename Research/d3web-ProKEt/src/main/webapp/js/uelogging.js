@@ -444,7 +444,7 @@ function ue_logDiagnosis(){
     
     var rating;
     var id;
-    var rootId = retrieveRootQuestionIdInHierarchyPrototype()
+    var rootId = $("[id^=dialog] > [id^=q_]").first().attr("id");
     
     // TODO: refactor that both dialogs have "solutiontext"; then
     // the if/else needs to be queried otherwise 
