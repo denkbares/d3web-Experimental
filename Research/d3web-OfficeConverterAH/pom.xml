@@ -9,7 +9,7 @@
         <version>0.2-SNAPSHOT</version>
     </parent>
         
-    <groupId>d3.uniwue.officeconverterahmaven</groupId>
+    <groupId>de.uniwue.officeconverterahmaven</groupId>
     <artifactId>d3web-OfficeConverterAHMaven</artifactId>
     <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
