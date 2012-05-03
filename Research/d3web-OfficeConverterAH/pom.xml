@@ -10,7 +10,7 @@
     </parent>
         
     <groupId>d3.uniwue.officeconverterahmaven</groupId>
-    <artifactId>OfficeConverterAHMaven</artifactId>
+    <artifactId>d3web-OfficeConverterAHMaven</artifactId>
     <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
