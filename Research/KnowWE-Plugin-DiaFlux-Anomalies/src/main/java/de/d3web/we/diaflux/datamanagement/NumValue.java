@@ -3,14 +3,14 @@ package de.d3web.we.diaflux.datamanagement;
 import java.util.LinkedList;
 import java.util.List;
 
-public class NumValue extends NumericInterval implements AllValue {
+public class NumValue extends NumericInterval implements AllValue<NumValue> {
 
 	public NumValue(double min, double max, boolean minClosed, boolean maxClosed) {
 		super(min, max, minClosed, maxClosed);
 	}
 
 	@Override
-	public boolean intersects(AllValue v) {
+	public boolean intersects(NumValue v) {
 		if (!(v instanceof NumValue)) return false;
 		NumValue nI = (NumValue) v;
 		if (max > nI.getMin() && min < nI.getMax()) {
@@ -26,15 +26,14 @@ public class NumValue extends NumericInterval implements AllValue {
 	}
 
 	@Override
-	public boolean containsValue(AllValue v) {
-		if(!(v instanceof NumValue))
-			return false;
+	public boolean containsValue(NumValue v) {
+		if (!(v instanceof NumValue)) return false;
 		NumericInterval nI = (NumericInterval) v;
 		return super.contains(nI);
 	}
 
 	@Override
-	public AllValue intersectWith(AllValue v) {
+	public NumValue intersectWith(NumValue v) {
 		NumValue nI = (NumValue) v;
 		NumValue result = new NumValue(this.min, this.max, this.minClosed, this.maxClosed);
 		if (min < nI.getMin()) {
@@ -68,7 +67,7 @@ public class NumValue extends NumericInterval implements AllValue {
 	}
 
 	@Override
-	public AllValue mergeWith(AllValue v) {
+	public NumValue mergeWith(NumValue v) {
 		if (!(v instanceof NumValue)) return this;
 		NumValue result = new NumValue(this.min, this.max, this.minClosed, this.maxClosed);
 		NumValue nI = (NumValue) v;
@@ -89,6 +88,7 @@ public class NumValue extends NumericInterval implements AllValue {
 		return result;
 	}
 
+	@Override
 	public String toString() {
 		String result = "NumValue: ";
 		result += super.toString();
@@ -96,7 +96,7 @@ public class NumValue extends NumericInterval implements AllValue {
 	}
 
 	@Override
-	public List<NumValue> substract(AllValue v) {
+	public List<NumValue> substract(NumValue v) {
 		List<NumValue> result = new LinkedList<NumValue>();
 		List<NumValue> neg_v = ((NumValue) v).negate();
 		for (NumValue numV : neg_v) {

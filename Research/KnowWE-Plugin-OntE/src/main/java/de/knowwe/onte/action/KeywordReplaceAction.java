@@ -31,7 +31,7 @@ import de.knowwe.core.action.KDOMReplaceTermNameAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.manchester.types.MisspelledSyntaxConstruct;
 
 /**
@@ -64,7 +64,7 @@ public class KeywordReplaceAction extends AbstractAction {
 
 		// Prepare new text, urldecode and strip whitespaces that JSPWiki might
 		// have added
-		newText = KnowWEUtils.urldecode(newText);
+		newText = Strings.decodeURL(newText);
 		newText = newText.replaceAll("\\s*$", "");
 
 		Map<String, String> nodesMap = new HashMap<String, String>();

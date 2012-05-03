@@ -1,7 +1,5 @@
 package de.knowwe.lod.taghandler;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +10,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class GetDataAppendHandler implements PageAppendHandler {
@@ -27,14 +26,7 @@ public class GetDataAppendHandler implements PageAppendHandler {
 				QueryRow row = result.next();
 
 				String title = row.getValue("x").toString();
-
-				try {
-					title = URLDecoder.decode(title, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
-
+				title = Strings.decodeURL(title);
 				title = title.substring(title.indexOf("#") + 1);
 				if (Environment.getInstance().getWikiConnector().doesArticleExist(title)) {
 					titleList.add(title);

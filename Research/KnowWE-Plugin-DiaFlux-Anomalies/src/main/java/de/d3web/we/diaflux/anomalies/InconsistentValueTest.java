@@ -89,9 +89,9 @@ public class InconsistentValueTest extends AbstractCITest {
 		if (node instanceof EndNode) {
 			status.put(node, Status.PROCESSING);
 			for (ComposedNode cNode : getComposedfromExit((EndNode) node)) {
-//				for (Node fNode : getFollowingNodes(cNode)) {
-					result += visit(cNode, status, unusedValues);
-//				}
+				// for (Node fNode : getFollowingNodes(cNode)) {
+				result += visit(cNode, status, unusedValues);
+				// }
 			}
 		}
 		List<String> unused = new LinkedList<String>();
@@ -121,7 +121,7 @@ public class InconsistentValueTest extends AbstractCITest {
 
 			Node nextNode = edge.getEndNode();
 			if (Status.UNVISITED == status.get(nextNode)) {
-				if(nextNode instanceof ComposedNode) {
+				if (nextNode instanceof ComposedNode) {
 					StartNode sNode = getStartFromComposed((ComposedNode) nextNode);
 					if (sNode != null) {
 						nextNode = sNode;
@@ -158,7 +158,7 @@ public class InconsistentValueTest extends AbstractCITest {
 		}
 		return result;
 	}
-	
+
 	private StartNode getStartFromComposed(ComposedNode node) {
 		String calledFlow = node.getCalledFlowName();
 		String calledStart = node.getCalledStartNodeName();
@@ -192,14 +192,6 @@ public class InconsistentValueTest extends AbstractCITest {
 					}
 				}
 			}
-		}
-		return result;
-	}
-
-	private List<Node> getFollowingNodes(Node node) {
-		List<Node> result = new LinkedList<Node>();
-		for (Edge e : node.getOutgoingEdges()) {
-			result.add(e.getEndNode());
 		}
 		return result;
 	}

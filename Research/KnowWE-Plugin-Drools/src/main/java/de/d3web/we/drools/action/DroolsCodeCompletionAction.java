@@ -24,6 +24,7 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -39,9 +40,8 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 
 		// Get committed query and add it to JSON Object
 		String query = context.getParameter("query");
-		query = KnowWEUtils.urldecode(query);
+		query = Strings.decodeURL(query);
 		json.addProperty("query", query);
-
 
 		// ignore empty lines
 		if (!query.matches("\\s*")) {
@@ -52,24 +52,15 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 			// if only 1 word is there, e.g. get or set
 			if (!query.contains(" ")) {
 				String output;
-				if (checkKeywordIgnoreCase(query, "set"))
-					output = "set";
-				else if (checkKeywordIgnoreCase(query, "get"))
-					output = "get";
-				else if (checkKeywordIgnoreCase(query, "fire"))
-					output = "fire";
-				else if (checkKeywordIgnoreCase(query, "reset"))
-					output = "reset";
-				else if (checkKeywordIgnoreCase(query, "help"))
-					output = "help";
-				else if (checkKeywordIgnoreCase(query, "clear"))
-					output = "clear";
-				else if (checkKeywordIgnoreCase(query, "store"))
-					output = "store";
-				else if (checkKeywordIgnoreCase(query, "load"))
-					output = "load";
-				else
-					output = "";
+				if (checkKeywordIgnoreCase(query, "set")) output = "set";
+				else if (checkKeywordIgnoreCase(query, "get")) output = "get";
+				else if (checkKeywordIgnoreCase(query, "fire")) output = "fire";
+				else if (checkKeywordIgnoreCase(query, "reset")) output = "reset";
+				else if (checkKeywordIgnoreCase(query, "help")) output = "help";
+				else if (checkKeywordIgnoreCase(query, "clear")) output = "clear";
+				else if (checkKeywordIgnoreCase(query, "store")) output = "store";
+				else if (checkKeywordIgnoreCase(query, "load")) output = "load";
+				else output = "";
 
 				// add suggestion to JSON Object
 				JsonArray a = new JsonArray();
@@ -81,7 +72,8 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 				// Input suggestions
 				// TODO: We have to check whether the '=' is quoted and is part
 				// of the Input's name
-			} else if (!query.contains("=") && (query.startsWith("set") || query.startsWith("get"))) {
+			}
+			else if (!query.contains("=") && (query.startsWith("set") || query.startsWith("get"))) {
 
 				String action = query.substring(0, query.indexOf(" ")).trim();
 				String object = query.substring(query.indexOf(" ") + 1).trim();
@@ -90,7 +82,8 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 
 				if (action.equals("set")) {
 					input = getNonSolutionInputSuggestions(context, object);
-				} else {
+				}
+				else {
 					input = getInputSuggestions(context, object);
 				}
 
@@ -101,7 +94,8 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 							.escapeHTML(action + " " + s))));
 
 				json.add("suggestions", a);
-			} else if (query.startsWith("set")) {
+			}
+			else if (query.startsWith("set")) {
 				// Value suggestions
 				// DO NOT forget to trim, otherwise code completion won't work
 				String action = query.substring(0, query.indexOf(" ")).trim();
@@ -118,7 +112,8 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 							.escapeHTML(action + " " + object + " = " + s))));
 
 				json.add("suggestions", a);
-			} else if (query.startsWith("load")) {
+			}
+			else if (query.startsWith("load")) {
 				// Value suggestions
 				// DO NOT forget to trim, otherwise code completion won't work
 				String action = query.substring(0, query.indexOf(" ")).trim();
@@ -158,7 +153,6 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 		return true;
 	}
 
-
 	/**
 	 * returns all inputs
 	 */
@@ -170,8 +164,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 
 		for (Object o : factsStore.values()) {
 			if (o instanceof AbstractFact) {
-				if (((AbstractFact) o).getName().toLowerCase().startsWith(object.toLowerCase()))
-					suggestions.add(((AbstractFact) o).getName());
+				if (((AbstractFact) o).getName().toLowerCase().startsWith(object.toLowerCase())) suggestions.add(((AbstractFact) o).getName());
 			}
 		}
 		return suggestions;
@@ -189,8 +182,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 
 		for (Object o : factsStore.values()) {
 			if (o instanceof AbstractFact && !(o instanceof SolutionInput)) {
-				if (((AbstractFact) o).getName().toLowerCase().startsWith(object.toLowerCase()))
-					suggestions.add(((AbstractFact) o).getName());
+				if (((AbstractFact) o).getName().toLowerCase().startsWith(object.toLowerCase())) suggestions.add(((AbstractFact) o).getName());
 			}
 		}
 		return suggestions;
@@ -210,8 +202,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 			ChoiceInput input = (ChoiceInput) factsStore.get(object);
 
 			for (TextValue textValue : input.getPossibleValues()) {
-				if (textValue.toString().toLowerCase().startsWith(value.toLowerCase()))
-					suggestions.add(textValue.toString());
+				if (textValue.toString().toLowerCase().startsWith(value.toLowerCase())) suggestions.add(textValue.toString());
 			}
 		}
 
@@ -236,12 +227,10 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 			// Search for the correct session
 			for (Section<DroolsSessionRootType> rootType : rootTypes) {
 				String sessionName = DefaultMarkupType.getAnnotation(rootType, "Name");
-				if (sessionName.toLowerCase().startsWith(value.toLowerCase()))
-					suggestions.add(sessionName);
+				if (sessionName.toLowerCase().startsWith(value.toLowerCase())) suggestions.add(sessionName);
 			}
 		}
 		return suggestions;
 	}
-
 
 }

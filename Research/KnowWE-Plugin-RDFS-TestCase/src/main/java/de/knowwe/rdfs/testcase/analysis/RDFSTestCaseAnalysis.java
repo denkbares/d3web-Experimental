@@ -18,8 +18,6 @@
  */
 package de.knowwe.rdfs.testcase.analysis;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -28,6 +26,7 @@ import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
 
+import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.testcase.Binding;
 import de.knowwe.rdfs.testcase.RDFSTestCase;
@@ -105,15 +104,8 @@ public class RDFSTestCaseAnalysis {
 		return bindings;
 	}
 
-	@SuppressWarnings("deprecation")
 	private static String processValue(String value) {
-		// TODO: ask Jochen if this is ok
-		try {
-			value = URLDecoder.decode(value, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			value = URLDecoder.decode(value);
-		}
+		value = Strings.decodeURL(value);
 		value = Rdf2GoCore.getInstance().reduceNamespace(value);
 		if (value.startsWith("lns:")) {
 			return value.substring(4);

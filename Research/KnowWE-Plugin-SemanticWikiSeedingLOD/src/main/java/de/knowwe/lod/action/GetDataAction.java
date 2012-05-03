@@ -4,8 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,6 +18,7 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.lod.ConceptType;
 import de.knowwe.lod.HermesData;
 import de.knowwe.lod.LinkedOpenData;
@@ -150,17 +149,8 @@ public class GetDataAction extends AbstractAction {
 					Sections.replaceSections(context, nodesMap);
 				}
 
-				String hermesConcept = concept;
-				String encodePerson = "";
-
-				try {
-					hermesConcept = URLEncoder.encode(hermesConcept, "UTF-8");
-					encodePerson = URLEncoder.encode(
-							"Historische Persönlichkeit", "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
+				String hermesConcept = Strings.encodeURL(concept);
+				String encodePerson = Strings.encodeURL("Historische Persönlichkeit");
 
 				String namespace = Rdf2GoCore.localns;
 				hermesConcept = namespace + hermesConcept;
@@ -208,15 +198,7 @@ public class GetDataAction extends AbstractAction {
 					HashMap<String, List<String>> inverse = var.getInverseMap();
 					StringBuffer buffy = new StringBuffer();
 
-					String encodeTopic = "";
-
-					try {
-						encodeTopic = URLEncoder.encode(HermesData.getTopicForConcept(concept),
-								"UTF-8");
-					}
-					catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
-					}
+					String encodeTopic = Strings.encodeURL(HermesData.getTopicForConcept(concept));
 
 					buffy.append("<br/><form id='lodwizard' class='layout'><table border='0' cellpadding='5' cellspacing='1'>"
 							+ "<tr><th id='conceptname' colspan='3' class='concepttopic'><a href='/KnowWE/Wiki.jsp?page="

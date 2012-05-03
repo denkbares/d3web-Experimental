@@ -27,7 +27,6 @@ import org.apache.commons.fileupload.FileItem;
 
 import de.d3web.we.taghandler.ImportKnOfficeHandler;
 import de.knowwe.core.Environment;
-import de.knowwe.core.utils.KopicWriter;
 
 public class KnOfficeUploadManager {
 

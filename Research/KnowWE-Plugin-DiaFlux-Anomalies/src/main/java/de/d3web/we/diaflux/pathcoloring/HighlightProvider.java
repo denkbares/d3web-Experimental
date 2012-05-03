@@ -7,16 +7,15 @@ import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
 
-
 public class HighlightProvider implements ToolProvider {
 
 	@Override
-	public Tool[] getTools(Section section, UserContext userContext) {
+	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		Tool refresh = getHighlightTool(section, userContext);
 		return new Tool[] { refresh };
 	}
 
-	protected Tool getHighlightTool(Section section, UserContext userContext) {
+	protected Tool getHighlightTool(Section<?> section, UserContext userContext) {
 
 		boolean dohighlighting =
 				DiaFluxTraceHighlight.checkForHighlight(userContext,

@@ -1,7 +1,5 @@
 package de.knowwe.lod.quiz.map;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,6 +7,7 @@ import java.util.List;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 
+import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class MapForConcepts {
@@ -75,17 +74,11 @@ public class MapForConcepts {
 			String latString = row.getValue("lat").toString();
 			String longString = row.getValue("long").toString();
 
-			try {
-				latString = URLDecoder.decode(latString, "UTF-8");
-				longString = URLDecoder.decode(longString, "UTF-8");
-			}
-			catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-			double latitude = Double.parseDouble(latString.replaceAll(",",
-						"."));
-			double longitude = Double.parseDouble(longString.replaceAll(
-						",", "."));
+			latString = Strings.decodeURL(latString);
+			longString = Strings.decodeURL(longString);
+
+			double latitude = Double.parseDouble(latString.replaceAll(",", "."));
+			double longitude = Double.parseDouble(longString.replaceAll(",", "."));
 
 			placemarks.add(new Placemark(null, latitude, longitude, ""));
 

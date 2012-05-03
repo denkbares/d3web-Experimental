@@ -20,8 +20,6 @@
 
 package de.knowwe.hermes.taghandler;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -35,6 +33,7 @@ import org.ontoware.rdf2go.model.node.Node;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class TimeLineHandler extends AbstractHTMLTagHandler {
@@ -94,7 +93,7 @@ public class TimeLineHandler extends AbstractHTMLTagHandler {
 				List<String> names = resultTable.getVariables();
 				for (String string : names) {
 					Node n = row.getValue(string);
-					buffy.append(URLDecoder.decode(n.toString(), "UTF-8") + "<br>");
+					buffy.append(Strings.decodeURL(n.toString()) + "<br>");
 				}
 
 			}
@@ -102,9 +101,6 @@ public class TimeLineHandler extends AbstractHTMLTagHandler {
 		catch (ModelRuntimeException e) {
 			return kwikiBundle.getString("KnowWE.owl.query.evalualtion.error") + ":"
 					+ e.getMessage();
-		}
-		catch (UnsupportedEncodingException e) {
-			return e.toString();
 		}
 
 		return buffy.toString();

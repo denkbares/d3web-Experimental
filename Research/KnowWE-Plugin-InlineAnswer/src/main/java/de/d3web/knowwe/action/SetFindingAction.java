@@ -21,8 +21,6 @@
 package de.d3web.knowwe.action;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,6 +43,7 @@ import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.event.EventManager;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.d3web.event.FindingSetEvent;
 
 public class SetFindingAction extends AbstractAction {
@@ -70,16 +69,11 @@ public class SetFindingAction extends AbstractAction {
 		String namespace = null;
 		String term = context.getParameter(Attributes.SEMANO_TERM_NAME);
 		String valueid = null;
-		try {
-			namespace = java.net.URLDecoder.decode(
-					context.getParameter(Attributes.SEMANO_NAMESPACE), "UTF-8");
-			String tempValueID = context.getParameter(Attributes.SEMANO_VALUE_ID);
-			if (tempValueID != null) valueid = URLDecoder.decode(tempValueID, "UTF-8");
-			if (term != null) term = URLDecoder.decode(term, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e1) {
-			// should not occur
-		}
+		namespace = Strings.decodeURL(context.getParameter(Attributes.SEMANO_NAMESPACE));
+		String tempValueID = context.getParameter(Attributes.SEMANO_VALUE_ID);
+		if (tempValueID != null) valueid = Strings.decodeURL(tempValueID);
+		if (term != null) term = Strings.decodeURL(term);
+
 		if (term != null && !term.equalsIgnoreCase("undefined")) {
 			objectid = term;
 		}

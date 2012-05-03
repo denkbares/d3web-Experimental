@@ -20,8 +20,6 @@
 
 package de.knowwe.rdfs.util;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,6 +31,7 @@ import de.d3web.plugin.PluginManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.plugin.Plugins;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.RDFSTermCategory;
@@ -49,14 +48,8 @@ public class RDFSUtil {
 
 		if (uri == null) {
 			String baseUrl = Rdf2GoCore.localns;
-			try {
-				String name = URLEncoder.encode(termIdentifier, "UTF-8");
-				uri = new URIImpl(baseUrl + name);
-			}
-			catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			String name = Strings.encodeURL(termIdentifier);
+			uri = new URIImpl(baseUrl + name);
 		}
 		return uri;
 
@@ -72,10 +65,10 @@ public class RDFSUtil {
 		if (info != null) {
 
 			if (info instanceof Map) {
-				Set keyset = ((Map) info).keySet();
+				Set<?> keyset = ((Map<?, ?>) info).keySet();
 				for (Object key : keyset) {
-					if (((Map) info).get(key) instanceof RDFSTermCategory) {
-						RDFSTermCategory rdfsTermCategory = (RDFSTermCategory) ((Map) info).get(key);
+					if (((Map<?, ?>) info).get(key) instanceof RDFSTermCategory) {
+						RDFSTermCategory rdfsTermCategory = (RDFSTermCategory) ((Map<?, ?>) info).get(key);
 						if (rdfsTermCategory.equals(c)) {
 							return true;
 						}

@@ -21,8 +21,6 @@
 package de.knowwe.medicine.action;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +30,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.medicine.DbConnection;
 import de.knowwe.medicine.Medicine;
 import de.knowwe.medicine.MedicineObject;
@@ -114,13 +113,13 @@ public class WriteDB extends AbstractAction {
 		s += "`" + med.getExportSetting(8) + "`) VALUES\n";
 
 		for (MedicineObject e : med.getObjects().values()) {
-			s += "(" + e.getId() + ", '" + decode(e.getSubject()) + "'";
+			s += "(" + e.getId() + ", '" + Strings.decodeURL(e.getSubject()) + "'";
 			for (MedicineParameter p : med.getParams()) {
 				Object o = e.get(p);
 				if (p.getTyp().equals(MedicineParameter.STRING)) {
 					s += ", '";
 					if (o != null) {
-						o = decode((String) o);
+						o = Strings.decodeURL((String) o);
 					}
 				}
 				else {
@@ -217,16 +216,4 @@ public class WriteDB extends AbstractAction {
 		med.setObjects(objects);
 	}
 
-	private String decode(String value) {
-		try {
-			return URLDecoder.decode(value, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e1) {
-		}
-		catch (IllegalArgumentException e) {
-		}
-
-		return "value";
-
-	}
 }

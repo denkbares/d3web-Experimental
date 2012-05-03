@@ -61,7 +61,7 @@ public class BoxRenderer implements Renderer {
 			date = "-";
 		}
 
-		Section<?> contentSec = ForumBox.getInstance().getContentChild(sec);
+		Section<?> contentSec = ForumBox.getContentChild(sec);
 
 		// no empty posts --> return
 		if (contentSec == null || contentSec.getText().length() < 1) return;

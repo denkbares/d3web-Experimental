@@ -1,9 +1,6 @@
 package de.knowwe.lod.quiz.action;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Map;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
@@ -11,6 +8,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.lod.quiz.YearOfBirthQuizHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -21,14 +19,7 @@ public class SolveYearOfBirthAction extends AbstractAction {
 
 		Map<String, String> map = context.getParameters();
 		String answer = map.get("answer");
-		String subject = map.get("subject");
-
-		try {
-			subject = URLEncoder.encode(subject, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		String subject = Strings.encodeURL(map.get("subject"));
 
 		String namespace = Rdf2GoCore.localns;
 		subject = namespace + subject;
@@ -43,7 +34,7 @@ public class SolveYearOfBirthAction extends AbstractAction {
 		while (real.hasNext()) {
 			QueryRow row = real.next();
 			result = row.getValue("y").toString();
-			result = URLDecoder.decode(result, "UTF-8");
+			result = Strings.decodeURL(result);
 			result = result.substring(result.indexOf("#") + 1);
 		}
 

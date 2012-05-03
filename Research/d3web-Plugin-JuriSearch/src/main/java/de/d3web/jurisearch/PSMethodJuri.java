@@ -18,23 +18,22 @@
  */
 package de.d3web.jurisearch;
 
-import de.d3web.core.inference.PSMethodAdapter;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.d3web.core.inference.PSMethodAdapter;
 import de.d3web.core.inference.PropagationEntry;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Fact;
-import java.lang.reflect.Type;
 
 /**
- *
+ * 
  * @author grotheer @created 06.03.2012
  */
 public class PSMethodJuri extends PSMethodAdapter {
 
-   private static PSMethodJuri instance = null;
+	private static PSMethodJuri instance = null;
 
 	public PSMethodJuri() {
 		super();
@@ -49,53 +48,55 @@ public class PSMethodJuri extends PSMethodAdapter {
 		}
 		return instance;
 	}
-   @Override
-    public void init(Session session) {
-        // TODO Auto-generated method stub
-    }
 
-    @Override
-    public void propagate(Session session, Collection<PropagationEntry> changes) {
+	@Override
+	public void init(Session session) {
+		// TODO Auto-generated method stub
+	}
 
-        Set<JuriRule> rulesToUpdate = new HashSet<JuriRule>();
-        for (PropagationEntry change : changes) {
-            // System.out.println(change.toString());
-            if (change.hasChanged()) {
-                Collection<JuriModel> models = session.getKnowledgeBase().getAllKnowledgeSlicesFor(
-                        JuriModel.KNOWLEDGE_KIND);
-                for (JuriModel model : models) {
-                    for (JuriRule rule : model.getRules()) {
-                        if (rule.getChildren().keySet().contains(change.getObject())) {
-                            rulesToUpdate.add(rule);
-                        }
-                    }
-                }
-            }
-        }
-        for (JuriRule rule : rulesToUpdate) {
-            Fact fact = rule.fire(session);
-            if (fact != null) {
-                session.getBlackboard().addValueFact(fact);
-            } else {
-                session.getBlackboard().removeValueFact(rule.getFather(), rule);
-            }
-        }
-    }
+	@Override
+	public void propagate(Session session, Collection<PropagationEntry> changes) {
 
-    @Override
-    public Fact mergeFacts(Fact[] facts) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+		Set<JuriRule> rulesToUpdate = new HashSet<JuriRule>();
+		for (PropagationEntry change : changes) {
+			// System.out.println(change.toString());
+			if (change.hasChanged()) {
+				Collection<JuriModel> models = session.getKnowledgeBase().getAllKnowledgeSlicesFor(
+						JuriModel.KNOWLEDGE_KIND);
+				for (JuriModel model : models) {
+					for (JuriRule rule : model.getRules()) {
+						if (rule.getChildren().keySet().contains(change.getObject())) {
+							rulesToUpdate.add(rule);
+						}
+					}
+				}
+			}
+		}
+		for (JuriRule rule : rulesToUpdate) {
+			Fact fact = rule.fire(session);
+			if (fact != null) {
+				session.getBlackboard().addValueFact(fact);
+			}
+			else {
+				session.getBlackboard().removeValueFact(rule.getFather(), rule);
+			}
+		}
+	}
 
-    @Override
-    public boolean hasType(Type type) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	@Override
+	public Fact mergeFacts(Fact[] facts) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public double getPriority() {
-        return 4;
-    }
+	@Override
+	public boolean hasType(Type type) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public double getPriority() {
+		return 4;
+	}
 }

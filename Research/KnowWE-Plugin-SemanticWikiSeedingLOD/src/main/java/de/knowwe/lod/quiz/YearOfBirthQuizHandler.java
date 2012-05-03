@@ -1,8 +1,5 @@
 package de.knowwe.lod.quiz;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -11,6 +8,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
@@ -38,16 +36,8 @@ public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 			valueRange = Integer.parseInt(range);
 		}
 
-		String encodePerson = "";
+		String encodePerson = Strings.encodeURL("Historische Persönlichkeit");
 		String concept = "";
-
-		try {
-			encodePerson = URLEncoder.encode(
-					"Historische Persönlichkeit", "UTF-8");
-		}
-		catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
 
 		String namespace = Rdf2GoCore.localns;
 		encodePerson = namespace + encodePerson;
@@ -60,18 +50,14 @@ public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 
 		boolean found = false;
 		while (!found) {
-			try {
-				while (result.hasNext()) {
-					QueryRow row = result.next();
-					String title = row.getValue("x").toString();
-					String realTitle = URLDecoder.decode(title, "UTF-8");
-					realTitle = realTitle.substring(title.indexOf("#") + 1);
-					persons.add(realTitle);
-				}
+			while (result.hasNext()) {
+				QueryRow row = result.next();
+				String title = row.getValue("x").toString();
+				String realTitle = Strings.decodeURL(title);
+				realTitle = realTitle.substring(title.indexOf("#") + 1);
+				persons.add(realTitle);
 			}
-			catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+
 			int size = persons.size();
 			int choose = (int) ((Math.random() * size) + 1);
 			concept = persons.get(choose - 1);
@@ -93,16 +79,11 @@ public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 		ClosableIterator<QueryRow> real = core.sparqlSelectIt(realQuery);
 		String realBirthYear = "";
 
-		try {
-			while (real.hasNext()) {
-				QueryRow row = real.next();
-				realBirthYear = row.getValue("x").toString();
-				realBirthYear = URLDecoder.decode(realBirthYear, "UTF-8");
-				realBirthYear = realBirthYear.substring(realBirthYear.indexOf("#") + 1);
-			}
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		while (real.hasNext()) {
+			QueryRow row = real.next();
+			realBirthYear = row.getValue("x").toString();
+			realBirthYear = Strings.decodeURL(realBirthYear);
+			realBirthYear = realBirthYear.substring(realBirthYear.indexOf("#") + 1);
 		}
 
 		int year;

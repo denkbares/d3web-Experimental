@@ -18,8 +18,6 @@
  */
 package de.d3web.knowwe.renderer;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,6 +35,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -48,18 +47,18 @@ public class AnnotationInlineAnswerRenderer implements Renderer {
 	@Override
 	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
-		Section prop = Sections.findSuccessor(sec, AnnotationProperty.class);
+		Section<?> prop = Sections.findSuccessor(sec, AnnotationProperty.class);
 		if (prop == null || !prop.getText().contains("asks")) return;
 
 		String question = null;
-		Section qAChild = Sections.findSuccessor(sec, SimpleAnnotation.class);
+		Section<?> qAChild = Sections.findSuccessor(sec, SimpleAnnotation.class);
 
 		if (qAChild == null) qAChild = Sections.findSuccessor(sec, AnnotationObject.class);
 
 		if (qAChild != null) question = qAChild.getText().trim();
 
 		if (question == null) {
-			Section findChildOfType = Sections.findSuccessor(sec, SimpleAnnotation.class);
+			Section<?> findChildOfType = Sections.findSuccessor(sec, SimpleAnnotation.class);
 			if (findChildOfType != null) {
 				question = findChildOfType.getText();
 			}
@@ -94,7 +93,7 @@ public class AnnotationInlineAnswerRenderer implements Renderer {
 		// }
 	}
 
-	private String renderline(Section sec, String user, String question,
+	private String renderline(Section<?> sec, String user, String question,
 			String text, KnowledgeBase kb) {
 		if (kb != null && question != null) {
 			question = question.trim();
@@ -126,12 +125,7 @@ public class AnnotationInlineAnswerRenderer implements Renderer {
 	private static String getRenderedInput(String questionid, String question,
 			String namespace, String userName, String title, String text,
 			String type) {
-		try {
-			question = URLEncoder.encode(question, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		question = Strings.encodeURL(question);
 		// text=URLEncoder.encode(text);
 
 		String rendering = "<span class=\"semLink\" "

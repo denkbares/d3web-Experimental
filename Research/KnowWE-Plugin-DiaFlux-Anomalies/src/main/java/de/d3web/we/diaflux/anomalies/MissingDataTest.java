@@ -60,13 +60,12 @@ public class MissingDataTest extends AbstractCITest {
 		if (null != kb) {
 			List<Flow> flowcharts =
 					kb.getManager().getObjects(Flow.class);
-			AnomalyManager anomalyManager = AnomalyManager.getAnomalyManager();
 
 			for (Flow flow : flowcharts) {
 				allNodes.addAll(flow.getNodes());
 			}
 			init(status, allNodes);
-			
+
 			for (Flow flow : flowcharts) {
 				if (flow.isAutostart()) {
 					for (Node node : flow.getStartNodes()) {
@@ -96,30 +95,31 @@ public class MissingDataTest extends AbstractCITest {
 		if (node instanceof EndNode) {
 			status.put(node, Status.PROCESSING);
 			for (ComposedNode cNode : getComposedfromExit((EndNode) node)) {
-//				for (Node fNode : getFollowingNodes(cNode)) {
-					result += visit(cNode, status, askedNodes);
-//				}
+				// for (Node fNode : getFollowingNodes(cNode)) {
+				result += visit(cNode, status, askedNodes);
+				// }
 			}
 		}
 		status.put(node, Status.PROCESSING);
 		List<String> askedList = new LinkedList<String>();
 		if (node.getClass().equals(ActionNode.class)) {
 			PSAction action = ((ActionNode) node).getAction();
-			
+
 			if (action instanceof ActionNextQASet) {
 				askedList = getAskedValues((ActionNextQASet) action);
 				askedNodes.addAll(askedList);
 			}
-			
+
 			if (action instanceof ActionSetValue) {
 				ActionSetValue actionSet = (ActionSetValue) action;
-				
+
 				if (actionSet.getValue() instanceof QNumWrapper) {
 					QNumWrapper wrapper = (QNumWrapper) actionSet.getValue();
 					String key = wrapper.getQuestion().getName();
-					
+
 					if (!askedNodes.contains(key)) {
-						anomalyManager.addAnomaly(node.getFlow(), node, "Intersecting Postcondition");
+						anomalyManager.addAnomaly(node.getFlow(), node,
+								"Intersecting Postcondition");
 						result += "<br>" + key + " on Node " + node;
 					}
 				}
@@ -130,7 +130,7 @@ public class MissingDataTest extends AbstractCITest {
 			result += testMissingVar(edge, askedNodes);
 			Node nextNode = edge.getEndNode();
 			if (Status.UNVISITED == status.get(nextNode)) {
-				if(nextNode instanceof ComposedNode) {
+				if (nextNode instanceof ComposedNode) {
 					StartNode sNode = getStartFromComposed((ComposedNode) nextNode);
 					if (sNode != null) {
 						nextNode = sNode;
@@ -171,7 +171,8 @@ public class MissingDataTest extends AbstractCITest {
 				EvalResult eRes = eval.evaluate(edge.getCondition());
 				for (String key : eRes.getVariables()) {
 					if (!askedNodes.contains(key)) {
-						anomalyManager.addAnomaly(edge.getEndNode().getFlow(), edge, "Intersecting Postcondition");
+						anomalyManager.addAnomaly(edge.getEndNode().getFlow(), edge,
+								"Intersecting Postcondition");
 						result += "<br>" + key + " on Edge " + edge;
 					}
 				}
@@ -179,7 +180,7 @@ public class MissingDataTest extends AbstractCITest {
 		}
 		return result;
 	}
-	
+
 	private StartNode getStartFromComposed(ComposedNode node) {
 		String calledFlow = node.getCalledFlowName();
 		String calledStart = node.getCalledStartNodeName();
@@ -213,14 +214,6 @@ public class MissingDataTest extends AbstractCITest {
 					}
 				}
 			}
-		}
-		return result;
-	}
-
-	private List<Node> getFollowingNodes(Node node) {
-		List<Node> result = new LinkedList<Node>();
-		for (Edge e : node.getOutgoingEdges()) {
-			result.add(e.getEndNode());
 		}
 		return result;
 	}

@@ -6,7 +6,6 @@ import org.junit.Test;
 import de.d3web.we.diaflux.datamanagement.Domain;
 import de.d3web.we.diaflux.datamanagement.NumValue;
 
-
 public class TestA {
 
 	@Test
@@ -16,7 +15,8 @@ public class TestA {
 		NumValue i3 = new NumValue(1, 6, false, false);
 		NumValue i4 = new NumValue(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false, false);
 
-		NumValue i5 = new NumValue(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false, false);
+		// NumValue i5 = new NumValue(Double.NEGATIVE_INFINITY,
+		// Double.POSITIVE_INFINITY, false, false);
 
 		System.out.println(i4.contains(Double.NEGATIVE_INFINITY));
 		System.out.println(Double.NEGATIVE_INFINITY <= Double.NEGATIVE_INFINITY);
@@ -33,8 +33,8 @@ public class TestA {
 	public void testIntersects() {
 		NumValue i1 = new NumValue(0, 5, true, true);
 		NumValue i2 = new NumValue(3, 7, true, true);
-		NumValue i3 = new NumValue(-3,0,true, false);
-		
+		NumValue i3 = new NumValue(-3, 0, true, false);
+
 		Assert.assertFalse(i1.intersects(i3));
 
 		Assert.assertTrue(i1.intersects(i2));
@@ -45,29 +45,23 @@ public class TestA {
 		Assert.assertFalse(i1.intersects(i2));
 
 	}
-	
+
 	@Test
 	public void testSubstract() {
 		NumValue i1 = new NumValue(0, 5, true, true);
-		NumValue i2 = new NumValue(3, 7, true, true);
-		NumValue i3 = new NumValue(0, 5, true, true);
+		NumValue i2 = new NumValue(0, 5, true, true);
 
-//		i1.substract(i2);
-		i1.substract(i3);
-//		System.out.println(i1.substract(i2));
-//		System.out.println(i1.substract(i3));
-		
+		Assert.assertTrue(i1.substract(i2).isEmpty());
 	}
 
 	@Test
 	public void domMerging() {
 		NumValue i1 = new NumValue(0, 5, true, true);
-		NumValue i2 = new NumValue(3, 7, true, true);
-		NumValue i3 = new NumValue(0, 5, true, true);
-		
+		NumValue i2 = new NumValue(0, 5, true, true);
+
 		Domain<NumValue> domain = new Domain<NumValue>();
 		domain.add(i1);
-		domain.add(i3);
-//		System.out.println(domain);
+		domain.add(i2);
+		Assert.assertEquals(1, domain.getList().size());
 	}
 }

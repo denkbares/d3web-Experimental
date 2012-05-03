@@ -93,20 +93,20 @@ public class DeadPathTest extends AbstractCITest {
 
 	private String visit(Node node, HashMap<Node, Status> status, FrameStack stack) {
 		String result = "";
-//		if (node instanceof ComposedNode) {
-//			status.put(node, Status.PROCESSING);
-//			StartNode sNode = getStartFromComposed((ComposedNode) node);
-//			if (sNode != null) {
-//				result += visit(sNode, status, stack);
-//			}
-//		}
-//		else 
+		// if (node instanceof ComposedNode) {
+		// status.put(node, Status.PROCESSING);
+		// StartNode sNode = getStartFromComposed((ComposedNode) node);
+		// if (sNode != null) {
+		// result += visit(sNode, status, stack);
+		// }
+		// }
+		// else
 		if (node instanceof EndNode) {
 			status.put(node, Status.PROCESSING);
 			for (ComposedNode cNode : getComposedfromExit((EndNode) node)) {
-//				for (Node fNode : getFollowingNodes(cNode)) {
-					result += visit(cNode, status, stack);
-//				}
+				// for (Node fNode : getFollowingNodes(cNode)) {
+				result += visit(cNode, status, stack);
+				// }
 			}
 		}
 		status.put(node, Status.PROCESSING);
@@ -124,7 +124,7 @@ public class DeadPathTest extends AbstractCITest {
 			stack.push(eRes);
 			Node nextNode = e.getEndNode();
 			if (status.get(nextNode).equals(Status.UNVISITED)) {
-				if(nextNode instanceof ComposedNode) {
+				if (nextNode instanceof ComposedNode) {
 					StartNode sNode = getStartFromComposed((ComposedNode) nextNode);
 					if (sNode != null) {
 						nextNode = sNode;
@@ -230,14 +230,6 @@ public class DeadPathTest extends AbstractCITest {
 					}
 				}
 			}
-		}
-		return result;
-	}
-
-	private List<Node> getFollowingNodes(Node node) {
-		List<Node> result = new LinkedList<Node>();
-		for (Edge e : node.getOutgoingEdges()) {
-			result.add(e.getEndNode());
 		}
 		return result;
 	}

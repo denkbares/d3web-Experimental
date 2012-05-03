@@ -18,8 +18,6 @@
  */
 package de.knowwe.hermes;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +28,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
@@ -42,22 +41,15 @@ public class ConceptBrowsingHandler implements PageAppendHandler {
 	@Override
 	public String getDataToAppend(String topic, String web, UserContext user) {
 		String query = "SELECT ?x WHERE {?x rdf:type lns:Hermes-Object} ORDER BY ASC(?x)";
-		
-		ClosableIterator<QueryRow> result =  Rdf2GoCore.getInstance().sparqlSelectIt(query);
+
+		ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance().sparqlSelectIt(query);
 		List<String> titleList = new ArrayList<String>();
 		try {
 			while (result.hasNext()) {
 				QueryRow row = result.next();
 
 				String title = row.getValue("x").toString();
-
-				try {
-					title = URLDecoder.decode(title, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
-
+				title = Strings.decodeURL(title);
 				title = title.substring(title.indexOf("#") + 1);
 				if (Environment.getInstance().getWikiConnector().doesArticleExist(title)) {
 					titleList.add(title);

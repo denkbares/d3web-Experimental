@@ -20,8 +20,6 @@
 
 package de.knowwe.hermes.util;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -33,6 +31,7 @@ import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 
+import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.hermes.maps.Placemark;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -112,29 +111,18 @@ public class TimeEventSPARQLUtils {
 					// thus using a set
 					QueryRow row2 = sourcesResult.next();
 					String aSource = row2.getValue("source").toString();
-					try {
-						aSource = URLDecoder.decode(aSource, "UTF-8");
-					}
-					catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
-					}
+					aSource = Strings.decodeURL(aSource);
 					if (aSource != null) {
 						sources.add(aSource);
 					}
 				}
 
-				try {
-					title = URLDecoder.decode(title, "UTF-8");
-					imp = URLDecoder.decode(imp, "UTF-8");
-					time = URLDecoder.decode(time, "UTF-8");
-					desc = URLDecoder.decode(desc, "UTF-8");
-					topic = URLDecoder.decode(topic, "UTF-8");
-					kdomid = URLDecoder.decode(kdomid, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				title = Strings.decodeURL(title);
+				imp = Strings.decodeURL(imp);
+				time = Strings.decodeURL(time);
+				desc = Strings.decodeURL(desc);
+				topic = Strings.decodeURL(topic);
+				kdomid = Strings.decodeURL(kdomid);
 
 				// Check if Importance is stored incl brackets (old timeevent)
 				if (imp.startsWith("(")) {
@@ -203,14 +191,10 @@ public class TimeEventSPARQLUtils {
 				String loc = row.getValue("loc").toString();
 				String latString = row.getValue("lat").toString();
 				String longString = row.getValue("long").toString();
-				try {
-					loc = URLDecoder.decode(loc, "UTF-8");
-					latString = URLDecoder.decode(latString, "UTF-8");
-					longString = URLDecoder.decode(longString, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
+
+				loc = Strings.decodeURL(loc);
+				latString = Strings.decodeURL(latString);
+				longString = Strings.decodeURL(longString);
 				loc = removeNamespace(loc);
 				double latitude = Double.parseDouble(latString.replaceAll(",", "."));
 				double longitude = Double.parseDouble(longString.replaceAll(",", "."));
@@ -247,16 +231,12 @@ public class TimeEventSPARQLUtils {
 
 				String latString = row.getValue("lat").toString();
 				String longString = row.getValue("long").toString();
-				try {
-					title = URLDecoder.decode(title, "UTF-8");
-					desc = URLDecoder.decode(desc, "UTF-8");
-					latString = URLDecoder.decode(latString, "UTF-8");
-					longString = URLDecoder.decode(longString, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+
+				title = Strings.decodeURL(title);
+				desc = Strings.decodeURL(desc);
+				latString = Strings.decodeURL(latString);
+				longString = Strings.decodeURL(longString);
+
 				double latitude = Double.parseDouble(latString.replaceAll(",", "."));
 				double longitude = Double.parseDouble(longString.replaceAll(",", "."));
 

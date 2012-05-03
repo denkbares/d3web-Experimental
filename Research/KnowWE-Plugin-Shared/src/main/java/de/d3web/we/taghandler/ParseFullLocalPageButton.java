@@ -40,7 +40,7 @@ public class ParseFullLocalPageButton extends AbstractHTMLTagHandler {
 	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 
 		// might be placed in 'secondary' pages (i.e., leftmenu, moremenu...)
-		String theMainTopic = user.getTopic();
+		String theMainTopic = user.getTitle();
 
 		String baseURL = Environment.getInstance().getWikiConnector().getBaseUrl();
 

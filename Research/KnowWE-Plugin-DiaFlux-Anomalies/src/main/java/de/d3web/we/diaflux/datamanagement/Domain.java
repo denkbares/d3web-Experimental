@@ -3,7 +3,7 @@ package de.d3web.we.diaflux.datamanagement;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Domain<T extends AllValue> {
+public class Domain<T extends AllValue<T>> {
 
 	private List<T> list;
 
@@ -30,8 +30,8 @@ public class Domain<T extends AllValue> {
 		while (!oldList.equals(result)) {
 			oldList = new LinkedList<T>();
 			oldList.addAll(result);
-			for(int i = 0; i < oldList.size(); i++) {
-				for(int j = i+1; j < oldList.size(); j++) {
+			for (int i = 0; i < oldList.size(); i++) {
+				for (int j = i + 1; j < oldList.size(); j++) {
 					T t1 = oldList.get(i);
 					T t2 = oldList.get(j);
 					if (t1.intersects(t2)) {
@@ -53,8 +53,8 @@ public class Domain<T extends AllValue> {
 		while (!oldList.equals(result)) {
 			oldList = new LinkedList<T>();
 			oldList.addAll(result);
-			for(int i = 0; i < oldList.size(); i++) {
-				for(int j = i+1; j < oldList.size(); j++) {
+			for (int i = 0; i < oldList.size(); i++) {
+				for (int j = i + 1; j < oldList.size(); j++) {
 					T t1 = oldList.get(i);
 					T t2 = oldList.get(j);
 
@@ -91,24 +91,19 @@ public class Domain<T extends AllValue> {
 		return true;
 	}
 
-	// public boolean contains(AllDomain<T> d) {
-	// // TODO Auto-generated method stub
-	// return false;
-	// }
-
 	public boolean isEmpty() {
 		return list.isEmpty();
 	}
 
 	public Domain<T> negate() {
-		List<AllValue> newlist = new LinkedList<AllValue>();
+		List<T> newlist = new LinkedList<T>();
 		Domain<T> result = new Domain<T>();
 
 		for (T t1 : list) {
 			newlist.addAll(t1.negate());
 		}
-		for (AllValue v : newlist) {
-			result.add((T) v);
+		for (T v : newlist) {
+			result.add(v);
 		}
 		result.mergeAll();
 		return result;
@@ -123,8 +118,7 @@ public class Domain<T extends AllValue> {
 		List<T> resultList = new LinkedList<T>();
 		for (T t : list) {
 			for (T d_t : d.list) {
-				for (Object o : t.substract(d_t)) {
-					T new_t = (T) o;
+				for (T new_t : t.substract(d_t)) {
 					if (!new_t.isEmpty()) {
 						resultList.add(new_t);
 						domain.list.add(new_t);
@@ -149,6 +143,7 @@ public class Domain<T extends AllValue> {
 		return result;
 	}
 
+	@Override
 	public String toString() {
 		String result = "";
 		for (T t : list) {

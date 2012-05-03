@@ -20,8 +20,6 @@
 
 package de.knowwe.hermes.taghandler;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,6 +32,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.maps.Placemark;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -117,13 +116,8 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 				QueryRow row = result.next();
 				String latString = row.getValue("lat").toString();
 				String longString = row.getValue("long").toString();
-				try {
-					latString = URLDecoder.decode(latString, "UTF-8");
-					longString = URLDecoder.decode(longString, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
+				latString = Strings.decodeURL(latString);
+				longString = Strings.decodeURL(longString);
 				double latitude = Double.parseDouble(latString.replaceAll(",", "."));
 				double longitude = Double.parseDouble(longString.replaceAll(",", "."));
 

@@ -1,8 +1,5 @@
 package de.knowwe.lod;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -16,6 +13,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.lod.markup.IgnoreContentType;
 import de.knowwe.lod.markup.IgnoreContentType.IgnoreChild;
 import de.knowwe.lod.markup.IgnoreContentType.IgnoreConcept;
@@ -284,13 +282,7 @@ public class HermesData {
 	public static String linkString(String concept) {
 
 		if (!concept.isEmpty()) {
-			String url = "";
-			try {
-				url = URLEncoder.encode(getTopicForConcept(concept), "UTF-8");
-			}
-			catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+			String url = Strings.encodeURL(getTopicForConcept(concept));
 			String baseURL = Environment.getInstance().getWikiConnector().getBaseUrl();
 
 			return "<a href=\"" + baseURL + "Wiki.jsp?page=" + url
@@ -311,13 +303,7 @@ public class HermesData {
 	public static String linkString(String concept, String id) {
 
 		if (!concept.isEmpty()) {
-			String url = "";
-			try {
-				url = URLEncoder.encode(getTopicForConcept(concept), "UTF-8");
-			}
-			catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+			String url = Strings.encodeURL(getTopicForConcept(concept));
 			String baseURL = Environment.getInstance().getWikiConnector().getBaseUrl();
 			return "<a id=\"" + id + "\" href=\"" + baseURL + "Wiki.jsp?page=" + url
 					+ "\" class=\"wikipage\">" + concept + "</a>";
@@ -338,13 +324,7 @@ public class HermesData {
 	public static boolean storeContains(String concept, String predicate,
 			String value) {
 
-		try {
-			concept = URLEncoder.encode(concept, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
+		concept = Strings.encodeURL(concept);
 		String ask = "";
 
 		if (value.matches("!\\$ConceptLink:: .*") || predicate.equals(objectType)) {
@@ -359,13 +339,7 @@ public class HermesData {
 				objectname = objectname.substring(objectname.indexOf(":") + 1);
 			}
 
-			try {
-				objectname = URLEncoder.encode(objectname, "UTF-8");
-			}
-			catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-
+			objectname = Strings.encodeURL(objectname);
 			objectname = namespace + objectname;
 
 			ask = "ASK {<" + concept + "> " + predicate + " <" + objectname + ">}";
@@ -389,13 +363,7 @@ public class HermesData {
 	 */
 	public static boolean storeContains(String concept) {
 
-		try {
-			concept = URLEncoder.encode(concept, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
+		concept = Strings.encodeURL(concept);
 		String namespace = Rdf2GoCore.localns;
 		concept = namespace + concept;
 		String ask = "";
@@ -413,13 +381,7 @@ public class HermesData {
 	 */
 	public static String getTopicForConcept(String concept) {
 
-		try {
-			concept = URLEncoder.encode(concept, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
+		concept = Strings.encodeURL(concept);
 		String namespace = Rdf2GoCore.localns;
 		concept = namespace + concept;
 
@@ -431,16 +393,11 @@ public class HermesData {
 
 		String topic = "";
 
-		try {
-			while (result.hasNext()) {
-				QueryRow row = result.next();
-				topic = row.getValue("x").toString();
-				topic = URLDecoder.decode(topic, "UTF-8");
-				topic = topic.substring(topic.indexOf("#") + 1);
-			}
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		while (result.hasNext()) {
+			QueryRow row = result.next();
+			topic = row.getValue("x").toString();
+			topic = Strings.decodeURL(topic);
+			topic = topic.substring(topic.indexOf("#") + 1);
 		}
 		return topic;
 	}
@@ -452,12 +409,7 @@ public class HermesData {
 	 */
 	public static List<String> queryStore(String concept, String predicate) {
 
-		try {
-			concept = URLEncoder.encode(concept, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		concept = Strings.encodeURL(concept);
 
 		String namespace = Rdf2GoCore.localns;
 		concept = namespace + concept;
@@ -470,17 +422,12 @@ public class HermesData {
 		List<String> values = new ArrayList<String>();
 		String value = "";
 
-		try {
-			while (result.hasNext()) {
-				QueryRow row = result.next();
-				value = row.getValue("x").toString();
-				value = URLDecoder.decode(value, "UTF-8");
-				value = value.substring(value.indexOf("#") + 1);
-				values.add(value);
-			}
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		while (result.hasNext()) {
+			QueryRow row = result.next();
+			value = row.getValue("x").toString();
+			value = Strings.decodeURL(value);
+			value = value.substring(value.indexOf("#") + 1);
+			values.add(value);
 		}
 		return values;
 	}

@@ -74,17 +74,17 @@ public class SectionizerTest extends TestCase {
 		 * The real tests 1. Check some children-Counts
 		 */
 		int expected = 12;
-		Section root = article.getRootSection().getChildren().get(0);
+		Section<?> root = article.getRootSection().getChildren().get(0);
 		assertEquals(expected, root.getChildren().size());
 
-		ArrayList<Section> children = new ArrayList<Section>(root.getChildren());
+		ArrayList<Section<?>> children = new ArrayList<Section<?>>(root.getChildren());
 
 		expected = 1;
-		Section child = children.get(0);
+		Section<?> child = children.get(0);
 		assertEquals("Wrong children count", expected, child.getChildren().size());
 
 		expected = 3;
-		Section child2 = (Section) child.getChildren().get(0);
+		Section<?> child2 = child.getChildren().get(0);
 		assertEquals("Wrong children count", expected, child2.getChildren().size());
 
 		child = children.get(2);
@@ -92,7 +92,7 @@ public class SectionizerTest extends TestCase {
 		assertEquals("Wrong children count", expected, child.getChildren().size());
 
 		expected = 3;
-		child2 = (Section) child.getChildren().get(0);
+		child2 = child.getChildren().get(0);
 		assertEquals("Wrong children count", expected, child2.getChildren().size());
 
 		expected = 7;
@@ -106,10 +106,10 @@ public class SectionizerTest extends TestCase {
 		child = children.get(0);
 		String cont = child.getText();
 		assertEquals("WordObjectType expected", "aaa", cont);
-		child = (Section) child.getChildren().get(0);
+		child = child.getChildren().get(0);
 		cont = child.getText();
 		assertEquals("AStarObjectType expected", "aaa", cont);
-		child = (Section) child.getChildren().get(1);
+		child = child.getChildren().get(1);
 		cont = child.getText();
 		assertEquals("AObjectType expected", "a", cont);
 
@@ -132,7 +132,7 @@ public class SectionizerTest extends TestCase {
 		child = children.get(4);
 		cont = child.getText();
 		assertEquals("Expected SplitObjectType", "-ababba-", cont);
-		ArrayList<Section> childs = new ArrayList<Section>(child.getChildren());
+		ArrayList<Section<?>> childs = new ArrayList<Section<?>>(child.getChildren());
 		cont = childs.get(0).getText();
 		assertEquals("Error in SplitObjectType", "-", cont);
 		cont = childs.get(1).getText();

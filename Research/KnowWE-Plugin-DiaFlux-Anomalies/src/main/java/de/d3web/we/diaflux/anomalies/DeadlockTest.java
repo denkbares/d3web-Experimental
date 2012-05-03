@@ -40,7 +40,6 @@ import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
 import de.knowwe.core.utils.KnowWEUtils;
 
-
 public class DeadlockTest extends AbstractCITest {
 
 	private enum Status {
@@ -49,9 +48,9 @@ public class DeadlockTest extends AbstractCITest {
 		PROCESSING,
 		SAVED
 	}
-	
+
 	private EvaluatorManager evalManager = EvaluatorManager.getEvalManager();
-	
+
 	@Override
 	public CITestResult call() throws Exception {
 		List<Node> allNodes = new LinkedList<Node>();
@@ -88,35 +87,35 @@ public class DeadlockTest extends AbstractCITest {
 			}
 		}
 		if (!errormsg.isEmpty()) {
-			errormsg =  "Deadlock:<br>" + errormsg;
+			errormsg = "Deadlock:<br>" + errormsg;
 			KnowWEUtils.maskHTML(errormsg);
 			res = new CITestResult(Type.FAILED, errormsg, config);
 		}
-		
+
 		return res;
 	}
-	
+
 	private String visit(Node node, HashMap<Node, Status> status, FrameStack stack) {
 		String result = "";
 		if (node instanceof EndNode) {
 			status.put(node, Status.PROCESSING);
 			for (ComposedNode cNode : getComposedfromExit((EndNode) node)) {
-//				for (Node fNode : getFollowingNodes(cNode)) {
-					result += visit(cNode, status, stack);
-//				}
+				// for (Node fNode : getFollowingNodes(cNode)) {
+				result += visit(cNode, status, stack);
+				// }
 			}
 		}
 		status.put(node, Status.PROCESSING);
-		if(node.getClass().equals(ActionNode.class)) {
+		if (node.getClass().equals(ActionNode.class)) {
 			ActionNode aNode = (ActionNode) node;
 			PSAction action = aNode.getAction();
-			if(action.getClass().equals(ActionSetValue.class)) {
+			if (action.getClass().equals(ActionSetValue.class)) {
 				ActionSetValue actionSet = (ActionSetValue) action;
 				EvalResult oldRes = stack.peek();
 				Question var = actionSet.getQuestion();
 				Object value = actionSet.getValue();
 				EvalResult newRes = createEval(var, value);
-				if(!oldRes.contains(newRes)) {
+				if (!oldRes.contains(newRes)) {
 					AnomalyManager anomalyManager = AnomalyManager.getAnomalyManager();
 					anomalyManager.addAnomaly(node.getFlow(), node, "Deadlock");
 					result += "on " + node + "<br>";
@@ -126,12 +125,12 @@ public class DeadlockTest extends AbstractCITest {
 		for (Edge e : node.getOutgoingEdges()) {
 			EvalResult eRes = evaluateEdge(e);
 			if (!stack.isEmpty()) {
-				
+
 			}
 			stack.push(eRes);
 			Node nextNode = e.getEndNode();
 			if (status.get(nextNode).equals(Status.UNVISITED)) {
-				if(nextNode instanceof ComposedNode) {
+				if (nextNode instanceof ComposedNode) {
 					StartNode sNode = getStartFromComposed((ComposedNode) nextNode);
 					if (sNode != null) {
 						nextNode = sNode;
@@ -227,18 +226,10 @@ public class DeadlockTest extends AbstractCITest {
 		return result;
 	}
 
-	private List<Node> getFollowingNodes(Node node) {
-		List<Node> result = new LinkedList<Node>();
-		for (Edge e : node.getOutgoingEdges()) {
-			result.add(e.getEndNode());
-		}
-		return result;
-	}
-
 	private EvalResult createEval(Question var, Object value) {
 		EvalResult eRes = new EvalResult();
-		if(var instanceof QuestionMC) {
-			String val = ((Choice)value).getName();
+		if (var instanceof QuestionMC) {
+			String val = ((Choice) value).getName();
 			Set<String> actValues = new HashSet<String>();
 			actValues.add(val);
 			Domain<MOValue> domain = new Domain<MOValue>();
@@ -249,8 +240,9 @@ public class DeadlockTest extends AbstractCITest {
 			MOValue moval = new MOValue(posValue, actValues, false);
 			domain.add(moval);
 			eRes.add(var.getName(), domain);
-		} else if(var instanceof QuestionOC) {
-			String val = ((Choice)value).getName();
+		}
+		else if (var instanceof QuestionOC) {
+			String val = ((Choice) value).getName();
 			Set<String> actValues = new HashSet<String>();
 			actValues.add(val);
 			Domain<MOValue> domain = new Domain<MOValue>();
@@ -261,7 +253,8 @@ public class DeadlockTest extends AbstractCITest {
 			MOValue moval = new MOValue(posValue, actValues, true);
 			domain.add(moval);
 			eRes.add(var.getName(), domain);
-		} else if(var instanceof QuestionNum) {
+		}
+		else if (var instanceof QuestionNum) {
 			Domain<NumValue> domain = new Domain<NumValue>();
 			domain.add(new NumValue(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
 					false, false));

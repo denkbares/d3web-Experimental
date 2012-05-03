@@ -127,7 +127,6 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 	 * @param found a List with all found Sections in it
 	 * @return a HTML formatted table witch lists all the findings in it
 	 */
-	@SuppressWarnings("unchecked")
 	private String renderFindingsSelectionMask(List<Section<?>> found, String searchedType) {
 		StringBuilder mask = new StringBuilder();
 
@@ -141,7 +140,7 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 			// Check if Section has an Article
 			k = this.getValidNextSection(k, found);
 			if (k == -1) break;
-			Section sec = found.get(k);
+			Section<?> sec = found.get(k);
 			String currentTopic = sec.getTitle();
 
 			// new topic findings
@@ -324,9 +323,8 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 	 * @param sec
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	private List<Section> getAllFathers(Section sec) {
-		ArrayList<Section> found2 = new ArrayList<Section>();
+	private List<Section<?>> getAllFathers(Section<?> sec) {
+		ArrayList<Section<?>> found2 = new ArrayList<Section<?>>();
 
 		if (sec.getFather() != null) {
 			found2.addAll(this.getAllFathers(sec.getFather()));
@@ -355,16 +353,15 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 	 * @param sec
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	private String createFindingsMaskFatherColumnAndPath(Section sec) {
+	private String createFindingsMaskFatherColumnAndPath(Section<?> sec) {
 		StringBuilder mask = new StringBuilder();
 
 		mask.append("</td><td>");
 
-		ArrayList<Section> fathers = new ArrayList<Section>(this.getAllFathers(sec));
+		ArrayList<Section<?>> fathers = new ArrayList<Section<?>>(this.getAllFathers(sec));
 		StringBuffer fstringbuffy = new StringBuffer();
 
-		for (Section s : fathers) {
+		for (Section<?> s : fathers) {
 			if (!(s.get() instanceof Article)) {
 				String name = s.get().getName() + ", ";
 				if (name.contains(".")) {

@@ -21,9 +21,6 @@
 package de.knowwe.medicine.action;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -34,6 +31,7 @@ import java.util.Map.Entry;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.medicine.DbConnection;
 import de.knowwe.medicine.Medicine;
 import de.knowwe.medicine.MedicineObject;
@@ -264,20 +262,11 @@ public class ReadDB extends AbstractAction {
 	private String beautify(String value) {
 		String temp = value;
 		try {
-			temp = URLDecoder.decode(value, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e1) {
+			temp = Strings.decodeURL(value);
 		}
 		catch (IllegalArgumentException e) {
 		}
-
-		try {
-			return URLEncoder.encode(temp, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return "value";
+		return Strings.encodeURL(temp);
 	}
 
 	@Override

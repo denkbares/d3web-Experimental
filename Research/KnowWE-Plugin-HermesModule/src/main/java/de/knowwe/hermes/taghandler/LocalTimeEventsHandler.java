@@ -20,8 +20,6 @@
 
 package de.knowwe.hermes.taghandler;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -33,6 +31,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.TimeStamp;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -86,19 +85,14 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 			while (result.hasNext()) {
 				found = true;
 				QueryRow row = result.next();
-				try {
-					String importance = URLDecoder.decode(row.getValue("imp").toString(), "UTF-8");
-					if (importance.equals("(1)")) {
+				String importance = Strings.decodeURL(row.getValue("imp").toString());
+				if (importance.equals("(1)")) {
 
-						String title = URLDecoder.decode(row.getValue("title").toString(), "UTF-8");
-						String timeString = URLDecoder.decode(row.getValue("y").toString(), "UTF-8");
-						TimeStamp timeStamp = new TimeStamp(timeString);
-						String timeDescr = timeStamp.getDescription();
-						queryResults.put(timeStamp, "<li>" + timeDescr + ": " + title + "</li>");
-					}
-				}
-				catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
+					String title = Strings.decodeURL(row.getValue("title").toString());
+					String timeString = Strings.decodeURL(row.getValue("y").toString());
+					TimeStamp timeStamp = new TimeStamp(timeString);
+					String timeDescr = timeStamp.getDescription();
+					queryResults.put(timeStamp, "<li>" + timeDescr + ": " + title + "</li>");
 				}
 				// Set<String> names = set.getBindingNames();
 				// for (String string : names) {

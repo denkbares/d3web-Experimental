@@ -65,7 +65,7 @@ public class TemplateGenerationAction extends AbstractAction {
 
 			List<Section<Template>> temps = TemplateTagHandler
 					.getTemplateTypes(Environment.getInstance()
-							.getArticle(context.getWeb(), context.getTopic()));
+							.getArticle(context.getWeb(), context.getTitle()));
 
 			if (pageName == null || pageName == ""
 					|| templateNum >= temps.size()) {

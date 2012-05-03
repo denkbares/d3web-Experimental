@@ -1,8 +1,5 @@
 package de.knowwe.lod.quiz;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +9,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.lod.quiz.map.MapForConcepts;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -29,15 +27,7 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
 		Rdf2GoCore core = Rdf2GoCore.getInstance();
 
-		String encodePerson = "";
-
-		try {
-			encodePerson = URLEncoder.encode(
-						"Historische Persönlichkeit", "UTF-8");
-		}
-		catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
+		String encodePerson = Strings.encodeURL("Historische Persönlichkeit");
 
 		String namespace = Rdf2GoCore.localns;
 		encodePerson = namespace + encodePerson;
@@ -54,18 +44,14 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 		String concept = "";
 
 		while (!found) {
-			try {
-				while (result.hasNext()) {
-					QueryRow row = result.next();
-					String title = row.getValue("x").toString();
-					String realTitle = URLDecoder.decode(title, "UTF-8");
-					realTitle = realTitle.substring(title.indexOf("#") + 1);
-					persons.add(realTitle);
-				}
+			while (result.hasNext()) {
+				QueryRow row = result.next();
+				String title = row.getValue("x").toString();
+				String realTitle = Strings.decodeURL(title);
+				realTitle = realTitle.substring(title.indexOf("#") + 1);
+				persons.add(realTitle);
 			}
-			catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+
 			int size = persons.size();
 			int choose = (int) ((Math.random() * size) + 1);
 			concept = persons.get(choose - 1);
@@ -78,16 +64,11 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 								+ " ?y}";
 			if (Rdf2GoCore.getInstance().sparqlAsk(hasBirthplace)) {
 				ClosableIterator<QueryRow> real = core.sparqlSelectIt(birthplace);
-				try {
-					while (real.hasNext()) {
-						QueryRow row = real.next();
-						realBirthPlace = row.getValue("x").toString();
-						realBirthPlace = URLDecoder.decode(realBirthPlace, "UTF-8");
-						realBirthPlace = realBirthPlace.substring(realBirthPlace.indexOf("#") + 1);
-					}
-				}
-				catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
+				while (real.hasNext()) {
+					QueryRow row = real.next();
+					realBirthPlace = row.getValue("x").toString();
+					realBirthPlace = Strings.decodeURL(realBirthPlace);
+					realBirthPlace = realBirthPlace.substring(realBirthPlace.indexOf("#") + 1);
 				}
 				String hasCoords = "ASK {<" + core.createlocalURI(realBirthPlace)
 						+ "> rdf:type lns:Geographika." +
@@ -109,19 +90,14 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 
 		List<String> fakeBirthPlaces = new ArrayList<String>();
 
-		try {
-			while (fakes.hasNext()) {
-				QueryRow row = fakes.next();
-				String fakeBirthPlace = row.getValue("x").toString();
-				fakeBirthPlace = URLDecoder.decode(fakeBirthPlace, "UTF-8");
-				fakeBirthPlace = fakeBirthPlace.substring(fakeBirthPlace.indexOf("#") + 1);
-				if (!fakeBirthPlace.equals(realBirthPlace)) {
-					fakeBirthPlaces.add(fakeBirthPlace);
-				}
+		while (fakes.hasNext()) {
+			QueryRow row = fakes.next();
+			String fakeBirthPlace = row.getValue("x").toString();
+			fakeBirthPlace = Strings.decodeURL(fakeBirthPlace);
+			fakeBirthPlace = fakeBirthPlace.substring(fakeBirthPlace.indexOf("#") + 1);
+			if (!fakeBirthPlace.equals(realBirthPlace)) {
+				fakeBirthPlaces.add(fakeBirthPlace);
 			}
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
 		}
 
 		String options = "<div class='layout'><div class='tags' align='middle'>Wo wurde <div id='quizplacesubject' style='display:inline'>"

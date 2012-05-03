@@ -64,7 +64,7 @@ public class XMLSectionFinderTest extends TestCase {
 		String content = this.readXMLFile("2");
 
 		Article article = Article.createArticle(content, "Test_Article", "default_web");
-		Section artSec = article.getRootSection();
+		Section<?> artSec = article.getRootSection();
 
 		/**
 		 * The Tests.
@@ -142,16 +142,17 @@ public class XMLSectionFinderTest extends TestCase {
 
 		// Test children counts
 		int expected = 3;
-		Section artChild = Sections.findChildOfType(artSec, RootType.class).getChildren().get(0);
+		Section<?> artChild = Sections.findChildOfType(artSec, RootType.class).getChildren().get(0);
 		assertEquals("ArticleSection: Childcount wrong", expected, artChild.getChildren().size());
 
-		artChild = (Section) artChild.getChildren().get(1);
+		artChild = artChild.getChildren().get(1);
 		expected = 2;
 		assertEquals("Wrong subtree count", expected,
 				Sections.findChildrenOfType(artChild, GenericXMLObjectType.class).size());
 
 		// Test left subtree
-		Section subRoot = Sections.findChildrenOfType(artChild, GenericXMLObjectType.class).get(0);
+		Section<?> subRoot = Sections.findChildrenOfType(artChild, GenericXMLObjectType.class).get(
+				0);
 		expected = 3;
 		assertEquals("Error in Left subtree:", expected, subRoot.getChildren().size());
 
@@ -161,20 +162,20 @@ public class XMLSectionFinderTest extends TestCase {
 
 		expected = 3;
 		assertEquals("Error in Left subtree:", expected,
-				((Section) subRoot.getChildren().get(1)).getChildren().size());
+				subRoot.getChildren().get(1).getChildren().size());
 
 		expected = 3;
 		assertEquals("Error in Left subtree:", expected,
-				((Section) subRoot.getChildren().get(3)).getChildren().size());
+				subRoot.getChildren().get(3).getChildren().size());
 
 		expected = 3;
-		subRoot = (Section) subRoot.getChildren().get(5);
-		subRoot = (Section) subRoot.getChildren().get(1);
-		subRoot = (Section) subRoot.getChildren().get(1);
+		subRoot = subRoot.getChildren().get(5);
+		subRoot = subRoot.getChildren().get(1);
+		subRoot = subRoot.getChildren().get(1);
 		assertEquals("Error in Left subtree:", expected, subRoot.getChildren().size());
 
 		// Test right subtree
-		subRoot = (Section) artChild.getChildren().get(1);
+		subRoot = artChild.getChildren().get(1);
 		expected = 3;
 		assertEquals("Error in right subtree", expected, subRoot.getChildren().size());
 

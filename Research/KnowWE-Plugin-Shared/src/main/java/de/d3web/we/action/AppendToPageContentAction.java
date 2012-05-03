@@ -44,7 +44,7 @@ public class AppendToPageContentAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String web = context.getWeb();
-		String name = context.getTopic();
+		String name = context.getTitle();
 		String appendText = context.getParameter(Attributes.TEXT);
 		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
 		Article art = mgr.getArticle(name);

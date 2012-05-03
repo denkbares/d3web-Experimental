@@ -98,9 +98,9 @@ public class IncompletePostconditionTest extends AbstractCITest {
 		if (node instanceof EndNode) {
 			status.put(node, Status.PROCESSING);
 			for (ComposedNode cNode : getComposedfromExit((EndNode) node)) {
-//				for (Node fNode : getFollowingNodes(cNode)) {
-					result += visit(cNode, status, stack);
-//				}
+				// for (Node fNode : getFollowingNodes(cNode)) {
+				result += visit(cNode, status, stack);
+				// }
 			}
 		}
 		status.put(node, Status.PROCESSING);
@@ -126,7 +126,7 @@ public class IncompletePostconditionTest extends AbstractCITest {
 				Node nextNode = e.getEndNode();
 
 				if (status.get(nextNode).equals(Status.UNVISITED)) {
-					if(nextNode instanceof ComposedNode) {
+					if (nextNode instanceof ComposedNode) {
 						StartNode sNode = getStartFromComposed((ComposedNode) nextNode);
 						if (sNode != null) {
 							nextNode = sNode;
@@ -139,10 +139,10 @@ public class IncompletePostconditionTest extends AbstractCITest {
 					stack.pop();
 				}
 			}
-			
+
 		}
 		status.put(node, Status.VISITED);
-		
+
 		return result;
 	}
 
@@ -185,7 +185,7 @@ public class IncompletePostconditionTest extends AbstractCITest {
 		stack.push(eRes);
 		return stack;
 	}
-	
+
 	private StartNode getStartFromComposed(ComposedNode node) {
 		String calledFlow = node.getCalledFlowName();
 		String calledStart = node.getCalledStartNodeName();
@@ -223,11 +223,4 @@ public class IncompletePostconditionTest extends AbstractCITest {
 		return result;
 	}
 
-	private List<Node> getFollowingNodes(Node node) {
-		List<Node> result = new LinkedList<Node>();
-		for (Edge e : node.getOutgoingEdges()) {
-			result.add(e.getEndNode());
-		}
-		return result;
-	}
 }

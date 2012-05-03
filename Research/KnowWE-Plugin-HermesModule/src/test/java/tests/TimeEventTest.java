@@ -1,7 +1,5 @@
 package tests;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +17,7 @@ import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
-import de.knowwe.core.kdom.RootType;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -27,7 +25,6 @@ public class TimeEventTest extends TestCase {
 
 	private Environment ke;
 	private ArticleManager am;
-	private RootType type;
 
 	@Override
 	@Before
@@ -38,7 +35,6 @@ public class TimeEventTest extends TestCase {
 		connector.setKnowWEExtensionPath(TestUtils.createKnowWEExtensionPath());
 		Environment.initInstance(connector);
 		ke = Environment.getInstance();
-		type = RootType.getInstance();
 		am = ke.getArticleManager(Environment.DEFAULT_WEB);
 		am.setArticlesInitialized(true);
 	}
@@ -98,16 +94,11 @@ public class TimeEventTest extends TestCase {
 				String src = row.getValue("imp").toString();
 				String dateDesc = row.getValue("dd").toString();
 
-				try {
-					title = URLDecoder.decode(title, "UTF-8");
-					desc = URLDecoder.decode(desc, "UTF-8");
-					src = URLDecoder.decode(src, "UTF-8");
-					impS = URLDecoder.decode(impS, "UTF-8");
-					dateDesc = URLDecoder.decode(dateDesc, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
+				title = Strings.decodeURL(title);
+				desc = Strings.decodeURL(desc);
+				src = Strings.decodeURL(src);
+				impS = Strings.decodeURL(impS);
+				dateDesc = Strings.decodeURL(dateDesc);
 
 				// Fix intentional differences between new TimeEvent and the old
 				// one

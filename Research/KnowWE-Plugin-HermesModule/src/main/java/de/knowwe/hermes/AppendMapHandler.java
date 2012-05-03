@@ -20,8 +20,6 @@
 
 package de.knowwe.hermes;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -36,6 +34,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.maps.Placemark;
 import de.knowwe.hermes.taghandler.ShowMapHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -108,24 +107,17 @@ public class AppendMapHandler implements PageAppendHandler {
 					// use SemanticCore:
 					QueryRow row = result.next();
 
-					try {
-						String currentPlace = URLDecoder.decode(row.getValue("x").toString(),
-								"UTF-8");
-						System.out.println(currentPlace);
-						if (matches.contains(currentPlace.substring(currentPlace.indexOf("#") + 1))) {
-							System.out.println("TREFFER");
-							String latitude = row.getValue("lat").toString();
-							String longitude = row.getValue("long").toString();
-							latitude = latitude.replace(",", ".");
-							longitude = longitude.replace(",", ".");
-							l.add(new Placemark(currentPlace, Double.parseDouble(latitude),
+					String currentPlace = Strings.decodeURL(row.getValue("x").toString());
+					System.out.println(currentPlace);
+					if (matches.contains(currentPlace.substring(currentPlace.indexOf("#") + 1))) {
+						System.out.println("TREFFER");
+						String latitude = row.getValue("lat").toString();
+						String longitude = row.getValue("long").toString();
+						latitude = latitude.replace(",", ".");
+						longitude = longitude.replace(",", ".");
+						l.add(new Placemark(currentPlace, Double.parseDouble(latitude),
 									Double.parseDouble(longitude)));
-						}
 					}
-					catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
-					}
-
 				}
 			}
 			catch (ModelRuntimeException e1) {

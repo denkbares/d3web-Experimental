@@ -77,7 +77,7 @@ public class ReplaceKdomNodeTest extends TestCase {
 		 */
 		Article article = _env.getArticle("default_web", "Test_Article");
 		Section<?> artSec = article.getRootSection();
-		String toReplace = ((Section) artSec.getChildren().get(0)).getID();
+		String toReplace = artSec.getChildren().get(0).getID();
 		Map<String, String> map = new HashMap<String, String>();
 		map.put(Attributes.WEB, "default_web");
 		map.put(Attributes.TARGET, toReplace);

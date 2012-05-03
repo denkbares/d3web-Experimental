@@ -33,6 +33,7 @@ import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.taghandler.TagHandlerTypeContent;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
@@ -78,10 +79,10 @@ public class DescribeIndividualTagHandler extends AbstractTagHandler {
 		// First try the URL-Parameter, if null try the TagHandler-Parameter.
 		String objectName = null;
 		if (urlParameters.get(OBJECTNAME) != null) {
-			objectName = KnowWEUtils.urldecode(urlParameters.get(OBJECTNAME));
+			objectName = Strings.decodeURL(urlParameters.get(OBJECTNAME));
 		}
 		else if (parameters.get(OBJECTNAME) != null) {
-			objectName = KnowWEUtils.urldecode(parameters.get(OBJECTNAME));
+			objectName = Strings.decodeURL(parameters.get(OBJECTNAME));
 		}
 
 		Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(

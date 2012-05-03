@@ -23,10 +23,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -70,6 +67,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.event.ArticleUpdatesFinishedEvent;
 import de.knowwe.event.FullParseEvent;
 
@@ -314,24 +312,11 @@ public class Rdf2GoCore implements EventListener {
 	private static String beautify(String value) {
 		String temp = value;
 		try {
-			temp = URLDecoder.decode(value, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e1) {
+			temp = Strings.decodeURL(value);
 		}
 		catch (IllegalArgumentException e) {
-
 		}
-
-		try {
-			return URLEncoder.encode(temp, "UTF-8");
-
-		}
-		catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "value";
-
+		return Strings.encodeURL(temp);
 	}
 
 	private void removeStatementsFromCache(List<Statement> list) {
@@ -422,34 +407,21 @@ public class Rdf2GoCore implements EventListener {
 					erg = reduceNamespace(s.getValue(var).toString());
 				}
 
-				try {
-					erg = URLDecoder.decode(erg, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				erg = Strings.decodeURL(erg);
 
 				if (links) {
 					if (erg.startsWith("lns:")) {
 						erg = erg.substring(4);
 					}
-					try {
-						if (Environment.getInstance()
+					if (Environment.getInstance()
 								.getWikiConnector().doesArticleExist(erg)
 								|| Environment.getInstance()
 										.getWikiConnector().doesArticleExist(
-												URLDecoder.decode(erg,
-														"UTF-8"))) {
-							erg = KnowWEUtils.maskHTML("<a href=\"Wiki.jsp?page=")
+												Strings.decodeURL(erg))) {
+						erg = KnowWEUtils.maskHTML("<a href=\"Wiki.jsp?page=")
 									+ erg + KnowWEUtils.maskHTML("\">") + erg
 									+ KnowWEUtils.maskHTML("</a>");
-						}
 					}
-					catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
-					}
-
 				}
 
 				if (tablemode) {
@@ -893,12 +865,7 @@ public class Rdf2GoCore implements EventListener {
 				QueryRow row = i.next();
 				String tag = row.getValue(targetbinding).toString();
 				if (tag.split("#").length == 2) tag = tag.split("#")[1];
-				try {
-					tag = URLDecoder.decode(tag, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
+				tag = Strings.decodeURL(tag);
 				if (tag.contains("=")) {
 					tag = tag.split("=")[1];
 				}
@@ -1009,13 +976,13 @@ public class Rdf2GoCore implements EventListener {
 	 * @param io the ex-IntermediateOwlObject (now List<Statements> that should
 	 *        collect the statements
 	 */
-	public void attachTextOrigin(Resource attachto, Section source, List<Statement> io) {
+	public void attachTextOrigin(Resource attachto, Section<?> source, List<Statement> io) {
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
 		io.addAll(createTextOrigin(source, to));
 		io.add(createStatement(attachto, RDFS.isDefinedBy, to));
 	}
 
-	private List<Statement> createTextOrigin(Section<Type> source, Resource to) {
+	private List<Statement> createTextOrigin(Section<?> source, Resource to) {
 		ArrayList<Statement> io = new ArrayList<Statement>();
 		io.add(createStatement(to, RDF.type, TEXTORIGIN));
 		io.add(createStatement(to, HASNODE, createLiteral(source.getID())));

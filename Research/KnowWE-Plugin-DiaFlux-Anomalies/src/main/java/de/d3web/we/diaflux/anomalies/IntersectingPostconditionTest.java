@@ -65,7 +65,6 @@ public class IntersectingPostconditionTest extends AbstractCITest {
 	}
 
 	private boolean evaluateIntersect(Node node) {
-		AnomalyManager anomalyManager = AnomalyManager.getAnomalyManager();
 		List<Condition> conditions = new LinkedList<Condition>();
 		for (Edge edge : node.getOutgoingEdges()) {
 			conditions.add(edge.getCondition());

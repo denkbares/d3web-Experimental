@@ -19,7 +19,6 @@ import de.knowwe.diaflux.FlowchartUtils;
 import de.knowwe.diaflux.type.DiaFluxType;
 import de.knowwe.diaflux.type.FlowchartType;
 
-
 public class GetAnomaliesHighlightAction extends AbstractAction {
 
 	private static final String PREFIX = "cover";
@@ -27,12 +26,13 @@ public class GetAnomaliesHighlightAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		
+
 		AnomalyManager anomalyManager = AnomalyManager.getAnomalyManager();
-		
+
 		String kdomid = context.getParameter("kdomid");
 
-		Section<DiaFluxType> diaFluxSec = (Section<DiaFluxType>) Sections.getSection(kdomid);
+		Section<DiaFluxType> diaFluxSec =
+				Sections.cast(Sections.getSection(kdomid), DiaFluxType.class);
 
 		Section<FlowchartType> flowchart = Sections.findSuccessor(diaFluxSec, FlowchartType.class);
 		if (flowchart == null) {
@@ -47,17 +47,17 @@ public class GetAnomaliesHighlightAction extends AbstractAction {
 		appendHeader(builder, flowName, PREFIX);
 
 		Flow flow = DiaFluxUtils.getFlowSet(session).get(flowName);
-		
+
 		List<Edge> anomalyEdges = new LinkedList<Edge>();
 		List<Node> anomalyNodes = new LinkedList<Node>();
 
-		//here anomalyManager
+		// here anomalyManager
 		anomalyEdges.addAll(anomalyManager.getAnomalyEdges(flow).keySet());
 		anomalyNodes.addAll(anomalyManager.getAnomalyNodes(flow).keySet());
-		
+
 		addNodeHighlight(builder, anomalyNodes, COVER_ANOMALY);
 		addEdgeHighlight(builder, anomalyEdges, COVER_ANOMALY);
-		
+
 		appendFooter(builder);
 
 		context.setContentType("text/xml");
@@ -71,7 +71,7 @@ public class GetAnomaliesHighlightAction extends AbstractAction {
 		builder.append("' prefix ='" + PREFIX + "'>\r");
 
 	}
-	
+
 	public static void addEdgeHighlight(StringBuilder builder, List<Edge> edges, String cssclass) {
 
 		for (Edge edge : edges) {
@@ -94,7 +94,7 @@ public class GetAnomaliesHighlightAction extends AbstractAction {
 			builder.append("</node>\r");
 		}
 	}
-	
+
 	public static void appendFooter(StringBuilder builder) {
 		builder.append("</flow>");
 		builder.append("\r");

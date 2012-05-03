@@ -2,20 +2,19 @@ package de.d3web.we.diaflux.datamanagement;
 
 import java.util.List;
 
+public interface AllValue<T> {
 
-public interface AllValue {
+	public boolean intersects(T v);
 
-	public boolean intersects(AllValue v);
+	public boolean containsValue(T v);
 
-	public boolean containsValue(AllValue v);
+	public T intersectWith(T v);
 
-	public AllValue intersectWith(AllValue v);
+	public List<T> negate();
 
-	public List<? extends AllValue> negate();
+	public T mergeWith(T v);
 
-	public AllValue mergeWith(AllValue v);
-	
-	public List<? extends AllValue> substract(AllValue v);
-	
+	public List<T> substract(T v);
+
 	public boolean isEmpty();
 }

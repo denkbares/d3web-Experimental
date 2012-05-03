@@ -30,7 +30,7 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.usersupport.correction.ApproximateCorrectionProvider;
 
 /**
@@ -53,7 +53,6 @@ public class KDOMReplaceTermUserSupportAction extends AbstractAction {
 			return;
 		}
 
-		String web = context.getWeb();
 		String nodeID = context.getParameter(Attributes.TARGET);
 		String name = context.getTitle();
 		String newText = context.getParameter(Attributes.TEXT);
@@ -67,7 +66,7 @@ public class KDOMReplaceTermUserSupportAction extends AbstractAction {
 
 		// Prepare new text, urldecode and strip whitespaces that JSPWiki might
 		// have added
-		newText = KnowWEUtils.urldecode(newText);
+		newText = Strings.decodeURL(newText);
 		newText = newText.replaceAll("\\s*$", "");
 
 		Map<String, String> nodesMap = new HashMap<String, String>();

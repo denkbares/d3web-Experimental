@@ -1,7 +1,5 @@
 package de.knowwe.rdfs.util;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,6 +15,7 @@ import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class SparqlResultSetRenderer {
@@ -100,38 +99,26 @@ public class SparqlResultSetRenderer {
 					n.toString());
 		}
 
-		try {
-			erg = URLDecoder.decode(erg, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		erg = Strings.decodeURL(erg);
 
 		if (links) {
 			if (erg.startsWith("lns:")) {
 				erg = erg.substring(4);
 			}
-			try {
-				Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+			Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 						erg);
 
-				if (termDefinitions != null && termDefinitions.size() > 0) {
-					erg = CompileUtils.createLinkToDefinition(erg);
-				}
-				else if (Environment.getInstance()
+			if (termDefinitions != null && termDefinitions.size() > 0) {
+				erg = CompileUtils.createLinkToDefinition(erg);
+			}
+			else if (Environment.getInstance()
 						.getWikiConnector().doesArticleExist(erg)
 						|| Environment.getInstance()
 								.getWikiConnector().doesArticleExist(
-										URLDecoder.decode(erg,
-												"UTF-8"))) {
-					erg = KnowWEUtils.maskHTML("<a href=\"Wiki.jsp?page=")
+										Strings.decodeURL(erg))) {
+				erg = KnowWEUtils.maskHTML("<a href=\"Wiki.jsp?page=")
 							+ erg + KnowWEUtils.maskHTML("\">") + erg
 							+ KnowWEUtils.maskHTML("</a>");
-				}
-			}
-			catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
 			}
 
 		}

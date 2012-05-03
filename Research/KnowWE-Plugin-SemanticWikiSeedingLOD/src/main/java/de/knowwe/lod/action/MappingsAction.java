@@ -1,8 +1,6 @@
 package de.knowwe.lod.action;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -19,6 +17,7 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.lod.HermesData;
 import de.knowwe.lod.LinkedOpenData;
 import de.knowwe.lod.markup.MappingContentType;
@@ -44,22 +43,17 @@ public class MappingsAction extends AbstractAction {
 
 		int count = 0;
 		int found = 0;
-		try {
-			while (result.hasNext()) {
-				count++;
-				QueryRow row = result.next();
-				String title = row.getValue("x").toString();
-				title = URLDecoder.decode(title, "UTF-8");
-				title = title.substring(title.indexOf("#") + 1);
-				String redirect = LinkedOpenData.getDBpediaRedirect(title);
-				if (redirect != "") {
-					found++;
-				}
-				corresDBpediaConcepts.put(title, redirect);
+		while (result.hasNext()) {
+			count++;
+			QueryRow row = result.next();
+			String title = row.getValue("x").toString();
+			title = Strings.decodeURL(title);
+			title = title.substring(title.indexOf("#") + 1);
+			String redirect = LinkedOpenData.getDBpediaRedirect(title);
+			if (redirect != "") {
+				found++;
 			}
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			corresDBpediaConcepts.put(title, redirect);
 		}
 
 		// New - deletes all previous contents.

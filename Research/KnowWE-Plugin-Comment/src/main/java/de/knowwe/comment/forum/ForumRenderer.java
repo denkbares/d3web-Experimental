@@ -33,7 +33,6 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.AbstractXMLType;
 
-@SuppressWarnings("unchecked")
 public class ForumRenderer implements Renderer {
 
 	private static boolean sortUpwards = ResourceBundle.getBundle("Forum_config").getString(
@@ -127,7 +126,7 @@ public class ForumRenderer implements Renderer {
 			// render posts
 			if (sortUpwards) {
 				for (int i = 0; i < contentSectionList.size(); i++) {
-					Section sectionI = contentSectionList.get(i);
+					Section<?> sectionI = contentSectionList.get(i);
 					sectionI.get().getRenderer().render(sectionI, user, ret);
 				}
 				ret.append("<div id=newBox></div>");
@@ -135,7 +134,7 @@ public class ForumRenderer implements Renderer {
 			else {
 				ret.append("<div id=newBox></div>");
 				for (int i = contentSectionList.size() - 1; i >= 0; i--) {
-					Section sectionI = contentSectionList.get(i);
+					Section<?> sectionI = contentSectionList.get(i);
 					sectionI.get().getRenderer().render(sectionI, user, ret);
 				}
 			}
@@ -163,25 +162,4 @@ public class ForumRenderer implements Renderer {
 		builder.append("</div>\n");
 	}
 
-	/**
-	 * 
-	 * 
-	 * @created 08.03.2011
-	 * @param direction
-	 * @param topic
-	 * @param rb
-	 * @return
-	 */
-	private String sortLink(String direction, String topic, ResourceBundle rb) {
-
-		String href = KnowWEUtils.urlencode("Wiki.jsp?page=" + topic + "&sort=" + direction);
-
-		StringBuilder ret = new StringBuilder();
-		ret.append("<a href=\"" + href + "\" title=\"" + rb.getString("Forum.sort." + direction)
-				+ "\">\n");
-		ret.append("<img src=\"KnowWEExtension/images/ct_" + direction + ".gif\" title=\""
-				+ rb.getString("Forum.sort." + direction) + "\">\n");
-		ret.append("</a>\n");
-		return ret.toString();
-	}
 }

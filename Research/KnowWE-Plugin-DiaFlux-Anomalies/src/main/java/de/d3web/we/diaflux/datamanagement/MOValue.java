@@ -5,77 +5,72 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class MOValue implements AllValue {
-	
+public class MOValue implements AllValue<MOValue> {
+
 	private boolean isOneChoice = false;
-	
+
 	private Set<String> possibleValues;
 	private Set<String> actualValues;
-	
+
 	public MOValue(Set<String> posValues, Set<String> actValues, boolean oneChoice) {
 		possibleValues = posValues;
 		actualValues = actValues;
 		isOneChoice = oneChoice;
 	}
-	
-//	public void setPossibleValues(Set<String> list) {
-//		possibleValues = list;
-//	}
-	
-//	public void setActualValues(Set<String> list) {
-//		actualValues = list;
-//	}
-	
+
+	// public void setPossibleValues(Set<String> list) {
+	// possibleValues = list;
+	// }
+
+	// public void setActualValues(Set<String> list) {
+	// actualValues = list;
+	// }
+
 	public void addActualValue(String value) {
-		if(isOneChoice) {
+		if (isOneChoice) {
 			actualValues = new HashSet<String>();
 		}
 		actualValues.add(value);
 	}
-	
+
 	public void removeActualValue(String value) {
 		actualValues.remove(value);
 	}
 
 	@Override
-	public boolean intersects(AllValue v) {
-		if(!(v instanceof MOValue))
-			return false;
+	public boolean intersects(MOValue v) {
+		if (!(v instanceof MOValue)) return false;
 		MOValue mov = (MOValue) v;
-		for(String val : actualValues) {
-			for(String comVal : mov.actualValues) {
-				if(val.equals(comVal))
-					return true;
+		for (String val : actualValues) {
+			for (String comVal : mov.actualValues) {
+				if (val.equals(comVal)) return true;
 			}
 		}
 		return false;
-		}
+	}
 
 	@Override
-	public boolean containsValue(AllValue v) {
-		if(!(v instanceof MOValue))
-			return false;
+	public boolean containsValue(MOValue v) {
+		if (!(v instanceof MOValue)) return false;
 		MOValue mov = (MOValue) v;
 		boolean contained = false;
-		for(String val : mov.actualValues) {
-			for(String comVal : actualValues) {
-				if(val.equals(comVal))
-					contained = true;
+		for (String val : mov.actualValues) {
+			for (String comVal : actualValues) {
+				if (val.equals(comVal)) contained = true;
 			}
-			if(!contained) return false;
+			if (!contained) return false;
 		}
 		return true;
 	}
 
 	@Override
-	public AllValue intersectWith(AllValue v) {
+	public MOValue intersectWith(MOValue v) {
 		MOValue result = new MOValue(this.possibleValues, new HashSet<String>(), this.isOneChoice);
-		if(!(v instanceof MOValue))
-			return result;
+		if (!(v instanceof MOValue)) return result;
 		MOValue mov = (MOValue) v;
-		for(String val : actualValues) {
-			for(String comVal : mov.actualValues) {
-				if(val.equals(comVal)) {
+		for (String val : actualValues) {
+			for (String comVal : mov.actualValues) {
+				if (val.equals(comVal)) {
 					result.addActualValue(val);
 				}
 			}
@@ -84,7 +79,7 @@ public class MOValue implements AllValue {
 	}
 
 	@Override
-	public List<? extends AllValue> negate() {
+	public List<MOValue> negate() {
 		List<MOValue> result = new LinkedList<MOValue>();
 		Set<String> negValues = new HashSet<String>(possibleValues);
 		negValues.removeAll(actualValues);
@@ -94,25 +89,25 @@ public class MOValue implements AllValue {
 	}
 
 	@Override
-	public AllValue mergeWith(AllValue v) {
-		if(!(v instanceof MOValue))
-			return this;
+	public MOValue mergeWith(MOValue v) {
+		if (!(v instanceof MOValue)) return this;
 		MOValue mov = (MOValue) v;
 		HashSet<String> mergedVars = new HashSet<String>();
-		for(String value : actualValues) {
+		for (String value : actualValues) {
 			mergedVars.add(value);
 		}
-		for(String value : mov.actualValues) {
+		for (String value : mov.actualValues) {
 			mergedVars.add(value);
 		}
 		MOValue result = new MOValue(possibleValues, mergedVars, this.isOneChoice);
 		return result;
 	}
 
-	public String toString(){
+	@Override
+	public String toString() {
 		String result = "MOValue: ";
 		result += "(";
-		for(String value : actualValues) {
+		for (String value : actualValues) {
 			result += value + " ";
 		}
 		result += ")";
@@ -120,7 +115,7 @@ public class MOValue implements AllValue {
 	}
 
 	@Override
-	public List<MOValue> substract(AllValue v) {
+	public List<MOValue> substract(MOValue v) {
 		MOValue oMO = (MOValue) v;
 		Set<String> act = new HashSet<String>();
 		act.addAll(this.actualValues);
@@ -135,16 +130,13 @@ public class MOValue implements AllValue {
 	public boolean isEmpty() {
 		return actualValues.isEmpty();
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
-		if(!(o instanceof MOValue))
-			return false;
+		if (!(o instanceof MOValue)) return false;
 		MOValue other = (MOValue) o;
-		if(!other.possibleValues.equals(this.possibleValues))
-			return false;
-		if(!other.actualValues.equals(this.actualValues))
-			return false;
+		if (!other.possibleValues.equals(this.possibleValues)) return false;
+		if (!other.actualValues.equals(this.actualValues)) return false;
 		return true;
 	}
 }
