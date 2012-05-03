@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 import com.sun.org.apache.xpath.internal.axes.ChildIterator;
 
-public class Question {
+public class ParserQuestion {
 
 	
 	public static String ODER_MOD = "oder";
@@ -19,19 +19,19 @@ public class Question {
 	private int score;
 	private String explanation;
 	private String prompt;
-	private LinkedList<Question> subQuestions;
-	private LinkedList<Question> parents;
+	private LinkedList<ParserQuestion> subQuestions;
+	private LinkedList<ParserQuestion> parents;
 	private int id;
 	private static int idCounter = 0;
 	private boolean invertiereNein;
 	private boolean isDummy;
 
 	
-	public Question(String content, String type) {
-		this.parents = new LinkedList<Question>();
+	public ParserQuestion(String content, String type) {
+		this.parents = new LinkedList<ParserQuestion>();
 		this.content = content;
 		this.type = type;
-		subQuestions = new LinkedList<Question>();
+		subQuestions = new LinkedList<ParserQuestion>();
 		score = 0;
 		id = idCounter++;
 		invertiereNein = false;
@@ -77,22 +77,22 @@ public class Question {
 		this.prompt = prompt;
 	}
 	
-	public void addChild(Question c) {
+	public void addChild(ParserQuestion c) {
 		if (!subQuestions.contains(c)) {
 			subQuestions.add(c);
 			c.addParent(this);
 		}
 	}
 	
-	public LinkedList<Question> getChildren() {
+	public LinkedList<ParserQuestion> getChildren() {
 		return subQuestions;
 	}
 	
-	public LinkedList<Question> getParents() {
+	public LinkedList<ParserQuestion> getParents() {
 		return parents;
 	}
 	
-	public void addParent(Question q) {
+	public void addParent(ParserQuestion q) {
 		if (!parents.contains(q)) {
 			q.addChild(this);
 			parents.add(q);
@@ -137,11 +137,11 @@ public class Question {
 		this.type = type;
 	}
 	
-	public HashSet<Question> getRoots() {
-		HashSet<Question> roots = new HashSet<Question>();
+	public HashSet<ParserQuestion> getRoots() {
+		HashSet<ParserQuestion> roots = new HashSet<ParserQuestion>();
 		if (parents.size() == 0) roots.add(this);
 		else {
-			for (Question p : parents) {
+			for (ParserQuestion p : parents) {
 				roots.addAll(p.getRoots());
 			}
 		}

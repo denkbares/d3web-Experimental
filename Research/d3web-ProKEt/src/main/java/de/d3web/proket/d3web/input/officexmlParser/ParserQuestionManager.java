@@ -10,17 +10,17 @@ import de.uniwue.abstracttools.ListUtils;
 import de.uniwue.abstracttools.Pair;
 import de.uniwue.abstracttools.StringUtils;
 
-public class QuestionManager {
+public class ParserQuestionManager {
 
-	private Hashtable<String, Question> questions;
+	private Hashtable<String, ParserQuestion> questions;
 	
 	
-	public QuestionManager() {
-		questions = new Hashtable<String, Question>();
+	public ParserQuestionManager() {
+		questions = new Hashtable<String, ParserQuestion>();
 	}
 	
 	
-	public void addQuestion(Question q) {
+	public void addQuestion(ParserQuestion q) {
 		questions.put(getQuestionIndex(q.getContent()), q);
 	}
 	
@@ -31,14 +31,14 @@ public class QuestionManager {
 		return s;
 	}
 	
-	public Question getQuestion(String content) {
+	public ParserQuestion getQuestion(String content) {
 		return questions.get(getQuestionIndex(content));
 	}
 	
 	
-	public Question getRoot() {
+	public ParserQuestion getRoot() {
 		if (questions.size() >0) {
-			HashSet<Question> roots = questions.values().iterator().next().getRoots();
+			HashSet<ParserQuestion> roots = questions.values().iterator().next().getRoots();
 			if (roots.size() > 0) return roots.iterator().next();
 			else return null;
 		} else return null;
@@ -51,7 +51,7 @@ public class QuestionManager {
 	private String getTreeFormatXml() {
 		String s = "<?xml version='1.0' encoding='UTF-8'?>\n";
 		s = s + "<dialog sub-type='front' type='legal' css='legal, nofoot' header='K&#252;ndigungsschutz-Beratung -- Hierarchischer-Dialog' and-or-type='AND' uequest='OWN' study='true' logging='true' feedback='true'>";
-		Question r = getRoot();
+		ParserQuestion r = getRoot();
 		Pair<String, Integer> result = getSubTreeXml(r, 0, -1);
 		s = s + result.getFirst();
 		s = s + "</dialog>";
@@ -59,10 +59,10 @@ public class QuestionManager {
 		return s;
 	}
 	
-	private Pair<String, Integer> getSubTreeXml(Question q, int idCounter, int parentId) {
+	private Pair<String, Integer> getSubTreeXml(ParserQuestion q, int idCounter, int parentId) {
 		int id = ++idCounter;
 		String s = q.getXml(parentId, id);
-		for (Question c : q.getChildren()) {
+		for (ParserQuestion c : q.getChildren()) {
 			Pair<String, Integer> r = getSubTreeXml(c, idCounter, id);
 			idCounter = r.getLast();
 			s = s + r.getFirst();
