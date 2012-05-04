@@ -49,6 +49,7 @@
         <servlet-name>DownloadServlet</servlet-name>
         <servlet-class>de.d3web.proket.d3web.run.DownloadTxtFileServlet</servlet-class>
     </servlet>
+    
     <servlet-mapping>
         <servlet-name>HelloServlet</servlet-name>
         <url-pattern>/HelloServlet</url-pattern>
