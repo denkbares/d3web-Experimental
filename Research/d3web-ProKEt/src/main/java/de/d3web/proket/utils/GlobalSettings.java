@@ -88,6 +88,8 @@ public class GlobalSettings {
     
     private boolean initLog = false;
     private String questionCount = "";
+    private String uegroup = "";
+    private String uesystemtype = "";
 
 
     /*
@@ -226,5 +228,21 @@ public class GlobalSettings {
 
     public String getResourcesPath() {
         return this.resourcesPath;
+    }
+    
+    public void setUEGroup(String group){
+        this.uegroup = group;
+    }
+    
+    public String getUEGroup(){
+        return this.uegroup;
+    }
+    
+    public void setUESystemType(String uestype){
+        this.uesystemtype = uestype;
+    }
+    
+    public String getUESystemType(){
+        return this.uesystemtype;
     }
 }

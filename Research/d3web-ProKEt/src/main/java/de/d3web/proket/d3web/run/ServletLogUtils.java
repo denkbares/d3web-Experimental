@@ -283,4 +283,10 @@ public class ServletLogUtils {
         logger.logQuestionToggle(questiontext, toggleType, logtime);
         logger.writeJSONToFile();
     }
+     
+      public static void logUEGroup(String group, JSONLogger logger){
+        logger.logUEGroup(group);
+        logger.writeJSONToFile();
+    }
+          
 }

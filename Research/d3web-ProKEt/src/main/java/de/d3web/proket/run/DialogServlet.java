@@ -94,12 +94,12 @@ public class DialogServlet extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
 
         HttpSession httpSession = request.getSession(true);
-        
-        if(httpSession.getAttribute("newload")==null ||
-                httpSession.getAttribute("newload").equals("")){
+
+        if (httpSession.getAttribute("newload") == null
+                || httpSession.getAttribute("newload").equals("")) {
             httpSession.setAttribute("newload", "true");
         }
-                
+
         String source = getSource(request);
 
         // set SRC store attribute to "" per default for avoiding nullpointers
@@ -117,7 +117,7 @@ public class DialogServlet extends HttpServlet {
 
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
-        System.out.println("ACTION: " + action);
+        // System.out.println("ACTION: " + action);
         if (action == null) {
             action = "show";
             httpSession.setAttribute("newload", "first");
@@ -125,27 +125,27 @@ public class DialogServlet extends HttpServlet {
 
         //System.out.println(action);
         //System.out.println(httpSession.getAttribute("newload"));
-        
-        
-        if (!action.equalsIgnoreCase("logInit") && 
-                !httpSession.getAttribute("newload").equals("first")){
+
+
+        if (!action.equalsIgnoreCase("logInit")
+                && !httpSession.getAttribute("newload").equals("first")) {
             httpSession.setAttribute("newload", "false");
         }
-        
-        if (action.equalsIgnoreCase("logInit")&&
-                httpSession.getAttribute("newload").equals("first")){
+
+        if (action.equalsIgnoreCase("logInit")
+                && httpSession.getAttribute("newload").equals("first")) {
             httpSession.setAttribute("newload", "true");
-        }  else if (action.equalsIgnoreCase("logInit")&&
-                !httpSession.getAttribute("newload").equals("first")) {
+        } else if (action.equalsIgnoreCase("logInit")
+                && !httpSession.getAttribute("newload").equals("first")) {
             httpSession.setAttribute("newload", "false");
         }
-        
-        
-         
+
+
+
         //if(action.equalsIgnoreCase("logInit") &&
-          //      httpSession.getAttribute("newload").equals("")){
+        //      httpSession.getAttribute("newload").equals("")){
         //}
-        
+
         if (action.equalsIgnoreCase("show")) {
             show(httpSession, response, request);
             return;
@@ -210,7 +210,7 @@ public class DialogServlet extends HttpServlet {
         } else if (action.equalsIgnoreCase("logQuestionToggle")) {
 
             JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
-            String questionText = request.getParameter("qtext").toString().replace("+"," ");
+            String questionText = request.getParameter("qtext").toString().replace("+", " ");
             String toggleType = request.getParameter("ttype").toString();
             String logtime = request.getParameter("timestring").toString().replace("+", " ");
             ServletLogUtils.logQuestionToggle(questionText, toggleType, logtime, logger);
@@ -262,8 +262,6 @@ public class DialogServlet extends HttpServlet {
         DialogTree dialogTree = parseInput(request);
         GlobalSettings.getInstance().setQuestionCount("0");
 
-        //System.out.println(dialogTree.getRoot());
-        //System.out.println(dialogTree.getRoot().getVirtualClassName());
         IRenderer rootRenderer = Renderer.getRenderer(dialogTree.getRoot());
         ContainerCollection cc = rootRenderer.renderRoot(dialogTree);
         String html = cc.html.toString();
@@ -290,28 +288,16 @@ public class DialogServlet extends HttpServlet {
             HttpServletResponse response, HttpSession httpSession) throws IOException {
 
         PrintWriter writer = response.getWriter();
-        //GlobalSettings.getInstance().setLogFolder(
-          //      GlobalSettings.getInstance().getServletBasePath()
-            //    + "../../LOGS/G1-Data");
         
         GlobalSettings.getInstance().setLogBaseFolder(
-                 GlobalSettings.getInstance().getServletBasePath()
-                + "../../LOGS");
-        GlobalSettings.getInstance().setLogSubFolder(
-                "/G1-Data");
-        System.out.println(GlobalSettings.getInstance().getLogFolder());
-        
-        /*GlobalSettings.getInstance().setLogFolder(
                 GlobalSettings.getInstance().getServletBasePath()
-                + "../../Study-Data-G2"/logs");
-*/
-        
+                + "../../LOGS");
         /*
          * in this case, the logging initialisation, i.e. retrieval of browser
          * etc info has been done successfully and now those values can be
          * processed further
          */
-         
+
         Date now = new Date();
         JSONLogger logger = new JSONLogger(createLogfileName(now, httpSession));
 
@@ -321,19 +307,40 @@ public class DialogServlet extends HttpServlet {
                 request.getParameter("user").replace("+", " ");
         String start =
                 request.getParameter("timestring").replace("+", " ");
-        String source = 
+        String source =
                 getSource(request);
-        String type="";
-        if(source.contains("juriRestruc")){
-            type = "USER";
-        } else {
-            type = "LEGAL";
-        }
-        ServletLogUtils.logBaseInfo(browser, user, start, logger);
-        ServletLogUtils.logDialogType(type, logger);
-        httpSession.setAttribute("logger", logger);
 
-        //response.getWriter().append(GlobalSettings.getInstance().getLogFolder());
+        ServletLogUtils.logBaseInfo(browser, user, start, logger);
+
+
+        // on first show, also log the USABILITY GROUP - for multiple group
+        // testing - as specified in the 
+        // prototype xml as well as the SYSTEM TYPE
+        String group = GlobalSettings.getInstance().getUEGroup();
+        if (group != null && !group.equals("")) {
+            String isGroupLogged =
+                    httpSession.getAttribute("isGroupLogged") != null
+                    ? httpSession.getAttribute("isGroupLogged").toString() : "";
+
+            if (!isGroupLogged.equals("true")) {
+                ServletLogUtils.logUEGroup(group, logger);
+                httpSession.setAttribute("isGroupLogged", "true");
+            }
+        }
+
+        String uesystemtype = GlobalSettings.getInstance().getUESystemType();
+        if (uesystemtype != null && !uesystemtype.equals("")) {
+            String isSystemTypeLogged =
+                    httpSession.getAttribute("isSystemTypeLogged") != null
+                    ? httpSession.getAttribute("isSystemTypeLogged").toString() : "";
+
+            if (!isSystemTypeLogged.equals("true")) {
+                ServletLogUtils.logDialogType(uesystemtype, logger);
+                httpSession.setAttribute("isSystemTypeLogged", "true");
+            }
+        }
+
+        httpSession.setAttribute("logger", logger);
     }
 
     /**
@@ -494,8 +501,8 @@ public class DialogServlet extends HttpServlet {
         qDataBui.append("Corresponding Logfile: ");
         qDataBui.append(httpSession.getAttribute("logfile").toString());
         qDataBui.append("\n\n");
-       
-        for (String pair : qvpairs){
+
+        for (String pair : qvpairs) {
             String[] splitpair = pair.split("---");
             qDataBui.append(splitpair[0].replace("UE_", ""));
             qDataBui.append(" --> ");

@@ -9,18 +9,23 @@ package de.d3web.proket.d3web.ue;
  * @author mafre
  */
 public enum UETerm {
-    BROW("browser"), USER("user"), RES("result"), 
-    START("start"), END("end"), CLICKED("clickedwidgets"), 
-    ID("id"), 
-    TS("timestamp"), 
-    VAL("value"),
+    BROW("BRWOSER"), 
+    USER("USER"), 
+    RES("RESULT"), 
+    START("START"), 
+    END("END"), 
+    CLICKED("CLICKEDWIDGETS"), 
+    ID("ID"), 
+    TS("TIMESTAMP"), 
+    VAL("VALUE"),
     BREAK("BREAK"),
     SOL("SOLUTION"),
-    UEQ("UE_Questionnaire"),
-    UEF("UE_Feedback"),
-    TYPE("dialogtype"),
+    UEQ("UE_QUESTIONNAIRE"),
+    UEF("UE_FREE_FEEDBACK"),
+    TYPE("DIALOGTYPE"),
     LOAD("LOAD"),
-    ISOL("INTER_SOLS"),
+    ISOL("INTERMED_SOLS"),
+    GROUP("STUDY_GROUP"),
     NAN("NONE");
     
     private String stringrep;

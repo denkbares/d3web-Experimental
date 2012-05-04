@@ -164,6 +164,8 @@ public class DialogRenderer extends Renderer {
                 st.setAttribute("study", true);
             }
 
+            GlobalSettings.getInstance().setUEGroup(dialog.getUegroup());
+            GlobalSettings.getInstance().setUESystemType(dialog.getUesystemtype());
             makeNavigation(dialogObject, st);
 
         }

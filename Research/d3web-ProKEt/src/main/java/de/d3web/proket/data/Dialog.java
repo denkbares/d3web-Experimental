@@ -57,6 +57,8 @@ public class Dialog extends DefaultDialogObject {
     protected Boolean feedback = false;
     protected Boolean study = false;
     protected String uequest = "none";
+    protected String uegroup = "";
+     protected String uesystemtype = "";
 
     public Dialog() {
         style = new InheritableAttributes(this);
@@ -139,5 +141,21 @@ public class Dialog extends DefaultDialogObject {
 
     public Boolean isStudy() {
         return this.study;
+    }
+    
+    public void setUegroup(String g){
+        this.uegroup = g;
+    }
+    
+    public String getUegroup(){
+        return this.uegroup;
+    }
+    
+    public void setUesystemtype(String t){
+        this.uesystemtype = t;
+    }
+    
+    public String getUesystemtype(){
+        return this.uesystemtype;
     }
 }

@@ -90,6 +90,11 @@ public class JSONLogger {
     public void logResultValue(String value) {
         logfile.put(UETerm.RES.toString(), value);
     }
+    
+    public void logUEGroup(String group) {
+        logfile.put(UETerm.GROUP.toString(), group);
+    }
+    
 
     /**
      * Adds the given value to the internal JSONObject representation.
