@@ -37,7 +37,7 @@ import de.d3web.core.session.values.ChoiceValue;
 /**
  * 
  * @author grotheer
- * @created 06.03.2012
+ * @created 04.05.2012
  */
 public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 
@@ -73,18 +73,42 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 		disjunctive = false;
 	}
 
+	/**
+	 * Getter for the father
+	 * 
+	 * @created 04.05.2012
+	 * @return
+	 */
 	public QuestionOC getFather() {
 		return father;
 	}
 
+	/**
+	 * Setter for the father
+	 * 
+	 * @created 04.05.2012
+	 * @param father
+	 */
 	public void setFather(QuestionOC father) {
 		this.father = father;
 	}
 
+	/**
+	 * getter for the children
+	 * 
+	 * @created 04.05.2012
+	 * @return
+	 */
 	public HashMap<QuestionOC, List<ChoiceValue>> getChildren() {
 		return children;
 	}
 
+	/**
+	 * Setter for the children
+	 * 
+	 * @created 04.05.2012
+	 * @param children
+	 */
 	public void setChildren(HashMap<QuestionOC, List<ChoiceValue>> children) {
 		this.children = children;
 	}
@@ -145,62 +169,111 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 		children.putAll(m);
 	}
 
+	/**
+	 * Remove a single child
+	 * 
+	 * @created 04.05.2012
+	 * @param q
+	 */
 	public void removeChild(QuestionOC q) {
 		children.remove(q);
 	}
 
+	/**
+	 * 
+	 * @created 04.05.2012
+	 * @return true if rule is disjunctive, else false
+	 */
 	public boolean isDisjunctive() {
 		return disjunctive;
 	}
 
+	/**
+	 * Define if the rule is disjunctive or not
+	 * 
+	 * @created 04.05.2012
+	 * @param disjunctive
+	 */
 	public void setDisjunctive(boolean disjunctive) {
 		this.disjunctive = disjunctive;
 	}
 
+	/**
+	 * fire a fact, if the evaluation of the rule is positive, else null
+	 * 
+	 * @created 04.05.2012
+	 * @param session
+	 * @return derived fact
+	 */
 	public Fact fire(Session session) {
 		boolean maybe = false;
+
+		// run over all children of the rule.
 		for (Entry<QuestionOC, List<ChoiceValue>> child : children.entrySet()) {
 			ChoiceValue value = null;
+			// get the value for this child from the blackboard
 			if (session.getBlackboard().getAnsweredQuestions().contains(child.getKey())) {
 				value = (ChoiceValue) session.getBlackboard().getValue(child.getKey());
 			}
 
 			if (value != null) {
+				// find out, if the value equals one of the specified confirming
+				// values
 				boolean oneOfConfirmingValues = false;
 				for (ChoiceValue confirmingValue : child.getValue()) {
 					if (value.equals(confirmingValue)) {
 						oneOfConfirmingValues = true;
 					}
 				}
+
 				if (!disjunctive) {
+					// directly set father to "no" if the rule is not
+					// disjunctive and has at least one child, which is not set
+					// to a confirming value.
 					if (!oneOfConfirmingValues) {
 						return createFact(session, NO_VALUE);
 					}
 
 				}
 				else {
+					// directly set father to "yes" if the rule is disjunctive
+					// and has at least one child, which is set to a confirming
+					// value.
 					if (oneOfConfirmingValues) {
 						return createFact(session, YES_VALUE);
 					}
 				}
+
+				// set the maybe flag, if one child is set to the maybe value.
 				if (value.equals(MAYBE_VALUE)) {
 					maybe = true;
 				}
 			}
 			else {
 				if (!disjunctive) {
+					// if a child question is not jet answered and the rule is
+					// not disjunctive, no new fact is returned (return null)
 					return null;
 				}
 			}
 		}
 
+		// if the for-loop is passed, there are four cases:
 		if (maybe) {
+			// matches two cases:
+			// 1. the rule is not disjunctive and all child question values are
+			// "maybe" or "yes"
+			// 2. the rule is disjunctive and all child question values are
+			// "maybe" or "no"
 			return createFact(session, MAYBE_VALUE);
 		}
 		if (!disjunctive) {
+			// the rule is not disjunctive and all child question values are
+			// "yes"
 			return createFact(session, YES_VALUE);
 		}
 		else {
+			// the rule is disjunctive and all child question values are "no"
 			return createFact(session, NO_VALUE);
 		}
 	}
@@ -240,7 +313,7 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 
 	@Override
 	public String toString() {
-            	return "JuriRule [father=" + father + ", children=" + children + ", disjunctive="
+		return "JuriRule [father=" + father + ", children=" + children + ", disjunctive="
 				+ disjunctive + "]";
 	}
 

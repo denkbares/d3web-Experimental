@@ -27,6 +27,7 @@ import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.knowledge.terminology.info.Property;
 
 /**
+ * Represents a set of JuriRules
  * 
  * @author grotheer
  * @created 09.03.2012
@@ -49,22 +50,52 @@ public class JuriModel implements KnowledgeSlice {
 		rules.addAll(c);
 	}
 
+	/**
+	 * Add a rule to this model
+	 * 
+	 * @created 04.05.2012
+	 * @param r
+	 */
 	public void addRule(JuriRule r) {
 		rules.add(r);
 	}
 
+	/**
+	 * Remove a rule from this model
+	 * 
+	 * @created 04.05.2012
+	 * @param r
+	 */
 	public void removeRule(JuriRule r) {
 		rules.remove(r);
 	}
 
+	/**
+	 * Add a collection of rules to this model
+	 * 
+	 * @created 04.05.2012
+	 * @param c
+	 */
 	public void addRules(Collection<JuriRule> c) {
 		rules.addAll(c);
 	}
 
+	/**
+	 * Remove a collection of rules from this model
+	 * 
+	 * @created 04.05.2012
+	 * @param c
+	 */
 	public void removeRules(Collection<JuriRule> c) {
 		rules.removeAll(c);
 	}
 
+	/**
+	 * Get all rules in this model
+	 * 
+	 * @created 04.05.2012
+	 * @return
+	 */
 	public Set<JuriRule> getRules() {
 		return rules;
 	}

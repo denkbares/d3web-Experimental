@@ -43,9 +43,9 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.session.values.ChoiceValue;
 
 /**
- * PersistenceHandler for XCLModels
+ * PersistenceHandler for JuriModels
  * 
- * @author kazamatzuri, Markus Friedrich (denkbares GmbH)
+ * @author grotheer
  * 
  */
 public class JuriModelPersistenceHandler implements KnowledgeReader,
@@ -67,6 +67,7 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 		root.setAttribute("system", "d3web");
 		doc.appendChild(root);
 
+		// Get all juri models
 		ArrayList<JuriModel> models = new ArrayList<JuriModel>(
 				knowledgeBase.getAllKnowledgeSlicesFor(JuriModel.KNOWLEDGE_KIND));
 		for (JuriModel model : models) {
@@ -74,7 +75,8 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 			float cur = 0;
 			int max = getEstimatedSize(knowledgeBase);
 			for (JuriRule rule : rules) {
-				root.appendChild(getRuleElement(rule, doc));
+				// Append all rules to the doc
+				root.appendChild(createRuleElement(rule, doc));
 				listener.updateProgress(++cur / max, "Saving knowledge base: Juri Rules");
 			}
 		}
@@ -99,7 +101,7 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 	 * @param doc
 	 * @param listener
 	 */
-	public KnowledgeBase loadKnowledgeSlices(KnowledgeBase kb, Document doc, ProgressListener listener) throws IOException {
+	public KnowledgeBase loadKnowledgeSlices(KnowledgeBase kb, Document doc, ProgressListener listener) {
 		listener.updateProgress(0, "Loading knowledge base");
 		NodeList jurirules = doc.getElementsByTagName(JURI_RULE);
 		int cur = 0;
@@ -108,16 +110,28 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 
 		for (int i = 0; i < jurirules.getLength(); i++) {
 			Node current = jurirules.item(i);
-			addRule(kb, model, current);
+			JuriRule rule = createRuleFromNode(kb, current);
+			if (rule != null) {
+				model.addRule(rule);
+			}
 			listener.updateProgress(++cur / max, "Loading knowledge base: Juri Rules");
 		}
 		kb.getKnowledgeStore().addKnowledge(JuriModel.KNOWLEDGE_KIND, model);
 		return kb;
 	}
 
-	private void addRule(KnowledgeBase kb, JuriModel model, Node current) throws IOException {
-		String isDisjunctive = getAttribute(DISJUNCTIVE, current);
-		String fatherquestion = getAttribute(FATHER_QUESTION, current);
+	/**
+	 * Creates a rule from the node
+	 * 
+	 * @created 04.05.2012
+	 * @param kb
+	 * @param node
+	 * @return
+	 * @throws IOException
+	 */
+	private JuriRule createRuleFromNode(KnowledgeBase kb, Node node) {
+		String isDisjunctive = getAttribute(DISJUNCTIVE, node);
+		String fatherquestion = getAttribute(FATHER_QUESTION, node);
 
 		JuriRule rule;
 		if (fatherquestion != null) {
@@ -127,10 +141,10 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 				rule.setDisjunctive(Boolean.parseBoolean(isDisjunctive));
 			}
 
-			NodeList elements = current.getChildNodes();
-			for (int i = 0; i < elements.getLength(); i++) {
-				if (elements.item(i).getNodeName().equals(CHILD)) {
-					NodeList confirmingValueNodes = elements.item(i).getChildNodes();
+			NodeList child_elements = node.getChildNodes();
+			for (int i = 0; i < child_elements.getLength(); i++) {
+				if (child_elements.item(i).getNodeName().equals(CHILD)) {
+					NodeList confirmingValueNodes = child_elements.item(i).getChildNodes();
 					List<ChoiceValue> confirmingValues = new LinkedList<ChoiceValue>();
 					for (int j = 0; j < confirmingValueNodes.getLength(); j++) {
 						if (confirmingValueNodes.item(j).getNodeName().equals(CONFIRMING_VALUE)) {
@@ -138,28 +152,32 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 							confirmingValues.add(new ChoiceValue(confirmingValue));
 						}
 					}
-					String childquestion = getAttribute(QUESTION, elements.item(i));
+					String childquestion = getAttribute(QUESTION, child_elements.item(i));
 					QuestionOC child = (QuestionOC) kb.getManager().search(childquestion);
 					rule.addChild(child, confirmingValues);
 				}
 			}
-			model.addRule(rule);
+			return rule;
 		}
+		return null;
 	}
 
-	public Element getRuleElement(JuriRule jurirule, Document doc) throws IOException {
+	/**
+	 * Create element for a rule
+	 * 
+	 * @created 04.05.2012
+	 * @param jurirule the JuriRule
+	 * @param doc the Document
+	 * @return the created element
+	 * @throws IOException
+	 */
+	public Element createRuleElement(JuriRule jurirule, Document doc) {
 		Element ruleelement = doc.createElement(JURI_RULE);
 
 		ruleelement.setAttribute(FATHER_QUESTION, jurirule.getFather().getName());
 
 		for (Entry<QuestionOC, List<ChoiceValue>> child : jurirule.getChildren().entrySet()) {
-			Element childelement = doc.createElement(CHILD);
-			childelement.setAttribute(QUESTION, child.getKey().getName());
-			for (ChoiceValue value : child.getValue()) {
-				Element confirmingValue = doc.createElement(CONFIRMING_VALUE);
-				confirmingValue.setTextContent(value.getAnswerChoiceID());
-				childelement.appendChild(confirmingValue);
-			}
+			Element childelement = createChildElement(doc, child);
 			ruleelement.appendChild(childelement);
 		}
 
@@ -168,6 +186,25 @@ public class JuriModelPersistenceHandler implements KnowledgeReader,
 		}
 
 		return ruleelement;
+	}
+
+	/**
+	 * Create element for a child of a rule
+	 * 
+	 * @created 04.05.2012
+	 * @param doc
+	 * @param child
+	 * @param childelement
+	 */
+	private Element createChildElement(Document doc, Entry<QuestionOC, List<ChoiceValue>> child) {
+		Element childelement = doc.createElement(CHILD);
+		childelement.setAttribute(QUESTION, child.getKey().getName());
+		for (ChoiceValue value : child.getValue()) {
+			Element confirmingValue = doc.createElement(CONFIRMING_VALUE);
+			confirmingValue.setTextContent(value.getAnswerChoiceID());
+			childelement.appendChild(confirmingValue);
+		}
+		return childelement;
 	}
 
 	private String getAttribute(String name, Node node) {
