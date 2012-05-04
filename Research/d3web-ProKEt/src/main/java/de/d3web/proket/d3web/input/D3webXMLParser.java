@@ -254,6 +254,14 @@ public class D3webXMLParser {
         public String getUEQuestionnaire() {
 		return XMLUtils.getStr((Element) dialogSpec, "uequestionnaire", "NONE");
 	}
+        
+         public String getUEGroup() {
+		return XMLUtils.getStr((Element) dialogSpec, "uegroup", "");
+	}
+         
+         public String getUESystemType() {
+		return XMLUtils.getStr((Element) dialogSpec, "uesystemtype", "");
+	}
 
 	public HashMap<String, HashMap<String, String>> getSingleSpecs() {
 		HashMap<String, HashMap<String, String>> specs =

@@ -263,7 +263,7 @@ public class DialogServlet extends HttpServlet {
         GlobalSettings.getInstance().setQuestionCount("0");
 
         IRenderer rootRenderer = Renderer.getRenderer(dialogTree.getRoot());
-        ContainerCollection cc = rootRenderer.renderRoot(dialogTree);
+        ContainerCollection cc = rootRenderer.renderRoot(dialogTree, session);
         String html = cc.html.toString();
 
         // deliver the rendered output
@@ -288,7 +288,7 @@ public class DialogServlet extends HttpServlet {
             HttpServletResponse response, HttpSession httpSession) throws IOException {
 
         PrintWriter writer = response.getWriter();
-        
+
         GlobalSettings.getInstance().setLogBaseFolder(
                 GlobalSettings.getInstance().getServletBasePath()
                 + "../../LOGS");
@@ -316,7 +316,9 @@ public class DialogServlet extends HttpServlet {
         // on first show, also log the USABILITY GROUP - for multiple group
         // testing - as specified in the 
         // prototype xml as well as the SYSTEM TYPE
-        String group = GlobalSettings.getInstance().getUEGroup();
+        String group =
+                httpSession.getAttribute("uegroup").toString() != null
+                ? httpSession.getAttribute("uegroup").toString() : "";
         if (group != null && !group.equals("")) {
             String isGroupLogged =
                     httpSession.getAttribute("isGroupLogged") != null
@@ -328,7 +330,9 @@ public class DialogServlet extends HttpServlet {
             }
         }
 
-        String uesystemtype = GlobalSettings.getInstance().getUESystemType();
+        String uesystemtype =
+                httpSession.getAttribute("uesystemtype").toString() != null
+                ? httpSession.getAttribute("uesystemtype").toString() : "";
         if (uesystemtype != null && !uesystemtype.equals("")) {
             String isSystemTypeLogged =
                     httpSession.getAttribute("isSystemTypeLogged") != null

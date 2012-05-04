@@ -32,6 +32,7 @@ import de.d3web.proket.utils.ClassUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.TemplateUtils;
 import java.util.HashMap;
+import javax.servlet.http.HttpSession;
 
 /**
  * General renderer. This renderer is handling the basic things. Overload it if
@@ -43,6 +44,7 @@ public class Renderer implements IRenderer {
 
     // maximum possible rating value
     protected double maxRating = 100;
+    protected HttpSession httpSession;
 
      private static HashMap<String, String> nameToIdMap = new HashMap<String, String>();
     private static HashMap<String, String> idToNameMap = new HashMap<String, String>();
@@ -381,7 +383,8 @@ public class Renderer implements IRenderer {
     /**
      * Render the tree in the simple case with no cc given and no constraints
      */
-    public ContainerCollection renderRoot(DialogTree dialogTree) {
+    public ContainerCollection renderRoot(DialogTree dialogTree, HttpSession hs) {
+        this.httpSession = hs;
         ContainerCollection cc = new ContainerCollection();
         renderRoot(dialogTree, cc);
         return cc;

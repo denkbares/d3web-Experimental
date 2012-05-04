@@ -25,6 +25,7 @@ import de.d3web.core.session.Session;
 import de.d3web.proket.data.DialogTree;
 import de.d3web.proket.data.IDialogObject;
 import de.d3web.proket.output.container.ContainerCollection;
+import javax.servlet.http.HttpSession;
 
 /**
  * Interface for renderers of all the DialogObjects.
@@ -55,7 +56,7 @@ public interface IRenderer {
         
 
 	// render root element of the dialog tree
-	public ContainerCollection renderRoot(DialogTree dialogTree);
+	public ContainerCollection renderRoot(DialogTree dialogTree, HttpSession httpSession);
 
 	// ...with a given container collection...
 	public void renderRoot(DialogTree dialogTree, ContainerCollection cc);

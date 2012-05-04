@@ -191,6 +191,9 @@ public class D3webDialog extends HttpServlet {
             d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
             d3wcon.setLoginMode(d3webParser.getLogin());
 
+            httpSession.setAttribute("uegroup", d3webParser.getUEGroup());
+            httpSession.setAttribute("uesystemtype", d3webParser.getUESystemType());
+            
             // switch on/off logging depending on xml specification
             if (d3webParser.getLogging().contains("TRUE")) {
                 d3wcon.setLogging(true);
@@ -233,11 +236,6 @@ public class D3webDialog extends HttpServlet {
         GLOBSET.setLogBaseFolder(
                  GlobalSettings.getInstance().getServletBasePath()
                  +  "../../" + userpref + "-Data/LOGS");
-        
-        GLOBSET.setLogSubFolder(
-                "/G1-Data");
-        
-        System.out.println(GLOBSET.getLogFolder());
         
         
         // if a new dialog is loaded we also need a new session to start
@@ -397,7 +395,7 @@ public class D3webDialog extends HttpServlet {
             //ServletLogUtils.initForD3wDialogs(logger, now);
 
             JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
-        logInitially(request, logger);
+        logInitially(request, logger, httpSession);
 
         httpSession.setAttribute("loginit", true);
         //GLOBSET.setInitLogged(true); // TODO remove
@@ -1519,7 +1517,8 @@ protected void checkInitialLoggingReload(HttpSession httpSession,
         writer.append("<div>");
     }
     
-    protected void logInitially(HttpServletRequest request, JSONLogger logger) {
+    protected void logInitially(HttpServletRequest request, JSONLogger logger
+            , HttpSession httpSession) {
         // get values to logQuestionValue initially: browser, user, and start time
         String browser =
                 request.getParameter("browser").replace("+", " ");
@@ -1528,6 +1527,40 @@ protected void checkInitialLoggingReload(HttpSession httpSession,
         String start =
                 request.getParameter("timestring").replace("+", " ");
         ServletLogUtils.logBaseInfo(browser, user, start, logger);
+        
+        
+        // on first show, also log the USABILITY GROUP - for multiple group
+        // testing - as specified in the 
+        // prototype xml as well as the SYSTEM TYPE
+        String group =
+                httpSession.getAttribute("uegroup").toString() != null
+                ? httpSession.getAttribute("uegroup").toString() : "";
+        if (group != null && !group.equals("")) {
+            String isGroupLogged =
+                    httpSession.getAttribute("isGroupLogged") != null
+                    ? httpSession.getAttribute("isGroupLogged").toString() : "";
+
+            if (!isGroupLogged.equals("true")) {
+                ServletLogUtils.logUEGroup(group, logger);
+                httpSession.setAttribute("isGroupLogged", "true");
+            }
+        }
+
+        String uesystemtype =
+                httpSession.getAttribute("uesystemtype").toString() != null
+                ? httpSession.getAttribute("uesystemtype").toString() : "";
+        if (uesystemtype != null && !uesystemtype.equals("")) {
+            String isSystemTypeLogged =
+                    httpSession.getAttribute("isSystemTypeLogged") != null
+                    ? httpSession.getAttribute("isSystemTypeLogged").toString() : "";
+
+            if (!isSystemTypeLogged.equals("true")) {
+                ServletLogUtils.logDialogType(uesystemtype, logger);
+                httpSession.setAttribute("isSystemTypeLogged", "true");
+            }
+        }
+        
+        
     }
     
     protected void logSessionEnd(HttpServletRequest request, HttpSession httpSession) {

@@ -15,6 +15,7 @@
         study='TRUE' 
         logging='TRUE' 
         feedbackform="TRUE"
-	>
+        uegroup=""
+        >
 	<data kb="juriswap.d3web" />
 </dialog>
