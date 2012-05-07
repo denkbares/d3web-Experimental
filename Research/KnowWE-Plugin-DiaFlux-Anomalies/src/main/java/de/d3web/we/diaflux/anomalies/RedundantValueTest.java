@@ -25,7 +25,7 @@ import de.d3web.we.ci4ke.testing.CITestResult;
 import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class RedundantValueTest extends AbstractCITest {
 
@@ -81,7 +81,7 @@ public class RedundantValueTest extends AbstractCITest {
 
 			String errormsg = error.toString();
 			if (!errormsg.isEmpty()) {
-				KnowWEUtils.maskHTML(errormsg);
+				Strings.maskHTML(errormsg);
 				res = new CITestResult(Type.FAILED, errormsg, config);
 			}
 		}

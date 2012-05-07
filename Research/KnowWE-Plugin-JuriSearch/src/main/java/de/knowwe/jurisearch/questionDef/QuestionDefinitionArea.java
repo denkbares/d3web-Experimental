@@ -37,7 +37,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.jurisearch.BoxRenderer;
 import de.knowwe.jurisearch.BracketRenderer;
 import de.knowwe.jurisearch.EmbracedContent;
@@ -77,20 +77,20 @@ public class QuestionDefinitionArea extends AbstractType {
 		@Override
 		public void render(Section<?> section, UserContext user, StringBuilder string)
 		{
-			string.append(KnowWEUtils.maskHTML("<div id=\"" + section.getID() + "\">"));
-			string.append(KnowWEUtils.maskHTML("<div class=\"defaultMarkupFrame\">"));
+			string.append(Strings.maskHTML("<div id=\"" + section.getID() + "\">"));
+			string.append(Strings.maskHTML("<div class=\"defaultMarkupFrame\">"));
 
-			string.append(KnowWEUtils.maskHTML("<div class=\"jurisearch-instantedit\">"
+			string.append(Strings.maskHTML("<div class=\"jurisearch-instantedit\">"
 					// + getFrameName(sec)
 					// + getEditorIcon(sec)
 					+ UserSupportUtil.renderTools(section, user)
 					// + getLink(sec)
 					+ "</div>"));
-			string.append(KnowWEUtils.maskHTML("<pre>"));
+			string.append(Strings.maskHTML("<pre>"));
 			DelegateRenderer.getInstance().render(section, user, string);
-			string.append(KnowWEUtils.maskHTML("</pre>"));
-			string.append(KnowWEUtils.maskHTML("</div>"));
-			string.append(KnowWEUtils.maskHTML("</div>"));
+			string.append(Strings.maskHTML("</pre>"));
+			string.append(Strings.maskHTML("</div>"));
+			string.append(Strings.maskHTML("</div>"));
 		}
 	}
 

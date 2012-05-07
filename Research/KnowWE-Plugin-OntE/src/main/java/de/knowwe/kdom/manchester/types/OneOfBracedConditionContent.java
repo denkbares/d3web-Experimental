@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
-import de.knowwe.core.utils.SplitUtility;
+import de.knowwe.core.utils.Strings;
 
 /**
  * A content element enclosed in curly brackets is a {@link OWLObjectOneOf}
@@ -53,7 +53,7 @@ public class OneOfBracedConditionContent extends NonTerminalCondition {
 			String trimmed = text.trim();
 			int leadingSpaces = text.indexOf(trimmed);
 			if (trimmed.startsWith(Character.toString(OneOfBracedCondition.CURLY_BRACKET_OPEN))) {
-				int closingBracket = SplitUtility.findIndexOfClosingBracket(trimmed, 0,
+				int closingBracket = Strings.findIndexOfClosingBracket(trimmed, 0,
 							OneOfBracedCondition.CURLY_BRACKET_OPEN,
 						OneOfBracedCondition.CURLY_BRACKET_CLOSED);
 

@@ -1,21 +1,21 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
- *                    Computer Science VI, University of Wuerzburg
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * Computer Science VI, University of Wuerzburg
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.we.drools.action;
 
@@ -50,8 +50,8 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.SplitUtility;
 import de.knowwe.core.utils.StringFragment;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.logging.Logging;
 
@@ -71,8 +71,7 @@ public class DroolsAction extends AbstractAction {
 			// create session if necessary
 			session = DroolsKnowledgeHandler.getInstance().getSession(context);
 
-			if (session == null)
-				throw new RuntimeException(
+			if (session == null) throw new RuntimeException(
 						"INTERNAL ERROR: Session is null where it shouldn't be.");
 		}
 		catch (Exception e) {
@@ -104,13 +103,10 @@ public class DroolsAction extends AbstractAction {
 	/**
 	 * Generates a Message containing the status of the specified object.
 	 * 
-	 * @param session
-	 *            the current KnowledgeSession
-	 * @param context
-	 *            the current ActionContext
-	 * @throws IOException
-	 *             only thrown if something went wrong while writing to
-	 *             KnowWE.jsp
+	 * @param session the current KnowledgeSession
+	 * @param context the current ActionContext
+	 * @throws IOException only thrown if something went wrong while writing to
+	 *         KnowWE.jsp
 	 */
 	private void doGetAction(UserActionContext context, StatefulKnowledgeSession session) throws IOException {
 		if (!checkCommandSyntax("get\\s+(.*?)", context)) {
@@ -130,13 +126,10 @@ public class DroolsAction extends AbstractAction {
 	 * Sets the value of a specified Fact and generates a Message containing the
 	 * new status of the fact.
 	 * 
-	 * @param session
-	 *            the current KnowledgeSession
-	 * @param context
-	 *            the current ActionContext
-	 * @throws IOException
-	 *             only thrown if something went wrong while writing to
-	 *             KnowWE.jsp
+	 * @param session the current KnowledgeSession
+	 * @param context the current ActionContext
+	 * @throws IOException only thrown if something went wrong while writing to
+	 *         KnowWE.jsp
 	 */
 	private void doSetAction(UserActionContext context, StatefulKnowledgeSession session) throws IOException {
 		if (!checkCommandSyntax("set\\s+(.*?)\\s*=\\s*(.*?)", context)) {
@@ -161,15 +154,11 @@ public class DroolsAction extends AbstractAction {
 	/**
 	 * Sets the value of a ChoiceInput fact.
 	 * 
-	 * @param context
-	 *            the current ActionContext
-	 * @param session
-	 *            the current KnowledgeSession
-	 * @param fact
-	 *            the current fact
-	 * @throws IOException
-	 *             only thrown if something went wrong while writing to
-	 *             KnowWE.jsp
+	 * @param context the current ActionContext
+	 * @param session the current KnowledgeSession
+	 * @param fact the current fact
+	 * @throws IOException only thrown if something went wrong while writing to
+	 *         KnowWE.jsp
 	 */
 	private void doSetValueChoice(UserActionContext context, StatefulKnowledgeSession session, ChoiceInput fact) throws IOException {
 		// Get the corresponding FactHandle
@@ -190,15 +179,11 @@ public class DroolsAction extends AbstractAction {
 	/**
 	 * Sets the value of a NumInput fact.
 	 * 
-	 * @param context
-	 *            the current ActionContext
-	 * @param session
-	 *            the current KnowledgeSession
-	 * @param fact
-	 *            the current fact
-	 * @throws IOException
-	 *             only thrown if something went wrong while writing to
-	 *             KnowWE.jsp
+	 * @param context the current ActionContext
+	 * @param session the current KnowledgeSession
+	 * @param fact the current fact
+	 * @throws IOException only thrown if something went wrong while writing to
+	 *         KnowWE.jsp
 	 */
 	private void doSetValueNum(UserActionContext context, StatefulKnowledgeSession session, NumInput fact) throws IOException {
 		// Get the corresponding FactHandle
@@ -220,11 +205,9 @@ public class DroolsAction extends AbstractAction {
 	 * Loads the session specified by the name in the command. All commands are
 	 * executed immediately
 	 * 
-	 * @param context
-	 *            the current ActionContext
-	 * @throws IOException
-	 *             only thrown if something went wrong while writing to
-	 *             KnowWE.jsp
+	 * @param context the current ActionContext
+	 * @throws IOException only thrown if something went wrong while writing to
+	 *         KnowWE.jsp
 	 */
 	private void doLoadAction(UserActionContext context) throws IOException {
 
@@ -313,16 +296,14 @@ public class DroolsAction extends AbstractAction {
 	/**
 	 * Extracts the name of the session from the command
 	 * 
-	 * @param text
-	 *            the command
+	 * @param text the command
 	 * @return the name of the session
 	 */
 	private String extractSessionName(String text) {
 		Pattern p = Pattern.compile("^(load|store)\\s*(.+?)\\s*");
 		Matcher m = p.matcher(text);
 
-		if (!m.matches())
-			return null;
+		if (!m.matches()) return null;
 
 		return m.group(2);
 	}
@@ -330,13 +311,11 @@ public class DroolsAction extends AbstractAction {
 	/**
 	 * Executes all commands stored in a session
 	 * 
-	 * @param context
-	 *            the current ActionContext
-	 * @param originalText
-	 *            the text of the DroolsSessionType representing the commands
-	 * @throws IOException
-	 *             only thrown if something went wrong while writing to
-	 *             KnowWE.jsp
+	 * @param context the current ActionContext
+	 * @param originalText the text of the DroolsSessionType representing the
+	 *        commands
+	 * @throws IOException only thrown if something went wrong while writing to
+	 *         KnowWE.jsp
 	 */
 	private void processSession(UserActionContext context, String originalText) throws IOException {
 		String[] commands = originalText.split("\r\n");
@@ -350,10 +329,8 @@ public class DroolsAction extends AbstractAction {
 	/**
 	 * Loads the fact which is specified in the request.
 	 * 
-	 * @param session
-	 *            the current KnowledgeSession
-	 * @param context
-	 *            the current ActionContext
+	 * @param session the current KnowledgeSession
+	 * @param context the current ActionContext
 	 * @return AbstractFact the loaded fact (null if no one was found)
 	 */
 	private AbstractFact loadFact(StatefulKnowledgeSession session, UserActionContext context) {
@@ -361,8 +338,7 @@ public class DroolsAction extends AbstractAction {
 		if (factName != null) {
 			for (Object o : session.getObjects()) {
 				if (o instanceof AbstractFact
-						&& ((AbstractFact) o).getName().equals(factName))
-					return (AbstractFact) o;
+						&& ((AbstractFact) o).getName().equals(factName)) return (AbstractFact) o;
 			}
 			Logging.getInstance().severe(
 					"Could not find " + factName + " in the current session.");
@@ -375,10 +351,8 @@ public class DroolsAction extends AbstractAction {
 	/**
 	 * Returns a message in XML Format which is processed via JavaScript.
 	 * 
-	 * @param context
-	 *            the current ActionContext
-	 * @param message
-	 *            a custom Message which will be wrapped with XML markups
+	 * @param context the current ActionContext
+	 * @param message a custom Message which will be wrapped with XML markups
 	 */
 	private void returnMessage(UserActionContext context, String message, ResponseType responseType) throws IOException {
 		JsonObject json = new JsonObject();
@@ -403,14 +377,13 @@ public class DroolsAction extends AbstractAction {
 		Pattern p = Pattern.compile("^(set|get)\\s*(.+?)\\s*(=.*|$)");
 		Matcher m = p.matcher(text);
 
-		if (!m.matches())
-			return null;
+		if (!m.matches()) return null;
 
 		return m.group(2);
 	}
 
 	private String extractValue(String text) {
-		List<StringFragment> value = SplitUtility.splitUnquoted(text, "=");
+		List<StringFragment> value = Strings.splitUnquoted(text, "=");
 		if (value.size() > 1) {
 			return value.get(1).getContent().trim();
 		}

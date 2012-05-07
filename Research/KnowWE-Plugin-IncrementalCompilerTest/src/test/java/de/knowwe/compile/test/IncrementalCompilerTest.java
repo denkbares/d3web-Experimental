@@ -42,6 +42,7 @@ import de.knowwe.compile.test.util.Vocabulary;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
@@ -96,7 +97,7 @@ public class IncrementalCompilerTest {
 		// Test existence of TermDefinitions
 		for (String def : defs) {
 			assertTrue("Missing TermDefinition for: " + def,
-					manager.getTermDefinitions(def).size() >= 1);
+					manager.getTermDefinitions(new TermIdentifier(def)).size() >= 1);
 		}
 	}
 

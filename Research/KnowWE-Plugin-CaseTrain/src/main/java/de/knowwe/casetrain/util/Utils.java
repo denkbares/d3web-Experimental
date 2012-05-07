@@ -28,7 +28,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolUtils;
 
@@ -113,12 +113,12 @@ public class Utils {
 			className = "error";
 		}
 
-		string.append(KnowWEUtils.maskHTML("<span class='" + className + "'>"));
+		string.append(Strings.maskHTML("<span class='" + className + "'>"));
 		for (Message error : messages) {
 			string.append(error.getVerbalization());
-			string.append(KnowWEUtils.maskHTML("<br/>"));
+			string.append(Strings.maskHTML("<br/>"));
 		}
-		string.append(KnowWEUtils.maskHTML("</span>"));
+		string.append(Strings.maskHTML("</span>"));
 	}
 
 	/**

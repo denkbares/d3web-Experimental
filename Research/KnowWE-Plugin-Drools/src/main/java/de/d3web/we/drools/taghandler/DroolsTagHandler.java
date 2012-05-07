@@ -25,7 +25,7 @@ import de.knowwe.core.RessourceLoader;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * The TagHandler which adds the command line for the Drools Plugin
@@ -65,7 +65,7 @@ public class DroolsTagHandler extends AbstractTagHandler {
 				+ section.getTitle() + "', width:512 });");
 		bob.append("</script>");
 
-		return KnowWEUtils.maskHTML(bob.toString());
+		return Strings.maskHTML(bob.toString());
 	}
 
 }

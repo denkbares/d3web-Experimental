@@ -22,7 +22,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.usersupport.tables.InnerTable;
 
@@ -43,7 +43,7 @@ public class DefaultMarkupRendererUserSupport implements Renderer
 		Section<InnerTable> iT = Sections.findSuccessor(section, InnerTable.class);
 		StringBuilder buildi = new StringBuilder();
 		TableRenderer.renderExportImportButton(buildi, iT);
-		string.append(KnowWEUtils.maskHTML(buildi.toString()));
+		string.append(Strings.maskHTML(buildi.toString()));
 	}
 
 }

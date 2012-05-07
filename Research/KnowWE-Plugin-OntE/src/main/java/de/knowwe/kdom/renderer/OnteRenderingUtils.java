@@ -9,10 +9,12 @@ import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 import de.knowwe.compile.ImportManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.owlapi.query.OWLApiQueryParser;
 
 /**
@@ -31,30 +33,30 @@ public class OnteRenderingUtils {
 	 * @param term
 	 * @return
 	 */
-	public static boolean isKnownTerm(String termIdendifier) {
+	public static boolean isKnownTerm(TermIdentifier termIdendifier) {
 		ReferenceManager manager = IncrementalCompiler.getInstance().getTerminology();
 		return manager.isValid(termIdendifier);
 	}
 
-	public static String determineTypeOfTermIdentifier(String termIdendifier) {
+	public static String determineTypeOfTerm(String term) {
 
 		OWLApiQueryParser parser = new OWLApiQueryParser(new SimpleShortFormProvider());
-		if (parser.isClassName(termIdendifier)) {
+		if (parser.isClassName(term)) {
 			return "OWLClass";
 		}
-		else if (parser.isObjectPropertyName(termIdendifier)) {
+		else if (parser.isObjectPropertyName(term)) {
 			return "OWLObjectProperty";
 		}
-		else if (parser.isDataPropertyName(termIdendifier)) {
+		else if (parser.isDataPropertyName(term)) {
 			return "OWLDataProperty";
 		}
-		else if (parser.isIndividualName(termIdendifier)) {
+		else if (parser.isIndividualName(term)) {
 			return "OWLIndividual";
 		}
 		return null;
 	}
 
-	public static String getHyperlink(String termIdentifier) {
+	public static String getHyperlink(TermIdentifier termIdentifier) {
 
 		if (IncrementalCompiler.getInstance().getTerminology().isImportedObject(termIdentifier)) {
 			Section<? extends AbstractType> importSection = ImportManager.resolveImportSection(termIdentifier);
@@ -115,7 +117,7 @@ public class OnteRenderingUtils {
 			s.append("<span style=\"font-size:9px;padding-left:10px;\">(Defined in: ");
 		}
 
-		String href = getHyperlink(term.getText());
+		String href = getHyperlink(KnowWEUtils.getTermIdentifier(term));
 		if (!href.isEmpty()) {
 			s.append("<a href=\"").append(href);
 			s.append("\" title=\"Goto definition article\">");
@@ -171,8 +173,9 @@ public class OnteRenderingUtils {
 	public static String renderHyperlink(String term, boolean raw) {
 
 		term = term.replace("\"", "").trim();
-		Collection<Section<? extends SimpleDefinition>> termDefs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				term);
+		Collection<Section<? extends SimpleDefinition>> termDefs =
+				IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+						new TermIdentifier(term));
 
 		// only one definition allowed in the onte plugin, so simply use the
 		// first result

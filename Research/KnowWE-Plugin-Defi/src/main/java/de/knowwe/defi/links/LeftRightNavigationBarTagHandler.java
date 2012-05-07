@@ -23,7 +23,7 @@ import java.util.Map;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class LeftRightNavigationBarTagHandler extends AbstractTagHandler {
 
@@ -48,41 +48,41 @@ public class LeftRightNavigationBarTagHandler extends AbstractTagHandler {
 
 		StringBuffer buffy = new StringBuffer();
 
-		buffy.append(KnowWEUtils.maskHTML("<center>"));
-		buffy.append(KnowWEUtils.maskHTML("<table>"));
-		buffy.append(KnowWEUtils.maskHTML("<tr>"));
+		buffy.append(Strings.maskHTML("<center>"));
+		buffy.append(Strings.maskHTML("<table>"));
+		buffy.append(Strings.maskHTML("<tr>"));
 		if (left != null) {
-			buffy.append(KnowWEUtils.maskHTML("<td >"));
+			buffy.append(Strings.maskHTML("<td >"));
 
-			buffy.append(KnowWEUtils.maskHTML("<a href='Wiki.jsp?page="
+			buffy.append(Strings.maskHTML("<a href='Wiki.jsp?page="
 					+ extractPageName(left)
 					+ "' ><img src='KnowWEExtension/images/Pfeil_nach_links.gif' height='60'/></a>"));
-			buffy.append(KnowWEUtils.maskHTML("</td>"));
-			buffy.append(KnowWEUtils.maskHTML("<td>"));
+			buffy.append(Strings.maskHTML("</td>"));
+			buffy.append(Strings.maskHTML("<td>"));
 			buffy.append(left);
 
-			buffy.append(KnowWEUtils.maskHTML("</td>"));
+			buffy.append(Strings.maskHTML("</td>"));
 		}
 		if (center != null) {
-			buffy.append(KnowWEUtils.maskHTML("<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
+			buffy.append(Strings.maskHTML("<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
 			buffy.append(center);
-			buffy.append(KnowWEUtils.maskHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
-			buffy.append(KnowWEUtils.maskHTML("</td>"));
+			buffy.append(Strings.maskHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
+			buffy.append(Strings.maskHTML("</td>"));
 		}
 
 		if (right != null) {
-			buffy.append(KnowWEUtils.maskHTML("<td>"));
+			buffy.append(Strings.maskHTML("<td>"));
 			buffy.append(right);
-			buffy.append(KnowWEUtils.maskHTML("</td>"));
-			buffy.append(KnowWEUtils.maskHTML("<td>"));
-			buffy.append(KnowWEUtils.maskHTML("<a href='Wiki.jsp?page="
+			buffy.append(Strings.maskHTML("</td>"));
+			buffy.append(Strings.maskHTML("<td>"));
+			buffy.append(Strings.maskHTML("<a href='Wiki.jsp?page="
 					+ extractPageName(right)
 					+ "' > <img src='KnowWEExtension/images/Pfeil_nach_rechts.gif' height='60'/>  </a>"));
 		}
-		buffy.append(KnowWEUtils.maskHTML("</td>"));
-		buffy.append(KnowWEUtils.maskHTML("</tr>"));
-		buffy.append(KnowWEUtils.maskHTML("</table>"));
-		buffy.append(KnowWEUtils.maskHTML("</center>"));
+		buffy.append(Strings.maskHTML("</td>"));
+		buffy.append(Strings.maskHTML("</tr>"));
+		buffy.append(Strings.maskHTML("</table>"));
+		buffy.append(Strings.maskHTML("</center>"));
 
 		return buffy.toString();
 	}

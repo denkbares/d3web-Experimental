@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 
 
@@ -43,7 +43,7 @@ public class WordDefaultMarkupRenderer implements Renderer
 		new DefaultMarkupRenderer().render(section, user, string);
 		StringBuilder buildi = new StringBuilder();
 		this.renderExportImportButton(buildi, section);
-		string.append(KnowWEUtils.maskHTML(buildi.toString()));
+		string.append(Strings.maskHTML(buildi.toString()));
 	}
 
 	/**

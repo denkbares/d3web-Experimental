@@ -32,8 +32,7 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.SplitUtility;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 
 /**
@@ -60,7 +59,7 @@ public class BraceElement extends NonTerminalCondition {
 
 				StringBuilder masked = new StringBuilder();
 				DelegateRenderer.getInstance().render(section, user, masked);
-				string.append(KnowWEUtils.maskJSPWikiMarkup(masked.toString()));
+				string.append(Strings.maskJSPWikiMarkup(masked.toString()));
 			}
 		});
 	}
@@ -83,7 +82,7 @@ class BracedExpressionFinder implements SectionFinder {
 		String trimmed = text.trim();
 		boolean startsWithOpen = trimmed.startsWith(Character.toString(BraceElement.OPEN));
 
-		int closingBracket = SplitUtility.findIndexOfClosingBracket(trimmed, 0,
+		int closingBracket = Strings.findIndexOfClosingBracket(trimmed, 0,
 				BraceElement.OPEN, BraceElement.CLOSED);
 
 		// text does not start with open brace, return null
@@ -117,7 +116,7 @@ class BracedExpressionFinder implements SectionFinder {
 		}
 
 		// OR an embracedExpression can be concluded with a lineEnd-comment
-		int lastEndLineCommentSymbol = SplitUtility.lastIndexOfUnquoted(text, "//");
+		int lastEndLineCommentSymbol = Strings.lastIndexOfUnquoted(text, "//");
 		// so has to start with '(' and have a lineend-comment-sign after
 		// the closing bracket but nothing in between!
 		if (trimmed.startsWith(Character.toString(BraceElement.OPEN))) {

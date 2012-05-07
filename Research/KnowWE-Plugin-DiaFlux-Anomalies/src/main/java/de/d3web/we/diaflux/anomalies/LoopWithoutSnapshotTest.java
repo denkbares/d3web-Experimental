@@ -18,7 +18,7 @@ import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.d3web.we.diaflux.pathcoloring.AnomalyManager;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class LoopWithoutSnapshotTest extends AbstractCITest {
 
@@ -60,7 +60,7 @@ public class LoopWithoutSnapshotTest extends AbstractCITest {
 
 			String errormsg = msg.toString();
 			if (!errormsg.isEmpty()) {
-				KnowWEUtils.maskHTML(errormsg);
+				Strings.maskHTML(errormsg);
 				res = new CITestResult(Type.FAILED, errormsg, config);
 			}
 		}
@@ -136,9 +136,9 @@ public class LoopWithoutSnapshotTest extends AbstractCITest {
 				kb.getManager().getObjects(Flow.class);
 		for (Flow flow : flowcharts) {
 			for (Node n : flow.getNodes()) {
-				if(n instanceof ComposedNode) {
+				if (n instanceof ComposedNode) {
 					ComposedNode cNode = (ComposedNode) n;
-					if(cNode.getCalledFlowName().equals(subFlow)) {
+					if (cNode.getCalledFlowName().equals(subFlow)) {
 						result.add(cNode);
 					}
 				}
@@ -149,7 +149,7 @@ public class LoopWithoutSnapshotTest extends AbstractCITest {
 
 	private List<Node> getFollowingNodes(Node node) {
 		List<Node> result = new LinkedList<Node>();
-		for(Edge e : node.getOutgoingEdges()) {
+		for (Edge e : node.getOutgoingEdges()) {
 			result.add(e.getEndNode());
 		}
 		return result;

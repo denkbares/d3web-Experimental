@@ -22,7 +22,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -45,10 +45,10 @@ public class Video extends MultimediaItem {
 			public void render(Section<?> sec, UserContext user, StringBuilder string) {
 				Section<MultimediaItemContent> bildURL = Sections.findChildOfType(sec,
 						MultimediaItemContent.class);
-				string.append(KnowWEUtils.maskHTML("<img height='70' src='"));
+				string.append(Strings.maskHTML("<img height='70' src='"));
 				string.append("attach/" + sec.getArticle().getTitle() + "/");
 				string.append(bildURL.getText().trim());
-				string.append(KnowWEUtils.maskHTML("'></img>"));
+				string.append(Strings.maskHTML("'></img>"));
 			}
 		});
 

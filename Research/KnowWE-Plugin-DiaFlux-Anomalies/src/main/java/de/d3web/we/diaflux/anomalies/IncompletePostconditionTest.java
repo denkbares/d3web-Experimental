@@ -33,7 +33,7 @@ import de.d3web.we.diaflux.evaluators.EvaluatorManager;
 import de.d3web.we.diaflux.pathcoloring.AnomalyManager;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class IncompletePostconditionTest extends AbstractCITest {
 
@@ -43,7 +43,7 @@ public class IncompletePostconditionTest extends AbstractCITest {
 		PROCESSING,
 	}
 
-	private EvaluatorManager evalManager = EvaluatorManager.getEvalManager();
+	private final EvaluatorManager evalManager = EvaluatorManager.getEvalManager();
 
 	@Override
 	public CITestResult call() throws Exception {
@@ -80,7 +80,7 @@ public class IncompletePostconditionTest extends AbstractCITest {
 		String errormsg = error.toString();
 		if (!errormsg.isEmpty()) {
 			errormsg = "Incomplete Postconditions:<br>" + errormsg;
-			KnowWEUtils.maskHTML(errormsg);
+			Strings.maskHTML(errormsg);
 			res = new CITestResult(Type.FAILED, errormsg, config);
 		}
 

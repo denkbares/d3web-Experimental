@@ -57,7 +57,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.defi.aboutMe.AboutMe;
 import de.knowwe.defi.logger.PageLoggerHandler;
 import de.knowwe.defi.menu.DynamicMenuMarkup;
@@ -357,7 +357,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		fm.append("</table>");
 
-		return KnowWEUtils.maskHTML(fm.toString());
+		return Strings.maskHTML(fm.toString());
 	}
 
 	/**

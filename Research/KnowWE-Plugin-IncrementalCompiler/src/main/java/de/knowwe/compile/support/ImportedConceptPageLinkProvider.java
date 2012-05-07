@@ -6,6 +6,7 @@ import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
@@ -24,10 +25,10 @@ public class ImportedConceptPageLinkProvider implements ToolProvider {
 		if (section.get() instanceof SimpleReference) {
 
 			boolean isImported = IncrementalCompiler.getInstance().getTerminology().isImportedObject(
-					section.getText());
+					KnowWEUtils.getTermIdentifier(section));
 
 			if (isImported) {
-				Section<? extends AbstractType> importLocation = ImportManager.resolveImportSection(section.getText());
+				Section<? extends AbstractType> importLocation = ImportManager.resolveImportSection(KnowWEUtils.getTermIdentifier(section));
 
 				if (importLocation != null) {
 					return new Tool[] { getConceptInfoPageTool(importLocation) };

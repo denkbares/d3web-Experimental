@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -23,22 +23,23 @@ import java.util.StringTokenizer;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.onte.editor.OWLApiAxiomCache;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 17.10.2011
  */
 public class ManchesterOWLSyntaxHTMLColorRenderer {
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 17.10.2011
 	 * @param axiom
 	 */
@@ -66,11 +67,11 @@ public class ManchesterOWLSyntaxHTMLColorRenderer {
 				doc.append(curToken);
 				doc.append("</span> ");
 			}
-			else if (OnteRenderingUtils.isKnownTerm(curToken)) {
+			else if (OnteRenderingUtils.isKnownTerm(new TermIdentifier(curToken))) {
 
 				doc.append(" <span style=\"color:rgb(25, 180, 120);\"");
 
-				String termType = OnteRenderingUtils.determineTypeOfTermIdentifier(curToken);
+				String termType = OnteRenderingUtils.determineTypeOfTerm(curToken);
 				if (termType != null) {
 					doc.append(" class=\"pointer\" data-type=\"").append(termType).append("\"");
 				}
@@ -90,10 +91,9 @@ public class ManchesterOWLSyntaxHTMLColorRenderer {
 		}
 	}
 
-
 	/**
 	 * Checks weather a given token is a restriction keyword.
-	 *
+	 * 
 	 * @created 17.10.2011
 	 * @param keyword
 	 * @return
@@ -114,7 +114,7 @@ public class ManchesterOWLSyntaxHTMLColorRenderer {
 
 	/**
 	 * Checks weather a given token is a characteristics keyword.
-	 *
+	 * 
 	 * @created 17.10.2011
 	 * @param keyword
 	 * @return

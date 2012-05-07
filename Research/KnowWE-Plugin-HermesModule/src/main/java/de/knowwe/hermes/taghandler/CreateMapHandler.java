@@ -26,7 +26,7 @@ import java.util.Map;
 import de.knowwe.core.Environment;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class CreateMapHandler extends AbstractHTMLTagHandler {
 
@@ -87,7 +87,7 @@ public class CreateMapHandler extends AbstractHTMLTagHandler {
 
 				+ "</td></table>\n";
 
-		return KnowWEUtils.maskHTML(text);
+		return Strings.maskHTML(text);
 	}
 
 }

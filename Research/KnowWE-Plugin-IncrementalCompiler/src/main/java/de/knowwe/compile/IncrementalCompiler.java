@@ -36,6 +36,7 @@ import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.compile.Priority;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.compile.terminology.TerminologyExtension;
 import de.knowwe.core.event.Event;
@@ -68,7 +69,9 @@ public class IncrementalCompiler implements EventListener {
 
 	private final ReferenceManager terminology = new ReferenceManager();
 
+	@SuppressWarnings("rawtypes")
 	private Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices = new HashSet<Section<? extends KnowledgeUnit>>();
+	@SuppressWarnings("rawtypes")
 	private Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove = new HashSet<Section<? extends KnowledgeUnit>>();
 
 	// TODO: how to implement singleton plugin?
@@ -117,9 +120,9 @@ public class IncrementalCompiler implements EventListener {
 	 * @param key
 	 * @param termIdentifier
 	 */
-	public void registerImportedTerminology(Section<? extends AbstractType> key, String termIdentifier) {
+	public void registerImportedTerminology(Section<? extends AbstractType> key, TermIdentifier termIdentifier) {
 		Section<ImportedTerm> importedSection = Section.createSection(
-				termIdentifier, new ImportedTerm(), null);
+				termIdentifier.getLastPathElement(), new ImportedTerm(), null);
 		terminology.addImportedObject(importedSection);
 		terminology.registerTermDefinition(importedSection);
 		ImportManager.addImport(key, importedSection);
@@ -139,7 +142,7 @@ public class IncrementalCompiler implements EventListener {
 		while (it.hasNext()) {
 			Section<?> termIdentifier = it.next();
 			terminology.deregisterTermDefinition(termIdentifier);
-			terminology.removeImportedObject(termIdentifier.getText());
+			terminology.removeImportedObject(KnowWEUtils.getTermIdentifier(termIdentifier));
 		}
 		ImportManager.removeImport(key);
 	}
@@ -170,22 +173,12 @@ public class IncrementalCompiler implements EventListener {
 					TermRegistrationScope.GLOBAL));
 		}
 
-		@Override
-		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
-			return s.getText();
-		}
-
 	}
 
 	class ImportedTerm extends SimpleDefinition {
 
 		public ImportedTerm() {
 			super(TermRegistrationScope.GLOBAL, String.class);
-		}
-
-		@Override
-		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
-			return s.getText();
 		}
 
 	}
@@ -205,6 +198,7 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void compileChanges(KDOMCreatedEvent event) {
 		Article modifiedArticle = event.getArticle();
 		Collection<Section<? extends Type>> newSectionsNotReused = CompileUtils.findSectionsNotReused(modifiedArticle);
@@ -232,7 +226,6 @@ public class IncrementalCompiler implements EventListener {
 		// filter resource-delta for equal sections
 		EqualStringHazardFilter.filter(createdknowledge, deletedknowledge);
 
-
 		for (Section<? extends KnowledgeUnit> section : createdknowledge) {
 
 			this.potentiallyNewKnowledgeSlices.add(section);
@@ -256,8 +249,6 @@ public class IncrementalCompiler implements EventListener {
 				this.knowledgeSlicesToRemove.add(section);
 			}
 		}
-
-
 
 		// check deleted objects
 		Collection<Section<SimpleDefinition>> deletedObjectDefintions = CompileUtils.filterDefinitions(oldSectionsNotReused);
@@ -350,6 +341,7 @@ public class IncrementalCompiler implements EventListener {
 	 * @param potentiallyNewKnowledgeSlices2
 	 * @param knowledgeSlicesToRemove2
 	 */
+	@SuppressWarnings("rawtypes")
 	private void hazardFilter(Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices2, Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove2) {
 
 		EqualStringHazardFilter.filter(potentiallyNewKnowledgeSlices2,
@@ -366,6 +358,7 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void removeRecursively(Section<? extends SimpleTerm> section) {
 		if (terminology.wasValidInOldVersion(section)) {
 			terminology.removeFromValidObjects(section);
@@ -382,6 +375,7 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void resolveRecursively(Section<? extends SimpleDefinition> section) {
 		if (hasValidDefinition(section)) {
 			// we cannot check on "!terminology.wasValidInOldVersion(section)"
@@ -423,12 +417,12 @@ public class IncrementalCompiler implements EventListener {
 	}
 
 	private boolean hasValidDefinition(Section<?> section) {
-		String termIdentifier = KnowWEUtils.getTermIdentifier(section);
+		TermIdentifier termIdentifier = KnowWEUtils.getTermIdentifier(section);
 		return hasValidDefinition(termIdentifier);
 
 	}
 
-	public boolean hasValidDefinition(String termIdentifier) {
+	public boolean hasValidDefinition(TermIdentifier termIdentifier) {
 
 		// System.out.println("CheckDefinition: " + termIdentifier);
 		Collection<Message> messages = checkDefinition(termIdentifier);
@@ -441,12 +435,13 @@ public class IncrementalCompiler implements EventListener {
 		return true;
 	}
 
-	public Collection<Message> checkDefinition(String termIdentifier) {
+	@SuppressWarnings("rawtypes")
+	public Collection<Message> checkDefinition(TermIdentifier termIdentifier) {
 		Collection<Message> messages = new ArrayList<Message>();
 
 		Collection<Section<? extends SimpleDefinition>> termDefiningSections = terminology.getTermDefinitions(termIdentifier);
 		if (termDefiningSections.size() == 0) {
-			messages.add(Messages.noSuchObjectError(termIdentifier));
+			messages.add(Messages.noSuchObjectError(termIdentifier.toString()));
 			return messages;
 		}
 
@@ -479,11 +474,11 @@ public class IncrementalCompiler implements EventListener {
 			for (Section<SimpleReference> ref : allReferencesOfComplexDefinition) {
 				String errorMsg = "ComplexDefinition has dependency error: ";
 				// if one reference is not defined
-				String termIdentifier2 = KnowWEUtils.getTermIdentifier(ref);
+				TermIdentifier termIdentifier2 = KnowWEUtils.getTermIdentifier(ref);
 				if ((!terminology.isValid(termIdentifier2))) {
 					// System.out.println("dependency error");
-					messages.add(new Message(Message.Type.ERROR, errorMsg +
-							termIdentifier2));
+					messages.add(Messages.error(errorMsg +
+							termIdentifier2.toString()));
 					return messages;
 				}
 
@@ -491,12 +486,10 @@ public class IncrementalCompiler implements EventListener {
 				if (complexDef.get() instanceof ComplexDefinitionWithTypeConstraints
 						&& !((ComplexDefinitionWithTypeConstraints) complexDef.get()).checkTypeConstraints(
 								def, ref)) { // or has a wrong type
-					messages.add(new Message(
-							Message.Type.ERROR,
-							errorMsg
-									+ ((ComplexDefinitionWithTypeConstraints) complexDef.get())
+					messages.add(Messages.error(
+							errorMsg + ((ComplexDefinitionWithTypeConstraints) complexDef.get())
 											.getProblemMessageForConstraintViolation(def,
-													ref) + " :" + termIdentifier2));
+													ref) + " :" + termIdentifier2.toString()));
 					return messages;
 				}
 			}

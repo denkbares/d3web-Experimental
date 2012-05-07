@@ -22,7 +22,7 @@ import de.d3web.we.knowledgebase.KnowledgeBaseType;
 import de.knowwe.core.RessourceLoader;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -54,15 +54,15 @@ public class GroovyCITestRenderer extends DefaultMarkupRenderer {
 
 		String testname = KnowledgeBaseType.getAnnotation(section,
 				GroovyCITestType.ANNOTATION_NAME);
-		string.append(KnowWEUtils.maskHTML("<b>" + testname + "</b>\n"));
+		string.append(Strings.maskHTML("<b>" + testname + "</b>\n"));
 
 		// string.append(KnowWEUtils.maskHTML("<span>\n"));
-		string.append(KnowWEUtils.maskHTML("<script type=\"syntaxhighlighter\" class=\"brush: groovy\">"));
-		string.append(KnowWEUtils.maskHTML("<![CDATA[\n"));
+		string.append(Strings.maskHTML("<script type=\"syntaxhighlighter\" class=\"brush: groovy\">"));
+		string.append(Strings.maskHTML("<![CDATA[\n"));
 
 		string.append(DefaultMarkupType.getContent(section));
 
-		string.append(KnowWEUtils.maskHTML("\n]]></script>\n"));
+		string.append(Strings.maskHTML("\n]]></script>\n"));
 		// string.append(KnowWEUtils.maskHTML("</span>\n"));
 	}
 

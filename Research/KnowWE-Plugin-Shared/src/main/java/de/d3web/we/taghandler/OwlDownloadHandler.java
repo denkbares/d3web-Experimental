@@ -25,7 +25,7 @@ import java.util.Map;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class OwlDownloadHandler extends AbstractHTMLTagHandler {
 
@@ -48,6 +48,6 @@ public class OwlDownloadHandler extends AbstractHTMLTagHandler {
 		String icon = "<img src=\"KnowWEExtension/images/disk.png\" title=\"Owl download\" /></img>";
 		result += "<a href=\"" + prefix + "OwlDownload.jsp\">" + icon + "</a>";
 
-		return KnowWEUtils.maskHTML(result);
+		return Strings.maskHTML(result);
 	}
 }

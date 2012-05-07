@@ -24,7 +24,7 @@ import java.util.List;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * Renders a span with css-classes around some text.
@@ -59,14 +59,14 @@ public class SpanClassRenderer implements Renderer {
 	@Override
 	public void render(Section<?> sec, UserContext user,
 			StringBuilder string) {
-		string.append(KnowWEUtils.maskHTML("<span class=\"" + clazz));
+		string.append(Strings.maskHTML("<span class=\"" + clazz));
 
 		for (String clazz : cssClasses)
 			string.append(" " + clazz);
-		string.append(KnowWEUtils.maskHTML("\">"));
+		string.append(Strings.maskHTML("\">"));
 
 		MouseOverTitleRenderer.getInstance().render(sec, user, string);
-		string.append(KnowWEUtils.maskHTML("</span>"));
+		string.append(Strings.maskHTML("</span>"));
 	}
 
 }

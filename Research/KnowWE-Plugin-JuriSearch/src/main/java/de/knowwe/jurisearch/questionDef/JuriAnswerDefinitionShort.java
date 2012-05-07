@@ -5,10 +5,11 @@ import java.util.List;
 import de.d3web.jurisearch.JuriRule;
 import de.d3web.we.object.AnswerDefinition;
 import de.d3web.we.object.QuestionDefinition;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.jurisearch.questionDef.QuestionDefinitionArea.QuestionDefinitionContent;
 import de.knowwe.jurisearch.questionDef.QuestionDefinitionArea.QuestionTermDefinitionLine.QAreaQuestionDefinition;
 
@@ -32,8 +33,8 @@ public class JuriAnswerDefinitionShort extends AnswerDefinition {
 	}
 
 	@Override
-	public String getAnswerName(Section<? extends AnswerDefinition> answerDefinition) {
-		char c = KnowWEUtils.trimQuotes(answerDefinition.getText()).charAt(0);
+	public String getTermName(Section<? extends SimpleTerm> answerDefinition) {
+		char c = Strings.trimQuotes(answerDefinition.getText()).charAt(0);
 		switch (c) {
 		case YES:
 			return JuriRule.YES.getName();

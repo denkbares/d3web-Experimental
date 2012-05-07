@@ -30,7 +30,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.TimeStamp;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -62,7 +62,7 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 		QueryResultTable qResultTable = Rdf2GoCore.getInstance().sparqlSelect(querystring);
 		ClosableIterator<QueryRow> qResult = qResultTable.iterator();
 
-		return KnowWEUtils.maskHTML(renderQueryResult(qResult, values));
+		return Strings.maskHTML(renderQueryResult(qResult, values));
 
 	}
 

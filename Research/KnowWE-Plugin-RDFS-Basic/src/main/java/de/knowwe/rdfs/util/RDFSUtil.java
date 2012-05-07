@@ -29,6 +29,7 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.knowwe.compile.IncrementalCompiler;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.Strings;
@@ -42,13 +43,13 @@ public class RDFSUtil {
 	public static URI getURI(Section<? extends SimpleTerm> s) {
 		if (s == null) return null;
 
-		String termIdentifier = s.get().getTermIdentifier(s);
+		String termName = s.get().getTermName(s);
 
-		URI uri = getRDFSURI(termIdentifier);
+		URI uri = getRDFSURI(termName);
 
 		if (uri == null) {
 			String baseUrl = Rdf2GoCore.localns;
-			String name = Strings.encodeURL(termIdentifier);
+			String name = Strings.encodeURL(termName);
 			uri = new URIImpl(baseUrl + name);
 		}
 		return uri;
@@ -56,7 +57,7 @@ public class RDFSUtil {
 	}
 
 	public static boolean isTermCategory(Section<? extends SimpleTerm> ref, RDFSTermCategory c) {
-		String termIdentifier = ref.getText();
+		TermIdentifier termIdentifier = ref.get().getTermIdentifier(ref);
 		if (ref.get() instanceof SimpleTerm) {
 			termIdentifier = ((SimpleTerm) ref.get()).getTermIdentifier(ref);
 		}

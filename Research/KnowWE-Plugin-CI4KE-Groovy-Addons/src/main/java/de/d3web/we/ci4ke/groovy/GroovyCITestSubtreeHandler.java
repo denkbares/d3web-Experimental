@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType> {
@@ -66,8 +66,8 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 			result = testClazz.newInstance().call();
 		}
 		catch (Exception e) {
-			String errorMessageMasked = KnowWEUtils.maskHTML(
-					KnowWEUtils.maskNewline(e.getLocalizedMessage()));
+			String errorMessageMasked = Strings.maskHTML(
+					Strings.maskNewline(e.getLocalizedMessage()));
 			messages.add(Messages.error(errorMessageMasked));
 		}
 		if (messages.size() == 0 && result == null) {

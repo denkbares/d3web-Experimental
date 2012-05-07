@@ -67,6 +67,7 @@ public class KDOMReplaceTermUserSupportAction extends AbstractAction {
 		// Prepare new text, urldecode and strip whitespaces that JSPWiki might
 		// have added
 		newText = Strings.decodeURL(newText);
+
 		newText = newText.replaceAll("\\s*$", "");
 
 		Map<String, String> nodesMap = new HashMap<String, String>();
@@ -80,7 +81,7 @@ public class KDOMReplaceTermUserSupportAction extends AbstractAction {
 
 		Section<? extends SimpleTerm> simpleSection = (Section<? extends SimpleTerm>) section;
 		String originalText = simpleSection.getText();
-		String oldTermName = simpleSection.get().getTermIdentifier(simpleSection);
+		String oldTermName = simpleSection.get().getTermIdentifier(simpleSection).getLastPathElement();
 		String newNodeText = originalText.replace(oldTermName, newText);
 
 		nodesMap.put(nodeID, newNodeText);

@@ -111,11 +111,11 @@ public class AnnotationInlineAnswerRenderer implements Renderer {
 				String s = "<a href=\"#" + sec.getID() + "\"></a>"
 						+ getRenderedInput(q.getName(), q.getName(),
 								kb.getId(), user, "Annotation", text, op);
-				String masked = KnowWEUtils.maskHTML(s);
+				String masked = Strings.maskHTML(s);
 				return masked;
 			}
 			else {
-				return KnowWEUtils.maskHTML(KnowWEUtils.getErrorQ404(
+				return Strings.maskHTML(KnowWEUtils.getErrorQ404(
 						question, text));
 			}
 		}

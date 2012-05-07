@@ -31,7 +31,7 @@ import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -121,12 +121,12 @@ public class LocationDefinitionType extends AbstractType {
 			String originalText = sec.getText();
 			Placemark extractPlacemark = extractPlacemark(sec);
 			if (extractPlacemark == null) {
-				string.append(KnowWEUtils.maskHTML("<span class='error' title='invalid syntax'>")
-						+ originalText + KnowWEUtils.maskHTML("</span>"));
+				string.append(Strings.maskHTML("<span class='error' title='invalid syntax'>")
+						+ originalText + Strings.maskHTML("</span>"));
 			}
 			else {
 				String htmlString = extractPlacemark.toHTMLString();
-				string.append(KnowWEUtils.maskHTML(htmlString));
+				string.append(Strings.maskHTML(htmlString));
 			}
 		}
 	}

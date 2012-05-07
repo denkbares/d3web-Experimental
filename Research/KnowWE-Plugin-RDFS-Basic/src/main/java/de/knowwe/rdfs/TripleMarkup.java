@@ -33,6 +33,7 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypeRestrictedReference;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.basicType.EndLineComment;
 import de.knowwe.core.kdom.objects.SimpleTerm;
@@ -102,7 +103,7 @@ public class TripleMarkup extends AbstractType implements
 				// IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(predName);
 
 				Object info = IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(
-						predName);
+						new TermIdentifier(predName));
 				String domainClassName = null;
 				String rangeClassName = null;
 				boolean warningRange = false;
@@ -125,9 +126,9 @@ public class TripleMarkup extends AbstractType implements
 						}
 					}
 					URI rangeClassURI = RDFSUtil.getURI(IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-							rangeClassName).iterator().next());
+							new TermIdentifier(rangeClassName)).iterator().next());
 					URI domainClassURI = RDFSUtil.getURI(IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-							domainClassName).iterator().next());
+							new TermIdentifier(domainClassName)).iterator().next());
 
 					URI objectURI = RDFSUtil.getURI(object);
 					URI subjectURI = RDFSUtil.getURI(subject);

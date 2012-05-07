@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -47,18 +48,16 @@ public class UserSupportUtil {
 	 * @param markup
 	 * @return
 	 */
-	public static Collection<Section<?>> getTermReferencesCompilingArticle(Article article, Section<?> markup)
-	{
+	public static Collection<Section<?>> getTermReferencesCompilingArticle(Article article, Section<?> markup) {
 
 		article = KnowWEUtils.getCompilingArticles(markup).iterator().next();
 
 		TerminologyManager tH = KnowWEUtils.getTerminologyManager(article);
-		Collection<String> allDefinedTerms = tH.getAllDefinedTerms();
+		Collection<TermIdentifier> allDefinedTerms = tH.getAllDefinedTerms();
 
 		Collection<Section<?>> globalTerms = new LinkedList<Section<?>>();
-		for (String term : allDefinedTerms)
-		{
-			globalTerms.addAll(tH.getTermDefiningSections(term));
+		for (TermIdentifier termIdentifier : allDefinedTerms) {
+			globalTerms.addAll(tH.getTermDefiningSections(termIdentifier));
 		}
 
 		return globalTerms;
@@ -70,15 +69,12 @@ public class UserSupportUtil {
 	 * @param suggestions
 	 * @return
 	 */
-	public static String buildJSONArray(List<Suggestion> suggestions)
-	{
+	public static String buildJSONArray(List<Suggestion> suggestions) {
 		StringBuilder buildi = new StringBuilder();
 
 		buildi.append("[");
-		for (Suggestion s : suggestions)
-		{
-			if (!s.getSuggestion().equals(""))
-				buildi.append("," + "\"" + s.getSuggestion() + "\"");
+		for (Suggestion s : suggestions) {
+			if (!s.getSuggestion().equals("")) buildi.append("," + "\"" + s.getSuggestion() + "\"");
 		}
 		buildi.append("]");
 		String toReturn = buildi.toString().replaceFirst(",", "");
@@ -115,7 +111,7 @@ public class UserSupportUtil {
 					+ (jsAction == null ? "span" : "a")
 					+ " class=\"markupMenuItem\""
 					+ (jsAction != null
-					? " href=\"javascript:" + t.getJSAction() + ";undefined;\""
+							? " href=\"javascript:" + t.getJSAction() + ";undefined;\""
 							: "") +
 							" title=\"" + t.getDescription() + "\">" +
 							(hasIcon ? ("<img src=\"" + icon + "\"></img>") : "") +

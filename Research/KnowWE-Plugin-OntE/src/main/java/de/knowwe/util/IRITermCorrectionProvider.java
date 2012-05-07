@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.wcohen.ss.Levenstein;
 
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.correction.CorrectionProvider;
 import de.knowwe.core.kdom.Article;
@@ -31,7 +32,7 @@ public class IRITermCorrectionProvider implements CorrectionProvider {
 		TerminologyManager terminologyHandler = KnowWEUtils.getGlobalTerminologyManager(article.getWeb());
 		SimpleTerm termReference = ((SimpleTerm) section.get());
 
-		Collection<String> localTermMatches = terminologyHandler.getAllDefinedTermsOfType(
+		Collection<TermIdentifier> localTermMatches = terminologyHandler.getAllDefinedTermsOfType(
 				termReference.getTermObjectClass(Sections.cast(section, SimpleTerm.class))
 				);
 
@@ -39,10 +40,11 @@ public class IRITermCorrectionProvider implements CorrectionProvider {
 		List<CorrectionProvider.Suggestion> suggestions = new LinkedList<CorrectionProvider.Suggestion>();
 		Levenstein l = new Levenstein();
 
-		for (String match : localTermMatches) {
-			double score = l.score(originalText, match);
+		for (TermIdentifier match : localTermMatches) {
+			double score = l.score(originalText, match.getLastPathElement());
 			if (score >= -threshold) {
-				suggestions.add(new CorrectionProvider.Suggestion(match, (int) score));
+				suggestions.add(new CorrectionProvider.Suggestion(match.getLastPathElement(),
+						(int) score));
 			}
 		}
 

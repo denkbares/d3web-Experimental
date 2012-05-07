@@ -37,7 +37,7 @@ import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.utils.SplitUtility;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.RegexSectionFinderSingle;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -86,8 +86,8 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 		}
 
 		@Override
-		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
-			return SplitUtility.unquote(s.getText().trim());
+		public String getTermName(Section<? extends SimpleTerm> section) {
+			return Strings.unquote(section.getText().trim());
 		}
 
 	}
@@ -100,7 +100,7 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 		}
 
 		@Override
-		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+		public String getTermName(Section<? extends SimpleTerm> s) {
 			return s.getText().trim().replaceAll("::", "").trim();
 		}
 	}
@@ -113,7 +113,7 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 		}
 
 		@Override
-		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+		public String getTermName(Section<? extends SimpleTerm> s) {
 			return s.getText().trim();
 		}
 	}

@@ -33,7 +33,7 @@ import de.d3web.we.diaflux.evaluators.EvaluatorManager;
 import de.d3web.we.diaflux.pathcoloring.AnomalyManager;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class DeadPathTest extends AbstractCITest {
 
@@ -44,7 +44,7 @@ public class DeadPathTest extends AbstractCITest {
 		SAVED
 	}
 
-	private EvaluatorManager evalManager = EvaluatorManager.getEvalManager();
+	private final EvaluatorManager evalManager = EvaluatorManager.getEvalManager();
 
 	@Override
 	public CITestResult call() throws Exception {
@@ -84,7 +84,7 @@ public class DeadPathTest extends AbstractCITest {
 		}
 		if (!errormsg.isEmpty()) {
 			errormsg = "Dead Path:<br>" + errormsg;
-			KnowWEUtils.maskHTML(errormsg);
+			Strings.maskHTML(errormsg);
 			res = new CITestResult(Type.FAILED, errormsg, config);
 		}
 

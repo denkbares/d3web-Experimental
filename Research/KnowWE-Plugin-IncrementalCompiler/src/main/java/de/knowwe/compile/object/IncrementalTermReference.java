@@ -33,6 +33,7 @@ import de.knowwe.core.report.DefaultMessageRenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
@@ -142,9 +143,9 @@ public abstract class IncrementalTermReference extends SimpleReference {
 				REF_RENDERER.render(reference, user, string);
 			}
 			else {
-				string.append(KnowWEUtils.maskHTML("<a name='" + reference.getID() + "'>"));
+				string.append(Strings.maskHTML("<a name='" + reference.getID() + "'>"));
 				r.render(reference, user, string);
-				string.append(KnowWEUtils.maskHTML("</a>"));
+				string.append(Strings.maskHTML("</a>"));
 			}
 			for (Message kdomReportMessage : messages) {
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {

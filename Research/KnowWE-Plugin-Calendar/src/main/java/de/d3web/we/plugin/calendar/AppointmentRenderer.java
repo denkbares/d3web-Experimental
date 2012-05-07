@@ -26,7 +26,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class AppointmentRenderer implements Renderer {
 
@@ -64,7 +64,7 @@ public class AppointmentRenderer implements Renderer {
 				+ "</th><th align=right width=250><i>" + name + "</i></th></tr>\n");
 		b.append("<tr><td colspan=3>" + text + "</td></tr>\n</table>\n");
 
-		string.append(KnowWEUtils.maskHTML(b.toString()));
+		string.append(Strings.maskHTML(b.toString()));
 
 	}
 }

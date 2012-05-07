@@ -23,7 +23,7 @@ import java.util.Map;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * Renders a html-link with "target='_blank'"
@@ -50,9 +50,9 @@ public class ExternalLinkTaghandler extends AbstractTagHandler {
 			String externalLinkHintText = "Sie verlassen nun die Webseite von ICD-Forum und folgen einem externen Link. Wir haben keinen Einfluss auf den Inhalt der folgenden Webseite und sind nicht für den Inhalt verantwortlich.";
 
 			StringBuffer buffy = new StringBuffer();
-			buffy.append(KnowWEUtils.maskHTML("<a href='" + url + "' target='_blank' onclick='alert(\""+externalLinkHintText+"\")'>"));
+			buffy.append(Strings.maskHTML("<a href='" + url + "' target='_blank' onclick='alert(\""+externalLinkHintText+"\")'>"));
 			buffy.append(text);
-			buffy.append(KnowWEUtils.maskHTML("</a>"));
+			buffy.append(Strings.maskHTML("</a>"));
 			return buffy.toString();
 		}
 		return "no url defined";

@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.table.Table;
 
 public class ShowTableTagHandler extends AbstractTagHandler {
@@ -68,7 +68,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 		}
 
 		StringBuilder string = new StringBuilder();
-		string.append(KnowWEUtils.maskHTML("<div id='" + myTable.getID()
+		string.append(Strings.maskHTML("<div id='" + myTable.getID()
 				+ "' style=''>"));
 
 		// user.getParameters().put(TableRenderer.QUICK_EDIT_FLAG, "false");
@@ -90,7 +90,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 			erneut = " erneut";
 		}
 
-		string.append(KnowWEUtils.maskHTML("<input type='button' onclick=\"submitTable('"
+		string.append(Strings.maskHTML("<input type='button' onclick=\"submitTable('"
 				+ myTable.getID() + "','" + user.getUserName()
 				+ "','" + tableid
 				+ "','" + versionsExisting
@@ -99,14 +99,14 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 		// tables can be configured to only support single versions using the
 		// single-attribute, then no additionalTable-button is rendered
 		if (previousInputExists && !singleTableVersion) {
-			string.append(KnowWEUtils.maskHTML("<input type='button' onclick=\"additionalTable('"
+			string.append(Strings.maskHTML("<input type='button' onclick=\"additionalTable('"
 					+ myTable.getID() + "','" + user.getUserName()
 					+ "','" + tableid
 					+ "')\" name='speichern' value='weitere Tabelle hinzufügen'/>"));
 		}
-		string.append(KnowWEUtils.maskHTML("<span id='tableSubmit_" + tableid + "'>"));
-		string.append(KnowWEUtils.maskHTML("</span>"));
-		string.append(KnowWEUtils.maskHTML("</div>"));
+		string.append(Strings.maskHTML("<span id='tableSubmit_" + tableid + "'>"));
+		string.append(Strings.maskHTML("</span>"));
+		string.append(Strings.maskHTML("</div>"));
 		return string.toString();
 	}
 

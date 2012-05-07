@@ -31,6 +31,7 @@ import de.knowwe.compile.ImportManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
@@ -39,6 +40,7 @@ import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * Some util methods needed for the compilation algorithm
@@ -167,15 +169,16 @@ public class CompileUtils {
 		return result;
 	}
 
-	public static String createLinkToDefinition(String termname) {
+	public static String createLinkToDefinition(TermIdentifier termIdentifier) {
 		Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
-				termname);
+				termIdentifier);
 		if (termReferences != null && termReferences.size() > 0) {
-			return createLinkToDefinition(termReferences.iterator().next(), termname);
+			return createLinkToDefinition(termReferences.iterator().next(),
+					termIdentifier.getLastPathElement());
 		}
 
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				termname);
+				termIdentifier);
 		if (termDefinitions != null && termDefinitions.size() > 0) {
 			return createLinkToDefinition(termDefinitions.iterator().next());
 		}
@@ -184,7 +187,7 @@ public class CompileUtils {
 	}
 
 	public static String createLinkToDefinition(Section<?> section) {
-		return createLinkToDef(section, KnowWEUtils.getTermIdentifier(section));
+		return createLinkToDef(section, KnowWEUtils.getTermIdentifier(section).toString());
 
 	}
 
@@ -210,14 +213,14 @@ public class CompileUtils {
 		}
 		String defArticleName = defArticle.getTitle();
 		StringBuffer link = new StringBuffer();
-		link.append(KnowWEUtils.maskHTML("<a href='Wiki.jsp?page="));
+		link.append(Strings.maskHTML("<a href='Wiki.jsp?page="));
 		link.append(defArticleName);
 		link.append("#");
 		link.append(definition.getID());
 
-		link.append(KnowWEUtils.maskHTML("'>"));
+		link.append(Strings.maskHTML("'>"));
 		link.append(linktext);
-		link.append(KnowWEUtils.maskHTML("</a>"));
+		link.append(Strings.maskHTML("</a>"));
 		return link.toString();
 
 	}

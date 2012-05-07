@@ -20,8 +20,6 @@
 
 package de.knowwe.termObject;
 
-import de.knowwe.core.kdom.objects.SimpleTerm;
-import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.rdfs.AbstractIRITermDefinition;
@@ -35,11 +33,6 @@ public class DatatypePropertyIRIDefinition extends AbstractIRITermDefinition {
 
 	public DatatypePropertyIRIDefinition() {
 		this.setRenderer(PROPERTY_RENDERER);
-	}
-
-	@Override
-	public String getTermIdentifier(Section<? extends SimpleTerm> s) {
-		return s.getText();
 	}
 
 }

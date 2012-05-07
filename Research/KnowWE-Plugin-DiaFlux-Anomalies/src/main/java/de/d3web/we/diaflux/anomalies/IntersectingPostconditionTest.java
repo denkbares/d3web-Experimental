@@ -21,11 +21,11 @@ import de.d3web.we.diaflux.evaluators.UnknownEval;
 import de.d3web.we.diaflux.pathcoloring.AnomalyManager;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class IntersectingPostconditionTest extends AbstractCITest {
 
-	private EvaluatorManager evalManager = EvaluatorManager.getEvalManager();
+	private final EvaluatorManager evalManager = EvaluatorManager.getEvalManager();
 
 	@Override
 	public CITestResult call() throws Exception {
@@ -57,7 +57,7 @@ public class IntersectingPostconditionTest extends AbstractCITest {
 		}
 
 		if (!errormsg.isEmpty()) {
-			KnowWEUtils.maskHTML(errormsg);
+			Strings.maskHTML(errormsg);
 			res = new CITestResult(Type.FAILED, "Postconditions are intersecting: " + errormsg,
 					config);
 		}

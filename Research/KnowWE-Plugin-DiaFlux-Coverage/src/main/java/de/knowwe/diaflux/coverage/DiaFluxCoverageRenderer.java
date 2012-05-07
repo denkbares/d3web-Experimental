@@ -30,7 +30,7 @@ import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.diaflux.FlowchartUtils;
 import de.knowwe.diaflux.type.FlowchartType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
@@ -64,7 +64,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 		bob.append("<em>No coverage has been calculated yet.</em><input type='button' value='Calculate' onclick='DiaFlux.Coverage.calculateCoverage(\""
 				+ section.getID() + "\")'></input>");
 
-		string.append(KnowWEUtils.maskHTML(bob.toString()));
+		string.append(Strings.maskHTML(bob.toString()));
 
 	}
 
@@ -142,7 +142,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 
 		builder.append("</div>");
 
-		string.append(KnowWEUtils.maskHTML(builder.toString()));
+		string.append(Strings.maskHTML(builder.toString()));
 	}
 
 }

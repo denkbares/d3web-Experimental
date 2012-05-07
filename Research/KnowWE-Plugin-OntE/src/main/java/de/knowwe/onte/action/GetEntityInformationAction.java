@@ -25,6 +25,7 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.renderer.ManchesterOWLSyntaxHTMLColorRenderer;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
@@ -36,7 +37,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
 /**
  * Queries the ontology for stored information about an entity and returns the
  * result. Used to show information about an OWL entity in the ontology brwoser.
- *
+ * 
  * @author Stefan Mark
  * @created 14.12.2011
  */
@@ -56,10 +57,12 @@ public class GetEntityInformationAction extends AbstractAction {
 		if (cls != null) {
 			OWLEntity entity = AxiomFactory.getOWLAPIEntity(providedEntity, cls);
 
+			TermIdentifier termIdentifier = new TermIdentifier(
+					OnteRenderingUtils.getDisplayName(entity));
 			html.append(
 					"<p style=\"height:30px;\"><a style=\"float:right;\" class=\"onte-button left small\" href=\"")
 					.append(
-							OnteRenderingUtils.getHyperlink(OnteRenderingUtils.getDisplayName(entity))).append(
+							OnteRenderingUtils.getHyperlink(termIdentifier)).append(
 							"\">");
 			html.append(
 					"<img class=\"tree-expand\" src=\"KnowWEExtension/images/onte/document-import-2.png\"></a></p>");
@@ -100,7 +103,7 @@ public class GetEntityInformationAction extends AbstractAction {
 
 	/**
 	 * Render class information for the current entity.
-	 *
+	 * 
 	 * @created 08.12.2011
 	 * @param cls
 	 * @param html
@@ -157,7 +160,6 @@ public class GetEntityInformationAction extends AbstractAction {
 			renderResult(owlObjects, html);
 		}
 
-
 		// add possible characteristics ...
 		StringBuilder tmp = new StringBuilder();
 
@@ -190,7 +192,7 @@ public class GetEntityInformationAction extends AbstractAction {
 
 	/**
 	 * Render class information for the current entity.
-	 *
+	 * 
 	 * @created 08.12.2011
 	 * @param cls
 	 * @param html
@@ -287,7 +289,7 @@ public class GetEntityInformationAction extends AbstractAction {
 
 	/**
 	 * Render class information for the current entity.
-	 *
+	 * 
 	 * @created 08.12.2011
 	 * @param cls
 	 * @param html
@@ -324,7 +326,7 @@ public class GetEntityInformationAction extends AbstractAction {
 
 	/**
 	 * Render the found results for a given frame.
-	 *
+	 * 
 	 * @created 08.12.2011
 	 * @param owlClassExpressions
 	 * @param html
@@ -346,7 +348,7 @@ public class GetEntityInformationAction extends AbstractAction {
 
 	/**
 	 * Load annotations for a given entity.
-	 *
+	 * 
 	 * @created 05.12.2011
 	 * @param OWLEntity entity
 	 * @param StringBuilder html
@@ -378,7 +380,7 @@ public class GetEntityInformationAction extends AbstractAction {
 			}
 			if (owlAnnotation.getProperty().isLabel()) {
 				html.append("<li><dl><dt>Label:</dt><dd>")
-					.append(owlAnnotation.getValue()).append("</dd></li>");
+						.append(owlAnnotation.getValue()).append("</dd></li>");
 			}
 		}
 		if (!annotations.isEmpty()) {

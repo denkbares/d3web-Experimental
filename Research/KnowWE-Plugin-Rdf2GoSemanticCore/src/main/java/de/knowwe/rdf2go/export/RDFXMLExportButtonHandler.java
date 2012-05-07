@@ -26,7 +26,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class RDFXMLExportButtonHandler extends AbstractTagHandler {
 
@@ -61,6 +61,6 @@ public class RDFXMLExportButtonHandler extends AbstractTagHandler {
 				"') no-repeat scroll center 6px transparent; height: 22px;width: 22px;");
 		html.append("\" /></a>");
 
-		return KnowWEUtils.maskHTML(html.toString());
+		return Strings.maskHTML(html.toString());
 	}
 }

@@ -49,6 +49,7 @@ import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
@@ -75,10 +76,10 @@ public class Evaluation extends BlockMarkupType {
 			@Override
 			public void render(Section<?> sec, UserContext user,
 					StringBuilder string) {
-				string.append(KnowWEUtils.maskHTML("<div class='"
+				string.append(Strings.maskHTML("<div class='"
 						+ ((Evaluation) sec.get()).getCSSClass()
 						+ "'>"));
-				string.append(KnowWEUtils.maskHTML("<div class='Evaluationstart'></div>"));
+				string.append(Strings.maskHTML("<div class='Evaluationstart'></div>"));
 				Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 				Utils.renderKDOMReportMessageBlock(
 						Messages.getErrors(Messages.getMessagesFromSubtree(
@@ -94,8 +95,8 @@ public class Evaluation extends BlockMarkupType {
 				Section<BlockMarkupContent> con =
 						Sections.findSuccessor(sec, BlockMarkupContent.class);
 				BlockMarkupContentRenderer.getInstance().render(con, user, string);
-				string.append(KnowWEUtils.maskHTML("<div class='Evaluationend'></div>"));
-				string.append(KnowWEUtils.maskHTML("</div>"));
+				string.append(Strings.maskHTML("<div class='Evaluationend'></div>"));
+				string.append(Strings.maskHTML("</div>"));
 			}
 		});
 

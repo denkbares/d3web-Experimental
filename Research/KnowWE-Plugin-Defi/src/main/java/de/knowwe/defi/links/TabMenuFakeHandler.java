@@ -24,7 +24,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class TabMenuFakeHandler extends AbstractTagHandler {
 
@@ -41,19 +41,19 @@ public class TabMenuFakeHandler extends AbstractTagHandler {
 			String baseUrl = Environment.getInstance().getWikiConnector().getBaseUrl();
 
 			StringBuffer buffy = new StringBuffer();
-			buffy.append(KnowWEUtils.maskHTML("<div class='tabmenu'>"));
+			buffy.append(Strings.maskHTML("<div class='tabmenu'>"));
 			for (String page : pageNames) {
 				String clazz = "";
 				if (page.trim().equals(section.getTitle())) {
 					clazz = "activetab";
 				}
-				buffy.append(KnowWEUtils.maskHTML("<a href='" + baseUrl
+				buffy.append(Strings.maskHTML("<a href='" + baseUrl
 						+ "Wiki.jsp?page=" + page.trim()
 						+ "' class='" + clazz + "'>"));
-				buffy.append(KnowWEUtils.maskHTML(page.trim()));
-				buffy.append(KnowWEUtils.maskHTML("</a>"));
+				buffy.append(Strings.maskHTML(page.trim()));
+				buffy.append(Strings.maskHTML("</a>"));
 			}
-			buffy.append(KnowWEUtils.maskHTML("</div>"));
+			buffy.append(Strings.maskHTML("</div>"));
 			return buffy.toString();
 
 		}

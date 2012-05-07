@@ -4,7 +4,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolUtils;
 
@@ -12,10 +12,10 @@ public class TurtleN3Renderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user, StringBuilder string) {
-		string.append(KnowWEUtils.maskHTML("<pre id=\""
+		string.append(Strings.maskHTML("<pre id=\""
 				+ sec.getID()
 				+ "\" class=\"turtle-instantedit-pre\">"));
-		string.append(KnowWEUtils.maskHTML("<div class=\"casetrain-instantedit\">"));
+		string.append(Strings.maskHTML("<div class=\"casetrain-instantedit\">"));
 
 		StringBuilder buffy = new StringBuilder();
 		DelegateRenderer.getInstance().render(sec, user, buffy);
@@ -25,8 +25,8 @@ public class TurtleN3Renderer implements Renderer {
 		result = result.replaceAll("\\]", "~]");
 		string.append(result);
 
-		string.append(KnowWEUtils.maskHTML("</div>"));
-		string.append(KnowWEUtils.maskHTML("</pre>"));
+		string.append(Strings.maskHTML("</div>"));
+		string.append(Strings.maskHTML("</pre>"));
 
 	}
 

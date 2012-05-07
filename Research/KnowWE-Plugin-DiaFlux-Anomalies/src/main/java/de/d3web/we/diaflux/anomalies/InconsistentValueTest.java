@@ -26,7 +26,7 @@ import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.d3web.we.diaflux.pathcoloring.AnomalyManager;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class InconsistentValueTest extends AbstractCITest {
 
@@ -69,7 +69,7 @@ public class InconsistentValueTest extends AbstractCITest {
 			String errormsg = error.toString();
 			if (!errormsg.isEmpty()) {
 				errormsg = "Inconsistent Value:" + errormsg;
-				KnowWEUtils.maskHTML(errormsg);
+				Strings.maskHTML(errormsg);
 				res = new CITestResult(Type.FAILED, errormsg, config);
 			}
 

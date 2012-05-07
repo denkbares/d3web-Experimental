@@ -25,7 +25,7 @@ import java.util.Map;
 import de.knowwe.core.Environment;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class ParseFullLocalPageButton extends AbstractHTMLTagHandler {
 
@@ -44,11 +44,11 @@ public class ParseFullLocalPageButton extends AbstractHTMLTagHandler {
 
 		String baseURL = Environment.getInstance().getWikiConnector().getBaseUrl();
 
-		String link = KnowWEUtils.maskHTML("<a href=\"" + baseURL + "Wiki.jsp?page="
+		String link = Strings.maskHTML("<a href=\"" + baseURL + "Wiki.jsp?page="
 				+ theMainTopic
 				+ "&parse=full\" title=\"full parse action for current article\">");
 		link += text;
-		link += KnowWEUtils.maskHTML("</a>");
+		link += Strings.maskHTML("</a>");
 
 		return link;
 	}

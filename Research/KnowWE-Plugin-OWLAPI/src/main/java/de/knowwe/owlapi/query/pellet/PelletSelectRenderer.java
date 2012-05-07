@@ -9,7 +9,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 public class PelletSelectRenderer implements Renderer {
@@ -42,7 +42,7 @@ public class PelletSelectRenderer implements Renderer {
 			html.append(PelletSparqlSelect.getDescription(user));
 			html.append("</div>");
 		}
-		string.append(KnowWEUtils.maskHTML(html.toString()));
+		string.append(Strings.maskHTML(html.toString()));
 	}
 
 	/**

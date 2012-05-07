@@ -37,6 +37,7 @@ import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
@@ -80,26 +81,26 @@ public class MetaData extends BlockMarkupType {
 						Messages.getNotices(Messages.getMessagesFromSubtree(
 								article, sec)), string);
 
-				string.append(KnowWEUtils.maskHTML("%%collapsebox-closed \r\n"));
+				string.append(Strings.maskHTML("%%collapsebox-closed \r\n"));
 				string.append(
-						KnowWEUtils.maskHTML("! "
+						Strings.maskHTML("! "
 								+ ResourceBundle.getBundle("casetrain_messages")
 										.getString(META)
 								+ "\r\n"));
 
 				// Quickedit button
-				string.append(KnowWEUtils.maskHTML("<pre id=\""
+				string.append(Strings.maskHTML("<pre id=\""
 						+ sec.getID()
 						+ "\" class=\"casetrain-instantedit-pre\">"));
-				string.append(KnowWEUtils.maskHTML("<div class=\"casetrain-instantedit\">"
+				string.append(Strings.maskHTML("<div class=\"casetrain-instantedit\">"
 						// + getFrameName(sec)
 						// + getEditorIcon(sec)
 						+ Utils.renderTools(sec, user)
 						// + getLink(sec)
 						+ "</div>"));
 
-				string.append(KnowWEUtils.maskHTML("<table class='wikitable'>"));
-				string.append(KnowWEUtils.maskHTML("<th>Metadaten:</th><th></th>"));
+				string.append(Strings.maskHTML("<table class='wikitable'>"));
+				string.append(Strings.maskHTML("<th>Metadaten:</th><th></th>"));
 
 				Section<BlockMarkupContent> con =
 						Sections.findSuccessor(sec, BlockMarkupContent.class);
@@ -110,10 +111,10 @@ public class MetaData extends BlockMarkupType {
 					l.get().getRenderer().render(l, user, string);
 				}
 
-				string.append(KnowWEUtils.maskHTML("</table>"));
-				string.append(KnowWEUtils.maskHTML("/%\r\n"));
+				string.append(Strings.maskHTML("</table>"));
+				string.append(Strings.maskHTML("/%\r\n"));
 
-				string.append(KnowWEUtils.maskHTML("</pre>"));
+				string.append(Strings.maskHTML("</pre>"));
 			}
 		});
 

@@ -17,6 +17,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import de.knowwe.compile.ImportManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
@@ -201,7 +202,7 @@ public class ImportFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<I
 				// }
 
 				entityNames.add(conceptName);
-				compiler.registerImportedTerminology(section, conceptName);
+				compiler.registerImportedTerminology(section, new TermIdentifier(conceptName));
 			}
 		}
 

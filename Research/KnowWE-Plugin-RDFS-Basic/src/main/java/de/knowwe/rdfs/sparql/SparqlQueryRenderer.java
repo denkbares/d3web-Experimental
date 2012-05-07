@@ -25,7 +25,7 @@ import org.ontoware.rdf2go.model.QueryResultTable;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.SparqlRenderer;
 import de.knowwe.rdfs.util.SparqlResultSetRenderer;
@@ -51,7 +51,7 @@ public class SparqlQueryRenderer implements Renderer {
 
 		try {
 			if (sparqlString.toLowerCase().startsWith("construct")) {
-				result.append(KnowWEUtils.maskHTML("<tt>" + sec.getText() + "</tt>"));
+				result.append(Strings.maskHTML("<tt>" + sec.getText() + "</tt>"));
 			}
 			else {
 				QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
@@ -61,7 +61,7 @@ public class SparqlQueryRenderer implements Renderer {
 
 		}
 		catch (ModelRuntimeException e) {
-			result.append(KnowWEUtils.maskHTML("<span class='warning'>"
+			result.append(Strings.maskHTML("<span class='warning'>"
 					+ e.getMessage() + "</span>"));
 		}
 	}

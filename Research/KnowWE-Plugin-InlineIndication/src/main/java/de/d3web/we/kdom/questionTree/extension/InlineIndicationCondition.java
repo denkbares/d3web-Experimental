@@ -31,7 +31,7 @@ import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.SplitUtility;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.sectionFinder.UnquotedExpressionFinder;
 
@@ -59,9 +59,9 @@ public class InlineIndicationCondition extends AbstractType {
 
 			@Override
 			public void render(Section<?> sec, UserContext user, StringBuilder string) {
-				string.append(KnowWEUtils.maskHTML("<b>"));
+				string.append(Strings.maskHTML("<b>"));
 				string.append(sec.getText().substring(1).trim());
-				string.append(KnowWEUtils.maskHTML("</b>"));
+				string.append(Strings.maskHTML("</b>"));
 			}
 		});
 		this.addChildType(open);
@@ -85,7 +85,7 @@ public class InlineIndicationCondition extends AbstractType {
 			Matcher matcher = pattern.matcher(text);
 			if (matcher.find()) {
 				int start = matcher.start();
-				int end = SplitUtility.lastIndexOfUnquoted(text, END_KEY);
+				int end = Strings.lastIndexOfUnquoted(text, END_KEY);
 				return SectionFinderResult.createSingleItemList(new SectionFinderResult(start,
 						end + 1));
 			}

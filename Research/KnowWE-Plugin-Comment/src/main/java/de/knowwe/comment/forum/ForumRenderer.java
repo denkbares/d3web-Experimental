@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.xml.AbstractXMLType;
 
 public class ForumRenderer implements Renderer {
@@ -144,7 +144,7 @@ public class ForumRenderer implements Renderer {
 				addCommentBox(ret, rb);
 			}
 		}
-		string.append(KnowWEUtils.maskHTML(ret.toString()));
+		string.append(Strings.maskHTML(ret.toString()));
 	}
 
 	/**

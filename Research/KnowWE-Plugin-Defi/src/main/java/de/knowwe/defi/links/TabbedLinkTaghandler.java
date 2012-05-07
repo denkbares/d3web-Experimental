@@ -23,7 +23,6 @@ import java.util.Map;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Strings;
 
 /**
@@ -70,6 +69,6 @@ public class TabbedLinkTaghandler extends AbstractTagHandler {
 			tabbedLink.append(title);
 			tabbedLink.append("</a>");
 		}
-		return KnowWEUtils.maskHTML(tabbedLink.toString());
+		return Strings.maskHTML(tabbedLink.toString());
 	}
 }

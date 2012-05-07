@@ -23,7 +23,7 @@ package de.knowwe.casetrain.renderer;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -44,12 +44,12 @@ public class DivStyleClassRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user, StringBuilder string) {
-		string.append(KnowWEUtils.maskHTML("<div class='"
+		string.append(Strings.maskHTML("<div class='"
 				+ cssClass
 				+ "'>"));
 		if (customRenderer != null) customRenderer.render(sec, user, string);
 		else MouseOverTitleRenderer.getInstance().render(sec, user, string);
-		string.append(KnowWEUtils.maskHTML("</div>"));
+		string.append(Strings.maskHTML("</div>"));
 
 	}
 

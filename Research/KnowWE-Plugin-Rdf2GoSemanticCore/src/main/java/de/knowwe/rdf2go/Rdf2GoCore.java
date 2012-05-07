@@ -379,14 +379,14 @@ public class Rdf2GoCore implements EventListener {
 			tablemode = l.size() > 1;
 		}
 		if (tablemode) {
-			result += KnowWEUtils.maskHTML("<table>");
+			result += Strings.maskHTML("<table>");
 			for (String var : l) {
-				result += KnowWEUtils.maskHTML("<th>") + var
-						+ KnowWEUtils.maskHTML("</th>");
+				result += Strings.maskHTML("<th>") + var
+						+ Strings.maskHTML("</th>");
 			}
 		}
 		else {
-			result += KnowWEUtils.maskHTML("<ul>");
+			result += Strings.maskHTML("<ul>");
 		}
 
 		while (i.hasNext()) {
@@ -398,7 +398,7 @@ public class Rdf2GoCore implements EventListener {
 			QueryRow s = i.next();
 
 			if (tablemode) {
-				result += KnowWEUtils.maskHTML("<tr>");
+				result += Strings.maskHTML("<tr>");
 			}
 			for (String var : l) {
 				Node n = s.getValue(var);
@@ -418,24 +418,24 @@ public class Rdf2GoCore implements EventListener {
 								|| Environment.getInstance()
 										.getWikiConnector().doesArticleExist(
 												Strings.decodeURL(erg))) {
-						erg = KnowWEUtils.maskHTML("<a href=\"Wiki.jsp?page=")
-									+ erg + KnowWEUtils.maskHTML("\">") + erg
-									+ KnowWEUtils.maskHTML("</a>");
+						erg = Strings.maskHTML("<a href=\"Wiki.jsp?page=")
+									+ erg + Strings.maskHTML("\">") + erg
+									+ Strings.maskHTML("</a>");
 					}
 				}
 
 				if (tablemode) {
-					result += KnowWEUtils.maskHTML("<td>") + erg
-							+ KnowWEUtils.maskHTML("</td>\n");
+					result += Strings.maskHTML("<td>") + erg
+							+ Strings.maskHTML("</td>\n");
 				}
 				else {
-					result += KnowWEUtils.maskHTML("<li>") + erg
-							+ KnowWEUtils.maskHTML("</li>\n");
+					result += Strings.maskHTML("<li>") + erg
+							+ Strings.maskHTML("</li>\n");
 				}
 
 			}
 			if (tablemode) {
-				result += KnowWEUtils.maskHTML("</tr>");
+				result += Strings.maskHTML("</tr>");
 			}
 		}
 
@@ -444,10 +444,10 @@ public class Rdf2GoCore implements EventListener {
 		}
 		else {
 			if (tablemode) {
-				result += KnowWEUtils.maskHTML("</table>");
+				result += Strings.maskHTML("</table>");
 			}
 			else {
-				result += KnowWEUtils.maskHTML("</ul>");
+				result += Strings.maskHTML("</ul>");
 			}
 		}
 		return result;

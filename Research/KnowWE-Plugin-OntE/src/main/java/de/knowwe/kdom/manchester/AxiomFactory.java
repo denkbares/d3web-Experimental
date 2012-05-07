@@ -56,6 +56,7 @@ import de.d3web.we.kdom.condition.NonTerminalCondition;
 import de.d3web.we.kdom.condition.TerminalCondition;
 import de.knowwe.compile.ImportManager;
 import de.knowwe.compile.IncrementalCompiler;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -192,10 +193,11 @@ public class AxiomFactory {
 		// check conflict: imported term and local term definition
 		// if violation found, prior local term
 
-		if (IncrementalCompiler.getInstance().getTerminology().isImportedObject(concept)
-				&& !IncrementalCompiler.getInstance().getTerminology().isLocalObject(concept)) {
+		TermIdentifier termIdentifier = new TermIdentifier(concept);
+		if (IncrementalCompiler.getInstance().getTerminology().isImportedObject(termIdentifier)
+				&& !IncrementalCompiler.getInstance().getTerminology().isLocalObject(termIdentifier)) {
 			// resolve import section, which section imported the term
-			Section<? extends AbstractType> importFrame = ImportManager.resolveImportSection(concept);
+			Section<? extends AbstractType> importFrame = ImportManager.resolveImportSection(termIdentifier);
 			// resolve IRI from above section
 			IRI iri = ImportedOntologyManager.getInstance().getImportIRIFromSection(importFrame);
 

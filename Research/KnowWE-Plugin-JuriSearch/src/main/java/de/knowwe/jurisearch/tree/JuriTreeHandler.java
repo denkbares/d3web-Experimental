@@ -32,6 +32,7 @@ import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.jurisearch.JuriModel;
 import de.d3web.jurisearch.JuriRule;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
 import de.knowwe.core.event.EventManager;
@@ -41,6 +42,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.event.ArticleCreatedEvent;
 import de.knowwe.jurisearch.EmbracedContent;
 import de.knowwe.jurisearch.tree.DummyExpression.NegationFlag;
@@ -104,7 +106,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 		HashMap<QuestionOC, List<ChoiceValue>> childrenQuestion = new HashMap<QuestionOC, List<ChoiceValue>>();
 
 		Collection<Section<?>> qReferences = KnowWEUtils.getTerminologyManager(article).getTermReferenceSections(
-				section.getText());
+				new TermIdentifier(Strings.trimQuotes(section.getText())));
 		if (qReferences.size() > 1) {
 			for (Section<?> sec : qReferences) {
 				if (sec.get() instanceof QuestionIdentifier) {

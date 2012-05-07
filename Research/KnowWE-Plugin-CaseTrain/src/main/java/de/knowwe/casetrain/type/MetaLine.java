@@ -24,7 +24,7 @@ import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 
@@ -52,9 +52,9 @@ public class MetaLine extends AbstractType {
 
 			@Override
 			public void render(Section<?> sec, UserContext user, StringBuilder string) {
-				string.append(KnowWEUtils.maskHTML("<tr>"));
+				string.append(Strings.maskHTML("<tr>"));
 				DelegateRenderer.getInstance().render(sec, user, string);
-				string.append(KnowWEUtils.maskHTML("</tr>"));
+				string.append(Strings.maskHTML("</tr>"));
 			}
 		});
 

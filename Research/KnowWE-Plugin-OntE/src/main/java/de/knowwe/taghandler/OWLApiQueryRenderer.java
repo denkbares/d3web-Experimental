@@ -20,7 +20,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
@@ -71,7 +71,7 @@ public class OWLApiQueryRenderer implements Renderer {
 			html.append(getDescription(user));
 			html.append("</div>");
 		}
-		string.append(KnowWEUtils.maskHTML(html.toString()));
+		string.append(Strings.maskHTML(html.toString()));
 	}
 
 	/**

@@ -23,7 +23,7 @@ import java.util.Map;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * Renders a button into a Wiki article that allows the user to download the
@@ -58,6 +58,6 @@ public class DownloadPageAsPDFTaghandler extends AbstractTagHandler {
 		pdf.append("</button>");
 		pdf.append("</a>");
 
-		return KnowWEUtils.maskHTML(pdf.toString());
+		return Strings.maskHTML(pdf.toString());
 	}
 }

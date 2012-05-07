@@ -11,7 +11,7 @@ import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.core.wikiConnector.ConnectorAttachment;
 import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
@@ -32,7 +32,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 		// no kb would cause massive amount of nullpointers
 		KnowledgeBase kb = D3webUtils.getKnowledgeBase(user.getWeb(), master);
 		if (kb == null) {
-			string.append(KnowWEUtils.maskHTML("<div id=\"testcases\">No Knowledgebase found on "
+			string.append(Strings.maskHTML("<div id=\"testcases\">No Knowledgebase found on "
 					+ master + "</div>"));
 			return;
 		}
@@ -74,7 +74,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 		ResourceBundle rb = D3webUtils.getD3webBundle(context);
 		MessageFormat mf = new MessageFormat("");
 		String analysisResult = TestCaseExecutorUtils.renderTestAnalysisResult(t, result, rb, mf);
-		string.append(KnowWEUtils.maskHTML(analysisResult));
+		string.append(Strings.maskHTML(analysisResult));
 
 	}
 
@@ -106,7 +106,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 		html.append("<div class=\"runCasesButton\" onclick=\"return TestCaseExecutor.runTestcaseFromSection('"
 				+ section.getID() + "')\"></div>");
 		html.append("</div>");
-		return KnowWEUtils.maskHTML(html.toString());
+		return Strings.maskHTML(html.toString());
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 		html.append("</div>");
 		html.append("<br />");
 
-		return KnowWEUtils.maskHTML(html.toString());
+		return Strings.maskHTML(html.toString());
 	}
 
 }

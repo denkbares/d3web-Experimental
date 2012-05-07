@@ -23,7 +23,7 @@ package de.knowwe.hermes.kdom.event.renderer;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.TimeStamp;
 
 public class TimeEventDateRenderer implements Renderer {
@@ -48,6 +48,6 @@ public class TimeEventDateRenderer implements Renderer {
 		if (date.startsWith("\r\n")) date = date.substring(2);
 
 		String dateDecoded = TimeStamp.decode(date);
-		result.append(KnowWEUtils.maskHTML("   :   " + dateDecoded + "</h4>\\\\"));
+		result.append(Strings.maskHTML("   :   " + dateDecoded + "</h4>\\\\"));
 	}
 }

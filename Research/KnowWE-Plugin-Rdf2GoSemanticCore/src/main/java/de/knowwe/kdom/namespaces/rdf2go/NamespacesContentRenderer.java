@@ -28,7 +28,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class NamespacesContentRenderer implements Renderer {
@@ -66,7 +66,7 @@ public class NamespacesContentRenderer implements Renderer {
 		}
 		buffy.append("</table>");
 		buffy.append("</div>");
-		string.append(KnowWEUtils.maskHTML(buffy.toString()));
+		string.append(Strings.maskHTML(buffy.toString()));
 	}
 
 }

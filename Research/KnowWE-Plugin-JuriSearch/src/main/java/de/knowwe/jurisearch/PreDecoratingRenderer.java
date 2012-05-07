@@ -3,7 +3,7 @@ package de.knowwe.jurisearch;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class PreDecoratingRenderer implements Renderer {
 
@@ -15,11 +15,11 @@ public class PreDecoratingRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> section, UserContext user, StringBuilder string) {
-		string.append(KnowWEUtils.maskHTML("<pre>"));
+		string.append(Strings.maskHTML("<pre>"));
 
 		renderer.render(section, user, string);
 
-		string.append(KnowWEUtils.maskHTML("</pre>"));
+		string.append(Strings.maskHTML("</pre>"));
 
 	}
 

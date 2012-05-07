@@ -25,7 +25,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.HermesUserManagement;
 import de.knowwe.hermes.kdom.event.TimeEventNew.ImportanceType;
 
@@ -57,7 +57,7 @@ public class TimeEventRenderer implements Renderer {
 			return;
 		}
 
-		result.append(KnowWEUtils.maskHTML("%%collapsebox-closed \n<h4> "));
+		result.append(Strings.maskHTML("%%collapsebox-closed \n<h4> "));
 
 		// change color of title depending on importance
 		String style = "color:black";
@@ -70,7 +70,7 @@ public class TimeEventRenderer implements Renderer {
 		if (eventImportanceLevel == 3) {
 			style = "color:rgb(20, 200, 102)";
 		}
-		String imp = KnowWEUtils.maskHTML("<span style='" + style + "'>");// Span-Tag
+		String imp = Strings.maskHTML("<span style='" + style + "'>");// Span-Tag
 		// closes
 		// in
 		// TimeEventTitleRenderer

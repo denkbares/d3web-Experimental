@@ -28,7 +28,7 @@ import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * A launcher class that renders an article
@@ -80,7 +80,7 @@ public class TestLauncher {
 
 		File targetFile = new File(targetDir, markupFile.getName() + ".html");
 
-		String content = KnowWEUtils.unmaskHTML(sb.toString());
+		String content = Strings.unmaskHTML(sb.toString());
 		
 		try {
 			FileWriter fstream = new FileWriter(targetFile);

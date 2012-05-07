@@ -23,7 +23,7 @@ import java.util.Map;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -47,7 +47,7 @@ public class UsernameTagHandler extends AbstractTagHandler {
 				+ "'>"
 				+ userContext.getUserName() + "</a>");
 
-		return KnowWEUtils.maskHTML(username.toString());
+		return Strings.maskHTML(username.toString());
 	}
 
 }

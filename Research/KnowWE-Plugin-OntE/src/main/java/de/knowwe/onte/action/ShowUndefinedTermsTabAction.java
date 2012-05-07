@@ -8,6 +8,7 @@ import java.util.Set;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
@@ -20,25 +21,25 @@ public class ShowUndefinedTermsTabAction extends AbstractAction {
 		html.append("<p>The ontology contains the following undefined terms:</p>");
 
 		// article --> errors
-		Map<String, Set<Section<? extends SimpleReference>>> errors = new HashMap<String, Set<Section<? extends SimpleReference>>>();
+		Map<TermIdentifier, Set<Section<? extends SimpleReference>>> errors = new HashMap<TermIdentifier, Set<Section<? extends SimpleReference>>>();
 
-		Map<String, Set<Section<? extends SimpleReference>>> refs = IncrementalCompiler.getInstance().getTerminology().getAllReferences();
-		for (String ref : refs.keySet()) {
-			if (!IncrementalCompiler.getInstance().getTerminology().isValid(ref)) {
-				if (errors.containsKey(ref)) {
-					errors.get(ref).addAll(refs.get(ref));
+		Map<TermIdentifier, Set<Section<? extends SimpleReference>>> refs = IncrementalCompiler.getInstance().getTerminology().getAllReferences();
+		for (TermIdentifier identifier : refs.keySet()) {
+			if (!IncrementalCompiler.getInstance().getTerminology().isValid(identifier)) {
+				if (errors.containsKey(identifier)) {
+					errors.get(identifier).addAll(refs.get(identifier));
 				}
 				else {
-					errors.put(ref, refs.get(ref));
+					errors.put(identifier, refs.get(identifier));
 				}
 			}
 		}
 
-		for (String termidentifier : errors.keySet()) {
+		for (TermIdentifier termidentifier : errors.keySet()) {
 			html.append("<div id=\"onte-import-tab\" class=\"onte-box\" style=\"padding-bottom:3px;\">");
 
 			html.append("<p><strong>Term: ");
-			html.append(termidentifier).append("</strong></p>");
+			html.append(termidentifier.getLastPathElement()).append("</strong></p>");
 			html.append("<ul>");
 
 			for (Section<? extends SimpleReference> section : errors.get(termidentifier)) {

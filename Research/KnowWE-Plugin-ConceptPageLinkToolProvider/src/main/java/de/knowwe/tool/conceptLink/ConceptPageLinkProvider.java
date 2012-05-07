@@ -24,6 +24,7 @@ import java.util.Collection;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.IncrementalTermReference;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
@@ -42,7 +43,7 @@ public class ConceptPageLinkProvider implements ToolProvider {
 		if (section.get() instanceof IncrementalTermReference) {
 			@SuppressWarnings("unchecked")
 			Section<IncrementalTermReference> incSection = (Section<IncrementalTermReference>) section;
-			String termIdentifier = incSection.get().getTermIdentifier(incSection);
+			TermIdentifier termIdentifier = incSection.get().getTermIdentifier(incSection);
 			Collection<Section<? extends SimpleDefinition>> definitions =
 					IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 							termIdentifier);

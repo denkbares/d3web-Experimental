@@ -23,6 +23,7 @@ import java.util.Set;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
@@ -35,10 +36,10 @@ public class ObjectInfoTagHandlerIncr extends de.knowwe.core.taghandler.ObjectIn
 	}
 
 	@Override
-	protected void getTermDefinitions(Article currentArticle, String objectName, Set<Section<?>> definitions) {
+	protected void getTermDefinitions(Article currentArticle, TermIdentifier termIdentifier, Set<Section<?>> definitions) {
 
 		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
-		Collection<Section<? extends SimpleDefinition>> termDefinitions = terminology.getTermDefinitions(objectName);
+		Collection<Section<? extends SimpleDefinition>> termDefinitions = terminology.getTermDefinitions(termIdentifier);
 		if (termDefinitions != null) {
 			for (Section<?> section : termDefinitions) {
 				definitions.add(section);
@@ -49,9 +50,9 @@ public class ObjectInfoTagHandlerIncr extends de.knowwe.core.taghandler.ObjectIn
 	}
 
 	@Override
-	protected void getTermReferences(Article currentArticle, String objectName, Set<Section<?>> references) {
+	protected void getTermReferences(Article currentArticle, TermIdentifier termIdentifier, Set<Section<?>> references) {
 		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
-		Collection<Section<? extends SimpleReference>> termReferences = terminology.getTermReferences(objectName);
+		Collection<Section<? extends SimpleReference>> termReferences = terminology.getTermReferences(termIdentifier);
 		if (termReferences != null) {
 			for (Section<?> section : termReferences) {
 				references.add(section);

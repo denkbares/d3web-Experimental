@@ -26,7 +26,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * A normal mailform.
@@ -56,9 +56,9 @@ public class MailFormTagHandler extends AbstractTagHandler {
 		if (userContext.userIsAsserted()) {
 			String id = "";
 			if (parameters.containsKey(FORM_NAME)) id = "mf_" + parameters.get(FORM_NAME);
-			else return KnowWEUtils.maskHTML(mailform.append(
+			else return Strings.maskHTML(mailform.append(
 					"<p>Jedes Mail-Formular muss eine eindeutige ID besitzen</p>").toString());
-			if (checkID(id, section.getArticle())) return KnowWEUtils.maskHTML(mailform.append(
+			if (checkID(id, section.getArticle())) return Strings.maskHTML(mailform.append(
 					"<p>Jedes Mail-Formular muss eine eindeutige ID besitzen</p>").toString());
 
 			mailform.append("<form id='" + id
@@ -73,7 +73,7 @@ public class MailFormTagHandler extends AbstractTagHandler {
 		else {
 			mailform.append("<p>Melden Sie sich bitte an um eine Nachricht zu schreiben.</p>");
 		}
-		return KnowWEUtils.maskHTML(mailform.toString());
+		return Strings.maskHTML(mailform.toString());
 	}
 
 	// TODO: BUTTON VERÄNDERN NACH DRÜCKEN / BUTTON AUF DOPPELTE BUTTONS PRÜFEN

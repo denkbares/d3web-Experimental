@@ -26,7 +26,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.jspwiki.JSPWikiConnector;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -60,7 +60,7 @@ public class AboutMeRenderer implements Renderer {
 		}
 		noneHTML.append("</div>");
 
-		string.append(KnowWEUtils.maskHTML(noneHTML.toString()));
+		string.append(Strings.maskHTML(noneHTML.toString()));
 	}
 
 	/**

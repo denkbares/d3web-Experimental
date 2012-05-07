@@ -25,7 +25,7 @@ import java.util.Map;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * @author Alex Legler
@@ -61,7 +61,7 @@ public class HelloWorldTagHandler extends AbstractTagHandler {
 			result += ("<img src=\"KnowWEExtension/images/helloworld.jpg\" alt=\":)\"/>");
 		}
 
-		return KnowWEUtils.maskHTML(result);
+		return Strings.maskHTML(result);
 	}
 
 }

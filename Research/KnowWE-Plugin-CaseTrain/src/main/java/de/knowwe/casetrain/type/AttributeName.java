@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -56,9 +56,9 @@ public class AttributeName extends AbstractType {
 
 			@Override
 			public void render(Section<?> sec, UserContext user, StringBuilder string) {
-				string.append(KnowWEUtils.maskHTML("<td>"));
+				string.append(Strings.maskHTML("<td>"));
 				DelegateRenderer.getInstance().render(sec, user, string);
-				string.append(KnowWEUtils.maskHTML("</td>"));
+				string.append(Strings.maskHTML("</td>"));
 
 			}
 		});

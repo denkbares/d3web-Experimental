@@ -24,7 +24,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * This renderer adds the kdomid to the span in which a Section is rendered. Use
@@ -54,7 +54,7 @@ public class KDomSectionHighlightingRenderer implements Renderer {
 		// that is needed for Highlighting the section
 		StringBuilder b = new StringBuilder();
 		DelegateRenderer.getInstance().render(sec, user, b);
-		string.append(KnowWEUtils.maskHTML("<span id='" + sec.getID()
+		string.append(Strings.maskHTML("<span id='" + sec.getID()
 						+ "'><span id=''>"
 						+ b.toString()
 						+ "</span></span>"));

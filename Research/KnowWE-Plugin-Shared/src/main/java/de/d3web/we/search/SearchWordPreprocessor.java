@@ -24,8 +24,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.knowwe.core.utils.SplitUtility;
 import de.knowwe.core.utils.StringFragment;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.search.SearchTerm;
 
 /**
@@ -58,7 +58,7 @@ public class SearchWordPreprocessor {
 	 * @return
 	 */
 	public Collection<SearchTerm> processForSearch(String searchText) {
-		List<StringFragment> terms = SplitUtility.splitUnquoted(searchText, " ");
+		List<StringFragment> terms = Strings.splitUnquoted(searchText, " ");
 
 		Set<SearchTerm> resultTmp = new HashSet<SearchTerm>();
 		Set<SearchTerm> result = new HashSet<SearchTerm>();
@@ -90,7 +90,7 @@ public class SearchWordPreprocessor {
 	 * @return
 	 */
 	public Collection<SearchTerm> processForRecommendation(String searchText) {
-		List<StringFragment> terms = SplitUtility.splitUnquoted(searchText, " ");
+		List<StringFragment> terms = Strings.splitUnquoted(searchText, " ");
 
 		Set<SearchTerm> resultTmp = new HashSet<SearchTerm>();
 		Set<SearchTerm> result = new HashSet<SearchTerm>();

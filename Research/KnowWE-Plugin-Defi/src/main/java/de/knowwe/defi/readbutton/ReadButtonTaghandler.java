@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -77,12 +77,12 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 		// only asserted user can see readbuttons.
 		if (!userContext.userIsAsserted()) {
-			return KnowWEUtils.maskHTML("");
+			return Strings.maskHTML("");
 		}
 
 		// check for errors
 		if (parameters.containsKey(ID)) id = parameters.get(ID);
-		else return KnowWEUtils.maskHTML("<span class='warning'>" + ERROR_MISSING_ID + "</span>");
+		else return Strings.maskHTML("<span class='warning'>" + ERROR_MISSING_ID + "</span>");
 
 		// TODO: ID-Check
 
@@ -129,7 +129,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 		}
 		builder.append("</div>");
 
-		return KnowWEUtils.maskHTML(builder.toString());
+		return Strings.maskHTML(builder.toString());
 	}
 
 	/**

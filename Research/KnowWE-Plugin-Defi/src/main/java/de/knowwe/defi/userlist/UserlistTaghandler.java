@@ -28,7 +28,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.defi.aboutMe.AboutMe;
 import de.knowwe.jspwiki.JSPWikiConnector;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -71,7 +71,7 @@ public class UserlistTaghandler extends AbstractTagHandler {
 		}
 
 		userlist.append("</table>");
-		return KnowWEUtils.maskHTML(userlist.toString());
+		return Strings.maskHTML(userlist.toString());
 	}
 
 	/**

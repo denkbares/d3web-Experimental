@@ -25,7 +25,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.usersupport.tables.InnerTable;
 import de.knowwe.usersupport.tables.TableCell;
 import de.knowwe.usersupport.tables.TableCellFirstColumn;
@@ -47,7 +47,7 @@ public class TableRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> section, UserContext user, StringBuilder string) {
-		string.append(KnowWEUtils.maskHTML("<span id='" + section.getID() + "'>"));
+		string.append(Strings.maskHTML("<span id='" + section.getID() + "'>"));
 
 		StringBuilder buildi = new StringBuilder();
 		buildi.append("<table border=\"1\">");
@@ -66,9 +66,9 @@ public class TableRenderer implements Renderer {
 
 		buildi.append("</table>");
 
-		string.append(KnowWEUtils.maskHTML("</span>"));
+		string.append(Strings.maskHTML("</span>"));
 
-		string.append(KnowWEUtils.maskHTML(buildi.toString()));
+		string.append(Strings.maskHTML(buildi.toString()));
 	}
 
 	private static void renderTableHeader(

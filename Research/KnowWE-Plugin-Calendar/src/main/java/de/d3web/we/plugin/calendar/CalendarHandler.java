@@ -33,7 +33,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class CalendarHandler extends AbstractHTMLTagHandler {
 
@@ -221,7 +221,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 					week = day.getAbsoluteWeek();
 				}
 
-				buttons = KnowWEUtils.maskHTML(js) + buttons(topic, week);
+				buttons = Strings.maskHTML(js) + buttons(topic, week);
 			}
 
 			if (values.containsKey("time")) {
@@ -254,11 +254,11 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 
 			// wide calendar activated
 			if (values.containsKey("wide")) {
-				return KnowWEUtils.maskHTML(js) + buttons(topic, week)
+				return Strings.maskHTML(js) + buttons(topic, week)
 						+ renderWeekWide(intervall, getAppointments(intervall, author, web));
 			}
 
-			return KnowWEUtils.maskHTML(js) + buttons(topic, week) +
+			return Strings.maskHTML(js) + buttons(topic, week) +
 					renderWeek(intervall, getAppointments(intervall, author, web));
 		}
 	}
@@ -321,7 +321,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 						"</button></td>");
 		buttons.append("</tr></table>");
 
-		return KnowWEUtils.maskHTML(buttons.toString());
+		return Strings.maskHTML(buttons.toString());
 	}
 
 	private String renderWeek(DateType[] intervall, List<CalendarEntry> appointments) {
@@ -390,7 +390,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 		}
 
 		toHTML.append("</tr></table>\n");
-		return KnowWEUtils.maskHTML(toHTML.toString());
+		return Strings.maskHTML(toHTML.toString());
 	}
 
 	private String renderWeekWide(DateType[] intervall, List<CalendarEntry> appointments) {
@@ -506,7 +506,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 
 		toHTML.append("</table>\n");
 
-		return KnowWEUtils.maskHTML(toHTML.toString());
+		return Strings.maskHTML(toHTML.toString());
 	}
 
 	private String renderList(List<CalendarEntry> appointments) {
@@ -536,7 +536,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 				+ cb.getString("KnowWE2-Plugin-CalendarHandler.empty") + "</i></td></tr>");
 
 		toHTML.append("</table>\n");
-		return KnowWEUtils.maskHTML(toHTML.toString());
+		return Strings.maskHTML(toHTML.toString());
 	}
 
 	@Override

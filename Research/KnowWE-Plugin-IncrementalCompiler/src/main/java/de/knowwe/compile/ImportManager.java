@@ -6,8 +6,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * 
@@ -72,10 +74,11 @@ public class ImportManager {
 		return Collections.unmodifiableSet(imports.get(key));
 	}
 
-	public static Section<? extends AbstractType> resolveImportSection(String termIdentifier) {
+	public static Section<? extends AbstractType> resolveImportSection(TermIdentifier termIdentifier) {
 		for (Section<? extends AbstractType> importSec : imports.keySet()) {
 			for (Section<?> section : imports.get(importSec)) {
-				if (section.getText().equals(termIdentifier)) {
+				if (KnowWEUtils.getTermIdentifier(section).toString().equals(
+						termIdentifier.toString())) {
 					return importSec;
 				}
 			}

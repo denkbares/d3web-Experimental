@@ -34,7 +34,6 @@ import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.basicType.EndLineComment;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
-import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -61,11 +60,6 @@ public class ClassDefinitionMarkup extends AbstractType implements Editable, Kno
 		public ClassDef() {
 			this.setSectionFinder(new RegexSectionFinder(CLASS_REGEX,
 					0, 1));
-		}
-
-		@Override
-		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
-			return s.getText().trim();
 		}
 
 		@Override

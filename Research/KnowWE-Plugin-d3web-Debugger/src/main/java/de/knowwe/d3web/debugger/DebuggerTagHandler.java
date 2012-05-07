@@ -29,7 +29,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.d3web.debugger.actions.DebuggerMenuAction;
 
 /**
@@ -59,7 +59,7 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 		String web = userContext.getParameter(Attributes.WEB);
 		// If article already contains a debugger, return error.
 		String articleText = Environment.getInstance().getArticle(web, title).getRootSection().getText();
-		if (articleText.split("KnowWEPlugin debugger").length > 2) return KnowWEUtils.maskHTML("<p class='info box'>Fehler: Nur ein Debugger pro Artikel!</p>");
+		if (articleText.split("KnowWEPlugin debugger").length > 2) return Strings.maskHTML("<p class='info box'>Fehler: Nur ein Debugger pro Artikel!</p>");
 		// Get knowledgebase
 		KnowledgeBase kb = null;
 		Session session = null;
@@ -80,7 +80,7 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 		}
 		// If finally no knowledgebase was found => return error
 		finally {
-			if (kb == null) return KnowWEUtils.maskHTML("Error: No knowledgebase was found.");
+			if (kb == null) return Strings.maskHTML("Error: No knowledgebase was found.");
 		}
 		session = SessionProvider.getSession(userContext, kb);
 
@@ -103,7 +103,7 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 
 		buffer.append("</div>");
 
-		return KnowWEUtils.maskHTML(buffer.toString());
+		return Strings.maskHTML(buffer.toString());
 	}
 
 }

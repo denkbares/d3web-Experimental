@@ -23,7 +23,7 @@ package de.d3web.we.drools.kdom.rendering;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.MessageRenderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class DroolsRuleWarningRenderer implements MessageRenderer {
 
@@ -45,7 +45,7 @@ public class DroolsRuleWarningRenderer implements MessageRenderer {
 		buffy.append(m.getVerbalization());
 		buffy.append("</span>");
 
-		return KnowWEUtils.maskHTML(buffy.toString());
+		return Strings.maskHTML(buffy.toString());
 	}
 
 	@Override

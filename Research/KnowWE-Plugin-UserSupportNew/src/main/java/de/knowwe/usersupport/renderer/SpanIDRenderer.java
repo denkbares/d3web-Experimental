@@ -22,7 +22,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -38,9 +38,9 @@ public class SpanIDRenderer implements Renderer
 	@Override
 	public void render(Section<?> sec, UserContext user, StringBuilder string)
 	{
-		string.append(KnowWEUtils.maskHTML("<span id='" + sec.getID() + "'>"));
+		string.append(Strings.maskHTML("<span id='" + sec.getID() + "'>"));
 		DelegateRenderer.getInstance().render(sec, user, string);
-		string.append(KnowWEUtils.maskHTML("</span>"));
+		string.append(Strings.maskHTML("</span>"));
 	}
 
 }

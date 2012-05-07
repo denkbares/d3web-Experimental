@@ -27,8 +27,8 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
-import de.knowwe.core.utils.SplitUtility;
 import de.knowwe.core.utils.StringFragment;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
@@ -69,7 +69,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 				public List<SectionFinderResult> lookForSections(String text,
 						Section<?> father, Type type) {
 					List<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
-					List<StringFragment> list = SplitUtility.splitUnquoted(text, ",");
+					List<StringFragment> list = Strings.splitUnquoted(text, ",");
 					for (StringFragment stringFragment : list) {
 						result.add(new SectionFinderResult(
 								stringFragment.getStartTrimmed(),
@@ -95,11 +95,6 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 
 		public PropertyDef() {
 			this.setSectionFinder(new RegexSectionFinder(OBJECT_PROPERTY_REGEX, 0, 1));
-		}
-
-		@Override
-		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
-			return s.getText();
 		}
 
 		@Override

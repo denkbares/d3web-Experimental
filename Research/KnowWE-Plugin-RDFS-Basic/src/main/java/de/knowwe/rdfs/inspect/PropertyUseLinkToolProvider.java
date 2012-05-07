@@ -24,6 +24,7 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdfs.AbstractIRITermDefinition;
 import de.knowwe.rdfs.IRITermRef;
@@ -39,14 +40,15 @@ public class PropertyUseLinkToolProvider implements ToolProvider {
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 
 		if (section.get() instanceof IRITermRef) {
-			Section<? extends IRITermRef> ref = ((Section<? extends IRITermRef>) section);
+			Section<? extends IRITermRef> ref = Sections.cast(section, IRITermRef.class);
 			if (RDFSUtil.isTermCategory(ref, RDFSTermCategory.ObjectProperty)) {
 				return new Tool[] { getPropertyUseTool(ref, userContext) };
 			}
 
 		}
 		if (section.get() instanceof AbstractIRITermDefinition) {
-			Section<? extends AbstractIRITermDefinition> def = ((Section<? extends AbstractIRITermDefinition>) section);
+			Section<? extends AbstractIRITermDefinition> def = Sections.cast(section,
+					AbstractIRITermDefinition.class);
 			Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
 					def.get().getTermIdentifier(def));
 			if (termReferences != null && termReferences.size() > 0) {
@@ -61,7 +63,7 @@ public class PropertyUseLinkToolProvider implements ToolProvider {
 	}
 
 	protected Tool getPropertyUseTool(Section<? extends SimpleTerm> section, UserContext userContext) {
-		String objectName = section.get().getTermIdentifier(section);
+		String objectName = section.get().getTermIdentifier(section).toString();
 
 		String jsAction = "window.location.href = " +
 				"'Wiki.jsp?page=PropertyUse&objectname=' + encodeURIComponent('" +

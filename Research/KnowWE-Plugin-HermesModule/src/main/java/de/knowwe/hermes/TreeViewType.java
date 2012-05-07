@@ -24,7 +24,7 @@ import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -68,9 +68,9 @@ public class TreeViewType extends AbstractType {
 					+ "treeInit" + id + "();"
 					+ "</script>";
 
-			string.append(KnowWEUtils.maskHTML(pre));
+			string.append(Strings.maskHTML(pre));
 			DelegateRenderer.getInstance().render(sec, user, string);
-			string.append(KnowWEUtils.maskHTML(post));
+			string.append(Strings.maskHTML(post));
 		}
 	}
 }

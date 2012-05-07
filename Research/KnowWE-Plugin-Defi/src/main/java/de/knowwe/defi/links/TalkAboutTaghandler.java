@@ -23,7 +23,6 @@ import java.util.Map;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Strings;
 
 /**
@@ -65,6 +64,7 @@ public class TalkAboutTaghandler extends AbstractTagHandler {
 		talkAbout.append("<a href=\"Wiki.jsp?page=");
 		talkAbout.append(Strings.encodeURL(talkPage.trim()));
 		talkAbout.append("&amp;talkabout=");
+
 		talkAbout.append(Strings.encodeURL(subject.trim()));
 		talkAbout.append("\" title=\"Title:");
 		talkAbout.append(title);
@@ -72,6 +72,6 @@ public class TalkAboutTaghandler extends AbstractTagHandler {
 		talkAbout.append("Mit Berater dar&uuml;ber sprechen");
 		talkAbout.append("</a>");
 
-		return KnowWEUtils.maskHTML(talkAbout.toString());
+		return Strings.maskHTML(talkAbout.toString());
 	}
 }

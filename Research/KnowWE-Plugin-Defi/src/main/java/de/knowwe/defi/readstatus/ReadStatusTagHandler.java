@@ -34,7 +34,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.defi.menu.DynamicMenuMarkup;
 import de.knowwe.defi.readbutton.ReadbuttonType;
 import de.knowwe.defi.time.TimeTableMarkup;
@@ -80,7 +80,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 			if (DashTreeUtils.getDashLevel(rootUnit) == 0) {
 				// Datum der Einheit
 				if (rootCounter >= dates.size())
-					return KnowWEUtils.maskHTML("<p>Fehler: Zu wenig Zeiteinheiten im <a href='Wiki.jsp?page=Zeitplan'>Zeitplan</a> vorhanden</p>");
+					return Strings.maskHTML("<p>Fehler: Zu wenig Zeiteinheiten im <a href='Wiki.jsp?page=Zeitplan'>Zeitplan</a> vorhanden</p>");
 
 				unitDate = dates.get(rootCounter);
 				// Hole alle Readbuttons aller Untereinheiten und der Einheit
@@ -139,7 +139,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 
 		}
 
-		return KnowWEUtils.maskHTML(readstatus.toString());
+		return Strings.maskHTML(readstatus.toString());
 	}
 
 	/**

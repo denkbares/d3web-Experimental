@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.xml.AbstractXMLType;
 
 /**
@@ -75,6 +75,6 @@ public class CSSRenderer implements Renderer {
 		result.append("<span style='" + style + "'>");
 		result.append(content);
 		result.append("</span>");
-		return KnowWEUtils.maskHTML(result.toString());
+		return Strings.maskHTML(result.toString());
 	}
 }

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import de.knowwe.core.Environment;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
@@ -145,7 +146,7 @@ public class JuriTreeXmlGenerator {
 								Environment.DEFAULT_WEB,
 								section.getArticle().getTitle());
 		Section<?> definingSection = terminologyHandler
-				.getTermDefiningSection(questionText);
+				.getTermDefiningSection(new TermIdentifier(questionText));
 		if (definingSection != null) {
 			Section<QuestionDefinitionArea> area = Sections.findAncestorOfType(
 					definingSection, QuestionDefinitionArea.class);

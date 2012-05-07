@@ -25,13 +25,13 @@ import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.knowwe.compile.IncrementalCompiler;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.taghandler.TagHandlerTypeContent;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -66,7 +66,7 @@ public class PropertyUseTagHandler extends AbstractTagHandler {
 		defaultMarkupRenderer.renderDefaultMarkupStyled(
 				getTagName(), content, sectionID, cssClassName, tools, userContext,
 				buffer);
-		KnowWEUtils.maskJSPWikiMarkup(buffer);
+		Strings.maskJSPWikiMarkup(buffer);
 		return buffer.toString();
 	}
 
@@ -76,20 +76,20 @@ public class PropertyUseTagHandler extends AbstractTagHandler {
 		Map<String, String> urlParameters = userContext.getParameters();
 
 		// First try the URL-Parameter, if null try the TagHandler-Parameter.
-		String objectName = null;
+		String externalForm = null;
 		if (urlParameters.get(OBJECTNAME) != null) {
-			objectName = Strings.decodeURL(urlParameters.get(OBJECTNAME));
+			externalForm = Strings.decodeURL(urlParameters.get(OBJECTNAME));
 		}
 		else if (parameters.get(OBJECTNAME) != null) {
-			objectName = Strings.decodeURL(parameters.get(OBJECTNAME));
+			externalForm = Strings.decodeURL(parameters.get(OBJECTNAME));
 		}
 
 		Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
-				objectName);
+				TermIdentifier.fromExternalForm(externalForm));
 
 		if (termReferences != null && termReferences.size() > 0) {
 
-			buffy.append(KnowWEUtils.maskHTML("Relations for property <b>" + objectName
+			buffy.append(Strings.maskHTML("Relations for property <b>" + externalForm
 					+ "</b>:<br>"));
 
 			URI propURI = RDFSUtil.getURI(termReferences.iterator().next());

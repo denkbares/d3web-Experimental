@@ -11,10 +11,10 @@ import org.ontoware.rdf2go.model.node.Node;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.Environment;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Messages;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -37,14 +37,14 @@ public class SparqlResultSetRenderer {
 			tablemode = l.size() > 1;
 		}
 		if (tablemode) {
-			result += KnowWEUtils.maskHTML("<table>");
+			result += Strings.maskHTML("<table>");
 			for (String var : l) {
-				result += KnowWEUtils.maskHTML("<th>") + var
-						+ KnowWEUtils.maskHTML("</th>");
+				result += Strings.maskHTML("<th>") + var
+						+ Strings.maskHTML("</th>");
 			}
 		}
 		else {
-			result += KnowWEUtils.maskHTML("<ul style='white-space: normal'>");
+			result += Strings.maskHTML("<ul style='white-space: normal'>");
 		}
 
 		while (i.hasNext()) {
@@ -56,24 +56,24 @@ public class SparqlResultSetRenderer {
 			QueryRow s = i.next();
 
 			if (tablemode) {
-				result += KnowWEUtils.maskHTML("<tr>");
+				result += Strings.maskHTML("<tr>");
 			}
 			for (String var : l) {
 				Node n = s.getValue(var);
 				String erg = renderNode(links, n);
 
 				if (tablemode) {
-					result += KnowWEUtils.maskHTML("<td>") + erg
-							+ KnowWEUtils.maskHTML("</td>\n");
+					result += Strings.maskHTML("<td>") + erg
+							+ Strings.maskHTML("</td>\n");
 				}
 				else {
-					result += KnowWEUtils.maskHTML("<li>") + erg
-							+ KnowWEUtils.maskHTML("</li>\n");
+					result += Strings.maskHTML("<li>") + erg
+							+ Strings.maskHTML("</li>\n");
 				}
 
 			}
 			if (tablemode) {
-				result += KnowWEUtils.maskHTML("</tr>");
+				result += Strings.maskHTML("</tr>");
 			}
 		}
 
@@ -83,10 +83,10 @@ public class SparqlResultSetRenderer {
 		}
 		else {
 			if (tablemode) {
-				result += KnowWEUtils.maskHTML("</table>");
+				result += Strings.maskHTML("</table>");
 			}
 			else {
-				result += KnowWEUtils.maskHTML("</ul>");
+				result += Strings.maskHTML("</ul>");
 			}
 		}
 		return result;
@@ -106,19 +106,19 @@ public class SparqlResultSetRenderer {
 				erg = erg.substring(4);
 			}
 			Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-						erg);
+						new TermIdentifier(erg));
 
 			if (termDefinitions != null && termDefinitions.size() > 0) {
-				erg = CompileUtils.createLinkToDefinition(erg);
+				erg = CompileUtils.createLinkToDefinition(new TermIdentifier(erg));
 			}
 			else if (Environment.getInstance()
 						.getWikiConnector().doesArticleExist(erg)
 						|| Environment.getInstance()
 								.getWikiConnector().doesArticleExist(
 										Strings.decodeURL(erg))) {
-				erg = KnowWEUtils.maskHTML("<a href=\"Wiki.jsp?page=")
-							+ erg + KnowWEUtils.maskHTML("\">") + erg
-							+ KnowWEUtils.maskHTML("</a>");
+				erg = Strings.maskHTML("<a href=\"Wiki.jsp?page=")
+							+ erg + Strings.maskHTML("\">") + erg
+							+ Strings.maskHTML("</a>");
 			}
 
 		}

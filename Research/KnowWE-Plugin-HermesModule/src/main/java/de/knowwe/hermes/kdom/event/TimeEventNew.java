@@ -21,8 +21,8 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
-import de.knowwe.core.utils.SplitUtility;
 import de.knowwe.core.utils.StringFragment;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.hermes.TimeStamp;
 import de.knowwe.hermes.kdom.event.renderer.TimeEventDateRenderer;
@@ -88,7 +88,7 @@ public class TimeEventNew extends AbstractType {
 	public static TimeEvent createTimeEvent(Section<TimeEventNew> s) {
 		String titleS = null;
 		Section<TitleType> title = Sections.findSuccessor(s, TitleType.class);
-		if (title != null) titleS = title.get().getTermIdentifier(title);
+		if (title != null) titleS = title.get().getTermIdentifier(title).toString();
 
 		String dateS = null;
 		Section<DateType> date = Sections.findSuccessor(s, DateType.class);
@@ -149,7 +149,7 @@ public class TimeEventNew extends AbstractType {
 		}
 
 		@Override
-		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+		public String getTermName(Section<? extends SimpleTerm> s) {
 			return s.getText().trim();
 		}
 
@@ -164,7 +164,7 @@ public class TimeEventNew extends AbstractType {
 
 						@Override
 						public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
-							StringFragment firstNonEmptyLineContent = SplitUtility.getFirstNonEmptyLineContent(text);
+							StringFragment firstNonEmptyLineContent = Strings.getFirstNonEmptyLineContent(text);
 							if (firstNonEmptyLineContent != null) {
 								return SectionFinderResult.createSingleItemResultList(
 										firstNonEmptyLineContent.getStart(),

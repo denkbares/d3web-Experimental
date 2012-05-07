@@ -19,8 +19,8 @@ import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 import de.knowwe.owlapi.OWLAPIConnector;
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 04.10.2011
  */
@@ -34,7 +34,7 @@ public class OWLApiQueryParser {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param shortFormProvider
 	 */
 	public OWLApiQueryParser(ShortFormProvider shortFormProvider) {
@@ -60,7 +60,7 @@ public class OWLApiQueryParser {
 	 * Parses a string given in Manchester OWL Syntax into a
 	 * {@link OWLClassExpression}. The OWLClassexpression can then further used
 	 * to obtain results from the loaded ontology.
-	 *
+	 * 
 	 * @param String query The to parse String
 	 * @throws ParserException
 	 */
@@ -77,7 +77,7 @@ public class OWLApiQueryParser {
 	 * Parses a string given in Manchester OWL Syntax into a
 	 * {@link OWLClassExpression}. The OWLClassexpression can then further used
 	 * to obtain results from the loaded ontology.
-	 *
+	 * 
 	 * @param String query The to parse String
 	 * @throws ParserException
 	 */
@@ -94,7 +94,7 @@ public class OWLApiQueryParser {
 	 * Parses a string given in Manchester OWL Syntax into a {@link OWLAxiom}.
 	 * The OWLAxiom can then further used to obtain results from the loaded
 	 * ontology.
-	 *
+	 * 
 	 * @param String query The to parse String
 	 * @throws ParserException
 	 */

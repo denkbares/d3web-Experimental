@@ -21,6 +21,7 @@ import de.knowwe.compile.ReferenceManager;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -64,7 +65,8 @@ public class ComplexDefinitionRefactoringTest {
 
 		// test whether hasAuthor is still alive and running and has not been
 		// killed by refactoring
-		assertTrue(IncrementalCompiler.getInstance().getTerminology().isValid("hasAuthor"));
+		assertTrue(IncrementalCompiler.getInstance().getTerminology().isValid(
+				new TermIdentifier("hasAuthor")));
 
 		// check store and query engine
 		assertTrue(core.sparqlAsk("ASK { ?x ?y ?z . }"));

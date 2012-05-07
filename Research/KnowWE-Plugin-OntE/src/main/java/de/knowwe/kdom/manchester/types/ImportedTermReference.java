@@ -5,8 +5,8 @@ import java.util.List;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.IncrementalTermReference;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
@@ -30,7 +30,8 @@ public class ImportedTermReference extends IncrementalTermReference {
 
 				String trimmed = text.trim();
 
-				if (IncrementalCompiler.getInstance().getTerminology().isImportedObject(trimmed)) {
+				if (IncrementalCompiler.getInstance().getTerminology().isImportedObject(
+						new TermIdentifier(trimmed))) {
 
 					int currentStart = text.indexOf(trimmed);
 					List<SectionFinderResult> results = new ArrayList<SectionFinderResult>();
@@ -41,11 +42,6 @@ public class ImportedTermReference extends IncrementalTermReference {
 				return null;
 			}
 		});
-	}
-
-	@Override
-	public String getTermIdentifier(Section<? extends SimpleTerm> s) {
-		return s.getText();
 	}
 
 }

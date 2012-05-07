@@ -39,13 +39,14 @@ public class IRITermRef extends IncrementalTermReference {
 	}
 
 	@Override
-	public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+	public String getTermName(Section<? extends SimpleTerm> s) {
 		// dirty hack for colons '::'
 		// TODO: fix
-		if (s.getText().endsWith("::")) return s.getText().substring(0,
+		String identifierString = s.getText();
+		if (s.getText().endsWith("::")) identifierString = s.getText().substring(0,
 				s.getText().length() - 2);
 
-		return s.getText();
+		return identifierString;
 
 	}
 

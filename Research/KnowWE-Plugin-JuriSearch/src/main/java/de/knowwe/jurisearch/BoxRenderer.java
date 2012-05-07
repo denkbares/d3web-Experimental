@@ -22,7 +22,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class BoxRenderer implements Renderer {
 
@@ -34,13 +34,13 @@ public class BoxRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> section, UserContext user, StringBuilder string) {
-		string.append(KnowWEUtils.maskHTML("<div"));
+		string.append(Strings.maskHTML("<div"));
 		string.append(" class='").append(clazz).append("'");
 
-		string.append(KnowWEUtils.maskHTML(">"));
+		string.append(Strings.maskHTML(">"));
 		DelegateRenderer.getInstance().render(section, user, string);
 
-		string.append(KnowWEUtils.maskHTML("</div>"));
+		string.append(Strings.maskHTML("</div>"));
 	}
 
 }

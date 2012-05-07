@@ -23,7 +23,7 @@ import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.d3web.we.diaflux.pathcoloring.AnomalyManager;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class InconsistentQuestionTest extends AbstractCITest {
 
@@ -43,10 +43,10 @@ public class InconsistentQuestionTest extends AbstractCITest {
 						Environment.DEFAULT_WEB, articleName);
 
 		CITestResult res = new CITestResult(Type.SUCCESSFUL, null, config);
-		
+
 		StringBuffer error = new StringBuffer();
 
-		Hashtable<String, IndicationType> knownQuestions = new Hashtable<String, IndicationType>(); 
+		Hashtable<String, IndicationType> knownQuestions = new Hashtable<String, IndicationType>();
 
 		if (null != kb) {
 			List<Flow> flowcharts =
@@ -54,7 +54,7 @@ public class InconsistentQuestionTest extends AbstractCITest {
 			for (Flow flow : flowcharts) {
 				List<Node> nodes = flow.getNodes();
 				for (Node node : nodes) {
-					if (node.getClass().equals(ActionNode.class)) { 
+					if (node.getClass().equals(ActionNode.class)) {
 						PSAction action = ((ActionNode) node).getAction();
 						if (action instanceof ActionNextQASet) {
 							List<String> vars = getAskedValues((ActionNextQASet) action);
@@ -75,10 +75,12 @@ public class InconsistentQuestionTest extends AbstractCITest {
 								}
 								else {
 									IndicationType original = knownQuestions.get(var);
-									if(original != type) {
+									if (original != type) {
 										AnomalyManager anomalyManager = AnomalyManager.getAnomalyManager();
-										anomalyManager.addAnomaly(node.getFlow(), node, "Inconsistent Question");
-										error.append("Inconsistent Question for Var. : " + var + "<br>");
+										anomalyManager.addAnomaly(node.getFlow(), node,
+												"Inconsistent Question");
+										error.append("Inconsistent Question for Var. : " + var
+												+ "<br>");
 									}
 								}
 							}
@@ -90,7 +92,7 @@ public class InconsistentQuestionTest extends AbstractCITest {
 		}
 		String errormsg = error.toString();
 		if (!errormsg.isEmpty()) {
-			KnowWEUtils.maskHTML(errormsg);
+			Strings.maskHTML(errormsg);
 			res = new CITestResult(Type.FAILED, errormsg, config);
 		}
 

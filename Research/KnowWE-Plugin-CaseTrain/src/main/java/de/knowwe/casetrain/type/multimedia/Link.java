@@ -24,7 +24,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -52,23 +52,23 @@ public class Link extends MultimediaItem {
 					StringBuilder string) {
 				Section<MultimediaItemContent> linkURL = Sections.findChildOfType(sec,
 						MultimediaItemContent.class);
-				string.append(KnowWEUtils.maskHTML(
+				string.append(Strings.maskHTML(
 						"<span title=\"Link\" class=\"casetrainlink\">"));
 				Section<Url> url = Sections.findChildOfType(sec, Url.class);
-				string.append(KnowWEUtils.maskHTML("<a href=\""));
+				string.append(Strings.maskHTML("<a href=\""));
 				String linkString = linkURL.getText().trim();
 				if (!linkString.startsWith("http://"))
 				;
 				string.append("http://");
 				string.append(linkString);
-				string.append(KnowWEUtils.maskHTML("\">"));
+				string.append(Strings.maskHTML("\">"));
 				if (url == null)
 					string.append(linkURL.getText().trim());
 					else
 					string.append(url.getText().
 							substring(1, url.getText().length() - 1).trim());
-					string.append(KnowWEUtils.maskHTML("</a>"));
-					string.append(KnowWEUtils.maskHTML("</span>"));
+					string.append(Strings.maskHTML("</a>"));
+					string.append(Strings.maskHTML("</span>"));
 				}
 		});
 

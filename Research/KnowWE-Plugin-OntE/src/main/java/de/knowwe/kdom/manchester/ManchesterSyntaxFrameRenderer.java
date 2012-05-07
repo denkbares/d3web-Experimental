@@ -31,7 +31,7 @@ import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.manchester.frame.DefaultFrame;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolUtils;
@@ -54,12 +54,12 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 	@Override
 	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
-		string.append(KnowWEUtils.maskHTML("<pre id=\""
+		string.append(Strings.maskHTML("<pre id=\""
 				+ sec.getID()
 				+ "\"style=\"white-space:pre-wrap;background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;position:relative;margin:0px\">"));
 
 		renderMessages(sec, string);
-		string.append(KnowWEUtils.maskHTML("<div style=\"position:absolute;top:0px;right:0px;border-bottom: 1px solid #E5E5E5;border-left: 1px solid #E5E5E5;padding:5px\">"
+		string.append(Strings.maskHTML("<div style=\"position:absolute;top:0px;right:0px;border-bottom: 1px solid #E5E5E5;border-left: 1px solid #E5E5E5;padding:5px\">"
 				// + getFrameName(sec)
 				// + getEditorIcon(sec)
 				+ renderTools(sec, user)
@@ -73,7 +73,7 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 		frame.replace(frame.length() - 2, frame.length(), "");
 		string.append(frame);
 
-		string.append(KnowWEUtils.maskHTML("</pre>"));
+		string.append(Strings.maskHTML("</pre>"));
 	}
 
 	/**
@@ -107,13 +107,13 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 				className = "error";
 			}
 
-			string.append(KnowWEUtils.maskHTML("<span class='" + className + "'>"));
+			string.append(Strings.maskHTML("<span class='" + className + "'>"));
 			for (Message msg : messages) {
 				if (msg.getType() != type) continue;
 				string.append(msg.getVerbalization());
 				string.append("\n");
 			}
-			string.append(KnowWEUtils.maskHTML("</span>"));
+			string.append(Strings.maskHTML("</span>"));
 		}
 	}
 

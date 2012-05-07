@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 public class InputFieldCellContent extends AbstractType {
@@ -87,7 +87,7 @@ public class InputFieldCellContent extends AbstractType {
 					user.getUserName());
 			int rows = InputFieldCellContent.getHeight(sec);
 			int cols = InputFieldCellContent.getWidth(sec);
-			string.append(KnowWEUtils.maskHTML("<textarea rows='" + rows + "' cols='"
+			string.append(Strings.maskHTML("<textarea rows='" + rows + "' cols='"
 					+ cols + "' wrap='soft' type='text' id='"
 					+ sec.getID()
 					+ "_" + version + "'>" + contentString + "</textarea>"));

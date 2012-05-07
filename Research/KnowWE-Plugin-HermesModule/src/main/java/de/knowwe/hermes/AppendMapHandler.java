@@ -33,7 +33,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.maps.Placemark;
 import de.knowwe.hermes.taghandler.ShowMapHandler;
@@ -56,7 +56,7 @@ public class AppendMapHandler implements PageAppendHandler {
 
 			if (l.size() >= 2) {
 				String map = createMap(l);
-				return KnowWEUtils.maskHTML(map);
+				return Strings.maskHTML(map);
 			}
 		}
 		return "";

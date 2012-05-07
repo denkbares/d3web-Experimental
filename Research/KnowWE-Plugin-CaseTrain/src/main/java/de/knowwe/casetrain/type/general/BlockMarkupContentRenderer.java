@@ -26,7 +26,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -51,7 +51,7 @@ public class BlockMarkupContentRenderer implements Renderer {
 	public void render(Section<?> sec, UserContext user,
 			StringBuilder string) {
 
-		string.append(KnowWEUtils.maskHTML("%%collapsebox-closed \r\n"));
+		string.append(Strings.maskHTML("%%collapsebox-closed \r\n"));
 		String tString = "";
 
 		// Only 1 title here
@@ -64,15 +64,15 @@ public class BlockMarkupContentRenderer implements Renderer {
 		}
 
 		string.append(
-				KnowWEUtils.maskHTML("! "
+				Strings.maskHTML("! "
 						+ tString
 						+ "\r\n")
 				);
 
-		string.append(KnowWEUtils.maskHTML("<pre id=\""
+		string.append(Strings.maskHTML("<pre id=\""
 				+ sec.getID()
 				+ "\" class=\"casetrain-instantedit-pre\">"));
-		string.append(KnowWEUtils.maskHTML("<div class=\"casetrain-instantedit\">"
+		string.append(Strings.maskHTML("<div class=\"casetrain-instantedit\">"
 				// + getFrameName(sec)
 				// + getEditorIcon(sec)
 				+ Utils.renderTools(sec, user)
@@ -88,9 +88,9 @@ public class BlockMarkupContentRenderer implements Renderer {
 			s.get().getRenderer().render(s, user, string);
 		}
 
-		string.append(KnowWEUtils.maskHTML("/%\r\n"));
+		string.append(Strings.maskHTML("/%\r\n"));
 
-		string.append(KnowWEUtils.maskHTML("</pre>"));
+		string.append(Strings.maskHTML("</pre>"));
 		return;
 	}
 

@@ -9,7 +9,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -39,7 +39,7 @@ public class GetDataAppendHandler implements PageAppendHandler {
 
 		if (titleList.contains(topic)) {
 
-			return KnowWEUtils.maskHTML("<body onload='getDataForConcept();'><form action='javascript:getDataForConcept()'>"
+			return Strings.maskHTML("<body onload='getDataForConcept();'><form action='javascript:getDataForConcept()'>"
 					+ "<div class='layout'><p class='tags'>Konzept: </p><input id='conceptname'  type='text' value='"
 					+ topic
 					+ "'>"

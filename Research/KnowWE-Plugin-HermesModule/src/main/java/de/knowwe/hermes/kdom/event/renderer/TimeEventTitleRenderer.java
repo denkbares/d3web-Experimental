@@ -23,7 +23,7 @@ package de.knowwe.hermes.kdom.event.renderer;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class TimeEventTitleRenderer implements Renderer {
 
@@ -43,7 +43,7 @@ public class TimeEventTitleRenderer implements Renderer {
 		if (sec != null) title = sec.getText();
 
 		// opening Span-Tag in TimeEventRenderer
-		title = title + KnowWEUtils.maskHTML("</span>");
+		title = title + Strings.maskHTML("</span>");
 
 		result.append(title);
 	}

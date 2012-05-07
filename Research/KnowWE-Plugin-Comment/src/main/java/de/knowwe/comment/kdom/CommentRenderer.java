@@ -32,7 +32,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.kdom.xml.XMLTail;
 
@@ -192,6 +192,6 @@ public class CommentRenderer implements Renderer {
 			// do nothing if WikiEngine is not properly started yet
 		}
 
-		string.append(KnowWEUtils.maskHTML(toHTML.toString()));
+		string.append(Strings.maskHTML(toHTML.toString()));
 	}
 }

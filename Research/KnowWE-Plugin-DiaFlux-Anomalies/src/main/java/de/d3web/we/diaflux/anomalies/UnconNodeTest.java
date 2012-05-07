@@ -14,7 +14,7 @@ import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.d3web.we.diaflux.pathcoloring.AnomalyManager;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 public class UnconNodeTest extends AbstractCITest {
 
@@ -59,7 +59,7 @@ public class UnconNodeTest extends AbstractCITest {
 				}
 			}
 			if (!resStr.isEmpty()) {
-				KnowWEUtils.maskHTML(resStr);
+				Strings.maskHTML(resStr);
 				res = new CITestResult(Type.FAILED, resStr, config);
 			}
 

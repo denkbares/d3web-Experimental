@@ -23,7 +23,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -34,7 +34,7 @@ public class SubblockMarkupRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user, StringBuilder string) {
-		string.append(KnowWEUtils.maskHTML("<div class='"
+		string.append(Strings.maskHTML("<div class='"
 				+ ((SubblockMarkup) sec.get()).getCSSClass()
 				+ "'>"));
 
@@ -43,6 +43,6 @@ public class SubblockMarkupRenderer implements Renderer {
 		MouseOverTitleRenderer.getInstance().render(
 				Sections.findSuccessor(sec, SubblockMarkupContent.class), user,
 				string);
-		string.append(KnowWEUtils.maskHTML("</div>"));
+		string.append(Strings.maskHTML("</div>"));
 	}
 }

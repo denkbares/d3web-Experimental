@@ -58,6 +58,7 @@ import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 
 /**
  * Renders rules to provide a debugging-layout.
@@ -106,7 +107,7 @@ public class DebuggerRuleRenderer implements Renderer {
 			buffer.append("THEN " + renderAction(r.getAction()));
 			buffer.append("</div>");
 
-			string.append(KnowWEUtils.maskHTML(buffer.toString()));
+			string.append(Strings.maskHTML(buffer.toString()));
 		}
 		else {
 			DelegateRenderer.getInstance().render(sec, user, string);

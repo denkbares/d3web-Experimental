@@ -28,7 +28,7 @@ import org.ontoware.rdf2go.model.node.URI;
 
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class ListIndividualsHandler extends AbstractHTMLTagHandler {
@@ -72,6 +72,6 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 		String querystring = SPARQL_START.replaceAll("CLASS", "<" + classURI.toString() + ">");
 		querystring += sparql_mid + SPARQL_END;
 
-		return KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(querystring, true));
+		return Strings.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(querystring, true));
 	}
 }

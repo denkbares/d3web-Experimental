@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.SparqlResultSetRenderer;
@@ -77,12 +77,12 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 
 			// render the difference
 
-			html.append(KnowWEUtils.maskHTML("<h3>"));
+			html.append(Strings.maskHTML("<h3>"));
 			html.append("Diff for: \"" + statementSection.getText() + "\"");
-			html.append(KnowWEUtils.maskHTML("</h3>"));
-			html.append(KnowWEUtils.maskHTML("<table>"));
+			html.append(Strings.maskHTML("</h3>"));
+			html.append(Strings.maskHTML("<table>"));
 			html.append(renderDiff(diff));
-			html.append(KnowWEUtils.maskHTML("</table>"));
+			html.append(Strings.maskHTML("</table>"));
 		}
 
 		StringBuilder buffer = new StringBuilder();
@@ -91,7 +91,7 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 				getTagName(), html.toString(), sectionID, cssClassName, new Tool[] {},
 				user,
 				buffer);
-		KnowWEUtils.maskJSPWikiMarkup(buffer);
+		Strings.maskJSPWikiMarkup(buffer);
 		return buffer.toString();
 
 	}
@@ -106,34 +106,34 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 	private String renderDiff(Collection<Statement> set) {
 		StringBuilder result = new StringBuilder();
 
-		result.append(KnowWEUtils.maskHTML("<tr>"));
-		result.append(KnowWEUtils.maskHTML("<th>"));
+		result.append(Strings.maskHTML("<tr>"));
+		result.append(Strings.maskHTML("<th>"));
 		result.append("x");
-		result.append(KnowWEUtils.maskHTML("</th>"));
-		result.append(KnowWEUtils.maskHTML("<th>"));
+		result.append(Strings.maskHTML("</th>"));
+		result.append(Strings.maskHTML("<th>"));
 		result.append("y");
-		result.append(KnowWEUtils.maskHTML("</th>"));
-		result.append(KnowWEUtils.maskHTML("<th>"));
+		result.append(Strings.maskHTML("</th>"));
+		result.append(Strings.maskHTML("<th>"));
 		result.append("z");
-		result.append(KnowWEUtils.maskHTML("</th>"));
-		result.append(KnowWEUtils.maskHTML("</tr>"));
+		result.append(Strings.maskHTML("</th>"));
+		result.append(Strings.maskHTML("</tr>"));
 
 		Iterator<Statement> itr = set.iterator();
 		while (itr.hasNext()) {
 			Statement row = itr.next();
 			// x y z (variables names of the query, see above)
 
-			result.append(KnowWEUtils.maskHTML("<tr>"));
-			result.append(KnowWEUtils.maskHTML("<td>"));
+			result.append(Strings.maskHTML("<tr>"));
+			result.append(Strings.maskHTML("<td>"));
 			result.append(SparqlResultSetRenderer.renderNode(true, row.getSubject()));
-			result.append(KnowWEUtils.maskHTML("</td>"));
-			result.append(KnowWEUtils.maskHTML("<td>"));
+			result.append(Strings.maskHTML("</td>"));
+			result.append(Strings.maskHTML("<td>"));
 			result.append(SparqlResultSetRenderer.renderNode(true, row.getPredicate()));
-			result.append(KnowWEUtils.maskHTML("</td>"));
-			result.append(KnowWEUtils.maskHTML("<td>"));
+			result.append(Strings.maskHTML("</td>"));
+			result.append(Strings.maskHTML("<td>"));
 			result.append(SparqlResultSetRenderer.renderNode(true, row.getObject()));
-			result.append(KnowWEUtils.maskHTML("</td>"));
-			result.append(KnowWEUtils.maskHTML("</tr>"));
+			result.append(Strings.maskHTML("</td>"));
+			result.append(Strings.maskHTML("</tr>"));
 		}
 		return result.toString();
 	}
