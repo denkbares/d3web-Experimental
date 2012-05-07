@@ -19,6 +19,7 @@
  */
 package de.d3web.proket.d3web.ue.analyze;
 
+import de.d3web.proket.d3web.ue.JSONReader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;

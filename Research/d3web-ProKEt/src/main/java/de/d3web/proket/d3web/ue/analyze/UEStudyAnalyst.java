@@ -19,298 +19,210 @@
  */
 package de.d3web.proket.d3web.ue.analyze;
 
+import de.d3web.proket.d3web.ue.JSONReader;
 import de.d3web.proket.d3web.ue.UETerm;
-import java.io.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import org.json.simple.JSONArray;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
 import org.json.simple.JSONObject;
 
+/**
+ * Basic class for evaluating logfiles from user studies. Provides basic
+ * functionality for getting a summarizing .csv file from a bunch of logfiles.
+ * So far: - get complete .csv witout solutions --> every file is contained, no
+ * solution evaluations contained - get cleaned .csv with solutions --> only
+ * correct/clean files, i.e. with logged start, end, duration --> also can
+ * contain (intermed) solution evaluation(s)
+ *
+ * TODO add functionality to read a to-be-specified file or table that contains
+ * the solution names and correct ratings
+ * 
+ * TODO: logSolution extra --> entfernen
+ * 
+ *
+ * @author Martina Freiberg @date 05.05.2012
+ */
 public class UEStudyAnalyst {
 
-    private JSONGlobalAnalyzer globa = null;
-    private JSONFileAnalyzer filea = null;
-    private File FILE;
-    private JSONObject JSON;
+    private static String PATH_TO_LOGFILES =
+            "/Users/mafre/CodingSpace/Research/d3web-ProKEt/LOGS";
+    private static String PATH_TO_ANALYSIS =
+            "/Users/mafre/CodingSpace/Research/d3web-ProKEt/LOGS/";
+    private static String FILENAME_ANALYSIS = "analysis.csv";
 
-    /*
-     * Constructor
+    public static void main(String[] args) {
+
+        StringBuilder bui = new StringBuilder();
+
+        /*
+         * will contain a list of solution-group-correctrating defs
+         */
+        ArrayList<JSONObject> solutions = new ArrayList<JSONObject>();
+
+        /*
+         * define JSON Object for each solution
+         */
+        JSONObject mainSolution = new JSONObject();
+        mainSolution.put(
+                UETerm.SNAME.toString(), "Ist das Arbeitsverhältnis wirksam gekündigt worden?");
+        mainSolution.put(UETerm.SRAT.toString(), "1");
+        mainSolution.put(UETerm.SG.toString(), "1");
+        
+        JSONObject secondSolution = new JSONObject();
+        secondSolution.put(
+                UETerm.SNAME.toString(), "Ist das Arbeitsverhältnis formell?");
+        secondSolution.put(UETerm.SRAT.toString(), "1");
+        secondSolution.put(UETerm.SG.toString(), "1");
+        
+        solutions.add(mainSolution);
+        solutions.add(secondSolution);
+
+        String csv = retrieveCleanedCSVWithSolutions(
+                PATH_TO_LOGFILES, solutions);
+
+        //String csv = retrieveCompleteCSVNoSolutions(
+        //      PATH_TO_LOGFILES);
+
+        try {
+            writeCSV(PATH_TO_ANALYSIS + FILENAME_ANALYSIS, csv);
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+    }
+
+    /**
+     * Retrieves a csv representation/summary of the logfiles contained in the
+     * provided log folder. Retrieves a CLEANED csv, i.e. containing no "empty"
+     * entries, which are defined as incomplete, i.e. not containing valid start
+     * and end values
+     *
+     * @param LogFolderName name of the log folder
+     * @param sdefs a collection of solutions and their corresponding ratings
+     * (i.e., ratings they should originally have if the case has been solved
+     * correctly
+     *
+     * @return a csv file containing all the results
      */
-    public UEStudyAnalyst(File f) {
-        //globa = new JSONGlobalAnalyzer(fn);
-        filea = new JSONFileAnalyzer();
-        FILE = f;
-        JSON = JSONReader.getInstance().getJSONFromTxtFile(FILE.getAbsolutePath());
-    }
+    public static String retrieveCleanedCSVWithSolutions(
+            String LogFolderName, ArrayList<JSONObject> sDefs) {
 
-    private String getStart() {
-        if (JSON.get(UETerm.START.toString()) != null) {
-            return JSON.get(UETerm.START.toString()).toString().replace("\"", "");
-        }
-        return "/";
-    }
-
-    private String getEnd() {
-        if (JSON.get(UETerm.END.toString()) != null) {
-            return JSON.get(UETerm.END.toString()).toString().replace("\"", "");
-        }
-        return "/";
-    }
-
-    private String getDuration() {
-        long millis = getTotalTaskDurationInMilliSecs(JSON);
-        return getHoursMinutesSecondsFromMilliseconds(millis);
-    }
-
-    private String getDialogType() {
-        if (JSON.get(UETerm.TYPE.toString()) != null) {
-            return JSON.get(UETerm.TYPE.toString()).toString().replace("\"", "");
-        }
-        return "/";
-    }
-
-    private String getBrowser() {
-        if (JSON.get(UETerm.BROW.toString()) != null) {
-            return JSON.get(UETerm.BROW.toString()).toString().replace("\"", "");
-        }
-        return "/";
-    }
-
-    private String getRealResult() {
-        if (JSON.get(UETerm.TYPE.toString()) != null) {
-            if (JSON.get(UETerm.TYPE.toString()).equals("\"ClariHIE\"")) {
-                return "wirksam";
-            } else if (JSON.get(UETerm.TYPE.toString()).equals("\"ClariOQD\"")) {
-                return "unwirksam";
-            }
-        }
-        return "/";
-    }
-
-    private String getResult() {
-        //if(JSON.get(UETerm.SOL.toString()) != null){
-        if (JSON.get(UETerm.SOL.toString()) != null) {
-            String rating = JSON.get(UETerm.SOL.toString()).toString();
-            if (rating.equals("\"1\"")) {
-                return "wirksam";
-            } else if (rating.equals("\"2\"")) {
-                return "unentschieden";
-            } else if (rating.equals("\"3\"")) {
-                return "unwirksam";
-            }
-        }
-        return "/";
-    }
-
-    private JSONArray getCompleteIntermediateResultsString() {
-        if (JSON.get(UETerm.ISOL.toString()) != null) {
-            return (JSONArray) JSON.get(UETerm.ISOL.toString());
-        }
-        return new JSONArray();
-    }
-
-    private TreeMap<String, String> getIntermediateResultsEvalFor(TreeMap<String, String> solutions) {
-
-        // the results as stored in the logfile
-        JSONArray completeInterRes = getCompleteIntermediateResultsString();
-        // for the results
-        TreeMap<String, String> interEval = new TreeMap();
-
-        // go through all intermediateLoggedResults
-        for (Object o : completeInterRes) {
-            JSONObject jo = (JSONObject) o;
-            if (jo.get(UETerm.ID.toString()) != null) {
-
-                // this is the loggedIntermedSolutionID/Name
-                String idToCheck = jo.get(UETerm.ID.toString()).toString();
-
-                // get corresponding sol/rating definition from TreeMap
-                if (solutions.get(idToCheck) != null) {
-                    String realValue = solutions.get(idToCheck);
-                    String loggedValue = jo.get(UETerm.VAL.toString()).toString();
-
-                    if (realValue.equals(loggedValue)) {
-                        interEval.put(idToCheck, "CORRECT: " + jo.get(UETerm.VAL.toString()));
-                    } else {
-                        interEval.put(idToCheck, "INCORRECT: was "
-                                + loggedValue + " / " + realValue);
-                    }
-                }
-            }
-        }
-
-        // additionally go through provided solutions and check whether there
-        // are elements that had not been logged
-        for (String key : solutions.keySet()) {
-
-            if (!interEval.containsKey(key)) {
-                interEval.put(key, "NaN");
-            }
-        }
-
-        return interEval;
-    }
-
-    public String getAnalysisResults() {
-        StringBuilder bui = new StringBuilder();
-        // bui.append("###################################\n");
-        bui.append("ANALYSIS OF FILE: " + FILE.getName() + "\n");
-        bui.append("###################################\n");
-        bui.append("\n");
-        bui.append("Start time: \t" + getStart() + "\n");
-        bui.append("End time: \t" + getEnd() + "\n");
-        bui.append("Task duration: \t" + getDuration() + "\n");
-        bui.append("Cons. Result: \t" + getResult() + "\n");
-        // bui.append("\n##############\n");
-        //bui.append("END OF ANALYIS\n");
-//        bui.append("##############\n");
-        return bui.toString();
-    }
-
-    public static String assembleCSVString(String LogFolderName, TreeMap<String, String> solAndRat) {
         StringBuilder bui = new StringBuilder();
 
-        // basic csv stuff, always needed
-        bui.append("filename , UI type , Duration , ResultUser , ResultOrig , "
+        // Header Line of CSV: first basic stuff
+        bui.append("filename , group , UI type , Duration , "
                 + "Browser , StartTime , EndTime");
 
-        // if intermed solutions and ratings are given, append corresponding headings
-        if (solAndRat.size() != 0) {
-            Set<String> keys = solAndRat.keySet();
-            for (String key : keys) {
-                bui.append(" , " + key);
+        // Header Line of CSV: additionally add Solution Names of sols to analyze
+        if (!sDefs.isEmpty()) {
+            for (JSONObject jo : sDefs) {
+                bui.append(" , ");
+                bui.append(jo.get(UETerm.SNAME.toString()).toString());
             }
         }
         bui.append("\n");
 
-        List<File> logs = JSONReader.getInstance().retrieveAllLogfiles(LogFolderName);
+
+        List<File> logs =
+                JSONReader.getInstance().retrieveAllLogfiles(LogFolderName);
 
         for (File logfile : logs) {
 
-            UEStudyAnalyst ue = new UEStudyAnalyst(logfile);
-            
-            // only include correct logs, i.e. with start end and duration
-            if (!ue.getStart().equals("/")
-                    //&& !ue.getEnd().equals("/")
-                   // && !ue.getDuration().equals("/")
-                    ) {
+            UEBasicFileAnalyzer uebfa = new UEBasicFileAnalyzer(logfile);
 
-                TreeMap<String, String> interMedSolRatings =
-                        ue.getIntermediateResultsEvalFor(solAndRat);
+            // only include "cleaned"=correct logs, i.e. with start,end,duration
+            if (!uebfa.getStart().equals("/")
+                    && !uebfa.getEnd().equals("/")
+                    && !uebfa.getDuration().equals("/")) {
 
                 bui.append(logfile.getName());
                 bui.append(" , ");
-                bui.append(ue.getDialogType());
+                bui.append(uebfa.getGroup());
                 bui.append(" , ");
-                bui.append(ue.getDuration());
+                bui.append(uebfa.getDialogType());
                 bui.append(" , ");
-                bui.append(ue.getResult());
+                bui.append(uebfa.getDuration());
                 bui.append(" , ");
-                bui.append(ue.getRealResult());
+                bui.append(uebfa.getBrowser());
                 bui.append(" , ");
-                bui.append(ue.getBrowser());
+                bui.append(uebfa.getStart());
                 bui.append(" , ");
-                bui.append(ue.getStart());
-                bui.append(" , ");
-                bui.append(ue.getEnd());
-                for (String value : interMedSolRatings.values()) {
-                    bui.append(" , ");
-                    bui.append(value);
+                bui.append(uebfa.getEnd());
+
+                if (!sDefs.isEmpty()) {
+                    TreeMap<String, String> interMedSolRatings =
+                            uebfa.getSolutionsEvaluationForGroupFile(
+                                sDefs, uebfa.getGroup());
+
+                    for (String value : interMedSolRatings.values()) {
+                        bui.append(" , ");
+                        bui.append(value);
+                    }
                 }
+
                 bui.append("\n");
             }
         }
         return bui.toString();
     }
 
-    public static void main(String[] args) {
-
+    /**
+     * Retrieves a csv representation/summary of the logfiles contained in the
+     * provided log folder.
+     *
+     * @param LogFolderName name of the log folder
+     * @param solAndRat a collection of solutions and their corresponding
+     * ratings (i.e., ratings they should originally have if the case has been
+     * solved correctly
+     *
+     * @return a csv file containing all the results
+     */
+    public static String retrieveCompleteCSVNoSolutions(String LogFolderName) {
         StringBuilder bui = new StringBuilder();
-        List<File> logs = JSONReader.getInstance().retrieveAllLogfiles("Logdata");
 
-        // Study 2, Case 1
-        /*
-         * TreeMap solRatings = new TreeMap(); solRatings.put("Ist das
-         * Arbeitsverhältnis wirksam gekündigt worden?", "1");
-         * solRatings.put("Ist die Kündigung formell rechtmäßig?", "1");
-         * solRatings.put("Ist die Kündigung materiell/inhaltlich rechtmäßig?",
-         * "3");
-         */
-        /*
-         * // Study 2, Case 2 TreeMap solRatings = new TreeMap();
-         * solRatings.put("Ist das Arbeitsverhältnis wirksam gekündigt worden?",
-         * "1"); solRatings.put("Ist die Kündigung formell rechtmäßig?", "1");
-         * solRatings.put("Ist die Kündigung materiell/inhaltlich rechtmäßig?",
-         * "3");
-         */
+        // basic csv stuff, always needed
+        bui.append("filename , group , UI type , Duration , "
+                + "Browser , StartTime , EndTime \n");
 
-        TreeMap solRatings = new TreeMap();
+        List<File> logs = JSONReader.getInstance().retrieveAllLogfiles(LogFolderName);
+
         for (File logfile : logs) {
-            UEStudyAnalyst ue = new UEStudyAnalyst(logfile);
+
+            UEBasicFileAnalyzer uebfa = new UEBasicFileAnalyzer(logfile);
+
+            // only include correct logs, i.e. with start end and duration
+            if (!uebfa.getStart().equals("/")) {
+
+                bui.append(logfile.getName());
+                bui.append(" , ");
+                bui.append(uebfa.getGroup());
+                bui.append(" , ");
+                bui.append(uebfa.getDialogType());
+                bui.append(" , ");
+                bui.append(uebfa.getDuration());
+                bui.append(" , ");
+                bui.append(uebfa.getBrowser());
+                bui.append(" , ");
+                bui.append(uebfa.getStart());
+                bui.append(" , ");
+                bui.append(uebfa.getEnd());
+                bui.append("\n");
+            }
         }
-
-        String csv = assembleCSVString("Logdata", solRatings);
-
-        try {
-            writeCSV("/Users/mafre/CodingSpace/Research/d3web-ProKEt/Logdata/auswertung.csv", csv);
-        } catch (IOException io) {
-            io.printStackTrace();
-        }
-
+        return bui.toString();
     }
 
-    // TODO; move; general utilit METHODS
-    public String getHoursMinutesSecondsFromMilliseconds(long millis) {
-        String time = "/";
-        if (millis != 0) {
-            String format = String.format("%%0%dd", 2);
-            millis = millis / 1000;
-            String seconds = String.format(format, millis % 60);
-            String minutes = String.format(format, (millis % 3600) / 60);
-            String hours = String.format(format, millis / 3600);
-            time = hours + ":" + minutes + ":" + seconds;
-        }
-
-        return time;
-    }
-
-    public long getTotalTaskDurationInMilliSecs(JSONObject json) {
-        if (json.get(UETerm.START.toString()) != null
-                && json.get(UETerm.END.toString()) != null) {
-            Date start = parse(json.get(UETerm.START.toString()).toString().replace("\"", ""));
-            Date end = parse(json.get(UETerm.END.toString()).toString().replace("\"", ""));
-
-            return end.getTime() - start.getTime();
-        }
-        return 0;
-    }
-
-    public Date parse(String datestring) {
-
-        String[] dateparts = datestring.split(" ");
-        String dateToParse = dateparts[1] + " " + dateparts[2];
-
-        Date date = null;
-        DateFormat sdf = new SimpleDateFormat("EEE yyyy_MM_dd hh:mm:s", Locale.GERMAN);
-        try {
-            date = sdf.parse(datestring);
-        } catch (ParseException pe) {
-            pe.printStackTrace();
-        }
-        return date;
-    }
-
-    public static String makeUTF8(final String toConvert) {
-        try {
-            return new String(toConvert.getBytes("UTF-8"), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
+    /**
+     * Write given csv content in the form of a String object to a defined path
+     *
+     * @param path filepath where to write the csv
+     * @param csvContent the content to be written
+     * @throws IOException
+     */
     public static void writeCSV(String path, String csvContent) throws IOException {
 
         File f = new File(path);

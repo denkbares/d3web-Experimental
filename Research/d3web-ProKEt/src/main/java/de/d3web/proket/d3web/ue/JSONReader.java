@@ -17,7 +17,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.proket.d3web.ue.analyze;
+package de.d3web.proket.d3web.ue;
 
 import de.d3web.proket.d3web.ue.UETerm;
 import java.io.*;
@@ -124,7 +124,9 @@ public class JSONReader implements Serializable {
         if (logdata.get(UETerm.SOL.toString()) != null) {
             ob.put(UETerm.SOL.toString(), logdata.get(UETerm.SOL.toString()).toString());
         }
-        
+        if (logdata.get(UETerm.GROUP.toString()) != null) {
+            ob.put(UETerm.GROUP.toString(), logdata.get(UETerm.GROUP.toString()).toString());
+        }
         if (logdata.get(UETerm.ISOL.toString()) != null) {
             ob.put(UETerm.ISOL.toString(), getJSONArrayFromString(logdata.get(UETerm.ISOL.toString()).toString()));
         }
@@ -187,6 +189,8 @@ public class JSONReader implements Serializable {
                     logdata.put(UETerm.SOL.toString(), value);
                 } else if (keyval.equals(UETerm.ISOL.toString())) {
                     logdata.put(UETerm.ISOL.toString(), value);
+                } else if (keyval.equals(UETerm.GROUP.toString())) {
+                    logdata.put(UETerm.GROUP.toString(), value);
                 }
                 // TODO refactor: only for first study
                  else if (keyval.equals("SOLUTION::Ist das Arbeitsverhältnis wirksam gekündigt worden?")) {

@@ -9,7 +9,7 @@ package de.d3web.proket.d3web.ue;
  * @author mafre
  */
 public enum UETerm {
-    BROW("BRWOSER"), 
+    BROW("BROWSER"), 
     USER("USER"), 
     RES("RESULT"), 
     START("START"), 
@@ -26,6 +26,9 @@ public enum UETerm {
     LOAD("LOAD"),
     ISOL("INTERMED_SOLS"),
     GROUP("STUDY_GROUP"),
+    SNAME("SOLUTION NAME"),
+    SRAT("SOLUTION RATING"),
+    SG("SOLUTION GROUP"),
     NAN("NONE");
     
     private String stringrep;

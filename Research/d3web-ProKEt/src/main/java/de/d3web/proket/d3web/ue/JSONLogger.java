@@ -172,8 +172,8 @@ public class JSONLogger {
     
     public void logIntermedSolution(Object elementid, Object solutionval){
         JSONObject ob = new JSONObject();
-        ob.put(UETerm.ID.toString(), elementid);
-        ob.put(UETerm.VAL.toString(), solutionval);
+        ob.put(UETerm.SNAME.toString(), elementid);
+        ob.put(UETerm.SRAT.toString(), solutionval);
         
         JSONArray existingISols = getIntermedSolutionsArray();
         existingISols.add(ob);
