@@ -33,7 +33,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
-public class ObjectPropertyDefinitionMarkup extends AbstractType implements ComplexDefinitionWithTypeConstraints<ObjectPropertyDefinitionMarkup>, KnowledgeUnit<ObjectPropertyDefinitionMarkup> {
+public class ObjectPropertyDefinitionMarkup extends AbstractType implements ComplexDefinitionWithTypeConstraints, KnowledgeUnit {
 
 	public static final String RDFS_DOMAIN_KEY = "rdfs:domain";
 	public static final String RDFS_RANGE_KEY = "rdfs:range";
@@ -122,7 +122,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 
 	@Override
 	public boolean checkTypeConstraints(
-			Section<? extends ComplexDefinition<ObjectPropertyDefinitionMarkup>> def,
+			Section<? extends ComplexDefinition> def,
 			Section<? extends SimpleReference> ref) {
 
 		return RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class);
@@ -130,7 +130,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 
 	@Override
 	public String getProblemMessageForConstraintViolation(
-			Section<? extends ComplexDefinition<ObjectPropertyDefinitionMarkup>> def,
+			Section<? extends ComplexDefinition> def,
 			Section<? extends SimpleReference> ref) {
 
 		return "Object of type 'Class' expected";

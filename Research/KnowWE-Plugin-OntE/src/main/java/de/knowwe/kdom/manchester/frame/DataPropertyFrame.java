@@ -54,7 +54,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * @created 06.09.2011
  */
 
-public class DataPropertyFrame extends DefaultFrame implements KnowledgeUnit<DataPropertyFrame> {
+public class DataPropertyFrame extends DefaultFrame implements KnowledgeUnit {
 
 	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.DATA_PROPERTY);
 

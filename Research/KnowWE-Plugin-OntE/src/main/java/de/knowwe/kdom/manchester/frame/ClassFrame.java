@@ -52,7 +52,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * @author Stefan Mark
  * @created 24.05.2011
  */
-public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame> {
+public class ClassFrame extends DefaultFrame implements KnowledgeUnit {
 
 	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.CLASS);
 

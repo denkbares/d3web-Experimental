@@ -39,7 +39,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
 
 public class TripleMarkupSimple extends AbstractType implements
-		KnowledgeUnit<TripleMarkupSimple> {
+		KnowledgeUnit {
 
 	public TripleMarkupSimple() {
 

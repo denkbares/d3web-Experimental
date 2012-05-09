@@ -44,7 +44,7 @@ import de.knowwe.kdom.sectionfinder.IRISectionFinder;
  * @author Stefan Mark
  * @created 22.09.2011
  */
-public class ImportFrame extends DefaultFrame implements KnowledgeUnit<ImportFrame> {
+public class ImportFrame extends DefaultFrame implements KnowledgeUnit {
 
 	public static final String KEYWORD = "Import:";
 

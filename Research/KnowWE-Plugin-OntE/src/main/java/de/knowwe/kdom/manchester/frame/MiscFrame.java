@@ -57,7 +57,7 @@ import de.knowwe.kdom.manchester.types.ObjectPropertyExpression;
  * @author Stefan Mark
  * @created 22.09.2011
  */
-public class MiscFrame extends DefaultFrame implements KnowledgeUnit<MiscFrame> {
+public class MiscFrame extends DefaultFrame implements KnowledgeUnit {
 
 	public static final String KEYWORD_SAME_INDIVIDUAL = "SameIndividual[:]?";
 	public static final String KEYWORD_DIFFERENT_INDIVIDUAL = "DifferentIndividuals[:]?";

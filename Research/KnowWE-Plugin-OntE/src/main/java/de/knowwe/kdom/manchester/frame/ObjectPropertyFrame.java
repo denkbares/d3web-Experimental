@@ -56,7 +56,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * @author Stefan Mark
  * @created 24.05.2011
  */
-public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<ObjectPropertyFrame> {
+public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit {
 
 	public static final String KEYWORD;
 	public static final String KEYWORDS;

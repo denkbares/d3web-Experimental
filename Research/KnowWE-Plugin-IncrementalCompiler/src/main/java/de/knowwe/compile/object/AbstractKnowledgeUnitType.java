@@ -23,13 +23,22 @@ package de.knowwe.compile.object;
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.plugin.Plugins;
 
-public class AbstractKnowledgeUnitType extends AbstractType
+@SuppressWarnings("unchecked")
+public class AbstractKnowledgeUnitType<T extends Type> extends AbstractType
 		implements KnowledgeUnit {
 
-	private KnowledgeUnitCompileScript compileScript = null;
+	private KnowledgeUnitCompileScript<T> compileScript = null;
 
+	public AbstractKnowledgeUnitType(KnowledgeUnitCompileScript<T> s) {
+		this();
+		if (compileScript == null) this.compileScript = s;
+
+	}
+
+	@SuppressWarnings("rawtypes")
 	public AbstractKnowledgeUnitType() {
 		Extension[] exts = PluginManager.getInstance().getExtensions(
 				Plugins.EXTENDED_PLUGIN_ID,
@@ -40,14 +49,14 @@ public class AbstractKnowledgeUnitType extends AbstractType
 			if (parameter.equals(thisClassName)) {
 				Object o = extension.getSingleton();
 				if (o instanceof KnowledgeUnitCompileScript) {
-					compileScript = (((KnowledgeUnitCompileScript) o));
+					this.compileScript = ((KnowledgeUnitCompileScript) o);
 				}
 			}
 		}
 	}
 
 	@Override
-	public KnowledgeUnitCompileScript getCompileScript() {
+	public KnowledgeUnitCompileScript<T> getCompileScript() {
 		return compileScript;
 	}
 

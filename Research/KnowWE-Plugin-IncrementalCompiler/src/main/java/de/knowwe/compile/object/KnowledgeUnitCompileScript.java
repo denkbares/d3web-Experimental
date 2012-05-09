@@ -8,7 +8,7 @@ import de.knowwe.core.kdom.parsing.Section;
 
 public interface KnowledgeUnitCompileScript<T extends Type> {
 
-	public Collection<Section<? extends SimpleReference>> getAllReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit<T>> section);
+	public Collection<Section<? extends SimpleReference>> getAllReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section);
 
 	public void insertIntoRepository(Section<T> section);
 

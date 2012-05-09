@@ -31,7 +31,7 @@ public abstract class AbstractKnowledgeUnitCompileScript<T extends Type> impleme
 
 	@Override
 	public Collection<Section<? extends SimpleReference>> getAllReferencesOfKnowledgeUnit(
-			Section<? extends KnowledgeUnit<T>> section) {
+			Section<? extends KnowledgeUnit> section) {
 
 		/*
 		 * this is a default behaviour, working for all markups where

@@ -155,7 +155,6 @@ public class ReferenceManager {
 		return wasValidInOldVersion(KnowWEUtils.getTermIdentifier(s));
 	}
 
-	@SuppressWarnings("rawtypes")
 	public Collection<Section<? extends KnowledgeUnit>> getReferencingSlices(Section<? extends SimpleTerm> section) {
 		Collection<Section<? extends KnowledgeUnit>> result = new HashSet<Section<? extends KnowledgeUnit>>();
 		TermIdentifier termIdentifier = KnowWEUtils.getTermIdentifier(section);
@@ -229,7 +228,6 @@ public class ReferenceManager {
 		return new ArrayList<Section<? extends SimpleReference>>();
 	}
 
-	@SuppressWarnings("rawtypes")
 	public Collection<Section<? extends ComplexDefinition>> getReferencingDefinitions(Section<?> section) {
 		Collection<Section<? extends ComplexDefinition>> result = new HashSet<Section<? extends ComplexDefinition>>();
 		TermIdentifier termIdentifier = KnowWEUtils.getTermIdentifier(section);

@@ -41,7 +41,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
-public class ClassDefinitionMarkup extends AbstractType implements Editable, KnowledgeUnit<ClassDefinitionMarkup> {
+public class ClassDefinitionMarkup extends AbstractType implements Editable, KnowledgeUnit {
 
 	private static final String CLASS_REGEX = "^Class:?\\s+(.*?)(\\(.*?\\))?$";
 

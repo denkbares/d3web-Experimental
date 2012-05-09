@@ -41,7 +41,7 @@ import de.knowwe.rdfs.IRITermRef;
 import de.knowwe.rdfs.util.RDFSUtil;
 
 public class SubClassingDashTreeElementContent extends DashTreeElementContent
-		implements KnowledgeUnit<SubClassingDashTreeElementContent> {
+		implements KnowledgeUnit {
 
 	public SubClassingDashTreeElementContent() {
 
@@ -86,7 +86,7 @@ public class SubClassingDashTreeElementContent extends DashTreeElementContent
 
 		@Override
 		public Collection<Section<? extends SimpleReference>> getAllReferencesOfKnowledgeUnit(
-				Section<? extends KnowledgeUnit<SubClassingDashTreeElementContent>> section) {
+				Section<? extends KnowledgeUnit> section) {
 
 			Set<Section<? extends SimpleReference>> result = new HashSet<Section<? extends SimpleReference>>();
 
@@ -115,7 +115,6 @@ public class SubClassingDashTreeElementContent extends DashTreeElementContent
 
 	@Override
 	public KnowledgeUnitCompileScript getCompileScript() {
-
 		return new SubClassingDashTreeElementCompileScript();
 	}
 

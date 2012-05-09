@@ -44,7 +44,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
-public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexDefinition<ComplexIRIDefinitionMarkup>, KnowledgeUnit<ComplexIRIDefinitionMarkup> {
+public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexDefinition, KnowledgeUnit {
 
 	private static final String REGEX = "(.+)\\s(\\w+)::\\s(.+)$";
 

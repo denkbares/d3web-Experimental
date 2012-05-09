@@ -7,13 +7,14 @@ import java.util.Iterator;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 
 public class EqualStringHazardFilter {
 
 	public static void filter(Collection<Section<? extends KnowledgeUnit>> insert, Collection<Section<? extends KnowledgeUnit>> remove) {
 		// NOTE: This weird collection juggling using CompileSections is
-		// necessary because the equals of the Sections class itself does not
-		// have the characteristics required here.
+		// necessary because the equals method of the class Section itself does
+		// not have the characteristics required here.
 		// All this code only aims to find sections that appear in both
 		// collection with the same text (String-equal)
 		// and remove it from both (once respectively!)
@@ -48,11 +49,13 @@ public class EqualStringHazardFilter {
 		if (changes) {
 			insert.clear();
 			for (CompileSection compileSection : insertSet) {
-				insert.add((Section<? extends KnowledgeUnit<?>>) compileSection.getSection());
+				insert.add(Sections.cast(compileSection.getSection(), KnowledgeUnit.class));
 			}
 			remove.clear();
 			for (CompileSection compileSection : removeSet) {
-				remove.add((Section<? extends KnowledgeUnit<?>>) compileSection.getSection());
+				Section<KnowledgeUnit> castedSection = Sections.cast(compileSection.getSection(),
+						KnowledgeUnit.class);
+				remove.add(castedSection);
 
 			}
 		}
@@ -63,7 +66,7 @@ public class EqualStringHazardFilter {
 		// necessary because the equals of the Sections class itself does not
 		// have the characteristics required here.
 		// All this code only aims to find sections that appear in both
-		// collection with the same text (String-equal)
+		// collections with the same text (String-equal)
 		// and remove it from both (once respectively!)
 
 		// transform Section-collections to CompileSection-collections
@@ -96,11 +99,11 @@ public class EqualStringHazardFilter {
 		if (changes) {
 			insert.clear();
 			for (CompileSection compileSection : insertSet) {
-				insert.add((Section<SimpleDefinition>) compileSection.getSection());
+				insert.add(Sections.cast(compileSection.getSection(), SimpleDefinition.class));
 			}
 			remove.clear();
 			for (CompileSection compileSection : removeSet) {
-				remove.add((Section<SimpleDefinition>) compileSection.getSection());
+				remove.add(Sections.cast(compileSection.getSection(), SimpleDefinition.class));
 
 			}
 		}

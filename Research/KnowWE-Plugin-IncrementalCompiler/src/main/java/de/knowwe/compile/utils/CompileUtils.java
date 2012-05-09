@@ -127,11 +127,12 @@ public class CompileUtils {
 	 * @param oldSectionsNotReused
 	 * @return
 	 */
-	public static Collection<Section<? extends KnowledgeUnit>> filterKnowledgeUnits(Collection<Section<? extends Type>> oldSectionsNotReused) {
+	public static <T extends Type> Collection<Section<? extends KnowledgeUnit>> filterKnowledgeUnits(Collection<Section<? extends Type>> oldSectionsNotReused) {
 		Collection<Section<? extends KnowledgeUnit>> result = new HashSet<Section<? extends KnowledgeUnit>>();
 		for (Section<? extends Type> section : oldSectionsNotReused) {
-			if (section.get() instanceof KnowledgeUnit<?>) {
-				result.add((Section<? extends KnowledgeUnit>) section);
+			if (section.get() instanceof KnowledgeUnit) {
+				Section<KnowledgeUnit> castedSection = Sections.cast(section, KnowledgeUnit.class);
+				result.add(castedSection);
 			}
 		}
 		return result;
@@ -146,12 +147,11 @@ public class CompileUtils {
 	 * @param oldSectionsNotReused
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static Collection<Section<SimpleDefinition>> filterDefinitions(Collection<Section<? extends Type>> oldSectionsNotReused) {
 		Collection<Section<SimpleDefinition>> result = new HashSet<Section<SimpleDefinition>>();
 		for (Section<? extends Type> section : oldSectionsNotReused) {
 			if (section.get() instanceof SimpleDefinition) {
-				result.add((Section<SimpleDefinition>) section);
+				result.add(Sections.cast(section, SimpleDefinition.class));
 			}
 		}
 		return result;
@@ -163,7 +163,7 @@ public class CompileUtils {
 		return result;
 	}
 
-	public static <T extends Type> Collection<Section<SimpleReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition> section) {
+	public static Collection<Section<SimpleReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition> section) {
 		List<Section<SimpleReference>> result = new ArrayList<Section<SimpleReference>>();
 		Sections.findSuccessorsOfType(section, SimpleReference.class, result);
 		return result;

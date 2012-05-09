@@ -22,10 +22,14 @@ package de.knowwe.compile.object;
 
 import de.knowwe.core.kdom.Type;
 
-public interface ComplexDefinition<T extends Type> extends Type {
-
-	// public Collection<Section<TermReference>>
-	// getAllReferencesOfComplexDefinition(Section<? extends
-	// ComplexDefinition<T>> section);
+/**
+ * 
+ * Marker Interface for a complex definition, i.e. a definition that depends on
+ * other referenced objects to be valid.
+ * 
+ * @author jochenreutelshofer
+ * @created 09.05.2012
+ */
+public interface ComplexDefinition extends Type {
 
 }

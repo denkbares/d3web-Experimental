@@ -56,7 +56,7 @@ import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
 public class TripleMarkup extends AbstractType implements
-		KnowledgeUnit<TripleMarkup> {
+		KnowledgeUnit {
 
 	static final String TRIPLE_REGEX = "^>(.*?::.*?)$";
 

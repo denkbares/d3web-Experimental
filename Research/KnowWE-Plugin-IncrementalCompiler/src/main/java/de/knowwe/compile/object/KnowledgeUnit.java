@@ -32,8 +32,8 @@ import de.knowwe.core.kdom.Type;
  * @author Jochen
  * @created 08.06.2011
  */
-public interface KnowledgeUnit<T extends Type> extends Type, Editable {
+public interface KnowledgeUnit extends Type, Editable {
 
-	public KnowledgeUnitCompileScript getCompileScript();
+	public <T extends Type> KnowledgeUnitCompileScript<T> getCompileScript();
 
 }

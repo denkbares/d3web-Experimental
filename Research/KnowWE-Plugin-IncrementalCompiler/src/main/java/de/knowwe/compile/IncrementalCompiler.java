@@ -69,9 +69,7 @@ public class IncrementalCompiler implements EventListener {
 
 	private final ReferenceManager terminology = new ReferenceManager();
 
-	@SuppressWarnings("rawtypes")
 	private Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices = new HashSet<Section<? extends KnowledgeUnit>>();
-	@SuppressWarnings("rawtypes")
 	private Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove = new HashSet<Section<? extends KnowledgeUnit>>();
 
 	// TODO: how to implement singleton plugin?
@@ -341,7 +339,6 @@ public class IncrementalCompiler implements EventListener {
 	 * @param potentiallyNewKnowledgeSlices2
 	 * @param knowledgeSlicesToRemove2
 	 */
-	@SuppressWarnings("rawtypes")
 	private void hazardFilter(Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices2, Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove2) {
 
 		EqualStringHazardFilter.filter(potentiallyNewKnowledgeSlices2,
@@ -358,7 +355,6 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void removeRecursively(Section<? extends SimpleTerm> section) {
 		if (terminology.wasValidInOldVersion(section)) {
 			terminology.removeFromValidObjects(section);
@@ -375,7 +371,6 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void resolveRecursively(Section<? extends SimpleDefinition> section) {
 		if (hasValidDefinition(section)) {
 			// we cannot check on "!terminology.wasValidInOldVersion(section)"
@@ -435,7 +430,6 @@ public class IncrementalCompiler implements EventListener {
 		return true;
 	}
 
-	@SuppressWarnings("rawtypes")
 	public Collection<Message> checkDefinition(TermIdentifier termIdentifier) {
 		Collection<Message> messages = new ArrayList<Message>();
 
@@ -463,7 +457,7 @@ public class IncrementalCompiler implements EventListener {
 		// check complex definitions here
 
 		// there is exactly one
-		Section<?> def = termDefiningSections.iterator().next();
+		Section<? extends SimpleDefinition> def = termDefiningSections.iterator().next();
 
 		Section<ComplexDefinition> complexDef = Sections.findAncestorOfType(def,
 				ComplexDefinition.class);
@@ -485,10 +479,10 @@ public class IncrementalCompiler implements EventListener {
 				// ADD-ON for type constraints
 				if (complexDef.get() instanceof ComplexDefinitionWithTypeConstraints
 						&& !((ComplexDefinitionWithTypeConstraints) complexDef.get()).checkTypeConstraints(
-								def, ref)) { // or has a wrong type
+								complexDef, ref)) { // or has a wrong type
 					messages.add(Messages.error(
 							errorMsg + ((ComplexDefinitionWithTypeConstraints) complexDef.get())
-											.getProblemMessageForConstraintViolation(def,
+											.getProblemMessageForConstraintViolation(complexDef,
 													ref) + " :" + termIdentifier2.toString()));
 					return messages;
 				}
