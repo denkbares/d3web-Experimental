@@ -280,7 +280,8 @@ public class IncrementalCompiler implements EventListener {
 						}
 						// check Types of referenced objects here
 						if (ref.get() instanceof TypeRestrictedReference) {
-							Section<? extends TypeRestrictedReference> trRef = (Section<? extends TypeRestrictedReference>) ref;
+							Section<TypeRestrictedReference> trRef = Sections.cast(ref,
+									TypeRestrictedReference.class);
 							if (trRef.get().checkTypeConstraints(trRef) == false) {
 								compilationUnitIterator.remove();
 								break;
