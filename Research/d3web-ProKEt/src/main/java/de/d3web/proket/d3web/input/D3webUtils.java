@@ -82,6 +82,7 @@ import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.IDUtils;
+import javax.servlet.http.HttpSession;
 
 /**
  * Util methods for the binding of d3web to the ProKEt system.
@@ -580,6 +581,18 @@ public class D3webUtils {
                     && // and check its indication state
                     (bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.INDICATED
                     || bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isContraIndicated(TerminologyObject to, Blackboard bb) {
+        for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
+            // find the appropriate qaset in the knowledge base
+            if (qaSet.getName().equals(to.getName())
+                    && // and check its indication state
+                    bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.CONTRA_INDICATED) {
                 return true;
             }
         }
@@ -1280,7 +1293,7 @@ public class D3webUtils {
                     Fact fact = FactFactory.createUserEnteredFact(question, value);
                     Fact f2 = new DefaultFact(question, value, PSMethodJuri.getInstance(),
                             PSMethodJuri.getInstance());
-                    blackboard.addValueFact(f2);
+                    blackboard.addValueFact(fact);
                 }
             }
         }
@@ -1370,24 +1383,49 @@ public class D3webUtils {
     }
 
     /**
-     * 
+     * Reset all questions, that are NOT currently indicated or instant-indicated
+     * so if they are re-opened, they are unanswered again.
+     * Therefore, all not currently ind. or inst-ind. questions and their 
+     * corresponding facts are removed from the blackboard.
+     * Exceptions - i.e. questions that are not removed - are the required
+     * questions (they need to be set always), of course all indicated and inst-
+     * indicated questions, AND all questions that are always initially set
+     * (as e.g. in EuraHS all dropdown - defaults). 
      * @param sess
-     * @return 
+     * @return a collection of all questions that have been removed from blackboard
      */
-    public static Collection<Question> resetAbandonedPaths(Session sess) {
+    public static Collection<Question> resetAbandonedPaths(Session sess,
+            HttpSession httpSess) {
+        
+        // get all questions that were set per default initially
+        // e.g. in EuraHS, we need to init set all dropdowns as to enable the
+        // follow up mechanisms
+        ArrayList<String> initSetQuestions =
+                (ArrayList<String>) httpSess.getAttribute("initsetquestions");
         Blackboard bb = sess.getBlackboard();
         Collection<Question> resetQuestions = new LinkedList<Question>();
         Set<QASet> initQuestions = new HashSet<QASet>(
                 D3webConnector.getInstance().getKb().getInitQuestions());
+        
+        // check all questions that have been lately answered 
         for (Question question : bb.getAnsweredQuestions()) {
+            
+            // if a question is not active by being initQuestion
             if (!isActive(question, bb, initQuestions)
+                    // and if question is not a required question
                     && !question.getName().equals(
                     D3webConnector.getInstance().getD3webParser().getRequired())) {
-                Fact lastFact = bb.getValueFact(question);
-                if (lastFact != null
-                        && lastFact.getPSMethod() == PSMethodUserSelected.getInstance()) {
-                    bb.removeValueFact(lastFact);
-                    resetQuestions.add(question);
+
+                // and if there are initSet questions and those do not contain q
+                if (initSetQuestions != null && !initSetQuestions.contains(question.getName())) {
+                    
+                    // then remove the corresponding fact from the blackboard
+                    Fact lastFact = bb.getValueFact(question);
+                    if (lastFact != null
+                            && lastFact.getPSMethod() == PSMethodUserSelected.getInstance()) {
+                        bb.removeValueFact(lastFact);
+                        resetQuestions.add(question);
+                    }
                 }
             }
         }

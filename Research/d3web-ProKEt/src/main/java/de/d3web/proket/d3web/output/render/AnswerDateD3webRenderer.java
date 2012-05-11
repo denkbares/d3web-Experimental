@@ -242,7 +242,7 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
 			Collections.reverse(measure);
 		}
 		return "<td><select type='" + name + "select'>\n"
-				+ createDropDownOptions("", selectedValue,
+				+ createDropDownOptionsWithDefault("", selectedValue,
 						measure.toArray(new String[] {})) + "<select/></td>";
 	}
 

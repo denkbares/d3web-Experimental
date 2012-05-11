@@ -32,6 +32,7 @@ var goon = true;
 
 $(function() {
    
+   
     // check browser and warn if the wrong one is used
     
     var link = $.query.set("action", "checkHandleBrowsers").toString();
@@ -847,7 +848,7 @@ function d3web_addFacts() {
    
             } else {
                 updateDialog(html);
-                setup();
+                init_all();
                 initFunctionality();
             }
         },

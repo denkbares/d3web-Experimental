@@ -102,7 +102,7 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 					ProKEtProperties.DROPDOWN_MENU_DEFAULT);
 			if (dropdownDefault == null) dropdownDefault = "Please select...";
 			String dropdownMenu = "<select  type='textselect'>"
-					+ createDropDownOptions(dropdownDefault, value.toString(),
+					+ createDropDownOptionsWithDefault(dropdownDefault, value.toString(),
 							dropdownMenuOptions.split(",")) + "<select/>";
 			st.setAttribute(
 					"dropdown_menu", dropdownMenu);
@@ -145,18 +145,5 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 		return sb.toString();
 	}
 
-	protected String createDropDownOptions(String dropdownDefault, String selectedValue, String... options) {
-		StringBuilder builder = new StringBuilder();
-		if (dropdownDefault != null) {
-			builder.append("<option>" + dropdownDefault + "</option>\n");
-		}
-		for (String option : options) {
-			option = option.trim();
-			builder.append("<option value='" + option + "'"
-					+ (option.equals(selectedValue) ? "selected='selected'" : "")
-					+ ">" + option
-					+ "</option>\n");
-		}
-		return builder.toString();
-	}
+	
 }

@@ -86,6 +86,7 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
             st.setAttribute("hidden", "true");
         }
 
+        
         // render the children
         super.renderChildren(st, d3webSession, cc, to, loc, httpSession);
 

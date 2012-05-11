@@ -132,12 +132,14 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 		/* the following handles follow-up questions that get activated */
 		/* in the course of the interview (by indication) */
 
-		// QContainer indicated
+                
+                		// QContainer indicated
 		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent) ||
 				isIndicated(parent, bb)) {
 
-			// show, if indicated follow up
-			if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
+                        
+                        // show, if indicated follow up
+                        if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
 					|| (!D3webUtils.isFollowUpToQCon(to, parent))) {
 				st.removeAttribute("inactiveQuestion");
 				st.removeAttribute("qstate");

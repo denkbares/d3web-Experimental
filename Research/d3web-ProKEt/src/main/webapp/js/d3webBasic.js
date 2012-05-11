@@ -19,8 +19,25 @@ var scrollHtml = 0;
 * e.g., marking questions (normal case) , making navigaion etc.             *
 ****************************************************************************/
 
+function setup() {
 
-function init_all() {
+    // setup popup stuff
+    // each time the document is clicked somewhere
+    $(document).click(function() {	
+        if (!clariPopupShowing) { // TODO try out 
+            hide_popup(250); // fade out popup in 250 ms
+        }
+        clariPopupShowing = false;	
+    });
+    hide_popup(0); // initially hiding popup per default
+
+    hide_all_tooltips();
+    generate_tooltip_functions();
+}
+
+// TODO: setup is called init_all in Juri d3web -Y refactor
+
+/*function init_all() {
 
     hide_all_tooltips();
     generate_tooltip_functions_ynButtons();
@@ -41,7 +58,7 @@ function init_all() {
         removePropagationInfoInQuestionForFirst();
         
         alwaysExpandDummyNodes();
-}
+}*/
 
 /**
  * Scroll to the top of the page by setting jquery attribute 

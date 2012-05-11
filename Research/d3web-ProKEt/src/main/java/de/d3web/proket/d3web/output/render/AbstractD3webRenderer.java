@@ -27,16 +27,19 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.jurisearch.JuriModel;
 import de.d3web.jurisearch.JuriRule;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
+import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.data.IndicationMode;
 import de.d3web.proket.output.container.ContainerCollection;
@@ -98,10 +101,10 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * renderer.
      * @return the suiting renderer class.
      */
-    public static AnswerD3webRenderer getAnswerRenderer(TerminologyObject to) {
+    public static AnswerD3webRenderer getAnswerRenderer(TerminologyObject to, Session d3webSession) {
 
         AnswerD3webRenderer renderer =
-                D3webRendererMapping.getInstance().getAnswerRendererObject(to);
+                D3webRendererMapping.getInstance().getAnswerRendererObject(to, d3webSession);
 
         return renderer;
     }
@@ -135,6 +138,9 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      */
     protected void renderChildren(StringTemplate st, Session d3webSession, ContainerCollection cc,
             TerminologyObject to, int loc, HttpSession httpSession) {
+
+        Session s = ((Session) httpSession.getAttribute("d3webSession"));
+        //System.out.println(s.getBlackboard().getAnsweredQuestions());
 
         StringBuilder childrenHTML = new StringBuilder();
         D3webConnector d3wcon = D3webConnector.getInstance();
@@ -176,7 +182,15 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
             // get the matching renderer
             IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);
-            // System.out.println(childRenderer);
+
+            // TODO: this hinders showing only if Questionnaires!!!
+            // only show questions if they are NOT contraindicated
+            // they ARE contraindicated by the EuraHS- only if construct
+            if (D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
+                    && child instanceof Question
+                    && D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())) {
+                continue;
+            }
 
             // receive the rendering code from the Renderer and append
             String childHTML =
@@ -250,6 +264,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
         // for choice questions (oc only so far...)
         if (to instanceof QuestionChoice) {
+
             // here the grids are rendered for info questions
             if (to instanceof QuestionZC) {
                 String gridString = to.getInfoStore().getValue(ProKEtProperties.GRID);
@@ -259,7 +274,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                 else {
 
                     // get the suiting child renderer (i.e., for answers)
-                    AnswerD3webRenderer childRenderer = getAnswerRenderer(to);
+                    AnswerD3webRenderer childRenderer = getAnswerRenderer(to, d3webSession);
 
                     // receive the matching HTML from the Renderer and append
                     Choice c = new Choice("uploadimages");
@@ -270,24 +285,48 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                     }
                 }
             } else {
-                for (Choice c : ((QuestionChoice) to).getAllAlternatives()) {
 
-                    // get the suiting child renderer (i.e., for answers)
-                    AnswerD3webRenderer childRenderer = getAnswerRenderer(to);
 
-                    // receive the matching HTML from the Renderer and append
-                    String childHTML =
-                            childRenderer.renderTerminologyObject(cc, d3webSession, c, to, parent, loc, httpSession);
+                String childHTML = "";
+                AnswerD3webRenderer childRenderer = null;
+
+                // if we have a dropdown based on choice question, we need to 
+                // handle separately here before going into the all-choices loop
+                String dropdownMenuOptions = to.getInfoStore().getValue(
+                        ProKEtProperties.DROPDOWN_MENU_OPTIONS);
+
+                if (dropdownMenuOptions != null) {
+
+                    childRenderer = getAnswerRenderer(to, d3webSession);
+
+                    childHTML =
+                            childRenderer.renderTerminologyObject(cc, d3webSession, null, to, parent, loc, httpSession);
                     if (childHTML != null) {
                         childrenHTML.append(childHTML);
                     }
-                }
-            }
 
-            // otherwise (num, text, date... questions)
+                } else {
+                    for (Choice c : ((QuestionChoice) to).getAllAlternatives()) {
+
+                        // get the suiting child renderer (i.e., for answers)
+                        childRenderer = getAnswerRenderer(to, d3webSession);
+
+                        // receive the matching HTML from the Renderer and append
+                        childHTML =
+                                childRenderer.renderTerminologyObject(cc, d3webSession, c, to, parent, loc, httpSession);
+
+                        if (childHTML != null) {
+                            childrenHTML.append(childHTML);
+                        }
+                    }
+                    // }
+
+                }
+                // otherwise (num, text, date... questions)
+            }
         } else {
             // get the suiting child renderer (i.e., for answers)
-            AnswerD3webRenderer childRenderer = getAnswerRenderer(to);
+            AnswerD3webRenderer childRenderer = getAnswerRenderer(to, d3webSession);
             // System.out.println(childRenderer);
 
             // receive the matching HTML from the Renderer and append
@@ -362,10 +401,16 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         if (child.getChildren() != null && child.getChildren().length != 0
                 && child.getChildren()[0] instanceof Question) {
 
+
+
             // get the (probably question) children of the child
             for (TerminologyObject childsChild : child.getChildren()) {
+//System.out.println("FOLLOW UP: " + childsChild.getName() + " " + ((Session) httpSession.getAttribute("d3webSession")).getBlackboard().getAnsweredQuestions());
+
+
                 if (D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
-                        && !isIndicated(childsChild, d3webSession.getBlackboard())) {
+                        && (D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())
+                        || !isIndicated(childsChild, d3webSession.getBlackboard()))) {
                     continue;
                 }
 
@@ -688,5 +733,41 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             }
         }
 
+    }
+
+    protected String createDropDownOptions(String selectedValue, String... options) {
+        StringBuilder builder = new StringBuilder();
+
+        for (String option : options) {
+            option = option.trim();
+            builder.append("<option value='" + option + "'"
+                    + (option.equals(selectedValue) ? "selected='selected'" : "")
+                    + ">" + option
+                    + "</option>\n");
+        }
+
+
+
+        return builder.toString();
+    }
+
+    protected String createDropDownOptionsWithDefault(
+            String defaultValue, String selectedValue, String... options) {
+        StringBuilder builder = new StringBuilder();
+        if (defaultValue != null) {
+            builder.append("<option>" + defaultValue + "</option>\n");
+        }
+
+        for (String option : options) {
+            option = option.trim();
+            builder.append("<option value='" + option + "'"
+                    + (option.equals(selectedValue) ? "selected='selected'" : "")
+                    + ">" + option
+                    + "</option>\n");
+        }
+
+
+
+        return builder.toString();
     }
 }

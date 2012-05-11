@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -43,180 +43,216 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.output.render.EuraHSDefaultRootD3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
  * a loose binding: if no d3web etc session exists, a new d3web session is
  * created and knowledge base and specs are read from the corresponding XML
  * specfication.
- * 
+ *
  * Basically, when the user selects answers in the dialog, those are transferred
  * back via AJAX calls and processed by this servlet. Here, values are
  * propagated to the d3web session (and later re-read by the renderers).
- * 
+ *
  * Both browser refresh and pressing the "new case"/"neuer Fall" Button in the
  * dialog leads to the creation of a new d3web session, i.e. all values set so
  * far are discarded, and an "empty" problem solving session begins.
- * 
+ *
  * @author Martina Freiberg
- * 
+ *
  * @date 14.01.2011; Update: 28/01/2011
- * 
+ *
  */
 public class EuraHSDialog extends D3webDialog {
 
-	private static final long serialVersionUID = -4790211381203716706L;
+    private static final long serialVersionUID = -4790211381203716706L;
+    private static ArrayList<String> INITDROPQS = new ArrayList<String>() {
 
-	@Override
-	protected String getSource(HttpServletRequest request) {
-		return "Hernia";
-	}
+        {
+            add("Production company of the mesh");
+            add("Production company of the first mesh");
+            add("Production company of the second mesh");
+            add("Production company of the suture material, non-mesh repair");
+            add("Production company of the suture material");
+            add("Production company of the tracker device");
+            add("Production company of the glue");
+        }
+    };
 
-	/**
-	 * Basic servlet method for displaying the dialog.
-	 * 
-	 * @created 28.01.2011
-	 * @param request
-	 * @param response
-	 * @param d3webSession
-	 * @throws IOException
-	 */
-	@Override
-	protected void show(HttpServletRequest request, HttpServletResponse response,
-			HttpSession httpSession)
-			throws IOException {
+    @Override
+    protected String getSource(HttpServletRequest request) {
+        return "Hernia";
+    }
 
-		PrintWriter writer = response.getWriter();
+    /**
+     * Basic servlet method for displaying the dialog.
+     *
+     * @created 28.01.2011
+     *
+     * @param request
+     * @param response
+     * @param d3webSession
+     * @throws IOException
+     */
+    @Override
+    protected void show(HttpServletRequest request, HttpServletResponse response,
+            HttpSession httpSession)
+            throws IOException {
 
-		// get the root renderer --> call getRenderer with null
-		EuraHSDefaultRootD3webRenderer d3webr = (EuraHSDefaultRootD3webRenderer)
-				D3webRendererMapping.getInstance().getRenderer(null);
+        PrintWriter writer = response.getWriter();
 
-		// new ContainerCollection needed each time to get an updated dialog
-		ContainerCollection cc = new ContainerCollection();
+        // new ContainerCollection needed each time to get an updated dialog
+        ContainerCollection cc = new ContainerCollection();
 
-		Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
-		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
+        Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
-		writer.print(cc.html.toString()); // deliver the rendered output
+        Session sNew = initDropdownChoiceQuestions(d3webSess);
+        httpSession.setAttribute(D3WEB_SESSION, sNew);
+        httpSession.setAttribute("initsetquestions", INITDROPQS);
 
-		writer.close(); // and close
-	}
 
-	/**
-	 * Handle login of new user
-	 * 
-	 * @created 29.04.2011
-	 * @param req
-	 * @param res
-	 * @param httpSession
-	 * @throws IOException
-	 */
-	@Override
-	protected void loginUsrDat(HttpServletRequest req,
-			HttpServletResponse res, HttpSession httpSession)
-			throws IOException {
+        // get the root renderer --> call getRenderer with null
+        EuraHSDefaultRootD3webRenderer d3webr = (EuraHSDefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
 
-		// fetch the information sent via the request string from login
-		String u = req.getParameter("u");
 
-		// get the response writer for communicating back via Ajax
-		PrintWriter writer = res.getWriter();
+        cc = d3webr.renderRoot(cc, sNew, httpSession);
 
-		httpSession.setMaxInactiveInterval(60 * 60);
+        writer.print(cc.html.toString()); // deliver the rendered output
 
-		// if no valid login
-		// if (!permitUser(u, p)) {
-		//
-		// // causes JS to display error message
-		// writer.append("nosuccess");
-		// return;
-		// }
+        writer.close(); // and close
+    }
 
-		// set user attribute for the HttpSession
-		httpSession.setAttribute("user", u);
+    /**
+     * Handle login of new user
+     *
+     * @created 29.04.2011
+     *
+     * @param req
+     * @param res
+     * @param httpSession
+     * @throws IOException
+     */
+    @Override
+    protected void loginUsrDat(HttpServletRequest req,
+            HttpServletResponse res, HttpSession httpSession)
+            throws IOException {
 
-		httpSession.setAttribute("lastLoaded", "");
+        // fetch the information sent via the request string from login
+        String u = req.getParameter("u");
 
-		/*
-		 * in case we should have more than one user per clinic, we distinguish
-		 * them by adding "_1"... to the clinic name, i.e. WUE_1, WUE_2 etc.
-		 * Thus we need to extract part of the login name that also denotes the
-		 * clinic name and thus the subfolder, where cases are stored that
-		 * should be visible for THIS user.
-		 */
-		int splitter = u.indexOf("_");
-		if (splitter != -1) {
-			String toReplace = u.substring(splitter, u.length());
-			String userSubfolder = u.replace(toReplace, "");
-			httpSession.setAttribute("user", userSubfolder);
-		}
+        // get the response writer for communicating back via Ajax
+        PrintWriter writer = res.getWriter();
 
-		// causes JS to start new session and d3web case finally
-		writer.append("newUser");
-	}
+        httpSession.setMaxInactiveInterval(60 * 60);
 
-	@Override
-	protected void resetD3webSession(HttpSession httpSession) {
-		super.resetD3webSession(httpSession);
-		Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
-		String definingObject = D3webConnector.getInstance().getD3webParser().getRequired();
-		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(
-				definingObject);
-		Fact fact = d3webSess.getBlackboard().getValueFact(to);
-		if (to != null && fact == null) {
-			D3webUtils.setValue(definingObject, generateCaseNumber(definingObject), d3webSess);
-		}
-	}
+        // if no valid login
+        // if (!permitUser(u, p)) {
+        //
+        // // causes JS to display error message
+        // writer.append("nosuccess");
+        // return;
+        // }
 
-	public static synchronized String generateCaseNumber(String persistenceFileName) {
-		String fileName = GlobalSettings.getInstance().getCaseFolder() + File.separator + ".."
-				+ File.separator + persistenceFileName + ".txt";
-		String persistence = readTxtFile(fileName);
-		int numberOfCases = 0;
-		try {
-			numberOfCases = Integer.parseInt(persistence);
-		}
-		catch (NumberFormatException ne) {
-		}
-		numberOfCases++;
-		writeTxtFile(fileName, String.valueOf(numberOfCases));
-		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		return date + "-" + numberOfCases;
-	}
+        // set user attribute for the HttpSession
+        httpSession.setAttribute("user", u);
 
-	private static String readTxtFile(String fileName) {
-		StringBuffer inContent = new StringBuffer();
-		File file = new File(fileName);
-		if (file.exists()) {
-			try {
-				BufferedReader bufferedReader = new BufferedReader(
-						new InputStreamReader(new FileInputStream(file)));
-				int char1 = bufferedReader.read();
-				while (char1 != -1) {
-					inContent.append((char) char1);
-					char1 = bufferedReader.read();
-				}
-				bufferedReader.close();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return inContent.toString();
-	}
+        httpSession.setAttribute("lastLoaded", "");
 
-	private static void writeTxtFile(String fileName, String content) {
-		try {
-			File file = new File(fileName).getCanonicalFile();
-			file.getParentFile().mkdirs();
-			FileWriter fstream = new FileWriter(file);
-			BufferedWriter out = new BufferedWriter(fstream);
-			out.write(content);
-			out.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+        /*
+         * in case we should have more than one user per clinic, we distinguish
+         * them by adding "_1"... to the clinic name, i.e. WUE_1, WUE_2 etc.
+         * Thus we need to extract part of the login name that also denotes the
+         * clinic name and thus the subfolder, where cases are stored that
+         * should be visible for THIS user.
+         */
+        int splitter = u.indexOf("_");
+        if (splitter != -1) {
+            String toReplace = u.substring(splitter, u.length());
+            String userSubfolder = u.replace(toReplace, "");
+            httpSession.setAttribute("user", userSubfolder);
+        }
+
+        // causes JS to start new session and d3web case finally
+        writer.append("newUser");
+    }
+
+    @Override
+    protected void resetD3webSession(HttpSession httpSession) {
+        super.resetD3webSession(httpSession);
+        Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
+        String definingObject = D3webConnector.getInstance().getD3webParser().getRequired();
+        Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+                definingObject);
+        Fact fact = d3webSess.getBlackboard().getValueFact(to);
+        if (to != null && fact == null) {
+            D3webUtils.setValue(definingObject, generateCaseNumber(definingObject), d3webSess);
+        }
+    }
+
+    public static synchronized String generateCaseNumber(String persistenceFileName) {
+        String fileName = GlobalSettings.getInstance().getCaseFolder() + File.separator + ".."
+                + File.separator + persistenceFileName + ".txt";
+        String persistence = readTxtFile(fileName);
+        int numberOfCases = 0;
+        try {
+            numberOfCases = Integer.parseInt(persistence);
+        } catch (NumberFormatException ne) {
+        }
+        numberOfCases++;
+        writeTxtFile(fileName, String.valueOf(numberOfCases));
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        return date + "-" + numberOfCases;
+    }
+
+    private static String readTxtFile(String fileName) {
+        StringBuffer inContent = new StringBuffer();
+        File file = new File(fileName);
+        if (file.exists()) {
+            try {
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(new FileInputStream(file)));
+                int char1 = bufferedReader.read();
+                while (char1 != -1) {
+                    inContent.append((char) char1);
+                    char1 = bufferedReader.read();
+                }
+                bufferedReader.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return inContent.toString();
+    }
+
+    private static void writeTxtFile(String fileName, String content) {
+        try {
+            File file = new File(fileName).getCanonicalFile();
+            file.getParentFile().mkdirs();
+            FileWriter fstream = new FileWriter(file);
+            BufferedWriter out = new BufferedWriter(fstream);
+            out.write(content);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Session initDropdownChoiceQuestions(Session d3webSess) {
+
+        for (String iddq : INITDROPQS) {
+
+            System.out.println(iddq);
+            Fact f = d3webSess.getBlackboard().getValueFact(
+                    d3webSess.getKnowledgeBase().getManager().searchQuestion(iddq));
+            System.out.println(f);
+            if (f == null) {
+                D3webUtils.setValue(iddq, "Please select...", d3webSess);
+            }
+            System.out.println(d3webSess.getBlackboard().getAnsweredQuestions());
+        }
+
+        return d3webSess;
+    }
 }

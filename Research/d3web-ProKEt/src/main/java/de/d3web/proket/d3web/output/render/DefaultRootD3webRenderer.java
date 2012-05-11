@@ -55,7 +55,10 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 	public ContainerCollection renderRoot(ContainerCollection cc,
 			Session d3webSession, HttpSession http) {
 
-		// get the d3web base template according to dialog type
+            
+            Session s = ((Session) http.getAttribute("d3webSession"));
+        
+            // get the d3web base template according to dialog type
 		String userprefix = D3webConnector.getInstance().getUserprefix();
 		StringTemplate st = TemplateUtils.getStringTemplate(
 				userprefix + "D3webDialog",

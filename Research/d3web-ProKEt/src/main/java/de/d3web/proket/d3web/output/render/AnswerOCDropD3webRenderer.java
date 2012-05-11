@@ -45,8 +45,10 @@ import javax.servlet.http.HttpSession;
  *
  * @author Martina Freiberg @created 15.01.2011
  */
-public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements AnswerD3webRenderer {
+public class AnswerOCDropD3webRenderer extends AbstractD3webRenderer implements AnswerD3webRenderer {
 
+    protected static final String D3WEB_SESSION = "d3webSession";
+    
     @Override
     /**
      * Specifically adapted for OCAnswer rendering
@@ -69,76 +71,34 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
         st = TemplateUtils.getStringTemplate(
                 super.getTemplateName("OcAnswerTabular"), "html");
 
-        st.setAttribute("fullId", getID(c));// .getName().replace(" ", "_"));
+        st.setAttribute("fullId", getID(to));// .getName().replace(" ", "_"));
         st.setAttribute("realAnswerType", "oc");
         st.setAttribute("parentFullId", getID(to));// getName().replace(" ",
         // "_"));
 
-        String resString = c.getInfoStore().getValue(ProKEtProperties.POPUP);
-        if (resString != null) {
-            st.setAttribute("tooltip", resString);
-        }
+       
+        //st.setAttribute("text", c.getName());
+        //st.setAttribute("text", D3webUtils.getAnswerPrompt(to, c, loc));
+        st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
+        String dropdownMenuOptions = to.getInfoStore().getValue(
+                ProKEtProperties.DROPDOWN_MENU_OPTIONS);
+
+       Session s = ((Session) httpSession.getAttribute(D3WEB_SESSION));
+                
         Blackboard bb = d3webSession.getBlackboard();
         Value value = bb.getValue((ValueObject) to);
-
-
-        //st.setAttribute("text", c.getName());
-        st.setAttribute("text", D3webUtils.getAnswerPrompt(to, c, loc));
-        st.setAttribute("count", D3webConnector.getInstance().getID(to));
-        if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
-            st.setAttribute("imageAnswer", "true");
+      
+        if (dropdownMenuOptions != null) {
+             
+              String dropdownMenu = "<select  type='textselect'>"
+                    + createDropDownOptions(value.toString(),
+                    dropdownMenuOptions.split(",")) + "<select/>";
+            st.setAttribute(
+                    "dropdown_menu", dropdownMenu);
         }
 
 
-
-        // if question is an abstraction question --> readonly
-        if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
-            st.setAttribute("readonly", "true");
-            st.setAttribute("inactive", "true");
-        }
-
-        // QContainer indicated
-        if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
-                || isIndicated(parent, bb)) {
-
-            // show, if indicated follow up
-            if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
-                    || (!D3webUtils.isFollowUpToQCon(to, parent))) {
-                st.removeAttribute("readonly");
-                st.removeAttribute("inactive");
-                st.removeAttribute("qstate");
-                st.setAttribute("qstate", "");
-            } else {
-                st.setAttribute("inactive", "true");
-                st.setAttribute("readonly", "true");
-            }
-        } else {
-            st.setAttribute("inactive", "true");
-            st.setAttribute("readonly", "true");
-        }
-
-        // if value of the to=question equals this choice
-        if (value.toString().equals(c.toString())) {
-
-            // if to=question is abstraction question, was readonly before, but
-            // value
-            // has been set (e.g. by other answer & Kb indication), remove
-            // readonly
-            if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
-                st.removeAttribute("readonly");
-                st.removeAttribute("inactive");
-            }
-
-            // set selected
-            st.removeAttribute("selection");
-            st.setAttribute("selection", "checked=\'checked\'");
-        } // if value of question is undefined or unknown remove previous choice
-        else if (UndefinedValue.isUndefinedValue(value)
-                || value.equals(Unknown.getInstance())) {
-            st.removeAttribute("selection");
-            st.setAttribute("selection", "");
-        }
 
         sb.append(st.toString());
 

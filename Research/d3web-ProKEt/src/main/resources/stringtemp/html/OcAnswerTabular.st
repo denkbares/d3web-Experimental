@@ -1,7 +1,9 @@
 <div id="$fullId$" $if(imageAnswer)$type="imageAnswer"$endif$ class="answer $fullId$ $if(realAnswerType)$answer-$realAnswerType$$endif$" >
-	<label>
-		<table>
-			<tr>
+	$if (dropdown_menu)$
+            $dropdown_menu$
+	$else$
+            <table>
+		<tr>
 				<td width=*>
 					<input id="f_$count$_$fullId$" name="group-$count$-$parentFullId$" type="radio" $selection$ title="$fullId$" 
 					$if(readonly)$ DISABLED $endif$ />
@@ -10,7 +12,7 @@
 					$text$
 					$Tooltip()$
 				</td>
-			</tr>
-		</table>
-	</label>
+                </tr>
+            </table>
+	$endif$
 </div>
