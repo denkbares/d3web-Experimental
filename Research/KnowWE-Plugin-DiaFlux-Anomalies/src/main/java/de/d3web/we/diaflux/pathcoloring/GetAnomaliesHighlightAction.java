@@ -1,8 +1,28 @@
+/*
+ * Copyright (C) 2012 University Wuerzburg, Computer Science VI
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
+ */
 package de.d3web.we.diaflux.pathcoloring;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
@@ -16,9 +36,15 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.diaflux.FlowchartUtils;
+import de.knowwe.diaflux.GetTraceHighlightAction;
 import de.knowwe.diaflux.type.DiaFluxType;
 import de.knowwe.diaflux.type.FlowchartType;
 
+/**
+ * 
+ * @author Roland Jerg
+ * @created 08.05.2012
+ */
 public class GetAnomaliesHighlightAction extends AbstractAction {
 
 	private static final String PREFIX = "cover";
@@ -31,73 +57,71 @@ public class GetAnomaliesHighlightAction extends AbstractAction {
 
 		String kdomid = context.getParameter("kdomid");
 
-		Section<DiaFluxType> diaFluxSec =
-				Sections.cast(Sections.getSection(kdomid), DiaFluxType.class);
+		Section<FlowchartType> flowchart = Sections.getSection(kdomid, FlowchartType.class);
+		Section<DiaFluxType> diaFluxSec = Sections.findAncestorOfExactType(flowchart,
+				DiaFluxType.class);
 
-		Section<FlowchartType> flowchart = Sections.findSuccessor(diaFluxSec, FlowchartType.class);
-		if (flowchart == null) {
-			context.getWriter().write("<flow></flow>");
-			return;
-		}
-		String flowName = FlowchartType.getFlowchartName(flowchart);
 		KnowledgeBase kb = FlowchartUtils.getKB(diaFluxSec);
 		Session session = SessionProvider.getSession(context, kb);
 
+		if (flowchart == null || session == null) {
+			context.getWriter().write(GetTraceHighlightAction.EMPTY_HIGHLIGHT);
+			return;
+		}
+		String flowName = FlowchartType.getFlowchartName(flowchart);
+
 		StringBuilder builder = new StringBuilder();
-		appendHeader(builder, flowName, PREFIX);
+		GetTraceHighlightAction.appendHeader(builder, FlowchartUtils.escapeHtmlId(flowName), PREFIX);
 
 		Flow flow = DiaFluxUtils.getFlowSet(session).get(flowName);
 
-		List<Edge> anomalyEdges = new LinkedList<Edge>();
-		List<Node> anomalyNodes = new LinkedList<Node>();
+		Map<Edge, Map<String, String>> anomalyedges = new HashMap<Edge, Map<String, String>>();
+		Map<Node, Map<String, String>> anomalynodes = new HashMap<Node, Map<String, String>>();
 
-		// here anomalyManager
-		anomalyEdges.addAll(anomalyManager.getAnomalyEdges(flow).keySet());
-		anomalyNodes.addAll(anomalyManager.getAnomalyNodes(flow).keySet());
+		for (Node node : anomalyManager.getAnomalyNodes(flow).keySet()) {
+			if (node.getFlow().getName().equals(flowName)) {
+				GetTraceHighlightAction.putValue(anomalynodes, node,
+						GetTraceHighlightAction.CSS_CLASS, COVER_ANOMALY);
+				GetTraceHighlightAction.putValue(anomalynodes, node,
+						GetTraceHighlightAction.TOOL_TIP,
+						anomalyManager.getAnomalyNodes(flow).get(node));
+			}
+		}
 
-		addNodeHighlight(builder, anomalyNodes, COVER_ANOMALY);
-		addEdgeHighlight(builder, anomalyEdges, COVER_ANOMALY);
+		for (Edge edge : anomalyManager.getAnomalyEdges(flow).keySet()) {
+			if (edge.getStartNode().getFlow().getName().equals(flowName)) {
+				GetTraceHighlightAction.putValue(anomalyedges, edge,
+						GetTraceHighlightAction.CSS_CLASS, COVER_ANOMALY);
+				GetTraceHighlightAction.putValue(anomalyedges, edge,
+						GetTraceHighlightAction.TOOL_TIP,
+						anomalyManager.getAnomalyEdges(flow).get(edge));
+			}
+		}
 
-		appendFooter(builder);
+		List<Edge> remainingEdges = new ArrayList<Edge>(flow.getEdges());
+		List<Node> remainingNodes = new ArrayList<Node>(flow.getNodes());
+		remainingEdges.removeAll(anomalyedges.keySet());
+		remainingNodes.removeAll(anomalynodes.keySet());
+
+		// clear classes on all remaining nodes and edges
+		for (Node node : remainingNodes) {
+			GetTraceHighlightAction.putValue(anomalynodes, node, GetTraceHighlightAction.CSS_CLASS,
+					"");
+		}
+
+		for (Edge edge : remainingEdges) {
+			GetTraceHighlightAction.putValue(anomalyedges, edge, GetTraceHighlightAction.CSS_CLASS,
+					"");
+		}
+
+		GetTraceHighlightAction.addNodeHighlight(builder, anomalynodes);
+		GetTraceHighlightAction.addEdgeHighlight(builder, anomalyedges);
+
+		GetTraceHighlightAction.appendFooter(builder);
 
 		context.setContentType("text/xml");
 		context.getWriter().write(builder.toString());
-	}
-
-	public static void appendHeader(StringBuilder builder, String flowName, String prefix) {
-
-		builder.append("<flow id='");
-		builder.append(flowName);
-		builder.append("' prefix ='" + PREFIX + "'>\r");
 
 	}
 
-	public static void addEdgeHighlight(StringBuilder builder, List<Edge> edges, String cssclass) {
-
-		for (Edge edge : edges) {
-			builder.append("<edge id='");
-			builder.append(edge.getID());
-			builder.append("'>");
-			builder.append(cssclass);
-			builder.append("</edge>\r");
-		}
-
-	}
-
-	public static void addNodeHighlight(StringBuilder builder, List<Node> nodes, String cssclass) {
-
-		for (Node node : nodes) {
-			builder.append("<node id='");
-			builder.append(node.getID());
-			builder.append("'>");
-			builder.append(cssclass);
-			builder.append("</node>\r");
-		}
-	}
-
-	public static void appendFooter(StringBuilder builder) {
-		builder.append("</flow>");
-		builder.append("\r");
-
-	}
 }

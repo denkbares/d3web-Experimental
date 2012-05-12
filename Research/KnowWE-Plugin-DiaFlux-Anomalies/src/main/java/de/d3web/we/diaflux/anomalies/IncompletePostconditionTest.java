@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2012 University Wuerzburg, Computer Science VI
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
+ */
 package de.d3web.we.diaflux.anomalies;
 
 import java.util.HashMap;
@@ -20,9 +38,6 @@ import de.d3web.diaFlux.flow.EndNode;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.flow.StartNode;
-import de.d3web.we.ci4ke.testing.AbstractCITest;
-import de.d3web.we.ci4ke.testing.CITestResult;
-import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.d3web.we.diaflux.datamanagement.Domain;
 import de.d3web.we.diaflux.datamanagement.EvalResult;
 import de.d3web.we.diaflux.datamanagement.FrameStack;
@@ -31,11 +46,13 @@ import de.d3web.we.diaflux.datamanagement.NumValue;
 import de.d3web.we.diaflux.evaluators.Evaluator;
 import de.d3web.we.diaflux.evaluators.EvaluatorManager;
 import de.d3web.we.diaflux.pathcoloring.AnomalyManager;
-import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.Environment;
-import de.knowwe.core.utils.Strings;
 
-public class IncompletePostconditionTest extends AbstractCITest {
+/**
+ * 
+ * @author Roland Jerg
+ * @created 08.05.2012
+ */
+public class IncompletePostconditionTest extends AbstractAnomalyTest {
 
 	private enum Status {
 		UNVISITED,
@@ -45,62 +62,77 @@ public class IncompletePostconditionTest extends AbstractCITest {
 
 	private final EvaluatorManager evalManager = EvaluatorManager.getEvalManager();
 
-	@Override
-	public CITestResult call() throws Exception {
-		HashMap<Node, Status> status = new HashMap<Node, Status>();
-		List<Node> allNodes = new LinkedList<Node>();
-		StringBuffer error = new StringBuffer();
+	/**
+	 *
+	 */
+	// @Override
+	// public CITestResult call() throws Exception {
+	// HashMap<Node, Status> status = new HashMap<Node, Status>();
+	// List<Node> allNodes = new LinkedList<Node>();
+	// StringBuffer error = new StringBuffer();
+	//
+	// String articleName = getParameter(0);
+	// String config = "knowledge base article: " + articleName;
+	//
+	// KnowledgeBase kb =
+	// D3webUtils.getKnowledgeBase(
+	// Environment.DEFAULT_WEB, articleName);
+	//
+	// CITestResult res = new CITestResult(Type.SUCCESSFUL, null, config);
+	//
+	// if (null != kb) {
+	// FrameStack stack = initStack(kb);
+	//
+	// List<Flow> flowcharts =
+	// kb.getManager().getObjects(Flow.class);
+	// for (Flow flow : flowcharts) {
+	// allNodes.addAll(flow.getNodes());
+	// }
+	// init(status, allNodes);
+	// for (Flow flow : flowcharts) {
+	// if (flow.isAutostart()) {
+	// for (Node node : flow.getStartNodes()) {
+	// error.append(visit(node, status, stack));
+	// }
+	// }
+	// }
+	// }
+	// String errormsg = error.toString();
+	// if (!errormsg.isEmpty()) {
+	// errormsg = "Incomplete Postconditions:<br>" + errormsg;
+	// Strings.maskHTML(errormsg);
+	// res = new CITestResult(Type.FAILED, errormsg, config);
+	// }
+	//
+	// return res;
+	// }
 
-		String articleName = getParameter(0);
-		String config = "knowledge base article: " + articleName;
-
-		KnowledgeBase kb =
-				D3webUtils.getKnowledgeBase(
-						Environment.DEFAULT_WEB, articleName);
-
-		CITestResult res = new CITestResult(Type.SUCCESSFUL, null, config);
-
-		if (null != kb) {
-			FrameStack stack = initStack(kb);
-
-			List<Flow> flowcharts =
-					kb.getManager().getObjects(Flow.class);
-			for (Flow flow : flowcharts) {
-				allNodes.addAll(flow.getNodes());
-			}
-			init(status, allNodes);
-			for (Flow flow : flowcharts) {
-				if (flow.isAutostart()) {
-					for (Node node : flow.getStartNodes()) {
-						error.append(visit(node, status, stack));
-					}
-				}
-			}
-		}
-		String errormsg = error.toString();
-		if (!errormsg.isEmpty()) {
-			errormsg = "Incomplete Postconditions:<br>" + errormsg;
-			Strings.maskHTML(errormsg);
-			res = new CITestResult(Type.FAILED, errormsg, config);
-		}
-
-		return res;
-	}
-
+	/**
+	 * 
+	 * @created 08.05.2012
+	 * @param status
+	 * @param allNodes
+	 */
 	private void init(HashMap<Node, Status> status, List<Node> allNodes) {
 		for (Node node : allNodes) {
 			status.put(node, Status.UNVISITED);
 		}
 	}
 
+	/**
+	 * 
+	 * @created 08.05.2012
+	 * @param node
+	 * @param status
+	 * @param stack
+	 * @return
+	 */
 	private String visit(Node node, HashMap<Node, Status> status, FrameStack stack) {
 		String result = "";
 		if (node instanceof EndNode) {
 			status.put(node, Status.PROCESSING);
 			for (ComposedNode cNode : getComposedfromExit((EndNode) node)) {
-				// for (Node fNode : getFollowingNodes(cNode)) {
 				result += visit(cNode, status, stack);
-				// }
 			}
 		}
 		status.put(node, Status.PROCESSING);
@@ -146,6 +178,12 @@ public class IncompletePostconditionTest extends AbstractCITest {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @created 08.05.2012
+	 * @param e
+	 * @return
+	 */
 	private EvalResult evaluateEdge(Edge e) {
 		EvalResult result = new EvalResult();
 		Condition con = e.getCondition();
@@ -157,6 +195,12 @@ public class IncompletePostconditionTest extends AbstractCITest {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @created 08.05.2012
+	 * @param kb
+	 * @return
+	 */
 	private FrameStack initStack(KnowledgeBase kb) {
 		FrameStack stack = new FrameStack();
 		EvalResult eRes = new EvalResult();
@@ -186,6 +230,12 @@ public class IncompletePostconditionTest extends AbstractCITest {
 		return stack;
 	}
 
+	/**
+	 * 
+	 * @created 08.05.2012
+	 * @param node
+	 * @return
+	 */
 	private StartNode getStartFromComposed(ComposedNode node) {
 		String calledFlow = node.getCalledFlowName();
 		String calledStart = node.getCalledStartNodeName();
@@ -204,6 +254,12 @@ public class IncompletePostconditionTest extends AbstractCITest {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @created 08.05.2012
+	 * @param node
+	 * @return
+	 */
 	private List<ComposedNode> getComposedfromExit(EndNode node) {
 		List<ComposedNode> result = new LinkedList<ComposedNode>();
 		String subFlow = node.getFlow().getName();
@@ -221,6 +277,31 @@ public class IncompletePostconditionTest extends AbstractCITest {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	protected String test(KnowledgeBase kb) {
+		HashMap<Node, Status> status = new HashMap<Node, Status>();
+		List<Node> allNodes = new LinkedList<Node>();
+		StringBuffer error = new StringBuffer();
+		if (null != kb) {
+			FrameStack stack = initStack(kb);
+
+			List<Flow> flowcharts =
+					kb.getManager().getObjects(Flow.class);
+			for (Flow flow : flowcharts) {
+				allNodes.addAll(flow.getNodes());
+			}
+			init(status, allNodes);
+			for (Flow flow : flowcharts) {
+				if (flow.isAutostart()) {
+					for (Node node : flow.getStartNodes()) {
+						error.append(visit(node, status, stack));
+					}
+				}
+			}
+		}
+		return error.toString();
 	}
 
 }

@@ -16,39 +16,53 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.we.diaflux.anomalies;
+package de.d3web.we.diaflux.anomalystrategies;
 
-import java.util.HashMap;
+import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.diaFlux.flow.DiaFluxElement;
+import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Node;
+import de.d3web.diaFlux.flow.SnapshotNode;
 import de.d3web.diaflux.coverage.Path;
-import de.d3web.diaflux.coverage.PathGenerator;
-import de.d3web.we.diaflux.anomalystrategies.SnapshotStrategy;
 
 /**
  * 
  * @author Roland Jerg
- * @created 08.05.2012
+ * @created 09.05.2012
  */
-public class LoopWithoutSnapshotTest extends AbstractAnomalyTest {
+public class SnapshotStrategy extends AbstractAnomalyStrategy {
+
+	/**
+	 * @param kb
+	 */
+	public SnapshotStrategy(KnowledgeBase kb) {
+		super(kb);
+	}
 
 	@Override
-	protected String test(KnowledgeBase kb) {
-		StringBuffer msg = new StringBuffer();
-		if (null != kb) {
+	public List<Path> getInitialStartPaths() {
+		List<Path> result = super.getInitialStartPaths();
+		return result;
+	}
 
-			SnapshotStrategy strategy = new SnapshotStrategy(kb);
+	@Override
+	public boolean followEdge(Edge edge, Path path) {
+		return true;
+	}
 
-			PathGenerator generator = new PathGenerator(kb, strategy);
-			generator.createPaths();
-
-			HashMap<Node, Path> anomalies = strategy.getAnomalies();
-			if (anomalies != null) {
-				for (Node node : anomalies.keySet())
-					msg.append("loop at " + node + "<br>");
-			}
+	@Override
+	public boolean offer(DiaFluxElement el, Path path) {
+		boolean finished = false;
+		if ((path.getLength() > 1 && el instanceof SnapshotNode)) {
+			finished = true;
 		}
-		return msg.toString();
+		else if (path.contains(el)) {
+			anomalies.put((Node) el, path);
+			finished = true;
+		}
+		super.offer(el, path);
+		return !finished;
 	}
 }

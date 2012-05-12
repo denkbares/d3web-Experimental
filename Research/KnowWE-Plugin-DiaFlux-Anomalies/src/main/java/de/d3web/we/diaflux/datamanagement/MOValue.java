@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2012 University Wuerzburg, Computer Science VI
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
+ */
 package de.d3web.we.diaflux.datamanagement;
 
 import java.util.HashSet;
@@ -5,11 +23,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class MOValue implements AllValue<MOValue> {
+public class MOValue implements IValue {
 
 	private boolean isOneChoice = false;
 
-	private Set<String> possibleValues;
+	private final Set<String> possibleValues;
 	private Set<String> actualValues;
 
 	public MOValue(Set<String> posValues, Set<String> actValues, boolean oneChoice) {
@@ -38,7 +56,7 @@ public class MOValue implements AllValue<MOValue> {
 	}
 
 	@Override
-	public boolean intersects(MOValue v) {
+	public boolean intersects(IValue v) {
 		if (!(v instanceof MOValue)) return false;
 		MOValue mov = (MOValue) v;
 		for (String val : actualValues) {
@@ -50,7 +68,7 @@ public class MOValue implements AllValue<MOValue> {
 	}
 
 	@Override
-	public boolean containsValue(MOValue v) {
+	public boolean containsValue(IValue v) {
 		if (!(v instanceof MOValue)) return false;
 		MOValue mov = (MOValue) v;
 		boolean contained = false;
@@ -64,7 +82,7 @@ public class MOValue implements AllValue<MOValue> {
 	}
 
 	@Override
-	public MOValue intersectWith(MOValue v) {
+	public IValue intersectWith(IValue v) {
 		MOValue result = new MOValue(this.possibleValues, new HashSet<String>(), this.isOneChoice);
 		if (!(v instanceof MOValue)) return result;
 		MOValue mov = (MOValue) v;
@@ -79,7 +97,7 @@ public class MOValue implements AllValue<MOValue> {
 	}
 
 	@Override
-	public List<MOValue> negate() {
+	public List<? extends IValue> negate() {
 		List<MOValue> result = new LinkedList<MOValue>();
 		Set<String> negValues = new HashSet<String>(possibleValues);
 		negValues.removeAll(actualValues);
@@ -89,7 +107,7 @@ public class MOValue implements AllValue<MOValue> {
 	}
 
 	@Override
-	public MOValue mergeWith(MOValue v) {
+	public IValue mergeWith(IValue v) {
 		if (!(v instanceof MOValue)) return this;
 		MOValue mov = (MOValue) v;
 		HashSet<String> mergedVars = new HashSet<String>();
@@ -115,7 +133,7 @@ public class MOValue implements AllValue<MOValue> {
 	}
 
 	@Override
-	public List<MOValue> substract(MOValue v) {
+	public List<MOValue> substract(IValue v) {
 		MOValue oMO = (MOValue) v;
 		Set<String> act = new HashSet<String>();
 		act.addAll(this.actualValues);

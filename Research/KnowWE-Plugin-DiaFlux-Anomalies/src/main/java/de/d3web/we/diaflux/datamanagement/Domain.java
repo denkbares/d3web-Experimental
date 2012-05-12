@@ -1,9 +1,27 @@
+/*
+ * Copyright (C) 2012 University Wuerzburg, Computer Science VI
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
+ */
 package de.d3web.we.diaflux.datamanagement;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Domain<T extends AllValue<T>> {
+public class Domain<T extends IValue> {
 
 	private List<T> list;
 
@@ -91,19 +109,24 @@ public class Domain<T extends AllValue<T>> {
 		return true;
 	}
 
+	// public boolean contains(AllDomain<T> d) {
+	// // TODO Auto-generated method stub
+	// return false;
+	// }
+
 	public boolean isEmpty() {
 		return list.isEmpty();
 	}
 
 	public Domain<T> negate() {
-		List<T> newlist = new LinkedList<T>();
+		List<IValue> newlist = new LinkedList<IValue>();
 		Domain<T> result = new Domain<T>();
 
 		for (T t1 : list) {
 			newlist.addAll(t1.negate());
 		}
-		for (T v : newlist) {
-			result.add(v);
+		for (IValue v : newlist) {
+			result.add((T) v);
 		}
 		result.mergeAll();
 		return result;
@@ -118,7 +141,8 @@ public class Domain<T extends AllValue<T>> {
 		List<T> resultList = new LinkedList<T>();
 		for (T t : list) {
 			for (T d_t : d.list) {
-				for (T new_t : t.substract(d_t)) {
+				for (Object o : t.substract(d_t)) {
+					T new_t = (T) o;
 					if (!new_t.isEmpty()) {
 						resultList.add(new_t);
 						domain.list.add(new_t);

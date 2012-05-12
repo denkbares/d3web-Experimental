@@ -1,16 +1,34 @@
+/*
+ * Copyright (C) 2012 University Wuerzburg, Computer Science VI
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
+ */
 package de.d3web.we.diaflux.datamanagement;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class NumValue extends NumericInterval implements AllValue<NumValue> {
+public class NumValue extends NumericInterval implements IValue {
 
 	public NumValue(double min, double max, boolean minClosed, boolean maxClosed) {
 		super(min, max, minClosed, maxClosed);
 	}
 
 	@Override
-	public boolean intersects(NumValue v) {
+	public boolean intersects(IValue v) {
 		if (!(v instanceof NumValue)) return false;
 		NumValue nI = (NumValue) v;
 		if (max > nI.getMin() && min < nI.getMax()) {
@@ -26,14 +44,14 @@ public class NumValue extends NumericInterval implements AllValue<NumValue> {
 	}
 
 	@Override
-	public boolean containsValue(NumValue v) {
+	public boolean containsValue(IValue v) {
 		if (!(v instanceof NumValue)) return false;
 		NumericInterval nI = (NumericInterval) v;
 		return super.contains(nI);
 	}
 
 	@Override
-	public NumValue intersectWith(NumValue v) {
+	public IValue intersectWith(IValue v) {
 		NumValue nI = (NumValue) v;
 		NumValue result = new NumValue(this.min, this.max, this.minClosed, this.maxClosed);
 		if (min < nI.getMin()) {
@@ -67,7 +85,7 @@ public class NumValue extends NumericInterval implements AllValue<NumValue> {
 	}
 
 	@Override
-	public NumValue mergeWith(NumValue v) {
+	public IValue mergeWith(IValue v) {
 		if (!(v instanceof NumValue)) return this;
 		NumValue result = new NumValue(this.min, this.max, this.minClosed, this.maxClosed);
 		NumValue nI = (NumValue) v;
@@ -96,7 +114,7 @@ public class NumValue extends NumericInterval implements AllValue<NumValue> {
 	}
 
 	@Override
-	public List<NumValue> substract(NumValue v) {
+	public List<NumValue> substract(IValue v) {
 		List<NumValue> result = new LinkedList<NumValue>();
 		List<NumValue> neg_v = ((NumValue) v).negate();
 		for (NumValue numV : neg_v) {

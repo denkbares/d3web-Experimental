@@ -1,40 +1,23 @@
+/*
+ * Copyright (C) 2012 University Wuerzburg, Computer Science VI
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
+ */
 package de.d3web.we.diaflux.evaluators;
-
 
 public abstract class NumEvaluator extends TerminalEvaluator {
 
-//	public final static double EPSILON = 0.000001;
-	
-	/*@Override
-	public List<Object> negate(Condition condition) {
-		EvaluatorManager evalManager =  EvaluatorManager.getEvalManager();
-		List<Object> intervals = new LinkedList<Object>();
-		for(Evaluator eval : evalManager.getEvaluator()) {
-			if(eval.canEvaluate(condition)) {
-				intervals = eval.evaluate(condition);
-			}
-		}
-		List<Object> result = new LinkedList<Object>();
-		for(Object interval : intervals) {
-			result.addAll(((NumericInterval)interval).getOuterIntervals());
-		}
-		return result;
-	}
-
-	@Override
-	public List<Object> merge(List<Condition> conList) {
-		EvaluatorManager evalManager =  EvaluatorManager.getEvalManager();
-		List<Object> intervals = new LinkedList<Object>();
-		List<Object> result = new LinkedList<Object>();
-		return result;
-	}
-
-	@Override
-	public List<Object> intersect(List<Condition> conList) {
-		EvaluatorManager evalManager =  EvaluatorManager.getEvalManager();
-		List<Object> inter1 = new LinkedList<Object>();
-		List<Object> inter2 = new LinkedList<Object>();
-		List<Object> result = new LinkedList<Object>();
-		return result;
-	}*/
 }

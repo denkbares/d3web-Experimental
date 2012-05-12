@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="de/d3web/we/diaflux/datamanagement/NumDomain.java|de/d3web/we/diaflux/datamanagement/EvalResultBeta.java|de/d3web/we/diaflux/datamanagement/MODomain.java|de/d3web/we/diaflux/datamanagement/Value.java|de/d3web/we/diaflux/anomalies/LoopSnapshotBeta.java|de/d3web/we/diaflux/anomalies/LoopSnapshotBeta2.java|de/d3web/we/diaflux/anomalies/LoopSnapshotBeta3.java|de/d3web/we/diaflux/datamanagement/DomainALT.java|de/d3web/we/diaflux/pathcoloring/AnomaliesHighlightRenderer.java|de/d3web/we/diaflux/pathcoloring/AnomaliesHighlightType.java|de/d3web/we/diaflux/pathcoloring/HighlightResult.java|de/d3web/we/diaflux/pathcoloring/HighlightSessionObject.java|de/d3web/we/diaflux/pathcoloring/PSMAnomaliesHighlight.java" kind="src" output="target/classes" path="src/main/java"/>
+	<classpathentry kind="src" output="target/classes" path="src/main/java"/>
 	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
 	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources"/>

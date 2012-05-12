@@ -16,34 +16,23 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.we.diaflux.evaluators;
+package de.d3web.we.diaflux.datamanagement;
 
-import de.d3web.core.inference.condition.Condition;
-import de.d3web.we.diaflux.datamanagement.EvalResult;
+import java.util.List;
 
-/**
- * 
- * @author Roland Jerg
- * @created 08.05.2012
- */
-public interface Evaluator {
+public interface IValue {
 
-	/**
-	 * returns true if the Evaluator can evaluate the condition
-	 * 
-	 * @created 08.05.2012
-	 * @param condition
-	 * @return
-	 */
-	public boolean canEvaluate(Condition condition);
+	public boolean intersects(IValue v);
 
-	/**
-	 * evaluates the condition and returns a new EvalResult
-	 * 
-	 * @created 08.05.2012
-	 * @param condition
-	 * @return
-	 */
-	public EvalResult evaluate(Condition condition);
+	public boolean containsValue(IValue v);
 
+	public IValue intersectWith(IValue v);
+
+	public List<? extends IValue> negate();
+
+	public IValue mergeWith(IValue v);
+
+	public List<? extends IValue> substract(IValue v);
+
+	public boolean isEmpty();
 }
