@@ -22,14 +22,13 @@ package de.knowwe.wikicontentdownload;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
 
 /**
  * 
- * @author Johanna
+ * @author Johanna Latt
  * @created 16.04.2012
  */
 public class WikiZIPDownloadProvider implements ToolProvider {
@@ -40,24 +39,18 @@ public class WikiZIPDownloadProvider implements ToolProvider {
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		// and provide both download and refresh as tools
 		Tool download = getDownloadTool(section, userContext);
-
 		return new Tool[] { download };
 	}
 
 	protected Tool getDownloadTool(Section<?> section, UserContext userContext) {
 		// tool to provide download capability
-		String kbName = DefaultMarkupType.getContent(section).trim();
-		if (kbName.isEmpty()) {
-			kbName = "knowledgebase";
-		}
 		String jsAction = "window.location='action/DownloadWikiZIP" +
 				"?" + Attributes.TOPIC + "=" + section.getTitle() +
-				"&" + Attributes.WEB + "=" + section.getWeb() +
-				"&" + PARAM_FILENAME + "=" + kbName + ".zip'";
+				"&" + Attributes.WEB + "=" + section.getWeb() + "'";
 		return new DefaultTool(
 				"KnowWEExtension/d3web/icon/download16.gif",
 				"Download Wiki Zip",
-				"Download the entire wiki.",
+				"Download the entire Wiki as a Zip-File.",
 				jsAction);
 	}
 

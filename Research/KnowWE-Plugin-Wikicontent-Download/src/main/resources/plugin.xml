@@ -18,10 +18,10 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="WikiZIPDownloadProvider">
 		<parameter id="class"
-			value="de.knowwe.d3web.download.WikiZIPDownloadProvider" />
+			value="de.knowwe.wikicontentdownload.WikiZIPDownloadProvider" />
 		<parameter id="name" value="WikiZIPDownloadProvider" />
 		<parameter id="description"
-			value="Offers a download button to download the knowledge base as an knowledge archive." />
+			value="Offers a download button to download the wiki as a zip file." />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="/KnowledgeBase" />
@@ -29,7 +29,7 @@
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="DownloadWikiZIP">
-		<parameter id="class" value="de.knowwe.d3web.download.DownloadWikiZIP" />
+		<parameter id="class" value="de.knowwe.wikicontentdownload.DownloadWikiZIP" />
 		<parameter id="name" value="DownloadWikiZIP" />
 		<parameter id="description"
 			value="Downloads a specific d3web knowledge base archive of a named wiki article." />
