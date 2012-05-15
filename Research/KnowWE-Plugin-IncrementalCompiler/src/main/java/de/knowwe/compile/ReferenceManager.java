@@ -196,7 +196,7 @@ public class ReferenceManager {
 			allDefinitions.get(identifier).add(section);
 		}
 		else {
-			HashSet<Section<? extends SimpleDefinition>> set = new HashSet<Section<? extends SimpleDefinition>>();
+			Set<Section<? extends SimpleDefinition>> set = new HashSet<Section<? extends SimpleDefinition>>();
 			set.add(section);
 			allDefinitions.put(identifier, set);
 		}
