@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
@@ -117,11 +118,26 @@ public class TripleMarkup extends AbstractType implements
 						for (Object key : keyset) {
 							if (key.equals(
 									ObjectPropertyDefinitionMarkup.RDFS_DOMAIN_KEY)) {
-								domainClassName = (String) ((Map) info).get(key);
+								Object o = ((Map) info).get(key);
+								if (o instanceof String) {
+									domainClassName = (String) o;
+								}
+								else {
+									Logger.getLogger(this.getClass()).error(
+											"Value in ObjectDefitionInfo-Map was not a String");
+								}
+
 							}
 							if (key.equals(
 									ObjectPropertyDefinitionMarkup.RDFS_RANGE_KEY)) {
-								rangeClassName = (String) ((Map) info).get(key);
+								Object o = ((Map) info).get(key);
+								if (o instanceof String) {
+									rangeClassName = (String) o;
+								}
+								else {
+									Logger.getLogger(this.getClass()).error(
+											"Value in ObjectDefitionInfo-Map was not a String");
+								}
 							}
 						}
 					}

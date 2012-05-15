@@ -110,9 +110,9 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 					s.getFather(), ClassRef.class);
 			if (classRefs.size() == 2) {
 				map.put(RDFS_DOMAIN_KEY,
-						classRefs.get(0).get().getTermIdentifier(classRefs.get(0)));
+						classRefs.get(0).get().getTermIdentifier(classRefs.get(0)).toExternalForm());
 				map.put(RDFS_RANGE_KEY,
-						classRefs.get(1).get().getTermIdentifier(classRefs.get(1)));
+						classRefs.get(1).get().getTermIdentifier(classRefs.get(1)).toExternalForm());
 
 			}
 			return map;
