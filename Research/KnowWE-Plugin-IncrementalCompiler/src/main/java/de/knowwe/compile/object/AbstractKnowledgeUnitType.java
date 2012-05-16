@@ -32,10 +32,8 @@ public class AbstractKnowledgeUnitType<T extends Type> extends AbstractType
 
 	private KnowledgeUnitCompileScript<T> compileScript = null;
 
-	public AbstractKnowledgeUnitType(KnowledgeUnitCompileScript<T> s) {
-		this();
-		if (compileScript == null) this.compileScript = s;
-
+	public void setCompileScript(KnowledgeUnitCompileScript<T> compileScript) {
+		this.compileScript = compileScript;
 	}
 
 	@SuppressWarnings("rawtypes")
