@@ -48,7 +48,7 @@ import javax.servlet.http.HttpSession;
 public class AnswerOCDropD3webRenderer extends AbstractD3webRenderer implements AnswerD3webRenderer {
 
     protected static final String D3WEB_SESSION = "d3webSession";
-    
+
     @Override
     /**
      * Specifically adapted for OCAnswer rendering
@@ -76,7 +76,7 @@ public class AnswerOCDropD3webRenderer extends AbstractD3webRenderer implements 
         st.setAttribute("parentFullId", getID(to));// getName().replace(" ",
         // "_"));
 
-       
+
         //st.setAttribute("text", c.getName());
         //st.setAttribute("text", D3webUtils.getAnswerPrompt(to, c, loc));
         st.setAttribute("count", D3webConnector.getInstance().getID(to));
@@ -84,14 +84,14 @@ public class AnswerOCDropD3webRenderer extends AbstractD3webRenderer implements 
         String dropdownMenuOptions = to.getInfoStore().getValue(
                 ProKEtProperties.DROPDOWN_MENU_OPTIONS);
 
-       Session s = ((Session) httpSession.getAttribute(D3WEB_SESSION));
-                
+        Session s = ((Session) httpSession.getAttribute(D3WEB_SESSION));
+
         Blackboard bb = d3webSession.getBlackboard();
         Value value = bb.getValue((ValueObject) to);
-      
+
         if (dropdownMenuOptions != null) {
-             
-              String dropdownMenu = "<select  type='textselect'>"
+
+            String dropdownMenu = "<select  type='textselect'>"
                     + createDropDownOptions(value.toString(),
                     dropdownMenuOptions.split(",")) + "<select/>";
             st.setAttribute(

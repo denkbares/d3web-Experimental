@@ -19,6 +19,10 @@
  */
 package de.d3web.proket.d3web.input;
 
+import de.d3web.core.inference.KnowledgeKind;
+import de.d3web.core.inference.KnowledgeSlice;
+import de.d3web.core.inference.Rule;
+import de.d3web.core.inference.RuleSet;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -72,6 +76,9 @@ import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.TextValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
+import de.d3web.indication.ActionIndication;
+import de.d3web.indication.ActionInstantIndication;
+import de.d3web.indication.inference.PSMethodStrategic;
 import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.jurisearch.PSMethodJuri;
 import de.d3web.plugin.JPFPluginManager;
@@ -79,9 +86,11 @@ import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.ImageHandler;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.data.DialogStrategy;
+import de.d3web.proket.data.DialogType;
 import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.IDUtils;
+import java.util.*;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -597,6 +606,105 @@ public class D3webUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * Retrieves a HashMap, that contains all TOs as keys that potentially
+     * indicate further TOs when answered in a specific way. The values of the
+     * HashMap are the indicated further TOs.
+     *
+     * @param bb
+     * @return
+     */
+    public static HashMap getIndicationSetsL1(Blackboard bb, ArrayList<TerminologyObject> l1qs) {
+
+        System.out.println(l1qs);
+        
+        HashMap<TerminologyObject, Collection<TerminologyObject>> ancestors = new HashMap();
+
+        for (KnowledgeSlice ks : bb.getSession().getKnowledgeBase().getAllKnowledgeSlices()) {
+
+            if (ks instanceof RuleSet) {
+                RuleSet rs = (RuleSet) ks;
+
+                for (Rule r : rs.getRules()) {
+
+                    if (r.getAction() instanceof ActionIndication
+                            || r.getAction() instanceof ActionInstantIndication) {
+
+                        List<TerminologyObject> backObjs = (List<TerminologyObject>) r.getAction().getBackwardObjects();
+                        Collection<TerminologyObject> termObjs = (Collection<TerminologyObject>) r.getCondition().getTerminalObjects();
+
+
+                        for (TerminologyObject termi : termObjs) {
+
+                            if (l1qs.contains(termi)
+                                    && !termi.getName().equals("Please choose database level")
+                                    ) {
+
+                                
+                                if (ancestors.containsKey(termi)) {
+
+                                    Collection<TerminologyObject> saveTermis =
+                                            (Collection<TerminologyObject>) ancestors.get(termi);
+                                    for (TerminologyObject newTermi : backObjs) {
+                                        
+                                        if(!newTermi.getName().equals("Number of mesh(s)") &&
+                                           !newTermi.getName().contains("Production company")     ){
+                                        
+                                        
+
+                                        if (!saveTermis.contains(newTermi)) {
+                                            saveTermis.add(newTermi);
+                                        }
+                                        }
+                                    }
+
+                                    ancestors.put(termi, saveTermis);
+
+                                } else {
+                                    ancestors.put(termi, backObjs);
+                                }
+                            }
+
+                            /*
+                             * for(TerminologyObject pto: termi.getParents()){
+                             * if(l1qs.contains(pto)){ if
+                             * (ancestors.containsKey(termi)) {
+                             *
+                             * Collection<TerminologyObject> saveTermis =
+                             * (Collection<TerminologyObject>)
+                             * ancestors.get(termi); for (TerminologyObject
+                             * newTermi : backObjs) { if
+                             * (!saveTermis.contains(newTermi)) {
+                             * saveTermis.add(newTermi); } }
+                             *
+                             * ancestors.put(termi, saveTermis);
+                             *
+                             * } else { ancestors.put(termi, backObjs); } }
+                            }
+                             */
+                        }
+                    }
+
+
+                    /*
+                     * if (ancestors.containsKey(to)) { List<TerminologyObject>
+                     * saveTOs = (List<TerminologyObject>) ancestors.get(to);
+                     * for (TerminologyObject fto :
+                     * r.getAction().getForwardObjects()) { if
+                     * (!saveTOs.contains(fto)) { saveTOs.add(fto); } }
+                     * ancestors.put(to, saveTOs);
+                     *
+                     * } else { ancestors.put(to,
+                     * r.getAction().getForwardObjects()); }
+                     */
+
+                }
+            }
+        }
+
+        return ancestors;
     }
 
     /**
@@ -1251,16 +1359,19 @@ public class D3webUtils {
         }
 
         String valueName = AbstractD3webRenderer.getObjectNameForId(valueString);
-        if (valueString != null && valueName == null) {
-            if (valueString.equals("1")) {
-                valueString = YESSTRING;
-            } else if (valueString.equals("2")) {
-                valueString = MAYBESTRING;
-            } else if (valueString.equals("3")) {
-                valueString = NOSTRING;
+        
+        // ONLY FOR ClariHIE Dialog!!!
+        if (D3webConnector.getInstance().getDialogType().equals(DialogType.CLARIHIE)) {
+            if (valueString != null && valueName == null) {
+                if (valueString.equals("1")) {
+                    valueString = YESSTRING;
+                } else if (valueString.equals("2")) {
+                    valueString = MAYBESTRING;
+                } else if (valueString.equals("3")) {
+                    valueString = NOSTRING;
+                }
             }
         }
-
         // init Value object...
         Value value = null;
 
@@ -1383,20 +1494,22 @@ public class D3webUtils {
     }
 
     /**
-     * Reset all questions, that are NOT currently indicated or instant-indicated
-     * so if they are re-opened, they are unanswered again.
-     * Therefore, all not currently ind. or inst-ind. questions and their 
-     * corresponding facts are removed from the blackboard.
-     * Exceptions - i.e. questions that are not removed - are the required
-     * questions (they need to be set always), of course all indicated and inst-
-     * indicated questions, AND all questions that are always initially set
-     * (as e.g. in EuraHS all dropdown - defaults). 
+     * Reset all questions, that are NOT currently indicated or
+     * instant-indicated so if they are re-opened, they are unanswered again.
+     * Therefore, all not currently ind. or inst-ind. questions and their
+     * corresponding facts are removed from the blackboard. Exceptions - i.e.
+     * questions that are not removed - are the required questions (they need to
+     * be set always), of course all indicated and inst- indicated questions,
+     * AND all questions that are always initially set (as e.g. in EuraHS all
+     * dropdown - defaults).
+     *
      * @param sess
-     * @return a collection of all questions that have been removed from blackboard
+     * @return a collection of all questions that have been removed from
+     * blackboard
      */
     public static Collection<Question> resetAbandonedPaths(Session sess,
             HttpSession httpSess) {
-        
+
         // get all questions that were set per default initially
         // e.g. in EuraHS, we need to init set all dropdowns as to enable the
         // follow up mechanisms
@@ -1406,10 +1519,10 @@ public class D3webUtils {
         Collection<Question> resetQuestions = new LinkedList<Question>();
         Set<QASet> initQuestions = new HashSet<QASet>(
                 D3webConnector.getInstance().getKb().getInitQuestions());
-        
+
         // check all questions that have been lately answered 
         for (Question question : bb.getAnsweredQuestions()) {
-            
+
             // if a question is not active by being initQuestion
             if (!isActive(question, bb, initQuestions)
                     // and if question is not a required question
@@ -1418,7 +1531,7 @@ public class D3webUtils {
 
                 // and if there are initSet questions and those do not contain q
                 if (initSetQuestions != null && !initSetQuestions.contains(question.getName())) {
-                    
+
                     // then remove the corresponding fact from the blackboard
                     Fact lastFact = bb.getValueFact(question);
                     if (lastFact != null

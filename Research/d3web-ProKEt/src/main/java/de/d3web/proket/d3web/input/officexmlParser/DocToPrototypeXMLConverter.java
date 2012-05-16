@@ -26,8 +26,8 @@ public class DocToPrototypeXMLConverter {
             "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/";
     
     /* SOURCE and TARGET doc names */
-    private static String SOURCEDOC = PARSINGPATH + "RNS_M1.doc";
-    private static String TARGETXML = PARSINGPATH + "juriMietrechtT1_neu.xml";
+    private static String SOURCEDOC = PARSINGPATH + "RNS_AR_USER.doc";
+    private static String TARGETXML = PARSINGPATH + "juriUser_neu.xml";
     
     private static String WEBAPPPREFIX = "Juri";
     

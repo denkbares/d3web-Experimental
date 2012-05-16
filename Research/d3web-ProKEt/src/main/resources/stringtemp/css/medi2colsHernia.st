@@ -28,7 +28,7 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 /* GENERAL STRUCTURING */
 #head{ font-size: 1.5em; font-variant: small-caps; font-weight: bold; text-align: center; background: #efefef; 
 	background-image: none; padding: 0px 5px 0px 5px; margin-left: auto; margin-right: auto; position: fixed; width: 100%;
-	-moz-box-shadow: 0 0 5px black; -webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; float: none; } 
+	-moz-box-shadow: 0 0 5px black; -webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; float: none; z-index: 99; } 
 
 #head td .header{ font-size: 1.4em; font-variant: small-caps; text-align: center; font-weight: bold; color: black; }
 
@@ -72,7 +72,7 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 
 
 /* TOOLTIPS, ADD STUFF */
-.tooltip { z-index: 100; background-color: rgb(255, 255, 180); background-color: rgba(255, 255, 180, 1);
+.tooltip { z-index: 1001; background-color: rgb(255, 255, 180); background-color: rgba(255, 255, 180, 1);
 	padding: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px;
 	-moz-box-shadow: 3px 3px 3px #888; -webkit-box-shadow: 3px 3px 3px #888; box-shadow: 3px 3px 3px #888;
 	border: 1px solid #BBB; font-weight: normal; color: #555; }

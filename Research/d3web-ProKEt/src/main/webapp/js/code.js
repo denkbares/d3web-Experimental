@@ -813,7 +813,7 @@ function tooltip_over(id) {
 
 
 function setLeftOffset(target) {
-    var pOffset = target.parent().offset();
+    /*var pOffset = target.parent().offset();
     var width = target.width();
     var widthW = $(window).width() - 25; // remove some for the scrollbar
     var overlap = pOffset.left + width - widthW;
@@ -826,7 +826,48 @@ function setLeftOffset(target) {
             left: leftOffset
         });
         target.width(width);
+    }*/
+    // get current coordinates of element relative to the document
+    var pOffset = target.parent().offset();
+   
+    // width of current element
+    var width = target.width();
+    var height = target.height();
+    
+    // window width
+    var widthW = $(window).width() - 25; // remove some for the scrollbar
+    // real height of the displayed dialog inside the browser window
+    var heightW = document.documentElement.clientHeight;
+    
+    // calculate appropriate distance to left border
+    var overlap = pOffset.left + width - widthW;
+    var leftOffset = pOffset.left
+    if (overlap > 0){
+        leftOffset = pOffset.left - overlap;
+        if (leftOffset < 0) {
+            leftOffset = 0;
+        }
     }
+   
+   /* display all popups that are too far down in the dialog relatively above
+    * the parent element */
+    var sizeToEnd = heightW - pOffset.top;
+    
+    if(sizeToEnd < 400){
+        target.offset({
+            top: pOffset.top - height - 20, 
+            left: leftOffset
+        });
+    } 
+    
+    /* display popups normally underneath the parent element */
+    else {
+        target.offset({
+            top: pOffset.top + target.parent().height() + 15, 
+            left: leftOffset
+        });
+    }
+    target.width(width);
 }
 
 /**

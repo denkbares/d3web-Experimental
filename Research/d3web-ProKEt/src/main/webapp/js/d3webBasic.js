@@ -611,10 +611,10 @@ function tooltip_over(id, element) {
         target.css("position", "absolute");
         var height = target.height();
         var width = target.width();
-		if (height > 0 && width > 0 && height > width) {
-			target.css("width", height);
-			target.css("height", width);
-		}
+        if (height > 0 && width > 0 && height > width) {
+            target.css("width", height);
+            target.css("height", width);
+        }
         //tooltip_move(element);
 
         target.fadeIn(300);
@@ -623,20 +623,47 @@ function tooltip_over(id, element) {
 }
 
 function setLeftOffset(target) {
+    
+    // get current coordinates of element relative to the document
     var pOffset = target.parent().offset();
+   
+    // width of current element
     var width = target.width();
+    var height = target.height();
+    
+    // window width
     var widthW = $(window).width() - 25; // remove some for the scrollbar
+    // real height of the displayed dialog inside the browser window
+    var heightW = document.documentElement.clientHeight;
+    
+    // calculate appropriate distance to left border
     var overlap = pOffset.left + width - widthW;
-    var leftOffset = pOffset.left;
+    var leftOffset = pOffset.left
     if (overlap > 0){
         leftOffset = pOffset.left - overlap;
-        if (leftOffset < 0) leftOffset = 0;
+        if (leftOffset < 0) {
+            leftOffset = 0;
+        }
+    }
+   
+   /* display all popups that are too far down in the dialog relatively above
+    * the parent element */
+    var sizeToEnd = heightW - pOffset.top;
+    if(sizeToEnd < 400){
         target.offset({
-            top: pOffset.top + target.parent().height(), 
+            top: pOffset.top - height - 20, 
             left: leftOffset
         });
-        target.width(width);
+    } 
+    
+    /* display popups normally underneath the parent element */
+    else {
+        target.offset({
+            top: pOffset.top + target.parent().height() + 15, 
+            left: leftOffset
+        });
     }
+    target.width(width);
 }
 
 /**

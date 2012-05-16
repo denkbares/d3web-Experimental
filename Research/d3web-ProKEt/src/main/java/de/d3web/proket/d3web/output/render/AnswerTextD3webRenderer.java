@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -40,110 +40,109 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Renderer for rendering basic NumAnswers.
- * 
+ *
  * TODO CHECK: 1) basic properties for answers 2) d3web resulting properties,
  * e.g. is indicated, is shown etc.
- * 
- * @author Martina Freiberg
- * @created 16.01.2011
+ *
+ * @author Martina Freiberg @created 16.01.2011
  */
 public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements AnswerD3webRenderer {
 
-	@Override
-	/**
-	 * Specifically adapted for rendering NumAnswers
-	 */
-	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession, Choice c,
-			TerminologyObject to, TerminologyObject parent, int loc,
-                        HttpSession httpSession) {
+    @Override
+    /**
+     * Specifically adapted for rendering NumAnswers
+     */
+    public String renderTerminologyObject(ContainerCollection cc, Session d3webSession, Choice c,
+            TerminologyObject to, TerminologyObject parent, int loc,
+            HttpSession httpSession) {
 
-		QuestionText tq = (QuestionText) to;
+        QuestionText tq = (QuestionText) to;
 
-		StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-		// return if the InterviewObject is null
-		if (to == null) {
-			return "";
-		}
+        // return if the InterviewObject is null
+        if (to == null) {
+            return "";
+        }
 
-		// get the fitting template. In case user prefix was specified, the
-		// specific TemplateName is returned, else the base object name.
-		StringTemplate st = TemplateUtils.getStringTemplate(
-					super.getTemplateName("TextAnswer"), "html");
+        // get the fitting template. In case user prefix was specified, the
+        // specific TemplateName is returned, else the base object name.
+        StringTemplate st = TemplateUtils.getStringTemplate(
+                super.getTemplateName("TextAnswer"), "html");
 
-		st.setAttribute("fullId", getID(tq));
-		st.setAttribute("realAnswerType", "text");
-		st.setAttribute("parentFullId", getID(parent));
+        st.setAttribute("fullId", getID(tq));
+        st.setAttribute("realAnswerType", "text");
+        st.setAttribute("parentFullId", getID(parent));
 
-		Boolean longText = to.getInfoStore().getValue(
-				ProKEtProperties.LONG_TEXT);
+        Boolean longText = to.getInfoStore().getValue(
+                ProKEtProperties.LONG_TEXT);
 
-		if (longText != null && longText) st.setAttribute("longtext", "true");
+        if (longText != null && longText) {
+            st.setAttribute("longtext", "true");
+        }
 
-		Boolean useAsFilename = to.getInfoStore().getValue(
-				ProKEtProperties.USE_AS_FILENAME);
+        Boolean useAsFilename = to.getInfoStore().getValue(
+                ProKEtProperties.USE_AS_FILENAME);
 
-		if (useAsFilename != null && useAsFilename) {
-			st.setAttribute("useasfilename", "true");
-		}
+        if (useAsFilename != null && useAsFilename) {
+            st.setAttribute("useasfilename", "true");
+        }
 
-		Blackboard bb = d3webSession.getBlackboard();
-		Value value = bb.getValue((ValueObject) to);
+        Blackboard bb = d3webSession.getBlackboard();
+        Value value = bb.getValue((ValueObject) to);
 
-		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
-			st.setAttribute("readonly", "true");
-		}
+        if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
+            st.setAttribute("readonly", "true");
+        }
 
-		String dropdownMenuOptions = to.getInfoStore().getValue(
-				ProKEtProperties.DROPDOWN_MENU_OPTIONS);
+        String dropdownMenuOptions = to.getInfoStore().getValue(
+                ProKEtProperties.DROPDOWN_MENU_OPTIONS);
 
-		if (dropdownMenuOptions != null) {
-			String dropdownDefault = to.getInfoStore().getValue(
-					ProKEtProperties.DROPDOWN_MENU_DEFAULT);
-			if (dropdownDefault == null) dropdownDefault = "Please select...";
-			String dropdownMenu = "<select  type='textselect'>"
-					+ createDropDownOptionsWithDefault(dropdownDefault, value.toString(),
-							dropdownMenuOptions.split(",")) + "<select/>";
-			st.setAttribute(
-					"dropdown_menu", dropdownMenu);
-		}
-		else {
-			// QContainer indicated
-			if ((bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
-					|| isIndicated(parent, bb))
-					&& ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
-						|| (!D3webUtils.isFollowUpToQCon(to, parent)))) {
-				st.removeAttribute("readonly");
-			}
-			else {
-				st.setAttribute("readonly", "true");
-				// also remove possible set values
-				st.removeAttribute("selection");
-				st.setAttribute("selection", "");
-			}
+        if (dropdownMenuOptions != null) {
+            //String dropdownDefault = to.getInfoStore().getValue(
+            //		ProKEtProperties.DROPDOWN_MENU_DEFAULT);
+            //if (dropdownDefault == null) dropdownDefault = "Please select...";
+            //String dropdownMenu = "<select  type='textselect'>"
+            //		+ createDropDownOptionsWithDefault(dropdownDefault, value.toString(),
+            //				dropdownMenuOptions.split(",")) + "<select/>";
+            String dropdownMenu = "<select  type='textselect'>"
+                    + createDropDownOptions(value.toString(),
+                    dropdownMenuOptions.split(",")) + "<select/>";
+            st.setAttribute(
+                    "dropdown_menu", dropdownMenu);
+        } else {
+            // QContainer indicated
+            if ((bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
+                    || isIndicated(parent, bb))
+                    && ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
+                    || (!D3webUtils.isFollowUpToQCon(to, parent)))) {
+                st.removeAttribute("readonly");
+            } else {
+                st.setAttribute("readonly", "true");
+                // also remove possible set values
+                st.removeAttribute("selection");
+                st.setAttribute("selection", "");
+            }
 
-			if (value != null && UndefinedValue.isNotUndefinedValue(value)
-					&& !value.equals(Unknown.getInstance())) {
-				st.setAttribute("selection", value);
-			}
-			else if (value.equals(Unknown.getInstance())
-					|| UndefinedValue.isUndefinedValue(value)) {
-				st.removeAttribute("selection"); // don't want to have
-													// "undefined"
-				st.setAttribute("selection", ""); // displayed in the input
-													// field
-			}
-		}
+            if (value != null && UndefinedValue.isNotUndefinedValue(value)
+                    && !value.equals(Unknown.getInstance())) {
+                st.setAttribute("selection", value);
+            } else if (value.equals(Unknown.getInstance())
+                    || UndefinedValue.isUndefinedValue(value)) {
+                st.removeAttribute("selection"); // don't want to have
+                // "undefined"
+                st.setAttribute("selection", ""); // displayed in the input
+                // field
+            }
+        }
 
-		// Description of the input to provide is read from the knowledge base
-		st.setAttribute("text", tq.getInfoStore().getValue(MMInfo.DESCRIPTION));
+        // Description of the input to provide is read from the knowledge base
+        st.setAttribute("text", tq.getInfoStore().getValue(MMInfo.DESCRIPTION));
 
-		sb.append(st.toString());
+        sb.append(st.toString());
 
-		super.makeTables(to, to, cc, sb);
+        super.makeTables(to, to, cc, sb);
 
-		return sb.toString();
-	}
-
-	
+        return sb.toString();
+    }
 }

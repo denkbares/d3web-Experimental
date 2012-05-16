@@ -20,6 +20,7 @@
 package de.d3web.proket.d3web.output.render;
 
 import de.d3web.core.inference.KnowledgeKind;
+import de.d3web.core.knowledge.Indication;
 import java.util.HashMap;
 
 import org.antlr.stringtemplate.StringTemplate;
@@ -32,9 +33,12 @@ import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.session.Session;
-import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
+import de.d3web.core.session.blackboard.Fact;
+import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.core.session.values.ChoiceValue;
+import de.d3web.core.session.values.Unknown;
+import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.jurisearch.JuriModel;
 import de.d3web.jurisearch.JuriRule;
 import de.d3web.proket.d3web.input.D3webConnector;
@@ -139,8 +143,17 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
     protected void renderChildren(StringTemplate st, Session d3webSession, ContainerCollection cc,
             TerminologyObject to, int loc, HttpSession httpSession) {
 
+        boolean debug = false;
+
+        if (httpSession.getAttribute("debug") != null) {
+            String deb = httpSession.getAttribute("debug").toString();
+            if (deb.equals("true")) {
+                debug = true;
+            }
+        }
+
+
         Session s = ((Session) httpSession.getAttribute("d3webSession"));
-        //System.out.println(s.getBlackboard().getAnsweredQuestions());
 
         StringBuilder childrenHTML = new StringBuilder();
         D3webConnector d3wcon = D3webConnector.getInstance();
@@ -174,22 +187,34 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         TerminologyObject[] children = to.getChildren();
         // Blackboard bb = d3webSession.getBlackboard();
         for (TerminologyObject child : children) {
-            // Boolean hide =
-            // child.getInfoStore().getValue(ProKEtProperties.HIDE);
-            // if (hide != null && hide == true) {
-            // continue;
-            // }
+
+
+            // in debug mode, set everything to instant indicated!
+            if (debug) {
+                Fact f = FactFactory.createIndicationFact(
+                        child,
+                        new Indication(Indication.State.INSTANT_INDICATED),
+                        PSMethodUserSelected.getInstance(),
+                        PSMethodUserSelected.getInstance());
+                d3webSession.getBlackboard().addInterviewFact(f);
+            }
+
 
             // get the matching renderer
             IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);
 
-            // TODO: this hinders showing only if Questionnaires!!!
-            // only show questions if they are NOT contraindicated
-            // they ARE contraindicated by the EuraHS- only if construct
-            if (D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
-                    && child instanceof Question
-                    && D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())) {
-                continue;
+            //System.out.println(to.getName() + " - " + D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
+            //System.out.println(child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
+            //System.out.println(child.getName() + " - " + D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()) + "\n");
+            if (!debug) {
+                // only show questions if they are NOT contraindicated
+                // they ARE contraindicated by the EuraHS- only if construct
+                if ((D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
+                        && child instanceof Question
+                        && D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()))
+                        ) {
+                    continue;
+                }
             }
 
             // receive the rendering code from the Renderer and append
@@ -397,21 +422,36 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             TerminologyObject parent, int loc, HttpSession httpSession) {
         StringBuilder fus = new StringBuilder();
 
+        boolean debug = false;
+
+        if (httpSession.getAttribute("debug") != null) {
+            String deb = httpSession.getAttribute("debug").toString();
+            if (deb.equals("true")) {
+                debug = true;
+            }
+        }
+
         // if child (question) has children and at least the 1st also a question
         if (child.getChildren() != null && child.getChildren().length != 0
                 && child.getChildren()[0] instanceof Question) {
 
 
-
             // get the (probably question) children of the child
             for (TerminologyObject childsChild : child.getChildren()) {
-//System.out.println("FOLLOW UP: " + childsChild.getName() + " " + ((Session) httpSession.getAttribute("d3webSession")).getBlackboard().getAnsweredQuestions());
 
-
-                if (D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
-                        && (D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())
-                        || !isIndicated(childsChild, d3webSession.getBlackboard()))) {
-                    continue;
+                //System.out.println(childsChild.getName() + " Indicated: " 
+                  //      + D3webUtils.isIndicated(childsChild, d3webSession.getBlackboard())
+                    //    + " C-Indicated: " + D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard()));
+                if (!debug) {
+                    if (
+                            (D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
+                            && (D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard()))
+                            || 
+                            (!isIndicated(childsChild, d3webSession.getBlackboard()))
+                            )
+                       ) {
+                        continue;
+                    }
                 }
 
                 // get appropriate renderer
@@ -624,8 +664,8 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             for (Object o : juriRules) {
                 JuriRule rule = (JuriRule) o;
                 if (rule.getChildren().containsKey(to)) {
-                    System.out.println(rule);
-                    System.out.println(rule.isDisjunctive());
+                    //System.out.println(rule);
+                    //F System.out.println(rule.isDisjunctive());
                     return rule.isDisjunctive();
                 }
             }

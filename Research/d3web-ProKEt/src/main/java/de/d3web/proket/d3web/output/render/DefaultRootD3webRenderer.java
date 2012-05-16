@@ -120,6 +120,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
                 D3webUserSettings us = 
                         (D3webUserSettings)http.getAttribute("userSettings");
                         
+                setDialogSpecificAttributes(http, st);
                 
 		// render the children
 		renderChildren(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet(), 
@@ -132,7 +133,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		st.setAttribute("fulljs", cc.js.generateOutput());
 		st.setDefaultArgumentValues();
 
-		setDialogSpecificAttributes(http, st);
+		
 
 		cc.html.add(st.toString());
 		return cc;

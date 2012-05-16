@@ -30,7 +30,7 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 /* GENERAL STRUCTURING */
 #head{ font-size: 1.5em; font-variant: small-caps; font-weight: bold; text-align: center; background: #efefef;
 	background-image: none; padding: 12px 5px 12px 5px; margin-left: auto; margin-right: auto; position: fixed; width: 100%;
-	-moz-box-shadow: 0 0 5px black; -webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; float: none; } 
+	-moz-box-shadow: 0 0 5px black; -webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; float: none;} 
 
 #head td{ font-size: 1.5em; font-variant: small-caps; text-align: center; font-weight: bold; }
 

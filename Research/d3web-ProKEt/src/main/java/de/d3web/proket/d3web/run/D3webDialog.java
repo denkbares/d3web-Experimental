@@ -272,6 +272,9 @@ public class D3webDialog extends HttpServlet {
         }
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
+        
+        // TEST:
+        //httpSession.setAttribute("debug", "true");
 
 
         if (action == null) {
@@ -1202,7 +1205,7 @@ public class D3webDialog extends HttpServlet {
         ContainerCollection cc = new ContainerCollection();
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
-
+        
         cc = d3webr.renderRoot(cc, d3webSess, httpSession);
         writer.print(cc.html.toString()); // deliver the rendered output
         writer.close(); // and close
@@ -1461,6 +1464,15 @@ public class D3webDialog extends HttpServlet {
                 SummaryD3webRenderer.SummaryType.QUESTIONNAIRE, httpSession));
         writer.append("<div>");
 
+        String questionnaireLevel1ContendID = "level1SummaryContent";
+        writer.append(REPLACEID + questionnaireLevel1ContendID);
+        writer.append(REPLACECONTENT);
+        writer.append("<div id='" + questionnaireLevel1ContendID + "'>");
+        writer.append(rootRenderer.renderSummaryDialog(
+                (Session) httpSession.getAttribute(D3WEB_SESSION),
+                SummaryD3webRenderer.SummaryType.QUESTIONNAIRE_LEVEL1, httpSession));
+        writer.append("<div>");
+        
         String gridContentID = "gridSummaryContent";
 
         writer.append(REPLACEID + gridContentID);

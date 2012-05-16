@@ -117,7 +117,7 @@ public class EuraHSDialog extends D3webDialog {
         EuraHSDefaultRootD3webRenderer d3webr = (EuraHSDefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
 
 
-        cc = d3webr.renderRoot(cc, sNew, httpSession);
+        cc = d3webr.renderRoot(cc, d3webSess, httpSession);
 
         writer.print(cc.html.toString()); // deliver the rendered output
 
@@ -243,14 +243,12 @@ public class EuraHSDialog extends D3webDialog {
 
         for (String iddq : INITDROPQS) {
 
-            System.out.println(iddq);
             Fact f = d3webSess.getBlackboard().getValueFact(
                     d3webSess.getKnowledgeBase().getManager().searchQuestion(iddq));
-            System.out.println(f);
             if (f == null) {
                 D3webUtils.setValue(iddq, "Please select...", d3webSess);
             }
-            System.out.println(d3webSess.getBlackboard().getAnsweredQuestions());
+            
         }
 
         return d3webSess;

@@ -15,7 +15,6 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionDate;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
@@ -27,6 +26,7 @@ import de.d3web.core.session.values.*;
 import de.d3web.core.utilities.Pair;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUtils;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.http.HttpSession;
 
@@ -35,6 +35,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
     public enum SummaryType {
 
         QUESTIONNAIRE,
+        QUESTIONNAIRE_LEVEL1,
         GRID
     }
 
@@ -44,8 +45,13 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
 
         if (type == SummaryType.GRID) {
             fillGridSummary(d3webSession, bui);
+        } else if (type == SummaryType.QUESTIONNAIRE_LEVEL1) {
+            TerminologyObject root = d3webSession.getKnowledgeBase().getRootQASet();
+
+            fillQuestionnaireSummaryLevel1(d3webSession, bui, http, root);
         } else if (type == SummaryType.QUESTIONNAIRE) {
             TerminologyObject root = d3webSession.getKnowledgeBase().getRootQASet();
+
             fillQuestionnaireSummaryChildren(d3webSession, bui, root, http);
         }
 
@@ -77,7 +83,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
             if (result.isEmpty()) {
                 continue;
             }
-            
+
 
             boolean nothingAnswered = enrichGrid(d3webSession, content, result);
             if (nothingAnswered) {
@@ -98,7 +104,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
             if (checkPara) {
                 bui.append("There is no grid summary available for parastomal hernias. <br />Please see complete summary.");
             } else {
-                bui.append("No data available yet.");
+                bui.append("<b>No data available yet.</b>");
             }
         } else {
 
@@ -124,10 +130,10 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
 
     /**
      * Helper method for creating a div displayed topmost in the summary that
-     * contains the defined question.
-     * If an optional Question name is provided, this is used to display the
-     * question, otherwise the Question.getName() is used there.
-     * 
+     * contains the defined question. If an optional Question name is provided,
+     * this is used to display the question, otherwise the Question.getName() is
+     * used there.
+     *
      * @param question question
      * @param optQuestionName optional question name
      * @param s D3webSession
@@ -171,11 +177,11 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
 
     /**
      * Fill the grid structure with content.
-     * 
+     *
      * @param d3webSession
      * @param content the grid base structure
-     * @param result 
-     * @return 
+     * @param result
+     * @return
      */
     private boolean enrichGrid(Session d3webSession,
             StringBuilder content,
@@ -183,8 +189,8 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
 
         boolean nothingAnswered = true;
         for (Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>> parsePair : result) {
-            
-            
+
+
             int matchStart = parsePair.getA().getA();
             int matchEnd = parsePair.getA().getB();
 
@@ -220,14 +226,14 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
         }
 
         String questionName = questionAnswerPair.getA();
-       
+
 
         Value value = getValue(d3webSession, questionName);
 
         if (value == null || UndefinedValue.isUndefinedValue(value)) {
             return false;
         }
-       
+
 
         Object answerTypeObject = questionAnswerPair.getB();
 
@@ -361,9 +367,70 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
         return sb;
     }
 
+    private void fillQuestionnaireSummaryLevel1(Session d3webSession, StringBuilder bui, HttpSession httpSession, TerminologyObject to) {
+
+        ArrayList<TerminologyObject> level1qs =
+                (ArrayList<TerminologyObject>) httpSession.getAttribute("level1qs");
+        System.out.println(level1qs);
+
+        if (to instanceof QContainer && !to.getName().contains("Q000")) {
+            System.out.println(to);
+            if (level1qs.contains(to)) {
+                
+                if (D3webUtils.hasAnsweredChildren(to, d3webSession)) {
+                    bui.append("<div style='margin-top:10px;'><b>");
+                    bui.append(D3webConnector.getInstance().getID(to));
+                    bui.append(" ");
+                    bui.append(to.getName());
+                    bui.append("</b></div>\n");
+                }
+            }
+        } else if (to instanceof Question) {
+            if (level1qs.contains(to)) {
+
+                Value val = d3webSession.getBlackboard().getValue((ValueObject) to);
+                if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
+
+                    // handle date quesstions separately for formatting date representation
+                    if (to instanceof QuestionDate) {
+
+                        // Format the date appropriately
+                        String f = D3webUtils.getFormattedDateFromString((Date) val.getValue(), "dd.MM.yyyy");
+
+                        bui.append("<div style='margin-left:10px;'>"
+                                + D3webConnector.getInstance().getID(to) + " " + to.getName()
+                                + " -- " + f + "</div>\n");
+                    } // handle abstraction questions separately, e.g. for rounding age quesstion
+                    else if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)
+                            && to instanceof QuestionNum) {
+
+                        int doubleAsInt = (int) Double.parseDouble(val.toString());
+                        bui.append("<div style='margin-left:10px;'>"
+                                + D3webConnector.getInstance().getID(to) + " " + to.getName()
+                                + " -- " + doubleAsInt + "</div>\n");
+
+                    } // all other questions: just append question and val
+                    else {
+                        bui.append("<div style='margin-left:10px;'>"
+                                + D3webConnector.getInstance().getID(to) + " " + to.getName()
+                                + " -- " + val + "</div>\n");
+
+                    }
+                }
+            }
+        }
+
+        if (to.getChildren() != null && to.getChildren().length != 0) {
+            for (TerminologyObject toc : to.getChildren()) {
+                fillQuestionnaireSummaryLevel1(d3webSession, bui, httpSession, toc);
+            }
+        }
+    }
+
     private void fillQuestionnaireSummaryChildren(Session d3webSession, StringBuilder bui, TerminologyObject to, HttpSession httpSession) {
 
         if (to instanceof QContainer && !to.getName().contains("Q000")) {
+
             if (D3webUtils.hasAnsweredChildren(to, d3webSession)) {
                 bui.append("<div style='margin-top:10px;'><b>");
                 bui.append(D3webConnector.getInstance().getID(to));
@@ -388,8 +455,6 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                 else if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)
                         && to instanceof QuestionNum) {
 
-                    //System.out.println("NUM VAL: " + val);
-                    //System.out.println("As int: " + (int)Double.parseDouble(val.toString()));
                     int doubleAsInt = (int) Double.parseDouble(val.toString());
                     bui.append("<div style='margin-left:10px;'>"
                             + D3webConnector.getInstance().getID(to) + " " + to.getName()
