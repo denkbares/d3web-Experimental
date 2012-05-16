@@ -49,7 +49,7 @@ public class ComplexIRIDefinitionMarkup extends AbstractKnowledgeUnitType<Comple
 	private static final String REGEX_DEF = "^def\\s+";
 
 	public ComplexIRIDefinitionMarkup() {
-		super(new ComplexIRIDefinitionCompileScript());
+		this.setCompileScript(new ComplexIRIDefinitionCompileScript());
 
 		this.sectionFinder = new RegexSectionFinder(REGEX_DEF + REGEX, Pattern.MULTILINE);
 

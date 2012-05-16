@@ -40,7 +40,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class TripleMarkupSimple extends AbstractKnowledgeUnitType<TripleMarkupSimple> {
 
 	public TripleMarkupSimple() {
-		super(new TripleMarkupSimpleCompileScript());
+		this.setCompileScript(new TripleMarkupSimpleCompileScript());
 
 		this.setSectionFinder(new RegexSectionFinder("\\{(.*?::.*?)\\}",
 				Pattern.DOTALL, 1));
