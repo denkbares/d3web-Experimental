@@ -17,7 +17,6 @@ import utils.TestArticleManager;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.compile.ReferenceManager;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
@@ -36,7 +35,6 @@ public class ComplexDefinitionRefactoringTest {
 	private final Environment environment = Environment.getInstance();
 	private final ArticleManager articleManager = environment.getArticleManager(Environment.DEFAULT_WEB);
 
-	private final ReferenceManager manager = IncrementalCompiler.getInstance().getTerminology();
 	private final Rdf2GoCore core = Rdf2GoCore.getInstance();
 
 	private static final String TESTFILE = "src/test/resources/"

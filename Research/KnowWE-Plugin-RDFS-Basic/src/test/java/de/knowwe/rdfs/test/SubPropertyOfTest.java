@@ -22,17 +22,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.compile.ReferenceManager;
-import de.knowwe.core.ArticleManager;
-import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -40,14 +35,13 @@ import de.knowwe.rdfs.test.util.Query;
 import de.knowwe.rdfs.test.util.Vocabulary;
 
 /**
- * Tests rdfs:subPropertyOf with reasoning 
+ * Tests rdfs:subPropertyOf with reasoning
  * 
  * @see Query, Vocabulary
  * @author Jochen Reutelshoefer
  * @created Sept 21, 2011
  */
 public class SubPropertyOfTest {
-
 
 	private final Rdf2GoCore core = Rdf2GoCore.getInstance();
 
@@ -62,22 +56,25 @@ public class SubPropertyOfTest {
 
 	@Test
 	public void testComplexIRIDefinitionMarkup() {
-		
-		// asserted
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.ISFRIENDOF, Vocabulary.RDFS_SUBPROPERTYOF,Vocabulary.KNOWS )));
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.BOB, Vocabulary.ISFRIENDOF,Vocabulary.JIM )));
-		
-		// subproperty inheritance
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.BOB, Vocabulary.KNOWS,Vocabulary.JIM )));
-		
-		// reflexivity
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.ISFRIENDOF, Vocabulary.RDFS_SUBPROPERTYOF,Vocabulary.ISFRIENDOF )));
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.KNOWS, Vocabulary.RDFS_SUBPROPERTYOF,Vocabulary.KNOWS )));
 
-		
+		// asserted
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.ISFRIENDOF,
+				Vocabulary.RDFS_SUBPROPERTYOF, Vocabulary.KNOWS)));
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.BOB, Vocabulary.ISFRIENDOF,
+				Vocabulary.JIM)));
+
+		// subproperty inheritance
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.BOB, Vocabulary.KNOWS,
+				Vocabulary.JIM)));
+
+		// reflexivity
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.ISFRIENDOF,
+				Vocabulary.RDFS_SUBPROPERTYOF, Vocabulary.ISFRIENDOF)));
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.KNOWS,
+				Vocabulary.RDFS_SUBPROPERTYOF, Vocabulary.KNOWS)));
+
 	}
 
-	
 	@AfterClass
 	public static void tearDown() {
 		// Remove the statements created in the test to avoid problems

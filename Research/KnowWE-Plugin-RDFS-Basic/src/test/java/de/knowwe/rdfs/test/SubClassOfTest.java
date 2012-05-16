@@ -22,17 +22,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.compile.ReferenceManager;
-import de.knowwe.core.ArticleManager;
-import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -40,14 +35,13 @@ import de.knowwe.rdfs.test.util.Query;
 import de.knowwe.rdfs.test.util.Vocabulary;
 
 /**
- * Tests rdfs:subClassOf with reasoning 
+ * Tests rdfs:subClassOf with reasoning
  * 
  * @see Query, Vocabulary
  * @author Jochen Reutelshoefer
  * @created Sept 21, 2011
  */
 public class SubClassOfTest {
-
 
 	private final Rdf2GoCore core = Rdf2GoCore.getInstance();
 
@@ -62,23 +56,27 @@ public class SubClassOfTest {
 
 	@Test
 	public void testComplexIRIDefinitionMarkup() {
-		
-		// asserted
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.MAMMAL, Vocabulary.RDFS_SUBCLASSOF,Vocabulary.ANIMAL )));
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.PERSON, Vocabulary.RDFS_SUBCLASSOF,Vocabulary.MAMMAL )));
-		
-		// transitivity
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.PERSON, Vocabulary.RDFS_SUBCLASSOF,Vocabulary.ANIMAL )));
-		
-		// reflexivity
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.ANIMAL, Vocabulary.RDFS_SUBCLASSOF,Vocabulary.ANIMAL )));
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.PERSON, Vocabulary.RDFS_SUBCLASSOF,Vocabulary.PERSON )));
-		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.MAMMAL, Vocabulary.RDFS_SUBCLASSOF,Vocabulary.MAMMAL )));
 
-		
+		// asserted
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.MAMMAL, Vocabulary.RDFS_SUBCLASSOF,
+				Vocabulary.ANIMAL)));
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.PERSON, Vocabulary.RDFS_SUBCLASSOF,
+				Vocabulary.MAMMAL)));
+
+		// transitivity
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.PERSON, Vocabulary.RDFS_SUBCLASSOF,
+				Vocabulary.ANIMAL)));
+
+		// reflexivity
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.ANIMAL, Vocabulary.RDFS_SUBCLASSOF,
+				Vocabulary.ANIMAL)));
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.PERSON, Vocabulary.RDFS_SUBCLASSOF,
+				Vocabulary.PERSON)));
+		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.MAMMAL, Vocabulary.RDFS_SUBCLASSOF,
+				Vocabulary.MAMMAL)));
+
 	}
 
-	
 	@AfterClass
 	public static void tearDown() {
 		// Remove the statements created in the test to avoid problems
