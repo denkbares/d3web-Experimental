@@ -20,10 +20,7 @@
 
 package de.knowwe.rdf2go.utils;
 
-import java.util.ArrayList;
-
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
-import org.ontoware.rdf2go.model.Statement;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
@@ -44,8 +41,6 @@ public class SparqlRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user, StringBuilder result) {
-
-		ArrayList<Statement> l = new ArrayList<Statement>();
 
 		String sparqlString = "";
 		String section = sec.getText();

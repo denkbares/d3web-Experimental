@@ -27,7 +27,7 @@ public class RDF2GoStatementCacheViewer extends AbstractHTMLTagHandler {
 			buffy.append("\"" + string + "\":");
 			buffy.append("<br>");
 			WeakHashMap<Section<? extends Type>, List<Statement>> weakHashMap = statementCache.get(string);
-			for (Section sec : weakHashMap.keySet()) {
+			for (Section<?> sec : weakHashMap.keySet()) {
 				buffy.append(sec.getID());
 				buffy.append(":");
 				for (Statement statement : weakHashMap.get(sec)) {
