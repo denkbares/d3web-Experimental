@@ -26,9 +26,8 @@ import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Node;
 
+import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.ComplexDefinition;
-import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.basicType.EndLineComment;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
@@ -44,13 +43,14 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
-public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexDefinition, KnowledgeUnit {
+public class ComplexIRIDefinitionMarkup extends AbstractKnowledgeUnitType<ComplexIRIDefinitionMarkup> implements ComplexDefinition {
 
 	private static final String REGEX = "(.+)\\s(\\w+)::\\s(.+)$";
 
 	private static final String REGEX_DEF = "^def\\s+";
 
 	public ComplexIRIDefinitionMarkup() {
+		this.setCompileScript(new ComplexIRIDefinitionCompileScript());
 		this.sectionFinder = new RegexSectionFinder(REGEX_DEF + REGEX, Pattern.MULTILINE);
 
 		this.addChildType(new EndLineComment());
@@ -118,57 +118,52 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 		}
 	}
 
-	class ComplexIRIDefinitionCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<ComplexIRIDefinitionMarkup> {
+}
 
-		@Override
-		public void insertIntoRepository(Section<ComplexIRIDefinitionMarkup> section) {
-			List<Section<SimpleReference>> found = new ArrayList<Section<SimpleReference>>();
-			Node subURI = null;
-			Node predURI = null;
-			Node objURI = null;
-
-			Sections.findSuccessorsOfType(section, SimpleReference.class, found);
-			Section<SimpleDefinition> subject = Sections.findSuccessor(section,
-					SimpleDefinition.class);
-
-			if (found.size() == 2) {
-
-				Section<SimpleReference> predicate = found.get(0);
-				Section<SimpleReference> object = found.get(1);
-
-				subURI = RDFSUtil.getURI(subject);
-				predURI = RDFSUtil.getURI(predicate);
-				objURI = RDFSUtil.getURI(object);
-			}
-			else {
-				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-				// "invalid term combination:" + found.size()));
-			}
-			if (subURI == null) {
-				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-				// "subject URI not found"));
-			}
-			if (predURI == null) {
-				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-				// "predicate URI not found"));
-			}
-			if (objURI == null) {
-				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-				// "object URI not found"));
-			}
-
-			Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
-					predURI.asURI(), objURI, section);
-
-			// return new ArrayList<KDOMReportMessage>(0);
-
-		}
-
-	}
+class ComplexIRIDefinitionCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<ComplexIRIDefinitionMarkup> {
 
 	@Override
-	public KnowledgeUnitCompileScript<ComplexIRIDefinitionMarkup> getCompileScript() {
-		return new ComplexIRIDefinitionCompileScript();
+	public void insertIntoRepository(Section<ComplexIRIDefinitionMarkup> section) {
+		List<Section<SimpleReference>> found = new ArrayList<Section<SimpleReference>>();
+		Node subURI = null;
+		Node predURI = null;
+		Node objURI = null;
+
+		Sections.findSuccessorsOfType(section, SimpleReference.class, found);
+		Section<SimpleDefinition> subject = Sections.findSuccessor(section,
+				SimpleDefinition.class);
+
+		if (found.size() == 2) {
+
+			Section<SimpleReference> predicate = found.get(0);
+			Section<SimpleReference> object = found.get(1);
+
+			subURI = RDFSUtil.getURI(subject);
+			predURI = RDFSUtil.getURI(predicate);
+			objURI = RDFSUtil.getURI(object);
+		}
+		else {
+			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+			// "invalid term combination:" + found.size()));
+		}
+		if (subURI == null) {
+			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+			// "subject URI not found"));
+		}
+		if (predURI == null) {
+			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+			// "predicate URI not found"));
+		}
+		if (objURI == null) {
+			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+			// "object URI not found"));
+		}
+
+		Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
+				predURI.asURI(), objURI, section);
+
+		// return new ArrayList<KDOMReportMessage>(0);
+
 	}
 
 }

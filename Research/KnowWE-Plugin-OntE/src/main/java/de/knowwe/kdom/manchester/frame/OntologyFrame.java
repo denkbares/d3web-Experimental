@@ -18,7 +18,7 @@ import de.knowwe.kdom.sectionfinder.IRISectionFinder;
  * @author Stefan Mark
  * @created 04.10.2011
  */
-public class OntologyFrame extends DefaultFrame {
+public class OntologyFrame extends DefaultFrame<OntologyFrame> {
 
 	public static final String KEYWORD = "OntologyDocument[:]?";
 	public static final String IRI_PATTERN = "";

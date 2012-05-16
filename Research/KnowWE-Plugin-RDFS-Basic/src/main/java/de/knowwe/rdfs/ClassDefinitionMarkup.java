@@ -27,11 +27,9 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
-import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
+import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.compile.support.Editable;
-import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.basicType.EndLineComment;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
@@ -41,11 +39,12 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
-public class ClassDefinitionMarkup extends AbstractType implements Editable, KnowledgeUnit {
+public class ClassDefinitionMarkup extends AbstractKnowledgeUnitType<ClassDefinitionMarkup> implements Editable {
 
 	private static final String CLASS_REGEX = "^Class:?\\s+(.*?)(\\(.*?\\))?$";
 
 	public ClassDefinitionMarkup() {
+		this.setCompileScript(new DefineClassCompileScript());
 		this.setSectionFinder(new RegexSectionFinder(CLASS_REGEX,
 				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE, 0));
 
@@ -71,11 +70,6 @@ public class ClassDefinitionMarkup extends AbstractType implements Editable, Kno
 			return map;
 		}
 
-	}
-
-	@Override
-	public KnowledgeUnitCompileScript<ClassDefinitionMarkup> getCompileScript() {
-		return new DefineClassCompileScript();
 	}
 
 	class DefineClassCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<ClassDefinitionMarkup> {

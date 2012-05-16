@@ -9,11 +9,10 @@ import java.util.regex.Pattern;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
+import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
 import de.knowwe.compile.object.IncrementalTermDefinition;
-import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.core.kdom.AbstractType;
@@ -33,7 +32,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
-public class ObjectPropertyDefinitionMarkup extends AbstractType implements ComplexDefinitionWithTypeConstraints, KnowledgeUnit {
+public class ObjectPropertyDefinitionMarkup extends AbstractKnowledgeUnitType<ObjectPropertyDefinitionMarkup> implements ComplexDefinitionWithTypeConstraints {
 
 	public static final String RDFS_DOMAIN_KEY = "rdfs:domain";
 	public static final String RDFS_RANGE_KEY = "rdfs:range";
@@ -41,6 +40,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 	private static final String OBJECT_PROPERTY_REGEX = "^ObjectProperty\\s+(.*?)(\\(.*?\\))?$";
 
 	public ObjectPropertyDefinitionMarkup() {
+		this.setCompileScript(new DomainRangeCompileScript());
 		this.setSectionFinder(new RegexSectionFinder(OBJECT_PROPERTY_REGEX,
 				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE,
 				0));
@@ -82,7 +82,8 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 
 		@Override
 		public boolean checkTypeConstraints(Section<? extends SimpleTerm> s) {
-			return RDFSUtil.isTermCategory(s, RDFSTermCategory.Class);
+			boolean termCategory = RDFSUtil.isTermCategory(s, RDFSTermCategory.Class);
+			return termCategory;
 		}
 
 		@Override
@@ -136,41 +137,36 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 		return "Object of type 'Class' expected";
 	}
 
+}
+
+class DomainRangeCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<ObjectPropertyDefinitionMarkup> {
+
 	@Override
-	public KnowledgeUnitCompileScript getCompileScript() {
-		return new DomainRangeCompileScript();
-	}
+	public void insertIntoRepository(Section<ObjectPropertyDefinitionMarkup> section) {
+		List<Section<IRITermRef>> refs = Sections.findSuccessorsOfType(section,
+				IRITermRef.class);
+		if (refs.size() == 2) {
+			Section<IncrementalTermDefinition> propDef = Sections.findSuccessor(
+					section, IncrementalTermDefinition.class);
+			URI propURI = RDFSUtil.getURI(propDef);
 
-	class DomainRangeCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<ObjectPropertyDefinitionMarkup> {
+			// prop domain:: arg0
+			URI objectURI = RDFSUtil.getURI(refs.get(0));
+			Rdf2GoCore.getInstance().addStatement(
+					propURI,
+					RDFS.domain,
+					objectURI, section);
 
-		@Override
-		public void insertIntoRepository(Section<ObjectPropertyDefinitionMarkup> section) {
-			List<Section<IRITermRef>> refs = Sections.findSuccessorsOfType(section,
-					IRITermRef.class);
-			if (refs.size() == 2) {
-				Section<IncrementalTermDefinition> propDef = Sections.findSuccessor(
-						section, IncrementalTermDefinition.class);
-				URI propURI = RDFSUtil.getURI(propDef);
-
-				// prop domain:: arg0
-				URI objectURI = RDFSUtil.getURI(refs.get(0));
-				Rdf2GoCore.getInstance().addStatement(
-						propURI,
-						RDFS.domain,
-						objectURI, section);
-
-				// prop range:: arg1
-				Rdf2GoCore.getInstance().addStatement(
-						propURI,
-						RDFS.range,
-						RDFSUtil.getURI(refs.get(1)), section);
-
-			}
-			else {
-				// shit, what to do?
-			}
+			// prop range:: arg1
+			Rdf2GoCore.getInstance().addStatement(
+					propURI,
+					RDFS.range,
+					RDFSUtil.getURI(refs.get(1)), section);
 
 		}
-	}
+		else {
+			// shit, what to do?
+		}
 
+	}
 }

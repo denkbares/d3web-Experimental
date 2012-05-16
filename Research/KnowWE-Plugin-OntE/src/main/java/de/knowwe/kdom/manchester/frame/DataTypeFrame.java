@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -48,7 +47,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * @author Stefan Mark
  * @created 24.05.2011
  */
-public class DataTypeFrame extends DefaultFrame implements KnowledgeUnit {
+public class DataTypeFrame extends DefaultFrame<DataTypeFrame> implements KnowledgeUnit {
 
 	public static final String KEYWORD;
 	public static final String KEYWORDS;
@@ -66,7 +65,7 @@ public class DataTypeFrame extends DefaultFrame implements KnowledgeUnit {
 	public DataTypeFrame() {
 
 		super(ManchesterSyntaxKeywords.DATATYPE.getKeyword());
-
+		this.setCompileScript(new DatatypeCompileScript());
 		List<Type> types = new ArrayList<Type>();
 
 		types.add(new DatatypeDefinition());
@@ -88,7 +87,7 @@ public class DataTypeFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
 	 */
-	public boolean hasDefinition(Section<? extends DefaultFrame> section) {
+	public boolean hasDefinition(Section<? extends DefaultFrame<?>> section) {
 		return Sections.findSuccessor(section, Datatype.class) != null;
 	}
 
@@ -100,7 +99,7 @@ public class DataTypeFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
 	 */
-	public Section<? extends Type> getDefinition(Section<? extends DefaultFrame> section) {
+	public Section<? extends Type> getDefinition(Section<? extends DefaultFrame<?>> section) {
 		return Sections.findSuccessor(section, Datatype.class);
 	}
 
@@ -111,7 +110,7 @@ public class DataTypeFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
 	 */
-	public boolean hasEquivalentTo(Section<? extends DefaultFrame> section) {
+	public boolean hasEquivalentTo(Section<? extends DefaultFrame<?>> section) {
 		return Sections.findSuccessor(section, EquivalentTo.class) != null;
 	}
 
@@ -122,14 +121,10 @@ public class DataTypeFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
 	 */
-	public Section<? extends Type> getEquivalentTo(Section<? extends DefaultFrame> section) {
+	public Section<? extends Type> getEquivalentTo(Section<? extends DefaultFrame<?>> section) {
 		return Sections.findSuccessor(section, EquivalentTo.class);
 	}
 
-	@Override
-	public KnowledgeUnitCompileScript<DataTypeFrame> getCompileScript() {
-		return new DatatypeCompileScript();
-	}
 }
 
 /**

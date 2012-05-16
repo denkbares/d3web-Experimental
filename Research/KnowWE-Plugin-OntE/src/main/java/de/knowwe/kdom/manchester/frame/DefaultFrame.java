@@ -22,7 +22,7 @@ package de.knowwe.kdom.manchester.frame;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxFrameRenderer;
@@ -40,7 +40,7 @@ import de.knowwe.kdom.manchester.types.MisspelledSyntaxConstruct;
  * @author Stefan Mark
  * @created 23.09.2011
  */
-public class DefaultFrame extends AbstractType {
+public class DefaultFrame<T extends Type> extends AbstractKnowledgeUnitType<T> {
 
 	/**
 	 * Constructor for the {@link DefaultFrame}.

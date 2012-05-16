@@ -52,6 +52,7 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 		super(NAME);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
 

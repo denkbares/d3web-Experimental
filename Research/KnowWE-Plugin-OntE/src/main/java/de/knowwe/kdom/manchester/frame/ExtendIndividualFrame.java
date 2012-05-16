@@ -5,7 +5,6 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.rdfs.IRITermRef;
 
-
 public class ExtendIndividualFrame extends IndividualFrame {
 
 	public static final String KEYWORD = "ExtendIndividual:";
@@ -24,26 +23,26 @@ public class ExtendIndividualFrame extends IndividualFrame {
 	/**
 	 * Returns the {@link OWLClass} section containing the name of the to define
 	 * OWLClass.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
 	 */
 	@Override
-	public boolean hasIndividualDefinition(Section<? extends DefaultFrame> section) {
+	public boolean hasIndividualDefinition(Section<? extends DefaultFrame<?>> section) {
 		return Sections.findSuccessor(section, EntityReference.class) != null;
 	}
 
 	/**
 	 * Returns the {@link OWLClass} section containing the name of the to define
 	 * OWLClass.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
 	 */
 	@Override
-	public Section<? extends Type> getIndividualDefinition(Section<? extends DefaultFrame> section) {
+	public Section<? extends Type> getIndividualDefinition(Section<? extends DefaultFrame<?>> section) {
 		return Sections.findSuccessor(section, IRITermRef.class);
 	}
 }

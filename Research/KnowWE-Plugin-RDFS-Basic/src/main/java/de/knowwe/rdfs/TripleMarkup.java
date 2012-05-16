@@ -31,8 +31,8 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
 import de.knowwe.compile.IncrementalCompiler;
+import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.AbstractType;
@@ -56,13 +56,13 @@ import de.knowwe.rdfs.literal.TurtleObjectLiteralText;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
-public class TripleMarkup extends AbstractType implements
+public class TripleMarkup extends AbstractKnowledgeUnitType<TripleMarkup> implements
 		KnowledgeUnit {
 
 	static final String TRIPLE_REGEX = "^>(.*?::.*?)$";
 
 	public TripleMarkup() {
-
+		this.setCompileScript(new TripleCompileScript());
 		this.setSectionFinder(new RegexSectionFinder(TRIPLE_REGEX,
 				Pattern.DOTALL | Pattern.MULTILINE, 0));
 
@@ -311,8 +311,4 @@ public class TripleMarkup extends AbstractType implements
 
 	}
 
-	@Override
-	public KnowledgeUnitCompileScript getCompileScript() {
-		return new TripleCompileScript();
-	}
 }

@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -56,7 +55,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * @author Stefan Mark
  * @created 24.05.2011
  */
-public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit {
+public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> implements KnowledgeUnit {
 
 	public static final String KEYWORD;
 	public static final String KEYWORDS;
@@ -85,7 +84,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit {
 	public ObjectPropertyFrame() {
 
 		super(ManchesterSyntaxKeywords.OBJECT_PROPERTY.getKeyword());
-
+		this.setCompileScript(new ObjectPropertyCompileScript());
 		List<Type> types = new ArrayList<Type>();
 
 		types.add(ObjectPropertyDefinition.getInstance());
@@ -144,7 +143,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
 	 */
-	public boolean hasObjectPropertyDefinition(Section<? extends DefaultFrame> section) {
+	public boolean hasObjectPropertyDefinition(Section<? extends DefaultFrame<?>> section) {
 		return Sections.findSuccessor(section, ObjectProperty.class) != null;
 	}
 
@@ -156,7 +155,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
 	 */
-	public Section<? extends Type> getObjectPropertyDefinition(Section<? extends DefaultFrame> section) {
+	public Section<? extends Type> getObjectPropertyDefinition(Section<? extends DefaultFrame<?>> section) {
 		return Sections.findSuccessor(section, ObjectProperty.class);
 	}
 
@@ -326,10 +325,6 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit {
 		return Sections.findSuccessor(section, SubPropertyChain.class);
 	}
 
-	@Override
-	public KnowledgeUnitCompileScript<ObjectPropertyFrame> getCompileScript() {
-		return new ObjectPropertyCompileScript();
-	}
 }
 
 /**

@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -54,7 +53,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * @created 06.09.2011
  */
 
-public class DataPropertyFrame extends DefaultFrame implements KnowledgeUnit {
+public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implements KnowledgeUnit {
 
 	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.DATA_PROPERTY);
 
@@ -71,7 +70,7 @@ public class DataPropertyFrame extends DefaultFrame implements KnowledgeUnit {
 	public DataPropertyFrame() {
 
 		super(ManchesterSyntaxKeywords.DATA_PROPERTY.getKeyword());
-
+		this.setCompileScript(new DataPropertyCompileScript());
 		List<Type> types = new ArrayList<Type>();
 
 		types.add(DataPropertyDefinition.getInstance());
@@ -261,10 +260,6 @@ public class DataPropertyFrame extends DefaultFrame implements KnowledgeUnit {
 		return Sections.findSuccessor(section, Characteristics.class);
 	}
 
-	@Override
-	public KnowledgeUnitCompileScript<DataPropertyFrame> getCompileScript() {
-		return new DataPropertyCompileScript();
-	}
 }
 
 /**

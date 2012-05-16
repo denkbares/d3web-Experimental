@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -57,7 +56,7 @@ import de.knowwe.kdom.manchester.types.ObjectPropertyExpression;
  * @author Stefan Mark
  * @created 22.09.2011
  */
-public class MiscFrame extends DefaultFrame implements KnowledgeUnit {
+public class MiscFrame extends DefaultFrame<MiscFrame> implements KnowledgeUnit {
 
 	public static final String KEYWORD_SAME_INDIVIDUAL = "SameIndividual[:]?";
 	public static final String KEYWORD_DIFFERENT_INDIVIDUAL = "DifferentIndividuals[:]?";
@@ -84,7 +83,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit {
 	public MiscFrame() {
 
 		super(FRAME_KEYWORDS);
-
+		this.setCompileScript(new MiscFrameCompileScript());
 		List<Type> types = new ArrayList<Type>();
 
 		types.add(new Keyword(FRAME_KEYWORDS));
@@ -108,7 +107,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if EquivalentClasses, FALSE otherwise
 	 */
-	public boolean isEquivalentClasses(Section<? extends DefaultFrame> section) {
+	public boolean isEquivalentClasses(Section<? extends DefaultFrame<?>> section) {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
@@ -126,7 +125,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if DisjointClasses, FALSE otherwise
 	 */
-	public boolean isDisjointClasses(Section<? extends DefaultFrame> section) {
+	public boolean isDisjointClasses(Section<? extends DefaultFrame<?>> section) {
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
 			if (keyword.getText().matches(KEYWORD_DISJOINT_CLASSES)) {
@@ -143,7 +142,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if SameIndividual, FALSE otherwise
 	 */
-	public boolean isSameIndividuals(Section<? extends DefaultFrame> section) {
+	public boolean isSameIndividuals(Section<? extends DefaultFrame<?>> section) {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
@@ -162,7 +161,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if DifferentIndividuals, FALSE otherwise
 	 */
-	public boolean isDifferentIndividuals(Section<? extends DefaultFrame> section) {
+	public boolean isDifferentIndividuals(Section<? extends DefaultFrame<?>> section) {
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
 			if (keyword.getText().matches(KEYWORD_DIFFERENT_INDIVIDUAL)) {
@@ -180,7 +179,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if EquivalentProperties, FALSE otherwise
 	 */
-	public boolean isEquivalentProperties(Section<? extends DefaultFrame> section) {
+	public boolean isEquivalentProperties(Section<? extends DefaultFrame<?>> section) {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
@@ -199,7 +198,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if DisjointProperties, FALSE otherwise
 	 */
-	public boolean isDisjointProperties(Section<? extends DefaultFrame> section) {
+	public boolean isDisjointProperties(Section<? extends DefaultFrame<?>> section) {
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
 			if (keyword.getText().matches(KEYWORD_DISJOINT_PROPERTIES)) {
@@ -217,7 +216,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if EquivalentProperties, FALSE otherwise
 	 */
-	public boolean isEquivalentDataProperties(Section<? extends DefaultFrame> section) {
+	public boolean isEquivalentDataProperties(Section<? extends DefaultFrame<?>> section) {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
@@ -236,7 +235,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if DisjointProperties, FALSE otherwise
 	 */
-	public boolean isDisjointDataProperties(Section<? extends DefaultFrame> section) {
+	public boolean isDisjointDataProperties(Section<? extends DefaultFrame<?>> section) {
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
 			if (keyword.getText().matches(KEYWORD_DISJOINT_PROPERTIES)) {
@@ -246,8 +245,4 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit {
 		return false;
 	}
 
-	@Override
-	public KnowledgeUnitCompileScript getCompileScript() {
-		return new MiscFrameCompileScript();
-	}
 }

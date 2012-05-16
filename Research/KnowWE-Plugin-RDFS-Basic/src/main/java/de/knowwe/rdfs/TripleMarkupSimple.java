@@ -25,9 +25,8 @@ import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Node;
 
+import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
-import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -38,11 +37,11 @@ import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
 
-public class TripleMarkupSimple extends AbstractType implements
+public class TripleMarkupSimple extends AbstractKnowledgeUnitType<TripleMarkupSimple> implements
 		KnowledgeUnit {
 
 	public TripleMarkupSimple() {
-
+		this.setCompileScript(new TripleMarkupSimpleCompileScript());
 		this.setSectionFinder(new RegexSectionFinder("\\{(.*?::.*?)\\}",
 				Pattern.DOTALL, 1));
 		this.addChildType(new SimpleTurtlePredicate());
@@ -130,8 +129,4 @@ public class TripleMarkupSimple extends AbstractType implements
 
 	}
 
-	@Override
-	public KnowledgeUnitCompileScript<TripleMarkupSimple> getCompileScript() {
-		return new TripleMarkupSimpleCompileScript();
-	}
 }

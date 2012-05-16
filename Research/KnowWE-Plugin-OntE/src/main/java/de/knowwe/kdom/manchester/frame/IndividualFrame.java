@@ -25,8 +25,6 @@ import java.util.regex.Pattern;
 
 import org.semanticweb.owlapi.model.OWLIndividual;
 
-import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -67,7 +65,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * @author Stefan Mark
  * @created 24.06.2011
  */
-public class IndividualFrame extends DefaultFrame implements KnowledgeUnit {
+public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 
 	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.INDIVIDUAL);
 
@@ -82,7 +80,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit {
 	public IndividualFrame() {
 
 		super(ManchesterSyntaxKeywords.INDIVIDUAL.getKeyword());
-
+		this.setCompileScript(new IndividualFrameCompileScript());
 		List<Type> types = new ArrayList<Type>();
 
 		types.add(IndividualDefinition.getInstance());
@@ -103,7 +101,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<DefaultFrame> section
 	 * @return TRUE if such an section exists, FALSE otherwise
 	 */
-	public boolean hasIndividualDefinition(Section<? extends DefaultFrame> section) {
+	public boolean hasIndividualDefinition(Section<? extends DefaultFrame<?>> section) {
 		return !Sections.findSuccessor(section, Individual.class).isEmpty();
 	}
 
@@ -115,7 +113,7 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit {
 	 * @param Section<DefaultFrame> section
 	 * @return The found section
 	 */
-	public Section<? extends Type> getIndividualDefinition(Section<? extends DefaultFrame> section) {
+	public Section<? extends Type> getIndividualDefinition(Section<? extends DefaultFrame<?>> section) {
 		return Sections.findSuccessor(section, Individual.class);
 	}
 
@@ -250,10 +248,6 @@ public class IndividualFrame extends DefaultFrame implements KnowledgeUnit {
 		return new ArrayList<Section<Annotation>>();
 	}
 
-	@Override
-	public KnowledgeUnitCompileScript getCompileScript() {
-		return new IndividualFrameCompileScript();
-	}
 }
 
 /**

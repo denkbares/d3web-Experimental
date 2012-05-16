@@ -41,7 +41,7 @@ import de.knowwe.kdom.sectionfinder.IRISectionFinder;
  * @author Stefan Mark
  * @created 22.09.2011
  */
-public class PrefixFrame extends DefaultFrame {
+public class PrefixFrame extends DefaultFrame<PrefixFrame> {
 
 	public static final String KEYWORD = "Prefix[:]?";
 

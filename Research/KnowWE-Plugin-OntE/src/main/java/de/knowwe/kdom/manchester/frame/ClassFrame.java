@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -52,7 +51,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * @author Stefan Mark
  * @created 24.05.2011
  */
-public class ClassFrame extends DefaultFrame implements KnowledgeUnit {
+public class ClassFrame extends DefaultFrame<ClassFrame> implements KnowledgeUnit {
 
 	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.CLASS);
 
@@ -67,6 +66,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit {
 
 	public ClassFrame() {
 		super(ManchesterSyntaxKeywords.CLASS.getKeyword());
+		this.setCompileScript(new ClassFrameCompileScript());
 		// this.addSubtreeHandler(new ClassFrameSubtreeHandler());
 
 		List<Type> types = new ArrayList<Type>();
@@ -226,11 +226,6 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit {
 			return Sections.findSuccessorsOfType(a, Annotation.class);
 		}
 		return new ArrayList<Section<Annotation>>();
-	}
-
-	@Override
-	public KnowledgeUnitCompileScript<ClassFrame> getCompileScript() {
-		return new ClassFrameCompileScript();
 	}
 }
 

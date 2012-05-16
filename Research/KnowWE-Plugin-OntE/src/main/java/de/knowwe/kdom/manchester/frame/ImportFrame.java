@@ -22,8 +22,6 @@ package de.knowwe.kdom.manchester.frame;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -44,7 +42,7 @@ import de.knowwe.kdom.sectionfinder.IRISectionFinder;
  * @author Stefan Mark
  * @created 22.09.2011
  */
-public class ImportFrame extends DefaultFrame implements KnowledgeUnit {
+public class ImportFrame extends DefaultFrame<ImportFrame> {
 
 	public static final String KEYWORD = "Import:";
 
@@ -55,7 +53,7 @@ public class ImportFrame extends DefaultFrame implements KnowledgeUnit {
 	public ImportFrame() {
 
 		super(KEYWORD);
-
+		this.setCompileScript(new ImportFrameCompileScript());
 		List<Type> types = new ArrayList<Type>();
 
 		types.add(new Keyword(KEYWORD));
@@ -111,11 +109,6 @@ public class ImportFrame extends DefaultFrame implements KnowledgeUnit {
 	 */
 	public Section<? extends Type> getPrefix(Section<? extends ImportFrame> section) {
 		return Sections.findSuccessor(section, ImportPrefix.class);
-	}
-
-	@Override
-	public KnowledgeUnitCompileScript<ImportFrame> getCompileScript() {
-		return new ImportFrameCompileScript();
 	}
 }
 
