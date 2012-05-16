@@ -100,12 +100,10 @@ public class AxiomFactory {
 
 	private static final OWLAPIConnector connector;
 	private static final OWLDataFactory factory;
-	private static final AxiomStorageSubtree storage;
 
 	static {
 		connector = OWLAPIConnector.getGlobalInstance();
 		factory = connector.getManager().getOWLDataFactory();
-		storage = AxiomStorageSubtree.getInstance();
 	}
 
 	/**
@@ -429,7 +427,8 @@ public class AxiomFactory {
 
 			OWLDataRange exp = null;
 			if (cr.hasOptionalDataRestriction(cardSection)) {
-				Section<DataRestriction> optional = cr.getOptionalDataRestriction(cardSection);
+				// Section<DataRestriction> optional =
+				// cr.getOptionalDataRestriction(cardSection);
 
 				// TODO :
 				// exp = handleDataExpressionTerminals(optional, messages);

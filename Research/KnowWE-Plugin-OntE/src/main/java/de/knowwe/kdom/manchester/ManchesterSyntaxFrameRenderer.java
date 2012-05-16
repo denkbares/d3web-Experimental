@@ -134,18 +134,6 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 	}
 
 	/**
-	 * Returns the name of the current {@link DefaultFrame} for visual
-	 * highlighting to the user on the article page.
-	 * 
-	 * @created 22.09.2011
-	 * @param Section<DefaultFrame> section The current {@link DefaultFrame}
-	 * @return The name of the {@link DefaultFrame}
-	 */
-	private String getFrameName(Section<?> section) {
-		return section.get().getName();
-	}
-
-	/**
 	 * Has the section some ToolProvider attached, render the tools into the
 	 * resulting HTML output. This is a adaption from the
 	 * ToolMenuDecoratingRenderer. This was needed to include some of the

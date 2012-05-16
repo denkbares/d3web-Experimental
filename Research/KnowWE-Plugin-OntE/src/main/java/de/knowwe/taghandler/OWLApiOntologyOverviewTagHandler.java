@@ -52,7 +52,6 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 		super(NAME);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
 
@@ -102,7 +101,6 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 			concepts.append("<a name=\"" + key + "\"></a>");
 
 			for (Section<DefaultFrame> frame : defaultFrames) {
-				@SuppressWarnings("rawtypes")
 				Renderer renderer = frame.get().getRenderer();
 				if (renderer instanceof ManchesterSyntaxFrameRenderer) {
 					((ManchesterSyntaxFrameRenderer) renderer).setRenderLink(true);

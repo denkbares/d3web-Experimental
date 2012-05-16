@@ -57,7 +57,8 @@ public class CreateEntityToolProvider implements ToolProvider {
 		@SuppressWarnings("unchecked")
 		Section<? extends AbstractIRITermDefinition> s = (Section<? extends AbstractIRITermDefinition>) section;
 		return new Tool[] {
-				getCreateClassTool(s), getCreateObjectPropertyTool(s) };
+				getCreateClassTool(s), getCreateObjectPropertyTool(s),
+				getCreateDataPropertyTool(s) };
 
 		/*
 		 * in JavaScript: call per Ajax the creation Action and redirect to the
@@ -115,7 +116,7 @@ public class CreateEntityToolProvider implements ToolProvider {
 	 */
 	private Tool getCreateDataPropertyTool(Section<? extends AbstractIRITermDefinition> section) {
 		String image = "KnowWEExtension/images/dt_icon_realisation.png";
-		String name = "Create ObjectProperty";
+		String name = "Create DataProperty";
 		String description = "Creates a article containing a basic OWL DataProperty Frame for adding the term to the Ontology!";
 		String action = "KnowWE.plugin.onte.actions.createEntity(urlencode('"
 				+ section.getText()

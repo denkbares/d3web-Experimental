@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -22,12 +22,8 @@ package de.knowwe.taghandler;
 import java.util.Map;
 
 import org.semanticweb.owlapi.expression.ParserException;
-import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.PrefixManager;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
-import org.semanticweb.owlapi.util.DefaultPrefixManager;
 
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.taghandler.TagHandler;
@@ -41,7 +37,7 @@ import de.knowwe.owlapi.query.OWLApiQueryParser;
  * the {@link TagHandler} can show to a given class the inferred hierarchy
  * relations, to a given class all the instances.
  * </p>
- *
+ * 
  * necessary features???
  * <ul>
  * <li>get inverse of a property, i.e. which individuals are in relation with a
@@ -51,7 +47,7 @@ import de.knowwe.owlapi.query.OWLApiQueryParser;
  * <li>ask reasoner whether individual isProperty something</li>
  * <li>explain given OWLAxioms</li>
  * </ul>
- *
+ * 
  * @author Stefan Mark
  * @created 20.09.2011
  */
@@ -82,10 +78,7 @@ public class OWLApiInferenceTagHandler extends AbstractHTMLTagHandler {
 				&& paramObject != null && !paramObject.isEmpty()) {
 
 			OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
-			OWLDataFactory factory = connector.getManager().getOWLDataFactory();
 			OWLReasoner reasoner = connector.getReasoner();
-			PrefixManager pm = new DefaultPrefixManager(
-					OWLAPIConnector.getGlobalInstance().getGlobalBaseIRI().toString());
 
 			OWLApiQueryParser parser = new OWLApiQueryParser();
 			try {
@@ -120,7 +113,7 @@ public class OWLApiInferenceTagHandler extends AbstractHTMLTagHandler {
 	/**
 	 * Appends a simple how to use message to the output if the
 	 * {@link TagHandler} was used incorrectly.
-	 *
+	 * 
 	 * @created 20.09.2011
 	 * @return String The how to use message
 	 */

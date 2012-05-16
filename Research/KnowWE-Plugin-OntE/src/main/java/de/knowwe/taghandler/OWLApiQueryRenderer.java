@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.semanticweb.owlapi.expression.ParserException;
-import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLEntity;
@@ -15,16 +14,13 @@ import org.semanticweb.owlapi.util.OWLEntityComparator;
 import org.semanticweb.owlapi.util.ShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
-import de.knowwe.onte.editor.OWLApiAxiomCache;
 import de.knowwe.owlapi.query.OWLApiQueryEngine;
 
 /**
@@ -162,20 +158,6 @@ public class OWLApiQueryRenderer implements Renderer {
 
 		if (!list.isEmpty()) {
 			for (OWLEntity entity : list) {
-
-				Section<? extends Type> section = null;
-				OWLAxiom a = null;
-
-				if (entity instanceof OWLNamedIndividual) {
-					a = AxiomFactory.createNamedIndividualAxiom(exp,
-							(OWLNamedIndividual) entity);
-				}
-				else {
-					a = AxiomFactory.getOWLAPIEntityDeclaration(entity);
-				}
-
-				section = OWLApiAxiomCache.getInstance().lookUpSection(
-						a, OWLApiAxiomCache.STORE_CACHE);
 
 				string.append("<li>");
 				String conceptName = OnteRenderingUtils.getDisplayName(entity);

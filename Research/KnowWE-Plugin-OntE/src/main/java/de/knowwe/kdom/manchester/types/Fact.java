@@ -18,8 +18,6 @@
  */
 package de.knowwe.kdom.manchester.types;
 
-import java.util.regex.Pattern;
-
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -46,8 +44,6 @@ public class Fact extends AbstractType {
 			+ OWLTermReferenceManchester.PATTERN_NON_CAP + ")";
 
 	public Fact() {
-
-		Pattern p = Pattern.compile(PATTERN);
 
 		// this.setSectionFinder(new RegexSectionFinder(p));
 		AllTextFinderTrimmed sectionFinder1 = new AllTextFinderTrimmed();

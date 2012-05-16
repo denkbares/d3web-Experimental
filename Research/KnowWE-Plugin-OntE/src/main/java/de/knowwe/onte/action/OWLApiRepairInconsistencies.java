@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -32,7 +32,6 @@ import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLObject;
 
-import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -50,7 +49,7 @@ import de.knowwe.taghandler.OWLApiTagHandlerUtil;
 
 /**
  * OWLApiRepairInconsistencies.
- *
+ * 
  * 
  * @author Stefan Mark
  * @created 30.11.2011
@@ -77,23 +76,20 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 					sectionID, OWLApiAxiomCache.STORE_EXPLANATION);
 			String articlename = section.getArticle().getTitle();
 
-
 			// ... then lock the page to avoid changes by other users ...
 			boolean isPageLocked = Environment.getInstance().getWikiConnector()
 										.isArticleLocked(articlename);
-			 if (isPageLocked) {
+			if (isPageLocked) {
 				context.sendError(
 						403,
 						"I am sorry. The page is being edited by another user. Please try again later.");
 				return;
-			 }
-			 else {
+			}
+			else {
 				Environment.getInstance().getWikiConnector().lockArticle(articlename,
 							context.getUserName());
 
 				// ... create the according replacements
-				ArticleManager mgr = Environment.getInstance().getArticleManager(
-							context.getWeb());
 
 				String replacement = getReplacementText(sectionID);
 				Map<String, String> nodesMap = new HashMap<String, String>();
@@ -120,7 +116,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 	 * Creates a comment string that is inserted in the replaced section on
 	 * repair action. This comment indicates when and from whom the action has
 	 * been executed.
-	 *
+	 * 
 	 * @created 30.11.2011
 	 * @param replacement
 	 * @param section
@@ -150,7 +146,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 	/**
 	 * Determines the replacement text from the given section. Therefore a look
 	 * up is made in the stored sections.
-	 *
+	 * 
 	 * @created 30.11.2011
 	 * @param sectionID
 	 * @return
@@ -183,7 +179,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 	 * Determines if the replacement is within a list, etc. and therefore a
 	 * subsequent delimiter should also be removed. If a delimiter can be found
 	 * the according section is returned for further handling.
-	 *
+	 * 
 	 * @created 30.11.2011
 	 * @param sectionID
 	 * @return
