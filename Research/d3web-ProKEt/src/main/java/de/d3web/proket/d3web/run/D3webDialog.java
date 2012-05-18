@@ -750,6 +750,7 @@ public class D3webDialog extends HttpServlet {
 
     private Set<TerminologyObject> calculateDiff(Session d3webSession, DialogState beforeState, DialogState afterState) {
 
+        
         Set<TerminologyObject> diff = new HashSet<TerminologyObject>();
 
         for (TerminologyObject to : beforeState.unknownQuestions) {
@@ -759,8 +760,13 @@ public class D3webDialog extends HttpServlet {
         }
 
         D3webUtils.getDiff(beforeState.indicatedQASets, afterState.indicatedQASets, diff);
+   //     System.out.println("DIFF 1: " + diff);
+        
         D3webUtils.getDiff(afterState.indicatedQASets, beforeState.indicatedQASets, diff);
 
+ //       System.out.println("DIFF 2: " + diff);
+        
+        
         diff.addAll(D3webUtils.getUnknownQuestions(d3webSession));
         // we simply update answered abstract questions every time
         // actually we only need to update them if their facts have changed, but
@@ -785,11 +791,13 @@ public class D3webDialog extends HttpServlet {
     private void renderAndUpdateDiff(PrintWriter writer, Session d3webSession, Set<TerminologyObject> diff, HttpSession httpSession) {
         ContainerCollection cc = new ContainerCollection();
         D3webUserSettings us = (D3webUserSettings) httpSession.getAttribute(USER_SETTINGS);
+        System.out.println("DIFF: " + diff);
         for (TerminologyObject to : diff) {
             if (isHiddenOrHasHiddenParent(to)) {
                 continue;
             }
             IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
+            System.out.println(to.getName());
 
             // get back the ID from store for finding element in HTML
             writer.append(REPLACEID + AbstractD3webRenderer.getID(to));
@@ -1608,9 +1616,6 @@ public class D3webDialog extends HttpServlet {
             source = request.getParameter("src");
         }
         return source.endsWith(".xml") ? source : source + ".xml";
-
-
-
 
 
 

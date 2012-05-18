@@ -203,16 +203,17 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             // get the matching renderer
             IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);
 
-            //System.out.println(to.getName() + " - " + D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
-            //System.out.println(child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
-            //System.out.println(child.getName() + " - " + D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()) + "\n");
+           //     System.out.println(d3webSession.getBlackboard().getValue((ValueObject) child));
+            //    System.out.println(to.getName() + " - " + D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
+           //     System.out.println(child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
+            //    System.out.println(child.getName() + " CI - " + D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()) + "\n");
+           
             if (!debug) {
                 // only show questions if they are NOT contraindicated
                 // they ARE contraindicated by the EuraHS- only if construct
                 if ((D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
                         && child instanceof Question
-                        && D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()))
-                        ) {
+                        && D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()))) {
                     continue;
                 }
             }
@@ -440,16 +441,12 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             for (TerminologyObject childsChild : child.getChildren()) {
 
                 //System.out.println(childsChild.getName() + " Indicated: " 
-                  //      + D3webUtils.isIndicated(childsChild, d3webSession.getBlackboard())
-                    //    + " C-Indicated: " + D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard()));
+                //      + D3webUtils.isIndicated(childsChild, d3webSession.getBlackboard())
+                //    + " C-Indicated: " + D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard()));
                 if (!debug) {
-                    if (
-                            (D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
+                    if ((D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
                             && (D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard()))
-                            || 
-                            (!isIndicated(childsChild, d3webSession.getBlackboard()))
-                            )
-                       ) {
+                            || (!isIndicated(childsChild, d3webSession.getBlackboard())))) {
                         continue;
                     }
                 }

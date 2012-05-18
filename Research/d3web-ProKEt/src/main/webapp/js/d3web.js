@@ -848,7 +848,9 @@ function d3web_addFacts() {
    
             } else {
                 updateDialog(html);
-                init_all();
+                //window.location.reload(true);
+                //init_all();
+                setup();
                 initFunctionality();
             }
         },
@@ -990,8 +992,22 @@ function d3web_handleQuestionDate(dateSelect) {
     var beforeDate = getDate(beforeQuestion.find("select").first());
     var afterDate = getDate(afterQuestion.find("select").first());
     
+    var tqpopup1 = "To avoid mistakes, timepoints must be filled in completely (Hour:Minute).";
+    var tqpopup2 = "Otherwise, missing values are automatically added by the system.";
+    var tqpopup3 = "Attention: End of operation must be after start of operation!";
+
+
     var beforeText = $.trim($("#text-" + beforeId).text());
+    if(beforeText.indexOf(tqpopup1) != -1){
+        //beforeText = beforeText.replace(tqpopup1, "").replace(tqpopup2, "").replace(tqpopup3, "");
+    }
+    
+    
     var afterText = $.trim($("#text-" + afterId).text());
+    if(afterText.indexOf(tqpopup1) != -1){
+        afterText = afterText.replace(tqpopup1, "").replace(tqpopup2, "").replace(tqpopup3, "");
+    }
+    
     
     if(language=="de"){
         tooLate = "Erwartet wird ein Datum früher als '" + beforeText + "'.";
@@ -1000,6 +1016,9 @@ function d3web_handleQuestionDate(dateSelect) {
         tooLate = "Expected is a date earlier than '" + beforeText + "'.";
         tooSoon = "Expected is a date later than '" + afterText + "'.";
     }
+    
+    // currently, no check of earlier-date questions needed
+    tooLate = "";
     
     var errorWid = getErrorPlaceholder(dateSelect);
     if (afterId != undefined && d3web_isAnsweredQuestion(afterQuestion) && date.getTime() <= afterDate.getTime()) {
@@ -1011,6 +1030,7 @@ function d3web_handleQuestionDate(dateSelect) {
     else {
         errorWid.html("");
     }
+    
 }
 
 function d3web_prepareSave() {

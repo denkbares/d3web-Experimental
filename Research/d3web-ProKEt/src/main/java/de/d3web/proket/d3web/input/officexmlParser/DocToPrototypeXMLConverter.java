@@ -27,7 +27,7 @@ public class DocToPrototypeXMLConverter {
     
     /* SOURCE and TARGET doc names */
     private static String SOURCEDOC = PARSINGPATH + "RNS_AR_USER.doc";
-    private static String TARGETXML = PARSINGPATH + "juriUser_neu.xml";
+    private static String TARGETXML = PARSINGPATH + "juriUserNeu.xml";
     
     private static String WEBAPPPREFIX = "Juri";
     

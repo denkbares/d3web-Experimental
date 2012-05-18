@@ -618,7 +618,7 @@ public class D3webUtils {
      */
     public static HashMap getIndicationSetsL1(Blackboard bb, ArrayList<TerminologyObject> l1qs) {
 
-        System.out.println(l1qs);
+        //System.out.println(l1qs);
         
         HashMap<TerminologyObject, Collection<TerminologyObject>> ancestors = new HashMap();
 
@@ -1576,7 +1576,8 @@ public class D3webUtils {
         boolean indicatedParent = false;
         for (TerminologyObject parentQASet : qaset.getParents()) {
             if (parentQASet instanceof QContainer
-                    && isIndicated((QASet) parentQASet, bb, initQuestions)) {
+                    && isIndicated((QASet) parentQASet, bb, initQuestions)
+                    && !isContraIndicated(qaset, bb)) {
                 indicatedParent = true;
                 break;
             }

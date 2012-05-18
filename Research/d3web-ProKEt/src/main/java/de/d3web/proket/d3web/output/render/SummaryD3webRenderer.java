@@ -371,10 +371,10 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
 
         ArrayList<TerminologyObject> level1qs =
                 (ArrayList<TerminologyObject>) httpSession.getAttribute("level1qs");
-        System.out.println(level1qs);
+        //System.out.println(level1qs);
 
         if (to instanceof QContainer && !to.getName().contains("Q000")) {
-            System.out.println(to);
+            //System.out.println(to);
             if (level1qs.contains(to)) {
                 
                 if (D3webUtils.hasAnsweredChildren(to, d3webSession)) {
