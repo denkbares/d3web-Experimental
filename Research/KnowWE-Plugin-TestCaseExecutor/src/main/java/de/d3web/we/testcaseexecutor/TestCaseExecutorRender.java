@@ -12,7 +12,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
-import de.knowwe.core.wikiConnector.ConnectorAttachment;
+import de.knowwe.core.wikiConnector.WikiAttachment;
 import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -93,7 +93,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 		for (String file : files) {
 
 			WikiConnector connector = Environment.getInstance().getWikiConnector();
-			ConnectorAttachment attachment = connector.getAttachment(section.getArticle().getTitle()
+			WikiAttachment attachment = connector.getAttachment(section.getArticle().getTitle()
 					+ "/" + file);
 
 			if (attachment != null) {
@@ -120,7 +120,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 	private String renderSelection(Section<?> section, String master) {
 		WikiConnector connector = Environment.getInstance().getWikiConnector();
 
-		Collection<ConnectorAttachment> attachments = connector.getAttachments(section.getArticle().getTitle());
+		Collection<WikiAttachment> attachments = connector.getAttachments(section.getArticle().getTitle());
 
 		StringBuilder html = new StringBuilder();
 		// html.append("<h2 class=\"testExecutor\"> TestCase Executor </h2>");
@@ -129,7 +129,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 		html.append("<select onChange=\"return TestCaseExecutor.getTestcases(" + null + ",'"
 				+ master + "')\">");
 		html.append("<option value=\"\">-- Choose file --</option>");
-		for (ConnectorAttachment attachment : attachments) {
+		for (WikiAttachment attachment : attachments) {
 			if (attachment.getFileName().matches("stc.*\\.xml")) {
 				html.append("<option value=\"" + attachment + "\">" + attachment + "</option>");
 

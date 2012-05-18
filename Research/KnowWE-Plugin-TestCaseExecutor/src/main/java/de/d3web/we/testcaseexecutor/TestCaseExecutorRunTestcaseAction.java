@@ -39,7 +39,7 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.wikiConnector.ConnectorAttachment;
+import de.knowwe.core.wikiConnector.WikiAttachment;
 import de.knowwe.core.wikiConnector.WikiConnector;
 
 /**
@@ -71,10 +71,10 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 		String[] cases = testCases.split(TESTCASEEXECUTOR_SEPARATOR);
 
 		WikiConnector connector = Environment.getInstance().getWikiConnector();
-		Collection<ConnectorAttachment> attachments = connector.getAttachments(topic);
-		ConnectorAttachment selectedAttachment = null;
+		Collection<WikiAttachment> attachments = connector.getAttachments(topic);
+		WikiAttachment selectedAttachment = null;
 
-		for (ConnectorAttachment attachment : attachments) {
+		for (WikiAttachment attachment : attachments) {
 			if (attachment.getFileName().equals(fileName)) {
 				selectedAttachment = attachment;
 				break;

@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
-import de.knowwe.core.wikiConnector.ConnectorAttachment;
+import de.knowwe.core.wikiConnector.WikiAttachment;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
@@ -47,10 +47,10 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 
 		List<Message> messages = new ArrayList<Message>(0);
 
-		List<ConnectorAttachment> attachments = Environment.getInstance().getWikiConnector()
+		List<WikiAttachment> attachments = Environment.getInstance().getWikiConnector()
 				.getAttachments(article.getTitle());
 		List<String> attachmentFileNames = new ArrayList<String>(attachments.size());
-		for (ConnectorAttachment attachment : attachments) {
+		for (WikiAttachment attachment : attachments) {
 			attachmentFileNames.add(attachment.getFileName());
 		}
 

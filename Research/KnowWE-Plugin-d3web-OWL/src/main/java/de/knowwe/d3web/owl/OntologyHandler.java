@@ -43,7 +43,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.wikiConnector.ConnectorAttachment;
+import de.knowwe.core.wikiConnector.WikiAttachment;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -188,9 +188,9 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 			sourceArticle = section.getArticle().getTitle();
 		}
 		// do the search
-		Collection<ConnectorAttachment> attachments =
+		Collection<WikiAttachment> attachments =
 				Environment.getInstance().getWikiConnector().getAttachments();
-		for (ConnectorAttachment attachment : attachments) {
+		for (WikiAttachment attachment : attachments) {
 			if (!attachment.getFileName().equalsIgnoreCase(sourceFile)) continue;
 			if (!attachment.getParentName().equalsIgnoreCase(sourceArticle)) continue;
 			return manager.loadOntologyFromOntologyDocument(attachment.getInputStream());
