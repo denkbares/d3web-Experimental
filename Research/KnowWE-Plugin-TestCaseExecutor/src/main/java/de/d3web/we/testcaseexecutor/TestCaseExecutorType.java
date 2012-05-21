@@ -18,9 +18,9 @@
  */
 package de.d3web.we.testcaseexecutor;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -81,19 +81,22 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 
 				String[] files = DefaultMarkupType.getAnnotations(section, ANNOTATION_FILE);
 
-				List<WikiAttachment> attachments = Environment.getInstance().getWikiConnector()
-						.getAttachments(section.getTitle());
-				List<String> attachmentFileNames = new ArrayList<String>(attachments.size());
-				for (WikiAttachment attachment : attachments) {
-					attachmentFileNames.add(attachment.getFileName());
+				try {
+					List<WikiAttachment> attachments = Environment.getInstance().getWikiConnector()
+							.getAttachments(section.getTitle());
+					List<String> attachmentFileNames = new ArrayList<String>(attachments.size());
+					for (WikiAttachment attachment : attachments) {
+						attachmentFileNames.add(attachment.getFileName());
+					}
+					for (String file : files) {
+						if (!attachmentFileNames.contains(file)) {
+							errors.add(Messages.noSuchObjectError("File", file));
+						}
+					}
 				}
-				for (String file : files) {
-					if (!attachmentFileNames.contains(file)) errors.add(Messages.noSuchObjectError(
-							"File",
-							file));
-
+				catch (IOException e) {
+					errors.add(Messages.internalError("cannot access wiki attachments", e));
 				}
-
 				return errors;
 			}
 		});
@@ -118,12 +121,19 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 
 		WikiConnector connector = Environment.getInstance().getWikiConnector();
 		String title = section.getArticle().getTitle();
-		List<WikiAttachment> attachments = connector.getAttachments(title);
+		List<WikiAttachment> attachments = new LinkedList<WikiAttachment>();
+		for (String file : files) {
+			try {
+				WikiAttachment attachment = connector.getAttachment(title + "/" + file);
+				if (attachment != null) attachments.add(attachment);
+			}
+			catch (IOException e) {
+			}
+		}
+
 		String master = getMaster(section);
 		KnowledgeBase kb = D3webUtils.getKnowledgeBase(section.getWeb(), master);
 		List<SequentialTestCase> cases = new LinkedList<SequentialTestCase>();
-		attachments.retainAll(Arrays.asList(files));
-
 		for (WikiAttachment attachment : attachments) {
 			try {
 				InputStream stream = attachment.getInputStream();

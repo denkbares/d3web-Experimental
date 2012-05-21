@@ -1,7 +1,9 @@
 package de.d3web.we.testcaseexecutor;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.ResourceBundle;
 
 import de.d3web.core.knowledge.KnowledgeBase;
@@ -92,12 +94,17 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 
 		for (String file : files) {
 
-			WikiConnector connector = Environment.getInstance().getWikiConnector();
-			WikiAttachment attachment = connector.getAttachment(section.getArticle().getTitle()
-					+ "/" + file);
+			try {
+				WikiConnector connector = Environment.getInstance().getWikiConnector();
+				WikiAttachment attachment = connector.getAttachment(section.getArticle().getTitle()
+						+ "/" + file);
 
-			if (attachment != null) {
-				html.append("<div>Run testcases in file '" + file + "'.</div>");
+				if (attachment != null) {
+					html.append("<div>Run testcases in file '" + file + "'.</div>");
+				}
+			}
+			catch (IOException e) {
+				// ignore file
 			}
 
 		}
@@ -120,7 +127,13 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 	private String renderSelection(Section<?> section, String master) {
 		WikiConnector connector = Environment.getInstance().getWikiConnector();
 
-		Collection<WikiAttachment> attachments = connector.getAttachments(section.getArticle().getTitle());
+		Collection<WikiAttachment> attachments;
+		try {
+			attachments = connector.getAttachments(section.getArticle().getTitle());
+		}
+		catch (IOException e) {
+			attachments = Collections.emptyList();
+		}
 
 		StringBuilder html = new StringBuilder();
 		// html.append("<h2 class=\"testExecutor\"> TestCase Executor </h2>");

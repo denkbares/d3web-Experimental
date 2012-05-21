@@ -18,10 +18,13 @@
  */
 package de.knowwe.casetrain.type.multimedia;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import de.knowwe.casetrain.type.multimedia.MultimediaItem.MultimediaItemContent;
 import de.knowwe.casetrain.util.Utils;
@@ -47,8 +50,18 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 
 		List<Message> messages = new ArrayList<Message>(0);
 
-		List<WikiAttachment> attachments = Environment.getInstance().getWikiConnector()
-				.getAttachments(article.getTitle());
+		List<WikiAttachment> attachments;
+		try {
+			attachments = Environment.getInstance().getWikiConnector()
+					.getAttachments(article.getTitle());
+		}
+		catch (IOException e) {
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,
+					"cannot access wiki attachment", e);
+			messages.add(Utils.missingContentWarning(MultimediaItem.class.getSimpleName()));
+			return messages;
+		}
+
 		List<String> attachmentFileNames = new ArrayList<String>(attachments.size());
 		for (WikiAttachment attachment : attachments) {
 			attachmentFileNames.add(attachment.getFileName());
