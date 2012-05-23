@@ -23,6 +23,7 @@
         <parameter-def id="priority" type="number" />
         <parameter-def id="order" type="number" />
     </extension-point>  
+    
 
 
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -143,9 +144,17 @@
         <parameter id="priority" value="5" />
     </extension>     
     
+    <extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="TestObjectProvider"
+		id="OWLAPITestObjectProvider">
+		<parameter id="class"
+			value="de.knowwe.onte.ci4ke.OWLAPITestObjectProvider" />
+		<parameter id="name" value="OWLAPITestObjectProvider" />
+		<parameter id="description" value="OWLAPITestObjectProvider" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
     
-    
-    <extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+    <extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"
         id="OntologyClassificationTest">
         <parameter id="class"
             value="de.knowwe.onte.ci4ke.OntologyClassificationTest" />
@@ -154,7 +163,7 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>     
-    <extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+    <extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"
         id="OntologyConsistencyTest">
         <parameter id="class"
             value="de.knowwe.onte.ci4ke.OntologyConsistencyTest" />
@@ -163,7 +172,7 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>
-    <extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+    <extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"
         id="OntologyDLExpressivityTest">
         <parameter id="class"
             value="de.knowwe.onte.ci4ke.OntologyDLExpressivityTest" />
@@ -172,7 +181,7 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>     
-    <extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+    <extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"
         id="OntologyIndividualExistTest">
         <parameter id="class"
             value="de.knowwe.onte.ci4ke.OntologyIndividualExistTest" />
@@ -181,7 +190,7 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>
-    <extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+    <extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"
         id="OWL2ProfileCheckTest">
         <parameter id="class"
             value="de.knowwe.onte.ci4ke.OWL2ProfileCheckTest" />

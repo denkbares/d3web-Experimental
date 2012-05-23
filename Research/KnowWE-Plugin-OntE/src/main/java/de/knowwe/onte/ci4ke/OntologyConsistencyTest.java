@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -26,9 +26,10 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.Node;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
-import de.d3web.we.ci4ke.testing.AbstractCITest;
-import de.d3web.we.ci4ke.testing.CITestResult;
-import de.d3web.we.ci4ke.testing.CITestResult.Type;
+import cc.denkbares.testing.ArgsCheckResult;
+import cc.denkbares.testing.Message;
+import cc.denkbares.testing.Message.Type;
+import cc.denkbares.testing.Test;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.taghandler.OWLApiTagHandlerUtil;
@@ -37,16 +38,16 @@ import de.knowwe.taghandler.OWLApiTagHandlerUtil;
  * A simple test for the continuous integration plugin for KnowWE. This test
  * checks the consistency of the local ontology. In case of inconsistency, the
  * concept responsible are printed into the ci4ke dashboard.
- *
+ * 
  * @author Stefan Mark
  * @created 17.10.2011
  */
-public class OntologyConsistencyTest extends AbstractCITest {
+public class OntologyConsistencyTest implements Test<OWLAPIConnector> {
 
 	@Override
-	public CITestResult call() throws Exception {
+	public Message execute(OWLAPIConnector connector, String[] args) {
 
-		OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
+		// OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
 		OWLOntology ontology = connector.getOntology();
 		OWLReasoner reasoner = connector.getReasoner();
 
@@ -77,11 +78,23 @@ public class OntologyConsistencyTest extends AbstractCITest {
 				message.append("<br />");
 
 			}
-			return new CITestResult(Type.ERROR, message.toString(), configuration.toString());
+			return new Message(Type.ERROR, message.toString());
 		}
 		else {
-			return new CITestResult(Type.SUCCESSFUL, "Ontology is consistent! Gratulations!",
-					configuration.toString());
+			return new Message(Type.SUCCESS, "Ontology is consistent! Gratulations!");
 		}
+	}
+
+	@Override
+	public ArgsCheckResult checkArgs(String[] args) {
+		int expectedArgCount = 0;
+		if (args.length == expectedArgCount) return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
+		return new ArgsCheckResult(ArgsCheckResult.Type.ERROR, "Expected number of arguments: "
+				+ expectedArgCount + " - found: " + args.length);
+	}
+
+	@Override
+	public Class<OWLAPIConnector> getTestObjectClass() {
+		return OWLAPIConnector.class;
 	}
 }
