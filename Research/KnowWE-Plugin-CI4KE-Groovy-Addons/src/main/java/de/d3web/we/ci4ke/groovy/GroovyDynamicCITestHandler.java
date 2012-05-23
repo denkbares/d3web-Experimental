@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2010 denkbares GmbH, Wuerzburg
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.we.ci4ke.groovy;
 
@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
 
-import de.d3web.we.ci4ke.testing.CITest;
+import cc.denkbares.testing.Test;
 import de.d3web.we.ci4ke.testing.DynamicCITestHandler;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
@@ -45,14 +45,14 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @created 22.11.2010
  */
 public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
-	
+
 	public static final GroovyDynamicCITestHandler INSTANCE = new GroovyDynamicCITestHandler();
 
 	private GroovyDynamicCITestHandler() {
 	}
 
 	@Override
-	public Class<? extends CITest> getCITestClass(String testName) {
+	public Class<? extends Test> getCITestClass(String testName) {
 		Section<GroovyCITestType> testSection = getAllGroovyCITestSections().get(testName);
 		return parseGroovyCITest(DefaultMarkupType.getContent(testSection));
 	}
@@ -64,10 +64,10 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 	 * @return
 	 */
 	@Override
-	public Map<String, Class<? extends CITest>> getAllCITestClasses() {
+	public Map<String, Class<? extends Test>> getAllCITestClasses() {
 		// return map
-		Map<String, Class<? extends CITest>> classesMap =
-				new HashMap<String, Class<? extends CITest>>();
+		Map<String, Class<? extends Test>> classesMap =
+				new HashMap<String, Class<? extends Test>>();
 		for (Map.Entry<String, Section<GroovyCITestType>> testSectionEntry : getAllGroovyCITestSections().entrySet()) {
 			String testName = testSectionEntry.getKey();
 			Section<GroovyCITestType> testSection = testSectionEntry.getValue();
@@ -112,7 +112,7 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 		return sectionsList;
 	}
 
-	public static Class<? extends CITest> parseGroovyCITest(String groovyCodeOfCITestSection) {
+	public static Class<? extends Test> parseGroovyCITest(String groovyCodeOfCITestSection) {
 
 		CompilerConfiguration cc = new CompilerConfiguration();
 		cc.setScriptBaseClass(GroovyCITestScript.class.getName());
@@ -121,8 +121,8 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 		String groovycode = GroovyCITestSubtreeHandler.PREPEND + groovyCodeOfCITestSection;
 
 		@SuppressWarnings("unchecked")
-		Class<? extends CITest> clazz =
-				(Class<? extends CITest>) shell.parse(groovycode).getClass();
+		Class<? extends Test> clazz =
+				(Class<? extends Test>) shell.parse(groovycode).getClass();
 
 		return clazz;
 	}

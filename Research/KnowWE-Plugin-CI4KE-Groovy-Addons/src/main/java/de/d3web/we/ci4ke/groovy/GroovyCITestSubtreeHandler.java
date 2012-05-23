@@ -21,10 +21,8 @@ package de.d3web.we.ci4ke.groovy;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import cc.denkbares.testing.Test;
 import de.d3web.we.ci4ke.handling.CIConfig;
-import de.d3web.we.ci4ke.testing.CITest;
-import de.d3web.we.ci4ke.testing.CITestResult;
-import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
@@ -39,8 +37,9 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 	 * Prepend the groovy-code with some import statements
 	 */
 	public static final String PREPEND = "import " + CIConfig.class.getName() + ";\n" +
-						"import " + CITestResult.class.getName() + ";\n" +
-						"import static " + Type.class.getName() + ".*;\n";
+						"import " + Message.class.getName() + ";\n" +
+						"import static " + cc.denkbares.testing.Message.Type.class.getName()
+			+ ".*;\n";
 
 	@Override
 	public Collection<Message> create(Article article, Section<GroovyCITestType> s) {
@@ -59,11 +58,11 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 			}
 		}
 		String sectionContent = DefaultMarkupType.getContent(s);
-		CITestResult result = null;
+		Message result = null;
 		try {
-			Class<? extends CITest> testClazz = GroovyDynamicCITestHandler.
+			Class<? extends Test> testClazz = GroovyDynamicCITestHandler.
 					parseGroovyCITest(sectionContent);
-			result = testClazz.newInstance().call();
+			// result = testClazz.newInstance().execute();
 		}
 		catch (Exception e) {
 			String errorMessageMasked = Strings.maskHTML(

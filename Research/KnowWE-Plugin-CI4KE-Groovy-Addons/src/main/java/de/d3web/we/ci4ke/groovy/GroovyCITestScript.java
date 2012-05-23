@@ -22,12 +22,10 @@ import groovy.lang.Script;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
+import cc.denkbares.testing.Test;
 import de.d3web.we.ci4ke.handling.CIConfig;
-import de.d3web.we.ci4ke.testing.AbstractCITest;
-import de.d3web.we.ci4ke.testing.CITest;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
 
@@ -38,7 +36,7 @@ import de.knowwe.core.kdom.Article;
  * @author Marc-Oliver Ochlast (denkbares GmbH)
  * @created 22.11.2010
  */
-public abstract class GroovyCITestScript extends Script implements CITest {
+public abstract class GroovyCITestScript<T> extends Script implements Test<T> {
 
 	protected CIConfig config;
 
@@ -47,20 +45,6 @@ public abstract class GroovyCITestScript extends Script implements CITest {
 	public GroovyCITestScript() {
 		this.config = CIConfig.DUMMY_CONFIG;
 		this.parameters = new ArrayList<String>();
-	}
-
-	@Override
-	public void init(CIConfig config) {
-		try {
-			this.config = (CIConfig) config.clone();
-		}
-		catch (CloneNotSupportedException e) {
-		}
-	}
-
-	@Override
-	public void setParameters(List<String> parameters) {
-		this.parameters = Collections.unmodifiableList(parameters);
 	}
 
 	public String getParameter(int index) {

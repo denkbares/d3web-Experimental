@@ -5,6 +5,7 @@
 	<requires>
 		<import plugin-id="KnowWE-Plugin-DiaFlux" />
 		<import plugin-id="KnowWEExtensionPoints" />
+		<import plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" />
 	</requires>
 	
 	<runtime>
@@ -73,7 +74,7 @@
 		<parameter id="scope" value="/DiaFlux" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+	<extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"
 		id="FlowCoverageTest">
 		<parameter id="class" value="de.knowwe.diaflux.coverage.ci.FlowCoverageTest" />
 		<parameter id="name" value="FlowCoverageTest" />

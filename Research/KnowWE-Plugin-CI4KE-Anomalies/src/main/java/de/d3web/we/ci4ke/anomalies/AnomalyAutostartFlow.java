@@ -22,14 +22,13 @@ package de.d3web.we.ci4ke.anomalies;
 
 import java.util.List;
 
+import cc.denkbares.testing.ArgsCheckResult;
+import cc.denkbares.testing.Message;
+import cc.denkbares.testing.Message.Type;
+import cc.denkbares.testing.Test;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.StartNode;
-import de.d3web.we.ci4ke.testing.AbstractCITest;
-import de.d3web.we.ci4ke.testing.CITestResult;
-import de.d3web.we.ci4ke.testing.CITestResult.Type;
-import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.Environment;
 
 /**
  * Anomaly detection: test for automatically starting flowcharts with more than
@@ -38,24 +37,14 @@ import de.knowwe.core.Environment;
  * @author Gritje Meinke
  * @created 17.04.2011
  */
-public class AnomalyAutostartFlow extends AbstractCITest {
+public class AnomalyAutostartFlow implements Test<KnowledgeBase> {
 
 	@Override
-	public CITestResult call() throws Exception {
+	public Message execute(KnowledgeBase kb, String[] args) {
 
-		// get the first parameter = article whose KB should be searched for
-		// anomaly
-		String articleName = getParameter(0);
-		String config = "knowledge base article: " + articleName;
-
-		KnowledgeBase kb =
-				D3webUtils.getKnowledgeBase(
-						Environment.DEFAULT_WEB, articleName);
-
-		CITestResult res = new CITestResult(Type.SUCCESSFUL, null, config);
+		Message res = new Message(Type.SUCCESS, null);
 		StringBuffer buf = new StringBuffer();
 
-		// get the KB of this article
 		if (kb != null) {
 
 			// get all flowcharts
@@ -78,14 +67,23 @@ public class AnomalyAutostartFlow extends AbstractCITest {
 		} // end if KB
 
 		if (buf.length() > 0) {
-			res = new
-					CITestResult(
-							Type.FAILED,
+			res = new Message(
+					Type.FAILURE,
 							"automatically starting flowcharts with more than one startnode found: \n"
-									+ buf.toString(), config);
+									+ buf.toString());
 		}
 
 		return res;
 
+	}
+
+	@Override
+	public ArgsCheckResult checkArgs(String[] args) {
+		return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
+	}
+
+	@Override
+	public Class<KnowledgeBase> getTestObjectClass() {
+		return KnowledgeBase.class;
 	}
 }

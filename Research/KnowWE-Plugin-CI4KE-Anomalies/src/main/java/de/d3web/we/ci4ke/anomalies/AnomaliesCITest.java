@@ -20,9 +20,10 @@
 
 package de.d3web.we.ci4ke.anomalies;
 
-import de.d3web.we.ci4ke.testing.AbstractCITest;
-import de.d3web.we.ci4ke.testing.CITestResult;
-import de.d3web.we.ci4ke.testing.CITestResult.Type;
+import cc.denkbares.testing.ArgsCheckResult;
+import cc.denkbares.testing.Message;
+import cc.denkbares.testing.Message.Type;
+import cc.denkbares.testing.Test;
 
 /**
  * test ...
@@ -30,13 +31,23 @@ import de.d3web.we.ci4ke.testing.CITestResult.Type;
  * @author Gritje Meinke
  * @created 17.04.2011
  */
-public class AnomaliesCITest extends AbstractCITest {
+public class AnomaliesCITest implements Test<Object> {
 
 	@Override
-	public CITestResult call() throws Exception {
+	public Message execute(Object o, String[] args) {
 
-		return new CITestResult(Type.FAILED);
+		return new Message(Type.FAILURE);
 
+	}
+
+	@Override
+	public ArgsCheckResult checkArgs(String[] args) {
+		return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
+	}
+
+	@Override
+	public Class<Object> getTestObjectClass() {
+		return Object.class;
 	}
 
 }

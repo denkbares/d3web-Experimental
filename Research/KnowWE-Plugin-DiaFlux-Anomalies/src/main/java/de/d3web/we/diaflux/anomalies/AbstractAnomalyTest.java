@@ -18,12 +18,11 @@
  */
 package de.d3web.we.diaflux.anomalies;
 
+import cc.denkbares.testing.ArgsCheckResult;
+import cc.denkbares.testing.Message;
+import cc.denkbares.testing.Message.Type;
+import cc.denkbares.testing.Test;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.we.ci4ke.testing.AbstractCITest;
-import de.d3web.we.ci4ke.testing.CITestResult;
-import de.d3web.we.ci4ke.testing.CITestResult.Type;
-import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.Environment;
 import de.knowwe.core.utils.Strings;
 
 /**
@@ -31,27 +30,36 @@ import de.knowwe.core.utils.Strings;
  * @author Roland Jerg
  * @created 09.05.2012
  */
-public abstract class AbstractAnomalyTest extends AbstractCITest {
+public abstract class AbstractAnomalyTest implements Test<KnowledgeBase> {
 
 	@Override
-	public CITestResult call() throws Exception {
-		String articleName = getParameter(0);
-		String config = "knowledge base article: " + articleName;
-		// StringBuffer msg = new StringBuffer();
+	public ArgsCheckResult checkArgs(String[] args) {
+		int requiredArgsCount = 0;
+		// args are not passed to implementing subclasses hence no args can be
+		// used
+		if (args.length > requiredArgsCount) {
+			new ArgsCheckResult(ArgsCheckResult.Type.WARNING, "Too many arguments given: "
+					+ args.length + " but only " + requiredArgsCount + "are expected");
+		}
+		return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
+	}
+
+	@Override
+	public Class<KnowledgeBase> getTestObjectClass() {
+		return KnowledgeBase.class;
+	}
+
+	@Override
+	public Message execute(KnowledgeBase kb, String[] args) {
 		String errormsg = "";
 
-		KnowledgeBase kb =
-				D3webUtils.getKnowledgeBase(
-						Environment.DEFAULT_WEB, articleName);
-
-		CITestResult res = new CITestResult(Type.SUCCESSFUL, null, config);
+		Message res = new Message(Type.SUCCESS, null);
 
 		errormsg = test(kb);
 
-		// String errormsg = msg.toString();
 		if (!errormsg.isEmpty()) {
 			Strings.maskHTML(errormsg);
-			res = new CITestResult(Type.FAILED, errormsg, config);
+			res = new Message(Type.FAILURE, errormsg);
 		}
 
 		return res;
