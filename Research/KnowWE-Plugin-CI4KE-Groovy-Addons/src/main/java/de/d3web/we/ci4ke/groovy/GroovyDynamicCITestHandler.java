@@ -52,7 +52,7 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 	}
 
 	@Override
-	public Class<? extends Test> getCITestClass(String testName) {
+	public Class<? extends Test<?>> getCITestClass(String testName) {
 		Section<GroovyCITestType> testSection = getAllGroovyCITestSections().get(testName);
 		return parseGroovyCITest(DefaultMarkupType.getContent(testSection));
 	}
@@ -64,10 +64,10 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 	 * @return
 	 */
 	@Override
-	public Map<String, Class<? extends Test>> getAllCITestClasses() {
+	public Map<String, Class<? extends Test<?>>> getAllCITestClasses() {
 		// return map
-		Map<String, Class<? extends Test>> classesMap =
-				new HashMap<String, Class<? extends Test>>();
+		Map<String, Class<? extends Test<?>>> classesMap =
+				new HashMap<String, Class<? extends Test<?>>>();
 		for (Map.Entry<String, Section<GroovyCITestType>> testSectionEntry : getAllGroovyCITestSections().entrySet()) {
 			String testName = testSectionEntry.getKey();
 			Section<GroovyCITestType> testSection = testSectionEntry.getValue();
@@ -112,7 +112,7 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 		return sectionsList;
 	}
 
-	public static Class<? extends Test> parseGroovyCITest(String groovyCodeOfCITestSection) {
+	public static Class<? extends Test<?>> parseGroovyCITest(String groovyCodeOfCITestSection) {
 
 		CompilerConfiguration cc = new CompilerConfiguration();
 		cc.setScriptBaseClass(GroovyCITestScript.class.getName());
@@ -121,8 +121,8 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 		String groovycode = GroovyCITestSubtreeHandler.PREPEND + groovyCodeOfCITestSection;
 
 		@SuppressWarnings("unchecked")
-		Class<? extends Test> clazz =
-				(Class<? extends Test>) shell.parse(groovycode).getClass();
+		Class<? extends Test<?>> clazz =
+				(Class<? extends Test<?>>) shell.parse(groovycode).getClass();
 
 		return clazz;
 	}

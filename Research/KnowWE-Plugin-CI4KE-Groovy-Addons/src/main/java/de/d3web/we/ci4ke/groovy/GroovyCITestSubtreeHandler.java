@@ -60,7 +60,9 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 		String sectionContent = DefaultMarkupType.getContent(s);
 		Message result = null;
 		try {
-			Class<? extends Test> testClazz = GroovyDynamicCITestHandler.
+			// TODO: how to make this working in combination with the
+			// TestingFramework?
+			Class<? extends Test<?>> testClazz = GroovyDynamicCITestHandler.
 					parseGroovyCITest(sectionContent);
 			// result = testClazz.newInstance().execute();
 		}
