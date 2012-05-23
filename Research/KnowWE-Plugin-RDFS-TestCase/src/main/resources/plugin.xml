@@ -26,12 +26,22 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+	<extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"
 		id="RDFSTestCaseRunner">
 		<parameter id="class"
 			value="de.knowwe.rdfs.testcase.ci4ke.RDFSTestCaseRunner" />
 		<parameter id="name" value="RDFSTestCaseRunner" />
 		<parameter id="description" value="CITest RDFSTestCaseRunner" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+		<extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="TestObjectProvider"
+		id="RDF2GoTestObjectProvider">
+		<parameter id="class"
+			value="de.knowwe.rdfs.testcase.ci4ke.RDF2GoTestObjectProvider" />
+		<parameter id="name" value="RDF2GoTestObjectProvider" />
+		<parameter id="description" value="RDF2GoTestObjectProvider" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>

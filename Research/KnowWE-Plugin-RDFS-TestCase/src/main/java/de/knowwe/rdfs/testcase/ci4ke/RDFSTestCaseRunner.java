@@ -18,10 +18,12 @@
  */
 package de.knowwe.rdfs.testcase.ci4ke;
 
-import de.d3web.we.ci4ke.testing.AbstractCITest;
-import de.d3web.we.ci4ke.testing.CITestResult;
-import de.d3web.we.ci4ke.testing.CITestResult.Type;
+import cc.denkbares.testing.ArgsCheckResult;
+import cc.denkbares.testing.Message;
+import cc.denkbares.testing.Message.Type;
+import cc.denkbares.testing.Test;
 import de.knowwe.core.Environment;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.testcase.RDFSTestCase;
 import de.knowwe.rdfs.testcase.analysis.RDFSTestCaseAnalysis;
 import de.knowwe.rdfs.testcase.analysis.RDFSTestCaseAnalysisReport;
@@ -33,26 +35,21 @@ import de.knowwe.rdfs.testcase.util.RDFSTestCaseLoader;
  * @author Sebastian Furth
  * @created 22.12.2011
  */
-public class RDFSTestCaseRunner extends AbstractCITest {
+public class RDFSTestCaseRunner implements Test<Rdf2GoCore> {
 
 	@Override
-	public CITestResult call() {
+	public Message execute(Rdf2GoCore core, String[] args) {
 
-		if (!checkIfParametersAreSufficient(2)) {
-			return numberOfParametersNotSufficientError(2);
-		}
-
-		String monitoredArticleTitle = getParameter(0);
-		String testCaseName = getParameter(1);
-		String config = "article: " + monitoredArticleTitle + "; name: " + testCaseName;
+		String monitoredArticleTitle = args[0];
+		String testCaseName = args[1];
 
 		// load test case
 		RDFSTestCase testCase = RDFSTestCaseLoader.loadTestCase(
 				monitoredArticleTitle, Environment.DEFAULT_WEB, testCaseName);
 
 		if (testCase == null) {
-			return new CITestResult(Type.ERROR, "No test case with name '" + testCaseName
-					+ "' found in article '" + monitoredArticleTitle + "'", config);
+			return new Message(Type.ERROR, "No test case with name '" + testCaseName
+					+ "' found in article '" + monitoredArticleTitle + "'");
 		}
 
 		// run test case
@@ -70,10 +67,24 @@ public class RDFSTestCaseRunner extends AbstractCITest {
 				description.append(diff);
 				description.append("\n");
 			}
-			return new CITestResult(Type.FAILED, description.toString(), config);
+			return new Message(Type.FAILURE, description.toString());
 		}
 
 		// report.recall() == 1.0 && report.precision() == 1.0
-		return new CITestResult(Type.SUCCESSFUL, null, config);
+		return new Message(Type.SUCCESS, null);
+	}
+
+	@Override
+	public ArgsCheckResult checkArgs(String[] args) {
+		int expectedArgCount = 2;
+		if (args.length == expectedArgCount) return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
+		return new ArgsCheckResult(ArgsCheckResult.Type.ERROR, "Expected number of arguments: "
+				+ expectedArgCount + " - found: " + args.length);
+	}
+
+	@Override
+	public Class<Rdf2GoCore> getTestObjectClass() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
