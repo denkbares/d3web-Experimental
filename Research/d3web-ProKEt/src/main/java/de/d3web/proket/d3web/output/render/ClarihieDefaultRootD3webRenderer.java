@@ -19,19 +19,14 @@
  */
 package de.d3web.proket.d3web.output.render;
 
-import de.d3web.core.inference.KnowledgeKind;
-import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.session.Session;
-import de.d3web.jurisearch.JuriModel;
-import de.d3web.jurisearch.JuriRule;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUserSettings;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
-import java.util.*;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.antlr.stringtemplate.StringTemplate;
 
@@ -43,7 +38,7 @@ public class ClarihieDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
      */
     @Override
     public ContainerCollection renderRoot(ContainerCollection cc,
-            Session d3webSession, HttpSession http) {
+            Session d3webSession, HttpSession http, HttpServletRequest request) {
 
         // get the d3web base template according to dialog type
         String userprefix = D3webConnector.getInstance().getUserprefix();
@@ -127,7 +122,7 @@ public class ClarihieDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         st.setAttribute("fulljs", cc.js.generateOutput());
         st.setDefaultArgumentValues();
 
-        setDialogSpecificAttributes(http, st);
+        setDialogSpecificAttributes(http, st, request);
 
         cc.html.add(st.toString());
         return cc;

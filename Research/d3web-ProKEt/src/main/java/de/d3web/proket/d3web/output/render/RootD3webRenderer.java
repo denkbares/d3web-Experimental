@@ -24,6 +24,7 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.session.Session;
 import de.d3web.proket.output.container.ContainerCollection;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 
@@ -40,11 +41,11 @@ public interface RootD3webRenderer {
 	 * @param cc the ContainerCollection that is to be used.
 	 * @return the resulting ContainerCollection specifying the dialog.
 	 */
-	public ContainerCollection renderRoot(ContainerCollection cc, Session d3webSession, HttpSession http);
+	public ContainerCollection renderRoot(ContainerCollection cc, Session d3webSession, HttpSession http, HttpServletRequest request);
 
 	public String renderHeaderInfoLine(Session d3webSession);
 
-	public void setDialogSpecificAttributes(HttpSession httpSession, StringTemplate st);
+	public void setDialogSpecificAttributes(HttpSession httpSession, StringTemplate st, HttpServletRequest request);
 
 	/**
 	 * Handles CSS specifications from the specification XML, i.e. checks the

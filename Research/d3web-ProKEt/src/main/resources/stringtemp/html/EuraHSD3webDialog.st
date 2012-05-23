@@ -10,50 +10,7 @@ $endif$
 	<table>
 	<tr>
 		<td width="35%" cellspacing="0" cellpadding="0">
-			<table>
-				<tr>
-					<td>
-						$if(reset)$
-							<div class="leftButton">
-								$CaseNewButton()$
-							</div>
-						$endif$
-						
-						$if(statistics)$
-							<div class="leftButton">
-								$StatisticsButton()$
-							</div>
-						$endif$
-
-						$if(summary)$
-							<div class="leftButton">
-								$SummaryButton()$
-							</div>
-						$endif$
-					</td>
-				</tr>
-				<tr>
-					<td>
-						$if(followupbutton)$
-							<div class="leftButton">
-								$FollowUpButton()$
-							</div>
-						$endif$
-						
-						$if(loadcase)$
-							<div class="leftButton">
-								$CaseLoadButton()$
-							</div>
-						$endif$
-						
-						$if(savecase)$
-							<div class="leftButton">
-								$CaseSaveButton()$
-							</div>
-						$endif$
-					</td>
-				</tr>
-			</table>
+			$EuraHSTabbedButtons()$
 		</td>
 		<td width=*>
 			
@@ -71,10 +28,36 @@ $endif$
 	</table>
 </div>
 
+<div id="eurahsintroscreen" style="$if(eurahsintro)$display: block;$else$display: none;$endif$">
 
-<div id="middle">
-	<!-- navigation on the left side //-->
-	<div id="left">$NavigationBox()$$left$</div>
+
+    <div id="newcaseintrobutton" class="eurahsintrobutton">
+        <a href="$eurahsintronewlink$">
+        <img src="img/EuraHSNew.png" alt="New Case" style="width: 200px;">
+        </a>
+    </div>
+
+    <div id="loadcaseintrobutton" class="eurahsintrobutton">
+        <input type="image" src="img/EuraHSLoad.png" alt="Load Case" style="width: 200px;">
+    </div>
+
+    <div id="statisticsintrobutton" class="eurahsintrobutton">
+        <a href="$eurahsintrostatslink$">
+        <img src="img/EuraHSStats.png" alt="New Case" style="width: 200px;">
+        </a>
+    </div>
+
+    <div id="creategroupsintrobutton" class="eurahsintrobutton">
+        <a href="$eurahsintrogroupslink$">
+        <img src="img/EuraHSGroups.png" alt="New Case" style="width: 200px;">
+        </a>
+    </div>
+
+
+</div>
+
+
+<div id="middle" style="$if(eurahsmiddle)$display: block;$else$display: none;$endif$">
 	
 	<!-- actual content //-->
 	<div id="content">
@@ -92,9 +75,6 @@ $endif$
 			
 		</div>
 	</div>
-	
-	<!-- box on the right side //-->
-	<div id="right">$sidetext$</div>
 </div>
 
 

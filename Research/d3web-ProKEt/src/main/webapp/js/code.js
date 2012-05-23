@@ -16,6 +16,8 @@ var stopMarking = false;
 var initialization = true;
 
 
+	
+
 /****************************************************************************
  * FUNCTIONS needed for the basic initial setting up of all js functionality *
  * e.g., marking questions (normal case) , making navigaion etc.             *
@@ -24,6 +26,7 @@ var initialization = true;
 
 function setup() {
 	
+        
     // load questionnaires and questions into memory
     questionnaires = $('#content [id^="qu_"]');
     questionsDirty = $('#content [id^="q_"]');
@@ -110,6 +113,7 @@ function setup() {
     }
     
 }
+
 
 function initUEQFreeFeedback(){
 
@@ -898,18 +902,11 @@ function tooltip_out(object) {
         target = object;
     } else {
 		
-        if($("#"+object).attr("id").indexOf("detail")!=-1){
-            target = $("#"+object);
-        } else {
-                // a specifically marked element
         target = $("#tt-" + object);
-        }
-        
-    }
+     }
 
     target.hide(500);
     tooltipShown = undefined;
-//tooltipShownTrigger = undefined;
 }
 
 
@@ -1432,7 +1429,6 @@ function showAuxInfoOQD(id, title){
 
 // TODO: curretly called on button click in front legal question -> refactor!!!
 function handleOQYNQuestions(fullId, rating){
-    //ue_logDialogType("ClariOQD");    
     
     // retrieve follow up element to current element
     var splitID = fullId.split("-")[1];
@@ -1476,6 +1472,9 @@ function handleOQYNQuestions(fullId, rating){
     questionEl.children().first().children().closest('[id^=detail]').removeClass("show");
     
     hide_all_tooltips();
+    
+    $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+
 }
 
 

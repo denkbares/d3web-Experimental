@@ -44,6 +44,7 @@ import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
+import javax.servlet.http.HttpServletRequest;
 
 public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements RootD3webRenderer {
 
@@ -53,9 +54,9 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 	 */
 	@Override
 	public ContainerCollection renderRoot(ContainerCollection cc,
-			Session d3webSession, HttpSession http) {
+			Session d3webSession, HttpSession http, HttpServletRequest request) {
 
-            
+           
             Session s = ((Session) http.getAttribute("d3webSession"));
         
             // get the d3web base template according to dialog type
@@ -120,7 +121,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
                 D3webUserSettings us = 
                         (D3webUserSettings)http.getAttribute("userSettings");
                         
-                setDialogSpecificAttributes(http, st);
+                setDialogSpecificAttributes(http, st, request);
                 
 		// render the children
 		renderChildren(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet(), 
@@ -140,7 +141,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 	}
 
 	@Override
-	public void setDialogSpecificAttributes(HttpSession httpSession, StringTemplate st) {
+	public void setDialogSpecificAttributes(HttpSession httpSession, StringTemplate st, HttpServletRequest request) {
 		// overwrite if you have specific attributes
 	}
 

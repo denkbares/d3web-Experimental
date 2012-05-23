@@ -34,22 +34,18 @@ import javax.servlet.http.HttpSession;
 import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.ValueObject;
-import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionDate;
-import de.d3web.core.knowledge.terminology.QuestionNum;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
-import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
-import de.d3web.proket.data.IndicationMode;
+import de.d3web.proket.utils.GlobalSettings;
 import java.util.*;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Basic Renderer Class for d3web-based dialogs. Defines the basic rendering of
@@ -87,11 +83,30 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
     private static Map<String, Map<String, Object>> caseCache = new HashMap<String, Map<String, Object>>();
 
     @Override
-    public void setDialogSpecificAttributes(HttpSession httpSession, StringTemplate st) {
+    public void setDialogSpecificAttributes(HttpSession httpSession, StringTemplate st, HttpServletRequest request) {
         // ONLY FOR HERNIA, 3 custom buttons
         st.setAttribute("summary", true);
         st.setAttribute("statistics", true);
         st.setAttribute("followupbutton", true);
+
+        //String ehsintro = request.getParameter("ehsintro");
+        // Maybe better pull out, handle button click per JS and call a goToStatistics Ajax etc
+        /*String ehsintro = "true";
+        if (ehsintro != null && ehsintro.equals("true")) {
+            st.setAttribute("eurahsintro", true);
+            st.removeAttribute("eurahsmiddle");
+            st.setAttribute("eurahsintronewlink", "/EuraHS-Dialog");
+            st.setAttribute("eurahsintronewlink", "/EuraHS-Dialog?loadcase=true");
+            // TODO: open load case dialog!!!
+            st.setAttribute("eurahsintrostatslink", "../Statistics/Statistic.jsp");
+            st.setAttribute("eurahsintrogroupslink", "../Statistics/Groups.jsp");
+        } /*else {
+            st.setAttribute("eurahsmiddle", true);
+            st.removeAttribute("eurahsintro");
+        }*/
+
+        st.setAttribute("eurahsmiddle", true);
+            st.removeAttribute("eurahsintro");
 
         if (httpSession.getAttribute("level1qs") == null) {
             httpSession.setAttribute("level1qs", parseLevel1Questions(httpSession));

@@ -111,13 +111,13 @@ public class EuraHSDialog extends D3webDialog {
         Session sNew = initDropdownChoiceQuestions(d3webSess);
         httpSession.setAttribute(D3WEB_SESSION, sNew);
         httpSession.setAttribute("initsetquestions", INITDROPQS);
-
+       
 
         // get the root renderer --> call getRenderer with null
         EuraHSDefaultRootD3webRenderer d3webr = (EuraHSDefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
 
 
-        cc = d3webr.renderRoot(cc, d3webSess, httpSession);
+        cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
 
         writer.print(cc.html.toString()); // deliver the rendered output
 

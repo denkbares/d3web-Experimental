@@ -273,9 +273,12 @@ public class D3webDialog extends HttpServlet {
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
         
+        
+        
+        
         // TEST:
-        //httpSession.setAttribute("debug", "true");
-
+        httpSession.setAttribute("debug", "true");
+        
 
         if (action == null) {
             action = "show";
@@ -453,6 +456,7 @@ public class D3webDialog extends HttpServlet {
             return;
         } else if (action.equalsIgnoreCase(
                 "sendFeedbackMail")) {
+
             String state = "";
             if (request.getParameter("feedback") != null) {
                 if (request.getParameter("feedback").equals("")) {
@@ -768,6 +772,8 @@ public class D3webDialog extends HttpServlet {
         
         
         diff.addAll(D3webUtils.getUnknownQuestions(d3webSession));
+        diff.addAll(D3webUtils.getMCQuestions(d3webSession));
+        
         // we simply update answered abstract questions every time
         // actually we only need to update them if their facts have changed, but
         // thats more complex to test and probably not even faster...
@@ -791,7 +797,8 @@ public class D3webDialog extends HttpServlet {
     private void renderAndUpdateDiff(PrintWriter writer, Session d3webSession, Set<TerminologyObject> diff, HttpSession httpSession) {
         ContainerCollection cc = new ContainerCollection();
         D3webUserSettings us = (D3webUserSettings) httpSession.getAttribute(USER_SETTINGS);
-        System.out.println("DIFF: " + diff);
+        
+        
         for (TerminologyObject to : diff) {
             if (isHiddenOrHasHiddenParent(to)) {
                 continue;
@@ -1161,7 +1168,6 @@ public class D3webDialog extends HttpServlet {
      */
     protected void resetD3webSession(HttpSession httpSession) {
 
-        System.out.println("reset");
         Session d3webSession =
                 D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
         httpSession.setAttribute(D3WEB_SESSION, d3webSession);
@@ -1214,7 +1220,7 @@ public class D3webDialog extends HttpServlet {
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
         
-        cc = d3webr.renderRoot(cc, d3webSess, httpSession);
+        cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
         writer.print(cc.html.toString()); // deliver the rendered output
         writer.close(); // and close
     }
@@ -1328,6 +1334,7 @@ public class D3webDialog extends HttpServlet {
             HttpServletResponse response,
             HttpSession httpSession) throws MessagingException {
 
+                    System.out.println("FEEDBACKMAIL: ");
         final String user = "SendmailAnonymus@freenet.de";
         final String pw = "sendmail";
 
@@ -1509,6 +1516,7 @@ public class D3webDialog extends HttpServlet {
         String group =
                 httpSession.getAttribute("uegroup").toString() != null
                 ? httpSession.getAttribute("uegroup").toString() : "";
+            // WIRD IM DialogRenderer in die httpSession geschrieben!
         if (group != null && !group.equals("")) {
             String isGroupLogged =
                     httpSession.getAttribute("isGroupLogged") != null
@@ -1523,6 +1531,7 @@ public class D3webDialog extends HttpServlet {
         String uesystemtype =
                 httpSession.getAttribute("uesystemtype").toString() != null
                 ? httpSession.getAttribute("uesystemtype").toString() : "";
+        // WIRD IM DialogRenderer in die httpSession geschrieben!
         if (uesystemtype != null && !uesystemtype.equals("")) {
             String isSystemTypeLogged =
                     httpSession.getAttribute("isSystemTypeLogged") != null

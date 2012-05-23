@@ -83,7 +83,7 @@ public class Test extends D3webDialog {
 		ContainerCollection cc = new ContainerCollection();
 
 		Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
-		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
+		cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
 
 		writer.print(cc.html.toString()); // deliver the rendered output
 

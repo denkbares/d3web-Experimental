@@ -149,7 +149,7 @@ public class MediastinitisDialog extends D3webDialog {
 			}
 		}
 
-		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
+		cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
 
 		writer.print(cc.html.toString()); // deliver the rendered output
 

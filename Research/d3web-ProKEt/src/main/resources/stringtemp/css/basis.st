@@ -154,6 +154,8 @@ body,table,div {
  
 .topText{vertical-align: top;}
 
+.width50Percent{ width: 45%;}
+
 .leftPadd{padding-left: 15px;}
 
 .tableNoTopMargin{margin-top: 0px;}

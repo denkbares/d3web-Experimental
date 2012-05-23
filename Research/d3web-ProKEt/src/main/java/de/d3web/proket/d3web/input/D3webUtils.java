@@ -1407,6 +1407,7 @@ public class D3webUtils {
                     blackboard.addValueFact(fact);
                 }
             }
+            System.out.println(blackboard.getAnsweredQuestions());
         }
     }
 
@@ -1465,13 +1466,16 @@ public class D3webUtils {
                 String[] choiceIds = valueId.split("##mcanswer##");
                 List<Choice> choices = new ArrayList<Choice>();
 
-                for (String choiceId : choiceIds) {
+               for (String choiceId : choiceIds) {
                     String choiceName = AbstractD3webRenderer.getObjectNameForId(choiceId);
                     choices.add(new Choice(choiceName == null ? choiceId : choiceName));
                 }
                 value = MultipleChoiceValue.fromChoices(choices);
+                
             }
         }
+      
+        
         return value;
     }
 
@@ -1608,6 +1612,20 @@ public class D3webUtils {
         return unknownQuestions;
     }
 
+    
+     public static Set<TerminologyObject> getMCQuestions(Session sess) {
+        Set<TerminologyObject> mcs = new HashSet<TerminologyObject>();
+        for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
+            if (to instanceof QuestionMC){
+                    mcs.add(to);
+            
+            }
+            
+        }
+        return mcs;
+    }
+     
+     
     public static String getFormattedDateFromString(Date date, String dateFormat) {
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         String f = sdf.format(date);

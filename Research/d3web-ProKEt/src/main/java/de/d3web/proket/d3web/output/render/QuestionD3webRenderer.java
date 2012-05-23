@@ -70,7 +70,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
             return "";
         }
         StringBuilder sb = new StringBuilder();
-
+        
 
         // get the fitting template. In case user prefix was specified, the
         // specific TemplateName is returned, otherwise, the base object name.
@@ -133,7 +133,6 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
        // System.out.println("PARENT IND:" + parent.getName() + " - " + isIndicated(parent, bb));
        // System.out.println();
         
-
        
             // QContainer indicated
             if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
