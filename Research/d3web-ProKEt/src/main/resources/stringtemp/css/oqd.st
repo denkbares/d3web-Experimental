@@ -106,6 +106,7 @@ table{
     min-height: 24px;
     padding-bottom: 1px;
     padding-left: 15px;
+    margin-bottom: 10px;
 }
 
 
@@ -243,7 +244,8 @@ area {
     margin-top: 5px;
     font-weight: normal;
     clear: both;
-    margin-right: 15px;
+    margin-right: 10px;
+    margin-bottom: 10px;
 }
 
 .detailButton{width: 50px; height: 18px; 

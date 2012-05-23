@@ -105,7 +105,8 @@ public class OQQuestionRenderer extends Renderer {
             GlobalSettings.getInstance().setQuestionCount(qcnew);*/
         }
 
-        st.setAttribute("questioncount", ((Question)dialogObject).getCounter());
+        
+        //st.setAttribute("questioncount", ((Question)dialogObject).getCounter());
             
         
         // get the inh.attributes of this objects and inherit missing

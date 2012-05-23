@@ -181,8 +181,10 @@ $(function() {
             autoOpen: false,
             position: [ 0, getHeaderHeight()],
             modal: false,
-            width: 450,
-            height: 550,
+            width: 550,
+            height: 600,
+            minWidth : 550,
+            minHeight : 600,
             buttons: [{
                 id: "sumDLTxt",
                 text: dl,
@@ -392,6 +394,7 @@ function initFunctionality() {
 	
     $(document).ready(function() {
         $("#jqSummaryDialog").tabs();
+        $("#jqTabbedButtons").tabs();
     });
 	
     /*

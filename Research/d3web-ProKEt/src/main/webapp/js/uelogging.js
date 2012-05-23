@@ -58,10 +58,10 @@ $(function(){
         var opts = {
             autoOpen: false,
             position : top,
-            width : 720,
-            height : 650,
-            minWidth : 720,
-            minHeight : 620,
+            width : 800,
+            height : 700,
+            minWidth : 800,
+            minHeight : 700,
             draggable : false,
             resizable : false,
             modal : false,
@@ -320,7 +320,7 @@ function ue_sendFF(){
                 $("#ffmessage").html("");
                 $("#ffmessage").removeClass("errorRed");
                 $('#jqFFDialog').dialog("close");
-                ue_logUEFeedback(user, contact, feedback, now);
+                //ue_logUEFeedback(user, contact, feedback, now);
         
             } else if(html=="nofeedback"){
                 // display message that feedback is NOT optional 
@@ -352,16 +352,8 @@ function ue_sendUEQ(){
     }
         
     var questionnaireData = ue_retrieveQuestionnaireData();
-    /*if(!ue_dataComplete(questionnaireData)){
-        
-        // display message that feedback is NOT optional 
-        message = "Please fill in the complete survey!";
-        $("#ueqMessage").html(message);
-        $("#ueqMessage").addClass("errorRed");
-        
-    } else { */
-        
-    var link = $.query.set("action", "sendUEQMail")
+   
+   var link = $.query.set("action", "sendUEQMail")
     .set("user", user)
     .set("contact", contact)
     .set("questionnaireData", questionnaireData).toString();
@@ -402,15 +394,25 @@ function ue_retrieveQuestionnaireData(){
     var qData = "";
     
     $("#ueq input:radio:checked").each(function(){
-        qData += $(this).attr("id").replace("UE_", "") + "---" + $(this).attr("value") + "###"; 
+       // if($(this).attr("name")==null){
+         //   qData += $(this).attr("id").replace("UE_", "") + "---" + $(this).attr("value") + "###"; 
+       // } else {
+       var ques = $(this).attr("name").replace("UE_", "").replace("uelikert7_", "");
+       qData += ques + "---" + $(this).attr("value") + "###";
+       // }
     });
     
     var freeFeedback = "/";
-    var uiRating = $("#UE_QUIRating"); 
-    if(uiRating.val()!=undefined && uiRating.val()!=""){
-        freeFeedback = uiRating.val();
-    }
-    qData += uiRating.attr("id").replace("UE_", "") + "---" + freeFeedback + "###";
+    //var uiRating = $("#UE_QUIRating"); 
+    //if(uiRating.val()!=undefined && uiRating.val()!=""){
+      //  freeFeedback = uiRating.val();
+    //}
+    
+    // TODO: maybe remove first option in future if radio buttons are used solely
+    //if(uiRating.attr("id")!=null){
+        // id is contained if here is a free textfield for dialog type rating
+        //qData += uiRating.attr("id").replace("UE_", "") + "---" + freeFeedback + "###";
+    //
     
     
     var freeFBField = $("#UE_QFreeFeedback"); 

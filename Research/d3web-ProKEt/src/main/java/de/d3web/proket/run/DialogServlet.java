@@ -287,7 +287,6 @@ public class DialogServlet extends HttpServlet {
     protected void logInitially(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession) throws IOException {
 
-        PrintWriter writer = response.getWriter();
 
         GlobalSettings.getInstance().setLogBaseFolder(
                 GlobalSettings.getInstance().getServletBasePath()
@@ -307,8 +306,7 @@ public class DialogServlet extends HttpServlet {
                 request.getParameter("user").replace("+", " ");
         String start =
                 request.getParameter("timestring").replace("+", " ");
-        String source =
-                getSource(request);
+        
 
         ServletLogUtils.logBaseInfo(browser, user, start, logger);
 

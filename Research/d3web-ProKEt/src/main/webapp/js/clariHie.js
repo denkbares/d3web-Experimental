@@ -8,6 +8,8 @@ var rootQuestionId = "";
 /*-----------------------------------------*/
 function clariHieInit() {
     
+    handleUnsupportedBrowsers();
+    
     generate_tooltip_functions_ynbuttons();
     generate_tooltip_functions_propagation();
         
