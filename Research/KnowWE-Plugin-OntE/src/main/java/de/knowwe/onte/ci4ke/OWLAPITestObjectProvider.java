@@ -21,6 +21,7 @@ package de.knowwe.onte.ci4ke;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.model.IRI;
 
 import cc.denkbares.testing.TestObjectProvider;
@@ -36,6 +37,14 @@ public class OWLAPITestObjectProvider implements TestObjectProvider<OWLAPIConnec
 	@Override
 	public List<OWLAPIConnector> getTestObject(Class<OWLAPIConnector> c, String id) {
 		List<OWLAPIConnector> result = new ArrayList<OWLAPIConnector>();
+		if (c == null) {
+			Logger.getLogger(this.getClass()).warn("Class given to TestObjectProvider was 'null'");
+			return result;
+		}
+		if (!c.equals(OWLAPIConnector.class)) {
+			return result;
+		}
+
 		if (id == null || id.length() == 0) {
 
 			result.add(OWLAPIConnector.getGlobalInstance());
