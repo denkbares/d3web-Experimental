@@ -221,6 +221,7 @@
 		<module>KnowWE-Plugin-DiaFlux-CoverageCity</module>
 		<module>KnowWE-Plugin-Wikicontent-Download</module>
 		<module>d3web-OfficeConverterAH</module>
+		<module>KnowWE-Plugin-WissKont</module>
 	</modules>
 	<repositories>
 		<repository>
