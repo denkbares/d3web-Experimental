@@ -44,5 +44,6 @@ public class HierarchyMarkupDef extends DefaultMarkupType {
 
 	public HierarchyMarkupDef() {
 		super(m);
+		setIgnorePackageCompile(true);
 	}
 }
