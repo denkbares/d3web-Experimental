@@ -27,6 +27,7 @@ public class SparqlQueryMarkup extends DefaultMarkupType {
 
 	public SparqlQueryMarkup(DefaultMarkup markup) {
 		super(markup);
+		this.setIgnorePackageCompile(true);
 	}
 
 	private static DefaultMarkup m = null;
@@ -38,6 +39,7 @@ public class SparqlQueryMarkup extends DefaultMarkupType {
 
 	public SparqlQueryMarkup() {
 		super(m);
+		this.setIgnorePackageCompile(true);
 
 	}
 

@@ -141,24 +141,29 @@ public class TripleMarkup extends AbstractKnowledgeUnitType<TripleMarkup> implem
 							}
 						}
 					}
-					URI rangeClassURI = RDFSUtil.getURI(IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-							new TermIdentifier(rangeClassName)).iterator().next());
-					URI domainClassURI = RDFSUtil.getURI(IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-							new TermIdentifier(domainClassName)).iterator().next());
+					if (rangeClassName != null) {
+						URI rangeClassURI = RDFSUtil.getURI(IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+								new TermIdentifier(rangeClassName)).iterator().next());
+						URI objectURI = RDFSUtil.getURI(object);
+						String queryRange = "ASK { <" + objectURI + "> <" + RDF.type + "> <"
+								+ rangeClassURI + "> .}";
+						warningRange = !Rdf2GoCore.getInstance().sparqlAskExcludeStatementForSection(
+								queryRange, triple);
+					}
 
-					URI objectURI = RDFSUtil.getURI(object);
-					URI subjectURI = RDFSUtil.getURI(subject);
+					if (domainClassName != null) {
+						URI domainClassURI = RDFSUtil.getURI(IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+								new TermIdentifier(domainClassName)).iterator().next());
 
-					String queryRange = "ASK { <" + objectURI + "> <" + RDF.type + "> <"
-							+ rangeClassURI + "> .}";
-					warningRange = !Rdf2GoCore.getInstance().sparqlAskExcludeStatementForSection(
-							queryRange, triple);
+						URI subjectURI = RDFSUtil.getURI(subject);
 
-					String queryDomain = "ASK { <" + subjectURI + "> <" + RDF.type
-							+ "> <"
-							+ domainClassURI + "> .}";
-					warningDomain = !Rdf2GoCore.getInstance().sparqlAskExcludeStatementForSection(
-							queryDomain, triple);
+						String queryDomain = "ASK { <" + subjectURI + "> <" + RDF.type
+								+ "> <"
+								+ domainClassURI + "> .}";
+						warningDomain = !Rdf2GoCore.getInstance().sparqlAskExcludeStatementForSection(
+								queryDomain, triple);
+					}
+
 				}
 
 				if (warningRange) {
