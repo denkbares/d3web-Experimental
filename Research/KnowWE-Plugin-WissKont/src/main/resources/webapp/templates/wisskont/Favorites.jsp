@@ -111,10 +111,4 @@
 
   </wiki:CheckRequestContext>
   
-  <div class="wikiversion"><%=Release.APPNAME%> v<%=Release.getVersionString()%>
-  <span class="rssfeed">
-    <wiki:RSSImageLink title='<%=LocaleSupport.getLocalizedMessage(pageContext,"fav.aggregatewiki.title")%>' />
-  </span>
-  </div>  
-  
 </div>
