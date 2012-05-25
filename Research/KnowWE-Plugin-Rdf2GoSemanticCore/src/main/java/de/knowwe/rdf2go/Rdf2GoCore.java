@@ -26,6 +26,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -112,7 +113,7 @@ public class Rdf2GoCore implements EventListener {
 	ResourceBundle properties = ResourceBundle.getBundle("model");
 
 	Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> getStatementCache() {
-		return statementcache;
+		return Collections.unmodifiableMap(statementcache);
 	}
 
 	/**
