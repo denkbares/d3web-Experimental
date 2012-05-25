@@ -21,11 +21,12 @@ package de.knowwe.rdfs.subclassingTree;
 
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.kdom.dashtree.DashTree;
+import de.knowwe.kdom.dashtree.DashTreeElementContent;
 
-public class SubClassingDashtree extends DashTree {
+public class HierarchyDashtree extends DashTree {
 
-	public SubClassingDashtree() {
-		replaceDashTreeElementContentType(new SubClassingDashTreeElementContent());
+	public HierarchyDashtree(DashTreeElementContent contentType) {
+		replaceDashTreeElementContentType(contentType);
 		this.setSectionFinder(new AllTextSectionFinder());
 	}
 

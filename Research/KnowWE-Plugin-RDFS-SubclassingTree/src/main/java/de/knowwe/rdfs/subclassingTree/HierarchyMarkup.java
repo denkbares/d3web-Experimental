@@ -22,20 +22,25 @@ package de.knowwe.rdfs.subclassingTree;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
-public class ClassHierarchyMarkup extends DefaultMarkupType {
+public class HierarchyMarkup extends DefaultMarkupType {
 
-	public ClassHierarchyMarkup(DefaultMarkup markup) {
+	public HierarchyMarkup(DefaultMarkup markup) {
 		super(markup);
+		setIgnorePackageCompile(true);
 	}
+
+	public static final String RELATION_ANNOTATION_KEY = "relation";
 
 	private static DefaultMarkup m = null;
 
 	static {
-		m = new DefaultMarkup("subclass");
-		m.addContentType(new SubClassingDashtree());
+		m = new DefaultMarkup("hierarchy");
+		m.addContentType(new HierarchyDashtree(new HierarchyDashtreeElementContent()));
+		m.addAnnotation(RELATION_ANNOTATION_KEY, false);
+
 	}
 
-	public ClassHierarchyMarkup() {
+	public HierarchyMarkup() {
 		super(m);
 
 	}

@@ -17,11 +17,22 @@
 
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="ClassHierarchyMarkup">
+		id="HierarchyMarkup">
 		<parameter id="class"
-			value="de.knowwe.rdfs.subclassingTree.ClassHierarchyMarkup" />
-		<parameter id="name" value="ClassHierarchyMarkup" />
-		<parameter id="description" value="KnowWEObjectType ClassHierarchyMarkup" />
+			value="de.knowwe.rdfs.subclassingTree.HierarchyMarkup" />
+		<parameter id="name" value="HierarchyMarkup" />
+		<parameter id="description" value="KnowWEObjectType HierarchyMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="HierarchyMarkupDef">
+		<parameter id="class"
+			value="de.knowwe.rdfs.subclassingTree.HierarchyMarkupDef" />
+		<parameter id="name" value="HierarchyMarkupDef" />
+		<parameter id="description" value="KnowWEObjectType HierarchyMarkupDef" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
