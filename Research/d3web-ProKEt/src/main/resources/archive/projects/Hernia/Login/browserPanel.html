@@ -1,0 +1,156 @@
+<!--
+MODULES used for EuraHS Enter and Login pages
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>EuraHS Login/Enter page Modules</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body style="padding:0px; margin:0px;">
+        <h2>EuraHS Login/Enter page Modules</h2>
+
+        <!-- HEADER module - similar to registry header -->
+        <div id="head" style="z-index: 1000; background: none repeat scroll 0 0 #EFEFEF; box-shadow: 0 0 5px black; width:100%;">
+            <table style="width:100%; margin: 0px; padding: 5px 5px 0px 5px;">
+                <tbody>
+                    <tr>
+                        <td width="35%" />
+                        <td width="*">
+                            <div style="color: black; font-size: 1.2em; font-variant: small-caps;
+                                 font-weight: bold; text-align: center; font-family:arial"> 
+                                European Registry of Abdominal wall HerniaS 
+                            </div>
+                        </td>
+                        <td width="35%">
+                            <div style="float:right;">
+                                <img style="width:100px;" alt="logo" src="eurahslogo.png" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="height:30px; clear: both">
+            <hr>
+        </div>
+
+        <!-- BROWSER info and linking module -->
+        <div style="width: 570px; margin-left: auto; margin-right: auto;">
+            <div style=" font-size: 1.2em; font-weight:  bold; text-align: center;">   
+                Please note that EuraHS is optimzied for the following browsers:
+            </div>
+        </div>
+        <div id="browsers" style="margin-left: auto; margin-right: auto; width: 570px; margin-top: 20px">
+            <div style="float:left; width: 100px; margin-left:20px; margin-right:20px;">
+                <a href="http://www.mozilla.org/en-US/firefox/all.html" target="_blank"> 
+                    <!--<img src="../EuraHS-Dialog/img/FF.png" alt="Firefox 10 (or higher)" style="width:100px;">-->
+                    <img src="FF.png" alt="Firefox 20 (or higher)" style="width:100px;">
+                </a>
+                <div style="margin-left: auto; margin-right: auto; width: 90px; font-size: 0.95em; font-weight:  bold; color: #555555;">10 (or higher)</div>
+            </div>
+            <div style="float:left; width: 100px; margin-left:20px; margin-right:20px;">
+                <a href="https://www.google.com/chrome" target="_blank">
+                    <!--<img src="../EuraHS-Dialog/img/GC.png alt="Google Chrome 17 (or higher)" style="width:100px;">-->
+                    <img src="GC.png" alt="Google Chrome 17 (or higher)" style="width:100px;">
+                </a>
+                <div style="margin-left: auto; margin-right: auto; width: 90px; font-size: 0.95em; font-weight:  bold; color: #555555;">17 (or higher)</div>
+            </div>
+            <div style="float:left; width: 100px; margin-left:20px; margin-right:20px;">
+                <a href="http://www.apple.com/de/safari/download/" target="_blank">
+                    <!--<img src="../EuraHS-Dialog/img/SA.png" alt ="Safari 5 (or higher)" style="width:100px;">-->
+                    <img src="SA.png" alt ="Safari 5 (or higher)" style="width:100px;"> 
+                </a>
+                <div style="margin-left: auto; margin-right: auto; width: 82px; font-size: 0.95em; font-weight:  bold; color: #555555;">5 (or higher)</div>
+            </div>
+            <div style="float:left; width: 100px; margin-left:20px; margin-right:20px;">
+                <a href="http://windows.microsoft.com/de-DE/internet-explorer/products/ie/home" target="_blank">
+                    <!--<img src="../EuraHS-Dialog/img/IE.png" alt="Internet Explorer 8 (or higher)" style="width:100px;">-->
+                    <img src="IE.png" alt="Internet Explorer 8 (or higher)" style="width:100px;">
+                </a>
+                <div style="margin-left: auto; margin-right: auto; width: 82px; font-size: 0.95em; font-weight:  bold; color: #555555;">9 (or higher)</div>
+            </div>
+        </div>
+
+        <div style="height:30px; clear: both">
+            <hr>
+        </div>
+
+        <!-- MailTo module -->
+        <div style='font-size:1.2em; font-weight: bold;'>
+            <div style="width:400px; margin-left: auto; margin-right: auto; float: left; padding-top: 15px;">
+                Problems or Questions? Please contact us:
+            </div>
+            <div style="width: 50px; float: left;">
+                <a href="mailto:freiberg@informatik.uni-wuerzburg.de">
+
+                    <img src="mailto.png" alt="Mail to:" style="width:50px;">
+                </a>
+            </div>
+        </div>
+
+
+
+        <div style="height:30px; clear: both">
+            <hr>
+        </div>
+
+
+        <table border="0" cellspacing="0" cellpadding="0" style="width: 550px;">
+
+            <tr>
+                <td colspan="2" 
+                    style="font-size:13pt;font-weight:bold;padding: 20px 0 20px;text-align:right;">
+                    EuraHS <b>MEMBER login</b>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="text-align: left; padding: 5px 0 5px; float: left;">Registered Email:</td>
+                <td>
+                    <input type="text" name="l_email" style="float: right; width: 350px;"/>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left; padding: 5px 0 5px; float: left;">Member Password:</td>
+                <td><input type="password" name="l_pwd" style="float: right; width: 350px;" /></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td><input style="width: 115px; height:25px; float: right;" type="submit" name="login" value="MEMBER login" /></td>
+            </tr>
+        </table>
+        <table border="0" cellspacing="0" cellpadding="0" style="width: 550px; margin-top: 30px;">
+            <tr>
+                <td colspan="2" style="font-size:13pt;font-weight:bold;padding: 20px 0 20px;text-align:right; ">
+                    <div style="color: black;">
+                        <div style="width:485px; margin-left: auto; margin-right: auto; float: right; padding-top: 15px;">
+                            Forgot user name or Password? Questions or Problems? 
+                        </div>
+                        <div style="width: 200px; float: right;">
+                            <div style="margin-right: 10px; margin-top: 20px; clear: both; float: left;">Please contact us:</div>
+                            <a style="float: right;" href="mailto:iris.kyle-leinhase@eurahs.eu">
+                                <img src="mailto.png" alt="Mail to:" style="width:50px;">
+                            </a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+        <table border="0" cellspacing="0" cellpadding="0" style="width: 550px; margin-top: 20px;">
+            <tr>
+                <td colspan="2" style="font-size:13pt;font-weight:bold;padding: 20px 0 20px;text-align:right; ">
+                    <div style="color: black;">
+                        <a style="color: black;" href="#" onClick="show('hide');show('person')">
+                            Create new EuraHS <b>MEMBER account</b>
+                        </a>   
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+    </body>
+</html>

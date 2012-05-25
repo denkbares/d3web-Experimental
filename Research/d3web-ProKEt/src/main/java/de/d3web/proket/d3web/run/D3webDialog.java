@@ -277,7 +277,7 @@ public class D3webDialog extends HttpServlet {
         
         
         // TEST:
-        httpSession.setAttribute("debug", "true");
+        //httpSession.setAttribute("debug", "true");
         
 
         if (action == null) {
