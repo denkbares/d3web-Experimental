@@ -9,7 +9,11 @@ table {
 /*position:absolute; top:180px; left:150px;*/
 margin-left: auto;
 margin-right: auto;
-border-color: rgb(6,61,121)
+border-color: rgb(6,61,121);
+}
+
+.table-edit input, .table-edit textarea {
+	font-size: 20px;
 }
 
 

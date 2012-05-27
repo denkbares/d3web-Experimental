@@ -47,6 +47,14 @@
 .tabmenu {
 	display:none;
 }
+.hinweis {
+	margin: 15px 10px 0 10px;
+	padding: 10px;
+	border: 1px dotted black;
+}
+.hinweis h5 {
+	margin-bottom: 5px;
+}
 </style>
 
 <div id="login_defi"> 
@@ -109,7 +117,10 @@
 
 </div>
 </form>
-
+<div class="hinweis"><h5>Hinweis:</h5> 
+Als registrierter Teilnehmer der Studie haben Sie Ihren Benutzernamen
+ und Ihr Passwort per Post erhalten. Sollten Sie diese Daten verloren haben, setzen Sie sich bitte 
+ umgehend mit uns in Verbindung!</div>
 </wiki:Tab>
 
 </wiki:TabbedSection>

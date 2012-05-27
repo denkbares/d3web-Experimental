@@ -148,6 +148,9 @@
 	color:red;	
 	font-weight:bold;
 	font-size:20px;
+	position: absolute;
+	top: 120px;
+	left: 755px;
 }
 .userbox div.notfall {
 	height:101px !important;

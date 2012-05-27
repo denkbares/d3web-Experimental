@@ -181,11 +181,12 @@ table.forumMenu tr td.fm_old {
 table.forumMenu input[type="button"].fm_open {
 	float:right;
 }
-table.forumMenu input[type="text"] {
-	font-size:100%;
-}
 table.forumMenu span.fm_new {
 	color:red;
+}
+table.forumMenu textarea, table.forumMenu input[type="text"] {
+	font-size: 130%;	
+	font-family: monospace;
 }
 table.forumMenu select {
 	font-size:100%;
@@ -286,4 +287,13 @@ div.aboutme div.aboutmeChat span {
 	-webkit-box-shadow: 5px 5px 5px 5px rgba(20, 20, 20, 0.5);
 	-moz-box-shadow: 5px 5px 5px 5px rgba(20, 20, 20, 0.5);
 	box-shadow: 5px 5px 5px 5px rgba(20, 20, 20, 0.5); 
+}
+/* Private Kommunikation */
+div.privatecom {
+	border: 1px solid rgb(6,61,121);
+	padding: 30px 20px;
+	font-weight: bolder;
+}
+div.privatecom span {
+	margin-right: 20px;
 }

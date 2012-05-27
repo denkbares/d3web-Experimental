@@ -17,6 +17,7 @@
   	<!--  <a href="Wiki.jsp?page=Datenschutz" class="data">Datenschutz</a>-->
   	<!-- <a href="Wiki.jsp?page=About" class="about">&Uuml;ber uns</a> -->
   	<a href="Impressum.html" class="impressum">Impressum</a>
+  	<a href="Bildnachweis.html" class="impressum">Bildnachweis</a>
     <a href="<wiki:LinkTo page='<%=frontpage%>' format='url' />" class="start" title="<fmt:message key='actions.home.title' ><fmt:param><%=frontpage%></fmt:param></fmt:message> "><fmt:message key='actions.home' /></a>
   </div>
   
