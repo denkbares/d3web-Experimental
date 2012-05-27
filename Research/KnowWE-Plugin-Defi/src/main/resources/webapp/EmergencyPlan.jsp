@@ -37,59 +37,122 @@
 <head>
   
 <style type="text/css" media="all">
-	table 
-	{ border: 2px dashed black; background-color: firebrick; margin-bottom: 0%; padding: 0%; vertical-align: 0%; }
-	
-	.other 
-	{ border: 0px; background-color: transparent; }
-	
-	#inner 
-	{ border-top: 0px; border-left: 0px; border-right: 0px; border-bottom: 1px; border-style: solid; border-color: black; font-family: Arial, Helvetica, sans-serif;
-      font-size: 12pt; text-align: center; vertical-align: top; line-height: 0.98em; }
-	
-	.inner2 
-	{ border-top: 0px; border-left: 0px; border-right: 0px; border-bottom: 0px; border-style: solid; border-color: black; font-family: Arial, Helvetica, sans-serif;
-      font-size: 12pt; text-align: center; vertical-align: top; line-height: 0.98em; }
-	
-	th 
-	{ border-top: 0px; border-left: 0px; border-right: 0px; border-bottom: 1px; border-style: solid; border-color: black; font-family: Arial, Helvetica, sans-serif;
-      font-size: 12pt; text-align: center; vertical-align: top; line-height: 0.98em; }
-	
-	td,tr 
-	{ border: 0px; border-style: solid; border-color: red; padding-top: 18%; padding-left: 6%; padding-bottom: 0%; font-family: Arial, Helvetica, sans-serif;
-      font-size: 12pt; text-align: left; vertical-align: top; line-height: 1.2em; }
-
-	.engl
-	{font-size:11pt; font-style:italic}
-	
-	.inhalt
-	{color: blue; font-size: 12pt;}
+	#emergency {
+    	margin: 0px;
+    	padding: 0px;
+    	border: 3px dotted black;
+    	border-collapse: collapse;
+    	background-color: rgb(218,37,29);
+	}
+	#emergency td, #emergency tr {
+		border: 0px;
+		width: 279px;
+	}
+	#emergency td {
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+	#emergency td.tel {
+		background-image:url(KnowWEExtension/images/tel_head.png);
+		background-position: top center;
+		padding-top: 40px;
+	}
+	#emergency td.info {
+		background-image:url(KnowWEExtension/images/info_head.png);
+		background-position: top center;
+		padding-top: 40px;
+		padding-bottom: 6px;
+	}
+	#emergency div.tel, #emergency div.info {
+		background-color: white;
+		margin: 0px 6px;
+		padding: 0px 6px 6px 6px;
+	}
+	#emergency span {
+		color: blue;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 16px;
+		font-weight:700;
+	}
+	#emergency div.tel, #emergency div.info {
+		font-family: Arial, Helvetica, sans-serif;
+     	font-size: 12pt; 
+     	line-height: 1.2em;
+	}
+	#emergency span.first {
+		text-align: center;
+		background-color: white;
+		position: relative;
+		top: 78px;
+		display: block;
+		margin: 0 6px;
+		line-height: 18pt;
+	}
+	table.other th { border-bottom: 1px solid black; }
+	table.other th.inner2 { border: 0px; }
 </style>
+<script type="text/javascript">
+	function checkFontSize() {
+		var inputs = document.getElementsByClassName('inhalt');
+		var nameInput = document.getElementsByClassName('first')[0];
+		var fontSize = 16;
+		var fit = false;
+		
+		// fit namefield
+		while(!fit && fontSize > 6) {
+			fontSize--;
+			fit = true;
+			
+			if (nameInput.offsetHeight > 24)
+				fit = false;
+			
+			if (!fit)
+				nameInput.style.fontSize = fontSize + "px";
+		}
+		
+		// fit inputfields
+		fontSize = 16;
+		fit = false;
+		
+		while(!fit && fontSize > 6) {
+			fontSize--;
+			fit = true;
+			
+			for (var i = 0; i < inputs.length; i++) {
+				
+				if (inputs[i].offsetHeight > 19) {
+					fit = false;
+					break;
+				}
+			}	
+			
+			if (!fit) {
+				for (var i = 0; i < inputs.length; i++) {
+					inputs[i].style.fontSize = fontSize + "px";
+				}
+			}
+			
+		}
+	}
+	
+	window.onload = checkFontSize;
+</script>
 </head>
 <body>
 <%
 if(requestUserCorrect) {
 %>
-<table border="1" style="border-collaps:collaps">
-	<tr>
-		<td width="280px" height="190px" style="background-image:url(KnowWEExtension/images/front3.png); background-repeat:no-repeat">	
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-			<table class="other" border="0">
-				<tr>
-					<th width="239px" height="15px">
-					<span class="inhalt"><%=EmergencyPlanUtils.getPatientName(context.getUserName())%></span>
-					</th>
-				</tr>
-			</table>		
-		</td>
-	</tr>
-	<tr>
-		<td width="280px" height="190px" class="tel" style="background-image: url(KnowWEExtension/images/tel.png); background-repeat: no-repeat">
+<table id="emergency">
+	<tr><td style="background-image:url(KnowWEExtension/images/front3.png);height: 200px;"><span class='first'>
+	<%=EmergencyPlanUtils.getPatientName(context.getUserName())%>&nbsp;</span></td></tr>
+	<tr><td class="tel"><div class="tel">
+		Notrufnummer
+		<table class="other" border="0">
+			<tr>
+				<th width="349px" height="20px"><span class="inhalt"><%=EmergencyPlanUtils.getEmergencyNumber(context.getUserName())%></span></th>
+			</tr>
+		</table>
+	
 		Mein Kardiologe 
 		<%=EmergencyPlanUtils.getCardiologist(context.getUserName())%>
 		
@@ -98,17 +161,10 @@ if(requestUserCorrect) {
 
 		Im Notfall zu verst&auml;ndigen 
 		<%=EmergencyPlanUtils.getEmergencyPerson(context.getUserName())%>
-		</td>
-	</tr>
-	
-	<tr>
-		<td width="280px" height="190px" style="background-image:url(KnowWEExtension/images/plan.png); background-repeat:no-repeat"></td>
-	</tr>
-
-	<tr>
-		<td width="280px" height="190px"
-			style="background-image: url(KnowWEExtension/images/info.png); background-repeat: no-repeat">
-		ICD Modell 
+	</div></td></tr>
+	<tr><td style="background-image:url(KnowWEExtension/images/plan.png);height:200px;"></td></tr>
+	<tr><td class="info"><div class="info">
+			ICD Modell 
 		<table class="other" border="0">
 			<tr>
 				<th width="160px" height="20px"><span class="inhalt"><%=EmergencyPlanUtils.getICDModelTitle(context.getUserName())%></span></th>
@@ -128,19 +184,13 @@ if(requestUserCorrect) {
 				<th width="349px" height="20px"><span class="inhalt"> <%=EmergencyPlanUtils.getBloodType(context.getUserName())%></span></th>
 			</tr>
 		</table>
-
-
-		</td>
-	</tr>
-	<tr>
-		<td width="280px" height="190px"
-			style="background-image: url(KnowWEExtension/images/info.png); background-repeat: no-repeat">
+	</div></td></tr>
+	<tr><td class="info"><div class="info">
 		Medikament&ouml;se Dauerbehandlung
 		<table class="other" border="0">
 		<%= EmergencyPlanUtils.getMedics(context.getUserName())%>
 		</table>
-		</td>
-	</tr>
+	</div></td></tr>
 </table>
 <% 
 }

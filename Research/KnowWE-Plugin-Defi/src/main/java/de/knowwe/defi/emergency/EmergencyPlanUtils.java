@@ -35,6 +35,7 @@ import de.knowwe.defi.table.TableEntryType;
 public class EmergencyPlanUtils {
 
 	private static final String NAME = "name";
+	private static final String EMERGENCY_NUMBER = "tel1";
 	private static final String CARDIOLOGIST = "tel2";
 	private static final String PHYSICIAN = "tel3";
 	private static final String EMERGENCY_PERSON = "tel4";
@@ -70,6 +71,7 @@ public class EmergencyPlanUtils {
 		String doctor = getEntryLine(entry, "INPUT0");
 		String phonenumber = getEntryLine(entry, "INPUT1");
 		
+
 		return doctorTemplate(doctor, phonenumber);
 	}
 
@@ -101,6 +103,19 @@ public class EmergencyPlanUtils {
 		String phonenumber = getEntryLine(entry, "INPUT1");
 
 		return doctorTemplate(doctor, phonenumber);
+	}
+
+	/**
+	 * tableid: tel1 INPUT0: EmergencyNumber
+	 * 
+	 * @created 25.10.2011
+	 * @param user
+	 * @return
+	 */
+	public static String getEmergencyNumber(String user) {
+		String entry = getTableEntry(EMERGENCY_NUMBER, user);
+
+		return getEntryLine(entry, "INPUT0");
 	}
 
 	/**
