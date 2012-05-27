@@ -24,18 +24,12 @@ import java.util.Collection;
 import java.util.ResourceBundle;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.servlet.ServletContext;
-
-import com.ecyrd.jspwiki.WikiEngine;
-import com.ecyrd.jspwiki.auth.NoSuchPrincipalException;
-import com.ecyrd.jspwiki.auth.user.UserProfile;
-import com.ecyrd.jspwiki.util.MailUtil;
 
 import de.d3web.we.event.NewCommentEvent;
 import de.knowwe.core.Environment;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
+import de.knowwe.defi.mailform.MailFormAction;
 
 /**
  * Listens to the NewCommentEvent of the Comment plugin. If fired a user
@@ -59,7 +53,7 @@ public class CommentListener implements EventListener {
 	public void notify(Event event) {
 		if (event instanceof NewCommentEvent) {
 			NewCommentEvent e = (NewCommentEvent) event;
-			this.notifyMail(e.getTopic(), e.getComment());
+			this.notifyMail(e.getTopic());
 		}
 	}
 
@@ -72,85 +66,31 @@ public class CommentListener implements EventListener {
 	 * @param comment
 	 * @return boolean
 	 */
-	private boolean notifyMail(String topic, String comment) {
+	private boolean notifyMail(String topic) {
 
 		ResourceBundle rb = ResourceBundle.getBundle("KnowWE_Defi_config");
-
-		String to = rb.getString("defi.mail.to");
-		String subject = rb.getString("defi.mail.subject");
-		String content = rb.getString("defi.mail.content.template");
+		String subject = rb.getString("defi.fmail.subject");
+		String message = rb.getString("defi.fmail.message");
 
 		// replace @page@
-		content = content.replaceAll("@page@", topic);
+		message = message.replaceAll("@page@", topic);
 
 		// replace @ink@
 		String link = Environment.getInstance().getWikiConnector().getBaseUrl();
 		link += "/Wiki.jsp?page=" + topic;
-		content = content.replaceAll("@link@", link);
+		link = link.replaceAll(" ", "%20");
+		message = message.replaceAll("@link@", link);
 
-		// replace @name@
-		String user = rb.getString("defi.last.login.user");
-		String fullName = this.getRealName(user);
-		content = content.replaceAll("@name@", fullName);
-
-		// replace @comment@
-		content = content.replaceAll("@comment@", comment);
-
+		// don't send mails in dev-mode
 		if (rb.getString("defi.dev").equals("false")) {
-			return this.notifyMail(to, subject, content);
-		}
-		else {
-			return true; // in dev environement
-		}
-	}
-
-	/**
-	 * Send an email to the specified mail address (see project properties
-	 * file), to inform the owner of a new comment an a certain page.
-	 *
-	 * @created 15.03.2011
-	 * @param to
-	 * @param subject
-	 * @param content
-	 * @return
-	 */
-	private boolean notifyMail(String to, String subject, String content) {
-		try {
-			ServletContext sc = Environment.getInstance().getWikiConnector().getServletContext();
-			WikiEngine engine = WikiEngine.getInstance(sc, null);
-			MailUtil.sendMessage(engine, to, subject, content);
-		}
-		catch (AddressException e) {
-			// mail address is erroneous, stop sending
-			return false;
-		}
-		catch (MessagingException e) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Deciphers the login name of a user and returns the real name.
-	 *
-	 * @created 15.03.2011
-	 * @param loginName
-	 * @return
-	 */
-	private String getRealName(String loginName) {
-
-		UserProfile profile;
-		try {
-			ServletContext sc = Environment.getInstance().getWikiConnector().getServletContext();
-			WikiEngine engine = WikiEngine.getInstance(sc, null);
-			profile = engine.getUserManager().getUserDatabase().find(loginName);
-			if (profile != null) {
-				return profile.getFullname();
+			try {
+				(new MailFormAction()).sendDefiMail(message, subject);
+			}
+			catch (MessagingException e) {
+				return false;
 			}
 		}
-		catch (NoSuchPrincipalException e) {
-			return loginName;
-		}
-		return loginName;
+
+		return true;
 	}
 }

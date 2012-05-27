@@ -19,19 +19,24 @@
 package de.knowwe.defi.mailform;
 
 import java.io.IOException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
+import javax.mail.Address;
+import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.servlet.ServletContext;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ecyrd.jspwiki.WikiEngine;
-import com.ecyrd.jspwiki.util.MailUtil;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.jspwiki.JSPWikiConnector;
 
 /**
  * Send a mail, show/hide form.
@@ -46,6 +51,7 @@ public class MailFormAction extends AbstractAction {
 		String pagename = context.getTitle();
 		String id = context.getParameter("id");
 
+		String subject = "Defi - Nachricht von " + username;
 		String nachricht = "Absender: " + username + "\n";
 		nachricht += "Seite: " + pagename + "\n";
 		nachricht += "Formular: " + id + "\n\n";
@@ -53,19 +59,10 @@ public class MailFormAction extends AbstractAction {
 		nachricht += context.getParameter("nachricht") + "\n\n";
 		nachricht += "--------------------------------------\n";
 
-		String subject = "Defi - Nachricht von " + username;
-		ResourceBundle rb = ResourceBundle.getBundle("KnowWE_Defi_config");
-		String mailTo = rb.getString("defi.mailform.to");
-		String responseText = "Vielen Dank!\nIhre Nachricht wurde erfolgreich versandt.";
 
+		String responseText = "Vielen Dank!\nIhre Nachricht wurde erfolgreich versandt.";
 		try {
-			ServletContext sc =
-					Environment.getInstance().getWikiConnector().getServletContext();
-			WikiEngine engine = WikiEngine.getInstance(sc, null);
-			MailUtil.sendMessage(engine, mailTo, subject, nachricht);
-		}
-		catch (AddressException e) {
-			responseText = "Die Nachricht konnte nicht gesendet werden.";
+			sendDefiMail(nachricht, subject);
 		}
 		catch (MessagingException e) {
 			responseText = "Die Nachricht konnte nicht gesendet werden.";
@@ -73,5 +70,35 @@ public class MailFormAction extends AbstractAction {
 
 		HttpServletResponse response = context.getResponse();
 		response.getWriter().write(responseText);
+	}
+
+	public void sendDefiMail(String message, String subject) throws MessagingException {
+		JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
+				Environment.getInstance().getContext(), null));
+		String from = wc.getWikiProperty("mail.from");
+		String uname = wc.getWikiProperty("mail.smtp.account");
+		String pass = wc.getWikiProperty("mail.smtp.password");
+		String host = wc.getWikiProperty("mail.smtp.host");
+		int port = Integer.parseInt(wc.getWikiProperty("mail.smtp.port"));
+		ResourceBundle rb = ResourceBundle.getBundle("KnowWE_Defi_config");
+		String mailTo = rb.getString("defi.mail.to");
+
+		Properties props = new Properties();
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.socketFactory.port", port);
+		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+
+		Session session = Session.getDefaultInstance(props);
+		Transport transport = session.getTransport("smtp");
+		transport.connect(host, port, uname, pass);
+		Address[] addresses = InternetAddress.parse(mailTo);
+
+		Message msg = new MimeMessage(session);
+		msg.setFrom(new InternetAddress(from));
+		msg.setRecipients(Message.RecipientType.TO, addresses);
+		msg.setSubject(subject);
+		msg.setText(message);
+		transport.sendMessage(msg, addresses);
+		transport.close();
 	}
 }
