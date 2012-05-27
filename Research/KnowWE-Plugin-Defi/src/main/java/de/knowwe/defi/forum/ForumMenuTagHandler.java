@@ -93,9 +93,9 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	private static final String PERSONAL_MESSAGE_BUTTON = "Pers&ouml;nliche Nachricht";
 
 	/** Größe der Eingabefelder */
-	private static final int TOPIC_PANEL_SIZE = 70;
-	private static final int TEXTAREA_COLS = 55;
-	private static final int TEXTAREA_ROWS = 10;
+	private static final String TOPIC_PANEL_WIDTH = "700px";
+	private static final String TEXTAREA_WIDTH = "700px";
+	private static final String TEXTAREA_HEIGHT = "200px";
 
 	/**
 	 * @param name
@@ -191,12 +191,12 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 						other.remove(sec);
 						noForum = false;
 					}
-					else if (topic.startsWith("Persönliche Nachrichten(")) {
+					else if (topic.startsWith("Persoenliche Nachrichten(")) {
 						chats.add(sec);
 						other.remove(sec);
 					}
 				}
-				if (noForum) fm.append("<li>Noch keine Foren vorhanden</p></li>");
+				if (noForum) fm.append("<li><i>Es wurden noch keine Beiträge erstellt</i></li>");
 				noForum = true;
 				fm.append("</ul></div>");
 
@@ -235,7 +235,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 				// Hole Section des entsprechenden Chats
 				for (Section<? extends Forum> sec : chats) {
 					topic = getForumAttribute("topic", sec.getText());
-					if (topic.equals("Persönliche Nachrichten(" + names[0] + ","
+					if (topic.equals("Persoenliche Nachrichten(" + names[0] + ","
 							+ names[1] + ")")) {
 						noForum = false;
 
@@ -414,14 +414,14 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		// ++ Ueberschrift
 		builder.append("<p class='fm_newforum'>" + TOPIC_LABEL
-				+ ":<br /><input type='text' size='" + TOPIC_PANEL_SIZE + "' name='"
+				+ "<br /><input type='text' style='width:" + TOPIC_PANEL_WIDTH + ";' name='"
 				+ pageName
 				+ "_topic' /></p>");
 
 		// ++ Nachrichteneingabe
 		builder.append("<p>" + TEXTAREA_LABEL + "</p><textarea name='" + pageName
-				+ "_text' rows='" + TEXTAREA_ROWS + "' cols='" + TEXTAREA_COLS
-				+ "'></textarea><br />");
+				+ "_text' style='width:" + TEXTAREA_WIDTH + ";height:" + TEXTAREA_HEIGHT
+				+ ";'></textarea><br />");
 		builder.append("<input type='button' value='" + SEND_BUTTON +
 				"' onclick='sendforumForm(\""
 				+ pageName +
@@ -508,8 +508,10 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 	/**
 	 * Get the number of new entries in a forum.
+	 * 
+	 * @param date lastvisit (e.g. 2012-05-22 12:18:33)
 	 */
-	private int getNumberOfNewEntries(String forumXML, String date) {
+	public int getNumberOfNewEntries(String forumXML, String date) {
 		int number = 0;
 		Date thresholdDate, entryDate;
 
@@ -530,8 +532,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 				for (int i = 0; i < boxes.getLength(); i++) {
 					Element element = (Element) boxes.item(i);
 					entryDate = stringToDate(element.getAttribute("date"));
-
-					if (entryDate.after(thresholdDate)) number++;
+					if (entryDate.after(thresholdDate) && !element.getTextContent().equals("")) number++;
 				}
 			}
 			catch (Exception e) {
@@ -544,7 +545,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	/**
 	 * Get a forum's author.
 	 */
-	private String getAuthor(String forumXML) {
+	public String getAuthor(String forumXML) {
 		String author = "";
 
 		try {
@@ -593,7 +594,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	/**
 	 * check the log.
 	 */
-	private HashMap<String, String> checkLog(UserContext uc) {
+	public HashMap<String, String> checkLog(UserContext uc) {
 		HashMap<String, String> logPages = new HashMap<String, String>();
 		String log = PageLoggerHandler.getPath();
 		String line;

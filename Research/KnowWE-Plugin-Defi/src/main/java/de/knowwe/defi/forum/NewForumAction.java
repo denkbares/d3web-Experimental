@@ -58,7 +58,7 @@ public class NewForumAction extends AbstractAction {
 		String title = "";
 		String responseString = "\n";
 		GregorianCalendar now = new GregorianCalendar();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 		ArticleManager mgr = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB);
 

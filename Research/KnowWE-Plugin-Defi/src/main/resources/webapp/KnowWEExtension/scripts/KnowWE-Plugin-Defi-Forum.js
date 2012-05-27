@@ -59,7 +59,7 @@ function newChat(user1, user2) {
 			response : {
 				action : '',
 				ids : [ '' ],
-				fn : function(){ setTimeout ( 'window.location = "Wiki.jsp?page=Persönliche Nachrichten('+user1+','+user2+')"',200 ); }
+				fn : function(){ setTimeout ( 'window.location = "Wiki.jsp?page=Persoenliche Nachrichten('+user1+','+user2+')"',200 ); }
 			}
 	}
 	

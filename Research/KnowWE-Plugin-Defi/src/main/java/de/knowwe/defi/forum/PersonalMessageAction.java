@@ -21,15 +21,8 @@ package de.knowwe.defi.forum;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
-import java.util.ResourceBundle;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
-
-import com.ecyrd.jspwiki.WikiEngine;
-import com.ecyrd.jspwiki.util.MailUtil;
 
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
@@ -56,7 +49,7 @@ public class PersonalMessageAction extends AbstractAction {
 		ArticleManager mgr = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB);
 
-		String topic = "Persönliche Nachrichten(" + user1 + "," + user2 + ")";
+		String topic = "Persoenliche Nachrichten(" + user1 + "," + user2 + ")";
 		String name = "Gespräch zwischen " + user1 + " und " + user2;
 
 		if (mgr.getArticle(topic) == null) {
@@ -86,23 +79,6 @@ public class PersonalMessageAction extends AbstractAction {
 						topic, Environment.DEFAULT_WEB);
 			Environment.getInstance().getWikiConnector()
 						.createArticle(topic, content, username);
-		}
-
-		/* Send mail */
-		String nachricht = "Neuer Forumeintrag auf der Seite '" + topic + "'";
-		String subject = "Defi - neuer Forumeintrag";
-		ResourceBundle rb = ResourceBundle.getBundle("KnowWE_Defi_config");
-		String mailTo = rb.getString("defi.mail.to");
-
-		try {
-			ServletContext sc =
-					Environment.getInstance().getWikiConnector().getServletContext();
-			WikiEngine engine = WikiEngine.getInstance(sc, null);
-			MailUtil.sendMessage(engine, mailTo, subject, nachricht);
-		}
-		catch (AddressException e) {
-		}
-		catch (MessagingException e) {
 		}
 
 		HttpServletResponse response = context.getResponse();

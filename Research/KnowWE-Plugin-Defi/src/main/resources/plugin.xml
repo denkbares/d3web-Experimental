@@ -153,6 +153,16 @@
         <parameter id="css" value="defi.css" />
     </extension>    
     
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="PrivateCommunicationTaghandler">
+        <parameter id="class" value="de.knowwe.defi.communication.PrivateCommunicationTaghandler" />
+        <parameter id="name" value="PrivateCommunicationTaghandler" />
+        <parameter id="description" value="TagHandler PrivateCommunicationTaghandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
+    </extension>  
+    
   <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
         id="ReadbuttonTaghandler">
         <parameter id="class" value="de.knowwe.defi.readbutton.ReadButtonTaghandler" />
@@ -234,6 +244,7 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
         <parameter id="css" value="defi-table.css" />
+         <parameter id="script" value="KnowWE-Plugin-Defi-Feedback.js" />
     </extension>      
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
