@@ -95,6 +95,8 @@ public class BoxRenderer implements Renderer {
 		}
 
 		StringBuilder ret = new StringBuilder();
+		// cut seconds if there
+		if (date.length() == 19) date = date.substring(0, date.length() - 3);
 
 		ret.append("<table class=wikitable width=99% border=0><tr>\n");
 		ret.append("<th align=\"left\"><a href='Wiki.jsp?page=" + name + "'>" + name
