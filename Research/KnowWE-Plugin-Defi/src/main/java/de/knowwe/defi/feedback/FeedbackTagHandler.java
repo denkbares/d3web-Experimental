@@ -62,6 +62,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	public static final String FRAGE26 = "Haben Sie sonst noch Wünsche, Kritik oder Erfahrungen, die Sie uns mitteilen möchten?";
 
 	private static final String HINT_MUTIPLE = "(Bitte alle zutreffenden Antworten markieren!)";
+	private static final String FEEDBACK_FORM_NAME = "feedbackForm";
 
 	/**
 	 * @param name
@@ -88,7 +89,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 
 		String path = Environment.getInstance().getWikiConnector().getSavePath();
 		String filename = user.getUserName().toLowerCase() + ".xml";
-		File f = new File(path + filename);
+		File f = new File(path + "/" + filename);
 
 		// render save button or note that feedback already found
 		if (f.exists()) {
@@ -96,7 +97,8 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		}
 		else {
 
-			html.append("<form action=\"KnowWE.jsp\" method=\"post\">\n");
+			html.append("<form id=\"" + FEEDBACK_FORM_NAME
+					+ "\" action=\"KnowWE.jsp\" method=\"post\">\n");
 
 			// render the feedback form
 			StringBuilder q = new StringBuilder();
@@ -159,7 +161,8 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 			q.append("<br />");
 			html.append(q);
 
-			html.append("<p><center><input type=\"submit\" value=\"Speichern\"/></center></p>\n");
+			html.append("<p><center><input type=\"submit\" value=\"Speichern\"/><input type=\"button\" value=\"Check\" onClick=\"checkAndSubmitForm('"
+					+ FEEDBACK_FORM_NAME + "')\"></center></p>\n");
 			html.append("<input type=\"hidden\" name=\"action\" value=\"FeedbackSaveAction\" />");
 			html.append("<input type=\"hidden\" name=\"KWiki_Topic\" value=\""
 					+ topic + "\" />");
@@ -170,7 +173,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion1(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE1);
@@ -190,7 +193,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion2(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE2);
@@ -210,7 +213,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion3(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE3);
@@ -230,7 +233,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion4(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE4);
@@ -252,7 +255,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion5(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"4\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE5 + "<br><b><i>" + HINT_MUTIPLE + "</i></b>");
@@ -326,7 +329,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion6(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"4\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ")   " + FRAGE6 + "<br><b><i>" + HINT_MUTIPLE + "</i></b>");
@@ -400,7 +403,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion7(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE7 + "<br><b><i>" + HINT_MUTIPLE + "</i></b> ");
@@ -423,7 +426,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion8(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE8 + "   ");
@@ -441,7 +444,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion9(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE9 + "  ");
@@ -463,7 +466,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion10(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE10);
@@ -485,7 +488,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion11(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE11 + " ");
@@ -506,7 +509,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion12(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE12 + "  ");
@@ -528,7 +531,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion13(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE13);
@@ -553,7 +556,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion14(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE14 + " ");
@@ -578,7 +581,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion15(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE15);
@@ -601,7 +604,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion16(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE16);
@@ -624,7 +627,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion17(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE17 + " ");
@@ -642,7 +645,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion18(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE18 + " ");
@@ -664,7 +667,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion19(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE19 + "  ");
@@ -686,7 +689,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion20(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE20);
@@ -707,7 +710,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion21(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE21 + " ");
@@ -727,7 +730,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion22(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE22 + " ");
@@ -747,7 +750,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion23(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE23 + "  ");
@@ -774,7 +777,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion24(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE24 + "  ");
@@ -792,7 +795,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion25(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE25 + "   ");
@@ -829,7 +832,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion26(StringBuilder result) {
-		result.append("<table><tbody><tr>\n");
+		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") " + FRAGE26 + "  ");

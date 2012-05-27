@@ -87,15 +87,14 @@ public class FeedbackSaveAction extends AbstractAction {
 					}
 				}
 
-				// xml.append(a);
-				xml.append("<answer>\n");
+				xml.append("</answer>\n");
 				xml.append("</question" + i + ">\n");
 			}
 
 		}
 		xml.append("</feedback>");
 
-		KnowWEUtils.writeFile(path + filename, xml.toString());
+		KnowWEUtils.writeFile(path + "/" + filename, xml.toString());
 
 		HttpServletResponse response = context.getResponse();
 		response.sendRedirect("Wiki.jsp?page=BefragungAbgeschlossen");
