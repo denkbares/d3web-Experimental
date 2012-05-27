@@ -127,16 +127,6 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 				Environment.getInstance().getWikiConnector()
 						.createArticle(fullName, content, loginName);
 
-				// create comment page / talks with the therapist
-				content = "[{ALLOW view "
-						+ fullName
-						+ "}]\n[{ALLOW delete "
-						+ fullName
-						+ "}]\n<forum name=\"Mit dem Berater sprechen\">\n<box></box></forum>\n";
-
-				String commentPage = fullName + "_comment_therapist";
-				Environment.getInstance().getWikiConnector()
-						.createArticle(commentPage, content, loginName);
 			}
 		}
 		else if ((event instanceof WikiSecurityEvent)

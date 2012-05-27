@@ -18,16 +18,11 @@
  */
 package de.knowwe.defi.aboutMe;
 
-import java.util.Arrays;
-
-import com.ecyrd.jspwiki.WikiEngine;
-
-import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
-import de.knowwe.jspwiki.JSPWikiConnector;
+import de.knowwe.defi.communication.PrivateCommunicationTaghandler;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -101,14 +96,14 @@ public class AboutMeRenderer implements Renderer {
 		html.append(getInputDependingOnUserState(sec, AboutMe.HTML_TYPE, true));
 		html.append("</p>");
 
-		html.append("<p><strong>Was ich sonst noch über mich sagen möchte:</strong> ");
+		html.append("<p>Was ich sonst noch über mich sagen möchte:");
 		html.append(getTextareaDependingOnUserState(sec, AboutMe.HTML_ABOUT, true));
 		html.append("</p>");
 
 		html.append("<h2 class=\"aboutme\">Mein Bild</h2>");
 		html.append("<p>Geben Sie Ihrem Profil „ein Gesicht“. Wählen Sie ein Bild aus,")
 				.append(" von dem Sie finden, dass es gut zu Ihnen passt. Klicken Sie dazu")
-				.append(" auf den kleinen Kreis links neben dem gewünschten Bild, so dass der")
+				.append(" auf den kleinen Kreis rechts neben dem gewünschten Bild, so dass der")
 				.append(" Kreis eine grüne Markierung erhält.</p>");
 
 		this.createAvatarHTML(sec, html, AboutMe.HTML_AVATAR, true);
@@ -157,29 +152,11 @@ public class AboutMeRenderer implements Renderer {
 		html.append(getTextareaDependingOnUserState(sec, AboutMe.HTML_HOBBIES, false));
 		html.append("</p>");
 
-		html.append("<p><strong>Was ich sonst noch über mich sagen möchte:</strong><br /> ");
+		html.append("<p>Was ich sonst noch über mich sagen möchte:<br /> ");
 		html.append(getTextareaDependingOnUserState(sec, AboutMe.HTML_ABOUT, false));
 		html.append("</p>");
-
-		// private communication
-		JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
-				Environment.getInstance().getContext(), null));
-		boolean online = false;
-		for (String name : wc.getAllActiveUsers()) {
-			if (name.equals(sec.getTitle())) online = true;
-		}
-		String[] names = {
-				sec.getTitle(), user.getUserName() };
-		Arrays.sort(names);
-
-		if (online) html.append("<div class='aboutmeChat' style='border-right: 30px solid green'>");
-		else html.append("<div class='aboutmeChat' style='border-right: 30px solid red'>");
-
-		html.append("<span>Private Kommunikation mit " + sec.getTitle() + "</span>");
-		html.append("<input class='fm_open' type='button' value='Pers&ouml;nliche Nachricht' onclick='newChat(\""
-				+ names[0] + "\", \"" + names[1]
-				+ "\");return false' />");
-		html.append("</div>");
+		html.append((new PrivateCommunicationTaghandler()).renderPrivateCommunicationFrame(
+				user, sec.getTitle()));
 	}
 
 	/**
@@ -247,7 +224,8 @@ public class AboutMeRenderer implements Renderer {
 
 		String avatar = DefaultMarkupType.getAnnotation(section, key);
 
-		if (!isOwner && avatar != null) {
+		if (avatar == null) avatar = "1000px-Comic_image_missing.svg.jpg";
+		if (!isOwner) {
 			string.append("<img src=\"KnowWEExtension/images/avatars/" + avatar
 					+ "\" height=\"80\" width=\"80\" style=\"float:right;\"/>\n");
 		}
@@ -333,9 +311,11 @@ public class AboutMeRenderer implements Renderer {
 					checked = " checked='checked'";
 				}
 
-				string.append("<img src=\"KnowWEExtension/images/avatars/" + icon
-							+ "\" height=\"80\" width=\"80\" />\n");
-				string.append("<input type=\"radio\" name=\"" + AboutMe.HTML_AVATAR + "\" id=\""
+				string.append("<img style='border:1px solid black;margin-top:6px;' src=\"KnowWEExtension/images/avatars/"
+						+ icon
+							+ "\" height=\"80px\" width=\"80px\" />\n");
+				string.append("<input style='margin:0px 10px 0px 0px;' type=\"radio\" name=\""
+						+ AboutMe.HTML_AVATAR + "\" id=\""
 							+ AboutMe.HTML_AVATAR + "\" value=\""
 							+ icon + "\" " + checked + " />\n");
 			}
