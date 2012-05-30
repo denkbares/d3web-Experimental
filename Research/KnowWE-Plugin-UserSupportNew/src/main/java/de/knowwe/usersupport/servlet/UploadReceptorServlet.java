@@ -131,7 +131,7 @@ public class UploadReceptorServlet extends HttpServlet {
 					ActionContext context = new ActionContext(null, null, parameters, req, res,
 							null, null);
 					if (fileType.equals("word"))
-						importWord(file.getAbsolutePath(), tableId, article, context);
+						importWord(file.getAbsolutePath(), article, context);
 					else
 						importTable(file, tableId, article, context);
 					file.delete();
@@ -149,9 +149,9 @@ public class UploadReceptorServlet extends HttpServlet {
 
 	}
 
-	protected void importWord(String fileName, String tableId, String article,
+	protected void importWord(String fileName, String article,
 			ActionContext context) throws IOException {
-		PoiUtils.importWordFromFile(fileName, tableId, article, context, new DefaultUserSupportWordImportConfiguration());	
+		PoiUtils.importWordFromFile(fileName, article, context, new DefaultUserSupportWordImportConfiguration());	
 	}
 	
 	protected void importTable(File file, String tableId, String article,

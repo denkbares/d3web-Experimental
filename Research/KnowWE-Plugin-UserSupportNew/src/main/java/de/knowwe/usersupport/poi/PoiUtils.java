@@ -311,7 +311,7 @@ public class PoiUtils
 	}
 	
 	
-	public static void importWordFromFile(String wordFileName, String tableId, String article,
+	public static void importWordFromFile(String wordFileName, String article,
 			ActionContext context, IWordImportConfiguration wordImport) throws IOException {
 		String newText = getKnowledgeBaseTextForArticle(article) + WORD_IMPORT_TEXT;
 		
