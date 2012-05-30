@@ -80,11 +80,11 @@
     </extension>
 
 	    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-        id="TermRenamingAction">
+        id="TermRenamingActionIncr">
         <parameter id="class"
-            value="de.knowwe.compile.support.TermRenamingAction" />
-        <parameter id="name" value="TermRenamingAction" />
-        <parameter id="description" value="Action TermRenamingAction" />
+            value="de.knowwe.compile.support.TermRenamingActionIncr" />
+        <parameter id="name" value="TermRenamingActionIncr" />
+        <parameter id="description" value="Action TermRenamingActionIncr" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="4" />
     </extension>

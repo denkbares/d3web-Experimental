@@ -51,7 +51,7 @@ import de.knowwe.core.kdom.parsing.Sections;
  * @author Sebastian Furth
  * @created Dec 15, 2010
  */
-public class TermRenamingAction extends AbstractAction {
+public class TermRenamingActionIncr extends AbstractAction {
 
 	public static final String TERMNAME = "termname";
 	public static final String REPLACEMENT = "termreplacement";

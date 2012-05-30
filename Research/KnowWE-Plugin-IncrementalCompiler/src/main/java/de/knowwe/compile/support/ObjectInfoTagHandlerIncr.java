@@ -61,4 +61,9 @@ public class ObjectInfoTagHandlerIncr extends de.knowwe.core.taghandler.ObjectIn
 		}
 
 	}
+
+	@Override
+	protected String getRenamingAction() {
+		return "TermRenamingActionIncr";
+	}
 }
