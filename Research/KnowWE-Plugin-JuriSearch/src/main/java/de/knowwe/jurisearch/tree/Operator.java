@@ -20,8 +20,7 @@ public class Operator extends AbstractType {
 		SectionFinder sf = new OneOfStringEnumFinder(new String[] {
 				EmbracedContent.BRACKET_OPEN_REGEX + OR + EmbracedContent.BRACKET_CLOSE_REGEX,
 				EmbracedContent.BRACKET_OPEN_REGEX + AND + EmbracedContent.BRACKET_CLOSE_REGEX,
-				EmbracedContent.BRACKET_OPEN_REGEX + SCORE
-						+ EmbracedContent.BRACKET_CLOSE_REGEX });
+				EmbracedContent.BRACKET_OPEN_REGEX + SCORE + EmbracedContent.BRACKET_CLOSE_REGEX });
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(sf);
 		csf.addConstraint(SingleChildConstraint.getInstance());
 		csf.addConstraint(AtMostOneFindingConstraint.getInstance());

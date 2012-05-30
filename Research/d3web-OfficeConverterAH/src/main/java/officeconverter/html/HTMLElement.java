@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.jdom.Attribute;
+import org.jdom.DataConversionException;
 import org.jdom.Namespace;
 import org.jdom.Text;
 
@@ -58,9 +59,18 @@ public class HTMLElement {
 	private Element getElementName(org.jdom.Element elem) {
 		String name = elem.getName().trim().toLowerCase();
 		if ("h".equals(name)) {
-			return new Element("p");
-		} 		
-		else if ("image".equals(name)) {
+			if (c.isWithHeadlineDepths()) {
+				try {
+					Namespace ns = NamespaceManager.text;
+					Attribute stName = elem.getAttribute("outline-level", ns);
+					int depth = stName.getIntValue();
+					return new Element("h" + depth);
+				} catch (Exception ex) {
+					return new Element("p");
+				}
+			} else
+				return new Element("p");
+		} else if ("image".equals(name)) {
 			Element ret = new Element("img");
 			ret.setAttribute(
 				" src=\"" + elem.getAttributeValue("href", NamespaceManager.xlink) + "\""
@@ -104,6 +114,8 @@ public class HTMLElement {
 			return new Element("td");
 		} else if ("p".equals(name)) {
 			return new Element("p");
+		} else if ("line-break".equals(name)) {
+			return new Element("br");
 		} else if ("span".equals(name)) {
 			if (elem.getContentSize() != 0 && elem.getContent(0) instanceof Text) {
 				Namespace ns = NamespaceManager.text;

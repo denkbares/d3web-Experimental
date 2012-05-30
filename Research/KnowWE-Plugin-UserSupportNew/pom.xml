@@ -104,6 +104,18 @@
   			<version>0.2-SNAPSHOT</version>
   			<scope>compile</scope>
   		</dependency>
+  		
+	  	<dependency>
+	  		<groupId>de.uniwue.abstracttools</groupId>
+	  		<artifactId>de.uniwue.abstracttools</artifactId>
+	  		<version>de.uniwue.abstracttools</version>
+	  	</dependency>
+	  	
+		<dependency>
+		    <groupId>OfficeConverter</groupId>
+		    <artifactId>OfficeConverter</artifactId>
+		    <version>OfficeConverter</version>
+		</dependency>	  	
 
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
@@ -204,11 +216,6 @@
   			<artifactId>CaseTrain-CleanUp</artifactId>
   			<version>CaseTrain-CleanUp</version>
   	    </dependency>
-		<dependency>
-			<groupId>OfficeConverter</groupId>
-			<artifactId>OfficeConverter</artifactId>
-			<version>OfficeConverter</version>
-		</dependency>
 		<dependency>
 			<groupId>org.openoffice</groupId>
 			<artifactId>juh</artifactId>

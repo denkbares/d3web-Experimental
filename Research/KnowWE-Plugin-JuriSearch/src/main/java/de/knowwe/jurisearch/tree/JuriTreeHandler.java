@@ -110,7 +110,6 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 		if (qReferences.size() > 1) {
 			for (Section<?> sec : qReferences) {
 				if (sec.get() instanceof QuestionIdentifier) {
-					@SuppressWarnings("unchecked")
 					Section<QuestionIdentifier> qSec = (Section<QuestionIdentifier>) sec;
 					if (!qSec.get().getChildrenQuestion(qSec).equals(children)) {
 						messages.add(Messages.error("Question already referenced before with different children questions."));

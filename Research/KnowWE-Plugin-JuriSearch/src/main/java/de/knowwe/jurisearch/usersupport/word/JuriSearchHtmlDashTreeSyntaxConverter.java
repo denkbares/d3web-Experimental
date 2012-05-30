@@ -6,6 +6,12 @@ import de.knowwe.usersupport.poi.DashMarkupHtmlToWikiConverter;
 import de.knowwe.usersupport.poi.IHtmlToWikiConverter;
 
 
+
+/**
+ * Handles word imports, where a dash-tree is a literal part of the 
+ * document, i.e. the html-document contains lines starting with "-", "--", ...
+ * @author boehler
+ */
 public class JuriSearchHtmlDashTreeSyntaxConverter implements IHtmlToWikiConverter {
 
 	@Override

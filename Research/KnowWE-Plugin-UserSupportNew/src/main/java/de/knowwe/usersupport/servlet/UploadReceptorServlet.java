@@ -39,6 +39,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.ActionContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.usersupport.poi.DashMarkupHtmlToWikiConverter;
 import de.knowwe.usersupport.poi.DefaultUserSupportWordImportConfiguration;
 import de.knowwe.usersupport.poi.PoiUtils;
 
@@ -151,7 +152,7 @@ public class UploadReceptorServlet extends HttpServlet {
 
 	protected void importWord(String fileName, String article,
 			ActionContext context) throws IOException {
-		PoiUtils.importWordFromFile(fileName, article, context, new DefaultUserSupportWordImportConfiguration());	
+		PoiUtils.importWordFromFile(fileName, article, context, new DashMarkupHtmlToWikiConverter());	
 	}
 	
 	protected void importTable(File file, String tableId, String article,

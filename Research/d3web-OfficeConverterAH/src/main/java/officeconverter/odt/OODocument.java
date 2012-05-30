@@ -140,7 +140,7 @@ public class OODocument {
 			}
 		}
 		
-		DiskUtils.savePageToDisk(new File(filename), cont.getHtml(), Config.DEFAULT_ENCODING);
+		DiskUtils.savePageToDisk(new File(filename), cont.getHtml(), c.getEncoding());
 
 		Logging.getLogger().log(Level.INFO,
 			"done.");

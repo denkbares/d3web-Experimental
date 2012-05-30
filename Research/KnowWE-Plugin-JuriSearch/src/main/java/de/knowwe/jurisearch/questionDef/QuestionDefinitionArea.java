@@ -53,19 +53,16 @@ public class QuestionDefinitionArea extends AbstractType {
 	private static final String LINEBREAK_REGEX = "\\r?\\n";
 	private static final String Q_AREA_REGEX = "^\\s*?FRAGE\\s*?" + LINEBREAK_REGEX
 			+ "(.*?)"
-			+ LINEBREAK_REGEX
-			+ LINEBREAK_REGEX + LINEBREAK_REGEX;
+			+ LINEBREAK_REGEX + LINEBREAK_REGEX + LINEBREAK_REGEX;
 
 	public QuestionDefinitionArea() {
 		super(null);
-		this.setSectionFinder(new RegexSectionFinder(Q_AREA_REGEX,
-				Pattern.MULTILINE | Pattern.DOTALL, 0));
+		this.setSectionFinder(new RegexSectionFinder(Q_AREA_REGEX, Pattern.MULTILINE | Pattern.DOTALL, 0));
 		// this.setRenderer(new PreDecoratingRenderer(new
 		// BoxRenderer("defaultMarkupFrame")));
 		this.setRenderer(new JuriInstantEditRenderer());
 		this.addChildType(new QuestionDefinitionContent());
-		this.addSubtreeHandler(Priority.PRECOMPILE_MIDDLE,
-				new RegisterPackageSubtreeHandler());
+		this.addSubtreeHandler(Priority.PRECOMPILE_MIDDLE, new RegisterPackageSubtreeHandler());
 	}
 
 	class JuriInstantEditRenderer implements Renderer {
@@ -122,8 +119,7 @@ public class QuestionDefinitionArea extends AbstractType {
 	class QuestionDefinitionContent extends AbstractType {
 
 		public QuestionDefinitionContent() {
-			this.setSectionFinder(new RegexSectionFinder(Q_AREA_REGEX,
-					Pattern.MULTILINE | Pattern.DOTALL, 1));
+			this.setSectionFinder(new RegexSectionFinder(Q_AREA_REGEX, Pattern.MULTILINE | Pattern.DOTALL, 1));
 			this.setRenderer(new BoxRenderer("markupText"));
 
 			// this.setOrderSensitive(true);
@@ -136,7 +132,6 @@ public class QuestionDefinitionArea extends AbstractType {
 	}
 
 	class QuestionTermDefinitionLine extends AbstractType {
-
 		public QuestionTermDefinitionLine() {
 			LineSectionFinder lineSectionFinder = new LineSectionFinder();
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(lineSectionFinder);
@@ -155,8 +150,8 @@ public class QuestionDefinitionArea extends AbstractType {
 			this.addChildType(qRef);
 		}
 
+		
 		public final class QAreaQuestionDefinition extends QuestionDefinition {
-
 			public QAreaQuestionDefinition() {
 				this.setRenderer(new StyleRenderer("color:green;"));
 
@@ -183,16 +178,16 @@ public class QuestionDefinitionArea extends AbstractType {
 		}
 	}
 
-	class ExplanationTextArea extends AbstractType {
 
+	class ExplanationTextArea extends AbstractType {
 		public ExplanationTextArea() {
 			this.setSectionFinder(new AllTextFinderTrimmed());
 			this.addChildType(new ExplanationText());
 		}
 	}
 
-	class AnswerDefinitionLine extends AbstractType {
 
+	class AnswerDefinitionLine extends AbstractType {
 		public AnswerDefinitionLine() {
 			this.setSectionFinder(new RegexSectionFinder(EmbracedContent.BRACKET_OPEN_REGEX
 					+ "(.)+"
@@ -202,12 +197,12 @@ public class QuestionDefinitionArea extends AbstractType {
 		}
 	}
 
-	class ShortAnswerDefinitionBracket extends AbstractType {
 
+	class ShortAnswerDefinitionBracket extends AbstractType {
 		ShortAnswerDefinitionBracket() {
 			this.setSectionFinder(new RegexSectionFinder(EmbracedContent.BRACKET_OPEN_REGEX
 					+ JuriAnswerDefinitionShort.YES + JuriAnswerDefinitionShort.NO
-					+ JuriAnswerDefinitionShort.MAYBE
+					+ JuriAnswerDefinitionShort.MAYBE + "?"
 					+ EmbracedContent.BRACKET_CLOSE_REGEX));
 			this.addChildType(new JuriAnswerDefinitionShort());
 			this.setRenderer(new BracketRenderer());

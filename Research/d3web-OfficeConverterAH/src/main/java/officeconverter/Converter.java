@@ -38,7 +38,7 @@ public class Converter {
 	}
 	
 	private static void convertFile2Dir(File file, File dir) {
-		convertFile2Dir(file, dir, null, new Config(null, null, null, null));
+		convertFile2Dir(file, dir, null, new Config());
 	}
 
 	private static void convertFile2Dir(File file, File dir, FileType fileType, Config config) {
@@ -57,7 +57,7 @@ public class Converter {
 			if (fileType == null)
 				fileType = FileType.getFileType(fileS);
 			URL resource = getResource(fileS);
-                        caseFile = fileType.createFile(resource, c);
+			caseFile = fileType.createFile(resource, c);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

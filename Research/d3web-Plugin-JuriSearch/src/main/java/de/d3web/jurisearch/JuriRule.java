@@ -323,3 +323,8 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 		return hashCode() - o.hashCode();
 	}
 }
+
+
+
+
+

@@ -43,10 +43,6 @@ public class QuestionIdentifier extends QuestionReference {
 		csf.addConstraint(SingleChildConstraint.getInstance());
 
 		this.setSectionFinder(csf);
-
-		// this.addSubtreeHandler(new
-		// SimpleTermReferenceRegistrationHandler(TermRegistrationScope.LOCAL));
-
 	}
 
 	public Section<QuestionIdentifier> getFatherQuestion(Section<QuestionIdentifier> s) {
@@ -73,9 +69,5 @@ public class QuestionIdentifier extends QuestionReference {
 		return result;
 	}
 
-	// @Override
-	// public Class<?> getTermObjectClass() {
-	// return Question.class;
-	// }
 
 }

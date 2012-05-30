@@ -32,7 +32,7 @@ public class MSOfficeFile extends DocumentFile {
 			throws Exception {
 		super(caseDocumentURL, c);
 		URL convertedDocument = convertDocument(caseDocumentURL, type.getTempDir());
-                this.delegate = new OpenDocumentFile(convertedDocument, c);
+		this.delegate = new OpenDocumentFile(convertedDocument, c);
 	}
 
 	/**
@@ -73,7 +73,6 @@ public class MSOfficeFile extends DocumentFile {
 			throw new RuntimeException("could not start OpenOffice server");
 		}
 
-                System.out.println(started);
 		File convertedDocumentsDir = tempDir;
 		convertedDocumentsDir.mkdirs();
 
@@ -102,7 +101,7 @@ public class MSOfficeFile extends DocumentFile {
 				OpenOfficeServerUtility.runOpenOfficeServer(
 					Config.getServiceProgramDir()
 					+ File.separator
-					+ "soffice.bin",
+					+ "soffice",
 					Config.getServiceHost(),
 					Config.getServicePort(),
 					Config.getServiceWaitStartDelayMS(),
