@@ -12,8 +12,8 @@ public class JuriSearchUploadReceptorServlet extends UploadReceptorServlet{
 	private static final long serialVersionUID = -3496523334733279679L;
 
 	@Override
-	protected void importWord(File file, String tableId, String article,
+	protected void importWord(String fileName, String article,
 			ActionContext context) throws IOException {
-		PoiUtils.importWordFromFile(file, tableId, article, context, new JuriSearchWordImportConfiguration());
+		PoiUtils.importWordFromFile(fileName, article, context, new JuriSearchHtmlDashTreeSyntaxConverter());
 	}
 }
