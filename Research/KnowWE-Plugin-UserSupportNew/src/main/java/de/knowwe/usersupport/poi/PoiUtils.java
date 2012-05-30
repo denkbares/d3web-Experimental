@@ -80,6 +80,10 @@ import de.knowwe.usersupport.tables.TableUtils;
  */
 public class PoiUtils
 {
+	private static String WORD_IMPORT_TEXT = "%%WordExportImport \r\n" + 
+		       								 "Text \r\n" +
+		       								 "@package: default \r\n" + 
+		       								 "% \r\n";
 
 	private static int idPostfix = 0;
 
@@ -284,39 +288,54 @@ public class PoiUtils
 
 		wb.write(out);
 	}
-
-	public static String importWordFromFile(File in, String tableId, String article,
-			ActionContext context, IWordImportConfiguration wordImport) throws IOException
-	{
+	
+	
+	public static Section<Article> getRootSectionForArticle(String article) {
 		ArticleManager manager =
 				Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
 		Article art = manager.getArticle(article);
-		Section<Article> artSec = art.getRootSection();
+		return art.getRootSection();
+	}
+	
 
-		// Save {@link KnowledgeBaseType} and {@link WordDefaultMarkup}
+	
+	public static String getKnowledgeBaseTextForArticle(String article) {
+		Section<Article> artSec = getRootSectionForArticle(article);
+
 		StringBuilder recovery = new StringBuilder();
 		List<Section<KnowledgeBaseType>> knowledgeBaseTypes = Sections.findSuccessorsOfType(artSec,
 				KnowledgeBaseType.class);
 		for (Section<KnowledgeBaseType> kType : knowledgeBaseTypes)
-		{
 			recovery.append(kType.getText());
-		}
-		recovery.append("%%WordExportImport \r\n");
-		recovery.append("Text \r\n");
-		recovery.append("@package: default \r\n");
-		recovery.append("% \r\n");
-
+		return recovery.toString();
+	}
+	
+	
+	public static void importWordFromFile(String wordFileName, String tableId, String article,
+			ActionContext context, IWordImportConfiguration wordImport) throws IOException {
+		String newText = getKnowledgeBaseTextForArticle(article) + WORD_IMPORT_TEXT;
+		
 		// Run the OfficeConverter
+		File in = new File(wordFileName);
 		String dirPath = in.getParent();
-		String absolutePath = in.getAbsolutePath();
-		Config conf = new Config().setEmbeddedObjectsDir(dirPath).setWithLists(true).setLeaveUmlauts(true).setWithHeadlineDepths(true);
-		//Config conf = new Config("html", true, "UTF-8", dirPath, true, false, true);
-		File inputFile = new File(absolutePath);
-		File outputFile = new File(dirPath + "/converted.html");
-		Converter.convertFile2File(inputFile, outputFile, conf);
+		String htmlFileName = dirPath + "/converted.html";
+		convertWordToHtml(wordFileName, htmlFileName);
 
 		// Parse the created html to Wikisyntax
-		File convertedFile = new File(dirPath + "/converted.html");
+		newText = newText + compileHtmlInputUsingWikiTreeSyntax(htmlFileName, wordImport);
+		
+		// replace the whole article
+		Map<String, String> nodeMap = new HashMap<String, String>();
+		nodeMap.put(getRootSectionForArticle(article).getID(), newText);
+		Sections.replaceSections(context, nodeMap);
+	}
+	
+	
+	
+	public static String compileHtmlInputUsingWikiTreeSyntax(String inFileName, IWordImportConfiguration wordImport) 
+	throws IOException {
+		// Parse the created html to Wikisyntax
+		File convertedFile = new File(inFileName);
 		BufferedReader r = new BufferedReader(new FileReader(convertedFile));
 
 		List<String> docLines = new ArrayList<String>();
@@ -324,15 +343,23 @@ public class PoiUtils
 		while ((readMe = r.readLine()) != null) {
 			wordImport.cleanHTMLLine(readMe, docLines);
 		}	
-		recovery.append(wordImport.createWikiMarkup(docLines));
-		
-		// replace the whole article
-		Map<String, String> nodeMap = new HashMap<String, String>();
-		nodeMap.put(artSec.getID(), recovery.toString());
-		Sections.replaceSections(context, nodeMap);
-		
-		return null;
+		return wordImport.createWikiMarkup(docLines);
 	}
+	
+	
+	
+	public static void convertWordToHtml(String inFileName, String outFileName)  throws IOException {
+		File in = new File(inFileName);
+		// Run the OfficeConverter
+		String dirPath = in.getParent();
+		String absolutePath = in.getAbsolutePath();
+		Config conf = new Config().setEmbeddedObjectsDir(dirPath).setWithLists(true).setLeaveUmlauts(true).setWithHeadlineDepths(true);
+		File inputFile = new File(absolutePath);
+		File outputFile = new File(outFileName);
+		Converter.convertFile2File(inputFile, outputFile, conf);
+	}
+	
+	
 
 	/**
 	 * Autoformats the column width. So that the text fits.
