@@ -198,16 +198,16 @@
             <table style="width:100%; margin: 0px; padding: 5px 5px 0px 5px;">
                 <tbody>
                     <tr>
-                        <td width="35%" />
+                        <td width="15%" />
                         <td width="*">
-                            <div style="color: black; font-size: 1.4em; font-variant: small-caps;
-                                 font-weight: bold; text-align: center; font-family:arial"> 
+                            <div style="color: black; font-size: 2.5em; font-variant: small-caps;
+                                 font-weight: bold; text-align: center; font-family:arial;color: #984806"> 
                                 European Registry of Abdominal wall HerniaS 
                             </div>
                         </td>
-                        <td width="35%">
+                        <td width="15%">
                             <div style="float:right;">
-                                <img style="width:100px;" alt="logo" src="../EuraHS-Dialog/img/eurahslogo.png" />
+                                <img style="width:180px;" alt="logo" src="../EuraHS-Dialog/img/eurahslogo.png" />
                             </div>
                         </td>
                     </tr>
@@ -237,29 +237,29 @@
         </div>
         <%		} %>
 
-        <div class="bwrap">
+        <div style="margin: 25px auto; width: 800px;">
             <form method="post" action="login.jsp">
-                <table border="0" cellspacing="0" cellpadding="0" style="width: 550px;"">
+                <table border="0" cellspacing="0" cellpadding="0" style="width: 615px;"">
 
                        <tr>
-                        <td colspan="2" 
-                            style="font-size:13pt;font-weight:bold;padding: 20px 0 20px;text-align:right;">
-                            EuraHS <b>MEMBER login</b>
+                        <td colspan="2" class="login"
+                            style="font-size:1.4em;font-weight:bold;padding: 20px 0 20px;text-align:left;">
+                            EuraHS <b>MEMBER LOGIN</b>
                         </td>
                     </tr>
                     <tr>
-                        <td style="text-align: left; padding: 5px 0 5px; float: left;">Registered Email:</td>
+                        <td style="text-align: left; padding: 5px 0 5px; float: left; font-size:1.4em;" class="login">REGISTERED EMAIL</td>
                         <td>
-                            <input type="text" name="l_email" style="float: right;"/>
+                            <input class="login" type="text" name="l_email" style="float: right;"/>
                             <% if (errors.contains("l_email")) {%>
                             <img class="icon" src="gfx/cross.png" />
                             <% } %>
                         </td>
                     </tr>
                     <tr>
-                        <td style="text-align: left; padding: 5px 0 5px; float: left;">Member Password:</td>
+                        <td style="text-align: left; padding: 5px 0 5px; float: left; font-size:1.4em;" class="login">MEMBER PASSWORD</td>
                         <td>
-                            <input type="password" name="l_pwd" style="float: right;" />
+                            <input class="login" type="password" name="l_pwd" style="float: right;" />
                             <% if (errors.contains("l_pwd")) { %>
                             <img class="icon" src="gfx/cross.png" />
                             <% } %>
@@ -268,37 +268,31 @@
                     <tr>
                         <td>&nbsp;</td>
                         <td>
-                            <input style="width: 125px; height:25px; float: right;" type="submit" name="login" value="MEMBER login" />
+                            <input class="login" style="width: 125px; height:25px; float: right;" type="submit" name="login" value="MEMBER LOGIN" />
                         </td>
                     </tr>
                 </table>
 
-                <div id='LOGININFO' style='width: 580px; margin-left: auto; margin-right: auto; margin-top: 25px;'>
-                    <div style='font-size:1.2em;'>To login as <b>EuraHS member</b>: </div>
-                    <div style='font-size:1.2em; margin-top: 20px;'>- Please type in your <b>registered Email</b> and the <b>member password</b>. </div>
-                    <div style='font-size:1em; float: right;'>This is the password, you received via email after having successfully registered as a 
-                        member for EuraHS.</div> <br />
-                    <div style='font-size:1.2em; margin-top: 30px;'>- Please press <b>MEMBER login</b>.</div><br />
-                    <div style='font-size:1.2em; font-weight: bold;'>
-                        <div style="float: left;">
-                            - Forgot user name or password? Please contact us:
-                        </div>
-                        <div style="width: 50px; float: right;">
-                            <a href="mailto:iris.kyle-leinhase@eurahs.eu">
-                                <img src="../EuraHS-Dialog/img/mailto.png" alt="Mail" style="width:50px; width:50px;margin-top:-25px; padding-right:20px; float:right;" />
-                            </a>
+                <div id='LOGININFO' class="login" style='width: 615px; margin-left: auto; margin-right: auto; margin-top: 25px;'>
+                    
+                    <div style='font-size:1.1em; margin-top: 60px;'>1. Please type in your <b>REGISTERED EMAIL</b> and the <b>MEMBER PASSWORD</b>. </div>
+                    <div style='font-size:1.1em; float: left; margin-left:20px;'>This is the password, you received via email after having successfully registered as 
+                        EuraHS member.</div> <br />
+                    <div style='font-size:1.1em; margin-top: 40px;'>2. Please press <b>MEMBER LOGIN</b>.</div><br />
+                    <div style='font-size:1.1em;'>
+                        <div style="float: left; margin-top: 30px;">
+                            You don't have a member account yet?
                         </div>
                     </div>
-                    <div style='font-size:1.2em; margin-top: 20px; float: left;'>- You don't have a member account yet?</div><br />
-                </div>  
+                </div>
 
 
-                <table border="0" cellspacing="0" cellpadding="0" style="width: 550px; margin-top: 10px;">
+                <table border="0" cellspacing="0" cellpadding="0" style="width: 615px; margin-top: 10px;">
                     <tr>
-                        <td colspan="2" style="font-size:13pt;font-weight:bold;padding: 20px 0 20px;text-align:right; ">
+                        <td colspan="2" style="font-size:1.1em;font-weight:bold;padding: 20px 0 10px;text-align:right; ">
                             <div style="color: black;">
                                 <script type="text/javascript">
-                                    document.write("<a style='color:black;' href=\"#\" onClick=\"show('hide');show('person')\">Create new EuraHS <b>MEMBER account</b></a>");
+                                    document.write("<a style='color:black;' href=\"#\" onClick=\"show('hide');show('person');hide('login')\">CREATE NEW EuraHS MEMBER ACCOUNT</b></a>");
                                 </script>
                             </div>
                         </td>
@@ -398,10 +392,10 @@
                         <td colspan="2">
                             <div class="hide" style="float: right; font-size:10pt;padding: 20px 0 20px;text-align:right; margin-top: 20px;">
                                 <div style="font-size: 13pt; font-weight: bold;"> Instructions and rules of the registry
-                                <p>
-                                <div style="font-size: 10pt; font-weight: normal;">Text with the user license agreement (will be added)</div>
-                                </p>
-                            </div>
+                                    <p>
+                                        <div style="font-size: 10pt; font-weight: normal;">Text with the user license agreement (will be added)</div>
+                                    </p>
+                                </div>
                         </td>
                     </tr>
                 </table>
@@ -458,14 +452,26 @@
         </div>
 
 
-        <div id='BROWSERINFO' style='width: 600px; margin-left:auto; margin-right:auto; margin-top:45px;'>
-            <div style="width: 580px; margin-left: auto; margin-right: auto;">
-                <div style=" font-size: 1.2em; font-weight:  bold; text-align: center;">   
-                   Please note! EuraHS is optimzied for the following browsers:
+
+
+        <div id='BROWSERINFO' style='width: 615px; margin-left:auto; margin-right:auto; margin-top:40px;'>
+            <div style='font-size:1.1em;'>
+                <div style="float: left; margin-top: 30px;">
+                    Problems or Questions? Please contact us:
+                </div>
+                <div style="width: 50px; float: left; margin-top: 10px; margin-left: 80px;">
+                    <a href="mailto:iris.kyle-leinhase@eurahs.eu">
+                        <img src="../EuraHS-Dialog/img/mailto.png" alt="Mail" style="width:50px;" />
+                    </a>
                 </div>
             </div>
-            <div id="browsers" style="margin-left: auto; margin-right: auto; width: 600px; margin-top: 20px">
-                <div style="float:left; width: 100px; margin-left:25px; margin-right:25px;">
+            <div style="width: 800px; margin-left: auto; margin-right: auto; float: left;">
+                <div style=" font-size: 1.1em; text-align: left; margin-top: 10px;">   
+                    Please note! EuraHS is optimized for the following browsers:
+                </div>
+            </div>
+            <div id="browsers" style="margin-left: auto; margin-right: auto; width: 600px; margin-top: 20px; float: left;">
+                <div style="float:left; width: 100px; margin-right:25px;">
                     <a href="http://www.mozilla.org/en-US/firefox/all.html" target="_blank"> 
                         <img src="../EuraHS-Dialog/img/FF.png" alt="Firefox 10 (or higher)" style="width:75px;" />
                         <!--<img src="FF.png" alt="Firefox 20 (or higher)" style="width:100px;" />-->

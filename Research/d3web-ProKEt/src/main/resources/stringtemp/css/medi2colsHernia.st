@@ -119,20 +119,24 @@ li.noListMarker {list-style-type: none;}
 	background-color: #B1E6BD
 }
 
-.eurahsintrobutton{width: 210px; float: left; margin-right: 10px; margin-left: 10px; margin-top: 200px;}
+.eurahsintrobutton{float: left;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 70px;
+    width: 185px;}
 
 #eurahsintroscreen{width: 1000px; margin-left: auto; margin-right: auto;}
 
 #headerInfoLine{font-weight: bold; font-size: 1em;}
 
-/* overwrite some jquery ui stuff for tabbed panes */
+/* overwrite some jquery ui stuff for tabbed panes 
 .ui-corner-all{border: none;}
 
 .ui-widget-header{background: none};
 
 
 
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+/*.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
     background: url("img/ui-bg_highlight-hard_50_bababa_1x100.png") repeat-x scroll 50% 50% #BABABA;
     border: 1px solid #D3D3D3;
     color: #555555;
@@ -146,3 +150,4 @@ li.noListMarker {list-style-type: none;}
     font-weight: normal;
 }
 
+*/

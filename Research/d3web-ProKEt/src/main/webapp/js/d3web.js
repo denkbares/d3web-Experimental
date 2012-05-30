@@ -543,6 +543,38 @@ function initFunctionality() {
         $("#jqUEQDialog").dialog("open");
     });
     
+    $('#newcaseintrobutton').unbind('click').click(function(event) {
+        if (logging) {
+            markIsWidget("true"); 
+            ue_logWidgetClicked($(this));
+        }
+        ehs_handleintrobuttons("newcase");
+    });
+    
+    $('#loadcaseintrobutton').unbind('click').click(function(event) {
+        if (logging) {
+            markIsWidget("true"); 
+            ue_logWidgetClicked($(this));
+        }
+        $("#jqLoadCaseDialog").dialog("open");
+    });
+    
+    $('#creategroupsintrobutton').unbind('click').click(function(event) {
+        if (logging) {
+            markIsWidget("true"); 
+            ue_logWidgetClicked($(this));
+        }
+        ehs_handleintrobuttons("groups");
+    });
+    
+    $('#statisticsintrobutton').unbind('click').click(function(event) {
+        if (logging) {
+            markIsWidget("true"); 
+            ue_logWidgetClicked($(this));
+        }
+        ehs_handleintrobuttons("statistics");
+    });
+    
     // click on language toggle
     $('img[id*="lang"]').unbind('click').click(function(event){
         if (logging){
@@ -681,6 +713,19 @@ function getTerminologyId(input, prefix) {
 
 function gotoStatistics() {
     var link = $.query.set("action", "gotoStatistics");
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        success : function(url) {
+            window.location.href = url;
+        }
+    });
+}
+
+function gotoGroups() {
+    var link = $.query.set("action", "gotoGroups");
     $.ajax({
         type : "GET",
         url : link,
@@ -999,25 +1044,24 @@ function d3web_handleQuestionDate(dateSelect) {
     var tqpopup2 = "Otherwise, missing values are automatically added by the system.";
     var tqpopup3 = "Attention: End of operation must be after start of operation!";
 
+    var tqpopup4 = "To avoid mistakes, dates must be filled in completely (Day:Month:Year)."; 
+    var tqpopup5 = "Otherwise, missing values are automatically added by the system.";
 
-    var beforeText = $.trim($("#text-" + beforeId).text());
-    if(beforeText.indexOf(tqpopup1) != -1){
-        //beforeText = beforeText.replace(tqpopup1, "").replace(tqpopup2, "").replace(tqpopup3, "");
-    }
-    
-    
+    // trim messages that are displayed when after-timepoints are not AFTER before-timepoints
+    // in dialog (as user entered)
     var afterText = $.trim($("#text-" + afterId).text());
     if(afterText.indexOf(tqpopup1) != -1){
         afterText = afterText.replace(tqpopup1, "").replace(tqpopup2, "").replace(tqpopup3, "");
     }
+    if(afterText.indexOf(tqpopup4) != -1){
+        afterText = afterText.replace(tqpopup4, "").replace(tqpopup5, "");
+    }
     
     
     if(language=="de"){
-        tooLate = "Erwartet wird ein Datum früher als '" + beforeText + "'.";
-        tooSoon = "Erwartet wird ein Datum später als '" + afterText + "'.";
+         tooSoon = "Erwartet wird ein Datum bzw. Zeitpunkt später als '" + afterText + "'.";
     } else if(language=="en"){
-        tooLate = "Expected is a date earlier than '" + beforeText + "'.";
-        tooSoon = "Expected is a date later than '" + afterText + "'.";
+        tooSoon = "Expected is a date / timepoint later than '" + afterText + "'.";
     }
     
     // currently, no check of earlier-date questions needed
@@ -1411,4 +1455,18 @@ function markIsWidget(isWidget){
             
         }
     });
+}
+
+function ehs_handleintrobuttons(whichbutton){
+    
+    if(whichbutton.indexOf("newcase")!=-1){
+        d3web_show();
+        
+    } else if (whichbutton.indexOf("statistics")!=-1){
+        gotoStatistics();
+        
+    } else if (whichbutton.indexOf("groups")!=-1){
+        gotoGroups();
+    }
+    
 }

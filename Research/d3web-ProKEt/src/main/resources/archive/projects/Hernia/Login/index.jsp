@@ -68,16 +68,16 @@
             <table style="width:100%; margin: 0px; padding: 5px 5px 0px 5px;">
                 <tbody>
                     <tr>
-                        <td width="35%" />
+                        <td width="15%" />
                         <td width="*">
-                            <div style="color: black; font-size: 1.4em; font-variant: small-caps;
-                                 font-weight: bold; text-align: center; font-family:arial"> 
+                            <div style="color: black; font-size: 2.5em; font-variant: small-caps;
+                                 font-weight: bold; text-align: center; font-family:arial;color: #984806"> 
                                 European Registry of Abdominal wall HerniaS 
                             </div>
                         </td>
-                        <td width="35%">
-                            <div style="float:right;">
-                                <img style="width:100px;" alt="logo" src="../EuraHS-Dialog/img/eurahslogo.png" />
+                        <td width="15%">
+                            <div style="float:right; ">
+                                <img style="width:180px;" alt="logo" src="../EuraHS-Dialog/img/eurahslogo.png" />
                             </div>
                         </td>
                     </tr>
@@ -102,15 +102,15 @@
                         String num = r == 0 ? "first" : "second";
                 %>
                 <input style="width: 300px;" type="hidden" name="cn" value="<%= r %>" />
-                <table border="0" cellspacing="0" cellpadding="0" width="560px;">
+                <table border="0" cellspacing="0" cellpadding="0" width="615px;">
                     <tr>
                         <td colspan="2" 
-                            style="font-size:13pt;font-weight:bold;padding: 20px 0 20px;text-align:right;">
-                            <b>Computer registration</b> to enter EuraHS
+                            style="font-size:1.4em;font-weight:bold;padding: 20px 0 20px;text-align:left;">
+                            COMPUTER REGISTRATION to enter EuraHS
                         </td>
                     </tr>
                     <tr>
-                        <td style="text-align: left; padding: 5px 0 5px;">Invitation Password:</td>
+                        <td style="text-align: left; padding: 5px 0 5px; font-size:1.4em;">INVITATION PASSWORD</td>
                         <td style="padding: 5px 0 5px; float: right;">
                             <input type="password" name="g_pwd" />
                             <% if (errors.contains("g_pwd")) {%>
@@ -120,7 +120,7 @@
                     </tr>
                     <tr>
                         <td style="padding: 5px 0 5px;">
-                            <div style="text-align: left; float: left;"> CAPTCHA: </div>
+                            <div style="text-align: left; float: left; font-size:1.4em;"> CAPTCHA </div>
                             <img style="cursor: pointer; text-align: left; float: left; margin-left: 10px;" 
                                  src="gfx/information.png" 
                                  title="The captcha is to prevent automated form processing." />
@@ -130,8 +130,8 @@
                         </td>    
                     </tr>
                     <tr>
-                        <td style="padding: 5px 0 5px;">
-                            Enter <b><%= num %></b> CAPTCHA:
+                        <td style="padding: 5px 0 5px; font-size:1.4em;">
+                            ENTER <b><%= num %></b> CAPTCHA
                         </td>
                         <td style="padding: 5px 0 5px;">
                             <input style="float: right;" type="text" name="c"/>
@@ -154,18 +154,18 @@
             <%	} %>
         </div>
 
-        <div id='LOGININFO' style='width: 560px; margin-left: auto; margin-right: auto; margin-top: 20px;'>
-            <div style='font-size:1.2em;'>- To register your computer, please enter the <b>Invitation Password</b>. </div>
-            <div style='font-size:1em; float: right;'>This is the password you received by the person who invited
+        <div id='LOGININFO' style='width: 615px; margin-left: auto; margin-right: auto; margin-top: 30px;'>
+            <div style='font-size:1.1em;'>1. Please enter the <b>INVITATION PASSWORD</b>. </div>
+            <div style='font-size:1.1em; margin-left: 20px;'>This is the password you received by the person who invited
                 you to the registry.</div> <br />
-            <div style='font-size:1.2em; margin-top:10px;'>- Please enter only the <b>first</b> OR <b> the second CAPTCHA</b> 
-                (see above).</div><br />
-            <div style='font-size:1.2em;'>- Please press <b>ENTER</b>.</div><br />
-            <div style='font-size:1.2em; font-weight: bold;'>
-                <div style="float: left; padding-top: 15px;">
-                    - Problems or Questions? Please contact us:
+            <div style='font-size:1.1em;'>2. Please enter only the first <b>OR</b> the second <b>CAPTCHA</b> 
+                as implied above.</div><br />
+            <div style='font-size:1.1em; '>3. Please press <b>ENTER</b>.</div><br />
+            <div style='font-size:1.1em;'>
+                <div style="float: left; margin-top: 50px;">
+                    Problems or Questions? Please contact us:
                 </div>
-                <div style="width: 50px; float: right;">
+                <div style="width: 50px; float: left; margin-top: 30px; margin-left: 80px;">
                     <a href="mailto:iris.kyle-leinhase@eurahs.eu">
                         <img src="../EuraHS-Dialog/img/mailto.png" alt="Mail" style="width:50px;" />
                     </a>
@@ -173,14 +173,14 @@
             </div>
         </div>
 
-        <div id='BROWSERINFO' style='width: 560px; margin-left:auto; margin-right:auto; margin-top:100px;'>
-            <div style="width: 560px; margin-left: auto; margin-right: auto;">
-                <div style=" font-size: 1.2em; font-weight:  bold; text-align: center;">   
+        <div id='BROWSERINFO' style='width: 615px; margin-left:auto; margin-right:auto; margin-top:100px;'>
+            <div style="width: 800px; margin-left: auto; margin-right: auto;">
+                <div style=" font-size: 1.1em; text-align: left; ">   
                    Please note! EuraHS is optimized for the following browsers:
                 </div>
             </div>
             <div id="browsers" style="margin-left: auto; margin-right: auto; width: 600px; margin-top: 20px">
-                <div style="float:left; width: 100px; margin-left:25px; margin-right:25px;">
+                <div style="float:left; width: 100px; margin-left:-10px; margin-right:25px;">
                     <a href="http://www.mozilla.org/en-US/firefox/all.html" target="_blank"> 
                         <img src="../EuraHS-Dialog/img/FF.png" alt="Firefox 10 (or higher)" style="width:75px;" />
                         <!--<img src="FF.png" alt="Firefox 20 (or higher)" style="width:100px;" />-->

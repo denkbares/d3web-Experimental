@@ -343,6 +343,10 @@ public class D3webDialog extends HttpServlet {
             gotoStatistics(response, httpSession);
             return;
         } else if (action.equalsIgnoreCase(
+                "gotoGroups")) {
+            gotoGroups(response, httpSession);
+            return;
+        } else if (action.equalsIgnoreCase(
                 "gotoTxtDownload")) {
             gotoTxtDownload(response, request, httpSession);
             return;
@@ -984,6 +988,24 @@ public class D3webDialog extends HttpServlet {
         String email = (String) httpSession.getAttribute("user");
 
         String gotoUrl = "../Statistics/Statistic.jsp?action=dbLogin";
+
+        String token = DateCoDec.getCode();
+        gotoUrl += "&t=" + token;
+        gotoUrl += "&e=" + Base64.encodeBase64String(email.getBytes());
+
+        new TokenThread(token, email).start();
+        PrintWriter writer = response.getWriter();
+        writer.print(gotoUrl);
+        writer.close();
+        // response.sendRedirect(gotoUrl);
+    }
+    
+     protected void gotoGroups(HttpServletResponse response,
+            HttpSession httpSession) throws IOException {
+
+        String email = (String) httpSession.getAttribute("user");
+
+        String gotoUrl = "../Statistics/Groups.jsp?action=dbLogin";
 
         String token = DateCoDec.getCode();
         gotoUrl += "&t=" + token;

@@ -89,25 +89,26 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         st.setAttribute("statistics", true);
         st.setAttribute("followupbutton", true);
 
-        //String ehsintro = request.getParameter("ehsintro");
+        String ehsintro = request.getParameter("ehsintro");
+        Object ehsHttp = httpSession.getAttribute("ehsintro");
         // Maybe better pull out, handle button click per JS and call a goToStatistics Ajax etc
-        /*String ehsintro = "true";
-        if (ehsintro != null && ehsintro.equals("true")) {
-            st.setAttribute("eurahsintro", true);
+        
+          
+        if(ehsHttp != null && ehsHttp.toString().equals("done")){
+            st.setAttribute("eurahsmiddle", "true");
+            st.removeAttribute("eurahsintro");
+        } else 
+        
+        // when coming from login, there is nothing like ehsintro set
+        if (ehsintro == null || ehsintro.equals("") ||
+                ehsHttp == null || ehsHttp.toString().equals("")) {
+            st.setAttribute("eurahsintro", "true");
             st.removeAttribute("eurahsmiddle");
-            st.setAttribute("eurahsintronewlink", "/EuraHS-Dialog");
-            st.setAttribute("eurahsintronewlink", "/EuraHS-Dialog?loadcase=true");
-            // TODO: open load case dialog!!!
-            st.setAttribute("eurahsintrostatslink", "../Statistics/Statistic.jsp");
-            st.setAttribute("eurahsintrogroupslink", "../Statistics/Groups.jsp");
-        } /*else {
-            st.setAttribute("eurahsmiddle", true);
-            st.removeAttribute("eurahsintro");
-        }*/
+            httpSession.setAttribute("ehsintro", "done");
+           
+        } 
 
-        st.setAttribute("eurahsmiddle", true);
-            st.removeAttribute("eurahsintro");
-
+       
         if (httpSession.getAttribute("level1qs") == null) {
             httpSession.setAttribute("level1qs", parseLevel1Questions(httpSession));
         }
