@@ -51,15 +51,14 @@ public class DialogComponent
 	private MatchingAlgorithm usedTokenAlgorithm;
 	private MatchingAlgorithm usedPhraseAlgorithm;
 
-	private static DialogComponent uniqueInstance;
+	private static DialogComponent uniqueInstance = new DialogComponent();;
 
 	private final SuggestionCache cache;
 
 	/**
 	 * To avoid instantiation
 	 */
-	private DialogComponent()
-	{
+	private DialogComponent() {
 		cache = SuggestionCache.getInstance();
 
 		maxSuggestions =
@@ -69,8 +68,7 @@ public class DialogComponent
 				Double.parseDouble(
 						bundle.getString("usersupport.dialogcomponent.threshold"));
 
-		try
-		{
+		try {
 			String className1 =
 					bundle.getString("usersupport.dialogcomponent.standardtokenmatchingalgorithm");
 			usedTokenAlgorithm = MatchingAlgorithm.class.cast(
@@ -81,11 +79,11 @@ public class DialogComponent
 			usedPhraseAlgorithm = MatchingAlgorithm.class.cast(
 					Class.forName(className2
 							));
-		}
-		catch (Exception e)
-		{
-			usedTokenAlgorithm = new LevenshteinAlgorithm();
-			usedPhraseAlgorithm = new MongeElkanAlgorithm();
+		} catch (Exception e) {
+			usedTokenAlgorithm = new DoNothingAlgorithm();
+			usedPhraseAlgorithm = new DoNothingAlgorithm();
+			//usedTokenAlgorithm = new LevenshteinAlgorithm();
+			//usedPhraseAlgorithm = new MongeElkanAlgorithm();
 		}
 
 		// Add all known Algorithms
@@ -110,9 +108,7 @@ public class DialogComponent
 	 * @created 21.11.2011
 	 * @return
 	 */
-	public static DialogComponent getInstance()
-	{
-		if (uniqueInstance == null) uniqueInstance = new DialogComponent();
+	public static DialogComponent getInstance() {
 		return uniqueInstance;
 	}
 
@@ -136,13 +132,10 @@ public class DialogComponent
 		List<SuggestionCountPair> matchList = new ArrayList<SuggestionCountPair>();
 		bestSuggs = new ArrayList<Suggestion>();
 		// When query contains Whitespace then use algorithmsPhrase
-		if (query.contains(" "))
-		{
-			this.getBestSuggestionsPhrase(query, termDefinitions, matchList, true);
-		}
-		else if (!query.contains(" "))
-		{
-			this.getBestSuggestionsToken(query, termDefinitions, matchList, true);
+		if (query.contains(" ")) {
+			this.getBestSuggestionsPhrase(query, termDefinitions, matchList, false);
+		} else {
+			this.getBestSuggestionsToken(query, termDefinitions, matchList, false);
 		}
 
 		// Sort the matchList and add the count of
@@ -237,18 +230,14 @@ public class DialogComponent
 	private void getBestSuggestionsPhrase(String query, List<String> termDefinitions, List<SuggestionCountPair> matchList, boolean useAllAlgorithms)
 	{
 		List<MatchingAlgorithm> algorithms = new ArrayList<MatchingAlgorithm>();
-		if (!useAllAlgorithms)
-		{
-			algorithms.add(usedPhraseAlgorithm);
-		}
-		if (useAllAlgorithms)
-		{
+		if (useAllAlgorithms) {
 			algorithms = algorithmsPhrase;
+		} else {
+			algorithms.add(usedPhraseAlgorithm);
 		}
 
 		List<Suggestion> suggs = new ArrayList<Suggestion>();
-		for (MatchingAlgorithm algo : algorithms)
-		{
+		for (MatchingAlgorithm algo : algorithms) {
 			suggs = algo.getMatches(maxSuggestions, threshold, query, termDefinitions);
 			boolean remove = true;
 			while (remove)
@@ -256,12 +245,10 @@ public class DialogComponent
 			suggs = this.removeExactMatches(suggs);
 			for (Suggestion s : suggs) {
 				int exists = AlgorithmUtil.containsSuggestion(matchList, s);
-				if (exists != -1)
-				{
+				if (exists != -1) {
 					matchList.get(exists).increment();
 					matchList.get(exists).updateDistance(s);
-				}
-				else matchList.add(new SuggestionCountPair(s));
+				} else matchList.add(new SuggestionCountPair(s));
 			}
 		}
 	}

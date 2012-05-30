@@ -309,11 +309,11 @@ public class PoiUtils
 		// Run the OfficeConverter
 		String dirPath = in.getParent();
 		String absolutePath = in.getAbsolutePath();
-		Config conf = new Config("html", true, "UTF-8", dirPath, true, false, true);
+		Config conf = new Config().setEmbeddedObjectsDir(dirPath).setWithLists(true).setLeaveUmlauts(true).setWithHeadlineDepths(true);
+		//Config conf = new Config("html", true, "UTF-8", dirPath, true, false, true);
 		File inputFile = new File(absolutePath);
 		File outputFile = new File(dirPath + "/converted.html");
-		Converter.convertFile2File(inputFile,
-				outputFile, conf);
+		Converter.convertFile2File(inputFile, outputFile, conf);
 
 		// Parse the created html to Wikisyntax
 		File convertedFile = new File(dirPath + "/converted.html");
