@@ -312,7 +312,7 @@ public class PoiUtils
 	
 	
 	public static void importWordFromFile(String wordFileName, String article,
-			ActionContext context, IWordImportConfiguration wordImport) throws IOException {
+			ActionContext context, IHtmlToWikiConverter htmlConv) throws IOException {
 		String newText = getKnowledgeBaseTextForArticle(article) + WORD_IMPORT_TEXT;
 		
 		// Run the OfficeConverter
@@ -322,7 +322,7 @@ public class PoiUtils
 		convertWordToHtml(wordFileName, htmlFileName);
 
 		// Parse the created html to Wikisyntax
-		newText = newText + compileHtmlInputUsingWikiTreeSyntax(htmlFileName, wordImport);
+		newText = newText + compileHtmlInput(htmlFileName, htmlConv);
 		
 		// replace the whole article
 		Map<String, String> nodeMap = new HashMap<String, String>();
@@ -332,18 +332,11 @@ public class PoiUtils
 	
 	
 	
-	public static String compileHtmlInputUsingWikiTreeSyntax(String inFileName, IWordImportConfiguration wordImport) 
+	public static String compileHtmlInput(String inFileName, IHtmlToWikiConverter htmlConv) 
 	throws IOException {
 		// Parse the created html to Wikisyntax
-		File convertedFile = new File(inFileName);
-		BufferedReader r = new BufferedReader(new FileReader(convertedFile));
-
-		List<String> docLines = new ArrayList<String>();
-		String readMe;
-		while ((readMe = r.readLine()) != null) {
-			wordImport.cleanHTMLLine(readMe, docLines);
-		}	
-		return wordImport.createWikiMarkup(docLines);
+		String htmlText = de.uniwue.abstracttools.StringUtils.readFileString(inFileName);
+		return htmlConv.getWikiText(htmlText);
 	}
 	
 	
