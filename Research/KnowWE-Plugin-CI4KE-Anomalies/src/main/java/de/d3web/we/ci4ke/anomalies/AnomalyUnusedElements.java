@@ -127,7 +127,7 @@ public class AnomalyUnusedElements implements Test<KnowledgeBase> {
 
 	@Override
 	public ArgsCheckResult checkArgs(String[] args) {
-		return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
+		return new ArgsCheckResult(args);
 	}
 
 	@Override

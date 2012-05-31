@@ -28,10 +28,9 @@ import org.semanticweb.owlapi.profiles.OWL2RLProfile;
 import org.semanticweb.owlapi.profiles.OWLProfile;
 import org.semanticweb.owlapi.profiles.OWLProfileReport;
 
-import cc.denkbares.testing.ArgsCheckResult;
 import cc.denkbares.testing.Message;
 import cc.denkbares.testing.Message.Type;
-import cc.denkbares.testing.Test;
+import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.owlapi.OWLAPIConnector;
 
 /**
@@ -42,7 +41,7 @@ import de.knowwe.owlapi.OWLAPIConnector;
  * @author Stefan Mark
  * @created 17.10.2011
  */
-public class OWL2ProfileCheckTest implements Test<OWLAPIConnector> {
+public class OWL2ProfileCheckTest extends AbstractTest<OWLAPIConnector> {
 
 	public static final String OWL2_PROFILE_DL = "DL";
 	public static final String OWL2_PROFILE_EL = "EL";
@@ -96,20 +95,8 @@ public class OWL2ProfileCheckTest implements Test<OWLAPIConnector> {
 	}
 
 	@Override
-	public ArgsCheckResult checkArgs(String[] args) {
-
-		// check if the parameters match the necessary amount
-		if (!(args.length == 1)) {
-
-			StringBuilder errorMessage = new StringBuilder();
-			errorMessage.append("The number of arguments for the test '");
-			errorMessage.append(this.getClass().getSimpleName());
-			errorMessage.append("' are not sufficient. Please specify 1 argument: ");
-			errorMessage.append("arg0: Type of the OWL2 profile");
-
-			return new ArgsCheckResult(ArgsCheckResult.Type.ERROR, errorMessage.toString());
-		}
-		return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
+	public int numberOfArguments() {
+		return 1;
 	}
 
 	@Override

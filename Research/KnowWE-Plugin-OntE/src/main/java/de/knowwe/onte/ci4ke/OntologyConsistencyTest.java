@@ -26,10 +26,9 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.Node;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
-import cc.denkbares.testing.ArgsCheckResult;
 import cc.denkbares.testing.Message;
 import cc.denkbares.testing.Message.Type;
-import cc.denkbares.testing.Test;
+import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.taghandler.OWLApiTagHandlerUtil;
@@ -42,7 +41,7 @@ import de.knowwe.taghandler.OWLApiTagHandlerUtil;
  * @author Stefan Mark
  * @created 17.10.2011
  */
-public class OntologyConsistencyTest implements Test<OWLAPIConnector> {
+public class OntologyConsistencyTest extends AbstractTest<OWLAPIConnector> {
 
 	@Override
 	public Message execute(OWLAPIConnector connector, String[] args) {
@@ -86,11 +85,8 @@ public class OntologyConsistencyTest implements Test<OWLAPIConnector> {
 	}
 
 	@Override
-	public ArgsCheckResult checkArgs(String[] args) {
-		int expectedArgCount = 0;
-		if (args.length == expectedArgCount) return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
-		return new ArgsCheckResult(ArgsCheckResult.Type.ERROR, "Expected number of arguments: "
-				+ expectedArgCount + " - found: " + args.length);
+	public int numberOfArguments() {
+		return 0;
 	}
 
 	@Override

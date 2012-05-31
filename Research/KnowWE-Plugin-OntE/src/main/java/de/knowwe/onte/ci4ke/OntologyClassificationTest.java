@@ -29,10 +29,9 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.ShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
-import cc.denkbares.testing.ArgsCheckResult;
 import cc.denkbares.testing.Message;
 import cc.denkbares.testing.Message.Type;
-import cc.denkbares.testing.Test;
+import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.owlapi.query.OWLApiQueryEngine;
@@ -44,7 +43,7 @@ import de.knowwe.owlapi.query.OWLApiQueryEngine;
  * @author Stefan Mark
  * @created 17.10.2011
  */
-public class OntologyClassificationTest implements Test<OWLAPIConnector> {
+public class OntologyClassificationTest extends AbstractTest<OWLAPIConnector> {
 
 	public static final char GREATER_THAN = '\u003E';
 	public static final char HYPHEN_MINUS = '\u002D';
@@ -136,19 +135,8 @@ public class OntologyClassificationTest implements Test<OWLAPIConnector> {
 	}
 
 	@Override
-	public ArgsCheckResult checkArgs(String[] args) {
-		// check if the parameters match the necessary amount
-		if (!(args.length == (1))) {
-
-			StringBuilder errorMessage = new StringBuilder();
-			errorMessage.append("The number of arguments for the test '");
-			errorMessage.append(this.getClass().getSimpleName());
-			errorMessage.append("' are not sufficient. Please specify at least 1 argument: ");
-			errorMessage.append("arg0: The classification hierarchy of the to check concepts, e.g. Food>Pizza>NamedPizza");
-
-			return new ArgsCheckResult(ArgsCheckResult.Type.ERROR, errorMessage.toString());
-		}
-		return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
+	public int numberOfArguments() {
+		return 1;
 	}
 
 	@Override

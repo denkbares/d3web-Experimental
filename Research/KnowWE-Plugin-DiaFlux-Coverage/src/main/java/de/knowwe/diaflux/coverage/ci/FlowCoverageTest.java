@@ -20,15 +20,14 @@ package de.knowwe.diaflux.coverage.ci;
 
 import java.util.List;
 
-import cc.denkbares.testing.ArgsCheckResult;
 import cc.denkbares.testing.Message;
 import cc.denkbares.testing.Message.Type;
-import cc.denkbares.testing.Test;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
+import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
@@ -39,7 +38,7 @@ import de.knowwe.diaflux.coverage.DiaFluxCoverageType;
  * @author Reinhard Hatko
  * @created 26.03.2012
  */
-public class FlowCoverageTest implements Test<KnowledgeBase> {
+public class FlowCoverageTest extends AbstractTest<KnowledgeBase> {
 
 	@Override
 	public Message execute(KnowledgeBase kb, String[] args) {
@@ -85,11 +84,8 @@ public class FlowCoverageTest implements Test<KnowledgeBase> {
 	}
 
 	@Override
-	public ArgsCheckResult checkArgs(String[] args) {
-		int expectedArgCount = 2;
-		if (args.length == expectedArgCount) return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
-		return new ArgsCheckResult(ArgsCheckResult.Type.ERROR, "Expected number of arguments: "
-				+ expectedArgCount + " - found: " + args.length);
+	public int numberOfArguments() {
+		return 2;
 	}
 
 	@Override

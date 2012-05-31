@@ -19,6 +19,7 @@
 package de.knowwe.onte.ci4ke;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -32,27 +33,31 @@ import de.knowwe.owlapi.OWLAPIConnector;
  * @author jochenreutelshofer
  * @created 22.05.2012
  */
-public class OWLAPITestObjectProvider implements TestObjectProvider<OWLAPIConnector> {
+public class OWLAPITestObjectProvider implements TestObjectProvider {
 
 	@Override
-	public List<OWLAPIConnector> getTestObject(Class<OWLAPIConnector> c, String id) {
-		List<OWLAPIConnector> result = new ArrayList<OWLAPIConnector>();
+	public <T> List<T> getTestObjects(Class<T> c, String id) {
 		if (c == null) {
 			Logger.getLogger(this.getClass()).warn("Class given to TestObjectProvider was 'null'");
-			return result;
+			return Collections.emptyList();
 		}
 		if (!c.equals(OWLAPIConnector.class)) {
-			return result;
+			return Collections.emptyList();
 		}
+		List<T> result = new ArrayList<T>();
 
 		if (id == null || id.length() == 0) {
-
-			result.add(OWLAPIConnector.getGlobalInstance());
+			result.add(c.cast(OWLAPIConnector.getGlobalInstance()));
 		}
 		else {
-			result.add(OWLAPIConnector.getInstance(IRI.create(id)));
+			result.add(c.cast(OWLAPIConnector.getInstance(IRI.create(id))));
 		}
 		return result;
+	}
+
+	@Override
+	public <T> String getTestObjectName(T testObject) {
+		return testObject.toString();
 	}
 
 }

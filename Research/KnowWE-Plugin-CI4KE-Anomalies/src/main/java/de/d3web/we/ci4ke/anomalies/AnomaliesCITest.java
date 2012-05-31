@@ -42,7 +42,7 @@ public class AnomaliesCITest implements Test<Object> {
 
 	@Override
 	public ArgsCheckResult checkArgs(String[] args) {
-		return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
+		return new ArgsCheckResult(args);
 	}
 
 	@Override

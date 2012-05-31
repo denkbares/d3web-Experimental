@@ -18,10 +18,9 @@
  */
 package de.knowwe.rdfs.testcase.ci4ke;
 
-import cc.denkbares.testing.ArgsCheckResult;
 import cc.denkbares.testing.Message;
 import cc.denkbares.testing.Message.Type;
-import cc.denkbares.testing.Test;
+import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.core.Environment;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.testcase.RDFSTestCase;
@@ -35,7 +34,7 @@ import de.knowwe.rdfs.testcase.util.RDFSTestCaseLoader;
  * @author Sebastian Furth
  * @created 22.12.2011
  */
-public class RDFSTestCaseRunner implements Test<Rdf2GoCore> {
+public class RDFSTestCaseRunner extends AbstractTest<Rdf2GoCore> {
 
 	@Override
 	public Message execute(Rdf2GoCore core, String[] args) {
@@ -75,16 +74,12 @@ public class RDFSTestCaseRunner implements Test<Rdf2GoCore> {
 	}
 
 	@Override
-	public ArgsCheckResult checkArgs(String[] args) {
-		int expectedArgCount = 2;
-		if (args.length == expectedArgCount) return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
-		return new ArgsCheckResult(ArgsCheckResult.Type.ERROR, "Expected number of arguments: "
-				+ expectedArgCount + " - found: " + args.length);
+	public Class<Rdf2GoCore> getTestObjectClass() {
+		return Rdf2GoCore.class;
 	}
 
 	@Override
-	public Class<Rdf2GoCore> getTestObjectClass() {
-		// TODO Auto-generated method stub
-		return null;
+	public int numberOfArguments() {
+		return 2;
 	}
 }

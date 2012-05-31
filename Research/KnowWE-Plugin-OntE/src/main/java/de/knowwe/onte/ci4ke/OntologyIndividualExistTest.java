@@ -26,10 +26,9 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
-import cc.denkbares.testing.ArgsCheckResult;
 import cc.denkbares.testing.Message;
 import cc.denkbares.testing.Message.Type;
-import cc.denkbares.testing.Test;
+import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
@@ -42,7 +41,7 @@ import de.knowwe.taghandler.OWLApiTagHandlerUtil;
  * @author Stefan Mark
  * @created 17.10.2011
  */
-public class OntologyIndividualExistTest implements Test<OWLAPIConnector> {
+public class OntologyIndividualExistTest extends AbstractTest<OWLAPIConnector> {
 
 	@Override
 	public Message execute(OWLAPIConnector connector, String[] args) {
@@ -110,21 +109,8 @@ public class OntologyIndividualExistTest implements Test<OWLAPIConnector> {
 	}
 
 	@Override
-	public ArgsCheckResult checkArgs(String[] args) {
-		int expectedArgCount = 2;
-		// check if the parameters match the necessary amount
-		if (!(args.length == expectedArgCount)) {
-
-			StringBuilder errorMessage = new StringBuilder();
-			errorMessage.append("The number of arguments for the test '");
-			errorMessage.append(this.getClass().getSimpleName());
-			errorMessage.append("' are not sufficient. Please specify 2 arguments: ");
-			errorMessage.append("arg0: Type of the individuals; arg1: Amount that should exist");
-
-			return new ArgsCheckResult(ArgsCheckResult.Type.ERROR, errorMessage.toString());
-		}
-		return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
-
+	public int numberOfArguments() {
+		return 2;
 	}
 
 	@Override

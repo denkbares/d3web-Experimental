@@ -18,11 +18,10 @@
  */
 package de.d3web.we.diaflux.anomalies;
 
-import cc.denkbares.testing.ArgsCheckResult;
 import cc.denkbares.testing.Message;
 import cc.denkbares.testing.Message.Type;
-import cc.denkbares.testing.Test;
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.core.utils.Strings;
 
 /**
@@ -30,18 +29,11 @@ import de.knowwe.core.utils.Strings;
  * @author Roland Jerg
  * @created 09.05.2012
  */
-public abstract class AbstractAnomalyTest implements Test<KnowledgeBase> {
+public abstract class AbstractAnomalyTest extends AbstractTest<KnowledgeBase> {
 
 	@Override
-	public ArgsCheckResult checkArgs(String[] args) {
-		int requiredArgsCount = 0;
-		// args are not passed to implementing subclasses hence no args can be
-		// used
-		if (args.length > requiredArgsCount) {
-			new ArgsCheckResult(ArgsCheckResult.Type.WARNING, "Too many arguments given: "
-					+ args.length + " but only " + requiredArgsCount + "are expected");
-		}
-		return new ArgsCheckResult(ArgsCheckResult.Type.FINE);
+	public int numberOfArguments() {
+		return 0;
 	}
 
 	@Override
