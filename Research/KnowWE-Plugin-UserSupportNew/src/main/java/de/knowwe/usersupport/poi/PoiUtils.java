@@ -29,11 +29,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-//TODO: Somehow integrate the correct OfficeConverter into the build process in order for this code to compile
-/*
 import officeconverter.Config;
 import officeconverter.Converter;
-*/
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -337,12 +334,8 @@ public class PoiUtils
 	throws IOException {
 		// Parse the created html to Wikisyntax
 		
-		//TODO: Somehow integrate the correct abstracttools into the build process in order for this code to compile
-		/*
 		String htmlText = de.uniwue.abstracttools.StringUtils.readFileString(inFileName);		
 		return htmlConv.getWikiText(htmlText);
-		*/
-		return null;
 	}
 	
 	
@@ -353,13 +346,10 @@ public class PoiUtils
 		String dirPath = in.getParent();
 		String absolutePath = in.getAbsolutePath();
 		
-		//TODO: Somehow integrate the correct OfficeConverter into the build process in order for this code to compile
-		/*
 		Config conf = new Config().setEmbeddedObjectsDir(dirPath).setWithLists(true).setLeaveUmlauts(true).setWithHeadlineDepths(true);
 		File inputFile = new File(absolutePath);
 		File outputFile = new File(outFileName);
 		Converter.convertFile2File(inputFile, outputFile, conf);
-		*/
 	}
 	
 	
