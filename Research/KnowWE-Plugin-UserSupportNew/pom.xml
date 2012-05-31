@@ -110,12 +110,7 @@
 	  		<artifactId>de.uniwue.abstracttools</artifactId>
 	  		<version>de.uniwue.abstracttools</version>
 	  	</dependency>
-	  	
-		<dependency>
-		    <groupId>OfficeConverter</groupId>
-		    <artifactId>OfficeConverter</artifactId>
-		    <version>OfficeConverter</version>
-		</dependency>	  	
+	  		  	
 
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
@@ -225,6 +220,11 @@
 			<groupId>org.openoffice</groupId>
 			<artifactId>unoil</artifactId>
 			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>de.uniwue.officeconverterahmaven</groupId>
+			<artifactId>d3web-OfficeConverterAH</artifactId>
+			<version>0.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<distributionManagement>
