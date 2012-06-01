@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-RDFS-d3web" version="0.0.1">
+	
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="SubtreeHandler"
+		id="D3webTermDefinitionRdf2GoHandler">
+		<parameter id="class" value="de.knowwe.rdfs.d3web.D3webTermDefinitionRdf2GoHandler" />
+		<parameter id="name" value="D3webTermDefinitionRdf2GoHandler" />
+		<parameter id="description" value="Handler D3webTermDefinitionRdf2GoHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="handlerpriority" value="-200" />
+		<parameter id="scope" value="QuestionDefinition" />
+		<parameter id="scope" value="QuestionnaireDefinition" />
+		<parameter id="scope" value="SolutionDefinition" />
+		<parameter id="scope" value="AnswerDefinition" />
+	</extension>
+	
+</plugin>
