@@ -4,12 +4,6 @@ import java.util.ResourceBundle;
 
 public class Config {
 	
-	private final static String DEFAULT_CONVERSION_HTML_SUFFIX = ".html";
-	private final static boolean DEFAULT_CONVERT_CHARACTER_ENTITIES = false;
-
-	public final static String DEFAULT_ENCODING = "UTF-8";
-	private final static String PICTURES_SUBDIR = "pictures";
-
 	// ----------------------------------------------------------------
 
 	private static String serviceHost;
@@ -44,26 +38,55 @@ public class Config {
 	
 	// ----------------------------------------------------------------
 	
-	private String htmlSuffix;
-	private boolean convertCharacterEntities;
-	private String encoding;
-	private String embeddedObjectsDir;
+	private String htmlSuffix = ".html";
+	private String encoding = "UTF-8";
+	private String embeddedObjectsDir = "pictures";
+	private boolean convertCharacterEntities = false;
 	private boolean withLists = false;
 	private boolean withImageScaling = false;
 	private boolean leaveUmlauts = false;
+	private boolean withHeadlineDepths = false;
 
-	public Config(String htmlSuffix, Boolean convertCharacterEntities, String encoding, String embeddedObjectsDir) {
-		this.htmlSuffix = htmlSuffix == null ? DEFAULT_CONVERSION_HTML_SUFFIX : htmlSuffix;
-		this.convertCharacterEntities = convertCharacterEntities == null ? DEFAULT_CONVERT_CHARACTER_ENTITIES : convertCharacterEntities;
-		this.encoding = encoding == null ? DEFAULT_ENCODING : encoding;
-		this.embeddedObjectsDir = embeddedObjectsDir == null ? PICTURES_SUBDIR : embeddedObjectsDir;
+	public Config() { /* use setters */ }
+
+	public Config setHtmlSuffix(String htmlSuffix) {
+		this.htmlSuffix = htmlSuffix;
+		return this;
 	}
-	
-	public Config(String htmlSuffix, Boolean convertCharacterEntities, String encoding, String embeddedObjectsDir, boolean withLists, boolean withImageScaling, boolean leaveUmlauts) {
-		this(htmlSuffix, convertCharacterEntities,encoding, embeddedObjectsDir);
+
+	public Config setConvertCharacterEntities(boolean convertCharacterEntities) {
+		this.convertCharacterEntities = convertCharacterEntities;
+		return this;
+	}
+
+	public Config setEncoding(String encoding) {
+		this.encoding = encoding;
+		return this;
+	}
+
+	public Config setEmbeddedObjectsDir(String embeddedObjectsDir) {
+		this.embeddedObjectsDir = embeddedObjectsDir;
+		return this;
+	}
+
+	public Config setWithLists(boolean withLists) {
 		this.withLists = withLists;
+		return this;
+	}
+
+	public Config setWithImageScaling(boolean withImageScaling) {
 		this.withImageScaling = withImageScaling;
+		return this;
+	}
+
+	public Config setLeaveUmlauts(boolean leaveUmlauts) {
 		this.leaveUmlauts = leaveUmlauts;
+		return this;
+	}
+
+	public Config setWithHeadlineDepths(boolean withHeadlineDepths) {
+		this.withHeadlineDepths = withHeadlineDepths;
+		return this;
 	}
 
 	public String getHtmlSuffix() {
@@ -92,6 +115,10 @@ public class Config {
 
 	public boolean isWithImageScaling() {
 		return withImageScaling;
+	}
+
+	public boolean isWithHeadlineDepths() {
+		return withHeadlineDepths;
 	}
 
 }
