@@ -106,19 +106,16 @@ public class SparqlResultSetRenderer {
 				erg = erg.substring(4);
 			}
 			Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-						new TermIdentifier(erg));
+					new TermIdentifier(erg));
 
 			if (termDefinitions != null && termDefinitions.size() > 0) {
 				erg = CompileUtils.createLinkToDefinition(new TermIdentifier(erg));
 			}
 			else if (Environment.getInstance()
-						.getWikiConnector().doesArticleExist(erg)
-						|| Environment.getInstance()
-								.getWikiConnector().doesArticleExist(
-										Strings.decodeURL(erg))) {
+					.getWikiConnector().doesArticleExist(erg)) {
 				erg = Strings.maskHTML("<a href=\"Wiki.jsp?page=")
-							+ erg + Strings.maskHTML("\">") + erg
-							+ Strings.maskHTML("</a>");
+						+ erg + Strings.maskHTML("\">") + erg
+						+ Strings.maskHTML("</a>");
 			}
 
 		}

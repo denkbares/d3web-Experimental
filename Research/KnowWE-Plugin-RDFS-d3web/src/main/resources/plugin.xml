@@ -7,7 +7,7 @@
 	</requires>
 	
 	<runtime>
-		<library id="de.d3web" path="." type="code">
+		<library id="de.knowwe" path="." type="code">
 			<export prefix="*" />
 		</library>
 		<library id="webapp" path="webapp/" type="resources">
@@ -28,5 +28,16 @@
 		<parameter id="scope" value="SolutionDefinition" />
 		<parameter id="scope" value="AnswerDefinition" />
 	</extension>
-	
+
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="SubtreeHandler"
+		id="KnowledgeBaseRdf2GoHandler">
+		<parameter id="class" value="de.knowwe.rdfs.d3web.KnowledgeBaseRdf2GoHandler" />
+		<parameter id="name" value="KnowledgeBaseRdf2GoHandler" />
+		<parameter id="description" value="Handler KnowledgeBaseRdf2GoHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="handlerpriority" value="-200" />
+		<parameter id="scope" value="KnowledgeBaseType" />
+	</extension>	
 </plugin>
