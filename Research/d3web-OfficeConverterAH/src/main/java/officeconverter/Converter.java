@@ -38,7 +38,7 @@ public class Converter {
 	}
 	
 	private static void convertFile2Dir(File file, File dir) {
-		convertFile2Dir(file, dir, null, new Config());
+		convertFile2Dir(file, dir, null, new Config(null, null, null, null));
 	}
 
 	private static void convertFile2Dir(File file, File dir, FileType fileType, Config config) {
