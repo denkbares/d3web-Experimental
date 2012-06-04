@@ -20,13 +20,13 @@ package de.knowwe.diaflux.coverage.ci;
 
 import java.util.List;
 
-import cc.denkbares.testing.Message;
-import cc.denkbares.testing.Message.Type;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
+import de.d3web.testing.Message;
+import de.d3web.testing.Message.Type;
 import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;

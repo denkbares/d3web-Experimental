@@ -18,9 +18,9 @@
  */
 package de.d3web.we.diaflux.anomalies;
 
-import cc.denkbares.testing.Message;
-import cc.denkbares.testing.Message.Type;
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.testing.Message;
+import de.d3web.testing.Message.Type;
 import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.core.utils.Strings;
 

@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.model.IRI;
 
-import cc.denkbares.testing.TestObjectProvider;
+import de.d3web.testing.TestObjectProvider;
 import de.knowwe.owlapi.OWLAPIConnector;
 
 /**

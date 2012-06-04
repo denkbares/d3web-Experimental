@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import cc.denkbares.testing.Test;
+import de.d3web.testing.Test;
 import de.d3web.we.ci4ke.handling.CIConfig;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;

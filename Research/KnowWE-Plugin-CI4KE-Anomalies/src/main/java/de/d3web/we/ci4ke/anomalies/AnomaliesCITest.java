@@ -20,10 +20,10 @@
 
 package de.d3web.we.ci4ke.anomalies;
 
-import cc.denkbares.testing.ArgsCheckResult;
-import cc.denkbares.testing.Message;
-import cc.denkbares.testing.Message.Type;
-import cc.denkbares.testing.Test;
+import de.d3web.testing.ArgsCheckResult;
+import de.d3web.testing.Message;
+import de.d3web.testing.Test;
+import de.d3web.testing.Message.Type;
 
 /**
  * test ...

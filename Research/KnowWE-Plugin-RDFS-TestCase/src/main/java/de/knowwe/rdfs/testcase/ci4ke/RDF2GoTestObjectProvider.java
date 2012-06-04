@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import cc.denkbares.testing.TestObjectProvider;
+import de.d3web.testing.TestObjectProvider;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**

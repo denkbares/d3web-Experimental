@@ -22,15 +22,15 @@ package de.d3web.we.ci4ke.anomalies;
 
 import java.util.List;
 
-import cc.denkbares.testing.ArgsCheckResult;
-import cc.denkbares.testing.Message;
-import cc.denkbares.testing.Message.Type;
-import cc.denkbares.testing.Test;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
+import de.d3web.testing.ArgsCheckResult;
+import de.d3web.testing.Message;
+import de.d3web.testing.Test;
+import de.d3web.testing.Message.Type;
 
 /**
  * Anomaly detection: test for unused elements

@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
 
-import cc.denkbares.testing.Test;
+import de.d3web.testing.Test;
 import de.d3web.we.ci4ke.testing.DynamicCITestHandler;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;

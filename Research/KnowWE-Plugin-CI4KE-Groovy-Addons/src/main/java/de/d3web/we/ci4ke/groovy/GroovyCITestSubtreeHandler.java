@@ -21,7 +21,7 @@ package de.d3web.we.ci4ke.groovy;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import cc.denkbares.testing.Test;
+import de.d3web.testing.Test;
 import de.d3web.we.ci4ke.handling.CIConfig;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -38,7 +38,7 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 	 */
 	public static final String PREPEND = "import " + CIConfig.class.getName() + ";\n" +
 						"import " + Message.class.getName() + ";\n" +
-						"import static " + cc.denkbares.testing.Message.Type.class.getName()
+						"import static " + de.d3web.testing.Message.Type.class.getName()
 			+ ".*;\n";
 
 	@Override

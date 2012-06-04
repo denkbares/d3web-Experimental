@@ -29,8 +29,8 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.ShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
-import cc.denkbares.testing.Message;
-import cc.denkbares.testing.Message.Type;
+import de.d3web.testing.Message;
+import de.d3web.testing.Message.Type;
 import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
