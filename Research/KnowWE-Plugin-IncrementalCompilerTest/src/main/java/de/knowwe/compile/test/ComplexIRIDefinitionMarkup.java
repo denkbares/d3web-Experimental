@@ -21,6 +21,7 @@
 package de.knowwe.compile.test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -30,6 +31,7 @@ import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.IncrementalTermDefinition;
+import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
@@ -113,6 +115,11 @@ public class ComplexIRIDefinitionMarkup extends AbstractKnowledgeUnitType<Comple
 		// s) {
 		// return new TermIdentifier(s.getText().trim());
 		// }
+	}
+
+	@Override
+	public Collection<Section<SimpleReference>> getAllReferences(Section<? extends ComplexDefinition> section) {
+		return CompileUtils.getAllReferencesOfComplexDefinition(section);
 	}
 
 }

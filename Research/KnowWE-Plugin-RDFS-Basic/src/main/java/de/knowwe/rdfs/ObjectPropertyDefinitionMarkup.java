@@ -1,6 +1,7 @@
 package de.knowwe.rdfs;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.object.TypedTermDefinition;
+import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.basicType.EndLineComment;
@@ -50,6 +52,11 @@ public class ObjectPropertyDefinitionMarkup extends AbstractKnowledgeUnitType<Ob
 		this.addChildType(new RangeDomainSpec());
 
 		this.setRenderer(new PreEnvRenderer());
+	}
+
+	@Override
+	public Collection<Section<SimpleReference>> getAllReferences(Section<? extends ComplexDefinition> section) {
+		return CompileUtils.getAllReferencesOfComplexDefinition(section);
 	}
 
 	class RangeDomainSpec extends AbstractType {
@@ -90,6 +97,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractKnowledgeUnitType<Ob
 		public String getMessageForConstraintViolation(Section<? extends SimpleTerm> s) {
 			return "Only classes are allowed here";
 		}
+
 	}
 
 	class PropertyDef extends AbstractIRITermDefinition implements TypedTermDefinition {

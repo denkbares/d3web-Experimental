@@ -21,6 +21,7 @@
 package de.knowwe.rdfs;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -28,6 +29,7 @@ import org.ontoware.rdf2go.model.node.Node;
 
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.ComplexDefinition;
+import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.basicType.EndLineComment;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
@@ -63,13 +65,10 @@ public class ComplexIRIDefinitionMarkup extends AbstractKnowledgeUnitType<Comple
 		this.setRenderer(new PreEnvRenderer());
 	}
 
-	// @Override
-	// public Collection<Section<TermReference>>
-	// getAllReferencesOfComplexDefinition(
-	// Section<? extends ComplexDefinition<ComplexIRIDefinitionMarkup>> section)
-	// {
-	// return CompileUtils.getAllReferencesOfComplexDefinition(section);
-	// }
+	@Override
+	public Collection<Section<SimpleReference>> getAllReferences(Section<? extends ComplexDefinition> section) {
+		return CompileUtils.getAllReferencesOfComplexDefinition(section);
+	}
 
 	class DefType extends AbstractType {
 

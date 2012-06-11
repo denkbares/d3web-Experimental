@@ -465,7 +465,8 @@ public class IncrementalCompiler implements EventListener {
 		// all references of this complexDef (if existing) need to be in the set
 		// of valid objects
 		if (complexDef != null) {
-			Collection<Section<SimpleReference>> allReferencesOfComplexDefinition = CompileUtils.getAllReferencesOfComplexDefinition(complexDef);
+			Collection<Section<SimpleReference>> allReferencesOfComplexDefinition = complexDef.get().getAllReferences(
+					complexDef);
 			for (Section<SimpleReference> ref : allReferencesOfComplexDefinition) {
 				String errorMsg = "ComplexDefinition has dependency error: ";
 				// if one reference is not defined

@@ -20,16 +20,30 @@
 
 package de.knowwe.compile.object;
 
+import java.util.Collection;
+
 import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.objects.SimpleReference;
+import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * 
  * Marker Interface for a complex definition, i.e. a definition that depends on
- * other referenced objects to be valid.
+ * other referenced terms to be valid.
  * 
  * @author jochenreutelshofer
  * @created 09.05.2012
  */
 public interface ComplexDefinition extends Type {
+
+	/**
+	 * Delivers the terms that this ComplexDefinition depends on.
+	 * 
+	 * @created 11.06.2012
+	 * @param section
+	 * @return
+	 */
+	public Collection<Section<SimpleReference>> getAllReferences(
+			Section<? extends ComplexDefinition> section);
 
 }
