@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import javax.servlet.ServletContext;
-
 import de.knowwe.plugin.Instantiation;
 
 public class CommentModule implements Instantiation {
@@ -70,6 +68,6 @@ public class CommentModule implements Instantiation {
 	}
 
 	@Override
-	public void init(ServletContext context) {
+	public void init() {
 	}
 }

@@ -307,8 +307,15 @@ public class Rdf2GoCore implements EventListener {
 		io.add(createStatement(attachto, RDFS.isDefinedBy, to));
 	}
 
-	// commits the statements from writeCache and removeCache to the triplestore
-	private void commit() {
+	/**
+	 * Commit is automatically called every time an article has finished
+	 * compiling. When commit is called, all {@link Statement}s that were cached
+	 * to be removed from the triple store are removed and all {@link Statement}
+	 * s that were cached to be added to the triple store are added.
+	 * 
+	 * @created 12.06.2012
+	 */
+	public void commit() {
 
 		// hazard filter
 
