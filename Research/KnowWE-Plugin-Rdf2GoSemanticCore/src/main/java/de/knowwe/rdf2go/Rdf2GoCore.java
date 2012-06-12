@@ -217,14 +217,32 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
-	 * Adds the Collection of {@link Statement}s for the given article. If the
-	 * given article is compiled again, all {@link Statement}s added for this
-	 * article are removed before the new Statements are added again. This
-	 * method works best when used in a {@link SubtreeHandler}.
+	 * Adds the {@link Statement} for the given article. If the given article is
+	 * compiled again, all {@link Statement}s added for this article are removed
+	 * before the new {@link Statement} are added again. This method works best
+	 * when used in a {@link SubtreeHandler}.
 	 * 
 	 * @created 11.06.2012
-	 * @param statements
-	 * @param article
+	 * @param statement the statement to add to the triple store
+	 * @param article the article for which the statements are added and for
+	 *        which they are removed at full parse
+	 */
+	public void addStatementTemporarily(Statement statement, Article article) {
+		ArrayList<Statement> statements = new ArrayList<Statement>(1);
+		statements.add(statement);
+		addStatementsTemporarily(statements, article);
+	}
+
+	/**
+	 * Adds the Collection of {@link Statement}s for the given article. If the
+	 * given article is compiled again, all {@link Statement}s added for this
+	 * article are removed before the new {@link Statement}s are added again.
+	 * This method works best when used in a {@link SubtreeHandler}.
+	 * 
+	 * @created 11.06.2012
+	 * @param statements the statements to add to the triple store
+	 * @param article the article for which the statements are added and for
+	 *        which they are removed at full parse
 	 */
 	public void addStatementsTemporarily(Collection<Statement> statements, Article article) {
 		Set<Statement> statementsOfArticle = fullParseStatementCache.get(article.getTitle());
@@ -234,7 +252,7 @@ public class Rdf2GoCore implements EventListener {
 		}
 		statementsOfArticle.addAll(statements);
 		addStatementsToDuplicatedCache(statements, article.getTitle());
-		addStatementsToInsertCache(new ArrayList<Statement>(statements));
+		addStatementsToInsertCache(statements);
 	}
 
 	private void addStatementsToDuplicatedCache(Collection<Statement> allStatements, String source) {
@@ -784,7 +802,7 @@ public class Rdf2GoCore implements EventListener {
 			Logger.getLogger(this.getClass().getName()).log(
 					Level.WARNING,
 					"Internal caching error. Expected statment to be cached with key '" + key
-							+ "', but statement wasn't:\n"
+							+ "', but wasn't:\n"
 							+ verbalizeStatement(statement));
 		}
 		if (removed && sectionIDsForStatement.isEmpty()) {
@@ -839,6 +857,7 @@ public class Rdf2GoCore implements EventListener {
 			}
 		}
 		addStatementsToRemoveCache(removedStatements);
+		fullParseStatementCache.remove(article.getTitle());
 	}
 
 	public String renderedSparqlSelect(String query, boolean links) throws ModelRuntimeException, MalformedQueryException {
