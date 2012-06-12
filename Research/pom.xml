@@ -222,7 +222,6 @@
 		<module>KnowWE-Plugin-Wikicontent-Download</module>
 		<module>d3web-OfficeConverterAH</module>
 		<module>KnowWE-Plugin-WissKont</module>
-		<module>d3web-Plugin-Rdf2Go</module>
 		<module>KnowWE-Plugin-d3web-Rdf2Go</module>
 	</modules>
 	<repositories>
