@@ -88,7 +88,7 @@ class TripleMarkupSimpleCompileScript extends
 
 	@Override
 	public void deleteFromRepository(Section<TripleMarkupSimple> section) {
-		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
+		Rdf2GoCore.getInstance().removeStatementsOfSectionRecursively(section);
 	}
 
 	@Override

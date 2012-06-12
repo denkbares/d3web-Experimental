@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,6 +36,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,6 +68,7 @@ import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Strings;
@@ -104,32 +107,19 @@ public class Rdf2GoCore implements EventListener {
 	private static final String RDFS_REASONING = "rdfs";
 
 	private static Rdf2GoCore me;
-	private Model model;
-	private Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> statementcache;
-	private Map<Statement, Set<String>> duplicateStatements;
-	private Map<String, String> namespaces;
-	private List<Statement> addCache;
-	private List<Statement> removeCache;
-	ResourceBundle properties = ResourceBundle.getBundle("model");
-
-	Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> getStatementCache() {
-		return Collections.unmodifiableMap(statementcache);
-	}
 
 	/**
-	 * Initializes the model and its caches and namespaces
+	 * @param value
+	 * @return
 	 */
-	public void init() {
-		initModel();
-		statementcache = new HashMap<String, WeakHashMap<Section<? extends Type>, List<Statement>>>();
-		duplicateStatements = new HashMap<Statement, Set<String>>();
-
-		addCache = new ArrayList<Statement>();
-		removeCache = new ArrayList<Statement>();
-
-		namespaces = new HashMap<String, String>();
-		namespaces.putAll(model.getNamespaces());
-		initDefaultNamespaces();
+	private static String beautify(String value) {
+		String temp = value;
+		try {
+			temp = Strings.decodeURL(value);
+		}
+		catch (IllegalArgumentException e) {
+		}
+		return Strings.encodeURL(temp);
 	}
 
 	/**
@@ -142,6 +132,463 @@ public class Rdf2GoCore implements EventListener {
 			me.init();
 		}
 		return me;
+	}
+
+	public static String getLocalName(Node o) {
+		return RDFTool.getLabel(o);
+	}
+
+	private static Set<Statement> modelToSet(Model m) {
+		HashSet<Statement> result = new HashSet<Statement>();
+
+		for (Statement s : m) {
+			result.add(s);
+		}
+
+		return result;
+	}
+
+	private Model model;
+
+	/**
+	 * This statement cache is controlled by the incremental compiler.
+	 */
+	private Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> incrementalStatementCache;
+	private Map<Statement, Set<String>> duplicateStatements;
+
+	/**
+	 * This statement cache gets cleaned with the full parse of an article. If a
+	 * full parse on an article is performed, all old statements registered for
+	 * this article are removed.
+	 */
+	private final Map<String, Set<Statement>> fullParseStatementCache = new HashMap<String, Set<Statement>>();
+
+	private Map<String, String> namespaces;
+
+	private TreeSet<Statement> insertCache;
+
+	private TreeSet<Statement> removeCache;
+
+	ResourceBundle properties = ResourceBundle.getBundle("model");
+
+	/**
+	 * add a namespace to the model
+	 * 
+	 * @param sh prefix
+	 * @param ns url
+	 */
+	public void addNamespace(String sh, String ns) {
+		namespaces.put(sh, ns);
+		model.setNamespace(sh, ns);
+	}
+
+	public void addStatement(Resource subject, URI predicate, Node object, Section<? extends Type> sec) {
+		List<Statement> l = new ArrayList<Statement>();
+		l.add(createStatement(subject, predicate, object));
+		addStatements(l, sec);
+	}
+
+	public void addStatement(Statement s, Section<? extends Type> sec) {
+		List<Statement> l = new ArrayList<Statement>();
+		l.add(s);
+		addStatements(l, sec);
+	}
+
+	/**
+	 * adds statements to statementcache and rdf store and count duplicate
+	 * statements
+	 * 
+	 * @created 06.12.2010
+	 * @param allStatements
+	 * @param sec
+	 */
+	public void addStatements(List<Statement> allStatements,
+			Section<? extends Type> sec) {
+		Logger.getLogger(this.getClass().getName()).finer(
+				"semantic core updating " + sec.getID() + "  " + allStatements.size());
+
+		addStatementsToDuplicatedCache(allStatements, sec.getID());
+
+		addStatementToIncrementalCache(sec, allStatements);
+
+		// Maybe remove duplicates before adding to store, if performance is
+		// better
+		addStatementsToInsertCache(allStatements);
+	}
+
+	/**
+	 * Adds the Collection of {@link Statement}s for the given article. If the
+	 * given article is compiled again, all {@link Statement}s added for this
+	 * article are removed before the new Statements are added again. This
+	 * method works best when used in a {@link SubtreeHandler}.
+	 * 
+	 * @created 11.06.2012
+	 * @param statements
+	 * @param article
+	 */
+	public void addStatementsTemporarily(Collection<Statement> statements, Article article) {
+		Set<Statement> statementsOfArticle = fullParseStatementCache.get(article.getTitle());
+		if (statementsOfArticle == null) {
+			statementsOfArticle = new HashSet<Statement>();
+			fullParseStatementCache.put(article.getTitle(), statementsOfArticle);
+		}
+		statementsOfArticle.addAll(statements);
+		addStatementsToDuplicatedCache(statements, article.getTitle());
+		addStatementsToInsertCache(new ArrayList<Statement>(statements));
+	}
+
+	private void addStatementsToDuplicatedCache(Collection<Statement> allStatements, String source) {
+		for (Statement s : allStatements) {
+			Set<String> registeredSectionIDsForStatements = duplicateStatements.get(s);
+			if (registeredSectionIDsForStatements == null) {
+				registeredSectionIDsForStatements = new HashSet<String>();
+				duplicateStatements.put(s, registeredSectionIDsForStatements);
+			}
+			registeredSectionIDsForStatements.add(source);
+		}
+	}
+
+	private void addStatementsToInsertCache(Collection<Statement> list) {
+		insertCache.addAll(list);
+	}
+
+	/**
+	 * adds statements to statementcache
+	 * 
+	 * @created 06.12.2010
+	 * @param sec
+	 * @param newStatements
+	 */
+	private void addStatementToIncrementalCache(Section<? extends Type> sec, List<Statement> newStatements) {
+		WeakHashMap<Section<? extends Type>, List<Statement>> temp = incrementalStatementCache.get(sec.getArticle().getTitle());
+		if (temp == null) {
+			temp = new WeakHashMap<Section<? extends Type>, List<Statement>>();
+		}
+		List<Statement> allStatements = new ArrayList<Statement>();
+		allStatements.addAll(newStatements);
+		if (temp.containsKey(sec)) {
+			allStatements.addAll(temp.get(sec));
+		}
+		temp.put(sec, allStatements);
+		incrementalStatementCache.put(sec.getArticle().getTitle(), temp);
+	}
+
+	/**
+	 * attaches a TextOrigin Node to a Resource. It's your duty to make sure the
+	 * Resource is of the right type if applicable (eg attachto RDF.TYPE
+	 * RDF.STATEMENT)
+	 * 
+	 * @param attachto The Resource that will be annotated bei the TO-Node
+	 * @param source The source section that should be used
+	 * @param io the ex-IntermediateOwlObject (now List<Statements> that should
+	 *        collect the statements
+	 */
+	public void attachTextOrigin(Resource attachto, Section<?> source, List<Statement> io) {
+		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
+		io.addAll(createTextOrigin(source, to));
+		io.add(createStatement(attachto, RDFS.isDefinedBy, to));
+	}
+
+	// commits the statements from writeCache and removeCache to the triplestore
+	private void commit() {
+
+		// hazard filter
+
+		long start = System.currentTimeMillis();
+		model.removeAll(removeCache.iterator());
+		EventManager.getInstance().fireEvent(new RemoveStatementsEvent(removeCache));
+		logStatements(removeCache, start, "Removed statements:\n");
+
+		start = System.currentTimeMillis();
+		model.addAll(insertCache.iterator());
+		EventManager.getInstance().fireEvent(new InsertStatementsEvent(insertCache));
+		logStatements(insertCache, start, "Inserted statements:\n");
+
+		removeCache = new TreeSet<Statement>();
+		insertCache = new TreeSet<Statement>();
+	}
+
+	public URI createBasensURI(String value) {
+		return createURI(basens, value);
+	}
+
+	public BlankNode createBlankNode() {
+		return model.createBlankNode();
+	}
+
+	public BlankNode createBlankNode(String internalID) {
+		return model.createBlankNode(internalID);
+	}
+
+	public Literal createDatatypeLiteral(String literal, String datatype) {
+		return createDatatypeLiteral(literal, createURI(datatype));
+	}
+
+	public Literal createDatatypeLiteral(String literal, URI datatype) {
+		return model.createDatatypeLiteral(literal, datatype);
+	}
+
+	public Literal createLiteral(String text) {
+		return model.createPlainLiteral(text);
+	}
+
+	public Literal createLiteral(String literal, URI datatypeURI) {
+		return model.createDatatypeLiteral(literal, datatypeURI);
+	}
+
+	/**
+	 * @param cur
+	 */
+	public List<Statement> createlocalProperty(String cur) {
+		URI prop = createlocalURI(cur);
+		URI naryprop = NARYPROPERTY;
+		List<Statement> io = new ArrayList<Statement>();
+		if (!PropertyManager.getInstance().isValid(prop)) {
+			io.add(createStatement(prop, RDFS.subClassOf, naryprop));
+		}
+		return io;
+	}
+
+	public URI createlocalURI(String value) {
+		return createURI(localns, value);
+	}
+
+	public Statement createStatement(Resource subject, URI predicate,
+			Node object) {
+		return model.createStatement(subject, predicate, object);
+	}
+
+	private List<Statement> createTextOrigin(Section<?> source, Resource to) {
+		ArrayList<Statement> io = new ArrayList<Statement>();
+		io.add(createStatement(to, RDF.type, TEXTORIGIN));
+		io.add(createStatement(to, HASNODE, createLiteral(source.getID())));
+		io.add(createStatement(to, HASTOPIC, createlocalURI(source.getTitle())));
+		return io;
+	}
+
+	public URI createURI(String value) {
+		return model.createURI(expandNamespace(value));
+	}
+
+	public URI createURI(String ns, String value) {
+		return createURI(expandNSPrefix(ns) + beautify(value));
+	}
+
+	/**
+	 * Dumps the whole content of the model via System.out
+	 * 
+	 * @created 05.01.2011
+	 */
+	public void dumpModel() {
+		model.dump();
+	}
+
+	/**
+	 * expands namespace from prefix to uri string
+	 * 
+	 * @created 04.01.2011
+	 * @param s
+	 * @return
+	 */
+	public String expandNamespace(String s) throws IllegalArgumentException {
+		if (s.startsWith("http://")) {
+			return s;
+		}
+		String[] array = s.split(":", 2);
+		if (array.length == 2) {
+			return expandNSPrefix(array[0]) + array[1];
+		}
+		throw new IllegalArgumentException("Not a valid (absolute) URI: " + s);
+
+	}
+
+	/**
+	 * expands prefix to namespace
+	 * 
+	 * @created 06.12.2010
+	 * @param ns
+	 * @return
+	 */
+	public String expandNSPrefix(String ns) {
+		for (Entry<String, String> cur : namespaces.entrySet()) {
+			if (ns.equals(cur.getKey())) {
+				ns = cur.getValue();
+				break;
+			}
+		}
+		return ns;
+	}
+
+	/**
+	 * Calculates the Set-subtraction of the inference closure of the model with
+	 * and without the statements created by the given section
+	 * 
+	 * @created 02.01.2012
+	 * @param sec
+	 * @return
+	 * @throws ModelRuntimeException
+	 * @throws MalformedQueryException
+	 */
+	public Collection<Statement> generateStatementDiffForSection(Section<?> sec) throws ModelRuntimeException, MalformedQueryException {
+
+		Set<Statement> includingSection = modelToSet(model);
+
+		// retrieve statements to be excluded
+		WeakHashMap<Section<? extends Type>, List<Statement>> allStatmentSectionsOfArticle =
+				incrementalStatementCache.get(sec.getTitle());
+		List<Statement> statementsOfSection = allStatmentSectionsOfArticle.get(sec);
+
+		// remove these statements
+		if (statementsOfSection != null) {
+			model.removeAll(statementsOfSection.iterator());
+		}
+		Set<Statement> excludingSection = modelToSet(model);
+		includingSection.removeAll(excludingSection);
+
+		// reinsert statements
+		if (statementsOfSection != null) {
+			model.addAll(statementsOfSection.iterator());
+		}
+
+		return includingSection;
+
+	}
+
+	@Override
+	public Collection<Class<? extends Event>> getEvents() {
+		ArrayList<Class<? extends Event>> events = new ArrayList<Class<? extends Event>>(
+				2);
+		events.add(FullParseEvent.class);
+		events.add(ArticleUpdatesFinishedEvent.class);
+		return events;
+	}
+
+	public File[] getImportList() {
+		String p = Environment.getInstance().getWikiConnector().getSavePath();
+		String inpath = (p != null) ? p : (KnowWEUtils.getKnowWEExtensionPath()
+				+ File.separatorChar + "owlincludes");
+		File includes = new File(inpath);
+		if (includes.exists()) {
+			File[] files = includes.listFiles(new FilenameFilter() {
+
+				@Override
+				public boolean accept(File f, String s) {
+					return s.endsWith(".owl");
+				}
+			});
+			return files;
+		}
+		return null;
+	}
+
+	public Map<String, String> getNameSpaces() {
+		return namespaces;
+	}
+
+	/**
+	 * @param prop
+	 * @return
+	 */
+	public URI getRDF(String prop) {
+		return createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#", prop);
+	}
+
+	/**
+	 * @param prop
+	 * @return
+	 */
+	public URI getRDFS(String prop) {
+		return createURI("http://www.w3.org/2000/01/rdf-schema#", prop);
+	}
+
+	/**
+	 * 
+	 * @created 06.12.2010
+	 * @param s
+	 * @return statements of section s (with children)
+	 */
+	public List<Statement> getSectionStatementsRecursive(Section<? extends Type> s) {
+		List<Statement> allstatements = new ArrayList<Statement>();
+
+		if (getStatementsofSingleSection(s) != null) {
+			// add statements of this section
+			allstatements.addAll(getStatementsofSingleSection(s));
+		}
+
+		// walk over all children
+		for (Section<? extends Type> current : s.getChildren()) {
+			// collect statements of the the children's descendants
+			allstatements.addAll(getSectionStatementsRecursive(current));
+		}
+
+		return allstatements;
+	}
+
+	public String getSparqlNamespaceShorts() {
+		StringBuilder buffy = new StringBuilder();
+
+		for (Entry<String, String> cur : namespaces.entrySet()) {
+			buffy.append("PREFIX " + cur.getKey() + ": <" + cur.getValue() + "> \n");
+		}
+		return buffy.toString();
+	}
+
+	Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> getStatementCache() {
+		return Collections.unmodifiableMap(incrementalStatementCache);
+	}
+
+	/**
+	 * 
+	 * @param sec
+	 * @created 06.12.2010
+	 * @return statements of section sec (without children)
+	 */
+	private List<Statement> getStatementsofSingleSection(
+			Section<? extends Type> sec) {
+		WeakHashMap<Section<? extends Type>, List<Statement>> temp = incrementalStatementCache.get(sec.getArticle().getTitle());
+		if (temp != null) {
+			return temp.get(sec);
+		}
+		return new ArrayList<Statement>();
+	}
+
+	public List<Statement> getTopicStatements(String topic) {
+		Section<? extends Type> rootsection = Environment.getInstance().getArticle(
+				Environment.DEFAULT_WEB, topic).getRootSection();
+		return getSectionStatementsRecursive(rootsection);
+	}
+
+	public Object getUnderlyingModelImplementation() {
+		return model.getUnderlyingModelImplementation();
+	}
+
+	/**
+	 * Initializes the model and its caches and namespaces
+	 */
+	public void init() {
+		initModel();
+		incrementalStatementCache = new HashMap<String, WeakHashMap<Section<? extends Type>, List<Statement>>>();
+		duplicateStatements = new HashMap<Statement, Set<String>>();
+
+		insertCache = new TreeSet<Statement>();
+		removeCache = new TreeSet<Statement>();
+
+		namespaces = new HashMap<String, String>();
+		namespaces.putAll(model.getNamespaces());
+		initDefaultNamespaces();
+	}
+
+	/**
+	 * sets the default namespaces
+	 */
+	private void initDefaultNamespaces() {
+		addNamespace("ns", basens);
+		addNamespace("lns", localns);
+		addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+		addNamespace("w", "http://www.umweltbundesamt.de/wisec#");
+		addNamespace("owl", "http://www.w3.org/2002/07/owl#");
+		addNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+		addNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
 	}
 
 	/**
@@ -197,17 +644,37 @@ public class Rdf2GoCore implements EventListener {
 
 	}
 
-	/**
-	 * sets the default namespaces
-	 */
-	private void initDefaultNamespaces() {
-		addNamespace("ns", basens);
-		addNamespace("lns", localns);
-		addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-		addNamespace("w", "http://www.umweltbundesamt.de/wisec#");
-		addNamespace("owl", "http://www.w3.org/2002/07/owl#");
-		addNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-		addNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
+	private void logStatements(Collection<Statement> collection, long start, String key) {
+		if (collection.isEmpty()) return;
+		StringBuffer buffy = new StringBuffer();
+		for (Statement statement : collection) {
+			buffy.append(verbalizeStatement(statement) + "\n");
+		}
+		buffy.append("Done after " + (System.currentTimeMillis() - start) + "ms");
+		Logger.getLogger(this.getClass().getName()).log(Level.INFO,
+				key + buffy.toString());
+	}
+
+	private String verbalizeStatement(Statement statement) {
+		String statementVerbalization = reduceNamespace(statement.toString());
+		try {
+			statementVerbalization = URLDecoder.decode(statementVerbalization, "UTF-8");
+		}
+		catch (Exception e) {
+			// may happen, just ignore...
+		}
+		return statementVerbalization;
+	}
+
+	@Override
+	public void notify(Event event) {
+		if (event instanceof FullParseEvent) {
+			getInstance().removeTemporaryStatements(((FullParseEvent) event).getArticle());
+
+		}
+		if (event instanceof ArticleUpdatesFinishedEvent) {
+			getInstance().commit();
+		}
 	}
 
 	public void readFrom(InputStream in) throws ModelRuntimeException, IOException {
@@ -216,62 +683,6 @@ public class Rdf2GoCore implements EventListener {
 
 	public void readFrom(Reader in) throws ModelRuntimeException, IOException {
 		model.readFrom(in);
-	}
-
-	/**
-	 * add a namespace to the model
-	 * 
-	 * @param sh prefix
-	 * @param ns url
-	 */
-	public void addNamespace(String sh, String ns) {
-		namespaces.put(sh, ns);
-		model.setNamespace(sh, ns);
-	}
-
-	public void removeNamespace(String sh) {
-		namespaces.remove(sh);
-		model.removeNamespace(sh);
-	}
-
-	public Map<String, String> getNameSpaces() {
-		return namespaces;
-	}
-
-	/**
-	 * expands namespace from prefix to uri string
-	 * 
-	 * @created 04.01.2011
-	 * @param s
-	 * @return
-	 */
-	public String expandNamespace(String s) throws IllegalArgumentException {
-		if (s.startsWith("http://")) {
-			return s;
-		}
-		String[] array = s.split(":", 2);
-		if (array.length == 2) {
-			return expandNSPrefix(array[0]) + array[1];
-		}
-		throw new IllegalArgumentException("Not a valid (absolute) URI: " + s);
-
-	}
-
-	/**
-	 * expands prefix to namespace
-	 * 
-	 * @created 06.12.2010
-	 * @param ns
-	 * @return
-	 */
-	public String expandNSPrefix(String ns) {
-		for (Entry<String, String> cur : namespaces.entrySet()) {
-			if (ns.equals(cur.getKey())) {
-				ns = cur.getValue();
-				break;
-			}
-		}
-		return ns;
 	}
 
 	/**
@@ -289,78 +700,149 @@ public class Rdf2GoCore implements EventListener {
 
 	}
 
-	public String renderedSparqlSelect(String query, boolean links) throws ModelRuntimeException, MalformedQueryException {
-		return renderQueryResult(sparqlSelect(query), links);
+	public void removeAllCachedStatements() {
+		// get all statements of this wiki and remove them from the model
+		ArrayList<Statement> allStatements = new ArrayList<Statement>();
+		for (WeakHashMap<Section<? extends Type>, List<Statement>> w : incrementalStatementCache.values()) {
+			for (List<Statement> l : w.values()) {
+				allStatements.addAll(l);
+			}
+		}
+		addStatementsToRemoveCache(allStatements);
+
+		// clear statementcache and duplicateStatements
+		incrementalStatementCache.clear();
+		duplicateStatements.clear();
+	}
+
+	public void removeArticleStatementsRecursive(Article art) {
+		WeakHashMap<Section<? extends Type>, List<Statement>> oldStatementsOfArticle =
+				incrementalStatementCache.get(art.getTitle());
+		if (oldStatementsOfArticle != null) {
+			Set<Section<? extends Type>> sectionsWithStatements =
+					new HashSet<Section<? extends Type>>();
+			sectionsWithStatements.addAll(oldStatementsOfArticle.keySet());
+			for (Section<? extends Type> cur : sectionsWithStatements) {
+				removeStatementsOfSection(cur);
+			}
+		}
+	}
+
+	public void removeNamespace(String sh) {
+		namespaces.remove(sh);
+		model.removeNamespace(sh);
 	}
 
 	/**
-	 * Writes the current repository model to the given writer in RDF/XML
-	 * format.
+	 * removes all statements of section s
 	 * 
-	 * @created 03.02.2012
-	 * @param out
-	 * @throws ModelRuntimeException
-	 * @throws IOException
+	 * @created 06.12.2010
+	 * @param s
 	 */
-	public void writeModel(Writer out) throws ModelRuntimeException, IOException {
-		model.writeTo(out);
+	public void removeStatementsOfSectionRecursively(Section<? extends Type> s) {
+
+		removeStatementsOfSection(s);
+
+		// walk over all children
+		for (Section<? extends Type> current : s.getChildren()) {
+			removeStatementsOfSectionRecursively(current);
+		}
 	}
 
-	/**
-	 * @param value
-	 * @return
-	 */
-	private static String beautify(String value) {
-		String temp = value;
-		try {
-			temp = Strings.decodeURL(value);
+	private void removeStatementListOfSection(Section<? extends Type> sec) {
+
+		WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle =
+				incrementalStatementCache.get(sec.getTitle());
+
+		List<Statement> statementsOfSection = allStatementSectionsOfArticle.get(sec);
+		List<Statement> removedStatements = new ArrayList<Statement>();
+
+		for (Statement statement : statementsOfSection) {
+			boolean removed = removeStatementFromDuplicateCache(statement, sec.getID());
+			if (removed) {
+				removedStatements.add(statement);
+			}
 		}
-		catch (IllegalArgumentException e) {
-		}
-		return Strings.encodeURL(temp);
+		removeSectionFromIncrementalStatementCache(sec, allStatementSectionsOfArticle);
+		addStatementsToRemoveCache(removedStatements);
 	}
 
-	private void removeStatementsFromCache(List<Statement> list) {
+	private void removeSectionFromIncrementalStatementCache(Section<? extends Type> sec, WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle) {
+		allStatementSectionsOfArticle.remove(sec);
+		if (allStatementSectionsOfArticle.isEmpty()) {
+			incrementalStatementCache.remove(sec.getArticle().getTitle());
+		}
+	}
 
-		String key = "REMOVE: ";
-		logStatements(list, key);
+	private boolean removeStatementFromDuplicateCache(Statement statement, String key) {
+		Set<String> sectionIDsForStatement = duplicateStatements.get(statement);
+		boolean removed = false;
+		if (sectionIDsForStatement != null) {
+			removed = sectionIDsForStatement.remove(key);
+		}
+		else {
+			Logger.getLogger(this.getClass().getName()).log(
+					Level.WARNING,
+					"Internal caching error. Expected statment to be cached with key '" + key
+							+ "', but statement wasn't:\n"
+							+ verbalizeStatement(statement));
+		}
+		if (removed && sectionIDsForStatement.isEmpty()) {
+			duplicateStatements.remove(statement);
+			return true;
+		}
+		return false;
+	}
 
-		// model.removeAll(list.iterator());
+	private void addStatementsToRemoveCache(List<Statement> list) {
 		removeCache.addAll(list);
 	}
 
-	private void addStatementsToCache(List<Statement> list) {
-		String key = "INSERT: ";
-		logStatements(list, key);
+	/**
+	 * removes statements from statementcache and rdf store
+	 * 
+	 * @created 06.12.2010
+	 * @param sec
+	 */
+	private void removeStatementsOfSection(Section<? extends Type> sec) {
+		WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle =
+				incrementalStatementCache.get(sec.getTitle());
 
-		// model.addAll(list.iterator());
-		addCache.addAll(list);
-	}
-
-	private void logStatements(List<Statement> list, String key) {
-		StringBuffer buffy = new StringBuffer();
-		for (Iterator<Statement> statements = list.iterator(); statements.hasNext();) {
-			buffy.append(statements.next().toString());
-			if (statements.hasNext()) buffy.append("\n");
+		if (allStatementSectionsOfArticle != null) {
+			if (allStatementSectionsOfArticle.containsKey(sec)) {
+				removeStatementListOfSection(sec);
+			}
+			else {
+				// fix: IncrementalCompiler not necessarily delivers the same
+				// section object, maybe another with the same content
+				Set<Section<? extends Type>> keySet = allStatementSectionsOfArticle.keySet();
+				Iterator<Section<? extends Type>> iterator = keySet.iterator();
+				while (iterator.hasNext()) {
+					Section<? extends Type> section = iterator.next();
+					if (section.getText().equals(sec.getText())) {
+						removeStatementListOfSection(section);
+						break;
+					}
+				}
+			}
 		}
-		Logger.getLogger(this.getClass().getName()).log(Level.INFO,
-				key + buffy.toString());
 	}
 
-	public URI createURI(String value) {
-		return model.createURI(expandNamespace(value));
+	private void removeTemporaryStatements(Article article) {
+		Set<Statement> statementsOfArticle = fullParseStatementCache.get(article.getTitle());
+		if (statementsOfArticle == null) return;
+		List<Statement> removedStatements = new ArrayList<Statement>();
+		for (Statement statement : statementsOfArticle) {
+			boolean removed = removeStatementFromDuplicateCache(statement, article.getTitle());
+			if (removed) {
+				removedStatements.add(statement);
+			}
+		}
+		addStatementsToRemoveCache(removedStatements);
 	}
 
-	public URI createURI(String ns, String value) {
-		return createURI(expandNSPrefix(ns) + beautify(value));
-	}
-
-	public URI createlocalURI(String value) {
-		return createURI(localns, value);
-	}
-
-	public URI createBasensURI(String value) {
-		return createURI(basens, value);
+	public String renderedSparqlSelect(String query, boolean links) throws ModelRuntimeException, MalformedQueryException {
+		return renderQueryResult(sparqlSelect(query), links);
 	}
 
 	/**
@@ -415,13 +897,13 @@ public class Rdf2GoCore implements EventListener {
 						erg = erg.substring(4);
 					}
 					if (Environment.getInstance()
-								.getWikiConnector().doesArticleExist(erg)
-								|| Environment.getInstance()
-										.getWikiConnector().doesArticleExist(
-												Strings.decodeURL(erg))) {
+							.getWikiConnector().doesArticleExist(erg)
+							|| Environment.getInstance()
+									.getWikiConnector().doesArticleExist(
+											Strings.decodeURL(erg))) {
 						erg = Strings.maskHTML("<a href=\"Wiki.jsp?page=")
-									+ erg + Strings.maskHTML("\">") + erg
-									+ Strings.maskHTML("</a>");
+								+ erg + Strings.maskHTML("\">") + erg
+								+ Strings.maskHTML("</a>");
 					}
 				}
 
@@ -452,391 +934,6 @@ public class Rdf2GoCore implements EventListener {
 			}
 		}
 		return result;
-	}
-
-	public boolean sparqlAsk(String query) throws ModelRuntimeException, MalformedQueryException {
-		String sparqlNamespaceShorts = getSparqlNamespaceShorts();
-		if (query.startsWith(sparqlNamespaceShorts)) {
-			return model.sparqlAsk(query);
-		}
-		return model.sparqlAsk(sparqlNamespaceShorts + query);
-	}
-
-	/**
-	 * Asks a sparql query on the model as if a specific Section wouldnt be
-	 * there. The statements of this section are removed from the model before
-	 * the query is executed. Afterwards these statements are inserted again to
-	 * provide a consistent model.
-	 * 
-	 * @created 14.12.2011
-	 * @param query the query to be ask
-	 * @param sec the section determining the statements to be excluded for the
-	 *        query
-	 * @return
-	 * @throws ModelRuntimeException
-	 * @throws MalformedQueryException
-	 */
-	public boolean sparqlAskExcludeStatementForSection(String query, Section<?> sec) throws ModelRuntimeException, MalformedQueryException {
-
-		// retrieve statements to be excluded
-		WeakHashMap<Section<? extends Type>, List<Statement>> allStatmentSectionsOfArticle =
-				statementcache.get(sec.getTitle());
-		List<Statement> statementsOfSection = allStatmentSectionsOfArticle.get(sec);
-
-		// remove these statements
-		if (statementsOfSection != null) {
-			model.removeAll(statementsOfSection.iterator());
-		}
-
-		boolean result;
-
-		// ask query
-		if (query.startsWith(getSparqlNamespaceShorts())) {
-			result = model.sparqlAsk(query);
-		}
-		result = model.sparqlAsk(getSparqlNamespaceShorts() + query);
-
-		// reinsert statements
-		if (statementsOfSection != null) {
-			model.addAll(statementsOfSection.iterator());
-		}
-
-		// return query result
-		return result;
-	}
-
-	/**
-	 * Calculates the Set-subtraction of the inference closure of the model with
-	 * and without the statements created by the given section
-	 * 
-	 * @created 02.01.2012
-	 * @param sec
-	 * @return
-	 * @throws ModelRuntimeException
-	 * @throws MalformedQueryException
-	 */
-	public Collection<Statement> generateStatementDiffForSection(Section<?> sec) throws ModelRuntimeException, MalformedQueryException {
-
-		Set<Statement> includingSection = modelToSet(model);
-
-		// retrieve statements to be excluded
-		WeakHashMap<Section<? extends Type>, List<Statement>> allStatmentSectionsOfArticle =
-				statementcache.get(sec.getTitle());
-		List<Statement> statementsOfSection = allStatmentSectionsOfArticle.get(sec);
-
-		// remove these statements
-		if (statementsOfSection != null) {
-			model.removeAll(statementsOfSection.iterator());
-		}
-		Set<Statement> excludingSection = modelToSet(model);
-		includingSection.removeAll(excludingSection);
-
-		// reinsert statements
-		if (statementsOfSection != null) {
-			model.addAll(statementsOfSection.iterator());
-		}
-
-		return includingSection;
-
-	}
-
-	private static Set<Statement> modelToSet(Model m) {
-		HashSet<Statement> result = new HashSet<Statement>();
-
-		for (Statement s : m) {
-			result.add(s);
-		}
-
-		return result;
-	}
-
-	public ClosableIterable<Statement> sparqlConstruct(String query) throws ModelRuntimeException, MalformedQueryException {
-		if (query.startsWith(getSparqlNamespaceShorts())) {
-			return model.sparqlConstruct(query);
-		}
-		return model.sparqlConstruct(getSparqlNamespaceShorts() + query);
-	}
-
-	public QueryResultTable sparqlSelect(String query) throws ModelRuntimeException, MalformedQueryException {
-		if (query.startsWith(getSparqlNamespaceShorts())) {
-			return model.sparqlSelect(query);
-		}
-		return model.sparqlSelect(getSparqlNamespaceShorts() + query);
-	}
-
-	public ClosableIterator<QueryRow> sparqlSelectIt(String query) throws ModelRuntimeException, MalformedQueryException {
-		return sparqlSelect(query).iterator();
-	}
-
-	/**
-	 * 
-	 * @created 06.12.2010
-	 * @param s
-	 * @return statements of section s (with children)
-	 */
-	public List<Statement> getSectionStatementsRecursive(Section<? extends Type> s) {
-		List<Statement> allstatements = new ArrayList<Statement>();
-
-		if (getStatementsofSingleSection(s) != null) {
-			// add statements of this section
-			allstatements.addAll(getStatementsofSingleSection(s));
-		}
-
-		// walk over all children
-		for (Section<? extends Type> current : s.getChildren()) {
-			// collect statements of the the children's descendants
-			allstatements.addAll(getSectionStatementsRecursive(current));
-		}
-
-		return allstatements;
-	}
-
-	/**
-	 * removes all statements of section s
-	 * 
-	 * @created 06.12.2010
-	 * @param s
-	 */
-	public void removeSectionStatementsRecursive(Section<? extends Type> s) {
-
-		removeStatementsofSingleSection(s);
-
-		// walk over all children
-		for (Section<? extends Type> current : s.getChildren()) {
-			removeSectionStatementsRecursive(current);
-		}
-	}
-
-	/**
-	 * 
-	 * @param sec
-	 * @created 06.12.2010
-	 * @return statements of section sec (without children)
-	 */
-	private List<Statement> getStatementsofSingleSection(
-			Section<? extends Type> sec) {
-		WeakHashMap<Section<? extends Type>, List<Statement>> temp = statementcache.get(sec.getArticle().getTitle());
-		if (temp != null) {
-			return temp.get(sec);
-		}
-		return new ArrayList<Statement>();
-	}
-
-	/**
-	 * removes statements from statementcache and rdf store
-	 * 
-	 * @created 06.12.2010
-	 * @param sec
-	 */
-	private void removeStatementsofSingleSection(Section<? extends Type> sec) {
-		WeakHashMap<Section<? extends Type>, List<Statement>> allStatmentSectionsOfArticle =
-				statementcache.get(sec.getTitle());
-
-		if (allStatmentSectionsOfArticle != null) {
-			if (allStatmentSectionsOfArticle.containsKey(sec)) {
-				removeStatementList(sec, allStatmentSectionsOfArticle);
-			}
-			else {
-				// fix: IncrementalCompiler not necessarily delivers the same
-				// section object, maybe another with the same content
-				Set<Section<? extends Type>> keySet = allStatmentSectionsOfArticle.keySet();
-				Iterator<Section<? extends Type>> iterator = keySet.iterator();
-				while (iterator.hasNext()) {
-					Section<? extends Type> section = iterator.next();
-					if (section.getText().equals(sec.getText())) {
-						removeStatementList(section, allStatmentSectionsOfArticle);
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	private void removeStatementList(Section<? extends Type> sec, WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle) {
-		List<Statement> statementsOfSection = allStatementSectionsOfArticle.get(sec);
-		List<Statement> removedStatements = new ArrayList<Statement>();
-
-		for (Statement s : statementsOfSection) {
-			Set<String> sectionIDsForStatement = duplicateStatements.get(s);
-			boolean removed = false;
-			if (sectionIDsForStatement != null) {
-				removed = sectionIDsForStatement.remove(sec.getID());
-			}
-			if (removed && sectionIDsForStatement.isEmpty()) {
-				removedStatements.add(s);
-				duplicateStatements.remove(s);
-			}
-			else {
-				Logger.getLogger(this.getClass().getName()).log(
-						Level.INFO,
-						"Tried to remove statement from Section '"
-								+ sec.get().getName()
-								+ "', ' " + sec.getID()
-								+ "' that wasn't there:\n"
-								+ s.toString());
-
-			}
-		}
-		allStatementSectionsOfArticle.remove(sec);
-		if (allStatementSectionsOfArticle.isEmpty()) {
-			statementcache.remove(sec.getArticle().getTitle());
-		}
-		removeStatementsFromCache(removedStatements);
-		// model.removeAll(removedStatements.iterator());
-	}
-
-	/**
-	 * adds statements to statementcache and rdf store and count duplicate
-	 * statements
-	 * 
-	 * @created 06.12.2010
-	 * @param allStatements
-	 * @param sec
-	 */
-	public void addStatements(List<Statement> allStatements,
-			Section<? extends Type> sec) {
-		Logger.getLogger(this.getClass().getName()).finer(
-				"semantic core updating " + sec.getID() + "  " + allStatements.size());
-
-		for (Statement s : allStatements) {
-			Set<String> registeredSectionIDsForStatements = duplicateStatements.get(s);
-			if (registeredSectionIDsForStatements == null) {
-				registeredSectionIDsForStatements = new HashSet<String>();
-				duplicateStatements.put(s, registeredSectionIDsForStatements);
-			}
-			registeredSectionIDsForStatements.add(sec.getID());
-		}
-
-		addToStatementcache(sec, allStatements);
-
-		// Maybe remove duplicates before adding to store, if performance is
-		// better
-		addStatementsToCache(allStatements);
-	}
-
-	/**
-	 * adds statements to statementcache
-	 * 
-	 * @created 06.12.2010
-	 * @param sec
-	 * @param newStatements
-	 */
-	private void addToStatementcache(Section<? extends Type> sec, List<Statement> newStatements) {
-		WeakHashMap<Section<? extends Type>, List<Statement>> temp = statementcache.get(sec.getArticle().getTitle());
-		if (temp == null) {
-			temp = new WeakHashMap<Section<? extends Type>, List<Statement>>();
-		}
-		List<Statement> allStatements = new ArrayList<Statement>();
-		allStatements.addAll(newStatements);
-		if (temp.containsKey(sec)) {
-			allStatements.addAll(temp.get(sec));
-		}
-		temp.put(sec, allStatements);
-		statementcache.put(sec.getArticle().getTitle(), temp);
-	}
-
-	public Statement createStatement(Resource subject, URI predicate,
-			Node object) {
-		return model.createStatement(subject, predicate, object);
-	}
-
-	public BlankNode createBlankNode(String internalID) {
-		return model.createBlankNode(internalID);
-	}
-
-	public BlankNode createBlankNode() {
-		return model.createBlankNode();
-	}
-
-	/**
-	 * Dumps the whole content of the model via System.out
-	 * 
-	 * @created 05.01.2011
-	 */
-	public void dumpModel() {
-		model.dump();
-	}
-
-	@Override
-	public Collection<Class<? extends Event>> getEvents() {
-		ArrayList<Class<? extends Event>> events = new ArrayList<Class<? extends Event>>(
-				2);
-		events.add(FullParseEvent.class);
-		events.add(ArticleUpdatesFinishedEvent.class);
-		return events;
-	}
-
-	@Override
-	public void notify(Event event) {
-		if (event instanceof FullParseEvent) {
-			if (properties.containsKey("compile")
-					&& properties.getString("compile").equals("ignoreFullParse")) {
-				// do nothing on full-parse
-			}
-			else {
-				getInstance().removeArticleStatementsRecursive(
-						((FullParseEvent) event).getArticle());
-			}
-		}
-		if (event instanceof ArticleUpdatesFinishedEvent) {
-			getInstance().commit();
-		}
-	}
-
-	// commits the statements from writeCache and removeCache to the triplestore
-	private void commit() {
-
-		// hazard filter
-
-		model.removeAll(removeCache.iterator());
-		EventManager.getInstance().fireEvent(new RemoveStatementsEvent(removeCache));
-
-		model.addAll(addCache.iterator());
-		EventManager.getInstance().fireEvent(new InsertStatementsEvent(addCache));
-
-		removeCache.clear();
-		addCache.clear();
-	}
-
-	public void removeArticleStatementsRecursive(Article art) {
-		WeakHashMap<Section<? extends Type>, List<Statement>> oldStatementsOfArticle =
-				statementcache.get(art.getTitle());
-		if (oldStatementsOfArticle != null) {
-			Set<Section<? extends Type>> sectionsWithStatements =
-					new HashSet<Section<? extends Type>>();
-			sectionsWithStatements.addAll(oldStatementsOfArticle.keySet());
-			for (Section<? extends Type> cur : sectionsWithStatements) {
-				removeStatementsofSingleSection(cur);
-			}
-		}
-	}
-
-	public void removeAllCachedStatements() {
-		// get all statements of this wiki and remove them from the model
-		ArrayList<Statement> allStatements = new ArrayList<Statement>();
-		for (WeakHashMap<Section<? extends Type>, List<Statement>> w : statementcache.values()) {
-			for (List<Statement> l : w.values()) {
-				allStatements.addAll(l);
-			}
-		}
-		removeStatementsFromCache(allStatements);
-
-		// clear statementcache and duplicateStatements
-		statementcache.clear();
-		duplicateStatements.clear();
-	}
-
-	public String getSparqlNamespaceShorts() {
-		StringBuilder buffy = new StringBuilder();
-
-		for (Entry<String, String> cur : namespaces.entrySet()) {
-			buffy.append("PREFIX " + cur.getKey() + ": <" + cur.getValue() + "> \n");
-		}
-		return buffy.toString();
-	}
-
-	public Object getUnderlyingModelImplementation() {
-		return model.getUnderlyingModelImplementation();
 	}
 
 	/*
@@ -882,112 +979,85 @@ public class Rdf2GoCore implements EventListener {
 		return resultlist;
 	}
 
-	public Literal createLiteral(String text) {
-		return model.createPlainLiteral(text);
-	}
-
-	public Literal createDatatypeLiteral(String literal, URI datatype) {
-		return model.createDatatypeLiteral(literal, datatype);
-	}
-
-	public Literal createDatatypeLiteral(String literal, String datatype) {
-		return createDatatypeLiteral(literal, createURI(datatype));
-	}
-
-	public Literal createLiteral(String literal, URI datatypeURI) {
-		return model.createDatatypeLiteral(literal, datatypeURI);
-	}
-
-	public static String getLocalName(Node o) {
-		return RDFTool.getLabel(o);
-	}
-
-	public List<Statement> getTopicStatements(String topic) {
-		Section<? extends Type> rootsection = Environment.getInstance().getArticle(
-				Environment.DEFAULT_WEB, topic).getRootSection();
-		return getSectionStatementsRecursive(rootsection);
-	}
-
-	public File[] getImportList() {
-		String p = Environment.getInstance().getWikiConnector().getSavePath();
-		String inpath = (p != null) ? p : (KnowWEUtils.getKnowWEExtensionPath()
-				+ File.separatorChar + "owlincludes");
-		File includes = new File(inpath);
-		if (includes.exists()) {
-			File[] files = includes.listFiles(new FilenameFilter() {
-
-				@Override
-				public boolean accept(File f, String s) {
-					return s.endsWith(".owl");
-				}
-			});
-			return files;
+	public boolean sparqlAsk(String query) throws ModelRuntimeException, MalformedQueryException {
+		String sparqlNamespaceShorts = getSparqlNamespaceShorts();
+		if (query.startsWith(sparqlNamespaceShorts)) {
+			return model.sparqlAsk(query);
 		}
-		return null;
+		return model.sparqlAsk(sparqlNamespaceShorts + query);
 	}
 
 	/**
-	 * @param prop
-	 * @return
-	 */
-	public URI getRDF(String prop) {
-		return createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#", prop);
-	}
-
-	/**
-	 * @param prop
-	 * @return
-	 */
-	public URI getRDFS(String prop) {
-		return createURI("http://www.w3.org/2000/01/rdf-schema#", prop);
-	}
-
-	public void addStatement(Statement s, Section<? extends Type> sec) {
-		List<Statement> l = new ArrayList<Statement>();
-		l.add(s);
-		addStatements(l, sec);
-	}
-
-	public void addStatement(Resource subject, URI predicate, Node object, Section<? extends Type> sec) {
-		List<Statement> l = new ArrayList<Statement>();
-		l.add(createStatement(subject, predicate, object));
-		addStatements(l, sec);
-	}
-
-	/**
-	 * @param cur
-	 */
-	public List<Statement> createlocalProperty(String cur) {
-		URI prop = createlocalURI(cur);
-		URI naryprop = NARYPROPERTY;
-		List<Statement> io = new ArrayList<Statement>();
-		if (!PropertyManager.getInstance().isValid(prop)) {
-			io.add(createStatement(prop, RDFS.subClassOf, naryprop));
-		}
-		return io;
-	}
-
-	/**
-	 * attaches a TextOrigin Node to a Resource. It's your duty to make sure the
-	 * Resource is of the right type if applicable (eg attachto RDF.TYPE
-	 * RDF.STATEMENT)
+	 * Asks a sparql query on the model as if a specific Section wouldnt be
+	 * there. The statements of this section are removed from the model before
+	 * the query is executed. Afterwards these statements are inserted again to
+	 * provide a consistent model.
 	 * 
-	 * @param attachto The Resource that will be annotated bei the TO-Node
-	 * @param source The source section that should be used
-	 * @param io the ex-IntermediateOwlObject (now List<Statements> that should
-	 *        collect the statements
+	 * @created 14.12.2011
+	 * @param query the query to be ask
+	 * @param sec the section determining the statements to be excluded for the
+	 *        query
+	 * @return
+	 * @throws ModelRuntimeException
+	 * @throws MalformedQueryException
 	 */
-	public void attachTextOrigin(Resource attachto, Section<?> source, List<Statement> io) {
-		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
-		io.addAll(createTextOrigin(source, to));
-		io.add(createStatement(attachto, RDFS.isDefinedBy, to));
+	public boolean sparqlAskExcludeStatementForSection(String query, Section<?> sec) throws ModelRuntimeException, MalformedQueryException {
+
+		// retrieve statements to be excluded
+		WeakHashMap<Section<? extends Type>, List<Statement>> allStatmentSectionsOfArticle =
+				incrementalStatementCache.get(sec.getTitle());
+		List<Statement> statementsOfSection = allStatmentSectionsOfArticle.get(sec);
+
+		// remove these statements
+		if (statementsOfSection != null) {
+			model.removeAll(statementsOfSection.iterator());
+		}
+
+		boolean result;
+
+		// ask query
+		if (query.startsWith(getSparqlNamespaceShorts())) {
+			result = model.sparqlAsk(query);
+		}
+		result = model.sparqlAsk(getSparqlNamespaceShorts() + query);
+
+		// reinsert statements
+		if (statementsOfSection != null) {
+			model.addAll(statementsOfSection.iterator());
+		}
+
+		// return query result
+		return result;
 	}
 
-	private List<Statement> createTextOrigin(Section<?> source, Resource to) {
-		ArrayList<Statement> io = new ArrayList<Statement>();
-		io.add(createStatement(to, RDF.type, TEXTORIGIN));
-		io.add(createStatement(to, HASNODE, createLiteral(source.getID())));
-		io.add(createStatement(to, HASTOPIC, createlocalURI(source.getTitle())));
-		return io;
+	public ClosableIterable<Statement> sparqlConstruct(String query) throws ModelRuntimeException, MalformedQueryException {
+		if (query.startsWith(getSparqlNamespaceShorts())) {
+			return model.sparqlConstruct(query);
+		}
+		return model.sparqlConstruct(getSparqlNamespaceShorts() + query);
+	}
+
+	public QueryResultTable sparqlSelect(String query) throws ModelRuntimeException, MalformedQueryException {
+		if (query.startsWith(getSparqlNamespaceShorts())) {
+			return model.sparqlSelect(query);
+		}
+		return model.sparqlSelect(getSparqlNamespaceShorts() + query);
+	}
+
+	public ClosableIterator<QueryRow> sparqlSelectIt(String query) throws ModelRuntimeException, MalformedQueryException {
+		return sparqlSelect(query).iterator();
+	}
+
+	/**
+	 * Writes the current repository model to the given writer in RDF/XML
+	 * format.
+	 * 
+	 * @created 03.02.2012
+	 * @param out
+	 * @throws ModelRuntimeException
+	 * @throws IOException
+	 */
+	public void writeModel(Writer out) throws ModelRuntimeException, IOException {
+		model.writeTo(out);
 	}
 }

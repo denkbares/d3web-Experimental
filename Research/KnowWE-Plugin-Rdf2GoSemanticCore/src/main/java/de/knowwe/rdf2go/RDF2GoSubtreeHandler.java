@@ -50,7 +50,7 @@ public abstract class RDF2GoSubtreeHandler<T extends Type> extends
 	@Override
 	public void destroy(Article article, Section<T> section) {
 		try {
-			Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
+			Rdf2GoCore.getInstance().removeStatementsOfSectionRecursively(section);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

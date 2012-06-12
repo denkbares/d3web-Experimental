@@ -128,7 +128,7 @@ class ComplexIRIDefinitionCompileScript extends AbstractKnowledgeUnitCompileScri
 
 	@Override
 	public void deleteFromRepository(Section<ComplexIRIDefinitionMarkup> section) {
-		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
+		Rdf2GoCore.getInstance().removeStatementsOfSectionRecursively(section);
 	}
 
 	@Override

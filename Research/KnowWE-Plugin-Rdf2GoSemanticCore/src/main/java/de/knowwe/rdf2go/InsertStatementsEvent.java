@@ -1,6 +1,6 @@
 package de.knowwe.rdf2go;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.ontoware.rdf2go.model.Statement;
 
@@ -8,13 +8,13 @@ import de.knowwe.core.event.Event;
 
 public class InsertStatementsEvent extends Event {
 
-	private final List<Statement> statements;
+	private final Collection<Statement> statements;
 
-	public InsertStatementsEvent(List<Statement> list) {
-		statements = list;
+	public InsertStatementsEvent(Collection<Statement> statements) {
+		this.statements = statements;
 	}
 
-	public List<Statement> getStatements() {
+	public Collection<Statement> getStatements() {
 		return statements;
 	}
 }

@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -106,7 +107,7 @@ public class RDF2GoSync {
 		}
 		else if (mode.equals(RDF2GoSync.Mode.REMOVE)) {
 			// TODO: Not sure if this is ok...
-			rdf2goCore.removeSectionStatementsRecursive(sec);
+			rdf2goCore.removeStatementsOfSectionRecursively(sec);
 		}
 	}
 
@@ -158,7 +159,7 @@ public class RDF2GoSync {
 	 * @param mode specifies whether the @link{Statement}s are added or removed
 	 *        from the @link{OWLOntology}.
 	 */
-	public static void synchronize(List<Statement> statements, RDF2GoSync.Mode mode) {
+	public static void synchronize(Collection<Statement> statements, RDF2GoSync.Mode mode) {
 		OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
 		String rdfXML = statementsToRDF(statements);
 		OWLOntology tempOntology = createTempOntology(rdfXML);
@@ -174,7 +175,7 @@ public class RDF2GoSync {
 		manager.removeOntology(tempOntology);
 	}
 
-	private static String statementsToRDF(List<Statement> statements) {
+	private static String statementsToRDF(Collection<Statement> statements) {
 		Model rdfModel = RDF2Go.getModelFactory().createModel();
 		rdfModel.open();
 		rdfModel.addAll(statements.iterator());

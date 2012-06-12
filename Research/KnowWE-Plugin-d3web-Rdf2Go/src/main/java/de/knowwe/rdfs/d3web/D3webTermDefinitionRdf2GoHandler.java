@@ -34,7 +34,8 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 		URI termObjectClassURI = Rdf2GoCore.getInstance().createlocalURI(
 				termObjectClass.getSimpleName());
 
-		URI hasInstanceURI = Rdf2GoCore.getInstance().createlocalURI("hasInstance");
+		// URI hasInstanceURI =
+		// Rdf2GoCore.getInstance().createlocalURI("hasInstance");
 
 		List<Statement> statements = new ArrayList<Statement>();
 
@@ -45,8 +46,9 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 
 		// Subject: lns:TermObjectClass Predicate: lns:hasInstance Object:
 		// lns:TermIdentifier
-		statements.add(Rdf2GoCore.getInstance().createStatement(termObjectClassURI, hasInstanceURI,
-				termIdentifierURI));
+		// statements.add(Rdf2GoCore.getInstance().createStatement(termObjectClassURI,
+		// hasInstanceURI,
+		// termIdentifierURI));
 
 		String kbName = D3webUtils.getKnowledgeBase(article).getId();
 
@@ -54,8 +56,9 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 		URI hasTerminologyObjectURI = Rdf2GoCore.getInstance().createlocalURI(
 				"hasTerminologyObject");
 
-		URI isTerminologyObjectOfURI = Rdf2GoCore.getInstance().createlocalURI(
-				"isTerminologyObjectOf");
+		// URI isTerminologyObjectOfURI =
+		// Rdf2GoCore.getInstance().createlocalURI(
+		// "isTerminologyObjectOf");
 
 		// Subject: lns:KbName Predicate: hasTerminologyObject Object:
 		// lns:TermIdentifier
@@ -64,11 +67,11 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 
 		// Subject: lns:TermIdentifier Predicate: isTerminologyObjectOf Object:
 		// lns:KbName
-		statements.add(Rdf2GoCore.getInstance().createStatement(termIdentifierURI,
-				isTerminologyObjectOfURI,
-				kbNameURI));
+		// statements.add(Rdf2GoCore.getInstance().createStatement(termIdentifierURI,
+		// isTerminologyObjectOfURI,
+		// kbNameURI));
 
-		Rdf2GoCore.getInstance().addStatements(statements, section);
+		Rdf2GoCore.getInstance().addStatementsTemporarily(statements, article);
 
 		return Messages.noMessage();
 	}

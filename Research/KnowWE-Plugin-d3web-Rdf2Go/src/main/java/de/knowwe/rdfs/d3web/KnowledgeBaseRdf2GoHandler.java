@@ -29,15 +29,16 @@ public class KnowledgeBaseRdf2GoHandler extends SubtreeHandler<D3webTermDefiniti
 
 		URI articleNameURI = Rdf2GoCore.getInstance().createlocalURI(
 				Strings.encodeURL(section.getTitle()));
-		URI hasInstanceURI = Rdf2GoCore.getInstance().createlocalURI("hasInstance");
+		// URI hasInstanceURI =
+		// Rdf2GoCore.getInstance().createlocalURI("hasInstance");
 		URI articleURI = Rdf2GoCore.getInstance().createlocalURI("Article");
 
 		URI kbNameURI = Rdf2GoCore.getInstance().createlocalURI(Strings.encodeURL(kbName));
 		URI definesURI = Rdf2GoCore.getInstance().createlocalURI(
 				"defines");
 
-		URI isDefinedByURI = Rdf2GoCore.getInstance().createlocalURI(
-				"isDefinedBy");
+		// URI isDefinedByURI = Rdf2GoCore.getInstance().createlocalURI(
+		// "isDefinedBy");
 
 		List<Statement> statements = new ArrayList<Statement>();
 
@@ -48,8 +49,8 @@ public class KnowledgeBaseRdf2GoHandler extends SubtreeHandler<D3webTermDefiniti
 
 		// Subject: lns:KbName Predicate: lns:isDefinedByURI Object:
 		// lns:ArticleName
-		statements.add(Rdf2GoCore.getInstance().createStatement(kbNameURI,
-				isDefinedByURI, articleNameURI));
+		// statements.add(Rdf2GoCore.getInstance().createStatement(kbNameURI,
+		// isDefinedByURI, articleNameURI));
 
 		// Subject: lns:ArticleName Predicate: rdf:type Object:
 		// lns:Article
@@ -58,10 +59,10 @@ public class KnowledgeBaseRdf2GoHandler extends SubtreeHandler<D3webTermDefiniti
 
 		// Subject: lns:ArticleName Predicate: lns:hasInstance Object:
 		// lns:Article
-		statements.add(Rdf2GoCore.getInstance().createStatement(articleURI,
-				hasInstanceURI, articleNameURI));
+		// statements.add(Rdf2GoCore.getInstance().createStatement(articleURI,
+		// hasInstanceURI, articleNameURI));
 
-		Rdf2GoCore.getInstance().addStatements(statements, section);
+		Rdf2GoCore.getInstance().addStatementsTemporarily(statements, article);
 		return Messages.noMessage();
 	}
 

@@ -32,7 +32,7 @@ public abstract class AbstractKnowledgeUnitCompileScriptRDFS<T extends Type> ext
 
 	@Override
 	public void deleteFromRepository(Section<T> section) {
-		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
+		Rdf2GoCore.getInstance().removeStatementsOfSectionRecursively(section);
 	}
 
 }
