@@ -182,69 +182,98 @@ public class Rdf2GoCore implements EventListener {
 		model.setNamespace(sh, ns);
 	}
 
+	/**
+	 * Creates a {@link Statement} for the given objects and adds it to the
+	 * triple store. The {@link Section} is used for caching. *
+	 * <p/>
+	 * You can remove the {@link Statement} using the method
+	 * {@link Rdf2GoCore#removeStatementsOfSectionRecursively(Section)}.
+	 * 
+	 * @created 06.12.2010
+	 * @param subject the subject of the statement/triple
+	 * @param predicate the predicate of the statement/triple
+	 * @param object the object of the statement/triple
+	 * @param section the {@link Section} for which the {@link Statement}s are
+	 *        added and cached
+	 */
 	public void addStatement(Resource subject, URI predicate, Node object, Section<? extends Type> sec) {
-		List<Statement> l = new ArrayList<Statement>();
-		l.add(createStatement(subject, predicate, object));
-		addStatements(l, sec);
-	}
-
-	public void addStatement(Statement s, Section<? extends Type> sec) {
-		List<Statement> l = new ArrayList<Statement>();
-		l.add(s);
-		addStatements(l, sec);
+		addStatement(createStatement(subject, predicate, object), sec);
 	}
 
 	/**
-	 * adds statements to statementcache and rdf store and count duplicate
-	 * statements
+	 * Adds the given {@link Statement} for the given {@link Section} to the
+	 * triple store.
+	 * <p/>
+	 * You can remove the {@link Statement} using the method
+	 * {@link Rdf2GoCore#removeStatementsOfSectionRecursively(Section)}.
 	 * 
 	 * @created 06.12.2010
-	 * @param allStatements
-	 * @param sec
+	 * @param statement the {@link Statement}s to add
+	 * @param section the {@link Section} for which the {@link Statement}s are
+	 *        added and cached
 	 */
-	public void addStatements(List<Statement> allStatements,
-			Section<? extends Type> sec) {
+	public void addStatement(Statement statement, Section<? extends Type> section) {
+		List<Statement> l = new ArrayList<Statement>();
+		l.add(statement);
+		addStatements(l, section);
+	}
+
+	/**
+	 * Adds the given {@link Statement}s for the given {@link Section} to the
+	 * triple store.
+	 * <p/>
+	 * You can remove the {@link Statement}s using the method
+	 * {@link Rdf2GoCore#removeStatementsOfSectionRecursively(Section)}.
+	 * 
+	 * @created 06.12.2010
+	 * @param statements the {@link Statement}s to add
+	 * @param section the {@link Section} for which the {@link Statement}s are
+	 *        added and cached
+	 */
+	public void addStatements(Collection<Statement> statements,
+			Section<? extends Type> section) {
 		Logger.getLogger(this.getClass().getName()).finer(
-				"semantic core updating " + sec.getID() + "  " + allStatements.size());
+				"semantic core updating " + section.getID() + "  " + statements.size());
 
-		addStatementsToDuplicatedCache(allStatements, sec.getID());
+		addStatementsToDuplicatedCache(statements, section.getID());
 
-		addStatementToIncrementalCache(sec, allStatements);
+		addStatementToIncrementalCache(statements, section);
 
 		// Maybe remove duplicates before adding to store, if performance is
 		// better
-		addStatementsToInsertCache(allStatements);
+		addStatementsToInsertCache(statements);
 	}
 
 	/**
-	 * Adds the {@link Statement} for the given article. If the given article is
-	 * compiled again, all {@link Statement}s added for this article are removed
-	 * before the new {@link Statement} are added again. This method works best
-	 * when used in a {@link SubtreeHandler}.
+	 * Adds the {@link Statement} for the given article to the triple store. If
+	 * the given article is compiled again, all {@link Statement}s added for
+	 * this article are removed before the new {@link Statement} are added
+	 * again. This method works best when used in a {@link SubtreeHandler}.
 	 * 
 	 * @created 11.06.2012
 	 * @param statement the statement to add to the triple store
-	 * @param article the article for which the statements are added and for
-	 *        which they are removed at full parse
+	 * @param article the article for which the statement is added, cached and
+	 *        for which it is removed at full parse
 	 */
-	public void addStatementTemporarily(Statement statement, Article article) {
+	public void addStatement(Statement statement, Article article) {
 		ArrayList<Statement> statements = new ArrayList<Statement>(1);
 		statements.add(statement);
-		addStatementsTemporarily(statements, article);
+		addStatements(statements, article);
 	}
 
 	/**
 	 * Adds the Collection of {@link Statement}s for the given article. If the
 	 * given article is compiled again, all {@link Statement}s added for this
 	 * article are removed before the new {@link Statement}s are added again.
-	 * This method works best when used in a {@link SubtreeHandler}.
+	 * You don't need to remove the {@link Statement}s yourself. This method
+	 * works best when used in a {@link SubtreeHandler}.
 	 * 
 	 * @created 11.06.2012
 	 * @param statements the statements to add to the triple store
 	 * @param article the article for which the statements are added and for
 	 *        which they are removed at full parse
 	 */
-	public void addStatementsTemporarily(Collection<Statement> statements, Article article) {
+	public void addStatements(Collection<Statement> statements, Article article) {
 		Set<Statement> statementsOfArticle = fullParseStatementCache.get(article.getTitle());
 		if (statementsOfArticle == null) {
 			statementsOfArticle = new HashSet<Statement>();
@@ -252,6 +281,23 @@ public class Rdf2GoCore implements EventListener {
 		}
 		statementsOfArticle.addAll(statements);
 		addStatementsToDuplicatedCache(statements, article.getTitle());
+		addStatementsToInsertCache(statements);
+	}
+
+	/**
+	 * Adds the given {@link Statement}s directly to the triple store.
+	 * <p/>
+	 * <b>Attention</b>: The added {@link Statement}s are not cached in the
+	 * {@link Rdf2GoCore}, so you are yourself responsible to remove the right
+	 * {@link Statement}s in case they are not longer valid. You can remove
+	 * these {@link Statement}s with the method
+	 * {@link Rdf2GoCore#removeStatements(Collection)}.
+	 * 
+	 * @created 13.06.2012
+	 * @param statements the statements you want to add to the triple store
+	 */
+	public void addStatements(Collection<Statement> statements) {
+		addStatementsToDuplicatedCache(statements, null);
 		addStatementsToInsertCache(statements);
 	}
 
@@ -271,13 +317,13 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
-	 * adds statements to statementcache
+	 * Adds statements to the incremental statementcache.
 	 * 
 	 * @created 06.12.2010
-	 * @param sec
 	 * @param newStatements
+	 * @param sec
 	 */
-	private void addStatementToIncrementalCache(Section<? extends Type> sec, List<Statement> newStatements) {
+	private void addStatementToIncrementalCache(Collection<Statement> newStatements, Section<? extends Type> sec) {
 		WeakHashMap<Section<? extends Type>, List<Statement>> temp = incrementalStatementCache.get(sec.getArticle().getTitle());
 		if (temp == null) {
 			temp = new WeakHashMap<Section<? extends Type>, List<Statement>>();
@@ -694,7 +740,7 @@ public class Rdf2GoCore implements EventListener {
 	@Override
 	public void notify(Event event) {
 		if (event instanceof FullParseEvent) {
-			getInstance().removeTemporaryStatements(((FullParseEvent) event).getArticle());
+			getInstance().removeStatementsOfArticle(((FullParseEvent) event).getArticle());
 
 		}
 		if (event instanceof ArticleUpdatesFinishedEvent) {
@@ -733,24 +779,15 @@ public class Rdf2GoCore implements EventListener {
 				allStatements.addAll(l);
 			}
 		}
+		for (Set<Statement> statements : fullParseStatementCache.values()) {
+			allStatements.addAll(statements);
+		}
 		addStatementsToRemoveCache(allStatements);
 
 		// clear statementcache and duplicateStatements
+		fullParseStatementCache.clear();
 		incrementalStatementCache.clear();
 		duplicateStatements.clear();
-	}
-
-	public void removeArticleStatementsRecursive(Article art) {
-		WeakHashMap<Section<? extends Type>, List<Statement>> oldStatementsOfArticle =
-				incrementalStatementCache.get(art.getTitle());
-		if (oldStatementsOfArticle != null) {
-			Set<Section<? extends Type>> sectionsWithStatements =
-					new HashSet<Section<? extends Type>>();
-			sectionsWithStatements.addAll(oldStatementsOfArticle.keySet());
-			for (Section<? extends Type> cur : sectionsWithStatements) {
-				removeStatementsOfSection(cur);
-			}
-		}
 	}
 
 	public void removeNamespace(String sh) {
@@ -759,17 +796,42 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
-	 * removes all statements of section s
+	 * Removes
+	 * 
+	 * @created 13.06.2012
+	 * @param statements
+	 */
+	public void removeStatements(Collection<Statement> statements) {
+		if (statements == null) return;
+		List<Statement> removedStatements = new ArrayList<Statement>();
+		for (Statement statement : statements) {
+			boolean removed = removeStatementFromDuplicateCache(statement, null);
+			if (removed) {
+				removedStatements.add(statement);
+			}
+		}
+		addStatementsToRemoveCache(removedStatements);
+	}
+
+	/**
+	 * Removes all {@link Statement}s that were added and cached for the given
+	 * {@link Section}.
+	 * <p/>
+	 * <b>Attention</b>: This method only removes {@link Statement}s that were
+	 * added (and cached) in connection with a {@link Section} using methods
+	 * like {@link Rdf2GoCore#addStatements(Collection, Section)} or
+	 * {@link Rdf2GoCore#addStatement(Statement, Section)}.
 	 * 
 	 * @created 06.12.2010
-	 * @param s
+	 * @param section the {@link Section} for which the {@link Statement}s
+	 *        should be removed
 	 */
-	public void removeStatementsOfSectionRecursively(Section<? extends Type> s) {
+	public void removeStatementsOfSectionRecursively(Section<? extends Type> section) {
 
-		removeStatementsOfSection(s);
+		removeStatementsOfSection(section);
 
 		// walk over all children
-		for (Section<? extends Type> current : s.getChildren()) {
+		for (Section<? extends Type> current : section.getChildren()) {
 			removeStatementsOfSectionRecursively(current);
 		}
 	}
@@ -853,7 +915,22 @@ public class Rdf2GoCore implements EventListener {
 		}
 	}
 
-	private void removeTemporaryStatements(Article article) {
+	/**
+	 * Removes all {@link Statement}s that were added and cached for the given
+	 * {@link Article}. This method is automatically called every time an
+	 * article is parsed fully ({@link FullParseEvent} fired) so normally you
+	 * shouldn't need to call this method yourself.
+	 * <p/>
+	 * <b>Attention</b>: This method only removes {@link Statement}s that were
+	 * added (and cached) in connection with an {@link Article} using methods
+	 * like {@link Rdf2GoCore#addStatements(Collection, Article)} or
+	 * {@link Rdf2GoCore#addStatement(Statement, Article)}.
+	 * 
+	 * @created 13.06.2012
+	 * @param article the article for which you want to remove all
+	 *        {@link Statement}s
+	 */
+	public void removeStatementsOfArticle(Article article) {
 		Set<Statement> statementsOfArticle = fullParseStatementCache.get(article.getTitle());
 		if (statementsOfArticle == null) return;
 		List<Statement> removedStatements = new ArrayList<Statement>();

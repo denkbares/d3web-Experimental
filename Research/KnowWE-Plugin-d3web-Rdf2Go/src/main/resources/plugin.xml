@@ -40,13 +40,5 @@
 		<parameter id="handlerpriority" value="-200" />
 		<parameter id="scope" value="KnowledgeBaseType" />
 	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Instantiation"
-		id="D3webRdf2GoInstantiation">
-		<parameter id="class" value="de.knowwe.rdfs.d3web.D3webRdf2GoInstantiation" />
-		<parameter id="name" value="D3webRdf2GoInstantiation" />
-		<parameter id="description" value="Instantiation D3webRdf2GoInstantiation" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>	
+		
 </plugin>

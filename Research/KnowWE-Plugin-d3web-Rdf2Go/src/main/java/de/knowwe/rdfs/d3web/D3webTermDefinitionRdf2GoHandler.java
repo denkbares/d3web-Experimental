@@ -71,7 +71,7 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 		// isTerminologyObjectOfURI,
 		// kbNameURI));
 
-		Rdf2GoCore.getInstance().addStatementsTemporarily(statements, article);
+		Rdf2GoCore.getInstance().addStatements(statements, article);
 
 		return Messages.noMessage();
 	}

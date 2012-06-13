@@ -62,7 +62,7 @@ public class KnowledgeBaseRdf2GoHandler extends SubtreeHandler<D3webTermDefiniti
 		// statements.add(Rdf2GoCore.getInstance().createStatement(articleURI,
 		// hasInstanceURI, articleNameURI));
 
-		Rdf2GoCore.getInstance().addStatementsTemporarily(statements, article);
+		Rdf2GoCore.getInstance().addStatements(statements, article);
 		return Messages.noMessage();
 	}
 
