@@ -76,7 +76,7 @@ class VersionEntry extends AbstractType {
 
 	public VersionEntry() {
 		this.setSectionFinder(new RegexSectionFinder(
-				"VERSION\\d+\\r?\\n.*?\\r?\\n\\r?\\n",
+				"VERSION\\d+\\r?\\n.*?(\\r|\\n)*?\\z",
 				Pattern.DOTALL));
 		this.addChildType(new VersionEntryData());
 	}
@@ -85,7 +85,7 @@ class VersionEntry extends AbstractType {
 
 		public VersionEntryData() {
 			this.setSectionFinder(new RegexSectionFinder(
-					"VERSION\\d+\\r?\\n(.*?)\\r?\\n\\r?\\n", Pattern.DOTALL));
+					"VERSION\\d+\\r?\\n(.*?)(\\r|\\n)*?\\z", Pattern.DOTALL));
 			this.addChildType(new ContentEntry());
 		}
 	}

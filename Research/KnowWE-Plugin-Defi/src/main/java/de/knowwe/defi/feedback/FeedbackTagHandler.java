@@ -395,7 +395,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 		// save button
 		if (f.exists()) {
 			html.append("<p><center><input type=\"button\" value=\"Erneut speichern\" onClick=\"checkAndSubmit()\"></center></p>\n");
-			html.append("<script type='text/javascript'>window.onload=function() {prepare25();fillForm();}</script>");
+			html.append("<script type='text/javascript'>window.onload=function() {fillForm();prepare25();}</script>");
 		}
 		else {
 			html.append("<p><center><input type=\"button\" value=\"Speichern\" onClick=\"checkAndSubmit()\"></center></p>\n");

@@ -19,11 +19,12 @@
  */
 package de.knowwe.defi.table;
 
+import java.util.regex.Pattern;
+
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.basicType.LineBreak;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 class ContentEntry extends AbstractType {
@@ -40,16 +41,17 @@ class ContentEntry extends AbstractType {
 	}
 
 	public static String getContent(Section<ContentEntry> s) {
-		Section<InputContent> section = Sections.findChildOfType(s, InputContent.class);
-		if (section != null) {
-			return section.getText();
-		}
+		// workaround, because InputContent only matches a single line.
+		return s.getText().replaceFirst("INPUT\\d*:", "").trim().replace("\n", "\t\n");
 
-		return "";
+// Section<InputContent> sec = Sections.findChildOfType(s,
+		// InputContent.class);
+		// if (sec != null) return sec.getText();
+		// return null;
 	}
 
 	public ContentEntry() {
-		this.setSectionFinder(new RegexSectionFinder("INPUT.*?\\r?\\n"));
+		this.setSectionFinder(new RegexSectionFinder("INPUT.*?(?=INPUT|\\z)", Pattern.DOTALL));
 		this.addChildType(new InputHead());
 		this.addChildType(new LineBreak());
 		this.addChildType(new InputContent());
@@ -65,7 +67,8 @@ class InputHead extends AbstractType {
 
 class InputContent extends AbstractType {
 	public InputContent() {
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(new RegexSectionFinder("(.*|\\r|\\n)*?\\z",
+				Pattern.DOTALL));
 	}
 
 }
