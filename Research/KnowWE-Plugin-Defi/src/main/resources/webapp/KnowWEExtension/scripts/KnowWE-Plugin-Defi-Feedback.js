@@ -1,302 +1,134 @@
-function checkAndSubmitForm(id) {
+function checkAndSubmit() {
 	var warning = "Sie haben nicht alle Felder ausgefüllt.\nTrotzdem fortfahren?"
-	var form = document.getElementById(id);
 	var pass = true;
 	
-	//check question 1
-	var empty = true;
-	var q = document.getElementsByName('FB1');
-	var h = document.getElementById('frage1');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 2
-	empty = true;
-	q = document.getElementsByName('FB2');
-	h = document.getElementById('frage2');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 3
-	empty = true;
-	q = document.getElementsByName('FB3');
-	h = document.getElementById('frage3');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 4
-	empty = true;
-	q = document.getElementsByName('FB4');
-	h = document.getElementById('frage4');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 5 - units
-	empty = true;
-	var qs;
-	h = document.getElementById('frage5');
-	for (var i = 1; i <= 6; i++) {
-		for (var j = 1; j <= 6; j++) {
-			qs = document.getElementsByName("FB5-"+i+"-" + j + "");
-			if (qs.length > 0 && qs[0].checked)
+	var table, boxes, empty, topic;
+	var entries = "";
+	for (var i = 1; i <= 26; i++) {
+		// check table
+		empty = true;
+		table = document.getElementById('q'+i);
+		topic = table.getElementsByTagName('td')[0].innerHTML;
+		entries += topic;
+		
+		boxes = table.getElementsByTagName('input');   
+		if (boxes.length > 0) {
+			for (var j = 0; j < boxes.length; j++) {
+				if (boxes[j].checked)  {
+					entries += "###" + boxes[j].id + "---" + boxes[j].value;
+					empty = false;
+				}
+			}
+		// check textarea
+		} 
+		
+		boxes = table.getElementsByTagName('textarea')[0];
+		if(boxes != null) {
+			if (boxes.value != "") {
+				entries += "###" + boxes.id + "---" + boxes.value;
 				empty = false;
+			}
 		}
+		entries += ":::";
+		
+		// mark table if not answered
+		if(empty) {table.style.border = "1px solid red";pass = false;}
+		else table.style.border = "0";
 	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 6 - units
-	empty = true;
-	h = document.getElementById('frage6');
-	for (var i = 1; i <= 6; i++) {
-		for (var j = 1; j <= 6; j++) {
-			qs = document.getElementsByName("FB6-"+i+"-" + j + "");
-			if (qs.length > 0 && qs[0].checked)
-				empty = false;
-		}
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 7
-	empty = true;
-	q = document.getElementsByName('FB7');
-	h = document.getElementById('frage7');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 8 - textarea
-	empty = true;
-	q = document.getElementsByName('FB8');
-	h = document.getElementById('frage8');
-	if(q[0].value != "") empty = false;
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 9
-	empty = true;
-	q = document.getElementsByName('FB9');
-	h = document.getElementById('frage9');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 10
-	empty = true;
-	q = document.getElementsByName('FB10');
-	h = document.getElementById('frage10');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 11
-	empty = true;
-	q = document.getElementsByName('FB11');
-	h = document.getElementById('frage11');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 12
-	empty = true;
-	q = document.getElementsByName('FB12');
-	h = document.getElementById('frage12');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 13
-	empty = true;
-	q = document.getElementsByName('FB13');
-	h = document.getElementById('frage13');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 14
-	empty = true;
-	q = document.getElementsByName('FB14');
-	h = document.getElementById('frage14');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 15
-	empty = true;
-	q = document.getElementsByName('FB15');
-	h = document.getElementById('frage15');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 16
-	empty = true;
-	q = document.getElementsByName('FB16');
-	h = document.getElementById('frage16');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 17 - textarea
-	empty = true;
-	q = document.getElementsByName('FB17');
-	h = document.getElementById('frage17');
-	if(q[0].value != "") empty = false;
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 18
-	empty = true;
-	q = document.getElementsByName('FB18');
-	h = document.getElementById('frage18');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 19
-	empty = true;
-	q = document.getElementsByName('FB19');
-	h = document.getElementById('frage19');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 20
-	empty = true;
-	q = document.getElementsByName('FB20');
-	h = document.getElementById('frage20');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 21
-	empty = true;
-	q = document.getElementsByName('FB21');
-	h = document.getElementById('frage21');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 22
-	empty = true;
-	q = document.getElementsByName('FB22');
-	h = document.getElementById('frage22');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 23
-	empty = true;
-	q = document.getElementsByName('FB23');
-	h = document.getElementById('frage23');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 24 - textarea
-	empty = true;
-	q = document.getElementsByName('FB24');
-	h = document.getElementById('frage24');
-	if(q[0].value != "") empty = false;
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 25
-	empty = true;
-	q = document.getElementsByName('FB25');
-	h = document.getElementById('frage25');
-	for (var i = 0; i < q.length; i++) {
-		if (q[i].checked)
-			empty = false;
-	}
-	
-	for (var i = 1; i <= 3; i++) {
-		qs = document.getElementsByName("FB25-"+ i + "");
-		if (qs.length > 0 && qs[0].checked)
-			empty = false;
-	}
-	
-	q = document.getElementsByName('FB25-4');
-	if(q[0].value != "") empty = false;
-	
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
-	
-	// question 26 - textarea
-	empty = true;
-	q = document.getElementsByName('FB26');
-	h = document.getElementById('frage26');
-	if(q[0].value != "") empty = false;
-	if(empty) {h.style.border = "1px solid red";pass = false;}
-	else h.style.border = "0";
+	entries = entries.substring(0, entries.length-3);
 	
 	if (!pass) {
-		if (confirm("Es wurden noch nicht alle Fragen beantwortet.\nTrotzdem speichern?"))
-			form.submit();
-		else
+		if (!confirm("Es wurden noch nicht alle Fragen beantwortet.\nTrotzdem speichern?"))
 			return;
-	} else 
-		form.submit();
+	}
+	
+	var params = {
+			action : 'FeedbackSaveAction',
+			entries : entries
+		}
+
+		var options = {
+			url : KNOWWE.core.util.getURL(params),
+			response : {
+				action : '',
+				ids : [ '' ],
+				fn : function() {
+					document.location = "Wiki.jsp?page=BefragungAbgeschlossen";
+				}
+			}
+	}
+	
+	
+	new _KA(options).send();
+}
+
+function fillForm() {
+
+	var params = {
+		action : 'FeedbackFillAction'
+	}
+	var url = KNOWWE.core.util.getURL(params);
+	var options = {
+		url : url,
+		response : {
+			action : 'none',
+			fn : function() {
+				checkAnswers(this.responseText);
+			}
+			
+		}
+	}
+	new _KA(options).send();
+}
+
+function checkAnswers(answers) {
+	var box;
+	var answer = answers.split(":::");
+	for (var i = 0; i < answer.length; i++) {
+		box = document.getElementById(answer[i].split("###")[0]);
+		
+		if (box.tagName == 'INPUT') {
+			box.checked = true;
+			if (box.id.indexOf("q5") == 0 || box.id.indexOf("q6") == 0)
+				box.parentNode.style.backgroundColor = 'lightgreen';
+			else
+				box.parentNode.parentNode.style.backgroundColor = 'lightgreen';
+		} else if (box.tagName == 'TEXTAREA')  {
+			box.value = answer[i].split("###")[1];
+		}
+	}
+}
+
+function prepare25() {
+	var rb1 = document.getElementById('q25_1');
+	var rb2 = document.getElementById('q25_2');
+	var rb3 = document.getElementById('q25_7');
+	var cb3 = document.getElementById('q25_5');
+	
+	rb1.onclick = setDisableFor25;
+	rb2.onclick = setDisableFor25;
+	rb3.onclick = setDisableFor25;
+	cb3.onclick = setDisableFor25;
+
+	setDisableFor25();
+}
+
+function setDisableFor25() {
+	var rb2 = document.getElementById('q25_2');
+	var cb1 = document.getElementById('q25_3');
+	var cb2 = document.getElementById('q25_4');
+	var cb3 = document.getElementById('q25_5');
+	var ta = document.getElementById('q25_6');
+	
+	cb1.disabled = !rb2.checked;
+	if (!rb2.checked)
+		cb1.checked = false;
+	cb2.disabled = !rb2.checked;
+	if (!rb2.checked)
+		cb2.checked = false;
+	cb3.disabled = !rb2.checked;
+	if (!rb2.checked)
+		cb3.checked = false;
+	ta.disabled = !cb3.checked;
+	
 }

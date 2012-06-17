@@ -31,66 +31,36 @@ import de.knowwe.core.utils.KnowWEUtils;
  * The FeedbackSaveAction stores the user input of the feedback form in a file
  * for further processing.
  * 
- * @author Stefan Mark
+ * @author Stefan Mark, dupke
  * @created 26.09.2011
  */
 public class FeedbackSaveAction extends AbstractAction {
 
-	private final int QUESTIONS = 27;
-
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-
 		String path = Environment.getInstance().getWikiConnector().getSavePath();
-		String filename = context.getUserName().toLowerCase() + ".xml";
+		String filename = context.getUserName().toLowerCase() + "_feedback.xml";
 
 		StringBuilder xml = new StringBuilder();
 
+		String entry = context.getParameter("entries");
+		String[] entries = entry.split(":::");
+		String[] parts;
+
+		//
 		xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n");
 		xml.append("<feedback>\n");
-
-		// answer have ID FBx where x is a natural number
-		// questions have ID QFBx where x is a natural number
-
-		for (int i = 1; i < QUESTIONS; i++) {
-
-			String q = context.getParameter("QFB" + i);
-			String a = context.getParameter("FB" + i);
-
-			if (q != null) {
-				xml.append("<question" + i + ">\n");
-				xml.append("    <question>");
-				xml.append(q);
-				xml.append("</question>\n");
-				xml.append("    <answer>");
-
-				if (a != null) {
-					xml.append(a);
-				}
-				else {
-					// QFB1-1-1 FB1-1-1
-					for (int j = 1; j < 6; j++) {
-						String sub = context.getParameter("QFB" + i + "-" + j);
-						if (sub != null) {
-							xml.append("\n        <subquestion>");
-							xml.append(sub);
-							xml.append("</subquestion>\n");
-						}
-						for (int k = 1; k < 6; k++) {
-							String sa = context.getParameter("FB" + i + "-" + j + "-" + k);
-							if (sa != null) {
-								xml.append("        <subanswer>");
-								xml.append(sa);
-								xml.append("</subanswer>\n");
-							}
-						}
-					}
-				}
-
-				xml.append("</answer>\n");
-				xml.append("</question" + i + ">\n");
+		for (int i = 0; i < entries.length; i++) {
+			parts = entries[i].split("###");
+			xml.append("\t<question id='q" + (i + 1) + "'>\n");
+			xml.append("\t\t<topic>"
+					+ parts[0].replace("<br><i>(Bitte alle zutreffenden Antworten markieren!)</i>",
+							"") + "</topic>\n");
+			for (int j = 1; j < parts.length; j++) {
+				xml.append("\t\t<answer id='" + parts[j].split("---")[0] + "'>"
+						+ parts[j].split("---")[1] + "</answer>\n");
 			}
-
+			xml.append("\t</question>\n");
 		}
 		xml.append("</feedback>");
 

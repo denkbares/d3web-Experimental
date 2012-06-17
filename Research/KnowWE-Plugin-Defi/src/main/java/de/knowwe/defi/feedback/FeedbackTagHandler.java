@@ -1,923 +1,559 @@
-/*
- * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- * 
- * This is free software; you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 3 of the License, or (at your option) any
- * later version.
- * 
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this software; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
- * site: http://www.fsf.org.
- */
 package de.knowwe.defi.feedback;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import de.knowwe.core.Environment;
-import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.Strings;
 
-/**
- * 
- * @author Stefan Mark
- * @created 22.09.2011
- */
-public class FeedbackTagHandler extends AbstractHTMLTagHandler {
+public class FeedbackTagHandler extends AbstractTagHandler {
 
-	private int questionNum = 1;
+	/** topics the questions are ordered by */
+	public static final String TOPIC1 = "Allgemeines";
+	public static final String TOPIC2 = "Zu den Inhalten";
+	public static final String TOPIC3 = "Zum Diskussionsforum";
+	public static final String TOPIC4 = "zu Ihren Aktivitäten";
 
-	public static final String FRAGE1 = "Die Teilnahme am ICD Forum hat mir insgesamt weitergeholfen.";
-	public static final String FRAGE2 = "ICD-Forum hat mir geholfen, meinen Alltag besser zu bewältigen.";
-	public static final String FRAGE3 = "ICD-Forum hat mich motiviert, neue Dinge auszuprobieren.";
-	public static final String FRAGE4 = "Durch die Teilnahme am ICD-Forum, komme ich mit meiner Erkrankung besser zurecht.";
-	public static final String FRAGE5 = "Welche Themen waren für Sie besonders wichtig?";
-	public static final String FRAGE6 = "Wie gut haben Ihnen die Themen in den einzelnen Bereichen geholfen?";
-	public static final String FRAGE7 = "Wie haben Sie den Gesamtumfang des Programms empfunden?";
-	public static final String FRAGE8 = "Was haben Sie bei unserem inhaltlichen Angebot vermisst?";
-	public static final String FRAGE9 = "Haben Sie das Diskussionsforum genutzt?";
-	public static final String FRAGE10 = "Es hat mir gut getan, im Diskussionsforum mitzulesen.";
-	public static final String FRAGE11 = "Ich habe den Moderator im Diskussionsforum als hilfreich empfunden.";
-	public static final String FRAGE12 = "Es hat mir gut getan, im Diskussionsforum Fragen zu stellen.";
-	public static final String FRAGE13 = "Es hat mir gut getan, im Diskussionsforum Antworten auf meine Fragen zu erhalten.";
-	public static final String FRAGE14 = "Es hat mir gut getan, im Diskussionsforum auf die Fragen anderer antworten zu können.";
-	public static final String FRAGE15 = "Ich habe den Eindruck, dass der Moderator im Diskussionsforum an meinen Fragen und Problemen interessiert war.";
-	public static final String FRAGE16 = "Ich habe den Eindruck, dass die Teilnehmer an meinen Fragen und Problemen wirklich interessiert waren.";
-	public static final String FRAGE17 = "Was haben Sie im Diskussionsforum vermisst?";
-	public static final String FRAGE18 = "Ich wusste, an wen ich mich bei ICD-Forum mit meinen persönlichen Fragen wenden kann.";
-	public static final String FRAGE19 = "ICD-Forum hat mir einen vertrauensvollen Rahmen geboten, in dem ich mich über die Themen austauschen konnte, die mir wirklich wichtig sind.";
-	public static final String FRAGE20 = "Wieviel Zeit haben Sie auf ICD-Forum verbracht?";
-	public static final String FRAGE21 = "In welchen Bereichen von ICD-Forum haben Sie mehr Zeit verbracht?";
-	public static final String FRAGE22 = "Wie haben Sie die Dauer des Programms empfunden? 6 Wochen waren...";
-	public static final String FRAGE23 = "Wie fanden Sie die Bedienbarkeit von ICD-Forum?";
-	public static final String FRAGE24 = "Wenn Sie Schwierigkeiten bei der Bedienung hatten - Woran lag das?";
-	public static final String FRAGE25 = "Würden Sie in Zukunft an einem ähnlichen Angebot teilnehmen?";
-	public static final String FRAGE26 = "Haben Sie sonst noch Wünsche, Kritik oder Erfahrungen, die Sie uns mitteilen möchten?";
+	/** questions */
+	public static final String QUESTION1 = "Die Teilnahme am ICD Forum hat mir insgesamt weitergeholfen.";
+	public static final String QUESTION2 = "ICD-Forum hat mir geholfen, meinen Alltag besser zu bewältigen.";
+	public static final String QUESTION3 = "ICD-Forum hat mich motiviert, neue Dinge auszuprobieren.";
+	public static final String QUESTION4 = "Durch die Teilnahme am ICD-Forum, komme ich mit meiner Erkrankung besser zurecht.";
+	public static final String QUESTION5 = "Welche Themen waren für Sie besonders wichtig?";
+	public static final String QUESTION6 = "Wie gut haben Ihnen die Themen in den einzelnen Bereichen geholfen?";
+	public static final String QUESTION7 = "Wie haben Sie den Gesamtumfang des Programms empfunden?";
+	public static final String QUESTION8 = "Was haben Sie bei unserem inhaltlichen Angebot vermisst?";
+	public static final String QUESTION9 = "Haben Sie das Diskussionsforum genutzt?";
+	public static final String QUESTION10 = "Es hat mir gut getan, im Diskussionsforum mitzulesen.";
+	public static final String QUESTION11 = "Ich habe den Moderator im Diskussionsforum als hilfreich empfunden.";
+	public static final String QUESTION12 = "Es hat mir gut getan, im Diskussionsforum Fragen zu stellen.";
+	public static final String QUESTION13 = "Es hat mir gut getan, im Diskussionsforum Antworten auf meine Fragen zu erhalten.";
+	public static final String QUESTION14 = "Es hat mir gut getan, im Diskussionsforum auf die Fragen anderer antworten zu können.";
+	public static final String QUESTION15 = "Ich habe den Eindruck, dass der Moderator im Diskussionsforum an meinen Fragen und Problemen interessiert war.";
+	public static final String QUESTION16 = "Ich habe den Eindruck, dass die Teilnehmer an meinen Fragen und Problemen wirklich interessiert waren.";
+	public static final String QUESTION17 = "Was haben Sie im Diskussionsforum vermisst?";
+	public static final String QUESTION18 = "Ich wusste, an wen ich mich bei ICD-Forum mit meinen persönlichen Fragen wenden kann.";
+	public static final String QUESTION19 = "ICD-Forum hat mir einen vertrauensvollen Rahmen geboten, in dem ich mich über die Themen austauschen konnte, die mir wirklich wichtig sind.";
+	public static final String QUESTION20 = "Wieviel Zeit haben Sie auf ICD-Forum verbracht?";
+	public static final String QUESTION21 = "In welchen Bereichen von ICD-Forum haben Sie mehr Zeit verbracht?";
+	public static final String QUESTION22 = "Wie haben Sie die Dauer des Programms empfunden? 6 Wochen waren...";
+	public static final String QUESTION23 = "Wie fanden Sie die Bedienbarkeit von ICD-Forum?";
+	public static final String QUESTION24 = "Wenn Sie Schwierigkeiten bei der Bedienung hatten - Woran lag das?";
+	public static final String QUESTION25 = "Würden Sie in Zukunft an einem ähnlichen Angebot teilnehmen?";
+	public static final String QUESTION26 = "Haben Sie sonst noch Wünsche, Kritik oder Erfahrungen, die Sie uns mitteilen möchten?";
 
-	private static final String HINT_MUTIPLE = "(Bitte alle zutreffenden Antworten markieren!)";
-	private static final String FEEDBACK_FORM_NAME = "feedbackForm";
+	/** units and subunits */
+	public static final Map<Integer, String> UNITS = new HashMap<Integer, String>();
 
-	/**
-	 * @param name
-	 */
+	static {
+		UNITS.put(1, "Einheit 1 - Kennenlernen");
+		UNITS.put(11, "Was erwartet mich im ICD-Forum");
+		UNITS.put(12, "Wer steckt hinter ICD Forum?");
+		UNITS.put(13, "Tipps und Anregungen");
+		UNITS.put(14, "Unser Sicherheitskonzept");
+	}
+
+	static {
+		UNITS.put(2, "Einheit 2 - Wissen über den ICD");
+		UNITS.put(21, "Wie funktioniert mein ICD?");
+		UNITS.put(22, "Was stört meinen ICD");
+		UNITS.put(23, "Den richtigen Rhythmus finden");
+		UNITS.put(24, "Der ICD löst aus - was tun!?");
+		UNITS.put(25, "Kleine und große Reisen mit dem ICD");
+		UNITS.put(26, "Wo finde ich weitere Informationen?");
+	}
+
+	static {
+		UNITS.put(3, "Einheit 3 - Alltag gestalten");
+		UNITS.put(31, "Der ICD als Teil von mir");
+		UNITS.put(32, "Sich vom ICD nicht unterkriegen lassen");
+		UNITS.put(33, "Körperliche Aktivität");
+		UNITS.put(34, "Mein soziales Netz");
+		UNITS.put(35, "Mein Partner versteht mich einfach nicht");
+		UNITS.put(36, "Intimität");
+	}
+
+	static {
+		UNITS.put(4, "Einheit 4 - Angst");
+		UNITS.put(41, "Angst verstehen");
+		UNITS.put(42, "Wie sich Angst zeigt");
+		UNITS.put(43, "Die eigenen Ängste kennen lernen");
+		UNITS.put(44, "Die Angst vor der Sterblichkeit");
+	}
+
+	static {
+		UNITS.put(5, "Einheit 5 - Krisen meistern");
+		UNITS.put(51, "Angst überwinden");
+		UNITS.put(52, "Ziele erreichen");
+		UNITS.put(53, "Gedankenmuster durchbrechen");
+		UNITS.put(54, "Stress reduzieren");
+		UNITS.put(55, "Wenn Selbsthilfe nicht mehr reicht");
+	}
+
+	static {
+		UNITS.put(6, "Einheit 6 - Meine Zukunft mit dem ICD");
+		UNITS.put(61, "Was kann ich für mich mitnehmen?");
+		UNITS.put(62, "Zukünftige Hürden meistern");
+	}
+
+	/** hint text */
+	private static final String HINT_MUTIPLE = "<i>(Bitte alle zutreffenden Antworten markieren!)</i>";
+
 	public FeedbackTagHandler() {
 		super("defifeedback");
 	}
 
+	/**
+	 *
+	 */
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
+	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 
-		questionNum = 1;
-
-		StringBuilder html = new StringBuilder();
-		if (!user.userIsAsserted()) {
+		if (!userContext.userIsAsserted()) {
 			return "<p class=\"info\">Bitte melden Sie sich an, um die Seite sehen zu können!</p>";
 		}
 
-		// html.append("<h1>Abschluss-Fragebogen</h1>");
-		// html.append("Bei den folgenden Fragen geht es um Ihr Resümee des Programms und der Plattform im "
-		// + "Allgemeinen und auf bestimmte Teilaspekte bezogen. "
-		// +
-		// "Bitte Antworten Sie so ehrlich wie möglich und seien Sie ruhig kritisch.");
-
 		String path = Environment.getInstance().getWikiConnector().getSavePath();
-		String filename = user.getUserName().toLowerCase() + ".xml";
+		String filename = userContext.getUserName().toLowerCase() + "_feedback.xml";
 		File f = new File(path + "/" + filename);
 
-		// render save button or note that feedback already found
+		StringBuilder html = new StringBuilder();
+		List<String> answers;
+		String title;
+
 		if (f.exists()) {
-			html.append("<p class=\"info\">Sie haben den Feedbackbogen bereits ausgefüllt! Vielen Dank!</p>\n");
+			html.append("<div class='defifeedback'>");
+			html.append("<p>Sie können den Abschlussfragebogen noch einmal ausfüllen.<br />");
+			html.append("Die <span style='background-color:lightgreen;'>grünen Markierungen</span> zeigen dabei Ihre letzte Auswahl an.</p>");
+			html.append("</div>");
+		}
+
+		html.append("<p class='header2'>" + TOPIC1 + "</p>");
+
+		// question 1
+		title = "1) " + QUESTION1;
+		answers = new LinkedList<String>();
+		answers.add("Trifft für mich voll zu.");
+		answers.add("Trifft für mich zu.");
+		answers.add("Unentschieden.");
+		answers.add("Trifft für mich eher nicht zu.");
+		answers.add("Trifft für mich überhaupt nicht zu.");
+		html.append(renderRadioTable(1, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 2
+		title = "2) " + QUESTION2;
+		answers = new LinkedList<String>();
+		answers.add("Trifft für mich überhaupt nicht zu.");
+		answers.add("Trifft für mich eher nicht zu.");
+		answers.add("Unentschieden.");
+		answers.add("Trifft für mich zu.");
+		answers.add("Trifft für mich voll zu.");
+		html.append(renderRadioTable(2, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 3
+		title = "3) " + QUESTION3;
+		answers = new LinkedList<String>();
+		answers.add("Trifft für mich voll zu.");
+		answers.add("Trifft für mich zu.");
+		answers.add("Unentschieden.");
+		answers.add("Trifft für mich eher nicht zu.");
+		answers.add("Trifft für mich überhaupt nicht zu.");
+		html.append(renderRadioTable(3, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 4
+		title = "4) " + QUESTION4;
+		answers = new LinkedList<String>();
+		answers.add("Trifft für mich überhaupt nicht zu.");
+		answers.add("Trifft für mich eher nicht zu.");
+		answers.add("Unentschieden.");
+		answers.add("Trifft für mich zu.");
+		answers.add("Trifft für mich voll zu.");
+		html.append(renderRadioTable(4, title, answers));
+		html.append("\n<br/>\n");
+
+		html.append("<p class='header2'>" + TOPIC2 + "</p>");
+
+		// question 5
+		title = "5) " + QUESTION5 + "<br/>" + HINT_MUTIPLE;
+		html.append(renderMultipleUnitTable(5, title));
+		html.append("\n<br/>\n");
+
+		// question 6
+		title = "6) " + QUESTION6 + "<br/>" + HINT_MUTIPLE;
+		html.append(renderMultipleUnitTable(6, title));
+		html.append("\n<br/>\n");
+
+		// question 7
+		title = "7) " + QUESTION7 + "<br/>" + HINT_MUTIPLE;
+		answers = new LinkedList<String>();
+		answers.add("zu wenig - ich hätte mir die Inhalte ausführlicher gewünscht.");
+		answers.add("zu wenig - ich hätte mir mehr zusätzliche Inhalte gewünscht.");
+		answers.add("zu viel.");
+		answers.add("genau passend.");
+		html.append(renderCheckTable(7, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 8
+		title = "8) " + QUESTION8;
+		html.append(renderTextareaTable(8, title));
+		html.append("\n<br/>\n");
+
+		html.append("<p class='header2'>" + TOPIC3 + "</p>");
+
+		// question 9
+		title = "9) " + QUESTION9;
+		answers = new LinkedList<String>();
+		answers.add("Nein");
+		answers.add("Ja, ich habe mitgelesen");
+		answers.add("Ja, ich habe mitgelesen und eigene Beiträge geschrieben");
+		html.append(renderRadioTable(9, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 10
+		title = "10) " + QUESTION10;
+		answers = new LinkedList<String>();
+		answers.add("Trifft für mich voll zu.");
+		answers.add("Trifft für mich zu.");
+		answers.add("Unentschieden.");
+		answers.add("Trifft für mich eher nicht zu.");
+		answers.add("Trifft für mich überhaupt nicht zu.");
+		answers.add("Ich habe im Diskussionsforum nicht mitgelesen. ");
+		html.append(renderRadioTable(10, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 11
+		title = "11) " + QUESTION11;
+		answers = new LinkedList<String>();
+		answers.add("Trifft für mich voll zu.");
+		answers.add("Trifft für mich zu.");
+		answers.add("Unentschieden.");
+		answers.add("Trifft für mich eher nicht zu.");
+		answers.add("Trifft für mich überhaupt nicht zu.");
+		answers.add("Kann ich nicht beurteilen.");
+		html.append(renderRadioTable(11, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 12
+		title = "12) " + QUESTION12;
+		answers = new LinkedList<String>();
+		answers.add("Trifft für mich voll zu.");
+		answers.add("Trifft für mich zu.");
+		answers.add("Unentschieden.");
+		answers.add("Trifft für mich eher nicht zu.");
+		answers.add("Trifft für mich überhaupt nicht zu.");
+		answers.add("Ich habe im Diskussionsforum keine eigenen Fragen gestellt.");
+		html.append(renderRadioTable(12, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 13
+		title = "13) " + QUESTION13;
+		answers = new LinkedList<String>();
+		answers.add("Trifft für mich voll zu.");
+		answers.add("Trifft für mich zu.");
+		answers.add("Unentschieden.");
+		answers.add("Trifft für mich eher nicht zu.");
+		answers.add("Trifft für mich überhaupt nicht zu.");
+		answers.add("Ich habe im Diskussionsforum Antworten auf meine Fragen erhalten.");
+		html.append(renderRadioTable(13, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 14
+		title = "14) " + QUESTION14;
+		answers = new LinkedList<String>();
+		answers.add("Trifft für mich voll zu.");
+		answers.add("Trifft für mich zu.");
+		answers.add("Unentschieden.");
+		answers.add("Trifft für mich eher nicht zu.");
+		answers.add("Trifft für mich überhaupt nicht zu.");
+		answers.add("Ich habe im Diskussionsforum nicht auf die Fragen anderer geantwortet.");
+		html.append(renderRadioTable(14, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 15
+		title = "15) " + QUESTION15;
+		answers = new LinkedList<String>();
+		answers.add("Trifft für mich voll zu.");
+		answers.add("Trifft für mich zu.");
+		answers.add("Unentschieden.");
+		answers.add("Trifft für mich eher nicht zu.");
+		answers.add("Trifft für mich überhaupt nicht zu.");
+		answers.add("Weiß nicht ");
+		html.append(renderRadioTable(15, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 16
+		title = "16) " + QUESTION16;
+		answers = new LinkedList<String>();
+		answers.add("Trifft für mich voll zu.");
+		answers.add("Trifft für mich zu.");
+		answers.add("Unentschieden.");
+		answers.add("Trifft für mich eher nicht zu.");
+		answers.add("Trifft für mich überhaupt nicht zu.");
+		answers.add("Weiß nicht ");
+		html.append(renderRadioTable(16, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 17
+		title = "17) " + QUESTION17;
+		html.append(renderTextareaTable(17, title));
+		html.append("\n<br/>\n");
+
+		html.append("<p class='header2'>" + TOPIC4 + "</p>");
+
+		// question 18
+		title = "18) " + QUESTION18;
+		answers = new LinkedList<String>();
+		answers.add("Trifft für mich voll zu.");
+		answers.add("Trifft für mich zu.");
+		answers.add("Unentschieden.");
+		answers.add("Trifft für mich eher nicht zu.");
+		answers.add("Trifft für mich überhaupt nicht zu.");
+		html.append(renderRadioTable(18, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 19
+		title = "19) " + QUESTION19;
+		answers = new LinkedList<String>();
+		answers.add("Trifft für mich voll zu.");
+		answers.add("Trifft für mich zu.");
+		answers.add("Unentschieden.");
+		answers.add("Trifft für mich eher nicht zu.");
+		answers.add("Trifft für mich überhaupt nicht zu.");
+		answers.add("Weiß nicht ");
+		html.append(renderRadioTable(19, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 20
+		title = "20) " + QUESTION20;
+		answers = new LinkedList<String>();
+		answers.add("Ich war (fast) jeden Tag hier.");
+		answers.add("Mehrmals die Woche");
+		answers.add("1-2 Mal pro Woche.");
+		answers.add("Seltener");
+		html.append(renderRadioTable(20, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 21
+		title = "21) " + QUESTION21;
+		answers = new LinkedList<String>();
+		answers.add("In den Inhalten.");
+		answers.add("Im Forum.");
+		answers.add("Ausgeglichen.");
+		html.append(renderRadioTable(21, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 22
+		title = "22) " + QUESTION22;
+		answers = new LinkedList<String>();
+		answers.add("...zu kurz.");
+		answers.add("...zu lang.");
+		answers.add("...genau passend.");
+		html.append(renderRadioTable(22, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 23
+		title = "23) " + QUESTION23;
+		answers = new LinkedList<String>();
+		answers.add("Ich konnte mich schnell hier \"einleben\" und fand mich gut zurecht.");
+		answers.add("Ich habe einige Zeit gebraucht, bis ich mich zurecht fand, dann ging es aber gut.");
+		answers.add("Ich hatte immer wieder Schwierigkeiten bei der Benutzung der Plattform.");
+		answers.add("Die Bedienung war sehr schwierig.");
+		html.append(renderRadioTable(23, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 24
+		title = "24) " + QUESTION24;
+		html.append(renderTextareaTable(24, title));
+		html.append("\n<br/>\n");
+
+		// question 25
+		title = "25) " + QUESTION25;
+		answers = new LinkedList<String>();
+		answers.add("Ich würde prinzipiell an einem neuen Angebot teilnehmen.");
+		answers.add("Ich würde teilnehmen, wenn Verbesserungen am ICD-Forum stattfinden (bitte auswählen)");
+		answers.add("Ich würde mir ein verbessertes Angebot mit einer stärkeren Beteiligung von Kardiologen und des ICD-Herstellers wünschen.");
+		answers.add("Ich würde mir ein fortlaufendes Angebot wünschen, so dass sich mit der Zeit immer mehr Teilnehmer im Forum einbringen können.");
+		answers.add("Ich würde mir ein verbessertes Angebot mit den folgenden Schwerpunkten/Zusätzen wünschen (bitte Art der Verbesserung angeben):");
+		answers.add("Nein, ich habe kein Interesse.");
+		html.append(renderSpecialTable(25, title, answers));
+		html.append("\n<br/>\n");
+
+		// question 26
+		title = "26) " + QUESTION26;
+		html.append(renderTextareaTable(26, title));
+		html.append("\n<br/>\n");
+
+		// save button
+		if (f.exists()) {
+			html.append("<p><center><input type=\"button\" value=\"Erneut speichern\" onClick=\"checkAndSubmit()\"></center></p>\n");
+			html.append("<script type='text/javascript'>window.onload=function() {prepare25();fillForm();}</script>");
 		}
 		else {
-
-			html.append("<form id=\"" + FEEDBACK_FORM_NAME
-					+ "\" action=\"KnowWE.jsp\" method=\"post\">\n");
-
-			// render the feedback form
-			StringBuilder q = new StringBuilder();
-			q.append("<p class=\"header2\">Allgemeines</p>\n");
-			renderQuestion1(q);
-			q.append("<br />");
-			renderQuestion2(q);
-			q.append("<br />");
-			renderQuestion3(q);
-			q.append("<br />");
-			renderQuestion4(q);
-
-			q.append("<p class=\"header2\">Zu den Inhalten</p>\n");
-			renderQuestion5(q);
-			q.append("<br />");
-			renderQuestion6(q);
-			q.append("<br />");
-			renderQuestion7(q);
-			q.append("<br />");
-			renderQuestion8(q);
-
-			q.append("<p class=\"header2\">Zum Diskussionsforum</p>\n");
-			renderQuestion9(q);
-			q.append("<br />");
-			renderQuestion10(q);
-			q.append("<br />");
-			renderQuestion11(q);
-			q.append("<br />");
-			renderQuestion12(q);
-			q.append("<br />");
-			renderQuestion13(q);
-			q.append("<br />");
-			renderQuestion14(q);
-			q.append("<br />");
-			renderQuestion15(q);
-			q.append("<br />");
-			renderQuestion16(q);
-			q.append("<br />");
-			renderQuestion17(q);
-			q.append("<br />");
-
-			q.append("<p class=\"header2\">zu Ihren Aktivitäten</p>\n");
-			renderQuestion18(q);
-			q.append("<br />");
-			renderQuestion19(q);
-			q.append("<br />");
-			renderQuestion20(q);
-			q.append("<br />");
-			renderQuestion21(q);
-			q.append("<br />");
-			renderQuestion22(q);
-			q.append("<br />");
-			renderQuestion23(q);
-			q.append("<br />");
-			renderQuestion24(q);
-			q.append("<br />");
-			renderQuestion25(q);
-			q.append("<br />");
-			renderQuestion26(q);
-			q.append("<br />");
-			html.append(q);
-
-			html.append("<p><center><input type=\"submit\" value=\"Speichern\"/><input type=\"button\" value=\"Check\" onClick=\"checkAndSubmitForm('"
-					+ FEEDBACK_FORM_NAME + "')\"></center></p>\n");
-			html.append("<input type=\"hidden\" name=\"action\" value=\"FeedbackSaveAction\" />");
-			html.append("<input type=\"hidden\" name=\"KWiki_Topic\" value=\""
-					+ topic + "\" />");
-
-			html.append("</form>");
+			html.append("<p><center><input type=\"button\" value=\"Speichern\" onClick=\"checkAndSubmit()\"></center></p>\n");
+			html.append("<script type='text/javascript'>window.onload=function() {prepare25();}</script>");
 		}
+
+		return Strings.maskHTML(html.toString());
+	}
+
+	/**
+	 * render question as list of radiobuttons.
+	 */
+	private String renderRadioTable(int qnum, String title, List<String> answers) {
+		StringBuilder html = new StringBuilder();
+		int aCounter = 0;
+
+		html.append("<table id='q" + qnum + "'>");
+		html.append("<tr><td class='rowhead' colspan='2'>" + title + "</td><tr/>");
+		for (int i = 1; i <= answers.size(); i++) {
+			aCounter++;
+			html.append("<tr><td class='radio'><input type='radio' value='" + answers.get(i - 1)
+					+ "' id='q" + qnum + "_" + aCounter + "' name='q" + qnum + "'></td>");
+			html.append("<td class='answer'>" + answers.get(i - 1) + "</td></tr>");
+		}
+		html.append("</table>");
+
 		return html.toString();
 	}
 
-	private void renderQuestion1(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE1);
-		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE1 + "\" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append(createRadioButton("Trifft für mich zu.", radioID));
-		result.append(createRadioButton("Unentschieden.", radioID));
-		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
-		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion2(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE2);
-		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE2 + " \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
-		result.append(createRadioButton("Unentschieden.", radioID));
-		result.append(createRadioButton("Trifft für mich zu.", radioID));
-		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion3(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE3);
-		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE3 + "\"/>");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append(createRadioButton("Trifft für mich zu.", radioID));
-		result.append(createRadioButton("Unentschieden.", radioID));
-		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
-		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion4(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE4);
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE4 + " \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
-		result.append(createRadioButton("Unentschieden.", radioID));
-		result.append(createRadioButton("Trifft für mich zu.", radioID));
-		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion5(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"4\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE5 + "<br><b><i>" + HINT_MUTIPLE + "</i></b>");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE5 + "  \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createDoubleHeader("Einheit 1 - Kennenlernen", "QFB" + questionNum
-				+ "-1",
-				"Einheit 4 - Angst", "QFB" + questionNum + "-4"));
-
-		result.append(createDoubleCheckBox("Was erwartet mich im ICD-Forum", radioID
-				+ "-1-1",
-				"Angst verstehen", radioID + "-4-1"));
-		result.append(createDoubleCheckBox("Wer steckt hinter ICD Forum?", radioID
-				+ "-1-2", "Wie sich Angst zeigt",
-				radioID + "-4-2"));
-		result.append(createDoubleCheckBox("Tipps und Anregungen", radioID + "-1-3",
-				"Die eigenen Ängste kennen lernen", radioID + "-4-3"));
-		result.append(createDoubleCheckBox("Unser Sicherheitskonzept", radioID + "-1-4",
-				"Die Angst vor der Sterblichkeit", radioID + "-4-4"));
-
-		result.append(createDoubleHeader("Einheit 2 - Wissen über den ICD", "QFB"
-				+ questionNum
-				+ "-2",
-				"Einheit 5", "QFB" + questionNum + "-5"));
-
-		result.append(createDoubleCheckBox("Wie funktioniert mein ICD?",
-				radioID + "-2-1",
-				"Angst überwinden", radioID + "-5-1"));
-		result.append(createDoubleCheckBox("Was stört meinen ICD?", radioID + "-2-2",
-				"Ziele erreichen", radioID + "-5-2"));
-		result.append(createDoubleCheckBox("Den richtigen Rhythmus finden", radioID
-				+ "-2-3",
-				"Gedankenmuster durchbrechen", radioID + "-5-3"));
-		result.append(createDoubleCheckBox("Der ICD löst aus - was tun!?", radioID
-				+ "-2-4",
-				"Stress reduzieren", radioID + "-5-4"));
-		result.append(createDoubleCheckBox("Kleine und große Reisen mit dem ICD", radioID
-				+ "-2-5",
-				"Wenn Selbsthilfe nicht mehr reicht", radioID + "-5-5"));
-		result.append(createDoubleCheckBox("Wo finde ich weitere Informationen?", radioID
-				+ "-2-6",
-				"", ""));
-
-		result.append(createDoubleHeader("Einheit 3 - Alltag gestalten",
-				"QFB" + questionNum + "-3",
-				"Einheit 6 - Meine Zukunft mit dem ICD", "QFB" + questionNum + "-6"));
-
-		result.append(createDoubleCheckBox("Der ICD als Teil von mir.", radioID + "-3-1",
-				"Was kann ich für mich mitnehmen?", radioID + "-6-1"));
-		result.append(createDoubleCheckBox("Sich vom ICD nicht unterkriegen lassen.",
-				radioID
-						+ "-3-2", "Zukünftige Hürden meistern", radioID + "-6-2"));
-		result.append(createDoubleCheckBox("Körperliche Aktivität", radioID + "-3-3", "",
-				radioID
-						+ ""));
-		result.append(createDoubleCheckBox("Mein soziales Netz", radioID + "-3-4", "",
-				radioID + ""));
-		result.append(createDoubleCheckBox("Mein Partner versteht mich einfach nicht.",
-				radioID
-						+ "-3-5", "", ""));
-		result.append(createDoubleCheckBox("Intimität", radioID + "-3-6", "", ""));
-
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion6(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"4\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ")   " + FRAGE6 + "<br><b><i>" + HINT_MUTIPLE + "</i></b>");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE6 + "  \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createDoubleHeader("Einheit 1 - Kennenlernen", "QFB" + questionNum
-				+ "-1",
-				"Einheit 4 - Angst", "QFB" + questionNum + "-4"));
-
-		result.append(createDoubleCheckBox("Was erwartet mich im ICD-Forum", radioID
-				+ "-1-1",
-				"Angst verstehen", radioID + "-4-1"));
-		result.append(createDoubleCheckBox("Wer steckt hinter ICD Forum?", radioID
-				+ "-1-2", "Wie sich Angst zeigt",
-				radioID + "-4-2"));
-		result.append(createDoubleCheckBox("Tipps und Anregungen", radioID + "-1-3",
-				"Die eigenen Ängste kennen lernen", radioID + "-4-3"));
-		result.append(createDoubleCheckBox("Unser Sicherheitskonzept", radioID + "-1-4",
-				"Die Angst vor der Sterblichkeit", radioID + "-4-4"));
-
-		result.append(createDoubleHeader("Einheit 2 - Wissen über den ICD", "QFB"
-				+ questionNum
-				+ "-2",
-				"Einheit 5", "QFB" + questionNum + "-5"));
-
-		result.append(createDoubleCheckBox("Wie funktioniert mein ICD?",
-				radioID + "-2-1",
-				"Angst überwinden", radioID + "-5-1"));
-		result.append(createDoubleCheckBox("Was stört meinen ICD?", radioID + "-2-2",
-				"Ziele erreichen", radioID + "-5-2"));
-		result.append(createDoubleCheckBox("Den richtigen Rhythmus finden", radioID
-				+ "-2-3",
-				"Gedankenmuster durchbrechen", radioID + "-5-3"));
-		result.append(createDoubleCheckBox("Der ICD löst aus - was tun!?", radioID
-				+ "-2-4",
-				"Stress reduzieren", radioID + "-5-4"));
-		result.append(createDoubleCheckBox("Kleine und große Reisen mit dem ICD", radioID
-				+ "-2-5",
-				"Wenn Selbsthilfe nicht mehr reicht", radioID + "-5-5"));
-		result.append(createDoubleCheckBox("Wo finde ich weitere Informationen?", radioID
-				+ "-2-6",
-				"", ""));
-
-		result.append(createDoubleHeader("Einheit 3 - Alltag gestalten",
-				"QFB" + questionNum + "-3",
-				"Einheit 6 - Meine Zukunft mit dem ICD", "QFB" + questionNum + "-6"));
-
-		result.append(createDoubleCheckBox("Der ICD als Teil von mir.", radioID + "-3-1",
-				"Was kann ich für mich mitnehmen?", radioID + "-6-1"));
-		result.append(createDoubleCheckBox("Sich vom ICD nicht unterkriegen lassen.",
-				radioID
-						+ "-3-2", "Zukünftige Hürden meistern", radioID + "-6-2"));
-		result.append(createDoubleCheckBox("Körperliche Aktivität", radioID + "-3-3", "",
-				radioID
-						+ ""));
-		result.append(createDoubleCheckBox("Mein soziales Netz", radioID + "-3-4", "",
-				radioID + ""));
-		result.append(createDoubleCheckBox("Mein Partner versteht mich einfach nicht.",
-				radioID
-						+ "-3-5", "", ""));
-		result.append(createDoubleCheckBox("Intimität", radioID + "-3-6", "", ""));
-
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion7(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE7 + "<br><b><i>" + HINT_MUTIPLE + "</i></b> ");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE7 + "  \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createCheckBox(
-				"zu wenig - ich hätte mir die Inhalte ausführlicher gewünscht. ", radioID));
-		result.append(createCheckBox(
-				"zu wenig - ich hätte mir mehr zusätzliche Inhalte gewünscht ", radioID));
-		result.append(createCheckBox("zu viel", radioID));
-		result.append(createCheckBox("genau passend", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion8(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE8 + "   ");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE8 + "   \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createTextArea(radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion9(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE9 + "  ");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE9 + "\" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Nein", radioID));
-		result.append(createRadioButton("Ja, ich habe mitgelesen ", radioID));
-		result.append(createRadioButton(
-				"Ja, ich habe mitgelesen und eigene Beiträge geschrieben ",
-				radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion10(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE10);
-		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE10 + "\"/>");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append(createRadioButton("Trifft für mich zu.", radioID));
-		result.append(createRadioButton("Unentschieden.", radioID));
-		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
-		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append(createRadioButton(
-				"Ich habe im Diskussionsforum nicht mitgelesen. ", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion11(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE11 + " ");
-		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE11 + "\" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append(createRadioButton("Trifft für mich zu.", radioID));
-		result.append(createRadioButton("Unentschieden.", radioID));
-		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
-		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append(createRadioButton("Kann ich nicht beurteilen. ", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion12(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE12 + "  ");
-		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE12 + "\"  />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append(createRadioButton("Trifft für mich zu.", radioID));
-		result.append(createRadioButton("Unentschieden.", radioID));
-		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
-		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append(createRadioButton(
-				"Ich habe im Diskussionsforum keine eigenen Fragen gestellt. ", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion13(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE13);
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE13 + "\" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append(createRadioButton("Trifft für mich zu.", radioID));
-		result.append(createRadioButton("Unentschieden.", radioID));
-		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
-		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append(createRadioButton(
-				"Ich habe im Diskussionsforum Antworten auf meine Fragen erhalten. ",
-				radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion14(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE14 + " ");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE14 + " \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append(createRadioButton("Trifft für mich zu.", radioID));
-		result.append(createRadioButton("Unentschieden.", radioID));
-		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
-		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append(createRadioButton(
-				"Ich habe im Diskussionsforum nicht auf die Fragen anderer geantwortet. ",
-				radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion15(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE15);
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE15 + "\" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append(createRadioButton("Trifft für mich zu.", radioID));
-		result.append(createRadioButton("Unentschieden.", radioID));
-		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
-		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append(createRadioButton("Weiß nicht ", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion16(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE16);
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE16 + "\" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append(createRadioButton("Trifft für mich zu.", radioID));
-		result.append(createRadioButton("Unentschieden.", radioID));
-		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
-		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append(createRadioButton("Weiß nicht ", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion17(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE17 + " ");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE17 + " \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createTextArea(radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion18(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE18 + " ");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE18 + " \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append(createRadioButton("Trifft für mich zu.", radioID));
-		result.append(createRadioButton("Unentschieden.", radioID));
-		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
-		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion19(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE19 + "  ");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE19 + "  \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append(createRadioButton("Trifft für mich zu.", radioID));
-		result.append(createRadioButton("Unentschieden.", radioID));
-		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
-		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion20(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE20);
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE20 + "\" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("Ich war (fast) jeden Tag hier.", radioID));
-		result.append(createRadioButton("Mehrmals die Woche", radioID));
-		result.append(createRadioButton("1-2 Mal pro Woche.", radioID));
-		result.append(createRadioButton("seltener", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion21(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE21 + " ");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE21 + " \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("in den Inhalten", radioID));
-		result.append(createRadioButton("im Forum", radioID));
-		result.append(createRadioButton("ausgeglichen ", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion22(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE22 + " ");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE22 + " \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton("...zu kurz.", radioID));
-		result.append(createRadioButton("...zu lang.", radioID));
-		result.append(createRadioButton("...genau passend. ", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion23(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE23 + "  ");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE23 + "  \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createRadioButton(
-				"Ich konnte mich schnell hier \"einleben\" und fand mich gut zurecht.",
-				radioID));
-		result.append(createRadioButton(
-				"Ich habe einige Zeit gebraucht, bis ich mich zurecht fand, dann ging es aber gut.",
-				radioID));
-		result.append(createRadioButton(
-				"Ich hatte immer wieder Schwierigkeiten bei der Benutzung der Plattform.",
-				radioID));
-		result.append(createRadioButton("Die Bedienung war sehr schwierig.", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion24(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE24 + "  ");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE24 + " \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createTextArea(radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion25(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE25 + "   ");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE25 + "  \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-
-		result.append(createRadioButton(
-				"Ich würde prinzipiell an einem neuen Angebot teilnehmen.",
-				radioID));
-		result.append(createRadioButton(
-				"Ich würde teilnehmen, wenn Verbesserungen am ICD-Forum stattfinden (bitte auswählen) ",
-				radioID));
-
-		result.append(createCheckBox(
-				"Ich würde mir ein verbessertes Angebot mit einer stärkeren Beteiligung von Kardiologen und des ICD-Herstellers wünschen.",
-				radioID + "-1"));
-		result.append(createCheckBox(
-				"Ich würde mir ein fortlaufendes Angebot wünschen, so dass sich mit der Zeit immer mehr Teilnehmer im Forum einbringen können. ",
-				radioID + "-2"));
-		result.append(createCheckBox(
-				"Ich würde mir ein verbessertes Angebot mit den folgenden Schwerpunkten/Zusätzen wünschen (bitte Art der Verbesserung angeben): ",
-				radioID + "-3"));
-		result.append(createTextArea(radioID + "-4"));
-
-		result.append(createRadioButton("Nein, ich habe kein Interesse. ", radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private void renderQuestion26(StringBuilder result) {
-		result.append("<table id=\"frage" + questionNum + "\"><tbody><tr>\n");
-		result.append("<td colspan=\"2\" class=\"rowhead\">");
-		result.append(questionNum
-				+ ") " + FRAGE26 + "  ");
-		result.append("<input type=\"hidden\" name=\"QFB"
-				+ questionNum
-				+ "\" value=\""
-				+ questionNum
-				+ ") " + FRAGE26 + "  \" />");
-		result.append("</td></tr>\n");
-
-		String radioID = "FB" + questionNum;
-		result.append(createTextArea(radioID));
-		result.append("</tbody></table>\n");
-		questionNum++;
-	}
-
-	private String createTextArea(String radioID) {
-		return "<tr><td colspan=\"2\"><textarea style=\"font-size:100%;\"rows=\"6\" cols=\"70\" name=\""
-				+ radioID
-				+ "\"></textarea></td></tr>\n";
-	}
-
-	private String createRadioButton(String answer, String radioID) {
-		return "<tr><td class=\"radio\"><input type=\"radio\" name=\"" + radioID
-				+ "\" value=\""
-				+ answer
-				+ "\">"
-				+ "</td>"
-				+ "<td class=\"answer\">"
-				+ answer
-				+ "</td></tr>\n";
-	}
-
-	private String createCheckBox(String answer, String radioID) {
-		return "<tr><td class=\"radio\"><input type=\"checkbox\" name=\"" + radioID
-				+ "\" value=\""
-				+ answer
-				+ "\">"
-				+ "</td>"
-				+ "<td class=\"answer\">"
-				+ answer
-				+ "</td></tr>\n";
-	}
-
-	private String createDoubleCheckBox(String answer1, String radioID1, String answer2, String radioID2) {
-
-		StringBuilder tmp = new StringBuilder();
-
-		tmp.append("<tr><td class=\"radio\">");
-
-		if (answer1 != "") {
-			tmp.append("<input type=\"checkbox\" name=\"" + radioID1
-					+ "\" value=\""
-					+ answer1
-					+ "\">");
+	/**
+	 * render question as list of checkboxes.
+	 */
+	private String renderCheckTable(int qnum, String title, List<String> answers) {
+		StringBuilder html = new StringBuilder();
+		int aCounter = 0;
+
+		html.append("<table id='q" + qnum + "'>");
+		html.append("<tr><td class='rowhead' colspan='2'>" + title + "</td></tr>");
+		for (int i = 1; i <= answers.size(); i++) {
+			aCounter++;
+			html.append("<tr><td class='radio'><input type='checkbox' value='" + answers.get(i - 1)
+					+ "' id='q" + qnum + "_" + aCounter + "' name='q" + qnum + "'></td>");
+			html.append("<td class='answer'>" + answers.get(i - 1) + "</td></tr>");
 		}
-		tmp.append("</td>"
-				+ "<td class=\"answer2\">"
-				+ answer1
-				+ "</td><td class=\"radio\">");
+		html.append("</table>");
 
-		if (answer2 != "") {
-			tmp.append("<input type=\"checkbox\" name=\"" + radioID2
-					+ "\" value=\""
-					+ answer2
-					+ "\">");
+		return html.toString();
+	}
+
+	/**
+	 * render question as table of units.
+	 */
+	private String renderMultipleUnitTable(int qnum, String title) {
+		StringBuilder html = new StringBuilder();
+		int aCounter = 0;
+
+		html.append("<table id='q" + qnum + "'>");
+		html.append("<tr><td class='rowhead' colspan='4'>" + title + "</td></tr>");
+
+		for (int i = 1; i <= 3; i++) {
+			// unit 1,2,3 - unit 4,5,6
+			html.append("<tr><td class='rowhead2' colspan='2'>" + UNITS.get(i) + "</td>");
+			html.append("<td class='rowhead2' colspan='2'>" + UNITS.get(i + 3) + "</td></tr>");
+			// - rows
+			for (int j = 1; j <= 6; j++) {
+				// cells
+				html.append("<tr>");
+				if (UNITS.containsKey(i * 10 + j)) {
+					// radiobutton
+					aCounter++;
+					html.append("<td class='radio'><input type='checkbox' value='"
+							+ UNITS.get(i) + " - " + UNITS.get(i * 10 + j) + "' id='q" + qnum + "_"
+							+ aCounter + "' name='q" + qnum
+							+ "-1'></td>");
+					// answer
+					html.append("<td class='answer2'>" + UNITS.get(i * 10 + j) + "</td>");
+				}
+				else {
+					html.append("<td></td>");
+				}
+				if (UNITS.containsKey((i + 3) * 10 + j)) {
+					// radiobutton
+					aCounter++;
+					html.append("<td class='radio'><input type='checkbox' value='"
+							+ UNITS.get(i + 3) + " - " + UNITS.get((i + 3) * 10 + j) + "' id='q"
+							+ qnum
+							+ "_" + aCounter
+							+ "' name='q"
+							+ qnum + "-1'></td>");
+					// answer
+					html.append("<td class='answer2'>" + UNITS.get(i + 3) + " - "
+							+ UNITS.get((i + 3) * 10 + j) + "</td>");
+				}
+				else {
+					html.append("<td></td>");
+				}
+				html.append("</tr>");
+			}
 		}
-		tmp.append("</td>"
-				+ "<td class=\"answer2\">"
-				+ answer2
-				+ "</td></tr>\n");
-		return tmp.toString();
+		html.append("</table>");
+
+		return html.toString();
 	}
 
-	private String createDoubleHeader(String head1, String qfb1, String head2, String qfb2) {
+	/**
+	 * render question as textarea.
+	 */
+	private String renderTextareaTable(int qnum, String title) {
+		StringBuilder html = new StringBuilder();
 
-		return "<td colspan=\"2\" class=\"rowhead2\">"
-				+ head1
-				+ "<input type=\"hidden\" name=\"" + qfb1 + "\" value=\"" + head1
-				+ "\" />"
-				+ "</td>"
-				+ "<td colspan=\"2\" class=\"rowhead2\">"
-				+ head2
-				+ "<input type=\"hidden\" name=\"" + qfb2 + "\" value=\"" + head2
-				+ "\" />"
-				+ "</td></tr>\n";
+		html.append("<table id='q" + qnum + "'>");
+		html.append("<tr><td class='rowhead' colspan='2'>" + title + "</td></tr>");
+		html.append("<tr><td colspan='2'><textarea id='q" + qnum
+				+ "_1' cols='70' rows='6' style='font-size:100%;'></textarea></td></tr>");
+		html.append("</table>");
+
+		return html.toString();
 	}
+
+	/**
+	 * Made for rendering question 25.
+	 */
+	private String renderSpecialTable(int qnum, String title, List<String> answers) {
+		StringBuilder html = new StringBuilder();
+		int aCounter = 0;
+
+		html.append("<table id='q" + qnum + "'>");
+		html.append("<tr><td class='rowhead' colspan='2'>" + title + "</td></tr>");
+		// 2 radiobuttons
+		for (int i = 1; i <= 2; i++) {
+			aCounter++;
+			html.append("<tr><td class='radio'><input type='radio' value='" + answers.get(i - 1)
+					+ "' id='q" + qnum + "_" + aCounter + "' name='q" + qnum + "'></td>");
+			html.append("<td class='answer'>" + answers.get(i - 1) + "</td></tr>");
+		}
+		// 2 checkboxes
+		for (int i = 3; i <= 4; i++) {
+			aCounter++;
+			html.append("<tr><td class='radio'><input type='checkbox' value='" + answers.get(i - 1)
+					+ "' id='q" + qnum + "_" + aCounter + "' name='q" + qnum + "'></td>");
+			html.append("<td class='answer'>" + answers.get(i - 1) + "</td></tr>");
+		}
+		// checkbox + textarea
+		aCounter++;
+		html.append("<tr><td class='radio'><input type='checkbox' value='" + answers.get(4)
+				+ "' id='q" + qnum + "_" + aCounter + "' name='q" + qnum + "'></td>");
+		html.append("<td class='answer'>" + answers.get(4) + "</td></tr>");
+		aCounter++;
+		html.append("<tr><td colspan='2'><textarea id='q" + qnum + "_" + aCounter
+				+ "' cols='70' rows='6' style='font-size:100%;'></textarea></td></tr>");
+		// radiobox
+		aCounter++;
+		html.append("<tr><td class='radio'><input type='radio' value='" + answers.get(5)
+				+ "' id='q" + qnum + "_" + aCounter + "' name='q" + qnum + "'></td>");
+		html.append("<td class='answer'>" + answers.get(5) + "</td></tr>");
+		html.append("</table>");
+
+		return html.toString();
+	}
+
 }

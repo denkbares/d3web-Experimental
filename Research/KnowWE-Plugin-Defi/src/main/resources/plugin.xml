@@ -317,6 +317,16 @@
     </extension>    
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="FeedbackFillAction">
+        <parameter id="class"
+            value="de.knowwe.defi.feedback.FeedbackFillAction" />
+        <parameter id="name" value="FeedbackFillAction" />
+        <parameter id="description" value="Action FeedbackFillAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>    
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="AboutMeSaveAction">
         <parameter id="class"
             value="de.knowwe.defi.aboutMe.AboutMeSaveAction" />

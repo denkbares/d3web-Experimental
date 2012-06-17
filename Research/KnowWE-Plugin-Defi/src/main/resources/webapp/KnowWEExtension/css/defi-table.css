@@ -3,7 +3,9 @@ body {
 	font: Verdana;
 	font-size: 100%;
 }
-
+.tablePopupIcon {
+	display: none;	
+}
 /* attribute für die ganze Tabelle  */
 table {
 /*position:absolute; top:180px; left:150px;*/
@@ -78,4 +80,18 @@ p.header2 {
 	color: rgb(6,61,121);
 	font-size: large;
 }
-
+div.defifeedback {
+	text-align: center;
+	margin-bottom: 40px;
+}
+div.defifeedback p {
+	text-align: left;
+	display: inline-block;
+	border: 3px solid #063D79;
+	padding: 20px 20px 20px 80px;
+	line-height: 25px;
+	background-image: url(../images/gluehbirne.jpg);
+	background-repeat: no-repeat;
+	background-position: 10px;
+	background-image: 
+}

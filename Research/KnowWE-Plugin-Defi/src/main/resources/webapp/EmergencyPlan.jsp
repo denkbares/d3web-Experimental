@@ -68,6 +68,10 @@
 		margin: 0px 6px;
 		padding: 0px 6px 6px 6px;
 	}
+	#emergency div.tel {
+		margin-top: -25px;
+		padding-top: 15px;
+	}
 	#emergency span {
 		color: blue;
 		font-family: Arial, Helvetica, sans-serif;
@@ -90,6 +94,22 @@
 	}
 	table.other th { border-bottom: 1px solid black; }
 	table.other th.inner2 { border: 0px; }
+	p.NotrufNummer {
+		display: inline-block;
+		position: relative;
+		top: -20px;
+		left: 60px;
+		margin: 0 0 0 0;
+		padding: 2px 5px;
+		width: 148px;
+		color: #DA251D;
+		font-family: Arial, Helvetica, sans-serif;
+     	font-size: 15px; 
+     	font-weight: bold;
+     	text-align: center;
+     	border: 1px solid black;
+     	border-radius: 10px;
+	}
 </style>
 <script type="text/javascript">
 	function checkFontSize() {
@@ -133,6 +153,22 @@
 			}
 			
 		}
+		
+		// fit notrufnummer-field
+		fontSize = 15;
+		fit = false;
+		var notrufnummer= document.getElementsByClassName('NotrufNummer')[0];
+		
+		while(!fit && fontSize > 6) {
+			fontSize--;
+			fit = true;
+			
+			if (notrufnummer.offsetHeight > 25) {
+				fit = false;
+				notrufnummer.style.fontSize = fontSize + "px";
+			}
+		}
+		
 	}
 	
 	window.onload = checkFontSize;
@@ -145,14 +181,9 @@ if(requestUserCorrect) {
 <table id="emergency">
 	<tr><td style="background-image:url(KnowWEExtension/images/front3.png);height: 200px;"><span class='first'>
 	<%=EmergencyPlanUtils.getPatientName(context.getUserName())%>&nbsp;</span></td></tr>
-	<tr><td class="tel"><div class="tel">
-		Notrufnummer
-		<table class="other" border="0">
-			<tr>
-				<th width="349px" height="20px"><span class="inhalt"><%=EmergencyPlanUtils.getEmergencyNumber(context.getUserName())%></span></th>
-			</tr>
-		</table>
-	
+	<tr><td class="tel">
+		<p class='NotrufNummer'>Notruf: <%=EmergencyPlanUtils.getEmergencyNumber(context.getUserName())%></p>
+		<div class="tel">
 		Mein Kardiologe 
 		<%=EmergencyPlanUtils.getCardiologist(context.getUserName())%>
 		
@@ -162,7 +193,7 @@ if(requestUserCorrect) {
 		Im Notfall zu verst&auml;ndigen 
 		<%=EmergencyPlanUtils.getEmergencyPerson(context.getUserName())%>
 	</div></td></tr>
-	<tr><td style="background-image:url(KnowWEExtension/images/plan.png);height:200px;"></td></tr>
+	<tr><td style="background-color:#DA251D;background-image:url(KnowWEExtension/images/plan.png);height:200px;border:0"></td></tr>
 	<tr><td class="info"><div class="info">
 			ICD Modell 
 		<table class="other" border="0">

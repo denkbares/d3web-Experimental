@@ -23,6 +23,11 @@
         if( redir == null ) redir = ctx.getEngine().getFrontPage();
         postURL = ctx.getURL( WikiContext.LOGIN, redir );
     }
+    
+	if (!postURL.endsWith("Startseite")) {
+		String[] pathparts= postURL.split("redirect=");
+		postURL = pathparts[0] + "redirect=Startseite";
+	}
 
     boolean supportsCookieAuthentication = mgr.allowsCookieAuthentication();
 %>
