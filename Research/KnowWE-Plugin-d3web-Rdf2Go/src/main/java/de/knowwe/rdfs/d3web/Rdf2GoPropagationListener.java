@@ -4,7 +4,9 @@ import java.util.Collection;
 
 import de.d3web.core.inference.PropagationEntry;
 import de.d3web.core.inference.PropagationListener;
+import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.session.Session;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class Rdf2GoPropagationListener implements PropagationListener {
 
@@ -20,21 +22,12 @@ public class Rdf2GoPropagationListener implements PropagationListener {
 
 	@Override
 	public void propagationFinished(Session session, Collection<PropagationEntry> entries) {
-		// System.out.println("######");
-		// for (PropagationEntry entry : entries) {
-		// System.out.println(entry);
-		// }
-		// String id = session.getId();
-		// URI sessionIdURI = Rdf2GoCore.getInstance().createlocalURI(
-		// Strings.encodeURL(id));
-		// URI hasFindingURI =
-		// Rdf2GoCore.getInstance().createlocalURI("hasFinding");
-		// BlankNode findingBlankNode =
-		// Rdf2GoCore.getInstance().createBlankNode();
-		//
-		// for (PropagationEntry entry : entries) {
-		// entry.g
-		// }
-
+		for (PropagationEntry entry : entries) {
+			TerminologyObject changedObject = entry.getObject();
+			D3webRdf2GoSessionManager mgr = D3webRdf2GoSessionManager.getInstance();
+			mgr.removeFactStatements(session, changedObject);
+			mgr.addFactAsStatements(session, changedObject, entry.getNewValue());
+		}
+		Rdf2GoCore.getInstance().commit();
 	}
 }

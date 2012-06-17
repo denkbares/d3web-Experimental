@@ -53,8 +53,6 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 		String kbName = D3webUtils.getKnowledgeBase(article).getId();
 
 		URI kbNameURI = Rdf2GoCore.getInstance().createlocalURI(Strings.encodeURL(kbName));
-		URI hasTerminologyObjectURI = Rdf2GoCore.getInstance().createlocalURI(
-				"hasTerminologyObject");
 
 		// URI isTerminologyObjectOfURI =
 		// Rdf2GoCore.getInstance().createlocalURI(
@@ -62,7 +60,8 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 
 		// Subject: lns:KbName Predicate: hasTerminologyObject Object:
 		// lns:TermIdentifier
-		statements.add(Rdf2GoCore.getInstance().createStatement(kbNameURI, hasTerminologyObjectURI,
+		statements.add(Rdf2GoCore.getInstance().createStatement(kbNameURI,
+				D3webRdf2GoURIs.getHasTerminologyObjectURI(),
 				termIdentifierURI));
 
 		// Subject: lns:TermIdentifier Predicate: isTerminologyObjectOf Object:
