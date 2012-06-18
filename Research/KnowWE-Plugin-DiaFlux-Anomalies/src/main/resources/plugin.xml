@@ -164,7 +164,7 @@
 			value="Enables highlighting for Anomalies." />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="/DiaFlux" />
+		<parameter id="scope" value="DiaFlux" />
 	</extension>
 
 </plugin>

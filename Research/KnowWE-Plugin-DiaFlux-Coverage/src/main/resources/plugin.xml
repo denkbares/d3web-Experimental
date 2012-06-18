@@ -71,7 +71,7 @@
 			value="Enables coverage for active nodes and edges." />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="/DiaFlux" />
+		<parameter id="scope" value="DiaFlux" />
 	</extension>
 	
 	<extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"

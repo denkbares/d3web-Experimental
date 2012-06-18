@@ -25,7 +25,7 @@
 			value="Shows the city visualization of the coverage." />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="/DiaFluxCoverage" />
+		<parameter id="scope" value="DiaFluxCoverage" />
 	</extension>
 	
 	
