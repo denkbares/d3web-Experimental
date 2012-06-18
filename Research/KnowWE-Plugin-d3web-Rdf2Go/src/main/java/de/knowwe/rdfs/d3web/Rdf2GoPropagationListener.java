@@ -28,6 +28,13 @@ public class Rdf2GoPropagationListener implements PropagationListener {
 			mgr.removeFactStatements(session, changedObject);
 			mgr.addFactAsStatements(session, changedObject, entry.getNewValue());
 		}
-		Rdf2GoCore.getInstance().commit();
+		Thread thread = new Thread() {
+
+			@Override
+			public void run() {
+				Rdf2GoCore.getInstance().commit();
+			}
+		};
+		thread.start();
 	}
 }
