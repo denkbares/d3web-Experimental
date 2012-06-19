@@ -10,6 +10,28 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class Rdf2GoPropagationListener implements PropagationListener {
 
+	private final boolean commitAfterPropagation;
+
+	/**
+	 * Constructor for the {@link Rdf2GoPropagationListener}.
+	 * 
+	 * @param commitAfterPropagation set this to true, if you want the Listener
+	 *        to commit the changes itself after each propagation
+	 */
+	public Rdf2GoPropagationListener(boolean commitAfterPropagation) {
+		this.commitAfterPropagation = commitAfterPropagation;
+	}
+
+	/**
+	 * Constructor for the {@link Rdf2GoPropagationListener}. Using this
+	 * constructor, the Listener commits the changes in the session after each
+	 * propagation.
+	 * 
+	 */
+	public Rdf2GoPropagationListener() {
+		this(true);
+	}
+
 	@Override
 	public void propagationStarted(Session session, Collection<PropagationEntry> entries) {
 		// nothing to do
@@ -28,13 +50,15 @@ public class Rdf2GoPropagationListener implements PropagationListener {
 			mgr.removeFactStatements(session, changedObject);
 			mgr.addFactAsStatements(session, changedObject, entry.getNewValue());
 		}
-		Thread thread = new Thread() {
+		if (commitAfterPropagation) {
+			Thread thread = new Thread() {
 
-			@Override
-			public void run() {
-				Rdf2GoCore.getInstance().commit();
-			}
-		};
-		thread.start();
+				@Override
+				public void run() {
+					Rdf2GoCore.getInstance().commit();
+				}
+			};
+			thread.start();
+		}
 	}
 }

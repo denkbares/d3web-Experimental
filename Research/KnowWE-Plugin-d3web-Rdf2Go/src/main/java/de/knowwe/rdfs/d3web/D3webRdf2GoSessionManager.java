@@ -31,7 +31,7 @@ public class D3webRdf2GoSessionManager {
 
 	}
 
-	public void addSession(Session session) {
+	public void addSession(Session session, boolean commitAfterPropagation) {
 		Set<Statement> statements = new HashSet<Statement>();
 		Rdf2GoCore core = Rdf2GoCore.getInstance();
 		URI sessionIdURI = D3webRdf2GoURIs.getSessionIdURI(session);
@@ -65,7 +65,8 @@ public class D3webRdf2GoSessionManager {
 
 		// add propagation listener update the Rdf2GoCore with the changes in
 		// the session
-		session.getPropagationManager().addListener(new Rdf2GoPropagationListener());
+		session.getPropagationManager().addListener(
+				new Rdf2GoPropagationListener(commitAfterPropagation));
 
 	}
 
