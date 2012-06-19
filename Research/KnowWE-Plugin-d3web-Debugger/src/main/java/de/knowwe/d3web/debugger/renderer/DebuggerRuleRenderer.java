@@ -95,7 +95,7 @@ public class DebuggerRuleRenderer implements Renderer {
 		StringBuffer buffer = new StringBuffer();
 		String title = user.getTitle();
 
-		if (r != null) {
+		if (r != null && session != null) {
 			if (r.hasFired(session)) buffer.append("<div class='ruleContentFired' ruleid='"
 					+ r.hashCode() + "'>");
 			else buffer.append("<div class='ruleContent' ruleid='" + r.hashCode() + "'>");
