@@ -31,7 +31,6 @@ import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -46,14 +45,11 @@ public class DownloadWikiZIP extends AbstractAction {
 
 	private File wikiParent;
 	private boolean firstLevel = true;
-	private UserActionContext context;
 	private JSPWikiConnector con;
 	public static final String PARAM_FILENAME = "filename";
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		String topic = context.getParameter(Attributes.TOPIC);
-		this.context = context;
 		this.con = (JSPWikiConnector) Environment.getInstance().getWikiConnector();
 		String wikiSavepath = con.getWikiProperty("var.basedir");
 		this.wikiParent = new File(new File(wikiSavepath).getParent());
@@ -64,7 +60,7 @@ public class DownloadWikiZIP extends AbstractAction {
 		OutputStream outs = context.getOutputStream();
 		ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(outs));
 		try {
-			zipDir(wikiSavepath, zos);
+			zipDir(wikiSavepath, zos, context);
 			zos.close();
 		}
 		catch (Exception ioe) {
@@ -83,7 +79,7 @@ public class DownloadWikiZIP extends AbstractAction {
 	 * @param savepath
 	 * @param zos
 	 */
-	private void zipDir(String savepath, ZipOutputStream zos) {
+	private void zipDir(String savepath, ZipOutputStream zos, UserActionContext context) {
 		try {
 			// create a new File object based on the directory we have to zip
 			File f = new File(savepath);
@@ -93,7 +89,7 @@ public class DownloadWikiZIP extends AbstractAction {
 			// of the current file is "OLD", the rights for those file(s) have
 			// to be checked additionally
 			if (firstLevel || f.getName() == "OLD") {
-				wikiList = cleanFiles(checkRights(f));
+				wikiList = cleanFiles(checkRights(f, context));
 			}
 			else {
 				wikiList = cleanFiles(f.list());
@@ -107,7 +103,7 @@ public class DownloadWikiZIP extends AbstractAction {
 				// again to add its content recursively
 				if (file.isDirectory()) {
 					String filePath = file.getPath();
-					zipDir(filePath, zos);
+					zipDir(filePath, zos, context);
 					// loop again
 					continue;
 				}
@@ -146,7 +142,7 @@ public class DownloadWikiZIP extends AbstractAction {
 	 *         given file, for which the user has the rights to view and zip
 	 *         them
 	 */
-	private String[] checkRights(File file) {
+	private String[] checkRights(File file, UserActionContext context) {
 		ArrayList<String> checkedList = new ArrayList<String>();
 		String[] fileList = file.list();
 		for (int i = 0; i < fileList.length; i++) {
