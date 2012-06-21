@@ -26,7 +26,7 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="RDFSTestCaseRunner">
 		<parameter id="class"
 			value="de.knowwe.rdfs.testcase.ci4ke.RDFSTestCaseRunner" />
@@ -36,7 +36,7 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-		<extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="TestObjectProvider"
+		<extension plugin-id="d3web-Plugin-TestingFramework" point-id="TestObjectProvider"
 		id="RDF2GoTestObjectProvider">
 		<parameter id="class"
 			value="de.knowwe.rdfs.testcase.ci4ke.RDF2GoTestObjectProvider" />

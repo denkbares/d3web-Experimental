@@ -4,7 +4,7 @@
 	
 	<requires>
 		<import plugin-id="KnowWEExtensionPoints" />
-		<import plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" />
+		<import plugin-id="d3web-Plugin-TestingFramework" />
 	</requires>
 	
 	<runtime>
@@ -14,7 +14,7 @@
 		
 	</runtime>
 
-	<extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="AnomaliesCITest">
 		<parameter id="class" value="de.d3web.we.ci4ke.anomalies.AnomaliesCITest" />
 		<parameter id="name" value="AnomaliesCITest" />
@@ -23,7 +23,7 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="AnomalyUnconnectedNode">
 		<parameter id="class" value="de.d3web.we.ci4ke.anomalies.AnomalyUnconnectedNode" />
 		<parameter id="name" value="AnomalyUnconnectedNode" />
@@ -32,7 +32,7 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="AnomalyAutostartFlow">
 		<parameter id="class" value="de.d3web.we.ci4ke.anomalies.AnomalyAutostartFlow" />
 		<parameter id="name" value="AnomalyAutostartFlow" />
@@ -41,7 +41,7 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="AnomalyInconsistentInd">
 		<parameter id="class" value="de.d3web.we.ci4ke.anomalies.AnomalyInconsistentInd" />
 		<parameter id="name" value="AnomalyInconsistentInd" />
@@ -50,7 +50,7 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="d3web-Plugin-TestingFramework-ExtensionPoints" point-id="Test"
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="AnomalyUnusedElements">
 		<parameter id="class" value="de.d3web.we.ci4ke.anomalies.AnomalyUnusedElements" />
 		<parameter id="name" value="AnomalyUnusedElements" />
