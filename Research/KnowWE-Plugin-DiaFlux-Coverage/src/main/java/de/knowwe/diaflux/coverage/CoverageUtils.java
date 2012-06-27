@@ -95,6 +95,16 @@ public class CoverageUtils {
 
 	/**
 	 * 
+	 * @created 03.04.2012
+	 * @param flow
+	 * @return
+	 */
+	public static boolean isWaitNode(Flow flow) {
+		return flow.getName().equalsIgnoreCase("wait");
+	}
+
+	/**
+	 * 
 	 * @created 08.02.2012
 	 * @param result
 	 * @param callingFlow

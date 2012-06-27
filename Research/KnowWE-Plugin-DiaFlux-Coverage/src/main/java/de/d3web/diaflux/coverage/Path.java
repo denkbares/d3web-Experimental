@@ -66,7 +66,6 @@ public class Path implements Iterable<DiaFluxElement> {
 		return new Path(this);
 	}
 
-
 	public Deque<ComposedNode> getCallStack() {
 		return new LinkedList<ComposedNode>(callStack);
 	}
@@ -74,7 +73,6 @@ public class Path implements Iterable<DiaFluxElement> {
 	void enterFlow(ComposedNode node) {
 		callStack.push(node);
 	}
-
 
 	ComposedNode returnFromFlow() {
 		return callStack.pop();
@@ -98,7 +96,8 @@ public class Path implements Iterable<DiaFluxElement> {
 
 	@Override
 	public int hashCode() {
-		return this.path.hashCode() /** this.callStack.hashCode() */
+		return this.path.hashCode()
+		/* this.callStack.hashCode() */
 		;
 	}
 
@@ -110,11 +109,10 @@ public class Path implements Iterable<DiaFluxElement> {
 		}
 
 		Path other = (Path) obj;
-		return this.path.equals(other.path)/*
-											 * &&
-											 * this.callStack.equals(other.callStack
-											 * )
-											 */;
+		return this.path.equals(other.path)
+		/*
+		 * && this.callStack.equals(other.callStack )
+		 */;
 
 	}
 
@@ -140,11 +138,6 @@ public class Path implements Iterable<DiaFluxElement> {
 		return this.path.contains(el);
 	}
 
-	/**
-	 * 
-	 * @created 04.04.2012
-	 * @return
-	 */
 	public int getLength() {
 		return path.size();
 	}

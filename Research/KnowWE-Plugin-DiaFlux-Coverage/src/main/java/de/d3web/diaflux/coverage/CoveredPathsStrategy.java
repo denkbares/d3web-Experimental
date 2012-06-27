@@ -28,56 +28,42 @@ import java.util.List;
 import de.d3web.core.session.Session;
 import de.d3web.diaFlux.flow.ComposedNode;
 import de.d3web.diaFlux.flow.DiaFluxCaseObject;
-import de.d3web.diaFlux.flow.DiaFluxElement;
-import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.FlowRun;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.flow.SnapshotNode;
 import de.d3web.diaFlux.flow.StartNode;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
-import de.d3web.diaFlux.inference.FluxSolver;
 
-final class CoveredPathsStrategy implements DFSStrategy {
-
-	private final Session session;
-	private final Collection<Path> paths;
+/**
+ * 
+ * 
+ * @author Reinhard Hatko
+ * @created 01.04.2012
+ */
+class CoveredPathsStrategy extends CoveredPathsStrategyShallow {
 
 	public CoveredPathsStrategy(Session session) {
-		this.session = session;
-		this.paths = new HashSet<Path>();
+		super(session);
 	}
+
 
 	/**
-	 * Returns true, if the path generation should continue on the given edge.
+	 * Creates a list of callstacks (calls to composed nodes), that let to the
+	 * activation of the supplied node.
+	 * 
+	 * @param activeNode
+	 * @created 03.04.2012
+	 * @return
 	 */
-	@Override
-	public boolean followEdge(Edge edge, Path path) {
-		return FluxSolver.evalEdge(session, edge);
-	}
+	Collection<Deque<ComposedNode>> createCallStacks(Node activeNode) {
 
-	@Override
-	public boolean offer(DiaFluxElement el, Path path) {
-		boolean finished = false;
-		if (path.contains(el)) {
-			finished = true;
-		}
-		path.append(el);
-		return !finished;
-	}
+		Collection<Deque<ComposedNode>> stacks = new LinkedList<Deque<ComposedNode>>();
+		fillCallStack(new LinkedList<ComposedNode>(), activeNode, stacks);
 
-	/**
-	 * does not create new start paths. Paths stop at snapshots and end there.
-	 */
-	@Override
-	public Path createStartPath(Path path) {
-		return null;
-	}
+		return stacks;
 
-	public Collection<Path> getPaths() {
-		return paths;
 	}
-
 
 	/**
 	 * Returns a list of nodes, at which the path generation should start.
@@ -111,40 +97,7 @@ final class CoveredPathsStrategy implements DFSStrategy {
 			}
 		}
 
-		List<StartNode> autostartNodes = DiaFluxUtils.getAutostartNodes(session.getKnowledgeBase());
-		for (StartNode startNode : autostartNodes) {
-			for (FlowRun flowRun : runs) {
-				if (flowRun.isActive(startNode)) {
-					startingPaths.add(new Path(startNode));
-				}
-			}
-		}
-
-
 		return startingPaths;
-	}
-
-	@Override
-	public void found(Path path) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * Creates a list of callstacks (calls to composed nodes), that let to the
-	 * activation of the supplied node.
-	 * 
-	 * @param activeNode
-	 * @created 03.04.2012
-	 * @return
-	 */
-	private Collection<Deque<ComposedNode>> createCallStacks(Node activeNode) {
-
-		Collection<Deque<ComposedNode>> stacks = new LinkedList<Deque<ComposedNode>>();
-		fillCallStack(new LinkedList<ComposedNode>(), activeNode, stacks);
-
-		return stacks;
-
 	}
 
 	/**
@@ -191,7 +144,6 @@ final class CoveredPathsStrategy implements DFSStrategy {
 
 					}
 				}
-
 			}
 		}
 
@@ -204,9 +156,10 @@ final class CoveredPathsStrategy implements DFSStrategy {
 
 	}
 
+
 	@Override
 	public boolean enterSubflow(ComposedNode node, Path path) {
-		return false;
+		return true;
 	}
 
 }

@@ -51,7 +51,7 @@ public class DefaultCoverageResult implements CoverageResult {
 	private final Map<Path, Integer> paths;
 	private final KnowledgeBase kb;
 
-	private PathCoverage pathCoverage;
+	private PathIndex pathCoverage;
 
 	private DefaultCoverageResult(Map<Node, Integer> nodeCount, Map<Edge, Integer> edgeCount, Map<Path, Integer> pathCount, KnowledgeBase kb) {
 		this.edges = new HashMap<Edge, Integer>(edgeCount);
@@ -105,18 +105,15 @@ public class DefaultCoverageResult implements CoverageResult {
 	@Override
 	public int getTraceCount(Node node) {
 		return getCount(node, nodes);
-
 	}
 
 	@Override
 	public int getTraceCount(Edge edge) {
 		return getCount(edge, edges);
-
 	}
 	
 	public int getTraceCount(Path path) {
 		return getCount(path, paths);
-
 	}
 
 	private static <T> int getCount(T edge, Map<T, Integer> map) {
@@ -124,7 +121,9 @@ public class DefaultCoverageResult implements CoverageResult {
 		if (count == null) {
 			return 0;
 		}
-		else return count;
+		else {
+			return count;
+		}
 		
 	}
 
@@ -179,13 +178,14 @@ public class DefaultCoverageResult implements CoverageResult {
 			setFlowCoverage(flow, flowCoverage);
 		}
 
-		// this.pathCoverage = new PathCoverage(paths, getKb());
+		this.pathCoverage = new PathIndex(paths, getKb());
 
 		// Path2GraphViz.createPaths(kb, allPaths);
 
 	}
 
-	public PathCoverage getPathCoverage() {
+	@Override
+	public PathIndex getPathIndex() {
 		return pathCoverage;
 	}
 
@@ -236,7 +236,7 @@ public class DefaultCoverageResult implements CoverageResult {
 	 * @param sum
 	 * @param coverage
 	 */
-	private static <T> void sumUp(Map<T, Integer> sum, Map<T, Integer> counts) {
+	public static <T> void sumUp(Map<T, Integer> sum, Map<T, Integer> counts) {
 
 		for (T elem : counts.keySet()) {
 			Integer integer = sum.get(elem);

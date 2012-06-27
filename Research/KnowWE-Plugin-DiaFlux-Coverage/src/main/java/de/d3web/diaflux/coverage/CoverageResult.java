@@ -32,17 +32,19 @@ import de.d3web.diaFlux.flow.Node;
  */
 public interface CoverageResult {
 
+	KnowledgeBase getKb();
+
 	double getFlowCoverage(Flow flow);
 
 	double getEdgeCoverage(Flow flow);
 
 	double getNodeCoverage(Flow flow);
 
-	KnowledgeBase getKb();
-
 	int getTraceCount(Node node);
 
 	int getTraceCount(Edge edge);
+
+	PathIndex getPathIndex();
 
 	Map<Edge, Integer> getEdgeCounts();
 

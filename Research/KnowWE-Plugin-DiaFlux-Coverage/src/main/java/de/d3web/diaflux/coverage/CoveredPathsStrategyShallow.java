@@ -19,93 +19,110 @@
 package de.d3web.diaflux.coverage;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.session.Session;
 import de.d3web.diaFlux.flow.ComposedNode;
+import de.d3web.diaFlux.flow.DiaFluxCaseObject;
 import de.d3web.diaFlux.flow.DiaFluxElement;
 import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Flow;
+import de.d3web.diaFlux.flow.FlowRun;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.flow.SnapshotNode;
+import de.d3web.diaFlux.flow.StartNode;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
-
+import de.d3web.diaFlux.inference.FluxSolver;
 
 /**
- *  A strategy to create all paths of each DiaFlux model. Subflows are not traversed.
+ * 
+ * 
  * @author Reinhard Hatko
- * @created 26.03.2012
+ * @created 20.05.2012
  */
-public class AllPathsStrategyShallow implements DFSStrategy {
+class CoveredPathsStrategyShallow implements DFSStrategy {
 
-	protected final KnowledgeBase kb;
-	protected final Collection<Path> usedStartPaths;
-	protected final Collection<Path> foundPaths;
+	protected final Session session;
+	protected final Collection<Path> paths;
 
-	public AllPathsStrategyShallow(KnowledgeBase kb) {
-		this.kb = kb;
-		this.usedStartPaths = new HashSet<Path>();
-		this.foundPaths = new HashSet<Path>();
+	public CoveredPathsStrategyShallow(Session session) {
+		this.session = session;
+		this.paths = new HashSet<Path>();
 	}
 
+	/**
+	 * Returns true, if the path generation should continue on the given edge.
+	 */
 	@Override
 	public boolean followEdge(Edge edge, Path path) {
-		return true;
+		return FluxSolver.evalEdge(session, edge);
 	}
-
-	@Override
-	public List<Path> getInitialStartPaths() {
-		LinkedList<Path> paths = new LinkedList<Path>();
-
-		for (Flow flow : DiaFluxUtils.getFlowSet(kb)) {
-			for (Node node : flow.getStartNodes()) {
-				paths.add(new Path(node));
-			}
-		}
-		usedStartPaths.addAll(paths);
-		return paths;
-	}
-
 
 	@Override
 	public boolean offer(DiaFluxElement el, Path path) {
 		boolean finished = false;
-		if (path.contains(el) || (path.getLength() > 1 && el instanceof SnapshotNode)) {
+		if (path.contains(el)) {
 			finished = true;
 		}
 		path.append(el);
 		return !finished;
 	}
 
+	/**
+	 * does not create new start paths. Paths stop at snapshots and end there.
+	 */
 	@Override
 	public Path createStartPath(Path path) {
+		return null;
+	}
 
-		// TODO consider callStack??
-		if (path.getHead() == path.getTail()) {
-			// circular path
-			return null;
-		}
-		Path startPath = path.newPath();
-
-		if (usedStartPaths.contains(startPath)) {
-			return null;
-		}
-		else {
-			usedStartPaths.add(startPath);
-			return startPath;
-		}
+	public Collection<Path> getPaths() {
+		return paths;
 	}
 
 	@Override
 	public void found(Path path) {
-		foundPaths.add(path);
+		paths.add(path);
 	}
 
-	public Collection<Path> getFoundPaths() {
-		return foundPaths;
+	/**
+	 * Returns a list of nodes, at which the path generation should start.
+	 */
+	@Override
+	public List<Path> getInitialStartPaths() {
+		DiaFluxCaseObject caseObject = DiaFluxUtils.getDiaFluxCaseObject(session);
+
+		if (caseObject == null) return Collections.emptyList();
+
+		List<Path> startingPaths = new LinkedList<Path>();
+		List<FlowRun> runs = caseObject.getRuns();
+
+		for (Flow flow : DiaFluxUtils.getFlowSet(session)) {
+			for (StartNode startNode : flow.getStartNodes()) {
+				for (FlowRun flowRun : runs) {
+					if (flowRun.isActive(startNode)) {
+						startingPaths.add(new Path(startNode));
+
+					}
+				}
+
+			}
+		}
+
+		for (FlowRun flowRun : runs) {
+			for (Node node : flowRun.getStartNodes()) {
+				if (node instanceof SnapshotNode) {
+					startingPaths.add(new Path(node));
+				}
+			}
+		}
+
+		return startingPaths;
 	}
+
 
 	@Override
 	public boolean enterSubflow(ComposedNode node, Path path) {

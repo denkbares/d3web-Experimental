@@ -103,7 +103,7 @@ public class DiaFluxCoverageTrace implements SessionObject {
 	 */
 	public void tracePaths(Session session) {
 
-		CoveredPathsStrategy evaluator = new CoveredPathsStrategy(session);
+		CoveredPathsStrategyShallow evaluator = new CoveredPathsStrategyShallow(session);
 		new PathGenerator(session.getKnowledgeBase(), evaluator).createPaths();
 		Collection<Path> paths = evaluator.getPaths(); // TODO
 
@@ -111,7 +111,7 @@ public class DiaFluxCoverageTrace implements SessionObject {
 			addTracedPath(path);
 		}
 
-		// System.out.println("Covered paths:" + paths.size());
+		System.out.println("Covered paths:" + paths.size());
 
 		// for (Path path : this.paths.keySet()) {
 		// System.out.println(path.getHead() + " (" + path.getLength() + ") = "

@@ -28,7 +28,6 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.ComposedNode;
 import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.EndNode;
-import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.flow.StartNode;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
@@ -61,7 +60,7 @@ public class PathGenerator {
 		while (!startPaths.isEmpty()) {
 			Path path = startPaths.iterator().next();
 			startPaths.remove(path);
-			System.out.println("Starting at: " + path);
+			// System.out.println("Starting at: " + path);
 			continuePath(path);
 
 		}
@@ -141,15 +140,6 @@ public class PathGenerator {
 
 	}
 
-	/**
-	 * 
-	 * @created 03.04.2012
-	 * @param flow
-	 * @return
-	 */
-	public boolean isWaitNode(Flow flow) {
-		return flow.getName().equalsIgnoreCase("wait");
-	}
 
 	/**
 	 * 
@@ -168,7 +158,7 @@ public class PathGenerator {
 					continueOnNode(newPath, edge.getEndNode());
 				}
 				else {
-
+					foundPath(newPath);
 				}
 
 			}
