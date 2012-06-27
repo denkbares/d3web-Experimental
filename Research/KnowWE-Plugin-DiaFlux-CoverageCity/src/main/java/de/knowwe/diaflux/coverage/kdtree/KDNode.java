@@ -134,7 +134,7 @@ public class KDNode<I> {
 		int depth = getDepth();
 
 		do {
-			childs = KDUtils.splitRect(bounds, dim, depth++);
+			childs = KDUtils.splitRect(bounds, dim, ++depth);
 			if (childs[0].equals(bounds)) break;
 			bounds = childs[0];
 		} while (childs != null);

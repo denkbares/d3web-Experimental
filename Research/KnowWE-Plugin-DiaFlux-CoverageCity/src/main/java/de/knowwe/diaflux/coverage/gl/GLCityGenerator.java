@@ -33,6 +33,9 @@ import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.flow.StartNode;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
+import de.d3web.diaflux.coverage.DefaultCoverageResult;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.diaflux.FlowchartUtils;
 import de.knowwe.diaflux.coverage.CoverageUtils;
 import de.knowwe.diaflux.coverage.kdtree.AddRectanglesVisitor;
 import de.knowwe.diaflux.coverage.kdtree.CollectAssignedRectangles;
@@ -40,13 +43,14 @@ import de.knowwe.diaflux.coverage.kdtree.KDNode;
 import de.knowwe.diaflux.coverage.kdtree.MarginMapper;
 import de.knowwe.diaflux.coverage.kdtree.RectanglePacker;
 import de.knowwe.diaflux.coverage.kdtree.RectanglePacker.Mapping;
-import de.knowwe.diaflux.coverage.metrics.IncomingEdgesMetric;
-import de.knowwe.diaflux.coverage.metrics.MaximumInSameFlowNodeCoverage;
+import de.knowwe.diaflux.coverage.metrics.Constant;
+import de.knowwe.diaflux.coverage.metrics.CoveredOutgoingEdgesMetric;
+import de.knowwe.diaflux.coverage.metrics.CoveredPathsColorMetric;
 import de.knowwe.diaflux.coverage.metrics.Metrics;
-import de.knowwe.diaflux.coverage.metrics.MetricsAggregator;
+import de.knowwe.diaflux.coverage.metrics.MetricsSet;
 import de.knowwe.diaflux.coverage.metrics.NodeCoverageMetric;
-import de.knowwe.diaflux.coverage.metrics.NodeTypeColorMetric;
 import de.knowwe.diaflux.coverage.metrics.OutgoingEdgesMetric;
+import de.knowwe.diaflux.type.FlowchartType;
 
 /**
  * 
@@ -64,7 +68,7 @@ public class GLCityGenerator {
 	 * @return
 	 */
 	public static GLCity generateCity(CoverageResult coverage) {
-		MetricsAggregator<Node> metrics = createMetrics(coverage);
+		MetricsSet<Node> metrics = createMetrics(coverage);
 
 		KnowledgeBase kb = coverage.getKb();
 		Map<Flow, Collection<Flow>> structure = CoverageUtils.createFlowStructure(kb);
@@ -112,48 +116,80 @@ public class GLCityGenerator {
 	 * @created 08.02.2012
 	 * @return
 	 */
-	public static MetricsAggregator<Node> createMetrics(CoverageResult coverage) {
-		MetricsAggregator<Node> metrics = new MetricsAggregator<Node>();
-		metrics.setHeightMetric(Metrics.multiply(Metrics.relate(new NodeCoverageMetric(coverage),
-				new MaximumInSameFlowNodeCoverage(coverage)), 5));
-		metrics.setLengthMetric(new IncomingEdgesMetric());
-		metrics.setWidthMetric(new OutgoingEdgesMetric());
-		metrics.setColorMetric(new NodeTypeColorMetric());
+	public static MetricsSet<Node> createMetrics(CoverageResult coverage) {
+		MetricsSet<Node> metrics = new MetricsSet<Node>();
+		// metrics.setHeightMetric(Metrics.multiply(Metrics.relate(new
+		// NodeCoverageMetric(coverage),
+		// new MaximumInSameFlowNodeCoverage(coverage)), 5));
+		metrics.setHeightMetric(new CoveredOutgoingEdgesMetric(coverage));
+		metrics.setLengthMetric(new OutgoingEdgesMetric());
+		metrics.setWidthMetric(Metrics.relate(new NodeCoverageMetric(coverage),
+				new Constant<Node>(15)));
+		// metrics.setColorMetric(new NodeTypeColorMetric());
+		metrics.setColorMetric(new CoveredPathsColorMetric(coverage));
 		return metrics;
 	}
 
 
-	private static GLDistrict createDistrict(KnowledgeBase kb, Flow flow, MetricsAggregator<Node> metrics, Map<Flow, GLDistrict> city) {
+	private static GLDistrict createDistrict(KnowledgeBase kb, Flow flow, MetricsSet<Node> metrics, Map<Flow, GLDistrict> city) {
 		
 		List<GLBuilding> boxes = new LinkedList<GLBuilding>();
 		
-		for (Node node : flow.getNodes()) {
+		// List<Node> nodes = flow.getNodes();
+		Collection<Node> nodes = DefaultCoverageResult.getValidNodes(flow);
+		for (Node node : nodes) {
 
 			GLBuilding box;
 			if (node instanceof ComposedNode) {
 				Flow calledFlow = DiaFluxUtils.getCalledFlow(kb, (ComposedNode) node);
-				box = city.remove(calledFlow);
-				// can be null in a leaf, that calls a flow, that came in the
-				// tree earlier and is inserted elsewhere
-				if (box == null) continue;
+				if (CoverageUtils.isWaitNode(calledFlow)) {
+					box = createBuilding(node, metrics);
+
+				}
+				else {
+					box = city.remove(calledFlow);
+					// can be null in a leaf, that calls a flow, that came in
+					// the tree earlier and is inserted elsewhere
+					if (box == null) continue;
+
+				}
+
 			}
 			else {
-				double xDim = metrics.getLength(node);
-				double yDim = metrics.getHeight(node);
-				double zDim = metrics.getWidth(node);
-				Color color = metrics.getColor(node);
-				box = new GLBuilding(xDim, yDim, zDim);
-				box.setColor(color);
-				box.setName(node.getID() +" in " + flow.getName());
+				box = createBuilding(node, metrics);
 
 			}
 			boxes.add(box);
 		}
 		
-		GLDistrict district = createDistrict(boxes, new GLNodeMapper(), 2, .3);
-		district.setName(flow.getName());
+		GLDistrict district = createDistrict(boxes, new GLNodeMapper(), 3, .75);
+		district.setName("" + flow.getName() + "");
 		return district;
 		
+	}
+
+
+
+	/**
+	 * 
+	 * @created 22.05.2012
+	 * @param node
+	 * @param metrics
+	 * @return
+	 */
+	public static GLBuilding createBuilding(Node node, MetricsSet<Node> metrics) {
+		GLBuilding box;
+		Flow flow = node.getFlow();
+		Section<FlowchartType> flowSec = FlowchartUtils.findFlowchartSection("default_web",
+				flow.getName());
+		double xDim = metrics.getLength(node);
+		double yDim = metrics.getHeight(node);
+		double zDim = metrics.getWidth(node);
+		Color color = metrics.getColor(node);
+		box = new GLBuilding(xDim, yDim, zDim);
+		box.setColor(color);
+		box.setName(flow.getName() +"+++" + flowSec.getID() + "+++" + node.getID() + "");
+		return box;
 	}
 
 	public static GLDistrict createDistrict(List<GLBuilding> boxes, Mapping<GLBuilding> mapper, double margin, double height) {

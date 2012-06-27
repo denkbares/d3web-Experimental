@@ -19,6 +19,7 @@
 package de.knowwe.diaflux.coverage.kdtree;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
@@ -52,7 +53,12 @@ public class RectanglePacker {
 
 	public static void main(String[] args) {
 
-		List<Dimension2D> dimensions = generateRandomDimensions(200, 1, 50);
+		// List<Dimension2D> dimensions = generateRandomDimensions(200, 1, 50);
+		List<Dimension2D> dimensions = new ArrayList<Dimension2D>();
+		dimensions.add(new Dimension(20, 20));
+		dimensions.add(new Dimension(20, 20));
+		dimensions.add(new Dimension(20, 20));
+		dimensions.add(new Dimension(20, 20));
 
 		Mapping<Dimension2D> map = new Mapping<Dimension2D>() {
 
@@ -95,6 +101,7 @@ public class RectanglePacker {
 		int i = 0;
 
 		for (I object : objects) {
+			i++;
 
 			Dimension2D dim = map.map(object);
 
@@ -147,7 +154,7 @@ public class RectanglePacker {
 			KDNode<I> bestNode = entry.getValue();
 			KDNode<I> targetNode = bestNode.insert(object, map);
 			covRec.add(targetNode.getBounds());
-
+			// printResult(tree, "d:\\city" + i);
 
 		}
 
@@ -224,7 +231,7 @@ public class RectanglePacker {
 					(int) dim.getHeight() + 1, BufferedImage.TYPE_INT_RGB);
 			Graphics2D graphics2D = image.createGraphics();
 			graphics2D.setColor(Color.WHITE);
-			graphics2D.fillRect(0, 0, (int) image.getWidth(), (int) image.getHeight());
+			graphics2D.fillRect(0, 0, image.getWidth(), image.getHeight());
 			Random random = new Random();
 
 			for (Rectangle2D rectangle2d : rects) {

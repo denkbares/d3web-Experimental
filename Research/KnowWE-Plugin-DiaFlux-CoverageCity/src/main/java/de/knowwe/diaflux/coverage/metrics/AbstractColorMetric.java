@@ -18,23 +18,36 @@
  */
 package de.knowwe.diaflux.coverage.metrics;
 
-import de.d3web.diaFlux.flow.EndNode;
-import de.d3web.diaFlux.flow.Node;
+import java.awt.Color;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 08.02.2012
+ * @created 20.05.2012
  */
-public class OutgoingEdgesMetric implements Metric<Node, Double> {
+public abstract class AbstractColorMetric<I> implements Metric<I, Color> {
 
-	public Double getValue(Node object) {
-		if (object instanceof EndNode) return 1d;
-		else {
-			int count = object.getOutgoingEdges().size();
-			return Math.max(2 * count/* * count */, 0.5);
-		}
+	private final float fromColor;
+	private final float toColor;
+
+	public AbstractColorMetric() {
+		this(0, 0.333f);
 	}
+
+	public AbstractColorMetric(float fromColor, float toColor) {
+		this.fromColor = fromColor;
+		this.toColor = toColor;
+	}
+
+	@Override
+	public Color getValue(I object) {
+
+		float hue = fromColor + (toColor - fromColor) * getColorValue(object);
+		// hue = .9f;
+		return Color.getHSBColor(hue, 1f, 8f);
+	}
+
+	protected abstract float getColorValue(I object);
 
 }

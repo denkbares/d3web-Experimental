@@ -18,23 +18,23 @@
  */
 package de.knowwe.diaflux.coverage.metrics;
 
-import de.d3web.diaFlux.flow.EndNode;
-import de.d3web.diaFlux.flow.Node;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 08.02.2012
+ * @created 21.05.2012
  */
-public class OutgoingEdgesMetric implements Metric<Node, Double> {
+public class Constant<T> implements Metric<T, Double> {
 
-	public Double getValue(Node object) {
-		if (object instanceof EndNode) return 1d;
-		else {
-			int count = object.getOutgoingEdges().size();
-			return Math.max(2 * count/* * count */, 0.5);
-		}
+	private final double constant;
+
+	public Constant(double constant) {
+		this.constant = constant;
 	}
+
+	public Double getValue(T object) {
+		return constant;
+	};
 
 }

@@ -26,7 +26,7 @@ import java.awt.Color;
  * @author Reinhard Hatko
  * @created 07.02.2012
  */
-public class MetricsAggregator<I> {
+public class MetricsSet<I> {
 
 	private Metric<I, Double> widthMetric;
 	private Metric<I, Double> lengthMetric;

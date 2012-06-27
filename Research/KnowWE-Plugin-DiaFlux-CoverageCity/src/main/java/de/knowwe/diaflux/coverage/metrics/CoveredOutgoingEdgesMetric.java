@@ -18,8 +18,10 @@
  */
 package de.knowwe.diaflux.coverage.metrics;
 
+import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.EndNode;
 import de.d3web.diaFlux.flow.Node;
+import de.d3web.diaflux.coverage.CoverageResult;
 
 
 /**
@@ -27,14 +29,24 @@ import de.d3web.diaFlux.flow.Node;
  * @author Reinhard Hatko
  * @created 08.02.2012
  */
-public class OutgoingEdgesMetric implements Metric<Node, Double> {
+public class CoveredOutgoingEdgesMetric implements Metric<Node, Double> {
+
+	private final CoverageResult result;
+
+	public CoveredOutgoingEdgesMetric(CoverageResult result) {
+		this.result = result;
+	}
 
 	public Double getValue(Node object) {
-		if (object instanceof EndNode) return 1d;
-		else {
-			int count = object.getOutgoingEdges().size();
-			return Math.max(2 * count/* * count */, 0.5);
+
+		if (object instanceof EndNode) return 2 * 1d;
+
+		double count = 0;
+		for (Edge edge : object.getOutgoingEdges()) {
+			if (result.getTraceCount(edge) > 0) count++;
 		}
+
+		return Math.max(2 * count/* * count */, 0.5);
 	}
 
 }

@@ -1,6 +1,6 @@
-var yaw = 0;
-var pitch = 0;
-var dist = 100;
+var yaw = -46;
+var pitch = -21;
+var dist = 450;
 
 SceneJS.createScene({
 
@@ -43,7 +43,7 @@ SceneJS.createScene({
                          */
                         {
                             type: "renderer",
-                            clearColor: { r: 0.3, g: 0.3, b: 0.6 },
+                            clearColor: { r: 1, g: 1, b: 1 },
                             clear: {
                                 depth : true,
                                 color : true
@@ -59,7 +59,7 @@ SceneJS.createScene({
                                     color:                  { r: 1.0, g: 1.0, b: 1.0 },
                                     diffuse:                true,
                                     specular:               true,
-                                    dir:                    { x: 1.0, y: -0.5, z: -1.0 }
+                                    dir:                    { x: 5.0, y: -5, z: 1.0 }
                                 },
                                 {
                                     type: "light",
@@ -67,21 +67,29 @@ SceneJS.createScene({
                                     color:                  { r: 1.0, g: 1.0, b: 0.8 },
                                     diffuse:                true,
                                     specular:               false,
-                                    dir:                    { x: 0.0, y: -0.5, z: -1.0 }
+                                    dir:                    { x: 10, y: 5, z: 1.0 }
+                                },
+                                {
+                                	type: "light",
+                                	mode:                   "dir",
+                                	color:                  { r: 1.0, g: 1.0, b: 0.8 },
+                                	diffuse:                true,
+                                	specular:               false,
+                                	dir:                    { x: -20, y: -15, z: 1.0 }
                                 },
                                 /* Modelling transforms - note the IDs, "pitch" and "yaw"
                                  */
                                 {
                                     type: "rotate",
                                     id: "pitch",
-                                    angle: 0.0,
+                                    angle: pitch,
                                     x : 1.0,
 
                                     nodes: [
                                         {
                                             type: "rotate",
                                             id: "yaw",
-                                            angle: 0.0,
+                                            angle: yaw,
                                             y : 1.0,
 
                                             nodes: [
@@ -90,7 +98,7 @@ SceneJS.createScene({
                                                  */
                                                 {
                                                     type: "material",
-                                                    emit: 0,
+                                                    emit: 50,
                                                     baseColor:      { r: 0.5, g: 0.5, b: 0.6 },
                                                     specularColor:  { r: 0.9, g: 0.9, b: 0.9 },
                                                     specular:       1.0,
@@ -132,6 +140,7 @@ var eyedX;
 var eyedY;
 var dragging = false;
 var rightclick;
+var mouseButtonDown = false;
 
 var newInput = false;
 
@@ -141,7 +150,8 @@ var canvas = document.getElementById("theCanvas");
 function mouseDown(event) {
     lastX = event.clientX;
     lastY = event.clientY;
-    dragging = true;
+    
+    mouseButtonDown = true
     
 	if (!event) event = window.event;
 	if (event.which) rightclick = (event.which == 3);
@@ -149,12 +159,28 @@ function mouseDown(event) {
 }
 
 function mouseUp(event) {
+	if (!dragging) {
+		var coords = clickCoordsWithinElement(event);
+
+		var hit = scene.pick(coords.x, coords.y, {rayPick : true});
+
+		if (hit) {
+			picked(hit.name);
+		} else { // Nothing picked
+		}
+	} else{
+//		alert(yaw);
+//		alert(pitch);
+	}
+	
     dragging = false;
+    mouseButtonDown = false;
     
 }
 
 function mouseMove(event) {
-    if (dragging) {
+    if (mouseButtonDown) {
+    	dragging = true;
     	if (!rightclick){
     		yaw += (event.clientX - lastX) * 0.5;
     		pitch += (event.clientY - lastY) * 0.5;
@@ -168,18 +194,7 @@ function mouseMove(event) {
     	}
 
         newInput = true;
-    } else {
-
-        var coords = clickCoordsWithinElement(event);
-
-        var hit = scene.pick(coords.x, coords.y, { rayPick: true });
-
-        if (hit) {          	
-        	document.getElementById("pickResult").innerHTML = hit.name;
-
-        } else { // Nothing picked
-        }
-    }
+    } 
 }
 
 function mouseWheel(event) {

@@ -18,23 +18,34 @@
  */
 package de.knowwe.diaflux.coverage.metrics;
 
-import de.d3web.diaFlux.flow.EndNode;
 import de.d3web.diaFlux.flow.Node;
+import de.d3web.diaflux.coverage.CoverageResult;
+import de.d3web.diaflux.coverage.PathIndex;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 08.02.2012
+ * @created 20.05.2012
  */
-public class OutgoingEdgesMetric implements Metric<Node, Double> {
-
-	public Double getValue(Node object) {
-		if (object instanceof EndNode) return 1d;
-		else {
-			int count = object.getOutgoingEdges().size();
-			return Math.max(2 * count/* * count */, 0.5);
-		}
+public class CoveredPathsColorMetric extends AbstractColorMetric<Node> {
+	
+	private final CoverageResult result;
+	
+	public CoveredPathsColorMetric(CoverageResult result) {
+		this.result = result;
 	}
+	
+	@Override
+	protected float getColorValue(Node object) {
+		PathIndex index = result.getPathIndex();
+		double allPathsCount = index.getAllPaths(object).size();
+		double coveredPathsCount = index.getCoveredPaths(object).size();
+
+		float f = (float) (coveredPathsCount / allPathsCount);
+		return Math.min(f, 1);
+	}
+
+
 
 }

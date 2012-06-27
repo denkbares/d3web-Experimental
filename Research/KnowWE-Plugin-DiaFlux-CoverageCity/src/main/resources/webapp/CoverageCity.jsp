@@ -1,3 +1,9 @@
+<%@page import="de.knowwe.diaflux.type.FlowchartType"%>
+<%@page import="de.d3web.diaFlux.flow.StartNode"%>
+<%@page import="de.d3web.diaFlux.flow.Node"%>
+<%@page import="de.d3web.diaFlux.flow.FlowSet"%>
+<%@page import="de.d3web.diaFlux.inference.DiaFluxUtils"%>
+<%@page import="de.knowwe.diaflux.coverage.DiaFluxCoverageRenderer"%>
 <%@page import="de.knowwe.diaflux.coverage.gl.GLCity"%>
 <%@page import="de.knowwe.diaflux.coverage.gl.GLBuilding"%>
 <%@page import="de.d3web.diaflux.coverage.CoverageResult"%>
@@ -92,19 +98,23 @@
 <link rel="shortcut icon" type="image/x-icon" href="/KnowWE/images/favicon.ico" />
 <link rel="icon" type="image/x-icon" href="/KnowWE/images/favicon.ico" /><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
  <script type="text/javascript" src="KnowWEExtension/scripts/scenejs.js"></script>
+ <script type="text/javascript" src="/KnowWE/scripts/mootools.js"></script>
+ <script type="text/javascript" src="KnowWEExtension/scripts/KnowWE-helper.js"></script>
+ <script type="text/javascript" src="KnowWEExtension/scripts/KnowWE.js"></script>
 <title>Coverage City</title>
 </head>
 <body>
-
+<input id="coveragesection" type="hidden" value="<%=kdomID%>">
 <div id="container">
     
     <div id="content">
-        <canvas id="theCanvas" width="1030" height="700">
+        <canvas id="theCanvas" width="800" height="700">
             
         </canvas>
         
     </div>
     <div id="pickResult"></div>
+    
 </div>
 <%
 
@@ -120,8 +130,16 @@ if (coverage == null){
 	GLCity glCity = GLCityGenerator.generateCity(coverage);
 	
 	city= glCity.toString();
+	List<StartNode> startnodes =  DiaFluxUtils.getAutostartNodes(coverage.getKb());
+	if (startnodes.isEmpty()){
+		//TODO
+	}
+	String flowName = startnodes.get(0).getFlow().getName();
+	
+	Section<FlowchartType> flowSec = FlowchartUtils.findFlowchartSection(web, flowName);
+	out.println(FlowchartUtils.createFlowchartRenderer(flowSec, context, "flow",
+			DiaFluxCoverageRenderer.DIA_FLUX_COVERAGE_SCOPE, true));
 }
-
 
 
 %>
@@ -130,6 +148,23 @@ if (coverage == null){
 <script type="text/javascript">
 
 var city = [<%=city%>];
+
+function picked(flowString){
+	//var matches = flowString.match(/\(([^)]*)\) \[([^]]*)\]/);
+	//var matches = /\(([^)]*)\) \[([^]]*)\]/.exec(flowString);
+	var matches = flowString.split("+++");
+	if (matches) {
+		document.getElementById("pickResult").innerHTML = matches[0];
+		var flowEl = $('flow');
+		if (flowEl.firstChild.id ==matches[0]) return;
+		
+		
+		flowEl.innerHTML ="<div id='" + matches[0] + "'></div>";
+		
+		Flowchart.loadFlowchart(matches[1], $('flow').firstChild);
+	}
+	
+}
 
 </script>
 
