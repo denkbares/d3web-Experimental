@@ -173,7 +173,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 		QuestionOC father = (QuestionOC) kb.getManager().search(section.getText());
 
 		// father nodes MUST have the answers yes, no and maybe
-		List<Choice> alloweredAnswers = father.getAlternatives();
+		List<Choice> alloweredAnswers = father.getAllAlternatives();
 		if (alloweredAnswers.contains(JuriRule.YES) & alloweredAnswers.contains(JuriRule.NO)
 				& alloweredAnswers.contains(JuriRule.MAYBE)) {
 
