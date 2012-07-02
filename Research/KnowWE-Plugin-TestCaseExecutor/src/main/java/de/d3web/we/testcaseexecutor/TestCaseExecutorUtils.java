@@ -352,7 +352,7 @@ public final class TestCaseExecutorUtils {
 							temp.append("<li>");
 							temp.append(diff.getFirst().toString());
 							temp.append(" = ");
-							temp.append(diff.getSecond().expected);
+							temp.append(diff.getSecond().getExpected());
 							temp.append("</li>");
 						}
 						temp.append("</ul>");
@@ -365,7 +365,7 @@ public final class TestCaseExecutorUtils {
 							temp.append("<li>");
 							temp.append(diff.getFirst().toString());
 							temp.append(" = ");
-							temp.append(diff.getSecond().derived);
+							temp.append(diff.getSecond().getDerived());
 							temp.append("</li>");
 						}
 						temp.append("</ul>");
@@ -393,7 +393,8 @@ public final class TestCaseExecutorUtils {
 						for (TerminologyObject obj : diff.getDiffObjects()) {
 							if (!(obj instanceof Solution)) {
 								temp.append("<li>");
-								temp.append(obj.getName() + " = " + diff.getDiffFor(obj).expected);
+								temp.append(obj.getName() + " = "
+										+ diff.getDiffFor(obj).getExpected());
 								temp.append("</li>");
 							}
 						}
@@ -406,7 +407,8 @@ public final class TestCaseExecutorUtils {
 						for (TerminologyObject obj : diff.getDiffObjects()) {
 							if (!(obj instanceof Solution)) {
 								temp.append("<li>");
-								temp.append(obj.getName() + " = " + diff.getDiffFor(obj).derived);
+								temp.append(obj.getName() + " = "
+										+ diff.getDiffFor(obj).getDerived());
 								temp.append("</li>");
 							}
 						}
