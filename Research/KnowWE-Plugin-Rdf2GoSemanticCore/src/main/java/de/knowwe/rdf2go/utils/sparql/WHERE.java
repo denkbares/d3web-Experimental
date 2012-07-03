@@ -29,9 +29,15 @@ public class WHERE extends SparqlQuery {
 		return (ORDER_BY) addNext(new ORDER_BY(), orderBy);
 	}
 
+	public WHERE AND_WHERE(String... where) {
+		return (WHERE) addNext(new WHERE(), where);
+	}
+
 	@Override
 	public String verbalize() {
-		return "WHERE { " + content + "}\n";
+		boolean isFirst = !(this.previous instanceof WHERE);
+		boolean isLast = !(this.next instanceof WHERE);
+		return (isFirst ? "WHERE {\n" : "") + content + (isLast ? "}\n" : "");
 	}
 
 	@Override
