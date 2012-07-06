@@ -19,13 +19,6 @@
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
-  		<groupId>com.denkbares</groupId>
-  		<artifactId>KnowWE-Plugin-JSPWiki-MarkupSet</artifactId>
-  		<version>0.2-SNAPSHOT</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
   		<artifactId>KnowWE-Plugin-IncrementalCompiler</artifactId>
   		<version>0.2-SNAPSHOT</version>
@@ -35,6 +28,13 @@
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
   		<artifactId>KnowWE-Plugin-RDFS-Basic</artifactId>
+  		<version>0.2-SNAPSHOT</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>KnowWE-Plugin-JSPWiki-MarkupSet</artifactId>
   		<version>0.2-SNAPSHOT</version>
   		<type>jar</type>
   		<scope>compile</scope>
