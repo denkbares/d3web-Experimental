@@ -98,7 +98,7 @@ public class SparqlResultSetRenderer {
 			erg = Rdf2GoCore.getInstance().reduceNamespace(
 					n.toString());
 		}
-
+		System.out.println(n.toString());
 		erg = Strings.decodeURL(erg);
 
 		if (links) {
@@ -115,6 +115,10 @@ public class SparqlResultSetRenderer {
 					.getWikiConnector().doesArticleExist(erg)) {
 				erg = Strings.maskHTML("<a href=\"Wiki.jsp?page=")
 						+ erg + Strings.maskHTML("\">") + erg
+						+ Strings.maskHTML("</a>");
+			}
+			else if (erg.startsWith("http")) {
+				erg = Strings.maskHTML("<a href=\"" + erg + "\">") + erg
 						+ Strings.maskHTML("</a>");
 			}
 
