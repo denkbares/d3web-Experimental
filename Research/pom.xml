@@ -223,6 +223,7 @@
 		<module>d3web-OfficeConverterAH</module>
 		<module>KnowWE-Plugin-WissKont</module>
 		<module>KnowWE-Plugin-d3web-Rdf2Go</module>
+		<module>KnowWE-Plugin-RDFS-WikiObjectModel</module>
 	</modules>
 	<repositories>
 		<repository>
