@@ -86,7 +86,6 @@ public class Rdf2GoCore implements EventListener {
 	public static final String localns = Environment.getInstance().getWikiConnector().getBaseUrl()
 			+ "OwlDownload.jsp#";
 
-	public static final URI HASTAG = Rdf2GoCore.getInstance().createURI(basens, "hasTag");
 	private static final URI HASTOPIC = Rdf2GoCore.getInstance().createURI(basens,
 			"hasTopic");
 	private static final URI NARYPROPERTY = Rdf2GoCore.getInstance().createURI(basens,
