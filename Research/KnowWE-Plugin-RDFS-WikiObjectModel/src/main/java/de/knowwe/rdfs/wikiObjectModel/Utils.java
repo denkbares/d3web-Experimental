@@ -48,8 +48,15 @@ public class Utils {
 		}
 
 		try {
-			return baseUrl + "Wiki.jsp?page=" + title + "#section-" + title + "-"
-					+ URLEncoder.encode(text.replaceAll(" ", "").replaceAll("-", ""), "UTF-8");
+			return baseUrl
+					+ "Wiki.jsp?page="
+					+ title
+					+ "#section-"
+					+ title
+					+ "-"
+					+ URLEncoder.encode(
+							text.replaceAll(" ", "").replaceAll("-", "").replaceAll(":", ""),
+							"UTF-8");
 		}
 		catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
