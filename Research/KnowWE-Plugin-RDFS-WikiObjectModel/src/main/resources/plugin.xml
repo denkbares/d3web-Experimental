@@ -25,5 +25,16 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="CompiledWikiSection">
+		<parameter id="class" value="de.knowwe.rdfs.wikiObjectModel.types.CompiledWikiSection" />
+		<parameter id="name" value="SectionType" />
+		<parameter id="description" value="Represents a SectionType in KDOM" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="1" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	
 
 </plugin>
