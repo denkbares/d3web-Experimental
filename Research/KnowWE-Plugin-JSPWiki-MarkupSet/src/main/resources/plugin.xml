@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-JSPWiki-MarkupSet" version="0.1">
+
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+
+	<!-- <runtime> <library id="" path="." type="code"> <export prefix="*" /> 
+		</library> <library id="webapp" path="webapp/" type="resources"> <export 
+		prefix="*" /> </library> </runtime> -->
+	
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="SectionType">
+		<parameter id="class" value="de.knowwe.jspwiki.types.SectionType" />
+		<parameter id="name" value="SectionType" />
+		<parameter id="description" value="Represents a SectionType in KDOM" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="2" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+</plugin>
