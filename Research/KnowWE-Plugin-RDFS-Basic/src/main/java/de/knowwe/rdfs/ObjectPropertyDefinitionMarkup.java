@@ -107,7 +107,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractKnowledgeUnitType<Ob
 		}
 
 		@Override
-		public Map getTypedTermInformation(
+		public Map<String, ? extends Object> getTypedTermInformation(
 				Section<? extends SimpleDefinition> s) {
 			Map<String, Object> map = new HashMap<String, Object>();
 
