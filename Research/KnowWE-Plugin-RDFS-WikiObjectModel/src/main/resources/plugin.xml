@@ -35,6 +35,16 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="SectionHeaderObjectDefinition">
+		<parameter id="class" value="de.knowwe.rdfs.wikiObjectModel.types.SectionHeaderObjectDefinition" />
+		<parameter id="name" value="SectionHeaderObjectDefinition" />
+		<parameter id="description" value="Defines a section header as RDFS-object" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="1" />
+		<parameter id="scope" value="HeaderType" />
+	</extension>
+	
 	
 
 </plugin>
