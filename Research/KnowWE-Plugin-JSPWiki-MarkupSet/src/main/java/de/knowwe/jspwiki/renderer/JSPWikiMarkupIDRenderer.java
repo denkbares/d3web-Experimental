@@ -18,8 +18,8 @@
  */
 package de.knowwe.jspwiki.renderer;
 
-import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
@@ -35,11 +35,14 @@ public class JSPWikiMarkupIDRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> section, UserContext user, StringBuilder string) {
-		string.append(Strings.maskHTML("<div class=\"pageedit\" id=\"" + section.getID() + "\">"));
+		string.append(Strings.maskHTML("<div class=\"pageedit\" id=\"" + section.getID() + "\">"
+				+ System.getProperty("line.separator")));
 		// let JSPWiki render the content
-		String html = Environment.getInstance().getWikiConnector().renderWikiSyntax(
-				section.getText(), user.getRequest());
-		string.append(Strings.maskHTML(html));
-		string.append(Strings.maskHTML("</div>"));
+		// JSPWiki will render the JSPWiki-Markup afterward, if we leave proper
+		// line separation if relevant, e.g., before
+		// !!! Header
+		DelegateRenderer.getInstance().render(section, user, string);
+
+		string.append(Strings.maskHTML("</div>" + System.getProperty("line.separator")));
 	}
 }
