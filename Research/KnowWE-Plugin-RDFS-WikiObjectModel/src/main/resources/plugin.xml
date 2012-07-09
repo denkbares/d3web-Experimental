@@ -45,6 +45,17 @@
 		<parameter id="scope" value="HeaderType" />
 	</extension>
 	
-	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="LocalConceptReference">
+		<parameter id="class" value="de.knowwe.rdfs.wikiObjectModel.types.LocalConceptReference" />
+		<parameter id="name" value="LocalConceptReference" />
+		<parameter id="description" value="this as reference to local section" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="1" />
+		<parameter id="scope" value="SimpleTurtleSubjectSection" />
+		<parameter id="scope" value="SimpleTurtleObjectSection" />
+		
+		
+	</extension>
 
 </plugin>
