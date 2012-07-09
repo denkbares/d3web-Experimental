@@ -98,7 +98,7 @@ public class SparqlResultSetRenderer {
 			erg = Rdf2GoCore.getInstance().reduceNamespace(
 					n.toString());
 		}
-		System.out.println(n.toString());
+		// System.out.println(n.toString());
 		erg = Strings.decodeURL(erg);
 
 		if (links) {
