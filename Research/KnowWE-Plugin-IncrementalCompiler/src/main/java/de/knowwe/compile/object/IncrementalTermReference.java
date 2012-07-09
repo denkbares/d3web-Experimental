@@ -144,8 +144,8 @@ public abstract class IncrementalTermReference extends SimpleReference {
 			}
 			else {
 				string.append(Strings.maskHTML("<a name='" + reference.getID() + "'>"));
-				r.render(reference, user, string);
 				string.append(Strings.maskHTML("</a>"));
+				r.render(reference, user, string);
 			}
 			for (Message kdomReportMessage : messages) {
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {

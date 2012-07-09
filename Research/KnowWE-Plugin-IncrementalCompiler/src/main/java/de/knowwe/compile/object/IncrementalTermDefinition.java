@@ -20,77 +20,22 @@
 
 package de.knowwe.compile.object;
 
-import java.util.Collection;
 
-import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
-import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
-import de.knowwe.core.report.DefaultMessageRenderer;
-import de.knowwe.core.report.Message;
-import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public abstract class IncrementalTermDefinition<TermObject> extends SimpleDefinition {
 
-	final Renderer CLASS_RENDERER = new ReferenceRenderer(
+	final Renderer CLASS_RENDERER = new TermDefinitionRenderer<TermObject>(
 			new ToolMenuDecoratingRenderer(
 					new StyleRenderer("color:rgb(125, 80, 102)")));
 
 	public IncrementalTermDefinition(Class<?> termObjectClass) {
 		super(TermRegistrationScope.GLOBAL, termObjectClass);
 		this.setRenderer(CLASS_RENDERER);
-	}
-
-	class ReferenceRenderer implements Renderer {
-
-		private Renderer r = null;
-
-		public ReferenceRenderer(Renderer renderer) {
-			r = renderer;
-		}
-
-		@Override
-		public void render(Section<?> sec, UserContext user, StringBuilder string) {
-
-			Collection<Message> messages = IncrementalCompiler.getInstance().checkDefinition(
-					KnowWEUtils.getTermIdentifier(sec));
-			for (Message kdomReportMessage : messages) {
-				if (kdomReportMessage.getType() == Message.Type.ERROR) {
-					string.append(
-							DefaultMessageRenderer.ERROR_RENDERER.preRenderMessage(
-									kdomReportMessage, user, null));
-				}
-				if (kdomReportMessage.getType() == Message.Type.WARNING) {
-					string.append(
-							DefaultMessageRenderer.WARNING_RENDERER.preRenderMessage(
-									kdomReportMessage, user, null));
-				}
-			}
-
-			string.append(Strings.maskHTML("<a name='" + sec.getID() + "'>"));
-
-			r.render(sec, user, string);
-
-			string.append(Strings.maskHTML("</a>"));
-
-			for (Message kdomReportMessage : messages) {
-				if (kdomReportMessage.getType() == Message.Type.ERROR) {
-					string.append(
-							DefaultMessageRenderer.ERROR_RENDERER.postRenderMessage(
-									kdomReportMessage, user, null));
-				}
-				if (kdomReportMessage.getType() == Message.Type.WARNING) {
-					string.append(
-							DefaultMessageRenderer.WARNING_RENDERER.postRenderMessage(
-									kdomReportMessage, user, null));
-				}
-			}
-		}
 	}
 
 }
