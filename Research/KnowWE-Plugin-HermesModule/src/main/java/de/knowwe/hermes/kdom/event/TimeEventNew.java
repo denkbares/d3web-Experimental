@@ -36,7 +36,7 @@ import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.rdfs.AbstractIRITermDefinition;
-import de.knowwe.rdfs.TripleMarkup;
+import de.knowwe.rdfs.tripleMarkup.TripleMarkup;
 
 public class TimeEventNew extends AbstractType {
 
