@@ -397,7 +397,6 @@ public class Rdf2GoCore implements EventListener {
 			if (set1.contains(s)) {
 				set1.remove(s);
 				iterator.remove();
-				System.out.println("removing disjoint: " + s.toString());
 			}
 		}
 
@@ -739,7 +738,10 @@ public class Rdf2GoCore implements EventListener {
 
 	}
 
-	private void logStatements(Collection<Statement> collection, long start, String key) {
+	private void logStatements(Collection<Statement> c, long start, String key) {
+		// sort statements at this point using tree map
+		TreeSet<Statement> collection = new TreeSet<Statement>();
+		collection.addAll(c);
 		if (collection.isEmpty()) return;
 		StringBuffer buffy = new StringBuffer();
 		for (Statement statement : collection) {
