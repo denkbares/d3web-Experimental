@@ -5,24 +5,16 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.TypedTermDefinition;
+import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
+import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 
 public class EqualStringHazardFilter {
-
-	private Collection<String> locationDependantKeywords = new HashSet<String>();
-
-	/**
-	 * 
-	 */
-	public EqualStringHazardFilter(Collection<String> locationDependantKeywords) {
-		this.locationDependantKeywords = locationDependantKeywords;
-	}
 
 	public void filter(Collection<Section<? extends KnowledgeUnit>> insert, Collection<Section<? extends KnowledgeUnit>> remove) {
 		// NOTE: This weird collection juggling using CompileSections is
@@ -49,13 +41,20 @@ public class EqualStringHazardFilter {
 		Iterator<CompileSection> removeIter = removeSet.iterator();
 		while (removeIter.hasNext()) {
 			CompileSection next = removeIter.next();
-			boolean usesLocationDependantKeyword = containsLocationDependantKeywordReference(next);
-			if (!usesLocationDependantKeyword && insertSet.contains(next)) {
-				// item found in both sets, removing from both
-				removeIter.remove();
-				insertSet.remove(next);
+			if (insertSet.contains(next)) {
+				Section<? extends Type> other = retrieveSection2(next.getSection(), insertSet);
+				// check whether the sections are not only textual identical,
+				// but also the resolved references (e.g., using the 'this'
+				// keyword) are identical
+				boolean equalTermNamesSignature = hasEqualResolvedTermNamesSignature(
+						next.getSection(), other);
+				if (equalTermNamesSignature) {
+					// item found in both sets, removing from both
+					removeIter.remove();
+					insertSet.remove(next);
 
-				changes = true;
+					changes = true;
+				}
 			}
 		}
 
@@ -75,22 +74,33 @@ public class EqualStringHazardFilter {
 		}
 	}
 
-	private boolean containsLocationDependantKeywordReference(CompileSection next) {
-		boolean usesLocationDependantKeyword = false;
-		for (String keyword : locationDependantKeywords) {
-			if (next.getSection().getText().contains(keyword)) {
-				Collection<Section<?>> containing = Sections.findSmallestSectionsContaining(
-						next.getSection(), keyword);
-				// should be one at most
-				for (Section<?> section : containing) {
-					if (section.get() instanceof IncrementalTermReference
-							&& section.getText().trim().equals(keyword)) {
-						usesLocationDependantKeyword = true;
-					}
-				}
-			}
+	private boolean hasEqualResolvedTermNamesSignature(Section<?> next, Section<?> other) {
+		Section<KnowledgeUnit> castedNextSection = Sections.cast(next,
+				KnowledgeUnit.class);
+		Section<KnowledgeUnit> castedOtherSection = Sections.cast(other,
+				KnowledgeUnit.class);
+
+		Collection<Section<SimpleReference>> referencesOfNextSection = CompileUtils.getAllReferencesOfCompilationUnit(castedNextSection);
+		Collection<Section<SimpleReference>> referencesOfOtherSection = CompileUtils.getAllReferencesOfCompilationUnit(castedOtherSection);
+
+		Collection<String> termNamesOther = resolveTermNames(referencesOfOtherSection);
+		Collection<String> termNamesNext = resolveTermNames(referencesOfNextSection);
+
+		return termNamesNext.equals(termNamesOther);
+	}
+
+	/**
+	 * 
+	 * @created 10.07.2012
+	 * @param referencesOfSection
+	 * @return
+	 */
+	private Collection<String> resolveTermNames(Collection<Section<SimpleReference>> referencesOfSection) {
+		Collection<String> termNames = new HashSet<String>();
+		for (Section<SimpleReference> section : referencesOfSection) {
+			termNames.add(section.get().getTermName(section));
 		}
-		return usesLocationDependantKeyword;
+		return termNames;
 	}
 
 	public void filterDefs(Collection<Section<SimpleDefinition>> insert, Collection<Section<SimpleDefinition>> remove) {

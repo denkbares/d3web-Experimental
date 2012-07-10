@@ -86,9 +86,7 @@ public class IncrementalCompiler implements EventListener {
 		// TODO: implement singleton properly
 		instance = this;
 
-		Set<String> keywords = new HashSet<String>();
-		keywords.add("this");
-		this.hazardFilter = new EqualStringHazardFilter(keywords);
+		this.hazardFilter = new EqualStringHazardFilter();
 
 		/*
 		 * This term is for the tests only TODO: remove when tests are adapted
