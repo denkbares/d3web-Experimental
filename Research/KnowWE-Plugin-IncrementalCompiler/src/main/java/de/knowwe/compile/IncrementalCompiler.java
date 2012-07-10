@@ -69,6 +69,8 @@ public class IncrementalCompiler implements EventListener {
 
 	private final ReferenceManager terminology = new ReferenceManager();
 
+	private EqualStringHazardFilter hazardFilter = null;
+
 	private Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices = new HashSet<Section<? extends KnowledgeUnit>>();
 	private Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove = new HashSet<Section<? extends KnowledgeUnit>>();
 
@@ -83,6 +85,10 @@ public class IncrementalCompiler implements EventListener {
 	public IncrementalCompiler() {
 		// TODO: implement singleton properly
 		instance = this;
+
+		Set<String> keywords = new HashSet<String>();
+		keywords.add("this");
+		this.hazardFilter = new EqualStringHazardFilter(keywords);
 
 		/*
 		 * This term is for the tests only TODO: remove when tests are adapted
@@ -222,7 +228,7 @@ public class IncrementalCompiler implements EventListener {
 		Collection<Section<? extends KnowledgeUnit>> deletedknowledge = CompileUtils.filterKnowledgeUnits(oldSectionsNotReused);
 
 		// filter resource-delta for equal sections
-		EqualStringHazardFilter.filter(createdknowledge, deletedknowledge);
+		hazardFilter.filter(createdknowledge, deletedknowledge);
 
 		for (Section<? extends KnowledgeUnit> section : createdknowledge) {
 
@@ -251,7 +257,7 @@ public class IncrementalCompiler implements EventListener {
 		// check deleted objects
 		Collection<Section<SimpleDefinition>> deletedObjectDefintions = CompileUtils.filterDefinitions(oldSectionsNotReused);
 		Collection<Section<SimpleDefinition>> createdObjectDefintions = CompileUtils.filterDefinitions(newSectionsNotReused);
-		EqualStringHazardFilter.filterDefs(createdObjectDefintions,
+		hazardFilter.filterDefs(createdObjectDefintions,
 				deletedObjectDefintions);
 		for (Section<? extends SimpleDefinition> section : deletedObjectDefintions) {
 			checkObject(section);
@@ -342,7 +348,7 @@ public class IncrementalCompiler implements EventListener {
 	 */
 	private void hazardFilter(Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices2, Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove2) {
 
-		EqualStringHazardFilter.filter(potentiallyNewKnowledgeSlices2,
+		hazardFilter.filter(potentiallyNewKnowledgeSlices2,
 				knowledgeSlicesToRemove2);
 	}
 

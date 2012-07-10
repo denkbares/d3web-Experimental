@@ -2,8 +2,10 @@ package de.knowwe.compile;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 
+import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.core.kdom.Type;
@@ -13,7 +15,16 @@ import de.knowwe.core.kdom.parsing.Sections;
 
 public class EqualStringHazardFilter {
 
-	public static void filter(Collection<Section<? extends KnowledgeUnit>> insert, Collection<Section<? extends KnowledgeUnit>> remove) {
+	private Collection<String> locationDependantKeywords = new HashSet<String>();
+
+	/**
+	 * 
+	 */
+	public EqualStringHazardFilter(Collection<String> locationDependantKeywords) {
+		this.locationDependantKeywords = locationDependantKeywords;
+	}
+
+	public void filter(Collection<Section<? extends KnowledgeUnit>> insert, Collection<Section<? extends KnowledgeUnit>> remove) {
 		// NOTE: This weird collection juggling using CompileSections is
 		// necessary because the equals method of the class Section itself does
 		// not have the characteristics required here.
@@ -38,7 +49,8 @@ public class EqualStringHazardFilter {
 		Iterator<CompileSection> removeIter = removeSet.iterator();
 		while (removeIter.hasNext()) {
 			CompileSection next = removeIter.next();
-			if (insertSet.contains(next)) {
+			boolean usesLocationDependantKeyword = containsLocationDependantKeywordReference(next);
+			if (!usesLocationDependantKeyword && insertSet.contains(next)) {
 				// item found in both sets, removing from both
 				removeIter.remove();
 				insertSet.remove(next);
@@ -63,7 +75,25 @@ public class EqualStringHazardFilter {
 		}
 	}
 
-	public static void filterDefs(Collection<Section<SimpleDefinition>> insert, Collection<Section<SimpleDefinition>> remove) {
+	private boolean containsLocationDependantKeywordReference(CompileSection next) {
+		boolean usesLocationDependantKeyword = false;
+		for (String keyword : locationDependantKeywords) {
+			if (next.getSection().getText().contains(keyword)) {
+				Collection<Section<?>> containing = Sections.findSmallestSectionsContaining(
+						next.getSection(), keyword);
+				// should be one at most
+				for (Section<?> section : containing) {
+					if (section.get() instanceof IncrementalTermReference
+							&& section.getText().trim().equals(keyword)) {
+						usesLocationDependantKeyword = true;
+					}
+				}
+			}
+		}
+		return usesLocationDependantKeyword;
+	}
+
+	public void filterDefs(Collection<Section<SimpleDefinition>> insert, Collection<Section<SimpleDefinition>> remove) {
 		// NOTE: This weird collection juggling using CompileSections is
 		// necessary because the equals of the Sections class itself does not
 		// have the characteristics required here.
@@ -96,7 +126,8 @@ public class EqualStringHazardFilter {
 				// different type
 				// therefore compare SectionTypes of definitions
 				Section<? extends Type> section1 = next.getSection();
-				// retrieve reference on other object (equals-but-not-really-equal-problem)
+				// retrieve reference on other object
+				// (equals-but-not-really-equal-problem)
 				Section<? extends Type> section2 = retrieveSection2(section1, insertSet);
 				if (section1.get() instanceof TypedTermDefinition) {
 					if (section2.get() instanceof TypedTermDefinition) {
