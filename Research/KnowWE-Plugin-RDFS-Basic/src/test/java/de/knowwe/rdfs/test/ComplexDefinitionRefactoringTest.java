@@ -77,7 +77,7 @@ public class ComplexDefinitionRefactoringTest {
 	public static void tearDown() {
 		// Remove the statements created in the test to avoid problems
 		Article article = TestArticleManager.getArticle(TESTFILE);
-		Rdf2GoCore.getInstance().removeStatementsOfSectionRecursively(article.getRootSection());
+		Rdf2GoCore.getInstance().removeStatementsForSection(article.getRootSection());
 		Rdf2GoCore.getInstance().removeAllCachedStatements();
 		// Finally remove the formerly created article
 		TestArticleManager.clear();

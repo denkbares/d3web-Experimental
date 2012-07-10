@@ -107,7 +107,7 @@ public class RDF2GoSync {
 		}
 		else if (mode.equals(RDF2GoSync.Mode.REMOVE)) {
 			// TODO: Not sure if this is ok...
-			rdf2goCore.removeStatementsOfSectionRecursively(sec);
+			rdf2goCore.removeStatementsForSection(sec);
 		}
 	}
 

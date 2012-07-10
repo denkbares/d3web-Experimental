@@ -164,9 +164,9 @@ public class Rdf2GoCore implements EventListener {
 
 	private Map<String, String> namespaces;
 
-	private TreeSet<Statement> insertCache;
+	private Set<Statement> insertCache;
 
-	private TreeSet<Statement> removeCache;
+	private Set<Statement> removeCache;
 
 	ResourceBundle properties = ResourceBundle.getBundle("model");
 
@@ -186,7 +186,7 @@ public class Rdf2GoCore implements EventListener {
 	 * triple store. The {@link Section} is used for caching. *
 	 * <p/>
 	 * You can remove the {@link Statement} using the method
-	 * {@link Rdf2GoCore#removeStatementsOfSectionRecursively(Section)}.
+	 * {@link Rdf2GoCore#removeStatementsForSection(Section)}.
 	 * 
 	 * @created 06.12.2010
 	 * @param subject the subject of the statement/triple
@@ -204,7 +204,7 @@ public class Rdf2GoCore implements EventListener {
 	 * triple store.
 	 * <p/>
 	 * You can remove the {@link Statement} using the method
-	 * {@link Rdf2GoCore#removeStatementsOfSectionRecursively(Section)}.
+	 * {@link Rdf2GoCore#removeStatementsForSection(Section)}.
 	 * 
 	 * @created 06.12.2010
 	 * @param statement the {@link Statement}s to add
@@ -222,7 +222,7 @@ public class Rdf2GoCore implements EventListener {
 	 * triple store.
 	 * <p/>
 	 * You can remove the {@link Statement}s using the method
-	 * {@link Rdf2GoCore#removeStatementsOfSectionRecursively(Section)}.
+	 * {@link Rdf2GoCore#removeStatementsForSection(Section)}.
 	 * 
 	 * @created 06.12.2010
 	 * @param statements the {@link Statement}s to add
@@ -363,19 +363,44 @@ public class Rdf2GoCore implements EventListener {
 	public void commit() {
 
 		// hazard filter
+		if (!Collections.disjoint(removeCache, insertCache)) {
+			makeDisjoint(removeCache, insertCache);
+		}
 
 		long start = System.currentTimeMillis();
 		model.removeAll(removeCache.iterator());
 		EventManager.getInstance().fireEvent(new RemoveStatementsEvent(removeCache));
-		logStatements(removeCache, start, "Removed statements:\n");
 
+		// Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).getLevel();
+		if (true) {
+			logStatements(removeCache, start, "Removed statements:\n");
+			logStatements(insertCache, start, "Inserted statements:\n");
+		}
 		start = System.currentTimeMillis();
 		model.addAll(insertCache.iterator());
 		EventManager.getInstance().fireEvent(new InsertStatementsEvent(insertCache));
-		logStatements(insertCache, start, "Inserted statements:\n");
 
-		removeCache = new TreeSet<Statement>();
-		insertCache = new TreeSet<Statement>();
+		removeCache = new HashSet<Statement>();
+		insertCache = new HashSet<Statement>();
+	}
+
+	/**
+	 * 
+	 * @created 10.07.2012
+	 * @param set1
+	 * @param set2
+	 */
+	private void makeDisjoint(Set<Statement> set1, Set<Statement> set2) {
+		Iterator<Statement> iterator = set2.iterator();
+		while (iterator.hasNext()) {
+			Statement s = iterator.next();
+			if (set1.contains(s)) {
+				set1.remove(s);
+				iterator.remove();
+				System.out.println("removing disjoint: " + s.toString());
+			}
+		}
+
 	}
 
 	public URI createBasensURI(String value) {
@@ -825,14 +850,30 @@ public class Rdf2GoCore implements EventListener {
 	 * @param section the {@link Section} for which the {@link Statement}s
 	 *        should be removed
 	 */
-	public void removeStatementsOfSectionRecursively(Section<? extends Type> section) {
+	public void removeStatementsForSection(Section<? extends Type> sec) {
 
-		removeStatementsOfSection(section);
+		WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle =
+				incrementalStatementCache.get(sec.getTitle());
 
-		// walk over all children
-		for (Section<? extends Type> current : section.getChildren()) {
-			removeStatementsOfSectionRecursively(current);
+		if (allStatementSectionsOfArticle != null) {
+			if (allStatementSectionsOfArticle.containsKey(sec)) {
+				removeStatementListOfSection(sec);
+			}
+			else {
+				// fix: IncrementalCompiler not necessarily delivers the same
+				// section object, maybe another with the same content
+				Set<Section<? extends Type>> keySet = allStatementSectionsOfArticle.keySet();
+				Iterator<Section<? extends Type>> iterator = keySet.iterator();
+				while (iterator.hasNext()) {
+					Section<? extends Type> section = iterator.next();
+					if (section.getText().equals(sec.getText())) {
+						removeStatementListOfSection(section);
+						break;
+					}
+				}
+			}
 		}
+
 	}
 
 	private void removeStatementListOfSection(Section<? extends Type> sec) {
@@ -882,36 +923,6 @@ public class Rdf2GoCore implements EventListener {
 
 	private void addStatementsToRemoveCache(List<Statement> list) {
 		removeCache.addAll(list);
-	}
-
-	/**
-	 * removes statements from statementcache and rdf store
-	 * 
-	 * @created 06.12.2010
-	 * @param sec
-	 */
-	private void removeStatementsOfSection(Section<? extends Type> sec) {
-		WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle =
-				incrementalStatementCache.get(sec.getTitle());
-
-		if (allStatementSectionsOfArticle != null) {
-			if (allStatementSectionsOfArticle.containsKey(sec)) {
-				removeStatementListOfSection(sec);
-			}
-			else {
-				// fix: IncrementalCompiler not necessarily delivers the same
-				// section object, maybe another with the same content
-				Set<Section<? extends Type>> keySet = allStatementSectionsOfArticle.keySet();
-				Iterator<Section<? extends Type>> iterator = keySet.iterator();
-				while (iterator.hasNext()) {
-					Section<? extends Type> section = iterator.next();
-					if (section.getText().equals(sec.getText())) {
-						removeStatementListOfSection(section);
-						break;
-					}
-				}
-			}
-		}
 	}
 
 	/**
