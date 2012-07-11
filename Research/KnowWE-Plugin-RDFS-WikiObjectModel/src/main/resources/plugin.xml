@@ -42,7 +42,7 @@
 		<parameter id="description" value="Defines a section header as RDFS-object" />
 		<parameter id="version" value="0.2" />
 		<parameter id="priority" value="1" />
-		<parameter id="scope" value="HeaderType" />
+		<parameter id="scope" value="SectionHeaderType" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -54,8 +54,16 @@
 		<parameter id="priority" value="1" />
 		<parameter id="scope" value="SimpleTurtleSubjectSection" />
 		<parameter id="scope" value="SimpleTurtleObjectSection" />
-		
-		
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="CompiledImageTag">
+		<parameter id="class" value="de.knowwe.rdfs.wikiObjectModel.types.CompiledImageTag" />
+		<parameter id="name" value="CompiledImageTag" />
+		<parameter id="description" value="Compiles the images in the wiki sources to rdf" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="1.0" />
+		<parameter id="scope" value="ImageType" />
 	</extension>
 
 </plugin>
