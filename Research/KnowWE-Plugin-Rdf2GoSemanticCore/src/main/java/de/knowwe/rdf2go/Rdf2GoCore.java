@@ -183,7 +183,7 @@ public class Rdf2GoCore implements EventListener {
 
 	/**
 	 * Creates a {@link Statement} for the given objects and adds it to the
-	 * triple store. The {@link Section} is used for caching. *
+	 * triple store. The {@link Section} is used for caching.
 	 * <p/>
 	 * You can remove the {@link Statement} using the method
 	 * {@link Rdf2GoCore#removeStatementsForSection(Section)}.
@@ -361,45 +361,33 @@ public class Rdf2GoCore implements EventListener {
 	 * @created 12.06.2012
 	 */
 	public void commit() {
+		boolean log = true;
 
-		// hazard filter
-		if (!Collections.disjoint(removeCache, insertCache)) {
-			makeDisjoint(removeCache, insertCache);
-		}
+		// For logging...
+		TreeSet<Statement> sortedRemoveCache = new TreeSet<Statement>(removeCache);
+
+		// Hazard Filter:
+		// Since removing statements is expansive, we do not remove statements
+		// that are inserted again anyway.
+		// Since inserting a statement is cheap and the fact that a statement in
+		// the remove cache has not necessarily been committed to the model
+		// before (e.g. compiling the same sections multiple times before the
+		// first commit), we do not remove statements from the insert cache.
+		// Duplicate statements are ignored by the model anyway.
+		removeCache.removeAll(insertCache);
 
 		long start = System.currentTimeMillis();
 		model.removeAll(removeCache.iterator());
 		EventManager.getInstance().fireEvent(new RemoveStatementsEvent(removeCache));
+		if (log) logStatements(sortedRemoveCache, start, "Removed statements:\n");
 
-		// Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).getLevel();
-		if (true) {
-			logStatements(removeCache, start, "Removed statements:\n");
-			logStatements(insertCache, start, "Inserted statements:\n");
-		}
 		start = System.currentTimeMillis();
 		model.addAll(insertCache.iterator());
 		EventManager.getInstance().fireEvent(new InsertStatementsEvent(insertCache));
+		if (log) logStatements(new TreeSet<Statement>(insertCache), start, "Inserted statements:\n");
 
 		removeCache = new HashSet<Statement>();
 		insertCache = new HashSet<Statement>();
-	}
-
-	/**
-	 * 
-	 * @created 10.07.2012
-	 * @param set1
-	 * @param set2
-	 */
-	private void makeDisjoint(Set<Statement> set1, Set<Statement> set2) {
-		Iterator<Statement> iterator = set2.iterator();
-		while (iterator.hasNext()) {
-			Statement s = iterator.next();
-			if (set1.contains(s)) {
-				set1.remove(s);
-				iterator.remove();
-			}
-		}
-
 	}
 
 	public URI createBasensURI(String value) {
@@ -664,8 +652,8 @@ public class Rdf2GoCore implements EventListener {
 		incrementalStatementCache = new HashMap<String, WeakHashMap<Section<? extends Type>, List<Statement>>>();
 		duplicateStatements = new HashMap<Statement, Set<String>>();
 
-		insertCache = new TreeSet<Statement>();
-		removeCache = new TreeSet<Statement>();
+		insertCache = new HashSet<Statement>();
+		removeCache = new HashSet<Statement>();
 
 		namespaces = new HashMap<String, String>();
 		namespaces.putAll(model.getNamespaces());
@@ -738,13 +726,11 @@ public class Rdf2GoCore implements EventListener {
 
 	}
 
-	private void logStatements(Collection<Statement> c, long start, String key) {
+	private void logStatements(TreeSet<Statement> statements, long start, String key) {
 		// sort statements at this point using tree map
-		TreeSet<Statement> collection = new TreeSet<Statement>();
-		collection.addAll(c);
-		if (collection.isEmpty()) return;
+		if (statements.isEmpty()) return;
 		StringBuffer buffy = new StringBuffer();
-		for (Statement statement : collection) {
+		for (Statement statement : statements) {
 			buffy.append(verbalizeStatement(statement) + "\n");
 		}
 		buffy.append("Done after " + (System.currentTimeMillis() - start) + "ms");
