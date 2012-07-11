@@ -43,8 +43,6 @@ public class SectionType extends AbstractType {
 	 * children.
 	 */
 	public SectionType(int count) {
-		System.out.println("creating SectionType: " + count);
-		// this.setSectionFinder(new WikiBookSectionFinder('!', true));
 		this.setSectionFinder(new SectionBlockFinder(createMarker(count)));
 		this.addChildType(new SectionHeaderType());
 		this.addChildType(new SectionContentType(count));
