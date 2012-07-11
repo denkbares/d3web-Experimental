@@ -30,6 +30,7 @@ public class ImageType extends AbstractType {
 
 	public ImageType() {
 
-		this.setSectionFinder(new RegexSectionFinder("\\[\\{Image.*\\}\\]"));
+		this.setSectionFinder(new RegexSectionFinder("\\[\\{Image(.*?)\\}\\]"));
 	}
+
 }
