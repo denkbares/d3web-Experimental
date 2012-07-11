@@ -80,7 +80,7 @@ public class WikiSectionCompiler extends AbstractKnowledgeUnitCompileScriptRDFS 
 
 		}
 
-		// Rdf2GoCore.getInstance().addStatements(data, section);
+		Rdf2GoCore.getInstance().addStatements(data, section);
 
 	}
 

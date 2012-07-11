@@ -51,12 +51,7 @@ public class Utils {
 			return baseUrl
 					+ "Wiki.jsp?page="
 					+ title
-					+ "#section-"
-					+ title
-					+ "-"
-					+ URLEncoder.encode(
-							text.replaceAll(" ", "").replaceAll("-", "").replaceAll(":", ""),
-							"UTF-8");
+					+ "#" + URLEncoder.encode(text, "UTF-8");
 		}
 		catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
