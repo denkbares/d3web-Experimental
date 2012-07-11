@@ -1,20 +1,19 @@
 /**
- * KnowWE Metatool
- * Copyright (C) 2011 Alex Legler
+ * KnowWE Metatool Copyright (C) 2011 Alex Legler
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 package de.uniwue.knowwe.metatool;
 
@@ -36,17 +35,16 @@ import de.knowwe.core.utils.Strings;
  * @author Alex Legler
  */
 public class TestLauncher {
-	
+
 	public final static String PREPEND =
-			"<style>\n" + 
-			"* { white-space: pre-wrap; }\n" + 
-			"</style>\n";
-	
+			"<style>\n" +
+					"* { white-space: pre-wrap; }\n" +
+					"</style>\n";
+
 	/**
 	 * @param args
 	 * @throws IOException
 	 */
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
 		if (args.length < 2) {
 			throw new RuntimeException(
@@ -81,7 +79,7 @@ public class TestLauncher {
 		File targetFile = new File(targetDir, markupFile.getName() + ".html");
 
 		String content = Strings.unmaskHTML(sb.toString());
-		
+
 		try {
 			FileWriter fstream = new FileWriter(targetFile);
 			BufferedWriter out = new BufferedWriter(fstream);
@@ -90,13 +88,14 @@ public class TestLauncher {
 			out.write(content);
 			out.close();
 			fstream.close();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			throw new RuntimeException("Cannot write to file: "
 					+ e.getMessage(), e);
 		}
-		
+
 		System.out.println("Rendering done.");
-		
+
 		System.exit(0);
 	}
 }
