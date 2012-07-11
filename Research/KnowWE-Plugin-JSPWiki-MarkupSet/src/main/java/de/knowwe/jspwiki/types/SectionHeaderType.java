@@ -41,9 +41,6 @@ public class SectionHeaderType extends AbstractType {
 	 */
 	public SectionHeaderType() {
 		this.setSectionFinder(new SectionHeaderSectionFinder());
-		this.addChildType(new HeaderType(HeaderType.REGEX_HEADER1));
-		this.addChildType(new HeaderType(HeaderType.REGEX_HEADER2));
-		this.addChildType(new HeaderType(HeaderType.REGEX_HEADER3));
 	}
 
 	public class SectionHeaderSectionFinder implements SectionFinder {

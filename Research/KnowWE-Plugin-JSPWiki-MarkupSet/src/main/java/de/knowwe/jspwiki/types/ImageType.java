@@ -28,9 +28,12 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
  */
 public class ImageType extends AbstractType {
 
+	public static String IMAGE_TAG_REGEX = "\\[\\{Image(.*?)\\}\\]";
+
 	public ImageType() {
 
-		this.setSectionFinder(new RegexSectionFinder("\\[\\{Image(.*?)\\}\\]"));
+		this.setSectionFinder(new RegexSectionFinder(IMAGE_TAG_REGEX));
+
 	}
 
 }

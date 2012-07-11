@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2011 denkbares GmbH
-
+ * 
  * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
@@ -34,33 +34,31 @@ import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
  */
 
 public class SectionContentType extends AbstractType {
+
 	/*
 	 * The SectionContentType takes everything left from a SectionType.
 	 */
-	
-	private static SectionContentType instance = null;
-	
-	public static SectionContentType getInstance() {
-		if (instance == null) {
-			instance = new SectionContentType();
-		}
-		return instance;
-	}
-	
-	public SectionContentType(){
+	public SectionContentType(int count) {
 		this.setSectionFinder(new AllTextSectionFinder());
+		if (count > 1) {
+			// allow for the next lower level of sections
+			this.addChildType(new SectionType(count - 1));
+		}
+		this.addChildType(new ParagraphType());
 	}
-	
+
 	/*
-	 * A SectionContentType can has a SectionType, every type that has root
-	 * as its father and paragrahtype as children.
+	 * A SectionContentType can has a SectionType, every type that has root as
+	 * its father and paragraph type as children.
 	 */
+	@Override
 	public List<Type> getChildrenTypes() {
-		ArrayList<Type> children = new ArrayList<Type>(2);
-		children.add(SectionType.getInstance());
+		ArrayList<Type> result = new ArrayList<Type>(2);
+
 		List<Type> rootChildren = RootType.getInstance().getChildrenTypes();
-		children.addAll(rootChildren);
-		children.add(new ParagraphType());
-		return children;
+		result.addAll(rootChildren);
+		result.addAll(this.childrenTypes);
+
+		return result;
 	}
 }

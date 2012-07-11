@@ -18,119 +18,64 @@
  */
 package de.knowwe.jspwiki.types;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.sectionFinder.SectionFinder;
-import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 /**
  * 
- * @author Lukas Brehl
+ * @author Lukas Brehl, Jochen
  * @created 25.05.2012
  */
 
 public class SectionType extends AbstractType {
 
-	private static SectionType instance = null;
-
-	public static SectionType getInstance() {
-		if (instance == null) {
-			instance = new SectionType();
-		}
-		return instance;
+	/**
+	 * for the plugin framework to call
+	 */
+	public SectionType() {
+		this(3);
 	}
 
 	/*
 	 * A SectionType can have a SectionHeaderType and a SectionContentType as
 	 * children.
 	 */
-	public SectionType() {
-		this.setSectionFinder(new WikiBookSectionFinder('!', true));
+	public SectionType(int count) {
+		System.out.println("creating SectionType: " + count);
+		// this.setSectionFinder(new WikiBookSectionFinder('!', true));
+		this.setSectionFinder(new SectionBlockFinder(createMarker(count)));
 		this.addChildType(new SectionHeaderType());
-		this.addChildType(SectionContentType.getInstance());
+		this.addChildType(new SectionContentType(count));
 	}
 
-	public class WikiBookSectionFinder implements SectionFinder {
-		/*
-		 * Looks for Sections separated throw a preceding Char. The order of
-		 * Sections can be decreasing and increasing amounts of preceding chars.
-		 */
-
-		private final char precedingChar;
-		private final boolean decreasing;
-
-		public WikiBookSectionFinder(char precedingChar, boolean decreasing) {
-			this.precedingChar = precedingChar;
-			this.decreasing = decreasing;
+	/**
+	 * 
+	 * @created 11.07.2012
+	 * @param count
+	 * @return
+	 */
+	private static String createMarker(int count) {
+		String marker = "";
+		for (int i = 0; i < count; i++) {
+			marker += "!";
 		}
+		return marker;
+	}
 
-		@Override
-		public List<SectionFinderResult> lookForSections(String text,
-				Section<?> father, Type type) {
-			List<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
-			String[] rows = text.split("(\n|^)");
+	class SectionBlockFinder extends RegexSectionFinder {
 
-			int start = 0;
-			int level = 0;
-			int startrow = 0;
-			for (int i = 1; i < rows.length; i++) {
-				if (count(rows[i]) != 0) {
-					level = count(rows[i]);
-					start = text.indexOf(rows[i]);
-					startrow = i;
-					break;
-				}
-			}
-			if (level == 0) {
-				return result;
-			}
-			for (int i = startrow + 1; i < rows.length; i++) {
-				if (level <= count(rows[i])) {
-					int end = text.indexOf(rows[i], start);
-					SectionFinderResult s = new SectionFinderResult(start, end);
-					result.add(s);
-					start = text.indexOf(rows[i], start);
-					level = count(rows[i]);
-				}
-			}
+		public SectionBlockFinder(String marker) {
+			// The regex for the major level looks like: "^!!!.*?((?=^!!!)|\\z)"
+			super("^" + marker + // the marker
+					".*?" // any content
+					+ "((?=^" + marker + ")" + // look ahead for the next one
 
-			int end = text.length();
-			SectionFinderResult s = new SectionFinderResult(start, end);
-			if (start != end) {
-				result.add(s);
-			}
-			return result;
-		}
-
-		/*
-		 * Counts the preceding chars at the beginning of string s if decreasing
-		 * equals true. If not it mirrors the amount by 2.
-		 */
-		public int count(String s) {
-			if (s.isEmpty() == true) {
-				return 0;
-			}
-			int level = 0;
-			if (s.charAt(0) == precedingChar) {
-				level++;
-				if (s.charAt(1) == precedingChar) {
-					level++;
-					if (s.charAt(2) == precedingChar) {
-						level++;
-					}
-				}
-			}
-			if (level == 0) {
-				return 0;
-			}
-			if (decreasing == false) {
-				level = 4 - level;
-			}
-			return level;
+					"|\\z)" // or end of content
+			, Pattern.DOTALL
+					| Pattern.MULTILINE, 0);
 		}
 	}
+
 }
