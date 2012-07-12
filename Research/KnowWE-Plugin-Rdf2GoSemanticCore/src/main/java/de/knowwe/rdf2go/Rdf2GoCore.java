@@ -161,6 +161,11 @@ public class Rdf2GoCore implements EventListener {
 	 */
 	private final Map<String, Set<Statement>> fullParseStatementCache = new HashMap<String, Set<Statement>>();
 
+	/**
+	 * All namespaces known to KnowWE. Key is the namespace shortcut, value is
+	 * the full namespace, e.g. rdf and
+	 * http://www.w3.org/1999/02/22-rdf-syntax-ns#
+	 */
 	private Map<String, String> namespaces;
 
 	private Set<Statement> insertCache;
@@ -768,18 +773,35 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
-	 * reduces namespace in uri string to prefix
+	 * Reduces namespace in uri string to prefix
 	 * 
 	 * @created 06.12.2010
-	 * @param s
-	 * @return
+	 * @param string the string where the namespace needs to be reduced
+	 * @return the string with the prefix instead of the full namespace
 	 */
-	public String reduceNamespace(String s) {
+	public String reduceNamespace(String string) {
 		for (Entry<String, String> cur : namespaces.entrySet()) {
-			s = s.replaceAll(cur.getValue(), cur.getKey() + ":");
+			string = string.replaceAll(cur.getValue(), cur.getKey() + ":");
 		}
-		return s;
+		return string;
+	}
 
+	/**
+	 * If the string starts with a known namespace, the namespace is removed
+	 * (only from the start of the string).
+	 * 
+	 * @created 12.07.2012
+	 * @param string the string where the namespace needs to be removed
+	 * @return the string without the namespace prefix
+	 */
+	public String trimNamespace(String string) {
+		for (String namespace : namespaces.values()) {
+			if (string.startsWith(namespace)) {
+				string = string.substring(namespace.length());
+				break;
+			}
+		}
+		return string;
 	}
 
 	public void removeAllCachedStatements() {
