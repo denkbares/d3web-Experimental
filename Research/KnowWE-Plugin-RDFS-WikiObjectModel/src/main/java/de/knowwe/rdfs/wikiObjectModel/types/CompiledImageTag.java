@@ -28,6 +28,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
+import de.knowwe.compile.object.LocationDependantKnowledgeUnit;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
@@ -45,7 +46,7 @@ import de.knowwe.rdfs.wikiObjectModel.WikiObjectModel;
  * @author Jochen Reutelshöfer (denkbares GmbH)
  * @created 11.07.2012
  */
-public class CompiledImageTag extends AbstractKnowledgeUnitType<CompiledImageTag> {
+public class CompiledImageTag extends AbstractKnowledgeUnitType<CompiledImageTag> implements LocationDependantKnowledgeUnit {
 
 	/**
 	 * 
