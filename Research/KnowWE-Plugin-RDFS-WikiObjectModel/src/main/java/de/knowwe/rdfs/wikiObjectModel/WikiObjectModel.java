@@ -47,6 +47,7 @@ public class WikiObjectModel implements Instantiation {
 	public static URI WIKI_PAGE = null;
 	public static URI WIKI_ATTACHEMENT = null;
 	public static URI WIKI_SECTION = null;
+	public static URI WIKI_IMAGE = null;
 	public static URI KDOM_ID = null;
 
 	public static URI HAS_PAGE = null;
@@ -64,6 +65,7 @@ public class WikiObjectModel implements Instantiation {
 		WIKI_CONTENT_RESOURCE = new URIImpl(Rdf2GoCore.basens + "WikiContentResource");
 		KDOM_ID = new URIImpl(Rdf2GoCore.basens + "KDOM_ID");
 		WIKI_PAGE = new URIImpl(Rdf2GoCore.basens + "WikiPage");
+		WIKI_IMAGE = new URIImpl(Rdf2GoCore.basens + "Image");
 		WIKI_ATTACHEMENT = new URIImpl(Rdf2GoCore.basens + "WikiAttachement");
 		WIKI_SECTION = new URIImpl(Rdf2GoCore.basens + "WikiSection");
 
@@ -99,6 +101,8 @@ public class WikiObjectModel implements Instantiation {
 		modelData.add(Rdf2GoCore.getInstance().createStatement(WIKI_SECTION, RDFS.subClassOf,
 				WIKI_CONTENT_RESOURCE));
 		modelData.add(Rdf2GoCore.getInstance().createStatement(WIKI_ATTACHEMENT, RDFS.subClassOf,
+				WIKI_CONTENT_RESOURCE));
+		modelData.add(Rdf2GoCore.getInstance().createStatement(WIKI_IMAGE, RDFS.subClassOf,
 				WIKI_CONTENT_RESOURCE));
 
 		// hasPage property

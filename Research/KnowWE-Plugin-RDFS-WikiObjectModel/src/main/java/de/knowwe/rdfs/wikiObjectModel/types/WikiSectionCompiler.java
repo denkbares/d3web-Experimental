@@ -18,6 +18,8 @@
  */
 package de.knowwe.rdfs.wikiObjectModel.types;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +51,16 @@ public class WikiSectionCompiler extends AbstractKnowledgeUnitCompileScriptRDFS 
 
 		List<Statement> data = new ArrayList<Statement>();
 
+		String title = section.getTitle();
+		try {
+			title = URLEncoder.encode(title, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String pageURL = Environment.getInstance().getWikiConnector().getBaseUrl()
-				+ KnowWEUtils.getURLLink(section.getTitle());
+				+ KnowWEUtils.getURLLink(title);
 
 		URI pageURI = new URIImpl(pageURL);
 
@@ -103,12 +113,13 @@ public class WikiSectionCompiler extends AbstractKnowledgeUnitCompileScriptRDFS 
 				new URIImpl(Utils.createKDOMIDURI(currentSection))));
 
 		// hasContentKDOMID
-		Section<SectionContentType> majorContent = Sections.findSuccessor(currentSection,
+		Section<SectionContentType> content = Sections.findSuccessor(currentSection,
 				SectionContentType.class);
-		data.add(Rdf2GoCore.getInstance().createStatement(currentSectionURI,
-				WikiObjectModel.HAS_CONTENT_KDOM_ID,
-				new URIImpl(Utils.createKDOMIDURI(majorContent))));
-
+		if (content != null) {
+			data.add(Rdf2GoCore.getInstance().createStatement(currentSectionURI,
+					WikiObjectModel.HAS_CONTENT_KDOM_ID,
+					new URIImpl(Utils.createKDOMIDURI(content))));
+		}
 		// hierarchical relation
 		if (parentSectionURI != null) {
 			data.add(Rdf2GoCore.getInstance().createStatement(parentSectionURI,

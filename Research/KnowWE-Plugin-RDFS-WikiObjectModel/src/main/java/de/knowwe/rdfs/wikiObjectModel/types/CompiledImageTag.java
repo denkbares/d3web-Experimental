@@ -18,6 +18,8 @@
  */
 package de.knowwe.rdfs.wikiObjectModel.types;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -26,6 +28,7 @@ import java.util.regex.Pattern;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
+import org.ontoware.rdf2go.vocabulary.RDF;
 
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.LocationDependantKnowledgeUnit;
@@ -68,6 +71,15 @@ public class CompiledImageTag extends AbstractKnowledgeUnitType<CompiledImageTag
 			String baseUrl = Environment.getInstance().getWikiConnector().getBaseUrl();
 			String title = section.getTitle();
 
+			try {
+				title = URLEncoder.encode(title, "UTF-8");
+				source = URLEncoder.encode(source, "UTF-8");
+			}
+			catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			// http://localhost:8080/KnowWE/attach/Test/flag_de.gif
 			String imageURIString = baseUrl + "attach/" + title + "/" + source;
 
@@ -82,6 +94,11 @@ public class CompiledImageTag extends AbstractKnowledgeUnitType<CompiledImageTag
 				targetURI = new URIImpl(Utils.createURL(section.getTitle()));
 			}
 			List<Statement> data = new ArrayList<Statement>();
+
+			// is an image
+			data.add(Rdf2GoCore.getInstance().createStatement(imageURI,
+					RDF.type,
+					WikiObjectModel.WIKI_IMAGE));
 
 			// image illustrates context concept
 			data.add(Rdf2GoCore.getInstance().createStatement(imageURI,
