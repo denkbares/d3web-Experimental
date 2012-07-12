@@ -56,6 +56,7 @@ public class WikiObjectModel implements Instantiation {
 
 	public static URI SUBSECTION_OF = null;
 	public static URI DESCRIBES = null;
+	public static URI DESCRIBED_BY = null;
 	public static URI DESCRIBES_ASPECT_OF = null;
 	public static URI ILLUSTRATES = null;
 
@@ -73,6 +74,7 @@ public class WikiObjectModel implements Instantiation {
 
 		SUBSECTION_OF = new URIImpl(Rdf2GoCore.basens + "subsectionOf");
 		DESCRIBES = new URIImpl(Rdf2GoCore.basens + "describes");
+		DESCRIBED_BY = new URIImpl(Rdf2GoCore.basens + "describedBy");
 		DESCRIBES_ASPECT_OF = new URIImpl(Rdf2GoCore.basens + "describesAspectOf");
 		ILLUSTRATES = new URIImpl(Rdf2GoCore.basens + "illustrates");
 	}
@@ -127,6 +129,10 @@ public class WikiObjectModel implements Instantiation {
 		// hasSubsection inverseOf subsectionOf
 		modelData.add(Rdf2GoCore.getInstance().createStatement(HAS_SUBSECTION, OWL.inverseOf,
 				SUBSECTION_OF));
+
+		// describes inverseOf describedBy
+		modelData.add(Rdf2GoCore.getInstance().createStatement(DESCRIBED_BY, OWL.inverseOf,
+				DESCRIBES));
 
 		// subsectionOf subpropertyOF describesAspectOf
 		modelData.add(Rdf2GoCore.getInstance().createStatement(SUBSECTION_OF, RDFS.subPropertyOf,
