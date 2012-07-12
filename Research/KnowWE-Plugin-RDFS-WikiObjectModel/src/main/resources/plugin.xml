@@ -65,5 +65,17 @@
 		<parameter id="priority" value="1.0" />
 		<parameter id="scope" value="ImageType" />
 	</extension>
+	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Terminology"
+		id="WikiObjectModelTerminology">
+		<parameter id="class"
+			value="de.knowwe.rdfs.wikiObjectModel.WikiObjectModelTerminologyExtension" />
+		<parameter id="name" value="WikiObjectModelTerminologyExtension" />
+		<parameter id="description"
+			value="Introduce WikiObjectModel-Terminology to TerminologyManager." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+
+	</extension>
 
 </plugin>
