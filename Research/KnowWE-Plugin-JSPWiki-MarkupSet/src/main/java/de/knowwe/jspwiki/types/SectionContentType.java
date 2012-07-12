@@ -35,6 +35,9 @@ import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 
 public class SectionContentType extends AbstractType {
 
+	private Type sectionType;
+	private final Type paragraphType;
+
 	/*
 	 * The SectionContentType takes everything left from a SectionType.
 	 */
@@ -42,9 +45,11 @@ public class SectionContentType extends AbstractType {
 		this.setSectionFinder(new AllTextSectionFinder());
 		if (count > 1) {
 			// allow for the next lower level of sections
-			this.addChildType(new SectionType(count - 1));
+			sectionType = new SectionType(count - 1);
+			this.addChildType(sectionType);
 		}
-		this.addChildType(new ParagraphType());
+		paragraphType = new ParagraphType();
+		this.addChildType(paragraphType);
 	}
 
 	/*
@@ -54,10 +59,12 @@ public class SectionContentType extends AbstractType {
 	@Override
 	public List<Type> getChildrenTypes() {
 		ArrayList<Type> result = new ArrayList<Type>(2);
-
+		if (sectionType != null) {
+			result.add(sectionType);
+		}
 		List<Type> rootChildren = RootType.getInstance().getChildrenTypes();
 		result.addAll(rootChildren);
-		result.addAll(this.childrenTypes);
+		result.add(paragraphType);
 
 		return result;
 	}
