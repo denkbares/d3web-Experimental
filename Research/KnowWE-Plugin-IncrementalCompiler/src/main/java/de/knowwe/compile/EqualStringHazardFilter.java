@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.LocationDependantKnowledgeUnit;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.Type;
@@ -49,11 +50,17 @@ public class EqualStringHazardFilter {
 				boolean equalTermNamesSignature = hasEqualResolvedTermNamesSignature(
 						next.getSection(), other);
 				if (equalTermNamesSignature) {
-					// item found in both sets, removing from both
-					removeIter.remove();
-					insertSet.remove(next);
 
-					changes = true;
+					// there are knowledge units which compile at different
+					// locations to different knowledge when containing the same
+					// section text
+					if (!(other.get() instanceof LocationDependantKnowledgeUnit)) {
+						// item found in both sets, removing from both
+						removeIter.remove();
+						insertSet.remove(next);
+
+						changes = true;
+					}
 				}
 			}
 		}
