@@ -78,7 +78,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Terminology"
 		id="RDFSTerminology">
 		<parameter id="class"
-			value="de.knowwe.rdfs.RDFSTerminology" />
+			value="de.knowwe.rdfs.RDFSTerminologyExtension" />
 		<parameter id="name" value="RDFSTerminology" />
 		<parameter id="description"
 			value="Introduce RDFS-Terminology to TerminologyManager." />

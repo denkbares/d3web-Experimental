@@ -36,16 +36,25 @@ import de.knowwe.core.utils.Strings;
 import de.knowwe.plugin.Plugins;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.RDFSTermCategory;
-import de.knowwe.rdfs.RDFSTerminology;
+import de.knowwe.rdfs.RDFSTerminologyExtension;
 
 public class RDFSUtil {
 
+	/**
+	 * Creates a URI for a term. It looks whether this term is a predefined term
+	 * plugged in the system holding a specific namespace. If not a URI using
+	 * the local namespace is created.
+	 * 
+	 * @created 12.07.2012
+	 * @param s
+	 * @return
+	 */
 	public static URI getURI(Section<? extends SimpleTerm> s) {
 		if (s == null) return null;
 
 		String termName = s.get().getTermName(s);
 
-		URI uri = getRDFSURI(termName);
+		URI uri = getURIForPredefinedConcept(termName);
 
 		if (uri == null) {
 			String baseUrl = Rdf2GoCore.localns;
@@ -80,7 +89,7 @@ public class RDFSUtil {
 		return false;
 	}
 
-	public static URI getRDFSURI(String termname) {
+	public static URI getURIForPredefinedConcept(String termname) {
 		URI uri = null;
 
 		Extension[] exts = PluginManager.getInstance().getExtensions(
@@ -88,8 +97,12 @@ public class RDFSUtil {
 				Plugins.EXTENDED_POINT_TERMINOLOGY);
 		for (Extension extension : exts) {
 			Object o = extension.getSingleton();
-			if (o instanceof RDFSTerminology) {
-				uri = (((RDFSTerminology) o).getURIForTerm(termname));
+
+			if (o instanceof RDFSTerminologyExtension) {
+				URI tmp = (((RDFSTerminologyExtension) o).getURIForTerm(termname));
+				if (tmp != null) {
+					uri = tmp;
+				}
 			}
 		}
 		return uri;

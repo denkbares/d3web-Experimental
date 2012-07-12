@@ -7,22 +7,22 @@ import org.ontoware.rdf2go.model.node.URI;
 import de.knowwe.core.compile.terminology.TerminologyExtension;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
-public class RDFSTerminology implements TerminologyExtension {
+public class RDFSTerminologyExtension implements TerminologyExtension {
 
-	ResourceBundle terms = null;
+	protected ResourceBundle terms = null;
 
-	private static RDFSTerminology instance;
+	// private static RDFSTerminology instance;
+	//
+	// public static RDFSTerminology getInstance() {
+	// if (instance == null) {
+	// instance = new RDFSTerminology();
+	// }
+	// return instance;
+	// }
 
-	public static RDFSTerminology getInstance() {
-		if (instance == null) {
-			instance = new RDFSTerminology();
-		}
-		return instance;
-	}
-
-	public RDFSTerminology() {
+	public RDFSTerminologyExtension() {
 		// TODO: implement singleton properly
-		instance = this;
+		// instance = this;
 		terms = ResourceBundle.getBundle("RDFS-terminology");
 	}
 
@@ -34,7 +34,7 @@ public class RDFSTerminology implements TerminologyExtension {
 	public URI getURIForTerm(String term) {
 		if (terms.containsKey(term)) {
 
-				return Rdf2GoCore.getInstance().createURI(terms.getString(term));
+			return Rdf2GoCore.getInstance().createURI(terms.getString(term));
 		}
 		else {
 			return null;
