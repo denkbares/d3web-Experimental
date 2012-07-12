@@ -93,32 +93,32 @@ public class SparqlResultSetRenderer {
 	}
 
 	public static String renderNode(boolean links, Node n) {
-		String erg = "";
-		if (n != null) {
-			erg = Rdf2GoCore.getInstance().reduceNamespace(
-					n.toString());
+		if (n == null) {
+			return null;
 		}
-		// System.out.println(n.toString());
-		erg = Strings.decodeURL(erg);
+		String erg = Strings.decodeURL(n.toString());
+		String reducedNamespace = Rdf2GoCore.getInstance().reduceNamespace(erg);
 
 		if (links) {
-			if (erg.startsWith("lns:")) {
-				erg = erg.substring(4);
+			String termName = reducedNamespace;
+			if (reducedNamespace.startsWith("lns:")) {
+				termName = reducedNamespace.substring(4);
 			}
 			Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-					new TermIdentifier(erg));
+					new TermIdentifier(termName));
 
 			if (termDefinitions != null && termDefinitions.size() > 0) {
-				erg = CompileUtils.createLinkToDefinition(new TermIdentifier(erg));
+				erg = CompileUtils.createLinkToDefinition(new TermIdentifier(termName));
 			}
 			else if (Environment.getInstance()
-					.getWikiConnector().doesArticleExist(erg)) {
+					.getWikiConnector().doesArticleExist(termName)) {
 				erg = Strings.maskHTML("<a href=\"Wiki.jsp?page=")
-						+ erg + Strings.maskHTML("\">") + erg
+						+ termName + Strings.maskHTML("\">") + termName
 						+ Strings.maskHTML("</a>");
 			}
-			else if (erg.startsWith("http")) {
-				erg = Strings.maskHTML("<a href=\"" + erg + "\">") + erg
+			else {
+
+				erg = Strings.maskHTML("<a href=\"" + erg + "\">") + reducedNamespace
 						+ Strings.maskHTML("</a>");
 			}
 

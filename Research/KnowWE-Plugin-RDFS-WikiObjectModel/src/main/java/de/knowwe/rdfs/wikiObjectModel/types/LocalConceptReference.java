@@ -20,10 +20,9 @@ package de.knowwe.rdfs.wikiObjectModel.types;
 
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.jspwiki.types.SectionType;
 import de.knowwe.kdom.sectionFinder.OneOfStringEnumFinderExact;
 import de.knowwe.rdfs.IRITermRef;
+import de.knowwe.rdfs.wikiObjectModel.Utils;
 
 /**
  * 'this' keyword allows to reference on the local WikiContent element (section
@@ -45,18 +44,7 @@ public class LocalConceptReference extends IRITermRef {
 
 	@Override
 	public String getTermName(Section<? extends SimpleTerm> s) {
-		Section<SectionType> section = Sections.findAncestorOfType(s,
-				SectionType.class);
-		if (section != null) {
-			Section<SectionHeaderObjectDefinition> headerObjectSection = Sections.findSuccessor(
-					section, SectionHeaderObjectDefinition.class);
-			if (headerObjectSection != null) {
-				return headerObjectSection.get().getTermName(headerObjectSection);
-			}
-
-		}
-
-		return s.getTitle();
+		return Utils.findContextConceptTermname(s);
 	}
 
 }

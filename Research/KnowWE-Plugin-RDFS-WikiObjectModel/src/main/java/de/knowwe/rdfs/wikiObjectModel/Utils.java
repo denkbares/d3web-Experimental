@@ -26,6 +26,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.jspwiki.types.SectionHeaderType;
 import de.knowwe.jspwiki.types.SectionType;
+import de.knowwe.rdfs.wikiObjectModel.types.SectionHeaderObjectDefinition;
 
 /**
  * 
@@ -39,19 +40,15 @@ public class Utils {
 		return createAnchorURLHeader(header);
 	}
 
-	public static String createAnchorURLHeader(Section<SectionHeaderType> header) {
+	public static String createAnchorURLHeaderDefinition(Section<SectionHeaderObjectDefinition> objectDef) {
+		String conceptName = objectDef.get().getTermName(objectDef);
+
 		String baseUrl = Environment.getInstance().getWikiConnector().getBaseUrl();
-		String title = header.getTitle();
-		String text = header.getText();
-		while (text.startsWith("!")) {
-			text = text.substring(1);
-		}
 
 		try {
 			return baseUrl
 					+ "Wiki.jsp?page="
-					+ title
-					+ "#" + URLEncoder.encode(text, "UTF-8");
+						+ URLEncoder.encode(conceptName, "UTF-8");
 		}
 		catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -60,9 +57,44 @@ public class Utils {
 		return null;
 	}
 
+	public static String createURL(String pageTitle) {
+		String baseUrl = Environment.getInstance().getWikiConnector().getBaseUrl();
+		return baseUrl
+				+ "Wiki.jsp?page="
+				+ pageTitle;
+	}
+
+	public static String createAnchorURLHeader(Section<SectionHeaderType> header) {
+		Section<SectionHeaderObjectDefinition> objectDef = Sections.findSuccessor(header,
+				SectionHeaderObjectDefinition.class);
+		return createAnchorURLHeaderDefinition(objectDef);
+
+	}
+
 	public static String createKDOMIDURI(Section<?> s) {
 		String baseUrl = Environment.getInstance().getWikiConnector().getBaseUrl();
 		return baseUrl + "#KDOM_" + s.getID();
 	}
 
+	public static String findContextConceptTermname(Section<?> s) {
+		Section<SectionHeaderObjectDefinition> headerObjectSection = getContextSectionIfExisting(s);
+
+		if (headerObjectSection != null) {
+			return headerObjectSection.get().getTermName(headerObjectSection);
+		}
+		return s.getTitle();
+	}
+
+	public static Section<SectionHeaderObjectDefinition> getContextSectionIfExisting(Section<?> s) {
+		Section<SectionType> section = Sections.findAncestorOfType(s,
+				SectionType.class);
+		if (section != null) {
+			Section<SectionHeaderObjectDefinition> headerObjectSection = Sections.findSuccessor(
+					section, SectionHeaderObjectDefinition.class);
+			return headerObjectSection;
+
+		}
+
+		return null;
+	}
 }

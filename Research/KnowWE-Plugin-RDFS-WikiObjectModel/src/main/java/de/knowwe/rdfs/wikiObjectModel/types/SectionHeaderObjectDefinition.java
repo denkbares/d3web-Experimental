@@ -81,6 +81,10 @@ public class SectionHeaderObjectDefinition<TermObject> extends AbstractIRITermDe
 				index++;
 				headerText = headerText.substring(1);
 			}
+			while (headerText.startsWith(" ")) {
+				index++;
+				headerText = headerText.substring(1);
+			}
 			return SectionFinderResult.createSingleItemResultList(index, text.length());
 		}
 

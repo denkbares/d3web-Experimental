@@ -18,17 +18,27 @@
  */
 package de.knowwe.rdfs.wikiObjectModel.types;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
+
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.jspwiki.types.ImageType;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
+import de.knowwe.rdfs.wikiObjectModel.Utils;
+import de.knowwe.rdfs.wikiObjectModel.WikiObjectModel;
 
 /**
  * 
@@ -53,14 +63,33 @@ public class CompiledImageTag extends AbstractKnowledgeUnitType<CompiledImageTag
 
 		@Override
 		public void insertIntoRepository(Section<CompiledImageTag> section) {
-			// TODO
-			// System.out.println("writting image to rdf-repo:" +
-			// section.toString());
+			String source = CompiledImageTag.getAttributeValue(section, "src");
+			String baseUrl = Environment.getInstance().getWikiConnector().getBaseUrl();
+			String title = section.getTitle();
 
-			// System.out.println("src: " +
-			// CompiledImageTag.getAttributeValue(section, "src"));
+			// http://localhost:8080/KnowWE/attach/Test/flag_de.gif
+			String imageURIString = baseUrl + "attach/" + title + "/" + source;
+
+			URI imageURI = new URIImpl(imageURIString);
+			URI targetURI = null;
+
+			Section<SectionHeaderObjectDefinition> contextSection = Utils.getContextSectionIfExisting(section);
+			if (contextSection != null) {
+				targetURI = new URIImpl(Utils.createAnchorURLHeaderDefinition(contextSection));
+			}
+			else {
+				targetURI = new URIImpl(Utils.createURL(section.getTitle()));
+			}
+			List<Statement> data = new ArrayList<Statement>();
+
+			// image illustrates context concept
+			data.add(Rdf2GoCore.getInstance().createStatement(imageURI,
+					WikiObjectModel.ILLUSTRATES,
+					targetURI));
+
+			Rdf2GoCore.getInstance().addStatements(data, section);
+
 		}
-
 	}
 
 	/**

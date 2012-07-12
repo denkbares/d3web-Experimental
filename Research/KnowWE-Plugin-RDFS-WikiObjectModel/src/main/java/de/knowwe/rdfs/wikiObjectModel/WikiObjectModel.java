@@ -25,6 +25,7 @@ import java.util.List;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
+import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
@@ -53,6 +54,11 @@ public class WikiObjectModel implements Instantiation {
 	public static URI HAS_CONTENT_KDOM_ID = null;
 	public static URI HAS_SUBSECTION = null;
 
+	public static URI SUBSECTION_OF = null;
+	public static URI DESCRIBES = null;
+	public static URI DESCRIBES_ASPECT_OF = null;
+	public static URI ILLUSTRATES = null;
+
 	static {
 		WIKI_CONTENT_RESOURCE = new URIImpl(Rdf2GoCore.basens + "WikiContentResource");
 		KDOM_ID = new URIImpl(Rdf2GoCore.basens + "KDOM_ID");
@@ -64,6 +70,11 @@ public class WikiObjectModel implements Instantiation {
 		HAS_KDOM_ID = new URIImpl(Rdf2GoCore.basens + "hasKDOMID");
 		HAS_CONTENT_KDOM_ID = new URIImpl(Rdf2GoCore.basens + "hasContentKDOMID");
 		HAS_SUBSECTION = new URIImpl(Rdf2GoCore.basens + "hasSubsection");
+
+		SUBSECTION_OF = new URIImpl(Rdf2GoCore.basens + "subsectionOf");
+		DESCRIBES = new URIImpl(Rdf2GoCore.basens + "describes");
+		DESCRIBES_ASPECT_OF = new URIImpl(Rdf2GoCore.basens + "describesAspectOf");
+		ILLUSTRATES = new URIImpl(Rdf2GoCore.basens + "illustrates");
 	}
 
 	public static Collection<Statement> getWikiObjectModelData() {
@@ -112,6 +123,30 @@ public class WikiObjectModel implements Instantiation {
 				WIKI_SECTION));
 		modelData.add(Rdf2GoCore.getInstance().createStatement(HAS_CONTENT_KDOM_ID, RDFS.range,
 				KDOM_ID));
+
+		// hasSubsection inverseOf subsectionOf
+		modelData.add(Rdf2GoCore.getInstance().createStatement(HAS_SUBSECTION, OWL.inverseOf,
+				SUBSECTION_OF));
+
+		// subsectionOf subpropertyOF describesAspectOf
+		modelData.add(Rdf2GoCore.getInstance().createStatement(SUBSECTION_OF, RDFS.subPropertyOf,
+				DESCRIBES_ASPECT_OF));
+
+		// illustrates subpropertyOF describes
+		modelData.add(Rdf2GoCore.getInstance().createStatement(ILLUSTRATES, RDFS.subPropertyOf,
+				DESCRIBES));
+
+		// describes subpropertyOF describesAspectOf
+		modelData.add(Rdf2GoCore.getInstance().createStatement(DESCRIBES, RDFS.subPropertyOf,
+				DESCRIBES_ASPECT_OF));
+
+		// describes is transitive
+		modelData.add(Rdf2GoCore.getInstance().createStatement(DESCRIBES, RDF.type,
+				OWL.TransitiveProperty));
+
+		// describesAspectOf is transitive
+		modelData.add(Rdf2GoCore.getInstance().createStatement(DESCRIBES_ASPECT_OF, RDF.type,
+				OWL.TransitiveProperty));
 
 		return modelData;
 	}
