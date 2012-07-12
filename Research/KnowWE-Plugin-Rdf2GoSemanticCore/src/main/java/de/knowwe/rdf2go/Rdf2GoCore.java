@@ -83,7 +83,8 @@ import de.knowwe.event.FullParseEvent;
 public class Rdf2GoCore implements EventListener {
 
 	public static final String basens = "http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#";
-	public static final String localns = Environment.getInstance().getWikiConnector().getBaseUrl();
+	public static final String localns = Environment.getInstance().getWikiConnector().getBaseUrl()
+			+ "Wiki.jsp?page=";
 
 	private static final URI HASTOPIC = Rdf2GoCore.getInstance().createURI(basens,
 			"hasTopic");

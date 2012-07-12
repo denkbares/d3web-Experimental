@@ -59,7 +59,7 @@ public class RDFSUtil {
 		if (uri == null) {
 			String baseUrl = Rdf2GoCore.localns;
 			String name = Strings.encodeURL(termName);
-			uri = new URIImpl(baseUrl + "Wiki.jsp?page=" + name);
+			uri = new URIImpl(baseUrl + name);
 		}
 		return uri;
 
