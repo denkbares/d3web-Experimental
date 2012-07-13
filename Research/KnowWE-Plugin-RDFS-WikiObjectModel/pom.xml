@@ -7,7 +7,7 @@
   </parent>
   <groupId>de.uniwue.d3web</groupId>
   <artifactId>KnowWE-Plugin-RDFS-WikiObjectModel</artifactId>
-  <name>WikiObjectModel</name>
+  <name>KnowWE-Plugin-RDFS-WikiObjectModel</name>
   <version>0.2-SNAPSHOT</version>
   <description>The WikiObjectModel is a small RDFS-based Ontology that allows to decribe the wiki content entities (pages, sections, attachements..). It can be used to relate content entities with domain concepts of a domain ontology. </description>
   <dependencies>

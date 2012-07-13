@@ -32,7 +32,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdfs.util.SparqlResultSetRenderer;
+import de.knowwe.rdf2go.sparql.SparqlResultRenderer;
 import de.knowwe.tools.Tool;
 
 /**
@@ -125,13 +125,16 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 
 			result.append(Strings.maskHTML("<tr>"));
 			result.append(Strings.maskHTML("<td>"));
-			result.append(SparqlResultSetRenderer.renderNode(true, row.getSubject()));
+			result.append(SparqlResultRenderer.getInstance().renderNode(row.getSubject(), null,
+					false));
 			result.append(Strings.maskHTML("</td>"));
 			result.append(Strings.maskHTML("<td>"));
-			result.append(SparqlResultSetRenderer.renderNode(true, row.getPredicate()));
+			result.append(SparqlResultRenderer.getInstance().renderNode(row.getPredicate(), null,
+					false));
 			result.append(Strings.maskHTML("</td>"));
 			result.append(Strings.maskHTML("<td>"));
-			result.append(SparqlResultSetRenderer.renderNode(true, row.getObject()));
+			result.append(SparqlResultRenderer.getInstance().renderNode(row.getObject(), null,
+					false));
 			result.append(Strings.maskHTML("</td>"));
 			result.append(Strings.maskHTML("</tr>"));
 		}

@@ -3,6 +3,7 @@
 <plugin id="KnowWE-Plugin-RDFS-WikiObjectModel" version="0.0.1">
 	<requires>
 		<import plugin-id="KnowWEExtensionPoints" />
+		<import plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore" />
 	</requires>
 	
 	<runtime>
@@ -14,6 +15,17 @@
 		</library>
 	</runtime>
 	
+		
+	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
+			point-id="SparqlResultNodeRenderer"
+			id="LinkNodeRenderer">
+		<parameter id="class"
+			value="de.knowwe.rdf2go.wikiObjectModel.LinkNodeRenderer" />
+		<parameter id="name" value="LinkNodeRenderer" />
+		<parameter id="description" value="NodeRenderer LinkNodeRenderer" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="10" />
+	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Instantiation"
 		id="WikiObjectModel">

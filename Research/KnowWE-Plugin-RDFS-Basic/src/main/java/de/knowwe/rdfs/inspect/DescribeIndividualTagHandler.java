@@ -36,8 +36,8 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.sparql.SparqlResultRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
-import de.knowwe.rdfs.util.SparqlResultSetRenderer;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolUtils;
 
@@ -100,8 +100,7 @@ public class DescribeIndividualTagHandler extends AbstractTagHandler {
 					+ "> ?y ?z .}";
 			QueryResultTable classMembersTable = Rdf2GoCore.getInstance().sparqlSelect(
 					query);
-			buffy.append(SparqlResultSetRenderer.renderQueryResult(classMembersTable,
-					true));
+			buffy.append(SparqlResultRenderer.getInstance().renderQueryResult(classMembersTable));
 
 		}
 		return buffy.toString();

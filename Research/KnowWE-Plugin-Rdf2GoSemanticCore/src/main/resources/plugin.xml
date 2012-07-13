@@ -14,6 +14,66 @@
 		</library>
 	</runtime>
 	
+	
+	<extension-point id="SparqlResultNodeRenderer">
+		<parameter-def id="class" />
+		<parameter-def id="name" />
+		<parameter-def id="description" />
+		<parameter-def id="version" />
+		<parameter-def id="priority" type="number" />
+	</extension-point>
+	
+	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
+			point-id="SparqlResultNodeRenderer"
+			id="DecodeUrlNodeRenderer">
+		<parameter id="class"
+			value="de.knowwe.rdf2go.sparql.DecodeUrlNodeRenderer" />
+		<parameter id="name" value="DecodeUrlNodeRenderer" />
+		<parameter id="description" value="NodeRenderer DecodeUrlNodeRenderer" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="2" />
+	</extension>
+	
+	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
+			point-id="SparqlResultNodeRenderer"
+			id="ArticleLinkNodeRenderer">
+		<parameter id="class"
+			value="de.knowwe.rdf2go.sparql.ArticleLinkNodeRenderer" />
+		<parameter id="name" value="ArticleLinkNodeRenderer" />
+		<parameter id="description" value="NodeRenderer ArticleLinkNodeRenderer" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="3" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+ 	  	         id="SparqlMarkupTypeInstantEditToolProvider">
+         <parameter id="class"
+             value="de.knowwe.instantedit.tools.InstantEditToolProvider" />
+         <parameter id="name" value="SparqlMarkupTypeInstantEditToolProvider" />
+         <parameter id="description"
+             value="Offers a button for quick editing a certain section." />
+         <parameter id="version" value="1.0" />
+         <parameter id="priority" value="5" />
+         <parameter id="script" value="KnowWE-Plugin-InstantEdit.js" />
+         <parameter id="script" value="KnowWE-Plugin-AutoComplete.js" />
+         <parameter id="script" value="DefaultEditTool.js" />
+         <parameter id="script" value="TextArea.js" />
+         <parameter id="css" value="KnowWE-Plugin-InstantEdit.css" />
+         <parameter id="css" value="DefaultEditTool.css" />
+         <parameter id="scope" value="SparqlMarkupType" />
+ 	 </extension>
+	
+	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
+			point-id="SparqlResultNodeRenderer"
+			id="ReduceNamespaceNodeRenderer">
+		<parameter id="class"
+			value="de.knowwe.rdf2go.sparql.ReduceNamespaceNodeRenderer" />
+		<parameter id="name" value="ReduceNamespaceNodeRenderer" />
+		<parameter id="description" value="NodeRenderer ReduceNamespaceNodeRenderer" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="100" />
+	</extension>
+
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Namespaces">
 		<parameter id="class"
@@ -25,13 +85,13 @@
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-Rdf2GoSemanticCore.js" />
 	</extension>
-	
+
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="SparqlType">
+		id="SparqlMarkupType">
 		<parameter id="class"
-			value="de.knowwe.rdf2go.utils.SparqlType" />
-		<parameter id="name" value="SparqlType" />
-		<parameter id="description" value="Type SparqlType" />
+			value="de.knowwe.rdf2go.sparql.SparqlMarkupType" />
+		<parameter id="name" value="SparqlMarkupType" />
+		<parameter id="description" value="Type SparqlMarkupType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="3" />
 		<parameter id="scope" value="root" />

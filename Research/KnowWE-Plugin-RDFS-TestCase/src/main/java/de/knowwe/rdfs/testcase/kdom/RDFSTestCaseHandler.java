@@ -32,8 +32,8 @@ import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.rdf2go.utils.sparql.validator.Validator;
-import de.knowwe.rdf2go.utils.sparql.validator.ValidatorResult;
+import de.knowwe.rdf2go.sparql.validator.Validator;
+import de.knowwe.rdf2go.sparql.validator.ValidatorResult;
 import de.knowwe.rdfs.testcase.Binding;
 import de.knowwe.rdfs.testcase.RDFSTestCase;
 

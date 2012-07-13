@@ -18,26 +18,28 @@
  * site: http://www.fsf.org.
  */
 
-package de.knowwe.rdfs.sparql;
+package de.knowwe.rdf2go.sparql;
 
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
-public class SparqlQueryMarkup extends DefaultMarkupType {
+public class SparqlMarkupType extends DefaultMarkupType {
 
-	public SparqlQueryMarkup(DefaultMarkup markup) {
-		super(markup);
-		this.setIgnorePackageCompile(true);
-	}
-
+	public static final String RAW_OUTPUT = "rawOutput";
 	private static DefaultMarkup m = null;
 
 	static {
 		m = new DefaultMarkup("sparql");
 		m.addContentType(new SparqlContentType());
+		m.addAnnotation(RAW_OUTPUT, false, "true", "false");
 	}
 
-	public SparqlQueryMarkup() {
+	public SparqlMarkupType(DefaultMarkup markup) {
+		super(markup);
+		this.setIgnorePackageCompile(true);
+	}
+
+	public SparqlMarkupType() {
 		super(m);
 		this.setIgnorePackageCompile(true);
 

@@ -24,12 +24,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.sparql.SparqlResultRenderer;
 
 public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 
@@ -72,6 +74,8 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 		String querystring = SPARQL_START.replaceAll("CLASS", "<" + classURI.toString() + ">");
 		querystring += sparql_mid + SPARQL_END;
 
-		return Strings.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(querystring, true));
+		QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
+				querystring);
+		return Strings.maskHTML(SparqlResultRenderer.getInstance().renderQueryResult(resultSet));
 	}
 }

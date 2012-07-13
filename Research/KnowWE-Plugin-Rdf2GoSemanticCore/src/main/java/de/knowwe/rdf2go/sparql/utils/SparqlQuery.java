@@ -16,26 +16,52 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.rdf2go.utils.sparql;
+package de.knowwe.rdf2go.sparql.utils;
 
 /**
  * 
  * @author Albrecht Striffler (denkbares GmbH)
  * @created 22.11.2011
  */
-public class SELECT extends SparqlQuery {
+public class SparqlQuery {
 
-	public DISTINCT DISTINCT() {
-		return (DISTINCT) addNext(new DISTINCT(), "");
+	protected SparqlQuery next = null;
+
+	protected SparqlQuery previous = null;
+
+	protected String content = "";
+
+	public SELECT SELECT(String... select) {
+		return (SELECT) addNext(new SELECT(), select);
 	}
 
-	public WHERE WHERE(String... where) {
-		return (WHERE) addNext(new WHERE(), where);
+	protected SparqlQuery addNext(SparqlQuery next, String... content) {
+		this.next = next;
+		next.previous = this;
+		next.content = next.createContent(content);
+		return next;
 	}
 
 	@Override
+	public String toString() {
+		SparqlQuery current = this;
+		StringBuilder builder = new StringBuilder();
+		while (current != null) {
+			builder.insert(0, current.verbalize());
+			current = current.previous;
+		}
+		return builder.toString();
+	}
+
 	public String verbalize() {
-		return "SELECT " + (next instanceof DISTINCT ? "DISTINCT " : "") + this.content + "\n";
+		return this.content;
+	}
+
+	public String createContent(String... content) {
+		StringBuilder contentBuilder = new StringBuilder();
+		for (String part : content)
+			contentBuilder.append(part + " ");
+		return contentBuilder.toString();
 	}
 
 }

@@ -40,6 +40,7 @@ import java.util.TreeSet;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import org.ontoware.aifbcommons.collection.ClosableIterable;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
@@ -69,7 +70,6 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.event.ArticleUpdatesFinishedEvent;
@@ -782,23 +782,30 @@ public class Rdf2GoCore implements EventListener {
 	 */
 	public String reduceNamespace(String string) {
 		for (Entry<String, String> cur : namespaces.entrySet()) {
-			string = string.replaceAll(cur.getValue(), cur.getKey() + ":");
+			string = string.replaceAll(Pattern.quote(cur.getValue()), cur.getKey() + ":");
 		}
 		return string;
 	}
 
 	/**
-	 * If the string starts with a known namespace, the namespace is removed
-	 * (only from the start of the string).
+	 * If the string starts with a known namespace or its shortcut, the
+	 * namespace is removed (only from the start of the string).
 	 * 
 	 * @created 12.07.2012
-	 * @param string the string where the namespace needs to be removed
+	 * @param string the string where the namespace or its shortcut needs to be
+	 *        removed
 	 * @return the string without the namespace prefix
 	 */
 	public String trimNamespace(String string) {
-		for (String namespace : namespaces.values()) {
-			if (string.startsWith(namespace)) {
-				string = string.substring(namespace.length());
+		for (Entry<String, String> namespaceEntry : namespaces.entrySet()) {
+			String ns = namespaceEntry.getValue();
+			if (string.startsWith(ns)) {
+				string = string.substring(ns.length());
+				break;
+			}
+			String nsShortCut = namespaceEntry.getKey() + ":";
+			if (string.startsWith(nsShortCut)) {
+				string = string.substring(nsShortCut.length());
 				break;
 			}
 		}
@@ -962,101 +969,6 @@ public class Rdf2GoCore implements EventListener {
 		}
 		addStatementsToRemoveCache(removedStatements);
 		fullParseStatementCache.remove(article.getTitle());
-	}
-
-	public String renderedSparqlSelect(String query, boolean links) throws ModelRuntimeException, MalformedQueryException {
-		return renderQueryResult(sparqlSelect(query), links);
-	}
-
-	/**
-	 * 
-	 * @created 06.12.2010
-	 * @param qrt
-	 * @return html table with all results of qrt
-	 */
-	public String renderQueryResult(QueryResultTable qrt, boolean links) {
-		boolean tablemode = false;
-		boolean empty = true;
-
-		List<String> l = qrt.getVariables();
-		ClosableIterator<QueryRow> i = qrt.iterator();
-		String result = "";
-		if (!tablemode) {
-			tablemode = l.size() > 1;
-		}
-		if (tablemode) {
-			result += Strings.maskHTML("<table>");
-			for (String var : l) {
-				result += Strings.maskHTML("<th>") + var
-						+ Strings.maskHTML("</th>");
-			}
-		}
-		else {
-			result += Strings.maskHTML("<ul>");
-		}
-
-		while (i.hasNext()) {
-			empty = false;
-
-			if (!tablemode) {
-				tablemode = qrt.getVariables().size() > 1;
-			}
-			QueryRow s = i.next();
-
-			if (tablemode) {
-				result += Strings.maskHTML("<tr>");
-			}
-			for (String var : l) {
-				Node n = s.getValue(var);
-				String erg = "";
-				if (n != null) {
-					erg = reduceNamespace(s.getValue(var).toString());
-				}
-
-				erg = Strings.decodeURL(erg);
-
-				if (links) {
-					if (erg.startsWith("lns:")) {
-						erg = erg.substring(4);
-					}
-					if (Environment.getInstance()
-							.getWikiConnector().doesArticleExist(erg)
-							|| Environment.getInstance()
-									.getWikiConnector().doesArticleExist(
-											Strings.decodeURL(erg))) {
-						erg = Strings.maskHTML("<a href=\"Wiki.jsp?page=")
-								+ erg + Strings.maskHTML("\">") + erg
-								+ Strings.maskHTML("</a>");
-					}
-				}
-
-				if (tablemode) {
-					result += Strings.maskHTML("<td>") + erg
-							+ Strings.maskHTML("</td>\n");
-				}
-				else {
-					result += Strings.maskHTML("<li>") + erg
-							+ Strings.maskHTML("</li>\n");
-				}
-
-			}
-			if (tablemode) {
-				result += Strings.maskHTML("</tr>");
-			}
-		}
-
-		if (empty) {
-			result = Messages.getMessageBundle().getString("KnowWE.owl.query.no_result");
-		}
-		else {
-			if (tablemode) {
-				result += Strings.maskHTML("</table>");
-			}
-			else {
-				result += Strings.maskHTML("</ul>");
-			}
-		}
-		return result;
 	}
 
 	/*

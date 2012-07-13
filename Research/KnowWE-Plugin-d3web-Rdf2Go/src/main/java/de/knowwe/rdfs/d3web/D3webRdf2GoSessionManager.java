@@ -6,8 +6,10 @@ import java.util.Set;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.Literal;
+import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
+import org.ontoware.rdf2go.vocabulary.XSD;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.session.Session;
@@ -75,8 +77,6 @@ public class D3webRdf2GoSessionManager {
 
 		Set<Statement> factStatements = new HashSet<Statement>();
 
-		String valueString = value.getValue().toString();
-
 		BlankNode factNode = core.createBlankNode();
 
 		// blank node (Fact) rdf:type lns:Fact
@@ -93,17 +93,35 @@ public class D3webRdf2GoSessionManager {
 		factStatements.add(core.createStatement(factNode,
 				D3webRdf2GoURIs.getHasTerminologyObjectURI(), toNameURI));
 
-		URI valueURI = core.createlocalURI(Strings.encodeURL(valueString));
+		Node valueNode = getValueNode(value);
 
 		// blank node (Fact) lns:hasValue lns:value
 		factStatements.add(core.createStatement(factNode, D3webRdf2GoURIs.getHasValueURI(),
-				valueURI));
+				valueNode));
 
 		// add fact statements to cache
 		getInstance().statementCache.addStatements(session, terminologyObject, factStatements);
 
 		// add fact statements to the core
 		core.addStatements(factStatements);
+	}
+
+	private Node getValueNode(Value value) {
+		Rdf2GoCore core = Rdf2GoCore.getInstance();
+		Object object = value.getValue();
+		if (object instanceof Integer) {
+			return core.createDatatypeLiteral(object.toString(), XSD._integer);
+		}
+		else if (object instanceof Double) {
+			return core.createDatatypeLiteral(object.toString(), XSD._double);
+		}
+		else if (object instanceof Float) {
+			return core.createDatatypeLiteral(object.toString(), XSD._float);
+		}
+		else if (object instanceof Long) {
+			return core.createDatatypeLiteral(object.toString(), XSD._long);
+		}
+		return core.createDatatypeLiteral(object.toString(), XSD._string);
 	}
 
 	public void removeFactStatements(Session session, TerminologyObject terminologyObject) {

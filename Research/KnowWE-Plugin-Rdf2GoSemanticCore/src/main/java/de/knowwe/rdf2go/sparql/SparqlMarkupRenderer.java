@@ -17,29 +17,20 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.rdfs.sparql;
+package de.knowwe.rdf2go.sparql;
 
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryResultTable;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.utils.SparqlRenderer;
-import de.knowwe.rdfs.util.SparqlResultSetRenderer;
 
-public class SparqlQueryRenderer implements Renderer {
-
-	private static SparqlRenderer instance;
-
-	public static SparqlRenderer getInstance() {
-		if (instance == null) {
-			instance = new SparqlRenderer();
-		}
-		return instance;
-	}
+public class SparqlMarkupRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user, StringBuilder result) {
@@ -54,9 +45,14 @@ public class SparqlQueryRenderer implements Renderer {
 				result.append(Strings.maskHTML("<tt>" + sec.getText() + "</tt>"));
 			}
 			else {
+				Section<SparqlMarkupType> markupSection = Sections.findAncestorOfType(sec,
+						SparqlMarkupType.class);
+				String rawOutput = DefaultMarkupType.getAnnotation(markupSection,
+						SparqlMarkupType.RAW_OUTPUT);
 				QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
 						sparqlString);
-				result.append(SparqlResultSetRenderer.renderQueryResult(resultSet, true));
+				result.append(SparqlResultRenderer.getInstance().renderQueryResult(resultSet,
+						rawOutput != null && rawOutput.equals("true")));
 			}
 
 		}
