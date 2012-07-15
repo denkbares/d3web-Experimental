@@ -60,7 +60,7 @@ public class SparqlContentType extends AbstractType {
 					ClosableIterator<Statement> statementIterator = sparqlConstruct.iterator();
 
 					while (statementIterator.hasNext()) {
-						Rdf2GoCore.getInstance().addStatement(statementIterator.next(), section);
+						Rdf2GoCore.getInstance().addStatements(section, statementIterator.next());
 					}
 				}
 				catch (Exception e) {

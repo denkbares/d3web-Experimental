@@ -27,6 +27,9 @@ import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 
+import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -50,7 +53,7 @@ public class Rdf2GoPageViewHandler extends AbstractHTMLTagHandler {
 		StringBuffer output = new StringBuffer();
 		output.append("<tr><th>S</th><th>P</th><th>O</th></tr>");
 
-		List<Statement> list = Rdf2GoCore.getInstance().getTopicStatements(topic);
+		List<Statement> list = getTopicStatements(topic);
 		if (list != null) {
 			for (Statement cur : list) {
 				Resource subject = cur.getSubject();
@@ -65,9 +68,9 @@ public class Rdf2GoPageViewHandler extends AbstractHTMLTagHandler {
 					o = object.toString();
 				}
 
-				s = Rdf2GoCore.getInstance().reduceNamespace(s);
-				p = Rdf2GoCore.getInstance().reduceNamespace(p);
-				o = Rdf2GoCore.getInstance().reduceNamespace(o);
+				s = Rdf2GoUtils.reduceNamespace(s);
+				p = Rdf2GoUtils.reduceNamespace(p);
+				o = Rdf2GoUtils.reduceNamespace(o);
 				// s = s.substring(s.indexOf('#') + 1);
 				// o = o.substring(o.indexOf('#') + 1);
 				// p = p.substring(p.indexOf('#') + 1);
@@ -79,6 +82,12 @@ public class Rdf2GoPageViewHandler extends AbstractHTMLTagHandler {
 			}
 		}
 		return "<table>" + output.toString() + "</table>";
+	}
+
+	public List<Statement> getTopicStatements(String topic) {
+		Section<? extends Type> rootsection = Environment.getInstance().getArticle(
+				Environment.DEFAULT_WEB, topic).getRootSection();
+		return Rdf2GoCore.getInstance().getSectionStatementsRecursively(rootsection);
 	}
 
 }

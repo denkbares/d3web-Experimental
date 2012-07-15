@@ -57,7 +57,7 @@ public class RDFSUtil {
 		URI uri = getURIForPredefinedConcept(termName);
 
 		if (uri == null) {
-			String baseUrl = Rdf2GoCore.localns;
+			String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
 			String name = Strings.encodeURL(termName);
 			uri = new URIImpl(baseUrl + name);
 		}

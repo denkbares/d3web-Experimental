@@ -17,6 +17,7 @@ import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Fact;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class D3webRdf2GoSessionManager {
 
@@ -63,7 +64,7 @@ public class D3webRdf2GoSessionManager {
 		}
 
 		// add statements to the core
-		core.addStatements(statements);
+		core.addStatements(Rdf2GoUtils.toArray(statements));
 
 		// add propagation listener update the Rdf2GoCore with the changes in
 		// the session
@@ -103,7 +104,7 @@ public class D3webRdf2GoSessionManager {
 		getInstance().statementCache.addStatements(session, terminologyObject, factStatements);
 
 		// add fact statements to the core
-		core.addStatements(factStatements);
+		core.addStatements(Rdf2GoUtils.toArray(factStatements));
 	}
 
 	private Node getValueNode(Value value) {

@@ -101,7 +101,7 @@ public class ImportFrame extends DefaultFrame<ImportFrame> {
 
 	/**
 	 * Returns the {@link ImportPrefix} section containing the name of the
-	 * optional namespace shortcut.
+	 * optional namespace abbreviation.
 	 * 
 	 * @created 27.09.2011
 	 * @param Section<ImportFrame> section

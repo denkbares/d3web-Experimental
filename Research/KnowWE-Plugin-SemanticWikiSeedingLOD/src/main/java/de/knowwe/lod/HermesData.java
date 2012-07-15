@@ -329,7 +329,7 @@ public class HermesData {
 
 		if (value.matches("!\\$ConceptLink:: .*") || predicate.equals(objectType)) {
 
-			String namespace = Rdf2GoCore.localns;
+			String namespace = Rdf2GoCore.getInstance().getLocalNamespace();
 			concept = namespace + concept;
 			String objectname = value;
 			if (value.matches("!\\$ConceptLink:: .*")) {
@@ -346,7 +346,7 @@ public class HermesData {
 		}
 		else {
 
-			String namespace = Rdf2GoCore.localns;
+			String namespace = Rdf2GoCore.getInstance().getLocalNamespace();
 			concept = namespace + concept;
 
 			ask = "ASK {<" + concept + "> " + predicate + " ?temp}";
@@ -364,7 +364,7 @@ public class HermesData {
 	public static boolean storeContains(String concept) {
 
 		concept = Strings.encodeURL(concept);
-		String namespace = Rdf2GoCore.localns;
+		String namespace = Rdf2GoCore.getInstance().getLocalNamespace();
 		concept = namespace + concept;
 		String ask = "";
 
@@ -382,7 +382,7 @@ public class HermesData {
 	public static String getTopicForConcept(String concept) {
 
 		concept = Strings.encodeURL(concept);
-		String namespace = Rdf2GoCore.localns;
+		String namespace = Rdf2GoCore.getInstance().getLocalNamespace();
 		concept = namespace + concept;
 
 		String query = "SELECT ?x ?y ?z WHERE {?y rdf:subject <" + concept
@@ -411,7 +411,7 @@ public class HermesData {
 
 		concept = Strings.encodeURL(concept);
 
-		String namespace = Rdf2GoCore.localns;
+		String namespace = Rdf2GoCore.getInstance().getLocalNamespace();
 		concept = namespace + concept;
 
 		String query = "SELECT ?x WHERE {<" + concept

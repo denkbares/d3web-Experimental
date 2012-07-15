@@ -108,8 +108,8 @@ public class HierarchyDashtreeElementCompileScript extends
 						}
 					}
 					if (Messages.getErrors(messages).size() == 0) {
-						Rdf2GoCore.getInstance().addStatement(localURI,
-								predicate, fatherURI, childElement);
+						Rdf2GoCore.getInstance().addStatement(childElement,
+								localURI, predicate, fatherURI);
 					}
 				}
 			}

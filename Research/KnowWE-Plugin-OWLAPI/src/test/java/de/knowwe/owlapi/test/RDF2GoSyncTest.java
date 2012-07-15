@@ -70,7 +70,6 @@ public class RDF2GoSyncTest {
 		Set<OWLAxiom> axioms = createSimpleOWLAxioms();
 		Section<?> sec = getDummySection();
 		Rdf2GoCore core = Rdf2GoCore.getInstance();
-		core.init();
 		// Add the axioms
 		RDF2GoSync.synchronize(axioms, sec, RDF2GoSync.Mode.ADD);
 		EventManager.getInstance().fireEvent(new ArticleUpdatesFinishedEvent());

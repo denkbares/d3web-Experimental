@@ -35,6 +35,7 @@ import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.jspwiki.types.SectionContentType;
 import de.knowwe.jspwiki.types.SectionType;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
 import de.knowwe.rdfs.wikiObjectModel.Utils;
 import de.knowwe.rdfs.wikiObjectModel.WikiObjectModel;
@@ -90,7 +91,7 @@ public class WikiSectionCompiler extends AbstractKnowledgeUnitCompileScriptRDFS 
 
 		}
 
-		Rdf2GoCore.getInstance().addStatements(data, section);
+		Rdf2GoCore.getInstance().addStatements(section, Rdf2GoUtils.toArray(data));
 
 	}
 

@@ -6,9 +6,12 @@ import java.util.List;
 
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.Literal;
+import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
+import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import de.knowwe.core.contexts.ContextManager;
 import de.knowwe.core.contexts.DefaultSubjectContext;
@@ -20,8 +23,20 @@ import de.knowwe.hermes.TimeStamp;
 import de.knowwe.rdf2go.DefaultURIContext;
 import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class TimeEventOWLCompiler extends RDF2GoSubtreeHandler<TimeEventNew> {
+
+	private static final URI HASTOPIC = Rdf2GoCore.getInstance().createURI(
+			Rdf2GoCore.getInstance().getLocalNamespace(),
+			"hasTopic");
+
+	private static final URI TEXTORIGIN = Rdf2GoCore.getInstance().createURI(
+			Rdf2GoCore.getInstance().getLocalNamespace(),
+			"TextOrigin");
+	private static final URI HASNODE = Rdf2GoCore.getInstance().createURI(
+			Rdf2GoCore.getInstance().getLocalNamespace(),
+			"hasNode");
 
 	@Override
 	public Collection<Message> create(Article article, Section<TimeEventNew> s) {
@@ -54,7 +69,7 @@ public class TimeEventOWLCompiler extends RDF2GoSubtreeHandler<TimeEventNew> {
 			createDateTripels(event.getTime(), slist, localURI);
 
 			// add textorigin
-			Rdf2GoCore.getInstance().attachTextOrigin(localURI, s, io);
+			attachTextOrigin(localURI, s, io);
 
 			// handle description
 			String description = event.getDescription();
@@ -98,8 +113,34 @@ public class TimeEventOWLCompiler extends RDF2GoSubtreeHandler<TimeEventNew> {
 			e.printStackTrace();
 		}
 
-		Rdf2GoCore.getInstance().addStatements(io, s);
+		Rdf2GoCore.getInstance().addStatements(s, Rdf2GoUtils.toArray(io));
 		return new ArrayList<Message>(0);
+	}
+
+	/**
+	 * Attaches a TextOrigin Node to a Resource. It's your duty to make sure the
+	 * Resource is of the right type if applicable (eg attachto RDF.TYPE
+	 * RDF.STATEMENT)
+	 * 
+	 * @param attachto The Resource that will be annotated bei the TO-Node
+	 * @param source The source section that should be used
+	 * @param io the ex-IntermediateOwlObject (now List<Statements> that should
+	 *        collect the statements
+	 */
+	private void attachTextOrigin(Resource attachto, Section<?> source, List<Statement> io) {
+		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
+		io.addAll(createTextOrigin(source, to));
+		io.add(Rdf2GoCore.getInstance().createStatement(attachto, RDFS.isDefinedBy, to));
+	}
+
+	private List<Statement> createTextOrigin(Section<?> source, Resource to) {
+		ArrayList<Statement> io = new ArrayList<Statement>();
+		io.add(Rdf2GoCore.getInstance().createStatement(to, RDF.type, TEXTORIGIN));
+		io.add(Rdf2GoCore.getInstance().createStatement(to, HASNODE,
+				Rdf2GoCore.getInstance().createLiteral(source.getID())));
+		io.add(Rdf2GoCore.getInstance().createStatement(to, HASTOPIC,
+				Rdf2GoCore.getInstance().createlocalURI(source.getTitle())));
+		return io;
 	}
 
 	private void createDateTripels(TimeStamp timeStamp, ArrayList<Statement> slist, URI localURI) throws ModelRuntimeException {

@@ -22,6 +22,7 @@ import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.parser.sparql.SPARQLParser;
 
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
  * 
@@ -31,7 +32,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class Validator {
 
 	private static final SPARQLParser parser = new SPARQLParser();
-	private static final String prefixes = Rdf2GoCore.getInstance().getSparqlNamespaceShorts();
+	private static final String prefixes = Rdf2GoUtils.getSparqlNamespaceShorts();
 	private static final int LINESTOSUBTRACT = 9;
 
 	private Validator() {
@@ -55,7 +56,7 @@ public class Validator {
 		ValidatorResult result = new ValidatorResult(query);
 
 		try {
-			parser.parseQuery(query, Rdf2GoCore.basens);
+			parser.parseQuery(query, Rdf2GoCore.getInstance().getLocalNamespace());
 		}
 		catch (MalformedQueryException e) {
 			// correct line numbers (caused by auto adding prefixes)

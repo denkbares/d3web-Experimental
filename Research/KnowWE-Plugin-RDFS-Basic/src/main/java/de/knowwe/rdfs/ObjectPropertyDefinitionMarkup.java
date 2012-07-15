@@ -161,15 +161,15 @@ class DomainRangeCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<Ob
 			// prop domain:: arg0
 			URI objectURI = RDFSUtil.getURI(refs.get(0));
 			Rdf2GoCore.getInstance().addStatement(
+					section,
 					propURI,
-					RDFS.domain,
-					objectURI, section);
+					RDFS.domain, objectURI);
 
 			// prop range:: arg1
 			Rdf2GoCore.getInstance().addStatement(
+					section,
 					propURI,
-					RDFS.range,
-					RDFSUtil.getURI(refs.get(1)), section);
+					RDFS.range, RDFSUtil.getURI(refs.get(1)));
 
 		}
 		else {

@@ -26,6 +26,7 @@ package de.knowwe.rdf2go;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
  * This class manages semantic properties, n-ary as well as simple ones
@@ -59,7 +60,7 @@ public class PropertyManager {
      * 
      */
 	private PropertyManager() {
-//		uo = UpperOntology.getInstance();
+		// uo = UpperOntology.getInstance();
 	}
 
 	public boolean isValid(String property) {
@@ -79,24 +80,24 @@ public class PropertyManager {
 	public boolean isValid(URI property) {
 		boolean result = false;
 		// TODO evil hack, to get going
-		if (Rdf2GoCore.getLocalName(property).contains("subClassOf")
-				|| Rdf2GoCore.getLocalName(property).contains("type")
-				|| Rdf2GoCore.getLocalName(property).contains("subPropertyOf")) return true;
-		String querystring = Rdf2GoCore.getInstance().getSparqlNamespaceShorts();
+		if (Rdf2GoUtils.getLocalName(property).contains("subClassOf")
+				|| Rdf2GoUtils.getLocalName(property).contains("type")
+				|| Rdf2GoUtils.getLocalName(property).contains("subPropertyOf")) return true;
+		String querystring = Rdf2GoUtils.getSparqlNamespaceShorts();
 		String objectpropquery = querystring + "ASK WHERE { <"
 				+ property.toString() + "> rdf:type owl:ObjectProperty }";
 		String datatypepropquery = querystring + "ASK WHERE { <"
 				+ property.toString() + "> rdf:type owl:DatatypeProperty }";
 		querystring += "ASK WHERE { <" + property.toString()
 				+ "> rdfs:subClassOf ns:NaryProperty }";
-		
+
 		try {
 			result = Rdf2GoCore.getInstance().sparqlAsk(querystring);
 			if (!result) {
 				result = Rdf2GoCore.getInstance().sparqlAsk(objectpropquery);
 			}
 			if (!result) {
-		 		result = Rdf2GoCore.getInstance().sparqlAsk(datatypepropquery);
+				result = Rdf2GoCore.getInstance().sparqlAsk(datatypepropquery);
 			}
 		}
 		catch (ModelRuntimeException e) {
@@ -123,8 +124,9 @@ public class PropertyManager {
 	 */
 	public boolean isRDFS(URI property) {
 		// TODO Auto-generated method stub
-		return (Rdf2GoCore.getLocalName(property).contains("subClassOf")
-				|| Rdf2GoCore.getLocalName(property).contains("type") || Rdf2GoCore.getLocalName(property).contains("subPropertyOf"));
+		return (Rdf2GoUtils.getLocalName(property).contains("subClassOf")
+				|| Rdf2GoUtils.getLocalName(property).contains("type") || Rdf2GoUtils.getLocalName(
+				property).contains("subPropertyOf"));
 
 	}
 
@@ -133,20 +135,20 @@ public class PropertyManager {
 	 * @return
 	 */
 	public boolean isRDF(URI property) {
-		return (Rdf2GoCore.getLocalName(property).contains("type"));
+		return (Rdf2GoUtils.getLocalName(property).contains("type"));
 
 	}
 
 	public boolean isNary(URI prop) {
 		boolean result = false;
-		String querystring = "PREFIX ns: <" + Rdf2GoCore.basens + "> \n";
+		String querystring = "PREFIX ns: <" + Rdf2GoCore.getInstance().getLocalNamespace() + "> \n";
 		querystring += "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n";
-		querystring += "PREFIX lns: <" + Rdf2GoCore.localns + "> \n";
+		querystring += "PREFIX lns: <" + Rdf2GoCore.getInstance().getLocalNamespace() + "> \n";
 		querystring += "PREFIX owl:<http://www.w3.org/2002/07/owl#> \n";
 		querystring += "PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#> \n";
 		querystring += "ASK WHERE { <" + prop.toString()
 				+ "> rdfs:subClassOf ns:NaryProperty }";
-		
+
 		try {
 			result = Rdf2GoCore.getInstance().sparqlAsk(querystring);
 		}

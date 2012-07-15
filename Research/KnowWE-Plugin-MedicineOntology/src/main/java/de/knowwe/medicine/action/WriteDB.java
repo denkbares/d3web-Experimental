@@ -36,6 +36,7 @@ import de.knowwe.medicine.Medicine;
 import de.knowwe.medicine.MedicineObject;
 import de.knowwe.medicine.MedicineParameter;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class WriteDB extends AbstractAction {
 
@@ -164,14 +165,14 @@ public class WriteDB extends AbstractAction {
 		while (it.hasNext()) {
 			QueryRow row = it.next();
 			int id = Integer.parseInt(row.getLiteralValue("id"));
-			String subject = Rdf2GoCore.getLocalName(row.getValue("subject"));
+			String subject = Rdf2GoUtils.getLocalName(row.getValue("subject"));
 
 			MedicineObject o = new MedicineObject();
 			o.setId(id);
 			o.setSubject(subject);
 
 			for (MedicineParameter p : med.getParams()) {
-				String s = Rdf2GoCore.getLocalName(row.getValue(p.getName()));
+				String s = Rdf2GoUtils.getLocalName(row.getValue(p.getName()));
 				if (s == null) {
 					s = "";
 				}

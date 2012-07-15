@@ -168,8 +168,8 @@ class ComplexIRIDefinitionCompileScript extends AbstractKnowledgeUnitCompileScri
 			// "object URI not found"));
 		}
 
-		Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
-				predURI.asURI(), objURI, section);
+		Rdf2GoCore.getInstance().addStatement(section,
+				subURI.asResource(), predURI.asURI(), objURI);
 
 		// return new ArrayList<KDOMReportMessage>(0);
 

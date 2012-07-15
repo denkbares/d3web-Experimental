@@ -81,9 +81,9 @@ public class ClassDefinitionMarkup extends AbstractKnowledgeUnitType<ClassDefini
 
 			URI classURI = RDFSUtil.getURI(classTerm);
 			Rdf2GoCore.getInstance().addStatement(
+					section,
 					classURI,
-					RDF.type,
-					OWL.Class, section);
+					RDF.type, OWL.Class);
 
 		}
 

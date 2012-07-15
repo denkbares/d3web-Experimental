@@ -31,6 +31,7 @@ import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import de.knowwe.plugin.Instantiation;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
  * A simple Wiki Object Model that can be used to describing the resources in
@@ -62,23 +63,24 @@ public class WikiObjectModel implements Instantiation {
 	public static URI ILLUSTRATES = null;
 
 	static {
-		WIKI_CONTENT_RESOURCE = new URIImpl(Rdf2GoCore.basens + "WikiContentResource");
-		KDOM_ID = new URIImpl(Rdf2GoCore.basens + "KDOM_ID");
-		WIKI_PAGE = new URIImpl(Rdf2GoCore.basens + "WikiPage");
-		WIKI_IMAGE = new URIImpl(Rdf2GoCore.basens + "Image");
-		WIKI_ATTACHEMENT = new URIImpl(Rdf2GoCore.basens + "WikiAttachement");
-		WIKI_SECTION = new URIImpl(Rdf2GoCore.basens + "WikiSection");
+		String bns = Rdf2GoCore.getInstance().getBaseNamespace();
+		WIKI_CONTENT_RESOURCE = new URIImpl(bns + "WikiContentResource");
+		KDOM_ID = new URIImpl(bns + "KDOM_ID");
+		WIKI_PAGE = new URIImpl(bns + "WikiPage");
+		WIKI_IMAGE = new URIImpl(bns + "Image");
+		WIKI_ATTACHEMENT = new URIImpl(bns + "WikiAttachement");
+		WIKI_SECTION = new URIImpl(bns + "WikiSection");
 
-		HAS_PAGE = new URIImpl(Rdf2GoCore.basens + "hasPage");
-		HAS_KDOM_ID = new URIImpl(Rdf2GoCore.basens + "hasKDOMID");
-		HAS_CONTENT_KDOM_ID = new URIImpl(Rdf2GoCore.basens + "hasContentKDOMID");
-		HAS_SUBSECTION = new URIImpl(Rdf2GoCore.basens + "hasSubsection");
+		HAS_PAGE = new URIImpl(bns + "hasPage");
+		HAS_KDOM_ID = new URIImpl(bns + "hasKDOMID");
+		HAS_CONTENT_KDOM_ID = new URIImpl(bns + "hasContentKDOMID");
+		HAS_SUBSECTION = new URIImpl(bns + "hasSubsection");
 
-		SUBSECTION_OF = new URIImpl(Rdf2GoCore.basens + "subsectionOf");
-		DESCRIBES = new URIImpl(Rdf2GoCore.basens + "describes");
-		DESCRIBED_BY = new URIImpl(Rdf2GoCore.basens + "describedBy");
-		DESCRIBES_ASPECT_OF = new URIImpl(Rdf2GoCore.basens + "describesAspectOf");
-		ILLUSTRATES = new URIImpl(Rdf2GoCore.basens + "illustrates");
+		SUBSECTION_OF = new URIImpl(bns + "subsectionOf");
+		DESCRIBES = new URIImpl(bns + "describes");
+		DESCRIBED_BY = new URIImpl(bns + "describedBy");
+		DESCRIBES_ASPECT_OF = new URIImpl(bns + "describesAspectOf");
+		ILLUSTRATES = new URIImpl(bns + "illustrates");
 	}
 
 	public static Collection<Statement> getWikiObjectModelData() {
@@ -163,7 +165,7 @@ public class WikiObjectModel implements Instantiation {
 
 	@Override
 	public void init() {
-		Rdf2GoCore.getInstance().addStatements(getWikiObjectModelData());
+		Rdf2GoCore.getInstance().addStatements(Rdf2GoUtils.toArray(getWikiObjectModelData()));
 
 	}
 }

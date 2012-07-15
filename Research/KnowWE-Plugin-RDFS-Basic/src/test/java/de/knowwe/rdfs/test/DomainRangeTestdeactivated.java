@@ -41,7 +41,7 @@ import de.knowwe.rdfs.test.util.Vocabulary;
  * @author Jochen Reutelshoefer
  * @created Sept 21, 2011
  */
-public class DomainRangeTesdeactivated {
+public class DomainRangeTestdeactivated {
 
 	private final Rdf2GoCore core = Rdf2GoCore.getInstance();
 

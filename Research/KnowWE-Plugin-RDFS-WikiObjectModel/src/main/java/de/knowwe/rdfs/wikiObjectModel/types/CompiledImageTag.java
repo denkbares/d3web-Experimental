@@ -96,16 +96,14 @@ public class CompiledImageTag extends AbstractKnowledgeUnitType<CompiledImageTag
 			List<Statement> data = new ArrayList<Statement>();
 
 			// is an image
-			data.add(Rdf2GoCore.getInstance().createStatement(imageURI,
+			Rdf2GoCore.getInstance().addStatement(section, imageURI,
 					RDF.type,
-					WikiObjectModel.WIKI_IMAGE));
+					WikiObjectModel.WIKI_IMAGE);
 
 			// image illustrates context concept
-			data.add(Rdf2GoCore.getInstance().createStatement(imageURI,
+			Rdf2GoCore.getInstance().addStatement(section, imageURI,
 					WikiObjectModel.ILLUSTRATES,
-					targetURI));
-
-			Rdf2GoCore.getInstance().addStatements(data, section);
+					targetURI);
 
 		}
 	}

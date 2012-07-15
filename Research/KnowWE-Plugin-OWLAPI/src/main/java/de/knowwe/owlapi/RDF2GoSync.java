@@ -43,6 +43,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
  * RDF2GoSync handles the syncing of @link{OWLOntology} instances and the
@@ -97,13 +98,11 @@ public class RDF2GoSync {
 			model.addModel(RDFTool.stringToModel(rdfXML));
 
 			Iterator<Statement> iter = model.iterator();
-			Statement s;
 			List<Statement> statements = new LinkedList<Statement>();
 			while (iter.hasNext()) {
-				s = iter.next();
-				statements.add(s);
+				statements.add(iter.next());
 			}
-			rdf2goCore.addStatements(statements, sec);
+			rdf2goCore.addStatements(sec, Rdf2GoUtils.toArray(statements));
 		}
 		else if (mode.equals(RDF2GoSync.Mode.REMOVE)) {
 			// TODO: Not sure if this is ok...

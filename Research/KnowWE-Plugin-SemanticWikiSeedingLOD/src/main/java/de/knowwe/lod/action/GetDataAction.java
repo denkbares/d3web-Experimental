@@ -152,7 +152,7 @@ public class GetDataAction extends AbstractAction {
 				String hermesConcept = Strings.encodeURL(concept);
 				String encodePerson = Strings.encodeURL("Historische Persönlichkeit");
 
-				String namespace = Rdf2GoCore.localns;
+				String namespace = Rdf2GoCore.getInstance().getLocalNamespace();
 				hermesConcept = namespace + hermesConcept;
 				encodePerson = namespace + encodePerson;
 

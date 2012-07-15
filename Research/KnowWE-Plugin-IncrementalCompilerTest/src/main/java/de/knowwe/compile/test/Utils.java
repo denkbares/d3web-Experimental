@@ -11,7 +11,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class Utils {
 
 	public static URI getURI(Section<? extends SimpleTerm> s) {
-		String baseUrl = Rdf2GoCore.localns;
+		String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
 		String name = Strings.encodeURL(s.get().getTermName(s));
 		URI uri = new URIImpl(baseUrl + name);
 		return uri;

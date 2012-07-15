@@ -21,7 +21,7 @@ public class SolveYearOfBirthAction extends AbstractAction {
 		String answer = map.get("answer");
 		String subject = Strings.encodeURL(map.get("subject"));
 
-		String namespace = Rdf2GoCore.localns;
+		String namespace = Rdf2GoCore.getInstance().getLocalNamespace();
 		subject = namespace + subject;
 
 		String realQuery =

@@ -24,6 +24,7 @@ import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDefinition<?>> {
 
@@ -94,7 +95,7 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 		// isTerminologyObjectOfURI,
 		// kbNameURI));
 
-		Rdf2GoCore.getInstance().addStatements(statements, article);
+		Rdf2GoCore.getInstance().addStatements(article, Rdf2GoUtils.toArray(statements));
 
 		return Messages.noMessage();
 	}

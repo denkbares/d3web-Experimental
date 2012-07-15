@@ -69,7 +69,7 @@ public class SesameSwiftOwlimModelFactory extends AbstractModelFactory {
 		String path = KnowWEUtils.getKnowWEExtensionPath();
 		String ontfile = path + File.separatorChar + "knowwe_base.owl";
 		String reppath = System.getProperty("java.io.tmpdir") + File.separatorChar
-					+ "repository" + System.nanoTime();
+				+ "repository" + System.nanoTime();
 		String config_file = path + File.separatorChar + "owlim.ttl";
 		File rfile = new File(reppath);
 		delete(rfile);
@@ -88,23 +88,24 @@ public class SesameSwiftOwlimModelFactory extends AbstractModelFactory {
 			RDFParser rdfParser = Rio.createParser(RDFFormat.TURTLE, vf);
 			rdfParser.setRDFHandler(new StatementCollector(graph));
 			rdfParser.parse(new FileReader(config_file),
-						RepositoryConfigSchema.NAMESPACE);
+					RepositoryConfigSchema.NAMESPACE);
 
 			Resource repositoryNode = GraphUtil.getUniqueSubject(graph,
-						RDF.TYPE, RepositoryConfigSchema.REPOSITORY);
+					RDF.TYPE, RepositoryConfigSchema.REPOSITORY);
 			RepositoryConfig repConfig = RepositoryConfig.create(graph,
-						repositoryNode);
+					repositoryNode);
 
 			repConfig.validate();
 			RepositoryConfigUtil.updateRepositoryConfigs(systemRepo, repConfig);
 			Literal _id = GraphUtil.getUniqueObjectLiteral(graph,
-						repositoryNode, RepositoryConfigSchema.REPOSITORYID);
+					repositoryNode, RepositoryConfigSchema.REPOSITORYID);
 			repository = man.getRepository(_id.getLabel());
 			RepositoryConnection repositoryConn = repository.getConnection();
 			repositoryConn.setAutoCommit(true);
 			BNode context = repositoryConn.getValueFactory().createBNode(
-						"rootontology");
-			repositoryConn.add(file, Rdf2GoCore.basens, RDFFormat.RDFXML, context);
+					"rootontology");
+			repositoryConn.add(file, Rdf2GoCore.getInstance().getLocalNamespace(),
+					RDFFormat.RDFXML, context);
 			repositoryConn.close();
 		}
 		catch (Exception ex) {

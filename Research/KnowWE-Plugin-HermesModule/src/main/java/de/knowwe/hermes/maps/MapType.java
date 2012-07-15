@@ -40,6 +40,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.xml.AbstractXMLType;
 import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class MapType extends AbstractXMLType {
 
@@ -68,7 +69,7 @@ public class MapType extends AbstractXMLType {
 			for (Placemark placem : placemarks) {
 				addPlacemarkToOwlObject(placem, ioo);
 			}
-			Rdf2GoCore.getInstance().addStatements(ioo, s);
+			Rdf2GoCore.getInstance().addStatements(s, Rdf2GoUtils.toArray(ioo));
 			return null;
 		}
 

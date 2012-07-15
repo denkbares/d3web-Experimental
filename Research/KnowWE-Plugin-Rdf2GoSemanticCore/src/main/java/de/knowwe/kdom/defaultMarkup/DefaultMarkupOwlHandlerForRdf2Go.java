@@ -36,11 +36,10 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup.Annotation;
 import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
  * This class implements a default behavior for generating owl concept and
@@ -73,54 +72,54 @@ public class DefaultMarkupOwlHandlerForRdf2Go extends RDF2GoSubtreeHandler<Defau
 		List<Statement> io = new ArrayList<Statement>();
 		List<Message> msgs = new ArrayList<Message>();
 
-//		try {
-			// Access (or lazy build) parent concept
-			URI superConceptURI = Rdf2GoCore.getInstance().createBasensURI("DefaultMarkup");
+		// try {
+		// Access (or lazy build) parent concept
+		URI superConceptURI = Rdf2GoCore.getInstance().createBasensURI("DefaultMarkup");
 
-			// create a new class for this markup
-			this.conceptURI = Rdf2GoCore.getInstance().createlocalURI(markupName);
-			io.add(Rdf2GoCore.getInstance().createStatement(
-					this.conceptURI,
-					RDFS.subClassOf,
-					superConceptURI));
+		// create a new class for this markup
+		this.conceptURI = Rdf2GoCore.getInstance().createlocalURI(markupName);
+		io.add(Rdf2GoCore.getInstance().createStatement(
+				this.conceptURI,
+				RDFS.subClassOf,
+				superConceptURI));
 
-			// create a new instance for the markup section
-			// TODO: create node with section-id instead of blank node
-			BlankNode bnode = Rdf2GoCore.getInstance().createBlankNode();
-			io.add(Rdf2GoCore.getInstance().createStatement(bnode, RDF.type, this.conceptURI));
+		// create a new instance for the markup section
+		// TODO: create node with section-id instead of blank node
+		BlankNode bnode = Rdf2GoCore.getInstance().createBlankNode();
+		io.add(Rdf2GoCore.getInstance().createStatement(bnode, RDF.type, this.conceptURI));
 
-			// add content block as literal "hasContent"
+		// add content block as literal "hasContent"
+		addStringLiteral(bnode,
+				"hasContent", DefaultMarkupType.getContent(section),
+				io);
+
+		// add annotation blocks as literal "hasXYZ"
+		for (Annotation annotation : defaultMarkupType.getAnnotations()) {
+			String name = annotation.getName();
 			addStringLiteral(bnode,
-					"hasContent", DefaultMarkupType.getContent(section),
+					"has" + name, DefaultMarkupType.getAnnotation(section, name),
 					io);
+		}
 
-			// add annotation blocks as literal "hasXYZ"
-			for (Annotation annotation : defaultMarkupType.getAnnotations()) {
-				String name = annotation.getName();
-				addStringLiteral(bnode,
-						"has" + name, DefaultMarkupType.getAnnotation(section, name),
-						io);
-			}
+		// add hasArticle
+		addStringLiteral(bnode,
+				"hasArticle", section.getTitle(),
+				io);
 
-			// add hasArticle
-			addStringLiteral(bnode,
-					"hasArticle", section.getTitle(),
-					io);
+		// add hasLink
+		addStringLiteral(bnode,
+				"hasLink", KnowWEUtils.getWikiLink(section),
+				io);
+		// }
+		// catch (RepositoryException e) {
+		// Logger.getLogger("DefaultMarkup").log(Level.SEVERE,
+		// "cannot create concept for default markup '" +
+		// markupName + "'", e);
+		// msgs.add(new SimpleMessageError(e.getMessage()));
+		// return msgs;
+		// }
 
-			// add hasLink
-			addStringLiteral(bnode,
-					"hasLink", KnowWEUtils.getWikiLink(section),
-					io);
-//		}
-//		catch (RepositoryException e) {
-//			Logger.getLogger("DefaultMarkup").log(Level.SEVERE,
-//					"cannot create concept for default markup '" +
-//							markupName + "'", e);
-//			msgs.add(new SimpleMessageError(e.getMessage()));
-//			return msgs;
-//		}
-
-		Rdf2GoCore.getInstance().addStatements(io, section);
+		Rdf2GoCore.getInstance().addStatements(section, Rdf2GoUtils.toArray(io));
 		return msgs;
 
 	}

@@ -34,6 +34,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class LocationDefinitionType extends AbstractType {
 
@@ -53,7 +54,7 @@ public class LocationDefinitionType extends AbstractType {
 			ArrayList<Statement> ioo = new ArrayList<Statement>();
 			Placemark placem = extractPlacemark(s);
 			MapType.addPlacemarkToOwlObject(placem, ioo);
-			Rdf2GoCore.getInstance().addStatements(ioo, s);
+			Rdf2GoCore.getInstance().addStatements(s, Rdf2GoUtils.toArray(ioo));
 			return null;
 		}
 

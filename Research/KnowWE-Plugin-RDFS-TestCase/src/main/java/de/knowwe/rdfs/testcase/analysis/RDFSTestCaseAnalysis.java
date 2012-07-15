@@ -28,6 +28,7 @@ import org.ontoware.rdf2go.model.node.Node;
 
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.testcase.Binding;
 import de.knowwe.rdfs.testcase.RDFSTestCase;
 import de.knowwe.rdfs.testcase.diff.MissingBindingDiff;
@@ -106,7 +107,7 @@ public class RDFSTestCaseAnalysis {
 
 	private static String processValue(String value) {
 		value = Strings.decodeURL(value);
-		value = Rdf2GoCore.getInstance().reduceNamespace(value);
+		value = Rdf2GoUtils.reduceNamespace(value);
 		if (value.startsWith("lns:")) {
 			return value.substring(4);
 		}

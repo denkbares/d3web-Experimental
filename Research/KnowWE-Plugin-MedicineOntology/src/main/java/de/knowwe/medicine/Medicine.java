@@ -29,6 +29,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
 
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class Medicine {
 
@@ -75,16 +76,16 @@ public class Medicine {
 				queryParams);
 		while (it.hasNext()) {
 			QueryRow row = it.next();
-			String title = Rdf2GoCore.getLocalName(row.getValue("title"));
-			String tag = Rdf2GoCore.getLocalName(row.getValue("tag"));
-			String typ = Rdf2GoCore.getLocalName(row.getValue("typ"));
+			String title = Rdf2GoUtils.getLocalName(row.getValue("title"));
+			String tag = Rdf2GoUtils.getLocalName(row.getValue("tag"));
+			String typ = Rdf2GoUtils.getLocalName(row.getValue("typ"));
 			Node n = row.getValue("split");
 			if (n == null) {
 				params.add(new MedicineParameter(title, tag, typ));
 			}
 			else {
-				String split = Rdf2GoCore.getLocalName(n);
-				String sp = Rdf2GoCore.getLocalName(row.getValue("sp"));
+				String split = Rdf2GoUtils.getLocalName(n);
+				String sp = Rdf2GoUtils.getLocalName(row.getValue("sp"));
 				params.add(new MedicineParameter(title, tag, typ, split, sp));
 			}
 		}
@@ -107,8 +108,8 @@ public class Medicine {
 		importSettings[4] = row.getLiteralValue("SqlTable");
 		importSettings[5] = row.getLiteralValue("useMarkup");
 		importSettings[6] = row.getLiteralValue("id");
-		importSettings[7] = Rdf2GoCore.getLocalName(row.getValue("idTag"));
-		importSettings[8] = Rdf2GoCore.getLocalName(row.getValue("parent"));
+		importSettings[7] = Rdf2GoUtils.getLocalName(row.getValue("idTag"));
+		importSettings[8] = Rdf2GoUtils.getLocalName(row.getValue("parent"));
 		importSettings[9] = row.getLiteralValue("subject");
 
 		// ExportSettings
@@ -129,8 +130,8 @@ public class Medicine {
 		exportSettings[4] = row.getLiteralValue("SqlTable");
 		exportSettings[5] = row.getLiteralValue("exportToDB");
 		exportSettings[6] = row.getLiteralValue("id");
-		exportSettings[7] = Rdf2GoCore.getLocalName(row.getValue("idTag"));
-		exportSettings[8] = Rdf2GoCore.getLocalName(row.getValue("parent"));
+		exportSettings[7] = Rdf2GoUtils.getLocalName(row.getValue("idTag"));
+		exportSettings[8] = Rdf2GoUtils.getLocalName(row.getValue("parent"));
 		exportSettings[9] = row.getLiteralValue("subject");
 
 	}

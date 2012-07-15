@@ -39,7 +39,7 @@ public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 		String encodePerson = Strings.encodeURL("Historische Persönlichkeit");
 		String concept = "";
 
-		String namespace = Rdf2GoCore.localns;
+		String namespace = Rdf2GoCore.getInstance().getLocalNamespace();
 		encodePerson = namespace + encodePerson;
 
 		String query =

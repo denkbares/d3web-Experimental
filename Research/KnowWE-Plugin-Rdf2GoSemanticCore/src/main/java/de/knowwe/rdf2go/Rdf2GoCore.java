@@ -18,14 +18,13 @@
  */
 package de.knowwe.rdf2go;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,14 +32,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 import org.ontoware.aifbcommons.collection.ClosableIterable;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
@@ -58,8 +55,6 @@ import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.util.RDFTool;
-import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import de.knowwe.core.Environment;
@@ -70,10 +65,9 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.event.ArticleUpdatesFinishedEvent;
 import de.knowwe.event.FullParseEvent;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
  * 
@@ -82,49 +76,23 @@ import de.knowwe.event.FullParseEvent;
  */
 public class Rdf2GoCore implements EventListener {
 
-	public static final String basens = "http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#";
-	public static final String localns = Environment.getInstance().getWikiConnector().getBaseUrl()
-			+ "Wiki.jsp?page=";
+	private final String bns;
+	private final String lns;
 
-	private static final URI HASTOPIC = Rdf2GoCore.getInstance().createURI(basens,
-			"hasTopic");
-	private static final URI NARYPROPERTY = Rdf2GoCore.getInstance().createURI(basens,
-			"NaryProperty");
-	private static final URI TEXTORIGIN = Rdf2GoCore.getInstance().createURI(basens,
-			"TextOrigin");
-	private static final URI HASNODE = Rdf2GoCore.getInstance().createURI(basens,
-			"hasNode");
+	private static final String NARY_PROPERTY = "NaryProperty";
 
-	private static final String JENA = "jena";
-	private static final String BIGOWLIM = "bigowlim";
+	public static final String JENA = "jena";
+	public static final String BIGOWLIM = "bigowlim";
 	public static final String SESAME = "sesame";
-	private static final String SWIFTOWLIM = "swiftowlim";
+	public static final String SWIFTOWLIM = "swiftowlim";
 
 	public static final String SELECT = "select";
 	public static final String ASK = "ask";
-	private static final String OWL_REASONING = "owl";
-	private static final String RDFS_REASONING = "rdfs";
+	public static final String OWL_REASONING = "owl";
+	public static final String RDFS_REASONING = "rdfs";
 
 	private static Rdf2GoCore me;
 
-	/**
-	 * @param value
-	 * @return
-	 */
-	private static String beautify(String value) {
-		String temp = value;
-		try {
-			temp = Strings.decodeURL(value);
-		}
-		catch (IllegalArgumentException e) {
-		}
-		return Strings.encodeURL(temp);
-	}
-
-	/**
-	 * 
-	 * @return me
-	 */
 	public static Rdf2GoCore getInstance() {
 		if (me == null) {
 			me = new Rdf2GoCore();
@@ -133,17 +101,22 @@ public class Rdf2GoCore implements EventListener {
 		return me;
 	}
 
-	public static String getLocalName(Node o) {
-		return RDFTool.getLabel(o);
+	public Rdf2GoCore() {
+		bns = "http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#";
+		lns = Environment.getInstance().getWikiConnector().getBaseUrl()
+				+ "Wiki.jsp?page=";
 	}
 
-	private static Set<Statement> modelToSet(Model m) {
+	/**
+	 * @created 15.07.2012
+	 * @return all {@link Statement}s of the Rdf2GoCore.
+	 */
+	public static Set<Statement> getStatements() {
 		HashSet<Statement> result = new HashSet<Statement>();
 
-		for (Statement s : m) {
+		for (Statement s : getInstance().model) {
 			result.add(s);
 		}
-
 		return result;
 	}
 
@@ -152,7 +125,7 @@ public class Rdf2GoCore implements EventListener {
 	/**
 	 * This statement cache is controlled by the incremental compiler.
 	 */
-	private Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> incrementalStatementCache;
+	private Map<String, WeakHashMap<Section<?>, List<Statement>>> incrementalStatementCache;
 	private Map<Statement, Set<String>> duplicateStatements;
 
 	/**
@@ -163,8 +136,8 @@ public class Rdf2GoCore implements EventListener {
 	private final Map<String, Set<Statement>> fullParseStatementCache = new HashMap<String, Set<Statement>>();
 
 	/**
-	 * All namespaces known to KnowWE. Key is the namespace shortcut, value is
-	 * the full namespace, e.g. rdf and
+	 * All namespaces known to KnowWE. Key is the namespace abbreviation, value
+	 * is the full namespace, e.g. rdf and
 	 * http://www.w3.org/1999/02/22-rdf-syntax-ns#
 	 */
 	private Map<String, String> namespaces;
@@ -176,14 +149,14 @@ public class Rdf2GoCore implements EventListener {
 	ResourceBundle properties = ResourceBundle.getBundle("model");
 
 	/**
-	 * add a namespace to the model
+	 * Add a namespace to the model.
 	 * 
-	 * @param sh prefix
-	 * @param ns url
+	 * @param abbreviation the short version of the namespace
+	 * @param namespace the namespace (URL)
 	 */
-	public void addNamespace(String sh, String ns) {
-		namespaces.put(sh, ns);
-		model.setNamespace(sh, ns);
+	public void addNamespace(String abbreviation, String namespace) {
+		namespaces.put(abbreviation, namespace);
+		model.setNamespace(abbreviation, namespace);
 	}
 
 	/**
@@ -200,26 +173,8 @@ public class Rdf2GoCore implements EventListener {
 	 * @param section the {@link Section} for which the {@link Statement}s are
 	 *        added and cached
 	 */
-	public void addStatement(Resource subject, URI predicate, Node object, Section<? extends Type> sec) {
-		addStatement(createStatement(subject, predicate, object), sec);
-	}
-
-	/**
-	 * Adds the given {@link Statement} for the given {@link Section} to the
-	 * triple store.
-	 * <p/>
-	 * You can remove the {@link Statement} using the method
-	 * {@link Rdf2GoCore#removeStatementsForSection(Section)}.
-	 * 
-	 * @created 06.12.2010
-	 * @param statement the {@link Statement}s to add
-	 * @param section the {@link Section} for which the {@link Statement}s are
-	 *        added and cached
-	 */
-	public void addStatement(Statement statement, Section<? extends Type> section) {
-		List<Statement> l = new ArrayList<Statement>();
-		l.add(statement);
-		addStatements(l, section);
+	public void addStatement(Section<?> sec, Resource subject, URI predicate, Node object) {
+		addStatements(sec, createStatement(subject, predicate, object));
 	}
 
 	/**
@@ -230,61 +185,40 @@ public class Rdf2GoCore implements EventListener {
 	 * {@link Rdf2GoCore#removeStatementsForSection(Section)}.
 	 * 
 	 * @created 06.12.2010
-	 * @param statements the {@link Statement}s to add
 	 * @param section the {@link Section} for which the {@link Statement}s are
 	 *        added and cached
+	 * @param statements the {@link Statement}s to add
 	 */
-	public void addStatements(Collection<Statement> statements,
-			Section<? extends Type> section) {
+	public void addStatements(Section<? extends Type> section,
+			Statement... statements) {
 		Logger.getLogger(this.getClass().getName()).finer(
-				"semantic core updating " + section.getID() + "  " + statements.size());
+				"semantic core updating " + section.getID() + "  " + statements.length);
 
-		addStatementsToDuplicatedCache(statements, section.getID());
-
-		addStatementToIncrementalCache(statements, section);
-
-		// Maybe remove duplicates before adding to store, if performance is
-		// better
+		addStatementsToDuplicatedCache(section.getID(), statements);
+		addStatementToIncrementalCache(section, statements);
 		addStatementsToInsertCache(statements);
 	}
 
 	/**
-	 * Adds the {@link Statement} for the given article to the triple store. If
-	 * the given article is compiled again, all {@link Statement}s added for
-	 * this article are removed before the new {@link Statement} are added
-	 * again. This method works best when used in a {@link SubtreeHandler}.
+	 * Adds the {@link Statement}s for the given article. If the given article
+	 * is compiled again, all {@link Statement}s added for this article are
+	 * removed before the new {@link Statement}s are added again. You don't need
+	 * to remove the {@link Statement}s yourself. This method works best when
+	 * used in a {@link SubtreeHandler}.
 	 * 
 	 * @created 11.06.2012
-	 * @param statement the statement to add to the triple store
-	 * @param article the article for which the statement is added, cached and
-	 *        for which it is removed at full parse
-	 */
-	public void addStatement(Statement statement, Article article) {
-		ArrayList<Statement> statements = new ArrayList<Statement>(1);
-		statements.add(statement);
-		addStatements(statements, article);
-	}
-
-	/**
-	 * Adds the Collection of {@link Statement}s for the given article. If the
-	 * given article is compiled again, all {@link Statement}s added for this
-	 * article are removed before the new {@link Statement}s are added again.
-	 * You don't need to remove the {@link Statement}s yourself. This method
-	 * works best when used in a {@link SubtreeHandler}.
-	 * 
-	 * @created 11.06.2012
-	 * @param statements the statements to add to the triple store
 	 * @param article the article for which the statements are added and for
 	 *        which they are removed at full parse
+	 * @param statements the statements to add to the triple store
 	 */
-	public void addStatements(Collection<Statement> statements, Article article) {
+	public void addStatements(Article article, Statement... statements) {
 		Set<Statement> statementsOfArticle = fullParseStatementCache.get(article.getTitle());
 		if (statementsOfArticle == null) {
 			statementsOfArticle = new HashSet<Statement>();
 			fullParseStatementCache.put(article.getTitle(), statementsOfArticle);
 		}
-		statementsOfArticle.addAll(statements);
-		addStatementsToDuplicatedCache(statements, article.getTitle());
+		statementsOfArticle.addAll(Arrays.asList(statements));
+		addStatementsToDuplicatedCache(article.getTitle(), statements);
 		addStatementsToInsertCache(statements);
 	}
 
@@ -300,61 +234,41 @@ public class Rdf2GoCore implements EventListener {
 	 * @created 13.06.2012
 	 * @param statements the statements you want to add to the triple store
 	 */
-	public void addStatements(Collection<Statement> statements) {
-		addStatementsToDuplicatedCache(statements, null);
+	public void addStatements(Statement... statements) {
+		addStatementsToDuplicatedCache(null, statements);
 		addStatementsToInsertCache(statements);
 	}
 
-	private void addStatementsToDuplicatedCache(Collection<Statement> allStatements, String source) {
-		for (Statement s : allStatements) {
-			Set<String> registeredSectionIDsForStatements = duplicateStatements.get(s);
-			if (registeredSectionIDsForStatements == null) {
-				registeredSectionIDsForStatements = new HashSet<String>();
-				duplicateStatements.put(s, registeredSectionIDsForStatements);
+	private void addStatementsToDuplicatedCache(String source, Statement... statements) {
+		for (Statement statement : statements) {
+			Set<String> registeredSourcesForStatements = duplicateStatements.get(statement);
+			if (registeredSourcesForStatements == null) {
+				registeredSourcesForStatements = new HashSet<String>();
+				duplicateStatements.put(statement, registeredSourcesForStatements);
 			}
-			registeredSectionIDsForStatements.add(source);
+			registeredSourcesForStatements.add(source);
 		}
 	}
 
-	private void addStatementsToInsertCache(Collection<Statement> list) {
-		insertCache.addAll(list);
-	}
-
-	/**
-	 * Adds statements to the incremental statementcache.
-	 * 
-	 * @created 06.12.2010
-	 * @param newStatements
-	 * @param sec
-	 */
-	private void addStatementToIncrementalCache(Collection<Statement> newStatements, Section<? extends Type> sec) {
-		WeakHashMap<Section<? extends Type>, List<Statement>> temp = incrementalStatementCache.get(sec.getArticle().getTitle());
-		if (temp == null) {
-			temp = new WeakHashMap<Section<? extends Type>, List<Statement>>();
-		}
-		List<Statement> allStatements = new ArrayList<Statement>();
-		allStatements.addAll(newStatements);
-		if (temp.containsKey(sec)) {
-			allStatements.addAll(temp.get(sec));
-		}
-		temp.put(sec, allStatements);
-		incrementalStatementCache.put(sec.getArticle().getTitle(), temp);
+	private void addStatementsToInsertCache(Statement... array) {
+		insertCache.addAll(Arrays.asList(array));
 	}
 
 	/**
-	 * attaches a TextOrigin Node to a Resource. It's your duty to make sure the
-	 * Resource is of the right type if applicable (eg attachto RDF.TYPE
-	 * RDF.STATEMENT)
-	 * 
-	 * @param attachto The Resource that will be annotated bei the TO-Node
-	 * @param source The source section that should be used
-	 * @param io the ex-IntermediateOwlObject (now List<Statements> that should
-	 *        collect the statements
+	 * Adds statements to the incremental statement cache.
 	 */
-	public void attachTextOrigin(Resource attachto, Section<?> source, List<Statement> io) {
-		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
-		io.addAll(createTextOrigin(source, to));
-		io.add(createStatement(attachto, RDFS.isDefinedBy, to));
+	private void addStatementToIncrementalCache(Section<?> section, Statement... newStatements) {
+		WeakHashMap<Section<?>, List<Statement>> sectionsWithStatements = incrementalStatementCache.get(section.getArticle().getTitle());
+		if (sectionsWithStatements == null) {
+			sectionsWithStatements = new WeakHashMap<Section<? extends Type>, List<Statement>>();
+			incrementalStatementCache.put(section.getTitle(), sectionsWithStatements);
+		}
+		List<Statement> statementsOfSection = sectionsWithStatements.get(section);
+		if (statementsOfSection == null) {
+			statementsOfSection = new ArrayList<Statement>();
+			sectionsWithStatements.put(section, statementsOfSection);
+		}
+		statementsOfSection.addAll(Arrays.asList(newStatements));
 	}
 
 	/**
@@ -396,7 +310,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public URI createBasensURI(String value) {
-		return createURI(basens, value);
+		return createURI(bns, value);
 	}
 
 	public BlankNode createBlankNode() {
@@ -428,16 +342,16 @@ public class Rdf2GoCore implements EventListener {
 	 */
 	public List<Statement> createlocalProperty(String cur) {
 		URI prop = createlocalURI(cur);
-		URI naryprop = NARYPROPERTY;
 		List<Statement> io = new ArrayList<Statement>();
 		if (!PropertyManager.getInstance().isValid(prop)) {
-			io.add(createStatement(prop, RDFS.subClassOf, naryprop));
+			io.add(createStatement(prop, RDFS.subClassOf, createURI(getBaseNamespace(),
+					NARY_PROPERTY)));
 		}
 		return io;
 	}
 
 	public URI createlocalURI(String value) {
-		return createURI(localns, value);
+		return createURI(lns, value);
 	}
 
 	public Statement createStatement(Resource subject, URI predicate,
@@ -445,20 +359,15 @@ public class Rdf2GoCore implements EventListener {
 		return model.createStatement(subject, predicate, object);
 	}
 
-	private List<Statement> createTextOrigin(Section<?> source, Resource to) {
-		ArrayList<Statement> io = new ArrayList<Statement>();
-		io.add(createStatement(to, RDF.type, TEXTORIGIN));
-		io.add(createStatement(to, HASNODE, createLiteral(source.getID())));
-		io.add(createStatement(to, HASTOPIC, createlocalURI(source.getTitle())));
-		return io;
-	}
-
 	public URI createURI(String value) {
-		return model.createURI(expandNamespace(value));
+		return model.createURI(Rdf2GoUtils.expandNamespace(value));
 	}
 
 	public URI createURI(String ns, String value) {
-		return createURI(expandNSPrefix(ns) + beautify(value));
+		// in case ns is just the abbreviation
+		String fullNs = getNameSpaces().get(ns);
+
+		return createURI((fullNs == null ? ns : fullNs) + Rdf2GoUtils.cleanUp(value));
 	}
 
 	/**
@@ -471,54 +380,23 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
-	 * expands namespace from prefix to uri string
-	 * 
-	 * @created 04.01.2011
-	 * @param s
-	 * @return
-	 */
-	public String expandNamespace(String s) throws IllegalArgumentException {
-		if (s.startsWith("http://")) {
-			return s;
-		}
-		String[] array = s.split(":", 2);
-		if (array.length == 2) {
-			return expandNSPrefix(array[0]) + array[1];
-		}
-		throw new IllegalArgumentException("Not a valid (absolute) URI: " + s);
-
-	}
-
-	/**
-	 * expands prefix to namespace
-	 * 
-	 * @created 06.12.2010
-	 * @param ns
-	 * @return
-	 */
-	public String expandNSPrefix(String ns) {
-		for (Entry<String, String> cur : namespaces.entrySet()) {
-			if (ns.equals(cur.getKey())) {
-				ns = cur.getValue();
-				break;
-			}
-		}
-		return ns;
-	}
-
-	/**
 	 * Calculates the Set-subtraction of the inference closure of the model with
 	 * and without the statements created by the given section
 	 * 
+	 * @deprecated this method has some serious flaws since it operates directly
+	 *             on the model, removing and adding statements. Example:
+	 *             queries to the model performed simultaneously might not
+	 *             contain all the results it would contain normally.
 	 * @created 02.01.2012
 	 * @param sec
 	 * @return
 	 * @throws ModelRuntimeException
 	 * @throws MalformedQueryException
 	 */
+	@Deprecated
 	public Collection<Statement> generateStatementDiffForSection(Section<?> sec) throws ModelRuntimeException, MalformedQueryException {
 
-		Set<Statement> includingSection = modelToSet(model);
+		Set<Statement> includingSection = getStatements();
 
 		// retrieve statements to be excluded
 		WeakHashMap<Section<? extends Type>, List<Statement>> allStatmentSectionsOfArticle =
@@ -529,7 +407,7 @@ public class Rdf2GoCore implements EventListener {
 		if (statementsOfSection != null) {
 			model.removeAll(statementsOfSection.iterator());
 		}
-		Set<Statement> excludingSection = modelToSet(model);
+		Set<Statement> excludingSection = getStatements();
 		includingSection.removeAll(excludingSection);
 
 		// reinsert statements
@@ -550,40 +428,14 @@ public class Rdf2GoCore implements EventListener {
 		return events;
 	}
 
-	public File[] getImportList() {
-		String p = Environment.getInstance().getWikiConnector().getSavePath();
-		String inpath = (p != null) ? p : (KnowWEUtils.getKnowWEExtensionPath()
-				+ File.separatorChar + "owlincludes");
-		File includes = new File(inpath);
-		if (includes.exists()) {
-			File[] files = includes.listFiles(new FilenameFilter() {
-
-				@Override
-				public boolean accept(File f, String s) {
-					return s.endsWith(".owl");
-				}
-			});
-			return files;
-		}
-		return null;
-	}
-
 	public Map<String, String> getNameSpaces() {
 		return namespaces;
 	}
 
-	/**
-	 * @param prop
-	 * @return
-	 */
 	public URI getRDF(String prop) {
 		return createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#", prop);
 	}
 
-	/**
-	 * @param prop
-	 * @return
-	 */
 	public URI getRDFS(String prop) {
 		return createURI("http://www.w3.org/2000/01/rdf-schema#", prop);
 	}
@@ -594,7 +446,7 @@ public class Rdf2GoCore implements EventListener {
 	 * @param s
 	 * @return statements of section s (with children)
 	 */
-	public List<Statement> getSectionStatementsRecursive(Section<? extends Type> s) {
+	public List<Statement> getSectionStatementsRecursively(Section<? extends Type> s) {
 		List<Statement> allstatements = new ArrayList<Statement>();
 
 		if (getStatementsofSingleSection(s) != null) {
@@ -605,19 +457,10 @@ public class Rdf2GoCore implements EventListener {
 		// walk over all children
 		for (Section<? extends Type> current : s.getChildren()) {
 			// collect statements of the the children's descendants
-			allstatements.addAll(getSectionStatementsRecursive(current));
+			allstatements.addAll(getSectionStatementsRecursively(current));
 		}
 
 		return allstatements;
-	}
-
-	public String getSparqlNamespaceShorts() {
-		StringBuilder buffy = new StringBuilder();
-
-		for (Entry<String, String> cur : namespaces.entrySet()) {
-			buffy.append("PREFIX " + cur.getKey() + ": <" + cur.getValue() + "> \n");
-		}
-		return buffy.toString();
 	}
 
 	Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> getStatementCache() {
@@ -639,20 +482,22 @@ public class Rdf2GoCore implements EventListener {
 		return new ArrayList<Statement>();
 	}
 
-	public List<Statement> getTopicStatements(String topic) {
-		Section<? extends Type> rootsection = Environment.getInstance().getArticle(
-				Environment.DEFAULT_WEB, topic).getRootSection();
-		return getSectionStatementsRecursive(rootsection);
-	}
-
 	public Object getUnderlyingModelImplementation() {
 		return model.getUnderlyingModelImplementation();
+	}
+
+	public String getLocalNamespace() {
+		return this.lns;
+	}
+
+	public String getBaseNamespace() {
+		return bns;
 	}
 
 	/**
 	 * Initializes the model and its caches and namespaces
 	 */
-	public void init() {
+	private void init() {
 		initModel();
 		incrementalStatementCache = new HashMap<String, WeakHashMap<Section<? extends Type>, List<Statement>>>();
 		duplicateStatements = new HashMap<Statement, Set<String>>();
@@ -669,8 +514,8 @@ public class Rdf2GoCore implements EventListener {
 	 * sets the default namespaces
 	 */
 	private void initDefaultNamespaces() {
-		addNamespace("ns", basens);
-		addNamespace("lns", localns);
+		addNamespace("ns", bns);
+		addNamespace("lns", lns);
 		addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 		addNamespace("w", "http://www.umweltbundesamt.de/wisec#");
 		addNamespace("owl", "http://www.w3.org/2002/07/owl#");
@@ -679,11 +524,11 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
-	 * registers and opens the specified model
+	 * Registers and opens the specified model.
 	 * 
 	 * @throws ModelRuntimeException
 	 */
-	public void initModel() throws ModelRuntimeException, ReasoningNotSupportedException {
+	private void initModel() throws ModelRuntimeException, ReasoningNotSupportedException {
 
 		String useModel = properties.getString("model").toLowerCase();
 		String useReasoning = properties.getString("reasoning").toLowerCase();
@@ -744,7 +589,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	private String verbalizeStatement(Statement statement) {
-		String statementVerbalization = reduceNamespace(statement.toString());
+		String statementVerbalization = Rdf2GoUtils.reduceNamespace(statement.toString());
 		try {
 			statementVerbalization = URLDecoder.decode(statementVerbalization, "UTF-8");
 		}
@@ -771,45 +616,6 @@ public class Rdf2GoCore implements EventListener {
 
 	public void readFrom(Reader in) throws ModelRuntimeException, IOException {
 		model.readFrom(in);
-	}
-
-	/**
-	 * Reduces namespace in uri string to prefix
-	 * 
-	 * @created 06.12.2010
-	 * @param string the string where the namespace needs to be reduced
-	 * @return the string with the prefix instead of the full namespace
-	 */
-	public String reduceNamespace(String string) {
-		for (Entry<String, String> cur : namespaces.entrySet()) {
-			string = string.replaceAll(Pattern.quote(cur.getValue()), cur.getKey() + ":");
-		}
-		return string;
-	}
-
-	/**
-	 * If the string starts with a known namespace or its shortcut, the
-	 * namespace is removed (only from the start of the string).
-	 * 
-	 * @created 12.07.2012
-	 * @param string the string where the namespace or its shortcut needs to be
-	 *        removed
-	 * @return the string without the namespace prefix
-	 */
-	public String trimNamespace(String string) {
-		for (Entry<String, String> namespaceEntry : namespaces.entrySet()) {
-			String ns = namespaceEntry.getValue();
-			if (string.startsWith(ns)) {
-				string = string.substring(ns.length());
-				break;
-			}
-			String nsShortCut = namespaceEntry.getKey() + ":";
-			if (string.startsWith(nsShortCut)) {
-				string = string.substring(nsShortCut.length());
-				break;
-			}
-		}
-		return string;
 	}
 
 	public void removeAllCachedStatements() {
@@ -860,7 +666,7 @@ public class Rdf2GoCore implements EventListener {
 	 * <p/>
 	 * <b>Attention</b>: This method only removes {@link Statement}s that were
 	 * added (and cached) in connection with a {@link Section} using methods
-	 * like {@link Rdf2GoCore#addStatements(Collection, Section)} or
+	 * like {@link Rdf2GoCore#addStatements(Section, Collection)} or
 	 * {@link Rdf2GoCore#addStatement(Statement, Section)}.
 	 * 
 	 * @created 06.12.2010
@@ -950,8 +756,8 @@ public class Rdf2GoCore implements EventListener {
 	 * <p/>
 	 * <b>Attention</b>: This method only removes {@link Statement}s that were
 	 * added (and cached) in connection with an {@link Article} using methods
-	 * like {@link Rdf2GoCore#addStatements(Collection, Article)} or
-	 * {@link Rdf2GoCore#addStatement(Statement, Article)}.
+	 * like {@link Rdf2GoCore#addStatements(Article, Collection)} or
+	 * {@link Rdf2GoCore#addStatement(Article, Statement)}.
 	 * 
 	 * @created 13.06.2012
 	 * @param article the article for which you want to remove all
@@ -971,51 +777,8 @@ public class Rdf2GoCore implements EventListener {
 		fullParseStatementCache.remove(article.getTitle());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.d3web.we.core.ISemanticCore#simpleQueryToList(java.lang.String,
-	 * java.lang.String)
-	 */
-	public ArrayList<String> simpleQueryToList(String inquery, String targetbinding) {
-
-		ArrayList<String> resultlist = new ArrayList<String>();
-		String querystring = getSparqlNamespaceShorts();
-		querystring = querystring + inquery;
-
-		QueryResultTable results = null;
-		try {
-			results = sparqlSelect(inquery);
-		}
-		catch (ModelRuntimeException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		if (results != null) {
-			ClosableIterator<QueryRow> i = results.iterator();
-
-			while (i.hasNext()) {
-				QueryRow row = i.next();
-				String tag = row.getValue(targetbinding).toString();
-				if (tag.split("#").length == 2) tag = tag.split("#")[1];
-				tag = Strings.decodeURL(tag);
-				if (tag.contains("=")) {
-					tag = tag.split("=")[1];
-				}
-				if (tag.startsWith("\"")) {
-					tag = tag.substring(1);
-				}
-				if (tag.endsWith("\"")) {
-					tag = tag.substring(0, tag.length() - 1);
-				}
-				resultlist.add(tag.trim());
-			}
-		}
-		return resultlist;
-	}
-
 	public boolean sparqlAsk(String query) throws ModelRuntimeException, MalformedQueryException {
-		String sparqlNamespaceShorts = getSparqlNamespaceShorts();
+		String sparqlNamespaceShorts = Rdf2GoUtils.getSparqlNamespaceShorts();
 		if (query.startsWith(sparqlNamespaceShorts)) {
 			return model.sparqlAsk(query);
 		}
@@ -1051,10 +814,10 @@ public class Rdf2GoCore implements EventListener {
 		boolean result;
 
 		// ask query
-		if (query.startsWith(getSparqlNamespaceShorts())) {
+		if (query.startsWith(Rdf2GoUtils.getSparqlNamespaceShorts())) {
 			result = model.sparqlAsk(query);
 		}
-		result = model.sparqlAsk(getSparqlNamespaceShorts() + query);
+		result = model.sparqlAsk(Rdf2GoUtils.getSparqlNamespaceShorts() + query);
 
 		// reinsert statements
 		if (statementsOfSection != null) {
@@ -1066,17 +829,17 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public ClosableIterable<Statement> sparqlConstruct(String query) throws ModelRuntimeException, MalformedQueryException {
-		if (query.startsWith(getSparqlNamespaceShorts())) {
+		if (query.startsWith(Rdf2GoUtils.getSparqlNamespaceShorts())) {
 			return model.sparqlConstruct(query);
 		}
-		return model.sparqlConstruct(getSparqlNamespaceShorts() + query);
+		return model.sparqlConstruct(Rdf2GoUtils.getSparqlNamespaceShorts() + query);
 	}
 
 	public QueryResultTable sparqlSelect(String query) throws ModelRuntimeException, MalformedQueryException {
-		if (query.startsWith(getSparqlNamespaceShorts())) {
+		if (query.startsWith(Rdf2GoUtils.getSparqlNamespaceShorts())) {
 			return model.sparqlSelect(query);
 		}
-		return model.sparqlSelect(getSparqlNamespaceShorts() + query);
+		return model.sparqlSelect(Rdf2GoUtils.getSparqlNamespaceShorts() + query);
 	}
 
 	public ClosableIterator<QueryRow> sparqlSelectIt(String query) throws ModelRuntimeException, MalformedQueryException {

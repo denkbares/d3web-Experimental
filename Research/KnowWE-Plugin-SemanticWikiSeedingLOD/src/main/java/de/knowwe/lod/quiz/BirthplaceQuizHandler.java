@@ -29,11 +29,11 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 
 		String encodePerson = Strings.encodeURL("Historische Persönlichkeit");
 
-		String namespace = Rdf2GoCore.localns;
+		String namespace = Rdf2GoCore.getInstance().getLocalNamespace();
 		encodePerson = namespace + encodePerson;
 
 		String query =
-					"SELECT ?x WHERE {?x rdf:type <" + encodePerson + ">} ORDER BY ASC(?x)";
+				"SELECT ?x WHERE {?x rdf:type <" + encodePerson + ">} ORDER BY ASC(?x)";
 
 		ClosableIterator<QueryRow> result = core.sparqlSelectIt(query);
 		ArrayList<String> persons = new ArrayList<String>();
@@ -56,12 +56,12 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 			int choose = (int) ((Math.random() * size) + 1);
 			concept = persons.get(choose - 1);
 			String hasBirthplace =
-						"ASK {<" + core.createlocalURI(concept) + "> " + birthplaceAttribute
-								+ " ?y}";
+					"ASK {<" + core.createlocalURI(concept) + "> " + birthplaceAttribute
+							+ " ?y}";
 			String birthplace =
-						"SELECT ?y WHERE {<" + core.createlocalURI(concept) + "> "
-								+ birthplaceAttribute
-								+ " ?y}";
+					"SELECT ?y WHERE {<" + core.createlocalURI(concept) + "> "
+							+ birthplaceAttribute
+							+ " ?y}";
 			if (Rdf2GoCore.getInstance().sparqlAsk(hasBirthplace)) {
 				ClosableIterator<QueryRow> real = core.sparqlSelectIt(birthplace);
 				while (real.hasNext()) {
@@ -73,7 +73,7 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 				String hasCoords = "ASK {<" + core.createlocalURI(realBirthPlace)
 						+ "> rdf:type lns:Geographika." +
 						"<" + core.createlocalURI(realBirthPlace) + "> lns:hasLongitude ?y." +
-								"<" + core.createlocalURI(realBirthPlace)
+						"<" + core.createlocalURI(realBirthPlace)
 						+ "> lns:hasLatitude ?z.}";
 				if (core.sparqlAsk(hasCoords)) {
 					found = true;
