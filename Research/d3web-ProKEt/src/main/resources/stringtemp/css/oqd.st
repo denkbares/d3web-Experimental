@@ -62,7 +62,7 @@ width: 100%;
 
 #dialog{
     float: left;
-    margin-top: 205px;
+    margin-top: 215px;
 }
 
 
@@ -269,7 +269,7 @@ area {
     font-weight: bold;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 115px;
+    margin-top: 125px;
     padding: 30px;
     width: 65%;
 }

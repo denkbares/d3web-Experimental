@@ -1407,7 +1407,7 @@ public class D3webUtils {
                     blackboard.addValueFact(fact);
                 }
             }
-            System.out.println(blackboard.getAnsweredQuestions());
+            //System.out.println(blackboard.getAnsweredQuestions());
         }
     }
 

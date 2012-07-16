@@ -277,9 +277,8 @@ public class D3webDialog extends HttpServlet {
         
         
         // TEST:
-        //httpSession.setAttribute("debug", "true");
+//        httpSession.setAttribute("debug", "true");
         
-
         if (action == null) {
             action = "show";
         }
@@ -808,7 +807,7 @@ public class D3webDialog extends HttpServlet {
                 continue;
             }
             IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
-            System.out.println(to.getName());
+            //System.out.println(to.getName());
 
             // get back the ID from store for finding element in HTML
             writer.append(REPLACEID + AbstractD3webRenderer.getID(to));
@@ -1005,14 +1004,19 @@ public class D3webDialog extends HttpServlet {
 
         String email = (String) httpSession.getAttribute("user");
 
-        String gotoUrl = "../Statistics/Groups.jsp?action=dbLogin";
-
+        String gotoUrl = "../Statistics/editGroup.jsp?action=dbLogin";
+       
         String token = DateCoDec.getCode();
         gotoUrl += "&t=" + token;
         gotoUrl += "&e=" + Base64.encodeBase64String(email.getBytes());
-
+        
+        gotoUrl += "&edit=showGroupTable";
+        
         new TokenThread(token, email).start();
         PrintWriter writer = response.getWriter();
+        
+        
+        
         writer.print(gotoUrl);
         writer.close();
         // response.sendRedirect(gotoUrl);

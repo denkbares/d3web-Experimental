@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dialog uegroup='1' uesystemtype='USER' sub-type='front' type='legal' css='legal, nofoot' header='K&#252;ndigungsschutz-Beratung -- Hierarchischer-Dialog' and-or-type='AND' uequest='OWN' study='true' logging='true' feedback='true'><legalQuestion title='Ist das Arbeitsverh&#228;ltnis wirksam gek&#252;ndigt worden?' id='1' and-or-type='AND' bonus-text='Erl&#228;uterung:
+<dialog uegroup='G1' uesystemtype='USER_HIE' sub-type='front' type='legal' css='legal, nofoot' header='K&#252;ndigungsschutz-Beratung -- Hierarchischer-Dialog' and-or-type='AND' uequest='OWN' study='true' logging='true' feedback='true'>
+    <legalQuestion title='Ist das Arbeitsverh&#228;ltnis wirksam gek&#252;ndigt worden?' id='1' and-or-type='AND' bonus-text='Erl&#228;uterung:
 Damit das Arbeitsverh&#228;ltnis wirksam gek&#252;ndigt ist, muss die K&#252;ndigung formell und materiell rechtm&#228;&#223;ig sein. Dies wird in den nachfolgenden Fragen gepr&#252;ft.
 Sollte die K&#252;ndigung nicht wirksam sein, so k&#246;nnen und m&#252;ssen Sie innerhalb einer Frist von drei Wochen K&#252;ndigungsschutzklage beim zust&#228;ndigen Arbeitsgericht erheben, wenn Sie gegen die K&#252;ndigung vorgehen wollen. 
 &#60;a href="/Juri/resources/K&#252;ndigungsschutzklage.pdf"&#62; K&#252;ndigungsschutzklage&#60;/a&#62;'/>

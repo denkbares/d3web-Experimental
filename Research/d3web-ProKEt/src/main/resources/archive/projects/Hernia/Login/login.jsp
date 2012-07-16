@@ -161,6 +161,7 @@
                                                 resultWhat = WhatToDo.ENTERNEW;
                                         }
                                 }
+			
                         }
                 }
         %>
@@ -191,33 +192,28 @@
         <meta http-equiv="refresh" content="0;url=<%= gotoUrl %>" />
         <%	} %>
     </head>
-
     <body style="padding:0px; margin:0px;">
-
-        <div id="head" style="z-index: 1000; background: none repeat scroll 0 0 #EFEFEF; box-shadow: 0 0 5px black; width:100%;">
-            <table style="width:100%; margin: 0px; padding: 5px 5px 0px 5px;">
-                <tbody>
-                    <tr>
-                        <td width="15%" />
-                        <td width="*">
-                            <div style="color: black; font-size: 2.5em; font-variant: small-caps;
-                                 font-weight: bold; text-align: center; font-family:arial;color: #984806"> 
-                                European Registry of Abdominal wall HerniaS 
-                            </div>
-                        </td>
-                        <td width="15%">
-                            <div style="float:right;">
-                                <img style="width:180px;" alt="logo" src="../EuraHS-Dialog/img/eurahslogo.png" />
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div> 
-
-
+		 <div id="head" style="z-index: 1000; background: none repeat scroll 0 0 #EFEFEF; box-shadow: 0 0 5px black; width:100%;">
+	            <table style="width:100%; margin: 0px; padding: 5px 5px 0px 5px;">
+	                <tbody>
+	                    <tr>
+	                        <td width="15%" />
+	                        <td width="*">
+	                            <div style="color: black; font-size: 2.5em; font-variant: small-caps;
+	                                 font-weight: bold; text-align: center; font-family:arial;color: #984806"> 
+	                                European Registry of Abdominal wall HerniaS 
+	                            </div>
+	                        </td>
+	                        <td width="15%">
+	                            <div style="float:right;">
+	                                <img style="width:180px;" alt="logo" src="../EuraHS-Dialog/img/eurahslogo.png" />
+	                            </div>
+	                        </td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	        </div>
         <%	if (gotoUrl != null) { %>
-
         <div class="bwrap">
             <p>Login successful, proceeding to application ... if you are not redirected automatically, please follow
                 <a href="<%= gotoUrl %>">this link</a>.</p>
@@ -236,143 +232,128 @@
                 </div></div>
         </div>
         <%		} %>
-
         <div style="margin: 25px auto; width: 800px;">
             <form method="post" action="login.jsp">
-                <table border="0" cellspacing="0" cellpadding="0" style="width: 615px;"">
-
-                       <tr>
+                <table border="0" cellspacing="0" cellpadding="0" style="width: 615px;">
+                    <tr class='login'>
                         <td colspan="2" class="login"
                             style="font-size:1.4em;font-weight:bold;padding: 20px 0 20px;text-align:left;">
-                            EuraHS <b>MEMBER LOGIN</b>
-                        </td>
+							EuraHS <b>MEMBER LOGIN</b></td>
                     </tr>
                     <tr>
                         <td style="text-align: left; padding: 5px 0 5px; float: left; font-size:1.4em;" class="login">REGISTERED EMAIL</td>
-                        <td>
-                            <input class="login" type="text" name="l_email" style="float: right;"/>
-                            <% if (errors.contains("l_email")) {%>
-                            <img class="icon" src="gfx/cross.png" />
-                            <% } %>
-                        </td>
+                        <td><input type="text" name="l_email" style="float: right;" class='login' /><%
+                                if (errors.contains("l_email")) {
+                            %><img class="icon" src="gfx/cross.png" /><% } %></td>
                     </tr>
-                    <tr>
-                        <td style="text-align: left; padding: 5px 0 5px; float: left; font-size:1.4em;" class="login">MEMBER PASSWORD</td>
-                        <td>
-                            <input class="login" type="password" name="l_pwd" style="float: right;" />
-                            <% if (errors.contains("l_pwd")) { %>
-                            <img class="icon" src="gfx/cross.png" />
-                            <% } %>
-                        </td>
+                    <tr class='login'>
+                        <td style="text-align: left; padding: 5px 0 5px; float: left; font-size:1.4em;">MEMBER PASSWORD</td>
+                        <td><input type="password" name="l_pwd" style="float: right;" class='login' /><%
+                                if (errors.contains("l_pwd")) {
+                            %><img class="icon" src="gfx/cross.png" /><% } %></td>
                     </tr>
-                    <tr>
+                    <tr class='login'>
                         <td>&nbsp;</td>
-                        <td>
-                            <input class="login" style="width: 125px; height:25px; float: right;" type="submit" name="login" value="MEMBER LOGIN" />
-                        </td>
+                        <td><input style="width: 125px; height:25px; float: right;" class ='login' type="submit" name="login" value="MEMBER LOGIN" /></td>
                     </tr>
-                </table>
+					<tr>
+                        <td colspan="2"> 
+							<div id='LOGININFO' class="login" style='margin-left: auto; margin-right: auto; margin-top: 25px;'>
 
-                <div id='LOGININFO' class="login" style='width: 615px; margin-left: auto; margin-right: auto; margin-top: 25px;'>
+			                    <div style='font-size:1.1em; margin-top: 60px;'>1. Please enter your <b>REGISTERED EMAIL</b> and the <b>MEMBER PASSWORD</b>. </div>
+			                    <div style='font-size:1.1em; float: left; margin-left:20px;'>This is the email and password you received after creating a new member account at the EuraHS registry.</div> <br />
+			                    <div style='font-size:1.1em; margin-top: 40px;'>2. Please press <b>MEMBER LOGIN</b>.</div><br />
+			                    <div style='font-size:1.1em;'>
+			                        <div style="float: left; margin-top: 10px;">
+			                            You don't have a member account yet?
+			                        </div>
+			                    </div>
+			                </div>
+						</td>
+                    </tr>
                     
-                    <div style='font-size:1.1em; margin-top: 60px;'>1. Please type in your <b>REGISTERED EMAIL</b> and the <b>MEMBER PASSWORD</b>. </div>
-                    <div style='font-size:1.1em; float: left; margin-left:20px;'>This is the password, you received via email after having successfully registered as 
-                        EuraHS member.</div> <br />
-                    <div style='font-size:1.1em; margin-top: 40px;'>2. Please press <b>MEMBER LOGIN</b>.</div><br />
-                    <div style='font-size:1.1em;'>
-                        <div style="float: left; margin-top: 30px;">
-                            You don't have a member account yet?
-                        </div>
-                    </div>
-                </div>
-
-
-                <table border="0" cellspacing="0" cellpadding="0" style="width: 615px; margin-top: 10px;">
-                    <tr>
-                        <td colspan="2" style="font-size:1.1em;font-weight:bold;padding: 20px 0 10px;text-align:right; ">
+					<tr>
+                        <td colspan="2" style="font-size:1.4em;font-weight:bold;padding: 20px 0 10px;text-align:left; ">
                             <div style="color: black;">
                                 <script type="text/javascript">
-                                    document.write("<a style='color:black;' href=\"#\" onClick=\"show('hide');show('person');hide('login')\">CREATE NEW EuraHS MEMBER ACCOUNT</b></a>");
+                                    document.write("<a style='color:black; text-decoration:none' href=\"#\" onClick=\"show('hide');show('person');hide('login')\">CREATE NEW EuraHS MEMBER ACCOUNT</b></a>");
                                 </script>
                             </div>
                         </td>
                     </tr>
 
                     <tr class="hide">
-                        <td colspan="2">&nbsp;</td>
-                    </tr>
-                    <tr class="hide">
-                        <td style="text-align: left; padding: 5px 0 5px; float: left; width: 240px;">Type of account</td>
+                        <td class="left" style="text-align: left; padding: 5px 0 5px; float: left; width: 240px; font-weight:bold; font-size:1.1em;">Type of account</td>
                         <td><label onclick="changeToPerson()">
-                                <input type="radio" name="a_type" value="person" checked="checked" style="float: right;"/>
-                                <div style="float: right;">Person independent from institutions</div>
+                               	<input class="m" type="radio" name="a_type" value="person" checked="checked" style="float: left;"/>
+                                <div style="float: left;">Person independent from institutions</div>
                             </label></td>
                     </tr>
                     <tr class="hide">
                         <td class="left"></td>
                         <td><label onclick="changeToInstitution()" >
-                                <input type="radio"  name="a_type" value="institution" style="float: right;"/>
-                                <div style="float: right;">Institution with multiple persons</div>
+                                 <input class="m" type="radio"  name="a_type" value="institution" style="float: left;"/>
+	                             <div style="float: left;">Institution with multiple persons</div>
                             </label></td>
                     </tr>
                     <tr class="hide">
-                        <td style="text-align: left; padding: 5px 0 5px; float: left; width: 240px;">E-mail address</td>
-                        <td><input  type="text" name="c_email" style="float: right;"/><%
+                        <td class="left" style="text-align: left; padding: 5px 0 5px; float: left; width: 240px; font-weight:bold; font-size:1.1em;">E-mail address</td>
+                        <td><input class="m" type="text" name="c_email" style="float: right; width: 365px;" /><%
                                 if (errors.contains("c_email")) {
                             %><img class="icon" src="gfx/cross.png" /><% } %></td>
                     </tr>
-                    <tr class="person">
-                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px;">Family name</td>
-                        <td><input style="float: right;" type="text" name="c_fname" /><%
+              		<tr class="person">
+                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px; font-weight:bold; font-size:1.1em;">Family name</td>
+                        <td><input class="m" style="float: right; width: 365px;" type="text" name="c_fname"  /><%
                                 if (errors.contains("c_fname")) {
                             %><img class="icon" src="gfx/cross.png" /><% } %></td>
                     </tr>
                     <tr class="person">
-                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px;">Given name</td>
-                        <td><input style="float: right;" type="text" name="c_gname" /><%
+                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px; font-weight:bold; font-size:1.1em;">Given name</td>
+                        <td><input class="m" style="float: right; width: 365px;" type="text" name="c_gname" /><%
                                 if (errors.contains("c_gname")) {
                             %><img class="icon" src="gfx/cross.png" /><% } %></td>
                     </tr>
                     <tr class="person">
-                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px;">Title</td>
-                        <td><input style="float: right;" type="text" name="c_title" /></td>
+                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px; font-weight:bold; font-size:1.1em;">Title</td>
+                        <td><input style="float: right; width: 365px;" type="text" name="c_title" /></td>
                     </tr>
                     <tr class="institution">
-                        <td style="text-align: left; padding: 5px 0 5px; float: left;"width: 240px;>Institution</td>
-                        <td><input style="float: right;" type="text" name="c_inst" /></td>
+                        <td style="text-align: left; padding: 5px 0 5px; float: left; width: 240px; font-weight:bold; font-size:1.1em;">Institution</td>
+                        <td><input style="float: right; width: 365px;" type="text" name="c_inst" /></td>
                     </tr>
                     <tr class="hide">
-                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px;">Address</td>
-                        <td><input style="float: right;" type="text" name="c_addr" /><%
+                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px; font-weight:bold; font-size:1.1em;">Address</td>
+                        <td><input class="m" style="float: right; width: 365px;" type="text" name="c_addr" /><%
                                 if (errors.contains("c_addr")) {
                             %><img class="icon" src="gfx/cross.png" /><% } %></td>
                     </tr>
-                    <tr class="hide">
-                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px;">City</td>
-                        <td><input style="float: right;" type="text" name="c_city" /><%
-                                if (errors.contains("c_city")) {
-                            %><img class="icon" src="gfx/cross.png" /><% } %></td>
-                    </tr>
-                    <tr class="hide">
-                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px;">ZIP code</td>
-                        <td><input style="float: right;" type="text" name="c_zip" /><%
-                                if (errors.contains("c_zip")) {
-                            %><img class="icon" src="gfx/cross.png" /><% } %></td>
-                    </tr>
-                    <tr class="hide">
-                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px;">Country</td>
-                        <td><input style="float: right;" type="text" name="c_zip" type="text" name="c_country" /><%
-                                if (errors.contains("c_country")) {
-                            %><img class="icon" src="gfx/cross.png" /><% } %></td>
-                    </tr>
-                    <tr class="hide">
-                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px;">Phone number</td>
-                        <td><input style="float: right;" type="text" name="c_phone" /></td>
-                    </tr>
-                    <tr class="hide">
-                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px;">Member of EHS</td>
-                        <td><input style="float: left;" type="checkbox" name="c_member" value="1" /></td>
-                    </tr>
+                        <tr class="hide">
+	                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px; font-weight:bold; font-size:1.1em;">City</td>
+	                        <td><input class="m" style="float: right; width: 365px;" type="text" name="c_city" /><%
+	                                if (errors.contains("c_city")) {
+	                            %><img class="icon" src="gfx/cross.png" /><% } %></td>
+	                    </tr>
+	                    <tr class="hide">
+	                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px; font-weight:bold; font-size:1.1em;">ZIP code</td>
+	                        <td><input class="m" style="float: right; width: 365px;" type="text" name="c_zip" /><%
+	                                if (errors.contains("c_zip")) {
+	                            %><img class="icon" src="gfx/cross.png" /><% } %></td>
+	                    </tr>
+	                    <tr class="hide">
+	                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px; font-weight:bold; font-size:1.1em;">Country</td>
+	                        <td><input class="m" style="float: right; width: 365px;" type="text" name="c_country" /><%
+	                                if (errors.contains("c_country")) {
+	                            %><img class="icon" src="gfx/cross.png" /><% } %></td>
+	                    </tr>
+                   		<tr class="hide">
+	                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px; font-weight:bold; font-size:1.1em;">Phone number</td>
+	                        <td><input style="float: right; width: 365px;" type="text" name="c_phone" /></td>
+	                    </tr>
+	                    <tr class="hide">
+	                        <td style="text-align: left; padding: 5px 0 5px; float: left;width: 240px; font-weight:bold; font-size:1.1em;">Member of EHS</td>
+	                        <td><input style="float: left;" type="checkbox" name="c_member" value="1" /></td>
+	                    </tr>
                     <tr class="hide">
                         <td class="left"><%
                                 if (errors.contains("c_eula")) {
@@ -380,27 +361,29 @@
                         <td class="nopad warn"><table class="d">
                                 <tr>
                                     <td><input type="checkbox" name="c_eula" value="1" /></td>
-                                    <td><b>I have read the EuraHS usage instructions and I accept the rules of the registry.</b></td>
+                                    <td>I have read the EuraHS usage instructions and I accept the rules of the registry.</td>
                                 </tr>
                             </table></td>
                     </tr>
                     <tr class="hide">
-                        <td class="left">&nbsp;</td>
-                        <td><input style="width: 150px; height:25px; float: right;" type="submit" name="create" value="Create member account" /></td>
+                       	<td class="left">&nbsp;</td>
+                        <td><input style="width: 180px; height:25px; float: right; padding: 2px 0px 0px 0px;" type="submit" name="create" value="CREATE MEMBER ACCOUNT" /></td>
                     </tr>
-                    <tr>
+                	<tr>
                         <td colspan="2">
-                            <div class="hide" style="float: right; font-size:10pt;padding: 20px 0 20px;text-align:right; margin-top: 20px;">
+                            <div class="hide" style="float: left; font-size:10pt;padding: 20px 0px 0px 0px;text-align:right; margin-top: 20px;">
                                 <div style="font-size: 13pt; font-weight: bold;"> Instructions and rules of the registry
-                                    <p>
-                                        <div style="font-size: 10pt; font-weight: normal;">Text with the user license agreement (will be added)</div>
-                                    </p>
+
                                 </div>
                         </td>
                     </tr>
-                </table>
+					</table>
+                
             </form>
-            <script type="text/javascript" defer>   
+            <script type="text/javascript" defer>
+                //<!--
+
+
                 function changeToInstitution() {
                     hide("person");
                     show("institution");
@@ -451,50 +434,47 @@
             <%	} %>
         </div>
 
-
-
-
-        <div id='BROWSERINFO' style='width: 615px; margin-left:auto; margin-right:auto; margin-top:40px;'>
+		<div id='BROWSERINFO' style='width: 615px; margin-left:auto; margin-right:auto; margin-top:40px;'>
             <div style='font-size:1.1em;'>
-                <div style="float: left; margin-top: 30px;">
-                    Problems or Questions? Please contact us:
+                <div style="float: left; margin-top: 10px;">
+                    Problems or Questions? Please contact us
                 </div>
-                <div style="width: 50px; float: left; margin-top: 10px; margin-left: 80px;">
+                <div style="width: 50px; float: left; margin-top: -10px; margin-left: 80px;">
                     <a href="mailto:iris.kyle-leinhase@eurahs.eu">
                         <img src="../EuraHS-Dialog/img/mailto.png" alt="Mail" style="width:50px;" />
                     </a>
                 </div>
             </div>
             <div style="width: 800px; margin-left: auto; margin-right: auto; float: left;">
-                <div style=" font-size: 1.1em; text-align: left; margin-top: 10px;">   
+                <div style=" font-size: 1.1em; text-align: left;">   
                     Please note! EuraHS is optimized for the following browsers:
                 </div>
             </div>
-            <div id="browsers" style="margin-left: auto; margin-right: auto; width: 600px; margin-top: 20px; float: left;">
-                <div style="float:left; width: 100px; margin-right:25px;">
+            <div id="browsers" style="margin-left: auto; margin-right: auto; width: 615px; margin-top: 20px; float: left;">
+                <div style="float:left; width: 100px; margin-left:35px; margin-right:25px;">
                     <a href="http://www.mozilla.org/en-US/firefox/all.html" target="_blank"> 
-                        <img src="../EuraHS-Dialog/img/FF.png" alt="Firefox 10 (or higher)" style="width:75px;" />
+                        <img src="../EuraHS-Dialog/img/FF.png" alt="Firefox 10 (or higher)" style="width:60px;margin-left:10px;" />
                         <!--<img src="FF.png" alt="Firefox 20 (or higher)" style="width:100px;" />-->
                     </a>
                     <div style="margin-left: auto; margin-right: auto; width: 100px; font-size: 0.75em; font-weight:  bold; color: #555555;">10 (or higher)</div>
                 </div>
                 <div style="float:left; width: 100px; margin-left:25px; margin-right:25px;">
                     <a href="https://www.google.com/chrome" target="_blank">
-                        <img src="../EuraHS-Dialog/img/GC.png" alt="Google Chrome 17 (or higher)" style="width:75px;" />
+                        <img src="../EuraHS-Dialog/img/GC.png" alt="Google Chrome 17 (or higher)" style="width:60px;margin-left:10px;" />
                         <!--<img src="GC.png" alt="Google Chrome 17 (or higher)" style="width:100px;" />-->
                     </a>
                     <div style="margin-left: auto; margin-right: auto; width: 100px; font-size: 0.75em; font-weight:  bold; color: #555555;">17 (or higher)</div>
                 </div>
                 <div style="float:left; width: 100px; margin-left:25px; margin-right:25px;">
                     <a href="http://www.apple.com/de/safari/download/" target="_blank">
-                        <img src="../EuraHS-Dialog/img/SA.png" alt ="Safari 5 (or higher)" style="width:75px;" />
+                        <img src="../EuraHS-Dialog/img/SA.png" alt ="Safari 5 (or higher)" style="width:60px;margin-left:10px;" />
                         <!--<img src="SA.png" alt ="Safari 5 (or higher)" style="width:100px;" />--> 
                     </a>
                     <div style="margin-left: auto; margin-right: auto; width: 100px; font-size: 0.75em; font-weight:  bold; color: #555555;">5 (or higher)</div>
                 </div>
                 <div style="float:left; width: 100px; margin-left:25px; margin-right:25px;">
                     <a href="http://windows.microsoft.com/de-DE/internet-explorer/products/ie/home" target="_blank">
-                        <img src="../EuraHS-Dialog/img/IE.png" alt="Internet Explorer 8 (or higher)" style="width:75px;" />
+                        <img src="../EuraHS-Dialog/img/IE.png" alt="Internet Explorer 8 (or higher)" style="width:60px;margin-left:10px;" />
                         <!--<img src="IE.png" alt="Internet Explorer 8 (or higher)" style="width:100px;" />-->
                     </a>
                     <div style="margin-left: auto; margin-right: auto; width: 100px; font-size: 0.75em; font-weight:  bold; color: #555555;">9 (or higher)</div>
@@ -502,5 +482,6 @@
             </div>
 
         </div>
+
     </body>
 </html>

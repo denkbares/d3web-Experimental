@@ -67,7 +67,7 @@ public class UEStudyAnalyst {
         /*
          * define JSON Object for each solution
          */
-        JSONObject mainSolution = new JSONObject();
+        /*JSONObject mainSolution = new JSONObject();
         mainSolution.put(
                 UETerm.SNAME.toString(), "Ist das Arbeitsverhältnis wirksam gekündigt worden?");
         mainSolution.put(UETerm.SRAT.toString(), "1");
@@ -81,12 +81,13 @@ public class UEStudyAnalyst {
         
         solutions.add(mainSolution);
         solutions.add(secondSolution);
+        */
+        //String csv = retrieveCleanedCSVWithSolutions(
+          //      PATH_TO_LOGFILES, solutions);
 
-        String csv = retrieveCleanedCSVWithSolutions(
-                PATH_TO_LOGFILES, solutions);
-
-        //String csv = retrieveCompleteCSVNoSolutions(
-        //      PATH_TO_LOGFILES);
+        
+        String csv = retrieveCompleteCSVNoSolutions(
+              PATH_TO_LOGFILES);
 
         try {
             writeCSV(PATH_TO_ANALYSIS + FILENAME_ANALYSIS, csv);
@@ -186,7 +187,7 @@ public class UEStudyAnalyst {
 
         // basic csv stuff, always needed
         bui.append("filename , group , UI type , Duration , "
-                + "Browser , StartTime , EndTime \n");
+                + "Browser , StartTime , EndTime, CoreIssue-KuendigungWirksam \n");
 
         List<File> logs = JSONReader.getInstance().retrieveAllLogfiles(LogFolderName);
 
@@ -210,6 +211,10 @@ public class UEStudyAnalyst {
                 bui.append(uebfa.getStart());
                 bui.append(" , ");
                 bui.append(uebfa.getEnd());
+                bui.append(" , ");
+                bui.append(uebfa.getCoreIssue());
+                bui.append(" , ");
+                bui.append(uebfa.getGroup());
                 bui.append("\n");
             }
         }

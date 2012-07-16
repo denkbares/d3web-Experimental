@@ -404,6 +404,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                     else if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)
                             && to instanceof QuestionNum) {
 
+                        System.out.println(to.getName() + " " + val.toString());
                         int doubleAsInt = (int) Double.parseDouble(val.toString());
                         bui.append("<div style='margin-left:10px;'>"
                                 + D3webConnector.getInstance().getID(to) + " " + to.getName()
@@ -455,6 +456,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                 else if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)
                         && to instanceof QuestionNum) {
 
+                    System.out.println(to.getName() + " " + val.toString());
                     int doubleAsInt = (int) Double.parseDouble(val.toString());
                     bui.append("<div style='margin-left:10px;'>"
                             + D3webConnector.getInstance().getID(to) + " " + to.getName()

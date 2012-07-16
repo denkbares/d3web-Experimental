@@ -144,7 +144,7 @@ DONE - Panel Areas vergrößern/anpassen --> CSS BUTTONS
 
 - CHECK div styles of hierarichal --> if too small, design is destroyed
 - d3web: Introtext über KB
-- Ausprobieren Schrift über Pfeil
+Maybe Later - Ausprobieren Schrift über Pfeil
 - JS interactivity für num und oc fragen
 - Install IE check as beforedialog
 - deploy automatically wiki to dialog
@@ -190,10 +190,10 @@ DONE - Grid Summary --> download .txt Button deaktivieren
 DONE - Kopfzeile Grid: Leerzeichen fehlt
 DONE - Summary --> incisional recurrent hernia "problem"
 
- - Frage 139 Intrahospital complications 
+DONE - Frage 139 Intrahospital complications 
     if answered with "no complications", question 148 Classification of surgical complications 
     should be disabled
-- mention imageupload [muysoms] --> link or session timeout
+DONE - mention imageupload [muysoms] --> link or session timeout
 - test IE8 and mail to [craessarts]
 - check firefox 3 [uli]
 
@@ -207,6 +207,7 @@ INTERNET EXPLORER QUIRKS
 - welche Version?
 - download txt button not invisible for grid
 - ! Browser Check: configure per specs which way to include (beforelogin, beforedialog)
+- Bildfragen
 
 
 

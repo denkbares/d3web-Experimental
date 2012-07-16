@@ -109,6 +109,9 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         } 
 
        
+        st.setAttribute("eurahsmiddle", "true");
+        st.removeAttribute("eurahsintro");
+            
         if (httpSession.getAttribute("level1qs") == null) {
             httpSession.setAttribute("level1qs", parseLevel1Questions(httpSession));
         }

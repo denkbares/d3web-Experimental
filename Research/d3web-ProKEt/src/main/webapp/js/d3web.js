@@ -1460,7 +1460,7 @@ function markIsWidget(isWidget){
 function ehs_handleintrobuttons(whichbutton){
     
     if(whichbutton.indexOf("newcase")!=-1){
-        d3web_show();
+        d3web_resetSession();
         
     } else if (whichbutton.indexOf("statistics")!=-1){
         gotoStatistics();

@@ -49,11 +49,11 @@ public class DocToPrototypeXMLConverter {
      */
     private static void convert() {
         try {
-            Config conf =
-                    new Config(FILETYPE_OUTPUT, false, "UTF-8",
-                    EMBEDDEDOBJECTSDIR, true, false, true);
-            Converter.convertFile2File(
-                    new File(SOURCEDOC), new File(PREHTML), conf);
+           // Config conf =
+                  //  new Config(FILETYPE_OUTPUT, false, "UTF-8",
+                 //   EMBEDDEDOBJECTSDIR, true, false, true);
+           // Converter.convertFile2File(
+            //        new File(SOURCEDOC), new File(PREHTML), conf);
 
             String s = StringUtils.readFileString(PREHTML);
 

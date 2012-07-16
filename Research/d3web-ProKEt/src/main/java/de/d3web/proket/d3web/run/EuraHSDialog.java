@@ -78,6 +78,7 @@ public class EuraHSDialog extends D3webDialog {
             add("Production company of the suture material");
             add("Production company of the tracker device");
             add("Production company of the glue");
+            add("Production company of the fixation device");
         }
     };
 

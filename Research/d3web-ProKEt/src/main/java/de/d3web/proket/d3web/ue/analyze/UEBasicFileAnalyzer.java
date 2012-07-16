@@ -52,6 +52,15 @@ public class UEBasicFileAnalyzer {
         JSON = JSONReader.getInstance().getJSONFromTxtFile(FILE.getAbsolutePath());
     }
 
+   
+    
+    public String getCoreIssue(){
+        if (JSON.get(UETerm.SOL.toString()) != null) {
+            return JSON.get(UETerm.SOL.toString()).toString().replace("\"", "");
+        }
+        return "/";
+    }
+    
     public String getGroup() {
         if (JSON.get(UETerm.GROUP.toString()) != null) {
             return JSON.get(UETerm.GROUP.toString()).toString().replace("\"", "");

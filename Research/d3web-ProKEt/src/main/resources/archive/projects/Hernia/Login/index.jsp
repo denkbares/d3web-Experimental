@@ -162,10 +162,10 @@
                 as implied above.</div><br />
             <div style='font-size:1.1em; '>3. Please press <b>ENTER</b>.</div><br />
             <div style='font-size:1.1em;'>
-                <div style="float: left; margin-top: 50px;">
-                    Problems or Questions? Please contact us:
+                <div style="float: left; margin-top: 20px;">
+                    Problems or Questions? Please contact us
                 </div>
-                <div style="width: 50px; float: left; margin-top: 30px; margin-left: 80px;">
+                <div style="width: 50px; float: left; margin-left: 80px;">
                     <a href="mailto:iris.kyle-leinhase@eurahs.eu">
                         <img src="../EuraHS-Dialog/img/mailto.png" alt="Mail" style="width:50px;" />
                     </a>
@@ -173,37 +173,37 @@
             </div>
         </div>
 
-        <div id='BROWSERINFO' style='width: 615px; margin-left:auto; margin-right:auto; margin-top:100px;'>
+        <div id='BROWSERINFO' style='width: 615px; margin-left:auto; margin-right:auto; margin-top:60px;'>
             <div style="width: 800px; margin-left: auto; margin-right: auto;">
                 <div style=" font-size: 1.1em; text-align: left; ">   
                    Please note! EuraHS is optimized for the following browsers:
                 </div>
             </div>
-            <div id="browsers" style="margin-left: auto; margin-right: auto; width: 600px; margin-top: 20px">
+            <div id="browsers" style="margin-left: 50px; margin-right: auto; width: 600px; margin-top: 20px">
                 <div style="float:left; width: 100px; margin-left:-10px; margin-right:25px;">
                     <a href="http://www.mozilla.org/en-US/firefox/all.html" target="_blank"> 
-                        <img src="../EuraHS-Dialog/img/FF.png" alt="Firefox 10 (or higher)" style="width:75px;" />
+                        <img src="../EuraHS-Dialog/img/FF.png" alt="Firefox 10 (or higher)" style="width:60px;margin-left:10px;" />
                         <!--<img src="FF.png" alt="Firefox 20 (or higher)" style="width:100px;" />-->
                     </a>
                     <div style="margin-left: auto; margin-right: auto; width: 100px; font-size: 0.75em; font-weight:  bold; color: #555555;">10 (or higher)</div>
                 </div>
                 <div style="float:left; width: 100px; margin-left:25px; margin-right:25px;">
                     <a href="https://www.google.com/chrome" target="_blank">
-                        <img src="../EuraHS-Dialog/img/GC.png" alt="Google Chrome 17 (or higher)" style="width:75px;" />
+                        <img src="../EuraHS-Dialog/img/GC.png" alt="Google Chrome 17 (or higher)" style="width:60px;margin-left:10px;" />
                         <!--<img src="GC.png" alt="Google Chrome 17 (or higher)" style="width:100px;" />-->
                     </a>
                     <div style="margin-left: auto; margin-right: auto; width: 100px; font-size: 0.75em; font-weight:  bold; color: #555555;">17 (or higher)</div>
                 </div>
                 <div style="float:left; width: 100px; margin-left:25px; margin-right:25px;">
                     <a href="http://www.apple.com/de/safari/download/" target="_blank">
-                        <img src="../EuraHS-Dialog/img/SA.png" alt ="Safari 5 (or higher)" style="width:75px;" />
+                        <img src="../EuraHS-Dialog/img/SA.png" alt ="Safari 5 (or higher)" style="width:60px;margin-left:10px;" />
                         <!--<img src="SA.png" alt ="Safari 5 (or higher)" style="width:100px;" />--> 
                     </a>
                     <div style="margin-left: auto; margin-right: auto; width: 100px; font-size: 0.75em; font-weight:  bold; color: #555555;">5 (or higher)</div>
                 </div>
                 <div style="float:left; width: 100px; margin-left:25px; margin-right:25px;">
                     <a href="http://windows.microsoft.com/de-DE/internet-explorer/products/ie/home" target="_blank">
-                        <img src="../EuraHS-Dialog/img/IE.png" alt="Internet Explorer 8 (or higher)" style="width:75px;" />
+                        <img src="../EuraHS-Dialog/img/IE.png" alt="Internet Explorer 8 (or higher)" style="width:60px;margin-left:10px;" />
                         <!--<img src="IE.png" alt="Internet Explorer 8 (or higher)" style="width:100px;" />-->
                     </a>
                     <div style="margin-left: auto; margin-right: auto; width: 100px; font-size: 0.75em; font-weight:  bold; color: #555555;">9 (or higher)</div>

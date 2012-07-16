@@ -59,11 +59,11 @@ $(function(){
             autoOpen: false,
             position : top,
             width : 800,
-            height : 700,
-            minWidth : 800,
-            minHeight : 700,
-            draggable : false,
-            resizable : false,
+            height : 620,
+            minWidth : 200,
+            minHeight : 220,
+            draggable : true,
+            resizable : true,
             modal : false,
             // two custom buttons
             buttons : [{

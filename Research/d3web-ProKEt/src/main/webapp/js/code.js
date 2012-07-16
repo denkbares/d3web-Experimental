@@ -853,7 +853,7 @@ function setLeftOffset(target) {
         }
     }
    
-   /* display all popups that are too far down in the dialog relatively above
+    /* display all popups that are too far down in the dialog relatively above
     * the parent element */
     var sizeToEnd = heightW - pOffset.top;
     
@@ -899,14 +899,37 @@ function tooltip_out(object) {
     
     // if a jquery tooltip or
     if (object instanceof jQuery) {
-        target = object;
-    } else {
-		
+        
+        if (object.attr("id").indexOf("detail")!=-1){
+            idDetail = object.attr("id").replace("detail-", "detail-tt-");
+            target = $("#"+idDetail);
+        } 
+        
+        if(object.attr("id").indexOf("Button")!=-1){
+            if(object.attr("class").indexOf("endstudy-tt-trigger")!=-1){
+                target = $("#tt-endstudy");
+            } else if (object.attr("class").indexOf("feedback-tt-trigger")){
+                target = $("#tt-feedback");
+            }
+        }
+    
+        if(object.attr("id").indexOf("typeimg")!=-1){
+            id = object.attr("id").replace("-typeimg", "");
+            target = $("#tt-"+id);
+        }
+      
+    } else if (object.attr("id").indexOf("detail"!=-1)){
+        target = $("#tt-" + object.attr("id"));
+       
+    } else {      
         target = $("#tt-" + object);
-     }
+    }
 
-    target.hide(500);
-    tooltipShown = undefined;
+    if(target != null){
+        target.hide(500);
+        tooltipShown = undefined;
+    }
+    
 }
 
 
@@ -971,7 +994,7 @@ function generate_tooltip_functions() {
                 ue_logInfoPopup(ttstart, ttend, $(this));
             }
           
-            tooltip_out(id);
+            tooltip_out($(this));
             
         });
     });
@@ -1364,7 +1387,7 @@ if (typeof window.loadFirebugConsole == "undefined"
 
 
 /*-----------------------*/
- /* One Question Dialog */
+/* One Question Dialog */
 /*-----------------------*/ 
 function toggle_sub_4oqd(id){
     toggle_hide("sub-" + id); 
@@ -1473,7 +1496,9 @@ function handleOQYNQuestions(fullId, rating){
     
     hide_all_tooltips();
     
-    $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+    $('html, body').animate({
+        scrollTop:$(document).height()
+    }, 'slow');
 
 }
 
@@ -1738,7 +1763,7 @@ function setPropagationColor(question, userval){
         prop.removeClass("show");
         prop.addClass("hide");
     }
-    //removePropagationInfoInQuestionForFirst();
+//removePropagationInfoInQuestionForFirst();
   
 }
 

@@ -62,7 +62,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
     public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
             TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession) {
 
-       
+
 
         Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
         // return if the InterviewObject is null
@@ -70,7 +70,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
             return "";
         }
         StringBuilder sb = new StringBuilder();
-        
+
 
         // get the fitting template. In case user prefix was specified, the
         // specific TemplateName is returned, otherwise, the base object name.
@@ -130,68 +130,68 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
          * in the course of the interview (by indication)
          */
         //System.out.println("TO IND:" + to.getName() + " - " + isIndicated(to, bb) + " - " + val);
-       // System.out.println("PARENT IND:" + parent.getName() + " - " + isIndicated(parent, bb));
-       // System.out.println();
-        
-       
-            // QContainer indicated
-            if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
-                    || isIndicated(parent, bb)) {
+        // System.out.println("PARENT IND:" + parent.getName() + " - " + isIndicated(parent, bb));
+        // System.out.println();
 
 
-                // show, if indicated follow up
-                if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
-                        || (!D3webUtils.isFollowUpToQCon(to, parent))) {
-                    st.removeAttribute("inactiveQuestion");
-                    st.removeAttribute("qstate");
-                    st.setAttribute("qstate", "");
-                } else {
-                    st.setAttribute("inactiveQuestion", "true");
-                }
+        // QContainer indicated
+        if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
+                || isIndicated(parent, bb)) {
+
+
+            // show, if indicated follow up
+            if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
+                    || (!D3webUtils.isFollowUpToQCon(to, parent))) {
+                st.removeAttribute("inactiveQuestion");
+                st.removeAttribute("qstate");
+                st.setAttribute("qstate", "");
             } else {
                 st.setAttribute("inactiveQuestion", "true");
             }
-        
-
-		/*
-		 * the following handles abstraction questions that get activated during
-		 * the interview when previous corresponding questions are answered
-		 */
-		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
-
-                st.setAttribute("inactiveQuestion", "true");
-                st.setAttribute("abstractQuestion", "true");
-
-                // check whether abstraction question has been implicitly answered
-                // by other, corresponding questions
-                if (val != null && UndefinedValue.isNotUndefinedValue(val)
-                        && !val.equals(Unknown.getInstance())) {
-                    st.removeAttribute("inactiveQuestion");
-                    st.removeAttribute("qstate");
-                    st.setAttribute("qstate", "question-d");
-                }
-            }
-
-            // check answer - if answered, mark question as done
-            if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
-                st.removeAttribute("qstate");
-                st.setAttribute("qstate", "question-d");
-            } else // currently active question (next interview object)
-            // is marked highlighted
-            if (current != null && current.getInterviewObject() != null
-                    && current.getInterviewObject().equals(to)) {
-                st.setAttribute("qstate", "question-c");
-            }
-
-            // underneath="within" a rendered question, always answers are rendered
-            super.renderChoices(st, cc, to, parent, d3webSession, loc, httpSession);
-
-            sb.append(st.toString());
-
-            // handle tables for multi-column styles
-            super.makeTables(to, parent, cc, sb);
-
-            return sb.toString();
+        } else {
+            st.setAttribute("inactiveQuestion", "true");
         }
 
+
+        /*
+         * the following handles abstraction questions that get activated during
+         * the interview when previous corresponding questions are answered
+         */
+        if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
+
+            st.setAttribute("inactiveQuestion", "true");
+            st.setAttribute("abstractQuestion", "true");
+
+            // check whether abstraction question has been implicitly answered
+            // by other, corresponding questions
+            if (val != null && UndefinedValue.isNotUndefinedValue(val)
+                    && !val.equals(Unknown.getInstance())) {
+                st.removeAttribute("inactiveQuestion");
+                st.removeAttribute("qstate");
+                st.setAttribute("qstate", "question-d");
+                
+            }
+        }
+
+        // check answer - if answered, mark question as done
+        if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
+            st.removeAttribute("qstate");
+            st.setAttribute("qstate", "question-d");
+        } else // currently active question (next interview object)
+        // is marked highlighted
+        if (current != null && current.getInterviewObject() != null
+                && current.getInterviewObject().equals(to)) {
+            st.setAttribute("qstate", "question-c");
+        }
+
+        // underneath="within" a rendered question, always answers are rendered
+        super.renderChoices(st, cc, to, parent, d3webSession, loc, httpSession);
+
+        sb.append(st.toString());
+
+        // handle tables for multi-column styles
+        super.makeTables(to, parent, cc, sb);
+
+        return sb.toString();
     }
+}
