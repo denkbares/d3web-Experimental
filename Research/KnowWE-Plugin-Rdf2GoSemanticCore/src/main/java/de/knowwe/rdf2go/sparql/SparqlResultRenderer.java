@@ -98,13 +98,11 @@ public class SparqlResultRenderer {
 			result.append(Messages.getMessageBundle().getString(
 					"KnowWE.owl.query.no_result"));
 		}
+		if (tablemode) {
+			result.append(Strings.maskHTML("</table>"));
+		}
 		else {
-			if (tablemode) {
-				result.append(Strings.maskHTML("</table>"));
-			}
-			else {
-				result.append(Strings.maskHTML("</ul>"));
-			}
+			result.append(Strings.maskHTML("</ul>"));
 		}
 		return result.toString();
 	}
