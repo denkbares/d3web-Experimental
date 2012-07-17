@@ -27,6 +27,17 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ConceptCloudMarkup">
+		<parameter id="class"
+			value="de.knowwe.rdfs.conceptCloudRendering.ConceptCloudMarkup" />
+		<parameter id="name" value="ConceptCloudMarkup" />
+		<parameter id="description" value="KnowWEObjectType ConceptCloudMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="HierarchyMarkupDef">
 		<parameter id="class"
