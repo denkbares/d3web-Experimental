@@ -52,4 +52,12 @@ public class ProKEtProperties {
 
 	public static final Property<String> AFTER = Property.getProperty(
 			"after", String.class);
+        
+        public static final Property<Boolean> ITREESHOWN = Property.getProperty(
+			"itree_shown", Boolean.class);
+        
+        public static final Property<Boolean> ITREEINIT = Property.getProperty(
+			"itree_init", Boolean.class);
+        
+        
 }
