@@ -836,10 +836,21 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public QueryResultTable sparqlSelect(String query) throws ModelRuntimeException, MalformedQueryException {
-		if (query.startsWith(Rdf2GoUtils.getSparqlNamespaceShorts())) {
-			return model.sparqlSelect(query);
+		String completeQuery;
+		if (!query.startsWith(Rdf2GoUtils.getSparqlNamespaceShorts())) {
+			completeQuery = Rdf2GoUtils.getSparqlNamespaceShorts() + query;
 		}
-		return model.sparqlSelect(Rdf2GoUtils.getSparqlNamespaceShorts() + query);
+		else {
+			completeQuery = query;
+		}
+		// long start = System.currentTimeMillis();
+		QueryResultTable resultTable = model.sparqlSelect(completeQuery);
+		// long time = System.currentTimeMillis() - start;
+		// if (time > 5) {
+		// Logger.getLogger(this.getClass().getName()).warning(
+		// "Slow SPARQ query (" + time + "ms):\n" + query);
+		// }
+		return resultTable;
 	}
 
 	public ClosableIterator<QueryRow> sparqlSelectIt(String query) throws ModelRuntimeException, MalformedQueryException {
