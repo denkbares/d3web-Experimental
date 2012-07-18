@@ -29,7 +29,6 @@ import javax.servlet.ServletContext;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 
-import de.d3web.kbb.diaFlux2graphviz.KBBGraphvizUtils;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
@@ -197,7 +196,7 @@ public class CloudRenderer implements Renderer {
 
 		z = z.replaceAll("\\+", " ");
 		z = z.replaceAll("_", " ");
-		z = KBBGraphvizUtils.cleanAndAddLineBreaks(z);
+		// z = KBBGraphvizUtils.cleanAndAddLineBreaks(z);
 		z = z.replaceAll("<br/>", "\\\\n");
 		// if (z.contains(" ") || z.contains("/") || z.contains("_")) {
 
