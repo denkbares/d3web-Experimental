@@ -42,7 +42,7 @@ public class JSCodeContainer implements ICodeContainer {
     private boolean usrdatLogin = false;
     private boolean dbLogin = false;
     private boolean logging = false;
-    private boolean hierarchy = false;
+    private boolean itree = false;
     private boolean oqd = false;
     private boolean study = false;
     private boolean feedback = false;
@@ -64,8 +64,8 @@ public class JSCodeContainer implements ICodeContainer {
         sb.append(newData).append("\n"); // add to existing sb
     }
 
-    public void setHierarchy() {
-        hierarchy = true;
+    public void setITree() {
+        itree = true;
     }
 
     public void setOneQuestionDialog() {
@@ -121,10 +121,8 @@ public class JSCodeContainer implements ICodeContainer {
         Vector<String> linkedBibs = new Vector<String>();
         Vector<String> ownBibs = new Vector<String>();
 
-        // FIRST define all necessary bibs
+        // FIRST define all necessary GLOBAL bibs
         linkedBibs.add("jquery/jquery-1.6.1.min.js");
-        // linkedBibs.add("jquery/jquery.min.js");
-        // linkedBibs.add("jquery/jquery-ui-position.min.js");
         linkedBibs.add("jquery/jquery.cookie.js");
         linkedBibs.add("jquery/jquery.jstree.js");
         linkedBibs.add("jquery/jquery.typing.min.js");
@@ -132,10 +130,13 @@ public class JSCodeContainer implements ICodeContainer {
         linkedBibs.add("jquery/jquery.customFileInput.js");
         linkedBibs.add("jquery/jquery.print.js");
         linkedBibs.add("jqueryUI/jqueryUi-1.8.10.all.min.js");
-
-
+        linkedBibs.add("jquery/jquery.object.js");
+        
         ownBibs.add("browserInfo.js");
         ownBibs.add("uelogging.js");
+        ownBibs.add("global.js");
+        
+
 
         // manage language mechanism
         String lang = D3webConnector.getInstance().getLanguage();
@@ -171,20 +172,23 @@ public class JSCodeContainer implements ICodeContainer {
             add("var dbLogin = false;", 0);
         }
 
-        if (hierarchy) {
-                ownBibs.add("clariHie.js");
-            }
+        if (itree) {
+            ownBibs.add("iTree.js");
+            add("var itree = true;", 0);
+        } else {
+            add("var itree = false;", 0);
+        }
+        
             
         if (d3web) {
 
-            ownBibs.add("d3webBasic.js");
+            if(!itree){
+                ownBibs.add("d3webBasic.js");
+            }
             ownBibs.add("d3web.js");
-            linkedBibs.add("jquery/jquery.object.js");
-            
             add("var d3web = true;", 0);
         } else {
             ownBibs.add("code.js");
-            linkedBibs.add("jquery/jquery.object.js");
             add("var d3web = false;", 0);
         }
 
@@ -197,11 +201,6 @@ public class JSCodeContainer implements ICodeContainer {
 
         }
 
-        if (hierarchy) {
-            add("var hierarchy = true;", 0);
-        } else {
-            add("var hierarchy = false;", 0);
-        }
 
         if (oqd) {
             add("var oqd = true;", 0);

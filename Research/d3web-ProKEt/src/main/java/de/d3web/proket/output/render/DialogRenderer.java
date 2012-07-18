@@ -70,7 +70,7 @@ public class DialogRenderer extends Renderer {
         // if hierarchical clarification, initialize specific js
         if (dialog.getType().equals("legal")
                 || dialog.getType().equals("clarihie")) {
-            cc.js.add("clariHieInit();", 2);
+            cc.js.add("iTreeInit();", 2);
         }
         
         if(dialog.getType().equals("OQ")){
@@ -136,7 +136,7 @@ public class DialogRenderer extends Renderer {
             Dialog dialog = (Dialog) dialogObject;
             if (dialog.getType().equals("legal")
                     || dialog.getType().equals("clarihie")) {
-                cc.js.setHierarchy();
+                cc.js.setITree();
             }
 
             if (dialog.isLogging()) {

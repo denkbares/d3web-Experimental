@@ -70,8 +70,8 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
             return "";
         }
         StringBuilder sb = new StringBuilder();
-
-
+        
+        
         // get the fitting template. In case user prefix was specified, the
         // specific TemplateName is returned, otherwise, the base object name.
         StringTemplate st = TemplateUtils.getStringTemplate(

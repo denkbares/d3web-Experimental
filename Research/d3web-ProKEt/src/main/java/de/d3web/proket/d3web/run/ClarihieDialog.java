@@ -44,6 +44,7 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
 import de.d3web.proket.d3web.output.render.MediastinitisDefaultRootD3webRenderer;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
@@ -74,10 +75,19 @@ import javax.servlet.ServletException;
  */
 public class ClarihieDialog extends D3webDialog {
 
+    // those need to be defined via the wiki later!!!
+    private static ArrayList<String> ITREEINIT = new ArrayList<String>() {
+
+        {
+            add("Ist das Arbeitsverhältnis wirksam gekündigt worden?");
+        }
+    };
+    
    
     @Override
-    protected String getSource(HttpServletRequest request) {
-        return "juriswap";
+    protected String getSource(HttpServletRequest request, HttpSession http) {
+        
+         return "juriswap";
     }
 
     /**
@@ -89,10 +99,14 @@ public class ClarihieDialog extends D3webDialog {
      *
      * @param request ServletRequest
      * @param response ServletResponse
+     * 
+     * @Override 
+     * 
      */
     protected void addFacts(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
+        
 
         PrintWriter writer = response.getWriter();
 
@@ -122,13 +136,34 @@ public class ClarihieDialog extends D3webDialog {
 
     private void setValue(Session d3webSession, HttpServletRequest request,
             String question, String value, HttpSession httpSession) {
-
-       D3webUtils.setValue(question, value, d3webSession);
+      
+       D3webUtils.setValueITree(question, value, d3webSession);
         if (d3wcon.isLogging()) {
             handleQuestionValueLogging(
                     request, httpSession, question, value, d3webSession);
         }
     }
+    
+     protected void saveShowStatus(HttpServletRequest request,
+            HttpSession httpSession) {
+      
+        Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
+        String parameterQuestion = request.getParameter("question");
+        String q = AbstractD3webRenderer.getObjectNameForId(parameterQuestion);
+        Question qFinal = d3webSession.getKnowledgeBase().getManager().searchQuestion(
+                q == null ? parameterQuestion : q);
+        
+       
+        if(qFinal.getInfoStore().getValue(ProKEtProperties.ITREESHOWN) != null &&
+                qFinal.getInfoStore().getValue(ProKEtProperties.ITREESHOWN) == true ){
+            qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN, false);
+        } else {
+            qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN, true);
+        }
+        
+    }
+    
+    
 
     private void handleQuestionValueLogging(HttpServletRequest request,
             HttpSession httpSession, String ques, String val, Session d3webSession) {
@@ -149,5 +184,23 @@ public class ClarihieDialog extends D3webDialog {
         JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
 
         ServletLogUtils.logQuestionValue(question, value, logtime, logger);
+    }
+    
+    protected void loadITreeInit(HttpSession http, HttpServletRequest request){
+     for (String q:ITREEINIT){
+            Session d3webSession = (Session) http.getAttribute(D3WEB_SESSION);
+            String qu = AbstractD3webRenderer.getObjectNameForId(q);
+            Question qFinal = d3webSession.getKnowledgeBase().getManager().searchQuestion(
+                qu == null ? q : qu);
+            qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN, true);
+            System.out.println("HALLO: " + qFinal);
+        }
+    }
+    
+    @Override
+    protected void show(HttpServletRequest request, HttpServletResponse response, 
+    HttpSession httpSession) throws IOException{
+        loadITreeInit(httpSession, request);
+        super.show(request, response, httpSession);
     }
 }

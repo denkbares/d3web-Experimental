@@ -92,6 +92,7 @@ import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.IDUtils;
 import java.util.*;
 import javax.servlet.http.HttpSession;
+import sun.org.mozilla.javascript.internal.Undefined;
 
 /**
  * Util methods for the binding of d3web to the ProKEt system.
@@ -103,6 +104,7 @@ public class D3webUtils {
     public static final String YESSTRING = "ja";
     public static final String NOSTRING = "nein";
     public static final String MAYBESTRING = "vielleicht";
+    public static final String RETRACTSTRING = "retract";
 
     /**
      * Create a d3web session with a given knowledge base. Per default creates a
@@ -619,7 +621,7 @@ public class D3webUtils {
     public static HashMap getIndicationSetsL1(Blackboard bb, ArrayList<TerminologyObject> l1qs) {
 
         //System.out.println(l1qs);
-        
+
         HashMap<TerminologyObject, Collection<TerminologyObject>> ancestors = new HashMap();
 
         for (KnowledgeSlice ks : bb.getSession().getKnowledgeBase().getAllKnowledgeSlices()) {
@@ -639,24 +641,23 @@ public class D3webUtils {
                         for (TerminologyObject termi : termObjs) {
 
                             if (l1qs.contains(termi)
-                                    && !termi.getName().equals("Please choose database level")
-                                    ) {
+                                    && !termi.getName().equals("Please choose database level")) {
 
-                                
+
                                 if (ancestors.containsKey(termi)) {
 
                                     Collection<TerminologyObject> saveTermis =
                                             (Collection<TerminologyObject>) ancestors.get(termi);
                                     for (TerminologyObject newTermi : backObjs) {
-                                        
-                                        if(!newTermi.getName().equals("Number of mesh(s)") &&
-                                           !newTermi.getName().contains("Production company")     ){
-                                        
-                                        
 
-                                        if (!saveTermis.contains(newTermi)) {
-                                            saveTermis.add(newTermi);
-                                        }
+                                        if (!newTermi.getName().equals("Number of mesh(s)")
+                                                && !newTermi.getName().contains("Production company")) {
+
+
+
+                                            if (!saveTermis.contains(newTermi)) {
+                                                saveTermis.add(newTermi);
+                                            }
                                         }
                                     }
 
@@ -681,8 +682,7 @@ public class D3webUtils {
                              *
                              * ancestors.put(termi, saveTermis);
                              *
-                             * } else { ancestors.put(termi, backObjs); } }
-                            }
+                             * } else { ancestors.put(termi, backObjs); } } }
                              */
                         }
                     }
@@ -1359,19 +1359,7 @@ public class D3webUtils {
         }
 
         String valueName = AbstractD3webRenderer.getObjectNameForId(valueString);
-        
-        // ONLY FOR ClariHIE Dialog!!!
-        if (D3webConnector.getInstance().getDialogType().equals(DialogType.CLARIHIE)) {
-            if (valueString != null && valueName == null) {
-                if (valueString.equals("1")) {
-                    valueString = YESSTRING;
-                } else if (valueString.equals("2")) {
-                    valueString = MAYBESTRING;
-                } else if (valueString.equals("3")) {
-                    valueString = NOSTRING;
-                }
-            }
-        }
+
         // init Value object...
         Value value = null;
 
@@ -1395,6 +1383,7 @@ public class D3webUtils {
                 value = setQuestionDate(question, valueString);
             }
 
+
             // if reasonable value retrieved, set it for the given
             // TerminologyObject
             if (value != null) {
@@ -1402,12 +1391,77 @@ public class D3webUtils {
                 if (UndefinedValue.isNotUndefinedValue(value)) {
                     // add new value as UserEnteredFact
                     Fact fact = FactFactory.createUserEnteredFact(question, value);
-                    Fact f2 = new DefaultFact(question, value, PSMethodJuri.getInstance(),
-                            PSMethodJuri.getInstance());
                     blackboard.addValueFact(fact);
                 }
             }
-            //System.out.println(blackboard.getAnsweredQuestions());
+        }
+    }
+
+    /**
+     * Utility method for adding values specifically in the iTree dialog type.
+     * (clarification hierarchy)
+     *
+     * @created 16.07.2012
+     *
+     * @param toId The ID of the TerminologyObject, the value is to be added.
+     * @param valString The value, that is to be added for the TerminologyObject
+     * with ID valID, in this case corresponds to number value 0 to 3.
+     */
+    public static void setValueITree(String toId, String valueString, Session sess) {
+
+        if (toId == null || valueString == null) {
+            return;
+        }
+
+        String toName = AbstractD3webRenderer.getObjectNameForId(toId);
+        Blackboard blackboard = sess.getBlackboard();
+        Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+                toName == null ? toId : toName);
+
+        // if TerminologyObject not found in the current KB return & do nothing
+        if (question == null) {
+            return;
+        }
+
+        // ONLY FOR ClariHIE Dialog!!!
+        if (D3webConnector.getInstance().getDialogType().equals(DialogType.CLARIHIE)) {
+            if (valueString != null) {
+                if (valueString.equals("1")) {
+                    valueString = YESSTRING;
+                } else if (valueString.equals("2")) {
+                    valueString = MAYBESTRING;
+                } else if (valueString.equals("3")) {
+                    valueString = NOSTRING;
+                } else if (valueString.equals("0")) {
+                    valueString = RETRACTSTRING;
+                }
+            }
+        }
+
+        // init Value object...
+        Value value = null;
+
+        if (valueString != null && valueString.equalsIgnoreCase("retract")) {
+            setQuestionUndefined(sess, question);
+        } // otherwise, i.e., for all other "not-unknown" values
+        else {
+
+            // CHOICE questions
+            if (question instanceof QuestionChoice) {
+                value = setQuestionChoice(question, valueString);
+            }
+
+            // if reasonable value retrieved, set it for the given
+            // TerminologyObject
+            if (value != null) {
+
+                if (UndefinedValue.isNotUndefinedValue(value)) {
+                    // add new value as UserEnteredFact
+                    Fact f2 = new DefaultFact(question, value, PSMethodJuri.getInstance(),
+                            PSMethodJuri.getInstance());
+                    blackboard.addValueFact(f2);
+                }
+            }
         }
     }
 
@@ -1466,19 +1520,27 @@ public class D3webUtils {
                 String[] choiceIds = valueId.split("##mcanswer##");
                 List<Choice> choices = new ArrayList<Choice>();
 
-               for (String choiceId : choiceIds) {
+                for (String choiceId : choiceIds) {
                     String choiceName = AbstractD3webRenderer.getObjectNameForId(choiceId);
                     choices.add(new Choice(choiceName == null ? choiceId : choiceName));
                 }
                 value = MultipleChoiceValue.fromChoices(choices);
-                
+
             }
         }
-      
-        
+
+
         return value;
     }
 
+    /**
+     * Set given question in given session to unknown, i.e. retract previous
+     * fact and set Unknown as new fact
+     *
+     * @param sess
+     * @param to
+     * @return The Unknown fact object for the question
+     */
     private static Value setQuestionToUnknown(Session sess, Question to) {
         Blackboard blackboard = sess.getBlackboard();
 
@@ -1495,6 +1557,26 @@ public class D3webUtils {
                 PSMethodUserSelected.getInstance());
         blackboard.addValueFact(fact);
         return value;
+    }
+
+    /**
+     * Set given question in the given session to Undefined
+     *
+     * @param sess
+     * @param to
+     * @return the (undefined) value object of the current session for the given
+     * question
+     */
+    private static Value setQuestionUndefined(Session sess, Question to) {
+        Blackboard blackboard = sess.getBlackboard();
+
+        // remove a previously set value
+        Fact lastFact = blackboard.getValueFact(to);
+        if (lastFact != null) {
+            blackboard.removeValueFact(lastFact);
+        }
+
+        return blackboard.getValue(to);
     }
 
     /**
@@ -1612,20 +1694,18 @@ public class D3webUtils {
         return unknownQuestions;
     }
 
-    
-     public static Set<TerminologyObject> getMCQuestions(Session sess) {
+    public static Set<TerminologyObject> getMCQuestions(Session sess) {
         Set<TerminologyObject> mcs = new HashSet<TerminologyObject>();
         for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
-            if (to instanceof QuestionMC){
-                    mcs.add(to);
-            
+            if (to instanceof QuestionMC) {
+                mcs.add(to);
+
             }
-            
+
         }
         return mcs;
     }
-     
-     
+
     public static String getFormattedDateFromString(Date date, String dateFormat) {
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         String f = sdf.format(date);

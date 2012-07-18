@@ -456,10 +456,14 @@ public class Renderer implements IRenderer {
     }
 
     public void addCount(IDialogObject parent, IDialogObject child, int count) {
-        String parentCount = ((Question) parent).getCounter();
-        String childCount = Integer.toString(count);
-        String countTotal = parentCount + "." + childCount;
-        ((Question) child).setCounter(countTotal);
+        if(parent instanceof Question){
+            String parentCount = ((Question) parent).getCounter();
+            String childCount = Integer.toString(count);
+            String countTotal = parentCount + "." + childCount;
+            if(child instanceof Question){
+                ((Question) child).setCounter(countTotal);
+            }
+        }
     }
     
      public static String getIDForNamePrototype(String element, IDialogObject ido) {

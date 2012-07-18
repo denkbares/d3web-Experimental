@@ -83,7 +83,7 @@ public class EuraHSDialog extends D3webDialog {
     };
 
     @Override
-    protected String getSource(HttpServletRequest request) {
+    protected String getSource(HttpServletRequest request, HttpSession http) {
         return "Hernia";
     }
 

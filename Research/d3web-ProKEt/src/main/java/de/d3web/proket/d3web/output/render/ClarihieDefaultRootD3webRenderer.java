@@ -170,13 +170,13 @@ public class ClarihieDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
     @Override
     public void defineAndAddJS(ContainerCollection cc) {
         cc.js.enableD3Web();
-        cc.js.setHierarchy();
+        cc.js.setITree();
 
         if (D3webConnector.getInstance().isLogging()) {
             cc.js.enableClickLogging();
         }
 
-        cc.js.add("$(function() {init_all();});", 1);
+        cc.js.add("$(function() {iTreeInit();});", 1);
     }
 
     

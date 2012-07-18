@@ -19,6 +19,10 @@ var scrollHtml = 0;
 * e.g., marking questions (normal case) , making navigaion etc.             *
 ****************************************************************************/
 
+/* TODO: REFACTOR THIS FILE - check what is needed by d3web questionary and
+ * other prototypes, factor out, remove d3web basic as not needed */
+
+
 function setup() {
 
     // setup popup stuff
@@ -35,30 +39,6 @@ function setup() {
     generate_tooltip_functions();
 }
 
-// TODO: setup is called init_all in Juri d3web -Y refactor
-
-/*function init_all() {
-
-    hide_all_tooltips();
-    generate_tooltip_functions_ynButtons();
-    
-        removeInputFacilitiesForFirst();
-        
-        expandAndStyleFirstElement();
-    
-        exchangeReadflowTextFirstSubQuestion();
-        
-        // initialize mechanism for num fields to check entered values etc
-        //initializeNumfields();
-        
-        // initialize mechanism for dropdwons to check entered values etc
-        //initializeDropdownSelects();
-        
-        // remove the field containing the propagation value info for 1st q
-        removePropagationInfoInQuestionForFirst();
-        
-        alwaysExpandDummyNodes();
-}*/
 
 /**
  * Scroll to the top of the page by setting jquery attribute 
@@ -312,14 +292,7 @@ function endsWith(fullString, testString) {
         return false;
 }
 
-/**
- * Hide all the tooltip elements, starting with an "tt-"
- */
-function hide_all_tooltips() {
-    $("[id^='tt-']").hide(0);
-    tooltipShown = undefined;
-    tooltipShownTrigger = undefined;
-}
+
 
 /**
  * Hide all the sub-questions, i.e., elements starting with sub-
@@ -622,66 +595,9 @@ function tooltip_over(id, element) {
     }
 }
 
-function setLeftOffset(target) {
-    
-    // get current coordinates of element relative to the document
-    var pOffset = target.parent().offset();
-   
-    // width of current element
-    var width = target.width();
-    var height = target.height();
-    
-    // window width
-    var widthW = $(window).width() - 25; // remove some for the scrollbar
-    // real height of the displayed dialog inside the browser window
-    var heightW = document.documentElement.clientHeight;
-    
-    // calculate appropriate distance to left border
-    var overlap = pOffset.left + width - widthW;
-    var leftOffset = pOffset.left
-    if (overlap > 0){
-        leftOffset = pOffset.left - overlap;
-        if (leftOffset < 0) {
-            leftOffset = 0;
-        }
-    }
-   
-   /* display all popups that are too far down in the dialog relatively above
-    * the parent element */
-    var sizeToEnd = heightW - pOffset.top;
-    if(sizeToEnd < 400){
-        target.offset({
-            top: pOffset.top - height - 20, 
-            left: leftOffset
-        });
-    } 
-    
-    /* display popups normally underneath the parent element */
-    else {
-        target.offset({
-            top: pOffset.top + target.parent().height() + 15, 
-            left: leftOffset
-        });
-    }
-    target.width(width);
-}
 
-/**
- * Define tooltip's position relative to calling element
- * @param e
- */
-function tooltip_move(e) {
-    if (tooltipShown != undefined) {
-        tooltipShown.position({
-            "my" : "left top",
-            "at" : "right bottom",
-            "of" : e,
-            "offset" : "15 15",
-            "collision" : "fit flip",
-            "bgiframe" : false
-        });
-    }
-}
+
+
 
 /**
  * Hide the tooltip
@@ -704,150 +620,6 @@ function tooltip_out(object) {
 //tooltipShownTrigger = undefined;
 }
 
-// generates the tooltips for the answer buttons of yes no questions
-function generate_tooltip_functions_ynButtons(){
-    triggers = $("[class*='-tt-trigger-ynbutton']");
-	
-    // if mouse is moved over an element define potential tooltips position
-    $(document).mousemove(function(e) {
-        tooltip_move(e);
-    });
-	
-    // go through all existing tooltip triggers
-    triggers.each(function() {
-		
-        var ttstart, ttend;
-        var now;
-                
-        $(this).unbind('mouseover').mouseover(function() {
-            //if logging is activated get the time tooltip is triggered
-            if(logging){
-                now = new Date();
-                ttstart = now.getTime();
-            }
-            
-            var fullId = $(this).attr("id");
-            
-            if(fullId.indexOf("ynYes")!=-1){
-                id = $(this).attr("id").replace("ynYes-", "");
-                tooltip_over_hierarchy_buttons(id, "1");
-            } else if(fullId.indexOf("ynNo")!=-1){
-                id = $(this).attr("id").replace("ynNo-", "");
-                tooltip_over_hierarchy_buttons(id, "3");
-            } else if(fullId.indexOf("ynUn")!=-1){
-                id = $(this).attr("id").replace("ynUn-", "");
-                tooltip_over_hierarchy_buttons(id, "2");
-            } else if(fullId.indexOf("ynNan")!=-1){
-                id = $(this).attr("id").replace("ynNan-", "");
-                tooltip_over_hierarchy_buttons(id, "0");
-            }
-        });
-
-        $(this).unbind('mouseout').mouseout(function() {
-            //if logging is activated get the time tooltip is deactivated again
-            if(logging){
-                now = new Date();
-                ttend = now.getTime();
-                ue_logInfoPopup(ttstart, ttend, $(this));
-            }
-            
-            var fullId = $(this).attr("id");
-            if(fullId.indexOf("ynYes")!=-1){
-                id = $(this).attr("id").replace("ynYes-", "");
-                tooltip_out_hierarchy_buttons(id, "1");
-            } else if(fullId.indexOf("ynNo")!=-1){
-                id = $(this).attr("id").replace("ynNo-", "");
-                tooltip_out_hierarchy_buttons(id, "3");
-            } else if(fullId.indexOf("ynUn")!=-1){
-                id = $(this).attr("id").replace("ynUn-", "");
-                tooltip_out_hierarchy_buttons(id, "2");
-            } else if(fullId.indexOf("ynNan")!=-1){
-                id = $(this).attr("id").replace("ynNan-", "");
-                tooltip_out_hierarchy_buttons(id, "0");
-            }
-        });
-    });
-}
-
-function tooltip_over_hierarchy_buttons(id, button) {
-   
-    switch(button){
-        case "1":
-            targetid = "tt-" + id + "-Y";
-            break;
-        case "2":
-            targetid = "tt-" + id + "-U";
-            break;
-        case "3":
-            targetid = "tt-" + id + "-NO";
-            break;
-        case "0":
-            targetid = "tt-" + id + "-NAN";
-            break;
-    }
-   	
-    //target = $("#tt-" + id).filter(":not(:animated)");
-    var target = $("[id^=" + targetid + "]");
-        
-    if (target.size() == 0) {
-        return;
-    }
-	
-    // if target element is not currently shown
-    if (target !== tooltipShown) {
-		
-        // hide old tooltip if existing
-        if (tooltipShown !== undefined) {
-            tooltip_out(tooltipShown);
-        }
-		
-        // store currently shown tooltip and tooltipShownTrigger
-        tooltipShown = target;
-		
-        target.css("position", "absolute");
-        var height = target.height();
-        var width = target.width();
-        if (height > 0 && width > 0 && height > width) {
-            target.css("width", height);
-            target.css("height", width);
-        }
-        //tooltip_move(element);
-
-        target.fadeIn(300);
-        setLeftOffset(target);
-    }
-}
-
-function tooltip_out_hierarchy_buttons(object, button) {
-	
-    switch(button){
-        case "1":
-            targetid = "tt-" + object + "-Y";
-            break;
-        case "2":
-            targetid = "tt-" + object + "-U";
-            break;
-        case "3":
-            targetid = "tt-" + object + "-NO";
-            break;
-        case "0":
-            targetid = "tt-" + object + "-NAN";
-            break;
-    }
-
-    // if a jquery tooltip or
-    if (object instanceof jQuery) {
-        target = object;
-    } else {
-		
-        // a specifically marked element
-        target = $("#" + targetid);
-    }
-
-    target.hide(500);
-    tooltipShown = undefined;
-//tooltipShownTrigger = undefined;
-}
 
 /**
  * Generate functionality for tooltip elements
@@ -979,12 +751,21 @@ function toggle_sub(id) {
  * toggle element's visibility by ID
  */
 function toggle_hide(id) {
-    // toggle (0 means no animation as time=0 for animation and on
+   
+     alert("toggle_hide " + id);
+    if(d3web){
+        id = id.replace("sub-", "");
+       
+        d3web_saveShowStatus(id);
+    } else {
+        
+         // toggle (0 means no animation as time=0 for animation and on
     // callback (animation complete) the function is processed
     $("#" + id).toggle(0, function() {
         alternating_colors();	// update alternating color scheme
         checkAnswers();			// check on answers
     });
+    }
 }
 
 /**
@@ -1070,220 +851,12 @@ function toggle_folder_image(id) {
 }
 
 
-/*** LEGAL STYLE ***/
-
-/**
- * IN ColorHierarchyMCQuestion.st or LegalQuestion.st
- * Toggle the subelements for special hierarchical dialogs
- * @param id
- */
-function toggle_sub_4boxes(id) {
-    toggle_hide("sub-" + id); 
-    toggle_folder_image_4boxes(id);
-    hide_all_tooltips();
-}
-
-/**
- * Toggle folder image (open/close) for the legal dialog style
- */
-function toggle_folder_image_4boxes(id) {
-	
-    // ids of the arrow/folder: in clarihie d3web this still contains the q_
-    var typeimgID = id + '-typeimg';
-    
-    // get the div of the arrow/folder image
-    var imgDiv = $("[id^="+ typeimgID + "]");
-    
-    var qtext = $('#solutiontitle-' + id).html();
-    
-    if (imgDiv.attr('src') == 'img/openedArrow.png') {
-        
-        imgDiv.attr('src', 'img/closedArrow.png');
-       
-        if(logging && !$("#" + id).hasClass("dummy")){
-            ue_logQuestionToggle(qtext, "SHUT");
-        }
-        
-    } else if (imgDiv.attr('src') == 'img/closedArrow.png') {
-
-        imgDiv.attr('src', 'img/openedArrow.png');
-        if(logging && !$("#" + id).hasClass("dummy")){
-            ue_logQuestionToggle(qtext, "EXPAND");
-        }
-    } 
-}
-
-/**
- * IN ColorHIerarchMcQuestion.st or LegalQuestion.st
- * Color background and mark selected answer in Legal style dialogs
- * TODO factor out d3web
- * @param id the id of the item to mark
- * @param value the value that indicates in what regard the item is marked
- */
-function h4boxes(value, id) {
-    if (!d3web) {
-		
-        // get dialog item
-        var item = $("#" + id);
-		
-        // set image attribute to the correctly selected one
-        item.attr('src', "img/panel" + value + ".gif");
-		
-        // get the first ancestor, i.e. the first upper question
-        var target = $(item).closest("div[id^='q_']");
-
-        // remove existing classes
-        target.removeClass('rating-low rating-medium rating-high');
-
-        // set classes new according to given value
-        switch (value) {
-            case "1": // yes
-                target.addClass('rating-high');
-                break;
-            case "2": // no
-                target.addClass('rating-low');
-                break;
-            case "3": // undecided
-                target.addClass('rating-medium');
-                break;
-            case "4": // nothing, default val, undecided
-                break;
-        }
-        // also mark parents of the target while excluding target
-        h4boxes_mark(target, true);
-		
-    } else {
-        // d3web specific toolchain
-        if (value < 4) {
-			
-            // add fact in d3web
-            d3web_addfact(id, value - 1); // zero-based
-        } else {
-            // set default empty fact
-            d3web_addfact(id, "[empty]");
-        }
-        // get new ratings, changed at least for the element we are looking at
-        var ids = "";
-        $("[id^='q_']").each(function() {
-            ids = ids + $(this).attr('id') + ",";
-        });
-        d3web_getRatings(ids);
-    }
-}
-
-/**
- * Transfer coloring (in hierarchy dialog) also to parent quesitons
- * @param object the object from where to start marking parents
- * @parents skip_self flag indicating whether element itself should
- * 		also be processed
- */
-function h4boxes_mark(object, skip_self) {
-
-    // TODO refactor algorithm and mapping between 0-3 and image 1-4 numbers
-    // check object itself unless skip_self
-    if (!skip_self) {
-		
-        // we need this as a coloring flag
-        var oc = object.hasClass('oc');
-        var color; 
-		
-        if (oc) {	// in oc questions, rating default for parents
-            // is always low
-            color = 3;
-        } else { // otherwise it is high (green) per default
-            color = 0;
-        }
-
-        // for each of the children questions
-        $("#sub-" + object.attr('id')).children("div[id^='q_']").each(
-            function() {
-					
-                // if child is rated medium
-                if ($(this).hasClass("rating-medium")) {
-						
-                    // if higher rating and mc question
-                    if (color < 2 && !oc) {
-                        color = 2; // set medium rating
-                    }
-                    // if lower rating and oc question
-                    // leave medium
-                    if (color > 2 && oc) {
-                        color = 2;
-                    }
-						
-                // if child is rated low	
-                } else if ($(this).hasClass("rating-low")) {
-						
-                    if (color < 3 && !oc) {
-                        color = 3;
-                    }
-					
-                } else if ($(this).hasClass("rating-high")) {
-                    if (color > 0 && oc) {
-                        color = 0;
-                    }
-                } else {
-                    // set color to transparent in case of undecided questions
-                    // if ($(this).hasClass("question-unanswered")) {
-                    if (color < 1 && !oc) {
-                        color = 1;
-                    }
-                    if (color > 1 && oc) {
-                        color = 1;
-                    }
-                }
-            });
-
-        // retrieve target element and target image
-        var target = $("#" + $(object).attr('id'));
-        var imgTarget = $("#panel-" + $(object).attr('id'));
-        // remove old classes
-        target.removeClass('rating-low rating-medium rating-high');
-        // set new class
-        switch (color) {
-            case 0: // green
-                target.addClass("rating-high");
-                imgTarget.attr('src', "img/panel1.gif");
-                break;
-            case 1: // transparent
-                imgTarget.attr('src', "img/panel4.gif");
-                break;
-            case 2: // yellow
-                target.addClass("rating-medium");
-                imgTarget.attr('src', "img/panel3.gif");
-                break;
-            case 3: // red
-                target.addClass("rating-low");
-                imgTarget.attr('src', "img/panel2.gif");
-                break;
-        }
-    }
-
-    // get first parent div
-    var walking = $(object).parent("div:first");
-    var reg = new RegExp(/^sub-.*$/);
-    var counter = 0;
-	
-    while (!reg.test($(walking).attr('id'))) {
-        counter += 1;
-        if (counter > 6) // why 6?! what about larger dialogs?! TODO
-            break; // break if there is no more parent question
-        walking = $(walking).parent("div");
-    }
-
-    // get first parent of element and call 
-    // recursively, also resetting the parents coloring
-    $(walking).parent(":first").each(function() {
-        h4boxes_mark($(this), false);
-    });
-}
-
 /**
  * IN ColorHierarchyMCQuestion.st and LegalQuestion.st
  * @param sourceId the ID of the source element
  * @param destId the ID of the destination elmenet
  */
-function copy_div(sourceId, destId) {
+/*function copy_div(sourceId, destId) {
 	
     // get content, which is the innerHTML of the source
     var newContent = $("#" + sourceId).attr('innerHTML');
@@ -1294,7 +867,7 @@ function copy_div(sourceId, destId) {
         // else set content to new element and show it animated
         dest.attr('innerHTML', newContent).show(1000);
     }
-}
+}*/
 
 
 /*** CLARIFICATION STYLE ***/
@@ -1518,125 +1091,4 @@ if (typeof window.loadFirebugConsole == "undefined"
         window.console[names[i]] = function() {
             };
     }
-}
-
-
-
-/* REFACTOR: ONE BASIC COMMON JS FILE */
-/**
-* Show the auxiliary information for element with id "id" in the infopanel
-* element
-*/
-function showAuxInfo(id, title){
-    
-    // get infotext stored in additional, invisible sub-element of current q
-    var infoid = "#bonus-"+id;
-    if(title==undefined){
-        title = "";
-    }
-    var auxHeader = "<b>FRAGE:</b> " + title + "<br /><br />";
-    var auxinfo = $(infoid).html();
-    
-    // rewrite inner HTML of infopanel widget with info content
-    if(auxinfo==""){
-        auxinfo = "-";
-    } 
-    
-    $("#auxHeader").html(auxHeader);
-    $("#auxInfo").html(auxinfo);
-}
-
-
-function hideAuxInfo(){
-    
-    // clear infopanel
-    $("#auxHeader").html("<b>FRAGE: </b> <br /><br />");
-    $("#auxInfo").html("-");
-}
-
-function showAuxPropInfo(){
-    var info = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung. ";
-    info += "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, ";
-    info += "wenn Sie eine andere als die bisher hergeleitete Bewertung setzen möchten.";
-    $("#auxPropagationInfo").html(info);
-}
-
-function hideAuxPropInfo(){
-    $("#auxPropagationInfo").html("");
-}
-
-/**
- * Retrieve the topmost element in hierarchically specified XML prototypes.
- * Usually this is the first <question> element.
- */
-function retrieveRootQuestionIdInHierarchyPrototype(){
-    
-    var first; // get question id
-    
-    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements     
-        if($(this).attr("id")!=undefined){  
-            first = $(this).attr("id");   
-        }   
-    });
-    return first;
-}
-
-// TODO check if that works for num and oc q
-function removeInputFacilitiesForFirst(){
-    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
-        
-        //alert($(this).attr("id"));
-        if($(this).attr("id")!=undefined){  
-            var id = "#" + $(this).attr("id") + "-imagebox";
-            
-            // the imagebox div, that contains input buttons normally
-            var prop = $(id);
-            
-            prop.html("<div id='solutionboxtextInTree'>Hauptfrage</div>");
-        }
-    });
-}
-
-/**
- * Retrieve the first element in hierarchical dialogs and expand it on startup
- * Used e.g. in hierarchy (legal) dialog
- */
-function expandAndStyleFirstElement(){
-    
-    var rootId = retrieveRootQuestionIdInHierarchyPrototype();
-
-    $("#" + rootId).addClass('solutiontext');
-    toggle_sub_4boxes(rootId);   // expand the first element
-}
-
-/*Helper function to exchange the text of the first subquestion - usually 
- *Oder and Und - of a set of subquestions to the given text, e.g. "Wenn" 
- */
-function exchangeReadflowTextFirstSubQuestion(){
-    
-    $("[id^=sub-] [id^=readFlow]:first-child img").each(function(){     
-        $(this).attr('src', 'img/If.png');
-    });
-}
-
-function alwaysExpandDummyNodes(){
-    $(".dummy").each(function(){
-        toggle_sub_4boxes($(this).attr("id"));
-    });
-};
-
-function removePropagationInfoInQuestionForFirst(){
-    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
-        
-        var first = $(this).attr("id"); // get question id
-        
-        if($(this).attr("id")!=undefined){  
-            var prop = $("#propagation-"+$(this).attr("id"));
-    
-            prop.removeClass("show");
-            prop.addClass("hide");
-        }
-      
-    });
-    
 }

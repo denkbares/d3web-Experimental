@@ -111,11 +111,31 @@ public class ClarihieQuestionD3webRenderer extends AbstractD3webRenderer impleme
         // set some basic properties
         st.setAttribute("fullId", getID(to));
         st.setAttribute("title", D3webUtils.getTOPrompt(to, loc).replace("[jnv]", ""));
+        
 
         // get d3web properties
         Blackboard bb = d3webSession.getBlackboard();
         Value val = bb.getValue((ValueObject) to);
 
+        Boolean itreeshown = to.getInfoStore().getValue(ProKEtProperties.ITREESHOWN);
+        Boolean itreeinit = to.getInfoStore().getValue(ProKEtProperties.ITREEINIT);
+        
+        // for questions to be initially shown in the tree
+        if (itreeinit != null && itreeinit.equals(true) ) {
+            st.setAttribute("showITree", true);
+        } else {
+            st.removeAttribute("showITree");
+        }
+        
+         // if questions are toggled in and out during tree navigation
+        if(itreeshown != null && itreeshown.equals(true)){
+            st.setAttribute("showITree", true);
+        } else {
+           st.removeAttribute("showITree");
+        }
+        
+        //System.out.println(D3webUtils.getTOPrompt(to, loc).replace("[jnv]", "") + " " + val);
+        
         // set bonus text: is displayed in auxinfo panel
         String bonustext =
                 to.getInfoStore().getValue(ProKEtProperties.POPUP);
@@ -158,7 +178,7 @@ public class ClarihieQuestionD3webRenderer extends AbstractD3webRenderer impleme
             //System.out.println("UNDEFINED:  " + to.getName());
             st.removeAttribute("qrating");
         }
-        System.out.println(val);
+        //System.out.println(val);
         
 
         st.removeAttribute("tty");

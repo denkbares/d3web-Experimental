@@ -156,7 +156,7 @@ public class D3webDialog extends HttpServlet {
         HttpSession httpSession = request.getSession(true);
 
         // try to get the src parameter, i.e. the specification of the dialog
-        String source = getSource(request);
+        String source = getSource(request, httpSession);
         //System.out.println(source);
         d3webParser.setSourceToParse(source);
 
@@ -211,8 +211,6 @@ public class D3webDialog extends HttpServlet {
                     d3wcon.setUEQuestionnaire("OWN");
                 }
             }
-
-
 
             // set dialog language (for internationalization of widgets, NOT
             // KB elements (specified in knowledge base
@@ -273,7 +271,7 @@ public class D3webDialog extends HttpServlet {
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
         
-        
+        System.out.println(action);
         
         
         // TEST:
@@ -314,6 +312,7 @@ public class D3webDialog extends HttpServlet {
             return;
         } else if (action.equalsIgnoreCase(
                 "addfacts")) {
+            System.out.println("add Facts base");
             addFacts(request, response, httpSession);
             return;
         } else if (action.equalsIgnoreCase(
@@ -423,6 +422,8 @@ public class D3webDialog extends HttpServlet {
                 writer.print("true");
                 httpSession.setAttribute("handleBrowsers", "false");
             }
+        } else if (action.equalsIgnoreCase("saveShowStatus")) {
+            saveShowStatus(request, httpSession);
         } else if (action.equalsIgnoreCase(
                 "handleBrowsers")) {
 
@@ -1643,7 +1644,7 @@ public class D3webDialog extends HttpServlet {
      * @param request the HttpServletRequest
      * @return the source string
      */
-    protected String getSource(HttpServletRequest request) {
+    protected String getSource(HttpServletRequest request, HttpSession http) {
 
         // Overwrite if necessary
         String source = "Default.xml"; // default
@@ -1739,5 +1740,17 @@ public class D3webDialog extends HttpServlet {
         bui.append("</div>");
 
         return bui.toString();
+    }
+    
+    protected void saveShowStatus(HttpServletRequest request,
+            HttpSession httpSession){
+        // do nothing for default dialogs so far, as not needed there
+        // overwritten in ClarihieDilaog (which should be renamed to iTreeDialog)
+    }
+    
+    
+    // remove once this works from KB
+     protected void loadITreeInit(HttpSession http, HttpServletRequest request){
+     
     }
 }

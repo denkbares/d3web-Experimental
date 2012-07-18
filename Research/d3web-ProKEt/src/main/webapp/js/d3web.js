@@ -784,7 +784,7 @@ function handleNumFields(field){
 
 /* move the content part of the dialog further down --> not in hierarchy */
 function moveContentPart() {
-    if(!hierarchy){
+    if(!itree){
         $('#content').css("margin-top", (getHeaderHeight() + 10) + "px");
     }
 }

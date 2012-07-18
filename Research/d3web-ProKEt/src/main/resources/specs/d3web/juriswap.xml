@@ -12,8 +12,8 @@
 	required = "none"
 	language = "de"
         uequestionnaire='OWN' 
-        study='TRUE' 
-        logging='TRUE' 
+        study='' 
+        logging='' 
         feedbackform="TRUE"
         uegroup=""
         >

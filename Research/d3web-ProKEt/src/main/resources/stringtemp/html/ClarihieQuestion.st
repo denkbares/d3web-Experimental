@@ -6,7 +6,7 @@
 <div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$ $qrating$ $swap$" >
     
     <div id="$fullId$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')">
-        <img id="$fullId$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes('$fullId$')">
+        <img id="$fullId$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes_clariHie('$fullId$')">
             <div id="ynYes-$fullId$" class="ynbutton $ratingY$ $fullId$-tt-trigger-ynbutton $swap$" ">
                 Ja
                 $TooltipButtonJA()$
@@ -36,7 +36,7 @@
         
         
 	
-	$if(children)$<div id="sub-$fullId$" class="sub-$fullId$" style="padding-left:15px;display:none">
+	$if(children)$<div id="sub-$fullId$" class="sub-$fullId$" style="padding-left:15px;$if(showITree)$display:block$else$display:none$endif$">
 		$children$
 	</div>$endif$
 	
