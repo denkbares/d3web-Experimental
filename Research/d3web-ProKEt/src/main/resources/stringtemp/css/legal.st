@@ -54,7 +54,7 @@ td > #headertext{
 
 #dialog{
     float: left;
-    margin-top: 165px;
+    margin-top: 195px;
 }
 
 
@@ -67,7 +67,7 @@ td > #headertext{
     position: fixed;
     right: 20px;
     padding: 10px;
-    margin-top: 175px;
+    margin-top: 205px;
     height: 60%;
     overflow: auto; /* for scrolling */
 }
@@ -299,28 +299,7 @@ img{
     margin-right: 5px;
 }
 
-.solution{
-    box-shadow: 0 0 3.5px black;
-    clear: both;
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    padding: 30px;
-    width: 65%;
-}
-       
-    
-.solRating {
-      background-color: #DEDEDE;
-    float: right;
-    font-weight: bold;
-    padding: 2px 15px;
-    margin-top: -16px;
-    margin-right: -20px;
-    min-height: 32px;
-}
+
 
 .solRating.rating-high { 
     background-color: #C3DAA8; 
@@ -342,6 +321,27 @@ img{
     background-color: #ffdead;  
 }*/
 
+.solution{
+    box-shadow: 0 0 3.5px black;
+    clear: both;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    width: 65%;
+    padding: 30px 40px 55px;
+}
+       
+    
+.solRating {
+    background-color: #DEDEDE;
+    float: left;
+    font-weight: bold;
+    padding: 2px 15px;
+    margin-top: -16px;
+    margin-left: -15px;
+}
 
 #solutionboxtext{
     font-size: 0.6em;
@@ -352,8 +352,10 @@ img{
 }
 
 #solutiontext{
-     float: left;
+    float: left;
     padding: 2px 0;
+    margin-bottom: 15px;
+    margin-right: 40px;
 }
 
 .solutiontitle{

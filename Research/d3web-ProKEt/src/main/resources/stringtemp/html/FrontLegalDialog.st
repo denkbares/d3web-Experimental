@@ -50,7 +50,7 @@ $HTMLHeader()$
             <div id="solLow" class="solRating rating-low hide">
                 Sachverhalt trifft nicht zu, <br /> weil nicht alle Top-Level Fragen bestätigt werden konnte.
             </div>
-            <div id="solUn" class="solRating"><br />
+            <div id="solUn" class="solRating">
                 Zu wenig Informationen für eine Bewertung.
             </div>
         </div>
