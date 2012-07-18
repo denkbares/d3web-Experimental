@@ -4,7 +4,7 @@
  */
 package de.d3web.proket.d3web.input.officexmlParser;
 
-import de.uniwue.abstracttools.StringUtils;
+/*import de.uniwue.abstracttools.StringUtils;
 import java.io.*;
 import officeconverter.Config;
 import officeconverter.Converter;
@@ -19,14 +19,14 @@ import officeconverter.Converter;
  *
  * @author mafre
  */
-public class DocToPrototypeXMLConverter {
+/*public class DocToPrototypeXMLConverter {
 
     /* Basic directory where word parsing docs are stored */
-    private static String PARSINGPATH =
+/*    private static String PARSINGPATH =
             "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/";
     
     /* SOURCE and TARGET doc names */
-    private static String SOURCEDOC = PARSINGPATH + "RNS_AR_USER.doc";
+/*    private static String SOURCEDOC = PARSINGPATH + "RNS_AR_USER.doc";
     private static String TARGETXML = PARSINGPATH + "juriUserNeu.xml";
     
     private static String WEBAPPPREFIX = "Juri";
@@ -34,7 +34,7 @@ public class DocToPrototypeXMLConverter {
     /*
      * further needed intermed files
      */
-    private static String EMBEDDEDOBJECTSDIR = PARSINGPATH + "Resources";
+  /*  private static String EMBEDDEDOBJECTSDIR = PARSINGPATH + "Resources";
     private static String PREHTML = PARSINGPATH + "PreIntermed.html";
     private static String HTML = PARSINGPATH + "Intermed.html";
     private static String FILETYPE_OUTPUT = "html";
@@ -47,7 +47,7 @@ public class DocToPrototypeXMLConverter {
      * Uses the files SOURCEDOC and TARGETXML specified at the beginning of the
      * class for performing the doc-to-xml conversion.
      */
-    private static void convert() {
+   /* private static void convert() {
         try {
            // Config conf =
                   //  new Config(FILETYPE_OUTPUT, false, "UTF-8",
@@ -79,7 +79,7 @@ public class DocToPrototypeXMLConverter {
         /*
          * From here, this is what formerly Elmar's "QuickParser" did
          */
-        QuickParser qp = new QuickParser();
+ /*       QuickParser qp = new QuickParser();
         try {
             String text = StringUtils.readFileString(HTML);
             ParserQuestionManager qm = qp.parseQuestionTree(qp.getTreePart(text));
@@ -99,3 +99,4 @@ public class DocToPrototypeXMLConverter {
 
     }
 }
+*/

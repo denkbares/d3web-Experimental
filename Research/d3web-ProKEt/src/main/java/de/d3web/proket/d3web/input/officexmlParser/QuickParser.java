@@ -1,4 +1,4 @@
-package de.d3web.proket.d3web.input.officexmlParser;
+/*package de.d3web.proket.d3web.input.officexmlParser;
 
 import de.d3web.proket.d3web.input.officexmlParser.ParserQuestion;
 import de.d3web.proket.d3web.input.officexmlParser.ParserQuestionManager;
@@ -21,7 +21,7 @@ public class QuickParser {
      * private static String parsedJuriXml =
      * "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/juriMietrechtT1.xml";
      */
-    private static String wordhtmlFinalOutput =
+ /*   private static String wordhtmlFinalOutput =
             "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/RNS_M1.html";
     private static String parsedJuriXml =
             "/Users/mafre/Promotion/Projects/2012JuriSearch/WordParsing/juriMietrechtT1_neu.xml";
@@ -36,13 +36,13 @@ public class QuickParser {
     /*
      * extract and write information from question "ERLÄUTERUNG" part
      */
-    public void extractQuestionInformations(String text, ParserQuestionManager qm,
+ /*   public void extractQuestionInformations(String text, ParserQuestionManager qm,
             String webappPrefix) {
 
         /*
          * preprocess PDF link definitions : replace with HTML representation
          */
-        if (text.contains("[LINK:")) {
+ /*       if (text.contains("[LINK:")) {
 
             // get the linked-doc name
             ArrayList pdfs = new ArrayList();
@@ -76,7 +76,7 @@ public class QuickParser {
         /*
          * preprocess LINKS to other WEBAPP parts
          */
-        if (text.contains("[WEBLINK:")) {
+  /*      if (text.contains("[WEBLINK:")) {
 
             // get the linked-doc name
             ArrayList links = new ArrayList();
@@ -151,7 +151,7 @@ public class QuickParser {
         for (Pair<String, Integer> p : l) {
             int depth = p.getLast();
             String content = p.getFirst();
-            System.out.println("Bearbeite Frage Nr " + count++ + " im Baum.");
+            //System.out.println("Bearbeite Frage Nr " + count++ + " im Baum.");
             ParserQuestion actQuestion = buildQuestion(content, qm);
             ParserQuestion q = stack.peek();
             if (q == null) {
@@ -301,3 +301,4 @@ public class QuickParser {
         }
     }
 }
+*/
