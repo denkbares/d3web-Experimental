@@ -193,7 +193,6 @@ public class ClarihieDialog extends D3webDialog {
             Question qFinal = d3webSession.getKnowledgeBase().getManager().searchQuestion(
                 qu == null ? q : qu);
             qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN, true);
-            System.out.println("HALLO: " + qFinal);
         }
     }
     

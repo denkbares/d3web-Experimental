@@ -242,7 +242,7 @@ public class ServletLogUtils {
     }
     
     public static void logUEFeedback(String feedbackString, String logtime, JSONLogger logger){
-         System.out.println(logger + " " + feedbackString + " " + logtime);
+         //System.out.println(logger + " " + feedbackString + " " + logtime);
          logger.logUEFeedback(feedbackString, logtime);
          logger.writeJSONToFile();
     }

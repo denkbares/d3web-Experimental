@@ -271,7 +271,7 @@ public class D3webDialog extends HttpServlet {
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
         
-        System.out.println(action);
+        //System.out.println(action);
         
         
         // TEST:
@@ -312,7 +312,7 @@ public class D3webDialog extends HttpServlet {
             return;
         } else if (action.equalsIgnoreCase(
                 "addfacts")) {
-            System.out.println("add Facts base");
+            //System.out.println("add Facts base");
             addFacts(request, response, httpSession);
             return;
         } else if (action.equalsIgnoreCase(

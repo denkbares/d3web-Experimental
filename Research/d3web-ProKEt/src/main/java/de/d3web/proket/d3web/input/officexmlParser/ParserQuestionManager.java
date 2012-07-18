@@ -1,4 +1,4 @@
-package de.d3web.proket.d3web.input.officexmlParser;
+/*package de.d3web.proket.d3web.input.officexmlParser;
 
 
 import java.util.HashSet;
@@ -99,4 +99,4 @@ public class ParserQuestionManager {
 	
 	
 }
-
+*/

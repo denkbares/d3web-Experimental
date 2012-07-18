@@ -92,7 +92,6 @@ import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.IDUtils;
 import java.util.*;
 import javax.servlet.http.HttpSession;
-import sun.org.mozilla.javascript.internal.Undefined;
 
 /**
  * Util methods for the binding of d3web to the ProKEt system.
@@ -786,177 +785,6 @@ public class D3webUtils {
         return false;
     }
 
-    /**
-     * Utility method for adding values. Adds a single value for a given
-     * question to the current knowledge base in the current problem solving
-     * session.
-     *
-     * @created 28.01.2011
-     *
-     * @param termObID The ID of the TerminologyObject, the value is to be
-     * added.
-     * @param valString The value, that is to be added for the TerminologyObject
-     * with ID valID.
-     */
-    public static void setValueOld(String termObID, String valString, Session sess) {
-
-        // TODO REFACTOR: can be removed, just provide ID without "q_"
-        // remove prefix, e.g. "q_" in "q_BMI"
-        termObID = IDUtils.removeNamspace(termObID);
-
-        Fact lastFact = null;
-        Blackboard blackboard = sess.getBlackboard();
-        Question to =
-                D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
-
-        // if TerminologyObject not found in the current KB return & do nothing
-        if (to == null) {
-            return;
-        }
-
-        // init Value object...
-        Value value = null;
-
-        // check if unknown option was chosen
-        if (valString.contains("unknown")) {
-
-            // remove a previously set value
-            lastFact = blackboard.getValueFact(to);
-            if (lastFact != null) {
-                blackboard.removeValueFact(lastFact);
-            }
-
-            // and add the unknown value
-            value = Unknown.getInstance();
-            Fact fact = FactFactory.createFact(sess, to, value,
-                    PSMethodUserSelected.getInstance(),
-                    PSMethodUserSelected.getInstance());
-            blackboard.addValueFact(fact);
-
-        } // otherwise, i.e., for all other "not-unknown" values
-        else {
-
-            // CHOICE questions
-            if (to instanceof QuestionChoice) {
-                if (to instanceof QuestionOC) {
-                    // valueString is the ID of the selected item
-                    try {
-                        valString = valString.replace("q_", "");
-                        value = KnowledgeBaseUtils.findValue(to, valString);
-                    } catch (NumberFormatException nfe) {
-                        // value still null, will not be set
-                    }
-                } else if (to instanceof QuestionMC) {
-
-                    if (valString.equals("")) {
-                        value = UndefinedValue.getInstance();
-                    } else {
-                        String[] choices = valString.split(",");
-                        List<Choice> cs = new ArrayList<Choice>();
-
-                        for (String c : choices) {
-                            cs.add(new Choice(c));
-                        }
-                        value = MultipleChoiceValue.fromChoices(cs);
-
-                    }
-                }
-            } // TEXT questions
-            else if (to instanceof QuestionText) {
-                String textPattern = to.getInfoStore().getValue(ProKEtProperties.TEXT_FORMAT);
-                Pattern p = null;
-                if (textPattern != null && !textPattern.isEmpty()) {
-                    try {
-                        p = Pattern.compile(textPattern);
-                    } catch (Exception e) {
-                    }
-                }
-                if (p != null) {
-                    Matcher m = p.matcher(valString);
-                    if (m.find()) {
-                        value = new TextValue(m.group());
-                    }
-                } else {
-                    value = new TextValue(valString);
-                }
-            } // NUM questions
-            else if (to instanceof QuestionNum) {
-                try {
-                    value = new NumValue(Double.parseDouble(valString));
-                } catch (NumberFormatException ex) {
-                    // value still null, will not be set
-                }
-            } // DATE questions
-            else if (to instanceof QuestionDate) {
-                String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
-                if (dateDescription != null && !dateDescription.isEmpty()) {
-                    String[] dateDescSplit = dateDescription.split("OR");
-                    for (String dateDesc : dateDescSplit) {
-                        dateDesc = dateDesc.trim();
-                        try {
-                            SimpleDateFormat dateFormat = new SimpleDateFormat(dateDesc);
-                            value = new DateValue(dateFormat.parse(valString));
-                        } catch (IllegalArgumentException e) {
-                            // value still null, will not be set
-                        } catch (java.text.ParseException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                        if (value != null) {
-                            break;
-                        }
-                    }
-                } else {
-                    try {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-                        value = new DateValue(dateFormat.parse(valString));
-                    } catch (java.text.ParseException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            // if reasonable value retrieved, set it for the given
-            // TerminologyObject
-            if (value != null) {
-
-                // remove previously set value
-                lastFact = blackboard.getValueFact(to);
-                if (lastFact != null) {
-                    blackboard.removeValueFact(lastFact);
-                }
-
-                if (UndefinedValue.isNotUndefinedValue(value)) {
-                    // add new value as UserEnteredFact
-                    Fact fact = FactFactory.createUserEnteredFact(to, value);
-                    blackboard.addValueFact(fact);
-                }
-            }
-        }
-
-        // TODO: CHECK whether we need both the resetNotIndicated and
-        // checkChildren methods
-
-        // check, that questions of all non-init and non-indicated
-        // questionnaires are reset, i.e., no value
-        for (QASet qaSet : D3webConnector.getInstance().getKb().getManager().getQContainers()) {
-            // find the appropriate qaset in the knowledge base
-
-            if (!D3webConnector.getInstance().getKb().getInitQuestions().contains(qaSet)
-                    && !qaSet.getName().equals("Q000")
-                    && (blackboard.getIndication(qaSet).getState() != de.d3web.core.knowledge.Indication.State.INDICATED
-                    && blackboard.getIndication(
-                    qaSet).getState() != de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED)) {
-
-                resetNotIndicatedTOs(qaSet, blackboard, sess);
-            }
-        }
-
-        // ensure, that follow-up questions are reset if parent-question doesn't
-        // indicate any more.
-        D3webUtils.resetFollowUpsIfParentUnknown(to, blackboard);
-    }
 
     /**
      * Utility method for resetting all children of a qcontainer or a question
@@ -1460,6 +1288,10 @@ public class D3webUtils {
                     Fact f2 = new DefaultFact(question, value, PSMethodJuri.getInstance(),
                             PSMethodJuri.getInstance());
                     blackboard.addValueFact(f2);
+                    System.out.println("SET FACT: " + f2.getTerminologyObject().getName() + " - " + f2.getValue());
+                    for(TerminologyObject to: blackboard.getValuedQuestions()){
+                        System.out.println("ON BB: " + to.getName() + " - " + blackboard.getValue((ValueObject)to));
+                    }
                 }
             }
         }
