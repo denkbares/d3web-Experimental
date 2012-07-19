@@ -1,5 +1,5 @@
 <div id="$fullId$"  class="unknown" >
-	<label>
+	
 		<table>
 			<tr>
 				<td width=*>
@@ -12,6 +12,6 @@
 				</td>
 			</tr>
 		</table>
-	</label>
+	
 </div>
 
