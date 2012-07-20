@@ -31,7 +31,7 @@
 		<parameter id="name" value="DecodeUrlNodeRenderer" />
 		<parameter id="description" value="NodeRenderer DecodeUrlNodeRenderer" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="2" />
+		<parameter id="priority" value="3" />
 	</extension>
 	
 	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
@@ -42,7 +42,7 @@
 		<parameter id="name" value="ArticleLinkNodeRenderer" />
 		<parameter id="description" value="NodeRenderer ArticleLinkNodeRenderer" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="3" />
+		<parameter id="priority" value="2" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
