@@ -1,12 +1,18 @@
 package de.knowwe.rdf2go.sparql;
 
-import de.knowwe.core.utils.Strings;
+import java.net.URLDecoder;
 
 public class DecodeUrlNodeRenderer implements SparqlResultNodeRenderer {
 
 	@Override
 	public String renderNode(String text, String variable) {
-		return Strings.decodeURL(text);
+		try {
+			return URLDecoder.decode(text, "UTF-8");
+
+		}
+		catch (Exception e) {
+			return text;
+		}
 	}
 
 	@Override

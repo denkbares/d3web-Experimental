@@ -36,6 +36,17 @@
 	
 	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
 			point-id="SparqlResultNodeRenderer"
+			id="ShrinkNodeRenderer">
+		<parameter id="class"
+			value="de.knowwe.rdf2go.sparql.ShrinkNodeRenderer" />
+		<parameter id="name" value="ShrinkNodeRenderer" />
+		<parameter id="description" value="NodeRenderer ShrinkNodeRenderer" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="1000" />
+	</extension>
+	
+	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
+			point-id="SparqlResultNodeRenderer"
 			id="ArticleLinkNodeRenderer">
 		<parameter id="class"
 			value="de.knowwe.rdf2go.sparql.ArticleLinkNodeRenderer" />

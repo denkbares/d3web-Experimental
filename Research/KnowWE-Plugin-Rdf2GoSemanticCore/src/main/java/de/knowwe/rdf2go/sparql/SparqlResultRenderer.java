@@ -109,7 +109,7 @@ public class SparqlResultRenderer {
 
 	public String renderNode(Node node, String var, boolean rawOutput) {
 		if (node == null) {
-			return null;
+			return "";
 		}
 		String rendered = node.toString();
 		if (!rawOutput) {
