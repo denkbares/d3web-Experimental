@@ -280,10 +280,13 @@ public class Rdf2GoCore implements EventListener {
 	 * @created 12.06.2012
 	 */
 	public void commit() {
-		boolean log = true;
+		int removeSize = removeCache.size();
+		int insertSize = insertCache.size();
+		boolean verboseLog = removeSize + insertSize < 50;
 
 		// For logging...
-		TreeSet<Statement> sortedRemoveCache = new TreeSet<Statement>(removeCache);
+		TreeSet<Statement> sortedRemoveCache = new TreeSet<Statement>();
+		if (verboseLog) sortedRemoveCache.addAll(removeCache);
 
 		// Hazard Filter:
 		// Since removing statements is expansive, we do not remove statements
@@ -295,15 +298,23 @@ public class Rdf2GoCore implements EventListener {
 		// Duplicate statements are ignored by the model anyway.
 		removeCache.removeAll(insertCache);
 
-		long start = System.currentTimeMillis();
+		long startRemove = System.currentTimeMillis();
 		model.removeAll(removeCache.iterator());
 		EventManager.getInstance().fireEvent(new RemoveStatementsEvent(removeCache));
-		if (log) logStatements(sortedRemoveCache, start, "Removed statements:\n");
+		if (verboseLog) logStatements(sortedRemoveCache, startRemove, "Removed statements:\n");
 
-		start = System.currentTimeMillis();
+		long startInsert = System.currentTimeMillis();
 		model.addAll(insertCache.iterator());
 		EventManager.getInstance().fireEvent(new InsertStatementsEvent(insertCache));
-		if (log) logStatements(new TreeSet<Statement>(insertCache), start, "Inserted statements:\n");
+		if (verboseLog) logStatements(new TreeSet<Statement>(insertCache), startInsert,
+				"Inserted statements:\n");
+
+		if (!verboseLog) Logger.getLogger(this.getClass().getName()).log(
+				Level.INFO,
+				"Removed " + removeSize + " statements from and added "
+						+ insertSize
+						+ " statements to " + Rdf2GoCore.class.getSimpleName() + " in "
+						+ (System.currentTimeMillis() - startRemove) + "ms.");
 
 		removeCache = new HashSet<Statement>();
 		insertCache = new HashSet<Statement>();
