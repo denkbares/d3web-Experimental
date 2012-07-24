@@ -25,6 +25,7 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.database.DateCoDec;
 import de.d3web.proket.output.container.ContainerCollection;
@@ -70,6 +71,7 @@ public class AnswerZCD3webRenderer extends AbstractD3webRenderer implements Answ
             st.setAttribute("fullId", getID(c));// .getName().replace(" ", "_"));
             st.setAttribute("realAnswerType", "oc");
             st.setAttribute("parentFullId", getID(to));// getName().replace(" ",
+            st.setAttribute("title", D3webUtils.getTOPrompt(to, loc));
             // "_"));
 
             // set the tooltip if exists

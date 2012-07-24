@@ -1426,6 +1426,14 @@ function toggleLanguage(el){
         langID = 5;
     } else if (id.indexOf("pl") != -1){
         langID = 6;
+    } else if (id.indexOf("nl") != -1){
+        langID = 7;
+    } else if (id.indexOf("sv") != -1){
+        langID = 8;
+    } else if (id.indexOf("pt") != -1){
+        langID = 9;
+    } else if (id.indexOf("braz") != -1){
+        langID = 10;
     }
      
     var link = $.query.set("action", "language").set("langID", langID);

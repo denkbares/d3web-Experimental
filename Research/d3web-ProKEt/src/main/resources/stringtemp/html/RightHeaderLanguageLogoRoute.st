@@ -1,8 +1,8 @@
 <table>
 	<tbody>
-	<tr>
-		 $LanguageSelectFlags()$
-	</tr>
+	 
+        $LanguageSelectFlags()$
+	
 	<tr>
 		<td colspan="6">$info$</td>
 	</tr>

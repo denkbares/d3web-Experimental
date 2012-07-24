@@ -772,11 +772,14 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
     }
 
-    protected String createDropDownOptions(String selectedValue, String... options) {
+    protected String createDropDownOptions(int loc, String selectedValue, String... options) {
         StringBuilder builder = new StringBuilder();
 
         for (String option : options) {
             option = option.trim();
+            if(option.equals("Please select...")){
+                option = D3webUtils.getDropdownDefaultPrompt(loc);
+            }
             builder.append("<option value='" + option + "'"
                     + (option.equals(selectedValue) ? "selected='selected'" : "")
                     + ">" + option

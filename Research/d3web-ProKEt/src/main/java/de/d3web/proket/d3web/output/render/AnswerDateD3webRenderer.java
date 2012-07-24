@@ -43,6 +43,7 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
+import java.util.*;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -112,7 +113,7 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
         String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
         boolean dateReverse = false;
 
-       // if date need to be reversed, date description contains a
+        // if date need to be reversed, date description contains a
         // :::reverse at the end (i.e. after the simple date format spec
         if (dateDescription != null && dateDescription.contains(":::reverse")) {
             dateReverse = true;
@@ -158,37 +159,37 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
         StringBuilder secondRow = new StringBuilder();
         table.append("<table style=\"width:0px\"><tr>");
         if (dateDescription.contains("d")) {
-            firstRow.append("<td>Day:</td>");
+            firstRow.append("<td>" + translateDropdownTitle("D", loc) + "</td>");
             secondRow.append(createDayDropDown(day));
         }
 
         if (dateDescription.contains("M")) {
-            firstRow.append("<td>Month:</td>");
+             firstRow.append("<td>" + translateDropdownTitle("M", loc) + "</td>");
             secondRow.append(createMonthDropDown(month));
         }
 
         if (dateDescription.contains("y")) {
             if (dateReverse) {
-                firstRow.append("<td>Year:</td>");
+                 firstRow.append("<td>" + translateDropdownTitle("Y", loc) + "</td>");
                 secondRow.append(createYearDropDownReverse(year));
             } else {
-                firstRow.append("<td>Year:</td>");
+                firstRow.append("<td>" + translateDropdownTitle("Y", loc) + "</td>");
                 secondRow.append(createYearDropDown(year));
             }
         }
 
         if (dateDescription.contains("H")) {
-            firstRow.append("<td>Hour:</td>");
+             firstRow.append("<td>" + translateDropdownTitle("H", loc) + "</td>");
             secondRow.append(createHourDropDown(hour));
         }
 
         if (dateDescription.contains("m")) {
-            firstRow.append("<td>Minute:</td>");
+             firstRow.append("<td>" + translateDropdownTitle("Min", loc) + "</td>");
             secondRow.append(createMinuteDropDown(minute));
         }
 
         if (dateDescription.contains("s")) {
-            firstRow.append("<td>Second:</td>");
+            firstRow.append("<td>" + translateDropdownTitle("S", loc) + "</td>");
             secondRow.append(createSecondDropDown(second));
         }
         table.append(firstRow);
@@ -203,6 +204,62 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
         super.makeTables(to, to, cc, sb);
 
         return sb.toString();
+    }
+
+    private String translateDropdownTitle(String titleID, int locIdent) {
+        String translated = "";
+
+        switch (locIdent) {
+            case 1: // german
+                if (titleID.equals("Y")) {
+                    translated = "Jahr:";
+                } else if (titleID.equals("M")) {
+                    translated = "Monat:";
+                } else if (titleID.equals("D")) {
+                    translated = "Tag:";
+                } else if (titleID.equals("H")) {
+                    translated = "Stunde:";
+                } else if (titleID.equals("Min")) {
+                    translated = "Minute:";
+                } else if (titleID.equals("S")) {
+                    translated = "Sekunde:";
+                }
+
+                break;
+            case 2: // english
+
+                break;
+            case 3: // spanish
+
+                break;
+            case 4: // italian
+
+                break;
+            case 5: // french
+
+                break;
+            case 6: // polish
+
+                break;
+        }
+        if (translated == "") {
+            if (titleID.equals("Y")) {
+                translated = "Year";
+            } else if (titleID.equals("M")) {
+                translated = "Month";
+            } else if (titleID.equals("D")) {
+                translated = "Day";
+            } else if (titleID.equals("H")) {
+                translated = "Hour";
+            } else if (titleID.equals("M")) {
+                translated = "Minute";
+            } else if (titleID.equals("S")) {
+                translated = "Second";
+            }
+        }
+
+        // emergency fallback
+        return translated;
     }
 
     private String createYearDropDownReverse(String selectedValue) {

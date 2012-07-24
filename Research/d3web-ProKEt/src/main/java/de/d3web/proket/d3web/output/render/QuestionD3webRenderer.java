@@ -84,7 +84,9 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
         st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
         // read html popups from properties
-        String resString = to.getInfoStore().getValue(ProKEtProperties.POPUP);
+        // String resString = to.getInfoStore().getValue(ProKEtProperties.POPUP);
+        String resString = D3webUtils.getPopupPrompt(to, loc);
+        
         if (resString != null) {
             st.setAttribute("tooltip", resString);
         }

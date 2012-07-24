@@ -19,7 +19,6 @@
  */
 package de.d3web.proket.d3web.input;
 
-import de.d3web.core.inference.KnowledgeKind;
 import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.RuleSet;
@@ -61,6 +60,7 @@ import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.manage.KnowledgeBaseUtils;
+import de.d3web.core.session.DefaultSession;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.SessionFactory;
 import de.d3web.core.session.Value;
@@ -78,7 +78,6 @@ import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.indication.ActionIndication;
 import de.d3web.indication.ActionInstantIndication;
-import de.d3web.indication.inference.PSMethodStrategic;
 import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.jurisearch.PSMethodJuri;
 import de.d3web.plugin.JPFPluginManager;
@@ -89,7 +88,6 @@ import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.data.DialogType;
 import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
-import de.d3web.proket.utils.IDUtils;
 import java.util.*;
 import javax.servlet.http.HttpSession;
 
@@ -104,6 +102,12 @@ public class D3webUtils {
     public static final String NOSTRING = "nein";
     public static final String MAYBESTRING = "vielleicht";
     public static final String RETRACTSTRING = "retract";
+    public static final Locale SPANISH = new Locale("es", "ES");
+    public static final Locale POLISH = new Locale("pl", "PL");
+    public static final Locale DUTCH = new Locale("nl", "NL");
+    public static final Locale SWEDISH = new Locale("sv", "SV");
+    public static final Locale PORTUGUESE = new Locale("pt", "PT");
+    public static final Locale BRAZILIAN = new Locale("braz", "BRAZ");
 
     /**
      * Create a d3web session with a given knowledge base. Per default creates a
@@ -126,7 +130,7 @@ public class D3webUtils {
      * @param dt the Dialog Type
      * @return A new D3webSession with the KnowledgeBase associated.
      */
-    public static Session createSession(KnowledgeBase kb, DialogStrategy ds) {
+    public static DefaultSession createSession(KnowledgeBase kb, DialogStrategy ds) {
 
         // if DialogType given
         if (ds != null) {
@@ -785,7 +789,6 @@ public class D3webUtils {
         return false;
     }
 
-
     /**
      * Utility method for resetting all children of a qcontainer or a question
      * that is not indicated (any more).
@@ -829,12 +832,12 @@ public class D3webUtils {
     }
 
     /**
-     * Retrieve a language specific prompt text for a TerminologyObject. If no
-     * language was specified, return the name of the TerminologyObject via
+     * Retrieve a language specific popupPrompt text for a TerminologyObject. If
+     * no language was specified, return the name of the TerminologyObject via
      * getName().
      *
-     * @param to the TerminologyObject the prompt is needed for.
-     * @return the prompt or the name repsectively.
+     * @param to the TerminologyObject the popupPrompt is needed for.
+     * @return the popupPrompt or the name repsectively.
      */
     public static String getTOPrompt(TerminologyObject to, int locIdent) {
 
@@ -846,18 +849,14 @@ public class D3webUtils {
             case 1: // german
                 prompt =
                         to.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN);
-
                 break;
             case 2: // english
                 prompt =
                         to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
-
                 break;
             case 3: // spanish
-                Locale SPANISH = new Locale("es", "ES");
                 prompt =
                         to.getInfoStore().getValue(MMInfo.PROMPT, SPANISH);
-
                 break;
             case 4: // italian
                 prompt =
@@ -868,13 +867,29 @@ public class D3webUtils {
                         to.getInfoStore().getValue(MMInfo.PROMPT, Locale.FRENCH);
                 break;
             case 6: // polish
-                Locale POLISH = new Locale("pl", "PL");
                 prompt =
                         to.getInfoStore().getValue(MMInfo.PROMPT, POLISH);
                 break;
+            case 7: // dutch
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, DUTCH);
+                break;
+            case 8: // swedish
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, SWEDISH);
+                break;
+            case 9: // portuguese
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, PORTUGUESE);
+                break;
+            case 10: // brazilian
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, BRAZILIAN);
+                break;
+
         }
 
-        // default fallback solution: prompt in english
+        // default fallback solution: popupPrompt in english
         if (prompt == null) {
             prompt = to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
         }
@@ -885,12 +900,120 @@ public class D3webUtils {
     }
 
     /**
-     * Retrieve a language specific prompt text for a TerminologyObject
+     * Get the language-specific translation of the popup texts.
+     *
+     * @param to the Terminology Object the popup is displayed for
+     * @param locIdent the locale identifier
+     * @return the localized popup prompt
+     */
+    public static String getPopupPrompt(TerminologyObject to, int locIdent) {
+
+        String popupPrompt = null;
+
+        switch (locIdent) {
+            case 1: // german
+                popupPrompt =
+                        to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.GERMAN);
+                break;
+            case 2: // english
+                popupPrompt =
+                        to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ENGLISH);
+                break;
+            case 3: // spanish
+                popupPrompt =
+                        to.getInfoStore().getValue(ProKEtProperties.POPUP, SPANISH);
+                break;
+            case 4: // italian
+                popupPrompt =
+                        to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ITALIAN);
+                break;
+            case 5: // french
+                popupPrompt =
+                        to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.FRENCH);
+                break;
+            case 6: // polish
+                popupPrompt =
+                        to.getInfoStore().getValue(ProKEtProperties.POPUP, POLISH);
+                break;
+            case 7: // dutch
+                popupPrompt =
+                        to.getInfoStore().getValue(ProKEtProperties.POPUP, DUTCH);
+                break;
+            case 8: // swedish
+                popupPrompt =
+                        to.getInfoStore().getValue(ProKEtProperties.POPUP, SWEDISH);
+                break;
+            case 9: // portuguese
+                popupPrompt =
+                        to.getInfoStore().getValue(ProKEtProperties.POPUP, PORTUGUESE);
+                break;
+            case 10: // brazilian
+                popupPrompt =
+                        to.getInfoStore().getValue(ProKEtProperties.POPUP, BRAZILIAN);
+                break;
+        }
+
+        // default fallback solution: popupPrompt in english
+        if (popupPrompt == null) {
+            popupPrompt = to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ENGLISH);
+        }
+
+        // emergency fallback: getName() if no locale specific and no default
+        // english was given
+        return popupPrompt == null ? to.getInfoStore().getValue(ProKEtProperties.POPUP) : popupPrompt;
+    }
+
+    public static String getDropdownDefaultPrompt(int locIdent) {
+        String prompt = null;
+        switch (locIdent) {
+            case 1: // german
+                prompt = "Bitte auswählen...";
+                break;
+            case 2: // english
+                prompt = "Please select...";
+                break;
+            case 3: // spanish
+                prompt = "";
+                break;
+            case 4: // italian
+                prompt = "";
+                break;
+            case 5: // french
+                prompt = "";
+                break;
+            case 6: // polish
+                prompt = "";
+                break;
+            case 7: // dutch
+                prompt = "";
+                break;
+            case 8: // swedish
+                prompt = "";
+                break;
+            case 9: // portuguese
+                prompt = "";
+                break;
+            case 10: // brazilian
+                prompt = "";
+                break;
+        }
+
+        // default fallback solution: popupPrompt in english
+        if (prompt == null) {
+            prompt = "Please select...";
+        }
+
+        // default popupPrompt = getName() if no locale specific was given
+        return prompt;
+    }
+
+    /**
+     * Retrieve a language specific popupPrompt text for a TerminologyObject
      * (Answer). If no language was specified, return the name of the
      * TerminologyObject via getName().
      *
-     * @param to the TerminologyObject the prompt is needed for.
-     * @return the prompt or the name repsectively.
+     * @param to the TerminologyObject the popupPrompt is needed for.
+     * @return the popupPrompt or the name repsectively.
      */
     public static String getAnswerPrompt(TerminologyObject to,
             Choice c, int locIdent) {
@@ -907,18 +1030,14 @@ public class D3webUtils {
             case 1: // german
                 prompt =
                         c.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN);
-
                 break;
             case 2: // english
                 prompt =
                         c.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
-
                 break;
             case 3: // spanish
-                Locale SPANISH = new Locale("es", "ES");
                 prompt =
                         c.getInfoStore().getValue(MMInfo.PROMPT, SPANISH);
-
                 break;
             case 4: // italian
                 prompt =
@@ -929,18 +1048,33 @@ public class D3webUtils {
                         c.getInfoStore().getValue(MMInfo.PROMPT, Locale.FRENCH);
                 break;
             case 6: // polish
-                Locale POLISH = new Locale("pl", "PL");
                 prompt =
                         c.getInfoStore().getValue(MMInfo.PROMPT, POLISH);
                 break;
+            case 7: // dutch
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, DUTCH);
+                break;
+            case 8: // swedish
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, SWEDISH);
+                break;
+            case 9: // portuguese
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, PORTUGUESE);
+                break;
+            case 10: // brazilian
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, BRAZILIAN);
+                break;
         }
 
-        // default fallback solution: prompt in english
+        // default fallback solution: popupPrompt in english
         if (prompt == null) {
             prompt = to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
         }
 
-        // default prompt = getName() if no locale specific was given
+        // default popupPrompt = getName() if no locale specific was given
         return prompt == null ? c.getName() : prompt;
     }
 
@@ -950,8 +1084,10 @@ public class D3webUtils {
      * YN-options in multiple languages via markup.
      *
      * @param c the Choice, i.e. Yes or No
-     * @return the String representation of the answer prompt in the respective
-     * language.
+     * @return the String representation of the answer popupPrompt in the
+     * respective language.
+     *
+     * TODO: NEEDED? WE CAN do that via knowledge base -> Check
      */
     private static String getAnswerYNPrompt(Choice c, int locIdent) {
 
@@ -980,9 +1116,21 @@ public class D3webUtils {
                 case 6: // polish
                     prompt = "Tak";
                     break;
+                case 7: // dutch
+                    prompt = "";
+                    break;
+                case 8: // swedish
+                    prompt = "";
+                    break;
+                case 9: // portuguese
+                    prompt = "";
+                    break;
+                case 10: // brazilian
+                    prompt = "";
+                    break;
             }
 
-            // default fallback solution: prompt in english
+            // default fallback solution: popupPrompt in english
             if (prompt == null) {
                 prompt = "Yes";
             }
@@ -1008,24 +1156,36 @@ public class D3webUtils {
                 case 6: // polish
                     prompt = "Nie";
                     break;
+                case 7: // dutch
+                    prompt = "";
+                    break;
+                case 8: // swedish
+                    prompt = "";
+                    break;
+                case 9: // portuguese
+                    prompt = "";
+                    break;
+                case 10: // brazilian
+                    prompt = "";
+                    break;
             }
 
-            // default fallback solution: prompt in english
+            // default fallback solution: popupPrompt in english
             if (prompt == null) {
                 prompt = "No";
             }
         }
 
-        // default prompt = getName() if no locale specific was given
+        // default popupPrompt = getName() if no locale specific was given
         return prompt == null ? c.getName() : prompt;
     }
 
     /**
-     * Retrieve a language specific prompt text for the Unknown Choice. If no
-     * language was specified, return "unknown" as default promp.
+     * Retrieve a language specific popupPrompt text for the Unknown Choice. If
+     * no language was specified, return "unknown" as default promp.
      *
-     * @param to the TerminologyObject the prompt is needed for.
-     * @return the prompt or the name repsectively.
+     * @param to the TerminologyObject the popupPrompt is needed for.
+     * @return the popupPrompt or the name repsectively.
      */
     public static String getUnknownPrompt(int locIdent) {
 
@@ -1048,7 +1208,6 @@ public class D3webUtils {
                         MMInfo.UNKNOWN_VERBALISATION, Locale.ENGLISH);
                 break;
             case 3: // spanish
-                Locale SPANISH = new Locale("es", "ES");
                 prompt =
                         d3wcon.getKb().getInfoStore().getValue(
                         MMInfo.UNKNOWN_VERBALISATION, SPANISH);
@@ -1064,21 +1223,45 @@ public class D3webUtils {
                         MMInfo.UNKNOWN_VERBALISATION, Locale.FRENCH);
                 break;
             case 6: // polish
-                Locale POLISH = new Locale("pl", "PL");
                 prompt =
                         d3wcon.getKb().getInfoStore().getValue(
                         MMInfo.UNKNOWN_VERBALISATION, POLISH);
                 break;
+            case 7: // dutch
+                prompt =
+                        d3wcon.getKb().getInfoStore().getValue(
+                        MMInfo.UNKNOWN_VERBALISATION, DUTCH);
+                break;
+            case 8: // swedish
+                prompt =
+                        d3wcon.getKb().getInfoStore().getValue(
+                        MMInfo.UNKNOWN_VERBALISATION, SWEDISH);
+                break;
+            case 9: // portuguese
+                prompt =
+                        d3wcon.getKb().getInfoStore().getValue(
+                        MMInfo.UNKNOWN_VERBALISATION, PORTUGUESE);
+                break;
+            case 10: // brazilian
+                prompt =
+                        d3wcon.getKb().getInfoStore().getValue(
+                        MMInfo.UNKNOWN_VERBALISATION, BRAZILIAN);
+                break;
         }
 
-        // default prompt = unknown if no locale specific prompt was given
+        // default popupPrompt = unknown if no locale specific popupPrompt was given
         return prompt == null ? defaultPrompt : prompt;
     }
 
+    /**
+     * Maps an integer value to the respective Locale for multilingualism
+     * 1-de 2-en 3-es 4-it 5-fr 6-pl 7-nl 8-sv 9-pt 10-braz
+     *
+     * @param locIdent integer value
+     * @return the Locale
+     */
     public static Locale getCurrentLocale(int locIdent) {
 
-        //int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
-        //int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
         Locale loc = Locale.getDefault();
 
         switch (locIdent) {
@@ -1089,7 +1272,7 @@ public class D3webUtils {
                 loc = Locale.ENGLISH;
                 break;
             case 3: // spanish
-                loc = new Locale("es", "ES");
+                loc = SPANISH;
                 break;
             case 4: // italian
                 loc = Locale.ITALIAN;
@@ -1098,11 +1281,23 @@ public class D3webUtils {
                 loc = Locale.FRENCH;
                 break;
             case 6: // polish
-                loc = new Locale("pl", "PL");
+                loc = POLISH;
+                break;
+            case 7: // dutch
+                loc = DUTCH;
+                break;
+            case 8: // swedish
+                loc = SWEDISH;
+                break;
+            case 9: // portuguese
+                loc = PORTUGUESE;
+                break;
+            case 10: // brazilian
+                loc = BRAZILIAN;
                 break;
         }
 
-        // default prompt = unknown if no locale specific prompt was given
+        // default popupPrompt = unknown if no locale specific popupPrompt was given
         return loc;
     }
 
@@ -1284,14 +1479,10 @@ public class D3webUtils {
             if (value != null) {
 
                 if (UndefinedValue.isNotUndefinedValue(value)) {
+
                     // add new value as UserEnteredFact
-                    Fact f2 = new DefaultFact(question, value, PSMethodJuri.getInstance(),
-                            PSMethodJuri.getInstance());
+                    Fact f2 = FactFactory.createUserEnteredFact(question, value);
                     blackboard.addValueFact(f2);
-                    System.out.println("SET FACT: " + f2.getTerminologyObject().getName() + " - " + f2.getValue());
-                    for(TerminologyObject to: blackboard.getValuedQuestions()){
-                        System.out.println("ON BB: " + to.getName() + " - " + blackboard.getValue((ValueObject)to));
-                    }
                 }
             }
         }

@@ -106,7 +106,7 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
             //		+ createDropDownOptionsWithDefault(dropdownDefault, value.toString(),
             //				dropdownMenuOptions.split(",")) + "<select/>";
             String dropdownMenu = "<select  type='textselect'>"
-                    + createDropDownOptions(value.toString(),
+                    + createDropDownOptions(loc, value.toString(),
                     dropdownMenuOptions.split(",")) + "<select/>";
             st.setAttribute(
                     "dropdown_menu", dropdownMenu);

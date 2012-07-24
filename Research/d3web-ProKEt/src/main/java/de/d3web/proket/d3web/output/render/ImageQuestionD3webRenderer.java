@@ -76,7 +76,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 
 		// set some basic properties
 		st.setAttribute("fullId", getID(to));
-		st.setAttribute("title", to.getName());
+		st.setAttribute("title", D3webUtils.getTOPrompt(to, loc));
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
 		// TODO extend for HERNIA
