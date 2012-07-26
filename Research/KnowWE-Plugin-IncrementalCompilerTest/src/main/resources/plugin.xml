@@ -50,4 +50,16 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Terminology"
+		id="SubclassOfTerminologyExtension">
+		<parameter id="class"
+			value="de.knowwe.compile.test.SubclassOfTerminologyExtension" />
+		<parameter id="name" value="SubclassOfTerminologyExtension" />
+		<parameter id="description"
+			value="Introduce SubclassOf" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+
+	</extension>
+	
 </plugin>
