@@ -39,6 +39,7 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
+import de.d3web.proket.d3web.input.D3webUserSettings;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.output.render.EuraHSDefaultRootD3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
@@ -109,10 +110,13 @@ public class EuraHSDialog extends D3webDialog {
 
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
-        Session sNew = initDropdownChoiceQuestions(d3webSess);
+        D3webUserSettings us = (D3webUserSettings) httpSession.getAttribute(USER_SETTINGS);
+        int loc = us.getLanguageId();
+       
+        Session sNew = initDropdownChoiceQuestions(d3webSess, loc);
         httpSession.setAttribute(D3WEB_SESSION, sNew);
         httpSession.setAttribute("initsetquestions", INITDROPQS);
-       
+
 
         // get the root renderer --> call getRenderer with null
         EuraHSDefaultRootD3webRenderer d3webr = (EuraHSDefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
@@ -240,16 +244,43 @@ public class EuraHSDialog extends D3webDialog {
         }
     }
 
-    private static Session initDropdownChoiceQuestions(Session d3webSess) {
+    private static Session initDropdownChoiceQuestions(Session d3webSess, int loc) {
 
         for (String iddq : INITDROPQS) {
 
             Fact f = d3webSess.getBlackboard().getValueFact(
                     d3webSess.getKnowledgeBase().getManager().searchQuestion(iddq));
             if (f == null) {
-                D3webUtils.setValue(iddq, "Please select...", d3webSess);
+
+                String selectChoicePrompt = null;
+                System.out.println("LOCALE:" + loc);
+                switch (loc) {
+                    case 1: // german
+                        selectChoicePrompt = "Bitte auswählen...";
+                        break;
+                    case 2: // english
+                        selectChoicePrompt = "Please select...";
+                        break;
+                    case 3: // spanish
+                        selectChoicePrompt = "";
+                        break;
+                    case 4: // italian
+                        selectChoicePrompt = "";
+                        break;
+                    case 5: // french
+                        selectChoicePrompt = "";
+                        break;
+                    case 6: // polish
+                        selectChoicePrompt = "";
+                        break;
+                }
+                
+                if(selectChoicePrompt == null){
+                    selectChoicePrompt = "Please select...";
+                }
+                D3webUtils.setValue(iddq, selectChoicePrompt, d3webSess);
             }
-            
+
         }
 
         return d3webSess;
