@@ -73,7 +73,7 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
     public static final Value UNKNOWN_VALUE = Unknown.getInstance();
     private QuestionOC parent;
     private HashMap<QuestionOC, List<Value>> children;
-    private ArrayList<Value> allValuesOfParent;
+    //private ArrayList<Value> allValuesOfParent;
     // corresponds to OR-type! Default type is conjunction (AND)
     private boolean disjunctive;
 
@@ -245,110 +245,60 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
      * the knowledge base
      */
     public Fact fire(Session session) {
-
-        allValuesOfParent = new ArrayList<Value>();
+    	int nrOfYesAnswers = 0;
+    	int nrOfNoAnswers = 0;
+    	int nrOfMaybeAnswers = 0;
 
         // run over all children of the rule, and store the value of each of them
-        for (Entry<QuestionOC, List<Value>> child : children.entrySet()) {
+        for (QuestionOC child : children.keySet()) {
             ChoiceValue value = null;
             // get the value for this child from the blackboard
-            if (session.getBlackboard().getAnsweredQuestions().contains(child.getKey())) {
+            if (session.getBlackboard().getAnsweredQuestions().contains(child)) {
 
-                if (session.getBlackboard().getValue(child.getKey()) != null
-                        && UndefinedValue.isNotUndefinedValue(session.getBlackboard().getValue(child.getKey()))) {
-                    value = (ChoiceValue) session.getBlackboard().getValue(child.getKey());
+                if (session.getBlackboard().getValue(child) != null
+                        && UndefinedValue.isNotUndefinedValue(session.getBlackboard().getValue(child))) {
+                    value = (ChoiceValue) session.getBlackboard().getValue(child);
 
                     // if there is a value - apart from undefined or unknown - store it as is
-                    allValuesOfParent.add(value);
+                    if (YES_VALUE.equals(value)) nrOfYesAnswers++;
+                    if (NO_VALUE.equals(value)) nrOfNoAnswers++;
+                    if (MAYBE_VALUE.equals(value)) nrOfMaybeAnswers++;
                 } else {
-
                     // otherwise, i.e. for undefined or unknown, store UNKNOWN value
-                    allValuesOfParent.add(UNKNOWN_VALUE);
+                    nrOfMaybeAnswers++;
                 }
             }
         }
-
-        /*
-         * AND connection evaluation
-         */
-        if (!disjunctive) {
-
-            // one val yes, no val unknown, no val maybe, no val no -> parent yes
-            if (allValuesOfParent.contains(YES_VALUE)
-                    && !(allValuesOfParent.contains(UNKNOWN_VALUE))
-                    && !(allValuesOfParent.contains(MAYBE_VALUE))
-                    && !(allValuesOfParent.contains(NO_VALUE))) {
-                return createFact(session, YES_VALUE);
-            } // one value maybe, no value no -> parent maybe
-            else if (allValuesOfParent.contains(MAYBE_VALUE)
-                    && !(allValuesOfParent.contains(NO_VALUE))) {
-                return createFact(session, MAYBE_VALUE);
-            } // one value no --> parent no
-            else if (allValuesOfParent.contains(NO_VALUE)) {
-                return createFact(session, NO_VALUE);
-            } // otherwise no value set for parent
-            else {
-                return null;
-            }
-        } /*
-         * OR connection evaluation
-         */ else {
-
-            // one val yes --> parent yes
-            if (allValuesOfParent.contains(YES_VALUE)) {
-                return createFact(session, YES_VALUE);
-            } // one val maybe, no unknown, no yes contained --> parent maybe
-            else if (allValuesOfParent.contains(MAYBE_VALUE)
-                    && !(allValuesOfParent.contains(UNKNOWN_VALUE))
-                    && !(allValuesOfParent.contains(YES_VALUE))) {
-                return createFact(session, MAYBE_VALUE);
-            } // one val no, no unknown, no yes, no maybe -> parent no
-            else if (allValuesOfParent.contains(NO_VALUE)
-                    && !(allValuesOfParent.contains(MAYBE_VALUE))
-                    && !(allValuesOfParent.contains(YES_VALUE))
-                    && !(allValuesOfParent.contains(UNKNOWN_VALUE))) {
-                return createFact(session, NO_VALUE);
-            } // otherwise: no fact needs to be set
-            else {
-                return null;
-            }
-        }
-
-
-        /*
-         * THE OLD STUFF, remove if new stuff works fine <br>
-         *
-         * if (value != null) { // find out, if the value equals one of the //
-         * specified confirming values boolean oneOfConfirmingValues = false;
-         * for (ChoiceValue confirmingValue : child.getValue()) { if
-         * (value.equals(confirmingValue)) { oneOfConfirmingValues = true; } }
-         *
-         * // if it is a AND question if (!disjunctive) {
-         *
-         * if (!oneOfConfirmingValues) { return createFact(session, NO_VALUE); }
-         *
-         * } else { // directly set parent to "yes" if the rule is disjunctive
-         * // and has at least one child, which is set to a confirming // value.
-         * if (oneOfConfirmingValues) { return createFact(session, YES_VALUE); }
-         * }
-         *
-         * // set the maybe flag, if one child is set to the maybe value. if
-         * (value.equals(MAYBE_VALUE)) { maybe = true; } } else { if
-         * (!disjunctive) { // if a child question is not jet answered and the
-         * rule is // not disjunctive, no new fact is returned (return null)
-         * return null; } } }
-         *
-         * // if the for-loop is passed, there are four cases: if (maybe) { //
-         * matches two cases: // 1. the rule is not disjunctive and all child
-         * question values are // "maybe" or "yes" // 2. the rule is disjunctive
-         * and all child question values are // "maybe" or "no" return
-         * createFact(session, MAYBE_VALUE); } if (!disjunctive) { // the rule
-         * is not disjunctive and all child question values are // "yes" return
-         * createFact(session, YES_VALUE); } else { // the rule is disjunctive
-         * and all child question values are "no" return createFact(session,
-         * NO_VALUE); }
-         */
+        return determineFiringValue(nrOfYesAnswers, nrOfNoAnswers, nrOfMaybeAnswers, session);
     }
+        
+        
+    private Fact determineFiringValue(int nrOfYesAnswers, int nrOfNoAnswers, 
+    		int nrOfMaybeAnswers, Session session) {
+        if (!disjunctive) { // this is an AND-rule
+        	if (nrOfNoAnswers > 0) {
+        		return createFact(session, NO_VALUE);
+        	} else { // no "no"-answers here
+        		if (nrOfMaybeAnswers > 0) {
+        			return createFact(session, MAYBE_VALUE);
+        		} else if (nrOfYesAnswers > 0) { // all remaining answers must be yes-answers
+            		return createFact(session, YES_VALUE);
+        		}
+        	}
+        } else { // this is an OR-rule
+        	if (nrOfYesAnswers > 0) {
+        		return createFact(session, YES_VALUE);
+        	} else { // no "yes" answers here
+        		if (nrOfMaybeAnswers > 0) {
+        			return createFact(session, MAYBE_VALUE);
+        		} else if (nrOfNoAnswers > 0) { // all remaining answers must be no-answers
+            		return createFact(session, NO_VALUE);
+        		}
+        	}
+        }    	
+    	return null; // cannot happen
+    }
+    
 
     /**
      * Utility method for creating the d3web facts; thereby, the PSMethodJuri
