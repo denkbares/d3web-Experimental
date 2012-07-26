@@ -22,20 +22,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
 
-import de.d3web.core.inference.KnowledgeKind;
 import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
+import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
-import java.util.*;
 
 /**
  * This class represents a tailored rule type for the hierarchical
@@ -61,9 +59,6 @@ import java.util.*;
  */
 public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 
-    /*
-     * some common values
-     */
     public static final Choice YES = new Choice("ja");
     public static final Choice NO = new Choice("nein");
     public static final Choice MAYBE = new Choice("vielleicht");
@@ -71,15 +66,13 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
     public static final Value NO_VALUE = new ChoiceValue(NO);
     public static final Value MAYBE_VALUE = new ChoiceValue(MAYBE);
     public static final Value UNKNOWN_VALUE = Unknown.getInstance();
+    
     private QuestionOC parent;
     private HashMap<QuestionOC, List<Value>> children;
-    //private ArrayList<Value> allValuesOfParent;
     // corresponds to OR-type! Default type is conjunction (AND)
     private boolean disjunctive;
 
-    /*
-     * some constructors...
-     */
+    
     public JuriRule(QuestionOC father) {
         this(father, new HashMap<QuestionOC, List<Value>>());
     }
@@ -249,32 +242,25 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
     	int nrOfNoAnswers = 0;
     	int nrOfMaybeAnswers = 0;
 
-        // run over all children of the rule, and store the value of each of them
+    	// count the number of the respective answer types
         for (QuestionOC child : children.keySet()) {
-            ChoiceValue value = null;
-            // get the value for this child from the blackboard
-            if (session.getBlackboard().getAnsweredQuestions().contains(child)) {
-
-                if (session.getBlackboard().getValue(child) != null
-                        && UndefinedValue.isNotUndefinedValue(session.getBlackboard().getValue(child))) {
-                    value = (ChoiceValue) session.getBlackboard().getValue(child);
-
-                    // if there is a value - apart from undefined or unknown - store it as is
-                    if (YES_VALUE.equals(value)) nrOfYesAnswers++;
-                    if (NO_VALUE.equals(value)) nrOfNoAnswers++;
-                    if (MAYBE_VALUE.equals(value)) nrOfMaybeAnswers++;
+            Blackboard bb = session.getBlackboard();
+            if (bb.getAnsweredQuestions().contains(child)) {
+            	Value v = bb.getValue(child); 
+                if (v != null && UndefinedValue.isNotUndefinedValue(v)) {
+                    if (YES_VALUE.equals(v)) nrOfYesAnswers++;
+                    if (NO_VALUE.equals(v)) nrOfNoAnswers++;
+                    if (MAYBE_VALUE.equals(v)) nrOfMaybeAnswers++;
                 } else {
-                    // otherwise, i.e. for undefined or unknown, store UNKNOWN value
                     nrOfMaybeAnswers++;
                 }
             }
         }
-        return determineFiringValue(nrOfYesAnswers, nrOfNoAnswers, nrOfMaybeAnswers, session);
+        return getFiringVal(nrOfYesAnswers, nrOfNoAnswers, nrOfMaybeAnswers, session);
     }
         
         
-    private Fact determineFiringValue(int nrOfYesAnswers, int nrOfNoAnswers, 
-    		int nrOfMaybeAnswers, Session session) {
+    private Fact getFiringVal(int nrOfYesAnswers, int nrOfNoAnswers, int nrOfMaybeAnswers, Session session) {
         if (!disjunctive) { // this is an AND-rule
         	if (nrOfNoAnswers > 0) {
         		return createFact(session, NO_VALUE);
@@ -296,7 +282,7 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
         		}
         	}
         }    	
-    	return null; // cannot happen
+    	return null; // should not happen 
     }
     
 
@@ -326,35 +312,18 @@ public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
+    	if (obj instanceof JuriRule) {
+            JuriRule other = (JuriRule) obj;
+    		if (disjunctive != other.disjunctive) return false;
+            if (parent == null) {
+                if (other.parent != null) return false;
+            } else if (!parent.equals(other.parent)) return false;
+            if (!children.equals(other.children)) return false;
             return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        JuriRule other = (JuriRule) obj;
-        if (children == null) {
-            if (other.children != null) {
-                return false;
-            }
-        } else if (!children.equals(other.children)) {
-            return false;
-        }
-        if (disjunctive != other.disjunctive) {
-            return false;
-        }
-        if (parent == null) {
-            if (other.parent != null) {
-                return false;
-            }
-        } else if (!parent.equals(other.parent)) {
-            return false;
-        }
-        return true;
+    	} 
+    	return false;
     }
+    
 
     @Override
     public String toString() {
