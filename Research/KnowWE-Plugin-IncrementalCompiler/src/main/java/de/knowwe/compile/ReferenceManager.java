@@ -94,8 +94,15 @@ public class ReferenceManager {
 	 * @created 10.06.2011
 	 * @param s
 	 */
-	public void addPredefinedObject(Section<?> s) {
-		validPredefinedObjects.put(KnowWEUtils.getTermIdentifier(s), s);
+	public void addPredefinedObject(Section<? extends SimpleDefinition> s) {
+		
+		TermIdentifier termIdentifier = KnowWEUtils.getTermIdentifier(s);
+		if(validPredefinedObjects.containsKey(termIdentifier)) {
+			throw new IllegalArgumentException("Term is already registered as predefined term. Check plugin configuration: "+termIdentifier.toString());
+		} else {
+			validPredefinedObjects.put(termIdentifier, s);
+			registerTermDefinition(s);
+		}
 	}
 
 	public boolean isPredefinedObject(TermIdentifier termIdentifer) {

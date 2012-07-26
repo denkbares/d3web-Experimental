@@ -88,20 +88,6 @@ public class IncrementalCompiler implements EventListener {
 
 		this.hazardFilter = new EqualStringHazardFilter();
 
-		/*
-		 * This term is for the tests only TODO: remove when tests are adapted
-		 */
-		Section<PreDefinedTerm> subclassDef =
-				Section.createSection("subclassof",
-						new PreDefinedTerm(), null);
-		terminology.addPredefinedObject(subclassDef);
-		terminology.registerTermDefinition(subclassDef);
-		/*
-		 * END term for testing
-		 */
-
-		// extension point for plugins defining predefined terminology
-
 		// extension point for plugins defining predefined terminology
 		Extension[] exts = PluginManager.getInstance().getExtensions(
 				Plugins.EXTENDED_PLUGIN_ID,
@@ -156,14 +142,7 @@ public class IncrementalCompiler implements EventListener {
 					Section.createSection(string,
 							new PreDefinedTerm(), null);
 			terminology.addPredefinedObject(predefinedTermname);
-			terminology.registerTermDefinition(predefinedTermname);
 		}
-
-		// Section<PreDefinedTerm> subclassDef =
-		// Section.createSection("subclassof",
-		// new PreDefinedTerm(), null);
-		// terminology.addPredefinedObject(subclassDef);
-		// terminology.registerTermDefinition(subclassDef);
 
 	}
 
