@@ -12,19 +12,19 @@
             </div>
         </img>
             
-            <div id="ynYes-$fullId$" class="ynbutton $ratingY$ $fullId$-tt-trigger-ynbutton" onclick="handleOQYNQuestions('ynYes-$fullId$', '$ratingNrY$')">
+            <div id="ynYes-$fullId$" class="ynbutton $ratingY$ $fullId$-tt-trigger-ynbutton" onclick="handleITreeYNQuestions('ynYes-$fullId$', '$ratingNrY$')">
                 Ja
                 $TooltipButtonJA()$
             </div>
-            <div id="ynNo-$fullId$" class="ynbutton $ratingN$ $fullId$-tt-trigger-ynbutton" onclick="handleOQYNQuestions('ynNo-$fullId$', '$ratingNrN$')">
+            <div id="ynNo-$fullId$" class="ynbutton $ratingN$ $fullId$-tt-trigger-ynbutton" onclick="handleITreeYNQuestions('ynNo-$fullId$', '$ratingNrN$')">
                 Nein
                 $TooltipButtonNEIN()$
             </div>
-            <div id="ynUn-$fullId$" class="ynbutton rating-medium $fullId$-tt-trigger-ynbutton" onclick="handleOQYNQuestions('ynUn-$fullId$', '2')">
+            <div id="ynUn-$fullId$" class="ynbutton rating-medium $fullId$-tt-trigger-ynbutton" onclick="handleITreeYNQuestions('ynUn-$fullId$', '2')">
                 -?-
                 $TooltipButtonWN()$
             </div>
-            <div id="ynNan-$fullId$" class="ynbutton rating-none $fullId$-tt-trigger-ynbutton" onclick="handleOQYNQuestions('ynNan-$fullId$', '0')">
+            <div id="ynNan-$fullId$" class="ynbutton rating-none $fullId$-tt-trigger-ynbutton" onclick="handleITreeYNQuestions('ynNan-$fullId$', '0')">
                 X
                 $TooltipButtonZ()$    
             </div>
@@ -41,7 +41,7 @@
         
         
 	
-	$if(children)$<div id="sub-$fullId$" class="sub-$fullId$" style="padding-left:15px;display:none">
+	$if(children)$<div id="sub-$fullId$" class="sub-$fullId$" style="padding-left:15px;display:none;clear: both;">
 		$children$
 	</div>$endif$
 	

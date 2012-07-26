@@ -1449,14 +1449,13 @@ function showAuxInfoOQD(id, title){
  * Handle everything there is to do when a y/n question in the OQDialog is clicked,
  * i.e., and answer is provided
  */
-
-// TODO: curretly called on button click in front legal question -> refactor!!!
 function handleOQYNQuestions(fullId, rating){
     
+   
     // retrieve follow up element to current element
     var splitID = fullId.split("-")[1];
     var questionEl = $("#"+splitID);
-    
+   
     prepareQuestionLogging(fullId, rating);
     
     setColorForQuestion(questionEl, questionEl, rating);
@@ -1499,7 +1498,7 @@ function handleOQYNQuestions(fullId, rating){
     $('html, body').animate({
         scrollTop:$(document).height()
     }, 'slow');
-
+    
 }
 
 
@@ -1512,7 +1511,6 @@ function closeAllChildren(question){
     $(question).children().each(function(){
         if($(this).attr("id").indexOf("sub-q")!=-1){
             $(this).children().each(function(){
-                
                 // toggle auxpanel and detail button visibility
                 $(this).children().first().children().closest('[id^=auxpanel]').addClass("hide");
                 $(this).children().first().children().closest('[id^=detail]').addClass("hide");

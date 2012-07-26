@@ -51,6 +51,9 @@ public enum DialogType {
 	/* e.g. QuickI dialog */
 	FREECHOICE,
 
+        /* the JuriSearch Clarification style */
+        ITREE,
+        
 	/* A default value */
-	DEFAULT;
+        DEFAULT;
 }

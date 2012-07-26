@@ -642,11 +642,11 @@ function initFunctionality() {
             }
         } else
         if($(this).attr("id").indexOf("ynNo")!=-1){
-            if($(this).hasClass("swap")){
+           if($(this).hasClass("swap")){
                 d3web_answerYesNoHierarchyQuestions($(this), "1");
-            } else {
+           } else {
                 d3web_answerYesNoHierarchyQuestions($(this), "3");
-            }
+           }
         } else 
         if($(this).attr("id").indexOf("ynUn")!=-1){
             d3web_answerYesNoHierarchyQuestions($(this), "2");

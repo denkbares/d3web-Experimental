@@ -67,6 +67,7 @@ import de.d3web.proket.d3web.output.render.SummaryD3webRenderer;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
+import de.d3web.proket.data.DialogType;
 import de.d3web.proket.database.DB;
 import de.d3web.proket.database.DateCoDec;
 import de.d3web.proket.database.TokenThread;
@@ -1209,6 +1210,10 @@ public class D3webDialog extends HttpServlet {
             httpSession.setAttribute("loginit", false);
             initializeLoggingMechanism(httpSession);
         }
+        
+        if(d3wcon.getDialogType().equals(DialogType.ITREE)){
+            //resetInitQuestionsAndShowStatus();
+        }
     }
 
     private void initializeLoggingMechanism(HttpSession httpSession) {
@@ -1282,6 +1287,7 @@ public class D3webDialog extends HttpServlet {
                     user,
                     userFilename,
                     d3webSession);
+            
             httpSession.setAttribute("lastLoaded", userFilename);
         } else {
             writer.append("exists");

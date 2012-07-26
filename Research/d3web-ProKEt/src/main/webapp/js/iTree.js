@@ -17,6 +17,8 @@ function iTreeInit() {
     // browserInfo.js
     handleUnsupportedBrowsers();
     
+    ue_logDialogType("ClariHIE");    
+    
     // this file
     generate_tooltip_functions_ynbuttons();
     generate_tooltip_functions_propagation();
@@ -331,6 +333,7 @@ function toggle_hide(id) {
  */
 function toggle_folder_image_4boxes(id) {
 	
+    alert(id);
     // ids of the arrow/folder image is 2-typeimg, when question is q_2    
     var typeimgID = id + '-typeimg';
     
@@ -365,46 +368,28 @@ function toggle_folder_image_4boxes(id) {
 /**
  * Color background and mark selected answer in Legal style dialogs
  * TODO factor out d3web
+ * This is ONLY for prototypes!
+ * 
  * @param id the id of the item to mark
  * @param value the value that indicates in what regard the item is marked
  */
-function h4boxes(value, id) {
+function handleITreeYNQuestions(fullId, rating) {
     	
-    ue_logDialogType("ClariHIE");    
+    // retrieve follow up element to current element
+    var splitID = fullId.split("-")[1];
+    var questionEl = $("#"+splitID);
+   
+    prepareQuestionLogging(fullId, rating);
     
-    
-    // get dialog item
-    var item = $("#" + id);
-	
-    // get the first ancestor, i.e. the first upper question
-    var target = $(item).closest("div[id^='q_']");
-        
-    // set image attribute to the correctly selected one
-    item.attr('src', "img/pane" + value + ".png");
-
-    // check whether the calculated rating contradicts the user-chosen rating
-    // VORLÄUFIG RAUSLASSEN
-    /*if(hasChildrenHierachical(target)){
-            if(!equalUserAndKBSRating(target, value)){
-                alert("Ratings stimmen nicht überein!")
-            }
-        }*/
-        
-    prepareQuestionLogging(id, value);
-    
-    //alert(target.attr("id") + " " + value);    
-    setColorForQuestion(target, item, value);
-    
-    // store user set value as uservalue attribute
-    storeUserVal(target, value);
-    
-    // set color of propagation-color indicator
-    setPropagationColor(target, value);
-        
+    setColorForQuestion(questionEl, questionEl, rating);
+    setPropagationColor(questionEl, rating);
     // also mark parents of the target while excluding target
-    h4boxes_mark(target, true);
-		
+    h4boxes_mark(questionEl, true);
+    
+    // calculate solution rating and display
     calculateAndHandleSolutionRating();
+ 
+    hide_all_tooltips();
 }
 
 
@@ -552,6 +537,7 @@ function d3web_answerYesNoHierarchyQuestions(buttonId, rating){
         var now = ue_getCurrentDate();		
     }
     
+    
     // assemble ajax call
     var link = $.query.set("action", "addFacts");
     //link = link.set("timestring", now);
@@ -586,13 +572,19 @@ function d3web_answerYesNoHierarchyQuestions(buttonId, rating){
 // thereupon the servlet checks the questions current state and toggles this.
 function d3web_saveShowStatus(qid){
 
-    // assemble ajax call
+    //alert(qid);
+    //var cookie = readExpandCookieValue(qid);
+    //alert(cookie + " --- " + cookie.indexOf("EXPANDED"));
+    //if(cookie.indexOf("EXPANDED") != -1){
+      //  deleteExpandCookie(qid);
+      //  writeExpandCookie(qid, "FOLDED");
+    //} else {
+      //  deleteExpandCookie(qid);
+      //  writeExpandCookie(qid, "EXPANDED");
+    //} 
+    //alert(document.cookie);
     var link = $.query.set("action", "saveShowStatus");
-    //link = link.set("timestring", now);
-    
     link = link.set("question", qid);
-   
-    
     link = window.location.href.replace(window.location.search, "") + link;
      
     $.ajax({

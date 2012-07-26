@@ -161,15 +161,25 @@ public class ClarihieQuestionD3webRenderer extends AbstractD3webRenderer impleme
             }
         }
 
-        // TODO: render the value i.e. coloring of the question
         st.removeAttribute("qrating");
         if (UndefinedValue.isNotUndefinedValue(val)) {
             if (val.equals(JuriRule.YES_VALUE)) {
-                //System.out.println("YES: " + to.getName());
-                st.setAttribute("qrating", "rating-high");
+                
+                // check if we have "swapped" questions
+                //if(isNoDefining(to, juriRules)){
+                  //  st.setAttribute("qrating", "rating-low");
+                //} else {
+                    st.setAttribute("qrating", "rating-high");
+                //}
+                
             } else if (val.equals(JuriRule.NO_VALUE)) {
-                //System.out.println("NO: " + to.getName());
-                st.setAttribute("qrating", "rating-low");
+                // check if we have "swapped" questions
+                //if(isNoDefining(to, juriRules)){
+                 //   st.setAttribute("qrating", "rating-high");
+               // } else {
+                    st.setAttribute("qrating", "rating-low");
+               // }
+                
             } else if (val.equals(JuriRule.MAYBE_VALUE)) {
                 //System.out.println("MAYBE: " + to.getName());
                 st.setAttribute("qrating", "rating-medium");

@@ -31,6 +31,7 @@ import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.file.records.io.SingleXMLSessionRepository;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.utils.GlobalSettings;
 
 public class PersistenceD3webUtils {
@@ -61,7 +62,7 @@ public class PersistenceD3webUtils {
 	public static Session loadUserCase(String user, String filename) {
 
 		File fileToLoad = getFile(user, filename);
-
+                
 		return loadUserCase(user, fileToLoad);
 	}
 
@@ -72,8 +73,9 @@ public class PersistenceD3webUtils {
 		try {
 			sessionRepository.load(fileToLoad);
 			Iterator<SessionRecord> iterator = sessionRepository.iterator();
-			SessionRecord record1 = iterator.next();
-			session = copyToSession(D3webConnector.getInstance().getKb(),
+                        SessionRecord record1 = iterator.next();
+                       
+                        session = copyToSession(D3webConnector.getInstance().getKb(),
 							record1);
 		}
 		catch (IOException e) {
@@ -125,7 +127,7 @@ public class PersistenceD3webUtils {
 
 		try {
 			sessionRepository.save(file);
-			//System.out.println("Saved case to file: " + file.getCanonicalPath());
+			//System.out.println("SAVED CASE to file: " + file.getCanonicalPath());
 		}
 		catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -166,8 +168,13 @@ public class PersistenceD3webUtils {
 	 * @throws IOException
 	 */
 	public static Session copyToSession(KnowledgeBase knowledgeBase, SessionRecord source) throws IOException {
-		DefaultSession target = SessionFactory.createSession(source.getId(),
-				knowledgeBase, source.getCreationDate());
+		//DefaultSession target = SessionFactory.createSession(source.getId(),
+		//		knowledgeBase, source.getCreationDate());
+                
+                // in case of iTree(legal) dialogs, we need to create Sessions otherwise
+                DefaultSession target =
+                    D3webUtils.createSession(knowledgeBase, D3webConnector.getInstance().getDialogStrat());
+                
 		target.setName(source.getName());
 		InfoStoreUtil.copyEntries(source.getInfoStore(), target.getInfoStore());
 
@@ -182,9 +189,11 @@ public class PersistenceD3webUtils {
 			List<Fact> interviewFacts =
 					getFacts(knowledgeBase, source.getInterviewFacts(), psMethods);
 			for (Fact fact : valueFacts) {
+                            System.out.println(fact);
 				target.getBlackboard().addValueFact(fact);
 			}
 			for (Fact fact : interviewFacts) {
+                            System.out.println(fact);
 				target.getBlackboard().addInterviewFact(fact);
 			}
 		}
@@ -198,6 +207,7 @@ public class PersistenceD3webUtils {
 			target.getProtocol().addEntry(entry);
 		}
 
+                System.out.println(target.getBlackboard().getValuedQuestions());
 		// this must be the last operation to overwrite all touches within
 		// propagation
 		target.touch(source.getLastChangeDate());
@@ -216,12 +226,15 @@ public class PersistenceD3webUtils {
 	private static List<Fact> getFacts(KnowledgeBase kb, List<FactRecord> factRecords, Map<String, PSMethod> psMethods) throws IOException {
 		List<Fact> valueFacts = new LinkedList<Fact>();
 		for (FactRecord factRecord : factRecords) {
+                    System.out.println(factRecord.getObjectName() + " " + factRecord.getPsm());
 			String psm = factRecord.getPsm();
 			if (psm != null) {
 				PSMethod psMethod = psMethods.get(psm);
+                                System.out.println(psMethod);
 				if (psMethod != null) {
-					if (psMethod.hasType(Type.source)) {
+                                    if (psMethod.hasType(Type.source)) {
 						Value value = factRecord.getValue();
+                                                System.out.println("V: " + value);
 						TerminologyObject object = kb.getManager().search(
 								factRecord.getObjectName());
 						if (object == null) {

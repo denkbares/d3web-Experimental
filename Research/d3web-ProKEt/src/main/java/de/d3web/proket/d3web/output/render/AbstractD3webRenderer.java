@@ -28,16 +28,14 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
-import de.d3web.core.session.values.ChoiceValue;
-import de.d3web.core.session.values.Unknown;
 import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.jurisearch.JuriModel;
 import de.d3web.jurisearch.JuriRule;
@@ -633,7 +631,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         if (juriRules != null && juriRules.size() != 0) {
             for (Object o : juriRules) {
                 JuriRule rule = (JuriRule) o;
-                if (rule.getFather().getName().equals(parent.getName())) {
+                if (rule.getParent().getName().equals(parent.getName())) {
                     HashMap children = rule.getChildren();
                     Set childKeys = children.keySet();
                     for (Object co : childKeys) {
@@ -678,7 +676,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * @param juriRules
      * @return
      */
-    protected boolean isNoDefining(TerminologyObject to, Set juriRules) {
+    public static boolean isNoDefining(TerminologyObject to, Set juriRules) {
         if (juriRules != null && juriRules.size() != 0) {
             for (Object o : juriRules) {
                 JuriRule rule = (JuriRule) o;
@@ -686,7 +684,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                 // get all rules, where to is CHILD
                 if (rule.getChildren().containsKey(to)) {
 
-                    HashMap<QuestionOC, List<ChoiceValue>> children = rule.getChildren();
+                    HashMap<QuestionOC, List<Value>> children = rule.getChildren();
                     for (Object ooc : children.keySet()) {
 
                         QuestionOC qoc = (QuestionOC) ooc;

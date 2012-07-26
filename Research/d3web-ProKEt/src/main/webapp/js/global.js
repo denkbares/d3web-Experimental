@@ -212,7 +212,7 @@ function setLeftOffset(target) {
         }
     }
    
-   /* display all popups that are too far down in the dialog relatively above
+    /* display all popups that are too far down in the dialog relatively above
     * the parent element */
     var sizeToEnd = heightW - pOffset.top;
     if(sizeToEnd < 400){
@@ -499,7 +499,7 @@ function setPropagationColor(question, userval){
         prop.removeClass("show");
         prop.addClass("hide");
     }
-    //removePropagationInfoInQuestionForFirst();
+//removePropagationInfoInQuestionForFirst();
   
 }
 
@@ -571,7 +571,7 @@ function calculateRatingForQuestion(question){
             color = "2";  // all known and at least one suggested, suggest parent
         } else if(ratings.indexOf("2") != -1 && ratings.indexOf("0") != -1 
             && ratings.indexOf("3")==-1 ){
-            color = 2;
+            color = "2"; // TODO: check if works
         } else if (ratings.indexOf("3") != -1 ){
             color = "3";    // one rejected, reject parent
         } else {
@@ -731,4 +731,49 @@ function calculateAndHandleSolutionRating(){
             //$("#solLow").html(baseText);
             break;
     }
+}
+
+
+/************************/
+/* COOKIE RELATED STUFF */
+/************************/
+
+/* write expand state cookie for a given question qname */
+function writeExpandCookie(qname, qExpandState){
+    //var cookie = "test=me;"
+    var cookie = escape(qname) + '=' + qExpandState + ';';
+    document.cookie = cookie;
+}
+
+
+/* Retrieve the expand cookie value for a given question qname */ 
+function readExpandCookieValue(qname){
+    
+    var coo = document.cookie;
+    
+    var res = '';
+    
+    while(coo != ''){
+    alert(coo + " coo");
+            var cookiename = coo.substring(0,coo.indexOf('='));
+        var cookiewert = coo.substring(coo.indexOf('=')+1,coo.indexOf(';'));
+        
+        alert(qname + "--" + cookiename + " " + cookiewert);
+        if(qname == cookiename){
+            res = cookiewert;
+        }
+        
+        var i = coo.indexOf(';')+1;
+        if(i == 0){
+            i = coo.length
+        }
+        coo = coo.substring(i,coo.length);
+    }
+    
+    return(res)
+}
+
+/* Delete expand-state cookie for a question qname*/
+function deleteExpandCookie(qname){
+    document.cookie = qname + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;';
 }

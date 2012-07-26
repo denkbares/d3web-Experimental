@@ -79,6 +79,7 @@ import de.d3web.core.session.values.Unknown;
 import de.d3web.indication.ActionIndication;
 import de.d3web.indication.ActionInstantIndication;
 import de.d3web.indication.inference.PSMethodUserSelected;
+import de.d3web.jurisearch.JuriRule;
 import de.d3web.jurisearch.PSMethodJuri;
 import de.d3web.plugin.JPFPluginManager;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
@@ -1254,8 +1255,8 @@ public class D3webUtils {
     }
 
     /**
-     * Maps an integer value to the respective Locale for multilingualism
-     * 1-de 2-en 3-es 4-it 5-fr 6-pl 7-nl 8-sv 9-pt 10-braz
+     * Maps an integer value to the respective Locale for multilingualism 1-de
+     * 2-en 3-es 4-it 5-fr 6-pl 7-nl 8-sv 9-pt 10-braz
      *
      * @param locIdent integer value
      * @return the Locale
@@ -1446,8 +1447,9 @@ public class D3webUtils {
             return;
         }
 
+        System.out.println(valueString);
         // ONLY FOR ClariHIE Dialog!!!
-        if (D3webConnector.getInstance().getDialogType().equals(DialogType.CLARIHIE)) {
+        if (D3webConnector.getInstance().getDialogType().equals(DialogType.ITREE)) {
             if (valueString != null) {
                 if (valueString.equals("1")) {
                     valueString = YESSTRING;
@@ -1485,7 +1487,14 @@ public class D3webUtils {
                     blackboard.addValueFact(f2);
                 }
             }
+
         }
+        System.out.println("BLACKBOARD: ");
+        for (Question q : blackboard.getValuedQuestions()) {
+
+            System.out.println(q.getName() + " -> " + blackboard.getValue(q));
+        }
+        System.out.println("BLACKBOARD ENDE");
     }
 
     private static Value setQuestionDate(Question to, String valString) {
@@ -1533,6 +1542,12 @@ public class D3webUtils {
         if (to instanceof QuestionOC) {
             // valueString is the html ID of the selected item
             String valueName = AbstractD3webRenderer.getObjectNameForId(valueId);
+            
+            if(valueId.equals(YESSTRING)){
+                value = KnowledgeBaseUtils.findValue(to,
+                    valueName == null ? valueId : valueName);
+               
+            }
             value = KnowledgeBaseUtils.findValue(to,
                     valueName == null ? valueId : valueName);
 
@@ -1581,6 +1596,8 @@ public class D3webUtils {
         blackboard.addValueFact(fact);
         return value;
     }
+    
+     
 
     /**
      * Set given question in the given session to Undefined
