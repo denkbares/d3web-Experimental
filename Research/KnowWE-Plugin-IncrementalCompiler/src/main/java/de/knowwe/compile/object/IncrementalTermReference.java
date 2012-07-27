@@ -20,7 +20,11 @@
 
 package de.knowwe.compile.object;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
@@ -123,7 +127,15 @@ public abstract class IncrementalTermReference extends SimpleReference {
 				}
 			}
 
-			for (Message kdomReportMessage : messages) {
+			List<Message> messageList = new ArrayList<Message>();
+			messageList.addAll(messages);
+			Collections.sort(messageList, new Comparator<Message>() {
+				@Override
+				public int compare(Message arg0, Message arg1) {
+					return arg0.getType().compareTo(arg1.getType());
+				}
+			});
+			for (Message kdomReportMessage : messageList) {
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					string.append(DefaultMessageRenderer.ERROR_RENDERER.preRenderMessage(
 							kdomReportMessage, user, null));
@@ -133,6 +145,7 @@ public abstract class IncrementalTermReference extends SimpleReference {
 							DefaultMessageRenderer.WARNING_RENDERER.preRenderMessage(
 									kdomReportMessage, user, null));
 				}
+				
 			}
 			if (IncrementalCompiler.getInstance().getTerminology().isPredefinedObject(
 					reference.get().getTermIdentifier(reference))) {
