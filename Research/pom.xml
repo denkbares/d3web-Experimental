@@ -224,6 +224,7 @@
 		<module>KnowWE-Plugin-d3web-Rdf2Go</module>
 		<module>KnowWE-Plugin-RDFS-WikiObjectModel</module>
 		<module>KnowWE-Plugin-JSPWiki-MarkupSet</module>
+		<module>KnowWE-Plugin-Include</module>
 	</modules>
 	<repositories>
 		<repository>
