@@ -24,8 +24,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import com.denkbares.jspwiki.types.SectionType;
-
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -36,6 +34,7 @@ import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.WikiConnector;
+import de.knowwe.jspwiki.types.SectionType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -44,7 +43,7 @@ import de.knowwe.tools.Tool;
 
 /**
  * 
- * @author Benedikt Kaemmerer
+ * @author Benedikt Kaemmerer (denkbares GmbH)
  * @created 06.07.2012
  */
 
@@ -114,7 +113,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 				Section<Article> renderarticle = article.getRootSection();
 
 				if (targetArray.length > 1) {
-					List<?> secList = Sections.findSuccessorsOfType(
+					List<Section<de.knowwe.jspwiki.types.SectionType>> secList = Sections.findSuccessorsOfType(
 							article.getRootSection(), SectionType.class);
 					Iterator<?> listIterator = secList.iterator();
 					while (listIterator.hasNext()) {

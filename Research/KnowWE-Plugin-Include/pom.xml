@@ -18,7 +18,7 @@
 			<scope>compile</scope>
 		</dependency>
   <dependency>
-  	<groupId>com.denkbares</groupId>
+  	<groupId>de.uniwue.d3web</groupId>
   	<artifactId>KnowWE-Plugin-JSPWiki-MarkupSet</artifactId>
   	<version>0.2-SNAPSHOT</version>
   </dependency>
