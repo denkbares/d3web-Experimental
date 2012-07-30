@@ -98,7 +98,8 @@ public class IncludeMarkup extends DefaultMarkupType {
 
 			if (article == null) {
 				StringBuilder builder = new StringBuilder();
-				Message noSuchSection = new Message(Message.Type.WARNING, "Article not found!");
+				Message noSuchSection = new Message(Message.Type.WARNING, "Article '" + targetKey
+						+ "' not found!");
 				Collection<Message> messages = new HashSet<Message>();
 				messages.add(noSuchSection);
 				DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, messages,
@@ -132,7 +133,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 					if (renderarticle.equals(article.getRootSection())) {
 						StringBuilder builder = new StringBuilder();
 						Message noSuchSection = new Message(Message.Type.WARNING,
-								"Section not found!");
+								"Section '" + getSec + "' not found!");
 						Collection<Message> messages = new HashSet<Message>();
 						messages.add(noSuchSection);
 						DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, messages,
