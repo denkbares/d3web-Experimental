@@ -617,6 +617,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
     }
 
     /**
+     * TODO: maybe remove
      * traverse all jurisearch rules and filter out the one(s) containing the
      * currently rendered Terminology Object as parent
      *
@@ -646,6 +647,8 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
     }
 
     /**
+     * TODO: maybe remove
+     * 
      * Check, whether a given terminology object is rated by its children by an
      * OR connection (default: AND connection)
      *
@@ -669,6 +672,8 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
     }
 
     /**
+     * TODO: May be remove
+     * 
      * Check whether a given terminology object rates the parent question in a
      * swapped y/n manner, i.e. "NO" is the positively rating answer.
      *
@@ -700,7 +705,16 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         return false;
     }
 
-    protected void renderChildrenClariHIE(StringTemplate st, Session d3webSession, ContainerCollection cc,
+    /**
+     * TODO aMaybe remove
+     * @param st
+     * @param d3webSession
+     * @param cc
+     * @param to
+     * @param loc
+     * @param httpSession 
+     */
+    protected void renderChildrenITree(StringTemplate st, Session d3webSession, ContainerCollection cc,
             TerminologyObject to, int loc, HttpSession httpSession) {
 
         final KnowledgeKind<JuriModel> JURIMODEL = new KnowledgeKind<JuriModel>(
@@ -748,7 +762,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
                     // TODO: render dummy nodes specially 
                     if (isDummy != null && isDummy.equals(true)) {
-                        childRenderer = D3webRendererMapping.getInstance().getDummyClarihieRenderer();
+                        childRenderer = D3webRendererMapping.getInstance().getDummyITreeRenderer();
                     } else {
                         childRenderer =
                                 AbstractD3webRenderer.getRenderer((TerminologyObject) newChildRoot);
@@ -769,6 +783,70 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         }
 
     }
+    
+    
+     protected void renderChildrenITreeNum(StringTemplate st, Session d3webSession, ContainerCollection cc,
+            TerminologyObject to, int loc, HttpSession httpSession) {
+
+        StringBuilder childrenHTML = new StringBuilder();
+        D3webConnector d3wcon = D3webConnector.getInstance();
+        
+        if (to.getName().equals("Q000")) {
+            TerminologyObject rootNode = to.getChildren()[0].getChildren()[0];
+           
+            if (rootNode != null) {
+
+                IQuestionD3webRenderer childRenderer =
+                        AbstractD3webRenderer.getRenderer(rootNode);
+               
+                String childHTML =
+                        childRenderer.renderTerminologyObject(d3webSession, cc, rootNode, to, loc, httpSession);
+                if (childHTML != null) {
+                    childrenHTML.append(childHTML);
+                }
+
+                st.setAttribute("children", childrenHTML.toString());
+
+            }
+        } else {
+            
+            // get the children of the current to from the juri rules
+            TerminologyObject[] toChildren = to.getChildren();
+            
+            if (toChildren != null && toChildren.length > 0) {
+
+                for (Object newChildRoot : toChildren) {
+
+                    IQuestionD3webRenderer childRenderer = null;
+                    TerminologyObject newChild = (TerminologyObject) newChildRoot;
+
+                    Boolean isDummy =
+                            newChild.getInfoStore().getValue(ProKEtProperties.DUMMY);
+
+                    // TODO: render dummy nodes specially 
+                    if (isDummy != null && isDummy.equals(true)) {
+                        childRenderer = D3webRendererMapping.getInstance().getDummyITreeRenderer();
+                    } else {
+                        childRenderer =
+                                AbstractD3webRenderer.getRenderer((TerminologyObject) newChildRoot);
+
+                    }
+
+
+                    String childHTML =
+                            childRenderer.renderTerminologyObject(d3webSession, cc, (TerminologyObject) newChildRoot, to, loc, httpSession);
+                    if (childHTML != null) {
+                        childrenHTML.append(childHTML);
+                    }
+
+                }
+                // if children, fill the template attribute children with children-HTML 
+                st.setAttribute("children", childrenHTML.toString());
+            }
+        }
+
+    }
+     
 
     protected String createDropDownOptions(int loc, String selectedValue, String... options) {
         StringBuilder builder = new StringBuilder();

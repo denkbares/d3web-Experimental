@@ -154,12 +154,12 @@ public class ClarihieDialog extends D3webDialog {
                 q == null ? parameterQuestion : q);
         
        
-        if(qFinal.getInfoStore().getValue(ProKEtProperties.ITREESHOWN) != null &&
+        /*if(qFinal.getInfoStore().getValue(ProKEtProperties.ITREESHOWN) != null &&
                 qFinal.getInfoStore().getValue(ProKEtProperties.ITREESHOWN) == true ){
             qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN, false);
         } else {
             qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN, true);
-        }
+        }*/
         
     }
     
@@ -192,7 +192,7 @@ public class ClarihieDialog extends D3webDialog {
             String qu = AbstractD3webRenderer.getObjectNameForId(q);
             Question qFinal = d3webSession.getKnowledgeBase().getManager().searchQuestion(
                 qu == null ? q : qu);
-            qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN, true);
+            qFinal.getInfoStore().addValue(ProKEtProperties.ITREEINIT, true);
         }
     }
     

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog 
-	header="JuriSearch - Swap "  
+	header="ITree - NumQuestion Based"  
 	dtype="itree" 
 	dstrategy="nextuaquestion" 
 	css="legal, nofoot" 
 	dialogcolumns="1"
 	questionnairecolumns="1"
 	questioncolumns = "1"
-	userprefix = "ITree" 
+	userprefix = "ITreeNum" 
 	login = "off"
 	required = "none"
 	language = "de"
@@ -17,5 +17,5 @@
         feedbackform="TRUE"
         uegroup=""
         >
-	<data kb="juriswap.d3web" />
+	<data kb="ITreeNum.d3web" />
 </dialog>

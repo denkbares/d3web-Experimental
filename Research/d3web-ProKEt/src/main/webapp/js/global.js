@@ -2,6 +2,8 @@
 // THIS FILE CONTAINS ALL FUNCTIONALITY THAT IS NEEDED BY ALL PROTOTYPES,
 // E.G. GENERAL TOOLTIP STUFF
 
+var tooltipShown = undefined;
+
 
 /* TOOLTIP STUFF - Tooltips are always defined by JS so they
  * are needed globally by d3web and prototype dialogs 

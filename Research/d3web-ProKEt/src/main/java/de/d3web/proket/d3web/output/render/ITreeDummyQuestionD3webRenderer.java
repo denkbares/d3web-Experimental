@@ -24,29 +24,14 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
-import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.QuestionDate;
-import de.d3web.core.knowledge.terminology.QuestionMC;
-import de.d3web.core.knowledge.terminology.QuestionNum;
-import de.d3web.core.knowledge.terminology.QuestionOC;
-import de.d3web.core.knowledge.terminology.QuestionText;
-import de.d3web.core.knowledge.terminology.QuestionZC;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
-import de.d3web.core.session.interviewmanager.Form;
-import de.d3web.core.session.values.UndefinedValue;
-import de.d3web.core.session.values.Unknown;
 import de.d3web.jurisearch.JuriModel;
-import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
-import de.d3web.proket.data.LegalQuestion;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
-import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.http.HttpSession;
 
@@ -55,7 +40,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Martina Freiberg @created 22.04.2012
  */
-public class ClarihieDummyQuestionD3webRenderer extends AbstractD3webRenderer implements IQuestionD3webRenderer {
+public class ITreeDummyQuestionD3webRenderer extends AbstractD3webRenderer implements IQuestionD3webRenderer {
 
     protected final KnowledgeKind<JuriModel> JURIMODEL = new KnowledgeKind<JuriModel>(
             "JuriModel", JuriModel.class);
@@ -88,7 +73,7 @@ public class ClarihieDummyQuestionD3webRenderer extends AbstractD3webRenderer im
         // get the fitting template. In case user prefix was specified, the
         // specific TemplateName is returned, otherwise, the base object name.
         StringTemplate st = TemplateUtils.getStringTemplate(
-                super.getTemplateName("DummyQuestion"), "html");
+                super.getTemplateName("ITreeDummyQuestion"), "html");
 
         // set some basic properties
         st.setAttribute("fullId", getID(to));
@@ -134,7 +119,7 @@ public class ClarihieDummyQuestionD3webRenderer extends AbstractD3webRenderer im
 
         st.setAttribute("tooltip", TT_PROP_ERROR);
 
-        super.renderChildrenClariHIE(st, d3webSession, cc, to, loc, httpSession);
+        super.renderChildrenITree(st, d3webSession, cc, to, loc, httpSession);
 
         sb.append(st.toString());
 
