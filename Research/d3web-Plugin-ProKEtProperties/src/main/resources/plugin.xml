@@ -196,22 +196,11 @@
 		<parameter id="instanceof" value="java.lang.String" />
 	</extension>
         
-        <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="itree_shown">
-		<parameter id="name" value="itree_shown" />
-		<parameter id="description" 
-			value="add property for iTree style for storing the 
-                        toggle status of the tree which otherwise is destroyed 
-                        by AJAX refresh" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Boolean" />
-	</extension>
+       
         
          <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="itree_init">
-		<parameter id="name" value="itree_init" />
+		id="itreeinit">
+		<parameter id="name" value="itreeinit" />
 		<parameter id="description" 
 			value="add property for iTree style marking those questions
                         that need to be expanded initially" />
@@ -220,5 +209,76 @@
 		<parameter id="priority" value="5" />
 		<parameter id="instanceof" value="java.lang.Boolean" />
 	</extension>
-		
+	
+        <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="nodefining">
+		<parameter id="name" value="nodefining" />
+		<parameter id="description" 
+			value="add property for iTree style marking those questions
+                        that need to be expanded initially" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.Boolean" />
+	</extension>
+        
+         <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="dummy">
+		<parameter id="name" value="dummy" />
+		<parameter id="description" 
+			value="add property for iTree style marking those questions
+                        that need to be expanded initially" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.Boolean" />
+	</extension>
+        
+        <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="ortype">
+		<parameter id="name" value="ortype" />
+		<parameter id="description" 
+			value="add property for iTree style marking those questions
+                        that are connected by an or-connection" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.Boolean" />
+	</extension>
+                
+         <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="weblink">
+		<parameter id="name" value="weblink" />
+		<parameter id="description" 
+			value="add property for iTree style for storing the 
+                        links to external sites" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
+        
+        <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="pdflink">
+		<parameter id="name" value="pdflink" />
+		<parameter id="description" 
+			value="add property for iTree style for storing the 
+                        links to pdf files" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
+        
+        <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="rechnerlink">
+		<parameter id="name" value="rechnerlink" />
+		<parameter id="description" 
+			value="add property for iTree style for storing the 
+                        links to external calculation tools" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
 </plugin>
