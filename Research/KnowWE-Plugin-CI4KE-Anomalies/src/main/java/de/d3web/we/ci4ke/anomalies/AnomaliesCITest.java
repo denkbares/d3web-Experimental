@@ -22,8 +22,8 @@ package de.d3web.we.ci4ke.anomalies;
 
 import de.d3web.testing.ArgsCheckResult;
 import de.d3web.testing.Message;
-import de.d3web.testing.Test;
 import de.d3web.testing.Message.Type;
+import de.d3web.testing.Test;
 
 /**
  * test ...
@@ -48,6 +48,11 @@ public class AnomaliesCITest implements Test<Object> {
 	@Override
 	public Class<Object> getTestObjectClass() {
 		return Object.class;
+	}
+
+	@Override
+	public String getDescription() {
+		return "No description available";
 	}
 
 }

@@ -27,8 +27,8 @@ import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.StartNode;
 import de.d3web.testing.ArgsCheckResult;
 import de.d3web.testing.Message;
-import de.d3web.testing.Test;
 import de.d3web.testing.Message.Type;
+import de.d3web.testing.Test;
 
 /**
  * Anomaly detection: test for automatically starting flowcharts with more than
@@ -85,5 +85,10 @@ public class AnomalyAutostartFlow implements Test<KnowledgeBase> {
 	@Override
 	public Class<KnowledgeBase> getTestObjectClass() {
 		return KnowledgeBase.class;
+	}
+	
+	@Override
+	public String getDescription() {
+		return "No description available";
 	}
 }
