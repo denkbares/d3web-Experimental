@@ -20,10 +20,10 @@
 
 package de.d3web.we.ci4ke.anomalies;
 
+import de.d3web.testing.AbstractTest;
 import de.d3web.testing.ArgsCheckResult;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
-import de.d3web.testing.Test;
 
 /**
  * test ...
@@ -31,7 +31,7 @@ import de.d3web.testing.Test;
  * @author Gritje Meinke
  * @created 17.04.2011
  */
-public class AnomaliesCITest implements Test<Object> {
+public class AnomaliesCITest extends AbstractTest<Object> {
 
 	@Override
 	public Message execute(Object o, String[] args) {
@@ -54,5 +54,6 @@ public class AnomaliesCITest implements Test<Object> {
 	public String getDescription() {
 		return "No description available";
 	}
+
 
 }

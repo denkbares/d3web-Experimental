@@ -26,9 +26,9 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.Node;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
+import de.d3web.testing.AbstractTest;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
-import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.taghandler.OWLApiTagHandlerUtil;
@@ -84,13 +84,15 @@ public class OntologyConsistencyTest extends AbstractTest<OWLAPIConnector> {
 		}
 	}
 
-	@Override
-	public int numberOfArguments() {
-		return 0;
-	}
 
 	@Override
 	public Class<OWLAPIConnector> getTestObjectClass() {
 		return OWLAPIConnector.class;
+	}
+
+
+	@Override
+	public String getDescription() {
+		return "no description available";
 	}
 }

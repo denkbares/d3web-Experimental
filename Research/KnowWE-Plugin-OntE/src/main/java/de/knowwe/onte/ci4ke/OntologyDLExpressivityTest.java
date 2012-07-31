@@ -26,9 +26,9 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.DLExpressivityChecker;
 
+import de.d3web.testing.AbstractTest;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
-import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.owlapi.OWLAPIConnector;
 
 /**
@@ -62,10 +62,9 @@ public class OntologyDLExpressivityTest extends AbstractTest<OWLAPIConnector> {
 		return new Message(Type.SUCCESS, "Expressivity of the ontology: "
 				+ checker.getDescriptionLogicName());
 	}
-
 	@Override
-	public int numberOfArguments() {
-		return 0;
+	public String getDescription() {
+		return "no description available";
 	}
 
 	@Override

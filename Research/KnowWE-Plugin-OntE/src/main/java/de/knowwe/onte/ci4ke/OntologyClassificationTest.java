@@ -31,7 +31,6 @@ import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
-import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.owlapi.query.OWLApiQueryEngine;
@@ -43,7 +42,7 @@ import de.knowwe.owlapi.query.OWLApiQueryEngine;
  * @author Stefan Mark
  * @created 17.10.2011
  */
-public class OntologyClassificationTest extends AbstractTest<OWLAPIConnector> {
+public class OntologyClassificationTest extends de.d3web.testing.AbstractTest<OWLAPIConnector> {
 
 	public static final char GREATER_THAN = '\u003E';
 	public static final char HYPHEN_MINUS = '\u002D';
@@ -134,13 +133,14 @@ public class OntologyClassificationTest extends AbstractTest<OWLAPIConnector> {
 		return false;
 	}
 
-	@Override
-	public int numberOfArguments() {
-		return 1;
-	}
 
 	@Override
 	public Class<OWLAPIConnector> getTestObjectClass() {
 		return OWLAPIConnector.class;
+	}
+
+	@Override
+	public String getDescription() {
+		return "no description available";
 	}
 }

@@ -26,9 +26,10 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
+import de.d3web.testing.AbstractTest;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
-import de.d3web.we.ci4ke.testmodules.AbstractTest;
+import de.d3web.testing.TestParameter;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
@@ -42,6 +43,18 @@ import de.knowwe.taghandler.OWLApiTagHandlerUtil;
  * @created 17.10.2011
  */
 public class OntologyIndividualExistTest extends AbstractTest<OWLAPIConnector> {
+	
+	
+	public OntologyIndividualExistTest() {
+		this.addParameter("Concept", TestParameter.Type.String, TestParameter.Mode.Mandatory, "Class concept where inidivuals will be checked.");
+		this.addParameter("Number of Individuals", TestParameter.Type.Number, TestParameter.Mode.Mandatory, "How many Individuals at least are expected.");
+
+	}
+	
+	@Override
+	public String getDescription() {
+		return "no description available";
+	}
 
 	@Override
 	public Message execute(OWLAPIConnector connector, String[] args) {
@@ -106,11 +119,6 @@ public class OntologyIndividualExistTest extends AbstractTest<OWLAPIConnector> {
 				return new Message(Type.FAILURE, message.toString());
 			}
 		}
-	}
-
-	@Override
-	public int numberOfArguments() {
-		return 2;
 	}
 
 	@Override

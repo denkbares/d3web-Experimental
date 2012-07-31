@@ -21,7 +21,6 @@ package de.d3web.we.diaflux.anomalies;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
-import de.d3web.we.ci4ke.testmodules.AbstractTest;
 import de.knowwe.core.utils.Strings;
 
 /**
@@ -29,12 +28,8 @@ import de.knowwe.core.utils.Strings;
  * @author Roland Jerg
  * @created 09.05.2012
  */
-public abstract class AbstractAnomalyTest extends AbstractTest<KnowledgeBase> {
+public abstract class AbstractAnomalyTest extends de.d3web.testing.AbstractTest<KnowledgeBase> {
 
-	@Override
-	public int numberOfArguments() {
-		return 0;
-	}
 
 	@Override
 	public Class<KnowledgeBase> getTestObjectClass() {
@@ -55,6 +50,11 @@ public abstract class AbstractAnomalyTest extends AbstractTest<KnowledgeBase> {
 		}
 
 		return res;
+	}
+	
+	@Override
+	public String getDescription() {
+		return "No description available";
 	}
 
 	/**

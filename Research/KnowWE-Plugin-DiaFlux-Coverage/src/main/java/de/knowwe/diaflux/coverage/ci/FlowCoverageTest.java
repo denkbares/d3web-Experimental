@@ -27,7 +27,7 @@ import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
-import de.d3web.we.ci4ke.testmodules.AbstractTest;
+import de.d3web.testing.TestParameter;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
@@ -38,8 +38,15 @@ import de.knowwe.diaflux.coverage.DiaFluxCoverageType;
  * @author Reinhard Hatko
  * @created 26.03.2012
  */
-public class FlowCoverageTest extends AbstractTest<KnowledgeBase> {
+public class FlowCoverageTest extends de.d3web.testing.AbstractTest<KnowledgeBase> {
 
+	
+	
+	public FlowCoverageTest() {
+		this.addParameter("param1", TestParameter.Type.String, TestParameter.Mode.Mandatory, "description param1");
+		this.addParameter("param2", TestParameter.Type.String, TestParameter.Mode.Mandatory, "description param2");
+	}
+	
 	@Override
 	public Message execute(KnowledgeBase kb, String[] args) {
 
@@ -83,14 +90,15 @@ public class FlowCoverageTest extends AbstractTest<KnowledgeBase> {
 		}
 	}
 
-	@Override
-	public int numberOfArguments() {
-		return 2;
-	}
 
 	@Override
 	public Class<KnowledgeBase> getTestObjectClass() {
 		return KnowledgeBase.class;
+	}
+
+	@Override
+	public String getDescription() {
+		return "No description available";
 	}
 
 }

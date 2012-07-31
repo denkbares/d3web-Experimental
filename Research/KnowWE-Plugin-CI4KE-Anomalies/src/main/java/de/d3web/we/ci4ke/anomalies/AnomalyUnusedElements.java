@@ -27,10 +27,10 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
+import de.d3web.testing.AbstractTest;
 import de.d3web.testing.ArgsCheckResult;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
-import de.d3web.testing.Test;
 
 /**
  * Anomaly detection: test for unused elements
@@ -38,7 +38,7 @@ import de.d3web.testing.Test;
  * @author Gritje Meinke
  * @created 17.04.2011
  */
-public class AnomalyUnusedElements implements Test<KnowledgeBase> {
+public class AnomalyUnusedElements extends  AbstractTest<KnowledgeBase> {
 
 	@Override
 	public Message execute(KnowledgeBase kb, String[] args) {

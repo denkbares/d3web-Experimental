@@ -20,7 +20,7 @@ package de.knowwe.rdfs.testcase.ci4ke;
 
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
-import de.d3web.we.ci4ke.testmodules.AbstractTest;
+import de.d3web.testing.TestParameter;
 import de.knowwe.core.Environment;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.testcase.RDFSTestCase;
@@ -34,8 +34,14 @@ import de.knowwe.rdfs.testcase.util.RDFSTestCaseLoader;
  * @author Sebastian Furth
  * @created 22.12.2011
  */
-public class RDFSTestCaseRunner extends AbstractTest<Rdf2GoCore> {
+public class RDFSTestCaseRunner extends de.d3web.testing.AbstractTest<Rdf2GoCore> {
 
+
+public RDFSTestCaseRunner() {
+	this.addParameter("Article", TestParameter.Type.String, TestParameter.Mode.Mandatory, "Monitored aricle.");
+	this.addParameter("Test case name", TestParameter.Type.Number, TestParameter.Mode.Mandatory, "Name of the rdf test case (sparql-test).");
+}
+	
 	@Override
 	public Message execute(Rdf2GoCore core, String[] args) {
 
@@ -79,7 +85,7 @@ public class RDFSTestCaseRunner extends AbstractTest<Rdf2GoCore> {
 	}
 
 	@Override
-	public int numberOfArguments() {
-		return 2;
+	public String getDescription() {
+		return "no description available";
 	}
 }

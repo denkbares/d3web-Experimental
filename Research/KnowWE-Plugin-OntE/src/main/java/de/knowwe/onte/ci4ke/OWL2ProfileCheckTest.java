@@ -28,9 +28,10 @@ import org.semanticweb.owlapi.profiles.OWL2RLProfile;
 import org.semanticweb.owlapi.profiles.OWLProfile;
 import org.semanticweb.owlapi.profiles.OWLProfileReport;
 
+import de.d3web.testing.AbstractTest;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
-import de.d3web.we.ci4ke.testmodules.AbstractTest;
+import de.d3web.testing.TestParameter;
 import de.knowwe.owlapi.OWLAPIConnector;
 
 /**
@@ -48,6 +49,11 @@ public class OWL2ProfileCheckTest extends AbstractTest<OWLAPIConnector> {
 	public static final String OWL2_PROFILE_QL = "QL";
 	public static final String OWL2_PROFILE_RL = "RL";
 	public static final String OWL2_PROFILE_FULL = "FULL";
+	
+	
+	public OWL2ProfileCheckTest() {
+		this.addParameter("OWL profile", TestParameter.Type.String, TestParameter.Mode.Mandatory, "Determines for which OWL language profile the test checks.");
+	}
 
 	@Override
 	public Message execute(OWLAPIConnector connector, String[] args) {
@@ -94,9 +100,10 @@ public class OWL2ProfileCheckTest extends AbstractTest<OWLAPIConnector> {
 		}
 	}
 
+
 	@Override
-	public int numberOfArguments() {
-		return 1;
+	public String getDescription() {
+		return "no description available";
 	}
 
 	@Override
