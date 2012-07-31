@@ -11,8 +11,11 @@ import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.Strings;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class SparqlResultRenderer {
+
+	private static final String POINT_ID = "SparqlResultNodeRenderer";
 
 	private static SparqlResultRenderer instance = null;
 
@@ -29,7 +32,7 @@ public class SparqlResultRenderer {
 
 	private SparqlResultNodeRenderer[] getNodeRenderer() {
 		Extension[] extensions = PluginManager.getInstance().getExtensions(
-				"KnowWE-Plugin-Rdf2GoSemanticCore", "SparqlResultNodeRenderer");
+				Rdf2GoCore.PLUGIN_ID, POINT_ID);
 		SparqlResultNodeRenderer[] renderers = new SparqlResultNodeRenderer[extensions.length];
 		for (int i = 0; i < extensions.length; i++) {
 			renderers[i] = ((SparqlResultNodeRenderer) extensions[i].getSingleton());

@@ -22,6 +22,16 @@
 		<parameter-def id="version" />
 		<parameter-def id="priority" type="number" />
 	</extension-point>
+
+	
+	<extension-point id="Rdf2GoModelConfig">
+		<parameter-def id="name" />
+		<parameter-def id="description" />
+		<parameter-def id="version" />
+		<parameter-def id="priority" type="number" />
+		<parameter-def id="model" multiplicity="one" />
+		<parameter-def id="reasoning" multiplicity="one" />
+	</extension-point>
 	
 	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
 			point-id="SparqlResultNodeRenderer"

@@ -46,7 +46,6 @@ import org.ontoware.rdf2go.Reasoning;
 import org.ontoware.rdf2go.exception.MalformedQueryException;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.exception.ReasoningNotSupportedException;
-import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.Statement;
@@ -57,6 +56,8 @@ import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
+import de.d3web.plugin.Extension;
+import de.d3web.plugin.PluginManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
@@ -76,20 +77,27 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
  */
 public class Rdf2GoCore implements EventListener {
 
+	private static final String MODEL_CONFIG_POINT_ID = "Rdf2GoModelConfig";
+	public static final String PLUGIN_ID = "KnowWE-Plugin-Rdf2GoSemanticCore";
+
 	private final String bns;
 	private final String lns;
 
 	private static final String NARY_PROPERTY = "NaryProperty";
 
-	public static final String JENA = "jena";
-	public static final String BIGOWLIM = "bigowlim";
-	public static final String SESAME = "sesame";
-	public static final String SWIFTOWLIM = "swiftowlim";
+	private org.ontoware.rdf2go.model.Model model;
 
-	public static final String SELECT = "select";
-	public static final String ASK = "ask";
-	public static final String OWL_REASONING = "owl";
-	public static final String RDFS_REASONING = "rdfs";
+	public enum Rdf2GoModel {
+		JENA, BIGOWLIM, SESAME, SWIFTOWLIM
+	}
+
+	public enum Rdf2GoReasoning {
+		RDF, RDFS, OWL
+	}
+
+	private Rdf2GoModel modelType = Rdf2GoModel.SESAME;
+
+	private Rdf2GoReasoning reasoningType = Rdf2GoReasoning.RDF;
 
 	private static Rdf2GoCore me;
 
@@ -119,8 +127,6 @@ public class Rdf2GoCore implements EventListener {
 		}
 		return result;
 	}
-
-	private Model model;
 
 	/**
 	 * This statement cache is controlled by the incremental compiler.
@@ -505,6 +511,14 @@ public class Rdf2GoCore implements EventListener {
 		return bns;
 	}
 
+	public Rdf2GoModel getModelType() {
+		return this.modelType;
+	}
+
+	public Rdf2GoReasoning getReasoningType() {
+		return this.reasoningType;
+	}
+
 	/**
 	 * Initializes the model and its caches and namespaces
 	 */
@@ -541,17 +555,40 @@ public class Rdf2GoCore implements EventListener {
 	 */
 	private void initModel() throws ModelRuntimeException, ReasoningNotSupportedException {
 
-		String useModel = properties.getString("model").toLowerCase();
-		String useReasoning = properties.getString("reasoning").toLowerCase();
+		try {
+			String model;
+			String reasoning;
 
-		if (useModel.equals(JENA)) {
+			Extension[] extensions = PluginManager.getInstance().getExtensions(
+					PLUGIN_ID, MODEL_CONFIG_POINT_ID);
+
+			if (extensions.length > 0) {
+				model = extensions[0].getParameter("model");
+				reasoning = extensions[0].getParameter("reasoning");
+			}
+			else {
+				model = properties.getString("model");
+				reasoning = properties.getString("reasoning");
+			}
+
+			modelType = Rdf2GoModel.valueOf(model.toUpperCase());
+			reasoningType = Rdf2GoReasoning.valueOf(reasoning.toUpperCase());
+		}
+		catch (IllegalArgumentException e) {
+			Logger.getLogger(this.getClass().getName()).log(
+					Level.WARNING,
+					"Unable to read Rdf2Go model config, using default");
+		}
+
+		switch (modelType) {
+		case JENA:
 			// Jena dependency currently commented out because of clashing
 			// lucene version in jspwiki
 
 			// RDF2Go.register(new
 			// org.ontoware.rdf2go.impl.jena26.ModelFactoryImpl());
-		}
-		else if (useModel.equals(BIGOWLIM)) {
+			break;
+		case BIGOWLIM:
 			// registers the customized model factory (in memory, owl-max)
 			// RDF2Go.register(new
 			// de.d3web.we.core.semantic.rdf2go.modelfactory.BigOwlimInMemoryModelFactory());
@@ -559,31 +596,35 @@ public class Rdf2GoCore implements EventListener {
 			// standard bigowlim model factory:
 			// RDF2Go.register(new
 			// com.ontotext.trree.rdf2go.OwlimModelFactory());
-		}
-		else if (useModel.equals(SESAME)) {
+			break;
+		case SESAME:
 			RDF2Go.register(new org.openrdf.rdf2go.RepositoryModelFactory());
-		}
-		else if (useModel.equals(SWIFTOWLIM)) {
+			break;
+		case SWIFTOWLIM:
 			RDF2Go.register(new de.knowwe.rdf2go.modelfactory.SesameSwiftOwlimModelFactory());
-		}
-		else {
-			throw new ModelRuntimeException("Model not supported");
+			break;
 		}
 
-		if (useReasoning.equals(OWL_REASONING)) {
+		// throw new ModelRuntimeException("Model not supported");
+
+		switch (reasoningType) {
+		case OWL:
 			model = RDF2Go.getModelFactory().createModel(Reasoning.owl);
-		}
-		else if (useReasoning.equals(RDFS_REASONING)) {
+			break;
+		case RDFS:
 			model = RDF2Go.getModelFactory().createModel(Reasoning.rdfs);
-		}
-		else {
+			break;
+		default:
 			model = RDF2Go.getModelFactory().createModel();
+			break;
 		}
 
 		model.open();
 
-		Logger.getLogger(this.getClass().getName()).log(Level.FINE,
-				"-> RDF2Go model '" + useModel + "' initialized");
+		Logger.getLogger(this.getClass().getName()).log(
+				Level.INFO,
+				"RDF2Go model '" + modelType + "' with reasoning '"
+						+ reasoningType + "' initialized");
 
 	}
 
