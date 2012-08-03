@@ -20,7 +20,7 @@
 
 package de.d3web.we.plugin.calendar;
 
-public class CalendarEntry implements Comparable {
+public class CalendarEntry implements Comparable<CalendarEntry> {
 
 	private DateType date;
 	private String author = "<i>-NV-</i>";
@@ -82,26 +82,22 @@ public class CalendarEntry implements Comparable {
 				&& value.equals(c.value);
 	}
 
+	@Override
 	public String toString() {
 
 		return "[" + date.toString() + " (" + author + "): " + value + "]";
 	}
 
 	@Override
-	public int compareTo(Object o) {
-		if (o instanceof CalendarEntry) {
-			if (this.equals(o)) {
-				return 0;
-			}
-			if (this.before((CalendarEntry) o)) {
-				return -1;
-			}
-			else {
-				return 1;
-			}
+	public int compareTo(CalendarEntry o) {
+		if (this.equals(o)) {
+			return 0;
+		}
+		if (this.before((CalendarEntry) o)) {
+			return -1;
 		}
 		else {
-			return 0;
+			return 1;
 		}
 	}
 }

@@ -33,7 +33,6 @@ import org.ontoware.rdf2go.model.node.Node;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class TimeLineHandler extends AbstractHTMLTagHandler {

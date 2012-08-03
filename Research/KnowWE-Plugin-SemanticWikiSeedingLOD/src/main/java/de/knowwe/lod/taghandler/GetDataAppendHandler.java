@@ -10,7 +10,6 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class GetDataAppendHandler implements PageAppendHandler {

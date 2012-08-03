@@ -28,7 +28,6 @@ import org.junit.Test;
 import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.kdom.rules.action.SetQuestionValue;
-import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;

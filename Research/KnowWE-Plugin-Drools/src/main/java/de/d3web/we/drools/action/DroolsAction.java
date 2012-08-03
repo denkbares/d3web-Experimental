@@ -42,8 +42,6 @@ import de.d3web.we.drools.terminology.ChoiceInput;
 import de.d3web.we.drools.terminology.DroolsKnowledgeHandler;
 import de.d3web.we.drools.terminology.NumInput;
 import de.d3web.we.drools.terminology.SolutionInput;
-import de.knowwe.core.ArticleManager;
-import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
@@ -228,8 +226,6 @@ public class DroolsAction extends AbstractAction {
 
 	private void doStoreAction(UserActionContext context) throws IOException {
 		Article article = DroolsUtils.loadArticle(context);
-		ArticleManager mgr = Environment.getInstance().getArticleManager(
-				article.getWeb());
 		String desiredSessionName = extractSessionName(context.getParameter("command"));
 		Section<DroolsSessionType> session = findDroolsSessionSection(context,
 				desiredSessionName);

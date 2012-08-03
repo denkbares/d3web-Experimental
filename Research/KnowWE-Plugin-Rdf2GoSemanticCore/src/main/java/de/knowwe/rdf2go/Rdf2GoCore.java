@@ -195,7 +195,7 @@ public class Rdf2GoCore implements EventListener {
 	 *        added and cached
 	 * @param statements the {@link Statement}s to add
 	 */
-	public void addStatements(Section<? extends Type> section,
+	public void addStatements(Section<?> section,
 			Statement... statements) {
 		Logger.getLogger(this.getClass().getName()).finer(
 				"semantic core updating " + section.getID() + "  " + statements.length);

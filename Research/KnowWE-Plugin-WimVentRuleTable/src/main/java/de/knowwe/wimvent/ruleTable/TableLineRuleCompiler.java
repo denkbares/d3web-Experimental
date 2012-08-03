@@ -65,7 +65,7 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 
 		Section<DefaultMarkupType> defaultMarkup = Sections.findAncestorOfType(s,
 				DefaultMarkupType.class);
-		String numString = defaultMarkup.get().getAnnotation(defaultMarkup,
+		String numString = DefaultMarkupType.getAnnotation(defaultMarkup,
 				WimVentTableMarkup.COLUMN_NUMBER_KEY);
 		int numberOfActionColumns = 1;
 		try {

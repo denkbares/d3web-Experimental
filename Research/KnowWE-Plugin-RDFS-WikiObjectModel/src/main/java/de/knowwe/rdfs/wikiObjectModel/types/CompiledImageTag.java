@@ -20,12 +20,9 @@ package de.knowwe.rdfs.wikiObjectModel.types;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
@@ -93,7 +90,6 @@ public class CompiledImageTag extends AbstractKnowledgeUnitType<CompiledImageTag
 			else {
 				targetURI = new URIImpl(Utils.createURL(section.getTitle()));
 			}
-			List<Statement> data = new ArrayList<Statement>();
 
 			// is an image
 			Rdf2GoCore.getInstance().addStatement(section, imageURI,
@@ -104,7 +100,6 @@ public class CompiledImageTag extends AbstractKnowledgeUnitType<CompiledImageTag
 			Rdf2GoCore.getInstance().addStatement(section, imageURI,
 					WikiObjectModel.ILLUSTRATES,
 					targetURI);
-
 		}
 	}
 

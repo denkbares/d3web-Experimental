@@ -101,7 +101,7 @@ public class InputFieldCellContent extends AbstractType {
 			int number = found.indexOf(sec);
 			Section<DefaultMarkupType> ancestorOfType = Sections.findAncestorOfType(sec,
 					DefaultMarkupType.class);
-			String tableid = ancestorOfType.get().getAnnotation(ancestorOfType, "id");
+			String tableid = DefaultMarkupType.getAnnotation(ancestorOfType, "id");
 			String contentString = getStoredContentString(number, tableid, version,
 					username);
 			return contentString;
@@ -119,8 +119,8 @@ public class InputFieldCellContent extends AbstractType {
 					List<Section<ContentEntry>> entries = VersionEntry.getEntries(
 							versionBlock);
 					for (Section<ContentEntry> section : entries) {
-						if (section.get().getNumber(section) == number) {
-							contentString = section.get().getContent(section);
+						if (ContentEntry.getNumber(section) == number) {
+							contentString = ContentEntry.getContent(section);
 							break;
 						}
 					}
@@ -139,7 +139,7 @@ public class InputFieldCellContent extends AbstractType {
 						TableEntryType.class,
 						tables);
 			for (Section<TableEntryType> table : tables) {
-				String tableID = table.get().getAnnotation(table, "tableid");
+				String tableID = DefaultMarkupType.getAnnotation(table, "tableid");
 				if (tableID != null) {
 					if (tableID.equals(id)) {
 						return table;

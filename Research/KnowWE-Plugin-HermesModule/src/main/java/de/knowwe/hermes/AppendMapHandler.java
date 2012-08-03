@@ -34,7 +34,6 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.maps.Placemark;
 import de.knowwe.hermes.taghandler.ShowMapHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;

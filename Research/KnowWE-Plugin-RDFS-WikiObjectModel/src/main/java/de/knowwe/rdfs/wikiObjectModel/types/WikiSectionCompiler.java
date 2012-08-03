@@ -85,14 +85,11 @@ public class WikiSectionCompiler extends AbstractKnowledgeUnitCompileScriptRDFS 
 			minorLevelSections.remove(medium); // without itself
 
 			for (Section<SectionType> minor : minorLevelSections) {
-				URI minorURI = createTriplesForSection(data, pageURI, minor, mediumURI);
-
+				createTriplesForSection(data, pageURI, minor, mediumURI);
 			}
-
 		}
 
 		Rdf2GoCore.getInstance().addStatements(section, Rdf2GoUtils.toArray(data));
-
 	}
 
 	private URI createTriplesForSection(List<Statement> data, URI pageURI, Section<SectionType> currentSection, URI parentSectionURI) {

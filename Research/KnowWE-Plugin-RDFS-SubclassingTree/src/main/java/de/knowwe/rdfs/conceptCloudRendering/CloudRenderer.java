@@ -107,7 +107,8 @@ public class CloudRenderer implements Renderer {
 			String outputfile = path
 					+ concept + section.getID() + ".pdf";
 
-			Process process = Runtime.getRuntime().exec(new String[] {
+			// TODO: read stdout and stderr to avoid process being blocked
+			/* Process process = */Runtime.getRuntime().exec(new String[] {
 					dotInstallation, dotFilename, tpng, o, outputfile });
 
 		}

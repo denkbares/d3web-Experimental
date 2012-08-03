@@ -169,7 +169,7 @@ public class SubmitTableContentAction extends AbstractAction {
 				TableEntryType.class, tables);
 		Section<TableEntryContentType> contentSection = null;
 		for (Section<TableEntryType> section : tables) {
-			String id = section.get().getAnnotation(section, "tableid");
+			String id = DefaultMarkupType.getAnnotation(section, "tableid");
 			if (id.equals(tableid)) {
 				contentSection = Sections.findSuccessor(section,
 						TableEntryContentType.class);

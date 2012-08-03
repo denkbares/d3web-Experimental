@@ -379,6 +379,7 @@ public class DateType {
 		return daysInMonth(month, year);
 	}
 
+	@Override
 	public int hashCode() {
 		return (int) longHashCode() ^ (3 / 13);
 	}
@@ -411,15 +412,7 @@ public class DateType {
 	}
 
 	public Date toDate() {
-		Date d = new Date();
-
-		d.setDate(day);
-		d.setMonth(month);
-		d.setYear(year);
-		d.setHours(hour);
-		d.setMinutes(minute);
-
-		return d;
+		return toCalendar().getTime();
 	}
 
 	public boolean after(DateType d) {
@@ -460,6 +453,7 @@ public class DateType {
 		return year == d.year && month == d.month && day == d.day;
 	}
 
+	@Override
 	public DateType clone() {
 		DateType d = new DateType();
 
@@ -472,6 +466,7 @@ public class DateType {
 		return d;
 	}
 
+	@Override
 	public String toString() {
 		return getDate() + " " + getTime();
 	}

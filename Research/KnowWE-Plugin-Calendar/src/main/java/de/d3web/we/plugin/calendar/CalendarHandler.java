@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -63,7 +63,6 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 		return getAppointments(null, author, web);
 	}
 
-	@SuppressWarnings("unchecked")
 	private static List<CalendarEntry> getAppointments(DateType[] intervall, String author, String web) {
 
 		List<CalendarEntry> result = new ArrayList<CalendarEntry>();
@@ -121,7 +120,6 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 		return search(apps, date, true);
 	}
 
-	@SuppressWarnings("unchecked")
 	private static int search(List<CalendarEntry> apps, DateType dateType, boolean after) {
 		String author = ""; // To provide that ce is set on the right place
 		if (!after) {

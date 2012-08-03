@@ -64,7 +64,7 @@ public class ParseXMLAction extends AbstractAction {
 
 		StringBuilder buildi = new StringBuilder();
 
-		String topic = context.getTopic();
+		String topic = context.getTitle();
 		String web = context.getWeb();
 		Article article = Environment.getInstance().getArticle(web, topic);
 		Section<Article> sec = article.getRootSection();

@@ -40,7 +40,6 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.action.ActionContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.usersupport.poi.DashMarkupHtmlToWikiConverter;
-import de.knowwe.usersupport.poi.DefaultUserSupportWordImportConfiguration;
 import de.knowwe.usersupport.poi.PoiUtils;
 
 /**
@@ -76,11 +75,10 @@ public class UploadReceptorServlet extends HttpServlet {
 			DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
 			fileItemFactory.setSizeThreshold(1 * 1024 * 1024); // 1 MB
 			ServletFileUpload uploadHandler = new ServletFileUpload(fileItemFactory);
-			String test = KnowWEUtils.getKnowWEExtensionPath();
 			File destinationDir = new
-					File(KnowWEUtils.getKnowWEExtensionPath()+"/tmp/uploads");
+					File(KnowWEUtils.getKnowWEExtensionPath() + "/tmp/uploads");
 			fileItemFactory.setRepository(new
-					File(KnowWEUtils.getKnowWEExtensionPath()+"/tmp/uploads"));
+					File(KnowWEUtils.getKnowWEExtensionPath() + "/tmp/uploads"));
 
 			/*
 			 * Parse the request
@@ -124,17 +122,16 @@ public class UploadReceptorServlet extends HttpServlet {
 					item.write(file);
 
 					/*
-					 *  import the file to Wiki via PoiUtils
-					 *  Create context here, because we need req and res.
+					 * import the file to Wiki via PoiUtils Create context here,
+					 * because we need req and res.
 					 */
 					Map<String, String> parameters = new HashMap<String, String>();
 					parameters.put("KWikiWeb", Environment.DEFAULT_WEB);
 					ActionContext context = new ActionContext(null, null, parameters, req, res,
 							null, null);
-					if (fileType.equals("word"))
-						importWord(file.getAbsolutePath(), article, context);
-					else
-						importTable(file, tableId, article, context);
+					if (fileType.equals("word")) importWord(file.getAbsolutePath(), article,
+							context);
+					else importTable(file, tableId, article, context);
 					file.delete();
 				}
 				out.close();
@@ -152,15 +149,13 @@ public class UploadReceptorServlet extends HttpServlet {
 
 	protected void importWord(String fileName, String article,
 			ActionContext context) throws IOException {
-		PoiUtils.importWordFromFile(fileName, article, context, new DashMarkupHtmlToWikiConverter());	
+		PoiUtils.importWordFromFile(fileName, article, context, new DashMarkupHtmlToWikiConverter());
 	}
-	
+
 	protected void importTable(File file, String tableId, String article,
 			ActionContext context) throws IOException {
 		PoiUtils.importTableFromFile(file, tableId, article, context);
-		
+
 	}
-
-
 
 }

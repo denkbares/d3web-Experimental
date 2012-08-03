@@ -31,7 +31,6 @@ import de.knowwe.d3web.scoreTable.renderer.TableCellRenderer;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 
 public class CornerCell extends AbstractType {
 

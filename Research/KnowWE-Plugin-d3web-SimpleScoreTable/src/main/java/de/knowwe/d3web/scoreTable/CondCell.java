@@ -24,7 +24,6 @@ package de.knowwe.d3web.scoreTable;
 
 import java.util.regex.Pattern;
 
-import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.d3web.scoreTable.renderer.TableCellRenderer;
 import de.knowwe.kdom.AnonymousType;

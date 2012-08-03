@@ -24,7 +24,6 @@ package de.knowwe.d3web.scoreTable;
 
 import de.d3web.we.object.SolutionReference;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 
 public class Solution extends SolutionReference {
 
