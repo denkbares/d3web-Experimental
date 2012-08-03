@@ -373,9 +373,10 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             Boolean value = D3webConnector.getInstance().getKb().getInfoStore().getValue(
                     BasicProperties.UNKNOWN_VISIBLE);
             if (value != null && value) {
-
+                
                 Boolean toValue = to.getInfoStore().getValue(BasicProperties.UNKNOWN_VISIBLE);
-                if (toValue == null || !toValue) {
+                System.out.println(to.getName() + " unknown: " + toValue);
+                if (toValue == null || toValue) {
 
                     AnswerD3webRenderer unknownRenderer = getUnknownRenderer();
 

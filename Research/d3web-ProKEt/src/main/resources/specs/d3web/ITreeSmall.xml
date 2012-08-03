@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="ITree - NumQuestion Based"  
+	dtype="itree" 
+	dstrategy="nextuaquestion" 
+	css="legal, nofoot" 
+	dialogcolumns="1"
+	questionnairecolumns="1"
+	questioncolumns = "1"
+	userprefix = "ITreeNum" 
+	login = "off"
+	required = "none"
+	language = "de"
+        uequestionnaire='OWN' 
+        study='' 
+        logging='' 
+        feedbackform="TRUE"
+        uegroup=""
+        >
+	<data kb="ITreeSmall.d3web" />
+</dialog>

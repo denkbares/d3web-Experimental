@@ -24,6 +24,8 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
+import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
@@ -88,12 +90,12 @@ public class ITreeNumQuestionD3webRenderer extends AbstractD3webRenderer impleme
 
         // get d3web properties
         Blackboard bb = d3webSession.getBlackboard();
-        Value val = bb.getValue((ValueObject) to);
 
         // set bonus text: is displayed in auxinfo panel
         String bonustext =
                 to.getInfoStore().getValue(ProKEtProperties.POPUP);
         st.setAttribute("bonusText", bonustext);
+
 
 
         // render arrows: --> check whether question has children,
@@ -127,26 +129,39 @@ public class ITreeNumQuestionD3webRenderer extends AbstractD3webRenderer impleme
             }
         }
 
-        /*
-         * st.removeAttribute("qrating"); if
-         * (UndefinedValue.isNotUndefinedValue(val)) { if
-         * (val.equals(JuriRule.YES_VALUE)) {
-         *
-         * // check if we have "swapped" questions //if(isNoDefining(to,
-         * juriRules)){ // st.setAttribute("qrating", "rating-low"); //} else {
-         * st.setAttribute("qrating", "rating-high"); //}
-         *
-         * } else if (val.equals(JuriRule.NO_VALUE)) { // check if we have
-         * "swapped" questions //if(isNoDefining(to, juriRules)){ //
-         * st.setAttribute("qrating", "rating-high"); // } else {
-         * st.setAttribute("qrating", "rating-low"); // }
-         *
-         * } else if (val.equals(JuriRule.MAYBE_VALUE)) {
-         * //System.out.println("MAYBE: " + to.getName());
-         * st.setAttribute("qrating", "rating-medium"); } } else {
-         * //System.out.println("UNDEFINED: " + to.getName());
-         * st.removeAttribute("qrating"); }
-         */
+        Value val = getAbstractValue(to, bb, d3webSession);
+        st.removeAttribute("qrating");
+
+
+        if (UndefinedValue.isNotUndefinedValue(val)) {
+
+            if (val.toString().equals(JNV.J.toString())) {
+
+                // check if we have "swapped" questions //
+                if (to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING) != null
+                        && to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING)) {
+
+                    st.setAttribute("qrating", "rating-low");
+                } else {
+                    st.setAttribute("qrating", "rating-high");
+                }
+
+            } else if (val.toString().equals(JNV.N.toString())) {
+                // check if we have swapped" questions //
+                if (to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING) != null
+                        && to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING)) {
+                    st.setAttribute("qrating", "rating-high");
+                } else {
+                    st.setAttribute("qrating", "rating-low");
+                }
+
+            } else if (val.toString().equals(JNV.V.toString())) {
+                st.setAttribute("qrating", "rating-medium");
+            }
+        } else {
+            st.removeAttribute("qrating");
+        }
+
 
 
         st.removeAttribute("tty");
@@ -181,6 +196,7 @@ public class ITreeNumQuestionD3webRenderer extends AbstractD3webRenderer impleme
 
 
 
+
         st.setAttribute("ttu", TT_UN);
         st.setAttribute("ttnan", TT_NAN);
         st.setAttribute("tooltip", TT_PROP_ERROR);
@@ -190,5 +206,34 @@ public class ITreeNumQuestionD3webRenderer extends AbstractD3webRenderer impleme
         sb.append(st.toString());
 
         return sb.toString();
+    }
+
+    /**
+     * In itree dialogs, there exist normal "num" questions as base objects due
+     * to need to model scoring behaviour and corresponding choice abstraction
+     * questions for mapping to values yes no and maybe. This method returns the
+     * abstraction value of the respective num base object.
+     *
+     * @param numTO
+     * @param blackboard
+     * @param sess
+     * @return
+     */
+    private Value getAbstractValue(TerminologyObject numTO, Blackboard blackboard,
+            Session sess) {
+
+        TerminologyObject abstractTO =
+                sess.getKnowledgeBase().getManager().searchQuestion(numTO.getName().replace("_n", ""));
+
+        return blackboard.getValue((ValueObject) abstractTO);
+    }
+
+    private Value getNumValue(TerminologyObject numTO, Blackboard blackboard,
+            Session sess) {
+
+        TerminologyObject num =
+                sess.getKnowledgeBase().getManager().searchQuestion(numTO.getName());
+
+        return blackboard.getValue((ValueObject) num);
     }
 }

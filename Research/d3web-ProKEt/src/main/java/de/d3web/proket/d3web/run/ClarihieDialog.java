@@ -75,19 +75,12 @@ import javax.servlet.ServletException;
  */
 public class ClarihieDialog extends D3webDialog {
 
-    // those need to be defined via the wiki later!!!
-    private static ArrayList<String> ITREEINIT = new ArrayList<String>() {
-
-        {
-            add("Ist das Arbeitsverhältnis wirksam gekündigt worden?");
-        }
-    };
-    
+   
    
     @Override
     protected String getSource(HttpServletRequest request, HttpSession http) {
         
-         return "juriswap";
+         return "ITree030812";
     }
 
     /**
@@ -186,16 +179,7 @@ public class ClarihieDialog extends D3webDialog {
         ServletLogUtils.logQuestionValue(question, value, logtime, logger);
     }
     
-    protected void loadITreeInit(HttpSession http, HttpServletRequest request){
-     for (String q:ITREEINIT){
-            Session d3webSession = (Session) http.getAttribute(D3WEB_SESSION);
-            String qu = AbstractD3webRenderer.getObjectNameForId(q);
-            Question qFinal = d3webSession.getKnowledgeBase().getManager().searchQuestion(
-                qu == null ? q : qu);
-            qFinal.getInfoStore().addValue(ProKEtProperties.ITREEINIT, true);
-        }
-    }
-    
+   
     @Override
     protected void show(HttpServletRequest request, HttpServletResponse response, 
     HttpSession httpSession) throws IOException{

@@ -65,25 +65,18 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.SessionFactory;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
-import de.d3web.core.session.blackboard.DefaultFact;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.core.session.interviewmanager.CurrentQContainerFormStrategy;
 import de.d3web.core.session.interviewmanager.NextUnansweredQuestionFormStrategy;
-import de.d3web.core.session.values.DateValue;
-import de.d3web.core.session.values.MultipleChoiceValue;
-import de.d3web.core.session.values.NumValue;
-import de.d3web.core.session.values.TextValue;
-import de.d3web.core.session.values.UndefinedValue;
-import de.d3web.core.session.values.Unknown;
+import de.d3web.core.session.values.*;
 import de.d3web.indication.ActionIndication;
 import de.d3web.indication.ActionInstantIndication;
 import de.d3web.indication.inference.PSMethodUserSelected;
-import de.d3web.jurisearch.JuriRule;
-import de.d3web.jurisearch.PSMethodJuri;
 import de.d3web.plugin.JPFPluginManager;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.ImageHandler;
+import de.d3web.proket.d3web.output.render.JNV;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.data.DialogType;
@@ -1441,13 +1434,78 @@ public class D3webUtils {
         Blackboard blackboard = sess.getBlackboard();
         Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
                 toName == null ? toId : toName);
+        Question question_c =
+                D3webConnector.getInstance().getKb().getManager().searchQuestion(
+                toName == null ? toId.replace("_n", "") : toName.replace("_n", ""));
+        
+        // if TerminologyObject not found in the current KB return & do nothing
+        if (question == null) {
+            return;
+        }
+
+        Value value = null;
+
+        if (D3webConnector.getInstance().getDialogType().equals(DialogType.ITREE)) {
+
+
+            // CHOICE questions
+            if (question instanceof QuestionNum) {
+                if (valueString != null) {
+                    if (valueString.equals("1")) {
+                        value = new ChoiceValue(JNV.J.toString());
+                    } else if (valueString.equals("2")) {
+                        value = new ChoiceValue(JNV.V.toString());
+                    } else if (valueString.equals("3")) {
+                        value = new ChoiceValue(JNV.N.toString());
+                    } else if (valueString.equals("0")) {
+                    }
+                }
+            }
+
+
+            if (question instanceof QuestionChoice) {
+                //TODO 
+            }
+
+            // if reasonable value retrieved, set it for the given
+            // TerminologyObject
+            if (value != null) {
+
+                if (UndefinedValue.isNotUndefinedValue(value)) {
+                    // add new value as UserEnteredFact
+                    Fact f2 = FactFactory.createUserEnteredFact(question_c, value);
+                    blackboard.addValueFact(f2);
+                }
+
+
+            } else {
+                setQuestionUndefined(sess, question);
+                setQuestionUndefined(sess, question_c);
+            }
+
+
+
+        }
+        
+    }
+
+    public static void setValueITreeOLD(String toId, String valueString, Session sess) {
+
+        if (toId == null || valueString == null) {
+            return;
+        }
+
+        String toName = AbstractD3webRenderer.getObjectNameForId(toId);
+        Blackboard blackboard = sess.getBlackboard();
+        Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+                toName == null ? toId : toName);
+
 
         // if TerminologyObject not found in the current KB return & do nothing
         if (question == null) {
             return;
         }
 
-        System.out.println(valueString);
         // ONLY FOR ClariHIE Dialog!!!
         if (D3webConnector.getInstance().getDialogType().equals(DialogType.ITREE)) {
             if (valueString != null) {
@@ -1468,6 +1526,8 @@ public class D3webUtils {
 
         if (valueString != null && valueString.equalsIgnoreCase("retract")) {
             setQuestionUndefined(sess, question);
+
+
         } // otherwise, i.e., for all other "not-unknown" values
         else {
 
@@ -1542,11 +1602,11 @@ public class D3webUtils {
         if (to instanceof QuestionOC) {
             // valueString is the html ID of the selected item
             String valueName = AbstractD3webRenderer.getObjectNameForId(valueId);
-            
-            if(valueId.equals(YESSTRING)){
+
+            if (valueId.equals(YESSTRING)) {
                 value = KnowledgeBaseUtils.findValue(to,
-                    valueName == null ? valueId : valueName);
-               
+                        valueName == null ? valueId : valueName);
+
             }
             value = KnowledgeBaseUtils.findValue(to,
                     valueName == null ? valueId : valueName);
@@ -1596,8 +1656,6 @@ public class D3webUtils {
         blackboard.addValueFact(fact);
         return value;
     }
-    
-     
 
     /**
      * Set given question in the given session to Undefined
@@ -1608,14 +1666,17 @@ public class D3webUtils {
      * question
      */
     private static Value setQuestionUndefined(Session sess, Question to) {
+        System.out.println("ud: " + to.getName());
         Blackboard blackboard = sess.getBlackboard();
 
         // remove a previously set value
         Fact lastFact = blackboard.getValueFact(to);
+        System.out.println("ud before: " + blackboard.getValue(to));
+
         if (lastFact != null) {
             blackboard.removeValueFact(lastFact);
         }
-
+        System.out.println("ud after: " + blackboard.getValue(to));
         return blackboard.getValue(to);
     }
 

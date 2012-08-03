@@ -68,7 +68,6 @@ function initializeSolutionBox(){
 function setRootQuestionIdInHierarchyPrototype(){   
     
     rootQuestionId = $("[id^=dialog] > [id^=q_]").first().attr("id");
-    alert(rootQuestionId);
 }
 
 /**
