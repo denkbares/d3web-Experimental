@@ -43,6 +43,9 @@ public class ProKEtProperties {
             "ortype", Boolean.class);
      public static final Property<Boolean> DUMMY = Property.getProperty(
             "dummy", Boolean.class);
+     
+        public static final Property<Boolean> SCORING = Property.getProperty(
+            "scoring", Boolean.class);
     public static final Property<String> WEBLINK = Property.getProperty(
             "weblink", String.class);
     public static final Property<String> PDFLINK = Property.getProperty(
