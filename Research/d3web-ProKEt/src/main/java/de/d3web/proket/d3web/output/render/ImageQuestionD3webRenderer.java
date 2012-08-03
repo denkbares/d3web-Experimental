@@ -81,7 +81,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 
 		// TODO extend for HERNIA
 		// read html popups from properties
-		String resString = to.getInfoStore().getValue(ProKEtProperties.POPUP);
+		String resString = D3webUtils.getPopupPrompt(to, loc);
 		if (resString != null) {
 			st.setAttribute("tooltip", resString);
 		}
