@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAnnotationAxiom;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLIndividual;
@@ -21,10 +20,8 @@ import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
-import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.frame.IndividualFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
-import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
 import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
 import de.knowwe.owlapi.OWLAPIAbstractKnowledgeUnitCompileScript;
@@ -77,7 +74,6 @@ public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCom
 							new OWLApiAxiomCacheUpdateEvent(axiom, fact));
 					axioms.add(axiom);
 				}
-				// handleOptionalAnnotations(fact, i); // Optional annotations
 			}
 		}
 
@@ -97,7 +93,6 @@ public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCom
 							new OWLApiAxiomCacheUpdateEvent(axiom, node));
 					axioms.add(axiom);
 				}
-				// handleOptionalAnnotations(node, i); // Optional annotations
 			}
 		}
 
@@ -117,7 +112,6 @@ public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCom
 							new OWLApiAxiomCacheUpdateEvent(axiom, node));
 					axioms.add(axiom);
 				}
-				// handleOptionalAnnotations(node, i); // Optional annotations
 			}
 		}
 
@@ -140,31 +134,6 @@ public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCom
 					EventManager.getInstance().fireEvent(
 							new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
 					axioms.add(axiom);
-				}
-			}
-			// handleOptionalAnnotations(types, i); optional Annotations
-		}
-		return axioms;
-	}
-
-	/**
-	 * Handles the optional {@link Annotations} inside each description.
-	 * 
-	 * @created 29.09.2011
-	 * @param Section<? extends Type> section
-	 * @return A Set with {@link OWLAnnotationAxiom}
-	 */
-	private Set<OWLAxiom> handleOptionalAnnotations(Section<? extends Type> section, OWLIndividual i, Collection<Message> messages) {
-
-		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
-
-		if (ManchesterSyntaxUtil.hasAnnotations(section)) {
-			List<Section<Annotation>> annotations = ManchesterSyntaxUtil.getAnnotations(section);
-			IRI annotatetObject = i.asOWLNamedIndividual().getIRI();
-			for (Section<Annotation> annotation : annotations) {
-				OWLAxiom a = AxiomFactory.createAnnotations(annotation, annotatetObject, messages);
-				if (a != null) {
-					axioms.add(a);
 				}
 			}
 		}

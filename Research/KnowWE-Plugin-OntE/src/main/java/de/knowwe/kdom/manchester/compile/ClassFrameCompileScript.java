@@ -161,12 +161,11 @@ public class ClassFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileS
 					set.add(e);
 					// TODO: needs testing
 					axiom = AxiomFactory.createOWLDisjointUnionOf(clazz, set);
-					axiom = null;
-					if (axiom != null) {
-						EventManager.getInstance().fireEvent(
-								new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
-						axioms.add(axiom);
-					}
+					// if (axiom != null) {
+					// EventManager.getInstance().fireEvent(
+					// new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
+					// axioms.add(axiom);
+					// }
 				}
 			}
 		}

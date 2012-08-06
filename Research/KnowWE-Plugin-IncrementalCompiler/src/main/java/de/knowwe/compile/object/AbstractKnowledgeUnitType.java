@@ -23,11 +23,10 @@ package de.knowwe.compile.object;
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.Type;
 import de.knowwe.plugin.Plugins;
 
 @SuppressWarnings("unchecked")
-public class AbstractKnowledgeUnitType<T extends Type> extends AbstractType
+public class AbstractKnowledgeUnitType<T extends AbstractKnowledgeUnitType<T>> extends AbstractType
 		implements KnowledgeUnit {
 
 	private KnowledgeUnitCompileScript<T> compileScript = null;

@@ -8,7 +8,6 @@ import java.util.Set;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLEntity;
-import org.semanticweb.owlapi.model.OWLImportsDeclaration;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyAlreadyExistsException;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -61,9 +60,6 @@ public class ImportFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<I
 				// OWLReasonerFactory factory =
 				// OWLAPIConnector.getInstance(iri).getFactory();
 				// OWLReasoner reasoner = factory.createReasoner(toImport);
-
-				// handleImportDeclarations(toImport, axioms, section); not
-				// necessary
 
 				axioms.addAll(toImport.getAxioms());
 
@@ -131,47 +127,6 @@ public class ImportFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<I
 
 		ImportManager.clearNewImports();
 		ImportManager.clearRemovedImports();
-	}
-
-	/**
-	 * Handle optional import declaration within the to import ontology.
-	 * 
-	 * @created 14.12.2011
-	 * @param ontolology
-	 * @param axioms
-	 * @param section
-	 */
-	private void handleImportDeclarations(OWLOntology ontolology, Set<OWLAxiom> axioms, Section<ImportFrame> section, IRI ontologyIRI) {
-		Set<OWLImportsDeclaration> importDeclarations = ontolology.getImportsDeclarations();
-		if (!importDeclarations.isEmpty()) {
-			for (OWLImportsDeclaration owlImportsDeclaration : importDeclarations) {
-				IRI iri = owlImportsDeclaration.getIRI();
-				try {
-					if (!ImportedOntologyManager.getInstance().isKnown(iri)) {
-
-						OWLOntologyManager manager = OWLAPIConnector.getInstance(iri).getManager();
-						OWLOntology anotherImport = manager.loadOntologyFromOntologyDocument(iri);
-
-						// ... finally add to known imported ontologies ...
-						IRI anotherOntologyIRI = anotherImport.getOntologyID().getOntologyIRI();
-						ImportedOntologyManager.getInstance().addOntology(section, ontologyIRI);
-						ImportedOntologyManager.getInstance().addAxioms(anotherImport.getAxioms(),
-								ontologyIRI);
-						manager.removeOntology(anotherImport);
-						axioms.addAll(anotherImport.getAxioms());
-
-						// ... and now add the terms to the ReferenceManager ...
-						Set<OWLEntity> entities = anotherImport.getSignature();
-						registerImportedTerminology(entities, section, ontologyIRI);
-
-						handleImportDeclarations(anotherImport, axioms, section, anotherOntologyIRI);
-					}
-				}
-				catch (OWLOntologyCreationException e) {
-
-				}
-			}
-		}
 	}
 
 	/**

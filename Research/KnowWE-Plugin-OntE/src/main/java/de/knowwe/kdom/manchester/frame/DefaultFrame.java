@@ -40,7 +40,7 @@ import de.knowwe.kdom.manchester.types.MisspelledSyntaxConstruct;
  * @author Stefan Mark
  * @created 23.09.2011
  */
-public class DefaultFrame<T extends Type> extends AbstractKnowledgeUnitType<T> {
+public class DefaultFrame<T extends DefaultFrame<T>> extends AbstractKnowledgeUnitType<T> {
 
 	/**
 	 * Constructor for the {@link DefaultFrame}.
