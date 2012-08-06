@@ -124,6 +124,7 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 	 * @param Section<DefaultFrame> section The current {@link DefaultFrame}
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private String getEditorIcon(Section<?> section) {
 		StringBuilder icon = new StringBuilder();
 		icon.append("<a href=\"javascript:KNOWWE.plugin.onte.popEditor('Edit current frame');\">");

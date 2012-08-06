@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -45,8 +45,8 @@ import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
- *
- *
+ * 
+ * 
  * @author smark
  * @created 03.09.2011
  */
@@ -71,7 +71,6 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
-
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -115,11 +114,12 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 08.09.2011
 	 * @param html
 	 */
+	@SuppressWarnings("unused")
 	private void printObjectProperties(StringBuilder html) {
 		html.append("<br /><br />");
 		Set<OWLObjectProperty> p = ontology.getObjectPropertiesInSignature();
@@ -151,7 +151,6 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 			}
 
 			checkCharacteristics(owlObjectProperty, html);
-
 
 			if (owlObjectProperty.getSuperProperties(ontology).size() == 0) {
 				for (OWLObjectPropertyExpression propertyExpression : owlObjectProperty.getSubProperties(ontology)) {
@@ -204,11 +203,12 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 08.09.2011
 	 * @param html
 	 */
+	@SuppressWarnings("unused")
 	private void printClasses(StringBuilder html) {
 		Set<OWLClass> c = ontology.getClassesInSignature();
 		for (OWLClass owlClass : c) {
@@ -220,12 +220,13 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 
 	/**
 	 * Print the hierarchy of the classes in the ontology.
-	 *
+	 * 
 	 * @created 07.09.2011
 	 * @param clazz
 	 * @param level
 	 * @param html
 	 */
+	@SuppressWarnings("unused")
 	private void printHierarchy(OWLClass clazz, int level, StringBuilder html) {
 
 		if (reasoner.isSatisfiable(clazz)) {
@@ -248,7 +249,7 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 	 * /owlapi/v3/trunk/tutorial/src/main
 	 * /java/uk/ac/manchester/owl/owlapi/tutorial
 	 * /examples/SimpleHierarchyExample.java?revision=1830&view=markup
-	 *
+	 * 
 	 * @created 07.09.2011
 	 * @param clazz
 	 * @return
@@ -271,5 +272,3 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 		}
 	}
 }
-
-
