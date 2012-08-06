@@ -75,24 +75,14 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 
 		}
 
-		List<Section<TableCellContent>> cells = new ArrayList<Section<TableCellContent>>();
-		Sections.findSuccessorsOfType(s, TableCellContent.class, cells);
+		List<Section<TableCellContent>> cells =
+				Sections.findSuccessorsOfType(s, TableCellContent.class);
 		List<Condition> conditions = new ArrayList<Condition>();
 		for (int i = 0; i < cells.size() - numberOfActionColumns; i++) {
 			Section<TableCellContent> cell = cells.get(i);
-			Section<D3webCondition> condSec = Sections.findSuccessor(cell,
-					D3webCondition.class);
-			if (condSec != null) {
-				Condition cond = condSec.get().getCondition(article, condSec);
-				if (cond != null) {
-					conditions.add(cond);
-				}
-				else {
-					return Messages.asList(Messages.creationFailedWarning(
-							D3webUtils.getD3webBundle().
-									getString("KnowWE.rulesNew.notcreated")
-							));
-				}
+			Condition cond = D3webCondition.findCondition(article, cell);
+			if (cond != null) {
+				conditions.add(cond);
 			}
 			else {
 				return Messages.asList(Messages.creationFailedWarning(
