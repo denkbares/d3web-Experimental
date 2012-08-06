@@ -28,7 +28,6 @@ import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.we.diaflux.datamanagement.Domain;
 import de.d3web.we.diaflux.datamanagement.EvalResult;
-import de.d3web.we.diaflux.datamanagement.MCValue;
 import de.d3web.we.diaflux.datamanagement.MOValue;
 
 /**
@@ -68,10 +67,7 @@ public class EqualEval extends TerminalEvaluator {
 
 		}
 		if (value instanceof MultipleChoiceValue) {
-			MultipleChoiceValue cValue = (MultipleChoiceValue) value;
-
-			Domain<MCValue> domain = new Domain<MCValue>();
-			result.add(name, domain);
+			throw new IllegalStateException("multiple choice values are not implemented yet");
 		}
 		return result;
 	}

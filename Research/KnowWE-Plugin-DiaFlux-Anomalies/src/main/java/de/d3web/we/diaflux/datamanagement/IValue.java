@@ -20,19 +20,19 @@ package de.d3web.we.diaflux.datamanagement;
 
 import java.util.List;
 
-public interface IValue {
+public interface IValue<T extends IValue<T>> {
 
-	public boolean intersects(IValue v);
+	public boolean intersects(T v);
 
-	public boolean containsValue(IValue v);
+	public boolean containsValue(T v);
 
-	public IValue intersectWith(IValue v);
+	public T intersectWith(T v);
 
-	public List<? extends IValue> negate();
+	public List<? extends T> negate();
 
-	public IValue mergeWith(IValue v);
+	public T mergeWith(T v);
 
-	public List<? extends IValue> substract(IValue v);
+	public List<? extends T> substract(T v);
 
 	public boolean isEmpty();
 }

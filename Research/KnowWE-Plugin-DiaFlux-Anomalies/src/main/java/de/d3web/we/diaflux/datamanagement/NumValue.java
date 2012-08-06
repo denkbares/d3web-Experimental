@@ -21,16 +21,14 @@ package de.d3web.we.diaflux.datamanagement;
 import java.util.LinkedList;
 import java.util.List;
 
-public class NumValue extends NumericInterval implements IValue {
+public class NumValue extends NumericInterval implements IValue<NumValue> {
 
 	public NumValue(double min, double max, boolean minClosed, boolean maxClosed) {
 		super(min, max, minClosed, maxClosed);
 	}
 
 	@Override
-	public boolean intersects(IValue v) {
-		if (!(v instanceof NumValue)) return false;
-		NumValue nI = (NumValue) v;
+	public boolean intersects(NumValue nI) {
 		if (max > nI.getMin() && min < nI.getMax()) {
 			return true;
 		}
@@ -44,15 +42,12 @@ public class NumValue extends NumericInterval implements IValue {
 	}
 
 	@Override
-	public boolean containsValue(IValue v) {
-		if (!(v instanceof NumValue)) return false;
-		NumericInterval nI = (NumericInterval) v;
+	public boolean containsValue(NumValue nI) {
 		return super.contains(nI);
 	}
 
 	@Override
-	public IValue intersectWith(IValue v) {
-		NumValue nI = (NumValue) v;
+	public NumValue intersectWith(NumValue nI) {
 		NumValue result = new NumValue(this.min, this.max, this.minClosed, this.maxClosed);
 		if (min < nI.getMin()) {
 			result.setMin(nI.getMin());
@@ -85,10 +80,8 @@ public class NumValue extends NumericInterval implements IValue {
 	}
 
 	@Override
-	public IValue mergeWith(IValue v) {
-		if (!(v instanceof NumValue)) return this;
+	public NumValue mergeWith(NumValue nI) {
 		NumValue result = new NumValue(this.min, this.max, this.minClosed, this.maxClosed);
-		NumValue nI = (NumValue) v;
 		if (min > nI.getMin()) {
 			result.setMin(nI.getMin());
 			result.setMinClosed(nI.getMinClosed());
@@ -114,12 +107,12 @@ public class NumValue extends NumericInterval implements IValue {
 	}
 
 	@Override
-	public List<NumValue> substract(IValue v) {
+	public List<NumValue> substract(NumValue v) {
 		List<NumValue> result = new LinkedList<NumValue>();
-		List<NumValue> neg_v = ((NumValue) v).negate();
+		List<NumValue> neg_v = v.negate();
 		for (NumValue numV : neg_v) {
 			if (this.intersects(numV)) {
-				result.add((NumValue) this.intersectWith(numV));
+				result.add(this.intersectWith(numV));
 			}
 		}
 		return result;
@@ -127,7 +120,7 @@ public class NumValue extends NumericInterval implements IValue {
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		// empty if not contains its middle element
+		return contains((getMin() + getMax()) / 2);
 	}
 }

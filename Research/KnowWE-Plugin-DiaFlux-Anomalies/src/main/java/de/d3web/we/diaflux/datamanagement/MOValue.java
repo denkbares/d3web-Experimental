@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class MOValue implements IValue {
+public class MOValue implements IValue<MOValue> {
 
 	private boolean isOneChoice = false;
 
@@ -56,9 +56,7 @@ public class MOValue implements IValue {
 	}
 
 	@Override
-	public boolean intersects(IValue v) {
-		if (!(v instanceof MOValue)) return false;
-		MOValue mov = (MOValue) v;
+	public boolean intersects(MOValue mov) {
 		for (String val : actualValues) {
 			for (String comVal : mov.actualValues) {
 				if (val.equals(comVal)) return true;
@@ -68,9 +66,7 @@ public class MOValue implements IValue {
 	}
 
 	@Override
-	public boolean containsValue(IValue v) {
-		if (!(v instanceof MOValue)) return false;
-		MOValue mov = (MOValue) v;
+	public boolean containsValue(MOValue mov) {
 		boolean contained = false;
 		for (String val : mov.actualValues) {
 			for (String comVal : actualValues) {
@@ -82,10 +78,8 @@ public class MOValue implements IValue {
 	}
 
 	@Override
-	public IValue intersectWith(IValue v) {
+	public MOValue intersectWith(MOValue mov) {
 		MOValue result = new MOValue(this.possibleValues, new HashSet<String>(), this.isOneChoice);
-		if (!(v instanceof MOValue)) return result;
-		MOValue mov = (MOValue) v;
 		for (String val : actualValues) {
 			for (String comVal : mov.actualValues) {
 				if (val.equals(comVal)) {
@@ -97,7 +91,7 @@ public class MOValue implements IValue {
 	}
 
 	@Override
-	public List<? extends IValue> negate() {
+	public List<? extends MOValue> negate() {
 		List<MOValue> result = new LinkedList<MOValue>();
 		Set<String> negValues = new HashSet<String>(possibleValues);
 		negValues.removeAll(actualValues);
@@ -107,9 +101,7 @@ public class MOValue implements IValue {
 	}
 
 	@Override
-	public IValue mergeWith(IValue v) {
-		if (!(v instanceof MOValue)) return this;
-		MOValue mov = (MOValue) v;
+	public MOValue mergeWith(MOValue mov) {
 		HashSet<String> mergedVars = new HashSet<String>();
 		for (String value : actualValues) {
 			mergedVars.add(value);
@@ -133,8 +125,7 @@ public class MOValue implements IValue {
 	}
 
 	@Override
-	public List<MOValue> substract(IValue v) {
-		MOValue oMO = (MOValue) v;
+	public List<MOValue> substract(MOValue oMO) {
 		Set<String> act = new HashSet<String>();
 		act.addAll(this.actualValues);
 		act.removeAll(oMO.actualValues);

@@ -25,7 +25,7 @@ import java.util.Set;
 
 import de.d3web.core.knowledge.terminology.Choice;
 
-public class OCValue implements IValue {
+public class OCValue implements IValue<OCValue> {
 
 	private final Set<Choice> possibleValues;
 	private final Set<Choice> actualValues;
@@ -48,9 +48,7 @@ public class OCValue implements IValue {
 	 * returns true if at least one Choice of v is in this.actualValues
 	 */
 	@Override
-	public boolean intersects(IValue v) {
-		if (!(v instanceof OCValue)) return false;
-		OCValue oc = (OCValue) v;
+	public boolean intersects(OCValue oc) {
 		for (Choice c : oc.actualValues) {
 			if (actualValues.contains(c)) return true;
 		}
@@ -62,9 +60,7 @@ public class OCValue implements IValue {
 	 * actualValues of this are empty
 	 */
 	@Override
-	public boolean containsValue(IValue v) {
-		if (!(v instanceof OCValue)) return false;
-		OCValue oc = (OCValue) v;
+	public boolean containsValue(OCValue oc) {
 		if (actualValues.isEmpty()) return true;
 		for (Choice c : oc.actualValues) {
 			if (!actualValues.contains(c)) return false;
@@ -73,8 +69,7 @@ public class OCValue implements IValue {
 	}
 
 	@Override
-	public IValue intersectWith(IValue v) {
-		OCValue oc = (OCValue) v;
+	public OCValue intersectWith(OCValue oc) {
 		OCValue result = new OCValue(possibleValues, actualValues);
 		for (Choice c : result.actualValues) {
 			if (!oc.actualValues.contains(c)) result.removeActualValue(c);
@@ -83,7 +78,7 @@ public class OCValue implements IValue {
 	}
 
 	@Override
-	public List<? extends IValue> negate() {
+	public List<? extends OCValue> negate() {
 		List<OCValue> result = new LinkedList<OCValue>();
 		Set<Choice> actValues = new HashSet<Choice>();
 		for (Choice c : possibleValues) {
@@ -100,13 +95,12 @@ public class OCValue implements IValue {
 	 * OC has only one actual Value
 	 */
 	@Override
-	public IValue mergeWith(IValue v) {
+	public OCValue mergeWith(OCValue v) {
 		return intersectWith(v);
 	}
 
 	@Override
-	public List<? extends IValue> substract(IValue v) {
-		OCValue oc = (OCValue) v;
+	public List<? extends OCValue> substract(OCValue oc) {
 		List<OCValue> result = new LinkedList<OCValue>();
 		Set<Choice> actValues = new HashSet<Choice>();
 		actValues.addAll(actualValues);

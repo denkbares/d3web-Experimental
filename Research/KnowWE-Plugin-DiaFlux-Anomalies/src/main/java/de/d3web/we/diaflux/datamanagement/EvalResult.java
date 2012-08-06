@@ -28,13 +28,15 @@ import java.util.Set;
  */
 public class EvalResult {
 
-	private final HashMap<String, Domain> results;
+	private final HashMap<String, Domain<?>> results;
 
 	public EvalResult() {
-		results = new HashMap<String, Domain>();
+		results = new HashMap<String, Domain<?>>();
 	}
 
-	public boolean add(String var, Domain domain) {
+	@SuppressWarnings("unchecked")
+	public boolean add(String var, Domain<?> domain) {
+		@SuppressWarnings("rawtypes")
 		Domain oldDomain = results.get(var);
 		if (oldDomain != null) {
 			domain.addAll(oldDomain);
@@ -53,7 +55,7 @@ public class EvalResult {
 	public EvalResult negate() {
 		EvalResult result = new EvalResult();
 		for (String key : results.keySet()) {
-			Domain domain = results.get(key).negate();
+			Domain<?> domain = results.get(key).negate();
 			result.add(key, domain);
 		}
 		// result.mergeAll();
@@ -69,6 +71,8 @@ public class EvalResult {
 	 * @param eRes
 	 * @return
 	 */
+	@SuppressWarnings({
+			"unchecked", "rawtypes" })
 	public EvalResult intersect(EvalResult eRes) {
 		EvalResult result = new EvalResult();
 		Set<String> thisList = results.keySet();
@@ -85,9 +89,10 @@ public class EvalResult {
 		for (String key1 : results.keySet()) {
 			for (String key2 : eRes.results.keySet()) {
 				if (key1.equals(key2)) {
-					Domain domain = results.get(key1);
-					if (domain.intersects(eRes.results.get(key2))) {
-						result.add(key1, domain.intersectWith(eRes.results.get(key2)));
+					Domain domain1 = results.get(key1);
+					Domain domain2 = eRes.results.get(key2);
+					if (domain1.intersects(domain2)) {
+						result.add(key1, domain1.intersectWith(domain2));
 					}
 				}
 			}
@@ -102,6 +107,8 @@ public class EvalResult {
 	 * @param eRes
 	 * @return
 	 */
+	@SuppressWarnings({
+			"rawtypes", "unchecked" })
 	public EvalResult restrictWith(EvalResult eRes) {
 
 		EvalResult result = new EvalResult();
@@ -113,11 +120,11 @@ public class EvalResult {
 
 			for (String key2 : eRes.results.keySet()) {
 				if (key1.equals(key2)) {
-
 					contained = true;
-					Domain domain = results.get(key1);
-					if (domain.intersects(eRes.results.get(key2))) {
-						result.add(key1, domain.intersectWith(eRes.results.get(key2)));
+					Domain domain1 = results.get(key1);
+					Domain domain2 = eRes.results.get(key2);
+					if (domain1.intersects(domain2)) {
+						result.add(key1, domain1.intersectWith(domain2));
 					}
 				}
 			}
@@ -134,12 +141,15 @@ public class EvalResult {
 	 * @param eRes
 	 * @return
 	 */
+	@SuppressWarnings({
+			"unchecked", "rawtypes" })
 	public boolean intersects(EvalResult eRes) {
 		for (String key1 : results.keySet()) {
 			for (String key2 : eRes.results.keySet()) {
 				if (key1.equals(key2)) {
-					Domain domain = results.get(key1);
-					if (domain.intersects(eRes.results.get(key2))) {
+					Domain domain1 = results.get(key1);
+					Domain domain2 = eRes.results.get(key2);
+					if (domain1.intersects(domain2)) {
 						return true;
 					}
 				}
@@ -154,13 +164,16 @@ public class EvalResult {
 	 * @param eRes
 	 * @return
 	 */
+	@SuppressWarnings({
+			"rawtypes", "unchecked" })
 	public boolean contains(EvalResult eRes) {
 		boolean contained = false;
 		for (String key1 : eRes.results.keySet()) {
 			for (String key2 : results.keySet()) {
 				if (key1.equals(key2)) {
-					Domain domain = results.get(key1);
-					if (domain.contains(eRes.results.get(key2))) {
+					Domain domain1 = results.get(key1);
+					Domain domain2 = eRes.results.get(key2);
+					if (domain1.contains(domain2)) {
 						return contained = true;
 					}
 				}
@@ -168,33 +181,6 @@ public class EvalResult {
 			if (!contained) return false;
 		}
 		return true;
-	}
-
-	/**
-	 * 
-	 * @created 08.05.2012
-	 * @param var
-	 * @param domain
-	 * @return
-	 */
-	public boolean contains(String var, Domain domain) {
-		if (!results.keySet().contains(var)) return false;
-		Domain oldDomain = results.get(var);
-		if (!oldDomain.contains(domain)) return false;
-		return true;
-	}
-
-	/**
-	 * 
-	 * @created 08.05.2012
-	 * @param var
-	 * @param value
-	 * @return
-	 */
-	public boolean contains(String var, IValue value) {
-		Domain newDomain = new Domain();
-		newDomain.add(value);
-		return contains(var, newDomain);
 	}
 
 	/**
@@ -222,14 +208,18 @@ public class EvalResult {
 	 * @param eRes
 	 * @return
 	 */
+	@SuppressWarnings({
+			"rawtypes", "unchecked" })
 	public EvalResult substract(EvalResult eRes) {
 		EvalResult result = new EvalResult();
 		for (String key : results.keySet()) {
 			for (String key_eRes : eRes.results.keySet()) {
 				if (key.equals(key_eRes)) {
-					Domain domain = results.get(key_eRes).substract(eRes.results.get(key_eRes));
-					if (!domain.isEmpty()) {
-						result.add(key, domain);
+					Domain domain1 = results.get(key_eRes);
+					Domain domain2 = eRes.results.get(key_eRes);
+					Domain difference = domain1.substract(domain2);
+					if (!difference.isEmpty()) {
+						result.add(key, difference);
 					}
 				}
 			}
