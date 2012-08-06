@@ -21,22 +21,15 @@
 package de.knowwe.medicine.action;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.Statement;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.medicine.DbConnection;
 import de.knowwe.medicine.Medicine;
-import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class TableExistCheckAction extends AbstractAction {
 
 	private Medicine med;
-	private Rdf2GoCore core;
-
-	private Connection connect = null;
-	private Statement statement = null;
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
