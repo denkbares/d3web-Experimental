@@ -36,8 +36,7 @@ import de.knowwe.usersupport.tables.action.TableExportAction;
  * @author Johannes Dienst
  * @created 18.10.2011
  */
-public class TableUtils
-{
+public class TableUtils {
 
 	/**
 	 * Returns the row of the table in which the current cell occurs.
@@ -46,8 +45,7 @@ public class TableUtils
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static int getRowNumber(Section<? extends TableCell> s)
-	{
+	public static int getRowNumber(Section<? extends TableCell> s) {
 		Section<TableLine> tableLine = Sections.findAncestorOfType(s, TableLine.class);
 
 		Section<ITable> table = (Section<ITable>) tableLine.getFather();
@@ -62,8 +60,7 @@ public class TableUtils
 	 * @param s current section
 	 * @return
 	 */
-	public static int getColumnNumber(Section<? extends TableCell> s)
-	{
+	public static int getColumnNumber(Section<? extends TableCell> s) {
 		Section<TableLine> tableLine = Sections.findAncestorOfType(s, TableLine.class);
 
 		List<Section<TableCell>> cells = Sections.findSuccessorsOfType(tableLine, TableCell.class);
@@ -77,8 +74,7 @@ public class TableUtils
 	 * @param s
 	 * @return
 	 */
-	public static int getRowNumberOfLine(Section<? extends TableLine> s)
-	{
+	public static int getRowNumberOfLine(Section<? extends TableLine> s) {
 		return Sections.findAncestorOfType(s, ITable.class).getChildren().indexOf(s);
 	}
 
@@ -117,8 +113,7 @@ public class TableUtils
 	 * @param table
 	 * @return
 	 */
-	public static List<Section<TableCell>> getRowCells(int row, Section<ITable> table)
-	{
+	public static List<Section<TableCell>> getRowCells(int row, Section<ITable> table) {
 
 		// no header return
 		if (row == 0) return null;
@@ -142,8 +137,7 @@ public class TableUtils
 	 * @param id
 	 * @return
 	 */
-	public static Section<ITable> getTableWithId(Article article, String id)
-	{
+	public static Section<ITable> getTableWithId(Article article, String id) {
 		Section<Article> articleSection = article.getRootSection();
 
 		List<Section<ITable>> tables = new ArrayList<Section<ITable>>();
@@ -156,8 +150,7 @@ public class TableUtils
 		return null;
 	}
 
-	public static int getWidestTableCellLength(List<Section<TableCell>> cells)
-	{
+	public static int getWidestTableCellLength(List<Section<TableCell>> cells) {
 		int max = 0;
 
 		for (Section<TableCell> cell : cells)
@@ -166,8 +159,7 @@ public class TableUtils
 		return max;
 	}
 
-	public static int getWidestTableCellLengthPoiUtils(List<String[]> rowsList)
-	{
+	public static int getWidestTableCellLengthPoiUtils(List<String[]> rowsList) {
 		int max = 0;
 
 		// Iterate over all rows and cells
@@ -178,8 +170,7 @@ public class TableUtils
 		return max;
 	}
 
-	public static String generateStringWithLength(int len, char fill)
-	{
+	public static String generateStringWithLength(int len, char fill) {
 		if (len < 0) return null;
 		char[] cs = new char[len];
 		Arrays.fill(cs, fill);
@@ -193,8 +184,7 @@ public class TableUtils
 	 * @param maxCellLength
 	 * @return
 	 */
-	public static String generateFillString(String toFill, int maxCellLength)
-	{
+	public static String generateFillString(String toFill, int maxCellLength) {
 		if (toFill.length() < maxCellLength) return TableUtils.generateStringWithLength(
 				Math.abs(toFill.length() - maxCellLength), ' ');
 		return "";
@@ -208,28 +198,21 @@ public class TableUtils
 	 * @param section
 	 * @return
 	 */
-	public static int getMaximumTableCellCount(Section<?> section)
-	{
+	public static int getMaximumTableCellCount(Section<?> section) {
 		int maxCount = 0;
 
 		List<Section<TableHeaderLine>> headerLines =
 				Sections.findSuccessorsOfType(section, TableHeaderLine.class);
-		for (Section<TableHeaderLine> line : headerLines)
-		{
-			if (Sections.findSuccessorsOfType(line, TableCell.class).size() > maxCount) maxCount
-			= Sections.findSuccessorsOfType(
-					line, TableCell.class).size();
+		for (Section<TableHeaderLine> line : headerLines) {
+			int size = Sections.findSuccessorsOfType(line, TableCell.class).size();
+			if (size > maxCount) maxCount = size;
 		}
 
 		List<Section<TableLine>> tableLines =
 				Sections.findSuccessorsOfType(section, TableLine.class);
-		for (Section<TableLine> line : tableLines)
-		{
-			List<Section<TableCell>> cells = Sections.findSuccessorsOfType(line, TableCell.class);
-			int size = cells.size();
-			if (Sections.findSuccessorsOfType(line, TableCell.class).size() > maxCount) maxCount
-			= Sections.findSuccessorsOfType(
-					line, TableCell.class).size();
+		for (Section<TableLine> line : tableLines) {
+			int size = Sections.findSuccessorsOfType(line, TableCell.class).size();
+			if (size > maxCount) maxCount = size;
 		}
 
 		return maxCount;
@@ -242,15 +225,13 @@ public class TableUtils
 	 * @param kb
 	 * @return
 	 */
-	public static Solution findSolutionInKB(Section<?> sec, KnowledgeBase kb)
-	{
+	public static Solution findSolutionInKB(Section<?> sec, KnowledgeBase kb) {
 		Section<TableSolutionType> sol =
 				Sections.findChildOfType(sec, TableSolutionType.class);
 		String solText = sol.getText();
 		solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
 		Solution solution = kb.getManager().searchSolution(solText);
-		if (solution == null)
-		{
+		if (solution == null) {
 			Solution newSolution = new Solution(kb.getRootSolution(), solText);
 			kb.getManager().putTerminologyObject(newSolution);
 		}

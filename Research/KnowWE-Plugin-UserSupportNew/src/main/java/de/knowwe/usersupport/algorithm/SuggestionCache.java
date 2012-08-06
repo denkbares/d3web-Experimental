@@ -27,50 +27,45 @@ import java.util.Set;
 
 /**
  * 
- * Cache for saving former results of earlier queries
- * for the {@link DialogComponent}.
+ * Cache for saving former results of earlier queries for the
+ * {@link DialogComponent}.
  * 
  * @author Johannes Dienst
  * @created 26.03.2012
- *
+ * 
  */
-public class SuggestionCache
-{
+public class SuggestionCache {
+
 	private List<Map<String, ItemProperties>> formerSuggs;
 	private static SuggestionCache unique;
 	private static int formerCount = 5;
-	
-	private SuggestionCache()
-	{
+
+	private SuggestionCache() {
 		this.formerSuggs = new ArrayList<Map<String, ItemProperties>>();
 	}
-	
-	public static SuggestionCache getInstance()
-	{
-		if (unique == null)
-			return new SuggestionCache();
+
+	public static SuggestionCache getInstance() {
+		if (unique == null) return new SuggestionCache();
 		return unique;
 	}
-	
+
 	/**
 	 * 
-	 * If a query has been stored returns the suggestions for it.
-	 * Otherwise null.
+	 * If a query has been stored returns the suggestions for it. Otherwise
+	 * null.
 	 * 
 	 * @param query
 	 * @param termDefinitions
 	 * @return
 	 */
-	public List<Suggestion> getSuggestionsFromCache(String query, List<String> termDefinitions)
-	{
+	public List<Suggestion> getSuggestionsFromCache(String query, List<String> termDefinitions) {
 		boolean cacheUpdated = this.updateCache(query, termDefinitions);
-		if (cacheUpdated)
-		{
+		if (cacheUpdated) {
 			return this.getSuggestionList(query);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 
 	 * Stores the results of a query.
@@ -79,57 +74,46 @@ public class SuggestionCache
 	 * @param termDefinitions
 	 * @param suggestions
 	 */
-	public void storeQueryResult(String query, List<String> termDefinitions, List<Suggestion> suggestions)
-	{
+	public void storeQueryResult(String query, List<String> termDefinitions, List<Suggestion> suggestions) {
 		Map<String, ItemProperties> item = new HashMap<String, ItemProperties>();
 		item.put(query, new ItemProperties(query, termDefinitions, suggestions));
 		formerSuggs.add(0, item);
-		
-		if (formerSuggs.size() > formerCount)
-			formerSuggs.remove(formerCount);
+
+		if (formerSuggs.size() > formerCount) formerSuggs.remove(formerCount);
 	}
-	
-	private List<Suggestion> getSuggestionList(String query)
-	{
-		for (Map<String, ItemProperties> item : formerSuggs)
-		{
+
+	private List<Suggestion> getSuggestionList(String query) {
+		for (Map<String, ItemProperties> item : formerSuggs) {
 			if (item.containsKey(query)) return item.get(query).getSuggs();
 		}
 		return null;
 	}
-	
-	private boolean updateCache(String query, List<String> termDefinitions)
-	{	
+
+	private boolean updateCache(String query, List<String> termDefinitions) {
 		// remove all formerSuggs that are timed out (older than 1 minute)
 		long current = System.currentTimeMillis();
 		Map<String, ItemProperties> item = null;
 		List<Integer> toRemove = new ArrayList<Integer>();
-		for (int i = 0; i < formerSuggs.size(); i++)
-		{		
+		for (int i = 0; i < formerSuggs.size(); i++) {
 			item = formerSuggs.get(i);
 			Set<String> itemKeySet = item.keySet();
 			String key = itemKeySet.iterator().next();
-			if ( (current - item.get(key).getTimestamp()) > 60000)
-			{
+			if ((current - item.get(key).getTimestamp()) > 60000) {
 				toRemove.add(i);
 			}
 		}
 
-		for (int j = toRemove.size()-1; j >= 0; j--)
-		{
+		for (int j = toRemove.size() - 1; j >= 0; j--) {
 			formerSuggs.remove(j);
 		}
-		
+
 		boolean updated = false;
-		for (int i = 0; i < formerSuggs.size(); i++)
-		{
+		for (int i = 0; i < formerSuggs.size(); i++) {
 			item = formerSuggs.get(i);
-			if (item.containsKey(query))
-			{
+			if (item.containsKey(query)) {
 				ItemProperties iP = item.get(query);
 				// TODO how to evaluate if termDefinitions are the same?
-				if (iP.getTermDefSize() == termDefinitions.size())
-				{
+				if (iP.getTermDefSize() == termDefinitions.size()) {
 					iP = new ItemProperties(query, termDefinitions, iP.getSuggs());
 					formerSuggs.remove(i);
 					item = new HashMap<String, ItemProperties>();
@@ -140,25 +124,24 @@ public class SuggestionCache
 				}
 			}
 		}
-		
+
 		return updated;
 	}
-	
-	private class ItemProperties
-	{
+
+	static class ItemProperties {
+
 		private long timestamp;
 		private String query;
 		private int termDefSize;
 		private List<Suggestion> suggs;
-		
-		public ItemProperties(String query, List<String> termDefinitions, List<Suggestion> suggestions)
-		{
+
+		public ItemProperties(String query, List<String> termDefinitions, List<Suggestion> suggestions) {
 			this.timestamp = System.currentTimeMillis();
 			this.query = query;
 			this.termDefSize = termDefinitions.size();
 			this.suggs = suggestions;
 		}
-		
+
 		public String getQuery() {
 			return query;
 		}
@@ -175,6 +158,5 @@ public class SuggestionCache
 			return suggs;
 		}
 	}
-	
-	
+
 }
