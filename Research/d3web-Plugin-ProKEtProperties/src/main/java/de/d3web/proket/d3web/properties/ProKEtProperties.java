@@ -43,6 +43,8 @@ public class ProKEtProperties {
             "ortype", Boolean.class);
      public static final Property<Boolean> DUMMY = Property.getProperty(
             "dummy", Boolean.class);
+      public static final Property<Boolean> REALNUM = Property.getProperty(
+            "realnum", Boolean.class);
      
         public static final Property<Boolean> SCORING = Property.getProperty(
             "scoring", Boolean.class);

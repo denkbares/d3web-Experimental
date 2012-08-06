@@ -258,6 +258,18 @@
 		<parameter id="instanceof" value="java.lang.Boolean" />
 	</extension>
         
+                    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="realnum">
+		<parameter id="name" value="realnum" />
+		<parameter id="description" 
+			value="add property for iTree style marking those questions
+                        that use special scoring calculations" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.Boolean" />
+	</extension>
+        
          <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
 		id="weblink">
 		<parameter id="name" value="weblink" />
