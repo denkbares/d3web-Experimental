@@ -1865,4 +1865,134 @@ public class D3webUtils {
 
         return has;
     }
+    
+    /* STUFF NEEDED FOR DATE QUESTIONS */
+    public static String translateDropdownTitle(String titleID, int locIdent) {
+        String translated = "";
+
+        switch (locIdent) {
+            case 1: // german
+                if (titleID.equals("Y")) {
+                    translated = "Jahr:";
+                } else if (titleID.equals("M")) {
+                    translated = "Monat:";
+                } else if (titleID.equals("D")) {
+                    translated = "Tag:";
+                } else if (titleID.equals("H")) {
+                    translated = "Stunde:";
+                } else if (titleID.equals("Min")) {
+                    translated = "Minute:";
+                } else if (titleID.equals("S")) {
+                    translated = "Sekunde:";
+                }
+
+                break;
+            case 2: // english
+
+                break;
+            case 3: // spanish
+
+                break;
+            case 4: // italian
+
+                break;
+            case 5: // french
+
+                break;
+            case 6: // polish
+
+                break;
+        }
+        if (translated == "") {
+            if (titleID.equals("Y")) {
+                translated = "Year";
+            } else if (titleID.equals("M")) {
+                translated = "Month";
+            } else if (titleID.equals("D")) {
+                translated = "Day";
+            } else if (titleID.equals("H")) {
+                translated = "Hour";
+            } else if (titleID.equals("M")) {
+                translated = "Minute";
+            } else if (titleID.equals("S")) {
+                translated = "Second";
+            }
+        }
+
+        // emergency fallback
+        return translated;
+    }
+
+    public static String createYearDropDownReverse(String selectedValue) {
+        return createDropDownOptions(selectedValue, "Year", 2008, 2025);
+    }
+
+    public static String createYearDropDown(String selectedValue) {
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        return createDropDownOptions(selectedValue, "Year", currentYear, 1900);
+    }
+
+    public static String createMonthDropDown(String selectedValue) {
+        return createDropDownOptions(selectedValue, "Month", 1, 12);
+    }
+
+    public static String createDayDropDown(String selectedValue) {
+        return createDropDownOptions(selectedValue, "Day", 1, 31);
+    }
+
+    public static String createHourDropDown(String selectedValue) {
+        return createDropDownOptions(selectedValue, "Hour", 23);
+    }
+
+    public static String createMinuteDropDown(String selectedValue) {
+        return createDropDownOptions(selectedValue, "Minute", 59);
+    }
+
+    public static String createSecondDropDown(String selectedValue) {
+        return createDropDownOptions(selectedValue, "Second", 59);
+    }
+
+    public static String createDropDownOptions(String selectedValue, String name, int end) {
+        return createDropDownOptions(selectedValue, name, 0, end);
+    }
+
+    public static String createDropDownOptions(String selectedValue, String name, int start, int end) {
+        ArrayList<String> measure = new ArrayList<String>();
+        boolean reverse = false;
+        if (end < start) {
+            reverse = true;
+            int temp = start;
+            start = end;
+            end = temp;
+        }
+        for (int i = start; i <= end; i++) {
+            measure.add(String.valueOf(i));
+        }
+        if (reverse) {
+            Collections.reverse(measure);
+        }
+        return "<td><select type='" + name + "select' class='"+ name +"select'>\n"
+                + createDropDownOptionsWithDefault("", selectedValue,
+                measure.toArray(new String[]{})) + "<select/></td>";
+    }
+    
+     public static String createDropDownOptionsWithDefault(
+            String defaultValue, String selectedValue, String... options) {
+        StringBuilder builder = new StringBuilder();
+        if (defaultValue != null) {
+            builder.append("<option>" + defaultValue + "</option>\n");
+        }
+
+        for (String option : options) {
+            option = option.trim();
+            builder.append("<option value='" + option + "'"
+                    + (option.equals(selectedValue) ? "selected='selected'" : "")
+                    + ">" + option
+                    + "</option>\n");
+        }
+
+
+
+        return builder.toString();
+    }
 }

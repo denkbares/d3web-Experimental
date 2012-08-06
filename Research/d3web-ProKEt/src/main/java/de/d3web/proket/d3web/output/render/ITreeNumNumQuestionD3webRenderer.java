@@ -40,11 +40,9 @@ import javax.servlet.http.HttpSession;
  *
  * @author Martina Freiberg @created 22.04.2012
  */
-public class ITreeNumDummyQuestionD3webRenderer extends AbstractD3webRenderer implements IQuestionD3webRenderer {
+public class ITreeNumNumQuestionD3webRenderer extends AbstractD3webRenderer implements IQuestionD3webRenderer {
 
-    protected final KnowledgeKind<JuriModel> JURIMODEL = new KnowledgeKind<JuriModel>(
-            "JuriModel", JuriModel.class);
-    protected static String TT_PROP_ERROR = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung.</b> "
+     protected static String TT_PROP_ERROR = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung.</b> "
             + "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, "
             + "wenn Sie eine andere als die bisher hergeleitete Bewertung setzen möchten.";
     
@@ -67,11 +65,11 @@ public class ITreeNumDummyQuestionD3webRenderer extends AbstractD3webRenderer im
         // get the fitting template. In case user prefix was specified, the
         // specific TemplateName is returned, otherwise, the base object name.
         StringTemplate st = TemplateUtils.getStringTemplate(
-                super.getTemplateName("ITreeNumDummyQuestion"), "html");
+                super.getTemplateName("ITreeNumNumQuestion"), "html");
 
         // set some basic properties
         st.setAttribute("fullId", getID(to));
-        st.setAttribute("title", D3webUtils.getTOPrompt(to, loc).replace("[jnv]", ""));
+        st.setAttribute("title", D3webUtils.getTOPrompt(to, loc));
         
         
         // set bonus text: is displayed in auxinfo panel

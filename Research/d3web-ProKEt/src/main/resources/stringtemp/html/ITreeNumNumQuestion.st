@@ -1,6 +1,4 @@
 
-
-
 <div id="readFlow-$fullId$" class="readflow">
     <img id="$fullId$-readimg" alt="readflow" src="$readimg$" height="14" width="25">
 </div>
@@ -9,22 +7,12 @@
     
     <div id="$fullId$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')">
         <img id="$fullId$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes_clariHie('$fullId$')">
-            <div id="ynYes-$fullId$" class="ynbutton $ratingY$ $fullId$-tt-trigger-ynbutton $swap$" ">
-                Ja
-                $TooltipButtonJA()$
-            </div>
-            <div id="ynNo-$fullId$" class="ynbutton $ratingN$ $fullId$-tt-trigger-ynbutton $swap$">
-                Nein
-                $TooltipButtonNEIN()$
-            </div>
-            <div id="ynUn-$fullId$" class="ynbutton rating-medium $fullId$-tt-trigger-ynbutton" >
-                -?-
-                $TooltipButtonWN()$
-            </div>
-            <div id="ynNan-$fullId$" class="ynbutton rating-none $fullId$-tt-trigger-ynbutton">
-                X
-                $TooltipButtonZ()$    
-            </div>
+            
+        <!--NUM VALUE ENTRY-->
+        <div id=$id$-numentry class="floatingnum"
+             onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
+            <input name="$id$-numentry" type="num" size="9" maxlength="9" value="" min="$defmin$" max="$defmax$"/>
+        </div>
             
     </div> 
     <div class="title t-$fullId$" id="t-$fullId$" onmouseover="showAuxInfo('$fullId$', '$title$')">

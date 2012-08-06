@@ -3,7 +3,7 @@
 	header="ITree - NumQuestion Based"  
 	dtype="itree" 
 	dstrategy="nextuaquestion" 
-	css="legal, nofoot" 
+	css="itree, nofoot" 
 	dialogcolumns="1"
 	questionnairecolumns="1"
 	questioncolumns = "1"

@@ -19,97 +19,72 @@
  */
 package de.d3web.proket.d3web.output.render;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
+import de.d3web.core.inference.KnowledgeKind;
 import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
-import de.d3web.core.knowledge.terminology.Choice;
-import de.d3web.core.knowledge.terminology.QuestionDate;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.DateValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
+import de.d3web.jurisearch.JuriModel;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 /**
- * Renderer for rendering basic NumAnswers.
+ * TODO: make super-class for clari hie?!
  *
- * TODO CHECK: 1) basic properties for answers 2) d3web resulting properties,
- * e.g. is indicated, is shown etc.
- *
- * @author Martina Freiberg @created 16.01.2011
+ * @author Martina Freiberg @created 22.04.2012
  */
-public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements AnswerD3webRenderer {
+public class ITreeNumDateQuestionD3webRenderer extends AnswerDateD3webRenderer implements IQuestionD3webRenderer {
 
-    /**
-     * Specifically adapted for rendering NumAnswers
-     */
+    protected static String TT_PROP_ERROR = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung.</b> "
+            + "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, "
+            + "wenn Sie eine andere als die bisher hergeleitete Bewertung setzen möchten.";
+    
+
     @Override
-    public String renderTerminologyObject(ContainerCollection cc,
-            Session d3webSession, Choice choice, TerminologyObject to, TerminologyObject parent, int loc,
-            HttpSession httpSession) {
+    /**
+     * Adapted specifically for question rendering
+     */
+    public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
+            TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession) {
 
-        QuestionDate dq = (QuestionDate) to;
-
-        StringBuilder sb = new StringBuilder();
-
+      Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
         // return if the InterviewObject is null
-        if (to == null) {
+        if (to == null || (hidden != null && hidden)) {
             return "";
         }
+        StringBuilder sb = new StringBuilder();
+
 
         // get the fitting template. In case user prefix was specified, the
-        // specific TemplateName is returned, else the base object name.
+        // specific TemplateName is returned, otherwise, the base object name.
         StringTemplate st = TemplateUtils.getStringTemplate(
-                super.getTemplateName("DateAnswerPure"), "html");
+                super.getTemplateName("ITreeNumDateQuestion"), "html");
 
-        st.setAttribute("fullId", getID(dq));
-        st.setAttribute("realAnswerType", "date");
-        st.setAttribute("parentFullId", getID(parent));
-
-        Blackboard bb = d3webSession.getBlackboard();
-        Value value = bb.getValue((ValueObject) to);
-
-        if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
-            st.setAttribute("readonly", "true");
-        }
-
-        // QContainer indicated
-        if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
-                || isIndicated(parent, bb)) {
-
-            // show, if indicated follow up
-            if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
-                    || (!D3webUtils.isFollowUpToQCon(to, parent))) {
-                st.removeAttribute("readonly");
-            } else {
-                st.setAttribute("readonly", "true");
-                // also remove possible set values
-                st.removeAttribute("selection");
-                st.setAttribute("selection", "");
-            }
-        } else {
-            st.setAttribute("readonly", "true");
-            // also remove possible set values
-            st.removeAttribute("selection");
-            st.setAttribute("selection", "");
-        }
-
+        // set some basic properties
+        st.setAttribute("fullId", getID(to));
+        st.setAttribute("title", D3webUtils.getTOPrompt(to, loc));
+        
+        
+        // set bonus text: is displayed in auxinfo panel
+        String bonustext = 
+                to.getInfoStore().getValue(ProKEtProperties.POPUP);
+        st.setAttribute("bonusText", bonustext);
+        
+       
         String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
         boolean dateReverse = false;
 
@@ -120,6 +95,9 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
             dateDescription = dateDescription.replace(":::reverse", "");
         }
 
+        Blackboard bb = d3webSession.getBlackboard();
+        Value value = bb.getValue((ValueObject) to);
+        
         SimpleDateFormat dateFormat = null;
 
         if (dateDescription != null && !dateDescription.isEmpty()) {
@@ -157,7 +135,7 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
         StringBuilder table = new StringBuilder();
         StringBuilder firstRow = new StringBuilder();
         StringBuilder secondRow = new StringBuilder();
-        table.append("<table style=\"width:0px\"><tr>");
+        table.append("<table style=\"width:0px;\" class=\"table-imagebox\"><tr>");
         if (dateDescription.contains("d")) {
             firstRow.append("<td>" + D3webUtils.translateDropdownTitle("D", loc) + "</td>");
             secondRow.append(D3webUtils.createDayDropDown(day));
@@ -196,15 +174,47 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
         table.append("</tr><tr>");
         table.append(secondRow);
         table.append("</tr></table>");
+        
         st.setAttribute(
-                "dropdown_menu", table.toString());
+                "dropdown", table.toString());
+        
+        
+
+
+        // render arrows: --> check whether question has children,
+        if(to.getChildren().length > 0){
+         st.setAttribute("typeimg", "img/closedArrow.png");
+        } else {
+            st.setAttribute("typeimg", "img/transpSquare.png");
+        }
+
+        // render read flow according to and/or type
+        if (to.getInfoStore().getValue(ProKEtProperties.ORTYPE) != null
+                && to.getInfoStore().getValue(ProKEtProperties.ORTYPE)) {
+            st.setAttribute("readimg", "img/Or.png");
+            st.setAttribute("andOrType", "OR");
+        } else {
+            st.setAttribute("readimg", "img/And.png");
+            st.setAttribute("andOrType", "AND");
+        }
+
+        // TODO: render the value i.e. coloring of the question
+        // System.out.println(getID(to) + ": " + val);
+
+        st.removeAttribute("tty");
+        st.removeAttribute("ttn");
+        st.removeAttribute("ttu");
+        st.removeAttribute("ttnan");
+
+
+     
+
+        st.setAttribute("tooltip", TT_PROP_ERROR);
+
+        super.renderChildrenITreeNum(st, d3webSession, cc, to, loc, httpSession);
 
         sb.append(st.toString());
 
-        super.makeTables(to, to, cc, sb);
-
         return sb.toString();
     }
-
-    
 }

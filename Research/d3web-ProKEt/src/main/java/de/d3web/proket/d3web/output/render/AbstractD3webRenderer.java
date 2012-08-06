@@ -790,7 +790,6 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             TerminologyObject to, int loc, HttpSession httpSession) {
 
         StringBuilder childrenHTML = new StringBuilder();
-        D3webConnector d3wcon = D3webConnector.getInstance();
         
         if (to.getName().equals("Q000")) {
             TerminologyObject rootNode = to.getChildren()[0].getChildren()[0];
@@ -831,6 +830,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                         childRenderer =
                                 AbstractD3webRenderer.getRenderer((TerminologyObject) newChildRoot);
 
+                         System.out.println(childRenderer.getClass());
                     }
 
 
@@ -868,23 +868,5 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         return builder.toString();
     }
 
-    protected String createDropDownOptionsWithDefault(
-            String defaultValue, String selectedValue, String... options) {
-        StringBuilder builder = new StringBuilder();
-        if (defaultValue != null) {
-            builder.append("<option>" + defaultValue + "</option>\n");
-        }
-
-        for (String option : options) {
-            option = option.trim();
-            builder.append("<option value='" + option + "'"
-                    + (option.equals(selectedValue) ? "selected='selected'" : "")
-                    + ">" + option
-                    + "</option>\n");
-        }
-
-
-
-        return builder.toString();
-    }
+   
 }

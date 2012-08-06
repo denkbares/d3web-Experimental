@@ -131,7 +131,8 @@ public class ITreeNumQuestionD3webRenderer extends AbstractD3webRenderer impleme
 
         Value val = getAbstractValue(to, bb, d3webSession);
         st.removeAttribute("qrating");
-
+        System.out.println(to.getName() + " > " + getNumValue(to, bb, d3webSession) + " > " + val);
+        
 
         if (UndefinedValue.isNotUndefinedValue(val)) {
 

@@ -55,6 +55,9 @@ public class D3webRendererMapping extends HashMap<String, String> {
     private static final String SUMMARY = "Summary";
     private static final String DUMMYITREE = "ITreeDummy";
     private static final String DUMMYITREENUM = "ITreeNumDummy";
+    private static final String ITREENUM_NUM = "ITreeNumNum";
+    private static final String ITREENUM_DATE = "ITreeNumDate";
+    
     private static final String Q_CONT = "QCont";
     private static final String IMG_QUESTION = "IMGQuestion";
     private static final String QUESTION = "Question";
@@ -97,6 +100,9 @@ public class D3webRendererMapping extends HashMap<String, String> {
         this.put(DATE_ANSWER, AnswerDateD3webRenderer.class.getSimpleName());
         this.put(UNKNOWN_ANSWER, AnswerUnknownD3webRenderer.class.getSimpleName());
         this.put(OC_DROP_ANSWERS, AnswerOCDropD3webRenderer.class.getSimpleName());
+        this.put(ITREENUM_NUM, ITreeNumNumQuestionD3webRenderer.class.getSimpleName());
+        this.put(ITREENUM_DATE, ITreeNumDateQuestionD3webRenderer.class.getSimpleName());
+        
     }
 
     /**
@@ -122,7 +128,8 @@ public class D3webRendererMapping extends HashMap<String, String> {
                 return (AbstractD3webRenderer) getRenderer(userPref, name);
             }
             if (D3webConnector.getInstance().getUserprefix().equals("ITreeNum")) {
-                return (AbstractD3webRenderer) getRenderer(userPref, name);
+                System.out.println("get ItreeNum");
+                return (AbstractD3webRenderer) getITreeNumRenderer(userPref, name, to);
             }
             
         } else if (to instanceof QContainer) {
@@ -196,6 +203,41 @@ public class D3webRendererMapping extends HashMap<String, String> {
 
         try {
             String completeToGet = (prefix + userPrefix + this.get(name));
+            result = Class.forName(completeToGet);
+        } catch (ClassNotFoundException cne) {
+            return null;
+        }
+
+        Object instance;
+        try {
+            instance = result.newInstance();
+        } catch (InstantiationException e) {
+            return null;
+        } catch (IllegalAccessException e) {
+            return null;
+        }
+        return instance;
+    }
+    
+     private Object getITreeNumRenderer(String userPrefix, String name,
+             TerminologyObject to) {
+
+        String prefix = GlobalSettings.getInstance().getD3webRendererPath();
+        Class<?> result = null;
+        // hier steht für ITree num-basierten Style drin: "ITreeNum"
+        
+        if(to instanceof QuestionNum &&
+                to.getInfoStore().getValue(ProKEtProperties.REALNUM) != null
+                && to.getInfoStore().getValue(ProKEtProperties.REALNUM)){
+                userPrefix = userPrefix + "Num";
+        } 
+        if (to instanceof QuestionDate){
+            userPrefix = userPrefix + "Date";
+        }
+
+        try {
+            String completeToGet = (prefix + userPrefix + this.get(name));
+            System.out.println(completeToGet);
             result = Class.forName(completeToGet);
         } catch (ClassNotFoundException cne) {
             return null;
