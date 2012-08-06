@@ -29,6 +29,7 @@ import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -77,8 +78,7 @@ public class AnnotationAction extends AbstractAction {
 			return null;
 		}
 
-		namespace = java.net.URLDecoder.decode(namespace);
-
+		namespace = Strings.decodeURL(namespace);
 		SessionProvider provider = SessionProvider.getSessionProvider(context);
 
 		if (id == null) {
