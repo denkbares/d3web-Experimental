@@ -55,43 +55,51 @@ public class CalculateCoverageAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
-//		String coverageKdomid = context.getParameter("kdomid");
-//
-//		Section<DiaFluxCoverageType> coverageSec = Sections.getSection(coverageKdomid,
-//				DiaFluxCoverageType.class);
-//
-//		String[] packages = DefaultMarkupType.getPackages(coverageSec);
-//
-//		Environment env = Environment.getInstance();
-//		PackageManager packageManager = env.getPackageManager(context.getWeb());
-//
-//		for (String packageName : packages) {
-//			List<Section<?>> sectionsOfPackage = packageManager.getSectionsOfPackage(packageName);
-//
-//		}
-//		Set<String> compilingArticles = packageManager.getCompilingArticles(packages);
-//		if (compilingArticles.isEmpty()) {
-//			return;
-//		}
-//
-//		// TODO use every KB, not only first
-//		Article article = Environment.getInstance().getArticleManager(context.getWeb()).getArticle(compilingArticles.iterator().next());
-//		KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(), article.getTitle());
-//		List<CoverageSessionObject> results = new LinkedList<CoverageSessionObject>();
-//
-//		for (Section<?> section : sectionsOfPackage) {
-//
-//			TestCaseProviderStorage testCaseProviderStorage =
-//					(TestCaseProviderStorage) section.getSectionStore().getObject(
-//							article, TestCaseProviderStorage.KEY);
-//			if (testCaseProviderStorage != null) {
-//				for (TestCaseProvider testCaseProvider : testCaseProviderStorage.getTestCaseProviders()) {
-//					Session session = runTestCase(testCaseProvider, kb);
-//					results.add(PSMDiaFluxCoverage.getCoverage(session));
-//
-//				}
-//			}
-//		}
+		// String coverageKdomid = context.getParameter("kdomid");
+		//
+		// Section<DiaFluxCoverageType> coverageSec =
+		// Sections.getSection(coverageKdomid,
+		// DiaFluxCoverageType.class);
+		//
+		// String[] packages = DefaultMarkupType.getPackages(coverageSec);
+		//
+		// Environment env = Environment.getInstance();
+		// PackageManager packageManager =
+		// env.getPackageManager(context.getWeb());
+		//
+		// for (String packageName : packages) {
+		// List<Section<?>> sectionsOfPackage =
+		// packageManager.getSectionsOfPackage(packageName);
+		//
+		// }
+		// Set<String> compilingArticles =
+		// packageManager.getCompilingArticles(packages);
+		// if (compilingArticles.isEmpty()) {
+		// return;
+		// }
+		//
+		// // TODO use every KB, not only first
+		// Article article =
+		// Environment.getInstance().getArticleManager(context.getWeb()).getArticle(compilingArticles.iterator().next());
+		// KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(),
+		// article.getTitle());
+		// List<CoverageSessionObject> results = new
+		// LinkedList<CoverageSessionObject>();
+		//
+		// for (Section<?> section : sectionsOfPackage) {
+		//
+		// TestCaseProviderStorage testCaseProviderStorage =
+		// (TestCaseProviderStorage) section.getSectionStore().getObject(
+		// article, TestCaseProviderStorage.KEY);
+		// if (testCaseProviderStorage != null) {
+		// for (TestCaseProvider testCaseProvider :
+		// testCaseProviderStorage.getTestCaseProviders()) {
+		// Session session = runTestCase(testCaseProvider, kb);
+		// results.add(PSMDiaFluxCoverage.getCoverage(session));
+		//
+		// }
+		// }
+		// }
 		String coverageKdomid = context.getParameter("kdomid");
 
 		Section<DiaFluxCoverageType> coverageSec = Sections.getSection(coverageKdomid,
@@ -103,7 +111,6 @@ public class CalculateCoverageAction extends AbstractAction {
 		}
 
 		calculateCoverage(coverageSec);
-
 
 	}
 
@@ -125,7 +132,7 @@ public class CalculateCoverageAction extends AbstractAction {
 		for (String packageName : packages) {
 			articles.addAll(packageManager.getCompilingArticles(packageName));
 		}
-		
+
 		for (String title : articles) {
 			Article article = Environment.getInstance().getArticle(coverageSec.getWeb(),
 					title);
@@ -142,7 +149,6 @@ public class CalculateCoverageAction extends AbstractAction {
 			// knowledgeBaseSections.get(0);
 
 			Set<Section<?>> sectionsCompiledByArticle = new HashSet<Section<?>>();
-			Set<String> compiledPackages = packageManager.getCompiledPackages(title);
 			// TODO use all packages of KB or only those of the defined packages
 			// for (String packageName : compiledPackages) {
 			for (String packageName : packages) {
