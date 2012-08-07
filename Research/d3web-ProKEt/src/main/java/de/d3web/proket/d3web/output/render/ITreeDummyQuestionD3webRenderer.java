@@ -56,13 +56,7 @@ public class ITreeDummyQuestionD3webRenderer extends AbstractD3webRenderer imple
     public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
             TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession) {
 
-        /*  ClariHIE specific */
-        JuriModel juriModel =
-                d3webSession.getKnowledgeBase().getKnowledgeStore().getKnowledge(JURIMODEL);
-        Set juriRules = juriModel.getRules();
-
-
-        Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
+      Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
         // return if the InterviewObject is null
         if (to == null || (hidden != null && hidden)) {
             return "";
@@ -73,7 +67,7 @@ public class ITreeDummyQuestionD3webRenderer extends AbstractD3webRenderer imple
         // get the fitting template. In case user prefix was specified, the
         // specific TemplateName is returned, otherwise, the base object name.
         StringTemplate st = TemplateUtils.getStringTemplate(
-                super.getTemplateName("ITreeDummyQuestion"), "html");
+                super.getTemplateName("ITreeNumDummyQuestion"), "html");
 
         // set some basic properties
         st.setAttribute("fullId", getID(to));
@@ -91,14 +85,15 @@ public class ITreeDummyQuestionD3webRenderer extends AbstractD3webRenderer imple
 
 
         // render arrows: --> check whether question has children,
-        if (!(getChildQuestionsFromJuriRules(to, juriRules)).isEmpty()) {
-            st.setAttribute("typeimg", "img/closedArrow.png");
+        if(to.getChildren().length > 0){
+         st.setAttribute("typeimg", "img/closedArrow.png");
         } else {
             st.setAttribute("typeimg", "img/transpSquare.png");
         }
 
         // render read flow according to and/or type
-        if (isOrType(to, juriRules)) {
+        if (to.getInfoStore().getValue(ProKEtProperties.ORTYPE) != null
+                && to.getInfoStore().getValue(ProKEtProperties.ORTYPE)) {
             st.setAttribute("readimg", "img/Or.png");
             st.setAttribute("andOrType", "OR");
         } else {
@@ -119,7 +114,7 @@ public class ITreeDummyQuestionD3webRenderer extends AbstractD3webRenderer imple
 
         st.setAttribute("tooltip", TT_PROP_ERROR);
 
-        super.renderChildrenITree(st, d3webSession, cc, to, loc, httpSession);
+        super.renderChildrenITreeNum(st, d3webSession, cc, to, loc, httpSession);
 
         sb.append(st.toString());
 

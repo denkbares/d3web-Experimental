@@ -317,6 +317,12 @@ public class D3webDialog extends HttpServlet {
             addFacts(request, response, httpSession);
             return;
         } else if (action.equalsIgnoreCase(
+                "addfactsyn")) {
+            //System.out.println("add Facts base");
+            addFactsYN(request, response, httpSession);
+            return;
+        }
+        else if (action.equalsIgnoreCase(
                 "savecase")) {
             saveCase(request, response, httpSession);
             return;
@@ -577,6 +583,12 @@ public class D3webDialog extends HttpServlet {
             writer.append("false");
         }
     }
+    
+     protected void addFactsYN(HttpServletRequest request,
+            HttpServletResponse response, HttpSession httpSession)
+            throws IOException {
+         // overwritten by ClariHie Dialog
+     }
 
     /**
      * Add one or several given facts. Thereby, first check whether input-store
@@ -600,6 +612,7 @@ public class D3webDialog extends HttpServlet {
         // get all questions and answers lately answered as lists
         getParameterPairs(request, "question", "value", questions, values);
         
+       
         // check if all required values are set correctly, if not, do not go on!
         if (!handleRequiredValueCheck(writer, d3webSession, questions, values)) {
             return;
@@ -607,7 +620,8 @@ public class D3webDialog extends HttpServlet {
 
         // save beforeState
         DialogState stateBefore = new DialogState(d3webSession);
-       
+        //System.out.println("BEF: " + stateBefore.answeredQuestions); 
+        
         // set the values
         setValues(d3webSession, questions, values, request, httpSession);
         
@@ -622,10 +636,12 @@ public class D3webDialog extends HttpServlet {
         
         // save afterState
         DialogState stateAfter = new DialogState(d3webSession);
+        //System.out.println("AFT:" +stateAfter.answeredQuestions);
        
         // calculate the difference set of before and after states of the dialog
         Set<TerminologyObject> diff = calculateDiff(d3webSession, stateBefore, stateAfter);
 
+        
         // update the dialog (partially, i.e. all changed questions)
         renderAndUpdateDiff(writer, d3webSession, diff, httpSession);
     }
@@ -652,7 +668,7 @@ public class D3webDialog extends HttpServlet {
         return true;
     }
 
-    private void setValues(Session d3webSession, List<String> questions, List<String> values, HttpServletRequest request,
+    protected void setValues(Session d3webSession, List<String> questions, List<String> values, HttpServletRequest request,
             HttpSession httpSession) {
 
         // before-state of abstraction questions
@@ -806,11 +822,11 @@ public class D3webDialog extends HttpServlet {
         
         for (TerminologyObject to : diff) {
             if (isHiddenOrHasHiddenParent(to)) {
+                      
                 continue;
             }
             IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
-            //System.out.println(to.getName());
-
+           
             // get back the ID from store for finding element in HTML
             writer.append(REPLACEID + AbstractD3webRenderer.getID(to));
             writer.append(REPLACECONTENT);
@@ -832,6 +848,8 @@ public class D3webDialog extends HttpServlet {
 
         // render the headerinfoline as latest as to have the most-current infos there
         writer.append(rootRenderer.renderHeaderInfoLine(d3webSession));
+          //  System.out.println(response.getContentType() + " " + response.getCharacterEncoding());
+        System.out.println(writer.toString());
     }
 
 // TODO: move to D3webUtils
@@ -956,7 +974,7 @@ public class D3webDialog extends HttpServlet {
      * @param parameters1
      * @param parameters2
      */
-    private void getParameterPairs(
+    protected void getParameterPairs(
             HttpServletRequest request, String paraName1, String paraName2,
             List<String> parameters1, List<String> parameters2) {
         int i = 0;

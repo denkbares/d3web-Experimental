@@ -25,30 +25,17 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.QuestionDate;
-import de.d3web.core.knowledge.terminology.QuestionMC;
-import de.d3web.core.knowledge.terminology.QuestionNum;
-import de.d3web.core.knowledge.terminology.QuestionOC;
-import de.d3web.core.knowledge.terminology.QuestionText;
-import de.d3web.core.knowledge.terminology.QuestionZC;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.knowledge.terminology.info.Property;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
-import de.d3web.core.session.interviewmanager.Form;
 import de.d3web.core.session.values.UndefinedValue;
-import de.d3web.core.session.values.Unknown;
 import de.d3web.jurisearch.JuriModel;
 import de.d3web.jurisearch.JuriRule;
-import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
-import de.d3web.proket.data.LegalQuestion;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
-import java.util.HashSet;
-import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -72,11 +59,6 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
     private static String TT_PROP_ERROR = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung.</b> "
             + "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, "
             + "wenn Sie eine andere als die bisher hergeleitete Bewertung setzen möchten.";
-    final KnowledgeKind<JuriModel> JURIMODEL = new KnowledgeKind<JuriModel>(
-            "JuriModel", JuriModel.class);
-    public static final String YESSTRING = "ja";
-    public static final String NOSTRING = "nein";
-    public static final String MAYBESTRING = "vielleicht";
 
     @Override
     /**
@@ -86,60 +68,52 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
             TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession) {
 
 
-        /*
-         * ClariHIE specific stuff
-         */
-        JuriModel juriModel =
-                d3webSession.getKnowledgeBase().getKnowledgeStore().getKnowledge(JURIMODEL);
-        Set juriRules = juriModel.getRules();
 
-
-
-        Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
+        //Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
         // return if the InterviewObject is null
-        if (to == null || (hidden != null && hidden)) {
-            return "";
-        }
+        //if (to == null || (hidden != null && hidden)) {
+        //  return "";
+        //}
         StringBuilder sb = new StringBuilder();
 
 
         // get the fitting template. In case user prefix was specified, the
         // specific TemplateName is returned, otherwise, the base object name.
         StringTemplate st = TemplateUtils.getStringTemplate(
-                super.getTemplateName("ITreeQuestion"), "html");
+                super.getTemplateName("ITreeNumQuestion"), "html");
 
         // set some basic properties
         st.setAttribute("fullId", getID(to));
-        st.setAttribute("title", D3webUtils.getTOPrompt(to, loc).replace("[jnv]", ""));
-        
+        st.setAttribute("title", D3webUtils.getTOPrompt(to, loc));
+
+
 
         // get d3web properties
         Blackboard bb = d3webSession.getBlackboard();
-        Value val = bb.getValue((ValueObject) to);
 
-        Boolean itreeinit = to.getInfoStore().getValue(ProKEtProperties.ITREEINIT);
-        
-        // for questions to be initially shown in the tree
-        if (itreeinit != null && itreeinit.equals(true) ) {
-            st.setAttribute("showITree", true);
-        } else {
-            st.removeAttribute("showITree");
-        }
-        
-         
-        //System.out.println(D3webUtils.getTOPrompt(to, loc).replace("[jnv]", "") + " " + val);
-        
         // set bonus text: is displayed in auxinfo panel
         String bonustext =
                 to.getInfoStore().getValue(ProKEtProperties.POPUP);
         st.setAttribute("bonusText", bonustext);
 
 
+
         // render arrows: --> check whether question has children,
-        if (!(getChildQuestionsFromJuriRules(to, juriRules)).isEmpty()) {
+        if (to.getChildren().length > 0) {
             st.setAttribute("typeimg", "img/closedArrow.png");
         } else {
             st.setAttribute("typeimg", "img/transpSquare.png");
+        }
+
+        // for questions to be initially shown in the tree
+        Boolean itreeinit = to.getInfoStore().getValue(ProKEtProperties.ITREEINIT);
+        if (itreeinit != null && itreeinit.equals(true)) {
+            st.setAttribute("showitree", true);
+
+            if (to.getChildren().length > 0) {
+                st.removeAttribute("typeimg");
+                st.setAttribute("typeimg", "img/openedArrow.png");
+            }
         }
 
         if (parent.getName().equals("Q000")) {
@@ -147,42 +121,63 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
         } else {
 
             // render read flow according to and/or type
-            if (isOrType(to, juriRules)) {
+            if (parent.getInfoStore().getValue(ProKEtProperties.ORTYPE) != null
+                    && parent.getInfoStore().getValue(ProKEtProperties.ORTYPE).equals(true)) {
                 st.setAttribute("readimg", "img/Or.png");
             } else {
                 st.setAttribute("readimg", "img/And.png");
             }
         }
 
+        Value val = bb.getValue((ValueObject) to);
+        //getAbstractValue(to, bb, d3webSession);
         st.removeAttribute("qrating");
+        
+        Value jnvValForScoringQ = null;
+
+        // handle scoring questions
+        if (to.getName().contains("_n")) {
+            if (d3webSession.getKnowledgeBase().getManager().search(to.getName().replace("_n", "")) != null) {
+
+                TerminologyObject jnvObject = d3webSession.getKnowledgeBase().getManager().search(to.getName().replace("_n", ""));
+                jnvValForScoringQ = bb.getValue((ValueObject) jnvObject);
+            }
+            if (jnvValForScoringQ != null) {
+                val = jnvValForScoringQ;
+            }
+        }
+
+
         if (UndefinedValue.isNotUndefinedValue(val)) {
-            if (val.equals(JuriRule.YES_VALUE)) {
-                
-                // check if we have "swapped" questions
-                //if(isNoDefining(to, juriRules)){
-                  //  st.setAttribute("qrating", "rating-low");
+
+            if (val.toString().equals(JNV.J.toString())) {
+
+                // check if we have "swapped" questions //
+                //if (to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING) != null
+                  //      && to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING)) {
+
+                 //   st.setAttribute("qrating", "rating-low");
                 //} else {
                     st.setAttribute("qrating", "rating-high");
-                //}
-                
-            } else if (val.equals(JuriRule.NO_VALUE)) {
-                // check if we have "swapped" questions
-                //if(isNoDefining(to, juriRules)){
-                 //   st.setAttribute("qrating", "rating-high");
-               // } else {
-                    st.setAttribute("qrating", "rating-low");
                // }
-                
-            } else if (val.equals(JuriRule.MAYBE_VALUE)) {
-                //System.out.println("MAYBE: " + to.getName());
+
+            } else if (val.toString().equals(JNV.N.toString())) {
+                // check if we have swapped" questions //
+               // if (to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING) != null
+                 //       && to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING)) {
+                  //  st.setAttribute("qrating", "rating-high");
+                //} else {
+                    st.setAttribute("qrating", "rating-low");
+                //}
+
+            } else if (val.toString().equals(JNV.V.toString())) {
                 st.setAttribute("qrating", "rating-medium");
             }
         } else {
-            //System.out.println("UNDEFINED:  " + to.getName());
             st.removeAttribute("qrating");
         }
-        //System.out.println(val);
-        
+
+
 
         st.removeAttribute("tty");
         st.removeAttribute("ttn");
@@ -194,7 +189,8 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
 
         // set coloring of question buttons according to type of question
         // (normal question or swapped)
-        if (isNoDefining(to, juriRules)) {
+        if (to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING) != null
+                && to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING)) {
             st.setAttribute("ratingY", "rating-low");
             st.setAttribute("ratingN", "rating-high");
             st.setAttribute("swap", "swap");
@@ -215,14 +211,45 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
 
 
 
+
         st.setAttribute("ttu", TT_UN);
         st.setAttribute("ttnan", TT_NAN);
         st.setAttribute("tooltip", TT_PROP_ERROR);
 
-        super.renderChildrenITree(st, d3webSession, cc, to, loc, httpSession);
+        super.renderChildrenITreeNum(st, d3webSession, cc, to, loc, httpSession);
 
         sb.append(st.toString());
 
         return sb.toString();
+    }
+
+    /**
+     * In itree dialogs, there exist normal "num" questions as base objects due
+     * to need to model scoring behaviour and corresponding choice abstraction
+     * questions for mapping to values yes no and maybe. This method returns the
+     * abstraction value of the respective num base object.
+     *
+     * @param numTO
+     * @param blackboard
+     * @param sess
+     * @return
+     */
+    private Value getAbstractValue(TerminologyObject numTO, Blackboard blackboard,
+            Session sess) {
+
+        TerminologyObject abstractTO =
+                sess.getKnowledgeBase().getManager().searchQuestion(numTO.getName().replace("_n", ""));
+
+        System.out.println(abstractTO.getName() + " " + blackboard.getValue((ValueObject) abstractTO));
+        return blackboard.getValue((ValueObject) abstractTO);
+    }
+
+    private Value getNumValue(TerminologyObject numTO, Blackboard blackboard,
+            Session sess) {
+
+        TerminologyObject num =
+                sess.getKnowledgeBase().getManager().searchQuestion(numTO.getName());
+
+        return blackboard.getValue((ValueObject) num);
     }
 }

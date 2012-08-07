@@ -1361,11 +1361,14 @@ public class D3webUtils {
      */
     public static void setValue(String toId, String valueString, Session sess) {
 
+        System.out.println(toId + " " + valueString);
+
         if (toId == null || valueString == null) {
             return;
         }
 
         String toName = AbstractD3webRenderer.getObjectNameForId(toId);
+
         Blackboard blackboard = sess.getBlackboard();
         Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
                 toName == null ? toId : toName);
@@ -1412,6 +1415,13 @@ public class D3webUtils {
                 }
             }
         }
+
+        System.out.println("BLACKBOARD: ");
+        for (Question q : blackboard.getValuedQuestions()) {
+
+            System.out.println(q.getName() + " -> " + blackboard.getValue(q));
+        }
+        System.out.println("BLACKBOARD ENDE");
     }
 
     /**
@@ -1434,10 +1444,11 @@ public class D3webUtils {
         Blackboard blackboard = sess.getBlackboard();
         Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
                 toName == null ? toId : toName);
-        Question question_c =
-                D3webConnector.getInstance().getKb().getManager().searchQuestion(
-                toName == null ? toId.replace("_n", "") : toName.replace("_n", ""));
-        
+
+        //Question question_c =
+        //      D3webConnector.getInstance().getKb().getManager().searchQuestion(
+        //      toName == null ? toId.replace("_n", "") : toName.replace("_n", ""));
+
         // if TerminologyObject not found in the current KB return & do nothing
         if (question == null) {
             return;
@@ -1445,116 +1456,55 @@ public class D3webUtils {
 
         Value value = null;
 
+        // TODO: can be removed?!
         if (D3webConnector.getInstance().getDialogType().equals(DialogType.ITREE)) {
 
 
-            // CHOICE questions
-            if (question instanceof QuestionNum) {
-                if (valueString != null) {
-                    if (valueString.equals("1")) {
-                        value = new ChoiceValue(JNV.J.toString());
-                    } else if (valueString.equals("2")) {
-                        value = new ChoiceValue(JNV.V.toString());
-                    } else if (valueString.equals("3")) {
-                        value = new ChoiceValue(JNV.N.toString());
-                    } else if (valueString.equals("0")) {
-                    }
+            if (valueString != null) {
+                if (valueString.equals("1")) {
+                    value = new ChoiceValue(JNV.J.toString());
+                } else if (valueString.equals("2")) {
+                    value = new ChoiceValue(JNV.V.toString());
+                } else if (valueString.equals("3")) {
+                    value = new ChoiceValue(JNV.N.toString());
+                } else if (valueString.equals("0")) {
                 }
             }
-
-
-            if (question instanceof QuestionChoice) {
-                //TODO 
+            
+            if(question instanceof QuestionNum){
+                Question choiceQFromNumQ = 
+                        D3webConnector.getInstance().getKb().getManager().searchQuestion(
+                        toName.replace("_n", ""));
+                if(choiceQFromNumQ != null){
+                    question = choiceQFromNumQ;
+                }
             }
-
+            
+            
             // if reasonable value retrieved, set it for the given
             // TerminologyObject
             if (value != null) {
 
                 if (UndefinedValue.isNotUndefinedValue(value)) {
                     // add new value as UserEnteredFact
-                    Fact f2 = FactFactory.createUserEnteredFact(question_c, value);
+                    Fact f2 = FactFactory.createUserEnteredFact(question, value);
                     blackboard.addValueFact(f2);
                 }
 
 
             } else {
                 setQuestionUndefined(sess, question);
-                setQuestionUndefined(sess, question_c);
             }
 
+            System.out.println("BLACKBOARD: ");
+            for (Question q : blackboard.getValuedQuestions()) {
 
-
-        }
-        
-    }
-
-    public static void setValueITreeOLD(String toId, String valueString, Session sess) {
-
-        if (toId == null || valueString == null) {
-            return;
-        }
-
-        String toName = AbstractD3webRenderer.getObjectNameForId(toId);
-        Blackboard blackboard = sess.getBlackboard();
-        Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
-                toName == null ? toId : toName);
-
-
-        // if TerminologyObject not found in the current KB return & do nothing
-        if (question == null) {
-            return;
-        }
-
-        // ONLY FOR ClariHIE Dialog!!!
-        if (D3webConnector.getInstance().getDialogType().equals(DialogType.ITREE)) {
-            if (valueString != null) {
-                if (valueString.equals("1")) {
-                    valueString = YESSTRING;
-                } else if (valueString.equals("2")) {
-                    valueString = MAYBESTRING;
-                } else if (valueString.equals("3")) {
-                    valueString = NOSTRING;
-                } else if (valueString.equals("0")) {
-                    valueString = RETRACTSTRING;
-                }
+                System.out.println(q.getName() + " -> " + blackboard.getValue(q));
             }
-        }
-
-        // init Value object...
-        Value value = null;
-
-        if (valueString != null && valueString.equalsIgnoreCase("retract")) {
-            setQuestionUndefined(sess, question);
-
-
-        } // otherwise, i.e., for all other "not-unknown" values
-        else {
-
-            // CHOICE questions
-            if (question instanceof QuestionChoice) {
-                value = setQuestionChoice(question, valueString);
-            }
-
-            // if reasonable value retrieved, set it for the given
-            // TerminologyObject
-            if (value != null) {
-
-                if (UndefinedValue.isNotUndefinedValue(value)) {
-
-                    // add new value as UserEnteredFact
-                    Fact f2 = FactFactory.createUserEnteredFact(question, value);
-                    blackboard.addValueFact(f2);
-                }
-            }
+            System.out.println("BLACKBOARD ENDE");
 
         }
-        System.out.println("BLACKBOARD: ");
-        for (Question q : blackboard.getValuedQuestions()) {
 
-            System.out.println(q.getName() + " -> " + blackboard.getValue(q));
-        }
-        System.out.println("BLACKBOARD ENDE");
     }
 
     private static Value setQuestionDate(Question to, String valString) {
@@ -1666,17 +1616,14 @@ public class D3webUtils {
      * question
      */
     private static Value setQuestionUndefined(Session sess, Question to) {
-        System.out.println("ud: " + to.getName());
         Blackboard blackboard = sess.getBlackboard();
 
         // remove a previously set value
         Fact lastFact = blackboard.getValueFact(to);
-        System.out.println("ud before: " + blackboard.getValue(to));
-
+       
         if (lastFact != null) {
             blackboard.removeValueFact(lastFact);
         }
-        System.out.println("ud after: " + blackboard.getValue(to));
         return blackboard.getValue(to);
     }
 
@@ -1865,8 +1812,10 @@ public class D3webUtils {
 
         return has;
     }
-    
-    /* STUFF NEEDED FOR DATE QUESTIONS */
+
+    /*
+     * STUFF NEEDED FOR DATE QUESTIONS
+     */
     public static String translateDropdownTitle(String titleID, int locIdent) {
         String translated = "";
 
@@ -1971,12 +1920,12 @@ public class D3webUtils {
         if (reverse) {
             Collections.reverse(measure);
         }
-        return "<td><select type='" + name + "select' class='"+ name +"select'>\n"
+        return "<td><select type='" + name + "select' class='" + name + "select'>\n"
                 + createDropDownOptionsWithDefault("", selectedValue,
                 measure.toArray(new String[]{})) + "<select/></td>";
     }
-    
-     public static String createDropDownOptionsWithDefault(
+
+    public static String createDropDownOptionsWithDefault(
             String defaultValue, String selectedValue, String... options) {
         StringBuilder builder = new StringBuilder();
         if (defaultValue != null) {

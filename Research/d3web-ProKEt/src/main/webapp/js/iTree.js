@@ -5,7 +5,7 @@
 
 
 
- /* Global variables */
+/* Global variables */
 /*-------------------*/
 var rootQuestionId = "";
 
@@ -80,7 +80,7 @@ function expandAndStyleFirstElement_iTree(){
     
     // reset contents of input facilities part of first element
     var inputFacilitiesElement = 
-        $("#" + rootQuestionId.replace("q_", "") + "-imagebox");
+    $("#" + rootQuestionId.replace("q_", "") + "-imagebox");
     inputFacilitiesElement.html("<div id='solutionboxtextInTree'>Hauptfrage</div>");
             
     // remove propagation info field for first element
@@ -91,7 +91,7 @@ function expandAndStyleFirstElement_iTree(){
     // only expand by javascript if not d3web, in d3web this is done by the
     // dialog/renderer
     if(!d3web){
-       toggle_sub_4boxes(rootQuestionId);
+        toggle_sub_4boxes(rootQuestionId);
     }
     
 }
@@ -111,16 +111,21 @@ function exchangeReadflowTextFirstSubQuestion(){
 * question should be established due to the rating given
 */
 function initializeNumfields(){
-    $('[type=num]').unbind("keydown").keydown(function(e) { 
-        var code = (e.keyCode ? e.keyCode : e.which);
-        if (code == 13) {
-            handleNumFields_proto($(this));
-        }
-    }).unbind("focusout").focusout(function() {
-        if(!d3web){
+    if(!d3web){
+        $('[type=num]').unbind("keydown").keydown(function(e) { 
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if (code == 13) {
+                
+                handleNumFields_itreePrototype($(this));
+               
+            }
+        }).unbind("focusout").focusout(function() {
+           
             handleNumFields_itreePrototype($(this));
-        }
-    });
+           
+        });
+    }   
+        
 }
 
 /**
@@ -527,20 +532,18 @@ function tooltip_out_prop(object) {
 }
 
 /*--------------------------*/
- /* clarihie d3web dialogs */
+/* clarihie d3web dialogs */
 /*--------------------------*/
 function d3web_answerYesNoHierarchyQuestions(buttonId, rating){
     
     // handle logging if activated
     if (logging) {
-        ue_logDialogType("ClariHIE"); 
-        
         var now = ue_getCurrentDate();		
     }
     
     
     // assemble ajax call
-    var link = $.query.set("action", "addFacts");
+    var link = $.query.set("action", "addFactsYN");
     //link = link.set("timestring", now);
     
     var qid = $(buttonId).closest("[id^=q_]").attr("id").replace("-imagebox", "");
@@ -559,8 +562,8 @@ function d3web_answerYesNoHierarchyQuestions(buttonId, rating){
         success : function(html) {
             
             // TODO: cookies for storing expand state of dialog!
-             window.location.reload();
-             initFunctionality();
+            window.location.reload();
+            initFunctionality();
         },
         error : function(html) {
             alert("ajax error add facts");
@@ -577,11 +580,11 @@ function d3web_saveShowStatus(qid){
     //var cookie = readExpandCookieValue(qid);
     //alert(cookie + " --- " + cookie.indexOf("EXPANDED"));
     //if(cookie.indexOf("EXPANDED") != -1){
-      //  deleteExpandCookie(qid);
-      //  writeExpandCookie(qid, "FOLDED");
+    //  deleteExpandCookie(qid);
+    //  writeExpandCookie(qid, "FOLDED");
     //} else {
-      //  deleteExpandCookie(qid);
-      //  writeExpandCookie(qid, "EXPANDED");
+    //  deleteExpandCookie(qid);
+    //  writeExpandCookie(qid, "EXPANDED");
     //} 
     //alert(document.cookie);
     var link = $.query.set("action", "saveShowStatus");

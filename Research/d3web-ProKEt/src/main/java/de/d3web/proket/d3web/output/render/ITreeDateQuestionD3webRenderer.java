@@ -47,7 +47,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Martina Freiberg @created 22.04.2012
  */
-public class ITreeNumDateQuestionD3webRenderer extends AnswerDateD3webRenderer implements IQuestionD3webRenderer {
+public class ITreeDateQuestionD3webRenderer extends AnswerDateD3webRenderer implements IQuestionD3webRenderer {
 
     protected static String TT_PROP_ERROR = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung.</b> "
             + "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, "

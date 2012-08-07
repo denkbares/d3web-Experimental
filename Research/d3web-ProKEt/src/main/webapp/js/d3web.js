@@ -438,6 +438,7 @@ function initFunctionality() {
     $('[type=num]').unbind("keydown").keydown(function(e) { 
         var code = (e.keyCode ? e.keyCode : e.which);
         if (code == 13) {
+            
             handleNumFields($(this));
         }
     }).unbind("focusout").focusout(function() {
@@ -884,7 +885,11 @@ function d3web_addFacts() {
         cache : false, // needed for IE, call is not made otherwise
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         success : function(html) {
-            if (html.startsWith("##missingfield##")) {
+            if (html.indexOf("itree_addfacts")==0){
+                window.location.reload();
+                initFunctionality();
+            } 
+            else if (html.startsWith("##missingfield##")) {
                
                 var field =    html.replace("##missingfield##", "");     
                 field = field.replace(" ", "_");
@@ -978,6 +983,7 @@ function d3web_storeQuestionNum(numInput) {
     if(d3web_checkQuestionNum(numInput)){
         var numQuestion = getQuestionId(numInput);
         textStore[numQuestion] = $(numInput).val();
+        //alert(numQuestion + " " + $(numInput).val());
     } else {
     // alert("dont store");
     }

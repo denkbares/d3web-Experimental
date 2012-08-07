@@ -375,7 +375,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             if (value != null && value) {
                 
                 Boolean toValue = to.getInfoStore().getValue(BasicProperties.UNKNOWN_VISIBLE);
-                System.out.println(to.getName() + " unknown: " + toValue);
+                //System.out.println(to.getName() + " unknown: " + toValue);
                 if (toValue == null || toValue) {
 
                     AnswerD3webRenderer unknownRenderer = getUnknownRenderer();
@@ -672,118 +672,6 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         return false;
     }
 
-    /**
-     * TODO: May be remove
-     * 
-     * Check whether a given terminology object rates the parent question in a
-     * swapped y/n manner, i.e. "NO" is the positively rating answer.
-     *
-     * @param to
-     * @param juriRules
-     * @return
-     */
-    public static boolean isNoDefining(TerminologyObject to, Set juriRules) {
-        if (juriRules != null && juriRules.size() != 0) {
-            for (Object o : juriRules) {
-                JuriRule rule = (JuriRule) o;
-
-                // get all rules, where to is CHILD
-                if (rule.getChildren().containsKey(to)) {
-
-                    HashMap<QuestionOC, List<Value>> children = rule.getChildren();
-                    for (Object ooc : children.keySet()) {
-
-                        QuestionOC qoc = (QuestionOC) ooc;
-                        if (children.get(qoc).contains(JuriRule.NO_VALUE)) {
-                            if (qoc.equals(to)) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * TODO aMaybe remove
-     * @param st
-     * @param d3webSession
-     * @param cc
-     * @param to
-     * @param loc
-     * @param httpSession 
-     */
-    protected void renderChildrenITree(StringTemplate st, Session d3webSession, ContainerCollection cc,
-            TerminologyObject to, int loc, HttpSession httpSession) {
-
-        final KnowledgeKind<JuriModel> JURIMODEL = new KnowledgeKind<JuriModel>(
-                "JuriModel", JuriModel.class);
-
-        StringBuilder childrenHTML = new StringBuilder();
-        D3webConnector d3wcon = D3webConnector.getInstance();
-
-        if (to.getName().equals("Q000")) {
-            TerminologyObject rootNode = to.getChildren()[0];
-
-            if (rootNode != null) {
-
-                IQuestionD3webRenderer childRenderer =
-                        AbstractD3webRenderer.getRenderer(rootNode);
-
-                // TODO: how to get parent el in here correctly!?
-                String childHTML =
-                        childRenderer.renderTerminologyObject(d3webSession, cc, rootNode, to, loc, httpSession);
-                if (childHTML != null) {
-                    childrenHTML.append(childHTML);
-                }
-
-                st.setAttribute("children", childrenHTML.toString());
-
-            }
-        } else {
-            JuriModel juriModel =
-                    d3wcon.getKb().getKnowledgeStore().getKnowledge(JURIMODEL);
-            Set juriRules = juriModel.getRules();
-
-            // get the children of the current to from the juri rules
-            List<QuestionOC> toChildren = getChildQuestionsFromJuriRules(to, juriRules);
-
-            if (toChildren != null && !toChildren.isEmpty()) {
-
-                for (Object newChildRoot : toChildren) {
-
-                    IQuestionD3webRenderer childRenderer = null;
-                    TerminologyObject newChild = (TerminologyObject) newChildRoot;
-
-                    Boolean isDummy =
-                            newChild.getInfoStore().getValue(
-                            Property.getProperty("dummy", Boolean.class));
-
-                    // TODO: render dummy nodes specially 
-                    if (isDummy != null && isDummy.equals(true)) {
-                        childRenderer = D3webRendererMapping.getInstance().getDummyITreeRenderer();
-                    } else {
-                        childRenderer =
-                                AbstractD3webRenderer.getRenderer((TerminologyObject) newChildRoot);
-
-                    }
-
-
-                    String childHTML =
-                            childRenderer.renderTerminologyObject(d3webSession, cc, (TerminologyObject) newChildRoot, to, loc, httpSession);
-                    if (childHTML != null) {
-                        childrenHTML.append(childHTML);
-                    }
-
-                }
-                // if children, fill the template attribute children with children-HTML 
-                st.setAttribute("children", childrenHTML.toString());
-            }
-        }
-
-    }
     
     
      protected void renderChildrenITreeNum(StringTemplate st, Session d3webSession, ContainerCollection cc,
@@ -825,12 +713,12 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
                     // TODO: render dummy nodes specially 
                     if (isDummy != null && isDummy.equals(true)) {
-                        childRenderer = D3webRendererMapping.getInstance().getDummyITreeRenderer();
+                        childRenderer = D3webRendererMapping.getInstance().getITreeDummyRenderer();
                     } else {
                         childRenderer =
                                 AbstractD3webRenderer.getRenderer((TerminologyObject) newChildRoot);
 
-                         System.out.println(childRenderer.getClass());
+                        
                     }
 
 

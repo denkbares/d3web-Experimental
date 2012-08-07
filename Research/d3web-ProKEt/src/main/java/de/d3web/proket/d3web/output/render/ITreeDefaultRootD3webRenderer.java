@@ -50,7 +50,7 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
          * fill some basic attributes
          */
         st.setAttribute("headertext", D3webConnector.getInstance().getHeader());
-        st.setAttribute("title", "Clarification Consultation --- iTree UI");
+        st.setAttribute("title", "ITree UI - Based on Num-Question Model");
 
         // load case list dependent from logged in user, e.g. MEDIASTINITIS
         String opts = renderUserCaseList((String) http.getAttribute("user"));
@@ -112,7 +112,7 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
                 (D3webUserSettings) http.getAttribute("userSettings");
 
         // render the children
-        renderChildrenITree(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet(),
+        renderChildrenITreeNum(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet(),
                 us.getLanguageId(), http);
 
         // global JS initialization

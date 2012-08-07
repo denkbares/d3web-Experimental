@@ -75,45 +75,36 @@ import javax.servlet.ServletException;
  */
 public class ClarihieDialog extends D3webDialog {
 
-   
-   
     @Override
     protected String getSource(HttpServletRequest request, HttpSession http) {
-        
-         return "ITree030812";
+
+        return "ITree070812";
     }
 
     /**
      * Add one or several given facts. Thereby, first check whether input-store
      * has elements, if yes, parse them and set them (for num/text/date
      * questions), if no, just parse and set a given single value.
-     *
-     * @created 28.01.2011
-     *
-     * @param request ServletRequest
-     * @param response ServletResponse
-     * 
-     * @Override 
-     * 
+
+     * @Override
      */
-    protected void addFacts(HttpServletRequest request,
+    protected void addFactsYN(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
-        
 
         PrintWriter writer = response.getWriter();
 
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
-        
+
         String question = request.getParameter("question");
         String value = request.getParameter("value");
-        
+
         setValue(d3webSession, request, question, value, httpSession);
 
         PersistenceD3webUtils.saveCase((String) httpSession.getAttribute("user"), "autosave",
                 d3webSession);
-        
-        
+
+
         // get the root renderer --> call getRenderer with null
         DefaultRootD3webRenderer d3webr =
                 (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
@@ -121,42 +112,75 @@ public class ClarihieDialog extends D3webDialog {
         // new ContainerCollection needed each time to get an updated dialog
         ContainerCollection cc = new ContainerCollection();
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
-        
+
         cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
         writer.print(cc.html.toString()); // deliver the rendered output
         writer.close(); // and close
     }
 
+    /**
+     * For adding facts other than default jnv values
+     *
+     * @param request
+     * @param response
+     * @param httpSession
+     * @throws IOException
+     */
+    protected void addFacts(HttpServletRequest request,
+            HttpServletResponse response, HttpSession httpSession)
+            throws IOException {
+
+        Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
+        List<String> questions = new ArrayList<String>();
+        List<String> values = new ArrayList<String>();
+
+        // get all questions and answers lately answered as lists
+        super.getParameterPairs(request, "question", "value", questions, values);
+        // set the values
+        super.setValues(d3webSession, questions, values, request, httpSession);
+        
+        // autosave the current state
+        PersistenceD3webUtils.saveCase(
+                (String) httpSession.getAttribute("user"), 
+                "autosave",
+                d3webSession);
+        PrintWriter writer = response.getWriter();
+        writer.append("itree_addfacts");
+        System.out.println(response.getContentType() + " " + response.getCharacterEncoding());
+        System.out.println(writer.toString());
+    }
+
     private void setValue(Session d3webSession, HttpServletRequest request,
             String question, String value, HttpSession httpSession) {
-      
-       D3webUtils.setValueITree(question, value, d3webSession);
+
+        D3webUtils.setValueITree(question, value, d3webSession);
         if (d3wcon.isLogging()) {
             handleQuestionValueLogging(
                     request, httpSession, question, value, d3webSession);
         }
     }
-    
-     protected void saveShowStatus(HttpServletRequest request,
+
+    protected void saveShowStatus(HttpServletRequest request,
             HttpSession httpSession) {
-      
+
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
         String parameterQuestion = request.getParameter("question");
         String q = AbstractD3webRenderer.getObjectNameForId(parameterQuestion);
         Question qFinal = d3webSession.getKnowledgeBase().getManager().searchQuestion(
                 q == null ? parameterQuestion : q);
-        
-       
-        /*if(qFinal.getInfoStore().getValue(ProKEtProperties.ITREESHOWN) != null &&
-                qFinal.getInfoStore().getValue(ProKEtProperties.ITREESHOWN) == true ){
-            qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN, false);
-        } else {
-            qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN, true);
-        }*/
-        
+
+
+        /*
+         * if(qFinal.getInfoStore().getValue(ProKEtProperties.ITREESHOWN) !=
+         * null && qFinal.getInfoStore().getValue(ProKEtProperties.ITREESHOWN)
+         * == true ){
+         * qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN, false); }
+         * else { qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN,
+         * true);
+        }
+         */
+
     }
-    
-    
 
     private void handleQuestionValueLogging(HttpServletRequest request,
             HttpSession httpSession, String ques, String val, Session d3webSession) {
@@ -178,11 +202,10 @@ public class ClarihieDialog extends D3webDialog {
 
         ServletLogUtils.logQuestionValue(question, value, logtime, logger);
     }
-    
-   
+
     @Override
-    protected void show(HttpServletRequest request, HttpServletResponse response, 
-    HttpSession httpSession) throws IOException{
+    protected void show(HttpServletRequest request, HttpServletResponse response,
+            HttpSession httpSession) throws IOException {
         loadITreeInit(httpSession, request);
         super.show(request, response, httpSession);
     }

@@ -90,8 +90,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
         this.put(IMG_QUESTION, ImageQuestionD3webRenderer.class.getSimpleName());
         this.put(Q_CONT, QuestionnaireD3webRenderer.class.getSimpleName());
         this.put(SUMMARY, SummaryD3webRenderer.class.getSimpleName());
-        this.put(DUMMYITREE, ITreeDummyQuestionD3webRenderer.class.getSimpleName());
-        this.put(DUMMYITREENUM, ITreeNumDummyQuestionD3webRenderer.class.getSimpleName());
+        this.put(DUMMYITREENUM, ITreeDummyQuestionD3webRenderer.class.getSimpleName());
         this.put(OC_ANSWER, AnswerOCD3webRenderer.class.getSimpleName());
         this.put(MC_ANSWER, AnswerMCD3webRenderer.class.getSimpleName());
         this.put(ZC_ANSWER, AnswerZCD3webRenderer.class.getSimpleName());
@@ -100,8 +99,8 @@ public class D3webRendererMapping extends HashMap<String, String> {
         this.put(DATE_ANSWER, AnswerDateD3webRenderer.class.getSimpleName());
         this.put(UNKNOWN_ANSWER, AnswerUnknownD3webRenderer.class.getSimpleName());
         this.put(OC_DROP_ANSWERS, AnswerOCDropD3webRenderer.class.getSimpleName());
-        this.put(ITREENUM_NUM, ITreeNumNumQuestionD3webRenderer.class.getSimpleName());
-        this.put(ITREENUM_DATE, ITreeNumDateQuestionD3webRenderer.class.getSimpleName());
+        this.put(ITREENUM_NUM, ITreeNumQuestionD3webRenderer.class.getSimpleName());
+        this.put(ITREENUM_DATE, ITreeDateQuestionD3webRenderer.class.getSimpleName());
         
     }
 
@@ -127,10 +126,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
             if (D3webConnector.getInstance().getUserprefix().equals("ITree")) {
                 return (AbstractD3webRenderer) getRenderer(userPref, name);
             }
-            if (D3webConnector.getInstance().getUserprefix().equals("ITreeNum")) {
-                System.out.println("get ItreeNum");
-                return (AbstractD3webRenderer) getITreeNumRenderer(userPref, name, to);
-            }
+            
             
         } else if (to instanceof QContainer) {
             name = Q_CONT;
@@ -184,10 +180,10 @@ public class D3webRendererMapping extends HashMap<String, String> {
         return (SummaryD3webRenderer) getRenderer(SUMMARY);
     }
 
-    public ITreeDummyQuestionD3webRenderer getDummyITreeRenderer() {
-        return (ITreeDummyQuestionD3webRenderer) getRenderer(DUMMYITREE);
+    public ITreeDummyQuestionD3webRenderer getITreeDummyRenderer(){
+        return (ITreeDummyQuestionD3webRenderer) getRenderer(DUMMYITREENUM);
     }
-
+    
     public AnswerD3webRenderer getUnknownRenderer() {
         return (AnswerD3webRenderer) getRenderer(UNKNOWN_ANSWER);
     }
@@ -237,7 +233,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
 
         try {
             String completeToGet = (prefix + userPrefix + this.get(name));
-            System.out.println(completeToGet);
+            //System.out.println(completeToGet);
             result = Class.forName(completeToGet);
         } catch (ClassNotFoundException cne) {
             return null;
