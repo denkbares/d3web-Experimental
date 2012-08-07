@@ -80,7 +80,7 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
         // get the fitting template. In case user prefix was specified, the
         // specific TemplateName is returned, otherwise, the base object name.
         StringTemplate st = TemplateUtils.getStringTemplate(
-                super.getTemplateName("ITreeNumQuestion"), "html");
+                super.getTemplateName("ITreeQuestion"), "html");
 
         // set some basic properties
         st.setAttribute("fullId", getID(to));

@@ -72,7 +72,7 @@ public class ITreeDateQuestionD3webRenderer extends AnswerDateD3webRenderer impl
         // get the fitting template. In case user prefix was specified, the
         // specific TemplateName is returned, otherwise, the base object name.
         StringTemplate st = TemplateUtils.getStringTemplate(
-                super.getTemplateName("ITreeNumDateQuestion"), "html");
+                super.getTemplateName("ITreeDateQuestion"), "html");
 
         // set some basic properties
         st.setAttribute("fullId", getID(to));

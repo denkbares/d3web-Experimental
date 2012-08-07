@@ -1,4 +1,6 @@
 
+
+
 <div id="readFlow-$fullId$" class="readflow">
     <img id="$fullId$-readimg" alt="readflow" src="$readimg$" height="14" width="25">
 </div>
@@ -33,10 +35,8 @@
                     $if(tooltip)$<div id="tt-$fullId$" class=" tooltip tooltipProp tt-$fullId$">$tooltip$</div>$endif$
                 </div>
 	</div>
-        
-        
 	
-	$if(children)$<div id="sub-$fullId$" class="sub-$fullId$" style="padding-left:15px;$if(showITree)$display:block$else$display:none$endif$">
+	$if(children)$<div id="sub-$fullId$" class="sub-$fullId$" style="padding-left:15px;$if(showitree)$display:block$else$display:none$endif$">
 		$children$
 	</div>$endif$
 	

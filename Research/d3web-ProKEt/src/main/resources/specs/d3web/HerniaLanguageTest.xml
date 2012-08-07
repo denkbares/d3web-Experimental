@@ -13,5 +13,5 @@
 	language = ""
         logging = "ON"
 	>
-	<data kb="Languages.d3web" />
+	<data kb="HerniaLanguageTest.d3web" />
 </dialog>
