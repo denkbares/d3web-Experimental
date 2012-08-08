@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
@@ -40,7 +41,7 @@ import de.knowwe.rdfs.test.util.Vocabulary;
  * @author Jochen Reutelshoefer
  * @created Sept 21, 2011
  */
-public class SubClassOfTest {
+public class SubClassOfTestOFF {
 
 	private final Rdf2GoCore core = Rdf2GoCore.getInstance();
 
@@ -53,7 +54,7 @@ public class SubClassOfTest {
 		TestArticleManager.getArticle(TESTFILE);
 	}
 
-	//@Test
+	@Test
 	public void testComplexIRIDefinitionMarkup() {
 
 		// asserted

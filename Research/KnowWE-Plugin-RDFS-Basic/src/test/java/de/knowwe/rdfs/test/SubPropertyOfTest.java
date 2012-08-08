@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
@@ -53,7 +54,7 @@ public class SubPropertyOfTest {
 		TestArticleManager.getArticle(TESTFILE);
 	}
 
-	//@Test
+	@Test
 	public void testComplexIRIDefinitionMarkup() {
 
 		// asserted
