@@ -20,7 +20,7 @@
 			point-id="SparqlResultNodeRenderer"
 			id="LinkNodeRenderer">
 		<parameter id="class"
-			value="de.knowwe.rdf2go.wikiObjectModel.LinkNodeRenderer" />
+			value="de.knowwe.rdfs.wikiObjectModel.utils.LinkNodeRenderer" />
 		<parameter id="name" value="LinkNodeRenderer" />
 		<parameter id="description" value="NodeRenderer LinkNodeRenderer" />
 		<parameter id="version" value="1.0" />
