@@ -3,6 +3,7 @@
 <plugin id="KnowWE-Plugin-SimpleScoreTable" version="0.0.1">
 <requires>
 <import plugin-id="KnowWEExtensionPoints"/>
+<import plugin-id="KnowWE-Plugin-InstantEdit"/>
 </requires>
 <runtime>
 <library id="de.d3web" path="." type="code">
@@ -29,6 +30,23 @@
 <parameter id="class" value="de.knowwe.d3web.scoreTable.ScoreTableDefaultMarkup"/>
 <parameter id="version" value="1.0"/>
 </extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+        id="ScoreTableEditToolProvider">
+        <parameter id="class"
+            value="de.knowwe.d3web.scoreTable.EditToolProvider" />
+        <parameter id="name" value="ScoreTableEditToolProvider" />
+        <parameter id="description"
+            value="Offers a tool for a spreadsheet-like table editor." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="3" />
+        <parameter id="script" value="KnowWE-Plugin-InstantEdit.js" />
+        <parameter id="script" value="KnowWE-Plugin-AutoComplete.js" />
+        <parameter id="script" value="table-edit-tool.js" />
+        <parameter id="css" value="KnowWE-Plugin-InstantEdit.css" />
+        <parameter id="css" value="table-edit-tool.css" />       
+        <parameter id="scope" value="ScoreTableDefaultMarkup" />
+	</extension>
 
     <extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
         id="ScoringTableEditToolProvider">
