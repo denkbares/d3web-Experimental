@@ -37,6 +37,8 @@ public class ProKEtProperties {
             "after", String.class);
     public static final Property<Boolean> ITREEINIT = Property.getProperty(
             "itreeinit", Boolean.class);
+    public static final Property<Boolean> SHOWITREE = Property.getProperty(
+            "showitree", Boolean.class);
     public static final Property<Boolean> NO_DEFINING = Property.getProperty(
             "nodefining", Boolean.class);
     public static final Property<Boolean> ORTYPE = Property.getProperty(
