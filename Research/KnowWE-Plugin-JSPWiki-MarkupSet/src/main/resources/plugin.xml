@@ -21,4 +21,34 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="SectionType2">
+		<parameter id="class" value="de.knowwe.jspwiki.types.SectionType2" />
+		<parameter id="name" value="SectionType2" />
+		<parameter id="description" value="Represents a SectionType2 in KDOM" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="SectionType1">
+		<parameter id="class" value="de.knowwe.jspwiki.types.SectionType1" />
+		<parameter id="name" value="SectionType1" />
+		<parameter id="description" value="Represents a SectionType1 in KDOM" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="10" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ParagraphType">
+		<parameter id="class" value="de.knowwe.jspwiki.types.ParagraphType" />
+		<parameter id="name" value="ParagraphType" />
+		<parameter id="description" value="Represents a ParagraphType in KDOM" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="100" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
 </plugin>
