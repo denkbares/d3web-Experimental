@@ -225,6 +225,7 @@
 		<module>KnowWE-Plugin-RDFS-WikiObjectModel</module>
 		<module>KnowWE-Plugin-JSPWiki-MarkupSet</module>
 		<module>KnowWE-Plugin-Include</module>
+		<module>KnowWE-Plugin-LoadKnowledgeBase</module>
 	</modules>
 	<repositories>
 		<repository>

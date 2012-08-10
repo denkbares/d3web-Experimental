@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-WikiZIPDownload" version="0.0.1">
+
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Annotation"
+		id="LoadKBAnnotation">
+		<parameter id="class"
+			value="de.knowwe.loadkb.LoadKBAnnotation" />
+		<parameter id="name" value="load" />
+		<parameter id="description"
+			value="Offers the possibility to load a KB" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="100000" />
+		<parameter id="scope" value="KnowledgeBaseType" />
+		<parameter id="renderer" value="de.knowwe.loadkb.AnnotationLoadKnowledgeBaseRenderer" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="SubtreeHandler"
+		id="AnnotationLoadKnowledgeBaseHandler">
+		<parameter id="class" value="de.knowwe.loadkb.AnnotationLoadKnowledgeBaseHandler" />
+		<parameter id="name" value="AnnotationLoadKnowledgeBaseHandler" />
+		<parameter id="description" value="Subtree handler to load a knowledge base" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="handlerpriority" value="1000" />
+		<parameter id="scope" value="KnowledgeBaseType" />
+	</extension>
+
+	
+</plugin>
