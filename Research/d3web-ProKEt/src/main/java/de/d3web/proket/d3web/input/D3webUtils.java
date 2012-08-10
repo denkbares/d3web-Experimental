@@ -1470,17 +1470,17 @@ public class D3webUtils {
                 } else if (valueString.equals("0")) {
                 }
             }
-            
-            if(question instanceof QuestionNum){
-                Question choiceQFromNumQ = 
+
+
+            if (question instanceof QuestionNum) {
+                Question choiceQFromNumQ =
                         D3webConnector.getInstance().getKb().getManager().searchQuestion(
                         toName.replace("_n", ""));
-                if(choiceQFromNumQ != null){
+                if (choiceQFromNumQ != null) {
                     question = choiceQFromNumQ;
                 }
             }
-            
-            
+
             // if reasonable value retrieved, set it for the given
             // TerminologyObject
             if (value != null) {
@@ -1496,13 +1496,14 @@ public class D3webUtils {
                 setQuestionUndefined(sess, question);
             }
 
-            System.out.println("BLACKBOARD: ");
-            for (Question q : blackboard.getValuedQuestions()) {
-
-                System.out.println(q.getName() + " -> " + blackboard.getValue(q));
-            }
-            System.out.println("BLACKBOARD ENDE");
-
+            /*
+             * System.out.println("BLACKBOARD: "); for (Question q :
+             * blackboard.getValuedQuestions()) {
+             *
+             * System.out.println(q.getName() + " -> " +
+             * blackboard.getValue(q)); } System.out.println("BLACKBOARD ENDE");
+             *
+             */
         }
 
     }
@@ -1620,7 +1621,7 @@ public class D3webUtils {
 
         // remove a previously set value
         Fact lastFact = blackboard.getValueFact(to);
-       
+
         if (lastFact != null) {
             blackboard.removeValueFact(lastFact);
         }

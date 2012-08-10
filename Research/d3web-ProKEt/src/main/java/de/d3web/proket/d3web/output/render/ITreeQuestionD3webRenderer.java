@@ -19,23 +19,19 @@
  */
 package de.d3web.proket.d3web.output.render;
 
-import de.d3web.core.inference.KnowledgeKind;
 import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
-import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
-import de.d3web.jurisearch.JuriModel;
-import de.d3web.jurisearch.JuriRule;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
+import java.util.ArrayList;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -107,6 +103,9 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
 
         // for questions to be initially shown in the tree
         Boolean itreeinit = to.getInfoStore().getValue(ProKEtProperties.ITREEINIT);
+        // get "show" status of question and display, if needed
+        Boolean showintree = to.getInfoStore().getValue(ProKEtProperties.SHOWITREE);
+
         if (itreeinit != null && itreeinit.equals(true)) {
             st.setAttribute("showitree", true);
 
@@ -115,6 +114,47 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
                 st.setAttribute("typeimg", "img/openedArrow.png");
             }
         }
+
+
+        if (showintree != null && showintree.equals(true)) {
+            st.setAttribute("showitree", true);
+
+            if (to.getChildren().length > 0) {
+                st.removeAttribute("typeimg");
+                st.setAttribute("typeimg", "img/openedArrow.png");
+            }
+        }
+
+
+        System.out.println(to.getName() + " > " + itreeinit + " " + showintree);
+        if(!itreeinit && !showintree){
+               
+            ArrayList<Boolean> indicatedChildren = new ArrayList<Boolean>();
+            // check children if one (or more) are indicated, if yes, then show
+            for (TerminologyObject child : to.getChildren()) {
+                System.out.println(to.getName());
+                if (D3webUtils.isIndicated(child, bb)) {
+                    System.out.println(to.getName() + " " + child.getName() + " " + "true");
+                    indicatedChildren.add(true);
+                }
+            }
+
+            if (indicatedChildren.contains(true)) {
+                // set show children part of indicating parent to true
+                to.getInfoStore().addValue(ProKEtProperties.SHOWITREE, true);
+                st.setAttribute("showitree", true);
+
+                if (to.getChildren().length > 0) {
+                    st.removeAttribute("typeimg");
+                    st.setAttribute("typeimg", "img/openedArrow.png");
+                }
+            } else {
+                to.getInfoStore().addValue(ProKEtProperties.SHOWITREE, false);
+                st.removeAttribute("showitree");
+                st.setAttribute("typeimg", "img/closedArrow.png");
+            }
+        }
+
 
         if (parent.getName().equals("Q000")) {
             st.setAttribute("readimg", "img/transpSquare.png");
@@ -129,10 +169,13 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
             }
         }
 
+
         Value val = bb.getValue((ValueObject) to);
         //getAbstractValue(to, bb, d3webSession);
-        st.removeAttribute("qrating");
-        
+
+        st.removeAttribute(
+                "qrating");
+
         Value jnvValForScoringQ = null;
 
         // handle scoring questions
@@ -144,32 +187,17 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
             }
             if (jnvValForScoringQ != null) {
                 val = jnvValForScoringQ;
+                //  System.out.println(to.getName() + " > " +  val );
             }
         }
 
-
+        // if a value is set for question, show acording coloring
         if (UndefinedValue.isNotUndefinedValue(val)) {
 
             if (val.toString().equals(JNV.J.toString())) {
-
-                // check if we have "swapped" questions //
-                //if (to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING) != null
-                  //      && to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING)) {
-
-                 //   st.setAttribute("qrating", "rating-low");
-                //} else {
-                    st.setAttribute("qrating", "rating-high");
-               // }
-
+                st.setAttribute("qrating", "rating-high");
             } else if (val.toString().equals(JNV.N.toString())) {
-                // check if we have swapped" questions //
-               // if (to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING) != null
-                 //       && to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING)) {
-                  //  st.setAttribute("qrating", "rating-high");
-                //} else {
-                    st.setAttribute("qrating", "rating-low");
-                //}
-
+                st.setAttribute("qrating", "rating-low");
             } else if (val.toString().equals(JNV.V.toString())) {
                 st.setAttribute("qrating", "rating-medium");
             }
@@ -177,15 +205,20 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
             st.removeAttribute("qrating");
         }
 
-
-
-        st.removeAttribute("tty");
-        st.removeAttribute("ttn");
-        st.removeAttribute("ttu");
-        st.removeAttribute("ttnan");
-        st.removeAttribute("ratingY");
-        st.removeAttribute("ratingN");
-        st.removeAttribute("swap");
+        st.removeAttribute(
+                "tty");
+        st.removeAttribute(
+                "ttn");
+        st.removeAttribute(
+                "ttu");
+        st.removeAttribute(
+                "ttnan");
+        st.removeAttribute(
+                "ratingY");
+        st.removeAttribute(
+                "ratingN");
+        st.removeAttribute(
+                "swap");
 
         // set coloring of question buttons according to type of question
         // (normal question or swapped)
@@ -209,12 +242,12 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
             st.setAttribute("ttn", TT_NO);
         }
 
-
-
-
-        st.setAttribute("ttu", TT_UN);
-        st.setAttribute("ttnan", TT_NAN);
-        st.setAttribute("tooltip", TT_PROP_ERROR);
+        st.setAttribute(
+                "ttu", TT_UN);
+        st.setAttribute(
+                "ttnan", TT_NAN);
+        st.setAttribute(
+                "tooltip", TT_PROP_ERROR);
 
         super.renderChildrenITreeNum(st, d3webSession, cc, to, loc, httpSession);
 

@@ -241,14 +241,18 @@ public class D3webDialog extends HttpServlet {
             //resetD3webSession(httpSession);
             resetD3webSession(httpSession);
 
+            // if session is null create a session 
+            
+
             /*
              * initialize logging
              */
             initializeLoggingMechanism(httpSession);
-            //D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
-            //System.out.println(d3webSession);
-            //httpSession.setAttribute(D3WEB_SESSION, d3webSession);
 
+            // THIS IS REALLY NEEDED; OTHERWISE PROBLEMS WITH DIFFERENT SESSIONS ON SAME KB
+            if (httpSession.getAttribute(D3WEB_SESSION) == null) {
+                resetD3webSession(httpSession);
+            }
             //httpSession.setAttribute("lastLoaded", "");
             //D3webConnector.getInstance().setSession(d3webSession);
 
@@ -257,12 +261,7 @@ public class D3webDialog extends HttpServlet {
             D3webUtils.streamImages();
         }
 
-        // if session is null create a session 
-        // THIS IS REALLY NEEDED; OTHERWISE PROBLEMS WITH DIFFERENT SESSIONS ON SAME KB
-        if (httpSession.getAttribute(D3WEB_SESSION)
-                == null) {
-            resetD3webSession(httpSession);
-        }
+
 
         if (httpSession.getAttribute(USER_SETTINGS)
                 == null) {
@@ -271,13 +270,13 @@ public class D3webDialog extends HttpServlet {
         }
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
-        
+
         //System.out.println(action);
-        
-        
+
+
         // TEST:
 //        httpSession.setAttribute("debug", "true");
-        
+
         if (action == null) {
             action = "show";
         }
@@ -321,8 +320,7 @@ public class D3webDialog extends HttpServlet {
             //System.out.println("add Facts base");
             addFactsYN(request, response, httpSession);
             return;
-        }
-        else if (action.equalsIgnoreCase(
+        } else if (action.equalsIgnoreCase(
                 "savecase")) {
             saveCase(request, response, httpSession);
             return;
@@ -583,12 +581,12 @@ public class D3webDialog extends HttpServlet {
             writer.append("false");
         }
     }
-    
-     protected void addFactsYN(HttpServletRequest request,
+
+    protected void addFactsYN(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
-         // overwritten by ClariHie Dialog
-     }
+        // overwritten by ClariHie Dialog
+    }
 
     /**
      * Add one or several given facts. Thereby, first check whether input-store
@@ -608,11 +606,11 @@ public class D3webDialog extends HttpServlet {
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
         List<String> questions = new ArrayList<String>();
         List<String> values = new ArrayList<String>();
-        
+
         // get all questions and answers lately answered as lists
         getParameterPairs(request, "question", "value", questions, values);
-        
-       
+
+
         // check if all required values are set correctly, if not, do not go on!
         if (!handleRequiredValueCheck(writer, d3webSession, questions, values)) {
             return;
@@ -621,27 +619,27 @@ public class D3webDialog extends HttpServlet {
         // save beforeState
         DialogState stateBefore = new DialogState(d3webSession);
         //System.out.println("BEF: " + stateBefore.answeredQuestions); 
-        
+
         // set the values
         setValues(d3webSession, questions, values, request, httpSession);
-        
+
         // "clean up" blackboard
         D3webUtils.resetAbandonedPaths(d3webSession, httpSession);
-        
+
         // autosave the current state
         PersistenceD3webUtils.saveCase(
-                (String) httpSession.getAttribute("user"), 
+                (String) httpSession.getAttribute("user"),
                 "autosave",
                 d3webSession);
-        
+
         // save afterState
         DialogState stateAfter = new DialogState(d3webSession);
         //System.out.println("AFT:" +stateAfter.answeredQuestions);
-       
+
         // calculate the difference set of before and after states of the dialog
         Set<TerminologyObject> diff = calculateDiff(d3webSession, stateBefore, stateAfter);
 
-        
+
         // update the dialog (partially, i.e. all changed questions)
         renderAndUpdateDiff(writer, d3webSession, diff, httpSession);
     }
@@ -775,7 +773,7 @@ public class D3webDialog extends HttpServlet {
 
     private Set<TerminologyObject> calculateDiff(Session d3webSession, DialogState beforeState, DialogState afterState) {
 
-        
+
         Set<TerminologyObject> diff = new HashSet<TerminologyObject>();
 
         for (TerminologyObject to : beforeState.unknownQuestions) {
@@ -785,16 +783,16 @@ public class D3webDialog extends HttpServlet {
         }
 
         D3webUtils.getDiff(beforeState.indicatedQASets, afterState.indicatedQASets, diff);
-   //     System.out.println("DIFF 1: " + diff);
-        
+        //     System.out.println("DIFF 1: " + diff);
+
         D3webUtils.getDiff(afterState.indicatedQASets, beforeState.indicatedQASets, diff);
 
- //       System.out.println("DIFF 2: " + diff);
-        
-        
+        //       System.out.println("DIFF 2: " + diff);
+
+
         diff.addAll(D3webUtils.getUnknownQuestions(d3webSession));
         diff.addAll(D3webUtils.getMCQuestions(d3webSession));
-        
+
         // we simply update answered abstract questions every time
         // actually we only need to update them if their facts have changed, but
         // thats more complex to test and probably not even faster...
@@ -811,22 +809,22 @@ public class D3webDialog extends HttpServlet {
         afterState.answeredQuestions.removeAll(beforeState.answeredQuestions);
         // System.out.println(answeredQuestionsAfter);
         diff.addAll(afterState.answeredQuestions);
-        
+
         return diff;
     }
 
     private void renderAndUpdateDiff(PrintWriter writer, Session d3webSession, Set<TerminologyObject> diff, HttpSession httpSession) {
         ContainerCollection cc = new ContainerCollection();
         D3webUserSettings us = (D3webUserSettings) httpSession.getAttribute(USER_SETTINGS);
-        
-        
+
+
         for (TerminologyObject to : diff) {
             if (isHiddenOrHasHiddenParent(to)) {
-                      
+
                 continue;
             }
             IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
-           
+
             // get back the ID from store for finding element in HTML
             writer.append(REPLACEID + AbstractD3webRenderer.getID(to));
             writer.append(REPLACECONTENT);
@@ -848,7 +846,7 @@ public class D3webDialog extends HttpServlet {
 
         // render the headerinfoline as latest as to have the most-current infos there
         writer.append(rootRenderer.renderHeaderInfoLine(d3webSession));
-          //  System.out.println(response.getContentType() + " " + response.getCharacterEncoding());
+        //  System.out.println(response.getContentType() + " " + response.getCharacterEncoding());
         System.out.println(writer.toString());
     }
 
@@ -1018,25 +1016,25 @@ public class D3webDialog extends HttpServlet {
         writer.close();
         // response.sendRedirect(gotoUrl);
     }
-    
-     protected void gotoGroups(HttpServletResponse response,
+
+    protected void gotoGroups(HttpServletResponse response,
             HttpSession httpSession) throws IOException {
 
         String email = (String) httpSession.getAttribute("user");
 
         String gotoUrl = "../Statistics/editGroup.jsp?action=dbLogin";
-       
+
         String token = DateCoDec.getCode();
         gotoUrl += "&t=" + token;
         gotoUrl += "&e=" + Base64.encodeBase64String(email.getBytes());
-        
+
         gotoUrl += "&edit=showGroupTable";
-        
+
         new TokenThread(token, email).start();
         PrintWriter writer = response.getWriter();
-        
-        
-        
+
+
+
         writer.print(gotoUrl);
         writer.close();
         // response.sendRedirect(gotoUrl);
@@ -1228,8 +1226,8 @@ public class D3webDialog extends HttpServlet {
             httpSession.setAttribute("loginit", false);
             initializeLoggingMechanism(httpSession);
         }
-        
-        if(d3wcon.getDialogType().equals(DialogType.ITREE)){
+
+        if (d3wcon.getDialogType().equals(DialogType.ITREE)) {
             //resetInitQuestionsAndShowStatus();
         }
     }
@@ -1270,7 +1268,7 @@ public class D3webDialog extends HttpServlet {
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
         System.out.println(d3webr.getClass());
-        
+
         cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
         writer.print(cc.html.toString()); // deliver the rendered output
         writer.close(); // and close
@@ -1306,7 +1304,7 @@ public class D3webDialog extends HttpServlet {
                     user,
                     userFilename,
                     d3webSession);
-            
+
             httpSession.setAttribute("lastLoaded", userFilename);
         } else {
             writer.append("exists");
@@ -1386,7 +1384,7 @@ public class D3webDialog extends HttpServlet {
             HttpServletResponse response,
             HttpSession httpSession) throws MessagingException {
 
-                    System.out.println("FEEDBACKMAIL: ");
+        System.out.println("FEEDBACKMAIL: ");
         final String user = "SendmailAnonymus@freenet.de";
         final String pw = "sendmail";
 
@@ -1539,7 +1537,7 @@ public class D3webDialog extends HttpServlet {
                 (Session) httpSession.getAttribute(D3WEB_SESSION),
                 SummaryD3webRenderer.SummaryType.QUESTIONNAIRE_LEVEL1, httpSession));
         writer.append("<div>");
-        
+
         String gridContentID = "gridSummaryContent";
 
         writer.append(REPLACEID + gridContentID);
@@ -1568,7 +1566,7 @@ public class D3webDialog extends HttpServlet {
         String group =
                 httpSession.getAttribute("uegroup").toString() != null
                 ? httpSession.getAttribute("uegroup").toString() : "";
-            // WIRD IM DialogRenderer in die httpSession geschrieben!
+        // WIRD IM DialogRenderer in die httpSession geschrieben!
         if (group != null && !group.equals("")) {
             String isGroupLogged =
                     httpSession.getAttribute("isGroupLogged") != null
@@ -1695,6 +1693,7 @@ public class D3webDialog extends HttpServlet {
         }
     }
 // TODO ingetrate logfilename creation for prototpes
+
     protected String createLogfileName(Date loggingstart, HttpSession httpSession) {
         String formatted = SDF_FILENAME_DEFAULT.format(loggingstart);
         Session sid = (Session) httpSession.getAttribute(D3WEB_SESSION);
@@ -1766,16 +1765,14 @@ public class D3webDialog extends HttpServlet {
 
         return bui.toString();
     }
-    
+
     protected void saveShowStatus(HttpServletRequest request,
-            HttpSession httpSession){
+            HttpSession httpSession) {
         // do nothing for default dialogs so far, as not needed there
         // overwritten in ClarihieDilaog (which should be renamed to iTreeDialog)
     }
-    
-    
+
     // remove once this works from KB
-     protected void loadITreeInit(HttpSession http, HttpServletRequest request){
-     
+    protected void loadITreeInit(HttpSession http, HttpServletRequest request) {
     }
 }

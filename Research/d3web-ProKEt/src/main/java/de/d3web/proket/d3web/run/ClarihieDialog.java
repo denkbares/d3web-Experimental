@@ -19,10 +19,8 @@
  */
 package de.d3web.proket.d3web.run;
 
-import au.com.bytecode.opencsv.CSVReader;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
-import de.d3web.core.knowledge.terminology.Choice;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -31,28 +29,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.QuestionDate;
-import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
-import de.d3web.core.session.blackboard.Fact;
-import de.d3web.core.session.values.ChoiceValue;
-import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
-import de.d3web.proket.d3web.output.render.MediastinitisDefaultRootD3webRenderer;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.*;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -78,14 +66,14 @@ public class ClarihieDialog extends D3webDialog {
     @Override
     protected String getSource(HttpServletRequest request, HttpSession http) {
 
-        return "ITree070812";
+        return "ITree090812";
     }
 
     /**
      * Add one or several given facts. Thereby, first check whether input-store
      * has elements, if yes, parse them and set them (for num/text/date
      * questions), if no, just parse and set a given single value.
-
+     *
      * @Override
      */
     protected void addFactsYN(HttpServletRequest request,
@@ -138,10 +126,10 @@ public class ClarihieDialog extends D3webDialog {
         super.getParameterPairs(request, "question", "value", questions, values);
         // set the values
         super.setValues(d3webSession, questions, values, request, httpSession);
-        
+
         // autosave the current state
         PersistenceD3webUtils.saveCase(
-                (String) httpSession.getAttribute("user"), 
+                (String) httpSession.getAttribute("user"),
                 "autosave",
                 d3webSession);
         PrintWriter writer = response.getWriter();
@@ -176,8 +164,7 @@ public class ClarihieDialog extends D3webDialog {
          * == true ){
          * qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN, false); }
          * else { qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN,
-         * true);
-        }
+         * true); }
          */
 
     }
@@ -206,7 +193,36 @@ public class ClarihieDialog extends D3webDialog {
     @Override
     protected void show(HttpServletRequest request, HttpServletResponse response,
             HttpSession httpSession) throws IOException {
-        loadITreeInit(httpSession, request);
+        
+        Session d3webs = (Session)httpSession.getAttribute(D3WEB_SESSION);
+        TerminologyObject root = d3webs.getKnowledgeBase().getRootQASet();
+        Session session = setQuestionShowStati(root, d3webs);
+        httpSession.setAttribute(D3WEB_SESSION, session);
         super.show(request, response, httpSession);
     }
+
+    private Session setQuestionShowStati(TerminologyObject to, Session d3webs) {
+
+        for (TerminologyObject child : to.getChildren()) {
+
+            if (child.getInfoStore().getValue(ProKEtProperties.ITREEINIT) == null) {
+                child.getInfoStore().addValue(ProKEtProperties.ITREEINIT, false);
+            }
+            
+            if (child.getInfoStore().getValue(ProKEtProperties.SHOWITREE) == null) {
+                child.getInfoStore().addValue(ProKEtProperties.SHOWITREE, false);
+            }
+        System.out.println("DIALOG: " + to.getName() + " > " + child.getInfoStore().getValue(ProKEtProperties.ITREEINIT) + " " + child.getInfoStore().getValue(ProKEtProperties.SHOWITREE));
+            if(child.getChildren().length > 0){
+                for (TerminologyObject childschild: child.getChildren()){
+                    setQuestionShowStati(childschild, d3webs);
+                }
+            }
+        }
+        
+        return d3webs;
+    }
+    
+    
+    
 }
