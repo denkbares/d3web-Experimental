@@ -19,8 +19,7 @@ public final class AnnotationLoadKnowledgeBaseRenderer implements Renderer {
 		load = load.replaceFirst("@", "");
 		buffer.append("\n");
 		buffer.append(Strings.maskHTML("<img src='KnowWEExtension/images/ofo.gif'></img> "));
-
-		buffer.append(load).append("\n");
+		buffer.append(load);
 	}
 
 }

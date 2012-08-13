@@ -65,12 +65,12 @@ public class AnnotationLoadKnowledgeBaseHandler extends D3webSubtreeHandler<Know
 
 		catch (FileNotFoundException e2) {
 			messages.add(new Message(Message.Type.WARNING,
-					"The file you specified does not exist!"));
+					"The file you tried to load does not exist!"));
 
 		}
 
 		catch (IOException e) {
-			e.printStackTrace();
+			messages.add(new Message(Message.Type.ERROR, e.getStackTrace().toString()));
 		}
 
 		return messages;
@@ -81,12 +81,15 @@ public class AnnotationLoadKnowledgeBaseHandler extends D3webSubtreeHandler<Know
 				filename);
 
 		if (attachment == null) {
-			messages.add(new Message(Message.Type.WARNING, "The file you specified does not exist!"));
+			messages.add(new Message(Message.Type.WARNING,
+					"The file you tried to load does not exist!"));
 			return null;
 		}
 
 		WikiConnector wc = Environment.getInstance().getWikiConnector();
 
+		// (temporary) save location for a file because pm.load(arg) expects a
+		// file instead of an attachment
 		String pathname = wc.getKnowWEExtensionPath() + TMP_LOADED_KB_PATH;
 		if (!new File(pathname).isDirectory()) {
 			boolean directoryCreated = new File(pathname).mkdir();
@@ -95,6 +98,18 @@ public class AnnotationLoadKnowledgeBaseHandler extends D3webSubtreeHandler<Know
 			}
 		}
 
+		File kbFile = createKBFile(attachment, pathname);
+
+		PersistenceManager pm = PersistenceManager.getInstance();
+
+		KnowledgeBase kb = pm.load(kbFile);
+
+		kbFile.delete();
+
+		return kb;
+	}
+
+	private File createKBFile(WikiAttachment attachment, String pathname) throws IOException, FileNotFoundException {
 		File kbFile = new File(pathname,
 				UUID.randomUUID().toString());
 
@@ -106,13 +121,6 @@ public class AnnotationLoadKnowledgeBaseHandler extends D3webSubtreeHandler<Know
 			out.write(buf, 0, len);
 		out.close();
 		inputStream.close();
-
-		PersistenceManager pm = PersistenceManager.getInstance();
-
-		KnowledgeBase kb = pm.load(kbFile);
-
-		kbFile.delete();
-
-		return kb;
+		return kbFile;
 	}
 }
