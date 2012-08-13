@@ -742,9 +742,9 @@ function calculateAndHandleSolutionRating(){
 
 /* write expand state cookie for a given question qname */
 function writeExpandCookie(qname, qExpandState){
-    //var cookie = "test=me;"
-    var cookie = escape(qname) + '=' + qExpandState + ';';
-    document.cookie = cookie;
+    
+    var cookieString = qname + "=" + qExpandState + ";";
+    document.cookie = cookieString;
 }
 
 
@@ -756,8 +756,8 @@ function readExpandCookieValue(qname){
     var res = '';
     
     while(coo != ''){
-    alert(coo + " coo");
-            var cookiename = coo.substring(0,coo.indexOf('='));
+    
+        var cookiename = coo.substring(0,coo.indexOf('='));
         var cookiewert = coo.substring(coo.indexOf('=')+1,coo.indexOf(';'));
         
         alert(qname + "--" + cookiename + " " + cookiewert);
@@ -777,5 +777,5 @@ function readExpandCookieValue(qname){
 
 /* Delete expand-state cookie for a question qname*/
 function deleteExpandCookie(qname){
-    document.cookie = qname + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;';
+    document.cookie = qname + "=; expires=Thu, 01-Jan-70 00:00:01 GMT;";
 }

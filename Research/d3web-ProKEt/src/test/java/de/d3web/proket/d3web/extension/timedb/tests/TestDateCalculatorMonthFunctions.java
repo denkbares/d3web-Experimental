@@ -549,6 +549,13 @@ public class TestDateCalculatorMonthFunctions extends TestCase {
         Date end = null;
 
         try {
+            start = dateFormat.parse("30.01.2012");
+            end = dateFormat.parse("03.02.2012");
+            assertTrue(
+                    "exp: 0 > act: " + DateCalculator.getMonthDelta(start, end) + " !",
+                    0 == DateCalculator.getMonthDelta(start, end));
+
+            
             start = dateFormat.parse("01.04.2012");
             end = dateFormat.parse("06.04.2012");
             assertTrue(

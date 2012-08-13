@@ -19,7 +19,6 @@
  */
 package de.d3web.proket.d3web.output.render;
 
-import de.d3web.core.inference.KnowledgeKind;
 import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
@@ -30,7 +29,6 @@ import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
-import de.d3web.jurisearch.JuriModel;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
@@ -38,7 +36,7 @@ import de.d3web.proket.utils.TemplateUtils;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Locale;
-import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -57,7 +55,8 @@ public class ITreeNumQuestionD3webRenderer extends AbstractD3webRenderer impleme
      * Adapted specifically for question rendering
      */
     public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
-            TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession) {
+            TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession,
+            HttpServletRequest request) {
 
         Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
         // return if the InterviewObject is null
@@ -140,7 +139,7 @@ public class ITreeNumQuestionD3webRenderer extends AbstractD3webRenderer impleme
 
         st.setAttribute("tooltip", TT_PROP_ERROR);
 
-        super.renderChildrenITreeNum(st, d3webSession, cc, to, loc, httpSession);
+        super.renderChildrenITreeNum(st, d3webSession, cc, to, loc, httpSession, request);
 
         sb.append(st.toString());
 

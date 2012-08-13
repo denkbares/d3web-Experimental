@@ -1071,10 +1071,7 @@ function click_box(id) {
  */
 function toggle_sub(id) {
 	
-    // TODO get d3web-related stuff out here
-    if (d3web) {
-        d3web_getChildren(id);
-    }
+    
     toggle_hide("sub-" + id); // toggle sub-elements
     toggle_folder_image(id); // toggle folder image
     hide_all_tooltips();	// on toggling all tooltips should disappear

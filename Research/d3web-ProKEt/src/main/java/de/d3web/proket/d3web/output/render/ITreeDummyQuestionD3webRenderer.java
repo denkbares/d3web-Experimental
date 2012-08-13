@@ -32,7 +32,7 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
-import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -54,7 +54,8 @@ public class ITreeDummyQuestionD3webRenderer extends AbstractD3webRenderer imple
      * Adapted specifically for question rendering
      */
     public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
-            TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession) {
+            TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession,
+            HttpServletRequest request) {
 
       Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
         // return if the InterviewObject is null
@@ -114,7 +115,7 @@ public class ITreeDummyQuestionD3webRenderer extends AbstractD3webRenderer imple
 
         st.setAttribute("tooltip", TT_PROP_ERROR);
 
-        super.renderChildrenITreeNum(st, d3webSession, cc, to, loc, httpSession);
+        super.renderChildrenITreeNum(st, d3webSession, cc, to, loc, httpSession, request);
 
         sb.append(st.toString());
 

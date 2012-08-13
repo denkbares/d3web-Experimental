@@ -1,6 +1,9 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <dialog css="medi2cols, nonavigation" 
-	    header="Herz-Medizinische Dokumentation - Prototyp" type="med" columns="1" sendall="true">
+	header="Heart Med Dialog - Prototype" 
+        type="med" 
+        columns="1" 
+        sendall="true">
 	
 	<questionnaire title="Demographische Daten" columns="3" tooltip="TT for questionnaire">
 		<question answer-type="oc" title="Geschlecht des Patienten" columns="3" tooltip="test">

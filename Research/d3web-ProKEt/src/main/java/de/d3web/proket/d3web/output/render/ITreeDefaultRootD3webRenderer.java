@@ -113,7 +113,7 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
         // render the children
         renderChildrenITreeNum(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet(),
-                us.getLanguageId(), http);
+                us.getLanguageId(), http, request);
 
         // global JS initialization
         defineAndAddJS(cc);

@@ -752,11 +752,10 @@ function toggle_sub(id) {
  */
 function toggle_hide(id) {
    
-     alert("toggle_hide " + id);
     if(d3web){
         id = id.replace("sub-", "");
        
-        d3web_saveShowStatus(id);
+       
     } else {
         
          // toggle (0 means no animation as time=0 for animation and on

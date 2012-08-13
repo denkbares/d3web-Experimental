@@ -9,7 +9,7 @@
     
     <div id="$fullId$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')">
         <img id="$fullId$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes_clariHie('$fullId$')">
-            <div id="ynYes-$fullId$" class="ynbutton $ratingY$ $fullId$-tt-trigger-ynbutton $swap$" ">
+            <div id="ynYes-$fullId$" class="ynbutton $ratingY$ $fullId$-tt-trigger-ynbutton $swap$">
                 Ja
                 $TooltipButtonJA()$
             </div>

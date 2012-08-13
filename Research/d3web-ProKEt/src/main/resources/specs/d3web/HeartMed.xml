@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog 
-	header="Heart Med Productive"  
+	header="Mediastinitisregister"  
 	dtype="singleform" 
 	dstrategy="nextuaquestion" 
 	css="medi2colsMediastinitis, nonavigation" 
@@ -9,7 +9,7 @@
 	questioncolumns = "2"
 	userprefix = "Mediastinitis" 
 	login = "usrdat"
-	required = "Clinic"
+	required = "Betreffende Klinik"
 	language = "de"
         logging = "ON"
 	>

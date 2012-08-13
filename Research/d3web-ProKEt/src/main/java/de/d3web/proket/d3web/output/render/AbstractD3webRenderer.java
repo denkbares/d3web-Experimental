@@ -19,7 +19,6 @@
  */
 package de.d3web.proket.d3web.output.render;
 
-import de.d3web.core.inference.KnowledgeKind;
 import de.d3web.core.knowledge.Indication;
 import java.util.HashMap;
 
@@ -30,14 +29,11 @@ import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.session.Session;
-import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.indication.inference.PSMethodUserSelected;
-import de.d3web.jurisearch.JuriModel;
 import de.d3web.jurisearch.JuriRule;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
@@ -46,6 +42,8 @@ import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.data.IndicationMode;
 import de.d3web.proket.output.container.ContainerCollection;
 import java.util.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -139,7 +137,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * @param to The TerminologyObject the children of which are rendered.
      */
     protected void renderChildren(StringTemplate st, Session d3webSession, ContainerCollection cc,
-            TerminologyObject to, int loc, HttpSession httpSession) {
+            TerminologyObject to, int loc, HttpSession httpSession, HttpServletRequest request) {
 
         boolean debug = false;
 
@@ -218,7 +216,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
             // receive the rendering code from the Renderer and append
             String childHTML =
-                    childRenderer.renderTerminologyObject(d3webSession, cc, child, to, loc, httpSession);
+                    childRenderer.renderTerminologyObject(d3webSession, cc, child, to, loc, httpSession, request);
             if (childHTML != null) {
                 childrenHTML.append(childHTML);
             }
@@ -227,7 +225,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             // as this is done after having inserted the normal child, the
             // follow up is appended in between the child and its follow-up
             if (child instanceof Question) {
-                childrenHTML.append(renderFollowUps(d3webSession, cc, child, to, loc, httpSession));
+                childrenHTML.append(renderFollowUps(d3webSession, cc, child, to, loc, httpSession, request));
             }
         }
 
@@ -419,7 +417,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * @return
      */
     private String renderFollowUps(Session d3webSession, ContainerCollection cc, TerminologyObject child,
-            TerminologyObject parent, int loc, HttpSession httpSession) {
+            TerminologyObject parent, int loc, HttpSession httpSession, HttpServletRequest request) {
         StringBuilder fus = new StringBuilder();
 
         boolean debug = false;
@@ -455,9 +453,9 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
                 // receive the rendering code from the Renderer and append
                 StringBuilder childHTML = new StringBuilder(
-                        childRenderer.renderTerminologyObject(d3webSession, cc, childsChild, parent, loc, httpSession));
+                        childRenderer.renderTerminologyObject(d3webSession, cc, childsChild, parent, loc, httpSession, request));
                 if (child instanceof Question) {
-                    childHTML.append(renderFollowUps(d3webSession, cc, childsChild, parent, loc, httpSession));
+                    childHTML.append(renderFollowUps(d3webSession, cc, childsChild, parent, loc, httpSession, request));
                 }
                 if (childHTML != null) {
                     fus.append(childHTML);
@@ -675,7 +673,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
     
     
      protected void renderChildrenITreeNum(StringTemplate st, Session d3webSession, ContainerCollection cc,
-            TerminologyObject to, int loc, HttpSession httpSession) {
+            TerminologyObject to, int loc, HttpSession httpSession, HttpServletRequest request) {
 
         StringBuilder childrenHTML = new StringBuilder();
         
@@ -688,7 +686,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                         AbstractD3webRenderer.getRenderer(rootNode);
                
                 String childHTML =
-                        childRenderer.renderTerminologyObject(d3webSession, cc, rootNode, to, loc, httpSession);
+                        childRenderer.renderTerminologyObject(d3webSession, cc, rootNode, to, loc, httpSession,request);
                 if (childHTML != null) {
                     childrenHTML.append(childHTML);
                 }
@@ -723,7 +721,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 
                     String childHTML =
-                            childRenderer.renderTerminologyObject(d3webSession, cc, (TerminologyObject) newChildRoot, to, loc, httpSession);
+                            childRenderer.renderTerminologyObject(d3webSession, cc, (TerminologyObject) newChildRoot, to, loc, httpSession, request);
                     if (childHTML != null) {
                         childrenHTML.append(childHTML);
                     }
@@ -756,5 +754,25 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         return builder.toString();
     }
 
+    protected Boolean getShowStateFromCookie(TerminologyObject to, Cookie[] cookies) {
+
+        List cooList = Arrays.asList(cookies);
+
+        if (cooList.size() != 0) {
+            for (Object cooOb : cooList) {
+
+                Cookie cookie = (Cookie) cooOb;
+                // found correct cookie
+                if (cookie.getName().replace("q_", "").equals(to.getName())) {
+                    if (cookie.getValue().equals("O")) {
+                        return true;
+                    } else if (cookie.getValue().equals("C")){
+                        return false;
+                    }
+                }
+            }
+        }
+        return null;
+    }
    
 }

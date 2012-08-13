@@ -32,6 +32,8 @@ import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 import java.util.ArrayList;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -61,7 +63,8 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
      * Adapted specifically for question rendering
      */
     public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
-            TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession) {
+            TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession,
+            HttpServletRequest request) {
 
 
 
@@ -103,8 +106,6 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
 
         // for questions to be initially shown in the tree
         Boolean itreeinit = to.getInfoStore().getValue(ProKEtProperties.ITREEINIT);
-        // get "show" status of question and display, if needed
-        Boolean showintree = to.getInfoStore().getValue(ProKEtProperties.SHOWITREE);
 
         if (itreeinit != null && itreeinit.equals(true)) {
             st.setAttribute("showitree", true);
@@ -113,47 +114,58 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
                 st.removeAttribute("typeimg");
                 st.setAttribute("typeimg", "img/openedArrow.png");
             }
-        }
-
-
-        if (showintree != null && showintree.equals(true)) {
-            st.setAttribute("showitree", true);
+        } else if (itreeinit != null && itreeinit.equals(false)) {
+            st.removeAttribute("showitree");
 
             if (to.getChildren().length > 0) {
                 st.removeAttribute("typeimg");
-                st.setAttribute("typeimg", "img/openedArrow.png");
+                st.setAttribute("typeimg", "img/closedArrow.png");
             }
         }
 
 
-        System.out.println(to.getName() + " > " + itreeinit + " " + showintree);
-        if(!itreeinit && !showintree){
-               
-            ArrayList<Boolean> indicatedChildren = new ArrayList<Boolean>();
-            // check children if one (or more) are indicated, if yes, then show
-            for (TerminologyObject child : to.getChildren()) {
-                System.out.println(to.getName());
-                if (D3webUtils.isIndicated(child, bb)) {
-                    System.out.println(to.getName() + " " + child.getName() + " " + "true");
-                    indicatedChildren.add(true);
-                }
+        // Check for cookies and indication state
+        Cookie[] cookies = request.getCookies();
+        Boolean cookieShow = null;
+        if ((itreeinit != null && !itreeinit)
+                && cookies != null) {
+            cookieShow = getShowStateFromCookie(to, cookies);
+        }
+        ArrayList<Boolean> indicatedChildren = new ArrayList<Boolean>();
+        for (TerminologyObject child : to.getChildren()) {
+            if (D3webUtils.isIndicated(child, bb)) {
+                indicatedChildren.add(true);
             }
+        }
 
-            if (indicatedChildren.contains(true)) {
-                // set show children part of indicating parent to true
-                to.getInfoStore().addValue(ProKEtProperties.SHOWITREE, true);
+        // if cookie says show, then show
+        if (cookieShow != null && cookieShow.equals(true)) {
+            st.setAttribute("showitree", true);
+            if (to.getChildren().length > 0 && !(indicatedChildren.contains(true))) {
+                st.removeAttribute("typeimg");
+                st.setAttribute("typeimg", "img/openedArrow.png");
+            }
+        } 
+        
+        // if we jave a follow up that is hidden
+        if (to.getInfoStore().getValue(ProKEtProperties.HIDDENFU) != null
+                && to.getInfoStore().getValue(ProKEtProperties.HIDDENFU)) {
+
+            // if the hidden follow up has not at least 1 indicated child
+            if (!indicatedChildren.contains(true)) {
+                st.removeAttribute("typeimg");
+                st.setAttribute("typeimg", "img/transpSquare.png");
+            } 
+            // otherwise if at least 1 indicated child
+            else {
                 st.setAttribute("showitree", true);
-
                 if (to.getChildren().length > 0) {
                     st.removeAttribute("typeimg");
                     st.setAttribute("typeimg", "img/openedArrow.png");
                 }
-            } else {
-                to.getInfoStore().addValue(ProKEtProperties.SHOWITREE, false);
-                st.removeAttribute("showitree");
-                st.setAttribute("typeimg", "img/closedArrow.png");
             }
-        }
+
+        } 
 
 
         if (parent.getName().equals("Q000")) {
@@ -168,8 +180,6 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
                 st.setAttribute("readimg", "img/And.png");
             }
         }
-
-
         Value val = bb.getValue((ValueObject) to);
         //getAbstractValue(to, bb, d3webSession);
 
@@ -249,7 +259,7 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
         st.setAttribute(
                 "tooltip", TT_PROP_ERROR);
 
-        super.renderChildrenITreeNum(st, d3webSession, cc, to, loc, httpSession);
+        super.renderChildrenITreeNum(st, d3webSession, cc, to, loc, httpSession, request);
 
         sb.append(st.toString());
 
@@ -273,7 +283,6 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
         TerminologyObject abstractTO =
                 sess.getKnowledgeBase().getManager().searchQuestion(numTO.getName().replace("_n", ""));
 
-        System.out.println(abstractTO.getName() + " " + blackboard.getValue((ValueObject) abstractTO));
         return blackboard.getValue((ValueObject) abstractTO);
     }
 

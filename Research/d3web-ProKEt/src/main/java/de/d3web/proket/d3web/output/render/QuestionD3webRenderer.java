@@ -42,6 +42,7 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -60,7 +61,8 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
      * Adapted specifically for question rendering
      */
     public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
-            TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession) {
+            TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession,
+            HttpServletRequest request) {
 
 
 

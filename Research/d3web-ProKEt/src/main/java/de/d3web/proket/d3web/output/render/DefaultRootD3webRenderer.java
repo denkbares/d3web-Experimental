@@ -125,7 +125,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
                 
 		// render the children
 		renderChildren(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet(), 
-                       us.getLanguageId(), http);
+                       us.getLanguageId(), http, request);
 
 		// global JS initialization
 		defineAndAddJS(cc);

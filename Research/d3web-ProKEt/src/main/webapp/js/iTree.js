@@ -318,18 +318,17 @@ function toggleAuxInfoPlacing(){
  */
 function toggle_sub_4boxes_clariHie(id) {
 	
-    toggle_hide("sub-" + id); 
-    toggle_folder_image_4boxes(id);
-    hide_all_tooltips();
+    toggle_hide_ITree("sub-" + id); 
    
 }
 
-function toggle_hide(id) {
+function toggle_hide_ITree(id) {
    
     if(d3web){
         id = id.replace("sub-", "");
-       
-        d3web_saveShowStatus(id);
+        
+        toggleShowStatus_ITree(id); // toggle folder image
+        hide_all_tooltips();	// on toggling all tooltips should disappear
     } 
 }
 
@@ -337,22 +336,19 @@ function toggle_hide(id) {
 /**
  * Toggle folder image (open/close) for the legal dialog style
  */
-function toggle_folder_image_4boxes(id) {
+function toggleShowStatus_ITree(id) {
 	
-    alert(id);
+   
     // ids of the arrow/folder image is 2-typeimg, when question is q_2    
     var typeimgID = id + '-typeimg';
     
     // get the div of the arrow/folder image
     var imgDiv = $("[id^="+ typeimgID + "]");
     
+    
     var qtext = $('#solutiontitle-' + id).html();
     
-    var topelem = false;  
-    if($('#' + id.replace("q_", "") + "-imagebox").html().indexOf("solutionboxtext") != -1){
-        topelem = true;
-    };
-    
+    // CLOSE the element and children
     if (imgDiv.attr('src') == 'img/openedArrow.png') {
         
         imgDiv.attr('src', 'img/closedArrow.png');
@@ -361,13 +357,23 @@ function toggle_folder_image_4boxes(id) {
             ue_logQuestionToggle(qtext, "SHUT");
         }
         
-    } else if (imgDiv.attr('src') == 'img/closedArrow.png') {
+        deleteExpandCookie(id);
+        writeExpandCookie(id, "C");
+    } 
+    
+    // OPEN the element and children
+    else if (imgDiv.attr('src') == 'img/closedArrow.png') {
 
         imgDiv.attr('src', 'img/openedArrow.png');
-        if(logging && !topelem && !$("#" + id).hasClass("dummy")){
+        if(logging && !$("#" + id).hasClass("dummy")){
             ue_logQuestionToggle(qtext, "EXPAND");
         }
+        //alert("toggle: " + id + " - opened");
+        deleteExpandCookie(id);
+        writeExpandCookie(id, "O");
     } 
+    // re-render only changed question
+    d3web_show();
 }
 
 

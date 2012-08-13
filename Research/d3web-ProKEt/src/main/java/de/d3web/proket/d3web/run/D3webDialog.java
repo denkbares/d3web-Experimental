@@ -641,7 +641,7 @@ public class D3webDialog extends HttpServlet {
 
 
         // update the dialog (partially, i.e. all changed questions)
-        renderAndUpdateDiff(writer, d3webSession, diff, httpSession);
+        renderAndUpdateDiff(writer, d3webSession, diff, httpSession, request);
     }
 
     /**
@@ -813,7 +813,8 @@ public class D3webDialog extends HttpServlet {
         return diff;
     }
 
-    private void renderAndUpdateDiff(PrintWriter writer, Session d3webSession, Set<TerminologyObject> diff, HttpSession httpSession) {
+    private void renderAndUpdateDiff(PrintWriter writer, Session d3webSession, Set<TerminologyObject> diff, HttpSession httpSession,
+            HttpServletRequest request) {
         ContainerCollection cc = new ContainerCollection();
         D3webUserSettings us = (D3webUserSettings) httpSession.getAttribute(USER_SETTINGS);
 
@@ -837,7 +838,7 @@ public class D3webDialog extends HttpServlet {
                     toRenderer.renderTerminologyObject(
                     d3webSession, cc, to,
                     parent, us.getLanguageId(),
-                    httpSession));
+                    httpSession, request));
         }
         writer.append(REPLACEID + "headerInfoLine");
         writer.append(REPLACECONTENT);
@@ -1267,7 +1268,7 @@ public class D3webDialog extends HttpServlet {
         ContainerCollection cc = new ContainerCollection();
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
-        System.out.println(d3webr.getClass());
+        //System.out.println(d3webr.getClass());
 
         cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
         writer.print(cc.html.toString()); // deliver the rendered output
