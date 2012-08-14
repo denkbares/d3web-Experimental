@@ -195,13 +195,12 @@ public class ClarihieDialog extends D3webDialog {
             HttpSession httpSession) throws IOException {
         
         Session d3webs = (Session)httpSession.getAttribute(D3WEB_SESSION);
-        if(!(httpSession.getAttribute("showstati")!=null &&
-                httpSession.getAttribute("showstati").equals("set"))){
-            System.out.println("SHOW");
-            TerminologyObject root = d3webs.getKnowledgeBase().getRootQASet();
-            Session session = setQuestionShowStati(root, d3webs);
-            httpSession.setAttribute(D3WEB_SESSION, session);
-        } 
+        //if(!(httpSession.getAttribute("showstati")!=null &&
+          //      httpSession.getAttribute("showstati").equals("set"))){
+            //TerminologyObject root = d3webs.getKnowledgeBase().getRootQASet();
+            //Session session = setQuestionShowStati(root, d3webs);
+            //httpSession.setAttribute(D3WEB_SESSION, session);
+        //} 
         super.show(request, response, httpSession);
     }
 
@@ -210,7 +209,10 @@ public class ClarihieDialog extends D3webDialog {
         for (TerminologyObject child : to.getChildren()) {
 
             if (child.getInfoStore().getValue(ProKEtProperties.ITREEINIT) == null) {
-                child.getInfoStore().addValue(ProKEtProperties.ITREEINIT, false);
+                
+                TerminologyObject questionToSet = 
+                        d3webs.getKnowledgeBase().getManager().searchQuestion(child.getName());
+                questionToSet.getInfoStore().addValue(ProKEtProperties.ITREEINIT, false);
             }
             
             if(child.getChildren().length > 0){

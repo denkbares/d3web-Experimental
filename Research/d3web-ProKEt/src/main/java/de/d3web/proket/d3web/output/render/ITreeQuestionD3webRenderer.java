@@ -66,13 +66,6 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
             TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession,
             HttpServletRequest request) {
 
-
-
-        //Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
-        // return if the InterviewObject is null
-        //if (to == null || (hidden != null && hidden)) {
-        //  return "";
-        //}
         StringBuilder sb = new StringBuilder();
 
 
@@ -85,52 +78,52 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
         st.setAttribute("fullId", getID(to));
         st.setAttribute("title", D3webUtils.getTOPrompt(to, loc));
 
-
-
-        // get d3web properties
-        Blackboard bb = d3webSession.getBlackboard();
-
-        // set bonus text: is displayed in auxinfo panel
+        // Set bonus text: is displayed in auxinfo panel
         String bonustext =
                 to.getInfoStore().getValue(ProKEtProperties.POPUP);
         st.setAttribute("bonusText", bonustext);
 
 
-
-        // render arrows: --> check whether question has children,
+        /*
+         * BASIC FOLDING RENDERING and INIT QUESTIONS
+         */
+        // Basic rendering of folding-arrows --> check if question has children
         if (to.getChildren().length > 0) {
             st.setAttribute("typeimg", "img/closedArrow.png");
         } else {
             st.setAttribute("typeimg", "img/transpSquare.png");
         }
-
-        // for questions to be initially shown in the tree
+        // Re-check state for init questions
         Boolean itreeinit = to.getInfoStore().getValue(ProKEtProperties.ITREEINIT);
-
         if (itreeinit != null && itreeinit.equals(true)) {
+            // IF INIT QUESTION
+            // show children and arrow  
             st.setAttribute("showitree", true);
-
             if (to.getChildren().length > 0) {
                 st.removeAttribute("typeimg");
                 st.setAttribute("typeimg", "img/openedArrow.png");
             }
         } else if (itreeinit != null && itreeinit.equals(false)) {
+            // IF NOT INIT QUESTION
+            // do not expand children but if it has children, show corresponding
+            // arrow state
             st.removeAttribute("showitree");
-
             if (to.getChildren().length > 0) {
                 st.removeAttribute("typeimg");
                 st.setAttribute("typeimg", "img/closedArrow.png");
             }
         }
 
-
-        // Check for cookies and indication state
+        // Check for COOKIES...
         Cookie[] cookies = request.getCookies();
         Boolean cookieShow = null;
-        if ((itreeinit != null && !itreeinit)
+        if (((itreeinit != null && !itreeinit) ||
+                itreeinit == null)
                 && cookies != null) {
             cookieShow = getShowStateFromCookie(to, cookies);
         }
+        //...and INDICATION STATE
+        Blackboard bb = d3webSession.getBlackboard();
         ArrayList<Boolean> indicatedChildren = new ArrayList<Boolean>();
         for (TerminologyObject child : to.getChildren()) {
             if (D3webUtils.isIndicated(child, bb)) {
@@ -138,25 +131,30 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
             }
         }
 
-        // if cookie says show, then show
+        /*
+         * COOKIE BASED SHOW STATE
+         */
+        // If cookie has saved show-state for question: show always
         if (cookieShow != null && cookieShow.equals(true)) {
             st.setAttribute("showitree", true);
-            if (to.getChildren().length > 0 && !(indicatedChildren.contains(true))) {
+            if (to.getChildren().length > 0) {
                 st.removeAttribute("typeimg");
                 st.setAttribute("typeimg", "img/openedArrow.png");
             }
         } 
         
-        // if we jave a follow up that is hidden
+        
+        /*
+         * FOLLOW UP QUESTIONS
+         */
         if (to.getInfoStore().getValue(ProKEtProperties.HIDDENFU) != null
                 && to.getInfoStore().getValue(ProKEtProperties.HIDDENFU)) {
-
             // if the hidden follow up has not at least 1 indicated child
+            // DO NOT SHOW
             if (!indicatedChildren.contains(true)) {
                 st.removeAttribute("typeimg");
                 st.setAttribute("typeimg", "img/transpSquare.png");
-            } 
-            // otherwise if at least 1 indicated child
+            } // otherwise if at least 1 indicated child THEN SHOW
             else {
                 st.setAttribute("showitree", true);
                 if (to.getChildren().length > 0) {
@@ -164,15 +162,21 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
                     st.setAttribute("typeimg", "img/openedArrow.png");
                 }
             }
+        } /*
+         * else { st.setAttribute("showitree", true); if
+         * (to.getChildren().length > 0) { st.removeAttribute("typeimg");
+         * st.setAttribute("typeimg", "img/openedArrow.png"); }
+        }
+         */
 
-        } 
-
-
+        /*
+         * READ FLOW - AND/OR verbalization
+         */
+        // for topmost element, do not render any and/or verbalization
         if (parent.getName().equals("Q000")) {
             st.setAttribute("readimg", "img/transpSquare.png");
         } else {
-
-            // render read flow according to and/or type
+            // render read flow verbalization according to and/or type
             if (parent.getInfoStore().getValue(ProKEtProperties.ORTYPE) != null
                     && parent.getInfoStore().getValue(ProKEtProperties.ORTYPE).equals(true)) {
                 st.setAttribute("readimg", "img/Or.png");
@@ -180,30 +184,28 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
                 st.setAttribute("readimg", "img/And.png");
             }
         }
+
+        /*
+         * RENDER VALUE STATE OF THE QUESTION -> coloring
+         */
         Value val = bb.getValue((ValueObject) to);
-        //getAbstractValue(to, bb, d3webSession);
-
-        st.removeAttribute(
-                "qrating");
-
         Value jnvValForScoringQ = null;
+        st.removeAttribute("qrating");
 
-        // handle scoring questions
+        /*
+         * Scoring of (num-based) helper questions - transfer to jnv value
+         */
         if (to.getName().contains("_n")) {
             if (d3webSession.getKnowledgeBase().getManager().search(to.getName().replace("_n", "")) != null) {
-
                 TerminologyObject jnvObject = d3webSession.getKnowledgeBase().getManager().search(to.getName().replace("_n", ""));
                 jnvValForScoringQ = bb.getValue((ValueObject) jnvObject);
             }
             if (jnvValForScoringQ != null) {
                 val = jnvValForScoringQ;
-                //  System.out.println(to.getName() + " > " +  val );
             }
         }
-
-        // if a value is set for question, show acording coloring
+        // set value state
         if (UndefinedValue.isNotUndefinedValue(val)) {
-
             if (val.toString().equals(JNV.J.toString())) {
                 st.setAttribute("qrating", "rating-high");
             } else if (val.toString().equals(JNV.N.toString())) {
@@ -215,83 +217,48 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
             st.removeAttribute("qrating");
         }
 
-        st.removeAttribute(
-                "tty");
-        st.removeAttribute(
-                "ttn");
-        st.removeAttribute(
-                "ttu");
-        st.removeAttribute(
-                "ttnan");
-        st.removeAttribute(
-                "ratingY");
-        st.removeAttribute(
-                "ratingN");
-        st.removeAttribute(
-                "swap");
+        // remove previously set attributes
+        st.removeAttribute("tty");
+        st.removeAttribute("ttn");
+        st.removeAttribute("ttu");
+        st.removeAttribute("ttnan");
+        st.removeAttribute("ratingY");
+        st.removeAttribute("ratingN");
+        st.removeAttribute("swap");
 
-        // set coloring of question buttons according to type of question
-        // (normal question or swapped)
+        // set coloring of question buttons and rating value according to type 
+        // of question (normal question or swapped), set tooltips 
+        // YES NO Buttons first
         if (to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING) != null
                 && to.getInfoStore().getValue(ProKEtProperties.NO_DEFINING)) {
+            // IF SWAPPED QUESTION
             st.setAttribute("ratingY", "rating-low");
             st.setAttribute("ratingN", "rating-high");
             st.setAttribute("swap", "swap");
             st.setAttribute("ratingNrY", "3");
             st.setAttribute("ratingNrN", "1");
-
             st.setAttribute("tty", TT_YES_REV);
             st.setAttribute("ttn", TT_NO_REV);
         } else {
+            // NORMAL QUESTION
             st.setAttribute("ratingY", "rating-high");
             st.setAttribute("ratingN", "rating-low");
             st.setAttribute("ratingNrY", "1");
             st.setAttribute("ratingNrN", "3");
-
             st.setAttribute("tty", TT_YES);
             st.setAttribute("ttn", TT_NO);
         }
 
-        st.setAttribute(
-                "ttu", TT_UN);
-        st.setAttribute(
-                "ttnan", TT_NAN);
-        st.setAttribute(
-                "tooltip", TT_PROP_ERROR);
+        // set remaining tooltips
+        st.setAttribute("ttu", TT_UN);
+        st.setAttribute("ttnan", TT_NAN);
+        st.setAttribute("tooltip", TT_PROP_ERROR);
 
+        // initiate children rendering
         super.renderChildrenITreeNum(st, d3webSession, cc, to, loc, httpSession, request);
 
+        // return everything as String
         sb.append(st.toString());
-
         return sb.toString();
-    }
-
-    /**
-     * In itree dialogs, there exist normal "num" questions as base objects due
-     * to need to model scoring behaviour and corresponding choice abstraction
-     * questions for mapping to values yes no and maybe. This method returns the
-     * abstraction value of the respective num base object.
-     *
-     * @param numTO
-     * @param blackboard
-     * @param sess
-     * @return
-     */
-    private Value getAbstractValue(TerminologyObject numTO, Blackboard blackboard,
-            Session sess) {
-
-        TerminologyObject abstractTO =
-                sess.getKnowledgeBase().getManager().searchQuestion(numTO.getName().replace("_n", ""));
-
-        return blackboard.getValue((ValueObject) abstractTO);
-    }
-
-    private Value getNumValue(TerminologyObject numTO, Blackboard blackboard,
-            Session sess) {
-
-        TerminologyObject num =
-                sess.getKnowledgeBase().getManager().searchQuestion(numTO.getName());
-
-        return blackboard.getValue((ValueObject) num);
     }
 }

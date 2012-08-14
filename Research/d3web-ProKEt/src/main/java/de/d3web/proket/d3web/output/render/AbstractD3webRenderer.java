@@ -676,7 +676,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             TerminologyObject to, int loc, HttpSession httpSession, HttpServletRequest request) {
 
         StringBuilder childrenHTML = new StringBuilder();
-        
+         
         if (to.getName().equals("Q000")) {
             TerminologyObject rootNode = to.getChildren()[0].getChildren()[0];
            
@@ -754,6 +754,17 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         return builder.toString();
     }
 
+    
+    /**
+     * Retrieves the to-show state of ITree questions. When toggling questions
+     * to be shown/expanded, cookies are written which store the show state
+     * "C" for closed question and "O" for open question. That way, when re-rendering
+     * the question state is not erased blindly.
+     * 
+     * @param to
+     * @param cookies
+     * @return true if the question should be shown when re-rendering
+     */
     protected Boolean getShowStateFromCookie(TerminologyObject to, Cookie[] cookies) {
 
         List cooList = Arrays.asList(cookies);
@@ -763,6 +774,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
                 Cookie cookie = (Cookie) cooOb;
                 // found correct cookie
+                System.out.println(cookie.getValue() + " " + to.getName());
                 if (cookie.getName().replace("q_", "").equals(to.getName())) {
                     if (cookie.getValue().equals("O")) {
                         return true;
