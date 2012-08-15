@@ -121,6 +121,7 @@ public class SparqlResultRenderer {
 				rendered = nodeRenderer.renderNode(rendered, var);
 				if (!temp.equals(rendered) && !nodeRenderer.allowFollowUpRenderer()) break;
 			}
+			rendered = Strings.maskJSPWikiMarkup(rendered);
 		}
 		return rendered;
 	}
