@@ -62,8 +62,8 @@ public class SparqlResultRenderer {
 		if (tablemode) {
 			result.append(Strings.maskHTML("<table>"));
 			for (String var : variables) {
-				result.append(Strings.maskHTML("<th>") + var
-						+ Strings.maskHTML("</th>"));
+				result.append(Strings.maskHTML("<td><b>") + var
+						+ Strings.maskHTML("<b/></td>"));
 			}
 		}
 		else {
