@@ -1460,7 +1460,11 @@ public class D3webUtils {
         if (D3webConnector.getInstance().getDialogType().equals(DialogType.ITREE)) {
 
 
-            if (valueString != null) {
+            if (question instanceof QuestionNum) {
+                value = setQuestionNum(valueString);
+            } else if (question instanceof QuestionDate) {
+                value = setQuestionDate(question, valueString);
+            } else if (valueString != null) {
                 if (valueString.equals("1")) {
                     value = new ChoiceValue(JNV.J.toString());
                 } else if (valueString.equals("2")) {
@@ -1471,15 +1475,6 @@ public class D3webUtils {
                 }
             }
 
-
-            if (question instanceof QuestionNum) {
-                Question choiceQFromNumQ =
-                        D3webConnector.getInstance().getKb().getManager().searchQuestion(
-                        toName.replace("_n", ""));
-                if (choiceQFromNumQ != null) {
-                    question = choiceQFromNumQ;
-                }
-            }
 
             // if reasonable value retrieved, set it for the given
             // TerminologyObject
@@ -1496,14 +1491,7 @@ public class D3webUtils {
                 setQuestionUndefined(sess, question);
             }
 
-            /*
-             * System.out.println("BLACKBOARD: "); for (Question q :
-             * blackboard.getValuedQuestions()) {
-             *
-             * System.out.println(q.getName() + " -> " +
-             * blackboard.getValue(q)); } System.out.println("BLACKBOARD ENDE");
-             *
-             */
+            printBlackboard(sess);
         }
 
     }
@@ -1945,6 +1933,30 @@ public class D3webUtils {
 
         return builder.toString();
     }
-    
-    
+
+    public static void printBlackboardSetValues(Session sess) {
+        Blackboard blackboard = sess.getBlackboard();
+        System.out.println("BLACKBOARD: ");
+        for (Question q :
+                blackboard.getValuedQuestions()) {
+
+            System.out.println(q.getName() + " -> "
+                    + blackboard.getValue(q));
+        }
+        System.out.println("BLACKBOARD ENDE");
+    }
+
+    public static void printBlackboard(Session sess) {
+        Blackboard blackboard = sess.getBlackboard();
+        KnowledgeBase kb = sess.getKnowledgeBase();
+        System.out.println("BLACKBOARD: ");
+        for (TerminologyObject to : kb.getManager().getAllTerminologyObjects()) {
+
+            if (!(to instanceof QContainer)) {
+                System.out.println(to.getName() + " -> "
+                        + blackboard.getValue((ValueObject) to));
+            }
+        }
+        System.out.println("BLACKBOARD ENDE");
+    }
 }

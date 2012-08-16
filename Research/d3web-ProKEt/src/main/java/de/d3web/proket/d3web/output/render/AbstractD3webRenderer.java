@@ -774,7 +774,6 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
                 Cookie cookie = (Cookie) cooOb;
                 // found correct cookie
-                System.out.println(cookie.getValue() + " " + to.getName());
                 if (cookie.getName().replace("q_", "").equals(to.getName())) {
                     if (cookie.getValue().equals("O")) {
                         return true;

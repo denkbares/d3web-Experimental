@@ -747,34 +747,6 @@ function writeExpandCookie(qname, qExpandState){
     document.cookie = cookieString;
 }
 
-
-/* Retrieve the expand cookie value for a given question qname */ 
-function readExpandCookieValue(qname){
-    
-    var coo = document.cookie;
-    
-    var res = '';
-    
-    while(coo != ''){
-    
-        var cookiename = coo.substring(0,coo.indexOf('='));
-        var cookiewert = coo.substring(coo.indexOf('=')+1,coo.indexOf(';'));
-        
-        alert(qname + "--" + cookiename + " " + cookiewert);
-        if(qname == cookiename){
-            res = cookiewert;
-        }
-        
-        var i = coo.indexOf(';')+1;
-        if(i == 0){
-            i = coo.length
-        }
-        coo = coo.substring(i,coo.length);
-    }
-    
-    return(res)
-}
-
 /* Delete expand-state cookie for a question qname*/
 function deleteExpandCookie(qname){
     document.cookie = qname + "=; expires=Thu, 01-Jan-70 00:00:01 GMT;";

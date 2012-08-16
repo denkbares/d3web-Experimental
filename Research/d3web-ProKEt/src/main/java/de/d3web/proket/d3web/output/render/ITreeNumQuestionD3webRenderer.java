@@ -84,7 +84,7 @@ public class ITreeNumQuestionD3webRenderer extends AbstractD3webRenderer impleme
         // get d3web properties
         Blackboard bb = d3webSession.getBlackboard();
         Value value = bb.getValue((ValueObject) to);
-
+        
         if (value != null && UndefinedValue.isNotUndefinedValue(value)
                 && !value.equals(Unknown.getInstance())) {
 

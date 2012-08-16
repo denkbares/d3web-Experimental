@@ -29,7 +29,9 @@ function iTreeInit() {
     exchangeReadflowTextFirstSubQuestion();
     initializeSolutionBox();
     initializeNumfields();
-    initializeDropdownSelects();      
+    initializeDropdownSelects();   
+    initializeDateDropdowns();
+    
     alwaysExpandDummyNodes();    
 
     // global.js
@@ -124,6 +126,20 @@ function initializeNumfields(){
             handleNumFields_itreePrototype($(this));
            
         });
+    } else {
+        $('[type=num]').unbind("keydown").keydown(function(e) { 
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if (code == 13) {
+                alert($(this).val());
+                d3web_addValueFactITree(getQuestionId($(this)), $(this).val());
+               
+            }
+        }).unbind("focusout").focusout(function() {
+           
+            d3web_addValueFactITree(getQuestionId($(this)), $(this).val());
+           
+        });
+        
     }   
         
 }
@@ -155,6 +171,22 @@ function handleNumFields_itreePrototype(el){
     setPropagationColor(par);
     h4boxes_mark(par, true);
 }
+
+
+
+function initializeDateDropdowns(){
+    $("[type=Yearselect]," +
+        "[type=Monthselect]," +
+        "[type=Dayselect]," +
+        "[type=Hourselect]," +
+        "[type=Minuteselect]," +
+        "[type=Secondselect]"
+        ).unbind('change').change(function() {
+            
+        d3web_addValueFactITree(getQuestionId($(this)), getDate($(this)).getTime());
+    });
+}
+
 
 /**
 * Initialize Dropdwons as to check whether the chosen value is the defined
@@ -578,23 +610,11 @@ function d3web_answerYesNoHierarchyQuestions(buttonId, rating){
 }
 
 
-// toggles the visibility of itree nodes by sending the respective question;
-// thereupon the servlet checks the questions current state and toggles this.
-function d3web_saveShowStatus(qid){
-
-    //alert(qid);
-    //var cookie = readExpandCookieValue(qid);
-    //alert(cookie + " --- " + cookie.indexOf("EXPANDED"));
-    //if(cookie.indexOf("EXPANDED") != -1){
-    //  deleteExpandCookie(qid);
-    //  writeExpandCookie(qid, "FOLDED");
-    //} else {
-    //  deleteExpandCookie(qid);
-    //  writeExpandCookie(qid, "EXPANDED");
-    //} 
-    //alert(document.cookie);
-    var link = $.query.set("action", "saveShowStatus");
-    link = link.set("question", qid);
+/* SAVE DATE QUESTIONS FOR ITREE */
+function d3web_addValueFactITree(qid, value){
+    alert(qid + " " + value);
+    var link = $.query.set("action", "addFactITree");
+    link = link.set("question", qid).set("value", value);
     link = window.location.href.replace(window.location.search, "") + link;
      
     $.ajax({
@@ -607,7 +627,8 @@ function d3web_saveShowStatus(qid){
             initFunctionality();
         },
         error : function(html) {
-            alert("ajax error add facts");
+            alert("ajax error add facts itree date");
         }
     });
 }
+

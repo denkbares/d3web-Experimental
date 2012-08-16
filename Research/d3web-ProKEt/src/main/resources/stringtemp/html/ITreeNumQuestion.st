@@ -11,7 +11,7 @@
         <!--NUM VALUE ENTRY-->
         <div id=$id$-numentry class="floatingnum"
              onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
-            <input name="$id$-numentry" type="num" size="9" maxlength="9" value="" min="$defmin$" max="$defmax$"/>
+            <input name="$id$-numentry" type="num" size="9" maxlength="9" min="$defmin$" max="$defmax$" $if(selection)$value="$selection$"$endif$/>
         </div>
             
     </div> 

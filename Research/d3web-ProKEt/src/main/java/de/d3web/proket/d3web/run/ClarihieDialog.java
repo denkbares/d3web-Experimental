@@ -66,7 +66,7 @@ public class ClarihieDialog extends D3webDialog {
     @Override
     protected String getSource(HttpServletRequest request, HttpSession http) {
 
-        return "ITree090812";
+        return "ITree140812";
     }
 
     /**
@@ -107,35 +107,29 @@ public class ClarihieDialog extends D3webDialog {
     }
 
     /**
-     * For adding facts other than default jnv values
+     * For adding date facts in itree
      *
      * @param request
      * @param response
      * @param httpSession
      * @throws IOException
+     * @Override
      */
-    protected void addFacts(HttpServletRequest request,
+    protected void addFactITree(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
 
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
-        List<String> questions = new ArrayList<String>();
-        List<String> values = new ArrayList<String>();
-
-        // get all questions and answers lately answered as lists
-        super.getParameterPairs(request, "question", "value", questions, values);
-        // set the values
-        super.setValues(d3webSession, questions, values, request, httpSession);
-
-        // autosave the current state
+        String question = request.getParameter("question");
+        String value = request.getParameter("value");
+        
+        
         PersistenceD3webUtils.saveCase(
                 (String) httpSession.getAttribute("user"),
                 "autosave",
                 d3webSession);
-        PrintWriter writer = response.getWriter();
-        writer.append("itree_addfacts");
-        System.out.println(response.getContentType() + " " + response.getCharacterEncoding());
-        System.out.println(writer.toString());
+        
+        D3webUtils.setValueITree(question, value, d3webSession);
     }
 
     private void setValue(Session d3webSession, HttpServletRequest request,

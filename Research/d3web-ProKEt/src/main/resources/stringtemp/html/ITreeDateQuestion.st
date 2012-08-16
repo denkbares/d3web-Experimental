@@ -8,8 +8,8 @@
     <div id="$fullId$-imagebox" class="date-imagebox" onmouseover="showAuxInfo('$fullId$')">
         <img id="$fullId$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes_clariHie('$fullId$')">
             
-        <!--NUM VALUE ENTRY-->
-        <div id="$fullId$-dateentry" onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
+        <!--DATE VALUE ENTRY-->
+        <div id="$fullId$" onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()" class="answer">
             $dropdown$
         </div>
         

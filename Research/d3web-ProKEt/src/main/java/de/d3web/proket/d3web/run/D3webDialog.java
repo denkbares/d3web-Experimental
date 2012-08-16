@@ -493,7 +493,10 @@ public class D3webDialog extends HttpServlet {
                 e.printStackTrace();
             }
             return;
-        } else {
+        } else if(action.equalsIgnoreCase("addFactITree")) {
+            addFactITree(request, response, httpSession);
+        }
+        else {
             handleDialogSpecificActions(httpSession, request, response, action);
             return;
         }
@@ -582,11 +585,7 @@ public class D3webDialog extends HttpServlet {
         }
     }
 
-    protected void addFactsYN(HttpServletRequest request,
-            HttpServletResponse response, HttpSession httpSession)
-            throws IOException {
-        // overwritten by ClariHie Dialog
-    }
+   
 
     /**
      * Add one or several given facts. Thereby, first check whether input-store
@@ -1773,7 +1772,18 @@ public class D3webDialog extends HttpServlet {
         // overwritten in ClarihieDilaog (which should be renamed to iTreeDialog)
     }
 
-    // remove once this works from KB
-    protected void loadITreeInit(HttpSession http, HttpServletRequest request) {
+    
+    /* itree specific */
+     protected void addFactsYN(HttpServletRequest request,
+            HttpServletResponse response, HttpSession httpSession)
+            throws IOException {
+        // overwritten by ClariHie Dialog
     }
+     
+     protected void addFactITree(HttpServletRequest request,
+            HttpServletResponse response, HttpSession httpSession)
+            throws IOException{
+         // overwritten by ClariHie Dialog
+     }
+    
 }
