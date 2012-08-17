@@ -30,7 +30,8 @@ public class ArticleLinkNodeRenderer implements SparqlResultNodeRenderer {
 			statement = Strings.decodeURL(statement);
 			if (statement.isEmpty()) continue;
 			String title = Rdf2GoUtils.trimNamespace(statement);
-			if (Environment.getInstance().getWikiConnector().doesArticleExist(title)) {
+			if (Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB)
+					.getTitles().contains(title)) {
 				foundArticle = true;
 				articleLinks[i] = Strings.maskHTML(KnowWEUtils.getURLLinkHTMLToArticle(title));
 			}
