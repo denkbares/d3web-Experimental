@@ -45,6 +45,9 @@ public class ProKEtProperties {
             "ortype", Boolean.class);
      public static final Property<Boolean> DUMMY = Property.getProperty(
             "dummy", Boolean.class);
+     public static final Property<Boolean> RULETYPE = Property.getProperty(
+            "ruletype", Boolean.class);
+     
      public static final Property<Boolean> HIDDENFU = Property.getProperty(
             "hashiddenfollowup", Boolean.class);
       public static final Property<Boolean> REALNUM = Property.getProperty(

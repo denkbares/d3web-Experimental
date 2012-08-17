@@ -2,331 +2,343 @@
 <!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
 <plugin id="d3web-Plugin-ProKEtProperties" version="0.0.1">
 	
-	<requires>
-		<import plugin-id="d3web-Kernel-ExtensionPoints" />
-	</requires>
+    <requires>
+        <import plugin-id="d3web-Kernel-ExtensionPoints" />
+    </requires>
 	
-	<runtime>
-		<library id="de.d3web" path="." type="code">
-			<export prefix="*" />
-		</library>
-	</runtime>
+    <runtime>
+        <library id="de.d3web" path="." type="code">
+            <export prefix="*" />
+        </library>
+    </runtime>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="date_format">
-		<parameter id="name" value="date_format" />
-		<parameter id="description" value="allows to specify a format for date entries" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="date_format">
+        <parameter id="name" value="date_format" />
+        <parameter id="description" value="allows to specify a format for date entries" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="text_format">
-		<parameter id="name" value="text_format" />
-		<parameter id="description" value="allows to specify a format for text entries" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="text_format">
+        <parameter id="name" value="text_format" />
+        <parameter id="description" value="allows to specify a format for text entries" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="popup">
-		<parameter id="name" value="popup" />
-		<parameter id="description" value="can be used for popups providing addtional informations for questions" />
-		<parameter id="multilingual" value="true" />
-		<parameter id="autosave" value="mminfo" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="popup">
+        <parameter id="name" value="popup" />
+        <parameter id="description" value="can be used for popups providing addtional informations for questions" />
+        <parameter id="multilingual" value="true" />
+        <parameter id="autosave" value="mminfo" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
 
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="grid">
-		<parameter id="name" value="grid" />
-		<parameter id="description" value="can be used for grids providing a summary of the entered values" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="grid">
+        <parameter id="name" value="grid" />
+        <parameter id="description" value="can be used for grids providing a summary of the entered values" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="show_in_header">
-		<parameter id="name" value="show_in_header" />
-		<parameter id="description" value="Set to true if a question should be shown in the header" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Boolean" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="show_in_header">
+        <parameter id="name" value="show_in_header" />
+        <parameter id="description" value="Set to true if a question should be shown in the header" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Boolean" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="hide">
-		<parameter id="name" value="hide" />
-		<parameter id="description" value="Set to true if a question should no be shown in the dialog" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Boolean" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="hide">
+        <parameter id="name" value="hide" />
+        <parameter id="description" value="Set to true if a question should no be shown in the dialog" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Boolean" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="long_text">
-		<parameter id="name" value="long_text" />
-		<parameter id="description" value="Set to true if a text question is expected to get a long text as a value" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Boolean" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="long_text">
+        <parameter id="name" value="long_text" />
+        <parameter id="description" value="Set to true if a text question is expected to get a long text as a value" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Boolean" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="position_in_header">
-		<parameter id="name" value="position_in_header" />
-		<parameter id="description" value="Sets the position of question in the header" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Integer" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="position_in_header">
+        <parameter id="name" value="position_in_header" />
+        <parameter id="description" value="Sets the position of question in the header" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Integer" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="header_text">
-		<parameter id="name" value="header_text" />
-		<parameter id="description" value="Sets the text of the NamedObject for the header" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="header_text">
+        <parameter id="name" value="header_text" />
+        <parameter id="description" value="Sets the text of the NamedObject for the header" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="image">
-		<parameter id="name" value="image" />
-		<parameter id="description" value="can be used for images in image questions" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="image">
+        <parameter id="name" value="image" />
+        <parameter id="description" value="can be used for images in image questions" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="imagewidth">
-		<parameter id="name" value="imagewidth" />
-		<parameter id="description" value="can be used to set a specific width for the image of a question" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="imagewidth">
+        <parameter id="name" value="imagewidth" />
+        <parameter id="description" value="can be used to set a specific width for the image of a question" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="imageheight">
-		<parameter id="name" value="imageheight" />
-		<parameter id="description" value="can be used to set a specific height for the image of a question" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="imageheight">
+        <parameter id="name" value="imageheight" />
+        <parameter id="description" value="can be used to set a specific height for the image of a question" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="imagemap">
-		<parameter id="name" value="imagemap" />
-		<parameter id="description" value="can be used to specify an imagemap for a image of question" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="imagemap">
+        <parameter id="name" value="imagemap" />
+        <parameter id="description" value="can be used to specify an imagemap for a image of question" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="dropdown_menu_options">
-		<parameter id="name" value="dropdown_menu_options" />
-		<parameter id="description" value="can be used to specify options for a dropdown menu" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="dropdown_menu_options">
+        <parameter id="name" value="dropdown_menu_options" />
+        <parameter id="description" value="can be used to specify options for a dropdown menu" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="dropdown_menu_default">
-		<parameter id="name" value="dropdown_menu_default" />
-		<parameter id="description" value="can be used to specify options for a dropdown menu" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="dropdown_menu_default">
+        <parameter id="name" value="dropdown_menu_default" />
+        <parameter id="description" value="can be used to specify options for a dropdown menu" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="use_as_filename">
-		<parameter id="name" value="use_as_filename" />
-		<parameter id="description" value="can be used to suggest the value of the question as the filename" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Boolean" />
-	</extension>
-	
-	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="before">
-		<parameter id="name" value="before" />
-		<parameter id="description" 
-			value="add a constraint, that a QuestionDate can only get values before the date entered in another QuestionDate" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="use_as_filename">
+        <parameter id="name" value="use_as_filename" />
+        <parameter id="description" value="can be used to suggest the value of the question as the filename" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Boolean" />
+    </extension>
 	
 	
-	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="after">
-		<parameter id="name" value="after" />
-		<parameter id="description" 
-			value="add a constraint, that a QuestionDate can only get values after the date entered in another QuestionDate" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="before">
+        <parameter id="name" value="before" />
+        <parameter id="description" 
+                           value="add a constraint, that a QuestionDate can only get values before the date entered in another QuestionDate" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
+	
+	
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="after">
+        <parameter id="name" value="after" />
+        <parameter id="description" 
+                           value="add a constraint, that a QuestionDate can only get values after the date entered in another QuestionDate" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
         
        
         
-         <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="itreeinit">
-		<parameter id="name" value="itreeinit" />
-		<parameter id="description" 
-			value="add property for iTree style marking those questions
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                    id="itreeinit">
+        <parameter id="name" value="itreeinit" />
+        <parameter id="description" 
+                           value="add property for iTree style marking those questions
                         that need to be expanded initially" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Boolean" />
-	</extension>
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Boolean" />
+    </extension>
         
-        <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="showitree">
-		<parameter id="name" value="showitree" />
-		<parameter id="description" 
-			value="add property for iTree style marking those questions
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="showitree">
+        <parameter id="name" value="showitree" />
+        <parameter id="description" 
+                           value="add property for iTree style marking those questions
                         that need to be expanded initially" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Boolean" />
-	</extension>
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Boolean" />
+    </extension>
 	
-        <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="nodefining">
-		<parameter id="name" value="nodefining" />
-		<parameter id="description" 
-			value="add property for iTree style marking those questions
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="nodefining">
+        <parameter id="name" value="nodefining" />
+        <parameter id="description" 
+                           value="add property for iTree style marking those questions
                         that need to be expanded initially" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Boolean" />
-	</extension>
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Boolean" />
+    </extension>
         
-         <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="dummy">
-		<parameter id="name" value="dummy" />
-		<parameter id="description" 
-			value="add property for iTree style marking those questions
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                    id="dummy">
+        <parameter id="name" value="dummy" />
+        <parameter id="description" 
+                           value="add property for iTree style marking those questions
                         that need to be expanded initially" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Boolean" />
-	</extension>
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Boolean" />
+    </extension>
         
-         <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="hashiddenfollowup">
-		<parameter id="name" value="hashiddenfollowup" />
-		<parameter id="description" 
-			value="add property for iTree style marking those questions
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                    id="hashiddenfollowup">
+        <parameter id="name" value="hashiddenfollowup" />
+        <parameter id="description" 
+                           value="add property for iTree style marking those questions
                         that are connected by an or-connection" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Boolean" />
-	</extension>
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Boolean" />
+    </extension>
         
-        <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="ortype">
-		<parameter id="name" value="ortype" />
-		<parameter id="description" 
-			value="add property for iTree style marking those questions
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="ortype">
+        <parameter id="name" value="ortype" />
+        <parameter id="description" 
+                           value="add property for iTree style marking those questions
                         that are connected by an or-connection" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Boolean" />
-	</extension>
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Boolean" />
+    </extension>
                 
-                <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="scoring">
-		<parameter id="name" value="scoring" />
-		<parameter id="description" 
-			value="add property for iTree style marking those questions
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                           id="scoring">
+        <parameter id="name" value="scoring" />
+        <parameter id="description" 
+                           value="add property for iTree style marking those questions
                         that use special scoring calculations" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Boolean" />
-	</extension>
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Boolean" />
+    </extension>
         
-                    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="realnum">
-		<parameter id="name" value="realnum" />
-		<parameter id="description" 
-			value="add property for iTree style marking those questions
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                    id="ruletype">
+        <parameter id="name" value="ruletype" />
+        <parameter id="description" 
+                           value="add property for iTree style marking those questions
                         that use special scoring calculations" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.Boolean" />
-	</extension>
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Boolean" />
+    </extension>
         
-         <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="weblink">
-		<parameter id="name" value="weblink" />
-		<parameter id="description" 
-			value="add property for iTree style for storing the 
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                               id="realnum">
+        <parameter id="name" value="realnum" />
+        <parameter id="description" 
+                           value="add property for iTree style marking those questions
+                        that use special scoring calculations" />
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.Boolean" />
+    </extension>
+        
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                    id="weblink">
+        <parameter id="name" value="weblink" />
+        <parameter id="description" 
+                           value="add property for iTree style for storing the 
                         links to external sites" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
         
-        <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="pdflink">
-		<parameter id="name" value="pdflink" />
-		<parameter id="description" 
-			value="add property for iTree style for storing the 
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="pdflink">
+        <parameter id="name" value="pdflink" />
+        <parameter id="description" 
+                           value="add property for iTree style for storing the 
                         links to pdf files" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
         
-        <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
-		id="rechnerlink">
-		<parameter id="name" value="rechnerlink" />
-		<parameter id="description" 
-			value="add property for iTree style for storing the 
+    <extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+                   id="rechnerlink">
+        <parameter id="name" value="rechnerlink" />
+        <parameter id="description" 
+                           value="add property for iTree style for storing the 
                         links to external calculation tools" />
-		<parameter id="multilingual" value="false" />
-		<parameter id="autosave" value="basic" />
-		<parameter id="priority" value="5" />
-		<parameter id="instanceof" value="java.lang.String" />
-	</extension>
+        <parameter id="multilingual" value="false" />
+        <parameter id="autosave" value="basic" />
+        <parameter id="priority" value="5" />
+        <parameter id="instanceof" value="java.lang.String" />
+    </extension>
 </plugin>
