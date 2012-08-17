@@ -103,8 +103,13 @@ function expandAndStyleFirstElement_iTree(){
  */
 function exchangeReadflowTextFirstSubQuestion(){
     
+    
     $("[id^=sub-] [id^=readFlow]:first-child img").each(function(){     
-        $(this).attr('src', 'img/If.png');
+        if(!($(this).attr("qtype")!=null && $(this).attr("qtype")=="ruletype") &&
+            !($(this).attr("qtype")!=null && $(this).attr("qtype")=="scoretype")){
+            
+            $(this).attr('src', 'img/If.png');
+        }
     });
 }
 
@@ -130,7 +135,6 @@ function initializeNumfields(){
         $('[type=num]').unbind("keydown").keydown(function(e) { 
             var code = (e.keyCode ? e.keyCode : e.which);
             if (code == 13) {
-                alert($(this).val());
                 d3web_addValueFactITree(getQuestionId($(this)), $(this).val());
                
             }
@@ -612,7 +616,7 @@ function d3web_answerYesNoHierarchyQuestions(buttonId, rating){
 
 /* SAVE DATE QUESTIONS FOR ITREE */
 function d3web_addValueFactITree(qid, value){
-    alert(qid + " " + value);
+   
     var link = $.query.set("action", "addFactITree");
     link = link.set("question", qid).set("value", value);
     link = window.location.href.replace(window.location.search, "") + link;

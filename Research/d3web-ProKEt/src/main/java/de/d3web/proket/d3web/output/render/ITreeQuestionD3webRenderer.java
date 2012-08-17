@@ -117,8 +117,8 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
         // Check for COOKIES...
         Cookie[] cookies = request.getCookies();
         Boolean cookieShow = null;
-        if (((itreeinit != null && !itreeinit) ||
-                itreeinit == null)
+        if (((itreeinit != null && !itreeinit)
+                || itreeinit == null)
                 && cookies != null) {
             cookieShow = getShowStateFromCookie(to, cookies);
         }
@@ -141,9 +141,9 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
                 st.removeAttribute("typeimg");
                 st.setAttribute("typeimg", "img/openedArrow.png");
             }
-        } 
-        
-        
+        }
+
+
         /*
          * FOLLOW UP QUESTIONS
          */
@@ -165,46 +165,45 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
         } /*
          * else { st.setAttribute("showitree", true); if
          * (to.getChildren().length > 0) { st.removeAttribute("typeimg");
-         * st.setAttribute("typeimg", "img/openedArrow.png"); }
-        }
+         * st.setAttribute("typeimg", "img/openedArrow.png"); } }
          */
 
         /*
-         * READ FLOW - AND/OR verbalization
+         * READ FLOW - AND/OR/Score/Rules verbalization
          */
-        // for topmost element, do not render any and/or verbalization
-        if (parent.getName().equals("Q000")) {
+        // for topmost element, do not render any read flow verbalization
+         if (parent.getName().equals("Q000")) {
             st.setAttribute("readimg", "img/transpSquare.png");
+        } else if (parent.getInfoStore().getValue(ProKEtProperties.RULETYPE) != null
+                && parent.getInfoStore().getValue(ProKEtProperties.RULETYPE).equals(true)) {
+            st.setAttribute("readimg", "img/Formula.png");
+            st.setAttribute("qtype", "ruletype");
+        } else if (parent.getInfoStore().getValue(ProKEtProperties.ORTYPE) != null
+                && parent.getInfoStore().getValue(ProKEtProperties.ORTYPE).equals(true)) {
+            st.setAttribute("readimg", "img/Or.png");
         } else {
-            // render read flow verbalization according to and/or type
-            if (parent.getInfoStore().getValue(ProKEtProperties.ORTYPE) != null
-                    && parent.getInfoStore().getValue(ProKEtProperties.ORTYPE).equals(true)) {
-                st.setAttribute("readimg", "img/Or.png");
-            } else {
-                st.setAttribute("readimg", "img/And.png");
-            }
-        }
+            st.setAttribute("readimg", "img/And.png");
 
+        }
+         
+         
+        /* 
+         * Check if parent question has scoring question correspondant. If yes, set property in ST
+         */ 
+         TerminologyObject scoringCor = 
+                 d3webSession.getKnowledgeBase().getManager().search(parent.getName().replace(parent.getName(), parent.getName() + "_n"));
+         if(scoringCor != null){
+             st.setAttribute("qtype", "scoretype");
+             st.removeAttribute("readimg");
+             st.setAttribute("readimg", "img/Score.png");
+         }
+         
         /*
          * RENDER VALUE STATE OF THE QUESTION -> coloring
          */
         Value val = bb.getValue((ValueObject) to);
-        Value jnvValForScoringQ = null;
         st.removeAttribute("qrating");
 
-        /*
-         * Scoring of (num-based) helper questions - transfer to jnv value
-         */
-        if (to.getName().contains("_n")) {
-            if (d3webSession.getKnowledgeBase().getManager().search(to.getName().replace("_n", "")) != null) {
-                TerminologyObject jnvObject = d3webSession.getKnowledgeBase().getManager().search(to.getName().replace("_n", ""));
-                jnvValForScoringQ = bb.getValue((ValueObject) jnvObject);
-            }
-            if (jnvValForScoringQ != null) {
-                val = jnvValForScoringQ;
-            }
-        }
-        // set value state
         if (UndefinedValue.isNotUndefinedValue(val)) {
             if (val.toString().equals(JNV.J.toString())) {
                 st.setAttribute("qrating", "rating-high");

@@ -1,6 +1,6 @@
 
 <div id="readFlow-$fullId$" class="readflow">
-    <img id="$fullId$-readimg" alt="readflow" src="$readimg$" height="14" width="25">
+    <img id="$fullId$-readimg" alt="readflow" src="$readimg$" height="14" width="25" $if(qtype)$qtype="$qtype$"$endif$>
 </div>
  
 <div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$ $qrating$ $swap$" >

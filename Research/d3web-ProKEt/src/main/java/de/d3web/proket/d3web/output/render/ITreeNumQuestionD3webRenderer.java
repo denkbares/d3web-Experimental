@@ -118,14 +118,26 @@ public class ITreeNumQuestionD3webRenderer extends AbstractD3webRenderer impleme
             st.setAttribute("typeimg", "img/transpSquare.png");
         }
 
-        // render read flow according to and/or type
-        if (to.getInfoStore().getValue(ProKEtProperties.ORTYPE) != null
-                && to.getInfoStore().getValue(ProKEtProperties.ORTYPE)) {
+       /*
+         * READ FLOW - AND/OR/Score/Rules verbalization
+         */
+        // for topmost element, do not render any read flow verbalization
+         if (parent.getName().equals("Q000")) {
+            st.setAttribute("readimg", "img/transpSquare.png");
+        } else if (parent.getInfoStore().getValue(ProKEtProperties.RULETYPE) != null
+                && parent.getInfoStore().getValue(ProKEtProperties.RULETYPE).equals(true)) {
+            st.setAttribute("readimg", "img/Formula.png");
+            st.setAttribute("qtype", "ruletype");
+        } else if (parent.getInfoStore().getValue(ProKEtProperties.SCORING) != null
+                && parent.getInfoStore().getValue(ProKEtProperties.SCORING).equals(true)) {
+            st.setAttribute("readimg", "img/Score.png");
+            st.setAttribute("qtype", "scoretype");
+        } else if (parent.getInfoStore().getValue(ProKEtProperties.ORTYPE) != null
+                && parent.getInfoStore().getValue(ProKEtProperties.ORTYPE).equals(true)) {
             st.setAttribute("readimg", "img/Or.png");
-            st.setAttribute("andOrType", "OR");
         } else {
             st.setAttribute("readimg", "img/And.png");
-            st.setAttribute("andOrType", "AND");
+
         }
 
 
