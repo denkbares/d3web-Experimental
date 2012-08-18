@@ -90,7 +90,7 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
          * handle custom ContainerCollection modification, e.g., enabling
          * certain JS stuff
          */
-        D3webXMLParser.LoginMode loginMode = D3webConnector.getInstance().getD3webParser().getLogin();
+        D3webXMLParser.LoginMode loginMode = D3webConnector.getInstance().getD3webParser().getLoginMode();
         cc.js.setLoginMode(loginMode);
         if (loginMode == D3webXMLParser.LoginMode.usrdat) {
             st.setAttribute("login", "true");

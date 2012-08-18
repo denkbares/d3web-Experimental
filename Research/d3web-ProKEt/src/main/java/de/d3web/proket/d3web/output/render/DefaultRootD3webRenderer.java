@@ -100,7 +100,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		 * handle custom ContainerCollection modification, e.g., enabling
 		 * certain JS stuff
 		 */
-		LoginMode loginMode = D3webConnector.getInstance().getD3webParser().getLogin();
+		LoginMode loginMode = D3webConnector.getInstance().getD3webParser().getLoginMode();
 		cc.js.setLoginMode(loginMode);
 		if (loginMode == LoginMode.usrdat) {
 			st.setAttribute("login", "true");

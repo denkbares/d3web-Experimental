@@ -189,11 +189,9 @@ public class D3webDialog extends HttpServlet {
             d3wcon.setCss(d3webParser.getCss());
             d3wcon.setHeader(d3webParser.getHeader());
             d3wcon.setUserprefix(d3webParser.getUserPrefix());
-            d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
-            d3wcon.setLoginMode(d3webParser.getLogin());
+            d3wcon.setLoginMode(d3webParser.getLoginMode());
 
             httpSession.setAttribute("uegroup", d3webParser.getUEGroup());
-            httpSession.setAttribute("uesystemtype", d3webParser.getUESystemType());
 
             // switch on/off logging depending on xml specification
             if (d3webParser.getLogging().contains("TRUE")) {

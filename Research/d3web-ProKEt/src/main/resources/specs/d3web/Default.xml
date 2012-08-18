@@ -11,9 +11,12 @@
 	login = "off"
         required = "none"
 	language = ""
-        logging = "ON"
-        feedbackform = "ON"
-        uequestionnaire = "ON"
+        
 	>
 	<data kb="Languages.d3web" />
+        
+        <ue 
+        logging = "TRUE"
+        feedbackform = "TRUE"
+        uequestionnaire = "SUS" />
 </dialog>

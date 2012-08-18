@@ -11,7 +11,8 @@
 	login = "off"
         required = "none"
 	language = ""
-        logging = "ON"
 	>
 	<data kb="HerniaLanguageTest.d3web" />
+        
+        <ue logging = "TRUE" />
 </dialog>

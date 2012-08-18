@@ -108,8 +108,7 @@ public class ImageQuestions extends HttpServlet {
 			d3wcon.setCss(d3webParser.getCss());
 			d3wcon.setHeader(d3webParser.getHeader());
 			d3wcon.setUserprefix(d3webParser.getUserPrefix());
-			d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
-		}
+			}
 
 		// Resource r = ImageHandler.getResource("example.jpg");
 		// Resource r = ImageHandler.getResource(picsrc);
