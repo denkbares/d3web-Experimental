@@ -1500,6 +1500,7 @@ public class D3webUtils {
         Value value = null;
         try {
             value = new DateValue(new Date(Long.parseLong(valString)));
+            System.out.println(value);
         } catch (NumberFormatException e) {
             // value still null, will not be set
         }

@@ -627,7 +627,8 @@ function d3web_addValueFactITree(qid, value){
         cache : false, // needed for IE, call is not made otherwise
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         success : function(html) {
-            window.location.reload();
+            
+            window.location.reload(true);
             initFunctionality();
         },
         error : function(html) {
