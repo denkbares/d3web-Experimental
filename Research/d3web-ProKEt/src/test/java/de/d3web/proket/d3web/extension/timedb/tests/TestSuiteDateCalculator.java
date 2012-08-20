@@ -36,6 +36,7 @@ public class TestSuiteDateCalculator extends TestSuite {
         TestSuite suite = new TestSuite();
         suite.addTestSuite(TestDateCalculatorMonthFunctions.class);
         suite.addTestSuite(TestDateCalculatorWeekFunctions.class);
+        suite.addTestSuite(TestDateCalculatorBasicFunctions.class);
         return suite;
     }
 
