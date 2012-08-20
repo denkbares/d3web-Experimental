@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import com.denkbares.jspwiki.types.SectionType;
+import de.knowwe.jspwiki.types.SectionType;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
