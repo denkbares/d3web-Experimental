@@ -26,6 +26,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.core.ArticleManager;
@@ -102,21 +105,40 @@ public class TermRenamingActionIncr extends AbstractAction {
 		Set<String> success = new HashSet<String>();
 		renameTerms(allTerms, replacement, mgr, context, failures,
 				success);
-		generateMessage(failures, success, context);
+		generateMessage(failures, success, context, termIdentifier, replacement);
 	}
 
-	private void generateMessage(Set<String> failures, Set<String> success, UserActionContext context) throws IOException {
+	private void generateMessage(Set<String> failures, Set<String> success, UserActionContext context, TermIdentifier termIdentifier, String replacement) throws IOException {
+		JSONObject response = new JSONObject();
+		try {
+			// the new external form of the TermIdentifier
+			String[] pathElements = termIdentifier.getPathElements();
+			String newLastPathElement = TermIdentifier.fromExternalForm(replacement).getLastPathElement();
+			pathElements[pathElements.length - 1] = newLastPathElement;
+			response.append("newTermIdentifier", new TermIdentifier(pathElements).toExternalForm());
+
+			// the new object name
+			response.append("newObjectName",
+					new TermIdentifier(newLastPathElement).toExternalForm());
+			StringBuilder builder = new StringBuilder();
 		Writer w = context.getWriter();
 		// successes
 		for (String article : success) {
-			w.write("##");
-			w.write(article);
+				builder.append("##");
+				builder.append(article);
 		}
-		w.write("###");
+			builder.append("###");
 		// failures
 		for (String article : failures) {
-			w.write("##");
-			w.write(article);
+				builder.append("##");
+				builder.append(article);
+			}
+			response.accumulate("renamedArticles", builder);
+
+			response.write(context.getWriter());
+		}
+		catch (JSONException e) {
+			throw new IOException(e.getMessage());
 		}
 	}
 
