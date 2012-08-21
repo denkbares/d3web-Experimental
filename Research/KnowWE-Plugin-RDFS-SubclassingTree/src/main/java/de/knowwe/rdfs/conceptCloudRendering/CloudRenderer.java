@@ -23,6 +23,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 
@@ -49,6 +51,10 @@ public class CloudRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> section, UserContext user, StringBuilder string) {
+
+		// remember which edges are already rendered to avoid duplicate arcs
+		Set<String> renderedEdges = new HashSet<String>();
+
 		String concept = DefaultMarkupType.getAnnotation(section,
 				ConceptCloudMarkup.CONCEPT_KEY).trim();
 
@@ -75,9 +81,9 @@ public class CloudRenderer implements Renderer {
 			dotSource.append(prepareConceptLabel(concept)
 					+ " [shape=hexagon, style=filled, fontsize=24]\n");
 
-			appendEdge(concept, relation, dotSource, z);
+			appendEdge(concept, relation, dotSource, z, renderedEdges);
 
-			appendDotSourceCloudForConcept(z, relation, dotSource, counter);
+			appendDotSourceCloudForConcept(z, relation, dotSource, counter, renderedEdges);
 			counter++;
 		}
 
@@ -89,7 +95,8 @@ public class CloudRenderer implements Renderer {
 		String realPath = servletContext.getRealPath("");
 		String tmpPath = "KnowWEExtension/tmp/";
 		String path = realPath + "/" + tmpPath;
-		String dotFilename = path + concept.replaceAll(" ", "_") + section.getID()
+		String dotFilename = path + concept.replaceAll(" ", "_").replaceAll("/", "_")
+				+ section.getID()
 					+ ".dot";
 		File f = new File(dotFilename);
 		try {
@@ -105,7 +112,7 @@ public class CloudRenderer implements Renderer {
 			// + section.getID() + ".png";
 
 			String outputfile = path
-					+ concept + section.getID() + ".pdf";
+					+ concept.replaceAll("/", "_") + section.getID() + ".pdf";
 
 			// TODO: read stdout and stderr to avoid process being blocked
 			/* Process process = */Runtime.getRuntime().exec(new String[] {
@@ -134,15 +141,25 @@ public class CloudRenderer implements Renderer {
 		if (concept.contains(" ") || concept.contains("+") || concept.contains("%")
 				|| concept.contains(".")) {
 			concept = concept.replaceAll(" ", "+");
+			concept = concept.replaceAll("/", "%2F");
 			String expandNamespace = Rdf2GoUtils.expandNamespace("lns:");
 			fullConcept = "<" + expandNamespace + concept + ">";
 		}
 		return fullConcept;
 	}
 
-	private void appendDotSourceForConcept(String concept, String relation, StringBuffer dotSource) {
+	/**
+	 * Adds the relations for this concept to the dot source. Further recursion
+	 * is started along unterkonzept-relation
+	 * 
+	 * @created 21.08.2012
+	 * @param concept
+	 * @param relation
+	 * @param dotSource
+	 */
+	private void appendDotSourceForConcept(String concept, String relation, StringBuffer dotSource, Set<String> renderedEdges) {
 
-		String fullConcept = getConceptURIString(concept);
+		String fullConcept = "<" + concept + ">";
 
 		String query = "SELECT ?z WHERE { ?z lns:" + relation + " " + fullConcept + "  .}";
 
@@ -153,20 +170,24 @@ public class CloudRenderer implements Renderer {
 			String zURI = row.getValue("z").toString();
 			String z = zURI.substring(zURI.indexOf("#") + 1);
 
-			appendEdge(concept, relation, dotSource, z);
+			appendEdge(concept, relation, dotSource, z, renderedEdges);
 
-			appendDotSourceForConcept(z, relation, dotSource);
+			appendDotSourceForConcept(z, relation, dotSource, renderedEdges);
 
 		}
+
+		appendOtherRelationsStart(concept, dotSource, fullConcept, renderedEdges);
+
+		appendOtherRelationsEnd(concept, dotSource, fullConcept, renderedEdges);
 	}
 
-	private void appendDotSourceCloudForConcept(String concept, String relation, StringBuffer dotSource, int cloudIndex) {
+	private void appendDotSourceCloudForConcept(String concept, String relation, StringBuffer dotSource, int cloudIndex, Set<String> renderedEdges) {
 
 		dotSource.append("\n\nsubgraph cluster_" + cloudIndex + " {\n "
 				+ prepareConceptLabel(concept)
 				+ " [shape=box, style=filled, fontsize=20]\n");
 
-		String fullConcept = getConceptURIString(concept);
+		String fullConcept = "<" + concept + ">";
 
 		String query = "SELECT ?z WHERE { ?z lns:" + relation + " " + fullConcept + "  .}";
 
@@ -177,16 +198,86 @@ public class CloudRenderer implements Renderer {
 			String zURI = row.getValue("z").toString();
 			String z = zURI.substring(zURI.indexOf("#") + 1);
 
-			appendEdge(concept, relation, dotSource, z);
+			appendEdge(concept, relation, dotSource, z, renderedEdges);
 
-			appendDotSourceForConcept(z, relation, dotSource);
+			appendDotSourceForConcept(z, relation, dotSource, renderedEdges);
 
 		}
+
+		appendOtherRelationsStart(concept, dotSource, fullConcept, renderedEdges);
+
+		appendOtherRelationsEnd(concept, dotSource, fullConcept, renderedEdges);
+
 		dotSource.append("\ncolor=white\nstyle=dashed");
 		dotSource.append("\n}\n\n");
 	}
 
+	/**
+	 * appends relations other than unterkonzept where the current concept is
+	 * start of the triple
+	 * 
+	 * @created 21.08.2012
+	 * @param concept
+	 * @param dotSource
+	 * @param fullConcept
+	 */
+	private void appendOtherRelationsEnd(String concept, StringBuffer dotSource, String fullConcept, Set<String> renderedEdges) {
+		String query3 = "SELECT ?z ?rel WHERE { " + fullConcept + " ?rel ?z .}";
+
+		ClosableIterator<QueryRow> result3 = Rdf2GoCore.getInstance().sparqlSelectIt(query3);
+		while (result3.hasNext()) {
+			QueryRow row = result3.next();
+
+			String zURI = row.getValue("z").toString();
+			String z = zURI.substring(zURI.indexOf("#") + 1);
+
+			String relURI = row.getValue("rel").toString();
+			String rel = relURI.substring(relURI.indexOf("#") + 1);
+
+			if (!rel.endsWith("unterkonzept")) {
+				appendEdge(z, rel, dotSource, concept, renderedEdges);
+			}
+
+			// appendDotSourceForConcept(z, relation, dotSource);
+
+		}
+	}
+
+	/**
+	 * appends relations other than unterkonzept where the current concept is
+	 * end of the triple
+	 * 
+	 * @created 21.08.2012
+	 * @param concept
+	 * @param dotSource
+	 * @param fullConcept
+	 */
+	private void appendOtherRelationsStart(String concept, StringBuffer dotSource, String fullConcept, Set<String> renderedEdges) {
+		String query2 = "SELECT ?z ?rel WHERE { ?z ?rel " + fullConcept + "  .}";
+
+		ClosableIterator<QueryRow> result2 = Rdf2GoCore.getInstance().sparqlSelectIt(query2);
+		while (result2.hasNext()) {
+			QueryRow row = result2.next();
+
+			String zURI = row.getValue("z").toString();
+			String z = zURI.substring(zURI.indexOf("#") + 1);
+
+			String relURI = row.getValue("rel").toString();
+			String rel = relURI.substring(relURI.indexOf("#") + 1);
+
+			if (!rel.endsWith("unterkonzept")) {
+				appendEdge(concept, rel, dotSource, z, renderedEdges);
+			}
+
+			// appendDotSourceForConcept(z, relation, dotSource);
+
+		}
+	}
+
 	private String prepareConceptLabel(String z) {
+		if (z.startsWith("http:")) {
+			z = z.substring(z.indexOf("=") + 1);
+		}
 		try {
 			z = URLDecoder.decode(z, "UTF-8").replaceAll(" ", "_");
 		}
@@ -209,21 +300,54 @@ public class CloudRenderer implements Renderer {
 			}
 		}
 
+		if (z.endsWith("\\n")) {
+			z = z.substring(0, z.length() - 2);
+		}
 		z = "\"" + z + "\"";
 		// }
 		return z;
 	}
 
-	private void appendEdge(String concept, String relation, StringBuffer dotSource, String z) {
+	private void appendEdge(String concept, String relation, StringBuffer dotSource, String z, Set<String> renderedEdges) {
 
-		String exp = prepareConceptLabel(z) + "->"
-				+ prepareConceptLabel(concept);
+		if (z.endsWith("Resource") || concept.endsWith("Resource")) return; // filter
+																			// rdf:Resource
 
-		// exp += ("[ label = " + relation + " ]");
+
+
+		String labelZ = prepareConceptLabel(z);
+		String labelConcept = prepareConceptLabel(concept);
+		String exp = labelZ + " -> "
+				+ labelConcept;
+
+		String relationLabel = relation.substring(relation.indexOf("=") + 1);
+		if (!relation.endsWith("unterkonzept")) {
+			exp += " [ label = \"" + relationLabel + "\" ";
+			if (relationLabel.endsWith("Bidirektional")) {
+				exp += " , dir=\"both\"";
+			}
+			if (relationLabel.startsWith("muss")) {
+				exp += " , color=\"red\"";
+			}
+			if (relationLabel.startsWith("kann")) {
+				exp += " , color=\"darkgreen\"";
+			}
+			if (relationLabel.startsWith("assoziation")) {
+				exp += " , color=\"blue\"";
+			}
+			if (relationLabel.startsWith("temporalBevor")) {
+				exp += " , color=\"goldenrod\"";
+			}
+			exp += "]";
+		}
 		exp += ";\n";
 
-		System.out.print(exp);
-		dotSource.append(exp);
+		String tripleSignature = labelZ + relationLabel + labelConcept;
+		if (!renderedEdges.contains(tripleSignature)) {
+			System.out.print(exp);
+			dotSource.append(exp);
+			renderedEdges.add(tripleSignature);
+		}
 	}
 
 }
