@@ -208,7 +208,6 @@ public class D3webDialog extends HttpServlet {
             }
 
             if (!d3webParser.getUEQuestionnaire().contains("FALSE")) {
-
                 if (d3webParser.getUEQuestionnaire().equals("SUS")) {
                     d3wcon.setUEQuestionnaire("SUS");
                 } else if (d3webParser.getUEQuestionnaire().equals("OWN")) {

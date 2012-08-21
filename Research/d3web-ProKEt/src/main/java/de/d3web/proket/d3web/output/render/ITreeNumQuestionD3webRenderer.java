@@ -84,7 +84,7 @@ public class ITreeNumQuestionD3webRenderer extends AbstractD3webRenderer impleme
         // get d3web properties
         Blackboard bb = d3webSession.getBlackboard();
         Value value = bb.getValue((ValueObject) to);
-        
+
         if (value != null && UndefinedValue.isNotUndefinedValue(value)
                 && !value.equals(Unknown.getInstance())) {
 
@@ -109,7 +109,13 @@ public class ITreeNumQuestionD3webRenderer extends AbstractD3webRenderer impleme
             }
             st.removeAttribute("selection");
             st.setAttribute("selection", doubleString);
+            
+            st.setAttribute("qrating", "rating-high");
+
+        } else {
+            st.removeAttribute("qrating");
         }
+        
 
         // render arrows: --> check whether question has children,
         if (to.getChildren().length > 0) {
@@ -118,16 +124,18 @@ public class ITreeNumQuestionD3webRenderer extends AbstractD3webRenderer impleme
             st.setAttribute("typeimg", "img/transpSquare.png");
         }
 
-       /*
+        /*
          * READ FLOW - AND/OR/Score/Rules verbalization
          */
         // for topmost element, do not render any read flow verbalization
-         if (parent.getName().equals("Q000")) {
+        if (parent.getName().equals("Q000")) {
             st.setAttribute("readimg", "img/transpSquare.png");
         } else if (parent.getInfoStore().getValue(ProKEtProperties.RULETYPE) != null
                 && parent.getInfoStore().getValue(ProKEtProperties.RULETYPE).equals(true)) {
             st.setAttribute("readimg", "img/Formula.png");
             st.setAttribute("qtype", "ruletype");
+            st.setAttribute("imgwidth", "28px");
+            st.setAttribute("imgheight", "30px");
         } else if (parent.getInfoStore().getValue(ProKEtProperties.SCORING) != null
                 && parent.getInfoStore().getValue(ProKEtProperties.SCORING).equals(true)) {
             st.setAttribute("readimg", "img/Score.png");

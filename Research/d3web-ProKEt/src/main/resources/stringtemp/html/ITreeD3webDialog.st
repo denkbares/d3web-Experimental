@@ -42,7 +42,7 @@ $endif$
                                     $ButtonUEQuestionnaire()$
                                 </div>
                             $endif$
-                            $if(feedback)$
+                           $if(feedback)$
                                 <div class="rightButton">
                                     $FeedbackButton()$
                                 </div>

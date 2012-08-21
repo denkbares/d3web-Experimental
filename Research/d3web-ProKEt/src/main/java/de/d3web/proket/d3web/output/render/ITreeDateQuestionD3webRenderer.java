@@ -50,7 +50,6 @@ public class ITreeDateQuestionD3webRenderer extends AnswerDateD3webRenderer impl
     protected static String TT_PROP_ERROR = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung.</b> "
             + "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, "
             + "wenn Sie eine andere als die bisher hergeleitete Bewertung setzen möchten.";
-    
 
     @Override
     /**
@@ -60,7 +59,7 @@ public class ITreeDateQuestionD3webRenderer extends AnswerDateD3webRenderer impl
             TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession,
             HttpServletRequest request) {
 
-      Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
+        Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
         // return if the InterviewObject is null
         if (to == null || (hidden != null && hidden)) {
             return "";
@@ -76,14 +75,14 @@ public class ITreeDateQuestionD3webRenderer extends AnswerDateD3webRenderer impl
         // set some basic properties
         st.setAttribute("fullId", getID(to));
         st.setAttribute("title", D3webUtils.getTOPrompt(to, loc));
-        
-        
+
+
         // set bonus text: is displayed in auxinfo panel
-        String bonustext = 
+        String bonustext =
                 to.getInfoStore().getValue(ProKEtProperties.POPUP);
         st.setAttribute("bonusText", bonustext);
-        
-       
+
+
         String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
         boolean dateReverse = false;
 
@@ -96,7 +95,7 @@ public class ITreeDateQuestionD3webRenderer extends AnswerDateD3webRenderer impl
 
         Blackboard bb = d3webSession.getBlackboard();
         Value value = bb.getValue((ValueObject) to);
-        
+
         SimpleDateFormat dateFormat = null;
 
         if (dateDescription != null && !dateDescription.isEmpty()) {
@@ -118,7 +117,13 @@ public class ITreeDateQuestionD3webRenderer extends AnswerDateD3webRenderer impl
             Date d = ((DateValue) value).getDate();
             dateCal = new GregorianCalendar();
             dateCal.setTime(d);
+
+            st.setAttribute("qrating", "rating-high");
+
+        } else {
+            st.removeAttribute("qrating");
         }
+
 
         String year = null, month = null, day = null, hour = null, minute = null, second = null;
 
@@ -141,13 +146,13 @@ public class ITreeDateQuestionD3webRenderer extends AnswerDateD3webRenderer impl
         }
 
         if (dateDescription.contains("M")) {
-             firstRow.append("<td>" + D3webUtils.translateDropdownTitle("M", loc) + "</td>");
+            firstRow.append("<td>" + D3webUtils.translateDropdownTitle("M", loc) + "</td>");
             secondRow.append(D3webUtils.createMonthDropDown(month));
         }
 
         if (dateDescription.contains("y")) {
             if (dateReverse) {
-                 firstRow.append("<td>" + D3webUtils.translateDropdownTitle("Y", loc) + "</td>");
+                firstRow.append("<td>" + D3webUtils.translateDropdownTitle("Y", loc) + "</td>");
                 secondRow.append(D3webUtils.createYearDropDownReverse(year));
             } else {
                 firstRow.append("<td>" + D3webUtils.translateDropdownTitle("Y", loc) + "</td>");
@@ -156,12 +161,12 @@ public class ITreeDateQuestionD3webRenderer extends AnswerDateD3webRenderer impl
         }
 
         if (dateDescription.contains("H")) {
-             firstRow.append("<td>" + D3webUtils.translateDropdownTitle("H", loc) + "</td>");
+            firstRow.append("<td>" + D3webUtils.translateDropdownTitle("H", loc) + "</td>");
             secondRow.append(D3webUtils.createHourDropDown(hour));
         }
 
         if (dateDescription.contains("m")) {
-             firstRow.append("<td>" + D3webUtils.translateDropdownTitle("Min", loc) + "</td>");
+            firstRow.append("<td>" + D3webUtils.translateDropdownTitle("Min", loc) + "</td>");
             secondRow.append(D3webUtils.createMinuteDropDown(minute));
         }
 
@@ -173,16 +178,16 @@ public class ITreeDateQuestionD3webRenderer extends AnswerDateD3webRenderer impl
         table.append("</tr><tr>");
         table.append(secondRow);
         table.append("</tr></table>");
-        
+
         st.setAttribute(
                 "dropdown", table.toString());
-        
-        
+
+
 
 
         // render arrows: --> check whether question has children,
-        if(to.getChildren().length > 0){
-         st.setAttribute("typeimg", "img/closedArrow.png");
+        if (to.getChildren().length > 0) {
+            st.setAttribute("typeimg", "img/closedArrow.png");
         } else {
             st.setAttribute("typeimg", "img/transpSquare.png");
         }
@@ -191,12 +196,14 @@ public class ITreeDateQuestionD3webRenderer extends AnswerDateD3webRenderer impl
          * READ FLOW - AND/OR/Score/Rules verbalization
          */
         // for topmost element, do not render any read flow verbalization
-         if (parent.getName().equals("Q000")) {
+        if (parent.getName().equals("Q000")) {
             st.setAttribute("readimg", "img/transpSquare.png");
         } else if (parent.getInfoStore().getValue(ProKEtProperties.RULETYPE) != null
                 && parent.getInfoStore().getValue(ProKEtProperties.RULETYPE).equals(true)) {
             st.setAttribute("readimg", "img/Formula.png");
             st.setAttribute("qtype", "ruletype");
+            st.setAttribute("imgwidth", "28px");
+            st.setAttribute("imgheight", "30px");
         } else if (parent.getInfoStore().getValue(ProKEtProperties.SCORING) != null
                 && parent.getInfoStore().getValue(ProKEtProperties.SCORING).equals(true)) {
             st.setAttribute("readimg", "img/Score.png");
@@ -218,7 +225,7 @@ public class ITreeDateQuestionD3webRenderer extends AnswerDateD3webRenderer impl
         st.removeAttribute("ttnan");
 
 
-     
+
 
         st.setAttribute("tooltip", TT_PROP_ERROR);
 

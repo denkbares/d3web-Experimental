@@ -27,6 +27,7 @@ import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
+import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.jurisearch.JuriModel;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
@@ -47,7 +48,6 @@ public class ITreeDummyQuestionD3webRenderer extends AbstractD3webRenderer imple
     protected static String TT_PROP_ERROR = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung.</b> "
             + "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, "
             + "wenn Sie eine andere als die bisher hergeleitete Bewertung setzen möchten.";
-    
 
     @Override
     /**
@@ -57,7 +57,7 @@ public class ITreeDummyQuestionD3webRenderer extends AbstractD3webRenderer imple
             TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession,
             HttpServletRequest request) {
 
-      Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
+        Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
         // return if the InterviewObject is null
         if (to == null || (hidden != null && hidden)) {
             return "";
@@ -73,30 +73,40 @@ public class ITreeDummyQuestionD3webRenderer extends AbstractD3webRenderer imple
         // set some basic properties
         st.setAttribute("fullId", getID(to));
         st.setAttribute("title", D3webUtils.getTOPrompt(to, loc).replace("[jnv]", ""));
-        
-        
+
+
         // set bonus text: is displayed in auxinfo panel
-        String bonustext = 
+        String bonustext =
                 to.getInfoStore().getValue(ProKEtProperties.POPUP);
         st.setAttribute("bonusText", bonustext);
-        
+
         // get d3web properties
         Blackboard bb = d3webSession.getBlackboard();
         Value val = bb.getValue((ValueObject) to);
-
+        if (UndefinedValue.isNotUndefinedValue(val)) {
+            if (val.toString().equals(JNV.J.toString())) {
+                st.setAttribute("qrating", "rating-high");
+            } else if (val.toString().equals(JNV.N.toString())) {
+                st.setAttribute("qrating", "rating-low");
+            } else if (val.toString().equals(JNV.V.toString())) {
+                st.setAttribute("qrating", "rating-medium");
+            }
+        } else {
+            st.removeAttribute("qrating");
+        }
 
         // render arrows: --> check whether question has children,
-        if(to.getChildren().length > 0){
-         st.setAttribute("typeimg", "img/closedArrow.png");
+        if (to.getChildren().length > 0) {
+            st.setAttribute("typeimg", "img/closedArrow.png");
         } else {
             st.setAttribute("typeimg", "img/transpSquare.png");
         }
 
-         /*
+        /*
          * READ FLOW - AND/OR/Score/Rules verbalization
          */
         // for topmost element, do not render any read flow verbalization
-         if (parent.getName().equals("Q000")) {
+        if (parent.getName().equals("Q000")) {
             st.setAttribute("readimg", "img/transpSquare.png");
         } else if (parent.getInfoStore().getValue(ProKEtProperties.RULETYPE) != null
                 && parent.getInfoStore().getValue(ProKEtProperties.RULETYPE).equals(true)) {
@@ -114,16 +124,13 @@ public class ITreeDummyQuestionD3webRenderer extends AbstractD3webRenderer imple
 
         }
 
-        // TODO: render the value i.e. coloring of the question
-        // System.out.println(getID(to) + ": " + val);
-
         st.removeAttribute("tty");
         st.removeAttribute("ttn");
         st.removeAttribute("ttu");
         st.removeAttribute("ttnan");
 
 
-     
+
 
         st.setAttribute("tooltip", TT_PROP_ERROR);
 

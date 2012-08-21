@@ -172,12 +172,16 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
          * READ FLOW - AND/OR/Score/Rules verbalization
          */
         // for topmost element, do not render any read flow verbalization
-         if (parent.getName().equals("Q000")) {
+        if (parent.getName().equals("Q000")) {
             st.setAttribute("readimg", "img/transpSquare.png");
-        } else if (parent.getInfoStore().getValue(ProKEtProperties.RULETYPE) != null
+        } 
+        // if the parent is of ruletype, than show formula sign for its children
+        else if (parent.getInfoStore().getValue(ProKEtProperties.RULETYPE) != null
                 && parent.getInfoStore().getValue(ProKEtProperties.RULETYPE).equals(true)) {
             st.setAttribute("readimg", "img/Formula.png");
             st.setAttribute("qtype", "ruletype");
+            st.setAttribute("imgwidth", "28px");
+            st.setAttribute("imgheight", "30px");
         } else if (parent.getInfoStore().getValue(ProKEtProperties.ORTYPE) != null
                 && parent.getInfoStore().getValue(ProKEtProperties.ORTYPE).equals(true)) {
             st.setAttribute("readimg", "img/Or.png");
@@ -185,19 +189,22 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
             st.setAttribute("readimg", "img/And.png");
 
         }
-         
-         
-        /* 
-         * Check if parent question has scoring question correspondant. If yes, set property in ST
-         */ 
-         TerminologyObject scoringCor = 
-                 d3webSession.getKnowledgeBase().getManager().search(parent.getName().replace(parent.getName(), parent.getName() + "_n"));
-         if(scoringCor != null){
-             st.setAttribute("qtype", "scoretype");
-             st.removeAttribute("readimg");
-             st.setAttribute("readimg", "img/Score.png");
-         }
-         
+
+
+        /*
+         * Check if parent question has scoring question correspondant. If yes,
+         * set property in ST
+         */
+        TerminologyObject scoringCor =
+                d3webSession.getKnowledgeBase().getManager().search(parent.getName().replace(parent.getName(), parent.getName() + "_n"));
+        if (scoringCor != null) {
+            st.setAttribute("qtype", "scoretype");
+            st.removeAttribute("readimg");
+            st.setAttribute("readimg", "img/Score.png");
+            st.setAttribute("imgwidth", "28px");
+            st.setAttribute("imgheight", "20px");
+        }
+
         /*
          * RENDER VALUE STATE OF THE QUESTION -> coloring
          */

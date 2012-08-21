@@ -245,9 +245,9 @@ area {
 }
 
 /* style the num input area of hierarchical num questions */
-.floatingnum {line-height: 1.5em; padding: 2px; float: left; margin-right: 15px;}
+.floatingnum {line-height: 2em; padding: 2px; float: left; margin-right: 15px;}
 
-.floatingnum input {height: 10px; margin-top: 1px; margin-left: 17px;}
+.floatingnum input {height: 1.75em; margin-top: 1px; margin-left: 17px;}
 
 
 /* style the dropdown area of hierarchical oc questions */ 

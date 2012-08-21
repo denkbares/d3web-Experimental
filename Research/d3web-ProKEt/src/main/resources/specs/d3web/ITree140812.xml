@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog 
-	header="ITree - NumQuestion Based"  
+	header="ITree-Date/Rules"  
 	dtype="itree" 
 	dstrategy="nextuaquestion" 
 	css="itree, nofoot" 
@@ -15,7 +15,7 @@
 	<data kb="ITree140812.d3web" />
         
         <ue 
-            uequestionnaire='OWN' 
+            questionnaire='OWN' 
             study='' 
             logging='' 
             feedbackform="TRUE"

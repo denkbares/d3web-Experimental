@@ -82,8 +82,10 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
             if (ueq.equals("SUS")) {
                 st.setAttribute("sus", true);
+                st.removeAttribute("own");
             } else if (ueq.equals("OWN")) {
                 st.setAttribute("own", true);
+                st.removeAttribute("sus");
             }
         }
         /*
