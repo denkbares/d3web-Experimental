@@ -33,7 +33,7 @@ import de.d3web.we.diaflux.evaluators.NumGreaterEval;
  * @author Reinhard Hatko
  * @created 28.06.2012
  */
-public class NumGreaterEvaluatorTest extends AbstractNumEvaluatorsTest {
+public class NumGreaterEvaluatorTest extends NumEvaluatorsTestBase {
 
 	@Before
 	public void setup() {

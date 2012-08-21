@@ -33,7 +33,7 @@ import de.d3web.we.diaflux.evaluators.NumLessEval;
  * @author Reinhard Hatko
  * @created 28.06.2012
  */
-public class NumLessEvaluatorTest extends AbstractNumEvaluatorsTest {
+public class NumLessEvaluatorTest extends NumEvaluatorsTestBase {
 
 	@Before
 	public void setup() {

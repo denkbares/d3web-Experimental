@@ -33,7 +33,7 @@ import de.d3web.we.diaflux.evaluators.Evaluator;
  * @author Reinhard Hatko
  * @created 28.06.2012
  */
-public class AbstractNumEvaluatorsTest {
+public abstract class NumEvaluatorsTestBase {
 
 	protected QuestionNum q;
 	KnowledgeBase kb;

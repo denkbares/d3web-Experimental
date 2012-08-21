@@ -42,7 +42,7 @@ import de.d3web.we.diaflux.evaluators.AndEvaluator;
  * @author Reinhard Hatko
  * @created 06.08.2012
  */
-public class AndNumEvaluatorTest extends AbstractNumEvaluatorsTest {
+public class AndNumEvaluatorTest extends NumEvaluatorsTestBase {
 
 	@Before
 	public void setup() {
