@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog 
-	header="ITree - NumQuestion Based"  
+	header="ITree - JNVQuestions, Scores, ID Questions"  
 	dtype="itree" 
 	dstrategy="nextuaquestion" 
 	css="itree, nofoot" 

@@ -157,12 +157,14 @@ public class D3webDialog extends HttpServlet {
         HttpSession httpSession = request.getSession(true);
 
         String source = "";
-        /*if (request.getParameter("src")!=null && 
+        if (request.getParameter("src")!=null && 
                 !request.getParameter("src").equals("")){
             source = getSource(request, httpSession);
-        }*/
+        } else {
+            source = request.getParameter("src");
+        }
         
-          source = getSource(request, httpSession);
+        
         // try to get the src parameter, i.e. the specification of the dialog
         d3webParser.setSourceToParse(source);
 
