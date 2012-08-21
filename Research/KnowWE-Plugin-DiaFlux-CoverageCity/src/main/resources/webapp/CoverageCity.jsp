@@ -1,3 +1,5 @@
+<%@page import="de.d3web.diaflux.coverage.CoverageResult"%>
+<%@page import="de.knowwe.diaflux.coverage.PathCoverageHighlight"%>
 <%@page import="de.knowwe.diaflux.type.FlowchartType"%>
 <%@page import="de.d3web.diaFlux.flow.StartNode"%>
 <%@page import="de.d3web.diaFlux.flow.Node"%>
@@ -105,6 +107,8 @@
 </head>
 <body>
 <input id="coveragesection" type="hidden" value="<%=kdomID%>">
+<input id="nodeid" type="hidden" value="">
+
 <div id="container">
     
     <div id="content">
@@ -138,7 +142,7 @@ if (coverage == null){
 	
 	Section<FlowchartType> flowSec = FlowchartUtils.findFlowchartSection(web, flowName);
 	out.println(FlowchartUtils.createFlowchartRenderer(flowSec, context, "flow",
-			DiaFluxCoverageRenderer.DIA_FLUX_COVERAGE_SCOPE, true));
+			PathCoverageHighlight.COVERAGE_CITY_SCOPE, true));
 }
 
 
@@ -156,12 +160,31 @@ function picked(flowString){
 	if (matches) {
 		document.getElementById("pickResult").innerHTML = matches[0];
 		var flowEl = $('flow');
-		if (flowEl.firstChild.id ==matches[0]) return;
+		
+		// clicked a node, remember its id
+		if (matches[2]){
+			$('nodeid').value = matches[2];			
+		} else {
+			$('nodeid').value = '';			
+			
+		}
+		
+		//load flowchart, if it changed
+		if (flowEl.firstChild.id != matches[0]) {
+		
+			flowEl.innerHTML ="<div id='" + matches[0] + "'></div>";
+		
+			Flowchart.loadFlowchart(matches[1], $('flow').firstChild);
+			
+		} else {
+			// if flow did not change, highlight new node
+			if (matches[2]) {
+				DiaFlux.Highlight.getHighlights.call({flow: flowEl.firstChild.firstChild.__flowchart}, 'PathCoverageHighlightAction', {coveragesection: $('coveragesection').value, nodeid: $('nodeid').value});
+			}	
+		}
 		
 		
-		flowEl.innerHTML ="<div id='" + matches[0] + "'></div>";
 		
-		Flowchart.loadFlowchart(matches[1], $('flow').firstChild);
 	}
 	
 }

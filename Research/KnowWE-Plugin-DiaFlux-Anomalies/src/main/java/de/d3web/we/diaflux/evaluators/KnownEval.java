@@ -20,14 +20,16 @@ package de.d3web.we.diaflux.evaluators;
 
 import de.d3web.core.inference.condition.CondKnown;
 import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.we.diaflux.datamanagement.EvalResult;
 
 /**
  * 
- * @author Roland
- * @created 08.05.2012
+ * 
+ * @author Reinhard Hatko
+ * @created 29.06.2012
  */
-public class KnownEval extends TerminalEvaluator {
+public class KnownEval implements Evaluator {
 
 	/**
 	 *
@@ -41,7 +43,7 @@ public class KnownEval extends TerminalEvaluator {
 	 *
 	 */
 	@Override
-	public EvalResult evaluate(Condition condition) {
+	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
 		return new EvalResult();
 	}
 }

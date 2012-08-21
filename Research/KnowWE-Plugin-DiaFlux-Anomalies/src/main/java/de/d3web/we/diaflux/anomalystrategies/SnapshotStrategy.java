@@ -18,51 +18,71 @@
  */
 package de.d3web.we.diaflux.anomalystrategies;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.diaFlux.flow.ComposedNode;
 import de.d3web.diaFlux.flow.DiaFluxElement;
 import de.d3web.diaFlux.flow.Edge;
-import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.flow.SnapshotNode;
+import de.d3web.diaflux.coverage.AllPathsStrategy;
+import de.d3web.diaflux.coverage.DFSStrategy;
 import de.d3web.diaflux.coverage.Path;
 
 /**
  * 
- * @author Roland Jerg
- * @created 09.05.2012
+ * 
+ * @author Reinhard Hatko
+ * @created 20.08.2012
  */
-public class SnapshotStrategy extends AbstractAnomalyStrategy {
+public class SnapshotStrategy implements DFSStrategy {
 
-	/**
-	 * @param kb
-	 */
+	private final DFSStrategy delegate;
+	private final Collection<Path> anomalies;
+
 	public SnapshotStrategy(KnowledgeBase kb) {
-		super(kb);
+		this.delegate = new AllPathsStrategy(false, kb);
+		this.anomalies = new LinkedList<Path>();
 	}
 
-	@Override
 	public List<Path> getInitialStartPaths() {
-		List<Path> result = super.getInitialStartPaths();
-		return result;
+		return delegate.getInitialStartPaths();
 	}
 
-	@Override
 	public boolean followEdge(Edge edge, Path path) {
-		return true;
+		return delegate.followEdge(edge, path);
 	}
 
-	@Override
 	public boolean offer(DiaFluxElement el, Path path) {
-		boolean finished = false;
-		if ((path.getLength() > 1 && el instanceof SnapshotNode)) {
-			finished = true;
-		}
-		else if (path.contains(el)) {
-			anomalies.put((Node) el, path);
-			finished = true;
-		}
-		super.offer(el, path);
-		return !finished;
+		return delegate.offer(el, path);
 	}
+
+	public void found(Path path) {
+		delegate.found(path);
+		// Circular path
+		if (path.getHead() == path.getTail()) {
+			if (!(path.getHead() instanceof SnapshotNode)) {
+				anomalies.add(path);
+			}
+		}
+	}
+
+	public Path createStartPath(Path path) {
+		return delegate.createStartPath(path);
+	}
+
+	public boolean enterSubflow(ComposedNode node, Path path) {
+		return delegate.enterSubflow(node, path);
+	}
+
+	public void finished(Path path) {
+		delegate.finished(path);
+	}
+
+	public Collection<Path> getAnomalies() {
+		return anomalies;
+	}
+
 }

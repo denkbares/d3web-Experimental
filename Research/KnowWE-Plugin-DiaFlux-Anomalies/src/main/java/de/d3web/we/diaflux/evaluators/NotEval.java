@@ -20,37 +20,28 @@ package de.d3web.we.diaflux.evaluators;
 
 import de.d3web.core.inference.condition.CondNot;
 import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.we.diaflux.datamanagement.EvalResult;
 
 /**
  * 
- * @author Roland Jerg
- * @created 08.05.2012
+ * 
+ * @author Reinhard Hatko
+ * @created 28.06.2012
  */
-public class NotEval extends NonTerminalEvaluator {
+public class NotEval implements Evaluator {
 
-	/**
-	 *
-	 */
 	@Override
 	public boolean canEvaluate(Condition condition) {
 		return condition.getClass().equals(CondNot.class);
 	}
 
-	/**
-	 *
-	 */
 	@Override
-	public EvalResult evaluate(Condition condition) {
-		EvalResult result = new EvalResult();
-		EvaluatorManager evalManager = EvaluatorManager.getEvalManager();
-		Condition cond = ((CondNot) condition).getTerms().get(0);
-		for (Evaluator eval : evalManager.getEvaluator()) {
-			if (eval.canEvaluate(cond)) {
-				result = eval.evaluate(cond).negate();
-			}
-		}
-		// if Objects NumericIntervall invert all Intervalls
+	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
+		Condition term = ((CondNot) condition).getTerms().get(0);
+
+		EvalResult result = EvaluatorManager.getInstance().evaluate(term, kb);
+		result.negate();
 
 		return result;
 	}

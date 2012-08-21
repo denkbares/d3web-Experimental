@@ -18,15 +18,12 @@
  */
 package de.d3web.we.diaflux.anomalystrategies;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.ComposedNode;
-import de.d3web.diaFlux.flow.DiaFluxElement;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.AllPathsStrategy;
@@ -37,21 +34,17 @@ import de.d3web.diaflux.coverage.Path;
  * @author Roland Jerg
  * @created 10.05.2012
  */
-public abstract class AbstractAnomalyStrategy extends AllPathsStrategy /*
-																		 * implements
-																		 * DFSStrategy
-																		 */{
+public abstract class AbstractAnomalyStrategy extends AllPathsStrategy {
 
 	protected final KnowledgeBase kb;
-	protected final Collection<Path> usedStartPaths;
+	// protected final Collection<Path> usedStartPaths;
 	protected long counter = 0;
 	protected final HashMap<Node, Path> anomalies = new HashMap<Node, Path>();
-	protected DiaFluxElement anomalyEl;
 
 	public AbstractAnomalyStrategy(KnowledgeBase kb) {
-		super(kb);
+		super(false, kb);
 		this.kb = kb;
-		this.usedStartPaths = new HashSet<Path>();
+		// this.usedStartPaths = new HashSet<Path>();
 	}
 
 	@Override
@@ -65,24 +58,6 @@ public abstract class AbstractAnomalyStrategy extends AllPathsStrategy /*
 		return paths;
 	}
 
-	@Override
-	public Path createStartPath(Path path) {
-		// TODO consider callStack??
-		// if (path.getHead() == path.getTail()) {
-		// // circular path
-		// return null;
-		// }
-		// Path startPath = path.newPath();
-		// if (usedStartPaths.contains(startPath)) {
-		// return null;
-		// }
-		// else {
-		// usedStartPaths.add(startPath);
-		// return startPath;
-		// }
-		// return null;
-		return super.createStartPath(path);
-	}
 
 	@Override
 	public boolean enterSubflow(ComposedNode node, Path path) {

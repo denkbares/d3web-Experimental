@@ -16,47 +16,31 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.diaflux.coverage;
+package de.d3web.we.diaflux.evaluators;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.diaFlux.flow.ComposedNode;
-import de.d3web.diaFlux.flow.Node;
-import de.d3web.diaFlux.inference.DiaFluxUtils;
+import de.d3web.diaFlux.inference.NodeActiveCondition;
+import de.d3web.we.diaflux.datamanagement.EvalResult;
 
 
 /**
- * A strategy to create all (deep) paths of a DiaFlux model. Traverses also Subflows.
+ * 
  * @author Reinhard Hatko
- * @created 26.03.2012
+ * @created 29.06.2012
  */
-public class AllPathsStrategy extends AllPathsShallowStrategy {
+public class NodeActiveEval implements Evaluator {
 
-	public AllPathsStrategy(boolean stopOnSnapshot, KnowledgeBase kb) {
-		super(stopOnSnapshot, kb);
+	@Override
+	public boolean canEvaluate(Condition condition) {
+		return condition.getClass().equals(NodeActiveCondition.class);
 	}
 
 	@Override
-	public List<Path> getInitialStartPaths() {
-		LinkedList<Path> paths = new LinkedList<Path>();
+	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
+		NodeActiveCondition nac = (NodeActiveCondition) condition;
 
-		for (Node node : DiaFluxUtils.getAutostartNodes(kb)) {
-			paths.add(new Path(node));
-		}
-		usedStartPaths.addAll(paths);
-		return paths;
-	}
-
-
-	@Override
-	public void found(Path path) {
-	}
-
-	@Override
-	public boolean enterSubflow(ComposedNode node, Path path) {
-		return true;
+		return null;
 	}
 
 }

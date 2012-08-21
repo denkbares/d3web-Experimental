@@ -16,23 +16,35 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.we.diaflux.datamanagement;
+package de.d3web.we.diaflux.evaluators;
 
-import java.util.List;
+import de.d3web.core.inference.condition.CondOr;
+import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.we.diaflux.datamanagement.EvalResult;
 
-public interface IValue<T extends IValue<T>> {
+/**
+ * 
+ * 
+ * @author Reinhard Hatko
+ * @created 28.06.2012
+ */
+public class OrEvaluator implements Evaluator {
 
-	public boolean intersects(T v);
+	@Override
+	public boolean canEvaluate(Condition condition) {
+		return condition.getClass().equals(CondOr.class);
+	}
 
-	public boolean containsValue(T v);
+	@Override
+	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
+		EvalResult result = new EvalResult();
+		for (Condition con : ((CondOr) condition).getTerms()) {
+			EvalResult evalResult = EvaluatorManager.getInstance().evaluate(con, kb);
+			result.mergeWith(evalResult);
+		}
+		return result;
 
-	public T intersectWith(T v);
+	}
 
-	public List<? extends T> negate();
-
-	public T mergeWith(T v);
-
-	public List<? extends T> substract(T v);
-
-	public boolean isEmpty();
 }

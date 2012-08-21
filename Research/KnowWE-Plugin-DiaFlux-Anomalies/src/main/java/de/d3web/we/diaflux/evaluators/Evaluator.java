@@ -19,6 +19,7 @@
 package de.d3web.we.diaflux.evaluators;
 
 import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.we.diaflux.datamanagement.EvalResult;
 
 /**
@@ -42,8 +43,9 @@ public interface Evaluator {
 	 * 
 	 * @created 08.05.2012
 	 * @param condition
+	 * @param kb TODO
 	 * @return
 	 */
-	public EvalResult evaluate(Condition condition);
+	public EvalResult evaluate(Condition condition, KnowledgeBase kb);
 
 }

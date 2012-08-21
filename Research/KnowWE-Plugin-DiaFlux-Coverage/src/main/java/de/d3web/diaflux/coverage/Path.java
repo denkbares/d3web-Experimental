@@ -89,7 +89,7 @@ public class Path implements Iterable<DiaFluxElement> {
 	 * @created 12.04.2012
 	 * @return
 	 */
-	Path newPath() {
+	Path continueFromTail() {
 		return new Path(getTail(), this.callStack);
 	}
 
@@ -121,11 +121,11 @@ public class Path implements Iterable<DiaFluxElement> {
 		return path.iterator();
 	}
 
-	Node getTail() {
+	public Node getTail() {
 		return (Node) this.path.get(this.path.size() - 1);
 	}
 
-	Node getHead() {
+	public Node getHead() {
 		return (Node) this.path.get(0);
 	}
 

@@ -16,45 +16,42 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.we.diaflux.evaluators;
+package test.evaluators;
 
-import de.d3web.core.inference.condition.CondAnd;
+import org.junit.Before;
+
+import test.domain.NumDomainTest;
 import de.d3web.core.inference.condition.Condition;
-import de.d3web.we.diaflux.datamanagement.EvalResult;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.QuestionNum;
+import de.d3web.core.manage.KnowledgeBaseUtils;
+import de.d3web.we.diaflux.datamanagement.NumDomain;
+import de.d3web.we.diaflux.evaluators.Evaluator;
 
 /**
  * 
- * @author Roland Jerg
- * @created 08.05.2012
+ * @author Reinhard Hatko
+ * @created 28.06.2012
  */
-public class AndEval extends NonTerminalEvaluator {
+public class AbstractNumEvaluatorsTest {
 
-	/**
-	 *
-	 */
-	@Override
-	public boolean canEvaluate(Condition condition) {
-		return condition.getClass().equals(CondAnd.class);
+	protected QuestionNum q;
+	KnowledgeBase kb;
+	Evaluator eval;
+
+	@Before
+	public void setupSuper() {
+		kb = KnowledgeBaseUtils.createKnowledgeBase();
+		q = new QuestionNum(kb, "q");
+
 	}
 
-	/**
-	 *
-	 */
-	@Override
-	public EvalResult evaluate(Condition condition) {
-		EvalResult result = new EvalResult();
-		EvaluatorManager evalManager = EvaluatorManager.getEvalManager();
-		CondAnd condAnd = (CondAnd) condition;
-		for (Condition con : condAnd.getTerms()) {
-			for (Evaluator eval : evalManager.getEvaluator()) {
-				if (eval.canEvaluate(con)) {
-					EvalResult eRes = eval.evaluate(con);
-					result = result.intersect(eRes);
-				}
-			}
-		}
-		return result;
+	protected NumDomain domain(String... string) {
+		return NumDomainTest.domain(q, string);
+	}
 
+	protected NumDomain eval(Condition cond) {
+		return (NumDomain) eval.evaluate(cond, kb).getDomain(q);
 	}
 
 }

@@ -18,41 +18,36 @@
  */
 package de.d3web.we.diaflux.evaluators;
 
-import de.d3web.core.inference.condition.CondOr;
+import de.d3web.core.inference.condition.CondNum;
+import de.d3web.core.inference.condition.CondNumLessEqual;
 import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.QuestionNum;
+import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 import de.d3web.we.diaflux.datamanagement.EvalResult;
+import de.d3web.we.diaflux.datamanagement.NumDomain;
 
 /**
  * 
- * @author Roland Jerg
- * @created 08.05.2012
+ * 
+ * @author Reinhard Hatko
+ * @created 28.06.2012
  */
-public class OrEval extends NonTerminalEvaluator {
+public class NumLessEqualEval implements Evaluator {
 
-	/**
-	 *
-	 */
 	@Override
 	public boolean canEvaluate(Condition condition) {
-		return condition.getClass().equals(CondOr.class);
+		return condition.getClass().equals(CondNumLessEqual.class);
 	}
 
-	/**
-	 *
-	 */
 	@Override
-	public EvalResult evaluate(Condition condition) {
-		EvalResult result = new EvalResult();
-		EvaluatorManager evalManager = EvaluatorManager.getEvalManager();
-		CondOr condOr = (CondOr) condition;
-		for (Condition cond : condOr.getTerms()) {
-			for (Evaluator eval : evalManager.getEvaluator()) {
-				if (eval.canEvaluate(cond)) {
-					EvalResult eRes = eval.evaluate(cond);
-					result = result.merge(eRes);
-				}
-			}
-		}
+	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
+
+		CondNum condNum = (CondNum) condition;
+		NumericalInterval interval = new NumericalInterval(Double.NEGATIVE_INFINITY,
+				condNum.getConditionValue(), false, false);
+		NumDomain domain = new NumDomain((QuestionNum) condNum.getQuestion(), interval);
+		EvalResult result = new EvalResult(condNum.getQuestion(), domain);
 		return result;
 	}
 

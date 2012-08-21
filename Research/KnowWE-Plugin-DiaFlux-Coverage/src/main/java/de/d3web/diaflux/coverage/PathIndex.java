@@ -59,29 +59,14 @@ public class PathIndex {
 	 */
 	private void prepare() {
 
-		AllPathsStrategyShallow strategy = new AllPathsStrategyShallow(kb);
+		PathCollector strategy = new PathCollector(
+				new AllPathsShallowStrategy(true, kb));
 		new PathGenerator(kb, strategy).createPaths();
-		allPaths = strategy.getFoundPaths();
-		System.out.println("All Paths:" + allPaths.size());
+		allPaths = strategy.getPaths();
 
 		indexizePaths(coveredPaths.keySet(), coveredPathsPerElement);
 		indexizePaths(allPaths, allPathsPerElement);
 
-		// for (DiaFluxElement element : coveredPathsPerElement.keySet()) {
-		// double coverage;
-		//
-		// Collection<Path> coveredPaths = coveredPathsPerElement.get(element);
-		// if (coveredPaths == null) {
-		// coverage = 0;
-		// }
-		// else {
-		// double totalCount = allPathsPerElement.get(element).size();
-		// double coveredCount = coveredPaths.size();
-		// coverage = coveredCount / totalCount;
-		// }
-		//
-		// pathCoveragePerelement.put(element, coverage);
-		// }
 
 	}
 

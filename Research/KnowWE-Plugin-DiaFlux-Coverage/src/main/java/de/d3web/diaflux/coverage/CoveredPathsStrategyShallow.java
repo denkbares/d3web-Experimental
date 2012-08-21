@@ -18,9 +18,7 @@
  */
 package de.d3web.diaflux.coverage;
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,11 +44,9 @@ import de.d3web.diaFlux.inference.FluxSolver;
 class CoveredPathsStrategyShallow implements DFSStrategy {
 
 	protected final Session session;
-	protected final Collection<Path> paths;
 
 	public CoveredPathsStrategyShallow(Session session) {
 		this.session = session;
-		this.paths = new HashSet<Path>();
 	}
 
 	/**
@@ -79,13 +75,8 @@ class CoveredPathsStrategyShallow implements DFSStrategy {
 		return null;
 	}
 
-	public Collection<Path> getPaths() {
-		return paths;
-	}
-
 	@Override
 	public void found(Path path) {
-		paths.add(path);
 	}
 
 	/**
@@ -127,6 +118,10 @@ class CoveredPathsStrategyShallow implements DFSStrategy {
 	@Override
 	public boolean enterSubflow(ComposedNode node, Path path) {
 		return false;
+	}
+
+	@Override
+	public void finished(Path path) {
 	}
 
 }

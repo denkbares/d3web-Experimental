@@ -109,4 +109,14 @@ public interface DFSStrategy {
 	 */
 	boolean enterSubflow(ComposedNode node, Path path);
 
+	/**
+	 * This method is notified, if a (sub-)path has been completely traversed.
+	 * It can be used to, e.g., clean data associated with a path.
+	 * 
+	 * 
+	 * @created 09.08.2012
+	 * @param path
+	 */
+	void finished(Path path);
+
 }

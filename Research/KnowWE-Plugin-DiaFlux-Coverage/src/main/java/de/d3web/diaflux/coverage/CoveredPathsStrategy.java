@@ -88,7 +88,7 @@ class CoveredPathsStrategy extends CoveredPathsStrategyShallow {
 			}
 		}
 
-		// TODO this does not find pathes from one snapshot to the next in the
+		// TODO this does not find paths from one snapshot to the next in the
 		// same flow
 		for (Node node : startSnapshots) {
 			Collection<Deque<ComposedNode>> callStacks = createCallStacks(node);

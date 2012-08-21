@@ -163,7 +163,9 @@ public class GLCityGenerator {
 		}
 		
 		GLDistrict district = createDistrict(boxes, new GLNodeMapper(), 3, .75);
-		district.setName("" + flow.getName() + "");
+		Section<FlowchartType> flowSec = FlowchartUtils.findFlowchartSection("default_web",
+				flow.getName());
+		district.setName("" + flow.getName() + "+++" + flowSec.getID());
 		return district;
 		
 	}

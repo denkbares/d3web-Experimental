@@ -36,7 +36,7 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.diaflux.FlowchartUtils;
-import de.knowwe.diaflux.GetTraceHighlightAction;
+import de.knowwe.diaflux.Highlights;
 import de.knowwe.diaflux.type.DiaFluxType;
 import de.knowwe.diaflux.type.FlowchartType;
 
@@ -65,13 +65,13 @@ public class GetAnomaliesHighlightAction extends AbstractAction {
 		Session session = SessionProvider.getSession(context, kb);
 
 		if (flowchart == null || session == null) {
-			context.getWriter().write(GetTraceHighlightAction.EMPTY_HIGHLIGHT);
+			Highlights.write(context, Highlights.EMPTY_HIGHLIGHT);
 			return;
 		}
 		String flowName = FlowchartType.getFlowchartName(flowchart);
 
 		StringBuilder builder = new StringBuilder();
-		GetTraceHighlightAction.appendHeader(builder, FlowchartUtils.escapeHtmlId(flowName), PREFIX);
+		Highlights.appendHeader(builder, FlowchartUtils.escapeHtmlId(flowName), PREFIX);
 
 		Flow flow = DiaFluxUtils.getFlowSet(session).get(flowName);
 
@@ -80,20 +80,20 @@ public class GetAnomaliesHighlightAction extends AbstractAction {
 
 		for (Node node : anomalyManager.getAnomalyNodes(flow).keySet()) {
 			if (node.getFlow().getName().equals(flowName)) {
-				GetTraceHighlightAction.putValue(anomalynodes, node,
-						GetTraceHighlightAction.CSS_CLASS, COVER_ANOMALY);
-				GetTraceHighlightAction.putValue(anomalynodes, node,
-						GetTraceHighlightAction.TOOL_TIP,
+				Highlights.putValue(anomalynodes, node,
+						Highlights.CSS_CLASS, COVER_ANOMALY);
+				Highlights.putValue(anomalynodes, node,
+						Highlights.TOOL_TIP,
 						anomalyManager.getAnomalyNodes(flow).get(node));
 			}
 		}
 
 		for (Edge edge : anomalyManager.getAnomalyEdges(flow).keySet()) {
 			if (edge.getStartNode().getFlow().getName().equals(flowName)) {
-				GetTraceHighlightAction.putValue(anomalyedges, edge,
-						GetTraceHighlightAction.CSS_CLASS, COVER_ANOMALY);
-				GetTraceHighlightAction.putValue(anomalyedges, edge,
-						GetTraceHighlightAction.TOOL_TIP,
+				Highlights.putValue(anomalyedges, edge,
+						Highlights.CSS_CLASS, COVER_ANOMALY);
+				Highlights.putValue(anomalyedges, edge,
+						Highlights.TOOL_TIP,
 						anomalyManager.getAnomalyEdges(flow).get(edge));
 			}
 		}
@@ -105,22 +105,19 @@ public class GetAnomaliesHighlightAction extends AbstractAction {
 
 		// clear classes on all remaining nodes and edges
 		for (Node node : remainingNodes) {
-			GetTraceHighlightAction.putValue(anomalynodes, node, GetTraceHighlightAction.CSS_CLASS,
-					"");
+			Highlights.putValue(anomalynodes, node, Highlights.CSS_CLASS, "");
 		}
 
 		for (Edge edge : remainingEdges) {
-			GetTraceHighlightAction.putValue(anomalyedges, edge, GetTraceHighlightAction.CSS_CLASS,
-					"");
+			Highlights.putValue(anomalyedges, edge, Highlights.CSS_CLASS, "");
 		}
 
-		GetTraceHighlightAction.addNodeHighlight(builder, anomalynodes);
-		GetTraceHighlightAction.addEdgeHighlight(builder, anomalyedges);
+		Highlights.addNodeHighlight(builder, anomalynodes);
+		Highlights.addEdgeHighlight(builder, anomalyedges);
 
-		GetTraceHighlightAction.appendFooter(builder);
+		Highlights.appendFooter(builder);
 
-		context.setContentType("text/xml");
-		context.getWriter().write(builder.toString());
+		Highlights.write(context, builder.toString());
 
 	}
 

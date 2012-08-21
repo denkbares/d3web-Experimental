@@ -16,32 +16,27 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.we.diaflux.anomalies;
+package de.d3web.we.diaflux.datamanagement;
 
-import java.util.Map;
-
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.diaflux.coverage.Path;
-import de.d3web.diaflux.coverage.PathGenerator;
-import de.d3web.we.diaflux.anomalystrategies.DeadPathStrategy;
+import de.d3web.core.knowledge.terminology.Question;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 06.08.2012
+ * @created 21.06.2012
  */
-public class DeadPathTest extends AbstractAnomalyTest {
+public abstract class QuestionDomain<Q extends Question> implements Domain {
 
-	@Override
-	protected String test(KnowledgeBase kb) {
-		DeadPathStrategy strategy = new DeadPathStrategy(kb);
-		PathGenerator generator = new PathGenerator(kb, strategy);
-		generator.createPaths();
-		Map<Path, String> anomalies = strategy.getAnomalies();
-		if (anomalies.isEmpty()) return "";
-		else return anomalies.values().toString();
-			
+	private final Q question;
+
+	public QuestionDomain(Q question) {
+		this.question = question;
 	}
+
+	public Q getQuestion() {
+		return question;
+	}
+
 
 }

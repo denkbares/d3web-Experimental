@@ -18,58 +18,49 @@
  */
 package de.d3web.we.diaflux.evaluators;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import de.d3web.core.inference.condition.CondEqual;
 import de.d3web.core.inference.condition.Condition;
-import de.d3web.core.session.Value;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.session.values.ChoiceValue;
-import de.d3web.core.session.values.MultipleChoiceValue;
-import de.d3web.we.diaflux.datamanagement.Domain;
 import de.d3web.we.diaflux.datamanagement.EvalResult;
-import de.d3web.we.diaflux.datamanagement.MOValue;
+import de.d3web.we.diaflux.datamanagement.OCDomain;
 
 /**
  * 
- * @author Roland Jerg
- * @created 08.05.2012
+ * 
+ * @author Reinhard Hatko
+ * @created 28.06.2012
  */
-public class EqualEval extends TerminalEvaluator {
+public class ChoiceEqualEval implements Evaluator {
 
-	/**
-	 *
-	 */
 	@Override
 	public boolean canEvaluate(Condition condition) {
 		return condition.getClass().equals(CondEqual.class);
 	}
 
-	/**
-	 *
-	 */
 	@Override
-	public EvalResult evaluate(Condition condition) {
-		EvalResult result = new EvalResult();
-		CondEqual conEqual = (CondEqual) condition;
-		Value value = conEqual.getValue();
-		String name = conEqual.getQuestion().getName();
-		Set<String> possibleValues = new HashSet<String>();
-		Set<String> actualValues = new HashSet<String>();
+	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
+		CondEqual condEqual = (CondEqual) condition;
 
-		if (value instanceof ChoiceValue) {
-			Domain<MOValue> domain = new Domain<MOValue>();
-			ChoiceValue cValue = (ChoiceValue) value;
-			actualValues.add(cValue.getChoiceID().getText());
-			MOValue mo = new MOValue(possibleValues, actualValues, true);
-			domain.add(mo);
-			result.add(name, domain);
+		if (condEqual.getQuestion() instanceof QuestionOC) {
+			return evaluateOC(condEqual);
+		}
+		else {
+			return evaluateMC(condEqual);
+		}
 
-		}
-		if (value instanceof MultipleChoiceValue) {
-			throw new IllegalStateException("multiple choice values are not implemented yet");
-		}
-		return result;
+	}
+
+	private EvalResult evaluateMC(CondEqual condEqual) {
+		throw new UnsupportedOperationException();
+	}
+
+	private EvalResult evaluateOC(CondEqual condEqual) {
+		ChoiceValue value = (ChoiceValue) condEqual.getValue();
+		QuestionOC question = (QuestionOC) condEqual.getQuestion();
+
+		return new EvalResult(question, new OCDomain(question, value.getChoice(question)));
 	}
 
 }

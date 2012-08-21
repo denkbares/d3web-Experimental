@@ -18,6 +18,33 @@
  */
 package de.d3web.we.diaflux.evaluators;
 
-public abstract class NonTerminalEvaluator implements Evaluator {
+import de.d3web.core.inference.condition.CondAnd;
+import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.we.diaflux.datamanagement.EvalResult;
+
+/**
+ * 
+ * 
+ * @author Reinhard Hatko
+ * @created 28.06.2012
+ */
+public class AndEvaluator implements Evaluator {
+
+	@Override
+	public boolean canEvaluate(Condition condition) {
+		return condition.getClass().equals(CondAnd.class);
+	}
+
+	@Override
+	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
+		EvalResult result = new EvalResult();
+		for (Condition con : ((CondAnd) condition).getTerms()) {
+			EvalResult evalResult = EvaluatorManager.getInstance().evaluate(con, kb);
+			result.intersectWith(evalResult);
+		}
+		return result;
+
+	}
 
 }

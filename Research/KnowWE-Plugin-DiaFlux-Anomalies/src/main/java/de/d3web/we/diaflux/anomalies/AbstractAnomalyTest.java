@@ -19,6 +19,7 @@
 package de.d3web.we.diaflux.anomalies;
 
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.testing.AbstractTest;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
 import de.knowwe.core.utils.Strings;
@@ -28,7 +29,7 @@ import de.knowwe.core.utils.Strings;
  * @author Roland Jerg
  * @created 09.05.2012
  */
-public abstract class AbstractAnomalyTest extends de.d3web.testing.AbstractTest<KnowledgeBase> {
+public abstract class AbstractAnomalyTest extends AbstractTest<KnowledgeBase> {
 
 
 	@Override

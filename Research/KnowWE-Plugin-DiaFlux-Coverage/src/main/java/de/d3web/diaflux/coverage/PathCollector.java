@@ -18,45 +18,62 @@
  */
 package de.d3web.diaflux.coverage;
 
-import java.util.LinkedList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
-import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.ComposedNode;
-import de.d3web.diaFlux.flow.Node;
-import de.d3web.diaFlux.inference.DiaFluxUtils;
-
+import de.d3web.diaFlux.flow.DiaFluxElement;
+import de.d3web.diaFlux.flow.Edge;
 
 /**
- * A strategy to create all (deep) paths of a DiaFlux model. Traverses also Subflows.
+ * 
  * @author Reinhard Hatko
- * @created 26.03.2012
+ * @created 06.08.2012
  */
-public class AllPathsStrategy extends AllPathsShallowStrategy {
+public class PathCollector implements DFSStrategy {
 
-	public AllPathsStrategy(boolean stopOnSnapshot, KnowledgeBase kb) {
-		super(stopOnSnapshot, kb);
+	private final DFSStrategy delegate;
+	private final Collection<Path> paths;
+
+	public PathCollector(DFSStrategy delegate) {
+		this.delegate = delegate;
+		this.paths = new HashSet<Path>();
 	}
-
-	@Override
-	public List<Path> getInitialStartPaths() {
-		LinkedList<Path> paths = new LinkedList<Path>();
-
-		for (Node node : DiaFluxUtils.getAutostartNodes(kb)) {
-			paths.add(new Path(node));
-		}
-		usedStartPaths.addAll(paths);
-		return paths;
-	}
-
 
 	@Override
 	public void found(Path path) {
+		paths.add(path);
+		delegate.found(path);
+	}
+
+	public Collection<Path> getPaths() {
+		return paths;
+	}
+
+	public List<Path> getInitialStartPaths() {
+		return delegate.getInitialStartPaths();
+	}
+
+	public boolean followEdge(Edge edge, Path path) {
+		return delegate.followEdge(edge, path);
+	}
+
+	public boolean offer(DiaFluxElement el, Path path) {
+		return delegate.offer(el, path);
+	}
+
+	public Path createStartPath(Path path) {
+		return delegate.createStartPath(path);
+	}
+
+	public boolean enterSubflow(ComposedNode node, Path path) {
+		return delegate.enterSubflow(node, path);
 	}
 
 	@Override
-	public boolean enterSubflow(ComposedNode node, Path path) {
-		return true;
+	public void finished(Path path) {
+		delegate.finished(path);
 	}
 
 }

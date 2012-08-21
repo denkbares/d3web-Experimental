@@ -18,40 +18,49 @@
  */
 package de.d3web.we.diaflux.evaluators;
 
-import de.d3web.core.inference.condition.CondNumLessEqual;
+import de.d3web.core.inference.condition.CondNumIn;
 import de.d3web.core.inference.condition.Condition;
-import de.d3web.we.diaflux.datamanagement.Domain;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.we.diaflux.datamanagement.EvalResult;
-import de.d3web.we.diaflux.datamanagement.NumValue;
+import de.d3web.we.diaflux.datamanagement.NumDomain;
 
 /**
  * 
- * @author Roland
- * @created 08.05.2012
+ * 
+ * @author Reinhard Hatko
+ * @created 28.06.2012
  */
-public class NumEqualLessEval extends NumEvaluator {
+public class NumInEval implements Evaluator {
 
-	/**
-	 *
-	 */
 	@Override
 	public boolean canEvaluate(Condition condition) {
-		return condition.getClass().equals(CondNumLessEqual.class);
+		return condition.getClass().equals(CondNumIn.class);
 	}
 
-	/**
-	 *
-	 */
 	@Override
-	public EvalResult evaluate(Condition condition) {
-		EvalResult result = new EvalResult();
-		Domain<NumValue> domain = new Domain<NumValue>();
-		CondNumLessEqual conLess = (CondNumLessEqual) condition;
-		double d = conLess.getConditionValue();
-		domain.add(new NumValue(Double.NEGATIVE_INFINITY, d, false, true));
-		String var = conLess.getQuestion().getName();
-		result.add(var, domain);
+	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
+
+		CondNumIn condNum = (CondNumIn) condition;
+		NumDomain domain = new NumDomain((QuestionNum) condNum.getQuestion(), condNum.getInterval());
+		EvalResult result = new EvalResult(condNum.getQuestion(), domain);
+
 		return result;
+	}
+
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return getClass().equals(obj.getClass());
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
 	}
 
 }

@@ -18,10 +18,9 @@
  */
 package de.d3web.we.diaflux.anomalies;
 
-import java.util.HashMap;
+import java.util.Collection;
 
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaflux.coverage.Path;
 import de.d3web.diaflux.coverage.PathGenerator;
 import de.d3web.we.diaflux.anomalystrategies.SnapshotStrategy;
@@ -43,11 +42,9 @@ public class LoopWithoutSnapshotTest extends AbstractAnomalyTest {
 			PathGenerator generator = new PathGenerator(kb, strategy);
 			generator.createPaths();
 
-			HashMap<Node, Path> anomalies = strategy.getAnomalies();
-			if (anomalies != null) {
-				for (Node node : anomalies.keySet())
-					msg.append("loop at " + node + "<br>");
-			}
+			Collection<Path> anomalies = strategy.getAnomalies();
+			for (Path path : anomalies)
+				msg.append("loop at " + path + "<br>");
 		}
 		return msg.toString();
 	}

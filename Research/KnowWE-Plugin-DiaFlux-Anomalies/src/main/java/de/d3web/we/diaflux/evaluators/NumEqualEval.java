@@ -18,42 +18,51 @@
  */
 package de.d3web.we.diaflux.evaluators;
 
+import de.d3web.core.inference.condition.CondNum;
 import de.d3web.core.inference.condition.CondNumEqual;
 import de.d3web.core.inference.condition.Condition;
-import de.d3web.we.diaflux.datamanagement.Domain;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.we.diaflux.datamanagement.EvalResult;
-import de.d3web.we.diaflux.datamanagement.NumValue;
+import de.d3web.we.diaflux.datamanagement.NumDomain;
 
 /**
  * 
- * @author Roland Jerg
- * @created 08.05.2012
+ * 
+ * @author Reinhard Hatko
+ * @created 28.06.2012
  */
-public class NumEqualEval extends NumEvaluator {
+public class NumEqualEval implements Evaluator {
 
-	/**
-	 *
-	 */
 	@Override
 	public boolean canEvaluate(Condition condition) {
 		return condition.getClass().equals(CondNumEqual.class);
 	}
 
-	/**
-	 *
-	 */
 	@Override
-	public EvalResult evaluate(Condition condition) {
+	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
 
-		CondNumEqual conEq = (CondNumEqual) condition;
-		EvalResult result = new EvalResult();
-		double d = conEq.getConditionValue();
-		Domain<NumValue> domain = new Domain<NumValue>();
-		domain.add(new NumValue(d, d, true, true));
-		String var = conEq.getQuestion().getName();
-		conEq.getTerminalObjects();
-		result.add(var, domain);
+		CondNum condNum = (CondNum) condition;
+		double value = condNum.getConditionValue();
+		NumDomain domain = new NumDomain((QuestionNum) condNum.getQuestion(), value);
+		EvalResult result = new EvalResult(condNum.getQuestion(), domain);
+
 		return result;
+	}
+
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return getClass().equals(obj.getClass());
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
 	}
 
 }

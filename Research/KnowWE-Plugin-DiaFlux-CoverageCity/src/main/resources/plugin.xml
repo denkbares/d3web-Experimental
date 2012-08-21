@@ -3,9 +3,9 @@
 <plugin id="KnowWE-Plugin-DiaFlux-CoverageCity" version="0.0.1">
 	
 	<requires>
+		<import plugin-id="KnowWE-Plugin-DiaFlux" />
 		<import plugin-id="KnowWE-Plugin-DiaFlux-Coverage" />
 		<import plugin-id="KnowWEExtensionPoints" />
-		
 	</requires>
 	
 	<runtime>
@@ -28,6 +28,25 @@
 		<parameter id="scope" value="DiaFluxCoverage" />
 	</extension>
 	
+		<extension plugin-id="KnowWE-Plugin-DiaFlux" point-id="DiaFluxDisplayEnhancement"
+		id="PathCoverageHighlight">
+		<parameter id="class"
+			value="de.knowwe.diaflux.coverage.PathCoverageHighlight" />
+		<parameter id="name" value="PathCoverageHighlight" />
+		<parameter id="description" value="PathCoverageHighlight" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="CoverageCity" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="PathCoverageHighlightAction">
+		<parameter id="class" value="de.knowwe.diaflux.coverage.PathCoverageHighlightAction" />
+		<parameter id="name" value="PathCoverageHighlightAction" />
+		<parameter id="description" value="Action PathCoverageHighlightAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
 	
 
 </plugin>

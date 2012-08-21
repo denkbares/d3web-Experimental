@@ -20,28 +20,25 @@ package de.d3web.we.diaflux.evaluators;
 
 import de.d3web.core.inference.condition.CondAnswered;
 import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.we.diaflux.datamanagement.EvalResult;
 
 /**
  * 
- * @author Roland Jerg
- * @created 08.05.2012
+ * 
+ * @author Reinhard Hatko
+ * @created 29.06.2012
  */
-public class AnsweredEval extends TerminalEvaluator {
+public class AnsweredEval implements Evaluator {
 
-	/**
-	 *
-	 */
 	@Override
 	public boolean canEvaluate(Condition condition) {
 		return condition.getClass().equals(CondAnswered.class);
 	}
 
-	/**
-	 *
-	 */
 	@Override
-	public EvalResult evaluate(Condition condition) {
+	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
+		// TODO
 		return new EvalResult();
 	}
 }

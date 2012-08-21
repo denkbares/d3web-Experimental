@@ -148,22 +148,21 @@ public class PathGenerator {
 	 * @param edges
 	 */
 	private void continueOnEdges(Path path, List<Edge> edges) {
-		if (edges.isEmpty()) {
-			strategy.found(path);
-		}
-		else {
-			for (Edge edge : edges) {
-				Path newPath = path.copy();
-				if (strategy.offer(edge, newPath)) {
-					continueOnNode(newPath, edge.getEndNode());
-				}
-				else {
-					foundPath(newPath);
-				}
-
+		boolean continued = false;
+		for (Edge edge : edges) {
+			Path newPath = path.copy();
+			if (strategy.offer(edge, newPath)) {
+				continueOnNode(newPath, edge.getEndNode());
+				continued = true;
 			}
 
 		}
+
+		if (!continued) {
+			foundPath(path);
+
+		}
+
 	}
 
 
@@ -176,16 +175,19 @@ public class PathGenerator {
 		else {
 			foundPath(newPath);
 		}
+
+		strategy.finished(newPath);
+
 	}
 
 	/**
 	 * 
 	 * @created 24.04.2012
-	 * @param newPath
+	 * @param path
 	 */
-	public void foundPath(Path newPath) {
-		strategy.found(newPath);
-		Path startPath = strategy.createStartPath(newPath);
+	private void foundPath(Path path) {
+		strategy.found(path);
+		Path startPath = strategy.createStartPath(path);
 		if (startPath != null) {
 			addStartPath(startPath);
 		}

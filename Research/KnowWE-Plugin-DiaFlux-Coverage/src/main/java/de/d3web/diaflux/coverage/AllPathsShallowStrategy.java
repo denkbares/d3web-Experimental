@@ -34,20 +34,22 @@ import de.d3web.diaFlux.inference.DiaFluxUtils;
 
 
 /**
- *  A strategy to create all paths of each DiaFlux model. Subflows are not traversed.
+ * A strategy to create all paths of each DiaFlux model. Subflows are not
+ * traversed.
+ * 
  * @author Reinhard Hatko
  * @created 26.03.2012
  */
-public class AllPathsStrategyShallow implements DFSStrategy {
+public class AllPathsShallowStrategy implements DFSStrategy {
 
 	protected final KnowledgeBase kb;
 	protected final Collection<Path> usedStartPaths;
-	protected final Collection<Path> foundPaths;
+	protected final boolean stopOnSnapshot;
 
-	public AllPathsStrategyShallow(KnowledgeBase kb) {
+	public AllPathsShallowStrategy(boolean stopOnSnapshot, KnowledgeBase kb) {
 		this.kb = kb;
+		this.stopOnSnapshot = stopOnSnapshot;
 		this.usedStartPaths = new HashSet<Path>();
-		this.foundPaths = new HashSet<Path>();
 	}
 
 	@Override
@@ -72,7 +74,10 @@ public class AllPathsStrategyShallow implements DFSStrategy {
 	@Override
 	public boolean offer(DiaFluxElement el, Path path) {
 		boolean finished = false;
-		if (path.contains(el) || (path.getLength() > 1 && el instanceof SnapshotNode)) {
+		if (path.contains(el)) {
+			finished = true;
+		}
+		if (this.stopOnSnapshot && el instanceof SnapshotNode) {
 			finished = true;
 		}
 		path.append(el);
@@ -87,7 +92,7 @@ public class AllPathsStrategyShallow implements DFSStrategy {
 			// circular path
 			return null;
 		}
-		Path startPath = path.newPath();
+		Path startPath = path.continueFromTail();
 
 		if (usedStartPaths.contains(startPath)) {
 			return null;
@@ -100,11 +105,10 @@ public class AllPathsStrategyShallow implements DFSStrategy {
 
 	@Override
 	public void found(Path path) {
-		foundPaths.add(path);
 	}
 
-	public Collection<Path> getFoundPaths() {
-		return foundPaths;
+	@Override
+	public void finished(Path newPath) {
 	}
 
 	@Override

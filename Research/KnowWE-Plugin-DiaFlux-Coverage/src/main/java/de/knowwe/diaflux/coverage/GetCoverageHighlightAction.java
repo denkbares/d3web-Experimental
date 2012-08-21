@@ -38,7 +38,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.diaflux.FlowchartUtils;
-import de.knowwe.diaflux.GetTraceHighlightAction;
+import de.knowwe.diaflux.Highlights;
 import de.knowwe.diaflux.type.DiaFluxType;
 import de.knowwe.diaflux.type.FlowchartType;
 
@@ -86,7 +86,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 
 		CoverageResult result = getResult(context);
 		if (result == null) {
-			context.getWriter().write(GetTraceHighlightAction.EMPTY_HIGHLIGHT);
+			context.getWriter().write(Highlights.EMPTY_HIGHLIGHT);
 			return;
 		}
 		String flowKdomid = context.getParameter("kdomid");
@@ -94,7 +94,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		Section<FlowchartType> flowchart = Sections.getSection(flowKdomid, FlowchartType.class);
 
 		if (flowchart == null) {
-			context.getWriter().write(GetTraceHighlightAction.EMPTY_HIGHLIGHT);
+			context.getWriter().write(Highlights.EMPTY_HIGHLIGHT);
 			return;
 		}
 
@@ -121,7 +121,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 	private static StringBuilder createCoverageXML(CoverageResult result, Flow flow) {
 		StringBuilder builder = new StringBuilder();
 
-		GetTraceHighlightAction.appendHeader(builder, flow.getName(), PREFIX);
+		Highlights.appendHeader(builder, flow.getName(), PREFIX);
 
 		Map<Edge, Map<String, String>> edges = new HashMap<Edge, Map<String, String>>();
 
@@ -137,12 +137,11 @@ public class GetCoverageHighlightAction extends AbstractAction {
 				clazz = COVERED;
 			}
 
-			GetTraceHighlightAction.putValue(edges, edge, GetTraceHighlightAction.CSS_CLASS, clazz);
-			GetTraceHighlightAction.putValue(edges, edge, GetTraceHighlightAction.TOOL_TIP,
-					String.valueOf(count));
+			Highlights.putValue(edges, edge, Highlights.CSS_CLASS, clazz);
+			Highlights.putValue(edges, edge, Highlights.TOOL_TIP, String.valueOf(count));
 		}
 
-		GetTraceHighlightAction.addEdgeHighlight(builder, edges);
+		Highlights.addEdgeHighlight(builder, edges);
 
 		Map<Node, Map<String, String>> nodes = new HashMap<Node, Map<String, String>>();
 
@@ -156,15 +155,15 @@ public class GetCoverageHighlightAction extends AbstractAction {
 				clazz = COVERED;
 			}
 
-			GetTraceHighlightAction.putValue(nodes, node, GetTraceHighlightAction.CSS_CLASS, clazz);
-			GetTraceHighlightAction.putValue(nodes, node, GetTraceHighlightAction.TOOL_TIP,
+			Highlights.putValue(nodes, node, Highlights.CSS_CLASS, clazz);
+			Highlights.putValue(nodes, node, Highlights.TOOL_TIP,
 					String.valueOf(count));
 
 		}
 
-		GetTraceHighlightAction.addNodeHighlight(builder, nodes);
+		Highlights.addNodeHighlight(builder, nodes);
 
-		GetTraceHighlightAction.appendFooter(builder);
+		Highlights.appendFooter(builder);
 		return builder;
 	}
 }
