@@ -27,7 +27,7 @@
 		<parameter id="name" value="SectionType2" />
 		<parameter id="description" value="Represents a SectionType2 in KDOM" />
 		<parameter id="version" value="0.2" />
-		<parameter id="priority" value="5" />
+		<parameter id="priority" value="2.1" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
@@ -37,7 +37,7 @@
 		<parameter id="name" value="SectionType1" />
 		<parameter id="description" value="Represents a SectionType1 in KDOM" />
 		<parameter id="version" value="0.2" />
-		<parameter id="priority" value="10" />
+		<parameter id="priority" value="2.2" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
