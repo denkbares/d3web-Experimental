@@ -659,7 +659,7 @@ public class D3webDialog extends HttpServlet {
      *
      * @return true of the value is set, false if it is not yet set
      */
-    private boolean handleRequiredValueCheck(PrintWriter writer, Session d3webSession, List<String> questions, List<String> values) {
+    protected boolean handleRequiredValueCheck(PrintWriter writer, Session d3webSession, List<String> questions, List<String> values) {
         List<String> all = new LinkedList<String>();
         all.addAll(questions);
         all.addAll(values);
@@ -704,7 +704,7 @@ public class D3webDialog extends HttpServlet {
         }
     }
 
-    private void handleQuestionValueLogging(HttpServletRequest request,
+    protected void handleQuestionValueLogging(HttpServletRequest request,
             HttpSession httpSession, String ques, String val,
             Session d3webSession, Collection<TerminologyObject> newAbstractions) {
 
@@ -1693,7 +1693,7 @@ public class D3webDialog extends HttpServlet {
 
     }
 
-    private class DialogState {
+    protected class DialogState {
 
         Set<QASet> indicatedQASets;
         List<Question> answeredQuestions;
@@ -1799,6 +1799,7 @@ public class D3webDialog extends HttpServlet {
          // overwritten by ClariHie Dialog
      }
      
+     /* eurahs specific */
       protected void loadCaseClear(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException{

@@ -19,6 +19,7 @@
  */
 package de.d3web.proket.d3web.run;
 
+import de.d3web.core.knowledge.TerminologyObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -40,6 +41,7 @@ import de.d3web.core.session.blackboard.Fact;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.input.D3webUserSettings;
+import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.output.render.EuraHSDefaultRootD3webRenderer;
 import de.d3web.proket.d3web.ue.JSONLogger;
@@ -47,8 +49,7 @@ import de.d3web.proket.d3web.utils.Encryptor;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -72,6 +73,9 @@ import java.util.List;
 public class EuraHSDialog extends D3webDialog {
 
     private static final long serialVersionUID = -4790211381203716706L;
+    private static final String EURAHS_FIRSTQUESTION = 
+            "Please enter a EuraHS registration number (NO PATIENT NAME)";
+    
     private static ArrayList<String> INITDROPQS = new ArrayList<String>() {
 
         {
@@ -372,4 +376,7 @@ public class EuraHSDialog extends D3webDialog {
             }
         }
     }
+    
+
+
 }
