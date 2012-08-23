@@ -162,7 +162,7 @@ public class UEBasicFileAnalyzer {
                 }
             }
         }
-        System.out.println(interEval);
+        //System.out.println(interEval);
 
         // additionally go through provided solutions and check whether there
         // are elements that had not been logged
@@ -173,7 +173,7 @@ public class UEBasicFileAnalyzer {
                 interEval.put(jos.get(UETerm.SNAME.toString()).toString(), "NaN");
             }
         }
-        System.out.println(interEval);
+        //System.out.println(interEval);
         return interEval;
     }
 

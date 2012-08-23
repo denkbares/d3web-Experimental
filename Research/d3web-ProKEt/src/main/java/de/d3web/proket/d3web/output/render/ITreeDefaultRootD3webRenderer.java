@@ -22,7 +22,7 @@ package de.d3web.proket.d3web.output.render;
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUserSettings;
-import de.d3web.proket.d3web.input.D3webUtils;
+import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;

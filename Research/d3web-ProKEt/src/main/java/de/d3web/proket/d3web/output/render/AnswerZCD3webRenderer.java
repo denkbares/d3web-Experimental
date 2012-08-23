@@ -25,7 +25,7 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webConnector;
-import de.d3web.proket.d3web.input.D3webUtils;
+import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.database.DateCoDec;
 import de.d3web.proket.output.container.ContainerCollection;

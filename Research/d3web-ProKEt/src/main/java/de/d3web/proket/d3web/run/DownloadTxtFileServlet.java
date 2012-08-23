@@ -11,7 +11,7 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.proket.d3web.input.D3webConnector;
-import de.d3web.proket.d3web.input.D3webUtils;
+import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

@@ -40,8 +40,11 @@ import de.d3web.core.session.blackboard.Fact;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.input.D3webUserSettings;
-import de.d3web.proket.d3web.input.D3webUtils;
+import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.output.render.EuraHSDefaultRootD3webRenderer;
+import de.d3web.proket.d3web.ue.JSONLogger;
+import de.d3web.proket.d3web.utils.Encryptor;
+import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
 import java.util.ArrayList;
@@ -111,9 +114,12 @@ public class EuraHSDialog extends D3webDialog {
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
         D3webUserSettings us = (D3webUserSettings) httpSession.getAttribute(USER_SETTINGS);
-        int loc = us.getLanguageId();
-       
-        Session sNew = initDropdownChoiceQuestions(d3webSess, loc);
+
+        // not needed for EuraHS, would work to change dropdown text default
+        // to other Locale
+        //int loc = us.getLanguageId();
+
+        Session sNew = initDropdownChoiceQuestions(d3webSess, 2);
         httpSession.setAttribute(D3WEB_SESSION, sNew);
         httpSession.setAttribute("initsetquestions", INITDROPQS);
 
@@ -253,7 +259,6 @@ public class EuraHSDialog extends D3webDialog {
             if (f == null) {
 
                 String selectChoicePrompt = null;
-                System.out.println("LOCALE:" + loc);
                 switch (loc) {
                     case 1: // german
                         selectChoicePrompt = "Bitte auswählen...";
@@ -274,8 +279,8 @@ public class EuraHSDialog extends D3webDialog {
                         selectChoicePrompt = "";
                         break;
                 }
-                
-                if(selectChoicePrompt == null){
+
+                if (selectChoicePrompt == null) {
                     selectChoicePrompt = "Please select...";
                 }
                 D3webUtils.setValue(iddq, selectChoicePrompt, d3webSess);
@@ -284,5 +289,87 @@ public class EuraHSDialog extends D3webDialog {
         }
 
         return d3webSess;
+    }
+
+    /**
+     * Saving a case, using encoded filename for anonymization
+     *
+     * @created 34.08.2012
+     *
+     * @param request ServletRequest
+     * @param response ServletResponse
+     */
+    protected void saveCase(HttpServletRequest request,
+            HttpServletResponse response, HttpSession httpSession)
+            throws IOException {
+
+        PrintWriter writer = null;
+        writer = response.getWriter();
+
+        String userFilename = request.getParameter("userfn");
+        String user = (String) httpSession.getAttribute("user");
+        String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
+        String forceString = request.getParameter("force");
+
+        // force wird im JS gesetzt, falls der User unter bereits vorhandenem
+        // Namen speichern will und das nochmal bestätigt.
+        boolean force = forceString != null && forceString.equals("true");
+
+        Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
+
+        // if: really overwrite existing OR case not exists OR case exists but
+        // has been loaded for modification
+        if (force
+                || !PersistenceD3webUtils.existsCaseAnon(user, userFilename)
+                || (PersistenceD3webUtils.existsCaseAnon(user, userFilename)
+                && lastLoaded != null && lastLoaded.equals(userFilename))) {
+
+            PersistenceD3webUtils.saveCaseAnonymized(
+                    user,
+                    userFilename,
+                    d3webSession);
+
+            httpSession.setAttribute("lastLoaded", userFilename);
+        } else {
+            writer.append("exists");
+        }
+    }
+
+    @Override
+    protected void loadCaseClear(HttpServletRequest request, HttpServletResponse response,
+            HttpSession httpSession) {
+        String filename = request.getParameter("fn");
+        String user = (String) httpSession.getAttribute("user");
+        loadCaseClearUserFilename(request, httpSession, user, filename);
+    }
+
+    private void loadCaseClearUserFilename(HttpServletRequest request, HttpSession httpSession,
+            String user, String filename) {
+
+        Session session = null;
+        String anonFilename = Encryptor.getAnonymizedFilename(filename);
+        if (PersistenceD3webUtils.existsCase(user, anonFilename)) {
+            session = PersistenceD3webUtils.loadUserCase(user, anonFilename);
+            httpSession.setAttribute(D3WEB_SESSION, session);
+            httpSession.setAttribute("lastLoaded", anonFilename);
+            D3webConnector.getInstance().setSession(session);
+
+            JSONLogger logger =
+                    (JSONLogger) httpSession.getAttribute("logger");
+
+            // TODO is logging () into httpSession
+            if (D3webConnector.getInstance().isLogging()) {
+                ServletLogUtils.resetLogfileName(session.getId(), logger);
+                String time;
+                if (request.getParameter("timestring") != null) {
+                    time = request.getParameter("timestring").replace("+", " ");
+                } else {
+                    Date date = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat(super.SDF_DEFAULT);
+                    time = sdf.format(date);
+                }
+                ServletLogUtils.logResume(time, session.getId(), logger);
+            }
+        }
     }
 }

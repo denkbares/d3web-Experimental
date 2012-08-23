@@ -41,7 +41,7 @@ import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
-import de.d3web.proket.d3web.input.D3webUtils;
+import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import java.util.*;
@@ -245,7 +245,7 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
             caseCache.put(caseFile.getPath(), parameters);
         }
         parameters.put(LAST_FILE_CHANGE, caseFile.lastModified());
-        Session loadedUserCase = PersistenceD3webUtils.loadUserCase(user, caseFile);
+        Session loadedUserCase = PersistenceD3webUtils.loadUserCaseUtil(user, caseFile);
         parameters.put(LAST_CASE_CHANGE, loadedUserCase.getLastChangeDate().getTime());
         parseFollowUpParameters(parameters, loadedUserCase);
         parseOperationDate(parameters, loadedUserCase);

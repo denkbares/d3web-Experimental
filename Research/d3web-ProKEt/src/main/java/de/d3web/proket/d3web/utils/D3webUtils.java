@@ -17,7 +17,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.proket.d3web.input;
+package de.d3web.proket.d3web.utils;
 
 import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.Rule;
@@ -74,6 +74,7 @@ import de.d3web.indication.ActionIndication;
 import de.d3web.indication.ActionInstantIndication;
 import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.plugin.JPFPluginManager;
+import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.ImageHandler;
 import de.d3web.proket.d3web.output.render.JNV;
@@ -1416,12 +1417,12 @@ public class D3webUtils {
             }
         }
 
-        System.out.println("BLACKBOARD: ");
-        for (Question q : blackboard.getValuedQuestions()) {
+        //System.out.println("BLACKBOARD: ");
+        //for (Question q : blackboard.getValuedQuestions()) {
 
-            System.out.println(q.getName() + " -> " + blackboard.getValue(q));
-        }
-        System.out.println("BLACKBOARD ENDE");
+            //System.out.println(q.getName() + " -> " + blackboard.getValue(q));
+        //}
+        //System.out.println("BLACKBOARD ENDE");
     }
 
     /**

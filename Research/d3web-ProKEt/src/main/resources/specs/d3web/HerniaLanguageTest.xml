@@ -3,7 +3,7 @@
 	header="Default Dialog - Example"  
 	dtype="singleform" 
 	dstrategy="nextuaquestion" 
-	css="medi2colsMediastinitis, nonavigation" 
+	css="medi2colsHernia, nonavigation" 
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns = "2"

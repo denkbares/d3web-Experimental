@@ -25,7 +25,7 @@ import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.values.*;
 import de.d3web.core.utilities.Pair;
 import de.d3web.proket.d3web.input.D3webConnector;
-import de.d3web.proket.d3web.input.D3webUtils;
+import de.d3web.proket.d3web.utils.D3webUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.http.HttpSession;

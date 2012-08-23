@@ -4,6 +4,6 @@
 	$endif$ 
 	$if (langDE)$
     	Fall laden
-    $endif$
-	$FileSelect()$
+        $endif$
+	$FileSelectAdd()$
 </div>

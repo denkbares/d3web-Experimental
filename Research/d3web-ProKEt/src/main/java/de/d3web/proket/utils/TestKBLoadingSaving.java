@@ -6,7 +6,7 @@ package de.d3web.proket.utils;
 
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.proket.d3web.input.D3webUtils;
+import de.d3web.proket.d3web.utils.D3webUtils;
 import java.io.File;
 import java.io.IOException;
 

@@ -32,7 +32,7 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
-import de.d3web.proket.d3web.input.D3webUtils;
+import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.output.render.MediastinitisDefaultRootD3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
 import java.io.FileNotFoundException;

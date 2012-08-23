@@ -19,6 +19,7 @@
  */
 package de.d3web.proket.d3web.run;
 
+import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.core.knowledge.TerminologyManager;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -111,7 +112,7 @@ public class D3webDialog extends HttpServlet {
     private String prevV = "";
     private static final SimpleDateFormat SDF_FILENAME_DEFAULT =
             new SimpleDateFormat("yyyyMMdd_HHmmss");
-    private static final String SDF_DEFAULT =
+    protected static final String SDF_DEFAULT =
             "EEE yyyy_MM_dd hh:mm:s";
 
     // TODO get Date everywhere in JS instead of Servlet
@@ -499,6 +500,8 @@ public class D3webDialog extends HttpServlet {
             return;
         } else if(action.equalsIgnoreCase("addFactITree")) {
             addFactITree(request, response, httpSession);
+        } else if(action.equalsIgnoreCase("loadcaseClear")) {
+            loadCaseClear(request, response, httpSession);
         }
         else {
             handleDialogSpecificActions(httpSession, request, response, action);
@@ -851,7 +854,7 @@ public class D3webDialog extends HttpServlet {
         // render the headerinfoline as latest as to have the most-current infos there
         writer.append(rootRenderer.renderHeaderInfoLine(d3webSession));
         //  System.out.println(response.getContentType() + " " + response.getCharacterEncoding());
-        System.out.println(writer.toString());
+        //System.out.println(writer.toString());
     }
 
 // TODO: move to D3webUtils
@@ -1297,13 +1300,20 @@ public class D3webDialog extends HttpServlet {
         String user = (String) httpSession.getAttribute("user");
         String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
         String forceString = request.getParameter("force");
+        
+        // force wird im JS gesetzt, falls der User unter bereits vorhandenem
+        // Namen speichern will und das nochmal bestätigt.
         boolean force = forceString != null && forceString.equals("true");
+        
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
+        // if: really overwrite existing OR case not exists OR case exists but
+        // has been loaded for modification
         if (force
                 || !PersistenceD3webUtils.existsCase(user, userFilename)
                 || (PersistenceD3webUtils.existsCase(user, userFilename)
                 && lastLoaded != null && lastLoaded.equals(userFilename))) {
+            
             PersistenceD3webUtils.saveCase(
                     user,
                     userFilename,
@@ -1388,7 +1398,7 @@ public class D3webDialog extends HttpServlet {
             HttpServletResponse response,
             HttpSession httpSession) throws MessagingException {
 
-        System.out.println("FEEDBACKMAIL: ");
+        //System.out.println("FEEDBACKMAIL: ");
         final String user = "SendmailAnonymus@freenet.de";
         final String pw = "sendmail";
 
@@ -1582,7 +1592,8 @@ public class D3webDialog extends HttpServlet {
             }
         }
 
-        String uesystemtype =
+        
+        /*String uesystemtype =
                 httpSession.getAttribute("uesystemtype").toString() != null
                 ? httpSession.getAttribute("uesystemtype").toString() : "";
         // WIRD IM DialogRenderer in die httpSession geschrieben!
@@ -1595,9 +1606,7 @@ public class D3webDialog extends HttpServlet {
                 ServletLogUtils.logDialogType(uesystemtype, logger);
                 httpSession.setAttribute("isSystemTypeLogged", "true");
             }
-        }
-
-
+        }*/
     }
 
     protected void logSessionEnd(HttpServletRequest request, HttpSession httpSession) {
@@ -1788,6 +1797,12 @@ public class D3webDialog extends HttpServlet {
             HttpServletResponse response, HttpSession httpSession)
             throws IOException{
          // overwritten by ClariHie Dialog
+     }
+     
+      protected void loadCaseClear(HttpServletRequest request,
+            HttpServletResponse response, HttpSession httpSession)
+            throws IOException{
+         // overwritten by EuraHS Dialog
      }
     
 }

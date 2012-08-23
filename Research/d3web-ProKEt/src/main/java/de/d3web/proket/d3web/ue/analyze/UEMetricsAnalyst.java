@@ -232,7 +232,7 @@ public class UEMetricsAnalyst {
 
     public static void main(String[] args) {
         UEMetricsAnalyst ue = new UEMetricsAnalyst("TestLog-Data");
-        System.out.println(ue.getAnalysisResults());
+        //System.out.println(ue.getAnalysisResults());
     }
 
     // TODO; move; general utilit METHODS

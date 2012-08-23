@@ -127,6 +127,7 @@ $(function() {
 
         var opts = {
             autoOpen: false,
+            minWidth: 320,
             position: [ 0, getHeaderHeight()],
             modal: false,
             buttons: [{
@@ -310,14 +311,7 @@ $(function() {
     // PROBLEM: so wird direkt am Anfang, also auch VOR dem
     // initialisieren, schonmal versucht das Ende zu loggen
     // FEHLER! 
-    /*$(window).unload( function () {
-           
-            d3web_ue_logEnd();
-                
-            d3web_resetSession();
-           
-            
-        } );*/
+    
     });
 	
     if (logging) {
@@ -501,6 +495,20 @@ function initFunctionality() {
         }
         $("#jqLoadCaseDialog").dialog("open");
     });
+    
+    $("[name^=fileClearname]").unbind("keydown").keydown(function(e) {
+        
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code == 13) {
+            
+            d3web_loadFileClearname($(this));
+        }
+    }) .unbind("focusout").focusout(function() {
+        d3web_loadFileClearname($(this));
+    });
+    
+   
+    
 	
     $('#followupbutton').unbind('click').click(function(event) {
         if (logging) {
@@ -559,6 +567,8 @@ function initFunctionality() {
         }
         $("#jqLoadCaseDialog").dialog("open");
     });
+    
+   
     
     $('#creategroupsintrobutton').unbind('click').click(function(event) {
         if (logging) {
@@ -643,11 +653,11 @@ function initFunctionality() {
             }
         } else
         if($(this).attr("id").indexOf("ynNo")!=-1){
-           if($(this).hasClass("swap")){
+            if($(this).hasClass("swap")){
                 d3web_answerYesNoHierarchyQuestions($(this), "1");
-           } else {
+            } else {
                 d3web_answerYesNoHierarchyQuestions($(this), "3");
-           }
+            }
         } else 
         if($(this).attr("id").indexOf("ynUn")!=-1){
             d3web_answerYesNoHierarchyQuestions($(this), "2");
@@ -983,7 +993,7 @@ function d3web_storeQuestionNum(numInput) {
     if(d3web_checkQuestionNum(numInput)){
         var numQuestion = getQuestionId(numInput);
         textStore[numQuestion] = $(numInput).val();
-        //alert(numQuestion + " " + $(numInput).val());
+    //alert(numQuestion + " " + $(numInput).val());
     } else {
     // alert("dont store");
     }
@@ -1065,7 +1075,7 @@ function d3web_handleQuestionDate(dateSelect) {
     
     
     if(language=="de"){
-         tooSoon = "Erwartet wird ein Datum bzw. Zeitpunkt später als '" + afterText + "'.";
+        tooSoon = "Erwartet wird ein Datum bzw. Zeitpunkt später als '" + afterText + "'.";
     } else if(language=="en"){
         tooSoon = "Expected is a date / timepoint later than '" + afterText + "'.";
     }
@@ -1234,41 +1244,6 @@ function d3web_getSelectedFile() {
     return $('#caseSelect :selected').text();
 }
 
-/**
-* Sends the name of the case/file that is to be loaded into the dialog via AJAX
-* so it can be processed by the dialog servlet (by reading the corresponding
-* "fn" request parameter).
-* 
-* @param filename
-*            Name of the file to be laoded.
-*/
-function d3web_loadCase(filename) {
-    var link;
-    
-    if(logging){
-        var now = ue_getCurrentDate();
-        link = $.query.set("action", "loadcase").set("fn", filename).set("timestring", now).toString();
-    } else {
-        link = $.query.set("action", "loadcase").set("fn", filename).toString();
-    }
-    link = window.location.href.replace(window.location.search, "") + link;
-
-    $.ajax({
-        type : "GET",
-        async : false,
-        cache : false, // needed for IE, call is not made otherwise
-        url : link,
-        success : function(html) {
-            // d3web_nextform();
-
-            // if (html != "same") { // replace target id of content if not the
-            // same
-            window.location.reload();
-            initFunctionality();
-        // }
-        }
-    });
-}
 
 function d3web_deleteCase(filename) {
 	
@@ -1484,3 +1459,61 @@ function ehs_handleintrobuttons(whichbutton){
     }
     
 }
+
+function d3web_loadFileClearname(whichbutton){
+    
+    filename = whichbutton.val();
+    
+    if (filename != "") {
+        d3web_loadCase(filename, true);
+    }
+}
+
+
+/**
+* Sends the name of the case/file that is to be loaded into the dialog via AJAX
+* so it can be processed by the dialog servlet (by reading the corresponding
+* "fn" request parameter).
+* 
+* @param filename
+*            Name of the file to be laoded.
+*/
+function d3web_loadCase(filename, clear) {
+    var link;
+    
+    if(clear != null && clear != false){
+       
+        if(logging){
+            var now = ue_getCurrentDate();
+            link = $.query.set("action", "loadcaseClear").set("fn", filename).set("timestring", now).toString();
+        } else {
+            link = $.query.set("action", "loadcaseClear").set("fn", filename).toString();
+        }
+    
+    } else {
+       
+       if(logging){
+            var now = ue_getCurrentDate();
+            link = $.query.set("action", "loadcase").set("fn", filename).set("timestring", now).toString();
+        } else {
+            link = $.query.set("action", "loadcase").set("fn", filename).toString();
+        }
+    }
+    
+   
+    link = window.location.href.replace(window.location.search, "") + link;
+
+    $.ajax({
+        type : "GET",
+        async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+            window.location.reload();
+            initFunctionality();
+        }
+    });
+}
+
+
+
