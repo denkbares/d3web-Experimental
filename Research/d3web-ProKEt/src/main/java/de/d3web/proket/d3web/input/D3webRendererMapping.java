@@ -111,7 +111,8 @@ public class D3webRendererMapping extends HashMap<String, String> {
      * @return The renderer as a simple Object.
      */
     public AbstractD3webRenderer getRenderer(TerminologyObject to) {
-        String userPref = D3webConnector.getInstance().getUserprefix();
+        String userPref = D3webConnector.getInstance().getUIprefix();
+        
         String name = DEFAULT;
         if (to == null) {
             return (AbstractD3webRenderer) getRenderer(userPref, name);
@@ -120,7 +121,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
             if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
                 name = IMG_QUESTION;
             }
-            if (D3webConnector.getInstance().getUserprefix().equals("ITree")) {
+            if (D3webConnector.getInstance().getUIprefix().equals("ITree")) {
 
                 if (to instanceof QuestionDate) {
                     userPref = "";

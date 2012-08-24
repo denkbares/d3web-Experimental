@@ -36,8 +36,8 @@ import de.d3web.core.session.Value;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
+import de.d3web.proket.d3web.input.D3webUESettings;
 import de.d3web.proket.d3web.input.D3webConnector;
-import de.d3web.proket.d3web.input.D3webUserSettings;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
@@ -60,7 +60,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
             Session s = ((Session) http.getAttribute("d3webSession"));
         
             // get the d3web base template according to dialog type
-		String userprefix = D3webConnector.getInstance().getUserprefix();
+		String userprefix = D3webConnector.getInstance().getUIprefix();
 		StringTemplate st = TemplateUtils.getStringTemplate(
 				userprefix + "D3webDialog",
 				"html");
@@ -89,11 +89,11 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		st.setAttribute("savecase", "true");
 		st.setAttribute("reset", "true");
                 
-                if(D3webConnector.getInstance().getFeedbackForm()){
+                if(D3webUESettings.getInstance().isFeedbackform()){
                     st.setAttribute("feedback", "true");
                 }
 
-                if(!D3webConnector.getInstance().getUEQuestionnaire().equals("NONE")){
+                if(!D3webUESettings.getInstance().getUequestionnaire().equals("NONE")){
                     st.setAttribute("ueq", "true");
                 }
 		/*
@@ -102,7 +102,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		 */
 		LoginMode loginMode = D3webConnector.getInstance().getD3webParser().getLoginMode();
 		cc.js.setLoginMode(loginMode);
-		if (loginMode == LoginMode.usrdat) {
+		if (loginMode == LoginMode.USRDAT) {
 			st.setAttribute("login", "true");
 		}
                 
@@ -118,14 +118,13 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		// handle Css
 		handleCss(cc);
 
-                D3webUserSettings us = 
-                        (D3webUserSettings)http.getAttribute("userSettings");
-                        
                 setDialogSpecificAttributes(http, st, request);
                 
+                int localeID = http.getAttribute("locale") != null 
+                 ?Integer.parseInt(http.getAttribute("locale").toString()):2;
 		// render the children
 		renderChildren(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet(), 
-                       us.getLanguageId(), http, request);
+                      localeID, http, request);
 
 		// global JS initialization
 		defineAndAddJS(cc);
@@ -240,7 +239,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 	@Override
 	public void defineAndAddJS(ContainerCollection cc) {
 		cc.js.enableD3Web();
-		if (D3webConnector.getInstance().isLogging()) {
+		if (D3webUESettings.getInstance().isLogging()) {
 			cc.js.enableClickLogging();
 		}
 		cc.js.add("$(function() {init_all();});", 1);

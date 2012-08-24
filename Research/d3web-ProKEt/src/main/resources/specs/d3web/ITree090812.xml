@@ -7,18 +7,20 @@
 	dialogcolumns="1"
 	questionnairecolumns="1"
 	questioncolumns = "1"
-	userprefix = "ITree" 
-	login = "off"
+	uiprefix = "ITree"
+	login = "OFF"
 	required = "none"
 	language = "de"
         >
 	<data kb="ITree090812.d3web" />
         
         <ue 
-            uequestionnaire='OWN' 
+            questionnaire='OWN' 
             study='' 
             logging='' 
             feedbackform="TRUE"
-            uegroup="" 
+            uegroup=""
+            logfile_path = ""
+            analysisoutput_path = ""
         />
 </dialog>

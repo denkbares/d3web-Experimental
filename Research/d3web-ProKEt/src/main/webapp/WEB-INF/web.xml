@@ -42,14 +42,13 @@
         <servlet-class>de.d3web.proket.d3web.run.EuraHSDialog</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ClarihieDialog</servlet-name>
-        <servlet-class>de.d3web.proket.d3web.run.ClarihieDialog</servlet-class>
+        <servlet-name>ITreeDialog</servlet-name>
+        <servlet-class>de.d3web.proket.d3web.run.ITreeDialog</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DownloadServlet</servlet-name>
         <servlet-class>de.d3web.proket.d3web.run.DownloadTxtFileServlet</servlet-class>
     </servlet>
-    
     <servlet-mapping>
         <servlet-name>HelloServlet</servlet-name>
         <url-pattern>/HelloServlet</url-pattern>
@@ -83,8 +82,8 @@
         <url-pattern>/EuraHS-Dialog</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ClarihieDialog</servlet-name>
-        <url-pattern>/ClarihieDialog</url-pattern>
+        <servlet-name>ITreeDialog</servlet-name>
+        <url-pattern>/ITreeDialog</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DownloadServlet</servlet-name>

@@ -8,7 +8,7 @@
 	questionnairecolumns="3"
 	questioncolumns = "2"
 	userprefix = "" 
-	login = "off"
+	login = "OFF"
         required = "none"
 	language = ""
         

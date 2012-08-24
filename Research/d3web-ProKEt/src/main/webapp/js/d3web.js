@@ -483,7 +483,10 @@ function initFunctionality() {
             markIsWidget("true");
             ue_logWidgetClicked($(this));
         }
-        d3web_addFacts();
+        if(!itree){
+            d3web_addFacts();
+            // TODO: we need a final save for ITree too one time!
+        }
         d3web_prepareSave();
     });
 
@@ -895,7 +898,7 @@ function d3web_addFacts() {
         cache : false, // needed for IE, call is not made otherwise
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         success : function(html) {
-            if (html.indexOf("itree_addfacts")==0){
+            if (html.indexOf("ITreeSUCCESS")==0){
                 window.location.reload();
                 initFunctionality();
             } 

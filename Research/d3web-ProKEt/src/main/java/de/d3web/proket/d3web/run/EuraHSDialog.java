@@ -40,7 +40,6 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
-import de.d3web.proket.d3web.input.D3webUserSettings;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.output.render.EuraHSDefaultRootD3webRenderer;
@@ -117,11 +116,9 @@ public class EuraHSDialog extends D3webDialog {
 
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
-        D3webUserSettings us = (D3webUserSettings) httpSession.getAttribute(USER_SETTINGS);
-
         // not needed for EuraHS, would work to change dropdown text default
         // to other Locale
-        //int loc = us.getLanguageId();
+        //int loc = Integer.parseInt((String) httpSession.getAttribute("locale").toString());
 
         Session sNew = initDropdownChoiceQuestions(d3webSess, 2);
         httpSession.setAttribute(D3WEB_SESSION, sNew);
@@ -361,8 +358,7 @@ public class EuraHSDialog extends D3webDialog {
             JSONLogger logger =
                     (JSONLogger) httpSession.getAttribute("logger");
 
-            // TODO is logging () into httpSession
-            if (D3webConnector.getInstance().isLogging()) {
+            if (uesettings.isLogging()) {
                 ServletLogUtils.resetLogfileName(session.getId(), logger);
                 String time;
                 if (request.getParameter("timestring") != null) {

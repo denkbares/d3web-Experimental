@@ -602,10 +602,10 @@ function d3web_answerYesNoHierarchyQuestions(buttonId, rating){
         cache : false, // needed for IE, call is not made otherwise
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         success : function(html) {
-            
-            // TODO: cookies for storing expand state of dialog!
-            window.location.reload();
-            initFunctionality();
+            if(html.indexOf("ITreeSUCCESS")==0){
+                window.location.reload();
+                initFunctionality();
+            }
         },
         error : function(html) {
             alert("ajax error add facts");

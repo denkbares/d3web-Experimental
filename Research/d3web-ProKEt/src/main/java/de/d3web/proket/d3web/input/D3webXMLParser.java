@@ -140,7 +140,6 @@ public class D3webXMLParser {
     }
 
     // gets a possibly defined header 
-    // TODO  WORKING?!
     public String getHeader() {
         return XMLUtils.getStr((Element) dialogSpec, "header", "");
     }
@@ -172,17 +171,17 @@ public class D3webXMLParser {
         return col;
     }
 
+    // currently supported login modes of ProKEt: OFF = no login, USRDAT: based
+    // on tailored textfile, DB: using SQL database connection
     public enum LoginMode {
-
-        off, usrdat, db
+        OFF, USRDAT, DB
     }
 
     // returns false in case "no" is given OR nothing
     public LoginMode getLoginMode() {
-        LoginMode currentMode = LoginMode.off;
+        LoginMode currentMode = LoginMode.OFF;
         String log = XMLUtils.getStr((Element) dialogSpec, "login", null);
         if (log != null) {
-
             currentMode = LoginMode.valueOf(log);
         }
         return currentMode;
@@ -200,8 +199,8 @@ public class D3webXMLParser {
     }
 
     // get the UI user Prefix, e.g. ITree or Hernia...
-    public String getUserPrefix() {
-        return XMLUtils.getStr((Element) dialogSpec, "userprefix", "");
+    public String getUIPrefix() {
+        return XMLUtils.getStr((Element) dialogSpec, "uiprefix", "");
     }
 
     // get the language to be set for UI internal (non-KB) language stuff
@@ -234,19 +233,33 @@ public class D3webXMLParser {
      * TODO: write them to separate confic file (like: UE CONNECTOR) and use
      * them for creating the usability stuff
      */
-    public String getLogging() {
-        return XMLUtils.getStr((Element) ueSpec, "logging", "FALSE");
+    public Boolean getLogging() {
+        return XMLUtils.getBoolean((Element) ueSpec, "logging", Boolean.FALSE);
     }
 
-    public String getFeedbackform() {
-        return XMLUtils.getStr((Element) ueSpec, "feedbackform", "FALSE");
+    public Boolean getFeedbackform() {
+        return XMLUtils.getBoolean((Element) ueSpec, "feedbackform", Boolean.FALSE);
     }
 
-    public String getUEQuestionnaire() {
-        return XMLUtils.getStr((Element) ueSpec, "questionnaire", "NONE");
+    public D3webUESettings.UEQ getUEQuestionnaire() {
+        String ueq = XMLUtils.getStr((Element) ueSpec, "questionnaire", 
+                D3webUESettings.UEQ.NONE.toString());
+        return D3webUESettings.UEQ.valueOf(ueq);
     }
 
     public String getUEGroup() {
         return XMLUtils.getStr((Element) ueSpec, "uegroup", "");
+    }
+    
+    public boolean getStudy(){
+        return XMLUtils.getBoolean((Element) ueSpec, "study", Boolean.TRUE);
+    }
+    
+    public String getLogfilePath(){
+        return XMLUtils.getStr((Element) ueSpec, "logfile_path", "");
+    }
+    
+    public String getAnalysisOutputPath(){
+        return XMLUtils.getStr((Element) ueSpec, "analysisoutput_path", "");
     }
 }

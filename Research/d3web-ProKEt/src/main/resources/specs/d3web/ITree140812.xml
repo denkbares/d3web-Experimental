@@ -7,8 +7,8 @@
 	dialogcolumns="1"
 	questionnairecolumns="1"
 	questioncolumns = "1"
-	userprefix = "ITree" 
-	login = "off"
+	uiprefix = "ITree"
+	login = "OFF"
 	required = "none"
 	language = "de"
         >
@@ -20,5 +20,7 @@
             logging='' 
             feedbackform="TRUE"
             uegroup="" 
+            logfile_path = ""
+            analysisoutput_path = ""
         />
 </dialog>

@@ -89,9 +89,9 @@ public class JSCodeContainer implements ICodeContainer {
     }
 
     public void setLoginMode(LoginMode mode) {
-        if (mode == LoginMode.usrdat) {
+        if (mode == LoginMode.USRDAT) {
             usrdatLogin = true;
-        } else if (mode == LoginMode.db) {
+        } else if (mode == LoginMode.DB) {
             dbLogin = true;
         }
     }

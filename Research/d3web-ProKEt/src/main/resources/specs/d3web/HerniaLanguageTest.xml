@@ -7,12 +7,14 @@
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns = "2"
-	userprefix = "EuraHS" 
-	login = "off"
+	uiprefix = "EuraHS" 
+	login = ""
         required = "none"
 	language = ""
 	>
 	<data kb="HerniaLanguageTest.d3web" />
         
-        <ue logging = "TRUE" />
+        <ue logging = "TRUE" 
+            questionnaire="SUS"
+            feedbackform = "TRUE"/>
 </dialog>

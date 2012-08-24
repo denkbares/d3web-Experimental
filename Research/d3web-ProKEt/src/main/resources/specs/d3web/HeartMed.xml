@@ -8,9 +8,8 @@
 	questionnairecolumns="3"
 	questioncolumns = "2"
 	userprefix = "Mediastinitis" 
-	login = "usrdat"
+	login = "USRDAT"
 	required = "Betreffende Klinik"
-	language = "de"
         >
 	<data kb="MediastinitisDez2011.d3web" />
         <ue logging = "TRUE"/>

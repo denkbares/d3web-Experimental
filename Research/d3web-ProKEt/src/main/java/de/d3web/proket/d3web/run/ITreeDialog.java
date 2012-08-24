@@ -61,12 +61,12 @@ import java.util.*;
  * @date 14.01.2011; Update: 28/01/2011
  *
  */
-public class ClarihieDialog extends D3webDialog {
+public class ITreeDialog extends D3webDialog {
 
     @Override
     protected String getSource(HttpServletRequest request, HttpSession http) {
 
-        return "ITree090812";
+        return "ITree140812";
     }
 
     /**
@@ -80,6 +80,7 @@ public class ClarihieDialog extends D3webDialog {
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
 
+        response.setContentType("text/html; charset=UTF-8");
         PrintWriter writer = response.getWriter();
 
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
@@ -94,16 +95,16 @@ public class ClarihieDialog extends D3webDialog {
 
 
         // get the root renderer --> call getRenderer with null
-        DefaultRootD3webRenderer d3webr =
-                (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
+        //DefaultRootD3webRenderer d3webr =
+          //      (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
 
         // new ContainerCollection needed each time to get an updated dialog
-        ContainerCollection cc = new ContainerCollection();
-        Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
+        //ContainerCollection cc = new ContainerCollection();
+        //Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
-        cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
-        writer.print(cc.html.toString()); // deliver the rendered output
-        writer.close(); // and close
+        //cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
+        //writer.print(cc.html.toString()); // deliver the rendered output
+        writer.append("ITreeSUCCESS");
     }
 
     /**
@@ -119,6 +120,7 @@ public class ClarihieDialog extends D3webDialog {
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
 
+        PrintWriter writer = response.getWriter();
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
         String question = request.getParameter("question");
         String value = request.getParameter("value");
@@ -130,13 +132,15 @@ public class ClarihieDialog extends D3webDialog {
                 d3webSession);
         
         D3webUtils.setValueITree(question, value, d3webSession);
+        
+        writer.append("ITreeSUCCESS");
     }
 
     private void setValue(Session d3webSession, HttpServletRequest request,
             String question, String value, HttpSession httpSession) {
 
         D3webUtils.setValueITree(question, value, d3webSession);
-        if (d3wcon.isLogging()) {
+        if (uesettings.isLogging()) {
             handleQuestionValueLogging(
                     request, httpSession, question, value, d3webSession);
         }
@@ -184,41 +188,5 @@ public class ClarihieDialog extends D3webDialog {
         ServletLogUtils.logQuestionValue(question, value, logtime, logger);
     }
 
-    @Override
-    protected void show(HttpServletRequest request, HttpServletResponse response,
-            HttpSession httpSession) throws IOException {
-        
-        Session d3webs = (Session)httpSession.getAttribute(D3WEB_SESSION);
-        //if(!(httpSession.getAttribute("showstati")!=null &&
-          //      httpSession.getAttribute("showstati").equals("set"))){
-            //TerminologyObject root = d3webs.getKnowledgeBase().getRootQASet();
-            //Session session = setQuestionShowStati(root, d3webs);
-            //httpSession.setAttribute(D3WEB_SESSION, session);
-        //} 
-        super.show(request, response, httpSession);
-    }
-
-    private Session setQuestionShowStati(TerminologyObject to, Session d3webs) {
-
-        for (TerminologyObject child : to.getChildren()) {
-
-            if (child.getInfoStore().getValue(ProKEtProperties.ITREEINIT) == null) {
-                
-                TerminologyObject questionToSet = 
-                        d3webs.getKnowledgeBase().getManager().searchQuestion(child.getName());
-                questionToSet.getInfoStore().addValue(ProKEtProperties.ITREEINIT, false);
-            }
-            
-            if(child.getChildren().length > 0){
-                for (TerminologyObject childschild: child.getChildren()){
-                    setQuestionShowStati(childschild, d3webs);
-                }
-            }
-        }
-        
-        return d3webs;
-    }
-    
-    
-    
+   
 }

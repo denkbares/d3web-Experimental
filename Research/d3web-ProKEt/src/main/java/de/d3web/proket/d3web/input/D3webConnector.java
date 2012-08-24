@@ -122,7 +122,7 @@ public class D3webConnector {
     /*
      * prefix that can be set by the user to define more specific dialog types
      */
-    private String userprefix = "";
+    private String uiprefix = "";
 
     /*
      * single element specification, e.g. selectbox...
@@ -131,13 +131,10 @@ public class D3webConnector {
     private D3webXMLParser d3webParser = null;
     // set english as default language setting
     private String language = "en";
-    private JSONLogger logger = null;
+    
     private LoginMode loginMode;
-    private boolean loggingActive = false;
-    private D3webUserSettings usersettings = null;
-    private boolean feedbackForm = false;
-    private String ueQuestionnaire = "NONE";
-
+   
+    
     public static D3webConnector getInstance() {
         if (instance == null) {
             instance = new D3webConnector();
@@ -270,12 +267,12 @@ public class D3webConnector {
         this.kbn = kbn;
     }
 
-    public String getUserprefix() {
-        return this.userprefix;
+    public String getUIprefix() {
+        return this.uiprefix;
     }
 
-    public void setUserprefix(String pref) {
-        this.userprefix = pref;
+    public void setUIprefix(String pref) {
+        this.uiprefix = pref;
     }
 
     public void setSingleSpecs(HashMap<String, HashMap<String, String>> singleSpecs) {
@@ -308,45 +305,5 @@ public class D3webConnector {
 
     public LoginMode getLoginMode() {
         return this.loginMode;
-    }
-
-    public void setLogger(JSONLogger logger) {
-        this.logger = logger;
-    }
-
-    public JSONLogger getLogger() {
-        return this.logger;
-    }
-
-    public void setLogging(boolean logging) {
-        this.loggingActive = logging;
-    }
-
-    public boolean isLogging() {
-        return this.loggingActive;
-    }
-    
-    public void setFeedbackForm(boolean ff) {
-        this.feedbackForm = ff;
-    }
-
-    public boolean getFeedbackForm() {
-        return this.feedbackForm;
-    }
-    
-    public void setUEQuestionnaire(String ueq) {
-        this.ueQuestionnaire = ueq;
-    }
-
-    public String getUEQuestionnaire() {
-        return this.ueQuestionnaire;
-    }
-
-    public void setUserSettings(D3webUserSettings us) {
-        this.usersettings = us;
-    }
-
-    public D3webUserSettings getUserSettings() {
-        return this.usersettings;
     }
 }

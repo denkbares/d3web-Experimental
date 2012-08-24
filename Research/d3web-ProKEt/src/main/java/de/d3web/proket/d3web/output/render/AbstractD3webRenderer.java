@@ -549,11 +549,11 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
     public String getTemplateName(String baseObjectName) {
         String tempName = "";
         D3webConnector d3w = D3webConnector.getInstance();
-        String up = d3w.getUserprefix();
+        String up = d3w.getUIprefix();
         if (up != "" && up != null) {
             // hier evtl noch einfügen Prüfung auf Großbuchstaben oder
             // automatisch umwandeln
-            tempName = D3webConnector.getInstance().getUserprefix() + baseObjectName;
+            tempName = D3webConnector.getInstance().getUIprefix() + baseObjectName;
         } else {
             tempName = baseObjectName;
         }

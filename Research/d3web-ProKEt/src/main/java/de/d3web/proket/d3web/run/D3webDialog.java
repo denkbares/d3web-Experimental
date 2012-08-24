@@ -107,6 +107,7 @@ public class D3webDialog extends HttpServlet {
     protected final GlobalSettings GLOBSET = GlobalSettings.getInstance();
     protected D3webXMLParser d3webParser;
     protected D3webConnector d3wcon;
+    protected D3webUESettings uesettings;
     protected static Map<String, List<String>> usrDat = null;
     private String prevQ = "";
     private String prevV = "";
@@ -158,29 +159,42 @@ public class D3webDialog extends HttpServlet {
         HttpSession httpSession = request.getSession(true);
 
         String source = "";
-        if (request.getParameter("src")!=null && 
-                !request.getParameter("src").equals("")){
+
+
+        if (request.getParameter("src") == null) {
+            source = getSource(request, httpSession);
+        } else if (request.getParameter("src") != null && !request.getParameter("src").equals("")) {
+
             source = getSource(request, httpSession);
         } else {
             source = request.getParameter("src");
         }
         
-        
+
+        /*
+         * if (request.getParameter("src") != null &&
+         * !request.getParameter("src").equals("")) { source =
+         * request.getParameter("src");
+         *
+         * } else { source = getSource(request, httpSession); }
+         */
+
         // try to get the src parameter, i.e. the specification of the dialog
         d3webParser.setSourceToParse(source);
 
         d3wcon = D3webConnector.getInstance();
-
         d3wcon.setD3webParser(d3webParser);
+
+        uesettings = D3webUESettings.getInstance();
 
         // set SRC store attribute to "" per default for avoiding nullpointers
         if (sourceSave == null) {
             sourceSave = "";
         }
-
         // only parse again if stored source is not equal to current source
         // then a new dialog has been called
         if (!sourceSave.equals(source)) {
+
             httpSession.setAttribute("loginit", false);
             //httpSession.setAttribute("first", "true");
             sourceSave = source;
@@ -196,27 +210,14 @@ public class D3webDialog extends HttpServlet {
             d3wcon.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
             d3wcon.setCss(d3webParser.getCss());
             d3wcon.setHeader(d3webParser.getHeader());
-            d3wcon.setUserprefix(d3webParser.getUserPrefix());
+            d3wcon.setUIprefix(d3webParser.getUIPrefix());
             d3wcon.setLoginMode(d3webParser.getLoginMode());
-
+          
             httpSession.setAttribute("uegroup", d3webParser.getUEGroup());
 
-            // switch on/off logging depending on xml specification
-            if (d3webParser.getLogging().contains("TRUE")) {
-                d3wcon.setLogging(true);
-            }
-
-            if (d3webParser.getFeedbackform().contains("TRUE")) {
-                d3wcon.setFeedbackForm(true);
-            }
-
-            if (!d3webParser.getUEQuestionnaire().contains("FALSE")) {
-                if (d3webParser.getUEQuestionnaire().equals("SUS")) {
-                    d3wcon.setUEQuestionnaire("SUS");
-                } else if (d3webParser.getUEQuestionnaire().equals("OWN")) {
-                    d3wcon.setUEQuestionnaire("OWN");
-                }
-            }
+            uesettings.setLogging(d3webParser.getLogging());
+            uesettings.setFeedbackform(d3webParser.getFeedbackform());
+            uesettings.setUequestionnaire(d3webParser.getUEQuestionnaire());
 
             // set dialog language (for internationalization of widgets, NOT
             // KB elements (specified in knowledge base
@@ -226,9 +227,9 @@ public class D3webDialog extends HttpServlet {
 
             // Get userprefix specification
             String userpref = "DEFAULT";
-            if (!(d3wcon.getUserprefix().equals(""))
-                    && !(d3wcon.getUserprefix() == null)) {
-                userpref = d3wcon.getUserprefix();
+            if (!(d3wcon.getUIprefix().equals(""))
+                    && !(d3wcon.getUIprefix() == null)) {
+                userpref = d3wcon.getUIprefix();
             }
 
             // set necessary paths for saving stuff such as cases, logfiles...
@@ -247,7 +248,7 @@ public class D3webDialog extends HttpServlet {
             resetD3webSession(httpSession);
 
             // if session is null create a session 
-            
+
 
             /*
              * initialize logging
@@ -268,11 +269,6 @@ public class D3webDialog extends HttpServlet {
 
 
 
-        if (httpSession.getAttribute(USER_SETTINGS)
-                == null) {
-            D3webUserSettings us = new D3webUserSettings();
-            httpSession.setAttribute(USER_SETTINGS, us);
-        }
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
 
@@ -294,7 +290,7 @@ public class D3webDialog extends HttpServlet {
         }
 
         if (d3wcon.getLoginMode()
-                == LoginMode.db) {
+                == LoginMode.DB) {
             String authenticated = (String) httpSession.getAttribute("authenticated");
             if (authenticated == null || !authenticated.equals("yes")) {
                 response.sendRedirect("../EuraHS-Login");
@@ -453,10 +449,10 @@ public class D3webDialog extends HttpServlet {
 
             } else {
 
-                // in case of db login (as for EuraHS) redirect to the EuraHS-Login
+                // in case of DB login (as for EuraHS) redirect to the EuraHS-Login
                 // Servlet --> TODO refactor: rename EuraHS-Login Servlet or create
                 // superservlet to be overwritten
-                if (d3wcon.getLoginMode() == LoginMode.db) {
+                if (d3wcon.getLoginMode() == LoginMode.DB) {
                     String authenticated = (String) httpSession.getAttribute("authenticated");
                     if (authenticated == null || !authenticated.equals("yes")) {
                         response.sendRedirect("../EuraHS-Login");
@@ -498,12 +494,11 @@ public class D3webDialog extends HttpServlet {
                 e.printStackTrace();
             }
             return;
-        } else if(action.equalsIgnoreCase("addFactITree")) {
+        } else if (action.equalsIgnoreCase("addFactITree")) {
             addFactITree(request, response, httpSession);
-        } else if(action.equalsIgnoreCase("loadcaseClear")) {
+        } else if (action.equalsIgnoreCase("loadcaseClear")) {
             loadCaseClear(request, response, httpSession);
-        }
-        else {
+        } else {
             handleDialogSpecificActions(httpSession, request, response, action);
             return;
         }
@@ -591,8 +586,6 @@ public class D3webDialog extends HttpServlet {
             writer.append("false");
         }
     }
-
-   
 
     /**
      * Add one or several given facts. Thereby, first check whether input-store
@@ -687,7 +680,7 @@ public class D3webDialog extends HttpServlet {
             Collection abstractionsAfter =
                     D3webUtils.getValuedAbstractions(d3webSession);
 
-            if (d3wcon.isLogging()) {
+            if (uesettings.isLogging()) {
 
                 Collection newAbstractions = new ArrayList<TerminologyObject>();
 
@@ -822,8 +815,6 @@ public class D3webDialog extends HttpServlet {
     private void renderAndUpdateDiff(PrintWriter writer, Session d3webSession, Set<TerminologyObject> diff, HttpSession httpSession,
             HttpServletRequest request) {
         ContainerCollection cc = new ContainerCollection();
-        D3webUserSettings us = (D3webUserSettings) httpSession.getAttribute(USER_SETTINGS);
-
 
         for (TerminologyObject to : diff) {
             if (isHiddenOrHasHiddenParent(to)) {
@@ -839,11 +830,12 @@ public class D3webDialog extends HttpServlet {
             TerminologyObject parent = to instanceof QContainer ? d3wcon.getKb().getRootQASet()
                     : D3webUtils.getQuestionnaireAncestor(to);
 
+            int loc = Integer.parseInt(httpSession.getAttribute("locale").toString());
             // get the HTML code for rendering the parent containing the to-update element
             writer.append(
                     toRenderer.renderTerminologyObject(
                     d3webSession, cc, to,
-                    parent, us.getLanguageId(),
+                    parent, loc,
                     httpSession, request));
         }
         writer.append(REPLACEID + "headerInfoLine");
@@ -881,10 +873,7 @@ public class D3webDialog extends HttpServlet {
         int localeID =
                 Integer.parseInt(
                 request.getParameter("langID").toString());
-        D3webUserSettings us = (D3webUserSettings) httpSession.getAttribute(USER_SETTINGS);
-
-        us.setLanguageId(localeID);
-        httpSession.setAttribute(USER_SETTINGS, us);
+        httpSession.setAttribute("locale", localeID);
 
 //        GLOBSET.setLocaleIdentifier(localeID);
     }
@@ -1096,7 +1085,7 @@ public class D3webDialog extends HttpServlet {
                     (JSONLogger) httpSession.getAttribute("logger");
 
             // TODO is logging () into httpSession
-            if (D3webConnector.getInstance().isLogging()) {
+            if (uesettings.isLogging()) {
                 ServletLogUtils.resetLogfileName(session.getId(), logger);
                 String time;
                 if (request.getParameter("timestring") != null) {
@@ -1224,11 +1213,9 @@ public class D3webDialog extends HttpServlet {
         httpSession.setAttribute(D3WEB_SESSION, d3webSession);
         httpSession.setAttribute("lastLoaded", "");
         httpSession.setAttribute("handleBrowsers", null);
-        D3webUserSettings us = new D3webUserSettings();
-        httpSession.setAttribute(USER_SETTINGS, us);
 
         D3webConnector.getInstance().setSession(d3webSession);
-        if (d3wcon.isLogging()) {  // move into httpSession
+        if (uesettings.isLogging()) {
 
             httpSession.setAttribute("loginit", false);
             initializeLoggingMechanism(httpSession);
@@ -1300,11 +1287,11 @@ public class D3webDialog extends HttpServlet {
         String user = (String) httpSession.getAttribute("user");
         String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
         String forceString = request.getParameter("force");
-        
+
         // force wird im JS gesetzt, falls der User unter bereits vorhandenem
         // Namen speichern will und das nochmal bestätigt.
         boolean force = forceString != null && forceString.equals("true");
-        
+
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
         // if: really overwrite existing OR case not exists OR case exists but
@@ -1313,7 +1300,7 @@ public class D3webDialog extends HttpServlet {
                 || !PersistenceD3webUtils.existsCase(user, userFilename)
                 || (PersistenceD3webUtils.existsCase(user, userFilename)
                 && lastLoaded != null && lastLoaded.equals(userFilename))) {
-            
+
             PersistenceD3webUtils.saveCase(
                     user,
                     userFilename,
@@ -1441,7 +1428,7 @@ public class D3webDialog extends HttpServlet {
         /*
          * Constructing the message
          */
-        String dialogFlag = d3wcon.getUserprefix();
+        String dialogFlag = d3wcon.getUIprefix();
         if (dialogFlag == null) {
             dialogFlag = "";
         }
@@ -1515,7 +1502,7 @@ public class D3webDialog extends HttpServlet {
             qDataBui.append("\n");
         }
 
-        String dialogFlag = d3wcon.getUserprefix();
+        String dialogFlag = d3wcon.getUIprefix();
         if (dialogFlag == null) {
             dialogFlag = "";
         }
@@ -1592,21 +1579,20 @@ public class D3webDialog extends HttpServlet {
             }
         }
 
-        
-        /*String uesystemtype =
-                httpSession.getAttribute("uesystemtype").toString() != null
-                ? httpSession.getAttribute("uesystemtype").toString() : "";
-        // WIRD IM DialogRenderer in die httpSession geschrieben!
-        if (uesystemtype != null && !uesystemtype.equals("")) {
-            String isSystemTypeLogged =
-                    httpSession.getAttribute("isSystemTypeLogged") != null
-                    ? httpSession.getAttribute("isSystemTypeLogged").toString() : "";
 
-            if (!isSystemTypeLogged.equals("true")) {
-                ServletLogUtils.logDialogType(uesystemtype, logger);
-                httpSession.setAttribute("isSystemTypeLogged", "true");
-            }
-        }*/
+        /*
+         * String uesystemtype =
+         * httpSession.getAttribute("uesystemtype").toString() != null ?
+         * httpSession.getAttribute("uesystemtype").toString() : ""; // WIRD IM
+         * DialogRenderer in die httpSession geschrieben! if (uesystemtype !=
+         * null && !uesystemtype.equals("")) { String isSystemTypeLogged =
+         * httpSession.getAttribute("isSystemTypeLogged") != null ?
+         * httpSession.getAttribute("isSystemTypeLogged").toString() : "";
+         *
+         * if (!isSystemTypeLogged.equals("true")) {
+         * ServletLogUtils.logDialogType(uesystemtype, logger);
+         * httpSession.setAttribute("isSystemTypeLogged", "true"); } }
+         */
     }
 
     protected void logSessionEnd(HttpServletRequest request, HttpSession httpSession) {
@@ -1785,25 +1771,27 @@ public class D3webDialog extends HttpServlet {
         // overwritten in ClarihieDilaog (which should be renamed to iTreeDialog)
     }
 
-    
-    /* itree specific */
-     protected void addFactsYN(HttpServletRequest request,
+    /*
+     * itree specific
+     */
+    protected void addFactsYN(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
         // overwritten by ClariHie Dialog
     }
-     
-     protected void addFactITree(HttpServletRequest request,
+
+    protected void addFactITree(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
-            throws IOException{
-         // overwritten by ClariHie Dialog
-     }
-     
-     /* eurahs specific */
-      protected void loadCaseClear(HttpServletRequest request,
+            throws IOException {
+        // overwritten by ClariHie Dialog
+    }
+
+    /*
+     * eurahs specific
+     */
+    protected void loadCaseClear(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
-            throws IOException{
-         // overwritten by EuraHS Dialog
-     }
-    
+            throws IOException {
+        // overwritten by EuraHS Dialog
+    }
 }

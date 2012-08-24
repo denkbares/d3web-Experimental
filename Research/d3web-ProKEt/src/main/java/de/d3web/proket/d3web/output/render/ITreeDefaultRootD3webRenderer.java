@@ -20,8 +20,8 @@
 package de.d3web.proket.d3web.output.render;
 
 import de.d3web.core.session.Session;
+import de.d3web.proket.d3web.input.D3webUESettings;
 import de.d3web.proket.d3web.input.D3webConnector;
-import de.d3web.proket.d3web.input.D3webUserSettings;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.output.container.ContainerCollection;
@@ -41,7 +41,7 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
             Session d3webSession, HttpSession http, HttpServletRequest request) {
 
         // get the d3web base template according to dialog type
-        String userprefix = D3webConnector.getInstance().getUserprefix();
+        String userprefix = D3webConnector.getInstance().getUIprefix();
         StringTemplate st = TemplateUtils.getStringTemplate(
                 userprefix + "D3webDialog",
                 "html");
@@ -72,18 +72,18 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         st.setAttribute("savecase", "true");
         st.setAttribute("reset", "true");
 
-        if (D3webConnector.getInstance().getFeedbackForm()) {
+        if (D3webUESettings.getInstance().isFeedbackform()) {
             st.setAttribute("feedback", "true");
         }
 
-        String ueq = D3webConnector.getInstance().getUEQuestionnaire();
-        if (!ueq.equals("NONE")) {
+        D3webUESettings.UEQ ueq = D3webUESettings.getInstance().getUequestionnaire();
+        if (ueq.equals(D3webUESettings.UEQ.NONE)) {
             st.setAttribute("ueq", "true");
 
-            if (ueq.equals("SUS")) {
+            if (ueq.equals(D3webUESettings.UEQ.SUS)) {
                 st.setAttribute("sus", true);
                 st.removeAttribute("own");
-            } else if (ueq.equals("OWN")) {
+            } else if (ueq.equals(D3webUESettings.UEQ.OWN)) {
                 st.setAttribute("own", true);
                 st.removeAttribute("sus");
             }
@@ -94,7 +94,7 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
          */
         D3webXMLParser.LoginMode loginMode = D3webConnector.getInstance().getD3webParser().getLoginMode();
         cc.js.setLoginMode(loginMode);
-        if (loginMode == D3webXMLParser.LoginMode.usrdat) {
+        if (loginMode == D3webXMLParser.LoginMode.USRDAT) {
             st.setAttribute("login", "true");
         }
 
@@ -110,12 +110,11 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         // handle Css
         handleCss(cc);
 
-        D3webUserSettings us =
-                (D3webUserSettings) http.getAttribute("userSettings");
-
-        // render the children
+        int localeID = http.getAttribute("locale") != null 
+                 ?Integer.parseInt(http.getAttribute("locale").toString()):2;
+      // render the children
         renderChildrenITreeNum(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet(),
-                us.getLanguageId(), http, request);
+                localeID, http, request);
 
         // global JS initialization
         defineAndAddJS(cc);
@@ -174,7 +173,7 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         cc.js.enableD3Web();
         cc.js.setITree();
 
-        if (D3webConnector.getInstance().isLogging()) {
+        if (D3webUESettings.getInstance().isLogging()) {
             cc.js.enableClickLogging();
         }
 
