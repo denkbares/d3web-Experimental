@@ -1,0 +1,64 @@
+/*
+ * Copyright (C) 2012 denkbares GmbH
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
+ */
+package de.knowwe.rdfs.vis;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.servlet.ServletContext;
+
+import de.knowwe.core.Attributes;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+
+/**
+ * 
+ * @author Johanna Latt
+ * @created 20.06.2012
+ */
+public class OntoVisSVGDownload extends AbstractAction {
+
+	@Override
+	public void execute(UserActionContext context) throws IOException {
+
+		ServletContext servletContext = context.getServletContext();
+		if (servletContext == null) return; // at wiki startup only
+		String realPath = servletContext.getRealPath("");
+		String tmpPath = "\\KnowWEExtension\\tmp\\";
+		String path = realPath + tmpPath + "graph" + context.getParameter(Attributes.SECTION_ID)
+				+ ".svg";
+		File svg = new File(path);
+		String filename = svg.getName();
+		context.setContentType("application/x-bin");
+		context.setHeader("Content-Disposition", "attachment;filename=\"" + filename + "\"");
+		FileInputStream fis = new FileInputStream(svg);
+		OutputStream ous = context.getOutputStream();
+		byte[] readBuffer = new byte[2156];
+		int bytesIn = 0;
+		while ((bytesIn = fis.read(readBuffer)) != -1)
+		{
+			ous.write(readBuffer, 0, bytesIn);
+		}
+		// close the Stream
+		fis.close();
+		ous.close();
+	}
+}

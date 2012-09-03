@@ -1,0 +1,94 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-OntoVis" version="0.0.1">
+
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="OntoVisType">
+		<parameter id="class"
+			value="de.knowwe.rdfs.vis.OntoVisType" />
+		<parameter id="name" value="de.knowwe.rdfs.vis.OntoVisType" />
+		<parameter id="description" value="KnowWEObjectType Hede.knowwe.rdfs.vis.OntoVisTypelloKnowWEType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="OntoVisSVGDownloadProvider">
+		<parameter id="class"
+			value="de.knowwe.rdfs.vis.OntoVisSVGDownloadProvider" />
+		<parameter id="name" value="OntoVisSVGDownloadProvider" />
+		<parameter id="description"
+			value="Offers a download button to download the graph as an svg file." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="/Vis" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="OntoVisSVGDownload">
+		<parameter id="class" value="de.knowwe.rdfs.vis.OntoVisSVGDownload" />
+		<parameter id="name" value="OntoVisSVGDownload" />
+		<parameter id="description"
+			value="Downloads the .svg-file of the displayed Graph" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="OntoVisDisplaySVGProvider">
+		<parameter id="class"
+			value="de.knowwe.rdfs.vis.OntoVisDisplaySVGProvider" />
+		<parameter id="name" value="OntoVisDisplaySVGProvider" />
+		<parameter id="description"
+			value="Offers a button to display the graph" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="/Vis" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="OntoVisDisplaySVG">
+		<parameter id="class" value="de.knowwe.rdfs.vis.OntoVisDisplaySVG" />
+		<parameter id="name" value="OntoVisDisplaySVG" />
+		<parameter id="description"
+			value="Display the .svg-Graph" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="OntoVisDOTDownloadProvider">
+		<parameter id="class"
+			value="de.knowwe.rdfs.vis.OntoVisDOTDownloadProvider" />
+		<parameter id="name" value="OntoVisDOTDownloadProvider" />
+		<parameter id="description"
+			value="Offers a download button to download the dot-file of the graph." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="/Vis" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="OntoVisDOTDownload">
+		<parameter id="class" value="de.knowwe.rdfs.vis.OntoVisDOTDownload" />
+		<parameter id="name" value="OntoVisDOTDownload" />
+		<parameter id="description"
+			value="Downloads the .dot-file of the displayed Graph" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+</plugin>
