@@ -226,6 +226,7 @@
 		<module>KnowWE-Plugin-JSPWiki-MarkupSet</module>
 		<module>KnowWE-Plugin-Include</module>
 		<module>KnowWE-Plugin-LoadKnowledgeBase</module>
+		<module>KnowWE-Plugin-OntoVis</module>
 	</modules>
 	<repositories>
 		<repository>
