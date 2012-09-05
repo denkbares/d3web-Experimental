@@ -24,6 +24,7 @@ import de.d3web.proket.d3web.input.D3webUESettings;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.input.UISettings;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 import javax.servlet.http.HttpServletRequest;
@@ -40,8 +41,9 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
     public ContainerCollection renderRoot(ContainerCollection cc,
             Session d3webSession, HttpSession http, HttpServletRequest request) {
 
+        UISettings uis = UISettings.getInstance();
         // get the d3web base template according to dialog type
-        String userprefix = D3webConnector.getInstance().getUIprefix();
+        String userprefix = uis.getUIprefix();
         StringTemplate st = TemplateUtils.getStringTemplate(
                 userprefix + "D3webDialog",
                 "html");
@@ -49,7 +51,7 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         /*
          * fill some basic attributes
          */
-        st.setAttribute("headertext", D3webConnector.getInstance().getHeader());
+        st.setAttribute("headertext", uis.getHeader());
         st.setAttribute("title", "ITree UI - Based on Num-Question Model");
 
         // load case list dependent from logged in user, e.g. MEDIASTINITIS
@@ -60,7 +62,7 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         //st.setAttribute("info", info);
 
         // set language variable for StringTemplate Widgets
-        String lang = D3webConnector.getInstance().getLanguage();
+        String lang = uis.getLanguage();
         if (lang.equals("de")) {
             st.setAttribute("langDE", "de");
         } else if (lang.equals("en")) {
@@ -134,7 +136,7 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
         D3webConnector d3wcon = D3webConnector.getInstance();
         // css code from the specification XML
-        String css = d3wcon.getCss();
+        String css = UISettings.getInstance().getCss();
 
         if (css != null) {
             // file reference or inline css?

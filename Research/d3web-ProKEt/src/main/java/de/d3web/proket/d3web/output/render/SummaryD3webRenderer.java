@@ -379,7 +379,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                 
                 if (D3webUtils.hasAnsweredChildren(to, d3webSession)) {
                     bui.append("<div style='margin-top:10px;'><b>");
-                    bui.append(D3webConnector.getInstance().getID(to));
+                    bui.append(D3webConnector.getInstance().getTOCount(to));
                     bui.append(" ");
                     bui.append(to.getName());
                     bui.append("</b></div>\n");
@@ -398,7 +398,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                         String f = D3webUtils.getFormattedDateFromString((Date) val.getValue(), "dd.MM.yyyy");
 
                         bui.append("<div style='margin-left:10px;'>"
-                                + D3webConnector.getInstance().getID(to) + " " + to.getName()
+                                + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
                                 + " -- " + f + "</div>\n");
                     } // handle abstraction questions separately, e.g. for rounding age quesstion
                     else if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)
@@ -407,13 +407,13 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                         System.out.println(to.getName() + " " + val.toString());
                         int doubleAsInt = (int) Double.parseDouble(val.toString());
                         bui.append("<div style='margin-left:10px;'>"
-                                + D3webConnector.getInstance().getID(to) + " " + to.getName()
+                                + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
                                 + " -- " + doubleAsInt + "</div>\n");
 
                     } // all other questions: just append question and val
                     else {
                         bui.append("<div style='margin-left:10px;'>"
-                                + D3webConnector.getInstance().getID(to) + " " + to.getName()
+                                + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
                                 + " -- " + val + "</div>\n");
 
                     }
@@ -434,7 +434,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
 
             if (D3webUtils.hasAnsweredChildren(to, d3webSession)) {
                 bui.append("<div style='margin-top:10px;'><b>");
-                bui.append(D3webConnector.getInstance().getID(to));
+                bui.append(D3webConnector.getInstance().getTOCount(to));
                 bui.append(" ");
                 bui.append(to.getName());
                 bui.append("</b></div>\n");
@@ -450,7 +450,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                     String f = D3webUtils.getFormattedDateFromString((Date) val.getValue(), "dd.MM.yyyy");
 
                     bui.append("<div style='margin-left:10px;'>"
-                            + D3webConnector.getInstance().getID(to) + " " + to.getName()
+                            + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
                             + " -- " + f + "</div>\n");
                 } // handle abstraction questions separately, e.g. for rounding age quesstion
                 else if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)
@@ -459,13 +459,13 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                     System.out.println(to.getName() + " " + val.toString());
                     int doubleAsInt = (int) Double.parseDouble(val.toString());
                     bui.append("<div style='margin-left:10px;'>"
-                            + D3webConnector.getInstance().getID(to) + " " + to.getName()
+                            + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
                             + " -- " + doubleAsInt + "</div>\n");
 
                 } // all other questions: just append question and val
                 else {
                     bui.append("<div style='margin-left:10px;'>"
-                            + D3webConnector.getInstance().getID(to) + " " + to.getName()
+                            + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
                             + " -- " + val + "</div>\n");
 
                 }

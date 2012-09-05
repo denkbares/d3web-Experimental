@@ -138,7 +138,7 @@ public class DownloadTxtFileServlet extends HttpServlet {
         if (to instanceof QContainer && !to.getName().contains("Q000")) {
             if (D3webUtils.hasAnsweredChildren(to, d3webSession)) {
                 bui.append("\r\n");
-                bui.append(D3webConnector.getInstance().getID(to));
+                bui.append(D3webConnector.getInstance().getTOCount(to));
                 bui.append(" ");
                 bui.append(to.getName());
                 bui.append("\r\n");
@@ -157,7 +157,7 @@ public class DownloadTxtFileServlet extends HttpServlet {
                     // Format the date appropriately
                     String f = D3webUtils.getFormattedDateFromString((Date) val.getValue(), "dd.MM.yyyy");
                     bui.append("\t q");
-                    bui.append(D3webConnector.getInstance().getID(to));
+                    bui.append(D3webConnector.getInstance().getTOCount(to));
                     bui.append(" ");
                     bui.append(to.getName());
                     bui.append(" -- ");
@@ -168,7 +168,7 @@ public class DownloadTxtFileServlet extends HttpServlet {
                         && to instanceof QuestionNum) {
                     bui.append("\t q");
                     int doubleAsInt = (int) Double.parseDouble(val.toString());
-                    bui.append(D3webConnector.getInstance().getID(to));
+                    bui.append(D3webConnector.getInstance().getTOCount(to));
                     bui.append(" ");
                     bui.append(to.getName());
                     bui.append(" -- ");
@@ -177,7 +177,7 @@ public class DownloadTxtFileServlet extends HttpServlet {
                 } // all other questions: just append question and val
                 else {
                     bui.append("\t q");
-                    bui.append(D3webConnector.getInstance().getID(to));
+                    bui.append(D3webConnector.getInstance().getTOCount(to));
                     bui.append(" ");
                     bui.append(to.getName());
                     bui.append(" -- ");

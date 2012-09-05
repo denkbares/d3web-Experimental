@@ -144,7 +144,6 @@ public class HerzmedizinD3web extends HttpServlet {
 		// if it has, a knowledge base already exists
 		if (d3wcon.getKb() == null) {
 			d3wcon.setKb(d3webParser.getKnowledgeBase());
-			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
 			d3wcon.setDialogStrat(d3webParser.getStrategy());
 			d3wcon.setDialogType(d3webParser.getType());
 			d3wcon.setDialogColumns(d3webParser.getDialogColumns());

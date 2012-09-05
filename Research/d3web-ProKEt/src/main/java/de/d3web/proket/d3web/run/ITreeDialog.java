@@ -66,7 +66,11 @@ public class ITreeDialog extends D3webDialog {
     @Override
     protected String getSource(HttpServletRequest request, HttpSession http) {
 
-        return "ITree140812";
+        String source = "ITree090812.xml"; // default
+        if (request.getParameter("src") != null) {
+            source = request.getParameter("src");
+        }
+        return source.endsWith(".xml") ? source : source + ".xml";
     }
 
     /**

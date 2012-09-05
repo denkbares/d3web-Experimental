@@ -79,7 +79,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 		// set some basic properties
 		st.setAttribute("fullId", getID(to));
 		st.setAttribute("title", D3webUtils.getTOPrompt(to, loc));
-		st.setAttribute("count", D3webConnector.getInstance().getID(to));
+		st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
 
 		// TODO extend for HERNIA
 		// read html popups from properties

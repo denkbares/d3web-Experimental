@@ -63,7 +63,7 @@ public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements
 
 		st.setAttribute("title", D3webUtils.getUnknownPrompt(loc));
 
-		st.setAttribute("count", D3webConnector.getInstance().getID(to));
+		st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
 
 		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);

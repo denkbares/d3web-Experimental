@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
+import de.d3web.proket.d3web.input.UISettings;
 
 /**
  * Container for JavaScript code.
@@ -139,7 +139,7 @@ public class JSCodeContainer implements ICodeContainer {
 
 
         // manage language mechanism
-        String lang = D3webConnector.getInstance().getLanguage();
+        String lang = UISettings.getInstance().getLanguage();
         String langString = "var language = \"" + lang + "\";";
         add(langString, 0);
 

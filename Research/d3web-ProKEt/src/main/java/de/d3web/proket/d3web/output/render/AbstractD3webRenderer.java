@@ -37,6 +37,7 @@ import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.jurisearch.JuriRule;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
+import de.d3web.proket.d3web.input.UISettings;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.data.IndicationMode;
@@ -153,15 +154,16 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
         StringBuilder childrenHTML = new StringBuilder();
         D3webConnector d3wcon = D3webConnector.getInstance();
+        UISettings uiset = UISettings.getInstance();
 
         // number of columns that is to be set for this element, default 1-col
         int columns = 1;
         if (to == d3webSession.getKnowledgeBase().getRootQASet()) {
-            columns = d3wcon.getDialogColumns();
+            columns = uiset.getDialogColumns();
         } else if (to instanceof QContainer) {
-            columns = d3wcon.getQuestionnaireColumns();
+            columns = uiset.getQuestionnaireColumns();
         } else if (to instanceof Question) {
-            columns = d3wcon.getQuestionColumns();
+            columns = uiset.getQuestionColumns();
         }
 
         // if more than one column is required, get open-table tag from
@@ -268,8 +270,8 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                 || to instanceof QuestionDate
                 || to instanceof QuestionText) {
             columns = 1;
-        } else if (D3webConnector.getInstance().getQuestionColumns() != -1) {
-            columns = D3webConnector.getInstance().getQuestionColumns();
+        } else if (UISettings.getInstance().getQuestionColumns() != -1) {
+            columns = UISettings.getInstance().getQuestionColumns();
         } else {
             // default: set 2 columns for questions, i.e., answers displayed in
             // 2 cols
@@ -548,12 +550,12 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      */
     public String getTemplateName(String baseObjectName) {
         String tempName = "";
-        D3webConnector d3w = D3webConnector.getInstance();
-        String up = d3w.getUIprefix();
+        UISettings uis = UISettings.getInstance();
+        String up = uis.getUIprefix();
         if (up != "" && up != null) {
             // hier evtl noch einfügen Prüfung auf Großbuchstaben oder
             // automatisch umwandeln
-            tempName = D3webConnector.getInstance().getUIprefix() + baseObjectName;
+            tempName = up + baseObjectName;
         } else {
             tempName = baseObjectName;
         }

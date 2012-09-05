@@ -79,7 +79,7 @@ public class AnswerOCDropD3webRenderer extends AbstractD3webRenderer implements 
 
         //st.setAttribute("text", c.getName());
         //st.setAttribute("text", D3webUtils.getAnswerPrompt(to, c, loc));
-        st.setAttribute("count", D3webConnector.getInstance().getID(to));
+        st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
 
         String dropdownMenuOptions = to.getInfoStore().getValue(
                 ProKEtProperties.DROPDOWN_MENU_OPTIONS);

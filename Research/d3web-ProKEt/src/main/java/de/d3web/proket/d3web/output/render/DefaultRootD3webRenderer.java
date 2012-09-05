@@ -40,6 +40,7 @@ import de.d3web.proket.d3web.input.D3webUESettings;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
+import de.d3web.proket.d3web.input.UISettings;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
@@ -56,16 +57,16 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 	public ContainerCollection renderRoot(ContainerCollection cc,
 			Session d3webSession, HttpSession http, HttpServletRequest request) {
 
-           
+           UISettings uis = UISettings.getInstance();
             Session s = ((Session) http.getAttribute("d3webSession"));
         
             // get the d3web base template according to dialog type
-		String userprefix = D3webConnector.getInstance().getUIprefix();
+		String userprefix = uis.getUIprefix();
 		StringTemplate st = TemplateUtils.getStringTemplate(
 				userprefix + "D3webDialog",
 				"html");
 		/* fill some basic attributes */
-		st.setAttribute("header", D3webConnector.getInstance().getHeader());
+		st.setAttribute("header", uis.getHeader());
 		st.setAttribute("title", userprefix + "-Dialog");
 
 		// load case list dependent from logged in user, e.g. MEDIASTINITIS
@@ -76,7 +77,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		st.setAttribute("info", info);
 
 		// set language variable for StringTemplate Widgets
-		String lang = D3webConnector.getInstance().getLanguage();
+		String lang = uis.getLanguage();
 		if (lang.equals("de")) {
 			st.setAttribute("langDE", "de");
 		}
@@ -202,7 +203,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 
 		D3webConnector d3wcon = D3webConnector.getInstance();
 		// css code from the specification XML
-		String css = d3wcon.getCss();
+		String css = UISettings.getInstance().getCss();
 
 		if (css != null) {
 			// file reference or inline css?

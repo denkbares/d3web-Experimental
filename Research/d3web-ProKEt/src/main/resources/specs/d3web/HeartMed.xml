@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog 
-	header="Mediastinitisregister"  
-	dtype="singleform" 
-	dstrategy="nextuaquestion" 
-	css="medi2colsMediastinitis, nonavigation" 
-	dialogcolumns="1"
-	questionnairecolumns="3"
-	questioncolumns = "2"
-	userprefix = "Mediastinitis" 
-	login = "USRDAT"
-	required = "Betreffende Klinik"
-        >
-	<data kb="MediastinitisDez2011.d3web" />
-        <ue logging = "TRUE"/>
+    header="Mediastinitisregister"  
+    dtype="singleform" 
+    dstrategy="nextuaquestion" 
+    css="medi2colsMediastinitis, nonavigation" 
+    dialogcolumns="1"
+    questionnairecolumns="3"
+    questioncolumns = "2"
+    uiprefix = "Mediastinitis" 
+    login = "USRDAT"
+    required = "Betreffende Klinik"
+>
+    <data kb="MediastinitisDez2011.d3web" />
+    <ue 
+        questionnaire='' 
+        study='' 
+        logging='TRUE' 
+        feedbackform="TRUE"
+        uegroup="" 
+        logfile_path = ""
+        analysisoutput_path = ""/>
 </dialog>

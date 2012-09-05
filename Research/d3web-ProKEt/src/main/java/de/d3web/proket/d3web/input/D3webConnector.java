@@ -29,20 +29,17 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
-import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.data.DialogType;
 import de.d3web.proket.data.IndicationMode;
 
 /**
- * Data storage class for everything that is parsed from the d3web XML and
- * created while working with d3web.
+ * Data storage class for everything that is parsed from the d3web XML 
+ * specification and concerns ONLY d3web
  *
  * @author Martina Freiberg @created 16.10.2010
  */
 public class D3webConnector {
-
-    private static D3webConnector instance;
 
     /*
      * The current session
@@ -70,9 +67,9 @@ public class D3webConnector {
     private KnowledgeBase kb;
 
     /*
-     * Map that contains an ID for each TO connected to the root
+     * Map that contains a number count for each TO connected to the root
      */
-    private Map<TerminologyObject, String> idMap;
+    private Map<TerminologyObject, String> toCountMap;
 
     /*
      * Counter for question IDs; needs to be 1 as there is no root question 
@@ -89,51 +86,14 @@ public class D3webConnector {
      */
     private int sCount = 0;
 
-    /*
-     * The Css parsed from the d3web XML
+    /**
+     * The parser instance that parsed the d3web specs that contained the 
+     * properties to be stored here
      */
-    private String css;
-
-    /*
-     * The header / title of the dialog parsed from the d3web XML
-     */
-    private String header;
-
-    /*
-     * The knowledge base management
-     */
-    private String kbn;
-
-    /*
-     * number of columns for multicolumn styles (dialog)
-     */
-    private int dcols;
-
-    /*
-     * number of columns for multicolumn styles (questionnaire)
-     */
-    private int questcols = -1;
-
-    /*
-     * number of columns for multicolumn styles (questionnaire)
-     */
-    private int qcols = -1;
-
-    /*
-     * prefix that can be set by the user to define more specific dialog types
-     */
-    private String uiprefix = "";
-
-    /*
-     * single element specification, e.g. selectbox...
-     */
-    private HashMap<String, HashMap<String, String>> singleSpecs;
     private D3webXMLParser d3webParser = null;
-    // set english as default language setting
-    private String language = "en";
+
     
-    private LoginMode loginMode;
-   
+    private static D3webConnector instance;
     
     public static D3webConnector getInstance() {
         if (instance == null) {
@@ -183,7 +143,7 @@ public class D3webConnector {
 
     public void setKb(KnowledgeBase kb) {
         this.kb = kb;
-        this.idMap = new HashMap<TerminologyObject, String>();
+        this.toCountMap = new HashMap<TerminologyObject, String>();
         qcCount = 0;
         qCount = 1;
         sCount = 0;
@@ -205,82 +165,21 @@ public class D3webConnector {
                 count = sCount;
                 sCount++;
             }
-            idMap.put(to, count == -1 ? "" : String.valueOf(count));
+            toCountMap.put(to, count == -1 ? "" : String.valueOf(count));
             generateIDs(to.getChildren());
         }
     }
 
-    //TODO: rename: gibt eigentlich den COUNTER zurück, nicht die ID
-    public String getID(TerminologyObject to) {
-        String id = idMap.get(to);
+    public String getTOCount(TerminologyObject to) {
+        String id = toCountMap.get(to);
         if (id == null) {
             id = "";
         }
         return id;
     }
 
-    public String getCss() {
-        return css;
-    }
-
-    public void setCss(String css) {
-        this.css = css;
-    }
-
-    public String getHeader() {
-        return header;
-    }
-
-    public void setHeader(String header) {
-        this.header = header;
-    }
-
-    public int getDialogColumns() {
-        return this.dcols;
-    }
-
-    public void setDialogColumns(int c) {
-        this.dcols = c;
-    }
-
-    public int getQuestionColumns() {
-        return this.qcols;
-    }
-
-    public void setQuestionColumns(int c) {
-        this.qcols = c;
-    }
-
-    public int getQuestionnaireColumns() {
-        return this.questcols;
-    }
-
-    public void setQuestionnaireColumns(int c) {
-        this.questcols = c;
-    }
-
     public String getKbName() {
-        return this.kbn;
-    }
-
-    public void setKbName(String kbn) {
-        this.kbn = kbn;
-    }
-
-    public String getUIprefix() {
-        return this.uiprefix;
-    }
-
-    public void setUIprefix(String pref) {
-        this.uiprefix = pref;
-    }
-
-    public void setSingleSpecs(HashMap<String, HashMap<String, String>> singleSpecs) {
-        this.singleSpecs = singleSpecs;
-    }
-
-    public HashMap<String, HashMap<String, String>> getSingleSpecs() {
-        return this.singleSpecs;
+        return this.kb!=null?this.kb.getName():"";
     }
 
     public void setD3webParser(D3webXMLParser parser) {
@@ -291,19 +190,4 @@ public class D3webConnector {
         return d3webParser;
     }
 
-    public void setLanguage(String lang) {
-        this.language = lang;
-    }
-
-    public String getLanguage() {
-        return this.language;
-    }
-
-    public void setLoginMode(LoginMode login) {
-        this.loginMode = login;
-    }
-
-    public LoginMode getLoginMode() {
-        return this.loginMode;
-    }
 }

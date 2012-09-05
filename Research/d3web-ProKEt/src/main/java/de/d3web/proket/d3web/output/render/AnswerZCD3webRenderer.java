@@ -99,7 +99,7 @@ public class AnswerZCD3webRenderer extends AbstractD3webRenderer implements Answ
 
 
             st.setAttribute("text", linkBui.toString());
-            st.setAttribute("count", D3webConnector.getInstance().getID(to));
+            st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
         }
 
 

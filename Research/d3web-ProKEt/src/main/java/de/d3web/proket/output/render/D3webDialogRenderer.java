@@ -27,6 +27,7 @@ import de.d3web.core.session.interviewmanager.Form;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.UISettings;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
@@ -144,9 +145,9 @@ public class D3webDialogRenderer {
 
 		st.setAttribute("children", sb.toString());
 		// fill StringTemplate with values from the specs XML first
-		st.setAttribute("header", D3webConnector.getInstance().getHeader());
+		st.setAttribute("header", UISettings.getInstance().getHeader());
 		st.setAttribute("resetimage", "reset.gif");
-		handleCss(cc, D3webConnector.getInstance().getCss());
+		handleCss(cc, UISettings.getInstance().getCss());
 
 		// append dialog ending in case no further questions/questionnaires
 		Form current = bb.getSession().getInterview().nextForm();
@@ -186,7 +187,7 @@ public class D3webDialogRenderer {
 		st.setAttribute("fullId", to.getId());
 		st.setAttribute("title", to.getName());
 
-		int cols = D3webConnector.getInstance().getDialogColumns();
+		int cols = UISettings.getInstance().getDialogColumns();
 		if (cols > 1) {
 			String tableOpening =
 					cc.tc.openTable(to.getId(), cols);

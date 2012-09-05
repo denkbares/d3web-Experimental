@@ -37,6 +37,7 @@ import de.d3web.core.knowledge.Resource;
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.input.UISettings;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -67,6 +68,8 @@ public class ImageQuestions extends HttpServlet {
 
 	/* d3web connector for storing certain relevant properties */
 	private D3webConnector d3wcon;
+        
+        private UISettings uis;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -95,19 +98,19 @@ public class ImageQuestions extends HttpServlet {
                 d3webParser.setSourceToParse(source);
 
 		d3wcon = D3webConnector.getInstance();
+                uis = UISettings.getInstance();
 
 		// only invoke parser, if XML hasn't been parsed before
 		// if it has, a knowledge base already exists
 		if (d3wcon.getKb() == null) {
 			d3wcon.setKb(d3webParser.getKnowledgeBase());
-			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
 			d3wcon.setDialogStrat(d3webParser.getStrategy());
 			d3wcon.setDialogType(d3webParser.getType());
-			d3wcon.setDialogColumns(d3webParser.getDialogColumns());
-			d3wcon.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
-			d3wcon.setCss(d3webParser.getCss());
-			d3wcon.setHeader(d3webParser.getHeader());
-			d3wcon.setUIprefix(d3webParser.getUIPrefix());
+			uis.setDialogColumns(d3webParser.getDialogColumns());
+			uis.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
+			uis.setCss(d3webParser.getCss());
+			uis.setHeader(d3webParser.getHeader());
+			uis.setUIprefix(d3webParser.getUIPrefix());
 			}
 
 		// Resource r = ImageHandler.getResource("example.jpg");

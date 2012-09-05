@@ -7,7 +7,7 @@
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns = "2"
-	userprefix = "Mediastinitis" 
+	uiprefix = "Mediastinitis" 
 	login = "USRDAT"
 	required = "Clinic"
         logging = "ON"

@@ -83,7 +83,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
         st.setAttribute("fullId", getID(to));
         st.setAttribute("title", D3webUtils.getTOPrompt(to, loc));
         // st.setAttribute("title", to.getName());
-        st.setAttribute("count", D3webConnector.getInstance().getID(to));
+        st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
 
         // read html popups from properties
         // String resString = to.getInfoStore().getValue(ProKEtProperties.POPUP);

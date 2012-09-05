@@ -8,12 +8,12 @@
 	questionnairecolumns="3"
 	questioncolumns = "2"
 	userprefix = "" 
-	login = "OFF"
+	login = ""
         required = "none"
 	language = ""
         
 	>
-	<data kb="Languages.d3web" />
+	<data kb="Hernia.d3web" />
         
         <ue 
         logging = "TRUE"
