@@ -100,10 +100,12 @@ public class D3webDialog extends HttpServlet {
     private static final long serialVersionUID = -2466200526894064976L;
     protected static final String D3WEB_SESSION = "d3webSession";
     protected static final String USER_SETTINGS = "userSettings";
+    protected static final String SOURCE_SAVE = "sourceSave";
+    protected static final String SERVLET_CLASS_SAVE = "classSave";
     protected static final String REPLACECONTENT = "##replacecontent##";
     protected static final String REPLACEID = "##replaceid##";
-    protected static String sourceSave;
-    protected static Class classSave;
+    protected static String sourceSave = "";
+    protected static Class classSave = Object.class;
     protected final GlobalSettings GLOBSET = GlobalSettings.getInstance();
     protected D3webXMLParser d3webParser;
     protected D3webConnector d3wcon;
@@ -172,22 +174,26 @@ public class D3webDialog extends HttpServlet {
         // usability extension settings: TODO rename
         uesettings = D3webUESettings.getInstance();
 
-        // set SRC store attribute to "" per default for avoiding nullpointers
-        if (sourceSave == null) {
-            sourceSave = "";
-        }
-
         /* parse the dialog specification 
          * -> only parse if stored source is different to current source as then
          *      a new dialog specification (e.g. new KB) has been called
          * -> also parse, if source is same, but different Servlet class as then
          *      a new dialog type has been called */
-        if (!sourceSave.equals(source)
-                || (classSave != null
-                && !classSave.equals(this.getClass()))) {
+        String sSave = httpSession.getAttribute(SOURCE_SAVE) != null ? 
+                httpSession.getAttribute(SOURCE_SAVE).toString() : "";
+        String cSave = httpSession.getAttribute(SERVLET_CLASS_SAVE) != null ? 
+                httpSession.getAttribute(SERVLET_CLASS_SAVE).toString() : "";
+        
+        if (!sSave.equals(source)){
+            httpSession.setAttribute(SOURCE_SAVE, source);
+            
+            parseAndInitDialogServlet(httpSession);
+        } else if(!cSave.equals(this.getClass().toString())) {
 
-            parseAndInitDialogServlet(httpSession, source);
+            httpSession.setAttribute(SERVLET_CLASS_SAVE, this.getClass().toString());
+            parseAndInitDialogServlet(httpSession);
         }
+             
 
         /* Reset the session in case the d3websession in the httpSession is still
          * null; this could be the case, if the same dialog is called from different
@@ -1705,13 +1711,10 @@ public class D3webDialog extends HttpServlet {
      * @param source
      * @throws IOException 
      */
-    protected void parseAndInitDialogServlet(HttpSession httpSession, String source)
+    protected void parseAndInitDialogServlet(HttpSession httpSession)
             throws IOException {
 
         httpSession.setAttribute("loginit", false);
-
-        sourceSave = source;
-        classSave = this.getClass();
 
         d3webParser.parse();
 

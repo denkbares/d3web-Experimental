@@ -49,7 +49,7 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
 
     // TODO remove from here to global config o.ä.
     private static String TT_YES = "Wertet übergeordnete Frage <b>positiv</b>.";
-    private static String TT_NO = "Wertet übergeordnete Frage <b>negativ</b>.";
+    private static String  TT_NO = "Wertet übergeordnete Frage <b>negativ</b>.";
     private static String TT_UN = "Wertet übergeordnete Frage <b>unsicher/neutral</b>.";
     private static String TT_NAN = "Antwort <b>zurücksetzen</b>.";
     private static String TT_YES_REV = "Wertet übergeordnete Frage <b>negativ</b>.";
@@ -123,9 +123,8 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
             cookieShow = getShowStateFromCookie(to, cookies);
         }
         //...and INDICATION STATE
-        System.out.println("ITreeQuestionRenderer: " + d3webSession);
+
         Blackboard bb = d3webSession.getBlackboard();
-        System.out.println("ITreeQuestionRenderer: " + bb);
         ArrayList<Boolean> indicatedChildren = new ArrayList<Boolean>();
         for (TerminologyObject child : to.getChildren()) {
             if (D3webUtils.isIndicated(child, bb)) {
@@ -176,8 +175,7 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
         // for topmost element, do not render any read flow verbalization
         if (parent.getName().equals("Q000")) {
             st.setAttribute("readimg", "img/transpSquare.png");
-        } 
-        // if the parent is of ruletype, than show formula sign for its children
+        } // if the parent is of ruletype, than show formula sign for its children
         else if (parent.getInfoStore().getValue(ProKEtProperties.RULETYPE) != null
                 && parent.getInfoStore().getValue(ProKEtProperties.RULETYPE).equals(true)) {
             st.setAttribute("readimg", "img/Formula.png");
@@ -234,6 +232,8 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
         st.removeAttribute("ratingN");
         st.removeAttribute("swap");
 
+        String tooltipScoring = "";
+
         // set coloring of question buttons and rating value according to type 
         // of question (normal question or swapped), set tooltips 
         // YES NO Buttons first
@@ -245,16 +245,37 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
             st.setAttribute("swap", "swap");
             st.setAttribute("ratingNrY", "3");
             st.setAttribute("ratingNrN", "1");
-            st.setAttribute("tty", TT_YES_REV);
-            st.setAttribute("ttn", TT_NO_REV);
+
+            if (scoringCor != null) {
+
+                tooltipScoring = assembleScoringTooltip(to, "ja", d3webSession, scoringCor);
+                st.setAttribute("tty", tooltipScoring);
+
+                tooltipScoring = assembleScoringTooltip(to, "nein", d3webSession, scoringCor);
+                st.setAttribute("ttn", tooltipScoring);
+            } else {
+                st.setAttribute("tty", TT_YES_REV);
+                st.setAttribute("ttn", TT_NO_REV);
+            }
+
         } else {
             // NORMAL QUESTION
             st.setAttribute("ratingY", "rating-high");
             st.setAttribute("ratingN", "rating-low");
             st.setAttribute("ratingNrY", "1");
             st.setAttribute("ratingNrN", "3");
-            st.setAttribute("tty", TT_YES);
-            st.setAttribute("ttn", TT_NO);
+
+            if (scoringCor != null) {
+
+                tooltipScoring = assembleScoringTooltip(to, "ja", d3webSession, scoringCor);
+                st.setAttribute("tty", tooltipScoring);
+
+                tooltipScoring = assembleScoringTooltip(to, "nein", d3webSession, scoringCor);
+                st.setAttribute("ttn", tooltipScoring);
+            } else {
+                st.setAttribute("tty", TT_YES);
+                st.setAttribute("ttn", TT_NO);
+            }
         }
 
         // set remaining tooltips
@@ -268,5 +289,20 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
         // return everything as String
         sb.append(st.toString());
         return sb.toString();
+    }
+
+    private String assembleScoringTooltip(TerminologyObject to, String answerString, Session sess,
+            TerminologyObject parent) {
+
+        StringBuilder bui = new StringBuilder();
+        bui.append("Addiert ");
+        bui.append(D3webUtils.getScoreForToAndAnswer(to, sess, answerString));
+        bui.append(" zu übergeordneter Frage -> ");
+        bui.append("Grenzwert üoF JA = ");
+        bui.append(D3webUtils.getRightScoreForTo(parent, sess));
+        bui.append(", Grenzwert üoF NEIN = ");
+        bui.append(D3webUtils.getLeftScoreForTo(parent, sess));
+        return bui.toString();
+
     }
 }

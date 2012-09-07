@@ -19,9 +19,13 @@
  */
 package de.d3web.proket.d3web.utils;
 
+import de.d3web.abstraction.ActionSetValue;
 import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.RuleSet;
+import de.d3web.core.inference.condition.CondEqual;
+import de.d3web.core.inference.condition.CondNumGreaterEqual;
+import de.d3web.core.inference.condition.CondNumLess;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -1374,6 +1378,7 @@ public class D3webUtils {
         Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
                 toName == null ? toId : toName);
 
+
         // if TerminologyObject not found in the current KB return & do nothing
         if (question == null) {
             return;
@@ -1420,7 +1425,7 @@ public class D3webUtils {
         //System.out.println("BLACKBOARD: ");
         //for (Question q : blackboard.getValuedQuestions()) {
 
-            //System.out.println(q.getName() + " -> " + blackboard.getValue(q));
+        //System.out.println(q.getName() + " -> " + blackboard.getValue(q));
         //}
         //System.out.println("BLACKBOARD ENDE");
     }
@@ -1445,6 +1450,7 @@ public class D3webUtils {
         Blackboard blackboard = sess.getBlackboard();
         Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
                 toName == null ? toId : toName);
+
 
         //Question question_c =
         //      D3webConnector.getInstance().getKb().getManager().searchQuestion(
@@ -1960,5 +1966,103 @@ public class D3webUtils {
             }
         }
         System.out.println("BLACKBOARD ENDE");
+    }
+
+    public static String getScoreForToAndAnswer(TerminologyObject to, Session sess, String answerValue) {
+        Collection<KnowledgeSlice> c = sess.getKnowledgeBase().getAllKnowledgeSlices();
+
+        for (KnowledgeSlice ks : c) {
+
+            if (ks instanceof RuleSet) {
+                RuleSet rs = (RuleSet) ks;
+
+                for (Rule r : rs.getRules()) {
+
+                    if (r.getAction() instanceof ActionSetValue) {
+
+                        ActionSetValue asv = (ActionSetValue) r.getAction();
+
+                        if (asv.getQuestion().getName().endsWith("_n")
+                                && r.getCondition() instanceof CondEqual
+                                && r.getCondition().getTerminalObjects().contains(to)) {
+
+                            CondEqual ce = (CondEqual) r.getCondition();
+
+                            if (ce.getValue() instanceof ChoiceValue) {
+
+                                ChoiceValue cv = (ChoiceValue) ce.getValue();
+
+                                if (cv.toString().equals(answerValue)) {
+
+                                    return asv.getValue().toString();
+                                }
+                            }
+
+
+                        }
+
+                    }
+                }
+
+
+
+            }
+
+        }
+        return "";
+    }
+
+    public static String getLeftScoreForTo(TerminologyObject to, Session sess) {
+        Collection<KnowledgeSlice> c = sess.getKnowledgeBase().getAllKnowledgeSlices();
+
+        for (KnowledgeSlice ks : c) {
+
+            if (ks instanceof RuleSet) {
+                RuleSet rs = (RuleSet) ks;
+
+                for (Rule r : rs.getRules()) {
+
+                    if (r.getAction() instanceof ActionSetValue
+                            && r.getCondition().getTerminalObjects().contains(to)
+                            && r.getCondition() instanceof CondNumLess) {
+
+                        ActionSetValue asv = (ActionSetValue) r.getAction();
+                        if (asv.getValue().toString().equals("nein")) {
+
+                            CondNumLess cnl = (CondNumLess) r.getCondition();
+                            return cnl.getConditionValue().toString();
+                        }
+                    }
+                }
+            }
+        }
+        return "";
+    }
+
+    public static String getRightScoreForTo(TerminologyObject to, Session sess) {
+        Collection<KnowledgeSlice> c = sess.getKnowledgeBase().getAllKnowledgeSlices();
+
+        for (KnowledgeSlice ks : c) {
+
+            if (ks instanceof RuleSet) {
+                RuleSet rs = (RuleSet) ks;
+
+                for (Rule r : rs.getRules()) {
+
+                    if (r.getAction() instanceof ActionSetValue
+                            && r.getCondition().getTerminalObjects().contains(to)
+                            && r.getCondition() instanceof CondNumGreaterEqual) {
+
+                        ActionSetValue asv = (ActionSetValue) r.getAction();
+                        if (asv.getValue().toString().equals("ja")) {
+                            CondNumGreaterEqual cnl = (CondNumGreaterEqual) r.getCondition();
+                            return cnl.getConditionValue().toString();
+                        }
+
+                    }
+                }
+            }
+        }
+        return "";
     }
 }

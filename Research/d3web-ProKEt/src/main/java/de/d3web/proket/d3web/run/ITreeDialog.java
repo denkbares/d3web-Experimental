@@ -123,7 +123,7 @@ public class ITreeDialog extends D3webDialog {
     protected void addFactITree(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
-
+        
         PrintWriter writer = response.getWriter();
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
         String question = request.getParameter("question");

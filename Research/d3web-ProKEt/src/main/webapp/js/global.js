@@ -150,6 +150,7 @@ function tooltip_over_hierarchy_buttons(id, button) {
         target.css("position", "absolute");
         var height = target.height();
         var width = target.width();
+        
         if (height > 0 && width > 0 && height > width) {
             target.css("width", height);
             target.css("height", width);
