@@ -141,6 +141,7 @@ public class D3webDialog extends HttpServlet {
         GLOBSET.setServletBasePath(servletcontext);
 
         d3webParser = new D3webXMLParser();
+        
     }
 
     /**
@@ -154,129 +155,61 @@ public class D3webDialog extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html; charset=UTF-8");
-
-
-        HttpSession httpSession = request.getSession(true);
-
-        String source = getSource(request, httpSession);
        
-        // try to get the src parameter, i.e. the specification of the dialog
+        response.setContentType("text/html; charset=UTF-8");
+        HttpSession httpSession = request.getSession(true);
+        httpSession.setMaxInactiveInterval(20*60);
+         
+        // source and parser
+        String source = getSource(request, httpSession);
         d3webParser.setSourceToParse(source);
-
-        // d3web / kb settings
         d3wcon = D3webConnector.getInstance();
         d3wcon.setD3webParser(d3webParser);
 
         // UI settings
         uis = UISettings.getInstance();
 
-        // uesability extension settings: TODO rename
+        // usability extension settings: TODO rename
         uesettings = D3webUESettings.getInstance();
 
         // set SRC store attribute to "" per default for avoiding nullpointers
         if (sourceSave == null) {
             sourceSave = "";
         }
-        
-        // only parse again if stored source is not equal to current source
-        // then a new dialog has been called; alternatively, if source IS the
-        // same but different Servlet class -> also parse dialog newly
-        if (!sourceSave.equals(source) ||
-                (classSave != null &&
-                    !classSave.equals(this.getClass()))) {
 
-            httpSession.setAttribute("loginit", false);
-            
-            sourceSave = source;
-            classSave = this.getClass();
-           
-            d3webParser.parse();
+        /* parse the dialog specification 
+         * -> only parse if stored source is different to current source as then
+         *      a new dialog specification (e.g. new KB) has been called
+         * -> also parse, if source is same, but different Servlet class as then
+         *      a new dialog type has been called */
+        if (!sourceSave.equals(source)
+                || (classSave != null
+                && !classSave.equals(this.getClass()))) {
 
-            d3wcon.setKb(d3webParser.getKnowledgeBase());
-            d3wcon.setDialogStrat(d3webParser.getStrategy());
-            d3wcon.setDialogType(d3webParser.getType());
-            d3wcon.setIndicationMode(d3webParser.getIndicationMode());
-
-            uis.setDialogColumns(d3webParser.getDialogColumns());
-            uis.setQuestionColumns(d3webParser.getQuestionColumns());
-            uis.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
-            uis.setCss(d3webParser.getCss());
-            uis.setHeader(d3webParser.getHeader());
-            uis.setUIprefix(d3webParser.getUIPrefix());
-            uis.setLoginMode(d3webParser.getLoginMode());
-            
-
-            String uegroup =  d3webParser.getUEGroup()!=null?d3webParser.getUEGroup():"";
-            httpSession.setAttribute("uegroup", uegroup);
-
-            uesettings.setLogging(d3webParser.getLogging());
-            uesettings.setFeedbackform(d3webParser.getFeedbackform());
-            uesettings.setUequestionnaire(d3webParser.getUEQuestionnaire());
-
-            // set dialog language (for internationalization of widgets, NOT
-            // KB elements (specified in knowledge base
-            if (!d3webParser.getLanguage().equals("")) {
-                uis.setLanguage(d3webParser.getLanguage());
-            }
-
-            // Get userprefix specification
-            String userpref = "DEFAULT";
-            if (!(uis.getUIprefix().equals(""))
-                    && !(uis.getUIprefix() == null)) {
-                userpref = uis.getUIprefix();
-            }
-
-            // set necessary paths for saving stuff such as cases, logfiles...
-            GLOBSET.setCaseFolder(
-                    GLOBSET.getServletBasePath()
-                    + "../../" + userpref + "-Data/cases");
-
-
-            GLOBSET.setLogBaseFolder(
-                    GlobalSettings.getInstance().getServletBasePath()
-                    + "../../" + userpref + "-Data/LOGS");
-
-
-            // if a new dialog is loaded we also need a new session to start
-            //resetD3webSession(httpSession);
-            resetD3webSession(httpSession);
-
-            // if session is null create a session 
-
-
-            /*
-             * initialize logging
-             */
-            initializeLoggingMechanism(httpSession);
-
-            // THIS IS REALLY NEEDED; OTHERWISE PROBLEMS WITH DIFFERENT SESSIONS ON SAME KB
-            if (httpSession.getAttribute(D3WEB_SESSION) == null) {
-                resetD3webSession(httpSession);
-            }
-            //httpSession.setAttribute("lastLoaded", "");
-            //D3webConnector.getInstance().setSession(d3webSession);
-
-            // stream images from KB into webapp
-            GLOBSET.setKbImgFolder(GLOBSET.getServletBasePath() + "kbimg");
-            D3webUtils.streamImages();
+            parseAndInitDialogServlet(httpSession, source);
         }
 
+        /* Reset the session in case the d3websession in the httpSession is still
+         * null; this could be the case, if the same dialog is called from different
+         * browsers (?! correct?) as then the httpSession is refreshed and we
+         * also need a new d3webSession
+         */
+        // THIS IS REALLY NEEDED; OTHERWISE PROBLEMS WITH DIFFERENT SESSIONS ON SAME KB
+        if (httpSession.getAttribute(D3WEB_SESSION) == null) {
+            resetD3webSession(httpSession);
+        }
+
+       
 
 
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
-
-        //System.out.println(action);
-
-
-        // TEST:
-//        httpSession.setAttribute("debug", "true");
-
         if (action == null) {
             action = "show";
         }
 
+        System.out.println("0: " + action);
+        System.out.println(httpSession.getAttribute(D3WEB_SESSION));
 
         if (action.equalsIgnoreCase(
                 "dbLogin")) {
@@ -340,10 +273,10 @@ public class D3webDialog extends HttpServlet {
             gotoTxtDownload(response, request, httpSession);
         } else if (action.equalsIgnoreCase(
                 "checkUsrDatLogin")) {
-             checkUsrDatLogin(response, httpSession);
+            checkUsrDatLogin(response, httpSession);
         } else if (action.equalsIgnoreCase(
                 "usrDatlogin")) {
-                       
+
             loginUsrDat(request, response, httpSession);
         } else if (action.equalsIgnoreCase(
                 "sendmail")) {
@@ -798,9 +731,9 @@ public class D3webDialog extends HttpServlet {
             TerminologyObject parent = to instanceof QContainer ? d3wcon.getKb().getRootQASet()
                     : D3webUtils.getQuestionnaireAncestor(to);
 
-           // set Locale=2 = english for default
-            int loc = httpSession.getAttribute("locale")!=null?
-                    Integer.parseInt(httpSession.getAttribute("locale").toString()):2;
+            // set Locale=2 = english for default
+            int loc = httpSession.getAttribute("locale") != null
+                    ? Integer.parseInt(httpSession.getAttribute("locale").toString()) : 2;
             // get the HTML code for rendering the parent containing the to-update element
             writer.append(
                     toRenderer.renderTerminologyObject(
@@ -1190,10 +1123,9 @@ public class D3webDialog extends HttpServlet {
             httpSession.setAttribute("loginit", false);
             initializeLoggingMechanism(httpSession);
         }
+        
+        sourceSave = "";
 
-        if (d3wcon.getDialogType().equals(DialogType.ITREE)) {
-            //resetInitQuestionsAndShowStatus();
-        }
     }
 
     private void initializeLoggingMechanism(HttpSession httpSession) {
@@ -1763,5 +1695,89 @@ public class D3webDialog extends HttpServlet {
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
         // overwritten by EuraHS Dialog
+    }
+
+    /**
+     * Parse the dialog specification and initialize the dialog/servlet
+     * correspondingly
+     * 
+     * @param httpSession
+     * @param source
+     * @throws IOException 
+     */
+    protected void parseAndInitDialogServlet(HttpSession httpSession, String source)
+            throws IOException {
+
+        httpSession.setAttribute("loginit", false);
+
+        sourceSave = source;
+        classSave = this.getClass();
+
+        d3webParser.parse();
+
+        d3wcon.setKb(d3webParser.getKnowledgeBase());
+        d3wcon.setDialogStrat(d3webParser.getStrategy());
+        d3wcon.setDialogType(d3webParser.getType());
+        d3wcon.setIndicationMode(d3webParser.getIndicationMode());
+
+        uis.setDialogColumns(d3webParser.getDialogColumns());
+        uis.setQuestionColumns(d3webParser.getQuestionColumns());
+        uis.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
+        uis.setCss(d3webParser.getCss());
+        uis.setHeader(d3webParser.getHeader());
+        uis.setUIprefix(d3webParser.getUIPrefix());
+        uis.setLoginMode(d3webParser.getLoginMode());
+
+
+        String uegroup = d3webParser.getUEGroup() != null ? d3webParser.getUEGroup() : "";
+        httpSession.setAttribute("uegroup", uegroup);
+
+        uesettings.setLogging(d3webParser.getLogging());
+        uesettings.setFeedbackform(d3webParser.getFeedbackform());
+        uesettings.setUequestionnaire(d3webParser.getUEQuestionnaire());
+
+        // set dialog language (for internationalization of widgets, NOT
+        // KB elements (specified in knowledge base
+        if (!d3webParser.getLanguage().equals("")) {
+            uis.setLanguage(d3webParser.getLanguage());
+        }
+
+        // Get userprefix specification
+        String userpref = "DEFAULT";
+        if (!(uis.getUIprefix().equals(""))
+                && !(uis.getUIprefix() == null)) {
+            userpref = uis.getUIprefix();
+        }
+
+        // set necessary paths for saving stuff such as cases, logfiles...
+        GLOBSET.setCaseFolder(
+                GLOBSET.getServletBasePath()
+                + "../../" + userpref + "-Data/cases");
+
+
+        GLOBSET.setLogBaseFolder(
+                GlobalSettings.getInstance().getServletBasePath()
+                + "../../" + userpref + "-Data/LOGS");
+
+
+        // if a new dialog is loaded we also need a new session to start
+        //resetD3webSession(httpSession);
+        resetD3webSession(httpSession);
+
+
+        /*
+         * initialize logging
+         */
+        initializeLoggingMechanism(httpSession);
+
+        // stream images from KB into webapp
+        GLOBSET.setKbImgFolder(GLOBSET.getServletBasePath() + "kbimg");
+        D3webUtils.streamImages();
+        
+        
+      // do we need to enable debug mode?!  
+        if(d3webParser.getDebug()!=null && d3webParser.getDebug()){
+            httpSession.setAttribute("debug", "true");
+        }
     }
 }

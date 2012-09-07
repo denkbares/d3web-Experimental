@@ -208,6 +208,12 @@ public class D3webXMLParser {
     public String getLanguage() {
         return XMLUtils.getStr((Element) dialogSpec, "language", "");
     }
+    
+    public Boolean getDebug() {
+        return XMLUtils.getBoolean((Element) dialogSpec, "debug", Boolean.FALSE);
+    }
+    
+    
 
     /*
      * DATA PROPERTIES, i.e. definition of the knowledge base

@@ -17,8 +17,9 @@ function iTreeInit() {
     // browserInfo.js
     handleUnsupportedBrowsers();
     
-    ue_logDialogType("ClariHIE");    
-    
+    if(logging){
+        ue_logDialogType("ITree");    
+    }
     // this file
     generate_tooltip_functions_ynbuttons();
     generate_tooltip_functions_propagation();

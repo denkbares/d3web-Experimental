@@ -123,7 +123,9 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
             cookieShow = getShowStateFromCookie(to, cookies);
         }
         //...and INDICATION STATE
+        System.out.println("ITreeQuestionRenderer: " + d3webSession);
         Blackboard bb = d3webSession.getBlackboard();
+        System.out.println("ITreeQuestionRenderer: " + bb);
         ArrayList<Boolean> indicatedChildren = new ArrayList<Boolean>();
         for (TerminologyObject child : to.getChildren()) {
             if (D3webUtils.isIndicated(child, bb)) {
