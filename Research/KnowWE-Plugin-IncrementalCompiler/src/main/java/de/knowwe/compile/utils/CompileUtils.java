@@ -23,6 +23,7 @@ package de.knowwe.compile.utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -60,7 +61,7 @@ public class CompileUtils {
 	 * @return
 	 */
 	public static Collection<Section<? extends Type>> findSectionsNotReused(Article parsedArticle) {
-		Collection<Section<? extends Type>> result = new HashSet<Section<? extends Type>>();
+		Collection<Section<? extends Type>> result = new LinkedList<Section<? extends Type>>();
 		addNonReusedSection(parsedArticle.getRootSection(), result);
 
 		Map<Section<? extends AbstractType>, Set<Section<?>>> newImports = ImportManager.fetchNewImports();
