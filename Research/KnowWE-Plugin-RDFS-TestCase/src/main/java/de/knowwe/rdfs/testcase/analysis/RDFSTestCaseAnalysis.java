@@ -32,7 +32,6 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.testcase.Binding;
 import de.knowwe.rdfs.testcase.RDFSTestCase;
 import de.knowwe.rdfs.testcase.diff.MissingBindingDiff;
-import de.knowwe.rdfs.testcase.diff.UnexpectedBindingDiff;
 
 /**
  * 
@@ -62,11 +61,12 @@ public class RDFSTestCaseAnalysis {
 		}
 
 		// derived but not expected
-		for (Binding derivedBinding : derivedBindings) {
-			if (!testCase.getExpectedBindings().contains(derivedBinding)) {
-				report.addDiff(new UnexpectedBindingDiff(derivedBinding));
-			}
-		}
+// we actually dont need this, as derived but not expected is not an issue
+//		for (Binding derivedBinding : derivedBindings) {
+//			if (!testCase.getExpectedBindings().contains(derivedBinding)) {
+//				report.addDiff(new UnexpectedBindingDiff(derivedBinding));
+//			}
+//		}
 
 	}
 

@@ -39,7 +39,8 @@ public class RDFSTestCaseRunner extends de.d3web.testing.AbstractTest<Rdf2GoCore
 
 public RDFSTestCaseRunner() {
 	this.addParameter("Article", TestParameter.Type.String, TestParameter.Mode.Mandatory, "Monitored aricle.");
-	this.addParameter("Test case name", TestParameter.Type.Number, TestParameter.Mode.Mandatory, "Name of the rdf test case (sparql-test).");
+		this.addParameter("Test case name", TestParameter.Type.String,
+				TestParameter.Mode.Mandatory, "Name of the rdf test case (sparql-test).");
 }
 	
 	@Override
@@ -63,11 +64,11 @@ public RDFSTestCaseRunner() {
 		// check for diffs
 		if (report.hasDiffs()) {
 			StringBuilder description = new StringBuilder();
-			description.append("Precision: ");
-			description.append(report.precision());
-			description.append("; Recall: ");
-			description.append(report.recall());
-			description.append("\n");
+			// description.append("Precision: ");
+			// description.append(report.precision());
+			// description.append("; Recall: ");
+			// description.append(report.recall());
+			// description.append("\n");
 			for (Diff diff : report.getDiffs()) {
 				description.append(diff);
 				description.append("\n");
