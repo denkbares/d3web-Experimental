@@ -60,6 +60,9 @@ public class GlobalSettings {
     private final String rendererBasePath = "de.d3web.proket.output.render";
     private final String applicationBasePath = "/controlcenterResources";
     private final String resourcesPath = "resources/";
+    
+    private final String docloaderBasePath = "/stringtemp/html/docLoad";
+            
     /*
      * File names
      */
@@ -244,5 +247,9 @@ public class GlobalSettings {
     
     public String getUESystemType(){
         return this.uesystemtype;
+    }
+    
+    public String getDocLoaderBasePath(){
+        return this.docloaderBasePath;
     }
 }

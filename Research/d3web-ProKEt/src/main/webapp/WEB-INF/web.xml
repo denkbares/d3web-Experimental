@@ -10,6 +10,10 @@
         <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
     <servlet>
+        <servlet-name>DocLoad</servlet-name>
+       <servlet-class>de.d3web.proket.d3web.run.DocLoad</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>HelloServlet</servlet-name>
         <servlet-class>de.d3web.proket.run.HelloServlet</servlet-class>
     </servlet>
@@ -88,5 +92,10 @@
     <servlet-mapping>
         <servlet-name>DownloadServlet</servlet-name>
         <url-pattern>/Download</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>DocLoad</servlet-name>
+        <url-pattern>/DocLoad</url-pattern>
     </servlet-mapping>
 </web-app>
