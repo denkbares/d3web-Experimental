@@ -20,7 +20,7 @@ package de.knowwe.usersupport.instantedit;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.instantedit.tools.DefaultEditTool;
+import de.knowwe.instantedit.tools.InstantEditTool;
 import de.knowwe.instantedit.tools.InstantEditToolProvider;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
@@ -33,27 +33,19 @@ import de.knowwe.tools.ToolProvider;
  * @author Johannes Dienst
  * @created 23.11.2011
  */
-public class UserSupportInstantEditToolProvider implements ToolProvider
-{
+public class UserSupportInstantEditToolProvider implements ToolProvider {
 
 	@Override
-	public Tool[] getTools(Section<?> section, UserContext userContext)
-	{
+	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		return new Tool[] { getQuickEditPageTool(section, userContext) };
 	}
 
-	protected Tool getQuickEditPageTool(Section<?> section, UserContext userContext)
-	{
-
-		String jsAction = "KNOWWE.plugin.instantEdit.enable("
-				+ "'"
-				+ section.getID()
-				//				+ "', KNOWWE.plugin.usersupportinstantedit);"; // BACKUP
-				+ "', KNOWWE.plugin.userSupportStandardMarkup);";
-		return new DefaultEditTool(
+	protected Tool getQuickEditPageTool(Section<?> section, UserContext userContext) {
+		return new InstantEditTool(
 				"KnowWEExtension/images/pencil.png",
 				"Edit",
 				"Edit this section",
-				jsAction);
+				section,
+				"KNOWWE.plugin.userSupportStandardMarkup");
 	}
 }
