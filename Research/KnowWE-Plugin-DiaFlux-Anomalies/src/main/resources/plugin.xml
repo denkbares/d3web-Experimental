@@ -16,20 +16,11 @@
             <export prefix="*" />
  		</library>
 	</runtime>
-		
-	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
-		id="DeadlockTest">
-		<parameter id="class" value="de.d3web.we.diaflux.anomalies.DeadlockTest" />
-		<parameter id="name" value="DeadlockTest" />
-		<parameter id="description" value="AbstractCITest DeadlockTest" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
 	
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="DeadPathTest">
 		<parameter id="class" value="de.d3web.we.diaflux.anomalies.DeadPathTest" />
-		<parameter id="name" value="DeadPathTest" />
+		<parameter id="name" value="DeadPath" />
 		<parameter id="description" value="AbstractCITest DeadPathTest" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
@@ -38,7 +29,7 @@
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="IncompletePostconditionTest">
 		<parameter id="class" value="de.d3web.we.diaflux.anomalies.IncompletePostconditionTest" />
-		<parameter id="name" value="IncompletePostconditionTest" />
+		<parameter id="name" value="IncompletePostcondition" />
 		<parameter id="description" value="AbstractCITest IncompletePostconditionTest" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
@@ -47,8 +38,8 @@
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="InconsistentQuestionTest">
 		<parameter id="class" value="de.d3web.we.diaflux.anomalies.InconsistentQuestionTest" />
-		<parameter id="name" value="InconsistentQuestionTest" />
-		<parameter id="description" value="AbstractCITest InconsistentQuestionTest" />
+		<parameter id="name" value="InconsistentQuestion" />
+		<parameter id="description" value="AbstractCITest InconsistentQuestion" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
@@ -56,8 +47,8 @@
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="InconsistentValueTest">
 		<parameter id="class" value="de.d3web.we.diaflux.anomalies.InconsistentValueTest" />
-		<parameter id="name" value="InconsistentValueTest" />
-		<parameter id="description" value="AbstractCITest InconsistentValueTest" />
+		<parameter id="name" value="InconsistentValue" />
+		<parameter id="description" value="AbstractCITest InconsistentValue" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
@@ -65,8 +56,8 @@
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="IntersectingPostconditionTest">
 		<parameter id="class" value="de.d3web.we.diaflux.anomalies.IntersectingPostconditionTest" />
-		<parameter id="name" value="IntersectingPostconditionTest" />
-		<parameter id="description" value="AbstractCITest IntersectingPostconditionTest" />
+		<parameter id="name" value="IntersectingPostcondition" />
+		<parameter id="description" value="AbstractCITest IntersectingPostcondition" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
@@ -74,8 +65,8 @@
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="LoopWithoutSnapshotTest">
 		<parameter id="class" value="de.d3web.we.diaflux.anomalies.LoopWithoutSnapshotTest" />
-		<parameter id="name" value="LoopWithoutSnapshotTest" />
-		<parameter id="description" value="AbstractCITest LoopWithoutSnapshotTest" />
+		<parameter id="name" value="LoopWithoutSnapshot" />
+		<parameter id="description" value="AbstractCITest LoopWithoutSnapshot" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
@@ -83,8 +74,8 @@
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="MissingDataTest">
 		<parameter id="class" value="de.d3web.we.diaflux.anomalies.MissingDataTest" />
-		<parameter id="name" value="MissingDataTest" />
-		<parameter id="description" value="AbstractCITest MissingDataTest" />
+		<parameter id="name" value="MissingData" />
+		<parameter id="description" value="AbstractCITest MissingData" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>	
@@ -92,26 +83,17 @@
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="NoAutoStartTest">
 		<parameter id="class" value="de.d3web.we.diaflux.anomalies.NoAutoStartTest" />
-		<parameter id="name" value="NoAutoStartTest" />
-		<parameter id="description" value="AbstractCITest NoAutoStartTest" />
+		<parameter id="name" value="NoAutoStart" />
+		<parameter id="description" value="AbstractCITest NoAutoStart" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
 			
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
-		id="RedundantFlowchartTest">
-		<parameter id="class" value="de.d3web.we.diaflux.anomalies.RedundantFlowchartTest" />
-		<parameter id="name" value="RedundantFlowchartTest" />
-		<parameter id="description" value="AbstractCITest RedundantFlowchartTest" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
-	
-	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="RedundantStartNodeTest">
 		<parameter id="class" value="de.d3web.we.diaflux.anomalies.RedundantStartNodeTest" />
-		<parameter id="name" value="RedundantStartNodeTest" />
-		<parameter id="description" value="AbstractCITest RedundantStartNodeTest" />
+		<parameter id="name" value="RedundantStartNode" />
+		<parameter id="description" value="AbstractCITest RedundantStartNode" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
@@ -119,17 +101,8 @@
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="RedundantValueTest">
 		<parameter id="class" value="de.d3web.we.diaflux.anomalies.RedundantValueTest" />
-		<parameter id="name" value="RedundantValueTest" />
-		<parameter id="description" value="AbstractCITest RedundantValueTest" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
-	
-	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
-		id="UnconNodeTest">
-		<parameter id="class" value="de.d3web.we.diaflux.anomalies.UnconNodeTest" />
-		<parameter id="name" value="UnconNodeTest" />
-		<parameter id="description" value="AbstractCITest UnconNodeTest" />
+		<parameter id="name" value="RedundantValue" />
+		<parameter id="description" value="AbstractCITest RedundantValue" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>

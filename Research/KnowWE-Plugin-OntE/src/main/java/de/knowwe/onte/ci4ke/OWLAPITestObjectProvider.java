@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.model.IRI;
 
+import de.d3web.testing.TestObjectContainer;
 import de.d3web.testing.TestObjectProvider;
 import de.knowwe.owlapi.OWLAPIConnector;
 
@@ -36,7 +37,7 @@ import de.knowwe.owlapi.OWLAPIConnector;
 public class OWLAPITestObjectProvider implements TestObjectProvider {
 
 	@Override
-	public <T> List<T> getTestObjects(Class<T> c, String id) {
+	public <T> List<TestObjectContainer<T>> getTestObjects(Class<T> c, String id) {
 		if (c == null) {
 			Logger.getLogger(this.getClass()).warn("Class given to TestObjectProvider was 'null'");
 			return Collections.emptyList();
@@ -44,20 +45,16 @@ public class OWLAPITestObjectProvider implements TestObjectProvider {
 		if (!c.equals(OWLAPIConnector.class)) {
 			return Collections.emptyList();
 		}
-		List<T> result = new ArrayList<T>();
+		List<TestObjectContainer<T>> result = new ArrayList<TestObjectContainer<T>>();
 
 		if (id == null || id.length() == 0) {
-			result.add(c.cast(OWLAPIConnector.getGlobalInstance()));
+			OWLAPIConnector globalInstance = OWLAPIConnector.getGlobalInstance();
+			result.add(new TestObjectContainer<T>(globalInstance.toString(), c.cast(globalInstance)));
 		}
 		else {
-			result.add(c.cast(OWLAPIConnector.getInstance(IRI.create(id))));
+			OWLAPIConnector instance = OWLAPIConnector.getInstance(IRI.create(id));
+			result.add(new TestObjectContainer<T>(instance.toString(), c.cast(instance)));
 		}
 		return result;
 	}
-
-	@Override
-	public <T> String getTestObjectName(T testObject) {
-		return testObject.toString();
-	}
-
 }

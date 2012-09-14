@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import de.d3web.testing.TestObjectContainer;
 import de.d3web.testing.TestObjectProvider;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -35,7 +36,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class RDF2GoTestObjectProvider implements TestObjectProvider {
 
 	@Override
-	public <T> List<T> getTestObjects(Class<T> c, String id) {
+	public <T> List<TestObjectContainer<T>> getTestObjects(Class<T> c, String id) {
 		if (c == null) {
 			Logger.getLogger(this.getClass()).warn("Class given to TestObjectProvider was 'null'");
 			return Collections.emptyList();
@@ -43,14 +44,12 @@ public class RDF2GoTestObjectProvider implements TestObjectProvider {
 		if (!c.equals(Rdf2GoCore.class)) {
 			return Collections.emptyList();
 		}
-		List<T> result = new ArrayList<T>();
-		result.add(c.cast(Rdf2GoCore.getInstance()));
+		List<TestObjectContainer<T>> result = new ArrayList<TestObjectContainer<T>>();
+		TestObjectContainer<T> container = new TestObjectContainer<T>(
+				Rdf2GoCore.class.getSimpleName(),
+				c.cast(Rdf2GoCore.getInstance()));
+		result.add(container);
 		return result;
-	}
-
-	@Override
-	public <T> String getTestObjectName(T testObject) {
-		return Rdf2GoCore.class.getSimpleName();
 	}
 
 }

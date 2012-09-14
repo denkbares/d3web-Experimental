@@ -38,11 +38,11 @@ import de.knowwe.diaflux.coverage.DiaFluxCoverageType;
  * @author Reinhard Hatko
  * @created 26.03.2012
  */
-public class FlowCoverageTest extends de.d3web.testing.AbstractTest<KnowledgeBase> {
+public class FlowCoverage extends de.d3web.testing.AbstractTest<KnowledgeBase> {
 
 	
 	
-	public FlowCoverageTest() {
+	public FlowCoverage() {
 		this.addParameter("param1", TestParameter.Type.String, TestParameter.Mode.Mandatory, "description param1");
 		this.addParameter("param2", TestParameter.Type.String, TestParameter.Mode.Mandatory, "description param2");
 	}
