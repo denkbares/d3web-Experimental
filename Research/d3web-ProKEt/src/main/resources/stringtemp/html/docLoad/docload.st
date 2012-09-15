@@ -14,23 +14,63 @@
 </head>
 
 <body>
-<h1>ProKEt - Doc Loader Module</h1>
+<div id="docloader">
 
-<div id="docloadUploader">
-    <div id="uploaderLabel">Hochladen</div>
-    $FileBrowser()$
-    $BaseButton(label="Hochladen")$
-    $BaseButton(label="Fehlerbericht")$
+    <div id="dlUploadLabelRow" class="row">
+        <div id="uploaderLabel" class="cell labelcell">Hochladen</div>
+    </div>
+
+    <div class="row">
+        <div class="cell selectcell firstcell">$FileBrowser()$</div>
+        <div id="span2buttons" class="cell lastcell">
+             <div class="cell buttoncell">
+                $ImgButton(src="img/Upload.png", 
+                            alt="Upload",
+                            tt="Upload",
+                            click="alert('Upload');")$
+             </div>
+             <div class="cell buttoncell">
+                 $ImgButton(src="img/ErrorReport.png", 
+                            alt="Error Report",
+                            tt="Error Report",
+                            click="alert('ErrorReport');")$
+             </div>
+         </div>
+    </div>
+
+    <div id="dlActionsLabelRow" class="row">
+        <div id="actionsLabel" class="cell labelcell">Aktionen: </div>
+        <div id="docloadKBName" class="cell labelcell"> $if(kbname)$ $kbname$ $else$ / $endif$</div>  
+    </div>
+
+
+    <div class="row">
+        <div class="cell selectcell firstcell">$DialogTypeBrowser()$</div>
+        <div id="span2buttons" class="cell lastcell">
+            <div class="cell buttoncell">
+                $ImgButton(src="img/Execute.png", 
+                            alt="Execute Dialog",
+                            tt="Execute Dialog",
+                            click="alert('Execute Dialog');")$
+            </div>               
+            <div class="cell"></div>
+        </div>
+    </div>
+
+    <div class="row spacerow" > </div>
+    
+    <div class="row">
+        <div class="cell selectcell firstcell">$DomainBrowser()$</div>
+        <div id="span2buttons" class="cell lastcell">
+            <div class="cell buttoncell">
+                $ImgButton(src="img/Save.png", 
+                            alt="Save",
+                            tt="Save Knowledge Base",
+                            click="alert('Save Knowledge Base');")$
+            </div>
+            <div class="cell"></div>
+        </div>
+    </div>
 </div>
-
-<div id="docloadActions">
-    <div id="actionsLabel">Aktionen: </div>
-    <div id="docloadKBName"> $if(kbname)$ $kbname$ $else$ / </div>
-    $DialogTypeBrowser()$
-    $BaseButton(label="Testen")$
-    $DomainBrowser()$
-    $BaseButton(label="Speichern")$
-</div>
-
 </body>
 </html>
