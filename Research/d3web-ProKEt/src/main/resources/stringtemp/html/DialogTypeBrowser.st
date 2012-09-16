@@ -1,3 +1,6 @@
 <div id="dtBrowser" class="baseDTBrowser">
-    <input type="text" value="Dialog Type Browser Dummy">
+    <select name="dialogTypeSelect" onChange="alert('dialog type selected')" disabled>
+        <option selected value="ITree">ITree</option>
+        <option value="Questionary">Questionary</option>
+    </select>
 </div>

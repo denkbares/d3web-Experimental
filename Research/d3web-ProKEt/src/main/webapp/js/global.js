@@ -752,3 +752,11 @@ function writeExpandCookie(qname, qExpandState){
 function deleteExpandCookie(qname){
     document.cookie = qname + "=; expires=Thu, 01-Jan-70 00:00:01 GMT;";
 }
+
+
+
+/***********************/
+
+function writeToBGFileInput(id){
+   $("#docfilename").val($("#"+id).attr("value")); 
+}

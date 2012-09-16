@@ -6,6 +6,7 @@
 
 <script src="libsExternal/jquery/jquery-1.6.1.min.js" type="text/javascript" language="javascript"></script>
 <script src="libsExternal/jqueryUI/jqueryUi-1.8.10.all.min.js" type="text/javascript" language="javascript"></script>
+<script src="js/global.js" type="text/javascript" language="javascript"></script>
 
 
 <style type="text/css">$css$</style>
@@ -17,7 +18,7 @@
 <div id="docloader">
 
     <div id="dlUploadLabelRow" class="row">
-        <div id="uploaderLabel" class="cell labelcell">Hochladen</div>
+        <div id="uploaderLabel" class="cell labelcell labelcellFirstRow">Hochladen</div>
     </div>
 
     <div class="row">
@@ -30,7 +31,7 @@
                             click="alert('Upload');")$
              </div>
              <div class="cell buttoncell">
-                 $ImgButton(src="img/ErrorReport.png", 
+                 $ImgButton(src="img/ErrorReportInactive.png", 
                             alt="Error Report",
                             tt="Error Report",
                             click="alert('ErrorReport');")$
@@ -48,7 +49,7 @@
         <div class="cell selectcell firstcell">$DialogTypeBrowser()$</div>
         <div id="span2buttons" class="cell lastcell">
             <div class="cell buttoncell">
-                $ImgButton(src="img/Execute.png", 
+                $ImgButton(src="img/ExecuteInactive.png", 
                             alt="Execute Dialog",
                             tt="Execute Dialog",
                             click="alert('Execute Dialog');")$
@@ -63,10 +64,10 @@
         <div class="cell selectcell firstcell">$DomainBrowser()$</div>
         <div id="span2buttons" class="cell lastcell">
             <div class="cell buttoncell">
-                $ImgButton(src="img/Save.png", 
-                            alt="Save",
-                            tt="Save Knowledge Base",
-                            click="alert('Save Knowledge Base');")$
+                $ImgButton(src="img/StoreInactive.png", 
+                            alt="Store",
+                            tt="Store Knowledge Base to Repository",
+                            click="alert('Store Knowledge Base to Repository');")$
             </div>
             <div class="cell"></div>
         </div>
