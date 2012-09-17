@@ -44,7 +44,7 @@ import de.knowwe.taghandler.OWLApiTagHandlerUtil;
 public class OntologyConsistencyTest extends AbstractTest<OWLAPIConnector> {
 
 	@Override
-	public Message execute(OWLAPIConnector connector, String[] args) {
+	public Message execute(OWLAPIConnector connector, String[] args, String[]... ignores) {
 
 		// OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
 		OWLOntology ontology = connector.getOntology();

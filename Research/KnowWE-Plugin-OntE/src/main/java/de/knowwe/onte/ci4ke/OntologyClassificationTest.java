@@ -55,7 +55,7 @@ public class OntologyClassificationTest extends de.d3web.testing.AbstractTest<OW
 	}
 
 	@Override
-	public Message execute(OWLAPIConnector connector, String[] args) {
+	public Message execute(OWLAPIConnector connector, String[] args, String[]... ignores) {
 
 		String classification = args[0];
 

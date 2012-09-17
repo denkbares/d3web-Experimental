@@ -26,7 +26,6 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.testing.AbstractTest;
-import de.d3web.testing.ArgsCheckResult;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
 
@@ -36,10 +35,10 @@ import de.d3web.testing.Message.Type;
  * @author Gritje Meinke
  * @created 17.04.2011
  */
-public class AnomalyUnconnectedNode extends  AbstractTest<KnowledgeBase> {
+public class AnomalyUnconnectedNode extends AbstractTest<KnowledgeBase> {
 
 	@Override
-	public Message execute(KnowledgeBase kb, String[] args) {
+	public Message execute(KnowledgeBase kb, String[] args, String[]... ignores) {
 
 		Message res = new Message(Type.SUCCESS, null);
 		Integer numberOfUnconnectedNodes = 0;
@@ -85,15 +84,10 @@ public class AnomalyUnconnectedNode extends  AbstractTest<KnowledgeBase> {
 	}
 
 	@Override
-	public ArgsCheckResult checkArgs(String[] args) {
-		return new ArgsCheckResult(args);
-	}
-
-	@Override
 	public Class<KnowledgeBase> getTestObjectClass() {
 		return KnowledgeBase.class;
 	}
-	
+
 	@Override
 	public String getDescription() {
 		return "No description available";

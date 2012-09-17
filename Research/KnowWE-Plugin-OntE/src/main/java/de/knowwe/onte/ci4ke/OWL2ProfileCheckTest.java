@@ -56,7 +56,7 @@ public class OWL2ProfileCheckTest extends AbstractTest<OWLAPIConnector> {
 	}
 
 	@Override
-	public Message execute(OWLAPIConnector connector, String[] args) {
+	public Message execute(OWLAPIConnector connector, String[] args, String[]... ignores) {
 
 		// OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
 		OWLOntology o = connector.getOntology();

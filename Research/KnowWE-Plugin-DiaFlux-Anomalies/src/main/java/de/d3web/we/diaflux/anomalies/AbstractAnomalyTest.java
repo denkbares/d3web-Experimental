@@ -31,14 +31,13 @@ import de.knowwe.core.utils.Strings;
  */
 public abstract class AbstractAnomalyTest extends AbstractTest<KnowledgeBase> {
 
-
 	@Override
 	public Class<KnowledgeBase> getTestObjectClass() {
 		return KnowledgeBase.class;
 	}
 
 	@Override
-	public Message execute(KnowledgeBase kb, String[] args) {
+	public Message execute(KnowledgeBase kb, String[] args, String[]... ignores) {
 		String errormsg = "";
 
 		Message res = new Message(Type.SUCCESS, null);
@@ -52,7 +51,7 @@ public abstract class AbstractAnomalyTest extends AbstractTest<KnowledgeBase> {
 
 		return res;
 	}
-	
+
 	@Override
 	public String getDescription() {
 		return "No description available";

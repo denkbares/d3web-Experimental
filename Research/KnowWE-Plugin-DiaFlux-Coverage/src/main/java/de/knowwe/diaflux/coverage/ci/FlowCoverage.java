@@ -48,7 +48,7 @@ public class FlowCoverage extends de.d3web.testing.AbstractTest<KnowledgeBase> {
 	}
 	
 	@Override
-	public Message execute(KnowledgeBase kb, String[] args) {
+	public Message execute(KnowledgeBase kb, String[] args, String[]... ignores) {
 
 		String packageName = args[1];
 

@@ -44,7 +44,7 @@ public RDFSTestCaseRunner() {
 }
 	
 	@Override
-	public Message execute(Rdf2GoCore core, String[] args) {
+	public Message execute(Rdf2GoCore core, String[] args, String[]... ignores) {
 
 		String monitoredArticleTitle = args[0];
 		String testCaseName = args[1];
