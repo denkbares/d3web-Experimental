@@ -6,6 +6,10 @@
 
 <script src="libsExternal/jquery/jquery-1.6.1.min.js" type="text/javascript" language="javascript"></script>
 <script src="libsExternal/jqueryUI/jqueryUi-1.8.10.all.min.js" type="text/javascript" language="javascript"></script>
+
+<script src="libsExternal/jquery/jquery-1.6.1.min.js" type="text/javascript" language="javascript"></script>
+<script src="libsExternal/jquery/jquery.object.js" type="text/javascript" language="javascript"></script>
+<script src="libsExternal/jqueryUI/jqueryUi-1.8.10.all.min.js" type="text/javascript" language="javascript"></script>
 <script src="js/global.js" type="text/javascript" language="javascript"></script>
 
 
@@ -21,22 +25,29 @@
         <div id="uploaderLabel" class="cell labelcell labelcellFirstRow">Hochladen</div>
     </div>
 
-    <div class="row">
+    <div class="row" id="uploadRow">
         <div class="cell selectcell firstcell">$FileBrowser()$</div>
         <div id="span2buttons" class="cell lastcell">
              <div class="cell buttoncell">
-                $ImgButton(src="img/Upload.png", 
-                            alt="Upload",
-                            tt="Upload",
-                            click="alert('Upload');")$
+                $ImgButton(src="img/Parse.png", 
+                            alt="Parse knowledge base",
+                            tt="Parse knowledge base",
+                            click="parseDocToKB('origKBUploadField');")$
              </div>
              <div class="cell buttoncell">
                  $ImgButton(src="img/ErrorReportInactive.png", 
-                            alt="Error Report",
+                            alt="ErrorReport",
                             tt="Error Report",
                             click="alert('ErrorReport');")$
              </div>
          </div>
+    </div>
+
+    <div class="row">
+        <div id="KBUploadStatus">Wissensbasis hochgeladen!</div> 
+    </div>
+    <div class="row">
+        <div id="SPECUploadStatus">XML Spezifikation hochgeladen!</div> 
     </div>
 
     <div id="dlActionsLabelRow" class="row">
@@ -57,7 +68,7 @@
             <div class="cell"></div>
         </div>
     </div>
-
+  
     <div class="row spacerow" > </div>
     
     <div class="row">

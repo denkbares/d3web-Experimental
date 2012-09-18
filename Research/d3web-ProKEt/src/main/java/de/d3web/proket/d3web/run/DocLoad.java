@@ -33,6 +33,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /**
@@ -60,13 +61,40 @@ public class DocLoad extends HttpServlet {
             HttpServletResponse response) throws ServletException, IOException {
         
         response.setContentType("text/html; charset=UTF-8");
+        HttpSession httpSession = request.getSession(true);
+        httpSession.setMaxInactiveInterval(20*60);
         
+        if(request.getParameter("upStatus") != null){
+            String status = request.getParameter("upStatus");
+            if(status.equals("done")){
+                
+            }
+        }
         
-        // First assemble the stringtemplate base paths within the servlet
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "show";        // per default: show the DocLoad Base UI
+        }
+        
+        if (action.equalsIgnoreCase("processDocFile")) {
+            processDocFile(request, response, httpSession);
+        } else if (action.equalsIgnoreCase("show")){
+            show(request, response, httpSession);
+        }
+
+    }
+    
+    
+    protected void show(HttpServletRequest request, 
+            HttpServletResponse response,
+            HttpSession httpSession)
+            throws IOException {
+    
+         // First assemble the stringtemplate base paths within the servlet
         ServletContext context = request.getSession().getServletContext();
         String realStPath = context.getRealPath(request.getContextPath())
                 + "/WEB-INF/classes/stringtemp/html";
-
+        
         // this is the topmost ST directory
         StringTemplateGroup stg =
                 new StringTemplateGroup("stGroup", realStPath);
@@ -79,28 +107,35 @@ public class DocLoad extends HttpServlet {
         // need to tell the template dirs of their inheritance, so within
         // st files we just can normally call other templates
         stg_sub.setSuperGroup(stg);
-
-
-        /*
+        
+         /*
          * Retrieve the basic DocLoad template
          */
         StringTemplate st = stg_sub.getInstanceOf("docload");
 
-
-        // set CSS
-        String realCSSPath = context.getRealPath(request.getContextPath())
-                + "/WEB-INF/classes/stringtemp/css";
-	File css = FileUtils.getResourceFile("/stringtemp/css/docLoad.st");
+        // get the css file for styling the DocLoad Module
+	File css = FileUtils.getResourceFile("/stringtemp/css/docLoadStyle.st");
         
         String cssString = FileUtils.getString(css); 
         st.setAttribute("css", cssString);
-         
-
-
-
+        
         // output
         PrintWriter writer = response.getWriter();
         writer.write(st.toString());
+
+        writer.close();
+    }
+    
+    
+    protected void processDocFile(HttpServletRequest request, 
+            HttpServletResponse response,
+            HttpSession httpSession) throws IOException{
+        System.out.println("Upload Doc File");
+        System.out.println("Parse Doc File on Server");
+        System.out.println("Handle Parsing Result");
+        
+        PrintWriter writer = response.getWriter();
+        writer.write("error");
 
         writer.close();
     }

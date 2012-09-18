@@ -530,6 +530,7 @@ function initFunctionality() {
         $("#jqSummaryDialog").dialog("open");
     });
 	
+     
     $('#statistics').unbind('click').click(function(event){
         if (logging) {
             markIsWidget("true"); 
@@ -670,7 +671,7 @@ function initFunctionality() {
         }
        
     });
-    
+     
 }
 
 function getHeaderHeight() {

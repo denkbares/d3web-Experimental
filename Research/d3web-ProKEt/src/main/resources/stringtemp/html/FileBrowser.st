@@ -1,6 +1,21 @@
 <div id="fileBrowser" class="baseFileBrowser">
-    <input type="file" name="docfile" id="docfileinputorig" onchange="writeToBGFileInput('docfileinputorig');">    
-    <input type="text" name="docfilename" id="docfilename" value="Choose knowledge base (.doc/.zip)" />
-    <input type="button" name="docfilebutton" id="docfilebutton" class="button" 
-    value="..."/>  
+    <div class="row">
+        <form action="FileUploadServlet" enctype="multipart/form-data" method="post" >
+            <input name="uploadKB" type="file" id="origKBUploadField" />
+            <input name="saveKB" type="submit" value="Upload File" id="origKBUploadButton" />
+        </form>
+        <input type="text" name="docfilename" id="docfilename" value="Choose knowledge base (.doc/.zip)" />
+        <input type="button" name="docfilebutton" id="docfilebutton" class="button" value="Hochladen" /> 
+
+    </div>
+
+    <div class="row" id="specUploadRow">
+        <form action="FileUploadServlet" enctype="multipart/form-data" method="post" >
+            <input name="uploadSPEC" type="file" id="origSpecUploadField" />
+            <input name="saveSPEC" type="submit" value="Upload XML Spec" id="origSpecUploadButton" />
+        </form>
+        <input type="text" name=specfilename" id="specfilename" value="Choose XML Specification (.xml)" />
+        <input type="button" name="specfilebutton" id="specfilebutton" class="button" value="Hochladen" /> 
+    </div>
+
 </div>
