@@ -10,7 +10,7 @@
 <script src="libsExternal/jquery/jquery-1.6.1.min.js" type="text/javascript" language="javascript"></script>
 <script src="libsExternal/jquery/jquery.object.js" type="text/javascript" language="javascript"></script>
 <script src="libsExternal/jqueryUI/jqueryUi-1.8.10.all.min.js" type="text/javascript" language="javascript"></script>
-<script src="js/global.js" type="text/javascript" language="javascript"></script>
+<script src="js/dialogmanager.js" type="text/javascript" language="javascript"></script>
 
 
 <style type="text/css">$css$</style>
@@ -63,12 +63,17 @@
                 $ImgButton(src="img/ExecuteInactive.png", 
                             alt="Execute Dialog",
                             tt="Execute Dialog",
-                            click="alert('Execute Dialog');")$
+                            click="assembleDialog()")$
             </div>               
             <div class="cell"></div>
         </div>
     </div>
-  
+    
+    <div class="row">
+        <a href="" id="latestDialogLink" target="_blank"></a> 
+    </div>
+
+
     <div class="row spacerow" > </div>
     
     <div class="row">
@@ -78,7 +83,7 @@
                 $ImgButton(src="img/StoreInactive.png", 
                             alt="Store",
                             tt="Store Knowledge Base to Repository",
-                            click="alert('Store Knowledge Base to Repository');")$
+                            click="storeDialogToUsersList();")$
             </div>
             <div class="cell"></div>
         </div>

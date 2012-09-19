@@ -82,6 +82,7 @@ public class GlobalSettings {
     private String caseFolder = "";
     private String kbImgFolder = "";
     private String servletBasePath;
+    private String uploadFilesBasePath;
     private int localeIdent = 0;
     /*
      * Save log files
@@ -251,5 +252,13 @@ public class GlobalSettings {
     
     public String getDocLoaderBasePath(){
         return this.docloaderBasePath;
+    }
+    
+    public String getUploadFilesBasePath(){
+        return this.uploadFilesBasePath;
+    }
+    
+    public void setUploadFilesBasePath(String path){
+        this.uploadFilesBasePath = path;
     }
 }

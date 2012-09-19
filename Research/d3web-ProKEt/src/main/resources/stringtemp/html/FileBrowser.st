@@ -1,7 +1,7 @@
 <div id="fileBrowser" class="baseFileBrowser">
     <div class="row">
         <form action="FileUploadServlet" enctype="multipart/form-data" method="post" >
-            <input name="uploadKB" type="file" id="origKBUploadField" />
+            <input name="uploadKB" type="file" id="origKBUploadField" onchange="writeToFakeField('origKBUploadField');"/>
             <input name="saveKB" type="submit" value="Upload File" id="origKBUploadButton" />
         </form>
         <input type="text" name="docfilename" id="docfilename" value="Choose knowledge base (.doc/.zip)" />
@@ -11,7 +11,7 @@
 
     <div class="row" id="specUploadRow">
         <form action="FileUploadServlet" enctype="multipart/form-data" method="post" >
-            <input name="uploadSPEC" type="file" id="origSpecUploadField" />
+            <input name="uploadSPEC" type="file" id="origSpecUploadField" onchange="writeToFakeField('origSpecUploadField');"/>
             <input name="saveSPEC" type="submit" value="Upload XML Spec" id="origSpecUploadButton" />
         </form>
         <input type="text" name=specfilename" id="specfilename" value="Choose XML Specification (.xml)" />

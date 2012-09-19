@@ -103,6 +103,10 @@ margin-top: 10px;}
     margin-top: 5px;
     padding-left: 15px; color: darkred;}
 
+#latestDialogLink{display: none; font-family: Verdana;  font-size: 0.7em;
+    margin-top: 5px;
+    padding-left: 15px; color: blue;}
+
 #origKBUploadField,#origSpecUploadField {width: 220px; position: relative; z-index:2; opacity:0;}
 
 #origKBUploadField{margin-top:15px;}

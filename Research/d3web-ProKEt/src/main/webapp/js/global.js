@@ -4,41 +4,6 @@
 
 var tooltipShown = undefined;
 
-
-
-$(function(){
-  
-    var Request = {	
-        parameter: function(name) {
-            return this.parameters()[name];
-        },
- 	
-        parameters: function() {
-            var result = {};
-            var url = window.location.href;
-            var parameters = url.slice(url.indexOf('?') + 1).split('&');
- 		
-            for(var i = 0;  i < parameters.length; i++) {
-                var parameter = parameters[i].split('=');
-                result[parameter[0]] = parameter[1];
-            }
-            return result;
-        }
-    }
-  
-    var statusKB =  Request.parameter("upKB");
-    var statusSpecs = Request.parameter("upSPEC");
-    
-    if(statusKB!=undefined && statusKB != "" && statusKB=="done"){
-        $("#KBUploadStatus").css("display", "block");
-    }
-    
-    if(statusSpecs!=undefined && statusSpecs != "" && statusSpecs=="done"){
-        $("#SPECUploadStatus").css("display", "block");
-    }
- 
-});
-
 /* TOOLTIP STUFF - Tooltips are always defined by JS so they
  * are needed globally by d3web and prototype dialogs 
  */
@@ -788,29 +753,4 @@ function deleteExpandCookie(qname){
 }
 
 
-
-/***********************/
-/* Functions needed for the docload module */
-/***********************/
-
-function parseDocToKB(id){
-    
-    
-    var link = $.query.set("action", "processDocFile").toString();
-    link = window.location.href.replace(window.location.search, "") + link;
-
-    $.ajax({
-        type : "GET",
-        url : link,
-        cache : false, // needed for IE, call is not made otherwise
-        success : function(html) {
-            alert(html);
-            if(html.indexOf("error")==-1){
-                alert("everything's fine");
-            } else {
-                $("#ErrorReportImgButton img").attr("src", "img/ErrorReport.png");
-            }
-        } 
-    });
-}
 
