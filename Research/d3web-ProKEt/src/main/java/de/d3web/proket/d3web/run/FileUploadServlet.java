@@ -32,8 +32,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet used for uploading files. 
- * Currently, .xml and .doc files. - TODO: check filetypes/extensions!
+ * Servlet used for uploading files. Currently, .xml and .doc files. - TODO:
+ * check filetypes/extensions!
  *
  * @author Martina Freiberg @date September 2012
  */
@@ -94,19 +94,28 @@ public class FileUploadServlet extends HttpServlet {
     private void uploadKB(HttpServletRequest request, HttpServletResponse response, MultipartRequest multipartRequest) throws IOException {
 
         File tmpFile = multipartRequest.getFile("uploadKB");
+        if (tmpFile != null) {
+            
+            if (!tmpFile.getName().endsWith(".doc") &&
+                    !tmpFile.getName().endsWith(".d3web") &&
+                        !tmpFile.getName().endsWith(".zip")) {
+                response.sendRedirect("/DialogManager?upERR=nokb");
+            }
+            File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
+            String newFileName = tmpFile.getName();
+            File fileToMove = new File(dirToMove, newFileName);
+            tmpFile.renameTo(fileToMove);
 
-        File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
-        String newFileName = tmpFile.getName();
-        File fileToMove = new File(dirToMove, newFileName);
-        tmpFile.renameTo(fileToMove);
+            HttpSession httpSession = request.getSession();
+            // TODO: move this to processDOC Method where doc is parsed into d3web, later
+            //TODO: flexible    httpSession.setAttribute("latestD3web", newFileName);
+            httpSession.setAttribute("latestD3web", "ITree140812.d3web");
 
-        HttpSession httpSession = request.getSession();
-        // TODO: move this to processDOC Method where doc is parsed into d3web, later
-        //TODO: flexible    httpSession.setAttribute("latestD3web", newFileName);
-        httpSession.setAttribute("latestD3web", "ITree140812.d3web");
-
-        tmpFile.delete();
-        response.sendRedirect("/DialogManager?upKB=done");
+            tmpFile.delete();
+            response.sendRedirect("/DialogManager?upKB=done");
+        } else {
+            response.sendRedirect("/DialogManager?upERR=nofile");
+        }
     }
 
     /**
@@ -122,17 +131,26 @@ public class FileUploadServlet extends HttpServlet {
             MultipartRequest multipartRequest) throws IOException {
 
         File tmpFile = multipartRequest.getFile("uploadSPEC");
+        if (tmpFile != null) {
 
-        File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
-        String newFileName = tmpFile.getName();
-        File fileToMove = new File(dirToMove, newFileName);
-        tmpFile.renameTo(fileToMove);
+            if (!tmpFile.getName().endsWith(".xml")) {
+                response.sendRedirect("/DialogManager?upERR=noxml");
+            }
+            File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
+            String newFileName = tmpFile.getName();
+            File fileToMove = new File(dirToMove, newFileName);
+            tmpFile.renameTo(fileToMove);
 
-        HttpSession httpSession = request.getSession();
-        httpSession.setAttribute("latestSpec", newFileName);
+            HttpSession httpSession = request.getSession();
+            httpSession.setAttribute("latestSpec", newFileName);
 
-        tmpFile.delete();
-        response.sendRedirect("/DialogManager?upSPEC=done");
+            tmpFile.delete();
+            response.sendRedirect("/DialogManager?upSPEC=done");
+        } else {
+            response.sendRedirect("/DialogManager?upERR=nofile");
+        }
+
+
     }
 
     /**

@@ -134,17 +134,20 @@ public class DialogManager extends HttpServlet {
         // the subdirectory which contains the specific framing template
         // for the document loader
         StringTemplateGroup stg_sub =
-                new StringTemplateGroup("stGroup", realStPath + "/docLoad");
+                new StringTemplateGroup("stGroup", realStPath + "/dialogManager");
 
         // need to tell the template dirs of their inheritance, so within
         // st files we just can normally call other templates
         stg_sub.setSuperGroup(stg);
 
         // Retrieve the basic DialogManager template
-        StringTemplate st = stg_sub.getInstanceOf("docload");
+        StringTemplate st = stg_sub.getInstanceOf("dialogManager");
 
         // get the css file for styling the DialogManager Module
-        File css = FileUtils.getResourceFile("/stringtemp/css/docLoadStyle.st");
+        File css = FileUtils.getResourceFile("/stringtemp/css/diaManStyle.st");
+        
+        st.setAttribute("kbuploadfieldlabel", "Wissensbasis wählen (.doc/.zip/.d3web)");
+        st.setAttribute("specuploadfieldlabel", "UI Spezifikation wählen (.xml)");
 
         String cssString = FileUtils.getString(css);
         st.setAttribute("css", cssString);

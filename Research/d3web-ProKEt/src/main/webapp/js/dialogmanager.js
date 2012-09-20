@@ -52,13 +52,27 @@ $(function(){
   
     var statusKB =  Request.parameter("upKB");
     var statusSpecs = Request.parameter("upSPEC");
+    var status = Request.parameter("upERR");
+    
+    // some error handling for uploading file
+    if(status != undefined && status != ""){
+        if(status=="nofile"){
+            $('#UploadError').html("Bitte Datei auswählen!");
+        } 
+        if(status=="noxml"){
+            $('#UploadError').html("Bitte XML Spezifikation (.xml) auswählen!");
+        } 
+        if(status=="nokb"){
+            $('#UploadError').html("Bitte Wissensbasis (.doc/.zip/.d3web) auswählen!");
+        }
+    }
     
     if(statusKB!=undefined && statusKB != "" && statusKB=="done"){
-        $("#KBUploadStatus").css("display", "block");
+        $("#UploadStatus").html("Wissensbasis hochgeladen.")
     }
     
     if(statusSpecs!=undefined && statusSpecs != "" && statusSpecs=="done"){
-        $("#SPECUploadStatus").css("display", "block");
+        $("#UploadStatus").html("Spezifikation hochgeladen.");
     }
  
 });
@@ -78,7 +92,6 @@ function parseDocToKB(id){
         url : link,
         cache : false, // needed for IE, call is not made otherwise
         success : function(html) {
-            alert(html);
             if(html.indexOf("error")==-1){
                 alert("everything's fine");
             } else {
@@ -104,9 +117,12 @@ function assembleDialog(){
         cache : false, // needed for IE, call is not made otherwise
         success : function(html) {
             if(html.indexOf("error")==-1){
-                $("#latestDialogLink").attr("href", html);
-                $("#latestDialogLink").html(html);
-                $("#latestDialogLink").css("display", "block");
+                // store link in hidden field
+                $("#latestDialogLink").html(html); 
+                // open the dialog in a new window 
+                window.open(html);
+                // activate button for storing dialog to the user's list'
+                $("#StoreImgButton img").attr("src", "img/Store.png");
             } else {
                 alert("assembleDialog error");
             }
@@ -132,11 +148,15 @@ function writeToFakeField(origFieldID){
  */
 function storeDialogToUsersList(){
     
+    // TODO: needs to be altered later. Is used currently to quicly move the
+    // latest dialog to the list view
+    $("#dialoglinklist").html(getDialogLinkCell($("#latestDialogLink").html()));
+    
     var dialogLink = $("#latestDialogLink").html();
     
-     var link = 
-         $.query.set("action", "storeDialogToUsersList")
-            .set("dialogLink", dialogLink).toString();
+    var link = 
+    $.query.set("action", "storeDialogToUsersList")
+    .set("dialogLink", dialogLink).toString();
             
     link = window.location.href.replace(window.location.search, "") + link;
     $.ajax({
@@ -145,10 +165,23 @@ function storeDialogToUsersList(){
         cache : false, // needed for IE, call is not made otherwise
         success : function(html) {
             if(html.indexOf("error")==-1){
-                alert('Store Dialog To List');
+                
             } else {
                 alert("storeDialogToUsersList error");
             }
         } 
     });
+}
+
+/**
+ * Display a given dialog link within a css cell as link
+ */
+function getDialogLinkCell(dialoglink){
+    var dialoghtml = 
+    "<div class='row'>\n\
+            <a href='"+dialoglink+"' target='_blank'>"+dialoglink+"</a> \n\
+        </div>"
+   
+    return dialoghtml;
+    
 }
