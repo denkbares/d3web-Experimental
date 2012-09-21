@@ -27,6 +27,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.jspwiki.renderer.JSPWikiMarkupIDRenderer;
 
 /**
  * 
@@ -41,6 +42,7 @@ public class SectionHeaderType extends AbstractType {
 	 */
 	public SectionHeaderType() {
 		this.setSectionFinder(new SectionHeaderSectionFinder());
+		this.setRenderer(new JSPWikiMarkupIDRenderer());
 	}
 
 	public class SectionHeaderSectionFinder implements SectionFinder {
