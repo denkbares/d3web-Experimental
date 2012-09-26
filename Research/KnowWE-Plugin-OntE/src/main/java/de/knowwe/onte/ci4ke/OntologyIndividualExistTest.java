@@ -43,14 +43,15 @@ import de.knowwe.taghandler.OWLApiTagHandlerUtil;
  * @created 17.10.2011
  */
 public class OntologyIndividualExistTest extends AbstractTest<OWLAPIConnector> {
-	
-	
+
 	public OntologyIndividualExistTest() {
-		this.addParameter("Concept", TestParameter.Type.String, TestParameter.Mode.Mandatory, "Class concept where inidivuals will be checked.");
-		this.addParameter("Number of Individuals", TestParameter.Type.Number, TestParameter.Mode.Mandatory, "How many Individuals at least are expected.");
+		this.addParameter("Concept", TestParameter.Type.String, TestParameter.Mode.Mandatory,
+				"Class concept where inidivuals will be checked.");
+		this.addParameter("Number of Individuals", TestParameter.Type.Number,
+				TestParameter.Mode.Mandatory, "How many Individuals at least are expected.");
 
 	}
-	
+
 	@Override
 	public String getDescription() {
 		return "no description available";
@@ -88,7 +89,7 @@ public class OntologyIndividualExistTest extends AbstractTest<OWLAPIConnector> {
 			}
 			else {
 				message.append("No individuals found! But there should be some!");
-				return new Message(Type.ERROR, message.toString());
+				return new Message(Type.FAILURE, message.toString());
 			}
 		}
 		else {

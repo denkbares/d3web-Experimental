@@ -67,7 +67,7 @@ public class OntologyClassificationTest extends de.d3web.testing.AbstractTest<OW
 			errorMessage.append("Please specify in the following format: ");
 			errorMessage.append("@\"Food>Pizza>NamedPizza\".");
 
-			return new Message(Type.ERROR, errorMessage.toString());
+			return new Message(Type.FAILURE, errorMessage.toString());
 		}
 
 		String[] concepts = classification.split(Character.toString(GREATER_THAN));
@@ -132,7 +132,6 @@ public class OntologyClassificationTest extends de.d3web.testing.AbstractTest<OW
 		}
 		return false;
 	}
-
 
 	@Override
 	public Class<OWLAPIConnector> getTestObjectClass() {

@@ -77,19 +77,17 @@ public class OntologyConsistencyTest extends AbstractTest<OWLAPIConnector> {
 				message.append("<br />");
 
 			}
-			return new Message(Type.ERROR, message.toString());
+			return new Message(Type.FAILURE, message.toString());
 		}
 		else {
 			return new Message(Type.SUCCESS, "Ontology is consistent! Gratulations!");
 		}
 	}
 
-
 	@Override
 	public Class<OWLAPIConnector> getTestObjectClass() {
 		return OWLAPIConnector.class;
 	}
-
 
 	@Override
 	public String getDescription() {
