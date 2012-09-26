@@ -28,16 +28,10 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
  */
 public class BoldType extends AbstractType {
 
-	// @Override
-	// public List<SectionFinderResult> lookForSections(String text, Section<?>
-	// father, Type type) {
-	// // TODO Auto-generated method stub // RegEXS
-	// // RegexSectionFinder;
-	// return null;
-	// }
 	public BoldType() {
 
 		this.setSectionFinder(new RegexSectionFinder("__.*?__"));
+		this.addChildType(new LinkType());
 		this.addChildType(new WikiTextType());
 	}
 

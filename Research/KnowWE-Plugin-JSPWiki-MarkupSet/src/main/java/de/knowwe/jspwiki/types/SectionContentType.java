@@ -35,21 +35,24 @@ import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 
 public class SectionContentType extends AbstractType {
 
-	private Type sectionType;
-	private final Type paragraphType;
+	private Type sectionType1 = null;
+	private Type sectionType2 = null;
+	private final Type paragraphType = new ParagraphType();
 
 	/*
 	 * The SectionContentType takes everything left from a SectionType.
 	 */
 	public SectionContentType(int count) {
 		this.setSectionFinder(new AllTextSectionFinder());
-		if (count > 1) {
+		if (count == 3) {
 			// allow for the next lower level of sections
-			sectionType = new SectionType(count - 1);
-			this.addChildType(sectionType);
+			sectionType2 = new SectionType2();
+			sectionType1 = new SectionType1();
 		}
-		paragraphType = new ParagraphType();
-		this.addChildType(paragraphType);
+		if (count == 2) {
+			// allow for the next lower level of sections
+			sectionType1 = new SectionType1();
+		}
 	}
 
 	/*
@@ -59,11 +62,27 @@ public class SectionContentType extends AbstractType {
 	@Override
 	public List<Type> getChildrenTypes() {
 		ArrayList<Type> result = new ArrayList<Type>(2);
-		if (sectionType != null) {
-			result.add(sectionType);
+		int i = 0;
+		if (sectionType2 != null) {
+			result.add(sectionType2);
+			i++;
+		}
+		if (sectionType1 != null) {
+			result.add(sectionType1);
+			i++;
 		}
 		List<Type> rootChildren = RootType.getInstance().getChildrenTypes();
 		result.addAll(rootChildren);
+		int l = 0;
+		for (; i < result.size() - l; i++) {
+			if (result.get(i).getName().equals("SectionType")
+					|| result.get(i).getName().equals("SectionType1")
+					|| result.get(i).getName().equals("SectionType2")) {
+				result.remove(i);
+				i = i - 1;
+				l++;
+			}
+		}
 		result.add(paragraphType);
 
 		return result;

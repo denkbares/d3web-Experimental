@@ -51,4 +51,26 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ParagraphTypeForLists">
+		<parameter id="class" value="de.knowwe.jspwiki.types.ParagraphTypeForLists" />
+		<parameter id="name" value="ParagraphTypeForLists" />
+		<parameter id="description" value="Represents a ParagraphTypeForLists in KDOM" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="20" />
+		<parameter id="scope" value="OrderedListType/**/DashTreeElementContent" />
+		<parameter id="scope" value="ListType/**/DashTreeElementContent" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TableRow">
+		<parameter id="class" value="de.knowwe.jspwiki.types.TableRow" />
+		<parameter id="name" value="TableRow" />
+		<parameter id="description" value="Represents a TableRow in KDOM" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="Table" />
+	</extension>
+	
+
 </plugin>
