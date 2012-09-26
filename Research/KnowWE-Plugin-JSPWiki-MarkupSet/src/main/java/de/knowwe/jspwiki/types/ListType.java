@@ -28,6 +28,7 @@ public class ListType extends AbstractType {
 		element.removeChildType(LineEndComment.class);
 
 		subtree.addChildType(element);
+		subtree.addChildType(subtree);
 
 		DashTree tree = new DashTree('*', 1);
 		tree.clearChildrenTypes();

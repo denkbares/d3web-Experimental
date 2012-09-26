@@ -30,6 +30,7 @@ public class ItalicType extends AbstractType {
 
 	public ItalicType() {
 		this.setSectionFinder(new RegexSectionFinder("\\'\\'.*?\\'\\'"));
+		this.addChildType(new LinkType());
 		this.addChildType(new WikiTextType());
 	}
 }
