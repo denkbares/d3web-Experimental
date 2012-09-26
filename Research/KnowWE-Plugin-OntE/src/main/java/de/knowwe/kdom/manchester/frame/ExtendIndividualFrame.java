@@ -16,7 +16,7 @@ public class ExtendIndividualFrame extends IndividualFrame {
 		// this.setSectionFinder(new RegexSectionFinder(p));
 
 		int pos = this.getChildrenTypes().indexOf(IndividualDefinition.getInstance());
-		this.removeChildType(IndividualDefinition.getInstance());
+		this.removeChildType(IndividualDefinition.class);
 		this.childrenTypes.add(pos, new EntityReference(KEYWORD));
 	}
 

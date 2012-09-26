@@ -16,14 +16,14 @@ public class ExtendClassFrame extends ClassFrame {
 		// this.setSectionFinder(new RegexSectionFinder(p, 3));
 
 		int pos = this.getChildrenTypes().indexOf(OWLClassDefinition.getInstance());
-		this.removeChildType(OWLClassDefinition.getInstance());
+		this.removeChildType(OWLClassDefinition.class);
 		this.childrenTypes.add(pos, new EntityReference(KEYWORD));
 	}
 
 	/**
 	 * Returns the {@link OWLClass} section containing the name of the to define
 	 * OWLClass.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section
@@ -36,7 +36,7 @@ public class ExtendClassFrame extends ClassFrame {
 	/**
 	 * Returns the {@link OWLClass} section containing the name of the to define
 	 * OWLClass.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ClassFrame> section
 	 * @return The found section

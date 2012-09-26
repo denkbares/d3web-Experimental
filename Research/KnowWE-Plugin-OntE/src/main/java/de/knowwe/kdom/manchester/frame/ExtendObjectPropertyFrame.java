@@ -16,7 +16,7 @@ public class ExtendObjectPropertyFrame extends ObjectPropertyFrame {
 		// this.setSectionFinder(new RegexSectionFinder(p));
 
 		int pos = this.getChildrenTypes().indexOf(ObjectPropertyDefinition.getInstance());
-		this.removeChildType(ObjectPropertyDefinition.getInstance());
+		this.removeChildType(ObjectPropertyDefinition.class);
 		this.childrenTypes.add(pos, new EntityReference(KEYWORD));
 	}
 
