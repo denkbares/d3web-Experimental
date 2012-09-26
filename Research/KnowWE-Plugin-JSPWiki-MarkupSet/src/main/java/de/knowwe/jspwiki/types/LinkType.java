@@ -29,7 +29,6 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 public class LinkType extends AbstractType {
 
 	public LinkType() {
-		this.setSectionFinder(new RegexSectionFinder(
-				"(?<=(^|[^\\[]))\\[[^\\[{].*?\\]"));
+		this.setSectionFinder(new RegexSectionFinder("\\[(?!\\{Image).*\\]"));
 	}
 }

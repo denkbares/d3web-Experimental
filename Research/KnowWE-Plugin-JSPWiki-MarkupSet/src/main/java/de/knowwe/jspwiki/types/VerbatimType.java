@@ -18,8 +18,6 @@
  */
 package de.knowwe.jspwiki.types;
 
-import java.util.regex.Pattern;
-
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
@@ -31,7 +29,6 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 public class VerbatimType extends AbstractType {
 
 	public VerbatimType() {
-		this.setSectionFinder(new RegexSectionFinder("\\{\\{\\{(.*?)\\}\\}\\}",
-				Pattern.DOTALL | Pattern.MULTILINE));
+		this.setSectionFinder(new RegexSectionFinder("\\{\\{\\{(.*?)\\}\\}\\}"));
 	}
 }

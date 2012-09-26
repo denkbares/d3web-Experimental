@@ -18,14 +18,10 @@
  */
 package de.knowwe.jspwiki.types;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.sectionFinder.SectionFinder;
-import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 /**
  * 
@@ -66,79 +62,18 @@ public class SectionType extends AbstractType {
 		return marker;
 	}
 
-	class SectionBlockFinder implements SectionFinder {
-
-		String marker;
+	class SectionBlockFinder extends RegexSectionFinder {
 
 		public SectionBlockFinder(String marker) {
-			this.marker = marker;
-		}
+			// The regex for the major level looks like: "^!!!.*?((?=^!!!)|\\z)"
+			super("^" + marker + // the marker
+					".*?" // any content
+					+ "((?=^" + marker + ")" + // look ahead for the next one
 
-		@Override
-		public List<SectionFinderResult> lookForSections(String text,
-				Section<?> father, Type type) {
-			List<SectionFinderResult> results = new ArrayList<SectionFinderResult>();
-			String s = text;
-			String[] sectionTypes = s.split("(^|\n)" + marker);
-			int start = -1;
-			int end = -1;
-			int correcture = 0;
-			// looking for start of a verbatimType
-			boolean verbatim = sectionTypes[0].replaceAll(
-					"\\{\\{\\{(.|\r\n)*?\\}\\}\\}", "").contains("{{{");
-			if (verbatim) {
-				correcture--;
-			}
-			for (int i = 1; i < sectionTypes.length; i++) {
-				if (verbatim) {
-					// looking for end of a verbatimType
-					if (sectionTypes[i].replaceAll(
-							"\\{\\{\\{(.|\r\n)*?\\}\\}\\}", "").contains("}}}")) {
-						// missing \n from splitting is added to length
-						if (i != sectionTypes.length - 1) {
-							correcture++;
-						}
-						verbatim = false;
-						if (start != -1) {
-							end = text.indexOf(sectionTypes[i])
-									+ sectionTypes[i].length();
-							SectionFinderResult result = new SectionFinderResult(
-									start, end + correcture);
-							correcture = 0;
-							results.add(result);
-						}
-						// looking for start of a verbatimType
-						if (sectionTypes[i].replaceAll(
-								"\\{\\{\\{(.|\r\n)*?\\}\\}\\}", "").contains(
-								"{{{")) {
-							start = text.indexOf(sectionTypes[i])
-									- marker.length();
-							verbatim = true;
-						}
-					}
-					continue;
-				}
-				// looking for start of a verbatimType
-				if (sectionTypes[i].replaceAll("\\{\\{\\{(.|\r\n)*?\\}\\}\\}",
-						"").contains("{{{")) {
-					start = text.indexOf(sectionTypes[i]) - marker.length();
-					verbatim = true;
-					continue;
-				}
-				// missing \n from splitting is added to length
-				if (i != sectionTypes.length - 1) {
-					correcture++;
-				}
-				start = text.indexOf(sectionTypes[i]) - marker.length();
-				end = text.indexOf(sectionTypes[i]) + sectionTypes[i].length();
-				SectionFinderResult result = new SectionFinderResult(start, end
-						+ correcture);
-				correcture = 0;
-				results.add(result);
-			}
-			return results;
+					"|\\z)" // or end of content
+			, Pattern.DOTALL
+					| Pattern.MULTILINE, 0);
 		}
-
 	}
 
 }
