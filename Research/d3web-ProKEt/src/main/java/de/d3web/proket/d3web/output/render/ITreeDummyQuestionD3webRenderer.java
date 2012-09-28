@@ -28,7 +28,7 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
-import de.d3web.jurisearch.JuriModel;
+//import de.d3web.jurisearch.JuriModel;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
@@ -43,8 +43,8 @@ import javax.servlet.http.HttpSession;
  */
 public class ITreeDummyQuestionD3webRenderer extends AbstractD3webRenderer implements IQuestionD3webRenderer {
 
-    protected final KnowledgeKind<JuriModel> JURIMODEL = new KnowledgeKind<JuriModel>(
-            "JuriModel", JuriModel.class);
+    //protected final KnowledgeKind<JuriModel> JURIMODEL = new KnowledgeKind<JuriModel>(
+      //      "JuriModel", JuriModel.class);
     protected static String TT_PROP_ERROR = "<b>Gewählte Antwort widerspricht der aus den Detailfragen hergeleiteten Bewertung.</b> "
             + "<br />Löschen Sie mindestens eine Antwort durch Klick auf den X-Button der jeweiligen Detailfrage, "
             + "wenn Sie eine andere als die bisher hergeleitete Bewertung setzen möchten.";

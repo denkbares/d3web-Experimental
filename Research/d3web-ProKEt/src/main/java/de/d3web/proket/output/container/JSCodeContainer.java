@@ -47,6 +47,7 @@ public class JSCodeContainer implements ICodeContainer {
     private boolean study = false;
     private boolean feedback = false;
     private boolean ueq = false;
+    private boolean qcons = false;
 
     @Override
     public void add(String data) {
@@ -66,6 +67,10 @@ public class JSCodeContainer implements ICodeContainer {
 
     public void setITree() {
         itree = true;
+    }
+    
+    public void setQuestionaryCons(){
+        qcons = true;
     }
 
     public void setOneQuestionDialog() {
@@ -177,6 +182,14 @@ public class JSCodeContainer implements ICodeContainer {
             add("var itree = true;", 0);
         } else {
             add("var itree = false;", 0);
+        }
+        
+        if(qcons){
+            ownBibs.add("questionarycons.js");
+            linkedBibs.add("jsTree/jquery.jstree.js");
+            add("var qcons = true;", 0);
+        } else {
+            add("var qcons = false;", 0);
         }
         
             

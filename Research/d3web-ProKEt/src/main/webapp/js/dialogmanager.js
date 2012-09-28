@@ -26,6 +26,8 @@
 /* Functions needed for the DialogManager */
 /******************************************/
 
+var upfilename;
+
 /* Startup function: we need to check parameters from request here, as 
  * this is the (currently) only way to get noticed whether the KB and XML
  * have been loaded and message should be displayed in UI 
@@ -53,6 +55,7 @@ $(function(){
     var statusKB =  Request.parameter("upKB");
     var statusSpecs = Request.parameter("upSPEC");
     var status = Request.parameter("upERR");
+     upfilename = Request.parameter("upfilename");
     
     // some error handling for uploading file
     if(status != undefined && status != ""){
@@ -82,9 +85,10 @@ $(function(){
 /* calls the functionality for parsing the word document into a .d3web file */
 // TODO
 function parseDocToKB(id){
+   
+    var docname = upfilename;
     
-    
-    var link = $.query.set("action", "processDocFile").toString();
+    var link = $.query.set("action", "parseKBDoc").set("docname", docname).toString();
     link = window.location.href.replace(window.location.search, "") + link;
 
     $.ajax({
@@ -92,7 +96,7 @@ function parseDocToKB(id){
         url : link,
         cache : false, // needed for IE, call is not made otherwise
         success : function(html) {
-            if(html.indexOf("error")==-1){
+            if(html.indexOf("parseErrorInvalidDoc")==-1){
                 alert("everything's fine");
             } else {
                 $("#ErrorReportImgButton img").attr("src", "img/ErrorReport.png");
@@ -137,9 +141,13 @@ function writeToFakeField(origFieldID){
     
     if(origFieldID.indexOf("KBUpload")!= -1){
         $("#docfilename").val($("#" + origFieldID).val());
+        $("#docnamestore").val($("#" + origFieldID).val());
+        
     }else if (origFieldID.indexOf("SpecUpload")!= -1){
         $("#specfilename").val($("#" + origFieldID).val());
+        $("#specnamestore").val($("#" + origFieldID).val());
     }
+    
 }
 
 /**

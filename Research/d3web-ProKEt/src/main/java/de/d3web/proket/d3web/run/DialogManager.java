@@ -19,6 +19,7 @@
  */
 package de.d3web.proket.d3web.run;
 
+import converter.Html2KnowWECompiler;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.data.DialogType;
 import java.io.File;
@@ -34,21 +35,22 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
+import de.d3web.proket.utils.TemplateUtils;
 import java.io.*;
+import java.util.Arrays;
+import java.util.Comparator;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import org.antlr.stringtemplate.StringTemplateGroup;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
- * DialogManager Servlet.
- * A framing application for using ProKEt. Enables users to upload their
- * word-based (or also d3web) files and xml specs, to parse the word doc
- * and to assemble the corresponding dialog link using the properties of 
- * the xml specs and the given d3web (parsed or native)
+ * DialogManager Servlet. A framing application for using ProKEt. Enables users
+ * to upload their word-based (or also d3web) files and xml specs, to parse the
+ * word doc and to assemble the corresponding dialog link using the properties
+ * of the xml specs and the given d3web (parsed or native)
  *
- * @author Martina Freiberg
- * @date September 2012
+ * @author Martina Freiberg @date September 2012
  */
 public class DialogManager extends HttpServlet {
 
@@ -69,11 +71,11 @@ public class DialogManager extends HttpServlet {
         // write the servletcontext path
         String servletcontext = config.getServletContext().getRealPath("/");
         GLOBSET.setServletBasePath(servletcontext);
-        
+
         // assemble and write the upload-files path
         String uploadFilesBase = GLOBSET.getServletBasePath() + "UPFiles";
         GLOBSET.setUploadFilesBasePath(uploadFilesBase);
-    
+
         // initialize the d3web parser
         d3webParser = new D3webXMLParser();
     }
@@ -81,7 +83,7 @@ public class DialogManager extends HttpServlet {
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      * response)
-     * 
+     *
      * Basic Servlet Processing method
      */
     @Override
@@ -98,8 +100,8 @@ public class DialogManager extends HttpServlet {
             action = "show";        // per default: show the DialogManager Base UI
         }
 
-        if (action.equalsIgnoreCase("processDocFile")) {
-            processDocFile(request, response, httpSession);
+        if (action.equalsIgnoreCase("parseKBDoc")) {
+            parseKBDocument(request, httpSession, response);
         } else if (action.equalsIgnoreCase("show")) {
             show(request, response, httpSession);
         } else if (action.equalsIgnoreCase("assembleDialog")) {
@@ -111,41 +113,48 @@ public class DialogManager extends HttpServlet {
 
     /**
      * Assemble and Show the Dialog Manager Module UI
-     * 
+     *
      * @param request
      * @param response
      * @param httpSession
-     * @throws IOException 
+     * @throws IOException
      */
     protected void show(HttpServletRequest request,
             HttpServletResponse response,
             HttpSession httpSession)
             throws IOException {
 
+
+        File template = FileUtils.getResourceFile(
+                "/stringtemp/html/dialogManager.st");
+        StringTemplate st =
+                TemplateUtils.getStringTemplate("dialogManager", "html");
+
+
         // First assemble the stringtemplate base paths within the servlet
-        ServletContext context = request.getSession().getServletContext();
-        String realStPath = context.getRealPath(request.getContextPath())
-                + "/WEB-INF/classes/stringtemp/html";
+        //ServletContext context = request.getSession().getServletContext();
+        //String realStPath = context.getRealPath(request.getContextPath())
+        //      + "/WEB-INF/classes/stringtemp/html";
 
         // this is the topmost ST directory
-        StringTemplateGroup stg =
-                new StringTemplateGroup("stGroup", realStPath);
+        //StringTemplateGroup stg =
+        //new StringTemplateGroup("stGroup", realStPath);
 
         // the subdirectory which contains the specific framing template
         // for the document loader
-        StringTemplateGroup stg_sub =
-                new StringTemplateGroup("stGroup", realStPath + "/dialogManager");
+        //StringTemplateGroup stg_sub =
+        //      new StringTemplateGroup("stGroup", realStPath + "/dialogManager");
 
         // need to tell the template dirs of their inheritance, so within
         // st files we just can normally call other templates
-        stg_sub.setSuperGroup(stg);
+        //stg_sub.setSuperGroup(stg);
 
         // Retrieve the basic DialogManager template
-        StringTemplate st = stg_sub.getInstanceOf("dialogManager");
+        //StringTemplate st = stg_sub.getInstanceOf("dialogManager");
 
         // get the css file for styling the DialogManager Module
         File css = FileUtils.getResourceFile("/stringtemp/css/diaManStyle.st");
-        
+
         st.setAttribute("kbuploadfieldlabel", "Wissensbasis wählen (.doc/.zip/.d3web)");
         st.setAttribute("specuploadfieldlabel", "UI Spezifikation wählen (.xml)");
 
@@ -160,60 +169,37 @@ public class DialogManager extends HttpServlet {
     }
 
     /**
-     * Parse the .doc file with KB specification into the d3web format.
-     * 
+     * Assemble the dialog links for the respective Servlets. Currently using
+     * the latest uploaded file (XML) and a fixed d3web. TODO: adapt when parser
+     * generates d3web.
+     *
      * @param request
      * @param response
      * @param httpSession
-     * @throws IOException 
-     */
-    protected void processDocFile(HttpServletRequest request,
-            HttpServletResponse response,
-            HttpSession httpSession) throws IOException {
-        
-        System.out.println("Parse Doc File on Server");
-        System.out.println("Write d3web to respective folder");
-
-        PrintWriter writer = response.getWriter();
-        writer.write("error");
-
-        writer.close();
-    }
-
-    /**
-     * Assemble the dialog links for the respective Servlets.
-     * Currently using the latest uploaded file (XML) and a fixed d3web.
-     * TODO: adapt when parser generates d3web.
-     * 
-     * @param request
-     * @param response
-     * @param httpSession
-     * @throws IOException 
+     * @throws IOException
      */
     protected void assembleDialog(HttpServletRequest request,
             HttpServletResponse response,
             HttpSession httpSession) throws IOException {
 
-        // TODO: later the latest d3web and spec are provided by the JS
-        String d3web = 
-                httpSession.getAttribute("latestD3web") != null
-                ? httpSession.getAttribute("latestD3web").toString() : "";
-       
         // get latest loaded .d3web and XML specs file
-        String spec = 
+        File spec =
                 httpSession.getAttribute("latestSpec") != null
-                ? httpSession.getAttribute("latestSpec").toString() : "";
-      
-        /* assemble dialog link */
+                ? (File)httpSession.getAttribute("latestSpec") : null;
+
+        /*
+         * assemble dialog link
+         */
         String dialogLink = "";
         // get the Dialog Type
-        if (!spec.equals("")) {
+        if (spec!=null) {
+           
             String type = retrieveDialogTypeFromSpec(spec);
-            
+
             // assemble ITree Servlet Link
             if (type.equalsIgnoreCase(DialogType.ITREE.toString())) {
 
-                dialogLink = "/ITreeDialog?src=" + spec.replace(".xml", "");
+                dialogLink = "/ITreeDialog?src=" + spec.getName().replace(".xml", "");
             } //TODO else... 
         }
 
@@ -229,25 +215,24 @@ public class DialogManager extends HttpServlet {
 
     /**
      * Retrieve the Dialog Type from the XML specification
-     * 
+     *
      * @param spec the Specification
-     * @return the Dialog Type 
+     * @return the Dialog Type
      */
-    private String retrieveDialogTypeFromSpec(String spec) {
+    private String retrieveDialogTypeFromSpec(File spec) {
 
-        d3webParser.setSourceToParse(spec);
-        d3webParser.parse();
+        d3webParser.parse(spec);
         return d3webParser.getUIPrefix();
     }
 
     /**
-     * Stores a dialog link to the list of dialogs (currently: globa,
-     * one day: per user)
-     * 
+     * Stores a dialog link to the list of dialogs (currently: globa, one day:
+     * per user)
+     *
      * @param request
      * @param response
      * @param httpSession
-     * @throws IOException 
+     * @throws IOException
      */
     protected void storeDialogToUsersList(HttpServletRequest request,
             HttpServletResponse response,
@@ -258,7 +243,7 @@ public class DialogManager extends HttpServlet {
                 && !request.getParameter("dialogLink").toString().equals("")) {
 
             String linkToStore = request.getParameter("dialogLink").toString();
-          
+
             // TODO: adapt this when adding user management wrt folders
             File dfile =
                     new File(GLOBSET.getUploadFilesBasePath() + "/dialogs.txt");
@@ -273,11 +258,143 @@ public class DialogManager extends HttpServlet {
                 output.newLine();
                 output.close();
                 writer.write("OK");
-                
+
             } catch (IOException e1) {
                 writer.write("error");
-                e1.printStackTrace(); 
+                e1.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * Parse the .doc file with KB specification into the d3web format.
+     *
+     * @param request
+     * @param response
+     * @param httpSession
+     * @throws IOException
+     */
+    protected void parseKBDocument(
+            HttpServletRequest request, HttpSession http, HttpServletResponse response)
+            throws IOException {
+        PrintWriter writer = response.getWriter();
+
+        String docname = request.getParameter("docname").toString();
+        boolean successfulParsed = false;
+
+        if (docname != null && !docname.equals("")) {
+            successfulParsed = parseKBDoc(docname, http);
+        } else {
+            writer.append("parseErrorInvalidDoc");
+        }
+
+        if (successfulParsed) {
+            writer.append("success");
+        }
+    }
+
+    /**
+     * Call the converter which transfers compiles the .doc file 
+     * @param docName
+     * @return 
+     */
+    private boolean parseKBDoc(String docName, HttpSession http) {
+
+        boolean success = false;
+        Html2KnowWECompiler compiler = new converter.Html2KnowWECompiler();
+
+        String upPath = GLOBSET.getUploadFilesBasePath();
+
+        // TODO: clean up intermediate files!!
+        
+        String doc = upPath + "/" + docName;
+        String errFile = upPath + "/" + docName + "_Error.html";
+        String tmp = upPath + "/tmp/";
+        File tmpF = new File(tmp);
+        tmpF.canExecute();
+        tmpF.canWrite();
+        tmpF.canRead();
+
+        String d3web = upPath + "/d3web/";
+        File d3wF = new File(d3web);
+        d3wF.canExecute();
+        d3wF.canWrite();
+        d3wF.canRead();
+
+        String knowwe = upPath + "/KnowWE-Headless-App.jar";
+        File kwF = new File(knowwe);
+        kwF.canExecute();
+        kwF.canWrite();
+        kwF.canRead();
+
+        System.out.println("PARSER: \n"
+                + upPath + "\n" + doc + "\n" + errFile + "\n" + tmp + "\n"
+                + d3web + "\n" + knowwe + "\n");
+        System.out.println("PARSER File Permissions: \n"
+                + "tmpF: " + tmpF.canExecute() + tmpF.canWrite() + tmpF.canRead() + "\n"
+                + "d3wF: " + d3wF.canExecute() + d3wF.canWrite() + d3wF.canRead() + "\n"
+                + "kwF: " + kwF.canExecute() + kwF.canWrite() + kwF.canRead());
+
+        try {
+            compiler.compileTo3web(doc, errFile, tmp, d3web, knowwe);
+            //de.uniwue.abstracttools.StringUtils.writefileString(knowwe, knowwe);
+
+
+        } catch (ParserConfigurationException pce) {
+            pce.printStackTrace();
+        } catch (SAXException saxe) {
+            saxe.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (InterruptedException ine) {
+            ine.printStackTrace();
+        }
+
+        // check if d3web was written correctly
+        return checkAndRenameD3webFile(docName.replace(".doc", ""), d3wF, http)
+                ?true:false;
+    }
+
+    /**
+     * TODO: How to handle existing files!?
+     *
+     * @param targetName
+     * @param d3webDir
+     * @return
+     */
+    private boolean checkAndRenameD3webFile(
+            String targetName, File d3webDir, HttpSession http) {
+
+        File[] fileList = d3webDir.listFiles();
+        if (fileList != null && fileList.length > 0) {
+            Arrays.sort(fileList, new LastModifiedComparator());
+            File lastFile = fileList[fileList.length - 1];
+            String targetD3webName = targetName + ".d3web";
+            File targetD3web = new File(d3webDir, targetD3webName);
+            lastFile.renameTo(targetD3web);
+            lastFile.delete();
+
+            if (targetD3web != null
+                    && targetD3web.getName().equals(targetD3webName)) {
+                http.setAttribute("latestD3web", targetD3web);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Comparator for comparing 2 File Objects by ther lastModified() value
+     */
+    private class LastModifiedComparator implements Comparator {
+
+        public int compare(Object f1, Object f2) {
+            if (f1 instanceof File && f2 instanceof File) {
+                Long l1 = new Long(((File) f1).lastModified());
+                Long l2 = new Long(((File) f2).lastModified());
+                return l1.compareTo(l2);
+            }
+            return 0;
         }
     }
 }

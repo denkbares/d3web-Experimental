@@ -98,6 +98,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
         this.put(OC_DROP_ANSWERS, AnswerOCDropD3webRenderer.class.getSimpleName());
         this.put(ITREENUM_NUM, ITreeNumQuestionD3webRenderer.class.getSimpleName());
         this.put(ITREENUM_DATE, ITreeDateQuestionD3webRenderer.class.getSimpleName());
+      
 
     }
 

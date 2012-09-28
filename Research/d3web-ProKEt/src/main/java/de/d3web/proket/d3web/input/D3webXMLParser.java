@@ -110,7 +110,39 @@ public class D3webXMLParser {
             }
         }
     }
+    
+     public void parse(File spec) {
 
+        // try to red the file depending on what was set in the constructor
+        File inputFile = spec;
+        
+        if (inputFile != null) {
+            try {
+                // try to read xml root node
+                dialogSpec = XMLUtils.getRoot(inputFile, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // read the children of the dialog tag, i.e. the data and the ue tag
+        NodeList children = dialogSpec.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            Node child = children.item(i);
+            String name = child.getNodeName();
+            if (name.startsWith("#")) {
+                continue;
+            }
+            if (name.equals("data")) {
+                dataSpec = child;
+            } else if (name.equals("ue")) {
+                ueSpec = child;
+            }
+        }
+    }
+
+    
+    
     /*
      * DIALOG PROPERTIES, i.e. global styling and config stuff
      */

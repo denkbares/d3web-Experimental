@@ -387,6 +387,28 @@ public class D3webUtils {
 
     }
 
+    public static KnowledgeBase getDocToD3webKnowledgeBase(File file) throws IOException {
+
+        // add .jar if it's not already there
+        if (!file.getName().endsWith(".jar")
+                && !file.getName().endsWith(".d3web")) {
+            return null;
+
+        }
+
+        File kbFile = file;
+        File libPath = FileUtils.getResourceFile("/../lib");
+
+        // initialize PluginManager
+        File[] files = null;
+        files = getAllJPFPlugins(libPath);
+        JPFPluginManager.init(files);
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+
+        // try to load knowledge base
+        return persistenceManager.load(kbFile);
+    }
+
     /**
      * Retrieve all {@link Question}s of a {@link KnowledgeBase} as a string.
      * TODO: needed?

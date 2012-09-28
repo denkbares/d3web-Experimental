@@ -34,7 +34,7 @@ import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.indication.inference.PSMethodUserSelected;
-import de.d3web.jurisearch.JuriRule;
+//import de.d3web.jurisearch.JuriRule;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.input.UISettings;
@@ -201,11 +201,11 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             // get the matching renderer
             IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);
 
-           //     System.out.println(d3webSession.getBlackboard().getValue((ValueObject) child));
+            //     System.out.println(d3webSession.getBlackboard().getValue((ValueObject) child));
             //    System.out.println(to.getName() + " - " + D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
-           //     System.out.println(child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
+            //     System.out.println(child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
             //    System.out.println(child.getName() + " CI - " + D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()) + "\n");
-           
+
             if (!debug) {
                 // only show questions if they are NOT contraindicated
                 // they ARE contraindicated by the EuraHS- only if construct
@@ -373,7 +373,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             Boolean value = D3webConnector.getInstance().getKb().getInfoStore().getValue(
                     BasicProperties.UNKNOWN_VISIBLE);
             if (value != null && value) {
-                
+
                 Boolean toValue = to.getInfoStore().getValue(BasicProperties.UNKNOWN_VISIBLE);
                 //System.out.println(to.getName() + " unknown: " + toValue);
                 if (toValue == null || toValue) {
@@ -618,38 +618,28 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
     }
 
     /**
-     * TODO: maybe remove
-     * traverse all jurisearch rules and filter out the one(s) containing the
-     * currently rendered Terminology Object as parent
+     * TODO: maybe remove traverse all jurisearch rules and filter out the
+     * one(s) containing the currently rendered Terminology Object as parent
      *
      * @param parent the parent element the children of which are searched
      * @return ArrayList<QuestionOC> the list of child QuestionOCs
      */
-    protected ArrayList<QuestionOC> getChildQuestionsFromJuriRules(TerminologyObject parent,
-            Set juriRules) {
-
-        ArrayList<QuestionOC> toChildren = new ArrayList<QuestionOC>();
-
-        if (juriRules != null && juriRules.size() != 0) {
-            for (Object o : juriRules) {
-                JuriRule rule = (JuriRule) o;
-                if (rule.getParent().getName().equals(parent.getName())) {
-                    HashMap children = rule.getChildren();
-                    Set childKeys = children.keySet();
-                    for (Object co : childKeys) {
-                        if (co instanceof QuestionOC) {
-                            toChildren.add(((QuestionOC) co));
-                        }
-                    }
-                }
-            }
-        }
-        return toChildren;
-    }
-
+    /*
+     * protected ArrayList<QuestionOC>
+     * getChildQuestionsFromJuriRules(TerminologyObject parent, Set juriRules) {
+     *
+     * ArrayList<QuestionOC> toChildren = new ArrayList<QuestionOC>();
+     *
+     * if (juriRules != null && juriRules.size() != 0) { for (Object o :
+     * juriRules) { JuriRule rule = (JuriRule) o; if
+     * (rule.getParent().getName().equals(parent.getName())) { HashMap children
+     * = rule.getChildren(); Set childKeys = children.keySet(); for (Object co :
+     * childKeys) { if (co instanceof QuestionOC) { toChildren.add(((QuestionOC)
+     * co)); } } } } } return toChildren; }
+     */
     /**
      * TODO: maybe remove
-     * 
+     *
      * Check, whether a given terminology object is rated by its children by an
      * OR connection (default: AND connection)
      *
@@ -657,50 +647,50 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * @param juriRules
      * @return
      */
-    protected boolean isOrType(TerminologyObject to, Set juriRules) {
-
-        if (juriRules != null && juriRules.size() != 0) {
-            for (Object o : juriRules) {
-                JuriRule rule = (JuriRule) o;
-                if (rule.getChildren().containsKey(to)) {
-                    //System.out.println(rule);
-                    //F System.out.println(rule.isDisjunctive());
-                    return rule.isDisjunctive();
-                }
-            }
-        }
-        return false;
-    }
-
-    
-    
-     protected void renderChildrenITreeNum(StringTemplate st, Session d3webSession, ContainerCollection cc,
+    /*
+     * protected boolean isOrType(TerminologyObject to, Set juriRules) {
+     *
+     * if (juriRules != null && juriRules.size() != 0) { for (Object o :
+     * juriRules) { JuriRule rule = (JuriRule) o; if
+     * (rule.getChildren().containsKey(to)) { //System.out.println(rule); //F
+     * System.out.println(rule.isDisjunctive()); return rule.isDisjunctive(); }
+     * } } return false; }
+     */
+    protected void renderChildrenITreeNum(StringTemplate st, Session d3webSession, ContainerCollection cc,
             TerminologyObject to, int loc, HttpSession httpSession, HttpServletRequest request) {
 
         StringBuilder childrenHTML = new StringBuilder();
-         
-        if (to.getName().equals("Q000")) {
-            TerminologyObject rootNode = to.getChildren()[0].getChildren()[0];
-           
-            if (rootNode != null) {
+        System.out.println("ITreeNUM: " + to.getName());
 
-                IQuestionD3webRenderer childRenderer =
-                        AbstractD3webRenderer.getRenderer(rootNode);
-               
-                String childHTML =
-                        childRenderer.renderTerminologyObject(d3webSession, cc, rootNode, to, loc, httpSession,request);
-                if (childHTML != null) {
-                    childrenHTML.append(childHTML);
+        if (to.getName().equals("Q000")) {
+            if (to.getChildren().length > 0) {
+                TerminologyObject rootNode = null;
+
+                for (TerminologyObject toc : to.getChildren()) {
+                    if (!toc.getName().contains("ABSTRACTIONS")) {
+                        rootNode = toc;
+                    }
                 }
 
-                st.setAttribute("children", childrenHTML.toString());
+                if (rootNode != null) {
 
+                    IQuestionD3webRenderer childRenderer =
+                            AbstractD3webRenderer.getRenderer(rootNode);
+
+                    String childHTML =
+                            childRenderer.renderTerminologyObject(d3webSession, cc, rootNode, to, loc, httpSession, request);
+                    if (childHTML != null) {
+                        childrenHTML.append(childHTML);
+                    }
+                    st.setAttribute("children", childrenHTML.toString());
+                }
             }
+
         } else {
-            
+
             // get the children of the current to from the juri rules
             TerminologyObject[] toChildren = to.getChildren();
-            
+
             if (toChildren != null && toChildren.length > 0) {
 
                 for (Object newChildRoot : toChildren) {
@@ -718,7 +708,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                         childRenderer =
                                 AbstractD3webRenderer.getRenderer((TerminologyObject) newChildRoot);
 
-                        
+
                     }
 
 
@@ -735,14 +725,13 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         }
 
     }
-     
 
     protected String createDropDownOptions(int loc, String selectedValue, String... options) {
         StringBuilder builder = new StringBuilder();
 
         for (String option : options) {
             option = option.trim();
-            if(option.equals("Please select...")){
+            if (option.equals("Please select...")) {
                 option = D3webUtils.getDropdownDefaultPrompt(loc);
             }
             builder.append("<option value='" + option + "'"
@@ -756,13 +745,12 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         return builder.toString();
     }
 
-    
     /**
      * Retrieves the to-show state of ITree questions. When toggling questions
-     * to be shown/expanded, cookies are written which store the show state
-     * "C" for closed question and "O" for open question. That way, when re-rendering
-     * the question state is not erased blindly.
-     * 
+     * to be shown/expanded, cookies are written which store the show state "C"
+     * for closed question and "O" for open question. That way, when
+     * re-rendering the question state is not erased blindly.
+     *
      * @param to
      * @param cookies
      * @return true if the question should be shown when re-rendering
@@ -779,7 +767,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                 if (cookie.getName().replace("q_", "").equals(to.getName())) {
                     if (cookie.getValue().equals("O")) {
                         return true;
-                    } else if (cookie.getValue().equals("C")){
+                    } else if (cookie.getValue().equals("C")) {
                         return false;
                     }
                 }
@@ -787,5 +775,4 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         }
         return null;
     }
-   
 }

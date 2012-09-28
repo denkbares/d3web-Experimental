@@ -67,12 +67,12 @@ import de.d3web.proket.d3web.output.render.SummaryD3webRenderer;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
-import de.d3web.proket.data.DialogType;
 import de.d3web.proket.database.DB;
 import de.d3web.proket.database.DateCoDec;
 import de.d3web.proket.database.TokenThread;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -143,7 +143,7 @@ public class D3webDialog extends HttpServlet {
         GLOBSET.setServletBasePath(servletcontext);
 
         d3webParser = new D3webXMLParser();
-        
+
     }
 
     /**
@@ -157,11 +157,11 @@ public class D3webDialog extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-       
+
         response.setContentType("text/html; charset=UTF-8");
         HttpSession httpSession = request.getSession(true);
-        httpSession.setMaxInactiveInterval(20*60);
-         
+        httpSession.setMaxInactiveInterval(20 * 60);
+
         // source and parser
         String source = getSource(request, httpSession);
         d3webParser.setSourceToParse(source);
@@ -174,38 +174,40 @@ public class D3webDialog extends HttpServlet {
         // usability extension settings: TODO rename
         uesettings = D3webUESettings.getInstance();
 
-        /* parse the dialog specification 
-         * -> only parse if stored source is different to current source as then
-         *      a new dialog specification (e.g. new KB) has been called
-         * -> also parse, if source is same, but different Servlet class as then
-         *      a new dialog type has been called */
-        String sSave = httpSession.getAttribute(SOURCE_SAVE) != null ? 
-                httpSession.getAttribute(SOURCE_SAVE).toString() : "";
-        String cSave = httpSession.getAttribute(SERVLET_CLASS_SAVE) != null ? 
-                httpSession.getAttribute(SERVLET_CLASS_SAVE).toString() : "";
-        
-        if (!sSave.equals(source)){
+        /*
+         * parse the dialog specification -> only parse if stored source is
+         * different to current source as then a new dialog specification (e.g.
+         * new KB) has been called -> also parse, if source is same, but
+         * different Servlet class as then a new dialog type has been called
+         */
+        String sSave = httpSession.getAttribute(SOURCE_SAVE) != null
+                ? httpSession.getAttribute(SOURCE_SAVE).toString() : "";
+        String cSave = httpSession.getAttribute(SERVLET_CLASS_SAVE) != null
+                ? httpSession.getAttribute(SERVLET_CLASS_SAVE).toString() : "";
+
+        if (!sSave.equals(source)) {
             httpSession.setAttribute(SOURCE_SAVE, source);
-            
+
             parseAndInitDialogServlet(httpSession);
-        } else if(!cSave.equals(this.getClass().toString())) {
+        } else if (!cSave.equals(this.getClass().toString())) {
 
             httpSession.setAttribute(SERVLET_CLASS_SAVE, this.getClass().toString());
             parseAndInitDialogServlet(httpSession);
         }
-             
 
-        /* Reset the session in case the d3websession in the httpSession is still
-         * null; this could be the case, if the same dialog is called from different
-         * browsers (?! correct?) as then the httpSession is refreshed and we
-         * also need a new d3webSession
+
+        /*
+         * Reset the session in case the d3websession in the httpSession is
+         * still null; this could be the case, if the same dialog is called from
+         * different browsers (?! correct?) as then the httpSession is refreshed
+         * and we also need a new d3webSession
          */
         // THIS IS REALLY NEEDED; OTHERWISE PROBLEMS WITH DIFFERENT SESSIONS ON SAME KB
         if (httpSession.getAttribute(D3WEB_SESSION) == null) {
             resetD3webSession(httpSession);
         }
 
-       
+
 
 
         // in case nothing other is provided, "show" is the default action
@@ -1129,7 +1131,7 @@ public class D3webDialog extends HttpServlet {
             httpSession.setAttribute("loginit", false);
             initializeLoggingMechanism(httpSession);
         }
-        
+
         sourceSave = "";
 
     }
@@ -1164,6 +1166,7 @@ public class D3webDialog extends HttpServlet {
         // get the root renderer --> call getRenderer with null
         DefaultRootD3webRenderer d3webr =
                 (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
+        System.out.println("RENDEER: " + d3webr.getClass());
 
         // new ContainerCollection needed each time to get an updated dialog
         ContainerCollection cc = new ContainerCollection();
@@ -1706,19 +1709,34 @@ public class D3webDialog extends HttpServlet {
     /**
      * Parse the dialog specification and initialize the dialog/servlet
      * correspondingly
-     * 
+     *
      * @param httpSession
      * @param source
-     * @throws IOException 
+     * @throws IOException
      */
     protected void parseAndInitDialogServlet(HttpSession httpSession)
             throws IOException {
 
         httpSession.setAttribute("loginit", false);
 
-        d3webParser.parse();
+        File specs = null;
+        if (httpSession.getAttribute("latestSpec") != null) {
+            specs = (File)httpSession.getAttribute("latestSpec");
+            d3webParser.parse(specs);
+        } else {
+            d3webParser.parse();
+        }
 
-        d3wcon.setKb(d3webParser.getKnowledgeBase());
+        // Only parse d3web from XML specs if it was not provided before,
+        // e.g., by the DialogManager Servlet
+        File d3web = null;
+        if (httpSession.getAttribute("latestD3web") != null) {
+            d3web = (File)httpSession.getAttribute("latestD3web");
+            System.out.println(d3web);
+            d3wcon.setKb(D3webUtils.getDocToD3webKnowledgeBase(d3web));
+        } else {
+            d3wcon.setKb(d3webParser.getKnowledgeBase());
+        }
         d3wcon.setDialogStrat(d3webParser.getStrategy());
         d3wcon.setDialogType(d3webParser.getType());
         d3wcon.setIndicationMode(d3webParser.getIndicationMode());
@@ -1776,10 +1794,10 @@ public class D3webDialog extends HttpServlet {
         // stream images from KB into webapp
         GLOBSET.setKbImgFolder(GLOBSET.getServletBasePath() + "kbimg");
         D3webUtils.streamImages();
-        
-        
-      // do we need to enable debug mode?!  
-        if(d3webParser.getDebug()!=null && d3webParser.getDebug()){
+
+
+        // do we need to enable debug mode?!  
+        if (d3webParser.getDebug() != null && d3webParser.getDebug()) {
             httpSession.setAttribute("debug", "true");
         }
     }

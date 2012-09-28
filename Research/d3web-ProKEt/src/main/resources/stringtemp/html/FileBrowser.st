@@ -6,6 +6,7 @@
         </form>
         <input type="text" name="docfilename" id="docfilename" value="$kbuploadfieldlabel$" />
         <input type="button" name="docfilebutton" id="docfilebutton" class="button" value="Hochladen" /> 
+        
 
     </div>
 
@@ -16,6 +17,7 @@
         </form>
         <input type="text" name=specfilename" id="specfilename" value="Choose XML Specification (.xml)" />
         <input type="button" name="specfilebutton" id="specfilebutton" class="button" value="Hochladen" /> 
+ 
     </div>
 
 </div>

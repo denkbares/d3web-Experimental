@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository>
+<session changed="2012-09-24 23:25:12.399" created="2012-09-24 23:25:12.398" id="1ad1fa07-0687-4eda-bd18-3ce1ef019e9f">
+<name/>
+<facts>
+<valueFacts>
+<fact objectName="now" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2012-09-24 23:25:19.85</dateValue>
+</fact>
+<fact objectName="start" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2012-09-24 23:25:12.398</dateValue>
+</fact>
+<fact objectName="Spezialfrage 11" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Spezialfrage 12" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<numValue>5.0</numValue>
+</fact>
+<fact objectName="Speziallösung 1" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="999.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+</valueFacts>
+<interviewFacts>
+<fact objectName="Spezialfragebogen 2" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Spezialfragebogen 1" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Einstieg" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+</interviewFacts>
+</facts>
+<protocol>
+<entry date="2012-09-24 23:25:17.532" objectName="Spezialfrage 11" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Yes</choiceValue>
+</entry>
+<entry date="2012-09-24 23:25:19.85" objectName="Spezialfrage 12" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<numValue>5.0</numValue>
+</entry>
+</protocol>
+</session>
+</repository>
