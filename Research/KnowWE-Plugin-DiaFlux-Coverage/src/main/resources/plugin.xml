@@ -76,7 +76,7 @@
 	
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="FlowCoverageTest">
-		<parameter id="class" value="de.knowwe.diaflux.coverage.ci.FlowCoverageTest" />
+		<parameter id="class" value="de.knowwe.diaflux.coverage.ci.FlowCoverage" />
 		<parameter id="name" value="FlowCoverageTest" />
 		<parameter id="description" value="AbstractCITest FlowCoverageTest" />
 		<parameter id="version" value="1.0" />
