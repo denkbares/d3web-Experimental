@@ -31,6 +31,7 @@ public class PathCoverageHighlight implements DiaFluxDisplayEnhancement {
 
 	public static final String COVERAGE_CITY_SCOPE = "CoverageCity";
 	private static String[] SCRIPTS = new String[] { "KnowWEExtension/scripts/pathcoveragehighlight.js" };
+	private static String[] CSSS = new String[] { "KnowWEExtension/css/pathcoverage.css" };
 
 	@Override
 	public boolean activate(UserContext user, String scope) {
@@ -44,7 +45,7 @@ public class PathCoverageHighlight implements DiaFluxDisplayEnhancement {
 
 	@Override
 	public String[] getStylesheets() {
-		return new String[0];
+		return CSSS;
 	}
 
 }

@@ -20,8 +20,6 @@ package de.knowwe.diaflux.coverage;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
@@ -38,7 +36,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.diaflux.FlowchartUtils;
-import de.knowwe.diaflux.Highlights;
+import de.knowwe.diaflux.Highlight;
 import de.knowwe.diaflux.type.DiaFluxType;
 import de.knowwe.diaflux.type.FlowchartType;
 
@@ -59,6 +57,8 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		if (coverageKdomid != null) { // coverage shown in coverage section
 			Section<DiaFluxCoverageType> coverageSec = Sections.getSection(
 					coverageKdomid, DiaFluxCoverageType.class);
+
+			if (coverageSec == null) return null;
 
 			return DiaFluxCoverageType.getResult(coverageSec);
 
@@ -86,7 +86,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 
 		CoverageResult result = getResult(context);
 		if (result == null) {
-			context.getWriter().write(Highlights.EMPTY_HIGHLIGHT);
+			Highlight.writeEmpty(context);
 			return;
 		}
 		String flowKdomid = context.getParameter("kdomid");
@@ -94,7 +94,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		Section<FlowchartType> flowchart = Sections.getSection(flowKdomid, FlowchartType.class);
 
 		if (flowchart == null) {
-			context.getWriter().write(Highlights.EMPTY_HIGHLIGHT);
+			Highlight.writeEmpty(context);
 			return;
 		}
 
@@ -104,66 +104,34 @@ public class GetCoverageHighlightAction extends AbstractAction {
 
 		if (flow == null) return;// TODO error handling
 
-		StringBuilder builder = createCoverageXML(result, flow);
+		Highlight highlight = createHighlight(result, flow);
 
-		context.setContentType("text/xml");
-		context.getWriter().write(builder.toString());
+		highlight.write(context);
 
 	}
 
-	/**
-	 * 
-	 * @created 10.10.2011
-	 * @param result
-	 * @param flow
-	 * @return
-	 */
-	private static StringBuilder createCoverageXML(CoverageResult result, Flow flow) {
-		StringBuilder builder = new StringBuilder();
+	private static Highlight createHighlight(CoverageResult result, Flow flow) {
 
-		Highlights.appendHeader(builder, flow.getName(), PREFIX);
-
-		Map<Edge, Map<String, String>> edges = new HashMap<Edge, Map<String, String>>();
-
+		Highlight highlight = new Highlight(flow, PREFIX);
 
 		Collection<Node> validNodes = DefaultCoverageResult.getValidNodes(flow);
 		for (Edge edge : DefaultCoverageResult.getValidEdges(validNodes)) {
 			int count = result.getTraceCount(edge);
-			String clazz;
-			if (count == 0) {
-				clazz = UNCOVERED;
-			}
-			else {
-				clazz = COVERED;
-			}
 
-			Highlights.putValue(edges, edge, Highlights.CSS_CLASS, clazz);
-			Highlights.putValue(edges, edge, Highlights.TOOL_TIP, String.valueOf(count));
+			highlight.add(edge, Highlight.CSS_CLASS, (count > 0 ? COVERED : UNCOVERED));
+			highlight.add(edge, Highlight.TOOL_TIP, String.valueOf(count));
 		}
 
-		Highlights.addEdgeHighlight(builder, edges);
-
-		Map<Node, Map<String, String>> nodes = new HashMap<Node, Map<String, String>>();
 
 		for (Node node : validNodes) {
 			int count = result.getTraceCount(node);
-			String clazz;
-			if (count == 0) {
-				clazz = UNCOVERED;
-			}
-			else {
-				clazz = COVERED;
-			}
 
-			Highlights.putValue(nodes, node, Highlights.CSS_CLASS, clazz);
-			Highlights.putValue(nodes, node, Highlights.TOOL_TIP,
-					String.valueOf(count));
+			highlight.add(node, Highlight.CSS_CLASS, (count > 0 ? COVERED : UNCOVERED));
+			highlight.add(node, Highlight.TOOL_TIP, String.valueOf(count));
 
 		}
 
-		Highlights.addNodeHighlight(builder, nodes);
 
-		Highlights.appendFooter(builder);
-		return builder;
+		return highlight;
 	}
 }
