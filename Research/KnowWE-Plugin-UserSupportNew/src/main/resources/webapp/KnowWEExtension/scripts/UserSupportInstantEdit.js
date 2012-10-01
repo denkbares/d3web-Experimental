@@ -42,7 +42,7 @@ KNOWWE.plugin.usersupportinstantedit = function() {
 	    postProcessHTML : function(id, coloringmode, completeFunction, extraKeys) {
 	    	var textarea = $(createTextAreaID(id));
 	    	if (typeof AutoComplete != "undefined") AutoComplete.initialize(textarea);
-	        TextArea.initialize(textarea);
+	        new TextArea(textarea);
 	        
 	        textarea.focus();
 	        while (textarea.clientHeight == textarea.scrollHeight) {
