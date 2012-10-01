@@ -78,7 +78,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 
 			// ... then lock the page to avoid changes by other users ...
 			boolean isPageLocked = Environment.getInstance().getWikiConnector()
-										.isArticleLocked(articlename);
+					.isArticleLocked(articlename);
 			if (isPageLocked) {
 				context.sendError(
 						403,
@@ -87,7 +87,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 			}
 			else {
 				Environment.getInstance().getWikiConnector().lockArticle(articlename,
-							context.getUserName());
+						context.getUserName());
 
 				// ... create the according replacements
 
@@ -106,7 +106,8 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 				Sections.replaceSections(context, nodesMap);
 
 				// .. and finally delete the page lock
-				Environment.getInstance().getWikiConnector().unlockArticle(articlename);
+				Environment.getInstance().getWikiConnector().unlockArticle(articlename,
+						context.getUserName());
 				context.getWriter().write("{msg : 'axioms deleted', success : 'true'}");
 			}
 		}

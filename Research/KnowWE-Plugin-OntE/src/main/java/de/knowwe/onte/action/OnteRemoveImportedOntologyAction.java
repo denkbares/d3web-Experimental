@@ -26,7 +26,7 @@ public class OnteRemoveImportedOntologyAction extends AbstractAction {
 
 			// ... lock the page to avoid changes by other users ...
 			boolean isPageLocked = Environment.getInstance().getWikiConnector()
-										.isArticleLocked(articleName);
+					.isArticleLocked(articleName);
 
 			if (isPageLocked) {
 				context.sendError(
@@ -36,7 +36,7 @@ public class OnteRemoveImportedOntologyAction extends AbstractAction {
 			}
 			else {
 				Environment.getInstance().getWikiConnector().lockArticle(articleName,
-							context.getUserName());
+						context.getUserName());
 
 				// ArticleManager mgr =
 				// Environment.getInstance().getArticleManager(
@@ -48,7 +48,8 @@ public class OnteRemoveImportedOntologyAction extends AbstractAction {
 				// mgr.replaceKDOMNodesSaveAndBuild(context, articleName,
 				// nodesMap);
 
-				Environment.getInstance().getWikiConnector().unlockArticle(articleName);
+				Environment.getInstance().getWikiConnector().unlockArticle(articleName,
+						context.getUserName());
 				context.getWriter().write("{msg : 'import deleted', success : 'true'}");
 				ImportedOntologyManager.getInstance().removeOntology(section);
 			}
