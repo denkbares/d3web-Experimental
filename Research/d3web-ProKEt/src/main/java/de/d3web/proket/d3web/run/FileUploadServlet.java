@@ -39,8 +39,9 @@ import javax.servlet.http.HttpSession;
  */
 public class FileUploadServlet extends HttpServlet {
 
+    // TODO read this from specs file possibly
     //private static String WEBAPP_NAME = "/DM";
-    private static String WEBAPP_NAME = "";
+    private static String WEBAPP_NAME = "/DM";
     
     protected final GlobalSettings GLOBSET = GlobalSettings.getInstance();
 
