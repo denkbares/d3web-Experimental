@@ -19,26 +19,16 @@
  */
 package de.d3web.proket.d3web.output.render;
 
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.Rating;
-import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
-import de.d3web.core.session.blackboard.Blackboard;
-import de.d3web.indication.inference.PSMethodUserSelected;
-import de.d3web.proket.d3web.input.D3webUESettings;
-import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.*;
 import de.d3web.proket.d3web.utils.D3webUtils;
-import de.d3web.proket.d3web.input.D3webXMLParser;
-import de.d3web.proket.d3web.input.UISettings;
 import de.d3web.proket.d3web.utils.D3webToJSTreeUtils;
+import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
 
 public class QuestionaryConsDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
@@ -51,35 +41,8 @@ public class QuestionaryConsDefaultRootD3webRenderer extends DefaultRootD3webRen
 
         // get the d3web base template according to dialog type
         String userprefix = uis.getUIprefix();
-        StringTemplate st = null;
-
-        // First assemble the stringtemplate base paths within the servlet
-        ServletContext context = request.getSession().getServletContext();
-        String realStPath = context.getRealPath(request.getContextPath())
-                + "/WEB-INF/classes/stringtemp/html";
-
-        // this is the topmost ST directory
-        StringTemplateGroup stg =
-                new StringTemplateGroup("stGroup", realStPath);
-
-        // the subdirectory which contains the specific framing template
-        // for the document loader
-        StringTemplateGroup stg_sub =
-                new StringTemplateGroup("stGroup", realStPath + "/questionaryCons");
-
-        StringTemplateGroup stg_sub_solP =
-                new StringTemplateGroup("stGroup", realStPath + "/solutionPanel");
-
-        // need to tell the template dirs of their inheritance, so within
-        // st files we just can normally call other templates
-        stg_sub.setSuperGroup(stg);
-        stg_sub_solP.setSuperGroup(stg);
-
-        // Retrieve the basic DialogManager template
-        st = stg_sub.getInstanceOf("QuestionaryConsD3webDialog");
-
-
-
+      
+        StringTemplate st = StringTemplateUtils.getTemplate("questionaryCons/QuestionaryConsD3webDialog");
 
         /*
          * fill some basic attributes
@@ -155,7 +118,16 @@ public class QuestionaryConsDefaultRootD3webRenderer extends DefaultRootD3webRen
                 D3webToJSTreeUtils.getJSTreeHTMLFromD3webSolutions(
                 D3webConnector.getInstance().getKb()));
 
-        st.setAttribute("solutions", getSolutionsListing(d3webSession, stg_sub_solP));
+        SolutionPanelD3webRenderer spr = 
+                D3webRendererMapping.getInstance().getSolutionPanelRenderer();
+        
+        // render solution panel into here. For including other forms of
+        // solution panels, adapt the EXPLANATIONTYPE attribute.
+        st.setAttribute("solutions", 
+                spr.renderSolutionPanel(d3webSession, 
+                    SolutionPanelD3webRenderer.EXPLANATIONTYPE.TEXTUALLISTING,
+                    http
+                    ));
 
         cc.html.add(st.toString());
         return cc;
@@ -180,58 +152,4 @@ public class QuestionaryConsDefaultRootD3webRenderer extends DefaultRootD3webRen
 
     }
 
-    private String getSolutionsListing(Session d3websession, StringTemplateGroup stg) {
-
-        KnowledgeBase kb = D3webConnector.getInstance().getKb();
-        TerminologyObject rootSol = kb.getRootSolution();
-        StringBuilder bui = new StringBuilder();
-        if (rootSol.getName().contains("000")) {
-
-            rootSol = rootSol.getChildren()[0];
-        }
-        System.out.println("SOL: " + rootSol.getName());
-        getSolutionsStates(rootSol, bui, d3websession.getBlackboard(), stg);
-
-        return bui.toString();
-    }
-
-    private void getSolutionsStates(TerminologyObject solution, StringBuilder bui, Blackboard bb,
-            StringTemplateGroup stg) {
-
-        if (bb.getRating((Solution) solution, PSMethodUserSelected.getInstance()).equals(Rating.State.UNCLEAR)) {
-            System.out.println(solution.getName() + " not yet rated");
-        } else {
-                    System.out.println("SOL: " + "rating?");
-            bui.append(getSolutionState((Solution)solution, stg, bb));
-        }
-        if(solution.getChildren().length>0){
-        
-            for(TerminologyObject sol: solution.getChildren()){
-                getSolutionsStates(sol, bui, bb, stg);
-            }
-        }
-    }
-
-    private String getSolutionState(Solution solution, StringTemplateGroup stg_sol, Blackboard bb) {
-        
-        StringTemplate st = stg_sol.getInstanceOf("Solution");
-        st.setAttribute("solid", solution.getName());
-        st.setAttribute("solutiontext", solution.getName());
-        
-        if(bb.getValuedSolutions().contains(solution)){
-            System.out.println("HALLO: " + solution);
-            System.out.println(bb.getRating(solution));
-            if (bb.getRating(solution).getState().equals(Rating.State.ESTABLISHED)){
-                st.setAttribute("solutionrating", "ESTABLISHED");
-            } else if (bb.getRating(solution).getState().equals(Rating.State.SUGGESTED)){
-                st.setAttribute("solutionrating", "SUGGESTED");
-            } else if (bb.getRating(solution).getState().equals(Rating.State.EXCLUDED)){
-                st.setAttribute("solutionrating", "EXCLUDED");
-            }
-        }
-        
-        System.out.println(st.toString());
-
-        return st.toString();
-    }
 }

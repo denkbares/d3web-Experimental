@@ -67,6 +67,7 @@ import de.d3web.proket.d3web.output.render.SummaryD3webRenderer;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
+import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import de.d3web.proket.database.DB;
 import de.d3web.proket.database.DateCoDec;
 import de.d3web.proket.database.TokenThread;
@@ -75,6 +76,7 @@ import de.d3web.proket.utils.GlobalSettings;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.servlet.ServletContext;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -144,6 +146,10 @@ public class D3webDialog extends HttpServlet {
 
         d3webParser = new D3webXMLParser();
 
+        String realStPath = servletcontext 
+                + "WEB-INF/classes/stringtemp/html";
+        
+        StringTemplateUtils.initializeStringTemplateStructure(realStPath);
     }
 
     /**
@@ -216,8 +222,8 @@ public class D3webDialog extends HttpServlet {
             action = "show";
         }
 
-        System.out.println("0: " + action);
-        System.out.println(httpSession.getAttribute(D3WEB_SESSION));
+        //System.out.println("0: " + action);
+        // System.out.println(httpSession.getAttribute(D3WEB_SESSION));
 
         if (action.equalsIgnoreCase(
                 "dbLogin")) {
@@ -1166,7 +1172,7 @@ public class D3webDialog extends HttpServlet {
         // get the root renderer --> call getRenderer with null
         DefaultRootD3webRenderer d3webr =
                 (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
-        System.out.println("RENDEER: " + d3webr.getClass());
+        //System.out .println("RENDEER: " + d3webr.getClass());
 
         // new ContainerCollection needed each time to get an updated dialog
         ContainerCollection cc = new ContainerCollection();
@@ -1721,7 +1727,7 @@ public class D3webDialog extends HttpServlet {
 
         File specs = null;
         if (httpSession.getAttribute("latestSpec") != null) {
-            specs = (File)httpSession.getAttribute("latestSpec");
+            specs = (File) httpSession.getAttribute("latestSpec");
             d3webParser.parse(specs);
         } else {
             d3webParser.parse();
@@ -1731,7 +1737,7 @@ public class D3webDialog extends HttpServlet {
         // e.g., by the DialogManager Servlet
         File d3web = null;
         if (httpSession.getAttribute("latestD3web") != null) {
-            d3web = (File)httpSession.getAttribute("latestD3web");
+            d3web = (File) httpSession.getAttribute("latestD3web");
             System.out.println(d3web);
             d3wcon.setKb(D3webUtils.getDocToD3webKnowledgeBase(d3web));
         } else {

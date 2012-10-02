@@ -53,6 +53,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
     private static final String OC_ANSWER = "OC";
     private static final String ZC_ANSWER = "ZC";
     private static final String SUMMARY = "Summary";
+    private static final String SOLUTIONPANEL = "SolutionPanel";
     private static final String DUMMYITREENUM = "ITreeDummy";
     private static final String ITREENUM_NUM = "ITreeNum";
     private static final String ITREENUM_DATE = "ITreeDate";
@@ -87,6 +88,8 @@ public class D3webRendererMapping extends HashMap<String, String> {
         this.put(IMG_QUESTION, ImageQuestionD3webRenderer.class.getSimpleName());
         this.put(Q_CONT, QuestionnaireD3webRenderer.class.getSimpleName());
         this.put(SUMMARY, SummaryD3webRenderer.class.getSimpleName());
+        this.put(SOLUTIONPANEL, SolutionPanelD3webRenderer.class.getSimpleName());
+       
         this.put(DUMMYITREENUM, ITreeDummyQuestionD3webRenderer.class.getSimpleName());
         this.put(OC_ANSWER, AnswerOCD3webRenderer.class.getSimpleName());
         this.put(MC_ANSWER, AnswerMCD3webRenderer.class.getSimpleName());
@@ -190,6 +193,10 @@ public class D3webRendererMapping extends HashMap<String, String> {
 
     public SummaryD3webRenderer getSummaryRenderer() {
         return (SummaryD3webRenderer) getRenderer(SUMMARY);
+    }
+    
+    public SolutionPanelD3webRenderer getSolutionPanelRenderer(){
+        return (SolutionPanelD3webRenderer) getRenderer(SOLUTIONPANEL);
     }
 
     public ITreeDummyQuestionD3webRenderer getITreeDummyRenderer() {
