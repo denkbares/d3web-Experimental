@@ -69,7 +69,7 @@
 		<parameter id="description" value="Represents a TableRow in KDOM" />
 		<parameter id="version" value="0.2" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="Table" />
+		<parameter id="scope" value="de.knowwe.instantedit.table.WikiTable" />
 	</extension>
 	
 
