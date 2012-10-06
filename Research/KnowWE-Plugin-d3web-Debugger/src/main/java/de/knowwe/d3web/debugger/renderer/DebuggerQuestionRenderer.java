@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.d3web.debugger.renderer;
 
@@ -31,6 +31,7 @@ import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.UndefinedValue;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
 
 /**
@@ -49,9 +50,10 @@ public class DebuggerQuestionRenderer {
 	public static String renderQuestion(Question q, Session session, String title, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
 		String valueText;
-		Value value = session.getBlackboard().getValue(q);
+		Value value = D3webUtils.getValueNonBlocking(session, q);
 		String kbid = session.getKnowledgeBase().getId();
-		if (UndefinedValue.isUndefinedValue(value) || value.toString().equals("-?-")) valueText = "unknown";
+		if (value == null) valueText = "";
+		else if (UndefinedValue.isUndefinedValue(value) || value.toString().equals("-?-")) valueText = "unknown";
 		else valueText = value.toString();
 
 		if (q instanceof QuestionOC) {
