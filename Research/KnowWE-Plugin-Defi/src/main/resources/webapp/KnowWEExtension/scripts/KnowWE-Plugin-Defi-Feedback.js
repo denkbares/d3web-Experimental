@@ -1,3 +1,5 @@
+var fEntries;
+
 function checkAndSubmit() {
 	var warning = "Sie haben nicht alle Felder ausgefüllt.\nTrotzdem fortfahren?"
 	var pass = true;
@@ -15,7 +17,7 @@ function checkAndSubmit() {
 		if (boxes.length > 0) {
 			for (var j = 0; j < boxes.length; j++) {
 				if (boxes[j].checked)  {
-					entries += "###" + boxes[j].id + "---" + boxes[j].value;
+					entries += "=#=" + boxes[j].id + "---" + boxes[j].value;
 					empty = false;
 				}
 			}
@@ -25,11 +27,11 @@ function checkAndSubmit() {
 		boxes = table.getElementsByTagName('textarea')[0];
 		if(boxes != null) {
 			if (boxes.value != "") {
-				entries += "###" + boxes.id + "---" + boxes.value;
+				entries += "=#=" + boxes.id + "---" + boxes.value;
 				empty = false;
 			}
 		}
-		entries += ":::";
+		entries += "=@=";
 		
 		// mark table if not answered
 		if(empty) {table.style.border = "1px solid red";pass = false;}
@@ -37,14 +39,19 @@ function checkAndSubmit() {
 	}
 	entries = entries.substring(0, entries.length-3);
 	
+	fEntries = entries;
 	if (!pass) {
-		if (!confirm("Es wurden noch nicht alle Fragen beantwortet.\nTrotzdem speichern?"))
-			return;
+		confirmFeedback();
+		return; 
 	}
-	
+
+	sendFeedbackForm();
+}
+
+function sendFeedbackForm() {
 	var params = {
 			action : 'FeedbackSaveAction',
-			entries : entries
+			entries : fEntries
 		}
 
 		var options = {
@@ -58,8 +65,36 @@ function checkAndSubmit() {
 			}
 	}
 	
-	
 	new _KA(options).send();
+}
+
+function confirmFeedback() {
+	// create alert-box and background
+	alertDiv = document.getElementsByTagName("body")[0].appendChild(document.createElement("div"));
+	alertDiv.id = "alertDialog";
+	alertDivModal = document.getElementsByTagName("body")[0].appendChild(document.createElement("div"));
+	alertDivModal.id = "alertDialogModal";
+
+	// position - alert-box
+	alertDiv.style.top = document.documentElement.scrollTop + 200 + "px";
+	alertDiv.style.left = (document.documentElement.scrollWidth - alertDiv.offsetWidth)/2 + "px";
+	// position - background
+	alertDivModal.style.height = document.documentElement.scrollHeight + "px";
+	
+	// innerHTML
+	alertDiv.innerHTML = createConfirmInnerHTML();
+}
+
+function createConfirmInnerHTML() {
+	var innerHTML = "<p>Es wurden noch nicht alle Fragen beantwortet.\nTrotzdem speichern?</p>";
+	innerHTML += "<input type='button' value='OK' onclick='sendFeedbackForm()' /><input type='button' value='Abbrechen' onclick='closeConfirm()' />";
+		
+	return innerHTML;
+}
+
+function closeConfirm() {
+	document.getElementsByTagName("body")[0].removeChild(document.getElementById("alertDialog"));
+	document.getElementsByTagName("body")[0].removeChild(document.getElementById("alertDialogModal"));
 }
 
 function fillForm() {
@@ -83,9 +118,9 @@ function fillForm() {
 
 function checkAnswers(answers) {
 	var box;
-	var answer = answers.split(":::");
+	var answer = answers.split("=@=");
 	for (var i = 0; i < answer.length; i++) {
-		box = document.getElementById(answer[i].split("###")[0]);
+		box = document.getElementById(answer[i].split("=#=")[0]);
 		
 		if (box.tagName == 'INPUT') {
 			box.checked = true;
@@ -94,9 +129,11 @@ function checkAnswers(answers) {
 			else
 				box.parentNode.parentNode.style.backgroundColor = 'lightgreen';
 		} else if (box.tagName == 'TEXTAREA')  {
-			box.value = answer[i].split("###")[1];
+			box.value = answer[i].split("=#=")[1];
 		}
 	}
+	
+	prepare25();
 }
 
 function prepare25() {

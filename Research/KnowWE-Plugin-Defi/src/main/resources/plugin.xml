@@ -23,8 +23,8 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />
-		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
-		<parameter id="css" value="defi.css" />
+		<parameter id="script" value="KnowWE-Plugin-Defi-Alert.js" />
+		<parameter id="css" value="defi-alert.css" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"

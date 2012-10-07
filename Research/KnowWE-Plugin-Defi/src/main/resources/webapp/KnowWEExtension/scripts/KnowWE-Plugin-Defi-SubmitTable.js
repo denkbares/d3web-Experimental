@@ -5,8 +5,16 @@ function submitTable(kdomid,user,tableid,versions) {
 	var inputs = _KS('textarea',tableElement);
 	var text = ''+versions+'#';
 	 var len = inputs.length;
+	 var input;
      for(i = 0; i < len; i++){
-    	 text += 'Input'+i+':'+inputs[i].value+";;";
+    	 input = inputs[i].value;
+    	 while (input.contains("\n\n")) {
+    		 input = input.replace("\n\n", "\n");
+    	 }
+    	 while (input.substring(input.length-1, input.length) == "\n") {
+    		 input = input.substring(0, input.length-1);
+    	 }
+    	 text += 'Input'+i+':'+ input +";;";
      }
     var params = {
             action : 'SubmitTableContentAction',

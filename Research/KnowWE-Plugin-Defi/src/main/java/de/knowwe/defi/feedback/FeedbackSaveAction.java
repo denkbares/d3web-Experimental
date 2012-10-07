@@ -44,14 +44,14 @@ public class FeedbackSaveAction extends AbstractAction {
 		StringBuilder xml = new StringBuilder();
 
 		String entry = context.getParameter("entries");
-		String[] entries = entry.split(":::");
+		String[] entries = entry.split("=@=");
 		String[] parts;
 
 		//
 		xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n");
 		xml.append("<feedback>\n");
 		for (int i = 0; i < entries.length; i++) {
-			parts = entries[i].split("###");
+			parts = entries[i].split("=#=");
 			xml.append("\t<question id='q" + (i + 1) + "'>\n");
 			xml.append("\t\t<topic>"
 					+ parts[0].replace("<br><i>(Bitte alle zutreffenden Antworten markieren!)</i>",

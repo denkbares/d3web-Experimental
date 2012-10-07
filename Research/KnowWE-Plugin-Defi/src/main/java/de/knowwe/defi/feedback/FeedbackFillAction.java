@@ -36,7 +36,7 @@ public class FeedbackFillAction extends AbstractAction {
 			Element knoten;
 			for (int i = 0; i < nodes.getLength(); i++) {
 				knoten = (Element) nodes.item(i);
-				answers.append(knoten.getAttribute("id") + "###" + knoten.getTextContent() + ":::");
+				answers.append(knoten.getAttribute("id") + "=#=" + knoten.getTextContent() + "=@=");
 			}
 			answers.setLength(answers.length() - 3);
 		}

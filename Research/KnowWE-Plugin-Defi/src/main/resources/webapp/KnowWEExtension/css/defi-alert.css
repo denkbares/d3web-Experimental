@@ -1,0 +1,32 @@
+@CHARSET "ISO-8859-1";
+#alertDialog {
+	width: 350px;
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	padding: 20px 20px;
+	background-color: white;	
+	z-index: 2000;
+	display: block;
+	border-radius: 6px;
+	border: 4px solid #063D79;
+	text-align: right;
+}
+#alertDialog p {
+	min-height: 100px;
+	text-align: center;
+	border-bottom: 1px solid black;
+	padding-bottom: 10px;
+}
+#alertDialog input {
+}
+#alertDialogModal {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.4);
+	display: block;
+	z-index: 1900;	
+}
