@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,13 +31,19 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	// path of the local dot-Installation
 	private final static String dotInstallation = "D:\\Graphviz\\bin\\dot";
 
+	// section
+	private Section<?> section;
+
 	// Annotations
-	private List<String> excludedKnodes;
+	private List<String> excludedNodes;
 	private List<String> excludedRelations;
 	private int requestedDepth;
 	private int requestedHeight;
 	private String graphWidth;
 	private String graphHeight;
+	private String format;
+	private boolean showClasses;
+	private boolean showProperties;
 
 	private int depth;
 	private int height;
@@ -51,11 +58,15 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	private Map<String, String> dotSourceLabel;
 	private Map<String, String> dotSourceRelations;
 
+	// appearances
+	private final String outerLabel = "[ shape=\"none\" fontsize=\"0\" fontcolor=\"white\" ];\n";
+
 	@Override
 	public void renderContents(Section<?> section, UserContext user, StringBuilder string) {
+		this.section = section;
 		String request = getRequest(user);
-		String concept = getConcept(user, section);
-		getAnnotations(user, section);
+		String concept = getConcept(user);
+		getAnnotations(user);
 
 		ServletContext servletContext = user.getServletContext();
 		if (servletContext == null) return; // at wiki startup only
@@ -65,8 +76,9 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		dotSourceLabel = new LinkedHashMap<String, String>();
 		dotSourceRelations = new LinkedHashMap<String, String>();
 
-		buildSources(concept, request, section);
-		writeAndAppendFiles(section, string);
+		buildSources(concept, request);
+		writeFiles();
+		appendFiles(string);
 	}
 
 	/**
@@ -88,25 +100,30 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	/**
 	 * 
 	 * @created 20.08.2012
-	 * @param section
+	 * @param user
 	 */
-	private void getAnnotations(UserContext user, Section<?> section) {
-		getSuccessors(section);
-		getPredecessors(section);
+	private void getAnnotations(UserContext user) {
+		getSuccessors();
+		getPredecessors();
 		graphWidth = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_WIDTH);
 		graphHeight = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_HEIGHT);
-		getExcludedKnodes(section);
-		getExcludedRelations(section);
+		getExcludedNodes();
+		getExcludedRelations();
+		format = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_FORMAT);
+		if (format != null) {
+			format = format.toLowerCase();
+		}
+		getShowAnnotations();
 	}
 
 	/**
 	 * 
 	 * @created 18.08.2012
-	 * @return
 	 */
-	private String getConcept(UserContext user, Section<?> section) {
+	private String getConcept(UserContext user) {
 		String parameter = user.getParameter("concept");
 		if (parameter != null) {
 			return parameter;
@@ -117,9 +134,8 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	/**
 	 * 
 	 * @created 18.08.2012
-	 * @param section
 	 */
-	private void getPredecessors(Section<?> section) {
+	private void getPredecessors() {
 		if (!isValidInt(OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_PREDECESSORS))) {
 			requestedHeight = 0;
@@ -133,9 +149,8 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	/**
 	 * 
 	 * @created 18.08.2012
-	 * @param section
 	 */
-	private void getSuccessors(Section<?> section) {
+	private void getSuccessors() {
 		if (!isValidInt(OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_SUCCESSORS))) {
 			requestedDepth = 0;
 		}
@@ -148,9 +163,8 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	/**
 	 * 
 	 * @created 20.08.2012
-	 * @param section
 	 */
-	private void getExcludedRelations(Section<?> section) {
+	private void getExcludedRelations() {
 		excludedRelations = new ArrayList<String>();
 		String exclude = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_EXCLUDERELATIONS);
@@ -163,40 +177,70 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	/**
 	 * 
 	 * @created 20.08.2012
-	 * @param section
 	 */
-	private void getExcludedKnodes(Section<?> section) {
-		excludedKnodes = new ArrayList<String>();
+	private void getExcludedNodes() {
+		excludedNodes = new ArrayList<String>();
 		String exclude = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_EXCLUDEKNODES);
+				OntoVisType.ANNOTATION_EXCLUDENODES);
 		if (exclude != null) {
 			String[] array = exclude.split(",");
-			excludedKnodes = Arrays.asList(array);
+			excludedNodes = Arrays.asList(array);
 		}
 	}
 
 	/**
 	 * 
+	 * @created 13.09.2012
+	 */
+	private void getShowAnnotations() {
+		String classes = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_SHOWCLASSES);
+		if (classes == null) {
+			showClasses = true;
+		}
+		else if (classes.equals("false")) {
+			showClasses = false;
+		}
+		else {
+			showClasses = true;
+		}
+		String properties = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_SHOWPROPERTIES);
+		if (properties == null) {
+			showProperties = true;
+		}
+		else if (properties.equals("false")) {
+			showProperties = false;
+		}
+		else {
+			showProperties = true;
+		}
+	}
+
+	/**
+	 * Adds all requested concepts and information to the dotSources (the maps).
+	 * 
 	 * @created 20.08.2012
 	 * @param concept
 	 * @param request
-	 * @param section
 	 */
-	private void buildSources(String concept, String request, Section<?> section) {
+	private void buildSources(String concept, String request) {
 		// if requested, the predecessor are added to the source
 		if (requestedHeight > 0) {
 			height = 0;
-			addPredecessors(concept, request, section);
+			addPredecessors(concept, request);
 		}
-		insertMainConcept(concept, request, section);
+		insertMainConcept(concept, request);
 		// if requested, the successors are added to the source
 		if (requestedDepth > 0) {
 			depth = 0;
-			addSuccessors(concept, request, section);
+			addSuccessors(concept, request);
 		}
-		// if the look of the main concept was changed during the process, it is
-		// resettet
-		insertMainConcept(concept, request, section);
+		// if the appearance of the main concept was changed during the process,
+		// it is reset
+		insertMainConcept(concept, request);
+		// check all relations again
+		checkRelations();
 		connectSources();
 	}
 
@@ -205,32 +249,123 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @created 18.08.2012
 	 * @param concept
 	 * @param request
-	 * @param section
 	 */
-	private void insertMainConcept(String concept, String request, Section<?> section) {
+	private void insertMainConcept(String concept, String request) {
 		// Main Concept Attributes
 		String style = "filled";
 		String fillcolor = "yellow";
 		String fontsize = "14";
+		String shape = "ellipse";
 
-		String conceptKey = "\"" + concept + "\" ";
+		String askClass = "ASK { lns:" + concept + " rdf:type owl:Class}";
+		boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
+		String askProperty = "ASK { lns:" + concept + " rdf:type owl:Property}";
+		boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
+
+		if (isClass) {
+			shape = "rectangle";
+		}
+		else if (isProperty) {
+			shape = "diamond";
+		}
+
+		String conceptKey = "\"" + concept + "\"";
 		String conceptValue = "[ URL=\"" + request + "?page=" + section.getTitle() + "&concept="
 				+ concept + "\" style=\"" + style + "\" fillcolor=\"" + fillcolor
-				+ "\" fontsize=\"" + fontsize + "\" ];\n";
+				+ "\" fontsize=\"" + fontsize + "\" shape=\"" + shape + "\"];\n";
+		// the main concept is inserted in the dotSource resp. reset if
+		// the appearance was changed
 		if (dotSourceLabel.get(conceptKey) != conceptValue) {
 			dotSourceLabel.put(conceptKey, conceptValue);
 		}
 	}
 
 	/**
+	 * All inner relations (relations between two inner nodes) are checked if
+	 * their appearance equals the appearance of the relation to an outer node.
+	 * If that is the case it is corrected.
+	 * 
+	 * @created 04.09.2012
+	 */
+	private void checkRelations() {
+		// First step: Iterate over all relations and check if it's an outer
+		// relation (gray, dashed and no arrowhead). If it is, save it.
+		List<String> keysWithGrayRelation = new LinkedList<String>();
+		Iterator<String> keys = dotSourceRelations.keySet().iterator();
+		while (keys.hasNext()) {
+			String key = keys.next();
+			if (dotSourceRelations.get(key).contains("fontcolor=\"white\"")) {
+				keysWithGrayRelation.add(key);
+			}
+		}
+
+		// Second step: Now check both concepts of those relations and see, if
+		// they are both normal (inner) nodes. If they are, the relation
+		// shouldnt be gray, so it will be changed.
+		Iterator<String> relations = keysWithGrayRelation.iterator();
+		while (relations.hasNext()) {
+			String relation = relations.next();
+			String[] concepts = relation.split("->");
+
+			if (dotSourceLabel.get(concepts[0]) != outerLabel
+					&& dotSourceLabel.get(concepts[1]) != outerLabel) {
+				String temp = dotSourceRelations.get(relation);
+				String labelOfRelation = temp.substring(9,
+						temp.indexOf("fontcolor") - 2);
+				dotSourceRelations.put(relation, innerRelation(labelOfRelation));
+			}
+		}
+	}
+
+	/**
+	 * Given the label of the inner relation, the method returns the String of
+	 * the appearance of the relation.
+	 * 
+	 * @created 06.09.2012
+	 * @param label
+	 */
+	private String innerRelation(String label) {
+		// Basic Relation Attributes
+		String arrowtail = "normal";
+		String color = "black";
+		String fontsize = "13";
+
+		return "[ label = \"" + label
+				+ "\"" + buildRelation(arrowtail, color, fontsize) + " ];\n";
+	}
+
+	/**
+	 * The sources from the maps are being written into the String-dotSource.
+	 * 
+	 * @created 18.08.2012
+	 */
+	private void connectSources() {
+		// iterate over the labels and add them to the dotSource
+		Iterator<String> labelKeys = dotSourceLabel.keySet().iterator();
+		while (labelKeys.hasNext()) {
+			String key = labelKeys.next();
+			dotSource += key + dotSourceLabel.get(key);
+		}
+
+		// iterate over the relations and add them to the dotSource
+		Iterator<String> relationsKeys = dotSourceRelations.keySet().iterator();
+		while (relationsKeys.hasNext()) {
+			String key = relationsKeys.next();
+			dotSource += key + dotSourceRelations.get(key);
+		}
+
+		dotSource += "}";
+	}
+
+	/**
+	 * The dot, svg and png files are created and written.
 	 * 
 	 * @created 20.08.2012
-	 * @param section
 	 */
-	private void writeAndAppendFiles(Section<?> section, StringBuilder string) {
-		File dot = createFile("dot", path, section);
-		File svg = createFile("svg", path, section);
-		File png = createFile("png", path, section);
+	private void writeFiles() {
+		File dot = createFile("dot", path);
+		File svg = createFile("svg", path);
+		File png = createFile("png", path);
 
 		// TODO all files are being deleted and still it happens that the old
 		// files/graph is being displayed when the user chooses a different
@@ -249,11 +384,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		command = dotInstallation + " \"" + dot.getAbsolutePath() + "\"" +
 				" -Tpng -o\"" + png.getAbsolutePath() + "\"";
 		createFileOutOfDot(png, dot, command);
-
-		prepareSVG(svg, section);
-		string.append("<object data='" + tmpPath + "graph" + section.getID()
-				+ ".svg' type=\"image/svg+xml\"><img alt='graph' src='" + tmpPath + "graph"
-				+ section.getID() + ".png'></object>");
+		prepareSVG(svg);
 	}
 
 	/**
@@ -279,6 +410,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @created 20.08.2012
 	 * @param file
 	 * @param dot
+	 * @param command
 	 */
 	private void createFileOutOfDot(File file, File dot, String command) {
 		try {
@@ -309,9 +441,10 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	/**
 	 * 
 	 * @created 18.08.2012
-	 * @param string
+	 * @param type
+	 * @param path
 	 */
-	private File createFile(String type, String path, Section<?> section) {
+	private File createFile(String type, String path) {
 		String filename = path + "graph" + section.getID()
 				+ "." + type;
 		File f = new File(filename);
@@ -320,40 +453,40 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 	/**
 	 * 
-	 * @created 18.08.2012
+	 * @created 03.09.2012
+	 * @param StringBuilder
 	 */
-	private void connectSources() {
-		// iterate over the labels and add them to the dotSource
-		Iterator<String> labelKeys = dotSourceLabel.keySet().iterator();
-		while (labelKeys.hasNext()) {
-			String key = labelKeys.next();
-			dotSource += key + dotSourceLabel.get(key);
+	private void appendFiles(StringBuilder string) {
+		String png_default = "<img alt='graph' src='" + tmpPath + "graph"
+				+ section.getID() + ".png'>";
+		String svg = "<object data='" + tmpPath + "graph" + section.getID()
+				+ ".svg' type=\"image/svg+xml\">" + png_default + "</object>";
+		if (format == null) {
+			string.append(png_default);
 		}
-
-		// iterate over the relations and add them to the dotSource
-		Iterator<String> relationsKeys = dotSourceRelations.keySet().iterator();
-		while (relationsKeys.hasNext()) {
-			String key = relationsKeys.next();
-			dotSource += key + dotSourceRelations.get(key);
+		else if (format.equals("svg")) {
+			string.append(svg);
 		}
-
-		dotSource += "}";
+		else {
+			string.append(png_default);
+		}
 	}
 
 	/**
 	 * Method, that recursively adds all successors of the requested concept up
-	 * to the chosen depth
+	 * to the chosen depth.
 	 * 
 	 * @created 26.06.2012
-	 * @param depth
+	 * @param concept
+	 * @param request
 	 */
-	private void addSuccessors(String concept, String request, Section<?> section) {
+	private void addSuccessors(String concept, String request) {
 		String query = "SELECT ?y ?z WHERE { lns:" + concept
 				+ " ?y ?z.}";
 		ClosableIterator<QueryRow> result =
 				Rdf2GoCore.getInstance().sparqlSelectIt(
 						query);
-		while (result.hasNext()) {
+		loop: while (result.hasNext()) {
 			QueryRow row = result.next();
 			String yURI = row.getValue("y").toString();
 			String y = clean(yURI.substring(yURI.indexOf("#") + 1));
@@ -361,21 +494,43 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 			String zURI = row.getValue("z").toString();
 			String z = clean(zURI.substring(zURI.indexOf("#") + 1));
 
-			if (excludedRelation(y, section)) {
-				continue;
+			if (excludedRelation(y)) {
+				continue loop;
 			}
-			if (excludedKnode(z, section)) {
-				continue;
+			if (excludedNode(z)) {
+				continue loop;
 			}
 
-			addConcept(z, concept, y, request, section);
+			String askClass = "ASK { lns:" + z + " rdf:type owl:Class}";
+			boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
+			String askProperty = "ASK { lns:" + y + " rdf:type rdf:Property}";
+			boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
+			String type = "basic";
+
+			if (isClass) {
+				if (showClasses) {
+					type = "class";
+				}
+				else {
+					continue loop;
+				}
+			}
+			else if (isProperty) {
+				if (showProperties) {
+					type = "property";
+				}
+				else {
+					continue loop;
+				}
+			}
+			addConcept(concept, z, y, request, false, type);
 
 			depth++;
 			if (depth < requestedDepth) {
-				addSuccessors(z, request, section);
+				addSuccessors(z, request);
 			}
 			if (depth == requestedDepth) {
-				addOutgoingEdgesSuccessors(z, request, section);
+				addOutgoingEdgesSuccessors(z, request);
 			}
 			depth--;
 		}
@@ -386,16 +541,13 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @created 03.08.2012
 	 * @param concept
 	 * @param request
-	 * @param section
-	 * @param dotSourceLabel
-	 * @param dotSourceRelations
 	 */
-	private void addPredecessors(String concept, String request, Section<?> section) {
+	private void addPredecessors(String concept, String request) {
 		String query = "SELECT ?x ?y WHERE { ?x ?y lns:" + concept + "}";
 		ClosableIterator<QueryRow> result =
 				Rdf2GoCore.getInstance().sparqlSelectIt(
 						query);
-		while (result.hasNext()) {
+		loop: while (result.hasNext()) {
 			QueryRow row = result.next();
 			String xURI = row.getValue("x").toString();
 			String x = clean(xURI.substring(xURI.indexOf("#") + 1));
@@ -403,32 +555,58 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 			String yURI = row.getValue("y").toString();
 			String y = clean(yURI.substring(yURI.indexOf("#") + 1));
 
-			if (excludedRelation(y, section)) {
-				continue;
+			if (excludedRelation(y)) {
+				continue loop;
 			}
-			if (excludedKnode(x, section)) {
-				continue;
+			if (excludedNode(x)) {
+				continue loop;
+			}
+
+			String askClass = "ASK { lns:" + x + " rdf:type owl:Class}";
+			boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
+			String askProperty = "ASK { lns:" + y + " rdf:type rdf:Property}";
+			boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
+			String type = "basic";
+
+			if (isClass) {
+				if (showClasses) {
+					type = "class";
+				}
+				else {
+					continue loop;
+				}
+			}
+			else if (isProperty) {
+				if (showProperties) {
+					type = "property";
+				}
+				else {
+					continue loop;
+				}
 			}
 
 			height++;
 			if (height < requestedHeight) {
-				addPredecessors(x, request, section);
+				addPredecessors(x, request);
 			}
 			if (height == requestedHeight) {
-				addOutgoingEdgesPredecessors(x, request, section);
+				addOutgoingEdgesPredecessors(x, request);
 			}
 			height--;
 
-			addConcept(x, concept, y, request, section);
+			addConcept(x, concept, y, request, true, type);
 		}
 	}
 
 	/**
-	 * 
+	 * Adds (gray) relations to the last (successor) nodes of the graph, showing
+	 * the nodes that still follow.
 	 * 
 	 * @created 26.06.2012
+	 * @param concept
+	 * @param request
 	 */
-	private void addOutgoingEdgesSuccessors(String concept, String request, Section<?> section) {
+	private void addOutgoingEdgesSuccessors(String concept, String request) {
 		String query = "SELECT ?y ?z WHERE { lns:" + concept
 				+ " ?y ?z.}";
 		ClosableIterator<QueryRow> result =
@@ -441,17 +619,25 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 			String zURI = row.getValue("z").toString();
 			String z = clean(zURI.substring(zURI.indexOf("#") + 1));
-			if (excludedRelation(y, section)) {
+			if (excludedRelation(y)) {
 				continue;
 			}
-			if (excludedKnode(z, section)) {
+			if (excludedNode(z)) {
 				continue;
 			}
-			addOuterConcept(concept, z);
+			addOuterConcept(concept, z, y, false);
 		}
 	}
 
-	private void addOutgoingEdgesPredecessors(String concept, String request, Section<?> section) {
+	/**
+	 * Adds (gray) relations to the last (predecessor) nodes of the graph,
+	 * showing the nodes that still follow.
+	 * 
+	 * @created 26.06.2012
+	 * @param concept
+	 * @param request
+	 */
+	private void addOutgoingEdgesPredecessors(String concept, String request) {
 		String query = "SELECT ?x ?y WHERE { ?x ?y lns:" + concept + "}";
 		ClosableIterator<QueryRow> result =
 				Rdf2GoCore.getInstance().sparqlSelectIt(
@@ -463,13 +649,13 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 			String yURI = row.getValue("y").toString();
 			String y = clean(yURI.substring(yURI.indexOf("#") + 1));
-			if (excludedRelation(y, section)) {
+			if (excludedRelation(y)) {
 				continue;
 			}
-			if (excludedKnode(x, section)) {
+			if (excludedNode(x)) {
 				continue;
 			}
-			addOuterConcept(x, concept);
+			addOuterConcept(x, concept, y, true);
 		}
 	}
 
@@ -479,29 +665,48 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param from
 	 * @param to
 	 * @param relation between from --> to
-	 * @param request
-	 * @param section
+	 * @param boolean predecessor (if predecessor or successor is added to the
+	 *        graph)
+	 * @param type (basic, class, property)
 	 */
-	private void addConcept(String from, String to, String relation, String request, Section<?> section) {
-		// Label Attributes
-		String shape = "ellipse";
-		String fontcolor = "black";
-		String fontsizeL = "14";
-	
-		// Relation Attributes
-		String arrowtail = "normal";
-		String color = "black";
-		String fontsizeR = "13";
-	
-		String newLineLabelKey = "\"" + from + "\" ";
-		String newLineRelationsKey = "\"" + from + "\"->\"" + to + "\" ";
-		String newLineLabelValue = "[ URL=\"" + request + "?page=" + section.getTitle()
-				+ "&concept=" + from
-				+ "\" fontcolor=\"" + fontcolor + "\" shape=\"" + shape + "\" fontsize=\""
-				+ fontsizeL + "\" ];\n";
-		String newLineRelationsValue = "[ label = \"" + relation
-				+ "\" arrowtail=\"" + arrowtail + "\" color=\"" + color + "\" fontsize=\""
-				+ fontsizeR + "\" ];\n";
+	private void addConcept(String from, String to, String relation, String request, boolean predecessor, String type) {
+		String shape;
+		String fontcolor;
+		String fontsize;
+		if (type.equals("class")) {
+			// Class Label Attributes
+			shape = "rectangle";
+			fontcolor = "black";
+			fontsize = "14";
+		}
+		else if (type.equals("property")) {
+			// Property Label Attributes
+			shape = "diamond";
+			fontcolor = "black";
+			fontsize = "14";
+		}
+		else {
+			// Basic Label Attributes
+			shape = "ellipse";
+			fontcolor = "black";
+			fontsize = "14";
+		}
+
+		String newLineLabelKey;
+		String newLineLabelValue;
+		if (predecessor) {
+			newLineLabelKey = "\"" + from + "\"";
+			newLineLabelValue = "[ URL=\"" + request + "?page=" + section.getTitle()
+					+ "&concept=" + from + "\"" + buildLabel(shape, fontcolor, fontsize) + " ];\n";
+		}
+		else {
+			newLineLabelKey = "\"" + to + "\"";
+			newLineLabelValue = "[ URL=\"" + request + "?page=" + section.getTitle()
+					+ "&concept=" + to + "\"" + buildLabel(shape, fontcolor, fontsize) + " ];\n";
+		}
+		String newLineRelationsKey = "\"" + from + "\"->\"" + to + "\"";
+		String newLineRelationsValue = innerRelation(relation);
+
 		if (!dotSourceLabel.containsKey(newLineLabelKey)
 				|| (dotSourceLabel.get(newLineLabelKey) != newLineLabelValue)) {
 			dotSourceLabel.put(newLineLabelKey, newLineLabelValue);
@@ -514,24 +719,58 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 	/**
 	 * 
+	 * @created 04.09.2012
+	 * @param shape
+	 * @param fontcolor
+	 * @param fontsizeL
+	 */
+	private String buildLabel(String shape, String fontcolor, String fontsizeL) {
+		return " fontcolor=\"" + fontcolor + "\" shape=\"" + shape
+				+ "\" fontsize=\"" + fontsizeL + "\"";
+	}
+
+	/**
+	 * 
+	 * @created 04.09.2012
+	 * @param arrowtail
+	 * @param color
+	 * @param fontsizeR
+	 */
+	private String buildRelation(String arrowtail, String color, String fontsize) {
+		return " arrowtail=\"" + arrowtail + "\" color=\"" + color + "\" fontsize=\""
+				+ fontsize + "\"";
+	}
+
+	/**
+	 * 
 	 * @created 20.08.2012
 	 * @param from
 	 * @param to
+	 * @param relation between from --> to
+	 * @param boolean predecessor (if predecessor or successor is added to the
+	 *        graph)
 	 */
-	private void addOuterConcept(String from, String to) {
+	private void addOuterConcept(String from, String to, String relation, boolean predecessor) {
 		// Relation Attributes
-		String arrowtail = "none";
-		String color = "#BEBEBE";
+		String arrowhead = "none";
+		String color = "#8b8989";
 		String style = "dashed";
 
-		String newLineLabelKey = "\"" + from + "\" ";
-		String newLineRelationsKey = "\"" + from + "\"->\"" + to + "\" ";
-		String newLineLabelValue = "[ shape=\"none\" fontsize=\"0\" fontcolor=\"white\" ];\n";
-		String newLineRelationsValue = "[ arrowtail=\"" + arrowtail + "\" color=\"" + color
+		String newLineLabelKey;
+		if (predecessor) {
+			newLineLabelKey = "\"" + from + "\"";
+		}
+		else {
+			newLineLabelKey = "\"" + to + "\"";
+		}
+		String newLineRelationsKey = "\"" + from + "\"->\"" + to + "\"";
+		String newLineRelationsValue = "[ label=\"" + relation
+				+ "\" fontcolor=\"white\" arrowhead=\""
+				+ arrowhead + "\" color=\"" + color
 				+ "\" style=\"" + style + "\" ];\n";
 
 		if (!dotSourceLabel.containsKey(newLineLabelKey)) {
-			dotSourceLabel.put(newLineLabelKey, newLineLabelValue);
+			dotSourceLabel.put(newLineLabelKey, outerLabel);
 		}
 		if (!dotSourceRelations.containsKey(newLineRelationsKey)) {
 			dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);
@@ -539,15 +778,14 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	}
 
 	/**
+	 * Tests if the given node x is being excluded in the annotations.
 	 * 
 	 * @created 20.08.2012
 	 * @param x
-	 * @param section
-	 * @return
 	 */
-	private boolean excludedKnode(String x, Section<?> section) {
-		if (excludedKnodes != null) {
-			Iterator<String> iterator = excludedKnodes.iterator();
+	private boolean excludedNode(String x) {
+		if (excludedNodes != null) {
+			Iterator<String> iterator = excludedNodes.iterator();
 			while (iterator.hasNext()) {
 				String next = iterator.next().trim();
 				if (x.matches(next)) return true;
@@ -557,13 +795,12 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	}
 
 	/**
+	 * Test if the given relation y is being excluded in the annotations.
 	 * 
 	 * @created 20.08.2012
 	 * @param y
-	 * @param section
-	 * @return
 	 */
-	private boolean excludedRelation(String y, Section<?> section) {
+	private boolean excludedRelation(String y) {
 		if (excludedRelations != null) {
 			Iterator<String> iterator = excludedRelations.iterator();
 			while (iterator.hasNext()) {
@@ -575,12 +812,13 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	}
 
 	/**
-	 * Method, that adds the target-tag to every URL in the svg-file
+	 * Method, that adds the target-tag to every URL in the svg-file and if
+	 * requested changes the height and width of the graph.
 	 * 
 	 * @created 01.08.2012
 	 * @param svg
 	 */
-	private void prepareSVG(File svg, Section<?> section) {
+	private void prepareSVG(File svg) {
 		FileInputStream fs = null;
 		InputStreamReader in = null;
 		BufferedReader br = null;
@@ -595,7 +833,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 			while (true) {
 				line = br.readLine();
 				if (line == null) break;
-				line = checkLine(line, section);
+				line = checkLine(line);
 				sb.append(line + "\n");
 			}
 
@@ -625,10 +863,10 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	/**
 	 * 
 	 * @created 20.08.2012
-	 * @param readLine
-	 * @return
+	 * @param line
 	 */
-	private String checkLine(String line, Section<?> section) {
+	private String checkLine(String line) {
+		// changes width and height if requested
 		if (isValidHeightOrWidth(graphWidth) && isValidHeightOrWidth(graphHeight)) {
 			if (line.matches("<svg width=.*")) {
 				line = line.replaceAll("width=\"\\d+pt\"", "width=\"" + graphWidth + "\"");
@@ -636,6 +874,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 						"height=\"" + graphHeight + "\"");
 			}
 		}
+		// adds target-tag to every URL
 		if (line.matches("<a xlink:href=.*")) {
 			line = line.substring(0, line.length() - 1) + " target=\"_top\">";
 		}
@@ -643,10 +882,11 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	}
 
 	/**
-	 * tests if var is a valid width or height value
+	 * Tests if var is a valid width or height value (valid if: var is a number
+	 * with 2-4 digits or a correct percentage).
 	 * 
 	 * @created 08.08.2012
-	 * @return
+	 * @param var
 	 */
 	private boolean isValidHeightOrWidth(String var) {
 		if (var == null) {
@@ -659,15 +899,15 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	}
 
 	/**
-	 * 
+	 * Tests if input is a valid int for the depth/height of the graph.
 	 * 
 	 * @created 20.08.2012
 	 * @param input
-	 * @return
 	 */
 	private boolean isValidInt(String input) {
 		try {
 			Integer value = Integer.parseInt(input);
+			// final maximum depth/height for graph
 			if (value > 5 || value < 0) {
 				return false;
 			}
@@ -679,10 +919,10 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	}
 
 	/**
-	 * 
+	 * If line is an URL it is cut and only the String behind "page=" is
+	 * returned.
 	 * 
 	 * @created 31.07.2012
-	 * @return
 	 */
 	private String clean(String line) {
 		if (line.matches("http:.*/?page=.*")) {
