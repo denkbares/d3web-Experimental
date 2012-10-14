@@ -23,6 +23,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -77,7 +78,17 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		dotSourceRelations = new LinkedHashMap<String, String>();
 
 		buildSources(concept, request);
-		writeFiles();
+		try {
+			writeFiles();
+		}
+		catch (FileNotFoundException e) {
+			// TODO: render proper message
+			string.append("Warning:" + e.toString());
+		}
+		catch (IOException e) {
+			// TODO: render proper message
+			string.append("Warning:" + e.toString());
+		}
 		appendFiles(string);
 	}
 
@@ -362,7 +373,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * 
 	 * @created 20.08.2012
 	 */
-	private void writeFiles() {
+	private void writeFiles() throws FileNotFoundException, IOException {
 		File dot = createFile("dot", path);
 		File svg = createFile("svg", path);
 		File png = createFile("png", path);
@@ -457,10 +468,10 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param StringBuilder
 	 */
 	private void appendFiles(StringBuilder string) {
-		String png_default = "<img alt='graph' src='" + tmpPath + "graph"
-				+ section.getID() + ".png'>";
-		String svg = "<object data='" + tmpPath + "graph" + section.getID()
-				+ ".svg' type=\"image/svg+xml\">" + png_default + "</object>";
+		String png_default = Strings.maskHTML("<img alt='graph' src='" + tmpPath + "graph"
+				+ section.getID() + ".png'>");
+		String svg = Strings.maskHTML("<object data='" + tmpPath + "graph" + section.getID()
+				+ ".svg' type=\"image/svg+xml\">" + png_default + "</object>");
 		if (format == null) {
 			string.append(png_default);
 		}
@@ -818,46 +829,32 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @created 01.08.2012
 	 * @param svg
 	 */
-	private void prepareSVG(File svg) {
+	private void prepareSVG(File svg) throws FileNotFoundException, IOException {
 		FileInputStream fs = null;
 		InputStreamReader in = null;
 		BufferedReader br = null;
 		StringBuffer sb = new StringBuffer();
 		String line;
 
-		try {
-			fs = new FileInputStream(svg);
-			in = new InputStreamReader(fs);
-			br = new BufferedReader(in);
+		fs = new FileInputStream(svg);
+		in = new InputStreamReader(fs);
+		br = new BufferedReader(in);
 
-			while (true) {
-				line = br.readLine();
-				if (line == null) break;
-				line = checkLine(line);
-				sb.append(line + "\n");
-			}
-
-			fs.close();
-			in.close();
-			br.close();
-
-		}
-		catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
+		while (true) {
+			line = br.readLine();
+			if (line == null) break;
+			line = checkLine(line);
+			sb.append(line + "\n");
 		}
 
-		try {
-			FileWriter fstream = new FileWriter(svg);
-			BufferedWriter outobj = new BufferedWriter(fstream);
-			outobj.write(sb.toString());
-			outobj.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		fs.close();
+		in.close();
+		br.close();
+
+		FileWriter fstream = new FileWriter(svg);
+		BufferedWriter outobj = new BufferedWriter(fstream);
+		outobj.write(sb.toString());
+		outobj.close();
 	}
 
 	/**
