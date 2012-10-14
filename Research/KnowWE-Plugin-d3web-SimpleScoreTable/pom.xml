@@ -1,90 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>Research</artifactId>
-    <groupId>de.uniwue.d3web</groupId>
-    <version>0.2-SNAPSHOT</version>
-  </parent>
-  <groupId>de.uniwue.d3web</groupId>
-  <artifactId>KnowWE-Plugin-d3web-SimpleScoreTable</artifactId>
-  <version>0.2-SNAPSHOT</version>
-  <name>KnowWE-Plugin-d3web-SimpleScoreTable</name>
-  <description>A simple table for diagnose scores</description>
-<dependencies>
-<dependency>
-<groupId>de.uniwue.d3web</groupId>
-<artifactId>KnowWE-core</artifactId>
-<version>0.2-SNAPSHOT</version>
-<type>jar</type>
-</dependency>
-<dependency>
-<groupId>de.uniwue.d3web</groupId>
-<artifactId>KnowWE-KDOMParseUtils</artifactId>
-<version>0.2-SNAPSHOT</version>
-<type>jar</type>
-</dependency>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>Research</artifactId>
+		<groupId>de.uniwue.d3web</groupId>
+		<version>0.2-SNAPSHOT</version>
+	</parent>
+	<groupId>de.uniwue.d3web</groupId>
+	<artifactId>KnowWE-Plugin-d3web-SimpleScoreTable</artifactId>
+	<version>0.2-SNAPSHOT</version>
+	<name>KnowWE-Plugin-d3web-SimpleScoreTable</name>
+	<description>A simple table for diagnose scores</description>
+	<dependencies>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-core</artifactId>
+			<version>0.2-SNAPSHOT</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-KDOMParseUtils</artifactId>
+			<version>0.2-SNAPSHOT</version>
+			<type>jar</type>
+		</dependency>
 
-	<dependency>
-		<groupId>de.uniwue.d3web</groupId>
-		<artifactId>metatool-test-launcher</artifactId>
-		<version>0.2-SNAPSHOT</version>
-	</dependency>
-	<dependency>
-		<groupId>de.uniwue.d3web</groupId>
-		<artifactId>KnowWE-Plugin-d3web-basic</artifactId>
-		<version>0.2-SNAPSHOT</version>
-	</dependency>
-	<dependency>
-		<groupId>de.uniwue.d3web</groupId>
-		<artifactId>KnowWE-Plugin-d3web-MarkupSet</artifactId>
-		<version>0.2-SNAPSHOT</version>
-	</dependency>
-</dependencies>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>metatool-test-launcher</artifactId>
+			<version>0.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-Plugin-d3web-basic</artifactId>
+			<version>0.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-Plugin-d3web-MarkupSet</artifactId>
+			<version>0.2-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 
-<build>
-<plugins>
-<plugin>
-<groupId>org.codehaus.mojo</groupId>
-<artifactId>build-helper-maven-plugin</artifactId>
-<version>1.7</version>
-<executions>
-<execution>
-<id>add-source</id>
-<phase>generate-sources</phase>
-<goals>
-<goal>add-source</goal>
-</goals>
-<configuration>
-<sources>
-<source>target/generated-sources/knowwe-metatool/</source>
-</sources>
-</configuration>
-</execution>
-</executions>
-</plugin>
-<plugin>
-<groupId>org.apache.maven.plugins</groupId>
-<artifactId>maven-dependency-plugin</artifactId>
-<version>2.1</version>
-<executions>
-<execution>
-<id>copy-dependencies</id>
-<phase>test-compile</phase>
-<goals>
-<goal>build-classpath</goal>
-</goals>
-<configuration>
-<outputDirectory>target/dependencies</outputDirectory>
-<overWriteReleases>false</overWriteReleases>
-<overWriteSnapshots>false</overWriteSnapshots>
-<overWriteIfNewer>true</overWriteIfNewer>
-<pathSeparator>;</pathSeparator>
-<outputFile>target/dependencies/output.txt</outputFile>
-</configuration>
-</execution>
-</executions>
-</plugin>
-</plugins>
-</build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>build-classpath</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/dependencies</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<pathSeparator>;</pathSeparator>
+							<outputFile>target/dependencies/output.txt</outputFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
