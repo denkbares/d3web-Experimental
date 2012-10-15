@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
-<plugin id="KnowWE-Plugin-WikiZIPDownload" version="0.0.1">
+<plugin id="KnowWE-Plugin-LoadKnowledgeBase" version="0.0.1">
 
 	<requires>
 		<import plugin-id="KnowWEExtensionPoints" />
@@ -38,6 +38,4 @@
 		<parameter id="handlerpriority" value="1000" />
 		<parameter id="scope" value="KnowledgeBaseType" />
 	</extension>
-
-	
 </plugin>
