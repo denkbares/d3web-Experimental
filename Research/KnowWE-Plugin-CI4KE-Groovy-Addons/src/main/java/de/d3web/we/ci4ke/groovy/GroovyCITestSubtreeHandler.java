@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import de.d3web.testing.Test;
-import de.d3web.we.ci4ke.handling.CIConfig;
+import de.d3web.we.ci4ke.build.CIConfig;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
@@ -37,8 +37,8 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 	 * Prepend the groovy-code with some import statements
 	 */
 	public static final String PREPEND = "import " + CIConfig.class.getName() + ";\n" +
-						"import " + Message.class.getName() + ";\n" +
-						"import static " + de.d3web.testing.Message.Type.class.getName()
+			"import " + Message.class.getName() + ";\n" +
+			"import static " + de.d3web.testing.Message.Type.class.getName()
 			+ ".*;\n";
 
 	@Override
