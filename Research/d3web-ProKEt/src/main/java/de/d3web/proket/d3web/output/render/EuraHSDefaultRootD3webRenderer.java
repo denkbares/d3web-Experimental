@@ -93,24 +93,24 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         Object ehsHttp = httpSession.getAttribute("ehsintro");
         // Maybe better pull out, handle button click per JS and call a goToStatistics Ajax etc
         
-          
         if(ehsHttp != null && ehsHttp.toString().equals("done")){
             st.setAttribute("eurahsmiddle", "true");
             st.removeAttribute("eurahsintro");
         } else 
         
+             
         // when coming from login, there is nothing like ehsintro set
         if (ehsintro == null || ehsintro.equals("") ||
-                ehsHttp == null || ehsHttp.toString().equals("")) {
-            st.setAttribute("eurahsintro", "true");
+                ehsHttp == null || ehsHttp.toString().equals("")
+                ) {
+            st.setAttribute("eurahsintro", true);
             st.removeAttribute("eurahsmiddle");
             httpSession.setAttribute("ehsintro", "done");
-           
         } 
-
        
-        st.setAttribute("eurahsmiddle", "true");
-        st.removeAttribute("eurahsintro");
+        // TODO: was only in for testing. Maybe make configuration in specs
+        // st.setAttribute("eurahsmiddle", "true");
+        // st.removeAttribute("eurahsintro");
             
         if (httpSession.getAttribute("level1qs") == null) {
             httpSession.setAttribute("level1qs", parseLevel1Questions(httpSession));

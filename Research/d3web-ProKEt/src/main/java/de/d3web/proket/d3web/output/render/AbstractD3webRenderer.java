@@ -660,32 +660,43 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             TerminologyObject to, int loc, HttpSession httpSession, HttpServletRequest request) {
 
         StringBuilder childrenHTML = new StringBuilder();
-        System.out.println("ITreeNUM: " + to.getName());
 
+        // skip default d3web root
         if (to.getName().equals("Q000")) {
+
+
             if (to.getChildren().length > 0) {
                 TerminologyObject rootNode = null;
 
+                // check default root's children
                 for (TerminologyObject toc : to.getChildren()) {
-                    if (!toc.getName().contains("ABSTRACTIONS")) {
-                        rootNode = toc;
+                    System.out.println(toc.getName());
+                    System.out.println(toc.getClass());
+
+                    // if we have direct children here, e.g. after parsing 
+                    // word specification files were the first child is a
+                    // question instead of a grouping questionnaire
+                    if (toc instanceof Question) {
+                        IQuestionD3webRenderer childRenderer =
+                                AbstractD3webRenderer.getRenderer(toc);
+
+                        String childHTML =
+                                childRenderer.renderTerminologyObject(d3webSession, cc, toc, to, loc, httpSession, request);
+                        if (childHTML != null) {
+                            childrenHTML.append(childHTML);
+                        }
+                        st.setAttribute("children", childrenHTML.toString());
+
+                    } 
+                    // we have sub-grouping questionnaires
+                    else {
+                        if (!toc.getName().contains("ABSTRACTIONS")
+                                && toc.getName().equals("ROOT")) {
+                            renderChildrenITreeNum(st, d3webSession, cc, toc, loc, httpSession, request);
+                        }
                     }
-                }
-
-                if (rootNode != null) {
-
-                    IQuestionD3webRenderer childRenderer =
-                            AbstractD3webRenderer.getRenderer(rootNode);
-
-                    String childHTML =
-                            childRenderer.renderTerminologyObject(d3webSession, cc, rootNode, to, loc, httpSession, request);
-                    if (childHTML != null) {
-                        childrenHTML.append(childHTML);
-                    }
-                    st.setAttribute("children", childrenHTML.toString());
                 }
             }
-
         } else {
 
             // get the children of the current to from the juri rules

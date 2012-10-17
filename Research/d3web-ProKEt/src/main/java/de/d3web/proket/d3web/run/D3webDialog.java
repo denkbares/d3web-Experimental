@@ -222,7 +222,7 @@ public class D3webDialog extends HttpServlet {
             action = "show";
         }
 
-        //System.out.println("0: " + action);
+        // System.out.println("0: " + action);
         // System.out.println(httpSession.getAttribute(D3WEB_SESSION));
 
         if (action.equalsIgnoreCase(

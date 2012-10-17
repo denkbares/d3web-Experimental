@@ -97,7 +97,7 @@ function parseDocToKB(id){
         cache : false, // needed for IE, call is not made otherwise
         success : function(html) {
             if(html.indexOf("parseErrorInvalidDoc")==-1){
-                alert("everything's fine");
+                //alert("everything's fine");
             } else {
                 $("#ErrorReportImgButton img").attr("src", "img/ErrorReport.png");
             }

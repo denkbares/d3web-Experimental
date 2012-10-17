@@ -1212,7 +1212,7 @@ function d3web_show() {
 
             // if (html != "same") { // replace target id of content if not the
             // same
-            window.location.reload();
+            //window.location.reload();
             initFunctionality();
         // }
         }
