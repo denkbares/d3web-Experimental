@@ -7,7 +7,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -30,6 +33,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 	// path of the local dot-Installation
+	// private final static String dotInstallation = "/usr/local/bin/dot";
 	private final static String dotInstallation = "D:\\Graphviz\\bin\\dot";
 
 	// section
@@ -51,8 +55,11 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 	// paths
 	private String realPath;
-	private final String tmpPath = "KnowWEExtension\\tmp\\";
+	private final String tmpPath;
+	private static final String TMP_FOLDER = "tmp";
+	private static final String KNOWWEEXTENSION_FOLDER = "KnowWEExtension";
 	private String path;
+	private static String FILE_SEPARATOR = System.getProperty("file.separator");
 
 	// sources for the dot-file
 	private String dotSource;
@@ -61,6 +68,10 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 	// appearances
 	private final String outerLabel = "[ shape=\"none\" fontsize=\"0\" fontcolor=\"white\" ];\n";
+
+	public OntoVisTypeRenderer() {
+		tmpPath = KNOWWEEXTENSION_FOLDER + FILE_SEPARATOR + TMP_FOLDER + FILE_SEPARATOR;
+	}
 
 	@Override
 	public void renderContents(Section<?> section, UserContext user, StringBuilder string) {
@@ -72,7 +83,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		ServletContext servletContext = user.getServletContext();
 		if (servletContext == null) return; // at wiki startup only
 		realPath = servletContext.getRealPath("");
-		path = realPath + "\\" + tmpPath;
+		path = realPath + FILE_SEPARATOR + tmpPath;
 		dotSource = "digraph finite_state_machine {\n";
 		dotSourceLabel = new LinkedHashMap<String, String>();
 		dotSourceRelations = new LinkedHashMap<String, String>();
@@ -268,9 +279,9 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		String fontsize = "14";
 		String shape = "ellipse";
 
-		String askClass = "ASK { lns:" + concept + " rdf:type owl:Class}";
+		String askClass = "ASK { lns:" + urlDecode(concept) + " rdf:type owl:Class}";
 		boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
-		String askProperty = "ASK { lns:" + concept + " rdf:type owl:Property}";
+		String askProperty = "ASK { lns:" + urlDecode(concept) + " rdf:type owl:Property}";
 		boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
 
 		if (isClass) {
@@ -387,13 +398,13 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 		writeDot(dot);
 		// create svg
-		String command = dotInstallation + " \"" + dot.getAbsolutePath() + "\"" +
-				" -Tsvg -o\"" + svg.getAbsolutePath() + "\"";
+		String command = dotInstallation + " " + dot.getAbsolutePath() +
+				" -Tsvg -o " + svg.getAbsolutePath();
 		createFileOutOfDot(svg, dot, command);
 
 		// create png
-		command = dotInstallation + " \"" + dot.getAbsolutePath() + "\"" +
-				" -Tpng -o\"" + png.getAbsolutePath() + "\"";
+		command = dotInstallation + " " + dot.getAbsolutePath() +
+				" -Tpng -o " + png.getAbsolutePath();
 		createFileOutOfDot(png, dot, command);
 		prepareSVG(svg);
 	}
@@ -404,8 +415,9 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param dot
 	 */
 	private void writeDot(File dot) {
-		FileWriter writer;
 		try {
+			checkWriteable(dot);
+			FileWriter writer;
 			writer = new FileWriter(dot);
 			writer.append(dotSource);
 			writer.flush();
@@ -417,36 +429,71 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	}
 
 	/**
+	 * Check if the specified file and the required folder structure can be
+	 * written. This prevents failures later on when the pdf will be created. If
+	 * the file cannot be written an {@link IOException} is thrown.
+	 * 
+	 * @created 20.04.2011
+	 * @param file the file to be written
+	 * @throws IOException if the file cannot be written
+	 */
+	private static void checkWriteable(File file) throws IOException {
+		// create/check target output folder
+		File parent = file.getAbsoluteFile().getParentFile();
+		parent.mkdirs();
+		if (!parent.exists()) {
+			throw new IOException(
+					"failed to create non-existing parent folder: " + parent.getCanonicalPath());
+		}
+		// if there is already a file that cannot be overwritten,
+		// throw an exception
+		if (file.exists() && !file.canWrite()) {
+			throw new IOException(
+					"output file cannot be written: " + file.getCanonicalPath());
+		}
+
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			}
+			catch (IOException io) {
+				throw new IOException(
+						"output file could not be created: " + file.getCanonicalPath());
+			}
+		}
+	}
+
+	/**
 	 * 
 	 * @created 20.08.2012
 	 * @param file
 	 * @param dot
 	 * @param command
 	 */
-	private void createFileOutOfDot(File file, File dot, String command) {
+	private void createFileOutOfDot(File file, File dot, String command) throws IOException {
+		checkWriteable(file);
+		checkReadable(dot);
 		try {
-			Runtime.getRuntime().exec(command);
-			boolean fileFinished = file.exists();
-			int time = 0;
-			int timeout = 8000;
-
-			// test if file is finished yet, if not sleep thread until the file
-			// is finished or a timeout is reached
-			loop: while (!fileFinished) {
-				Thread.sleep(100);
-				time += 100;
-				fileFinished = file.exists();
-				if (time == timeout) {
-					break loop;
-				}
+			Process process = Runtime.getRuntime().exec(command);
+			process.waitFor();
+			int exitValue = process.exitValue();
+			if (exitValue != 0) {
+				printStream(process.getErrorStream());
+				throw new IOException("Command could not successfully be executed: " + command);
 			}
-		}
-		catch (IOException e) {
-			e.printStackTrace();
+
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void printStream(InputStream str) throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(str));
+		String inputLine;
+		while ((inputLine = in.readLine()) != null)
+			System.out.println(inputLine);
+		in.close();
 	}
 
 	/**
@@ -460,6 +507,25 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 				+ "." + type;
 		File f = new File(filename);
 		return f;
+	}
+
+	/**
+	 * Checks if the specified file can be read. If not an {@link IOException}
+	 * is thrown.
+	 * 
+	 * @created 20.04.2011
+	 * @param file the file to read from
+	 * @throws IOException if the file cannot be read
+	 */
+	private static void checkReadable(File file) throws IOException {
+		if (!file.exists()) {
+			throw new FileNotFoundException(
+					"file does not exist: " + file.getCanonicalPath());
+		}
+		if (!file.canRead()) {
+			throw new IOException(
+					"file cannot be read:" + file.getCanonicalPath());
+		}
 	}
 
 	/**
@@ -492,7 +558,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param request
 	 */
 	private void addSuccessors(String concept, String request) {
-		String query = "SELECT ?y ?z WHERE { lns:" + concept
+		String query = "SELECT ?y ?z WHERE { lns:" + urlDecode(concept)
 				+ " ?y ?z.}";
 		ClosableIterator<QueryRow> result =
 				Rdf2GoCore.getInstance().sparqlSelectIt(
@@ -512,9 +578,9 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 				continue loop;
 			}
 
-			String askClass = "ASK { lns:" + z + " rdf:type owl:Class}";
+			String askClass = "ASK { lns:" + urlDecode(z) + " rdf:type owl:Class}";
 			boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
-			String askProperty = "ASK { lns:" + y + " rdf:type rdf:Property}";
+			String askProperty = "ASK { lns:" + urlDecode(y) + " rdf:type rdf:Property}";
 			boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
 			String type = "basic";
 
@@ -554,7 +620,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param request
 	 */
 	private void addPredecessors(String concept, String request) {
-		String query = "SELECT ?x ?y WHERE { ?x ?y lns:" + concept + "}";
+		String query = "SELECT ?x ?y WHERE { ?x ?y lns:" + urlDecode(concept) + "}";
 		ClosableIterator<QueryRow> result =
 				Rdf2GoCore.getInstance().sparqlSelectIt(
 						query);
@@ -573,9 +639,9 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 				continue loop;
 			}
 
-			String askClass = "ASK { lns:" + x + " rdf:type owl:Class}";
+			String askClass = "ASK { lns:" + urlDecode(x) + " rdf:type owl:Class}";
 			boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
-			String askProperty = "ASK { lns:" + y + " rdf:type rdf:Property}";
+			String askProperty = "ASK { lns:" + urlDecode(y) + " rdf:type rdf:Property}";
 			boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
 			String type = "basic";
 
@@ -618,7 +684,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param request
 	 */
 	private void addOutgoingEdgesSuccessors(String concept, String request) {
-		String query = "SELECT ?y ?z WHERE { lns:" + concept
+		String query = "SELECT ?y ?z WHERE { lns:" + urlDecode(concept)
 				+ " ?y ?z.}";
 		ClosableIterator<QueryRow> result =
 				Rdf2GoCore.getInstance().sparqlSelectIt(
@@ -649,7 +715,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param request
 	 */
 	private void addOutgoingEdgesPredecessors(String concept, String request) {
-		String query = "SELECT ?x ?y WHERE { ?x ?y lns:" + concept + "}";
+		String query = "SELECT ?x ?y WHERE { ?x ?y lns:" + urlDecode(concept) + "}";
 		ClosableIterator<QueryRow> result =
 				Rdf2GoCore.getInstance().sparqlSelectIt(
 						query);
@@ -670,6 +736,17 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		}
 	}
 
+	private static String urlDecode(String s) {
+		try {
+			return URLDecoder.decode(s, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	/**
 	 * 
 	 * @created 20.08.2012
@@ -684,6 +761,11 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		String shape;
 		String fontcolor;
 		String fontsize;
+
+		from = urlDecode(from);
+		to = urlDecode(to);
+		relation = urlDecode(relation);
+
 		if (type.equals("class")) {
 			// Class Label Attributes
 			shape = "rectangle";
@@ -766,6 +848,10 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		String arrowhead = "none";
 		String color = "#8b8989";
 		String style = "dashed";
+
+		from = urlDecode(from);
+		to = urlDecode(to);
+		relation = urlDecode(relation);
 
 		String newLineLabelKey;
 		if (predecessor) {
