@@ -620,7 +620,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param request
 	 */
 	private void addPredecessors(String concept, String request) {
-		String query = "SELECT ?x ?y WHERE { ?x ?y " + createSparqlURI(concept) + "}";
+		String query = "SELECT ?x ?y WHERE { ?x ?y " + createSparqlURI(concept) + ". }";
 		ClosableIterator<QueryRow> result =
 				Rdf2GoCore.getInstance().sparqlSelectIt(
 						query);
@@ -737,6 +737,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	}
 
 	private static String createSparqlURI(String name) {
+		name = name.replaceAll(" ", "+");
 		if (name.contains("+")) {
 			String localNamespace = Rdf2GoCore.getInstance().getLocalNamespace();
 
