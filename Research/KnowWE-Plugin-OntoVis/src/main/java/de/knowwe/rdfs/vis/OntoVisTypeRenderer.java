@@ -33,8 +33,8 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 	// path of the local dot-Installation
-	// private final static String dotInstallation = "/usr/local/bin/dot";
-	private final static String dotInstallation = "D:\\Graphviz\\bin\\dot";
+	private final static String dotInstallation = "/usr/local/bin/dot";
+	// private final static String dotInstallation = "D:\\Graphviz\\bin\\dot";
 
 	// section
 	private Section<?> section;
@@ -279,9 +279,9 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		String fontsize = "14";
 		String shape = "ellipse";
 
-		String askClass = "ASK { lns:" + urlDecode(concept) + " rdf:type owl:Class}";
+		String askClass = "ASK { " + createSparqlURI(concept) + " rdf:type owl:Class}";
 		boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
-		String askProperty = "ASK { lns:" + urlDecode(concept) + " rdf:type owl:Property}";
+		String askProperty = "ASK { " + createSparqlURI(concept) + " rdf:type owl:Property}";
 		boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
 
 		if (isClass) {
@@ -558,7 +558,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param request
 	 */
 	private void addSuccessors(String concept, String request) {
-		String query = "SELECT ?y ?z WHERE { lns:" + urlDecode(concept)
+		String query = "SELECT ?y ?z WHERE { " + createSparqlURI(concept)
 				+ " ?y ?z.}";
 		ClosableIterator<QueryRow> result =
 				Rdf2GoCore.getInstance().sparqlSelectIt(
@@ -578,9 +578,9 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 				continue loop;
 			}
 
-			String askClass = "ASK { lns:" + urlDecode(z) + " rdf:type owl:Class}";
+			String askClass = "ASK { " + createSparqlURI(z) + " rdf:type owl:Class}";
 			boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
-			String askProperty = "ASK { lns:" + urlDecode(y) + " rdf:type rdf:Property}";
+			String askProperty = "ASK { " + createSparqlURI(y) + " rdf:type rdf:Property}";
 			boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
 			String type = "basic";
 
@@ -620,7 +620,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param request
 	 */
 	private void addPredecessors(String concept, String request) {
-		String query = "SELECT ?x ?y WHERE { ?x ?y lns:" + urlDecode(concept) + "}";
+		String query = "SELECT ?x ?y WHERE { ?x ?y " + createSparqlURI(concept) + "}";
 		ClosableIterator<QueryRow> result =
 				Rdf2GoCore.getInstance().sparqlSelectIt(
 						query);
@@ -639,9 +639,9 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 				continue loop;
 			}
 
-			String askClass = "ASK { lns:" + urlDecode(x) + " rdf:type owl:Class}";
+			String askClass = "ASK { " + createSparqlURI(x) + " rdf:type owl:Class}";
 			boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
-			String askProperty = "ASK { lns:" + urlDecode(y) + " rdf:type rdf:Property}";
+			String askProperty = "ASK { " + createSparqlURI(y) + " rdf:type rdf:Property}";
 			boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
 			String type = "basic";
 
@@ -684,7 +684,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param request
 	 */
 	private void addOutgoingEdgesSuccessors(String concept, String request) {
-		String query = "SELECT ?y ?z WHERE { lns:" + urlDecode(concept)
+		String query = "SELECT ?y ?z WHERE { " + createSparqlURI(concept)
 				+ " ?y ?z.}";
 		ClosableIterator<QueryRow> result =
 				Rdf2GoCore.getInstance().sparqlSelectIt(
@@ -715,7 +715,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param request
 	 */
 	private void addOutgoingEdgesPredecessors(String concept, String request) {
-		String query = "SELECT ?x ?y WHERE { ?x ?y lns:" + urlDecode(concept) + "}";
+		String query = "SELECT ?x ?y WHERE { ?x ?y " + createSparqlURI(concept) + "}";
 		ClosableIterator<QueryRow> result =
 				Rdf2GoCore.getInstance().sparqlSelectIt(
 						query);
@@ -736,9 +736,26 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		}
 	}
 
-	private static String urlDecode(String s) {
+	private static String createSparqlURI(String name) {
+		if (name.contains("+")) {
+			String localNamespace = Rdf2GoCore.getInstance().getLocalNamespace();
+
+			return "<" + localNamespace + name + ">";
+		}
+
 		try {
-			return URLDecoder.decode(s, "UTF-8");
+			return "lns:" + URLDecoder.decode(name, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private static String urlDecode(String name) {
+		try {
+			return URLDecoder.decode(name, "UTF-8");
 		}
 		catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
