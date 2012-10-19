@@ -29,7 +29,7 @@
 
 .bgcell{background: white; border: 2px solid white;}
 
-.buttoncell{min-width: 50px; padding: 5px;}
+.buttoncell{min-width: 50px; padding-left: 10px; }
 
 .spacercell{min-width: 20px;}
 
@@ -45,7 +45,7 @@ input{border: 1px dotted darkgrey;
     width: 240px;
     padding-left: 5px;}
 
-.imgButtonQuad img{margin-top: 8px; width: 50px; height: 50px;}
+.imgButtonQuad img{ width: 50px; height: 50px;}
 
 .spacerow{height: 10px;}
 
@@ -96,13 +96,7 @@ input{border: 1px dotted darkgrey;
     top: 85px;
     width: 50px;}
 
-#UploadStatus{font-family: Verdana;  font-size: 0.7em;
-    margin-top: 5px;
-    padding-left: 15px; color: darkslateblue;}
 
-#UploadError{font-family: Verdana;  font-size: 0.7em;
-    margin-top: 5px;
-    padding-left: 15px; color: darkred; font-weight: bold;}
 
 #latestDialogLink{display: none; font-family: Verdana;  font-size: 0.7em;
     margin-top: 5px;
@@ -138,3 +132,17 @@ input{border: 1px dotted darkgrey;
 
 .row a{font-family: Verdana;  font-size: 0.8em;
     margin-top: 5px; color: darkslateblue; padding-right: 10px; padding-left:10px;}
+
+.uploadStatusOK{font-family: Verdana;  font-size: 0.7em;
+    margin-top: 5px;
+    padding-left: 15px; color: darkslateblue;}
+
+.uploadStatusERR{font-family: Verdana;  font-size: 0.7em;
+    margin-top: 5px;
+    padding-left: 15px; color: darkred; font-weight: bold;}
+
+#UploadStatus{text-align: right; padding: 5px; height: 10px;}
+
+#UploadSpacer{width: 200px; height: 20px; padding-left: 10px; 
+    padding-right: 10px; 
+    padding-top: 0px; padding-bottom: 5px;}

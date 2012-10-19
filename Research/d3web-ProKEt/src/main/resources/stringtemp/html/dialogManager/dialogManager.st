@@ -20,19 +20,21 @@
 
 <body>
 <div id="docloader">
-
+    <div id="actionleftcol" class = "cell">
+    
     <div id="dlUploadLabelRow" class="row">
-        <div id="uploaderLabel" class="cell labelcell labelcellFirstRow">Hochladen</div>
+        <div id="uploaderLabel" class="cell labelcell labelcellFirstRow">Bereitstellen</div>
     </div>
 
     <div class="row" id="uploadRow">
+        <div id="rowwrappercell">
         <div class="cell selectcell firstcell">
             $FileBrowser()$
         </div>
         
-        <div class="cell">
+        <div class="cell lastcell">
             <div id="uploadParseButtons" class="row">
-                <div id="span2buttons" class="cell lastcell">
+                <div id="span2buttons" class="cell">
                     <div class="cell buttoncell">
                         $ImgButton(src="img/Parse.png", 
                         alt="Parse knowledge base",
@@ -47,51 +49,67 @@
                     </div>
                 </div>
             </div>
-            <div id="uploadStatusRow" class="row">
-                <div id="UploadStatus"></div> 
+            <div id="uploadSpacerRow" class="row">
+                <div id="UploadSpacer"></div> 
             </div>
         </div>
-    </div>
-
-    
-
-    <div id="dlActionsLabelRow" class="row">
-        <div id="actionsLabel" class="cell labelcell">Aktionen: </div>
-        <div id="docloadKBName" class="cell labelcell"> $if(kbname)$ $kbname$ $else$ / $endif$</div>  
-    </div>
-
-
-    <div class="row">
-        <div class="cell selectcell firstcell">$DialogTypeBrowser()$</div>
-        <div id="span2buttons" class="cell lastcell">
-            <div class="cell buttoncell">
-                $ImgButton(src="img/ExecuteInactive.png", 
-                            alt="Execute Dialog",
-                            tt="Execute Dialog",
-                            click="assembleDialog()")$
-            </div>               
-            <div class="cell"></div>
         </div>
     </div>
-    
-    <div class="row">
-        <a href="" id="latestDialogLink" target="_blank"></a> 
+
+    <div id="uploadStatusRow" class="row">
+        <div id="UploadStatus" class="uploadStatusOK cell"></div> 
     </div>
 
 
-    <div class="row spacerow" > </div>
-    
+
+    <div id="dlActionsLabelRow" class="row">
+        <div id="actionsLabel" class="cell labelcell">Testen </div>
+    </div>
+
+
     <div class="row">
-        <div class="cell selectcell firstcell">$DomainBrowser()$</div>
-        <div id="span2buttons" class="cell lastcell">
-            <div class="cell buttoncell">
+        <div class="cell buttoncell firstcell">
+            <div class="cell">
+                $ImgButton(src="img/AssembleRun.png", 
+                            alt="Assemble and Run Dialog",
+                            tt="Assemble and Run Dialog",
+                            click="assembleDialog()")$
+            </div>
+            <div class="cell spacercell">
+            </div>
+            <div class="cell">
                 $ImgButton(src="img/StoreInactive.png", 
                             alt="Store",
                             tt="Store Knowledge Base to Repository",
                             click="storeDialogToUsersList();")$
             </div>
-            <div class="cell"></div>
         </div>
+        <div class="cell buttoncell lastcell">    
+        </div>
+    </div>
+    
+    </div>
+
+    <div id="spacecol" class="cell">
+    </div>
+
+    <div id="datarightcol" class="cell">
+        <div id="kbviewer">
+            <div id="actionsLabel" class="cell labelcell">Wissensbasen</div>
+        </div>
+
+        <div id="specviewer">
+            <div id="actionsLabel" class="cell labelcell">UI Spezifikationen</div>
+        </div>
+
+        <div id="dialoglinkviewer">
+            <div id="latestDialogLink" style="display: none"></div>
+            <div id="actionsLabel" class="cell labelcell">Dialog Links</div>
+            <div id="dialoglinklist">
+            </div>
+        </div>
+
+
     </div>
 </div>
 </body>

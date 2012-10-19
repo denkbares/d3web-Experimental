@@ -125,32 +125,9 @@ public class DialogManager extends HttpServlet {
             throws IOException {
 
 
-        File template = FileUtils.getResourceFile(
-                "/stringtemp/html/dialogManager.st");
         StringTemplate st =
-                TemplateUtils.getStringTemplate("dialogManager", "html");
+                TemplateUtils.getStringTemplate("dialogManager/dialogManager", "html");
 
-
-        // First assemble the stringtemplate base paths within the servlet
-        //ServletContext context = request.getSession().getServletContext();
-        //String realStPath = context.getRealPath(request.getContextPath())
-        //      + "/WEB-INF/classes/stringtemp/html";
-
-        // this is the topmost ST directory
-        //StringTemplateGroup stg =
-        //new StringTemplateGroup("stGroup", realStPath);
-
-        // the subdirectory which contains the specific framing template
-        // for the document loader
-        //StringTemplateGroup stg_sub =
-        //      new StringTemplateGroup("stGroup", realStPath + "/dialogManager");
-
-        // need to tell the template dirs of their inheritance, so within
-        // st files we just can normally call other templates
-        //stg_sub.setSuperGroup(stg);
-
-        // Retrieve the basic DialogManager template
-        //StringTemplate st = stg_sub.getInstanceOf("dialogManager");
 
         // get the css file for styling the DialogManager Module
         File css = FileUtils.getResourceFile("/stringtemp/css/diaManStyle.st");
@@ -290,17 +267,17 @@ public class DialogManager extends HttpServlet {
 
         if (successfulParsed) {
             writer.append("success");
-        }
+        } 
     }
 
     /**
-     * Call the converter which transfers compiles the .doc file 
+     * Call the converter which  compiles the .doc file into d3web
      * @param docName
      * @return 
+     * TODO: separate compiling to HTML Error report and parsing
      */
     private boolean parseKBDoc(String docName, HttpSession http) {
 
-        boolean success = false;
         Html2KnowWECompiler compiler = new converter.Html2KnowWECompiler();
 
         String upPath = GLOBSET.getUploadFilesBasePath();
@@ -330,11 +307,12 @@ public class DialogManager extends HttpServlet {
         System.out.println("PARSER: \n"
                 + upPath + "\n" + doc + "\n" + errFile + "\n" + tmp + "\n"
                 + d3web + "\n" + knowwe + "\n");
-        System.out.println("PARSER File Permissions: \n"
+        /*System.out.println("PARSER File Permissions: \n"
                 + "tmpF: " + tmpF.canExecute() + tmpF.canWrite() + tmpF.canRead() + "\n"
                 + "d3wF: " + d3wF.canExecute() + d3wF.canWrite() + d3wF.canRead() + "\n"
-                + "kwF: " + kwF.canExecute() + kwF.canWrite() + kwF.canRead());
+                + "kwF: " + kwF.canExecute() + kwF.canWrite() + kwF.canRead());*/
 
+        // TODO: wie komme ich an das Error.html? Flag? Gleich das File zurückgeben?
         try {
             compiler.compileTo3web(doc, errFile, tmp, d3web, knowwe);
             //de.uniwue.abstracttools.StringUtils.writefileString(knowwe, knowwe);

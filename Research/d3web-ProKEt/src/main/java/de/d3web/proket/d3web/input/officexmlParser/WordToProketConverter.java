@@ -1,6 +1,11 @@
-/**package de.d3web.proket.d3web.input.officexmlParser;
+package de.d3web.proket.d3web.input.officexmlParser;
 
-import de.d3web.proket.d3web.input.officexmlParser.toolkit.*;
+//import de.d3web.proket.d3web.input.officexmlParser.toolkit.*;
+import de.uniwue.abstracttools.StringUtils;
+import de.uniwue.abstracttools.TreeNode;
+import de.uniwue.abstracttools.xml.XmlElement;
+import de.uniwue.abstracttools.xml.XmlToTreeReader;
+/*import de.uniwue.abstracttools.xml.XmlTree;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -279,4 +284,5 @@ public class WordToProketConverter {
 	
 	
 	
-}*/
+}
+*/

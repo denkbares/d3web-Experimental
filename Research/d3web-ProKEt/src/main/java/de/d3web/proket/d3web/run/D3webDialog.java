@@ -146,9 +146,9 @@ public class D3webDialog extends HttpServlet {
 
         d3webParser = new D3webXMLParser();
 
-        String realStPath = servletcontext 
+        String realStPath = servletcontext
                 + "WEB-INF/classes/stringtemp/html";
-        
+
         StringTemplateUtils.initializeStringTemplateStructure(realStPath);
     }
 
@@ -412,6 +412,8 @@ public class D3webDialog extends HttpServlet {
             }
         } else if (action.equalsIgnoreCase("addFactITree")) {
             addFactITree(request, response, httpSession);
+        } else if (action.equalsIgnoreCase("rerenderSubtree")) {
+            rerenderSubtree(request, response, httpSession);
         } else if (action.equalsIgnoreCase("loadcaseClear")) {
             loadCaseClear(request, response, httpSession);
         } else {
@@ -678,9 +680,12 @@ public class D3webDialog extends HttpServlet {
             for (TerminologyObject to : newAbstractions) {
                 Question qa =
                         D3webConnector.getInstance().getKb().getManager().searchQuestion(to.getName());
-                Value va = d3webSession.getBlackboard().getValue((ValueObject) qa);
-                int doubleAsInt = (int) Double.parseDouble(va.toString());
-                ServletLogUtils.logQuestionValue(qa.getName(), Integer.toString(doubleAsInt), logtime, logger);
+                        Value va = d3webSession.getBlackboard().getValue((ValueObject) qa);
+                if (qa instanceof QuestionNum) {
+                    int doubleAsInt = (int) Double.parseDouble(va.toString());
+                    ServletLogUtils.logQuestionValue(qa.getName(), Integer.toString(doubleAsInt), logtime, logger);
+                }
+                ServletLogUtils.logQuestionValue(qa.getName(), va.toString(), logtime, logger);
             }
         }
     }
@@ -1698,6 +1703,12 @@ public class D3webDialog extends HttpServlet {
     }
 
     protected void addFactITree(HttpServletRequest request,
+            HttpServletResponse response, HttpSession httpSession)
+            throws IOException {
+        // overwritten by ClariHie Dialog
+    }
+    
+     protected void rerenderSubtree(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
         // overwritten by ClariHie Dialog

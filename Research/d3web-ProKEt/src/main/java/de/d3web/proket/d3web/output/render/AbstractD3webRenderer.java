@@ -670,8 +670,8 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
                 // check default root's children
                 for (TerminologyObject toc : to.getChildren()) {
-                    System.out.println(toc.getName());
-                    System.out.println(toc.getClass());
+                    //System.out.println(toc.getName());
+                    //System.out.println(toc.getClass());
 
                     // if we have direct children here, e.g. after parsing 
                     // word specification files were the first child is a
