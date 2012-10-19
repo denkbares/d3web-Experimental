@@ -33,6 +33,7 @@ import de.d3web.core.session.Value;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
+import de.knowwe.core.utils.Strings;
 
 /**
  * Get the HTML-output for debugging a question.
@@ -57,19 +58,19 @@ public class DebuggerQuestionRenderer {
 		else valueText = value.toString();
 
 		if (q instanceof QuestionOC) {
-			buffer.append("<span class='debuggerQuestionOC'><img src='KnowWEExtension/images/questionOC.gif' /> "
+			buffer.append("<span class='debuggerQuestionOC'> "
 					+ q.getName() + "</span>");
 		}
 		else if (q instanceof QuestionMC) {
-			buffer.append("<span class='debuggerQuestionMC'><img src='KnowWEExtension/images/questionMC.gif' /> "
+			buffer.append("<span class='debuggerQuestionMC'> "
 					+ q.getName() + "</span>");
 		}
 		else if (q instanceof QuestionNum) {
-			buffer.append("<span class='debuggerQuestionNum'><img src='KnowWEExtension/images/questionNum.gif' /> "
+			buffer.append("<span class='debuggerQuestionNum'> "
 					+ q.getName() + "</span>");
 		}
 		else if (q instanceof QuestionText) {
-			buffer.append("<span class='debuggerQuestionText'><img src='KnowWEExtension/images/questionText.gif' /> "
+			buffer.append("<span class='debuggerQuestionText'> "
 					+ q.getName() + "</span>");
 		}
 		// Build dropdownmenu
@@ -93,7 +94,7 @@ public class DebuggerQuestionRenderer {
 
 		buffer.append("</div>");
 
-		return buffer.toString();
+		return Strings.maskHTML(buffer.toString());
 	}
 
 	/**
@@ -118,7 +119,7 @@ public class DebuggerQuestionRenderer {
 
 			buffer.append(">" + choice + "</p>");
 		}
-		return buffer.toString();
+		return Strings.maskHTML(buffer.toString());
 	}
 
 	/**
@@ -149,7 +150,7 @@ public class DebuggerQuestionRenderer {
 			}
 			buffer.append(">" + choice + "</p>");
 		}
-		return buffer.toString();
+		return Strings.maskHTML(buffer.toString());
 	}
 
 	/**
@@ -185,7 +186,7 @@ public class DebuggerQuestionRenderer {
 		}
 		buffer.append("<span class='dQnumError'></span></p>");
 
-		return buffer.toString();
+		return Strings.maskHTML(buffer.toString());
 	}
 
 	/**
@@ -202,6 +203,6 @@ public class DebuggerQuestionRenderer {
 				+ "onClick='KNOWWE.plugin.debuggr.questionTextClicked(this, " + inside
 				+ ");' /></p>");
 
-		return buffer.toString();
+		return Strings.maskHTML(buffer.toString());
 	}
 }

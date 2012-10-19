@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.d3web.debugger.actions;
 
@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.d3web.abstraction.ActionSetValue;
+import de.d3web.core.inference.PSAction;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.inference.condition.NoAnswerException;
@@ -30,6 +32,11 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
+import de.d3web.indication.ActionContraIndication;
+import de.d3web.indication.ActionInstantIndication;
+import de.d3web.indication.ActionNextQASet;
+import de.d3web.indication.ActionSuppressAnswer;
+import de.d3web.scoring.ActionHeuristicPS;
 import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
@@ -165,7 +172,7 @@ public class DebuggerMainAction extends AbstractAction {
 				}
 
 				buffer.append(" ruleid='" + r.hashCode() + "' kbid='" + kb.getId() + "'>"
-						+ drr.renderAction(r.getAction()) + "</li>");
+						+ renderAction(r.getAction()) + "</li>");
 			}
 			buffer.append("</ul>");
 
@@ -195,13 +202,56 @@ public class DebuggerMainAction extends AbstractAction {
 					}
 
 					buffer.append(" ruleid='" + r.hashCode() + "' kbid='" + kb.getId() + "'>"
-							+ drr.renderAction(r.getAction()) + "</li>");
+							+ renderAction(r.getAction()) + "</li>");
 				}
 				buffer.append("</ul>");
 			}
 			buffer.append("<div style='clear:both'></div>");
 		}
 		catch (NullPointerException e) {
+		}
+
+		return buffer.toString();
+	}
+
+	/**
+	 * Get the rendering for an action.
+	 */
+	public String renderAction(PSAction action) {
+		StringBuffer buffer = new StringBuffer();
+
+		if (action instanceof ActionHeuristicPS) {
+			ActionHeuristicPS ac = (ActionHeuristicPS) action;
+			buffer.append("<span class='debuggerSolution'>" + ac.getSolution().getName()
+					+ "</span> = " + ac.getScore());
+		}
+		else if (action instanceof ActionContraIndication) {
+			buffer.append(action.toString());
+		}
+		else if (action instanceof ActionSuppressAnswer) {
+			buffer.append(action.toString());
+		}
+		else if (action instanceof ActionInstantIndication) {
+			buffer.append(action.toString());
+		}
+		else if (action instanceof ActionNextQASet) {
+			ActionNextQASet anq = (ActionNextQASet) action;
+			for (int i = 0; i < anq.getQASets().size(); i++) {
+				if (i < anq.getQASets().size() - 1) buffer.append("<span class='debuggerAction'>"
+						+ anq.getQASets().get(i).getName() + "</span>, ");
+				else buffer.append("<span class='debuggerAction'>"
+						+ anq.getQASets().get(i).getName()
+						+ "</span>");
+			}
+		}
+		else if (action instanceof ActionSetValue) {
+			ActionSetValue asv = (ActionSetValue) action;
+			buffer.append("<span class='debuggerAction'>" + asv.getQuestion()
+					+ "</span> = <span class='debuggerValue'>"
+					+ asv.getValue() + "</span>");
+		}
+		else {
+			buffer.append(action.toString());
 		}
 
 		return buffer.toString();

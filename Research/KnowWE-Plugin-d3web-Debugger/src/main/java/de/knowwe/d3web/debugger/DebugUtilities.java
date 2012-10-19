@@ -43,6 +43,7 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author dupke
  */
 public class DebugUtilities {
+
 	/** BackgroundColors for TopNode(Solution) */
 	public static final String COLOR_ESTABLISHED = "#33CC66";
 	public static final String COLOR_SUGGESTED = "#99FF66";
@@ -151,16 +152,16 @@ public class DebugUtilities {
 	/**
 	 * Get the path to the rule's article.
 	 */
-	public static String getRuleResource(Rule r, Session session) {
+	public static Section<RuleAction> getRuleResource(Rule r, Session session) {
 		KnowledgeBase kb = session.getKnowledgeBase();
 		Article kbArticle = null;
 		Rule rule;
 		List<Section<RuleAction>> rules;
-		
+
 		// get the knowledgebase's article
 		for (Article article : Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB).getArticles()) {
-			
+
 			if (article.getTitle().equals(kb.getId())) {
 				kbArticle = article;
 				break;
@@ -176,11 +177,11 @@ public class DebugUtilities {
 				rule = (Rule) KnowWEUtils.getStoredObject(kbArticle, ruleAction,
 							RuleContentType.ruleStoreKey);
 
-				if (rule != null && rule.equals(r)) return article.getTitle();
+				if (rule != null && rule.equals(r)) return ruleAction;
 			}
 		}
 
-		return "";
+		return null;
 	}
 
 }

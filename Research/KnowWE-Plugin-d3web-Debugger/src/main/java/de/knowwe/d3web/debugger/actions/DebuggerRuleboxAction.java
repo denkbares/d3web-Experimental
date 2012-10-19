@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.d3web.debugger.actions;
 
@@ -25,9 +25,13 @@ import de.d3web.core.inference.Rule;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.SessionProvider;
+import de.d3web.we.kdom.rule.ConditionArea;
+import de.d3web.we.kdom.rules.action.RuleAction;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.d3web.debugger.DebugUtilities;
 import de.knowwe.d3web.debugger.renderer.DebuggerRuleRenderer;
 
@@ -51,7 +55,7 @@ public class DebuggerRuleboxAction extends AbstractAction {
 	 * Render the rulebox.
 	 */
 	public String renderRule(UserActionContext context) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		String title = context.getTitle();
 		KnowledgeBase kb = null;
 		try {
@@ -67,9 +71,13 @@ public class DebuggerRuleboxAction extends AbstractAction {
 			buffer.append("<span ruleid='" + ruleid + "'>");
 			for (Rule r : rules) {
 				if (r.hashCode() == ruleid) {
-					ruleArticle = DebugUtilities.getRuleResource(r, session);
+					Section<RuleAction> ruleAction = DebugUtilities.getRuleResource(r, session);
+					Section<ConditionArea> conditionActionRuleSection = Sections.findAncestorOfType(
+							ruleAction, ConditionArea.class);
+					ruleArticle = ruleAction.getTitle();
 					if (ruleArticle.equals("")) ruleArticle = context.getTitle();
-					buffer.append(drr.renderCondition(r.getCondition(), session, title, true));
+					drr.renderConditionSection(conditionActionRuleSection, r.getCondition(),
+							session, title, true, buffer, context);
 					buffer.append("<a class='ruleLink' href='Wiki.jsp?page="
 							+ ruleArticle + "'></a>");
 					break;
