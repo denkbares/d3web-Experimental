@@ -35,8 +35,46 @@ KNOWWE.plugin.semantic = function() {
 KNOWWE.plugin.semantic.actions = function() {
 
 	return {
-
-	}
+		refreshSparqlRenderer : function() {
+        	var fromLine = jq$('#fromLine').val();
+			var search = /^\d+$/;
+			var found = search.test(fromLine);
+			if(!(found)){
+				jq$('#fromLine').val('');
+				return;
+			}
+			document.cookie = "FromLine=" + fromLine;
+			var showLines = jq$('#showLines').val();
+			document.cookie = "ShowLines=" + showLines;
+			KNOWWE.plugin.d3webbasic.actions.updateNode(jq$('.type_sparql').first().attr("id"), KNOWWE.helper.gup('page'), null);
+		},
+		
+		forward : function(){
+			var showLines = jq$('#showLines').val();
+			document.cookie = "ShowLines=" + showLines;
+			var fromLine = jq$('#fromLine').val();
+			var newFromLine = parseInt(fromLine)+parseInt(showLines)
+			document.cookie = "FromLine=" + newFromLine;
+			KNOWWE.plugin.d3webbasic.actions.updateNode(jq$('.type_sparql').first().attr("id"), KNOWWE.helper.gup('page'), null);
+		},  
+		
+		back : function(){
+			var showLines = jq$('#showLines').val();
+			document.cookie = "ShowLines=" + showLines;
+			var fromLine = jq$('#fromLine').val();
+			var newFromLine = parseInt(fromLine)-parseInt(showLines)
+			document.cookie = "FromLine=" + newFromLine;
+			KNOWWE.plugin.d3webbasic.actions.updateNode(jq$('.type_sparql').first().attr("id"), KNOWWE.helper.gup('page'), null);
+		},
+		
+		begin : function(){
+			var showLines = jq$('#showLines').val();
+			document.cookie = "ShowLines=" + showLines;
+			var fromLine = 1;
+			document.cookie = "FromLine=" + fromLine;
+			KNOWWE.plugin.d3webbasic.actions.updateNode(jq$('.type_sparql').first().attr("id"), KNOWWE.helper.gup('page'), null);
+		},  
+	} 
 }();
 
 (function init() {

@@ -116,6 +116,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="3" />
 		<parameter id="scope" value="root" />
+		<parameter id="css" value="sparql.css" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
@@ -192,5 +193,6 @@
 		<parameter id="scope" value="DefaultMarkupType" />
 	</extension>
 	-->
+	
 
 </plugin>

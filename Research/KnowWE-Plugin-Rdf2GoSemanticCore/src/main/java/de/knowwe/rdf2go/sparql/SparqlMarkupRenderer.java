@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.Cookie;
+
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryResultTable;
 
@@ -46,8 +48,26 @@ public class SparqlMarkupRenderer implements Renderer {
 				result.append(Strings.maskHTML("<tt>" + sec.getText() + "</tt>"));
 			}
 			else {
+
 				Section<SparqlMarkupType> markupSection = Sections.findAncestorOfType(sec,
 						SparqlMarkupType.class);
+
+				// Navigation bar is (at the moment) only displayed if
+				// explicitly activated in markup
+				String navigation = DefaultMarkupType.getAnnotation(markupSection,
+						SparqlMarkupType.NAVIGATION);
+				if ((navigation != null) && navigation.equals("true")) {
+					// do not show navigation bar if LIMIT or OFFSET is set in
+					// markup
+					if (!(isLimitSet(markupSection) || (isOffsetSet(markupSection)))) {
+						int fromLine = getSelectedFromLine(user);
+						int showLines = getShowLines(user);
+						result.append(renderTableSizeSelector(showLines));
+						result.append(renderNavigation(fromLine, showLines));
+						sparqlString += addOffsetandLimitToSparqlString(fromLine, showLines);
+					}
+				}
+
 				String rawOutput = DefaultMarkupType.getAnnotation(markupSection,
 						SparqlMarkupType.RAW_OUTPUT);
 				QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
@@ -93,6 +113,120 @@ public class SparqlMarkupRenderer implements Renderer {
 
 		newSparqlString.append(sparqlString.subSequence(lastEnd, sparqlString.length()));
 		sparqlString = newSparqlString.toString();
+
 		return sparqlString;
 	}
+
+	private String addOffsetandLimitToSparqlString(int offset, int limit) {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(" OFFSET " + offset);
+		sb.append(" LIMIT " + limit);
+
+		return sb.toString();
+	}
+
+	private String renderTableSizeSelector(int selectedSize) {
+		StringBuilder builder = new StringBuilder();
+
+		int[] sizeArray = new int[] {
+				10, 20, 50, 100, 1000, 10000 };
+		builder.append("<div class='toolBar'>");
+		builder.append("<span class=fillText>Show </span>"
+				+ "<select id='showLines'"
+				+ " onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer();\">");
+		for (int size : sizeArray) {
+			if (size == selectedSize) {
+				builder.append("<option selected='selected' value='" + size + "'>"
+						+ size + "</option>");
+			}
+			else {
+				builder.append("<option value='" + size + "'>" + size
+						+ "</option>");
+			}
+		}
+		builder.append("</select><span class=fillText> lines </span> ");
+		builder.append("<div class='toolSeparator'></div>");
+		return Strings.maskHTML(builder.toString());
+	}
+
+	private Object renderNavigation(int from, int selectedSize) {
+		StringBuilder builder = new StringBuilder();
+
+		renderToolbarButton(
+				"begin.png", "KNOWWE.plugin.semantic.actions.begin()",
+				(from > 1), builder);
+		renderToolbarButton(
+				"back.png", "KNOWWE.plugin.semantic.actions.back()",
+				(from > 1), builder);
+		builder.append("<span class=fillText> Lines </span>");
+		builder.append("<input size=3 id='fromLine' type=\"field\" onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer();\" value='"
+				+ from + "'>");
+		builder.append("<span class=fillText> to </span>" + (from + selectedSize - 1));
+		renderToolbarButton(
+				"forward.png", "KNOWWE.plugin.semantic.actions.forward()",
+				true, builder);
+		builder.append("</div>");
+		return Strings.maskHTML(builder.toString());
+	}
+
+	private void renderToolbarButton(String icon, String action, boolean enabled, StringBuilder builder) {
+		int index = icon.lastIndexOf('.');
+		String suffix = icon.substring(index);
+		icon = icon.substring(0, index);
+		if (enabled) {
+			builder.append("<a onclick=\"");
+			builder.append(action);
+			builder.append(";\">");
+		}
+		builder.append("<span class='toolButton ");
+		builder.append(enabled ? "enabled" : "disabled");
+		builder.append("'>");
+		builder.append("<img src='KnowWEExtension/navigation_icons/");
+		builder.append(icon);
+		if (!enabled) builder.append("_deactivated");
+		builder.append(suffix).append("'></img></span>");
+		if (enabled) {
+			builder.append("</a>");
+		}
+	}
+
+	private int getSelectedFromLine(UserContext user) {
+		return Integer.parseInt(getCookie(user, "FromLine", "1"));
+	}
+
+	private int getShowLines(UserContext user) {
+		return Integer.parseInt(getCookie(user, "ShowLines", "20"));
+	}
+
+	private String getCookie(UserContext user, String cookieName, String defaultValue) {
+		if (user != null && user.getRequest() != null && user.getRequest().getCookies() != null) {
+			for (Cookie cookie : user.getRequest().getCookies()) {
+				if (cookie.getName().equals(cookieName)) {
+					return cookie.getValue();
+				}
+			}
+		}
+		return defaultValue;
+	}
+
+	private boolean isOffsetSet(Section<SparqlMarkupType> sec) {
+		return isConstraintSet(sec, "OFFSET");
+	}
+
+	private boolean isLimitSet(Section<SparqlMarkupType> sec) {
+		return isConstraintSet(sec, "LIMIT");
+	}
+
+	private boolean isConstraintSet(Section<SparqlMarkupType> sec, String cons) {
+		if (sec == null) {
+			return false;
+		}
+		String secText = sec.getText();
+		if ((secText.contains("OFFSET")) || (secText.contains("LIMIT"))) {
+			return true;
+		}
+		return false;
+	}
+
 }

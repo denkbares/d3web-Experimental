@@ -1,0 +1,33 @@
+.type_sparql .fillText {
+	color: grey;
+}
+
+.type_sparql .toolBar {
+	display: inline-block;
+}
+
+.type_sparql .toolBar.avoidMenu {
+	padding-right: 40px;
+}
+
+.type_sparql .toolSeparator {
+	display: inline-block;
+	margin-left: 10px;
+	margin-right: 10px;
+	border-left: 2px solid #DDD;
+	height: 10px;
+}
+
+.type_sparql .toolBar .toolButton {
+	position: relative;
+	border: 1px solid white;
+}
+
+.type_sparql .toolBar .toolButton.enabled:hover {
+	border: 1px outset white;
+}
+
+.type_sparql .toolButton IMG {
+	position: relative;
+	top: 3px;
+}

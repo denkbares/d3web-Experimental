@@ -20,17 +20,21 @@
 
 package de.knowwe.rdf2go.sparql;
 
+import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 public class SparqlMarkupType extends DefaultMarkupType {
 
 	public static final String RAW_OUTPUT = "rawOutput";
+	public static final String NAVIGATION = "navigation";
 	private static DefaultMarkup m = null;
 
 	static {
 		m = new DefaultMarkup("sparql");
 		m.addContentType(new SparqlContentType());
+		m.addAnnotation(NAVIGATION, false, "true", "false");
+		m.addAnnotationRenderer(NAVIGATION, NothingRenderer.getInstance());
 		m.addAnnotation(RAW_OUTPUT, false, "true", "false");
 	}
 
