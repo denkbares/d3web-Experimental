@@ -30,8 +30,8 @@
             </div>
             
     </div> 
-    <div class="title t-$fullId$" id="t-$fullId$" onmouseover="showAuxInfo('$fullId$', '$title$')">
-        <div id="solutiontitle-$fullId$" class="solutiontitle">$title$</div>
+    <div class="title t-$fullId$ " id="t-$fullId$" onmouseover="showAuxInfo('$fullId$', '$title$')">
+        <div id="solutiontitle-$fullId$" class="solutiontitle dictClass">$title$</div>
             $Image()$
 		$text$
 		<div id="propagation-$fullId$" class="propagation hide $if(tooltip)$$fullId$-tt-trigger tooltip-trigger$endif$" >

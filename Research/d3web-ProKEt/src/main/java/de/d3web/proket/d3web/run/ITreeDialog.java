@@ -21,6 +21,7 @@ package de.d3web.proket.d3web.run;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
+import de.d3web.core.knowledge.terminology.QContainer;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -36,6 +37,7 @@ import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
+import de.d3web.proket.d3web.output.render.IQuestionD3webRenderer;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
@@ -90,56 +92,95 @@ public class ITreeDialog extends D3webDialog {
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
         String question = request.getParameter("question");
+
+        TerminologyObject q =
+                d3webSession.getKnowledgeBase().getManager().searchQuestion(
+                AbstractD3webRenderer.getObjectNameForId(question));
+        System.out.println(q);
         String value = request.getParameter("value");
 
-        setValue(d3webSession, request, question, value, httpSession);
+        IQuestionD3webRenderer toRenderer =
+                AbstractD3webRenderer.getRenderer(q);
+       
+        // replace the readflow pic with empty, as this is constructed again by
+        // renderer call later
+        writer.append(REPLACEID + "readFlow-" + AbstractD3webRenderer.getID(q));
+        writer.append(REPLACECONTENT);
+        writer.append("");
 
+
+        // get ID and content for question(s) to replace and append
+        writer.append(REPLACEID + AbstractD3webRenderer.getID(q));
+        writer.append(REPLACECONTENT);
+        setValue(d3webSession, request, question, value, httpSession);
         PersistenceD3webUtils.saveCase((String) httpSession.getAttribute("user"), "autosave",
                 d3webSession);
+        TerminologyObject parent = q instanceof QContainer ? d3wcon.getKb().getRootQASet()
+                : D3webUtils.getQuestionnaireAncestor(q);
 
+        // set Locale=2 = english for default
+        int loc = httpSession.getAttribute("locale") != null
+                ? Integer.parseInt(httpSession.getAttribute("locale").toString()) : 2;
 
-        // get the root renderer --> call getRenderer with null
-        //DefaultRootD3webRenderer d3webr =
-          //      (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
+        ContainerCollection cc = new ContainerCollection();
 
-        // new ContainerCollection needed each time to get an updated dialog
-        //ContainerCollection cc = new ContainerCollection();
-        //Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
+        // get the HTML code for rendering the parent containing the to-update element
+        writer.append(
+                toRenderer.renderTerminologyObject(
+                d3webSession, cc, q,
+                parent, loc,
+                httpSession, request));
 
-        //cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
-        //writer.print(cc.html.toString()); // deliver the rendered output
-        writer.append("ITreeSUCCESS");
     }
-
-    /**
-     * For adding date facts in itree
-     *
-     * @param request
-     * @param response
-     * @param httpSession
-     * @throws IOException
-     * @Override
-     */
-    protected void addFactITree(HttpServletRequest request,
+    
+    @Override
+     protected void rerenderSubtree(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
-        
+
+        response.setContentType("text/html; charset=UTF-8");
         PrintWriter writer = response.getWriter();
+
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
+
         String question = request.getParameter("question");
-        String value = request.getParameter("value");
+
+        TerminologyObject q =
+                d3webSession.getKnowledgeBase().getManager().searchQuestion(
+                AbstractD3webRenderer.getObjectNameForId(question));
         
-        
-        PersistenceD3webUtils.saveCase(
-                (String) httpSession.getAttribute("user"),
-                "autosave",
-                d3webSession);
-        
-        D3webUtils.setValueITree(question, value, d3webSession);
-        
-        writer.append("ITreeSUCCESS");
+        IQuestionD3webRenderer toRenderer =
+                AbstractD3webRenderer.getRenderer(q);
+       
+        // replace the readflow pic with empty, as this is constructed again by
+        // renderer call later
+        writer.append(REPLACEID + "readFlow-" + AbstractD3webRenderer.getID(q));
+        writer.append(REPLACECONTENT);
+        writer.append("");
+
+
+        // get ID and content for question(s) to replace and append
+        writer.append(REPLACEID + AbstractD3webRenderer.getID(q));
+        writer.append(REPLACECONTENT);
+        TerminologyObject parent = q instanceof QContainer ? d3wcon.getKb().getRootQASet()
+                : D3webUtils.getQuestionnaireAncestor(q);
+
+        // set Locale=2 = english for default
+        int loc = httpSession.getAttribute("locale") != null
+                ? Integer.parseInt(httpSession.getAttribute("locale").toString()) : 2;
+
+        ContainerCollection cc = new ContainerCollection();
+
+        // get the HTML code for rendering the parent containing the to-update element
+        writer.append(
+                toRenderer.renderTerminologyObject(
+                d3webSession, cc, q,
+                parent, loc,
+                httpSession, request));
+
     }
 
+    
     private void setValue(Session d3webSession, HttpServletRequest request,
             String question, String value, HttpSession httpSession) {
 
@@ -148,27 +189,6 @@ public class ITreeDialog extends D3webDialog {
             handleQuestionValueLogging(
                     request, httpSession, question, value, d3webSession);
         }
-    }
-
-    protected void saveShowStatus(HttpServletRequest request,
-            HttpSession httpSession) {
-
-        Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
-        String parameterQuestion = request.getParameter("question");
-        String q = AbstractD3webRenderer.getObjectNameForId(parameterQuestion);
-        Question qFinal = d3webSession.getKnowledgeBase().getManager().searchQuestion(
-                q == null ? parameterQuestion : q);
-
-
-        /*
-         * if(qFinal.getInfoStore().getValue(ProKEtProperties.ITREESHOWN) !=
-         * null && qFinal.getInfoStore().getValue(ProKEtProperties.ITREESHOWN)
-         * == true ){
-         * qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN, false); }
-         * else { qFinal.getInfoStore().addValue(ProKEtProperties.ITREESHOWN,
-         * true); }
-         */
-
     }
 
     private void handleQuestionValueLogging(HttpServletRequest request,
@@ -191,6 +211,4 @@ public class ITreeDialog extends D3webDialog {
 
         ServletLogUtils.logQuestionValue(question, value, logtime, logger);
     }
-
-   
 }

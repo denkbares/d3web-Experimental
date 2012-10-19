@@ -110,5 +110,7 @@ $if(logging)$
 	$EoSDialog()$
 $endif$
 
+<div id="dict" style="display:none">
+</div>
 
 </body></html>

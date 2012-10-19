@@ -651,23 +651,23 @@ function initFunctionality() {
     $('.ynbutton').unbind('click').click(function(event) {
         if($(this).attr("id").indexOf("ynYes")!=-1){
             if($(this).hasClass("swap")){
-                d3web_answerYesNoHierarchyQuestions($(this), "3");
+                d3web_addFactsITree($(this), "3");
             } else {
-                d3web_answerYesNoHierarchyQuestions($(this), "1");
+                d3web_addFactsITree($(this), "1");
             }
         } else
         if($(this).attr("id").indexOf("ynNo")!=-1){
             if($(this).hasClass("swap")){
-                d3web_answerYesNoHierarchyQuestions($(this), "1");
+                d3web_addFactsITree($(this), "1");
             } else {
-                d3web_answerYesNoHierarchyQuestions($(this), "3");
+                d3web_addFactsITree($(this), "3");
             }
         } else 
         if($(this).attr("id").indexOf("ynUn")!=-1){
-            d3web_answerYesNoHierarchyQuestions($(this), "2");
+            d3web_addFactsITree($(this), "2");
         }
         else if($(this).attr("id").indexOf("ynNan")!=-1){
-            d3web_answerYesNoHierarchyQuestions($(this), "0");
+            d3web_addFactsITree($(this), "0");
         }
        
     });
@@ -807,7 +807,7 @@ function moveContentPart() {
 
 
 function updateDialog(html) {
-    if (html.startsWith("##replaceid##")) {
+    if (html.indexOf("##replaceid##")!= -1) {
         var updateArray = html.split(/##replaceid##|##replacecontent##/);
         for (var i = 0; i < updateArray.length - 1; i+=2) {
             if (updateArray[i].length == 0) {

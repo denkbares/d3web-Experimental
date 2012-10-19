@@ -2,7 +2,20 @@
 // THIS FILE CONTAINS ALL NECESSARY JAVASCRIPT NEEDED FOR ITREE 
 // PROTOTYPES AND D3WEB SYSTEMS
 //
-
+// Test: for integrating highlighting auxinfo
+/*MF = {};
+MF.Selector = {};
+MF.Selector.getSelected = function(){
+    var t = '';
+    if(window.getSelection){
+        t = window.getSelection();
+    }else if(document.getSelection){
+        t = document.getSelection();
+    }else if(document.selection){
+        t = document.selection.createRange().text;
+    }
+    return t;
+}*/
 
 
 /* Global variables */
@@ -13,6 +26,34 @@ var rootQuestionId = "";
 /* Initialization for iTree prototypes */
 /*-----------------------------------------*/
 function iTreeInit() {
+    
+    // Test: for integrating highlighting-auxinfo functionality
+    /*var mousePos;
+    $(document).mousemove(function (e) {
+        mousePos = {
+            left: e.pageX + 20, 
+            top: e.pageY + 20
+        };
+    });
+   
+
+    $(".dictClass").bind("mouseup", function() {
+        if(MF.Selector.getSelected() != ""){
+            var current = MF.Selector.getSelected();
+            alert(current);
+                
+            if(current != '') {
+                $('div#dict').html(current.toString());
+                $('#dict').offset({ top: 100, left: 30 });
+                $('div#dict').css("position: absolute; background: yellow; color:red;");
+                $('#dict').show();
+            } else {
+                $('#dict').hide();
+            }
+            
+        }
+    });*/
+    
     
     // browserInfo.js
     handleUnsupportedBrowsers();
@@ -136,12 +177,12 @@ function initializeNumfields(){
         $('[type=num]').unbind("keydown").keydown(function(e) { 
             var code = (e.keyCode ? e.keyCode : e.which);
             if (code == 13) {
-                d3web_addValueFactITree(getQuestionId($(this)), $(this).val());
+                d3web_addFactsITree(getQuestionId($(this)), $(this).val());
                
             }
         }).unbind("focusout").focusout(function() {
            
-            d3web_addValueFactITree(getQuestionId($(this)), $(this).val());
+            d3web_addFactsITree(getQuestionId($(this)), $(this).val());
            
         });
         
@@ -188,7 +229,7 @@ function initializeDateDropdowns(){
         "[type=Secondselect]"
         ).unbind('change').change(function() {
             
-        d3web_addValueFactITree(getQuestionId($(this)), getDate($(this)).getTime());
+        d3web_addFactsITree(getQuestionId($(this)), getDate($(this)).getTime());
     });
 }
 
@@ -367,6 +408,8 @@ function toggle_hide_ITree(id) {
         toggleShowStatus_ITree(id); // toggle folder image
         hide_all_tooltips();	// on toggling all tooltips should disappear
     } 
+    
+    
 }
 
 
@@ -410,7 +453,7 @@ function toggleShowStatus_ITree(id) {
         writeExpandCookie(id, "O");
     } 
     // re-render only changed question
-    d3web_show();
+    d3web_rerenderITreeQuestionToggle(id);
 }
 
 
@@ -577,7 +620,7 @@ function tooltip_out_prop(object) {
 /*--------------------------*/
 /* clarihie d3web dialogs */
 /*--------------------------*/
-function d3web_answerYesNoHierarchyQuestions(buttonId, rating){
+function d3web_addFactsITree(qid, value){
     
     // handle logging if activated
     if (logging) {
@@ -589,9 +632,13 @@ function d3web_answerYesNoHierarchyQuestions(buttonId, rating){
     var link = $.query.set("action", "addFactsYN");
     //link = link.set("timestring", now);
     
-    var qid = $(buttonId).closest("[id^=q_]").attr("id").replace("-imagebox", "");
+    if(!checkDateQuestion(qid)){
+        qid = $(buttonId).closest("[id^=q_]").attr("id").replace("-imagebox", "");
+        alert(qid +  " " + value);
+    }
     
-    link = link.set("question", qid).set("value", rating);
+    
+    link = link.set("question", qid).set("value", value);
     
     
     link = window.location.href.replace(window.location.search, "") + link;
@@ -603,10 +650,9 @@ function d3web_answerYesNoHierarchyQuestions(buttonId, rating){
         cache : false, // needed for IE, call is not made otherwise
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         success : function(html) {
-            if(html.indexOf("ITreeSUCCESS")==0){
-                window.location.reload();
-                initFunctionality();
-            }
+            updateDialog(html);
+            initFunctionality();
+            iTreeInit();
         },
         error : function(html) {
             alert("ajax error add facts");
@@ -614,12 +660,18 @@ function d3web_answerYesNoHierarchyQuestions(buttonId, rating){
     });
 }
 
+function checkDateQuestion(qid){
+    var qtitle = $("#t-" + qid);
+    if(qtitle.hasClass("titleDate")){
+        return true;
+    }
+    return false;
+}
 
-/* SAVE DATE QUESTIONS FOR ITREE */
-function d3web_addValueFactITree(qid, value){
+function d3web_rerenderITreeQuestionToggle(qid){
    
-    var link = $.query.set("action", "addFactITree");
-    link = link.set("question", qid).set("value", value);
+    var link = $.query.set("action", "rerenderSubtree");
+    link = link.set("question", qid);
     link = window.location.href.replace(window.location.search, "") + link;
      
     $.ajax({
@@ -628,13 +680,13 @@ function d3web_addValueFactITree(qid, value){
         cache : false, // needed for IE, call is not made otherwise
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         success : function(html) {
-            
-            window.location.reload(true);
+          
+            updateDialog(html);
             initFunctionality();
+            iTreeInit();
         },
         error : function(html) {
             alert("ajax error add facts itree date");
         }
     });
 }
-

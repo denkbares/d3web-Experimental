@@ -245,7 +245,7 @@ function setLeftOffset(target) {
  */
 function toggle_sub_4boxes(id) {
     toggle_hide("sub-" + id); 
-    toggle_folder_image_4boxes(id);
+    //toggle_folder_image(id);
     hide_all_tooltips();
 }
 
