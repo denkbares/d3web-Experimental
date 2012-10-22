@@ -64,7 +64,7 @@ Next, we need to define Person to make that statement valid:
 
 Class Person
 
-
+> Person label:: 'Eine Person'
 
 
 
@@ -111,7 +111,7 @@ ttl: deathPlace subpropertyOf:: isRelatedTo.
 
 He was also a king: 
 
-ttl Alexander the Great type:: King.
+ttl: Alexander the Great type:: King.
 
 
 
@@ -129,6 +129,14 @@ We want to state, that he died in Babylon:
 ttl: Alexander the Great deathPlace:: Babylon;
                          type:: King;
                          yearOfDeath:: '323bc'.
+                         
+> Alexander the Great label:: 'Alex@de'
+
+
+
+                         
+                        
+
 
 
 
@@ -142,21 +150,6 @@ ttl: Alexander the Great yearOfDeath:: '323bc'.
 The value is stored as plain RDF-Literal. No more distinct datatype are currently supported.
 
 
-! The keyword __''this''__
-
-With the keyword ''this'' one can refer to the termname of the current page. Note: Currently the keyword ''this'' can only be used in the subject.
-Example:
-
-
-ObjectProperty describes
-
-Class Historical Essay
-
-ttl: this type:: Historical Essay. ttl this describes:: Alexander the Great.
-
-
-
-When tripels using the keyword ''this'' are compiled into the RDF-store, ''this'' is replaced by the name of the current wiki page (with the local namespace).
 
 !! Subclassing Markup using a DashTree
 
@@ -164,7 +157,7 @@ While a subclass-hierarchy can be defined using the triple-markup it is kind of 
 
 
 {{{
-%%subclass
+%%hierarchy-def
 RootClass
 - Child Class 1
 -- subclass 11
@@ -173,10 +166,19 @@ RootClass
 %
 }}}
 
+%%hierarchy-def
+RootClass
+- Child Class 1
+-- subclass 11
+-- subclass 12
+- Child Class 2
+%
+
 
 ! Example:
-In the following example, we say that ''Person'' and ''Location'' are subclasses of the class ''Concept of History''. Further, we state that ''King'' is a subclass of ''Person'' and 'City' and 'Island' are subclasses of 'Location'. Note that any class used in the subclassing-dashtree needs to be explictely defined in another place.
-%%subclass
+
+Or define the concepts within the hierarchy: In the following example, we say that ''Person'' and ''Location'' are subclasses of the class ''Concept of History''. Further, we state that ''King'' is a subclass of ''Person'' and 'City' and 'Island' are subclasses of 'Location'. Note that any class used in the subclassing-dashtree needs to be explictely defined in another place.
+%%hierarchy
 Concept of History
 - Person
 -- King
@@ -192,4 +194,7 @@ Class Concept of History
 Class Island
 
 
-[{KnowWEPlugin renderKDOM}]
+!! Download RDF-data
+
+[{KnowWEPlugin exportRDF}]
+
