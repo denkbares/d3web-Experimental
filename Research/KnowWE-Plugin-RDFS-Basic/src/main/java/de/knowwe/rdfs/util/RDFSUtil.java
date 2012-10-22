@@ -23,6 +23,7 @@ package de.knowwe.rdfs.util;
 import java.util.Map;
 import java.util.Set;
 
+import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
@@ -63,6 +64,17 @@ public class RDFSUtil {
 		}
 		return uri;
 
+	}
+
+	public static Node createLiteral(String text) {
+
+		if (text.length() > 3 && text.charAt(text.length() - 3) == '@') {
+			return Rdf2GoCore.getInstance().createLanguageTaggedLiteral(text);
+		}
+		else {
+			return Rdf2GoCore.getInstance().createLiteral(
+					text);
+		}
 	}
 
 	public static boolean isTermCategory(Section<? extends SimpleTerm> ref, RDFSTermCategory c) {

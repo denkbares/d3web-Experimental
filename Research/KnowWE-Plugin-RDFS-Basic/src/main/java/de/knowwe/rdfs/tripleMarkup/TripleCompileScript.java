@@ -55,23 +55,17 @@ class TripleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TripleM
 			predURI = RDFSUtil.getURI(predicate);
 
 			if (found.size() == 3) {
-
 				Section<IRITermRef> object = found.get(2);
 				objURI = RDFSUtil.getURI(object);
 			}
 			else if (literalSec != null) {
-				objURI = Rdf2GoCore.getInstance().createLiteral(
-						literalSec.getText());
+				objURI = RDFSUtil.createLiteral(literalSec.getText());
 			}
 
 		}
-
 		if (subURI != null && predURI != null && objURI != null) {
-
 			Rdf2GoCore.getInstance().addStatement(section,
 					subURI.asResource(), predURI.asURI(), objURI);
 		}
-
 	}
-
 }

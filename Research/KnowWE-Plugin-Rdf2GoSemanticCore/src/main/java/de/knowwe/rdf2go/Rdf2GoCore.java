@@ -54,6 +54,7 @@ import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.LanguageTagLiteralImpl;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import de.d3web.plugin.Extension;
@@ -348,6 +349,14 @@ public class Rdf2GoCore implements EventListener {
 
 	public Literal createLiteral(String text) {
 		return model.createPlainLiteral(text);
+	}
+
+	public Literal createLanguageTaggedLiteral(String text, String tag) {
+		return model.createLanguageTagLiteral(text, tag);
+	}
+
+	public Literal createLanguageTaggedLiteral(String text) {
+		return new LanguageTagLiteralImpl(text);
 	}
 
 	public Literal createLiteral(String literal, URI datatypeURI) {

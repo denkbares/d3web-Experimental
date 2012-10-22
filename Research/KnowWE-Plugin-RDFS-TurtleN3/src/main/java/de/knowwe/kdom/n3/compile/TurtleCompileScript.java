@@ -103,8 +103,7 @@ public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<
 				objURI = RDFSUtil.getURI(termSec);
 			}
 			if (literalSec != null) {
-				objURI = Rdf2GoCore.getInstance().createLiteral(
-						literalSec.getText());
+				objURI = RDFSUtil.createLiteral(literalSec.getText());
 			}
 		}
 
