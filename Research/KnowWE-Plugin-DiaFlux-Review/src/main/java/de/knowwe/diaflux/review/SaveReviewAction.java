@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -46,7 +47,7 @@ public class SaveReviewAction extends AbstractAction {
 
 
 		String reviewXML = context.getParameter(REVIEW_NAME);
-		String kdomid = context.getParameter("kdomid");
+		String kdomid = context.getParameter(Attributes.SECTION_ID);
 
 		if (reviewXML == null || kdomid == null) {
 			// TODO errorhandling

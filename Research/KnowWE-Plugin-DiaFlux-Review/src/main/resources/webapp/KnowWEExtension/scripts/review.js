@@ -2,297 +2,356 @@ if (typeof DiaFlux == "undefined" || !DiaFlux) {
     var DiaFlux = {};
 }
 
-DiaFlux.ReviewTool = {};
-
-DiaFlux.ReviewTool.addReviewPanel = function(){
-	var flow = this.flow;
-	var flowDOM = jq$(flow.dom);
-	var panel = jq$("<div>", {id: flow.kdomid + "-review" ,"class" : "reviewPanel"}).appendTo(flowDOM);
-	DiaFlux.ReviewTool.addToolbar(panel);
-	panel.data('flow', flow);
-	DiaFlux.ReviewTool.getReview(flow, panel);
+DiaFlux.ReviewTool = (function(flow) {
+	var panel;
+	var flowDOM;
 	
-	DiaFlux.ReviewTool.removeNodeLinks(flowDOM);
-	DiaFlux.ReviewTool.addMarkingHandler(flowDOM);
+	var review;
 	
-}
-
-DiaFlux.ReviewTool.addToolbar = function(panel){
-	var toolbar = jq$("<div>", {"class":"reviewToolbar"}).appendTo(panel);
-	jq$("<a>",{"class":"saveReview"})
-	.appendTo(toolbar)
-	.on('click', 
-		function(event){
-			DiaFlux.ReviewTool.saveReview(panel.data('review'), panel.data('flow').kdomid);
-		}
-	);
+	var modState = false;
+	var currentEdit = null;
+	var currentSelection= null;
 	
-}
-
-DiaFlux.ReviewTool.saveReview = function(review, kdomid){
-	var params = {
-		action : 'SaveReviewAction',
-        kdomid: kdomid,
-        review: review.toXML()
-	};
+	var PRIORITIES = ['low', 'important', 'critical'];
 	
-	var options = {
-		url: KNOWWE.core.util.getURL( params )
+	return {
 		
-    };
-    new _KA(options).send();
-	
-}
-
-DiaFlux.ReviewTool.removeNodeLinks = function(flowDOM){
-//TODO	
-}
-
-DiaFlux.ReviewTool.addMarkingHandler = function(flowDOM){
-	flowDOM.find('.Node').on('click', 
-		function(event) {
-			if (DiaFlux.ReviewTool.isEditing(flowDOM.find('.reviewList'))){
-				DiaFlux.ReviewTool.mark(this, true);
+		init : function(){
+			flowDOM = jq$(flow.dom);
+			panel = jq$("<div>", {id: flow.kdomid + "-review" ,"class" : "reviewPanel"}).appendTo(flowDOM);
+			this.addToolbar(panel);
+			this.getReview(flow, panel);
+			
+			this.bindUnloadFunction(panel);
+			
+			this.addMarkingHandler();
+			
+		},
+		
+		bindUnloadFunction : function(panel) {
+			jq$(window).bind('beforeunload', function(){
+				if (this.isModified())
+					return "edit.areyousure".localize();
+			}.bind(this));
+		},
+		
+		addToolbar : function(panel){
+			var toolbar = jq$("<div>", {"class":"reviewToolbar"}).appendTo(panel);
+			jq$("<a>",{"class":"saveReview"})
+			.appendTo(toolbar)
+			.on('click', 
+				function(event){
+					this.saveReview(review, flow.kdomid);
+					this.setModified(false);
+				}.bind(this)
+			);
+			
+			jq$("<a>",{"class":"addItem"})
+			.appendTo(toolbar)
+			.on('click', 
+				function(event){
+					this.addItem(review, panel);
+				}.bind(this)
+			);
+			
+		},
+		
+		addItem : function(review, panel){
+			var item = new DiaFlux.ReviewItem(review.getNextId(), new Date(), KNOWWE.helper.getUsername());
+			item.setPageRev(KNOWWE.helper.getPageVersion());
+			review.addItem(item);
+			this.setModified(true);
+			this.renderItem(item, panel.find('ul'));
+		},
+		
+		saveReview : function(review, kdomid){
+			var params = {
+				action : 'SaveReviewAction',
+				SectionID: kdomid,
+		        review: review.toXML()
+			};
+			
+			var options = {
+				url: KNOWWE.core.util.getURL( params )
 				
-			}
-		}
-	);
-	flowDOM.find('.rule_selector').on('click', 
-		function(event) {
-			if (DiaFlux.ReviewTool.isEditing(flowDOM.find('.reviewList'))){
-				var set = jq$(this).closest('.Rule'); 
-				DiaFlux.ReviewTool.mark(set, true);
-			}
-		}
-	);
-}
-DiaFlux.ReviewTool.isEditing = function(list){
-	var editItem = list.data('currentEdit');
-	if (editItem)
-		return true;
-	else 
-		return false;
-}
-
-DiaFlux.ReviewTool.mark= function(node, toggle){
-	if (toggle) {
-		node.toggleClass('reviewMarked');
-	} else {
-		node.addClass('reviewMarked');
-	}
-}
-
-
-DiaFlux.ReviewTool.getReview = function(flow, panel){
-	
-	var params = {
-		action : 'LoadReviewAction',
-        kdomid: flow.kdomid
-	};
-	
-	var options = {
-		url: KNOWWE.core.util.getURL( params ),
-        response : {
-            fn: function(){DiaFlux.ReviewTool.loadReview(this.responseXML, panel);}
-        }
-    };
-    new _KA(options).send();
-	
-}
-
-DiaFlux.ReviewTool.loadReview = function(response, panel){	
-	var review = DiaFlux.Review.fromXML(response);
-	panel.data('review', review);
-	DiaFlux.ReviewTool.showReview(review, panel);
+		    };
+			
+			KNOWWE.core.util.updateProcessingState(1);
+			try{
+				new _KA(options).send();
+				
+			} catch(e) {}
+			KNOWWE.core.util.updateProcessingState(-1);
+			this.setModified(false);
+		},
 		
-}
-
-DiaFlux.ReviewTool.showReview = function(review, panel){
-	var list = jq$("<ul>", {"class":"reviewList"}).appendTo(panel);
-	var items = review.getItems();
-	
-	for (var i = 0; i < items.length; i++){
-		DiaFlux.ReviewTool.renderItem(items[i], list);
-	}
-	
-//	list.sortable({
-//		axis : 'y', 
-//		containment : 'window'
-//	});
-	
-}
-
-DiaFlux.ReviewTool.renderItem = function(item, list){
-	var li = jq$("<li>", {id:"item-" + item.getId(), "class" : "reviewItem"})
-		.appendTo(list)
-		.on('click', function(){DiaFlux.ReviewTool.handleSelection(li);})
-		.on('dblclick', function() {jq$(this).find('a.editItem').click();});
-	li.data(item);
-	DiaFlux.ReviewTool.renderItemContent(item, li);
-}
-
-DiaFlux.ReviewTool.handleSelection = function(li){
-	var list = li.closest('ul');
-	if (DiaFlux.ReviewTool.isEditing(list)) return;
-	var selectedItem = list.data('selectedItem');
-	if (selectedItem == li) {
-		DiaFlux.ReviewTool.deselect(li);
-	} else {
-		DiaFlux.ReviewTool.select(li);
-	}
-	
-}
-
-DiaFlux.ReviewTool.select = function(li){
-	var list = li.closest('ul');
-	list.data('selectedItem', li);
-	list.find('li').removeClass('selected');
-	li.addClass('selected');
-	DiaFlux.ReviewTool.showMarkings(li);
-}
-
-DiaFlux.ReviewTool.deselect = function(li){
-	var list = li.closest('ul');
-	list.removeData('selectedItem');
-	li.removeClass('selected');
-	DiaFlux.ReviewTool.removeAllMarkings(li);
-	
-}
-DiaFlux.ReviewTool.collectMarkings = function(li){
-	var markings = [];
-	var flow = li.closest('.reviewPanel').data('flow');
-	
-	return jq$.map(jq$(flow.dom).find('.reviewMarked'), function(val, key) {
-		return val.getAttribute('id');
-	});
-	
-}
-
-DiaFlux.ReviewTool.showMarkings = function(li){
-	DiaFlux.ReviewTool.removeAllMarkings(li);
-	var markings = li.data().getMarkings();
-	var flow = li.closest('.reviewPanel').data('flow');
-	
-	for (var i = 0; i < markings.length; i++){
-		var flowElem = flow.findObject(markings[i]);
-		if (flowElem) DiaFlux.ReviewTool.mark(flowElem.getDOM(), false);
+		addMarkingHandler : function(){
+			flowDOM.find('.Node').on('click', 
+				function(event) {
+					if (this.isEditing(flowDOM.find('.reviewList'))){
+						this.mark(event.delegateTarget, true);
+						
+					}
+				}.bind(this)
+			);
+			flowDOM.find('.rule_selector').on('click', 
+				function(event) {
+					if (this.isEditing(flowDOM.find('.reviewList'))){
+						var set = jq$(event.delegateTarget).closest('.Rule'); 
+						this.mark(set, true);
+					}
+				}.bind(this)
+			);
+		},
 		
-	}
-	
-}
+		isEditing : function(){
+			if (currentEdit)
+				return true;
+			else 
+				return false;
+		},
+		
+		isModified : function(){
+			return modState;
+		},
+		
+		setModified : function(modified){
+			modState = modified;
+			if (modState) {
+				panel.find('a.saveReview').addClass('modified');
+			} else {
+				panel.find('a.saveReview').removeClass('modified');
+			}
+		},
+		
+		mark : function(node, toggle){
+			if (toggle) {
+				node.toggleClass('reviewMarked');
+			} else {
+				node.addClass('reviewMarked');
+			}
+		},
 
-DiaFlux.ReviewTool.removeAllMarkings = function(elem){
-	jq$(elem.closest('.reviewPanel').data('flow').dom).find('.reviewMarked').removeClass('reviewMarked');
-	
-}
+		getReview : function(flow, panel){
+			var params = {
+				action : 'LoadReviewAction',
+				SectionID: flow.kdomid
+			};
+			var that = this;
+			
+			var options = {
+				url: KNOWWE.core.util.getURL( params ),
+		        response : {
+		            fn: function(){that.loadReview(this.responseXML, panel);}
+		        }
+		    };
+		    new _KA(options).send();
+			
+		},
+		
+		loadReview : function(response, panel){	
+			review = DiaFlux.Review.fromXML(response);
+			this.showReview(review, panel);
+		},
+		
+		showReview : function(review, panel){
+			var list = jq$("<ul>", {"class":"reviewList"}).appendTo(panel);
+			var items = review.getItems();
+			
+			for (var i = 0; i < items.length; i++){
+				this.renderItem(items[i], list);
+			}
+			
+		},
+		
+		renderItem : function(item, list){
+			var li = jq$("<li>", {"class" : "reviewItem"})
+				.appendTo(list)
+				.on('click', function(){this.handleSelection(li);}.bind(this))
+				.on('dblclick', function() {jq$(this).find('a.editItem').click();});
+			li.data('item', item);
+			this.renderItemContent(item, li);
+		},
+		
+		renderItemContent : function(item, li){
+			li.empty();
+			var container = jq$("<div>").appendTo(li);
+			var date = item.getDate();
+			var info = "#" + item.getId() + " by " + item.getAuthor() + " at " + date.toLocaleString(); 
+			var infoDiv = jq$("<div class='reviewItemInfo'>" + info + "</div>").appendTo(container);
+			var statusDiv = jq$("<div>", {"class" : "reviewItemStatus"}).appendTo(infoDiv);
+			var priorityDiv = jq$("<div>", {"class" : "reviewItemPriority"}).appendTo(statusDiv);
+			jq$("<label for='" + PRIORITIES[item.getPriority()] + "' alt='" + PRIORITIES[item.getPriority()] + "'></label>").appendTo(priorityDiv);
+			
+			jq$("<div class='reviewText'>" + item.getDescription() + "</div>").appendTo(container);
+			
+			this.addItemActions(item, li);
 
-DiaFlux.ReviewTool.renderItemContent = function(item, li){
-	li.empty();
-	var textDiv = jq$("<div class='reviewText'>" + item.getDescription() + "</div>")
-	.appendTo(li);
-	
-	DiaFlux.ReviewTool.addItemActions(item, li);
+		},
+		
+		createImageDropdown : function(parent, name, options, checked){
+			parent.addClass('image-dropdown');
+			for (var i = 0; i < options.length; i++) {
+				var state = "";
+				if (i == checked){
+					state = "checked='checked'";
+				}
+				jq$('<input type="radio" id="' + options[i] + '" name="' + name + '" value="' + i + '" ' + state + '/><label for="' + options[i] + '"></label>').appendTo(parent);
+					
+			}
+			
+		},
+		
+		handleSelection : function(li){
+			if (this.isEditing()) return;
+			if (currentSelection == li) {
+				this.deselect();
+			} else {
+				this.select(li);
+			}
+			
+		},
+		
+		select : function(li){
+			currentSelection = li;
+			li.closest('ul').find('li').removeClass('selected');
+			li.addClass('selected');
+			this.showMarkings(li);
+		},
+		
+		deselect : function(){
+			currentSelection.removeClass('selected');
+			this.removeAllMarkings(currentSelection);
+			currentSelection = null;
+			
+		},
+		
+		collectMarkings : function(li){
+			return jq$.map(flowDOM.find('.reviewMarked'), function(val, key) {
+				return val.getAttribute('id');
+			});
+			
+		},
+		
+		showMarkings : function(li){
+			this.removeAllMarkings(li);
+			var markings = li.data('item').getMarkings();
+			
+			for (var i = 0; i < markings.length; i++){
+				var flowElem = flow.findObject(markings[i]);
+				if (flowElem) this.mark(flowElem.getDOM(), false);
+			}
+		},
 
-}
-
-DiaFlux.ReviewTool.addItemActions = function(item, li){
-	
-	var actionsDiv = jq$("<div>",{"class":"reviewActions"}).appendTo(li);
-	jq$("<a>",{"class":"editItem"}).appendTo(actionsDiv).on('click', DiaFlux.ReviewTool.editItem);
-	jq$("<a>",{"class":"deleteItem"}).appendTo(actionsDiv).on('click', DiaFlux.ReviewTool.deleteItem);
-	
-}
-
-DiaFlux.ReviewTool.editItem = function(event){
-	var itemEl = jq$(this).closest('li');
-	var list = jq$(this).closest('ul');
-	if (list.data('currentEdit')) return; //allow only one edit
-	DiaFlux.ReviewTool.select(itemEl);
-	var item = itemEl.data();
-	list.data('currentEdit', item);
-	
-	var parent = itemEl.find('.reviewText').empty();
-//	parent;
-	var textArea = jq$('<textarea>', {rows: 5}).val(item.getDescription()).appendTo(parent);
-	
-	var actionsDiv = jq$('<div>', { "class": "editActions"}).appendTo(parent);
-	
-	var endEdit = function(){
-		list.data('currentEdit', null);
-		DiaFlux.ReviewTool.renderItemContent(item, itemEl);
-	}
-	
-	jq$('<a class="saveChanges">Save</a>').on('click',
-		function() {
-			item.setDescription(textArea.val());
-			item.setMarkings(DiaFlux.ReviewTool.collectMarkings(itemEl));
-			endEdit();
+		removeAllMarkings : function(elem){
+			flowDOM.find('.reviewMarked').removeClass('reviewMarked');
+		},
+		
+		addItemActions : function(item, li){
+			
+			var actionsDiv = jq$("<div>", {"class":"reviewActions"}).appendTo(li);
+			jq$("<a>", {"class":"editItem"}).appendTo(actionsDiv).on('click', this.editItem.bind(this));
+			jq$("<a>", {"class":"deleteItem"}).appendTo(actionsDiv).on('click', this.deleteItem.bind(this));
+			
+		},
+		
+		editItem : function(event){
+			if (currentEdit) return; //allow only one edit
+			var itemEl = jq$(event.delegateTarget).closest('li');
+			itemEl.addClass('editing');
+			currentEdit = itemEl;
+			this.select(itemEl);
+			var item = itemEl.data('item');
+			
+			var prioDiv = itemEl.find('.reviewItemPriority').empty();
+			this.createImageDropdown(prioDiv, 'itemPrio', PRIORITIES, item.getPriority());
+			
+			var parent = itemEl.find('.reviewText').empty();
+			var textArea = jq$('<textarea>', {rows: 5}).val(item.getDescription()).appendTo(parent).focus();
+			
+			var actionsDiv = jq$('<div>', { "class": "editActions"}).appendTo(parent);
+			
+			var endEdit = function(){
+				currentEdit = null;
+				itemEl.removeClass('editing');
+				this.renderItemContent(item, itemEl);
+			}.bind(this);
+			
+			jq$('<a class="saveChanges">Ok</a> ').on('click',
+				function() {
+					item.setDescription(textArea.val());
+					item.setMarkings(this.collectMarkings(itemEl));
+					item.setPriority(prioDiv.find('input[name=itemPrio]:checked').val());
+					this.setModified(true);
+					endEdit();
+				}.bind(this)
+			).appendTo(actionsDiv);
+			
+			jq$('<a class="discardChanges">Cancel</a>').on('click', endEdit).appendTo(actionsDiv);
+			event.preventDefault();
+		},
+		
+		deleteItem : function(event){
+			var li = jq$(event.delegateTarget).closest('li');
+			var item = li.data('item');
+			review.removeItem(item);
+			li.remove();
+			this.deselect();
+			this.setModified(true);
+			
 		}
-	).appendTo(actionsDiv);
-	
-	jq$('<a class="discardChanges">Cancel</a>').on('click', endEdit).appendTo(actionsDiv);
-	
-}
-
-	
-DiaFlux.ReviewTool.deleteItem = function(event){
-	var itemEl = jq$(this).closest('li');
-	var item = itemEl.data();
-	itemEl.closest('.reviewPanel').data('review').removeItem(item);
-	itemEl.remove();
-	
-}
+	}
+});
 
 /**
  * Review class
  * Stores items
  */
 DiaFlux.Review = function(flowName, idCounter, items){
-	this.flowName = flowName;
-	this.idCounter = idCounter;
-	this.items = items;
-}
+	
+	return {
+		
+		getFlowName : function() {
+			return flowName;
+		},
 
-DiaFlux.Review.prototype.getFlowName = function() {
-	return this.flowName;
-}
+		getItems : function() {
+			return items;
+		},
 
-DiaFlux.Review.prototype.getItems = function() {
-	return this.items;
-}
+		addItem : function(item) {
+			items.push(item);
+		},
 
-DiaFlux.Review.prototype.addItem = function(item) {
-	this.items.push(item);
-}
+		removeItem : function(item) {
+			var index = items.indexOf(item);
+			if (index != -1)
+			items.splice(index, 1);
+		},
 
-DiaFlux.Review.prototype.removeItem = function(item) {
-	var index = this.items.indexOf(item);
-	if (index != -1)
-	this.items.splice(index, 1);
-}
+		getIdCounter : function() {
+			return idCounter;
+		},
 
-DiaFlux.Review.prototype.getIdCounter = function() {
-	return this.idCounter;
-}
+		getNextId : function() {
+			return ++idCounter;
+		},
 
-DiaFlux.Review.prototype.getNextId = function() {
-	return ++this.idCounter;
-}
+		toXML : function() {
+			var xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+			xml += '<review idCounter="' + this.getIdCounter() +'" flowName="' + this.getFlowName() + '">\n';
 
-DiaFlux.Review.prototype.toXML = function(){
-	var xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-	xml += '<review idCounter="' + this.getIdCounter() +'" flowName="' + this.getFlowName() + '">\n';
-
-	var items = this.getItems();
-	for (var i = 0; i < items.length; i++){
-		xml += items[i].toXML();
+			for (var i = 0; i < items.length; i++){
+				xml += items[i].toXML();
+			}
+			
+			xml += '</review>\n';
+			return xml;
+			
+		}
+		
 	}
-	
-	xml += '</review>\n';
-	return xml;
-	
 }
-
 
 DiaFlux.Review.fromXML = function(xml){
 	var idCounter = parseInt(xml.getElementsByTagName('review')[0].getAttribute('idCounter'));
@@ -301,7 +360,7 @@ DiaFlux.Review.fromXML = function(xml){
 	var items = [];
 	
 	for (var i = 0; i < xmlItems.length; i++){
-		items.push(DiaFlux.Review.Item.fromXML(xmlItems[i]));
+		items.push(DiaFlux.ReviewItem.fromXML(xmlItems[i]));
 	}
 	
 	return new DiaFlux.Review(flow, idCounter, items);
@@ -312,20 +371,89 @@ DiaFlux.Review.fromXML = function(xml){
  * Review item class
  * Stores one remark
  */
-DiaFlux.Review.Item = function(id, date, author){
-	this.id = id;
-	this.date = date;
-	this.author = author;
-	this.description = "";
-	this.markings = [];
+DiaFlux.ReviewItem = function(id, date, author){
+	var description = "";
+	var markings = [];
+	var pageRev = -1;
+	var priority = 1;
+	var state = 0;
+
+	return {
+		
+
+		getId : function() {
+			return id;
+		},
+		
+		getDate : function() {
+			return date;
+		},
+		
+		getAuthor : function() {
+			return author;
+		},
+		
+		setPageRev : function(pageRev) {
+			pageRev = pageRev;
+		},
+		
+		getPageRev : function() {
+			return pageRev;
+		},
+		
+		setDescription : function(desc) {
+			description = desc;
+		},
+		
+		getDescription : function() {
+			return description;
+		},
+		
+		setPriority : function(prio) {
+			priority = prio;
+		},
+		
+		getPriority : function() {
+			return priority;
+		},
+		
+		setMarkings : function(marks) {
+			markings = marks;
+		},
+		
+		getMarkings : function() {
+			return markings;
+		},
+		
+		toXML : function() {
+			var xml = '<item id="' + this.getId() +'" date="' + this.getDate() + '" author="' + this.getAuthor() +'" pageRev="' + this.getPageRev() +'" priority="' + this.getPriority() + '">\n';
+			xml += '<description>' + this.getDescription() + '</description>\n';
+			xml += '<markings>\n';
+			
+			var markings = this.getMarkings();
+			
+			for (var i = 0; i < markings.length; i++){
+				xml += '<mark id="' + markings[i] + '"/>\n'
+			}
+			xml += '</markings>\n';
+			xml += '</item>\n';
+			return xml;
+		}
+	}
 }
 
-DiaFlux.Review.Item.fromXML = function(itemXML){
+DiaFlux.ReviewItem.fromXML = function(itemXML){
 	var id = parseInt(itemXML.getAttribute('id'));
-	var date = itemXML.getAttribute('date');
+	var date = new Date(itemXML.getAttribute('date'));
 	var author = itemXML.getAttribute('author');
 	var pageRev = itemXML.getAttribute('pageRev');
-	var description = itemXML.getElementsByTagName('description')[0].firstChild.nodeValue;
+	var priority = itemXML.getAttribute('priority');
+	var descriptionTag = itemXML.getElementsByTagName('description')[0];
+	var description = "";
+	if (descriptionTag.firstChild){
+		description = descriptionTag.firstChild.nodeValue
+	} 
+		
 	var markXML = itemXML.getElementsByTagName('markings')[0].getElementsByTagName('mark');
 	var markings = [];
 	
@@ -333,62 +461,21 @@ DiaFlux.Review.Item.fromXML = function(itemXML){
 		markings.push(markXML[i].getAttribute('id'));
 	}
 	
-	var item = new DiaFlux.Review.Item(id, date, author);
+	var item = new DiaFlux.ReviewItem(id, date, author);
 	item.setDescription(description);
 	item.setMarkings(markings);
 	item.setPageRev(pageRev);
+	item.setPriority(priority);
 	
 	return item; 
 	
 }
-DiaFlux.Review.Item.prototype.toXML = function(){
-	var xml = '<item id="' + this.getId() +'" date="' + this.getDate() + '" author="' + this.getAuthor() +'" pageRev="' + this.getPageRev() +'">\n';
-	xml += '<description>' + this.getDescription() + '</description>\n';
-	xml += '<markings>\n';
-	
-	var markings = this.getMarkings();
-	
-	for (var i = 0; i < markings.length; i++){
-		xml += '<mark id="' + markings[i] + '"/>\n'
-	}
-	xml += '</markings>\n';
-	xml += '</item>\n';
-	return xml;
-}
 
-DiaFlux.Review.Item.prototype.getId = function(){
-	return this.id;
-}
-DiaFlux.Review.Item.prototype.getDate = function(){
-	return this.date;
-}
-DiaFlux.Review.Item.prototype.getAuthor = function(){
-	return this.author;
-}
+KNOWWE.helper.observer.subscribe("flowchartrendered", function(){
+	new DiaFlux.ReviewTool(this.flow).init();
+});
 
-DiaFlux.Review.Item.prototype.setPageRev= function(pageRev){
-	this.pageRev = pageRev;
-}
+KNOWWE.helper.observer.subscribe("flowchartlinked", function(){
+	var nodes = jq$(this.flow.dom).find('.Node a>div:first-child').unwrap();
+});
 
-DiaFlux.Review.Item.prototype.getPageRev = function(){
-	return this.pageRev;
-}
-
-DiaFlux.Review.Item.prototype.setDescription = function(description){
-	this.description = description;
-}
-
-DiaFlux.Review.Item.prototype.getDescription = function(){
-	return this.description;
-}
-
-DiaFlux.Review.Item.prototype.setMarkings = function(markings){
-	this.markings = markings;
-}
-
-DiaFlux.Review.Item.prototype.getMarkings = function(){
-	return this.markings;
-}
-
-
-KNOWWE.helper.observer.subscribe("flowchartrendered", DiaFlux.ReviewTool.addReviewPanel);

@@ -1,4 +1,5 @@
-.Flowchart .reviewMarked, .Flowchart .reviewMarked .v_line, .Flowchart .reviewMarked .h_line{
+/*.Flowchart .Node*/ 
+.Node.reviewMarked, .Rule.reviewMarked .v_line, .Rule.reviewMarked .h_line{
 	border: 2px solid green;
 }
 
@@ -12,11 +13,13 @@ ul.reviewList {
 	padding: 1em;
     margin: 0;
     position: relative;
-    width: 500px;
+    width: 70%;
 }
 
 ul.reviewList li.selected {
     background-color: white;
+    border: 2px solid #E3E8E2;
+    border-radius: 6px 6px 6px 6px;
 }
 
 ul.reviewList li {
@@ -28,14 +31,25 @@ ul.reviewList li {
     margin: 6px;
     padding: 6px 9px;
     position: relative;
-    text-shadow: 1px 1px 0 white;
+    min-height: 50px;
+    
 }
-
-
 
 ul.reviewList li:hover {
     border-color: #9BE0F9;
     box-shadow: 0 0 5px #A6E5FD;
+}
+
+div.reviewItemInfo {
+	color: grey;
+}
+
+div.reviewText{
+	
+}
+
+.reviewItem {
+	white-space: pre-wrap;
 }
 
 .reviewItem textarea {
@@ -46,8 +60,22 @@ ul.reviewList li:hover {
 .reviewItem .reviewActions {
     position: absolute;
     right: 7px;
-    top: 6px;
+    bottom: 20px;
+    visibility: hidden;
 }
+
+.reviewItem.selected div.reviewActions {
+	visibility: visible;	
+}
+
+.reviewItem.selected.editing div.reviewActions {
+	visibility: hidden;	
+}
+
+.reviewItem div.reviewActions:hover {
+    visibility: visible;
+}
+
 .reviewItem .reviewActions a {
     display: block;
     float: left;
@@ -66,27 +94,123 @@ ul.reviewList li:hover {
 }
 
 .editActions {
-    display: inline;
-    font-size: 0.6em;
+    font-size: 0.7em;
     padding-left: 9px;
 }
 .editActions a {
     font-weight: bold;
 }
+a.saveChanges {
+    color: #4DB209 !important;
+    margin-right: 5px;
+}
 a.discardChanges {
     color: #CC0000 !important;
 }
-a.saveChanges {
-    color: #4DB209 !important;
+
+div.reviewToolbar {
+	
+}
+
+div.reviewItemStatus {
+	margin-left: 2px;
+	display: inline-block;
+}
+
+div.reviewItemPriority {
+	display: inline-block;
 }
 
 a.saveReview {
-	    display: block;
-   /** float: left;**/
+	display: inline-block;
     height: 16px;
     margin: 3px;
     overflow: hidden;
     text-indent: -9999px;
     width: 16px;
-	 background: url("../images/save_edit.gif") no-repeat scroll center center transparent;
+	background: url("../images/save_edit.gif") no-repeat scroll center center transparent;
 }
+
+a.saveReview.modified {
+	box-shadow: 0 0 5px #E6354D;
+}
+
+a.addItem {
+	display: inline-block;
+    height: 16px;
+    margin: 3px;
+    overflow: hidden;
+    text-indent: -9999px;
+    width: 16px;
+	background: url("../images/dt_icon_q_description.png") no-repeat scroll center center transparent;
+}
+
+/*o.v.*/
+
+.image-dropdown {
+    /*style the "box" in its minimzed state*/
+    border: 1px solid #EEEEEE;
+    border-radius: 2px 2px 2px 2px;
+  	/*width:20px; 
+    height: 20px;*/
+	overflow: hidden;
+}
+.image-dropdown:hover {
+    /*when expanded, the dropdown will get native means of scrolling*/
+    overflow-y: visible;
+   
+}
+
+.image-dropdown input {
+    position:absolute;
+    top:0;
+    left:0;
+    opacity:0;
+}
+
+.image-dropdown label {
+    /*style the labels to look like dropdown options, kinda*/
+    display:none; 
+    /*margin:2px;*/ 
+    /*height:16px;*/  
+    opacity:0.2;
+}
+
+.reviewItemPriority.image-dropdown label{
+	display: none;
+}
+
+.reviewItemPriority label{
+	width:16px; 
+    height: 16px;
+    padding: 0px;
+    display:block;
+    margin: 0px;
+}
+
+.reviewItemPriority label[for=low] {
+    background:url("../image/priority_low.png") no-repeat;
+}
+
+.reviewItemPriority label[for=important] {
+    background:url("../image/priority_important.png") no-repeat scroll center center transparent;
+}
+
+.reviewItemPriority label[for=critical] {
+    background:url("../image/priority_critical.png") no-repeat scroll center center transparent;
+}
+
+.image-dropdown:hover label{
+    /*this is how labels render in the "expanded" state. we want to see only the selected radio button in the collapsed menu, and all of them when expanded*/
+    display:block;
+}
+.image-dropdown label:hover {
+    opacity:0.5;
+}
+.image-dropdown input:checked + label {
+    /*tricky! labels immediately following a checked radio button (with our markup they are semantically related) should be fully opaque regardless of hover, and they should always be visible (i.e. even in the collapsed menu*/
+    opacity:1 !important; display:block;
+}
+
+
+

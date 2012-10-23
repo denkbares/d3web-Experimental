@@ -18,13 +18,16 @@
  */
 package de.knowwe.diaflux.review;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.List;
+import java.io.Reader;
 
 import javax.servlet.http.HttpServletResponse;
 
+import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -45,29 +48,28 @@ public class LoadReviewAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		String kdomid = context.getParameter("kdomid");
+		String kdomid = context.getParameter(Attributes.SECTION_ID);
 		Section<FlowchartType> flowSec = Sections.getSection(kdomid, FlowchartType.class);
 		Article article = flowSec.getArticle();
 		String flowName = FlowchartType.getFlowchartName(flowSec);
 		WikiConnector connector = Environment.getInstance().getWikiConnector();
-		List<WikiAttachment> attachments = connector.getAttachments(article.getTitle());
 
 		String filename = article.getTitle() + "/" + flowName + ".review.xml";
 		WikiAttachment attachment = connector.getAttachment(filename);
 
+		context.setContentType("text/xml");
 		if (attachment == null) {
-			// TODO error handling
-
+			context.getWriter().write(createEmptyReview(flowName));
 		}
 		else {
 			InputStream in = attachment.getInputStream();
-			context.setContentType("text/xml");
+			Reader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
 			OutputStream outs = context.getOutputStream();
 
 			int bit;
 			try {
-				while ((bit = in.read()) >= 0) {
+				while ((bit = reader.read()) >= 0) {
 					outs.write(bit);
 				}
 
@@ -77,11 +79,17 @@ public class LoadReviewAction extends AbstractAction {
 				context.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, String.valueOf(ioe));
 			}
 			finally {
-				in.close();
+				reader.close();
 			}
 
 		}
 
+	}
+
+	private static String createEmptyReview(String flowName) {
+		String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+				"<review idCounter=\"0\" flowName=\"" + flowName + "\"></review>";
+		return result;
 	}
 
 }
