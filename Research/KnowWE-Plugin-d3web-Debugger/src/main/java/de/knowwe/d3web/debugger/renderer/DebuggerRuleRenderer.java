@@ -94,13 +94,13 @@ public class DebuggerRuleRenderer implements Renderer {
 							string, user);
 				}
 				else {
-					DelegateRenderer.getInstance().render(section, user, string);
+					DelegateRenderer.getInstance().renderSubSection(section, user, string);
 				}
 			}
 			string.append(Strings.maskHTML("</div>"));
 		}
 		else {
-			DelegateRenderer.getInstance().render(sec, user, string);
+			DelegateRenderer.getInstance().renderSubSection(sec, user, string);
 		}
 	}
 
@@ -112,7 +112,7 @@ public class DebuggerRuleRenderer implements Renderer {
 						session, title, inside, string, user);
 			}
 			else {
-				DelegateRenderer.getInstance().render(section, user, string);
+				DelegateRenderer.getInstance().renderSubSection(section, user, string);
 			}
 		}
 	}
@@ -147,7 +147,7 @@ public class DebuggerRuleRenderer implements Renderer {
 							string, user);
 				}
 				else {
-					DelegateRenderer.getInstance().render(child, user, string);
+					DelegateRenderer.getInstance().renderSubSection(child, user, string);
 				}
 			}
 		}
@@ -165,7 +165,7 @@ public class DebuggerRuleRenderer implements Renderer {
 					condIndex++;
 				}
 				else {
-					DelegateRenderer.getInstance().render(section, user, string);
+					DelegateRenderer.getInstance().renderSubSection(section, user, string);
 				}
 			}
 		}
@@ -180,7 +180,7 @@ public class DebuggerRuleRenderer implements Renderer {
 				}
 				else {
 					// not happening ?!
-					DelegateRenderer.getInstance().render(condSection, user, string);
+					DelegateRenderer.getInstance().renderSubSection(condSection, user, string);
 				}
 			}
 		}
@@ -201,13 +201,13 @@ public class DebuggerRuleRenderer implements Renderer {
 								condition, session, title, inside, string, user);
 					}
 					else {
-						DelegateRenderer.getInstance().render(contentChild, user, string);
+						DelegateRenderer.getInstance().renderSubSection(contentChild, user, string);
 					}
 
 				}
 			}
 			else {
-				DelegateRenderer.getInstance().render(child, user, string);
+				DelegateRenderer.getInstance().renderSubSection(child, user, string);
 			}
 		}
 
@@ -241,13 +241,14 @@ public class DebuggerRuleRenderer implements Renderer {
 							renderer.render(grandChild, user, builder);
 						}
 						else {
-							DelegateRenderer.getInstance().render(grandChild, user, builder);
+							DelegateRenderer.getInstance().renderSubSection(grandChild, user,
+									builder);
 						}
 					}
 				}
 			}
 			else {
-				DelegateRenderer.getInstance().render(child, user, builder);
+				DelegateRenderer.getInstance().renderSubSection(child, user, builder);
 			}
 		}
 

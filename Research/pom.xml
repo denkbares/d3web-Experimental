@@ -184,7 +184,7 @@
 		<module>KnowWE-Plugin-SemanticWikiSeedingLOD</module>
 		<module>KnowWE-Plugin-Renaming</module>
 		<module>KnowWE-MetaTool</module>
-		<module>KnowWE-Plugin-Drools</module>
+
 		<module>KnowWE-Plugin-OntE</module>
 		<module>d3web-Plugin-OWL</module>
 		<module>KnowWE-Plugin-d3web-OWL</module>
@@ -212,7 +212,7 @@
 		<module>KnowWE-Plugin-CodeMirror</module>
 		<module>KnowWE-Plugin-RDFS-TestCase</module>
 		<module>KnowWE-Plugin-TestcaseTable-Extensions</module>
-		<module>KnowWE-Plugin-d3web-Debugger</module>
+		<module>KnowWE-Plugin-d3web-RuleDebugger</module>
 		<module>KnowWE-Plugin-DiaFlux-CoverageCity</module>
 		<module>KnowWE-Plugin-Wikicontent-Download</module>
 		<module>d3web-OfficeConverterAH</module>

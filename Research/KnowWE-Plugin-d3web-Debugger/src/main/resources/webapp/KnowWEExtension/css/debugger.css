@@ -111,9 +111,11 @@ div.debugger div.debuggerRule {
 }
 .condTrue {
 	color: green;
+	background-color: #CCFFCC;
 }
 .condFalse {
 	color: red;	
+	background-color: #FFDDDD;
 }
 .condUnknown {
 	color: gray;

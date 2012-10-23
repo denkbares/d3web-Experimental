@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.d3web.debugger.actions;
 
@@ -29,6 +29,7 @@ import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.d3web.debugger.DebugUtilities;
 
 /**
@@ -48,8 +49,8 @@ public class DebuggerMenuAction extends AbstractAction {
 		String qid = context.getParameter("qid");
 		KnowledgeBase kb = null;
 		Session session = null;
-		if (context.getParameters().containsKey("kbID")) {
-			kbID = context.getParameter("kbID");
+		if (context.getParameters().containsKey("kbid")) {
+			kbID = context.getParameter("kbid");
 			kb = D3webUtils.getKnowledgeBase(context.getWeb(), kbID);
 			session = SessionProvider.getSession(context, kb);
 		}
@@ -57,7 +58,7 @@ public class DebuggerMenuAction extends AbstractAction {
 
 		if (result != null && context.getWriter() != null) {
 			context.setContentType("text/html; charset=UTF-8");
-			context.getWriter().write(result);
+			context.getWriter().write(Strings.unmaskHTML(result));
 		}
 	}
 
@@ -71,7 +72,7 @@ public class DebuggerMenuAction extends AbstractAction {
 		try {
 			KnowledgeBase kb = session.getKnowledgeBase();
 			TerminologyObject to = null;
-			
+
 			// Search for the given TerminologyObject
 			List<TerminologyObject> tos = DebugUtilities.getAllTOsFromKB(kb);
 			tos.addAll(DebugUtilities.getSolutionsFromKB(kb));
@@ -112,7 +113,7 @@ public class DebuggerMenuAction extends AbstractAction {
 		}
 		catch (NullPointerException e) {
 		}
-		
+
 		return buffer.toString();
 	}
 

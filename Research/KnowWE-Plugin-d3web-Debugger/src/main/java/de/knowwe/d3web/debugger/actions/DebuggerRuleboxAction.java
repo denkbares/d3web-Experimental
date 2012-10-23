@@ -25,6 +25,7 @@ import de.d3web.core.inference.Rule;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.SessionProvider;
+import de.d3web.we.kdom.rule.ConditionActionRuleContent;
 import de.d3web.we.kdom.rule.ConditionArea;
 import de.d3web.we.kdom.rules.action.RuleAction;
 import de.d3web.we.utils.D3webUtils;
@@ -32,6 +33,7 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.d3web.debugger.DebugUtilities;
 import de.knowwe.d3web.debugger.renderer.DebuggerRuleRenderer;
 
@@ -47,7 +49,7 @@ public class DebuggerRuleboxAction extends AbstractAction {
 
 		if (context.getWriter() != null) {
 			context.setContentType("text/html; charset=UTF-8");
-			context.getWriter().write(renderRule(context));
+			context.getWriter().write(Strings.unmaskHTML(renderRule(context)));
 		}
 	}
 
@@ -66,17 +68,18 @@ public class DebuggerRuleboxAction extends AbstractAction {
 			kb = D3webUtils.getKnowledgeBase(context.getWeb(), kbID);
 			Session session = SessionProvider.getSession(context, kb);
 			List<Rule> rules = DebugUtilities.getRulesFromKB(kb);
-			DebuggerRuleRenderer drr = new DebuggerRuleRenderer();
 
 			buffer.append("<span ruleid='" + ruleid + "'>");
 			for (Rule r : rules) {
 				if (r.hashCode() == ruleid) {
 					Section<RuleAction> ruleAction = DebugUtilities.getRuleResource(r, session);
-					Section<ConditionArea> conditionActionRuleSection = Sections.findAncestorOfType(
-							ruleAction, ConditionArea.class);
+					Section<ConditionActionRuleContent> conditionActionRuleSection = Sections.findAncestorOfType(
+							ruleAction, ConditionActionRuleContent.class);
+					Section<ConditionArea> cond = Sections.findSuccessor(
+							conditionActionRuleSection, ConditionArea.class);
 					ruleArticle = ruleAction.getTitle();
 					if (ruleArticle.equals("")) ruleArticle = context.getTitle();
-					drr.renderConditionSection(conditionActionRuleSection, r.getCondition(),
+					DebuggerRuleRenderer.renderConditionSection(cond, r.getCondition(),
 							session, title, true, buffer, context);
 					buffer.append("<a class='ruleLink' href='Wiki.jsp?page="
 							+ ruleArticle + "'></a>");
