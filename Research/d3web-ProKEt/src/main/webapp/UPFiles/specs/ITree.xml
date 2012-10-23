@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="ITree Standard Style"  
+	dtype="itree" 
+	dstrategy="nextuaquestion" 
+	css="itree, nofoot" 
+	dialogcolumns="1"
+	questionnairecolumns="1"
+	questioncolumns = "1"
+	uiprefix = "ITree"
+	login = "OFF"
+	required = "none"
+	language = "de"
+        >
+	<data kb="VR1.d3web" />
+        
+        <ue 
+            questionnaire='OWN' 
+            study='' 
+            logging='' 
+            feedbackform="TRUE"
+            uegroup="" 
+            logfile_path = ""
+            analysisoutput_path = ""
+        />
+</dialog>

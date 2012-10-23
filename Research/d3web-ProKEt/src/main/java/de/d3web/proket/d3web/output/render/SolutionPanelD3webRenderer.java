@@ -128,7 +128,10 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
       
       private String getSolutionState(Solution solution,  Blackboard bb) {
         
+          // retrieve template
         StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/Solution");
+        
+        // fill template attribute
         st.setAttribute("solid", solution.getName());
         st.setAttribute("solutiontext", solution.getName());
         
