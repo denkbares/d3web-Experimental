@@ -41,7 +41,7 @@ import de.knowwe.rdf2go.BlankNodeImpl;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
-import de.knowwe.rdfs.literal.TurtleObjectLiteralText;
+import de.knowwe.rdfs.literal.TurtleObjectLiteral;
 import de.knowwe.rdfs.util.RDFSUtil;
 
 public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TurtleMarkupN3> {
@@ -83,8 +83,8 @@ public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<
 		//
 		// }
 
-		Section<TurtleObjectLiteralText> literalSec = Sections.findSuccessor(
-				objectSec, TurtleObjectLiteralText.class);
+		Section<TurtleObjectLiteral> literalSec = Sections.findSuccessor(
+				objectSec, TurtleObjectLiteral.class);
 
 		Node objURI = null;
 
@@ -103,7 +103,7 @@ public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<
 				objURI = RDFSUtil.getURI(termSec);
 			}
 			if (literalSec != null) {
-				objURI = RDFSUtil.createLiteral(literalSec.getText());
+				objURI = RDFSUtil.createLiteral(literalSec);
 			}
 		}
 

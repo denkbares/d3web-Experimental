@@ -28,7 +28,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
 import de.knowwe.rdfs.IRITermRef;
-import de.knowwe.rdfs.literal.TurtleObjectLiteralText;
+import de.knowwe.rdfs.literal.TurtleObjectLiteral;
 import de.knowwe.rdfs.util.RDFSUtil;
 
 class TripleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TripleMarkup> {
@@ -43,8 +43,8 @@ class TripleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TripleM
 
 		Section<SimpleTurtleObjectSection> objectSec = Sections.findSuccessor(
 				section, SimpleTurtleObjectSection.class);
-		Section<TurtleObjectLiteralText> literalSec = Sections.findSuccessor(
-				objectSec, TurtleObjectLiteralText.class);
+		Section<TurtleObjectLiteral> literalSec = Sections.findSuccessor(
+				objectSec, TurtleObjectLiteral.class);
 
 		Sections.findSuccessorsOfType(section, IRITermRef.class, found);
 
@@ -59,7 +59,7 @@ class TripleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TripleM
 				objURI = RDFSUtil.getURI(object);
 			}
 			else if (literalSec != null) {
-				objURI = RDFSUtil.createLiteral(literalSec.getText());
+				objURI = RDFSUtil.createLiteral(literalSec);
 			}
 
 		}

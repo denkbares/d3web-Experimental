@@ -33,11 +33,15 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.plugin.Plugins;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.RDFSTermCategory;
 import de.knowwe.rdfs.RDFSTerminologyExtension;
+import de.knowwe.rdfs.literal.LanguageTag;
+import de.knowwe.rdfs.literal.TurtleObjectLiteral;
+import de.knowwe.rdfs.literal.TurtleObjectLiteralText;
 
 public class RDFSUtil {
 
@@ -66,9 +70,18 @@ public class RDFSUtil {
 
 	}
 
-	public static Node createLiteral(String text) {
+	public static Node createLiteral(Section<TurtleObjectLiteral> sec) {
 
-		if (text.length() > 3 && text.charAt(text.length() - 3) == '@') {
+		String text = Sections.findChildOfType(sec, TurtleObjectLiteralText.class).getText();
+
+		Section<LanguageTag> langSec = Sections.findChildOfType(sec, LanguageTag.class);
+
+		if (langSec != null) {
+			String langCode = langSec.getText().substring(1); // strip @
+			return Rdf2GoCore.getInstance().createLanguageTaggedLiteral(text,
+					langCode);
+		}
+		else if (text.length() > 3 && text.charAt(text.length() - 3) == '@') {
 			return Rdf2GoCore.getInstance().createLanguageTaggedLiteral(text);
 		}
 		else {
