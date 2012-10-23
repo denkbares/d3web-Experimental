@@ -32,6 +32,8 @@ import de.knowwe.tools.ToolProvider;
  */
 public class HighlightProvider implements ToolProvider {
 
+	private static final String ICON = "KnowWEExtension/flowchart/icon/debug16.png";
+
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		Tool refresh = getHighlightTool(section, userContext);
@@ -42,35 +44,17 @@ public class HighlightProvider implements ToolProvider {
 
 		boolean dohighlighting =
 				DiaFluxTraceHighlight.checkForHighlight(userContext,
-						"anomalie_coverage");
+						AnomaliesHighlight.ANOMALIES_HIGHLIGHT);
 
 		if (dohighlighting) {
-			String jsAction = "var url = window.location.href;" +
-					"if (url.search('highlight')!=-1)" +
-					"{url = url.replace(/highlight=[^&]*/g, 'highlight=none');}" +
-					"else {" +
-					"if (url.indexOf('?') == -1) {url += '?';}" +
-					"url = url.replace(/\\?/g,'?highlight=none&');}" +
-					"window.location = url;";
-			return new DefaultTool(
-					"KnowWEExtension/flowchart/icon/debug16.png",
-					"Hide Anomalies",
+			return new DefaultTool(ICON, "Hide Anomalies",
 					"Highlights Anomalies in the flowchart.",
-					jsAction);
+					DiaFluxTraceHighlight.getDeactivationJSAction());
 		}
 		else {
-			String jsAction = "var url = window.location.href;" +
-					"if (url.search('highlight')!=-1)" +
-					"{url = url.replace(/highlight=[^&]*/g, 'highlight=anomalie_coverage');}" +
-					"else {" +
-					"if (url.indexOf('?') == -1) {url += '?';}" +
-					"url = url.replace(/\\?/g,'?highlight=anomalie_coverage&');}" +
-					"window.location = url;";
-			return new DefaultTool(
-					"KnowWEExtension/flowchart/icon/debug16.png",
-					"Show Anomalies",
+			return new DefaultTool(ICON, "Show Anomalies",
 					"Highlights Anomalies in the flowchart.",
-					jsAction);
+					DiaFluxTraceHighlight.getActivationJSAction(AnomaliesHighlight.ANOMALIES_HIGHLIGHT));
 		}
 	}
 }
