@@ -1,0 +1,18 @@
+Installing JuriParser und Abstracttools:
+-----------------------------------------------
+-> in das Verzeichnis wo die jars liegen, direkt reinwechseln. Dann:
+
+- Officeconverter
+    mvn install:install-file -Dfile=officeconverter.jar -DgroupId=com.mfext.officeconverterEW -DartifactId=com.mfext.officeconverterEW -Dversion=1.0 -Dpackaging=jar
+
+
+- Abstracttools:
+    mvn install:install-file -Dfile=abstracttools.jar -DgroupId=de.uniwue.abstracttoolsNew -DartifactId=de.uniwue.abstracttoolsNew -Dversion=1.0 -Dpackaging=jar
+- JuriParser
+    mvn install:install-file -Dfile=juriparser.jar -DgroupId=com.mfext.juriparser -DartifactId=juriparser -Dversion=1.0 -Dpackaging=jar
+
+
+
+OpenOffice über Konsole starten:
+- 
+/Applications/OpenOffice.org.app/Contents/MacOS/soffice.bin -nologo &

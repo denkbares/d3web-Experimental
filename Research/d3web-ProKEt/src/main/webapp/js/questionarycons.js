@@ -18,7 +18,7 @@ $(function(){
     })
     
     .bind("loaded.jstree", function(event, data){
-        alert("jstree is loaded");
+        //alert("jstree is loaded");
     });
     
     

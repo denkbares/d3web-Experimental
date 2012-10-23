@@ -129,7 +129,8 @@ public class JSCodeContainer implements ICodeContainer {
         // FIRST define all necessary GLOBAL bibs
         linkedBibs.add("jquery/jquery-1.6.1.min.js");
         linkedBibs.add("jquery/jquery.cookie.js");
-        linkedBibs.add("jquery/jquery.jstree.js");
+        //linkedBibs.add("jquery/jquery.jstree.js");
+        linkedBibs.add("jsTree/jquery.jstree.js");
         linkedBibs.add("jquery/jquery.typing.min.js");
         linkedBibs.add("jquery/jquery.numeric.js");
         linkedBibs.add("jquery/jquery.customFileInput.js");
@@ -140,6 +141,9 @@ public class JSCodeContainer implements ICodeContainer {
         ownBibs.add("browserInfo.js");
         ownBibs.add("uelogging.js");
         ownBibs.add("global.js");
+        
+        // smaller stuff for diagnosis visualization BA Alina Coca
+        ownBibs.add("diagnosisVisu.js");
         
 
 
