@@ -21,6 +21,7 @@ package de.d3web.proket.d3web.run;
 
 import converter.Html2KnowWECompiler;
 import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.utils.Utils;
 import de.d3web.proket.data.DialogType;
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +40,7 @@ import de.d3web.proket.utils.TemplateUtils;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
@@ -138,11 +140,39 @@ public class DialogManager extends HttpServlet {
         String cssString = FileUtils.getString(css);
         st.setAttribute("css", cssString);
 
+        fillFilesList("d3web", st);
+        fillFilesList("specs", st);
+
         // output
         PrintWriter writer = response.getWriter();
         writer.write(st.toString());
 
         writer.close();
+    }
+
+    private void fillFilesList(String subfolder, StringTemplate st) {
+        
+        // assemble path where files are stored
+        String path = GlobalSettings.getInstance().getUploadFilesBasePath()
+                + "/" + subfolder;
+       
+        // get all files under the given path
+        List<File> files = Utils.getFileList(path);
+       
+        if (files.size() > 0) {
+            for (File file : files) {
+                StringBuilder bui = new StringBuilder();
+                bui.append("<option");
+                // omitt filetype ending
+                String filename = 
+                        file.getName().split("\\.")[0];
+                bui.append(" title='" + filename + "'>");
+                bui.append(filename);
+                bui.append("</option>");
+                st.setAttribute("fileselectopts_" + subfolder, bui.toString());
+            }
+            
+        }
     }
 
     /**
@@ -162,15 +192,15 @@ public class DialogManager extends HttpServlet {
         // get latest loaded .d3web and XML specs file
         File spec =
                 httpSession.getAttribute("latestSpec") != null
-                ? (File)httpSession.getAttribute("latestSpec") : null;
+                ? (File) httpSession.getAttribute("latestSpec") : null;
 
         /*
          * assemble dialog link
          */
         String dialogLink = "";
         // get the Dialog Type
-        if (spec!=null) {
-           
+        if (spec != null) {
+
             String type = retrieveDialogTypeFromSpec(spec);
 
             // assemble ITree Servlet Link
@@ -260,30 +290,32 @@ public class DialogManager extends HttpServlet {
         boolean successfulParsed = false;
 
         if (docname != null && !docname.equals("")) {
-            successfulParsed = parseKBDoc(docname, http);
+            successfulParsed = kbDocSuccessfullyParsed(docname, http);
         } else {
             writer.append("parseErrorInvalidDoc");
         }
 
         if (successfulParsed) {
             writer.append("success");
-        } 
+        } else {
+            writer.append("showErrFile");
+        }
     }
 
     /**
-     * Call the converter which  compiles the .doc file into d3web
+     * Call the converter which compiles the .doc file into d3web
+     *
      * @param docName
-     * @return 
-     * TODO: separate compiling to HTML Error report and parsing
+     * @return TODO: separate compiling to HTML Error report and parsing
      */
-    private boolean parseKBDoc(String docName, HttpSession http) {
+    private boolean kbDocSuccessfullyParsed(String docName, HttpSession http) {
 
         Html2KnowWECompiler compiler = new converter.Html2KnowWECompiler();
 
         String upPath = GLOBSET.getUploadFilesBasePath();
 
         // TODO: clean up intermediate files!!
-        
+
         String doc = upPath + "/" + docName;
         String errFile = upPath + "/" + docName + "_Error.html";
         String tmp = upPath + "/tmp/";
@@ -303,21 +335,23 @@ public class DialogManager extends HttpServlet {
         kwF.canExecute();
         kwF.canWrite();
         kwF.canRead();
+        
+        boolean compileError = false;
 
-        System.out.println("PARSER: \n"
-                + upPath + "\n" + doc + "\n" + errFile + "\n" + tmp + "\n"
-                + d3web + "\n" + knowwe + "\n");
-        /*System.out.println("PARSER File Permissions: \n"
-                + "tmpF: " + tmpF.canExecute() + tmpF.canWrite() + tmpF.canRead() + "\n"
-                + "d3wF: " + d3wF.canExecute() + d3wF.canWrite() + d3wF.canRead() + "\n"
-                + "kwF: " + kwF.canExecute() + kwF.canWrite() + kwF.canRead());*/
+        //System.out.println("PARSER: \n"
+        //        + upPath + "\n" + doc + "\n" + errFile + "\n" + tmp + "\n"
+        //        + d3web + "\n" + knowwe + "\n");
+        /*
+         * System.out.println("PARSER File Permissions: \n" + "tmpF: " +
+         * tmpF.canExecute() + tmpF.canWrite() + tmpF.canRead() + "\n" + "d3wF:
+         * " + d3wF.canExecute() + d3wF.canWrite() + d3wF.canRead() + "\n" +
+         * "kwF: " + kwF.canExecute() + kwF.canWrite() + kwF.canRead());
+         */
 
         // TODO: wie komme ich an das Error.html? Flag? Gleich das File zurückgeben?
         try {
-            compiler.compileTo3web(doc, errFile, tmp, d3web, knowwe);
-            //de.uniwue.abstracttools.StringUtils.writefileString(knowwe, knowwe);
-
-
+            compileError = compiler.compileTo3web(doc, errFile, tmp, d3web, knowwe);
+           
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
         } catch (SAXException saxe) {
@@ -328,10 +362,17 @@ public class DialogManager extends HttpServlet {
             ine.printStackTrace();
         }
 
-        // check if d3web was written correctly
-        return checkAndRenameD3webFile(docName.replace(".doc", ""), d3wF, http)
-                ?true:false;
-    }
+        if(compileError){
+            // something went wrong during compilation. 
+            return false;
+        } else {
+            
+            // OK everything fine. Then rename d3web file and store latest one
+            // in webapp/session
+            checkAndRenameD3webFile(docName.replace(".doc", ""), d3wF, http);
+            return true;
+        }
+     }
 
     /**
      * TODO: How to handle existing files!?
@@ -340,7 +381,7 @@ public class DialogManager extends HttpServlet {
      * @param d3webDir
      * @return
      */
-    private boolean checkAndRenameD3webFile(
+    private void checkAndRenameD3webFile(
             String targetName, File d3webDir, HttpSession http) {
 
         File[] fileList = d3webDir.listFiles();
@@ -355,10 +396,8 @@ public class DialogManager extends HttpServlet {
             if (targetD3web != null
                     && targetD3web.getName().equals(targetD3webName)) {
                 http.setAttribute("latestD3web", targetD3web);
-                return true;
             }
         }
-        return false;
     }
 
     /**

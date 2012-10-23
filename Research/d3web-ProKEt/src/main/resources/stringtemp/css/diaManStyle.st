@@ -146,3 +146,11 @@ input{border: 1px dotted darkgrey;
 #UploadSpacer{width: 200px; height: 20px; padding-left: 10px; 
     padding-right: 10px; 
     padding-top: 0px; padding-bottom: 5px;}
+
+.dmFileSelectorBox{width: 200px;}
+
+.dmFileSelectorDropdown{width: 100px;}
+
+.specsSelect{min-width: 150px;}
+
+.d3webSelect{min-width: 150px;}

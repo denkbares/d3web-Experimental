@@ -231,6 +231,7 @@ public class D3webDialog extends HttpServlet {
             return;
         }
 
+        System.out.println(uis.getLoginMode());
         if (uis.getLoginMode()
                 == LoginMode.DB) {
             String authenticated = (String) httpSession.getAttribute("authenticated");

@@ -80,9 +80,11 @@ public class D3webXMLParser {
         File inputFile = null;
         try {
             // try to get the corresponding XML from the resources folder
+            
             inputFile = FileUtils.getResourceFile(
                     GlobalSettings.getInstance().getD3webSpecsPath()
                     + "/" + xMLFilename);
+            System.out.println(inputFile.getName());
         } catch (FileNotFoundException e2) {
         }
 
@@ -213,8 +215,10 @@ public class D3webXMLParser {
     public LoginMode getLoginMode() {
         LoginMode currentMode = LoginMode.OFF;
         String log = XMLUtils.getStr((Element) dialogSpec, "login", null);
+        System.out.println(log);
         if (log != null) {
             currentMode = LoginMode.valueOf(log);
+            System.out.println(currentMode);
         }
         return currentMode;
     }

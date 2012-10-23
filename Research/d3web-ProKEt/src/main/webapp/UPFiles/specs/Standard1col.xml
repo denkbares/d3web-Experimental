@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="Standard Dialog 1 Column Style"  
+	dtype="singleform" 
+	indicationmode="hide_unindicated"
+	dstrategy="nextform"
+	css="questionaryCons, diagnosisVisu" 
+	dialogcolumns="1"
+	questionnairecolumns="1"
+	questioncolumns="2"
+	uiprefix = "QuestionaryCons"
+        login = ""
+        required = "NONE"
+	language = ""
+        debug = "false"
+        >
+	<data kb="QExt240912.d3web" />
+        <ue logging = "FALSE" />
+</dialog>

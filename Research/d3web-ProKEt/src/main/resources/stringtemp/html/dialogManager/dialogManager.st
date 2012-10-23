@@ -94,13 +94,11 @@
     </div>
 
     <div id="datarightcol" class="cell">
-        <div id="kbviewer">
-            <div id="actionsLabel" class="cell labelcell">Wissensbasen</div>
-        </div>
+        <div id="actionsLabel" class="cell labelcell">Wissensbasen</div>
+        $dialogManager/FileSelectorD3web()$
 
-        <div id="specviewer">
-            <div id="actionsLabel" class="cell labelcell">UI Spezifikationen</div>
-        </div>
+        <div id="actionsLabel" class="cell labelcell">UI Spezifikationen</div>
+        $dialogManager/FileSelectorSpecs()$
 
         <div id="dialoglinkviewer">
             <div id="latestDialogLink" style="display: none"></div>

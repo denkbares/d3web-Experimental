@@ -55,23 +55,27 @@ $(function(){
     var statusKB =  Request.parameter("upKB");
     var statusSpecs = Request.parameter("upSPEC");
     var status = Request.parameter("upERR");
-     upfilename = Request.parameter("upfilename");
+    upfilename = Request.parameter("upfilename");
+    
     
     // some error handling for uploading file
     if(status != undefined && status != ""){
         if(status=="nofile"){
-            $('#UploadError').html("Bitte Datei auswählen!");
+            $('#UploadStatus').html("Bitte Datei auswählen!")
+                .removeClass("uploadStatusOK").addClass("uploadStatusERR");
         } 
         if(status=="noxml"){
-            $('#UploadError').html("Bitte XML Spezifikation (.xml) auswählen!");
+            $('#UploadStatus').html("Bitte XML Spezifikation (.xml) auswählen!")
+                removeClass("uploadStatusOK").addClass("uploadStatusERR");
         } 
         if(status=="nokb"){
-            $('#UploadError').html("Bitte Wissensbasis (.doc/.zip/.d3web) auswählen!");
+            $('#UploadStatus').html("Bitte Wissensbasis (.doc/.zip/.d3web) auswählen!")
+                removeClass("uploadStatusOK").addClass("uploadStatusERR");
         }
     }
     
     if(statusKB!=undefined && statusKB != "" && statusKB=="done"){
-        $("#UploadStatus").html("Wissensbasis hochgeladen.")
+        $("#UploadStatus").html("Wissensbasis hochgeladen.");
     }
     
     if(statusSpecs!=undefined && statusSpecs != "" && statusSpecs=="done"){
@@ -96,10 +100,14 @@ function parseDocToKB(id){
         url : link,
         cache : false, // needed for IE, call is not made otherwise
         success : function(html) {
-            if(html.indexOf("parseErrorInvalidDoc")==-1){
+            if(html.indexOf("success")!=-1){
                 //alert("everything's fine");
-            } else {
+                $("#UploadStatus").html("Wissensbasis erfolgreich geparst.")
+            } else if(html.indexOf("showErrFile") != -1) {
+                // everything fine
                 $("#ErrorReportImgButton img").attr("src", "img/ErrorReport.png");
+            } else {
+                $("#UploadStatus").html("Bitte laden Sie ein valides Dokument hoch.")
             }
         } 
     });
