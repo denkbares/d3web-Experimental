@@ -55,5 +55,8 @@ public enum DialogType {
         ITREE,
         
 	/* A default value */
-        DEFAULT;
+        DEFAULT, 
+        
+        /* The Standard form based dialog */
+        STANDARD;
 }

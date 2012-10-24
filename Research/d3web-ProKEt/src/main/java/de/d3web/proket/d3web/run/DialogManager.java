@@ -151,27 +151,27 @@ public class DialogManager extends HttpServlet {
     }
 
     private void fillFilesList(String subfolder, StringTemplate st) {
-        
+
         // assemble path where files are stored
         String path = GlobalSettings.getInstance().getUploadFilesBasePath()
                 + "/" + subfolder;
-       
+
         // get all files under the given path
         List<File> files = Utils.getFileList(path);
-       
+
         if (files.size() > 0) {
             for (File file : files) {
                 StringBuilder bui = new StringBuilder();
                 bui.append("<option");
                 // omitt filetype ending
-                String filename = 
+                String filename =
                         file.getName().split("\\.")[0];
                 bui.append(" title='" + filename + "'>");
                 bui.append(filename);
                 bui.append("</option>");
                 st.setAttribute("fileselectopts_" + subfolder, bui.toString());
             }
-            
+
         }
     }
 
@@ -188,36 +188,46 @@ public class DialogManager extends HttpServlet {
     protected void assembleDialog(HttpServletRequest request,
             HttpServletResponse response,
             HttpSession httpSession) throws IOException {
-
+        
         // get latest loaded .d3web and XML specs file
-        File spec =
-                httpSession.getAttribute("latestSpec") != null
-                ? (File) httpSession.getAttribute("latestSpec") : null;
+        //File spec =
+        //httpSession.getAttribute("latestSpec") != null
+        //? (File) httpSession.getAttribute("latestSpec") : null;
 
-        /*
-         * assemble dialog link
-         */
+        String d3webKBName = request.getParameter("kb").toString();
+        String specName = request.getParameter("spec").toString();
+        String path =
+                GlobalSettings.getInstance().getUploadFilesBasePath()
+                + "/specs/" + specName + ".xml";
+        File specFile = new File(path);
+       
+        // assemble dialog link
         String dialogLink = "";
-        // get the Dialog Type
-        if (spec != null) {
 
-            String type = retrieveDialogTypeFromSpec(spec);
+        // get the Dialog Type
+        if (specName != null) {
+            System.out.println(specName);
+            String type = retrieveDialogTypeFromSpec(specFile);
 
             // assemble ITree Servlet Link
             if (type.equalsIgnoreCase(DialogType.ITREE.toString())) {
 
-                dialogLink = "/ITreeDialog?src=" + spec.getName().replace(".xml", "");
-            } //TODO else... 
+                dialogLink = "/ITreeDialog?src=" + specFile.getName().replace(".xml", "");
+                
+            } else if (type.equalsIgnoreCase(DialogType.STANDARD.toString())){
+                dialogLink = "/StandardDialog?src=" + specFile.getName().replace(".xml", "");
+            }
+            System.out.println(type);
         }
-
+        
         // send link text back to JS
-        PrintWriter writer = response.getWriter();
+       PrintWriter writer = response.getWriter();
         if (!dialogLink.equals("")) {
             writer.write(dialogLink);
         } else {
             writer.write("error");
         }
-        writer.close();
+        //writer.close();
     }
 
     /**
@@ -228,8 +238,13 @@ public class DialogManager extends HttpServlet {
      */
     private String retrieveDialogTypeFromSpec(File spec) {
 
-        d3webParser.parse(spec);
-        return d3webParser.getUIPrefix();
+        if (spec != null) {
+            System.out.println(spec);
+            d3webParser.parse(spec);
+            return d3webParser.getUIPrefix();
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -298,7 +313,9 @@ public class DialogManager extends HttpServlet {
         if (successfulParsed) {
             writer.append("success");
         } else {
-            writer.append("showErrFile");
+            String errFilePath = 
+                    "UPFiles/" + docname + "_Error.html";
+            writer.append("showErrFile;" + errFilePath);
         }
     }
 
@@ -335,7 +352,7 @@ public class DialogManager extends HttpServlet {
         kwF.canExecute();
         kwF.canWrite();
         kwF.canRead();
-        
+
         boolean compileError = false;
 
         //System.out.println("PARSER: \n"
@@ -351,7 +368,7 @@ public class DialogManager extends HttpServlet {
         // TODO: wie komme ich an das Error.html? Flag? Gleich das File zurückgeben?
         try {
             compileError = compiler.compileTo3web(doc, errFile, tmp, d3web, knowwe);
-           
+
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
         } catch (SAXException saxe) {
@@ -362,17 +379,17 @@ public class DialogManager extends HttpServlet {
             ine.printStackTrace();
         }
 
-        if(compileError){
+        if (compileError) {
             // something went wrong during compilation. 
             return false;
         } else {
-            
+
             // OK everything fine. Then rename d3web file and store latest one
             // in webapp/session
             checkAndRenameD3webFile(docName.replace(".doc", ""), d3wF, http);
             return true;
         }
-     }
+    }
 
     /**
      * TODO: How to handle existing files!?

@@ -34,6 +34,8 @@ var upfilename;
  * TODO: maybe refactor */
 $(function(){
   
+ 
+        
     var Request = {	
         parameter: function(name) {
             return this.parameters()[name];
@@ -103,15 +105,24 @@ function parseDocToKB(id){
             if(html.indexOf("success")!=-1){
                 //alert("everything's fine");
                 $("#UploadStatus").html("Wissensbasis erfolgreich geparst.")
+                window.location.reload();
             } else if(html.indexOf("showErrFile") != -1) {
                 // everything fine
                 $("#ErrorReportImgButton img").attr("src", "img/ErrorReport.png");
+                var errorReportLink = html.toString().replace("showErrFile;", "");
+                $("#ErrorReportImgButton img").attr("onclick", "dmOpenErrorReport('" + errorReportLink +"')");
+                $("#UploadStatus").html("Fehler beim Parsen! Bitte Fehlerbericht lesen.")
+                
             } else {
                 $("#UploadStatus").html("Bitte laden Sie ein valides Dokument hoch.")
             }
         } 
     });
 }
+
+function dmOpenErrorReport(errorReportLink){
+    window.open(errorReportLink, "Fehlerbericht", "width=800,height=600,left=100,top=200"); 
+  }
 
 /* calls functionality for assembling a dialog servlet string from the
  * (currently last loaded) KB and spec 
@@ -120,7 +131,18 @@ function assembleDialog(){
     
     // TODO: if we have listings of KBs and Specs here, get the selected ones 
     // and send them as arguments
-    var link = $.query.set("action", "assembleDialog").toString();
+    var selections = "";
+    $("select option:selected").each(function () {
+        selections += $(this).text() + ";;;";
+    });
+    
+    var selArray = selections.split(";;;");
+    var kb = selArray[0];
+    var spec = selArray[1];
+
+    var link = $.query.set("action", "assembleDialog")
+        .set("kb", kb).set("spec", spec).toString();
+        
     link = window.location.href.replace(window.location.search, "") + link;
 
     $.ajax({
@@ -136,6 +158,7 @@ function assembleDialog(){
                 // activate button for storing dialog to the user's list'
                 $("#StoreImgButton img").attr("src", "img/Store.png");
             } else {
+                // extra error div or use upload status div?
                 alert("assembleDialog error");
             }
         } 

@@ -25,7 +25,8 @@
      }
 
 .lastcell{background: white; -moz-border-radius: 0px 15px 15px 0px; 
-    border-radius: 0px 15px 15px 0px; border: 2px solid white;}
+    border-radius: 0px 15px 15px 0px; border: 2px solid white;
+    max-width: 130px;}
 
 .bgcell{background: white; border: 2px solid white;}
 
@@ -153,4 +154,6 @@ input{border: 1px dotted darkgrey;
 
 .specsSelect{min-width: 150px;}
 
-.d3webSelect{min-width: 150px;}
+.d3webSelect{min-width: 275px;}
+
+#spacerowRightcol{min-height: 45px; height: 45px;}

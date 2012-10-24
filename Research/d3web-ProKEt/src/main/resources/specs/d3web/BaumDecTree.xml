@@ -8,12 +8,12 @@
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns="1"
-	uiprefix = "QuestionaryCons"
+	uiprefix = "Standard"
         login = ""
         required = "NONE"
 	language = ""
         debug = "false"
         >
-	<data kb="QExt240912.d3web" />
+	<data kb="BaumDecTree221012.d3web" />
         <ue logging = "FALSE" />
 </dialog>

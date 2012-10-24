@@ -27,7 +27,7 @@
     </div>
 
     <div class="row" id="uploadRow">
-        <div id="rowwrappercell">
+       
         <div class="cell selectcell firstcell">
             $FileBrowser()$
         </div>
@@ -53,52 +53,56 @@
                 <div id="UploadSpacer"></div> 
             </div>
         </div>
-        </div>
+        
     </div>
 
     <div id="uploadStatusRow" class="row">
         <div id="UploadStatus" class="uploadStatusOK cell"></div> 
     </div>
 
-
-
-    <div id="dlActionsLabelRow" class="row">
-        <div id="actionsLabel" class="cell labelcell">Testen </div>
-    </div>
-
-
-    <div class="row">
-        <div class="cell buttoncell firstcell">
-            <div class="cell">
-                $ImgButton(src="img/AssembleRun.png", 
-                            alt="Assemble and Run Dialog",
-                            tt="Assemble and Run Dialog",
-                            click="assembleDialog()")$
-            </div>
-            <div class="cell spacercell">
-            </div>
-            <div class="cell">
-                $ImgButton(src="img/StoreInactive.png", 
-                            alt="Store",
-                            tt="Store Knowledge Base to Repository",
-                            click="storeDialogToUsersList();")$
-            </div>
+    <div id="selectorsRow" class="row">
+        <div id="d3webFileSelectorCell" class="cell">
+            <div id="actionsLabel" class="cell labelcell">Wissensbasen</div>
+            $dialogManager/FileSelectorD3web()$
         </div>
-        <div class="cell buttoncell lastcell">    
+        <div id="specFileSelectorCell" class="cell">
+            <div id="actionsLabel" class="cell labelcell">UI Spezifikationen</div>
+            $dialogManager/FileSelectorSpecs()$
         </div>
     </div>
-    
     </div>
 
     <div id="spacecol" class="cell">
     </div>
 
     <div id="datarightcol" class="cell">
-        <div id="actionsLabel" class="cell labelcell">Wissensbasen</div>
-        $dialogManager/FileSelectorD3web()$
+        <div id="dlActionsLabelRow" class="row">
+            <div id="actionsLabel" class="cell labelcell">Testen </div>
+        </div>
+        
+        <div class="row">
+            <div class="cell buttoncell firstcell">
+                <div class="cell">
+                    $ImgButton(src="img/AssembleRun.png", 
+                            alt="Assemble and Run Dialog",
+                            tt="Assemble and Run Dialog",
+                            click="assembleDialog()")$
+                </div>
+                <div class="cell spacercell">
+                </div>
+                <div class="cell">
+                    $ImgButton(src="img/StoreInactive.png", 
+                            alt="Store",
+                            tt="Store Knowledge Base to Repository",
+                            click="storeDialogToUsersList();")$
+                </div>
+            </div>
+            <div class="cell buttoncell lastcell">    
+            </div>
+        </div>
 
-        <div id="actionsLabel" class="cell labelcell">UI Spezifikationen</div>
-        $dialogManager/FileSelectorSpecs()$
+        <div id="spacerowRightcol" class="cell">
+        </div>
 
         <div id="dialoglinkviewer">
             <div id="latestDialogLink" style="display: none"></div>

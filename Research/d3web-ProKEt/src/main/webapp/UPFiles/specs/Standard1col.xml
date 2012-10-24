@@ -8,7 +8,7 @@
 	dialogcolumns="1"
 	questionnairecolumns="1"
 	questioncolumns="2"
-	uiprefix = "QuestionaryCons"
+	uiprefix = "Standard"
         login = ""
         required = "NONE"
 	language = ""

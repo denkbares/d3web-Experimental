@@ -76,18 +76,30 @@ public class D3webXMLParser {
      */
     public void parse() {
 
-        // try to red the file depending on what was set in the constructor
+        // try to read the file depending on what was set in the constructor
+        // first: "normal" case, i.e. Dialog standalone, no Dialog Manager
         File inputFile = null;
         try {
             // try to get the corresponding XML from the resources folder
-            
+
             inputFile = FileUtils.getResourceFile(
                     GlobalSettings.getInstance().getD3webSpecsPath()
                     + "/" + xMLFilename);
-            System.out.println(inputFile.getName());
         } catch (FileNotFoundException e2) {
+        } catch (NullPointerException npe) {
         }
 
+        // if normal parsing was not yet successful, try to read file from
+        // DialogManager upload directory
+        if (inputFile == null) {
+            String path =
+                    GlobalSettings.getInstance().getUploadFilesBasePath()
+                    + "/specs/" + xMLFilename;
+            inputFile = new File(path);
+        }
+
+
+        // if we have a file, go on parsing
         if (inputFile != null) {
             try {
                 // try to read xml root node
@@ -95,29 +107,29 @@ public class D3webXMLParser {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
 
-        // read the children of the dialog tag, i.e. the data and the ue tag
-        NodeList children = dialogSpec.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
-            Node child = children.item(i);
-            String name = child.getNodeName();
-            if (name.startsWith("#")) {
-                continue;
-            }
-            if (name.equals("data")) {
-                dataSpec = child;
-            } else if (name.equals("ue")) {
-                ueSpec = child;
+            // read the children of the dialog tag, i.e. the data and the ue tag
+            NodeList children = dialogSpec.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                Node child = children.item(i);
+                String name = child.getNodeName();
+                if (name.startsWith("#")) {
+                    continue;
+                }
+                if (name.equals("data")) {
+                    dataSpec = child;
+                } else if (name.equals("ue")) {
+                    ueSpec = child;
+                }
             }
         }
     }
-    
-     public void parse(File spec) {
+
+    public void parse(File spec) {
 
         // try to red the file depending on what was set in the constructor
         File inputFile = spec;
-        
+
         if (inputFile != null) {
             try {
                 // try to read xml root node
@@ -143,8 +155,6 @@ public class D3webXMLParser {
         }
     }
 
-    
-    
     /*
      * DIALOG PROPERTIES, i.e. global styling and config stuff
      */
@@ -208,6 +218,7 @@ public class D3webXMLParser {
     // currently supported login modes of ProKEt: OFF = no login, USRDAT: based
     // on tailored textfile, DB: using SQL database connection
     public enum LoginMode {
+
         OFF, USRDAT, DB
     }
 
@@ -244,12 +255,10 @@ public class D3webXMLParser {
     public String getLanguage() {
         return XMLUtils.getStr((Element) dialogSpec, "language", "");
     }
-    
+
     public Boolean getDebug() {
         return XMLUtils.getBoolean((Element) dialogSpec, "debug", Boolean.FALSE);
     }
-    
-    
 
     /*
      * DATA PROPERTIES, i.e. definition of the knowledge base
@@ -271,9 +280,8 @@ public class D3webXMLParser {
     }
 
     /*
-     * USABILITY EXTENSION STUFF
-     * TODO: write them to separate confic file (like: UE CONNECTOR) and use
-     * them for creating the usability stuff
+     * USABILITY EXTENSION STUFF TODO: write them to separate confic file (like:
+     * UE CONNECTOR) and use them for creating the usability stuff
      */
     public Boolean getLogging() {
         return XMLUtils.getBoolean((Element) ueSpec, "logging", Boolean.FALSE);
@@ -284,7 +292,7 @@ public class D3webXMLParser {
     }
 
     public D3webUESettings.UEQ getUEQuestionnaire() {
-        String ueq = XMLUtils.getStr((Element) ueSpec, "questionnaire", 
+        String ueq = XMLUtils.getStr((Element) ueSpec, "questionnaire",
                 D3webUESettings.UEQ.NONE.toString());
         return D3webUESettings.UEQ.valueOf(ueq);
     }
@@ -292,16 +300,16 @@ public class D3webXMLParser {
     public String getUEGroup() {
         return XMLUtils.getStr((Element) ueSpec, "uegroup", "");
     }
-    
-    public boolean getStudy(){
+
+    public boolean getStudy() {
         return XMLUtils.getBoolean((Element) ueSpec, "study", Boolean.TRUE);
     }
-    
-    public String getLogfilePath(){
+
+    public String getLogfilePath() {
         return XMLUtils.getStr((Element) ueSpec, "logfile_path", "");
     }
-    
-    public String getAnalysisOutputPath(){
+
+    public String getAnalysisOutputPath() {
         return XMLUtils.getStr((Element) ueSpec, "analysisoutput_path", "");
     }
 }
