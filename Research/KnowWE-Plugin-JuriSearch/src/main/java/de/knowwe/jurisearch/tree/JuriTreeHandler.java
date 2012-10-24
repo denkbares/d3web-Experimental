@@ -37,6 +37,7 @@ import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
 import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -89,7 +90,7 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 	public void notify(Event event) {
 		ArticleCreatedEvent e = (ArticleCreatedEvent) event;
 		Article article = e.getArticle();
-		Section<Article> section = article.getRootSection();
+		Section<RootType> section = article.getRootSection();
 		// JuriTreeXmlGenerator jtxg = new JuriTreeXmlGenerator(section);
 	}
 
