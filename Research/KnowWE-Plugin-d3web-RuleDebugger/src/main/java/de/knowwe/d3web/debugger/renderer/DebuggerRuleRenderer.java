@@ -238,19 +238,44 @@ public class DebuggerRuleRenderer implements Renderer {
 						Renderer renderer = grandChild.get().getRenderer();
 
 						if (renderer != null) {
-							renderer.render(grandChild, user, builder);
+							renderMaskJSPWikiMarkup(renderer, grandChild, user, builder);
 						}
 						else {
-							DelegateRenderer.getInstance().renderSubSection(grandChild, user,
-									builder);
+							delegateMaskJSPWikiMarkup(child, user, builder);
 						}
 					}
 				}
 			}
 			else {
-				DelegateRenderer.getInstance().renderSubSection(child, user, builder);
+				delegateMaskJSPWikiMarkup(child, user, builder);
 			}
 		}
 
+	}
+
+	/**
+	 * 
+	 * @created 24.10.2012
+	 * @param child
+	 * @param user
+	 * @param builder
+	 */
+	private static void delegateMaskJSPWikiMarkup(Section<? extends Type> child, UserContext user, StringBuilder builder) {
+		StringBuilder buffy = new StringBuilder();
+		DelegateRenderer.getInstance().renderSubSection(child, user, buffy);
+		builder.append(Strings.maskJSPWikiMarkup(buffy.toString()));
+	}
+
+	/**
+	 * 
+	 * @created 24.10.2012
+	 * @param child
+	 * @param user
+	 * @param builder
+	 */
+	private static void renderMaskJSPWikiMarkup(Renderer r, Section<? extends Type> child, UserContext user, StringBuilder builder) {
+		StringBuilder buffy = new StringBuilder();
+		r.render(child, user, buffy);
+		builder.append(Strings.maskJSPWikiMarkup(buffy.toString()));
 	}
 }

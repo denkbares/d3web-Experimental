@@ -19,6 +19,8 @@
 package de.knowwe.d3web.debugger.actions;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
@@ -91,6 +93,17 @@ public class DebuggerMenuAction extends AbstractAction {
 			else {
 				// render menu
 				if (!qid.equals(SOLUTIONS_KEY)) buffer.append("<p>Relevante Elemente:</p><ul>");
+
+				// sort objects
+				Collections.sort(tos, new Comparator<TerminologyObject>() {
+
+					@Override
+					public int compare(TerminologyObject arg0, TerminologyObject arg1) {
+						return arg0.getName().compareTo(arg1.getName());
+					}
+				});
+
+				// show objects
 				for (TerminologyObject tobj : tos) {
 					if (tobj instanceof Solution) {
 						rate = session.getBlackboard().getRating((Solution) tobj).toString();

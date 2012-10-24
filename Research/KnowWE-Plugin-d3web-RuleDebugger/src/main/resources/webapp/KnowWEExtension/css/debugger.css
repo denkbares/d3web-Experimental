@@ -105,6 +105,7 @@ div.debugger div.debuggerRule {
 	padding: 5px;
 	min-height:20px;
 	text-align: left;
+	white-space: pre;
 }
 .condTrue, .condFalse, .condUnknown, .condUndefined {
 	display: inline;

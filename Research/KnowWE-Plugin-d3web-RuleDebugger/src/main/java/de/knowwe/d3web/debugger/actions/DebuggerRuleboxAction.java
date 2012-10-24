@@ -49,7 +49,8 @@ public class DebuggerRuleboxAction extends AbstractAction {
 
 		if (context.getWriter() != null) {
 			context.setContentType("text/html; charset=UTF-8");
-			context.getWriter().write(Strings.unmaskHTML(renderRule(context)));
+			String text = Strings.unmaskHTML(renderRule(context));
+			context.getWriter().write(text);
 		}
 	}
 

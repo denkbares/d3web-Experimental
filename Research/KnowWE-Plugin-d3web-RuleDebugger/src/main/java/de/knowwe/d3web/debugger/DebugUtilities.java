@@ -20,6 +20,7 @@ package de.knowwe.d3web.debugger;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.Rule;
@@ -29,8 +30,10 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
+import de.d3web.we.basic.D3webKnowledgeHandler;
 import de.d3web.we.kdom.rules.RuleContentType;
 import de.d3web.we.kdom.rules.action.RuleAction;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -159,12 +162,14 @@ public class DebugUtilities {
 		List<Section<RuleAction>> rules;
 
 		// get the knowledgebase's article
-		for (Article article : Environment.getInstance().getArticleManager(
-				Environment.DEFAULT_WEB).getArticles()) {
-
-			if (article.getTitle().equals(kb.getId())) {
-				kbArticle = article;
-				break;
+		D3webKnowledgeHandler knowledgeRepresentationHandler = D3webUtils.getKnowledgeRepresentationHandler(Environment.DEFAULT_WEB);
+		Set<String> knowledgeArticles = knowledgeRepresentationHandler.getKnowledgeArticles();
+		for (String title : knowledgeArticles) {
+			KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB,
+					title);
+			if (knowledgeBase.getId().endsWith(kb.getId())) {
+				kbArticle = Environment.getInstance().getArticleManager(
+						Environment.DEFAULT_WEB).getArticle(title);
 			}
 		}
 
