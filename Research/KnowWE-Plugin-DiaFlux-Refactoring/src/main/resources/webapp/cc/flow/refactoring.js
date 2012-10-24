@@ -652,12 +652,15 @@ Refactoring.newFlowchartText = function(xml) {
 Refactoring.renameTerm = function(node, term, replacement) {
 	
 	var url = "KnowWE.jsp";
+	var changeNote = 'Renaming: "' + term + '" -> "' + replacement +'"';
 	new Ajax.Request(url, {
 		method: 'post',
 		parameters: {
 			action: 'TermRenamingAction',
 			termname: term,
-			termreplacement: replacement
+			termreplacement: replacement,
+			KWikiChangeNote: changeNote
+			
 		},
 		onSuccess: function(transport) {
 			node.setVisible(false);
