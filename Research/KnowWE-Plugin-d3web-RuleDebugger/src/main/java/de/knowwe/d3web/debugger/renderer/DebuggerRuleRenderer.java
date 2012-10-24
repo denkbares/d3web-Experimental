@@ -174,7 +174,7 @@ public class DebuggerRuleRenderer implements Renderer {
 			if (cond instanceof TerminalCondition) {
 				if (condSection.get() instanceof CompositeCondition) {
 					renderTerminalCondition(
-							condSection.getChildren().get(0), (TerminalCondition) cond, session,
+							condSection.getChildren().get(0), cond, session,
 							title,
 							inside, string, user);
 				}
@@ -182,6 +182,17 @@ public class DebuggerRuleRenderer implements Renderer {
 					// not happening ?!
 					DelegateRenderer.getInstance().renderSubSection(condSection, user, string);
 				}
+			}
+			else {
+				// happening for ExpressionConditions which are neither
+				// TerminalConditions nor NonTerminalConditions
+
+				// DelegateRenderer.getInstance().renderSubSection(condSection,
+				// user, string);
+				renderTerminalCondition(
+						condSection.getChildren().get(0), cond, session,
+						title,
+						inside, string, user);
 			}
 		}
 
@@ -213,7 +224,7 @@ public class DebuggerRuleRenderer implements Renderer {
 
 	}
 
-	private static void renderTerminalCondition(Section<?> condSection, TerminalCondition cond, Session session, String title, boolean inside, StringBuilder builder, UserContext user) {
+	private static void renderTerminalCondition(Section<?> condSection, Condition cond, Session session, String title, boolean inside, StringBuilder builder, UserContext user) {
 
 		List<Section<? extends Type>> children = condSection.getChildren();
 		for (Section<? extends Type> child : children) {
