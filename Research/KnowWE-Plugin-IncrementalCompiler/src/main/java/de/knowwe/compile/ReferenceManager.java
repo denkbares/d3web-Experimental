@@ -32,7 +32,7 @@ import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.core.compile.terminology.TermIdentifier;
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.objects.SimpleTerm;
@@ -181,7 +181,7 @@ public class ReferenceManager {
 			// TODO: find better/faster way to do this - this brute force style is
 			// awkward
 			// maybe it can be stored and cached somehow ?
-			Section<Article> rootSection = ref.getArticle().getRootSection();
+			Section<RootType> rootSection = ref.getArticle().getRootSection();
 			List<Section<KnowledgeUnit>> allKnowledgeUnitsOfArticle = Sections.findSuccessorsOfType(
 					rootSection, KnowledgeUnit.class);
 			for (Section<KnowledgeUnit> knowledge : allKnowledgeUnitsOfArticle) {

@@ -29,6 +29,7 @@ import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.kdom.rules.action.SetQuestionValue;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.usersupport.tables.CausalDiagnosisScore;
@@ -56,7 +57,7 @@ import de.knowwe.usersupport.tables.TableSolutionType;
 public class TableTest extends TestCase {
 
 	private final String TESTSUITEARTICLE = "src/test/resources/TableMarkup.txt";
-	private Section<Article> articleSec = null;
+	private Section<RootType> articleSec = null;
 
 	private Section<CausalDiagnosisScoreMarkup> causalTable = null;
 	private final int causalHeaderLineCount = 1;

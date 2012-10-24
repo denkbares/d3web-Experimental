@@ -41,6 +41,7 @@ import de.knowwe.casetrain.type.multimedia.Link.Url;
 import de.knowwe.casetrain.type.multimedia.MultimediaItem.MultimediaItemContent;
 import de.knowwe.casetrain.type.multimedia.Video;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -78,7 +79,7 @@ public class CaseTrainArticleTest extends TestCase {
 	private final String TESTSUITEARTICLE = "src/test/resources/CaseTrainWikipage.txt";
 
 	private final String missingComponent = "Missing component: ";
-	private Section<Article> articleSec;
+	private Section<RootType> articleSec;
 	private Section<MetaData> meta;
 	private Section<Introduction> intro;
 	private Section<Info> info;

@@ -95,6 +95,7 @@ import de.knowwe.casetrain.type.multimedia.MultimediaItem;
 import de.knowwe.casetrain.type.multimedia.Video;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -113,7 +114,7 @@ public class XMLUtils {
 	public static final String TMP_CASE_XML = "/tmp/case.xml";
 
 	public static void createXML(Article article, String user) {
-		Section<Article> articleSec = article.getRootSection();
+		Section<RootType> articleSec = article.getRootSection();
 
 		ObjectFactory fac = new ObjectFactory();
 		Case c = fac.createCase();
@@ -171,7 +172,7 @@ public class XMLUtils {
 	 * @param articleSec
 	 * @param fac
 	 */
-	private static void addEvaluation(Case c, Section<Article> articleSec, ObjectFactory fac) {
+	private static void addEvaluation(Case c, Section<RootType> articleSec, ObjectFactory fac) {
 		Evaluation evo = fac.createCaseEvaluation();
 		EvaluationSections evoSecs = fac.createCaseEvaluationEvaluationSections();
 
@@ -273,7 +274,7 @@ public class XMLUtils {
 		c.setEvaluation(evo);
 	}
 
-	private static void addTitledMM(Case c, Section<Article> sec,
+	private static void addTitledMM(Case c, Section<RootType> sec,
 			ObjectFactory fac, String elementName) {
 
 		Section<?> introSec = null;
@@ -365,7 +366,7 @@ public class XMLUtils {
 	 * @param articleSec
 	 */
 	private static void addMetaData(
-			Case c, Section<Article> articleSec, ObjectFactory fac) {
+			Case c, Section<RootType> articleSec, ObjectFactory fac) {
 		Metadata metaObj = fac.createCaseMetadata();
 
 		Section<MetaData> meta = Sections.findSuccessor(articleSec, MetaData.class);
@@ -490,7 +491,7 @@ public class XMLUtils {
 	 * @param articleSec
 	 * @param fac
 	 */
-	private static void addSections(Case c, Section<Article> articleSec,
+	private static void addSections(Case c, Section<RootType> articleSec,
 			ObjectFactory fac) {
 
 		List<Section<Info>> infoSecs = new ArrayList<Section<Info>>();

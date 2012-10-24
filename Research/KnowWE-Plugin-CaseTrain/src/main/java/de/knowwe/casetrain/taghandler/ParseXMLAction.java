@@ -28,6 +28,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -67,7 +68,7 @@ public class ParseXMLAction extends AbstractAction {
 		String topic = context.getTitle();
 		String web = context.getWeb();
 		Article article = Environment.getInstance().getArticle(web, topic);
-		Section<Article> sec = article.getRootSection();
+		Section<RootType> sec = article.getRootSection();
 
 		if (Sections.findSuccessor(sec, MetaData.class) == null) {
 			buildi.append("<span class=\"error\">" +

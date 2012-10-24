@@ -33,6 +33,7 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.action.WordBasedRenameFinding;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -362,7 +363,7 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 		StringBuffer fstringbuffy = new StringBuffer();
 
 		for (Section<?> s : fathers) {
-			if (!(s.get() instanceof Article)) {
+			if (!(s.get() instanceof RootType)) {
 				String name = s.get().getName() + ", ";
 				if (name.contains(".")) {
 					name = name.substring(name.indexOf('.') + 1);

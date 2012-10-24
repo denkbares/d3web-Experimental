@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
@@ -94,7 +95,7 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 		Collection<Article> articles = manager.getArticles();
 
 		for (Article article : articles) {
-			Section<Article> root = article.getRootSection();
+			Section<RootType> root = article.getRootSection();
 
 			Map<Section<?>, Collection<Message>> errors = new HashMap<Section<?>, Collection<Message>>();
 			Map<Section<?>, Collection<Message>> warnings = new HashMap<Section<?>, Collection<Message>>();

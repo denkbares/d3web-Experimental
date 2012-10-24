@@ -24,10 +24,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import de.knowwe.jspwiki.types.SectionType;
-
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
@@ -37,6 +36,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.core.wikiConnector.WikiConnector;
+import de.knowwe.jspwiki.types.SectionType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -108,7 +108,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 			}
 			else {
 				// render article
-				Section<Article> renderarticle = article.getRootSection();
+				Section<RootType> renderarticle = article.getRootSection();
 
 				if (targetArray.length > 1) {
 					List<?> secList = Sections.findSuccessorsOfType(
@@ -125,7 +125,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 						text = text.trim();
 						if (text.startsWith(subSectionKey)) {
 							// renderarticle for single section
-							renderarticle = (Section<Article>) listElement;
+							renderarticle = (Section<RootType>) listElement;
 						}
 					}
 					// warning if section not found

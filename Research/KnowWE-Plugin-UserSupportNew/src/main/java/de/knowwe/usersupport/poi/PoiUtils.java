@@ -51,6 +51,7 @@ import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.ActionContext;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -78,9 +79,9 @@ import de.knowwe.usersupport.tables.TableUtils;
  */
 public class PoiUtils
 {
-	private static String WORD_IMPORT_TEXT = "%%WordExportImport \r\n" + 
+	private static String WORD_IMPORT_TEXT = "%%WordExportImport \r\n" +
 		       								 "Text \r\n" +
-		       								 "@package: default \r\n" + 
+		       								 "@package: default \r\n" +
 		       								 "% \r\n";
 
 	private static int idPostfix = 0;
@@ -288,7 +289,7 @@ public class PoiUtils
 	}
 	
 	
-	public static Section<Article> getRootSectionForArticle(String article) {
+	public static Section<RootType> getRootSectionForArticle(String article) {
 		ArticleManager manager =
 				Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
 		Article art = manager.getArticle(article);
@@ -298,7 +299,7 @@ public class PoiUtils
 
 	
 	public static String getKnowledgeBaseTextForArticle(String article) {
-		Section<Article> artSec = getRootSectionForArticle(article);
+		Section<RootType> artSec = getRootSectionForArticle(article);
 
 		StringBuilder recovery = new StringBuilder();
 		List<Section<KnowledgeBaseType>> knowledgeBaseTypes = Sections.findSuccessorsOfType(artSec,
@@ -330,11 +331,11 @@ public class PoiUtils
 	
 	
 	
-	public static String compileHtmlInput(String inFileName, IHtmlToWikiConverter htmlConv) 
+	public static String compileHtmlInput(String inFileName, IHtmlToWikiConverter htmlConv)
 	throws IOException {
 		// Parse the created html to Wikisyntax
 		
-		String htmlText = de.uniwue.abstracttools.StringUtils.readFileString(inFileName);		
+		String htmlText = de.uniwue.abstracttools.StringUtils.readFileString(inFileName);
 		return htmlConv.getWikiText(htmlText);
 	}
 	

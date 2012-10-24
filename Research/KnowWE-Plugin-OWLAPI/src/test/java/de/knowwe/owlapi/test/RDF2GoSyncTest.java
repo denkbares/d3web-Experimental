@@ -40,6 +40,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.event.ArticleUpdatesFinishedEvent;
 import de.knowwe.owlapi.OWLAPIConnector;
@@ -93,7 +94,8 @@ public class RDF2GoSyncTest {
 
 	private Section<?> getDummySection() {
 		Article article = Article.createArticle("Wayne", "Juckts", "default_web");
-		return Section.createSection("Wayne Juckts", article, article.getRootSection());
+		return Section.createSection("Wayne Juckts", RootType.getInstance(),
+				article.getRootSection());
 	}
 
 	@Test

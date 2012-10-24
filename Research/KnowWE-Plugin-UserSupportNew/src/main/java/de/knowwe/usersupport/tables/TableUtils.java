@@ -25,6 +25,7 @@ import java.util.List;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.usersupport.renderer.TableRenderer;
@@ -138,7 +139,7 @@ public class TableUtils {
 	 * @return
 	 */
 	public static Section<ITable> getTableWithId(Article article, String id) {
-		Section<Article> articleSection = article.getRootSection();
+		Section<RootType> articleSection = article.getRootSection();
 
 		List<Section<ITable>> tables = new ArrayList<Section<ITable>>();
 		Sections.findSuccessorsOfType(articleSection, ITable.class, tables);
