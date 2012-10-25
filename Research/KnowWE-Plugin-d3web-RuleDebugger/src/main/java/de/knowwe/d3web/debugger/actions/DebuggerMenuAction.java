@@ -107,7 +107,7 @@ public class DebuggerMenuAction extends AbstractAction {
 				for (TerminologyObject tobj : tos) {
 					if (tobj instanceof Solution) {
 						rate = session.getBlackboard().getRating((Solution) tobj).toString();
-						buffer.append("<li class='debuggerMenuSolution' style='");
+						buffer.append("\n<li class='debuggerMenuSolution' style='");
 						if (rate.equals("EXCLUDED")) buffer.append("border-color:"
 								+ DebugUtilities.COLOR_EXCLUDED + "'");
 						else if (rate.equals("SUGGESTED")) buffer.append("border-color:"
@@ -116,7 +116,7 @@ public class DebuggerMenuAction extends AbstractAction {
 								+ DebugUtilities.COLOR_ESTABLISHED + "'");
 						else buffer.append("border-color: " + DebugUtilities.COLOR_UNCLEAR + "'");
 					}
-					else buffer.append("<li class='debuggerMenu'");
+					else buffer.append("\n<li class='debuggerMenu'");
 					buffer.append(" kbid='" + kb.getId() + "'>"
 							+ tobj.getName()
 							+ "</li>");
