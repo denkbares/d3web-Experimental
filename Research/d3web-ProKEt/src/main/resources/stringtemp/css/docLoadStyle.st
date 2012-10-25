@@ -95,14 +95,6 @@ margin-top: 10px;}
     top: 85px;
     width: 50px;}
 
-#KBUploadStatus{display: none; font-family: Verdana;  font-size: 0.7em;
-    margin-top: 5px;
-    padding-left: 15px; color: darkred;}
-
-#SPECUploadStatus{display: none; font-family: Verdana;  font-size: 0.7em;
-    margin-top: 5px;
-    padding-left: 15px; color: darkred;}
-
 #latestDialogLink{display: none; font-family: Verdana;  font-size: 0.7em;
     margin-top: 5px;
     padding-left: 15px; color: blue;}

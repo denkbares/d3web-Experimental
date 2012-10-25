@@ -63,25 +63,25 @@ $(function(){
     // some error handling for uploading file
     if(status != undefined && status != ""){
         if(status=="nofile"){
-            $('#UploadStatus').html("Bitte Datei auswählen!")
-                .removeClass("uploadStatusOK").addClass("uploadStatusERR");
+            $('#statusMessage').html("Bitte Datei auswählen!")
+                .removeClass("statusMessageOK").addClass("statusMessageERR");
         } 
         if(status=="noxml"){
-            $('#UploadStatus').html("Bitte XML Spezifikation (.xml) auswählen!")
-                removeClass("uploadStatusOK").addClass("uploadStatusERR");
+            $('#statusMessage').html("Bitte XML Spezifikation (.xml) auswählen!")
+                removeClass("statusMessageOK").addClass("statusMessageERR");
         } 
         if(status=="nokb"){
-            $('#UploadStatus').html("Bitte Wissensbasis (.doc/.zip/.d3web) auswählen!")
-                removeClass("uploadStatusOK").addClass("uploadStatusERR");
+            $('#statusMessage').html("Bitte Wissensbasis (.doc/.zip/.d3web) auswählen!")
+                removeClass("statusMessageOK").addClass("statusMessageERR");
         }
     }
     
     if(statusKB!=undefined && statusKB != "" && statusKB=="done"){
-        $("#UploadStatus").html("Wissensbasis hochgeladen.");
+        $("#statusMessage").html("Wissensbasis hochgeladen.");
     }
     
     if(statusSpecs!=undefined && statusSpecs != "" && statusSpecs=="done"){
-        $("#UploadStatus").html("Spezifikation hochgeladen.");
+        $("#statusMessage").html("Spezifikation hochgeladen.");
     }
  
 });
@@ -104,17 +104,20 @@ function parseDocToKB(id){
         success : function(html) {
             if(html.indexOf("success")!=-1){
                 //alert("everything's fine");
-                $("#UploadStatus").html("Wissensbasis erfolgreich geparst.")
-                window.location.reload();
+                $("#statusMessage").html("Wissensbasis erfolgreich geparst.");
+                var kbSelectContent = html.replace("success;;;", "");
+                alert(kbSelectContent);
+                $("#d3webSelect").html(kbSelectContent);
+                
             } else if(html.indexOf("showErrFile") != -1) {
                 // everything fine
                 $("#ErrorReportImgButton img").attr("src", "img/ErrorReport.png");
                 var errorReportLink = html.toString().replace("showErrFile;", "");
                 $("#ErrorReportImgButton img").attr("onclick", "dmOpenErrorReport('" + errorReportLink +"')");
-                $("#UploadStatus").html("Fehler beim Parsen! Bitte Fehlerbericht lesen.")
+                $("#statusMessage").html("Fehler beim Parsen! Bitte Fehlerbericht lesen.")
                 
             } else {
-                $("#UploadStatus").html("Bitte laden Sie ein valides Dokument hoch.")
+                $("#statusMessage").html("Bitte laden Sie ein valides Dokument hoch.")
             }
         } 
     });

@@ -19,6 +19,7 @@
  */
 package de.d3web.proket.d3web.run;
 
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.core.knowledge.TerminologyManager;
 import java.io.IOException;
@@ -76,7 +77,6 @@ import de.d3web.proket.utils.GlobalSettings;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import javax.servlet.ServletContext;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -1178,13 +1178,11 @@ public class D3webDialog extends HttpServlet {
         // get the root renderer --> call getRenderer with null
         DefaultRootD3webRenderer d3webr =
                 (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
-        //System.out .println("RENDEER: " + d3webr.getClass());
+        System.out .println("RENDEER: " + d3webr.getClass());
 
         // new ContainerCollection needed each time to get an updated dialog
         ContainerCollection cc = new ContainerCollection();
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
-
-        //System.out.println(d3webr.getClass());
 
         cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
         writer.print(cc.html.toString()); // deliver the rendered output
@@ -1747,11 +1745,11 @@ public class D3webDialog extends HttpServlet {
 
         // Only parse d3web from XML specs if it was not provided before,
         // e.g., by the DialogManager Servlet
-        File d3web = null;
+        KnowledgeBase d3web = null;
         if (httpSession.getAttribute("latestD3web") != null) {
-            d3web = (File) httpSession.getAttribute("latestD3web");
+            d3web = (KnowledgeBase) httpSession.getAttribute("latestD3web");
             System.out.println(d3web);
-            d3wcon.setKb(D3webUtils.getDocToD3webKnowledgeBase(d3web));
+            d3wcon.setKb(d3web);
         } else {
             d3wcon.setKb(d3webParser.getKnowledgeBase());
         }

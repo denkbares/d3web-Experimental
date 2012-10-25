@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository>
+<session changed="2012-10-25 12:08:02.272" created="2012-10-25 12:08:02.272" id="dd8208a6-5b95-4589-a99b-bf45e35a99fd">
+<name/>
+<facts>
+<valueFacts>
+<fact objectName="Fruchttyp" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Kastanie</choiceValue>
+</fact>
+<fact objectName="Rindenoberfläche" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>rissig oder geborsten</choiceValue>
+</fact>
+<fact objectName="Einheimische Baumart?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Fruchtart" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>längliche Zapfen</choiceValue>
+</fact>
+<fact objectName="Stammfarbe" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>braun oder grau</choiceValue>
+</fact>
+<fact objectName="Zapfenrichtung" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>stehend</choiceValue>
+</fact>
+<fact objectName="start" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2012-10-25 12:08:02.272</dateValue>
+</fact>
+<fact objectName="now" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2012-10-25 12:08:32.198</dateValue>
+</fact>
+<fact objectName="Blüten" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>grün, vor oder mit dem Laubaustrieb</choiceValue>
+</fact>
+<fact objectName="Hat der Baum Nadeln?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Nadellänge" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>kurz</choiceValue>
+</fact>
+<fact objectName="Anderer Baum" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="10.0" type="heuristic">SUGGESTED</rating>
+</fact>
+<fact objectName="Kiefer" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="-Infinity" type="heuristic">EXCLUDED</rating>
+</fact>
+<fact objectName="Ahorn" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="10.0" type="heuristic">SUGGESTED</rating>
+</fact>
+<fact objectName="Fichte" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="10.0" type="heuristic">SUGGESTED</rating>
+</fact>
+<fact objectName="Nadelbaum" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="999.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+<fact objectName="Tanne" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="90.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+<fact objectName="Buche" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="10.0" type="heuristic">SUGGESTED</rating>
+</fact>
+<fact objectName="Kastanie" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="999.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+</valueFacts>
+<interviewFacts>
+<fact objectName="Zapfenrichtung" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Nadelanordnung" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Stamm" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Samen" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Nadeln" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Einstiegsuntersuchung" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Hat der Baum Nadeln?" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+</interviewFacts>
+</facts>
+<protocol>
+<entry date="2012-10-25 12:08:03.638" objectName="Einheimische Baumart?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Yes</choiceValue>
+</entry>
+<entry date="2012-10-25 12:08:06.609" objectName="Hat der Baum Nadeln?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>No</choiceValue>
+</entry>
+<entry date="2012-10-25 12:08:08.485" objectName="Rindenoberfläche" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>rissig oder geborsten</choiceValue>
+</entry>
+<entry date="2012-10-25 12:08:10.658" objectName="Stammfarbe" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>braun oder grau</choiceValue>
+</entry>
+<entry date="2012-10-25 12:08:12.714" objectName="Fruchttyp" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Kastanie</choiceValue>
+</entry>
+<entry date="2012-10-25 12:08:15.752" objectName="Blüten" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>grün, vor oder mit dem Laubaustrieb</choiceValue>
+</entry>
+<entry date="2012-10-25 12:08:18.973" objectName="Hat der Baum Nadeln?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Yes</choiceValue>
+</entry>
+<entry date="2012-10-25 12:08:21.07" objectName="Fruchtart" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>rundliche Zapfen</choiceValue>
+</entry>
+<entry date="2012-10-25 12:08:22.999" objectName="Nadellänge" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>lang</choiceValue>
+</entry>
+<entry date="2012-10-25 12:08:26.48" objectName="Nadellänge" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>kurz</choiceValue>
+</entry>
+<entry date="2012-10-25 12:08:29.279" objectName="Fruchtart" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>längliche Zapfen</choiceValue>
+</entry>
+<entry date="2012-10-25 12:08:30.794" objectName="Zapfenrichtung" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>hängend</choiceValue>
+</entry>
+<entry date="2012-10-25 12:08:32.198" objectName="Zapfenrichtung" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>stehend</choiceValue>
+</entry>
+</protocol>
+</session>
+</repository>

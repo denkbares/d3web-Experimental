@@ -56,8 +56,8 @@
         
     </div>
 
-    <div id="uploadStatusRow" class="row">
-        <div id="UploadStatus" class="uploadStatusOK cell"></div> 
+    <div id="statusRow" class="row">
+        <div id="statusMessage" class="statusMessageOK cell"></div> 
     </div>
 
     <div id="selectorsRow" class="row">

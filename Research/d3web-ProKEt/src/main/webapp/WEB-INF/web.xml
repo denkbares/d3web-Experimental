@@ -26,6 +26,10 @@
         <servlet-class>de.d3web.proket.d3web.run.D3webDialog</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>StandardDialog</servlet-name>
+        <servlet-class>de.d3web.proket.d3web.run.StandardDialog</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>MediastinitisDialog</servlet-name>
         <servlet-class>de.d3web.proket.d3web.run.MediastinitisDialog</servlet-class>
     </servlet>
@@ -120,5 +124,9 @@
     <servlet-mapping>
         <servlet-name>ConsQuestionary</servlet-name>
         <url-pattern>/CQues</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StandardDialog</servlet-name>
+        <url-pattern>/StandardDialog</url-pattern>
     </servlet-mapping>
 </web-app>

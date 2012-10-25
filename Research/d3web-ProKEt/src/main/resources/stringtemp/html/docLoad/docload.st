@@ -47,8 +47,8 @@
                     </div>
                 </div>
             </div>
-            <div id="uploadStatusRow" class="row">
-                <div id="UploadStatus"></div> 
+            <div id="statusRow" class="row">
+                <div id="statusMessage"></div> 
             </div>
         </div>
     </div>

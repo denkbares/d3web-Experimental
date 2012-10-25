@@ -117,6 +117,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
     public AbstractD3webRenderer getRenderer(TerminologyObject to) {
         String userPref = UISettings.getInstance().getUIprefix();
         
+        
         String name = DEFAULT;
         if (to == null) {
             return (AbstractD3webRenderer) getRenderer(userPref, name);

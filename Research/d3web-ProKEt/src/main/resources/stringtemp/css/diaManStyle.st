@@ -134,15 +134,15 @@ input{border: 1px dotted darkgrey;
 .row a{font-family: Verdana;  font-size: 0.8em;
     margin-top: 5px; color: darkslateblue; padding-right: 10px; padding-left:10px;}
 
-.uploadStatusOK{font-family: Verdana;  font-size: 0.7em;
+.statusMessageOK{font-family: Verdana;  font-size: 0.7em;
     margin-top: 5px;
     padding-left: 15px; color: darkslateblue;}
 
-.uploadStatusERR{font-family: Verdana;  font-size: 0.7em;
+.statusMessageERR{font-family: Verdana;  font-size: 0.7em;
     margin-top: 5px;
     padding-left: 15px; color: darkred; font-weight: bold;}
 
-#UploadStatus{text-align: right; padding: 5px; height: 10px;}
+#statusMessage{text-align: right; padding: 5px; height: 10px;}
 
 #UploadSpacer{width: 200px; height: 20px; padding-left: 10px; 
     padding-right: 10px; 

@@ -16,3 +16,14 @@ Installing JuriParser und Abstracttools:
 OpenOffice über Konsole starten:
 - 
 /Applications/OpenOffice.org.app/Contents/MacOS/soffice.bin -nologo &
+
+
+
+Neuen DialogTyp anlegen (Beispiel: Typ "Standard")
+-----------------------
+- DialogType anlegen, das ist das was im XML bei uiprefix angegeben wird
+
+- entsprechende Renderer schreiben, z.B. StandardDefaultRootD3webRenderer
+(ggf. entsprechende Einzelrenderer für Fragen, Antworten etc mit dem Prefix)
+
+- ggf. im D3webRendererMapping entsprechend anpassen/einfügen

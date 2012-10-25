@@ -20,7 +20,9 @@
 package de.d3web.proket.d3web.run;
 
 import converter.Html2KnowWECompiler;
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.utils.Utils;
 import de.d3web.proket.data.DialogType;
 import java.io.File;
@@ -150,7 +152,7 @@ public class DialogManager extends HttpServlet {
         writer.close();
     }
 
-    private void fillFilesList(String subfolder, StringTemplate st) {
+    private String fillFilesList(String subfolder, StringTemplate st) {
 
         // assemble path where files are stored
         String path = GlobalSettings.getInstance().getUploadFilesBasePath()
@@ -158,10 +160,9 @@ public class DialogManager extends HttpServlet {
 
         // get all files under the given path
         List<File> files = Utils.getFileList(path);
-
+        StringBuilder bui = new StringBuilder();
         if (files.size() > 0) {
             for (File file : files) {
-                StringBuilder bui = new StringBuilder();
                 bui.append("<option");
                 // omitt filetype ending
                 String filename =
@@ -169,10 +170,10 @@ public class DialogManager extends HttpServlet {
                 bui.append(" title='" + filename + "'>");
                 bui.append(filename);
                 bui.append("</option>");
-                st.setAttribute("fileselectopts_" + subfolder, bui.toString());
             }
-
+            st.setAttribute("fileselectopts_" + subfolder, bui.toString());
         }
+        return bui.toString();
     }
 
     /**
@@ -195,6 +196,9 @@ public class DialogManager extends HttpServlet {
         //? (File) httpSession.getAttribute("latestSpec") : null;
 
         String d3webKBName = request.getParameter("kb").toString();
+        KnowledgeBase kb = D3webUtils.getKnowledgeBase(d3webKBName);
+        httpSession.setAttribute("latestD3web", kb);
+                
         String specName = request.getParameter("spec").toString();
         String path =
                 GlobalSettings.getInstance().getUploadFilesBasePath()
@@ -206,7 +210,7 @@ public class DialogManager extends HttpServlet {
 
         // get the Dialog Type
         if (specName != null) {
-            System.out.println(specName);
+            
             String type = retrieveDialogTypeFromSpec(specFile);
 
             // assemble ITree Servlet Link
@@ -217,7 +221,7 @@ public class DialogManager extends HttpServlet {
             } else if (type.equalsIgnoreCase(DialogType.STANDARD.toString())){
                 dialogLink = "/StandardDialog?src=" + specFile.getName().replace(".xml", "");
             }
-            System.out.println(type);
+ 
         }
         
         // send link text back to JS
@@ -311,7 +315,11 @@ public class DialogManager extends HttpServlet {
         }
 
         if (successfulParsed) {
+            StringTemplate st =
+                TemplateUtils.getStringTemplate("dialogManager/dialogManager", "html");
+            String d3webSelectOpts = fillFilesList("d3web", st);
             writer.append("success");
+            writer.append(";;;"+d3webSelectOpts);
         } else {
             String errFilePath = 
                     "UPFiles/" + docname + "_Error.html";
