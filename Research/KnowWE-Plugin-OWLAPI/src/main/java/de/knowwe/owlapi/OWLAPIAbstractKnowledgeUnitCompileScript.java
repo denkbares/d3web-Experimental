@@ -31,7 +31,7 @@ import de.knowwe.core.report.Message;
 /**
  * OWLAPIAbstractKnowledgeUnitCompileScript class which handles basic knowledge
  * creation. Implements dummy deleteFromOntology method. If you need to
- * implement your own use the {@link OWLAPIKnowledgeUnitCompileScript}.
+ * implement your own use the {@link OWLAPIRDFKnowledgeUnitCompileScript}.
  *
  * Simply adapted the {@link OWLAPISubtreeHandler} to the new
  * {@link IncrementalCompiler}.
@@ -40,7 +40,7 @@ import de.knowwe.core.report.Message;
  * @created 22.11.2011
  * @param <T>
  */
-public abstract class OWLAPIAbstractKnowledgeUnitCompileScript<T extends Type> extends OWLAPIKnowledgeUnitCompileScript<T> {
+public abstract class OWLAPIAbstractKnowledgeUnitCompileScript<T extends Type> extends OWLAPIRDFKnowledgeUnitCompileScript<T> {
 
 	public OWLAPIAbstractKnowledgeUnitCompileScript(boolean sync) {
 		super(sync);

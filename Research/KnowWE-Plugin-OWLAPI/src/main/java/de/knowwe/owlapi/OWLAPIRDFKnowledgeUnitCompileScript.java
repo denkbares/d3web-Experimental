@@ -45,7 +45,7 @@ import de.knowwe.core.report.Messages;
  * @created 22.11.2011
  * @param <T>
  */
-public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends AbstractKnowledgeUnitCompileScript<T> {
+public abstract class OWLAPIRDFKnowledgeUnitCompileScript<T extends Type> extends AbstractKnowledgeUnitCompileScript<T> {
 
 	/**
 	 * Cache for the OWLAxioms. Enables incremental compilation.
@@ -68,7 +68,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 	 * Creates an OWLAPISubtreeHandler instance using KnowWE's global ontology
 	 * and applying all changes to this ontology to the RDF2Go-Store.
 	 */
-	public OWLAPIKnowledgeUnitCompileScript() {
+	public OWLAPIRDFKnowledgeUnitCompileScript() {
 		this(OWLAPIConnector.getGlobalInstance(), true);
 	}
 
@@ -80,7 +80,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 	 * @param sync specifies the sync with the RDF2Go-Store (true means sync is
 	 *        active).
 	 */
-	public OWLAPIKnowledgeUnitCompileScript(boolean sync) {
+	public OWLAPIRDFKnowledgeUnitCompileScript(boolean sync) {
 		this(OWLAPIConnector.getGlobalInstance(), sync);
 	}
 
@@ -93,7 +93,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 	 * @param sync specifies the sync with the RDF2Go-Store (true means sync is
 	 *        active).
 	 */
-	public OWLAPIKnowledgeUnitCompileScript(OWLAPIConnector connector, boolean sync) {
+	public OWLAPIRDFKnowledgeUnitCompileScript(OWLAPIConnector connector, boolean sync) {
 		if (connector == null) {
 			throw new NullPointerException("The connector can't be null!");
 		}
