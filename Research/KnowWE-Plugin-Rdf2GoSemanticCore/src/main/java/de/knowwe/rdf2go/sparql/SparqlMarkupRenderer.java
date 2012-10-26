@@ -35,6 +35,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.sparql.utils.Pair;
 
 public class SparqlMarkupRenderer implements Renderer {
 
@@ -52,6 +53,23 @@ public class SparqlMarkupRenderer implements Renderer {
 				Section<SparqlMarkupType> markupSection = Sections.findAncestorOfType(sec,
 						SparqlMarkupType.class);
 
+				String rawOutput =
+						DefaultMarkupType.getAnnotation(markupSection,
+								SparqlMarkupType.RAW_OUTPUT);
+				// QueryResultTable resultSet =
+				// Rdf2GoCore.getInstance().sparqlSelect(
+				// sparqlString);
+				//
+				String zebramode =
+						DefaultMarkupType.getAnnotation(markupSection,
+								SparqlMarkupType.ZEBRAMODE);
+				// Pair<String, Integer> resultEntry =
+				// SparqlResultRenderer.getInstance().renderQueryResult(
+				// resultSet,
+				// rawOutput != null && rawOutput.equals("true"), zebramode !=
+				// null
+				// && zebramode.equals("true"));
+
 				// Navigation bar is (at the moment) only displayed if
 				// explicitly activated in markup
 				String navigation = DefaultMarkupType.getAnnotation(markupSection,
@@ -60,20 +78,32 @@ public class SparqlMarkupRenderer implements Renderer {
 					// do not show navigation bar if LIMIT or OFFSET is set in
 					// markup
 					if (!(isLimitSet(markupSection) || (isOffsetSet(markupSection)))) {
-						int fromLine = getSelectedFromLine(user);
-						int showLines = getShowLines(user);
-						result.append(renderTableSizeSelector(showLines));
-						result.append(renderNavigation(fromLine, showLines));
+						String fromLine = getSelectedFromLine(user);
+						String showLines = getShowLines(user);
 						sparqlString += addOffsetandLimitToSparqlString(fromLine, showLines);
+
+						QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
+								sparqlString);
+						Pair<String, Integer> resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
+								resultSet,
+								rawOutput != null && rawOutput.equals("true"), zebramode != null
+										&& zebramode.equals("true"));
+						result.append(renderTableSizeSelector(showLines));
+						result.append(renderNavigation(fromLine, showLines, resultEntry.getB()));
+						result.append(Strings.maskHTML(resultEntry.getA()));
+
 					}
 				}
+				else {
+					QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
+							sparqlString);
+					Pair<String, Integer> resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
+							resultSet,
+							rawOutput != null && rawOutput.equals("true"), zebramode != null
+									&& zebramode.equals("true"));
+					result.append(Strings.maskHTML(resultEntry.getA()));
+				}
 
-				String rawOutput = DefaultMarkupType.getAnnotation(markupSection,
-						SparqlMarkupType.RAW_OUTPUT);
-				QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
-						sparqlString);
-				result.append(SparqlResultRenderer.getInstance().renderQueryResult(resultSet,
-						rawOutput != null && rawOutput.equals("true")));
 			}
 
 		}
@@ -117,28 +147,29 @@ public class SparqlMarkupRenderer implements Renderer {
 		return sparqlString;
 	}
 
-	private String addOffsetandLimitToSparqlString(int offset, int limit) {
+	private String addOffsetandLimitToSparqlString(String offset, String limit) {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(" OFFSET " + offset);
-		sb.append(" LIMIT " + limit);
+
+		if (!(limit.equals("All"))) sb.append(" LIMIT " + limit);
 
 		return sb.toString();
 	}
 
-	private String renderTableSizeSelector(int selectedSize) {
+	private String renderTableSizeSelector(String selectedSize) {
 		StringBuilder builder = new StringBuilder();
 
-		int[] sizeArray = new int[] {
-				10, 20, 50, 100, 1000, 10000 };
+		String[] sizeArray = new String[] {
+				"10", "20", "50", "100", "1000", "All" };
 		builder.append("<div class='toolBar'>");
 		builder.append("<span class=fillText>Show </span>"
 				+ "<select id='showLines'"
 				+ " onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer();\">");
-		for (int size : sizeArray) {
-			if (size == selectedSize) {
-				builder.append("<option selected='selected' value='" + size + "'>"
-						+ size + "</option>");
+		for (String size : sizeArray) {
+			if (size.equals(selectedSize)) {
+				builder.append("<option selected='selected' value='" + size + "'>" + size
+						+ "</option>");
 			}
 			else {
 				builder.append("<option value='" + size + "'>" + size
@@ -150,22 +181,31 @@ public class SparqlMarkupRenderer implements Renderer {
 		return Strings.maskHTML(builder.toString());
 	}
 
-	private Object renderNavigation(int from, int selectedSize) {
+	private Object renderNavigation(String from, String selectedSize, int max) {
 		StringBuilder builder = new StringBuilder();
+
+		int fromInt = Integer.parseInt(from);
+		int selectedSizeInt;
+		if (!(selectedSize.equals("All"))) {
+			selectedSizeInt = Integer.parseInt(selectedSize);
+		}
+		else {
+			selectedSizeInt = max;
+		}
 
 		renderToolbarButton(
 				"begin.png", "KNOWWE.plugin.semantic.actions.begin()",
-				(from > 1), builder);
+				(fromInt > 1), builder);
 		renderToolbarButton(
 				"back.png", "KNOWWE.plugin.semantic.actions.back()",
-				(from > 1), builder);
+				(fromInt > 1), builder);
 		builder.append("<span class=fillText> Lines </span>");
 		builder.append("<input size=3 id='fromLine' type=\"field\" onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer();\" value='"
 				+ from + "'>");
-		builder.append("<span class=fillText> to </span>" + (from + selectedSize - 1));
+		builder.append("<span class=fillText> to </span>" + (fromInt + selectedSizeInt - 1));
 		renderToolbarButton(
 				"forward.png", "KNOWWE.plugin.semantic.actions.forward()",
-				true, builder);
+				!selectedSize.equals("all"), builder);
 		builder.append("</div>");
 		return Strings.maskHTML(builder.toString());
 	}
@@ -191,12 +231,12 @@ public class SparqlMarkupRenderer implements Renderer {
 		}
 	}
 
-	private int getSelectedFromLine(UserContext user) {
-		return Integer.parseInt(getCookie(user, "FromLine", "1"));
+	private String getSelectedFromLine(UserContext user) {
+		return getCookie(user, "FromLine", "1");
 	}
 
-	private int getShowLines(UserContext user) {
-		return Integer.parseInt(getCookie(user, "ShowLines", "20"));
+	private String getShowLines(UserContext user) {
+		return getCookie(user, "ShowLines", "20");
 	}
 
 	private String getCookie(UserContext user, String cookieName, String defaultValue) {

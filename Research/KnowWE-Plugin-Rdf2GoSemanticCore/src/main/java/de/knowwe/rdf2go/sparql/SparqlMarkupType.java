@@ -28,6 +28,7 @@ public class SparqlMarkupType extends DefaultMarkupType {
 
 	public static final String RAW_OUTPUT = "rawOutput";
 	public static final String NAVIGATION = "navigation";
+	public static final String ZEBRAMODE = "zebramode";
 	private static DefaultMarkup m = null;
 
 	static {
@@ -36,6 +37,9 @@ public class SparqlMarkupType extends DefaultMarkupType {
 		m.addAnnotation(NAVIGATION, false, "true", "false");
 		m.addAnnotationRenderer(NAVIGATION, NothingRenderer.getInstance());
 		m.addAnnotation(RAW_OUTPUT, false, "true", "false");
+		m.addAnnotation(ZEBRAMODE, false, "true", "false");
+		m.addAnnotationRenderer(ZEBRAMODE, NothingRenderer.getInstance());
+
 	}
 
 	public SparqlMarkupType(DefaultMarkup markup) {

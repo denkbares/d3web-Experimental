@@ -31,3 +31,27 @@
 	position: relative;
 	top: 3px;
 }
+
+.type_sparql TABLE.wikitable {
+	margin: 0px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.type_sparql TABLE.wikitable * TD {
+	padding-bottom: 1px;
+}
+
+.type_sparql .toolBar .toolButton {
+	position: relative;
+	border: 1px solid white;
+}
+
+.type_sparql .wikitable * TR.odd {
+	background-color: #EEE;
+}
+
+.type_sparql .wikitable * TH {
+	vertical-align: middle;
+	text-align: left;
+}

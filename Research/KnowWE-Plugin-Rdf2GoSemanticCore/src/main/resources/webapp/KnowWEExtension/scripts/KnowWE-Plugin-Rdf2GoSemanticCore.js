@@ -53,7 +53,14 @@ KNOWWE.plugin.semantic.actions = function() {
 			var showLines = jq$('#showLines').val();
 			document.cookie = "ShowLines=" + showLines;
 			var fromLine = jq$('#fromLine').val();
-			var newFromLine = parseInt(fromLine)+parseInt(showLines)
+			
+			var newFromLine;
+			if (showLines == "All"){
+				newFromLine = 1;
+			}
+			else {
+				newFromLine = parseInt(fromLine)+parseInt(showLines);
+			}
 			document.cookie = "FromLine=" + newFromLine;
 			KNOWWE.plugin.d3webbasic.actions.updateNode(jq$('.type_sparql').first().attr("id"), KNOWWE.helper.gup('page'), null);
 		},  
@@ -62,7 +69,19 @@ KNOWWE.plugin.semantic.actions = function() {
 			var showLines = jq$('#showLines').val();
 			document.cookie = "ShowLines=" + showLines;
 			var fromLine = jq$('#fromLine').val();
-			var newFromLine = parseInt(fromLine)-parseInt(showLines)
+			var newFromLine;
+			if (showLines == "All"){
+				newFromLine = 1;
+			}
+			else {
+				if(parseInt(fromLine)-parseInt(showLines) < 1){
+					newFromLine = 1;
+				}
+				else {
+			 		newFromLine = parseInt(fromLine)-parseInt(showLines);
+				}
+			}
+			
 			document.cookie = "FromLine=" + newFromLine;
 			KNOWWE.plugin.d3webbasic.actions.updateNode(jq$('.type_sparql').first().attr("id"), KNOWWE.helper.gup('page'), null);
 		},

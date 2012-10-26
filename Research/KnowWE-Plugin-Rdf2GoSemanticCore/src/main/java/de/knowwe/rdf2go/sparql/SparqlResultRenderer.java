@@ -12,6 +12,7 @@ import de.d3web.plugin.PluginManager;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.sparql.utils.Pair;
 
 public class SparqlResultRenderer {
 
@@ -40,27 +41,30 @@ public class SparqlResultRenderer {
 		return renderers;
 	}
 
-	public String renderQueryResult(QueryResultTable qrt) {
-		return renderQueryResult(qrt, false);
+	public Pair<String, Integer> renderQueryResult(QueryResultTable qrt) {
+		return renderQueryResult(qrt, false, false);
 	}
 
 	/**
 	 * 
 	 * @created 06.12.2010
 	 * @param qrt
-	 * @return html table with all results of qrt
+	 * @return html table with all results of qrt and size of qrt
 	 */
-	public String renderQueryResult(QueryResultTable qrt, boolean rawOutput) {
+	public Pair<String, Integer> renderQueryResult(QueryResultTable qrt, boolean rawOutput, boolean zebraMode) {
 		boolean tablemode = false;
 		boolean empty = true;
-
+		int i = 0;
 		List<String> variables = qrt.getVariables();
 		ClosableIterator<QueryRow> iterator = qrt.iterator();
 		StringBuilder result = new StringBuilder();
 		tablemode = variables.size() > 1;
 
+		// TODO
+		// for test purpose only (remove afterwards!)
+		// tablemode = true;
 		if (tablemode) {
-			result.append(Strings.maskHTML("<table>"));
+			result.append(Strings.maskHTML("<table class='wikitable' border='1'>"));
 			for (String var : variables) {
 				result.append(Strings.maskHTML("<td><b>") + var
 						+ Strings.maskHTML("<b/></td>"));
@@ -76,8 +80,15 @@ public class SparqlResultRenderer {
 			QueryRow row = iterator.next();
 
 			if (tablemode) {
-				result.append(Strings.maskHTML("<tr>"));
+				if (zebraMode) {
+					result.append(Strings.maskHTML(i % 2 == 1 ? "<tr>" : "<tr class='odd'>"));
+				}
+				else {
+					result.append(Strings.maskHTML("<tr>"));
+				}
+
 			}
+
 			for (String var : variables) {
 				Node node = row.getValue(var);
 				String erg = renderNode(node, var, rawOutput);
@@ -95,6 +106,7 @@ public class SparqlResultRenderer {
 			if (tablemode) {
 				result.append(Strings.maskHTML("</tr>"));
 			}
+			i++;
 		}
 
 		if (empty) {
@@ -107,7 +119,7 @@ public class SparqlResultRenderer {
 		else {
 			result.append(Strings.maskHTML("</ul>"));
 		}
-		return result.toString();
+		return new Pair<String, Integer>(result.toString(), i);
 	}
 
 	public String renderNode(Node node, String var, boolean rawOutput) {
