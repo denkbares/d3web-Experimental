@@ -223,6 +223,7 @@
 		<module>KnowWE-Plugin-LoadKnowledgeBase</module>
 		<module>KnowWE-Plugin-OntoVis</module>
 		<module>KnowWE-Plugin-OWL-RDF-Sync</module>
+		<module>KnowWE-Plugin-OWLAPIConnector</module>
 	</modules>
 	<repositories>
 		<repository>
