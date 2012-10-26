@@ -76,6 +76,6 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 
 		QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
 				querystring);
-		return Strings.maskHTML(SparqlResultRenderer.getInstance().renderQueryResult(resultSet));
+		return Strings.maskHTML(SparqlResultRenderer.getInstance().renderQueryResult(resultSet).getA());
 	}
 }
