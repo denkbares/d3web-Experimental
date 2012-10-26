@@ -19,11 +19,9 @@ import de.knowwe.kdom.manchester.frame.MiscFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
-import de.knowwe.owlapi.OWLAPIAbstractKnowledgeUnitCompileScript;
-import de.knowwe.owlapi.OWLAPISubtreeHandler;
+import de.knowwe.owlapi.OWLAPIKnowledgeUnitCompileScript;
 
-
-public class MiscFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileScript<MiscFrame> {
+public class MiscFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<MiscFrame> {
 
 	/**
 	 * Constructor for the SubtreeHandler. Here you can set if a sync with
@@ -37,7 +35,7 @@ public class MiscFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileSc
 	@Override
 	public Set<OWLAxiom> createOWLAxioms(Section<MiscFrame> section, Collection<Message> messages) {
 		OWLAxiom a = null;
-		MiscFrame type = (MiscFrame) section.get();
+		MiscFrame type = section.get();
 
 		Set<OWLAnnotation> annotations = handleOptionalAnnotations(section, messages);
 
@@ -64,7 +62,7 @@ public class MiscFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileSc
 
 	/**
 	 * Handles the optional {@link Annotations} inside each description.
-	 *
+	 * 
 	 * @created 29.09.2011
 	 * @param Section<? extends Type> section
 	 * @return A Set with {@link OWLAnnotationAxiom}

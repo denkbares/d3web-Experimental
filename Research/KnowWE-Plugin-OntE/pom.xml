@@ -89,12 +89,6 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-Rdf2GoSemanticCore</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-Core</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
@@ -120,12 +114,6 @@
         </dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-OWLAPI</artifactId>
-			<version>0.2-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-CI4KE</artifactId>
 			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
@@ -144,8 +132,9 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-RDFS-Basic</artifactId>
+			<artifactId>KnowWE-Plugin-OWLAPIConnector</artifactId>
 			<version>0.2-SNAPSHOT</version>
+			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

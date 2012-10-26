@@ -87,11 +87,29 @@ public class ImportFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<I
 				return new HashSet<OWLAxiom>();
 			}
 		}
+
+		// ImportFrame importFrame = section.get();
+		Section<? extends Type> importIRISection = importFrame.getImportIRI(section);
+
+		String importIRI = importIRISection.getText();
+		if (!importIRI.endsWith("#")) {
+			importIRI += "#";
+		}
+		IRI iri = IRI.create(importIRI);
+
+		// .. add the import as an import declaration to the local one
+		OWLAPIConnector.getGlobalInstance().addImport(iri);
+
+		ImportManager.clearNewImports();
+		ImportManager.clearRemovedImports();
+
 		return axioms;
 	}
 
 	@Override
-	public void deleteFromOntology(Section<ImportFrame> section) {
+	public void deleteFromRepository(Section<ImportFrame> section) {
+		super.deleteFromRepository(section);
+
 		ImportFrame importFrame = section.get();
 
 		Section<? extends Type> importIRISection = importFrame.getImportIRI(section);
@@ -108,25 +126,6 @@ public class ImportFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<I
 
 		// ... and finally from the import ontology manager itself
 		ImportedOntologyManager.getInstance().removeOntology(section);
-	}
-
-	@Override
-	public void insertIntoOntology(Section<ImportFrame> section) {
-
-		ImportFrame importFrame = section.get();
-		Section<? extends Type> importIRISection = importFrame.getImportIRI(section);
-
-		String importIRI = importIRISection.getText();
-		if (!importIRI.endsWith("#")) {
-			importIRI += "#";
-		}
-		IRI iri = IRI.create(importIRI);
-
-		// .. add the import as an import declaration to the local one
-		OWLAPIConnector.getGlobalInstance().addImport(iri);
-
-		ImportManager.clearNewImports();
-		ImportManager.clearRemovedImports();
 	}
 
 	/**

@@ -22,11 +22,9 @@ import de.knowwe.kdom.manchester.frame.DataTypeFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.DataRangeExpression;
 import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
-import de.knowwe.owlapi.OWLAPIAbstractKnowledgeUnitCompileScript;
-import de.knowwe.owlapi.OWLAPISubtreeHandler;
+import de.knowwe.owlapi.OWLAPIKnowledgeUnitCompileScript;
 
-
-public class DatatypeCompileScript extends OWLAPIAbstractKnowledgeUnitCompileScript<DataTypeFrame> {
+public class DatatypeCompileScript extends OWLAPIKnowledgeUnitCompileScript<DataTypeFrame> {
 
 	/**
 	 * Constructor for the SubtreeHandler. Here you can set if a sync with
@@ -45,7 +43,7 @@ public class DatatypeCompileScript extends OWLAPIAbstractKnowledgeUnitCompileScr
 		OWLAxiom axiom = null;
 
 		// handle definition, then the rest
-		DataTypeFrame type = (DataTypeFrame) section.get();
+		DataTypeFrame type = section.get();
 		if (type.hasDefinition(section)) {
 			Section<?> def = type.getDefinition(section);
 			d = (OWLDatatype) AxiomFactory.getOWLAPIEntity(def, OWLDatatype.class);

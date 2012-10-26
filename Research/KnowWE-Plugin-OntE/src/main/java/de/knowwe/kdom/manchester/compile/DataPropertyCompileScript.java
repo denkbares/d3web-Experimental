@@ -25,10 +25,9 @@ import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Characteristics;
 import de.knowwe.kdom.manchester.types.DataRangeExpression;
 import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
-import de.knowwe.owlapi.OWLAPIAbstractKnowledgeUnitCompileScript;
-import de.knowwe.owlapi.OWLAPISubtreeHandler;
+import de.knowwe.owlapi.OWLAPIKnowledgeUnitCompileScript;
 
-public class DataPropertyCompileScript extends OWLAPIAbstractKnowledgeUnitCompileScript<DataPropertyFrame> {
+public class DataPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScript<DataPropertyFrame> {
 
 	/**
 	 * Constructor for the SubtreeHandler. Here you can set if a sync with
@@ -63,7 +62,7 @@ public class DataPropertyCompileScript extends OWLAPIAbstractKnowledgeUnitCompil
 			Section<DataRangeExpression> dre = Sections.findSuccessor(desc,
 					DataRangeExpression.class);
 
-			 if (dre == null) {
+			if (dre == null) {
 				messages.add(Messages.syntaxError("Range is empty!"));
 			}
 			else {

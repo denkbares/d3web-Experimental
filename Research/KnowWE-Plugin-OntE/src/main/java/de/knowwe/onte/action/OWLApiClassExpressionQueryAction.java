@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -43,8 +43,8 @@ import de.knowwe.owlapi.query.OWLApiQueryEngine;
 import de.knowwe.taghandler.OWLApiTagHandlerUtil;
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 13.10.2011
  */
@@ -67,7 +67,7 @@ public class OWLApiClassExpressionQueryAction extends AbstractAction {
 
 		if (query != null && !query.trim().isEmpty()) {
 			query = query.replace(",", "");
-			OWLApiQueryEngine engine = new OWLApiQueryEngine(shortFormProvider);
+			de.knowwe.owlapi.query.OWLApiQueryEngine engine = new OWLApiQueryEngine(shortFormProvider);
 			String[] selectedOptions = (option != null) ? option.split("::") : new String[0];
 
 			Map<OWLEntity, Set<OWLAxiom>> queryResults = new HashMap<OWLEntity, Set<OWLAxiom>>();
@@ -135,7 +135,7 @@ public class OWLApiClassExpressionQueryAction extends AbstractAction {
 	 * Checks weather a certain option from the query window is checked. If TRUE
 	 * the according information is visible to the user, if FALSE, the
 	 * information will be hidden until the checkbox is checked.
-	 *
+	 * 
 	 * @created 10.10.2011
 	 * @param selectedOptions
 	 * @param option
@@ -152,8 +152,8 @@ public class OWLApiClassExpressionQueryAction extends AbstractAction {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 10.10.2011
 	 * @param option
 	 * @param queryResults
@@ -171,7 +171,7 @@ public class OWLApiClassExpressionQueryAction extends AbstractAction {
 		String className = option.toLowerCase().replace(" ", "");
 		String style = "style=\"display:none; visibility:hidden\"";
 
-		if(isVisible) {
+		if (isVisible) {
 			style = "";
 		}
 

@@ -24,9 +24,9 @@ import de.knowwe.kdom.manchester.frame.IndividualFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
 import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
-import de.knowwe.owlapi.OWLAPIAbstractKnowledgeUnitCompileScript;
+import de.knowwe.owlapi.OWLAPIKnowledgeUnitCompileScript;
 
-public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileScript<IndividualFrame> {
+public class IndividualFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<IndividualFrame> {
 
 	public IndividualFrameCompileScript() {
 		super(false);

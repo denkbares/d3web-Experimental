@@ -21,10 +21,10 @@ package de.knowwe.onte.editor;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.manchester.AbstractOWLTermDefinition;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
 import de.knowwe.kdom.manchester.frame.DataPropertyFrame;
 import de.knowwe.kdom.manchester.frame.ObjectPropertyFrame;
-import de.knowwe.rdfs.AbstractIRITermDefinition;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
@@ -55,7 +55,7 @@ public class CreateEntityToolProvider implements ToolProvider {
 		}
 
 		@SuppressWarnings("unchecked")
-		Section<? extends AbstractIRITermDefinition> s = (Section<? extends AbstractIRITermDefinition>) section;
+		Section<? extends AbstractOWLTermDefinition> s = (Section<? extends AbstractOWLTermDefinition>) section;
 		return new Tool[] {
 				getCreateClassTool(s), getCreateObjectPropertyTool(s),
 				getCreateDataPropertyTool(s) };
@@ -76,7 +76,7 @@ public class CreateEntityToolProvider implements ToolProvider {
 	 * @param section
 	 * @return
 	 */
-	private Tool getCreateClassTool(Section<? extends AbstractIRITermDefinition> section) {
+	private Tool getCreateClassTool(Section<? extends AbstractOWLTermDefinition> section) {
 		String image = "KnowWEExtension/images/dt_icon_realisation.png";
 		String name = "Create Class";
 		String description = "Creates a article containing a basic OWL Class Frame for adding the term to the Ontology!";
@@ -95,7 +95,7 @@ public class CreateEntityToolProvider implements ToolProvider {
 	 * @param section
 	 * @return
 	 */
-	private Tool getCreateObjectPropertyTool(Section<? extends AbstractIRITermDefinition> section) {
+	private Tool getCreateObjectPropertyTool(Section<? extends AbstractOWLTermDefinition> section) {
 		String image = "KnowWEExtension/images/dt_icon_realisation.png";
 		String name = "Create ObjectProperty";
 		String description = "Creates a article containing a basic OWL ObjectProperty Frame for adding the term to the Ontology!";
@@ -114,7 +114,7 @@ public class CreateEntityToolProvider implements ToolProvider {
 	 * @param section
 	 * @return
 	 */
-	private Tool getCreateDataPropertyTool(Section<? extends AbstractIRITermDefinition> section) {
+	private Tool getCreateDataPropertyTool(Section<? extends AbstractOWLTermDefinition> section) {
 		String image = "KnowWEExtension/images/dt_icon_realisation.png";
 		String name = "Create DataProperty";
 		String description = "Creates a article containing a basic OWL DataProperty Frame for adding the term to the Ontology!";

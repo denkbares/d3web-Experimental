@@ -23,10 +23,9 @@ import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
-import de.knowwe.owlapi.OWLAPIAbstractKnowledgeUnitCompileScript;
-import de.knowwe.owlapi.OWLAPISubtreeHandler;
+import de.knowwe.owlapi.OWLAPIKnowledgeUnitCompileScript;
 
-public class ClassFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileScript<ClassFrame> {
+public class ClassFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<ClassFrame> {
 
 	/**
 	 * Constructor for the {@link SubtreeHandler}. Here you can set if a sync

@@ -3,7 +3,7 @@ package de.knowwe.kdom.manchester.frame;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.rdfs.IRITermRef;
+import de.knowwe.kdom.manchester.OWLTermRef;
 
 public class ExtendClassFrame extends ClassFrame {
 
@@ -43,6 +43,6 @@ public class ExtendClassFrame extends ClassFrame {
 	 */
 	@Override
 	public Section<? extends Type> getClassDefinition(Section<? extends ClassFrame> section) {
-		return Sections.findSuccessor(section, IRITermRef.class);
+		return Sections.findSuccessor(section, OWLTermRef.class);
 	}
 }

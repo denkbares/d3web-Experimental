@@ -21,11 +21,11 @@
 package de.knowwe.termObject;
 
 import de.knowwe.core.kdom.rendering.Renderer;
+import de.knowwe.kdom.manchester.AbstractOWLTermDefinition;
 import de.knowwe.kdom.renderer.StyleRenderer;
-import de.knowwe.rdfs.AbstractIRITermDefinition;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
-public class DatatypePropertyIRIDefinition extends AbstractIRITermDefinition {
+public class DatatypePropertyIRIDefinition extends AbstractOWLTermDefinition {
 
 	final Renderer PROPERTY_RENDERER =
 			new ToolMenuDecoratingRenderer(new StyleRenderer(
