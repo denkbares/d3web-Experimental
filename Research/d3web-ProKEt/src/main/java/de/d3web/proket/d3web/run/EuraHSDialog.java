@@ -299,7 +299,7 @@ public class EuraHSDialog extends D3webDialog {
      *
      * @param request ServletRequest
      * @param response ServletResponse
-     */
+     *//*
     protected void saveCase(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
@@ -334,7 +334,7 @@ public class EuraHSDialog extends D3webDialog {
         } else {
             writer.append("exists");
         }
-    }
+    }*/
 
     @Override
     protected void loadCaseClear(HttpServletRequest request, HttpServletResponse response,
