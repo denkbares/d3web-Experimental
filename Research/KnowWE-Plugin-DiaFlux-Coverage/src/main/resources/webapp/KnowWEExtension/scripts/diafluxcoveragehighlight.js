@@ -11,7 +11,7 @@ DiaFlux.Coverage.highlight = function(){
 	if ($('coveragesection')) {
 		DiaFlux.Highlight.getHighlights.call(this, 'GetCoverageHighlightAction', {coveragesection: $('coveragesection').value});
 	} else {
-		DiaFlux.Highlight.getHighlights.call(this, 'GetCoverageHighlightAction', {});
+		DiaFlux.Highlight.getHighlights.call(this, 'GetCoverageHighlightAction');
 	} 
 	
 }

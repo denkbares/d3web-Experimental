@@ -34,10 +34,11 @@ import de.d3web.diaflux.coverage.DefaultCoverageResult;
 import de.d3web.diaflux.coverage.Path;
 import de.d3web.diaflux.coverage.PathGenerator;
 import de.d3web.diaflux.coverage.PathIndex;
-import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.diaflux.AbstractHighlightAction;
+import de.knowwe.diaflux.GetTraceHighlightAction;
 import de.knowwe.diaflux.Highlight;
 import de.knowwe.diaflux.type.FlowchartType;
 
@@ -47,25 +48,23 @@ import de.knowwe.diaflux.type.FlowchartType;
  * @author Reinhard Hatko
  * @created 11.07.2012
  */
-public class PathCoverageHighlightAction extends AbstractAction {
+public class PathCoverageHighlightAction extends AbstractHighlightAction {
 
 	private static final String PREFIX = "cover";
 	private static final String COVERED = PREFIX + "Covered";
 
+
 	@Override
-	public void execute(UserActionContext context) throws IOException {
-
-		String nodeid = context.getParameter("nodeid");
-
+	public void insertHighlighting(Section<FlowchartType> flowchart, Highlight highlight, UserActionContext context) throws IOException {
 		CoverageResult result = getCoverageResult(context);
 		if (result == null) {
-			Highlight.writeEmpty(context);
 			return;
 		}
 
 		KnowledgeBase kb = result.getKb();
+		Flow flow = GetTraceHighlightAction.findFlow(flowchart, kb);
 		
-		Flow flow = findFlowchart(context, kb);
+		String nodeid = context.getParameter("nodeid");
 
 		Node selectedNode = null;
 		for (Node node : flow.getNodes()) {
@@ -75,22 +74,24 @@ public class PathCoverageHighlightAction extends AbstractAction {
 			}
 		}
 		
-		Highlight highlight;
 		if (selectedNode == null) {
-			highlight = createHighlight(result, flow);
-			return;
+			fillHighlightForFlow(result, flow, highlight);
 		}
 		else {
-			highlight = createHighlight(result, selectedNode, kb);
+			fillHighlightForNode(result, selectedNode, kb, highlight);
 
 		}
-
-		highlight.write(context);
 
 	}
 
-	private Highlight createHighlight(CoverageResult result, Node selectedNode, KnowledgeBase kb) {
-		Highlight highlight = new Highlight(selectedNode.getFlow(), PREFIX);
+
+	@Override
+	public String getPrefix() {
+		return COVERED;
+	}
+	
+	private void fillHighlightForNode(CoverageResult result, Node selectedNode, KnowledgeBase kb, Highlight highlight) {
+
 		Collection<DiaFluxElement> elements = new LinkedList<DiaFluxElement>();
 		for (DiaFluxElement el : elements) {
 			PathIndex index = result.getPathIndex();
@@ -103,11 +104,9 @@ public class PathCoverageHighlightAction extends AbstractAction {
 
 		}
 
-		return highlight;
 	}
 
-	public Highlight createHighlight(CoverageResult result, Flow flow) {
-		Highlight highlight = new Highlight(flow, PREFIX);
+	private void fillHighlightForFlow(CoverageResult result, Flow flow, Highlight highlight) {
 		Collection<DiaFluxElement> elements = new LinkedList<DiaFluxElement>();
 		Collection<Node> validNodes = DefaultCoverageResult.getValidNodes(flow);
 		elements.addAll(validNodes);
@@ -123,7 +122,6 @@ public class PathCoverageHighlightAction extends AbstractAction {
 			insertColor(highlight, el, allPathsSize, coveredPathsSize);
 
 		}
-		return highlight;
 
 	}
 
@@ -176,13 +174,6 @@ public class PathCoverageHighlightAction extends AbstractAction {
 		System.out.println(getColorString(0.3333333));
 	}
 
-	private Flow findFlowchart(UserActionContext context, KnowledgeBase kb) {
-		String flowid = context.getParameter("kdomid");
-		Section<FlowchartType> section = Sections.getSection(flowid, FlowchartType.class);
-		String name = FlowchartType.getFlowchartName(section);
-
-		return (Flow) kb.getManager().search(name);
-	}
 
 	/**
 	 * 

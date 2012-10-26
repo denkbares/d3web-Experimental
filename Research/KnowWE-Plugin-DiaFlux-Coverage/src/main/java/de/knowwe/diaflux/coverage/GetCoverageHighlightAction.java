@@ -26,16 +26,17 @@ import de.d3web.core.session.Session;
 import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
-import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.d3web.diaflux.coverage.DefaultCoverageResult;
 import de.d3web.we.basic.SessionProvider;
-import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.Attributes;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.diaflux.AbstractHighlightAction;
 import de.knowwe.diaflux.FlowchartUtils;
+import de.knowwe.diaflux.GetTraceHighlightAction;
 import de.knowwe.diaflux.Highlight;
 import de.knowwe.diaflux.type.DiaFluxType;
 import de.knowwe.diaflux.type.FlowchartType;
@@ -45,7 +46,7 @@ import de.knowwe.diaflux.type.FlowchartType;
  * @author Reinhard Hatko
  * @created 05.08.2011
  */
-public class GetCoverageHighlightAction extends AbstractAction {
+public class GetCoverageHighlightAction extends AbstractHighlightAction {
 
 	private static final String PREFIX = "cover";
 	private static final String COVERED = PREFIX + "Covered";
@@ -64,7 +65,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 
 		}
 		else { // coverage shown in diaflux section
-			String flowKdomid = context.getParameter("kdomid");
+			String flowKdomid = context.getParameter(Attributes.SECTION_ID);
 
 			Section<FlowchartType> flowchartSec = Sections.getSection(flowKdomid,
 					FlowchartType.class);
@@ -82,37 +83,11 @@ public class GetCoverageHighlightAction extends AbstractAction {
 	}
 
 	@Override
-	public void execute(UserActionContext context) throws IOException {
+	public void insertHighlighting(Section<FlowchartType> flowchart, Highlight highlight, UserActionContext context) throws IOException {
 
 		CoverageResult result = getResult(context);
-		if (result == null) {
-			Highlight.writeEmpty(context);
-			return;
-		}
-		String flowKdomid = context.getParameter("kdomid");
-
-		Section<FlowchartType> flowchart = Sections.getSection(flowKdomid, FlowchartType.class);
-
-		if (flowchart == null) {
-			Highlight.writeEmpty(context);
-			return;
-		}
-
-		String flowchartName = FlowchartType.getFlowchartName(flowchart);
-		KnowledgeBase kb = result.getKb();
-		Flow flow = DiaFluxUtils.getFlowSet(kb).get(flowchartName);
-
-		if (flow == null) return;// TODO error handling
-
-		Highlight highlight = createHighlight(result, flow);
-
-		highlight.write(context);
-
-	}
-
-	private static Highlight createHighlight(CoverageResult result, Flow flow) {
-
-		Highlight highlight = new Highlight(flow, PREFIX);
+		if (result == null) return;
+		Flow flow = GetTraceHighlightAction.findFlow(flowchart, result.getKb());
 
 		Collection<Node> validNodes = DefaultCoverageResult.getValidNodes(flow);
 		for (Edge edge : DefaultCoverageResult.getValidEdges(validNodes)) {
@@ -131,7 +106,10 @@ public class GetCoverageHighlightAction extends AbstractAction {
 
 		}
 
+	}
 
-		return highlight;
+	@Override
+	public String getPrefix() {
+		return PREFIX;
 	}
 }

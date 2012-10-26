@@ -9,7 +9,7 @@ if (typeof DiaFlux.Coverage == "undefined" || !DiaFlux.Coverage) {
 DiaFlux.Coverage.calculateCoverage = function(kdomid){
 	var params = {
 		action : 'CalculateCoverageAction',
-        kdomid: kdomid
+        SectionID: kdomid
 	};
 	
 	var options = {
