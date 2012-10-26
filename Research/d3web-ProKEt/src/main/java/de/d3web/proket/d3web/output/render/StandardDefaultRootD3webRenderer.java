@@ -42,7 +42,7 @@ public class StandardDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         // get the d3web base template according to dialog type
         String userprefix = uis.getUIprefix();
       
-        StringTemplate st = StringTemplateUtils.getTemplate("questionaryCons/QuestionaryConsD3webDialog");
+        StringTemplate st = StringTemplateUtils.getTemplate("standardDialog/StandardD3webDialog");
 
         /*
          * fill some basic attributes
@@ -117,6 +117,10 @@ public class StandardDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         st.setAttribute("naviTreeSolutions",
                 D3webToJSTreeUtils.getJSTreeHTMLFromD3webSolutions(
                 D3webConnector.getInstance().getKb()));
+        
+        st.setAttribute("naviTreeQuestionnaires",
+                D3webToJSTreeUtils.getJSTreeHTMLFromD3webQuestionnaires(
+                D3webConnector.getInstance().getKb()));
 
         SolutionPanelD3webRenderer spr = 
                 D3webRendererMapping.getInstance().getSolutionPanelRenderer();
@@ -139,7 +143,10 @@ public class StandardDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         if (D3webUESettings.getInstance().isLogging()) {
             cc.js.enableClickLogging();
         }
-
+        cc.js.setStandardDialog();
+        cc.js.enableQuestionnaireSideNavi();
+        cc.js.enableSolutionSideNavi();
+        
         cc.js.setQuestionaryCons();
 
         cc.js.add("$(function() {init_all();});", 1);

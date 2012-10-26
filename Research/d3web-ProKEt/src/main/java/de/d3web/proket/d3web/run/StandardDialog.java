@@ -19,9 +19,13 @@
  */
 package de.d3web.proket.d3web.run;
 
+import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
+import de.d3web.proket.d3web.output.render.QuestionnaireD3webRenderer;
 import de.d3web.proket.d3web.output.render.SolutionPanelD3webRenderer;
+import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -50,7 +54,7 @@ import javax.servlet.http.HttpSession;
  */
 public class StandardDialog extends D3webDialog {
 
-     @Override
+    @Override
     protected String getSource(HttpServletRequest request, HttpSession http) {
 
         String source = "BaumDecTree.xml"; // default
@@ -60,32 +64,39 @@ public class StandardDialog extends D3webDialog {
         return source.endsWith(".xml") ? source : source + ".xml";
     }
 
-    /* In consultation dialogs, additionally a solution panel is rendered and
-     needs to be updated each time, new facts are added */
+    /*
+     * In consultation dialogs, additionally a solution panel is rendered and
+     * needs to be updated each time, new facts are added
+     */
     @Override
-     protected void addFacts(HttpServletRequest request,
+    protected void addFacts(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
 
-        /* means: add questions as single objects, without reloading the
-          entire dialog UI but only the answered questions */
+        /*
+         * means: add questions as single objects, without reloading the entire
+         * dialog UI but only the answered questions
+         */
         super.addFacts(request, response, httpSession);
-        
+
         Session d3webs = (Session) httpSession.getAttribute(D3WEB_SESSION);
-        
-        /* similarly: update solution panel without needing to reload complete 
-          dialog */
+
+        /*
+         * similarly: update solution panel without needing to reload complete
+         * dialog
+         */
         updateDialogPanel(response.getWriter(), d3webs, httpSession, request);
-     }
-   
+    }
+
     /**
-     * Assembling the diff and giving it to the writer. The diff contains 
-     * the element which should be replaced - here the solution panel - 
-     * and the contents that are to be written instead of the old ones.
+     * Assembling the diff and giving it to the writer. The diff contains the
+     * element which should be replaced - here the solution panel - and the
+     * contents that are to be written instead of the old ones.
+     *
      * @param writer
      * @param d3webSession
      * @param httpSession
-     * @param request 
+     * @param request
      */
     protected void updateDialogPanel(PrintWriter writer, Session d3webSession,
             HttpSession httpSession, HttpServletRequest request) {
@@ -96,14 +107,48 @@ public class StandardDialog extends D3webDialog {
         writer.append(REPLACECONTENT);
         writer.append("<div id='" + solutionPanelID + "'>");
         writer.append("<div id='sol_heading'>Solutions:</div>");
-        
-        
+
+
         SolutionPanelD3webRenderer spr = D3webRendererMapping.getInstance().getSolutionPanelRenderer();
-        String spUpdate = spr.renderSolutionPanel(d3webSession, 
-                    SolutionPanelD3webRenderer.EXPLANATIONTYPE.TEXTUALLISTING,
-                    httpSession);
-        
+        String spUpdate = spr.renderSolutionPanel(d3webSession,
+                SolutionPanelD3webRenderer.EXPLANATIONTYPE.TEXTUALLISTING,
+                httpSession);
+
         writer.append(spUpdate);
+        writer.append("</div>");
+    }
+
+    @Override
+    protected void reloadSelectedQuestionnaire(HttpServletRequest request,
+            HttpServletResponse response, HttpSession httpSession) throws IOException {
+
+        PrintWriter writer = response.getWriter();
+        ContainerCollection cc = new ContainerCollection();
+
+        String refreshContentID = "contents";
+        writer.append(REPLACEID + refreshContentID);
+        writer.append(REPLACECONTENT);
+        writer.append("<div id='" + refreshContentID + "'>");
+
+        String qsString = request.getParameter("questionnaire").toString();
+        Session d3webs = (Session) httpSession.getAttribute(D3WEB_SESSION);
+        QContainer qs =
+                d3webs.getKnowledgeBase().getManager().searchQContainer(qsString);
+        
+        int loc = httpSession.getAttribute("locale") != null
+                ? Integer.parseInt(httpSession.getAttribute("locale").toString()) : 2;
+        TerminologyObject parent = qs instanceof QContainer ? d3wcon.getKb().getRootQASet()
+                : D3webUtils.getQuestionnaireAncestor(qs);
+
+
+
+        QuestionnaireD3webRenderer QSrenderer =
+                (QuestionnaireD3webRenderer) D3webRendererMapping.getInstance().getRenderer(qs);
+        String contentUpdate =
+                QSrenderer.renderTerminologyObject(d3webs, cc, qs, parent, loc, httpSession, request);
+
+
+        writer.append(contentUpdate);
         writer.append("</div>");
     }
 }

@@ -39,14 +39,21 @@ public class JSCodeContainer implements ICodeContainer {
     private boolean dateAnswer = false;
     private final boolean debug = false;
     private boolean imageQuestions = false;
+    // login
     private boolean usrdatLogin = false;
     private boolean dbLogin = false;
-    private boolean logging = false;
-    private boolean itree = false;
-    private boolean oqd = false;
+    // usability
     private boolean study = false;
     private boolean feedback = false;
     private boolean ueq = false;
+    private boolean logging = false;
+    // side navis
+    private boolean qsSideNavi = false;
+    private boolean solSideNavi = false;
+    // dialog types
+    private boolean standarddialog = false;
+    private boolean itree = false;
+    private boolean oqd = false;
     private boolean qcons = false;
 
     @Override
@@ -65,11 +72,23 @@ public class JSCodeContainer implements ICodeContainer {
         sb.append(newData).append("\n"); // add to existing sb
     }
 
+    public void setStandardDialog() {
+        standarddialog = true;
+    }
+
     public void setITree() {
         itree = true;
     }
-    
-    public void setQuestionaryCons(){
+
+    public void enableQuestionnaireSideNavi() {
+        qsSideNavi = true;
+    }
+
+    public void enableSolutionSideNavi() {
+        solSideNavi = true;
+    }
+
+    public void setQuestionaryCons() {
         qcons = true;
     }
 
@@ -130,7 +149,6 @@ public class JSCodeContainer implements ICodeContainer {
         linkedBibs.add("jquery/jquery-1.6.1.min.js");
         linkedBibs.add("jquery/jquery.cookie.js");
         //linkedBibs.add("jquery/jquery.jstree.js");
-        linkedBibs.add("jsTree/jquery.jstree.js");
         linkedBibs.add("jquery/jquery.typing.min.js");
         linkedBibs.add("jquery/jquery.numeric.js");
         linkedBibs.add("jquery/jquery.customFileInput.js");
@@ -138,13 +156,18 @@ public class JSCodeContainer implements ICodeContainer {
         linkedBibs.add("jqueryUI/jqueryUi-1.8.10.all.min.js");
         linkedBibs.add("jquery/jquery.object.js");
         
+         // only need jsTree if we need side navis
+        if(qsSideNavi || solSideNavi){
+            linkedBibs.add("jsTree/jquery.jstree.js");
+        }
+
         ownBibs.add("browserInfo.js");
         ownBibs.add("uelogging.js");
         ownBibs.add("global.js");
-        
+
         // smaller stuff for diagnosis visualization BA Alina Coca
         ownBibs.add("diagnosisVisu.js");
-        
+
 
 
         // manage language mechanism
@@ -188,18 +211,24 @@ public class JSCodeContainer implements ICodeContainer {
             add("var itree = false;", 0);
         }
         
-        if(qcons){
+        if (standarddialog) {
+            add("var standarddialog = true;", 0);
+        } else {
+            add("var standarddialog = false;", 0);
+        }
+
+        if (qcons) {
             ownBibs.add("questionarycons.js");
             linkedBibs.add("jsTree/jquery.jstree.js");
             add("var qcons = true;", 0);
         } else {
             add("var qcons = false;", 0);
         }
-        
-            
+
+
         if (d3web) {
 
-            if(!itree){
+            if (!itree) {
                 ownBibs.add("d3webBasic.js");
             }
             ownBibs.add("d3web.js");
@@ -243,6 +272,19 @@ public class JSCodeContainer implements ICodeContainer {
             add("var study = false;", 0);
         }
 
+        if (qsSideNavi) {
+            add("var questionnaireSideNavi = true;", 0);
+        } else {
+            add("var questionnaireSideNavi = false;", 0);
+        }
+
+        if (solSideNavi) {
+            add("var solutionSideNavi = true;", 0);
+        } else {
+            add("var solutionSideNavi = false;", 0);
+        }
+
+       
 
 
         // SECOND assemble bibs and singular js data to a string

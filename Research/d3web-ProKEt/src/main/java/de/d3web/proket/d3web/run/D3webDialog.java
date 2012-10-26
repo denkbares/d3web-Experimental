@@ -417,7 +417,10 @@ public class D3webDialog extends HttpServlet {
             rerenderSubtree(request, response, httpSession);
         } else if (action.equalsIgnoreCase("loadcaseClear")) {
             loadCaseClear(request, response, httpSession);
-        } else {
+        } else if (action.equalsIgnoreCase("reloadSelectedQuestionnaire")) {
+            reloadSelectedQuestionnaire(request, response, httpSession);
+        }  
+        else{
             handleDialogSpecificActions(httpSession, request, response, action);
         }
     }
@@ -1711,6 +1714,13 @@ public class D3webDialog extends HttpServlet {
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
         // overwritten by ClariHie Dialog
+    }
+     
+     /* Standard Dialog (with side Navi) specific */        
+    protected void reloadSelectedQuestionnaire (HttpServletRequest request,
+            HttpServletResponse response, HttpSession httpSession)
+            throws IOException {
+        // overwritten by Standard Dialog
     }
 
     /*

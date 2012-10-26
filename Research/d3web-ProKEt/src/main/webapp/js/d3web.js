@@ -1192,7 +1192,9 @@ function d3web_sendSave(force) {
             $('#confirmMessage').html("<font color=\"red\">" + warning + "</font>");
             warningRecieved = true;
         } else {
-            d3web_show();
+            $('#jqConfirmDialog').dialog('close');
+            window.location.reload();
+            initFunctionality();
         }
     });
 }

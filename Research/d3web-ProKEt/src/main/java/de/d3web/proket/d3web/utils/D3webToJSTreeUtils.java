@@ -20,9 +20,7 @@ public class D3webToJSTreeUtils {
         StringBuilder bui = new StringBuilder();
 
         TerminologyObject roots = kb.getRootSolution();
-        if(roots.getName().contains("000")){
-            roots = roots.getChildren()[0];
-        }
+
         Solution2JSTreeHTMLRecurse(roots, bui);
 
         return bui.toString();
@@ -40,8 +38,16 @@ public class D3webToJSTreeUtils {
 
     private static void Solution2JSTreeHTMLRecurse(TerminologyObject s, StringBuilder bui) {
 
-        bui.append("<li id='" + s.getName() + "'>\n");
-        bui.append("<a href='TODO'>" + s.getName() + "</a>\n");
+        if (!s.getName().contains("000")) {
+            bui.append("<li id='" + s.getName() + "'>\n");
+            bui.append("<a href='TODO'>" + s.getName() + "</a>\n");
+        } else if (s.getName().contains("000")
+                && s.getChildren().length > 0) {
+
+            for (TerminologyObject cs : s.getChildren()) {
+                Solution2JSTreeHTMLRecurse(cs, bui);
+            }
+        }
 
         if (s.getChildren().length > 0) {
 
@@ -58,41 +64,28 @@ public class D3webToJSTreeUtils {
 
     private static void QContainer2JSTreeHTMLRecurse(TerminologyObject qc, StringBuilder bui) {
 
-        bui.append("<li>\n");
-        bui.append("<a href='TODO'>" + qc.getName() + "</a>\n");
+        if (!qc.getName().contains("000")) {
+            bui.append("<li id='qsnavi_" + qc.getName() + "'>\n");
+            bui.append("<a href='" + qc.getName() + "'>" + qc.getName() + "</a>\n");
+        } else if (qc.getName().contains("000")
+                && qc.getChildren().length > 0) {
+
+            for (TerminologyObject cs : qc.getChildren()) {
+                QContainer2JSTreeHTMLRecurse(cs, bui);
+            }
+        }
 
         if (qc.getChildren().length > 0) {
 
-            for (TerminologyObject cqcon : qc.getChildren()) {
+            for (TerminologyObject cs : qc.getChildren()) {
+                bui.append("<ul>\n");
 
-                if (cqcon instanceof QContainer) {
-                    bui.append("<ul>\n");
-
-                    QContainer2JSTreeHTMLRecurse(cqcon, bui);
-
-                    bui.append("</ul>\n");
-                }
+                QContainer2JSTreeHTMLRecurse(cs, bui);
+                bui.append("</ul>\n");
             }
+
         }
         bui.append("</li>\n");
     }
 
-    public static void main(String[] args) {
-        KnowledgeBase kb = new KnowledgeBase();
-        Solution roots = new Solution(kb, "Root Solution");
-        Solution cr1 = new Solution(roots, "Child 1 of Root");
-        Solution cr2 = new Solution(roots, "Child 2 of Root");
-        Solution cr21 = new Solution(cr2, "Child 1 of Root Child2");
-        kb.setRootSolution(roots);
-
-        System.out.println(getJSTreeHTMLFromD3webSolutions(kb));
-        
-        QContainer rootQC = new QContainer(kb, "Root QContainer");
-        QContainer c1 = new QContainer(rootQC, "Child 1 of Root QC");
-        QContainer c2 = new QContainer(rootQC, "Child 2 of Root QC");
-        QContainer c11 = new QContainer(c1, "Child of Child 1");
-        kb.setRootQASet(rootQC);
-        
-        System.out.println(getJSTreeHTMLFromD3webQuestionnaires(kb));
-    }
 }

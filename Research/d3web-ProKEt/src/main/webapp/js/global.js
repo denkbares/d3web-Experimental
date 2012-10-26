@@ -2,7 +2,81 @@
 // THIS FILE CONTAINS ALL FUNCTIONALITY THAT IS NEEDED BY ALL PROTOTYPES,
 // E.G. GENERAL TOOLTIP STUFF
 
+$(function(){
+        
+    $('a').click(function(event) {
+        event.preventDefault();
+        var qsClicked = $(this);
+        qsNavi_reload(qsClicked);
+    });    
+    
+    if(standarddialog){    
+        $.jstree._themes = "libsExternal/jsTree/themes/";
+    
+        if(solutionSideNavi){
+            $("#treeNaviSolutions") 
+            .jstree({
+        
+                "themes" : {
+                    "theme":"apple", 
+                    "dots":false, 
+                    "icons":false
+                },
+                "plugins" : ["themes","html_data"]
+            })
+    
+            .bind("loaded.jstree", function(event, data){
+                //alert("jstree is loaded");
+                });
+        }
+        
+        
+        if(questionnaireSideNavi){    
+            $("#treeNaviQuestionnaires") 
+            .jstree({
+        
+                "themes" : {
+                    "theme":"apple", 
+                    "dots":false, 
+                    "icons":false
+                },
+                "plugins" : ["themes","html_data"]
+            })
+    
+            .bind("loaded.jstree", function(event, data){
+                //alert("jstree is loaded");
+                });    
+        
+        }
+    }
+
+    
+});
+
+
 var tooltipShown = undefined;
+
+function qsNavi_reload(element){
+    alert(element.attr("href"));
+    
+    var link = $.query.set("action", "reloadSelectedQuestionnaire");
+    link = link.set("questionnaire", element.attr("href"));
+    link = window.location.href.replace(window.location.search, "") + link;
+     
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        success : function(html) {
+            alert(html);
+            updateDialog(html);
+        },
+        error : function(html) {
+            alert("ajax error reload selected questionnaire");
+        }
+    });
+}
 
 /* TOOLTIP STUFF - Tooltips are always defined by JS so they
  * are needed globally by d3web and prototype dialogs 
@@ -215,7 +289,7 @@ function setLeftOffset(target) {
     }
    
     /* display all popups that are too far down in the dialog relatively above
-    * the parent element */
+     * the parent element */
     var sizeToEnd = heightW - pOffset.top;
     if(sizeToEnd < 400){
         target.offset({
