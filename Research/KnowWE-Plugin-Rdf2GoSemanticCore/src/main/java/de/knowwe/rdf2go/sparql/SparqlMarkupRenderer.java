@@ -35,7 +35,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.sparql.utils.Pair;
+import de.knowwe.rdf2go.sparql.utils.SparqlRenderResult;
 
 public class SparqlMarkupRenderer implements Renderer {
 
@@ -53,28 +53,13 @@ public class SparqlMarkupRenderer implements Renderer {
 				Section<SparqlMarkupType> markupSection = Sections.findAncestorOfType(sec,
 						SparqlMarkupType.class);
 
-				String rawOutput =
-						DefaultMarkupType.getAnnotation(markupSection,
-								SparqlMarkupType.RAW_OUTPUT);
-				// QueryResultTable resultSet =
-				// Rdf2GoCore.getInstance().sparqlSelect(
-				// sparqlString);
-				//
-				String zebramode =
-						DefaultMarkupType.getAnnotation(markupSection,
-								SparqlMarkupType.ZEBRAMODE);
-				// Pair<String, Integer> resultEntry =
-				// SparqlResultRenderer.getInstance().renderQueryResult(
-				// resultSet,
-				// rawOutput != null && rawOutput.equals("true"), zebramode !=
-				// null
-				// && zebramode.equals("true"));
+				boolean rawOutput = checkAnnotation(markupSection, SparqlMarkupType.RAW_OUTPUT);
+				boolean zebraMode = checkAnnotation(markupSection, SparqlMarkupType.ZEBRAMODE);
+				boolean border = checkAnnotation(markupSection, SparqlMarkupType.BORDER);
+				boolean navigation = checkAnnotation(markupSection, SparqlMarkupType.NAVIGATION);
 
-				// Navigation bar is (at the moment) only displayed if
-				// explicitly activated in markup
-				String navigation = DefaultMarkupType.getAnnotation(markupSection,
-						SparqlMarkupType.NAVIGATION);
-				if ((navigation != null) && navigation.equals("true")) {
+				if (border) result.append(Strings.maskHTML("<div class='border'>"));
+				if (navigation) {
 					// do not show navigation bar if LIMIT or OFFSET is set in
 					// markup
 					if (!(isLimitSet(markupSection) || (isOffsetSet(markupSection)))) {
@@ -84,26 +69,23 @@ public class SparqlMarkupRenderer implements Renderer {
 
 						QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
 								sparqlString);
-						Pair<String, Integer> resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
+						SparqlRenderResult resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
 								resultSet,
-								rawOutput != null && rawOutput.equals("true"), zebramode != null
-										&& zebramode.equals("true"));
+								rawOutput, zebraMode);
 						result.append(renderTableSizeSelector(showLines));
-						result.append(renderNavigation(fromLine, showLines, resultEntry.getB()));
-						result.append(Strings.maskHTML(resultEntry.getA()));
+						result.append(renderNavigation(fromLine, showLines, resultEntry.getSize()));
+						result.append(Strings.maskHTML(resultEntry.getHTML()));
 
 					}
 				}
 				else {
 					QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
 							sparqlString);
-					Pair<String, Integer> resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
-							resultSet,
-							rawOutput != null && rawOutput.equals("true"), zebramode != null
-									&& zebramode.equals("true"));
-					result.append(Strings.maskHTML(resultEntry.getA()));
+					SparqlRenderResult resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
+							resultSet, rawOutput, zebraMode);
+					result.append(Strings.maskHTML(resultEntry.getHTML()));
 				}
-
+				if (border) result.append(Strings.maskHTML("</div>"));
 			}
 
 		}
@@ -111,6 +93,13 @@ public class SparqlMarkupRenderer implements Renderer {
 			result.append(Strings.maskHTML("<span class='warning'>"
 					+ e.getMessage() + "</span>"));
 		}
+	}
+
+	private boolean checkAnnotation(Section<?> markupSection, String annotationName) {
+		String annotationString = DefaultMarkupType.getAnnotation(markupSection,
+				annotationName);
+		return annotationString != null && annotationString.equals("true");
+
 	}
 
 	private String createSparqlString(Section<?> sec) {

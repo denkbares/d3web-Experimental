@@ -19,39 +19,27 @@
 
 package de.knowwe.rdf2go.sparql.utils;
 
-/**
- * This class implements a typed, null-save pair of two other objects.
- * 
- * @author volker_belli
- * 
- */
-public class Pair<T1, T2> {
+public class SparqlRenderResult {
 
-	private final Object[] items;
+	private final String html;
+	private final int size;
 
-	public Pair(Object... items) {
-		this.items = items;
+	public SparqlRenderResult(String html, int size) {
+		this.html = html;
+		this.size = size;
 	}
 
-	public Object get(int index) {
-		return items[index];
+	public String getHTML() {
+		return this.html;
 	}
 
-	@SuppressWarnings("unchecked")
-	public T1 getA() {
-		return (T1) get(0);
-	}
-
-	@SuppressWarnings("unchecked")
-	public T2 getB() {
-		return (T2) get(1);
+	public int getSize() {
+		return this.size;
 	}
 
 	@Override
 	public String toString() {
-		return "#Pair["
-				+ String.valueOf(getA()) + "; "
-				+ String.valueOf(getB()) + "]";
+		return this.html;
 	}
 
 }

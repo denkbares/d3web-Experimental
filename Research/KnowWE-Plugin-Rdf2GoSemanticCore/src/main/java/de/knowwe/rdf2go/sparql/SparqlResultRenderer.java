@@ -12,7 +12,7 @@ import de.d3web.plugin.PluginManager;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.sparql.utils.Pair;
+import de.knowwe.rdf2go.sparql.utils.SparqlRenderResult;
 
 public class SparqlResultRenderer {
 
@@ -41,7 +41,7 @@ public class SparqlResultRenderer {
 		return renderers;
 	}
 
-	public Pair<String, Integer> renderQueryResult(QueryResultTable qrt) {
+	public SparqlRenderResult renderQueryResult(QueryResultTable qrt) {
 		return renderQueryResult(qrt, false, false);
 	}
 
@@ -51,7 +51,7 @@ public class SparqlResultRenderer {
 	 * @param qrt
 	 * @return html table with all results of qrt and size of qrt
 	 */
-	public Pair<String, Integer> renderQueryResult(QueryResultTable qrt, boolean rawOutput, boolean zebraMode) {
+	public SparqlRenderResult renderQueryResult(QueryResultTable qrt, boolean rawOutput, boolean zebraMode) {
 		boolean tablemode = false;
 		boolean empty = true;
 		int i = 0;
@@ -64,11 +64,13 @@ public class SparqlResultRenderer {
 		// for test purpose only (remove afterwards!)
 		// tablemode = true;
 		if (tablemode) {
-			result.append(Strings.maskHTML("<table class='wikitable' border='1'>"));
+			result.append(Strings.maskHTML("<table class='sparqltable'>"));
+			result.append(Strings.maskHTML(!zebraMode ? "<tr>" : "<tr class='odd'>"));
 			for (String var : variables) {
 				result.append(Strings.maskHTML("<td><b>") + var
 						+ Strings.maskHTML("<b/></td>"));
 			}
+			result.append(Strings.maskHTML("</tr>"));
 		}
 		else {
 			result.append(Strings.maskHTML("<ul style='white-space: normal'>"));
@@ -81,7 +83,7 @@ public class SparqlResultRenderer {
 
 			if (tablemode) {
 				if (zebraMode) {
-					result.append(Strings.maskHTML(i % 2 == 1 ? "<tr>" : "<tr class='odd'>"));
+					result.append(Strings.maskHTML(i % 2 == 0 ? "<tr>" : "<tr class='odd'>"));
 				}
 				else {
 					result.append(Strings.maskHTML("<tr>"));
@@ -119,7 +121,7 @@ public class SparqlResultRenderer {
 		else {
 			result.append(Strings.maskHTML("</ul>"));
 		}
-		return new Pair<String, Integer>(result.toString(), i);
+		return new SparqlRenderResult(result.toString(), i);
 	}
 
 	public String renderNode(Node node, String var, boolean rawOutput) {
