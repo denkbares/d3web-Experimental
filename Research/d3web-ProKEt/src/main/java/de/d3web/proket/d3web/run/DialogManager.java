@@ -60,6 +60,7 @@ public class DialogManager extends HttpServlet {
 
     GlobalSettings GLOBSET = GlobalSettings.getInstance();
     protected D3webXMLParser d3webParser;
+    private static String PATHSEP = System.getProperty("file.separator");
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -79,9 +80,32 @@ public class DialogManager extends HttpServlet {
         // assemble and write the upload-files path
         String uploadFilesBase = GLOBSET.getServletBasePath() + "UPFiles";
         GLOBSET.setUploadFilesBasePath(uploadFilesBase);
-
+        
+        GLOBSET.setWebAppWarName("/JuriLibreOffice");
+        GLOBSET.setWebAppWarName("");
+        
         // initialize the d3web parser
         d3webParser = new D3webXMLParser();
+        
+        
+        // umleiten des System.err
+        try 
+         {
+             
+            // Code that writes to System.out or System.err
+            String logdir = uploadFilesBase;
+            PrintStream ps = new PrintStream(
+                             new BufferedOutputStream(new FileOutputStream(
+                             new File(logdir,"ERRORLOG.txt"))), true);
+            System.out.println("Umleiten: " + logdir);
+            
+            //System.setOut(ps);         
+            System.setErr(ps);         
+         } 
+         catch (Exception e)
+         {
+            System.out.println(e.getMessage());
+         }
     }
 
     /**
@@ -216,10 +240,10 @@ public class DialogManager extends HttpServlet {
             // assemble ITree Servlet Link
             if (type.equalsIgnoreCase(DialogType.ITREE.toString())) {
 
-                dialogLink = "/ITreeDialog?src=" + specFile.getName().replace(".xml", "");
+                dialogLink = GLOBSET.getWebAppWarName() + "/ITreeDialog?src=" + specFile.getName().replace(".xml", "");
                 
             } else if (type.equalsIgnoreCase(DialogType.STANDARD.toString())){
-                dialogLink = "/StandardDialog?src=" + specFile.getName().replace(".xml", "");
+                dialogLink = GLOBSET.getWebAppWarName() + "/StandardDialog?src=" + specFile.getName().replace(".xml", "");
             }
  
         }
@@ -341,21 +365,21 @@ public class DialogManager extends HttpServlet {
 
         // TODO: clean up intermediate files!!
 
-        String doc = upPath + "/" + docName;
-        String errFile = upPath + "/" + docName + "_Error.html";
-        String tmp = upPath + "/tmp/";
+        String doc = upPath + PATHSEP + docName;
+        String errFile = upPath + PATHSEP + docName + "_Error.html";
+        String tmp = upPath + PATHSEP + "tmp" + PATHSEP;
         File tmpF = new File(tmp);
         tmpF.canExecute();
         tmpF.canWrite();
         tmpF.canRead();
 
-        String d3web = upPath + "/d3web/";
+        String d3web = upPath + PATHSEP + "d3web" + PATHSEP;
         File d3wF = new File(d3web);
         d3wF.canExecute();
         d3wF.canWrite();
         d3wF.canRead();
 
-        String knowwe = upPath + "/KnowWE-Headless-App.jar";
+        String knowwe = upPath + PATHSEP + "KnowWE-Headless-App.jar";
         File kwF = new File(knowwe);
         kwF.canExecute();
         kwF.canWrite();
@@ -363,9 +387,9 @@ public class DialogManager extends HttpServlet {
 
         boolean compileError = false;
 
-        //System.out.println("PARSER: \n"
-        //        + upPath + "\n" + doc + "\n" + errFile + "\n" + tmp + "\n"
-        //        + d3web + "\n" + knowwe + "\n");
+        System.out.println("PARSER: \n"
+                + upPath + "\n" + doc + "\n" + errFile + "\n" + tmp + "\n"
+                + d3web + "\n" + knowwe + "\n");
         /*
          * System.out.println("PARSER File Permissions: \n" + "tmpF: " +
          * tmpF.canExecute() + tmpF.canWrite() + tmpF.canRead() + "\n" + "d3wF:

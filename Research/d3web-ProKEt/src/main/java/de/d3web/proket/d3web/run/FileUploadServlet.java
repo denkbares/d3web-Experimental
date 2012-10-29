@@ -40,8 +40,9 @@ import javax.servlet.http.HttpSession;
 public class FileUploadServlet extends HttpServlet {
 
     // TODO read this from specs file possibly
-    //private static String WEBAPP_NAME = "/DM";
-    private static String WEBAPP_NAME = "";
+    //private static String WEBAPP_NAME = "/";
+    private static String PATHSEP = System.getProperty("file.separator");
+    
     
     protected final GlobalSettings GLOBSET = GlobalSettings.getInstance();
 
@@ -65,7 +66,7 @@ public class FileUploadServlet extends HttpServlet {
              * multipart/form-data throws IOException if request is not
              * multipart *
              */
-            MultipartRequest multipartRequest = new MultipartRequest(request, getServletContext().getRealPath("/tmp/"), /*
+            MultipartRequest multipartRequest = new MultipartRequest(request, getServletContext().getRealPath(PATHSEP + "tmp" + PATHSEP), /*
                      * 1MB
                      */ 1024 * 1024, new DefaultFileRenamePolicy());
             if (multipartRequest.getParameter("saveKB") != null) {
@@ -103,7 +104,7 @@ public class FileUploadServlet extends HttpServlet {
             if (!tmpFile.getName().endsWith(".doc") &&
                     !tmpFile.getName().endsWith(".d3web") &&
                         !tmpFile.getName().endsWith(".zip")) {
-                response.sendRedirect(WEBAPP_NAME + 
+                response.sendRedirect(GLOBSET.getWebAppWarName() + 
                         "/DialogManager?upERR=nokb");
             }
             File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
@@ -117,10 +118,10 @@ public class FileUploadServlet extends HttpServlet {
             httpSession.setAttribute("latestDoc", newFileName);
 
             tmpFile.delete();
-            response.sendRedirect(WEBAPP_NAME + 
+            response.sendRedirect(GLOBSET.getWebAppWarName() + 
                     "/DialogManager?upKB=done&upfilename=" + newFileName);
         } else {
-            response.sendRedirect(WEBAPP_NAME + 
+            response.sendRedirect(GLOBSET.getWebAppWarName() + 
                     "/DialogManager?upERR=nofile");
         }
     }
@@ -141,7 +142,7 @@ public class FileUploadServlet extends HttpServlet {
         if (tmpFile != null) {
 
             if (!tmpFile.getName().endsWith(".xml")) {
-                response.sendRedirect(WEBAPP_NAME + 
+                response.sendRedirect(GLOBSET.getWebAppWarName() + 
                         "/DialogManager?upERR=noxml");
             }
             File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
@@ -153,10 +154,10 @@ public class FileUploadServlet extends HttpServlet {
             httpSession.setAttribute("latestSpec", fileToMove);
 
             tmpFile.delete();
-            response.sendRedirect(WEBAPP_NAME +  
+            response.sendRedirect(GLOBSET.getWebAppWarName() +  
                     "/DialogManager?upSPEC=done");
         } else {
-            response.sendRedirect(WEBAPP_NAME + 
+            response.sendRedirect(GLOBSET.getWebAppWarName() + 
                     "/DialogManager?upERR=nofile");
         }
 

@@ -76,6 +76,16 @@ public class GlobalSettings {
     private final DialogStrategy defaultDialogStrategy = DialogStrategy.DEFAULT;
     private final String defaultCSSSpec = "default"; // TODO
 
+    
+    private String webAppWarName = "";
+
+    public String getWebAppWarName() {
+        return webAppWarName;
+    }
+
+    public void setWebAppWarName(String webAppWarName) {
+        this.webAppWarName = webAppWarName;
+    }
     /*
      * The folder, where persistence is stored, e.g., case-files
      */

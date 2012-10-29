@@ -10,7 +10,7 @@
 
     </div>
 
-    <div class="row" id="specUploadRow">
+    <div class="row" id="specUploadRow" style="display:none;">
         <form action="FileUploadServlet" enctype="multipart/form-data" method="post" >
             <input name="uploadSPEC" type="file" id="origSpecUploadField" onchange="writeToFakeField('origSpecUploadField');"/>
             <input name="saveSPEC" type="submit" value="$specuploadfieldlabel$" id="origSpecUploadButton" />

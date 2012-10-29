@@ -106,7 +106,7 @@ function parseDocToKB(id){
                 //alert("everything's fine");
                 $("#statusMessage").html("Wissensbasis erfolgreich geparst.");
                 var kbSelectContent = html.replace("success;;;", "");
-                alert(kbSelectContent);
+                //alert(kbSelectContent);
                 $("#d3webSelect").html(kbSelectContent);
                 
             } else if(html.indexOf("showErrFile") != -1) {

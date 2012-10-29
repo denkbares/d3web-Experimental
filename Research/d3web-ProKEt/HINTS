@@ -27,3 +27,14 @@ Neuen DialogTyp anlegen (Beispiel: Typ "Standard")
 (ggf. entsprechende Einzelrenderer für Fragen, Antworten etc mit dem Prefix)
 
 - ggf. im D3webRendererMapping entsprechend anpassen/einfügen
+
+
+
+DialogManager auf Windows Server:
+- Tomcat dort (ggf als Dienst) installieren
+- Tomcat root Rechte!?
+- Webapp deployen
+- OpenOffice oder Libre Office am verwendeten Pfad installieren
+- Konsole als Admin öffnen, 
+    Open Office Server starten:
+    soffice.exe -accept="socket,host=127.0.0.1,port=8100;urp;StarOffice.ServiceManager" -headless -nodefault -nofirststartwizard -nolockcheck -nologo -norestore

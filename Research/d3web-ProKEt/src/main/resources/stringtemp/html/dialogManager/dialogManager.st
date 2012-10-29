@@ -29,7 +29,7 @@
     <div class="row" id="uploadRow">
        
         <div class="cell selectcell firstcell">
-            $FileBrowser()$
+            $dialogManager/FileBrowserKBOnly()$
         </div>
         
         <div class="cell lastcell">
@@ -65,7 +65,7 @@
             <div id="actionsLabel" class="cell labelcell">Wissensbasen</div>
             $dialogManager/FileSelectorD3web()$
         </div>
-        <div id="specFileSelectorCell" class="cell">
+        <div id="specFileSelectorCell" class="cell" >
             <div id="actionsLabel" class="cell labelcell">UI Spezifikationen</div>
             $dialogManager/FileSelectorSpecs()$
         </div>
