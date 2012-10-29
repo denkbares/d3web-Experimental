@@ -223,6 +223,8 @@
 		<module>KnowWE-Plugin-LoadKnowledgeBase</module>
 		<module>KnowWE-Plugin-OntoVis</module>
 		<module>KnowWE-Plugin-OWLAPIConnector</module>
+		<module>KnowWE-Plugin-DiaFlux-Review</module>
+		<module>KnowWE-Plugin-WikiBaseline</module>
 	</modules>
 	<repositories>
 		<repository>
