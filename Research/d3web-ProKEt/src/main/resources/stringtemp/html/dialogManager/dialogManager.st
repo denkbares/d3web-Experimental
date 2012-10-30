@@ -49,15 +49,21 @@
                     </div>
                 </div>
             </div>
-            <div id="uploadSpacerRow" class="row">
+            <!--<div id="uploadSpacerRow" class="row">
                 <div id="UploadSpacer"></div> 
             </div>
+            -->
+            
         </div>
         
     </div>
 
     <div id="statusRow" class="row">
-        <div id="statusMessage" class="statusMessageOK cell"></div> 
+        <div id="statusMessage" class="statusMessageOK cell">
+        </div>
+        <div id='progressIndicator'>
+                <img src='img/processCircle.gif' alt='processCircle' width="22px" height=22px;/>
+        </div>
     </div>
 
     <div id="selectorsRow" class="row">
@@ -66,7 +72,7 @@
             $dialogManager/FileSelectorD3web()$
         </div>
         <div id="specFileSelectorCell" class="cell" >
-            <div id="actionsLabel" class="cell labelcell">UI Spezifikationen</div>
+            <div id="actionsLabel" class="cell labelcell">Dialogtypen</div>
             $dialogManager/FileSelectorSpecs()$
         </div>
     </div>
@@ -108,6 +114,7 @@
             <div id="latestDialogLink" style="display: none"></div>
             <div id="actionsLabel" class="cell labelcell">Dialog Links</div>
             <div id="dialoglinklist">
+                $dialogLinkList$
             </div>
         </div>
 

@@ -33,9 +33,7 @@ var upfilename;
  * have been loaded and message should be displayed in UI 
  * TODO: maybe refactor */
 $(function(){
-  
- 
-        
+     
     var Request = {	
         parameter: function(name) {
             return this.parameters()[name];
@@ -64,15 +62,15 @@ $(function(){
     if(status != undefined && status != ""){
         if(status=="nofile"){
             $('#statusMessage').html("Bitte Datei auswählen!")
-                .removeClass("statusMessageOK").addClass("statusMessageERR");
+            .removeClass("statusMessageOK").addClass("statusMessageERR");
         } 
         if(status=="noxml"){
             $('#statusMessage').html("Bitte XML Spezifikation (.xml) auswählen!")
-                removeClass("statusMessageOK").addClass("statusMessageERR");
+            removeClass("statusMessageOK").addClass("statusMessageERR");
         } 
         if(status=="nokb"){
             $('#statusMessage').html("Bitte Wissensbasis (.doc/.zip/.d3web) auswählen!")
-                removeClass("statusMessageOK").addClass("statusMessageERR");
+            removeClass("statusMessageOK").addClass("statusMessageERR");
         }
     }
     
@@ -96,12 +94,17 @@ function parseDocToKB(id){
     
     var link = $.query.set("action", "parseKBDoc").set("docname", docname).toString();
     link = window.location.href.replace(window.location.search, "") + link;
+    
+    $("#statusMessage").html("Wissensbasis-Datei wird geparst...");
+    $("#progressIndicator").show();
+    
 
     $.ajax({
         type : "GET",
         url : link,
         cache : false, // needed for IE, call is not made otherwise
         success : function(html) {
+            $("#progressIndicator").hide();
             if(html.indexOf("success")!=-1){
                 //alert("everything's fine");
                 $("#statusMessage").html("Wissensbasis erfolgreich geparst.");
@@ -120,12 +123,13 @@ function parseDocToKB(id){
                 $("#statusMessage").html("Bitte laden Sie ein valides Dokument hoch.")
             }
         } 
+        
     });
 }
 
 function dmOpenErrorReport(errorReportLink){
     window.open(errorReportLink, "Fehlerbericht", "width=800,height=600,left=100,top=200"); 
-  }
+}
 
 /* calls functionality for assembling a dialog servlet string from the
  * (currently last loaded) KB and spec 
@@ -144,7 +148,7 @@ function assembleDialog(){
     var spec = selArray[1];
 
     var link = $.query.set("action", "assembleDialog")
-        .set("kb", kb).set("spec", spec).toString();
+    .set("kb", kb).set("spec", spec).toString();
         
     link = window.location.href.replace(window.location.search, "") + link;
 
@@ -192,7 +196,7 @@ function storeDialogToUsersList(){
     
     // TODO: needs to be altered later. Is used currently to quicly move the
     // latest dialog to the list view
-    $("#dialoglinklist").html(getDialogLinkCell($("#latestDialogLink").html()));
+    //$("#dialoglinklist").html(getDialogLinkCell($("#latestDialogLink").html()));
     
     var dialogLink = $("#latestDialogLink").html();
     
@@ -207,7 +211,17 @@ function storeDialogToUsersList(){
         cache : false, // needed for IE, call is not made otherwise
         success : function(html) {
             if(html.indexOf("error")==-1){
-                
+                // UPDATE THE LINKLIST
+                if (html.indexOf("##replaceid##")!= -1) {
+                    var updateArray = html.split(/##replaceid##|##replacecontent##/);
+                    for (var i = 0; i < updateArray.length - 1; i+=2) {
+                        if (updateArray[i].length == 0) {
+                            i--;
+                            continue;
+                        }
+                        $("#" + updateArray[i]).replaceWith(updateArray[i + 1]);
+                    }
+                }
             } else {
                 alert("storeDialogToUsersList error");
             }

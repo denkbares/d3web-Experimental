@@ -26,11 +26,11 @@
 
 .lastcell{background: white; -moz-border-radius: 0px 15px 15px 0px; 
     border-radius: 0px 15px 15px 0px; border: 2px solid white;
-    max-width: 130px;}
+    max-width: 130px; padding-right: 5px;}
 
 .bgcell{background: white; border: 2px solid white;}
 
-.buttoncell{min-width: 50px; padding-left: 10px; }
+.buttoncell{min-width: 50px; padding-left: 10px; padding-top: 5px;}
 
 .spacercell{min-width: 20px;}
 
@@ -75,7 +75,7 @@ input{border: 1px dotted darkgrey;
     margin-top: 10px;}
 
 #docfilebutton{width: 70px; height: 24px;
-    left: 225px;
+    left: 240px;
     min-width: 25px;
     position: absolute;
     top: -1px;
@@ -105,7 +105,7 @@ input{border: 1px dotted darkgrey;
 
 #origKBUploadField,#origSpecUploadField {width: 220px; position: relative; z-index:2; opacity:0;}
 
-#origKBUploadField{margin-top:12px; width: 225px;}
+#origKBUploadField{margin-top:12px; width: 245px;}
 
 #origSpecUploadField{margin-top:10px; width: 225px;}
 
@@ -113,7 +113,7 @@ input{border: 1px dotted darkgrey;
 
 #specUploadRow{margin-top:10px;}
 
-#uploadRow{height: 80px;}
+#uploadRow{}
 
 #uploadButtonRow{height: 80px;}
 
@@ -135,14 +135,25 @@ input{border: 1px dotted darkgrey;
     margin-top: 5px; color: darkslateblue; padding-right: 10px; padding-left:10px;}
 
 .statusMessageOK{font-family: Verdana;  font-size: 0.7em;
-    margin-top: 5px;
-    padding-left: 15px; color: darkslateblue;}
+    padding-right: 10px;
+    padding-top: 10px;
+    text-align: right;
+    vertical-align: middle;
+    color: darkslateblue;}
 
 .statusMessageERR{font-family: Verdana;  font-size: 0.7em;
-    margin-top: 5px;
-    padding-left: 15px; color: darkred; font-weight: bold;}
+    padding-right: 10px;
+    padding-top: 10px;
+    text-align: right;
+    vertical-align: middle;
+    color: darkred; font-weight: bold;}
 
-#statusMessage{text-align: right; padding: 5px; height: 10px;}
+#statusMessage{
+    min-height: 25px; height: 25px;
+    padding-right: 10px;
+    padding-top: 10px;
+    text-align: right;
+    vertical-align: middle;}
 
 #UploadSpacer{width: 200px; height: 20px; padding-left: 10px; 
     padding-right: 10px; 
@@ -152,8 +163,10 @@ input{border: 1px dotted darkgrey;
 
 .dmFileSelectorDropdown{width: 100px;}
 
-.specsSelect{min-width: 150px;}
+.specsSelect{min-width: 130px;}
 
 .d3webSelect{min-width: 275px;}
 
-#spacerowRightcol{min-height: 45px; height: 45px;}
+#spacerowRightcol{min-height: 20px; height: 20px;}
+
+#progressIndicator{display: none; padding-top: 5px; padding-right: 5px; padding-left: 15px;}
