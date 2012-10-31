@@ -5,5 +5,5 @@
 	$if (langDE)$
     	Fall laden
         $endif$
-	$FileSelectAdd()$
+	$FileSelect()$
 </div>

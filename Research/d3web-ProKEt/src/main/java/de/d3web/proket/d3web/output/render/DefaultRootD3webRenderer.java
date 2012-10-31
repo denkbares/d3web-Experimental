@@ -315,7 +315,8 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
             for (File f : files) {
                 if (!f.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
                     cases.append("<option");
-                    String filename = f.getName().substring(0, f.getName().lastIndexOf("."));
+                    String filename = 
+                            f.getName().substring(0, f.getName().lastIndexOf(".")).replace("+", " ");
                     cases.append(" title='"
                             + filename + "'>");
                     cases.append(filename);

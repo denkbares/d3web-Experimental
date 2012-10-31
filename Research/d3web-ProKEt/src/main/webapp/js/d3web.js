@@ -1058,6 +1058,7 @@ function d3web_handleQuestionDate(dateSelect) {
     var beforeQuestion = $("#" + beforeId);
     var afterQuestion = $("#" + afterId);
     var beforeDate = getDate(beforeQuestion.find("select").first());
+    
     var afterDate = getDate(afterQuestion.find("select").first());
     
     var tqpopup1 = "To avoid mistakes, timepoints must be filled in completely (Hour:Minute).";
@@ -1088,10 +1089,10 @@ function d3web_handleQuestionDate(dateSelect) {
     tooLate = "";
     
     var errorWid = getErrorPlaceholder(dateSelect);
-    if (afterId != undefined && d3web_isAnsweredQuestion(afterQuestion) && date.getTime() <= afterDate.getTime()) {
+    if (afterId != undefined && d3web_isAnsweredQuestion(afterQuestion) && date.getTime() < afterDate.getTime()) {
         errorWid.html(tooSoon);
     }
-    else if (beforeId != undefined && d3web_isAnsweredQuestion(beforeQuestion) && date.getTime() >= beforeDate.getTime()) {   
+    else if (beforeId != undefined && d3web_isAnsweredQuestion(beforeQuestion) && date.getTime() > beforeDate.getTime()) {   
         errorWid.html(tooLate);
     } 
     else {
