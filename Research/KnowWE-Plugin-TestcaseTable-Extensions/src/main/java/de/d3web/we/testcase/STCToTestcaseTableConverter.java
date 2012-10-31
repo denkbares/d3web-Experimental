@@ -33,7 +33,6 @@ import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.empiricaltesting.SequentialTestCase;
 import de.d3web.empiricaltesting.TestPersistence;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.testcases.TimeStampType;
 
 /**
@@ -49,10 +48,10 @@ public class STCToTestcaseTableConverter {
 
 	private static final String LINESEP = "\r\n";
 
-	public static String convert(List<SequentialTestCase> cases, String master) {
+	public static String convert(List<SequentialTestCase> cases, String[] packages) {
 		StringBuilder markup = new StringBuilder();
 		for (SequentialTestCase stc : cases) {
-			markup.append(convert(stc, master));
+			markup.append(convert(stc, packages));
 			markup.append(LINESEP);
 		}
 
@@ -65,7 +64,7 @@ public class STCToTestcaseTableConverter {
 	 * @param stc
 	 * @return
 	 */
-	public static String convert(SequentialTestCase stc, String master) {
+	public static String convert(SequentialTestCase stc, String[] packages) {
 		List<RatedTestCase> cases = stc.getCases();
 
 		if (cases.isEmpty()) return null;
@@ -84,7 +83,10 @@ public class STCToTestcaseTableConverter {
 
 		builder.append(LINESEP);
 
-		if (!Strings.isBlank(master)) builder.append("@master " + master);
+		for (String pack : packages) {
+			builder.append("@package " + pack);
+
+		}
 		builder.append(LINESEP);
 		builder.append("%");
 		builder.append(LINESEP);
@@ -135,7 +137,7 @@ public class STCToTestcaseTableConverter {
 					continue nextQ;
 				}
 			}
-			builder.append("| - ");
+			builder.append("| ");
 		}
 
 		builder.append(LINESEP);
@@ -179,7 +181,7 @@ public class STCToTestcaseTableConverter {
 		List<SequentialTestCase> cases = TestPersistence.getInstance().loadCases(
 				inputFile.toURI().toURL(), kb);
 
-		String markup = convert(cases, "Dashboard");
+		String markup = convert(cases, new String[] { "Dashboard" });
 		System.out.println(markup);
 
 		Writer writer = new BufferedWriter(new FileWriter(outputFile));

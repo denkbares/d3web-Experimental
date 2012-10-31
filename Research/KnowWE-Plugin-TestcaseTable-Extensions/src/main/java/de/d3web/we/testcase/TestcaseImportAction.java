@@ -21,6 +21,7 @@ package de.d3web.we.testcase;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +36,12 @@ import de.d3web.empiricaltesting.TestPersistence;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.testcases.table.TestcaseTableType;
 
 /**
@@ -83,8 +88,14 @@ public class TestcaseImportAction extends AbstractAction {
 
 		@SuppressWarnings("unchecked")
 		Section<TestcaseTableType> section = (Section<TestcaseTableType>) Sections.getSection(sectionID);
+		String[] packs = DefaultMarkupType.getAnnotations(section,
+				PackageManager.PACKAGE_ATTRIBUTE_NAME);
+		// TODO insert all annotations
+		if (packs.length == 0) {
+			packs = new String[] { "default" };
+		}
 
-		KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(), context.getTitle());
+		KnowledgeBase kb = getKB(section);
 		List<SequentialTestCase> cases;
 		try {
 
@@ -100,12 +111,23 @@ public class TestcaseImportAction extends AbstractAction {
 					"<a href='Wiki.jsp?page=" + section.getTitle() + "'>back</a>");
 			return;
 		}
-		String stcs = STCToTestcaseTableConverter.convert(cases, context.getTitle());
+		String stcs = STCToTestcaseTableConverter.convert(cases, packs);
 
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		nodesMap.put(sectionID, stcs);
 		Sections.replaceSections(context, nodesMap);
 		context.getResponse().sendRedirect("Wiki.jsp?page=" + section.getTitle());
+	}
+
+	private static KnowledgeBase getKB(Section<TestcaseTableType> s) {
+
+		Iterator<Article> iterator = KnowWEUtils.getCompilingArticles(s).iterator();
+		if (!iterator.hasNext()) return null;
+
+		// TODO how to select right kb, if more than 1?
+		Article article = iterator.next();
+
+		return D3webUtils.getKnowledgeBase(s.getWeb(), article.getTitle());
 	}
 
 }
