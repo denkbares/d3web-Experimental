@@ -21,7 +21,12 @@ package de.knowwe.rdfs.subclassingTree;
 
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
 import de.knowwe.rdfs.IRITermRef;
 
@@ -35,11 +40,29 @@ public class HierarchyDashtreeElementContent extends DashTreeElementContent
 		IRITermRef ref = new IRITermRef();
 		ref.setSectionFinder(new AllTextFinderTrimmed());
 		this.addChildType(ref);
+
+		this.setRenderer(new DashTreeElementContentEditableRenderer());
 	}
 
 	@Override
 	public KnowledgeUnitCompileScript getCompileScript() {
 		return new HierarchyDashtreeElementCompileScript();
+	}
+
+	class DashTreeElementContentEditableRenderer implements Renderer {
+
+		@Override
+		public void render(Section<?> section, UserContext user, StringBuilder string) {
+			string.append(Strings.maskHTML("<div style='display:inline;' id=\""
+					+ section.getID()
+					+ "\" >"));
+			string.append(Strings.maskHTML("<div style='display:inline;' class=\"casetrain-instantedit\">"));
+			DelegateRenderer.getInstance().render(section, user, string);
+			string.append(Strings.maskHTML("</div>"));
+			string.append(Strings.maskHTML("</div>"));
+
+		}
+
 	}
 
 }
