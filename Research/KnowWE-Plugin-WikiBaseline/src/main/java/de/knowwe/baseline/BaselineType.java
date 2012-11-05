@@ -19,6 +19,7 @@
 package de.knowwe.baseline;
 
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 
@@ -29,6 +30,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  */
 public class BaselineType extends DefaultMarkupType {
 
+	private static final String ICON = "KnowWEExtension/images/baseline.png";
 	private static DefaultMarkup m;
 
 	static {
@@ -37,6 +39,8 @@ public class BaselineType extends DefaultMarkupType {
 
 	public BaselineType() {
 		super(m);
+		setIgnorePackageCompile(true);
+		setRenderer(new DefaultMarkupRenderer(ICON));
 		getContentType(this).setRenderer(new BaselineRenderer());
 	}
 

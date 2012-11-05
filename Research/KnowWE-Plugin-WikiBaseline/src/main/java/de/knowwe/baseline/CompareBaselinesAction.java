@@ -24,11 +24,13 @@ import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
@@ -37,9 +39,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import de.knowwe.baseline.BaselineDiff.ArticleVersion;
+import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.WikiAttachment;
 import de.knowwe.core.wikiConnector.WikiConnector;
@@ -50,6 +55,8 @@ import de.knowwe.core.wikiConnector.WikiConnector;
  * @created 26.10.2012
  */
 public class CompareBaselinesAction extends AbstractAction {
+
+	private static String BASELINE_DIFFS = "WikiBaseline";
 
 	private static final String[] CHANGED_HEADER = {
 			"Title", "Edits", "Date", "Author", "" };
@@ -93,7 +100,6 @@ public class CompareBaselinesAction extends AbstractAction {
 			// TODO errorhandling
 			return;
 		}
-
 		Baseline baseline1 = loadBaseline(context, basename1);
 		Baseline baseline2 = loadBaseline(context, basename2);
 
@@ -101,31 +107,51 @@ public class CompareBaselinesAction extends AbstractAction {
 			// TODO errorhandling
 			return;
 		}
-
 		BaselineDiff diff = new BaselineDiff(baseline1, baseline2);
+		storeBaseline(context, diff);
 
-		StringBuilder bob = new StringBuilder();
-		printDiff(diff, bob);
+		String changes = createDiffHtml(diff);
+
 		context.setContentType("text/html");
-		context.getWriter().write(bob.toString());
+		context.getWriter().write(changes);
 
 	}
 
-	/**
-	 * 
-	 * @created 27.10.2012
-	 * @param diff
-	 * @param bob
-	 */
-	private static void printDiff(BaselineDiff diff, StringBuilder bob) {
+	@SuppressWarnings("unchecked")
+	public static BaselineDiff getDiff(Section<?> s, UserContext context) {
+		Map<String, BaselineDiff> diffs = (Map<String, BaselineDiff>) context.getSession().getAttribute(
+				BASELINE_DIFFS);
+
+		if (diffs == null) {
+			return null;
+		}
+		else {
+			return diffs.get(s.getID());
+		}
+	}
+
+
+	@SuppressWarnings("unchecked")
+	private static void storeBaseline(UserContext context, BaselineDiff diff) {
+		HttpSession session = context.getSession();
+		Map<String, BaselineDiff> diffs = (Map<String, BaselineDiff>) session.getAttribute(BASELINE_DIFFS);
+		if (diffs == null) {
+			diffs = new HashMap<String, BaselineDiff>();
+			session.setAttribute(BASELINE_DIFFS, diffs);
+		}
+		diffs.put(context.getParameter(Attributes.SECTION_ID), diff);
+	}
+
+	public static String createDiffHtml(BaselineDiff diff) {
 		if (diff.isEmpty()) {
-			bob.append("No changes");
-			return;
+			return "No changes";
 		}
 
+		StringBuilder bob = new StringBuilder();
 		printChangedArticles(diff, bob);
 		printAddedArticles(diff, bob);
 		printRemovedArticles(diff, bob);
+		return bob.toString();
 
 	}
 
@@ -204,7 +230,9 @@ public class CompareBaselinesAction extends AbstractAction {
 		// for new articles, we also want to count the first version
 		if (includeFirst) changes++;
 		appendDataCells(bob, String.valueOf(changes));
-		appendDataCells(bob, format(info2.getLastModDate()));
+		appendDataCells(bob,
+				createDiffLink(info1.getTitle(), info1.getVersion(), info2.getVersion(),
+						format(info2.getLastModDate())));
 		appendDataCells(bob, info2.getLastEditor());
 		bob.append("<td><div class=\"detailsArrow\" alt=\"Show details\"></div></td>");
 		bob.append("</tr>\n");
@@ -284,7 +312,7 @@ public class CompareBaselinesAction extends AbstractAction {
 			return description;
 		}
 		else {
-			return "<a href='" + KnowWEUtils.getDiffURLLink(title, v1, v2) + "' >" + description
+			return "<a href='" + KnowWEUtils.getDiffURLLink(title, v2, v1) + "' >" + description
 					+ "</a>";
 		}
 	}
@@ -336,7 +364,7 @@ public class CompareBaselinesAction extends AbstractAction {
 	 * @return
 	 * @throws IOException
 	 */
-	private static Baseline loadBaseline(UserActionContext context, String baseName) throws IOException {
+	private static Baseline loadBaseline(UserContext context, String baseName) throws IOException {
 		if (baseName.equals(CreateBaselineAction.NAME_CURRENT)) {
 			return CreateBaselineAction.createNewBaseline(CreateBaselineAction.NAME_CURRENT, "",
 					context.getWeb());

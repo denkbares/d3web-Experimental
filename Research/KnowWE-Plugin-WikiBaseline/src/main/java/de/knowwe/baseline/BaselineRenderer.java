@@ -42,32 +42,41 @@ public class BaselineRenderer implements Renderer {
 
 	private static DateFormat FORMAT = DateFormat.getDateInstance();
 
+
 	@Override
 	public void render(Section<?> section, UserContext user, StringBuilder string) {
 		StringBuilder bob = new StringBuilder();
 		bob.append("<div class='baselineParent'>");
-		renderSelection(user, bob);
+
+		BaselineDiff diff = CompareBaselinesAction.getDiff(section, user);
+		renderSelection(user, bob, section, diff);
+
 		bob.append("<div class='baselineCompareResult'>");
+		if (diff != null) {
+			bob.append(CompareBaselinesAction.createDiffHtml(diff));
+		}
 
 		bob.append("</div>");
 		bob.append("</div>");
 		string.append(Strings.maskHTML(bob.toString()));
 	}
 
-	private static void renderSelection(UserContext user, StringBuilder bob) {
+	private static void renderSelection(UserContext user, StringBuilder bob, Section<?> section, BaselineDiff diff) {
 		List<Baseline> baselines = loadBaselines(user.getTitle());
 
 		bob.append("<div class='baselineSelection'>");
 		if (baselines.isEmpty()) {
-			bob.append("There are no baselines to compare against. Please create one first.");
+			bob.append("There is no baseline to compare against. Please create one first.");
 			bob.append("</div>");
 			return;
 		}
+		String selection1 = diff != null ? diff.getBase1().getName() : "";
+		String selection2 = diff != null ? diff.getBase2().getName() : "";
 
-		renderDropdown("First baseline:", baselines, bob);
+		renderDropdown("Differences between", baselines, selection1, bob);
 		baselines.add(0, CreateBaselineAction.createCurrentBaseline(user));
-		renderDropdown("Second baseline:", baselines, bob);
-
+		renderDropdown("and", baselines, selection2, bob);
+		bob.append("<input type=\"hidden\" value=\"" + section.getID() + "\">");
 		bob.append("</div>");
 	}
 
@@ -76,16 +85,22 @@ public class BaselineRenderer implements Renderer {
 	 * @created 27.10.2012
 	 * @param title
 	 * @param baselines
+	 * @param selection
 	 * @param bob
 	 */
-	public static void renderDropdown(String title, Collection<Baseline> baselines, StringBuilder bob) {
+	public static void renderDropdown(String title, Collection<Baseline> baselines, String selection, StringBuilder bob) {
 		bob.append(title);
-		bob.append("<select>");
+		bob.append("<select class=\"baselineSelect\">");
 		for (Baseline baseline : baselines) {
 			bob.append("<option value=\"");
-			bob.append(baseline.getName());
-			bob.append("\">");
-			bob.append(baseline.getName());
+			String name = baseline.getName();
+			bob.append(name);
+			bob.append("\"");
+			if (name.equals(selection)) {
+				bob.append(" selected=\"selected\"");
+			}
+			bob.append(">");
+			bob.append(name);
 			bob.append(" (");
 			bob.append(FORMAT.format(new Date(baseline.getDate())));
 			bob.append(")");

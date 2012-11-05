@@ -32,7 +32,7 @@ import de.knowwe.tools.ToolProvider;
  */
 public class BaselineToolProvider implements ToolProvider {
 
-	private static final String ICON = "";
+	private static final String ICON = "KnowWEExtension/images/baseline_add.png";
 
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {

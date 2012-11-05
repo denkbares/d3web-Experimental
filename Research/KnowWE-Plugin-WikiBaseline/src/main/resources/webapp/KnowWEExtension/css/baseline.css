@@ -7,15 +7,13 @@
 }
 
 .baselineSelection {
-	
+	padding: 0.5em;
+	font-weight: bold;
 }
 
-.baselineChanged, .baselineAdded, .baselineRemoved{
-
-	
-}
-.baselineCompareResult table{
-	empty-cells:hide;
+select.baselineSelect {
+	margin-left: 0.5em;
+	margin-right: 0.5em;
 }
 
 .baselineCompareResult table caption{
@@ -50,7 +48,6 @@ ul.changeList {
 	background-position:0px 0px;
 }
 
-
 .changeTable tr:odd td {
 	background-color: white;
 }
@@ -59,13 +56,3 @@ ul.changeList {
 	padding-left: 1em;
 }
 
-.baselineChanged {
-	
-}
-.baselineAdded {
-	
-}
-
-.baselineRemoved {
-	
-}
