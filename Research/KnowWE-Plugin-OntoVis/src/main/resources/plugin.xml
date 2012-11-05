@@ -35,7 +35,7 @@
 			value="Offers a download button to download the graph as an svg file." />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="/Vis" />
+		<parameter id="scope" value="Vis" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -57,7 +57,7 @@
 			value="Offers a button to display the graph" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="/Vis" />
+		<parameter id="scope" value="Vis" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -79,7 +79,7 @@
 			value="Offers a download button to download the dot-file of the graph." />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="/Vis" />
+		<parameter id="scope" value="Vis" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"

@@ -738,7 +738,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 	private static String createSparqlURI(String name) {
 		name = name.replaceAll(" ", "+");
-		if (name.contains("+")) {
+		if (name.contains("+") || name.contains(".")) {
 			String localNamespace = Rdf2GoCore.getInstance().getLocalNamespace();
 
 			return "<" + localNamespace + name + ">";
