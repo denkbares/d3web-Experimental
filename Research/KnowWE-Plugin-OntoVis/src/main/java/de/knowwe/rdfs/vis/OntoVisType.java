@@ -11,8 +11,7 @@ public class OntoVisType extends DefaultMarkupType {
 	public static final String ANNOTATION_PREDECESSORS = "predecessors";
 	public static final String ANNOTATION_EXCLUDENODES = "excludeNodes";
 	public static final String ANNOTATION_EXCLUDERELATIONS = "excludeRelations";
-	public static final String ANNOTATION_WIDTH = "width";
-	public static final String ANNOTATION_HEIGHT = "height";
+	public static final String ANNOTATION_SIZE = "size";
 	public static final String ANNOTATION_FORMAT = "format";
 	public static final String ANNOTATION_SHOWCLASSES = "showClasses";
 	public static final String ANNOTATION_SHOWPROPERTIES = "showProperties";
@@ -27,8 +26,7 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_PREDECESSORS, false);
 		MARKUP.addAnnotation(ANNOTATION_EXCLUDENODES, false);
 		MARKUP.addAnnotation(ANNOTATION_EXCLUDERELATIONS, false);
-		MARKUP.addAnnotation(ANNOTATION_WIDTH, false);
-		MARKUP.addAnnotation(ANNOTATION_HEIGHT, false);
+		MARKUP.addAnnotation(ANNOTATION_SIZE, false);
 		MARKUP.addAnnotation(ANNOTATION_FORMAT, false);
 		MARKUP.addAnnotation(ANNOTATION_SHOWCLASSES, false);
 		MARKUP.addAnnotation(ANNOTATION_SHOWPROPERTIES, false);

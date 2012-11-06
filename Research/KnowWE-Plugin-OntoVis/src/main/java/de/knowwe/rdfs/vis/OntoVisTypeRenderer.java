@@ -18,6 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 
@@ -33,8 +34,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 	// path of the local dot-Installation
-	private final static String dotInstallation = "/usr/local/bin/dot";
-	// private final static String dotInstallation = "D:\\Graphviz\\bin\\dot";
+	private static String DOT_INSTALLATION;
 
 	// section
 	private Section<?> section;
@@ -44,8 +44,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	private List<String> excludedRelations;
 	private int requestedDepth;
 	private int requestedHeight;
-	private String graphWidth;
-	private String graphHeight;
+	private String graphSize;
 	private String format;
 	private boolean showClasses;
 	private boolean showProperties;
@@ -75,6 +74,8 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 	@Override
 	public void renderContents(Section<?> section, UserContext user, StringBuilder string) {
+		ResourceBundle rb = ResourceBundle.getBundle("dotInstallation");
+		DOT_INSTALLATION = rb.getString("path");
 		this.section = section;
 		String request = getRequest(user);
 		String concept = getConcept(user);
@@ -85,6 +86,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		realPath = servletContext.getRealPath("");
 		path = realPath + FILE_SEPARATOR + tmpPath;
 		dotSource = "digraph finite_state_machine {\n";
+		setSize();
 		dotSourceLabel = new LinkedHashMap<String, String>();
 		dotSourceRelations = new LinkedHashMap<String, String>();
 
@@ -121,16 +123,27 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 	/**
 	 * 
+	 * @created 18.08.2012
+	 */
+	private String getConcept(UserContext user) {
+		String parameter = null;
+		parameter = user.getParameter("concept");
+		if (parameter != null) {
+			return parameter;
+		}
+		return OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONCEPT);
+	}
+
+	/**
+	 * 
 	 * @created 20.08.2012
 	 * @param user
 	 */
 	private void getAnnotations(UserContext user) {
 		getSuccessors();
 		getPredecessors();
-		graphWidth = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_WIDTH);
-		graphHeight = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_HEIGHT);
+		graphSize = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_SIZE);
 		getExcludedNodes();
 		getExcludedRelations();
 		format = OntoVisType.getAnnotation(section,
@@ -143,14 +156,20 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 	/**
 	 * 
-	 * @created 18.08.2012
+	 * 
+	 * @created 30.10.2012
 	 */
-	private String getConcept(UserContext user) {
-		String parameter = user.getParameter("concept");
-		if (parameter != null) {
-			return parameter;
+	private void setSize() {
+		if (graphSize != null) {
+			if (graphSize.matches("\\d+px")) {
+				graphSize = graphSize.substring(0, graphSize.length() - 2);
+			}
+			if (graphSize.matches("\\d+")) {
+				dotSource += "graph [size=\""
+						+ String.valueOf(Double.valueOf(graphSize) * 0.010415597) + "!\"]\n";
+			}
 		}
-		return OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONCEPT);
+
 	}
 
 	/**
@@ -398,13 +417,13 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 		writeDot(dot);
 		// create svg
-		String command = dotInstallation + " " + dot.getAbsolutePath() +
-				" -Tsvg -o " + svg.getAbsolutePath();
+		String command = DOT_INSTALLATION + " \"" + dot.getAbsolutePath() +
+				"\" -Tsvg -o \"" + svg.getAbsolutePath() + "\"";
 		createFileOutOfDot(svg, dot, command);
 
 		// create png
-		command = dotInstallation + " " + dot.getAbsolutePath() +
-				" -Tpng -o " + png.getAbsolutePath();
+		command = DOT_INSTALLATION + " \"" + dot.getAbsolutePath() +
+				"\" -Tpng -o \"" + png.getAbsolutePath() + "\"";
 		createFileOutOfDot(png, dot, command);
 		prepareSVG(svg);
 	}
@@ -534,10 +553,13 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param StringBuilder
 	 */
 	private void appendFiles(StringBuilder string) {
-		String png_default = Strings.maskHTML("<img alt='graph' src='" + tmpPath + "graph"
-				+ section.getID() + ".png'>");
-		String svg = Strings.maskHTML("<object data='" + tmpPath + "graph" + section.getID()
-				+ ".svg' type=\"image/svg+xml\">" + png_default + "</object>");
+		String div_open = "<div style=\"max-height:1000px; overflow:scroll\">";
+		String div_close = "</div>";
+		String png_default = Strings.maskHTML(div_open + "<img alt='graph' src='"
+				+ tmpPath + "graph" + section.getID() + ".png'>" + div_close);
+		String svg = Strings.maskHTML(div_open + "<object data='" + tmpPath
+				+ "graph" + section.getID() + ".svg' type=\"image/svg+xml\">" + png_default
+				+ "</object>" + div_close);
 		if (format == null) {
 			string.append(png_default);
 		}
@@ -786,13 +808,13 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 		if (type.equals("class")) {
 			// Class Label Attributes
-			shape = "rectangle";
+			shape = "box";
 			fontcolor = "black";
 			fontsize = "14";
 		}
 		else if (type.equals("property")) {
 			// Property Label Attributes
-			shape = "diamond";
+			shape = "septagon";
 			fontcolor = "black";
 			fontsize = "14";
 		}
@@ -967,36 +989,11 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @param line
 	 */
 	private String checkLine(String line) {
-		// changes width and height if requested
-		if (isValidHeightOrWidth(graphWidth) && isValidHeightOrWidth(graphHeight)) {
-			if (line.matches("<svg width=.*")) {
-				line = line.replaceAll("width=\"\\d+pt\"", "width=\"" + graphWidth + "\"");
-				line = line.replaceAll("height=\"\\d+pt\"",
-						"height=\"" + graphHeight + "\"");
-			}
-		}
 		// adds target-tag to every URL
 		if (line.matches("<a xlink:href=.*")) {
 			line = line.substring(0, line.length() - 1) + " target=\"_top\">";
 		}
 		return line;
-	}
-
-	/**
-	 * Tests if var is a valid width or height value (valid if: var is a number
-	 * with 2-4 digits or a correct percentage).
-	 * 
-	 * @created 08.08.2012
-	 * @param var
-	 */
-	private boolean isValidHeightOrWidth(String var) {
-		if (var == null) {
-			return false;
-		}
-		if (var.matches("\\d{2,4}pt") || var.matches("(100|[0-9]{1,2})%")) {
-			return true;
-		}
-		return false;
 	}
 
 	/**
