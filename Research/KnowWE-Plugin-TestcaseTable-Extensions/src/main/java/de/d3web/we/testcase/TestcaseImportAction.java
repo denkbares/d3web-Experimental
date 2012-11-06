@@ -34,6 +34,7 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.empiricaltesting.SequentialTestCase;
 import de.d3web.empiricaltesting.TestPersistence;
 import de.d3web.we.utils.D3webUtils;
+import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.compile.packaging.PackageManager;
@@ -77,7 +78,7 @@ public class TestcaseImportAction extends AbstractAction {
 		for (Object object : items) {
 			FileItem item = (FileItem) object;
 
-			if (item.getFieldName().equals("kdomid")) sectionID = item.getString();
+			if (item.getFieldName().equals(Attributes.SECTION_ID)) sectionID = item.getString();
 			else if (item.getFieldName().equalsIgnoreCase("testcasefile")) file = item;
 		}
 
