@@ -1,40 +1,40 @@
-.Node.important, .Rule.important .v_line, .Rule.important .h_line{
+.Node.important,.Rule.important .v_line,.Rule.important .h_line {
 	border: 2px solid orange;
 }
 
-.Node.critical, .Rule.critical .v_line, .Rule.critical .h_line{
+.Node.critical,.Rule.critical .v_line,.Rule.critical .h_line {
 	border: 2px solid red;
 }
 
-.Node.low, .Rule.low .v_line, .Rule.low .h_line{
+.Node.low,.Rule.low .v_line,.Rule.low .h_line {
 	border: 2px solid green;
 }
 
 div.reviewPanel {
 	margin: 6px;
 	border: 1px solid #EEEEEE;
-    border-radius: 6px 6px 6px 6px;
+	border-radius: 6px 6px 6px 6px;
 }
 
 div.reviewToolbar {
- 	display:inline-block; 	
+	display: inline-block;
 }
 
 div.itemFilter {
- 	display:inline-block;
- 	padding: 0.1em; 	
- 	position:absolute;
-	right:10px;
+	display: inline-block;
+	padding: 0.1em;
+	position: absolute;
+	right: 10px;
 	margin-top: 3px;
 }
 
-div.itemFilter .filterPanel{
- 	display:inline-block;
- 	margin-left: 0.2em; 	
+div.itemFilter .filterPanel {
+	display: inline-block;
+	margin-left: 0.2em;
 }
 
 div.itemFilter div.filterButton {
-	display:inline-block;
+	display: inline-block;
 	border: 2px outset;
 	border-color: #EEEEEE;
 	border-radius: 2px 2px 2px 2px;
@@ -50,95 +50,126 @@ div.itemFilter div.filterButton.pressed {
 
 ul.reviewList {
 	padding: 1em;
-    margin: 0;
-    position: relative;
-    width: 70%;
+	margin: 0;
+	position: relative;
+	width: 85%;
 }
 
 ul.reviewList li.selected {
-    background-color: white;
-    border: 2px solid #E3E8E2;
-    border-radius: 6px 6px 6px 6px;
+	background-color: white;
+	border: 2px solid #E3E8E2;
+	border-radius: 6px 6px 6px 6px;
 }
 
 ul.reviewList li {
-    background-color: #F9F9F9;
-    border: 1px solid #EEEEEE;
-    border-radius: 6px 6px 6px 6px;
-    /**cursor: n-resize;**/
-    list-style: none outside none;
-    margin: 6px;
-    min-height: 50px;
+	background-color: #F9F9F9;
+	border: 1px solid #EEEEEE;
+	border-radius: 6px 6px 6px 6px;
+	/**cursor: n-resize;**/
+	list-style: none outside none;
+	margin: 6px;
+	min-height: 50px;
 }
 
 ul.reviewList li:hover {
-    border-color: #9BE0F9;
-    box-shadow: 0 0 5px #A6E5FD;
+	border-color: #9BE0F9;
+	box-shadow: 0 0 5px #A6E5FD;
 }
 
-div.reviewItemInfo {
+div.reviewItemInfo,div.reviewCommentInfo {
 	color: grey;
+	margin-right: 50px;
 }
 
-div.reviewText{
-	
+div.reviewText {
+	margin-right: 50px;
+}
+
+div.reviewPopup {
+	display: none;
+	position: absolute;
+	width: 280px;
+	padding: 10px;
+	background: #F9F9F9;
+	border: 1px solid #1a1a1a;
+	border-radius: 3px 3px 3px 3px;
+	font-size: 90%;
+	z-index: 100000;
+	opacity: 0.9;
 }
 
 div.reviewItem {
 	padding: 6px 9px;
-    position: relative;
+	position: relative;
 	white-space: pre-wrap;
 }
 
 div.reviewItem textarea {
 	width: 80%;
-	border:1px solid #999999;
+	border: 1px solid #999999;
 }
 
 div.reviewItem .reviewActions {
-    position: absolute;
-    right: 0.5em;
-    bottom: 50%;
-    visibility: hidden;
+	position: absolute;
+	display: inline-block;
+	right: 1em;
+	visibility: hidden;
 }
 
 ul.reviewList li.selected div.reviewActions {
-	visibility: visible;	
+	visibility: visible;
 }
 
 ul.reviewList li.selected.editing div.reviewActions {
-	visibility: hidden;	
+	visibility: hidden;
 }
 
 div.reviewItem div.reviewActions a {
-    display: block;
-    float: left;
-    height: 16px;
-    margin: 3px;
-    overflow: hidden;
-    width: 16px;
+	display: block;
+	float: left;
+	height: 16px;
+	margin: 3px;
+	overflow: hidden;
+	width: 16px;
 }
 
 div.reviewItem div.reviewActions a.editItem {
-    background: url("../image/edit.png") no-repeat scroll center center transparent;
+	background: url("../images/edit.png") no-repeat scroll center center
+		transparent;
 }
+
 div.reviewItem div.reviewActions a.deleteItem {
-    background: url("../image/delete.png") no-repeat scroll center center transparent;
+	background: url("../images/delete.png") no-repeat scroll center center
+		transparent;
+}
+
+div.reviewComments {
+	margin-left: 5%;
+}
+
+div.reviewComment {
+	border: 1px solid #EEEEEE;
+	margin-top: 0.2em;
+	margin-right: 50px;
+	font-size: 90%;
 }
 
 .editActions {
-    font-size: 0.7em;
-    padding-left: 9px;
+	font-size: 0.7em;
+	padding-left: 9px;
 }
+
 .editActions a {
-    font-weight: bold;
+	font-weight: bold;
 }
+
 a.saveChanges {
-    color: #4DB209 !important;
-    margin-right: 5px;
+	color: #4DB209 !important;
+	margin-right: 5px;
 }
+
 a.discardChanges {
-    color: #CC0000 !important;
+	color: #CC0000 !important;
 }
 
 div.reviewItemStatus {
@@ -148,11 +179,12 @@ div.reviewItemStatus {
 
 a.saveReview {
 	display: inline-block;
-    height: 16px;
-    margin: 3px;
-    overflow: hidden;
-    width: 16px;
-	background: url("../images/save_edit.gif") no-repeat scroll center center transparent;
+	height: 16px;
+	margin: 3px;
+	overflow: hidden;
+	width: 16px;
+	background: url("../images/save_edit.gif") no-repeat scroll center
+		center transparent;
 }
 
 a.saveReview.modified {
@@ -161,11 +193,22 @@ a.saveReview.modified {
 
 a.addItem {
 	display: inline-block;
-    height: 16px;
-    margin: 3px;
-    overflow: hidden;
-    width: 16px;
-	background: url("../images/dt_icon_q_description.png") no-repeat scroll center center transparent;
+	height: 16px;
+	margin: 3px;
+	overflow: hidden;
+	width: 16px;
+	background: url("../images/add.png") no-repeat scroll center center
+		transparent;
+}
+
+a.addComment {
+	display: inline-block;
+	height: 16px;
+	margin: 3px;
+	overflow: hidden;
+	width: 16px;
+	background: url("../images/dt_icon_q_description.png") no-repeat scroll
+		center center transparent;
 }
 
 /********/
@@ -181,7 +224,7 @@ div.reviewItemState {
 	margin-left: 0.4em;
 }
 
-.image-dropdown{
+.image-dropdown {
 	position: absolute;
 	padding: 0.5em;
 }
@@ -189,13 +232,11 @@ div.reviewItemState {
 /* .image-dropdown:hover { */
 /*     border: 2px solid black; */
 /* } */
-
-.image-dropdown {
-    /*style the "box" in its minimzed state*/
-    border: 1px solid #EEEEEE;
-    border-radius: 2px 2px 2px 2px;
-  	/*width:20px;*/ 
-    /*height: 20px;*/
+.image-dropdown { /*style the "box" in its minimzed state*/
+	border: 1px solid #EEEEEE;
+	border-radius: 2px 2px 2px 2px;
+	/*width:20px;*/
+	/*height: 20px;*/
 	overflow: hidden;
 	display: none;
 	background-color: white;
@@ -204,69 +245,68 @@ div.reviewItemState {
 /*     when expanded, the dropdown will get native means of scrolling */
 /*     overflow-y: visible !important; */
 /* } */
-
 .image-dropdown input {
-    position:absolute;top:0;left:0; opacity:0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0;
 }
 
 .image-dropdown label {
-   /* style the labels to look like dropdown options, kinda*/
-    display:block; 
-    opacity:0.2;
- /*    width:16px;*/
-    height: 24px; 
-    padding-left: 26px;
-    margin: 0px;
-    color: black;
-    
+	/* style the labels to look like dropdown options, kinda*/
+	display: block;
+	opacity: 0.2;
+	/*    width:16px;*/
+	height: 24px;
+	padding-left: 26px;
+	margin: 0px;
+	color: black;
 }
 
-.imageLabel{
-  	width:24px;
-    height: 24px; 
-    padding: 0px;
-    display: inline-block;
-    margin: 0px;
+.imageLabel {
+	width: 24px;
+	height: 24px;
+	padding: 0px;
+	display: inline-block;
+	margin: 0px;
 }
 
 
-.reviewItem.editing .imageLabel {
+li.editing .reviewItem .imageLabel {
 	border: 1px solid #EEEEEE;
-    border-radius: 2px 2px 2px 2px;
-} 
-
-.reviewItemPriority label[for=low], div.filterButton.low {
-    background:url("../image/priority_low.png") no-repeat;
+	border-radius: 2px 2px 2px 2px;
 }
 
-.reviewItemPriority label[for=important], div.filterButton.important {
-    background:url("../image/priority_important.png") no-repeat;
+.reviewItemPriority label[for=low],div.filterButton.low {
+	background: url("../images/priority_low.png") no-repeat;
 }
 
-.reviewItemPriority label[for=critical], div.filterButton.critical {
-    background:url("../image/priority_critical.png") no-repeat;
+.reviewItemPriority label[for=important],div.filterButton.important {
+	background: url("../images/priority_important.png") no-repeat;
 }
 
-.reviewItemState label[for=open], div.filterButton.open {
-    background:url("../image/open.png") no-repeat;
+.reviewItemPriority label[for=critical],div.filterButton.critical {
+	background: url("../images/priority_critical.png") no-repeat;
 }
 
-.reviewItemState label[for=resolved], div.filterButton.resolved {
-    background:url("../image/resolved.png") no-repeat;
+.reviewItemState label[for=open],div.filterButton.open {
+	background: url("../images/open.png") no-repeat;
+}
+
+.reviewItemState label[for=resolved],div.filterButton.resolved {
+	background: url("../images/resolved.png") no-repeat;
 }
 
 /*     this is how labels render in the "expanded" state. we want to see only the selected radio button in the collapsed menu, and all of them when expanded */
-.image-dropdown:hover label{
-    display:block;
+.image-dropdown:hover label {
+	display: block;
 }
 
 .image-dropdown label:hover {
-    opacity:0.5;
-}
-.image-dropdown input:checked + label {
-    /*tricky! labels immediately following a checked radio button (with our markup they are semantically related) should be fully opaque regardless of hover, and they should always be visible (i.e. even in the collapsed menu*/
-    opacity:1 !important; 
+	opacity: 0.5;
 }
 
-
-
+.image-dropdown input:checked+label {
+	/*tricky! labels immediately following a checked radio button (with our markup they are semantically related) should be fully opaque regardless of hover, and they should always be visible (i.e. even in the collapsed menu*/
+	opacity: 1 !important;
+}
