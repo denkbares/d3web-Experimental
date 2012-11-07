@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository>
+<session changed="2012-10-31 21:55:26.83" created="2012-10-31 21:55:26.83" id="d661c0e0-74b6-4a69-9a7b-588f28f7865c">
+<name/>
+<facts>
+<valueFacts>
+<fact objectName="now" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2012-10-31 21:55:26.83</dateValue>
+</fact>
+<fact objectName="start" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2012-10-31 21:55:26.83</dateValue>
+</fact>
+</valueFacts>
+<interviewFacts>
+<fact objectName="Einstiegsuntersuchung" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+</interviewFacts>
+</facts>
+<protocol/>
+</session>
+</repository>

@@ -75,7 +75,7 @@ public interface RootD3webRenderer {
 	 *         of an options-list. (For to be included within the corresponding
 	 *         FileSelect-StringTemplate.
 	 */
-	public String renderCaseList();
+	public String renderCaseList(HttpSession http);
 
 	/**
 	 * 
@@ -84,5 +84,5 @@ public interface RootD3webRenderer {
 	 *         of an options-list. (For to be included within the corresponding
 	 *         FileSelect-StringTemplate.
 	 */
-	public String renderUserCaseList(String user);
+	public String renderUserCaseList(String user, HttpSession http);
 }

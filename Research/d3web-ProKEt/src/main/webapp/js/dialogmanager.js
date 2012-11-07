@@ -58,6 +58,7 @@ $(function(){
     upfilename = Request.parameter("upfilename");
     
     
+    
     // some error handling for uploading file
     if(status != undefined && status != ""){
         if(status=="nofile"){
@@ -72,6 +73,7 @@ $(function(){
             $('#statusMessage').html("Bitte Wissensbasis (.doc/.zip/.d3web) auswählen!")
             removeClass("statusMessageOK").addClass("statusMessageERR");
         }
+    //window.location.href = removeParameter(window.location.href, "upERR");
     }
     
     if(statusKB!=undefined && statusKB != "" && statusKB=="done"){
@@ -80,8 +82,11 @@ $(function(){
     
     if(statusSpecs!=undefined && statusSpecs != "" && statusSpecs=="done"){
         $("#statusMessage").html("Spezifikation hochgeladen.");
+    //window.location.href = removeParameter(window.location.href, "upSPEC");
+    //window.location.href = removeParameter(window.location.href, "upfilename");
     }
  
+    
 });
 
 
@@ -92,9 +97,9 @@ function parseDocToKB(id){
    
     var docname = upfilename;
     
-    var link = $.query.set("action", "parseKBDoc").set("docname", docname).toString();
+    link = $.query.set("action", "parseKBDoc").set("docname", docname).toString();
     link = window.location.href.replace(window.location.search, "") + link;
-    
+   
     $("#statusMessage").html("Wissensbasis-Datei wird geparst...");
     $("#progressIndicator").show();
     
@@ -240,4 +245,70 @@ function getDialogLinkCell(dialoglink){
    
     return dialoghtml;
     
+}
+
+function deleteSelectedKB(){
+    var kbToDelete;
+    $('#d3webSelect option:selected').each(function(){
+        kbToDelete = $(this).val();
+    });
+    
+    if(kbToDelete != undefined){
+        
+        var baseLink = window.location.href.replace(window.location.search, "");
+       
+        var link = 
+        $.query.set("action", "deleteSelectedKB")
+        .set("kbToDelete", kbToDelete).toString();
+        
+        link = baseLink + link;
+         
+        $.ajax({
+            type : "GET",
+            url : link,
+            cache : false, // needed for IE, call is not made otherwise
+            success : function(html) {
+                if(html.indexOf("error")==-1){
+                    $("#statusMessage").html("Wissensbasis " + kbToDelete + " entfernt.").addClass("statusMessageOK").removeClass("statusMessageERR");
+                    // trx to assemble new link here with aprameter for deleted
+                       // check deleted in function() and append statusMessage not here
+            } else {
+                    $("#statusMessage").html("Wissensbasis konnte nicht gelöscht werden!").addClass("statusMessageERR").removeClass("statusMessageOK");
+                }
+            } 
+        });
+    }
+}
+
+function removeParameter(url, parameter)
+{
+    var urlparts= url.split('?');
+
+    if (urlparts.length>=2)
+    {
+        var urlBase=urlparts.shift(); //get first part, and remove from array
+        var queryString=urlparts.join("?"); //join it back up
+
+        var prefix = encodeURIComponent(parameter)+'=';
+        var pars = queryString.split(/[&;]/g);
+        for (var i= pars.length; i-->0;)               //reverse iteration as may be destructive
+            if (pars[i].lastIndexOf(prefix, 0)!==-1)   //idiom for string.startsWith
+                pars.splice(i, 1);
+        url = urlBase+'?'+pars.join('&');
+    }
+    return url;
+}
+
+
+function setStatusMessage(message, error){
+    if(error){
+        $("#statusMessage").html(message).addClass("statusMessageERR").removeClass("statusMessageOK");
+    } else {
+        $("#statusMessage").html(message).addClass("statusMessageOK").removeClass("statusMessageERR");
+    }
+     
+}
+
+function clearStatusMessage(){
+    $("#statusMessage").html("").removeClass("statusMessageOK").removeClass("statusMessageERR");
 }

@@ -68,7 +68,16 @@
 
     <div id="selectorsRow" class="row">
         <div id="d3webFileSelectorCell" class="cell">
-            <div id="actionsLabel" class="cell labelcell">Wissensbasen</div>
+            <div id="fileSelectHeading" class="row">
+                <div id="actionsLabel" class="cell labelcell">Wissensbasen</div>
+                <div class="cell deleteButton">
+                        $ImgButton(src="img/Delete.png", 
+                        alt="Wissensbasis Entfernen",
+                        tt="Entferne markierte Wissensbasis",
+                        click="deleteSelectedKB();")$
+                    </div>
+            </div>
+            
             $dialogManager/FileSelectorD3web()$
         </div>
         <div id="specFileSelectorCell" class="cell" >

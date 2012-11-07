@@ -4,7 +4,7 @@
 	dtype="singleform" 
 	indicationmode="hide_unindicated"
 	dstrategy="nextform"
-	css="questionaryCons, diagnosisVisu" 
+	css="standarddialog, diagnosisVisu" 
 	dialogcolumns="1"
 	questionnairecolumns="1"
 	questioncolumns="2"

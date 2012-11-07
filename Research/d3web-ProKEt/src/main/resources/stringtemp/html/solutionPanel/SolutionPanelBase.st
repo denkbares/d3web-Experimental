@@ -1,6 +1,6 @@
 <div id="solutionPanel"> 
 
-   <div id="sol_heading">Solutions:</div> 
+   <div id="sol_heading">Diagnosen:</div> 
    
    $solutions$ 
 

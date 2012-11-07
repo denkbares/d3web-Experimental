@@ -167,6 +167,12 @@ input{border: 1px dotted darkgrey;
 
 .d3webSelect{min-width: 275px;}
 
-#spacerowRightcol{min-height: 20px; height: 20px;}
+#spacerowRightcol{min-height: 20px; height: 35px;}
 
 #progressIndicator{display: none; padding-top: 5px; padding-right: 5px; padding-left: 15px;}
+
+.deleteButton img{height: 30px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    vertical-align: middle;
+    width: 30px;}

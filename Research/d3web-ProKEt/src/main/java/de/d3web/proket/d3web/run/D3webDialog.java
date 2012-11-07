@@ -19,6 +19,8 @@
  */
 package de.d3web.proket.d3web.run;
 
+import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.core.knowledge.TerminologyManager;
@@ -74,7 +76,7 @@ import de.d3web.proket.database.DateCoDec;
 import de.d3web.proket.database.TokenThread;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
-import java.io.File;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -104,6 +106,7 @@ public class D3webDialog extends HttpServlet {
     protected static final String USER_SETTINGS = "userSettings";
     protected static final String SOURCE_SAVE = "sourceSave";
     protected static final String SERVLET_CLASS_SAVE = "classSave";
+    protected static final String DID_SAVE = "DialogIDSave";
     protected static final String REPLACECONTENT = "##replacecontent##";
     protected static final String REPLACEID = "##replaceid##";
     protected static String sourceSave = "";
@@ -120,6 +123,7 @@ public class D3webDialog extends HttpServlet {
             new SimpleDateFormat("yyyyMMdd_HHmmss");
     protected static final String SDF_DEFAULT =
             "EEE yyyy_MM_dd hh:mm:s";
+    private static String PATHSEP = System.getProperty("file.separator");
 
     // TODO get Date everywhere in JS instead of Servlet
     /**
@@ -168,11 +172,43 @@ public class D3webDialog extends HttpServlet {
         HttpSession httpSession = request.getSession(true);
         httpSession.setMaxInactiveInterval(20 * 60);
 
-        // source and parser
         String source = getSource(request, httpSession);
+        String kbName = "";
+
+        // source and parse
+        System.err.append("D3webDialog - the whole dialogID String: " + request.getParameter("dialogID"));
+        System.out.println(request.getParameter("dialogID"));
+        
+        if (request.getParameter("dialogID") != null) {
+            String[] dialogID = request.getParameter("dialogID").split("AND");
+            if (dialogID[1] != null) {
+                source = new String();
+                source = dialogID[1];
+            }
+            if (dialogID[0] != null) {
+                kbName = dialogID[0];
+            }
+        }
+
+        System.out.println("D3webDialog - try to read specs: " + source);
+        System.out.println("D3webDialog - try to read kb: " + kbName);
+        
         d3webParser.setSourceToParse(source);
+        d3webParser.parse();
+
         d3wcon = D3webConnector.getInstance();
         d3wcon.setD3webParser(d3webParser);
+
+        // Only parse d3web from XML specs if it was not provided before,
+        // e.g., by the DialogManager Servlet
+        KnowledgeBase d3web = null;
+        if (kbName != null && !kbName.equals("")) {
+            d3web = D3webUtils.getKnowledgeBase(kbName, 
+                    GlobalSettings.getInstance().getUploadFilesBasePath());
+            d3wcon.setKb(d3web);
+        } else {
+            d3wcon.setKb(d3webParser.getKnowledgeBase());
+        }
 
         // UI settings
         uis = UISettings.getInstance();
@@ -190,15 +226,21 @@ public class D3webDialog extends HttpServlet {
                 ? httpSession.getAttribute(SOURCE_SAVE).toString() : "";
         String cSave = httpSession.getAttribute(SERVLET_CLASS_SAVE) != null
                 ? httpSession.getAttribute(SERVLET_CLASS_SAVE).toString() : "";
+        String DIDSave = httpSession.getAttribute(DID_SAVE) != null
+                ? httpSession.getAttribute(DID_SAVE).toString() : "";
 
         if (!sSave.equals(source)) {
             httpSession.setAttribute(SOURCE_SAVE, source);
 
-            parseAndInitDialogServlet(httpSession);
+            parseAndInitDialogServlet(httpSession, request);
         } else if (!cSave.equals(this.getClass().toString())) {
 
             httpSession.setAttribute(SERVLET_CLASS_SAVE, this.getClass().toString());
-            parseAndInitDialogServlet(httpSession);
+            parseAndInitDialogServlet(httpSession, request);
+        } else if (request.getParameter("dialogID") != null
+                && !DIDSave.equals(request.getParameter("dialogID"))) {
+            httpSession.setAttribute(DID_SAVE, request.getParameter("dialogID"));
+            parseAndInitDialogServlet(httpSession, request);
         }
 
 
@@ -231,7 +273,7 @@ public class D3webDialog extends HttpServlet {
             return;
         }
 
-        System.out.println(uis.getLoginMode());
+        //System.out.println(uis.getLoginMode());
         if (uis.getLoginMode()
                 == LoginMode.DB) {
             String authenticated = (String) httpSession.getAttribute("authenticated");
@@ -419,8 +461,7 @@ public class D3webDialog extends HttpServlet {
             loadCaseClear(request, response, httpSession);
         } else if (action.equalsIgnoreCase("reloadSelectedQuestionnaire")) {
             reloadSelectedQuestionnaire(request, response, httpSession);
-        }  
-        else{
+        } else {
             handleDialogSpecificActions(httpSession, request, response, action);
         }
     }
@@ -684,7 +725,7 @@ public class D3webDialog extends HttpServlet {
             for (TerminologyObject to : newAbstractions) {
                 Question qa =
                         D3webConnector.getInstance().getKb().getManager().searchQuestion(to.getName());
-                        Value va = d3webSession.getBlackboard().getValue((ValueObject) qa);
+                Value va = d3webSession.getBlackboard().getValue((ValueObject) qa);
                 if (qa instanceof QuestionNum) {
                     int doubleAsInt = (int) Double.parseDouble(va.toString());
                     ServletLogUtils.logQuestionValue(qa.getName(), Integer.toString(doubleAsInt), logtime, logger);
@@ -1181,7 +1222,7 @@ public class D3webDialog extends HttpServlet {
         // get the root renderer --> call getRenderer with null
         DefaultRootD3webRenderer d3webr =
                 (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
-        System.out .println("RENDEER: " + d3webr.getClass());
+        System.out.println("RENDEER: " + d3webr.getClass());
 
         // new ContainerCollection needed each time to get an updated dialog
         ContainerCollection cc = new ContainerCollection();
@@ -1234,6 +1275,9 @@ public class D3webDialog extends HttpServlet {
         } else {
             writer.append("exists");
         }
+
+        System.out.println("saveCase: " + d3webSession.getKnowledgeBase().getName() + " " + userFilename);
+        addToCSV(d3webSession.getKnowledgeBase().getName(), userFilename);
     }
 
     /**
@@ -1709,15 +1753,17 @@ public class D3webDialog extends HttpServlet {
             throws IOException {
         // overwritten by ClariHie Dialog
     }
-    
-     protected void rerenderSubtree(HttpServletRequest request,
+
+    protected void rerenderSubtree(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
         // overwritten by ClariHie Dialog
     }
-     
-     /* Standard Dialog (with side Navi) specific */        
-    protected void reloadSelectedQuestionnaire (HttpServletRequest request,
+
+    /*
+     * Standard Dialog (with side Navi) specific
+     */
+    protected void reloadSelectedQuestionnaire(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
         // overwritten by Standard Dialog
@@ -1740,29 +1786,10 @@ public class D3webDialog extends HttpServlet {
      * @param source
      * @throws IOException
      */
-    protected void parseAndInitDialogServlet(HttpSession httpSession)
+    protected void parseAndInitDialogServlet(HttpSession httpSession, HttpServletRequest request)
             throws IOException {
 
         httpSession.setAttribute("loginit", false);
-
-        File specs = null;
-        if (httpSession.getAttribute("latestSpec") != null) {
-            specs = (File) httpSession.getAttribute("latestSpec");
-            d3webParser.parse(specs);
-        } else {
-            d3webParser.parse();
-        }
-
-        // Only parse d3web from XML specs if it was not provided before,
-        // e.g., by the DialogManager Servlet
-        KnowledgeBase d3web = null;
-        if (httpSession.getAttribute("latestD3web") != null) {
-            d3web = (KnowledgeBase) httpSession.getAttribute("latestD3web");
-            System.out.println(d3web);
-            d3wcon.setKb(d3web);
-        } else {
-            d3wcon.setKb(d3webParser.getKnowledgeBase());
-        }
         d3wcon.setDialogStrat(d3webParser.getStrategy());
         d3wcon.setDialogType(d3webParser.getType());
         d3wcon.setIndicationMode(d3webParser.getIndicationMode());
@@ -1825,6 +1852,102 @@ public class D3webDialog extends HttpServlet {
         // do we need to enable debug mode?!  
         if (d3webParser.getDebug() != null && d3webParser.getDebug()) {
             httpSession.setAttribute("debug", "true");
+        }
+    }
+
+    private void addToCSV(String kb, String casename) {
+
+        String kbToCaseMapFile = GLOBSET.getCaseFolder()
+                + "/KB2CASES.csv";
+
+        File file = new File(kbToCaseMapFile);
+        File tempFile = new File(GLOBSET.getCaseFolder() + "/KB2CASESTEMP.csv");
+
+        CSVReader csvr = null;
+        String[] nextLine = null;
+
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            csvr = new CSVReader(new FileReader(kbToCaseMapFile));
+            ArrayList<List<String>> entries = new ArrayList<List<String>>();
+
+            // go through file and read linewise
+            while ((nextLine = csvr.readNext()) != null) {
+                //if (nextLine[0].startsWith(kb)) {
+                // if username and pw could be found, return true
+                ArrayList<String> lineList = new ArrayList<String>();
+                for (String word : nextLine) {
+                    lineList.add(word);
+                }
+                entries.add(lineList);
+                //}
+            }
+            System.out.println("IN FILE: ");
+            for (List l : entries) {
+                System.out.println(l.toString());
+            }
+
+            BufferedWriter out =
+                    new BufferedWriter(new FileWriter(tempFile.getPath()));
+
+            CSVWriter writer = new CSVWriter(out);
+
+            String[] values = null;
+            // if there were previous entries
+            if (entries.size() > 0) {
+
+                boolean hadKBLine = false;
+                // go through all stored lines
+                for (List<String> lineList : entries) {
+                    
+                    values = new String[lineList.size() + 1];
+
+                    int count = 0;
+                    for (String entry : lineList) {
+                        
+                        if(entry.equals(kb)){
+                            hadKBLine = true;
+                        }
+                        if(!entry.equals("")){
+                            values[count] = entry;
+                            count++;
+                        }
+                        
+                    }
+
+                    // if we are in the line of the existing kb entry
+                    if (lineList.contains(kb)) {
+                        if (!lineList.contains(casename)) {
+                            if(!casename.equals("")){
+                                values[count] = casename;
+                            }
+                        }
+                    }
+                    writer.writeNext(values);
+
+                }
+                if (!hadKBLine) {
+                    values = new String[]{kb, casename};
+                    writer.writeNext(values);
+                }
+            } else {
+                values = new String[]{kb, casename};
+                writer.writeNext(values);
+            }
+
+            out.close();
+            tempFile.renameTo(file);
+            tempFile.delete();
+
+
+            //System.out.println(usrDat);
+
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
     }
 }

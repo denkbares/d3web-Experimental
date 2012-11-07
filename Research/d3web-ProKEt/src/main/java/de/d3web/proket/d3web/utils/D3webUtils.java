@@ -351,6 +351,10 @@ public class D3webUtils {
         return result;
     }
 
+    public static KnowledgeBase getKnowledgeBase(String kbFilename)
+    throws IOException{
+        return getKnowledgeBase(kbFilename, "DEFAULT");
+    }
     /**
      * Retrieve a {@link KnowledgeBase} by its file name. Search is performed in
      * /WEB-INF/classes/kb. The trailing ".jar" can be omitted.
@@ -360,8 +364,14 @@ public class D3webUtils {
      * such {@link KnowledgeBase} exists.
      * @throws IOException
      */
-    public static KnowledgeBase getKnowledgeBase(String kbFilename) throws IOException {
+    public static KnowledgeBase getKnowledgeBase(String kbFilename, String path) throws IOException {
 
+        
+        if(path.equals("DEFAULT")){
+            path = "/specs/d3web/";
+        } else if(path.contains("UPFiles")){
+            path = "/../../UPFiles/d3web/";
+        }
         // add .jar if it's not already there
         if (!kbFilename.endsWith(".jar")
                 && !kbFilename.endsWith(".d3web")) {
@@ -372,7 +382,8 @@ public class D3webUtils {
         File libPath;
         // Paths here are relative to the WEB-INF/classes folder!!!
         // from the /specs/d3web folder
-        kbFile = FileUtils.getResourceFile("/specs/d3web/" + kbFilename);
+        System.out.println(path + " " + kbFilename);
+        kbFile = FileUtils.getResourceFile(path + kbFilename);
         // from the /lib folder
         libPath = FileUtils.getResourceFile("/../lib");
 
@@ -382,11 +393,15 @@ public class D3webUtils {
         JPFPluginManager.init(files);
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
 
+        //System.out.println(kbFile.getName() + " " + kbFile.getAbsolutePath());
+        KnowledgeBase kb = persistenceManager.load(kbFile);
+        kb.getName();
         // try to load knowledge base
-        return persistenceManager.load(kbFile);
+        return kb;
 
     }
 
+    
     public static KnowledgeBase getDocToD3webKnowledgeBase(File file) throws IOException {
 
         // add .jar if it's not already there

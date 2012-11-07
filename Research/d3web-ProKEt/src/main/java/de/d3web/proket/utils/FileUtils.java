@@ -98,7 +98,7 @@ public class FileUtils {
 	 *         otherwise.
 	 */
 	public static String getString(File file) {
-		Logger log = ProKEtLogger.getLogger();
+		//Logger log = ProKEtLogger.getLogger();
 		StringBuilder result = new StringBuilder();
 		if (file == null) {
 			return null;
@@ -114,13 +114,13 @@ public class FileUtils {
 			}
 		}
 		catch (FileNotFoundException e) {
-			log.severe(MessageFormat.format("Could not find file at \"{0}\"",
-					file));
+			//log.severe(MessageFormat.format("Could not find file at \"{0}\"",
+					//file));
 			e.printStackTrace();
 		}
 		catch (IOException e) {
-			log.severe(MessageFormat.format(
-					"Problems occurred while reading from file \"{0}\"", file));
+			//log.severe(MessageFormat.format(
+					//"Problems occurred while reading from file \"{0}\"", file));
 			e.printStackTrace();
 		}
 

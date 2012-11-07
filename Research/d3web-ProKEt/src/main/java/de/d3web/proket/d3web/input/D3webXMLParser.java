@@ -85,6 +85,7 @@ public class D3webXMLParser {
             inputFile = FileUtils.getResourceFile(
                     GlobalSettings.getInstance().getD3webSpecsPath()
                     + "/" + xMLFilename);
+            System.out.println("try to parse: " + xMLFilename + " result: " + inputFile);
         } catch (FileNotFoundException e2) {
         } catch (NullPointerException npe) {
         }
@@ -96,9 +97,9 @@ public class D3webXMLParser {
                     GlobalSettings.getInstance().getUploadFilesBasePath()
                     + "/specs/" + xMLFilename;
             inputFile = new File(path);
+            System.out.println("try to parse: " + xMLFilename + " result: " + inputFile);
         }
-
-
+        
         // if we have a file, go on parsing
         if (inputFile != null) {
             try {
@@ -266,6 +267,7 @@ public class D3webXMLParser {
     // Return the knowledgebase as specified per its filename in the parsed XML
     public KnowledgeBase getKnowledgeBase() throws IOException {
         KnowledgeBase kb = null;
+       
         String kbname = getKnowledgeBaseName();
         kb = D3webUtils.getKnowledgeBase(kbname);
         return kb;
@@ -275,7 +277,7 @@ public class D3webXMLParser {
     public String getKnowledgeBaseName() {
         String kbname = "";
         kbname = XMLUtils.getStr((Element) dataSpec, "kb", null);
-
+    
         return kbname;
     }
 

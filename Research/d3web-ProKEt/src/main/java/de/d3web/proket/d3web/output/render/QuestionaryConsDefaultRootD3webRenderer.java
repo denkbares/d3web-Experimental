@@ -51,7 +51,7 @@ public class QuestionaryConsDefaultRootD3webRenderer extends DefaultRootD3webRen
         st.setAttribute("title", userprefix + "-Dialog");
 
         // load case list dependent from logged in user, e.g. MEDIASTINITIS
-        String opts = renderUserCaseList((String) http.getAttribute("user"));
+        String opts = renderUserCaseList((String) http.getAttribute("user"), http);
         st.setAttribute("fileselectopts", opts);
 
         String info = renderHeaderInfoLine(d3webSession);

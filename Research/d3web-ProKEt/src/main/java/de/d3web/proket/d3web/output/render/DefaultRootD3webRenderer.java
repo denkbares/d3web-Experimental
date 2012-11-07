@@ -19,6 +19,8 @@
  */
 package de.d3web.proket.d3web.output.render;
 
+import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +46,10 @@ import de.d3web.proket.d3web.input.UISettings;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
+import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.TemplateUtils;
+import java.io.*;
+import java.util.ArrayList;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.antlr.stringtemplate.StringTemplateGroup;
@@ -103,7 +108,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
         st.setAttribute("title", userprefix + "-Dialog");
 
         // load case list dependent from logged in user, e.g. MEDIASTINITIS
-        String opts = renderUserCaseList((String) http.getAttribute("user"));
+        String opts = renderUserCaseList((String) http.getAttribute("user"), http);
         st.setAttribute("fileselectopts", opts);
 
         String info = renderHeaderInfoLine(d3webSession);
@@ -290,14 +295,17 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
     }
 
     @Override
-    public String renderCaseList() {
-        return renderUserCaseList(null);
+    public String renderCaseList(HttpSession http) {
+        return renderUserCaseList(null, http);
     }
 
     @Override
-    public String renderUserCaseList(String user) {
+    public String renderUserCaseList(String user, HttpSession http) {
 
+        Session d3web = (Session) http.getAttribute("d3webSession");
         List<File> files = PersistenceD3webUtils.getCaseList(user);
+        
+        //files = filterFilesForKB(d3web.getKnowledgeBase().getName(), files);
 
         StringBuffer cases = new StringBuffer();
         /*
@@ -326,5 +334,51 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
         }
 
         return cases.toString();
+    }
+    
+    private List<File> filterFilesForKB(String kbname, List<File> allFiles){
+        
+        List<File> filteredFiles = new ArrayList<File>();
+        
+        String kbToCaseMapFile = 
+                GlobalSettings.getInstance().getCaseFolder() + "/KB2CASES.csv";
+        File file = new File(kbToCaseMapFile);
+
+        CSVReader csvr = null;
+        String[] nextLine = null;
+        List<String> filesFromCSV = null;
+
+        try {
+            csvr = new CSVReader(new FileReader(file.getName()));
+            // go through file
+            while ((nextLine = csvr.readNext()) != null) {
+                // search for the right "knowledge base line"
+                if (nextLine[0].startsWith(kbname)) {
+                    // if username and pw could be found, return true
+                    filesFromCSV = new ArrayList<String>();
+                    for (String word : nextLine) {
+                        filesFromCSV.add(word);
+                    }
+                }
+            }
+            
+            
+            // if there were previous entries
+            if (filesFromCSV != null) {
+               for(File f: allFiles){
+                   if(filesFromCSV.contains(f.getName().replace(".xml", ""))){
+                       filteredFiles.add(f);
+                   }
+               }
+
+            } 
+            
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        
+        return filteredFiles;
     }
 }
