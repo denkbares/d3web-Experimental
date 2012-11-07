@@ -1,0 +1,114 @@
+.window { border:1px solid #346789;
+/*box-shadow: 2px 2px 19px #aaa;
+   -o-box-shadow: 2px 2px 19px #aaa;
+   -webkit-box-shadow: 2px 2px 19px #aaa;
+  -moz-box-shadow: 2px 2px 19px #aaa;
+-moz-border-radius:0.5em;
+border-radius:0.5em;
+
+filter:alpha(opacity=99);*/
+
+/*width:8em; 
+height:1.5em;*/
+
+
+opacity:0.9;
+
+
+overflow:hidden;
+
+line-height:0em;
+
+/*padding-top:0px;*/
+
+/*padding-bottom:0em;*/
+
+
+   /* min-height: 0.5em;
+    display: table-cell;
+    vertical-align: top ;
+	*/
+
+/*height: 100%;
+background-color: #ffffff;
+width: 80%;
+margin: auto
+overflow: auto*/
+
+/*line-height:5em;*/
+
+/*line-height:auto;*/
+text-align:center;
+z-index:20; position:absolute;
+
+/*Hintergrundfarbe der Knoten*/
+
+
+/*background-color:#E52020;*/
+background-color:#E6E6E6;
+
+
+color:black;
+font-family:helvetica;
+/*padding:1em;*/
+font-size:1em;}
+.window:hover {
+/*
+box-shadow: 2px 2px 19px #444;
+   -o-box-shadow: 2px 2px 19px #444;
+   -webkit-box-shadow: 2px 2px 19px #444;
+   -moz-box-shadow: 2px 2px 19px #444;
+    opacity:0.6;
+filter:alpha(opacity=60);*/
+
+}
+
+.active {
+	border:1px dotted green;
+}
+.hover {
+	border:1px dotted red;
+}
+/* Positionen der einzelnen Knoten */
+
+/*#knoten1 { top:17em; left:10em;}
+
+#knoten11 { top:20em; left:15em;}
+#knoten111 { top:37em; left:20em;}
+#knoten112 { top:47em; left:20em;}
+
+
+
+#knoten2 { top:17em; left:30em;}
+#knoten3 { top:17em; left:50em; }
+
+#knoten31 { top:27em; left:65em;}
+#knoten311 { top:37em; left:75em;}
+#knoten312 { top:47em; left:75em;}
+
+
+#knoten4 { top:17em; left:70em;}
+
+
+
+
+
+
+#knoten12 { top:57em; left:15em;}*/
+/*
+._jsPlumb_connector { z-index:4; }
+._jsPlumb_endpoint, .endpointTargetLabel, .endpointSourceLabel{ z-index:21;cursor:pointer; }
+.hl { border:3px solid red; }
+#debug { position:absolute; background-color:black; color:red; z-index:5000 }
+*/
+/*
+.aLabel {
+ 	background-color:white; 
+	padding:0.4em; 
+	font:35px sans-serif; 
+	color:#444;
+	z-index:21;
+	border:1px dotted gray;
+	opacity:0.8;
+	filter:alpha(opacity=80);
+} */
