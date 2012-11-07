@@ -225,6 +225,8 @@
 		<module>KnowWE-Plugin-OWLAPIConnector</module>
 		<module>KnowWE-Plugin-DiaFlux-Review</module>
 		<module>KnowWE-Plugin-WikiBaseline</module>
+		<module>KnowWE-Plugin-OphtoViz</module>
+		
 	</modules>
 	<repositories>
 		<repository>
