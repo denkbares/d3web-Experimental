@@ -352,9 +352,10 @@ public class D3webUtils {
     }
 
     public static KnowledgeBase getKnowledgeBase(String kbFilename)
-    throws IOException{
+            throws IOException {
         return getKnowledgeBase(kbFilename, "DEFAULT");
     }
+
     /**
      * Retrieve a {@link KnowledgeBase} by its file name. Search is performed in
      * /WEB-INF/classes/kb. The trailing ".jar" can be omitted.
@@ -366,10 +367,10 @@ public class D3webUtils {
      */
     public static KnowledgeBase getKnowledgeBase(String kbFilename, String path) throws IOException {
 
-        
-        if(path.equals("DEFAULT")){
+
+        if (path.equals("DEFAULT")) {
             path = "/specs/d3web/";
-        } else if(path.contains("UPFiles")){
+        } else if (path.contains("UPFiles")) {
             path = "/../../UPFiles/d3web/";
         }
         // add .jar if it's not already there
@@ -382,7 +383,7 @@ public class D3webUtils {
         File libPath;
         // Paths here are relative to the WEB-INF/classes folder!!!
         // from the /specs/d3web folder
-        System.out.println(path + " " + kbFilename);
+        System.out.println("D3webUtils: " + path + " " + kbFilename);
         kbFile = FileUtils.getResourceFile(path + kbFilename);
         // from the /lib folder
         libPath = FileUtils.getResourceFile("/../lib");
@@ -395,13 +396,12 @@ public class D3webUtils {
 
         //System.out.println(kbFile.getName() + " " + kbFile.getAbsolutePath());
         KnowledgeBase kb = persistenceManager.load(kbFile);
-        kb.getName();
+        System.out.println("D3webUtils " + kb);
         // try to load knowledge base
         return kb;
 
     }
 
-    
     public static KnowledgeBase getDocToD3webKnowledgeBase(File file) throws IOException {
 
         // add .jar if it's not already there
@@ -997,6 +997,63 @@ public class D3webUtils {
         // emergency fallback: getName() if no locale specific and no default
         // english was given
         return popupPrompt == null ? to.getInfoStore().getValue(ProKEtProperties.POPUP) : popupPrompt;
+    }
+
+    public static String getPopupPromptChoices(Choice c, int loc) {
+
+        String popupPrompt = null;
+
+        switch (loc) {
+            case 1: // german
+                popupPrompt =
+                        c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.GERMAN);
+                break;
+            case 2: // english
+                popupPrompt =
+                        c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ENGLISH);
+                break;
+            case 3: // spanish
+                popupPrompt =
+                        c.getInfoStore().getValue(ProKEtProperties.POPUP, SPANISH);
+                break;
+            case 4: // italian
+                popupPrompt =
+                        c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ITALIAN);
+                break;
+            case 5: // french
+                popupPrompt =
+                        c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.FRENCH);
+                break;
+            case 6: // polish
+                popupPrompt =
+                        c.getInfoStore().getValue(ProKEtProperties.POPUP, POLISH);
+                break;
+            case 7: // dutch
+                popupPrompt =
+                        c.getInfoStore().getValue(ProKEtProperties.POPUP, DUTCH);
+                break;
+            case 8: // swedish
+                popupPrompt =
+                        c.getInfoStore().getValue(ProKEtProperties.POPUP, SWEDISH);
+                break;
+            case 9: // portuguese
+                popupPrompt =
+                        c.getInfoStore().getValue(ProKEtProperties.POPUP, PORTUGUESE);
+                break;
+            case 10: // brazilian
+                popupPrompt =
+                        c.getInfoStore().getValue(ProKEtProperties.POPUP, BRAZILIAN);
+                break;
+        }
+
+        // default fallback solution: popupPrompt in english
+        if (popupPrompt == null) {
+            popupPrompt = c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ENGLISH);
+        }
+
+        // emergency fallback: getName() if no locale specific and no default
+        // english was given
+        return popupPrompt == null ? c.getInfoStore().getValue(ProKEtProperties.POPUP) : popupPrompt;
     }
 
     public static String getDropdownDefaultPrompt(int locIdent) {
@@ -2102,7 +2159,4 @@ public class D3webUtils {
         }
         return "";
     }
-    
-    
-    
 }

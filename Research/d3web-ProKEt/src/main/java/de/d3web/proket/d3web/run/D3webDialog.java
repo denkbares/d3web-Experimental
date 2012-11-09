@@ -176,13 +176,11 @@ public class D3webDialog extends HttpServlet {
         String kbName = "";
 
         // source and parse
-        System.err.append("D3webDialog - the whole dialogID String: " + request.getParameter("dialogID"));
-        System.out.println(request.getParameter("dialogID"));
-        
+        //System.err.append("D3webDialog - the whole dialogID String: " + request.getParameter("dialogID"));
+        //System.out.println(request.getParameter("dialogID"));
         if (request.getParameter("dialogID") != null) {
             String[] dialogID = request.getParameter("dialogID").split("AND");
             if (dialogID[1] != null) {
-                source = new String();
                 source = dialogID[1];
             }
             if (dialogID[0] != null) {
@@ -190,26 +188,14 @@ public class D3webDialog extends HttpServlet {
             }
         }
 
-        System.out.println("D3webDialog - try to read specs: " + source);
-        System.out.println("D3webDialog - try to read kb: " + kbName);
+        //System.out.println("D3webDialog - try to read specs: " + source);
+        //System.out.println("D3webDialog - try to read kb: " + kbName);
         
         d3webParser.setSourceToParse(source);
-        d3webParser.parse();
-
         d3wcon = D3webConnector.getInstance();
         d3wcon.setD3webParser(d3webParser);
 
-        // Only parse d3web from XML specs if it was not provided before,
-        // e.g., by the DialogManager Servlet
-        KnowledgeBase d3web = null;
-        if (kbName != null && !kbName.equals("")) {
-            d3web = D3webUtils.getKnowledgeBase(kbName, 
-                    GlobalSettings.getInstance().getUploadFilesBasePath());
-            d3wcon.setKb(d3web);
-        } else {
-            d3wcon.setKb(d3webParser.getKnowledgeBase());
-        }
-
+        
         // UI settings
         uis = UISettings.getInstance();
 
@@ -1790,6 +1776,29 @@ public class D3webDialog extends HttpServlet {
             throws IOException {
 
         httpSession.setAttribute("loginit", false);
+        
+        d3webParser.parse();
+        
+        String kbName = "";
+        // Only parse d3web from XML specs if it was not provided before,
+        // e.g., by the DialogManager Servlet
+        if (request.getParameter("dialogID") != null) {
+            String[] dialogID = request.getParameter("dialogID").split("AND");
+            if (dialogID[0] != null) {
+                kbName = dialogID[0];
+            }
+        }
+        
+        KnowledgeBase d3web = null;
+        if (kbName != null && !kbName.equals("")) {
+            d3web = D3webUtils.getKnowledgeBase(kbName, 
+                    GlobalSettings.getInstance().getUploadFilesBasePath());
+            d3wcon.setKb(d3web);
+        } else {
+            d3wcon.setKb(d3webParser.getKnowledgeBase());
+        }
+        
+        
         d3wcon.setDialogStrat(d3webParser.getStrategy());
         d3wcon.setDialogType(d3webParser.getType());
         d3wcon.setIndicationMode(d3webParser.getIndicationMode());

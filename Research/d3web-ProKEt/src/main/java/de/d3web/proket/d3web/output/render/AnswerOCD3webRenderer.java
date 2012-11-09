@@ -74,7 +74,8 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
         st.setAttribute("parentFullId", getID(to));// getName().replace(" ",
         // "_"));
 
-        String resString = c.getInfoStore().getValue(ProKEtProperties.POPUP);
+        
+        String resString = D3webUtils.getPopupPromptChoices(c, loc);
         if (resString != null) {
             st.setAttribute("tooltip", resString);
         }

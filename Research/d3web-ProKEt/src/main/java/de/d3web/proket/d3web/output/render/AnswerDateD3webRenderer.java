@@ -110,6 +110,7 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
             st.setAttribute("selection", "");
         }
 
+     
         String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
         boolean dateReverse = false;
 
@@ -164,13 +165,13 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
         }
 
         if (dateDescription.contains("M")) {
-             firstRow.append("<td>" + D3webUtils.translateDropdownTitle("M", loc) + "</td>");
+            firstRow.append("<td>" + D3webUtils.translateDropdownTitle("M", loc) + "</td>");
             secondRow.append(D3webUtils.createMonthDropDown(month));
         }
 
         if (dateDescription.contains("y")) {
             if (dateReverse) {
-                 firstRow.append("<td>" + D3webUtils.translateDropdownTitle("Y", loc) + "</td>");
+                firstRow.append("<td>" + D3webUtils.translateDropdownTitle("Y", loc) + "</td>");
                 secondRow.append(D3webUtils.createYearDropDownReverse(year));
             } else {
                 firstRow.append("<td>" + D3webUtils.translateDropdownTitle("Y", loc) + "</td>");
@@ -179,12 +180,12 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
         }
 
         if (dateDescription.contains("H")) {
-             firstRow.append("<td>" + D3webUtils.translateDropdownTitle("H", loc) + "</td>");
+            firstRow.append("<td>" + D3webUtils.translateDropdownTitle("H", loc) + "</td>");
             secondRow.append(D3webUtils.createHourDropDown(hour));
         }
 
         if (dateDescription.contains("m")) {
-             firstRow.append("<td>" + D3webUtils.translateDropdownTitle("Min", loc) + "</td>");
+            firstRow.append("<td>" + D3webUtils.translateDropdownTitle("Min", loc) + "</td>");
             secondRow.append(D3webUtils.createMinuteDropDown(minute));
         }
 
@@ -205,6 +206,4 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
 
         return sb.toString();
     }
-
-    
 }

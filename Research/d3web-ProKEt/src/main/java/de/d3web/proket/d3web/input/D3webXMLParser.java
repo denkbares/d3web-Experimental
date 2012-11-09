@@ -97,7 +97,7 @@ public class D3webXMLParser {
                     GlobalSettings.getInstance().getUploadFilesBasePath()
                     + "/specs/" + xMLFilename;
             inputFile = new File(path);
-            System.out.println("try to parse: " + xMLFilename + " result: " + inputFile);
+            System.out.println("try to parse2: " + xMLFilename + " result: " + inputFile);
         }
         
         // if we have a file, go on parsing
