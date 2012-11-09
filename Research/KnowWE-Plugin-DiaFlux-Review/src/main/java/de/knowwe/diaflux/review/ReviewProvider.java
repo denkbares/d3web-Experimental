@@ -33,7 +33,7 @@ import de.knowwe.tools.ToolProvider;
 public class ReviewProvider implements ToolProvider {
 
 	public static final String TOOL_CATEGORY = "Review";
-	public static final String ICON_PATH = "KnowWEExtension/image/review.png";
+	public static final String ICON_PATH = "KnowWEExtension/images/review.png";
 
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
