@@ -82,7 +82,7 @@ public class DialogManager extends HttpServlet {
         String uploadFilesBase = GLOBSET.getServletBasePath() + "UPFiles";
         GLOBSET.setUploadFilesBasePath(uploadFilesBase);
 
-        //GLOBSET.setWebAppWarName("/JuriLibreOffice");
+        GLOBSET.setWebAppWarName("/JuriLibreOffice");
         GLOBSET.setWebAppWarName("");
 
         // initialize the d3web parser
@@ -149,7 +149,7 @@ public class DialogManager extends HttpServlet {
             HttpSession httpSession)
             throws IOException {
 
-
+        System.err.println("Show the Servlet - try to get and fill template and styles...");
         StringTemplate st =
                 TemplateUtils.getStringTemplate("dialogManager/dialogManager", "html");
 
@@ -172,9 +172,11 @@ public class DialogManager extends HttpServlet {
         writer.write(st.toString());
 
         writer.close();
+        System.err.println("Show the Servlet - SUCCESS");
     }
 
     private void fillDialogList(StringTemplate st) {
+        System.err.println("Fill Dialog list - try to get and display stored dialogs...");
         try {
             BufferedReader br;
             StringBuilder bui = new StringBuilder();
@@ -196,20 +198,27 @@ public class DialogManager extends HttpServlet {
             }
             br.close();
             st.setAttribute("dialogLinkList", bui.toString());
+            System.err.println("Fill Dialog list - SUCCESS");
 
         } catch (IOException e1) {
             e1.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
+        } catch (Exception e) {
+            e.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
         }
     }
 
     private String fillFilesList(String subfolder, StringTemplate st) {
 
+        System.err.println("Fill " + subfolder + " files list - try to get and display " + subfolder + " files...");
         // assemble path where files are stored
         String path = GlobalSettings.getInstance().getUploadFilesBasePath()
                 + "/" + subfolder;
+        System.err.println("\t - " + subfolder + " filepath on server: " + path);
 
         // get all files under the given path
         List<File> files = Utils.getFileList(path);
+        System.err.println("\t - " + subfolder + " files on server: " + files.toString());
+
         StringBuilder bui = new StringBuilder();
         if (files.size() > 0) {
             for (File file : files) {
@@ -222,6 +231,7 @@ public class DialogManager extends HttpServlet {
                 bui.append("</option>");
             }
             st.setAttribute("fileselectopts_" + subfolder, bui.toString());
+            System.err.println("Fill " + subfolder + " files list - SUCCESS");
         }
         return bui.toString();
     }
@@ -230,15 +240,16 @@ public class DialogManager extends HttpServlet {
             HttpServletResponse response,
             HttpSession httpSession) throws IOException {
 
-        // get latest loaded .d3web and XML specs file
-        //File spec =
-        //httpSession.getAttribute("latestSpec") != null
-        //? (File) httpSession.getAttribute("latestSpec") : null;
+        System.err.println("Delete selected KB - try to delete a selected kb from the list...");
 
         String kbName = request.getParameter("kbToDelete").toString();
+        System.err.println("\t - kbName selected: " + kbName);
+
         boolean deleteSuccess = false;
         String path = GLOBSET.getUploadFilesBasePath() + PATHSEP
                 + "d3web/";
+
+        System.err.println("\t - kb filepath on server: " + path);
         File fileToDelete = new File(path + kbName + ".d3web");
         if (fileToDelete.exists()) {
             deleteSuccess = fileToDelete.delete();
@@ -247,16 +258,12 @@ public class DialogManager extends HttpServlet {
         // send link text back to JS
         PrintWriter writer = response.getWriter();
         if (deleteSuccess) {
-            System.out.println("DELETED");
-            //response.sendRedirect("http://www.google.com");
-            //response.sendRedirect(GLOBSET.getWebAppWarName() + "/DialogManager"
-            //       + "?upKB=''" + "&upfilename=''");
+            System.err.println("Delete selected KB - SUCCESS");
+
         } else {
-            System.out.println("SOME ERROR");
             writer.write("error");
         }
         writer.close();
-
     }
 
     /**
@@ -273,39 +280,36 @@ public class DialogManager extends HttpServlet {
             HttpServletResponse response,
             HttpSession httpSession) throws IOException {
 
-        // get latest loaded .d3web and XML specs file
-        //File spec =
-        //httpSession.getAttribute("latestSpec") != null
-        //? (File) httpSession.getAttribute("latestSpec") : null;
+        System.err.println("Assemble Dialog - try to assemble dialog string from selected KB & UI");
 
         String d3webKBName = request.getParameter("kb").toString();
-        String kbpath = GLOBSET.getUploadFilesBasePath() + PATHSEP + "d3web";
+        System.err.println("\t - KB name: " + d3webKBName);
 
         String specName = request.getParameter("spec").toString();
-        System.err.append("assembleDialog: " + specName);
+        System.err.println("\t - UI spec name: " + specName);
+
         String path =
                 GlobalSettings.getInstance().getUploadFilesBasePath()
                 + "/specs/" + specName + ".xml";
+        System.err.println("\t - dialog xml path and file name: " + path);
+
         File specFile = new File(path);
 
         // assemble dialog link
         String dialogLink = "";
 
-        // get the Dialog Type
+
         if (specName != null) {
 
-            String type = retrieveDialogTypeFromSpec(specFile);
-
-            // assemble ITree Servlet Link
-            if (type.equalsIgnoreCase(DialogType.ITREE.toString())) {
+              // assemble ITree Servlet Link
+            if (specName.equalsIgnoreCase(DialogType.ITREE.toString())) {
 
                 dialogLink = GLOBSET.getWebAppWarName() + "/ITreeDialog?src="
                         + specFile.getName().replace(".xml", "")
                         + "&dialogID=" + d3webKBName + "AND" + specName;
 
 
-
-            } else if (type.equalsIgnoreCase(DialogType.STANDARD.toString())) {
+        } else if (specName.contains(DialogType.STANDARD.toString())) {
                 //dialogLink = GLOBSET.getWebAppWarName() + "/StandardDialog?src="
                 //      + specFile.getName().replace(".xml", "")
                 //    + "&dialogID=" + d3webKBName + "AND" + specName;
@@ -313,13 +317,13 @@ public class DialogManager extends HttpServlet {
                         + specFile.getName().replace(".xml", "")
                         + "&dialogID=" + d3webKBName + "AND" + specName;
             }
-            System.err.append("assembleDialogAfter: " + dialogLink);
+            System.err.println("\t - assembled dialog link: " + dialogLink);
         }
 
         // send link text back to JS
         PrintWriter writer = response.getWriter();
         if (!dialogLink.equals("")) {
-            System.err.append("assembleDialog Writer: " + dialogLink);
+            System.err.println("Assemble dialog - SUCCESS");
             writer.write(dialogLink);
         } else {
             writer.write("error");
@@ -327,22 +331,6 @@ public class DialogManager extends HttpServlet {
         writer.close();
     }
 
-    /**
-     * Retrieve the Dialog Type from the XML specification
-     *
-     * @param spec the Specification
-     * @return the Dialog Type
-     */
-    private String retrieveDialogTypeFromSpec(File spec) {
-
-        if (spec != null) {
-            System.out.println(spec);
-            d3webParser.parse(spec);
-            return d3webParser.getUIPrefix();
-        } else {
-            return "";
-        }
-    }
 
     /**
      * Stores a dialog link to the list of dialogs (currently: globa, one day:
@@ -357,11 +345,14 @@ public class DialogManager extends HttpServlet {
             HttpServletResponse response,
             HttpSession httpSession) throws IOException {
 
+        System.err.println("Store dialog - try to store dialog to dialog link list...");
+
         // if a dialog link is given (only if confirmed by user)
         if (request.getParameter("dialogLink") != null
                 && !request.getParameter("dialogLink").toString().equals("")) {
 
             String linkToStore = request.getParameter("dialogLink").toString();
+            System.err.println("\t - link to store: " + linkToStore);
 
             // TODO: adapt this when adding user management wrt folders
             PrintWriter writer = response.getWriter();
@@ -369,10 +360,13 @@ public class DialogManager extends HttpServlet {
             // add the link to the dialog list file
             try {
                 boolean exists = false;
+                File dialogsFile =
+                        new File(GLOBSET.getUploadFilesBasePath() + PATHSEP + "dialogs.txt");
+                System.err.println("\t - dialog store file: " + dialogsFile.getName());
+
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(
-                        new FileInputStream(
-                        GLOBSET.getUploadFilesBasePath() + PATHSEP + "dialogs.txt")));
+                        new FileInputStream(dialogsFile)));
 
                 StringBuilder bui = new StringBuilder();
                 String line;
@@ -384,9 +378,9 @@ public class DialogManager extends HttpServlet {
                 br.close();
 
                 if (!exists) {
-                    File dfile =
-                            new File(GLOBSET.getUploadFilesBasePath() + PATHSEP + "dialogs.txt");
-                    BufferedWriter output = new BufferedWriter(new FileWriter(dfile, true));
+
+                    BufferedWriter output =
+                            new BufferedWriter(new FileWriter(dialogsFile, true));
                     output.write(linkToStore);
                     output.newLine();
                     output.close();
@@ -414,6 +408,7 @@ public class DialogManager extends HttpServlet {
                     writer.append(REPLACEID + "dialoglinklist");
                     writer.append(REPLACECONTENT);
                     writer.append(bui.toString());
+                    System.err.println("Store dialog - SUCCESS");
 
                 } catch (IOException e1) {
                     e1.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
@@ -437,9 +432,13 @@ public class DialogManager extends HttpServlet {
     protected void parseKBDocument(
             HttpServletRequest request, HttpSession http, HttpServletResponse response)
             throws IOException {
+
+        System.err.println("Parse KB Document - try to parse word to d3web... ");
         PrintWriter writer = response.getWriter();
 
         String docname = request.getParameter("docname").toString();
+        System.err.println("\t - docname of doc to be parsed: " + docname);
+
         boolean successfulParsed = false;
 
         if (docname != null && !docname.equals("")) {
@@ -457,7 +456,9 @@ public class DialogManager extends HttpServlet {
         } else {
             String errFilePath =
                     "UPFiles/" + docname + "_Error.html";
+            System.err.println("\t - error report filename: " + errFilePath);
             writer.append("showErrFile;" + errFilePath);
+            System.err.println("Parse KB Document - show error report...");
         }
     }
 
@@ -469,11 +470,11 @@ public class DialogManager extends HttpServlet {
      */
     private boolean kbDocSuccessfullyParsed(String docName, HttpSession http) {
 
-        System.err.append("Document name: " + docName + "\n");
+        System.err.println("Parse KB - parser call...");
         Html2KnowWECompiler compiler = new converter.Html2KnowWECompiler();
 
         String upPath = GLOBSET.getUploadFilesBasePath();
-        System.err.append("UploadFilesBasePath: " + upPath + "\n");
+        System.err.println("\t - upload base path: " + upPath);
 
         // TODO: clean up intermediate files!!
 
@@ -505,20 +506,16 @@ public class DialogManager extends HttpServlet {
 
         boolean compileError = false;
 
-        System.err.println("Files for converter and parser: "
-                + upPath + " - " + doc + " - " + err + " - " + tmp + " - "
-                + d3web + " - " + knowwe);
-        /*
-         * System.out.println("PARSER File Permissions: \n" + "tmpF: " +
-         * tmpF.canExecute() + tmpF.canWrite() + tmpF.canRead() + "\n" + "d3wF:
-         * " + d3wF.canExecute() + d3wF.canWrite() + d3wF.canRead() + "\n" +
-         * "kwF: " + kwF.canExecute() + kwF.canWrite() + kwF.canRead());
-         */
+        System.err.println("\t - Files for converter and parser: ");
+        System.err.println("\t\t - document path and name: " + doc);
+        System.err.println("\t\t - error report path and name: " + err);
+        System.err.println("\t\t - temporary file path and name: " + tmp);
+        System.err.println("\t\t - d3web goal path: " + d3web);
+        System.err.println("\t\t - knowwe headless app path: " + knowwe);
 
-        // TODO: wie komme ich an das Error.html? Flag? Gleich das File zurückgeben?
         try {
             compileError = compiler.compileTo3web(doc, err, tmp, d3web, knowwe);
-            System.err.println("Compile Flag: " + compileError);
+            System.err.println("\t - Compilation error?: " + compileError);
 
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
@@ -528,12 +525,15 @@ public class DialogManager extends HttpServlet {
             ioe.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
         } catch (InterruptedException ine) {
             ine.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
+        } catch (NullPointerException npe){
+            npe.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
         } catch (Exception e) {
             e.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
         }
 
         if (compileError) {
             // something went wrong during compilation. 
+            System.err.println("\t - Compilation error occurred!");
             return false;
         } else {
 
@@ -544,19 +544,18 @@ public class DialogManager extends HttpServlet {
             Runtime rt = Runtime.getRuntime();
             try {
                 if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1) {
-                    // need to kill it on 
+                    // need to kill it on ?!
                 } else {
-                    System.err.println("Trying to kill the soffice process immediately again "
-                            + "(only on MAC)...");
+                    System.err.println("\t - try to kill soffice on MAC systems...");
                     String execute = "killall soffice.bin";
-                    System.err.println("Executing: " + execute);
+                    System.err.println("\t - executing kill command: " + execute);
                     rt.exec(execute);
                 }
-            }catch (IOException ioe){
+            } catch (IOException ioe) {
                 ioe.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
             }
 
-
+            System.err.println("Parse KB - parser call SUCCESS...");
             return true;
         }
     }
@@ -571,20 +570,24 @@ public class DialogManager extends HttpServlet {
     private void checkAndRenameD3webFile(
             String targetName, File d3webDir, HttpSession http) {
 
+        System.err.println("Rename d3web - try to rename d3web file to former .doc filename...");
         File[] fileList = d3webDir.listFiles();
         if (fileList != null && fileList.length > 0) {
             Arrays.sort(fileList, new LastModifiedComparator());
             File lastFile = fileList[fileList.length - 1];
+            System.err.println("\t - latest created d3web file: " + lastFile.getName());
+
             String targetD3webName = targetName + ".d3web";
+            System.err.println("\t - goal d3web filename: " + targetD3webName);
+
             File targetD3web = new File(d3webDir, targetD3webName);
             lastFile.renameTo(targetD3web);
             lastFile.delete();
 
             if (targetD3web != null
                     && targetD3web.getName().equals(targetD3webName)) {
-                http.setAttribute("latestD3web", targetD3web);
-
-
+                //http.setAttribute("latestD3web", targetD3web);
+                System.err.println("Rename d3web - SUCCESS");
             }
         }
     }
