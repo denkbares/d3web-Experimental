@@ -84,7 +84,8 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
         FIRST, SECOND, THIRD
     }
-    private static Map<String, Map<String, Object>> caseCache = new HashMap<String, Map<String, Object>>();
+    private static Map<String, Map<String, Object>> caseCache 
+            = new HashMap<String, Map<String, Object>>();
 
     @Override
     public void setDialogSpecificAttributes(HttpSession httpSession, StringTemplate st, HttpServletRequest request) {
@@ -115,32 +116,55 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         if (httpSession.getAttribute("level1qs") == null) {
             httpSession.setAttribute("level1qs", parseLevel1Questions(httpSession));
         }
+        // get the popup for the follow up table dialog window
         String opts = renderFollowUpTable((String) httpSession.getAttribute("user"));
         st.setAttribute("followupdialog", opts);
 
     }
 
+    /**
+     * Render the window with the Follow Up Table
+     *
+     * @param user the given user (needed to optain the cases)
+     * @return the String Representation of the Follow Up Table
+     */
     private String renderFollowUpTable(String user) {
 
+        // get the cases of this user
         List<File> caseFiles = PersistenceD3webUtils.getCaseList(user);
         StringBuilder followUpTable = new StringBuilder();
+
+        // if this user has some stored cases go through each one
         if (caseFiles != null && caseFiles.size() > 0) {
 
+            // basic table framing
             followUpTable.append("<table style='border-spacing: 0px' border='1'>");
-            renderTableHeader(followUpTable);
 
-            Collections.sort(caseFiles);
+            renderTableHeader(followUpTable); // insert the table header
+
+            Collections.sort(caseFiles); // sort the user's cases
 
             for (File caseFile : caseFiles) {
+
+                // for all cases except the autocase file
                 if (!caseFile.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
+
+                    // render one row in the follow up table
                     renderRow(user, caseFile, followUpTable);
                 }
             }
-            followUpTable.append("</table>");
+            followUpTable.append("</table>"); // basic table framing
         }
         return followUpTable.toString();
     }
 
+    /**
+     * Render the header of the Follow Up Table (de facto one -- the first --
+     * row of that table.
+     *
+     * @param followUpTable the StringBuilder that contains already the table
+     * framing
+     */
     private void renderTableHeader(StringBuilder followUpTable) {
         followUpTable.append("<tr>");
         renderHeaderCell("Case Name", followUpTable);
@@ -152,57 +176,108 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         followUpTable.append("</tr>");
     }
 
+    /**
+     * Render one Table Header Cell
+     *
+     * @param content the content to be displayed in the cell
+     * @param followUpTable The StringBuilder containing the entire table
+     */
     private void renderHeaderCell(String content, StringBuilder followUpTable) {
         followUpTable.append("<th>" + content + "</th>");
     }
 
+    /**
+     * Render one row of the Follow Up Table
+     *
+     * @param user the respective user
+     * @param caseFile the case file represented by that row
+     * @param followUpTable The StringBuilder containing the entire table
+     */
     private void renderRow(String user, File caseFile, StringBuilder followUpTable) {
 
+        // first parse the relevant attributes of the case into a map
         Map<String, Object> parsedCase = parseCase(user, caseFile);
 
-        followUpTable.append("<tr>");
+        followUpTable.append("<tr>"); // open the row
 
-        renderFileNameCell(caseFile, followUpTable);
-        renderLastModifiedCell(caseFile, followUpTable);
-        renderOperationDateCell(parsedCase, followUpTable);
+        renderFileNameCell(caseFile, followUpTable); // render file name
+        renderLastModifiedCell(caseFile, followUpTable); // render modified date
+        renderOperationDateCell(parsedCase, followUpTable); // render op date
+
+        // render the notification cells for each of the (currently 3) existing
+        // follow ups
         renderFollowUpCell(parsedCase, FollowUp.FIRST, followUpTable);
         renderFollowUpCell(parsedCase, FollowUp.SECOND, followUpTable);
         renderFollowUpCell(parsedCase, FollowUp.THIRD, followUpTable);
 
-        followUpTable.append("</tr>");
+        followUpTable.append("</tr>"); // close the row
     }
 
+    /**
+     * Render the filename of a case into the first column of the table
+     * @param caseFile the respective vase
+     * @param followUpTable The StringBuilder containing the entire FU table
+     */
     private void renderFileNameCell(File caseFile, StringBuilder followUpTable) {
-        String filename = caseFile.getName().substring(0,
-                caseFile.getName().lastIndexOf("."));
+        // cut the file ending from the filename
+        String filename = 
+                caseFile.getName()
+                    .substring(0, caseFile.getName().lastIndexOf("."));
+        
+        // and render the cell
         renderCell(filename, followUpTable);
     }
 
+    /**
+     * Render the last modified date of the case into a cell
+     * @param caseFile the respective case
+     * @param followUpTable The StringBuilder containing the entire FU table
+     */
     private void renderLastModifiedCell(File caseFile, StringBuilder followUpTable) {
+        
+        // get last modified date and format it
         Date lastModified = new Date(caseFile.lastModified());
         String lastModifiedFormatted = DD_MM_YYYY_HH_MM.format(lastModified) + " h";
-        renderCell(lastModifiedFormatted, followUpTable);
+        renderCell(lastModifiedFormatted, followUpTable); // render it into cell
     }
 
+    /**
+     * Render a cell with the operation date
+     * @param parsedCase the map containing all relevant data of the case
+     * @param followUpTable The StringBuilder containing the entire FU table
+     */ 
     private void renderOperationDateCell(Map<String, Object> parsedCase, StringBuilder followUpTable) {
-        boolean operationDateAnswered = (Boolean) parsedCase.get(OPERATION_DATE_ANSWERED);
-        if (!operationDateAnswered) {
+        
+        // get the operation date
+        boolean operationDateAnswered = 
+                (Boolean) parsedCase.get(OPERATION_DATE_ANSWERED);
+        if (!operationDateAnswered) { // of no op date: "no date found" is rendered
             renderCell("No date found", followUpTable);
         } else {
+            // otherwise get and render the operation date
             Date operationDate = (Date) parsedCase.get(OPERATION_DATE);
             String operationDateFormatted = DD_MM_YYYY.format(operationDate);
             renderCell(operationDateFormatted, followUpTable);
         }
     }
 
+    /**
+     * Render a follow up cell
+     * @param parsedCase the respective case
+     * @param followUp an enum value indicating if we have the 1., 2., or 3. FU
+     * @param followUpTable The StringBuilder containing the entire FU table
+     */
     private void renderFollowUpCell(Map<String, Object> parsedCase,
             FollowUp followUp, StringBuilder followUpTable) {
 
         // if no operation date was answered, we can't calculate any follow ups...
-        boolean operationDateAnswered = (Boolean) parsedCase.get(OPERATION_DATE_ANSWERED);
+        boolean operationDateAnswered = 
+                (Boolean) parsedCase.get(OPERATION_DATE_ANSWERED);
         if (!operationDateAnswered) {
+            // if no op date, render "Unknown"
             renderCell("Unknown", followUpTable);
         } else {
+            // else, get the respective FU value from the case properties map
             boolean followUpDone = false;
             if (followUp == FollowUp.FIRST) {
                 followUpDone = (Boolean) parsedCase.get(FOLLOW_UP1_DONE);
@@ -216,9 +291,11 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
             //      ? FOLLOW_UP1_DONE
             //    : FOLLOW_UP2_DONE);
 
-            if (followUpDone) {
+            if (followUpDone) { // if done successfully
                 renderColoredCell("Done", COLOR_OK, followUpTable);
             } else {
+                // otherwise, calculate due date by getting the op date and
+                // adding a timespan according to the FU number
                 Date operationDate = (Date) parsedCase.get(OPERATION_DATE);
                 long time = operationDate.getTime();
                 long add = 0;
@@ -233,7 +310,12 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
                 Date followUpDueDate = new Date(time + add);
                 Date now = new Date();
-                String followUpDueFormatted = DD_MM_YYYY.format(followUpDueDate);
+                String followUpDueFormatted = 
+                        DD_MM_YYYY.format(followUpDueDate);
+                
+                // render a notification acordingly: if due is in future still,
+                // render with OK color, if due was already in the past, render
+                // with alert color
                 if (followUpDueDate.after(now)) {
                     renderColoredCell("Due " + followUpDueFormatted, COLOR_OK, followUpTable);
                 } else {
@@ -243,20 +325,51 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         }
     }
 
+    /**
+     * Rendering a cell with specifically colored content
+     * @param content the content
+     * @param color the color string
+     * @param followUpTable The StringBuilder containing the entire FU table
+     */
     private void renderColoredCell(String content, String color, StringBuilder followUpTable) {
         renderCell(getColoredText(content, color), followUpTable);
     }
 
+    /**
+     * Helper method for above renderedColoredCell method: returns a span
+     * containing text with specific color style attribute
+     * @param text the text to display
+     * @param colorCode the color
+     * @return the String representation of the colored-text span
+     */
     private String getColoredText(String text, String colorCode) {
         return "<span style='color:" + colorCode + "'>" + text + "</span>";
     }
 
+    /**
+     * Render a table cell with given content
+     * @param content the content for the cell
+     * @param followUpTable the StringBuilder containing the entire table
+     */
     private void renderCell(String content, StringBuilder followUpTable) {
         followUpTable.append("<td style='padding:3px'>" + content + "</td>");
     }
 
+    /**
+     * Parse a d3web case file (xml format) into a map, which contains certain 
+     * parameters/properties needed later on for displaying the FollowUp Table.
+     * @param user the respective user
+     * @param caseFile the respective case File to be parsed
+     * @return the Map representation of the parameters
+     */
     private Map<String, Object> parseCase(String user, File caseFile) {
-        Map<String, Object> parameters = caseCache.get(caseFile.getPath());
+        // if exists, get the map for the respective case from the all-cases-
+        // parameters-map-cache
+        Map<String, Object> parameters = 
+                caseCache.get(caseFile.getPath());
+        
+        // if there exists a map, and if the last modification is untouched
+        // since the last modification, just return this map
         if (parameters != null) {
             long lastLastFileChange = (Long) parameters.get(LAST_FILE_CHANGE);
             long lastFileChange = caseFile.lastModified();
@@ -264,20 +377,27 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
                 return parameters;
             }
         }
+        // if the requested map does not yet exist
         if (parameters == null) {
+            // create a new one and put it into the cache
             parameters = new HashMap<String, Object>();
             caseCache.put(caseFile.getPath(), parameters);
         }
+        
+        // add the parameters last file change, last case change, FU parameters.
+        // op date etc.
         parameters.put(LAST_FILE_CHANGE, caseFile.lastModified());
         Session loadedUserCase = PersistenceD3webUtils.loadUserCaseUtil(user, caseFile);
         parameters.put(LAST_CASE_CHANGE, loadedUserCase.getLastChangeDate().getTime());
         parseFollowUpParameters(parameters, loadedUserCase);
         parseOperationDate(parameters, loadedUserCase);
 
+        // return the map for the requested case
         return parameters;
 
     }
 
+    
     private void parseOperationDate(Map<String, Object> parameters, Session loadedUserCase) {
         Question operationDateQuestion = loadedUserCase.getKnowledgeBase().getManager().searchQuestion(
                 OPERATION_DATE_QUESTION_NAME);
@@ -328,7 +448,7 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         List<Question> allAnsweredFollowUp1Questions = new LinkedList<Question>();
         List<Question> allAnsweredFollowUp2Questions = new LinkedList<Question>();
         List<Question> allAnsweredFollowUp3Questions = new LinkedList<Question>();
-        
+
         getFollowUpQuestions(allAnsweredQuestions, allAnsweredFollowUp1Questions,
                 allAnsweredFollowUp2Questions, allAnsweredFollowUp3Questions);
 
@@ -337,7 +457,7 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
         parameters.put(FOLLOW_UP2_DONE,
                 isFollowUpDone(allAnsweredFollowUp2Questions, allIndicatedFollowUp2Questions));
-        
+
         parameters.put(FOLLOW_UP3_DONE,
                 isFollowUpDone(allAnsweredFollowUp3Questions, allIndicatedFollowUp3Questions));
     }
