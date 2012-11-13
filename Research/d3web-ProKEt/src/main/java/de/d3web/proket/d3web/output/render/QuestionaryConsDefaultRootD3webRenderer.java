@@ -124,8 +124,7 @@ public class QuestionaryConsDefaultRootD3webRenderer extends DefaultRootD3webRen
         // render solution panel into here. For including other forms of
         // solution panels, adapt the EXPLANATIONTYPE attribute.
         st.setAttribute("solutions", 
-                spr.renderSolutionPanel(d3webSession, 
-                    SolutionPanelD3webRenderer.EXPLANATIONTYPE.TEXTUALLISTING,
+                spr.renderSolutionPanel(d3webSession,
                     http
                     ));
 

@@ -99,7 +99,7 @@ public class D3webXMLParser {
             inputFile = new File(path);
             System.out.println("try to parse2: " + xMLFilename + " result: " + inputFile);
         }
-        
+
         // if we have a file, go on parsing
         if (inputFile != null) {
             try {
@@ -235,6 +235,24 @@ public class D3webXMLParser {
         return currentMode;
     }
 
+    
+    // defining the possible solution explanation types
+    public enum SolutionExplanationType{
+        NONE, TREEMAP, TABLE, CLARI, TEXTUAL, SOLGRAPH
+    }
+    
+    // return the solution explanation type to be used
+    public SolutionExplanationType getSolutionExplanationType() {
+        SolutionExplanationType current = SolutionExplanationType.NONE;
+        String solType = XMLUtils.getStr((Element) dialogSpec, "solutionExplanation", null);
+        
+        if (solType != null) {
+            current = SolutionExplanationType.valueOf(solType);
+            System.out.println(current);
+        }
+        return current;
+    }
+
     // returns the specification of required fields
     public String getRequired() {
 
@@ -267,7 +285,7 @@ public class D3webXMLParser {
     // Return the knowledgebase as specified per its filename in the parsed XML
     public KnowledgeBase getKnowledgeBase() throws IOException {
         KnowledgeBase kb = null;
-       
+
         String kbname = getKnowledgeBaseName();
         kb = D3webUtils.getKnowledgeBase(kbname);
         return kb;
@@ -277,7 +295,7 @@ public class D3webXMLParser {
     public String getKnowledgeBaseName() {
         String kbname = "";
         kbname = XMLUtils.getStr((Element) dataSpec, "kb", null);
-    
+
         return kbname;
     }
 

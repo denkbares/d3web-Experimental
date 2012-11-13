@@ -39,7 +39,7 @@ public class ConsQuestionary extends D3webDialog {
     @Override
     protected String getSource(HttpServletRequest request, HttpSession http) {
 
-        String source = "QuestionaryCons.xml"; // default
+        String source = "BA_Alina.xml"; // default
         if (request.getParameter("src") != null) {
             source = request.getParameter("src");
         }
@@ -85,9 +85,7 @@ public class ConsQuestionary extends D3webDialog {
         
         
         SolutionPanelD3webRenderer spr = D3webRendererMapping.getInstance().getSolutionPanelRenderer();
-        String spUpdate = spr.renderSolutionPanel(d3webSession, 
-                    SolutionPanelD3webRenderer.EXPLANATIONTYPE.TEXTUALLISTING,
-                    httpSession);
+        String spUpdate = spr.renderSolutionPanel(d3webSession, httpSession);
         
         writer.append(spUpdate);
         writer.append("</div>");

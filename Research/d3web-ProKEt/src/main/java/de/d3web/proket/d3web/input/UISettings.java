@@ -72,6 +72,8 @@ public class UISettings {
     private D3webXMLParser.LoginMode loginMode;
    
 
+    private D3webXMLParser.SolutionExplanationType solExpType;
+    
     
     private static UISettings instance;
     
@@ -149,6 +151,14 @@ public class UISettings {
 
     public D3webXMLParser.LoginMode getLoginMode() {
         return this.loginMode;
+    }
+    
+    public void setSolutionExplanationType(D3webXMLParser.SolutionExplanationType sol) {
+        this.solExpType = sol;
+    }
+
+    public D3webXMLParser.SolutionExplanationType getSolutionExplanationType() {
+        return this.solExpType;
     }
     
 }

@@ -111,7 +111,6 @@ public class StandardDialog extends D3webDialog {
 
         SolutionPanelD3webRenderer spr = D3webRendererMapping.getInstance().getSolutionPanelRenderer();
         String spUpdate = spr.renderSolutionPanel(d3webSession,
-                SolutionPanelD3webRenderer.EXPLANATIONTYPE.TEXTUALLISTING,
                 httpSession);
 
         writer.append(spUpdate);

@@ -25,6 +25,8 @@ import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.input.UISettings;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,18 +41,7 @@ import org.antlr.stringtemplate.StringTemplate;
  */
 public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
 
-    /*
-     * some basic types of how the solution panel could be rendered
-     */
-    public enum EXPLANATIONTYPE {
-
-        TEXTUALLISTING,
-        TABLE,
-        TREEMAP,
-        SOLUTIONGRAPH,
-        EXPLDIALOG
-    }
-
+    
     /**
      * Entry point to solution panel rendering. According to given EXPL-TYPE the
      * corresponding sub-method for rendering will be called.
@@ -62,22 +53,26 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
      * solution panel
      */
     public String renderSolutionPanel(Session d3webSession,
-            EXPLANATIONTYPE type,
             HttpSession http) {
 
         StringBuilder bui = new StringBuilder();
-
-        if (type == EXPLANATIONTYPE.TEXTUALLISTING) {
+        D3webXMLParser.SolutionExplanationType solType = 
+                UISettings.getInstance().getSolutionExplanationType();
+        
+        
+        if (solType == D3webXMLParser.SolutionExplanationType.TEXTUAL) {
 
             bui.append(getTextualListing(d3webSession));
 
-        } else if (type == EXPLANATIONTYPE.TABLE) {
+        } else if (solType == D3webXMLParser.SolutionExplanationType.TABLE) {
             // TODO
-        } else if (type == EXPLANATIONTYPE.TREEMAP) {
+        } else if (solType == D3webXMLParser.SolutionExplanationType.TREEMAP) {
+            System.out.println("Treemap Solution Rendering");
             // TODO
-        } else if (type == EXPLANATIONTYPE.SOLUTIONGRAPH) {
+        } else if (solType == D3webXMLParser.SolutionExplanationType.SOLGRAPH) {
             // TODO
-        } else if (type == EXPLANATIONTYPE.EXPLDIALOG) {
+        } else if (solType == D3webXMLParser.SolutionExplanationType.CLARI) {
+            System.out.println("Clarification Dialog Solution Rendering");
             // TODO
         }
 

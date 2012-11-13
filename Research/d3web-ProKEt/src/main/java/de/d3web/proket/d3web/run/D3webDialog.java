@@ -1810,7 +1810,8 @@ public class D3webDialog extends HttpServlet {
         uis.setHeader(d3webParser.getHeader());
         uis.setUIprefix(d3webParser.getUIPrefix());
         uis.setLoginMode(d3webParser.getLoginMode());
-
+        uis.setSolutionExplanationType(d3webParser.getSolutionExplanationType());
+        
 
         String uegroup = d3webParser.getUEGroup() != null ? d3webParser.getUEGroup() : "";
         httpSession.setAttribute("uegroup", uegroup);

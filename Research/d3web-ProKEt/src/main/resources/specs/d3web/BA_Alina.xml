@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog 
-	header="Consultation Questionary"  
+	header="Testdialog BA ACOCA"  
 	dtype="singleform" 
 	indicationmode="hide_unindicated"
 	dstrategy="nextform"
-	css="standarddialog, diagnosisVisu" 
+	css="questionaryCons, diagnosisVisu" 
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns="1"
@@ -13,7 +13,7 @@
         required = "NONE"
 	language = ""
         debug = "false"
-        solutionExplanation = "TEXTUAL"
+        solutionExplanation = "TEXTUAL" 
         >
 	<data kb="BaumDecTree.d3web" />
         <ue logging = "FALSE" />

@@ -129,7 +129,6 @@ public class StandardDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         // solution panels, adapt the EXPLANATIONTYPE attribute.
         st.setAttribute("solutions", 
                 spr.renderSolutionPanel(d3webSession, 
-                    SolutionPanelD3webRenderer.EXPLANATIONTYPE.TEXTUALLISTING,
                     http
                     ));
 
