@@ -155,3 +155,5 @@ li.noListMarker {list-style-type: none;}
 .fileClearname{margin-top: 5px;}
 
 .fileClearnameLabel{float: left; margin-top: 15px;}
+
+td > img{cursor:pointer;}

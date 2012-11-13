@@ -62,23 +62,27 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
     private static final long WEEK = DAY * 7;
     private static final long SIX_WEEKS = WEEK * 6;
     private static final long YEAR = DAY * 365;
+    private static final long YEARS2 = DAY * 365 * 2;
     private static final SimpleDateFormat DD_MM_YYYY = new SimpleDateFormat("dd.MM.yyyy");
     private static final SimpleDateFormat DD_MM_YYYY_HH_MM = new SimpleDateFormat(
             "dd.MM.yyyy HH:mm");
     private static final String OPERATION_DATE_QUESTION_NAME = "Operation date";
-    private static final String FOLLOW_UP1_NAME_SUFFIX = "(Follow up 1)";
-    private static final String FOLLOW_UP2_NAME_SUFFIX = "(Follow up 2)";
+    private static final String FOLLOW_UP1_NAME_SUFFIX = "Follow up (6 weeks)"; //"(Follow up 1)";
+    private static final String FOLLOW_UP2_NAME_SUFFIX = "Follow up (12 month)"; //"(Follow up 2)";
+    private static final String FOLLOW_UP3_NAME_SUFFIX = "Follow up (24 month)"; //"(Follow up 3)";
     private static final String OPERATION_DATE = "operationDate";
     private static final String OPERATION_DATE_ANSWERED = "operationDateAnswered";
     private static final String LAST_CASE_CHANGE = "lastCaseChange";
     private static final String LAST_FILE_CHANGE = "lastFileChange";
     private static final String FOLLOW_UP1_DONE = "followUp1Done";
     private static final String FOLLOW_UP2_DONE = "followUp2Done";
+    private static final String FOLLOW_UP3_DONE = "followUp3Done";
     private static final double PERCENTAGE_ANSWERED_QUESTIONS_NEEDED = 0.5;
 
+    // just to be sure to use the correct terminology each time
     private static enum FollowUp {
 
-        FIRST, SECOND
+        FIRST, SECOND, THIRD
     }
     private static Map<String, Map<String, Object>> caseCache = new HashMap<String, Map<String, Object>>();
 
@@ -92,26 +96,22 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         String ehsintro = request.getParameter("ehsintro");
         Object ehsHttp = httpSession.getAttribute("ehsintro");
         // Maybe better pull out, handle button click per JS and call a goToStatistics Ajax etc
-        
-        if(ehsHttp != null && ehsHttp.toString().equals("done")){
+
+        if (ehsHttp != null && ehsHttp.toString().equals("done")) {
             st.setAttribute("eurahsmiddle", "true");
             st.removeAttribute("eurahsintro");
-        } else 
-        
-             
-        // when coming from login, there is nothing like ehsintro set
-        if (ehsintro == null || ehsintro.equals("") ||
-                ehsHttp == null || ehsHttp.toString().equals("")
-                ) {
+        } else // when coming from login, there is nothing like ehsintro set
+        if (ehsintro == null || ehsintro.equals("")
+                || ehsHttp == null || ehsHttp.toString().equals("")) {
             st.setAttribute("eurahsintro", true);
             st.removeAttribute("eurahsmiddle");
             httpSession.setAttribute("ehsintro", "done");
-        } 
-       
+        }
+
         // TODO: was only in for testing. Maybe make configuration in specs
         // st.setAttribute("eurahsmiddle", "true");
         // st.removeAttribute("eurahsintro");
-            
+
         if (httpSession.getAttribute("level1qs") == null) {
             httpSession.setAttribute("level1qs", parseLevel1Questions(httpSession));
         }
@@ -146,8 +146,9 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         renderHeaderCell("Case Name", followUpTable);
         renderHeaderCell("Last Modified", followUpTable);
         renderHeaderCell("Date of Surgery", followUpTable);
-        renderHeaderCell("Follow-Up 1", followUpTable);
-        renderHeaderCell("Follow-Up 2", followUpTable);
+        renderHeaderCell("Follow Up (6 weeks)", followUpTable);
+        renderHeaderCell("Follow Up (12 month)", followUpTable);
+        renderHeaderCell("Follow Up (24 month)", followUpTable);
         followUpTable.append("</tr>");
     }
 
@@ -156,6 +157,7 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
     }
 
     private void renderRow(String user, File caseFile, StringBuilder followUpTable) {
+
         Map<String, Object> parsedCase = parseCase(user, caseFile);
 
         followUpTable.append("<tr>");
@@ -165,6 +167,7 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         renderOperationDateCell(parsedCase, followUpTable);
         renderFollowUpCell(parsedCase, FollowUp.FIRST, followUpTable);
         renderFollowUpCell(parsedCase, FollowUp.SECOND, followUpTable);
+        renderFollowUpCell(parsedCase, FollowUp.THIRD, followUpTable);
 
         followUpTable.append("</tr>");
     }
@@ -192,21 +195,42 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         }
     }
 
-    private void renderFollowUpCell(Map<String, Object> parsedCase, FollowUp followUp, StringBuilder followUpTable) {
+    private void renderFollowUpCell(Map<String, Object> parsedCase,
+            FollowUp followUp, StringBuilder followUpTable) {
+
+        // if no operation date was answered, we can't calculate any follow ups...
         boolean operationDateAnswered = (Boolean) parsedCase.get(OPERATION_DATE_ANSWERED);
         if (!operationDateAnswered) {
             renderCell("Unknown", followUpTable);
         } else {
-            boolean followUpDone = (Boolean) parsedCase.get(followUp == FollowUp.FIRST
-                    ? FOLLOW_UP1_DONE
-                    : FOLLOW_UP2_DONE);
+            boolean followUpDone = false;
+            if (followUp == FollowUp.FIRST) {
+                followUpDone = (Boolean) parsedCase.get(FOLLOW_UP1_DONE);
+            } else if (followUp == FollowUp.SECOND) {
+                followUpDone = (Boolean) parsedCase.get(FOLLOW_UP2_DONE);
+            } else if (followUp == FollowUp.THIRD) {
+                followUpDone = (Boolean) parsedCase.get(FOLLOW_UP3_DONE);
+            }
+
+            //boolean followUpDone = (Boolean) parsedCase.get(followUp == FollowUp.FIRST
+            //      ? FOLLOW_UP1_DONE
+            //    : FOLLOW_UP2_DONE);
 
             if (followUpDone) {
                 renderColoredCell("Done", COLOR_OK, followUpTable);
             } else {
                 Date operationDate = (Date) parsedCase.get(OPERATION_DATE);
                 long time = operationDate.getTime();
-                long add = (followUp == FollowUp.FIRST ? SIX_WEEKS : YEAR);
+                long add = 0;
+
+                if (followUp == FollowUp.FIRST) {
+                    add = SIX_WEEKS;
+                } else if (followUp == FollowUp.SECOND) {
+                    add = YEAR;
+                } else if (followUp == FollowUp.THIRD) {
+                    add = YEARS2;
+                }
+
                 Date followUpDueDate = new Date(time + add);
                 Date now = new Date();
                 String followUpDueFormatted = DD_MM_YYYY.format(followUpDueDate);
@@ -288,34 +312,65 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         List<Question> allQuestions = loadedUserCase.getKnowledgeBase().getManager().getQuestions();
         List<Question> allFollowUp1Questions = new LinkedList<Question>();
         List<Question> allFollowUp2Questions = new LinkedList<Question>();
-        getFollowUpQuestions(allQuestions, allFollowUp1Questions, allFollowUp2Questions);
+        List<Question> allFollowUp3Questions = new LinkedList<Question>();
 
-        List<Question> allIndicatedFollowUp1Questions = getIndicatedOrTopLevelQuestions(
-                allFollowUp1Questions,
-                loadedUserCase);
-        List<Question> allIndicatedFollowUp2Questions = getIndicatedOrTopLevelQuestions(
-                allFollowUp2Questions,
-                loadedUserCase);
+        getFollowUpQuestions(allQuestions,
+                allFollowUp1Questions, allFollowUp2Questions, allFollowUp3Questions);
+
+        List<Question> allIndicatedFollowUp1Questions =
+                getIndicatedOrTopLevelQuestions(allFollowUp1Questions, loadedUserCase);
+        List<Question> allIndicatedFollowUp2Questions =
+                getIndicatedOrTopLevelQuestions(allFollowUp2Questions, loadedUserCase);
+        List<Question> allIndicatedFollowUp3Questions =
+                getIndicatedOrTopLevelQuestions(allFollowUp3Questions, loadedUserCase);
 
         List<Question> allAnsweredQuestions = loadedUserCase.getBlackboard().getAnsweredQuestions();
         List<Question> allAnsweredFollowUp1Questions = new LinkedList<Question>();
         List<Question> allAnsweredFollowUp2Questions = new LinkedList<Question>();
+        List<Question> allAnsweredFollowUp3Questions = new LinkedList<Question>();
+        
         getFollowUpQuestions(allAnsweredQuestions, allAnsweredFollowUp1Questions,
-                allAnsweredFollowUp2Questions);
+                allAnsweredFollowUp2Questions, allAnsweredFollowUp3Questions);
 
         parameters.put(FOLLOW_UP1_DONE,
                 isFollowUpDone(allAnsweredFollowUp1Questions, allIndicatedFollowUp1Questions));
 
         parameters.put(FOLLOW_UP2_DONE,
                 isFollowUpDone(allAnsweredFollowUp2Questions, allIndicatedFollowUp2Questions));
+        
+        parameters.put(FOLLOW_UP3_DONE,
+                isFollowUpDone(allAnsweredFollowUp3Questions, allIndicatedFollowUp3Questions));
     }
 
+    /**
+     * Checks whether a Follow Up has been done completely - thereby all
+     * answered questions are compared to the indicated questions, and the
+     * percentage of answered questions is compared to the percentage needed for
+     * a "done" follow up PERCENTAGE_ANSWERED_QUESTIONS_NEEDED: currently 0.5
+     */
     private boolean isFollowUpDone(List<Question> answeredQuestions, List<Question> allIndicatedQuestions) {
-        boolean percentageAnswered = answeredQuestions.size()
-                >= allIndicatedQuestions.size() * PERCENTAGE_ANSWERED_QUESTIONS_NEEDED;
+
+        System.err.println("FU DONE - answeredQuestions: " + answeredQuestions.toString());
+        System.err.println("FU DONE - allIndicatedQuestions: " + allIndicatedQuestions.toString());
+
+        double neededNr = allIndicatedQuestions.size() * PERCENTAGE_ANSWERED_QUESTIONS_NEEDED;
+        double answeredNr = answeredQuestions.size();
+
+        System.err.println("FU DONE - neededNr: " + neededNr);
+        System.err.println("FU DONE - answered: " + answeredNr);
+
+        boolean percentageAnswered = answeredNr >= neededNr;
+
+        System.err.println("FU DONE - percentageAnswered: " + percentageAnswered);
+
+        // answeredQuestions.size() >= allIndicatedQuestions.size() * PERCENTAGE_ANSWERED_QUESTIONS_NEEDED;
         return percentageAnswered && !answeredQuestions.isEmpty();
     }
 
+    /*
+     * Checks, which of the given List of questions are actually indicated or
+     * are top level questions
+     */
     private List<Question> getIndicatedOrTopLevelQuestions(List<Question> questions, Session session) {
         Blackboard blackboard = session.getBlackboard();
         List<Question> indicatedOrTopLevelQuestions = new LinkedList<Question>();
@@ -346,12 +401,17 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         return false;
     }
 
-    private void getFollowUpQuestions(List<Question> allQuestions, List<Question> allFollowUp1Questions, List<Question> allFollowUp2Questions) {
+    private void getFollowUpQuestions(List<Question> allQuestions,
+            List<Question> allFollowUp1Questions,
+            List<Question> allFollowUp2Questions,
+            List<Question> allFollowUp3Questions) {
         for (Question question : allQuestions) {
             if (question.getName().contains(FOLLOW_UP1_NAME_SUFFIX)) {
                 allFollowUp1Questions.add(question);
             } else if (question.getName().contains(FOLLOW_UP2_NAME_SUFFIX)) {
                 allFollowUp2Questions.add(question);
+            } else if (question.getName().contains(FOLLOW_UP3_NAME_SUFFIX)) {
+                allFollowUp3Questions.add(question);
             }
         }
     }
