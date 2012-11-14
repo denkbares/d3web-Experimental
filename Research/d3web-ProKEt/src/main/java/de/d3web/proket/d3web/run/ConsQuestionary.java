@@ -81,7 +81,8 @@ public class ConsQuestionary extends D3webDialog {
         writer.append(REPLACEID + solutionPanelID);
         writer.append(REPLACECONTENT);
         writer.append("<div id='" + solutionPanelID + "'>");
-        writer.append("<div id='sol_heading'>Solutions:</div>");
+        writer.append("<div id='sol_heading'>Diagnosen:</div>");
+        writer.append("<div class='sol_bgSpacer'></div>");
         
         
         SolutionPanelD3webRenderer spr = D3webRendererMapping.getInstance().getSolutionPanelRenderer();

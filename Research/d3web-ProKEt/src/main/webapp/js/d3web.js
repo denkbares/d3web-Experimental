@@ -485,7 +485,7 @@ function initFunctionality() {
         }
         if(!itree){
             d3web_addFacts();
-            // TODO: we need a final save for ITree too one time!
+        // TODO: we need a final save for ITree too one time!
         }
         d3web_prepareSave();
     });
@@ -919,6 +919,7 @@ function d3web_addFacts() {
                 //init_all();
                 setup();
                 initFunctionality();
+                
             }
         },
         error : function(html) {
@@ -1499,7 +1500,7 @@ function d3web_loadCase(filename, clear) {
     
     } else {
        
-       if(logging){
+        if(logging){
             var now = ue_getCurrentDate();
             link = $.query.set("action", "loadcase").set("fn", filename).set("timestring", now).toString();
         } else {

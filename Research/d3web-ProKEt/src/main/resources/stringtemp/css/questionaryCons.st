@@ -163,7 +163,7 @@ li.noListMarker {list-style-type: none;}
 
 #solutionPanel{background-color: lightslategray; color: white; }
 
-#sol_heading{font-weight: bold; font-size: 1.1em; margin-bottom: 10px; 
+#sol_heading{font-weight: bold; font-size: 1.1em; 
 margin-left: 20px;}
 
 .solution{margin-top:5px; margin-left:30px; margin-right: 10px; display: table-row;}
@@ -177,3 +177,5 @@ margin-left: 20px;}
 .solution > img { margin-right: 5px; margin-left:12px; display: table-cell;}
 
 .solutiontext{display: table-cell; vertical-align:middle;}
+
+.bottomSpace{margin-bottom: 10px;}
