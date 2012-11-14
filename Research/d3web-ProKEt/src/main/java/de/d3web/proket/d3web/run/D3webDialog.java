@@ -1163,6 +1163,7 @@ public class D3webDialog extends HttpServlet {
 
         Session d3webSession =
                 D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
+        
         httpSession.setAttribute(D3WEB_SESSION, d3webSession);
         httpSession.setAttribute("lastLoaded", "");
         httpSession.setAttribute("handleBrowsers", null);
