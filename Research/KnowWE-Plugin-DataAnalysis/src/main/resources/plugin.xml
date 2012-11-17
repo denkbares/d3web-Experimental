@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-DataAnalysis" version="0.0.1">
+    
+    <requires>
+        <import plugin-id="KnowWEExtensionPoints" />
+    </requires>
+    
+    <runtime>
+        <library id="de.knowwe" path="." type="code">
+            <export prefix="*" />
+        </library>
+        <library id="webapp" path="webapp/" type="resources">
+            <export prefix="*" />
+        </library>
+    </runtime>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="Discretization">
+		<parameter id="class"
+			value="de.knowwe.dataAnalysis.DiscretizationMarkup" />
+		<parameter id="name" value="Discretization" />
+		<parameter id="description" value="Type to create discretization knowledge." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="6" />
+		<parameter id="scope" value="root" />	
+	</extension>
+	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="SimpleTermDefinition">
+		<parameter id="class"
+			value="de.knowwe.dataAnalysis.SimpleTermDefinition" />
+		<parameter id="name" value="SimpleTermDefinition" />
+		<parameter id="description" value="Type to create knowledge analysis terms." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="6" />
+		<parameter id="scope" value="root" />	
+	</extension>
+	
+</plugin>
