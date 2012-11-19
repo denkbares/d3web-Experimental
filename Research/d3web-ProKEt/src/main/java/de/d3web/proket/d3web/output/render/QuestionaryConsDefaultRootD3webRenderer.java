@@ -25,7 +25,7 @@ import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.utils.D3webToJSTreeUtils;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import de.d3web.proket.output.container.ContainerCollection;
-import javax.servlet.ServletContext;
+import de.d3web.proket.utils.GlobalSettings;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.antlr.stringtemplate.StringTemplate;
@@ -114,10 +114,12 @@ public class QuestionaryConsDefaultRootD3webRenderer extends DefaultRootD3webRen
         st.setAttribute("fulljs", cc.js.generateOutput());
         st.setDefaultArgumentValues();
 
-        st.setAttribute("naviTreeSolutions",
+        if(UISettings.getInstance().hasDiagnosisNavi()){
+            st.setAttribute("naviTreeSolutions",
                 D3webToJSTreeUtils.getJSTreeHTMLFromD3webSolutions(
                 D3webConnector.getInstance().getKb()));
-
+        }
+        
         SolutionPanelD3webRenderer spr = 
                 D3webRendererMapping.getInstance().getSolutionPanelRenderer();
         
@@ -138,7 +140,7 @@ public class QuestionaryConsDefaultRootD3webRenderer extends DefaultRootD3webRen
         if (D3webUESettings.getInstance().isLogging()) {
             cc.js.enableClickLogging();
         }
-
+        
         cc.js.setQuestionaryCons();
 
         cc.js.add("$(function() {init_all();});", 1);

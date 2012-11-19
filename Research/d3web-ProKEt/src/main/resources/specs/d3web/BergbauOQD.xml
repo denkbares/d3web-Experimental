@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="Bergbau Diagnose und Verbesserung"  
+	dtype="singleform" 
+	indicationmode="hide_unindicated"
+	dstrategy="nextquestion"
+	css="questionaryCons, diagnosisVisu" 
+	dialogcolumns="1"
+	questionnairecolumns="3"
+	questioncolumns="1"
+	uiprefix = "OQDCons"
+        login = ""
+        required = "NONE"
+	language = ""
+        debug = "false"
+        solutionExplanation = "TEXTUAL" 
+        diagnosisNavi = "FALSE"
+        questionnaireNavi = "FALSE"
+        >
+	<data kb="Bergbau191112.d3web" />
+        <ue logging = "FALSE" />
+</dialog>

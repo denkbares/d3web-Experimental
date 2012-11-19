@@ -60,6 +60,7 @@
 
     <div id="statusRow" class="row">
         <div id="statusMessage" class="statusMessageOK cell">
+            $if(statusmessage)$$statusmessage$$endif$
         </div>
         <div id='progressIndicator'>
                 <img src='img/processCircle.gif' alt='processCircle' width="22px" height=22px;/>

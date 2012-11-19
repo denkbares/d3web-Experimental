@@ -23,6 +23,7 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.utils.D3webUtils;
@@ -59,8 +60,9 @@ public class AnswerZCD3webRenderer extends AbstractD3webRenderer implements Answ
 
         StringTemplate st = null;
 
-        // if we have an image question 
-        // TODO later evtl: make ProkEt property for img upload and quere here
+        // if we have an image upload question 
+        // TODO later evtl: make ProkEt property for img upload and quere here!!!
+        // TODO image upload very EuraHS specific, refactor see above
         if (to.getName().contains("Upload images")
                 || to.getName().contains("Bilder hochladen")) {
             // get the template. In case user prefix was specified, the specific
@@ -84,12 +86,12 @@ public class AnswerZCD3webRenderer extends AbstractD3webRenderer implements Answ
             StringBuilder linkBui = new StringBuilder();
             linkBui.append("http://promotion.medizin.uni-wuerzburg.de/idb/index.jsp");
             linkBui.append("?ext=eurahs");
-            
+
             String token = DateCoDec.getCode();
             linkBui.append("&t=" + token);  // TODO: get Token
-            
+
             String mailPure = "";
-            if(httpSession.getAttribute("user")!=null){
+            if (httpSession.getAttribute("user") != null) {
                 mailPure = httpSession.getAttribute("user").toString();
             } else {
                 mailPure = "default@mymail.com"; // just a default for null cases
@@ -100,6 +102,38 @@ public class AnswerZCD3webRenderer extends AbstractD3webRenderer implements Answ
 
             st.setAttribute("text", linkBui.toString());
             st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
+        } // normal case: rendering info texts inside the question
+        else {
+
+            // get the template. In case user prefix was specified, the specific
+            // TemplateName is returned, otherwise the base object name.
+            st = TemplateUtils.getStringTemplate(
+                    super.getTemplateName("ZcAnswer"), "html");
+
+            System.out.println("ZCQuestion: " + getID(c));
+            st.setAttribute("fullId", getID(c));// .getName().replace(" ", "_"));
+            st.setAttribute("realAnswerType", "info");
+            st.setAttribute("parentFullId", getID(to));// getName().replace(" ",
+            st.setAttribute("title", D3webUtils.getTOPrompt(to, loc));
+            // "_"));
+
+            // set the tooltip if exists
+            String resString = c.getInfoStore().getValue(ProKEtProperties.POPUP);
+            if (resString != null) {
+                st.setAttribute("tooltip", resString);
+            }
+
+            // render the descriptive text
+            String text = "";
+            if(!to.getInfoStore().getValue(MMInfo.DESCRIPTION).equals(null)){
+                text = to.getInfoStore().getValue(MMInfo.DESCRIPTION);
+            }
+            st.setAttribute("descriptionText", text);
+            System.out.println("ZCAnswer: " + text);
+            
+            st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
+
+
         }
 
 

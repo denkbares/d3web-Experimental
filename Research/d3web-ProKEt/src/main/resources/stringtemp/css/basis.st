@@ -161,3 +161,5 @@ body,table,div {
 .tableNoTopMargin{margin-top: 0px;}
 
 .fontOnePointTwo{font-size: 1.2em;}
+
+#leftBorderSpacer{min-width: 20px; }

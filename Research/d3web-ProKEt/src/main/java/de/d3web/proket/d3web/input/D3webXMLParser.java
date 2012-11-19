@@ -278,6 +278,14 @@ public class D3webXMLParser {
     public Boolean getDebug() {
         return XMLUtils.getBoolean((Element) dialogSpec, "debug", Boolean.FALSE);
     }
+    
+    public Boolean getDiagnosisNavi(){
+        return XMLUtils.getBoolean((Element) dialogSpec, "diagnosisNavi", Boolean.FALSE);
+    }
+    
+    public Boolean getQuestionnaireNavi(){
+        return XMLUtils.getBoolean((Element) dialogSpec, "questionnaireNavi", Boolean.FALSE);
+    }
 
     /*
      * DATA PROPERTIES, i.e. definition of the knowledge base
@@ -299,6 +307,7 @@ public class D3webXMLParser {
         return kbname;
     }
 
+    
     /*
      * USABILITY EXTENSION STUFF TODO: write them to separate confic file (like:
      * UE CONNECTOR) and use them for creating the usability stuff
@@ -332,4 +341,6 @@ public class D3webXMLParser {
     public String getAnalysisOutputPath() {
         return XMLUtils.getStr((Element) ueSpec, "analysisoutput_path", "");
     }
+    
+    
 }

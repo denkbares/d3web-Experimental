@@ -46,6 +46,8 @@ public class GlobalSettings {
     private GlobalSettings() {
     }
 
+     private static String FILESEP = System.getProperty("file.separator");
+     
     /*
      * Paths
      */
@@ -60,9 +62,15 @@ public class GlobalSettings {
     private final String rendererBasePath = "de.d3web.proket.output.render";
     private final String applicationBasePath = "/controlcenterResources";
     private final String resourcesPath = "resources/";
-    
     private final String docloaderBasePath = "/stringtemp/html/docLoad";
-            
+    
+    private final String exceptionReportTmp = "";
+    private final String exceptionReportFinal = "";        
+    
+    
+   
+ 
+           
     /*
      * File names
      */
@@ -104,7 +112,11 @@ public class GlobalSettings {
     private String questionCount = "";
     private String uegroup = "";
     private String uesystemtype = "";
-
+    
+    private String exceptionReportFinalFileName = "EXCEPTION_FINAL.html";
+    private String exceptionReportTmpFileName = "ExceptionReportTmp.txt";
+    private String eventLogFileName = "EVENTLOG.txt";
+    private String uploadFilesFolderName = "UPFiles";
 
     /*
      * The getters for retrieving all those values
@@ -271,4 +283,40 @@ public class GlobalSettings {
     public void setUploadFilesBasePath(String path){
         this.uploadFilesBasePath = path;
     }
+    
+    public String getSyslogsBasePath(){
+        return  this.getUploadFilesBasePath() + FILESEP + "syslogs";              
+    }
+    
+    public String getExceptionReportTmpFilePath(){
+        return this.getSyslogsBasePath() + FILESEP + getExceptionReportTmpFileName();
+    }
+
+    public String getExceptionReportFinalFilePath(){
+        return this.getSyslogsBasePath() + FILESEP + getExceptionReportFinalFileName();
+    }
+    
+    public String getExceptionReportFinalFileName(){
+        return this.exceptionReportFinalFileName;
+    }
+
+    public String getExceptionReportTmpFileName(){
+        return this.exceptionReportTmpFileName;
+    }
+    
+    public String getEventLogFileName(){
+        return this.eventLogFileName;
+    }
+    
+    public String getSyslogsRelativePath(){
+        return FILESEP + this.uploadFilesFolderName + FILESEP + "syslogs";
+    }
+    
+     public String getSyslogsRelativePathForWeb(){
+        return this.uploadFilesFolderName + "/syslogs";
+    }
+
+  
+     
+     
 }

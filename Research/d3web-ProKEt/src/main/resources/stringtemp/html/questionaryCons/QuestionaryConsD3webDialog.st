@@ -60,13 +60,20 @@ $fulljs$
 
     <div id="middle" class="row">
 	<!-- tree style solutions navigation on the left side //-->
-        <div class="sol_bgSpacer"></div>
-	<div id="treeNaviSolutions" class="cell"> 
+        
+        $if(diagnosisNavi)$
+	<div class="sol_bgSpacer"></div>
+        <div id="treeNaviSolutions" class="cell"> 
             <ul>
                 $naviTreeSolutions$ 
             </ul>
         </div>  
         <div class="sol_bgSpacer"></div>
+        $else$
+        <div id="leftBorderSpacer"></div>
+
+        $endif$
+        
 	
 	<!-- actual dialog content //-->
 	<div id="contents" class="cell">

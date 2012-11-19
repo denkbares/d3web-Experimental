@@ -34,6 +34,9 @@ var upfilename;
  * TODO: maybe refactor */
 $(function(){
      
+    /* fix the display of C:\fakepath\... in Safari etc browsers... */
+    var fileUploadID = "origKBUploadField";
+    
     var Request = {	
         parameter: function(name) {
             return this.parameters()[name];
@@ -57,7 +60,7 @@ $(function(){
     var status = Request.parameter("upERR");
     upfilename = Request.parameter("upfilename");
     
-    
+    //dmOpenExceptionReport();
     
     // some error handling for uploading file
     if(status != undefined && status != ""){
@@ -70,18 +73,18 @@ $(function(){
             removeClass("statusMessageOK").addClass("statusMessageERR");
         } 
         if(status=="nokb"){
-            $('#statusMessage').html("Bitte Wissensbasis (.doc/.zip/.d3web) auswählen!")
+            $('#statusMessage').html("<b>Bitte Wissensbasis Dokument (.doc/.d3web) auswählen!</b>")
             removeClass("statusMessageOK").addClass("statusMessageERR");
         }
     //window.location.href = removeParameter(window.location.href, "upERR");
     }
     
     if(statusKB!=undefined && statusKB != "" && statusKB=="done"){
-        $("#statusMessage").html("Wissensbasis hochgeladen.");
+        $("#statusMessage").html("Wissensbasis <b>" + upfilename + "</b> hochgeladen.");
     }
     
     if(statusSpecs!=undefined && statusSpecs != "" && statusSpecs=="done"){
-        $("#statusMessage").html("Spezifikation hochgeladen.");
+        $("#statusMessage").html("Spezifikation <b>" + upfilename + "</b> hochgeladen.");
     //window.location.href = removeParameter(window.location.href, "upSPEC");
     //window.location.href = removeParameter(window.location.href, "upfilename");
     }
@@ -100,7 +103,7 @@ function parseDocToKB(id){
     link = $.query.set("action", "parseKBDoc").set("docname", docname).toString();
     link = window.location.href.replace(window.location.search, "") + link;
    
-    $("#statusMessage").html("Wissensbasis-Datei wird geparst...");
+    $("#statusMessage").html("Wissensbasis Dokument <b>" + docname + "</b> wird geparst...");
     $("#progressIndicator").show();
     
 
@@ -112,7 +115,7 @@ function parseDocToKB(id){
             $("#progressIndicator").hide();
             if(html.indexOf("success")!=-1){
                 //alert("everything's fine");
-                $("#statusMessage").html("Wissensbasis erfolgreich geparst.");
+                $("#statusMessage").html("Wissensbasis <b>" + docname + "</b> erfolgreich geparst.");
                 var kbSelectContent = html.replace("success;;;", "");
                 //alert(kbSelectContent);
                 $("#d3webSelect").html(kbSelectContent);
@@ -122,10 +125,12 @@ function parseDocToKB(id){
                 $("#ErrorReportImgButton img").attr("src", "img/ErrorReport.png");
                 var errorReportLink = html.toString().replace("showErrFile;", "");
                 $("#ErrorReportImgButton img").attr("onclick", "dmOpenErrorReport('" + errorReportLink +"')");
-                $("#statusMessage").html("Fehler beim Parsen! Bitte Fehlerbericht lesen.")
+                $("#statusMessage").html("Fehler beim Parsen! Bitte Fehlerbericht lesen.").addClass("statusMessageERR").removeClass("statusMessageOK");
                 
+            } else if(html.indexOf("showExceptionFile") != -1){
+                dmOpenExceptionReport();
             } else {
-                $("#statusMessage").html("Bitte laden Sie ein valides Dokument hoch.")
+                $("#statusMessage").html("Bitte laden Sie ein valides Dokument hoch.").addClass("statusMessageERR").removeClass("statusMessageOK");
             }
         } 
         
@@ -133,7 +138,26 @@ function parseDocToKB(id){
 }
 
 function dmOpenErrorReport(errorReportLink){
-    window.open(errorReportLink, "Fehlerbericht", "width=800,height=600,left=100,top=200"); 
+    window.open(errorReportLink, "Fehlerbericht", "scrollbars=yes,left=100,top=200,width=800,height=600"); 
+    $("#statusMessage").html("");
+}
+
+function dmOpenExceptionReport(){
+    
+    link = $.query.set("action", "finalizeExceptionReport");
+    link = window.location.href.replace(window.location.search, "") + link;
+   
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        success : function(html) {
+            window.open(html, "Exception-Bericht", "scrollbars=yes,left=100,top=200,width=800,height=600"); 
+            $("#statusMessage").html("");
+        } 
+        
+    });
+    
 }
 
 /* calls functionality for assembling a dialog servlet string from the
@@ -162,7 +186,7 @@ function assembleDialog(){
         url : link,
         cache : false, // needed for IE, call is not made otherwise
         success : function(html) {
-            if(html.indexOf("error")==-1){
+            if(html.indexOf("ERROR")==-1){
                 // store link in hidden field
                 $("#latestDialogLink").html(html); 
                 // open the dialog in a new window 
@@ -170,8 +194,8 @@ function assembleDialog(){
                 // activate button for storing dialog to the user's list'
                 $("#StoreImgButton img").attr("src", "img/Store.png");
             } else {
-                // extra error div or use upload status div?
-                alert("assembleDialog error");
+                $("#statusMessage").html("Assemble Dialog Exception!").addClass("statusMessageERR").removeClass("statusMessageOK");
+            // TODO: open Exception Report automatically
             }
         } 
     });
@@ -183,8 +207,8 @@ function assembleDialog(){
 function writeToFakeField(origFieldID){
     
     if(origFieldID.indexOf("KBUpload")!= -1){
-        $("#docfilename").val($("#" + origFieldID).val());
-        $("#docnamestore").val($("#" + origFieldID).val());
+        $("#docfilename").val(fixFakePathDisplay(origFieldID));
+        $("#docnamestore").val(fixFakePathDisplay(origFieldID));
         
     }else if (origFieldID.indexOf("SpecUpload")!= -1){
         $("#specfilename").val($("#" + origFieldID).val());
@@ -215,7 +239,7 @@ function storeDialogToUsersList(){
         url : link,
         cache : false, // needed for IE, call is not made otherwise
         success : function(html) {
-            if(html.indexOf("error")==-1){
+            if(html.indexOf("EXCEPTION")==-1){
                 // UPDATE THE LINKLIST
                 if (html.indexOf("##replaceid##")!= -1) {
                     var updateArray = html.split(/##replaceid##|##replacecontent##/);
@@ -228,7 +252,7 @@ function storeDialogToUsersList(){
                     }
                 }
             } else {
-                alert("storeDialogToUsersList error");
+            // open Exception Report
             }
         } 
     });
@@ -268,12 +292,20 @@ function deleteSelectedKB(){
             url : link,
             cache : false, // needed for IE, call is not made otherwise
             success : function(html) {
-                if(html.indexOf("error")==-1){
+                if(html.indexOf("ERROR")==-1){
                     $("#statusMessage").html("Wissensbasis " + kbToDelete + " entfernt.").addClass("statusMessageOK").removeClass("statusMessageERR");
-                    // trx to assemble new link here with aprameter for deleted
-                       // check deleted in function() and append statusMessage not here
-            } else {
-                    $("#statusMessage").html("Wissensbasis konnte nicht gelöscht werden!").addClass("statusMessageERR").removeClass("statusMessageOK");
+                    if (html.indexOf("##replaceid##")!= -1) {
+                        var updateArray = html.split(/##replaceid##|##replacecontent##/);
+                        for (var i = 0; i < updateArray.length - 1; i+=2) {
+                            if (updateArray[i].length == 0) {
+                                i--;
+                                continue;
+                            }
+                            $("#" + updateArray[i]).replaceWith(updateArray[i + 1]);
+                        }
+                    }
+                } else {
+                    $("#statusMessage").html("Wissensbasis konnte nicht gelöscht werden! Bitte kontaktieren Sie den Systemadministrator.").addClass("statusMessageERR").removeClass("statusMessageOK");
                 }
             } 
         });
@@ -311,4 +343,13 @@ function setStatusMessage(message, error){
 
 function clearStatusMessage(){
     $("#statusMessage").html("").removeClass("statusMessageOK").removeClass("statusMessageERR");
+}
+
+function fixFakePathDisplay(fileUploadID){
+   
+    //get our form field
+    var a = $('#'+fileUploadID);
+    b = encodeURI(a.val());
+    c = b.replace("C:%5Cfakepath%5C","");
+    return c;
 }

@@ -1803,7 +1803,7 @@ public class D3webDialog extends HttpServlet {
         d3wcon.setDialogStrat(d3webParser.getStrategy());
         d3wcon.setDialogType(d3webParser.getType());
         d3wcon.setIndicationMode(d3webParser.getIndicationMode());
-
+       
         uis.setDialogColumns(d3webParser.getDialogColumns());
         uis.setQuestionColumns(d3webParser.getQuestionColumns());
         uis.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
@@ -1812,6 +1812,8 @@ public class D3webDialog extends HttpServlet {
         uis.setUIprefix(d3webParser.getUIPrefix());
         uis.setLoginMode(d3webParser.getLoginMode());
         uis.setSolutionExplanationType(d3webParser.getSolutionExplanationType());
+        uis.setDiagnosisNavi(d3webParser.getDiagnosisNavi());
+        uis.setQuestionnaireNavi(d3webParser.getQuestionnaireNavi());
         
 
         String uegroup = d3webParser.getUEGroup() != null ? d3webParser.getUEGroup() : "";

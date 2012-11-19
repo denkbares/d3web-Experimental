@@ -77,6 +77,10 @@ public class UISettings {
     
     private static UISettings instance;
     
+    private boolean diagnosisNavi = false;
+    
+    private boolean questionnaireNavi = false;
+    
     public static UISettings getInstance() {
         if (instance == null) {
             instance = new UISettings();
@@ -160,5 +164,20 @@ public class UISettings {
     public D3webXMLParser.SolutionExplanationType getSolutionExplanationType() {
         return this.solExpType;
     }
-    
+ 
+      public boolean hasDiagnosisNavi() {
+        return diagnosisNavi;
+    }
+
+    public void setDiagnosisNavi(boolean diagnosisNavi) {
+        this.diagnosisNavi = diagnosisNavi;
+    }
+
+    public boolean hasQuestionnaireNavi() {
+        return questionnaireNavi;
+    }
+
+    public void setQuestionnaireNavi(boolean questionnaireNavi) {
+        this.questionnaireNavi = questionnaireNavi;
+    }
 }

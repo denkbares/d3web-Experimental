@@ -153,7 +153,8 @@ input{border: 1px dotted darkgrey;
     padding-right: 10px;
     padding-top: 10px;
     text-align: right;
-    vertical-align: middle;}
+    vertical-align: middle;
+    max-width: 300px;}
 
 #UploadSpacer{width: 200px; height: 20px; padding-left: 10px; 
     padding-right: 10px; 

@@ -3,9 +3,7 @@
 // E.G. GENERAL TOOLTIP STUFF
 
 $(function(){
-    /* fix the display of C:\fakepath\... in Safari etc browsers... */
-    var fileUploadID = "origKBUploadField";
-    fixFakePathDisplay(fileUploadID);    
+  
         
     $('a').click(function(event) {
         event.preventDefault();
@@ -831,17 +829,3 @@ function deleteExpandCookie(qname){
 
 
 
-function fixFakePathDisplay(fileUploadID){
-    //alert(fileUploadID);
-    //get our form field
-    var a = $('#'+fileUploadID);
-        b = encodeURI(a.value);
-        c = b.replace("C:%5Cfakepath%5C","");
-        //alert(b);
-        //alert(c)
-    //We then listen for the value changing and
-    //remove the C:\fakepath\ from it! easy!
-    a.onchange = function () {
-        this.value = c;
-    }
-}

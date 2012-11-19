@@ -7,59 +7,30 @@ package de.d3web.proket.utils;
 import java.io.*;
 
 /**
- * Utility Class for getting tailored PrintStreams for writing dedicated
- * event- and error log files.
- * 
+ * Utility Class for getting tailored PrintStreams for writing dedicated event-
+ * and error log files.
+ *
  * @author Martina Freiberg
  */
 public class SystemLoggerUtils {
 
-    private static String FILESEP = System.getProperty("file.separator");
+    
+    private static GlobalSettings GLOBSET = GlobalSettings.getInstance();
+
+    
 
     /**
      * Retrieves the default errorlog stream, which writes to the file
-     * webapppath/UPFiles/syslogs/ERRORLOG.txt
-     * @return 
-     */
-    public static PrintStream getErrorLoggerStream() {
-        try {
-            String logdir = GlobalSettings.getInstance().getUploadFilesBasePath()
-                    + FILESEP + "syslogs";
-
-            File logpath = new File(logdir);
-            File logfile = new File(logdir, "ERRORLOG.txt");
-            if (!logpath.exists()) {
-                logpath.mkdirs();
-                if (!logfile.exists()) {
-                    logfile.createNewFile();
-                }
-
-            }
-
-            PrintStream el = new PrintStream(
-                    new BufferedOutputStream(new FileOutputStream(
-                    logfile)), true);
-            return el;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-        return null;
-    }
-
-     /**
-     * Retrieves the default errorlog stream, which writes to the file
      * webapppath/UPFiles/syslogs/EVENTLOG.txt
-     * @return 
+     *
+     * @return
      */
     public static PrintStream getEventLoggerStream() {
         try {
-            String logdir = GlobalSettings.getInstance().getUploadFilesBasePath()
-                    + FILESEP + "syslogs";
-            
+            String logdir = GLOBSET.getSyslogsBasePath();
+
             File logpath = new File(logdir);
-            File logfile = new File(logdir, "EVENTLOG.txt");
+            File logfile = new File(logdir, GLOBSET.getEventLogFileName());
             if (!logpath.exists()) {
                 logpath.mkdirs();
                 if (!logfile.exists()) {
@@ -68,7 +39,7 @@ public class SystemLoggerUtils {
             }
 
 
-          PrintStream es = new PrintStream(
+            PrintStream es = new PrintStream(
                     new BufferedOutputStream(new FileOutputStream(
                     logfile)), true);
             return es;
@@ -79,4 +50,39 @@ public class SystemLoggerUtils {
         }
         return null;
     }
+
+    /**
+     * Retrieves the default exception logger stream, which writes to the file
+     * webapppath/UPFiles/syslogs/ExceptionReportTmp.txt
+     *
+     * @return
+     */
+    public static PrintStream getExceptionLoggerStream() {
+        try {
+            String logdir = 
+                    GlobalSettings.getInstance().getSyslogsBasePath();
+
+            File logpath = new File(logdir);
+            File logfile = new File(logdir, GLOBSET.getExceptionReportTmpFileName());
+            if (!logpath.exists()) {
+                logpath.mkdirs();
+                if (!logfile.exists()) {
+                    logfile.createNewFile();
+                }
+            }
+
+            
+            PrintStream es = new PrintStream(
+                    new BufferedOutputStream(new FileOutputStream(
+                    logfile)), true);
+            return es;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return null;
+    }
+
+   
 }

@@ -19,6 +19,7 @@
  */
 package de.d3web.proket.d3web.run;
 
+import com.sun.tools.internal.xjc.model.CReferencePropertyInfo;
 import converter.Html2KnowWECompiler;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.utils.Utils;
@@ -59,9 +60,10 @@ public class DialogManager extends HttpServlet {
 
     GlobalSettings GLOBSET = GlobalSettings.getInstance();
     protected D3webXMLParser d3webParser;
-    private static String PATHSEP = System.getProperty("file.separator");
+    private static String FILESEP = System.getProperty("file.separator");
     protected static final String REPLACECONTENT = "##replacecontent##";
     protected static final String REPLACEID = "##replaceid##";
+    protected static final String LINESEP = System.getProperty("line.separator");
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -99,7 +101,7 @@ public class DialogManager extends HttpServlet {
 
         } catch (Exception e) {
             // all Exceptions go to the real Errorlog, however
-            e.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
+            e.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
         }
     }
 
@@ -133,6 +135,8 @@ public class DialogManager extends HttpServlet {
             storeDialogToUsersList(request, response, httpSession);
         } else if (action.equalsIgnoreCase("deleteSelectedKB")) {
             deleteSelectedKB(request, response, httpSession);
+        } else if (action.equalsIgnoreCase("finalizeExceptionReport")) {
+            finalizeExceptionReport(request, response, httpSession);
         }
     }
 
@@ -163,30 +167,54 @@ public class DialogManager extends HttpServlet {
         String cssString = FileUtils.getString(css);
         st.setAttribute("css", cssString);
 
-        fillFilesList("d3web", st);
-        fillFilesList("specs", st);
-        fillDialogList(st);
+        boolean withoutExceptions = false;
+        if (!fillFilesList("d3web").toString().contains("EXCEPTION")) {
+            withoutExceptions = true;
+        }
+        st.setAttribute("fileselectopts_" + "d3web", fillFilesList("d3web").toString());
 
-        // output
+        if (!fillFilesList("specs").toString().contains("EXCEPTION")) {
+            withoutExceptions = true;
+        }
+        st.setAttribute("fileselectopts_" + "specs", fillFilesList("specs").toString());
+
+
+        if (!fillDialogList().toString().contains("EXCEPTION")) {
+            withoutExceptions = true;
+        }
+        st.setAttribute("dialogLinkList", fillDialogList().toString());
+
+
         PrintWriter writer = response.getWriter();
+        if (!withoutExceptions) {
+            st.setAttribute("statusmessage", "An internal program exception occured. Please see Exception Report!");
+            // TODO write Exception to Exception Report
+        }
+        // output
         writer.write(st.toString());
-
         writer.close();
         System.err.println("Show the Servlet - SUCCESS");
     }
 
-    private void fillDialogList(StringTemplate st) {
+    /**
+     * Fill the dialog list HTML
+     *
+     * @param st the StringTemplate to be filled
+     * @return true if filling the dialog list was successful, false otherwise
+     * (e.g. in case of an exception)
+     */
+    private StringBuilder fillDialogList() {
+
+        StringBuilder bui = new StringBuilder();
         System.err.println("Fill Dialog list - try to get and display stored dialogs...");
         try {
             BufferedReader br;
-            StringBuilder bui = new StringBuilder();
+
             String line = "";
             br = new BufferedReader(
                     new InputStreamReader(
                     new FileInputStream(
-                    GLOBSET.getUploadFilesBasePath() + PATHSEP + "dialogs.txt")));
-
-            bui = new StringBuilder();
+                    GLOBSET.getUploadFilesBasePath() + FILESEP + "dialogs.txt")));
             line = "";
             while ((line = br.readLine()) != null) {
                 bui.append("<div class='row'>");
@@ -197,17 +225,20 @@ public class DialogManager extends HttpServlet {
                 bui.append("</a></div>");
             }
             br.close();
-            st.setAttribute("dialogLinkList", bui.toString());
             System.err.println("Fill Dialog list - SUCCESS");
 
+
         } catch (IOException e1) {
-            e1.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
+            e1.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+            bui.append("EXCEPTION");
         } catch (Exception e) {
-            e.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
+            e.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+            bui.append("EXCEPTION");
         }
+        return bui;
     }
 
-    private String fillFilesList(String subfolder, StringTemplate st) {
+    private StringBuilder fillFilesList(String subfolder) {
 
         System.err.println("Fill " + subfolder + " files list - try to get and display " + subfolder + " files...");
         // assemble path where files are stored
@@ -221,19 +252,22 @@ public class DialogManager extends HttpServlet {
 
         StringBuilder bui = new StringBuilder();
         if (files.size() > 0) {
+
             for (File file : files) {
-                bui.append("<option");
-                // omitt filetype ending
-                String filename =
-                        file.getName().split("\\.")[0];
-                bui.append(" title='" + filename + "'>");
-                bui.append(filename);
-                bui.append("</option>");
+                if (!file.getName().equals("empty.txt")
+                        && !file.getName().equals("wikiCode.d3web")) {
+                    bui.append("<option");
+                    // omitt filetype ending
+                    String filename =
+                            file.getName().split("\\.")[0];
+                    bui.append(" title='" + filename + "'>");
+                    bui.append(filename);
+                    bui.append("</option>");
+                }
             }
-            st.setAttribute("fileselectopts_" + subfolder, bui.toString());
             System.err.println("Fill " + subfolder + " files list - SUCCESS");
         }
-        return bui.toString();
+        return bui;
     }
 
     protected void deleteSelectedKB(HttpServletRequest request,
@@ -246,7 +280,7 @@ public class DialogManager extends HttpServlet {
         System.err.println("\t - kbName selected: " + kbName);
 
         boolean deleteSuccess = false;
-        String path = GLOBSET.getUploadFilesBasePath() + PATHSEP
+        String path = GLOBSET.getUploadFilesBasePath() + FILESEP
                 + "d3web/";
 
         System.err.println("\t - kb filepath on server: " + path);
@@ -255,13 +289,17 @@ public class DialogManager extends HttpServlet {
             deleteSuccess = fileToDelete.delete();
         }
 
-        // send link text back to JS
         PrintWriter writer = response.getWriter();
         if (deleteSuccess) {
             System.err.println("Delete selected KB - SUCCESS");
-
+            
+            writer.append(REPLACEID + "d3webSelect");
+            writer.append(REPLACECONTENT);
+            writer.append("<select id='d3webSelect' class='d3webSelect' size='12' name='d3webfiles'>");
+            writer.append(fillFilesList("d3web"));
+            writer.append("</select>");
         } else {
-            writer.write("error");
+            writer.write("ERROR--DeleteSelectedKB");
         }
         writer.close();
     }
@@ -301,7 +339,7 @@ public class DialogManager extends HttpServlet {
 
         if (specName != null) {
 
-              // assemble ITree Servlet Link
+            // assemble ITree Servlet Link
             if (specName.equalsIgnoreCase(DialogType.ITREE.toString())) {
 
                 dialogLink = GLOBSET.getWebAppWarName() + "/ITreeDialog?src="
@@ -309,7 +347,7 @@ public class DialogManager extends HttpServlet {
                         + "&dialogID=" + d3webKBName + "AND" + specName;
 
 
-        } else if (specName.contains(DialogType.STANDARD.toString())) {
+            } else if (specName.contains(DialogType.STANDARD.toString())) {
                 //dialogLink = GLOBSET.getWebAppWarName() + "/StandardDialog?src="
                 //      + specFile.getName().replace(".xml", "")
                 //    + "&dialogID=" + d3webKBName + "AND" + specName;
@@ -326,11 +364,10 @@ public class DialogManager extends HttpServlet {
             System.err.println("Assemble dialog - SUCCESS");
             writer.write(dialogLink);
         } else {
-            writer.write("error");
+            writer.write("ERROR--AssembleDialog");
         }
         writer.close();
     }
-
 
     /**
      * Stores a dialog link to the list of dialogs (currently: globa, one day:
@@ -361,7 +398,7 @@ public class DialogManager extends HttpServlet {
             try {
                 boolean exists = false;
                 File dialogsFile =
-                        new File(GLOBSET.getUploadFilesBasePath() + PATHSEP + "dialogs.txt");
+                        new File(GLOBSET.getUploadFilesBasePath() + FILESEP + "dialogs.txt");
                 System.err.println("\t - dialog store file: " + dialogsFile.getName());
 
                 BufferedReader br = new BufferedReader(
@@ -392,7 +429,7 @@ public class DialogManager extends HttpServlet {
                     br = new BufferedReader(
                             new InputStreamReader(
                             new FileInputStream(
-                            GLOBSET.getUploadFilesBasePath() + PATHSEP + "dialogs.txt")));
+                            GLOBSET.getUploadFilesBasePath() + FILESEP + "dialogs.txt")));
 
                     bui = new StringBuilder();
                     line = "";
@@ -411,12 +448,15 @@ public class DialogManager extends HttpServlet {
                     System.err.println("Store dialog - SUCCESS");
 
                 } catch (IOException e1) {
-                    e1.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
+                    writer.write("EXCEPTION--StoreDialogToList");
+                    e1.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+                    // TODO: write Exception to Exception Report file
                 }
 
             } catch (IOException e1) {
-                writer.write("error");
-                e1.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
+                writer.write("EXCEPTION--StoreDialogToList");
+                e1.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+                // TODO: write Exception to Exception Report file
             }
         }
     }
@@ -439,26 +479,31 @@ public class DialogManager extends HttpServlet {
         String docname = request.getParameter("docname").toString();
         System.err.println("\t - docname of doc to be parsed: " + docname);
 
-        boolean successfulParsed = false;
+        String parseResult = "";
 
         if (docname != null && !docname.equals("")) {
-            successfulParsed = kbDocSuccessfullyParsed(docname, http);
+            parseResult = kbDocSuccessfullyParsed(docname, http);
         } else {
             writer.append("parseErrorInvalidDoc");
         }
 
-        if (successfulParsed) {
+        if (parseResult.equals("ParseSuccess")) {
             StringTemplate st =
                     TemplateUtils.getStringTemplate("dialogManager/dialogManager", "html");
-            String d3webSelectOpts = fillFilesList("d3web", st);
+            String d3webSelectOpts = fillFilesList("d3web").toString();
             writer.append("success");
             writer.append(";;;" + d3webSelectOpts);
-        } else {
+        } else if (parseResult.equals("ParseError")) {
+            // don't need system filesep here because its gonna be web path
             String errFilePath =
-                    "UPFiles/" + docname + "_Error.html";
+                    GLOBSET.getWebAppWarName() + "/UPFiles/" + docname + "_Error.html";
             System.err.println("\t - error report filename: " + errFilePath);
             writer.append("showErrFile;" + errFilePath);
             System.err.println("Parse KB Document - show error report...");
+        } else if (parseResult.equals("ParseException")) {
+
+            writer.append("showExceptionFile");
+            System.err.println("Parse KB Document - show exception report...");
         }
     }
 
@@ -468,8 +513,9 @@ public class DialogManager extends HttpServlet {
      * @param docName
      * @return TODO: separate compiling to HTML Error report and parsing
      */
-    private boolean kbDocSuccessfullyParsed(String docName, HttpSession http) {
+    private String kbDocSuccessfullyParsed(String docName, HttpSession http) {
 
+        String status = "ParseException";
         System.err.println("Parse KB - parser call...");
         Html2KnowWECompiler compiler = new converter.Html2KnowWECompiler();
 
@@ -478,27 +524,27 @@ public class DialogManager extends HttpServlet {
 
         // TODO: clean up intermediate files!!
 
-        String doc = upPath + PATHSEP + docName;
+        String doc = upPath + FILESEP + docName;
 
-        String err = upPath + PATHSEP + docName + "_Error.html";
+        String err = upPath + FILESEP + docName + "_Error.html";
         File errFile = new File(err);
         errFile.canExecute();
         errFile.canWrite();
         errFile.canRead();
 
-        String tmp = upPath + PATHSEP + "tmp" + PATHSEP;
+        String tmp = upPath + FILESEP + "tmp" + FILESEP;
         File tmpF = new File(tmp);
         tmpF.canExecute();
         tmpF.canWrite();
         tmpF.canRead();
 
-        String d3web = upPath + PATHSEP + "d3web" + PATHSEP;
+        String d3web = upPath + FILESEP + "d3web" + FILESEP;
         File d3wF = new File(d3web);
         d3wF.canExecute();
         d3wF.canWrite();
         d3wF.canRead();
 
-        String knowwe = upPath + PATHSEP + "KnowWE-Headless-App.jar";
+        String knowwe = upPath + FILESEP + "KnowWE-Headless-App.jar";
         File kwF = new File(knowwe);
         kwF.canExecute();
         kwF.canWrite();
@@ -513,51 +559,55 @@ public class DialogManager extends HttpServlet {
         System.err.println("\t\t - d3web goal path: " + d3web);
         System.err.println("\t\t - knowwe headless app path: " + knowwe);
 
+        // TODO: write Exceptions to Exception Doc
         try {
             compileError = compiler.compileTo3web(doc, err, tmp, d3web, knowwe);
             System.err.println("\t - Compilation error?: " + compileError);
+            if (compileError) {
+                // something went wrong during compilation. 
+                System.err.println("\t - Compilation error occurred!");
+                status = "ParseError";
+            } else {
 
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
-        } catch (SAXException saxe) {
-            saxe.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
-        } catch (IOException ioe) {
-            ioe.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
-        } catch (InterruptedException ine) {
-            ine.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
-        } catch (NullPointerException npe){
-            npe.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
-        } catch (Exception e) {
-            e.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
-        }
+                // OK everything fine. Then rename d3web file and store latest one
+                // in webapp/session
+                checkAndRenameD3webFile(docName.replace(".doc", ""), d3wF, http);
 
-        if (compileError) {
-            // something went wrong during compilation. 
-            System.err.println("\t - Compilation error occurred!");
-            return false;
-        } else {
-
-            // OK everything fine. Then rename d3web file and store latest one
-            // in webapp/session
-            checkAndRenameD3webFile(docName.replace(".doc", ""), d3wF, http);
-
-            Runtime rt = Runtime.getRuntime();
-            try {
-                if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1) {
-                    // need to kill it on ?!
-                } else {
-                    System.err.println("\t - try to kill soffice on MAC systems...");
-                    String execute = "killall soffice.bin";
-                    System.err.println("\t - executing kill command: " + execute);
-                    rt.exec(execute);
+                Runtime rt = Runtime.getRuntime();
+                try {
+                    if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1) {
+                        // need to kill it on ?!
+                    } else {
+                        System.err.println("\t - try to kill soffice on MAC systems...");
+                        String execute = "killall soffice.bin";
+                        System.err.println("\t - executing kill command: " + execute);
+                        rt.exec(execute);
+                    }
+                } catch (IOException ioe) {
+                    ioe.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+                    status = "ParseException";
                 }
-            } catch (IOException ioe) {
-                ioe.printStackTrace(SystemLoggerUtils.getErrorLoggerStream());
+
+                System.err.println("Parse KB - parser call SUCCESS...");
+                status = "ParseSuccess";
             }
 
-            System.err.println("Parse KB - parser call SUCCESS...");
-            return true;
+        } catch (ParserConfigurationException pce) {
+            pce.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+        } catch (SAXException saxe) {
+            saxe.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+        } catch (IOException ioe) {
+            ioe.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+        } catch (InterruptedException ine) {
+            ine.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+        } catch (NullPointerException npe) {
+            npe.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+        } catch (Exception e) {
+            e.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
         }
+
+
+        return status;
     }
 
     /**
@@ -605,5 +655,108 @@ public class DialogManager extends HttpServlet {
             }
             return 0;
         }
+    }
+
+    protected void finalizeExceptionReport(HttpServletRequest request,
+            HttpServletResponse response, HttpSession http)
+            throws IOException {
+
+        PrintWriter writer = response.getWriter();
+        StringBuilder bui;
+
+        // first read existing contents
+        try {
+            String logdir = GLOBSET.getSyslogsBasePath();
+            File logpath = new File(logdir);
+            File logfile = new File(logdir, GLOBSET.getExceptionReportTmpFileName());
+            File finalExReportFile = new File(logdir, GLOBSET.getExceptionReportFinalFileName());
+            if (!logpath.exists()) {
+                logpath.mkdirs();
+            }
+            if (!logfile.exists()) {
+                logfile.createNewFile();
+            }
+            if (!finalExReportFile.exists()) {
+                finalExReportFile.createNewFile();
+            }
+
+            System.err.println("Finalize Exception Report - " + logfile.getAbsoluteFile());
+
+            /*
+             * Read existing File Contents in temporary exception report
+             */
+            BufferedReader br;
+            String line = "";
+            br = new BufferedReader(
+                    new InputStreamReader(
+                    new FileInputStream(
+                    logfile)));
+            bui = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                bui.append(line);
+                bui.append(LINESEP);
+            }
+            br.close();
+
+            /*
+             * Clear all previous contents of the final Exception Report
+             */
+            FileWriter fw = new FileWriter(finalExReportFile, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write("");
+            bw.close();
+
+
+            /*
+             * Write new Exception Report to final report File
+             */
+            String finalReportString = assembleExceptionReport(bui.toString());
+            System.out.println(finalReportString);
+            
+            Writer w = new OutputStreamWriter(new FileOutputStream(finalExReportFile), "UTF8");
+            BufferedWriter output = new BufferedWriter(w);
+            output.write(finalReportString);
+            output.newLine();
+            output.close();
+
+            String path =
+                    GLOBSET.getWebAppWarName() + "/" + 
+                    GLOBSET.getSyslogsRelativePathForWeb() + "/"
+                    + GLOBSET.getExceptionReportFinalFileName();
+
+            writer.append(path);
+
+        } catch (IOException e1) {
+            e1.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+        } catch (Exception e) {
+            e.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+        }
+    }
+
+    /**
+     * Assemble the final (HTML) String which makes up the final Exception
+     * Report to be displayed to the user
+     *
+     * @param exceptionString a String containing only the stored exception(s)
+     * @return a String containing the entire (HTML) exception report
+     */
+    private String assembleExceptionReport(String exceptionString) {
+        StringBuilder finalBui = new StringBuilder();
+        finalBui.append("<html>");
+        finalBui.append("<head>");
+        finalBui.append("<title>Exception (Ausnahme) Report</title>");
+        finalBui.append("</head>");
+        finalBui.append("<h3>Entschuldigung - Eine programminterne Exception (Ausnahme) "
+                + "ist aufgetreten. <br> "
+                + "<span style='color: red;'>Bitte leiten Sie den Inhalt dieses "
+                + "Fensters an den Systemadministrator weiter. </span> <br><br>"
+                + "Das Problem wird dann baldmöglichst behoben.<br /><br /><br />"
+                + "Fehlermeldung: </h3>");
+        finalBui.append("<h5>");
+        finalBui.append(exceptionString);
+        finalBui.append("</h5>");
+        finalBui.append("</html>");
+
+        return finalBui.toString();
     }
 }
