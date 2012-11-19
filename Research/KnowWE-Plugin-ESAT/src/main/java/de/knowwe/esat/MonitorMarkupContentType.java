@@ -21,7 +21,9 @@ package de.knowwe.esat;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.QuestionNum;
+import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.we.object.SolutionDefinition;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.compile.terminology.TermIdentifier;
@@ -56,9 +58,15 @@ public class MonitorMarkupContentType extends AbstractType {
 	class CreateSquareQuestionTermHandler extends SubtreeHandler<MonitorMarkupContentType> {
 
 		@Override
-		public Collection<Message> create(Article article, Section section) {
+		public Collection<Message> create(Article article, Section<MonitorMarkupContentType> section) {
 			Section<SolutionDefinition> solutionDef = Sections.findSuccessor(section,
 					SolutionDefinition.class);
+			Solution solution = solutionDef.get().getTermObject(article, solutionDef);
+			KnowledgeBase knowledgeBase = solution.getKnowledgeBase();
+			QuestionNum qSquare = new QuestionNum(knowledgeBase, solution.getName() + "_a");
+
+			knowledgeBase.getManager().putTerminologyObject(qSquare);
+
 			TermIdentifier termIdentifier = new TermIdentifier(solutionDef.get().getTermName(
 					solutionDef)
 					+ "_a");

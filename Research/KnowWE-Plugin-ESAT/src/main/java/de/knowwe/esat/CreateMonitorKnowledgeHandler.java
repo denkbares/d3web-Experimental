@@ -30,7 +30,8 @@ import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.inference.condition.ConditionTrue;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.terminology.QuestionNum;
+import de.d3web.core.knowledge.terminology.NamedObject;
+import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.manage.RuleFactory;
@@ -75,7 +76,7 @@ public class CreateMonitorKnowledgeHandler extends D3webSubtreeHandler<MonitorMa
 		try {
 			double width = Double.parseDouble(widthString);
 			double height = Double.parseDouble(heightString);
-			createCalculationKnowledge(solution, width, height);
+			createCalculationKnowledge(article, solution, width, height);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -91,20 +92,19 @@ public class CreateMonitorKnowledgeHandler extends D3webSubtreeHandler<MonitorMa
 	 * @param width
 	 * @param height
 	 */
-	private void createCalculationKnowledge(Solution solution, double width, double height) {
-		KnowledgeBase knowledgeBase = solution.getKnowledgeBase();
-		QuestionNum qSquare = new QuestionNum(knowledgeBase, solution.getName() + "_a");
+	private void createCalculationKnowledge(Article article, Solution solution, double width, double height) {
+		KnowledgeBase kb = solution.getKnowledgeBase();
+		NamedObject qSquare = kb.getManager().search(solution.getName() + "_a");
+		if (qSquare instanceof Question) {
 
-		knowledgeBase.getManager().putTerminologyObject(qSquare);
+			Condition cond = new ConditionTrue(new ArrayList<TerminologyObject>());
+			Rule rule = new Rule(PSMethodAbstraction.class);
 
-		Condition cond = new ConditionTrue(new ArrayList<TerminologyObject>());
-		Rule rule = new Rule(PSMethodAbstraction.class);
+			ActionSetValue a = new ActionSetValue();
+			a.setQuestion((Question) qSquare);
+			a.setValue(new FormulaNumber(height * width));
 
-		ActionSetValue a = new ActionSetValue();
-		a.setQuestion(qSquare);
-		a.setValue(new FormulaNumber(height * width));
-
-		RuleFactory.setRuleParams(rule, a, cond, null);
-
+			RuleFactory.setRuleParams(rule, a, cond, null);
+		}
 	}
 }
