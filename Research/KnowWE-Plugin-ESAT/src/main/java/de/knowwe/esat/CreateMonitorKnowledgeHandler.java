@@ -22,19 +22,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
-import de.d3web.abstraction.ActionSetValue;
-import de.d3web.abstraction.formula.FormulaNumber;
-import de.d3web.abstraction.inference.PSMethodAbstraction;
-import de.d3web.core.inference.Rule;
-import de.d3web.core.inference.condition.Condition;
-import de.d3web.core.inference.condition.ConditionTrue;
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.NamedObject;
-import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
+import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
-import de.d3web.core.manage.RuleFactory;
 import de.d3web.we.object.SolutionDefinition;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.knowwe.core.kdom.Article;
@@ -76,7 +67,21 @@ public class CreateMonitorKnowledgeHandler extends D3webSubtreeHandler<MonitorMa
 		try {
 			double width = Double.parseDouble(widthString);
 			double height = Double.parseDouble(heightString);
-			createCalculationKnowledge(article, solution, width, height);
+
+			// set width
+			NamedObject qWidth = solution.getKnowledgeBase().getManager().search(
+					solution.getName() + "_width");
+			qWidth.getInfoStore().addValue(BasicProperties.INIT, "" + width);
+
+			// set height
+			NamedObject qHeight = solution.getKnowledgeBase().getManager().search(
+					solution.getName() + "_height");
+			qHeight.getInfoStore().addValue(BasicProperties.INIT, "" + height);
+
+			// set area
+			NamedObject qSquare = solution.getKnowledgeBase().getManager().search(
+					solution.getName() + "_a");
+			qSquare.getInfoStore().addValue(BasicProperties.INIT, "" + width * height);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -85,26 +90,4 @@ public class CreateMonitorKnowledgeHandler extends D3webSubtreeHandler<MonitorMa
 		return new ArrayList<Message>(0);
 	}
 
-	/**
-	 * 
-	 * @created 18.11.2012
-	 * @param solution
-	 * @param width
-	 * @param height
-	 */
-	private void createCalculationKnowledge(Article article, Solution solution, double width, double height) {
-		KnowledgeBase kb = solution.getKnowledgeBase();
-		NamedObject qSquare = kb.getManager().search(solution.getName() + "_a");
-		if (qSquare instanceof Question) {
-
-			Condition cond = new ConditionTrue(new ArrayList<TerminologyObject>());
-			Rule rule = new Rule(PSMethodAbstraction.class);
-
-			ActionSetValue a = new ActionSetValue();
-			a.setQuestion((Question) qSquare);
-			a.setValue(new FormulaNumber(height * width));
-
-			RuleFactory.setRuleParams(rule, a, cond, null);
-		}
-	}
 }

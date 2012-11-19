@@ -24,6 +24,7 @@ import java.util.Collection;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.Solution;
+import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.we.object.SolutionDefinition;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.compile.terminology.TermIdentifier;
@@ -63,15 +64,44 @@ public class MonitorMarkupContentType extends AbstractType {
 					SolutionDefinition.class);
 			Solution solution = solutionDef.get().getTermObject(article, solutionDef);
 			KnowledgeBase knowledgeBase = solution.getKnowledgeBase();
-			QuestionNum qSquare = new QuestionNum(knowledgeBase, solution.getName() + "_a");
+			TerminologyManager terminologyHandler = KnowWEUtils.getTerminologyManager(article);
+			Class<?> termObjectClass = QuestionNum.class;
 
+			// create width variable
+			QuestionNum qWidth = new QuestionNum(knowledgeBase, solution.getName() + "_width");
+			qWidth.getInfoStore().addValue(BasicProperties.ABSTRACTION_QUESTION,
+					Boolean.TRUE);
+			knowledgeBase.getRootQASet().addChild(qWidth);
+			knowledgeBase.getManager().putTerminologyObject(qWidth);
+
+			TermIdentifier termIdentifierWidth = new TermIdentifier(solutionDef.get().getTermName(
+					solutionDef)
+					+ "_width");
+			terminologyHandler.registerTermDefinition(section, termObjectClass, termIdentifierWidth);
+
+			// create height variable
+			QuestionNum qHeight = new QuestionNum(knowledgeBase, solution.getName() + "_height");
+			qHeight.getInfoStore().addValue(BasicProperties.ABSTRACTION_QUESTION,
+					Boolean.TRUE);
+			knowledgeBase.getRootQASet().addChild(qHeight);
+			knowledgeBase.getManager().putTerminologyObject(qHeight);
+
+			TermIdentifier termIdentifierHeigth = new TermIdentifier(solutionDef.get().getTermName(
+					solutionDef)
+					+ "_height");
+			terminologyHandler.registerTermDefinition(section, termObjectClass,
+					termIdentifierHeigth);
+
+			// create area variable
+			QuestionNum qSquare = new QuestionNum(knowledgeBase, solution.getName() + "_a");
+			qSquare.getInfoStore().addValue(BasicProperties.ABSTRACTION_QUESTION,
+					Boolean.TRUE);
+			knowledgeBase.getRootQASet().addChild(qSquare);
 			knowledgeBase.getManager().putTerminologyObject(qSquare);
 
 			TermIdentifier termIdentifier = new TermIdentifier(solutionDef.get().getTermName(
 					solutionDef)
 					+ "_a");
-			Class<?> termObjectClass = QuestionNum.class;
-			TerminologyManager terminologyHandler = KnowWEUtils.getTerminologyManager(article);
 			terminologyHandler.registerTermDefinition(section, termObjectClass, termIdentifier);
 
 			return new ArrayList<Message>(0);
