@@ -100,7 +100,7 @@ public class DebuggerRuleRenderer implements Renderer {
 			string.append(Strings.maskHTML("</div>"));
 		}
 		else {
-			DelegateRenderer.getInstance().renderSubSection(sec, user, string);
+			DelegateRenderer.getInstance().render(sec, user, string);
 		}
 	}
 
