@@ -190,12 +190,12 @@ public class D3webDialog extends HttpServlet {
 
         //System.out.println("D3webDialog - try to read specs: " + source);
         //System.out.println("D3webDialog - try to read kb: " + kbName);
-        
+
         d3webParser.setSourceToParse(source);
         d3wcon = D3webConnector.getInstance();
         d3wcon.setD3webParser(d3webParser);
 
-        
+
         // UI settings
         uis = UISettings.getInstance();
 
@@ -1163,7 +1163,7 @@ public class D3webDialog extends HttpServlet {
 
         Session d3webSession =
                 D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
-        
+
         httpSession.setAttribute(D3WEB_SESSION, d3webSession);
         httpSession.setAttribute("lastLoaded", "");
         httpSession.setAttribute("handleBrowsers", null);
@@ -1777,9 +1777,9 @@ public class D3webDialog extends HttpServlet {
             throws IOException {
 
         httpSession.setAttribute("loginit", false);
-        
+
         d3webParser.parse();
-        
+
         String kbName = "";
         // Only parse d3web from XML specs if it was not provided before,
         // e.g., by the DialogManager Servlet
@@ -1789,21 +1789,31 @@ public class D3webDialog extends HttpServlet {
                 kbName = dialogID[0];
             }
         }
-        
+
         KnowledgeBase d3web = null;
         if (kbName != null && !kbName.equals("")) {
-            d3web = D3webUtils.getKnowledgeBase(kbName, 
-                    GlobalSettings.getInstance().getUploadFilesBasePath());
-            d3wcon.setKb(d3web);
+            if (httpSession.getAttribute("WUMP") != null
+                    && httpSession.getAttribute("WUMP").equals("true")) {
+                String wumpPath =
+                        GLOBSET.getStoreOutsideWUMPPath();
+                String wumpD3webPath = wumpPath + PATHSEP + "d3web";
+                d3web = D3webUtils.getKnowledgeBase(kbName, wumpD3webPath);
+                d3wcon.setKb(d3web);
+            } else {
+                d3web = D3webUtils.getKnowledgeBase(kbName,
+                        GlobalSettings.getInstance().getUploadFilesBasePath());
+                d3wcon.setKb(d3web);
+            }
+
         } else {
             d3wcon.setKb(d3webParser.getKnowledgeBase());
         }
-        
-        
+
+
         d3wcon.setDialogStrat(d3webParser.getStrategy());
         d3wcon.setDialogType(d3webParser.getType());
         d3wcon.setIndicationMode(d3webParser.getIndicationMode());
-       
+
         uis.setDialogColumns(d3webParser.getDialogColumns());
         uis.setQuestionColumns(d3webParser.getQuestionColumns());
         uis.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
@@ -1814,7 +1824,7 @@ public class D3webDialog extends HttpServlet {
         uis.setSolutionExplanationType(d3webParser.getSolutionExplanationType());
         uis.setDiagnosisNavi(d3webParser.getDiagnosisNavi());
         uis.setQuestionnaireNavi(d3webParser.getQuestionnaireNavi());
-        
+
 
         String uegroup = d3webParser.getUEGroup() != null ? d3webParser.getUEGroup() : "";
         httpSession.setAttribute("uegroup", uegroup);
@@ -1914,26 +1924,26 @@ public class D3webDialog extends HttpServlet {
                 boolean hadKBLine = false;
                 // go through all stored lines
                 for (List<String> lineList : entries) {
-                    
+
                     values = new String[lineList.size() + 1];
 
                     int count = 0;
                     for (String entry : lineList) {
-                        
-                        if(entry.equals(kb)){
+
+                        if (entry.equals(kb)) {
                             hadKBLine = true;
                         }
-                        if(!entry.equals("")){
+                        if (!entry.equals("")) {
                             values[count] = entry;
                             count++;
                         }
-                        
+
                     }
 
                     // if we are in the line of the existing kb entry
                     if (lineList.contains(kb)) {
                         if (!lineList.contains(casename)) {
-                            if(!casename.equals("")){
+                            if (!casename.equals("")) {
                                 values[count] = casename;
                             }
                         }

@@ -64,11 +64,6 @@ public class GlobalSettings {
     private final String resourcesPath = "resources/";
     private final String docloaderBasePath = "/stringtemp/html/docLoad";
     
-    private final String exceptionReportTmp = "";
-    private final String exceptionReportFinal = "";        
-    
-    
-   
  
            
     /*
@@ -102,6 +97,7 @@ public class GlobalSettings {
     private String servletBasePath;
     private String uploadFilesBasePath;
     private int localeIdent = 0;
+    private String outsideWUMPPath = "";
     /*
      * Save log files
      */
@@ -116,7 +112,9 @@ public class GlobalSettings {
     private String exceptionReportFinalFileName = "EXCEPTION_FINAL.html";
     private String exceptionReportTmpFileName = "ExceptionReportTmp.txt";
     private String eventLogFileName = "EVENTLOG.txt";
-    private String uploadFilesFolderName = "UPFiles";
+    private String uploadFilesFolderName = "ADDFiles";
+    private String wumpFolderName = "WUMPStorage";
+    
 
     /*
      * The getters for retrieving all those values
@@ -283,6 +281,14 @@ public class GlobalSettings {
     public void setUploadFilesBasePath(String path){
         this.uploadFilesBasePath = path;
     }
+            
+    public String getStoreOutsideWUMPPath(){
+        return this.outsideWUMPPath;
+    }
+    
+    public void setStoreOutsideWUMPPath(String path){
+        this.outsideWUMPPath = path;
+    }        
     
     public String getSyslogsBasePath(){
         return  this.getUploadFilesBasePath() + FILESEP + "syslogs";              
@@ -317,6 +323,12 @@ public class GlobalSettings {
     }
 
   
+     public String getUploadFilesFolderName(){
      
+     return this.uploadFilesFolderName;}
+     
+     public String getWUMPFolderName(){
+         return this.wumpFolderName;
+     }
      
 }

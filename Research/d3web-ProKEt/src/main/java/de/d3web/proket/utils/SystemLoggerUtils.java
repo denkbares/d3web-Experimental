@@ -28,6 +28,7 @@ public class SystemLoggerUtils {
     public static PrintStream getEventLoggerStream() {
         try {
             String logdir = GLOBSET.getSyslogsBasePath();
+            //System.out.println("EVENTLOGGERSTREAM" + logdir);
 
             File logpath = new File(logdir);
             File logfile = new File(logdir, GLOBSET.getEventLogFileName());
@@ -38,7 +39,8 @@ public class SystemLoggerUtils {
                 }
             }
 
-
+            //System.out.println("EVENTLOGGERSTREAM" + logfile.getName());
+            
             PrintStream es = new PrintStream(
                     new BufferedOutputStream(new FileOutputStream(
                     logfile)), true);
@@ -61,7 +63,8 @@ public class SystemLoggerUtils {
         try {
             String logdir = 
                     GlobalSettings.getInstance().getSyslogsBasePath();
-
+            //System.out.println("EXCEPTIONLOGGERSTREAM" + logdir);
+            
             File logpath = new File(logdir);
             File logfile = new File(logdir, GLOBSET.getExceptionReportTmpFileName());
             if (!logpath.exists()) {
@@ -70,7 +73,7 @@ public class SystemLoggerUtils {
                     logfile.createNewFile();
                 }
             }
-
+            //System.out.println("EXCEPTIONLOGGERSTREAM" + logfile.getName());
             
             PrintStream es = new PrintStream(
                     new BufferedOutputStream(new FileOutputStream(

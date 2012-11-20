@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository>
+<session changed="2012-11-19 15:14:10.606" created="2012-11-19 15:14:10.606" id="2f5da47d-b912-4caf-9d00-0a6cb68b8cb8">
+<name/>
+<facts>
+<valueFacts>
+<fact objectName="now" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2012-11-19 15:14:20.962</dateValue>
+</fact>
+<fact objectName="start" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2012-11-19 15:14:10.606</dateValue>
+</fact>
+<fact objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Afrika</choiceValue>
+</fact>
+<fact objectName="Tagebau - Welche Rohstoffart wird abgebaut ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>metallische Rohstoffe</choiceValue>
+</fact>
+<fact objectName="Afrika, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Algerien</choiceValue>
+</fact>
+<fact objectName="Welcher Lagerstättentyp liegt vor ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Tagebau (Übertage)</choiceValue>
+</fact>
+<fact objectName="Algerien" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="999.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+</valueFacts>
+<interviewFacts>
+<fact objectName="Technik - Tagebau" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Lagerstätte" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Tagebau - Welche Rohstoffart wird abgebaut ?" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Afrika, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Wo befindet sich die Lägerstätte ?" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+</interviewFacts>
+</facts>
+<protocol>
+<entry date="2012-11-19 15:14:13.00" objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Afrika</choiceValue>
+</entry>
+<entry date="2012-11-19 15:14:14.306" objectName="Afrika, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Algerien</choiceValue>
+</entry>
+<entry date="2012-11-19 15:14:18.398" objectName="Welcher Lagerstättentyp liegt vor ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Tagebau (Übertage)</choiceValue>
+</entry>
+<entry date="2012-11-19 15:14:20.962" objectName="Tagebau - Welche Rohstoffart wird abgebaut ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>metallische Rohstoffe</choiceValue>
+</entry>
+</protocol>
+</session>
+</repository>

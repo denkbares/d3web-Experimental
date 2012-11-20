@@ -4,8 +4,9 @@
  */
 package de.d3web.proket.d3web.utils;
 
-import de.d3web.proket.utils.GlobalSettings;
+import de.d3web.proket.utils.SystemLoggerUtils;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,9 @@ import java.util.List;
  * @author mafre
  */
 public class Utils {
+
     public static List<File> getFileList(String folderPath) {
-        
+
         File folder = new File(folderPath);
         File[] files = folder.listFiles();
         if (files == null) {
@@ -30,4 +32,24 @@ public class Utils {
         return filesList;
     }
 
+    public static File checkCreateDir(String dirpath) {
+
+        File pathF = new File(dirpath);
+        if (!pathF.exists()) {
+            pathF.mkdirs();
+        }
+        return pathF;
+    }
+
+    public static File checkCreateFile(String filepath) {
+        File fileF = new File(filepath);
+        try {
+            if (!fileF.exists()) {
+                fileF.createNewFile();
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+        }
+        return fileF;
+    }
 }

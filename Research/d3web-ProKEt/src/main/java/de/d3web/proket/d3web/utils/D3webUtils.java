@@ -131,9 +131,10 @@ public class D3webUtils {
      */
     public static DefaultSession createSession(KnowledgeBase kb, DialogStrategy ds) {
 
+
         // if DialogType given
         if (ds != null) {
-            if (ds == DialogStrategy.NEXTUAQUESTION) { // one question dialog
+            if (ds == DialogStrategy.NEXTQUESTION) { // one question dialog
                 return SessionFactory.createSession(
                         null, kb, new NextUnansweredQuestionFormStrategy(), new Date());
             } else if (ds == DialogStrategy.NEXTFORM) { // questionnaire based
@@ -356,6 +357,11 @@ public class D3webUtils {
         return getKnowledgeBase(kbFilename, "DEFAULT");
     }
 
+    public static KnowledgeBase getKnowledgeBaseFromWUMPStorage(String kbFilename)
+            throws IOException {
+        return getKnowledgeBase(kbFilename, "WUMP");
+    }
+
     /**
      * Retrieve a {@link KnowledgeBase} by its file name. Search is performed in
      * /WEB-INF/classes/kb. The trailing ".jar" can be omitted.
@@ -367,27 +373,25 @@ public class D3webUtils {
      */
     public static KnowledgeBase getKnowledgeBase(String kbFilename, String path) throws IOException {
 
-
+        String PATHSEP = System.getProperty("file.separator");
         if (path.equals("DEFAULT")) {
             path = "/specs/d3web/";
         } else if (path.contains("UPFiles")) {
             path = "/../../UPFiles/d3web/";
+        } else if (path.contains("WUMP")) {
+            path = path + PATHSEP;
         }
+   
         // add .jar if it's not already there
         if (!kbFilename.endsWith(".jar")
                 && !kbFilename.endsWith(".d3web")) {
             kbFilename += ".d3web";
         }
 
-        File kbFile;
-        File libPath;
         // Paths here are relative to the WEB-INF/classes folder!!!
-        // from the /specs/d3web folder
-        System.out.println("D3webUtils: " + path + " " + kbFilename);
-        kbFile = FileUtils.getResourceFile(path + kbFilename);
-        // from the /lib folder
-        libPath = FileUtils.getResourceFile("/../lib");
-
+        File kbFile = new File(path + kbFilename);
+        File libPath = FileUtils.getResourceFile("/../lib");
+       
         // initialize PluginManager
         File[] files = null;
         files = getAllJPFPlugins(libPath);
@@ -395,8 +399,9 @@ public class D3webUtils {
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
 
         //System.out.println(kbFile.getName() + " " + kbFile.getAbsolutePath());
+        //KnowledgeBase kb = persistenceManager.load(kbFile);
         KnowledgeBase kb = persistenceManager.load(kbFile);
-        System.out.println("D3webUtils " + kb);
+       
         // try to load knowledge base
         return kb;
 

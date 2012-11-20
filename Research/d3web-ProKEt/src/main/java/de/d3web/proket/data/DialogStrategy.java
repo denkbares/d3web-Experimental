@@ -13,7 +13,7 @@ public enum DialogStrategy {
 	NEXTFORM,
 
 	/* Get only the next unanswered question next */
-	NEXTUAQUESTION,
+	NEXTQUESTION,
 
 	/* Default value */
 	DEFAULT;

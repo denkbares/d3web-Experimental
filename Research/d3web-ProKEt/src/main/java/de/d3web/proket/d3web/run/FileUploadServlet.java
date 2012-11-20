@@ -49,10 +49,6 @@ public class FileUploadServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        String servletcontext = GLOBSET.getServletBasePath();
-        String uploadFilesBase = servletcontext + "UPFiles";
-
-        GLOBSET.setUploadFilesBasePath(uploadFilesBase);
     }
 
     // Process the upload request

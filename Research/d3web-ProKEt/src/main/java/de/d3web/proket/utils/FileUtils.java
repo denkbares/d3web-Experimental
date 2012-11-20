@@ -80,8 +80,8 @@ public class FileUtils {
 			throws FileNotFoundException {
 		URL resourceUrl = null;
 		resourceUrl = FileUtils.class.getResource(fileNameAndPath);
-                
-		try {
+                try {
+                   
 			return new File(resourceUrl.toURI());
 		}
 		catch (URISyntaxException e) {

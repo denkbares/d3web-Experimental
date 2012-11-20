@@ -4,9 +4,9 @@
 	dtype="singleform" 
 	indicationmode="hide_unindicated"
 	dstrategy="nextquestion"
-	css="questionaryCons, diagnosisVisu" 
+	css="diagnosisVisu, hallo" 
 	dialogcolumns="1"
-	questionnairecolumns="3"
+	questionnairecolumns="1"
 	questioncolumns="1"
 	uiprefix = "OQDCons"
         login = ""
@@ -18,5 +18,9 @@
         questionnaireNavi = "FALSE"
         >
 	<data kb="Bergbau191112.d3web" />
-        <ue logging = "FALSE" />
+        <ue 
+            logging = "FALSE"
+            feedback = "FALSE"
+            ueq = "FALSE"
+            />
 </dialog>

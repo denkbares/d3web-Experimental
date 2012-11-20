@@ -163,3 +163,5 @@ body,table,div {
 .fontOnePointTwo{font-size: 1.2em;}
 
 #leftBorderSpacer{min-width: 20px; }
+
+#rightBorderSpacer{min-width: 30%; }
