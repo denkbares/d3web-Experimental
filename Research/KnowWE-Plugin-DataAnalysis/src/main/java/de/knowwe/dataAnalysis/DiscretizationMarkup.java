@@ -82,23 +82,24 @@ public class DiscretizationMarkup extends AbstractKnowledgeUnitType<Discretizati
 
 		@Override
 		public void insertIntoRepository(Section<DiscretizationMarkup> section) {
-			String verbalization = createVerbalization(section);
-			System.out.println("adding discretization knowledge: "
-					+ verbalization);
-
-		}
-
-		private String createVerbalization(Section<DiscretizationMarkup> section) {
-			String verbalization = "";
 			Section<NumericalValueTermRef> term = Sections.findSuccessor(section,
 					NumericalValueTermRef.class);
-			if (term != null) {
-				verbalization += term.get().getTermName(term) + " ";
-			}
+			String name = term.get().getTermName(term);
+			KnowledgeRepositoryCache.getInstance().addInsertKnowledge(new String[] {
+							name, Terminology.DISCRETIZATION,
+							createIntervallStringData(section) });
+		}
+
+
+		private String createIntervallStringData(Section<DiscretizationMarkup> section) {
 			double[] discretizationBoundaries = getDiscretizationBoundaries(section);
+			String verbalization = "";
 			if (discretizationBoundaries != null) {
 				for (double d : discretizationBoundaries) {
-					verbalization += " | " + d;
+					verbalization += d + ";";
+				}
+				if (verbalization.endsWith(";")) {
+					verbalization = verbalization.substring(0, verbalization.length() - 1);
 				}
 			}
 			return verbalization;
@@ -106,9 +107,12 @@ public class DiscretizationMarkup extends AbstractKnowledgeUnitType<Discretizati
 
 		@Override
 		public void deleteFromRepository(Section<DiscretizationMarkup> section) {
-			String verbalization = createVerbalization(section);
-			System.out.println("removing discretization knowledge: "
-					+ verbalization);
+			Section<NumericalValueTermRef> term = Sections.findSuccessor(section,
+					NumericalValueTermRef.class);
+			String name = term.get().getTermName(term);
+			KnowledgeRepositoryCache.getInstance().addRemoveKnowledge(new String[] {
+							name, Terminology.DISCRETIZATION,
+							createIntervallStringData(section) });
 
 		}
 
