@@ -18,7 +18,6 @@
  */
 package de.knowwe.wikicontentdownload;
 
-
 import de.knowwe.core.Attributes;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
@@ -48,11 +47,10 @@ public class WikiZIPDownloadProvider implements ToolProvider {
 				"?" + Attributes.TOPIC + "=" + section.getTitle() +
 				"&" + Attributes.WEB + "=" + section.getWeb() + "'";
 		return new DefaultTool(
-				"KnowWEExtension/d3web/icon/download16.gif",
+				"KnowWEExtension/images/zip.jpg",
 				"Download Wiki Zip",
 				"Download the entire Wiki as a Zip-File.",
 				jsAction);
 	}
-
 
 }
