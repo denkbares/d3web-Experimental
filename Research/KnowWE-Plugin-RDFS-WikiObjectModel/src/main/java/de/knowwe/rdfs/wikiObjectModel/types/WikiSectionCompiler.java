@@ -33,7 +33,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.jspwiki.types.SectionContentType;
-import de.knowwe.jspwiki.types.SectionType;
+import de.knowwe.jspwiki.types.HeaderType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
@@ -68,23 +68,23 @@ public class WikiSectionCompiler extends AbstractKnowledgeUnitCompileScriptRDFS 
 		data.add(Rdf2GoCore.getInstance().createStatement(pageURI, RDF.type,
 				WikiObjectModel.WIKI_PAGE));
 
-		Section<SectionType> theMajorSection = Sections.findSuccessor(section, SectionType.class);
+		Section<HeaderType> theMajorSection = Sections.findSuccessor(section, HeaderType.class);
 
 		URI sectionURI = createTriplesForSection(data, pageURI, theMajorSection, null);
 
-		List<Section<SectionType>> mediumLevelSections = new ArrayList<Section<SectionType>>();
+		List<Section<HeaderType>> mediumLevelSections = new ArrayList<Section<HeaderType>>();
 
-		Sections.findSuccessorsOfType(section, SectionType.class, 2, mediumLevelSections);
+		Sections.findSuccessorsOfType(section, HeaderType.class, 2, mediumLevelSections);
 		mediumLevelSections.remove(section); // without itself
 
-		for (Section<SectionType> medium : mediumLevelSections) {
+		for (Section<HeaderType> medium : mediumLevelSections) {
 			URI mediumURI = createTriplesForSection(data, pageURI, medium, sectionURI);
 
-			List<Section<SectionType>> minorLevelSections = new ArrayList<Section<SectionType>>();
-			Sections.findSuccessorsOfType(medium, SectionType.class, 2, minorLevelSections);
+			List<Section<HeaderType>> minorLevelSections = new ArrayList<Section<HeaderType>>();
+			Sections.findSuccessorsOfType(medium, HeaderType.class, 2, minorLevelSections);
 			minorLevelSections.remove(medium); // without itself
 
-			for (Section<SectionType> minor : minorLevelSections) {
+			for (Section<HeaderType> minor : minorLevelSections) {
 				createTriplesForSection(data, pageURI, minor, mediumURI);
 			}
 		}
@@ -92,7 +92,7 @@ public class WikiSectionCompiler extends AbstractKnowledgeUnitCompileScriptRDFS 
 		Rdf2GoCore.getInstance().addStatements(section, Rdf2GoUtils.toArray(data));
 	}
 
-	private URI createTriplesForSection(List<Statement> data, URI pageURI, Section<SectionType> currentSection, URI parentSectionURI) {
+	private URI createTriplesForSection(List<Statement> data, URI pageURI, Section<HeaderType> currentSection, URI parentSectionURI) {
 
 		URI currentSectionURI = new URIImpl(Utils.createAnchorURL(currentSection));
 

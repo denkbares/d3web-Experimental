@@ -36,7 +36,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.core.wikiConnector.WikiConnector;
-import de.knowwe.jspwiki.types.SectionType;
+import de.knowwe.jspwiki.types.HeaderType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -112,7 +112,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 
 				if (targetArray.length > 1) {
 					List<?> secList = Sections.findSuccessorsOfType(
-							article.getRootSection(), SectionType.class);
+							article.getRootSection(), HeaderType.class);
 					Iterator<?> listIterator = secList.iterator();
 					while (listIterator.hasNext()) {
 						Section<?> listElement = (Section<?>) listIterator.next();

@@ -25,7 +25,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.jspwiki.types.SectionHeaderType;
-import de.knowwe.jspwiki.types.SectionType;
+import de.knowwe.jspwiki.types.HeaderType;
 import de.knowwe.rdfs.wikiObjectModel.types.SectionHeaderObjectDefinition;
 
 /**
@@ -35,7 +35,7 @@ import de.knowwe.rdfs.wikiObjectModel.types.SectionHeaderObjectDefinition;
  */
 public class Utils {
 
-	public static String createAnchorURL(Section<SectionType> sec) {
+	public static String createAnchorURL(Section<HeaderType> sec) {
 		Section<SectionHeaderType> header = Sections.findSuccessor(sec, SectionHeaderType.class);
 		return createAnchorURLHeader(header);
 	}
@@ -86,8 +86,8 @@ public class Utils {
 	}
 
 	public static Section<SectionHeaderObjectDefinition> getContextSectionIfExisting(Section<?> s) {
-		Section<SectionType> section = Sections.findAncestorOfType(s,
-				SectionType.class);
+		Section<HeaderType> section = Sections.findAncestorOfType(s,
+				HeaderType.class);
 		if (section != null) {
 			Section<SectionHeaderObjectDefinition> headerObjectSection = Sections.findSuccessor(
 					section, SectionHeaderObjectDefinition.class);

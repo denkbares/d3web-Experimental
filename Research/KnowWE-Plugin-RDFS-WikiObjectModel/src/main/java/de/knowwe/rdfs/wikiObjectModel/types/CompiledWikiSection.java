@@ -21,14 +21,14 @@ package de.knowwe.rdfs.wikiObjectModel.types;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.jspwiki.types.SectionType;
+import de.knowwe.jspwiki.types.HeaderType;
 
 /**
  * 
  * @author Jochen Reutelshöfer (denkbares GmbH)
  * @created 06.07.2012
  */
-public class CompiledWikiSection extends SectionType implements KnowledgeUnit {
+public class CompiledWikiSection extends HeaderType implements KnowledgeUnit {
 
 	@Override
 	public <T extends Type> KnowledgeUnitCompileScript<T> getCompileScript() {
