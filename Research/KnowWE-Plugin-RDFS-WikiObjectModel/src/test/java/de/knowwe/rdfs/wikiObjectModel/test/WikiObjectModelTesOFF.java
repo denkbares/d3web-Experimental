@@ -38,7 +38,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.utils.SparqlQuery;
 
-public class WikiObjectModelTest {
+public class WikiObjectModelTesOFF {
 
 	private static final String TESTFILE = "src/test/resources/"
 			+ "TestPage.txt";
