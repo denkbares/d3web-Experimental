@@ -194,14 +194,14 @@ public class IncludeMarkup extends DefaultMarkupType {
 					"Go to Page", "", "");
 
 			StringBuilder builder = new StringBuilder();
+			String zoomStyle = "";
 			if (zoom != null) {
-				builder.append(Strings.maskHTML("<div style=\"zoom: " + zoom + "%\">"));
+				zoomStyle = "zoom: " + zoom + "%";
 			}
+			builder.append(Strings.maskHTML("<div style=\"white-space:normal;" + zoomStyle + "\">"));
 			builder.append("\n");
 			renderTarget(user, renderarticle, builder);
-			if (zoom != null) {
-				builder.append(Strings.maskHTML("</div>"));
-			}
+			builder.append(Strings.maskHTML("</div>"));
 			new DefaultMarkupRenderer().renderDefaultMarkupStyled("include",
 					builder.toString(),
 					section.getID(), "", tools, user,
