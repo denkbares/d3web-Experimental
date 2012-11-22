@@ -26,7 +26,7 @@ import java.util.List;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.RootType;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
@@ -36,6 +36,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.core.wikiConnector.WikiConnector;
+import de.knowwe.jspwiki.JSPWikiMarkupUtils;
 import de.knowwe.jspwiki.types.HeaderType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
@@ -55,16 +56,6 @@ public class IncludeMarkup extends DefaultMarkupType {
 
 	public static final String MARKUP_NAME = "include";
 
-	public static String target;
-
-	public static String targetKey;
-
-	public static String frame;
-
-	public static String zoom;
-
-	public static String subSectionKey;
-
 	static {
 		m = new DefaultMarkup("include");
 		m.addAnnotation("target", true);
@@ -80,10 +71,19 @@ public class IncludeMarkup extends DefaultMarkupType {
 
 	static class IncludeRenderer implements Renderer {
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public void render(Section<?> section, UserContext user,
 				StringBuilder string) {
+
+			String target = "";
+
+			String targetKey = "";
+
+			String frame = "";
+
+			String zoom = "";
+
+			String subSectionKey = "";
 
 			target = DefaultMarkupType.getAnnotation(section,
 					"target");
@@ -108,7 +108,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 			}
 			else {
 				// render article
-				Section<RootType> renderarticle = article.getRootSection();
+				Section<?> renderarticle = article.getRootSection();
 
 				if (targetArray.length > 1) {
 					List<?> secList = Sections.findSuccessorsOfType(
@@ -125,7 +125,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 						text = text.trim();
 						if (text.startsWith(subSectionKey)) {
 							// renderarticle for single section
-							renderarticle = (Section<RootType>) listElement;
+							renderarticle = listElement;
 						}
 					}
 					// warning if section not found
@@ -136,28 +136,30 @@ public class IncludeMarkup extends DefaultMarkupType {
 					else {
 						if (frame != null && frame.equals("false")) {
 							// render section, no frame
-							renderNoFrame(user, renderarticle, string);
+							renderNoFrame(user, renderarticle, string, zoom);
 						}
 						else {
 							// render section, with frame
-							renderFrame(article, user, section, renderarticle, string, true);
+							renderFrame(article, user, section, renderarticle, string, true,
+									targetKey, zoom, subSectionKey);
 						}
 					}
 				}
 				else {
 					if (frame != null && frame.equals("false")) {
 						// render whole article, no frame
-						renderNoFrame(user, renderarticle, string);
+						renderNoFrame(user, renderarticle, string, zoom);
 					}
 					else {
 						// render whole article, with frame
-						renderFrame(article, user, section, renderarticle, string, false);
+						renderFrame(article, user, section, renderarticle, string, false,
+								targetKey, zoom, subSectionKey);
 					}
 				}
 			}
 		}
 
-		public void renderFrame(Article article, UserContext user, Section<?> section, Section<?> renderarticle, StringBuilder string, Boolean rendersec) {
+		public void renderFrame(Article article, UserContext user, Section<?> section, Section<?> renderarticle, StringBuilder string, Boolean rendersec, String targetKey, String zoom, String subSectionKey) {
 
 			WikiConnector wikiConnector = Environment.getInstance().getWikiConnector();
 			String context = wikiConnector.getServletContext().getContextPath();
@@ -196,8 +198,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 				builder.append(Strings.maskHTML("<div style=\"zoom: " + zoom + "%\">"));
 			}
 			builder.append("\n");
-			DelegateRenderer.getInstance().render(renderarticle,
-					user, builder);
+			renderTarget(user, renderarticle, builder);
 			if (zoom != null) {
 				builder.append(Strings.maskHTML("</div>"));
 			}
@@ -208,15 +209,43 @@ public class IncludeMarkup extends DefaultMarkupType {
 
 		}
 
-		public void renderNoFrame(UserContext user, Section<?> renderarticle, StringBuilder string) {
+		public void renderNoFrame(UserContext user, Section<?> renderarticle, StringBuilder string, String zoom) {
 			if (zoom != null) {
 				string.append(Strings.maskHTML("<div style=\"zoom: " + zoom + "%\">"));
 			}
 			string.append("\n");
-			DelegateRenderer.getInstance().render(renderarticle,
-					user, string);
+			renderTarget(user, renderarticle, string);
 			if (zoom != null) {
 				string.append(Strings.maskHTML("</div>"));
+			}
+		}
+
+		/**
+		 * 
+		 * @created 22.11.2012
+		 * @param user
+		 * @param renderarticle
+		 * @param string
+		 */
+		private void renderTarget(UserContext user, Section<?> renderarticle, StringBuilder string) {
+			if (renderarticle.get() instanceof HeaderType) {
+
+				// render header
+				DelegateRenderer.getInstance().render(renderarticle,
+						user, string);
+
+				// render content of the sub-chapter
+				List<Section<? extends Type>> content = JSPWikiMarkupUtils.getContent(Sections.cast(
+						renderarticle,
+						HeaderType.class));
+				for (Section<? extends Type> section : content) {
+					DelegateRenderer.getInstance().render(section,
+							user, string);
+				}
+			}
+			else {
+				DelegateRenderer.getInstance().render(renderarticle,
+						user, string);
 			}
 		}
 
