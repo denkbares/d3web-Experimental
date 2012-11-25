@@ -142,7 +142,7 @@ public class XMLSectionFinderTest extends TestCase {
 
 		// Test children counts
 		int expected = 3;
-		Section<?> artChild = Sections.findChildOfType(artSec, RootType.class).getChildren().get(0);
+		Section<?> artChild = artSec.getChildren().get(0);
 		assertEquals("ArticleSection: Childcount wrong", expected, artChild.getChildren().size());
 
 		artChild = artChild.getChildren().get(1);

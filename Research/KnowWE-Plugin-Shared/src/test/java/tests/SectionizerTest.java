@@ -74,7 +74,7 @@ public class SectionizerTest extends TestCase {
 		 * The real tests 1. Check some children-Counts
 		 */
 		int expected = 12;
-		Section<?> root = article.getRootSection().getChildren().get(0);
+		Section<?> root = article.getRootSection();
 		assertEquals(expected, root.getChildren().size());
 
 		ArrayList<Section<?>> children = new ArrayList<Section<?>>(root.getChildren());

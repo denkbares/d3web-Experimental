@@ -133,7 +133,7 @@ public class ReplaceKdomNodeTest extends TestCase {
 		actual = original.equals(content);
 		assertEquals("Original equals replaced", false, actual);
 
-		artSec = artSec.getChildren().get(0).getChildren().get(0);
+		artSec = artSec.getChildren().get(0);
 		String objectTypeName = artSec.get().getName();
 		assertEquals("SplitObjectType not contained", "SplitObjectType", objectTypeName);
 	}
