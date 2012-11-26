@@ -30,7 +30,6 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
-import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -121,10 +120,10 @@ public class HierarchyDashtreeElementCompileScript extends
 	}
 
 	@Override
-	public Collection<Section<? extends SimpleReference>> getAllReferencesOfKnowledgeUnit(
+	public Collection<Section<? extends SimpleTerm>> getAllReferencesOfKnowledgeUnit(
 			Section<? extends KnowledgeUnit> section) {
 
-		Set<Section<? extends SimpleReference>> result = new HashSet<Section<? extends SimpleReference>>();
+		Set<Section<? extends SimpleTerm>> result = new HashSet<Section<? extends SimpleTerm>>();
 
 		// add child-DTE to ref-list
 		Section<? extends IRITermRef> childElement = Sections
