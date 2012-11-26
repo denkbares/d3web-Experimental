@@ -38,7 +38,7 @@ public abstract class AbstractKnowledgeUnitCompileScript<T extends Type> impleme
 		 * knowledge-units dont overlap
 		 */
 
-		Collection<Section<SimpleTerm>> allReferencesOfCompilationUnit = CompileUtils.getAllReferencesOfCompilationUnit(section);
+		Collection<Section<SimpleTerm>> allReferencesOfCompilationUnit = CompileUtils.getAllLocalReferencesOfCompilationUnit(section);
 
 		// some evil workaround because of generics problem
 		Collection<Section<? extends SimpleTerm>> result = new ArrayList<Section<? extends SimpleTerm>>();
@@ -46,8 +46,12 @@ public abstract class AbstractKnowledgeUnitCompileScript<T extends Type> impleme
 			result.add(ref);
 		}
 
+		result.addAll(getExternalReferencesOfKnowledgeUnit(section));
+
 		return result;
 
 	}
+
+	public abstract Collection<Section<? extends SimpleTerm>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section);
 
 }

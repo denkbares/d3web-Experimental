@@ -31,7 +31,13 @@ import de.knowwe.core.kdom.parsing.Section;
  * @author Jochen
  * @created 04.03.2012
  */
-public class CompileSection {
+public class CompileSection<T extends Type> {
+
+	T type;
+
+	public T get() {
+		return type;
+	}
 
 	public Section<? extends Type> getSection() {
 		return section;
@@ -39,8 +45,9 @@ public class CompileSection {
 
 	private Section<? extends Type> section = null;
 
-	public CompileSection(Section<? extends Type> s) {
+	public CompileSection(Section<T> s) {
 		this.section = s;
+		type = s.get();
 	}
 
 	@Override
@@ -52,7 +59,58 @@ public class CompileSection {
 	public boolean equals(Object arg0) {
 		if (arg0 instanceof CompileSection) {
 			CompileSection other = (CompileSection) arg0;
-			return other.section.getText().equals(this.section.getText());
+			if (!(other.section.getText().equals(this.section.getText()))) {
+				return false;
+			}
+			else {
+				return true;
+				// if (type instanceof KnowledgeUnit && other.get() instanceof
+				// KnowledgeUnit) {
+				// // find out whether external references are equals also
+				// Section<KnowledgeUnit> thisUnit = Sections.cast(section,
+				// KnowledgeUnit.class);
+				// Collection<Section<? extends SimpleTerm>> externalReferences
+				// = (Collection<Section<? extends SimpleTerm>>)
+				// (KnowWEUtils.getStoredObject(
+				// thisUnit,
+				// IncrementalCompiler.EXTERNAL_REFERENCES_OF_KNOWLEDGEUNIT));
+				// Section<KnowledgeUnit> otherUnit = Sections.cast(section,
+				// KnowledgeUnit.class);
+				// Collection<Section<? extends SimpleTerm>>
+				// otherExternalReferences = (Collection<Section<? extends
+				// SimpleTerm>>) (KnowWEUtils.getStoredObject(
+				// otherUnit,
+				// IncrementalCompiler.EXTERNAL_REFERENCES_OF_KNOWLEDGEUNIT));
+
+				// return otherExternalReferences.equals(externalReferences);
+
+				// Collection<Section<? extends SimpleTerm>>
+				// allReferencesOfKnowledgeUnit =
+				// thisUnit.get().getCompileScript().getAllReferencesOfKnowledgeUnit(
+				// thisUnit);
+				// Collection<CompileSection<? extends SimpleTerm>> refs =
+				// new
+				// HashSet<CompileSection<? extends SimpleTerm>>();
+				// for (Section<? extends SimpleTerm> section :
+				// allReferencesOfKnowledgeUnit) {
+				// refs.add(new CompileSection(section));
+				// }
+				//
+				// Collection<Section<? extends SimpleTerm>>
+				// allReferencesOfOtherKnowledgeUnit =
+				// otherUnit.get().getCompileScript().getAllReferencesOfKnowledgeUnit(
+				// otherUnit);
+				// Collection<CompileSection<? extends SimpleTerm>>
+				// otherRefs =
+				// new HashSet<CompileSection<? extends SimpleTerm>>();
+				// for (Section<? extends SimpleTerm> section :
+				// allReferencesOfOtherKnowledgeUnit) {
+				// otherRefs.add(new CompileSection(section));
+				// }
+
+				// return refs.equals(otherRefs);
+				// }
+			}
 		}
 		return false;
 	}

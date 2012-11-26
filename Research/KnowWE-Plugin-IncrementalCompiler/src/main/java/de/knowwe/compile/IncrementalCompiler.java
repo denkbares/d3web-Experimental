@@ -43,6 +43,7 @@ import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.AssertSingleTermDefinitionHandler;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
@@ -66,6 +67,8 @@ import de.knowwe.plugin.Plugins;
  */
 @SuppressWarnings("unchecked")
 public class IncrementalCompiler implements EventListener {
+
+	public static final String EXTERNAL_REFERENCES_OF_KNOWLEDGEUNIT = "EXTERNAL_REFERENCES_OF_KNOWLEDGEUNIT";
 
 	private final ReferenceManager terminology = new ReferenceManager();
 
@@ -186,6 +189,12 @@ public class IncrementalCompiler implements EventListener {
 		Article lastVersionOfArticle = modifiedArticle.getLastVersionOfArticle();
 		Collection<Section<? extends Type>> oldSectionsNotReused = CompileUtils.findOldNonReusedSections(lastVersionOfArticle);
 
+		// to handle the compilation with external references we need to store
+		// those in advance
+		if (lastVersionOfArticle != null) {
+			storeExternalReferencesOfKnowledgeUnits(lastVersionOfArticle);
+		}
+
 		// reset knowledge slice sets
 		potentiallyNewKnowledgeSlices = new HashSet<Section<? extends KnowledgeUnit>>();
 		knowledgeSlicesToRemove = new HashSet<Section<? extends KnowledgeUnit>>();
@@ -218,7 +227,7 @@ public class IncrementalCompiler implements EventListener {
 		// otherwise it does not need to be in the toRemove list,
 		// indeed it must not if hazard filter activated!
 		for (Section<? extends KnowledgeUnit> section : deletedknowledge) {
-			Collection<Section<SimpleTerm>> referencesOfCompilationUnit = CompileUtils.getAllReferencesOfCompilationUnit(section);
+			Collection<Section<SimpleTerm>> referencesOfCompilationUnit = CompileUtils.getAllLocalReferencesOfCompilationUnit(section);
 			boolean valid = true;
 			// check for all references if had been valid in old version
 			for (Section<SimpleTerm> ref : referencesOfCompilationUnit) {
@@ -250,11 +259,11 @@ public class IncrementalCompiler implements EventListener {
 		// now check all potentially new knowledge slices for validity
 		Iterator<Section<? extends KnowledgeUnit>> compilationUnitIterator = potentiallyNewKnowledgeSlices.iterator();
 		while (compilationUnitIterator.hasNext()) {
-			Section<? extends KnowledgeUnit> section = compilationUnitIterator.next();
-			KnowledgeUnitCompileScript compileScript = section.get().getCompileScript();
+			Section<? extends KnowledgeUnit> knowledgeUnit = compilationUnitIterator.next();
+			KnowledgeUnitCompileScript compileScript = knowledgeUnit.get().getCompileScript();
 			if (compileScript != null) {
 				Collection<Section<?>> refs = compileScript.getAllReferencesOfKnowledgeUnit(
-						section);
+						knowledgeUnit);
 				if (refs != null) {
 					for (Section<?> ref : refs) {
 						if (!terminology.isValid(KnowWEUtils.getTermIdentifier(ref))) {
@@ -303,6 +312,28 @@ public class IncrementalCompiler implements EventListener {
 		if (!ImportManager.fetchNewImports().isEmpty()
 				|| !ImportManager.fetchRemovedImports().isEmpty()) {
 			notify(event);
+		}
+
+	}
+
+	/**
+	 * 
+	 * @created 26.11.2012
+	 * @param lastVersionOfArticle
+	 */
+	private void storeExternalReferencesOfKnowledgeUnits(Article lastVersionOfArticle) {
+		Section<RootType> rootSection = lastVersionOfArticle.getRootSection();
+		List<Section<KnowledgeUnit>> allKnowledgeUnits = Sections.findSuccessorsOfType(rootSection,
+				KnowledgeUnit.class);
+		for (Section<KnowledgeUnit> unit : allKnowledgeUnits) {
+			Collection<Section<? extends SimpleTerm>> externalReferencesOfKnowledgeUnit = unit.get().getCompileScript().getExternalReferencesOfKnowledgeUnit(
+					unit);
+			if (externalReferencesOfKnowledgeUnit != null
+					&& externalReferencesOfKnowledgeUnit.size() > 0) {
+				KnowWEUtils.storeObject(null, unit,
+						EXTERNAL_REFERENCES_OF_KNOWLEDGEUNIT, externalReferencesOfKnowledgeUnit);
+
+			}
 		}
 
 	}

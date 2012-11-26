@@ -10,6 +10,8 @@ public interface KnowledgeUnitCompileScript<T extends Type> {
 
 	public Collection<Section<? extends SimpleTerm>> getAllReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section);
 
+	public Collection<Section<? extends SimpleTerm>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section);
+
 	public void insertIntoRepository(Section<T> section);
 
 	public void deleteFromRepository(Section<T> section);

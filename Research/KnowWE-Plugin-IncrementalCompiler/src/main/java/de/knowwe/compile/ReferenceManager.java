@@ -170,9 +170,13 @@ public class ReferenceManager {
 	public Collection<Section<? extends KnowledgeUnit>> getReferencingSlices(Section<? extends SimpleTerm> section) {
 		Collection<Section<? extends KnowledgeUnit>> result = new HashSet<Section<? extends KnowledgeUnit>>();
 		TermIdentifier termIdentifier = KnowWEUtils.getTermIdentifier(section);
-		Set<Section<? extends SimpleReference>> refSet = allReferences.get(termIdentifier);
-		if (refSet == null) return result;
-		for (Section<?> ref : refSet) {
+		Set<Section<? extends SimpleTerm>> termSet = new HashSet<Section<? extends SimpleTerm>>();
+		Set<Section<? extends SimpleReference>> refs = allReferences.get(termIdentifier);
+		if (refs != null) {
+			termSet.addAll(refs);
+		}
+		termSet.add(section);
+		for (Section<?> ref : termSet) {
 			Section<KnowledgeUnit> compilationUnit = Sections.findAncestorOfType(ref,
 					KnowledgeUnit.class);
 			if (compilationUnit != null) {

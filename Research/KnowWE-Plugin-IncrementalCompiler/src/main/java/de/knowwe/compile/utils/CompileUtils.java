@@ -159,7 +159,7 @@ public class CompileUtils {
 		return result;
 	}
 
-	public static Collection<Section<SimpleTerm>> getAllReferencesOfCompilationUnit(Section<? extends KnowledgeUnit> section) {
+	public static Collection<Section<SimpleTerm>> getAllLocalReferencesOfCompilationUnit(Section<? extends KnowledgeUnit> section) {
 		List<Section<SimpleTerm>> result = new ArrayList<Section<SimpleTerm>>();
 		Sections.findSuccessorsOfType(section, SimpleTerm.class, result);
 		return result;

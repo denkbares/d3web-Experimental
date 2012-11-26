@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Node;
 
-import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
+import de.knowwe.compile.object.SimpleKnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -84,7 +84,7 @@ public class TripleMarkupSimple extends AbstractKnowledgeUnitType<TripleMarkupSi
 }
 
 class TripleMarkupSimpleCompileScript extends
-		AbstractKnowledgeUnitCompileScript<TripleMarkupSimple> {
+		SimpleKnowledgeUnitCompileScript<TripleMarkupSimple> {
 
 	@Override
 	public void deleteFromRepository(Section<TripleMarkupSimple> section) {

@@ -27,10 +27,10 @@ import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Node;
 
-import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.IncrementalTermDefinition;
+import de.knowwe.compile.object.SimpleKnowledgeUnitCompileScript;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
@@ -124,7 +124,7 @@ public class ComplexIRIDefinitionMarkup extends AbstractKnowledgeUnitType<Comple
 
 }
 
-class ComplexIRIDefinitionCompileScript extends AbstractKnowledgeUnitCompileScript<ComplexIRIDefinitionMarkup> {
+class ComplexIRIDefinitionCompileScript extends SimpleKnowledgeUnitCompileScript<ComplexIRIDefinitionMarkup> {
 
 	@Override
 	public void deleteFromRepository(Section<ComplexIRIDefinitionMarkup> section) {
