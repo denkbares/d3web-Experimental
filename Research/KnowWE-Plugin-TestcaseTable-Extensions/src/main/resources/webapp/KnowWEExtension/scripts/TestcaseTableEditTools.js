@@ -42,14 +42,14 @@ KNOWWE.plugin.testcasetable.editProvider = (function(){
 		prepare: function(id){
 			editId = "defaultEditTable" + id;
 			
-			params = {
+			var params = {
 				action : 'TestcaseTableEditAction',
 				KWikiWeb : 'default_web',
 				kdomid: id
 			};
 
 			// options for AJAX request
-			options = {
+			var options = {
 				async: false,
 				url : KNOWWE.core.util.getURL( params ),
 				response : {
@@ -106,16 +106,16 @@ KNOWWE.plugin.testcasetable.editProvider = (function(){
 			switch (el.name) {
 				default:
 				case "text":
-					valid = KNOWWE.plugin.testcasetable.editProvider.isValidText(el.value);
+					valid = this.isValidText(el.value);
 					break;
 				case "num":
-					valid = KNOWWE.plugin.testcasetable.editProvider.isValidNum(el.value);
+					valid = this.isValidNum(el.value);
 					break;
 				case "date":
-					valid = KNOWWE.plugin.testcasetable.editProvider.isValidDate(el.value);
+					valid = this.isValidDate(el.value);
 					break;
 				case "oc":
-					valid = KNOWWE.plugin.testcasetable.editProvider.isValidDropdown(el);
+					valid = this.isValidDropdown(el);
 					break;
 			}
 			//HTML 5 attribut "classList"
@@ -346,7 +346,7 @@ KNOWWE.plugin.testcasetable.editProvider = (function(){
 			for (var i = 1; i < tmp.length; i++) {
 				//get old value, remove the input-box, save the old inner-HTML
 				oldInput = tmp[i].childNodes[colNr].firstChild;
-				value = KNOWWE.table.edit.getValue(editId, oldInput, i, colNr);
+				value = editprovider.getValue(oldInput, i, colNr);
 				tmp[i].childNodes[colNr].removeChild(oldInput);
 				tmpInnerHtml = tmp[i].childNodes[colNr].innerHTML;
 				
@@ -472,10 +472,14 @@ KNOWWE.plugin.testcasetable.editProvider = (function(){
 			if (row <= 1) {
 				return "";
 			} else {
-				return KNOWWE.table.edit.getValue(editId, undefined, (row-1), col);
+				return this.getValue(undefined, (row-1), col);
 			}
 		},
 		
+		getValue : function(el, row, col) {
+			if (el)	return el.value;
+			else return "";
+		},
 		
 		/**
 		 * Returns an array of actions, that are available for the cell at the specified coordinates.

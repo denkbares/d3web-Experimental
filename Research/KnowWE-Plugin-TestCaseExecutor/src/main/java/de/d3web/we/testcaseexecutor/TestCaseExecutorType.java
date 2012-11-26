@@ -67,12 +67,15 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 
 		RessourceLoader.getInstance().add("testcaseexecutor.js",
 				RessourceLoader.RESOURCE_SCRIPT);
+		RessourceLoader.getInstance().add("testcase.js",
+				RessourceLoader.RESOURCE_SCRIPT);
 		RessourceLoader.getInstance().add("testcaseexecutor.css",
 				RessourceLoader.RESOURCE_STYLESHEET);
 	}
 
 	public TestCaseExecutorType() {
 		super(MARKUP);
+		setIgnorePackageCompile(true);
 		addSubtreeHandler(new SubtreeHandler<TestCaseExecutorType>() {
 
 			@Override
