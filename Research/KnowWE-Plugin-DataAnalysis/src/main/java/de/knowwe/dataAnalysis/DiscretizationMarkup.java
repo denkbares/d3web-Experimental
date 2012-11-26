@@ -2,9 +2,9 @@ package de.knowwe.dataAnalysis;
 
 import java.util.regex.Pattern;
 
-import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.IncrementalTermReference;
+import de.knowwe.compile.object.SimpleKnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -26,9 +26,10 @@ public class DiscretizationMarkup extends AbstractKnowledgeUnitType<Discretizati
 		this.addChildType(new DiscretizationMarkupContent());
 
 	}
-	
+
 	public static double[] getDiscretizationBoundaries(Section<DiscretizationMarkup> section) throws NumberFormatException {
-		Section<IntervallContent> intervallContent = Sections.findSuccessor(section, IntervallContent.class);
+		Section<IntervallContent> intervallContent = Sections.findSuccessor(section,
+				IntervallContent.class);
 		if (intervallContent == null) return null;
 		String text = intervallContent.getText();
 		String[] split = text.split(";");
@@ -54,6 +55,7 @@ public class DiscretizationMarkup extends AbstractKnowledgeUnitType<Discretizati
 	}
 
 	class DiscretizationMarkupContent extends AbstractType {
+
 		public DiscretizationMarkupContent() {
 			this.setSectionFinder(new RegexSectionFinder(patternString, Pattern.MULTILINE
 					| Pattern.DOTALL, 1));
@@ -65,20 +67,23 @@ public class DiscretizationMarkup extends AbstractKnowledgeUnitType<Discretizati
 	}
 
 	class Intervalls extends AbstractType {
+
 		String intervallPattern = "\\[(.*?)\\]";
+
 		public Intervalls() {
 			this.setSectionFinder(new RegexSectionFinder(intervallPattern));
 			this.addChildType(new IntervallContent());
 		}
 
 		class IntervallContent extends AbstractType {
+
 			public IntervallContent() {
 				this.setSectionFinder(new RegexSectionFinder(intervallPattern, 0, 1));
 			}
 		}
 	}
 
-	class DiscretizationCompileScript extends AbstractKnowledgeUnitCompileScript<DiscretizationMarkup> {
+	class DiscretizationCompileScript extends SimpleKnowledgeUnitCompileScript<DiscretizationMarkup> {
 
 		@Override
 		public void insertIntoRepository(Section<DiscretizationMarkup> section) {
@@ -89,7 +94,6 @@ public class DiscretizationMarkup extends AbstractKnowledgeUnitType<Discretizati
 							name, Terminology.DISCRETIZATION,
 							createIntervallStringData(section) });
 		}
-
 
 		private String createIntervallStringData(Section<DiscretizationMarkup> section) {
 			double[] discretizationBoundaries = getDiscretizationBoundaries(section);
