@@ -28,7 +28,7 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 
 import de.knowwe.compile.CompileSection;
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
+import de.knowwe.compile.object.SimpleKnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
@@ -45,7 +45,7 @@ import de.knowwe.core.report.Messages;
  * @created 22.11.2011
  * @param <T>
  */
-public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends AbstractKnowledgeUnitCompileScript<T> {
+public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends SimpleKnowledgeUnitCompileScript<T> {
 
 	/**
 	 * Cache for the OWLAxioms. Enables incremental compilation.
