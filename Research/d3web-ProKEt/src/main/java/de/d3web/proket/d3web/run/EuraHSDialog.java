@@ -259,8 +259,8 @@ public class EuraHSDialog extends D3webDialog {
                     d3webSess.getKnowledgeBase().getManager().searchQuestion(iddq));
             if (f == null) {
 
-                String selectChoicePrompt = null;
-                switch (loc) {
+                String selectChoicePrompt = "Please select...";
+                /*switch (loc) {
                     case 1: // german
                         selectChoicePrompt = "Bitte auswählen...";
                         break;
@@ -280,10 +280,9 @@ public class EuraHSDialog extends D3webDialog {
                         selectChoicePrompt = "";
                         break;
                 }
-
                 if (selectChoicePrompt == null) {
                     selectChoicePrompt = "Please select...";
-                }
+                }*/
                 D3webUtils.setValue(iddq, selectChoicePrompt, d3webSess);
             }
 
