@@ -11,7 +11,7 @@ import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
-import de.knowwe.core.kdom.objects.SimpleReference;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 
@@ -87,8 +87,8 @@ public class EqualStringHazardFilter {
 		Section<KnowledgeUnit> castedOtherSection = Sections.cast(other,
 				KnowledgeUnit.class);
 
-		Collection<Section<SimpleReference>> referencesOfNextSection = CompileUtils.getAllReferencesOfCompilationUnit(castedNextSection);
-		Collection<Section<SimpleReference>> referencesOfOtherSection = CompileUtils.getAllReferencesOfCompilationUnit(castedOtherSection);
+		Collection<Section<SimpleTerm>> referencesOfNextSection = CompileUtils.getAllReferencesOfCompilationUnit(castedNextSection);
+		Collection<Section<SimpleTerm>> referencesOfOtherSection = CompileUtils.getAllReferencesOfCompilationUnit(castedOtherSection);
 
 		Collection<String> termNamesOther = resolveTermNames(referencesOfOtherSection);
 		Collection<String> termNamesNext = resolveTermNames(referencesOfNextSection);
@@ -102,9 +102,9 @@ public class EqualStringHazardFilter {
 	 * @param referencesOfSection
 	 * @return
 	 */
-	private Collection<String> resolveTermNames(Collection<Section<SimpleReference>> referencesOfSection) {
+	private Collection<String> resolveTermNames(Collection<Section<SimpleTerm>> referencesOfSection) {
 		Collection<String> termNames = new HashSet<String>();
-		for (Section<SimpleReference> section : referencesOfSection) {
+		for (Section<SimpleTerm> section : referencesOfSection) {
 			termNames.add(section.get().getTermName(section));
 		}
 		return termNames;

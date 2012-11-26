@@ -218,10 +218,10 @@ public class IncrementalCompiler implements EventListener {
 		// otherwise it does not need to be in the toRemove list,
 		// indeed it must not if hazard filter activated!
 		for (Section<? extends KnowledgeUnit> section : deletedknowledge) {
-			Collection<Section<SimpleReference>> referencesOfCompilationUnit = CompileUtils.getAllReferencesOfCompilationUnit(section);
+			Collection<Section<SimpleTerm>> referencesOfCompilationUnit = CompileUtils.getAllReferencesOfCompilationUnit(section);
 			boolean valid = true;
 			// check for all references if had been valid in old version
-			for (Section<SimpleReference> ref : referencesOfCompilationUnit) {
+			for (Section<SimpleTerm> ref : referencesOfCompilationUnit) {
 				if (!terminology.wasValidInOldVersion(ref)) {
 					valid = false;
 				}

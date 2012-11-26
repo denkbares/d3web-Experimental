@@ -97,11 +97,14 @@ public class ReferenceManager {
 	 * @param s
 	 */
 	public void addPredefinedObject(Section<? extends SimpleDefinition> s) {
-		
+
 		TermIdentifier termIdentifier = KnowWEUtils.getTermIdentifier(s);
-		if(validPredefinedObjects.containsKey(termIdentifier)) {
-			throw new IllegalArgumentException("Term is already registered as predefined term. Check plugin configuration: "+termIdentifier.toString());
-		} else {
+		if (validPredefinedObjects.containsKey(termIdentifier)) {
+			throw new IllegalArgumentException(
+					"Term is already registered as predefined term. Check plugin configuration: "
+							+ termIdentifier.toString());
+		}
+		else {
 			validPredefinedObjects.put(termIdentifier, s);
 			registerTermDefinition(s);
 		}
@@ -178,16 +181,17 @@ public class ReferenceManager {
 
 			// we need to additionally find all knowledge units that refer
 			// externally to this reference
-			// TODO: find better/faster way to do this - this brute force style is
+			// TODO: find better/faster way to do this - this brute force style
+			// is
 			// awkward
 			// maybe it can be stored and cached somehow ?
 			Section<RootType> rootSection = ref.getArticle().getRootSection();
 			List<Section<KnowledgeUnit>> allKnowledgeUnitsOfArticle = Sections.findSuccessorsOfType(
 					rootSection, KnowledgeUnit.class);
 			for (Section<KnowledgeUnit> knowledge : allKnowledgeUnitsOfArticle) {
-				Collection<Section<? extends SimpleReference>> allReferencesOfKnowledgeUnit = knowledge.get().getCompileScript().getAllReferencesOfKnowledgeUnit(
+				Collection<Section<? extends SimpleTerm>> allReferencesOfKnowledgeUnit = knowledge.get().getCompileScript().getAllReferencesOfKnowledgeUnit(
 						knowledge);
-				for (Section<? extends SimpleReference> sliceRef : allReferencesOfKnowledgeUnit) {
+				for (Section<? extends SimpleTerm> sliceRef : allReferencesOfKnowledgeUnit) {
 					TermIdentifier sliceRefTermIdentifier = KnowWEUtils.getTermIdentifier(sliceRef);
 					if (sliceRefTermIdentifier.equals(termIdentifier)) {
 						result.add(knowledge);

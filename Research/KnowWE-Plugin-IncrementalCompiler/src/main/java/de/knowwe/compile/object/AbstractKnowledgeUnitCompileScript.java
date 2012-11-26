@@ -24,13 +24,13 @@ import java.util.Collection;
 
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.SimpleReference;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 
 public abstract class AbstractKnowledgeUnitCompileScript<T extends Type> implements KnowledgeUnitCompileScript<T> {
 
 	@Override
-	public Collection<Section<? extends SimpleReference>> getAllReferencesOfKnowledgeUnit(
+	public Collection<Section<? extends SimpleTerm>> getAllReferencesOfKnowledgeUnit(
 			Section<? extends KnowledgeUnit> section) {
 
 		/*
@@ -38,11 +38,11 @@ public abstract class AbstractKnowledgeUnitCompileScript<T extends Type> impleme
 		 * knowledge-units dont overlap
 		 */
 
-		Collection<Section<SimpleReference>> allReferencesOfCompilationUnit = CompileUtils.getAllReferencesOfCompilationUnit(section);
+		Collection<Section<SimpleTerm>> allReferencesOfCompilationUnit = CompileUtils.getAllReferencesOfCompilationUnit(section);
 
 		// some evil workaround because of generics problem
-		Collection<Section<? extends SimpleReference>> result = new ArrayList<Section<? extends SimpleReference>>();
-		for (Section<SimpleReference> ref : allReferencesOfCompilationUnit) {
+		Collection<Section<? extends SimpleTerm>> result = new ArrayList<Section<? extends SimpleTerm>>();
+		for (Section<SimpleTerm> ref : allReferencesOfCompilationUnit) {
 			result.add(ref);
 		}
 
