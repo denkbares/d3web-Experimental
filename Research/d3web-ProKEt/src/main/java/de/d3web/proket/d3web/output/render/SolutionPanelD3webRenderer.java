@@ -111,6 +111,7 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
         ArrayList<Solution> established = new ArrayList<Solution>();
         ArrayList<Solution> suggested = new ArrayList<Solution>();
         ArrayList<Solution> excluded = new ArrayList<Solution>();
+        ArrayList<Solution> unclear = new ArrayList<Solution>();
 
         for (Solution s : valued) {
             if (bb.getRating(s).getState().equals(Rating.State.ESTABLISHED)) {
@@ -119,13 +120,35 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
                 suggested.add(s);
             } else if (bb.getRating(s).getState().equals(Rating.State.EXCLUDED)) {
                 excluded.add(s);
+            } else if (bb.getRating(s).getState().equals(Rating.State.UNCLEAR)){
+                unclear.add(s);
             }
         }
 
-        result.addAll(established);
-        result.addAll(suggested);
-        result.addAll(excluded);
-
+        if(UISettings.getInstance().getSolutionDepth()
+                .equals(D3webXMLParser.SolutionDepth.ESTABLISHED)){
+            result.addAll(established);
+        }
+        if(UISettings.getInstance().getSolutionDepth()
+                .equals(D3webXMLParser.SolutionDepth.SUGGESTED)){
+            result.addAll(established);
+            result.addAll(suggested);
+        }
+        if(UISettings.getInstance().getSolutionDepth()
+                .equals(D3webXMLParser.SolutionDepth.EXCLUDED)){
+            result.addAll(established);
+            result.addAll(suggested);
+            result.addAll(excluded);
+        }
+        if(UISettings.getInstance().getSolutionDepth()
+                .equals(D3webXMLParser.SolutionDepth.ALL)){
+            result.addAll(established);
+            result.addAll(suggested);
+            result.addAll(excluded);
+            result.addAll(unclear);
+        }
+        
+        
         return result;
     }
 
@@ -164,6 +187,12 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
             st.setAttribute("src", "/img/solExc.png");
             st.setAttribute("alt", "excluded");
             st.setAttribute("tt", "excluded");
+        
+        } else if (bb.getRating(solution).getState().equals(Rating.State.UNCLEAR)) {
+            //st.setAttribute("src", "/img/solExc.png");
+            st.setAttribute("alt", "unclear");
+            st.setAttribute("tt", "unclear");
+        
         }
 
 

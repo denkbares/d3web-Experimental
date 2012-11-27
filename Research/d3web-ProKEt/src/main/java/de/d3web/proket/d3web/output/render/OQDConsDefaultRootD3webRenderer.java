@@ -74,8 +74,7 @@ public class OQDConsDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
             st.setAttribute("feedback", "true");
         }
 
-        if (!D3webUESettings.getInstance().getUequestionnaire().equals("FALSE")) {
-            System.out.println("UEQ");
+        if (!D3webUESettings.getInstance().getUequestionnaire().equals(D3webUESettings.UEQ.NONE)) {
             st.setAttribute("ueq", "true");
         }
         /*

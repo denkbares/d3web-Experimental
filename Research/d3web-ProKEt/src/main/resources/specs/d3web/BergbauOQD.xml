@@ -14,6 +14,7 @@
 	language = ""
         debug = "false"
         solutionExplanation = "TEXTUAL" 
+        solutionDepth = "ESTABLISHED"
         diagnosisNavi = "FALSE"
         questionnaireNavi = "FALSE"
         >
@@ -21,6 +22,6 @@
         <ue 
             logging = "FALSE"
             feedback = "FALSE"
-            ueq = "FALSE"
+            questionnaire = "NONE"
             />
 </dialog>
