@@ -73,7 +73,7 @@ $(function(){
             removeClass("statusMessageOK").addClass("statusMessageERR");
         } 
         if(status=="nokb"){
-            $('#statusMessage').html("<b>Bitte Wissensbasis Dokument (.doc/.d3web) auswählen!</b>")
+            $('#statusMessage').html("<b>Bitte Wissensbasis Dokument (.doc/.xls/.d3web) auswählen!</b>")
             removeClass("statusMessageOK").addClass("statusMessageERR");
         }
     //window.location.href = removeParameter(window.location.href, "upERR");
@@ -89,6 +89,13 @@ $(function(){
     //window.location.href = removeParameter(window.location.href, "upfilename");
     }
  
+    $("#delKBButton").unbind('click').click(function(){
+        deleteSelectedKB();
+    })
+    
+    $("#activateKBButton").unbind('click').click(function(){
+        assembleDialog();
+    })
     
 });
 
@@ -188,9 +195,10 @@ function assembleDialog(){
         success : function(html) {
             if(html.indexOf("ERROR")==-1){
                 // store link in hidden field
-                $("#latestDialogLink").html(html); 
+                var link = "<a href='" + html + "' target='blank'>" + html + "</a>";
+                $("#latestDialogLink").html(link); 
                 // open the dialog in a new window 
-                window.open(html);
+                //window.open(html);
                 // activate button for storing dialog to the user's list'
                 $("#StoreImgButton img").attr("src", "img/Store.png");
             } else {

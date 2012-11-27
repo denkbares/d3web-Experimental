@@ -373,35 +373,46 @@ public class D3webUtils {
      */
     public static KnowledgeBase getKnowledgeBase(String kbFilename, String path) throws IOException {
 
-        String PATHSEP = System.getProperty("file.separator");
-        if (path.equals("DEFAULT")) {
-            path = "/specs/d3web/";
-        } else if (path.contains("UPFiles")) {
-            path = "/../../UPFiles/d3web/";
-        } else if (path.contains("WUMP")) {
-            path = path + PATHSEP;
-        }
-   
         // add .jar if it's not already there
         if (!kbFilename.endsWith(".jar")
                 && !kbFilename.endsWith(".d3web")) {
             kbFilename += ".d3web";
         }
+        File kbFile = null;
+
+        String PATHSEP = System.getProperty("file.separator");
+
+        if (path.equals("DEFAULT")) {
+            path = "/specs/d3web/";
+
+            kbFile = FileUtils.getResourceFile(path + kbFilename);
+
+        } else if (path.contains("UPFiles")) {
+            path = "/../../UPFiles/d3web/";
+        } else if (path.contains("WUMP")) {
+            path = path + PATHSEP;
+
+            kbFile = new File(path + kbFilename);
+        }
+
+        System.out.println(path);
+
+
 
         // Paths here are relative to the WEB-INF/classes folder!!!
-        File kbFile = new File(path + kbFilename);
+
         File libPath = FileUtils.getResourceFile("/../lib");
-       
+
         // initialize PluginManager
         File[] files = null;
         files = getAllJPFPlugins(libPath);
         JPFPluginManager.init(files);
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
 
-        //System.out.println(kbFile.getName() + " " + kbFile.getAbsolutePath());
+        System.out.println(kbFile.getName() + " " + kbFile.getAbsolutePath());
         //KnowledgeBase kb = persistenceManager.load(kbFile);
         KnowledgeBase kb = persistenceManager.load(kbFile);
-       
+
         // try to load knowledge base
         return kb;
 
@@ -1740,16 +1751,20 @@ public class D3webUtils {
     public static Collection<Question> resetAbandonedPaths(Session sess,
             HttpSession httpSess) {
 
+        System.out.println("RESET ABANDONED PATHS");
         // get all questions that were set per default initially
         // e.g. in EuraHS, we need to init set all dropdowns as to enable the
         // follow up mechanisms
         ArrayList<String> initSetQuestions =
                 (ArrayList<String>) httpSess.getAttribute("initsetquestions");
+        
         Blackboard bb = sess.getBlackboard();
         Collection<Question> resetQuestions = new LinkedList<Question>();
+        
         Set<QASet> initQuestions = new HashSet<QASet>(
                 D3webConnector.getInstance().getKb().getInitQuestions());
-
+        System.out.println("RAP: init questions - " + initQuestions.toString());
+        
         // check all questions that have been lately answered 
         for (Question question : bb.getAnsweredQuestions()) {
 
@@ -1758,10 +1773,14 @@ public class D3webUtils {
                     // and if question is not a required question
                     && !question.getName().equals(
                     D3webConnector.getInstance().getD3webParser().getRequired())) {
-
+                    
+                System.out.println("RAP: !active && !required ");
                 // and if there are initSet questions and those do not contain q
-                if (initSetQuestions != null && !initSetQuestions.contains(question.getName())) {
+                if ((initSetQuestions != null && !initSetQuestions.contains(question.getName()))
+                        || initSetQuestions == null) {
 
+                    System.out.println("RAP: !initially set ");
+                    System.out.println("RAP: try removing... ");
                     // then remove the corresponding fact from the blackboard
                     Fact lastFact = bb.getValueFact(question);
                     if (lastFact != null

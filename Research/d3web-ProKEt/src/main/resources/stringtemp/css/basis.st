@@ -165,3 +165,10 @@ body,table,div {
 #leftBorderSpacer{min-width: 20px; }
 
 #rightBorderSpacer{min-width: 30%; }
+
+.defaultPlainButton{width: 70px; height: 24px;
+    left: 290px;
+    min-width: 25px;
+    position: absolute;
+    top: -1px;
+    margin-top: 10px;}

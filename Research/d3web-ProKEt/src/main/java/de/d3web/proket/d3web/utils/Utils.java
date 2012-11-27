@@ -34,20 +34,29 @@ public class Utils {
 
     public static File checkCreateDir(String dirpath) {
 
-        File pathF = new File(dirpath);
-        if (!pathF.exists()) {
-            pathF.mkdirs();
+        File pathF = null;
+        try {
+            pathF = new File(dirpath);
+            if (!pathF.exists()) {
+                pathF.mkdirs();
+            }
+        } catch (Exception e) {
+            e.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
         }
+
         return pathF;
     }
 
     public static File checkCreateFile(String filepath) {
-        File fileF = new File(filepath);
+        System.err.println(filepath);
+        File fileF = null;
         try {
+            fileF = new File(filepath);
             if (!fileF.exists()) {
                 fileF.createNewFile();
             }
         } catch (IOException ioe) {
+            SystemLoggerUtils.getExceptionLoggerStream().println("CheckCreateFile: filepath= " + filepath + "\n" );
             ioe.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
         }
         return fileF;

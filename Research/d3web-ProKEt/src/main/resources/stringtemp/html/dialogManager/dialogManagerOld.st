@@ -71,41 +71,65 @@
         <div id="d3webFileSelectorCell" class="cell">
             <div id="fileSelectHeading" class="row">
                 <div id="actionsLabel" class="cell labelcell">Wissensbasen</div>
+                <div class="cell deleteButton">
+                        $ImgButton(src="img/Delete.png", 
+                        alt="Wissensbasis Entfernen",
+                        tt="Entferne markierte Wissensbasis",
+                        click="deleteSelectedKB();")$
+                    </div>
             </div>
             
             $dialogManager/FileSelectorD3web()$
-
-            <div id="kbButtons" class="row">
-                <div class="cell">
-                    <input type="button" name="delKBButton" id="delKBButton" class="defaultPlainButton" value="Entfernen" /> 
-                </div>
-                <div class="cell">
-                    <input type="button" name="activateKBButton" id="activateKBButton" class="defaultPlainButton" value="Aktivieren" />
-                </div>
-                 
-            </div>
-
         </div>
+        <div id="specFileSelectorCell" class="cell" >
+            <div id="actionsLabel" class="cell labelcell">Dialogtypen</div>
+            $dialogManager/FileSelectorSpecs()$
+        </div>
+    </div>
+    </div>
 
-        <div id="selctorRowRightColCell" class="cell">
-            <div id="specFileSelectorCellRow" class="row" >
-                <div id="specFileSelectorCell" class="cell">
-                    <div id="actionsLabel" class="cell labelcell">Dialogtypen</div>
-                    $dialogManager/FileSelectorSpecs()$
-                </div>
-            </div>
+    <div id="spacecol" class="cell">
+    </div>
 
+    <div id="datarightcol" class="cell">
+        <div id="dlActionsLabelRow" class="row">
+            <div id="actionsLabel" class="cell labelcell">Testen </div>
+        </div>
         
-            <div id="dialogLinkViewerRow" class="row">
-                <div id="dialogLinkViewerCell" class="cell">
-                    <div id="actionsLabel" class="cell labelcell">Dialog Links</div>
-                    <div id="latestDialogLink" style="display:block;"></div>
+        <div class="row">
+            <div class="cell buttoncell firstcell">
+                <div class="cell">
+                    $ImgButton(src="img/AssembleRun.png", 
+                            alt="Assemble and Run Dialog",
+                            tt="Assemble and Run Dialog",
+                            click="assembleDialog()")$
+                </div>
+                <div class="cell spacercell">
+                </div>
+                <div class="cell">
+                    $ImgButton(src="img/StoreInactive.png", 
+                            alt="Store",
+                            tt="Store Knowledge Base to Repository",
+                            click="storeDialogToUsersList();")$
                 </div>
             </div>
+            <div class="cell buttoncell lastcell">    
+            </div>
         </div>
+
+        <div id="spacerowRightcol" class="cell">
+        </div>
+
+        <div id="dialoglinkviewer">
+            <div id="latestDialogLink" style="display: none"></div>
+            <div id="actionsLabel" class="cell labelcell">Dialog Links</div>
+            <div id="dialoglinklist">
+                $dialogLinkList$
+            </div>
+        </div>
+
 
     </div>
-    
 </div>
 </body>
 </html>

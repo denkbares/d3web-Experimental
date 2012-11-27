@@ -46,7 +46,6 @@ import java.util.List;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
-import org.apache.xmlbeans.impl.xb.ltgfmt.TestCase.Files;
 import org.xml.sax.SAXException;
 
 /**
@@ -82,28 +81,32 @@ public class DialogManager extends HttpServlet {
         GLOBSET.setServletBasePath(servletcontext);
 
         // TODO: make property in specs
-        GLOBSET.setWebAppWarName("/JuriLibreOffice");
-        GLOBSET.setWebAppWarName("");
+        //GLOBSET.setWebAppWarName("/JuriLibreOffice");
+        GLOBSET.setWebAppWarName("/UploadParseTool");
+        //GLOBSET.setWebAppWarName("");
 
         String webappname =
                 GLOBSET.getWebAppWarName().equals("") ? "" : GLOBSET.getWebAppWarName() + "_";
 
+
         // the storage for files which lies outside the webapp. E.g. for parsed KBs
-        String base = servletcontext.substring(0, servletcontext.length()-1);
+        String base = servletcontext.substring(0, servletcontext.length() - 1);
         // cut two inner dirs as we want this to be all outside the inner webapp
-        base = base.replace(base.substring(base.lastIndexOf("/"), base.length()),""); 
-        base = base.replace(base.substring(base.lastIndexOf("/"), base.length()),"");
-        
-        String storeOutsideWUMPPath = 
-                base + FILESEP + webappname  + GLOBSET.getWUMPFolderName();
-        
+        base = base.replace(base.substring(base.lastIndexOf(FILESEP), base.length()), "");
+        base = base.replace(base.substring(base.lastIndexOf(FILESEP), base.length()), "");
+
+        String storeOutsideWUMPPath =
+                base + FILESEP + webappname + GLOBSET.getWUMPFolderName();
+
         File storageDir = Utils.checkCreateDir(storeOutsideWUMPPath);
-        storageDir.canExecute(); storageDir.canWrite(); storageDir.canRead();
-        
+        storageDir.canExecute();
+        storageDir.canWrite();
+        storageDir.canRead();
+
         GLOBSET.setStoreOutsideWUMPPath(storeOutsideWUMPPath);
-        System.out.println(GLOBSET.getStoreOutsideWUMPPath());
+        System.err.println("OutsideWUMPPath: " + GLOBSET.getStoreOutsideWUMPPath());
         GLOBSET.setUploadFilesBasePath(GLOBSET.getServletBasePath() + GLOBSET.getUploadFilesFolderName());
-        System.out.println(GLOBSET.getUploadFilesBasePath());
+        System.err.println("UploadFilesBasePath: " + GLOBSET.getUploadFilesBasePath());
 
         // initialize the d3web parser
         d3webParser = new D3webXMLParser();
@@ -179,7 +182,7 @@ public class DialogManager extends HttpServlet {
         // get the css file for styling the DialogManager Module
         File css = FileUtils.getResourceFile("/stringtemp/css/diaManStyle.st");
 
-        st.setAttribute("kbuploadfieldlabel", "Wissensbasis-Datei wählen (.doc/.d3web)");
+        st.setAttribute("kbuploadfieldlabel", "Wissensbasis-Datei wählen (.doc/.xls/.d3web)");
         st.setAttribute("specuploadfieldlabel", "UI Spezifikation wählen (.xml)");
 
         String cssString = FileUtils.getString(css);
@@ -335,9 +338,10 @@ public class DialogManager extends HttpServlet {
         System.err.println("\t - kbName selected: " + kbName);
 
         boolean deleteSuccess = false;
-        String path = GLOBSET.getUploadFilesBasePath() + FILESEP
-                + "d3web/";
-
+        //String path = GLOBSET.getUploadFilesBasePath() + FILESEP
+                //+ "d3web/";
+        String path = GLOBSET.getStoreOutsideWUMPPath() + FILESEP + "d3web" + FILESEP;
+        
         System.err.println("\t - kb filepath on server: " + path);
         File fileToDelete = new File(path + kbName + ".d3web");
         if (fileToDelete.exists()) {
@@ -552,9 +556,9 @@ public class DialogManager extends HttpServlet {
         } else if (parseResult.equals("ParseError")) {
             // don't need system filesep here because its gonna be web path
             String errFilePath =
-                    GLOBSET.getWebAppWarName() + "/" + 
-                    GLOBSET.getUploadFilesFolderName() + "/" + 
-                    docname + "_Error.html";
+                    GLOBSET.getWebAppWarName() + "/"
+                    + GLOBSET.getUploadFilesFolderName() + "/"
+                    + docname + "_Error.html";
             System.err.println("\t - error report filename: " + errFilePath);
             writer.append("showErrFile;" + errFilePath);
             System.err.println("Parse KB Document - show error report...");
@@ -575,7 +579,14 @@ public class DialogManager extends HttpServlet {
 
         String status = "ParseException";
         System.err.println("Parse KB - parser call...");
-        Html2KnowWECompiler compiler = new converter.Html2KnowWECompiler();
+        //Html2KnowWECompiler compiler = new converter.Html2KnowWECompiler();
+        
+        converter.compiler.Compiler compiler = null;
+        try {
+            compiler = new converter.compiler.Compiler();
+        } catch (Exception e) {
+            e.printStackTrace(SystemLoggerUtils.getEventLoggerStream());
+        }
 
         String upPath = GLOBSET.getUploadFilesBasePath();
         System.err.println("\t - upload base path: " + upPath);
@@ -620,7 +631,10 @@ public class DialogManager extends HttpServlet {
 
         // TODO: write Exceptions to Exception Doc
         try {
-            compileError = compiler.compileTo3web(doc, err, tmp, d3web, knowwe);
+            //compileError = compiler.compileTo3web(doc, err, tmp, d3web, knowwe);
+            compileError = compiler.compile(doc, err, tmp, d3web, knowwe);
+
+
             System.err.println("\t - Compilation error?: " + compileError);
             if (compileError) {
                 // something went wrong during compilation. 
@@ -630,31 +644,30 @@ public class DialogManager extends HttpServlet {
 
                 // OK everything fine. Then rename d3web file and store latest one
                 // in webapp/session
-                checkAndRenameD3webFile(docName.replace(".doc", ""), d3wF, http);
+                checkAndRenameD3webFile(docName.replace(".doc", "").replace(".xls", ""), d3wF, http);
                 errFile.delete();
-
-                           
-                Runtime rt = Runtime.getRuntime();
-                try {
-                    if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1) {
-                        // need to kill it on ?!
-                    } else {
-                        System.err.println("\t - try to kill soffice on MAC systems...");
-                        String execute = "killall soffice.bin";
-                        System.err.println("\t - executing kill command: " + execute);
-                        rt.exec(execute);
-                    }
-                } catch (IOException ioe) {
-                    ioe.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
-                    status = "ParseException";
-                }
 
                 System.err.println("Parse KB - parser call SUCCESS...");
                 status = "ParseSuccess";
             }
 
+            Runtime rt = Runtime.getRuntime();
+            try {
+                if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1) {
+                    // need to kill it on ?!
+                } else {
+                    System.err.println("\t - try to kill soffice on MAC systems...");
+                    String execute = "killall soffice.bin";
+                    System.err.println("\t - executing kill command: " + execute);
+                    rt.exec(execute);
+                }
+            } catch (IOException ioe) {
+                ioe.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+                status = "ParseException";
+            }
+
             docToParse.delete();
- 
+
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
         } catch (SAXException saxe) {
@@ -702,7 +715,7 @@ public class DialogManager extends HttpServlet {
                     String targetD3web = targetDir + FILESEP + targetD3webName;
                     File tf = new File(targetD3web);
                     toRename.renameTo(tf);
-                    
+
                     toRename.delete();
 
                     if (tf != null
@@ -754,22 +767,31 @@ public class DialogManager extends HttpServlet {
             System.err.println("Finalize Exception Report - " + logfile.getAbsoluteFile());
 
             String outsideStorageDir =
-                    GLOBSET.getStoreOutsideWUMPPath() + FILESEP + "syslogs" + FILESEP;
+                    GLOBSET.getStoreOutsideWUMPPath() + FILESEP + "syslogs";
+
+            // TODO: check: problem with creation of outside storage dir?!
             Utils.checkCreateDir(outsideStorageDir);
+            System.err.println("\t - OutsideStorageDir: " + new File(outsideStorageDir).getAbsolutePath());
 
-            Date d = new Date();
-            String filenameToStore = d.toString() + "_" + finalExReportFile.getName();
+            GregorianCalendar greg = new GregorianCalendar();
 
-            String toRenameTo = outsideStorageDir + filenameToStore;
+            String filenameToStore = String.valueOf(greg.get(GregorianCalendar.YEAR))
+                    + String.valueOf(greg.get(GregorianCalendar.MONTH))
+                    + String.valueOf(greg.get(GregorianCalendar.DATE))
+                    + String.valueOf(greg.get(GregorianCalendar.HOUR_OF_DAY))
+                    + "_"
+                    + String.valueOf(greg.get(GregorianCalendar.HOUR_OF_DAY))
+                    + String.valueOf(greg.get(GregorianCalendar.MINUTE))
+                    + String.valueOf(greg.get(GregorianCalendar.SECOND))
+                    + "_" + finalExReportFile.getName();
+
+
+            String toRenameTo = new File(outsideStorageDir).getAbsolutePath() + FILESEP + filenameToStore;
+            System.err.println("\t - To Rename To path and filename: " + toRenameTo);
+
+
             File fileToCopy = Utils.checkCreateFile(toRenameTo);
 
-            boolean copied = finalExReportFile.renameTo(fileToCopy);
-
-            if (!copied) {
-                SystemLoggerUtils.getExceptionLoggerStream().println(
-                        "File " + finalExReportFile.getName() + " could not be "
-                        + "copied to " + toRenameTo);
-            }
 
             /*
              * Read existing File Contents in temporary exception report
@@ -784,6 +806,14 @@ public class DialogManager extends HttpServlet {
                 bui.append(LINESEP);
             }
             br.close();
+
+            boolean copied = logfile.renameTo(fileToCopy);
+
+            if (!copied) {
+                SystemLoggerUtils.getExceptionLoggerStream().println(
+                        "File " + finalExReportFile.getName() + " could not be "
+                        + "copied to " + toRenameTo);
+            }
 
             /*
              * Clear all previous contents of the final Exception Report
@@ -828,6 +858,7 @@ public class DialogManager extends HttpServlet {
      * @return a String containing the entire (HTML) exception report
      */
     private String assembleExceptionReport(String exceptionString) {
+        Date d = new Date();
         StringBuilder finalBui = new StringBuilder();
         finalBui.append("<html>");
         finalBui.append("<head>");
@@ -838,7 +869,7 @@ public class DialogManager extends HttpServlet {
                 + "<span style='color: red;'>Bitte leiten Sie den Inhalt dieses "
                 + "Fensters an den Systemadministrator weiter. </span> <br><br>"
                 + "Das Problem wird dann baldmöglichst behoben.<br /><br /><br />"
-                + "Fehlermeldung: </h3>");
+                + "Fehlermeldung vom " + d.toString() + ":</h3>");
         finalBui.append("<h5>");
         finalBui.append(exceptionString);
         finalBui.append("</h5>");

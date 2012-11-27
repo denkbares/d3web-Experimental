@@ -248,10 +248,27 @@ public class D3webXMLParser {
         
         if (solType != null) {
             current = SolutionExplanationType.valueOf(solType);
-            System.out.println(current);
+            //System.out.println(current);
         }
         return current;
     }
+    
+    public enum SolutionDepth{
+        ALL, ESTABLISHED, SUGGESTED, EXCLUDED
+    }
+    
+    // return the solution depth to be used in solution panel
+    public SolutionDepth getSolutionDepth() {
+        SolutionDepth current = SolutionDepth.ALL;
+        String solDepth = XMLUtils.getStr((Element) dialogSpec, "solutionDepth", null);
+        
+        if (solDepth != null) {
+            current = SolutionDepth.valueOf(solDepth);
+            //System.out.println(solDepth);
+        }
+        return current;
+    }
+    
 
     // returns the specification of required fields
     public String getRequired() {

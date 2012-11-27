@@ -99,7 +99,9 @@ public class FileUploadServlet extends HttpServlet {
             
             if (!tmpFile.getName().endsWith(".doc") &&
                     !tmpFile.getName().endsWith(".d3web") &&
-                        !tmpFile.getName().endsWith(".zip")) {
+                        !tmpFile.getName().endsWith(".zip") &&
+                            (!tmpFile.getName().endsWith(".xls")
+                            && tmpFile.getName().endsWith(".xlsx"))) {
                 response.sendRedirect(GLOBSET.getWebAppWarName() + 
                         "/DialogManager?upERR=nokb");
             }

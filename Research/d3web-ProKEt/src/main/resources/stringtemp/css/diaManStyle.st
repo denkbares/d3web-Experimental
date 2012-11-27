@@ -64,6 +64,7 @@ input{border: 1px dotted darkgrey;
 
 #docfilename{left: -1px;
     min-width: 22%px;
+    width: 290px;
     position: absolute;
     top: -1px;
     margin-top: 10px;}
@@ -75,7 +76,7 @@ input{border: 1px dotted darkgrey;
     margin-top: 10px;}
 
 #docfilebutton{width: 70px; height: 24px;
-    left: 240px;
+    left: 290px;
     min-width: 25px;
     position: absolute;
     top: -1px;
@@ -105,7 +106,7 @@ input{border: 1px dotted darkgrey;
 
 #origKBUploadField,#origSpecUploadField {width: 220px; position: relative; z-index:2; opacity:0;}
 
-#origKBUploadField{margin-top:12px; width: 245px;}
+#origKBUploadField{margin-top:12px; width: 295px;}
 
 #origSpecUploadField{margin-top:10px; width: 225px;}
 
@@ -166,7 +167,7 @@ input{border: 1px dotted darkgrey;
 
 .specsSelect{min-width: 130px;}
 
-.d3webSelect{min-width: 275px;}
+.d3webSelect{min-width: 300px;}
 
 #spacerowRightcol{min-height: 20px; height: 35px;}
 
@@ -177,3 +178,15 @@ input{border: 1px dotted darkgrey;
     padding-left: 20px;
     vertical-align: middle;
     width: 30px;}
+
+#specFileSelectorCell{padding-right: 50px;}
+
+.defaultPlainButton {
+     height: 20px;
+    margin-left: 5px;
+    margin-right: 10px;
+    margin-top: 5px;
+    min-width: 25px;
+    position: relative;
+    width: 70px;
+}

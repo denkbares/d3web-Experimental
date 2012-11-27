@@ -1792,6 +1792,7 @@ public class D3webDialog extends HttpServlet {
 
         KnowledgeBase d3web = null;
         if (kbName != null && !kbName.equals("")) {
+            // DialogManager with outside path store
             if (httpSession.getAttribute("WUMP") != null
                     && httpSession.getAttribute("WUMP").equals("true")) {
                 String wumpPath =
@@ -1824,7 +1825,7 @@ public class D3webDialog extends HttpServlet {
         uis.setSolutionExplanationType(d3webParser.getSolutionExplanationType());
         uis.setDiagnosisNavi(d3webParser.getDiagnosisNavi());
         uis.setQuestionnaireNavi(d3webParser.getQuestionnaireNavi());
-
+        uis.setSolutionDepth(d3webParser.getSolutionDepth());
 
         String uegroup = d3webParser.getUEGroup() != null ? d3webParser.getUEGroup() : "";
         httpSession.setAttribute("uegroup", uegroup);
@@ -1832,6 +1833,7 @@ public class D3webDialog extends HttpServlet {
         uesettings.setLogging(d3webParser.getLogging());
         uesettings.setFeedbackform(d3webParser.getFeedbackform());
         uesettings.setUequestionnaire(d3webParser.getUEQuestionnaire());
+        System.out.println("PARSE:" + d3webParser.getUEQuestionnaire());
 
         // set dialog language (for internationalization of widgets, NOT
         // KB elements (specified in knowledge base
