@@ -22,35 +22,11 @@ package de.knowwe.compile.object;
 
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.objects.SimpleReference;
-import de.knowwe.core.kdom.rendering.Renderer;
 
 public abstract class IncrementalTermReference extends SimpleReference {
 
 	public IncrementalTermReference(Class<?> termObjectClass) {
 		super(TermRegistrationScope.GLOBAL, termObjectClass);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.knowwe.core.kdom.AbstractType#setRenderer(de.knowwe.core.kdom.rendering
-	 * .Renderer)
-	 * 
-	 * 
-	 * makes sure that the ReferenceRenderer for the error-messages is actually
-	 * installed and called and does not get overridden
-	 */
-	@Override
-	public void setRenderer(Renderer renderer) {
-		if (this.getRenderer() != null) {
-			if (this.getRenderer() instanceof ReferenceRenderer) {
-				((ReferenceRenderer) this.getRenderer()).setRenderer(renderer);
-			}
-		}
-		else {
-			super.setRenderer(renderer);
-		}
 	}
 
 }

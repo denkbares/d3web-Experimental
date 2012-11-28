@@ -21,21 +21,20 @@
 package de.knowwe.rdfs;
 
 import de.knowwe.compile.object.IncrementalTermReference;
+import de.knowwe.compile.object.renderer.CompositeRenderer;
+import de.knowwe.compile.object.renderer.ReferenceRenderer;
+import de.knowwe.compile.object.renderer.ReferenceSurroundingRenderer;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
-import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public class IRITermRef extends IncrementalTermReference {
 
-	final Renderer REF_RENDERER =
-			new ToolMenuDecoratingRenderer(new StyleRenderer(
-					"color:rgb(25, 180, 120)"));
-
 	public IRITermRef() {
 		super(String.class);
-		this.setRenderer(REF_RENDERER);
+		this.setRenderer(new CompositeRenderer(new ReferenceRenderer(new StyleRenderer(
+				"color:rgb(25, 180, 120)")),
+				new ReferenceSurroundingRenderer()));
 	}
 
 	@Override
