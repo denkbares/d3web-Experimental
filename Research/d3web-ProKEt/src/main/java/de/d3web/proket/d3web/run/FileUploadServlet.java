@@ -22,6 +22,7 @@ package de.d3web.proket.d3web.run;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import de.d3web.proket.utils.GlobalSettings;
+import de.d3web.proket.utils.SystemLoggerUtils;
 import java.io.File;
 import java.io.IOException;
 import javax.servlet.ServletConfig;
@@ -98,27 +99,39 @@ public class FileUploadServlet extends HttpServlet {
             if (!tmpFile.getName().endsWith(".doc")
                     && !tmpFile.getName().endsWith(".d3web")
                     && !tmpFile.getName().endsWith(".zip")
-                    && !tmpFile.getName().endsWith(".xls")
+                    //&& !tmpFile.getName().endsWith(".xls")
                     && !tmpFile.getName().endsWith(".xlsx")) {
-                
+
                 response.sendRedirect(GLOBSET.getWebAppWarName()
                         + "/DialogManager?upERR=nokb");
             } else {
 
-                File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
-                String newFileName = tmpFile.getName();
-                File fileToMove = new File(dirToMove, newFileName);
-                tmpFile.renameTo(fileToMove);
+                try {
+                    System.err.println("FileUploadServlet - UploadKB - upload base path: "
+                            + GLOBSET.getUploadFilesBasePath());
+                    File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
+                    System.err.println("FileUploadServlet - UploadKB - filepath to be written: "
+                            + dirToMove.getAbsolutePath());
+                    
+                    String newFileName = tmpFile.getName();
+                    File fileToMove = new File(dirToMove, newFileName);
+                    System.err.println("FileUploadServlet - UploadKB - final file: "
+                            + fileToMove.getAbsolutePath());
+                    
+                    
+                    tmpFile.renameTo(fileToMove);
 
-                HttpSession httpSession = request.getSession();
-                // TODO: move this to processDOC Method where doc is parsed into d3web, later
-                //TODO: flexible    httpSession.setAttribute("latestD3web", newFileName);
-                httpSession.setAttribute("latestDoc", newFileName);
+                    HttpSession httpSession = request.getSession();
+                    // TODO: move this to processDOC Method where doc is parsed into d3web, later
+                    //TODO: flexible    httpSession.setAttribute("latestD3web", newFileName);
+                    httpSession.setAttribute("latestDoc", newFileName);
 
-                tmpFile.delete();
-                response.sendRedirect(GLOBSET.getWebAppWarName()
-                        + "/DialogManager?upKB=done&upfilename=" + newFileName);
-
+                    tmpFile.delete();
+                    response.sendRedirect(GLOBSET.getWebAppWarName()
+                            + "/DialogManager?upKB=done&upfilename=" + newFileName.replace("%", " "));
+                } catch (Exception e) {
+                    e.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+                }
             }
         } else {
             response.sendRedirect(GLOBSET.getWebAppWarName()

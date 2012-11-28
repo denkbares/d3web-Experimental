@@ -58,7 +58,7 @@ $(function(){
     var statusKB =  Request.parameter("upKB");
     var statusSpecs = Request.parameter("upSPEC");
     var status = Request.parameter("upERR");
-    upfilename = Request.parameter("upfilename");
+    upfilename = Request.parameter("upfilename").replace("%", " ");
     
     //dmOpenExceptionReport();
     
@@ -73,7 +73,7 @@ $(function(){
             removeClass("statusMessageOK").addClass("statusMessageERR");
         } 
         if(status=="nokb"){
-            $('#statusMessage').html("<b>Bitte Wissensbasis Dokument (.doc/.xls/.d3web) auswählen!</b>")
+            $('#statusMessage').html("<b>Bitte erlaubtes Wissensbasis Dateiformat (.doc/.xlsx/.d3web) auswählen!</b>")
             removeClass("statusMessageOK").addClass("statusMessageERR");
         }
     //window.location.href = removeParameter(window.location.href, "upERR");
