@@ -20,22 +20,13 @@
 
 package de.knowwe.compile.object;
 
-
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
-import de.knowwe.core.kdom.rendering.Renderer;
-import de.knowwe.kdom.renderer.StyleRenderer;
-import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public abstract class IncrementalTermDefinition<TermObject> extends SimpleDefinition {
 
-	final Renderer CLASS_RENDERER = new TermDefinitionRenderer<TermObject>(
-			new ToolMenuDecoratingRenderer(
-					new StyleRenderer("color:rgb(125, 80, 102)")));
-
 	public IncrementalTermDefinition(Class<?> termObjectClass) {
 		super(TermRegistrationScope.GLOBAL, termObjectClass);
-		this.setRenderer(CLASS_RENDERER);
 	}
 
 }

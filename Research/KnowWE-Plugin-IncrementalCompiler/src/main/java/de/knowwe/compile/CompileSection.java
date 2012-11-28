@@ -21,6 +21,7 @@ package de.knowwe.compile;
 
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 
 /**
  * Wrapper class for sections allowing equals to compare only the text-content.
@@ -63,53 +64,10 @@ public class CompileSection<T extends Type> {
 				return false;
 			}
 			else {
-				return true;
-				// if (type instanceof KnowledgeUnit && other.get() instanceof
-				// KnowledgeUnit) {
-				// // find out whether external references are equals also
-				// Section<KnowledgeUnit> thisUnit = Sections.cast(section,
-				// KnowledgeUnit.class);
-				// Collection<Section<? extends SimpleTerm>> externalReferences
-				// = (Collection<Section<? extends SimpleTerm>>)
-				// (KnowWEUtils.getStoredObject(
-				// thisUnit,
-				// IncrementalCompiler.EXTERNAL_REFERENCES_OF_KNOWLEDGEUNIT));
-				// Section<KnowledgeUnit> otherUnit = Sections.cast(section,
-				// KnowledgeUnit.class);
-				// Collection<Section<? extends SimpleTerm>>
-				// otherExternalReferences = (Collection<Section<? extends
-				// SimpleTerm>>) (KnowWEUtils.getStoredObject(
-				// otherUnit,
-				// IncrementalCompiler.EXTERNAL_REFERENCES_OF_KNOWLEDGEUNIT));
-
-				// return otherExternalReferences.equals(externalReferences);
-
-				// Collection<Section<? extends SimpleTerm>>
-				// allReferencesOfKnowledgeUnit =
-				// thisUnit.get().getCompileScript().getAllReferencesOfKnowledgeUnit(
-				// thisUnit);
-				// Collection<CompileSection<? extends SimpleTerm>> refs =
-				// new
-				// HashSet<CompileSection<? extends SimpleTerm>>();
-				// for (Section<? extends SimpleTerm> section :
-				// allReferencesOfKnowledgeUnit) {
-				// refs.add(new CompileSection(section));
-				// }
-				//
-				// Collection<Section<? extends SimpleTerm>>
-				// allReferencesOfOtherKnowledgeUnit =
-				// otherUnit.get().getCompileScript().getAllReferencesOfKnowledgeUnit(
-				// otherUnit);
-				// Collection<CompileSection<? extends SimpleTerm>>
-				// otherRefs =
-				// new HashSet<CompileSection<? extends SimpleTerm>>();
-				// for (Section<? extends SimpleTerm> section :
-				// allReferencesOfOtherKnowledgeUnit) {
-				// otherRefs.add(new CompileSection(section));
-				// }
-
-				// return refs.equals(otherRefs);
-				// }
+				if (Sections.createTypePathToRoot(other.section).equals(
+						Sections.createTypePathToRoot(this.section))) {
+					return true;
+				}
 			}
 		}
 		return false;

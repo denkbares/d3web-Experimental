@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.LocationDependantKnowledgeUnit;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.compile.utils.CompileUtils;
@@ -104,8 +106,17 @@ public class EqualStringHazardFilter {
 		allOldReferences.addAll(allLocalReferencesOfCompilationUnit);
 
 		// for the new unit the normal way of fetching all refs can be used.
-		Collection<Section<? extends SimpleTerm>> referencesOfOtherSection = castedOtherSection.get().getCompileScript().getAllReferencesOfKnowledgeUnit(
-				castedOtherSection);
+
+		Collection<Section<? extends SimpleTerm>> referencesOfOtherSection = new HashSet<Section<? extends SimpleTerm>>();
+		KnowledgeUnitCompileScript<Type> compileScript = castedOtherSection.get().getCompileScript();
+		if (compileScript != null) {
+			referencesOfOtherSection = compileScript.getAllReferencesOfKnowledgeUnit(
+					castedOtherSection);
+		}
+		else {
+			Logger.getLogger(this.getClass().getName()).warning(
+					"KnowledgeUnit without CompileScript: " + castedOtherSection.toString());
+		}
 
 		Collection<String> termNamesOther = resolveTermNames(referencesOfOtherSection);
 		Collection<String> termNamesOld = resolveTermNames(allOldReferences);

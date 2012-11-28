@@ -26,11 +26,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
+import de.knowwe.compile.object.InvalidReference;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypeRestrictedReference;
@@ -266,6 +268,11 @@ public class IncrementalCompiler implements EventListener {
 						knowledgeUnit);
 				if (refs != null) {
 					for (Section<?> ref : refs) {
+						if (ref.get() instanceof InvalidReference) {
+							knowledgeSlicesToRemove.add(knowledgeUnit);
+							compilationUnitIterator.remove();
+							break;
+						}
 						if (!terminology.isValid(KnowWEUtils.getTermIdentifier(ref))) {
 							compilationUnitIterator.remove();
 							break;
@@ -280,6 +287,7 @@ public class IncrementalCompiler implements EventListener {
 
 							}
 						}
+
 					}
 				}
 			}
@@ -326,7 +334,13 @@ public class IncrementalCompiler implements EventListener {
 		List<Section<KnowledgeUnit>> allKnowledgeUnits = Sections.findSuccessorsOfType(rootSection,
 				KnowledgeUnit.class);
 		for (Section<KnowledgeUnit> unit : allKnowledgeUnits) {
-			Collection<Section<? extends SimpleTerm>> externalReferencesOfKnowledgeUnit = unit.get().getCompileScript().getExternalReferencesOfKnowledgeUnit(
+			KnowledgeUnitCompileScript<Type> compileScript = unit.get().getCompileScript();
+			if (compileScript == null) {
+				Logger.getLogger(this.getClass().getName()).warning(
+						"KnowledgeUnit without CompileScript: " + unit.toString());
+				continue;
+			}
+			Collection<Section<? extends SimpleTerm>> externalReferencesOfKnowledgeUnit = compileScript.getExternalReferencesOfKnowledgeUnit(
 					unit);
 			if (externalReferencesOfKnowledgeUnit != null
 					&& externalReferencesOfKnowledgeUnit.size() > 0) {

@@ -28,11 +28,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.RootType;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.objects.SimpleTerm;
@@ -193,12 +197,19 @@ public class ReferenceManager {
 			List<Section<KnowledgeUnit>> allKnowledgeUnitsOfArticle = Sections.findSuccessorsOfType(
 					rootSection, KnowledgeUnit.class);
 			for (Section<KnowledgeUnit> knowledge : allKnowledgeUnitsOfArticle) {
-				Collection<Section<? extends SimpleTerm>> allReferencesOfKnowledgeUnit = knowledge.get().getCompileScript().getAllReferencesOfKnowledgeUnit(
+				KnowledgeUnitCompileScript<Type> compileScript = knowledge.get().getCompileScript();
+				if (compileScript == null) {
+					Logger.getLogger(this.getClass().getSimpleName()).warn(
+							"KnowledgeUnit without compile script: " + knowledge.toString());
+					continue;
+				}
+				Collection<Section<? extends SimpleTerm>> allReferencesOfKnowledgeUnit = compileScript.getAllReferencesOfKnowledgeUnit(
 						knowledge);
 				for (Section<? extends SimpleTerm> sliceRef : allReferencesOfKnowledgeUnit) {
 					TermIdentifier sliceRefTermIdentifier = KnowWEUtils.getTermIdentifier(sliceRef);
 					if (sliceRefTermIdentifier.equals(termIdentifier)) {
 						result.add(knowledge);
+						break;
 					}
 				}
 			}
