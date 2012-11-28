@@ -66,6 +66,7 @@ import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.event.ArticleUpdatesFinishedEvent;
 import de.knowwe.event.FullParseEvent;
@@ -736,12 +737,14 @@ public class Rdf2GoCore implements EventListener {
 	 */
 	public void removeStatementsForSection(Section<? extends Type> sec) {
 
+		boolean removed = false;
+
 		WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle =
 				incrementalStatementCache.get(sec.getTitle());
 
 		if (allStatementSectionsOfArticle != null) {
 			if (allStatementSectionsOfArticle.containsKey(sec)) {
-				removeStatementListOfSection(sec);
+				removed = removeStatementListOfSection(sec);
 			}
 			else {
 				// fix: IncrementalCompiler not necessarily delivers the same
@@ -751,16 +754,25 @@ public class Rdf2GoCore implements EventListener {
 				while (iterator.hasNext()) {
 					Section<? extends Type> section = iterator.next();
 					if (section.getText().equals(sec.getText())) {
-						removeStatementListOfSection(section);
-						break;
+						List<String> sectionPathToRoot = Sections.createTypePathToRoot(section);
+						List<String> secPathToRoot = Sections.createTypePathToRoot(sec);
+						if (sectionPathToRoot.equals(
+								secPathToRoot)) {
+							removed = removeStatementListOfSection(section);
+							break;
+						}
 					}
 				}
 			}
 		}
+		if (!removed) {
+			Logger.getLogger(this.getClass().getName()).log(Level.INFO,
+					"failed to remove statement for: " + sec.toString());
+		}
 
 	}
 
-	private void removeStatementListOfSection(Section<? extends Type> sec) {
+	private boolean removeStatementListOfSection(Section<? extends Type> sec) {
 
 		WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle =
 				incrementalStatementCache.get(sec.getTitle());
@@ -774,15 +786,18 @@ public class Rdf2GoCore implements EventListener {
 				removedStatements.add(statement);
 			}
 		}
-		removeSectionFromIncrementalStatementCache(sec, allStatementSectionsOfArticle);
+		boolean removeSectionFromIncrementalStatementCache = removeSectionFromIncrementalStatementCache(
+				sec, allStatementSectionsOfArticle);
 		addStatementsToRemoveCache(removedStatements);
+		return removeSectionFromIncrementalStatementCache;
 	}
 
-	private void removeSectionFromIncrementalStatementCache(Section<? extends Type> sec, WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle) {
-		allStatementSectionsOfArticle.remove(sec);
+	private boolean removeSectionFromIncrementalStatementCache(Section<? extends Type> sec, WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle) {
+		List<Statement> remove = allStatementSectionsOfArticle.remove(sec);
 		if (allStatementSectionsOfArticle.isEmpty()) {
 			incrementalStatementCache.remove(sec.getArticle().getTitle());
 		}
+		return remove != null;
 	}
 
 	private boolean removeStatementFromDuplicateCache(Statement statement, String key) {
