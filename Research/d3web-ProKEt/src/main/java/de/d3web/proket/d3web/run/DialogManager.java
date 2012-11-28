@@ -64,6 +64,7 @@ public class DialogManager extends HttpServlet {
     protected static final String REPLACECONTENT = "##replacecontent##";
     protected static final String REPLACEID = "##replaceid##";
     protected static final String LINESEP = System.getProperty("line.separator");
+    private String docname = "";
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -83,7 +84,7 @@ public class DialogManager extends HttpServlet {
         // TODO: make property in specs
         //GLOBSET.setWebAppWarName("/JuriLibreOffice");
         GLOBSET.setWebAppWarName("/UploadParseTool");
-        //GLOBSET.setWebAppWarName("");
+        GLOBSET.setWebAppWarName("");
 
         String webappname =
                 GLOBSET.getWebAppWarName().equals("") ? "" : GLOBSET.getWebAppWarName() + "_";
@@ -535,8 +536,8 @@ public class DialogManager extends HttpServlet {
 
         System.err.println("Parse KB Document - try to parse word to d3web... ");
         PrintWriter writer = response.getWriter();
-
-        String docname = request.getParameter("docname").toString();
+        
+        docname = request.getParameter("docname").toString();
         System.err.println("\t - docname of doc to be parsed: " + docname);
 
         String parseResult = "";
@@ -869,7 +870,8 @@ public class DialogManager extends HttpServlet {
                 + "<span style='color: red;'>Bitte leiten Sie den Inhalt dieses "
                 + "Fensters an den Systemadministrator weiter. </span> <br><br>"
                 + "Das Problem wird dann baldmöglichst behoben.<br /><br /><br />"
-                + "Fehlermeldung vom " + d.toString() + ":</h3>");
+                + "Fehlermeldung vom " + d.toString() + ", aufgetreten beim der "
+                + "Verarbeitung des Dokuments <b>" + docname + "</b>:</h3>");
         finalBui.append("<h5>");
         finalBui.append(exceptionString);
         finalBui.append("</h5>");

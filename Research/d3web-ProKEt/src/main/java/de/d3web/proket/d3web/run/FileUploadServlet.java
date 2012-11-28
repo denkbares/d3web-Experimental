@@ -42,8 +42,6 @@ public class FileUploadServlet extends HttpServlet {
     // TODO read this from specs file possibly
     //private static String WEBAPP_NAME = "/";
     private static String PATHSEP = System.getProperty("file.separator");
-    
-    
     protected final GlobalSettings GLOBSET = GlobalSettings.getInstance();
 
     public void init(ServletConfig config) throws ServletException {
@@ -96,31 +94,35 @@ public class FileUploadServlet extends HttpServlet {
 
         File tmpFile = multipartRequest.getFile("uploadKB");
         if (tmpFile != null) {
-            
-            if (!tmpFile.getName().endsWith(".doc") &&
-                    !tmpFile.getName().endsWith(".d3web") &&
-                        !tmpFile.getName().endsWith(".zip") &&
-                            (!tmpFile.getName().endsWith(".xls")
-                            && tmpFile.getName().endsWith(".xlsx"))) {
-                response.sendRedirect(GLOBSET.getWebAppWarName() + 
-                        "/DialogManager?upERR=nokb");
+
+            if (!tmpFile.getName().endsWith(".doc")
+                    && !tmpFile.getName().endsWith(".d3web")
+                    && !tmpFile.getName().endsWith(".zip")
+                    && !tmpFile.getName().endsWith(".xls")
+                    && !tmpFile.getName().endsWith(".xlsx")) {
+                
+                response.sendRedirect(GLOBSET.getWebAppWarName()
+                        + "/DialogManager?upERR=nokb");
+            } else {
+
+                File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
+                String newFileName = tmpFile.getName();
+                File fileToMove = new File(dirToMove, newFileName);
+                tmpFile.renameTo(fileToMove);
+
+                HttpSession httpSession = request.getSession();
+                // TODO: move this to processDOC Method where doc is parsed into d3web, later
+                //TODO: flexible    httpSession.setAttribute("latestD3web", newFileName);
+                httpSession.setAttribute("latestDoc", newFileName);
+
+                tmpFile.delete();
+                response.sendRedirect(GLOBSET.getWebAppWarName()
+                        + "/DialogManager?upKB=done&upfilename=" + newFileName);
+
             }
-            File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
-            String newFileName = tmpFile.getName();
-            File fileToMove = new File(dirToMove, newFileName);
-            tmpFile.renameTo(fileToMove);
-
-            HttpSession httpSession = request.getSession();
-            // TODO: move this to processDOC Method where doc is parsed into d3web, later
-            //TODO: flexible    httpSession.setAttribute("latestD3web", newFileName);
-            httpSession.setAttribute("latestDoc", newFileName);
-
-            tmpFile.delete();
-            response.sendRedirect(GLOBSET.getWebAppWarName() + 
-                    "/DialogManager?upKB=done&upfilename=" + newFileName);
         } else {
-            response.sendRedirect(GLOBSET.getWebAppWarName() + 
-                    "/DialogManager?upERR=nofile");
+            response.sendRedirect(GLOBSET.getWebAppWarName()
+                    + "/DialogManager?upERR=nofile");
         }
     }
 
@@ -140,8 +142,8 @@ public class FileUploadServlet extends HttpServlet {
         if (tmpFile != null) {
 
             if (!tmpFile.getName().endsWith(".xml")) {
-                response.sendRedirect(GLOBSET.getWebAppWarName() + 
-                        "/DialogManager?upERR=noxml");
+                response.sendRedirect(GLOBSET.getWebAppWarName()
+                        + "/DialogManager?upERR=noxml");
             }
             File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
             String newFileName = tmpFile.getName();
@@ -152,11 +154,11 @@ public class FileUploadServlet extends HttpServlet {
             httpSession.setAttribute("latestSpec", fileToMove);
 
             tmpFile.delete();
-            response.sendRedirect(GLOBSET.getWebAppWarName() +  
-                    "/DialogManager?upSPEC=done");
+            response.sendRedirect(GLOBSET.getWebAppWarName()
+                    + "/DialogManager?upSPEC=done");
         } else {
-            response.sendRedirect(GLOBSET.getWebAppWarName() + 
-                    "/DialogManager?upERR=nofile");
+            response.sendRedirect(GLOBSET.getWebAppWarName()
+                    + "/DialogManager?upERR=nofile");
         }
 
 

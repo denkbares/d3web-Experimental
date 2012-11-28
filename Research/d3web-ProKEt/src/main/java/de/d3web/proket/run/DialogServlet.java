@@ -162,59 +162,63 @@ public class DialogServlet extends HttpServlet {
         } else if (action.equalsIgnoreCase("logEnd")) {
 
             String end = request.getParameter("timestring").replace("+", " ");
-            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
-            ServletLogUtils.logSessionEnd(end, logger);
+            //JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            //ServletLogUtils.logSessionEnd(end, logger);
             httpSession.invalidate();
 
         } else if (action.equalsIgnoreCase("logDiagnosis")) {
 
             String soltext = request.getParameter("id").replace("+", " ");
             String rating = request.getParameter("rating");
-            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
-            ServletLogUtils.logDiagnosis(soltext, rating, logger);
+            //JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            //ServletLogUtils.logDiagnosis(soltext, rating, logger);
 
         } else if (action.equalsIgnoreCase("logUEFeedback")) {
 
-            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            /*JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
             String feedback = request.getParameter("ueFeedback").toString().replace("+", " ");
             String logtime =
                     request.getParameter("timestring").replace("+", " ");
             ServletLogUtils.logUEFeedback(feedback, logtime, logger);
-
+            */
+            return;
         } else if (action.equalsIgnoreCase("logISOLS")) {
-            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            /*JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
             String iSols = URLDecoder.decode(request.getParameter("intermedSolutions").toString(), "UTF-8");
-            ServletLogUtils.logUEIntermediateSolutions(iSols, logger);
+            ServletLogUtils.logUEIntermediateSolutions(iSols, logger);*/
             return;
         } else if (action.equalsIgnoreCase("logUEQuestionnaire")) {
 
-            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            /*JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
             String qData = request.getParameter("ueQData").toString().replace("_", " ").replace("+", " ");
             ServletLogUtils.logUEQuestionnaire(qData, logger);
-            response.getWriter().append("success");
-
+            response.getWriter().append("success");*/
+            return;
         } else if (action.equalsIgnoreCase("logQuestion")) {
 
-            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            /*JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
             String qtext = request.getParameter("qtext").toString().replace("+", " ").replace("\\", "");
             String qvalue = request.getParameter("qvalue").toString().replace("+", " ").replace("\\", "");
             String logtime = request.getParameter("timestring").toString().replace("+", " ");
             ServletLogUtils.logQuestionValue(qtext, qvalue, logtime, logger);
-
+            */
+            return;
         } else if (action.equalsIgnoreCase("logDialogType")) {
 
-            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            /*JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
             String type = request.getParameter("type").toString();
             ServletLogUtils.logDialogType(type, logger);
-
+            */
+            return;
         } else if (action.equalsIgnoreCase("logQuestionToggle")) {
 
-            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            /*JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
             String questionText = request.getParameter("qtext").toString().replace("+", " ");
             String toggleType = request.getParameter("ttype").toString();
             String logtime = request.getParameter("timestring").toString().replace("+", " ");
             ServletLogUtils.logQuestionToggle(questionText, toggleType, logtime, logger);
-
+            */
+            return;
         } else if (action.equalsIgnoreCase("sendFeedbackMail")) {
             String state = "";
             if (request.getParameter("feedback") != null) {
@@ -300,15 +304,16 @@ public class DialogServlet extends HttpServlet {
         Date now = new Date();
         JSONLogger logger = new JSONLogger(createLogfileName(now, httpSession));
 
-        String browser =
+        
+        /*String browser =
                 request.getParameter("browser").replace("+", " ");
         String user =
                 request.getParameter("user").replace("+", " ");
         String start =
                 request.getParameter("timestring").replace("+", " ");
-        
+        */
 
-        ServletLogUtils.logBaseInfo(browser, user, start, logger);
+        ServletLogUtils.logBaseInfo("", "", "", logger);
 
 
         // on first show, also log the USABILITY GROUP - for multiple group
