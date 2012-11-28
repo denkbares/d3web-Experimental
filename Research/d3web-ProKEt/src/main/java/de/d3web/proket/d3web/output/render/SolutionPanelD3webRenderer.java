@@ -174,17 +174,17 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
         st.setAttribute("solutiontext", solution.getName());
 
         if (bb.getRating(solution).getState().equals(Rating.State.ESTABLISHED)) {
-            st.setAttribute("src", "/img/solEst.png");
+            st.setAttribute("src", "img/solEst.png");
             st.setAttribute("alt", "established");
             st.setAttribute("tt", "established");
 
         } else if (bb.getRating(solution).getState().equals(Rating.State.SUGGESTED)) {
-            st.setAttribute("src", "/img/solSug.png");
+            st.setAttribute("src", "img/solSug.png");
             st.setAttribute("alt", "suggested");
             st.setAttribute("tt", "suggested");
 
         } else if (bb.getRating(solution).getState().equals(Rating.State.EXCLUDED)) {
-            st.setAttribute("src", "/img/solExc.png");
+            st.setAttribute("src", "img/solExc.png");
             st.setAttribute("alt", "excluded");
             st.setAttribute("tt", "excluded");
         

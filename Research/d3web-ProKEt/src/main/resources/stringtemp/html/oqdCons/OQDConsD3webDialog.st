@@ -82,8 +82,6 @@ $fulljs$
         <div id="rightBorderSpacer" class="cell">
         </div>
 
-        <!-- solution / explanation panel at the bottom //-->
-        <div id="fixedBottomSolPanel" class="row">
         
         <!-- maybe create somewhat sliding/fading panels with grip or likewise //-->   
 	<div id="solutionPanelCell" class="cell">
