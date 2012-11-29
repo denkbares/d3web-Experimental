@@ -212,7 +212,7 @@ public class RenderingCore {
 	 * @created 03.09.2012
 	 * @param StringBuilder
 	 */
-	public void createHTMLOutput(StringBuilder string) {
+	private void createHTMLOutput(StringBuilder string) {
 		String div_open = "<div style=\"max-height:1000px; overflow:scroll\">";
 		String div_close = "</div>";
 		String png_default = Strings.maskHTML(div_open + "<img alt='graph' src='"
