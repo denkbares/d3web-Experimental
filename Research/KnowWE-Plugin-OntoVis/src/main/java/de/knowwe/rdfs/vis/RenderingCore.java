@@ -31,6 +31,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -41,10 +42,14 @@ import java.util.ResourceBundle;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 
+import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.Environment;
+import de.knowwe.core.compile.terminology.TermIdentifier;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdfs.vis.util.Utils;
 
 /**
  * 
@@ -65,6 +70,12 @@ public class RenderingCore {
 	public static final String SHOW_PROPERTIES = "show_properties";
 
 	public static final String GRAPH_SIZE = "graph_size";
+	public static final String RANK_DIRECTION = "rank_direction";
+	public static final String LINK_MODE = "LINK_MODE";
+	public static final String LINK_MODE_JUMP = "LINK_MODE_JUMP";
+	public static final String LINK_MODE_BROWSE = "LINK_MODE_BROWSE";
+
+	public static final String SHOW_OUTGOING_EDGES = "SHOW_OUTGOING_EDGES";
 
 	private int requestedDepth;
 	private int requestedHeight;
@@ -158,7 +169,7 @@ public class RenderingCore {
 
 		getAnnotations();
 
-		setSize();
+		setSizeAndRankDir();
 
 		buildSources();
 		try {
@@ -450,14 +461,21 @@ public class RenderingCore {
 	 * 
 	 * @created 30.10.2012
 	 */
-	private void setSize() {
+	private void setSizeAndRankDir() {
+		String rankDir = "TB";
+		String rankDirSetting = parameters.get(RANK_DIRECTION);
+		if (rankDirSetting != null) {
+			rankDir = rankDirSetting;
+		}
 		if (graphSize != null) {
 			if (graphSize.matches("\\d+px")) {
 				graphSize = graphSize.substring(0, graphSize.length() - 2);
+				dotSource += "graph [ rankdir=\"" + rankDir + "\"]\n";
 			}
 			if (graphSize.matches("\\d+")) {
 				dotSource += "graph [size=\""
-						+ String.valueOf(Double.valueOf(graphSize) * 0.010415597) + "!\"]\n";
+						+ String.valueOf(Double.valueOf(graphSize) * 0.010415597) + "!\""
+						+ " rankdir=\"" + rankDir + "\"]\n";
 			}
 		}
 
@@ -567,7 +585,7 @@ public class RenderingCore {
 		else if (isProperty) {
 			shape = "diamond";
 		}
-		String url = Environment.getInstance().getWikiConnector().getBaseUrl();
+		String url = createURL();
 		String conceptKey = "\"" + concept + "\"";
 		String conceptValue = "[ URL=\"" + url + "?page=" + section.getTitle() + "&concept="
 				+ concept + "\" style=\"" + style + "\" fillcolor=\"" + fillcolor
@@ -577,6 +595,15 @@ public class RenderingCore {
 		if (dotSourceLabel.get(conceptKey) != conceptValue) {
 			dotSourceLabel.put(conceptKey, conceptValue);
 		}
+	}
+
+	/**
+	 * 
+	 * @created 29.11.2012
+	 * @return
+	 */
+	private String createURL() {
+		return Environment.getInstance().getWikiConnector().getBaseUrl() + "Wiki.jsp";
 	}
 
 	/**
@@ -687,7 +714,7 @@ public class RenderingCore {
 
 			String askClass = "ASK { " + createSparqlURI(z) + " rdf:type owl:Class}";
 			boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
-			String askProperty = "ASK { " + createSparqlURI(y) + " rdf:type rdf:Property}";
+			String askProperty = "ASK { " + createSparqlURI(z) + " rdf:type rdf:Property}";
 			boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
 			String type = "basic";
 
@@ -714,6 +741,12 @@ public class RenderingCore {
 				addSuccessors(z);
 			}
 			if (depth == requestedDepth) {
+				boolean showOutgoingEdges = true;
+				if (parameters.get(SHOW_OUTGOING_EDGES) != null) {
+					if (parameters.get(SHOW_OUTGOING_EDGES).equals("false")) {
+						showOutgoingEdges = false;
+					}
+				}
 				addOutgoingEdgesSuccessors(z);
 			}
 			depth--;
@@ -748,7 +781,7 @@ public class RenderingCore {
 
 			String askClass = "ASK { " + createSparqlURI(x) + " rdf:type owl:Class}";
 			boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
-			String askProperty = "ASK { " + createSparqlURI(y) + " rdf:type rdf:Property}";
+			String askProperty = "ASK { " + createSparqlURI(x) + " rdf:type rdf:Property}";
 			boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
 			String type = "basic";
 
@@ -774,6 +807,7 @@ public class RenderingCore {
 				addPredecessors(x);
 			}
 			if (height == requestedHeight) {
+
 				addOutgoingEdgesPredecessors(x);
 			}
 			height--;
@@ -833,6 +867,7 @@ public class RenderingCore {
 
 			String yURI = row.getValue("y").toString();
 			String y = clean(yURI.substring(yURI.indexOf("#") + 1));
+
 			if (excludedRelation(y)) {
 				continue;
 			}
@@ -912,16 +947,19 @@ public class RenderingCore {
 
 		String newLineLabelKey;
 		String newLineLabelValue;
-		String url = Environment.getInstance().getWikiConnector().getBaseUrl();
 		if (predecessor) {
+			String targetURL = createTargetURL(from);
 			newLineLabelKey = "\"" + from + "\"";
-			newLineLabelValue = "[ URL=\"" + url + "?page=" + section.getTitle()
-					+ "&concept=" + from + "\"" + buildLabel(shape, fontcolor, fontsize) + " ];\n";
+			newLineLabelValue = "[ URL=\"" + targetURL + "\""
+					+ buildLabel(shape, fontcolor, fontsize)
+					+ "label=\"" + Utils.prepareLabel(from) + "\" ];\n";
 		}
 		else {
+			String targetURL = createTargetURL(to);
 			newLineLabelKey = "\"" + to + "\"";
-			newLineLabelValue = "[ URL=\"" + url + "?page=" + section.getTitle()
-					+ "&concept=" + to + "\"" + buildLabel(shape, fontcolor, fontsize) + " ];\n";
+			newLineLabelValue = "[ URL=\"" + targetURL + "\""
+					+ buildLabel(shape, fontcolor, fontsize) + "label=\""
+					+ Utils.prepareLabel(to) + "\" ];\n";
 		}
 		String newLineRelationsKey = "\"" + from + "\"->\"" + to + "\"";
 		String newLineRelationsValue = innerRelation(relation);
@@ -934,6 +972,29 @@ public class RenderingCore {
 				|| (dotSourceRelations.get(newLineRelationsKey)) != newLineRelationsValue) {
 			dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);
 		}
+	}
+
+	/**
+	 * 
+	 * @created 29.11.2012
+	 * @param to
+	 * @return
+	 */
+	private String createTargetURL(String to) {
+		if (parameters.get(LINK_MODE) != null) {
+			if (parameters.get(LINK_MODE).equals(LINK_MODE_BROWSE)) {
+				Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+						new TermIdentifier(to));
+				String targetArticle = to;
+				if (termDefinitions.size() > 0) {
+					targetArticle = termDefinitions.iterator().next().getTitle();
+				}
+
+				return createURL() + "?page=" + targetArticle;
+			}
+		}
+		return createURL() + "?page=" + section.getTitle()
+				+ "&concept=" + to;
 	}
 
 	/**
@@ -992,12 +1053,32 @@ public class RenderingCore {
 				+ arrowhead + "\" color=\"" + color
 				+ "\" style=\"" + style + "\" ];\n";
 
-		if (!dotSourceLabel.containsKey(newLineLabelKey)) {
-			dotSourceLabel.put(newLineLabelKey, outerLabel);
+		boolean arcIsNew = !dotSourceRelations.containsKey(newLineRelationsKey);
+		boolean nodeIsNew = !dotSourceLabel.containsKey(newLineLabelKey);
+
+		boolean showOutgoingEdges = true;
+		if (parameters.get(SHOW_OUTGOING_EDGES) != null) {
+			if (parameters.get(SHOW_OUTGOING_EDGES).equals("false")) {
+				showOutgoingEdges = false;
+			}
 		}
-		if (!dotSourceRelations.containsKey(newLineRelationsKey)) {
-			dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);
+
+		if (showOutgoingEdges) {
+			if (nodeIsNew) {
+				dotSourceLabel.put(newLineLabelKey, outerLabel);
+			}
+			if (arcIsNew) {
+				dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);
+			}
 		}
+		else {
+			// do not show outgoing edges
+			if (!nodeIsNew) {
+				// but show if its node is internal one already
+				dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);
+			}
+		}
+
 	}
 
 	/**
