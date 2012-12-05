@@ -51,6 +51,11 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 				SimpleScoreTable.class);
 		Section<HeaderLine> headerLine = Sections.findChildOfType(table, HeaderLine.class);
 
+		if (headerLine == null) {
+			messages.add(Messages.error("No valid table found"));
+			return messages;
+		}
+
 		List<Section<SolutionCell>> solutionCells = Sections.findSuccessorsOfType(headerLine,
 				SolutionCell.class);
 		Section<? extends Type> solutionCell = solutionCells.get(columnIndex);
@@ -80,7 +85,7 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 			if (r != null) {
 				KnowWEUtils.storeObject(article, section, ruleStoreKey, r);
 				return Messages.asList(Messages.objectCreatedNotice(
-								"Rule"));
+						"Rule"));
 			}
 		}
 
