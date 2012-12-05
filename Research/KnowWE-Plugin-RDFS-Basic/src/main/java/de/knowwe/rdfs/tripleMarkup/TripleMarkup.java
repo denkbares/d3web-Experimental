@@ -24,8 +24,12 @@ import java.util.regex.Pattern;
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.core.kdom.basicType.EndLineComment;
+import de.knowwe.core.kdom.objects.SimpleReference;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
+import de.knowwe.rdfs.tripleMarkup.TripleMarkupContent.SimpleTurtlePredicate;
 
 public class TripleMarkup extends AbstractKnowledgeUnitType<TripleMarkup> implements
 		KnowledgeUnit {
@@ -42,4 +46,30 @@ public class TripleMarkup extends AbstractKnowledgeUnitType<TripleMarkup> implem
 		this.setRenderer(new PreEnvRenderer());
 	}
 
+	public static Section<? extends SimpleReference> getSubject(Section<TripleMarkup> section) {
+		Section<TripleMarkupContent> content = Sections.findSuccessor(section,
+				TripleMarkupContent.class);
+		if (content != null) {
+			return Sections.findSuccessor(content, SimpleTurtleSubject.class);
+		}
+		return null;
+	}
+
+	public static Section<? extends SimpleReference> getPredicate(Section<TripleMarkup> section) {
+		Section<TripleMarkupContent> content = Sections.findSuccessor(section,
+				TripleMarkupContent.class);
+		if (content != null) {
+			return Sections.findSuccessor(content, SimpleTurtlePredicate.class);
+		}
+		return null;
+	}
+
+	public static Section<? extends SimpleReference> getObject(Section<TripleMarkup> section) {
+		Section<TripleMarkupContent> content = Sections.findSuccessor(section,
+				TripleMarkupContent.class);
+		if (content != null) {
+			return Sections.findSuccessor(content, SimpleTurtleObjectRef.class);
+		}
+		return null;
+	}
 }
