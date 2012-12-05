@@ -73,18 +73,23 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 					solution);
 
 			Condition d3webCond = KDOMConditionFactory.createCondition(article, condition);
-
+			
 			Score score = D3webUtils.getScoreForString(section.getText().trim());
-			if (solution == null || score == null) return messages;
+			if (score == null) return messages;
+
 			ActionHeuristicPS a = new ActionHeuristicPS();
 			a.setSolution(s);
 			a.setScore(score);
 
 			Rule r = RuleFactory.createRule(a, d3webCond,
 					null, PSMethodHeuristic.class);
-			if (r != null) {
+			if (r == null) {
+				messages.add(Messages.error("Unable to create rule for line '" + condition
+						+ "' and column '" + solution + "'"));
+			}
+			else {
 				KnowWEUtils.storeObject(article, section, ruleStoreKey, r);
-				return Messages.asList(Messages.objectCreatedNotice(
+				messages.add(Messages.objectCreatedNotice(
 						"Rule"));
 			}
 		}
