@@ -40,6 +40,23 @@ public class GraphNodeConnection implements Comparable<GraphNodeConnection> {
 
 	}
 
+	public int getTargetID() {
+		return targetNode.getId();
+	}
+
+	public int getSourceID() {
+		return sourceNode.getId();
+	}
+
+	public int sourceIfTargetIs(int target) {
+		if (targetNode.getId() == target) {
+			return sourceNode.getId();
+		}
+		else {
+			return -1;
+		}
+	}
+
 
 	@Override
 	public int compareTo(GraphNodeConnection o) {

@@ -36,20 +36,14 @@ public class GraphBuilder {
 		this.startNodeName = startNodeName;
 	}
 
-	// FINALE Start-Koordinaten
-	// left: 0px; top: 75px ist ca ganz oben links
-	private final int startLeftCo = 0;
+	private final int startLeftCo = 200;
 	private final int startTopCo = 75;
-
-	// je weiteren knoten müssen die koordinaten verschoben werden
 	private final int add2Left = 250;
 	private final int add2Top = 50;
-
-	// laufende Coordinaten
 	int leftCo = startLeftCo;
 	int topCo = startTopCo;
-
-	int id = 0;
+	int leftCoMax = 0;
+	int id = 1;
 
 	List<String> temporalConnection;
 	String startNodeName;
@@ -81,20 +75,20 @@ public class GraphBuilder {
 	public void buildGraph(){
 		
 		// Startknoten
-		GraphNode startNode = buildNode(startNodeName, getStartLeftCo(), getStartTopCo());
+		GraphNode startNode = buildNode(startNodeName, getStartLeftCo(), getStartTopCo(), 1);
 
 		do {
-		// Startknoten hinzugefügt
-		nodeAndCoList.add(startNode);
-		//
-		// parent id 0;
-		buildNodeAndCoList(startNode, leftCo, 0);
-			temporalConnection = DataBaseHelper.getConnectedNodeNamesOfTypeReverse(
-					startNode.getName(), "temporalBevor");
-			System.out.println("tempconsinze" + temporalConnection.size() + startNode.getName());
+			nodeAndCoList.add(startNode);
+			buildNodeAndCoList(startNode, startNode.getLeftCo() + add2Left, startNode.getId());
+			temporalConnection = DataBaseHelper.getConnectedNodeNamesOfType(
+					startNode.getName(), "temporalGraph", true);
+			System.out.println("Es wurden temporale Beziehungen gefunden: "
+					+ temporalConnection.size());
 			if (!temporalConnection.isEmpty()) {
 				topCo = getStartTopCo();
-				GraphNode tempNode = buildNode(temporalConnection.get(0), leftCo, getStartTopCo());
+				System.out.println("neuer start" + temporalConnection.get(0) + " " + leftCo);
+				GraphNode tempNode = buildNode(temporalConnection.get(0), leftCoMax + add2Left,
+						getStartTopCo(), ++id);
 				connections.add(new GraphNodeConnection(startNode, tempNode, "temporal"));
 				startNode = tempNode;
 			}
@@ -106,11 +100,9 @@ public class GraphBuilder {
 
 	// Starknoten bauen
 
-	public GraphNode buildNode(String nodeName, int leftCor, int topCor) {
+	public GraphNode buildNode(String nodeName, int leftCor, int topCor, int parentId) {
 
-		GraphNode startNode = new GraphNode(nodeName, leftCor, topCor, id++);
-
-		leftCo += add2Left;
+		GraphNode startNode = new GraphNode(nodeName, leftCor, topCor, id++, parentId);
 		topCo += add2Top;
 
 		return startNode;
@@ -122,62 +114,38 @@ public class GraphBuilder {
 	@SuppressWarnings("rawtypes")
 	public List<GraphNode> buildNodeAndCoList(GraphNode node, int leftCo, int parentID)
 	{
-		// für alle knoten in connectedNodesList werden die Koordinaten
-		// berechnet
-		// angefangen beim Startknoten mit Startwerten
-
-
 		String nodeName = node.getName();
 		// TODO connectionTypes
-		// hole liste mit nachfolgerknoten
 		List<String> childrenNames = DataBaseHelper.getConnectedNodeNamesOfType(nodeName,
-				"unterkonzept");
+				"unterkonzept", false);
 
-		// wenn childrennames leer ist wird die forschleife nicht durchlaufen
 		for (String string : childrenNames) {
-
-			GraphNode node2add = new GraphNode(string, leftCo, topCo, id++);
-
+			System.out.println("parentsname" + node.getId());
+			GraphNode node2add = new GraphNode(string, leftCo, topCo, ++id, node.getId());
+			System.out.println("neuer node cor " + leftCo);
 			nodeAndCoList.add(node2add);
-
 			connections.add(new GraphNodeConnection(node, node2add, "unterkonzept"));
-
-			// nachdem Hinzufügen des Knotens, aendert sich die topCo Coordinate
 			topCo += add2Top;
-
-			// TODO
-			// Textformatierungen
+			// TODO Textformatierungen
 			String oldFormatName = "";
-
 			try {
 				oldFormatName = URLEncoder.encode(node.getName(), "UTF-8");
 			}
 			catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-
 			}
-
-			// Hat der gerade eingefuegte Knoten auch Unterkonzepte
 
 			List<String> nextChildrenOfNode = DataBaseHelper.getConnectedNodeNamesOfType(
-					oldFormatName,
-					"unterkonzept");
-
-			System.out.println("nextChildrenOfNode.size()------------------------------"
-					+ nextChildrenOfNode.size());
-			System.out.println("node.getName()----------------------------------------------------"
-					+ node.getName());
-			// wenn der gerade eingefuegte nachfolger hat dann
+					oldFormatName, "unterkonzept", false);
 			if (!nextChildrenOfNode.isEmpty()) {
-
-				// bilde vom hinzugefuegten die node and co list
-				buildNodeAndCoList(node2add, leftCo + add2Left, id);
-
+				int leftCoAct = leftCo + add2Left;
+				this.leftCo = leftCoAct;
+				if (leftCoAct > leftCoMax) {
+					leftCoMax = leftCoAct;
+				}
+				buildNodeAndCoList(node2add, leftCoAct, id);
 			}
-
-
-		}// forschleife
+		}
 
 		return nodeAndCoList;
 
@@ -198,33 +166,6 @@ public class GraphBuilder {
 	public int getStartTopCo() {
 		return startTopCo;
 	}
-
-	// -----------------------------------
-//	public void buildGraph(String startNode, int startLeft, int startTop, String conType) {
-//
-//		List<String> connectedNodesList = new ArrayList<String>();
-//
-//		connectedNodesList = getConnectedNodesOfType(startNode, conType);
-//
-//		List<GraphNode> nodeAndCoList = buildNodeAndCoList(connectedNodesList, leftCo, topCo);
-//
-//		if (connectedNodesList.size() > 1) {
-//
-//			// es gibt keine weiteren Nachfolger vom Typ conType,
-//			// der Startknoten ist der einzige Knoten
-//		}
-//		else {
-//			// es gibt keine weiteren Nachfolger vom Typ conType,
-//			// der Startknoten ist der einzige Knoten
-//
-//			GraphNode<String, Integer, Integer> node = new GraphNode<String, Integer, Integer>(
-//					startNode,
-//					startLeft, startTop);
-//
-//		}
-
-	// }
-	
 
 
 }

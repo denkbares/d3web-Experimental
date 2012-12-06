@@ -33,116 +33,59 @@ public class Visualization {
 	public static String visualize(String concept) {
 
 		StringBuffer string = new StringBuffer();
-		// wird nicht eingesetzt
-		// String[] connection = {
-		// "lns:unterkonzept", "lns:assoziation",
-		// "lns:assoziationBidirektional", "lns:kann",
-		// "lns:kannBidirektional", "lns:muss", "lns:temporalBevor" };
-
-		// Startknoten
 		String start = concept;
-
-		System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-				+ start);
-		// -------------------------------------------------------------------------------------------
-		// DataBaseHelper Helper Action
-		// GraphBuilder Action
-		// DataBaseHelper dbh = new DataBaseHelper();
 		GraphBuilder gB = new GraphBuilder(start);
 		gB.buildGraph();
-
-		// int leftCo = gB.getStartLeftCo();
-		// int topCo = gB.getStartTopCo();
-		// int id = 0;
-		// String stringID = "stringID";
-
-		// ------------------------------------------------------------------------------------------------------------------------------
-		// Startknoten
-		// Node<Name, LeftCo, TopCo> startNode = new Node<Name, LeftCo,
-		// TopCo>(start, leftCo, topCo);
-
-		// GraphNode startNode = gB.buildStartNode(start);
-
-		// leftCo += gB.getAdd2Left();
-		// topCo += gB.getAdd2Top();
-
-		// System.out.println("leftCo----------------------------------------------------------------------"
-		// + leftCo);
-
-		// ------------------------------------------------------------------------------------------------------------------------------
-
-		// List<List<String>> listOfConnectedNodesLists = new
-		// ArrayList<List<String>>();
-
-		// List<String> connectedNodesList = gB.getConnectedNodesOfType(start,
-		// "unterkonzept");
-		// TODO
-
-		// if (connectedNodesList.isEmpty()) {
-		// // do nothing
-		// }
-		// else {
-		//
-		// }
-
-		// List<GraphNode> nodeAndCoList =
-		// gB.buildNodeAndCoList(connectedNodesList, leftCo, topCo);
-
-		// ------------------------------------------------------------------------------------------------------------------------------
-
-		// System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-		// + nodeAndCoList.size());
-		//
-		// System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-		// + nodeAndCoList.get(0).getName());
-		//
-		// System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-		// + nodeAndCoList.get(1).getName());
-		// --------------------------------------------------------------------------------------------
-
-		// design der knoten und connections
 		String initDesign = "initDesign();";
-
-		// der erste knoten position am bildschirm, der mittelknoten
-
 		String knoten = "";
-		//
-		// // zeichne den Startknoten
-		//
-		// knoten += "createKnoten(\"" + startNode.getName() + "\", " +
-		// startNode.getLeftCo() + ","
-		// + startNode.getTopCo() + "," + startNode.getId() + "," + "\""
-		// + startNode.getStringID() + "\""
-		// + ");";
-
-		// zeichne alle nachfolger knoten mit ihren berechneten positionen
-
+		LinkedList<Integer> drawnLists = new LinkedList<Integer>();
+		LinkedList<GraphNodeConnection> listOfConnections = (LinkedList<GraphNodeConnection>) gB.getConnections();
 		for (GraphNode node : gB.getNodeAndCoList()) {
+			int source = getSoureOf(node.getParentId(), listOfConnections);
+			System.out.println("id ist" + node.getId() + "parent ist " + node.getParentId()
+					+ "source ist " + source);
+			if (!drawnLists.contains(source)) {
+				if (node.getParentId() == node.getId()) {
+					knoten += "createULRelative(\"e" + node.getId() + "\",knots, \""
+							+ node.getLeftCo() + "px\" , \"" + node.getTopCo() + "px\");\r\n";
+				}
+				else {
+					if (source == -1) {
+						if (!drawnLists.contains(node.getParentId())) {
+						knoten += "createUL(" + node.getParentId() + ",\"e" + node.getParentId()
+								+ "\");\r\n";
+						drawnLists.add(node.getParentId());
+						}
+					}
+					else {
+					knoten += "createUL(" + node.getParentId() + "," + source + ");\r\n";
+					drawnLists.add(source);
+					}
+				}
 
+			}
+			else if (!drawnLists.contains(node.getParentId())) {
+				knoten += "createUL(" + node.getParentId() + "," + source + ");\r\n";
+				drawnLists.add(node.getParentId());
+			}
 			String name = node.getName();
 			name = name.replace(" ", "_");
 			int left = node.getLeftCo();
 			int top = node.getTopCo();
-			// int id1 = node.getId();
 			String stringID = node.getStringID();
-			// String stringID1 = "stringID" + id1;
-
-			// System.out.println("node1-------------------------------------------------------------------: "
-			// + id1);
-
-			// System.out.println("stringnode1-------------------------------------------------------------------: "
-			// + stringID1);
-
+			int parentID = node.getParentId();
+			if (!(node.getParentId() == node.getId())) {
 			knoten += "createKnoten(\"" + name + "\", " + left + ","
-					+ top + "," + "\"" + stringID + "\"" + ");\r\n";
-
-			// knoten += "connectKnoten(" + startNode.getStringID() + "," + "\""
-			// + stringID1 + "\""
-			// + ");\r\n";
-
+					+ top + "," + "\"" + stringID + "\"," + parentID + ");\r\n";
+			}
+			else {
+				knoten += "createKnoten(\"" + name + "\", " + left + ","
+						+ top + "," + "\"" + stringID + "\"," + "\"e" +
+						parentID + "\");\r\n";
+			}
 		}
 
-		LinkedList<GraphNodeConnection> listOfConnections = (LinkedList<GraphNodeConnection>) gB.getConnections();
+
 
 		for (GraphNodeConnection graphNodeConnection : listOfConnections) {
 
@@ -176,8 +119,6 @@ public class Visualization {
 						"	<script type=\"text/javascript\" src=\"/KnowWE/KnowWEExtension/initDefaultDesign.js \"></script>\r\n"
 						+
 						" <!-- im body befindet sich der sichtbare bereich der seite -->\r\n"
-						// +
-						// "	<div id=\"jsPlumb_1_4\" style=\"position:relative;margin-top:100px;\">\r\n"
 						+
 						"	<div id=\"demonstration\">\r\n"
 						+
@@ -186,15 +127,13 @@ public class Visualization {
 						"	</div>"
 						+
 						"<script type=\"text/javascript\">"
-						// +
-						// "ajax();"
 						+
 						initDesign
 						+
-						"</script>"
+						"</script>\r\n"
 
 						+
-						"<script type=\"text/javascript\">"
+						"<script type=\"text/javascript\">\r\n"
 						+
 						knoten
 						+
@@ -204,15 +143,23 @@ public class Visualization {
 						+
 						"	</div>\r\n"
 						+
-						// Starte script - zugemacht wird es in verbindungen
-						// weiter oben
 						"<script type=\"text/javascript\">"
-
 						+
 						"</script>"
 				));
 
 		return string.toString();
+	}
+
+	static int getSoureOf(int target, LinkedList<GraphNodeConnection> links) {
+		for (GraphNodeConnection connection : links) {
+			if (connection.connectionType.matches("unterkonzept")) {
+			if (connection.getTargetID() == target) return connection.getSourceID();
+			}
+		}
+		System.out.println("Zu " + target + "wurde leider kein Source gefunden");
+		return -1;
+
 	}
 
 }

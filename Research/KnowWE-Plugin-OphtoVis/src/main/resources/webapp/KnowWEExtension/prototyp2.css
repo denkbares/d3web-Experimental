@@ -5,19 +5,20 @@
   -moz-box-shadow: 2px 2px 19px #aaa;
 -moz-border-radius:0.5em;
 border-radius:0.5em;
-
+}
 filter:alpha(opacity=99);*/
 
 /*width:8em; 
 height:1.5em;*/
+overflow:hidden;
 
+line-height:0em;
 
 opacity:0.9;
 
 
-overflow:hidden;
+    
 
-line-height:0em;
 
 /*padding-top:0px;*/
 
@@ -68,6 +69,8 @@ filter:alpha(opacity=60);*/
 }
 .hover {
 	border:1px dotted red;
+}
+ul{  margin-left:300px; 
 }
 /* Positionen der einzelnen Knoten */
 

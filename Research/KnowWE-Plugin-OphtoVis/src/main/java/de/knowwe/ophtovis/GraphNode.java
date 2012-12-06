@@ -31,14 +31,15 @@ public class GraphNode
 	private int leftCo;
 	private int topCo;
 	private int id;
+	private int parentId;
 
-	public GraphNode(String name, int leftCo, int topCo, int id)
+	public GraphNode(String name, int leftCo, int topCo, int id, int parentId)
 	{
 		this.name = name;
 		this.leftCo = leftCo;
 		this.topCo = topCo;
-
 		this.id = id;
+		this.parentId = parentId;
 	}
 
 	public String getStringID() {
@@ -53,6 +54,14 @@ public class GraphNode
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
 	}
 
 	public String getName() {
