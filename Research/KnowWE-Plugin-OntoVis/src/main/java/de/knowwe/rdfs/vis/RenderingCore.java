@@ -49,6 +49,7 @@ import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.rdfs.vis.util.Utils;
 
 /**
@@ -884,6 +885,12 @@ public class RenderingCore {
 	}
 
 	private static String createSparqlURI(String name) {
+		Collection<Section<? extends SimpleDefinition>> definitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+				new TermIdentifier(name));
+		if (definitions.size() > 0) {
+			Section<? extends SimpleDefinition> def = definitions.iterator().next();
+			return "<" + RDFSUtil.getURI(def) + ">";
+		}
 		name = name.replaceAll(" ", "+");
 		if (name.contains("+") || name.contains(".")) {
 			String localNamespace = Rdf2GoCore.getInstance().getLocalNamespace();
