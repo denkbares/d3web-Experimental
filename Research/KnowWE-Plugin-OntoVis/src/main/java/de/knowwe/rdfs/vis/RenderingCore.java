@@ -77,6 +77,8 @@ public class RenderingCore {
 	public static final String LINK_MODE_JUMP = "LINK_MODE_JUMP";
 	public static final String LINK_MODE_BROWSE = "LINK_MODE_BROWSE";
 
+	public static final String RELATION_COLOR_CODES = "relation_color_codes";
+
 	public static final String SHOW_OUTGOING_EDGES = "SHOW_OUTGOING_EDGES";
 
 	private int requestedDepth;
@@ -664,11 +666,34 @@ public class RenderingCore {
 	private String innerRelation(String label) {
 		// Basic Relation Attributes
 		String arrowtail = "normal";
-		String color = "black";
 		String fontsize = "13";
+
+		String color = getRelationColorCode(label);
 
 		return "[ label = \"" + label
 				+ "\"" + buildRelation(arrowtail, color, fontsize) + " ];\n";
+	}
+
+	/**
+	 * 
+	 * @created 07.12.2012
+	 * @param label
+	 * @return
+	 */
+	private String getRelationColorCode(String label) {
+		if (parameters.get(RELATION_COLOR_CODES) != null) {
+			String codeList = parameters.get(RELATION_COLOR_CODES);
+			String[] assignments = codeList.split(";");
+			for (String assignment : assignments) {
+				String[] ass = assignment.split(":");
+				String relationName = ass[0];
+				String colorCode = ass[1];
+				if (relationName.equals(label)) {
+					return colorCode;
+				}
+			}
+		}
+		return "black";
 	}
 
 	/**
