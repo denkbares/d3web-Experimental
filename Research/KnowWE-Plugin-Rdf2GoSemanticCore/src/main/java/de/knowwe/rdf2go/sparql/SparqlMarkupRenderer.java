@@ -19,12 +19,18 @@
  */
 package de.knowwe.rdf2go.sparql;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.Cookie;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryResultTable;
 
@@ -35,6 +41,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.sparql.utils.RenderOptions;
 import de.knowwe.rdf2go.sparql.utils.SparqlRenderResult;
 
 public class SparqlMarkupRenderer implements Renderer {
@@ -53,46 +60,110 @@ public class SparqlMarkupRenderer implements Renderer {
 				Section<SparqlMarkupType> markupSection = Sections.findAncestorOfType(sec,
 						SparqlMarkupType.class);
 
-				boolean rawOutput = checkAnnotation(markupSection, SparqlMarkupType.RAW_OUTPUT);
-				boolean zebraMode = checkAnnotation(markupSection, SparqlMarkupType.ZEBRAMODE);
-				boolean border = checkAnnotation(markupSection, SparqlMarkupType.BORDER);
-				boolean navigation = checkAnnotation(markupSection, SparqlMarkupType.NAVIGATION);
+				RenderOptions renderOpts = new RenderOptions(sec.getID());
 
-				if (border) result.append(Strings.maskHTML("<div class='border'>"));
-				if (navigation) {
+				// Default values
+				String navigationOffset = "1";
+				String navigationLimit = "20";
+				Map<String, String> sortMap = new LinkedHashMap<String, String>();
+				// Get values out of JSON Cookie
+				if (getJSONCookieString(sec, user) != null) {
+					JSONObject json = new JSONObject(Strings.decodeURL(getJSONCookieString(sec,
+							user)));
+					if (!json.isNull("navigationOffset")) {
+						navigationOffset = json.getString("navigationOffset");
+					}
+					if (!json.isNull("navigationLimit")) {
+						navigationLimit = json.getString("navigationLimit");
+					}
+					if (!json.isNull("sorting")) {
+						JSONArray jsonArray = json.getJSONArray("sorting");
+						for (int i = 0; i < jsonArray.length(); i++) {
+							JSONObject sortPair = jsonArray.getJSONObject(i);
+							Iterator<String> it = sortPair.keys();
+							String key = it.next();
+							sortMap.put(key, sortPair.getString(key));
+						}
+						renderOpts.setSortingMap(sortMap);
+					}
+				}
+
+				setRenderOptions(markupSection, renderOpts);
+
+				if (renderOpts.isBorder()) result.append(Strings.maskHTML("<div class='border'>"));
+				if (renderOpts.isSorting()) sparqlString = modifyOrderByInSparqlString(sortMap,
+						sparqlString);
+
+				SparqlRenderResult resultEntry;
+				if (renderOpts.isNavigation()) {
 					// do not show navigation bar if LIMIT or OFFSET is set in
 					// markup
-					if (!(isLimitSet(markupSection) || (isOffsetSet(markupSection)))) {
-						String fromLine = getSelectedFromLine(user);
-						String showLines = getShowLines(user);
-						sparqlString += addOffsetandLimitToSparqlString(fromLine, showLines);
+					sparqlString = addOffsetAndLimitToSparqlString(sparqlString, markupSection,
+							navigationOffset, navigationLimit);
 
-						QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
+					QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
 								sparqlString);
-						SparqlRenderResult resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
+					resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
 								resultSet,
-								rawOutput, zebraMode);
-						result.append(renderTableSizeSelector(showLines));
-						result.append(renderNavigation(fromLine, showLines, resultEntry.getSize()));
-						result.append(Strings.maskHTML(resultEntry.getHTML()));
-
+								renderOpts);
+					if (!renderOpts.isRawOutput()) {
+						result.append(renderTableSizeSelector(navigationLimit, sec.getID()));
+						result.append(renderNavigation(navigationOffset, navigationLimit,
+								resultEntry.getSize(), sec.getID()));
 					}
+
 				}
 				else {
 					QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
 							sparqlString);
-					SparqlRenderResult resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
-							resultSet, rawOutput, zebraMode);
-					result.append(Strings.maskHTML(resultEntry.getHTML()));
+					resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
+							resultSet,
+							renderOpts);
 				}
-				if (border) result.append(Strings.maskHTML("</div>"));
-			}
+				result.append(Strings.maskHTML(resultEntry.getHTML()));
+				if (renderOpts.isBorder()) result.append(Strings.maskHTML("</div>"));
 
+			}
 		}
 		catch (ModelRuntimeException e) {
 			result.append(Strings.maskHTML("<span class='warning'>"
 					+ e.getMessage() + "</span>"));
 		}
+		catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private String addOffsetAndLimitToSparqlString(String sparqlString, Section<SparqlMarkupType> markupSection, String navigationOffset, String navigationLimit) {
+		if (!(isLimitSet(markupSection) || (isOffsetSet(markupSection)))) {
+
+			int offsetInt = Integer.parseInt(navigationOffset);
+			int limitInt;
+			if (!navigationLimit.equals("All")) limitInt = Integer.parseInt(navigationLimit);
+			else limitInt = -999;
+
+			StringBuilder sb = new StringBuilder();
+			sb.append(" OFFSET " + (offsetInt - 1));
+			if (limitInt != -999) sb.append(" LIMIT " + (limitInt - 1));
+			sparqlString += sb.toString();
+		}
+		return sparqlString;
+	}
+
+	private void setRenderOptions(Section<SparqlMarkupType> markupSection, RenderOptions renderOpts) {
+		renderOpts.setRawOutput(checkAnnotation(markupSection, SparqlMarkupType.RAW_OUTPUT));
+		renderOpts.setSorting(checkSortingAnnotation(markupSection,
+				SparqlMarkupType.SORTING));
+		renderOpts.setZebraMode(checkAnnotation(markupSection, SparqlMarkupType.ZEBRAMODE));
+		renderOpts.setBorder(checkAnnotation(markupSection, SparqlMarkupType.BORDER));
+		renderOpts.setNavigation(checkAnnotation(markupSection, SparqlMarkupType.NAVIGATION));
+	}
+
+	private boolean checkSortingAnnotation(Section<SparqlMarkupType> markupSection, String sorting) {
+		String annotationString = DefaultMarkupType.getAnnotation(markupSection,
+				sorting);
+		return annotationString == null || annotationString.equals("true");
 	}
 
 	private boolean checkAnnotation(Section<?> markupSection, String annotationName) {
@@ -136,17 +207,52 @@ public class SparqlMarkupRenderer implements Renderer {
 		return sparqlString;
 	}
 
-	private String addOffsetandLimitToSparqlString(String offset, String limit) {
+	private String modifyOrderByInSparqlString(Map<String, String> sortOrder, String sparqlString) {
+		StringBuilder sb = new StringBuilder(sparqlString);
+		if (sortOrder.isEmpty()) {
+			return sb.toString();
+		}
+		String sparqlTempString = sparqlString.toLowerCase();
+		int orderBy = sparqlTempString.lastIndexOf("order by");
+		int limit = sparqlTempString.indexOf("limit", orderBy);
+		int offset = sparqlTempString.indexOf("offset", orderBy);
+		int nextStatement;
+		if (limit > 0 && offset > 0) nextStatement = (limit < offset) ? limit : offset;
+		else if (limit > 0 && offset < 0) nextStatement = limit;
+		else if (limit < 0 && offset > 0) nextStatement = offset;
+		else nextStatement = -1;
 
-		StringBuilder sb = new StringBuilder();
-		sb.append(" OFFSET " + offset);
+		StringBuilder sbOrder = new StringBuilder();
+		Collection<String> keyCollection = sortOrder.keySet();
+		Iterator<String> keyIt = keyCollection.iterator();
+		Collection<String> valueCollection = sortOrder.values();
+		Iterator<String> valIt = valueCollection.iterator();
 
-		if (!(limit.equals("All"))) sb.append(" LIMIT " + limit);
+		while (keyIt.hasNext()) {
+			sbOrder.append(" " + valIt.next() + "(?" + keyIt.next() + ")");
+		}
+
+		if (orderBy == -1) {
+			if (nextStatement == -1) {
+				sb.append(" ORDER BY" + sbOrder.toString());
+			}
+			else {
+				sb.replace(nextStatement, nextStatement, " ORDER BY" + sbOrder.toString());
+			}
+		}
+		else {
+			if (nextStatement != -1) {
+				sb.replace(orderBy, nextStatement, " ORDER BY" + sbOrder.toString());
+			}
+			else {
+				sb.replace(orderBy, sb.length(), " ORDER BY" + sbOrder.toString());
+			}
+		}
 
 		return sb.toString();
 	}
 
-	private String renderTableSizeSelector(String selectedSize) {
+	private String renderTableSizeSelector(String selectedSize, String id) {
 		StringBuilder builder = new StringBuilder();
 
 		String[] sizeArray = new String[] {
@@ -154,7 +260,8 @@ public class SparqlMarkupRenderer implements Renderer {
 		builder.append("<div class='toolBar'>");
 		builder.append("<span class=fillText>Show </span>"
 				+ "<select id='showLines'"
-				+ " onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer();\">");
+				+ " onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer('"
+								+ id + "');\">");
 		for (String size : sizeArray) {
 			if (size.equals(selectedSize)) {
 				builder.append("<option selected='selected' value='" + size + "'>" + size
@@ -170,7 +277,7 @@ public class SparqlMarkupRenderer implements Renderer {
 		return Strings.maskHTML(builder.toString());
 	}
 
-	private Object renderNavigation(String from, String selectedSize, int max) {
+	private Object renderNavigation(String from, String selectedSize, int max, String id) {
 		StringBuilder builder = new StringBuilder();
 
 		int fromInt = Integer.parseInt(from);
@@ -181,20 +288,23 @@ public class SparqlMarkupRenderer implements Renderer {
 		else {
 			selectedSizeInt = max;
 		}
-
 		renderToolbarButton(
-				"begin.png", "KNOWWE.plugin.semantic.actions.begin()",
+				"begin.png", "KNOWWE.plugin.semantic.actions.begin('"
+								+ id + "')",
 				(fromInt > 1), builder);
 		renderToolbarButton(
-				"back.png", "KNOWWE.plugin.semantic.actions.back()",
+				"back.png", "KNOWWE.plugin.semantic.actions.back('"
+								+ id + "')",
 				(fromInt > 1), builder);
 		builder.append("<span class=fillText> Lines </span>");
-		builder.append("<input size=3 id='fromLine' type=\"field\" onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer();\" value='"
+		builder.append("<input size=3 id='fromLine' type=\"field\" onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer('"
+								+ id + "');\" value='"
 				+ from + "'>");
 		builder.append("<span class=fillText> to </span>" + (fromInt + selectedSizeInt - 1));
 		renderToolbarButton(
-				"forward.png", "KNOWWE.plugin.semantic.actions.forward()",
-				!selectedSize.equals("all"), builder);
+				"forward.png", "KNOWWE.plugin.semantic.actions.forward('"
+								+ id + "')",
+				!selectedSize.equals("All"), builder);
 		builder.append("</div>");
 		return Strings.maskHTML(builder.toString());
 	}
@@ -220,12 +330,8 @@ public class SparqlMarkupRenderer implements Renderer {
 		}
 	}
 
-	private String getSelectedFromLine(UserContext user) {
-		return getCookie(user, "FromLine", "1");
-	}
-
-	private String getShowLines(UserContext user) {
-		return getCookie(user, "ShowLines", "20");
+	private String getJSONCookieString(Section<?> sec, UserContext user) {
+		return getCookie(user, "SparqlRenderer-" + sec.getID(), null);
 	}
 
 	private String getCookie(UserContext user, String cookieName, String defaultValue) {
@@ -252,6 +358,8 @@ public class SparqlMarkupRenderer implements Renderer {
 			return false;
 		}
 		String secText = sec.getText();
+		// for future changes keep the possibility to switch this to
+		// "secText.contains(cons)"
 		if ((secText.contains("OFFSET")) || (secText.contains("LIMIT"))) {
 			return true;
 		}

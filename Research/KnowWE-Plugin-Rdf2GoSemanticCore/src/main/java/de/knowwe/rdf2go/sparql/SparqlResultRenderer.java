@@ -1,6 +1,7 @@
 package de.knowwe.rdf2go.sparql;
 
 import java.util.List;
+import java.util.Map;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryResultTable;
@@ -12,6 +13,7 @@ import de.d3web.plugin.PluginManager;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.sparql.utils.RenderOptions;
 import de.knowwe.rdf2go.sparql.utils.SparqlRenderResult;
 
 public class SparqlResultRenderer {
@@ -42,18 +44,23 @@ public class SparqlResultRenderer {
 	}
 
 	public SparqlRenderResult renderQueryResult(QueryResultTable qrt) {
-		return renderQueryResult(qrt, false, false);
+		// TODO
+		// is this a good idea?
+		return renderQueryResult(qrt, new RenderOptions("defaultID"));
 	}
 
 	/**
 	 * 
 	 * @created 06.12.2010
 	 * @param qrt
+	 * @param opts TODO
 	 * @return html table with all results of qrt and size of qrt
 	 */
-	public SparqlRenderResult renderQueryResult(QueryResultTable qrt, boolean rawOutput, boolean zebraMode) {
+	public SparqlRenderResult renderQueryResult(QueryResultTable qrt, RenderOptions opts) {
 		boolean tablemode = false;
 		boolean empty = true;
+		boolean zebraMode = opts.isZebraMode();
+		boolean rawOutput = opts.isRawOutput();
 		int i = 0;
 		List<String> variables = qrt.getVariables();
 		ClosableIterator<QueryRow> iterator = qrt.iterator();
@@ -67,8 +74,19 @@ public class SparqlResultRenderer {
 			result.append(Strings.maskHTML("<table class='sparqltable'>"));
 			result.append(Strings.maskHTML(!zebraMode ? "<tr>" : "<tr class='odd'>"));
 			for (String var : variables) {
-				result.append(Strings.maskHTML("<td><b>") + var
-						+ Strings.maskHTML("<b/></td>"));
+
+				result.append(Strings.maskHTML("<td><b>")
+						+ Strings.maskHTML("<a href='#/' onclick=\"KNOWWE.plugin.semantic.actions.sortResultsBy('"
+								+ var + "','" + opts.getId() + "');\">")
+						+ var
+						+ Strings.maskHTML("</a>"));
+				if (hasSorting(var, opts.getSortingMap())) {
+					String symbol = getSortingSymbol(var, opts.getSortingMap());
+					result.append(Strings.maskHTML("<img src='KnowWEExtension/images/" + symbol
+							+ "' alt='Sort by '"
+							+ var + "border='0' /><b/></td>"));
+				}
+
 			}
 			result.append(Strings.maskHTML("</tr>"));
 		}
@@ -138,5 +156,28 @@ public class SparqlResultRenderer {
 			rendered = Strings.maskJSPWikiMarkup(rendered);
 		}
 		return rendered;
+	}
+
+	private String getSortingSymbol(String value, Map<String, String> map) {
+		StringBuilder sb = new StringBuilder();
+		if (map.containsKey(value)) {
+			sb.append("arrow");
+			sb.append("_");
+			if (map.get(value).equals("ASC")) {
+				sb.append("down");
+			}
+			else {
+				sb.append("up");
+			}
+		}
+		sb.append(".png");
+		return sb.toString().toLowerCase();
+	}
+
+	private boolean hasSorting(String value, Map<String, String> map) {
+		if (map.containsKey(value)) {
+			return true;
+		}
+		return false;
 	}
 }
