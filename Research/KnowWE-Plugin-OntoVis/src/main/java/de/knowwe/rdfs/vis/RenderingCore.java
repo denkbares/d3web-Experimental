@@ -101,7 +101,7 @@ public class RenderingCore {
 	// sources for the dot-file
 	private String dotSource;
 	private final Map<String, String> dotSourceLabel;
-	private final Map<String, String> dotSourceRelations;
+	private final Map<Edge, String> dotSourceRelations;
 
 	// Annotations
 	private List<String> excludedNodes;
@@ -154,7 +154,7 @@ public class RenderingCore {
 		path = realPath + FILE_SEPARATOR + tmpPath;
 
 		dotSourceLabel = new LinkedHashMap<String, String>();
-		dotSourceRelations = new LinkedHashMap<String, String>();
+		dotSourceRelations = new LinkedHashMap<Edge, String>();
 	}
 
 	/**
@@ -616,10 +616,10 @@ public class RenderingCore {
 	private void checkRelations() {
 		// First step: Iterate over all relations and check if it's an outer
 		// relation (gray, dashed and no arrowhead). If it is, save it.
-		List<String> keysWithGrayRelation = new LinkedList<String>();
-		Iterator<String> keys = dotSourceRelations.keySet().iterator();
+		List<Edge> keysWithGrayRelation = new LinkedList<Edge>();
+		Iterator<Edge> keys = dotSourceRelations.keySet().iterator();
 		while (keys.hasNext()) {
-			String key = keys.next();
+			Edge key = keys.next();
 			if (dotSourceRelations.get(key).contains("fontcolor=\"white\"")) {
 				keysWithGrayRelation.add(key);
 			}
@@ -628,10 +628,11 @@ public class RenderingCore {
 		// Second step: Now check both concepts of those relations and see, if
 		// they are both normal (inner) nodes. If they are, the relation
 		// shouldnt be gray, so it will be changed.
-		Iterator<String> relations = keysWithGrayRelation.iterator();
+		Iterator<Edge> relations = keysWithGrayRelation.iterator();
 		while (relations.hasNext()) {
-			String relation = relations.next();
-			String[] concepts = relation.split("->");
+			Edge relation = relations.next();
+			String[] concepts = new String[] {
+					relation.getSubject(), relation.getObject() };
 
 			if (dotSourceLabel.get(concepts[0]) != outerLabel
 					&& dotSourceLabel.get(concepts[1]) != outerLabel) {
@@ -674,10 +675,11 @@ public class RenderingCore {
 		}
 
 		// iterate over the relations and add them to the dotSource
-		Iterator<String> relationsKeys = dotSourceRelations.keySet().iterator();
+		Iterator<Edge> relationsKeys = dotSourceRelations.keySet().iterator();
 		while (relationsKeys.hasNext()) {
-			String key = relationsKeys.next();
-			dotSource += key + dotSourceRelations.get(key);
+			Edge key = relationsKeys.next();
+			dotSource += "\"" + key.getSubject() + "\"" + " -> " + "\"" + key.getObject() + "\" "
+					+ dotSourceRelations.get(key);
 		}
 
 		dotSource += "}";
@@ -741,12 +743,6 @@ public class RenderingCore {
 				addSuccessors(z);
 			}
 			if (depth == requestedDepth) {
-				boolean showOutgoingEdges = true;
-				if (parameters.get(SHOW_OUTGOING_EDGES) != null) {
-					if (parameters.get(SHOW_OUTGOING_EDGES).equals("false")) {
-						showOutgoingEdges = false;
-					}
-				}
 				addOutgoingEdgesSuccessors(z);
 			}
 			depth--;
@@ -961,7 +957,7 @@ public class RenderingCore {
 					+ buildLabel(shape, fontcolor, fontsize) + "label=\""
 					+ Utils.prepareLabel(to) + "\" ];\n";
 		}
-		String newLineRelationsKey = "\"" + from + "\"->\"" + to + "\"";
+		Edge newLineRelationsKey = new Edge(from, relation, to);
 		String newLineRelationsValue = innerRelation(relation);
 
 		if (!dotSourceLabel.containsKey(newLineLabelKey)
@@ -1047,7 +1043,7 @@ public class RenderingCore {
 		else {
 			newLineLabelKey = "\"" + to + "\"";
 		}
-		String newLineRelationsKey = "\"" + from + "\"->\"" + to + "\"";
+		Edge newLineRelationsKey = new Edge(from, relation, to);
 		String newLineRelationsValue = "[ label=\"" + relation
 				+ "\" fontcolor=\"white\" arrowhead=\""
 				+ arrowhead + "\" color=\"" + color
