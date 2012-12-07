@@ -68,6 +68,7 @@ public class RenderingCore {
 
 	public static final String SHOW_CLASSES = "show_classes";
 	public static final String SHOW_PROPERTIES = "show_properties";
+	public static final String SHOW_SCROLLBAR = "show_scrollbar";
 
 	public static final String GRAPH_SIZE = "graph_size";
 	public static final String RANK_DIRECTION = "rank_direction";
@@ -224,7 +225,15 @@ public class RenderingCore {
 	 * @param StringBuilder
 	 */
 	private void createHTMLOutput(StringBuilder string) {
-		String div_open = "<div style=\"max-height:1000px; overflow:scroll\">";
+		String style = "max-height:1000px; ";
+		if (parameters.get(SHOW_SCROLLBAR) != null
+				&& parameters.get(SHOW_SCROLLBAR).equals("false")) {
+			// no scroll-bars
+		}
+		else {
+			style += "overflow:scroll";
+		}
+		String div_open = "<div style=\"" + style + "\">";
 		String div_close = "</div>";
 		String png_default = Strings.maskHTML(div_open + "<img alt='graph' src='"
 				+ tmpPath + "graph" + section.getID() + ".png'>" + div_close);
