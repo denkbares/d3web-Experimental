@@ -1076,7 +1076,7 @@ public class D3webUtils {
         String prompt = null;
         switch (locIdent) {
             case 1: // german
-                prompt = "Bitte auswählen...";
+                prompt = "Please select...";//"Bitte auswählen...";
                 break;
             case 2: // english
                 prompt = "Please select...";
@@ -1751,7 +1751,7 @@ public class D3webUtils {
     public static Collection<Question> resetAbandonedPaths(Session sess,
             HttpSession httpSess) {
 
-        System.out.println("RESET ABANDONED PATHS");
+        //System.out.println("RESET ABANDONED PATHS");
         // get all questions that were set per default initially
         // e.g. in EuraHS, we need to init set all dropdowns as to enable the
         // follow up mechanisms
@@ -1763,7 +1763,7 @@ public class D3webUtils {
         
         Set<QASet> initQuestions = new HashSet<QASet>(
                 D3webConnector.getInstance().getKb().getInitQuestions());
-        System.out.println("RAP: init questions - " + initQuestions.toString());
+        //System.out.println("RAP: init questions - " + initQuestions.toString());
         
         // check all questions that have been lately answered 
         for (Question question : bb.getAnsweredQuestions()) {
@@ -1774,13 +1774,13 @@ public class D3webUtils {
                     && !question.getName().equals(
                     D3webConnector.getInstance().getD3webParser().getRequired())) {
                     
-                System.out.println("RAP: !active && !required ");
+                //System.out.println("RAP: !active && !required ");
                 // and if there are initSet questions and those do not contain q
                 if ((initSetQuestions != null && !initSetQuestions.contains(question.getName()))
                         || initSetQuestions == null) {
 
-                    System.out.println("RAP: !initially set ");
-                    System.out.println("RAP: try removing... ");
+                    //System.out.println("RAP: !initially set ");
+                    //System.out.println("RAP: try removing... ");
                     // then remove the corresponding fact from the blackboard
                     Fact lastFact = bb.getValueFact(question);
                     if (lastFact != null
@@ -1936,7 +1936,7 @@ public class D3webUtils {
 
         switch (locIdent) {
             case 1: // german
-                if (titleID.equals("Y")) {
+                /*if (titleID.equals("Y")) {
                     translated = "Jahr:";
                 } else if (titleID.equals("M")) {
                     translated = "Monat:";
@@ -1948,7 +1948,20 @@ public class D3webUtils {
                     translated = "Minute:";
                 } else if (titleID.equals("S")) {
                     translated = "Sekunde:";
-                }
+                }*/
+                if (titleID.equals("Y")) {
+                translated = "Year";
+            } else if (titleID.equals("M")) {
+                translated = "Month";
+            } else if (titleID.equals("D")) {
+                translated = "Day";
+            } else if (titleID.equals("H")) {
+                translated = "Hour";
+            } else if (titleID.equals("M")) {
+                translated = "Minute";
+            } else if (titleID.equals("S")) {
+                translated = "Second";
+            }
 
                 break;
             case 2: // english
