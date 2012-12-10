@@ -18,9 +18,27 @@ jq$(document).ready(function() {
     });
 
 
-
+    jq$(".termline").each(function() {
+    	initIconHover(jq$(this));
+    });
 
 });
+
+function initIconHover(element) {
+	element.find('.ui-icon').each(
+			function() {
+				var icon = jq$(this);
+				element.hover(
+						function () {
+							icon.show();
+						}, 
+						function () {
+							icon.hide();
+						}
+				);
+			}
+	);
+}
 
 
 function activateDraggables() {

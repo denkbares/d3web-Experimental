@@ -60,8 +60,23 @@ public class TermBrowserRenderUtils {
 		for (int i = 0; i < 10; i++) {
 			if (i >= rankedTermList.size()) break;
 			String term = rankedTermList.get(i);
-			string.append(Strings.maskHTML("<div id='draggable' class='termline'><div class='termname'>"
-					+ term + "</div></div>"));
+			string.append(Strings.maskHTML("<div id='draggable' class='termline'>"
+					+
+					"<table style='table-layout:fixed'><col width='80'/><col width='16'/><col width='16'/><col width='16'/>"
+					+
+					"<tr>"
+					+
+					"<td class='termbrowser'><div class='termname'>"
+					+ term
+					+ "</div></td>"
+					+
+							"<td class='termbrowser'><span class='ui-icon ui-icon-arrowreturnthick-1-e' style='display:none;'></span></td>"
+					+
+							"<td class='termbrowser'><span class='ui-icon ui-icon-circle-close' style='display:none;'></span></td>"
+					+
+							"<td class='termbrowser'><span class='ui-icon ui-icon-arrow-4-diag' style='display:none;'></span></td>"
+					+
+					"</tr></table></div>"));
 		}
 
 		string.append(Strings.maskHTML("</div>"));

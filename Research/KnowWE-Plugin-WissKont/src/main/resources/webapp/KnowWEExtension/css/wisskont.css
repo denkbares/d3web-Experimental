@@ -54,7 +54,7 @@ border-color: #FFFFCC;
 	border-width: 3px;
 	border-color: #CCCCCC;
 	background-color: ##F9F9F0;
-	padding: 10px;
+	padding: 6px;
 	border-radius: 10px 10px 10px 10px;
 }
 
@@ -67,6 +67,11 @@ border-color: #FFFFCC;
 
 .termline {
 	
+	}
+	
+td.termbrowser {
+	padding: 0;
+	overflow: hidden;
 	}
 	
 .termname{
