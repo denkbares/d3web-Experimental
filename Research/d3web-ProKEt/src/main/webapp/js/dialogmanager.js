@@ -58,7 +58,11 @@ $(function(){
     var statusKB =  Request.parameter("upKB");
     var statusSpecs = Request.parameter("upSPEC");
     var status = Request.parameter("upERR");
-    upfilename = Request.parameter("upfilename").replace("%", " ");
+    upfilename = "";
+    if(Request.parameter("upfilename")!= undefined){
+        upfilename = Request.parameter("upfilename").replace("%", " ");
+    }
+    
     
     //dmOpenExceptionReport();
     

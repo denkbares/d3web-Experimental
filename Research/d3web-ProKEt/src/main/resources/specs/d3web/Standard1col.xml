@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="Standard Dialog 1 Column Style"  
+	dtype="singleform" 
+	indicationmode="hide_unindicated"
+	dstrategy="nextform"
+	css="standarddialog, diagnosisVisu" 
+	dialogcolumns="1"
+	questionnairecolumns="1"
+	questioncolumns="2"
+	uiprefix = "Standard"
+        login = ""
+        required = "NONE"
+	language = ""
+        debug = "false"
+        >
+	<data kb="BergbauAbstract.d3web" />
+        <ue logging = "FALSE" />
+</dialog>

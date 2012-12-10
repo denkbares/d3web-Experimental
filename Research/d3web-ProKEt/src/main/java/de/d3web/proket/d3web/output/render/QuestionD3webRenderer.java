@@ -72,8 +72,8 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
             return "";
         }
         StringBuilder sb = new StringBuilder();
-        
-        
+
+
         // get the fitting template. In case user prefix was specified, the
         // specific TemplateName is returned, otherwise, the base object name.
         StringTemplate st = TemplateUtils.getStringTemplate(
@@ -88,7 +88,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
         // read html popups from properties
         // String resString = to.getInfoStore().getValue(ProKEtProperties.POPUP);
         String resString = D3webUtils.getPopupPrompt(to, loc);
-        
+
         if (resString != null) {
             st.setAttribute("tooltip", resString);
         }
@@ -140,18 +140,24 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 
         // QContainer indicated
         if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
-                || isIndicated(parent, bb)) {
+                || isIndicated(parent, bb) || isIndicatedByChild(parent, bb)) {
 
+            if (isIndicated(to, bb) || isIndicated(parent, bb)) {
 
-            // show, if indicated follow up
-            if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
-                    || (!D3webUtils.isFollowUpToQCon(to, parent))) {
-                st.removeAttribute("inactiveQuestion");
-                st.removeAttribute("qstate");
-                st.setAttribute("qstate", "");
+                // show, if indicated follow up
+                if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
+                        || (!D3webUtils.isFollowUpToQCon(to, parent))) {
+                    
+                    st.removeAttribute("inactiveQuestion");
+                    st.removeAttribute("qstate");
+                    st.setAttribute("qstate", "");
+                } else {
+                    st.setAttribute("inactiveQuestion", "true");
+                }
             } else {
                 st.setAttribute("inactiveQuestion", "true");
             }
+
         } else {
             st.setAttribute("inactiveQuestion", "true");
         }
@@ -173,7 +179,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
                 st.removeAttribute("inactiveQuestion");
                 st.removeAttribute("qstate");
                 st.setAttribute("qstate", "question-d");
-                
+
             }
         }
 

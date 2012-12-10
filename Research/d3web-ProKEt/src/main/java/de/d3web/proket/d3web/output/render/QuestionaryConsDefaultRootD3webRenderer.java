@@ -74,7 +74,7 @@ public class QuestionaryConsDefaultRootD3webRenderer extends DefaultRootD3webRen
             st.setAttribute("feedback", "true");
         }
 
-        if (!D3webUESettings.getInstance().getUequestionnaire().equals("NONE")) {
+        if (!D3webUESettings.getInstance().getUequestionnaire().equals(D3webUESettings.UEQ.NONE)) {
             st.setAttribute("ueq", "true");
         }
         /*

@@ -80,11 +80,16 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
 
         Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
 
+        
         if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(to)
-                || isIndicated(to, bb) && (hidden == null || !hidden)) {
-
+                || isIndicated(to, bb) || isIndicatedByChild(to, bb) && (hidden == null || !hidden)) {
+// || 
+           
             st.removeAttribute("hidden");
         } else {
+            //System.out.println("HIDDEN");
+            //System.out.println(to.getName());
+            //System.out.println(isIndicated(to, bb));
             st.setAttribute("hidden", "true");
         }
 

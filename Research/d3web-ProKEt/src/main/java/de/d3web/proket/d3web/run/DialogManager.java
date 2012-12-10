@@ -392,6 +392,8 @@ public class DialogManager extends HttpServlet {
         String dialogLink = "";
 
         httpSession.setAttribute("WUMP", "true");
+            System.out.println("ASSEMBLE: " +DialogType.STANDARD.toString());
+        
         if (specName != null) {
 
             // assemble ITree Servlet Link
@@ -402,11 +404,13 @@ public class DialogManager extends HttpServlet {
                         + "&dialogID=" + d3webKBName + "AND" + specName;
 
 
-            } else if (specName.contains(DialogType.STANDARD.toString())) {
+            } else if (specName.toUpperCase().contains(DialogType.STANDARD.toString())) {
+                System.out.println("ASSEMBLE: " +DialogType.STANDARD.toString());
+        
                 //dialogLink = GLOBSET.getWebAppWarName() + "/StandardDialog?src="
                 //      + specFile.getName().replace(".xml", "")
                 //    + "&dialogID=" + d3webKBName + "AND" + specName;
-                dialogLink = GLOBSET.getWebAppWarName() + "/ITreeDialog?src="
+                dialogLink = GLOBSET.getWebAppWarName() + "/StandardDialog?src="
                         + specFile.getName().replace(".xml", "")
                         + "&dialogID=" + d3webKBName + "AND" + specName;
             }
@@ -865,7 +869,7 @@ public class DialogManager extends HttpServlet {
                 + "<span style='color: red;'>Bitte leiten Sie den Inhalt dieses "
                 + "Fensters an den Systemadministrator weiter. </span> <br><br>"
                 + "Das Problem wird dann baldmöglichst behoben.<br /><br /><br />"
-                + "Fehlermeldung vom " + d.toString() + ", aufgetreten beim der "
+                + "Fehlermeldung vom " + d.toString() + ", aufgetreten bei der "
                 + "Verarbeitung des Dokuments <b>" + docname + "</b>:</h3>");
         finalBui.append("<h5>");
         finalBui.append(exceptionString);

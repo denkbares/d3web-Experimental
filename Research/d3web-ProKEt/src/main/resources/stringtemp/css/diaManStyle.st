@@ -26,7 +26,7 @@
 
 .lastcell{background: white; -moz-border-radius: 0px 15px 15px 0px; 
     border-radius: 0px 15px 15px 0px; border: 2px solid white;
-    max-width: 130px; padding-right: 5px;}
+    max-width: 130px; padding-right: 100px;}
 
 .bgcell{background: white; border: 2px solid white;}
 
@@ -64,7 +64,7 @@ input{border: 1px dotted darkgrey;
 
 #docfilename{left: -1px;
     min-width: 22%px;
-    width: 290px;
+    width: 330px;
     position: absolute;
     top: -1px;
     margin-top: 10px;}
@@ -76,7 +76,7 @@ input{border: 1px dotted darkgrey;
     margin-top: 10px;}
 
 #docfilebutton{width: 70px; height: 24px;
-    left: 290px;
+    left: 330px;
     min-width: 25px;
     position: absolute;
     top: -1px;
@@ -106,7 +106,7 @@ input{border: 1px dotted darkgrey;
 
 #origKBUploadField,#origSpecUploadField {width: 220px; position: relative; z-index:2; opacity:0;}
 
-#origKBUploadField{margin-top:12px; width: 295px;}
+#origKBUploadField{margin-top:12px; width: 350px;}
 
 #origSpecUploadField{margin-top:10px; width: 225px;}
 
@@ -167,7 +167,7 @@ input{border: 1px dotted darkgrey;
 
 .specsSelect{min-width: 130px;}
 
-.d3webSelect{min-width: 300px;}
+.d3webSelect{min-width: 400px; max-width: 400px;}
 
 #spacerowRightcol{min-height: 20px; height: 35px;}
 
@@ -190,3 +190,9 @@ input{border: 1px dotted darkgrey;
     position: relative;
     width: 70px;
 }
+
+#latestDialogLink{max-width: 200px;}
+
+.dmFileSelctorBox{margin-right:50px;}
+
+.horSpace{width: 0px;}

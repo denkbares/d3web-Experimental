@@ -202,16 +202,18 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);
 
             //     System.out.println(d3webSession.getBlackboard().getValue((ValueObject) child));
-            //    System.out.println(to.getName() + " - " + D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
-            //     System.out.println(child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
-            //    System.out.println(child.getName() + " CI - " + D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()) + "\n");
-
+            //System.out.println("parent: " + to.getName() + " - " + D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
+            //System.out.println("child: " + child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
+            //System.out.println(child.getName() + " CI - " + D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()) + "\n");
+            //System.out.println(D3webConnector.getInstance().getIndicationMode());
+            
             if (!debug) {
                 // only show questions if they are NOT contraindicated
                 // they ARE contraindicated by the EuraHS- only if construct
                 if ((D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
                         && child instanceof Question
                         && D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()))) {
+                    System.out.println("CONTINUE");
                     continue;
                 }
             }
@@ -573,6 +575,19 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         return false;
     }
 
+    public boolean isIndicatedByChild(TerminologyObject to, Blackboard bb) {
+
+        if (to.getChildren().length != 0) {
+            for (TerminologyObject toc : to.getChildren()) {
+                //System.out.println(toc.getName() + " " + isIndicated(to, bb));
+                if (isIndicated(toc, bb)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean isParentOfFollowUpQuIndicated(TerminologyObject to, Blackboard bb) {
         for (Question q : bb.getSession().getKnowledgeBase().getManager().getQuestions()) {
 
@@ -687,8 +702,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                         }
                         st.setAttribute("children", childrenHTML.toString());
 
-                    } 
-                    // we have sub-grouping questionnaires
+                    } // we have sub-grouping questionnaires
                     else {
                         if (!toc.getName().contains("ABSTRACTIONS")
                                 && toc.getName().equals("ROOT")) {

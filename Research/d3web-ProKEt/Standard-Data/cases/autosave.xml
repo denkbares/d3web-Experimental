@@ -1,94 +1,49 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <repository>
-<session changed="2012-11-13 13:59:56.419" created="2012-11-13 13:59:56.419" id="faea409c-1334-4c7d-a72a-fdfb693db439">
+<session changed="2012-11-29 20:37:06.266" created="2012-11-29 20:37:06.266" id="dce43db5-6c3a-4442-a2e0-947aa512451d">
 <name/>
 <facts>
 <valueFacts>
-<fact objectName="Einheimische Baumart?" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
+<fact objectName="now" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2012-11-29 20:37:11.176</dateValue>
 </fact>
 <fact objectName="start" psm="cc.d3web.history.ps.PSMethodTimeDB">
-<dateValue>2012-11-13 13:59:56.419</dateValue>
+<dateValue>2012-11-29 20:37:06.266</dateValue>
 </fact>
-<fact objectName="now" psm="cc.d3web.history.ps.PSMethodTimeDB">
-<dateValue>2012-11-13 14:00:02.894</dateValue>
+<fact objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Afrika</choiceValue>
 </fact>
-<fact objectName="Hat der Baum Nadeln?" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>No</choiceValue>
+<fact objectName="Afrika, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Algerien</choiceValue>
 </fact>
-<fact objectName="Anderer Baum" psm="de.d3web.scoring.inference.PSMethodHeuristic">
-<rating score="10.0" type="heuristic">SUGGESTED</rating>
-</fact>
-<fact objectName="Kiefer" psm="de.d3web.scoring.inference.PSMethodHeuristic">
-<rating score="-Infinity" type="heuristic">EXCLUDED</rating>
-</fact>
-<fact objectName="Ahorn" psm="de.d3web.scoring.inference.PSMethodHeuristic">
-<rating score="10.0" type="heuristic">SUGGESTED</rating>
-</fact>
-<fact objectName="Fichte" psm="de.d3web.scoring.inference.PSMethodHeuristic">
-<rating score="-Infinity" type="heuristic">EXCLUDED</rating>
-</fact>
-<fact objectName="Nadelbaum" psm="de.d3web.scoring.inference.PSMethodHeuristic">
-<rating score="-Infinity" type="heuristic">EXCLUDED</rating>
-</fact>
-<fact objectName="Eiche" psm="de.d3web.scoring.inference.PSMethodHeuristic">
-<rating score="10.0" type="heuristic">SUGGESTED</rating>
-</fact>
-<fact objectName="Tanne" psm="de.d3web.scoring.inference.PSMethodHeuristic">
-<rating score="-Infinity" type="heuristic">EXCLUDED</rating>
-</fact>
-<fact objectName="Linde" psm="de.d3web.scoring.inference.PSMethodHeuristic">
-<rating score="10.0" type="heuristic">SUGGESTED</rating>
-</fact>
-<fact objectName="Buche" psm="de.d3web.scoring.inference.PSMethodHeuristic">
-<rating score="10.0" type="heuristic">SUGGESTED</rating>
-</fact>
-<fact objectName="Kastanie" psm="de.d3web.scoring.inference.PSMethodHeuristic">
-<rating score="10.0" type="heuristic">SUGGESTED</rating>
-</fact>
-<fact objectName="Birke" psm="de.d3web.scoring.inference.PSMethodHeuristic">
-<rating score="10.0" type="heuristic">SUGGESTED</rating>
-</fact>
-<fact objectName="Laubbaum" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<fact objectName="Algerien" psm="de.d3web.scoring.inference.PSMethodHeuristic">
 <rating score="999.0" type="heuristic">ESTABLISHED</rating>
-</fact>
-<fact objectName="Esche" psm="de.d3web.scoring.inference.PSMethodHeuristic">
-<rating score="10.0" type="heuristic">SUGGESTED</rating>
 </fact>
 </valueFacts>
 <interviewFacts>
-<fact objectName="Früchte und Blüten" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Stamm" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Samen" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Fragebogen Asien" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>CONTRA_INDICATED</indication>
 </fact>
-<fact objectName="Nadeln" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Fragebogen Afrika" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Fragebogen Südamerika" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>CONTRA_INDICATED</indication>
 </fact>
-<fact objectName="Blätter" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Lagerstätte" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Einstiegsuntersuchung" psm="de.d3web.core.inference.PSMethodInit">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Hat der Baum Nadeln?" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Wo befindet sich die Lägerstätte ?" psm="de.d3web.core.inference.PSMethodInit">
 <indication>INDICATED</indication>
 </fact>
 </interviewFacts>
 </facts>
 <protocol>
-<entry date="2012-11-13 13:59:58.652" objectName="Einheimische Baumart?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
-<choiceValue>Yes</choiceValue>
+<entry date="2012-11-29 20:37:09.380" objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Afrika</choiceValue>
 </entry>
-<entry date="2012-11-13 13:59:59.472" objectName="Hat der Baum Nadeln?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
-<choiceValue>Yes</choiceValue>
-</entry>
-<entry date="2012-11-13 14:00:02.894" objectName="Hat der Baum Nadeln?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
-<choiceValue>No</choiceValue>
+<entry date="2012-11-29 20:37:11.176" objectName="Afrika, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Algerien</choiceValue>
 </entry>
 </protocol>
 </session>

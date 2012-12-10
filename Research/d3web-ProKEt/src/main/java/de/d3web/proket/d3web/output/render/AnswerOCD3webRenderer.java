@@ -74,7 +74,7 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
         st.setAttribute("parentFullId", getID(to));// getName().replace(" ",
         // "_"));
 
-        
+
         String resString = D3webUtils.getPopupPromptChoices(c, loc);
         if (resString != null) {
             st.setAttribute("tooltip", resString);
@@ -99,17 +99,28 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
             st.setAttribute("inactive", "true");
         }
 
+        System.out.println(to.getName());
+        System.out.println(parent.getName() + isIndicated(parent, bb));
+        System.out.println();
         // QContainer indicated
         if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
-                || isIndicated(parent, bb)) {
+                || isIndicated(parent, bb) || isIndicatedByChild(parent, bb)) {
 
-            // show, if indicated follow up
-            if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
-                    || (!D3webUtils.isFollowUpToQCon(to, parent))) {
-                st.removeAttribute("readonly");
-                st.removeAttribute("inactive");
-                st.removeAttribute("qstate");
-                st.setAttribute("qstate", "");
+            if (isIndicated(parent, bb) || isIndicated(to, bb)) {
+
+
+                // show, if indicated follow up
+                if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
+                        || (!D3webUtils.isFollowUpToQCon(to, parent))) {
+                    st.removeAttribute("readonly");
+                    st.removeAttribute("inactive");
+                    st.removeAttribute("qstate");
+                    st.setAttribute("qstate", "");
+                } else {
+                    st.setAttribute("inactive", "true");
+                    st.setAttribute("readonly", "true");
+                }
+
             } else {
                 st.setAttribute("inactive", "true");
                 st.setAttribute("readonly", "true");
@@ -118,6 +129,13 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
             st.setAttribute("inactive", "true");
             st.setAttribute("readonly", "true");
         }
+
+
+
+
+
+
+
 
         // if value of the to=question equals this choice
         if (value.toString().equals(c.toString())) {
