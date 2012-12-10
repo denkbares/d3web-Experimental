@@ -15,4 +15,237 @@
         </library>
     </runtime>
     
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
+		id="ShowConceptRelationsAppendHandler">
+		<parameter id="class"
+			value="de.knowwe.wisskont.navigation.ShowConceptRelationsAppendHandler" />
+		<parameter id="name" value="ShowConceptRelationsAppendHandler" />
+		<parameter id="description" value="PageAppendHandler ShowConceptRelationsAppendHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="css" value="wisskont.css" />
+	</extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ConceptMarkup">
+		<parameter id="class"
+			value="de.knowwe.wisskont.ConceptMarkup" />
+		<parameter id="name" value="ConceptMarkup" />
+		<parameter id="description" value="KnowWEObjectType ConceptMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TermBrowserMarkup">
+		<parameter id="class"
+			value="de.knowwe.wisskont.edit.TermBrowserMarkup" />
+		<parameter id="name" value="TermBrowserMarkup" />
+		<parameter id="description" value="KnowWEObjectType TermBrowserMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="drag.js" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="InsertTermRelationAction">
+		<parameter id="class"
+			value="de.knowwe.wisskont.edit.InsertTermRelationAction" />
+		<parameter id="name" value="InsertTermRelationAction" />
+		<parameter id="description" value="Actions InsertTermRelationAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="ConceptDefinitionRefactoring">
+		<parameter id="class"
+			value="de.knowwe.wisskont.refactoring.ConceptDefinitionRefactoring" />
+		<parameter id="name" value="ConceptDefinitionRefactoring" />
+		<parameter id="description" value="refactoring.ConceptDefinitionRefactoring" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="RelationRefactoringAction">
+		<parameter id="class"
+			value="de.knowwe.wisskont.refactoring.RefactoringAction" />
+		<parameter id="name" value="RefactoringAction" />
+		<parameter id="description" value="Action RefactoringAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="RefactorConceptDefinitionHandler">
+		<parameter id="class"
+			value="de.knowwe.wisskont.refactoring.RefactorConceptDefinitionHandler" />
+		<parameter id="name" value="RefactorConceptDefinitionHandler" />
+		<parameter id="description" value="Action RefactorConceptDefinitionHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="RefactorRelationsHandler">
+		<parameter id="class"
+			value="de.knowwe.wisskont.refactoring.RefactorRelationsHandler" />
+		<parameter id="name" value="RefactorRelationsHandler" />
+		<parameter id="description" value="Action RefactorRelationsHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+        id="InstantEditToolProvider">
+        <parameter id="class"
+            value="de.knowwe.wisskont.edit.InstantEditToolProviderGerman" />
+        <parameter id="name" value="InstantEditToolProvider" />
+        <parameter id="description"
+            value="Offers a button for quick editing a certain section." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="4" />
+        <parameter id="script" value="KnowWE-EditCommons.js" />
+        <parameter id="script" value="KnowWE-Plugin-InstantEdit.js" />
+        <parameter id="script" value="KnowWE-Plugin-AutoComplete.js" />
+        <parameter id="script" value="DefaultEditTool.js" />
+        <parameter id="script" value="TextArea.js" />
+        <parameter id="css" value="KnowWE-Plugin-InstantEdit.css" />
+        <parameter id="css" value="DefaultEditTool.css" />       
+        <parameter id="scope" value="MustMarkup" />
+        <parameter id="scope" value="CanMarkup" />
+        <parameter id="scope" value="AssociationMarkup"/>
+         <parameter id="scope" value="SubconceptMarkup" />
+         <parameter id="scope" value="TemporalMarkup" />
+          <parameter id="scope" value="LabelMarkup" />
+    </extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="ObjectInfoToolProviderGerman">
+		<parameter id="class"
+			value="de.knowwe.wisskont.edit.ObjectInfoToolProviderGerman" />
+		<parameter id="name" value="ObjectInfoToolProviderGerman" />
+		<parameter id="description"
+			value="Offer a button to navigate to the object information page of an selected object." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="ConceptMarkup" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ShowHierarchyMarkup">
+		<parameter id="class"
+			value="de.knowwe.wisskont.navigation.ShowHierarchyMarkup" />
+		<parameter id="name" value="ShowHierarchyMarkup" />
+		<parameter id="description" value="KnowWEObjectType ShowHierarchyMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+			<parameter id="css" value="wisskont.css" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="SubconceptMarkup">
+		<parameter id="class"
+			value="de.knowwe.wisskont.SubconceptMarkup" />
+		<parameter id="name" value="SubconceptMarkup" />
+		<parameter id="description" value="KnowWEObjectType SubconceptMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+			<parameter id="css" value="wisskont.css" />
+	</extension>
+	    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="LabelMarkup">
+		<parameter id="class"
+			value="de.knowwe.wisskont.LabelMarkup" />
+		<parameter id="name" value="LabelMarkup" />
+		<parameter id="description" value="KnowWEObjectType LabelMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+			<parameter id="css" value="wisskont.css" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="MustMarkup">
+		<parameter id="class"
+			value="de.knowwe.wisskont.MustMarkup" />
+		<parameter id="name" value="MustMarkup" />
+		<parameter id="description" value="KnowWEObjectType MustMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+			<parameter id="css" value="wisskont.css" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="CanMarkup">
+		<parameter id="class"
+			value="de.knowwe.wisskont.CanMarkup" />
+		<parameter id="name" value="CanMarkup" />
+		<parameter id="description" value="KnowWEObjectType CanMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+		<parameter id="css" value="wisskont.css" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="AssociationMarkup">
+		<parameter id="class"
+			value="de.knowwe.wisskont.AssociationMarkup" />
+		<parameter id="name" value="AssociationMarkup" />
+		<parameter id="description" value="KnowWEObjectType AssociationMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+			<parameter id="css" value="wisskont.css" />
+	</extension>
+	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="AssociationBidirMarkup">
+		<parameter id="class"
+			value="de.knowwe.wisskont.AssociationBidirMarkup" />
+		<parameter id="name" value="AssociationBidirMarkup" />
+		<parameter id="description" value="KnowWEObjectType AssociationBidirMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+			<parameter id="css" value="wisskont.css" />
+	</extension>
+	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="CanBidirMarkup">
+		<parameter id="class"
+			value="de.knowwe.wisskont.CanBidirMarkup" />
+		<parameter id="name" value="CanBidirMarkup" />
+		<parameter id="description" value="KnowWEObjectType CanBidirMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+		<parameter id="css" value="wisskont.css" />
+	</extension>
+	
+			<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TemporalMarkup">
+		<parameter id="class"
+			value="de.knowwe.wisskont.TemporalMarkup" />
+		<parameter id="name" value="TemporalMarkup" />
+		<parameter id="description" value="KnowWEObjectType TemporalMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+		<parameter id="css" value="wisskont.css" />
+	</extension>
+	
+
+	
+    
 </plugin>

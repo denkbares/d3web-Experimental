@@ -1,0 +1,67 @@
+.applicationlogo a:hover {
+	background-position: 30px 20px;
+	}
+
+.relationMarkupFrame {
+	#display: inline-block;
+	max-width: 100%;
+	border-right: 0px;
+	border-left: 0px;
+	border-bottom: 0px;
+	border-right: 1px solid white;
+	border-left: 1px solid white;
+	border-bottom: 1px solid white;
+}
+
+.drophover {
+border-style: solid;
+border-width: 3px;
+border-color: #FFFFCC;
+}
+
+@media screen, projection {
+	.relationMarkupFrame:hover {
+		border-right: 1px solid #DDD;
+		border-left: 1px solid #DDD;
+		border-bottom: 1px solid #DDD;
+		background-color: #F9F9F9;
+	}
+}
+
+.relationMarkupFrame > .relationMarkup .markupText {
+	#padding-right: 120px;
+}
+.relationMarkupFrame > .relationMarkup {
+	background-color: transparent;
+	border-right: 0px;
+	border-left: 0px;
+	border-bottom: 0px;
+}
+
+.relationMarkupContent {
+	display: inline;	
+}
+.termbrowserheader {
+	border-bottom-style: solid;
+    border-bottom-width: 1px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+	
+.termbrowserframe {
+	border-style: solid;
+	border-width: 3px;
+	border-color: #CCCCCC;
+	background-color: ##F9F9F0;
+	padding: 10px;
+	border-radius: 10px 10px 10px 10px;
+}
+
+.termline {
+	
+	}
+	
+	
+.termline:hover {
+	background-color: #DDDDDD;
+	}
