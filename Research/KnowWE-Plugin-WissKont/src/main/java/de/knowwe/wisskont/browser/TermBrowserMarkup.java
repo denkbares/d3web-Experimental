@@ -16,8 +16,11 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.edit;
+package de.knowwe.wisskont.browser;
 
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.Renderer;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -45,6 +48,15 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		super(m);
 		setIgnorePackageCompile(true);
 		this.setRenderer(new TermBrowserRenderer());
+	}
+
+	class TermBrowserRenderer implements Renderer {
+
+		@Override
+		public void render(Section<?> section, UserContext user, StringBuilder string) {
+			string.append(TermBrowserRenderUtils.renderTermBrowser(user, ""));
+		}
+
 	}
 
 }

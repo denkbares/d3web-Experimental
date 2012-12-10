@@ -16,35 +16,46 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.edit;
+package de.knowwe.wisskont.browser;
 
-import java.util.List;
+import java.io.IOException;
 
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.Renderer;
-import de.knowwe.core.user.UserContext;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.utils.Strings;
 
 /**
  * 
  * @author jochenreutelshofer
- * @created 29.11.2012
+ * @created 10.12.2012
  */
-public class TermBrowserRenderer implements Renderer {
+public class RerenderTermBrowserAction extends AbstractAction {
 
 	@Override
-	public void render(Section<?> section, UserContext user, StringBuilder string) {
-		string.append(Strings.maskHTML("<div class='termbrowserframe'>"));
-		string.append(Strings.maskHTML("<div class='termbrowserheader'>Konzepte:</div>"));
-		List<String> rankedTermList = TermRecommender.getInstance().getRankedTermList(user);
-		for (int i = 0; i < 10; i++) {
-			if (i >= rankedTermList.size()) break;
-			String term = rankedTermList.get(i);
-			string.append(Strings.maskHTML("<div id='draggable' class='termline'><div class='termname'>"
-					+ term + "</div></div>"));
+	public void execute(UserActionContext context) throws IOException {
+		String result = perform(context);
+		if (result != null && context.getWriter() != null) {
+			context.setContentType("text/html; charset=UTF-8");
+			context.getWriter().write(result);
 		}
 
-		string.append(Strings.maskHTML("</div>"));
+	}
 
+	/**
+	 * 
+	 * @created 10.12.2012
+	 * @param context
+	 * @return
+	 */
+	private String perform(UserActionContext context) {
+		String term = context.getParameter("term");
+		if (term == null) {
+			term = "";
+		}
+		else {
+			// update ranking weights
+			TermRecommender.getInstance().termSearched(context, term);
+		}
+		return Strings.unmaskHTML(TermBrowserRenderUtils.renderTermBrowser(context, term));
 	}
 }

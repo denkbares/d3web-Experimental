@@ -1,13 +1,5 @@
 jq$(document).ready(function() {
-    jq$(".termline").each(function () {
-    	jq$(this).draggable( 
-    			{
-        		distance: 20,
-        		opacity: 0.55,
-        		revert: true,
-    			}
-    	);
-    });
+    jq$(".termline").each(activateDraggables);
         
     jq$(".relationMarkup").each(function() {
     	jq$(this).droppable({
@@ -22,9 +14,25 @@ jq$(document).ready(function() {
     				sendAddedTerm(termname, markupID);
     				},
     			hoverClass: "drophover",
-    			})
-    		});
-  });
+    	})
+    });
+
+
+
+
+});
+
+
+function activateDraggables() {
+	jq$(this).draggable( 
+			{
+    		distance: 20,
+    		opacity: 0.55,
+    		revert: true,
+			}
+	);
+	
+}
 
 function sendAddedTerm(term, oldTargetID) {
 		
@@ -61,6 +69,26 @@ function rerenderSection(oldTargetID, newTargetID) {
 	}
 	
 	 new _KA(options).send();
+}
+
+function updateTermBrowser(event, ui) {
+	var term = ui.item.value;
+	var params = {
+			action : 'RerenderTermBrowserAction',
+			term   : term,
+    }; 
+	var options = {
+		url : KNOWWE.core.util.getURL(params),
+		 response : {
+			 fn : function() {
+					jq$('.termbrowserframe').replaceWith(this.response);
+				    jq$(".termline").each(activateDraggables);
+				},
+		 },
+	}
+	
+	 new _KA(options).send();
+	
 }
 	
 

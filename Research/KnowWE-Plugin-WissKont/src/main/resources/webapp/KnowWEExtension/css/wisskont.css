@@ -45,7 +45,8 @@ border-color: #FFFFCC;
 	border-bottom-style: solid;
     border-bottom-width: 1px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
 }
 	
 .termbrowserframe {
@@ -57,8 +58,19 @@ border-color: #FFFFCC;
 	border-radius: 10px 10px 10px 10px;
 }
 
+.termlist {
+	border-top-style: solid;
+    border-top-width: 1px;
+	margin-top: 5px;
+	padding-top: 10px;
+	}
+
 .termline {
 	
+	}
+	
+.termname{
+	cursor: pointer;
 	}
 	
 	

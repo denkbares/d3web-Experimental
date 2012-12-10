@@ -41,13 +41,24 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TermBrowserMarkup">
 		<parameter id="class"
-			value="de.knowwe.wisskont.edit.TermBrowserMarkup" />
+			value="de.knowwe.wisskont.browser.TermBrowserMarkup" />
 		<parameter id="name" value="TermBrowserMarkup" />
 		<parameter id="description" value="KnowWEObjectType TermBrowserMarkup" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="drag.js" />
+		<parameter id="css" value="jquery-ui.css" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="RerenderTermBrowserAction">
+		<parameter id="class"
+			value="de.knowwe.wisskont.browser.RerenderTermBrowserAction" />
+		<parameter id="name" value="RerenderTermBrowserAction" />
+		<parameter id="description" value="Actions RerenderTermBrowserAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"

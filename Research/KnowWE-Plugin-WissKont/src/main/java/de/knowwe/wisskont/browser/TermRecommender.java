@@ -16,7 +16,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.edit;
+package de.knowwe.wisskont.browser;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,6 +43,10 @@ import de.knowwe.event.PageRenderedEvent;
  * @created 05.12.2012
  */
 public class TermRecommender implements EventListener {
+
+	private static final double WEIGHT_REFERENCE = 0.5;
+	private static final double WEIGHT_DEFINITION = 1.0;
+	private static final double WEIGHT_SEARCHED = 2.0;
 
 	private static TermRecommender instance;
 
@@ -83,6 +87,19 @@ public class TermRecommender implements EventListener {
 		return result;
 	}
 
+	public void termSearched(UserContext user, String term) {
+		RecommendationSet set = null;
+		if (data.containsKey(user.getUserName())) {
+			set = data.get(user.getUserName());
+			set.discount(0.8);
+		}
+		else {
+			set = new RecommendationSet();
+			data.put(user.getUserName(), set);
+		}
+		set.addValue(term, WEIGHT_SEARCHED);
+	}
+
 	@Override
 	public void notify(Event event) {
 		if (event instanceof PageRenderedEvent) {
@@ -104,14 +121,14 @@ public class TermRecommender implements EventListener {
 					article.getRootSection(), SimpleDefinition.class);
 			for (Section<SimpleDefinition> def : definitions) {
 				String termname = def.get().getTermName(def);
-				set.addValue(termname, 1.0);
+				set.addValue(termname, WEIGHT_DEFINITION);
 			}
 
 			List<Section<SimpleReference>> references = Sections.findSuccessorsOfType(
 					article.getRootSection(), SimpleReference.class);
 			for (Section<SimpleReference> ref : references) {
 				String termname = ref.get().getTermName(ref);
-				set.addValue(termname, 0.5);
+				set.addValue(termname, WEIGHT_REFERENCE);
 			}
 
 		}

@@ -16,11 +16,12 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.edit;
+package de.knowwe.wisskont.browser;
 
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -56,7 +57,9 @@ public class RecommendationSet {
 
 	public void discount(double factor) {
 		Set<String> keySet = terms.keySet();
-		for (String term : keySet) {
+		Iterator<String> iterator = keySet.iterator();
+		while (iterator.hasNext()) {
+			String term = iterator.next();
 			double newValue = terms.get(term) * factor;
 			if (newValue < 0.1) {
 				terms.remove(term);
