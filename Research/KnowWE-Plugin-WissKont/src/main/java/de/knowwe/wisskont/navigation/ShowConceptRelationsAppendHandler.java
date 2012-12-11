@@ -30,6 +30,7 @@ import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.rdfs.vis.RenderingCore;
 import de.knowwe.wisskont.ConceptMarkup;
 
@@ -97,8 +98,18 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 			RenderingCore renderingCore = new RenderingCore(
 					user.getServletContext().getRealPath(""), section, parameterMap);
 			StringBuilder builder = new StringBuilder();
+			builder.append(Strings.maskHTML("<div class='termgraph'>"));
+			builder.append(Strings.maskHTML("<div class='termgraphHeader'>"));
+			builder.append(Strings.maskHTML("<span style='float:left;' class='ui-icon ui-icon-circle-plus showGraph'></span>"));
+			builder.append(Strings.maskHTML("<span style='float:left;display:none;' class='ui-icon ui-icon-circle-minus hideGraph'></span>"));
+			builder.append(Strings.maskHTML("<div style=''>Konzeptübersicht</div>"));
+			builder.append(Strings.maskHTML("</div>"));
+			builder.append(Strings.maskHTML("<div style='display:none;' class='termgraphcontent'>"));
 			renderingCore.render(builder);
+			builder.append(Strings.maskHTML("</div>"));
+			builder.append(Strings.maskHTML("</div>"));
 			return builder.toString();
+
 		}
 		else {
 			if ((conceptMarkups.size() > 1)) {

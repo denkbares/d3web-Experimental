@@ -86,4 +86,14 @@ td.termbrowser {
 	
 .openConcept, .expandConcept, .removeConcept {
 cursor: pointer;
-}	
+}
+
+.termgraph{
+	border-style: solid;
+	border-width: 1px;	
+}
+
+.termgraphHeader{
+	padding: 5px;
+	background-color: lightgray;	
+}
