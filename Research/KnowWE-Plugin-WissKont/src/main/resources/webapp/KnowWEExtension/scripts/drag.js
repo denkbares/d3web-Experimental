@@ -21,8 +21,64 @@ jq$(document).ready(function() {
     jq$(".termline").each(function() {
     	initIconHover(jq$(this));
     });
+    
+    jq$(".removeConcept").each(function() {
+    	initClickEvents(jq$(this));
+    });
+    jq$(".openConcept").each(function() {
+    	initClickEvents(jq$(this));
+    });
+    jq$(".expandConcept").each(function() {
+    	initClickEvents(jq$(this));
+    });
 
 });
+
+function initClickEvents(element) {
+	element.bind("click", function() {
+		handleTermActionEvent(jq$(this));
+	});
+}
+
+function handleTermActionEvent(element) {
+	var command = 'noop'
+	if(element.hasClass('removeConcept')) {
+		command = 'remove';
+	}
+	if(element.hasClass('expandConcept')) {
+		command = 'expand';
+	}
+	if(element.hasClass('openConcept')) {
+		command = 'open';
+	}
+	
+	var line = element.parent().parent();
+	var termnameElement = line.find('div.termname');
+	var term = termnameElement.html();
+	
+	sendTermBrowserAction(term, command);
+	
+}
+
+function sendTermBrowserAction(term, command) {
+	var params = {
+			action : 'TermBrowserAction',
+			term   : term,
+			command   : command,
+    }; 
+	var options = {
+		url : KNOWWE.core.util.getURL(params),
+		 response : {
+			 fn : function(){
+				 jq$('.termbrowserframe').replaceWith(this.response);
+				 jq$(".termline").each(activateDraggables);
+			 }
+		 },
+	}
+	
+	 new _KA(options).send();
+}
+
 
 function initIconHover(element) {
 	element.find('.ui-icon').each(
@@ -91,22 +147,7 @@ function rerenderSection(oldTargetID, newTargetID) {
 
 function updateTermBrowser(event, ui) {
 	var term = ui.item.value;
-	var params = {
-			action : 'RerenderTermBrowserAction',
-			term   : term,
-    }; 
-	var options = {
-		url : KNOWWE.core.util.getURL(params),
-		 response : {
-			 fn : function() {
-					jq$('.termbrowserframe').replaceWith(this.response);
-				    jq$(".termline").each(activateDraggables);
-				},
-		 },
-	}
-	
-	 new _KA(options).send();
-	
+	sendTermBrowserAction(term, 'searched');
 }
 	
 

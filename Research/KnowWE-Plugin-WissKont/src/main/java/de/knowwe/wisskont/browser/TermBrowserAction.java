@@ -29,7 +29,7 @@ import de.knowwe.core.utils.Strings;
  * @author jochenreutelshofer
  * @created 10.12.2012
  */
-public class RerenderTermBrowserAction extends AbstractAction {
+public class TermBrowserAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -48,13 +48,25 @@ public class RerenderTermBrowserAction extends AbstractAction {
 	 * @return
 	 */
 	private String perform(UserActionContext context) {
+		String command = context.getParameter("command");
 		String term = context.getParameter("term");
 		if (term == null) {
 			term = "";
 		}
 		else {
-			// update ranking weights
-			TermRecommender.getInstance().termSearched(context, term);
+			if (command.equals("searched")) {
+				// update ranking weights
+				TermRecommender.getInstance().termSearched(context, term);
+			}
+			else if (command.equals("remove")) {
+				TermRecommender.getInstance().clearTerm(context, term);
+			}
+			else if (command.equals("expand")) {
+				TermRecommender.getInstance().expandTerm(context, term);
+			}
+			else if (command.equals("open")) {
+				// is handled by a link
+			}
 		}
 		return Strings.unmaskHTML(TermBrowserRenderUtils.renderTermBrowser(context, term));
 	}

@@ -52,11 +52,11 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="RerenderTermBrowserAction">
+		id="TermBrowserAction">
 		<parameter id="class"
-			value="de.knowwe.wisskont.browser.RerenderTermBrowserAction" />
-		<parameter id="name" value="RerenderTermBrowserAction" />
-		<parameter id="description" value="Actions RerenderTermBrowserAction" />
+			value="de.knowwe.wisskont.browser.TermBrowserAction" />
+		<parameter id="name" value="TermBrowserAction" />
+		<parameter id="description" value="Action TermBrowserAction" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 	</extension>

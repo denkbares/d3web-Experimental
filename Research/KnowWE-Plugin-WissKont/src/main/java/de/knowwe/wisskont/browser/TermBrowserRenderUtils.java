@@ -26,6 +26,7 @@ import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
  * 
@@ -57,10 +58,25 @@ public class TermBrowserRenderUtils {
 		List<String> rankedTermList = TermRecommender.getInstance().getRankedTermList(user);
 
 		string.append(Strings.maskHTML("<div class='termlist'>"));
+		boolean zebra = false;
 		for (int i = 0; i < 10; i++) {
+
 			if (i >= rankedTermList.size()) break;
 			String term = rankedTermList.get(i);
-			string.append(Strings.maskHTML("<div id='draggable' class='termline'>"
+			String lineStyle = "";
+			if (!zebra) {
+				zebra = true;
+			}
+			else {
+				lineStyle = "background-color:white;";
+				zebra = false;
+			}
+			String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
+			String name = Strings.encodeURL(term);
+			String url = baseUrl + name;
+			string.append(Strings.maskHTML("<div id='draggable' style='"
+					+ lineStyle
+					+ "'  class='termline'>"
 					+
 					"<table style='table-layout:fixed'><col width='80'/><col width='16'/><col width='16'/><col width='16'/>"
 					+
@@ -70,11 +86,13 @@ public class TermBrowserRenderUtils {
 					+ term
 					+ "</div></td>"
 					+
-							"<td class='termbrowser'><span class='ui-icon ui-icon-arrowreturnthick-1-e' style='display:none;'></span></td>"
+							"<td class='termbrowser'><a href='"
+					+ url
+					+ "'><span class='ui-icon ui-icon-arrowreturnthick-1-e openConcept' title='Seite zu diesem Konzept öffnen' style='display:none;'></span></a></td>"
 					+
-							"<td class='termbrowser'><span class='ui-icon ui-icon-circle-close' style='display:none;'></span></td>"
+							"<td class='termbrowser'><span class='ui-icon ui-icon-circle-close removeConcept' title='Konzept aus dieser Liste herausnehmen' style='display:none;'></span></td>"
 					+
-							"<td class='termbrowser'><span class='ui-icon ui-icon-arrow-4-diag' style='display:none;'></span></td>"
+							"<td class='termbrowser'><span class='ui-icon ui-icon-arrow-4-diag expandConcept' title='Unterkonzepte in diese Liste aufnehmen' style='display:none;'></span></td>"
 					+
 					"</tr></table></div>"));
 		}

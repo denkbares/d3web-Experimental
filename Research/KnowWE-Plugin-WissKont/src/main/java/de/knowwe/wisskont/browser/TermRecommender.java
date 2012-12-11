@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.knowwe.core.Environment;
+import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
 import de.knowwe.core.event.EventManager;
@@ -132,6 +133,31 @@ public class TermRecommender implements EventListener {
 			}
 
 		}
+
+	}
+
+	/**
+	 * 
+	 * @created 11.12.2012
+	 * @param context
+	 * @param term
+	 */
+	public void clearTerm(UserActionContext context, String term) {
+		RecommendationSet recommendationSet = data.get(context.getUserName());
+		if (recommendationSet != null) {
+			recommendationSet.clearValue(term);
+		}
+
+	}
+
+	/**
+	 * 
+	 * @created 11.12.2012
+	 * @param context
+	 * @param term
+	 */
+	public void expandTerm(UserActionContext context, String term) {
+		// TODO Auto-generated method stub
 
 	}
 

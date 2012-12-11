@@ -82,3 +82,8 @@ td.termbrowser {
 .termline:hover {
 	background-color: #DDDDDD;
 	}
+
+	
+.openConcept, .expandConcept, .removeConcept {
+cursor: pointer;
+}	
