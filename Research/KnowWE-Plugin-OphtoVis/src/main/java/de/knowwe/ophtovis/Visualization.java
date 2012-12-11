@@ -46,7 +46,7 @@ public class Visualization {
 					+ "source ist " + source);
 			if (!drawnLists.contains(source)) {
 				if (node.getParentId() == node.getId()) {
-					knoten += "createULRelative(\"e" + node.getId() + "\",knots, \""
+					knoten += "createULRelative(\"e" + node.getId() + "\",\"knots\", \""
 							+ node.getLeftCo() + "px\" , \"" + node.getTopCo() + "px\");\r\n";
 				}
 				else {
@@ -88,11 +88,23 @@ public class Visualization {
 
 
 		for (GraphNodeConnection graphNodeConnection : listOfConnections) {
+			if (graphNodeConnection.connectionType.equalsIgnoreCase("temporal"))
+			{
+				knoten += "connectKnotenTemporal(\"" +
+						graphNodeConnection.sourceNode.getStringID()
+						+ "\","
+						+ "\""
+						+ graphNodeConnection.targetNode.getStringID() + "\""
+						+ ");\r\n";
 
-			knoten += "connectKnoten(\"" + graphNodeConnection.sourceNode.getStringID() + "\","
-					+ "\""
-					+ graphNodeConnection.targetNode.getStringID() + "\""
-					+ ");\r\n";
+			}
+			else {
+				knoten += "connectKnoten(\"" + graphNodeConnection.sourceNode.getStringID() + "\","
+						+ "\""
+						+ graphNodeConnection.targetNode.getStringID() + "\""
+						+ ");\r\n";
+
+			}
 		}
 
 		string.append(Strings.maskHTML(
