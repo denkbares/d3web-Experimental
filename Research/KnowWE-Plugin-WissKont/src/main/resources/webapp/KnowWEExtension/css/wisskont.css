@@ -15,8 +15,9 @@
 
 .drophover {
 border-style: solid;
-border-width: 3px;
-border-color: #FFFFCC;
+border-width: 2px;
+border-color: #CCCCCC;
+border-radius: 10px 10px 10px 10px;
 }
 
 @media screen, projection {
@@ -51,7 +52,7 @@ border-color: #FFFFCC;
 	
 .termbrowserframe {
 	border-style: solid;
-	border-width: 3px;
+	border-width: 2px;
 	border-color: #CCCCCC;
 	background-color: ##F9F9F0;
 	padding: 6px;
@@ -90,10 +91,11 @@ cursor: pointer;
 
 .termgraph{
 	border-style: solid;
-	border-width: 1px;	
+	border-width: 2px;	
+	border-color: #CCCCCC;
+	border-radius: 10px 10px 10px 10px;
 }
 
 .termgraphHeader{
 	padding: 5px;
-	background-color: lightgray;	
 }
