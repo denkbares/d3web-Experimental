@@ -17,12 +17,15 @@ jq$(document).ready(function() {
     	})
     });
 
-
-    jq$(".termline").each(function() {
-    	initIconHover(jq$(this));
-    });
+    initAllIconHovers();
     
-    jq$(".removeConcept").each(function() {
+    initAllBrowserActionEvents();
+    
+    
+});
+
+function initAllBrowserActionEvents() {
+	jq$(".removeConcept").each(function() {
     	initClickEvents(jq$(this));
     });
     jq$(".openConcept").each(function() {
@@ -32,7 +35,7 @@ jq$(document).ready(function() {
     	initClickEvents(jq$(this));
     });
 
-});
+}
 
 function initClickEvents(element) {
 	element.bind("click", function() {
@@ -70,8 +73,13 @@ function sendTermBrowserAction(term, command) {
 		url : KNOWWE.core.util.getURL(params),
 		 response : {
 			 fn : function(){
+				 // insert new browser data
 				 jq$('.termbrowserframe').replaceWith(this.response);
+				 
+				 // re-init js features
 				 jq$(".termline").each(activateDraggables);
+				 initAllIconHovers();
+				 initAllBrowserActionEvents();
 			 }
 		 },
 	}
@@ -79,6 +87,11 @@ function sendTermBrowserAction(term, command) {
 	 new _KA(options).send();
 }
 
+function initAllIconHovers() {
+	jq$(".termline").each(function() {
+    	initIconHover(jq$(this));
+    });
+}
 
 function initIconHover(element) {
 	element.find('.ui-icon').each(

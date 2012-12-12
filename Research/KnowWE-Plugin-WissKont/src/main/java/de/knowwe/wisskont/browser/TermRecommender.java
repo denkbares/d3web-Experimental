@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.event.Event;
@@ -37,6 +38,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.event.PageRenderedEvent;
+import de.knowwe.wisskont.ConceptMarkup;
 
 /**
  * 
@@ -122,14 +124,27 @@ public class TermRecommender implements EventListener {
 					article.getRootSection(), SimpleDefinition.class);
 			for (Section<SimpleDefinition> def : definitions) {
 				String termname = def.get().getTermName(def);
-				set.addValue(termname, WEIGHT_DEFINITION);
+				// only those defined by by concept markups are added to the
+				// term recommender
+				if (Sections.findAncestorOfType(def, ConceptMarkup.class) != null) {
+					set.addValue(termname, WEIGHT_DEFINITION);
+				}
 			}
 
 			List<Section<SimpleReference>> references = Sections.findSuccessorsOfType(
 					article.getRootSection(), SimpleReference.class);
 			for (Section<SimpleReference> ref : references) {
 				String termname = ref.get().getTermName(ref);
-				set.addValue(termname, WEIGHT_REFERENCE);
+				Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+						ref.get().getTermIdentifier(ref));
+				if (termDefinitions.size() > 0) {
+					Section<? extends SimpleDefinition> def = termDefinitions.iterator().next();
+					// only those defined by by concept markups are added to the
+					// term recommender
+					if (Sections.findAncestorOfType(def, ConceptMarkup.class) != null) {
+						set.addValue(termname, WEIGHT_REFERENCE);
+					}
+				}
 			}
 
 		}

@@ -27,6 +27,17 @@
 		<parameter id="css" value="wisskont.css" />
 		<parameter id="script" value="overviewGraph.js" />
 	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
+		id="ParentConceptLinkAppendHandler">
+		<parameter id="class"
+			value="de.knowwe.wisskont.navigation.ParentConceptLinkAppendHandler" />
+		<parameter id="name" value="ParentConceptLinkAppendHandler" />
+		<parameter id="description" value="PageAppendHandler ParentConceptLinkAppendHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="css" value="wisskont.css" />
+	</extension>
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="ConceptMarkup">

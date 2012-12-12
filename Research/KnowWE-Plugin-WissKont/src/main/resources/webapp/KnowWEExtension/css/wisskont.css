@@ -99,3 +99,7 @@ cursor: pointer;
 .termgraphHeader{
 	padding: 5px;
 }
+
+.parentBreadcrumb {
+	font-size: 75%;
+	}
