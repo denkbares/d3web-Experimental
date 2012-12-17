@@ -63,6 +63,7 @@ public class CIInfoHandler extends RDF2GoSubtreeHandler<CIInfoType> {
 	private static final URI PROP_HASSTAT = Rdf2GoCore.getInstance().createlocalURI("hasStat");
 	private static final URI PROP_HASKEY = Rdf2GoCore.getInstance().createlocalURI("hasKey");
 	private static final URI PROP_HASVALUE = Rdf2GoCore.getInstance().createlocalURI("hasValue");
+	private static final URI PROP_HASID = Rdf2GoCore.getInstance().createlocalURI("hasID");
 
 	@Override
 	public Collection<Message> create(Article article, Section<CIInfoType> section) {
@@ -91,6 +92,10 @@ public class CIInfoHandler extends RDF2GoSubtreeHandler<CIInfoType> {
 			// lns:Plugin-X rdf:Type lns:Plugin
 			URI pluginURI = core.createlocalURI(info.getPlugin());
 			core.addStatements(article, core.createStatement(pluginURI, RDF.type, CLASS_PLUGIN));
+			core.addStatements(
+					article,
+					core.createStatement(pluginURI, PROP_HASID,
+							core.createLiteral(info.getPlugin())));
 
 			// lns:Plugin-X lns:hasDescription "description"
 			core.addStatements(article, core.createStatement(pluginURI, PROP_HASDESCRIPTION,
