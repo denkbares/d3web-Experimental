@@ -19,10 +19,10 @@ public class Change {
 		if (revision == null || timestamp == null || author == null || commitText == null) {
 			throw new NullPointerException();
 		}
-		this.revision = revision;
-		this.timestamp = timestamp;
-		this.author = author;
-		this.commitText = commitText;
+		this.revision = revision.trim();
+		this.timestamp = timestamp.trim();
+		this.author = author.trim();
+		this.commitText = commitText.trim();
 	}
 
 	public String getRevision() {

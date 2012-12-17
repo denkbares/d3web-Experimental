@@ -24,7 +24,7 @@ public class CIInfo {
 		if (plugin == null) {
 			throw new NullPointerException();
 		}
-		this.plugin = plugin;
+		this.plugin = plugin.trim();
 	}
 
 	public String getDescription() {
@@ -40,7 +40,7 @@ public class CIInfo {
 	}
 
 	public void addStat(String id, String value) {
-		this.stat.put(id, value);
+		this.stat.put(id.trim(), value.trim());
 	}
 
 	public List<Change> getChanges() {
