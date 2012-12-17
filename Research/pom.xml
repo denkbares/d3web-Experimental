@@ -228,6 +228,7 @@
 		<module>KnowWE-Plugin-OphtoVis</module>
 		<module>KnowWE-Plugin-DataAnalysis</module>
 		<module>KnowWE-Plugin-ESAT</module>
+		<module>KnowWE-Plugin-CIConnector</module>
 	</modules>
 	<repositories>
 		<repository>
