@@ -57,7 +57,7 @@ public class CIInfoHandler extends RDF2GoSubtreeHandler<CIInfoType> {
 			"hasRevision");
 	private static final URI PROP_HASAUTHOR = Rdf2GoCore.getInstance().createlocalURI("hasAuthor");
 	private static final URI PROP_HASCOMMITTEXT = Rdf2GoCore.getInstance().createlocalURI(
-			"hasAuthor");
+			"hasCommitText");
 	private static final URI PROP_HASDESCRIPTION = Rdf2GoCore.getInstance().createlocalURI(
 			"hasDescription");
 	private static final URI PROP_HASSTAT = Rdf2GoCore.getInstance().createlocalURI("hasStat");
@@ -145,17 +145,19 @@ public class CIInfoHandler extends RDF2GoSubtreeHandler<CIInfoType> {
 
 		for (WikiAttachment attachment : attachments) {
 			if (attachment.getFileName().endsWith(SaveCIInfoAction.FILENAMESUFFIX)) {
-				result.addAll(parseCIInfo(attachment));
+				for (int version : attachment.getAvailableVersions()) {
+					result.addAll(parseCIInfo(attachment, version));
+				}
 			}
 		}
 
 		return result;
 	}
 
-	private Collection<CIInfo> parseCIInfo(WikiAttachment attachment) throws JDOMException, IOException {
+	private Collection<CIInfo> parseCIInfo(WikiAttachment attachment, int version) throws JDOMException, IOException {
 
 		Collection<CIInfo> result = new LinkedList<CIInfo>();
-		Document doc = new SAXBuilder().build(attachment.getInputStream());
+		Document doc = new SAXBuilder().build(attachment.getInputStream(version));
 
 		List<?> pluginElements = doc.getRootElement().getChildren(EL_PLUGIN);
 		for (Object o : pluginElements) {

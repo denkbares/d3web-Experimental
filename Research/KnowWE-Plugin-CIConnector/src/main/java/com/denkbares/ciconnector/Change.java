@@ -19,9 +19,6 @@ public class Change {
 		if (revision == null || timestamp == null || author == null || commitText == null) {
 			throw new NullPointerException();
 		}
-		if (revision.isEmpty() || timestamp.isEmpty() || author.isEmpty() || commitText.isEmpty()) {
-			throw new IllegalArgumentException();
-		}
 		this.revision = revision;
 		this.timestamp = timestamp;
 		this.author = author;
