@@ -102,4 +102,5 @@ cursor: pointer;
 
 .parentBreadcrumb {
 	font-size: 75%;
+	border-bottom: 1px solid lightgrey;
 	}

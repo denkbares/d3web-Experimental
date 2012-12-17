@@ -55,7 +55,7 @@ function handleTermActionEvent(element) {
 		command = 'open';
 	}
 	
-	var line = element.parent().parent();
+	var line = element.parent().parent().parent().parent().parent().parent();
 	var termnameElement = line.find('div.termname');
 	var term = termnameElement.html();
 	

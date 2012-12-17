@@ -68,33 +68,43 @@ public class TermBrowserRenderUtils {
 				zebra = true;
 			}
 			else {
-				lineStyle = "background-color:white;";
+				lineStyle += "background-color:white;";
 				zebra = false;
 			}
 			String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
 			String name = Strings.encodeURL(term);
 			String url = baseUrl + name;
+			// String divStyle = "display:inline; float:left;";
+			String divStyle = "";
 			string.append(Strings.maskHTML("<div id='draggable' style='"
 					+ lineStyle
 					+ "'  class='termline'>"
 					+
-					"<table style='table-layout:fixed'><col width='80'/><col width='16'/><col width='16'/><col width='16'/>"
+					"<table style='table-layout:fixed'>"
 					+
-					"<tr>"
+					// "<col width='80'/><col width='16'/><col width='16'/><col width='16'/>"+
+					"<tr height='23px'>"
 					+
-					"<td class='termbrowser'><div class='termname'>"
+					"<td style='width:80%' class='termbrowser'><div class='termname'>"
 					+ term
 					+ "</div></td>"
-					+
-							"<td class='termbrowser'><a href='"
+					+ "<td>"
+					+ "<table style='table-layout:fixed'><tr>"
+					+ "<td style='"
+					+ divStyle
+					+ "' class='termbrowser'><a href='"
 					+ url
 					+ "'><span class='ui-icon ui-icon-arrowreturnthick-1-e openConcept' title='Seite zu diesem Konzept öffnen' style='display:none;'></span></a></td>"
 					+
-							"<td class='termbrowser'><span class='ui-icon ui-icon-circle-close removeConcept' title='Konzept aus dieser Liste herausnehmen' style='display:none;'></span></td>"
+							"<td style='"
+					+ divStyle
+					+ "' class='termbrowser'><span class='ui-icon ui-icon-circle-close removeConcept' title='Konzept aus dieser Liste herausnehmen' style='display:none;'></span></td>"
 					+
-							"<td class='termbrowser'><span class='ui-icon ui-icon-arrow-4-diag expandConcept' title='Unterkonzepte in diese Liste aufnehmen' style='display:none;'></span></td>"
+							"<td style='"
+					+ divStyle
+					+ "' class='termbrowser'><span class='ui-icon ui-icon-arrow-4-diag expandConcept' title='Unterkonzepte in diese Liste aufnehmen' style='display:none;'></span></td>"
 					+
-					"</tr></table></div>"));
+					"</tr></table></td></tr></table></div>"));
 		}
 
 		string.append(Strings.maskHTML("</div>"));
