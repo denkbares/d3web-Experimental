@@ -110,7 +110,7 @@ public class AnswerZCD3webRenderer extends AbstractD3webRenderer implements Answ
             st = TemplateUtils.getStringTemplate(
                     super.getTemplateName("ZcAnswer"), "html");
 
-            System.out.println("ZCQuestion: " + getID(c));
+            //System.out.println("ZCQuestion: " + getID(c));
             st.setAttribute("fullId", getID(c));// .getName().replace(" ", "_"));
             st.setAttribute("realAnswerType", "info");
             st.setAttribute("parentFullId", getID(to));// getName().replace(" ",
@@ -129,7 +129,7 @@ public class AnswerZCD3webRenderer extends AbstractD3webRenderer implements Answ
                 text = to.getInfoStore().getValue(MMInfo.DESCRIPTION);
             }
             st.setAttribute("descriptionText", text);
-            System.out.println("ZCAnswer: " + text);
+            //System.out.println("ZCAnswer: " + text);
             
             st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
 

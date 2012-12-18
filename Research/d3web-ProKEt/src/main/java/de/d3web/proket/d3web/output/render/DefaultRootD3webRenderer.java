@@ -302,11 +302,8 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
     @Override
     public String renderUserCaseList(String user, HttpSession http) {
 
-        Session d3web = (Session) http.getAttribute("d3webSession");
         List<File> files = PersistenceD3webUtils.getCaseList(user);
         
-        //files = filterFilesForKB(d3web.getKnowledgeBase().getName(), files);
-
         StringBuffer cases = new StringBuffer();
         /*
          * add autosaved as first item always
@@ -318,18 +315,24 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 
         if (files != null && files.size() > 0) {
 
-            Collections.sort(files);
+            //Collections.sort(files);
 
+            //int nr = 1;
+            String nr = "";
             for (File f : files) {
                 if (!f.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
                     cases.append("<option");
                     String filename = 
                             f.getName().substring(0, f.getName().lastIndexOf(".")).replace("+", " ");
+                    //cases.append(" title='"
+                    //        + filename + "'>");
                     cases.append(" title='"
-                            + filename + "'>");
-                    cases.append(filename);
+                            + nr + filename + "'>");
+                    cases.append(nr + filename);
                     cases.append("</option>");
+                    //nr++;
                 }
+                
             }
         }
 

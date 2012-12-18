@@ -21,6 +21,7 @@ package de.d3web.proket.d3web.run;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import de.d3web.proket.d3web.utils.Utils;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.SystemLoggerUtils;
 import java.io.File;
@@ -44,6 +45,7 @@ public class FileUploadServlet extends HttpServlet {
     //private static String WEBAPP_NAME = "/";
     private static String PATHSEP = System.getProperty("file.separator");
     protected final GlobalSettings GLOBSET = GlobalSettings.getInstance();
+    private static String FILESEP = System.getProperty("file.separator");
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -100,37 +102,56 @@ public class FileUploadServlet extends HttpServlet {
                     && !tmpFile.getName().endsWith(".d3web")
                     && !tmpFile.getName().endsWith(".zip")
                     //&& !tmpFile.getName().endsWith(".xls")
-                    && !tmpFile.getName().endsWith(".xlsx")) {
+                    && !tmpFile.getName().endsWith(".xlsx")
+                    && !tmpFile.getName().endsWith(".csv")) {
 
                 response.sendRedirect(GLOBSET.getWebAppWarName()
                         + "/DialogManager?upERR=nokb");
             } else {
 
-                try {
-                    System.err.println("FileUploadServlet - UploadKB - upload base path: "
-                            + GLOBSET.getUploadFilesBasePath());
-                    File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
-                    System.err.println("FileUploadServlet - UploadKB - filepath to be written: "
-                            + dirToMove.getAbsolutePath());
-                    
-                    String newFileName = tmpFile.getName();
-                    File fileToMove = new File(dirToMove, newFileName);
-                    System.err.println("FileUploadServlet - UploadKB - final file: "
-                            + fileToMove.getAbsolutePath());
-                    
-                    
-                    tmpFile.renameTo(fileToMove);
+                if (tmpFile.getName().endsWith(".d3web")) {
 
-                    HttpSession httpSession = request.getSession();
-                    // TODO: move this to processDOC Method where doc is parsed into d3web, later
-                    //TODO: flexible    httpSession.setAttribute("latestD3web", newFileName);
-                    httpSession.setAttribute("latestDoc", newFileName);
-
-                    tmpFile.delete();
+                    // directly store it into the "real" outside storage path
+                    // for d3web and refresh list view
+                    String targetD3webName = tmpFile.getName();
+                    String targetDir =
+                            GLOBSET.getStoreOutsideWUMPPath() + FILESEP + "d3web";
+                    Utils.checkCreateDir(targetDir);
+                    String targetD3web = targetDir + FILESEP + targetD3webName;
+                    File tf = new File(targetD3web);
+                    tmpFile.renameTo(tf);
                     response.sendRedirect(GLOBSET.getWebAppWarName()
-                            + "/DialogManager?upKB=done&upfilename=" + newFileName.replace("%", " "));
-                } catch (Exception e) {
-                    e.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+                                + "/DialogManager?upKB=done&upfilename=" + targetD3webName.replace("%", " "));
+
+                    //tmpFile.delete();
+                    
+                } else {
+                    // otherwise upload doc to tmp directory for further parsing
+                    try {
+                        System.err.println("FileUploadServlet - UploadKB - upload base path: "
+                                + GLOBSET.getUploadFilesBasePath());
+                        File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
+                        System.err.println("FileUploadServlet - UploadKB - filepath to be written: "
+                                + dirToMove.getAbsolutePath());
+
+                        String newFileName = tmpFile.getName();
+                        File fileToMove = new File(dirToMove, newFileName);
+                        System.err.println("FileUploadServlet - UploadKB - final file: "
+                                + fileToMove.getAbsolutePath());
+
+
+                        tmpFile.renameTo(fileToMove);
+
+                        HttpSession httpSession = request.getSession();
+
+                        httpSession.setAttribute("latestDoc", newFileName);
+
+                        tmpFile.delete();
+                        response.sendRedirect(GLOBSET.getWebAppWarName()
+                                + "/DialogManager?upKB=done&upfilename=" + newFileName.replace("%", " "));
+                    } catch (Exception e) {
+                        e.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+                    }
                 }
             }
         } else {

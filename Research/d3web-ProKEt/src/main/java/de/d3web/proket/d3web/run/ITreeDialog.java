@@ -96,7 +96,7 @@ public class ITreeDialog extends D3webDialog {
         TerminologyObject q =
                 d3webSession.getKnowledgeBase().getManager().searchQuestion(
                 AbstractD3webRenderer.getObjectNameForId(question));
-        System.out.println(q);
+        //System.out.println(q);
         String value = request.getParameter("value");
 
         IQuestionD3webRenderer toRenderer =

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog 
-	header="Standard Consultation Dialog - 1 column style"  
+	header="Standard Consultation Dialog - 2 column style"  
 	dtype="singleform" 
 	indicationmode="hide_unindicated"
 	dstrategy="nextform"
 	css="questionaryCons, diagnosisVisu" 
 	dialogcolumns="1"
-	questionnairecolumns="1"
+	questionnairecolumns="2"
 	questioncolumns="1"
 	uiprefix = "QuestionaryCons"
         login = ""

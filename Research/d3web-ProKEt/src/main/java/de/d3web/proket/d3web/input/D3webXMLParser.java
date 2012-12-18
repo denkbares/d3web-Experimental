@@ -85,7 +85,7 @@ public class D3webXMLParser {
             inputFile = FileUtils.getResourceFile(
                     GlobalSettings.getInstance().getD3webSpecsPath()
                     + "/" + xMLFilename);
-            System.out.println("try to parse: " + xMLFilename + " result: " + inputFile);
+            //System.out.println("try to parse: " + xMLFilename + " result: " + inputFile);
         } catch (FileNotFoundException e2) {
         } catch (NullPointerException npe) {
         }
@@ -97,7 +97,7 @@ public class D3webXMLParser {
                     GlobalSettings.getInstance().getUploadFilesBasePath()
                     + "/specs/" + xMLFilename;
             inputFile = new File(path);
-            System.out.println("try to parse2: " + xMLFilename + " result: " + inputFile);
+            //System.out.println("try to parse2: " + xMLFilename + " result: " + inputFile);
         }
 
         // if we have a file, go on parsing
@@ -227,10 +227,10 @@ public class D3webXMLParser {
     public LoginMode getLoginMode() {
         LoginMode currentMode = LoginMode.OFF;
         String log = XMLUtils.getStr((Element) dialogSpec, "login", null);
-        System.out.println(log);
+        //System.out.println(log);
         if (log != null) {
             currentMode = LoginMode.valueOf(log);
-            System.out.println(currentMode);
+            //System.out.println(currentMode);
         }
         return currentMode;
     }

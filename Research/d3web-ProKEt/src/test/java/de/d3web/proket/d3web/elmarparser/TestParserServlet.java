@@ -71,7 +71,7 @@ public class TestParserServlet extends HttpServlet {
         // write the servletcontext path
         String servletcontext = config.getServletContext().getRealPath("/");
         GLOBSET.setServletBasePath(servletcontext);
-        System.out.println("HALLO " + servletcontext);
+        //System.out.println("HALLO " + servletcontext);
         
         // assemble and write the upload-files path
         }
@@ -86,14 +86,14 @@ public class TestParserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 
-        System.out.println("Servlet init");
+        //System.out.println("Servlet init");
         response.setContentType("text/html; charset=UTF-8");
         HttpSession httpSession = request.getSession(true);
         httpSession.setMaxInactiveInterval(20 * 60);
         
         String parserFolder = GLOBSET.getServletBasePath() + "PARSER";
         
-        System.out.println(parserFolder + "/Grrr.txt");
+        //System.out.println(parserFolder + "/Grrr.txt");
         Html2KnowWECompiler compiler = new converter.Html2KnowWECompiler();
         writeFileTo(parserFolder + "/Grrr.txt");
         

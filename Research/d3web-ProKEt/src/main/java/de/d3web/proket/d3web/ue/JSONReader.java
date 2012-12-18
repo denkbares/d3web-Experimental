@@ -198,7 +198,7 @@ public class JSONReader implements Serializable {
                 }
             }
         } catch (ParseException pe) {
-            System.out.println(pe);
+           // System.out.println(pe);
         }
         return logdata;
     }
@@ -299,7 +299,7 @@ public class JSONReader implements Serializable {
             ja = (JSONArray) p.parse(s);
 
         } catch (ParseException pe) {
-            System.out.println(pe);
+            //System.out.println(pe);
         }
 
         return ja;

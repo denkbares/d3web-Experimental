@@ -395,7 +395,7 @@ public class D3webUtils {
             kbFile = new File(path + kbFilename);
         }
 
-        System.out.println(path);
+       // System.out.println(path);
 
 
 
@@ -409,7 +409,7 @@ public class D3webUtils {
         JPFPluginManager.init(files);
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
 
-        System.out.println(kbFile.getName() + " " + kbFile.getAbsolutePath());
+        //println(kbFile.getName() + " " + kbFile.getAbsolutePath());
         //KnowledgeBase kb = persistenceManager.load(kbFile);
         KnowledgeBase kb = persistenceManager.load(kbFile);
 
@@ -1617,7 +1617,7 @@ public class D3webUtils {
         Value value = null;
         try {
             value = new DateValue(new Date(Long.parseLong(valString)));
-            System.out.println(value);
+            //println(value);
         } catch (NumberFormatException e) {
             // value still null, will not be set
         }

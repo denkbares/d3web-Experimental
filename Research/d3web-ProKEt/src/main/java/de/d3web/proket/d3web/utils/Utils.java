@@ -5,8 +5,7 @@
 package de.d3web.proket.d3web.utils;
 
 import de.d3web.proket.utils.SystemLoggerUtils;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,4 +60,38 @@ public class Utils {
         }
         return fileF;
     }
+    
+    public static String readNumberFromTxtFile(String fileName) {
+        StringBuffer inContent = new StringBuffer();
+        File file = new File(fileName);
+        if (file.exists()) {
+            try {
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(new FileInputStream(file)));
+                int char1 = bufferedReader.read();
+                while (char1 != -1) {
+                    inContent.append((char) char1);
+                    char1 = bufferedReader.read();
+                }
+                bufferedReader.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return inContent.toString();
+    }
+    
+    public static void writeNumberToTxtFile(String fileName, String content) {
+        try {
+            File file = new File(fileName).getCanonicalFile();
+            file.getParentFile().mkdirs();
+            FileWriter fstream = new FileWriter(file);
+            BufferedWriter out = new BufferedWriter(fstream);
+            out.write(content);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

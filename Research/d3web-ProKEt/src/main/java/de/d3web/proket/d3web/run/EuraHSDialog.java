@@ -40,15 +40,20 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
+import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.output.render.EuraHSDefaultRootD3webRenderer;
 import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.d3web.utils.Encryptor;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
+import de.d3web.proket.d3web.utils.StringTemplateUtils;
+import de.d3web.proket.d3web.utils.Utils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
 import java.util.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -90,6 +95,25 @@ public class EuraHSDialog extends D3webDialog {
     };
 
     @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        //System.out.println("INIT EURAHS SERVLET");
+
+        String servletcontext = config.getServletContext().getRealPath("/");
+        GLOBSET.setServletBasePath(servletcontext);
+
+        d3webParser = new D3webXMLParser();
+
+        String realStPath = servletcontext
+                + "WEB-INF/classes/stringtemp/html";
+
+        StringTemplateUtils.initializeStringTemplateStructure(realStPath);
+        
+        Utils.checkCreateFile(realStPath);
+    }
+    
+    
+    @Override
     protected String getSource(HttpServletRequest request, HttpSession http) {
         return "Hernia";
     }
@@ -108,7 +132,7 @@ public class EuraHSDialog extends D3webDialog {
     protected void show(HttpServletRequest request, HttpServletResponse response,
             HttpSession httpSession)
             throws IOException {
-
+        
         PrintWriter writer = response.getWriter();
 
         // new ContainerCollection needed each time to get an updated dialog
@@ -206,7 +230,7 @@ public class EuraHSDialog extends D3webDialog {
     public static synchronized String generateCaseNumber(String persistenceFileName) {
         String fileName = GlobalSettings.getInstance().getCaseFolder() + File.separator + ".."
                 + File.separator + persistenceFileName + ".txt";
-        String persistence = readTxtFile(fileName);
+        String persistence = Utils.readNumberFromTxtFile(fileName);
         int numberOfCases = 0;
         try {
             numberOfCases = Integer.parseInt(persistence);
@@ -303,6 +327,7 @@ public class EuraHSDialog extends D3webDialog {
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
 
+        //super.saveCase(request, response, httpSession);
         PrintWriter writer = null;
         writer = response.getWriter();
 

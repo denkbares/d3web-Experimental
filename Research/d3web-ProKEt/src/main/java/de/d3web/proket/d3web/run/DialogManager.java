@@ -19,7 +19,6 @@
  */
 package de.d3web.proket.d3web.run;
 
-import converter.Html2KnowWECompiler;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.utils.Utils;
 import de.d3web.proket.data.DialogType;
@@ -38,11 +37,17 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.TemplateUtils;
+import de.uniwuerzburg.informatik.wms.kombitabelle.base.Intelligence;
+import de.uniwuerzburg.informatik.wms.kombitabelle.base.IntelligenceType;
+import de.uniwuerzburg.informatik.wms.kombitabelle.base.KnowledgeMatrix;
+import de.uniwuerzburg.informatik.wms.kombitabelle.parser.CsvKnowledgeMatrixParser;
+import de.uniwuerzburg.informatik.wms.kombitabelle.parser.KnowledgeMatrixParser;
+import de.uniwuerzburg.informatik.wms.kombitabelle.wiki.*;
 import java.io.*;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Properties;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
@@ -632,7 +637,31 @@ public class DialogManager extends HttpServlet {
 
         // TODO: write Exceptions to Exception Doc
         try {
-            //compileError = compiler.compileTo3web(doc, err, tmp, d3web, knowwe);
+            // use Volker Kokula's Parser for Excel stuff for now
+            /*if(doc.endsWith(".csv") || doc.endsWith(".xls")){
+               
+		KnowledgeMatrixParser parser = new CsvKnowledgeMatrixParser();
+		KnowledgeMatrix matrix = parser.parse(docToParse, new Properties());
+		
+		de.uniwuerzburg.informatik.wms.kombitabelle.base.KnowledgeBase knowledge = 
+                        new de.uniwuerzburg.informatik.wms.kombitabelle.base.KnowledgeBase(matrix);
+		
+		Page page = new Page();
+		page.add(new SolutionComponent("kb", knowledge.getSolutions()));
+		page.add(new QuestionComponent("kb", knowledge.getQuestions()));
+		page.add(new RuleComponent("kb", knowledge.getIntelligence()));
+		
+		for (Intelligence intelligence : knowledge.getIntelligence(IntelligenceType.COVERING)) {
+			page.add(new CoveringComponent("kb", intelligence));
+		}
+		
+		PrintWriter pw = new PrintWriter(System.out);
+		page.write(pw);
+		pw.flush();
+            } else {*/
+            
+                // otherwise user Elmar's parser
+                 //compileError = compiler.compileTo3web(doc, err, tmp, d3web, knowwe);
             compileError = compiler.compile(doc, err, tmp, d3web, knowwe);
 
 
@@ -650,6 +679,10 @@ public class DialogManager extends HttpServlet {
 
                 status = "ParseSuccess";
             }
+            //}
+            
+
+
 
             Runtime rt = Runtime.getRuntime();
             try {

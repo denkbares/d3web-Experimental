@@ -40,7 +40,7 @@ public class StringTemplateUtils {
     public static void initializeStringTemplateStructure(String basePath) {
 
         stBasePath = basePath;
-        System.out.println(basePath);
+        //System.out.println(basePath);
         // this is the topmost ST directory
         baseSTG = new StringTemplateGroup("stGroup", stBasePath);
     }

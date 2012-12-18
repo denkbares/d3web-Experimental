@@ -77,7 +77,7 @@ public class TestParserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 
-        System.out.println("Servlet init");
+        //System.out.println("Servlet init");
         response.setContentType("text/html; charset=UTF-8");
         HttpSession httpSession = request.getSession(true);
         httpSession.setMaxInactiveInterval(20 * 60);

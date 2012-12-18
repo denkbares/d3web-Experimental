@@ -41,18 +41,20 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
 
     public String renderSummaryDialog(Session d3webSession, SummaryType type, HttpSession http) {
 
+        System.out.println("RENDER SUMMARY");
         StringBuilder bui = new StringBuilder();
 
         if (type == SummaryType.GRID) {
             fillGridSummary(d3webSession, bui);
+
         } else if (type == SummaryType.QUESTIONNAIRE_LEVEL1) {
             TerminologyObject root = d3webSession.getKnowledgeBase().getRootQASet();
-
             fillQuestionnaireSummaryLevel1(d3webSession, bui, http, root);
+
         } else if (type == SummaryType.QUESTIONNAIRE) {
             TerminologyObject root = d3webSession.getKnowledgeBase().getRootQASet();
-
             fillQuestionnaireSummaryChildren(d3webSession, bui, root, http);
+
         }
 
         return bui.toString();
@@ -150,6 +152,9 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
         buil.append("<div style='margin-top:10px;'><b>");
         if (to != null) {
             String qName = optQuestionName.equals("") ? to.getName() : optQuestionName;
+            if (qName.equals("Case-Number")) {
+                qName = "Case";
+            }
             buil.append(qName);
 
         }
@@ -376,7 +381,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
         if (to instanceof QContainer && !to.getName().contains("Q000")) {
             //System.out.println(to);
             if (level1qs.contains(to)) {
-                
+
                 if (D3webUtils.hasAnsweredChildren(to, d3webSession)) {
                     bui.append("<div style='margin-top:10px;'><b>");
                     bui.append(D3webConnector.getInstance().getTOCount(to));
@@ -394,22 +399,38 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                     // handle date quesstions separately for formatting date representation
                     if (to instanceof QuestionDate) {
 
-                        // Format the date appropriately
-                        String f = D3webUtils.getFormattedDateFromString((Date) val.getValue(), "dd.MM.yyyy");
+                        if (val.equals(Unknown.getInstance())) {
 
-                        bui.append("<div style='margin-left:10px;'>"
-                                + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
-                                + " -- " + f + "</div>\n");
-                    } // handle abstraction questions separately, e.g. for rounding age quesstion
+                            bui.append("<div style='margin-left:10px;'>"
+                                    + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
+                                    + " -- " + val + "</div>\n");
+
+                        } else {
+                            // Format the date appropriately
+                            String f = D3webUtils.getFormattedDateFromString((Date) val.getValue(), "dd.MM.yyyy");
+
+                            bui.append("<div style='margin-left:10px;'>"
+                                    + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
+                                    + " -- " + f + "</div>\n");
+                        }
+                    }// handle abstraction questions separately, e.g. for rounding age quesstion
                     else if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)
                             && to instanceof QuestionNum) {
 
-                        System.out.println(to.getName() + " " + val.toString());
-                        int doubleAsInt = (int) Double.parseDouble(val.toString());
-                        bui.append("<div style='margin-left:10px;'>"
-                                + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
-                                + " -- " + doubleAsInt + "</div>\n");
+                        if (val.equals(Unknown.getInstance())) {
 
+                            bui.append("<div style='margin-left:10px;'>"
+                                    + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
+                                    + " -- " + val + "</div>\n");
+
+                        } else {
+                            //System.out.println(to.getName() + " " + val.toString());
+                            int doubleAsInt = (int) Double.parseDouble(val.toString());
+                            bui.append("<div style='margin-left:10px;'>"
+                                    + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
+                                    + " -- " + doubleAsInt + "</div>\n");
+
+                        }
                     } // all other questions: just append question and val
                     else {
                         bui.append("<div style='margin-left:10px;'>"
@@ -430,6 +451,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
 
     private void fillQuestionnaireSummaryChildren(Session d3webSession, StringBuilder bui, TerminologyObject to, HttpSession httpSession) {
 
+        //System.out.println(bui.toString());
         if (to instanceof QContainer && !to.getName().contains("Q000")) {
 
             if (D3webUtils.hasAnsweredChildren(to, d3webSession)) {
@@ -446,21 +468,39 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                 // handle date quesstions separately for formatting date representation
                 if (to instanceof QuestionDate) {
 
-                    // Format the date appropriately
-                    String f = D3webUtils.getFormattedDateFromString((Date) val.getValue(), "dd.MM.yyyy");
+                    // need to handle Unknown Values separately as they are String instead
+                    // of, e.g., Date Values
+                    if (val.equals(Unknown.getInstance())) {
 
-                    bui.append("<div style='margin-left:10px;'>"
-                            + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
-                            + " -- " + f + "</div>\n");
+                        bui.append("<div style='margin-left:10px;'>"
+                                + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
+                                + " -- " + val + "</div>\n");
+
+                    } else {
+                        // Format the date appropriately
+                        String f = D3webUtils.getFormattedDateFromString((Date) val.getValue(), "dd.MM.yyyy");
+
+                        bui.append("<div style='margin-left:10px;'>"
+                                + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
+                                + " -- " + f + "</div>\n");
+                    }
                 } // handle abstraction questions separately, e.g. for rounding age quesstion
                 else if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)
                         && to instanceof QuestionNum) {
 
-                    System.out.println(to.getName() + " " + val.toString());
-                    int doubleAsInt = (int) Double.parseDouble(val.toString());
-                    bui.append("<div style='margin-left:10px;'>"
-                            + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
-                            + " -- " + doubleAsInt + "</div>\n");
+                    if (val.equals(Unknown.getInstance())) {
+
+                        bui.append("<div style='margin-left:10px;'>"
+                                + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
+                                + " -- " + val + "</div>\n");
+
+                    } else {
+                        //System.out.println(to.getName() + " " + val.toString());
+                        int doubleAsInt = (int) Double.parseDouble(val.toString());
+                        bui.append("<div style='margin-left:10px;'>"
+                                + D3webConnector.getInstance().getTOCount(to) + " " + to.getName()
+                                + " -- " + doubleAsInt + "</div>\n");
+                    }
 
                 } // all other questions: just append question and val
                 else {
@@ -469,7 +509,9 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                             + " -- " + val + "</div>\n");
 
                 }
+
             }
+
         }
 
         if (to.getChildren() != null && to.getChildren().length != 0) {

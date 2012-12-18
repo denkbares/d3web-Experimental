@@ -99,9 +99,9 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
             st.setAttribute("inactive", "true");
         }
 
-        System.out.println(to.getName());
-        System.out.println(parent.getName() + isIndicated(parent, bb));
-        System.out.println();
+        //System.out.println(to.getName());
+        //System.out.println(parent.getName() + isIndicated(parent, bb));
+        //System.out.println();
         // QContainer indicated
         if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
                 || isIndicated(parent, bb) || isIndicatedByChild(parent, bb)) {

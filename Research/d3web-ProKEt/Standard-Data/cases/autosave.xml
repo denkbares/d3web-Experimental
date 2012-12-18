@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <repository>
-<session changed="2012-11-29 20:37:06.266" created="2012-11-29 20:37:06.266" id="dce43db5-6c3a-4442-a2e0-947aa512451d">
+<session changed="2012-12-13 12:34:12.66" created="2012-12-13 12:34:12.66" id="85515cd8-e959-4bb2-ab88-092738fa6cc1">
 <name/>
 <facts>
 <valueFacts>
 <fact objectName="now" psm="cc.d3web.history.ps.PSMethodTimeDB">
-<dateValue>2012-11-29 20:37:11.176</dateValue>
+<dateValue>2012-12-13 12:34:21.32</dateValue>
 </fact>
 <fact objectName="start" psm="cc.d3web.history.ps.PSMethodTimeDB">
-<dateValue>2012-11-29 20:37:06.266</dateValue>
+<dateValue>2012-12-13 12:34:12.66</dateValue>
+</fact>
+<fact objectName="Welche Kategorie von Werkzeugen wird zur Erkundung von Tagebaulagerstätten verwendet ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>manuelle Werkzeuge</choiceValue>
 </fact>
 <fact objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <choiceValue>Afrika</choiceValue>
 </fact>
+<fact objectName="Tagebau - Welche Rohstoffart wird abgebaut ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>metallische Rohstoffe</choiceValue>
+</fact>
 <fact objectName="Afrika, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <choiceValue>Algerien</choiceValue>
+</fact>
+<fact objectName="Welcher Lagerstättentyp liegt vor ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Tagebau (Übertage)</choiceValue>
 </fact>
 <fact objectName="Algerien" psm="de.d3web.scoring.inference.PSMethodHeuristic">
 <rating score="999.0" type="heuristic">ESTABLISHED</rating>
 </fact>
+<fact objectName="Tagebau Erkundung teilmechanisch" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="999.0" type="heuristic">ESTABLISHED</rating>
+</fact>
 </valueFacts>
 <interviewFacts>
+<fact objectName="Technik - Tagebau" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
 <fact objectName="Fragebogen Asien" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>CONTRA_INDICATED</indication>
 </fact>
@@ -33,17 +48,29 @@
 <fact objectName="Lagerstätte" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
+<fact objectName="Tagebau - Welche Rohstoffart wird abgebaut ?" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
 <fact objectName="Wo befindet sich die Lägerstätte ?" psm="de.d3web.core.inference.PSMethodInit">
 <indication>INDICATED</indication>
 </fact>
 </interviewFacts>
 </facts>
 <protocol>
-<entry date="2012-11-29 20:37:09.380" objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<entry date="2012-12-13 12:34:13.527" objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
 <choiceValue>Afrika</choiceValue>
 </entry>
-<entry date="2012-11-29 20:37:11.176" objectName="Afrika, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<entry date="2012-12-13 12:34:14.346" objectName="Afrika, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
 <choiceValue>Algerien</choiceValue>
+</entry>
+<entry date="2012-12-13 12:34:15.494" objectName="Welcher Lagerstättentyp liegt vor ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Tagebau (Übertage)</choiceValue>
+</entry>
+<entry date="2012-12-13 12:34:17.578" objectName="Tagebau - Welche Rohstoffart wird abgebaut ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>metallische Rohstoffe</choiceValue>
+</entry>
+<entry date="2012-12-13 12:34:21.32" objectName="Welche Kategorie von Werkzeugen wird zur Erkundung von Tagebaulagerstätten verwendet ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>manuelle Werkzeuge</choiceValue>
 </entry>
 </protocol>
 </session>

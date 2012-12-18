@@ -32,7 +32,7 @@ var goon = true;
 
 $(function() {
    
-   
+    
     // check browser and warn if the wrong one is used
     
     var link = $.query.set("action", "checkHandleBrowsers").toString();
@@ -474,6 +474,7 @@ function initFunctionality() {
             markIsWidget("true");
             ue_logWidgetClicked($(this));
         }
+        //checkSessionStillValid();
         d3web_resetSession();
     });
 
@@ -487,6 +488,7 @@ function initFunctionality() {
             d3web_addFacts();
         // TODO: we need a final save for ITree too one time!
         }
+        checkSessionStillValid();
         d3web_prepareSave();
     });
 
@@ -496,6 +498,7 @@ function initFunctionality() {
             markIsWidget("true");
             ue_logWidgetClicked($(this));
         }
+        checkSessionStillValid();
         $("#jqLoadCaseDialog").dialog("open");
     });
     
@@ -518,6 +521,7 @@ function initFunctionality() {
             markIsWidget("true"); 
             ue_logWidgetClicked($(this));
         }
+        checkSessionStillValid();
         $("#jqFollowUpDialog").dialog("open");
     });
 	
@@ -527,6 +531,7 @@ function initFunctionality() {
             ue_logWidgetClicked($(this));
         }
         d3web_updateSummary();
+        checkSessionStillValid();
         $("#jqSummaryDialog").dialog("open");
     });
 	
@@ -536,6 +541,7 @@ function initFunctionality() {
             markIsWidget("true"); 
             ue_logWidgetClicked($(this));
         }
+        checkSessionStillValid();
         gotoStatistics();
     });
     
@@ -545,6 +551,7 @@ function initFunctionality() {
             markIsWidget("true"); 
             ue_logWidgetClicked($(this));
         }
+        checkSessionStillValid();
         $("#jqFFDialog").dialog("open");
     });
     
@@ -553,6 +560,7 @@ function initFunctionality() {
             markIsWidget("true"); 
             ue_logWidgetClicked($(this));
         }
+        checkSessionStillValid();
         $("#jqUEQDialog").dialog("open");
     });
     
@@ -596,6 +604,7 @@ function initFunctionality() {
             markIsWidget("true"); 
             ue_logLanguageWidgetClicked($(this));
         } 
+        
         toggleLanguage($(this));
     });
     
@@ -892,12 +901,18 @@ function d3web_addFacts() {
         i++;
     }
     
-   
+    
+    // check current state: is session still active? Then go on, otherwise
+    // redirect to login page
+    checkSessionStillValid();
+    
+    
     $.ajax({
         type : "GET",
         url : link,
         cache : false, // needed for IE, call is not made otherwise
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        dataType: 'html',
         success : function(html) {
             if (html.indexOf("ITreeSUCCESS")==0){
                 window.location.reload();
@@ -923,11 +938,10 @@ function d3web_addFacts() {
             }
         },
         error : function(html) {
+           
             alert("ajax error add facts");
         }
     });
-
-    
     
         
     // create new stores for next call
@@ -937,6 +951,9 @@ function d3web_addFacts() {
     textStore = new Object();
     numStore = new Object();
 }
+
+
+
 
 function d3web_storeQuestionOC(ocInput) {
     var ocQuestion = getQuestionId(ocInput);
@@ -1425,6 +1442,8 @@ function toggleLanguage(el){
         langID = 10;
     }
      
+    checkSessionStillValid();
+    
     var link = $.query.set("action", "language").set("langID", langID);
     link = window.location.href.replace(window.location.search, "") + link;
 

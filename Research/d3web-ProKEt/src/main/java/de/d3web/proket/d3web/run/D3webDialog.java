@@ -170,7 +170,11 @@ public class D3webDialog extends HttpServlet {
 
         response.setContentType("text/html; charset=UTF-8");
         HttpSession httpSession = request.getSession(true);
-        httpSession.setMaxInactiveInterval(20 * 60);
+        // System.out.println("Session: " + request.getSession(true));
+
+        // timeout after 30 minutes
+        httpSession.setMaxInactiveInterval(30 * 60);
+
 
         String source = getSource(request, httpSession);
         String kbName = "";
@@ -215,15 +219,18 @@ public class D3webDialog extends HttpServlet {
         String DIDSave = httpSession.getAttribute(DID_SAVE) != null
                 ? httpSession.getAttribute(DID_SAVE).toString() : "";
 
+        // if we call different xml src file but with same dialog (e.g. different dialogs for D3webDialog Servlet)
         if (!sSave.equals(source)) {
             httpSession.setAttribute(SOURCE_SAVE, source);
 
             parseAndInitDialogServlet(httpSession, request);
-        } else if (!cSave.equals(this.getClass().toString())) {
+        } else // if we call a different servlet = completely different dialog, parse newly
+        if (!cSave.equals(this.getClass().toString())) {
 
             httpSession.setAttribute(SERVLET_CLASS_SAVE, this.getClass().toString());
             parseAndInitDialogServlet(httpSession, request);
-        } else if (request.getParameter("dialogID") != null
+        } else // if we have a dialog ID (we have when we come from DialogManager
+        if (request.getParameter("dialogID") != null
                 && !DIDSave.equals(request.getParameter("dialogID"))) {
             httpSession.setAttribute(DID_SAVE, request.getParameter("dialogID"));
             parseAndInitDialogServlet(httpSession, request);
@@ -250,6 +257,7 @@ public class D3webDialog extends HttpServlet {
             action = "show";
         }
 
+
         // System.out.println("0: " + action);
         // System.out.println(httpSession.getAttribute(D3WEB_SESSION));
 
@@ -259,6 +267,7 @@ public class D3webDialog extends HttpServlet {
             return;
         }
 
+
         //System.out.println(uis.getLoginMode());
         if (uis.getLoginMode()
                 == LoginMode.DB) {
@@ -266,8 +275,12 @@ public class D3webDialog extends HttpServlet {
             if (authenticated == null || !authenticated.equals("yes")) {
                 response.sendRedirect("../EuraHS-Login");
                 return;
-            }
+            } /*
+             * else { response.sendRedirect("../EuraHS-Dialog"); return; }
+             */
+
         }
+
 
         // set handleBrowsers flag null for all actions other than handlecheck
         // itself; that way, the check can be processed correctly also after 
@@ -447,9 +460,26 @@ public class D3webDialog extends HttpServlet {
             loadCaseClear(request, response, httpSession);
         } else if (action.equalsIgnoreCase("reloadSelectedQuestionnaire")) {
             reloadSelectedQuestionnaire(request, response, httpSession);
+        } else if (action.equalsIgnoreCase("checkSessionStillValid")) {
+            checkSession(request, response, httpSession);
         } else {
             handleDialogSpecificActions(httpSession, request, response, action);
         }
+
+    }
+
+    protected void checkSession(HttpServletRequest request,
+            HttpServletResponse response, HttpSession httpSession) throws IOException {
+        PrintWriter writer = response.getWriter();
+
+        // System.out.println("CHECKSESSION");
+        if (request.isRequestedSessionIdValid()) {
+
+            writer.append("SESSIONVALID");
+        } else {
+            writer.append(uis.getLoginMode().toString());
+        }
+
     }
 
     /*
@@ -992,9 +1022,6 @@ public class D3webDialog extends HttpServlet {
     protected void gotoTxtDownload(HttpServletResponse response, HttpServletRequest request,
             HttpSession httpSession) throws IOException {
 
-        String email = (String) httpSession.getAttribute("user");
-        String path = GlobalSettings.getInstance().getServletBasePath();
-
         // Important: /Download... doesn't work both locally and on server due
         // to webapp paths etc
         String gotoUrl = "Download?flag=summary";
@@ -1209,7 +1236,7 @@ public class D3webDialog extends HttpServlet {
         // get the root renderer --> call getRenderer with null
         DefaultRootD3webRenderer d3webr =
                 (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
-        System.out.println("RENDEER: " + d3webr.getClass());
+        //System.out.println("RENDEER: " + d3webr.getClass());
 
         // new ContainerCollection needed each time to get an updated dialog
         ContainerCollection cc = new ContainerCollection();
@@ -1263,7 +1290,7 @@ public class D3webDialog extends HttpServlet {
             writer.append("exists");
         }
 
-        System.out.println("saveCase: " + d3webSession.getKnowledgeBase().getName() + " " + userFilename);
+        //System.out.println("saveCase: " + d3webSession.getKnowledgeBase().getName() + " " + userFilename);
         addToCSV(d3webSession.getKnowledgeBase().getName(), userFilename);
     }
 
@@ -1472,7 +1499,11 @@ public class D3webDialog extends HttpServlet {
     }
 
     protected void updateSummary(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
+        System.out.println("UPDATE SUMMARY");
+        System.out.println(httpSession.getAttribute(D3WEB_SESSION));
+
         PrintWriter writer = response.getWriter();
+
 
         String questionnaireContentID = "questionnaireSummaryContent";
 
@@ -1484,6 +1515,7 @@ public class D3webDialog extends HttpServlet {
                 (Session) httpSession.getAttribute(D3WEB_SESSION),
                 SummaryD3webRenderer.SummaryType.QUESTIONNAIRE, httpSession));
         writer.append("<div>");
+        System.out.println("SUMMARY1: " + writer.toString());
 
         String questionnaireLevel1ContendID = "level1SummaryContent";
         writer.append(REPLACEID + questionnaireLevel1ContendID);
@@ -1493,6 +1525,7 @@ public class D3webDialog extends HttpServlet {
                 (Session) httpSession.getAttribute(D3WEB_SESSION),
                 SummaryD3webRenderer.SummaryType.QUESTIONNAIRE_LEVEL1, httpSession));
         writer.append("<div>");
+        System.out.println("SUMMARY2: " + writer.toString());
 
         String gridContentID = "gridSummaryContent";
 
@@ -1503,6 +1536,7 @@ public class D3webDialog extends HttpServlet {
                 (Session) httpSession.getAttribute(D3WEB_SESSION),
                 SummaryD3webRenderer.SummaryType.GRID, httpSession));
         writer.append("<div>");
+        System.out.println("SUMMARY3: " + writer.toString());
     }
 
     protected void logInitially(HttpServletRequest request, JSONLogger logger, HttpSession httpSession) {
@@ -1833,7 +1867,7 @@ public class D3webDialog extends HttpServlet {
         uesettings.setLogging(d3webParser.getLogging());
         uesettings.setFeedbackform(d3webParser.getFeedbackform());
         uesettings.setUequestionnaire(d3webParser.getUEQuestionnaire());
-        System.out.println("PARSE:" + d3webParser.getUEQuestionnaire());
+        //System.out.println("PARSE:" + d3webParser.getUEQuestionnaire());
 
         // set dialog language (for internationalization of widgets, NOT
         // KB elements (specified in knowledge base
@@ -1909,9 +1943,9 @@ public class D3webDialog extends HttpServlet {
                 entries.add(lineList);
                 //}
             }
-            System.out.println("IN FILE: ");
+            //println("IN FILE: ");
             for (List l : entries) {
-                System.out.println(l.toString());
+                //System.out.println(l.toString());
             }
 
             BufferedWriter out =

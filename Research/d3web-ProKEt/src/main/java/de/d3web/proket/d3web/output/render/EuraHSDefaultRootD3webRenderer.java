@@ -42,6 +42,7 @@ import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.utils.D3webUtils;
+import de.d3web.proket.d3web.utils.CaseCreationComparator;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import java.util.*;
@@ -131,6 +132,7 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
     private String renderFollowUpTable(String user) {
 
         // get the cases of this user
+        //List<File> caseFiles = PersistenceD3webUtils.getCaseListNumbered(user);
         List<File> caseFiles = PersistenceD3webUtils.getCaseList(user);
         StringBuilder followUpTable = new StringBuilder();
 
@@ -611,5 +613,45 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
                 parseLevel1FUs(http, level1, childsChild, d3webSession);
             }
         }
+    }
+    
+    @Override
+    public String renderUserCaseList(String user, HttpSession http) {
+
+        Session d3web = (Session) http.getAttribute("d3webSession");
+        List<File> files = PersistenceD3webUtils.getCaseList(user);
+       
+        StringBuffer cases = new StringBuffer();
+        /*
+         * add autosaved as first item always
+         */
+        cases.append("<option");
+        cases.append(" title='" + PersistenceD3webUtils.AUTOSAVE + "'>");
+        cases.append(PersistenceD3webUtils.AUTOSAVE);
+        cases.append("</option>");
+
+        if (files != null && files.size() > 0) {
+
+            Collections.sort(files, new CaseCreationComparator());
+             
+            int nr = 1;
+            
+            for (File f : files) {
+                if (!f.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
+                    cases.append("<option");
+                    String filename = 
+                            f.getName().substring(0, f.getName().lastIndexOf(".")).replace("+", " ");
+                   
+                    cases.append(" title='"
+                            + nr + ". " + filename + "'>");
+                    cases.append(nr + ". " + filename);
+                    cases.append("</option>");
+                    nr++;
+                }
+                
+            }
+        }
+
+        return cases.toString();
     }
 }

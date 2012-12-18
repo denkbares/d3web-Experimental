@@ -5,13 +5,14 @@
 $(function(){
   
         
-    $('a').click(function(event) {
-        event.preventDefault();
-        var qsClicked = $(this);
-        qsNavi_reload(qsClicked);
-    });    
-    
     if(standarddialog){    
+        
+        $('a').click(function(event) {
+            event.preventDefault();
+            var qsClicked = $(this);
+            qsNavi_reload(qsClicked);
+        });   
+    
         $.jstree._themes = "libsExternal/jsTree/themes/";
     
         if(solutionSideNavi){
@@ -58,7 +59,7 @@ $(function(){
 var tooltipShown = undefined;
 
 function qsNavi_reload(element){
-    alert(element.attr("href"));
+    //alert(element.attr("href"));
     
     var link = $.query.set("action", "reloadSelectedQuestionnaire");
     link = link.set("questionnaire", element.attr("href"));
@@ -829,3 +830,71 @@ function deleteExpandCookie(qname){
 
 
 
+
+/************************/
+/* SESSION MANAGEMENT   */
+/************************/    
+function checkSessionStillValid(){
+    
+    var link = $.query.set("action", "checkSessionStillValid");
+     
+    $.ajax({
+        type : "GET",
+        url : link,
+        async: false,
+        cache : false, // needed for IE, call is not made otherwise
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        dataType: 'html',
+        success : function(html) {
+            //alert("session valid? " + html);
+            if(html.indexOf("SESSIONVALID")!= -1){
+            // do nothing with valid sessions any further
+                  
+            } else {
+                handleSessionRedirect(html);
+            }
+           
+        },
+        error : function(html) {
+            //alert("session valid error" + html);
+            // if we come here, the previous session had expired, so
+            // send request to redirect to login
+            handleSessionRedirect("");
+        }
+    });
+}
+
+function handleSessionRedirect(loginFlag){
+    // TODO: nicer Window
+    alert("Ihre Session ist abgelaufen. Sie werden automatisch zur \n\
+                        Start- bzw. Login-Seite umgeleitet. Ihre zuletzt eingegebenen \n\
+                        Daten können Sie über 'Load Case' und 'Autosave' wiederherstellen.")
+    // if we are here, the session is not valid anymore, so redirect
+    // according to returned html parameter, which in case of
+    // the session check contains the implemented login (if any)
+    // currently only for EuraHS - replace if we have other dialog running
+    var orig = window.location.href;
+    var redirectLink;
+       
+    if(loginFlag == "" || loginFlag.indexOf("OFF")!=-1){
+       
+       redirectLink = orig;//"http://www.google.de";
+        //window.location.href = orig;
+        document.location = redirectLink;
+        window.location.reload(true);
+    }
+    // handle different webapps here...
+    else if(orig.indexOf("EuraHS-Dialog")!=-1 && loginFlag.indexOf("DB")!= -1){
+        redirectLink = orig.replace("EuraHS-Dialog", "EuraHS-Login");
+        document.location = redirectLink;
+    //alert(redirectLink);
+                    
+    } /*else if(loginFlag.indexOf("OFF")!=-1) {       
+        // otherwise, currently just redirect back to dialog itself
+        redirectLink = orig;//"http://www.google.de";
+        //window.location.href = orig;
+        document.location = redirectLink;
+        window.location.reload(true);
+    } */
+    
+}

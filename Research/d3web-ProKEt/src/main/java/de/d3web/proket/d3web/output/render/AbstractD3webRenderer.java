@@ -213,7 +213,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                 if ((D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
                         && child instanceof Question
                         && D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()))) {
-                    System.out.println("CONTINUE");
+                    //System.out.println("CONTINUE");
                     continue;
                 }
             }

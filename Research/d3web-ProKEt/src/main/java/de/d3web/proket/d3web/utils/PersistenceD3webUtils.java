@@ -50,7 +50,7 @@ import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.file.records.io.SingleXMLSessionRepository;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.utils.GlobalSettings;
-
+import java.util.Collections;
 
 public class PersistenceD3webUtils {
 
@@ -59,16 +59,17 @@ public class PersistenceD3webUtils {
     private static File getFile(String user, String filename) {
         String path = GlobalSettings.getInstance().getCaseFolder() + File.separator
                 + (user != null && !user.isEmpty() ? user + File.separator : "")
-                + filename + ".xml";
+                + filename + 
+                (filename.contains(".xml") ? "" : ".xml");
         return new File(path);
     }
 
     public static boolean existsCase(String user, String filename) {
         return getFile(user, filename).exists();
     }
-    
+
     public static boolean existsCaseAnon(String user, String filename) {
-        
+
         String anonFilename = Encryptor.getAnonymizedFilename(filename);
         return getFile(user, anonFilename).exists();
     }
@@ -115,6 +116,8 @@ public class PersistenceD3webUtils {
                     "'" + fileToLoad.getName() + "' for user '" + user + "' could not be loaded.");
             // e.printStackTrace();
         }
+        
+
         return session;
     }
 
@@ -141,6 +144,8 @@ public class PersistenceD3webUtils {
         }
         return filesList;
     }
+    
+    
 
     public static void saveCase(String user,
             String filename, Session d3webSession) {
@@ -149,7 +154,9 @@ public class PersistenceD3webUtils {
             new SaveThread(file, d3webSession).start();
         } else {
             saveCase(file, d3webSession);
-            file.setLastModified(System.currentTimeMillis());
+            long saveCreateDate = file.lastModified();
+            file.setLastModified(saveCreateDate);
+            //file.setLastModified(System.currentTimeMillis());
         }
     }
 
@@ -165,9 +172,14 @@ public class PersistenceD3webUtils {
             String user, String filename, Session d3webSession) {
 
         String anonFilename = "";
+        String fnToAnonComplete = 
+                (user != null && !user.isEmpty() ? user + File.separator : "")
+                + filename;
+        
         anonFilename =
-                Encryptor.getAnonymizedFilename(filename);
-
+                Encryptor.getAnonymizedFilename(fnToAnonComplete);
+        //System.out.println("SaveCaseAnonymized: " + anonFilename);
+       
         // get the corresponding file for the current user if exists
         File file = getFile(user, anonFilename);
 
@@ -175,7 +187,9 @@ public class PersistenceD3webUtils {
             new SaveThread(file, d3webSession).start();
         } else {
             saveCase(file, d3webSession);
-            file.setLastModified(System.currentTimeMillis());
+            long saveCreateDate = file.lastModified();
+            file.setLastModified(saveCreateDate);
+            //file.setLastModified(System.currentTimeMillis());
         }
     }
 
@@ -323,4 +337,6 @@ public class PersistenceD3webUtils {
         }
         return valueFacts;
     }
+    
+    
 }
