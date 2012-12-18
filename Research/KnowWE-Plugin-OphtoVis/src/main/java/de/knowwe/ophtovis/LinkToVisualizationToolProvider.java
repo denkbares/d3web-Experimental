@@ -37,9 +37,10 @@ public class LinkToVisualizationToolProvider implements ToolProvider {
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		String termName = null;
-		if (section.get() instanceof IncrementalTermDefinition) {
-			Section<IncrementalTermDefinition> defSection = Sections.cast(section,
-					IncrementalTermDefinition.class);
+		Section<IncrementalTermDefinition> defSection = Sections.findSuccessor(
+				section, IncrementalTermDefinition.class);
+
+		if (defSection != null) {
 			termName = defSection.get().getTermName(defSection);
 		}
 

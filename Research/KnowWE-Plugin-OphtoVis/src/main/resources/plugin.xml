@@ -35,7 +35,7 @@
 		<parameter id="description" value=" LinkToVisualizationToolProvider" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="IncrementalTermDefinition" />
+		<parameter id="scope" value="ConceptMarkup" />
 	</extension>
 
 </plugin>
