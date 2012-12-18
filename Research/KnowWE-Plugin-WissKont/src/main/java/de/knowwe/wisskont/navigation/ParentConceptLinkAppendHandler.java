@@ -89,6 +89,7 @@ public class ParentConceptLinkAppendHandler implements PageAppendHandler {
 					"Oberkonzept: ";
 			result += Strings.concat(", ", resultList);
 			result += Strings.maskHTML("</div>");
+			result += System.getProperty("line.separator");
 			return result;
 		}
 

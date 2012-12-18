@@ -62,7 +62,7 @@ public class RecommendationSet {
 			String term = iterator.next();
 			double newValue = terms.get(term) * factor;
 			if (newValue < 0.1) {
-				terms.remove(term);
+				// terms.remove(term);
 			}
 			else {
 				terms.put(term, newValue);
