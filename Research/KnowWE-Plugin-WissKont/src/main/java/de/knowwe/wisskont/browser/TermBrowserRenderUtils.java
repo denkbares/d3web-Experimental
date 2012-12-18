@@ -63,6 +63,7 @@ public class TermBrowserRenderUtils {
 
 			if (i >= rankedTermList.size()) break;
 			String term = rankedTermList.get(i);
+			term = term.replaceAll("_", Strings.maskHTML("_<wbr>"));
 			String lineStyle = "";
 			if (!zebra) {
 				zebra = true;
