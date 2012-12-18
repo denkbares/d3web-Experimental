@@ -88,7 +88,7 @@ public class TermBrowserRenderUtils {
 					"<td style='width:80%' class='termbrowser'><div class='termname'>"
 					+ term
 					+ "</div></td>"
-					+ "<td style='min-width: 45px;width:20%;'>"
+					+ "<td style='min-width: 48px;width:20%;'>"
 					+ "<table style='table-layout:fixed'><tr>"
 					+ "<td style='"
 					+ divStyle
