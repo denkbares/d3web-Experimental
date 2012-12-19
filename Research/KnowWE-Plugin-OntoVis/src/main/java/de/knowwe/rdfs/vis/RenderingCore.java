@@ -748,10 +748,10 @@ public class RenderingCore {
 			if (excludedNode(z)) {
 				continue loop;
 			}
-
-			String askClass = "ASK { " + createSparqlURI(z) + " rdf:type owl:Class}";
+			String askClass = "ASK { <" + zURI
+					+ "> rdf:type owl:Class}";
 			boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
-			String askProperty = "ASK { " + createSparqlURI(z) + " rdf:type rdf:Property}";
+			String askProperty = "ASK { <" + zURI + "> rdf:type rdf:Property}";
 			boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
 			String type = "basic";
 
@@ -856,6 +856,13 @@ public class RenderingCore {
 	 * @param request
 	 */
 	private void addOutgoingEdgesSuccessors(String concept) {
+		try {
+			concept = URLDecoder.decode(concept, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String query = "SELECT ?y ?z WHERE { " + createSparqlURI(concept)
 				+ " ?y ?z.}";
 		ClosableIterator<QueryRow> result =
@@ -1009,6 +1016,25 @@ public class RenderingCore {
 				|| (dotSourceRelations.get(newLineRelationsKey)) != newLineRelationsValue) {
 			dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);
 		}
+	}
+
+	/**
+	 * 
+	 * @created 10.12.2012
+	 * @param to
+	 * @return
+	 */
+	private String getLabel(String concept) {
+		String query = "SELECT ?z WHERE { " + createSparqlURI(concept) + " rdfs:label  ?z }";
+		ClosableIterator<QueryRow> result =
+				Rdf2GoCore.getInstance().sparqlSelectIt(
+						query);
+		while (result.hasNext()) {
+			QueryRow queryRow = result.next();
+			String label = queryRow.getLiteralValue("z");
+			return label;
+		}
+		return concept;
 	}
 
 	/**
