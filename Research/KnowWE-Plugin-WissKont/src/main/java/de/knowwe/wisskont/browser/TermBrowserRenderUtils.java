@@ -39,8 +39,7 @@ public class TermBrowserRenderUtils {
 		StringBuilder string = new StringBuilder();
 		string.append(Strings.maskHTML("<div class='termbrowserframe'>"));
 		string.append(Strings.maskHTML("<div class='termbrowserheader'>Konzepte:</div>"));
-		string.append(Strings.maskHTML("<div class='ui-widget'><table><tr><td><label for='conceptSearch' style='font-weight:normal;padding-right:0;font: 83%/140% Verdana,Arial,Helvetica,sans-serif;;'>Suche: </label></td><td><input id='conceptSearch' size='15' value='"
-				+ searchFieldContent + "' /></td></tr></table></div>"));
+		string.append(Strings.maskHTML("<div class='ui-widget'><table><tr><td><label for='conceptSearch' style='font-weight:normal;padding-right:0;font: 83%/140% Verdana,Arial,Helvetica,sans-serif;;'>Suche: </label></td><td><input id='conceptSearch' size='15' value='' /></td></tr></table></div>"));
 		string.append(Strings.maskHTML("<script>" +
 				"jq$(document).ready(function() {" +
 				// "$(function() {" +
@@ -63,7 +62,6 @@ public class TermBrowserRenderUtils {
 
 			if (i >= rankedTermList.size()) break;
 			String term = rankedTermList.get(i);
-			term = term.replaceAll("_", Strings.maskHTML("_<wbr>"));
 			String lineStyle = "";
 			if (!zebra) {
 				zebra = true;
@@ -87,7 +85,7 @@ public class TermBrowserRenderUtils {
 					"<tr height='23px'>"
 					+
 					"<td style='width:80%' class='termbrowser'><div class='termname'>"
-					+ term
+					+ term.replaceAll("_", Strings.maskHTML("_<wbr>"))
 					+ "</div></td>"
 					+ "<td style='min-width: 48px;width:20%;'>"
 					+ "<table style='table-layout:fixed'><tr>"

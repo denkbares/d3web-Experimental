@@ -7,7 +7,7 @@ jq$(document).ready(function() {
     				var termElement = ui.draggable;
     				var termnameDiv = termElement.find("div.termname");
     				var termname = termnameDiv.html();
-    				
+    				termname = termname.replace(/<wbr>/g, "");
     				var markupElement = jq$(this).find("div.defaultMarkupFrame");
     				var markupID = markupElement.attr('id');
     				//alert('dropped: '+ termname + ' on id: '+markupID  );
@@ -58,6 +58,7 @@ function handleTermActionEvent(element) {
 	var line = element.parent().parent().parent().parent().parent().parent();
 	var termnameElement = line.find('div.termname');
 	var term = termnameElement.html();
+	term = term.replace(/<wbr>/g, "");
 	
 	sendTermBrowserAction(term, command);
 	
