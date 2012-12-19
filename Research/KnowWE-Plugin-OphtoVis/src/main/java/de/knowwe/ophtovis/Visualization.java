@@ -20,6 +20,7 @@ package de.knowwe.ophtovis;
 
 import java.util.LinkedList;
 
+import de.knowwe.core.Environment;
 import de.knowwe.core.utils.Strings;
 
 
@@ -106,9 +107,12 @@ public class Visualization {
 
 			}
 		}
-
+		String context = Environment.getInstance().getWikiConnector().getServletContext().getContextPath();
+		System.out.println("context " + context);
 		string.append(Strings.maskHTML(
-				"	<link rel=\"stylesheet\" href=\"/KnowWE/KnowWEExtension/prototyp2.css\">"
+				"	<link rel=\"stylesheet\" href=\""
+						+ context
+						+ "/KnowWEExtension/prototyp2.css\">"
 						+
 						"	<!--  Script importe -->	\r\n"
 						+
@@ -118,17 +122,27 @@ public class Visualization {
 						+
 						"	<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js\"></script>\r\n"
 						+
-						"	<script type=\"text/javascript\" src=\"/KnowWE/KnowWEExtension/jquery.jsPlumb-1.3.15-all-min.js \"></script>\r\n"
+						"	<script type=\"text/javascript\" src=\""
+						+ context
+						+ "/KnowWEExtension/jquery.jsPlumb-1.3.15-all-min.js \"></script>\r\n"
 						+
 						"	<script type=\"text/javascript\" src=\"http://yui.yahooapis.com/3.3.0/build/simpleyui/simpleyui-min.js\"></script>\r\n"
 						+
-						"	<script type=\"text/javascript\" src=\"/KnowWE/KnowWEExtension/jquery.js\"></script>\r\n"
+						"	<script type=\"text/javascript\" src=\""
+						+ context
+						+ "/KnowWEExtension/jquery.js\"></script>\r\n"
 						+
-						"	<script type=\"text/javascript\" src=\"/KnowWE/KnowWEExtension/jquery-ui.js\"></script>	\r\n"
+						"	<script type=\"text/javascript\" src=\""
+						+ context
+						+ "/KnowWEExtension/jquery-ui.js\"></script>	\r\n"
 						+
-						"	<script type=\"text/javascript\" src=\"/KnowWE/KnowWEExtension/nodeCreatin.js \"></script>\r\n"
+						"	<script type=\"text/javascript\" src=\""
+						+ context
+						+ "/KnowWEExtension/nodeCreatin.js \"></script>\r\n"
 						+
-						"	<script type=\"text/javascript\" src=\"/KnowWE/KnowWEExtension/initDefaultDesign.js \"></script>\r\n"
+						"	<script type=\"text/javascript\" src=\""
+						+ context
+						+ "/KnowWEExtension/initDefaultDesign.js \"></script>\r\n"
 						+
 						" <!-- im body befindet sich der sichtbare bereich der seite -->\r\n"
 						+
