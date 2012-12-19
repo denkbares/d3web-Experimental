@@ -117,10 +117,8 @@ public class IncludeMarkup extends DefaultMarkupType {
 					while (listIterator.hasNext()) {
 						Section<?> listElement = (Section<?>) listIterator.next();
 						String text = listElement.getText();
-						int start = 0;
 						while (text.startsWith("!")) {
-							start++;
-							text = text.substring(start);
+							text = text.substring(1);
 						}
 						text = text.trim();
 						if (text.startsWith(subSectionKey)) {
