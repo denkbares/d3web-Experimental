@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.knowwe.compile.IncrementalCompiler;
+import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
@@ -62,6 +63,14 @@ public class TermBrowserRenderUtils {
 
 			if (i >= rankedTermList.size()) break;
 			String term = rankedTermList.get(i);
+			String topic = term;
+			Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+					new TermIdentifier(term));
+			if (termDefinitions.size() > 0) {
+				Section<? extends SimpleDefinition> def = termDefinitions.iterator().next();
+				topic = def.getTitle();
+			}
+
 			String lineStyle = "";
 			if (!zebra) {
 				zebra = true;
@@ -71,7 +80,7 @@ public class TermBrowserRenderUtils {
 				zebra = false;
 			}
 			String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
-			String name = Strings.encodeURL(term);
+			String name = Strings.encodeURL(topic);
 			String url = baseUrl + name;
 			// String divStyle = "display:inline; float:left;";
 			String divStyle = "";
