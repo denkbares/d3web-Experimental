@@ -43,8 +43,6 @@ public class Visualization {
 		LinkedList<GraphNodeConnection> listOfConnections = (LinkedList<GraphNodeConnection>) gB.getConnections();
 		for (GraphNode node : gB.getNodeAndCoList()) {
 			int source = getSoureOf(node.getParentId(), listOfConnections);
-			System.out.println("id ist" + node.getId() + "parent ist " + node.getParentId()
-					+ "source ist " + source);
 			if (!drawnLists.contains(source)) {
 				if (node.getParentId() == node.getId()) {
 					knoten += "createULRelative(\"e" + node.getId() + "\",\"knots\", \""
@@ -70,7 +68,6 @@ public class Visualization {
 				drawnLists.add(node.getParentId());
 			}
 			String name = node.getName();
-			name = name.replace(" ", "_");
 			int left = node.getLeftCo();
 			int top = node.getTopCo();
 			String stringID = node.getStringID();
@@ -108,7 +105,7 @@ public class Visualization {
 			}
 		}
 		String context = Environment.getInstance().getWikiConnector().getServletContext().getContextPath();
-		System.out.println("context " + context);
+
 		string.append(Strings.maskHTML(
 				"	<link rel=\"stylesheet\" href=\""
 						+ context
@@ -183,7 +180,6 @@ public class Visualization {
 			if (connection.getTargetID() == target) return connection.getSourceID();
 			}
 		}
-		System.out.println("Zu " + target + "wurde leider kein Source gefunden");
 		return -1;
 
 	}

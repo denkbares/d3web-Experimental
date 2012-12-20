@@ -82,11 +82,8 @@ public class GraphBuilder {
 			buildNodeAndCoList(startNode, startNode.getLeftCo() + add2Left, startNode.getId());
 			temporalConnection = DataBaseHelper.getConnectedNodeNamesOfType(
 					startNode.getName(), "temporalGraph", true);
-			System.out.println("Es wurden temporale Beziehungen gefunden: "
-					+ temporalConnection.size());
 			if (!temporalConnection.isEmpty()) {
 				topCo = getStartTopCo();
-				System.out.println("neuer start" + temporalConnection.get(0) + " " + leftCo);
 				GraphNode tempNode = buildNode(temporalConnection.get(0), leftCoMax + add2Left,
 						getStartTopCo(), ++id);
 				connections.add(new GraphNodeConnection(startNode, tempNode, "temporal"));
@@ -120,7 +117,6 @@ public class GraphBuilder {
 				"unterkonzept", false);
 
 		for (String string : childrenNames) {
-			System.out.println("parentsname" + node.getId());
 			GraphNode node2add = new GraphNode(string, leftCo, topCo, ++id, node.getId());
 			System.out.println("neuer node cor " + leftCo);
 			nodeAndCoList.add(node2add);
