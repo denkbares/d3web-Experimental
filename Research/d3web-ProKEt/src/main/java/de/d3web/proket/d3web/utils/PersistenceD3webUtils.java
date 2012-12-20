@@ -154,9 +154,8 @@ public class PersistenceD3webUtils {
             new SaveThread(file, d3webSession).start();
         } else {
             saveCase(file, d3webSession);
-            long saveCreateDate = file.lastModified();
-            file.setLastModified(saveCreateDate);
-            //file.setLastModified(System.currentTimeMillis());
+            //file.setLastModified(saveCreateDate);
+            file.setLastModified(System.currentTimeMillis());
         }
     }
 
@@ -186,10 +185,9 @@ public class PersistenceD3webUtils {
         if (filename.equals("autosave")) {
             new SaveThread(file, d3webSession).start();
         } else {
-            saveCase(file, d3webSession);
-            long saveCreateDate = file.lastModified();
-            file.setLastModified(saveCreateDate);
-            //file.setLastModified(System.currentTimeMillis());
+            new SaveThread(file, d3webSession).start();
+ //           saveCase(file, d3webSession);
+ //           file.setLastModified(System.currentTimeMillis());
         }
     }
 

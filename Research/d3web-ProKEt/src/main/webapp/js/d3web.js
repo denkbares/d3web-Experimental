@@ -489,7 +489,9 @@ function initFunctionality() {
         // TODO: we need a final save for ITree too one time!
         }
         checkSessionStillValid();
-        d3web_prepareSave();
+        if(!redirectFlag){
+            d3web_prepareSave();
+        }
     });
 
     // bind the loadcase button to making the fileselect list visible
@@ -499,7 +501,9 @@ function initFunctionality() {
             ue_logWidgetClicked($(this));
         }
         checkSessionStillValid();
-        $("#jqLoadCaseDialog").dialog("open");
+        if(!redirectFlag){
+            $("#jqLoadCaseDialog").dialog("open");
+        }
     });
     
     $("[name^=fileClearname]").unbind("keydown").keydown(function(e) {
@@ -522,7 +526,9 @@ function initFunctionality() {
             ue_logWidgetClicked($(this));
         }
         checkSessionStillValid();
-        $("#jqFollowUpDialog").dialog("open");
+        if(!redirectFlag){
+            $("#jqFollowUpDialog").dialog("open");
+        }
     });
 	
     $('#summary').unbind('click').click(function(event){
@@ -530,9 +536,11 @@ function initFunctionality() {
             markIsWidget("true"); 
             ue_logWidgetClicked($(this));
         }
-        d3web_updateSummary();
         checkSessionStillValid();
-        $("#jqSummaryDialog").dialog("open");
+        if(!redirectFlag){
+            d3web_updateSummary();
+            $("#jqSummaryDialog").dialog("open");
+        }
     });
 	
      
@@ -542,7 +550,9 @@ function initFunctionality() {
             ue_logWidgetClicked($(this));
         }
         checkSessionStillValid();
-        gotoStatistics();
+        if(!redirectFlag){
+            gotoStatistics();
+        }
     });
     
     // TODO REFACTOR: is used both here and in Code.js
@@ -552,7 +562,9 @@ function initFunctionality() {
             ue_logWidgetClicked($(this));
         }
         checkSessionStillValid();
-        $("#jqFFDialog").dialog("open");
+        if(!redirectFlag){
+            $("#jqFFDialog").dialog("open");
+        }
     });
     
     $('#UEQButton').unbind('click').click(function(event) {
@@ -561,125 +573,127 @@ function initFunctionality() {
             ue_logWidgetClicked($(this));
         }
         checkSessionStillValid();
-        $("#jqUEQDialog").dialog("open");
+        if(!redirectFlag){
+            $("#jqUEQDialog").dialog("open");
+        }
     });
     
-    $('#newcaseintrobutton').unbind('click').click(function(event) {
-        if (logging) {
-            markIsWidget("true"); 
-            ue_logWidgetClicked($(this));
-        }
-        ehs_handleintrobuttons("newcase");
-    });
+$('#newcaseintrobutton').unbind('click').click(function(event) {
+    if (logging) {
+        markIsWidget("true"); 
+        ue_logWidgetClicked($(this));
+    }
+    ehs_handleintrobuttons("newcase");
+});
     
-    $('#loadcaseintrobutton').unbind('click').click(function(event) {
-        if (logging) {
-            markIsWidget("true"); 
-            ue_logWidgetClicked($(this));
-        }
-        $("#jqLoadCaseDialog").dialog("open");
-    });
+$('#loadcaseintrobutton').unbind('click').click(function(event) {
+    if (logging) {
+        markIsWidget("true"); 
+        ue_logWidgetClicked($(this));
+    }
+    $("#jqLoadCaseDialog").dialog("open");
+});
     
    
     
-    $('#creategroupsintrobutton').unbind('click').click(function(event) {
-        if (logging) {
-            markIsWidget("true"); 
-            ue_logWidgetClicked($(this));
-        }
-        ehs_handleintrobuttons("groups");
-    });
+$('#creategroupsintrobutton').unbind('click').click(function(event) {
+    if (logging) {
+        markIsWidget("true"); 
+        ue_logWidgetClicked($(this));
+    }
+    ehs_handleintrobuttons("groups");
+});
     
-    $('#statisticsintrobutton').unbind('click').click(function(event) {
-        if (logging) {
-            markIsWidget("true"); 
-            ue_logWidgetClicked($(this));
-        }
-        ehs_handleintrobuttons("statistics");
-    });
+$('#statisticsintrobutton').unbind('click').click(function(event) {
+    if (logging) {
+        markIsWidget("true"); 
+        ue_logWidgetClicked($(this));
+    }
+    ehs_handleintrobuttons("statistics");
+});
     
-    // click on language toggle
-    $('img[id*="lang"]').unbind('click').click(function(event){
-        if (logging){
-            markIsWidget("true"); 
-            ue_logLanguageWidgetClicked($(this));
-        } 
+// click on language toggle
+$('img[id*="lang"]').unbind('click').click(function(event){
+    if (logging){
+        markIsWidget("true"); 
+        ue_logLanguageWidgetClicked($(this));
+    } 
         
-        toggleLanguage($(this));
-    });
+    toggleLanguage($(this));
+});
     
-    // mouseover on image answer --> MC Checkboxes
-    $('[type=imageAnswer]').unbind('mouseenter').mouseenter(function() {
-        var poly = $("#polygon-IMG_" + $(this).attr("id"));
-        poly.attr("oldmouseoveropacity", poly.css("opacity"));
-        poly.css("opacity", poly.attr("mouseoveropacity"));
-    }).unbind('mouseleave').mouseleave(function() {
-        var poly = $("#polygon-IMG_" + $(this).attr("id"));
-        poly.css("opacity", poly.attr("oldmouseoveropacity"));
-    })
-    // click on image answer --> MC Checkboxes
-    .find('input').unbind('change').change(function() {
-        var poly = $("#polygon-IMG_" + $(this).parents('[type=imageAnswer]').attr("id"));
-        if ($(this).attr("checked") == "checked") {
-            poly.css("opacity",  poly.attr("clickedopacity"));
-            poly.attr("oldmouseoveropacity", poly.attr("clickedopacity"));
-        } else {
-            poly.css("opacity",  poly.attr("unclickedopacity"));
-            poly.attr("oldmouseoveropacity", poly.attr("unclickedopacity"));
-        }
-    });
+// mouseover on image answer --> MC Checkboxes
+$('[type=imageAnswer]').unbind('mouseenter').mouseenter(function() {
+    var poly = $("#polygon-IMG_" + $(this).attr("id"));
+    poly.attr("oldmouseoveropacity", poly.css("opacity"));
+    poly.css("opacity", poly.attr("mouseoveropacity"));
+}).unbind('mouseleave').mouseleave(function() {
+    var poly = $("#polygon-IMG_" + $(this).attr("id"));
+    poly.css("opacity", poly.attr("oldmouseoveropacity"));
+})
+// click on image answer --> MC Checkboxes
+.find('input').unbind('change').change(function() {
+    var poly = $("#polygon-IMG_" + $(this).parents('[type=imageAnswer]').attr("id"));
+    if ($(this).attr("checked") == "checked") {
+        poly.css("opacity",  poly.attr("clickedopacity"));
+        poly.attr("oldmouseoveropacity", poly.attr("clickedopacity"));
+    } else {
+        poly.css("opacity",  poly.attr("unclickedopacity"));
+        poly.attr("oldmouseoveropacity", poly.attr("unclickedopacity"));
+    }
+});
     
-    // mouseover on image answer --> IMAGE-PARTS
-    $('[type=imagepolygon]').unbind('mouseenter').mouseenter(function() {
-        d3web_IQMouseOver($(this).attr("answerid"), true);
-    }).unbind('mouseleave').mouseleave(function() {
-        d3web_IQMouseOver($(this).attr("answerid"), false);
-    }).unbind('click').click(function() {
-        d3web_IQClicked($(this).attr("answerid"));
-    });
+// mouseover on image answer --> IMAGE-PARTS
+$('[type=imagepolygon]').unbind('mouseenter').mouseenter(function() {
+    d3web_IQMouseOver($(this).attr("answerid"), true);
+}).unbind('mouseleave').mouseleave(function() {
+    d3web_IQMouseOver($(this).attr("answerid"), false);
+}).unbind('click').click(function() {
+    d3web_IQClicked($(this).attr("answerid"));
+});
     
-    // check which pane of the summary dialog is selected as download button
-    // is to be shown ONLY for the plain summary
-    $('#jqSummaryDialog').bind('tabsselect', function(event, ui) {
-        if (logging) {
-            markIsWidget("true"); 
-        }
+// check which pane of the summary dialog is selected as download button
+// is to be shown ONLY for the plain summary
+$('#jqSummaryDialog').bind('tabsselect', function(event, ui) {
+    if (logging) {
+        markIsWidget("true"); 
+    }
         
-        if(ui.index==0){
-            $("#sumDLTxt").addClass("hidden");
-            $("#sumDLTxt").removeClass("visible");
+    if(ui.index==0){
+        $("#sumDLTxt").addClass("hidden");
+        $("#sumDLTxt").removeClass("visible");
+    } else {
+        $("#sumDLTxt").addClass("visible");
+        $("#sumDLTxt").removeClass("hidden");
+    }
+});
+    
+    
+/* Clarification Hierarchy Dialog */
+// bind yes/no/?/retract buttons to d3web corresponding function
+$('.ynbutton').unbind('click').click(function(event) {
+    if($(this).attr("id").indexOf("ynYes")!=-1){
+        if($(this).hasClass("swap")){
+            d3web_addFactsITree($(this), "3");
         } else {
-            $("#sumDLTxt").addClass("visible");
-            $("#sumDLTxt").removeClass("hidden");
+            d3web_addFactsITree($(this), "1");
         }
-    });
-    
-    
-    /* Clarification Hierarchy Dialog */
-    // bind yes/no/?/retract buttons to d3web corresponding function
-    $('.ynbutton').unbind('click').click(function(event) {
-        if($(this).attr("id").indexOf("ynYes")!=-1){
-            if($(this).hasClass("swap")){
-                d3web_addFactsITree($(this), "3");
-            } else {
-                d3web_addFactsITree($(this), "1");
-            }
-        } else
-        if($(this).attr("id").indexOf("ynNo")!=-1){
-            if($(this).hasClass("swap")){
-                d3web_addFactsITree($(this), "1");
-            } else {
-                d3web_addFactsITree($(this), "3");
-            }
-        } else 
-        if($(this).attr("id").indexOf("ynUn")!=-1){
-            d3web_addFactsITree($(this), "2");
+    } else
+    if($(this).attr("id").indexOf("ynNo")!=-1){
+        if($(this).hasClass("swap")){
+            d3web_addFactsITree($(this), "1");
+        } else {
+            d3web_addFactsITree($(this), "3");
         }
-        else if($(this).attr("id").indexOf("ynNan")!=-1){
-            d3web_addFactsITree($(this), "0");
-        }
+    } else 
+    if($(this).attr("id").indexOf("ynUn")!=-1){
+        d3web_addFactsITree($(this), "2");
+    }
+    else if($(this).attr("id").indexOf("ynNan")!=-1){
+        d3web_addFactsITree($(this), "0");
+    }
        
-    });
+});
      
 }
 
@@ -905,44 +919,45 @@ function d3web_addFacts() {
     // check current state: is session still active? Then go on, otherwise
     // redirect to login page
     checkSessionStillValid();
+    //alert(redirectFlag);
     
-    
-    $.ajax({
-        type : "GET",
-        url : link,
-        cache : false, // needed for IE, call is not made otherwise
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        dataType: 'html',
-        success : function(html) {
-            if (html.indexOf("ITreeSUCCESS")==0){
-                window.location.reload();
-                initFunctionality();
-            } 
-            else if (html.startsWith("##missingfield##")) {
+    if(!redirectFlag){
+        $.ajax({
+            type : "GET",
+            url : link,
+            cache : false, // needed for IE, call is not made otherwise
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            dataType: 'html',
+            success : function(html) {
+                if (html.indexOf("ITreeSUCCESS")==0){
+                    window.location.reload();
+                    initFunctionality();
+                } 
+                else if (html.startsWith("##missingfield##")) {
                
-                var field =    html.replace("##missingfield##", "");     
-                field = field.replace(" ", "_");
-                var errorPlaceholder = "#error-q_" + field;
-                var warning = "Required Field";
+                    var field =    html.replace("##missingfield##", "");     
+                    field = field.replace(" ", "_");
+                    var errorPlaceholder = "#error-q_" + field;
+                    var warning = "Required Field";
                 
-                $(errorPlaceholder).html("<font color=\"red\">" + warning + "</font>");
-                alert("Please fill in the required, marked field(s) first!");
+                    $(errorPlaceholder).html("<font color=\"red\">" + warning + "</font>");
+                    alert("Please fill in the required, marked field(s) first!");
    
-            } else {
-                updateDialog(html);
-                //window.location.reload(true);
-                //init_all();
-                setup();
-                initFunctionality();
+                } else {
+                    updateDialog(html);
+                    //window.location.reload(true);
+                    //init_all();
+                    setup();
+                    initFunctionality();
                 
-            }
-        },
-        error : function(html) {
+                }
+            },
+            error : function(html) {
            
-            alert("ajax error add facts");
-        }
-    });
-    
+                alert("ajax error add facts");
+            }
+        });
+    }
         
     // create new stores for next call
     mcStore = new Object();
@@ -1444,18 +1459,21 @@ function toggleLanguage(el){
      
     checkSessionStillValid();
     
-    var link = $.query.set("action", "language").set("langID", langID);
-    link = window.location.href.replace(window.location.search, "") + link;
+    if(!redirectFlag){
+    
+        var link = $.query.set("action", "language").set("langID", langID);
+        link = window.location.href.replace(window.location.search, "") + link;
 
-    $.ajax({
-        type : "GET",
-        url : link,
-        cache : false, // needed for IE, call is not made otherwise
-        success : function(html) {
-            window.location.reload(true);
-            initFunctionality();
-        }
-    });
+        $.ajax({
+            type : "GET",
+            url : link,
+            cache : false, // needed for IE, call is not made otherwise
+            success : function(html) {
+                window.location.reload(true);
+                initFunctionality();
+            }
+        });
+    }
 }
     
 function markIsWidget(isWidget){

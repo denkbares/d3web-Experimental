@@ -335,26 +335,38 @@ public class EuraHSDialog extends D3webDialog {
         String user = (String) httpSession.getAttribute("user");
         String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
         String forceString = request.getParameter("force");
-
+        
+        
         // force wird im JS gesetzt, falls der User unter bereits vorhandenem
         // Namen speichern will und das nochmal bestätigt.
         boolean force = forceString != null && forceString.equals("true");
 
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
-
+        
+        String fnToAnonComplete = 
+                (user != null && !user.isEmpty() ? user + File.separator : "")
+                + userFilename;
+        
+        String anonFilename =
+                Encryptor.getAnonymizedFilename(fnToAnonComplete);
+        
+        System.out.println("save case: lastLoaded " + lastLoaded + " userFilename " + userFilename + 
+                " anonFilename " + anonFilename);
+        
         // if: really overwrite existing OR case not exists OR case exists but
         // has been loaded for modification
         if (force
                 || !PersistenceD3webUtils.existsCaseAnon(user, userFilename)
                 || (PersistenceD3webUtils.existsCaseAnon(user, userFilename)
-                && lastLoaded != null && lastLoaded.equals(userFilename))) {
+                && lastLoaded != null && lastLoaded.equals(anonFilename))) {
 
             PersistenceD3webUtils.saveCaseAnonymized(
                     user,
                     userFilename,
                     d3webSession);
 
-            httpSession.setAttribute("lastLoaded", userFilename);
+            httpSession.setAttribute("lastLoaded", anonFilename);
+            
         } else {
             writer.append("exists");
         }
@@ -377,6 +389,7 @@ public class EuraHSDialog extends D3webDialog {
             session = PersistenceD3webUtils.loadUserCase(user, anonFilename);
             httpSession.setAttribute(D3WEB_SESSION, session);
             httpSession.setAttribute("lastLoaded", anonFilename);
+            System.out.println("lastLoaded in Load Case: " + anonFilename);
             D3webConnector.getInstance().setSession(session);
 
             JSONLogger logger =

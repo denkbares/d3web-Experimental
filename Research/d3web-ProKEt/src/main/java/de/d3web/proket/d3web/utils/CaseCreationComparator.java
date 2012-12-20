@@ -43,6 +43,10 @@ public class CaseCreationComparator implements Comparator<File> {
         Session session = null;
         session = PersistenceD3webUtils.loadCase(casefile.getName());
         
+        //System.out.println(casefile.getName());
+        //System.out.println("LASTCHANGED: " + session.getLastChangeDate());
+        //System.out.println("CREATION: " + session.getCreationDate());
+        
         // TODO: AN DENKBARES ANGEFRAGT
         // is it a bug that we need to retrieve the lastchangedate here?
         return session.getLastChangeDate();

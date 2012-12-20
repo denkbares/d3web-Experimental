@@ -1,6 +1,7 @@
 // 
 // THIS FILE CONTAINS ALL FUNCTIONALITY THAT IS NEEDED BY ALL PROTOTYPES,
 // E.G. GENERAL TOOLTIP STUFF
+var redirectFlag = false;
 
 $(function(){
   
@@ -866,10 +867,17 @@ function checkSessionStillValid(){
 
 function handleSessionRedirect(loginFlag){
     // TODO: nicer Window
-    alert("Ihre Session ist abgelaufen. Sie werden automatisch zur \n\
-                        Start- bzw. Login-Seite umgeleitet. Ihre zuletzt eingegebenen \n\
-                        Daten können Sie über 'Load Case' und 'Autosave' wiederherstellen.")
-    // if we are here, the session is not valid anymore, so redirect
+    var note = "We are sorry. Your EuraHS session has expired due to inactivity for more than 30 minutes! ";
+    note = note + 
+        "This is done for security reasons and to increase the overall speed of the database. ";
+    note = note + 
+        "You are automatically redirected to the EuraHS website, where you have to login to EuraHS again. \n";
+    note = note + 
+        "However, your most recent data are not lost. You can reload these date in the 'Load Case' function with ";
+    note = note + 
+        " 'autosave' after successful re-login.";
+    alert(note);
+// if we are here, the session is not valid anymore, so redirect
     // according to returned html parameter, which in case of
     // the session check contains the implemented login (if any)
     // currently only for EuraHS - replace if we have other dialog running
@@ -896,5 +904,5 @@ function handleSessionRedirect(loginFlag){
         document.location = redirectLink;
         window.location.reload(true);
     } */
-    
+    redirectFlag = true;
 }
