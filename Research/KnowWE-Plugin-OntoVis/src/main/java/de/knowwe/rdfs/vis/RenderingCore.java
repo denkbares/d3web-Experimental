@@ -810,9 +810,9 @@ public class RenderingCore {
 				continue loop;
 			}
 
-			String askClass = "ASK { " + createSparqlURI(x) + " rdf:type owl:Class}";
+			String askClass = "ASK { <" + xURI.toString() + "> rdf:type owl:Class}";
 			boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
-			String askProperty = "ASK { " + createSparqlURI(x) + " rdf:type rdf:Property}";
+			String askProperty = "ASK { <" + xURI.toString() + "> rdf:type rdf:Property}";
 			boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
 			String type = "basic";
 
@@ -894,7 +894,8 @@ public class RenderingCore {
 	 * @param request
 	 */
 	private void addOutgoingEdgesPredecessors(String concept) {
-		String query = "SELECT ?x ?y WHERE { ?x ?y " + createSparqlURI(concept) + "}";
+		String conceptDecoded = urlDecode(concept);
+		String query = "SELECT ?x ?y WHERE { ?x ?y " + createSparqlURI(conceptDecoded) + "}";
 		ClosableIterator<QueryRow> result =
 				Rdf2GoCore.getInstance().sparqlSelectIt(
 						query);
