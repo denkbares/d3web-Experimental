@@ -101,7 +101,8 @@ KNOWWE.renaming = function(){
                 KWikiFocusedTerm : _KS('#replaceInputField').value,
                 ContextPrevious : _KS('#renamePreviousInputContext').value,
                 ContextAfter : _KS('#renameAfterInputContext').value,
-                CaseSensitive :_KS('#search-sensitive').checked
+                CaseSensitive :_KS('#search-sensitive').checked,
+                regex : _KS('#search-regex').checked
             }
             
             var options = {

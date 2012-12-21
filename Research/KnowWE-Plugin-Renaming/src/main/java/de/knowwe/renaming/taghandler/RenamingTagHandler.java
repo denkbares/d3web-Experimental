@@ -127,6 +127,11 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 				+ "</label>");
 		html.append("<input id='search-sensitive' type='checkbox' name='search-sensitive' tabindex='7' checked='checked'/>");
 		html.append("</div>");
+		html.append("<div class='left'>");
+		html.append("<label for='search-regex'>" + "Regex"
+				+ "</label>");
+		html.append("<input id='search-regex' type='checkbox' name='search-regex' tabindex='8' checked='checked'/>");
+		html.append("</div>");
 		// includes the section selection tree
 		html.append(""
 				+
