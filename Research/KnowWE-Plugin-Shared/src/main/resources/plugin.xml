@@ -52,17 +52,7 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
-		
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="KnowWETypeBrowserAction">
-		<parameter id="class"
-			value="de.d3web.we.action.KnowWETypeBrowserAction" />
-		<parameter id="name" value="KnowWETypeBrowserAction" />
-		<parameter id="description" value="Action KnowWETypeBrowserAction" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
-	
+			
 	<!-- was moved out
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
