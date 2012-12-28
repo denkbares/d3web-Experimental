@@ -137,12 +137,14 @@ public class MediastinitisDialog extends D3webDialog {
 		// set clinic to user name, since its the only clinic it can see cases
 		// of
 		String user = (String) httpSession.getAttribute("user");
+                System.out.println(user);
                 
 		if (user != null && user != "") {
 			String definingObject = D3webConnector.getInstance().getD3webParser().getRequired();
-                        
+                        System.out.println(definingObject);
 			Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(
 					definingObject);
+                        System.out.println(to);
 			Fact fact = d3webSess.getBlackboard().getValueFact(to);
 			if (to != null && (fact == null || !fact.getValue().getValue().toString().equals(user))) {
 				D3webUtils.setValue(definingObject, user, d3webSess);

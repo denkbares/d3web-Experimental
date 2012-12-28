@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog 
-	header="Heart Med Productive"  
+	header="Mediastinitisregister"  
 	dtype="singleform" 
-	dstrategy="nextuaquestion" 
+	dstrategy="nextquestion" 
+        indicationmode="hide_unindicated"
 	css="medi2colsMediastinitis, nonavigation" 
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns = "2"
 	uiprefix = "Mediastinitis" 
 	login = "USRDAT"
-	required = "Clinic"
-        logging = "ON"
+	required = "Betreffende Klinik"
+        debug = "FALSE">
 	>
+        <ue />
 	<data kb="MediastinitisDez2011.d3web" />
 </dialog>
