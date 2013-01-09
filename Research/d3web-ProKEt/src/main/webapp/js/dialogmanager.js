@@ -27,6 +27,7 @@
 /******************************************/
 
 var upfilename;
+var currentAssembledDialog;
 
 /* Startup function: we need to check parameters from request here, as 
  * this is the (currently) only way to get noticed whether the KB and XML
@@ -97,8 +98,12 @@ $(function(){
         deleteSelectedKB();
     })
     
-    $("#activateKBButton").unbind('click').click(function(){
-        assembleDialog();
+    $("#linkButton").unbind('click').click(function(){
+        assembleDialogLink();
+    })
+    
+    $("#startDialogButton").unbind('click').click(function(){
+        startDialog();
     })
     
 });
@@ -174,7 +179,7 @@ function dmOpenExceptionReport(){
 /* calls functionality for assembling a dialog servlet string from the
  * (currently last loaded) KB and spec 
  * TODO LATER: KB and spec can be chosen freely */
-function assembleDialog(){
+function assembleDialogLink(){
     
     // TODO: if we have listings of KBs and Specs here, get the selected ones 
     // and send them as arguments
@@ -197,9 +202,10 @@ function assembleDialog(){
         url : link,
         cache : false, // needed for IE, call is not made otherwise
         success : function(html) {
+            
             if(html.indexOf("ERROR")==-1){
                 // store link in hidden field
-                var link = "<a href='" + html + "' target='blank'>" + html + "</a>";
+                var link = "<a href='" + html + "' target='_blank'>" + html + "</a>";
                 $("#latestDialogLink").html(link); 
                 // open the dialog in a new window 
                 //window.open(html);
@@ -211,6 +217,45 @@ function assembleDialog(){
             }
         } 
     });
+}
+
+function startDialog(){
+    
+    var selections = "";
+    $("select option:selected").each(function () {
+        selections += $(this).text() + ";;;";
+    });
+    
+    var selArray = selections.split(";;;");
+    var kb = selArray[0];
+    var spec = selArray[1];
+
+    var link = $.query.set("action", "assembleDialog")
+    .set("kb", kb).set("spec", spec).toString();
+        
+    link = window.location.href.replace(window.location.search, "") + link;
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        success : function(html) {
+            
+            if(html.indexOf("ERROR")==-1){
+                base = window.location.href.toString();
+                linkComplete = base.substring(0, base.lastIndexOf("/")) + html;
+                
+                dialogWindow = window.open(linkComplete, "", "");   
+                dialogWindow.focus();
+                
+               
+            } else {
+                $("#statusMessage").html("Assemble Dialog Exception!").addClass("statusMessageERR").removeClass("statusMessageOK");
+            // TODO: open Exception Report automatically
+            }
+        } 
+    });
+    
+    
 }
 
 

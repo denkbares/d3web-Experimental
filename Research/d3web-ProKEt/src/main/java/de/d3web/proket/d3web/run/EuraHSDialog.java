@@ -327,8 +327,8 @@ public class EuraHSDialog extends D3webDialog {
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
 
-        //super.saveCase(request, response, httpSession);
-        PrintWriter writer = null;
+        super.saveCase(request, response, httpSession);
+        /*PrintWriter writer = null;
         writer = response.getWriter();
 
         String userFilename = request.getParameter("userfn");
@@ -369,7 +369,7 @@ public class EuraHSDialog extends D3webDialog {
             
         } else {
             writer.append("exists");
-        }
+        }*/
     }
 
     @Override

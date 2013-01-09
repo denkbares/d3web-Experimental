@@ -78,10 +78,13 @@
 
             <div id="kbButtons" class="row">
                 <div class="cell">
-                    <input type="button" name="delKBButton" id="delKBButton" class="defaultPlainButton" value="Entfernen" /> 
+                    <input type="button" name="linkButton" id="linkButton" class="defaultPlainButton" value="Link Anzeigen" />
+                </div>
+                 <div class="cell">
+                    <input type="button" name="startDialogButton" id="startDialogButton" class="defaultPlainButton" value="Dialog Starten" /> 
                 </div>
                 <div class="cell">
-                    <input type="button" name="activateKBButton" id="activateKBButton" class="defaultPlainButton" value="Aktivieren" />
+                    <input type="button" name="delKBButton" id="delKBButton" class="defaultPlainButton" value="Entfernen" /> 
                 </div>
                  
             </div>

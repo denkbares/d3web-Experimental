@@ -42,9 +42,8 @@ import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.utils.D3webUtils;
-import de.d3web.proket.d3web.utils.CaseCreationComparator;
+import de.d3web.proket.d3web.utils.FileNameComparator;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
-import de.d3web.proket.utils.GlobalSettings;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
@@ -632,10 +631,11 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
         if (files != null && files.size() > 0) {
 
-            Collections.sort(files, new CaseCreationComparator());
+            Collections.sort(files, new FileNameComparator());
+            //Collections.sort(files, new CaseCreationComparator());
              
-            int nr = 1;
-            
+    //         int nr = 1;
+            String nr = "";
             for (File f : files) {
                 if (!f.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
                     cases.append("<option");
@@ -643,10 +643,10 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
                             f.getName().substring(0, f.getName().lastIndexOf(".")).replace("+", " ");
                    
                     cases.append(" title='"
-                            + nr + ". " + filename + "'>");
-                    cases.append(nr + ". " + filename);
+                            + nr + filename + "'>");
+                    cases.append(nr + filename);
                     cases.append("</option>");
-                    nr++;
+                 //   nr++;
                 }
                 
             }

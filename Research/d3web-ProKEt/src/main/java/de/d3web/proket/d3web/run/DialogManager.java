@@ -81,15 +81,17 @@ public class DialogManager extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-
+  
+       
+       
         // write the servletcontext path
         String servletcontext = config.getServletContext().getRealPath("/");
         GLOBSET.setServletBasePath(servletcontext);
 
         // TODO: make property in specs
         //GLOBSET.setWebAppWarName("/JuriLibreOffice");
-        GLOBSET.setWebAppWarName("/UploadParseTool");
-        //GLOBSET.setWebAppWarName("");
+        //GLOBSET.setWebAppWarName("/UploadParseTool");
+        GLOBSET.setWebAppWarName("");
 
         String webappname =
                 GLOBSET.getWebAppWarName().equals("") ? "" : GLOBSET.getWebAppWarName() + "_";
@@ -142,9 +144,9 @@ public class DialogManager extends HttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 
-        response.setContentType("text/html; charset=UTF-8");
+        response.setContentType("text/html; charset=UTF-8"); 
         HttpSession httpSession = request.getSession(true);
-        httpSession.setMaxInactiveInterval(20 * 60);
+        //httpSession.setMaxInactiveInterval(20 * 60);
 
         // get required action for progressing to the respective functionality
         String action = request.getParameter("action");
@@ -404,7 +406,8 @@ public class DialogManager extends HttpServlet {
             // assemble ITree Servlet Link
             if (specName.equalsIgnoreCase(DialogType.ITREE.toString())) {
 
-                dialogLink = GLOBSET.getWebAppWarName() + "/ITreeDialog?src="
+                dialogLink = GLOBSET.getWebAppWarName() + 
+                        "/ITreeDialog?src="
                         + specFile.getName().replace(".xml", "")
                         + "&dialogID=" + d3webKBName + "AND" + specName;
 
@@ -415,7 +418,8 @@ public class DialogManager extends HttpServlet {
                 //dialogLink = GLOBSET.getWebAppWarName() + "/StandardDialog?src="
                 //      + specFile.getName().replace(".xml", "")
                 //    + "&dialogID=" + d3webKBName + "AND" + specName;
-                dialogLink = GLOBSET.getWebAppWarName() + "/StandardDialog?src="
+                dialogLink = GLOBSET.getWebAppWarName() + 
+                        "/StandardDialog?src="
                         + specFile.getName().replace(".xml", "")
                         + "&dialogID=" + d3webKBName + "AND" + specName;
             }
@@ -674,7 +678,8 @@ public class DialogManager extends HttpServlet {
 
                 // OK everything fine. Then rename d3web file and store latest one
                 // in webapp/session
-                checkAndRenameD3webFile(docName.replace(".doc", "").replace(".xls", ""), d3wF, http);
+                docName = docName.replace(".doc", "").replace(".xlsx", "").replace(".csv", "");
+                checkAndRenameD3webFile(docName, d3wF, http);
                 errFile.delete();
 
                 status = "ParseSuccess";

@@ -30,7 +30,7 @@
 						
 						$if(loadcase)$
 							<div class="leftButton">
-								$CaseLoadButtonAnonymized()$
+								$CaseLoadButton()$
 							</div>
 						$endif$
 						

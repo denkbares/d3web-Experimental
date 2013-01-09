@@ -174,7 +174,8 @@ public class D3webDialog extends HttpServlet {
 
         // timeout after 30 minutes
         httpSession.setMaxInactiveInterval(30 * 60);
-
+        // never timeout
+        //httpSession.setMaxInactiveInterval(-1000);
 
         String source = getSource(request, httpSession);
         String kbName = "";
@@ -1188,8 +1189,21 @@ public class D3webDialog extends HttpServlet {
      */
     protected void resetD3webSession(HttpSession httpSession) {
 
+        KnowledgeBase kb = d3wcon.getKb();
+        // TODO Urgent: needed for EuraHS due to early reset, but not good
+        // for other dialogs!
+        /*try {
+            // not yet parsed completely/correctly
+            if (kb == null) {
+                d3webParser.parse();
+                kb = d3webParser.getKnowledgeBase();
+
+            }
+        } catch (IOException ioe) {
+        }*/
+
         Session d3webSession =
-                D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
+                D3webUtils.createSession(kb, d3wcon.getDialogStrat());
 
         httpSession.setAttribute(D3WEB_SESSION, d3webSession);
         httpSession.setAttribute("lastLoaded", "");
@@ -1205,6 +1219,8 @@ public class D3webDialog extends HttpServlet {
         sourceSave = "";
 
     }
+
+  
 
     private void initializeLoggingMechanism(HttpSession httpSession) {
         Date now = new Date();

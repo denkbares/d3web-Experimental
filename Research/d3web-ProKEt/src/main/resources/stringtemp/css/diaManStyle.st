@@ -188,7 +188,7 @@ input{border: 1px dotted darkgrey;
     margin-top: 5px;
     min-width: 25px;
     position: relative;
-    width: 70px;
+    width: 90px;
 }
 
 #latestDialogLink{max-width: 200px;}
@@ -196,3 +196,5 @@ input{border: 1px dotted darkgrey;
 .dmFileSelctorBox{margin-right:50px;}
 
 .horSpace{width: 0px;}
+
+#delKBButton{horizontal-align: right; margin-left: 85px;}

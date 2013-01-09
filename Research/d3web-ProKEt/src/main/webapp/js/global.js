@@ -847,20 +847,24 @@ function checkSessionStillValid(){
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         dataType: 'html',
         success : function(html) {
+            
             //alert("session valid? " + html);
             if(html.indexOf("SESSIONVALID")!= -1){
             // do nothing with valid sessions any further
                   
+            } else if(html.indexOf("DB")!=-1){
+                handleSessionRedirect("DB");
+            } else if(html.indexOf("OFF")!=-1){
+                handleSessionRedirect("OFF");
             } else {
-                handleSessionRedirect(html);
+                handleSessionRedirect("DB");
             }
            
         },
         error : function(html) {
-            //alert("session valid error" + html);
             // if we come here, the previous session had expired, so
             // send request to redirect to login
-            handleSessionRedirect("");
+            handleSessionRedirect("DB");
         }
     });
 }
@@ -883,6 +887,8 @@ function handleSessionRedirect(loginFlag){
     // currently only for EuraHS - replace if we have other dialog running
     var orig = window.location.href;
     var redirectLink;
+    //alert(loginFlag);
+    //alert(orig);
        
     if(loginFlag == "" || loginFlag.indexOf("OFF")!=-1){
        
