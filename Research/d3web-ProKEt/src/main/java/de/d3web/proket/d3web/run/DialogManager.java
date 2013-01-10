@@ -37,17 +37,10 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.TemplateUtils;
-import de.uniwuerzburg.informatik.wms.kombitabelle.base.Intelligence;
-import de.uniwuerzburg.informatik.wms.kombitabelle.base.IntelligenceType;
-import de.uniwuerzburg.informatik.wms.kombitabelle.base.KnowledgeMatrix;
-import de.uniwuerzburg.informatik.wms.kombitabelle.parser.CsvKnowledgeMatrixParser;
-import de.uniwuerzburg.informatik.wms.kombitabelle.parser.KnowledgeMatrixParser;
-import de.uniwuerzburg.informatik.wms.kombitabelle.wiki.*;
 import java.io.*;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Properties;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
@@ -90,8 +83,8 @@ public class DialogManager extends HttpServlet {
 
         // TODO: make property in specs
         //GLOBSET.setWebAppWarName("/JuriLibreOffice");
-        //GLOBSET.setWebAppWarName("/UploadParseTool");
-        GLOBSET.setWebAppWarName("");
+        GLOBSET.setWebAppWarName("/UploadParseTool");
+        //GLOBSET.setWebAppWarName("");
 
         String webappname =
                 GLOBSET.getWebAppWarName().equals("") ? "" : GLOBSET.getWebAppWarName() + "_";

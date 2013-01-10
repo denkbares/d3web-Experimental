@@ -157,6 +157,27 @@ input{border: 1px dotted darkgrey;
     vertical-align: middle;
     max-width: 300px;}
 
+.buttonTextInactive{
+    font-family: Verdana;  font-size: 0.7em;
+    color: lightgrey;
+}
+
+.buttonTextActive{
+    font-family: Verdana;  font-size: 0.7em;
+    color: black;
+    font-weigt: bold;
+
+}
+
+.verticalMiddle{
+    vertical-align: middle;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+
 #UploadSpacer{width: 200px; height: 20px; padding-left: 10px; 
     padding-right: 10px; 
     padding-top: 0px; padding-bottom: 5px;}

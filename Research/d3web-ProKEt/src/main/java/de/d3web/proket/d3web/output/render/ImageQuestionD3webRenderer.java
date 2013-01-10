@@ -193,7 +193,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 				st.setAttribute("fullId", getID(choice));
 				st.setAttribute("title", choice.getName());
 				// if description = shape and coords for current Choice exist
-				String imgmap = choice.getInfoStore().getValue(ProKEtProperties.MAPIMAGE);
+				String imgmap = choice.getInfoStore().getValue(ProKEtProperties.IMAGEMAP);
 				Matcher m;
                                 
 				// if no description given at all or part of the description

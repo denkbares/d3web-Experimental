@@ -45,14 +45,11 @@ import org.xml.sax.SAXException;
  *
  * @author Martina Freiberg @date September 2012
  */
-public class TestParserServlet extends HttpServlet {
+/*public class TestParserServlet extends HttpServlet {
 
     GlobalSettings GLOBSET = GlobalSettings.getInstance();
     protected D3webXMLParser d3webParser;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public TestParserServlet() {
         super();
     }
@@ -67,12 +64,6 @@ public class TestParserServlet extends HttpServlet {
 
     }
 
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     * response)
-     *
-     * Basic Servlet Processing method
-     */
     @Override
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
@@ -139,15 +130,7 @@ public class TestParserServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Assemble and Show the Dialog Manager Module UI
-     *
-     * @param request
-     * @param response
-     * @param httpSession
-     * @throws IOException
-     */
-    protected void show(HttpServletRequest request,
+   protected void show(HttpServletRequest request,
             HttpServletResponse response,
             HttpSession httpSession)
             throws IOException {
@@ -159,4 +142,4 @@ public class TestParserServlet extends HttpServlet {
 
         writer.close();
     }
-}
+}*/

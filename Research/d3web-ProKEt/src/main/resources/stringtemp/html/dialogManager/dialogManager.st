@@ -35,17 +35,13 @@
         <div class="cell lastcell">
             <div id="uploadParseButtons" class="row">
                 <div id="span2buttons" class="cell">
-                    <div class="cell buttoncell">
-                        $ImgButton(src="img/Parse.png", 
-                        alt="Parse knowledge base",
-                        tt="Parse knowledge base",
-                        click="parseDocToKB('origKBUploadField');")$
-                    </div>
+                    
                     <div class="cell buttoncell">
                         $ImgButton(src="img/ErrorReportInactive.png", 
                         alt="ErrorReport",
                         tt="Error Report",
-                        click="alert('ErrorReport');")$
+                        buttonText="Fehlerbericht<br>anzeigen",
+                        click="")$
                     </div>
                 </div>
                 

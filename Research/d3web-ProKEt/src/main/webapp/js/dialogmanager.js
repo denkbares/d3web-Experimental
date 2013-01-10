@@ -84,8 +84,11 @@ $(function(){
     //window.location.href = removeParameter(window.location.href, "upERR");
     }
     
+    // Wissensbasis wurde erfolgreich hochgeladen und kann direkt geparst werden.
     if(statusKB!=undefined && statusKB != "" && statusKB=="done"){
-        $("#statusMessage").html("Wissensbasis <b>" + upfilename + "</b> hochgeladen.");
+        //$("#statusMessage").html("Wissensbasis <b>" + upfilename + "</b> wird geparst.");
+
+        parseDocToKB();
     }
     
     if(statusSpecs!=undefined && statusSpecs != "" && statusSpecs=="done"){
@@ -111,8 +114,7 @@ $(function(){
 
 
 /* calls the functionality for parsing the word document into a .d3web file */
-// TODO
-function parseDocToKB(id){
+function parseDocToKB(){
    
     var docname = upfilename;
     
@@ -138,9 +140,11 @@ function parseDocToKB(id){
                 
             } else if(html.indexOf("showErrFile") != -1) {
                 // everything fine
+                $("#ErrorReportImgButtonText").removeClass("buttonTextInactive").addClass("buttonTextActive");
                 $("#ErrorReportImgButton img").attr("src", "img/ErrorReport.png");
                 var errorReportLink = html.toString().replace("showErrFile;", "");
-                $("#ErrorReportImgButton img").attr("onclick", "dmOpenErrorReport('" + errorReportLink +"')");
+                $("#ErrorReportImgButton").attr("onclick", "dmOpenErrorReport('" + errorReportLink +"')");
+                
                 $("#statusMessage").html("Fehler beim Parsen! Bitte Fehlerbericht lesen.").addClass("statusMessageERR").removeClass("statusMessageOK");
                 
             } else if(html.indexOf("showExceptionFile") != -1){
