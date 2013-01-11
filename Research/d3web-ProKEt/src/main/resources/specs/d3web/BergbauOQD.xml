@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog 
-	header="Bergbau Diagnose und Verbesserung"  
+	header="Bergbau Diagnose und Verbesserung - OQD"  
 	dtype="singleform" 
 	indicationmode="hide_unindicated"
 	dstrategy="nextquestion"

@@ -74,7 +74,7 @@ public class UISettings {
 
     private D3webXMLParser.SolutionExplanationType solExpType;
     
-    private D3webXMLParser.SolutionDepth solDepth;
+    private String[] solDepth;
     
     
     private static UISettings instance;
@@ -183,11 +183,11 @@ public class UISettings {
         this.questionnaireNavi = questionnaireNavi;
     }
 
-    public void setSolutionDepth(D3webXMLParser.SolutionDepth depth){
+    public void setSolutionDepths(String[] depth){
         this.solDepth = depth;
     }
     
-    public D3webXMLParser.SolutionDepth getSolutionDepth(){
+    public String[] getSolutionDepths(){
         return this.solDepth;
     }
 }

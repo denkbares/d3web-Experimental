@@ -14,7 +14,7 @@
 	language = ""
         debug = "false"
         solutionExplanation = "TEXTUAL"
-        solutionDepth = "SUGGESTED"
+        solutionDepth = "ESTABLISHED"
         >
 	<data kb="BaumDecTree.d3web" />
         <ue logging = "FALSE" />

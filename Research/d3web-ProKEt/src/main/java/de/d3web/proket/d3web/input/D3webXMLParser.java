@@ -35,6 +35,7 @@ import de.d3web.proket.data.IndicationMode;
 import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.XMLUtils;
+import java.util.Arrays;
 
 /**
  * Class for parsing a given XML specification file (d3web coupled dialogs).
@@ -258,15 +259,23 @@ public class D3webXMLParser {
     }
     
     // return the solution depth to be used in solution panel
-    public SolutionDepth getSolutionDepth() {
+    public String[] getSolutionDepths() {
         SolutionDepth current = SolutionDepth.ALL;
-        String solDepth = XMLUtils.getStr((Element) dialogSpec, "solutionDepth", null);
-        
-        if (solDepth != null) {
-            current = SolutionDepth.valueOf(solDepth);
-            //System.out.println(solDepth);
+        String depths = XMLUtils.getStr((Element) dialogSpec, "solutionDepth", null);
+        String[] solDepths = null;
+        if (depths != null) {
+            //current = SolutionDepth.valueOf(depths);
+            System.out.println(depths);
+            if(!depths.equals("") && depths.contains(";;;")){
+                solDepths = depths.split(";;;");
+                System.out.println(Arrays.toString(solDepths));
+            } else {
+                solDepths = new String[1];
+                solDepths[0] = depths;
+            }
         }
-        return current;
+        return solDepths;
+ //       return current;
     }
     
 

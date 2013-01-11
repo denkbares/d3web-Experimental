@@ -41,7 +41,6 @@ import org.antlr.stringtemplate.StringTemplate;
  */
 public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
 
-    
     /**
      * Entry point to solution panel rendering. According to given EXPL-TYPE the
      * corresponding sub-method for rendering will be called.
@@ -56,10 +55,10 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
             HttpSession http) {
 
         StringBuilder bui = new StringBuilder();
-        D3webXMLParser.SolutionExplanationType solType = 
+        D3webXMLParser.SolutionExplanationType solType =
                 UISettings.getInstance().getSolutionExplanationType();
-        
-        
+
+
         if (solType == D3webXMLParser.SolutionExplanationType.TEXTUAL) {
 
             bui.append(getTextualListing(d3webSession));
@@ -120,35 +119,38 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
                 suggested.add(s);
             } else if (bb.getRating(s).getState().equals(Rating.State.EXCLUDED)) {
                 excluded.add(s);
-            } else if (bb.getRating(s).getState().equals(Rating.State.UNCLEAR)){
+            } else if (bb.getRating(s).getState().equals(Rating.State.UNCLEAR)) {
                 unclear.add(s);
             }
         }
 
-        if(UISettings.getInstance().getSolutionDepth()
-                .equals(D3webXMLParser.SolutionDepth.ESTABLISHED)){
-            result.addAll(established);
-        }
-        if(UISettings.getInstance().getSolutionDepth()
-                .equals(D3webXMLParser.SolutionDepth.SUGGESTED)){
-            result.addAll(established);
-            result.addAll(suggested);
-        }
-        if(UISettings.getInstance().getSolutionDepth()
-                .equals(D3webXMLParser.SolutionDepth.EXCLUDED)){
-            result.addAll(established);
-            result.addAll(suggested);
-            result.addAll(excluded);
-        }
-        if(UISettings.getInstance().getSolutionDepth()
-                .equals(D3webXMLParser.SolutionDepth.ALL)){
+        String[] solutionDepths = UISettings.getInstance().getSolutionDepths();
+
+        // if the shortcut ALL for getting ALL ratings is used
+        if (solutionDepths.length == 1 && solutionDepths[0].equals("ALL")) {
             result.addAll(established);
             result.addAll(suggested);
             result.addAll(excluded);
             result.addAll(unclear);
+        } else {
+            // otherwise check the different rating entries and add only the
+            // chosen ones.
+            for (String solDepth : solutionDepths) {
+                if (solDepth.equals(Rating.State.ESTABLISHED.toString())) {
+                    result.addAll(established);
+                }
+                if (solDepth.equals(Rating.State.SUGGESTED.toString())) {
+                    result.addAll(suggested);
+                }
+                if (solDepth.equals(Rating.State.EXCLUDED.toString())) {
+                    result.addAll(excluded);
+                }
+                if (solDepth.equals(Rating.State.UNCLEAR.toString())) {
+                    result.addAll(unclear);
+                }
+            }
         }
-        
-        
+
         return result;
     }
 
@@ -187,12 +189,12 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
             st.setAttribute("src", "img/solExc.png");
             st.setAttribute("alt", "excluded");
             st.setAttribute("tt", "excluded");
-        
+
         } else if (bb.getRating(solution).getState().equals(Rating.State.UNCLEAR)) {
             //st.setAttribute("src", "/img/solExc.png");
             st.setAttribute("alt", "unclear");
             st.setAttribute("tt", "unclear");
-        
+
         }
 
 

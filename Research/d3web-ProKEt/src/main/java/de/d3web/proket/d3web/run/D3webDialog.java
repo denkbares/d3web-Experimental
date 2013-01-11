@@ -1875,7 +1875,7 @@ public class D3webDialog extends HttpServlet {
         uis.setSolutionExplanationType(d3webParser.getSolutionExplanationType());
         uis.setDiagnosisNavi(d3webParser.getDiagnosisNavi());
         uis.setQuestionnaireNavi(d3webParser.getQuestionnaireNavi());
-        uis.setSolutionDepth(d3webParser.getSolutionDepth());
+        uis.setSolutionDepths(d3webParser.getSolutionDepths());
 
         String uegroup = d3webParser.getUEGroup() != null ? d3webParser.getUEGroup() : "";
         httpSession.setAttribute("uegroup", uegroup);
