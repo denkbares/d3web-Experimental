@@ -83,6 +83,12 @@ public class UISettings {
     
     private boolean questionnaireNavi = false;
     
+    
+    private String showIndicated;
+    private String showContraIndicated;
+    private String showNonIndicated;
+    
+    
     public static UISettings getInstance() {
         if (instance == null) {
             instance = new UISettings();
@@ -189,5 +195,29 @@ public class UISettings {
     
     public String[] getSolutionDepths(){
         return this.solDepth;
+    }
+    
+    public String getShowIndicated() {
+        return this.showIndicated;
+    }
+
+    public void setShowIndicated(String sIndi) {
+        this.showIndicated = sIndi;
+    }
+    
+    public String getShowContraIndicated() {
+        return this.showContraIndicated;
+    }
+
+    public void setShowContraIndicated(String sIndi) {
+        this.showContraIndicated = sIndi;
+    }
+    
+    public String getShowNonIndicated() {
+        return this.showNonIndicated;
+    }
+
+    public void setShowNonIndicated(String sIndi) {
+        this.showNonIndicated = sIndi;
     }
 }

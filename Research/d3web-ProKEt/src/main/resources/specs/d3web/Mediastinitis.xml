@@ -4,6 +4,8 @@
 	dtype="singleform" 
 	dstrategy="nextquestion" 
         indicationmode="hide_unindicated"
+        showcontraindicated="HIDE"
+        shownonindicated="HIDE"
 	css="medi2colsMediastinitis, nonavigation" 
 	dialogcolumns="1"
 	questionnairecolumns="3"

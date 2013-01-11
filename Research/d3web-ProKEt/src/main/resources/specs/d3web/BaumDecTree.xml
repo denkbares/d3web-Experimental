@@ -3,6 +3,8 @@
 	header="Consultation Questionary"  
 	dtype="singleform" 
 	indicationmode="hide_unindicated"
+        showcontraindicated="HIDE"
+        shownonindicated="GREY"
 	dstrategy="nextform"
 	css="standarddialog, diagnosisVisu" 
 	dialogcolumns="1"

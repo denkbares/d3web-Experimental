@@ -265,10 +265,10 @@ public class D3webXMLParser {
         String[] solDepths = null;
         if (depths != null) {
             //current = SolutionDepth.valueOf(depths);
-            System.out.println(depths);
+            //System.out.println(depths);
             if(!depths.equals("") && depths.contains(";;;")){
                 solDepths = depths.split(";;;");
-                System.out.println(Arrays.toString(solDepths));
+                //System.out.println(Arrays.toString(solDepths));
             } else {
                 solDepths = new String[1];
                 solDepths[0] = depths;
@@ -278,6 +278,23 @@ public class D3webXMLParser {
  //       return current;
     }
     
+   
+    
+    public String getShowContraIndicated(){
+         String showContraIndi = XMLUtils.getStr((Element) dialogSpec, "showcontraindicated", null);
+        if (showContraIndi.equals(null)) {
+            return "";
+        }
+        return showContraIndi;
+    }
+    
+     public String getShowNonIndicated(){
+        String showNonIndi = XMLUtils.getStr((Element) dialogSpec, "shownonindicated", null);
+        if (showNonIndi.equals(null)) {
+            return "";
+        }
+        return showNonIndi;
+    }
 
     // returns the specification of required fields
     public String getRequired() {

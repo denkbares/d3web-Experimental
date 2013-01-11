@@ -640,7 +640,7 @@ public class D3webUtils {
      * @param bb
      * @return True, if the terminology object is (instant) indicated.
      */
-    public static boolean isIndicated(TerminologyObject to, Blackboard bb) {
+    /*public static boolean isIndicated(TerminologyObject to, Blackboard bb) {
         for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
             // find the appropriate qaset in the knowledge base
             if (qaSet.getName().equals(to.getName())
@@ -651,7 +651,23 @@ public class D3webUtils {
             }
         }
         return false;
+    }*/
+    
+    public static boolean isIndicated(TerminologyObject to, Blackboard bb) {
+        for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
+            
+            // find the appropriate qaset in the knowledge base
+            if (qaSet.getName().equals(to.getName())
+                    && // and check its indication state
+                    (bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.INDICATED
+                    || bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED)
+                    || bb.getSession().getKnowledgeBase().getInitQuestions().contains(qaSet)) {
+                return true;
+            } 
+        }
+        return false;
     }
+    
 
     public static boolean isContraIndicated(TerminologyObject to, Blackboard bb) {
         for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
@@ -817,7 +833,7 @@ public class D3webUtils {
      * Utility method that checks, whether a given TerminologyObject child is
      * the child of another given TerminologyObject parent. That is, whether
      * child is nested hierarchically *somewhere* underneath parent.
-     *
+     
      * @created 30.01.2011
      *
      * @param parent The parent TerminologyObject
