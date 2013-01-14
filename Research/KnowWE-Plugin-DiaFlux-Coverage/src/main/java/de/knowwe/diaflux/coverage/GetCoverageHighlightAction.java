@@ -88,6 +88,8 @@ public class GetCoverageHighlightAction extends AbstractHighlightAction {
 		CoverageResult result = getResult(context);
 		if (result == null) return;
 		Flow flow = GetTraceHighlightAction.findFlow(flowchart, result.getKb());
+		// if flow has errors
+		if (flow == null) return;
 
 		Collection<Node> validNodes = DefaultCoverageResult.getValidNodes(flow);
 		for (Edge edge : DefaultCoverageResult.getValidEdges(validNodes)) {
