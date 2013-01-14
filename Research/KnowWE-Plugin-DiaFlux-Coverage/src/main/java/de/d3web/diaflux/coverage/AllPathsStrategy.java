@@ -28,7 +28,9 @@ import de.d3web.diaFlux.inference.DiaFluxUtils;
 
 
 /**
- * A strategy to create all (deep) paths of a DiaFlux model. Traverses also Subflows.
+ * A strategy to create all (deep) paths of a DiaFlux model. Traverses also
+ * Subflows. Starts only at the autostart Start nodes.
+ * 
  * @author Reinhard Hatko
  * @created 26.03.2012
  */

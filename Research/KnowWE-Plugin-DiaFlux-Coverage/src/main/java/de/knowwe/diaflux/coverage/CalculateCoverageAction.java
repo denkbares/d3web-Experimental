@@ -34,6 +34,7 @@ import de.d3web.diaflux.coverage.DiaFluxCoverageTrace;
 import de.d3web.testcase.TestCaseUtils;
 import de.d3web.testcase.model.TestCase;
 import de.d3web.we.utils.D3webUtils;
+import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -100,7 +101,7 @@ public class CalculateCoverageAction extends AbstractAction {
 		// }
 		// }
 		// }
-		String coverageKdomid = context.getParameter("kdomid");
+		String coverageKdomid = context.getParameter(Attributes.SECTION_ID);
 
 		Section<DiaFluxCoverageType> coverageSec = Sections.getSection(coverageKdomid,
 				DiaFluxCoverageType.class);

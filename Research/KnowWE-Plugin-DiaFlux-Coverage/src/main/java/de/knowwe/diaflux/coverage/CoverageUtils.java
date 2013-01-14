@@ -48,12 +48,12 @@ public class CoverageUtils {
 	}
 
 
-	public static Map<Flow, Collection<Flow>> createFlowStructure(KnowledgeBase base) {
+	public static Map<Flow, Collection<ComposedNode>> createFlowStructure(KnowledgeBase base) {
 		List<StartNode> nodes = DiaFluxUtils.getAutostartNodes(base);
 		assert nodes.size() == 1; // TODO for now works only with 1
 
 		Flow callingFlow = nodes.get(0).getFlow();
-		return createFlowStructure(base, new HashMap<Flow, Collection<Flow>>(), callingFlow);
+		return createFlowStructure(base, new HashMap<Flow, Collection<ComposedNode>>(), callingFlow);
 
 	}
 
@@ -65,13 +65,13 @@ public class CoverageUtils {
 	 * @param callingFlow
 	 * @return
 	 */
-	private static Map<Flow, Collection<Flow>> createFlowStructure(KnowledgeBase base, Map<Flow, Collection<Flow>> result, Flow callingFlow) {
+	private static Map<Flow, Collection<ComposedNode>> createFlowStructure(KnowledgeBase base, Map<Flow, Collection<ComposedNode>> result, Flow callingFlow) {
 		Collection<ComposedNode> composed = callingFlow.getNodesOfClass(ComposedNode.class);
 		for (ComposedNode composedNode : composed) {
 			Flow calledFlow = DiaFluxUtils.getCalledFlow(base, composedNode);
 			addFlow(result, callingFlow);
 			addFlow(result, calledFlow);
-			addCall(result, callingFlow, calledFlow);
+			addCall(result, callingFlow, composedNode);
 			createFlowStructure(base, result, calledFlow);
 		}
 
@@ -85,10 +85,10 @@ public class CoverageUtils {
 	 * @param result
 	 * @param calledFlow
 	 */
-	private static void addFlow(Map<Flow, Collection<Flow>> result, Flow calledFlow) {
-		Collection<Flow> flows = result.get(calledFlow);
+	private static void addFlow(Map<Flow, Collection<ComposedNode>> result, Flow calledFlow) {
+		Collection<ComposedNode> flows = result.get(calledFlow);
 		if (flows == null) {
-			flows = new HashSet<Flow>();
+			flows = new HashSet<ComposedNode>();
 			result.put(calledFlow, flows);
 		}
 	}
@@ -110,23 +110,9 @@ public class CoverageUtils {
 	 * @param callingFlow
 	 * @param calledFlow
 	 */
-	private static void addCall(Map<Flow, Collection<Flow>> result, Flow callingFlow, Flow calledFlow) {
-		for (Flow flow : result.keySet()) {
-			//called flow is already traced as called from someone else
-			// if (flow == calledFlow) {
-			// return;
-			// }
-			// else {
-				if (result.get(flow).contains(calledFlow)) {
-					return; // TODO put empty list??
-				}
-			// }
-
-		}
-		
-		
-		Collection<Flow> flows = result.get(callingFlow);
-		flows.add(calledFlow);
+	private static void addCall(Map<Flow, Collection<ComposedNode>> result, Flow callingFlow, ComposedNode calledNode) {
+		Collection<ComposedNode> flows = result.get(callingFlow);
+		flows.add(calledNode);
 	}
 
 }

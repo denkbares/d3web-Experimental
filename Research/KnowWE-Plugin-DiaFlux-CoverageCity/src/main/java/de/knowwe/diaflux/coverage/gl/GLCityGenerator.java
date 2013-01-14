@@ -20,6 +20,7 @@ package de.knowwe.diaflux.coverage.gl;
 
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -71,7 +72,7 @@ public class GLCityGenerator {
 		MetricsSet<Node> metrics = createMetrics(coverage);
 
 		KnowledgeBase kb = coverage.getKb();
-		Map<Flow, Collection<Flow>> structure = CoverageUtils.createFlowStructure(kb);
+		Map<Flow, Collection<ComposedNode>> structure = CoverageUtils.createFlowStructure(kb);
 		Map<Flow, GLDistrict> city = new HashMap<Flow, GLDistrict>();
 
 		while (!structure.isEmpty()) {
@@ -79,7 +80,7 @@ public class GLCityGenerator {
 			// find leaf
 			Flow flow = null;
 			for (Flow temp : structure.keySet()) {
-				Collection<Flow> calledFlows = structure.get(temp);
+				Collection<ComposedNode> calledFlows = structure.get(temp);
 				if (calledFlows.isEmpty()) {
 					flow = temp;
 					structure.remove(temp);
@@ -91,8 +92,12 @@ public class GLCityGenerator {
 
 			// remove leaf from tree
 			for (Flow temp : structure.keySet()) {
-				Collection<Flow> calledFlows = structure.get(temp);
-				calledFlows.remove(flow);
+				Collection<ComposedNode> calledFlows = structure.get(temp);
+				for (ComposedNode composedNode : new ArrayList<ComposedNode>(calledFlows)) {
+					if (DiaFluxUtils.getCalledFlow(kb, composedNode) == flow) {
+						calledFlows.remove(composedNode);
+					}
+				}
 			}
 
 			GLDistrict district = createDistrict(kb, flow, metrics, city);

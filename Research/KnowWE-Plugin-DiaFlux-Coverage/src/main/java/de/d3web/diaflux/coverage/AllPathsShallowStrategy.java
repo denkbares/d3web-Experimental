@@ -35,7 +35,7 @@ import de.d3web.diaFlux.inference.DiaFluxUtils;
 
 /**
  * A strategy to create all paths of each DiaFlux model. Subflows are not
- * traversed.
+ * traversed. Starts at all Start nodes of all flowcharts.
  * 
  * @author Reinhard Hatko
  * @created 26.03.2012
