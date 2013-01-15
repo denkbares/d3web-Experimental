@@ -202,33 +202,39 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);
 
             //System.out.println(d3webSession.getBlackboard().getValue((ValueObject) child));
-            System.out.println("Init Questions: " + d3webSession.getKnowledgeBase().getInitQuestions().toString());
-            System.out.println("parent: " + to.getName() + " - " + D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
-            System.out.println("child: " + child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
-            System.out.println(child.getName() + " CI - " + D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()) + "\n");
+            //System.out.println("Init Questions: " + d3webSession.getKnowledgeBase().getInitQuestions().toString());
+            //System.out.println("parent: " + to.getName() + " - " + D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
+            //System.out.println("child: " + child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
+            //System.out.println(child.getName() + " CI - " + D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()) + "\n");
             //System.out.println(D3webConnector.getInstance().getIndicationMode());
-            
+
             if (!debug) {
-                
+
                 // !!!Activate upper block for EuraHS or Mediastinitis (auch in Follow Up Rendering)
                 // as long as other mechanism not stable!!!
-                
+
                 // only show questions if they are NOT contraindicated
                 // they ARE contraindicated by the EuraHS- only if construct
-                /*if ((D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
-                        && child instanceof Question
-                        && D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()))) {
-                    continue;
-                }*/
-                
+                /*
+                 * if ((D3webConnector.getInstance().getIndicationMode() ==
+                 * IndicationMode.HIDE_UNINDICATED && child instanceof Question
+                 * && D3webUtils.isContraIndicated(child,
+                 * d3webSession.getBlackboard()))) { continue; }
+                 */
+                if (to.getName().equals("Diabetes mellitus: Behandlung")) {
+                    System.out.println("Init Questions: " + d3webSession.getKnowledgeBase().getInitQuestions().toString());
+                    System.out.println("parent: " + to.getName() + " - " + D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
+                    System.out.println("child: " + child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
+                }
+
                 UISettings uis = UISettings.getInstance();
-                if(uis.getShowNonIndicated().equals("HIDE")
+                if (uis.getShowNonIndicated().equals("HIDE")
                         && child instanceof Question
                         && !D3webUtils.isIndicated(child, d3webSession.getBlackboard())
-                        && !D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())){
-                   continue;
+                        && !D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())) {
+                    continue;
                 }
-                
+
             }
 
             // receive the rendering code from the Renderer and append
@@ -454,41 +460,51 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             // get the (probably question) children of the child
             for (TerminologyObject childsChild : child.getChildren()) {
 
-                System.out.println(childsChild.getName() + " Indicated: " 
-                      + D3webUtils.isIndicated(childsChild, d3webSession.getBlackboard())
-                    + " C-Indicated: " + D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard()));
-                /*if (!debug) {
-                    if ((D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
-                            && (D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())))) {
-                        continue;
-                    }
-                }*/
-                
+                //   System.out.println(childsChild.getName() + " Indicated: "
+                ////       + " C-Indicated: " + D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard()));
+                /*
+                 * if (!debug) { if
+                 * ((D3webConnector.getInstance().getIndicationMode() ==
+                 * IndicationMode.HIDE_UNINDICATED &&
+                 * (D3webUtils.isContraIndicated(childsChild,
+                 * d3webSession.getBlackboard())))) { continue; } }
+                 */
+
                 // for MEDIASTINITIS the above version needs to be taken as there
                 // indicated follow-questions need to be shown greyed
-                /* if (!debug) {
-                    if ((D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
-                            && (D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard()))
-                            || (!isIndicated(childsChild, d3webSession.getBlackboard())))) {
-                        continue;
-                    }
-                }*/
-                
-                if(!debug){
-                    if(UISettings.getInstance().getShowNonIndicated().equals("HIDE")
-                            && child instanceof Question
-                            && !D3webUtils.isIndicated(child, d3webSession.getBlackboard())
-                            && !D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())){
-                        continue;
+                /*
+                 * if (!debug) { if
+                 * ((D3webConnector.getInstance().getIndicationMode() ==
+                 * IndicationMode.HIDE_UNINDICATED &&
+                 * (D3webUtils.isContraIndicated(childsChild,
+                 * d3webSession.getBlackboard())) || (!isIndicated(childsChild,
+                 * d3webSession.getBlackboard())))) { continue; } }
+                 */
+
+
+                if (!debug) {
+
+                    if (childsChild.getName().equals("Diabetes mellitus: Behandlung")) {
+                        System.out.println("Init Questions: " + d3webSession.getKnowledgeBase().getInitQuestions().toString());
+                        System.out.println("parent: " + child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
+                        System.out.println("child: " + childsChild.getName() + " - indicated: " + D3webUtils.isIndicated(childsChild, d3webSession.getBlackboard()));
+                        System.out.println("child: " + childsChild.getName() + " - QContainerChild: " + D3webUtils.isDirectQContainerChild(childsChild));
                     }
                     
-                    if(UISettings.getInstance().getShowContraIndicated().equals("HIDE")
-                            && child instanceof Question
-                            && D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())){
+                    if (UISettings.getInstance().getShowNonIndicated().equals("HIDE")
+                            && childsChild instanceof Question
+                            && !D3webUtils.isIndicated(childsChild, d3webSession.getBlackboard())
+                            && !D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())) {
+                        continue;
+                    }
+
+                    if (UISettings.getInstance().getShowContraIndicated().equals("HIDE")
+                            && childsChild instanceof Question
+                            && D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())) {
                         continue;
                     }
                 }
-                
+
                 // get appropriate renderer
                 IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(childsChild);
 

@@ -139,8 +139,12 @@ public class FileUploadServlet extends HttpServlet {
                         System.err.println("FileUploadServlet - UploadKB - final file: "
                                 + fileToMove.getAbsolutePath());
 
+                        // if old equally named file already there: delete it
+                        if(fileToMove.exists()){
+                            fileToMove.delete();
+                        }
 
-                        tmpFile.renameTo(fileToMove);
+                        tmpFile.renameTo(new File(dirToMove, newFileName));
 
                         HttpSession httpSession = request.getSession();
 

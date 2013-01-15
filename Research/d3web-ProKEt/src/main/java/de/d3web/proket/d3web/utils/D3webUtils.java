@@ -395,7 +395,7 @@ public class D3webUtils {
             kbFile = new File(path + kbFilename);
         }
 
-       // System.out.println(path);
+        // System.out.println(path);
 
 
 
@@ -640,34 +640,75 @@ public class D3webUtils {
      * @param bb
      * @return True, if the terminology object is (instant) indicated.
      */
-    /*public static boolean isIndicated(TerminologyObject to, Blackboard bb) {
-        for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
-            // find the appropriate qaset in the knowledge base
-            if (qaSet.getName().equals(to.getName())
-                    && // and check its indication state
-                    (bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.INDICATED
-                    || bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED)) {
-                return true;
+    /*
+     * public static boolean isIndicated(TerminologyObject to, Blackboard bb) {
+     * for (QASet qaSet :
+     * bb.getSession().getKnowledgeBase().getManager().getQASets()) { // find
+     * the appropriate qaset in the knowledge base if
+     * (qaSet.getName().equals(to.getName()) && // and check its indication
+     * state (bb.getIndication((InterviewObject) to).getState() ==
+     * de.d3web.core.knowledge.Indication.State.INDICATED ||
+     * bb.getIndication((InterviewObject) to).getState() ==
+     * de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED)) { return
+     * true; } } return false;
+    }
+     */
+    
+    /**
+     * Check whether the given Terminology Object is a direct child of a 
+     * QContainer (Questionnaire).
+     * If not it is a follow up question and might
+     * not be thought to be presented by certain dialogs.
+     * @param to Terminology Object to check
+     * @return boolean true if the checked TO is a direct child of a QContainer,
+     * false otherwise
+     */
+    public static boolean isDirectQContainerChild(TerminologyObject to) {
+        TerminologyObject[] parents = to.getParents();
+
+       if (parents != null && parents.length != 0) {
+            for (TerminologyObject term : parents) {
+                 if (!term.getClass().equals(QContainer.class)) {
+                    return false;
+                }
             }
         }
-        return false;
-    }*/
-    
+
+        return true;
+
+    }
+
+    /**
+     * Checks, whether a given TerminologyObject is currently indicated (or active)
+     * on a given blackboard in a d3web session.
+     * Therefore, it is checked whether it is indicated, instantly_indicated, or
+     * whether it is contained within an init questions questionnaire and
+     * is a direct child. (Currently needed for EuraHS and Mediastinitis as they
+     * should per default display all of the direct child questions of init 
+     * questionnaires for convenience)
+     * @param to TerminologyObject to check its inidication state
+     * @param bb Blackboard which is used for check reference
+     * @return boolean true if the checked TerminologyObject IS currently 
+     * indicated, false otherwise
+     * 
+     * TODO: maybe we need other "default" isIndicated methods. Or other mechanisms
+     */
     public static boolean isIndicated(TerminologyObject to, Blackboard bb) {
         for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
-            
+
+
             // find the appropriate qaset in the knowledge base
             if (qaSet.getName().equals(to.getName())
                     && // and check its indication state
                     (bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.INDICATED
                     || bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED)
-                    || bb.getSession().getKnowledgeBase().getInitQuestions().contains(qaSet)) {
+                    || (bb.getSession().getKnowledgeBase().getInitQuestions().contains(qaSet)
+                    && D3webUtils.isDirectQContainerChild(to))) {
                 return true;
-            } 
+            }
         }
         return false;
     }
-    
 
     public static boolean isContraIndicated(TerminologyObject to, Blackboard bb) {
         for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
@@ -833,7 +874,7 @@ public class D3webUtils {
      * Utility method that checks, whether a given TerminologyObject child is
      * the child of another given TerminologyObject parent. That is, whether
      * child is nested hierarchically *somewhere* underneath parent.
-     
+     *
      * @created 30.01.2011
      *
      * @param parent The parent TerminologyObject
@@ -1773,14 +1814,14 @@ public class D3webUtils {
         // follow up mechanisms
         ArrayList<String> initSetQuestions =
                 (ArrayList<String>) httpSess.getAttribute("initsetquestions");
-        
+
         Blackboard bb = sess.getBlackboard();
         Collection<Question> resetQuestions = new LinkedList<Question>();
-        
+
         Set<QASet> initQuestions = new HashSet<QASet>(
                 D3webConnector.getInstance().getKb().getInitQuestions());
         //System.out.println("RAP: init questions - " + initQuestions.toString());
-        
+
         // check all questions that have been lately answered 
         for (Question question : bb.getAnsweredQuestions()) {
 
@@ -1789,7 +1830,7 @@ public class D3webUtils {
                     // and if question is not a required question
                     && !question.getName().equals(
                     D3webConnector.getInstance().getD3webParser().getRequired())) {
-                    
+
                 //System.out.println("RAP: !active && !required ");
                 // and if there are initSet questions and those do not contain q
                 if ((initSetQuestions != null && !initSetQuestions.contains(question.getName()))
@@ -1952,32 +1993,28 @@ public class D3webUtils {
 
         switch (locIdent) {
             case 1: // german
-                /*if (titleID.equals("Y")) {
-                    translated = "Jahr:";
-                } else if (titleID.equals("M")) {
-                    translated = "Monat:";
-                } else if (titleID.equals("D")) {
-                    translated = "Tag:";
-                } else if (titleID.equals("H")) {
-                    translated = "Stunde:";
-                } else if (titleID.equals("Min")) {
-                    translated = "Minute:";
-                } else if (titleID.equals("S")) {
-                    translated = "Sekunde:";
-                }*/
+                /*
+                 * if (titleID.equals("Y")) { translated = "Jahr:"; } else if
+                 * (titleID.equals("M")) { translated = "Monat:"; } else if
+                 * (titleID.equals("D")) { translated = "Tag:"; } else if
+                 * (titleID.equals("H")) { translated = "Stunde:"; } else if
+                 * (titleID.equals("Min")) { translated = "Minute:"; } else if
+                 * (titleID.equals("S")) { translated = "Sekunde:";
+                }
+                 */
                 if (titleID.equals("Y")) {
-                translated = "Year";
-            } else if (titleID.equals("M")) {
-                translated = "Month";
-            } else if (titleID.equals("D")) {
-                translated = "Day";
-            } else if (titleID.equals("H")) {
-                translated = "Hour";
-            } else if (titleID.equals("M")) {
-                translated = "Minute";
-            } else if (titleID.equals("S")) {
-                translated = "Second";
-            }
+                    translated = "Year";
+                } else if (titleID.equals("M")) {
+                    translated = "Month";
+                } else if (titleID.equals("D")) {
+                    translated = "Day";
+                } else if (titleID.equals("H")) {
+                    translated = "Hour";
+                } else if (titleID.equals("M")) {
+                    translated = "Minute";
+                } else if (titleID.equals("S")) {
+                    translated = "Second";
+                }
 
                 break;
             case 2: // english

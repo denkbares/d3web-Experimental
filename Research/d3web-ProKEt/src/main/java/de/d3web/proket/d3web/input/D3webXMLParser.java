@@ -281,18 +281,14 @@ public class D3webXMLParser {
    
     
     public String getShowContraIndicated(){
-         String showContraIndi = XMLUtils.getStr((Element) dialogSpec, "showcontraindicated", null);
-        if (showContraIndi.equals(null)) {
-            return "";
-        }
+        String showContraIndi = XMLUtils.getStr((Element) dialogSpec, "showcontraindicated", "");
+        
         return showContraIndi;
     }
     
      public String getShowNonIndicated(){
-        String showNonIndi = XMLUtils.getStr((Element) dialogSpec, "shownonindicated", null);
-        if (showNonIndi.equals(null)) {
-            return "";
-        }
+        String showNonIndi = XMLUtils.getStr((Element) dialogSpec, "shownonindicated", "");
+       
         return showNonIndi;
     }
 

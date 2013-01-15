@@ -84,7 +84,7 @@ public class DialogManager extends HttpServlet {
         // TODO: make property in specs
         //GLOBSET.setWebAppWarName("/JuriLibreOffice");
         GLOBSET.setWebAppWarName("/UploadParseTool");
-        //GLOBSET.setWebAppWarName("");
+        GLOBSET.setWebAppWarName("");
 
         String webappname =
                 GLOBSET.getWebAppWarName().equals("") ? "" : GLOBSET.getWebAppWarName() + "_";
