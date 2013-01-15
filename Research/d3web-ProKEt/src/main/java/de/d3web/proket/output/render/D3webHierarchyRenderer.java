@@ -26,7 +26,7 @@ import de.d3web.core.session.interviewmanager.Form;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
-import de.d3web.proket.d3web.input.UISettings;
+import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 

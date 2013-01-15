@@ -278,6 +278,21 @@ public class D3webXMLParser {
  //       return current;
     }
     
+    public enum SolutionSorting{
+        CATEGORICAL, ALPHABETICAL, CATEGALPHA
+    }
+    
+    // return the solution depth to be used in solution panel
+    public SolutionSorting getSolutionSorting() {
+        SolutionSorting current = SolutionSorting.CATEGORICAL; //default
+        String sorting = XMLUtils.getStr((Element) dialogSpec, "solutionSorting", "");
+        
+        if (!sorting.equals("")) {
+            current = SolutionSorting.valueOf(sorting);
+            //System.out.println(current);
+        }
+        return current;
+    }
    
     
     public String getShowContraIndicated(){

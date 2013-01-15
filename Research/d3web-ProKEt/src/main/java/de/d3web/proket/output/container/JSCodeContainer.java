@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
-import de.d3web.proket.d3web.input.UISettings;
+import de.d3web.proket.d3web.settings.UISettings;
 
 /**
  * Container for JavaScript code.

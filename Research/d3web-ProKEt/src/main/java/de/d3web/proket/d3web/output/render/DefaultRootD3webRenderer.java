@@ -42,7 +42,7 @@ import de.d3web.proket.d3web.input.D3webUESettings;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
-import de.d3web.proket.d3web.input.UISettings;
+import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;

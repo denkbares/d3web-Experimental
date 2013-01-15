@@ -78,7 +78,9 @@ $(function(){
             removeClass("statusMessageOK").addClass("statusMessageERR");
         } 
         if(status=="nokb"){
-            $('#statusMessage').html("<b>Bitte erlaubtes Wissensbasis Dateiformat (.doc/.xlsx/.d3web) auswählen!</b>")
+            //only for WMS Upload currently
+            $('#statusMessage').html("<b>Dateityp nicht unterstützt, bitte lade als CSV mit Semikolontrennzeichen hoch!</b>");
+            //$('#statusMessage').html("<b>Bitte erlaubtes Wissensbasis Dateiformat (.doc/.xlsx/.d3web) auswählen!</b>")
             removeClass("statusMessageOK").addClass("statusMessageERR");
         }
     //window.location.href = removeParameter(window.location.href, "upERR");

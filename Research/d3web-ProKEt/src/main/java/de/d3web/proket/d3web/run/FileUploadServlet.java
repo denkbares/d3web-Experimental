@@ -98,12 +98,13 @@ public class FileUploadServlet extends HttpServlet {
         File tmpFile = multipartRequest.getFile("uploadKB");
         if (tmpFile != null) {
 
-            if (!tmpFile.getName().endsWith(".doc")
-                    && !tmpFile.getName().endsWith(".d3web")
-                    && !tmpFile.getName().endsWith(".zip")
+            if (//!tmpFile.getName().endsWith(".doc")
+                  //  && !tmpFile.getName().endsWith(".d3web")
+                    //&& !tmpFile.getName().endsWith(".zip")
                     //&& !tmpFile.getName().endsWith(".xls")
-                    && !tmpFile.getName().endsWith(".xlsx")
-                    && !tmpFile.getName().endsWith(".csv")) {
+                    //&& !tmpFile.getName().endsWith(".xlsx")
+                    //&& 
+                    !tmpFile.getName().endsWith(".csv")) {
 
                 response.sendRedirect(GLOBSET.getWebAppWarName()
                         + "/DialogManager?upERR=nokb");
@@ -163,6 +164,8 @@ public class FileUploadServlet extends HttpServlet {
                     + "/DialogManager?upERR=nofile");
         }
     }
+    
+    
 
     /**
      * Processing a specification (XML) upload
@@ -230,5 +233,11 @@ public class FileUploadServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         processRequest(request, response);
+    }
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+    
+        
     }
 }

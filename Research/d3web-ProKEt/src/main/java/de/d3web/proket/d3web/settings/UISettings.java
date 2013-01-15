@@ -17,7 +17,10 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.proket.d3web.input;
+package de.d3web.proket.d3web.settings;
+
+import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.input.D3webXMLParser.SolutionSorting;
 
 /**
  * Class for storing all UI Properties of a productive KBS as specified in the
@@ -73,6 +76,8 @@ public class UISettings {
    
 
     private D3webXMLParser.SolutionExplanationType solExpType;
+    
+    private D3webXMLParser.SolutionSorting solSorting;
     
     private String[] solDepth;
     
@@ -220,4 +225,14 @@ public class UISettings {
     public void setShowNonIndicated(String sIndi) {
         this.showNonIndicated = sIndi;
     }
+
+    public SolutionSorting getSolutionSorting() {
+        return solSorting;
+    }
+
+    public void setSolutionSorting(SolutionSorting solSorting) {
+        this.solSorting = solSorting;
+    }
+    
+    
 }

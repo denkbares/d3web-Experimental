@@ -26,10 +26,12 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webXMLParser;
-import de.d3web.proket.d3web.input.UISettings;
+import de.d3web.proket.d3web.settings.UISettings;
+import de.d3web.proket.d3web.utils.SolutionNameComparator;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import javax.servlet.http.HttpSession;
 import org.antlr.stringtemplate.StringTemplate;
 
@@ -97,6 +99,7 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
         Collection<Solution> sortedValuedSolutions =
                 sortSolutions(valuedSolutions, d3websession);
 
+        // the *real* rendering, i.e. getting the HTML representation
         getSolutionStates(sortedValuedSolutions, bui, d3websession.getBlackboard());
 
         return bui.toString();
@@ -105,53 +108,17 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
     private Collection<Solution> sortSolutions(Collection<Solution> valued,
             Session d3websession) {
 
-        Blackboard bb = d3websession.getBlackboard();
-        Collection<Solution> result = new ArrayList<Solution>();
-        ArrayList<Solution> established = new ArrayList<Solution>();
-        ArrayList<Solution> suggested = new ArrayList<Solution>();
-        ArrayList<Solution> excluded = new ArrayList<Solution>();
-        ArrayList<Solution> unclear = new ArrayList<Solution>();
-
-        for (Solution s : valued) {
-            if (bb.getRating(s).getState().equals(Rating.State.ESTABLISHED)) {
-                established.add(s);
-            } else if (bb.getRating(s).getState().equals(Rating.State.SUGGESTED)) {
-                suggested.add(s);
-            } else if (bb.getRating(s).getState().equals(Rating.State.EXCLUDED)) {
-                excluded.add(s);
-            } else if (bb.getRating(s).getState().equals(Rating.State.UNCLEAR)) {
-                unclear.add(s);
-            }
+        UISettings uis = UISettings.getInstance();
+        
+        if(uis.getSolutionSorting().equals(D3webXMLParser.SolutionSorting.ALPHABETICAL)){
+            return sortSolutionsAlphabetical(valued, d3websession);
+        } else if (uis.getSolutionSorting().equals(D3webXMLParser.SolutionSorting.CATEGORICAL)){
+            return sortSolutionsCategorical(valued, d3websession);
+        } else if (uis.getSolutionSorting().equals(D3webXMLParser.SolutionSorting.CATEGALPHA)){
+            return sortSolutionsCategoricalAndAlphabetical(valued, d3websession);
         }
-
-        String[] solutionDepths = UISettings.getInstance().getSolutionDepths();
-
-        // if the shortcut ALL for getting ALL ratings is used
-        if (solutionDepths.length == 1 && solutionDepths[0].equals("ALL")) {
-            result.addAll(established);
-            result.addAll(suggested);
-            result.addAll(excluded);
-            result.addAll(unclear);
-        } else {
-            // otherwise check the different rating entries and add only the
-            // chosen ones.
-            for (String solDepth : solutionDepths) {
-                if (solDepth.equals(Rating.State.ESTABLISHED.toString())) {
-                    result.addAll(established);
-                }
-                if (solDepth.equals(Rating.State.SUGGESTED.toString())) {
-                    result.addAll(suggested);
-                }
-                if (solDepth.equals(Rating.State.EXCLUDED.toString())) {
-                    result.addAll(excluded);
-                }
-                if (solDepth.equals(Rating.State.UNCLEAR.toString())) {
-                    result.addAll(unclear);
-                }
-            }
-        }
-
-        return result;
+        
+        return new ArrayList<Solution>();
     }
 
     private void getSolutionStates(Collection<Solution> sortedSols, StringBuilder bui,
@@ -200,4 +167,170 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
 
         return st.toString();
     }
+    
+     private Collection<Solution> sortSolutionsAlphabetical(Collection<Solution> valued,
+            Session d3websession) {
+         
+        Blackboard bb = d3websession.getBlackboard();
+        ArrayList<Solution> result = new ArrayList<Solution>();
+        ArrayList<Solution> established = new ArrayList<Solution>();
+        ArrayList<Solution> suggested = new ArrayList<Solution>();
+        ArrayList<Solution> excluded = new ArrayList<Solution>();
+        ArrayList<Solution> unclear = new ArrayList<Solution>();
+
+        for (Solution s : valued) {
+            if (bb.getRating(s).getState().equals(Rating.State.ESTABLISHED)) {
+                established.add(s);
+            } else if (bb.getRating(s).getState().equals(Rating.State.SUGGESTED)) {
+                suggested.add(s);
+            } else if (bb.getRating(s).getState().equals(Rating.State.EXCLUDED)) {
+                excluded.add(s);
+            } else if (bb.getRating(s).getState().equals(Rating.State.UNCLEAR)) {
+                unclear.add(s);
+            }
+        }
+
+        String[] solutionDepths = UISettings.getInstance().getSolutionDepths();
+
+        // if the shortcut ALL for getting ALL ratings is used
+        if (solutionDepths.length == 1 && solutionDepths[0].equals("ALL")) {
+            result.addAll(established);
+            result.addAll(suggested);
+            result.addAll(excluded);
+            result.addAll(unclear);
+        } else {
+            // otherwise check the different rating entries and add only the
+            // chosen ones.
+            for (String solDepth : solutionDepths) {
+                if (solDepth.equals(Rating.State.ESTABLISHED.toString())) {
+                    result.addAll(established);
+                }
+                if (solDepth.equals(Rating.State.SUGGESTED.toString())) {
+                    result.addAll(suggested);
+                }
+                if (solDepth.equals(Rating.State.EXCLUDED.toString())) {
+                    result.addAll(excluded);
+                }
+                if (solDepth.equals(Rating.State.UNCLEAR.toString())) {
+                    result.addAll(unclear);
+                }
+            }
+        }
+        
+        Collections.sort(result, new SolutionNameComparator());
+        return result;
+     
+     }
+     
+     private Collection<Solution> sortSolutionsCategorical(Collection<Solution> valued,
+            Session d3websession) {
+         
+        Blackboard bb = d3websession.getBlackboard();
+        Collection<Solution> result = new ArrayList<Solution>();
+        ArrayList<Solution> established = new ArrayList<Solution>();
+        ArrayList<Solution> suggested = new ArrayList<Solution>();
+        ArrayList<Solution> excluded = new ArrayList<Solution>();
+        ArrayList<Solution> unclear = new ArrayList<Solution>();
+
+        for (Solution s : valued) {
+            if (bb.getRating(s).getState().equals(Rating.State.ESTABLISHED)) {
+                established.add(s);
+            } else if (bb.getRating(s).getState().equals(Rating.State.SUGGESTED)) {
+                suggested.add(s);
+            } else if (bb.getRating(s).getState().equals(Rating.State.EXCLUDED)) {
+                excluded.add(s);
+            } else if (bb.getRating(s).getState().equals(Rating.State.UNCLEAR)) {
+                unclear.add(s);
+            }
+        }
+
+        String[] solutionDepths = UISettings.getInstance().getSolutionDepths();
+
+        // if the shortcut ALL for getting ALL ratings is used
+        if (solutionDepths.length == 1 && solutionDepths[0].equals("ALL")) {
+            result.addAll(established);
+            result.addAll(suggested);
+            result.addAll(excluded);
+            result.addAll(unclear);
+        } else {
+            // otherwise check the different rating entries and add only the
+            // chosen ones.
+            for (String solDepth : solutionDepths) {
+                if (solDepth.equals(Rating.State.ESTABLISHED.toString())) {
+                    result.addAll(established);
+                }
+                if (solDepth.equals(Rating.State.SUGGESTED.toString())) {
+                    result.addAll(suggested);
+                }
+                if (solDepth.equals(Rating.State.EXCLUDED.toString())) {
+                    result.addAll(excluded);
+                }
+                if (solDepth.equals(Rating.State.UNCLEAR.toString())) {
+                    result.addAll(unclear);
+                }
+            }
+        }
+        
+        return result;
+     }
+     
+     private Collection<Solution> sortSolutionsCategoricalAndAlphabetical(Collection<Solution> valued,
+            Session d3websession) {
+        
+         System.out.println("CATEGORISCH UND ALPHABETISCH");
+         Blackboard bb = d3websession.getBlackboard();
+        ArrayList<Solution> result = new ArrayList<Solution>();
+        ArrayList<Solution> established = new ArrayList<Solution>();
+        ArrayList<Solution> suggested = new ArrayList<Solution>();
+        ArrayList<Solution> excluded = new ArrayList<Solution>();
+        ArrayList<Solution> unclear = new ArrayList<Solution>();
+
+        for (Solution s : valued) {
+            if (bb.getRating(s).getState().equals(Rating.State.ESTABLISHED)) {
+                established.add(s);
+            } else if (bb.getRating(s).getState().equals(Rating.State.SUGGESTED)) {
+                suggested.add(s);
+            } else if (bb.getRating(s).getState().equals(Rating.State.EXCLUDED)) {
+                excluded.add(s);
+            } else if (bb.getRating(s).getState().equals(Rating.State.UNCLEAR)) {
+                unclear.add(s);
+            }
+        }
+
+        Collections.sort(established, new SolutionNameComparator());
+        Collections.sort(suggested, new SolutionNameComparator());
+        Collections.sort(excluded, new SolutionNameComparator());
+        Collections.sort(unclear, new SolutionNameComparator());
+        
+        String[] solutionDepths = UISettings.getInstance().getSolutionDepths();
+
+        // if the shortcut ALL for getting ALL ratings is used
+        if (solutionDepths.length == 1 && solutionDepths[0].equals("ALL")) {
+            result.addAll(established);
+            result.addAll(suggested);
+            result.addAll(excluded);
+            result.addAll(unclear);
+        } else {
+            // otherwise check the different rating entries and add only the
+            // chosen ones.
+            for (String solDepth : solutionDepths) {
+                if (solDepth.equals(Rating.State.ESTABLISHED.toString())) {
+                    result.addAll(established);
+                }
+                if (solDepth.equals(Rating.State.SUGGESTED.toString())) {
+                    result.addAll(suggested);
+                }
+                if (solDepth.equals(Rating.State.EXCLUDED.toString())) {
+                    result.addAll(excluded);
+                }
+                if (solDepth.equals(Rating.State.UNCLEAR.toString())) {
+                    result.addAll(unclear);
+                }
+            }
+        }
+        
+        return result;
+     
+     }
+
 }

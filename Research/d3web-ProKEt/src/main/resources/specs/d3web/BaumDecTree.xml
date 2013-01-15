@@ -16,7 +16,8 @@
 	language = ""
         debug = "false"
         solutionExplanation = "TEXTUAL"
-        solutionDepth = "ESTABLISHED"
+        solutionSorting = "CATEGALPHA" 
+        solutionDepth = "ALL"
         >
 	<data kb="BaumDecTree.d3web" />
         <ue logging = "FALSE" />

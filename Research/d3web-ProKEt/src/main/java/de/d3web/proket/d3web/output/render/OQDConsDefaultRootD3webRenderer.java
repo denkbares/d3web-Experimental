@@ -21,11 +21,11 @@ package de.d3web.proket.d3web.output.render;
 
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.*;
+import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.utils.D3webToJSTreeUtils;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import de.d3web.proket.output.container.ContainerCollection;
-import de.d3web.proket.utils.GlobalSettings;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.antlr.stringtemplate.StringTemplate;

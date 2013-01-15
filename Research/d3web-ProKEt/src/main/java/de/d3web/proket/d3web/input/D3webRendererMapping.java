@@ -29,6 +29,7 @@ import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.output.render.*;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
+import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.utils.GlobalSettings;
 
 /**

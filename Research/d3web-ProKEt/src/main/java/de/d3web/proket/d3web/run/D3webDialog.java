@@ -62,12 +62,14 @@ import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.*;
+
 import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
 import de.d3web.proket.d3web.output.render.IQuestionD3webRenderer;
 import de.d3web.proket.d3web.output.render.SummaryD3webRenderer;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
+import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
@@ -1876,7 +1878,7 @@ public class D3webDialog extends HttpServlet {
         uis.setDiagnosisNavi(d3webParser.getDiagnosisNavi());
         uis.setQuestionnaireNavi(d3webParser.getQuestionnaireNavi());
         uis.setSolutionDepths(d3webParser.getSolutionDepths());
-        
+        uis.setSolutionSorting(d3webParser.getSolutionSorting());
         uis.setShowContraIndicated(d3webParser.getShowContraIndicated());
         uis.setShowNonIndicated(d3webParser.getShowNonIndicated());
         
