@@ -229,6 +229,7 @@
 		<module>KnowWE-Plugin-DataAnalysis</module>
 		<module>KnowWE-Plugin-ESAT</module>
 		<module>KnowWE-Plugin-CIConnector</module>
+		<module>KnowWE-Plugin-Flash</module>
 	</modules>
 	<repositories>
 		<repository>

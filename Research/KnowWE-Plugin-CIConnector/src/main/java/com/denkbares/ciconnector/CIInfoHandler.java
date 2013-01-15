@@ -46,25 +46,6 @@ public class CIInfoHandler extends RDF2GoSubtreeHandler<CIInfoType> {
 	private static final String ATT_TIMESTAMP = "timestamp";
 	private static final String ATT_AUTHOR = "author";
 
-	private static final URI CLASS_PLUGIN = Rdf2GoCore.getInstance().createlocalURI("Plugin");
-	private static final URI CLASS_CHANGE = Rdf2GoCore.getInstance().createlocalURI("Change");
-	private static final URI CLASS_STAT = Rdf2GoCore.getInstance().createlocalURI("Stat");
-
-	private static final URI PROP_HASCHANGE = Rdf2GoCore.getInstance().createlocalURI("hasChange");
-	private static final URI PROP_HASTIMESTAMP = Rdf2GoCore.getInstance().createlocalURI(
-			"hasTimeStamp");
-	private static final URI PROP_HASREVISION = Rdf2GoCore.getInstance().createlocalURI(
-			"hasRevision");
-	private static final URI PROP_HASAUTHOR = Rdf2GoCore.getInstance().createlocalURI("hasAuthor");
-	private static final URI PROP_HASCOMMITTEXT = Rdf2GoCore.getInstance().createlocalURI(
-			"hasCommitText");
-	private static final URI PROP_HASDESCRIPTION = Rdf2GoCore.getInstance().createlocalURI(
-			"hasDescription");
-	private static final URI PROP_HASSTAT = Rdf2GoCore.getInstance().createlocalURI("hasStat");
-	private static final URI PROP_HASKEY = Rdf2GoCore.getInstance().createlocalURI("hasKey");
-	private static final URI PROP_HASVALUE = Rdf2GoCore.getInstance().createlocalURI("hasValue");
-	private static final URI PROP_HASID = Rdf2GoCore.getInstance().createlocalURI("hasID");
-
 	@Override
 	public Collection<Message> create(Article article, Section<CIInfoType> section) {
 
@@ -87,47 +68,58 @@ public class CIInfoHandler extends RDF2GoSubtreeHandler<CIInfoType> {
 
 		Rdf2GoCore core = Rdf2GoCore.getInstance();
 
+		URI changeTypeURI = core.createlocalURI("Change");
+		URI hasTimeStampURI = core.createlocalURI("hasTimeStamp");
+		URI hasRevisionURI = core.createlocalURI("hasRevision");
+		URI hasAuthorURI = core.createlocalURI("hasAuthor");
+		URI hasCommitTextURI = core.createlocalURI("hasCommitText");
+		URI hasChangeURI = core.createlocalURI("hasChange");
+		URI pluginTypeURI = core.createlocalURI("Plugin");
+		URI hasIDURI = core.createlocalURI("hasID");
+		URI hasDescriptionURI = core.createlocalURI("hasDescription");
+		URI hasStatURI = core.createlocalURI("hasStat");
+		URI hasValueURI = core.createlocalURI("hasValue");
+		URI statTypeURI = core.createlocalURI("Stat");
+		URI hasKeyURI = core.createlocalURI("hasKey");
+
 		for (CIInfo info : infos) {
 
 			// lns:Plugin-X rdf:Type lns:Plugin
 			URI pluginURI = core.createlocalURI(info.getPlugin());
-			core.addStatements(article, core.createStatement(pluginURI, RDF.type, CLASS_PLUGIN));
-			core.addStatements(
-					article,
-					core.createStatement(pluginURI, PROP_HASID,
-							core.createLiteral(info.getPlugin())));
+			core.addStatements(article, core.createStatement(pluginURI, RDF.type, pluginTypeURI));
+			core.addStatements(article, core.createStatement(pluginURI, hasIDURI,
+					core.createLiteral(info.getPlugin())));
 
 			// lns:Plugin-X lns:hasDescription "description"
-			core.addStatements(article, core.createStatement(pluginURI, PROP_HASDESCRIPTION,
+			core.addStatements(article, core.createStatement(pluginURI, hasDescriptionURI,
 					core.createLiteral(info.getDescription())));
 
 			// changes...
 			for (Change change : info.getChanges()) {
 				BlankNode changeURI = core.createBlankNode();
-				core.addStatements(article, core.createStatement(changeURI, RDF.type, CLASS_CHANGE));
-				core.addStatements(article, core.createStatement(changeURI, PROP_HASTIMESTAMP,
+				core.addStatements(article,
+						core.createStatement(changeURI, RDF.type, changeTypeURI));
+				core.addStatements(article, core.createStatement(changeURI, hasTimeStampURI,
 						core.createLiteral(change.getTimestamp())));
-				core.addStatements(article, core.createStatement(changeURI, PROP_HASREVISION,
+				core.addStatements(article, core.createStatement(changeURI, hasRevisionURI,
 						core.createLiteral(change.getRevision())));
-				core.addStatements(article, core.createStatement(changeURI, PROP_HASAUTHOR,
+				core.addStatements(article, core.createStatement(changeURI, hasAuthorURI,
 						core.createLiteral(change.getAuthor())));
-				core.addStatements(article, core.createStatement(changeURI, PROP_HASCOMMITTEXT,
+				core.addStatements(article, core.createStatement(changeURI, hasCommitTextURI,
 						core.createLiteral(change.getCommitText())));
 				core.addStatements(article,
-						core.createStatement(pluginURI, PROP_HASCHANGE, changeURI));
+						core.createStatement(pluginURI, hasChangeURI, changeURI));
 			}
 
 			// stats...
 			for (Entry<String, String> stat : info.getStat().entrySet()) {
 				BlankNode statURI = core.createBlankNode();
-				core.addStatements(article, core.createStatement(statURI, RDF.type, CLASS_STAT));
-				core.addStatements(
-						article,
-						core.createStatement(statURI, PROP_HASKEY,
-								core.createLiteral(stat.getKey())));
-				core.addStatements(article, core.createStatement(statURI, PROP_HASVALUE,
+				core.addStatements(article, core.createStatement(statURI, RDF.type, statTypeURI));
+				core.addStatements(article, core.createStatement(statURI, hasKeyURI,
+						core.createLiteral(stat.getKey())));
+				core.addStatements(article, core.createStatement(statURI, hasValueURI,
 						core.createLiteral(stat.getValue())));
-				core.addStatements(article, core.createStatement(pluginURI, PROP_HASSTAT, statURI));
+				core.addStatements(article, core.createStatement(pluginURI, hasStatURI, statURI));
 			}
 
 			core.commit();
