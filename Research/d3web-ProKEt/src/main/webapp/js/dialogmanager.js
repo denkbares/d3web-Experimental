@@ -35,6 +35,35 @@ var currentAssembledDialog;
  * TODO: maybe refactor */
 $(function(){
      
+    /* Confirm file upload DIALOG */
+    var opts = {
+        autoOpen: false,
+        position: [ 0, 0],
+        minWidth: 200,
+        minHeight: 150,
+        modal: false,
+        buttons: [{
+            id: "saveOK",
+            text: "Fortfahren",
+            click: function(){
+                $('#jqFileUploadConfirm').dialog('close');
+                fuSaveOverwrite();
+            }
+        },
+        {
+            id: "saveCancel",
+            text: "Abbrechen",
+            click: function(){
+                $('#jqFileUploadConfirm').dialog('close');
+            }
+        }]
+    }
+    $("#jqFileUploadConfirm").dialog(opts);
+   
+   
+    
+    
+    
     /* fix the display of C:\fakepath\... in Safari etc browsers... */
     var fileUploadID = "origKBUploadField";
     
@@ -59,13 +88,22 @@ $(function(){
     var statusKB =  Request.parameter("upKB");
     var statusSpecs = Request.parameter("upSPEC");
     var status = Request.parameter("upERR");
+    
+    
     upfilename = "";
     if(Request.parameter("upfilename")!= undefined){
         upfilename = Request.parameter("upfilename").replace("%", " ");
     }
     
+    //$('#jqFileUploadConfirm').dialog("close");
     
-    //dmOpenExceptionReport();
+    if(Request.parameter("fileExists") != undefined){
+        if(Request.parameter("fileExists")=="true"){
+            //display confirmation dialog
+            $("#jqFileUploadConfirm").dialog("open");
+        }
+    }
+    
     
     // some error handling for uploading file
     if(status != undefined && status != ""){
@@ -112,6 +150,25 @@ $(function(){
     })
     
 });
+
+
+function fuSaveOverwrite(){
+    
+    link = $.query.set("action", "uploadAndOverwrite").set("overwrite", "true");
+    link = window.location.href.replace(window.location.search, "") + link;
+    
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        success : function(html) {
+            if(html.indexOf("NOPARSE")==-1){
+                upfilename = html;
+                parseDocToKB();
+            }
+        } 
+    });
+}
 
 
 

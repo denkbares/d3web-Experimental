@@ -65,7 +65,7 @@ public class FileUploadServlet extends HttpServlet {
              */
             MultipartRequest multipartRequest = new MultipartRequest(request, getServletContext().getRealPath(PATHSEP + "tmp" + PATHSEP), /*
                      * 1MB
-                     */ 1024 * 1024, new DefaultFileRenamePolicy());
+                     */ 1024 * 1024);
             if (multipartRequest.getParameter("saveKB") != null) {
 
                 // if the saveKB button had been clicked, a KB is to be uploaded
@@ -99,7 +99,7 @@ public class FileUploadServlet extends HttpServlet {
         if (tmpFile != null) {
 
             if (//!tmpFile.getName().endsWith(".doc")
-                  //  && !tmpFile.getName().endsWith(".d3web")
+                    //  && !tmpFile.getName().endsWith(".d3web")
                     //&& !tmpFile.getName().endsWith(".zip")
                     //&& !tmpFile.getName().endsWith(".xls")
                     //&& !tmpFile.getName().endsWith(".xlsx")
@@ -111,6 +111,7 @@ public class FileUploadServlet extends HttpServlet {
             } else {
 
                 if (tmpFile.getName().endsWith(".d3web")) {
+                    // TODO add handling of existing files here also!
 
                     // directly store it into the "real" outside storage path
                     // for d3web and refresh list view
@@ -122,40 +123,61 @@ public class FileUploadServlet extends HttpServlet {
                     File tf = new File(targetD3web);
                     tmpFile.renameTo(tf);
                     response.sendRedirect(GLOBSET.getWebAppWarName()
-                                + "/DialogManager?upKB=done&upfilename=" + targetD3webName.replace("%", " "));
+                            + "/DialogManager?upKB=done&upfilename=" + targetD3webName.replace("%", " "));
 
                     //tmpFile.delete();
-                    
+
                 } else {
-                    // otherwise upload doc to tmp directory for further parsing
-                    try {
-                        System.err.println("FileUploadServlet - UploadKB - upload base path: "
-                                + GLOBSET.getUploadFilesBasePath());
-                        File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
-                        System.err.println("FileUploadServlet - UploadKB - filepath to be written: "
-                                + dirToMove.getAbsolutePath());
 
-                        String newFileName = tmpFile.getName();
-                        File fileToMove = new File(dirToMove, newFileName);
-                        System.err.println("FileUploadServlet - UploadKB - final file: "
-                                + fileToMove.getAbsolutePath());
+                    if (tmpFile != null) {
 
-                        // if old equally named file already there: delete it
-                        if(fileToMove.exists()){
-                            fileToMove.delete();
+                        try {
+                            System.err.println("FileUploadServlet - UploadKB - upload base path: "
+                                    + GLOBSET.getUploadFilesBasePath());
+                            File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
+                            System.err.println("FileUploadServlet - UploadKB - filepath to be written: "
+                                    + dirToMove.getAbsolutePath());
+
+                            String newFileName = tmpFile.getName();
+                            File fileToMove = new File(dirToMove, newFileName);
+                            System.err.println("FileUploadServlet - UploadKB - final file: "
+                                    + fileToMove.getAbsolutePath());
+                            
+                            
+                            /*for checking if file already in repository OUTSIDE webapp*/
+                            String targetDir =
+                                GLOBSET.getStoreOutsideWUMPPath() + FILESEP + "d3web";
+                            Utils.checkCreateDir(targetDir);
+                            // remove file ending
+                            String fnD3web = 
+                                    newFileName.replace(".xlsx", ".d3web").replace(".csv", ".d3web").replace(".doc", ".d3web");
+                            String targetD3web = targetDir + FILESEP + fnD3web;
+                            File tf = new File(targetD3web);
+                            System.out.println(tf.getAbsolutePath());
+                            // if old equally named file already there: delete it
+                            if (tf.exists()) {
+                                System.out.println("FILE EXISTS!");
+                                // ask whether to delete file in dialog manager
+                                response.sendRedirect(GLOBSET.getWebAppWarName()
+                                    + "/DialogManager?fileExists=true&upfilename=" + newFileName.replace("%", " "));
+                               
+                            } else {
+
+                                System.out.println("FILE DOES NOT EXIST");
+                                tmpFile.renameTo(new File(dirToMove, newFileName));
+
+                                HttpSession httpSession = request.getSession();
+
+                                httpSession.setAttribute("latestDoc", newFileName);
+
+                                tmpFile.delete();
+                                response.sendRedirect(GLOBSET.getWebAppWarName()
+                                    + "/DialogManager?upKB=done&upfilename=" + newFileName.replace("%", " "));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
                         }
-
-                        tmpFile.renameTo(new File(dirToMove, newFileName));
-
-                        HttpSession httpSession = request.getSession();
-
-                        httpSession.setAttribute("latestDoc", newFileName);
-
-                        tmpFile.delete();
-                        response.sendRedirect(GLOBSET.getWebAppWarName()
-                                + "/DialogManager?upKB=done&upfilename=" + newFileName.replace("%", " "));
-                    } catch (Exception e) {
-                        e.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
                     }
                 }
             }
@@ -164,8 +186,6 @@ public class FileUploadServlet extends HttpServlet {
                     + "/DialogManager?upERR=nofile");
         }
     }
-    
-    
 
     /**
      * Processing a specification (XML) upload
@@ -234,10 +254,7 @@ public class FileUploadServlet extends HttpServlet {
 
         processRequest(request, response);
     }
+
+   
     
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
-    
-        
-    }
 }

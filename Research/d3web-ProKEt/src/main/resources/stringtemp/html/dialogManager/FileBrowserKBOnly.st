@@ -1,6 +1,6 @@
 <div id="fileBrowser" class="baseFileBrowser">
     <div class="row">
-        <form action="FileUploadServlet" enctype="multipart/form-data" method="post" >
+        <form action="DialogManager" enctype="multipart/form-data" method="post" >
             <input name="uploadKB" type="file" id="origKBUploadField" onchange="writeToFakeField('origKBUploadField');"/>
             <input name="saveKB" type="submit" value="Upload File" id="origKBUploadButton" />
         </form>

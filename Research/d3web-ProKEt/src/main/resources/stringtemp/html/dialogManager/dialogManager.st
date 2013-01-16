@@ -12,6 +12,7 @@
 <script src="libsExternal/jqueryUI/jqueryUi-1.8.10.all.min.js" type="text/javascript" language="javascript"></script>
 <script src="js/dialogmanager.js" type="text/javascript" language="javascript"></script>
 
+<link href="libsExternal/jqueryUI/jquery-ui-1.8.12.basic.css" type="text/css" rel="stylesheet">
 
 <style type="text/css">$css$</style>
 
@@ -20,6 +21,13 @@
 
 <body>
 <div id="docloader">
+
+    <div id="warning">
+    $commonElements/fileUploadWarningConfirm(warningText="Die Wissensbasis-Datei die Sie hochladen
+wollen hat denselben Namen wie eine bereits existierende Wissensbasis. Wenn Sie fortfahren,
+wird die existierende Wissensbasis unwiederruflich gelöscht!")$
+    </div>
+
     <div id="actionleftcol" class = "cell">
     
     <div id="dlUploadLabelRow" class="row">
