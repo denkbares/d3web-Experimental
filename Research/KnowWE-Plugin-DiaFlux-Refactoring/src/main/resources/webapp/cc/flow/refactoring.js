@@ -379,9 +379,11 @@ Refactoring.removeNode = function(node) {
  */
 Refactoring.extractModule = function(selection) {
 	
+	var sourceFlow = selection.flowchart;
+	
 	// first save the inbound and outbound rules
-	var inbound = selection.flowchart.findInboundRulesForSelection();
-	var outbound = selection.flowchart.findOutboundRulesForSelection();
+	var inbound = sourceFlow.findInboundRulesForSelection();
+	var outbound = sourceFlow.findOutboundRulesForSelection();
 	
 	// ask user for module name
 	var modID = Math.floor((2000-999)*Math.random()) + 1000; // generate number between 1000 and 2000
@@ -392,17 +394,17 @@ Refactoring.extractModule = function(selection) {
 	
 	// create new flowchart for module
 	var modID = Math.floor((2000-999)*Math.random()) + 1000; // generate number between 1000 and 2000
-	var module = new Flowchart('contents', "module" + modID, 650, 400, 1);
+	var module = new Flowchart('contents', "module" + modID, sourceFlow.width, sourceFlow.height, 1);
 	module.name = modName;
 	module.icon = "";
 	module.autostart = false;
 	
-	var sel = selection.flowchart.selection.clone();
+	var sel = sourceFlow.selection.clone();
 
 	// add all interconnecting rules to clipboard but not
 	// inbound and outbound ones
-	for (var i=0; i<selection.flowchart.rules.length; i++) {
-		var rule = selection.flowchart.rules[i];
+	for (var i=0; i<sourceFlow.rules.length; i++) {
+		var rule = sourceFlow.rules[i];
 		if (sel.contains(rule)) continue;
 		if (sel.contains(rule.getSourceNode()) && sel.contains(rule.getTargetNode())) {
 			sel.push(rule);
@@ -415,89 +417,141 @@ Refactoring.extractModule = function(selection) {
 		result += sel[i].toXML();
 	}
 	
-	var xmlDom = result.parseXML();
-	
+	var xmlDom = document.createElement('data');
+	xmlDom.innerHTML = result;
+		
 	module.addFromXML(xmlDom, 0, 0);
 	
 	// create start nodes for inbound rules and reconnect the rules
-	var startNodes = [];
+	var startNodes = {};
 	var startCounter = 1;
 	for (var i = 0; i < inbound.length; i++) {
-		var x = inbound[i].getSourceNode().getLeft();
-		var y = inbound[i].getSourceNode().getTop();
-		var nodeModel = {start: 'Start' + startCounter++}
-		nodeModel.position = {left: x, top: y};
-		var newSource = new Node(module, nodeModel);
-		startNodes.push(newSource);
-		rule = new Rule(null, newSource, null, module.findNode(inbound[i].getTargetNode().nodeModel.fcid));
+		var oldSource = inbound[i].getSourceNode();
+		var key = oldSource.nodeModel.fcid;
+		//Same inbound target nodes shall point to same startnode
+		if (!startNodes[key]) {
+			var nodeModel = {
+					start : 'Start' + startCounter++,
+					position : inbound[i].getTargetNode().nodeModel.position
+				}
+			startNodes[key] = {
+				node: new Node(module, nodeModel),
+				rules: []
+			};
+			
+			var newSource = startNodes[key].node;
+			var targetNode = module.findNode(inbound[i].getTargetNode().nodeModel.fcid);		
+			new Rule(null, newSource, null, targetNode);
+		}
+		startNodes[key].rules.push(inbound[i]);
 	}
 	
 	// create exit nodes for outbound rules and reconnect the rules
-	var exitNodes = [];
+	var exitNodes = {};
 	var exitCounter = 1;
 	for (var i = 0; i < outbound.length; i++) {
-		var x = outbound[i].getTargetNode().getLeft();
-		var y = outbound[i].getTargetNode().getTop();
-		var nodeModel = {exit: 'Exit' + exitCounter++}
-		nodeModel.position = {left: x, top: y};
-		var newSource = new Node(module, nodeModel);
-		exitNodes.push(newSource);
-		rule = new Rule(null, module.findNode(outbound[i].getSourceNode().nodeModel.fcid), outbound[i].getGuard(), newSource);
+		var oldTarget = outbound[i].getTargetNode();
+		var key = oldTarget.nodeModel.fcid;
+		if (!exitNodes[key]) {
+			var nodeModel = {
+					exit : 'Exit' + exitCounter++,
+					position : oldTarget.nodeModel.position 
+				}
+			
+			exitNodes[key] = {
+				node: new Node(module, nodeModel),
+				rules:[]
+			};
+			
+		}
+		var newTarget = exitNodes[key].node;
+		exitNodes[key].rules.push(outbound[i]);
+		var source = module.findNode(outbound[i].getSourceNode().nodeModel.fcid);
+		new Rule(null, source, outbound[i].getGuard(), newTarget);
 	}
 	
-	// preview doesn't work yet
-	// will be fixed later when preview function is renewed
 	module.setSelection(null, false, false);
-	var modXML = module.toXML(true);
+	var modXML = module.toXML();
 	
 	// the module is saved in the AJAX request which gets the package name
 	// because the request is done asynchronously but saving doesn't concern
 	// the replacing of the module
-	Refactoring.saveModule(modXML);
+	Refactoring.saveModule(modXML, modName);
 	
 	// update kbinfo cache to prevent an error of not finding the module node
 	var kbinfoXML = "<kbinfo>";
 	kbinfoXML += "<flowchart id=\"" + topic + ".." + topic + "_KB/" + "module" + modID + "\" name=\"" + module.name + "\">\r\n";
-	for (var i = 0; i < startNodes.length; i++) {
-		kbinfoXML += '<start>' + startNodes[i].nodeModel.start + '</start>\r\n';
+	
+	for (var nodeInfo in startNodes) {
+		if (startNodes.hasOwnProperty(nodeInfo)){
+			kbinfoXML += '<start>' + startNodes[nodeInfo].node.nodeModel.start + '</start>\r\n';
+		}
 	}
-	for (var i = 0; i < exitNodes.length; i++) {
-		kbinfoXML += '<exit>' + exitNodes[i].nodeModel.exit + '</exit>\r\n';
+	
+	for (var nodeInfo in exitNodes) {
+		if (exitNodes.hasOwnProperty(nodeInfo)) {
+			kbinfoXML += '<exit>' + exitNodes[nodeInfo].node.nodeModel.exit + '</exit>\r\n';
+		}
+		
 	}
 	kbinfoXML += "</flowchart>\r\n";
 	kbinfoXML += "</kbinfo>";
 	KBInfo._updateCache(kbinfoXML.parseXML());
 	
-	// create module node
-	var model = {
-			position: {left: inbound[0].getTargetNode().getLeft(), top: inbound[0].getTargetNode().getTop()},
-			action: {markup: 'KnOffice', expression: 'CALL[' + module.name + '(' + startNodes[0].nodeModel.start + ')]' }
-	};
-	var moduleNode = new Node(selection.flowchart, model);
-	moduleNode.select();
 	
-	// reconnect inbound rules to module node
-	for (var i = 0; i < inbound.length; i++) {
-		var inRule = new Rule(null, inbound[i].getSourceNode(), inbound[i].getGuard(), moduleNode);
-		inRule.select(true);
-		inbound[i].destroy();
-	}
-	
-	// reconnect outbound rules to module node
-	for (var i = 0; i < outbound.length; i++) {
+	// create one module node for each start node
+	for (var startInfo in startNodes) {
+		if (startNodes.hasOwnProperty(startInfo)) {
+			var node = startNodes[startInfo].node;
+			var rules = startNodes[startInfo].rules;
+			var position = rules[0].getTargetNode().nodeModel.position;
+			var model = {
+					position: position,
+					action: {markup: 'KnOffice', expression: 'CALL[' + module.name + '(' + node.nodeModel.start + ')]' }
+			};
+			var moduleNode = new Node(selection.flowchart, model);
+			moduleNode.select(true);
 
-		var newGuard = new Guard('KnOffice', 'IS_ACTIVE[' + module.name + '(' + exitNodes[i].nodeModel.exit + ')]', exitNodes[i].nodeModel.exit)
+			// reconnect inbound rules to module node
+			for (var i = 0; i < rules.length; i++) {
+				var inRule = new Rule(null, rules[i].getSourceNode(), rules[i].getGuard(), moduleNode);
+				inRule.select(true);
+				inbound[i].destroy();
+			}
+			
+			// connect outbound rules to each outbound 
+			for (var exitInfo in exitNodes){
+				if (exitNodes.hasOwnProperty(exitInfo)) {
+					var exitNode = exitNodes[exitInfo].node;
+					var rules = exitNodes[exitInfo].rules;
+					var connectedNodes = [];
+					for (var i = 0; i < rules.length; i++) {
+						var oldTargetNode = rules[i].getTargetNode();
+						//node was already connected
+						if (connectedNodes.indexOf(oldTargetNode) != -1) {
+							continue;
+						}
+						connectedNodes.push(oldTargetNode);
+						
+						var newGuard = new Guard('KnOffice', 'IS_ACTIVE[' + module.name + '(' + exitNode.nodeModel.exit + ')]', exitNode.nodeModel.exit)
+						// reconnect outbound rules to module node
+						var outRule = new Rule(null, moduleNode, newGuard, oldTargetNode);
+						outRule.select(true);
+						rules[i].destroy();
+						
+					}
+					
+				}
+				
+			}
+		}
 		
-		var outRule = new Rule(null, moduleNode, newGuard, outbound[i].getTargetNode());
-		outRule.select(true);
-		outbound[i].destroy();
 	}
 	
 	// finally trash original selection (can't use trashSelection()
 	// because selection has changed)
 	for (var i=0; i<sel.length; i++) {
-		var item = sel[i];
-		item.destroy();
+		sel[i].destroy();
 	}
 }
 
@@ -560,14 +614,17 @@ Refactoring.rename = function(node) {
 		Refactoring.renameTerm(node, oldName, newName);
 	}
 	else  if (node.nodeModel.start) {
-		oldName = node.nodeModel.start = newName;
+		node.nodeModel.start = newName;
 		node.setVisible(false);
 		node.setVisible(true);
+		Refactoring.renameTerm(node, flowName + '(' + oldName+')', newName);
 	}
 	else if (node.nodeModel.exit) {
-		oldName = node.nodeModel.exit = newName;
+		node.nodeModel.exit = newName;
 		node.setVisible(false);
 		node.setVisible(true);
+		var flowName = node.flowchart.name;
+		Refactoring.renameTerm(node, flowName + '(' + oldName+')', newName);
 	}
 	else {
 		alert("Renaming not possible for this type of node.")
@@ -580,7 +637,7 @@ Refactoring.rename = function(node) {
  * as the parent flowchart.
  * @param xml XML representation of the module
  */
-Refactoring.saveModule = function(xml) {
+Refactoring.saveModule = function(xml, modName) {
 	
 	var url = "KnowWE.jsp";
 	new Ajax.Request(url, {
@@ -596,7 +653,7 @@ Refactoring.saveModule = function(xml) {
 			if (packageName != "#undefined#") {
 				xml += '@package: ' + packageName + '\r\n';
 			}
-			Refactoring.newFlowchartText(xml);
+			Refactoring.newFlowchartText(xml, modName);
 		},
 		onFailure: function() {
 			CCMessage.warn(
@@ -617,13 +674,14 @@ Refactoring.saveModule = function(xml) {
  * the Wiki article of its parent flowchart.
  * @param xml XML representation of the module
  */
-Refactoring.newFlowchartText = function(xml) {
+Refactoring.newFlowchartText = function(xml, modName) {
 	
 	var url = "KnowWE.jsp";
 	new Ajax.Request(url, {
 		method: 'post',
 		parameters: {
 			action: 'SaveFlowchartAction',
+			KWikiChangeNote: 'Extracted module "' + modName +'"',
 			KWiki_Topic: topic,			// article
 			KWikitext: xml				// content
 		},
