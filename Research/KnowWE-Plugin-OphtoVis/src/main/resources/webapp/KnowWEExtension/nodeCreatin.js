@@ -37,7 +37,7 @@ subDiv.setAttribute('onclick', "event.stopPropagation(); bottonClick("+stringID+
 subDiv.style.width="200px";
 subDiv.style.height="50px";
 subDiv.style.backgroundColor="green";
-//newdiv.appendChild(subDiv);
+newdiv.appendChild(subDiv);
 listEntry.appendChild(newdiv);
 var test ="#ul"+parentID;
 $(test).append(listEntry);
@@ -45,20 +45,23 @@ return listEntry;
 
 }
 function bottonClick(id, instance){
-if(!instance.hid){
 var str = "#ul"+ id;
-   alert(str);
+if(!instance.hid){
 $(str).hide();
 instance.hid=true;
 instance.style.backgroundColor='red';
-jsPlumb.select({source: id }).detach();
-
+jsPlumb.select({source: id+"" }).detach();
+jsPlumb.repaintEverything();
 }else{
-$("'ul'+ id").show();
-// instance.hid=false;
-// instance.style.backgroundColor='green';
-// jsPlumb.select({source: id }).setPaintStyle({ strokeStyle:"black"});
-
+var toShow = 'ul'+ id;
+var found = $(window[toShow]).show();
+instance.hid=false;
+instance.style.backgroundColor='green';
+var listElements = $(window[toShow]).children().children();
+for(var i=0,j=listElements.length; i<j; i++){
+  connectKnoten(id+"",listElements[i].id+"");
+};
+jsPlumb.repaintEverything();
 }
 }
 function createUL(name,parent){
