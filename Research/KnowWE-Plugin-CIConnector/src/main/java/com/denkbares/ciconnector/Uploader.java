@@ -16,9 +16,9 @@ public class Uploader {
 
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost post = new HttpPost(
-				"http://localhost:8080/KnowWE/action/SaveCIInfoAction");
+				"http://d3web.de/action/SaveCIInfoAction");
 		MultipartEntity entity = new MultipartEntity();
-		String example = "/Users/sebastian/Desktop/example.xml";
+		String example = "src/main/resources/example.xml";
 		entity.addPart("file", new FileBody(new File(example)));
 		post.setEntity(entity);
 
