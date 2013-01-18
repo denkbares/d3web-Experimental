@@ -67,8 +67,8 @@ public class DialogManager extends HttpServlet {
     protected static final String LINESEP = System.getProperty("line.separator");
     private String docname = "";
     private MultipartRequest mpRequest;
-    
-    
+    private File currentUploadFile;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -79,7 +79,7 @@ public class DialogManager extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-  
+
         // write the servletcontext path
         String servletcontext = config.getServletContext().getRealPath("/");
         String realStPath = servletcontext
@@ -102,7 +102,7 @@ public class DialogManager extends HttpServlet {
         base = base.replace(base.substring(base.lastIndexOf(FILESEP), base.length()), "");
 
         String storeOutsideWUMPPath =
-                base + FILESEP + webappname + GLOBSET.getWUMPFolderName();
+                base + FILESEP + webappname.replaceFirst("/", "") + GLOBSET.getWUMPFolderName();
 
         File storageDir = Utils.checkCreateDir(storeOutsideWUMPPath);
         storageDir.canExecute();
@@ -110,9 +110,9 @@ public class DialogManager extends HttpServlet {
         storageDir.canRead();
 
         GLOBSET.setStoreOutsideWUMPPath(storeOutsideWUMPPath);
-        System.err.println("OutsideWUMPPath: " + GLOBSET.getStoreOutsideWUMPPath());
+       
         GLOBSET.setUploadFilesBasePath(GLOBSET.getServletBasePath() + GLOBSET.getUploadFilesFolderName());
-        System.err.println("UploadFilesBasePath: " + GLOBSET.getUploadFilesBasePath());
+        
 
         // initialize the d3web parser
         d3webParser = new D3webXMLParser();
@@ -130,6 +130,16 @@ public class DialogManager extends HttpServlet {
             // all Exceptions go to the real Errorlog, however
             e.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
         }
+        
+         System.err.println("base: " + base);
+         System.err.println("FILESEP: " + FILESEP);
+         System.err.println("webappname: " + webappname);
+         System.err.println("WUMPFOLDERNAME: " + GLOBSET.getWUMPFolderName());
+         System.err.println("storeOutsideWUMPPath: " + storeOutsideWUMPPath);
+            
+        System.err.println("storeOutsideWUMPPath: " + storeOutsideWUMPPath);
+         System.err.println("OutsideWUMPPath: " + GLOBSET.getStoreOutsideWUMPPath());
+        System.err.println("UploadFilesBasePath: " + GLOBSET.getUploadFilesBasePath());
     }
 
     /**
@@ -142,7 +152,7 @@ public class DialogManager extends HttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 
-        response.setContentType("text/html; charset=UTF-8"); 
+        response.setContentType("text/html; charset=UTF-8");
         HttpSession httpSession = request.getSession(true);
         //httpSession.setMaxInactiveInterval(20 * 60);
 
@@ -164,21 +174,22 @@ public class DialogManager extends HttpServlet {
             deleteSelectedKB(request, response, httpSession);
         } else if (action.equalsIgnoreCase("finalizeExceptionReport")) {
             finalizeExceptionReport(request, response, httpSession);
-        } if (action.equals("uploadAndOverwrite")) {
+        }
+        if (action.equals("uploadAndOverwrite")) {
             try {
                 /**
                  * Parse request using MultiparRequest since it is a
                  * multipart/form-data throws IOException if request is not
                  * multipart *
                  */
-                MultipartRequest multipartRequest = 
+                MultipartRequest multipartRequest =
                         this.mpRequest;
-               
-               if (multipartRequest.getParameter("saveKB") != null
+
+                if (multipartRequest.getParameter("saveKB") != null
                         && request.getParameter("overwrite") != null) {
 
                     // if the saveKB button had been clicked, a KB is to be uploaded
-                    uploadKBOverwrite(request, response, multipartRequest);
+                    uploadKBOverwrite(request, response);
 
                 } else if (multipartRequest.getParameter("saveSPEC") != null) {
                     // TODO 
@@ -279,7 +290,7 @@ public class DialogManager extends HttpServlet {
                 bui.append("</a></div>");
             }
             br.close();
-            
+
         } catch (IOException e1) {
             e1.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
             bui.append("EXCEPTION");
@@ -301,7 +312,7 @@ public class DialogManager extends HttpServlet {
 
         // get all files under the given path
         List<File> files = Utils.getFileList(dir);
-      
+
         StringBuilder bui = new StringBuilder();
         if (files.size() > 0) {
 
@@ -317,7 +328,7 @@ public class DialogManager extends HttpServlet {
                     bui.append("</option>");
                 }
             }
-           
+
         }
         return bui;
     }
@@ -333,7 +344,7 @@ public class DialogManager extends HttpServlet {
 
         // get all files under the given path
         List<File> files = Utils.getFileList(dir);
-       
+
         StringBuilder bui = new StringBuilder();
         if (files.size() > 0) {
 
@@ -348,7 +359,7 @@ public class DialogManager extends HttpServlet {
                     bui.append("</option>");
                 }
             }
-           
+
         }
         return bui;
     }
@@ -412,7 +423,7 @@ public class DialogManager extends HttpServlet {
         String path =
                 GLOBSET.getUploadFilesBasePath()
                 + "/specs/" + specName + ".xml";
-        
+
         System.err.println("\t - dialog xml path and file name: " + path);
 
         File specFile = new File(path);
@@ -421,25 +432,26 @@ public class DialogManager extends HttpServlet {
         String dialogLink = "";
 
         httpSession.setAttribute("WUMP", "true");
-        
+        httpSession.setAttribute("initFromUpload", "init");
+
         if (specName != null) {
 
             // assemble ITree Servlet Link
             if (specName.equalsIgnoreCase(DialogType.ITREE.toString())) {
 
-                dialogLink = GLOBSET.getWebAppWarName() + 
-                        "/ITreeDialog?src="
+                dialogLink = GLOBSET.getWebAppWarName()
+                        + "/ITreeDialog?src="
                         + specFile.getName().replace(".xml", "")
                         + "&dialogID=" + d3webKBName + "AND" + specName;
 
 
             } else if (specName.toUpperCase().contains(DialogType.STANDARD.toString())) {
-        
+
                 //dialogLink = GLOBSET.getWebAppWarName() + "/StandardDialog?src="
                 //      + specFile.getName().replace(".xml", "")
                 //    + "&dialogID=" + d3webKBName + "AND" + specName;
-                dialogLink = GLOBSET.getWebAppWarName() + 
-                        "/StandardDialog?src="
+                dialogLink = GLOBSET.getWebAppWarName()
+                        + "/StandardDialog?src="
                         + specFile.getName().replace(".xml", "")
                         + "&dialogID=" + d3webKBName + "AND" + specName;
             }
@@ -532,7 +544,7 @@ public class DialogManager extends HttpServlet {
                     writer.append(REPLACEID + "dialoglinklist");
                     writer.append(REPLACECONTENT);
                     writer.append(bui.toString());
-                    
+
 
                 } catch (IOException e1) {
                     writer.write("EXCEPTION--StoreDialogToList");
@@ -611,9 +623,9 @@ public class DialogManager extends HttpServlet {
         converter.compiler.Compiler compiler = null;
         try {
             compiler = new converter.compiler.Compiler();
-            /*if (true) {
-                throw new Exception();
-            }*/
+            /*
+             * if (true) { throw new Exception(); }
+             */
         } catch (Exception e) {
             e.printStackTrace(SystemLoggerUtils.getEventLoggerStream());
         }
@@ -661,31 +673,7 @@ public class DialogManager extends HttpServlet {
 
         // TODO: write Exceptions to Exception Doc
         try {
-            // use Volker Kokula's Parser for Excel stuff for now
-            /*if(doc.endsWith(".csv") || doc.endsWith(".xls")){
-               
-		KnowledgeMatrixParser parser = new CsvKnowledgeMatrixParser();
-		KnowledgeMatrix matrix = parser.parse(docToParse, new Properties());
-		
-		de.uniwuerzburg.informatik.wms.kombitabelle.base.KnowledgeBase knowledge = 
-                        new de.uniwuerzburg.informatik.wms.kombitabelle.base.KnowledgeBase(matrix);
-		
-		Page page = new Page();
-		page.add(new SolutionComponent("kb", knowledge.getSolutions()));
-		page.add(new QuestionComponent("kb", knowledge.getQuestions()));
-		page.add(new RuleComponent("kb", knowledge.getIntelligence()));
-		
-		for (Intelligence intelligence : knowledge.getIntelligence(IntelligenceType.COVERING)) {
-			page.add(new CoveringComponent("kb", intelligence));
-		}
-		
-		PrintWriter pw = new PrintWriter(System.out);
-		page.write(pw);
-		pw.flush();
-            } else {*/
-            
-                // otherwise user Elmar's parser
-                 //compileError = compiler.compileTo3web(doc, err, tmp, d3web, knowwe);
+
             compileError = compiler.compile(doc, err, tmp, d3web, knowwe);
 
 
@@ -703,9 +691,11 @@ public class DialogManager extends HttpServlet {
                 errFile.delete();
 
                 status = "ParseSuccess";
+
+              
             }
             //}
-            
+
 
 
 
@@ -724,7 +714,11 @@ public class DialogManager extends HttpServlet {
                 status = "ParseException";
             }
 
+            System.err.println("\t - Doc Parsed: " + docToParse.getAbsolutePath());
+            System.gc();
+            docToParse.setWritable(true);
             docToParse.delete();
+            System.err.println("\t - EXISTS?: " + docToParse.exists());
 
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
@@ -761,7 +755,7 @@ public class DialogManager extends HttpServlet {
         File[] fileList = d3webDir.listFiles();
         if (fileList != null && fileList.length > 0) {
             for (File f : fileList) {
-                
+
                 if (!f.getName().equals("empty.txt")) {
                     File toRename = f;
                     System.err.println("\t - latest created d3web file: " + toRename.getName());
@@ -772,14 +766,18 @@ public class DialogManager extends HttpServlet {
                     Utils.checkCreateDir(targetDir);
                     String targetD3web = targetDir + FILESEP + targetD3webName;
                     File tf = new File(targetD3web);
-                    toRename.renameTo(tf);
+
+                    if (tf.exists()) {
+                        tf.delete();
+                    }
+                    toRename.renameTo(new File(targetD3web));
 
                     toRename.delete();
 
-                    if (tf != null
-                            && tf.getName().equals(targetD3webName)) {
-                        //http.setAttribute("latestD3web", targetD3web);
-                    }
+                    // if (tf != null
+                    //       && tf.getName().equals(targetD3webName)) {
+                    //http.setAttribute("latestD3web", targetD3web);
+                    // }
                 }
             }
 
@@ -920,7 +918,7 @@ public class DialogManager extends HttpServlet {
         finalBui.append("<head>");
         finalBui.append("<title>Exception (Ausnahme) Report</title>");
         finalBui.append("</head>");
-        
+
         finalBui.append("<h3>Entschuldigung - Eine programminterne Exception (Ausnahme) "
                 + "ist aufgetreten. <br> "
                 + "<span style='color: red;'>Bitte leiten Sie den Inhalt dieses "
@@ -935,12 +933,11 @@ public class DialogManager extends HttpServlet {
 
         return finalBui.toString();
     }
-    
-    
-    private void uploadKBOverwrite(HttpServletRequest request, HttpServletResponse response, MultipartRequest multipartRequest) throws IOException {
 
-        
-        File tmpFile = mpRequest.getFile("uploadKB");
+    private void uploadKBOverwrite(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+
+        File tmpFile = this.currentUploadFile;
         if (tmpFile != null) {
 
             try {
@@ -952,12 +949,18 @@ public class DialogManager extends HttpServlet {
 
                 String newFileName = tmpFile.getName();
                 File fileToMove = new File(dirToMove, newFileName);
+
                 System.err.println("FileUploadServlet - UploadKB - final file: "
                         + fileToMove.getAbsolutePath());
 
                 // if old equally named file already there: delete it
                 if (fileToMove.exists()) {
+                    System.err.println("FileUploadServlet - try to delete: "
+                            + fileToMove.getAbsolutePath());
+                    fileToMove.setWritable(true);
                     fileToMove.delete();
+                    System.err.println("FileUploadServlet - deleted file: "
+                            + fileToMove.getAbsolutePath() + " - " + fileToMove.exists());
                 }
 
                 tmpFile.renameTo(new File(dirToMove, newFileName));
@@ -966,13 +969,15 @@ public class DialogManager extends HttpServlet {
 
                 httpSession.setAttribute("latestDoc", newFileName);
 
+                tmpFile.setWritable(true);
                 tmpFile.delete();
                 //response.sendRedirect(GLOBSET.getWebAppWarName()
-                  //      + "/DialogManager?upKB=done&upfilename=" + newFileName.replace("%", " "));
+                //      + "/DialogManager?upKB=done&upfilename=" + newFileName.replace("%", " "));
                 PrintWriter writer = response.getWriter();
                 writer.append(newFileName.replace("%", " "));
-                
-                this.mpRequest = null;
+
+                this.currentUploadFile = null;
+
             } catch (Exception e) {
                 PrintWriter writer = response.getWriter();
                 writer.append("NOPARSE");
@@ -980,11 +985,10 @@ public class DialogManager extends HttpServlet {
             }
         }
     }
-    
-    
+
     /**
      * File Upload Functionality
-     * 
+     *
      */
     /**
      * Bundle the requests
@@ -998,8 +1002,8 @@ public class DialogManager extends HttpServlet {
 
         processRequest(request, response);
     }
-    
-     // Process the upload request
+
+    // Process the upload request
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -1013,8 +1017,8 @@ public class DialogManager extends HttpServlet {
             MultipartRequest multipartRequest = new MultipartRequest(request, getServletContext().getRealPath(FILESEP + "tmp" + FILESEP), /*
                      * 1MB
                      */ 1024 * 1024);
-            
-            
+
+
             if (multipartRequest.getParameter("saveKB") != null) {
 
                 this.mpRequest = multipartRequest;
@@ -1027,7 +1031,7 @@ public class DialogManager extends HttpServlet {
                 // if the saveSPEC button had been clicked, a Spec is to be uploaded
                 uploadSpec(request, response, multipartRequest);
 
-            } 
+            }
         } catch (IOException ex) {
             // in Exception case, i.e., no file provided, show upload plainly
             displayUpload(request, response);
@@ -1045,7 +1049,11 @@ public class DialogManager extends HttpServlet {
     private void uploadKB(HttpServletRequest request, HttpServletResponse response, MultipartRequest multipartRequest) throws IOException {
 
         File tmpFile = multipartRequest.getFile("uploadKB");
-        if (tmpFile != null) {
+        multipartRequest = null;
+
+        this.currentUploadFile = tmpFile;
+
+        if (currentUploadFile != null) {
 
             if (//!tmpFile.getName().endsWith(".doc")
                     //  && !tmpFile.getName().endsWith(".d3web")
@@ -1053,24 +1061,24 @@ public class DialogManager extends HttpServlet {
                     //&& !tmpFile.getName().endsWith(".xls")
                     //&& !tmpFile.getName().endsWith(".xlsx")
                     //&& 
-                    !tmpFile.getName().endsWith(".csv")) {
+                    !currentUploadFile.getName().endsWith(".csv")) {
 
                 response.sendRedirect(GLOBSET.getWebAppWarName()
                         + "/DialogManager?upERR=nokb");
             } else {
 
-                if (tmpFile.getName().endsWith(".d3web")) {
+                if (currentUploadFile.getName().endsWith(".d3web")) {
                     // TODO add handling of existing files here also!
 
                     // directly store it into the "real" outside storage path
                     // for d3web and refresh list view
-                    String targetD3webName = tmpFile.getName();
+                    String targetD3webName = currentUploadFile.getName();
                     String targetDir =
                             GLOBSET.getStoreOutsideWUMPPath() + FILESEP + "d3web";
                     Utils.checkCreateDir(targetDir);
                     String targetD3web = targetDir + FILESEP + targetD3webName;
                     File tf = new File(targetD3web);
-                    tmpFile.renameTo(tf);
+                    currentUploadFile.renameTo(tf);
                     response.sendRedirect(GLOBSET.getWebAppWarName()
                             + "/DialogManager?upKB=done&upfilename=" + targetD3webName.replace("%", " "));
 
@@ -1078,62 +1086,70 @@ public class DialogManager extends HttpServlet {
 
                 } else {
 
-                    if (tmpFile != null) {
 
-                        try {
-                            System.err.println("FileUploadServlet - UploadKB - upload base path: "
-                                    + GLOBSET.getUploadFilesBasePath());
-                            File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
-                            System.err.println("FileUploadServlet - UploadKB - filepath to be written: "
-                                    + dirToMove.getAbsolutePath());
+                    try {
+                        System.err.println("FileUploadServlet - UploadKB - upload base path: "
+                                + GLOBSET.getUploadFilesBasePath());
+                        File dirToMove = new File(GLOBSET.getUploadFilesBasePath());
+                        System.err.println("FileUploadServlet - UploadKB - filepath to be written: "
+                                + dirToMove.getAbsolutePath());
 
-                            String newFileName = tmpFile.getName();
-                            File fileToMove = new File(dirToMove, newFileName);
-                            System.err.println("FileUploadServlet - UploadKB - final file: "
-                                    + fileToMove.getAbsolutePath());
-                            
-                            
-                            /*for checking if file already in repository OUTSIDE webapp*/
-                            String targetDir =
+                        String newFileName = currentUploadFile.getName();
+                        File fileToMove = new File(dirToMove, newFileName);
+
+                        System.err.println("FileUploadServlet - UploadKB - final file: "
+                                + fileToMove.getAbsolutePath());
+
+
+                        /*
+                         * for checking if file already in repository OUTSIDE
+                         * webapp
+                         */
+                        String targetDir =
                                 GLOBSET.getStoreOutsideWUMPPath() + FILESEP + "d3web";
-                            Utils.checkCreateDir(targetDir);
-                            // remove file ending
-                            String fnD3web = 
-                                    newFileName.replace(".xlsx", ".d3web").replace(".csv", ".d3web").replace(".doc", ".d3web");
-                            String targetD3web = targetDir + FILESEP + fnD3web;
-                            File tf = new File(targetD3web);
-                           
-                            // if old equally named file already there: delete it
-                            if (tf.exists()) {
-                                
-                                // ask whether to delete file in dialog manager
-                                response.sendRedirect(GLOBSET.getWebAppWarName()
+                        Utils.checkCreateDir(targetDir);
+                        // remove file ending
+                        String fnD3web =
+                                newFileName.replace(".xlsx", ".d3web").replace(".csv", ".d3web").replace(".doc", ".d3web");
+                        String targetD3web = targetDir + FILESEP + fnD3web;
+                        File tf = new File(targetD3web);
+
+                        // if old equally named file already there: delete it
+                        if (tf.exists()) {
+
+                            // ask whether to delete file in dialog manager
+                            response.sendRedirect(GLOBSET.getWebAppWarName()
                                     + "/DialogManager?fileExists=true&upfilename=" + newFileName.replace("%", " "));
-                               
-                            } else {
 
-                                
-                                tmpFile.renameTo(new File(dirToMove, newFileName));
+                        } else {
 
-                                HttpSession httpSession = request.getSession();
+                            currentUploadFile.renameTo(new File(dirToMove, newFileName));
 
-                                httpSession.setAttribute("latestDoc", newFileName);
+                            HttpSession httpSession = request.getSession();
 
-                                tmpFile.delete();
-                                response.sendRedirect(GLOBSET.getWebAppWarName()
+                            httpSession.setAttribute("latestDoc", newFileName);
+
+                            currentUploadFile.setWritable(true);
+                            currentUploadFile.delete();
+                            System.out.println("CURRENT UPLOAD FILE: EXISTS? " + currentUploadFile.exists());
+
+                            response.sendRedirect(GLOBSET.getWebAppWarName()
                                     + "/DialogManager?upKB=done&upfilename=" + newFileName.replace("%", " "));
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
+                            currentUploadFile = null;
                         }
+
+                    } catch (Exception e) {
+                        e.printStackTrace(SystemLoggerUtils.getExceptionLoggerStream());
                     }
                 }
+
             }
         } else {
             response.sendRedirect(GLOBSET.getWebAppWarName()
                     + "/DialogManager?upERR=nofile");
         }
+
+
     }
 
     /**
@@ -1174,7 +1190,7 @@ public class DialogManager extends HttpServlet {
 
     }
 
-     private void displayUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void displayUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         /**
          * Display upload.jsp as response. It is a good convention to use JSPs
          * as Views (i.e. to show response) and Servlets as Controllers (i.e. to

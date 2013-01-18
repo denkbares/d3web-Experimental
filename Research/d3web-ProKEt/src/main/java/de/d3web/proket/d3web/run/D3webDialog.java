@@ -180,8 +180,7 @@ public class D3webDialog extends HttpServlet {
         //httpSession.setMaxInactiveInterval(-1000);
 
         String source = getSource(request, httpSession);
-        String kbName = "";
-
+        
         // source and parse
         //System.err.append("D3webDialog - the whole dialogID String: " + request.getParameter("dialogID"));
         //System.out.println(request.getParameter("dialogID"));
@@ -190,14 +189,8 @@ public class D3webDialog extends HttpServlet {
             if (dialogID[1] != null) {
                 source = dialogID[1];
             }
-            if (dialogID[0] != null) {
-                kbName = dialogID[0];
-            }
         }
-
-        //System.out.println("D3webDialog - try to read specs: " + source);
-        //System.out.println("D3webDialog - try to read kb: " + kbName);
-
+   
         d3webParser.setSourceToParse(source);
         d3wcon = D3webConnector.getInstance();
         d3wcon.setD3webParser(d3webParser);
@@ -222,22 +215,34 @@ public class D3webDialog extends HttpServlet {
         String DIDSave = httpSession.getAttribute(DID_SAVE) != null
                 ? httpSession.getAttribute(DID_SAVE).toString() : "";
 
+        String initFromUploadTool = httpSession.getAttribute("initFromUpload") != null
+                ? httpSession.getAttribute("initFromUpload").toString() : "";
+        
+        // first of all check if we come from upload tool as we need special 
+        // reparse handling then
+        if (
+                (request.getParameter("dialogID") != null
+                && !DIDSave.equals(request.getParameter("dialogID"))) ||
+                
+                (request.getParameter("dialogID") != null
+                && DIDSave.equals(request.getParameter("dialogID"))
+                && initFromUploadTool.equals("init"))
+           )
+        {
+            httpSession.setAttribute(DID_SAVE, request.getParameter("dialogID"));
+            parseAndInitDialogServlet(httpSession, request);
+            httpSession.setAttribute("initFromUpload", "");
+        } else
         // if we call different xml src file but with same dialog (e.g. different dialogs for D3webDialog Servlet)
         if (!sSave.equals(source)) {
             httpSession.setAttribute(SOURCE_SAVE, source);
-
             parseAndInitDialogServlet(httpSession, request);
         } else // if we call a different servlet = completely different dialog, parse newly
         if (!cSave.equals(this.getClass().toString())) {
 
             httpSession.setAttribute(SERVLET_CLASS_SAVE, this.getClass().toString());
             parseAndInitDialogServlet(httpSession, request);
-        } else // if we have a dialog ID (we have when we come from DialogManager
-        if (request.getParameter("dialogID") != null
-                && !DIDSave.equals(request.getParameter("dialogID"))) {
-            httpSession.setAttribute(DID_SAVE, request.getParameter("dialogID"));
-            parseAndInitDialogServlet(httpSession, request);
-        }
+        } 
 
 
         /*
@@ -1194,15 +1199,15 @@ public class D3webDialog extends HttpServlet {
         KnowledgeBase kb = d3wcon.getKb();
         // TODO Urgent: needed for EuraHS due to early reset, but not good
         // for other dialogs!
-        /*try {
+        //try {
             // not yet parsed completely/correctly
-            if (kb == null) {
-                d3webParser.parse();
-                kb = d3webParser.getKnowledgeBase();
+          //  if (kb == null) {
+            //    d3webParser.parse();
+              //  kb = d3webParser.getKnowledgeBase();
 
-            }
-        } catch (IOException ioe) {
-        }*/
+           // }
+        //} catch (IOException ioe) {
+        //}
 
         Session d3webSession =
                 D3webUtils.createSession(kb, d3wcon.getDialogStrat());
