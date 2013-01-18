@@ -1,22 +1,3 @@
-function createKnoten(name, startx, starty,stringID){
-var listEntry= document.createElement('li');
-var newdiv = document.createElement('div');
-newdiv.setAttribute('id', stringID);
-newdiv.setAttribute('onclick', "location='Wiki.jsp?page="+name+"'");
-newdiv.className="window ui-draggable";
-//newdiv.style.left ="400px";
-newdiv.style.width="100px";
-newdiv.style.top ="100px"; 
-newdiv.style.marginTop="100px";
-newdiv.innerHTML="<p>"+name+"</p>";
-newdiv.style.position = "relative"; 
-listEntry.appendChild(newdiv);
-$(knots).append(listEntry);
-return listEntry;
-
-
-
-}
 function createKnoten(name, startx, starty,stringID,parentID){
 var listEntry= document.createElement('li');
   newdiv = document.createElement('div');
@@ -53,17 +34,34 @@ instance.style.backgroundColor='red';
 jsPlumb.select({source: id+"" }).detach();
 jsPlumb.repaintEverything();
 }else{
-var toShow = 'ul'+ id;
-var found = $(window[toShow]).show();
+var found = $(str).show();
 instance.hid=false;
 instance.style.backgroundColor='green';
-var listElements = $(window[toShow]).children().children();
+restoreKnoten(id);
+}
+}
+function restoreKnoten(id){
+var str = "#ul"+ id;
+var listElement = $(str).children();
+var listElements =$(listElement).children();
 for(var i=0,j=listElements.length; i<j; i++){
-  connectKnoten(id+"",listElements[i].id+"");
+	if(listElements[i].id.length>0){
+  	connectKnoten(id+"",listElements[i].id+"");
+  }
+  	var str2 = "#ul"+ listElements[i].id;
+  	if($(str2).length>0){
+  		jsPlumb.repaintEverything();
+  		var str = "#ul"+ listElements[i].id ;
+  		$(str).show();
+  		restoreKnoten(listElements[i].id);
+  	}
 };
 jsPlumb.repaintEverything();
 }
-}
+	
+	
+
+
 function createUL(name,parent){
 var list= document.createElement('ul');
 list.style.listStyleType = "none";
@@ -87,8 +85,8 @@ $(knots).append(list);
 function connectKnoten(start,end){
 jsPlumb.bind("ready", function() {
 jsPlumb.connect({
-source:start,
-target:end
+source:start+"",
+target:end+""
 });
 });
 
