@@ -304,8 +304,15 @@ function startDialog(){
         success : function(html) {
             
             if(html.indexOf("ERROR")==-1){
+                
+                // get only the server:port substring of the url
                 base = window.location.href.toString();
-                linkComplete = base.substring(0, base.lastIndexOf("/")) + html;
+                
+                // index of last occurence of slash
+                lastSlash = base.lastIndexOf("/");
+                
+                // assemble final url string
+                linkComplete = base.substring(0, lastSlash) + html;
                 
                 dialogWindow = window.open(linkComplete, "", "");   
                 dialogWindow.focus();

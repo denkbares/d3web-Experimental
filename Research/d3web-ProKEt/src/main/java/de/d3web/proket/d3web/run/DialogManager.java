@@ -167,7 +167,7 @@ public class DialogManager extends HttpServlet {
         } else if (action.equalsIgnoreCase("show")) {
             show(request, response, httpSession);
         } else if (action.equalsIgnoreCase("assembleDialog")) {
-            assembleDialog(request, response, httpSession);
+            assembleDialogLink(request, response, httpSession);
         } else if (action.equalsIgnoreCase("storeDialogToUsersList")) {
             storeDialogToUsersList(request, response, httpSession);
         } else if (action.equalsIgnoreCase("deleteSelectedKB")) {
@@ -408,7 +408,7 @@ public class DialogManager extends HttpServlet {
      * @param httpSession
      * @throws IOException
      */
-    protected void assembleDialog(HttpServletRequest request,
+    protected void assembleDialogLink(HttpServletRequest request,
             HttpServletResponse response,
             HttpSession httpSession) throws IOException {
 
