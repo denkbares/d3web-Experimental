@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="Minimaldialog: Start- und Folgefragen in Startfrageklassen"  
+	dtype="singleform" 
+	indicationmode="hide_unindicated"
+	dstrategy="nextform"
+        showcontraindicated="HIDE"
+        shownonindicated="HIDE"
+	css="questionaryCons, diagnosisVisu" 
+	dialogcolumns="1"
+	questionnairecolumns="3"
+	questioncolumns="1"
+	uiprefix = "QuestionaryCons"
+        login = ""
+        required = "NONE"
+	language = ""
+        debug = "false"
+        solutionExplanation = "TEXTUAL"
+        solutionSorting = "CATEGORICAL" 
+        solutionDepth = "ESTABLISHED"
+        diagnosisNavi = "FALSE"
+        questionnaireNavi = "FALSE"
+        >
+	<data kb="MinStartFU.d3web" />
+        <ue logging = "FALSE" />
+</dialog>

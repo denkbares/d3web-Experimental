@@ -113,8 +113,8 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
         } else {
             // QContainer indicated
             if ((bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
-                    || isIndicated(parent, bb))
-                    && ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
+                    || D3webUtils.isIndicatedPlain(parent, bb))
+                    && ((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb))
                     || (!D3webUtils.isFollowUpToQCon(to, parent)))) {
                 st.removeAttribute("readonly");
             } else {

@@ -42,7 +42,7 @@ public interface D3webRenderer {
 	 * @param bb Blackboard of the current session
 	 * @return true, if the TerminologyObject is indicated.
 	 */
-	public boolean isIndicated(TerminologyObject to, Blackboard bb);
+	//public boolean isIndicated(TerminologyObject to, Blackboard bb);
 
 	// public boolean isParentIndicated(TerminologyObject to, Blackboard bb);
 

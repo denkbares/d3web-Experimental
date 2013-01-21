@@ -610,13 +610,12 @@ public class D3webUtils {
 
         if (parent.getChildren() != null && parent.getChildren().length != 0) {
             for (TerminologyObject c : parent.getChildren()) {
+                if (!isIndicatedByInitQuestionnaire(c, parent, blackboard)
+                        && !isIndicatedPlain(parent, blackboard)) {
 
-                Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
-                        c.getName());
-
-                if (!isIndicated(qto, blackboard)
-                        || !isParentIndicated(qto, blackboard)) {
-
+                    Question qto =
+                            D3webConnector.getInstance().getKb().getManager().searchQuestion(
+                            c.getName());
                     // remove a previously set value
                     Fact lastFact = blackboard.getValueFact(qto);
                     if (lastFact != null) {
@@ -650,15 +649,13 @@ public class D3webUtils {
      * de.d3web.core.knowledge.Indication.State.INDICATED ||
      * bb.getIndication((InterviewObject) to).getState() ==
      * de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED)) { return
-     * true; } } return false;
-    }
+     * true; } } return false; }
      */
-    
     /**
-     * Check whether the given Terminology Object is a direct child of a 
-     * QContainer (Questionnaire).
-     * If not it is a follow up question and might
-     * not be thought to be presented by certain dialogs.
+     * Check whether the given Terminology Object is a direct child of a
+     * QContainer (Questionnaire). If not it is a follow up question and maybe
+     * should not be presented by certain dialogs.
+     *
      * @param to Terminology Object to check
      * @return boolean true if the checked TO is a direct child of a QContainer,
      * false otherwise
@@ -666,9 +663,9 @@ public class D3webUtils {
     public static boolean isDirectQContainerChild(TerminologyObject to) {
         TerminologyObject[] parents = to.getParents();
 
-       if (parents != null && parents.length != 0) {
+        if (parents != null && parents.length != 0) {
             for (TerminologyObject term : parents) {
-                 if (!term.getClass().equals(QContainer.class)) {
+                if (!term.getClass().equals(QContainer.class)) {
                     return false;
                 }
             }
@@ -678,45 +675,147 @@ public class D3webUtils {
 
     }
 
-    /**
-     * Checks, whether a given TerminologyObject is currently indicated (or active)
-     * on a given blackboard in a d3web session.
-     * Therefore, it is checked whether it is indicated, instantly_indicated, or
-     * whether it is contained within an init questions questionnaire and
-     * is a direct child. (Currently needed for EuraHS and Mediastinitis as they
-     * should per default display all of the direct child questions of init 
-     * questionnaires for convenience)
-     * @param to TerminologyObject to check its inidication state
-     * @param bb Blackboard which is used for check reference
-     * @return boolean true if the checked TerminologyObject IS currently 
-     * indicated, false otherwise
-     * 
-     * TODO: maybe we need other "default" isIndicated methods. Or other mechanisms
-     */
-    public static boolean isIndicated(TerminologyObject to, Blackboard bb) {
-        for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
+    public static boolean isIndicatedByChild(TerminologyObject to, Blackboard bb) {
 
-
-            // find the appropriate qaset in the knowledge base
-            if (qaSet.getName().equals(to.getName())
-                    && // and check its indication state
-                    (bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.INDICATED
-                    || bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED)
-                    || (bb.getSession().getKnowledgeBase().getInitQuestions().contains(qaSet)
-                    && D3webUtils.isDirectQContainerChild(to))) {
-                return true;
+        if (to.getChildren().length != 0) {
+            for (TerminologyObject toc : to.getChildren()) {
+                //System.out.println(toc.getName() + " " + isIndicated(to, bb));
+                if (isIndicatedPlain(toc, bb)) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
+    /**
+     * Checks, whether a given TerminologyObject is currently indicated.
+     * Thereby, it is NOT checked whether e.g. the TerminologyObject is
+     * contained in an init questionnaire but plainly the indication states of
+     * the blackboard are returned, i.e. whether the TO is indicated or instant
+     * indicated.
+     *
+     * @param to TerminologyObject to check its inidication state
+     * @param bb Blackboard which is used for check reference
+     * @return boolean true if the checked TerminologyObject IS currently
+     * indicated, false otherwise
+     */
+    public static boolean isIndicatedPlain(TerminologyObject to, Blackboard bb) {
+        for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
+
+            if (bb.getIndication((InterviewObject) to).getState()
+                    == de.d3web.core.knowledge.Indication.State.INDICATED
+                    || bb.getIndication((InterviewObject) to).getState()
+                    == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED) {
+                return true;
+            }
+
+
+        }
+        return false;
+    }
+
+    /**
+     * Retrieving the indication status of a TerminologyObject respecting also
+     * whether the parent questionnaire is an initQuestionnaire or not. Only
+     * DIRECT children of such InitQuestionnaires are considered as indicated,
+     * hierarchically deeper children account for follow-up questions and thus
+     * are returnd as NON indicated.
+     *
+     * @param to TerminologyObject to check
+     * @param parent TerminologyObject the parent of the to to check
+     * @param bb Blackboard of the current session that provides indication
+     * states
+     * @return boolean true if the checked to is indicated according to above
+     * aspects, false otherwise.
+     */
+    public static boolean isIndicatedByInitQuestionnaire(TerminologyObject to,
+            TerminologyObject parent, Blackboard bb) {
+
+        QASet parentQASet =
+                bb.getSession().getKnowledgeBase().getManager().searchQASet(parent.getName());
+
+        for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
+
+            // find the appropriate qaset in the knowledge base
+            if (qaSet.getName().equals(to.getName())) {
+
+                if (isIndicatedPlain(to, bb)
+                        || D3webUtils.isInitQuestion(qaSet, parentQASet, bb)) {
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+    
+    public static boolean isIndicatedByIndicatedQuestionnaire(TerminologyObject to,
+            TerminologyObject parent, Blackboard bb) {
+
+        QASet parentQASet =
+                bb.getSession().getKnowledgeBase().getManager().searchQASet(parent.getName());
+
+        for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
+
+            // find the appropriate qaset in the knowledge base
+            if (qaSet.getName().equals(to.getName())) {
+
+                if (isIndicatedPlain(to, bb)
+                        || D3webUtils.isIndicatedPlain(parent, bb)) {
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
+    /**
+     * Checks, whether a given QASet is an init questionnaire of the knowledge
+     * base.
+     *
+     * @param qaset QASet to check
+     * @param bb Blackboard of the current session
+     * @return boolean true if the checked QASet is initQuestionnaire, false
+     * otherwise.
+     */
+    public static boolean isInitQuestionnaire(QASet qaset, Blackboard bb) {
+        return bb.getSession().getKnowledgeBase().getInitQuestions().contains(qaset);
+    }
+
+    /**
+     * Checks, whether a given QASet is an init question, meaning that it is a
+     * DIRECT child of one of the init questionnaires of the knowledge base.
+     *
+     * @param child QASet to check
+     * @param parent QASet the parent object of the checked QASet
+     * @param bb Blackboard of the current session
+     * @return boolean true if the checked QASet is initQuestion, false
+     * otherwise.
+     */
+    public static boolean isInitQuestion(QASet child, QASet parent, Blackboard bb) {
+        return isInitQuestionnaire(parent, bb)
+                && D3webUtils.isDirectQContainerChild(child);
+    }
+
+    /**
+     * Check whether a given TerminologyObject is explicitly contra-indicated
+     * which is stronger than being just not-yet indicated.
+     *
+     * @param to TerminologyObject to check
+     * @param bb Blackboard of the current session that provides indication
+     * states
+     * @return boolean true if the checked to is contra-indicated, false
+     * otherwise.
+     */
     public static boolean isContraIndicated(TerminologyObject to, Blackboard bb) {
         for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
             // find the appropriate qaset in the knowledge base
-            if (qaSet.getName().equals(to.getName())
-                    && // and check its indication state
-                    bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.CONTRA_INDICATED) {
-                return true;
+            if (qaSet.getName().equals(to.getName())) {
+                if (bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.CONTRA_INDICATED) {
+                    return true;
+                }
             }
         }
         return false;
@@ -831,7 +930,7 @@ public class D3webUtils {
      * @return True, if there exists a parent object of the given terminology
      * object that is indicated.
      */
-    public static boolean isParentIndicated(TerminologyObject to, Blackboard bb) {
+    public static boolean isParentQuestionnaireIndicated(TerminologyObject to, Blackboard bb) {
         for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
 
             // get questionnaires only
@@ -1999,8 +2098,7 @@ public class D3webUtils {
                  * (titleID.equals("D")) { translated = "Tag:"; } else if
                  * (titleID.equals("H")) { translated = "Stunde:"; } else if
                  * (titleID.equals("Min")) { translated = "Minute:"; } else if
-                 * (titleID.equals("S")) { translated = "Sekunde:";
-                }
+                 * (titleID.equals("S")) { translated = "Sekunde:"; }
                  */
                 if (titleID.equals("Y")) {
                     translated = "Year";

@@ -543,7 +543,7 @@ public class D3webDialog extends HttpServlet {
         List<Question> allquestions = tman.getQuestions();
         List<Question> indicated = new ArrayList<Question>();
         for (Question q : allquestions) {
-            if (D3webUtils.isIndicated(q, D3webConnector.getInstance().getSession().getBlackboard())) {
+            if (D3webUtils.isIndicatedPlain(q, D3webConnector.getInstance().getSession().getBlackboard())) {
                 indicated.add(q);
             }
 

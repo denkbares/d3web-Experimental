@@ -97,10 +97,10 @@ public class AnswerMCD3webRenderer extends AbstractD3webRenderer implements Answ
 
         // QContainer indicated
         if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
-                || isIndicated(parent, bb)) {
+                || D3webUtils.isIndicatedPlain(parent, bb)) {
 
             // show, if indicated follow up
-            if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
+            if ((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb))
                     || (!D3webUtils.isFollowUpToQCon(to, parent))) {
                 st.removeAttribute("inactive");
                 st.removeAttribute("readonly");

@@ -496,7 +496,7 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         Blackboard blackboard = session.getBlackboard();
         List<Question> indicatedOrTopLevelQuestions = new LinkedList<Question>();
         for (Question question : questions) {
-            if (isIndicated(question, blackboard) || isTopLevelQuestion(question)) {
+            if (D3webUtils.isIndicatedPlain(question, blackboard) || isTopLevelQuestion(question)) {
                 indicatedOrTopLevelQuestions.add(question);
             }
         }
@@ -581,7 +581,7 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
 
                 if (D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())
-                        || !D3webUtils.isIndicated(child, d3webSession.getBlackboard())) {
+                        || !D3webUtils.isIndicatedByInitQuestionnaire(child, to, d3webSession.getBlackboard())) {
                     continue;
                 } else {
                     level1.add(child);

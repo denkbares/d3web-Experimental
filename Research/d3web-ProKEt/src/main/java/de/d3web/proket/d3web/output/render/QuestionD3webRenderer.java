@@ -139,29 +139,46 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 
 
         // QContainer indicated
-        if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
-                || isIndicated(parent, bb) || isIndicatedByChild(parent, bb)) {
+       /*
+         * if
+         * (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
+         * || D3webUtils.isIndicatedPlain(parent, bb) ||
+         * D3webUtils.isIndicatedByChild(parent, bb)) {
+         *
+         * if (D3webUtils.isIndicatedPlain(to, bb) ||
+         * D3webUtils.isIndicatedPlain(parent, bb)) {
+         *
+         * // show, if indicated follow up if ((D3webUtils.isFollowUpToQCon(to,
+         * parent) && D3webUtils.isIndicatedPlain(to, bb)) ||
+         * (!D3webUtils.isFollowUpToQCon(to, parent))) {
+         *
+         * st.removeAttribute("inactiveQuestion"); st.removeAttribute("qstate");
+         * st.setAttribute("qstate", ""); } else {
+         * st.setAttribute("inactiveQuestion", "true"); }
+         *
+         */
 
-            if (isIndicated(to, bb) || isIndicated(parent, bb)) {
 
-                // show, if indicated follow up
-                if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
-                        || (!D3webUtils.isFollowUpToQCon(to, parent))) {
-                    
-                    st.removeAttribute("inactiveQuestion");
-                    st.removeAttribute("qstate");
-                    st.setAttribute("qstate", "");
-                } else {
-                    st.setAttribute("inactiveQuestion", "true");
-                }
-            } else {
-                st.setAttribute("inactiveQuestion", "true");
-            }
+       
+        if(parent.getName().equals("Quality of Life Check ")){
+            System.out.println("Parent indicated plain: " + D3webUtils.isIndicatedPlain(parent, bb));
+        }
+        if (D3webUtils.isIndicatedByInitQuestionnaire(to, parent, bb)
+                || D3webUtils.isIndicatedPlain(to, bb)
+                || D3webUtils.isIndicatedByChild(parent, bb)
+                || D3webUtils.isIndicatedPlain(parent, bb)
+                || (D3webUtils.isFollowUpToQCon(to, parent)
+                && D3webUtils.isIndicatedPlain(to, bb))
+                || (!D3webUtils.isFollowUpToQCon(to, parent))) {
+
+            st.removeAttribute("inactiveQuestion");
+            st.removeAttribute("qstate");
+            st.setAttribute("qstate", "");
 
         } else {
+
             st.setAttribute("inactiveQuestion", "true");
         }
-
 
         /*
          * the following handles abstraction questions that get activated during

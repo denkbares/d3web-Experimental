@@ -184,6 +184,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         // for each of the child elements
         TerminologyObject[] children = to.getChildren();
         // Blackboard bb = d3webSession.getBlackboard();
+        // System.out.println(d3webSession.getInterview().getInterviewAgenda().getCurrentlyActiveObjects().toString());
         for (TerminologyObject child : children) {
 
 
@@ -221,62 +222,87 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                  * && D3webUtils.isContraIndicated(child,
                  * d3webSession.getBlackboard()))) { continue; }
                  */
-                if (to.getName().equals("Diabetes mellitus: Behandlung")) {
-                    System.out.println("Init Questions: " + d3webSession.getKnowledgeBase().getInitQuestions().toString());
-                    System.out.println("parent: " + to.getName() + " - " + D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
-                    System.out.println("child: " + child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
-                }
+                /*
+                 * if (to.getName().equals("Diabetes mellitus: Behandlung")) {
+                 * System.out.println("Init Questions: " +
+                 * d3webSession.getKnowledgeBase().getInitQuestions().toString());
+                 * System.out.println("parent: " + to.getName() + " - " +
+                 * D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
+                 * System.out.println("child: " + child.getName() + " - " +
+                 * D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
+                 * }
+                 */
 
                 UISettings uis = UISettings.getInstance();
-                if (uis.getShowNonIndicated().equals("HIDE")
-                        && child instanceof Question
-                        && !D3webUtils.isIndicated(child, d3webSession.getBlackboard())
-                        && !D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())) {
-                    continue;
+
+                if (to.getName().equals("Comorbidities")) {
+                    System.out.println("to: " + to.getName());
+                    System.out.println("  Ind? - " + D3webUtils.isIndicatedPlain(to, d3webSession.getBlackboard()));
+                    System.out.println("  CInd? - " + D3webUtils.isContraIndicated(to, d3webSession.getBlackboard()));
+                    System.out.println("child: " + child.getName());
+                    System.out.println("  Ind? - " + D3webUtils.isIndicatedPlain(child, d3webSession.getBlackboard()));
+                    System.out.println("  Ind? - " + D3webUtils.isIndicatedByInitQuestionnaire(child, to, d3webSession.getBlackboard()));
+                    System.out.println("  Ind? - " + D3webUtils.isIndicatedByIndicatedQuestionnaire(child, to, d3webSession.getBlackboard()));
+                    System.out.println("  CInd? - " + D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()));
                 }
 
+                if (uis.getShowNonIndicated().equals("HIDE")
+                        && child instanceof Question) {
+
+                    if ((!D3webUtils.isIndicatedByInitQuestionnaire(child, to, d3webSession.getBlackboard())
+                            && !D3webUtils.isIndicatedByIndicatedQuestionnaire(child, to, d3webSession.getBlackboard()))
+                            || (D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())
+                            || D3webUtils.isContraIndicated(to, d3webSession.getBlackboard()))) {
+                        continue;
+                    }
+                }
             }
 
-            // receive the rendering code from the Renderer and append
-            String childHTML =
-                    childRenderer.renderTerminologyObject(d3webSession, cc, child, to, loc, httpSession, request);
-            if (childHTML != null) {
-                childrenHTML.append(childHTML);
-            }
+        
 
-            // if the child is a question, check recursively for follow-up-qs
-            // as this is done after having inserted the normal child, the
-            // follow up is appended in between the child and its follow-up
-            if (child instanceof Question) {
-                childrenHTML.append(renderFollowUps(d3webSession, cc, child, to, loc, httpSession, request));
-            }
+        // receive the rendering code from the Renderer and append
+        String childHTML =
+                childRenderer.renderTerminologyObject(d3webSession, cc, child, to, loc, httpSession, request);
+        if (childHTML != null) {
+            childrenHTML.append(childHTML);
         }
 
-        // close the table that had been opened for multicolumn cases
-        if (columns > 1) {
-            String tableClosing = cc.tc.closeTable(to.getName().replace(" ", "_"));
-            childrenHTML.append(tableClosing);
-        }
-
-        // if children, fill the template attribute children with children-HTML
-        if (children.length > 0) {
-            st.setAttribute("children", childrenHTML.toString());
+        // if the child is a question, check recursively for follow-up-qs
+        // as this is done after having inserted the normal child, the
+        // follow up is appended in between the child and its follow-up
+        if (child instanceof Question) {
+            childrenHTML.append(renderFollowUps(d3webSession, cc, child, to, loc, httpSession, request));
         }
     }
+    // close the table that had been opened for multicolumn cases
+    if (columns
 
-    /**
-     * Renders the choices of a given (question) TerminologyObject and assembles
-     * the result into the given StringTemplate(s) and writes everything into
-     * the given ContainerCollection.
-     *
-     * @created 15.01.2011
-     *
-     * @param st The StringTemplate
-     * @param cc The ContainerCollection
-     * @param to The TerminologyObject
-     * @param d3webSession TODO
-     */
-    protected void renderChoices(StringTemplate st, ContainerCollection cc,
+    
+        > 1) {
+            String tableClosing = cc.tc.closeTable(to.getName().replace(" ", "_"));
+        childrenHTML.append(tableClosing);
+    }
+    // if children, fill the template attribute children with children-HTML
+    if (children.length
+
+    
+        > 0) {
+            st.setAttribute("children", childrenHTML.toString());
+    }
+}
+/**
+ * Renders the choices of a given (question) TerminologyObject and assembles the
+ * result into the given StringTemplate(s) and writes everything into the given
+ * ContainerCollection.
+ *
+ * @created 15.01.2011
+ *
+ * @param st The StringTemplate
+ * @param cc The ContainerCollection
+ * @param to The TerminologyObject
+ * @param d3webSession TODO
+ */
+protected void renderChoices(StringTemplate st, ContainerCollection cc,
             TerminologyObject to, TerminologyObject parent, Session d3webSession,
             int loc, HttpSession httpSession) {
 
@@ -484,16 +510,10 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
                 if (!debug) {
 
-                    if (childsChild.getName().equals("Diabetes mellitus: Behandlung")) {
-                        System.out.println("Init Questions: " + d3webSession.getKnowledgeBase().getInitQuestions().toString());
-                        System.out.println("parent: " + child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
-                        System.out.println("child: " + childsChild.getName() + " - indicated: " + D3webUtils.isIndicated(childsChild, d3webSession.getBlackboard()));
-                        System.out.println("child: " + childsChild.getName() + " - QContainerChild: " + D3webUtils.isDirectQContainerChild(childsChild));
-                    }
-                    
+
                     if (UISettings.getInstance().getShowNonIndicated().equals("HIDE")
                             && childsChild instanceof Question
-                            && !D3webUtils.isIndicated(childsChild, d3webSession.getBlackboard())
+                            && !D3webUtils.isIndicatedByInitQuestionnaire(childsChild, child, d3webSession.getBlackboard())
                             && !D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())) {
                         continue;
                     }
@@ -615,30 +635,6 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             tempName = baseObjectName;
         }
         return tempName;
-    }
-
-    @Override
-    public boolean isIndicated(TerminologyObject to, Blackboard bb) {
-        // find the appropriate qaset in the knowledge base
-        if ((bb.getIndication((InterviewObject) to).getState() == State.INDICATED || bb.getIndication(
-                (InterviewObject) to).getState() == State.INSTANT_INDICATED)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean isIndicatedByChild(TerminologyObject to, Blackboard bb) {
-
-        if (to.getChildren().length != 0) {
-            for (TerminologyObject toc : to.getChildren()) {
-                //System.out.println(toc.getName() + " " + isIndicated(to, bb));
-                if (isIndicated(toc, bb)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public boolean isParentOfFollowUpQuIndicated(TerminologyObject to, Blackboard bb) {

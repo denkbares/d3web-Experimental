@@ -127,7 +127,7 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
         Blackboard bb = d3webSession.getBlackboard();
         ArrayList<Boolean> indicatedChildren = new ArrayList<Boolean>();
         for (TerminologyObject child : to.getChildren()) {
-            if (D3webUtils.isIndicated(child, bb)) {
+            if (D3webUtils.isIndicatedPlain(child, bb)) {
                 indicatedChildren.add(true);
             }
         }

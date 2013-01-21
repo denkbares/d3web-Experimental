@@ -82,7 +82,7 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
 
         
         if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(to)
-                || isIndicated(to, bb) || isIndicatedByChild(to, bb) && (hidden == null || !hidden)) {
+                || D3webUtils.isIndicatedPlain(to, bb) || D3webUtils.isIndicatedByChild(to, bb) && (hidden == null || !hidden)) {
 // || 
            
             st.removeAttribute("hidden");
