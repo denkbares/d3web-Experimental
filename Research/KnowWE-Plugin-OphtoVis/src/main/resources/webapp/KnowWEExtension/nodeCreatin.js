@@ -1,25 +1,20 @@
-function createKnoten(name, startx, starty,stringID,parentID){
+function createKnoten(name, startx, starty,stringID,parentID){	
 var listEntry= document.createElement('li');
+frameDiv = document.createElement('div');
   newdiv = document.createElement('div');
   subDiv = document.createElement('div'); 
-newdiv.setAttribute('id', stringID);
+frameDiv.setAttribute('id', stringID);
 newdiv.setAttribute('onclick', "location='Wiki.jsp?page="+name+"'");
-newdiv.className="window ui-draggable";
-newdiv.style.width="200px";
-newdiv.style.top ="100px"; 
-newdiv.style.marginRight="100px";
-newdiv.style.marginTop="10px";
+//attributes for nodes are stored in css class node
+frameDiv.className="window ui-draggable node";
 newdiv.innerHTML="<p><nobr>"+name+"</nobr></p>";
-newdiv.style.position = "relative";
-subDiv.style.top ="10px";
-subDiv.style.left="10px";
+//attributes are stored in css class
+subDiv.className="button blue";
 subDiv.setAttribute("hid","false");
 subDiv.setAttribute('onclick', "event.stopPropagation(); bottonClick("+stringID+",this)");
-subDiv.style.width="200px";
-subDiv.style.height="50px";
-subDiv.style.backgroundColor="green";
-newdiv.appendChild(subDiv);
-listEntry.appendChild(newdiv);
+frameDiv.appendChild(subDiv);
+frameDiv.appendChild(newdiv);
+listEntry.appendChild(frameDiv);
 var test ="#ul"+parentID;
 $(test).append(listEntry);
 return listEntry;
@@ -27,6 +22,9 @@ return listEntry;
 }
 function bottonClick(id, instance){
 var str = "#ul"+ id;
+if(("#ul"+ id).length>0){
+$($("#"+id).children()[0]).toggleClass('blue');
+$($("#"+id).children()[0]).toggleClass('red');}
 if(!instance.hid){
 $(str).hide();
 instance.hid=true;
@@ -58,9 +56,6 @@ for(var i=0,j=listElements.length; i<j; i++){
 };
 jsPlumb.repaintEverything();
 }
-	
-	
-
 
 function createUL(name,parent){
 var list= document.createElement('ul');
