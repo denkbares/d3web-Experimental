@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog 
-	header="Baumberatung - Entscheidungsbaum KB"  
+	header="Gastro Wissensbasis"  
 	dtype="singleform" 
 	indicationmode="hide_unindicated"
         showcontraindicated="HIDE"
@@ -19,6 +19,6 @@
         solutionSorting = "CATEGALPHA" 
         solutionDepth = "ALL"
         >
-	<data kb="BaumDecTree.d3web" />
+	<data kb="GastroNew.d3web" />
         <ue logging = "FALSE" />
 </dialog>

@@ -57,6 +57,11 @@ public enum DialogType {
 	/* A default value */
         DEFAULT, 
         
-        /* The Standard form based dialog */
-        STANDARD;
+        /* The Standard form based dialog, only for documentatn, i.e.
+          without solution panel */
+        STANDARD,
+        
+        /* A consultation questionary, i.e. like Standard style but
+          with solution panel */
+        QUESTIONARYCONS;
 }

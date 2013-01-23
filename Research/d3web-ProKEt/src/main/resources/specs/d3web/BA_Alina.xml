@@ -3,6 +3,8 @@
 	header="Testdialog BA ACOCA"  
 	dtype="singleform" 
 	indicationmode="hide_unindicated"
+        showcontraindicated = "HIDE"
+        shownonindicated = "HIDE"
 	dstrategy="nextform"
 	css="questionaryCons, diagnosisVisu" 
 	dialogcolumns="1"
@@ -14,6 +16,8 @@
 	language = ""
         debug = "false"
         solutionExplanation = "TEXTUAL" 
+        solutionSorting = "CATEGORICAL"
+        solutionDepth = "ALL"
         >
 	<data kb="BaumDecTree.d3web" />
         <ue logging = "FALSE" />

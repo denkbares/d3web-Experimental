@@ -64,7 +64,14 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
             TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession,
             HttpServletRequest request) {
 
+        boolean debug = false;
 
+        if (httpSession.getAttribute("debug") != null) {
+            String deb = httpSession.getAttribute("debug").toString();
+            if (deb.equals("true")) {
+                debug = true;
+            }
+        }
 
         Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
         // return if the InterviewObject is null
@@ -159,17 +166,23 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
          */
 
 
-       
-        if(parent.getName().equals("Quality of Life Check ")){
-            System.out.println("Parent indicated plain: " + D3webUtils.isIndicatedPlain(parent, bb));
+
+        if (to.getName().equals("Please select primary ventral hernia")) {
+            System.out.println(D3webUtils.isIndicatedByInitQuestionnaire(to, parent, bb));
+            System.out.println(D3webUtils.isIndicatedPlain(to, bb));
+            System.out.println(D3webUtils.isIndicatedByChild(parent, bb));
+            System.out.println((D3webUtils.isIndicatedPlain(parent, bb) && D3webUtils.isDirectQContainerChild(to)));
+            System.out.println(((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb)) || !D3webUtils.isFollowUpToQCon(to, parent)));
+
+            System.out.println("");
+
         }
+        
         if (D3webUtils.isIndicatedByInitQuestionnaire(to, parent, bb)
                 || D3webUtils.isIndicatedPlain(to, bb)
-                || D3webUtils.isIndicatedByChild(parent, bb)
-                || D3webUtils.isIndicatedPlain(parent, bb)
-                || (D3webUtils.isFollowUpToQCon(to, parent)
-                && D3webUtils.isIndicatedPlain(to, bb))
-                || (!D3webUtils.isFollowUpToQCon(to, parent))) {
+                || (D3webUtils.isIndicatedByChild(parent, bb) && D3webUtils.isDirectQContainerChild(to))
+                || (D3webUtils.isIndicatedPlain(parent, bb) && D3webUtils.isDirectQContainerChild(to))
+                || ((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb)) || !D3webUtils.isFollowUpToQCon(to, parent))) {
 
             st.removeAttribute("inactiveQuestion");
             st.removeAttribute("qstate");
@@ -179,6 +192,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 
             st.setAttribute("inactiveQuestion", "true");
         }
+
 
         /*
          * the following handles abstraction questions that get activated during
@@ -210,6 +224,8 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
                 && current.getInterviewObject().equals(to)) {
             st.setAttribute("qstate", "question-c");
         }
+
+
 
         // underneath="within" a rendered question, always answers are rendered
         super.renderChoices(st, cc, to, parent, d3webSession, loc, httpSession);
