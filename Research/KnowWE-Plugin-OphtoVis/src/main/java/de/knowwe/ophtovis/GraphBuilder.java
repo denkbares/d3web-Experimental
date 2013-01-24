@@ -75,7 +75,7 @@ public class GraphBuilder {
 	public void buildGraph(){
 		
 		// Startknoten
-		GraphNode startNode = buildNode(startNodeName, getStartLeftCo(), getStartTopCo(), 1);
+		GraphNode startNode = buildNode(startNodeName, getStartLeftCo(), getStartTopCo(), 1, false);
 
 		do {
 			nodeAndCoList.add(startNode);
@@ -85,7 +85,7 @@ public class GraphBuilder {
 			if (!temporalConnection.isEmpty()) {
 				topCo = getStartTopCo();
 				GraphNode tempNode = buildNode(temporalConnection.get(0), leftCoMax + add2Left,
-						getStartTopCo(), ++id);
+						getStartTopCo(), ++id, false);
 				connections.add(new GraphNodeConnection(startNode, tempNode, "temporal"));
 				startNode = tempNode;
 			}
@@ -97,9 +97,9 @@ public class GraphBuilder {
 
 	// Starknoten bauen
 
-	public GraphNode buildNode(String nodeName, int leftCor, int topCor, int parentId) {
+	public GraphNode buildNode(String nodeName, int leftCor, int topCor, int parentId, boolean haveChildren) {
 
-		GraphNode startNode = new GraphNode(nodeName, leftCor, topCor, id++, parentId);
+		GraphNode startNode = new GraphNode(nodeName, leftCor, topCor, id++, parentId, haveChildren);
 		topCo += add2Top;
 
 		return startNode;
@@ -116,8 +116,17 @@ public class GraphBuilder {
 		List<String> childrenNames = DataBaseHelper.getConnectedNodeNamesOfType(nodeName,
 				"unterkonzept", false);
 
+		boolean hasChildren = false;
+
+		if (!childrenNames.isEmpty()) {
+			hasChildren = true;
+		}
+
+		node.setHasChildren(hasChildren);
+
 		for (String string : childrenNames) {
-			GraphNode node2add = new GraphNode(string, leftCo, topCo, ++id, node.getId());
+			GraphNode node2add = new GraphNode(string, leftCo, topCo, ++id, node.getId(),
+					false);
 			System.out.println("neuer node cor " + leftCo);
 			nodeAndCoList.add(node2add);
 			connections.add(new GraphNodeConnection(node, node2add, "unterkonzept"));
@@ -134,6 +143,9 @@ public class GraphBuilder {
 			List<String> nextChildrenOfNode = DataBaseHelper.getConnectedNodeNamesOfType(
 					oldFormatName, "unterkonzept", false);
 			if (!nextChildrenOfNode.isEmpty()) {
+
+				node2add.setHasChildren(true);
+
 				int leftCoAct = leftCo + add2Left;
 				this.leftCo = leftCoAct;
 				if (leftCoAct > leftCoMax) {

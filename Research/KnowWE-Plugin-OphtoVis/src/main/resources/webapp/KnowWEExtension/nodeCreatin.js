@@ -9,7 +9,7 @@ newdiv.setAttribute('onclick', "location='Wiki.jsp?page="+name+"'");
 frameDiv.className="window ui-draggable node";
 newdiv.innerHTML="<p><nobr>"+name+"</nobr></p>";
 //attributes are stored in css class
-subDiv.className="button blue";
+subDiv.className="buttons back";
 subDiv.setAttribute("hid","false");
 subDiv.setAttribute('onclick', "event.stopPropagation(); bottonClick("+stringID+",this)");
 frameDiv.appendChild(subDiv);
@@ -20,11 +20,45 @@ $(test).append(listEntry);
 return listEntry;
 
 }
+
+
+//create leaf node
+// subDiv Button not included in FrameDiv
+function createLeafNode(name, startx, starty,stringID,parentID){	
+var listEntry= document.createElement('li');
+frameDiv = document.createElement('div');
+  newdiv = document.createElement('div');
+//  subDiv = document.createElement('div'); 
+frameDiv.setAttribute('id', stringID);
+newdiv.setAttribute('onclick', "location='Wiki.jsp?page="+name+"'");
+//attributes for nodes are stored in css class node
+frameDiv.className="window ui-draggable node";
+newdiv.innerHTML="<p><nobr>"+name+"</nobr></p>";
+//attributes are stored in css class
+
+//subDiv.className="button blue";
+//subDiv.setAttribute("hid","false");
+//subDiv.setAttribute('onclick', "event.stopPropagation(); bottonClick("+stringID+",this)");
+//frameDiv.appendChild(subDiv);
+frameDiv.appendChild(newdiv);
+listEntry.appendChild(frameDiv);
+var test ="#ul"+parentID;
+$(test).append(listEntry);
+return listEntry;
+
+}
+
+
+
 function bottonClick(id, instance){
 var str = "#ul"+ id;
-if(("#ul"+ id).length>0){
-$($("#"+id).children()[0]).toggleClass('blue');
-$($("#"+id).children()[0]).toggleClass('red');}
+$($("#"+id).children()[0]).toggleClass('fwd');
+//$($("#"+id).children()[0]).text('-');
+
+$($("#"+id).children()[0]).toggleClass('back');
+//$($("#"+id).children()[0]).text('+');
+
+
 if(!instance.hid){
 $(str).hide();
 instance.hid=true;
@@ -102,3 +136,14 @@ container:$(contain)
 });
 }
 
+ 	var fontSize = 2;
+	function zoomIn() {
+		fontSize += 0.1;
+		document.body.style.fontSize = fontSize + "em";
+		jsPlumb.repaintEverything();
+	}
+	function zoomOut() {
+		fontSize -= 0.1;
+		document.body.style.fontSize = fontSize + "em";
+		jsPlumb.repaintEverything();
+	}

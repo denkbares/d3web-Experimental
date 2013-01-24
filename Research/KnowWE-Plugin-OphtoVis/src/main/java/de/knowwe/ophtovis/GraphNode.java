@@ -33,13 +33,16 @@ public class GraphNode
 	private int id;
 	private int parentId;
 
-	public GraphNode(String name, int leftCo, int topCo, int id, int parentId)
+	boolean hasChildren = false;
+
+	public GraphNode(String name, int leftCo, int topCo, int id, int parentId, boolean hasChildren)
 	{
 		this.name = name;
 		this.leftCo = leftCo;
 		this.topCo = topCo;
 		this.id = id;
 		this.parentId = parentId;
+		this.hasChildren = hasChildren;
 	}
 
 	public String getStringID() {
@@ -86,6 +89,14 @@ public class GraphNode
 
 	public void setTopCo(int topCo) {
 		this.topCo = topCo;
+	}
+
+	public boolean isHasChildren() {
+		return hasChildren;
+	}
+
+	public void setHasChildren(boolean hasChildren) {
+		this.hasChildren = hasChildren;
 	}
 
 	// ////////////////////////////////////////////////////////////////////////////////

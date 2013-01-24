@@ -72,15 +72,32 @@ public class Visualization {
 			int top = node.getTopCo();
 			String stringID = node.getStringID();
 			int parentID = node.getParentId();
-			if (!(node.getParentId() == node.getId())) {
-			knoten += "createKnoten(\"" + name + "\", " + left + ","
-					+ top + "," + "\"" + stringID + "\"," + parentID + ");\r\n";
+
+			if (node.hasChildren) {
+				if (!(node.getParentId() == node.getId())) {
+					knoten += "createKnoten(\"" + name + "\", " + left + ","
+							+ top + "," + "\"" + stringID + "\"," + parentID + ");\r\n";
+				}
+				else {
+					knoten += "createKnoten(\"" + name + "\", " + left + ","
+							+ top + "," + "\"" + stringID + "\"," + "\"e" +
+							parentID + "\");\r\n";
+				}
 			}
 			else {
-				knoten += "createKnoten(\"" + name + "\", " + left + ","
-						+ top + "," + "\"" + stringID + "\"," + "\"e" +
-						parentID + "\");\r\n";
+
+				if (!(node.getParentId() == node.getId())) {
+					knoten += "createLeafNode(\"" + name + "\", " + left + ","
+							+ top + "," + "\"" + stringID + "\"," + parentID + ");\r\n";
+				}
+				else {
+					knoten += "createLeafNode(\"" + name + "\", " + left + ","
+							+ top + "," + "\"" + stringID + "\"," + "\"e" +
+							parentID + "\");\r\n";
+				}
+
 			}
+
 		}
 
 
@@ -144,6 +161,10 @@ public class Visualization {
 						" <!-- im body befindet sich der sichtbare bereich der seite -->\r\n"
 						+
 						"	<div id=\"demonstration\">\r\n"
+						// zoom buttons
+						+ "<input type=\"button\" value=\"+\" onClick=\"zoomIn()\"/>"
+						+ "<input type=\"button\" value=\"-\" onClick=\"zoomOut()\"/>"
+						//
 						+
 						"	<div id=knots>\r\n"
 						+
