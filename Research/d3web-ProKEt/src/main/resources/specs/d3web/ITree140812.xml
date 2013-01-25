@@ -2,7 +2,7 @@
 <dialog 
 	header="ITree-Date/Rules"  
 	dtype="itree" 
-	dstrategy="nextuaquestion" 
+	dstrategy="nextquestion" 
 	css="itree, nofoot" 
 	dialogcolumns="1"
 	questionnairecolumns="1"

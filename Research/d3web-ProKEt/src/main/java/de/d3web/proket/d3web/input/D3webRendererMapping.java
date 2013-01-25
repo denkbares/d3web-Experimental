@@ -30,6 +30,7 @@ import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.output.render.*;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.settings.UISettings;
+import de.d3web.proket.data.DialogType;
 import de.d3web.proket.utils.GlobalSettings;
 
 /**
@@ -63,6 +64,11 @@ public class D3webRendererMapping extends HashMap<String, String> {
     private static final String QUESTION = "Question";
     private static final String DEFAULT = "Default";
     private static final String OC_DROP_ANSWERS = "OCDrop";
+    
+    //private static final String QUESTIONARYCONS = "QUESTIONARYCONS";
+    //private static final String ITREE = "ITREE";
+    //private static final String STANDARD = "STANDARD";
+    
     // the instance
     private static D3webRendererMapping instance = null;
 
@@ -103,7 +109,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
         this.put(ITREENUM_NUM, ITreeNumQuestionD3webRenderer.class.getSimpleName());
         this.put(ITREENUM_DATE, ITreeDateQuestionD3webRenderer.class.getSimpleName());
       
-
+        //this.put(QUESTIONARYCONS, "QuestionaryCons");
     }
 
     /**
@@ -116,8 +122,8 @@ public class D3webRendererMapping extends HashMap<String, String> {
      * @return The renderer as a simple Object.
      */
     public AbstractD3webRenderer getRenderer(TerminologyObject to) {
-        String userPref = UISettings.getInstance().getUIprefix();
-        
+        String userPref = UISettings.getInstance().getDialogType().toString();
+        System.out.println(userPref);
         
         String name = DEFAULT;
         if (to == null) {
@@ -127,7 +133,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
             if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
                 name = IMG_QUESTION;
             }
-            if (UISettings.getInstance().getUIprefix().equals("ITree")) {
+            if (UISettings.getInstance().getDialogType().equals(DialogType.ITREE)) {
 
                 //System.out.println("RM: " + to.getClass());
                 if (to instanceof QuestionDate) {

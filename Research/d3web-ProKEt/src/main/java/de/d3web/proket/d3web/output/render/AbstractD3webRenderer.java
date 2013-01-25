@@ -235,8 +235,8 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
                 UISettings uis = UISettings.getInstance();
 
-                if (to.getName().equals("Comorbidities")) {
-                    System.out.println("to: " + to.getName());
+                 //if (to.getName().equals("Welche Erkrankungen des Magen-Darm-Trakts hatten Sie?")) {
+                   /* System.out.println("to: " + to.getName());
                     System.out.println("  Ind? - " + D3webUtils.isIndicatedPlain(to, d3webSession.getBlackboard()));
                     System.out.println("  CInd? - " + D3webUtils.isContraIndicated(to, d3webSession.getBlackboard()));
                     System.out.println("child: " + child.getName());
@@ -244,65 +244,62 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                     System.out.println("  Ind? - " + D3webUtils.isIndicatedByInitQuestionnaire(child, to, d3webSession.getBlackboard()));
                     System.out.println("  Ind? - " + D3webUtils.isIndicatedByIndicatedQuestionnaire(child, to, d3webSession.getBlackboard()));
                     System.out.println("  CInd? - " + D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()));
-                }
+                *///}
 
                 if (uis.getShowNonIndicated().equals("HIDE")
                         && child instanceof Question) {
 
                     if ((!D3webUtils.isIndicatedByInitQuestionnaire(child, to, d3webSession.getBlackboard())
-                            && !D3webUtils.isIndicatedByIndicatedQuestionnaire(child, to, d3webSession.getBlackboard()))
-                            || (D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())
-                            || D3webUtils.isContraIndicated(to, d3webSession.getBlackboard()))) {
+                            && !D3webUtils.isIndicatedByIndicatedQuestionnaire(child, to, d3webSession.getBlackboard())) //|| (D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())
+                            //|| D3webUtils.isContraIndicated(to, d3webSession.getBlackboard()))
+                            ) {
                         continue;
                     }
                 }
             }
 
-        
 
-        // receive the rendering code from the Renderer and append
-        String childHTML =
-                childRenderer.renderTerminologyObject(d3webSession, cc, child, to, loc, httpSession, request);
-        if (childHTML != null) {
-            childrenHTML.append(childHTML);
+
+            // receive the rendering code from the Renderer and append
+            String childHTML =
+                    childRenderer.renderTerminologyObject(d3webSession, cc, child, to, loc, httpSession, request);
+            if (childHTML != null) {
+                childrenHTML.append(childHTML);
+            }
+
+            // if the child is a question, check recursively for follow-up-qs
+            // as this is done after having inserted the normal child, the
+            // follow up is appended in between the child and its follow-up
+            if (child instanceof Question) {
+                childrenHTML.append(renderFollowUps(d3webSession, cc, child, to, loc, httpSession, request));
+            }
         }
-
-        // if the child is a question, check recursively for follow-up-qs
-        // as this is done after having inserted the normal child, the
-        // follow up is appended in between the child and its follow-up
-        if (child instanceof Question) {
-            childrenHTML.append(renderFollowUps(d3webSession, cc, child, to, loc, httpSession, request));
-        }
-    }
-    // close the table that had been opened for multicolumn cases
-    if (columns
-
-    
-        > 1) {
+        // close the table that had been opened for multicolumn cases
+        if (columns
+                > 1) {
             String tableClosing = cc.tc.closeTable(to.getName().replace(" ", "_"));
-        childrenHTML.append(tableClosing);
-    }
-    // if children, fill the template attribute children with children-HTML
-    if (children.length
-
-    
-        > 0) {
+            childrenHTML.append(tableClosing);
+        }
+        // if children, fill the template attribute children with children-HTML
+        if (children.length
+                > 0) {
             st.setAttribute("children", childrenHTML.toString());
+        }
     }
-}
-/**
- * Renders the choices of a given (question) TerminologyObject and assembles the
- * result into the given StringTemplate(s) and writes everything into the given
- * ContainerCollection.
- *
- * @created 15.01.2011
- *
- * @param st The StringTemplate
- * @param cc The ContainerCollection
- * @param to The TerminologyObject
- * @param d3webSession TODO
- */
-protected void renderChoices(StringTemplate st, ContainerCollection cc,
+
+    /**
+     * Renders the choices of a given (question) TerminologyObject and assembles
+     * the result into the given StringTemplate(s) and writes everything into
+     * the given ContainerCollection.
+     *
+     * @created 15.01.2011
+     *
+     * @param st The StringTemplate
+     * @param cc The ContainerCollection
+     * @param to The TerminologyObject
+     * @param d3webSession TODO
+     */
+    protected void renderChoices(StringTemplate st, ContainerCollection cc,
             TerminologyObject to, TerminologyObject parent, Session d3webSession,
             int loc, HttpSession httpSession) {
 
@@ -511,13 +508,18 @@ protected void renderChoices(StringTemplate st, ContainerCollection cc,
                 if (!debug) {
 
 
+                    //if(childsChild.getName().equals("Welche Erkrankungen des Magen-Darm-Trakts hatten Sie?")){
+                        System.out.println("IN FU: " + D3webUtils.isIndicatedByInitQuestionnaire(childsChild, child, d3webSession.getBlackboard()));
+                    //}
                     if (UISettings.getInstance().getShowNonIndicated().equals("HIDE")
-                            && childsChild instanceof Question
-                            && !D3webUtils.isIndicatedByInitQuestionnaire(childsChild, child, d3webSession.getBlackboard())
-                            && !D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())) {
-                        continue;
+                            && childsChild instanceof Question) {
+                        if (!D3webUtils.isIndicatedByInitQuestionnaire(childsChild, child, d3webSession.getBlackboard()))
+                        {
+                            continue;
+                        }
                     }
-
+                    
+                    
                     if (UISettings.getInstance().getShowContraIndicated().equals("HIDE")
                             && childsChild instanceof Question
                             && D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())) {
@@ -626,7 +628,7 @@ protected void renderChoices(StringTemplate st, ContainerCollection cc,
     public String getTemplateName(String baseObjectName) {
         String tempName = "";
         UISettings uis = UISettings.getInstance();
-        String up = uis.getUIprefix();
+        String up = uis.getDialogType().toString();
         if (up != "" && up != null) {
             // hier evtl noch einfügen Prüfung auf Großbuchstaben oder
             // automatisch umwandeln

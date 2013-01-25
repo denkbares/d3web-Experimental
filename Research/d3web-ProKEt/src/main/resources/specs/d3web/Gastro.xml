@@ -14,7 +14,7 @@
         login = ""
         required = "NONE"
 	language = ""
-        debug = "false"
+        debug = "FALSE"
         solutionExplanation = "TEXTUAL"
         solutionSorting = "CATEGALPHA" 
         solutionDepth = "ALL"

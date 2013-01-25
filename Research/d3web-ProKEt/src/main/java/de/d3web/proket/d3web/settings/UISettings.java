@@ -20,7 +20,7 @@
 package de.d3web.proket.d3web.settings;
 
 import de.d3web.proket.d3web.input.D3webXMLParser;
-import de.d3web.proket.d3web.input.D3webXMLParser.SolutionSorting;
+import de.d3web.proket.data.DialogType;
 
 /**
  * Class for storing all UI Properties of a productive KBS as specified in the
@@ -62,7 +62,7 @@ public class UISettings {
     /*
      * prefix that can be set by the user to define more specific dialog types
      */
-    private String uiprefix = "";
+    private DialogType dt;
 
     /*
      * In case we want to internationalize
@@ -73,8 +73,7 @@ public class UISettings {
      * The login mode, needed for adding the chosen form of login
      */
     private D3webXMLParser.LoginMode loginMode;
-   
-
+  
     private D3webXMLParser.SolutionExplanationType solExpType;
     
     private D3webXMLParser.SolutionSorting solSorting;
@@ -146,12 +145,12 @@ public class UISettings {
         this.questcols = c;
     }
     
-    public String getUIprefix() {
-        return this.uiprefix;
+    public DialogType getDialogType() {
+        return this.dt;
     }
 
-    public void setUIprefix(String pref) {
-        this.uiprefix = pref;
+    public void setDialogType(DialogType type) {
+        this.dt = type;
     }
 
      public void setLanguage(String lang) {
@@ -226,11 +225,11 @@ public class UISettings {
         this.showNonIndicated = sIndi;
     }
 
-    public SolutionSorting getSolutionSorting() {
+    public D3webXMLParser.SolutionSorting getSolutionSorting() {
         return solSorting;
     }
 
-    public void setSolutionSorting(SolutionSorting solSorting) {
+    public void setSolutionSorting(D3webXMLParser.SolutionSorting solSorting) {
         this.solSorting = solSorting;
     }
     

@@ -44,7 +44,7 @@ public class D3webDialog extends DefaultDialogObject {
 	 * Indicates the basic type of the dialog, so that d3web can adapt its
 	 * nextFormStrategy to it.
 	 */
-	protected DialogType d3webDialogType = DialogType.MULTIFORM;
+	protected DialogType d3webDialogType = DialogType.STANDARD;
 
 	protected DialogStrategy d3webDialogStrategy = DialogStrategy.NEXTFORM;
 	/**

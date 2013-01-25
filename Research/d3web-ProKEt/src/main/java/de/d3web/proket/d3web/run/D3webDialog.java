@@ -73,6 +73,7 @@ import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
+import de.d3web.proket.data.DialogType;
 import de.d3web.proket.database.DB;
 import de.d3web.proket.database.DateCoDec;
 import de.d3web.proket.database.TokenThread;
@@ -114,6 +115,7 @@ public class D3webDialog extends HttpServlet {
     protected static String sourceSave = "";
     protected static Class classSave = Object.class;
     protected final GlobalSettings GLOBSET = GlobalSettings.getInstance();
+    //protected D3webXMLParserOrig d3webParser;
     protected D3webXMLParser d3webParser;
     protected D3webConnector d3wcon;
     protected UISettings uis;
@@ -150,8 +152,9 @@ public class D3webDialog extends HttpServlet {
         String servletcontext = config.getServletContext().getRealPath("/");
         GLOBSET.setServletBasePath(servletcontext);
 
-        d3webParser = new D3webXMLParser();
-
+        //d3webParser = new D3webXMLParserOrig();
+        d3webParser  = new D3webXMLParser();
+        
         String realStPath = servletcontext
                 + "WEB-INF/classes/stringtemp/html";
 
@@ -1259,8 +1262,7 @@ public class D3webDialog extends HttpServlet {
         // get the root renderer --> call getRenderer with null
         DefaultRootD3webRenderer d3webr =
                 (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
-        //System.out.println("RENDEER: " + d3webr.getClass());
-
+        
         // new ContainerCollection needed each time to get an updated dialog
         ContainerCollection cc = new ContainerCollection();
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
@@ -1433,7 +1435,7 @@ public class D3webDialog extends HttpServlet {
         /*
          * Constructing the message
          */
-        String dialogFlag = uis.getUIprefix();
+        String dialogFlag = uis.getDialogType().toString();
         if (dialogFlag == null) {
             dialogFlag = "";
         }
@@ -1507,7 +1509,7 @@ public class D3webDialog extends HttpServlet {
             qDataBui.append("\n");
         }
 
-        String dialogFlag = uis.getUIprefix();
+        String dialogFlag = uis.getDialogType().toString();
         if (dialogFlag == null) {
             dialogFlag = "";
         }
@@ -1868,9 +1870,7 @@ public class D3webDialog extends HttpServlet {
         }
 
 
-        d3wcon.setDialogStrat(d3webParser.getStrategy());
-        d3wcon.setDialogType(d3webParser.getType());
-        d3wcon.setIndicationMode(d3webParser.getIndicationMode());
+        /*
 
         uis.setDialogColumns(d3webParser.getDialogColumns());
         uis.setQuestionColumns(d3webParser.getQuestionColumns());
@@ -1886,6 +1886,23 @@ public class D3webDialog extends HttpServlet {
         uis.setSolutionSorting(d3webParser.getSolutionSorting());
         uis.setShowContraIndicated(d3webParser.getShowContraIndicated());
         uis.setShowNonIndicated(d3webParser.getShowNonIndicated());
+        */
+        
+        uis.setDialogColumns(d3webParser.getDialogColumns());
+        uis.setQuestionColumns(d3webParser.getQuestionColumns());
+        uis.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
+        uis.setCss(d3webParser.getCss());
+        uis.setHeader(d3webParser.getHeader());
+        uis.setDialogType(d3webParser.getDialogType());
+        uis.setLoginMode(d3webParser.getLoginMode());
+        uis.setSolutionExplanationType(d3webParser.getSolutionExplanationType());
+        uis.setDiagnosisNavi(d3webParser.getSolutionNavi());
+        uis.setQuestionnaireNavi(d3webParser.getQuestionnaireNavi());
+        uis.setSolutionDepths(d3webParser.getSolutionDepths());
+        uis.setSolutionSorting(d3webParser.getSolutionSorting());
+        uis.setShowContraIndicated(d3webParser.getShowContraIndicated());
+        uis.setShowNonIndicated(d3webParser.getShowNonIndicated());
+        
         
         String uegroup = d3webParser.getUEGroup() != null ? d3webParser.getUEGroup() : "";
         httpSession.setAttribute("uegroup", uegroup);
@@ -1902,21 +1919,21 @@ public class D3webDialog extends HttpServlet {
         }
 
         // Get userprefix specification
-        String userpref = "DEFAULT";
-        if (!(uis.getUIprefix().equals(""))
-                && !(uis.getUIprefix() == null)) {
-            userpref = uis.getUIprefix();
+        String dialogTypeForStoring = "";
+        DialogType dt = DialogType.DEFAULT;
+        if (!(uis.getDialogType() == null)) {
+            dialogTypeForStoring = uis.getDialogType().toString();
         }
 
         // set necessary paths for saving stuff such as cases, logfiles...
         GLOBSET.setCaseFolder(
                 GLOBSET.getServletBasePath()
-                + "../../" + userpref + "-Data/cases");
+                + "../../" + dialogTypeForStoring + "-Data/cases");
 
 
         GLOBSET.setLogBaseFolder(
                 GlobalSettings.getInstance().getServletBasePath()
-                + "../../" + userpref + "-Data/LOGS");
+                + "../../" + dialogTypeForStoring + "-Data/LOGS");
 
 
         // if a new dialog is loaded we also need a new session to start
@@ -1935,6 +1952,7 @@ public class D3webDialog extends HttpServlet {
 
 
         // do we need to enable debug mode?!  
+        System.out.println("D3webDialog: " + d3webParser.getDebug());
         if (d3webParser.getDebug() != null && d3webParser.getDebug()) {
             httpSession.setAttribute("debug", "true");
         }

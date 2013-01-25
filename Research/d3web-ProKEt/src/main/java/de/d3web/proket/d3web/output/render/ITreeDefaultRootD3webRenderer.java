@@ -22,8 +22,9 @@ package de.d3web.proket.d3web.output.render;
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webUESettings;
 import de.d3web.proket.d3web.input.D3webConnector;
-import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.utils.D3webUtils;
+import de.d3web.proket.d3web.input.D3webXMLParserOrig;
 import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
@@ -43,7 +44,7 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
         UISettings uis = UISettings.getInstance();
         // get the d3web base template according to dialog type
-        String userprefix = uis.getUIprefix();
+        String userprefix = uis.getDialogType().toString();
         StringTemplate st = TemplateUtils.getStringTemplate(
                 userprefix + "D3webDialog",
                 "html");

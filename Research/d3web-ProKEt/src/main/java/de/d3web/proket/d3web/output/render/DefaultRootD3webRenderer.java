@@ -68,7 +68,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
         Session s = ((Session) http.getAttribute("d3webSession"));
 
         // get the d3web base template according to dialog type
-        String userprefix = uis.getUIprefix();
+        String userprefix = uis.getDialogType().toString();
         StringTemplate st = null;
 
         if (userprefix.equals("QuestionaryCons")) {

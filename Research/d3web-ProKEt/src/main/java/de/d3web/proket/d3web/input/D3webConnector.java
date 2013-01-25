@@ -54,7 +54,7 @@ public class D3webConnector {
     /*
      * The default dialogtype
      */
-    private DialogType dialogType = DialogType.SINGLEFORM;
+    private DialogType dialogType = DialogType.STANDARD;
 
     /*
      * Mode how not indicated qasets are handles

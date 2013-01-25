@@ -17,51 +17,52 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-
 package de.d3web.proket.data;
 
 /**
  * The possible styles a dialog can implement
- * 
- * @author Martina Freiberg
- * @created 08.10.2010 TODO think about correct and sufficient types
+ *
+ * @author Martina Freiberg @created 08.10.2010 TODO think about correct and
+ * sufficient types
  */
 public enum DialogType {
-	/*
-	 * All questionnaires on one page, only corresponding highlighting e.g. the
-	 * Rheuma dialog, but also the Kneipen dialog
-	 */
-	SINGLEFORM,
+    
+    /*
+     * Pub consultation dialog or medical diagnosis clarification
+     */
+    CLARIFICATION ("Clarfication"),
+    /*
+     * e.g. in JuriSearch, Clarification modules
+     */
+    FREECHOICE ("Freechoice"),
+    /*
+     * the JuriSearch Clarification style
+     */
+    ITREE ("ITree"),
+    /*
+     * A default value
+     */
+    DEFAULT ("Default"),
+    /*
+     * The Standard form based dialog, only for documentatn, i.e. without
+     * solution panel
+     */
+    STANDARD ("Standard"),
+    /*
+     * A consultation questionary, i.e. like Standard style but with solution
+     * panel
+     */
+    QUESTIONARYCONS ("QuestionaryCons");
+    
+    
+    private String stringrep;
 
-	/*
-	 * Questionnaires distributed over several pages e.g., Standarddialog,
-	 * SonoConsult...
-	 */
-	MULTIFORM,
+    private DialogType(String s) {
+        stringrep = s;
+    }
 
-	/* Hierarchical style dialogs, e.g. Labour Legislation */
-	HIERARCHICAL,
-
-	/* Pub consultation dialog or medical diagnosis clarification */
-	CLARIFICATION,
-        
-        /* e.g. in JuriSearch, Clarification modules */
-        CLARIHIE,
-
-	/* e.g. QuickI dialog */
-	FREECHOICE,
-
-        /* the JuriSearch Clarification style */
-        ITREE,
-        
-	/* A default value */
-        DEFAULT, 
-        
-        /* The Standard form based dialog, only for documentatn, i.e.
-          without solution panel */
-        STANDARD,
-        
-        /* A consultation questionary, i.e. like Standard style but
-          with solution panel */
-        QUESTIONARYCONS;
+    @Override
+    public String toString(){
+        return this.stringrep;
+    }
 }

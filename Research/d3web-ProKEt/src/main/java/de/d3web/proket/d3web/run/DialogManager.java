@@ -21,7 +21,7 @@ package de.d3web.proket.d3web.run;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
-import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.input.D3webXMLParserOrig;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import de.d3web.proket.d3web.utils.Utils;
 import de.d3web.proket.data.DialogType;
@@ -60,7 +60,7 @@ import org.xml.sax.SAXException;
 public class DialogManager extends HttpServlet {
 
     GlobalSettings GLOBSET = GlobalSettings.getInstance();
-    protected D3webXMLParser d3webParser;
+    protected D3webXMLParserOrig d3webParser;
     private static String FILESEP = System.getProperty("file.separator");
     protected static final String REPLACECONTENT = "##replacecontent##";
     protected static final String REPLACEID = "##replaceid##";
@@ -115,7 +115,7 @@ public class DialogManager extends HttpServlet {
         
 
         // initialize the d3web parser
-        d3webParser = new D3webXMLParser();
+        d3webParser = new D3webXMLParserOrig();
 
         // umleiten des System.err
         try {
@@ -1055,13 +1055,12 @@ public class DialogManager extends HttpServlet {
 
         if (currentUploadFile != null) {
 
-            if (//!tmpFile.getName().endsWith(".doc")
+            if (!tmpFile.getName().endsWith(".doc")
                     //  && !tmpFile.getName().endsWith(".d3web")
                     //&& !tmpFile.getName().endsWith(".zip")
                     //&& !tmpFile.getName().endsWith(".xls")
                     //&& !tmpFile.getName().endsWith(".xlsx")
-                    //&& 
-                    !currentUploadFile.getName().endsWith(".csv")) {
+                    && !currentUploadFile.getName().endsWith(".csv")) {
 
                 response.sendRedirect(GLOBSET.getWebAppWarName()
                         + "/DialogManager?upERR=nokb");

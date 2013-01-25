@@ -59,10 +59,9 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
         StringBuilder bui = new StringBuilder();
         D3webXMLParser.SolutionExplanationType solType =
                 UISettings.getInstance().getSolutionExplanationType();
-
-
+       
         if (solType == D3webXMLParser.SolutionExplanationType.TEXTUAL) {
-
+            System.out.println("textual");
             bui.append(getTextualListing(d3webSession));
 
         } else if (solType == D3webXMLParser.SolutionExplanationType.TABLE) {

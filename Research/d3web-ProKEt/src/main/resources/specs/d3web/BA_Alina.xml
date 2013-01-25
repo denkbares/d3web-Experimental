@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dialog 
-	header="Testdialog BA ACOCA"  
-	dtype="singleform" 
-	indicationmode="hide_unindicated"
+<dialogOpts 
+    header="Testdialog BA ACOCA"  
+    login = ""
+    required = ""
+    language = ""
+    debug = "false" >
+    <globalUIOpts 
+        dialogtype="QuestionaryCons"
+        dialogstrategy = ""
         showcontraindicated = "HIDE"
         shownonindicated = "HIDE"
-	dstrategy="nextform"
-	css="questionaryCons, diagnosisVisu" 
+        css="questionaryCons, diagnosisVisu" 
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns="1"
-	uiprefix = "QuestionaryCons"
-        login = ""
-        required = "NONE"
-	language = ""
-        debug = "false"
         solutionExplanation = "TEXTUAL" 
         solutionSorting = "CATEGORICAL"
         solutionDepth = "ALL"
-        >
-	<data kb="BaumDecTree.d3web" />
-        <ue logging = "FALSE" />
-</dialog>
+    />
+    <localUIOpts />
+    <dataOpts kb="BaumDecTree.d3web" />
+    <ueOpts logging = "FALSE" />
+</dialogOpts>

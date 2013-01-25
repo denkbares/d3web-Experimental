@@ -20,7 +20,7 @@
 package de.d3web.proket.d3web.run;
 
 import converter.Html2KnowWECompiler;
-import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.input.D3webXMLParserOrig;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -48,7 +48,7 @@ import org.xml.sax.SAXException;
 /*public class TestParserServlet extends HttpServlet {
 
     GlobalSettings GLOBSET = GlobalSettings.getInstance();
-    protected D3webXMLParser d3webParser;
+    protected D3webXMLParserOrig d3webParser;
 
     public TestParserServlet() {
         super();

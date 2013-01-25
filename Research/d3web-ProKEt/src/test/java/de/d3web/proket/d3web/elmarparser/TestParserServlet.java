@@ -21,7 +21,7 @@ package de.d3web.proket.d3web.elmarparser;
 
 import converter.Html2KnowWECompiler;
 import de.d3web.proket.d3web.run.*;
-import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.input.D3webXMLParserOrig;
 import de.d3web.proket.data.DialogType;
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +55,7 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 public class TestParserServlet extends HttpServlet {
 
     GlobalSettings GLOBSET = GlobalSettings.getInstance();
-    protected D3webXMLParser d3webParser;
+    protected D3webXMLParserOrig d3webParser;
 
     /**
      * @see HttpServlet#HttpServlet()
