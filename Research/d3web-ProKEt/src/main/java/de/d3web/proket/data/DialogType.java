@@ -39,11 +39,7 @@ public enum DialogType {
      * the JuriSearch Clarification style
      */
     ITREE ("ITree"),
-    /*
-     * A default value
-     */
-    DEFAULT ("Default"),
-    /*
+     /*
      * The Standard form based dialog, only for documentatn, i.e. without
      * solution panel
      */

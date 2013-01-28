@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dialogOpts header="European Registry of Abdominal wall HerniaS" login="DB" required="Case-Number" language="en" debug="TRUE">
-	<globalUIOpts dialogtype="QuestionaryCons" dialogstrategy="nextform" showcontraindicated="HIDE" shownonindicated="HIDE" css="medi2colsHernia, nonavigation" dialogcolumns="1" questionnairecolumns="3" questioncolumns="1" unknownvisible="TRUE"
+<dialogOpts header="European Registry of Abdominal wall HerniaS" login="DB" 
+    required="Case-Number" language="en" debug="TRUE">
+	<globalUIOpts dialogtype="QuestionaryCons" dialogstrategy="nextform" 
+         showcontraindicated="HIDE" shownonindicated="HIDE" css="medi2colsHernia, nonavigation" 
+         dialogcolumns="1" questionnairecolumns="3" questioncolumns="1" unknownvisible="TRUE"
          solutionExplanation="TEXTUAL" solutionSorting = "CATEGALPHA" 
-         solutionDepth="ALL" questionnaireNavi="FALSE" solutionNavi="FALSE"/>
+         solutionDepth="ALL" questionnaireNavi="FALSE" solutionNavi="FALSE"
+         ynFlat = "TRUE" autocolumns = "T3---C2" />
 	<localUIOpts>
 		<unknownvisible TRUE="qid1;;;qid2" FALSE="qid3" />
-		<questioncolumns one="qid1;;;qid5" two="qid2" three="qid3;;;qid6;;;qid7" />
+		<questioncolumns>
+                    <one questions="qid1;;;qid5"/>
+                    <two questions="qid2"/>
+                </questioncolumns>
 		<dropdown TRUE="qid4;;;qid2" FALSE="qid3;;;qid5" />
 		<overlay TRUE="qid1" FALSE="qid4" />
 		<largetext TRUE="" FALSE="" />
-                <autocolumns T3:::C3 = "qid1" />
-	</localUIOpts>
+                <autocolumns>
+                    <T3---C3 questions="qid10;;;qidX" />
+                    <T1---C2 questions="qid10;;;qidX;;;qid1;;;qi2" />
+                </autocolumns>
+                <groups>
+                    <g1 questions="qid1;;;qi2" />
+                    <g2 questions="qid3;;;qid5" />
+                </groups>
+        </localUIOpts>
 	<dataOpts kb="Hernia.d3web"/>
 	<ueOpts questionnaire="NONE" study="" logging="" feedbackform="FALSE" uegroup="" logfilepath="" analysisoutputpath="" />
 </dialogOpts>

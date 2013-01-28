@@ -29,6 +29,7 @@ import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.d3web.utils.SolutionNameComparator;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
+import de.d3web.scoring.HeuristicRating;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -61,8 +62,7 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
                 UISettings.getInstance().getSolutionExplanationType();
        
         if (solType == D3webXMLParser.SolutionExplanationType.TEXTUAL) {
-            System.out.println("textual");
-            bui.append(getTextualListing(d3webSession));
+           bui.append(getTextualListing(d3webSession));
 
         } else if (solType == D3webXMLParser.SolutionExplanationType.TABLE) {
             // TODO
@@ -139,8 +139,12 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
 
         // fill template attribute
         st.setAttribute("solid", solution.getName());
-        st.setAttribute("solutiontext", solution.getName());
-
+        
+        double score = ((HeuristicRating)bb.getRating(solution)).getScore();
+        String solutiontext = solution.getName() + " (" + score + ") "; 
+        st.setAttribute("solutiontext", solutiontext);
+        
+       
         if (bb.getRating(solution).getState().equals(Rating.State.ESTABLISHED)) {
             st.setAttribute("src", "img/solEst.png");
             st.setAttribute("alt", "established");
@@ -157,12 +161,10 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
             st.setAttribute("tt", "excluded");
 
         } else if (bb.getRating(solution).getState().equals(Rating.State.UNCLEAR)) {
-            //st.setAttribute("src", "/img/solExc.png");
+            st.setAttribute("src", "/img/solUnc.png");
             st.setAttribute("alt", "unclear");
             st.setAttribute("tt", "unclear");
-
         }
-
 
         return st.toString();
     }
@@ -189,10 +191,10 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
             }
         }
 
-        String[] solutionDepths = UISettings.getInstance().getSolutionDepths();
+        ArrayList<String> solutionDepths = UISettings.getInstance().getSolutionDepths();
 
         // if the shortcut ALL for getting ALL ratings is used
-        if (solutionDepths.length == 1 && solutionDepths[0].equals("ALL")) {
+        if (solutionDepths.size() == 1 && solutionDepths.get(0).equals("ALL")) {
             result.addAll(established);
             result.addAll(suggested);
             result.addAll(excluded);
@@ -243,10 +245,10 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
             }
         }
 
-        String[] solutionDepths = UISettings.getInstance().getSolutionDepths();
+        ArrayList<String> solutionDepths = UISettings.getInstance().getSolutionDepths();
 
         // if the shortcut ALL for getting ALL ratings is used
-        if (solutionDepths.length == 1 && solutionDepths[0].equals("ALL")) {
+        if (solutionDepths.size() == 1 && solutionDepths.get(0).equals("ALL")) {
             result.addAll(established);
             result.addAll(suggested);
             result.addAll(excluded);
@@ -276,8 +278,7 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
      private Collection<Solution> sortSolutionsCategoricalAndAlphabetical(Collection<Solution> valued,
             Session d3websession) {
         
-         System.out.println("CATEGORISCH UND ALPHABETISCH");
-         Blackboard bb = d3websession.getBlackboard();
+        Blackboard bb = d3websession.getBlackboard();
         ArrayList<Solution> result = new ArrayList<Solution>();
         ArrayList<Solution> established = new ArrayList<Solution>();
         ArrayList<Solution> suggested = new ArrayList<Solution>();
@@ -301,10 +302,10 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
         Collections.sort(excluded, new SolutionNameComparator());
         Collections.sort(unclear, new SolutionNameComparator());
         
-        String[] solutionDepths = UISettings.getInstance().getSolutionDepths();
+        ArrayList<String> solutionDepths = UISettings.getInstance().getSolutionDepths();
 
         // if the shortcut ALL for getting ALL ratings is used
-        if (solutionDepths.length == 1 && solutionDepths[0].equals("ALL")) {
+        if (solutionDepths.size() == 1 && solutionDepths.get(0).equals("ALL")) {
             result.addAll(established);
             result.addAll(suggested);
             result.addAll(excluded);

@@ -1898,7 +1898,7 @@ public class D3webDialog extends HttpServlet {
         uis.setSolutionExplanationType(d3webParser.getSolutionExplanationType());
         uis.setDiagnosisNavi(d3webParser.getSolutionNavi());
         uis.setQuestionnaireNavi(d3webParser.getQuestionnaireNavi());
-        uis.setSolutionDepths(d3webParser.getSolutionDepths());
+        uis.setSolutionDepths((ArrayList)d3webParser.getSolutionDepths());
         uis.setSolutionSorting(d3webParser.getSolutionSorting());
         uis.setShowContraIndicated(d3webParser.getShowContraIndicated());
         uis.setShowNonIndicated(d3webParser.getShowNonIndicated());
@@ -1920,7 +1920,7 @@ public class D3webDialog extends HttpServlet {
 
         // Get userprefix specification
         String dialogTypeForStoring = "";
-        DialogType dt = DialogType.DEFAULT;
+        DialogType dt = DialogType.QUESTIONARYCONS;
         if (!(uis.getDialogType() == null)) {
             dialogTypeForStoring = uis.getDialogType().toString();
         }
@@ -1952,7 +1952,7 @@ public class D3webDialog extends HttpServlet {
 
 
         // do we need to enable debug mode?!  
-        System.out.println("D3webDialog: " + d3webParser.getDebug());
+        //System.out.println("D3webDialog: " + d3webParser.getDebug());
         if (d3webParser.getDebug() != null && d3webParser.getDebug()) {
             httpSession.setAttribute("debug", "true");
         }

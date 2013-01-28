@@ -29,7 +29,10 @@ import de.d3web.proket.utils.XMLUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -57,7 +60,7 @@ public class D3webXMLParser {
     private Node locOverlay;
     private Node locLargetext;
     private Node locAutocolumns;
-    
+    private Node locGroups;
     private static String FILESEP = System.getProperty("file.separator");
 
     /**
@@ -160,6 +163,14 @@ public class D3webXMLParser {
                             locDropdown = locChild;
                         } else if (locName.equals("unknownvisible")) {
                             locUnknownvisible = locChild;
+                        } else if (locName.equals("overlay")) {
+                            locOverlay = locChild;
+                        } else if (locName.equals("largetext")) {
+                            locLargetext = locChild;
+                        } else if (locName.equals("autocolumns")) {
+                            locAutocolumns = locChild;
+                        } else if (locName.equals("groups")) {
+                            locGroups = locChild;
                         }
                     }
                 }
@@ -240,22 +251,42 @@ public class D3webXMLParser {
         return DialogStrategy.NEXTFORM;
     }
 
+    public enum IndicationRepresentation {
+
+        HIDE, GREY
+    }
+    
+    
     // get definition what to do with contra indicated objects of the knowledge
     // base, e.g. hide or show greyed
-    public String getShowContraIndicated() {
+    public IndicationRepresentation getShowContraIndicated() {
         if (XMLUtils.getStr((Element) globalUIOpts, "showcontraindicated") != null) {
-            return XMLUtils.getStr((Element) globalUIOpts, "showcontraindicated");
+            
+            String state = XMLUtils.getStr((Element) globalUIOpts, "showcontraindicated");
+            try {
+                return IndicationRepresentation.valueOf(state);
+            } catch (IllegalArgumentException iae) {
+                iae.printStackTrace();
+                return IndicationRepresentation.HIDE;
+            }
+            
         }
-        return "HIDE";
+        return IndicationRepresentation.HIDE;
     }
 
     // get definition what to do with non indicated objects of the knowledge
     // base, e.g. hide or show greyed
-    public String getShowNonIndicated() {
+    public IndicationRepresentation getShowNonIndicated() {
         if (XMLUtils.getStr((Element) globalUIOpts, "shownonindicated") != null) {
-            return XMLUtils.getStr((Element) globalUIOpts, "shownonindicated");
+            String state = XMLUtils.getStr((Element) globalUIOpts, "shownonindicated");
+            try {
+                return IndicationRepresentation.valueOf(state);
+            } catch (IllegalArgumentException iae) {
+                iae.printStackTrace();
+                return IndicationRepresentation.HIDE;
+            }
         }
-        return "HIDE";
+        return IndicationRepresentation.HIDE;
     }
 
     // Reads the CSS attribute from the parsed XML file.
@@ -277,7 +308,7 @@ public class D3webXMLParser {
     }
 
     //  get the (global) number of columns for displaiyng  questionnaires, i.e.
-    // how many questions are displayed next to each other in one dialog line
+    // how many groupQuestions are displayed next to each other in one dialog line
     public int getQuestionnaireColumns() {
         if (XMLUtils.getInt((Element) globalUIOpts, "questionnairecolumns") != null) {
             return XMLUtils.getInt((Element) globalUIOpts, "questionnairecolumns");
@@ -286,7 +317,7 @@ public class D3webXMLParser {
         return 1;
     }
 
-    // get the (global) number of columns for displaying within questions
+    // get the (global) number of columns for displaying within groupQuestions
     public int getQuestionColumns() {
         if (XMLUtils.getInt((Element) globalUIOpts, "questioncolumns") != null) {
             return XMLUtils.getInt((Element) globalUIOpts, "questioncolumns");
@@ -328,25 +359,27 @@ public class D3webXMLParser {
     }
 // return the solution depth to be used in solution panel
 
-    public String[] getSolutionDepths() {
+    public List getSolutionDepths() {
         if (XMLUtils.getStr((Element) globalUIOpts, "solutionDepth") != null) {
             String depths = XMLUtils.getStr((Element) globalUIOpts, "solutionDepth");
             String[] solDepths = null;
+            List depthsFinal = new ArrayList();
 
             //current = SolutionDepth.valueOf(depths);
             //System.out.println(depths);
             if (!depths.equals("") && depths.contains(";;;")) {
                 solDepths = depths.split(";;;");
+                depthsFinal = Arrays.asList(solDepths);
                 //System.out.println(Arrays.toString(solDepths));
             } else {
-                solDepths = new String[1];
-                solDepths[0] = depths;
+                depthsFinal.add(depths);
             }
-            return solDepths;
+            return depthsFinal;
         }
 
-        String[] def = new String[]{SolutionDepth.ALL.toString()};
-        return def;
+        List dFinal = new ArrayList();
+        dFinal.add(SolutionDepth.ALL.toString());
+        return dFinal;
     }
 
     public enum SolutionSorting {
@@ -385,39 +418,60 @@ public class D3webXMLParser {
         return Boolean.FALSE;
     }
 
+    // get flag, whether yn groupQuestions are to be displayed horizontally by default
+    public Boolean getYNFlatGlobal () {
+        if (XMLUtils.getBoolean((Element) globalUIOpts, "ynFlat") != null) {
+            return XMLUtils.getBoolean((Element) globalUIOpts, "ynFlat");
+        }
+        return Boolean.FALSE;
+    }
+
+    // get global definition for autocolumns. Per default return no autocolumning
+    public String getAutocolumnsGlobal() {
+        if (XMLUtils.getStr((Element) globalUIOpts, "autocolumns") != null) {
+            return XMLUtils.getStr((Element) globalUIOpts, "autocolumns");
+        }
+        return "none";
+    }
+
     /*
      * Retrieve LOCALUIOPTS Properties
      */
-    // get all questions (in a Hashmap) that have a number of question columns
+    // get all groupQuestions (in a Hashmap) that have a number of question columns
     public HashMap<String, Integer> getNrColumnsQuestions() {
-        HashMap questions = new HashMap<String, Integer>();
+        HashMap groupQuestions = new HashMap<String, ArrayList>();
         if (locQuestioncolumns != null) {
-            if (XMLUtils.getStr((Element) locQuestioncolumns, "one") != null) {
-                String qids = XMLUtils.getStr((Element) locQuestioncolumns, "one");
-                String[] qidsSplit = qids.split(";;;");
-                for (String qid : qidsSplit) {
-                    questions.put(qid, 1);
-                }
-            }
-            if (XMLUtils.getStr((Element) locQuestioncolumns, "two") != null) {
-                String qids = XMLUtils.getStr((Element) locQuestioncolumns, "two");
-                String[] qidsSplit = qids.split(";;;");
-                for (String qid : qidsSplit) {
-                    questions.put(qid, 2);
-                }
-            }
-            if (XMLUtils.getStr((Element) locQuestioncolumns, "three") != null) {
-                String qids = XMLUtils.getStr((Element) locQuestioncolumns, "three");
-                String[] qidsSplit = qids.split(";;;");
-                for (String qid : qidsSplit) {
-                    questions.put(qid, 3);
+
+            // get all group subchilds
+            NodeList locChildren = locQuestioncolumns.getChildNodes();
+
+            if (locChildren.getLength() > 0) {
+                for (int i = 0; i < locChildren.getLength(); i++) {
+                    Node locChild = locChildren.item(i);
+                    String gName = locChild.getNodeName();
+                    if (!gName.startsWith("#")) {
+
+                        String gQuestions = ""; //default
+                        if (XMLUtils.getStr((Element) locChild, "questions") != null) {
+                            gQuestions = XMLUtils.getStr((Element) locChild, "questions");
+                        }
+                        String[] gQuestionsSplit;
+                        List questions = null;
+                        if (!gQuestions.equals("")) {
+                            gQuestionsSplit = gQuestions.split(";;;");
+                            questions = Arrays.asList(gQuestionsSplit);
+                        }
+                        if (questions != null) {
+                            groupQuestions.put(gName, questions);
+                        }
+                    }
                 }
             }
         }
-        return questions;
+        return groupQuestions;
     }
 
-    // get all questions (in a Hashmap) that have a dropdown option specified
+    // get all groupQuestions (in a Hashmap) that have a dropdown option specified
     public HashMap<String, Boolean> getDropdownQuestions() {
         HashMap questions = new HashMap<String, Boolean>();
         if (locDropdown != null) {
@@ -439,7 +493,7 @@ public class D3webXMLParser {
         return questions;
     }
 
-    // get all questions (in a Hashmap) that have unknown visible option specified
+    // get all groupQuestions (in a Hashmap) that have unknown visible option specified
     public HashMap<String, Boolean> getUnknownVisibleQuestions() {
         HashMap questions = new HashMap<String, Boolean>();
         if (locUnknownvisible != null) {
@@ -460,9 +514,9 @@ public class D3webXMLParser {
         }
         return questions;
     }
-    
+
     // TODO: implement with templates and UI stuff
-     // get all questions (in a Hashmap) that have unknown visible option specified
+    // get all groupQuestions (in a Hashmap) that have unknown visible option specified
     public HashMap<String, Boolean> getOverlayQuestions() {
         HashMap questions = new HashMap<String, Boolean>();
         if (locOverlay != null) {
@@ -483,9 +537,9 @@ public class D3webXMLParser {
         }
         return questions;
     }
-    
-     // TODO: implement with templates and UI stuff
-     // get all questions (in a Hashmap) that have unknown visible option specified
+
+    // TODO: implement with templates and UI stuff
+    // get all groupQuestions (in a Hashmap) that have unknown visible option specified
     public HashMap<String, Boolean> getLargeTextEntryQuestions() {
         HashMap questions = new HashMap<String, Boolean>();
         if (locLargetext != null) {
@@ -506,32 +560,75 @@ public class D3webXMLParser {
         }
         return questions;
     }
-    
-     // TODO: implement with templates and UI stuff
-     // get all questions (in a Hashmap) that have unknown visible option specified
+
+    // TODO: implement with templates and UI stuff
+    // get all groupQuestions (in a Hashmap) that have unknown visible option specified
     public HashMap<String, String> getAutocolumnsQuestions() {
-        HashMap questions = new HashMap<String, String>();
+        HashMap autocols = new HashMap<String, ArrayList>();
         if (locAutocolumns != null) {
-            if (XMLUtils.getStr((Element) locAutocolumns, "T4:::C2") != null) {
-                String qids = XMLUtils.getStr((Element) locAutocolumns, "T4:::C2");
-                String[] qidsSplit = qids.split(";;;");
-                for (String qid : qidsSplit) {
-                    questions.put(qid, "T4:::C2");
-                }
-            }
-            if (XMLUtils.getStr((Element) locAutocolumns, "T8:::C3") != null) {
-                String qids = XMLUtils.getStr((Element) locAutocolumns, "T4:::C2");
-                String[] qidsSplit = qids.split(";;;");
-                for (String qid : qidsSplit) {
-                    questions.put(qid, "T4:::C2");
+
+            // get all group subchilds
+            NodeList locChildren = locAutocolumns.getChildNodes();
+
+            if (locChildren.getLength() > 0) {
+                for (int i = 0; i < locChildren.getLength(); i++) {
+                    Node locChild = locChildren.item(i);
+                    String acName = locChild.getNodeName();
+                    if (!acName.startsWith("#")) {
+
+                        String acQuestions = ""; //default
+                        if (XMLUtils.getStr((Element) locChild, "questions") != null) {
+                            acQuestions = XMLUtils.getStr((Element) locChild, "questions");
+                        }
+                        String[] questionsSplit;
+                        List questions = null;
+                        if (!acQuestions.equals("")) {
+                            questionsSplit = acQuestions.split(";;;");
+                            questions = Arrays.asList(questionsSplit);
+                        }
+                        if (questions != null) {
+                            autocols.put(acName, questions);
+                        }
+                    }
                 }
             }
         }
-        return questions;
+        return autocols;
     }
-    
-    
-    
+
+    // get all groupQuestions (in a Hashmap) that have grouping option specified
+    public HashMap<String, ArrayList> getGroupedQuestions() {
+        HashMap groupQuestions = new HashMap<String, ArrayList>();
+        if (locGroups != null) {
+
+            // get all group subchilds
+            NodeList locChildren = locGroups.getChildNodes();
+
+            if (locChildren.getLength() > 0) {
+                for (int i = 0; i < locChildren.getLength(); i++) {
+                    Node locChild = locChildren.item(i);
+                    String gName = locChild.getNodeName();
+                    if (!gName.startsWith("#")) {
+
+                        String gQuestions = ""; //default
+                        if (XMLUtils.getStr((Element) locChild, "questions") != null) {
+                            gQuestions = XMLUtils.getStr((Element) locChild, "questions");
+                        }
+                        String[] gQuestionsSplit;
+                        List questions = null;
+                        if (!gQuestions.equals("")) {
+                            gQuestionsSplit = gQuestions.split(";;;");
+                            questions = Arrays.asList(gQuestionsSplit);
+                        }
+                        if (questions != null) {
+                            groupQuestions.put(gName, questions);
+                        }
+                    }
+                }
+            }
+        }
+        return groupQuestions;
+    }
 
     /*
      * Retrieve DATAOPTS Properties
@@ -591,7 +688,7 @@ public class D3webXMLParser {
     }
 
     // get a group definition String if usability study is performed with
-    // multiple groups that use different artifacts
+    // multiple groupQuestions that use different artifacts
     public String getUEGroup() {
         if (XMLUtils.getStr((Element) ueOpts, "uegroup") != null) {
             return XMLUtils.getStr((Element) ueOpts, "uegroup");
@@ -637,11 +734,23 @@ public class D3webXMLParser {
         System.out.println("questionnairecolumns: \t\t" + parser.getQuestionnaireColumns());
         System.out.println("questioncolumns: \t\t" + parser.getQuestionColumns());
         System.out.println("unknownvisible: \t\t" + parser.getUnknownVisible());
+        System.out.println("solutionExplanantion: \t\t" + parser.getSolutionExplanationType());
+        System.out.println("solutionSorting: \t\t" + parser.getSolutionSorting());
+        System.out.println("solutionDepth: \t\t\t" + parser.getSolutionDepths());
+        System.out.println("questionnaireNavi: \t\t" + parser.getQuestionnaireNavi());
+        System.out.println("solutionNavi: \t\t\t" + parser.getSolutionNavi());
+        System.out.println("ynFlat: \t\t\t" + parser.getYNFlatGlobal());
+        System.out.println("autocolumns: \t\t\t" + parser.getAutocolumnsGlobal());
 
         System.out.println("- - -");
         System.out.println("LOCAL UI OPTS:");
         System.out.println("unknownvisible questions: \t" + parser.getUnknownVisibleQuestions().toString());
         System.out.println("dropdown questions: \t\t" + parser.getDropdownQuestions().toString());
         System.out.println("nrcolumns questions: \t\t" + parser.getNrColumnsQuestions());
+        System.out.println("overlay questions: \t\t" + parser.getOverlayQuestions());
+        System.out.println("largetext questions: \t\t" + parser.getLargeTextEntryQuestions());
+        System.out.println("autocolumn questions: \t\t" + parser.getAutocolumnsQuestions());
+        System.out.println("groups questions: \t\t" + parser.getGroupedQuestions());
+
     }
 }

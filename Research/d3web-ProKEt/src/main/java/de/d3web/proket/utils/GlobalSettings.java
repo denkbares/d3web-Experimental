@@ -75,8 +75,8 @@ public class GlobalSettings {
     /*
      * Default dialog settings
      */
-    private final DialogType defaultDialogType = DialogType.DEFAULT;
-    private final DialogStrategy defaultDialogStrategy = DialogStrategy.DEFAULT;
+    private final DialogType defaultDialogType = DialogType.QUESTIONARYCONS;
+    private final DialogStrategy defaultDialogStrategy = DialogStrategy.NEXTQUESTION;
     private final String defaultCSSSpec = "default"; // TODO
 
     

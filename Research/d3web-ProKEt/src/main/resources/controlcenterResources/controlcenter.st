@@ -9,8 +9,11 @@
 
 <script type="text/javascript">
 	\$(function() {
-		\$("#accordion").accordion({autoheight:true});
-		\$("div > a").button();		
+		\$("#accordion").accordion({
+                    autoFill: true,
+                    autoheight:false,
+                    clearStyle: true});
+			
 	});
 </script>
 
@@ -32,7 +35,9 @@ $css$
 
 <p align="center">
 <div id="accordion"
-	style="width: 600px; margin-left: auto; margin-right: auto;">
+    style=" width: 60%; height: 400px;
+    margin-left: auto; margin-right: auto; overflow: auto;"
+>
 
 <h3><a href="#">Pure Prototype Dialogs</a></h3>
 <div>$dialogs$</div>

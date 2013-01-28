@@ -158,7 +158,7 @@ public class D3webUtils {
      * @throws IOException
      */
     public static Session createSession(String kbFilename) throws IOException {
-        return createSession(getKnowledgeBase(kbFilename), DialogStrategy.DEFAULT);
+        return createSession(getKnowledgeBase(kbFilename), DialogStrategy.NEXTQUESTION);
     }
 
     /**

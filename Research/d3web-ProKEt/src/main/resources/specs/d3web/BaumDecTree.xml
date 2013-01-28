@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dialog 
-	header="Baumberatung - Entscheidungsbaum KB"  
-	dtype="singleform" 
-	indicationmode="hide_unindicated"
-        showcontraindicated="HIDE"
-        shownonindicated="HIDE"
-	dstrategy="nextform"
-	css="standarddialog, diagnosisVisu" 
+<dialogOpts 
+    header="Baumberatung - Entscheidungsbaum"  
+    login = ""
+    required = ""
+    language = ""
+    debug = "false" >
+    <globalUIOpts 
+        dialogtype="QuestionaryCons"
+        dialogstrategy = ""
+        showcontraindicated = "HIDE"
+        shownonindicated = "HIDE"
+        css="questionaryCons, diagnosisVisu" 
 	dialogcolumns="1"
 	questionnairecolumns="3"
-	questioncolumns="1"
-	uiprefix = "QuestionaryCons"
-        login = ""
-        required = "NONE"
-	language = ""
-        debug = "false"
-        solutionExplanation = "TEXTUAL"
-        solutionSorting = "CATEGALPHA" 
+	questioncolumns="2"
+        solutionExplanation = "TEXTUAL" 
+        solutionSorting = "CATEGALPHA"
         solutionDepth = "ALL"
-        >
-	<data kb="BaumDecTree.d3web" />
-        <ue logging = "FALSE" />
-</dialog>
+    />
+    <localUIOpts />
+    <dataOpts kb="BaumMin.d3web" />
+    <ueOpts logging = "FALSE" />
+</dialogOpts>

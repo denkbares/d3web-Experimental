@@ -21,6 +21,7 @@ package de.d3web.proket.d3web.settings;
 
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.data.DialogType;
+import java.util.ArrayList;
 
 /**
  * Class for storing all UI Properties of a productive KBS as specified in the
@@ -78,7 +79,7 @@ public class UISettings {
     
     private D3webXMLParser.SolutionSorting solSorting;
     
-    private String[] solDepth;
+    private ArrayList solDepth;
     
     
     private static UISettings instance;
@@ -88,9 +89,9 @@ public class UISettings {
     private boolean questionnaireNavi = false;
     
     
-    private String showIndicated;
-    private String showContraIndicated;
-    private String showNonIndicated;
+    private D3webXMLParser.IndicationRepresentation showIndicated;
+    private D3webXMLParser.IndicationRepresentation showContraIndicated;
+    private D3webXMLParser.IndicationRepresentation showNonIndicated;
     
     
     public static UISettings getInstance() {
@@ -193,35 +194,35 @@ public class UISettings {
         this.questionnaireNavi = questionnaireNavi;
     }
 
-    public void setSolutionDepths(String[] depth){
+    public void setSolutionDepths(ArrayList depth){
         this.solDepth = depth;
     }
     
-    public String[] getSolutionDepths(){
+    public ArrayList getSolutionDepths(){
         return this.solDepth;
     }
     
-    public String getShowIndicated() {
+    public D3webXMLParser.IndicationRepresentation getShowIndicated() {
         return this.showIndicated;
     }
 
-    public void setShowIndicated(String sIndi) {
+    public void setShowIndicated(D3webXMLParser.IndicationRepresentation sIndi) {
         this.showIndicated = sIndi;
     }
     
-    public String getShowContraIndicated() {
+    public D3webXMLParser.IndicationRepresentation getShowContraIndicated() {
         return this.showContraIndicated;
     }
 
-    public void setShowContraIndicated(String sIndi) {
+    public void setShowContraIndicated(D3webXMLParser.IndicationRepresentation sIndi) {
         this.showContraIndicated = sIndi;
     }
     
-    public String getShowNonIndicated() {
+    public D3webXMLParser.IndicationRepresentation getShowNonIndicated() {
         return this.showNonIndicated;
     }
 
-    public void setShowNonIndicated(String sIndi) {
+    public void setShowNonIndicated(D3webXMLParser.IndicationRepresentation sIndi) {
         this.showNonIndicated = sIndi;
     }
 
