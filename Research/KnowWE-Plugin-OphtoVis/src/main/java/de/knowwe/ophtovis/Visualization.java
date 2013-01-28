@@ -152,6 +152,10 @@ public class Visualization {
 						+
 						"	<script type=\"text/javascript\" src=\""
 						+ context
+						+ "/KnowWEExtension/jquery.blockUI.js\"></script>	\r\n"
+						+
+						"	<script type=\"text/javascript\" src=\""
+						+ context
 						+ "/KnowWEExtension/nodeCreatin.js \"></script>\r\n"
 						+
 						"	<script type=\"text/javascript\" src=\""

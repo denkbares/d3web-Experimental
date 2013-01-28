@@ -51,20 +51,26 @@ return listEntry;
 
 
 function bottonClick(id, instance){
+	blockScreen();
+	$(document).ready(function() {
+		var str = "#ul"+ id;
+		});
 var str = "#ul"+ id;
 $($("#"+id).children()[0]).toggleClass('fwd');
-//$($("#"+id).children()[0]).text('-');
-
 $($("#"+id).children()[0]).toggleClass('back');
-//$($("#"+id).children()[0]).text('+');
-
-
 if(!instance.hid){
 $(str).hide();
 instance.hid=true;
 instance.style.backgroundColor='red';
-jsPlumb.select({source: id+"" }).detach();
+var connections =jsPlumb.select({source: id+""}).getParameter();
+	
+for(var i=0,j=connections.length; i<j; i++){
+  if(connections[i][1].getPaintStyle().strokeStyle=="black"){
+  	jsPlumb.detach(connections[i][1]);
+  }
+};
 jsPlumb.repaintEverything();
+unBlockScreen();
 }else{
 var found = $(str).show();
 instance.hid=false;
@@ -89,6 +95,15 @@ for(var i=0,j=listElements.length; i<j; i++){
   	}
 };
 jsPlumb.repaintEverything();
+unBlockScreen();
+}
+
+function blockScreen(){
+	 $.blockUI();
+}
+function unBlockScreen(){
+	
+	$.unblockUI();
 }
 
 function createUL(name,parent){
@@ -123,7 +138,7 @@ target:end+""
 
 }
 function connectKnotenTemporal(start,end){
-var contain = '#ul'+start;
+var contain = '#ule'+start;
 jsPlumb.bind("ready", function() {
 jsPlumb.connect({
 source:start,
