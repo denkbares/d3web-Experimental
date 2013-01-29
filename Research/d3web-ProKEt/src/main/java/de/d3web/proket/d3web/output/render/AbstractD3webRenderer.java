@@ -37,6 +37,7 @@ import de.d3web.indication.inference.PSMethodUserSelected;
 //import de.d3web.jurisearch.JuriRule;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
+import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
@@ -73,6 +74,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
     private static HashMap<String, String> nameToIdMap = new HashMap<String, String>();
     private static HashMap<String, String> idToNameMap = new HashMap<String, String>();
+    D3webXMLParser d3webxmlparser = D3webConnector.getInstance().getD3webParser();
 
     /**
      * Retrieves the appropriate renderer class according to what base object is
@@ -235,18 +237,26 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
                 UISettings uis = UISettings.getInstance();
 
-                 //if (to.getName().equals("Welche Erkrankungen des Magen-Darm-Trakts hatten Sie?")) {
-                   /* System.out.println("to: " + to.getName());
-                    System.out.println("  Ind? - " + D3webUtils.isIndicatedPlain(to, d3webSession.getBlackboard()));
-                    System.out.println("  CInd? - " + D3webUtils.isContraIndicated(to, d3webSession.getBlackboard()));
-                    System.out.println("child: " + child.getName());
-                    System.out.println("  Ind? - " + D3webUtils.isIndicatedPlain(child, d3webSession.getBlackboard()));
-                    System.out.println("  Ind? - " + D3webUtils.isIndicatedByInitQuestionnaire(child, to, d3webSession.getBlackboard()));
-                    System.out.println("  Ind? - " + D3webUtils.isIndicatedByIndicatedQuestionnaire(child, to, d3webSession.getBlackboard()));
-                    System.out.println("  CInd? - " + D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()));
-                *///}
+                //if (to.getName().equals("Welche Erkrankungen des Magen-Darm-Trakts hatten Sie?")) {
+                   /*
+                 * System.out.println("to: " + to.getName());
+                 * System.out.println(" Ind? - " +
+                 * D3webUtils.isIndicatedPlain(to,
+                 * d3webSession.getBlackboard())); System.out.println(" CInd? -
+                 * " + D3webUtils.isContraIndicated(to,
+                 * d3webSession.getBlackboard())); System.out.println("child: "
+                 * + child.getName()); System.out.println(" Ind? - " +
+                 * D3webUtils.isIndicatedPlain(child,
+                 * d3webSession.getBlackboard())); System.out.println(" Ind? - "
+                 * + D3webUtils.isIndicatedByInitQuestionnaire(child, to,
+                 * d3webSession.getBlackboard())); System.out.println(" Ind? - "
+                 * + D3webUtils.isIndicatedByIndicatedQuestionnaire(child, to,
+                 * d3webSession.getBlackboard())); System.out.println(" CInd? -
+                 * " + D3webUtils.isContraIndicated(child,
+                 * d3webSession.getBlackboard()));
+                 *///}
 
-                if (uis.getShowNonIndicated().equals("HIDE")
+                if (uis.getShowNonIndicated().equals(D3webXMLParser.IndicationRepresentation.HIDE)
                         && child instanceof Question) {
 
                     if ((!D3webUtils.isIndicatedByInitQuestionnaire(child, to, d3webSession.getBlackboard())
@@ -410,28 +420,32 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                 && !(to instanceof QuestionZC)) {
 
             /*
-             * Append result of the unknown-renderer, i.e., unknown option, if -
-             * unknown by default option of KB is activated - AND nothing set
-             * additionally for single questions
+             * Append unknown answer option if specified */
+            Boolean unknownGlobal = d3webxmlparser.getUnknownVisible();
+            System.out.println("global " + unknownGlobal);
+            Boolean unknownLocal =
+                    d3webxmlparser.getUnknownVisibleQuestions()
+                    .get(to.getName()) == null 
+                    ? unknownGlobal // nothing local set take global as default
+                    : d3webxmlparser.getUnknownVisibleQuestions().get(to.getName());
+            System.out.println("local " + unknownLocal);
+            
+            /*
+             * render unknown if: globally set and NOT locally deactivated OR if
+             * globally deactivated but locally set
              */
-            Boolean value = D3webConnector.getInstance().getKb().getInfoStore().getValue(
-                    BasicProperties.UNKNOWN_VISIBLE);
-            if (value != null && value) {
+            if ((unknownGlobal && !(!unknownLocal))
+                    || (!unknownGlobal && unknownLocal)) {
 
-                Boolean toValue = to.getInfoStore().getValue(BasicProperties.UNKNOWN_VISIBLE);
-                //System.out.println(to.getName() + " unknown: " + toValue);
-                if (toValue == null || toValue) {
+                AnswerD3webRenderer unknownRenderer = getUnknownRenderer();
 
-                    AnswerD3webRenderer unknownRenderer = getUnknownRenderer();
-
-                    // receive the matching HTML from the Renderer and append
-                    String childHTML =
-                            unknownRenderer.renderTerminologyObject(cc, d3webSession, null, to,
-                            parent, loc, httpSession);
-                    // System.out.println(childHTML);
-                    if (childHTML != null) {
-                        childrenHTML.append(childHTML);
-                    }
+                // receive the matching HTML from the Renderer and append
+                String childHTML =
+                        unknownRenderer.renderTerminologyObject(cc, d3webSession, null, to,
+                        parent, loc, httpSession);
+                
+                if (childHTML != null) {
+                    childrenHTML.append(childHTML);
                 }
             }
         }
@@ -508,19 +522,20 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                 if (!debug) {
 
 
-                    //if(childsChild.getName().equals("Welche Erkrankungen des Magen-Darm-Trakts hatten Sie?")){
-                        System.out.println("IN FU: " + D3webUtils.isIndicatedByInitQuestionnaire(childsChild, child, d3webSession.getBlackboard()));
+                    //if(childsChild.getName().equals("Hat der Baum Nadeln?")){
+                    //  System.out.println("IN FU: " + D3webUtils.isIndicatedByInitQuestionnaire(childsChild, child, d3webSession.getBlackboard()));
                     //}
-                    if (UISettings.getInstance().getShowNonIndicated().equals("HIDE")
+                    if (UISettings.getInstance().getShowNonIndicated().equals(
+                            D3webXMLParser.IndicationRepresentation.HIDE)
                             && childsChild instanceof Question) {
-                        if (!D3webUtils.isIndicatedByInitQuestionnaire(childsChild, child, d3webSession.getBlackboard()))
-                        {
+                        if (!D3webUtils.isIndicatedByInitQuestionnaire(childsChild, child, d3webSession.getBlackboard())) {
                             continue;
                         }
                     }
-                    
-                    
-                    if (UISettings.getInstance().getShowContraIndicated().equals("HIDE")
+
+
+                    if (UISettings.getInstance().getShowContraIndicated().equals(
+                            D3webXMLParser.IndicationRepresentation.HIDE)
                             && childsChild instanceof Question
                             && D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())) {
                         continue;

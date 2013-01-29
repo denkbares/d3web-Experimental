@@ -19,6 +19,7 @@
  */
 package de.d3web.proket.d3web.output.render;
 
+import de.d3web.core.inference.PSMethod;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.*;
@@ -30,6 +31,8 @@ import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.d3web.utils.SolutionNameComparator;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import de.d3web.scoring.HeuristicRating;
+import de.d3web.scoring.inference.PSMethodHeuristic;
+import de.d3web.xcl.inference.PSMethodXCL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -60,9 +63,9 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
         StringBuilder bui = new StringBuilder();
         D3webXMLParser.SolutionExplanationType solType =
                 UISettings.getInstance().getSolutionExplanationType();
-       
+
         if (solType == D3webXMLParser.SolutionExplanationType.TEXTUAL) {
-           bui.append(getTextualListing(d3webSession));
+            bui.append(getTextualListing(d3webSession));
 
         } else if (solType == D3webXMLParser.SolutionExplanationType.TABLE) {
             // TODO
@@ -108,15 +111,15 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
             Session d3websession) {
 
         UISettings uis = UISettings.getInstance();
-        
-        if(uis.getSolutionSorting().equals(D3webXMLParser.SolutionSorting.ALPHABETICAL)){
+
+        if (uis.getSolutionSorting().equals(D3webXMLParser.SolutionSorting.ALPHABETICAL)) {
             return sortSolutionsAlphabetical(valued, d3websession);
-        } else if (uis.getSolutionSorting().equals(D3webXMLParser.SolutionSorting.CATEGORICAL)){
+        } else if (uis.getSolutionSorting().equals(D3webXMLParser.SolutionSorting.CATEGORICAL)) {
             return sortSolutionsCategorical(valued, d3websession);
-        } else if (uis.getSolutionSorting().equals(D3webXMLParser.SolutionSorting.CATEGALPHA)){
+        } else if (uis.getSolutionSorting().equals(D3webXMLParser.SolutionSorting.CATEGALPHA)) {
             return sortSolutionsCategoricalAndAlphabetical(valued, d3websession);
         }
-        
+
         return new ArrayList<Solution>();
     }
 
@@ -139,12 +142,27 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
 
         // fill template attribute
         st.setAttribute("solid", solution.getName());
-        
-        double score = ((HeuristicRating)bb.getRating(solution)).getScore();
-        String solutiontext = solution.getName() + " (" + score + ") "; 
+
+        /* get scoring, dependent on applied problem solving method */
+        double score = 0.0;
+        Collection<PSMethod> contributingPSMethods =
+                bb.getContributingPSMethods(solution);
+        for (PSMethod psmethod : contributingPSMethods) {
+            if (psmethod.getClass().equals(PSMethodHeuristic.class)) {
+                score = ((HeuristicRating) bb.getRating(solution)).getScore();
+                break;
+            } 
+            // preparation for x
+            else if (psmethod.equals(PSMethodXCL.class)) {
+                System.out.println("xcl scoring");
+                break;
+            }
+        }
+
+        String solutiontext = solution.getName() + " (" + score + ") ";
         st.setAttribute("solutiontext", solutiontext);
-        
-       
+
+
         if (bb.getRating(solution).getState().equals(Rating.State.ESTABLISHED)) {
             st.setAttribute("src", "img/solEst.png");
             st.setAttribute("alt", "established");
@@ -168,10 +186,10 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
 
         return st.toString();
     }
-    
-     private Collection<Solution> sortSolutionsAlphabetical(Collection<Solution> valued,
+
+    private Collection<Solution> sortSolutionsAlphabetical(Collection<Solution> valued,
             Session d3websession) {
-         
+
         Blackboard bb = d3websession.getBlackboard();
         ArrayList<Solution> result = new ArrayList<Solution>();
         ArrayList<Solution> established = new ArrayList<Solution>();
@@ -217,15 +235,15 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
                 }
             }
         }
-        
+
         Collections.sort(result, new SolutionNameComparator());
         return result;
-     
-     }
-     
-     private Collection<Solution> sortSolutionsCategorical(Collection<Solution> valued,
+
+    }
+
+    private Collection<Solution> sortSolutionsCategorical(Collection<Solution> valued,
             Session d3websession) {
-         
+
         Blackboard bb = d3websession.getBlackboard();
         Collection<Solution> result = new ArrayList<Solution>();
         ArrayList<Solution> established = new ArrayList<Solution>();
@@ -271,13 +289,13 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
                 }
             }
         }
-        
+
         return result;
-     }
-     
-     private Collection<Solution> sortSolutionsCategoricalAndAlphabetical(Collection<Solution> valued,
+    }
+
+    private Collection<Solution> sortSolutionsCategoricalAndAlphabetical(Collection<Solution> valued,
             Session d3websession) {
-        
+
         Blackboard bb = d3websession.getBlackboard();
         ArrayList<Solution> result = new ArrayList<Solution>();
         ArrayList<Solution> established = new ArrayList<Solution>();
@@ -301,7 +319,7 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
         Collections.sort(suggested, new SolutionNameComparator());
         Collections.sort(excluded, new SolutionNameComparator());
         Collections.sort(unclear, new SolutionNameComparator());
-        
+
         ArrayList<String> solutionDepths = UISettings.getInstance().getSolutionDepths();
 
         // if the shortcut ALL for getting ALL ratings is used
@@ -328,9 +346,8 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
                 }
             }
         }
-        
-        return result;
-     
-     }
 
+        return result;
+
+    }
 }

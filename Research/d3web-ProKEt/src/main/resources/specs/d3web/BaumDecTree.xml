@@ -17,8 +17,11 @@
         solutionExplanation = "TEXTUAL" 
         solutionSorting = "CATEGALPHA"
         solutionDepth = "ALL"
+        unknownvisible = "true"
     />
-    <localUIOpts />
+    <localUIOpts>
+        <unknownvisible TRUE="Einheimische Baumart?" />
+    </localUIOpts>
     <dataOpts kb="BaumMin.d3web" />
     <ueOpts logging = "FALSE" />
 </dialogOpts>
