@@ -75,6 +75,9 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
     private static HashMap<String, String> nameToIdMap = new HashMap<String, String>();
     private static HashMap<String, String> idToNameMap = new HashMap<String, String>();
     D3webXMLParser d3webxmlparser = D3webConnector.getInstance().getD3webParser();
+    UISettings uiset = UISettings.getInstance();
+    private int columnsGlobal = -1;
+    private int columnsLocal = -1;
 
     /**
      * Retrieves the appropriate renderer class according to what base object is
@@ -158,16 +161,27 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         D3webConnector d3wcon = D3webConnector.getInstance();
         UISettings uiset = UISettings.getInstance();
 
-        // number of columns that is to be set for this element, default 1-col
-        int columns = 1;
+        /*
+         * get the nr of columns setting for dialog, questionnaires and the
+         * questions.
+         */
+        // global columns for the dialog, i.e. how many questionnaires in a row
         if (to == d3webSession.getKnowledgeBase().getRootQASet()) {
-            columns = uiset.getDialogColumns();
-        } else if (to instanceof QContainer) {
-            columns = uiset.getQuestionnaireColumns();
-        } else if (to instanceof Question) {
-            columns = uiset.getQuestionColumns();
+            columnsGlobal = uiset.getDialogColumns();
+        } // global columns for the questionnaire, i.e., how many questions in a row
+        else if (to instanceof QContainer) {
+            columnsGlobal = uiset.getQuestionnaireColumns();
+        } // global columns for the questions, i.e., how many answers in a row
+        else if (to instanceof Question) {
+            columnsGlobal = uiset.getQuestionColumns();
         }
 
+       // final columns store
+        int columns = columnsGlobal;
+        if (columnsLocal != -1) {
+            columns = columnsLocal; //local settings overwrite global settings!
+        }
+        
         // if more than one column is required, get open-table tag from
         // TableContainer and append it to the HTML
         if (columns > 1) {
@@ -324,14 +338,48 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                 || to instanceof QuestionDate
                 || to instanceof QuestionText) {
             columns = 1;
-        } else if (UISettings.getInstance().getQuestionColumns() != -1) {
-            columns = UISettings.getInstance().getQuestionColumns();
-        } else {
-            // default: set 2 columns for questions, i.e., answers displayed in
-            // 2 cols
-            columns = 2;
         }
 
+        System.out.println(to.getName());
+        // first check if global or local "autocolumn setting" is provided
+        String acSet = uiset.getAutocolumns();
+        int threshold = getThresholdFromThresholdSpecs(acSet);
+        System.out.println(threshold);
+        if (((QuestionChoice)to).getAllAlternatives().size() >= threshold) {
+            columnsGlobal = getNrColumnsFromThresholdSpecs(acSet);
+            System.out.println(columnsGlobal);
+        }
+
+        HashMap<String, String> acSetLocal = uiset.getAutocolumnsQuestionsLoc();
+        if (acSetLocal.containsKey(to.getName())) {
+            acSet = acSetLocal.get(to.getName());
+        }
+        threshold = getNrColumnsFromThresholdSpecs(acSet);
+        if (((QuestionChoice)to).getAllAlternatives().size() >= threshold) {
+            columnsLocal = getNrColumnsFromThresholdSpecs(acSet);
+        }
+
+        // concrete settings weigh more than autocolum setting per default
+        columnsGlobal = uiset.getQuestionColumns(); // global setting
+        // potentially overwritten by local setting
+        HashMap<String, Integer> localColumns = uiset.getQuestionColumnsLoc();
+        if (localColumns.containsKey(to.getName())) {
+            columnsLocal = localColumns.get(to.getName());
+        }
+
+        //else if (UISettings.getInstance().getQuestionColumns() != -1) {
+        //  columns = UISettings.getInstance().getQuestionColumns();
+        //} else {
+        // default: set 2 columns for questions, i.e., answers displayed in
+        // 2 thres
+        //  columns = 2;
+        //}
+
+        columns = columnsGlobal;
+        if (columnsLocal != -1) {
+            columns = columnsLocal; //local settings overwrite global settings!
+        }
+        System.out.println(columns);
         // if more than one column open table tag via TableContainer and
         // append
         if (columns > 1) {
@@ -420,16 +468,15 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                 && !(to instanceof QuestionZC)) {
 
             /*
-             * Append unknown answer option if specified */
-            Boolean unknownGlobal = d3webxmlparser.getUnknownVisible();
-            System.out.println("global " + unknownGlobal);
+             * Append unknown answer option if specified
+             */
+            Boolean unknownGlobal = uiset.getUnknownVisible();
+
             Boolean unknownLocal =
-                    d3webxmlparser.getUnknownVisibleQuestions()
-                    .get(to.getName()) == null 
+                    uiset.getUnknownVisibleQuestionsLoc().get(to.getName()) == null
                     ? unknownGlobal // nothing local set take global as default
-                    : d3webxmlparser.getUnknownVisibleQuestions().get(to.getName());
-            System.out.println("local " + unknownLocal);
-            
+                    : uiset.getUnknownVisibleQuestionsLoc().get(to.getName());
+
             /*
              * render unknown if: globally set and NOT locally deactivated OR if
              * globally deactivated but locally set
@@ -443,7 +490,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                 String childHTML =
                         unknownRenderer.renderTerminologyObject(cc, d3webSession, null, to,
                         parent, loc, httpSession);
-                
+
                 if (childHTML != null) {
                     childrenHTML.append(childHTML);
                 }
@@ -865,5 +912,31 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             }
         }
         return null;
+    }
+
+    /**
+     * Get the number of columns from a specification String of the form
+     * <threshold---columns>.
+     *
+     * @param def specification String
+     * @return the number of columns
+     */
+    private int getNrColumnsFromThresholdSpecs(String def) {
+        int cols = 0;
+        
+        if (def != null && !def.equals("")) {
+            String[] defSplit = def.split("---");
+            cols = Integer.parseInt(defSplit[1].replace("C", ""));
+        }
+        return cols;
+    }
+
+    private int getThresholdFromThresholdSpecs(String def) {
+        int thres = 0;
+        if (def != null && !def.equals("")) {
+            String[] defSplit = def.split("---");
+            thres = Integer.parseInt(defSplit[0].replace("T", ""));
+        }
+        return thres;
     }
 }

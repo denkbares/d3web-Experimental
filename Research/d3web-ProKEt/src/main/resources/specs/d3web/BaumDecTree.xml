@@ -11,16 +11,22 @@
         showcontraindicated = "HIDE"
         shownonindicated = "HIDE"
         css="questionaryCons, diagnosisVisu" 
-	dialogcolumns="1"
-	questionnairecolumns="3"
-	questioncolumns="2"
+        dialogcolumns="1"
+        questionnairecolumns="2"
+        questioncolumns="1"
         solutionExplanation = "TEXTUAL" 
         solutionSorting = "CATEGALPHA"
         solutionDepth = "ALL"
-        unknownvisible = "true"
+        unknownvisible = "FALSE"      
     />
     <localUIOpts>
         <unknownvisible TRUE="Einheimische Baumart?" />
+        <autocolumns>
+            <T2---C2 questions="N3 Frage" />
+        </autocolumns>
+        <questioncolumns>
+            <two questions="N4 Frage"/>
+        </questioncolumns>    
     </localUIOpts>
     <dataOpts kb="BaumMin.d3web" />
     <ueOpts logging = "FALSE" />

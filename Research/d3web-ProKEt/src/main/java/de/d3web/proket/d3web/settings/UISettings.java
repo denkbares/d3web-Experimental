@@ -20,8 +20,10 @@
 package de.d3web.proket.d3web.settings;
 
 import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.data.DialogType;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Class for storing all UI Properties of a productive KBS as specified in the
@@ -48,22 +50,22 @@ public class UISettings {
      /*
      * number of columns for multicolumn styles (dialog)
      */
-    private int dcols;
+    private int dialogColumns;
 
     /*
      * number of columns for multicolumn styles (questionnaire)
      */
-    private int questcols = -1;
+    private int questionnaireColumns = -1;
 
     /*
      * number of columns for multicolumn styles (questionnaire)
      */
-    private int qcols = -1;
+    private int questionColumns = -1;
 
     /*
      * prefix that can be set by the user to define more specific dialog types
      */
-    private DialogType dt;
+    private DialogType dialogType;
 
     /*
      * In case we want to internationalize
@@ -75,11 +77,11 @@ public class UISettings {
      */
     private D3webXMLParser.LoginMode loginMode;
   
-    private D3webXMLParser.SolutionExplanationType solExpType;
+    private D3webXMLParser.SolutionExplanationType solutionExplanationType;
     
-    private D3webXMLParser.SolutionSorting solSorting;
+    private D3webXMLParser.SolutionSorting solutionSorting;
     
-    private ArrayList solDepth;
+    private ArrayList solutionDepths;
     
     
     private static UISettings instance;
@@ -92,6 +94,22 @@ public class UISettings {
     private D3webXMLParser.IndicationRepresentation showIndicated;
     private D3webXMLParser.IndicationRepresentation showContraIndicated;
     private D3webXMLParser.IndicationRepresentation showNonIndicated;
+    
+    private Boolean debug;
+    private DialogStrategy dialogStrategy;
+    private boolean unknownVisible;
+    private boolean ynFlat;
+    private String autocolumns;
+    
+    private HashMap<String, Boolean> unknownVisibleQuestionsLoc;
+    private HashMap<String, Integer> questionColumnsLoc;
+    //adapt parser
+    private HashMap<String, Boolean> dropdownQuestionsLoc;
+    private HashMap<String, Boolean> overlayQuestionsLoc;
+    private HashMap<String, Boolean> largeTextQuestionsLoc;
+    private HashMap<String, String> autocolumnsQuestionsLoc;
+    private HashMap<String, ArrayList> groupedQuestionsLoc;
+    
     
     
     public static UISettings getInstance() {
@@ -123,35 +141,35 @@ public class UISettings {
     }
 
     public int getDialogColumns() {
-        return this.dcols;
+        return this.dialogColumns;
     }
 
     public void setDialogColumns(int c) {
-        this.dcols = c;
+        this.dialogColumns = c;
     }
 
     public int getQuestionColumns() {
-        return this.qcols;
+        return this.questionColumns;
     }
 
     public void setQuestionColumns(int c) {
-        this.qcols = c;
+        this.questionColumns = c;
     }
 
     public int getQuestionnaireColumns() {
-        return this.questcols;
+        return this.questionnaireColumns;
     }
 
     public void setQuestionnaireColumns(int c) {
-        this.questcols = c;
+        this.questionnaireColumns = c;
     }
     
     public DialogType getDialogType() {
-        return this.dt;
+        return this.dialogType;
     }
 
     public void setDialogType(DialogType type) {
-        this.dt = type;
+        this.dialogType = type;
     }
 
      public void setLanguage(String lang) {
@@ -171,11 +189,11 @@ public class UISettings {
     }
     
     public void setSolutionExplanationType(D3webXMLParser.SolutionExplanationType sol) {
-        this.solExpType = sol;
+        this.solutionExplanationType = sol;
     }
 
     public D3webXMLParser.SolutionExplanationType getSolutionExplanationType() {
-        return this.solExpType;
+        return this.solutionExplanationType;
     }
  
       public boolean hasDiagnosisNavi() {
@@ -195,11 +213,11 @@ public class UISettings {
     }
 
     public void setSolutionDepths(ArrayList depth){
-        this.solDepth = depth;
+        this.solutionDepths = depth;
     }
     
     public ArrayList getSolutionDepths(){
-        return this.solDepth;
+        return this.solutionDepths;
     }
     
     public D3webXMLParser.IndicationRepresentation getShowIndicated() {
@@ -227,11 +245,107 @@ public class UISettings {
     }
 
     public D3webXMLParser.SolutionSorting getSolutionSorting() {
-        return solSorting;
+        return solutionSorting;
     }
 
     public void setSolutionSorting(D3webXMLParser.SolutionSorting solSorting) {
-        this.solSorting = solSorting;
+        this.solutionSorting = solSorting;
+    }
+
+    public String getAutocolumns() {
+        return autocolumns;
+    }
+
+    public void setAutocolumns(String autocolumns) {
+        this.autocolumns = autocolumns;
+    }
+
+    public Boolean getDebug() {
+        return debug;
+    }
+
+    public void setDebug(Boolean debug) {
+        this.debug = debug;
+    }
+
+    public DialogStrategy getDialogStrategy() {
+        return dialogStrategy;
+    }
+
+    public void setDialogStrategy(DialogStrategy dialogStrategy) {
+        this.dialogStrategy = dialogStrategy;
+    }
+
+    public boolean getUnknownVisible() {
+        return unknownVisible;
+    }
+
+    public void setUnknownVisible(boolean unknownVisible) {
+        this.unknownVisible = unknownVisible;
+    }
+
+    public boolean isYnFlat() {
+        return ynFlat;
+    }
+
+    public void setYnFlat(boolean ynFlat) {
+        this.ynFlat = ynFlat;
+    }
+
+    public HashMap<String, String> getAutocolumnsQuestionsLoc() {
+        return autocolumnsQuestionsLoc;
+    }
+
+    public void setAutocolumnsQuestionsLoc(HashMap<String, String> autocolumnsQuestionsLoc) {
+        this.autocolumnsQuestionsLoc = autocolumnsQuestionsLoc;
+    }
+
+    public HashMap<String, Boolean> getDropdownQuestionsLoc() {
+        return dropdownQuestionsLoc;
+    }
+
+    public void setDropdownQuestionsLoc(HashMap<String, Boolean> dropdownQuestionsLoc) {
+        this.dropdownQuestionsLoc = dropdownQuestionsLoc;
+    }
+
+    public HashMap<String, ArrayList> getGroupedQuestionsLoc() {
+        return groupedQuestionsLoc;
+    }
+
+    public void setGroupedQuestionsLoc(HashMap<String, ArrayList> groupedQuestionsLoc) {
+        this.groupedQuestionsLoc = groupedQuestionsLoc;
+    }
+
+    public HashMap<String, Boolean> getLargeTextQuestionsLoc() {
+        return largeTextQuestionsLoc;
+    }
+
+    public void setLargeTextQuestionsLoc(HashMap<String, Boolean> largeTextEntryQuestionsLoc) {
+        this.largeTextQuestionsLoc = largeTextEntryQuestionsLoc;
+    }
+
+    public HashMap<String, Boolean> getOverlayQuestionsLoc() {
+        return overlayQuestionsLoc;
+    }
+
+    public void setOverlayQuestionsLoc(HashMap<String, Boolean> overlayQuestionsLoc) {
+        this.overlayQuestionsLoc = overlayQuestionsLoc;
+    }
+
+    public HashMap<String, Integer> getQuestionColumnsLoc() {
+        return questionColumnsLoc;
+    }
+
+    public void setQuestionColumnsLoc(HashMap<String, Integer> questionColumnsLoc) {
+        this.questionColumnsLoc = questionColumnsLoc;
+    }
+
+    public HashMap<String, Boolean> getUnknownVisibleQuestionsLoc() {
+        return unknownVisibleQuestionsLoc;
+    }
+
+    public void setUnknownVisibleQuestionsLoc(HashMap<String, Boolean> unknownVisibleQuestionsLoc) {
+        this.unknownVisibleQuestionsLoc = unknownVisibleQuestionsLoc;
     }
     
     

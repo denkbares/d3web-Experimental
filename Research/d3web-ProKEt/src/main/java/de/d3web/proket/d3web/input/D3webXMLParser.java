@@ -255,13 +255,12 @@ public class D3webXMLParser {
 
         HIDE, GREY
     }
-    
-    
+
     // get definition what to do with contra indicated objects of the knowledge
     // base, e.g. hide or show greyed
     public IndicationRepresentation getShowContraIndicated() {
         if (XMLUtils.getStr((Element) globalUIOpts, "showcontraindicated") != null) {
-            
+
             String state = XMLUtils.getStr((Element) globalUIOpts, "showcontraindicated");
             try {
                 return IndicationRepresentation.valueOf(state);
@@ -269,7 +268,7 @@ public class D3webXMLParser {
                 iae.printStackTrace();
                 return IndicationRepresentation.HIDE;
             }
-            
+
         }
         return IndicationRepresentation.HIDE;
     }
@@ -308,7 +307,7 @@ public class D3webXMLParser {
     }
 
     //  get the (global) number of columns for displaiyng  questionnaires, i.e.
-    // how many groupQuestions are displayed next to each other in one dialog line
+    // how many colsQuestions are displayed next to each other in one dialog line
     public int getQuestionnaireColumns() {
         if (XMLUtils.getInt((Element) globalUIOpts, "questionnairecolumns") != null) {
             return XMLUtils.getInt((Element) globalUIOpts, "questionnairecolumns");
@@ -317,7 +316,7 @@ public class D3webXMLParser {
         return 1;
     }
 
-    // get the (global) number of columns for displaying within groupQuestions
+    // get the (global) number of columns for displaying within colsQuestions
     public int getQuestionColumns() {
         if (XMLUtils.getInt((Element) globalUIOpts, "questioncolumns") != null) {
             return XMLUtils.getInt((Element) globalUIOpts, "questioncolumns");
@@ -418,8 +417,8 @@ public class D3webXMLParser {
         return Boolean.FALSE;
     }
 
-    // get flag, whether yn groupQuestions are to be displayed horizontally by default
-    public Boolean getYNFlatGlobal () {
+    // get flag, whether yn colsQuestions are to be displayed horizontally by default
+    public Boolean getYNFlatGlobal() {
         if (XMLUtils.getBoolean((Element) globalUIOpts, "ynFlat") != null) {
             return XMLUtils.getBoolean((Element) globalUIOpts, "ynFlat");
         }
@@ -431,15 +430,15 @@ public class D3webXMLParser {
         if (XMLUtils.getStr((Element) globalUIOpts, "autocolumns") != null) {
             return XMLUtils.getStr((Element) globalUIOpts, "autocolumns");
         }
-        return "none";
+        return "";
     }
 
     /*
      * Retrieve LOCALUIOPTS Properties
      */
-    // get all groupQuestions (in a Hashmap) that have a number of question columns
+    // get all colsQuestions (in a Hashmap) that have a number of question columns
     public HashMap<String, Integer> getNrColumnsQuestions() {
-        HashMap groupQuestions = new HashMap<String, ArrayList>();
+        HashMap colsQuestions = new HashMap<String, ArrayList>();
         if (locQuestioncolumns != null) {
 
             // get all group subchilds
@@ -456,22 +455,35 @@ public class D3webXMLParser {
                             gQuestions = XMLUtils.getStr((Element) locChild, "questions");
                         }
                         String[] gQuestionsSplit;
-                        List questions = null;
+                        List<String> questions = null;
                         if (!gQuestions.equals("")) {
                             gQuestionsSplit = gQuestions.split(";;;");
                             questions = Arrays.asList(gQuestionsSplit);
                         }
+                        Integer cols = 0;
+                        if (gName.equals("one")) {
+                            cols = 1;
+                        } else if (gName.equals("two")) {
+                            cols = 2;
+                        } else if (gName.equals("three")) {
+                            cols = 3;
+                        } else if (gName.equals("four")) {
+                            cols = 4;
+                        }
+
                         if (questions != null) {
-                            groupQuestions.put(gName, questions);
+                            for (String s : questions) {
+                                colsQuestions.put(s, cols);
+                            }
                         }
                     }
                 }
             }
         }
-        return groupQuestions;
+        return colsQuestions;
     }
 
-    // get all groupQuestions (in a Hashmap) that have a dropdown option specified
+    // get all colsQuestions (in a Hashmap) that have a dropdown option specified
     public HashMap<String, Boolean> getDropdownQuestions() {
         HashMap questions = new HashMap<String, Boolean>();
         if (locDropdown != null) {
@@ -493,7 +505,7 @@ public class D3webXMLParser {
         return questions;
     }
 
-    // get all groupQuestions (in a Hashmap) that have unknown visible option specified
+    // get all colsQuestions (in a Hashmap) that have unknown visible option specified
     public HashMap<String, Boolean> getUnknownVisibleQuestions() {
         HashMap questions = new HashMap<String, Boolean>();
         if (locUnknownvisible != null) {
@@ -516,7 +528,7 @@ public class D3webXMLParser {
     }
 
     // TODO: implement with templates and UI stuff
-    // get all groupQuestions (in a Hashmap) that have unknown visible option specified
+    // get all colsQuestions (in a Hashmap) that have unknown visible option specified
     public HashMap<String, Boolean> getOverlayQuestions() {
         HashMap questions = new HashMap<String, Boolean>();
         if (locOverlay != null) {
@@ -539,7 +551,7 @@ public class D3webXMLParser {
     }
 
     // TODO: implement with templates and UI stuff
-    // get all groupQuestions (in a Hashmap) that have unknown visible option specified
+    // get all colsQuestions (in a Hashmap) that have unknown visible option specified
     public HashMap<String, Boolean> getLargeTextEntryQuestions() {
         HashMap questions = new HashMap<String, Boolean>();
         if (locLargetext != null) {
@@ -562,7 +574,7 @@ public class D3webXMLParser {
     }
 
     // TODO: implement with templates and UI stuff
-    // get all groupQuestions (in a Hashmap) that have unknown visible option specified
+    // get all colsQuestions (in a Hashmap) that have unknown visible option specified
     public HashMap<String, String> getAutocolumnsQuestions() {
         HashMap autocols = new HashMap<String, ArrayList>();
         if (locAutocolumns != null) {
@@ -581,13 +593,15 @@ public class D3webXMLParser {
                             acQuestions = XMLUtils.getStr((Element) locChild, "questions");
                         }
                         String[] questionsSplit;
-                        List questions = null;
+                        List<String> questions = null;
                         if (!acQuestions.equals("")) {
                             questionsSplit = acQuestions.split(";;;");
                             questions = Arrays.asList(questionsSplit);
                         }
-                        if (questions != null) {
-                            autocols.put(acName, questions);
+                        if (questions != null && questions.size() > 0) {
+                            for (String qString : questions) {
+                                autocols.put(qString, acName);
+                            }
                         }
                     }
                 }
@@ -596,7 +610,7 @@ public class D3webXMLParser {
         return autocols;
     }
 
-    // get all groupQuestions (in a Hashmap) that have grouping option specified
+    // get all colsQuestions (in a Hashmap) that have grouping option specified
     public HashMap<String, ArrayList> getGroupedQuestions() {
         HashMap groupQuestions = new HashMap<String, ArrayList>();
         if (locGroups != null) {
@@ -688,7 +702,7 @@ public class D3webXMLParser {
     }
 
     // get a group definition String if usability study is performed with
-    // multiple groupQuestions that use different artifacts
+    // multiple colsQuestions that use different artifacts
     public String getUEGroup() {
         if (XMLUtils.getStr((Element) ueOpts, "uegroup") != null) {
             return XMLUtils.getStr((Element) ueOpts, "uegroup");
