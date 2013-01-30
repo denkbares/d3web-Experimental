@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import de.d3web.abstraction.ActionSetValue;
+import de.d3web.abstraction.ActionSetQuestion;
 import de.d3web.abstraction.inference.PSMethodAbstraction;
 import de.d3web.core.inference.PSAction;
 import de.d3web.core.inference.Rule;
@@ -106,7 +106,7 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 			if (q != null && numberSec != null) {
 				if (q instanceof QuestionNum) {
 					QuestionNum qNum = (QuestionNum) q;
-					ActionSetValue asv = new ActionSetValue();
+					ActionSetQuestion asv = new ActionSetQuestion();
 					asv.setQuestion(qNum);
 					asv.setValue(Number.getNumber(numberSec));
 					a = asv;
@@ -124,7 +124,7 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 			if (q != null && answerSec != null) {
 				if (q instanceof QuestionChoice) {
 					Choice choice = answerSec.get().getTermObject(article, answerSec);
-					ActionSetValue asv = new ActionSetValue();
+					ActionSetQuestion asv = new ActionSetQuestion();
 					asv.setQuestion(q);
 					asv.setValue(choice);
 					a = asv;

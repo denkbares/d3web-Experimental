@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.d3web.abstraction.ActionSetValue;
+import de.d3web.abstraction.ActionSetQuestion;
 import de.d3web.core.inference.PSAction;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.condition.Condition;
@@ -245,8 +245,8 @@ public class DebuggerMainAction extends AbstractAction {
 						+ "</span>");
 			}
 		}
-		else if (action instanceof ActionSetValue) {
-			ActionSetValue asv = (ActionSetValue) action;
+		else if (action instanceof ActionSetQuestion) {
+			ActionSetQuestion asv = (ActionSetQuestion) action;
 			buffer.append("<span class='debuggerAction'>" + asv.getQuestion()
 					+ "</span> = <span class='debuggerValue'>"
 					+ asv.getValue() + "</span>");

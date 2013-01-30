@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import de.d3web.abstraction.ActionSetValue;
+import de.d3web.abstraction.ActionSetQuestion;
 import de.d3web.core.inference.PSAction;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
@@ -105,7 +105,7 @@ public class RedundantValueStrategy extends AbstractAnomalyStrategy {
 					// nodes.put(st, (Node) el);
 				}
 			}
-			else if (action instanceof ActionSetValue) {
+			else if (action instanceof ActionSetQuestion) {
 
 				// String actionUsedValue = ((ActionSetValue)
 				// action).getValue().toString();

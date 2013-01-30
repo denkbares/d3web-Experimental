@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.d3web.abstraction.ActionSetValue;
+import de.d3web.abstraction.ActionSetQuestion;
 import de.d3web.core.inference.PSAction;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
@@ -136,8 +136,8 @@ public class InconsistentValueTest extends AbstractAnomalyTest {
 				unusedValues.addAll(askedList);
 			}
 			unused.addAll(unusedValues);
-			if (action instanceof ActionSetValue) {
-				ActionSetValue actionSet = (ActionSetValue) action;
+			if (action instanceof ActionSetQuestion) {
+				ActionSetQuestion actionSet = (ActionSetQuestion) action;
 				String actionUsedValue = actionSet.getQuestion().getName();
 				if (unusedValues.contains(actionUsedValue)) {
 					result += actionUsedValue + " in " + node;
