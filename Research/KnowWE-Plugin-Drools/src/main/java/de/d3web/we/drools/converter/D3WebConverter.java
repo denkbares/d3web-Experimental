@@ -29,7 +29,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import de.d3web.abstraction.ActionSetValue;
+import de.d3web.abstraction.ActionSetQuestion;
 import de.d3web.abstraction.inference.PSMethodAbstraction;
 import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.PSAction;
@@ -533,8 +533,8 @@ public class D3WebConverter {
 	private void convertAction(PSAction action, DroolsRule droolsRule) {
 		if (action instanceof ActionHeuristicPS) convertHeuristicAction(droolsRule,
 				(ActionHeuristicPS) action);
-		else if (action instanceof ActionSetValue) convertSetValueAction(droolsRule,
-				(ActionSetValue) action);
+		else if (action instanceof ActionSetQuestion) convertSetValueAction(droolsRule,
+				(ActionSetQuestion) action);
 		else Logger.getLogger(this.getClass()).warn(
 				"Unable to handle ActionType " + droolsRule.getAction().getClass());
 	}
@@ -570,7 +570,7 @@ public class D3WebConverter {
 	 * @param action the currently processed d3-web action
 	 */
 	private void convertSetValueAction(DroolsRule droolsRule,
-			ActionSetValue action) {
+			ActionSetQuestion action) {
 		StringBuilder actionBuilder = new StringBuilder();
 		actionBuilder.append(INDENT);
 		actionBuilder.append(INDENT);
