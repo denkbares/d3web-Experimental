@@ -6,7 +6,7 @@
          dialogcolumns="1" questionnairecolumns="3" questioncolumns="1" unknownvisible="TRUE"
          solutionExplanation="TEXTUAL" solutionSorting = "CATEGALPHA" 
          solutionDepth="ALL" questionnaireNavi="FALSE" solutionNavi="FALSE"
-         ynFlat = "TRUE" autocolumns = "T3---C2" />
+         ynFlat = "TRUE" autocolumns = "T3---C2" dropdown = "TRUE"/>
 	<localUIOpts>
 		<unknownvisible TRUE="qid1;;;qid2" FALSE="qid3" />
 		<questioncolumns>

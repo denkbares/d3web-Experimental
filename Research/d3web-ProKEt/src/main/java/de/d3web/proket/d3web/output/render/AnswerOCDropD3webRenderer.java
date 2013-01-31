@@ -24,17 +24,15 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
-import de.d3web.core.session.values.UndefinedValue;
-import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
-import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
+import java.util.List;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -92,14 +90,21 @@ public class AnswerOCDropD3webRenderer extends AbstractD3webRenderer implements 
         if (dropdownMenuOptions != null) {
 
             String dropdownMenu = "<select  type='textselect'>"
-                    + createDropDownOptions(loc, value.toString(),
+                    + createDropDownOptionsOldV(loc, value.toString(),
                     dropdownMenuOptions.split(",")) + "<select/>";
             st.setAttribute(
                     "dropdown_menu", dropdownMenu);
         }
 
 
-
+        List<Choice> answers = ((QuestionChoice) to).getAllAlternatives();
+        if (answers != null && answers.size() > 0) {
+            String dropdownMenu = "<select  type='textselect'>"
+                    + createDropDownOptions(loc, value.toString(),
+                    answers) + "<select/>";
+            st.setAttribute(
+                    "dropdown_menu", dropdownMenu);
+        }
         sb.append(st.toString());
 
         super.makeTables(c, to, cc, sb);

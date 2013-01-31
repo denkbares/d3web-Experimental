@@ -64,11 +64,9 @@ public class D3webRendererMapping extends HashMap<String, String> {
     private static final String QUESTION = "Question";
     private static final String DEFAULT = "Default";
     private static final String OC_DROP_ANSWERS = "OCDrop";
-    
     //private static final String QUESTIONARYCONS = "QUESTIONARYCONS";
     //private static final String ITREE = "ITREE";
     //private static final String STANDARD = "STANDARD";
-    
     // the instance
     private static D3webRendererMapping instance = null;
 
@@ -96,7 +94,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
         this.put(Q_CONT, QuestionnaireD3webRenderer.class.getSimpleName());
         this.put(SUMMARY, SummaryD3webRenderer.class.getSimpleName());
         this.put(SOLUTIONPANEL, SolutionPanelD3webRenderer.class.getSimpleName());
-       
+
         this.put(DUMMYITREENUM, ITreeDummyQuestionD3webRenderer.class.getSimpleName());
         this.put(OC_ANSWER, AnswerOCD3webRenderer.class.getSimpleName());
         this.put(MC_ANSWER, AnswerMCD3webRenderer.class.getSimpleName());
@@ -108,7 +106,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
         this.put(OC_DROP_ANSWERS, AnswerOCDropD3webRenderer.class.getSimpleName());
         this.put(ITREENUM_NUM, ITreeNumQuestionD3webRenderer.class.getSimpleName());
         this.put(ITREENUM_DATE, ITreeDateQuestionD3webRenderer.class.getSimpleName());
-      
+
         //this.put(QUESTIONARYCONS, "QuestionaryCons");
     }
 
@@ -123,7 +121,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
      */
     public AbstractD3webRenderer getRenderer(TerminologyObject to) {
         String userPref = UISettings.getInstance().getDialogType().toString();
-        
+
         String name = DEFAULT;
         if (to == null) {
             return (AbstractD3webRenderer) getRenderer(userPref, name);
@@ -199,11 +197,19 @@ public class D3webRendererMapping extends HashMap<String, String> {
         return (AnswerD3webRenderer) getRenderer(name);
     }
 
+    public AnswerD3webRenderer getDropdownAnswerRenderer(TerminologyObject to) {
+        String name = "";
+        if (to instanceof QuestionOC) {
+            name = OC_DROP_ANSWERS;
+    }
+        return (AnswerD3webRenderer) getRenderer(name);
+    }
+
     public SummaryD3webRenderer getSummaryRenderer() {
         return (SummaryD3webRenderer) getRenderer(SUMMARY);
     }
-    
-    public SolutionPanelD3webRenderer getSolutionPanelRenderer(){
+
+    public SolutionPanelD3webRenderer getSolutionPanelRenderer() {
         return (SolutionPanelD3webRenderer) getRenderer(SOLUTIONPANEL);
     }
 

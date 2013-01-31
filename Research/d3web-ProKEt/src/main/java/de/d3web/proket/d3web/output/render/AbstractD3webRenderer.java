@@ -176,12 +176,12 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             columnsGlobal = uiset.getQuestionColumns();
         }
 
-       // final columns store
+        // final columns store
         int columns = columnsGlobal;
         if (columnsLocal != -1) {
             columns = columnsLocal; //local settings overwrite global settings!
         }
-        
+
         // if more than one column is required, get open-table tag from
         // TableContainer and append it to the HTML
         if (columns > 1) {
@@ -345,7 +345,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         String acSet = uiset.getAutocolumns();
         int threshold = getThresholdFromThresholdSpecs(acSet);
         System.out.println(threshold);
-        if (((QuestionChoice)to).getAllAlternatives().size() >= threshold) {
+        if (((QuestionChoice) to).getAllAlternatives().size() >= threshold) {
             columnsGlobal = getNrColumnsFromThresholdSpecs(acSet);
             System.out.println(columnsGlobal);
         }
@@ -355,7 +355,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             acSet = acSetLocal.get(to.getName());
         }
         threshold = getNrColumnsFromThresholdSpecs(acSet);
-        if (((QuestionChoice)to).getAllAlternatives().size() >= threshold) {
+        if (((QuestionChoice) to).getAllAlternatives().size() >= threshold) {
             columnsLocal = getNrColumnsFromThresholdSpecs(acSet);
         }
 
@@ -421,8 +421,15 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                 String dropdownMenuOptions = to.getInfoStore().getValue(
                         ProKEtProperties.DROPDOWN_MENU_OPTIONS);
 
-                if (dropdownMenuOptions != null) {
+                Boolean showDropdownGlobal =
+                        uiset.getDropdown();
+                Boolean showDropdown =
+                        uiset.getDropdownQuestionsLoc().get(to.getName()) == null
+                        ? showDropdownGlobal // nothing local set take global as default
+                        : uiset.getDropdownQuestionsLoc().get(to.getName());
 
+
+                if (dropdownMenuOptions != null) {
                     childRenderer = getAnswerRenderer(to, d3webSession);
 
                     childHTML =
@@ -431,6 +438,16 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                         childrenHTML.append(childHTML);
                     }
 
+                } else if (showDropdown) {
+
+                    childRenderer =
+                            D3webRendererMapping.getInstance().getDropdownAnswerRenderer(to);
+
+                    childHTML =
+                            childRenderer.renderTerminologyObject(cc, d3webSession, null, to, parent, loc, httpSession);
+                    if (childHTML != null) {
+                        childrenHTML.append(childHTML);
+                    }
                 } else {
                     for (Choice c : ((QuestionChoice) to).getAllAlternatives()) {
 
@@ -864,7 +881,8 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
     }
 
-    protected String createDropDownOptions(int loc, String selectedValue, String... options) {
+    // old version, currently needed for EuraHS
+    protected String createDropDownOptionsOldV(int loc, String selectedValue, String... options) {
         StringBuilder builder = new StringBuilder();
 
         for (String option : options) {
@@ -879,6 +897,26 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
         }
 
 
+        return builder.toString();
+    }
+
+    // new version according to new dialog specs
+    protected String createDropDownOptions(int loc, String selectedValue, List<Choice> options) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<option value='Please select...'"
+                + ">" + "Please select..."
+                + "</option>\n");
+
+        // TODO what about internationalization here?
+        for (Choice option : options) {
+            String choiceText = option.getName();
+
+            builder.append("<option value='" + choiceText + "'"
+                    + (choiceText.equals(selectedValue) ? "selected='selected'" : "")
+                    + ">" + option
+                    + "</option>\n");
+        }
 
         return builder.toString();
     }
@@ -923,7 +961,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      */
     private int getNrColumnsFromThresholdSpecs(String def) {
         int cols = 0;
-        
+
         if (def != null && !def.equals("")) {
             String[] defSplit = def.split("---");
             cols = Integer.parseInt(defSplit[1].replace("C", ""));

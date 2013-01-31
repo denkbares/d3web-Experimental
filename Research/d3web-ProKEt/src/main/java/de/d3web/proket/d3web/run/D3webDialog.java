@@ -1909,6 +1909,7 @@ public class D3webDialog extends HttpServlet {
         uis.setQuestionnaireNavi(d3webParser.getQuestionnaireNavi());
         uis.setYnFlat(d3webParser.getYNFlatGlobal());
         uis.setAutocolumns(d3webParser.getAutocolumnsGlobal());
+        uis.setDropdown(d3webParser.getDropdown());
 
         /*
          * local settings

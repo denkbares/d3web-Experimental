@@ -90,6 +90,8 @@ public class UISettings {
     
     private boolean questionnaireNavi = false;
     
+    private boolean dropdown = false;
+    
     
     private D3webXMLParser.IndicationRepresentation showIndicated;
     private D3webXMLParser.IndicationRepresentation showContraIndicated;
@@ -346,6 +348,14 @@ public class UISettings {
 
     public void setUnknownVisibleQuestionsLoc(HashMap<String, Boolean> unknownVisibleQuestionsLoc) {
         this.unknownVisibleQuestionsLoc = unknownVisibleQuestionsLoc;
+    }
+
+    public boolean getDropdown() {
+        return dropdown;
+    }
+
+    public void setDropdown(boolean dropdown) {
+        this.dropdown = dropdown;
     }
     
     

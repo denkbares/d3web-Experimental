@@ -330,6 +330,13 @@ public class D3webXMLParser {
         }
         return Boolean.FALSE;
     }
+    
+     public Boolean getDropdown() {
+        if (XMLUtils.getBoolean((Element) globalUIOpts, "dropdown") != null) {
+            return XMLUtils.getBoolean((Element) globalUIOpts, "dropdown");
+        }
+        return Boolean.FALSE;
+    }
 
     // TODO: maybe remove all enums from here to UISettings class!
     // defining the possible solution explanation types
