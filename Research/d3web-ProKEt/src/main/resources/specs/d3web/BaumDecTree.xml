@@ -18,7 +18,7 @@
         solutionSorting = "CATEGALPHA"
         solutionDepth = "ALL"
         unknownvisible = "FALSE"    
-        dropdown = "TRUE"
+        dropdown = "FALSE"
     />
     <localUIOpts>
         <unknownvisible TRUE="Einheimische Baumart?" />
@@ -28,8 +28,8 @@
         <questioncolumns>
             <two questions="N4 Frage"/>
         </questioncolumns>    
-        <dropdown FALSE="N3 Frage" />
-            
+        <dropdown TRUE="N3 Frage" />
+        <largetext TRUE="Textfrage 1" FALSE="Textfrage 2" />    
     </localUIOpts>
     <dataOpts kb="BaumMin.d3web" />
     <ueOpts logging = "FALSE" />

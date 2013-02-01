@@ -1910,6 +1910,7 @@ public class D3webDialog extends HttpServlet {
         uis.setYnFlat(d3webParser.getYNFlatGlobal());
         uis.setAutocolumns(d3webParser.getAutocolumnsGlobal());
         uis.setDropdown(d3webParser.getDropdown());
+        uis.setLargetext(d3webParser.getLargetext());
 
         /*
          * local settings
@@ -1921,7 +1922,7 @@ public class D3webDialog extends HttpServlet {
         uis.setLargeTextQuestionsLoc(d3webParser.getLargeTextEntryQuestions());
         uis.setAutocolumnsQuestionsLoc(d3webParser.getAutocolumnsQuestions());
         uis.setGroupedQuestionsLoc(d3webParser.getGroupedQuestions());
-        
+
         /*
          * usability extension settings
          */
@@ -1963,7 +1964,9 @@ public class D3webDialog extends HttpServlet {
         // if a new dialog is loaded we also need a new session to start
         resetD3webSession(httpSession);
 
-        /* initialize logging */
+        /*
+         * initialize logging
+         */
         initializeLoggingMechanism(httpSession);
 
         // stream images from KB into webapp

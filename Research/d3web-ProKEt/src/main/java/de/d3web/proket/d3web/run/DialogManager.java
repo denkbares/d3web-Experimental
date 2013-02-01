@@ -20,7 +20,6 @@
 package de.d3web.proket.d3web.run;
 
 import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import de.d3web.proket.d3web.input.D3webXMLParserOrig;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import de.d3web.proket.d3web.utils.Utils;
@@ -620,6 +619,7 @@ public class DialogManager extends HttpServlet {
         System.err.println("Parse KB - parser call...");
         //Html2KnowWECompiler compiler = new converter.Html2KnowWECompiler();
 
+      
         converter.compiler.Compiler compiler = null;
         try {
             compiler = new converter.compiler.Compiler();

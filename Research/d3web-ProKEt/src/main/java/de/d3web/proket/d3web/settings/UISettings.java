@@ -92,6 +92,8 @@ public class UISettings {
     
     private boolean dropdown = false;
     
+    private boolean largetext = false;
+    
     
     private D3webXMLParser.IndicationRepresentation showIndicated;
     private D3webXMLParser.IndicationRepresentation showContraIndicated;
@@ -356,6 +358,14 @@ public class UISettings {
 
     public void setDropdown(boolean dropdown) {
         this.dropdown = dropdown;
+    }
+
+    public boolean getLargetext() {
+        return largetext;
+    }
+
+    public void setLargetext(boolean largetext) {
+        this.largetext = largetext;
     }
     
     

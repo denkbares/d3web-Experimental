@@ -340,46 +340,37 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             columns = 1;
         }
 
-        System.out.println(to.getName());
-        // first check if global or local "autocolumn setting" is provided
-        String acSet = uiset.getAutocolumns();
-        int threshold = getThresholdFromThresholdSpecs(acSet);
-        System.out.println(threshold);
-        if (((QuestionChoice) to).getAllAlternatives().size() >= threshold) {
-            columnsGlobal = getNrColumnsFromThresholdSpecs(acSet);
-            System.out.println(columnsGlobal);
+        if (to instanceof QuestionChoice) {
+            // first check if global or local "autocolumn setting" is provided
+            String acSet = uiset.getAutocolumns();
+            int threshold = getThresholdFromThresholdSpecs(acSet);
+            if (((QuestionChoice) to).getAllAlternatives().size() >= threshold) {
+                columnsGlobal = getNrColumnsFromThresholdSpecs(acSet);
+            }
+
+            HashMap<String, String> acSetLocal = uiset.getAutocolumnsQuestionsLoc();
+            if (acSetLocal.containsKey(to.getName())) {
+                acSet = acSetLocal.get(to.getName());
+            }
+            threshold = getNrColumnsFromThresholdSpecs(acSet);
+            if (((QuestionChoice) to).getAllAlternatives().size() >= threshold) {
+                columnsLocal = getNrColumnsFromThresholdSpecs(acSet);
+            }
+
+            // concrete settings weigh more than autocolum setting per default
+            columnsGlobal = uiset.getQuestionColumns(); // global setting
+            // potentially overwritten by local setting
+            HashMap<String, Integer> localColumns = uiset.getQuestionColumnsLoc();
+            if (localColumns.containsKey(to.getName())) {
+                columnsLocal = localColumns.get(to.getName());
+            }
+
+             columns = columnsGlobal;
+            if (columnsLocal != -1) {
+                columns = columnsLocal; //local settings overwrite global settings!
+            }
         }
 
-        HashMap<String, String> acSetLocal = uiset.getAutocolumnsQuestionsLoc();
-        if (acSetLocal.containsKey(to.getName())) {
-            acSet = acSetLocal.get(to.getName());
-        }
-        threshold = getNrColumnsFromThresholdSpecs(acSet);
-        if (((QuestionChoice) to).getAllAlternatives().size() >= threshold) {
-            columnsLocal = getNrColumnsFromThresholdSpecs(acSet);
-        }
-
-        // concrete settings weigh more than autocolum setting per default
-        columnsGlobal = uiset.getQuestionColumns(); // global setting
-        // potentially overwritten by local setting
-        HashMap<String, Integer> localColumns = uiset.getQuestionColumnsLoc();
-        if (localColumns.containsKey(to.getName())) {
-            columnsLocal = localColumns.get(to.getName());
-        }
-
-        //else if (UISettings.getInstance().getQuestionColumns() != -1) {
-        //  columns = UISettings.getInstance().getQuestionColumns();
-        //} else {
-        // default: set 2 columns for questions, i.e., answers displayed in
-        // 2 thres
-        //  columns = 2;
-        //}
-
-        columns = columnsGlobal;
-        if (columnsLocal != -1) {
-            columns = columnsLocal; //local settings overwrite global settings!
-        }
-        System.out.println(columns);
         // if more than one column open table tag via TableContainer and
         // append
         if (columns > 1) {
@@ -388,6 +379,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             childrenHTML.append(tableOpening);
         }
 
+        
         // for choice questions (oc only so far...)
         if (to instanceof QuestionChoice) {
 
@@ -429,6 +421,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                         : uiset.getDropdownQuestionsLoc().get(to.getName());
 
 
+                // for EuraHS (OLD) only. Refactor out!
                 if (dropdownMenuOptions != null) {
                     childRenderer = getAnswerRenderer(to, d3webSession);
 

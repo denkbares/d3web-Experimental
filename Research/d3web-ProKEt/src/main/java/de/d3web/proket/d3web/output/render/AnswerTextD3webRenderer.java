@@ -74,10 +74,22 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
         st.setAttribute("realAnswerType", "text");
         st.setAttribute("parentFullId", getID(parent));
 
+        /*
+         * OLD: for EuraHS. Refactor out!
+         */
         Boolean longText = to.getInfoStore().getValue(
                 ProKEtProperties.LONG_TEXT);
-
         if (longText != null && longText) {
+            st.setAttribute("longtext", "true");
+        }
+
+        Boolean largetextGlobal =
+                uiset.getLargetext();
+        Boolean largetext =
+                uiset.getLargeTextQuestionsLoc().get(to.getName()) == null
+                ? largetextGlobal // nothing local set take global as default
+                : uiset.getLargeTextQuestionsLoc().get(to.getName());
+        if (largetext) {
             st.setAttribute("longtext", "true");
         }
 

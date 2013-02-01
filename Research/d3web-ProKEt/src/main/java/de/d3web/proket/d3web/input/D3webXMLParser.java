@@ -330,10 +330,17 @@ public class D3webXMLParser {
         }
         return Boolean.FALSE;
     }
-    
-     public Boolean getDropdown() {
+
+    public Boolean getDropdown() {
         if (XMLUtils.getBoolean((Element) globalUIOpts, "dropdown") != null) {
             return XMLUtils.getBoolean((Element) globalUIOpts, "dropdown");
+        }
+        return Boolean.FALSE;
+    }
+
+    public Boolean getLargetext() {
+        if (XMLUtils.getBoolean((Element) globalUIOpts, "largetext") != null) {
+            return XMLUtils.getBoolean((Element) globalUIOpts, "largetext");
         }
         return Boolean.FALSE;
     }

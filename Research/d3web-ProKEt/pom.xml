@@ -101,33 +101,10 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
-         <dependency>
-            <groupId>com.mfext.cos</groupId>
+        <dependency>
+            <groupId>cos</groupId>
             <artifactId>cos</artifactId>
-            <version>1.0</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>juriparser</groupId>
-            <artifactId>juriparser</artifactId>
-            <version>1.0</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.mfext.officeconverterEW</groupId>
-            <artifactId>com.mfext.officeconverterEW</artifactId>
-            <version>1.0</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>abstracttools</groupId>
-            <artifactId>abstracttools</artifactId>
-            <version>1.0</version>
-            <type>jar</type>
-            <scope>compile</scope>
+            <version>05Nov2002</version>
         </dependency>
         <dependency>
             <groupId>org.openoffice</groupId>
@@ -186,12 +163,10 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
-       <dependency>
-            <groupId>juniversalchardet</groupId>
+        <dependency>
+            <groupId>com.googlecode.juniversalchardet</groupId>
             <artifactId>juniversalchardet</artifactId>
-            <version>1.0</version>
-            <type>jar</type>
-            <scope>compile</scope>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -223,17 +198,17 @@
             <artifactId>poi-ooxml</artifactId>
             <version>3.8</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.apache.directory.studio</groupId>
             <artifactId>org.dom4j.dom4j</artifactId>
             <version>1.6.1</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-excelant</artifactId>
             <version>3.8</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml-schemas</artifactId>
             <version>3.8</version>
@@ -248,7 +223,27 @@
             <artifactId>xalan</artifactId>
             <version>2.7.1</version>
         </dependency>
+        <dependency>
+            <groupId>ma.fre.officeconverter</groupId>
+            <artifactId>officeconverter</artifactId>
+            <version>1.0</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ma.fre.abstracttools</groupId>
+            <artifactId>abstracttools</artifactId>
+            <version>1.0</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ma.fre.juriparser</groupId>
+            <artifactId>juriparser</artifactId>
+            <version>1.0</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     
-   
 </project>
