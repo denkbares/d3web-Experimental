@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.defi.readon;
 
@@ -72,11 +72,10 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(
 					(new FileInputStream(
-					new File(path))), "UTF-8"));
+							new File(path))), "UTF-8"));
 			while ((line = br.readLine()) != null) {
 				if (userContext.getUserName().equals(line.split(";")[1])
-						&& units.contains(line.split(";")[2]))
-					page = line.split(";")[2];
+						&& units.contains(line.split(";")[2])) page = line.split(";")[2];
 			}
 		}
 		catch (FileNotFoundException e) {
@@ -103,7 +102,7 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
 					leftMenu.getRootSection(),
 					DynamicMenuMarkup.class);
-			Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
+			if (menu != null) Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
 		}
 
 		for (Section<DashTreeElement> unit : units) {
