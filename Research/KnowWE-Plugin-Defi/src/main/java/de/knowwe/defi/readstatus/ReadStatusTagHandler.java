@@ -35,9 +35,9 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
-import de.knowwe.defi.menu.DynamicMenuMarkup;
+import de.knowwe.defi.menu.MenuUtilities;
 import de.knowwe.defi.readbutton.ReadbuttonType;
-import de.knowwe.defi.time.TimeTableMarkup;
+import de.knowwe.defi.time.TimeTableUtilities;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -61,8 +61,8 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	@Override
 	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder readstatus = new StringBuilder();
-		List<Section<DashTreeElement>> units = getALlUnits();
-		List<Date> dates = getTimeTable();
+		List<Section<DashTreeElement>> units = MenuUtilities.getUnits();
+		List<Date> dates = TimeTableUtilities.getTimeTable();
 		List<String> readbuttons = new ArrayList<String>();
 		// Zählt Rooteinheiten
 		int rootCounter = 0;
@@ -84,7 +84,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 
 				unitDate = dates.get(rootCounter);
 				// Hole alle Readbuttons aller Untereinheiten und der Einheit
-				readbuttons = searchForReadbuttons(getSubUnits(rootUnit, units));
+				readbuttons = searchForReadbuttons(MenuUtilities.getSubUnits(rootUnit, units));
 
 				for (int i = 0; i < readbuttons.size(); i++) {
 					// Prüfe ob alle Buttons der Lektion geklickt wurden
@@ -140,72 +140,6 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 		}
 
 		return Strings.maskHTML(readstatus.toString());
-	}
-
-	/**
-	 * 
-	 * @created 29.05.2011
-	 * @return
-	 */
-	private List<Section<DashTreeElement>> getALlUnits() {
-		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
-		Article leftMenu = Environment.getInstance().getArticleManager(
-				Environment.DEFAULT_WEB).getArticle("LeftMenu");
-
-		if (leftMenu != null) {
-			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
-					leftMenu.getRootSection(),
-					DynamicMenuMarkup.class);
-			if (menu != null) Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
-		}
-
-		return units;
-	}
-
-	/**
-	 * 
-	 * @created 31.05.2011
-	 * @return
-	 */
-	private List<Date> getTimeTable() {
-		List<Date> dates = new ArrayList<Date>();
-		Article zeitplanArticle = Environment.getInstance().getArticleManager(
-				Environment.DEFAULT_WEB).getArticle("Zeitplan");
-
-		if (zeitplanArticle != null) {
-			Section<TimeTableMarkup> timetable = Sections.findSuccessor(
-					zeitplanArticle.getRootSection(), TimeTableMarkup.class);
-			if (timetable != null) {
-				dates = TimeTableMarkup.getDates(timetable);
-			}
-		}
-
-		return dates;
-	}
-
-	/**
-	 * 
-	 * @created 29.05.2011
-	 * @param rootUnit
-	 * @return
-	 */
-	private List<Section<DashTreeElement>> getSubUnits(Section<DashTreeElement> rootUnit, List<Section<DashTreeElement>> units) {
-		List<Section<DashTreeElement>> subUnits = new LinkedList<Section<DashTreeElement>>();
-		Sections.findSuccessorsOfType(rootUnit, DashTreeElement.class, subUnits);
-		boolean add = false;
-
-		for (Section<DashTreeElement> sec : units) {
-			if (sec.equals(rootUnit)) {
-				add = true;
-			}
-			else if (DashTreeUtils.getDashLevel(sec) == 0) {
-				add = false;
-			}
-
-			if (add) subUnits.add(sec);
-		}
-
-		return subUnits;
 	}
 
 	/**

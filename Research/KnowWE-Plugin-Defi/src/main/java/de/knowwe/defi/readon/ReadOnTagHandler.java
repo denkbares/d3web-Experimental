@@ -28,17 +28,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.core.Environment;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.defi.logger.PageLoggerHandler;
-import de.knowwe.defi.menu.DynamicMenuMarkup;
+import de.knowwe.defi.menu.MenuUtilities;
 import de.knowwe.kdom.dashtree.DashTreeElement;
-import de.knowwe.kdom.dashtree.DashTreeUtils;
 
 /**
  * 
@@ -63,19 +59,25 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 		String line;
 		String page = "";
 		// Hole Lektionen aus dem Left Menu
-		List<String> units = getALlUnits();
-		// Füge zusätzliche Seiten an
-		for (String s : ADDITIONAL_PAGES) {
-			units.add(s);
+		List<Section<DashTreeElement>> units = MenuUtilities.getUnits();
+		List<String> unitTitles = new LinkedList<String>();
+		for (Section<DashTreeElement> unit : units) {
+			unitTitles.add(MenuUtilities.getUnitTitle(unit));
 		}
 
+		// Füge zusätzliche Seiten an
+		for (String s : ADDITIONAL_PAGES) {
+			unitTitles.add(s);
+		}
+
+		// TODO Neuen pagelogger benutzen
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(
 					(new FileInputStream(
 							new File(path))), "UTF-8"));
 			while ((line = br.readLine()) != null) {
 				if (userContext.getUserName().equals(line.split(";")[1])
-						&& units.contains(line.split(";")[2])) page = line.split(";")[2];
+						&& unitTitles.contains(line.split(";")[2])) page = line.split(";")[2];
 			}
 		}
 		catch (FileNotFoundException e) {
@@ -88,47 +90,4 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 
 		return Strings.maskHTML(readon.toString());
 	}
-
-	/**
-	 * 
-	 */
-	private List<String> getALlUnits() {
-		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
-		List<String> pageNames = new LinkedList<String>();
-		Article leftMenu = Environment.getInstance().getArticleManager(
-				Environment.DEFAULT_WEB).getArticle("LeftMenu");
-
-		if (leftMenu != null) {
-			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
-					leftMenu.getRootSection(),
-					DynamicMenuMarkup.class);
-			if (menu != null) Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
-		}
-
-		for (Section<DashTreeElement> unit : units) {
-			pageNames.add(getPageName(unit));
-		}
-
-		return pageNames;
-	}
-
-	/**
-	 * 
-	 */
-	private static String getPageName(Section<DashTreeElement> sec) {
-		String pagename = sec.getText().trim();
-		if (DashTreeUtils.getDashLevel(sec) == 1) {
-			pagename = pagename.substring(2);
-		}
-		else if (DashTreeUtils.getDashLevel(sec) == 2) {
-			pagename = pagename.substring(3);
-		}
-		if (sec.getText().contains("|")) {
-			String[] split = sec.getText().split("\\|");
-			pagename = split[1].trim();
-		}
-
-		return pagename;
-	}
-
 }
