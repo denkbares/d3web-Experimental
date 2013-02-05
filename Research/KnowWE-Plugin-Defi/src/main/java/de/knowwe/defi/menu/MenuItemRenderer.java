@@ -24,13 +24,12 @@ import java.util.Date;
 import java.util.List;
 
 import de.knowwe.core.Environment;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.defi.time.TimeTableMarkup;
+import de.knowwe.defi.time.TimeTableUtilities;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
@@ -91,7 +90,7 @@ public class MenuItemRenderer implements Renderer {
 		boolean hidden = true;
 
 		if (isRoot) {
-			if (isFree(sec)) {
+			if (isFree(sec, user.getUserName())) {
 				className = CSS_CLASS_MENULINKROOT;
 			}
 			else {
@@ -163,7 +162,7 @@ public class MenuItemRenderer implements Renderer {
 		return false;
 	}
 
-	private boolean isFree(Section<?> sec) {
+	private boolean isFree(Section<?> sec, String user) {
 		Section<? extends Type> dashtree = sec.getFather().getFather().getFather();
 		List<Section<DynamicMenuItem>> found = new ArrayList<Section<DynamicMenuItem>>();
 		Sections.findSuccessorsOfType(dashtree, DynamicMenuItem.class, 3, found);
@@ -177,24 +176,14 @@ public class MenuItemRenderer implements Renderer {
 			}
 		}
 
-		Article zeitplanArticle = Environment.getInstance().getArticleManager(
-				Environment.DEFAULT_WEB).getArticle(
-				"Zeitplan");
-		if (zeitplanArticle != null) {
-			Section<TimeTableMarkup> timetable = Sections.findSuccessor(
-					zeitplanArticle.getRootSection(), TimeTableMarkup.class);
-			if (timetable != null) {
-				List<Date> dates = TimeTableMarkup.getDates(timetable);
-				Date current = new Date();
-				Date unitDate = null;
-				if (dates.size() > unitNumber) {
-					unitDate = dates.get(unitNumber);
-					if (current.after(unitDate)) {
-						return true;
-					}
-				}
+		List<Date> dates = TimeTableUtilities.getTimeTable(user);
+		Date current = new Date();
+		Date unitDate = null;
+		if (dates.size() > unitNumber) {
+			unitDate = dates.get(unitNumber);
+			if (current.after(unitDate)) {
+				return true;
 			}
-
 		}
 
 		return false;

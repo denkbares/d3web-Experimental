@@ -36,7 +36,8 @@ public class TimeTableUtilities {
 
 	public final static String TIMETABLE_ARTICLE = "Zeitplan";
 
-	public static List<Date> getTimeTable() {
+	public static List<Date> getTimeTable(String user) {
+		// TODO: Zeitplan individuell nach user holen
 		List<Date> dates = new ArrayList<Date>();
 		Article zeitplanArticle = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB).getArticle(TIMETABLE_ARTICLE);

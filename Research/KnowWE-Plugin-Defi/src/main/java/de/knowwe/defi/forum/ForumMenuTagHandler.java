@@ -61,7 +61,7 @@ import de.knowwe.core.utils.Strings;
 import de.knowwe.defi.aboutMe.AboutMe;
 import de.knowwe.defi.logger.PageLoggerHandler;
 import de.knowwe.defi.menu.DynamicMenuMarkup;
-import de.knowwe.defi.time.TimeTableMarkup;
+import de.knowwe.defi.time.TimeTableUtilities;
 import de.knowwe.jspwiki.JSPWikiConnector;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
@@ -140,7 +140,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 			newEntry = false;
 			pageName = getPageName(rootUnit);
 			fm.append("\n"); // "10000 characters without linebreak-bug"
-			if (isFree(rootUnit)) {
+			if (isFree(rootUnit, userContext.getUserName())) {
 				fm.append("<tr class='active'><td>" + pageName);
 
 				// "Neues Forum"-Button
@@ -186,7 +186,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 						if (numberOfNewEntries == -1) fm.append("&nbsp;<span class='fm_new'>(ungelesenes Thema)</span>");
 						else if (numberOfNewEntries == 1) fm.append("&nbsp;<span class='fm_new'>(1 neuer Beitrag)</span>");
 						else if (numberOfNewEntries > 0) fm.append("&nbsp;<span class='fm_new'>("
-									+ numberOfNewEntries + " neue Beiträge)</span>");
+								+ numberOfNewEntries + " neue Beiträge)</span>");
 						fm.append("</li>");
 						other.remove(sec);
 						noForum = false;
@@ -442,7 +442,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	/**
 	 * 
 	 */
-	private boolean isFree(Section<DashTreeElement> sec) {
+	private boolean isFree(Section<DashTreeElement> sec, String user) {
 		Section<? extends Type> dashtree = sec.getFather().getFather().getFather();
 		List<Section<DashTreeElement>> found = new ArrayList<Section<DashTreeElement>>();
 		Sections.findSuccessorsOfType(dashtree, DashTreeElement.class, 3, found);
@@ -456,24 +456,14 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 			}
 		}
 
-		Article zeitplanArticle = Environment.getInstance().getArticleManager(
-				Environment.DEFAULT_WEB).getArticle(
-				"Zeitplan");
-		if (zeitplanArticle != null) {
-			Section<TimeTableMarkup> timetable = Sections.findSuccessor(
-					zeitplanArticle.getRootSection(), TimeTableMarkup.class);
-			if (timetable != null) {
-				List<Date> dates = TimeTableMarkup.getDates(timetable);
-				Date current = new Date();
-				Date unitDate = null;
-				if (dates.size() > unitNumber) {
-					unitDate = dates.get(unitNumber);
-					if (current.after(unitDate)) {
-						return true;
-					}
-				}
+		List<Date> dates = TimeTableUtilities.getTimeTable(user);
+		Date current = new Date();
+		Date unitDate = null;
+		if (unitNumber < dates.size()) {
+			unitDate = dates.get(unitNumber);
+			if (current.after(unitDate)) {
+				return true;
 			}
-
 		}
 
 		return false;
