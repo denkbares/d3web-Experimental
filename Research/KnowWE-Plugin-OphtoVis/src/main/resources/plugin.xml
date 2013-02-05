@@ -38,4 +38,26 @@
 		<parameter id="scope" value="ConceptMarkup" />
 	</extension>
 
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="LinkToMinVisualizationToolProvider">
+		<parameter id="class"
+			value="de.knowwe.ophtovis.LinkToMinVisualizationToolProvider" />
+		<parameter id="name" value="LinkToMinVisualizationToolProvider" />
+		<parameter id="description" value=" LinkToMinVisualizationToolProvider" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="ConceptMarkup" />
+	</extension>
+
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="AjaxAction">
+		<parameter id="class"
+			value="de.knowwe.ophtovis.AjaxAction" />
+		<parameter id="name" value="AjaxAction" />
+		<parameter id="description" value="Action AjaxAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
 </plugin>

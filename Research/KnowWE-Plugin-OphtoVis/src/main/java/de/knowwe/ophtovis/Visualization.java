@@ -132,15 +132,34 @@ public class Visualization {
 						+
 						"	<!--  JSPLUMB -->\r\n"
 						+
-						"	<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js\"></script>\r\n"
+						//
+						"<script type=\"text/javascript\" src=\"/KnowWE/scripts/mootools.js\"></script>\r\n"
 						+
-						"	<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js\"></script>\r\n"
+						"<script type=\"text/javascript\" src=\"/KnowWE/scripts/prettify.js\"></script>\r\n"
+						+
+						"<script type=\"text/javascript\" src=\"/KnowWE/scripts/jspwiki-common.js\"></script>\r\n"
+						+
+						"<script type=\"text/javascript\" src=\"/KnowWE/scripts/jspwiki-commonstyles.js\"></script>\r\n"
+						+
+						"\r\n"
+						+
+						"\r\n"
+						+
+						"<script type='text/javascript' src='KnowWEExtension/scripts/jquery-1.7.1.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/jquery-autosize.min.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/jquery-ui-1.8.23.custom.min.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/jquery-compatibility.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-helper.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-notification.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/quicki.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/overviewGraph.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/correction.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/drag.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/jquery.treeTable.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-Rdf2GoSemanticCore.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-d3web-basic.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/testcaseplayer.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-CI4KE.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/loadQuicki.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/saveQuicki.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-Core.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/toolsMenuDecorator.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-InstantEdit.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-AutoComplete.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/DefaultTableEditTool.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/DefaultEditTool.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/TextArea.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-EditCommons.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/TableEditTool.js'></script>\r\n"
+						+
+						""
+						//
+//						+
+//						"	<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js\"></script>\r\n"
+//						+
+//						"	<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js\"></script>\r\n"
+//						+
 						+
 						"	<script type=\"text/javascript\" src=\""
 						+ context
 						+ "/KnowWEExtension/jquery.jsPlumb-1.3.15-all-min.js \"></script>\r\n"
-						+
-						"	<script type=\"text/javascript\" src=\"http://yui.yahooapis.com/3.3.0/build/simpleyui/simpleyui-min.js\"></script>\r\n"
+//						+
+						// "	<script type=\"text/javascript\" src=\"http://yui.yahooapis.com/3.3.0/build/simpleyui/simpleyui-min.js\"></script>\r\n"
 						+
 						"	<script type=\"text/javascript\" src=\""
 						+ context
@@ -161,6 +180,24 @@ public class Visualization {
 						"	<script type=\"text/javascript\" src=\""
 						+ context
 						+ "/KnowWEExtension/initDefaultDesign.js \"></script>\r\n"
+						// +
+						// //
+						// "<script type=\"text/javascript\" src=\"/KnowWE/scripts/mootools.js\"></script>\r\n"
+						// +
+						// "<script type=\"text/javascript\" src=\"/KnowWE/scripts/prettify.js\"></script>\r\n"
+						// +
+						// "<script type=\"text/javascript\" src=\"/KnowWE/scripts/jspwiki-common.js\"></script>\r\n"
+						// +
+						// "<script type=\"text/javascript\" src=\"/KnowWE/scripts/jspwiki-commonstyles.js\"></script>\r\n"
+						// +
+						// "\r\n"
+						// +
+						// "\r\n"
+						// +
+						// "<script type='text/javascript' src='KnowWEExtension/scripts/jquery-1.7.1.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/jquery-autosize.min.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/jquery-ui-1.8.23.custom.min.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/jquery-compatibility.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-helper.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-notification.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/quicki.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/overviewGraph.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/correction.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/drag.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/jquery.treeTable.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-Rdf2GoSemanticCore.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-d3web-basic.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/testcaseplayer.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-CI4KE.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/loadQuicki.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/saveQuicki.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-Core.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/toolsMenuDecorator.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-InstantEdit.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-AutoComplete.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/DefaultTableEditTool.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/DefaultEditTool.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/TextArea.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-EditCommons.js'></script><script type='text/javascript' src='KnowWEExtension/scripts/TableEditTool.js'></script>\r\n"
+						// +
+						// ""
+						// //
 						+
 						" <!-- im body befindet sich der sichtbare bereich der seite -->\r\n"
 						+
@@ -168,6 +205,20 @@ public class Visualization {
 						// zoom buttons
 						+ "<input type=\"button\" value=\"+\" onClick=\"zoomIn()\"/>"
 						+ "<input type=\"button\" value=\"-\" onClick=\"zoomOut()\"/>"
+						+ "<input type=\"button\" value=\"AjaxVis\" onClick=\"startSparqlQuery()\"/>"
+						//
+						+
+						//
+						"	<div id=\"dropzone\" style=\"\r\n" +
+						"    position: relative;\r\n" +
+						"    left: 20%;\r\n" +
+						"    margin: auto;\r\n" +
+						"    width: 500;\r\n" +
+						"    height: 100;\r\n" +
+						"    color: red;\r\n" +
+						"    background-color: #2EFEC8;\"\r\n" +
+						"<p></p>" +
+						"	</div>"
 						//
 						+
 						"	<div id=knots>\r\n"
