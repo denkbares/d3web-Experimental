@@ -48,7 +48,8 @@ public enum DialogType {
      * A consultation questionary, i.e. like Standard style but with solution
      * panel
      */
-    QUESTIONARYCONS ("QuestionaryCons");
+    QUESTIONARYCONS ("QuestionaryCons"),
+    EURAHS("EuraHS");
     
     
     private String stringrep;

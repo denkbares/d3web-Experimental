@@ -1197,15 +1197,18 @@ public class D3webDialog extends HttpServlet {
         KnowledgeBase kb = d3wcon.getKb();
         // TODO Urgent: needed for EuraHS due to early reset, but not good
         // for other dialogs!
-        //try {
-        // not yet parsed completely/correctly
-        //  if (kb == null) {
-        //    d3webParser.parse();
-        //  kb = d3webParser.getKnowledgeBase();
+        if (uis.getDialogType().equals(DialogType.EURAHS)) {
+            try {
+                //not yet parsed completely/correctly
 
-        // }
-        //} catch (IOException ioe) {
-        //}
+                if (kb == null) {
+                    d3webParser.parse();
+                    kb = d3webParser.getKnowledgeBase();
+                }
+
+            } catch (IOException ioe) {
+            }
+        }
 
         Session d3webSession =
                 D3webUtils.createSession(kb, d3wcon.getDialogStrat());

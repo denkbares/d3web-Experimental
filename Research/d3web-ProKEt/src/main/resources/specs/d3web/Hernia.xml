@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dialog 
-	header="European Registry of Abdominal wall HerniaS"  
-	dtype="singleform" 
-	indicationmode="hide_unindicated"
-	dstrategy="nextuaquestion"
-	css="medi2colsHernia, nonavigation" 
-	dialogcolumns="1"
-	questionnairecolumns="3"
-	questioncolumns="1"
-	userprefix = "EuraHS"
-        login = "db"
-	required = "Case-Number"
-	language = "en"
-        logging = "ON">
-	<data kb="Hernia.d3web" />
-</dialog>
+<dialogOpts
+    header="European Registry of Abdominal wall HerniaS"  
+    login = "OFF"
+    required = "Case-Number"
+    language = "en"
+    debug="" >
+        
+    <globalUIOpts 
+        dialogtype="EuraHS"
+        dialogstrategy = ""
+        showcontraindicated = "HIDE"
+        shownonindicated = "HIDE"
+        css="medi2colsHernia, nonavigation" 
+        dialogcolumns="1"
+        questionnairecolumns="3"
+        questioncolumns="1"/>
+        
+    <dataOpts kb="Hernia.d3web" />
+    <ueOpts />
+</dialogOpts>

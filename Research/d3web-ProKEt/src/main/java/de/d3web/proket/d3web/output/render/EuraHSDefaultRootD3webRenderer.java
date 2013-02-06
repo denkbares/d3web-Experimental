@@ -148,7 +148,8 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
             for (File caseFile : caseFiles) {
 
                 // for all cases except the autocase file
-                if (!caseFile.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
+                if (!caseFile.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)
+                        && user != null) {
 
                     // render one row in the follow up table
                     renderRow(user, caseFile, followUpTable);

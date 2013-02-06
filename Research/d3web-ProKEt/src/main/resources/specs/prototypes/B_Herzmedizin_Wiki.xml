@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <dialog css="freechoice, nofoot, nonavigation, noquestionnairenav" 
-	    header="Herz-Medizinische Dokumentation - Prototyp" type="freechoice" columns="3">
+	    header="Herz-Medizinische Dokumentation - Prototyp" type="freechoice" columns="2">
 	
 	<questionnaire title="Demographische Daten" columns="1">
 		<question type="num" title="Alter des Patienten">
