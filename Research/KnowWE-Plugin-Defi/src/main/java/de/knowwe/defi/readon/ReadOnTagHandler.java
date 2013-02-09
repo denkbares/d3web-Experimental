@@ -59,10 +59,10 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 		String line;
 		String page = "";
 		// Hole Lektionen aus dem Left Menu
-		List<Section<DashTreeElement>> units = MenuUtilities.getUnits();
+		List<Section<DashTreeElement>> units = MenuUtilities.getAllUnits();
 		List<String> unitTitles = new LinkedList<String>();
 		for (Section<DashTreeElement> unit : units) {
-			unitTitles.add(MenuUtilities.getUnitTitle(unit));
+			unitTitles.add(MenuUtilities.getUnitPagename(unit));
 		}
 
 		// Füge zusätzliche Seiten an

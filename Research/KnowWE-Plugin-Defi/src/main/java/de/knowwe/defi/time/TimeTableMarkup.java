@@ -21,7 +21,6 @@ package de.knowwe.defi.time;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -66,7 +65,6 @@ public class TimeTableMarkup extends DefaultMarkupType {
 					d = DateT.dateFormat.parse(section.getText().trim());
 				}
 				catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -74,7 +72,6 @@ public class TimeTableMarkup extends DefaultMarkupType {
 			}
 		}
 
-		Collections.sort(result);
 		return result;
 	}
 

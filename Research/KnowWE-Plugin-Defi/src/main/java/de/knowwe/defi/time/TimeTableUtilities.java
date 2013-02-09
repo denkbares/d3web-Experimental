@@ -19,8 +19,15 @@
 package de.knowwe.defi.time;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.lang.time.DateUtils;
+
+import com.ecyrd.jspwiki.WikiEngine;
+import com.ecyrd.jspwiki.auth.NoSuchPrincipalException;
+import com.ecyrd.jspwiki.auth.user.UserDatabase;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
@@ -37,19 +44,39 @@ public class TimeTableUtilities {
 	public final static String TIMETABLE_ARTICLE = "Zeitplan";
 
 	public static List<Date> getTimeTable(String user) {
-		// TODO: Zeitplan individuell nach user holen
 		List<Date> dates = new ArrayList<Date>();
-		Article zeitplanArticle = Environment.getInstance().getArticleManager(
-				Environment.DEFAULT_WEB).getArticle(TIMETABLE_ARTICLE);
-
-		if (zeitplanArticle != null) {
-			Section<TimeTableMarkup> timetable = Sections.findSuccessor(
-					zeitplanArticle.getRootSection(), TimeTableMarkup.class);
-			if (timetable != null) {
-				dates = TimeTableMarkup.getDates(timetable);
+		WikiEngine eng = WikiEngine.getInstance(Environment.getInstance().getContext(), null);
+		UserDatabase udb = eng.getUserManager().getUserDatabase();
+		try {
+			Date created = udb.find(user).getCreated();
+			// TODO: Zeitzone englisch deutsch: CET <> MEZ, eventuell
+			// Userdatabase anpassen, Server: CET, Lokal: MEZ
+			if (created == null) return dates;
+			created = DateUtils.truncate(created, Calendar.DAY_OF_MONTH);
+			for (Integer days : getTimeTableTemplate()) {
+				dates.add(DateUtils.addDays(created, days));
 			}
+		}
+		catch (NoSuchPrincipalException e) {
+			e.printStackTrace();
 		}
 
 		return dates;
+	}
+
+	public static List<Integer> getTimeTableTemplate() {
+		List<Integer> numOfDays = new ArrayList<Integer>();
+		Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
+				TimeTableUtilities.TIMETABLE_ARTICLE);
+
+		if (article != null) {
+			Section<TimeTableTemplateMarkup> timeTableTemplate = Sections.findSuccessor(
+					article.getRootSection(), TimeTableTemplateMarkup.class);
+			if (timeTableTemplate != null) {
+				numOfDays = TimeTableTemplateMarkup.getNumbersOfDays(timeTableTemplate);
+			}
+		}
+
+		return numOfDays;
 	}
 }

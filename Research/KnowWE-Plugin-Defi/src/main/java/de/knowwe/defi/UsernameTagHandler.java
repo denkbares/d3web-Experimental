@@ -37,7 +37,6 @@ public class UsernameTagHandler extends AbstractTagHandler {
 	 */
 	public UsernameTagHandler() {
 		super("username");
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

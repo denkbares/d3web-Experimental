@@ -1,0 +1,9 @@
+#timetable {
+	border: 1px solid black;
+	border-radius: 4px;
+	padding: 10px;
+}
+
+#timetable input[type=button] {
+	margin-left: 675px;
+}

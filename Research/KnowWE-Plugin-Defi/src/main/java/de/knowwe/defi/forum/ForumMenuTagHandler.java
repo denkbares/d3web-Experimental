@@ -26,7 +26,6 @@ import java.io.StringReader;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -60,11 +59,9 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.defi.aboutMe.AboutMe;
 import de.knowwe.defi.logger.PageLoggerHandler;
-import de.knowwe.defi.menu.DynamicMenuMarkup;
-import de.knowwe.defi.time.TimeTableUtilities;
+import de.knowwe.defi.menu.MenuUtilities;
 import de.knowwe.jspwiki.JSPWikiConnector;
 import de.knowwe.kdom.dashtree.DashTreeElement;
-import de.knowwe.kdom.dashtree.DashTreeUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -118,7 +115,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		HashMap<String, String> logPages = checkLog(userContext);
 
 		// Hole Lektionen aus dem Left Menu
-		List<Section<DashTreeElement>> rootUnits = getAllRootUnits();
+		List<Section<DashTreeElement>> rootUnits = MenuUtilities.getRootUnits();
 
 		// Hole alle Foren
 		while (it.hasNext()) {
@@ -138,9 +135,9 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		fm.append("<tr><th colspan=2>" + UNIT_DISCUSSION_LABEL + "</th></tr>");
 		for (Section<DashTreeElement> rootUnit : rootUnits) {
 			newEntry = false;
-			pageName = getPageName(rootUnit);
+			pageName = MenuUtilities.getUnitPagename(rootUnit);
 			fm.append("\n"); // "10000 characters without linebreak-bug"
-			if (isFree(rootUnit, userContext.getUserName())) {
+			if (MenuUtilities.isUnitOpen(rootUnit, userContext.getUserName())) {
 				fm.append("<tr class='active'><td>" + pageName);
 
 				// "Neues Forum"-Button
@@ -361,48 +358,6 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	}
 
 	/**
-	 * Get all root units
-	 */
-	private List<Section<DashTreeElement>> getAllRootUnits() {
-		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
-		List<Section<DashTreeElement>> rootUnits = new LinkedList<Section<DashTreeElement>>();
-		Article leftMenu = Environment.getInstance().getArticleManager(
-				Environment.DEFAULT_WEB).getArticle("LeftMenu");
-
-		if (leftMenu != null) {
-			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
-					leftMenu.getRootSection(),
-					DynamicMenuMarkup.class);
-			Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
-		}
-
-		for (Section<DashTreeElement> unit : units) {
-			if (DashTreeUtils.getDashLevel(unit) == 0) rootUnits.add(unit);
-		}
-
-		return rootUnits;
-	}
-
-	/**
-	 * Get the page's name.
-	 */
-	private static String getPageName(Section<DashTreeElement> sec) {
-		String pagename = sec.getText().trim();
-		if (DashTreeUtils.getDashLevel(sec) == 1) {
-			pagename = pagename.substring(2);
-		}
-		else if (DashTreeUtils.getDashLevel(sec) == 2) {
-			pagename = pagename.substring(3);
-		}
-		if (sec.getText().contains("|")) {
-			String[] split = sec.getText().split("\\|");
-			pagename = split[1].trim();
-		}
-
-		return pagename;
-	}
-
-	/**
 	 * Get HTML-Form for a new forum.
 	 */
 	private String buildForm(String pageName, boolean newEntry) {
@@ -437,36 +392,6 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		}
 
 		return builder.toString();
-	}
-
-	/**
-	 * 
-	 */
-	private boolean isFree(Section<DashTreeElement> sec, String user) {
-		Section<? extends Type> dashtree = sec.getFather().getFather().getFather();
-		List<Section<DashTreeElement>> found = new ArrayList<Section<DashTreeElement>>();
-		Sections.findSuccessorsOfType(dashtree, DashTreeElement.class, 3, found);
-
-		int unitNumber = -1;
-		for (int i = 0; i < found.size(); i++) {
-			if (found.get(i).getID().equals(
-					sec.getID())) {
-				unitNumber = i;
-				break;
-			}
-		}
-
-		List<Date> dates = TimeTableUtilities.getTimeTable(user);
-		Date current = new Date();
-		Date unitDate = null;
-		if (unitNumber < dates.size()) {
-			unitDate = dates.get(unitNumber);
-			if (current.after(unitDate)) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	/**

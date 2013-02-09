@@ -61,7 +61,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	@Override
 	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder readstatus = new StringBuilder();
-		List<Section<DashTreeElement>> units = MenuUtilities.getUnits();
+		List<Section<DashTreeElement>> units = MenuUtilities.getAllUnits();
 		List<Date> dates = TimeTableUtilities.getTimeTable(userContext.getUserName());
 		List<String> readbuttons = new ArrayList<String>();
 		// Zählt Rooteinheiten

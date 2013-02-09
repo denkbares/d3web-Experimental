@@ -38,6 +38,16 @@
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
 		<parameter id="css" value="defi.css" />
 	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TimeTableTemplateMarkup">
+		<parameter id="class" value="de.knowwe.defi.time.TimeTableTemplateMarkup" />
+		<parameter id="name" value="TimeTableTemplateMarkup" />
+		<parameter id="description" value="Type TimeTableTemplateMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5"  />
+		<parameter id="scope" value="root" />
+	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="ReadbuttonType">
@@ -275,6 +285,17 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>   
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="TimeTableTagHandler">
+        <parameter id="class" value="de.knowwe.defi.time.TimeTableTagHandler" />
+        <parameter id="name" value="TimeTableTagHandler" />
+        <parameter id="description" value="TagHandler TimeTableTagHandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="css" value="defi-timetable.css" />
+        <parameter id="script" value="KnowWE-Plugin-Defi-TimeTable.js" />
+    </extension>   
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="RegisterUserAction">
@@ -413,6 +434,16 @@
             value="de.knowwe.defi.forum.PersonalMessageAction" />
         <parameter id="name" value="PersonalMessageAction" />
         <parameter id="description" value="Action PersonalMessageAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="TimeTableAction">
+        <parameter id="class"
+            value="de.knowwe.defi.time.TimeTableAction" />
+        <parameter id="name" value="TimeTableAction" />
+        <parameter id="description" value="Action TimeTableAction" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>

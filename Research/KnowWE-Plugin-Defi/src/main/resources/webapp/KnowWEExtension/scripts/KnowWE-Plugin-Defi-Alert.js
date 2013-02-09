@@ -1,3 +1,4 @@
+//TODO: Schwacher workaround
 if(document.getElementById) {
 	window.alert = function(txt) {
 		alertCalled(txt);

@@ -18,13 +18,17 @@
  */
 package de.knowwe.defi.menu;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.defi.time.TimeTableUtilities;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
 
@@ -38,7 +42,7 @@ public class MenuUtilities {
 	/**
 	 * Get all units.
 	 */
-	public static List<Section<DashTreeElement>> getUnits() {
+	public static List<Section<DashTreeElement>> getAllUnits() {
 		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
 		Article leftMenu = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB).getArticle("LeftMenu");
@@ -51,6 +55,29 @@ public class MenuUtilities {
 		}
 
 		return units;
+	}
+
+	/**
+	 * Get all root units.
+	 */
+	public static List<Section<DashTreeElement>> getRootUnits() {
+		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
+		List<Section<DashTreeElement>> rootUnits = new LinkedList<Section<DashTreeElement>>();
+		Article leftMenu = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB).getArticle("LeftMenu");
+
+		if (leftMenu != null) {
+			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
+					leftMenu.getRootSection(),
+					DynamicMenuMarkup.class);
+			Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
+		}
+
+		for (Section<DashTreeElement> unit : units) {
+			if (DashTreeUtils.getDashLevel(unit) == 0) rootUnits.add(unit);
+		}
+
+		return rootUnits;
 	}
 
 	/**
@@ -78,7 +105,7 @@ public class MenuUtilities {
 	/**
 	 * Get the unit's pagename.
 	 */
-	public static String getUnitTitle(Section<DashTreeElement> sec) {
+	public static String getUnitPagename(Section<DashTreeElement> sec) {
 		String title = sec.getText().trim();
 		if (DashTreeUtils.getDashLevel(sec) == 1) {
 			title = title.substring(2);
@@ -92,5 +119,35 @@ public class MenuUtilities {
 		}
 
 		return title;
+	}
+
+	/**
+	 * Is the unit open?
+	 */
+	public static boolean isUnitOpen(Section<DashTreeElement> sec, String user) {
+		Section<? extends Type> dashtree = sec.getFather().getFather().getFather();
+		List<Section<DashTreeElement>> found = new ArrayList<Section<DashTreeElement>>();
+		Sections.findSuccessorsOfType(dashtree, DashTreeElement.class, 3, found);
+
+		int unitNumber = -1;
+		for (int i = 0; i < found.size(); i++) {
+			if (found.get(i).getID().equals(
+					sec.getID())) {
+				unitNumber = i;
+				break;
+			}
+		}
+
+		List<Date> dates = TimeTableUtilities.getTimeTable(user);
+		Date current = new Date();
+		Date unitDate = null;
+		if (unitNumber < dates.size()) {
+			unitDate = dates.get(unitNumber);
+			if (current.after(unitDate)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
