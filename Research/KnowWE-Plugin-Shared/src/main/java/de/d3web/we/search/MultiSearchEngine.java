@@ -34,7 +34,6 @@ import de.knowwe.plugin.Plugins;
 import de.knowwe.search.GenericSearchResult;
 import de.knowwe.search.SearchProvider;
 import de.knowwe.search.SearchTerm;
-import de.knowwe.tagging.TaggingMangler;
 
 /**
  * KnowWEs MultiSearchEngine manages multiple SearchProviders. When a search
@@ -135,9 +134,6 @@ public class MultiSearchEngine implements Instantiation {
 				addProvider(((SearchProvider) o));
 			}
 		}
-
-		// add _the_ TaggingMangler instance
-		addProvider(TaggingMangler.getInstance());
 
 	}
 
