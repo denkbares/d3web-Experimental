@@ -351,11 +351,12 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             HashMap<String, String> acSetLocal = uiset.getAutocolumnsQuestionsLoc();
             if (acSetLocal.containsKey(to.getName())) {
                 acSet = acSetLocal.get(to.getName());
+                threshold = getNrColumnsFromThresholdSpecs(acSet);
+                if (((QuestionChoice) to).getAllAlternatives().size() >= threshold) {
+                    columnsLocal = getNrColumnsFromThresholdSpecs(acSet);
+                }
             }
-            threshold = getNrColumnsFromThresholdSpecs(acSet);
-            if (((QuestionChoice) to).getAllAlternatives().size() >= threshold) {
-                columnsLocal = getNrColumnsFromThresholdSpecs(acSet);
-            }
+
 
             // concrete settings weigh more than autocolum setting per default
             columnsGlobal = uiset.getQuestionColumns(); // global setting
@@ -365,11 +366,15 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                 columnsLocal = localColumns.get(to.getName());
             }
 
-             columns = columnsGlobal;
+            System.out.println("specs: " + uiset.getQuestionColumns());
+            columns = columnsGlobal;
             if (columnsLocal != -1) {
                 columns = columnsLocal; //local settings overwrite global settings!
             }
         }
+
+        System.out.println("GLOB: " + columnsGlobal);
+        System.out.println("LOC: " + columnsLocal);
 
         // if more than one column open table tag via TableContainer and
         // append
@@ -379,7 +384,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
             childrenHTML.append(tableOpening);
         }
 
-        
+
         // for choice questions (oc only so far...)
         if (to instanceof QuestionChoice) {
 
@@ -801,11 +806,10 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
         // skip default d3web root
         if (to.getName().equals("Q000")) {
-
+            
 
             if (to.getChildren().length > 0) {
-                TerminologyObject rootNode = null;
-
+                    System.out.println(to.getChildren().toString());
                 // check default root's children
                 for (TerminologyObject toc : to.getChildren()) {
                     //System.out.println(toc.getName());

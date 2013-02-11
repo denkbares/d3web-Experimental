@@ -620,21 +620,21 @@ function tooltip_out_prop(object) {
 /*--------------------------*/
 /* clarihie d3web dialogs */
 /*--------------------------*/
-function d3web_addFactsITree(qid, value){
+function d3web_addFactsITree(qobj, value){
     
     // handle logging if activated
     if (logging) {
         var now = ue_getCurrentDate();		
     }
-    
+    qid = $(qobj).attr("id");
     
     // assemble ajax call
     var link = $.query.set("action", "addFactsYN");
     //link = link.set("timestring", now);
     
     if(!checkDateQuestion(qid)){
-        qid = $(buttonId).closest("[id^=q_]").attr("id").replace("-imagebox", "");
-        alert(qid +  " " + value);
+        qid = qobj.closest("[id^=q_]").attr("id").replace("-imagebox", "");
+        //alert(qid +  " " + value);
     }
     
     

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogOpts 
+    header="Baumdiagnose - Questionary/Consultation"  
+    login = ""
+    required = ""
+    language = ""
+    debug = "false" >
+    <globalUIOpts 
+        dialogtype="QuestionaryCons"
+        dialogstrategy = ""
+        showcontraindicated = "HIDE"
+        shownonindicated = "HIDE"
+        css="questionaryCons, diagnosisVisu" 	
+        dialogcolumns="1"
+        questionnairecolumns="2"
+        questioncolumns="1"
+        solutionExplanation = "TEXTUAL" 
+        solutionSorting = "CATEGALPHA"
+        solutionDepth = "ALL"
+        unknownvisible = "TRUE"
+    />
+    <localUIOpts>
+        <dropdown TRUE="Fruchttyp;;;Blüten" />
+        <questioncolumns>
+            <one questions="Fruchttyp;;;Blüten"/>
+        </questioncolumns>
+    </localUIOpts>
+    <dataOpts kb="0DemoBaum.d3web" />
+    <ueOpts logging = "FALSE" />
+</dialogOpts>

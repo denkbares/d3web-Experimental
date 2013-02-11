@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialogOpts 
-    header="ITree Standard Style" 
+    header="Demo - iTree"  
     login = ""
     required = ""
     language = ""
@@ -10,10 +10,10 @@
         dialogstrategy = "nextquestion"
         css="itree, nofoot" 
 	dialogcolumns="1"
-	questionnairecolumns="1"
+	questionnairecolumns="3"
 	questioncolumns="1"
     />
     <localUIOpts />
     <dataOpts kb="0DemoITree.d3web" />
-    <ueOpts logging = "FALSE" questionnaire="OWN" feedbackform="TRUE" />
+    <ueOpts logging = "FALSE" />
 </dialogOpts>

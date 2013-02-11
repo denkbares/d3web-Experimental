@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -39,86 +39,108 @@ import javax.servlet.http.HttpSession;
 
 public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements AnswerD3webRenderer {
 
-	@Override
-	/**
-	 * Specifically adapted for Unknown Option rendering
-	 */
-	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession, Choice c,
-			TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession) {
+    @Override
+    /**
+     * Specifically adapted for Unknown Option rendering
+     */
+    public String renderTerminologyObject(ContainerCollection cc, Session d3webSession, Choice c,
+            TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession) {
 
-		StringBuilder sb = new StringBuilder();
-		StringTemplate st = null;
+        StringBuilder sb = new StringBuilder();
+        StringTemplate st = null;
 
-		// Get the fitting template.
-		st = TemplateUtils.getStringTemplate(
-					super.getTemplateName("UnknownTabular"), "html");
+        // Get the fitting template.
+        st = TemplateUtils.getStringTemplate(
+                super.getTemplateName("UnknownTabular"), "html");
 
-		// set basic properties
-		Choice choiceUnknown = new Choice("Unknown");
-		choiceUnknown.setQuestion((Question) to);
-		st.setAttribute("fullId", getID(choiceUnknown));// .getName().replace(" ",
-														// "_"));
-		st.setAttribute("parentFullId", getID(parent));// .getName().replace(" ",
-														// // "_"));
+        // set basic properties
+        Choice choiceUnknown = new Choice("Unknown");
+        choiceUnknown.setQuestion((Question) to);
+        st.setAttribute("fullId", getID(choiceUnknown));// .getName().replace(" ",
+        // "_"));
+        st.setAttribute("parentFullId", getID(parent));// .getName().replace(" ",
+        // // "_"));
 
-		st.setAttribute("title", D3webUtils.getUnknownPrompt(loc));
+        st.setAttribute("title", D3webUtils.getUnknownPrompt(loc));
 
-		st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
+        st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
 
-		Blackboard bb = d3webSession.getBlackboard();
-		Value value = bb.getValue((ValueObject) to);
+        Blackboard bb = d3webSession.getBlackboard();
+        Value value = bb.getValue((ValueObject) to);
 
-		// abstraction question --> readonly
-		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
-			st.setAttribute("readonly", "true");
-			st.setAttribute("inactive", "true");
+        // abstraction question --> readonly
+        if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
+            st.setAttribute("readonly", "true");
+            st.setAttribute("inactive", "true");
+        }
+
+        if (c != null) {
+            String resString = c.getInfoStore().getValue(ProKEtProperties.POPUP);
+            if (resString != null) {
+                st.setAttribute("tooltip", resString);
+            }
+        }
+
+        // QContainer indicated
+		/*
+         * if
+         * (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
+         * || D3webUtils.isIndicatedPlain(parent, bb)) {
+         *
+         * // show, if indicated follow up if ((D3webUtils.isFollowUpToQCon(to,
+         * parent) && D3webUtils.isIndicatedPlain(to, bb)) ||
+         * (!D3webUtils.isFollowUpToQCon(to, parent))) {
+         * st.removeAttribute("inactive"); st.removeAttribute("readonly");
+         * st.removeAttribute("qstate"); st.setAttribute("qstate", ""); } else {
+         * st.setAttribute("inactive", "true"); st.setAttribute("readonly",
+         * "true"); } }
+         *
+         * else { st.setAttribute("inactive", "true");
+         * st.setAttribute("readonly", "true");
 		}
+         */
 
-		if (c != null) {
-			String resString = c.getInfoStore().getValue(ProKEtProperties.POPUP);
-			if (resString != null) {
-				st.setAttribute("tooltip", resString);
-			}
-		}
+        if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
+                || D3webUtils.isIndicatedPlain(parent, bb) || D3webUtils.isIndicatedByChild(parent, bb)) {
 
-		// QContainer indicated
-		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent) ||
-				D3webUtils.isIndicatedPlain(parent, bb)) {
+            if (D3webUtils.isIndicatedPlain(parent, bb) || D3webUtils.isIndicatedPlain(to, bb)) {
 
-			// show, if indicated follow up
-			if ((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb))
-					|| (!D3webUtils.isFollowUpToQCon(to, parent))) {
-				st.removeAttribute("inactive");
-				st.removeAttribute("readonly");
-				st.removeAttribute("qstate");
-				st.setAttribute("qstate", "");
-			}
-			else {
-				st.setAttribute("inactive", "true");
-				st.setAttribute("readonly", "true");
-			}
-		}
 
-		else {
-			st.setAttribute("inactive", "true");
-			st.setAttribute("readonly", "true");
-		}
+                // show, if indicated follow up
+                if ((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb))
+                        || (!D3webUtils.isFollowUpToQCon(to, parent))) {
+                    st.removeAttribute("readonly");
+                    st.removeAttribute("inactive");
+                    st.removeAttribute("qstate");
+                    st.setAttribute("qstate", "");
+                } else {
+                    st.setAttribute("inactive", "true");
+                    st.setAttribute("readonly", "true");
+                }
 
-		if (value.equals(Unknown.getInstance())) {
-			// set the selected OC as selected in the next round
-			// st.setAttribute("selection", "true");
-			st.setAttribute("selection", "checked=\"checked\"");
-		}
-		else {
-			st.removeAttribute("selection");
-			st.setAttribute("selection", "");
-		}
+            } else {
+                st.setAttribute("inactive", "true");
+                st.setAttribute("readonly", "true");
+            }
+        } else {
+            st.setAttribute("inactive", "true");
+            st.setAttribute("readonly", "true");
+        }
 
-		sb.append(st.toString());
 
-		super.makeTables(to, to, cc, sb);
+        if (value.equals(Unknown.getInstance())) {
+            // set the selected OC as selected in the next round
+            // st.setAttribute("selection", "true");
+            st.setAttribute("selection", "checked=\"checked\"");
+        } else {
+            st.removeAttribute("selection");
+            st.setAttribute("selection", "");
+        }
 
-		return sb.toString();
-	}
+        sb.append(st.toString());
 
+        super.makeTables(to, to, cc, sb);
+
+        return sb.toString();
+    }
 }

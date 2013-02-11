@@ -83,6 +83,7 @@ import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.ImageHandler;
 import de.d3web.proket.d3web.output.render.JNV;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
+import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.data.DialogType;
 import de.d3web.proket.utils.FileUtils;
@@ -130,7 +131,6 @@ public class D3webUtils {
      * @return A new D3webSession with the KnowledgeBase associated.
      */
     public static DefaultSession createSession(KnowledgeBase kb, DialogStrategy ds) {
-
 
         // if DialogType given
         if (ds != null) {
@@ -1711,13 +1711,11 @@ public class D3webUtils {
         if (toId == null || valueString == null) {
             return;
         }
-
+        
         String toName = AbstractD3webRenderer.getObjectNameForId(toId);
         Blackboard blackboard = sess.getBlackboard();
         Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
                 toName == null ? toId : toName);
-
-
         //Question question_c =
         //      D3webConnector.getInstance().getKb().getManager().searchQuestion(
         //      toName == null ? toId.replace("_n", "") : toName.replace("_n", ""));
@@ -1730,7 +1728,7 @@ public class D3webUtils {
         Value value = null;
 
         // TODO: can be removed?!
-        if (D3webConnector.getInstance().getDialogType().equals(DialogType.ITREE)) {
+        if (UISettings.getInstance().getDialogType().equals(DialogType.ITREE)) {
 
 
             if (question instanceof QuestionNum) {
@@ -1764,7 +1762,7 @@ public class D3webUtils {
                 setQuestionUndefined(sess, question);
             }
 
-            printBlackboard(sess);
+            //printBlackboard(sess);
         }
 
     }

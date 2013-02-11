@@ -434,7 +434,7 @@ public class DialogManager extends HttpServlet {
         httpSession.setAttribute("initFromUpload", "init");
 
         if (specName != null) {
-
+            
             // assemble ITree Servlet Link
             if (specName.equalsIgnoreCase(DialogType.ITREE.toString())) {
 
@@ -444,7 +444,7 @@ public class DialogManager extends HttpServlet {
                         + "&dialogID=" + d3webKBName + "AND" + specName;
 
 
-            } else if (specName.toUpperCase().contains(DialogType.STANDARD.toString())) {
+            } else if (specName.contains(DialogType.QUESTIONARYCONS.toString())) {
 
                 //dialogLink = GLOBSET.getWebAppWarName() + "/StandardDialog?src="
                 //      + specFile.getName().replace(".xml", "")

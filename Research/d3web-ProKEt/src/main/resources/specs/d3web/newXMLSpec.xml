@@ -26,5 +26,7 @@
                 </groups>
         </localUIOpts>
 	<dataOpts kb="Hernia.d3web"/>
-	<ueOpts questionnaire="NONE" study="" logging="" feedbackform="FALSE" uegroup="" logfilepath="" analysisoutputpath="" />
+	<ueOpts questionnaire="NONE" study="" 
+        logging="" feedbackform="FALSE" uegroup="" 
+        logfilepath="" analysisoutputpath="" />
 </dialogOpts>

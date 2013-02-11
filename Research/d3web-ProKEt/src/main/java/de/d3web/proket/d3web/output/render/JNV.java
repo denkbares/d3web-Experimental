@@ -10,9 +10,9 @@ package de.d3web.proket.d3web.output.render;
  * @date Aug2012
  */
 public enum JNV {
-    J("ja"), 
-    N("nein"),
-    V("vielleicht");
+    J("Ja"), 
+    N("Nein"),
+    V("Vielleicht");
     
     private String stringrep;
      

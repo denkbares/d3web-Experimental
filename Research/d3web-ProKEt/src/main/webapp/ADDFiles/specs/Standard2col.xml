@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dialog 
-	header="Standard Consultation Dialog - 2 column style"  
-	dtype="singleform" 
-	indicationmode="hide_unindicated"
-	dstrategy="nextform"
-	css="questionaryCons, diagnosisVisu" 
-	dialogcolumns="1"
-	questionnairecolumns="2"
-	questioncolumns="1"
-	uiprefix = "QuestionaryCons"
-        login = ""
-        required = "NONE"
-	language = ""
-        debug = "false"
+<dialogOpts 
+    header="Standard Consultation Dialog - 1 column style"    
+    login = ""
+    required = ""
+    language = ""
+    debug = "false" >
+    <globalUIOpts 
+        dialogtype="QuestionaryCons"
+        dialogstrategy = "nextform"
+        showcontraindicated = "HIDE"
+        shownonindicated = "HIDE"
+        css="questionaryCons, diagnosisVisu" 
+        dialogcolumns="1"
+        questionnairecolumns="1"
+        questioncolumns="1"
         solutionExplanation = "TEXTUAL" 
+        solutionSorting = "CATEGORICAL"
         solutionDepth = "ALL"
-        diagnosisNavi = "FALSE"
-        questionnaireNavi = "FALSE"
-        >
-	<data kb="BergbauNew.d3web" />
-        <ue logging = "FALSE" />
-</dialog>
+        unknownvisible = "TRUE"
+    />
+    <localUIOpts>
+        <dropdown TRUE="Fruchttyp;;;Blüten" />
+        <questioncolumns>
+            <one questions="Fruchttyp;;;Blüten"/>
+        </questioncolumns>
+    </localUIOpts>
+    <dataOpts kb="0DemoBaum.d3web" />
+    <ueOpts logging = "FALSE" />
+</dialogOpts>
