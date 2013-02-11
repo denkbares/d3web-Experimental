@@ -447,6 +447,26 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="PersonalTimeTableAction">
+        <parameter id="class"
+            value="de.knowwe.defi.time.PersonalTimeTableAction" />
+        <parameter id="name" value="PersonalTimeTableAction" />
+        <parameter id="description" value="Action PersonalTimeTableAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="GetPersonalTimeTableAction">
+        <parameter id="class"
+            value="de.knowwe.defi.time.GetPersonalTimeTableAction" />
+        <parameter id="name" value="GetPersonalTimeTableAction" />
+        <parameter id="description" value="Action GetPersonalTimeTableAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
         id="CommentListener">
@@ -454,6 +474,16 @@
             value="de.knowwe.defi.event.CommentListener" />
         <parameter id="name" value="CommentListener" />
         <parameter id="description" value="EventListener CommentListener" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension> 
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
+        id="UserEventsListener">
+        <parameter id="class"
+            value="de.knowwe.defi.usermanager.UserEventsListener" />
+        <parameter id="name" value="UserEventsListener" />
+        <parameter id="description" value="EventListener UserEventsListener" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension> 

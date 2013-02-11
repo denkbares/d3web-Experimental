@@ -31,6 +31,7 @@ import com.ecyrd.jspwiki.auth.user.UserProfile;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.event.EventManager;
 
 
 /**
@@ -60,6 +61,7 @@ public class RegisterUserAction extends AbstractAction {
 		// save new user
 		try {
 			udb.save(newUser);
+			EventManager.getInstance().fireEvent(new UserRegisteredEvent(newUser));
 		}
 		catch (WikiSecurityException e) {
 			responseText = fullname + " konnte nicht angelegt werden.";

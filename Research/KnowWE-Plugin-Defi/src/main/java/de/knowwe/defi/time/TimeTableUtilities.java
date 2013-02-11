@@ -22,17 +22,21 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.apache.commons.lang.time.DateUtils;
 
 import com.ecyrd.jspwiki.WikiEngine;
 import com.ecyrd.jspwiki.auth.NoSuchPrincipalException;
 import com.ecyrd.jspwiki.auth.user.UserDatabase;
+import com.ecyrd.jspwiki.auth.user.UserProfile;
 
+import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.wikiConnector.WikiConnector;
 
 /**
  * 
@@ -41,33 +45,56 @@ import de.knowwe.core.kdom.parsing.Sections;
  */
 public class TimeTableUtilities {
 
-	public final static String TIMETABLE_ARTICLE = "Zeitplan";
-
+	/**
+	 * Get a user's timetable. If not exists, build it.
+	 */
 	public static List<Date> getTimeTable(String user) {
 		List<Date> dates = new ArrayList<Date>();
-		WikiEngine eng = WikiEngine.getInstance(Environment.getInstance().getContext(), null);
-		UserDatabase udb = eng.getUserManager().getUserDatabase();
-		try {
-			Date created = udb.find(user).getCreated();
-			// TODO: Zeitzone englisch deutsch: CET <> MEZ, eventuell
-			// Userdatabase anpassen, Server: CET, Lokal: MEZ
-			if (created == null) return dates;
-			created = DateUtils.truncate(created, Calendar.DAY_OF_MONTH);
-			for (Integer days : getTimeTableTemplate()) {
-				dates.add(DateUtils.addDays(created, days));
+		Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
+				getTimeTablePageForUser(user));
+
+		if (article != null) {
+			Section<TimeTableMarkup> timetable = Sections.findSuccessor(
+					article.getRootSection(), TimeTableMarkup.class);
+			if (timetable != null) {
+				dates = TimeTableMarkup.getDates(timetable);
 			}
 		}
-		catch (NoSuchPrincipalException e) {
-			e.printStackTrace();
+		else {
+			WikiEngine eng = WikiEngine.getInstance(Environment.getInstance().getContext(), null);
+			UserDatabase udb = eng.getUserManager().getUserDatabase();
+			UserProfile userProfile;
+			try {
+				userProfile = udb.find(user);
+				buildPersonalTimeTable(userProfile);
+
+				// try again
+				article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
+						getTimeTablePageForUser(user));
+
+				if (article != null) {
+					Section<TimeTableMarkup> timetable = Sections.findSuccessor(
+							article.getRootSection(), TimeTableMarkup.class);
+					if (timetable != null) {
+						dates = TimeTableMarkup.getDates(timetable);
+					}
+				}
+			}
+			catch (NoSuchPrincipalException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return dates;
 	}
 
+	/**
+	 * Get the timetable template.
+	 */
 	public static List<Integer> getTimeTableTemplate() {
 		List<Integer> numOfDays = new ArrayList<Integer>();
 		Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
-				TimeTableUtilities.TIMETABLE_ARTICLE);
+				getTimeTableTemplatePagename());
 
 		if (article != null) {
 			Section<TimeTableTemplateMarkup> timeTableTemplate = Sections.findSuccessor(
@@ -78,5 +105,56 @@ public class TimeTableUtilities {
 		}
 
 		return numOfDays;
+	}
+
+	/**
+	 * Build an article with a personal timetable for user.
+	 */
+	public static void buildPersonalTimeTable(UserProfile user) {
+		WikiConnector wikiConnector = Environment.getInstance().getWikiConnector();
+		ArticleManager mgr = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
+		String pageName = getTimeTablePageForUser(user.getFullname());
+		String timetable = generatePersonalTimeTableContent(user);
+
+		if (wikiConnector.doesArticleExist(pageName))
+			mgr.deleteArticle(mgr.getArticle(pageName));
+
+		wikiConnector.createArticle(pageName, timetable, "Defi-system");
+		mgr.registerArticle(Article.createArticle(timetable, pageName, Environment.DEFAULT_WEB));
+	}
+
+	/**
+	 * Get the timetable template's pagename.
+	 */
+	public static String getTimeTableTemplatePagename() {
+		return ResourceBundle.getBundle("KnowWE_Defi_config").getString(
+				"defi.timetable.pagename");
+	}
+
+	/**
+	 * Get the user's timetable pagename.
+	 */
+	public static String getTimeTablePageForUser(String user) {
+		return user + "_" + getTimeTableTemplatePagename();
+	}
+
+	/**
+	 * Generate timetable content for user.
+	 */
+	private static String generatePersonalTimeTableContent(UserProfile user) {
+		Date created = user.getCreated();
+		String content = "%%Zeitplan" + System.getProperty("line.separator");
+		// TODO: Zeitzone englisch deutsch: CET <> MEZ, eventuell
+		// Userdatabase anpassen, Server: CET, Lokal: MEZ
+		if (created != null) {
+			created = DateUtils.truncate(created, Calendar.DAY_OF_MONTH);
+			for (Integer days : getTimeTableTemplate()) {
+				Date d = DateUtils.addDays(created, days);
+				content += DateT.dateFormat.format(d) + System.getProperty("line.separator");
+			}
+		}
+		content += "%";
+
+		return content;
 	}
 }

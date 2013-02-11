@@ -70,14 +70,16 @@ public class TimeTableTagHandler extends AbstractTagHandler {
 					+ "'/></td></tr>");
 		}
 		timetable.append("</table>");
-		timetable.append("<input type='button' onClick='changeTimeTable()' value='Bestätigen' /></form>");
+		timetable.append("<input type='button' onClick='changeTimeTableTemplate()' value='Bestätigen' /></form>");
 		timetable.append("<br /><br />");
 
 		// timetable for single user
+		// TODO: Zeitplan für einzelnen user auslesen und eintragen
 		timetable.append("<h3>Individueller Zeitplan</h3><hr />");
-		timetable.append("<p>Benutzer: <select name='users'>");
+		timetable.append("<p>Benutzer: <select name='users' onChange='displayPersonalTimeTable(this.options[this.selectedIndex].value)'>");
+		timetable.append("<option value='' style='display:none;'></option>");
 		for (String user : users) {
-			timetable.append("<option>" + user + "</option>");
+			timetable.append("<option value='" + user + "'>" + user + "</option>");
 		}
 		timetable.append("</select></p>");
 		timetable.append("<form name='timetable_single'><table>");
@@ -87,7 +89,7 @@ public class TimeTableTagHandler extends AbstractTagHandler {
 					+ "</td><td><input type='text' size='10' /></td></tr>");
 		}
 		timetable.append("</table>");
-		timetable.append("<input type='button' onclick='alert(\"Hallo\");' value='Bestätigen' /></form>");
+		timetable.append("<input type='button' onclick='changePersonalTimeTable();' value='Bestätigen' /></form>");
 		timetable.append("</div>");
 
 		return Strings.maskHTML(timetable.toString());

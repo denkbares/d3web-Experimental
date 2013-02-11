@@ -46,12 +46,11 @@ public class TimeTableAction extends AbstractAction {
 		String timetableContent = createTimeTableTemplate(days);
 		ArticleManager mgr = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
 		WikiConnector wikiConnector = Environment.getInstance().getWikiConnector();
-		String pageName = TimeTableUtilities.TIMETABLE_ARTICLE;
+		String pageName = TimeTableUtilities.getTimeTableTemplatePagename();
 
 		// timetable doesn't exist
 		if (!wikiConnector.doesArticleExist(pageName)) {
-			Environment.getInstance().getWikiConnector().createArticle(
-					pageName, timetableContent, "Defi-system");
+			wikiConnector.createArticle(pageName, timetableContent, "Defi-system");
 			mgr.registerArticle(Article.createArticle(timetableContent,
 					pageName, Environment.DEFAULT_WEB));
 		}
