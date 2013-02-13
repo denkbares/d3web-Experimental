@@ -19,11 +19,8 @@
  */
 package de.d3web.proket.d3web.settings;
 
-import de.d3web.proket.d3web.input.D3webXMLParser;
-import de.d3web.proket.data.DialogStrategy;
-import de.d3web.proket.data.DialogType;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 /**
  * Class for storing all UI Properties of a productive KBS as specified in the
@@ -39,7 +36,7 @@ public class UISolutionPanelSettings {
  
     public enum SolutionRange{SINGLE, MULTIPLE}; 
     
-    public enum DYNAMICS{STATIC, INTERACTIVE};
+    public enum Dynamics{STATIC, INTERACTIVE};
     
     public enum RatingGranularity{ABSTRACT, PRECISE};
     
@@ -53,17 +50,21 @@ public class UISolutionPanelSettings {
     
     
     
-    private ArrayList solutionDepths;
+    private List solutionDepths;
+    
+    private List ratingGranularity;
+    
     
     private ExplanationType explanationType;
     
     private SolutionSorting solutionSorting;
     
-    private RatingGranularity ratingGranularity;
-    
     private SolutionStructuring solutionStructuring;
     
     private SolutionRange solutionRange;
+    
+    private Dynamics dynamics;
+    
     
     
     // singleton constructor stuff
@@ -96,20 +97,12 @@ public class UISolutionPanelSettings {
         this.solutionSorting = solSorting;
     }
     
-     public void setSolutionDepths(ArrayList depth){
+     public void setSolutionDepths(List depth){
         this.solutionDepths = depth;
     }
     
-    public ArrayList getSolutionDepths(){
+    public List getSolutionDepths(){
         return this.solutionDepths;
-    }
-
-    public RatingGranularity getRatingGranularity() {
-        return ratingGranularity;
-    }
-
-    public void setRatingGranularity(RatingGranularity ratingGranularity) {
-        this.ratingGranularity = ratingGranularity;
     }
 
     public SolutionStructuring getSolutionStructuring() {
@@ -127,24 +120,41 @@ public class UISolutionPanelSettings {
     public void setSolutionRange(SolutionRange solutionRange) {
         this.solutionRange = solutionRange;
     }
-    
-    
-    
-    
-    
+
+    public List getRatingGranularity() {
+        return ratingGranularity;
+    }
+
+    public void setRatingGranularity(List ratingGranularity) {
+        this.ratingGranularity = ratingGranularity;
+    }
+
+    public Dynamics getDynamics() {
+        return dynamics;
+    }
+
+    public void setDynamics(Dynamics dynamics) {
+        this.dynamics = dynamics;
+    }
+
+   
     
     
     public boolean getShowAbstractSolRating(){
-        if(this.ratingGranularity.equals(RatingGranularity.ABSTRACT)){
+        if(this.ratingGranularity.contains(
+                RatingGranularity.ABSTRACT.toString())){
             return true;
         }
+        
         return false;
     }
     
-     public boolean getShowPreciseSolRating(){
-        if(this.ratingGranularity.equals(RatingGranularity.PRECISE)){
+    public boolean getShowPreciseSolRating(){
+        if(this.ratingGranularity.contains(
+                RatingGranularity.PRECISE.toString())){
             return true;
         }
+        
         return false;
     }
 }

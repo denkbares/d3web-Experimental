@@ -367,12 +367,12 @@ public class D3webXMLParser {
             String[] solDepths = null;
             List depthsFinal = new ArrayList();
 
-            //current = SolutionDepth.valueOf(depths);
-            //System.out.println(depths);
+            //current = SolutionDepth.valueOf(grans);
+            //System.out.println(grans);
             if (!depths.equals("") && depths.contains(";;;")) {
                 solDepths = depths.split(";;;");
                 depthsFinal = Arrays.asList(solDepths);
-                //System.out.println(Arrays.toString(solDepths));
+                //System.out.println(Arrays.toString(granularities));
             } else {
                 depthsFinal.add(depths);
             }
@@ -382,6 +382,30 @@ public class D3webXMLParser {
         List dFinal = new ArrayList();
         dFinal.add(UISolutionPanelSettings.SolutionDepth.ALL.toString());
         return dFinal;
+    }
+    
+    // return the solution rating granularities to be used in solution panel
+    public List getRatingGranularities() {
+        if (XMLUtils.getStr((Element) globalUIOpts, "solRatingGranularity") != null) {
+            String grans = XMLUtils.getStr((Element) globalUIOpts, "solRatingGranularity");
+            String[] granularities = null;
+            List gransFinal = new ArrayList();
+
+            //current = SolutionDepth.valueOf(grans);
+            //System.out.println(grans);
+            if (!grans.equals("") && grans.contains(";;;")) {
+                granularities = grans.split(";;;");
+                gransFinal = Arrays.asList(granularities);
+                //System.out.println(Arrays.toString(granularities));
+            } else {
+                gransFinal.add(grans);
+            }
+            return gransFinal;
+        }
+
+        List gFinal = new ArrayList();
+        gFinal.add(UISolutionPanelSettings.RatingGranularity.ABSTRACT.toString());
+        return gFinal;
     }
 
     // return the solution depth to be used in solution panel
@@ -425,6 +449,20 @@ public class D3webXMLParser {
             }
         }
         return UISolutionPanelSettings.SolutionStructuring.LISTING;
+    }
+    
+    public UISolutionPanelSettings.Dynamics getSolutionDynamics() {
+        if (XMLUtils.getStr((Element) globalUIOpts, "solutionDynamics") != null) {
+            String sorting = XMLUtils.getStr((Element) globalUIOpts, "solutionDynamics");
+
+            try {
+                return UISolutionPanelSettings.Dynamics.valueOf(sorting);
+            } catch (IllegalArgumentException iae) {
+                iae.printStackTrace();
+                return UISolutionPanelSettings.Dynamics.STATIC;
+            }
+        }
+        return UISolutionPanelSettings.Dynamics.STATIC;
     }
 
     // get flag, whether dialog should include a questionnaire navigation sidepanel

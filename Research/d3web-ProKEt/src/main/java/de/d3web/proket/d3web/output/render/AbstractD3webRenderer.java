@@ -366,15 +366,15 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                 columnsLocal = localColumns.get(to.getName());
             }
 
-            System.out.println("specs: " + uiset.getQuestionColumns());
+            //System.out.println("specs: " + uiset.getQuestionColumns());
             columns = columnsGlobal;
             if (columnsLocal != -1) {
                 columns = columnsLocal; //local settings overwrite global settings!
             }
         }
 
-        System.out.println("GLOB: " + columnsGlobal);
-        System.out.println("LOC: " + columnsLocal);
+        //System.out.println("GLOB: " + columnsGlobal);
+        //System.out.println("LOC: " + columnsLocal);
 
         // if more than one column open table tag via TableContainer and
         // append

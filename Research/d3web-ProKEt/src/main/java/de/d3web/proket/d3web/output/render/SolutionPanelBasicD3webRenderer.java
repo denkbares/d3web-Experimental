@@ -27,6 +27,7 @@ import de.d3web.proket.d3web.utils.SolutionNameComparator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -129,7 +130,7 @@ public class SolutionPanelBasicD3webRenderer {
             }
         }
 
-        ArrayList<String> solutionDepths = UISolutionPanelSettings.getInstance().getSolutionDepths();
+        List<String> solutionDepths = UISolutionPanelSettings.getInstance().getSolutionDepths();
 
         // if the shortcut ALL for getting ALL ratings is used
         if (solutionDepths.size() == 1 && solutionDepths.get(0).equals("ALL")) {
@@ -190,7 +191,7 @@ public class SolutionPanelBasicD3webRenderer {
             }
         }
 
-        ArrayList<String> solutionDepths = UISolutionPanelSettings.getInstance().getSolutionDepths();
+        List<String> solutionDepths = UISolutionPanelSettings.getInstance().getSolutionDepths();
 
         // if the shortcut ALL for getting ALL ratings is used
         if (solutionDepths.size() == 1 && solutionDepths.get(0).equals("ALL")) {
@@ -255,7 +256,7 @@ public class SolutionPanelBasicD3webRenderer {
         Collections.sort(excluded, new SolutionNameComparator());
         Collections.sort(unclear, new SolutionNameComparator());
 
-        ArrayList<String> solutionDepths = UISolutionPanelSettings.getInstance().getSolutionDepths();
+        List<String> solutionDepths = UISolutionPanelSettings.getInstance().getSolutionDepths();
 
         // if the shortcut ALL for getting ALL ratings is used
         if (solutionDepths.size() == 1 && solutionDepths.get(0).equals("ALL")) {

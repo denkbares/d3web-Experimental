@@ -172,3 +172,7 @@ body,table,div {
     position: absolute;
     top: -1px;
     margin-top: 10px;}
+
+.row{display: table-row;}
+
+.cell{display: table-cell; }

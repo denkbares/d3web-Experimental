@@ -159,23 +159,8 @@ li.noListMarker {list-style-type: none;}
 
 #contents{margin-top: 80px; width: 65%;}
 
-#solutionPanelCell{padding-top: 70px; padding-left: 20px; padding-right: 10px; width: 20%;}
-
-#solutionPanel{background-color: lightslategray; color: white; }
-
-#sol_heading{font-weight: bold; font-size: 1.1em; 
-margin-left: 20px;}
-
-.solution{margin-top:5px; margin-left:30px; margin-right: 10px; display: table-row;}
-
-.sol_bgSpacer{background-color: lightslategray; height:20px;}
-
 .questionnaire-content{padding-top:10px;}
 
 .jstree-apple > ul { background-color: lightslategrey; color: white;}
 
-.solution > img { margin-right: 5px; margin-left:12px; display: table-cell;}
 
-.solutiontext{display: table-cell; vertical-align:middle;}
-
-.bottomSpace{margin-bottom: 10px;}

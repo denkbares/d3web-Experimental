@@ -21,18 +21,17 @@ package de.d3web.proket.d3web.output.render;
 
 import de.d3web.core.inference.PSMethod;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.input.D3webConnector;
-import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.d3web.settings.UISolutionPanelSettings;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import de.d3web.scoring.HeuristicRating;
 import de.d3web.scoring.inference.PSMethodHeuristic;
 import de.d3web.xcl.inference.PSMethodXCL;
 import java.util.Collection;
+import java.util.List;
 import org.antlr.stringtemplate.StringTemplate;
 
 /**
@@ -73,8 +72,7 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
         for (Solution solution : sortedSols) {
             if (!solution.getName().contains("000")) {
 
-                bui.append(
-                        renderStateAbstractCirclePreciseText((Solution) solution, d3webs));
+                bui.append(renderState((Solution) solution, d3webs));
             }
         }
     }
@@ -85,9 +83,17 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
         Blackboard bb = d3webs.getBlackboard();
         UISolutionPanelSettings uisols = UISolutionPanelSettings.getInstance();
         
+        System.out.println(uisols.getShowPreciseSolRating());
+                System.out.println(uisols.getShowAbstractSolRating());
+        
         if(uisols.getShowAbstractSolRating() && 
                 uisols.getShowPreciseSolRating()){
-            return renderStateAbstractCirclePreciseText(solution, d3webs);
+            if(uisols.getDynamics().equals(UISolutionPanelSettings.Dynamics.STATIC)){
+                return renderStateAbstractCirclePreciseText(solution, d3webs);
+            } else {
+                return renderStateAbstractCirclePreciseTextDynamic(solution, d3webs);
+            }
+            
         } else if (uisols.getShowAbstractSolRating() &&
                 !uisols.getShowPreciseSolRating()){
             // only abstract rating
@@ -132,9 +138,69 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
             }
         }
 
-        String solutiontext = solution.getName() + " (" + score + ") ";
-        st.setAttribute("solutiontext", solutiontext);
+        
+        st.setAttribute("solutiontext", solution.getName());
+        st.setAttribute("scoretext", "(" + score + ")");
 
+
+        // TODO refactor that out of methods and make one own!
+        if (bb.getRating(solution).getState().equals(Rating.State.ESTABLISHED)) {
+            st.setAttribute("src", "img/solEst.png");
+            st.setAttribute("alt", "established");
+            st.setAttribute("tt", "established");
+
+        } else if (bb.getRating(solution).getState().equals(Rating.State.SUGGESTED)) {
+            st.setAttribute("src", "img/solSug.png");
+            st.setAttribute("alt", "suggested");
+            st.setAttribute("tt", "suggested");
+
+        } else if (bb.getRating(solution).getState().equals(Rating.State.EXCLUDED)) {
+            st.setAttribute("src", "img/solExc.png");
+            st.setAttribute("alt", "excluded");
+            st.setAttribute("tt", "excluded");
+
+        } else if (bb.getRating(solution).getState().equals(Rating.State.UNCLEAR)) {
+            st.setAttribute("src", "/img/solUnc.png");
+            st.setAttribute("alt", "unclear");
+            st.setAttribute("tt", "unclear");
+        }
+
+        return st.toString();
+    }
+    
+    
+    private String renderStateAbstractCirclePreciseTextDynamic(Solution solution, Session d3webs) {
+
+        Blackboard bb = d3webs.getBlackboard();
+        
+        renderExplanationForSolution(solution, d3webs);
+        
+        // retrieve template
+        StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynLink");
+
+        // fill template attribute
+        st.setAttribute("solid", solution.getName());
+
+        /*
+         * get scoring, dependent on applied problem solving method
+         */
+        double score = 0.0;
+        Collection<PSMethod> contributingPSMethods =
+                bb.getContributingPSMethods(solution);
+        for (PSMethod psmethod : contributingPSMethods) {
+            if (psmethod.getClass().equals(PSMethodHeuristic.class)) {
+                score = ((HeuristicRating) bb.getRating(solution)).getScore();
+                break;
+            } // preparation for x
+            else if (psmethod.equals(PSMethodXCL.class)) {
+                System.out.println("xcl scoring");
+                break;
+            }
+        }
+        
+        st.setAttribute("solutiontext", solution.getName());
+        st.setAttribute("scoretext", "(" + score + ")");
+        
 
         if (bb.getRating(solution).getState().equals(Rating.State.ESTABLISHED)) {
             st.setAttribute("src", "img/solEst.png");

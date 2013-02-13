@@ -1918,10 +1918,12 @@ public class D3webDialog extends HttpServlet {
         uis.setLargetext(d3webParser.getLargetext());
         // for the solution panel
         uisols.setExplanationType(d3webParser.getSolutionExplanationType());
-        uisols.setSolutionDepths((ArrayList) d3webParser.getSolutionDepths());
+        uisols.setSolutionDepths(d3webParser.getSolutionDepths());
         uisols.setSolutionSorting(d3webParser.getSolutionSorting());
         uisols.setSolutionRange(d3webParser.getSolutionRange());
         uisols.setSolutionStructuring(d3webParser.getSolutionStructuring());
+        uisols.setDynamics(d3webParser.getSolutionDynamics());
+        uisols.setRatingGranularity(d3webParser.getRatingGranularities());
         
         /*
          * local settings
