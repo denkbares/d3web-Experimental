@@ -70,6 +70,7 @@ import de.d3web.proket.d3web.output.render.IQuestionD3webRenderer;
 import de.d3web.proket.d3web.output.render.SummaryD3webRenderer;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.settings.UISettings;
+import de.d3web.proket.d3web.settings.UISolutionPanelSettings;
 import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
@@ -119,6 +120,7 @@ public class D3webDialog extends HttpServlet {
     protected D3webXMLParser d3webParser;
     protected D3webConnector d3wcon;
     protected UISettings uis;
+    protected UISolutionPanelSettings uisols;
     protected D3webUESettings uesettings;
     protected static Map<String, List<String>> usrDat = null;
     private String prevQ = "";
@@ -201,6 +203,9 @@ public class D3webDialog extends HttpServlet {
 
         // UI settings
         uis = UISettings.getInstance();
+        
+        // Solution Panel UI Settings
+        uisols = UISolutionPanelSettings.getInstance();
 
         // usability extension settings: TODO rename
         uesettings = D3webUESettings.getInstance();
@@ -1905,16 +1910,19 @@ public class D3webDialog extends HttpServlet {
         uis.setQuestionColumns(d3webParser.getQuestionColumns());
         uis.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
         uis.setUnknownVisible(d3webParser.getUnknownVisible());
-        uis.setSolutionExplanationType(d3webParser.getSolutionExplanationType());
-        uis.setSolutionDepths((ArrayList) d3webParser.getSolutionDepths());
-        uis.setSolutionSorting(d3webParser.getSolutionSorting());
         uis.setDiagnosisNavi(d3webParser.getSolutionNavi());
         uis.setQuestionnaireNavi(d3webParser.getQuestionnaireNavi());
         uis.setYnFlat(d3webParser.getYNFlatGlobal());
         uis.setAutocolumns(d3webParser.getAutocolumnsGlobal());
         uis.setDropdown(d3webParser.getDropdown());
         uis.setLargetext(d3webParser.getLargetext());
-
+        // for the solution panel
+        uisols.setExplanationType(d3webParser.getSolutionExplanationType());
+        uisols.setSolutionDepths((ArrayList) d3webParser.getSolutionDepths());
+        uisols.setSolutionSorting(d3webParser.getSolutionSorting());
+        uisols.setSolutionRange(d3webParser.getSolutionRange());
+        uisols.setSolutionStructuring(d3webParser.getSolutionStructuring());
+        
         /*
          * local settings
          */

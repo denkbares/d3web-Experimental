@@ -19,25 +19,15 @@
  */
 package de.d3web.proket.d3web.output.render;
 
-import de.d3web.core.inference.PSMethod;
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
-import de.d3web.proket.d3web.input.D3webConnector;
-import de.d3web.proket.d3web.input.D3webXMLParser;
-import de.d3web.proket.d3web.settings.UISettings;
+import de.d3web.proket.d3web.settings.UISolutionPanelSettings;
 import de.d3web.proket.d3web.utils.SolutionNameComparator;
-import de.d3web.proket.d3web.utils.StringTemplateUtils;
-import de.d3web.scoring.HeuristicRating;
-import de.d3web.scoring.inference.PSMethodHeuristic;
-import de.d3web.xcl.inference.PSMethodXCL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import javax.servlet.http.HttpSession;
-import org.antlr.stringtemplate.StringTemplate;
 
 /**
  * Basic class for rendering the solution panel or explanation component of a
@@ -45,11 +35,14 @@ import org.antlr.stringtemplate.StringTemplate;
  *
  * @author Martina Freiberg @date Oct 2012
  */
-public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
+public class SolutionPanelBasicD3webRenderer {
+
+    private UISolutionPanelSettings uiSolPanelSet = UISolutionPanelSettings.getInstance();
 
     /**
-     * Entry point to solution panel rendering. According to given EXPL-TYPE the
-     * corresponding sub-method for rendering will be called.
+     * Entry point to solution panel rendering. Switches basic solution panel
+     * style between "single solution", multiple solution as list or multiple
+     * solution as table and calls according renderers.
      *
      * @param d3webSession
      * @param type
@@ -61,133 +54,60 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
             HttpSession http) {
 
         StringBuilder bui = new StringBuilder();
-        D3webXMLParser.SolutionExplanationType solType =
-                UISettings.getInstance().getSolutionExplanationType();
 
-        if (solType == D3webXMLParser.SolutionExplanationType.TEXTUAL) {
-            bui.append(getTextualListing(d3webSession));
+        UISolutionPanelSettings.SolutionStructuring solStruc =
+                uiSolPanelSet.getSolutionStructuring();
+        UISolutionPanelSettings.SolutionRange solRange =
+                uiSolPanelSet.getSolutionRange();
 
-        } else if (solType == D3webXMLParser.SolutionExplanationType.TABLE) {
-            // TODO
-        } else if (solType == D3webXMLParser.SolutionExplanationType.TREEMAP) {
-            System.out.println("Treemap Solution Rendering");
-            // TODO
-        } else if (solType == D3webXMLParser.SolutionExplanationType.SOLGRAPH) {
-            // TODO
-        } else if (solType == D3webXMLParser.SolutionExplanationType.CLARI) {
-            System.out.println("Clarification Dialog Solution Rendering");
-            // TODO
+
+        if (solRange == UISolutionPanelSettings.SolutionRange.SINGLE) {
+            // TODO: render only the one best solution presented
+        } else {
+            if (solStruc == UISolutionPanelSettings.SolutionStructuring.LISTING) {
+                SolutionPanelListingD3webRenderer sListRend =
+                        new SolutionPanelListingD3webRenderer();
+                bui.append(sListRend.getSolutionListing(d3webSession));
+            } else if (solStruc == UISolutionPanelSettings.SolutionStructuring.TABLE) {
+                // TODO: table renderer for solution panel!
+            }
         }
 
         return bui.toString();
     }
 
     /**
-     * Rendering method for getting the textual listing representation of a
-     * solution panel
+     * Returns given collection of valued solutions as sorted solutions
+     * according to what is specified in settings.
      *
+     * @param valued
      * @param d3websession
-     * @return the (HTML) representation of the rendered solution panel in
-     * textual listing form
+     * @return
      */
-    private String getTextualListing(Session d3websession) {
-
-        KnowledgeBase kb = D3webConnector.getInstance().getKb();
-        TerminologyObject rootSol = kb.getRootSolution();
-        StringBuilder bui = new StringBuilder();
-
-        Collection<Solution> valuedSolutions =
-                d3websession.getBlackboard().getValuedSolutions();
-        Collection<Solution> sortedValuedSolutions =
-                sortSolutions(valuedSolutions, d3websession);
-
-        // the *real* rendering, i.e. getting the HTML representation
-        getSolutionStates(sortedValuedSolutions, bui, d3websession.getBlackboard());
-
-        return bui.toString();
-    }
-
-    private Collection<Solution> sortSolutions(Collection<Solution> valued,
+    protected Collection<Solution> sortSolutions(Collection<Solution> valued,
             Session d3websession) {
 
-        UISettings uis = UISettings.getInstance();
+        UISolutionPanelSettings uisols = UISolutionPanelSettings.getInstance();
 
-        if (uis.getSolutionSorting().equals(D3webXMLParser.SolutionSorting.ALPHABETICAL)) {
+        if (uisols.getSolutionSorting().equals(UISolutionPanelSettings.SolutionSorting.ALPHABETICAL)) {
             return sortSolutionsAlphabetical(valued, d3websession);
-        } else if (uis.getSolutionSorting().equals(D3webXMLParser.SolutionSorting.CATEGORICAL)) {
+        } else if (uisols.getSolutionSorting().equals(UISolutionPanelSettings.SolutionSorting.CATEGORICAL)) {
             return sortSolutionsCategorical(valued, d3websession);
-        } else if (uis.getSolutionSorting().equals(D3webXMLParser.SolutionSorting.CATEGALPHA)) {
+        } else if (uisols.getSolutionSorting().equals(UISolutionPanelSettings.SolutionSorting.CATEGALPHA)) {
             return sortSolutionsCategoricalAndAlphabetical(valued, d3websession);
         }
 
         return new ArrayList<Solution>();
     }
 
-    private void getSolutionStates(Collection<Solution> sortedSols, StringBuilder bui,
-            Blackboard bb) {
-
-        for (Solution solution : sortedSols) {
-            if (!solution.getName().contains("000")) {
-
-                bui.append(renderSolutionState((Solution) solution, bb));
-
-            }
-        }
-    }
-
-    private String renderSolutionState(Solution solution, Blackboard bb) {
-
-        // retrieve template
-        StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/Solution");
-
-        // fill template attribute
-        st.setAttribute("solid", solution.getName());
-
-        /* get scoring, dependent on applied problem solving method */
-        double score = 0.0;
-        Collection<PSMethod> contributingPSMethods =
-                bb.getContributingPSMethods(solution);
-        for (PSMethod psmethod : contributingPSMethods) {
-            if (psmethod.getClass().equals(PSMethodHeuristic.class)) {
-                score = ((HeuristicRating) bb.getRating(solution)).getScore();
-                break;
-            } 
-            // preparation for x
-            else if (psmethod.equals(PSMethodXCL.class)) {
-                System.out.println("xcl scoring");
-                break;
-            }
-        }
-
-        String solutiontext = solution.getName() + " (" + score + ") ";
-        st.setAttribute("solutiontext", solutiontext);
-
-
-        if (bb.getRating(solution).getState().equals(Rating.State.ESTABLISHED)) {
-            st.setAttribute("src", "img/solEst.png");
-            st.setAttribute("alt", "established");
-            st.setAttribute("tt", "established");
-
-        } else if (bb.getRating(solution).getState().equals(Rating.State.SUGGESTED)) {
-            st.setAttribute("src", "img/solSug.png");
-            st.setAttribute("alt", "suggested");
-            st.setAttribute("tt", "suggested");
-
-        } else if (bb.getRating(solution).getState().equals(Rating.State.EXCLUDED)) {
-            st.setAttribute("src", "img/solExc.png");
-            st.setAttribute("alt", "excluded");
-            st.setAttribute("tt", "excluded");
-
-        } else if (bb.getRating(solution).getState().equals(Rating.State.UNCLEAR)) {
-            st.setAttribute("src", "/img/solUnc.png");
-            st.setAttribute("alt", "unclear");
-            st.setAttribute("tt", "unclear");
-        }
-
-        return st.toString();
-    }
-
-    private Collection<Solution> sortSolutionsAlphabetical(Collection<Solution> valued,
+    /**
+     * Sorts solutions in alphabetical order only.
+     *
+     * @param valued
+     * @param d3websession
+     * @return
+     */
+    protected Collection<Solution> sortSolutionsAlphabetical(Collection<Solution> valued,
             Session d3websession) {
 
         Blackboard bb = d3websession.getBlackboard();
@@ -209,7 +129,7 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
             }
         }
 
-        ArrayList<String> solutionDepths = UISettings.getInstance().getSolutionDepths();
+        ArrayList<String> solutionDepths = UISolutionPanelSettings.getInstance().getSolutionDepths();
 
         // if the shortcut ALL for getting ALL ratings is used
         if (solutionDepths.size() == 1 && solutionDepths.get(0).equals("ALL")) {
@@ -241,7 +161,14 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
 
     }
 
-    private Collection<Solution> sortSolutionsCategorical(Collection<Solution> valued,
+    /**
+     * Sorts solutions according to abstract rating = category only.
+     *
+     * @param valued
+     * @param d3websession
+     * @return
+     */
+    protected Collection<Solution> sortSolutionsCategorical(Collection<Solution> valued,
             Session d3websession) {
 
         Blackboard bb = d3websession.getBlackboard();
@@ -263,7 +190,7 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
             }
         }
 
-        ArrayList<String> solutionDepths = UISettings.getInstance().getSolutionDepths();
+        ArrayList<String> solutionDepths = UISolutionPanelSettings.getInstance().getSolutionDepths();
 
         // if the shortcut ALL for getting ALL ratings is used
         if (solutionDepths.size() == 1 && solutionDepths.get(0).equals("ALL")) {
@@ -293,7 +220,15 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
         return result;
     }
 
-    private Collection<Solution> sortSolutionsCategoricalAndAlphabetical(Collection<Solution> valued,
+    /**
+     * Sorts solutions according to rating categories and within them
+     * alphabetically
+     *
+     * @param valued
+     * @param d3websession
+     * @return
+     */
+    protected Collection<Solution> sortSolutionsCategoricalAndAlphabetical(Collection<Solution> valued,
             Session d3websession) {
 
         Blackboard bb = d3websession.getBlackboard();
@@ -320,7 +255,7 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
         Collections.sort(excluded, new SolutionNameComparator());
         Collections.sort(unclear, new SolutionNameComparator());
 
-        ArrayList<String> solutionDepths = UISettings.getInstance().getSolutionDepths();
+        ArrayList<String> solutionDepths = UISolutionPanelSettings.getInstance().getSolutionDepths();
 
         // if the shortcut ALL for getting ALL ratings is used
         if (solutionDepths.size() == 1 && solutionDepths.get(0).equals("ALL")) {
@@ -349,5 +284,43 @@ public class SolutionPanelD3webRenderer extends AbstractD3webRenderer {
 
         return result;
 
+    }
+
+    /**
+     * Basic Explanation Renderer switch. Calls corresponding subrenderer for
+     * constructing an explanation according to what was specified in XML as
+     * explanation type.
+     *
+     * @param solution
+     * @return
+     */
+    protected String renderExplanationForSolution(Solution solution, Session d3webs) {
+
+        String renderedExplanation = "";
+        UISolutionPanelSettings.ExplanationType expType =
+                uiSolPanelSet.getExplanationType();
+
+        // ToDo differentiate between single/multiple solution
+        if (expType == UISolutionPanelSettings.ExplanationType.TEXTUAL) {
+            // TODO: render only a plain text representation here
+            SolutionExplanationTextualD3webRenderer textualSolRenderer =
+                    new SolutionExplanationTextualD3webRenderer();
+
+            System.out.println("TEXTUAL EXPLANATION for solution" + solution.getName() + ": ");
+            System.out.println(textualSolRenderer.renderExplanationForSolution(solution, d3webs));
+                   
+
+            return textualSolRenderer.renderExplanationForSolution(solution, d3webs);
+        } else if (expType == UISolutionPanelSettings.ExplanationType.TREEMAP) {
+            System.out.println("Treemap Explanation Rendering");
+            // TODO: render treemap explanation
+        } else if (expType == UISolutionPanelSettings.ExplanationType.RULEGRAPH) {
+            // TODO: render rulegraph explanation
+        } else if (expType == UISolutionPanelSettings.ExplanationType.CLARI) {
+            System.out.println("Clarification Dialog Solution Rendering");
+            // TODO render clarification dialog explanation
+        }
+
+        return renderedExplanation;
     }
 }

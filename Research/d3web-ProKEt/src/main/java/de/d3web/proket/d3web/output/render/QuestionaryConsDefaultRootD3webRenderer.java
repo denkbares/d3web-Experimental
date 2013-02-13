@@ -121,7 +121,7 @@ public class QuestionaryConsDefaultRootD3webRenderer extends DefaultRootD3webRen
                 D3webConnector.getInstance().getKb()));
         }
         
-        SolutionPanelD3webRenderer spr = 
+        SolutionPanelBasicD3webRenderer spr = 
                 D3webRendererMapping.getInstance().getSolutionPanelRenderer();
         
         // render solution panel into here. For including other forms of

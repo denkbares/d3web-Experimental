@@ -76,10 +76,6 @@ public class UISettings {
      * The login mode, needed for adding the chosen form of login
      */
     private D3webXMLParser.LoginMode loginMode;
-  
-    private D3webXMLParser.SolutionExplanationType solutionExplanationType;
-    
-    private D3webXMLParser.SolutionSorting solutionSorting;
     
     private ArrayList solutionDepths;
     
@@ -192,13 +188,7 @@ public class UISettings {
         return this.loginMode;
     }
     
-    public void setSolutionExplanationType(D3webXMLParser.SolutionExplanationType sol) {
-        this.solutionExplanationType = sol;
-    }
-
-    public D3webXMLParser.SolutionExplanationType getSolutionExplanationType() {
-        return this.solutionExplanationType;
-    }
+   
  
       public boolean hasDiagnosisNavi() {
         return diagnosisNavi;
@@ -216,13 +206,7 @@ public class UISettings {
         this.questionnaireNavi = questionnaireNavi;
     }
 
-    public void setSolutionDepths(ArrayList depth){
-        this.solutionDepths = depth;
-    }
-    
-    public ArrayList getSolutionDepths(){
-        return this.solutionDepths;
-    }
+   
     
     public D3webXMLParser.IndicationRepresentation getShowIndicated() {
         return this.showIndicated;
@@ -248,13 +232,7 @@ public class UISettings {
         this.showNonIndicated = sIndi;
     }
 
-    public D3webXMLParser.SolutionSorting getSolutionSorting() {
-        return solutionSorting;
-    }
-
-    public void setSolutionSorting(D3webXMLParser.SolutionSorting solSorting) {
-        this.solutionSorting = solSorting;
-    }
+   
 
     public String getAutocolumns() {
         return autocolumns;

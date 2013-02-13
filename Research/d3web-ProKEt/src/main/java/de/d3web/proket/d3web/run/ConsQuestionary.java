@@ -21,7 +21,7 @@ package de.d3web.proket.d3web.run;
 
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
-import de.d3web.proket.d3web.output.render.SolutionPanelD3webRenderer;
+import de.d3web.proket.d3web.output.render.SolutionPanelBasicD3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -85,7 +85,7 @@ public class ConsQuestionary extends D3webDialog {
         writer.append("<div class='sol_bgSpacer'></div>");
         
         
-        SolutionPanelD3webRenderer spr = D3webRendererMapping.getInstance().getSolutionPanelRenderer();
+        SolutionPanelBasicD3webRenderer spr = D3webRendererMapping.getInstance().getSolutionPanelRenderer();
         String spUpdate = spr.renderSolutionPanel(d3webSession, httpSession);
         
         writer.append(spUpdate);

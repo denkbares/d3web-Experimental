@@ -21,6 +21,7 @@ package de.d3web.proket.d3web.utils;
 
 import de.d3web.abstraction.ActionSetValue;
 import de.d3web.core.inference.KnowledgeSlice;
+import de.d3web.core.inference.PSMethod;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.RuleSet;
 import de.d3web.core.inference.condition.CondEqual;
@@ -749,7 +750,7 @@ public class D3webUtils {
         }
         return false;
     }
-    
+
     public static boolean isIndicatedByIndicatedQuestionnaire(TerminologyObject to,
             TerminologyObject parent, Blackboard bb) {
 
@@ -1711,7 +1712,7 @@ public class D3webUtils {
         if (toId == null || valueString == null) {
             return;
         }
-        
+
         String toName = AbstractD3webRenderer.getObjectNameForId(toId);
         Blackboard blackboard = sess.getBlackboard();
         Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
@@ -2344,5 +2345,45 @@ public class D3webUtils {
             }
         }
         return "";
+    }
+
+    public static List getRulesHeuristicRatingFor(TerminologyObject sol,
+            Session d3webs) {
+
+        List rulesList = new ArrayList();
+
+        Blackboard bb = d3webs.getBlackboard();
+        Collection<PSMethod> indicatingPSs = bb.getIndicatingPSMethods(sol);
+        Collection<PSMethod> contribPSs = bb.getContributingPSMethods(sol);
+
+
+        for (PSMethod cpsm : contribPSs) {
+
+            Fact vFact = bb.getValueFact(sol, cpsm);
+            
+            if(vFact.getSource() instanceof Rule){
+                Rule rule = (Rule)vFact.getSource();
+                if(rule.getAction().getBackwardObjects().contains(sol)){
+                    rulesList.add(rule);
+                }
+            }
+            
+            /*
+             * if (sol.getName().equals("Nadelbaum")) {
+             *
+             * //System.out.println(d3webs.getKnowledgeBase().getAllKnowledgeSlicesFor(PSMethodHeuristic.FORWARD));
+             * Collection<RuleSet> rules =
+             * d3webs.getKnowledgeBase().getAllKnowledgeSlicesFor(PSMethodHeuristic.FORWARD);
+             *
+             * for(RuleSet r: rules){
+             *
+             * for(Rule rule: r.getRules()){
+             *
+             * if (rule.getAction().getBackwardObjects().contains(sol)){
+             * System.out.println(rule); rulesList.add(rule); } } } }
+             */
+        }
+
+        return rulesList;
     }
 }

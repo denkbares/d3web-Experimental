@@ -20,6 +20,7 @@
 package de.d3web.proket.d3web.input;
 
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.proket.d3web.settings.UISolutionPanelSettings;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.data.DialogType;
@@ -345,33 +346,21 @@ public class D3webXMLParser {
         return Boolean.FALSE;
     }
 
-    // TODO: maybe remove all enums from here to UISettings class!
-    // defining the possible solution explanation types
-    public enum SolutionExplanationType {
-
-        NONE, TREEMAP, TABLE, CLARI, TEXTUAL, SOLGRAPH
-    }
-
     // return the solution explanation type to be used
-    public SolutionExplanationType getSolutionExplanationType() {
+    public UISolutionPanelSettings.ExplanationType getSolutionExplanationType() {
         if (XMLUtils.getStr((Element) globalUIOpts, "solutionExplanation") != null) {
             String solType = XMLUtils.getStr((Element) globalUIOpts, "solutionExplanation");
             try {
-                return SolutionExplanationType.valueOf(solType);
+                return UISolutionPanelSettings.ExplanationType.valueOf(solType);
             } catch (IllegalArgumentException iae) {
                 iae.printStackTrace();
-                return SolutionExplanationType.NONE;
+                return UISolutionPanelSettings.ExplanationType.NONE;
             }
         }
-        return SolutionExplanationType.NONE;
+        return UISolutionPanelSettings.ExplanationType.NONE;
     }
 
-    public enum SolutionDepth {
-
-        ALL, ESTABLISHED, SUGGESTED, EXCLUDED
-    }
-// return the solution depth to be used in solution panel
-
+    // return the solution depth to be used in solution panel
     public List getSolutionDepths() {
         if (XMLUtils.getStr((Element) globalUIOpts, "solutionDepth") != null) {
             String depths = XMLUtils.getStr((Element) globalUIOpts, "solutionDepth");
@@ -391,28 +380,51 @@ public class D3webXMLParser {
         }
 
         List dFinal = new ArrayList();
-        dFinal.add(SolutionDepth.ALL.toString());
+        dFinal.add(UISolutionPanelSettings.SolutionDepth.ALL.toString());
         return dFinal;
     }
 
-    public enum SolutionSorting {
-
-        CATEGORICAL, ALPHABETICAL, CATEGALPHA
-    }
-// return the solution depth to be used in solution panel
-
-    public SolutionSorting getSolutionSorting() {
+    // return the solution depth to be used in solution panel
+    public UISolutionPanelSettings.SolutionSorting getSolutionSorting() {
         if (XMLUtils.getStr((Element) globalUIOpts, "solutionSorting") != null) {
             String sorting = XMLUtils.getStr((Element) globalUIOpts, "solutionSorting");
 
             try {
-                return SolutionSorting.valueOf(sorting);
+                return UISolutionPanelSettings.SolutionSorting.valueOf(sorting);
             } catch (IllegalArgumentException iae) {
                 iae.printStackTrace();
-                return SolutionSorting.CATEGORICAL;
+                return UISolutionPanelSettings.SolutionSorting.CATEGORICAL;
             }
         }
-        return SolutionSorting.CATEGORICAL;
+        return UISolutionPanelSettings.SolutionSorting.CATEGORICAL;
+    }
+
+    public UISolutionPanelSettings.SolutionRange getSolutionRange() {
+        if (XMLUtils.getStr((Element) globalUIOpts, "solutionRange") != null) {
+            String sorting = XMLUtils.getStr((Element) globalUIOpts, "solutionRange");
+
+            try {
+                return UISolutionPanelSettings.SolutionRange.valueOf(sorting);
+            } catch (IllegalArgumentException iae) {
+                iae.printStackTrace();
+                return UISolutionPanelSettings.SolutionRange.MULTIPLE;
+            }
+        }
+        return UISolutionPanelSettings.SolutionRange.MULTIPLE;
+    }
+    
+    public UISolutionPanelSettings.SolutionStructuring getSolutionStructuring() {
+        if (XMLUtils.getStr((Element) globalUIOpts, "solutionStructuring") != null) {
+            String sorting = XMLUtils.getStr((Element) globalUIOpts, "solutionStructuring");
+
+            try {
+                return UISolutionPanelSettings.SolutionStructuring.valueOf(sorting);
+            } catch (IllegalArgumentException iae) {
+                iae.printStackTrace();
+                return UISolutionPanelSettings.SolutionStructuring.LISTING;
+            }
+        }
+        return UISolutionPanelSettings.SolutionStructuring.LISTING;
     }
 
     // get flag, whether dialog should include a questionnaire navigation sidepanel

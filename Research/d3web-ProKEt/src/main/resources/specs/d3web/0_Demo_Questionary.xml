@@ -14,6 +14,8 @@
         dialogcolumns="1"
         questionnairecolumns="2"
         questioncolumns="1"
+        solutionRange = "MULTIPLE"
+        solutionStructuring = "LISTING"
         solutionExplanation = "TEXTUAL" 
         solutionSorting = "CATEGALPHA"
         solutionDepth = "ALL"
