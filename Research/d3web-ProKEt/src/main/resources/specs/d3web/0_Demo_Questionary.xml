@@ -15,7 +15,7 @@
         questionnairecolumns="2"
         questioncolumns="1"
         solRatingGranularity = "ABSTRACT;;;PRECISE"
-        solutionDynamics = "STATIC"
+        solutionDynamics = "INTERACTIVE"
         solutionRange = "MULTIPLE"
         solutionStructuring = "LISTING"
         solutionExplanation = "TEXTUAL" 

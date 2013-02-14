@@ -79,7 +79,7 @@ public class StandardDialog extends D3webDialog {
         
         /* similarly: update solution panel without needing to reload complete 
           dialog */
-        updateDialogPanel(response.getWriter(), d3webs, httpSession, request);
+        updateSolutionPanel(response.getWriter(), d3webs, httpSession, request);
      }
    
     /**
@@ -91,16 +91,16 @@ public class StandardDialog extends D3webDialog {
      * @param httpSession
      * @param request 
      */
-    protected void updateDialogPanel(PrintWriter writer, Session d3webSession,
+    protected void updateSolutionPanel(PrintWriter writer, Session d3webSession,
             HttpSession httpSession, HttpServletRequest request) {
         ContainerCollection cc = new ContainerCollection();
 
-        String solutionPanelID = "solutionPanel";
+        String solutionPanelID = "solutions";
         writer.append(REPLACEID + solutionPanelID);
         writer.append(REPLACECONTENT);
         writer.append("<div id='" + solutionPanelID + "'>");
-        writer.append("<div id='sol_heading'>Diagnosen:</div>");
-        writer.append("<div class='sol_bgSpacer'></div>");
+        //writer.append("<div id='sol_heading'>Diagnosen:</div>");
+        //writer.append("<div class='sol_bgSpacer'></div>");
         
         
         SolutionPanelBasicD3webRenderer spr = D3webRendererMapping.getInstance().getSolutionPanelRenderer();

@@ -31,7 +31,6 @@ import de.d3web.scoring.HeuristicRating;
 import de.d3web.scoring.inference.PSMethodHeuristic;
 import de.d3web.xcl.inference.PSMethodXCL;
 import java.util.Collection;
-import java.util.List;
 import org.antlr.stringtemplate.StringTemplate;
 
 /**
@@ -113,7 +112,6 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
 
         Blackboard bb = d3webs.getBlackboard();
         
-        renderExplanationForSolution(solution, d3webs);
         
         // retrieve template
         StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/Solution");
@@ -171,13 +169,20 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
     
     private String renderStateAbstractCirclePreciseTextDynamic(Solution solution, Session d3webs) {
 
+        SolutionExplanationBasicD3webRenderer expr = new SolutionExplanationBasicD3webRenderer();
+        // fill in the explanation into the explanation popup:
+        StringTemplate stExp = StringTemplateUtils.getTemplate("solutionPanel/PopupExp");
+        String explanation = expr.getExplanationForSolution(solution, d3webs);
+        stExp.setAttribute("elementID", solution.getName());
+        stExp.setAttribute("popupcontent", explanation);
+        System.out.println(stExp.toString());
+        
         Blackboard bb = d3webs.getBlackboard();
         
-        renderExplanationForSolution(solution, d3webs);
-        
-        // retrieve template
+        // retrieve template for the solution panel per se, first
         StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynLink");
-
+        st.setAttribute("explanationpopup", stExp.toString());
+        
         // fill template attribute
         st.setAttribute("solid", solution.getName());
 

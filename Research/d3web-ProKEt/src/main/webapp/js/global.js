@@ -856,7 +856,8 @@ function checkSessionStillValid(){
                 handleSessionRedirect("DB");
             } else if(html.indexOf("OFF")!=-1){
                 handleSessionRedirect("OFF");
-            } else {
+            }
+            else {
                 handleSessionRedirect("DB");
             }
            
@@ -873,15 +874,15 @@ function handleSessionRedirect(loginFlag){
     // TODO: nicer Window
     var note = "We are sorry. Your EuraHS session has expired due to inactivity for more than 30 minutes! ";
     note = note + 
-        "This is done for security reasons and to increase the overall speed of the database. ";
+    "This is done for security reasons and to increase the overall speed of the database. ";
     note = note + 
-        "You are automatically redirected to the EuraHS website, where you have to login to EuraHS again. \n";
+    "You are automatically redirected to the EuraHS website, where you have to login to EuraHS again. \n";
     note = note + 
-        "However, your most recent data are not lost. You can reload these date in the 'Load Case' function with ";
+    "However, your most recent data are not lost. You can reload these date in the 'Load Case' function with ";
     note = note + 
-        " 'autosave' after successful re-login.";
+    " 'autosave' after successful re-login.";
     alert(note);
-// if we are here, the session is not valid anymore, so redirect
+    // if we are here, the session is not valid anymore, so redirect
     // according to returned html parameter, which in case of
     // the session check contains the implemented login (if any)
     // currently only for EuraHS - replace if we have other dialog running
@@ -892,7 +893,7 @@ function handleSessionRedirect(loginFlag){
        
     if(loginFlag == "" || loginFlag.indexOf("OFF")!=-1){
        
-       redirectLink = orig;//"http://www.google.de";
+        redirectLink = orig;//"http://www.google.de";
         //window.location.href = orig;
         document.location = redirectLink;
         window.location.reload(true);
@@ -914,3 +915,17 @@ function handleSessionRedirect(loginFlag){
 }
 
 
+/* explanation popups */
+
+function explanationPopupHandle(clickedID){
+    if($("#"+clickedID+"_popup").hasClass("selected")) {
+        // destyle popup
+        $("#"+clickedID+"_popup").removeClass("selected");
+        
+    } else {
+        // style the calling link part
+        $("#"+clickedID+"_popup").addClass("selected");
+       
+    }
+    return false;
+}

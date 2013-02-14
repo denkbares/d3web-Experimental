@@ -11,12 +11,30 @@ margin-left: 20px;}
 
 .solution > img { margin-right: 5px; margin-left:12px; display: table-cell;}
 
-.solutiontext{display: table-cell; vertical-align:middle;}
 
-.solLink{text-decoration: underline; color: blue; cursor: pointer; padding-right: 5px; }
+.solText{vertical-align: top;}
 
-.solText{padding-right: 5px;}
+.linkstyle{text-decoration: underline; color: blue; cursor: pointer; padding-right: 5px; }
 
-.solScore{}
+.solScore{vertical-align: top;}
+
 
 .bottomSpace{margin-bottom: 10px;}
+
+.explanationPopup{background-color:#FFFFFF;
+  border:1px solid #999999;
+  cursor:default;
+  display:none;
+  margin-top: 15px;
+  position:absolute;
+  text-align:left;
+  width:394px;
+  z-index:50;
+  padding: 25px 25px 20px;
+    color: black;
+}
+
+
+.selected{
+    display: block;
+}

@@ -286,42 +286,4 @@ public class SolutionPanelBasicD3webRenderer {
         return result;
 
     }
-
-    /**
-     * Basic Explanation Renderer switch. Calls corresponding subrenderer for
-     * constructing an explanation according to what was specified in XML as
-     * explanation type.
-     *
-     * @param solution
-     * @return
-     */
-    protected String renderExplanationForSolution(Solution solution, Session d3webs) {
-
-        String renderedExplanation = "";
-        UISolutionPanelSettings.ExplanationType expType =
-                uiSolPanelSet.getExplanationType();
-
-        // ToDo differentiate between single/multiple solution
-        if (expType == UISolutionPanelSettings.ExplanationType.TEXTUAL) {
-            // TODO: render only a plain text representation here
-            SolutionExplanationTextualD3webRenderer textualSolRenderer =
-                    new SolutionExplanationTextualD3webRenderer();
-
-            System.out.println("TEXTUAL EXPLANATION for solution" + solution.getName() + ": ");
-            System.out.println(textualSolRenderer.renderExplanationForSolution(solution, d3webs));
-                   
-
-            return textualSolRenderer.renderExplanationForSolution(solution, d3webs);
-        } else if (expType == UISolutionPanelSettings.ExplanationType.TREEMAP) {
-            System.out.println("Treemap Explanation Rendering");
-            // TODO: render treemap explanation
-        } else if (expType == UISolutionPanelSettings.ExplanationType.RULEGRAPH) {
-            // TODO: render rulegraph explanation
-        } else if (expType == UISolutionPanelSettings.ExplanationType.CLARI) {
-            System.out.println("Clarification Dialog Solution Rendering");
-            // TODO render clarification dialog explanation
-        }
-
-        return renderedExplanation;
-    }
 }
