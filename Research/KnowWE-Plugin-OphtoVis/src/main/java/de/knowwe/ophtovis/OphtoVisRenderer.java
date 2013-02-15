@@ -26,16 +26,13 @@ import de.knowwe.core.user.UserContext;
 
 public class OphtoVisRenderer implements Renderer {
 
-	public void rekTeilbaueumeAbarbeiten() {
-
-	}
 
 	@Override
 	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		String concept = sec.getText().substring(4, sec.getText().length() - 2);
 
-		string.append(Visualization.visualize(concept));
+		string.append(Visualization.visualize(concept, true));
 	}
 
 

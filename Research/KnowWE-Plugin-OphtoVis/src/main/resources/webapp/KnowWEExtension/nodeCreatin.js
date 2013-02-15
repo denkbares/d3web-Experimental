@@ -1,4 +1,4 @@
-function createKnoten(name, startx, starty,stringID,parentID){	
+function createKnoten(name, startx,stringID,parentID){	
 var listEntry= document.createElement('li');
 frameDiv = document.createElement('div');
   newdiv = document.createElement('div');
@@ -6,11 +6,11 @@ frameDiv = document.createElement('div');
 frameDiv.setAttribute('id', stringID);
 newdiv.setAttribute('onclick', "location='Wiki.jsp?page="+name+"'");
 //attributes for nodes are stored in css class node
-frameDiv.className="window ui-draggable node";
+frameDiv.className="window node";
 newdiv.innerHTML="<p><nobr>"+name+"</nobr></p>";
 //attributes are stored in css class
 subDiv.className="buttons back";
-subDiv.setAttribute("hid","false");
+$(subDiv).attr("hid",true);
 subDiv.setAttribute('onclick', "event.stopPropagation(); bottonClick("+stringID+",this)");
 frameDiv.appendChild(subDiv);
 frameDiv.appendChild(newdiv);
@@ -24,22 +24,15 @@ return listEntry;
 
 //create leaf node
 // subDiv Button not included in FrameDiv
-function createLeafNode(name, startx, starty,stringID,parentID){	
+function createLeafNode(name, startx,stringID,parentID){	
 var listEntry= document.createElement('li');
 frameDiv = document.createElement('div');
   newdiv = document.createElement('div');
-//  subDiv = document.createElement('div'); 
 frameDiv.setAttribute('id', stringID);
 newdiv.setAttribute('onclick', "location='Wiki.jsp?page="+name+"'");
 //attributes for nodes are stored in css class node
-frameDiv.className="window ui-draggable node";
+frameDiv.className="window node";
 newdiv.innerHTML="<p><nobr>"+name+"</nobr></p>";
-//attributes are stored in css class
-
-//subDiv.className="button blue";
-//subDiv.setAttribute("hid","false");
-//subDiv.setAttribute('onclick', "event.stopPropagation(); bottonClick("+stringID+",this)");
-//frameDiv.appendChild(subDiv);
 frameDiv.appendChild(newdiv);
 listEntry.appendChild(frameDiv);
 var test ="#ul"+parentID;
@@ -52,30 +45,41 @@ return listEntry;
 
 function bottonClick(id, instance){
 	blockScreen();
-	$(document).ready(function() {
-		var str = "#ul"+ id;
-		});
-var str = "#ul"+ id;
-$($("#"+id).children()[0]).toggleClass('fwd');
-$($("#"+id).children()[0]).toggleClass('back');
-if(!instance.hid){
-$(str).hide();
-instance.hid=true;
-instance.style.backgroundColor='red';
-var connections =jsPlumb.select({source: id+""}).getParameter();
-	
-for(var i=0,j=connections.length; i<j; i++){
-  if(connections[i][1].getPaintStyle().strokeStyle=="black"){
-  	jsPlumb.detach(connections[i][1]);
-  }
-};
-jsPlumb.repaintEverything();
-unBlockScreen();
-}else{
-var found = $(str).show();
-instance.hid=false;
-instance.style.backgroundColor='green';
-restoreKnoten(id);
+	var str = "#ul"+ id;
+	$($("#"+id).children()[0]).toggleClass('fwd');
+	$($("#"+id).children()[0]).toggleClass('back');
+	var hidden = $(instance).attr("hid");
+	if(hidden=="false"){
+		alert("sichtbar");
+		
+		var zusammen = "ul" +(id+1);
+		alert("going to hide" + zusammen);
+		$(window[zusammen]).hide();
+		//$(str).hide();
+		//$(instance).children().closest("ul").hide();
+		var connections =jsPlumb.select({source: id+""}).getParameter();
+		for(var i=0,j=connections.length; i<j; i++){
+  			if(connections[i][1].getPaintStyle().strokeStyle=="black"){
+  				jsPlumb.detach(connections[i][1]);
+  			}
+		};
+		jsPlumb.repaintEverything();
+		unBlockScreen();
+		$(instance).attr("hid",true);
+		alert("wieder hidden");
+	}else if(hidden=="true"){
+		alert("hidden");
+		$(instance).attr("hid",false);
+		alert("nimmer hidden");
+		if (typeof(window[str]) == "undefined"){
+			var parentString =$("#"+id).parent().parent().attr("id");
+			var parent = parentString.substring(2);
+ 			getChilds($("#"+id).children().children().text(),id,parent);
+		}else{
+			var found = $(window[str]).show();
+			restoreKnoten(id);
+}
+
 }
 }
 function restoreKnoten(id){
@@ -99,11 +103,11 @@ unBlockScreen();
 }
 
 function blockScreen(){
-	 $.blockUI();
+	// $.blockUI();
 }
 function unBlockScreen(){
 	
-	$.unblockUI();
+	//$.unblockUI();
 }
 
 function createUL(name,parent){
@@ -115,6 +119,13 @@ $("#ul" + parent).append(list);
 }else{
 $(knots).append(list);	
 }
+}
+function createULAjax(name,parent,father){
+var list= document.createElement('ul');
+list.style.listStyleType = "none";
+list.setAttribute('id', 'ul' + name);
+$(list).insertAfter($("#"+father));
+jsPlumb.repaintEverything();
 }
 function createULRelative(name,parent,xcor,ycor){
 var list= document.createElement('ul');
@@ -162,3 +173,74 @@ container:$(contain)
 		document.body.style.fontSize = fontSize + "em";
 		jsPlumb.repaintEverything();
 	}
+
+function testAjax() {
+	
+		var params = {
+			action : 'AjaxAction',
+			node   : 'Kapselsackveränderung',
+		}
+	
+		var options = {
+			url : KNOWWE.core.util.getURL(params),
+			loader : false,
+			response : {
+				fn : function() {
+					alert(this.responseText);
+					eval(this.responseText);
+				},
+				onError : onErrorBehavior,
+			}
+		}
+	
+		new _KA(options).send();
+	
+	}
+	function getChilds(nodeName,nodeId,parentId) {
+		//alert("Ajax on its way");
+	
+		var params = {
+			action 		: 'AjaxAction',
+			node   		:  nodeName,
+			id			: nodeId ,
+			parent		: parentId
+		}
+	
+		var options = {
+			url : KNOWWE.core.util.getURL(params),
+			loader : false,
+			response : {
+				fn : function() {
+					eval(this.responseText);
+					 $(document).ready(function() {
+						jsPlumb.repaintEverything();
+					});
+					
+				},
+				onError : onErrorBehavior,
+			}
+		}
+	
+		new _KA(options).send();
+	
+	}
+
+
+function onErrorBehavior() {
+	if (this.status == null)
+		return;
+	switch (this.status) {
+	case 0:
+		// server not running, do nothing.
+		break;
+	case 409:
+		alert("There already is a build running for this dashbaord. Please abort the running build before starting a new one.");
+		break;
+	case 404:
+		alert("This page no longer exists. Please reload.");
+		break;
+	default:
+		// alert("Error " + this.status + ". Please reload the page.");
+		break;
+	}
+}

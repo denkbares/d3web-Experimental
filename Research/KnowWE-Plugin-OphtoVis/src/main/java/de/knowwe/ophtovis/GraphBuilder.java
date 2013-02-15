@@ -1,29 +1,27 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.ophtovis;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 
 /**
  * 
@@ -31,25 +29,25 @@ import java.util.List;
  * @created 22.10.2012
  */
 public class GraphBuilder {
-	
+	static GraphBuilder getInstance(){
+		return new GraphBuilder("");
+	}
+
 	public GraphBuilder(String startNodeName) {
 		this.startNodeName = startNodeName;
 	}
 
 	private final int startLeftCo = 200;
-	private final int startTopCo = 75;
 	private final int add2Left = 250;
-	private final int add2Top = 50;
 	int leftCo = startLeftCo;
-	int topCo = startTopCo;
 	int leftCoMax = 0;
 	int id = 1;
 
 	List<String> temporalConnection;
 	String startNodeName;
-	
-	List<GraphNode> nodeAndCoList = new ArrayList<GraphNode>();
-	
+
+	List<GraphNode> nodeAndCoList = new LinkedList<GraphNode>();
+
 	public List<GraphNode> getNodeAndCoList() {
 		return nodeAndCoList;
 	}
@@ -67,113 +65,119 @@ public class GraphBuilder {
 	}
 
 	List<GraphNodeConnection> connections = new LinkedList<GraphNodeConnection>();
-	
-
 
 	// Initialisierung
-	
-	public void buildGraph(){
-		
+
+	public void buildGraph() {
+
 		// Startknoten
-		GraphNode startNode = buildNode(startNodeName, getStartLeftCo(), getStartTopCo(), 1, false);
+		GraphNode startNode = buildNode(startNodeName, getStartLeftCo(), 1, false);
 
 		do {
 			nodeAndCoList.add(startNode);
-			buildNodeAndCoList(startNode, startNode.getLeftCo() + add2Left, startNode.getId());
+			buildNodeAndCoList(startNode, startNode.getLeftCo() + add2Left, startNode.getId(), true);
 			temporalConnection = DataBaseHelper.getConnectedNodeNamesOfType(
 					startNode.getName(), "temporalGraph", true);
 			if (!temporalConnection.isEmpty()) {
-				topCo = getStartTopCo();
 				GraphNode tempNode = buildNode(temporalConnection.get(0), leftCoMax + add2Left,
-						getStartTopCo(), ++id, false);
+						++id, false);
 				connections.add(new GraphNodeConnection(startNode, tempNode, "temporal"));
 				startNode = tempNode;
 			}
 		} while (!temporalConnection.isEmpty());
-		
+
 	}
-	
-	
 
 	// Starknoten bauen
 
-	public GraphNode buildNode(String nodeName, int leftCor, int topCor, int parentId, boolean haveChildren) {
+	public GraphNode buildNode(String nodeName, int leftCor, int parentId, boolean haveChildren) {
 
-		GraphNode startNode = new GraphNode(nodeName, leftCor, topCor, id++, parentId, haveChildren);
-		topCo += add2Top;
+		GraphNode startNode = new GraphNode(nodeName, leftCor, id++, parentId, haveChildren);
 
 		return startNode;
 
 	}
 
-	// -----------------------------------------------------------------------------------------------------------------------------------------------
-
+	
 	@SuppressWarnings("rawtypes")
-	public List<GraphNode> buildNodeAndCoList(GraphNode node, int leftCo, int parentID)
+	public List<GraphNode> buildNodeAndCoList(GraphNode node, int leftCo, int parentID, boolean getChilds)
 	{
 		String nodeName = node.getName();
+		id=node.getId();
 		// TODO connectionTypes
 		List<String> childrenNames = DataBaseHelper.getConnectedNodeNamesOfType(nodeName,
 				"unterkonzept", false);
 
-		boolean hasChildren = false;
-
-		if (!childrenNames.isEmpty()) {
-			hasChildren = true;
-		}
-
-		node.setHasChildren(hasChildren);
-
-		for (String string : childrenNames) {
-			GraphNode node2add = new GraphNode(string, leftCo, topCo, ++id, node.getId(),
+		node.hasChildren = !childrenNames.isEmpty();
+			boolean first = true;
+			GraphNode node2add;
+		for (String name : childrenNames) {
+			if(first){
+				node2add = new GraphNode(name, leftCo, ++id, parentID,
 					false);
-			System.out.println("neuer node cor " + leftCo);
+			first=false;
+			}else{
+			node2add = new GraphNode(name, leftCo, ++id, node.getId(),
+						false);
+			}
 			nodeAndCoList.add(node2add);
 			connections.add(new GraphNodeConnection(node, node2add, "unterkonzept"));
-			topCo += add2Top;
-			// TODO Textformatierungen
-			String oldFormatName = "";
+			String queryName = "";
 			try {
-				oldFormatName = URLEncoder.encode(node.getName(), "UTF-8");
+				queryName = URLEncoder.encode(name, "UTF-8");
 			}
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
 
 			List<String> nextChildrenOfNode = DataBaseHelper.getConnectedNodeNamesOfType(
-					oldFormatName, "unterkonzept", false);
+					queryName, "unterkonzept", false);
 			if (!nextChildrenOfNode.isEmpty()) {
 
 				node2add.setHasChildren(true);
-
 				int leftCoAct = leftCo + add2Left;
 				this.leftCo = leftCoAct;
 				if (leftCoAct > leftCoMax) {
 					leftCoMax = leftCoAct;
 				}
-				buildNodeAndCoList(node2add, leftCoAct, id);
+				if (getChilds) {
+					buildNodeAndCoList(node2add, leftCoAct, id, getChilds);
+				}
 			}
 		}
 
 		return nodeAndCoList;
 
 	}
-	
+
 	public int getAdd2Left() {
 		return add2Left;
-	}
-
-	public int getAdd2Top() {
-		return add2Top;
 	}
 
 	public int getStartLeftCo() {
 		return startLeftCo;
 	}
 
-	public int getStartTopCo() {
-		return startTopCo;
-	}
+	public void buildMinGraph() {
+	
 
+			// Startknoten
+			GraphNode startNode = buildNode(startNodeName, getStartLeftCo(), 1, false);
 
+			do {
+				nodeAndCoList.add(startNode);
+				buildNodeAndCoList(startNode, startNode.getLeftCo() + add2Left, startNode.getId(), false);
+				temporalConnection = DataBaseHelper.getConnectedNodeNamesOfType(
+						startNode.getName(), "temporalGraph", true);
+				if (!temporalConnection.isEmpty()) {
+					GraphNode tempNode = buildNode(temporalConnection.get(0), leftCoMax + add2Left,
+							++id, false);
+					connections.add(new GraphNodeConnection(startNode, tempNode, "temporal"));
+					startNode = tempNode;
+				}
+			} while (!temporalConnection.isEmpty());
+
+		}
+		
+	
 }

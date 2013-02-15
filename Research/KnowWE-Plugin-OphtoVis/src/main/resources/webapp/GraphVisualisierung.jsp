@@ -49,12 +49,21 @@ String findParam( PageContext ctx, String key )
 	UserActionContext context = new ActionContext(parameters.get("action"), AbstractActionServlet.getActionFollowUpPath(request), parameters, request, response, wiki.getServletContext(), manager);
 	
 	String concept = parameters.get("concept");
+	String min= parameters.get("minimized");
 	
 	// Perform action
 	if(concept == null || concept.length() == 0) {
 		concept = "PRAEOPERATIVE";		
 	}
-	String content = Visualization.visualize(concept);
+	if(min == null || min.length() == 0) {
+		min = "false";		
+	}
+	String content = "";
+	if(min.equals("true")){
+		content = Visualization.visualize(concept,true);
+	}else{
+		content = Visualization.visualize(concept,false);	
+	}
 	content = Strings.unmaskHTML(content);
 	
 	%><%=content %>
