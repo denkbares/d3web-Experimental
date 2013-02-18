@@ -174,7 +174,6 @@
 	<modules>
 		<module>KnowWE-Plugin-CI4KE-Groovy-Addons</module>
 		<module>KnowWE-Plugin-Comment</module>
-		<module>KnowWE-Plugin-Calendar</module>
 		<module>KnowWE-Plugin-HermesModule</module>
 		<module>KnowWE-Plugin-Shared</module>
 		<module>KnowWE-Plugin-OneQuestionDialog</module>
