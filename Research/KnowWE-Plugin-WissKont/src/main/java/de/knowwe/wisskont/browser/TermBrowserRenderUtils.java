@@ -19,6 +19,7 @@
 package de.knowwe.wisskont.browser;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import de.knowwe.compile.IncrementalCompiler;
@@ -39,7 +40,7 @@ public class TermBrowserRenderUtils {
 	public static String renderTermBrowser(UserContext user, String searchFieldContent) {
 		StringBuilder string = new StringBuilder();
 		string.append(Strings.maskHTML("<div class='termbrowserframe'>"));
-		string.append(Strings.maskHTML("<div class='termbrowserheader'>Konzepte:</div>"));
+		string.append(Strings.maskHTML("<div class='termbrowserheader'>Benutzte Begriffe:</div>"));
 		string.append(Strings.maskHTML("<div class='ui-widget'><table><tr><td><label for='conceptSearch' style='font-weight:normal;padding-right:0;font: 83%/140% Verdana,Arial,Helvetica,sans-serif;;'>Suche: </label></td><td><input id='conceptSearch' size='15' value='' /></td></tr></table></div>"));
 		string.append(Strings.maskHTML("<script>" +
 				"jq$(document).ready(function() {" +
@@ -57,12 +58,19 @@ public class TermBrowserRenderUtils {
 				"</script>"));
 		List<String> rankedTermList = TermRecommender.getInstance().getRankedTermList(user);
 
+		// sorted is probably more comprehensive
+		List<String> subList = rankedTermList;
+		if (rankedTermList.size() >= 10) {
+			subList = rankedTermList.subList(0, 10);
+		}
+		Collections.sort(subList);
+
 		string.append(Strings.maskHTML("<div class='termlist'>"));
 		boolean zebra = false;
 		for (int i = 0; i < 10; i++) {
 
-			if (i >= rankedTermList.size()) break;
-			String term = rankedTermList.get(i);
+			if (i >= subList.size()) break;
+			String term = subList.get(i);
 			String topic = term;
 			Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 					new TermIdentifier(term));

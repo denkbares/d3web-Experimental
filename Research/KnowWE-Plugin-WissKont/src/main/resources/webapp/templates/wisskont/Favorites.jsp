@@ -107,6 +107,9 @@
     </wiki:NoSuchPage>
   </div>
 
+<div class="breadcrumbs"><b><fmt:message key="header.yourtrail"/></b><wiki:Breadcrumbs /></div>
+
+
   </wiki:Permission>
 
   </wiki:CheckRequestContext>

@@ -35,12 +35,13 @@
     <wiki:Include page="AttachmentTab.jsp"/>
   </wiki:Tab>
   </wiki:PageType>
-    
+  
+  <!--    removed for WISSASS (as taghandler link available to be put into more-menu)
   <wiki:Tab id="info" title='<%=LocaleSupport.getLocalizedMessage(pageContext, "info.tab")%>'
            url="<%=c.getURL(WikiContext.INFO, c.getPage().getName())%>"
            accesskey="i" >
   </wiki:Tab>
-    
+    -->
   </wiki:PageExists>
 
 </wiki:TabbedSection>

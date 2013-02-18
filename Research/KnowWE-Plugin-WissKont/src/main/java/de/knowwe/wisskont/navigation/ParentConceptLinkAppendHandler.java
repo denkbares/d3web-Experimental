@@ -86,7 +86,7 @@ public class ParentConceptLinkAppendHandler implements PageAppendHandler {
 			}
 
 			String result = Strings.maskHTML("<div class='parentBreadcrumb'>") +
-					"Oberkonzept: ";
+					"Oberbegriff: ";
 			result += Strings.concat(", ", resultList);
 			result += Strings.maskHTML("</div>");
 			result += System.getProperty("line.separator");

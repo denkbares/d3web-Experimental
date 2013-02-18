@@ -102,7 +102,7 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 			builder.append(Strings.maskHTML("<div class='termgraphHeader'>"));
 			builder.append(Strings.maskHTML("<span style='float:left;' class='ui-icon ui-icon-circle-plus showGraph'></span>"));
 			builder.append(Strings.maskHTML("<span style='float:left;display:none;' class='ui-icon ui-icon-circle-minus hideGraph'></span>"));
-			builder.append(Strings.maskHTML("<div style=''>Konzeptübersicht</div>"));
+			builder.append(Strings.maskHTML("<div style=''>Übersicht über Begriffsverknüpfungen</div>"));
 			builder.append(Strings.maskHTML("</div>"));
 			builder.append(Strings.maskHTML("<div style='display:none;' class='termgraphcontent'>"));
 			renderingCore.render(builder);

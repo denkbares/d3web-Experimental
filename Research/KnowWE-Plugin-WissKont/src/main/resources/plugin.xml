@@ -123,6 +123,27 @@
 		<parameter id="priority" value="4" />
 	</extension>
 
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="VersionHistoryLinkHandler">
+		<parameter id="class"
+			value="de.knowwe.wisskont.navigation.VersionHistoryLinkHandler" />
+		<parameter id="name" value="VersionHistoryLinkHandler" />
+		<parameter id="description" value="TagHandler VersionHistoryLinkHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="AttachmentsLinkHandler">
+		<parameter id="class"
+			value="de.knowwe.wisskont.navigation.AttachmentsLinkHandler" />
+		<parameter id="name" value="AttachmentsLinkHandler" />
+		<parameter id="description" value="TagHandler AttachmentsLinkHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+	
+	
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
         id="InstantEditToolProvider">

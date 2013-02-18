@@ -33,7 +33,7 @@ import java.util.TreeMap;
  */
 public class RecommendationSet {
 
-	private final Map<String, Double> terms = new HashMap<String, Double>();
+	private Map<String, Double> terms = new HashMap<String, Double>();
 
 	public Collection<String> getRankedTermList() {
 		ValueComparator bvc = new ValueComparator(terms);
@@ -56,6 +56,7 @@ public class RecommendationSet {
 	}
 
 	public void discount(double factor) {
+		Map<String, Double> newValues = new HashMap<String, Double>();
 		Set<String> keySet = terms.keySet();
 		Iterator<String> iterator = keySet.iterator();
 		while (iterator.hasNext()) {
@@ -65,9 +66,10 @@ public class RecommendationSet {
 				// terms.remove(term);
 			}
 			else {
-				terms.put(term, newValue);
+				newValues.put(term, newValue);
 			}
 		}
+		terms = newValues;
 	}
 
 	class ValueComparator implements Comparator<String> {
