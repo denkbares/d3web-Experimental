@@ -2,6 +2,7 @@ package de.knowwe.rdfs.d3web;
 
 import java.util.Collection;
 
+import de.d3web.core.inference.PSMethod;
 import de.d3web.core.inference.PropagationEntry;
 import de.d3web.core.inference.PropagationListener;
 import de.d3web.core.knowledge.TerminologyObject;
@@ -41,6 +42,11 @@ public class Rdf2GoPropagationListener implements PropagationListener {
 	public void postPropagationStarted(Session session, Collection<PropagationEntry> entries) {
 		// nothing to do
 	}
+
+	@Override
+	public void propagating(Session session, PSMethod psMethod, Collection<PropagationEntry> entries) {
+		// nothing to do
+	};
 
 	@Override
 	public void propagationFinished(Session session, Collection<PropagationEntry> entries) {
