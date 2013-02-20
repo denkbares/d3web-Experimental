@@ -41,6 +41,7 @@ import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
+import de.d3web.proket.data.DialogType;
 import de.d3web.proket.data.IndicationMode;
 import de.d3web.proket.output.container.ContainerCollection;
 import java.util.*;
@@ -75,9 +76,9 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
     private static HashMap<String, String> nameToIdMap = new HashMap<String, String>();
     private static HashMap<String, String> idToNameMap = new HashMap<String, String>();
     D3webXMLParser d3webxmlparser = D3webConnector.getInstance().getD3webParser();
-    UISettings uiset = UISettings.getInstance();
     private int columnsGlobal = -1;
     private int columnsLocal = -1;
+    protected UISettings uiset = UISettings.getInstance();
 
     /**
      * Retrieves the appropriate renderer class according to what base object is
@@ -159,7 +160,6 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
         StringBuilder childrenHTML = new StringBuilder();
         D3webConnector d3wcon = D3webConnector.getInstance();
-        UISettings uiset = UISettings.getInstance();
 
         /*
          * get the nr of columns setting for dialog, questionnaires and the
@@ -277,7 +277,10 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                             && !D3webUtils.isIndicatedByIndicatedQuestionnaire(child, to, d3webSession.getBlackboard())) //|| (D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())
                             //|| D3webUtils.isContraIndicated(to, d3webSession.getBlackboard()))
                             ) {
-                        continue;
+                        if (!uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
+                            continue;
+                        }
+
                     }
                 }
             }
@@ -591,7 +594,9 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                             D3webXMLParser.IndicationRepresentation.HIDE)
                             && childsChild instanceof Question) {
                         if (!D3webUtils.isIndicatedByInitQuestionnaire(childsChild, child, d3webSession.getBlackboard())) {
-                            continue;
+                            if (!uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
+                                continue;
+                            }
                         }
                     }
 
@@ -600,7 +605,9 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
                             D3webXMLParser.IndicationRepresentation.HIDE)
                             && childsChild instanceof Question
                             && D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())) {
-                        continue;
+                        if (!uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
+                            continue;
+                        }
                     }
                 }
 
@@ -806,10 +813,10 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
         // skip default d3web root
         if (to.getName().equals("Q000")) {
-            
+
 
             if (to.getChildren().length > 0) {
-                    System.out.println(to.getChildren().toString());
+                System.out.println(to.getChildren().toString());
                 // check default root's children
                 for (TerminologyObject toc : to.getChildren()) {
                     //System.out.println(toc.getName());

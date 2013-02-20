@@ -63,7 +63,9 @@ public class SolutionPanelBasicD3webRenderer {
 
 
         if (solRange == UISolutionPanelSettings.SolutionRange.SINGLE) {
-            // TODO: render only the one best solution presented
+            SolutionPanelSingleSolutionD3webRenderer sSingleRend = 
+                    new SolutionPanelSingleSolutionD3webRenderer();
+            bui.append(sSingleRend.getSolutionRendering(d3webSession));
         } else {
             if (solStruc == UISolutionPanelSettings.SolutionStructuring.LISTING) {
                 SolutionPanelListingD3webRenderer sListRend =
@@ -74,6 +76,7 @@ public class SolutionPanelBasicD3webRenderer {
             }
         }
 
+        System.out.println(bui.toString());   
         return bui.toString();
     }
 

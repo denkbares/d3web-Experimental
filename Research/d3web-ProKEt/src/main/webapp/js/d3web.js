@@ -695,6 +695,15 @@ $('.ynbutton').unbind('click').click(function(event) {
        
 });
      
+/* SingleForm Dialog */
+$('[class^=answerFlat]').unbind('click').click(function(event) {
+    if($(this).attr("class").indexOf("answer-oc")!=-1){
+            d3web_storeQuestionOC($(this).attr("id"));
+            d3web_addFacts();
+    }
+});
+
+
 }
 
 function getHeaderHeight() {
@@ -733,7 +742,7 @@ function getErrorPlaceholder(input){
     return $("#error-" + questionId);
 }
 
-
+// input needs to be the jquery element, NOT an id
 function getQuestionId(input) {
     return getTerminologyId(input, "q");
 }
@@ -874,6 +883,7 @@ function escapeExpression(str) {
 
 function d3web_addFacts() {
 
+alert(ocStore);
     var link = $.query.set("action", "addFacts");
 	
     if (logging) {
@@ -919,7 +929,7 @@ function d3web_addFacts() {
     // check current state: is session still active? Then go on, otherwise
     // redirect to login page
     checkSessionStillValid();
-    //alert(redirectFlag);
+    alert(link);
     
     if(!redirectFlag){
         $.ajax({
@@ -971,8 +981,18 @@ function d3web_addFacts() {
 
 
 function d3web_storeQuestionOC(ocInput) {
-    var ocQuestion = getQuestionId(ocInput);
-    ocStore[ocQuestion] = getAnswerId(ocInput);
+    var ocQuestion;
+    // in flatanswer dialog style, id is defined otherwisely
+    if(ocInput.indexOf("a_q_")!=-1){
+        ocAnswerElement = $("#" + ocInput);
+        ocQuestion = getQuestionId(ocAnswerElement);
+        ocStore[ocQuestion] = ocInput;
+    } else {
+        ocQuestion = getQuestionId(ocInput);
+        ocStore[ocQuestion] = getAnswerId(ocInput);
+    }
+    
+    
 }
 
 function d3web_storeQuestionMC(mcCheckBox) {

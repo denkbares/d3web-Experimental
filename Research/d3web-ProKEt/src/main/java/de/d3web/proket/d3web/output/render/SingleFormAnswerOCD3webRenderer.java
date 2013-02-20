@@ -33,8 +33,6 @@ import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
-import de.d3web.proket.d3web.utils.StringTemplateUtils;
-import de.d3web.proket.data.DialogType;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 import javax.servlet.http.HttpSession;
@@ -47,7 +45,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Martina Freiberg @created 15.01.2011
  */
-public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements AnswerD3webRenderer {
+public class SingleFormAnswerOCD3webRenderer extends AbstractD3webRenderer implements AnswerD3webRenderer {
 
     @Override
     /**
@@ -65,17 +63,12 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
         }
 
         StringTemplate st = null;
-        System.out.println(uiset.getDialogType());
 
         // get the template. In case user prefix was specified, the specific
         // TemplateName is returned, otherwise the base object name.
-        if (uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
-            st = StringTemplateUtils.getTemplate("singleForm/OCAnswerFlat");
-        } else {
-            st = StringTemplateUtils.getTemplate("OcAnswerTabular");
-            //st = TemplateUtils.getStringTemplate(
-            //        super.getTemplateName("OcAnswerTabular"), "html");
-        }
+        st = TemplateUtils.getStringTemplate(
+                super.getTemplateName("OcAnswerFlat"), "html");
+
         st.setAttribute("fullId", getID(c));// .getName().replace(" ", "_"));
         st.setAttribute("realAnswerType", "oc");
         st.setAttribute("parentFullId", getID(to));// getName().replace(" ",
@@ -91,7 +84,6 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
         Value value = bb.getValue((ValueObject) to);
 
 
-        // TODO: question count as property!
         //st.setAttribute("text", c.getName());
         st.setAttribute("text", D3webUtils.getAnswerPrompt(to, c, loc));
         st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
@@ -111,50 +103,36 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
         //System.out.println(parent.getName() + isIndicated(parent, bb));
         //System.out.println();
         // QContainer indicated
-        /*
-         * if
-         * (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
-         * || D3webUtils.isIndicatedPlain(parent, bb) ||
-         * D3webUtils.isIndicatedByChild(parent, bb)) {
-         *
-         * if (D3webUtils.isIndicatedPlain(parent, bb) ||
-         * D3webUtils.isIndicatedPlain(to, bb)) {
-         *
-         *
-         * // show, if indicated follow up if ((D3webUtils.isFollowUpToQCon(to,
-         * parent) && D3webUtils.isIndicatedPlain(to, bb)) ||
-         * (!D3webUtils.isFollowUpToQCon(to, parent))) {
-         * st.removeAttribute("readonly"); st.removeAttribute("inactive");
-         * st.removeAttribute("qstate"); st.setAttribute("qstate", ""); } else {
-         * st.setAttribute("inactive", "true"); st.setAttribute("readonly",
-         * "true"); }
-         *
-         * } else { st.setAttribute("inactive", "true");
-         * st.setAttribute("readonly", "true"); } } else {
-         * st.setAttribute("inactive", "true"); st.setAttribute("readonly",
-         * "true"); }
-         */
+        if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
+                || D3webUtils.isIndicatedPlain(parent, bb) || D3webUtils.isIndicatedByChild(parent, bb)) {
+
+            if (D3webUtils.isIndicatedPlain(parent, bb) || D3webUtils.isIndicatedPlain(to, bb)) {
 
 
+                // show, if indicated follow up
+                if ((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb))
+                        || (!D3webUtils.isFollowUpToQCon(to, parent))) {
+                    st.removeAttribute("readonly");
+                    st.removeAttribute("inactive");
+                    st.removeAttribute("qstate");
+                    st.setAttribute("qstate", "");
+                } else {
+                    st.setAttribute("inactive", "true");
+                    st.setAttribute("readonly", "true");
+                }
 
-        if (D3webUtils.isIndicatedByInitQuestionnaire(to, parent, bb)
-                || D3webUtils.isIndicatedPlain(to, bb)
-                || (D3webUtils.isIndicatedByChild(parent, bb) && D3webUtils.isDirectQContainerChild(to))
-                || (D3webUtils.isIndicatedPlain(parent, bb) && D3webUtils.isDirectQContainerChild(to))
-                || ((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb)) || !D3webUtils.isFollowUpToQCon(to, parent))) {
-
-            st.removeAttribute("inactive");
-            st.removeAttribute("readonly");
-            st.removeAttribute("qstate");
-            st.setAttribute("qstate", "");
-
-        } else {
-            if (!uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
-
-                st.setAttribute("readonly", "true");
+            } else {
                 st.setAttribute("inactive", "true");
+                st.setAttribute("readonly", "true");
             }
+        } else {
+            st.setAttribute("inactive", "true");
+            st.setAttribute("readonly", "true");
         }
+
+
+
+
 
 
 
@@ -163,7 +141,8 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
         if (value.toString().equals(c.toString())) {
 
             // if to=question is abstraction question, was readonly before, but
-            // value has been set (e.g. by other answer & Kb indication), remove
+            // value
+            // has been set (e.g. by other answer & Kb indication), remove
             // readonly
             if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
                 st.removeAttribute("readonly");

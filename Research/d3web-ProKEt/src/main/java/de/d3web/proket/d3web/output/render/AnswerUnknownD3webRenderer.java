@@ -33,6 +33,8 @@ import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
+import de.d3web.proket.d3web.utils.StringTemplateUtils;
+import de.d3web.proket.data.DialogType;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 import javax.servlet.http.HttpSession;
@@ -49,9 +51,16 @@ public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements
         StringBuilder sb = new StringBuilder();
         StringTemplate st = null;
 
+        if (uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
+            st = StringTemplateUtils.getTemplate("singleForm/UnknownAnswerFlat");
+        } else {
+            st = StringTemplateUtils.getTemplate("UnknownTabular");
+            //st = TemplateUtils.getStringTemplate(
+            //        super.getTemplateName("OcAnswerTabular"), "html");
+        }
         // Get the fitting template.
-        st = TemplateUtils.getStringTemplate(
-                super.getTemplateName("UnknownTabular"), "html");
+        // st = TemplateUtils.getStringTemplate(
+        //       super.getTemplateName("UnknownTabular"), "html");
 
         // set basic properties
         Choice choiceUnknown = new Choice("Unknown");
@@ -64,7 +73,6 @@ public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements
         st.setAttribute("title", D3webUtils.getUnknownPrompt(loc));
 
         st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
-
         Blackboard bb = d3webSession.getBlackboard();
         Value value = bb.getValue((ValueObject) to);
 
@@ -96,35 +104,48 @@ public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements
          * "true"); } }
          *
          * else { st.setAttribute("inactive", "true");
-         * st.setAttribute("readonly", "true");
-		}
+         * st.setAttribute("readonly", "true"); }
          */
 
-        if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
-                || D3webUtils.isIndicatedPlain(parent, bb) || D3webUtils.isIndicatedByChild(parent, bb)) {
+        /*
+         * if
+         * (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
+         * || D3webUtils.isIndicatedPlain(parent, bb) ||
+         * D3webUtils.isIndicatedByChild(parent, bb)) {
+         *
+         * if (D3webUtils.isIndicatedPlain(parent, bb) ||
+         * D3webUtils.isIndicatedPlain(to, bb)) {
+         *
+         *
+         * // show, if indicated follow up if ((D3webUtils.isFollowUpToQCon(to,
+         * parent) && D3webUtils.isIndicatedPlain(to, bb)) ||
+         * (!D3webUtils.isFollowUpToQCon(to, parent))) {
+         * st.removeAttribute("readonly"); st.removeAttribute("inactive");
+         * st.removeAttribute("qstate"); st.setAttribute("qstate", ""); } else {
+         * st.setAttribute("inactive", "true"); st.setAttribute("readonly",
+         * "true"); }
+         *
+         * } else { st.setAttribute("inactive", "true");
+         * st.setAttribute("readonly", "true"); } } else {
+         * st.setAttribute("inactive", "true"); st.setAttribute("readonly",
+         * "true");
+        }
+         */
 
-            if (D3webUtils.isIndicatedPlain(parent, bb) || D3webUtils.isIndicatedPlain(to, bb)) {
+        if (D3webUtils.isIndicatedByInitQuestionnaire(to, parent, bb)
+                || D3webUtils.isIndicatedPlain(to, bb)
+                || (D3webUtils.isIndicatedByChild(parent, bb) && D3webUtils.isDirectQContainerChild(to))
+                || (D3webUtils.isIndicatedPlain(parent, bb) && D3webUtils.isDirectQContainerChild(to))
+                || ((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb)) || !D3webUtils.isFollowUpToQCon(to, parent))) {
 
+            st.removeAttribute("inactive");
+            st.removeAttribute("readonly");
+            st.removeAttribute("qstate");
+            st.setAttribute("qstate", "");
 
-                // show, if indicated follow up
-                if ((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb))
-                        || (!D3webUtils.isFollowUpToQCon(to, parent))) {
-                    st.removeAttribute("readonly");
-                    st.removeAttribute("inactive");
-                    st.removeAttribute("qstate");
-                    st.setAttribute("qstate", "");
-                } else {
-                    st.setAttribute("inactive", "true");
-                    st.setAttribute("readonly", "true");
-                }
-
-            } else {
-                st.setAttribute("inactive", "true");
-                st.setAttribute("readonly", "true");
-            }
         } else {
-            st.setAttribute("inactive", "true");
             st.setAttribute("readonly", "true");
+            st.setAttribute("inactive", "true");
         }
 
 

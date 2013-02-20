@@ -90,6 +90,9 @@ public class UISettings {
     
     private boolean largetext = false;
     
+    private boolean questionnaireNumbering = false;
+    private boolean questionNumbering = false;
+    
     
     private D3webXMLParser.IndicationRepresentation showIndicated;
     private D3webXMLParser.IndicationRepresentation showContraIndicated;
@@ -344,6 +347,22 @@ public class UISettings {
 
     public void setLargetext(boolean largetext) {
         this.largetext = largetext;
+    }
+
+    public boolean getQuestionNumbering() {
+        return questionNumbering;
+    }
+
+    public void setQuestionNumbering(boolean questionNumbering) {
+        this.questionNumbering = questionNumbering;
+    }
+
+    public boolean getQuestionnaireNumbering() {
+        return questionnaireNumbering;
+    }
+
+    public void setQuestionnaireNumbering(boolean questionnaireNumbering) {
+        this.questionnaireNumbering = questionnaireNumbering;
     }
     
     

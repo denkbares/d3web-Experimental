@@ -496,6 +496,20 @@ public class D3webXMLParser {
         }
         return "";
     }
+    
+     public Boolean getQuestionNumbering() {
+        if (XMLUtils.getBoolean((Element) globalUIOpts, "questionNumbering") != null) {
+            return XMLUtils.getBoolean((Element) globalUIOpts, "questionNumbering");
+        }
+        return Boolean.FALSE;
+    }
+     
+       public Boolean getQuestionnaireNumbering() {
+        if (XMLUtils.getBoolean((Element) globalUIOpts, "questionnaireNumbering") != null) {
+            return XMLUtils.getBoolean((Element) globalUIOpts, "questionnaireNumbering");
+        }
+        return Boolean.FALSE;
+    }
 
     /*
      * Retrieve LOCALUIOPTS Properties

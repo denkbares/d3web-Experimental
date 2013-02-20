@@ -195,7 +195,7 @@ public class D3webDialog extends HttpServlet {
                 source = dialogID[1];
             }
         }
-
+        System.out.println("D3webDialog: " + source);
         d3webParser.setSourceToParse(source);
         d3wcon = D3webConnector.getInstance();
         d3wcon.setD3webParser(d3webParser);
@@ -203,7 +203,7 @@ public class D3webDialog extends HttpServlet {
 
         // UI settings
         uis = UISettings.getInstance();
-        
+
         // Solution Panel UI Settings
         uisols = UISolutionPanelSettings.getInstance();
 
@@ -225,6 +225,8 @@ public class D3webDialog extends HttpServlet {
 
         String initFromUploadTool = httpSession.getAttribute("initFromUpload") != null
                 ? httpSession.getAttribute("initFromUpload").toString() : "";
+
+        System.out.println("D3webDialog: " + sSave);
 
         // first of all check if we come from upload tool as we need special 
         // reparse handling then
@@ -1202,12 +1204,15 @@ public class D3webDialog extends HttpServlet {
         KnowledgeBase kb = d3wcon.getKb();
         // TODO Urgent: needed for EuraHS due to early reset, but not good
         // for other dialogs!
+        System.out.println("RESET: " + uis.getDialogType());
+
         if (uis.getDialogType().equals(DialogType.EURAHS)) {
             try {
                 //not yet parsed completely/correctly
 
                 if (kb == null) {
                     d3webParser.parse();
+                    System.out.println("RESET: " + d3webParser.getKnowledgeBase());
                     kb = d3webParser.getKnowledgeBase();
                 }
 
@@ -1837,10 +1842,13 @@ public class D3webDialog extends HttpServlet {
             throws IOException {
 
         httpSession.setAttribute("loginit", false);
+        System.out.println("D3webDialog: " + "PARSE");
 
         d3webParser.parse();
+        System.out.println("D3webDialog:" + d3webParser.getKnowledgeBase());
 
         String kbName = "";
+
         // Only parse d3web from XML specs if it was not provided before,
         // e.g., by the DialogManager Servlet
         if (request.getParameter("dialogID") != null) {
@@ -1916,6 +1924,8 @@ public class D3webDialog extends HttpServlet {
         uis.setAutocolumns(d3webParser.getAutocolumnsGlobal());
         uis.setDropdown(d3webParser.getDropdown());
         uis.setLargetext(d3webParser.getLargetext());
+        uis.setQuestionNumbering(d3webParser.getQuestionNumbering());
+        uis.setQuestionnaireNumbering(d3webParser.getQuestionnaireNumbering());
         // for the solution panel
         uisols.setExplanationType(d3webParser.getSolutionExplanationType());
         uisols.setSolutionDepths(d3webParser.getSolutionDepths());
@@ -1924,7 +1934,7 @@ public class D3webDialog extends HttpServlet {
         uisols.setSolutionStructuring(d3webParser.getSolutionStructuring());
         uisols.setDynamics(d3webParser.getSolutionDynamics());
         uisols.setRatingGranularity(d3webParser.getRatingGranularities());
-        
+
         /*
          * local settings
          */

@@ -40,6 +40,8 @@ import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
+import de.d3web.proket.d3web.utils.StringTemplateUtils;
+import de.d3web.proket.data.DialogType;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 import javax.servlet.http.HttpServletRequest;
@@ -81,16 +83,30 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
         StringBuilder sb = new StringBuilder();
 
 
+        StringTemplate st;
         // get the fitting template. In case user prefix was specified, the
         // specific TemplateName is returned, otherwise, the base object name.
-        StringTemplate st = TemplateUtils.getStringTemplate(
-                super.getTemplateName("Question"), "html");
+        if (uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
+            st = StringTemplateUtils.getTemplate("singleForm/QuestionFlat");
+        } else {
+            st = StringTemplateUtils.getTemplate("Question");
+        }
+        //StringTemplate st = TemplateUtils.getStringTemplate(
+        //      super.getTemplateName("Question"), "html");
 
         // set some basic properties
         st.setAttribute("fullId", getID(to));
         st.setAttribute("title", D3webUtils.getTOPrompt(to, loc));
         // st.setAttribute("title", to.getName());
-        st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
+
+        if (uiset.getQuestionNumbering()) {
+            st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
+        }
+
+        // for printing all questions with number and text to the commandline 
+        //System.out.println(D3webConnector.getInstance().getTOCount(to) + "\t"
+        //        + D3webUtils.getTOPrompt(to, loc));
+
 
         // read html popups from properties
         // String resString = to.getInfoStore().getValue(ProKEtProperties.POPUP);
@@ -167,7 +183,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 
 
 
-         if (D3webUtils.isIndicatedByInitQuestionnaire(to, parent, bb)
+        if (D3webUtils.isIndicatedByInitQuestionnaire(to, parent, bb)
                 || D3webUtils.isIndicatedPlain(to, bb)
                 || (D3webUtils.isIndicatedByChild(parent, bb) && D3webUtils.isDirectQContainerChild(to))
                 || (D3webUtils.isIndicatedPlain(parent, bb) && D3webUtils.isDirectQContainerChild(to))
@@ -178,8 +194,9 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
             st.setAttribute("qstate", "");
 
         } else {
-
-            st.setAttribute("inactiveQuestion", "true");
+            if (!uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
+                st.setAttribute("inactiveQuestion", "true");
+            }
         }
 
 

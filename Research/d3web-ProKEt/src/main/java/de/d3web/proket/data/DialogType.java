@@ -35,6 +35,7 @@ public enum DialogType {
      * e.g. in JuriSearch, Clarification modules
      */
     FREECHOICE ("Freechoice"),
+    SINGLEFORM ("SingleForm"),
     /*
      * the JuriSearch Clarification style
      */
