@@ -48,6 +48,6 @@ public class TimeEventDateRenderer implements Renderer {
 		if (date.startsWith("\r\n")) date = date.substring(2);
 
 		String dateDecoded = TimeStamp.decode(date);
-		result.appendHTML("   :   " + dateDecoded + "</h4>\\\\");
+		result.appendHtml("   :   " + dateDecoded + "</h4>\\\\");
 	}
 }

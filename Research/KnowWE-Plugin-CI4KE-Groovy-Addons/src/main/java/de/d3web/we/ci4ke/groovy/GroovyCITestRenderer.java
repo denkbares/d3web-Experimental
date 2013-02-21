@@ -54,15 +54,15 @@ public class GroovyCITestRenderer extends DefaultMarkupRenderer {
 
 		String testname = KnowledgeBaseType.getAnnotation(section,
 				GroovyCITestType.ANNOTATION_NAME);
-		string.appendHTML("<b>" + testname + "</b>\n");
+		string.appendHtml("<b>" + testname + "</b>\n");
 
 		// string.append(KnowWEUtils.maskHTML("<span>\n"));
-		string.appendHTML("<script type=\"syntaxhighlighter\" class=\"brush: groovy\">");
-		string.appendHTML("<![CDATA[\n");
+		string.appendHtml("<script type=\"syntaxhighlighter\" class=\"brush: groovy\">");
+		string.appendHtml("<![CDATA[\n");
 
 		string.append(DefaultMarkupType.getContent(section));
 
-		string.appendHTML("\n]]></script>\n");
+		string.appendHtml("\n]]></script>\n");
 		// string.append(KnowWEUtils.maskHTML("</span>\n"));
 	}
 

@@ -45,9 +45,9 @@ public class MouseOverTitleRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user, RenderResult string) {
-		string.appendHTML("<span title=\"" + sec.get().getName() + "\">");
+		string.appendHtml("<span title=\"" + sec.get().getName() + "\">");
 		DelegateRenderer.getInstance().render(sec, user, string);
-		string.appendHTML("</span>");
+		string.appendHtml("</span>");
 	}
 
 }

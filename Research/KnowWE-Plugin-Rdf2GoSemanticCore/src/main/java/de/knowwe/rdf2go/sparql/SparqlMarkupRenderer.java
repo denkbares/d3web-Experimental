@@ -54,9 +54,9 @@ public class SparqlMarkupRenderer implements Renderer {
 
 		try {
 			if (sparqlString.toLowerCase().startsWith("construct")) {
-				result.appendHTML("<tt>");
+				result.appendHtml("<tt>");
 				result.append(sec.getText());
-				result.appendHTML("</tt>");
+				result.appendHtml("</tt>");
 			}
 			else {
 
@@ -94,7 +94,7 @@ public class SparqlMarkupRenderer implements Renderer {
 
 				setRenderOptions(markupSection, renderOpts);
 
-				if (renderOpts.isBorder()) result.appendHTML("<div class='border'>");
+				if (renderOpts.isBorder()) result.appendHtml("<div class='border'>");
 				if (renderOpts.isSorting()) sparqlString = modifyOrderByInSparqlString(sortMap,
 						sparqlString);
 
@@ -123,13 +123,13 @@ public class SparqlMarkupRenderer implements Renderer {
 					resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
 							resultSet, renderOpts, user);
 				}
-				result.appendHTML(resultEntry.getHTML());
-				if (renderOpts.isBorder()) result.appendHTML("</div>");
+				result.appendHtml(resultEntry.getHTML());
+				if (renderOpts.isBorder()) result.appendHtml("</div>");
 
 			}
 		}
 		catch (ModelRuntimeException e) {
-			result.appendHTML("<span class='warning'>"
+			result.appendHtml("<span class='warning'>"
 					+ e.getMessage() + "</span>");
 		}
 		catch (JSONException e) {
@@ -259,23 +259,23 @@ public class SparqlMarkupRenderer implements Renderer {
 
 		String[] sizeArray = new String[] {
 				"10", "20", "50", "100", "1000", "All" };
-		result.appendHTML("<div class='toolBar'>");
-		result.appendHTML("<span class=fillText>Show </span>"
+		result.appendHtml("<div class='toolBar'>");
+		result.appendHtml("<span class=fillText>Show </span>"
 				+ "<select id='showLines'"
 				+ " onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer('"
 				+ id + "');\">");
 		for (String size : sizeArray) {
 			if (size.equals(selectedSize)) {
-				result.appendHTML("<option selected='selected' value='" + size + "'>" + size
+				result.appendHtml("<option selected='selected' value='" + size + "'>" + size
 						+ "</option>");
 			}
 			else {
-				result.appendHTML("<option value='" + size + "'>" + size
+				result.appendHtml("<option value='" + size + "'>" + size
 						+ "</option>");
 			}
 		}
-		result.appendHTML("</select><span class=fillText> lines </span> ");
-		result.appendHTML("<div class='toolSeparator'></div>");
+		result.appendHtml("</select><span class=fillText> lines </span> ");
+		result.appendHtml("<div class='toolSeparator'></div>");
 	}
 
 	private void renderNavigation(String from, String selectedSize, int max, String id, RenderResult result) {

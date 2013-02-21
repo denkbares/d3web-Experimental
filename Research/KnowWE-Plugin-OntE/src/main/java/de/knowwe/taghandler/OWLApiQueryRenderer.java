@@ -67,7 +67,7 @@ public class OWLApiQueryRenderer implements Renderer {
 			html.append(getDescription(user));
 			html.append("</div>");
 		}
-		string.appendHTML(html.toString());
+		string.appendHtml(html.toString());
 	}
 
 	/**

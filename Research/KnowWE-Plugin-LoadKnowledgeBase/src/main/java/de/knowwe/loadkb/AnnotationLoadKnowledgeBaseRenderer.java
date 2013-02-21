@@ -18,7 +18,7 @@ public final class AnnotationLoadKnowledgeBaseRenderer implements Renderer {
 		String load = section.getText();
 		load = load.replaceFirst("@", "");
 		buffer.append("\n");
-		buffer.appendHTML("<img src='KnowWEExtension/images/ofo.gif'></img> ");
+		buffer.appendHtml("<img src='KnowWEExtension/images/ofo.gif'></img> ");
 		buffer.append(load);
 	}
 

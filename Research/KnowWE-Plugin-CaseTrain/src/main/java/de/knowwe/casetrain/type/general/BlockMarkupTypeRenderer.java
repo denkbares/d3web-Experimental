@@ -38,7 +38,7 @@ public class BlockMarkupTypeRenderer implements Renderer {
 	@Override
 	public void render(Section<?> sec, UserContext user, RenderResult string) {
 
-		string.appendHTML("<div class='"
+		string.appendHtml("<div class='"
 				+ ((BlockMarkupType) sec.get()).getCSSClass()
 				+ "'>");
 		Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
@@ -70,7 +70,7 @@ public class BlockMarkupTypeRenderer implements Renderer {
 		Section<BlockMarkupContent> con =
 				Sections.findSuccessor(sec, BlockMarkupContent.class);
 		BlockMarkupContentRenderer.getInstance().render(con, user, string);
-		string.appendHTML("</div>");
+		string.appendHtml("</div>");
 
 		// string.append(KnowWEUtils.maskHTML("</pre>"));
 	}

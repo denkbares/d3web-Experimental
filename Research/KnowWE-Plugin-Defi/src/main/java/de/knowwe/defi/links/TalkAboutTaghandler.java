@@ -73,6 +73,6 @@ public class TalkAboutTaghandler extends AbstractTagHandler {
 		talkAbout.append("Mit Berater dar&uuml;ber sprechen");
 		talkAbout.append("</a>");
 
-		result.appendHTML(talkAbout.toString());
+		result.appendHtml(talkAbout.toString());
 	}
 }

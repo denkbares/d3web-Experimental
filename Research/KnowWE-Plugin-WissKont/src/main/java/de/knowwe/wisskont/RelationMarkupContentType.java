@@ -67,14 +67,14 @@ public class RelationMarkupContentType extends AbstractType {
 
 			@Override
 			public void renderPre(Section<?> section, UserContext user, RenderResult string) {
-				string.appendHTML("<div class='relationMarkupContent' id='"
+				string.appendHtml("<div class='relationMarkupContent' id='"
 						+ section.getID() + "'>");
 
 			}
 
 			@Override
 			public void renderPost(Section<?> section, UserContext user, RenderResult string) {
-				string.appendHTML("</div>");
+				string.appendHtml("</div>");
 
 			}
 		}));
@@ -165,7 +165,7 @@ public class RelationMarkupContentType extends AbstractType {
 					public void render(Section<?> section, UserContext user, RenderResult string) {
 						Section<SimpleReference> ref = Sections.cast(section,
 								SimpleReference.class);
-						string.appendHTML("<a href='" + RDFSUtil.getURI(ref)
+						string.appendHtml("<a href='" + RDFSUtil.getURI(ref)
 								+ "'>" + section.getText() + "</a>");
 
 					}

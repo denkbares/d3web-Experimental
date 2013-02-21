@@ -48,15 +48,15 @@ public class RDFXMLExportButtonHandler extends AbstractTagHandler {
 				"&" + Attributes.WEB + "=" + Environment.DEFAULT_WEB +
 				"&" + "filename" + "=" + "ontology" + ".xml'";
 
-		html.appendHTML("<a href=\"javascript:");
-		html.appendHTML(jsAction);
-		html.appendHTML(";void(0);\" ");
-		html.appendHTML("\" title=\"");
-		html.appendHTML(Strings.encodeHtml(description));
-		html.appendHTML("\" class=\"onte-button left small\">");
-		html.appendHTML("<img src=\"KnowWEExtension/images/disk.png\" style=\"");
-		html.appendHTML("background: url('").appendHTML("KnowWEExtension/images/disk.png").appendHTML(
+		html.appendHtml("<a href=\"javascript:");
+		html.appendHtml(jsAction);
+		html.appendHtml(";void(0);\" ");
+		html.appendHtml("\" title=\"");
+		html.appendHtml(Strings.encodeHtml(description));
+		html.appendHtml("\" class=\"onte-button left small\">");
+		html.appendHtml("<img src=\"KnowWEExtension/images/disk.png\" style=\"");
+		html.appendHtml("background: url('").appendHtml("KnowWEExtension/images/disk.png").appendHtml(
 				"') no-repeat scroll center 6px transparent; height: 22px;width: 22px;");
-		html.appendHTML("\" /></a>");
+		html.appendHtml("\" /></a>");
 	}
 }

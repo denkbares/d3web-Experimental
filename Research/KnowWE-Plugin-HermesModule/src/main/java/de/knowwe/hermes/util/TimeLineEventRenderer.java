@@ -109,7 +109,7 @@ public class TimeLineEventRenderer {
 		sb.append("</div>\n</div>\n");
 
 		if (maskHTMLTags) {
-			result.appendHTML(sb.toString());
+			result.appendHtml(sb.toString());
 		}
 		else {
 			result.append(sb.toString());

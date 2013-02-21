@@ -128,7 +128,7 @@ public class BoxRenderer implements Renderer {
 		DelegateRenderer.getInstance().render(sec, user, ret);
 
 		ret.append("</td></tr>\n</table>\n");
-		string.appendHTML(ret.toStringRaw());
+		string.appendHtml(ret.toStringRaw());
 	}
 
 }

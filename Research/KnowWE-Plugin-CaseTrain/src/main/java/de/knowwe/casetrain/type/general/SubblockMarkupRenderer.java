@@ -34,7 +34,7 @@ public class SubblockMarkupRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user, RenderResult string) {
-		string.appendHTML("<div class='"
+		string.appendHtml("<div class='"
 				+ ((SubblockMarkup) sec.get()).getCSSClass()
 				+ "'>");
 
@@ -43,6 +43,6 @@ public class SubblockMarkupRenderer implements Renderer {
 		MouseOverTitleRenderer.getInstance().render(
 				Sections.findSuccessor(sec, SubblockMarkupContent.class), user,
 				string);
-		string.appendHTML("</div>");
+		string.appendHtml("</div>");
 	}
 }

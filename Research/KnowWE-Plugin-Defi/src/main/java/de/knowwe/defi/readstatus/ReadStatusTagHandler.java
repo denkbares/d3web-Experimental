@@ -80,7 +80,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 			if (DashTreeUtils.getDashLevel(rootUnit) == 0) {
 				// Datum der Einheit
 				if (rootCounter >= dates.size()) {
-					result.appendHTML("<p>Fehler: Zu wenig Zeiteinheiten im <a href='Wiki.jsp?page=Zeitplan'>Zeitplan</a> vorhanden</p>");
+					result.appendHtml("<p>Fehler: Zu wenig Zeiteinheiten im <a href='Wiki.jsp?page=Zeitplan'>Zeitplan</a> vorhanden</p>");
 					return;
 				}
 
@@ -139,7 +139,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 
 		}
 
-		result.appendHTML(readstatus.toString());
+		result.appendHtml(readstatus.toString());
 	}
 
 	/**

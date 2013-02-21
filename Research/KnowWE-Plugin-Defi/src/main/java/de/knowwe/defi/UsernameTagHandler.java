@@ -46,7 +46,7 @@ public class UsernameTagHandler extends AbstractTagHandler {
 				+ "'>"
 				+ userContext.getUserName() + "</a>");
 
-		result.appendHTML(username.toString());
+		result.appendHtml(username.toString());
 	}
 
 }

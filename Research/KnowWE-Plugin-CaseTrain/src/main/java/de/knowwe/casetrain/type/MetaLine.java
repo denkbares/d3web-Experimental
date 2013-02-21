@@ -52,9 +52,9 @@ public class MetaLine extends AbstractType {
 
 			@Override
 			public void render(Section<?> sec, UserContext user, RenderResult string) {
-				string.appendHTML("<tr>");
+				string.appendHtml("<tr>");
 				DelegateRenderer.getInstance().render(sec, user, string);
-				string.appendHTML("</tr>");
+				string.appendHtml("</tr>");
 			}
 		});
 

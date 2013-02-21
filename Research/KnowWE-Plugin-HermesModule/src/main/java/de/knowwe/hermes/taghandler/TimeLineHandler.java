@@ -68,7 +68,7 @@ public class TimeLineHandler extends AbstractHTMLTagHandler {
 		}
 		try {
 			QueryResultTable resultIter = Rdf2GoCore.getInstance().sparqlSelect(querystring);
-			result.appendHTML(renderQueryResult(resultIter, values, asList));
+			result.appendHtml(renderQueryResult(resultIter, values, asList));
 		}
 		catch (ModelRuntimeException e) {
 			e.printStackTrace();

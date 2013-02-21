@@ -50,7 +50,7 @@ public class ShowHierarchyRenderer implements Renderer {
 	@Override
 	public void render(Section<?> section, UserContext user, RenderResult string) {
 
-		string.appendHTML("<pre>");
+		string.appendHtml("<pre>");
 
 		String startConceptString = DefaultMarkupType.getAnnotation(section,
 				ShowHierarchyMarkup.START_CONCEPT);
@@ -72,7 +72,7 @@ public class ShowHierarchyRenderer implements Renderer {
 			renderSubconceptsOf(concept, relation, 1, string);
 
 		}
-		string.appendHTML("</pre>");
+		string.appendHtml("</pre>");
 	}
 
 	/**
@@ -137,9 +137,9 @@ public class ShowHierarchyRenderer implements Renderer {
 				new TermIdentifier(name));
 		URI uri = RDFSUtil.getURI(defs.iterator().next());
 
-		result.appendHTML("<a href='" + uri.toString() + "'>");
+		result.appendHtml("<a href='" + uri.toString() + "'>");
 		result.append(name);
-		result.appendHTML("</a>");
+		result.appendHtml("</a>");
 	}
 
 	/**

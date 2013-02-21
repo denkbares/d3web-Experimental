@@ -12,9 +12,9 @@ public class TableLineRenderer implements Renderer {
 	public void render(Section<?> section, UserContext user,
 			RenderResult string) {
 
-		string.appendHTML("<tr>");
+		string.appendHtml("<tr>");
 		DelegateRenderer.getInstance().render(section, user, string);
-		string.appendHTML("</tr>");
+		string.appendHtml("</tr>");
 
 	}
 

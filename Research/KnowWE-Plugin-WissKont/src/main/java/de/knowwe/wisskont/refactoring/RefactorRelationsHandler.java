@@ -52,16 +52,16 @@ public class RefactorRelationsHandler extends AbstractTagHandler {
 				"&" + Attributes.USER + "=" + userContext.getUserName() +
 				"&" + Attributes.WEB + "=" + Environment.DEFAULT_WEB + "'";
 
-		html.appendHTML("<a href=\"javascript:");
-		html.appendHTML(jsAction);
-		html.appendHTML(";void(0);\" ");
-		html.appendHTML("\" title=\"");
-		html.appendHTML(Strings.encodeHtml(description));
-		html.appendHTML("\" class=\"onte-button left small\">");
-		html.appendHTML("<img src=\"KnowWEExtension/images/dt_icon_realisation2.gif\" style=\"");
-		html.appendHTML("background: url('").appendHTML("KnowWEExtension/images/disk.png").appendHTML(
+		html.appendHtml("<a href=\"javascript:");
+		html.appendHtml(jsAction);
+		html.appendHtml(";void(0);\" ");
+		html.appendHtml("\" title=\"");
+		html.appendHtml(Strings.encodeHtml(description));
+		html.appendHtml("\" class=\"onte-button left small\">");
+		html.appendHtml("<img src=\"KnowWEExtension/images/dt_icon_realisation2.gif\" style=\"");
+		html.appendHtml("background: url('").appendHtml("KnowWEExtension/images/disk.png").appendHtml(
 				"') no-repeat scroll center 6px transparent; height: 16px;width: 16px;");
-		html.appendHTML("\" /></a>");
+		html.appendHtml("\" /></a>");
 
 	}
 

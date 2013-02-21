@@ -55,7 +55,7 @@ public class AboutMeRenderer implements Renderer {
 		}
 		noneHTML.append("</div>");
 
-		string.appendHTML(noneHTML.toString());
+		string.appendHtml(noneHTML.toString());
 	}
 
 	/**

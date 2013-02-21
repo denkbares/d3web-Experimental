@@ -144,7 +144,7 @@ public class ForumRenderer implements Renderer {
 				addCommentBox(ret, rb);
 			}
 		}
-		string.appendHTML(ret.toStringRaw());
+		string.appendHtml(ret.toStringRaw());
 	}
 
 	/**

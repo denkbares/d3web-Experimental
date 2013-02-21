@@ -12,10 +12,10 @@ public class TurtleN3Renderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user, RenderResult string) {
-		string.appendHTML("<pre id=\""
+		string.appendHtml("<pre id=\""
 				+ sec.getID()
 				+ "\" class=\"turtle-instantedit-pre\">");
-		string.appendHTML("<div class=\"casetrain-instantedit\">");
+		string.appendHtml("<div class=\"casetrain-instantedit\">");
 
 		RenderResult buffy = new RenderResult(user);
 		DelegateRenderer.getInstance().render(sec, user, buffy);
@@ -25,8 +25,8 @@ public class TurtleN3Renderer implements Renderer {
 		result = result.replaceAll("\\]", "~]");
 		string.append(result);
 
-		string.appendHTML("</div>");
-		string.appendHTML("</pre>");
+		string.appendHtml("</div>");
+		string.appendHtml("</pre>");
 
 	}
 

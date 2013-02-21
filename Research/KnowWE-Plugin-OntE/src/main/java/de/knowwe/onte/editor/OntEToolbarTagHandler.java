@@ -50,7 +50,7 @@ public class OntEToolbarTagHandler extends AbstractHTMLTagHandler {
 	public void renderHTML(String web, String topic, UserContext user, Map<String, String> parameters, RenderResult html) {
 
 		if (parameters.get("help") != null) { // print help message
-			html.appendHTML(getDescription(user));
+			html.appendHtml(getDescription(user));
 			return;
 		}
 
@@ -60,12 +60,12 @@ public class OntEToolbarTagHandler extends AbstractHTMLTagHandler {
 
 		ToolbarButton[] buttons = ToolbarUtils.getButtons(article, user);
 
-		html.appendHTML("<div class=\"onte-buttons onte-buttonbar\" style=\"width: 100%; height: 44px;\">");
+		html.appendHtml("<div class=\"onte-buttons onte-buttonbar\" style=\"width: 100%; height: 44px;\">");
 		for (ToolbarButton button : buttons) {
-			html.appendHTML(ToolbarUtils.getButtonHTML(button));
+			html.appendHtml(ToolbarUtils.getButtonHTML(button));
 
 		}
-		html.appendHTML("</div>");
+		html.appendHtml("</div>");
 	}
 
 	/**

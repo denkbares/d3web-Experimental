@@ -40,19 +40,19 @@ public class TabMenuFakeHandler extends AbstractTagHandler {
 
 			String baseUrl = Environment.getInstance().getWikiConnector().getBaseUrl();
 
-			result.appendHTML("<div class='tabmenu'>");
+			result.appendHtml("<div class='tabmenu'>");
 			for (String page : pageNames) {
 				String clazz = "";
 				if (page.trim().equals(section.getTitle())) {
 					clazz = "activetab";
 				}
-				result.appendHTML("<a href='" + baseUrl
+				result.appendHtml("<a href='" + baseUrl
 						+ "Wiki.jsp?page=" + page.trim()
 						+ "' class='" + clazz + "'>");
 				result.append(page.trim());
-				result.appendHTML("</a>");
+				result.appendHtml("</a>");
 			}
-			result.appendHTML("</div>");
+			result.appendHtml("</div>");
 			return;
 
 		}

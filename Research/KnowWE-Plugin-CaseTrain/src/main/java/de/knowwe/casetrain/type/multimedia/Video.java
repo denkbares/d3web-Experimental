@@ -45,10 +45,10 @@ public class Video extends MultimediaItem {
 			public void render(Section<?> sec, UserContext user, RenderResult string) {
 				Section<MultimediaItemContent> bildURL = Sections.findChildOfType(sec,
 						MultimediaItemContent.class);
-				string.appendHTML("<img height='70' src='");
+				string.appendHtml("<img height='70' src='");
 				string.append("attach/" + sec.getArticle().getTitle() + "/");
 				string.append(bildURL.getText().trim());
-				string.appendHTML("'></img>");
+				string.appendHtml("'></img>");
 			}
 		});
 

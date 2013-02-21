@@ -87,7 +87,7 @@ public class CreateMapHandler extends AbstractHTMLTagHandler {
 
 				+ "</td></table>\n";
 
-		result.appendHTML(text);
+		result.appendHtml(text);
 	}
 
 }

@@ -103,7 +103,7 @@ public class AnnotationInlineAnswerRenderer implements Renderer {
 				// return KnowWEUtils.maskHTML(DefaultTextType
 				// .getErrorUnknownConcept(op, text));
 				// }
-				result.appendHTML("<a href=\"#" + sec.getID() + "\"></a>");
+				result.appendHtml("<a href=\"#" + sec.getID() + "\"></a>");
 				appendRenderedInput(q.getName(), q.getName(), kb.getId(), user, "Annotation", text,
 						op, result);
 			}
@@ -114,12 +114,12 @@ public class AnnotationInlineAnswerRenderer implements Renderer {
 	}
 
 	private static void appendErrorQ404(String question, String text, RenderResult result) {
-		result.appendHTML("<span class=\"semLink\"><a href=\"#\" title=\""
+		result.appendHtml("<span class=\"semLink\"><a href=\"#\" title=\""
 				+ "Question not found:"
 				+ question
 				+ "\" >");
 		result.append(text);
-		result.appendHTML("</a></span>");
+		result.appendHtml("</a></span>");
 
 	}
 
@@ -129,11 +129,11 @@ public class AnnotationInlineAnswerRenderer implements Renderer {
 		question = Strings.encodeURL(question);
 		// text=URLEncoder.encode(text);
 
-		result.appendHTML("<span class=\"semLink\" "
+		result.appendHtml("<span class=\"semLink\" "
 				+ "rel=\"{type: '" + type + "', objectID: '" + questionid
 				+ "', termName: '" + text + "', user:'" + userName + "'}\">");
 		result.append(text);
-		result.appendHTML("</span>");
+		result.appendHtml("</span>");
 	}
 
 }

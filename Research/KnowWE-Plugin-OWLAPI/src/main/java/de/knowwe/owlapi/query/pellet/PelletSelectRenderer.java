@@ -42,7 +42,7 @@ public class PelletSelectRenderer implements Renderer {
 			html.append(PelletSparqlSelect.getDescription(user));
 			html.append("</div>");
 		}
-		string.appendHTML(html.toString());
+		string.appendHtml(html.toString());
 	}
 
 	/**

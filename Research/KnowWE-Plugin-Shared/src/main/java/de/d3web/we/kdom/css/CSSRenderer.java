@@ -71,8 +71,8 @@ public class CSSRenderer implements Renderer {
 	 * @return
 	 */
 	private void wrapWithCSS(String content, String style, RenderResult result) {
-		result.appendHTML("<span style='" + style + "'>");
+		result.appendHtml("<span style='" + style + "'>");
 		result.append(content);
-		result.appendHTML("</span>");
+		result.appendHtml("</span>");
 	}
 }

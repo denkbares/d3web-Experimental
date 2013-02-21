@@ -122,7 +122,7 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 			html.append(warningHTML);
 			html.append("</dl></div>");
 		}
-		result.appendHTML(html.toString());
+		result.appendHtml(html.toString());
 	}
 
 	/**

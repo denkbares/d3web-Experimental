@@ -56,7 +56,7 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 		}
 		catch (Exception e) {
 			result.append("Illegal query String: " + querystring);
-			result.appendHTML("<br />");
+			result.appendHtml("<br />");
 			result.append(" no valid parameter for: "
 					+ TIME_AFTER);
 			return;
@@ -82,7 +82,7 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 	private String renderQueryResult(ClosableIterator<QueryRow> result, Map<String, String> params, RenderResult buffy) {
 		// List<String> bindings = result.getBindingNames();
 		try {
-			buffy.appendHTML("<ul>");
+			buffy.appendHtml("<ul>");
 			boolean found = false;
 			TreeMap<TimeStamp, String> queryResults = new TreeMap<TimeStamp, String>();
 			while (result.hasNext()) {
@@ -96,9 +96,9 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 					TimeStamp timeStamp = new TimeStamp(timeString);
 					String timeDescr = timeStamp.getDescription();
 					RenderResult queryRenderResult = new RenderResult(buffy);
-					queryRenderResult.appendHTML("<li>");
+					queryRenderResult.appendHtml("<li>");
 					queryRenderResult.append(timeDescr + ": " + title);
-					queryRenderResult.appendHTML("</li>");
+					queryRenderResult.appendHtml("</li>");
 					queryResults.put(timeStamp, queryRenderResult.toStringRaw());
 				}
 				// Set<String> names = set.getBindingNames();
@@ -113,7 +113,7 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 				buffy.append(s);
 			}
 			if (!found) buffy.append("no results found");
-			buffy.appendHTML("</ul>");
+			buffy.appendHtml("</ul>");
 		}
 		catch (ModelRuntimeException e) {
 			return "error";

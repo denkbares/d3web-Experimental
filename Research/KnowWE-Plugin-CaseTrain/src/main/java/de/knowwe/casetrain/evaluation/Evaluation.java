@@ -76,10 +76,10 @@ public class Evaluation extends BlockMarkupType {
 			@Override
 			public void render(Section<?> sec, UserContext user,
 					RenderResult string) {
-				string.appendHTML("<div class='"
+				string.appendHtml("<div class='"
 						+ ((Evaluation) sec.get()).getCSSClass()
 						+ "'>");
-				string.appendHTML("<div class='Evaluationstart'></div>");
+				string.appendHtml("<div class='Evaluationstart'></div>");
 				Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 				Utils.renderKDOMReportMessageBlock(
 						Messages.getErrors(Messages.getMessagesFromSubtree(
@@ -95,8 +95,8 @@ public class Evaluation extends BlockMarkupType {
 				Section<BlockMarkupContent> con =
 						Sections.findSuccessor(sec, BlockMarkupContent.class);
 				BlockMarkupContentRenderer.getInstance().render(con, user, string);
-				string.appendHTML("<div class='Evaluationend'></div>");
-				string.appendHTML("</div>");
+				string.appendHtml("<div class='Evaluationend'></div>");
+				string.appendHtml("</div>");
 			}
 		});
 

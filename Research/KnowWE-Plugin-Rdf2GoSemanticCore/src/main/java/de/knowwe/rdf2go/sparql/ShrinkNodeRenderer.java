@@ -13,9 +13,9 @@ public class ShrinkNodeRenderer implements SparqlResultNodeRenderer {
 			String titleText = text.replaceAll("\"", "&#34;");
 			titleText = text.replaceAll("'", "&#39;");
 			RenderResult result = new RenderResult(user);
-			result.appendHTML("<span title='" + titleText + "'>");
+			result.appendHtml("<span title='" + titleText + "'>");
 			result.append(text.substring(0, maxLength - 3) + "...");
-			result.appendHTML("</span>");
+			result.appendHtml("</span>");
 			return result.toStringRaw();
 		}
 		return text;

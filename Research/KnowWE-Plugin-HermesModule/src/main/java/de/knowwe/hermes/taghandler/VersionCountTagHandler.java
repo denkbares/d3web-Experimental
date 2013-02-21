@@ -66,6 +66,6 @@ public class VersionCountTagHandler extends AbstractHTMLTagHandler {
 		resultString += "</table>";
 		resultString += "</div>";
 		resultString += "</div>";
-		result.appendHTML(resultString);
+		result.appendHtml(resultString);
 	}
 }

@@ -70,11 +70,11 @@ public class ObjectTypeTreeHandler extends AbstractTagHandler {
 		for (Type child_type : t.getChildrenTypes()) {
 			if (doNotRecurse) {
 				sb.append(asterisks(level + 1));
-				sb.appendHTML("<a href=\"#objecttype-"
+				sb.appendHtml("<a href=\"#objecttype-"
 						+ child_type.getName()
 						+ "\" style=\"color: grey !important; text-decoration: underline\" title=\"Go to first occurrence\">");
 				sb.append(child_type.getName());
-				sb.appendHTML("</a>\n");
+				sb.appendHtml("</a>\n");
 
 			}
 			else {

@@ -71,7 +71,7 @@ public class UserlistTaghandler extends AbstractTagHandler {
 		}
 
 		userlist.append("</table>");
-		result.appendHTML(userlist.toString());
+		result.appendHtml(userlist.toString());
 	}
 
 	/**

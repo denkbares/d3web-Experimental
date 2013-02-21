@@ -86,7 +86,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			id = parameters.get(ID);
 		}
 		else {
-			result.appendHTML("<span class='warning'>" + ERROR_MISSING_ID + "</span>");
+			result.appendHtml("<span class='warning'>" + ERROR_MISSING_ID + "</span>");
 			return;
 		}
 
@@ -135,7 +135,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 		}
 		builder.append("</div>");
 
-		result.appendHTML(builder.toString());
+		result.appendHtml(builder.toString());
 	}
 
 	/**

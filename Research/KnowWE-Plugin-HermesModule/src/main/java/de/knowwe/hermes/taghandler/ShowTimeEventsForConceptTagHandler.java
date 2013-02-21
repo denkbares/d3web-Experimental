@@ -50,10 +50,10 @@ public class ShowTimeEventsForConceptTagHandler extends AbstractHTMLTagHandler {
 				.findTimeEventsInvolvingConcept(concept);
 		Collections.sort(events);
 
-		result.appendHTML("<div class=\"panel\">");
-		result.appendHTML("<h3>");
+		result.appendHtml("<div class=\"panel\">");
+		result.appendHtml("<h3>");
 		result.append("Ereignisse für \"" + concept + "\":");
-		result.appendHTML("</h3><div>");
+		result.appendHtml("</h3><div>");
 
 		if (events != null) {
 			for (TimeEvent timeEvent : events) {
@@ -61,6 +61,6 @@ public class ShowTimeEventsForConceptTagHandler extends AbstractHTMLTagHandler {
 						false, result);
 			}
 		}
-		result.appendHTML("</div></div>");
+		result.appendHtml("</div></div>");
 	}
 }

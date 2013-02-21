@@ -34,7 +34,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 		// no kb would cause massive amount of nullpointers
 		KnowledgeBase kb = D3webUtils.getKnowledgeBase(user.getWeb(), master);
 		if (kb == null) {
-			string.appendHTML("<div id=\"testcases\">No Knowledgebase found on "
+			string.appendHtml("<div id=\"testcases\">No Knowledgebase found on "
 					+ master + "</div>");
 			return;
 		}
@@ -76,7 +76,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 		ResourceBundle rb = D3webUtils.getD3webBundle(context);
 		MessageFormat mf = new MessageFormat("");
 		String analysisResult = TestCaseExecutorUtils.renderTestAnalysisResult(t, result, rb, mf);
-		string.appendHTML(analysisResult);
+		string.appendHtml(analysisResult);
 
 	}
 
@@ -90,9 +90,9 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 						+ "/" + file);
 
 				if (attachment != null) {
-					html.appendHTML("<div>");
+					html.appendHtml("<div>");
 					html.append("Run testcases in file '" + file + "'.");
-					html.appendHTML("</div>");
+					html.appendHtml("</div>");
 				}
 			}
 			catch (IOException e) {
@@ -101,10 +101,10 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 
 		}
 
-		html.appendHTML("<div id='testcases'>");
-		html.appendHTML("<div class=\"runCasesButton\" onclick=\"return TestCaseExecutor.runTestcaseFromSection('"
+		html.appendHtml("<div id='testcases'>");
+		html.appendHtml("<div class=\"runCasesButton\" onclick=\"return TestCaseExecutor.runTestcaseFromSection('"
 				+ section.getID() + "')\"></div>");
-		html.appendHTML("</div>");
+		html.appendHtml("</div>");
 	}
 
 	/**
@@ -127,23 +127,23 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 		}
 
 		// html.append("<h2 class=\"testExecutor\"> TestCase Executor </h2>");
-		html.appendHTML("<p></p><div id=\"testcases\"><strong>Available Files with Testcases:</strong><br/><br/>");
+		html.appendHtml("<p></p><div id=\"testcases\"><strong>Available Files with Testcases:</strong><br/><br/>");
 
-		html.appendHTML("<select onChange=\"return TestCaseExecutor.getTestcases(" + null + ",'"
+		html.appendHtml("<select onChange=\"return TestCaseExecutor.getTestcases(" + null + ",'"
 				+ master + "')\">");
-		html.appendHTML("<option value=\"\">-- Choose file --</option>");
+		html.appendHtml("<option value=\"\">-- Choose file --</option>");
 		for (WikiAttachment attachment : attachments) {
 			if (attachment.getFileName().matches("stc.*\\.xml")) {
-				html.appendHTML("<option value=\"" + attachment + "\">");
+				html.appendHtml("<option value=\"" + attachment + "\">");
 				html.append(attachment);
-				html.appendHTML("</option>");
+				html.appendHtml("</option>");
 
 			}
 		}
 
-		html.appendHTML("</select>");
-		html.appendHTML("</div>");
-		html.appendHTML("<br />");
+		html.appendHtml("</select>");
+		html.appendHtml("</div>");
+		html.appendHtml("<br />");
 	}
 
 }

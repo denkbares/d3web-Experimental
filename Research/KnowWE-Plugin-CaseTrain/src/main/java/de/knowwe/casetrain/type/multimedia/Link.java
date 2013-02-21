@@ -52,23 +52,23 @@ public class Link extends MultimediaItem {
 					RenderResult string) {
 				Section<MultimediaItemContent> linkURL = Sections.findChildOfType(sec,
 						MultimediaItemContent.class);
-				string.appendHTML(
+				string.appendHtml(
 						"<span title=\"Link\" class=\"casetrainlink\">");
 				Section<Url> url = Sections.findChildOfType(sec, Url.class);
-				string.appendHTML("<a href=\"");
+				string.appendHtml("<a href=\"");
 				String linkString = linkURL.getText().trim();
 				if (!linkString.startsWith("http://"))
 				;
 				string.append("http://");
 				string.append(linkString);
-				string.appendHTML("\">");
+				string.appendHtml("\">");
 				if (url == null)
 				string.append(linkURL.getText().trim());
 				else
 				string.append(url.getText().
 						substring(1, url.getText().length() - 1).trim());
-				string.appendHTML("</a>");
-				string.appendHTML("</span>");
+				string.appendHtml("</a>");
+				string.appendHtml("</span>");
 			}
 		});
 

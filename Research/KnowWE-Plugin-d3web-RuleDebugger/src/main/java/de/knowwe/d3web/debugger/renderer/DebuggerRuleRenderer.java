@@ -80,11 +80,11 @@ public class DebuggerRuleRenderer implements Renderer {
 
 		if (r != null && session != null) {
 			if (r.hasFired(session)) {
-				string.appendHTML("<div class='ruleContentFired' ruleid='"
+				string.appendHtml("<div class='ruleContentFired' ruleid='"
 						+ r.hashCode() + "'>");
 			}
 			else {
-				string.appendHTML("<div class='ruleContent' ruleid='"
+				string.appendHtml("<div class='ruleContent' ruleid='"
 						+ r.hashCode()
 						+ "'>");
 			}
@@ -98,7 +98,7 @@ public class DebuggerRuleRenderer implements Renderer {
 					DelegateRenderer.getInstance().renderSubSection(section, user, string);
 				}
 			}
-			string.appendHTML("</div>");
+			string.appendHtml("</div>");
 		}
 		else {
 			DelegateRenderer.getInstance().render(sec, user, string);
@@ -128,14 +128,14 @@ public class DebuggerRuleRenderer implements Renderer {
 
 		// open div for cond
 		try {
-			if (cond.eval(session)) string.appendHTML("<div class='condTrue'>");
-			else string.appendHTML("<div class='condFalse'>");
+			if (cond.eval(session)) string.appendHtml("<div class='condTrue'>");
+			else string.appendHtml("<div class='condFalse'>");
 		}
 		catch (NoAnswerException e) {
-			string.appendHTML("<div class='condUndefined'>");
+			string.appendHtml("<div class='condUndefined'>");
 		}
 		catch (UnknownAnswerException e) {
-			string.appendHTML("<div class='condUnknown'>");
+			string.appendHtml("<div class='condUnknown'>");
 		}
 
 		// handle div
@@ -198,7 +198,7 @@ public class DebuggerRuleRenderer implements Renderer {
 		}
 
 		// close div for cond
-		string.appendHTML("</div>");
+		string.appendHtml("</div>");
 
 	}
 
@@ -241,9 +241,9 @@ public class DebuggerRuleRenderer implements Renderer {
 					}
 					else if (grandChild.get() instanceof SolutionReference) {
 						if (cond instanceof CondDState) {
-							builder.appendHTML("<span class='debuggerSolution'>");
+							builder.appendHtml("<span class='debuggerSolution'>");
 							builder.append(((CondDState) cond).getSolution());
-							builder.appendHTML("</span>");
+							builder.appendHtml("</span>");
 						}
 					}
 					else {
@@ -275,8 +275,7 @@ public class DebuggerRuleRenderer implements Renderer {
 	private static void delegateMaskJSPWikiMarkup(Section<? extends Type> child, UserContext user, RenderResult builder) {
 		RenderResult buffy = new RenderResult(builder);
 		DelegateRenderer.getInstance().renderSubSection(child, user, buffy);
-		builder.maskJSPWikiMarkup();
-		builder.append(buffy.toStringRaw());
+		builder.appendJSPWikiMarkup(buffy);
 	}
 
 	/**
@@ -289,7 +288,6 @@ public class DebuggerRuleRenderer implements Renderer {
 	private static void renderMaskJSPWikiMarkup(Renderer r, Section<? extends Type> child, UserContext user, RenderResult builder) {
 		RenderResult buffy = new RenderResult(builder);
 		r.render(child, user, buffy);
-		buffy.maskJSPWikiMarkup();
-		builder.append(buffy.toStringRaw());
+		builder.appendJSPWikiMarkup(buffy);
 	}
 }

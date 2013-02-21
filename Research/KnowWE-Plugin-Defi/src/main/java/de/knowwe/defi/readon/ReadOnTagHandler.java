@@ -88,6 +88,6 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 		readon.append("<p><a href='Wiki.jsp?page=" + page + "'>" + page
 				+ "</a></p>");
 
-		result.appendHTML(readon.toString());
+		result.appendHtml(readon.toString());
 	}
 }

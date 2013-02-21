@@ -105,7 +105,7 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 		// placemarks.add(new Placemark("London", 51.3, 0));
 		output += getJavaScript(latitude, longitude, zoom, divId);
 		output += "</div>";
-		result.appendHTML(output);
+		result.appendHtml(output);
 	}
 
 	private static Collection<? extends Placemark> buildPlacemarksForLocation(ClosableIterator<QueryRow> result) {

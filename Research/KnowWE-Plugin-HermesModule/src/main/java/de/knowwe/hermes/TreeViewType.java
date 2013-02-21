@@ -68,9 +68,9 @@ public class TreeViewType extends AbstractType {
 					+ "treeInit" + id + "();"
 					+ "</script>";
 
-			string.appendHTML(pre);
+			string.appendHtml(pre);
 			DelegateRenderer.getInstance().render(sec, user, string);
-			string.appendHTML(post);
+			string.appendHtml(post);
 		}
 	}
 }

@@ -67,8 +67,7 @@ public class PropertyUseTagHandler extends AbstractTagHandler {
 		defaultMarkupRenderer.renderDefaultMarkupStyled(
 				getTagName(), content, sectionID, cssClassName, tools, userContext,
 				buffer);
-		buffer.maskJSPWikiMarkup();
-		result.append(buffer);
+		result.appendJSPWikiMarkup(buffer);
 	}
 
 	private String renderContent(Section<?> section, UserContext userContext, Map<String, String> parameters) {
@@ -90,7 +89,7 @@ public class PropertyUseTagHandler extends AbstractTagHandler {
 
 		if (termReferences != null && termReferences.size() > 0) {
 
-			buffy.appendHTML("Relations for property <b>" + externalForm
+			buffy.appendHtml("Relations for property <b>" + externalForm
 					+ "</b>:<br>");
 
 			URI propURI = RDFSUtil.getURI(termReferences.iterator().next());

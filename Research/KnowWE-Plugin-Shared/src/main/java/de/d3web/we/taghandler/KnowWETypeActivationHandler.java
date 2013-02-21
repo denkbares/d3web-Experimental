@@ -102,6 +102,6 @@ public class KnowWETypeActivationHandler extends AbstractHTMLTagHandler {
 		html.append("</form>");
 		html.append("</div>");
 
-		result.appendHTML(html.toString());
+		result.appendHtml(html.toString());
 	}
 }

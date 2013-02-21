@@ -67,7 +67,7 @@ public class TimeEventSearchHandler extends AbstractHTMLTagHandler {
 
 		s += "<div><p><input onclick='sendTimeEventBackSearchRequest()' type='button' value='vorherige Seite'/>";
 		s += "<input onclick='sendTimeEventNextSearchRequest()' type='button' value='nächste Seite'/></p></div>";
-		result.appendHTML(s);
+		result.appendHtml(s);
 	}
 
 }

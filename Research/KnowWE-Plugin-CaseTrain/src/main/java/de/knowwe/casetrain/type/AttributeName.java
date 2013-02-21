@@ -56,9 +56,9 @@ public class AttributeName extends AbstractType {
 
 			@Override
 			public void render(Section<?> sec, UserContext user, RenderResult string) {
-				string.appendHTML("<td>");
+				string.appendHtml("<td>");
 				DelegateRenderer.getInstance().render(sec, user, string);
-				string.appendHTML("</td>");
+				string.appendHtml("</td>");
 
 			}
 		});

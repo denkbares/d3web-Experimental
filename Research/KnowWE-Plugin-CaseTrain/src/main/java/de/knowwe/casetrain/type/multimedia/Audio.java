@@ -46,9 +46,9 @@ public class Audio extends MultimediaItem {
 			public void render(Section<?> sec, UserContext user, RenderResult string) {
 				Section<MultimediaItemContent> linkURL = Sections.findChildOfType(sec,
 						MultimediaItemContent.class);
-				string.appendHTML("<span title='Audio'>");
+				string.appendHtml("<span title='Audio'>");
 				string.append(linkURL.getText().trim());
-				string.appendHTML("'</span>");
+				string.appendHtml("'</span>");
 			}
 		});
 

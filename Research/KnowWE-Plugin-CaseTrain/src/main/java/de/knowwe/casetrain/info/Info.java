@@ -80,10 +80,10 @@ public class Info extends BlockMarkupType {
 
 			@Override
 			public void render(Section<?> sec, UserContext user, RenderResult string) {
-				string.appendHTML("<div class='"
+				string.appendHtml("<div class='"
 						+ ((Info) sec.get()).getCSSClass()
 						+ "'>");
-				string.appendHTML("<div class='Infostart'></div>");
+				string.appendHtml("<div class='Infostart'></div>");
 				Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 				Utils.renderKDOMReportMessageBlock(
 						Messages.getErrors(Messages.getMessagesFromSubtree(
@@ -100,8 +100,8 @@ public class Info extends BlockMarkupType {
 				Section<BlockMarkupContent> con =
 						Sections.findSuccessor(sec, BlockMarkupContent.class);
 				BlockMarkupContentRenderer.getInstance().render(con, user, string);
-				string.appendHTML("<div class='Infoend'></div>");
-				string.appendHTML("</div>");
+				string.appendHtml("<div class='Infoend'></div>");
+				string.appendHtml("</div>");
 			}
 		});
 

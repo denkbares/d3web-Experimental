@@ -35,7 +35,7 @@ public class ArticleLinkNodeRenderer implements SparqlResultNodeRenderer {
 			if (Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB)
 					.getTitles().contains(title)) {
 				foundArticle = true;
-				articleLinks[i] = new RenderResult(user).appendHTML(
+				articleLinks[i] = new RenderResult(user).appendHtml(
 						KnowWEUtils.getURLLinkHTMLToArticle(title)).toStringRaw();
 			}
 			else {

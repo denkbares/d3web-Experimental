@@ -32,7 +32,7 @@ public class PrivateCommunicationTaghandler extends AbstractTagHandler {
 
 		html.append(renderPrivateCommunicationFrame(userContext, to));
 
-		result.appendHTML(html.toString());
+		result.appendHtml(html.toString());
 	}
 
 	public String renderPrivateCommunicationFrame(UserContext context, String to) {

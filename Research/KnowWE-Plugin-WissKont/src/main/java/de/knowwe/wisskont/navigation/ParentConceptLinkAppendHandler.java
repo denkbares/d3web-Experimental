@@ -64,7 +64,7 @@ public class ParentConceptLinkAppendHandler implements PageAppendHandler {
 			if (!resultIterator.hasNext()) {
 				return;
 			}
-			result.appendHTML("<div class='parentBreadcrumb'>");
+			result.appendHtml("<div class='parentBreadcrumb'>");
 			result.append("Oberkonzept: ");
 			while (resultIterator.hasNext()) {
 				QueryRow parentConceptResult = resultIterator.next();
@@ -81,13 +81,13 @@ public class ParentConceptLinkAppendHandler implements PageAppendHandler {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				result.appendHTML("<a href='" + urlString + "'>");
+				result.appendHtml("<a href='" + urlString + "'>");
 				result.append(termName);
-				result.appendHTML("</a>");
+				result.appendHtml("</a>");
 				if (resultIterator.hasNext()) result.append(", ");
 			}
 
-			result.appendHTML("</div>");
+			result.appendHtml("</div>");
 			result.append("line.separator");
 		}
 	}

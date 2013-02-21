@@ -57,7 +57,7 @@ public class TimeEventRenderer implements Renderer {
 			return;
 		}
 
-		result.appendHTML("%%collapsebox-closed \n<h4> ");
+		result.appendHtml("%%collapsebox-closed \n<h4> ");
 
 		// change color of title depending on importance
 		String style = "color:black";
@@ -74,7 +74,7 @@ public class TimeEventRenderer implements Renderer {
 		// in
 		// TimeEventTitleRenderer
 
-		result.appendHTML("<span style='" + style + "'>");
+		result.appendHtml("<span style='" + style + "'>");
 		DelegateRenderer.getInstance().render(sec, user, result);
 		result.append("/%\n");
 	}

@@ -44,11 +44,11 @@ public class ParseFullLocalPageButton extends AbstractHTMLTagHandler {
 
 		String baseURL = Environment.getInstance().getWikiConnector().getBaseUrl();
 
-		result.appendHTML("<a href=\"" + baseURL + "Wiki.jsp?page="
+		result.appendHtml("<a href=\"" + baseURL + "Wiki.jsp?page="
 				+ theMainTopic
 				+ "&parse=full\" title=\"full parse action for current article\">");
 		result.append(text);
-		result.appendHTML("</a>");
+		result.appendHtml("</a>");
 
 	}
 

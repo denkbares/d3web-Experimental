@@ -113,12 +113,12 @@ public class Utils {
 			className = "error";
 		}
 
-		string.appendHTML("<span class='" + className + "'>");
+		string.appendHtml("<span class='" + className + "'>");
 		for (Message error : messages) {
 			string.append(error.getVerbalization());
-			string.appendHTML("<br/>");
+			string.appendHtml("<br/>");
 		}
-		string.appendHTML("</span>");
+		string.appendHtml("</span>");
 	}
 
 	/**

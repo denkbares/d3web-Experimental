@@ -10,6 +10,6 @@ public class IRITypeRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user, RenderResult string) {
-		string.appendHTML(Strings.encodeHtml(sec.getText()));
+		string.appendHtml(Strings.encodeHtml(sec.getText()));
 	}
 }

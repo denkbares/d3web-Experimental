@@ -51,7 +51,7 @@ public class Rdf2GoPageViewHandler extends AbstractHTMLTagHandler {
 	@Override
 	public void renderHTML(String web, String topic,
 			UserContext user, Map<String, String> values, RenderResult result) {
-		result.appendHTML("<tr><th>S</th><th>P</th><th>O</th></tr>");
+		result.appendHtml("<tr><th>S</th><th>P</th><th>O</th></tr>");
 
 		List<Statement> list = getTopicStatements(topic);
 		RenderResult output = new RenderResult(result);
@@ -76,21 +76,21 @@ public class Rdf2GoPageViewHandler extends AbstractHTMLTagHandler {
 				// o = o.substring(o.indexOf('#') + 1);
 				// p = p.substring(p.indexOf('#') + 1);
 				// p = p.replaceAll("type", "isA");
-				output.appendHTML("<tr><td>");
+				output.appendHtml("<tr><td>");
 				output.append(s);
-				output.appendHTML("</td><td>");
+				output.appendHtml("</td><td>");
 				output.append(p);
-				output.appendHTML("</td><td>");
+				output.appendHtml("</td><td>");
 				output.append(o);
-				output.appendHTML("</td></tr> \n"); // \n only to avoid
+				output.appendHtml("</td></tr> \n"); // \n only to avoid
 													// hmtl-code
 				// being cut by JspWiki
 				// (String.length > 10000)
 			}
 		}
-		result.appendHTML("<table>");
+		result.appendHtml("<table>");
 		result.append(output);
-		result.appendHTML("</table>");
+		result.appendHtml("</table>");
 	}
 
 	public List<Statement> getTopicStatements(String topic) {

@@ -196,10 +196,10 @@ public class IncludeMarkup extends DefaultMarkupType {
 			if (zoom != null) {
 				zoomStyle = "zoom: " + zoom + "%";
 			}
-			builder.appendHTML("<div style=\"white-space:normal;" + zoomStyle + "\">");
+			builder.appendHtml("<div style=\"white-space:normal;" + zoomStyle + "\">");
 			builder.append("\n");
 			renderTarget(user, renderarticle, builder);
-			builder.appendHTML("</div>");
+			builder.appendHtml("</div>");
 			new DefaultMarkupRenderer().renderDefaultMarkupStyled("include",
 					builder.toStringRaw(),
 					section.getID(), "", tools, user,
@@ -209,12 +209,12 @@ public class IncludeMarkup extends DefaultMarkupType {
 
 		public void renderNoFrame(UserContext user, Section<?> renderarticle, RenderResult string, String zoom) {
 			if (zoom != null) {
-				string.appendHTML("<div style=\"zoom: " + zoom + "%\">");
+				string.appendHtml("<div style=\"zoom: " + zoom + "%\">");
 			}
 			string.append("\n");
 			renderTarget(user, renderarticle, string);
 			if (zoom != null) {
-				string.appendHTML("</div>");
+				string.appendHtml("</div>");
 			}
 		}
 

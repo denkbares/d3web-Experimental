@@ -12,9 +12,9 @@ public class TableCellRenderer implements Renderer {
 	public void render(Section<?> section, UserContext user,
 			RenderResult string) {
 
-		string.appendHTML("<td style=\"white-space: normal\">");
+		string.appendHtml("<td style=\"white-space: normal\">");
 		DelegateRenderer.getInstance().render(section, user, string);
-		string.appendHTML("</td>");
+		string.appendHtml("</td>");
 
 	}
 

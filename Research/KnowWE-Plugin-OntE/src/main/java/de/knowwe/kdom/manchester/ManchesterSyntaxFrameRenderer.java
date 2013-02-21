@@ -54,12 +54,12 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 	@Override
 	public void render(Section<?> sec, UserContext user, RenderResult string) {
 
-		string.appendHTML("<pre id=\""
+		string.appendHtml("<pre id=\""
 				+ sec.getID()
 				+ "\"style=\"white-space:pre-wrap;background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;position:relative;margin:0px\">");
 
 		renderMessages(sec, string);
-		string.appendHTML("<div style=\"position:absolute;top:0px;right:0px;border-bottom: 1px solid #E5E5E5;border-left: 1px solid #E5E5E5;padding:5px\">"
+		string.appendHtml("<div style=\"position:absolute;top:0px;right:0px;border-bottom: 1px solid #E5E5E5;border-left: 1px solid #E5E5E5;padding:5px\">"
 				// + getFrameName(sec)
 				// + getEditorIcon(sec)
 				+ renderTools(sec, user)
@@ -73,7 +73,7 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 		frame.replace(frame.length() - 2, frame.length(), "");
 		string.append(frame);
 
-		string.appendHTML("</pre>");
+		string.appendHtml("</pre>");
 	}
 
 	/**
@@ -107,13 +107,13 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 				className = "error";
 			}
 
-			string.appendHTML("<span class='" + className + "'>");
+			string.appendHtml("<span class='" + className + "'>");
 			for (Message msg : messages) {
 				if (msg.getType() != type) continue;
 				string.append(msg.getVerbalization());
 				string.append("\n");
 			}
-			string.appendHTML("</span>");
+			string.appendHtml("</span>");
 		}
 	}
 

@@ -45,6 +45,6 @@ public class TimeEventTitleRenderer implements Renderer {
 		// opening Span-Tag in TimeEventRenderer
 		result.append(title);
 
-		result.appendHTML("</span>");
+		result.appendHtml("</span>");
 	}
 }

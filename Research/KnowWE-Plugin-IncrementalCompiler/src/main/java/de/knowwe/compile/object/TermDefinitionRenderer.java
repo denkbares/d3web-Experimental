@@ -62,8 +62,8 @@ public class TermDefinitionRenderer<TermObject> implements Renderer {
 			}
 		}
 
-		string.appendHTML("<a name='" + sec.getID() + "'>");
-		string.appendHTML("</a>");
+		string.appendHtml("<a name='" + sec.getID() + "'>");
+		string.appendHtml("</a>");
 
 		r.render(sec, user, string);
 

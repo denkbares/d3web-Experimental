@@ -116,7 +116,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 
 		if (!userContext.userIsAsserted()) {
-			result.appendHTML("<p class=\"info\">Bitte melden Sie sich an, um die Seite sehen zu können!</p>");
+			result.appendHtml("<p class=\"info\">Bitte melden Sie sich an, um die Seite sehen zu können!</p>");
 			return;
 		}
 
@@ -403,7 +403,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 			html.append("<script type='text/javascript'>window.onload=function() {prepare25()}</script>");
 		}
 
-		result.appendHTML(html.toString());
+		result.appendHtml(html.toString());
 	}
 
 	/**

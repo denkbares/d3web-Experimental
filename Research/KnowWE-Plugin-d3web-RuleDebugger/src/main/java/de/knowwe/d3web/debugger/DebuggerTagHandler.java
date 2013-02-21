@@ -60,7 +60,7 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 		// If article already contains a debugger, return error.
 		String articleText = Environment.getInstance().getArticle(web, title).getRootSection().getText();
 		if (articleText.split("KnowWEPlugin debugger").length > 2) {
-			result.appendHTML("<p class='info box'>Fehler: Nur ein Debugger pro Artikel!</p>");
+			result.appendHtml("<p class='info box'>Fehler: Nur ein Debugger pro Artikel!</p>");
 			return;
 		}
 		// Get knowledgebase
@@ -109,7 +109,7 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 
 		buffer.append("</div>");
 
-		result.appendHTML(buffer.toString());
+		result.appendHtml(buffer.toString());
 	}
 
 }

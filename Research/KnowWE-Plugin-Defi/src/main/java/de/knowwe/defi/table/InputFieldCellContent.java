@@ -87,12 +87,12 @@ public class InputFieldCellContent extends AbstractType {
 					user.getUserName());
 			int rows = InputFieldCellContent.getHeight(sec);
 			int cols = InputFieldCellContent.getWidth(sec);
-			string.appendHTML("<textarea rows='" + rows + "' cols='"
+			string.appendHtml("<textarea rows='" + rows + "' cols='"
 					+ cols + "' wrap='soft' type='text' id='"
 					+ sec.getID()
 					+ "_" + version + "'>");
 			string.append(contentString);
-			string.appendHTML("</textarea>");
+			string.appendHtml("</textarea>");
 		}
 
 		public static String getStoredContentForInput(Section<?> sec, int version, String username) {

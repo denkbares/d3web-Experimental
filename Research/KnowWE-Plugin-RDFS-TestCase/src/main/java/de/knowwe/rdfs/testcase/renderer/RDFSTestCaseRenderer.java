@@ -32,10 +32,10 @@ public class RDFSTestCaseRenderer extends DefaultMarkupRenderer {
 
 	@Override
 	public void renderContents(Section<?> section, UserContext user, RenderResult string) {
-		string.appendHTML("<pre id=\"" + section.getID()
+		string.appendHtml("<pre id=\"" + section.getID()
 				+ "\" style=\"border:none;margin:0px;\">");
 		super.renderContents(section, user, string);
-		string.appendHTML("</pre>");
+		string.appendHtml("</pre>");
 	}
 
 }

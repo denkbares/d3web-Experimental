@@ -57,7 +57,7 @@ public class BaselineRenderer implements Renderer {
 
 		bob.append("</div>");
 		bob.append("</div>");
-		string.appendHTML(bob.toString());
+		string.appendHtml(bob.toString());
 	}
 
 	private static void renderSelection(UserContext user, StringBuilder bob, Section<?> section, BaselineDiff diff) {

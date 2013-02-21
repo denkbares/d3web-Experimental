@@ -59,14 +59,14 @@ public class SpanClassRenderer implements Renderer {
 	@Override
 	public void render(Section<?> sec, UserContext user,
 			RenderResult string) {
-		string.appendHTML("<span class=\"" + clazz);
+		string.appendHtml("<span class=\"" + clazz);
 
 		for (String clazz : cssClasses)
 			string.append(" " + clazz);
-		string.appendHTML("\">");
+		string.appendHtml("\">");
 
 		MouseOverTitleRenderer.getInstance().render(sec, user, string);
-		string.appendHTML("</span>");
+		string.appendHtml("</span>");
 	}
 
 }

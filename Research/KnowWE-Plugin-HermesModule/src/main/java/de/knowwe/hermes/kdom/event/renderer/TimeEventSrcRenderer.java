@@ -42,7 +42,7 @@ public class TimeEventSrcRenderer implements Renderer {
 	public void render(Section<?> sec, UserContext user,
 			RenderResult result) {
 		if (sec.equals(Sections.findChildOfType(sec.getFather(), Source.class))) {
-			result.appendHTML("\\\\__Quellen:__\\\\");
+			result.appendHtml("\\\\__Quellen:__\\\\");
 		}
 		String source = "no source found";
 		if (sec != null) source = sec.getText();

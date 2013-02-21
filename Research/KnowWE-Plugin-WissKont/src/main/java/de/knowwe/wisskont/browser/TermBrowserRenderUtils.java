@@ -40,10 +40,10 @@ public class TermBrowserRenderUtils {
 
 	public static String renderTermBrowser(UserContext user, String searchFieldContent) {
 		RenderResult string = new RenderResult(user);
-		string.appendHTML("<div class='termbrowserframe'>");
-		string.appendHTML("<div class='termbrowserheader'>Benutzte Begriffe:</div>");
-		string.appendHTML("<div class='ui-widget'><table><tr><td><label for='conceptSearch' style='font-weight:normal;padding-right:0;font: 83%/140% Verdana,Arial,Helvetica,sans-serif;;'>Suche: </label></td><td><input id='conceptSearch' size='15' value='' /></td></tr></table></div>");
-		string.appendHTML("<script>" +
+		string.appendHtml("<div class='termbrowserframe'>");
+		string.appendHtml("<div class='termbrowserheader'>Benutzte Begriffe:</div>");
+		string.appendHtml("<div class='ui-widget'><table><tr><td><label for='conceptSearch' style='font-weight:normal;padding-right:0;font: 83%/140% Verdana,Arial,Helvetica,sans-serif;;'>Suche: </label></td><td><input id='conceptSearch' size='15' value='' /></td></tr></table></div>");
+		string.appendHtml("<script>" +
 				"jq$(document).ready(function() {" +
 				// "$(function() {" +
 				" var availableTags = [" +
@@ -66,7 +66,7 @@ public class TermBrowserRenderUtils {
 		}
 		Collections.sort(subList);
 
-		string.appendHTML("<div class='termlist'>");
+		string.appendHtml("<div class='termlist'>");
 		boolean zebra = false;
 		for (int i = 0; i < 10; i++) {
 
@@ -93,7 +93,7 @@ public class TermBrowserRenderUtils {
 			String url = baseUrl + name;
 			// String divStyle = "display:inline; float:left;";
 			String divStyle = "";
-			string.appendHTML("<div id='draggable' style='"
+			string.appendHtml("<div id='draggable' style='"
 					+ lineStyle
 					+ "'  class='termline'>"
 					+
@@ -124,8 +124,8 @@ public class TermBrowserRenderUtils {
 					"</tr></table></td></tr></table></div>");
 		}
 
-		string.appendHTML("</div>");
-		string.appendHTML("</div>");
+		string.appendHtml("</div>");
+		string.appendHtml("</div>");
 
 		return string.toStringRaw();
 	}

@@ -97,16 +97,16 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 
 			RenderingCore renderingCore = new RenderingCore(
 					user.getServletContext().getRealPath(""), section, parameterMap);
-			result.appendHTML("<div class='termgraph'>");
-			result.appendHTML("<div class='termgraphHeader'>");
-			result.appendHTML("<span style='float:left;' class='ui-icon ui-icon-circle-plus showGraph'></span>");
-			result.appendHTML("<span style='float:left;display:none;' class='ui-icon ui-icon-circle-minus hideGraph'></span>");
-			result.appendHTML("<div style=''>Übersicht über Begriffsverknüpfungen</div>");
-			result.appendHTML("</div>");
-			result.appendHTML("<div style='display:none;' class='termgraphcontent'>");
+			result.appendHtml("<div class='termgraph'>");
+			result.appendHtml("<div class='termgraphHeader'>");
+			result.appendHtml("<span style='float:left;' class='ui-icon ui-icon-circle-plus showGraph'></span>");
+			result.appendHtml("<span style='float:left;display:none;' class='ui-icon ui-icon-circle-minus hideGraph'></span>");
+			result.appendHtml("<div style=''>Übersicht über Begriffsverknüpfungen</div>");
+			result.appendHtml("</div>");
+			result.appendHtml("<div style='display:none;' class='termgraphcontent'>");
 			renderingCore.render(result);
-			result.appendHTML("</div>");
-			result.appendHTML("</div>");
+			result.appendHtml("</div>");
+			result.appendHtml("</div>");
 		}
 		else {
 			if ((conceptMarkups.size() > 1)) {

@@ -66,7 +66,7 @@ public class NamespacesContentRenderer implements Renderer {
 		}
 		buffy.append("</table>");
 		buffy.append("</div>");
-		string.appendHTML(buffy.toString());
+		string.appendHtml(buffy.toString());
 	}
 
 }

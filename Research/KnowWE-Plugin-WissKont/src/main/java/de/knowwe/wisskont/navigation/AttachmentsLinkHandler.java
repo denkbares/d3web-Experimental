@@ -42,7 +42,7 @@ public class AttachmentsLinkHandler extends AbstractTagHandler {
 	@Override
 	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 
-		result.appendHTML("<a id='menu-attach' accesskey='a' class='activetab'><span class='accesskey'>A</span>ttach</a>");
+		result.appendHtml("<a id='menu-attach' accesskey='a' class='activetab'><span class='accesskey'>A</span>ttach</a>");
 
 	}
 	// http://localhost:8080/KnowWE/PageInfo.jsp?page=Ophthalmologische%20Vorbereitung

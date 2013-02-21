@@ -48,14 +48,14 @@ public class DownloadPageAsPDFTaghandler extends AbstractTagHandler {
 			title = " Download as PDF ";
 		}
 
-		result.appendHTML("<a href=\"wiki.pdf?page=" + section.getTitle() + "&ext=.pdf");
-		result.appendHTML("\" title=\"Title:");
+		result.appendHtml("<a href=\"wiki.pdf?page=" + section.getTitle() + "&ext=.pdf");
+		result.appendHtml("\" title=\"Title:");
 		result.append(Strings.encodeHtml(title));
-		result.appendHTML("\" rel=\"nofollow\">");
-		result.appendHTML("<button class=\"defi-bttn defi-download\">");
+		result.appendHtml("\" rel=\"nofollow\">");
+		result.appendHtml("<button class=\"defi-bttn defi-download\">");
 		result.append(title);
-		result.appendHTML("</button>");
-		result.appendHTML("</a>");
+		result.appendHtml("</button>");
+		result.appendHtml("</a>");
 
 	}
 }

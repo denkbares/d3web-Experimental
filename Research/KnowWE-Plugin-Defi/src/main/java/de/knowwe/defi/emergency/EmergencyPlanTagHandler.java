@@ -44,10 +44,10 @@ public class EmergencyPlanTagHandler extends AbstractHTMLTagHandler {
 	@Override
 	public void renderHTML(String web, String topic, UserContext user, Map<String, String> parameters, RenderResult result) {
 
-		result.appendHTML("<a href=\"EmergencyPlan.jsp?user=" + user.getUserName()
+		result.appendHtml("<a href=\"EmergencyPlan.jsp?user=" + user.getUserName()
 				+ "\" title=\"&gt;&gt;Notfallplan erzeugen&lt;&lt;\" target=\"_new\">");
-		result.appendHTML("&gt;&gt;Notfallplan erzeugen&lt;&lt;");
-		result.appendHTML("</a>");
+		result.appendHtml("&gt;&gt;Notfallplan erzeugen&lt;&lt;");
+		result.appendHtml("</a>");
 
 	}
 }

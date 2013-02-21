@@ -72,16 +72,16 @@ public class OneQuestionDialogTagHandler extends AbstractHTMLTagHandler {
 
 		OneQuestionDialogHistory.getInstance().addInterviewObject(o);
 
-		result.appendHTML("<h3 class=\"oneQuestionDialog\">Dialog</h3>");
+		result.appendHtml("<h3 class=\"oneQuestionDialog\">Dialog</h3>");
 
 		if (o == null) {
-			result.appendHTML("<div class=\"oneQuestionDialog\">Keine weiteren Fragen vorhanden</div>");
+			result.appendHtml("<div class=\"oneQuestionDialog\">Keine weiteren Fragen vorhanden</div>");
 			return;
 		}
 
-		result.appendHTML("<div class=\"oneQuestionDialog\">");
+		result.appendHtml("<div class=\"oneQuestionDialog\">");
 		OneQuestionDialogUtils.createNewForm(o, result);
-		result.appendHTML("</div>");
+		result.appendHtml("</div>");
 
 	}
 }

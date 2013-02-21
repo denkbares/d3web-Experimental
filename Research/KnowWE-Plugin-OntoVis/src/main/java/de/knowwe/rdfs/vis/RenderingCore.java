@@ -245,13 +245,13 @@ public class RenderingCore {
 				+ "</object>" + div_close;
 		String format = parameters.get(FORMAT);
 		if (format == null) {
-			string.appendHTML(png_default);
+			string.appendHtml(png_default);
 		}
 		else if (format.equals("svg")) {
-			string.appendHTML(svg);
+			string.appendHtml(svg);
 		}
 		else {
-			string.appendHTML(png_default);
+			string.appendHtml(png_default);
 		}
 	}
 

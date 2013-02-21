@@ -89,7 +89,7 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 					manager.saveOntology(ontology, stream);
 					html.append(Strings.encodeHtml(stream.toString()));
 					html.append("</pre>");
-					result.appendHTML(html.toString());
+					result.appendHtml(html.toString());
 					return;
 				}
 				else if (syntax.equals("owl")) {
@@ -112,7 +112,7 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 			}
 		}
 		html.append("</pre>");
-		result.appendHTML(html.toString());
+		result.appendHtml(html.toString());
 	}
 
 	/**

@@ -91,7 +91,7 @@ public class TimeTableTagHandler extends AbstractTagHandler {
 		timetable.append("<input type='button' onclick='changePersonalTimeTable();' value='Bestätigen' /></form>");
 		timetable.append("</div>");
 
-		result.appendHTML(timetable.toString());
+		result.appendHtml(timetable.toString());
 	}
 
 }

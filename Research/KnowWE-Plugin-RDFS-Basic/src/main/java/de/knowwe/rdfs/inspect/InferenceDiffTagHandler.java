@@ -78,12 +78,12 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 			Collection<Statement> diff = Rdf2GoCore.getInstance().generateStatementDiffForSection(
 					statementSection);
 			// render the difference
-			html.appendHTML("<h3>");
+			html.appendHtml("<h3>");
 			html.append("Diff for: \"" + statementSection.getText() + "\"");
-			html.appendHTML("</h3>");
-			html.appendHTML("<table>");
+			html.appendHtml("</h3>");
+			html.appendHtml("<table>");
 			html.append(renderDiff(diff, user));
-			html.appendHTML("</table>");
+			html.appendHtml("</table>");
 		}
 
 		RenderResult buffer = new RenderResult(user);
@@ -92,8 +92,7 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 				getTagName(), html.toStringRaw(), sectionID, cssClassName, new Tool[] {},
 				user,
 				buffer);
-		buffer.maskJSPWikiMarkup();
-		result.append(buffer);
+		result.appendJSPWikiMarkup(buffer);
 
 	}
 
@@ -107,37 +106,37 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 	private String renderDiff(Collection<Statement> set, UserContext user) {
 		RenderResult result = new RenderResult(user);
 
-		result.appendHTML("<tr>");
-		result.appendHTML("<th>");
+		result.appendHtml("<tr>");
+		result.appendHtml("<th>");
 		result.append("x");
-		result.appendHTML("</th>");
-		result.appendHTML("<th>");
+		result.appendHtml("</th>");
+		result.appendHtml("<th>");
 		result.append("y");
-		result.appendHTML("</th>");
-		result.appendHTML("<th>");
+		result.appendHtml("</th>");
+		result.appendHtml("<th>");
 		result.append("z");
-		result.appendHTML("</th>");
-		result.appendHTML("</tr>");
+		result.appendHtml("</th>");
+		result.appendHtml("</tr>");
 
 		Iterator<Statement> itr = set.iterator();
 		while (itr.hasNext()) {
 			Statement row = itr.next();
 			// x y z (variables names of the query, see above)
 
-			result.appendHTML("<tr>");
-			result.appendHTML("<td>");
+			result.appendHtml("<tr>");
+			result.appendHtml("<td>");
 			result.append(SparqlResultRenderer.getInstance().renderNode(row.getSubject(), null,
 					false, user));
-			result.appendHTML("</td>");
-			result.appendHTML("<td>");
+			result.appendHtml("</td>");
+			result.appendHtml("<td>");
 			result.append(SparqlResultRenderer.getInstance().renderNode(row.getPredicate(), null,
 					false, user));
-			result.appendHTML("</td>");
-			result.appendHTML("<td>");
+			result.appendHtml("</td>");
+			result.appendHtml("<td>");
 			result.append(SparqlResultRenderer.getInstance().renderNode(row.getObject(), null,
 					false, user));
-			result.appendHTML("</td>");
-			result.appendHTML("</tr>");
+			result.appendHtml("</td>");
+			result.appendHtml("</tr>");
 		}
 		return result.toString();
 	}

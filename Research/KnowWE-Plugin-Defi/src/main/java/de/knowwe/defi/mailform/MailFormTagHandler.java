@@ -56,27 +56,27 @@ public class MailFormTagHandler extends AbstractTagHandler {
 			String id = "";
 			if (parameters.containsKey(FORM_NAME)) id = "mf_" + parameters.get(FORM_NAME);
 			else {
-				mailform.appendHTML(
+				mailform.appendHtml(
 						"<p>Jedes Mail-Formular muss eine eindeutige ID besitzen</p>");
 				return;
 			}
 			if (checkID(id, section.getArticle())) {
-				mailform.appendHTML("<p>Jedes Mail-Formular muss eine eindeutige ID besitzen</p>");
+				mailform.appendHtml("<p>Jedes Mail-Formular muss eine eindeutige ID besitzen</p>");
 				return;
 			}
 
-			mailform.appendHTML("<form id='" + id
+			mailform.appendHtml("<form id='" + id
 					+ "' class='mailform'  method='post' enctype='text/plain'>");
-			mailform.appendHTML("<p>Schicken sie uns eine Nachricht:</p>");
-			mailform.appendHTML("<textarea name='nachricht' rows='8' cols='50'></textarea><br>");
-			mailform.appendHTML("<p><input type='button' value='Abschicken' onclick='mailForm(\""
+			mailform.appendHtml("<p>Schicken sie uns eine Nachricht:</p>");
+			mailform.appendHtml("<textarea name='nachricht' rows='8' cols='50'></textarea><br>");
+			mailform.appendHtml("<p><input type='button' value='Abschicken' onclick='mailForm(\""
 					+ id
 					+ "\")' />");
-			mailform.appendHTML("</form>");
+			mailform.appendHtml("</form>");
 
 		}
 		else {
-			mailform.appendHTML("<p>Melden Sie sich bitte an um eine Nachricht zu schreiben.</p>");
+			mailform.appendHtml("<p>Melden Sie sich bitte an um eine Nachricht zu schreiben.</p>");
 		}
 
 	}

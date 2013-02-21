@@ -60,7 +60,7 @@ public class BraceElement extends NonTerminalCondition {
 
 				RenderResult masked = new RenderResult(user);
 				DelegateRenderer.getInstance().render(section, user, masked);
-				string.appendHTML(masked.toStringRaw());
+				string.appendHtml(masked.toStringRaw());
 			}
 		});
 	}

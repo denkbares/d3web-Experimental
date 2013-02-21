@@ -92,7 +92,7 @@ public class TagHandlerListHandler extends AbstractHTMLTagHandler {
 			// > 10000)
 		}
 		html.append("</tbody></table></div></div>");
-		result.appendHTML(html.toString());
+		result.appendHtml(html.toString());
 	}
 
 	@Override

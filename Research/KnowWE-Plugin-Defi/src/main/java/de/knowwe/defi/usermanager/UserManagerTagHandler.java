@@ -121,7 +121,7 @@ public class UserManagerTagHandler extends AbstractTagHandler {
 			builder.append("</table></div>");
 		}
 
-		result.appendHTML(builder.toString());
+		result.appendHtml(builder.toString());
 	}
 
 	/**

@@ -122,13 +122,13 @@ public class LocationDefinitionType extends AbstractType {
 			String originalText = sec.getText();
 			Placemark extractPlacemark = extractPlacemark(sec);
 			if (extractPlacemark == null) {
-				string.appendHTML("<span class='error' title='invalid syntax'>");
+				string.appendHtml("<span class='error' title='invalid syntax'>");
 				string.append(originalText);
-				string.appendHTML("</span>");
+				string.appendHtml("</span>");
 			}
 			else {
 				String htmlString = extractPlacemark.toHTMLString();
-				string.appendHTML(htmlString);
+				string.appendHtml(htmlString);
 			}
 		}
 	}

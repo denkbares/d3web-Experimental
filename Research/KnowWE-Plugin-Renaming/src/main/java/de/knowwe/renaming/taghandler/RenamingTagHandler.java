@@ -161,7 +161,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 		html.append("<div id='rename-result'></div>");
 		html.append("</div>");
 
-		result.appendHTML(html.toString());
+		result.appendHtml(html.toString());
 	}
 
 	private StringBuffer printULTree() {

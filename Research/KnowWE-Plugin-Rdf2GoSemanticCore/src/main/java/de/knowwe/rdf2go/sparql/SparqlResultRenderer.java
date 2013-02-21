@@ -73,27 +73,27 @@ public class SparqlResultRenderer {
 		// for test purpose only (remove afterwards!)
 		// tablemode = true;
 		if (tablemode) {
-			result.appendHTML("<table class='sparqltable'>");
-			result.appendHTML(!zebraMode ? "<tr>" : "<tr class='odd'>");
+			result.appendHtml("<table class='sparqltable'>");
+			result.appendHtml(!zebraMode ? "<tr>" : "<tr class='odd'>");
 			for (String var : variables) {
 
-				result.appendHTML("<td><b>");
-				result.appendHTML("<a href='#/' onclick=\"KNOWWE.plugin.semantic.actions.sortResultsBy('"
+				result.appendHtml("<td><b>");
+				result.appendHtml("<a href='#/' onclick=\"KNOWWE.plugin.semantic.actions.sortResultsBy('"
 						+ var + "','" + opts.getId() + "');\">");
 				result.append(var);
-				result.appendHTML("</a>");
+				result.appendHtml("</a>");
 				if (hasSorting(var, opts.getSortingMap())) {
 					String symbol = getSortingSymbol(var, opts.getSortingMap());
-					result.appendHTML("<img src='KnowWEExtension/images/" + symbol
+					result.appendHtml("<img src='KnowWEExtension/images/" + symbol
 							+ "' alt='Sort by '"
 							+ var + "border='0' /><b/></td>");
 				}
 
 			}
-			result.appendHTML("</tr>");
+			result.appendHtml("</tr>");
 		}
 		else {
-			result.appendHTML("<ul style='white-space: normal'>");
+			result.appendHtml("<ul style='white-space: normal'>");
 		}
 
 		while (iterator.hasNext()) {
@@ -103,10 +103,10 @@ public class SparqlResultRenderer {
 
 			if (tablemode) {
 				if (zebraMode) {
-					result.appendHTML(i % 2 == 0 ? "<tr>" : "<tr class='odd'>");
+					result.appendHtml(i % 2 == 0 ? "<tr>" : "<tr class='odd'>");
 				}
 				else {
-					result.appendHTML("<tr>");
+					result.appendHtml("<tr>");
 				}
 
 			}
@@ -116,19 +116,19 @@ public class SparqlResultRenderer {
 				String erg = renderNode(node, var, rawOutput, user);
 
 				if (tablemode) {
-					result.appendHTML("<td>");
+					result.appendHtml("<td>");
 					result.append(erg);
-					result.appendHTML("</td>\n");
+					result.appendHtml("</td>\n");
 				}
 				else {
-					result.appendHTML("<li>");
+					result.appendHtml("<li>");
 					result.append(erg);
-					result.appendHTML("</li>\n");
+					result.appendHtml("</li>\n");
 				}
 
 			}
 			if (tablemode) {
-				result.appendHTML("</tr>");
+				result.appendHtml("</tr>");
 			}
 			i++;
 		}
@@ -138,10 +138,10 @@ public class SparqlResultRenderer {
 					"KnowWE.owl.query.no_result"));
 		}
 		if (tablemode) {
-			result.appendHTML("</table>");
+			result.appendHtml("</table>");
 		}
 		else {
-			result.appendHTML("</ul>");
+			result.appendHtml("</ul>");
 		}
 		return new SparqlRenderResult(result.toStringRaw(), i);
 	}

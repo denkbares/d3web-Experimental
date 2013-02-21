@@ -35,7 +35,7 @@ public class ParseAllButton extends AbstractHTMLTagHandler {
 	@Override
 	public void renderHTML(String web, String topic,
 			UserContext user, Map<String, String> values, RenderResult result) {
-		result.appendHTML("<input type=\"button\" value=\"ParseAll\" class=\"parseAllButton\"\"><div id=\"parseAllResult\"></div>");
+		result.appendHtml("<input type=\"button\" value=\"ParseAll\" class=\"parseAllButton\"\"><div id=\"parseAllResult\"></div>");
 	}
 
 }

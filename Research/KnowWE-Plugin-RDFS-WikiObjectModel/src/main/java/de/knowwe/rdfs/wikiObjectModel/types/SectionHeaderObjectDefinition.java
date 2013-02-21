@@ -62,9 +62,9 @@ public class SectionHeaderObjectDefinition<TermObject> extends AbstractIRITermDe
 			Section<SectionHeaderObjectDefinition> castedSection = Sections.cast(section,
 					SectionHeaderObjectDefinition.class);
 			String termName = castedSection.get().getTermName(castedSection);
-			string.appendHTML("<a name='"
+			string.appendHtml("<a name='"
 					+ termName.substring(termName.indexOf("#") + 1) + "'>");
-			string.appendHTML("</a>");
+			string.appendHtml("</a>");
 
 			// render tool stuff
 			r.render(section, user, string);

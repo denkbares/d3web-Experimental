@@ -88,18 +88,18 @@ public class MetaData extends BlockMarkupType {
 						+ "\r\n");
 
 				// Quickedit button
-				string.appendHTML("<pre id=\""
+				string.appendHtml("<pre id=\""
 						+ sec.getID()
 						+ "\" class=\"casetrain-instantedit-pre\">");
-				string.appendHTML("<div class=\"casetrain-instantedit\">"
+				string.appendHtml("<div class=\"casetrain-instantedit\">"
 						// + getFrameName(sec)
 						// + getEditorIcon(sec)
 						+ Utils.renderTools(sec, user)
 						// + getLink(sec)
 						+ "</div>");
 
-				string.appendHTML("<table class='wikitable'>");
-				string.appendHTML("<th>Metadaten:</th><th></th>");
+				string.appendHtml("<table class='wikitable'>");
+				string.appendHtml("<th>Metadaten:</th><th></th>");
 
 				Section<BlockMarkupContent> con =
 						Sections.findSuccessor(sec, BlockMarkupContent.class);
@@ -110,10 +110,10 @@ public class MetaData extends BlockMarkupType {
 					l.get().getRenderer().render(l, user, string);
 				}
 
-				string.appendHTML("</table>");
-				string.appendHTML("/%\r\n");
+				string.appendHtml("</table>");
+				string.appendHtml("/%\r\n");
 
-				string.appendHTML("</pre>");
+				string.appendHtml("</pre>");
 			}
 		});
 

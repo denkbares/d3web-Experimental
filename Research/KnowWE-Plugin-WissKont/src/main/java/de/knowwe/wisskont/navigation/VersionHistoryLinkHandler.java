@@ -42,7 +42,7 @@ public class VersionHistoryLinkHandler extends AbstractTagHandler {
 	@Override
 	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 
-		result.appendHTML("<a href='PageInfo.jsp?page=" + userContext.getTitle() + "'>"
+		result.appendHtml("<a href='PageInfo.jsp?page=" + userContext.getTitle() + "'>"
 				+ "Versionshistorie" + "</a>");
 
 	}

@@ -55,7 +55,7 @@ public class HelloWorldTagHandler extends AbstractTagHandler {
 			}
 		}
 
-		result.appendHTML(" <b>Hello World!</b>");
+		result.appendHtml(" <b>Hello World!</b>");
 
 		for (int i = 0; i < number; i++) {
 			result.append("<img src=\"KnowWEExtension/images/helloworld.jpg\" alt=\":)\"/>");

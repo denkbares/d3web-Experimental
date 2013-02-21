@@ -108,7 +108,7 @@ public class OWLApiInferenceTagHandler extends AbstractHTMLTagHandler {
 		}
 
 		html.append("</div>");
-		result.appendHTML(html.toString());
+		result.appendHtml(html.toString());
 	}
 
 	/**

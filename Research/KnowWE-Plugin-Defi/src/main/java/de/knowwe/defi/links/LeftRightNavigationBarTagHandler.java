@@ -48,41 +48,41 @@ public class LeftRightNavigationBarTagHandler extends AbstractTagHandler {
 
 		RenderResult buffy = new RenderResult(result);
 
-		buffy.appendHTML("<center>");
-		buffy.appendHTML("<table>");
-		buffy.appendHTML("<tr>");
+		buffy.appendHtml("<center>");
+		buffy.appendHtml("<table>");
+		buffy.appendHtml("<tr>");
 		if (left != null) {
-			buffy.appendHTML("<td >");
+			buffy.appendHtml("<td >");
 
-			buffy.appendHTML("<a href='Wiki.jsp?page="
+			buffy.appendHtml("<a href='Wiki.jsp?page="
 					+ extractPageName(left)
 					+ "' ><img src='KnowWEExtension/images/Pfeil_nach_links.gif' height='60'/></a>");
-			buffy.appendHTML("</td>");
-			buffy.appendHTML("<td>");
+			buffy.appendHtml("</td>");
+			buffy.appendHtml("<td>");
 			buffy.append(left);
 
-			buffy.appendHTML("</td>");
+			buffy.appendHtml("</td>");
 		}
 		if (center != null) {
-			buffy.appendHTML("<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+			buffy.appendHtml("<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 			buffy.append(center);
-			buffy.appendHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-			buffy.appendHTML("</td>");
+			buffy.appendHtml("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+			buffy.appendHtml("</td>");
 		}
 
 		if (right != null) {
-			buffy.appendHTML("<td>");
+			buffy.appendHtml("<td>");
 			buffy.append(right);
-			buffy.appendHTML("</td>");
-			buffy.appendHTML("<td>");
-			buffy.appendHTML("<a href='Wiki.jsp?page="
+			buffy.appendHtml("</td>");
+			buffy.appendHtml("<td>");
+			buffy.appendHtml("<a href='Wiki.jsp?page="
 					+ extractPageName(right)
 					+ "' > <img src='KnowWEExtension/images/Pfeil_nach_rechts.gif' height='60'/>  </a>");
 		}
-		buffy.appendHTML("</td>");
-		buffy.appendHTML("</tr>");
-		buffy.appendHTML("</table>");
-		buffy.appendHTML("</center>");
+		buffy.appendHtml("</td>");
+		buffy.appendHtml("</tr>");
+		buffy.appendHtml("</table>");
+		buffy.appendHtml("</center>");
 
 		result.append(buffy);
 	}

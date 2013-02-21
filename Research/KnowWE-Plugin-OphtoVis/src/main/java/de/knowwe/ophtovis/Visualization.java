@@ -53,7 +53,7 @@ public class Visualization {
 	 */
 	public static void appendHtmlWrap(String jsCommands, RenderResult result) {
 		String context = Environment.getInstance().getWikiConnector().getServletContext().getContextPath();
-		result.appendHTML(
+		result.appendHtml(
 				"	<link rel=\"stylesheet\" href=\""
 						+ context
 						+ "/KnowWEExtension/prototyp2.css\">"

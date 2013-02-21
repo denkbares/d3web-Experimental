@@ -32,12 +32,12 @@ public class DroppableTargetSurroundingRenderer implements SurroundingRenderer {
 
 	@Override
 	public void renderPre(Section<?> section, UserContext user, RenderResult string) {
-		string.appendHTML("<div class='relationMarkup'>");
+		string.appendHtml("<div class='relationMarkup'>");
 	}
 
 	@Override
 	public void renderPost(Section<?> section, UserContext user, RenderResult string) {
-		string.appendHTML("</div>");
+		string.appendHtml("</div>");
 	}
 
 }

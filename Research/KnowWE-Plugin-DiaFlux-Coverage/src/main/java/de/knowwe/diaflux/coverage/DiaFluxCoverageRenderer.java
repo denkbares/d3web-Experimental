@@ -60,7 +60,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 
 	private void renderButton(UserContext user, RenderResult string, Section<?> section) {
 
-		string.appendHTML("<em>No coverage has been calculated yet.</em><input type='button' value='Calculate' onclick='DiaFlux.Coverage.calculateCoverage(\""
+		string.appendHtml("<em>No coverage has been calculated yet.</em><input type='button' value='Calculate' onclick='DiaFlux.Coverage.calculateCoverage(\""
 				+ section.getID() + "\")'></input>");
 
 	}
@@ -139,7 +139,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 
 		builder.append("</div>");
 
-		string.appendHTML(builder.toString());
+		string.appendHtml(builder.toString());
 	}
 
 }

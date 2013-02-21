@@ -70,6 +70,6 @@ public class TabbedLinkTaghandler extends AbstractTagHandler {
 			tabbedLink.append(title);
 			tabbedLink.append("</a>");
 		}
-		result.appendHTML(tabbedLink.toString());
+		result.appendHtml(tabbedLink.toString());
 	}
 }

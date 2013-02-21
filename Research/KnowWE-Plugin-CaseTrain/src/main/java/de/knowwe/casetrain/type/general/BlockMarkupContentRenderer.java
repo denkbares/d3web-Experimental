@@ -51,7 +51,7 @@ public class BlockMarkupContentRenderer implements Renderer {
 	public void render(Section<?> sec, UserContext user,
 			RenderResult string) {
 
-		string.appendHTML("%%collapsebox-closed \r\n");
+		string.appendHtml("%%collapsebox-closed \r\n");
 		String tString = "";
 
 		// Only 1 title here
@@ -63,14 +63,14 @@ public class BlockMarkupContentRenderer implements Renderer {
 			tString = bundle.getString(sec.getFather().get().getName());
 		}
 
-		string.appendHTML("! "
+		string.appendHtml("! "
 				+ tString
 				+ "\r\n");
 
-		string.appendHTML("<pre id=\""
+		string.appendHtml("<pre id=\""
 				+ sec.getID()
 				+ "\" class=\"casetrain-instantedit-pre\">");
-		string.appendHTML("<div class=\"casetrain-instantedit\">"
+		string.appendHtml("<div class=\"casetrain-instantedit\">"
 				// + getFrameName(sec)
 				// + getEditorIcon(sec)
 				+ Utils.renderTools(sec, user)
@@ -88,7 +88,7 @@ public class BlockMarkupContentRenderer implements Renderer {
 
 		string.append("/%\r\n");
 
-		string.appendHTML("</pre>");
+		string.appendHtml("</pre>");
 		return;
 	}
 

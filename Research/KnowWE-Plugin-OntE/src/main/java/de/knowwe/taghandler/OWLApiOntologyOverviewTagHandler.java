@@ -62,7 +62,7 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 			html.append("<div style=\"background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;padding:8px 0 10px 20px;\">");
 			html.append(getDescription(user));
 			html.append("</div>");
-			result.appendHTML(html.toString());
+			result.appendHtml(html.toString());
 			return;
 		}
 
@@ -115,7 +115,7 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 		}
 		anchors.append("</ul>");
 
-		result.appendHTML(anchors.toStringRaw() + concepts.toStringRaw());
+		result.appendHtml(anchors.toStringRaw() + concepts.toStringRaw());
 	}
 
 	/**

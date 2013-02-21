@@ -42,6 +42,6 @@ public class PelletAskRenderer implements Renderer {
 			html.append(PelletSparqlAsk.getDescription(user));
 			html.append("</div>");
 		}
-		string.appendHTML(html.toString());
+		string.appendHtml(html.toString());
 	}
 }

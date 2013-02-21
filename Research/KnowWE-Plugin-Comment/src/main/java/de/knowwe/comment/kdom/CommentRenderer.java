@@ -192,6 +192,6 @@ public class CommentRenderer implements Renderer {
 			// do nothing if WikiEngine is not properly started yet
 		}
 
-		string.appendHTML(toHTML.toString());
+		string.appendHtml(toHTML.toString());
 	}
 }

@@ -38,7 +38,7 @@ public class ButtonRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user, RenderResult result) {
-		result.appendHTML("<script type='text/javascript' src='KnowWEExtension/scripts/Medicine.js'></script>\n<input type='button' value='Export' title='' onclick='checkIfTableExists();'/><input type='button' value='Import' title='' onclick='readFromDB();'/><div id='medresult'></div>");
+		result.appendHtml("<script type='text/javascript' src='KnowWEExtension/scripts/Medicine.js'></script>\n<input type='button' value='Export' title='' onclick='checkIfTableExists();'/><input type='button' value='Import' title='' onclick='readFromDB();'/><div id='medresult'></div>");
 	}
 
 }

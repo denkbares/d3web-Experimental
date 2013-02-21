@@ -56,7 +56,7 @@ public class AppendMapHandler implements PageAppendHandler {
 
 			if (l.size() >= 2) {
 				String map = createMap(l);
-				result.appendHTML(map);
+				result.appendHtml(map);
 			}
 		}
 	}

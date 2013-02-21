@@ -60,9 +60,9 @@ public class InlineIndicationCondition extends AbstractType {
 
 			@Override
 			public void render(Section<?> sec, UserContext user, RenderResult string) {
-				string.appendHTML("<b>");
+				string.appendHtml("<b>");
 				string.append(sec.getText().substring(1).trim());
-				string.appendHTML("</b>");
+				string.appendHtml("</b>");
 			}
 		});
 		this.addChildType(open);

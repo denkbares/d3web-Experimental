@@ -354,7 +354,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		fm.append("</table>");
 
-		result.appendHTML(fm.toString());
+		result.appendHtml(fm.toString());
 	}
 
 	/**

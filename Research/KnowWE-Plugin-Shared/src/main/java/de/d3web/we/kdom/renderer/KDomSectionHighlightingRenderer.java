@@ -54,7 +54,7 @@ public class KDomSectionHighlightingRenderer implements Renderer {
 		// that is needed for Highlighting the section
 		RenderResult b = new RenderResult(user);
 		DelegateRenderer.getInstance().render(sec, user, b);
-		string.appendHTML("<span id='" + sec.getID()
+		string.appendHtml("<span id='" + sec.getID()
 				+ "'><span id=''>"
 				+ b.toStringRaw()
 				+ "</span></span>");

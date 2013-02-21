@@ -69,7 +69,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 		}
 
 		RenderResult string = new RenderResult(user);
-		string.appendHTML("<div id='" + myTable.getID() + "' style=''>");
+		string.appendHtml("<div id='" + myTable.getID() + "' style=''>");
 
 		// user.getParameters().put(TableRenderer.QUICK_EDIT_FLAG, "false");
 
@@ -90,7 +90,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 			erneut = " erneut";
 		}
 
-		string.appendHTML("<input type='button' onclick=\"submitTable('"
+		string.appendHtml("<input type='button' onclick=\"submitTable('"
 				+ myTable.getID() + "','" + user.getUserName()
 				+ "','" + tableid
 				+ "','" + versionsExisting
@@ -99,14 +99,14 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 		// tables can be configured to only support single versions using the
 		// single-attribute, then no additionalTable-button is rendered
 		if (previousInputExists && !singleTableVersion) {
-			string.appendHTML("<input type='button' onclick=\"additionalTable('"
+			string.appendHtml("<input type='button' onclick=\"additionalTable('"
 					+ myTable.getID() + "','" + user.getUserName()
 					+ "','" + tableid
 					+ "')\" name='speichern' value='weitere Tabelle hinzufügen'/>");
 		}
-		string.appendHTML("<span id='tableSubmit_" + tableid + "'>");
-		string.appendHTML("</span>");
-		string.appendHTML("</div>");
+		string.appendHtml("<span id='tableSubmit_" + tableid + "'>");
+		string.appendHtml("</span>");
+		string.appendHtml("</div>");
 		return string.toStringRaw();
 	}
 

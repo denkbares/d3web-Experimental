@@ -59,7 +59,7 @@ public class ShowMapForTopicHandler extends AbstractHTMLTagHandler {
 			// placemarks.add(new Placemark("London", 51.3, 0));
 			output += getJavaScript(placemarks, divId);
 			output += "</div>";
-			result.appendHTML(output);
+			result.appendHtml(output);
 		}
 	}
 

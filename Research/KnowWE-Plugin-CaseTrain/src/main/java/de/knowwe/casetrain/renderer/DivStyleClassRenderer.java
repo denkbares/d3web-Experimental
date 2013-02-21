@@ -44,12 +44,12 @@ public class DivStyleClassRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user, RenderResult string) {
-		string.appendHTML("<div class='"
+		string.appendHtml("<div class='"
 				+ cssClass
 				+ "'>");
 		if (customRenderer != null) customRenderer.render(sec, user, string);
 		else MouseOverTitleRenderer.getInstance().render(sec, user, string);
-		string.appendHTML("</div>");
+		string.appendHtml("</div>");
 
 	}
 

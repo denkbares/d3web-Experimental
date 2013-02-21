@@ -29,14 +29,14 @@ public class PreEnvRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> section, UserContext user, RenderResult string) {
-		string.appendHTML("<pre id=\""
+		string.appendHtml("<pre id=\""
 				+ section.getID()
 				+ "\" class=\"turtle-instantedit-pre\">");
-		string.appendHTML("<div class=\"casetrain-instantedit\">");
+		string.appendHtml("<div class=\"casetrain-instantedit\">");
 
 		DelegateRenderer.getInstance().render(section, user, string);
-		string.appendHTML("</div>");
-		string.appendHTML("</pre>");
+		string.appendHtml("</div>");
+		string.appendHtml("</pre>");
 
 	}
 }

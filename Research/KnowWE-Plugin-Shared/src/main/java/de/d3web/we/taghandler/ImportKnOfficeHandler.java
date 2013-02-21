@@ -142,6 +142,6 @@ public class ImportKnOfficeHandler extends AbstractHTMLTagHandler {
 		html.append("<br /><p><input id='upload' type='submit' value='"
 				+ rb.getString("KnowWE.button.upload") + "' name='submit' class='button'/></p>");
 		html.append("</form><br /></div>");
-		result.appendHTML(html.toString());
+		result.appendHtml(html.toString());
 	}
 }

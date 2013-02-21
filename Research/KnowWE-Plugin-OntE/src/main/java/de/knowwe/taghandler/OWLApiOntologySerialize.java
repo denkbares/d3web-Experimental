@@ -52,7 +52,7 @@ public class OWLApiOntologySerialize extends AbstractHTMLTagHandler {
 		if (parameters.get("help") != null) {
 			html.append(getDescription(user));
 			html.append("</pre>");
-			result.appendHTML(html.toString());
+			result.appendHtml(html.toString());
 			return;
 		}
 
@@ -72,7 +72,7 @@ public class OWLApiOntologySerialize extends AbstractHTMLTagHandler {
 			html.append(getDescription(user));
 		}
 		html.append("</pre>");
-		result.appendHTML(html.toString());
+		result.appendHtml(html.toString());
 	}
 
 	/**

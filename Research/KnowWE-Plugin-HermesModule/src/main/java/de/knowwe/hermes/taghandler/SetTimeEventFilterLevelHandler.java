@@ -63,7 +63,7 @@ public class SetTimeEventFilterLevelHandler extends AbstractHTMLTagHandler {
 		wrappBoldIf("<a href=\"\" onclick=\"sendFilterLevel('3','" + user.getUserName()
 				+ "')\"> 3  </a>", buffy, currInt, 3);
 
-		result.appendHTML(buffy.toString());
+		result.appendHtml(buffy.toString());
 	}
 
 	private void wrappBoldIf(String string, StringBuffer buffy, int currInt,

@@ -58,27 +58,27 @@ public class DebuggerQuestionRenderer {
 		else valueText = value.toString();
 
 		if (q instanceof QuestionOC) {
-			buffer.appendHTML("<span class='debuggerQuestionOC'> ");
+			buffer.appendHtml("<span class='debuggerQuestionOC'> ");
 			buffer.append(q.getName());
-			buffer.appendHTML("</span>");
+			buffer.appendHtml("</span>");
 		}
 		else if (q instanceof QuestionMC) {
-			buffer.appendHTML("<span class='debuggerQuestionMC'> ");
+			buffer.appendHtml("<span class='debuggerQuestionMC'> ");
 			buffer.append(q.getName());
-			buffer.appendHTML("</span>");
+			buffer.appendHtml("</span>");
 		}
 		else if (q instanceof QuestionNum) {
-			buffer.appendHTML("<span class='debuggerQuestionNum'> ");
+			buffer.appendHtml("<span class='debuggerQuestionNum'> ");
 			buffer.append(q.getName());
-			buffer.appendHTML("</span>");
+			buffer.appendHtml("</span>");
 		}
 		else if (q instanceof QuestionText) {
-			buffer.appendHTML("<span class='debuggerQuestionText'> ");
+			buffer.appendHtml("<span class='debuggerQuestionText'> ");
 			buffer.append(q.getName());
-			buffer.appendHTML("</span>");
+			buffer.appendHtml("</span>");
 		}
 		// Build dropdownmenu
-		buffer.appendHTML("<div class='debuggerDropdown' id='' style='display:none;'>");
+		buffer.appendHtml("<div class='debuggerDropdown' id='' style='display:none;'>");
 
 		if (q instanceof QuestionOC) {
 			renderQuestionOC((QuestionOC) q, valueText, kbid, title, inside, buffer);
@@ -93,11 +93,11 @@ public class DebuggerQuestionRenderer {
 			renderQuestionText((QuestionText) q, valueText, kbid, title, inside, buffer);
 		}
 
-		buffer.appendHTML("<a href='Wiki.jsp?page=ObjectInfoPage&objectname="
+		buffer.appendHtml("<a href='Wiki.jsp?page=ObjectInfoPage&objectname="
 				+ Strings.encodeHtml(q.getName())
 				+ "' class='dquestionLink'>Show Info Page</a>");
 
-		buffer.appendHTML("</div>");
+		buffer.appendHtml("</div>");
 
 	}
 
@@ -107,22 +107,22 @@ public class DebuggerQuestionRenderer {
 	private static void renderQuestionOC(QuestionOC q, String valueText, String kbid, String title, boolean inside, RenderResult buffer) {
 		String web = Environment.DEFAULT_WEB;
 		for (Choice choice : q.getAllAlternatives()) {
-			buffer.appendHTML("<p onClick='KNOWWE.plugin.debuggr.questionOCclicked(this, " + inside
+			buffer.appendHtml("<p onClick='KNOWWE.plugin.debuggr.questionOCclicked(this, " + inside
 					+ ")' ");
-			buffer.appendHTML("rel=\"{kbid: '" + kbid + "', web:'" + web + "', ns:'" + title
+			buffer.appendHtml("rel=\"{kbid: '" + kbid + "', web:'" + web + "', ns:'" + title
 					+ "', qid:'"
 					+ Strings.encodeHtml(q.getName()) + "'}\" ");
 
 			if (valueText.equals(choice.getName())) {
-				buffer.appendHTML("class='dchoiceActive'");
+				buffer.appendHtml("class='dchoiceActive'");
 			}
 			else {
-				buffer.appendHTML("class='dchoice'");
+				buffer.appendHtml("class='dchoice'");
 			}
 
-			buffer.appendHTML(">");
+			buffer.appendHtml(">");
 			buffer.append(choice);
-			buffer.appendHTML("</p>");
+			buffer.appendHtml("</p>");
 		}
 	}
 
@@ -135,9 +135,9 @@ public class DebuggerQuestionRenderer {
 		String[] values = valueText.substring(1, valueText.length() - 1).split(", ");
 
 		for (Choice choice : ((QuestionChoice) q).getAllAlternatives()) {
-			buffer.appendHTML("<p onClick='KNOWWE.plugin.debuggr.questionMCclicked(this, " + inside
+			buffer.appendHtml("<p onClick='KNOWWE.plugin.debuggr.questionMCclicked(this, " + inside
 					+ ")' ");
-			buffer.appendHTML("rel=\"{kbid: '" + kbid + "', web:'" + web + "', ns:'" + title
+			buffer.appendHtml("rel=\"{kbid: '" + kbid + "', web:'" + web + "', ns:'" + title
 					+ "', qid:'"
 					+ Strings.encodeHtml(q.getName()) + "'}\" ");
 
@@ -146,14 +146,14 @@ public class DebuggerQuestionRenderer {
 				if (v.equals(choice.getName())) active = true;
 			}
 			if (active) {
-				buffer.appendHTML("class='dchoiceActive'");
+				buffer.appendHtml("class='dchoiceActive'");
 			}
 			else {
-				buffer.appendHTML("class='dchoice'");
+				buffer.appendHtml("class='dchoice'");
 			}
-			buffer.appendHTML(">");
+			buffer.appendHtml(">");
 			buffer.append(choice);
-			buffer.appendHTML("</p>");
+			buffer.appendHtml("</p>");
 		}
 	}
 
@@ -173,9 +173,9 @@ public class DebuggerQuestionRenderer {
 		}
 
 		// Adding text-input-field and submit-button
-		buffer.appendHTML("<p class='dQnum'>");
-		buffer.appendHTML("<input value='" + valueText + "' type='text' size='15' />");
-		buffer.appendHTML("<input type='button' value='O.K.' rel=\"{kbid: '" + kbid + "', web:'"
+		buffer.appendHtml("<p class='dQnum'>");
+		buffer.appendHtml("<input value='" + valueText + "' type='text' size='15' />");
+		buffer.appendHtml("<input type='button' value='O.K.' rel=\"{kbid: '" + kbid + "', web:'"
 				+ web + "', ns:'" + title + "', qid:'"
 				+ Strings.encodeHtml(q.getName()) + "', rangeMin:'" + rangeMin
 				+ "', rangeMax:'" + rangeMax
@@ -185,9 +185,9 @@ public class DebuggerQuestionRenderer {
 		Object questionUnit = q.getInfoStore().getValue(MMInfo.UNIT);
 		if (questionUnit != null) {
 			unit = questionUnit.toString();
-			buffer.appendHTML("<span class='dQnumUnit'>[" + unit + "]</span>");
+			buffer.appendHtml("<span class='dQnumUnit'>[" + unit + "]</span>");
 		}
-		buffer.appendHTML("<span class='dQnumError'></span></p>");
+		buffer.appendHtml("<span class='dQnumError'></span></p>");
 
 	}
 
@@ -198,7 +198,7 @@ public class DebuggerQuestionRenderer {
 
 		String web = Environment.DEFAULT_WEB;
 
-		result.appendHTML("<p class='dQtext'><input value='" + valueText
+		result.appendHtml("<p class='dQtext'><input value='" + valueText
 				+ "' type='text' size='20' />"
 				+ "<input type='button' value='O.K.' rel=\"{kbid: '" + kbid + "', web:'"
 				+ web + "', ns:'" + title + "', qid:'" + Strings.encodeHtml(q.getName())

@@ -216,14 +216,14 @@ public class CompileUtils {
 		}
 		String defArticleName = defArticle.getTitle();
 		RenderResult link = new RenderResult(user);
-		link.appendHTML("<a href='Wiki.jsp?page=");
+		link.appendHtml("<a href='Wiki.jsp?page=");
 		link.append(defArticleName);
 		link.append("#");
 		link.append(definition.getID());
 
-		link.appendHTML("'>");
+		link.appendHtml("'>");
 		link.append(linktext);
-		link.appendHTML("</a>");
+		link.appendHtml("</a>");
 		return link.toStringRaw();
 
 	}

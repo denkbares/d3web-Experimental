@@ -29,9 +29,9 @@ public class LinkNodeRenderer implements SparqlResultNodeRenderer {
 	public String renderNode(String text, String variable, UserContext user) {
 		String label = Rdf2GoUtils.reduceNamespace(text);
 		RenderResult result = new RenderResult(user);
-		result.appendHTML("<a href=\"" + text + "\">");
+		result.appendHtml("<a href=\"" + text + "\">");
 		result.append(label);
-		result.appendHTML("</a>");
+		result.appendHtml("</a>");
 		return result.toStringRaw();
 	}
 

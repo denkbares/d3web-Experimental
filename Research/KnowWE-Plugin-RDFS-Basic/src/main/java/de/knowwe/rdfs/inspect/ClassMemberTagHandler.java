@@ -68,8 +68,7 @@ public class ClassMemberTagHandler extends AbstractTagHandler {
 		defaultMarkupRenderer.renderDefaultMarkupStyled(
 				getTagName(), content, sectionID, cssClassName, tools, userContext,
 				buffer);
-		buffer.maskJSPWikiMarkup();
-		result.append(buffer);
+		result.appendJSPWikiMarkup(buffer);
 	}
 
 	private String renderContent(Section<?> section, UserContext userContext, Map<String, String> parameters) {

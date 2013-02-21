@@ -54,13 +54,13 @@ public class HierarchyDashtreeElementContent extends DashTreeElementContent
 
 		@Override
 		public void render(Section<?> section, UserContext user, RenderResult string) {
-			string.appendHTML("<div style='display:inline;' id=\""
+			string.appendHtml("<div style='display:inline;' id=\""
 					+ section.getID()
 					+ "\" >");
-			string.appendHTML("<div style='display:inline;' class=\"casetrain-instantedit\">");
+			string.appendHtml("<div style='display:inline;' class=\"casetrain-instantedit\">");
 			DelegateRenderer.getInstance().render(section, user, string);
-			string.appendHTML("</div>");
-			string.appendHTML("</div>");
+			string.appendHtml("</div>");
+			string.appendHtml("</div>");
 
 		}
 

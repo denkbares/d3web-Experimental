@@ -90,8 +90,8 @@ public class ReferenceRenderer implements Renderer {
 			REF_RENDERER.render(reference, user, string);
 		}
 		else {
-			string.appendHTML("<a name='" + reference.getID() + "'>");
-			string.appendHTML("</a>");
+			string.appendHtml("<a name='" + reference.getID() + "'>");
+			string.appendHtml("</a>");
 			r.render(reference, user, string);
 		}
 

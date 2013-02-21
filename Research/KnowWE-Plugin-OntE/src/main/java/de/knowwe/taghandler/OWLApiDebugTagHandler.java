@@ -60,7 +60,7 @@ public class OWLApiDebugTagHandler extends AbstractHTMLTagHandler {
 		if (parameters.get("help") != null) {
 			html.append(getDescription(user));
 			html.append("</div>");
-			result.appendHTML(html.toString());
+			result.appendHtml(html.toString());
 			return;
 		}
 
@@ -131,7 +131,7 @@ public class OWLApiDebugTagHandler extends AbstractHTMLTagHandler {
 			html.append("<dt>none</dt><dd></dd></dl>");
 		}
 		html.append("</div>");
-		result.appendHTML(html.toString());
+		result.appendHtml(html.toString());
 	}
 
 	/**

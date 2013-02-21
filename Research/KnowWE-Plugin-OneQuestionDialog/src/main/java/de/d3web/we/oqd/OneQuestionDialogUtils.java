@@ -100,46 +100,46 @@ public class OneQuestionDialogUtils {
 
 		List<Choice> answers = OneQuestionDialogUtils.getAllAlternatives(o);
 
-		html.appendHTML("<div class='oqdheadline'>");
+		html.appendHtml("<div class='oqdheadline'>");
 
-		html.appendHTML("<div class=\"oqdquestion\" id='oqdquestion'>");
+		html.appendHtml("<div class=\"oqdquestion\" id='oqdquestion'>");
 		html.append(o.getName());
-		html.appendHTML("<input type=\"hidden\" name=\"" + Strings.encodeHtml(o.getName())
+		html.appendHtml("<input type=\"hidden\" name=\"" + Strings.encodeHtml(o.getName())
 				+ "\" value=\"" + Strings.encodeHtml(o.getName()) + "\">");
-		html.appendHTML("</div>");
+		html.appendHtml("</div>");
 
 		// MF: moved send button to head
-		html.appendHTML("<div id=\"oqdbutton\" class=\"oqdbutton\" onclick=\"return OneQuestionDialog.sendQuestion(this)\" "
+		html.appendHtml("<div id=\"oqdbutton\" class=\"oqdbutton\" onclick=\"return OneQuestionDialog.sendQuestion(this)\" "
 				+ "title='"
 				+ Strings.encodeHtml(D3webUtils.getD3webBundle(kwuser).getString("KnowWE.OQD.send"))
 				+ "'>");
-		html.appendHTML("</div>");
+		html.appendHtml("</div>");
 
-		html.appendHTML("</div>");
-		html.appendHTML("<table>");
+		html.appendHtml("</div>");
+		html.appendHtml("<table>");
 
 		if (!type.equals("text")) {
 			for (Choice c : answers) {
-				html.appendHTML("<tr>");
-				html.appendHTML("<td class=\"oqdanswer\">");
+				html.appendHtml("<tr>");
+				html.appendHtml("<td class=\"oqdanswer\">");
 				String encodedChoice = Strings.encodeHtml(c.getName());
-				html.appendHTML("<input type=\"" + type + "\" name=\""
+				html.appendHtml("<input type=\"" + type + "\" name=\""
 						+ Strings.encodeHtml(o.getName()) + "\" value=\""
 						+ encodedChoice + "\">"
 						+ encodedChoice);
-				html.appendHTML("<input type=\"hidden\" name=\"" + encodedChoice + "\" value=\""
+				html.appendHtml("<input type=\"hidden\" name=\"" + encodedChoice + "\" value=\""
 						+ encodedChoice + "\">");
-				html.appendHTML("</td>");
-				html.appendHTML("</tr>");
+				html.appendHtml("</td>");
+				html.appendHtml("</tr>");
 			}
 		}
 		else {
-			html.appendHTML("<tr>");
-			html.appendHTML("<td>");
-			html.appendHTML("<input onkeypress=\"return OneQuestionDialog.submitOnEnter(this, event)\" type=\""
+			html.appendHtml("<tr>");
+			html.appendHtml("<td>");
+			html.appendHtml("<input onkeypress=\"return OneQuestionDialog.submitOnEnter(this, event)\" type=\""
 					+ type + "\">");
-			html.appendHTML("</td>");
-			html.appendHTML("</tr>");
+			html.appendHtml("</td>");
+			html.appendHtml("</tr>");
 		}
 		/*
 		 * html.append("<tr>"); html.append("<td>"); html.append(

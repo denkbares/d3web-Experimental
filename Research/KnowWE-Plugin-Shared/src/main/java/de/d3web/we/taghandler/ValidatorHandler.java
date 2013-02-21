@@ -42,7 +42,7 @@ public class ValidatorHandler extends AbstractHTMLTagHandler {
 	@Override
 	public void renderHTML(String web, String topic, UserContext user, Map<String, String> values, RenderResult result) {
 
-		result.appendHTML("<span class='warning'>Currently the KDOM is not validated due to code refactoring!</span>");
+		result.appendHtml("<span class='warning'>Currently the KDOM is not validated due to code refactoring!</span>");
 	}
 
 }
