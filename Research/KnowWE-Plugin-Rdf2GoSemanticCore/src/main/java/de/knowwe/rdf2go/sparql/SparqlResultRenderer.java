@@ -143,7 +143,7 @@ public class SparqlResultRenderer {
 		else {
 			result.appendHTML("</ul>");
 		}
-		return new SparqlRenderResult(result.toString(), i);
+		return new SparqlRenderResult(result.toStringRaw(), i);
 	}
 
 	public String renderNode(Node node, String var, boolean rawOutput, UserContext user) {

@@ -16,6 +16,7 @@ public class ShrinkNodeRenderer implements SparqlResultNodeRenderer {
 			result.appendHTML("<span title='" + titleText + "'>");
 			result.append(text.substring(0, maxLength - 3) + "...");
 			result.appendHTML("</span>");
+			return result.toStringRaw();
 		}
 		return text;
 	}

@@ -224,7 +224,7 @@ public class CompileUtils {
 		link.appendHTML("'>");
 		link.append(linktext);
 		link.appendHTML("</a>");
-		return link.toString();
+		return link.toStringRaw();
 
 	}
 }
