@@ -21,6 +21,7 @@ package de.knowwe.defi.links;
 import java.util.Map;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
@@ -45,7 +46,7 @@ public class TalkAboutTaghandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 
 		StringBuilder talkAbout = new StringBuilder();
 
@@ -72,6 +73,6 @@ public class TalkAboutTaghandler extends AbstractTagHandler {
 		talkAbout.append("Mit Berater dar&uuml;ber sprechen");
 		talkAbout.append("</a>");
 
-		return Strings.maskHTML(talkAbout.toString());
+		result.appendHTML(talkAbout.toString());
 	}
 }

@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.MessageRenderer;
@@ -63,13 +64,13 @@ public abstract class BlockMarkupType extends AbstractType {
 		return new MessageRenderer() {
 
 			@Override
-			public String postRenderMessage(Message m, UserContext user, String source) {
-				return "";
+			public void postRenderMessage(Message m, UserContext user, String source, RenderResult result) {
+
 			}
 
 			@Override
-			public String preRenderMessage(Message m, UserContext user, String source) {
-				return "";
+			public void preRenderMessage(Message m, UserContext user, String source, RenderResult result) {
+
 			}
 		};
 	}

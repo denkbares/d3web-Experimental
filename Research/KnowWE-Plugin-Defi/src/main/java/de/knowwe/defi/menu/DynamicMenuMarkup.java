@@ -22,6 +22,7 @@ package de.knowwe.defi.menu;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.ContentType;
@@ -35,7 +36,7 @@ public class DynamicMenuMarkup extends DefaultMarkupType {
 		this.setRenderer(new Renderer() {
 
 			@Override
-			public void render(Section<?> sec, UserContext user, StringBuilder string) {
+			public void render(Section<?> sec, UserContext user, RenderResult string) {
 				string.append("<table class='menulink'>");
 				Section<ContentType> content = Sections.findChildOfType(sec,
 						ContentType.class);

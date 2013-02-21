@@ -21,9 +21,9 @@
 package de.knowwe.hermes.kdom.event.renderer;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 public class TimeEventTitleRenderer implements Renderer {
 
@@ -38,13 +38,13 @@ public class TimeEventTitleRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user,
-			StringBuilder result) {
+			RenderResult result) {
 		String title = "no title found";
 		if (sec != null) title = sec.getText();
 
 		// opening Span-Tag in TimeEventRenderer
-		title = title + Strings.maskHTML("</span>");
-
 		result.append(title);
+
+		result.appendHTML("</span>");
 	}
 }

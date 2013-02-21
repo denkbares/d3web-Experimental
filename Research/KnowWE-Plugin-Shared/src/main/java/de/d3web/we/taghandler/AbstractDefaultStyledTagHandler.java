@@ -24,6 +24,7 @@ import java.util.Map;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.taghandler.TagHandlerTypeContent;
 import de.knowwe.core.user.UserContext;
@@ -53,18 +54,16 @@ public abstract class AbstractDefaultStyledTagHandler extends AbstractTagHandler
 	}
 
 	@Override
-	public final String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public final void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 		String content = renderContent(section, userContext, parameters);
 		Section<TagHandlerTypeContent> tagNameSection = Sections.findSuccessor(section,
 				TagHandlerTypeContent.class);
 		String sectionID = section.getID();
 		Tool[] tools = ToolUtils.getTools(tagNameSection, userContext);
 
-		StringBuilder buffer = new StringBuilder();
 		String cssClassName = "type_" + section.get().getName();
 		defaultMarkupRenderer.renderDefaultMarkupStyled(
-				getTagName(), content, sectionID, cssClassName, tools, userContext, buffer);
-		return buffer.toString();
+				getTagName(), content, sectionID, cssClassName, tools, userContext, result);
 	}
 
 	/**

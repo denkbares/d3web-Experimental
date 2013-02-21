@@ -8,11 +8,11 @@ import org.semanticweb.owlapi.model.OWLDeclarationAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyID;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.owlapi.OWLAPIConnector;
-
 
 public class OntologyBrowserTagHandler extends AbstractHTMLTagHandler {
 
@@ -23,7 +23,7 @@ public class OntologyBrowserTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> parameters, RenderResult result) {
 
 		StringBuilder html = new StringBuilder();
 
@@ -31,7 +31,8 @@ public class OntologyBrowserTagHandler extends AbstractHTMLTagHandler {
 			html.append("<div style=\"background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;padding:8px 0 10px 20px;\">");
 			html.append(getDescription(user));
 			html.append("</div>");
-			return html.toString();
+			result.appendHTML(html.toString());
+			return;
 		}
 
 		html.append("<div id=\"onte-ontology-browser\" class=\"onte-box\">")
@@ -69,7 +70,6 @@ public class OntologyBrowserTagHandler extends AbstractHTMLTagHandler {
 						"<img id=\"oob-search\" class=\"tree-search\" src=\"KnowWEExtension/images/onte/magnifier.png\"></a>")
 				.append("</div>") // end buttons
 
-
 				.append("<div id=\"oob-hierarchy\">") // start hierarchy
 				.append(
 						"<div id=\"oob-class-hierarchy\" class=\"oob-box\" style=\"overflow:auto; height:400px;\"></div>")
@@ -92,12 +92,12 @@ public class OntologyBrowserTagHandler extends AbstractHTMLTagHandler {
 				.append("</div>"); // end browser
 
 		html.append("<br /><br /><br />");
-		return html.toString();
+		result.append(html.toString());
 	}
 
 	/**
 	 * Returns an example usage string
-	 *
+	 * 
 	 * @return A example usage string
 	 */
 	@Override
@@ -114,7 +114,7 @@ public class OntologyBrowserTagHandler extends AbstractHTMLTagHandler {
 	/**
 	 * Appends a simple how to use message to the output if the
 	 * {@link TagHandler} was used incorrectly.
-	 *
+	 * 
 	 * @created 20.09.2011
 	 * @return String The how to use message
 	 */

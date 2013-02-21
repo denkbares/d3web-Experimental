@@ -24,6 +24,7 @@ import java.util.List;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.Strings;
@@ -38,7 +39,7 @@ import de.knowwe.wisskont.util.MarkupUtils;
 public class RelationMarkupRenderer extends DefaultMarkupRenderer {
 
 	@Override
-	public void renderMessages(Section<?> section, StringBuilder string) {
+	public void renderMessages(Section<?> section, RenderResult string) {
 		List<Section<ConceptMarkup>> conecptDefinitions = MarkupUtils.getConecptDefinitions(section);
 		if (conecptDefinitions.size() == 0) {
 			Messages.storeMessage(

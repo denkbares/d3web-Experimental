@@ -41,8 +41,9 @@ import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.Strings;
 
 /**
  * Some util methods needed for the compilation algorithm
@@ -171,35 +172,35 @@ public class CompileUtils {
 		return result;
 	}
 
-	public static String createLinkToDefinition(TermIdentifier termIdentifier) {
+	public static String createLinkToDefinition(TermIdentifier termIdentifier, UserContext user) {
 		Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
 				termIdentifier);
 		if (termReferences != null && termReferences.size() > 0) {
 			return createLinkToDefinition(termReferences.iterator().next(),
-					termIdentifier.getLastPathElement());
+					termIdentifier.getLastPathElement(), user);
 		}
 
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				termIdentifier);
 		if (termDefinitions != null && termDefinitions.size() > 0) {
-			return createLinkToDefinition(termDefinitions.iterator().next());
+			return createLinkToDefinition(termDefinitions.iterator().next(), user);
 		}
 
 		return null;
 	}
 
-	public static String createLinkToDefinition(Section<?> section) {
-		return createLinkToDef(section, KnowWEUtils.getTermIdentifier(section).toString());
+	public static String createLinkToDefinition(Section<?> section, UserContext user) {
+		return createLinkToDef(section, KnowWEUtils.getTermIdentifier(section).toString(), user);
 
 	}
 
-	public static String createLinkToDefinition(Section<?> section, String linktext) {
+	public static String createLinkToDefinition(Section<?> section, String linktext, UserContext user) {
 
 		Collection<Section<? extends SimpleDefinition>> definitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				KnowWEUtils.getTermIdentifier(section));
 		if (definitions != null && definitions.size() > 0) {
 
-			return createLinkToDef(definitions.iterator().next(), linktext);
+			return createLinkToDef(definitions.iterator().next(), linktext, user);
 
 		}
 
@@ -207,22 +208,22 @@ public class CompileUtils {
 
 	}
 
-	protected static String createLinkToDef(Section<?> definition, String linktext) {
+	protected static String createLinkToDef(Section<?> definition, String linktext, UserContext user) {
 		Article defArticle = definition.getArticle();
 
 		if (defArticle == null) {
 			return linktext; // predefined/imported/undefined Term !?
 		}
 		String defArticleName = defArticle.getTitle();
-		StringBuffer link = new StringBuffer();
-		link.append(Strings.maskHTML("<a href='Wiki.jsp?page="));
+		RenderResult link = new RenderResult(user);
+		link.appendHTML("<a href='Wiki.jsp?page=");
 		link.append(defArticleName);
 		link.append("#");
 		link.append(definition.getID());
 
-		link.append(Strings.maskHTML("'>"));
+		link.appendHTML("'>");
 		link.append(linktext);
-		link.append(Strings.maskHTML("</a>"));
+		link.appendHTML("</a>");
 		return link.toString();
 
 	}

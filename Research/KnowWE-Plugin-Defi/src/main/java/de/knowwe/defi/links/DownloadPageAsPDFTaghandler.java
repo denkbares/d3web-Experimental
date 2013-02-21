@@ -21,6 +21,7 @@ package de.knowwe.defi.links;
 import java.util.Map;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
@@ -39,9 +40,7 @@ public class DownloadPageAsPDFTaghandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
-
-		StringBuilder pdf = new StringBuilder();
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 
 		String title = parameters.get("title");
 
@@ -49,15 +48,14 @@ public class DownloadPageAsPDFTaghandler extends AbstractTagHandler {
 			title = " Download as PDF ";
 		}
 
-		pdf.append("<a href=\"wiki.pdf?page=" + section.getTitle() + "&ext=.pdf");
-		pdf.append("\" title=\"Title:");
-		pdf.append(title);
-		pdf.append("\" rel=\"nofollow\">");
-		pdf.append("<button class=\"defi-bttn defi-download\">");
-		pdf.append(title);
-		pdf.append("</button>");
-		pdf.append("</a>");
+		result.appendHTML("<a href=\"wiki.pdf?page=" + section.getTitle() + "&ext=.pdf");
+		result.appendHTML("\" title=\"Title:");
+		result.append(Strings.encodeHtml(title));
+		result.appendHTML("\" rel=\"nofollow\">");
+		result.appendHTML("<button class=\"defi-bttn defi-download\">");
+		result.append(title);
+		result.appendHTML("</button>");
+		result.appendHTML("</a>");
 
-		return Strings.maskHTML(pdf.toString());
 	}
 }

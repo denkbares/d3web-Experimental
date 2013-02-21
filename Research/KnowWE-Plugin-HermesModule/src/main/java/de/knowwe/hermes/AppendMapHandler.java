@@ -32,6 +32,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.maps.Placemark;
@@ -44,7 +45,7 @@ public class AppendMapHandler implements PageAppendHandler {
 	private static final String SPARQL_PLACE = "select ?x ?lat ?long where {?x lns:hasLatitude ?lat . ?x lns:hasLongitude ?long }";
 
 	@Override
-	public String getDataToAppend(String topic, String web, UserContext user) {
+	public void append(String web, String topic, UserContext user, RenderResult result) {
 
 		if (Environment.getInstance().getWikiConnector().userIsMemberOfGroup(
 				group, user.getRequest())) {
@@ -55,10 +56,9 @@ public class AppendMapHandler implements PageAppendHandler {
 
 			if (l.size() >= 2) {
 				String map = createMap(l);
-				return Strings.maskHTML(map);
+				result.appendHTML(map);
 			}
 		}
-		return "";
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class AppendMapHandler implements PageAppendHandler {
 						latitude = latitude.replace(",", ".");
 						longitude = longitude.replace(",", ".");
 						l.add(new Placemark(currentPlace, Double.parseDouble(latitude),
-									Double.parseDouble(longitude)));
+								Double.parseDouble(longitude)));
 					}
 				}
 			}

@@ -26,6 +26,7 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -38,11 +39,11 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class TermBrowserRenderUtils {
 
 	public static String renderTermBrowser(UserContext user, String searchFieldContent) {
-		StringBuilder string = new StringBuilder();
-		string.append(Strings.maskHTML("<div class='termbrowserframe'>"));
-		string.append(Strings.maskHTML("<div class='termbrowserheader'>Benutzte Begriffe:</div>"));
-		string.append(Strings.maskHTML("<div class='ui-widget'><table><tr><td><label for='conceptSearch' style='font-weight:normal;padding-right:0;font: 83%/140% Verdana,Arial,Helvetica,sans-serif;;'>Suche: </label></td><td><input id='conceptSearch' size='15' value='' /></td></tr></table></div>"));
-		string.append(Strings.maskHTML("<script>" +
+		RenderResult string = new RenderResult(user);
+		string.appendHTML("<div class='termbrowserframe'>");
+		string.appendHTML("<div class='termbrowserheader'>Benutzte Begriffe:</div>");
+		string.appendHTML("<div class='ui-widget'><table><tr><td><label for='conceptSearch' style='font-weight:normal;padding-right:0;font: 83%/140% Verdana,Arial,Helvetica,sans-serif;;'>Suche: </label></td><td><input id='conceptSearch' size='15' value='' /></td></tr></table></div>");
+		string.appendHTML("<script>" +
 				"jq$(document).ready(function() {" +
 				// "$(function() {" +
 				" var availableTags = [" +
@@ -55,7 +56,7 @@ public class TermBrowserRenderUtils {
 				"}," +
 				"});" +
 				"});" +
-				"</script>"));
+				"</script>");
 		List<String> rankedTermList = TermRecommender.getInstance().getRankedTermList(user);
 
 		// sorted is probably more comprehensive
@@ -65,7 +66,7 @@ public class TermBrowserRenderUtils {
 		}
 		Collections.sort(subList);
 
-		string.append(Strings.maskHTML("<div class='termlist'>"));
+		string.appendHTML("<div class='termlist'>");
 		boolean zebra = false;
 		for (int i = 0; i < 10; i++) {
 
@@ -92,7 +93,7 @@ public class TermBrowserRenderUtils {
 			String url = baseUrl + name;
 			// String divStyle = "display:inline; float:left;";
 			String divStyle = "";
-			string.append(Strings.maskHTML("<div id='draggable' style='"
+			string.appendHTML("<div id='draggable' style='"
 					+ lineStyle
 					+ "'  class='termline'>"
 					+
@@ -102,7 +103,7 @@ public class TermBrowserRenderUtils {
 					"<tr height='23px'>"
 					+
 					"<td style='width:80%' class='termbrowser'><div class='termname'>"
-					+ term.replaceAll("_", Strings.maskHTML("_<wbr>"))
+					+ term.replaceAll("_", "_<wbr>")
 					+ "</div></td>"
 					+ "<td style='min-width: 48px;width:20%;'>"
 					+ "<table style='table-layout:fixed'><tr>"
@@ -112,21 +113,21 @@ public class TermBrowserRenderUtils {
 					+ url
 					+ "'><span class='ui-icon ui-icon-arrowreturnthick-1-e openConcept' title='Seite zu diesem Konzept öffnen' style='display:none;'></span></a></td>"
 					+
-							"<td style='"
+					"<td style='"
 					+ divStyle
 					+ "' class='termbrowser'><span class='ui-icon ui-icon-circle-close removeConcept' title='Konzept aus dieser Liste herausnehmen' style='display:none;'></span></td>"
 					+
-							"<td style='"
+					"<td style='"
 					+ divStyle
 					+ "' class='termbrowser'><span class='ui-icon ui-icon-arrow-4-diag expandConcept' title='Unterkonzepte in diese Liste aufnehmen' style='display:none;'></span></td>"
 					+
-					"</tr></table></td></tr></table></div>"));
+					"</tr></table></td></tr></table></div>");
 		}
 
-		string.append(Strings.maskHTML("</div>"));
-		string.append(Strings.maskHTML("</div>"));
+		string.appendHTML("</div>");
+		string.appendHTML("</div>");
 
-		return string.toString();
+		return string.toStringRaw();
 	}
 
 	/**

@@ -19,6 +19,7 @@
 package de.knowwe.wisskont.browser;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
@@ -53,7 +54,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 	class TermBrowserRenderer implements Renderer {
 
 		@Override
-		public void render(Section<?> section, UserContext user, StringBuilder string) {
+		public void render(Section<?> section, UserContext user, RenderResult string) {
 			string.append(TermBrowserRenderUtils.renderTermBrowser(user, ""));
 		}
 

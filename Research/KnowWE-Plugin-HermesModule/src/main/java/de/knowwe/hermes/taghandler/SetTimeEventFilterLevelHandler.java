@@ -22,6 +22,7 @@ package de.knowwe.hermes.taghandler;
 
 import java.util.Map;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.hermes.HermesUserManagement;
@@ -33,8 +34,8 @@ public class SetTimeEventFilterLevelHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic,
+			UserContext user, Map<String, String> values, RenderResult result) {
 
 		Integer currentLevel = HermesUserManagement.getInstance().getEventFilterLevelForUser(
 				user.getUserName());
@@ -62,7 +63,7 @@ public class SetTimeEventFilterLevelHandler extends AbstractHTMLTagHandler {
 		wrappBoldIf("<a href=\"\" onclick=\"sendFilterLevel('3','" + user.getUserName()
 				+ "')\"> 3  </a>", buffy, currInt, 3);
 
-		return buffy.toString();
+		result.appendHTML(buffy.toString());
 	}
 
 	private void wrappBoldIf(String string, StringBuffer buffy, int currInt,

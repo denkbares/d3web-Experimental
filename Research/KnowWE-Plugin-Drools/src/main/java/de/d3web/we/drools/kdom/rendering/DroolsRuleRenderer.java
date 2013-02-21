@@ -21,9 +21,9 @@ package de.d3web.we.drools.kdom.rendering;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * @author Alex Legler
@@ -33,11 +33,11 @@ public class DroolsRuleRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user,
-			StringBuilder string) {
+			RenderResult string) {
 
-		string.append(Strings.maskHTML("<span class=\"drools-rule\">"));
+		string.appendHTML("<span class=\"drools-rule\">");
 		DelegateRenderer.getInstance().render(sec, user, string);
-		string.append(Strings.maskHTML("</span>"));
+		string.appendHTML("</span>");
 	}
 
 }

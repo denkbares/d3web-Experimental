@@ -1,6 +1,8 @@
 package de.knowwe.rdf2go.sparql;
 
 import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.rendering.RenderResult;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -9,7 +11,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 public class ArticleLinkNodeRenderer implements SparqlResultNodeRenderer {
 
 	@Override
-	public String renderNode(String text, String variable) {
+	public String renderNode(String text, String variable, UserContext user) {
 		boolean foundArticle = false;
 		String lns = Rdf2GoCore.getInstance().getLocalNamespace();
 
@@ -33,7 +35,8 @@ public class ArticleLinkNodeRenderer implements SparqlResultNodeRenderer {
 			if (Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB)
 					.getTitles().contains(title)) {
 				foundArticle = true;
-				articleLinks[i] = Strings.maskHTML(KnowWEUtils.getURLLinkHTMLToArticle(title));
+				articleLinks[i] = new RenderResult(user).appendHTML(
+						KnowWEUtils.getURLLinkHTMLToArticle(title)).toStringRaw();
 			}
 			else {
 				articleLinks[i] = Rdf2GoUtils.reduceNamespace(statement);

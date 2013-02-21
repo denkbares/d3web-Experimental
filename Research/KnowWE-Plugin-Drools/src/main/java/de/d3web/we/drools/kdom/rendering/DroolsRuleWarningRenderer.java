@@ -20,10 +20,10 @@
 
 package de.d3web.we.drools.kdom.rendering;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.MessageRenderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 public class DroolsRuleWarningRenderer implements MessageRenderer {
 
@@ -38,19 +38,16 @@ public class DroolsRuleWarningRenderer implements MessageRenderer {
 	}
 
 	@Override
-	public String postRenderMessage(Message m, UserContext user, String source) {
-		StringBuffer buffy = new StringBuffer();
+	public void postRenderMessage(Message m, UserContext user, String source, RenderResult result) {
 
-		buffy.append("<span style=\"border-bottom: 1px solid #999; padding: 2px; margin-top: 5px; display: block; color: #a40000;\">");
-		buffy.append(m.getVerbalization());
-		buffy.append("</span>");
+		result.appendHTML("<span style=\"border-bottom: 1px solid #999; padding: 2px; margin-top: 5px; display: block; color: #a40000;\">");
+		result.append(m.getVerbalization());
+		result.appendHTML("</span>");
 
-		return Strings.maskHTML(buffy.toString());
 	}
 
 	@Override
-	public String preRenderMessage(Message m, UserContext user, String source) {
-		return "";
+	public void preRenderMessage(Message m, UserContext user, String source, RenderResult result) {
 	}
 
 }

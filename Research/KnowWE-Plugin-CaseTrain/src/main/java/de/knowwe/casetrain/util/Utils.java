@@ -25,10 +25,10 @@ import java.util.ResourceBundle;
 import de.casetrain.cleanup.Cleaner;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolUtils;
 
@@ -97,7 +97,7 @@ public class Utils {
 	}
 
 	public static void renderKDOMReportMessageBlock(
-			Collection<? extends Message> messages, StringBuilder string) {
+			Collection<? extends Message> messages, RenderResult string) {
 		if (messages == null) return;
 		if (messages.size() == 0) return;
 
@@ -113,12 +113,12 @@ public class Utils {
 			className = "error";
 		}
 
-		string.append(Strings.maskHTML("<span class='" + className + "'>"));
+		string.appendHTML("<span class='" + className + "'>");
 		for (Message error : messages) {
 			string.append(error.getVerbalization());
-			string.append(Strings.maskHTML("<br/>"));
+			string.appendHTML("<br/>");
 		}
-		string.append(Strings.maskHTML("</span>"));
+		string.appendHTML("</span>");
 	}
 
 	/**
@@ -151,10 +151,10 @@ public class Utils {
 					+ " class=\"markupMenuItem\""
 					+ (jsAction != null
 							? " href=\"javascript:" + t.getJSAction() + ";undefined;\""
-									: "") +
-									" title=\"" + t.getDescription() + "\">" +
-									(hasIcon ? ("<img src=\"" + icon + "\"></img>") : "") +
-									"</" + (jsAction == null ? "span" : "a") + ">" +
+							: "") +
+					" title=\"" + t.getDescription() + "\">" +
+					(hasIcon ? ("<img src=\"" + icon + "\"></img>") : "") +
+					"</" + (jsAction == null ? "span" : "a") + ">" +
 					"</span>");
 		}
 		return string.toString();

@@ -20,9 +20,9 @@ package de.knowwe.casetrain.type.multimedia;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -42,13 +42,13 @@ public class Video extends MultimediaItem {
 		this.setRenderer(new Renderer() {
 
 			@Override
-			public void render(Section<?> sec, UserContext user, StringBuilder string) {
+			public void render(Section<?> sec, UserContext user, RenderResult string) {
 				Section<MultimediaItemContent> bildURL = Sections.findChildOfType(sec,
 						MultimediaItemContent.class);
-				string.append(Strings.maskHTML("<img height='70' src='"));
+				string.appendHTML("<img height='70' src='");
 				string.append("attach/" + sec.getArticle().getTitle() + "/");
 				string.append(bildURL.getText().trim());
-				string.append(Strings.maskHTML("'></img>"));
+				string.appendHTML("'></img>");
 			}
 		});
 

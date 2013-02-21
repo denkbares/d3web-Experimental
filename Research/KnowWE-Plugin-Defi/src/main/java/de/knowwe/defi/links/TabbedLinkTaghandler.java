@@ -21,6 +21,7 @@ package de.knowwe.defi.links;
 import java.util.Map;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
@@ -45,7 +46,7 @@ public class TabbedLinkTaghandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 
 		StringBuilder tabbedLink = new StringBuilder();
 
@@ -69,6 +70,6 @@ public class TabbedLinkTaghandler extends AbstractTagHandler {
 			tabbedLink.append(title);
 			tabbedLink.append("</a>");
 		}
-		return Strings.maskHTML(tabbedLink.toString());
+		result.appendHTML(tabbedLink.toString());
 	}
 }

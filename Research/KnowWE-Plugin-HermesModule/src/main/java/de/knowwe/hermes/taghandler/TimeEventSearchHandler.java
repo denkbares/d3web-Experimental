@@ -22,6 +22,7 @@ package de.knowwe.hermes.taghandler;
 
 import java.util.Map;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 
@@ -32,12 +33,9 @@ public class TimeEventSearchHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
-		return generateForms(topic);
-	}
+	public void renderHTML(String web, String topic,
+			UserContext user, Map<String, String> values, RenderResult result) {
 
-	private String generateForms(String topic) {
 		int startIndex = 1;
 		int noEntries = 20;
 		String startTimeString = "-10000";
@@ -64,13 +62,12 @@ public class TimeEventSearchHandler extends AbstractHTMLTagHandler {
 		s += "<p><input onclick='sendTimeEventBackSearchRequest()' type='button' value='vorherige Seite'/>";
 		s += "<input onclick='sendTimeEventNextSearchRequest()' type='button' value='nächste Seite'/></p>";
 
-		
 		s += "</div>";
 		s += "<div id='hermesSearchResult'></div>";
-		
+
 		s += "<div><p><input onclick='sendTimeEventBackSearchRequest()' type='button' value='vorherige Seite'/>";
 		s += "<input onclick='sendTimeEventNextSearchRequest()' type='button' value='nächste Seite'/></p></div>";
-		return s;
+		result.appendHTML(s);
 	}
 
 }

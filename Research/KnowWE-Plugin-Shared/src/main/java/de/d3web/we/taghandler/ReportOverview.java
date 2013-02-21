@@ -30,6 +30,7 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
@@ -73,14 +74,13 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 	 * Renders the result of the TagHandler into the wiki page. In this case it
 	 * shows all error and warning reports of all sections of an article.
 	 * 
-	 * @param topic
-	 * @param user
-	 * @param value
 	 * @param web
-	 * @return
+	 * @param user
+	 * @param topic
+	 * @param value
 	 */
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> values, RenderResult result) {
 
 		String reportType = values.get("report");
 		if (reportType == null || reportType == "") {
@@ -122,7 +122,7 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 			html.append(warningHTML);
 			html.append("</dl></div>");
 		}
-		return html.toString();
+		result.appendHTML(html.toString());
 	}
 
 	/**
@@ -167,8 +167,7 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 	 * 
 	 * @created 12.10.2010
 	 * @param section The root section of an {@link Article}.
-	 * @param article The {@link Article} containing erroneous
-	 *        {@link Section}'s
+	 * @param article The {@link Article} containing erroneous {@link Section}'s
 	 * @param errors {@link StringBuilder} containing all error messages
 	 * @param warnings {@link StringBuilder} containing all warning messages
 	 */

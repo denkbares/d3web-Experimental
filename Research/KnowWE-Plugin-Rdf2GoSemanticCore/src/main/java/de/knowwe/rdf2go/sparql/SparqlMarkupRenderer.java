@@ -36,6 +36,7 @@ import org.ontoware.rdf2go.model.QueryResultTable;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
@@ -47,13 +48,15 @@ import de.knowwe.rdf2go.sparql.utils.SparqlRenderResult;
 public class SparqlMarkupRenderer implements Renderer {
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder result) {
+	public void render(Section<?> sec, UserContext user, RenderResult result) {
 
 		String sparqlString = createSparqlString(sec);
 
 		try {
 			if (sparqlString.toLowerCase().startsWith("construct")) {
-				result.append(Strings.maskHTML("<tt>" + sec.getText() + "</tt>"));
+				result.appendHTML("<tt>");
+				result.append(sec.getText());
+				result.appendHTML("</tt>");
 			}
 			else {
 
@@ -80,6 +83,7 @@ public class SparqlMarkupRenderer implements Renderer {
 						JSONArray jsonArray = json.getJSONArray("sorting");
 						for (int i = 0; i < jsonArray.length(); i++) {
 							JSONObject sortPair = jsonArray.getJSONObject(i);
+							@SuppressWarnings("unchecked")
 							Iterator<String> it = sortPair.keys();
 							String key = it.next();
 							sortMap.put(key, sortPair.getString(key));
@@ -90,7 +94,7 @@ public class SparqlMarkupRenderer implements Renderer {
 
 				setRenderOptions(markupSection, renderOpts);
 
-				if (renderOpts.isBorder()) result.append(Strings.maskHTML("<div class='border'>"));
+				if (renderOpts.isBorder()) result.appendHTML("<div class='border'>");
 				if (renderOpts.isSorting()) sparqlString = modifyOrderByInSparqlString(sortMap,
 						sparqlString);
 
@@ -102,14 +106,14 @@ public class SparqlMarkupRenderer implements Renderer {
 							navigationOffset, navigationLimit);
 
 					QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
-								sparqlString);
+							sparqlString);
 					resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
-								resultSet,
-								renderOpts);
+							resultSet,
+							renderOpts, user);
 					if (!renderOpts.isRawOutput()) {
-						result.append(renderTableSizeSelector(navigationLimit, sec.getID()));
-						result.append(renderNavigation(navigationOffset, navigationLimit,
-								resultEntry.getSize(), sec.getID()));
+						renderTableSizeSelector(navigationLimit, sec.getID(), result);
+						renderNavigation(navigationOffset, navigationLimit,
+								resultEntry.getSize(), sec.getID(), result);
 					}
 
 				}
@@ -117,17 +121,16 @@ public class SparqlMarkupRenderer implements Renderer {
 					QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
 							sparqlString);
 					resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
-							resultSet,
-							renderOpts);
+							resultSet, renderOpts, user);
 				}
-				result.append(Strings.maskHTML(resultEntry.getHTML()));
-				if (renderOpts.isBorder()) result.append(Strings.maskHTML("</div>"));
+				result.appendHTML(resultEntry.getHTML());
+				if (renderOpts.isBorder()) result.appendHTML("</div>");
 
 			}
 		}
 		catch (ModelRuntimeException e) {
-			result.append(Strings.maskHTML("<span class='warning'>"
-					+ e.getMessage() + "</span>"));
+			result.appendHTML("<span class='warning'>"
+					+ e.getMessage() + "</span>");
 		}
 		catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -252,34 +255,30 @@ public class SparqlMarkupRenderer implements Renderer {
 		return sb.toString();
 	}
 
-	private String renderTableSizeSelector(String selectedSize, String id) {
-		StringBuilder builder = new StringBuilder();
+	private void renderTableSizeSelector(String selectedSize, String id, RenderResult result) {
 
 		String[] sizeArray = new String[] {
 				"10", "20", "50", "100", "1000", "All" };
-		builder.append("<div class='toolBar'>");
-		builder.append("<span class=fillText>Show </span>"
+		result.appendHTML("<div class='toolBar'>");
+		result.appendHTML("<span class=fillText>Show </span>"
 				+ "<select id='showLines'"
 				+ " onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer('"
-								+ id + "');\">");
+				+ id + "');\">");
 		for (String size : sizeArray) {
 			if (size.equals(selectedSize)) {
-				builder.append("<option selected='selected' value='" + size + "'>" + size
+				result.appendHTML("<option selected='selected' value='" + size + "'>" + size
 						+ "</option>");
 			}
 			else {
-				builder.append("<option value='" + size + "'>" + size
+				result.appendHTML("<option value='" + size + "'>" + size
 						+ "</option>");
 			}
 		}
-		builder.append("</select><span class=fillText> lines </span> ");
-		builder.append("<div class='toolSeparator'></div>");
-		return Strings.maskHTML(builder.toString());
+		result.appendHTML("</select><span class=fillText> lines </span> ");
+		result.appendHTML("<div class='toolSeparator'></div>");
 	}
 
-	private Object renderNavigation(String from, String selectedSize, int max, String id) {
-		StringBuilder builder = new StringBuilder();
-
+	private void renderNavigation(String from, String selectedSize, int max, String id, RenderResult result) {
 		int fromInt = Integer.parseInt(from);
 		int selectedSizeInt;
 		if (!(selectedSize.equals("All"))) {
@@ -290,26 +289,25 @@ public class SparqlMarkupRenderer implements Renderer {
 		}
 		renderToolbarButton(
 				"begin.png", "KNOWWE.plugin.semantic.actions.begin('"
-								+ id + "')",
-				(fromInt > 1), builder);
+						+ id + "')",
+				(fromInt > 1), result);
 		renderToolbarButton(
 				"back.png", "KNOWWE.plugin.semantic.actions.back('"
-								+ id + "')",
-				(fromInt > 1), builder);
-		builder.append("<span class=fillText> Lines </span>");
-		builder.append("<input size=3 id='fromLine' type=\"field\" onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer('"
-								+ id + "');\" value='"
+						+ id + "')",
+				(fromInt > 1), result);
+		result.append("<span class=fillText> Lines </span>");
+		result.append("<input size=3 id='fromLine' type=\"field\" onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer('"
+				+ id + "');\" value='"
 				+ from + "'>");
-		builder.append("<span class=fillText> to </span>" + (fromInt + selectedSizeInt - 1));
+		result.append("<span class=fillText> to </span>" + (fromInt + selectedSizeInt - 1));
 		renderToolbarButton(
 				"forward.png", "KNOWWE.plugin.semantic.actions.forward('"
-								+ id + "')",
-				!selectedSize.equals("All"), builder);
-		builder.append("</div>");
-		return Strings.maskHTML(builder.toString());
+						+ id + "')",
+				!selectedSize.equals("All"), result);
+		result.append("</div>");
 	}
 
-	private void renderToolbarButton(String icon, String action, boolean enabled, StringBuilder builder) {
+	private void renderToolbarButton(String icon, String action, boolean enabled, RenderResult builder) {
 		int index = icon.lastIndexOf('.');
 		String suffix = icon.substring(index);
 		icon = icon.substring(0, index);

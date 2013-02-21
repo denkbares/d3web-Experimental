@@ -38,9 +38,10 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Strings;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
@@ -70,7 +71,7 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> parameters, RenderResult result) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -86,9 +87,10 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 			try {
 				if (syntax.equals("rdf")) {
 					manager.saveOntology(ontology, stream);
-					html.append(KnowWEUtils.escapeHTML(stream.toString()));
+					html.append(Strings.encodeHtml(stream.toString()));
 					html.append("</pre>");
-					return html.toString();
+					result.appendHTML(html.toString());
+					return;
 				}
 				else if (syntax.equals("owl")) {
 					format = new OWLXMLOntologyFormat();
@@ -102,7 +104,7 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 				}
 				if (format != null) {
 					manager.saveOntology(ontology, format, stream);
-					html.append(KnowWEUtils.escapeHTML(stream.toString()));
+					html.append(Strings.encodeHtml(stream.toString()));
 				}
 			}
 			catch (OWLOntologyStorageException e) {
@@ -110,7 +112,7 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 			}
 		}
 		html.append("</pre>");
-		return html.toString();
+		result.appendHTML(html.toString());
 	}
 
 	/**

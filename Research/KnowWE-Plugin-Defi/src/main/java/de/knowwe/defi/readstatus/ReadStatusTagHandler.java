@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.defi.readstatus;
 
@@ -32,9 +32,9 @@ import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.defi.menu.MenuUtilities;
 import de.knowwe.defi.readbutton.ReadbuttonType;
 import de.knowwe.defi.time.TimeTableUtilities;
@@ -59,7 +59,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 		StringBuilder readstatus = new StringBuilder();
 		List<Section<DashTreeElement>> units = MenuUtilities.getAllUnits();
 		List<Date> dates = TimeTableUtilities.getTimeTable(userContext.getUserName());
@@ -79,8 +79,10 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 			// Ist die Einheit eine Rooteinheit?
 			if (DashTreeUtils.getDashLevel(rootUnit) == 0) {
 				// Datum der Einheit
-				if (rootCounter >= dates.size())
-					return Strings.maskHTML("<p>Fehler: Zu wenig Zeiteinheiten im <a href='Wiki.jsp?page=Zeitplan'>Zeitplan</a> vorhanden</p>");
+				if (rootCounter >= dates.size()) {
+					result.appendHTML("<p>Fehler: Zu wenig Zeiteinheiten im <a href='Wiki.jsp?page=Zeitplan'>Zeitplan</a> vorhanden</p>");
+					return;
+				}
 
 				unitDate = dates.get(rootCounter);
 				// Hole alle Readbuttons aller Untereinheiten und der Einheit
@@ -89,8 +91,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 				for (int i = 0; i < readbuttons.size(); i++) {
 					// Prüfe ob alle Buttons der Lektion geklickt wurden
 					if (!getReadbuttonStatus(readbuttons.get(i),
-							userContext.getUserName()))
-						read = false;
+							userContext.getUserName())) read = false;
 				}
 
 				calendar.setTime(dates.get(rootCounter));
@@ -126,8 +127,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 							+ getPageName(rootUnit) + "'>" + getLabel(rootUnit)
 							+ "</a> ");
 
-					if (timeStatus == -1 || (timeStatus == 0 && !current.before(warning)))
-						readstatus.append(" haben Sie noch nicht alle Seiten bearbeitet!");
+					if (timeStatus == -1 || (timeStatus == 0 && !current.before(warning))) readstatus.append(" haben Sie noch nicht alle Seiten bearbeitet!");
 
 					readstatus.append("</li>");
 				}
@@ -139,7 +139,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 
 		}
 
-		return Strings.maskHTML(readstatus.toString());
+		result.appendHTML(readstatus.toString());
 	}
 
 	/**

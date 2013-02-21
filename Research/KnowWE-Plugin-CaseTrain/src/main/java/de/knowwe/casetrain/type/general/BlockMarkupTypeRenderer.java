@@ -22,11 +22,11 @@ import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -36,11 +36,11 @@ import de.knowwe.core.utils.Strings;
 public class BlockMarkupTypeRenderer implements Renderer {
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, RenderResult string) {
 
-		string.append(Strings.maskHTML("<div class='"
+		string.appendHTML("<div class='"
 				+ ((BlockMarkupType) sec.get()).getCSSClass()
-				+ "'>"));
+				+ "'>");
 		Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 		Utils.renderKDOMReportMessageBlock(Messages.getErrors(Messages.getMessagesFromSubtree(
 				article, sec)), string);
@@ -70,7 +70,7 @@ public class BlockMarkupTypeRenderer implements Renderer {
 		Section<BlockMarkupContent> con =
 				Sections.findSuccessor(sec, BlockMarkupContent.class);
 		BlockMarkupContentRenderer.getInstance().render(con, user, string);
-		string.append(Strings.maskHTML("</div>"));
+		string.appendHTML("</div>");
 
 		// string.append(KnowWEUtils.maskHTML("</pre>"));
 	}

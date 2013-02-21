@@ -23,9 +23,9 @@ import java.util.Map;
 
 import de.knowwe.core.RessourceLoader;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * The TagHandler which adds the command line for the Drools Plugin
@@ -43,7 +43,7 @@ public class DroolsTagHandler extends AbstractTagHandler {
 	/**
 	 * adds the command line
 	 */
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 
 		RessourceLoader rl = RessourceLoader.getInstance();
 		rl.add("drools.css", RessourceLoader.RESOURCE_STYLESHEET);
@@ -65,7 +65,7 @@ public class DroolsTagHandler extends AbstractTagHandler {
 				+ section.getTitle() + "', width:512 });");
 		bob.append("</script>");
 
-		return Strings.maskHTML(bob.toString());
+		result.appendHTML(bob.toString());
 	}
 
 }

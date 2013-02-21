@@ -27,6 +27,7 @@ import de.d3web.we.kdom.condition.helper.BracedCondition;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
@@ -55,11 +56,11 @@ public class BraceElement extends NonTerminalCondition {
 		this.setRenderer(new Renderer() {
 
 			@Override
-			public void render(Section<?> section, UserContext user, StringBuilder string) {
+			public void render(Section<?> section, UserContext user, RenderResult string) {
 
-				StringBuilder masked = new StringBuilder();
+				RenderResult masked = new RenderResult(user);
 				DelegateRenderer.getInstance().render(section, user, masked);
-				string.append(Strings.maskJSPWikiMarkup(masked.toString()));
+				string.appendHTML(masked.toStringRaw());
 			}
 		});
 	}
@@ -72,7 +73,7 @@ class BracedExpressionFinder implements SectionFinder {
 
 	public static SectionFinder createEmbracedExpressionFinder() {
 		ConstraintSectionFinder sectionFinder = new ConstraintSectionFinder(
-					new BracedExpressionFinder());
+				new BracedExpressionFinder());
 		return sectionFinder;
 	}
 
@@ -93,8 +94,8 @@ class BracedExpressionFinder implements SectionFinder {
 		// closing brace could not be found -> throw error message
 		if (closingBracket == -1) {
 			Messages.storeMessage(father.getArticle(), father,
-						this.getClass(), Messages.syntaxError("missing \""
-								+ BraceElement.CLOSED + "\""));
+					this.getClass(), Messages.syntaxError("missing \""
+							+ BraceElement.CLOSED + "\""));
 			return null;
 		}
 		else {
@@ -110,7 +111,7 @@ class BracedExpressionFinder implements SectionFinder {
 			// and the ending ')' needs to close the opening
 			if (closingBracket == trimmed.length() - 1) {
 				return SectionFinderResult.createSingleItemList(new SectionFinderResult(
-								leadingSpaces, text.length() - followingSpaces));
+						leadingSpaces, text.length() - followingSpaces));
 			}
 
 		}
@@ -121,12 +122,12 @@ class BracedExpressionFinder implements SectionFinder {
 		// the closing bracket but nothing in between!
 		if (trimmed.startsWith(Character.toString(BraceElement.OPEN))) {
 			if (lastEndLineCommentSymbol > -1
-						&& !CompositeCondition.hasLineBreakAfterComment(trimmed)) {
+					&& !CompositeCondition.hasLineBreakAfterComment(trimmed)) {
 				// TODO fix: < 3 is inaccurate
 				// better check that there is no other expression in between
 				if (lastEndLineCommentSymbol - closingBracket < 3) {
 					return SectionFinderResult.createSingleItemList(new SectionFinderResult(
-									leadingSpaces, text.length()));
+							leadingSpaces, text.length()));
 				}
 			}
 

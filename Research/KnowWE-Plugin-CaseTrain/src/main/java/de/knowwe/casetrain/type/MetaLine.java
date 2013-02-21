@@ -21,10 +21,10 @@ package de.knowwe.casetrain.type;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 
@@ -51,10 +51,10 @@ public class MetaLine extends AbstractType {
 		this.setRenderer(new Renderer() {
 
 			@Override
-			public void render(Section<?> sec, UserContext user, StringBuilder string) {
-				string.append(Strings.maskHTML("<tr>"));
+			public void render(Section<?> sec, UserContext user, RenderResult string) {
+				string.appendHTML("<tr>");
 				DelegateRenderer.getInstance().render(sec, user, string);
-				string.append(Strings.maskHTML("</tr>"));
+				string.appendHTML("</tr>");
 			}
 		});
 

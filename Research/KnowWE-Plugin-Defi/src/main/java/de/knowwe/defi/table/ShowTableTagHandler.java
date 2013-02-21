@@ -28,9 +28,9 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.table.Table;
 
@@ -68,9 +68,8 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 			}
 		}
 
-		StringBuilder string = new StringBuilder();
-		string.append(Strings.maskHTML("<div id='" + myTable.getID()
-				+ "' style=''>"));
+		RenderResult string = new RenderResult(user);
+		string.appendHTML("<div id='" + myTable.getID() + "' style=''>");
 
 		// user.getParameters().put(TableRenderer.QUICK_EDIT_FLAG, "false");
 
@@ -91,24 +90,24 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 			erneut = " erneut";
 		}
 
-		string.append(Strings.maskHTML("<input type='button' onclick=\"submitTable('"
+		string.appendHTML("<input type='button' onclick=\"submitTable('"
 				+ myTable.getID() + "','" + user.getUserName()
 				+ "','" + tableid
 				+ "','" + versionsExisting
-				+ "')\" name='speichern' value='Änderungen" + erneut + " speichern'/>"));
+				+ "')\" name='speichern' value='Änderungen" + erneut + " speichern'/>");
 
 		// tables can be configured to only support single versions using the
 		// single-attribute, then no additionalTable-button is rendered
 		if (previousInputExists && !singleTableVersion) {
-			string.append(Strings.maskHTML("<input type='button' onclick=\"additionalTable('"
+			string.appendHTML("<input type='button' onclick=\"additionalTable('"
 					+ myTable.getID() + "','" + user.getUserName()
 					+ "','" + tableid
-					+ "')\" name='speichern' value='weitere Tabelle hinzufügen'/>"));
+					+ "')\" name='speichern' value='weitere Tabelle hinzufügen'/>");
 		}
-		string.append(Strings.maskHTML("<span id='tableSubmit_" + tableid + "'>"));
-		string.append(Strings.maskHTML("</span>"));
-		string.append(Strings.maskHTML("</div>"));
-		return string.toString();
+		string.appendHTML("<span id='tableSubmit_" + tableid + "'>");
+		string.appendHTML("</span>");
+		string.appendHTML("</div>");
+		return string.toStringRaw();
 	}
 
 	private Section<DefineTableMarkup> findTableToShow(String id) {
@@ -133,20 +132,21 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext,
-			Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext userContext,
+			Map<String, String> parameters, RenderResult result) {
 		String id = parameters.get("id");
 		boolean singleVersionTable = parameters.containsKey("single");
 		if (id == null) {
-			return "Error: no table id specified!";
+			result.append("Error: no table id specified!");
+			return;
 		}
 		Section<DefineTableMarkup> myTable = findTableToShow(id);
 
 		if (myTable != null) {
-			return renderTable(myTable, userContext, id, singleVersionTable);
+			result.append(renderTable(myTable, userContext, id, singleVersionTable));
 		}
 		else {
-			return "no table definition found for specified id: " + id;
+			result.append("no table definition found for specified id: " + id);
 		}
 	}
 

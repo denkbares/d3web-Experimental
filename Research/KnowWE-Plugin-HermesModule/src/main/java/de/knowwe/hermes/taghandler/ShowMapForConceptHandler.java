@@ -23,6 +23,7 @@ package de.knowwe.hermes.taghandler;
 import java.util.List;
 import java.util.Map;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.hermes.maps.Placemark;
@@ -35,8 +36,8 @@ public class ShowMapForConceptHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic,
+			UserContext user, Map<String, String> values, RenderResult result) {
 
 		String concept = topic;
 		String givenConcept = values.get("concept");
@@ -55,7 +56,7 @@ public class ShowMapForConceptHandler extends AbstractHTMLTagHandler {
 		// placemarks.add(new Placemark("London", 51.3, 0));
 		output += getJavaScript(placemarks, divId);
 		output += "</div>";
-		return output;
+		result.appendHTML(output);
 	}
 
 	private String getJavaScript(List<Placemark> placemarks, String divID) {
@@ -64,7 +65,9 @@ public class ShowMapForConceptHandler extends AbstractHTMLTagHandler {
 			return "no placemarks to render";
 		}
 		String output = "";
-		output += "<script src=\"http://maps.google.com/maps?file=api&v=2&key="+ShowMapHandler.apiKey+"&sensor=true_or_false\" type=\"text/javascript\"> </script>";
+		output += "<script src=\"http://maps.google.com/maps?file=api&v=2&key="
+				+ ShowMapHandler.apiKey
+				+ "&sensor=true_or_false\" type=\"text/javascript\"> </script>";
 		output += "<script type=\"text/javascript\">\n";
 		output += "if (GBrowserIsCompatible()) {"
 				+ "var map = new GMap2(document.getElementById(\"" + divID

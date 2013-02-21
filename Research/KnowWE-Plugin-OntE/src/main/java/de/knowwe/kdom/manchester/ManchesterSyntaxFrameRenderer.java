@@ -26,12 +26,12 @@ import java.util.Map;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.manchester.frame.DefaultFrame;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolUtils;
@@ -52,28 +52,28 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 	private boolean renderLink = false;
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, RenderResult string) {
 
-		string.append(Strings.maskHTML("<pre id=\""
+		string.appendHTML("<pre id=\""
 				+ sec.getID()
-				+ "\"style=\"white-space:pre-wrap;background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;position:relative;margin:0px\">"));
+				+ "\"style=\"white-space:pre-wrap;background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;position:relative;margin:0px\">");
 
 		renderMessages(sec, string);
-		string.append(Strings.maskHTML("<div style=\"position:absolute;top:0px;right:0px;border-bottom: 1px solid #E5E5E5;border-left: 1px solid #E5E5E5;padding:5px\">"
+		string.appendHTML("<div style=\"position:absolute;top:0px;right:0px;border-bottom: 1px solid #E5E5E5;border-left: 1px solid #E5E5E5;padding:5px\">"
 				// + getFrameName(sec)
 				// + getEditorIcon(sec)
 				+ renderTools(sec, user)
 				+ getLink(sec)
-				+ "</div>"));
+				+ "</div>");
 
-		StringBuilder frame = new StringBuilder();
+		RenderResult frame = new RenderResult(user);
 		DelegateRenderer.getInstance().render(sec, user, frame);
 
 		// remove the newlines at the end for nicer rendering
 		frame.replace(frame.length() - 2, frame.length(), "");
 		string.append(frame);
 
-		string.append(Strings.maskHTML("</pre>"));
+		string.appendHTML("</pre>");
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 	 * @param Section<? extends Type> section
 	 * @param StringBuilder string
 	 */
-	private void renderMessages(Section<? extends Type> section, StringBuilder string) {
+	private void renderMessages(Section<? extends Type> section, RenderResult string) {
 		Map<String, Collection<Message>> messagesFromSubtree = Messages.getMessagesFromSubtree(
 				section, Message.Type.ERROR, Message.Type.WARNING);
 		Collection<Message> allmsgs = new LinkedList<Message>();
@@ -94,7 +94,7 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 		renderKDOMReportMessages(allmsgs, string, Message.Type.ERROR, Message.Type.WARNING);
 	}
 
-	private void renderKDOMReportMessages(Collection<Message> messages, StringBuilder string, Message.Type... types) {
+	private void renderKDOMReportMessages(Collection<Message> messages, RenderResult string, Message.Type... types) {
 		if (messages == null) return;
 		if (messages.isEmpty()) return;
 
@@ -107,13 +107,13 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 				className = "error";
 			}
 
-			string.append(Strings.maskHTML("<span class='" + className + "'>"));
+			string.appendHTML("<span class='" + className + "'>");
 			for (Message msg : messages) {
 				if (msg.getType() != type) continue;
 				string.append(msg.getVerbalization());
 				string.append("\n");
 			}
-			string.append(Strings.maskHTML("</span>"));
+			string.appendHTML("</span>");
 		}
 	}
 

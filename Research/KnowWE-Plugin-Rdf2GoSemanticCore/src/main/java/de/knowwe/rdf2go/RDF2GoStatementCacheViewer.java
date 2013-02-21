@@ -8,6 +8,7 @@ import org.ontoware.rdf2go.model.Statement;
 
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 
@@ -18,27 +19,24 @@ public class RDF2GoStatementCacheViewer extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> parameters, RenderResult result) {
 		Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> statementCache = Rdf2GoCore.getInstance().getStatementCache();
 
-		StringBuffer buffy = new StringBuffer();
-
 		for (String string : statementCache.keySet()) {
-			buffy.append("\"" + string + "\":");
-			buffy.append("<br>");
+			result.append("\"" + string + "\":");
+			result.appendHTML("<br>");
 			WeakHashMap<Section<? extends Type>, List<Statement>> weakHashMap = statementCache.get(string);
 			for (Section<?> sec : weakHashMap.keySet()) {
-				buffy.append(sec.getID());
-				buffy.append(":");
+				result.append(sec.getID());
+				result.append(":");
 				for (Statement statement : weakHashMap.get(sec)) {
-					buffy.append(statement.toString());
+					result.append(statement.toString());
 				}
 			}
-			buffy.append("<br>");
+			result.appendHTML("<br>");
 
 		}
 
-		return buffy.toString();
 	}
 
 }

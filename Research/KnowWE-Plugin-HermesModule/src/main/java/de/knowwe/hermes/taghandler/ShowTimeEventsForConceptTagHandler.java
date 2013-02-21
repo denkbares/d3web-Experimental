@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.hermes.TimeEvent;
@@ -37,8 +38,8 @@ public class ShowTimeEventsForConceptTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic,
+			UserContext user, Map<String, String> values, RenderResult result) {
 		String concept = topic;
 		String givenConcept = values.get("concept");
 		if (givenConcept != null) {
@@ -49,17 +50,17 @@ public class ShowTimeEventsForConceptTagHandler extends AbstractHTMLTagHandler {
 				.findTimeEventsInvolvingConcept(concept);
 		Collections.sort(events);
 
-		StringBuffer result = new StringBuffer();
-		result.append("<div class=\"panel\">");
-		result.append("<h3> Ereignisse für \"" + concept + "\":</h3><div>");
+		result.appendHTML("<div class=\"panel\">");
+		result.appendHTML("<h3>");
+		result.append("Ereignisse für \"" + concept + "\":");
+		result.appendHTML("</h3><div>");
 
 		if (events != null) {
 			for (TimeEvent timeEvent : events) {
-				result.append(TimeLineEventRenderer.renderToHTML(timeEvent,
-						false));
+				TimeLineEventRenderer.renderToHTML(timeEvent,
+						false, result);
 			}
 		}
-		result.append("</div></div>");
-		return result.toString();
+		result.appendHTML("</div></div>");
 	}
 }

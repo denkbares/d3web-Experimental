@@ -30,6 +30,7 @@ import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
@@ -47,7 +48,7 @@ public class TimeLineHandler extends AbstractHTMLTagHandler {
 	private static final String TIME_AFTER = "nach";
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> values, RenderResult result) {
 
 		boolean asList = false;
 		if (values.containsKey("renderType") && values.get("renderType").equals("list")) {
@@ -60,17 +61,18 @@ public class TimeLineHandler extends AbstractHTMLTagHandler {
 			querystring = TIME_SPARQL.replaceAll("YEAR", yearAfter);
 		}
 		catch (Exception e) {
-			return "Illegal query String: " + querystring + "<br />" + " no valid parameter for: "
-					+ TIME_AFTER;
+			result.append("Illegal query String: " + querystring + "<br />"
+					+ " no valid parameter for: "
+					+ TIME_AFTER);
+			return;
 		}
 		try {
-			QueryResultTable result = Rdf2GoCore.getInstance().sparqlSelect(querystring);
-			return Strings.maskHTML(renderQueryResult(result, values, asList));
+			QueryResultTable resultIter = Rdf2GoCore.getInstance().sparqlSelect(querystring);
+			result.appendHTML(renderQueryResult(resultIter, values, asList));
 		}
 		catch (ModelRuntimeException e) {
 			e.printStackTrace();
 		}
-		return null;
 	}
 
 	private String getIntAsString(int defaultValue, Map<String, String> valueMap, String valueFromMap) {

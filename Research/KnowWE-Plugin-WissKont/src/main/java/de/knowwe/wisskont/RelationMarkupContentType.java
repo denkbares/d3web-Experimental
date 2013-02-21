@@ -40,11 +40,11 @@ import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquotedNonEmpty;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -60,21 +60,21 @@ public class RelationMarkupContentType extends AbstractType {
 
 	public RelationMarkupContentType(String regex) {
 		this.setSectionFinder(new RegexSectionFinder(regex, Pattern.MULTILINE
-					| Pattern.DOTALL,
-					2));
+				| Pattern.DOTALL,
+				2));
 		this.addChildType(new RelationLine());
 		this.setRenderer(new CompositeRenderer(new SurroundingRenderer() {
 
 			@Override
-			public void renderPre(Section<?> section, UserContext user, StringBuilder string) {
-				string.append(Strings.maskHTML("<div class='relationMarkupContent' id='"
-							+ section.getID() + "'>"));
+			public void renderPre(Section<?> section, UserContext user, RenderResult string) {
+				string.appendHTML("<div class='relationMarkupContent' id='"
+						+ section.getID() + "'>");
 
 			}
 
 			@Override
-			public void renderPost(Section<?> section, UserContext user, StringBuilder string) {
-				string.append(Strings.maskHTML("</div>"));
+			public void renderPost(Section<?> section, UserContext user, RenderResult string) {
+				string.appendHTML("</div>");
 
 			}
 		}));
@@ -110,17 +110,17 @@ public class RelationMarkupContentType extends AbstractType {
 
 					URI subjectURI = RDFSUtil.getURI(conceptDefinition);
 					Section<RelationMarkup> relationMarkup = Sections.findAncestorOfType(
-								section, RelationMarkup.class);
+							section, RelationMarkup.class);
 					URI predicateURI = relationMarkup.get().getRelationURI();
 					Section<ObjectIdentifier> objectSection = Sections.findSuccessor(section,
-								ObjectIdentifier.class);
+							ObjectIdentifier.class);
 					URI objectURI = RDFSUtil.getURI(objectSection);
 					Statement statement = Rdf2GoCore.getInstance().createStatement(subjectURI,
-								predicateURI,
-								objectURI);
+							predicateURI,
+							objectURI);
 					System.out.println("Inserting: " + statement.toString());
 					Rdf2GoCore.getInstance().addStatements(section,
-								new Statement[] { statement });
+							new Statement[] { statement });
 
 				}
 
@@ -136,12 +136,12 @@ public class RelationMarkupContentType extends AbstractType {
 					Collection<Section<ConceptMarkup>> conceptDefinitions = MarkupUtils.getConecptDefinitions(section);
 					for (Section<ConceptMarkup> def : conceptDefinitions) {
 						result.add(Sections.findSuccessor(def,
-									IncrementalTermDefinition.class));
+								IncrementalTermDefinition.class));
 					}
 					if (conceptDefinitions.size() != 1) {
 						Section<InvalidReference> invalidReference =
-									Section.createSection("foo",
-											new InvalidReference(), null);
+								Section.createSection("foo",
+										new InvalidReference(), null);
 						result.add(invalidReference);
 					}
 					return result;
@@ -162,11 +162,11 @@ public class RelationMarkupContentType extends AbstractType {
 				class OIRenderer implements Renderer {
 
 					@Override
-					public void render(Section<?> section, UserContext user, StringBuilder string) {
+					public void render(Section<?> section, UserContext user, RenderResult string) {
 						Section<SimpleReference> ref = Sections.cast(section,
-									SimpleReference.class);
-						string.append(Strings.maskHTML("<a href='" + RDFSUtil.getURI(ref)
-									+ "'>" + section.getText() + "</a>"));
+								SimpleReference.class);
+						string.appendHTML("<a href='" + RDFSUtil.getURI(ref)
+								+ "'>" + section.getText() + "</a>");
 
 					}
 				}

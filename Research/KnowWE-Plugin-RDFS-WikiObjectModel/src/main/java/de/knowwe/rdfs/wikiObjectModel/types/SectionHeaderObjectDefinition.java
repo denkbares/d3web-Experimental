@@ -25,11 +25,11 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.rdfs.AbstractIRITermDefinition;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
@@ -56,15 +56,15 @@ public class SectionHeaderObjectDefinition<TermObject> extends AbstractIRITermDe
 						new StyleRenderer("color:rgb(0, 0, 0)")));
 
 		@Override
-		public void render(Section<?> section, UserContext user, StringBuilder string) {
+		public void render(Section<?> section, UserContext user, RenderResult string) {
 
 			// render anchor that corresponds to term name / URI
 			Section<SectionHeaderObjectDefinition> castedSection = Sections.cast(section,
 					SectionHeaderObjectDefinition.class);
 			String termName = castedSection.get().getTermName(castedSection);
-			string.append(Strings.maskHTML("<a name='"
-					+ termName.substring(termName.indexOf("#") + 1) + "'>"));
-			string.append(Strings.maskHTML("</a>"));
+			string.appendHTML("<a name='"
+					+ termName.substring(termName.indexOf("#") + 1) + "'>");
+			string.appendHTML("</a>");
 
 			// render tool stuff
 			r.render(section, user, string);

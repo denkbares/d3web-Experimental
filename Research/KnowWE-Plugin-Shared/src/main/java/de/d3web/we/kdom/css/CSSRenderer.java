@@ -27,9 +27,9 @@ import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.xml.AbstractXMLType;
 
 /**
@@ -47,17 +47,17 @@ import de.knowwe.kdom.xml.AbstractXMLType;
 public class CSSRenderer implements Renderer {
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, RenderResult string) {
 		Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(sec);
 		String style = mapFor.get("style");
 
-		StringBuilder b = new StringBuilder();
+		RenderResult b = new RenderResult(user);
 		List<Section<PlainText>> children = Sections.findChildrenOfType(sec, PlainText.class);
 		// should only be one
 		for (Section<PlainText> section : children) {
 			DelegateRenderer.getInstance().render(section, user, b);
 		}
-		string.append(wrapWithCSS(b.toString(), style));
+		wrapWithCSS(b.toStringRaw(), style, string);
 	}
 
 	/**
@@ -70,11 +70,9 @@ public class CSSRenderer implements Renderer {
 	 * @param style
 	 * @return
 	 */
-	private String wrapWithCSS(String content, String style) {
-		StringBuilder result = new StringBuilder();
-		result.append("<span style='" + style + "'>");
+	private void wrapWithCSS(String content, String style, RenderResult result) {
+		result.appendHTML("<span style='" + style + "'>");
 		result.append(content);
-		result.append("</span>");
-		return Strings.maskHTML(result.toString());
+		result.appendHTML("</span>");
 	}
 }

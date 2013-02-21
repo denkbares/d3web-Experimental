@@ -24,9 +24,9 @@ import java.util.ResourceBundle;
 import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -49,9 +49,9 @@ public class BlockMarkupContentRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user,
-			StringBuilder string) {
+			RenderResult string) {
 
-		string.append(Strings.maskHTML("%%collapsebox-closed \r\n"));
+		string.appendHTML("%%collapsebox-closed \r\n");
 		String tString = "";
 
 		// Only 1 title here
@@ -63,21 +63,19 @@ public class BlockMarkupContentRenderer implements Renderer {
 			tString = bundle.getString(sec.getFather().get().getName());
 		}
 
-		string.append(
-				Strings.maskHTML("! "
-						+ tString
-						+ "\r\n")
-				);
+		string.appendHTML("! "
+				+ tString
+				+ "\r\n");
 
-		string.append(Strings.maskHTML("<pre id=\""
+		string.appendHTML("<pre id=\""
 				+ sec.getID()
-				+ "\" class=\"casetrain-instantedit-pre\">"));
-		string.append(Strings.maskHTML("<div class=\"casetrain-instantedit\">"
+				+ "\" class=\"casetrain-instantedit-pre\">");
+		string.appendHTML("<div class=\"casetrain-instantedit\">"
 				// + getFrameName(sec)
 				// + getEditorIcon(sec)
 				+ Utils.renderTools(sec, user)
 				// + getLink(sec)
-				+ "</div>"));
+				+ "</div>");
 
 		// Dont ask why I use this hack here!
 		// DelegateRenderer should find the SubblockMarkupRender, but in fact
@@ -88,9 +86,9 @@ public class BlockMarkupContentRenderer implements Renderer {
 			s.get().getRenderer().render(s, user, string);
 		}
 
-		string.append(Strings.maskHTML("/%\r\n"));
+		string.append("/%\r\n");
 
-		string.append(Strings.maskHTML("</pre>"));
+		string.appendHTML("</pre>");
 		return;
 	}
 

@@ -22,7 +22,7 @@ package de.knowwe.hermes.util;
 
 import java.util.List;
 
-import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.hermes.TimeEvent;
 
 public class TimeLineEventRenderer {
@@ -35,7 +35,7 @@ public class TimeLineEventRenderer {
 		 * 
 		 * @return the string
 		 */
-	public static String renderToHTML(TimeEvent te, boolean maskHTMLTags) {
+	public static void renderToHTML(TimeEvent te, boolean maskHTMLTags, RenderResult result) {
 		// return cached result, if possible
 		// if (te.getRenderedOutput() != null) return te.getRenderedOutput();
 
@@ -108,13 +108,11 @@ public class TimeLineEventRenderer {
 
 		sb.append("</div>\n</div>\n");
 
-		String result = sb.toString();
-
 		if (maskHTMLTags) {
-			result = result.replaceAll(">", Environment.HTML_GT);
-			result = result.replaceAll("<", Environment.HTML_ST);
-			result = result.replaceAll("\"", Environment.HTML_QUOTE);
+			result.appendHTML(sb.toString());
 		}
-		return result;
+		else {
+			result.append(sb.toString());
+		}
 	}
 }

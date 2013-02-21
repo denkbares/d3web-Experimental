@@ -21,10 +21,10 @@ package de.knowwe.casetrain.type;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -38,11 +38,11 @@ public class AttributeContent extends AbstractType {
 		this.setRenderer(new Renderer() {
 
 			@Override
-			public void render(Section<?> sec, UserContext user, StringBuilder string) {
+			public void render(Section<?> sec, UserContext user, RenderResult string) {
 
-				string.append(Strings.maskHTML("<td>"));
+				string.appendHTML("<td>");
 				DelegateRenderer.getInstance().render(sec, user, string);
-				string.append(Strings.maskHTML("</td>"));
+				string.appendHTML("</td>");
 
 			}
 		});

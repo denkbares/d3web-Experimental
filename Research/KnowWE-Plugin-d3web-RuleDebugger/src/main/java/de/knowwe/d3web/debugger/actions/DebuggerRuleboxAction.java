@@ -33,6 +33,7 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.d3web.debugger.DebugUtilities;
 import de.knowwe.d3web.debugger.renderer.DebuggerRuleRenderer;
@@ -58,7 +59,7 @@ public class DebuggerRuleboxAction extends AbstractAction {
 	 * Render the rulebox.
 	 */
 	public String renderRule(UserActionContext context) {
-		StringBuilder buffer = new StringBuilder();
+		RenderResult buffer = new RenderResult(context);
 		String title = context.getTitle();
 		KnowledgeBase kb = null;
 		try {

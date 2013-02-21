@@ -21,9 +21,9 @@
 package de.knowwe.example;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 public class HelloKnowWERenderer implements Renderer {
 
@@ -40,9 +40,9 @@ public class HelloKnowWERenderer implements Renderer {
 	 * (KnowWEEnvoronment.maskHTML(htmlString))
 	 */
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, RenderResult string) {
 		string.append("Hello!");
-		string.append(Strings.maskHTML("<img src=\"KnowWEExtension/images/helloworld.jpg\" alt=\":)\"/>"));
+		string.appendHTML("<img src=\"KnowWEExtension/images/helloworld.jpg\" alt=\":)\"/>");
 	}
 
 }

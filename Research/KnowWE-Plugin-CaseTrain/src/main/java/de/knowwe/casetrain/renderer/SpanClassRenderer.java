@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * Renders a span with css-classes around some text.
@@ -58,15 +58,15 @@ public class SpanClassRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user,
-			StringBuilder string) {
-		string.append(Strings.maskHTML("<span class=\"" + clazz));
+			RenderResult string) {
+		string.appendHTML("<span class=\"" + clazz);
 
 		for (String clazz : cssClasses)
 			string.append(" " + clazz);
-		string.append(Strings.maskHTML("\">"));
+		string.appendHTML("\">");
 
 		MouseOverTitleRenderer.getInstance().render(sec, user, string);
-		string.append(Strings.maskHTML("</span>"));
+		string.appendHTML("</span>");
 	}
 
 }

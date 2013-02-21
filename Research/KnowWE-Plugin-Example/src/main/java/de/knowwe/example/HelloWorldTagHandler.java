@@ -23,9 +23,9 @@ package de.knowwe.example;
 import java.util.Map;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * @author Alex Legler
@@ -37,7 +37,7 @@ public class HelloWorldTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> values) {
+	public void render(Section<?> section, UserContext userContext, Map<String, String> values, RenderResult result) {
 		String count = values.get("count");
 
 		int number = 1;
@@ -55,13 +55,12 @@ public class HelloWorldTagHandler extends AbstractTagHandler {
 			}
 		}
 
-		String result = " <b>Hello World!</b>";
+		result.appendHTML(" <b>Hello World!</b>");
 
 		for (int i = 0; i < number; i++) {
-			result += ("<img src=\"KnowWEExtension/images/helloworld.jpg\" alt=\":)\"/>");
+			result.append("<img src=\"KnowWEExtension/images/helloworld.jpg\" alt=\":)\"/>");
 		}
 
-		return Strings.maskHTML(result);
 	}
 
 }

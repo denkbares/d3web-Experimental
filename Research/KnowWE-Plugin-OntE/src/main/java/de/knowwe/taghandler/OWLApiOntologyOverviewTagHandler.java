@@ -30,6 +30,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.taghandler.TagHandler;
@@ -54,20 +55,21 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> parameters, RenderResult result) {
 
 		if (parameters.get("help") != null) {
 			StringBuilder html = new StringBuilder();
 			html.append("<div style=\"background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;padding:8px 0 10px 20px;\">");
 			html.append(getDescription(user));
 			html.append("</div>");
-			return html.toString();
+			result.appendHTML(html.toString());
+			return;
 		}
 
 		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
 		Collection<Article> articles = mgr.getArticles();
-		StringBuilder anchors = new StringBuilder();
-		StringBuilder concepts = new StringBuilder();
+		RenderResult anchors = new RenderResult(user);
+		RenderResult concepts = new RenderResult(user);
 
 		Map<String, List<Section<DefaultFrame>>> frames = new HashMap<String, List<Section<DefaultFrame>>>();
 
@@ -97,7 +99,7 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 
 			anchors.append("<li style=\"display:inline; padding-right:10px;\"><a href=\"#" + key
 					+ "\">" + key
-						+ " (" + defaultFrames.size() + ") "
+					+ " (" + defaultFrames.size() + ") "
 					+ "</a></li>");
 			concepts.append("<a name=\"" + key + "\"></a>");
 
@@ -113,7 +115,7 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 		}
 		anchors.append("</ul>");
 
-		return anchors.toString() + concepts.toString();
+		result.appendHTML(anchors.toStringRaw() + concepts.toStringRaw());
 	}
 
 	/**

@@ -28,6 +28,7 @@ import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
@@ -45,40 +46,43 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 
 	// ?t lns:isDefinedBy ?to . ?to lns:hasTopic TOPIC .
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> values, RenderResult result) {
 
-		String yearAfter = getIntAsString(-10000, values, TIME_AFTER);
+		// String yearAfter = getIntAsString(-10000, values, TIME_AFTER);
 		String querystring = null;
 		try {
 			querystring = TIME_SPARQL.replaceAll("TOPIC", "<"
 					+ Rdf2GoCore.getInstance().createlocalURI(topic).toString() + ">");
 		}
 		catch (Exception e) {
-			return "Illegal query String: " + querystring + "<br />" + " no valid parameter for: "
-					+ TIME_AFTER;
+			result.append("Illegal query String: " + querystring);
+			result.appendHTML("<br />");
+			result.append(" no valid parameter for: "
+					+ TIME_AFTER);
+			return;
 		}
 
 		QueryResultTable qResultTable = Rdf2GoCore.getInstance().sparqlSelect(querystring);
 		ClosableIterator<QueryRow> qResult = qResultTable.iterator();
 
-		return Strings.maskHTML(renderQueryResult(qResult, values));
+		renderQueryResult(qResult, values, result);
 
 	}
 
-	private String getIntAsString(int defaultValue, Map<String, String> valueMap, String valueFromMap) {
-		try {
-			return String.valueOf(Integer.parseInt(valueMap.get(valueFromMap)));
-		}
-		catch (NumberFormatException nfe) {
-			return String.valueOf(defaultValue);
-		}
-	}
+	// private String getIntAsString(int defaultValue, Map<String, String>
+	// valueMap, String valueFromMap) {
+	// try {
+	// return String.valueOf(Integer.parseInt(valueMap.get(valueFromMap)));
+	// }
+	// catch (NumberFormatException nfe) {
+	// return String.valueOf(defaultValue);
+	// }
+	// }
 
-	private String renderQueryResult(ClosableIterator<QueryRow> result, Map<String, String> params) {
+	private String renderQueryResult(ClosableIterator<QueryRow> result, Map<String, String> params, RenderResult buffy) {
 		// List<String> bindings = result.getBindingNames();
-		StringBuffer buffy = new StringBuffer();
 		try {
-			buffy.append("<ul>");
+			buffy.appendHTML("<ul>");
 			boolean found = false;
 			TreeMap<TimeStamp, String> queryResults = new TreeMap<TimeStamp, String>();
 			while (result.hasNext()) {
@@ -91,7 +95,11 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 					String timeString = Strings.decodeURL(row.getValue("y").toString());
 					TimeStamp timeStamp = new TimeStamp(timeString);
 					String timeDescr = timeStamp.getDescription();
-					queryResults.put(timeStamp, "<li>" + timeDescr + ": " + title + "</li>");
+					RenderResult queryRenderResult = new RenderResult(buffy);
+					queryRenderResult.appendHTML("<li>");
+					queryRenderResult.append(timeDescr + ": " + title);
+					queryRenderResult.appendHTML("</li>");
+					queryResults.put(timeStamp, queryRenderResult.toStringRaw());
 				}
 				// Set<String> names = set.getBindingNames();
 				// for (String string : names) {
@@ -105,11 +113,11 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 				buffy.append(s);
 			}
 			if (!found) buffy.append("no results found");
-			buffy.append("</ul>");
+			buffy.appendHTML("</ul>");
 		}
 		catch (ModelRuntimeException e) {
 			return "error";
 		}
-		return buffy.toString();
+		return buffy.toStringRaw();
 	}
 }

@@ -49,10 +49,10 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.Strings;
 
 /**
  * Renders rules to provide a debugging-layout.
@@ -63,7 +63,7 @@ public class DebuggerRuleRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user,
-			StringBuilder string) {
+			RenderResult string) {
 		Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 		KnowledgeBase kb = D3webUtils.getKnowledgeBase(article.getWeb(), article.getTitle());
 		Session session = SessionProvider.getSession(user, kb);
@@ -80,12 +80,13 @@ public class DebuggerRuleRenderer implements Renderer {
 
 		if (r != null && session != null) {
 			if (r.hasFired(session)) {
-				string.append(Strings.maskHTML("<div class='ruleContentFired' ruleid='"
-						+ r.hashCode() + "'>"));
+				string.appendHTML("<div class='ruleContentFired' ruleid='"
+						+ r.hashCode() + "'>");
 			}
 			else {
-				string.append(Strings.maskHTML("<div class='ruleContent' ruleid='" + r.hashCode()
-						+ "'>"));
+				string.appendHTML("<div class='ruleContent' ruleid='"
+						+ r.hashCode()
+						+ "'>");
 			}
 			for (Section<? extends Type> section : ruleSections) {
 				if (section.get() instanceof ConditionArea) {
@@ -97,14 +98,14 @@ public class DebuggerRuleRenderer implements Renderer {
 					DelegateRenderer.getInstance().renderSubSection(section, user, string);
 				}
 			}
-			string.append(Strings.maskHTML("</div>"));
+			string.appendHTML("</div>");
 		}
 		else {
 			DelegateRenderer.getInstance().render(sec, user, string);
 		}
 	}
 
-	public static void renderConditionSection(Section<?> condSection, Condition cond, Session session, String title, boolean inside, StringBuilder string, UserContext user) {
+	public static void renderConditionSection(Section<?> condSection, Condition cond, Session session, String title, boolean inside, RenderResult string, UserContext user) {
 		List<Section<? extends Type>> children = condSection.getChildren();
 		for (Section<? extends Type> section : children) {
 			if (section.get() instanceof CompositeCondition) {
@@ -123,18 +124,18 @@ public class DebuggerRuleRenderer implements Renderer {
 	 * @param inside If the rule is display inside the debugger, it has to use
 	 *        different js-functions.
 	 */
-	public static void renderCondition(Section<CompositeCondition> condSection, Condition cond, Session session, String title, boolean inside, StringBuilder string, UserContext user) {
+	public static void renderCondition(Section<CompositeCondition> condSection, Condition cond, Session session, String title, boolean inside, RenderResult string, UserContext user) {
 
 		// open div for cond
 		try {
-			if (cond.eval(session)) string.append(Strings.maskHTML("<div class='condTrue'>"));
-			else string.append(Strings.maskHTML("<div class='condFalse'>"));
+			if (cond.eval(session)) string.appendHTML("<div class='condTrue'>");
+			else string.appendHTML("<div class='condFalse'>");
 		}
 		catch (NoAnswerException e) {
-			string.append(Strings.maskHTML("<div class='condUndefined'>"));
+			string.appendHTML("<div class='condUndefined'>");
 		}
 		catch (UnknownAnswerException e) {
-			string.append(Strings.maskHTML("<div class='condUnknown'>"));
+			string.appendHTML("<div class='condUnknown'>");
 		}
 
 		// handle div
@@ -197,11 +198,11 @@ public class DebuggerRuleRenderer implements Renderer {
 		}
 
 		// close div for cond
-		string.append(Strings.maskHTML("</div>"));
+		string.appendHTML("</div>");
 
 	}
 
-	private static void renderBracedCondition(Section<? extends Type> section, Condition condition, Session session, String title, boolean inside, StringBuilder string, UserContext user) {
+	private static void renderBracedCondition(Section<? extends Type> section, Condition condition, Session session, String title, boolean inside, RenderResult string, UserContext user) {
 		List<Section<? extends Type>> children = section.getChildren();
 		for (Section<? extends Type> child : children) {
 			if (child.get() instanceof BracedConditionContent) {
@@ -224,7 +225,7 @@ public class DebuggerRuleRenderer implements Renderer {
 
 	}
 
-	private static void renderTerminalCondition(Section<?> condSection, Condition cond, Session session, String title, boolean inside, StringBuilder builder, UserContext user) {
+	private static void renderTerminalCondition(Section<?> condSection, Condition cond, Session session, String title, boolean inside, RenderResult builder, UserContext user) {
 
 		List<Section<? extends Type>> children = condSection.getChildren();
 		for (Section<? extends Type> child : children) {
@@ -233,16 +234,16 @@ public class DebuggerRuleRenderer implements Renderer {
 				for (Section<? extends Type> grandChild : grandChildren) {
 					if (grandChild.get() instanceof QuestionReference) {
 						if (cond instanceof CondQuestion) {
-							builder.append(DebuggerQuestionRenderer.renderQuestion(
+							DebuggerQuestionRenderer.renderQuestion(
 									((CondQuestion) cond).getQuestion(),
-											session, title, inside));
+									session, title, inside, builder);
 						}
 					}
 					else if (grandChild.get() instanceof SolutionReference) {
 						if (cond instanceof CondDState) {
-							builder.append(Strings.maskHTML("<span class='debuggerSolution'>")
-									+ ((CondDState) cond).getSolution()
-									+ Strings.maskHTML("</span>"));
+							builder.appendHTML("<span class='debuggerSolution'>");
+							builder.append(((CondDState) cond).getSolution());
+							builder.appendHTML("</span>");
 						}
 					}
 					else {
@@ -271,10 +272,11 @@ public class DebuggerRuleRenderer implements Renderer {
 	 * @param user
 	 * @param builder
 	 */
-	private static void delegateMaskJSPWikiMarkup(Section<? extends Type> child, UserContext user, StringBuilder builder) {
-		StringBuilder buffy = new StringBuilder();
+	private static void delegateMaskJSPWikiMarkup(Section<? extends Type> child, UserContext user, RenderResult builder) {
+		RenderResult buffy = new RenderResult(builder);
 		DelegateRenderer.getInstance().renderSubSection(child, user, buffy);
-		builder.append(Strings.maskJSPWikiMarkup(buffy.toString()));
+		builder.maskJSPWikiMarkup();
+		builder.append(buffy.toStringRaw());
 	}
 
 	/**
@@ -284,9 +286,10 @@ public class DebuggerRuleRenderer implements Renderer {
 	 * @param user
 	 * @param builder
 	 */
-	private static void renderMaskJSPWikiMarkup(Renderer r, Section<? extends Type> child, UserContext user, StringBuilder builder) {
-		StringBuilder buffy = new StringBuilder();
+	private static void renderMaskJSPWikiMarkup(Renderer r, Section<? extends Type> child, UserContext user, RenderResult builder) {
+		RenderResult buffy = new RenderResult(builder);
 		r.render(child, user, buffy);
-		builder.append(Strings.maskJSPWikiMarkup(buffy.toString()));
+		buffy.maskJSPWikiMarkup();
+		builder.append(buffy.toStringRaw());
 	}
 }

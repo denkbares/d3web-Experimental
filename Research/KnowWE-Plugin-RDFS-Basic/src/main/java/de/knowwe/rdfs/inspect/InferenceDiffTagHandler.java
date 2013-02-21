@@ -27,9 +27,9 @@ import org.ontoware.rdf2go.model.Statement;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.SparqlResultRenderer;
@@ -61,38 +61,39 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext user, Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext user, Map<String, String> parameters, RenderResult result) {
 
 		Map<String, String> urlParameters = user.getParameters();
 		String sectionID = urlParameters.get("section");
 
-		if (sectionID == null) return "Could not calculate any difference. No statement given!";
+		if (sectionID == null) {
+			result.append("Could not calculate any difference. No statement given!");
+			return;
+		}
 
+		RenderResult html = new RenderResult(result);
 		Section<?> statementSection = Sections.getSection(sectionID);
-		StringBuilder html = new StringBuilder();
 		if (statementSection != null) {
 
 			Collection<Statement> diff = Rdf2GoCore.getInstance().generateStatementDiffForSection(
 					statementSection);
-
 			// render the difference
-
-			html.append(Strings.maskHTML("<h3>"));
+			html.appendHTML("<h3>");
 			html.append("Diff for: \"" + statementSection.getText() + "\"");
-			html.append(Strings.maskHTML("</h3>"));
-			html.append(Strings.maskHTML("<table>"));
-			html.append(renderDiff(diff));
-			html.append(Strings.maskHTML("</table>"));
+			html.appendHTML("</h3>");
+			html.appendHTML("<table>");
+			html.append(renderDiff(diff, user));
+			html.appendHTML("</table>");
 		}
 
-		StringBuilder buffer = new StringBuilder();
+		RenderResult buffer = new RenderResult(user);
 		String cssClassName = "type_" + section.get().getName();
 		defaultMarkupRenderer.renderDefaultMarkupStyled(
-				getTagName(), html.toString(), sectionID, cssClassName, new Tool[] {},
+				getTagName(), html.toStringRaw(), sectionID, cssClassName, new Tool[] {},
 				user,
 				buffer);
-		Strings.maskJSPWikiMarkup(buffer);
-		return buffer.toString();
+		buffer.maskJSPWikiMarkup();
+		result.append(buffer);
 
 	}
 
@@ -103,40 +104,40 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 	 * @param set A set containing the statements that differ.
 	 * @return HTML string
 	 */
-	private String renderDiff(Collection<Statement> set) {
-		StringBuilder result = new StringBuilder();
+	private String renderDiff(Collection<Statement> set, UserContext user) {
+		RenderResult result = new RenderResult(user);
 
-		result.append(Strings.maskHTML("<tr>"));
-		result.append(Strings.maskHTML("<th>"));
+		result.appendHTML("<tr>");
+		result.appendHTML("<th>");
 		result.append("x");
-		result.append(Strings.maskHTML("</th>"));
-		result.append(Strings.maskHTML("<th>"));
+		result.appendHTML("</th>");
+		result.appendHTML("<th>");
 		result.append("y");
-		result.append(Strings.maskHTML("</th>"));
-		result.append(Strings.maskHTML("<th>"));
+		result.appendHTML("</th>");
+		result.appendHTML("<th>");
 		result.append("z");
-		result.append(Strings.maskHTML("</th>"));
-		result.append(Strings.maskHTML("</tr>"));
+		result.appendHTML("</th>");
+		result.appendHTML("</tr>");
 
 		Iterator<Statement> itr = set.iterator();
 		while (itr.hasNext()) {
 			Statement row = itr.next();
 			// x y z (variables names of the query, see above)
 
-			result.append(Strings.maskHTML("<tr>"));
-			result.append(Strings.maskHTML("<td>"));
+			result.appendHTML("<tr>");
+			result.appendHTML("<td>");
 			result.append(SparqlResultRenderer.getInstance().renderNode(row.getSubject(), null,
-					false));
-			result.append(Strings.maskHTML("</td>"));
-			result.append(Strings.maskHTML("<td>"));
+					false, user));
+			result.appendHTML("</td>");
+			result.appendHTML("<td>");
 			result.append(SparqlResultRenderer.getInstance().renderNode(row.getPredicate(), null,
-					false));
-			result.append(Strings.maskHTML("</td>"));
-			result.append(Strings.maskHTML("<td>"));
+					false, user));
+			result.appendHTML("</td>");
+			result.appendHTML("<td>");
 			result.append(SparqlResultRenderer.getInstance().renderNode(row.getObject(), null,
-					false));
-			result.append(Strings.maskHTML("</td>"));
-			result.append(Strings.maskHTML("</tr>"));
+					false, user));
+			result.appendHTML("</td>");
+			result.appendHTML("</tr>");
 		}
 		return result.toString();
 	}

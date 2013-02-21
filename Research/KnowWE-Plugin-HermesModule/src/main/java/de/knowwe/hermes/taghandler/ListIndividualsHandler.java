@@ -27,9 +27,9 @@ import java.util.Map.Entry;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.SparqlResultRenderer;
 
@@ -45,7 +45,7 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 	private static final String SPARQL_END = "} ORDER BY ASC(?x)";
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> values, RenderResult result) {
 
 		String className = values.get("class");
 
@@ -66,7 +66,8 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 		}
 
 		if (className == null) {
-			return "No class given for list class members tag!";
+			result.append("No class given for list class members tag!");
+			return;
 		}
 
 		URI classURI = Rdf2GoCore.getInstance().createlocalURI(className);
@@ -76,6 +77,6 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 
 		QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
 				querystring);
-		return Strings.maskHTML(SparqlResultRenderer.getInstance().renderQueryResult(resultSet).getHTML());
+		result.append(SparqlResultRenderer.getInstance().renderQueryResult(resultSet, user).getHTML());
 	}
 }

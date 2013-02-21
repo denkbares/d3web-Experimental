@@ -22,12 +22,12 @@ import java.util.Collection;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.DefaultMessageRenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.Strings;
 
 /**
  * A renderer for terms which also takes care of rendering error messages (using
@@ -47,38 +47,34 @@ public class TermDefinitionRenderer<TermObject> implements Renderer {
 	}
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, RenderResult string) {
 
 		Collection<Message> messages = IncrementalCompiler.getInstance().checkDefinition(
 				KnowWEUtils.getTermIdentifier(sec));
 		for (Message kdomReportMessage : messages) {
 			if (kdomReportMessage.getType() == Message.Type.ERROR) {
-				string.append(
-						DefaultMessageRenderer.ERROR_RENDERER.preRenderMessage(
-								kdomReportMessage, user, null));
+				DefaultMessageRenderer.ERROR_RENDERER.preRenderMessage(
+						kdomReportMessage, user, null, string);
 			}
 			if (kdomReportMessage.getType() == Message.Type.WARNING) {
-				string.append(
-						DefaultMessageRenderer.WARNING_RENDERER.preRenderMessage(
-								kdomReportMessage, user, null));
+				DefaultMessageRenderer.WARNING_RENDERER.preRenderMessage(
+						kdomReportMessage, user, null, string);
 			}
 		}
 
-		string.append(Strings.maskHTML("<a name='" + sec.getID() + "'>"));
-		string.append(Strings.maskHTML("</a>"));
+		string.appendHTML("<a name='" + sec.getID() + "'>");
+		string.appendHTML("</a>");
 
 		r.render(sec, user, string);
 
 		for (Message kdomReportMessage : messages) {
 			if (kdomReportMessage.getType() == Message.Type.ERROR) {
-				string.append(
-						DefaultMessageRenderer.ERROR_RENDERER.postRenderMessage(
-								kdomReportMessage, user, null));
+				DefaultMessageRenderer.ERROR_RENDERER.postRenderMessage(
+						kdomReportMessage, user, null, string);
 			}
 			if (kdomReportMessage.getType() == Message.Type.WARNING) {
-				string.append(
-						DefaultMessageRenderer.WARNING_RENDERER.postRenderMessage(
-								kdomReportMessage, user, null));
+				DefaultMessageRenderer.WARNING_RENDERER.postRenderMessage(
+						kdomReportMessage, user, null, string);
 			}
 		}
 	}

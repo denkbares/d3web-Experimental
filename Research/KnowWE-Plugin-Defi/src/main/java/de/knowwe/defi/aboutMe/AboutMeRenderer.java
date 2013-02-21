@@ -19,9 +19,9 @@
 package de.knowwe.defi.aboutMe;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.defi.communication.PrivateCommunicationTaghandler;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -37,7 +37,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 public class AboutMeRenderer implements Renderer {
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, RenderResult string) {
 
 		String username = user.getUserName();
 
@@ -55,7 +55,7 @@ public class AboutMeRenderer implements Renderer {
 		}
 		noneHTML.append("</div>");
 
-		string.append(Strings.maskHTML(noneHTML.toString()));
+		string.appendHTML(noneHTML.toString());
 	}
 
 	/**
@@ -313,11 +313,11 @@ public class AboutMeRenderer implements Renderer {
 
 				string.append("<img style='border:1px solid black;margin-top:6px;' src=\"KnowWEExtension/images/avatars/"
 						+ icon
-							+ "\" height=\"80px\" width=\"80px\" />\n");
+						+ "\" height=\"80px\" width=\"80px\" />\n");
 				string.append("<input style='margin:0px 10px 0px 0px;' type=\"radio\" name=\""
 						+ AboutMe.HTML_AVATAR + "\" id=\""
-							+ AboutMe.HTML_AVATAR + "\" value=\""
-							+ icon + "\" " + checked + " />\n");
+						+ AboutMe.HTML_AVATAR + "\" value=\""
+						+ icon + "\" " + checked + " />\n");
 			}
 			string.append("<br />");
 		}

@@ -12,8 +12,8 @@ import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysisReport;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.core.wikiConnector.WikiAttachment;
 import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
@@ -28,14 +28,14 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 
 	@Override
-	protected void renderContents(Section<?> section, UserContext user, StringBuilder string) {
+	protected void renderContents(Section<?> section, UserContext user, RenderResult string) {
 
 		String master = TestCaseExecutorType.getMaster(section);
 		// no kb would cause massive amount of nullpointers
 		KnowledgeBase kb = D3webUtils.getKnowledgeBase(user.getWeb(), master);
 		if (kb == null) {
-			string.append(Strings.maskHTML("<div id=\"testcases\">No Knowledgebase found on "
-					+ master + "</div>"));
+			string.appendHTML("<div id=\"testcases\">No Knowledgebase found on "
+					+ master + "</div>");
 			return;
 		}
 
@@ -50,10 +50,10 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 					TestCaseExecutorType.ANNOTATION_FILE);
 
 			if (files.length == 0) {
-				string.append(renderSelection(section, master));
+				appendSelection(section, master, string);
 			}
 			else {
-				string.append(renderAutomated(section, master, files));
+				renderAutomated(section, master, files, string);
 			}
 
 		}
@@ -67,7 +67,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 	 * @param section
 	 * @param context
 	 */
-	private void renderResult(TestCaseAnalysisReport report, StringBuilder string, Section<?> section, UserContext context) {
+	private void renderResult(TestCaseAnalysisReport report, RenderResult string, Section<?> section, UserContext context) {
 		TestCaseAnalysisReport result = (TestCaseAnalysisReport) section.getSectionStore().getObject(
 				TestCaseExecutorType.TEST_RESULT_KEY);
 		TestCase t = (TestCase) section.getSectionStore().getObject(
@@ -76,21 +76,11 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 		ResourceBundle rb = D3webUtils.getD3webBundle(context);
 		MessageFormat mf = new MessageFormat("");
 		String analysisResult = TestCaseExecutorUtils.renderTestAnalysisResult(t, result, rb, mf);
-		string.append(Strings.maskHTML(analysisResult));
+		string.appendHTML(analysisResult);
 
 	}
 
-	/**
-	 * 
-	 * @created 16.09.2011
-	 * @param section
-	 * @param string
-	 * @param master
-	 * @param file
-	 */
-	private String renderAutomated(Section<?> section, String master, String[] files) {
-
-		StringBuilder html = new StringBuilder();
+	private void renderAutomated(Section<?> section, String master, String[] files, RenderResult html) {
 
 		for (String file : files) {
 
@@ -100,7 +90,9 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 						+ "/" + file);
 
 				if (attachment != null) {
-					html.append("<div>Run testcases in file '" + file + "'.</div>");
+					html.appendHTML("<div>");
+					html.append("Run testcases in file '" + file + "'.");
+					html.appendHTML("</div>");
 				}
 			}
 			catch (IOException e) {
@@ -109,22 +101,21 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 
 		}
 
-		html.append("<div id='testcases'>");
-		html.append("<div class=\"runCasesButton\" onclick=\"return TestCaseExecutor.runTestcaseFromSection('"
+		html.appendHTML("<div id='testcases'>");
+		html.appendHTML("<div class=\"runCasesButton\" onclick=\"return TestCaseExecutor.runTestcaseFromSection('"
 				+ section.getID() + "')\"></div>");
-		html.append("</div>");
-		return Strings.maskHTML(html.toString());
+		html.appendHTML("</div>");
 	}
 
 	/**
 	 * 
 	 * @created 16.09.2011
 	 * @param section
-	 * @param string
 	 * @param master
-	 * @return
+	 * @param result TODO
+	 * @param string
 	 */
-	private String renderSelection(Section<?> section, String master) {
+	private void appendSelection(Section<?> section, String master, RenderResult html) {
 		WikiConnector connector = Environment.getInstance().getWikiConnector();
 
 		Collection<WikiAttachment> attachments;
@@ -135,25 +126,24 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 			attachments = Collections.emptyList();
 		}
 
-		StringBuilder html = new StringBuilder();
 		// html.append("<h2 class=\"testExecutor\"> TestCase Executor </h2>");
-		html.append("<p></p><div id=\"testcases\"><strong>Available Files with Testcases:</strong><br/><br/>");
+		html.appendHTML("<p></p><div id=\"testcases\"><strong>Available Files with Testcases:</strong><br/><br/>");
 
-		html.append("<select onChange=\"return TestCaseExecutor.getTestcases(" + null + ",'"
+		html.appendHTML("<select onChange=\"return TestCaseExecutor.getTestcases(" + null + ",'"
 				+ master + "')\">");
-		html.append("<option value=\"\">-- Choose file --</option>");
+		html.appendHTML("<option value=\"\">-- Choose file --</option>");
 		for (WikiAttachment attachment : attachments) {
 			if (attachment.getFileName().matches("stc.*\\.xml")) {
-				html.append("<option value=\"" + attachment + "\">" + attachment + "</option>");
+				html.appendHTML("<option value=\"" + attachment + "\">");
+				html.append(attachment);
+				html.appendHTML("</option>");
 
 			}
 		}
 
-		html.append("</select>");
-		html.append("</div>");
-		html.append("<br />");
-
-		return Strings.maskHTML(html.toString());
+		html.appendHTML("</select>");
+		html.appendHTML("</div>");
+		html.appendHTML("<br />");
 	}
 
 }

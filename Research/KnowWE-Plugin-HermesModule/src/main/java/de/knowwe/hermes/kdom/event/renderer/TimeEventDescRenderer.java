@@ -22,6 +22,7 @@ package de.knowwe.hermes.kdom.event.renderer;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 
@@ -37,7 +38,7 @@ public class TimeEventDescRenderer implements Renderer {
 	}
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder result) {
+	public void render(Section<?> sec, UserContext user, RenderResult result) {
 		DelegateRenderer.getInstance().render(sec, user, result);
 	}
 

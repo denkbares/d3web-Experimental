@@ -25,6 +25,7 @@ import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.session.Session;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.rendering.RenderResult;
 
 /**
  * 
@@ -63,7 +64,9 @@ public class OneQuestionDialogAction extends AbstractAction {
 			}
 			else {
 				OneQuestionDialogHistory.getInstance().addInterviewObject(o);
-				context.getWriter().write(OneQuestionDialogUtils.createNewForm(o));
+				RenderResult html = new RenderResult(context);
+				OneQuestionDialogUtils.createNewForm(o, html);
+				context.getWriter().write(html.toString());
 			}
 		}
 		// if the back button was hit, the previous question will be shown
@@ -75,7 +78,10 @@ public class OneQuestionDialogAction extends AbstractAction {
 			}
 
 			OneQuestionDialogHistory.getInstance().removeLast();
-			context.getWriter().write(OneQuestionDialogUtils.createNewForm(o));
+
+			RenderResult html = new RenderResult(context);
+			OneQuestionDialogUtils.createNewForm(o, html);
+			context.getWriter().write(html.toString());
 		}
 
 	}

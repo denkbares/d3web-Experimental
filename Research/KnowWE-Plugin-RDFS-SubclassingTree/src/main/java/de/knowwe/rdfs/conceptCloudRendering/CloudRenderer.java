@@ -32,6 +32,7 @@ import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -50,7 +51,7 @@ public class CloudRenderer implements Renderer {
 	// private final static String dotInstallation = "";
 
 	@Override
-	public void render(Section<?> section, UserContext user, StringBuilder string) {
+	public void render(Section<?> section, UserContext user, RenderResult string) {
 
 		// remember which edges are already rendered to avoid duplicate arcs
 		Set<String> renderedEdges = new HashSet<String>();

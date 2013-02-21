@@ -15,10 +15,10 @@ import org.semanticweb.owlapi.util.ShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.query.OWLApiQueryEngine;
@@ -41,7 +41,7 @@ public class OWLApiQueryRenderer implements Renderer {
 	}
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, RenderResult string) {
 
 		String query = DefaultMarkupType.getAnnotation(sec, "query");
 		String show = DefaultMarkupType.getAnnotation(sec, "show");
@@ -67,7 +67,7 @@ public class OWLApiQueryRenderer implements Renderer {
 			html.append(getDescription(user));
 			html.append("</div>");
 		}
-		string.append(Strings.maskHTML(html.toString()));
+		string.appendHTML(html.toString());
 	}
 
 	/**

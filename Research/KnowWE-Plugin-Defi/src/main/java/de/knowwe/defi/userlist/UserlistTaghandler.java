@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.defi.userlist;
 
@@ -26,9 +26,9 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.defi.aboutMe.AboutMe;
 import de.knowwe.jspwiki.JSPWikiConnector;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -48,7 +48,7 @@ public class UserlistTaghandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 		StringBuilder userlist = new StringBuilder();
 		JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
 				Environment.getInstance().getContext(), null));
@@ -58,20 +58,20 @@ public class UserlistTaghandler extends AbstractTagHandler {
 		userlist.append("<table class='userlist'>");
 		for (int i = 0; i < users.length; i++) {
 			if (!users[i].startsWith("Patient")) {
-			userlist.append("<tr>");
+				userlist.append("<tr>");
 				userlist.append("<td><img src=\"KnowWEExtension/images/avatars/"
 						+ getAvatar(users[i])
 						+ "\" height=\"80px\" width=\"80px\" alt=\"avatar\" /></td>");
-			userlist.append("<td><a href='" + JSPWikiConnector.LINK_PREFIX + users[i] + "'>"
-					+ users[i]
-					+ "</a><br />- " + getStatus(activeUsers, users[i])
-					+ " -</td>");
-			userlist.append("</tr>");
+				userlist.append("<td><a href='" + JSPWikiConnector.LINK_PREFIX + users[i] + "'>"
+						+ users[i]
+						+ "</a><br />- " + getStatus(activeUsers, users[i])
+						+ " -</td>");
+				userlist.append("</tr>");
 			}
 		}
 
 		userlist.append("</table>");
-		return Strings.maskHTML(userlist.toString());
+		result.appendHTML(userlist.toString());
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class UserlistTaghandler extends AbstractTagHandler {
 
 		try {
 			Article article = Environment.getInstance().getArticle(
-				Environment.DEFAULT_WEB, userName);
+					Environment.DEFAULT_WEB, userName);
 			Section<?> s = article.getRootSection();
 			Section<AboutMe> sec = Sections.findSuccessor(s, AboutMe.class);
 			avatar = DefaultMarkupType.getAnnotation(sec, "avatar");

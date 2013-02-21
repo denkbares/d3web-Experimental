@@ -45,6 +45,7 @@ import org.w3c.dom.Text;
 
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -73,7 +74,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 	 * </p>
 	 */
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> values, RenderResult result) {
 		StringBuffer html = new StringBuffer();
 
 		ResourceBundle rb = Messages.getMessageBundle(user);
@@ -160,7 +161,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 		html.append("<div id='rename-result'></div>");
 		html.append("</div>");
 
-		return html.toString();
+		result.appendHTML(html.toString());
 	}
 
 	private StringBuffer printULTree() {

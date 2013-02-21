@@ -22,9 +22,9 @@ package de.knowwe.hermes.kdom.event.renderer;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.kdom.event.TimeEventNew.Source;
 
 public class TimeEventSrcRenderer implements Renderer {
@@ -40,9 +40,9 @@ public class TimeEventSrcRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user,
-			StringBuilder result) {
+			RenderResult result) {
 		if (sec.equals(Sections.findChildOfType(sec.getFather(), Source.class))) {
-			result.append(Strings.maskHTML("\\\\__Quellen:__\\\\"));
+			result.appendHTML("\\\\__Quellen:__\\\\");
 		}
 		String source = "no source found";
 		if (sec != null) source = sec.getText();

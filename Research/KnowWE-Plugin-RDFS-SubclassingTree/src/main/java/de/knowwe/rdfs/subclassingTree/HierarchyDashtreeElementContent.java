@@ -23,6 +23,7 @@ import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.user.UserContext;
@@ -52,14 +53,14 @@ public class HierarchyDashtreeElementContent extends DashTreeElementContent
 	class DashTreeElementContentEditableRenderer implements Renderer {
 
 		@Override
-		public void render(Section<?> section, UserContext user, StringBuilder string) {
-			string.append(Strings.maskHTML("<div style='display:inline;' id=\""
+		public void render(Section<?> section, UserContext user, RenderResult string) {
+			string.appendHTML("<div style='display:inline;' id=\""
 					+ section.getID()
-					+ "\" >"));
-			string.append(Strings.maskHTML("<div style='display:inline;' class=\"casetrain-instantedit\">"));
+					+ "\" >");
+			string.appendHTML("<div style='display:inline;' class=\"casetrain-instantedit\">");
 			DelegateRenderer.getInstance().render(section, user, string);
-			string.append(Strings.maskHTML("</div>"));
-			string.append(Strings.maskHTML("</div>"));
+			string.appendHTML("</div>");
+			string.appendHTML("</div>");
 
 		}
 

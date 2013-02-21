@@ -25,6 +25,7 @@ import org.semanticweb.owlapi.expression.ParserException;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
@@ -66,7 +67,7 @@ public class OWLApiInferenceTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> parameters, RenderResult result) {
 
 		String paramInference = parameters.get(PARAM_KEY_INFERENCE);
 		String paramObject = parameters.get(PARAM_KEY_OBJECT);
@@ -107,7 +108,7 @@ public class OWLApiInferenceTagHandler extends AbstractHTMLTagHandler {
 		}
 
 		html.append("</div>");
-		return html.toString();
+		result.appendHTML(html.toString());
 	}
 
 	/**

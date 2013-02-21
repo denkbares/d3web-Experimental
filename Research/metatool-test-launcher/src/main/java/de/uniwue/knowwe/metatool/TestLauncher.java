@@ -26,6 +26,7 @@ import utils.TestArticleManager;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 
@@ -72,8 +73,8 @@ public class TestLauncher {
 		Article art = TestArticleManager.getArticle(markupFile
 				.getPath());
 
-		StringBuilder sb = new StringBuilder();
 		UserContext userContext = TestUtils.createTestActionContext(null, null);
+		RenderResult sb = new RenderResult(userContext);
 		art.getRootType().getRenderer().render(art.getRootSection(), userContext, sb);
 
 		File targetFile = new File(targetDir, markupFile.getName() + ".html");

@@ -29,6 +29,7 @@ import org.semanticweb.owlapi.model.OWLOntologyID;
 import org.semanticweb.owlapi.reasoner.Node;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
@@ -38,7 +39,7 @@ import de.knowwe.owlapi.OWLAPIConnector;
  * The {@link OWLApiDebugTagHandler} prints out some useful information about
  * the local ontology. For example: if the ontology is consistent or some of the
  * unsatisfiable classes.
- *
+ * 
  * @author Stefan Mark
  * @created 20.09.2011
  */
@@ -51,7 +52,7 @@ public class OWLApiDebugTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> parameters, RenderResult result) {
 
 		StringBuilder html = new StringBuilder();
 		html.append("<div style=\"background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;padding:8px 0 10px 20px;\">");
@@ -59,7 +60,8 @@ public class OWLApiDebugTagHandler extends AbstractHTMLTagHandler {
 		if (parameters.get("help") != null) {
 			html.append(getDescription(user));
 			html.append("</div>");
-			return html.toString();
+			result.appendHTML(html.toString());
+			return;
 		}
 
 		OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
@@ -129,12 +131,12 @@ public class OWLApiDebugTagHandler extends AbstractHTMLTagHandler {
 			html.append("<dt>none</dt><dd></dd></dl>");
 		}
 		html.append("</div>");
-		return html.toString();
+		result.appendHTML(html.toString());
 	}
 
 	/**
 	 * Returns an example usage string
-	 *
+	 * 
 	 * @return A example usage string
 	 */
 	@Override
@@ -150,7 +152,7 @@ public class OWLApiDebugTagHandler extends AbstractHTMLTagHandler {
 	/**
 	 * Appends a simple how to use message to the output if the
 	 * {@link TagHandler} was used incorrectly.
-	 *
+	 * 
 	 * @created 20.09.2011
 	 * @return String The how to use message
 	 */

@@ -6,13 +6,14 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 
 public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 	@Override
-	public void renderContents(Section<?> section, UserContext user, StringBuilder string) {
+	public void renderContents(Section<?> section, UserContext user, RenderResult string) {
 
 		ServletContext servletContext = user.getServletContext();
 		if (servletContext == null) return; // at wiki startup only

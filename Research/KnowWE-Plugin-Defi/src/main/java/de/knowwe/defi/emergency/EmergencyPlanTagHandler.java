@@ -20,6 +20,7 @@ package de.knowwe.defi.emergency;
 
 import java.util.Map;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 
@@ -41,15 +42,12 @@ public class EmergencyPlanTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> parameters, RenderResult result) {
 
-		StringBuilder html = new StringBuilder();
-
-		html.append("<a href=\"EmergencyPlan.jsp?user=" + user.getUserName()
+		result.appendHTML("<a href=\"EmergencyPlan.jsp?user=" + user.getUserName()
 				+ "\" title=\"&gt;&gt;Notfallplan erzeugen&lt;&lt;\" target=\"_new\">");
-		html.append("&gt;&gt;Notfallplan erzeugen&lt;&lt;");
-		html.append("</a>");
+		result.appendHTML("&gt;&gt;Notfallplan erzeugen&lt;&lt;");
+		result.appendHTML("</a>");
 
-		return html.toString();
 	}
 }

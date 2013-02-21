@@ -8,9 +8,9 @@ import java.util.Map;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 public class FeedbackTagHandler extends AbstractTagHandler {
 
@@ -113,10 +113,11 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 	 *
 	 */
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 
 		if (!userContext.userIsAsserted()) {
-			return "<p class=\"info\">Bitte melden Sie sich an, um die Seite sehen zu können!</p>";
+			result.appendHTML("<p class=\"info\">Bitte melden Sie sich an, um die Seite sehen zu können!</p>");
+			return;
 		}
 
 		String path = Environment.getInstance().getWikiConnector().getSavePath();
@@ -402,7 +403,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 			html.append("<script type='text/javascript'>window.onload=function() {prepare25()}</script>");
 		}
 
-		return Strings.maskHTML(html.toString());
+		result.appendHTML(html.toString());
 	}
 
 	/**

@@ -30,6 +30,7 @@ import org.ontoware.rdf2go.model.node.Resource;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -48,12 +49,12 @@ public class Rdf2GoPageViewHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
-		StringBuffer output = new StringBuffer();
-		output.append("<tr><th>S</th><th>P</th><th>O</th></tr>");
+	public void renderHTML(String web, String topic,
+			UserContext user, Map<String, String> values, RenderResult result) {
+		result.appendHTML("<tr><th>S</th><th>P</th><th>O</th></tr>");
 
 		List<Statement> list = getTopicStatements(topic);
+		RenderResult output = new RenderResult(result);
 		if (list != null) {
 			for (Statement cur : list) {
 				Resource subject = cur.getSubject();
@@ -75,13 +76,21 @@ public class Rdf2GoPageViewHandler extends AbstractHTMLTagHandler {
 				// o = o.substring(o.indexOf('#') + 1);
 				// p = p.substring(p.indexOf('#') + 1);
 				// p = p.replaceAll("type", "isA");
-				output.append("<tr><td>" + s + "</td><td>" + p + "</td><td>"
-						+ o + "</td></tr> \n"); // \n only to avoid hmtl-code
+				output.appendHTML("<tr><td>");
+				output.append(s);
+				output.appendHTML("</td><td>");
+				output.append(p);
+				output.appendHTML("</td><td>");
+				output.append(o);
+				output.appendHTML("</td></tr> \n"); // \n only to avoid
+													// hmtl-code
 				// being cut by JspWiki
 				// (String.length > 10000)
 			}
 		}
-		return "<table>" + output.toString() + "</table>";
+		result.appendHTML("<table>");
+		result.append(output);
+		result.appendHTML("</table>");
 	}
 
 	public List<Statement> getTopicStatements(String topic) {

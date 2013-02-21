@@ -21,6 +21,7 @@
 package de.knowwe.hermes.kdom.event.renderer;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 
@@ -37,7 +38,7 @@ public class TimeEventImpRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user,
-			StringBuilder result) {
+			RenderResult result) {
 		// Empty renderer. Importance is handled in TimeEventRenderer.
 	}
 }

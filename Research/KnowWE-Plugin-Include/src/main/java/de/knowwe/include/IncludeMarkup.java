@@ -30,11 +30,11 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.jspwiki.JSPWikiMarkupUtils;
 import de.knowwe.jspwiki.types.HeaderType;
@@ -73,7 +73,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 
 		@Override
 		public void render(Section<?> section, UserContext user,
-				StringBuilder string) {
+				RenderResult string) {
 
 			String target = "";
 
@@ -157,7 +157,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 			}
 		}
 
-		public void renderFrame(Article article, UserContext user, Section<?> section, Section<?> renderarticle, StringBuilder string, Boolean rendersec, String targetKey, String zoom, String subSectionKey) {
+		public void renderFrame(Article article, UserContext user, Section<?> section, Section<?> renderarticle, RenderResult string, Boolean rendersec, String targetKey, String zoom, String subSectionKey) {
 
 			WikiConnector wikiConnector = Environment.getInstance().getWikiConnector();
 			String context = wikiConnector.getServletContext().getContextPath();
@@ -191,30 +191,30 @@ public class IncludeMarkup extends DefaultMarkupType {
 					link,
 					"Go to Page", "", "");
 
-			StringBuilder builder = new StringBuilder();
+			RenderResult builder = new RenderResult(user);
 			String zoomStyle = "";
 			if (zoom != null) {
 				zoomStyle = "zoom: " + zoom + "%";
 			}
-			builder.append(Strings.maskHTML("<div style=\"white-space:normal;" + zoomStyle + "\">"));
+			builder.appendHTML("<div style=\"white-space:normal;" + zoomStyle + "\">");
 			builder.append("\n");
 			renderTarget(user, renderarticle, builder);
-			builder.append(Strings.maskHTML("</div>"));
+			builder.appendHTML("</div>");
 			new DefaultMarkupRenderer().renderDefaultMarkupStyled("include",
-					builder.toString(),
+					builder.toStringRaw(),
 					section.getID(), "", tools, user,
 					string);
 
 		}
 
-		public void renderNoFrame(UserContext user, Section<?> renderarticle, StringBuilder string, String zoom) {
+		public void renderNoFrame(UserContext user, Section<?> renderarticle, RenderResult string, String zoom) {
 			if (zoom != null) {
-				string.append(Strings.maskHTML("<div style=\"zoom: " + zoom + "%\">"));
+				string.appendHTML("<div style=\"zoom: " + zoom + "%\">");
 			}
 			string.append("\n");
 			renderTarget(user, renderarticle, string);
 			if (zoom != null) {
-				string.append(Strings.maskHTML("</div>"));
+				string.appendHTML("</div>");
 			}
 		}
 
@@ -225,7 +225,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 		 * @param renderarticle
 		 * @param string
 		 */
-		private void renderTarget(UserContext user, Section<?> renderarticle, StringBuilder string) {
+		private void renderTarget(UserContext user, Section<?> renderarticle, RenderResult string) {
 			if (renderarticle.get() instanceof HeaderType) {
 
 				// render header
@@ -247,8 +247,8 @@ public class IncludeMarkup extends DefaultMarkupType {
 			}
 		}
 
-		public void renderWarning(UserContext user, Section<?> section, StringBuilder string, String warning) {
-			StringBuilder builder = new StringBuilder();
+		public void renderWarning(UserContext user, Section<?> section, RenderResult string, String warning) {
+			RenderResult builder = new RenderResult(string);
 			Message noSuchSection = new Message(Message.Type.WARNING,
 					warning);
 			Collection<Message> messages = new HashSet<Message>();
@@ -256,7 +256,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 			DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, messages,
 					builder);
 			new DefaultMarkupRenderer().renderDefaultMarkupStyled("include",
-					builder.toString(),
+					builder.toStringRaw(),
 					section.getID(), "", null, user,
 					string);
 		}

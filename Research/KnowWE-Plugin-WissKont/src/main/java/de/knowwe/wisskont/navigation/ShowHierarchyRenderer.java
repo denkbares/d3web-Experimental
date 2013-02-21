@@ -33,9 +33,9 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
@@ -48,9 +48,9 @@ import de.knowwe.rdfs.util.RDFSUtil;
 public class ShowHierarchyRenderer implements Renderer {
 
 	@Override
-	public void render(Section<?> section, UserContext user, StringBuilder string) {
+	public void render(Section<?> section, UserContext user, RenderResult string) {
 
-		string.append(Strings.maskHTML("<pre>"));
+		string.appendHTML("<pre>");
 
 		String startConceptString = DefaultMarkupType.getAnnotation(section,
 				ShowHierarchyMarkup.START_CONCEPT);
@@ -67,11 +67,12 @@ public class ShowHierarchyRenderer implements Renderer {
 		}
 
 		if (relation != null && concept != null) {
-			string.append(createLink(concept) + "\n");
-			renderSubconceptsOf(concept, relation, string, 1);
+			appendLink(concept, string);
+			string.append("\n");
+			renderSubconceptsOf(concept, relation, 1, string);
 
 		}
-		string.append(Strings.maskHTML("</pre>"));
+		string.appendHTML("</pre>");
 	}
 
 	/**
@@ -81,9 +82,9 @@ public class ShowHierarchyRenderer implements Renderer {
 	 * @param relation
 	 * @param string
 	 */
-	private void renderSubconceptsOf(String concept, String relation, StringBuilder string, int depth) {
+	private void renderSubconceptsOf(String concept, String relation, int depth, RenderResult string) {
 		Collection<Section<? extends SimpleDefinition>> defs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-					new TermIdentifier(concept));
+				new TermIdentifier(concept));
 		String query = "SELECT ?z WHERE { ?z lns:"
 				+ relation
 				+ " <"
@@ -117,8 +118,10 @@ public class ShowHierarchyRenderer implements Renderer {
 		Collections.sort(subconcepts);
 
 		for (String name : subconcepts) {
-			string.append(createDashes(depth) + " " + createLink(name) + "\n");
-			renderSubconceptsOf(name, relation, string, depth + 1);
+			string.append(createDashes(depth) + " ");
+			appendLink(name, string);
+			string.append("\n");
+			renderSubconceptsOf(name, relation, depth + 1, string);
 		}
 
 	}
@@ -129,12 +132,14 @@ public class ShowHierarchyRenderer implements Renderer {
 	 * @param name
 	 * @return
 	 */
-	private String createLink(String name) {
+	private void appendLink(String name, RenderResult result) {
 		Collection<Section<? extends SimpleDefinition>> defs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				new TermIdentifier(name));
 		URI uri = RDFSUtil.getURI(defs.iterator().next());
 
-		return Strings.maskHTML("<a href='" + uri.toString() + "'>" + name + "</a>");
+		result.appendHTML("<a href='" + uri.toString() + "'>");
+		result.append(name);
+		result.appendHTML("</a>");
 	}
 
 	/**

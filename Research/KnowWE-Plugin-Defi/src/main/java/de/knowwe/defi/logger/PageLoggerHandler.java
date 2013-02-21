@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 
 public class PageLoggerHandler implements PageAppendHandler {
@@ -38,8 +39,8 @@ public class PageLoggerHandler implements PageAppendHandler {
 			+ "/Pagelogger.log";
 
 	@Override
-	public String getDataToAppend(String topic, String web,
-			UserContext user) {
+	public void append(String web, String topic,
+			UserContext user, RenderResult result) {
 		if (log) {
 			try {
 				BufferedWriter buffy = new BufferedWriter(new OutputStreamWriter(
@@ -53,7 +54,6 @@ public class PageLoggerHandler implements PageAppendHandler {
 				e.printStackTrace();
 			}
 		}
-		return "";
 	}
 
 	@Override

@@ -1,9 +1,9 @@
 package de.knowwe.owlapi.query.pellet;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 public class PelletAskRenderer implements Renderer {
@@ -15,7 +15,7 @@ public class PelletAskRenderer implements Renderer {
 	}
 
 	@Override
-	public void render(Section<?> section, UserContext user, StringBuilder string) {
+	public void render(Section<?> section, UserContext user, RenderResult string) {
 
 		String query = DefaultMarkupType.getAnnotation(section, PelletSparqlAsk.QUERY);
 
@@ -42,6 +42,6 @@ public class PelletAskRenderer implements Renderer {
 			html.append(PelletSparqlAsk.getDescription(user));
 			html.append("</div>");
 		}
-		string.append(Strings.maskHTML(html.toString()));
+		string.appendHTML(html.toString());
 	}
 }

@@ -23,9 +23,9 @@ package de.d3web.we.taghandler;
 import java.util.Map;
 
 import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 public class ParseFullLocalPageButton extends AbstractHTMLTagHandler {
 
@@ -37,20 +37,19 @@ public class ParseFullLocalPageButton extends AbstractHTMLTagHandler {
 	static final String text = "full-parse";
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> values, RenderResult result) {
 
 		// might be placed in 'secondary' pages (i.e., leftmenu, moremenu...)
 		String theMainTopic = user.getTitle();
 
 		String baseURL = Environment.getInstance().getWikiConnector().getBaseUrl();
 
-		String link = Strings.maskHTML("<a href=\"" + baseURL + "Wiki.jsp?page="
+		result.appendHTML("<a href=\"" + baseURL + "Wiki.jsp?page="
 				+ theMainTopic
 				+ "&parse=full\" title=\"full parse action for current article\">");
-		link += text;
-		link += Strings.maskHTML("</a>");
+		result.append(text);
+		result.appendHTML("</a>");
 
-		return link;
 	}
 
 }

@@ -20,7 +20,6 @@ package de.knowwe.wisskont.navigation;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
@@ -35,8 +34,8 @@ import de.knowwe.core.append.PageAppendHandler;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.wisskont.ConceptMarkup;
@@ -49,7 +48,7 @@ import de.knowwe.wisskont.ConceptMarkup;
 public class ParentConceptLinkAppendHandler implements PageAppendHandler {
 
 	@Override
-	public String getDataToAppend(String topic, String web, UserContext user) {
+	public void append(String web, String topic, UserContext user, RenderResult result) {
 
 		Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB, topic);
 		List<Section<ConceptMarkup>> conceptMarkups = Sections.findSuccessorsOfType(
@@ -63,9 +62,10 @@ public class ParentConceptLinkAppendHandler implements PageAppendHandler {
 
 			ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
 			if (!resultIterator.hasNext()) {
-				return "";
+				return;
 			}
-			List<String> resultList = new ArrayList<String>();
+			result.appendHTML("<div class='parentBreadcrumb'>");
+			result.append("Oberkonzept: ");
 			while (resultIterator.hasNext()) {
 				QueryRow parentConceptResult = resultIterator.next();
 				Node value = parentConceptResult.getValue("z");
@@ -81,19 +81,15 @@ public class ParentConceptLinkAppendHandler implements PageAppendHandler {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				String link = (Strings.maskHTML("<a href='" + urlString + "'>" + termName + "</a>"));
-				resultList.add(link);
+				result.appendHTML("<a href='" + urlString + "'>");
+				result.append(termName);
+				result.appendHTML("</a>");
+				if (resultIterator.hasNext()) result.append(", ");
 			}
 
-			String result = Strings.maskHTML("<div class='parentBreadcrumb'>") +
-					"Oberbegriff: ";
-			result += Strings.concat(", ", resultList);
-			result += Strings.maskHTML("</div>");
-			result += System.getProperty("line.separator");
-			return result;
+			result.appendHTML("</div>");
+			result.append("line.separator");
 		}
-
-		return "";
 	}
 
 	@Override

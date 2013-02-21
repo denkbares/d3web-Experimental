@@ -20,8 +20,8 @@ package de.knowwe.wisskont;
 
 import de.knowwe.compile.object.renderer.SurroundingRenderer;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -31,13 +31,13 @@ import de.knowwe.core.utils.Strings;
 public class DroppableTargetSurroundingRenderer implements SurroundingRenderer {
 
 	@Override
-	public void renderPre(Section<?> section, UserContext user, StringBuilder string) {
-		string.append(Strings.maskHTML("<div class='relationMarkup'>"));
+	public void renderPre(Section<?> section, UserContext user, RenderResult string) {
+		string.appendHTML("<div class='relationMarkup'>");
 	}
 
 	@Override
-	public void renderPost(Section<?> section, UserContext user, StringBuilder string) {
-		string.append(Strings.maskHTML("</div>"));
+	public void renderPost(Section<?> section, UserContext user, RenderResult string) {
+		string.appendHTML("</div>");
 	}
 
 }

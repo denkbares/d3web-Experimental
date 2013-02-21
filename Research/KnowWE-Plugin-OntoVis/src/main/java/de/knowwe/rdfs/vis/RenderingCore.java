@@ -47,7 +47,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.utils.Strings;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.rdfs.vis.util.Utils;
@@ -169,7 +169,7 @@ public class RenderingCore {
 	 * @param builder html source showing the generated images is added to this
 	 *        builder
 	 */
-	public void render(StringBuilder builder) {
+	public void render(RenderResult builder) {
 
 		getAnnotations();
 
@@ -227,7 +227,7 @@ public class RenderingCore {
 	 * @created 03.09.2012
 	 * @param StringBuilder
 	 */
-	private void createHTMLOutput(StringBuilder string) {
+	private void createHTMLOutput(RenderResult string) {
 		String style = "max-height:1000px; ";
 		if (parameters.get(SHOW_SCROLLBAR) != null
 				&& parameters.get(SHOW_SCROLLBAR).equals("false")) {
@@ -238,20 +238,20 @@ public class RenderingCore {
 		}
 		String div_open = "<div style=\"" + style + "\">";
 		String div_close = "</div>";
-		String png_default = Strings.maskHTML(div_open + "<img alt='graph' src='"
-				+ tmpPath + "graph" + section.getID() + ".png'>" + div_close);
-		String svg = Strings.maskHTML(div_open + "<object data='" + tmpPath
+		String png_default = div_open + "<img alt='graph' src='"
+				+ tmpPath + "graph" + section.getID() + ".png'>" + div_close;
+		String svg = div_open + "<object data='" + tmpPath
 				+ "graph" + section.getID() + ".svg' type=\"image/svg+xml\">" + png_default
-				+ "</object>" + div_close);
+				+ "</object>" + div_close;
 		String format = parameters.get(FORMAT);
 		if (format == null) {
-			string.append(png_default);
+			string.appendHTML(png_default);
 		}
 		else if (format.equals("svg")) {
-			string.append(svg);
+			string.appendHTML(svg);
 		}
 		else {
-			string.append(png_default);
+			string.appendHTML(png_default);
 		}
 	}
 

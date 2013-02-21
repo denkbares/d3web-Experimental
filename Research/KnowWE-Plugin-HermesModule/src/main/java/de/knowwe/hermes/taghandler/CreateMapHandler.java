@@ -24,9 +24,9 @@ import java.util.Collections;
 import java.util.Map;
 
 import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 public class CreateMapHandler extends AbstractHTMLTagHandler {
 
@@ -35,8 +35,8 @@ public class CreateMapHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic,
+			UserContext user, Map<String, String> values, RenderResult result) {
 		String text = "<script type='text/javascript' src='http://maps.google.com/maps?file=api&v=2.x&key="
 				+ ShowMapHandler.apiKey
 				+ "'></script>\n"
@@ -87,7 +87,7 @@ public class CreateMapHandler extends AbstractHTMLTagHandler {
 
 				+ "</td></table>\n";
 
-		return Strings.maskHTML(text);
+		result.appendHTML(text);
 	}
 
 }

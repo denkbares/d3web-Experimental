@@ -21,9 +21,9 @@ package de.knowwe.wisskont.navigation;
 import java.util.Map;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -40,9 +40,9 @@ public class AttachmentsLinkHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 
-		return Strings.maskHTML("<a id='menu-attach' accesskey='a' class='activetab'><span class='accesskey'>A</span>ttach</a>");
+		result.appendHTML("<a id='menu-attach' accesskey='a' class='activetab'><span class='accesskey'>A</span>ttach</a>");
 
 	}
 	// http://localhost:8080/KnowWE/PageInfo.jsp?page=Ophthalmologische%20Vorbereitung

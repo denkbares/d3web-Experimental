@@ -29,8 +29,8 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.rdfs.vis.RenderingCore;
 import de.knowwe.wisskont.ConceptMarkup;
 
@@ -42,7 +42,7 @@ import de.knowwe.wisskont.ConceptMarkup;
 public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 
 	@Override
-	public String getDataToAppend(String topic, String web, UserContext user) {
+	public void append(String web, String topic, UserContext user, RenderResult result) {
 		ArticleManager articleManager = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB);
 		Article article = articleManager.getArticle(topic);
@@ -97,26 +97,22 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 
 			RenderingCore renderingCore = new RenderingCore(
 					user.getServletContext().getRealPath(""), section, parameterMap);
-			StringBuilder builder = new StringBuilder();
-			builder.append(Strings.maskHTML("<div class='termgraph'>"));
-			builder.append(Strings.maskHTML("<div class='termgraphHeader'>"));
-			builder.append(Strings.maskHTML("<span style='float:left;' class='ui-icon ui-icon-circle-plus showGraph'></span>"));
-			builder.append(Strings.maskHTML("<span style='float:left;display:none;' class='ui-icon ui-icon-circle-minus hideGraph'></span>"));
-			builder.append(Strings.maskHTML("<div style=''>Übersicht über Begriffsverknüpfungen</div>"));
-			builder.append(Strings.maskHTML("</div>"));
-			builder.append(Strings.maskHTML("<div style='display:none;' class='termgraphcontent'>"));
-			renderingCore.render(builder);
-			builder.append(Strings.maskHTML("</div>"));
-			builder.append(Strings.maskHTML("</div>"));
-			return builder.toString();
-
+			result.appendHTML("<div class='termgraph'>");
+			result.appendHTML("<div class='termgraphHeader'>");
+			result.appendHTML("<span style='float:left;' class='ui-icon ui-icon-circle-plus showGraph'></span>");
+			result.appendHTML("<span style='float:left;display:none;' class='ui-icon ui-icon-circle-minus hideGraph'></span>");
+			result.appendHTML("<div style=''>Übersicht über Begriffsverknüpfungen</div>");
+			result.appendHTML("</div>");
+			result.appendHTML("<div style='display:none;' class='termgraphcontent'>");
+			renderingCore.render(result);
+			result.appendHTML("</div>");
+			result.appendHTML("</div>");
 		}
 		else {
 			if ((conceptMarkups.size() > 1)) {
 				// TODO: show warning
 			}
 		}
-		return "";
 	}
 
 	@Override

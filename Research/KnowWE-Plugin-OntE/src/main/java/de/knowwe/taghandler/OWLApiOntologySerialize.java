@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
@@ -30,7 +31,7 @@ import de.knowwe.core.user.UserContext;
 /**
  * The {@link OWLApiOntologySerialize} serializes a local ontology to a given
  * format.
- *
+ * 
  * @author Stefan Mark
  * @created 27.09.2011
  */
@@ -43,7 +44,7 @@ public class OWLApiOntologySerialize extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> parameters, RenderResult result) {
 
 		StringBuilder html = new StringBuilder();
 		html.append("<pre style=\"background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;padding:8px 0 10px 20px;\">");
@@ -51,7 +52,8 @@ public class OWLApiOntologySerialize extends AbstractHTMLTagHandler {
 		if (parameters.get("help") != null) {
 			html.append(getDescription(user));
 			html.append("</pre>");
-			return html.toString();
+			result.appendHTML(html.toString());
+			return;
 		}
 
 		String syntax = parameters.get("syntax");
@@ -70,12 +72,12 @@ public class OWLApiOntologySerialize extends AbstractHTMLTagHandler {
 			html.append(getDescription(user));
 		}
 		html.append("</pre>");
-		return html.toString();
+		result.appendHTML(html.toString());
 	}
 
 	/**
 	 * Returns an example usage string
-	 *
+	 * 
 	 * @return A example usage string
 	 */
 	@Override
@@ -92,7 +94,7 @@ public class OWLApiOntologySerialize extends AbstractHTMLTagHandler {
 	/**
 	 * Appends a simple how to use message to the output if the
 	 * {@link TagHandler} was used incorrectly.
-	 *
+	 * 
 	 * @created 20.09.2011
 	 * @return String The how to use message
 	 */

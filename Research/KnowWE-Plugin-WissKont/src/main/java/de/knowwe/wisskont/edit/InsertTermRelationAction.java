@@ -32,6 +32,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.wisskont.RelationMarkupContentType;
 
 /**
@@ -84,7 +85,7 @@ public class InsertTermRelationAction extends AbstractAction {
 
 			// hotfix: workaround to trigger update of the sectionID map
 			DelegateRenderer.getInstance().render(section, context, new
-					StringBuilder());
+					RenderResult(context));
 			return result;
 		}
 		else {

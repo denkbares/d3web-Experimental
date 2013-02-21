@@ -2,31 +2,31 @@ package de.knowwe.kdom.n3.render;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolUtils;
 
 public class TurtleN3Renderer implements Renderer {
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
-		string.append(Strings.maskHTML("<pre id=\""
+	public void render(Section<?> sec, UserContext user, RenderResult string) {
+		string.appendHTML("<pre id=\""
 				+ sec.getID()
-				+ "\" class=\"turtle-instantedit-pre\">"));
-		string.append(Strings.maskHTML("<div class=\"casetrain-instantedit\">"));
+				+ "\" class=\"turtle-instantedit-pre\">");
+		string.appendHTML("<div class=\"casetrain-instantedit\">");
 
-		StringBuilder buffy = new StringBuilder();
+		RenderResult buffy = new RenderResult(user);
 		DelegateRenderer.getInstance().render(sec, user, buffy);
 
-		String result = buffy.toString();
+		String result = buffy.toStringRaw();
 		result = result.replaceAll("\\[", "~[");
 		result = result.replaceAll("\\]", "~]");
 		string.append(result);
 
-		string.append(Strings.maskHTML("</div>"));
-		string.append(Strings.maskHTML("</pre>"));
+		string.appendHTML("</div>");
+		string.appendHTML("</pre>");
 
 	}
 

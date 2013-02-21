@@ -47,7 +47,6 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.StringFragment;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -70,7 +69,7 @@ public class DroolsAction extends AbstractAction {
 			session = DroolsKnowledgeHandler.getInstance().getSession(context);
 
 			if (session == null) throw new RuntimeException(
-						"INTERNAL ERROR: Session is null where it shouldn't be.");
+					"INTERNAL ERROR: Session is null where it shouldn't be.");
 		}
 		catch (Exception e) {
 			returnMessage(context, "Unable to load KnowledgeSession: " + e.toString(),
@@ -356,7 +355,7 @@ public class DroolsAction extends AbstractAction {
 		json.addProperty("status", responseType.ordinal());
 
 		json.addProperty("command", context.getParameter("command"));
-		json.addProperty("message", JSONValue.escape(KnowWEUtils.escapeHTML(message)));
+		json.addProperty("message", JSONValue.escape(Strings.encodeHtml(message)));
 
 		context.getWriter().write(json.toString() + "\n");
 	}

@@ -28,9 +28,9 @@ import java.util.ResourceBundle;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.xml.AbstractXMLType;
 
 public class ForumRenderer implements Renderer {
@@ -84,9 +84,9 @@ public class ForumRenderer implements Renderer {
 	}
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, RenderResult string) {
 
-		StringBuilder ret = new StringBuilder();
+		RenderResult ret = new RenderResult(user);
 
 		ret.append("<link rel=stylesheet type=text/css href=KnowWEExtension/css/forum.css>\n");
 		ret.append("<script type=text/javascript src=KnowWEExtension/scripts/ForumPlugin.js></script>\n");
@@ -144,7 +144,7 @@ public class ForumRenderer implements Renderer {
 				addCommentBox(ret, rb);
 			}
 		}
-		string.append(Strings.maskHTML(ret.toString()));
+		string.appendHTML(ret.toStringRaw());
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class ForumRenderer implements Renderer {
 	 * @created 11.03.2011
 	 * @return
 	 */
-	public static void addCommentBox(StringBuilder builder, ResourceBundle rb) {
+	public static void addCommentBox(RenderResult builder, ResourceBundle rb) {
 		builder.append("<div class='forumTextareaContainer' style=\"clear:both;float:right;padding-right: 30px;\"><a name='message'></a>\n");
 		builder.append("<textarea id=\"knowwe-plugin-comment\" name=\"knowwe-plugin-comment\" cols=\"60\" rows=\"8\"></textarea>\n");
 		builder.append("<div class=\"forumbutton\" id=\"forum-button-save\" onclick=\"javascript:KNOWWE.plugin.comment.saveComment();\">");

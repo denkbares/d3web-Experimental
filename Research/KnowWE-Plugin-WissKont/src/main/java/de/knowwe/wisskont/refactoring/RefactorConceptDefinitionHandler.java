@@ -23,6 +23,7 @@ import java.util.Map;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
@@ -39,30 +40,28 @@ public class RefactorConceptDefinitionHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
-		return getButtonHTML(userContext);
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
+		getButtonHTML(userContext, result);
 	}
 
-	public static String getButtonHTML(UserContext userContext) {
+	public static void getButtonHTML(UserContext userContext, RenderResult html) {
 
 		String description = "Konzeptdefinitionen refaktorisieren";
 		String jsAction = "window.location='action/ConceptDefinitionRefactoring" +
 				"?" + Attributes.TOPIC + "=" + userContext.getTitle() +
 				"&" + Attributes.USER + "=" + userContext.getUserName() +
 				"&" + Attributes.WEB + "=" + Environment.DEFAULT_WEB + "'";
-		StringBuilder html = new StringBuilder();
 
-		html.append("<a href=\"javascript:");
-		html.append(jsAction);
-		html.append(";void(0);\" ");
-		html.append("\" title=\"");
-		html.append(description);
-		html.append("\" class=\"onte-button left small\">");
-		html.append("<img src=\"KnowWEExtension/images/dt_icon_realisation2.gif\" style=\"");
-		html.append("background: url('").append("KnowWEExtension/images/disk.png").append(
+		html.appendHTML("<a href=\"javascript:");
+		html.appendHTML(jsAction);
+		html.appendHTML(";void(0);\" ");
+		html.appendHTML("\" title=\"");
+		html.appendHTML(Strings.encodeHtml(description));
+		html.appendHTML("\" class=\"onte-button left small\">");
+		html.appendHTML("<img src=\"KnowWEExtension/images/dt_icon_realisation2.gif\" style=\"");
+		html.appendHTML("background: url('").appendHTML("KnowWEExtension/images/disk.png").appendHTML(
 				"') no-repeat scroll center 6px transparent; height: 16px;width: 16px;");
-		html.append("\" /></a>");
+		html.appendHTML("\" /></a>");
 
-		return Strings.maskHTML(html.toString());
 	}
 }

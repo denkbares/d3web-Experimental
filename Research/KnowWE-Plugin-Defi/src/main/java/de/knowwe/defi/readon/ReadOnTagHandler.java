@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.Map;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.defi.logger.PageLoggerHandler;
 import de.knowwe.defi.menu.MenuUtilities;
 import de.knowwe.kdom.dashtree.DashTreeElement;
@@ -53,7 +53,7 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 		StringBuilder readon = new StringBuilder();
 		String path = PageLoggerHandler.getPath();
 		String line;
@@ -88,6 +88,6 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 		readon.append("<p><a href='Wiki.jsp?page=" + page + "'>" + page
 				+ "</a></p>");
 
-		return Strings.maskHTML(readon.toString());
+		result.appendHTML(readon.toString());
 	}
 }

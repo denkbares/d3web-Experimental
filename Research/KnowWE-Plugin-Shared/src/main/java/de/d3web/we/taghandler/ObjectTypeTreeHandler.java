@@ -24,9 +24,9 @@ import java.util.Map;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * The ObjectTypeTreeHandler renders the hierarchy of Types, starting with the
@@ -43,24 +43,22 @@ public class ObjectTypeTreeHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
-		return visitNode(RootType.getInstance(), 1, new HashSet<String>(), false);
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
+		visitNode(RootType.getInstance(), 1, new HashSet<String>(), false, result);
 	}
 
-	private String visitNode(Type t, int level, HashSet<String> visitedNodes, boolean doNotRecurse) {
+	private void visitNode(Type t, int level, HashSet<String> visitedNodes, boolean doNotRecurse, RenderResult sb) {
 		// The anti-cycle strategy is rather simple:
 		// Maintain a list of already visited types with the associated classes
 		visitedNodes.add(t.getName() + t.getClass().getCanonicalName());
-
-		StringBuilder sb = new StringBuilder();
 
 		sb.append(asterisks(level));
 		sb.append("%%(text-decoration: underline) ");
 
 		// Create an anchor to be able to jump to the first occurrence
-		sb.append(Strings.maskHTML("<span id=\"objecttype-" + t.getName() + "\">"));
+		sb.append("<span id=\"objecttype-" + t.getName() + "\">");
 		sb.append(t.getName());
-		sb.append(Strings.maskHTML("</span>"));
+		sb.append("</span>");
 
 		// add the full canonical name
 		sb.append("%% %%(color: grey; font-size: 80%) (" + t.getClass().getCanonicalName() + ") %%");
@@ -72,26 +70,25 @@ public class ObjectTypeTreeHandler extends AbstractTagHandler {
 		for (Type child_type : t.getChildrenTypes()) {
 			if (doNotRecurse) {
 				sb.append(asterisks(level + 1));
-				sb.append(Strings.maskHTML("<a href=\"#objecttype-"
+				sb.appendHTML("<a href=\"#objecttype-"
 						+ child_type.getName()
-						+ "\" style=\"color: grey !important; text-decoration: underline\" title=\"Go to first occurrence\">"));
+						+ "\" style=\"color: grey !important; text-decoration: underline\" title=\"Go to first occurrence\">");
 				sb.append(child_type.getName());
-				sb.append(Strings.maskHTML("</a>\n"));
+				sb.appendHTML("</a>\n");
 
 			}
 			else {
 				if (visitedNodes.contains(child_type.getName()
 						+ child_type.getClass().getCanonicalName())) {
 
-					sb.append(visitNode(child_type, level + 1, visitedNodes, true));
+					visitNode(child_type, level + 1, visitedNodes, true, sb);
 				}
 				else {
-					sb.append(visitNode(child_type, level + 1, visitedNodes, false));
+					visitNode(child_type, level + 1, visitedNodes, false, sb);
 				}
 			}
 		}
 
-		return sb.toString();
 	}
 
 	private String asterisks(int count) {

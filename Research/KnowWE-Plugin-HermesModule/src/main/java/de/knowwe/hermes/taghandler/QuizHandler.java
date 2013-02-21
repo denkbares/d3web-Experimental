@@ -22,6 +22,7 @@ package de.knowwe.hermes.taghandler;
 
 import java.util.Map;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.hermes.quiz.QuizPanelRenderer;
@@ -36,8 +37,8 @@ public class QuizHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic,
+			UserContext user, Map<String, String> values, RenderResult result) {
 
 		String kdomid = values.get("kdomid");
 
@@ -101,7 +102,7 @@ public class QuizHandler extends AbstractHTMLTagHandler {
 		html += renderQuizPanel(user.getUserName(), session, kdomid);
 		html += "</div></div>";
 
-		return html;
+		result.append(html);
 	}
 
 	public static String renderQuizPanel(String user, QuizSession session, String kdomid) {

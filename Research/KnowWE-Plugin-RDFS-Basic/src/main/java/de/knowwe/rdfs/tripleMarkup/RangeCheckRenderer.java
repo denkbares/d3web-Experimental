@@ -31,6 +31,7 @@ import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.DefaultMessageRenderer;
 import de.knowwe.core.report.Message;
@@ -44,7 +45,7 @@ import de.knowwe.rdfs.util.RDFSUtil;
 class RangeCheckRenderer implements Renderer {
 
 	@Override
-	public void render(Section<?> section, UserContext user, StringBuilder string) {
+	public void render(Section<?> section, UserContext user, RenderResult string) {
 		Section<KnowledgeUnit> triple = Sections.findAncestorOfType(section,
 				KnowledgeUnit.class);
 
@@ -125,35 +126,33 @@ class RangeCheckRenderer implements Renderer {
 		}
 
 		if (warningRange) {
-			string.append(
-					DefaultMessageRenderer.WARNING_RENDERER.preRenderMessage(
-							new Message(Message.Type.WARNING,
-									"Triple object does not match range definition"),
-							user, null));
+			DefaultMessageRenderer.WARNING_RENDERER.preRenderMessage(
+					new Message(Message.Type.WARNING,
+							"Triple object does not match range definition"),
+					user, null, string);
 		}
 		if (warningDomain) {
-			string.append(
-					DefaultMessageRenderer.WARNING_RENDERER.preRenderMessage(
-							new Message(Message.Type.WARNING,
-									"Triple subject does not match domain definition"),
-							user, null));
+
+			DefaultMessageRenderer.WARNING_RENDERER.preRenderMessage(
+					new Message(Message.Type.WARNING,
+							"Triple subject does not match domain definition"),
+					user, null, string);
 		}
 
 		DelegateRenderer.getInstance().render(section, user, string);
 
 		if (warningRange) {
-			string.append(
-					DefaultMessageRenderer.WARNING_RENDERER.postRenderMessage(
-							new Message(Message.Type.WARNING,
-									""), user, null));
+
+			DefaultMessageRenderer.WARNING_RENDERER.postRenderMessage(
+					new Message(Message.Type.WARNING,
+							""), user, null, string);
 		}
 		if (warningDomain) {
-			string.append(
-					DefaultMessageRenderer.WARNING_RENDERER.postRenderMessage(
-							new Message(Message.Type.WARNING,
-									""), user, null));
+
+			DefaultMessageRenderer.WARNING_RENDERER.postRenderMessage(
+					new Message(Message.Type.WARNING,
+							""), user, null, string);
 		}
 
 	}
-
 }

@@ -27,6 +27,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 
 import de.knowwe.core.append.PageAppendHandler;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -35,8 +36,8 @@ public class PageLoggerHandler implements PageAppendHandler {
 	public boolean log = true;
 
 	@Override
-	public String getDataToAppend(String topic, String web,
-			UserContext user) {
+	public void append(String web, String topic,
+			UserContext user, RenderResult result) {
 		if (log) {
 			try {
 				BufferedWriter buffy = new BufferedWriter(new FileWriter(
@@ -51,7 +52,6 @@ public class PageLoggerHandler implements PageAppendHandler {
 				e.printStackTrace();
 			}
 		}
-		return "";
 	}
 
 	@Override

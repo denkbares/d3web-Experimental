@@ -22,9 +22,9 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
@@ -76,7 +76,7 @@ public class ReferenceRenderer implements Renderer {
 	}
 
 	@Override
-	public void render(Section<?> section, UserContext user, StringBuilder string) {
+	public void render(Section<?> section, UserContext user, RenderResult string) {
 
 		@SuppressWarnings("unchecked")
 		Section<? extends SimpleTerm> reference = (Section<? extends SimpleTerm>) section;
@@ -90,8 +90,8 @@ public class ReferenceRenderer implements Renderer {
 			REF_RENDERER.render(reference, user, string);
 		}
 		else {
-			string.append(Strings.maskHTML("<a name='" + reference.getID() + "'>"));
-			string.append(Strings.maskHTML("</a>"));
+			string.appendHTML("<a name='" + reference.getID() + "'>");
+			string.appendHTML("</a>");
 			r.render(reference, user, string);
 		}
 

@@ -25,6 +25,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 
@@ -35,19 +36,19 @@ public class VersionCountTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic,
+			UserContext user, Map<String, String> values, RenderResult result) {
 		Environment env = Environment.getInstance();
 
-		String result = "<div class=\"versionCounts\">";
-		result += "<div class=\"sortable\">";
-		result += "<table class=\"wikitable\" border=\"1\">";
-		result += "<tbody>";
+		String resultString = "<div class=\"versionCounts\">";
+		resultString += "<div class=\"sortable\">";
+		resultString += "<table class=\"wikitable\" border=\"1\">";
+		resultString += "<tbody>";
 
-		result += "<tr>";
-		result += "<th class=\"sort\" > Seitenname </th>";
-		result += "<th class=\"sort\" > Editierungen </th>";
-		result += "</tr>";
+		resultString += "<tr>";
+		resultString += "<th class=\"sort\" > Seitenname </th>";
+		resultString += "<th class=\"sort\" > Editierungen </th>";
+		resultString += "</tr>";
 
 		// result += "<table>";
 		// result += "<th><td>pagename</td><td>versionCount</td></th>";
@@ -56,15 +57,15 @@ public class VersionCountTagHandler extends AbstractHTMLTagHandler {
 			versionsMap.put(title, env.getWikiConnector().getVersionCount(title));
 		}
 		for (Entry<String, Integer> e : versionsMap.entrySet()) {
-			result += "<tr><td>" + e.getKey() + "</td><td>" + e.getValue()
+			resultString += "<tr><td>" + e.getKey() + "</td><td>" + e.getValue()
 					+ "</td></tr>";
 		}
 		// result += "</table>";
 
-		result += "</tbody>";
-		result += "</table>";
-		result += "</div>";
-		result += "</div>";
-		return result;
+		resultString += "</tbody>";
+		resultString += "</table>";
+		resultString += "</div>";
+		resultString += "</div>";
+		result.appendHTML(resultString);
 	}
 }

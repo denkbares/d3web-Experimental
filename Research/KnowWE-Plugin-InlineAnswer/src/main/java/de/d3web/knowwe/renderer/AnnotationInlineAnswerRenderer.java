@@ -32,9 +32,9 @@ import de.knowwe.core.contexts.AnnotationContext;
 import de.knowwe.core.contexts.ContextManager;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Strings;
 
 /**
@@ -45,7 +45,7 @@ import de.knowwe.core.utils.Strings;
 public class AnnotationInlineAnswerRenderer implements Renderer {
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, RenderResult string) {
 
 		Section<?> prop = Sections.findSuccessor(sec, AnnotationProperty.class);
 		if (prop == null || !prop.getText().contains("asks")) return;
@@ -85,16 +85,11 @@ public class AnnotationInlineAnswerRenderer implements Renderer {
 			if (base != null) service = base;
 		}
 
-		String middle = renderline(sec, user.getUserName(), question, text, service);
-
-		if (middle != null) string.append(middle);
-		// else {
-		// new StandardAnnotationRenderer().render(article, sec, user, string);
-		// }
+		renderline(sec, user.getUserName(), question, text, service, string);
 	}
 
-	private String renderline(Section<?> sec, String user, String question,
-			String text, KnowledgeBase kb) {
+	private void renderline(Section<?> sec, String user, String question,
+			String text, KnowledgeBase kb, RenderResult result) {
 		if (kb != null && question != null) {
 			question = question.trim();
 			Question q = kb.getManager().searchQuestion(question);
@@ -108,31 +103,37 @@ public class AnnotationInlineAnswerRenderer implements Renderer {
 				// return KnowWEUtils.maskHTML(DefaultTextType
 				// .getErrorUnknownConcept(op, text));
 				// }
-				String s = "<a href=\"#" + sec.getID() + "\"></a>"
-						+ getRenderedInput(q.getName(), q.getName(),
-								kb.getId(), user, "Annotation", text, op);
-				String masked = Strings.maskHTML(s);
-				return masked;
+				result.appendHTML("<a href=\"#" + sec.getID() + "\"></a>");
+				appendRenderedInput(q.getName(), q.getName(), kb.getId(), user, "Annotation", text,
+						op, result);
 			}
 			else {
-				return Strings.maskHTML(KnowWEUtils.getErrorQ404(
-						question, text));
+				appendErrorQ404(question, text, result);
 			}
 		}
-		return null;
 	}
 
-	private static String getRenderedInput(String questionid, String question,
+	private static void appendErrorQ404(String question, String text, RenderResult result) {
+		result.appendHTML("<span class=\"semLink\"><a href=\"#\" title=\""
+				+ "Question not found:"
+				+ question
+				+ "\" >");
+		result.append(text);
+		result.appendHTML("</a></span>");
+
+	}
+
+	private static void appendRenderedInput(String questionid, String question,
 			String namespace, String userName, String title, String text,
-			String type) {
+			String type, RenderResult result) {
 		question = Strings.encodeURL(question);
 		// text=URLEncoder.encode(text);
 
-		String rendering = "<span class=\"semLink\" "
+		result.appendHTML("<span class=\"semLink\" "
 				+ "rel=\"{type: '" + type + "', objectID: '" + questionid
-				+ "', termName: '" + text + "', user:'" + userName + "'}\">"
-				+ text + "</span>";
-		return rendering;
+				+ "', termName: '" + text + "', user:'" + userName + "'}\">");
+		result.append(text);
+		result.appendHTML("</span>");
 	}
 
 }

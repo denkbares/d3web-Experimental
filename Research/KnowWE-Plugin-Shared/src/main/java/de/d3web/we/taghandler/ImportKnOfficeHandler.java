@@ -23,6 +23,7 @@ package de.d3web.we.taghandler;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -56,7 +57,7 @@ public class ImportKnOfficeHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> values, RenderResult result) {
 
 		ResourceBundle rb = Messages.getMessageBundle(user);
 
@@ -116,7 +117,7 @@ public class ImportKnOfficeHandler extends AbstractHTMLTagHandler {
 			html.append("<label for='" + fields[i][1] + "' class='" + fields[i][4] + "'>"
 					+ rb.getString(fields[i][0].toString()) + "</label>");
 			html.append("<input id='" + fields[i][1] + "' name='" + fields[i][1]
-								+ "' type='" + fields[i][2] + "' size='" + fields[i][3] + "'/>");
+					+ "' type='" + fields[i][2] + "' size='" + fields[i][3] + "'/>");
 			html.append("\n <br />"); // \n only to avoid hmtl-code being cut by
 										// JspWiki (String.length > 10000)
 		}
@@ -129,7 +130,7 @@ public class ImportKnOfficeHandler extends AbstractHTMLTagHandler {
 			html.append("<label for='" + extFields[i][1] + "' class='" + extFields[i][4] + "'>"
 					+ rb.getString(extFields[i][0].toString()) + "</label>");
 			html.append("<input id='" + extFields[i][1] + "' name='" + extFields[i][1]
-							+ "' type='" + extFields[i][2] + "' size='" + extFields[i][3] + "'/>");
+					+ "' type='" + extFields[i][2] + "' size='" + extFields[i][3] + "'/>");
 			if (extFields[i][5] != "") html.append("<span class='hint'>"
 					+ rb.getString("KnowWE.knoffice.hint").replace("{0}",
 							extFields[i][5].toString()) + "</span>");
@@ -141,6 +142,6 @@ public class ImportKnOfficeHandler extends AbstractHTMLTagHandler {
 		html.append("<br /><p><input id='upload' type='submit' value='"
 				+ rb.getString("KnowWE.button.upload") + "' name='submit' class='button'/></p>");
 		html.append("</form><br /></div>");
-		return html.toString();
+		result.appendHTML(html.toString());
 	}
 }

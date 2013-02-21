@@ -27,10 +27,10 @@ import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 public class InputFieldCellContent extends AbstractType {
@@ -77,7 +77,7 @@ public class InputFieldCellContent extends AbstractType {
 
 		@Override
 		public void render(Section<?> sec,
-				UserContext user, StringBuilder string) {
+				UserContext user, RenderResult string) {
 			String versionString = user.getParameter(ShowTableTagHandler.VERSION_KEY);
 			int version = 0;
 			if (versionString != null) {
@@ -87,10 +87,12 @@ public class InputFieldCellContent extends AbstractType {
 					user.getUserName());
 			int rows = InputFieldCellContent.getHeight(sec);
 			int cols = InputFieldCellContent.getWidth(sec);
-			string.append(Strings.maskHTML("<textarea rows='" + rows + "' cols='"
+			string.appendHTML("<textarea rows='" + rows + "' cols='"
 					+ cols + "' wrap='soft' type='text' id='"
 					+ sec.getID()
-					+ "_" + version + "'>" + contentString + "</textarea>"));
+					+ "_" + version + "'>");
+			string.append(contentString);
+			string.appendHTML("</textarea>");
 		}
 
 		public static String getStoredContentForInput(Section<?> sec, int version, String username) {
@@ -136,8 +138,8 @@ public class InputFieldCellContent extends AbstractType {
 			if (article == null) return null;
 			List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
 			Sections.findSuccessorsOfType(article.getRootSection(),
-						TableEntryType.class,
-						tables);
+					TableEntryType.class,
+					tables);
 			for (Section<TableEntryType> table : tables) {
 				String tableID = DefaultMarkupType.getAnnotation(table, "tableid");
 				if (tableID != null) {

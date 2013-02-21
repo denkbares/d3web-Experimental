@@ -21,9 +21,9 @@ package de.knowwe.wisskont.navigation;
 import java.util.Map;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -40,9 +40,9 @@ public class VersionHistoryLinkHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 
-		return Strings.maskHTML("<a href='PageInfo.jsp?page=" + userContext.getTitle() + "'>"
+		result.appendHTML("<a href='PageInfo.jsp?page=" + userContext.getTitle() + "'>"
 				+ "Versionshistorie" + "</a>");
 
 	}

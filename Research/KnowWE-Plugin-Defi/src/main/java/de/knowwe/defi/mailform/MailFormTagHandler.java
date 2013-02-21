@@ -24,9 +24,9 @@ import java.util.Map;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * A normal mailform.
@@ -51,29 +51,34 @@ public class MailFormTagHandler extends AbstractTagHandler {
 	 * 
 	 */
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
-		StringBuilder mailform = new StringBuilder();
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult mailform) {
 		if (userContext.userIsAsserted()) {
 			String id = "";
 			if (parameters.containsKey(FORM_NAME)) id = "mf_" + parameters.get(FORM_NAME);
-			else return Strings.maskHTML(mailform.append(
-					"<p>Jedes Mail-Formular muss eine eindeutige ID besitzen</p>").toString());
-			if (checkID(id, section.getArticle())) return Strings.maskHTML(mailform.append(
-					"<p>Jedes Mail-Formular muss eine eindeutige ID besitzen</p>").toString());
+			else {
+				mailform.appendHTML(
+						"<p>Jedes Mail-Formular muss eine eindeutige ID besitzen</p>");
+				return;
+			}
+			if (checkID(id, section.getArticle())) {
+				mailform.appendHTML("<p>Jedes Mail-Formular muss eine eindeutige ID besitzen</p>");
+				return;
+			}
 
-			mailform.append("<form id='" + id
+			mailform.appendHTML("<form id='" + id
 					+ "' class='mailform'  method='post' enctype='text/plain'>");
-			mailform.append("<p>Schicken sie uns eine Nachricht:</p>");
-			mailform.append("<textarea name='nachricht' rows='8' cols='50'></textarea><br>");
-			mailform.append("<p><input type='button' value='Abschicken' onclick='mailForm(\"" + id
+			mailform.appendHTML("<p>Schicken sie uns eine Nachricht:</p>");
+			mailform.appendHTML("<textarea name='nachricht' rows='8' cols='50'></textarea><br>");
+			mailform.appendHTML("<p><input type='button' value='Abschicken' onclick='mailForm(\""
+					+ id
 					+ "\")' />");
-			mailform.append("</form>");
+			mailform.appendHTML("</form>");
 
 		}
 		else {
-			mailform.append("<p>Melden Sie sich bitte an um eine Nachricht zu schreiben.</p>");
+			mailform.appendHTML("<p>Melden Sie sich bitte an um eine Nachricht zu schreiben.</p>");
 		}
-		return Strings.maskHTML(mailform.toString());
+
 	}
 
 	// TODO: BUTTON VERÄNDERN NACH DRÜCKEN / BUTTON AUF DOPPELTE BUTTONS PRÜFEN

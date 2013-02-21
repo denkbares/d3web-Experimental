@@ -29,8 +29,8 @@ import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.diaflux.FlowchartUtils;
 import de.knowwe.diaflux.type.FlowchartType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
@@ -45,7 +45,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 	public static final String DIA_FLUX_COVERAGE_SCOPE = "diafluxcoverage";
 
 	@Override
-	protected void renderContents(Section<?> section, UserContext user, StringBuilder string) {
+	protected void renderContents(Section<?> section, UserContext user, RenderResult string) {
 
 		CoverageResult result = DiaFluxCoverageType.getResult(section);
 
@@ -58,13 +58,10 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 
 	}
 
-	private void renderButton(UserContext user, StringBuilder string, Section<?> section) {
+	private void renderButton(UserContext user, RenderResult string, Section<?> section) {
 
-		StringBuilder bob = new StringBuilder();
-		bob.append("<em>No coverage has been calculated yet.</em><input type='button' value='Calculate' onclick='DiaFlux.Coverage.calculateCoverage(\""
+		string.appendHTML("<em>No coverage has been calculated yet.</em><input type='button' value='Calculate' onclick='DiaFlux.Coverage.calculateCoverage(\""
 				+ section.getID() + "\")'></input>");
-
-		string.append(Strings.maskHTML(bob.toString()));
 
 	}
 
@@ -77,7 +74,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 	 * @param result
 	 * @param session
 	 */
-	private void renderResult(UserContext user, StringBuilder string, Section<?> section, CoverageResult result) {
+	private void renderResult(UserContext user, RenderResult string, Section<?> section, CoverageResult result) {
 		KnowledgeBase kb = result.getKb();
 		FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
 
@@ -142,7 +139,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 
 		builder.append("</div>");
 
-		string.append(Strings.maskHTML(builder.toString()));
+		string.appendHTML(builder.toString());
 	}
 
 }

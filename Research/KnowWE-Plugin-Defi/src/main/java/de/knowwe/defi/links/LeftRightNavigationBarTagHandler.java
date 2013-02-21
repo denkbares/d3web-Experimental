@@ -1,29 +1,29 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.defi.links;
 
 import java.util.Map;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 public class LeftRightNavigationBarTagHandler extends AbstractTagHandler {
 
@@ -32,7 +32,7 @@ public class LeftRightNavigationBarTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 		String center = null;
 		if (parameters.containsKey("center")) {
 			center = parameters.get("center");
@@ -46,45 +46,45 @@ public class LeftRightNavigationBarTagHandler extends AbstractTagHandler {
 			right = parameters.get("right");
 		}
 
-		StringBuffer buffy = new StringBuffer();
+		RenderResult buffy = new RenderResult(result);
 
-		buffy.append(Strings.maskHTML("<center>"));
-		buffy.append(Strings.maskHTML("<table>"));
-		buffy.append(Strings.maskHTML("<tr>"));
+		buffy.appendHTML("<center>");
+		buffy.appendHTML("<table>");
+		buffy.appendHTML("<tr>");
 		if (left != null) {
-			buffy.append(Strings.maskHTML("<td >"));
+			buffy.appendHTML("<td >");
 
-			buffy.append(Strings.maskHTML("<a href='Wiki.jsp?page="
+			buffy.appendHTML("<a href='Wiki.jsp?page="
 					+ extractPageName(left)
-					+ "' ><img src='KnowWEExtension/images/Pfeil_nach_links.gif' height='60'/></a>"));
-			buffy.append(Strings.maskHTML("</td>"));
-			buffy.append(Strings.maskHTML("<td>"));
+					+ "' ><img src='KnowWEExtension/images/Pfeil_nach_links.gif' height='60'/></a>");
+			buffy.appendHTML("</td>");
+			buffy.appendHTML("<td>");
 			buffy.append(left);
 
-			buffy.append(Strings.maskHTML("</td>"));
+			buffy.appendHTML("</td>");
 		}
 		if (center != null) {
-			buffy.append(Strings.maskHTML("<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
+			buffy.appendHTML("<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 			buffy.append(center);
-			buffy.append(Strings.maskHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
-			buffy.append(Strings.maskHTML("</td>"));
+			buffy.appendHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+			buffy.appendHTML("</td>");
 		}
 
 		if (right != null) {
-			buffy.append(Strings.maskHTML("<td>"));
+			buffy.appendHTML("<td>");
 			buffy.append(right);
-			buffy.append(Strings.maskHTML("</td>"));
-			buffy.append(Strings.maskHTML("<td>"));
-			buffy.append(Strings.maskHTML("<a href='Wiki.jsp?page="
+			buffy.appendHTML("</td>");
+			buffy.appendHTML("<td>");
+			buffy.appendHTML("<a href='Wiki.jsp?page="
 					+ extractPageName(right)
-					+ "' > <img src='KnowWEExtension/images/Pfeil_nach_rechts.gif' height='60'/>  </a>"));
+					+ "' > <img src='KnowWEExtension/images/Pfeil_nach_rechts.gif' height='60'/>  </a>");
 		}
-		buffy.append(Strings.maskHTML("</td>"));
-		buffy.append(Strings.maskHTML("</tr>"));
-		buffy.append(Strings.maskHTML("</table>"));
-		buffy.append(Strings.maskHTML("</center>"));
+		buffy.appendHTML("</td>");
+		buffy.appendHTML("</tr>");
+		buffy.appendHTML("</table>");
+		buffy.appendHTML("</center>");
 
-		return buffy.toString();
+		result.append(buffy);
 	}
 
 	private String extractPageName(String left) {

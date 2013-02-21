@@ -21,9 +21,9 @@ package de.knowwe.casetrain.type.general;
 import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -33,16 +33,16 @@ import de.knowwe.core.utils.Strings;
 public class SubblockMarkupRenderer implements Renderer {
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
-		string.append(Strings.maskHTML("<div class='"
+	public void render(Section<?> sec, UserContext user, RenderResult string) {
+		string.appendHTML("<div class='"
 				+ ((SubblockMarkup) sec.get()).getCSSClass()
-				+ "'>"));
+				+ "'>");
 
 		// Only render the Subblock and not the
 		// PlainText surrounding it.
 		MouseOverTitleRenderer.getInstance().render(
 				Sections.findSuccessor(sec, SubblockMarkupContent.class), user,
 				string);
-		string.append(Strings.maskHTML("</div>"));
+		string.appendHTML("</div>");
 	}
 }

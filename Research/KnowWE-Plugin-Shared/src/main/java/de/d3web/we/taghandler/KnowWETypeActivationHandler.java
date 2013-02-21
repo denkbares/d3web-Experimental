@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -51,7 +52,7 @@ public class KnowWETypeActivationHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> values, RenderResult result) {
 		TreeSet<Type> types = Types.getAllTypes();
 		StringBuilder html = new StringBuilder();
 
@@ -84,10 +85,10 @@ public class KnowWETypeActivationHandler extends AbstractHTMLTagHandler {
 
 			// insert type with spancolor
 			html.append("<option value=\"" + name + "\"style=\"color:" + spancolor + "\">"
-						+ type.getName()
-						+ "</option> \n"); // \n only to avoid hmtl-code being
-											// cut by JspWiki (String.length >
-											// 10000)
+					+ type.getName()
+					+ "</option> \n"); // \n only to avoid hmtl-code being
+										// cut by JspWiki (String.length >
+										// 10000)
 		}
 		html.append("</select>");
 
@@ -101,6 +102,6 @@ public class KnowWETypeActivationHandler extends AbstractHTMLTagHandler {
 		html.append("</form>");
 		html.append("</div>");
 
-		return html.toString();
+		result.appendHTML(html.toString());
 	}
 }

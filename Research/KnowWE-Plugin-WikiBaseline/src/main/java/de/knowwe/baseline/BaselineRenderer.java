@@ -28,9 +28,9 @@ import java.util.List;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.core.wikiConnector.WikiAttachment;
 
 /**
@@ -42,9 +42,8 @@ public class BaselineRenderer implements Renderer {
 
 	private static DateFormat FORMAT = DateFormat.getDateInstance();
 
-
 	@Override
-	public void render(Section<?> section, UserContext user, StringBuilder string) {
+	public void render(Section<?> section, UserContext user, RenderResult string) {
 		StringBuilder bob = new StringBuilder();
 		bob.append("<div class='baselineParent'>");
 
@@ -58,7 +57,7 @@ public class BaselineRenderer implements Renderer {
 
 		bob.append("</div>");
 		bob.append("</div>");
-		string.append(Strings.maskHTML(bob.toString()));
+		string.appendHTML(bob.toString());
 	}
 
 	private static void renderSelection(UserContext user, StringBuilder bob, Section<?> section, BaselineDiff diff) {

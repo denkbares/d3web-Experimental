@@ -54,9 +54,9 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.defi.aboutMe.AboutMe;
 import de.knowwe.defi.logger.PageLoggerHandler;
 import de.knowwe.defi.menu.MenuUtilities;
@@ -102,7 +102,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 		StringBuilder fm = new StringBuilder();
 		Iterator<Article> it = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB).getArticleIterator();
@@ -354,7 +354,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		fm.append("</table>");
 
-		return Strings.maskHTML(fm.toString());
+		result.appendHTML(fm.toString());
 	}
 
 	/**

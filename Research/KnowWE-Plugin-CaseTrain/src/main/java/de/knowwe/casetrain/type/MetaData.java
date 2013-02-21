@@ -31,13 +31,13 @@ import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
@@ -67,7 +67,7 @@ public class MetaData extends BlockMarkupType {
 		this.setRenderer(new Renderer() {
 
 			@Override
-			public void render(Section<?> sec, UserContext user, StringBuilder string) {
+			public void render(Section<?> sec, UserContext user, RenderResult string) {
 				Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 				Utils.renderKDOMReportMessageBlock(
 						Messages.getErrors(Messages.getMessagesFromSubtree(
@@ -81,26 +81,25 @@ public class MetaData extends BlockMarkupType {
 						Messages.getNotices(Messages.getMessagesFromSubtree(
 								article, sec)), string);
 
-				string.append(Strings.maskHTML("%%collapsebox-closed \r\n"));
-				string.append(
-						Strings.maskHTML("! "
-								+ ResourceBundle.getBundle("casetrain_messages")
-										.getString(META)
-								+ "\r\n"));
+				string.append("%%collapsebox-closed \r\n");
+				string.append("! "
+						+ ResourceBundle.getBundle("casetrain_messages")
+								.getString(META)
+						+ "\r\n");
 
 				// Quickedit button
-				string.append(Strings.maskHTML("<pre id=\""
+				string.appendHTML("<pre id=\""
 						+ sec.getID()
-						+ "\" class=\"casetrain-instantedit-pre\">"));
-				string.append(Strings.maskHTML("<div class=\"casetrain-instantedit\">"
+						+ "\" class=\"casetrain-instantedit-pre\">");
+				string.appendHTML("<div class=\"casetrain-instantedit\">"
 						// + getFrameName(sec)
 						// + getEditorIcon(sec)
 						+ Utils.renderTools(sec, user)
 						// + getLink(sec)
-						+ "</div>"));
+						+ "</div>");
 
-				string.append(Strings.maskHTML("<table class='wikitable'>"));
-				string.append(Strings.maskHTML("<th>Metadaten:</th><th></th>"));
+				string.appendHTML("<table class='wikitable'>");
+				string.appendHTML("<th>Metadaten:</th><th></th>");
 
 				Section<BlockMarkupContent> con =
 						Sections.findSuccessor(sec, BlockMarkupContent.class);
@@ -111,10 +110,10 @@ public class MetaData extends BlockMarkupType {
 					l.get().getRenderer().render(l, user, string);
 				}
 
-				string.append(Strings.maskHTML("</table>"));
-				string.append(Strings.maskHTML("/%\r\n"));
+				string.appendHTML("</table>");
+				string.appendHTML("/%\r\n");
 
-				string.append(Strings.maskHTML("</pre>"));
+				string.appendHTML("</pre>");
 			}
 		});
 

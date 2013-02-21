@@ -28,9 +28,9 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.xml.AbstractXMLType;
 import de.knowwe.kdom.xml.XMLHead;
 
@@ -44,7 +44,7 @@ public class BoxRenderer implements Renderer {
 	}
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, RenderResult string) {
 
 		ResourceBundle rb = ResourceBundle.getBundle("Forum_messages");
 
@@ -94,7 +94,7 @@ public class BoxRenderer implements Renderer {
 			}
 		}
 
-		StringBuilder ret = new StringBuilder();
+		RenderResult ret = new RenderResult(user);
 		// cut seconds if there
 		if (date.length() == 19) date = date.substring(0, date.length() - 3);
 
@@ -128,7 +128,7 @@ public class BoxRenderer implements Renderer {
 		DelegateRenderer.getInstance().render(sec, user, ret);
 
 		ret.append("</td></tr>\n</table>\n");
-		string.append(Strings.maskHTML(ret.toString()));
+		string.appendHTML(ret.toStringRaw());
 	}
 
 }

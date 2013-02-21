@@ -32,6 +32,7 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -56,8 +57,8 @@ public class TemplateTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic,
+			UserContext user, Map<String, String> values, RenderResult result) {
 
 		ResourceBundle rb = Messages
 				.getMessageBundle(user);
@@ -85,22 +86,22 @@ public class TemplateTagHandler extends AbstractHTMLTagHandler {
 
 				html.append("<div>");
 				html.append("<p><img src='KnowWEExtension/images/arrow_right.png' border='0'/> "
-								+ rb
-										.getString("KnowWE.TemplateTagHandler.copy")
-								+ " " + secName + "</p>");
+						+ rb
+								.getString("KnowWE.TemplateTagHandler.copy")
+						+ " " + secName + "</p>");
 				html.append("<label for='" + "Template" + i + "'>"
 						+ rb.getString("KnowWE.TemplateTagHandler.newpage")
 						+ "</label>");
 				html.append("<input id='"
-								+ "Template"
-								+ i
-								+ "' type='text' name='templateTerm' class='field' title=''/>");
+						+ "Template"
+						+ i
+						+ "' type='text' name='templateTerm' class='field' title=''/>");
 
 				html.append("<input type='button' value='"
-								+ rb.getString("KnowWE.TemplateTagHandler.copyButton")
-								+ "' name='generate' class='button generate-template' "
-								+ "title='' rel='{jar : \"Template"
-								+ i + "\"}'/>");
+						+ rb.getString("KnowWE.TemplateTagHandler.copyButton")
+						+ "' name='generate' class='button generate-template' "
+						+ "title='' rel='{jar : \"Template"
+						+ i + "\"}'/>");
 
 				html.append("</div> \n"); // \n only to avoid hmtl-code being
 				// cut by JspWiki (String.length >
@@ -127,7 +128,7 @@ public class TemplateTagHandler extends AbstractHTMLTagHandler {
 
 		html.append("</div>");
 
-		return html.toString();
+		result.appendHTML(html.toString());
 	}
 
 	/**

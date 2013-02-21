@@ -32,7 +32,9 @@ import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -84,7 +86,7 @@ public class OneQuestionDialogUtils {
 	 * @param o
 	 * @return the new form
 	 */
-	public static String createNewForm(InterviewObject o) {
+	public static String createNewForm(InterviewObject o, RenderResult html) {
 		String type = "";
 		if (o instanceof QuestionOC) {
 			type = "radio";
@@ -98,46 +100,46 @@ public class OneQuestionDialogUtils {
 
 		List<Choice> answers = OneQuestionDialogUtils.getAllAlternatives(o);
 
-		StringBuilder html = new StringBuilder();
+		html.appendHTML("<div class='oqdheadline'>");
 
-		html.append("<div class='oqdheadline'>");
-
-		html.append("<div class=\"oqdquestion\" id='oqdquestion'>");
+		html.appendHTML("<div class=\"oqdquestion\" id='oqdquestion'>");
 		html.append(o.getName());
-		html.append("<input type=\"hidden\" name=\"" + o.getName() + "\" value=\"" + o.getName()
-				+ "\">");
-		html.append("</div>");
+		html.appendHTML("<input type=\"hidden\" name=\"" + Strings.encodeHtml(o.getName())
+				+ "\" value=\"" + Strings.encodeHtml(o.getName()) + "\">");
+		html.appendHTML("</div>");
 
 		// MF: moved send button to head
-		html.append("<div id=\"oqdbutton\" class=\"oqdbutton\" onclick=\"return OneQuestionDialog.sendQuestion(this)\" "
+		html.appendHTML("<div id=\"oqdbutton\" class=\"oqdbutton\" onclick=\"return OneQuestionDialog.sendQuestion(this)\" "
 				+ "title='"
-				+ D3webUtils.getD3webBundle(kwuser).getString("KnowWE.OQD.send")
+				+ Strings.encodeHtml(D3webUtils.getD3webBundle(kwuser).getString("KnowWE.OQD.send"))
 				+ "'>");
-		html.append("</div>");
+		html.appendHTML("</div>");
 
-		html.append("</div>");
-		html.append("<table>");
+		html.appendHTML("</div>");
+		html.appendHTML("<table>");
 
 		if (!type.equals("text")) {
 			for (Choice c : answers) {
-				html.append("<tr>");
-				html.append("<td class=\"oqdanswer\">");
-				html.append("<input type=\"" + type + "\" name=\"" + o.getName() + "\" value=\""
-						+ c.getName() + "\">"
-						+ c.getName());
-				html.append("<input type=\"hidden\" name=\"" + c.getName() + "\" value=\""
-						+ c.getName() + "\">");
-				html.append("</td>");
-				html.append("</tr>");
+				html.appendHTML("<tr>");
+				html.appendHTML("<td class=\"oqdanswer\">");
+				String encodedChoice = Strings.encodeHtml(c.getName());
+				html.appendHTML("<input type=\"" + type + "\" name=\""
+						+ Strings.encodeHtml(o.getName()) + "\" value=\""
+						+ encodedChoice + "\">"
+						+ encodedChoice);
+				html.appendHTML("<input type=\"hidden\" name=\"" + encodedChoice + "\" value=\""
+						+ encodedChoice + "\">");
+				html.appendHTML("</td>");
+				html.appendHTML("</tr>");
 			}
 		}
 		else {
-			html.append("<tr>");
-			html.append("<td>");
-			html.append("<input onkeypress=\"return OneQuestionDialog.submitOnEnter(this, event)\" type=\""
+			html.appendHTML("<tr>");
+			html.appendHTML("<td>");
+			html.appendHTML("<input onkeypress=\"return OneQuestionDialog.submitOnEnter(this, event)\" type=\""
 					+ type + "\">");
-			html.append("</td>");
-			html.append("</tr>");
+			html.appendHTML("</td>");
+			html.appendHTML("</tr>");
 		}
 		/*
 		 * html.append("<tr>"); html.append("<td>"); html.append(

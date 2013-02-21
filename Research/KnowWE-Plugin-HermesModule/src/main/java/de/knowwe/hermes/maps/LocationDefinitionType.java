@@ -27,11 +27,11 @@ import org.ontoware.rdf2go.model.Statement;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
@@ -118,16 +118,17 @@ public class LocationDefinitionType extends AbstractType {
 		}
 
 		@Override
-		public void render(Section<?> sec, UserContext user, StringBuilder string) {
+		public void render(Section<?> sec, UserContext user, RenderResult string) {
 			String originalText = sec.getText();
 			Placemark extractPlacemark = extractPlacemark(sec);
 			if (extractPlacemark == null) {
-				string.append(Strings.maskHTML("<span class='error' title='invalid syntax'>")
-						+ originalText + Strings.maskHTML("</span>"));
+				string.appendHTML("<span class='error' title='invalid syntax'>");
+				string.append(originalText);
+				string.appendHTML("</span>");
 			}
 			else {
 				String htmlString = extractPlacemark.toHTMLString();
-				string.append(Strings.maskHTML(htmlString));
+				string.appendHTML(htmlString);
 			}
 		}
 	}

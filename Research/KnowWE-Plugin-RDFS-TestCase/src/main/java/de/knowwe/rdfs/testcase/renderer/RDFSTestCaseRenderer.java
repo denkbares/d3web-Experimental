@@ -19,8 +19,8 @@
 package de.knowwe.rdfs.testcase.renderer;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 
 /**
@@ -31,11 +31,11 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 public class RDFSTestCaseRenderer extends DefaultMarkupRenderer {
 
 	@Override
-	public void renderContents(Section<?> section, UserContext user, StringBuilder string) {
-		string.append(Strings.maskHTML("<pre id=\"" + section.getID()
-				+ "\" style=\"border:none;margin:0px;\">"));
+	public void renderContents(Section<?> section, UserContext user, RenderResult string) {
+		string.appendHTML("<pre id=\"" + section.getID()
+				+ "\" style=\"border:none;margin:0px;\">");
 		super.renderContents(section, user, string);
-		string.append(Strings.maskHTML("</pre>"));
+		string.appendHTML("</pre>");
 	}
 
 }

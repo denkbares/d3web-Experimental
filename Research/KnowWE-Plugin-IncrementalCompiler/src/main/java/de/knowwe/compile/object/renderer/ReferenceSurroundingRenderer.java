@@ -28,6 +28,7 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.DefaultMessageRenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
@@ -45,7 +46,7 @@ import de.knowwe.core.utils.KnowWEUtils;
 public class ReferenceSurroundingRenderer implements SurroundingRenderer {
 
 	@Override
-	public void renderPre(Section<?> section, UserContext user, StringBuilder string) {
+	public void renderPre(Section<?> section, UserContext user, RenderResult string) {
 		@SuppressWarnings("unchecked")
 		Section<? extends SimpleTerm> reference = (Section<? extends SimpleTerm>) section;
 
@@ -72,20 +73,19 @@ public class ReferenceSurroundingRenderer implements SurroundingRenderer {
 		});
 		for (Message kdomReportMessage : messageList) {
 			if (kdomReportMessage.getType() == Message.Type.ERROR) {
-				string.append(DefaultMessageRenderer.ERROR_RENDERER.preRenderMessage(
-						kdomReportMessage, user, null));
+				DefaultMessageRenderer.ERROR_RENDERER.preRenderMessage(
+						kdomReportMessage, user, null, string);
 			}
 			if (kdomReportMessage.getType() == Message.Type.WARNING) {
-				string.append(
-						DefaultMessageRenderer.WARNING_RENDERER.preRenderMessage(
-								kdomReportMessage, user, null));
+				DefaultMessageRenderer.WARNING_RENDERER.preRenderMessage(
+						kdomReportMessage, user, null, string);
 			}
 
 		}
 	}
 
 	@Override
-	public void renderPost(Section<?> section, UserContext user, StringBuilder string) {
+	public void renderPost(Section<?> section, UserContext user, RenderResult string) {
 		@SuppressWarnings("unchecked")
 		Section<? extends SimpleTerm> reference = (Section<? extends SimpleTerm>) section;
 
@@ -93,14 +93,12 @@ public class ReferenceSurroundingRenderer implements SurroundingRenderer {
 				KnowWEUtils.getTermIdentifier(reference));
 		for (Message kdomReportMessage : messages) {
 			if (kdomReportMessage.getType() == Message.Type.ERROR) {
-				string.append(
-						DefaultMessageRenderer.ERROR_RENDERER.postRenderMessage(
-								kdomReportMessage, user, null));
+				DefaultMessageRenderer.ERROR_RENDERER.postRenderMessage(
+						kdomReportMessage, user, null, string);
 			}
 			if (kdomReportMessage.getType() == Message.Type.WARNING) {
-				string.append(
-						DefaultMessageRenderer.WARNING_RENDERER.postRenderMessage(
-								kdomReportMessage, user, null));
+				DefaultMessageRenderer.WARNING_RENDERER.postRenderMessage(
+						kdomReportMessage, user, null, string);
 			}
 		}
 	}

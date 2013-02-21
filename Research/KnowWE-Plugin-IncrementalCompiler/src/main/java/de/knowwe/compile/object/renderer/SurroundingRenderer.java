@@ -19,6 +19,7 @@
 package de.knowwe.compile.object.renderer;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 
 /**
@@ -28,8 +29,8 @@ import de.knowwe.core.user.UserContext;
  */
 public interface SurroundingRenderer {
 
-	public void renderPre(Section<?> section, UserContext user, StringBuilder string);
+	public void renderPre(Section<?> section, UserContext user, RenderResult string);
 
-	public void renderPost(Section<?> section, UserContext user, StringBuilder string);
+	public void renderPost(Section<?> section, UserContext user, RenderResult string);
 
 }

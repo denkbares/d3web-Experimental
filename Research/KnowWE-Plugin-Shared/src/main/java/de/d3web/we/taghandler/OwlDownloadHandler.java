@@ -22,10 +22,10 @@ package de.d3web.we.taghandler;
 
 import java.util.Map;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 public class OwlDownloadHandler extends AbstractHTMLTagHandler {
 
@@ -42,12 +42,9 @@ public class OwlDownloadHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> values, RenderResult result) {
 		String prefix = "";
-		String result = "";
 		String icon = "<img src=\"KnowWEExtension/images/disk.png\" title=\"Owl download\" /></img>";
-		result += "<a href=\"" + prefix + "OwlDownload.jsp\">" + icon + "</a>";
-
-		return Strings.maskHTML(result);
+		result.appendHTML("<a href=\"" + prefix + "OwlDownload.jsp\">" + icon + "</a>");
 	}
 }

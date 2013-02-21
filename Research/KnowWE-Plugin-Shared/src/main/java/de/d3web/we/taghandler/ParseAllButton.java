@@ -22,6 +22,7 @@ package de.d3web.we.taghandler;
 
 import java.util.Map;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 
@@ -32,9 +33,9 @@ public class ParseAllButton extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
-		return "<input type=\"button\" value=\"ParseAll\" class=\"parseAllButton\"\"><div id=\"parseAllResult\"></div>";
+	public void renderHTML(String web, String topic,
+			UserContext user, Map<String, String> values, RenderResult result) {
+		result.appendHTML("<input type=\"button\" value=\"ParseAll\" class=\"parseAllButton\"\"><div id=\"parseAllResult\"></div>");
 	}
 
 }

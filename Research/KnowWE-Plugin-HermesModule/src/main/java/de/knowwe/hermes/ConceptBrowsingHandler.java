@@ -27,6 +27,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -39,14 +40,14 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class ConceptBrowsingHandler implements PageAppendHandler {
 
 	@Override
-	public String getDataToAppend(String topic, String web, UserContext user) {
+	public void append(String web, String topic, UserContext user, RenderResult result) {
 		String query = "SELECT ?x WHERE {?x rdf:type lns:Hermes-Object} ORDER BY ASC(?x)";
 
-		ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance().sparqlSelectIt(query);
+		ClosableIterator<QueryRow> resultIt = Rdf2GoCore.getInstance().sparqlSelectIt(query);
 		List<String> titleList = new ArrayList<String>();
 		try {
-			while (result.hasNext()) {
-				QueryRow row = result.next();
+			while (resultIt.hasNext()) {
+				QueryRow row = resultIt.next();
 
 				String title = row.getValue("x").toString();
 				title = Strings.decodeURL(title);
@@ -77,10 +78,8 @@ public class ConceptBrowsingHandler implements PageAppendHandler {
 				str += " > > > > [" + next + "]";
 			}
 			str += "\n%%\n}]";
-			return str;
+			result.append(str);
 		}
-
-		return "";
 	}
 
 	@Override

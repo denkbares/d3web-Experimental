@@ -30,6 +30,7 @@ import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.taghandler.TagHandlerTypeContent;
 import de.knowwe.core.user.UserContext;
@@ -54,7 +55,7 @@ public class DescribeIndividualTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public final String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public final void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 
 		String content = renderContent(section, userContext, parameters);
 		Section<TagHandlerTypeContent> tagNameSection = Sections.findSuccessor(section,
@@ -62,13 +63,13 @@ public class DescribeIndividualTagHandler extends AbstractTagHandler {
 		String sectionID = section.getID();
 		Tool[] tools = ToolUtils.getTools(tagNameSection, userContext);
 
-		StringBuilder buffer = new StringBuilder();
+		RenderResult buffer = new RenderResult(userContext);
 		String cssClassName = "type_" + section.get().getName();
 		defaultMarkupRenderer.renderDefaultMarkupStyled(
 				getTagName(), content, sectionID, cssClassName, tools, userContext,
 				buffer);
-		Strings.maskJSPWikiMarkup(buffer);
-		return buffer.toString();
+		buffer.maskJSPWikiMarkup();
+		result.append(buffer.toString());
 	}
 
 	private String renderContent(Section<?> section, UserContext userContext, Map<String, String> parameters) {
@@ -90,9 +91,9 @@ public class DescribeIndividualTagHandler extends AbstractTagHandler {
 
 		if (termReferences != null && termReferences.size() > 0) {
 
-			buffy.append(Strings.maskHTML("Relations known for individual <b>"
+			buffy.append("Relations known for individual <b>"
 					+ objectName
-					+ "</b>:<br>"));
+					+ "</b>:<br>");
 
 			URI individual = RDFSUtil.getURI(termReferences.iterator().next());
 
@@ -100,7 +101,8 @@ public class DescribeIndividualTagHandler extends AbstractTagHandler {
 					+ "> ?y ?z .}";
 			QueryResultTable classMembersTable = Rdf2GoCore.getInstance().sparqlSelect(
 					query);
-			buffy.append(SparqlResultRenderer.getInstance().renderQueryResult(classMembersTable));
+			buffy.append(SparqlResultRenderer.getInstance().renderQueryResult(classMembersTable,
+					userContext));
 
 		}
 		return buffy.toString();

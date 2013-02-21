@@ -10,11 +10,10 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.defi.forum.ForumMenuTagHandler;
-
 
 public class PrivateCommunicationTaghandler extends AbstractTagHandler {
 
@@ -23,17 +22,17 @@ public class PrivateCommunicationTaghandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 		StringBuilder html = new StringBuilder();
 		String to;
 		ResourceBundle rb = ResourceBundle.getBundle("KnowWE_Defi_config");
-		
+
 		if (parameters.containsKey("to")) to = parameters.get("to");
 		else to = rb.getString("defi.berater");
-		
+
 		html.append(renderPrivateCommunicationFrame(userContext, to));
-		
-		return Strings.maskHTML(html.toString());
+
+		result.appendHTML(html.toString());
 	}
 
 	public String renderPrivateCommunicationFrame(UserContext context, String to) {

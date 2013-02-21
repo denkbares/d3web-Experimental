@@ -27,9 +27,9 @@ import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -66,7 +66,8 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 	/**
 	 *
 	 */
-	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	@Override
+	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 		StringBuilder builder = new StringBuilder();
 		String id, dataPagename, closed = "Nein";
 		String[] values;
@@ -77,12 +78,17 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 		// only asserted user can see readbuttons.
 		if (!userContext.userIsAsserted()) {
-			return Strings.maskHTML("");
+			return;
 		}
 
 		// check for errors
-		if (parameters.containsKey(ID)) id = parameters.get(ID);
-		else return Strings.maskHTML("<span class='warning'>" + ERROR_MISSING_ID + "</span>");
+		if (parameters.containsKey(ID)) {
+			id = parameters.get(ID);
+		}
+		else {
+			result.appendHTML("<span class='warning'>" + ERROR_MISSING_ID + "</span>");
+			return;
+		}
 
 		// TODO: ID-Check
 
@@ -129,7 +135,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 		}
 		builder.append("</div>");
 
-		return Strings.maskHTML(builder.toString());
+		result.appendHTML(builder.toString());
 	}
 
 	/**

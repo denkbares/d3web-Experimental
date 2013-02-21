@@ -22,10 +22,10 @@ package de.d3web.we.taghandler;
 
 import java.util.Map;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 public class ValidatorHandler extends AbstractHTMLTagHandler {
 
@@ -40,9 +40,9 @@ public class ValidatorHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> values, RenderResult result) {
 
-		return Strings.maskHTML("<span class='warning'>Currently the KDOM is not validated due to code refactoring!</span>");
+		result.appendHTML("<span class='warning'>Currently the KDOM is not validated due to code refactoring!</span>");
 	}
 
 }

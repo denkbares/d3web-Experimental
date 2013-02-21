@@ -23,7 +23,6 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -64,8 +63,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 
 				// add suggestion to JSON Object
 				JsonArray a = new JsonArray();
-				a.add(new JsonPrimitive(JSONValue.escape(KnowWEUtils
-						.escapeHTML(output))));
+				a.add(new JsonPrimitive(JSONValue.escape(Strings.encodeHtml(output))));
 
 				json.add("suggestions", a);
 
@@ -90,8 +88,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 				JsonArray a = new JsonArray();
 
 				for (String s : input)
-					a.add(new JsonPrimitive(JSONValue.escape(KnowWEUtils
-							.escapeHTML(action + " " + s))));
+					a.add(new JsonPrimitive(JSONValue.escape(Strings.encodeHtml(action + " " + s))));
 
 				json.add("suggestions", a);
 			}
@@ -108,8 +105,8 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 				JsonArray a = new JsonArray();
 
 				for (String s : values)
-					a.add(new JsonPrimitive(JSONValue.escape(KnowWEUtils
-							.escapeHTML(action + " " + object + " = " + s))));
+					a.add(new JsonPrimitive(JSONValue.escape(Strings.encodeHtml(action + " "
+							+ object + " = " + s))));
 
 				json.add("suggestions", a);
 			}
@@ -124,8 +121,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 				JsonArray a = new JsonArray();
 
 				for (String s : values)
-					a.add(new JsonPrimitive(JSONValue.escape(KnowWEUtils
-							.escapeHTML(action + " " + s))));
+					a.add(new JsonPrimitive(JSONValue.escape(Strings.encodeHtml(action + " " + s))));
 
 				json.add("suggestions", a);
 			}

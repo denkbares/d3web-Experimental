@@ -29,6 +29,7 @@ import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.taghandler.TagHandlerTypeContent;
 import de.knowwe.core.user.UserContext;
@@ -53,7 +54,7 @@ public class PropertyUseTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public final String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public final void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 
 		String content = renderContent(section, userContext, parameters);
 		Section<TagHandlerTypeContent> tagNameSection = Sections.findSuccessor(section,
@@ -61,18 +62,18 @@ public class PropertyUseTagHandler extends AbstractTagHandler {
 		String sectionID = section.getID();
 		Tool[] tools = ToolUtils.getTools(tagNameSection, userContext);
 
-		StringBuilder buffer = new StringBuilder();
+		RenderResult buffer = new RenderResult(userContext);
 		String cssClassName = "type_" + section.get().getName();
 		defaultMarkupRenderer.renderDefaultMarkupStyled(
 				getTagName(), content, sectionID, cssClassName, tools, userContext,
 				buffer);
-		Strings.maskJSPWikiMarkup(buffer);
-		return buffer.toString();
+		buffer.maskJSPWikiMarkup();
+		result.append(buffer);
 	}
 
 	private String renderContent(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 
-		StringBuffer buffy = new StringBuffer();
+		RenderResult buffy = new RenderResult(userContext);
 		Map<String, String> urlParameters = userContext.getParameters();
 
 		// First try the URL-Parameter, if null try the TagHandler-Parameter.
@@ -89,8 +90,8 @@ public class PropertyUseTagHandler extends AbstractTagHandler {
 
 		if (termReferences != null && termReferences.size() > 0) {
 
-			buffy.append(Strings.maskHTML("Relations for property <b>" + externalForm
-					+ "</b>:<br>"));
+			buffy.appendHTML("Relations for property <b>" + externalForm
+					+ "</b>:<br>");
 
 			URI propURI = RDFSUtil.getURI(termReferences.iterator().next());
 
@@ -98,9 +99,10 @@ public class PropertyUseTagHandler extends AbstractTagHandler {
 					+ "> ?z .}";
 			QueryResultTable classMembersTable = Rdf2GoCore.getInstance().sparqlSelect(
 					query);
-			buffy.append(SparqlResultRenderer.getInstance().renderQueryResult(classMembersTable));
+			buffy.append(SparqlResultRenderer.getInstance().renderQueryResult(classMembersTable,
+					userContext));
 
 		}
-		return buffy.toString();
+		return buffy.toStringRaw();
 	}
 }

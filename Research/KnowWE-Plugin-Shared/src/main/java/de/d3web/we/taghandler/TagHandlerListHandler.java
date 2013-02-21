@@ -26,6 +26,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.taghandler.TagHandler;
@@ -45,8 +46,8 @@ public class TagHandlerListHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic,
+			UserContext user, Map<String, String> values, RenderResult result) {
 		Collection<TagHandler> coll = Environment.getInstance()
 				.getDefaultTagHandlers().values();
 
@@ -91,7 +92,7 @@ public class TagHandlerListHandler extends AbstractHTMLTagHandler {
 			// > 10000)
 		}
 		html.append("</tbody></table></div></div>");
-		return html.toString();
+		result.appendHTML(html.toString());
 	}
 
 	@Override

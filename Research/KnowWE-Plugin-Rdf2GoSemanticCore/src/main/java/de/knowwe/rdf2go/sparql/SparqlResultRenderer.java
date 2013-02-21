@@ -10,7 +10,9 @@ import org.ontoware.rdf2go.model.node.Node;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Messages;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.utils.RenderOptions;
@@ -43,10 +45,10 @@ public class SparqlResultRenderer {
 		return renderers;
 	}
 
-	public SparqlRenderResult renderQueryResult(QueryResultTable qrt) {
+	public SparqlRenderResult renderQueryResult(QueryResultTable qrt, UserContext user) {
 		// TODO
 		// is this a good idea?
-		return renderQueryResult(qrt, new RenderOptions("defaultID"));
+		return renderQueryResult(qrt, new RenderOptions("defaultID"), user);
 	}
 
 	/**
@@ -56,7 +58,7 @@ public class SparqlResultRenderer {
 	 * @param opts TODO
 	 * @return html table with all results of qrt and size of qrt
 	 */
-	public SparqlRenderResult renderQueryResult(QueryResultTable qrt, RenderOptions opts) {
+	public SparqlRenderResult renderQueryResult(QueryResultTable qrt, RenderOptions opts, UserContext user) {
 		boolean tablemode = false;
 		boolean empty = true;
 		boolean zebraMode = opts.isZebraMode();
@@ -64,34 +66,34 @@ public class SparqlResultRenderer {
 		int i = 0;
 		List<String> variables = qrt.getVariables();
 		ClosableIterator<QueryRow> iterator = qrt.iterator();
-		StringBuilder result = new StringBuilder();
+		RenderResult result = new RenderResult(user);
 		tablemode = variables.size() > 1;
 
 		// TODO
 		// for test purpose only (remove afterwards!)
 		// tablemode = true;
 		if (tablemode) {
-			result.append(Strings.maskHTML("<table class='sparqltable'>"));
-			result.append(Strings.maskHTML(!zebraMode ? "<tr>" : "<tr class='odd'>"));
+			result.appendHTML("<table class='sparqltable'>");
+			result.appendHTML(!zebraMode ? "<tr>" : "<tr class='odd'>");
 			for (String var : variables) {
 
-				result.append(Strings.maskHTML("<td><b>")
-						+ Strings.maskHTML("<a href='#/' onclick=\"KNOWWE.plugin.semantic.actions.sortResultsBy('"
-								+ var + "','" + opts.getId() + "');\">")
-						+ var
-						+ Strings.maskHTML("</a>"));
+				result.appendHTML("<td><b>");
+				result.appendHTML("<a href='#/' onclick=\"KNOWWE.plugin.semantic.actions.sortResultsBy('"
+						+ var + "','" + opts.getId() + "');\">");
+				result.append(var);
+				result.appendHTML("</a>");
 				if (hasSorting(var, opts.getSortingMap())) {
 					String symbol = getSortingSymbol(var, opts.getSortingMap());
-					result.append(Strings.maskHTML("<img src='KnowWEExtension/images/" + symbol
+					result.appendHTML("<img src='KnowWEExtension/images/" + symbol
 							+ "' alt='Sort by '"
-							+ var + "border='0' /><b/></td>"));
+							+ var + "border='0' /><b/></td>");
 				}
 
 			}
-			result.append(Strings.maskHTML("</tr>"));
+			result.appendHTML("</tr>");
 		}
 		else {
-			result.append(Strings.maskHTML("<ul style='white-space: normal'>"));
+			result.appendHTML("<ul style='white-space: normal'>");
 		}
 
 		while (iterator.hasNext()) {
@@ -101,30 +103,32 @@ public class SparqlResultRenderer {
 
 			if (tablemode) {
 				if (zebraMode) {
-					result.append(Strings.maskHTML(i % 2 == 0 ? "<tr>" : "<tr class='odd'>"));
+					result.appendHTML(i % 2 == 0 ? "<tr>" : "<tr class='odd'>");
 				}
 				else {
-					result.append(Strings.maskHTML("<tr>"));
+					result.appendHTML("<tr>");
 				}
 
 			}
 
 			for (String var : variables) {
 				Node node = row.getValue(var);
-				String erg = renderNode(node, var, rawOutput);
+				String erg = renderNode(node, var, rawOutput, user);
 
 				if (tablemode) {
-					result.append(Strings.maskHTML("<td>") + erg
-							+ Strings.maskHTML("</td>\n"));
+					result.appendHTML("<td>");
+					result.append(erg);
+					result.appendHTML("</td>\n");
 				}
 				else {
-					result.append(Strings.maskHTML("<li>") + erg
-							+ Strings.maskHTML("</li>\n"));
+					result.appendHTML("<li>");
+					result.append(erg);
+					result.appendHTML("</li>\n");
 				}
 
 			}
 			if (tablemode) {
-				result.append(Strings.maskHTML("</tr>"));
+				result.appendHTML("</tr>");
 			}
 			i++;
 		}
@@ -134,15 +138,15 @@ public class SparqlResultRenderer {
 					"KnowWE.owl.query.no_result"));
 		}
 		if (tablemode) {
-			result.append(Strings.maskHTML("</table>"));
+			result.appendHTML("</table>");
 		}
 		else {
-			result.append(Strings.maskHTML("</ul>"));
+			result.appendHTML("</ul>");
 		}
 		return new SparqlRenderResult(result.toString(), i);
 	}
 
-	public String renderNode(Node node, String var, boolean rawOutput) {
+	public String renderNode(Node node, String var, boolean rawOutput, UserContext user) {
 		if (node == null) {
 			return "";
 		}
@@ -150,7 +154,7 @@ public class SparqlResultRenderer {
 		if (!rawOutput) {
 			for (SparqlResultNodeRenderer nodeRenderer : nodeRenderers) {
 				String temp = rendered;
-				rendered = nodeRenderer.renderNode(rendered, var);
+				rendered = nodeRenderer.renderNode(rendered, var, user);
 				if (!temp.equals(rendered) && !nodeRenderer.allowFollowUpRenderer()) break;
 			}
 			rendered = Strings.maskJSPWikiMarkup(rendered);

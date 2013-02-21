@@ -30,9 +30,9 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.kdom.xml.XMLTail;
 
@@ -60,7 +60,7 @@ public class CommentRenderer implements Renderer {
 	}
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, RenderResult string) {
 
 		Map<String, String> commentTypes = CommentModule.getCommentTypes();
 
@@ -88,7 +88,7 @@ public class CommentRenderer implements Renderer {
 			Map<String, Integer> ids = CommentModule.getIDs();
 
 			Section<?> idSec = Sections.findChildOfType(
-						Sections.findChildOfType(sec, CommentTypeTag.class), CommentTypeTagID.class);
+					Sections.findChildOfType(sec, CommentTypeTag.class), CommentTypeTagID.class);
 			String id = idSec.getText().trim();
 
 			// add ID if not done before:
@@ -123,9 +123,9 @@ public class CommentRenderer implements Renderer {
 				else { // page exists ==> add a new box:
 
 					String save = "<box name=\"" + user.getUserName() + "\"; date=\""
-									+ ForumRenderer.getDate()
+							+ ForumRenderer.getDate()
 							+ "\">--> A new comment to this topic on page ["
-									+ sec.getTitle() + "]:\\\\ \\\\" + commentContent
+							+ sec.getTitle() + "]:\\\\ \\\\" + commentContent
 							+ "</box>\n</forum>";
 
 					Section<?> forumSec = instance.getArticle(sec.getWeb(), pageName).getRootSection();
@@ -192,6 +192,6 @@ public class CommentRenderer implements Renderer {
 			// do nothing if WikiEngine is not properly started yet
 		}
 
-		string.append(Strings.maskHTML(toHTML.toString()));
+		string.appendHTML(toHTML.toString());
 	}
 }

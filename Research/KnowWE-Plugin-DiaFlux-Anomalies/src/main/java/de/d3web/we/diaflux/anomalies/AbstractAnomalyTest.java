@@ -22,7 +22,6 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.testing.AbstractTest;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
-import de.knowwe.core.utils.Strings;
 
 /**
  * 
@@ -45,7 +44,6 @@ public abstract class AbstractAnomalyTest extends AbstractTest<KnowledgeBase> {
 		errormsg = test(kb);
 
 		if (!errormsg.isEmpty()) {
-			Strings.maskHTML(errormsg);
 			res = new Message(Type.FAILURE, errormsg);
 		}
 

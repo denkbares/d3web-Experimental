@@ -26,6 +26,7 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.RessourceLoader;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 
@@ -45,7 +46,7 @@ public class OneQuestionDialogTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
+	public void renderHTML(String web, String topic, UserContext user, Map<String, String> values, RenderResult result) {
 		// D3webKnowledgeService knowledgeService =
 		// D3webModule.getAD3webKnowledgeServiceInTopic(
 		// web, topic);
@@ -60,7 +61,10 @@ public class OneQuestionDialogTagHandler extends AbstractHTMLTagHandler {
 
 		KnowledgeBase knowledgeServiceInTopic = D3webUtils.getKnowledgeBase(
 				web, topic);
-		if (knowledgeServiceInTopic == null) return rb.getString("KnowWE.quicki.error");
+		if (knowledgeServiceInTopic == null) {
+			result.append(rb.getString("KnowWE.quicki.error"));
+			return;
+		}
 
 		Session current = OneQuestionDialogUtils.getSession(topic, web, user);
 
@@ -68,16 +72,16 @@ public class OneQuestionDialogTagHandler extends AbstractHTMLTagHandler {
 
 		OneQuestionDialogHistory.getInstance().addInterviewObject(o);
 
-		String html = "<h3 class=\"oneQuestionDialog\">Dialog</h3>";
+		result.appendHTML("<h3 class=\"oneQuestionDialog\">Dialog</h3>");
 
 		if (o == null) {
-			return html
-					+ "<div class=\"oneQuestionDialog\">Keine weiteren Fragen vorhanden</div>";
+			result.appendHTML("<div class=\"oneQuestionDialog\">Keine weiteren Fragen vorhanden</div>");
+			return;
 		}
 
-		return html + "<div class=\"oneQuestionDialog\">" + OneQuestionDialogUtils.createNewForm(o)
-				+ "</div>";
+		result.appendHTML("<div class=\"oneQuestionDialog\">");
+		OneQuestionDialogUtils.createNewForm(o, result);
+		result.appendHTML("</div>");
 
 	}
-
 }

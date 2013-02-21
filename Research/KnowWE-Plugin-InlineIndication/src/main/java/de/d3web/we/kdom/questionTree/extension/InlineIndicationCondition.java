@@ -23,6 +23,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.NothingRenderer;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
@@ -58,10 +59,10 @@ public class InlineIndicationCondition extends AbstractType {
 		open.setRenderer(new Renderer() {
 
 			@Override
-			public void render(Section<?> sec, UserContext user, StringBuilder string) {
-				string.append(Strings.maskHTML("<b>"));
+			public void render(Section<?> sec, UserContext user, RenderResult string) {
+				string.appendHTML("<b>");
 				string.append(sec.getText().substring(1).trim());
-				string.append(Strings.maskHTML("</b>"));
+				string.appendHTML("</b>");
 			}
 		});
 		this.addChildType(open);
