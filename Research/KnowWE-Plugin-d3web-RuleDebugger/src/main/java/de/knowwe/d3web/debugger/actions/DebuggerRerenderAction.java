@@ -22,7 +22,6 @@ import java.io.IOException;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * An action to rerender the debugger.
@@ -58,7 +57,7 @@ public class DebuggerRerenderAction extends AbstractAction {
 
 		if (buffer != null && context.getWriter() != null) {
 			context.setContentType("text/html; charset=UTF-8");
-			context.getWriter().write(Strings.unmaskHTML(buffer.toString()));
+			context.getWriter().write(buffer.toString());
 		}
 
 	}

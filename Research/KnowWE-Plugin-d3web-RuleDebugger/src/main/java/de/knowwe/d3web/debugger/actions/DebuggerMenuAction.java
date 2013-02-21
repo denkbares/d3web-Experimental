@@ -31,7 +31,6 @@ import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.d3web.debugger.DebugUtilities;
 
 /**
@@ -60,7 +59,7 @@ public class DebuggerMenuAction extends AbstractAction {
 
 		if (result != null && context.getWriter() != null) {
 			context.setContentType("text/html; charset=UTF-8");
-			context.getWriter().write(Strings.unmaskHTML(result));
+			context.getWriter().write(result);
 		}
 	}
 

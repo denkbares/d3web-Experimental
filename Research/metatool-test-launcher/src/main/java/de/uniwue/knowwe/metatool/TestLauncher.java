@@ -79,7 +79,7 @@ public class TestLauncher {
 
 		File targetFile = new File(targetDir, markupFile.getName() + ".html");
 
-		String content = Strings.unmaskHTML(sb.toString());
+		String content = sb.toString();
 
 		try {
 			FileWriter fstream = new FileWriter(targetFile);

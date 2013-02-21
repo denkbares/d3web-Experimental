@@ -34,7 +34,6 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.d3web.debugger.DebugUtilities;
 import de.knowwe.d3web.debugger.renderer.DebuggerRuleRenderer;
 
@@ -50,7 +49,7 @@ public class DebuggerRuleboxAction extends AbstractAction {
 
 		if (context.getWriter() != null) {
 			context.setContentType("text/html; charset=UTF-8");
-			String text = Strings.unmaskHTML(renderRule(context));
+			String text = renderRule(context);
 			context.getWriter().write(text);
 		}
 	}

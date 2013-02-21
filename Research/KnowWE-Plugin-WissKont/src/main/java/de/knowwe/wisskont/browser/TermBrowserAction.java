@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.utils.Strings;
+import de.knowwe.core.kdom.rendering.RenderResult;
 
 /**
  * 
@@ -68,6 +68,7 @@ public class TermBrowserAction extends AbstractAction {
 				// is handled by a link
 			}
 		}
-		return Strings.unmaskHTML(TermBrowserRenderUtils.renderTermBrowser(context, term));
+		return new RenderResult(context).unmask(TermBrowserRenderUtils.renderTermBrowser(context,
+				term));
 	}
 }
