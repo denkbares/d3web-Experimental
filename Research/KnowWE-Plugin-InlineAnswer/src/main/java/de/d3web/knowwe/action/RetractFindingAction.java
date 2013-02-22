@@ -23,7 +23,6 @@ import java.io.IOException;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.session.Session;
-import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.core.session.values.Unknown;
@@ -32,9 +31,7 @@ import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.event.EventManager;
 import de.knowwe.core.utils.Strings;
-import de.knowwe.d3web.event.FindingSetEvent;
 
 /**
  * 
@@ -56,7 +53,6 @@ public class RetractFindingAction extends AbstractAction {
 
 		String objectid = context.getParameter(Attributes.SEMANO_OBJECT_ID);
 		String topic = context.getTitle();
-		String user = context.getUserName();
 		String web = context.getWeb();
 
 		String namespace = null;
@@ -74,28 +70,19 @@ public class RetractFindingAction extends AbstractAction {
 		}
 
 		KnowledgeBase kb = D3webUtils.getKnowledgeBase(web, topic);
-		SessionProvider provider = SessionProvider.getSessionProvider(context);
-		Session session = provider.getSession(kb);
+		Session session = SessionProvider.getSession(context, kb);
 		if (session == null) {
 			KnowledgeBase firstKB = D3webUtils.getFirstKnowledgeBase(web);
-			session = provider.createSession(firstKB);
+			session = SessionProvider.createSession(context, firstKB);
 		}
-		Blackboard blackboard = session.getBlackboard();
 
 		Question question = kb.getManager().searchQuestion(objectid);
 		if (question != null) {
-
-			// TODO Use this Code?
-			// 6.2011 Johannes
 			Unknown unknown = Unknown.getInstance();
-			synchronized (session) {
-				Fact fact = FactFactory.createUserEnteredFact(question,
-						unknown);
-				blackboard.addValueFact(fact);
-			}
-			EventManager.getInstance().fireEvent(
-					new FindingSetEvent(question, unknown, namespace, web,
-							user));
+			Fact fact = FactFactory.createUserEnteredFact(question,
+					unknown);
+			D3webUtils.setFindingSynchronized(fact, session, context);
+
 		}
 
 		return null;

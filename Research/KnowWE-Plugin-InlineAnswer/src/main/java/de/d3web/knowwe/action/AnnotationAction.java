@@ -79,7 +79,6 @@ public class AnnotationAction extends AbstractAction {
 		}
 
 		namespace = Strings.decodeURL(namespace);
-		SessionProvider provider = SessionProvider.getSessionProvider(context);
 
 		if (id == null) {
 			return null;
@@ -91,11 +90,11 @@ public class AnnotationAction extends AbstractAction {
 		String fixMe = namespace;
 		if (fixMe.contains("..")) fixMe = fixMe.substring(0, fixMe.indexOf(".."));
 		KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(), fixMe);
-		Session session = provider.getSession(kb);
+		Session session = SessionProvider.getSession(context, kb);
 
 		if (session == null) {
 			KnowledgeBase firstKB = D3webUtils.getFirstKnowledgeBase(webname);
-			session = provider.getSession(firstKB);
+			session = SessionProvider.getSession(context, firstKB);
 		}
 
 		TerminologyObject obj = session.getKnowledgeBase().getManager().search(id);
