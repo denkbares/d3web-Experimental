@@ -41,6 +41,8 @@ import org.antlr.stringtemplate.StringTemplate;
  */
 public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRenderer {
 
+    private UISolutionPanelSettings uiSolPanelSet = UISolutionPanelSettings.getInstance();
+    
     /**
      * Rendering method for getting the textual listing representation of a
      * solution panel
@@ -169,26 +171,42 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
     
     private String renderStateAbstractCirclePreciseTextDynamic(Solution solution, Session d3webs) {
 
+        StringTemplate stExp;
+        
         SolutionExplanationBasicD3webRenderer expr = new SolutionExplanationBasicD3webRenderer();
-        // fill in the explanation into the explanation popup:
-        StringTemplate stExp = StringTemplateUtils.getTemplate("solutionPanel/PopupExp");
-        String explanation = expr.getExplanationForSolution(solution, d3webs);
+        
+        UISolutionPanelSettings.ExplanationType expType =
+                uiSolPanelSet.getExplanationType();
+        
+        String explanation = expr.getExplanationForSolution(solution, d3webs, expType);
+        
+        // in the case of a treemap, a tailored popup that uses the respective image
+        // needs to be used
+        if (expType == UISolutionPanelSettings.ExplanationType.TREEMAP){
+            // explanation popup that shows image
+            stExp = StringTemplateUtils.getTemplate("solutionPanel/PopupExpImage");
+            stExp.setAttribute("expImagePath", explanation);
+        } else {
+            // basic explanation popup  
+            stExp = StringTemplateUtils.getTemplate("solutionPanel/PopupExp");
+            stExp.setAttribute("popupcontent", explanation);
+        }
+        
         stExp.setAttribute("elementID", solution.getName());
-        stExp.setAttribute("popupcontent", explanation);
+        
         System.out.println(stExp.toString());
         
-        Blackboard bb = d3webs.getBlackboard();
+        
         
         // retrieve template for the solution panel per se, first
         StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynLink");
         st.setAttribute("explanationpopup", stExp.toString());
-        
-        // fill template attribute
         st.setAttribute("solid", solution.getName());
 
         /*
          * get scoring, dependent on applied problem solving method
          */
+        Blackboard bb = d3webs.getBlackboard();
         double score = 0.0;
         Collection<PSMethod> contributingPSMethods =
                 bb.getContributingPSMethods(solution);

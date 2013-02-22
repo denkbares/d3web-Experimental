@@ -38,7 +38,7 @@ import javax.servlet.http.HttpSession;
  */
 public class SolutionPanelBasicD3webRenderer {
 
-    private UISolutionPanelSettings uiSolPanelSet = UISolutionPanelSettings.getInstance();
+    protected UISolutionPanelSettings uiSolPanelSet = UISolutionPanelSettings.getInstance();
 
     /**
      * Entry point to solution panel rendering. Switches basic solution panel

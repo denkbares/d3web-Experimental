@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><repository>
-<session changed="2013-02-22 12:29:54.274" created="2013-02-22 12:29:54.274" id="1755d92e-f1ab-4c66-923f-0d1f5525e94d">
+<session changed="2013-02-20 13:11:19.849" created="2013-02-20 13:11:19.848" id="b4f0bb62-a424-4ca8-a9a9-e21b89fde42e">
 <name/>
 <facts>
 <valueFacts>
 <fact objectName="now" psm="cc.d3web.history.ps.PSMethodTimeDB">
-<dateValue>2013-02-22 12:29:56.705</dateValue>
+<dateValue>2013-02-20 13:11:24.889</dateValue>
 </fact>
 <fact objectName="start" psm="cc.d3web.history.ps.PSMethodTimeDB">
-<dateValue>2013-02-22 12:29:54.274</dateValue>
+<dateValue>2013-02-20 13:11:19.848</dateValue>
 </fact>
 <fact objectName="Einheimische Baumart?" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <choiceValue>Yes</choiceValue>
@@ -23,10 +23,10 @@
 </interviewFacts>
 </facts>
 <protocol>
-<entry date="2013-02-22 12:29:55.997" objectName="Einheimische Baumart?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<entry date="2013-02-20 13:11:22.350" objectName="Einheimische Baumart?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
 <choiceValue>No</choiceValue>
 </entry>
-<entry date="2013-02-22 12:29:56.705" objectName="Einheimische Baumart?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<entry date="2013-02-20 13:11:24.889" objectName="Einheimische Baumart?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
 <choiceValue>Yes</choiceValue>
 </entry>
 </protocol>

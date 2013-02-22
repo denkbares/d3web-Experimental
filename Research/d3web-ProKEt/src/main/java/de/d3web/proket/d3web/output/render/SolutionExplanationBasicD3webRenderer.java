@@ -21,14 +21,8 @@ package de.d3web.proket.d3web.output.render;
 
 import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.session.Session;
-import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.settings.UISolutionPanelSettings;
-import de.d3web.proket.d3web.utils.SolutionNameComparator;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import javax.servlet.http.HttpSession;
+import de.d3web.proket.d3web.settings.UISolutionPanelSettings.ExplanationType;
 
 /**
  * Basic class for rendering the solution panel or explanation component of a
@@ -38,7 +32,7 @@ import javax.servlet.http.HttpSession;
  */
 public class SolutionExplanationBasicD3webRenderer {
 
-    private UISolutionPanelSettings uiSolPanelSet = UISolutionPanelSettings.getInstance();
+    protected UISolutionPanelSettings uiSolPanelSet = UISolutionPanelSettings.getInstance();
 
   /**
      * Basic Explanation Renderer switch. Calls corresponding subrenderer for
@@ -48,12 +42,11 @@ public class SolutionExplanationBasicD3webRenderer {
      * @param solution
      * @return
      */
-    protected String getExplanationForSolution(Solution solution, Session d3webs) {
+    protected String getExplanationForSolution(Solution solution, 
+            Session d3webs, ExplanationType expType) {
 
         String renderedExplanation = "";
-        UISolutionPanelSettings.ExplanationType expType =
-                uiSolPanelSet.getExplanationType();
-
+        
         // ToDo differentiate between single/multiple solution
         if (expType == UISolutionPanelSettings.ExplanationType.TEXTUAL) {
             // TODO: render only a plain text representation here

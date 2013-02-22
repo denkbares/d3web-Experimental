@@ -10,15 +10,19 @@
         dialogstrategy = ""
         showcontraindicated = "HIDE"
         shownonindicated = "HIDE"
-        css="questionaryCons, diagnosisVisu" 
+        css="questionaryCons, diagnosisVisu, solutionPanel" 
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns="1"
         solutionExplanation = "TEXTUAL" 
         solutionSorting = "CATEGORICAL"
         solutionDepth = "ALL"
+        solutionDynamics = "STATIC"
+        solutionRange = "MULTIPLE"
+        solutionStructuring = "LISTING"
+        solRatingGranularity = "ABSTRACT;;;PRECISE"    
     />
     <localUIOpts />
-    <dataOpts kb="BaumDecTree.d3web" />
+    <dataOpts kb="0DemoBaum.d3web" />
     <ueOpts logging = "FALSE" />
 </dialogOpts>

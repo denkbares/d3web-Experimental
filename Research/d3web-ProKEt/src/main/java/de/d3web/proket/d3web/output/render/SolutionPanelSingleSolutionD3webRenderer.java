@@ -62,13 +62,14 @@ public class SolutionPanelSingleSolutionD3webRenderer extends SolutionPanelBasic
 
         Solution s = getBestRatedSolution(valuedSolutions, d3websession);
         bui.append(renderState(s, d3websession));
-        System.out.println(renderState(s, d3websession));
+        System.out.println("SOLUTIONPANELSINGLERENDEER" + renderState(s, d3websession));
         return bui.toString();
     }
 
     protected Solution getBestRatedSolution(Collection<Solution> valued,
             Session d3websession) {
 
+        System.out.println(valued.toString());
         if (valued.size() > 0) {
 
             Blackboard bb = d3websession.getBlackboard();
@@ -201,7 +202,9 @@ public class SolutionPanelSingleSolutionD3webRenderer extends SolutionPanelBasic
         SolutionExplanationBasicD3webRenderer expr = new SolutionExplanationBasicD3webRenderer();
         // fill in the explanation into the explanation popup:
         StringTemplate stExp = StringTemplateUtils.getTemplate("solutionPanel/PopupExp");
-        String explanation = expr.getExplanationForSolution(solution, d3webs);
+        UISolutionPanelSettings.ExplanationType expType =
+                uiSolPanelSet.getExplanationType();
+        String explanation = expr.getExplanationForSolution(solution, d3webs, expType);
         stExp.setAttribute("elementID", solution.getName());
         stExp.setAttribute("popupcontent", explanation);
         System.out.println(stExp.toString());
