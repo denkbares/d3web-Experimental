@@ -40,9 +40,9 @@ public class DroolsRuleWarningRenderer implements MessageRenderer {
 	@Override
 	public void postRenderMessage(Message m, UserContext user, String source, RenderResult result) {
 
-		result.appendHTML("<span style=\"border-bottom: 1px solid #999; padding: 2px; margin-top: 5px; display: block; color: #a40000;\">");
+		result.appendHtml("<span style=\"border-bottom: 1px solid #999; padding: 2px; margin-top: 5px; display: block; color: #a40000;\">");
 		result.append(m.getVerbalization());
-		result.appendHTML("</span>");
+		result.appendHtml("</span>");
 
 	}
 

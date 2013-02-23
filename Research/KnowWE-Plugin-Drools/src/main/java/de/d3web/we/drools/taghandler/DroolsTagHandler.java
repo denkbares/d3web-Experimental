@@ -65,7 +65,7 @@ public class DroolsTagHandler extends AbstractTagHandler {
 				+ section.getTitle() + "', width:512 });");
 		bob.append("</script>");
 
-		result.appendHTML(bob.toString());
+		result.appendHtml(bob.toString());
 	}
 
 }

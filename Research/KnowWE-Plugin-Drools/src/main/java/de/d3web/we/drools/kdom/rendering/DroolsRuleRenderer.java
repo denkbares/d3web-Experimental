@@ -35,9 +35,9 @@ public class DroolsRuleRenderer implements Renderer {
 	public void render(Section<?> sec, UserContext user,
 			RenderResult string) {
 
-		string.appendHTML("<span class=\"drools-rule\">");
+		string.appendHtml("<span class=\"drools-rule\">");
 		DelegateRenderer.getInstance().render(sec, user, string);
-		string.appendHTML("</span>");
+		string.appendHtml("</span>");
 	}
 
 }
