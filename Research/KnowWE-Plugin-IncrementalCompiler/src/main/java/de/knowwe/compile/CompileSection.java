@@ -40,11 +40,15 @@ public class CompileSection<T extends Type> {
 		return type;
 	}
 
-	public Section<? extends Type> getSection() {
+	public Section<T> getSection() {
 		return section;
 	}
 
-	private Section<? extends Type> section = null;
+	private Section<T> section = null;
+
+	public static <T extends Type> CompileSection<T> create(Section<T> s) {
+		return new CompileSection<T>(s);
+	}
 
 	public CompileSection(Section<T> s) {
 		this.section = s;
@@ -59,7 +63,7 @@ public class CompileSection<T extends Type> {
 	@Override
 	public boolean equals(Object arg0) {
 		if (arg0 instanceof CompileSection) {
-			CompileSection other = (CompileSection) arg0;
+			CompileSection<?> other = (CompileSection<?>) arg0;
 			if (!(other.section.getText().equals(this.section.getText()))) {
 				return false;
 			}

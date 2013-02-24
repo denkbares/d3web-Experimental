@@ -22,10 +22,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.jspwiki.types.SectionHeaderType;
 import de.knowwe.jspwiki.types.HeaderType;
+import de.knowwe.jspwiki.types.SectionHeaderType;
 import de.knowwe.rdfs.wikiObjectModel.types.SectionHeaderObjectDefinition;
 
 /**
@@ -40,7 +41,7 @@ public class Utils {
 		return createAnchorURLHeader(header);
 	}
 
-	public static String createAnchorURLHeaderDefinition(Section<SectionHeaderObjectDefinition> objectDef) {
+	public static String createAnchorURLHeaderDefinition(Section<? extends SimpleTerm> objectDef) {
 		String conceptName = objectDef.get().getTermName(objectDef);
 
 		String baseUrl = Environment.getInstance().getWikiConnector().getBaseUrl();
@@ -65,9 +66,8 @@ public class Utils {
 	}
 
 	public static String createAnchorURLHeader(Section<SectionHeaderType> header) {
-		Section<SectionHeaderObjectDefinition> objectDef = Sections.findSuccessor(header,
-				SectionHeaderObjectDefinition.class);
-		return createAnchorURLHeaderDefinition(objectDef);
+		return createAnchorURLHeaderDefinition(Sections.findSuccessor(header,
+				SectionHeaderObjectDefinition.class));
 
 	}
 

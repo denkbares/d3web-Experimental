@@ -29,24 +29,24 @@ public class EqualStringHazardFilter {
 		// and remove it from both (once respectively!)
 
 		// transform Section-collections to CompileSection-collections
-		Collection<CompileSection> removeSet = new ArrayList<CompileSection>();
+		Collection<CompileSection<? extends KnowledgeUnit>> removeSet = new ArrayList<CompileSection<? extends KnowledgeUnit>>();
 		for (Section<? extends KnowledgeUnit> section : remove) {
-			removeSet.add(new CompileSection(section));
+			removeSet.add(CompileSection.create(section));
 		}
 
-		Collection<CompileSection> insertSet = new ArrayList<CompileSection>();
+		Collection<CompileSection<? extends KnowledgeUnit>> insertSet = new ArrayList<CompileSection<? extends KnowledgeUnit>>();
 		for (Section<? extends KnowledgeUnit> section : insert) {
-			insertSet.add(new CompileSection(section));
+			insertSet.add(CompileSection.create(section));
 		}
 
 		boolean changes = false; // for efficiency only
 
 		// find corresponding sections
-		Iterator<CompileSection> removeIter = removeSet.iterator();
+		Iterator<CompileSection<? extends KnowledgeUnit>> removeIter = removeSet.iterator();
 		while (removeIter.hasNext()) {
-			CompileSection next = removeIter.next();
+			CompileSection<?> next = removeIter.next();
 			if (insertSet.contains(next)) {
-				Section<? extends Type> other = retrieveSection2(next.getSection(), insertSet);
+				Section<? extends Type> other = retrieveSection3(next.getSection(), insertSet);
 				// check whether the sections are not only textual identical,
 				// but also the resolved references (e.g., using the 'this'
 				// keyword) are identical
@@ -71,15 +71,12 @@ public class EqualStringHazardFilter {
 		// refill original sets with remaining sections
 		if (changes) {
 			insert.clear();
-			for (CompileSection compileSection : insertSet) {
-				insert.add(Sections.cast(compileSection.getSection(), KnowledgeUnit.class));
+			for (CompileSection<? extends KnowledgeUnit> compileSection : insertSet) {
+				insert.add(compileSection.getSection());
 			}
 			remove.clear();
-			for (CompileSection compileSection : removeSet) {
-				Section<KnowledgeUnit> castedSection = Sections.cast(compileSection.getSection(),
-						KnowledgeUnit.class);
-				remove.add(castedSection);
-
+			for (CompileSection<? extends KnowledgeUnit> compileSection : removeSet) {
+				remove.add(compileSection.getSection());
 			}
 		}
 	}
@@ -148,22 +145,22 @@ public class EqualStringHazardFilter {
 		// and remove it from both (once respectively!)
 
 		// transform Section-collections to CompileSection-collections
-		Collection<CompileSection> removeSet = new ArrayList<CompileSection>();
-		for (Section<? extends SimpleDefinition> section : remove) {
-			removeSet.add(new CompileSection(section));
+		Collection<CompileSection<SimpleDefinition>> removeSet = new ArrayList<CompileSection<SimpleDefinition>>();
+		for (Section<SimpleDefinition> section : remove) {
+			removeSet.add(new CompileSection<SimpleDefinition>(section));
 		}
 
-		Collection<CompileSection> insertSet = new ArrayList<CompileSection>();
-		for (Section<? extends SimpleDefinition> section : insert) {
-			insertSet.add(new CompileSection(section));
+		Collection<CompileSection<SimpleDefinition>> insertSet = new ArrayList<CompileSection<SimpleDefinition>>();
+		for (Section<SimpleDefinition> section : insert) {
+			insertSet.add(new CompileSection<SimpleDefinition>(section));
 		}
 
 		boolean changes = false; // for efficiency only
 
 		// find corresponding sections
-		Iterator<CompileSection> removeIter = removeSet.iterator();
+		Iterator<CompileSection<SimpleDefinition>> removeIter = removeSet.iterator();
 		while (removeIter.hasNext()) {
-			CompileSection next = removeIter.next();
+			CompileSection<SimpleDefinition> next = removeIter.next();
 			if (insertSet.contains(next)) {
 				// item found in both sets, removing from both
 
@@ -171,10 +168,10 @@ public class EqualStringHazardFilter {
 				// this is a problem if a term with same name is newly as a
 				// different type
 				// therefore compare SectionTypes of definitions
-				Section<? extends Type> section1 = next.getSection();
+				Section<SimpleDefinition> section1 = next.getSection();
 				// retrieve reference on other object
 				// (equals-but-not-really-equal-problem)
-				Section<? extends Type> section2 = retrieveSection2(section1, insertSet);
+				Section<?> section2 = retrieveSection2(section1, insertSet);
 				if (section1.get() instanceof TypedTermDefinition) {
 					if (section2.get() instanceof TypedTermDefinition) {
 						if (section1.get().getClass().equals(section2.get().getClass())) {
@@ -204,28 +201,33 @@ public class EqualStringHazardFilter {
 		// refill original sets with remaining sections
 		if (changes) {
 			insert.clear();
-			for (CompileSection compileSection : insertSet) {
-				insert.add(Sections.cast(compileSection.getSection(), SimpleDefinition.class));
+			for (CompileSection<SimpleDefinition> compileSection : insertSet) {
+				insert.add(compileSection.getSection());
 			}
 			remove.clear();
-			for (CompileSection compileSection : removeSet) {
-				remove.add(Sections.cast(compileSection.getSection(), SimpleDefinition.class));
-
+			for (CompileSection<SimpleDefinition> compileSection : removeSet) {
+				remove.add(compileSection.getSection());
 			}
 		}
 	}
 
-	/**
-	 * 
-	 * @created 15.05.2012
-	 * @param section1
-	 * @param insertSet
-	 */
-	private static Section<? extends Type> retrieveSection2(Section<? extends Type> section1, Collection<CompileSection> insertSet) {
-		for (CompileSection compileSection : insertSet) {
-			if (compileSection.equals(new CompileSection(section1))) return compileSection.getSection();
+	private static <T extends Type> Section<? extends Type> retrieveSection2(Section<?> section1, Collection<CompileSection<T>> insertSet) {
+		CompileSection<?> toFind = CompileSection.create(section1);
+		for (CompileSection<?> compileSection : insertSet) {
+			if (compileSection.equals(toFind)) {
+				return compileSection.getSection();
+			}
 		}
 		return null;
+	}
 
+	private static <T> Section<? extends Type> retrieveSection3(Section<?> section1, Collection<CompileSection<? extends T>> insertSet) {
+		CompileSection<?> toFind = CompileSection.create(section1);
+		for (CompileSection<?> compileSection : insertSet) {
+			if (compileSection.equals(toFind)) {
+				return compileSection.getSection();
+			}
+		}
+		return null;
 	}
 }

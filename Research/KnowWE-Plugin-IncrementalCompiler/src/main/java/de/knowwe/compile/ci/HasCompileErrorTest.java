@@ -29,6 +29,7 @@ import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.Strings;
@@ -44,22 +45,13 @@ public class HasCompileErrorTest extends AbstractTest<Article> {
 	public Message execute(Article testObject, String[] args, String[]... ignores) throws InterruptedException {
 		ReferenceManager referenceManager = IncrementalCompiler.getInstance().getTerminology();
 		Section<RootType> rootSection = testObject.getRootSection();
-		List<Section<IncrementalTermDefinition>> defs = Sections.findSuccessorsOfType(rootSection,
-				IncrementalTermDefinition.class);
-		List<String> erroneousTerms = new ArrayList<String>();
-		for (Section<IncrementalTermDefinition> def : defs) {
-			if (!referenceManager.isValid(def.get().getTermIdentifier(def))) {
-				erroneousTerms.add(def.get().getTermName(def));
-			}
-		}
+		List<String> erroneousTerms = extractedErroneousTermNames(referenceManager,
+				Sections.findSuccessorsOfType(rootSection,
+						IncrementalTermDefinition.class));
 
-		List<Section<IncrementalTermReference>> refs = Sections.findSuccessorsOfType(rootSection,
-				IncrementalTermReference.class);
-		for (Section<IncrementalTermReference> ref : refs) {
-			if (!referenceManager.isValid(ref.get().getTermIdentifier(ref))) {
-				erroneousTerms.add(ref.get().getTermName(ref));
-			}
-		}
+		erroneousTerms.addAll(extractedErroneousTermNames(referenceManager,
+				Sections.findSuccessorsOfType(rootSection,
+						IncrementalTermReference.class)));
 
 		if (erroneousTerms.size() == 0) {
 			return Message.SUCCESS;
@@ -69,6 +61,16 @@ public class HasCompileErrorTest extends AbstractTest<Article> {
 					+ Strings.concat(", ", erroneousTerms));
 		}
 
+	}
+
+	private <T extends SimpleTerm> List<String> extractedErroneousTermNames(ReferenceManager referenceManager, List<Section<T>> terms) {
+		List<String> erroneousTerms = new ArrayList<String>();
+		for (Section<T> def : terms) {
+			if (!referenceManager.isValid(def.get().getTermIdentifier(def))) {
+				erroneousTerms.add(def.get().getTermName(def));
+			}
+		}
+		return erroneousTerms;
 	}
 
 	@Override

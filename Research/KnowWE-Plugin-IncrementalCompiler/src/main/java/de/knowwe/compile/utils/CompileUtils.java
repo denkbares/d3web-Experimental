@@ -130,7 +130,7 @@ public class CompileUtils {
 	 * @param oldSectionsNotReused
 	 * @return
 	 */
-	public static <T extends Type> Collection<Section<? extends KnowledgeUnit>> filterKnowledgeUnits(Collection<Section<? extends Type>> oldSectionsNotReused) {
+	public static Collection<Section<? extends KnowledgeUnit>> filterKnowledgeUnits(Collection<Section<?>> oldSectionsNotReused) {
 		Collection<Section<? extends KnowledgeUnit>> result = new HashSet<Section<? extends KnowledgeUnit>>();
 		for (Section<? extends Type> section : oldSectionsNotReused) {
 			if (section.get() instanceof KnowledgeUnit) {

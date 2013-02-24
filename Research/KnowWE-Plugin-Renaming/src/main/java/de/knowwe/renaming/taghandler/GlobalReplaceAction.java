@@ -118,8 +118,8 @@ public class GlobalReplaceAction extends AbstractAction {
 			for (WordBasedRenameFinding finding : list) {
 				int start = finding.getStart();
 				// matches can have different lenght
-				String potentialMatch = sec.getText().substring(start,
-						start + finding.getLength());
+				// String potentialMatch = sec.getText().substring(start,
+				// start + finding.getLength());
 
 				// TODO: add further match check
 				// if (potentialMatch.equals(query)) {

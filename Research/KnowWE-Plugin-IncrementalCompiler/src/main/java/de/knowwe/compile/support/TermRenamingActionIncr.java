@@ -19,7 +19,6 @@
 package de.knowwe.compile.support;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -121,15 +120,15 @@ public class TermRenamingActionIncr extends AbstractAction {
 			response.append("newObjectName",
 					new TermIdentifier(newLastPathElement).toExternalForm());
 			StringBuilder builder = new StringBuilder();
-		Writer w = context.getWriter();
-		// successes
-		for (String article : success) {
+
+			// successes
+			for (String article : success) {
 				builder.append("##");
 				builder.append(article);
-		}
+			}
 			builder.append("###");
-		// failures
-		for (String article : failures) {
+			// failures
+			for (String article : failures) {
 				builder.append("##");
 				builder.append(article);
 			}
