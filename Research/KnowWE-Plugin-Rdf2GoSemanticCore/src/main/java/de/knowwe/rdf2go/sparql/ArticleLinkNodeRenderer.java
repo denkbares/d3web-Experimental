@@ -36,7 +36,7 @@ public class ArticleLinkNodeRenderer implements SparqlResultNodeRenderer {
 					.getTitles().contains(title)) {
 				foundArticle = true;
 				articleLinks[i] = new RenderResult(user).appendHtml(
-						KnowWEUtils.getURLLinkHTMLToArticle(title)).toStringRaw();
+						KnowWEUtils.getLinkHTMLToArticle(title)).toStringRaw();
 			}
 			else {
 				articleLinks[i] = Rdf2GoUtils.reduceNamespace(statement);
