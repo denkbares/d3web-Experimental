@@ -227,6 +227,7 @@
 		<module>KnowWE-Plugin-ESAT</module>
 		<module>KnowWE-Plugin-CIConnector</module>
 		<module>KnowWE-Plugin-Flash</module>
+		<module>KnowWE-Plugin-Ontology-MarkupSet</module>
 	</modules>
 	<repositories>
 		<repository>
