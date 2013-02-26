@@ -96,11 +96,11 @@
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="Namespaces">
+		id="ShowNamespacesType">
 		<parameter id="class"
-			value="de.knowwe.kdom.namespaces.rdf2go.Namespaces" />
-		<parameter id="name" value="Namespaces" />
-		<parameter id="description" value="Type Namespaces" />
+			value="de.knowwe.kdom.namespaces.rdf2go.ShowNamespacesType" />
+		<parameter id="name" value="ShowNamespacesType" />
+		<parameter id="description" value="Type ShowNamespacesType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
@@ -119,7 +119,7 @@
 		<parameter id="css" value="sparql.css" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
+	<!--extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
 		id="Rdf2GoCoreEventListener">
 		<parameter id="class"
 			value="de.knowwe.rdf2go.Rdf2GoCore" />
@@ -127,7 +127,7 @@
 		<parameter id="description" value="EventListener Rdf2GoCore" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-	</extension>
+	</extension-->
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="DumpHandler">

@@ -12,12 +12,12 @@
   <dependencies>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
-  		<artifactId>KnowWE-Plugin-Core</artifactId>
+  		<artifactId>KnowWE-Plugin-Rdf2GoSemanticCore</artifactId>
   		<version>0.2-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
-  		<artifactId>KnowWE-Plugin-Rdf2GoSemanticCore</artifactId>
+  		<artifactId>KnowWE-core</artifactId>
   		<version>0.2-SNAPSHOT</version>
   	</dependency>
   </dependencies>

@@ -79,16 +79,6 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
  */
 public class Rdf2GoCore implements EventListener {
 
-	private static final String MODEL_CONFIG_POINT_ID = "Rdf2GoModelConfig";
-	public static final String PLUGIN_ID = "KnowWE-Plugin-Rdf2GoSemanticCore";
-
-	private final String bns;
-	private final String lns;
-
-	private static final String NARY_PROPERTY = "NaryProperty";
-
-	private org.ontoware.rdf2go.model.Model model;
-
 	public enum Rdf2GoModel {
 		JENA, BIGOWLIM, SESAME, SWIFTOWLIM
 	}
@@ -97,43 +87,69 @@ public class Rdf2GoCore implements EventListener {
 		RDF, RDFS, OWL
 	}
 
-	private Rdf2GoModel modelType = Rdf2GoModel.SESAME;
+	private static Rdf2GoCore globaleInstance;
 
-	private Rdf2GoReasoning reasoningType = Rdf2GoReasoning.RDF;
+	private static Map<String, Rdf2GoCore> instances = new HashMap<String, Rdf2GoCore>();
 
-	private static Rdf2GoCore me;
+	private static final String MODEL_CONFIG_POINT_ID = "Rdf2GoModelConfig";
 
-	public static Rdf2GoCore getInstance() {
-		if (me == null) {
-			me = new Rdf2GoCore();
-			me.init();
-		}
-		return me;
-	}
+	public static final String PLUGIN_ID = "KnowWE-Plugin-Rdf2GoSemanticCore";
 
-	public Rdf2GoCore() {
-		bns = "http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#";
-		lns = Environment.getInstance().getWikiConnector().getBaseUrl()
-				+ "Wiki.jsp?page=";
+	private static final String NARY_PROPERTY = "NaryProperty";
+
+	private static String getCoreId(String web, String title) {
+		return web + "_" + title;
 	}
 
 	/**
-	 * @created 15.07.2012
-	 * @return all {@link Statement}s of the Rdf2GoCore.
+	 * Returns the global Rdf2GoCore. Be aware, that there are also other cores
+	 * for markups with package support. They are accessible with
+	 * 
+	 * @created 26.02.2013
+	 * @return
 	 */
-	public static Set<Statement> getStatements() {
-		HashSet<Statement> result = new HashSet<Statement>();
-
-		for (Statement s : getInstance().model) {
-			result.add(s);
+	public static Rdf2GoCore getInstance() {
+		if (globaleInstance == null) {
+			globaleInstance = new Rdf2GoCore();
+			globaleInstance.init();
 		}
-		return result;
+		return globaleInstance;
 	}
+
+	public static Rdf2GoCore getInstance(String web, String master) {
+		String coreId = getCoreId(web, master);
+		Rdf2GoCore instance = instances.get(coreId);
+		if (instance == null) {
+			instance = new Rdf2GoCore();
+			instance.init();
+			instances.put(coreId, instance);
+		}
+		return instance;
+	}
+
+	public static Rdf2GoCore getInstance(Article article) {
+		return getInstance(article.getWeb(), article.getTitle());
+	}
+
+	private static void removeInstance(Article article) {
+		instances.remove(getCoreId(article.getWeb(), article.getTitle()));
+	}
+
+	private final String bns;
+
+	private final String lns;
+
+	private org.ontoware.rdf2go.model.Model model;
+
+	private Rdf2GoModel modelType = Rdf2GoModel.SESAME;
+
+	private Rdf2GoReasoning reasoningType = Rdf2GoReasoning.RDF;
 
 	/**
 	 * This statement cache is controlled by the incremental compiler.
 	 */
 	private Map<String, WeakHashMap<Section<?>, List<Statement>>> incrementalStatementCache;
+
 	private Map<Statement, Set<String>> duplicateStatements;
 
 	/**
@@ -142,7 +158,6 @@ public class Rdf2GoCore implements EventListener {
 	 * this article are removed.
 	 */
 	private final Map<String, Set<Statement>> fullParseStatementCache = new HashMap<String, Set<Statement>>();
-
 	/**
 	 * All namespaces known to KnowWE. Key is the namespace abbreviation, value
 	 * is the full namespace, e.g. rdf and
@@ -155,6 +170,12 @@ public class Rdf2GoCore implements EventListener {
 	private Set<Statement> removeCache;
 
 	ResourceBundle properties = ResourceBundle.getBundle("model");
+
+	public Rdf2GoCore() {
+		bns = "http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#";
+		lns = Environment.getInstance().getWikiConnector().getBaseUrl()
+				+ "Wiki.jsp?page=";
+	}
 
 	/**
 	 * Add a namespace to the model.
@@ -186,28 +207,6 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
-	 * Adds the given {@link Statement}s for the given {@link Section} to the
-	 * triple store.
-	 * <p/>
-	 * You can remove the {@link Statement}s using the method
-	 * {@link Rdf2GoCore#removeStatementsForSection(Section)}.
-	 * 
-	 * @created 06.12.2010
-	 * @param section the {@link Section} for which the {@link Statement}s are
-	 *        added and cached
-	 * @param statements the {@link Statement}s to add
-	 */
-	public void addStatements(Section<?> section,
-			Statement... statements) {
-		Logger.getLogger(this.getClass().getName()).finer(
-				"semantic core updating " + section.getID() + "  " + statements.length);
-
-		addStatementsToDuplicatedCache(section.getID(), statements);
-		addStatementToIncrementalCache(section, statements);
-		addStatementsToInsertCache(statements);
-	}
-
-	/**
 	 * Adds the {@link Statement}s for the given article. If the given article
 	 * is compiled again, all {@link Statement}s added for this article are
 	 * removed before the new {@link Statement}s are added again. You don't need
@@ -227,6 +226,28 @@ public class Rdf2GoCore implements EventListener {
 		}
 		statementsOfArticle.addAll(Arrays.asList(statements));
 		addStatementsToDuplicatedCache(article.getTitle(), statements);
+		addStatementsToInsertCache(statements);
+	}
+
+	/**
+	 * Adds the given {@link Statement}s for the given {@link Section} to the
+	 * triple store.
+	 * <p/>
+	 * You can remove the {@link Statement}s using the method
+	 * {@link Rdf2GoCore#removeStatementsForSection(Section)}.
+	 * 
+	 * @created 06.12.2010
+	 * @param section the {@link Section} for which the {@link Statement}s are
+	 *        added and cached
+	 * @param statements the {@link Statement}s to add
+	 */
+	public void addStatements(Section<?> section,
+			Statement... statements) {
+		Logger.getLogger(this.getClass().getName()).finer(
+				"semantic core updating " + section.getID() + "  " + statements.length);
+
+		addStatementsToDuplicatedCache(section.getID(), statements);
+		addStatementToIncrementalCache(section, statements);
 		addStatementsToInsertCache(statements);
 	}
 
@@ -260,6 +281,10 @@ public class Rdf2GoCore implements EventListener {
 
 	private void addStatementsToInsertCache(Statement... array) {
 		insertCache.addAll(Arrays.asList(array));
+	}
+
+	private void addStatementsToRemoveCache(List<Statement> list) {
+		removeCache.addAll(list);
 	}
 
 	/**
@@ -348,16 +373,16 @@ public class Rdf2GoCore implements EventListener {
 		return model.createDatatypeLiteral(literal, datatype);
 	}
 
-	public Literal createLiteral(String text) {
-		return model.createPlainLiteral(text);
+	public Literal createLanguageTaggedLiteral(String text) {
+		return new LanguageTagLiteralImpl(text);
 	}
 
 	public Literal createLanguageTaggedLiteral(String text, String tag) {
 		return model.createLanguageTagLiteral(text, tag);
 	}
 
-	public Literal createLanguageTaggedLiteral(String text) {
-		return new LanguageTagLiteralImpl(text);
+	public Literal createLiteral(String text) {
+		return model.createPlainLiteral(text);
 	}
 
 	public Literal createLiteral(String literal, URI datatypeURI) {
@@ -446,6 +471,10 @@ public class Rdf2GoCore implements EventListener {
 
 	}
 
+	public String getBaseNamespace() {
+		return bns;
+	}
+
 	@Override
 	public Collection<Class<? extends Event>> getEvents() {
 		ArrayList<Class<? extends Event>> events = new ArrayList<Class<? extends Event>>(
@@ -453,6 +482,14 @@ public class Rdf2GoCore implements EventListener {
 		events.add(FullParseEvent.class);
 		events.add(ArticleUpdatesFinishedEvent.class);
 		return events;
+	}
+
+	public String getLocalNamespace() {
+		return this.lns;
+	}
+
+	public Rdf2GoModel getModelType() {
+		return this.modelType;
 	}
 
 	public Map<String, String> getNameSpaces() {
@@ -465,6 +502,10 @@ public class Rdf2GoCore implements EventListener {
 
 	public URI getRDFS(String prop) {
 		return createURI("http://www.w3.org/2000/01/rdf-schema#", prop);
+	}
+
+	public Rdf2GoReasoning getReasoningType() {
+		return this.reasoningType;
 	}
 
 	/**
@@ -495,6 +536,19 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
+	 * @created 15.07.2012
+	 * @return all {@link Statement}s of the Rdf2GoCore.
+	 */
+	public Set<Statement> getStatements() {
+		HashSet<Statement> result = new HashSet<Statement>();
+
+		for (Statement s : model) {
+			result.add(s);
+		}
+		return result;
+	}
+
+	/**
 	 * 
 	 * @param sec
 	 * @created 06.12.2010
@@ -513,22 +567,6 @@ public class Rdf2GoCore implements EventListener {
 		return model.getUnderlyingModelImplementation();
 	}
 
-	public String getLocalNamespace() {
-		return this.lns;
-	}
-
-	public String getBaseNamespace() {
-		return bns;
-	}
-
-	public Rdf2GoModel getModelType() {
-		return this.modelType;
-	}
-
-	public Rdf2GoReasoning getReasoningType() {
-		return this.reasoningType;
-	}
-
 	/**
 	 * Initializes the model and its caches and namespaces
 	 */
@@ -543,6 +581,7 @@ public class Rdf2GoCore implements EventListener {
 		namespaces = new HashMap<String, String>();
 		namespaces.putAll(model.getNamespaces());
 		initDefaultNamespaces();
+		EventManager.getInstance().registerListener(this);
 	}
 
 	/**
@@ -650,25 +689,15 @@ public class Rdf2GoCore implements EventListener {
 				key + buffy.toString());
 	}
 
-	private String verbalizeStatement(Statement statement) {
-		String statementVerbalization = Rdf2GoUtils.reduceNamespace(statement.toString());
-		try {
-			statementVerbalization = URLDecoder.decode(statementVerbalization, "UTF-8");
-		}
-		catch (Exception e) {
-			// may happen, just ignore...
-		}
-		return statementVerbalization;
-	}
-
 	@Override
 	public void notify(Event event) {
 		if (event instanceof FullParseEvent) {
-			getInstance().removeStatementsOfArticle(((FullParseEvent) event).getArticle());
-
+			Article article = ((FullParseEvent) event).getArticle();
+			removeStatementsOfArticle(article);
+			removeInstance(article);
 		}
 		if (event instanceof ArticleUpdatesFinishedEvent) {
-			getInstance().commit();
+			commit();
 		}
 	}
 
@@ -702,6 +731,54 @@ public class Rdf2GoCore implements EventListener {
 	public void removeNamespace(String sh) {
 		namespaces.remove(sh);
 		model.removeNamespace(sh);
+	}
+
+	private boolean removeSectionFromIncrementalStatementCache(Section<? extends Type> sec, WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle) {
+		List<Statement> remove = allStatementSectionsOfArticle.remove(sec);
+		if (allStatementSectionsOfArticle.isEmpty()) {
+			incrementalStatementCache.remove(sec.getArticle().getTitle());
+		}
+		return remove != null;
+	}
+
+	private boolean removeStatementFromDuplicateCache(Statement statement, String key) {
+		Set<String> sectionIDsForStatement = duplicateStatements.get(statement);
+		boolean removed = false;
+		if (sectionIDsForStatement != null) {
+			removed = sectionIDsForStatement.remove(key);
+		}
+		else {
+			Logger.getLogger(this.getClass().getName()).log(
+					Level.WARNING,
+					"Internal caching error. Expected statment to be cached with key '" + key
+							+ "', but wasn't:\n"
+							+ verbalizeStatement(statement));
+		}
+		if (removed && sectionIDsForStatement.isEmpty()) {
+			duplicateStatements.remove(statement);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean removeStatementListOfSection(Section<? extends Type> sec) {
+
+		WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle =
+				incrementalStatementCache.get(sec.getTitle());
+
+		List<Statement> statementsOfSection = allStatementSectionsOfArticle.get(sec);
+		List<Statement> removedStatements = new ArrayList<Statement>();
+
+		for (Statement statement : statementsOfSection) {
+			boolean removed = removeStatementFromDuplicateCache(statement, sec.getID());
+			if (removed) {
+				removedStatements.add(statement);
+			}
+		}
+		boolean removeSectionFromIncrementalStatementCache = removeSectionFromIncrementalStatementCache(
+				sec, allStatementSectionsOfArticle);
+		addStatementsToRemoveCache(removedStatements);
+		return removeSectionFromIncrementalStatementCache;
 	}
 
 	/**
@@ -770,58 +847,6 @@ public class Rdf2GoCore implements EventListener {
 					"failed to remove statement for: " + sec.toString());
 		}
 
-	}
-
-	private boolean removeStatementListOfSection(Section<? extends Type> sec) {
-
-		WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle =
-				incrementalStatementCache.get(sec.getTitle());
-
-		List<Statement> statementsOfSection = allStatementSectionsOfArticle.get(sec);
-		List<Statement> removedStatements = new ArrayList<Statement>();
-
-		for (Statement statement : statementsOfSection) {
-			boolean removed = removeStatementFromDuplicateCache(statement, sec.getID());
-			if (removed) {
-				removedStatements.add(statement);
-			}
-		}
-		boolean removeSectionFromIncrementalStatementCache = removeSectionFromIncrementalStatementCache(
-				sec, allStatementSectionsOfArticle);
-		addStatementsToRemoveCache(removedStatements);
-		return removeSectionFromIncrementalStatementCache;
-	}
-
-	private boolean removeSectionFromIncrementalStatementCache(Section<? extends Type> sec, WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle) {
-		List<Statement> remove = allStatementSectionsOfArticle.remove(sec);
-		if (allStatementSectionsOfArticle.isEmpty()) {
-			incrementalStatementCache.remove(sec.getArticle().getTitle());
-		}
-		return remove != null;
-	}
-
-	private boolean removeStatementFromDuplicateCache(Statement statement, String key) {
-		Set<String> sectionIDsForStatement = duplicateStatements.get(statement);
-		boolean removed = false;
-		if (sectionIDsForStatement != null) {
-			removed = sectionIDsForStatement.remove(key);
-		}
-		else {
-			Logger.getLogger(this.getClass().getName()).log(
-					Level.WARNING,
-					"Internal caching error. Expected statment to be cached with key '" + key
-							+ "', but wasn't:\n"
-							+ verbalizeStatement(statement));
-		}
-		if (removed && sectionIDsForStatement.isEmpty()) {
-			duplicateStatements.remove(statement);
-			return true;
-		}
-		return false;
-	}
-
-	private void addStatementsToRemoveCache(List<Statement> list) {
-		removeCache.addAll(list);
 	}
 
 	/**
@@ -933,6 +958,17 @@ public class Rdf2GoCore implements EventListener {
 		return sparqlSelect(query).iterator();
 	}
 
+	private String verbalizeStatement(Statement statement) {
+		String statementVerbalization = Rdf2GoUtils.reduceNamespace(statement.toString());
+		try {
+			statementVerbalization = URLDecoder.decode(statementVerbalization, "UTF-8");
+		}
+		catch (Exception e) {
+			// may happen, just ignore...
+		}
+		return statementVerbalization;
+	}
+
 	/**
 	 * Writes the current repository model to the given writer in RDF/XML
 	 * format.
@@ -945,4 +981,5 @@ public class Rdf2GoCore implements EventListener {
 	public void writeModel(Writer out) throws ModelRuntimeException, IOException {
 		model.writeTo(out);
 	}
+
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-Ontology-MarkupSet" version="0.0.1">
+	
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+		<import plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+			
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="NamespaceType">
+		<parameter id="class"
+			value="de.knowwe.ontology.kdom.namespace.NamespaceType" />
+		<parameter id="name" value="NamespaceType" />
+		<parameter id="description" value="Type NamespaceType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ClassType">
+		<parameter id="class"
+			value="de.knowwe.ontology.kdom.ClassType" />
+		<parameter id="name" value="ClassType" />
+		<parameter id="description" value="Type ClassType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="IndividualType">
+		<parameter id="class"
+			value="de.knowwe.ontology.kdom.IndividualType" />
+		<parameter id="name" value="IndividualType" />
+		<parameter id="description" value="Type IndividualType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ObjectPropertyType">
+		<parameter id="class"
+			value="de.knowwe.ontology.kdom.ObjectPropertyType" />
+		<parameter id="name" value="ObjectPropertyType" />
+		<parameter id="description" value="Type ObjectPropertyType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="RelationType">
+		<parameter id="class"
+			value="de.knowwe.ontology.kdom.RelationType" />
+		<parameter id="name" value="RelationType" />
+		<parameter id="description" value="Type RelationType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+</plugin>
