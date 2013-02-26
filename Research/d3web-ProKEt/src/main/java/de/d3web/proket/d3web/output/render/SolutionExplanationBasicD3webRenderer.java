@@ -59,12 +59,14 @@ public class SolutionExplanationBasicD3webRenderer {
             return textualSolRenderer.renderExplanationForSolution(solution, d3webs);
             
         } else if (expType == UISolutionPanelSettings.ExplanationType.TREEMAP) {
-            System.out.println("Treemap Explanation Rendering");
+            return "img/baAlina/treemap.png";
+            //System.out.println("Treemap Explanation Rendering");
             // TODO: render treemap explanation
         } else if (expType == UISolutionPanelSettings.ExplanationType.RULEGRAPH) {
             // TODO: render rulegraph explanation
         } else if (expType == UISolutionPanelSettings.ExplanationType.CLARI) {
-            System.out.println("Clarification Dialog Solution Rendering");
+            return "Clarification Explanation Dialog";
+            //System.out.println("Clarification Dialog Solution Rendering");
             // TODO render clarification dialog explanation
         }
 
