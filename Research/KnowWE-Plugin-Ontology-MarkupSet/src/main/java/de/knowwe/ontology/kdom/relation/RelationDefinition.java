@@ -9,6 +9,7 @@ import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
@@ -27,15 +28,13 @@ public class RelationDefinition extends AbstractType {
 	private static final String THING_PATTERN = "(?:" + Patterns.QUOTED + "|[^\" ]+)";
 	private static final String ABBREVIATION_THING_PATTERN = "(?:" +
 			AbbreviationPrefixReference.ABBREVIATION_PREFIX_PATTERN + ")?" + THING_PATTERN;
-	private static final String RELATION_PATTERN = "(?:" + ABBREVIATION_THING_PATTERN
-			+ "(?: |\\z)+){3}";
 
 	private static final SectionFinder ABBREVIATION_THING_FINDER = new ConstraintSectionFinder(
 			new RegexSectionFinder(ABBREVIATION_THING_PATTERN),
 			AtMostOneFindingConstraint.getInstance());
 
 	public RelationDefinition() {
-		this.setSectionFinder(new RegexSectionFinder(RELATION_PATTERN));
+		this.setSectionFinder(new AllTextFinderTrimmed());
 		this.addChildType(new SubjectType());
 		this.addChildType(new PredicateType());
 		this.addChildType(new ObjectType());
