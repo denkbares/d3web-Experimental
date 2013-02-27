@@ -80,6 +80,8 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
  */
 public class Rdf2GoCore implements EventListener {
 
+	public static final String LNS_ABBREVIATION = "lns";
+
 	public enum Rdf2GoModel {
 		JENA, BIGOWLIM, SESAME, SWIFTOWLIM
 	}
@@ -602,7 +604,7 @@ public class Rdf2GoCore implements EventListener {
 	 */
 	private void initDefaultNamespaces() {
 		addNamespace("ns", bns);
-		addNamespace("lns", lns);
+		addNamespace(LNS_ABBREVIATION, lns);
 		addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 		addNamespace("w", "http://www.umweltbundesamt.de/wisec#");
 		addNamespace("owl", "http://www.w3.org/2002/07/owl#");
