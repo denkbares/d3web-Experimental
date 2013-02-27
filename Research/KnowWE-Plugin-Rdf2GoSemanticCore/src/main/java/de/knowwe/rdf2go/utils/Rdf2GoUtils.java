@@ -30,8 +30,8 @@ public class Rdf2GoUtils {
 	 *        be removed
 	 * @return the string without the namespace prefix
 	 */
-	public static String trimNamespace(String string) {
-		for (Entry<String, String> namespaceEntry : Rdf2GoCore.getInstance().getNameSpaces().entrySet()) {
+	public static String trimNamespace(Rdf2GoCore core, String string) {
+		for (Entry<String, String> namespaceEntry : core.getNameSpaces().entrySet()) {
 			String ns = namespaceEntry.getValue();
 			if (string.startsWith(ns)) {
 				string = string.substring(ns.length());
@@ -53,8 +53,8 @@ public class Rdf2GoUtils {
 	 * @param string the string where the namespace needs to be reduced
 	 * @return the string with the prefix instead of the full namespace
 	 */
-	public static String reduceNamespace(String string) {
-		for (Entry<String, String> cur : Rdf2GoCore.getInstance().getNameSpaces().entrySet()) {
+	public static String reduceNamespace(Rdf2GoCore core, String string) {
+		for (Entry<String, String> cur : core.getNameSpaces().entrySet()) {
 			string = string.replaceAll(Pattern.quote(cur.getValue()),
 					toNamespacePrefix(cur.getKey()));
 		}
@@ -68,10 +68,10 @@ public class Rdf2GoUtils {
 	 * @created 15.07.2012
 	 * @return the namespace prefixes for a SPARQL query.
 	 */
-	public static String getSparqlNamespaceShorts() {
+	public static String getSparqlNamespaceShorts(Rdf2GoCore core) {
 		StringBuilder buffy = new StringBuilder();
 
-		for (Entry<String, String> cur : Rdf2GoCore.getInstance().getNameSpaces().entrySet()) {
+		for (Entry<String, String> cur : core.getNameSpaces().entrySet()) {
 			buffy.append("PREFIX " + toNamespacePrefix(cur.getKey()) + " <" + cur.getValue()
 					+ "> \n");
 		}
@@ -103,8 +103,8 @@ public class Rdf2GoUtils {
 	 * @return the abbreviation of the namespace found at the start of the given
 	 *         string
 	 */
-	public static String parseKnownAbbreviation(String string) {
-		for (String nsAbbreviation : Rdf2GoCore.getInstance().getNameSpaces().keySet()) {
+	public static String parseKnownAbbreviation(Rdf2GoCore core, String string) {
+		for (String nsAbbreviation : core.getNameSpaces().keySet()) {
 			String prefix = toNamespacePrefix(nsAbbreviation);
 			if (string.startsWith(prefix)) {
 				return nsAbbreviation;
@@ -122,8 +122,8 @@ public class Rdf2GoUtils {
 	 * @param string the string with the namespace abbreviation to expand
 	 * @return the string with an expanded namespace
 	 */
-	public static String expandNamespace(String string) {
-		String knownAbbreviation = parseKnownAbbreviation(string);
+	public static String expandNamespace(Rdf2GoCore core, String string) {
+		String knownAbbreviation = parseKnownAbbreviation(core, string);
 		if (knownAbbreviation == null) return string;
 		return string.replaceFirst(Pattern.quote(toNamespacePrefix(knownAbbreviation)),
 				Rdf2GoCore.getInstance().getNameSpaces().get(knownAbbreviation));

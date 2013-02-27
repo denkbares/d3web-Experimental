@@ -32,6 +32,7 @@ import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.validator.Validator;
 import de.knowwe.rdf2go.sparql.validator.ValidatorResult;
 import de.knowwe.rdfs.testcase.Binding;
@@ -62,7 +63,7 @@ public class RDFSTestCaseHandler extends SubtreeHandler<RDFSTestCaseType> {
 			return Messages.asList(Messages.syntaxError("Unable to find SPARQL-Query! Check the syntax!"));
 		}
 		String sparqlQuery = SPARQLQueryType.getSPARQLQuery(sparqlSection);
-		ValidatorResult validation = Validator.validate(sparqlQuery);
+		ValidatorResult validation = Validator.validate(Rdf2GoCore.getInstance(), sparqlQuery);
 
 		if (validation.hasErrors()) {
 			Collection<Message> messages = new LinkedList<Message>();

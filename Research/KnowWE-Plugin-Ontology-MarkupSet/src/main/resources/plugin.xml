@@ -30,7 +30,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="ClassType">
 		<parameter id="class"
-			value="de.knowwe.ontology.kdom.ClassType" />
+			value="de.knowwe.ontology.kdom.clazz.ClassType" />
 		<parameter id="name" value="ClassType" />
 		<parameter id="description" value="Type ClassType" />
 		<parameter id="version" value="1.0" />
@@ -41,7 +41,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="IndividualType">
 		<parameter id="class"
-			value="de.knowwe.ontology.kdom.IndividualType" />
+			value="de.knowwe.ontology.kdom.individual.IndividualType" />
 		<parameter id="name" value="IndividualType" />
 		<parameter id="description" value="Type IndividualType" />
 		<parameter id="version" value="1.0" />
@@ -69,6 +69,47 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+        id="OntologyMarkupInstantEditToolProvider">
+        <parameter id="class"
+            value="de.knowwe.instantedit.tools.InstantEditToolProvider" />
+        <parameter id="name" value="OntologyMarkupInstantEditToolProvider" />
+        <parameter id="description"
+            value="Offers a button for quick editing a certain section." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="4" />
+        <parameter id="script" value="KnowWE-EditCommons.js" />
+        <parameter id="script" value="KnowWE-Plugin-InstantEdit.js" />
+        <parameter id="script" value="KnowWE-Plugin-AutoComplete.js" />
+        <parameter id="script" value="DefaultEditTool.js" />
+        <parameter id="script" value="TextArea.js" />
+        <parameter id="css" value="KnowWE-Plugin-InstantEdit.css" />
+        <parameter id="css" value="DefaultEditTool.css" />       
+        <parameter id="scope" value="ObjectPropertyType" />
+        <parameter id="scope" value="ClassType" />
+        <parameter id="scope" value="RelationType" />
+        <parameter id="scope" value="NamespaceType" />
+        <parameter id="scope" value="IndividualType" />
+    </extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="OntologyMarkupObjectInfoPageToolProvider">
+		<parameter id="class"
+			value="de.knowwe.core.toolprovider.ObjectInfoPageToolProvider" />
+		<parameter id="name" value="OntologyMarkupObjectInfoPageToolProvider" />
+		<parameter id="description"
+			value="Offer a button to navigate to the object information page of an selected object." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="AbbreviationDefinition" />
+		<parameter id="scope" value="AbbreviationReference" />
+		<parameter id="scope" value="NamespaceDefinition" />
+		<parameter id="scope" value="NamespaceReference" />
+		<parameter id="scope" value="IndividualDefinition" />
+		<parameter id="scope" value="IndividualReference" />
+
 	</extension>
 	
 </plugin>

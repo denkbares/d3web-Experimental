@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
@@ -32,16 +33,13 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class ShowNamespacesType extends DefaultMarkupType {
 
-	private static final String GLOBAL_ANNOTATION = "global";
-	private static final String GLOBAL_TRUE = "true";
 	private static final String MASTER_ANNOTATION = "master";
 
 	private static DefaultMarkup MARKUP = null;
 
 	static {
 		MARKUP = new DefaultMarkup("ShowNamespaces");
-		MARKUP.addAnnotation(GLOBAL_ANNOTATION, false, GLOBAL_TRUE, "false");
-		MARKUP.addAnnotation(MASTER_ANNOTATION, false);
+		MARKUP.addAnnotation(Rdf2GoCore.MASTER_ANNOTATION, false);
 	}
 
 	public ShowNamespacesType() {
@@ -54,15 +52,8 @@ public class ShowNamespacesType extends DefaultMarkupType {
 		@Override
 		protected void renderContents(Section<?> section, UserContext user, RenderResult string) {
 
-			String global = DefaultMarkupType.getAnnotation(section, GLOBAL_ANNOTATION);
-			String master = DefaultMarkupType.getAnnotation(section, MASTER_ANNOTATION);
-			Rdf2GoCore core;
-			if (master == null || GLOBAL_TRUE.equals(global)) {
-				core = Rdf2GoCore.getInstance();
-			}
-			else {
-				core = Rdf2GoCore.getInstance(section.getWeb(), master);
-			}
+			Rdf2GoCore core = Rdf2GoCore.getInstance(Sections.cast(section,
+					ShowNamespacesType.class));
 
 			Map<String, String> namespaces = core.getNameSpaces();
 

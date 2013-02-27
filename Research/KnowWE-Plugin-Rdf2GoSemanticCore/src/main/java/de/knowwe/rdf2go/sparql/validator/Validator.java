@@ -32,7 +32,6 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 public class Validator {
 
 	private static final SPARQLParser parser = new SPARQLParser();
-	private static final String prefixes = Rdf2GoUtils.getSparqlNamespaceShorts();
 	private static final int LINESTOSUBTRACT = 9;
 
 	private Validator() {
@@ -47,8 +46,8 @@ public class Validator {
 	 * @param baseURI (optional) The base URI for the SPARQL-Query
 	 * @return ValidatorResult wrapping the validation result
 	 */
-	public static ValidatorResult validate(String query) {
-
+	public static ValidatorResult validate(Rdf2GoCore core, String query) {
+		String prefixes = Rdf2GoUtils.getSparqlNamespaceShorts(core);
 		// add default prefixes if necessary
 		if (!query.startsWith(prefixes)) {
 			query = prefixes + query;

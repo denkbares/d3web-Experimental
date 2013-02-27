@@ -13,7 +13,6 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
-import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class NamespaceAbbreviationDefinition extends SimpleDefinition {
@@ -22,7 +21,6 @@ public class NamespaceAbbreviationDefinition extends SimpleDefinition {
 		super(TermRegistrationScope.LOCAL, NamespaceAbbreviationDefinition.class);
 		this.addSubtreeHandler(Priority.HIGH, new NamespaceSubtreeHandler());
 		this.setSectionFinder(new RegexSectionFinder("\\s*\\w+\\s+\\S+\\s*"));
-		this.setRenderer(StyleRenderer.Questionaire);
 		this.addChildType(new AbbreviationDefinition());
 		this.addChildType(new NamespaceDefinition());
 	}

@@ -99,13 +99,17 @@ public class SparqlMarkupRenderer implements Renderer {
 						sparqlString);
 
 				SparqlRenderResult resultEntry;
+
+				Rdf2GoCore core = Rdf2GoCore.getInstance(markupSection);
+				renderOpts.setRdf2GoCore(core);
+
 				if (renderOpts.isNavigation()) {
 					// do not show navigation bar if LIMIT or OFFSET is set in
 					// markup
 					sparqlString = addOffsetAndLimitToSparqlString(sparqlString, markupSection,
 							navigationOffset, navigationLimit);
 
-					QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
+					QueryResultTable resultSet = core.sparqlSelect(
 							sparqlString);
 					resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
 							resultSet,
@@ -118,7 +122,7 @@ public class SparqlMarkupRenderer implements Renderer {
 
 				}
 				else {
-					QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
+					QueryResultTable resultSet = core.sparqlSelect(
 							sparqlString);
 					resultEntry = SparqlResultRenderer.getInstance().renderQueryResult(
 							resultSet, renderOpts, user);

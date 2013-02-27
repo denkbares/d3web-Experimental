@@ -3,6 +3,8 @@ package de.knowwe.rdf2go.sparql.utils;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import de.knowwe.rdf2go.Rdf2GoCore;
+
 public class RenderOptions {
 
 	boolean zebraMode;
@@ -12,6 +14,7 @@ public class RenderOptions {
 	boolean border;
 	Map sortingOrder;
 	String id;
+	private Rdf2GoCore core;
 
 	public RenderOptions(String id) {
 		super();
@@ -74,6 +77,14 @@ public class RenderOptions {
 
 	public void setSorting(boolean sorting) {
 		this.sorting = sorting;
+	}
+
+	public void setRdf2GoCore(Rdf2GoCore core) {
+		this.core = core;
+	}
+
+	public Rdf2GoCore getRdf2GoCore() {
+		return this.core;
 	}
 
 }

@@ -104,6 +104,7 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 	 * @return HTML string
 	 */
 	private String renderDiff(Collection<Statement> set, UserContext user) {
+		Rdf2GoCore core = Rdf2GoCore.getInstance();
 		RenderResult result = new RenderResult(user);
 
 		result.appendHtml("<tr>");
@@ -126,15 +127,15 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 			result.appendHtml("<tr>");
 			result.appendHtml("<td>");
 			result.append(SparqlResultRenderer.getInstance().renderNode(row.getSubject(), null,
-					false, user));
+					false, user, core));
 			result.appendHtml("</td>");
 			result.appendHtml("<td>");
 			result.append(SparqlResultRenderer.getInstance().renderNode(row.getPredicate(), null,
-					false, user));
+					false, user, core));
 			result.appendHtml("</td>");
 			result.appendHtml("<td>");
 			result.append(SparqlResultRenderer.getInstance().renderNode(row.getObject(), null,
-					false, user));
+					false, user, core));
 			result.appendHtml("</td>");
 			result.appendHtml("</tr>");
 		}

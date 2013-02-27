@@ -63,10 +63,10 @@ public class PropertyManager {
 		// uo = UpperOntology.getInstance();
 	}
 
-	public boolean isValid(String property) {
+	public boolean isValid(Rdf2GoCore core, String property) {
 		URI prop = Rdf2GoCore.getInstance().createlocalURI(
 				property);
-		return isValid(prop);
+		return isValid(core, prop);
 	}
 
 	/**
@@ -77,13 +77,13 @@ public class PropertyManager {
 	 * @param property
 	 * @return
 	 */
-	public boolean isValid(URI property) {
+	public boolean isValid(Rdf2GoCore core, URI property) {
 		boolean result = false;
 		// TODO evil hack, to get going
 		if (Rdf2GoUtils.getLocalName(property).contains("subClassOf")
 				|| Rdf2GoUtils.getLocalName(property).contains("type")
 				|| Rdf2GoUtils.getLocalName(property).contains("subPropertyOf")) return true;
-		String querystring = Rdf2GoUtils.getSparqlNamespaceShorts();
+		String querystring = Rdf2GoUtils.getSparqlNamespaceShorts(core);
 		String objectpropquery = querystring + "ASK WHERE { <"
 				+ property.toString() + "> rdf:type owl:ObjectProperty }";
 		String datatypepropquery = querystring + "ASK WHERE { <"

@@ -48,7 +48,9 @@ public class SparqlResultRenderer {
 	public SparqlRenderResult renderQueryResult(QueryResultTable qrt, UserContext user) {
 		// TODO
 		// is this a good idea?
-		return renderQueryResult(qrt, new RenderOptions("defaultID"), user);
+		RenderOptions opts = new RenderOptions("defaultID");
+		opts.setRdf2GoCore(Rdf2GoCore.getInstance());
+		return renderQueryResult(qrt, opts, user);
 	}
 
 	/**
@@ -113,7 +115,7 @@ public class SparqlResultRenderer {
 
 			for (String var : variables) {
 				Node node = row.getValue(var);
-				String erg = renderNode(node, var, rawOutput, user);
+				String erg = renderNode(node, var, rawOutput, user, opts.getRdf2GoCore());
 
 				if (tablemode) {
 					result.appendHtml("<td>");
@@ -146,7 +148,7 @@ public class SparqlResultRenderer {
 		return new SparqlRenderResult(result.toStringRaw(), i);
 	}
 
-	public String renderNode(Node node, String var, boolean rawOutput, UserContext user) {
+	public String renderNode(Node node, String var, boolean rawOutput, UserContext user, Rdf2GoCore core) {
 		if (node == null) {
 			return "";
 		}
@@ -154,7 +156,7 @@ public class SparqlResultRenderer {
 		if (!rawOutput) {
 			for (SparqlResultNodeRenderer nodeRenderer : nodeRenderers) {
 				String temp = rendered;
-				rendered = nodeRenderer.renderNode(rendered, var, user);
+				rendered = nodeRenderer.renderNode(rendered, var, user, core);
 				if (!temp.equals(rendered) && !nodeRenderer.allowFollowUpRenderer()) break;
 			}
 			rendered = Strings.maskJSPWikiMarkup(rendered);

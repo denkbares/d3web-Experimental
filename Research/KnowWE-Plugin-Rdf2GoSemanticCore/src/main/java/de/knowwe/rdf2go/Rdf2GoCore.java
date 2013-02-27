@@ -70,6 +70,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.event.ArticleUpdatesFinishedEvent;
 import de.knowwe.event.FullParseEvent;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
@@ -96,6 +97,8 @@ public class Rdf2GoCore implements EventListener {
 	public static final String PLUGIN_ID = "KnowWE-Plugin-Rdf2GoSemanticCore";
 
 	private static final String NARY_PROPERTY = "NaryProperty";
+
+	public static final String MASTER_ANNOTATION = "master";
 
 	private static String getCoreId(String web, String title) {
 		return web + "_" + title;
@@ -129,6 +132,16 @@ public class Rdf2GoCore implements EventListener {
 
 	public static Rdf2GoCore getInstance(Article article) {
 		return getInstance(article.getWeb(), article.getTitle());
+	}
+
+	public static Rdf2GoCore getInstance(Section<? extends DefaultMarkupType> section) {
+		String master = DefaultMarkupType.getAnnotation(section, Rdf2GoCore.MASTER_ANNOTATION);
+		if (master == null) {
+			return Rdf2GoCore.getInstance();
+		}
+		else {
+			return Rdf2GoCore.getInstance(section.getWeb(), master);
+		}
 	}
 
 	private static void removeInstance(Article article) {
@@ -395,7 +408,7 @@ public class Rdf2GoCore implements EventListener {
 	public List<Statement> createlocalProperty(String cur) {
 		URI prop = createlocalURI(cur);
 		List<Statement> io = new ArrayList<Statement>();
-		if (!PropertyManager.getInstance().isValid(prop)) {
+		if (!PropertyManager.getInstance().isValid(this, prop)) {
 			io.add(createStatement(prop, RDFS.subClassOf, createURI(getBaseNamespace(),
 					NARY_PROPERTY)));
 		}
@@ -412,7 +425,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public URI createURI(String value) {
-		return model.createURI(Rdf2GoUtils.expandNamespace(value));
+		return model.createURI(Rdf2GoUtils.expandNamespace(this, value));
 	}
 
 	public URI createURI(String ns, String value) {
@@ -879,7 +892,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public boolean sparqlAsk(String query) throws ModelRuntimeException, MalformedQueryException {
-		String sparqlNamespaceShorts = Rdf2GoUtils.getSparqlNamespaceShorts();
+		String sparqlNamespaceShorts = Rdf2GoUtils.getSparqlNamespaceShorts(this);
 		if (query.startsWith(sparqlNamespaceShorts)) {
 			return model.sparqlAsk(query);
 		}
@@ -915,10 +928,10 @@ public class Rdf2GoCore implements EventListener {
 		boolean result;
 
 		// ask query
-		if (query.startsWith(Rdf2GoUtils.getSparqlNamespaceShorts())) {
+		if (query.startsWith(Rdf2GoUtils.getSparqlNamespaceShorts(this))) {
 			result = model.sparqlAsk(query);
 		}
-		result = model.sparqlAsk(Rdf2GoUtils.getSparqlNamespaceShorts() + query);
+		result = model.sparqlAsk(Rdf2GoUtils.getSparqlNamespaceShorts(this) + query);
 
 		// reinsert statements
 		if (statementsOfSection != null) {
@@ -930,16 +943,16 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public ClosableIterable<Statement> sparqlConstruct(String query) throws ModelRuntimeException, MalformedQueryException {
-		if (query.startsWith(Rdf2GoUtils.getSparqlNamespaceShorts())) {
+		if (query.startsWith(Rdf2GoUtils.getSparqlNamespaceShorts(this))) {
 			return model.sparqlConstruct(query);
 		}
-		return model.sparqlConstruct(Rdf2GoUtils.getSparqlNamespaceShorts() + query);
+		return model.sparqlConstruct(Rdf2GoUtils.getSparqlNamespaceShorts(this) + query);
 	}
 
 	public QueryResultTable sparqlSelect(String query) throws ModelRuntimeException, MalformedQueryException {
 		String completeQuery;
-		if (!query.startsWith(Rdf2GoUtils.getSparqlNamespaceShorts())) {
-			completeQuery = Rdf2GoUtils.getSparqlNamespaceShorts() + query;
+		if (!query.startsWith(Rdf2GoUtils.getSparqlNamespaceShorts(this))) {
+			completeQuery = Rdf2GoUtils.getSparqlNamespaceShorts(this) + query;
 		}
 		else {
 			completeQuery = query;
@@ -959,7 +972,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	private String verbalizeStatement(Statement statement) {
-		String statementVerbalization = Rdf2GoUtils.reduceNamespace(statement.toString());
+		String statementVerbalization = Rdf2GoUtils.reduceNamespace(this, statement.toString());
 		try {
 			statementVerbalization = URLDecoder.decode(statementVerbalization, "UTF-8");
 		}

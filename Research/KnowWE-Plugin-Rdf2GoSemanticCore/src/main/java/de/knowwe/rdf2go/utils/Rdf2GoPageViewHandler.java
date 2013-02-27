@@ -68,10 +68,10 @@ public class Rdf2GoPageViewHandler extends AbstractHTMLTagHandler {
 				if (object != null) {
 					o = object.toString();
 				}
-
-				s = Rdf2GoUtils.reduceNamespace(s);
-				p = Rdf2GoUtils.reduceNamespace(p);
-				o = Rdf2GoUtils.reduceNamespace(o);
+				Rdf2GoCore core = Rdf2GoCore.getInstance();
+				s = Rdf2GoUtils.reduceNamespace(core, s);
+				p = Rdf2GoUtils.reduceNamespace(core, p);
+				o = Rdf2GoUtils.reduceNamespace(core, o);
 				// s = s.substring(s.indexOf('#') + 1);
 				// o = o.substring(o.indexOf('#') + 1);
 				// p = p.substring(p.indexOf('#') + 1);

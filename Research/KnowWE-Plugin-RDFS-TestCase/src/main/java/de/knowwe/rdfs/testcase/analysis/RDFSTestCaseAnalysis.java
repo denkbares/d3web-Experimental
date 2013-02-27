@@ -61,12 +61,13 @@ public class RDFSTestCaseAnalysis {
 		}
 
 		// derived but not expected
-// we actually dont need this, as derived but not expected is not an issue
-//		for (Binding derivedBinding : derivedBindings) {
-//			if (!testCase.getExpectedBindings().contains(derivedBinding)) {
-//				report.addDiff(new UnexpectedBindingDiff(derivedBinding));
-//			}
-//		}
+		// we actually dont need this, as derived but not expected is not an
+		// issue
+		// for (Binding derivedBinding : derivedBindings) {
+		// if (!testCase.getExpectedBindings().contains(derivedBinding)) {
+		// report.addDiff(new UnexpectedBindingDiff(derivedBinding));
+		// }
+		// }
 
 	}
 
@@ -107,7 +108,7 @@ public class RDFSTestCaseAnalysis {
 
 	private static String processValue(String value) {
 		value = Strings.decodeURL(value);
-		value = Rdf2GoUtils.reduceNamespace(value);
+		value = Rdf2GoUtils.reduceNamespace(Rdf2GoCore.getInstance(), value);
 		if (value.startsWith("lns:")) {
 			return value.substring(4);
 		}

@@ -98,7 +98,7 @@ public class CloudRenderer implements Renderer {
 		String path = realPath + "/" + tmpPath;
 		String dotFilename = path + concept.replaceAll(" ", "_").replaceAll("/", "_")
 				+ section.getID()
-					+ ".dot";
+				+ ".dot";
 		File f = new File(dotFilename);
 		try {
 			FileWriter writer = new FileWriter(f);
@@ -126,7 +126,7 @@ public class CloudRenderer implements Renderer {
 		}
 
 		string.append("<img src='" + tmpPath + "graph"
-					+ section.getID() + ".png'/>");
+				+ section.getID() + ".png'/>");
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class CloudRenderer implements Renderer {
 				|| concept.contains(".")) {
 			concept = concept.replaceAll(" ", "+");
 			concept = concept.replaceAll("/", "%2F");
-			String expandNamespace = Rdf2GoUtils.expandNamespace("lns:");
+			String expandNamespace = Rdf2GoUtils.expandNamespace(Rdf2GoCore.getInstance(), "lns:");
 			fullConcept = "<" + expandNamespace + concept + ">";
 		}
 		return fullConcept;
@@ -313,8 +313,6 @@ public class CloudRenderer implements Renderer {
 
 		if (z.endsWith("Resource") || concept.endsWith("Resource")) return; // filter
 																			// rdf:Resource
-
-
 
 		String labelZ = prepareConceptLabel(z);
 		String labelConcept = prepareConceptLabel(concept);

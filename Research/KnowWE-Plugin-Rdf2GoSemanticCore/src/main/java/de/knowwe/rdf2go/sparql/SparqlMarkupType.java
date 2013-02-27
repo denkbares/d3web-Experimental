@@ -23,6 +23,7 @@ package de.knowwe.rdf2go.sparql;
 import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class SparqlMarkupType extends DefaultMarkupType {
 
@@ -34,7 +35,7 @@ public class SparqlMarkupType extends DefaultMarkupType {
 	private static DefaultMarkup m = null;
 
 	static {
-		m = new DefaultMarkup("sparql");
+		m = new DefaultMarkup("Sparql");
 		m.addContentType(new SparqlContentType());
 		m.addAnnotation(RAW_OUTPUT, false, "true", "false");
 		m.addAnnotation(NAVIGATION, false, "true", "false");
@@ -45,6 +46,8 @@ public class SparqlMarkupType extends DefaultMarkupType {
 		m.addAnnotationRenderer(SORTING, NothingRenderer.getInstance());
 		m.addAnnotation(BORDER, false, "true", "false");
 		m.addAnnotationRenderer(BORDER, NothingRenderer.getInstance());
+		m.addAnnotation(Rdf2GoCore.MASTER_ANNOTATION, false);
+		m.addAnnotationRenderer(Rdf2GoCore.MASTER_ANNOTATION, NothingRenderer.getInstance());
 
 	}
 
