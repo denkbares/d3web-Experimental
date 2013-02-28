@@ -16,24 +16,28 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.ontology.kdom.namespace;
+package de.knowwe.ontology.kdom.resource;
 
-import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.utils.Patterns;
-import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
-import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.core.compile.terminology.TermRegistrationScope;
+import de.knowwe.core.kdom.objects.SimpleReference;
+import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.utils.Strings;
+import de.knowwe.kdom.renderer.StyleRenderer;
+import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
-public class AbbreviationPrefixReference extends AbstractType {
+public class ResourceReference extends SimpleReference {
 
-	public static final String ABBREVIATION_PREFIX_PATTERN = "^\\s*"
-			+ Patterns.WORD + ":\\s*";
+	public ResourceReference() {
+		super(TermRegistrationScope.LOCAL, Resource.class);
+		this.setSectionFinder(new AllTextFinderTrimmed());
+		this.setRenderer(new ToolMenuDecoratingRenderer(StyleRenderer.Question));
+	}
 
-	public AbbreviationPrefixReference() {
-		this.setSectionFinder(new ConstraintSectionFinder(new RegexSectionFinder(
-				ABBREVIATION_PREFIX_PATTERN),
-				AtMostOneFindingConstraint.getInstance()));
-		this.addChildType(new AbbreviationReference());
+	@Override
+	public String getTermName(Section<? extends SimpleTerm> section) {
+		return Strings.trimQuotes(section.getText());
 	}
 
 }

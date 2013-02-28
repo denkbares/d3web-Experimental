@@ -16,24 +16,18 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.ontology.kdom.namespace;
+package de.knowwe.ontology.kdom.objectproperty;
 
-import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.utils.Patterns;
-import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
-import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.core.compile.terminology.TerminologyManager;
+import de.knowwe.ontology.kdom.resource.Resource;
 
-public class AbbreviationPrefixReference extends AbstractType {
-
-	public static final String ABBREVIATION_PREFIX_PATTERN = "^\\s*"
-			+ Patterns.WORD + ":\\s*";
-
-	public AbbreviationPrefixReference() {
-		this.setSectionFinder(new ConstraintSectionFinder(new RegexSectionFinder(
-				ABBREVIATION_PREFIX_PATTERN),
-				AtMostOneFindingConstraint.getInstance()));
-		this.addChildType(new AbbreviationReference());
-	}
+/**
+ * This class is only used to register Properties in the
+ * {@link TerminologyManager}.
+ * 
+ * @author Albrecht Striffler (denkbares GmbH)
+ * @created 28.02.2013
+ */
+public class Property extends Resource {
 
 }

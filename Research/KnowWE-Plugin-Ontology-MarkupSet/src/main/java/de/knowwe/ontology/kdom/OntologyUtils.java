@@ -16,24 +16,29 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.ontology.kdom.namespace;
+package de.knowwe.ontology.kdom;
 
-import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.utils.Patterns;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.ontology.kdom.namespace.AbbreviationPrefixReference;
 
-public class AbbreviationPrefixReference extends AbstractType {
+/**
+ * 
+ * @author Albrecht Striffler (denkbares GmbH)
+ * @created 28.02.2013
+ */
+public class OntologyUtils {
 
-	public static final String ABBREVIATION_PREFIX_PATTERN = "^\\s*"
-			+ Patterns.WORD + ":\\s*";
+	public static final String RESOURCE_PATTERN = "(?:" + Patterns.QUOTED + "|[^\" ]+)";
 
-	public AbbreviationPrefixReference() {
-		this.setSectionFinder(new ConstraintSectionFinder(new RegexSectionFinder(
-				ABBREVIATION_PREFIX_PATTERN),
-				AtMostOneFindingConstraint.getInstance()));
-		this.addChildType(new AbbreviationReference());
-	}
+	public static final String ABBREVIATED_RESOURCE_PATTERN = "(?:" +
+			AbbreviationPrefixReference.ABBREVIATION_PREFIX_PATTERN + ")?" + RESOURCE_PATTERN;
+
+	public static final SectionFinder ABBREVIATED_RESOURCE_FINDER = new ConstraintSectionFinder(
+			new RegexSectionFinder(ABBREVIATED_RESOURCE_PATTERN),
+			AtMostOneFindingConstraint.getInstance());
 
 }

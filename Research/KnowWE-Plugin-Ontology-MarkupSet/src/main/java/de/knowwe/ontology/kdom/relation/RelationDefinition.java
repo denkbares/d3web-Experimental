@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2013 University Wuerzburg, Computer Science VI
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
+ */
 package de.knowwe.ontology.kdom.relation;
 
 import java.util.Collection;
@@ -10,28 +28,15 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
-import de.knowwe.core.utils.Patterns;
-import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
-import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.ontology.kdom.individual.NamespaceIndividualReference;
-import de.knowwe.ontology.kdom.namespace.AbbreviationPrefixReference;
-import de.knowwe.ontology.kdom.objectproperty.NamespaceObjectPropertyReference;
+import de.knowwe.ontology.kdom.OntologyUtils;
+import de.knowwe.ontology.kdom.objectproperty.AbbreviatedPropertyReference;
+import de.knowwe.ontology.kdom.resource.AbbreviatedResourceReference;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class RelationDefinition extends AbstractType {
-
-	private static final String THING_PATTERN = "(?:" + Patterns.QUOTED + "|[^\" ]+)";
-	private static final String ABBREVIATION_THING_PATTERN = "(?:" +
-			AbbreviationPrefixReference.ABBREVIATION_PREFIX_PATTERN + ")?" + THING_PATTERN;
-
-	private static final SectionFinder ABBREVIATION_THING_FINDER = new ConstraintSectionFinder(
-			new RegexSectionFinder(ABBREVIATION_THING_PATTERN),
-			AtMostOneFindingConstraint.getInstance());
 
 	public RelationDefinition() {
 		this.setSectionFinder(new AllTextFinderTrimmed());
@@ -44,24 +49,24 @@ public class RelationDefinition extends AbstractType {
 	private static class SubjectType extends AbstractType {
 
 		public SubjectType() {
-			this.setSectionFinder(ABBREVIATION_THING_FINDER);
-			this.addChildType(new NamespaceIndividualReference());
+			this.setSectionFinder(OntologyUtils.ABBREVIATED_RESOURCE_FINDER);
+			this.addChildType(new AbbreviatedResourceReference());
 		}
 	}
 
 	private static class PredicateType extends AbstractType {
 
 		public PredicateType() {
-			this.setSectionFinder(ABBREVIATION_THING_FINDER);
-			this.addChildType(new NamespaceObjectPropertyReference());
+			this.setSectionFinder(OntologyUtils.ABBREVIATED_RESOURCE_FINDER);
+			this.addChildType(new AbbreviatedPropertyReference());
 		}
 	}
 
 	private static class ObjectType extends AbstractType {
 
 		public ObjectType() {
-			this.setSectionFinder(ABBREVIATION_THING_FINDER);
-			this.addChildType(new NamespaceIndividualReference());
+			this.setSectionFinder(OntologyUtils.ABBREVIATED_RESOURCE_FINDER);
+			this.addChildType(new AbbreviatedResourceReference());
 		}
 	}
 
@@ -76,31 +81,31 @@ public class RelationDefinition extends AbstractType {
 
 			Section<SubjectType> subjectSection = Sections.findChildOfType(section,
 					SubjectType.class);
-			Section<NamespaceIndividualReference> nsSubjectSection = Sections.findSuccessor(
-					subjectSection, NamespaceIndividualReference.class);
+			Section<AbbreviatedResourceReference> nsSubjectSection = Sections.findSuccessor(
+					subjectSection, AbbreviatedResourceReference.class);
 
 			Section<PredicateType> predicateSection = Sections.findChildOfType(section,
 					PredicateType.class);
-			Section<NamespaceObjectPropertyReference> nsObjPropSection = Sections.findSuccessor(
-					predicateSection, NamespaceObjectPropertyReference.class);
+			Section<AbbreviatedPropertyReference> nsObjPropSection = Sections.findSuccessor(
+					predicateSection, AbbreviatedPropertyReference.class);
 
 			Section<ObjectType> objectSection = Sections.findChildOfType(section,
 					ObjectType.class);
-			Section<NamespaceIndividualReference> nsObjectSection = Sections.findSuccessor(
-					objectSection, NamespaceIndividualReference.class);
+			Section<AbbreviatedResourceReference> nsObjectSection = Sections.findSuccessor(
+					objectSection, AbbreviatedResourceReference.class);
 
 			String subjectAbbreviation = nsSubjectSection.get().getAbbreviation(nsSubjectSection);
-			String subjectIndividual = nsSubjectSection.get().getIndividual(nsSubjectSection);
+			String subjectIndividual = nsSubjectSection.get().getResource(nsSubjectSection);
 
 			URI subjectURI = core.createURI(subjectAbbreviation, subjectIndividual);
 
 			String objPropAbbreviation = nsObjPropSection.get().getAbbreviation(nsObjPropSection);
-			String objectProperty = nsObjPropSection.get().getProperty(nsObjPropSection);
+			String objectProperty = nsObjPropSection.get().getResource(nsObjPropSection);
 
 			URI predicateURI = core.createURI(objPropAbbreviation, objectProperty);
 
 			String objectAbbreviation = nsObjectSection.get().getAbbreviation(nsObjectSection);
-			String objectIndividual = nsObjectSection.get().getIndividual(nsObjectSection);
+			String objectIndividual = nsObjectSection.get().getResource(nsObjectSection);
 
 			URI objectURI = core.createURI(objectAbbreviation, objectIndividual);
 
