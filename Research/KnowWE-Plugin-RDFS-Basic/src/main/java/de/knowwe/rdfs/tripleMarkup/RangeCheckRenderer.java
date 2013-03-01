@@ -20,8 +20,8 @@ package de.knowwe.rdfs.tripleMarkup;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
@@ -82,7 +82,7 @@ class RangeCheckRenderer implements Renderer {
 							domainClassName = (String) o;
 						}
 						else {
-							Logger.getLogger(this.getClass()).error(
+							Logger.getLogger(this.getClass().getName()).severe(
 									"Value in ObjectDefitionInfo-Map was not a String");
 						}
 
@@ -94,7 +94,7 @@ class RangeCheckRenderer implements Renderer {
 							rangeClassName = (String) o;
 						}
 						else {
-							Logger.getLogger(this.getClass()).error(
+							Logger.getLogger(this.getClass().getName()).severe(
 									"Value in ObjectDefitionInfo-Map was not a String");
 						}
 					}
