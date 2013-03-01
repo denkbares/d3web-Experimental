@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -93,7 +93,7 @@ public class ComplexDefinitionRefactoringTest {
 					""), nodesMap);
 		}
 		else {
-			Logger.getLogger(getClass()).fatal("Unable to get section with text: " +
+			Logger.getLogger(getClass().getName()).severe("Unable to get section with text: " +
 					oldText);
 		}
 	}

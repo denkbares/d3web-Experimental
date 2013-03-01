@@ -21,8 +21,7 @@ package de.knowwe.rdfs.testcase.ci4ke;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import de.d3web.testing.TestObjectContainer;
 import de.d3web.testing.TestObjectProvider;
@@ -38,7 +37,8 @@ public class RDF2GoTestObjectProvider implements TestObjectProvider {
 	@Override
 	public <T> List<TestObjectContainer<T>> getTestObjects(Class<T> c, String id) {
 		if (c == null) {
-			Logger.getLogger(this.getClass()).warn("Class given to TestObjectProvider was 'null'");
+			Logger.getLogger(this.getClass().getName()).warning(
+					"Class given to TestObjectProvider was 'null'");
 			return Collections.emptyList();
 		}
 		if (!c.equals(Rdf2GoCore.class)) {

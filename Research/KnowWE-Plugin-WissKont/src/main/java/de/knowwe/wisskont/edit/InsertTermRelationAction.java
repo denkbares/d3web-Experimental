@@ -22,8 +22,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
@@ -64,7 +63,7 @@ public class InsertTermRelationAction extends AbstractAction {
 
 			if (section == null) {
 				String message = "Section not found: " + targetIDString;
-				Logger.getLogger(this.getClass().getName()).error(message);
+				Logger.getLogger(this.getClass().getName()).warning(message);
 				return message;
 
 			}
