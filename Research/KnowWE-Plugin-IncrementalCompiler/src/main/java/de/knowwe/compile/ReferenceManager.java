@@ -27,8 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
@@ -199,7 +198,7 @@ public class ReferenceManager {
 			for (Section<KnowledgeUnit> knowledge : allKnowledgeUnitsOfArticle) {
 				KnowledgeUnitCompileScript<Type> compileScript = knowledge.get().getCompileScript();
 				if (compileScript == null) {
-					Logger.getLogger(this.getClass().getSimpleName()).warn(
+					Logger.getLogger(this.getClass().getName()).warning(
 							"KnowledgeUnit without compile script: " + knowledge.toString());
 					continue;
 				}

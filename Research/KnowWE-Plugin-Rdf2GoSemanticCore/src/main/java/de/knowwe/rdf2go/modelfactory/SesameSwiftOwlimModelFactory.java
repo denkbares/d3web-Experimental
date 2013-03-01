@@ -126,4 +126,11 @@ public class SesameSwiftOwlimModelFactory extends AbstractModelFactory {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	// Only needed for 4.8.2
+	// @Override
+	// public QueryResultTable sparqlSelect(String url, String query) {
+	// System.out.println(url + " " + query);
+	// return null;
+	// }
 }
