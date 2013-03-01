@@ -20,7 +20,9 @@ package de.knowwe.ontology.kdom.relation;
 
 import java.util.Collection;
 
+import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.vocabulary.XSD;
 
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.AbstractType;
@@ -42,6 +44,7 @@ public class RelationDefinition extends AbstractType {
 		this.setSectionFinder(new AllTextFinderTrimmed());
 		this.addChildType(new SubjectType());
 		this.addChildType(new PredicateType());
+		this.addChildType(new LiteralType());
 		this.addChildType(new ObjectType());
 		this.addSubtreeHandler(Priority.LOWER, new RelationSubtreeHandler());
 	}
@@ -81,35 +84,44 @@ public class RelationDefinition extends AbstractType {
 
 			Section<SubjectType> subjectSection = Sections.findChildOfType(section,
 					SubjectType.class);
-			Section<AbbreviatedResourceReference> nsSubjectSection = Sections.findSuccessor(
+			if (subjectSection == null) {
+				return Messages.asList(Messages.error("No subject found for relation definition '"
+						+ section.getText() + "'."));
+			}
+			Section<AbbreviatedResourceReference> abbrSubjectSection = Sections.findSuccessor(
 					subjectSection, AbbreviatedResourceReference.class);
+
+			URI subjectURI = abbrSubjectSection.get().getResourceURI(core, abbrSubjectSection);
 
 			Section<PredicateType> predicateSection = Sections.findChildOfType(section,
 					PredicateType.class);
-			Section<AbbreviatedPropertyReference> nsObjPropSection = Sections.findSuccessor(
+			if (predicateSection == null) {
+				return Messages.asList(Messages.error("No predicate found for relation definition '"
+						+ section.getText() + "'."));
+			}
+			Section<AbbreviatedPropertyReference> abbrObjPropSection = Sections.findSuccessor(
 					predicateSection, AbbreviatedPropertyReference.class);
+
+			URI predicatedURI = abbrObjPropSection.get().getPropertyURI(core, abbrObjPropSection);
 
 			Section<ObjectType> objectSection = Sections.findChildOfType(section,
 					ObjectType.class);
-			Section<AbbreviatedResourceReference> nsObjectSection = Sections.findSuccessor(
-					objectSection, AbbreviatedResourceReference.class);
 
-			String subjectAbbreviation = nsSubjectSection.get().getAbbreviation(nsSubjectSection);
-			String subjectIndividual = nsSubjectSection.get().getResource(nsSubjectSection);
+			if (objectSection == null) {
+				Section<LiteralType> literalSection = Sections.findChildOfType(section,
+						LiteralType.class);
+				String literalString = literalSection.get().getLiteral(literalSection);
+				Literal literal = core.createLiteral(literalString, XSD._string);
+				core.addStatements(core.createStatement(subjectURI, predicatedURI, literal));
+			}
+			else {
 
-			URI subjectURI = core.createURI(subjectAbbreviation, subjectIndividual);
+				Section<AbbreviatedResourceReference> abbrObjectSection = Sections.findSuccessor(
+						objectSection, AbbreviatedResourceReference.class);
+				URI objectURI = abbrObjectSection.get().getResourceURI(core, abbrObjectSection);
 
-			String objPropAbbreviation = nsObjPropSection.get().getAbbreviation(nsObjPropSection);
-			String objectProperty = nsObjPropSection.get().getResource(nsObjPropSection);
-
-			URI predicateURI = core.createURI(objPropAbbreviation, objectProperty);
-
-			String objectAbbreviation = nsObjectSection.get().getAbbreviation(nsObjectSection);
-			String objectIndividual = nsObjectSection.get().getResource(nsObjectSection);
-
-			URI objectURI = core.createURI(objectAbbreviation, objectIndividual);
-
-			core.addStatements(core.createStatement(subjectURI, predicateURI, objectURI));
+				core.addStatements(core.createStatement(subjectURI, predicatedURI, objectURI));
+			}
 
 			return Messages.noMessage();
 		}
