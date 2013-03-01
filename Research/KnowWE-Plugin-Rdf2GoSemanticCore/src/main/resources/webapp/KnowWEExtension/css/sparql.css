@@ -1,16 +1,16 @@
-.type_sparql .fillText {
+.type_Sparql .fillText {
 	color: grey;
 }
 
-.type_sparql .toolBar {
+.type_Sparql .toolBar {
 	display: inline-block;
 }
 
-.type_sparql .toolBar.avoidMenu {
+.type_Sparql .toolBar.avoidMenu {
 	padding-right: 40px;
 }
 
-.type_sparql .toolSeparator {
+.type_Sparql .toolSeparator {
 	display: inline-block;
 	margin-left: 10px;
 	margin-right: 10px;
@@ -18,53 +18,53 @@
 	height: 10px;
 }
 
-.type_sparql .toolBar .toolButton {
+.type_Sparql .toolBar .toolButton {
 	position: relative;
 	border: 1px solid white;
 }
 
-.type_sparql .toolBar .toolButton.enabled:hover {
+.type_Sparql .toolBar .toolButton.enabled:hover {
 	border: 1px outset white;
 }
 
-.type_sparql .toolButton IMG {
+.type_Sparql .toolButton IMG {
 	position: relative;
 	top: 3px;
 }
 
-.type_sparql .border .sparqltable td {
+.type_Sparql .border .sparqltable td {
 	border: 1px solid #DDD;
 }
 
 
-.type_sparql TABLE.sparqltable {
+.type_Sparql TABLE.sparqltable {
 	margin: 0px;
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
 
-.type_sparql TABLE.sparqltable * TD {
+.type_Sparql TABLE.sparqltable * TD {
 	padding-bottom: 1px;
 }
 
-.type_sparql .toolBar .toolButton {
+.type_Sparql .toolBar .toolButton {
 	position: relative;
 	border: 1px solid white;
 }
 
-.type_sparql .border .sparqltable tr:first-child {
+.type_Sparql .border .sparqltable tr:first-child {
 	background-color: #EEE;
 }
 
-.type_sparql .sparqltable * TR.odd {
+.type_Sparql .sparqltable * TR.odd {
 	background-color: #EEE;
 }
 
-.type_sparql.defaultMarkupFrame:hover {
+.type_Sparql.defaultMarkupFrame:hover {
 	background: transparent;
 }
 
-.type_sparql .sparqltable * TH {
+.type_Sparql .sparqltable * TH {
 	vertical-align: middle;
 	text-align: left;
 }

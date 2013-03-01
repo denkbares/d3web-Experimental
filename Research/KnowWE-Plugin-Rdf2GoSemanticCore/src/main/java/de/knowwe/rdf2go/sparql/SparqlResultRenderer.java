@@ -71,9 +71,6 @@ public class SparqlResultRenderer {
 		RenderResult result = new RenderResult(user);
 		tablemode = variables.size() > 1;
 
-		// TODO
-		// for test purpose only (remove afterwards!)
-		// tablemode = true;
 		if (tablemode) {
 			result.appendHtml("<table class='sparqltable'>");
 			result.appendHtml(!zebraMode ? "<tr>" : "<tr class='odd'>");
@@ -81,7 +78,8 @@ public class SparqlResultRenderer {
 
 				result.appendHtml("<td><b>");
 				result.appendHtml("<a href='#/' onclick=\"KNOWWE.plugin.semantic.actions.sortResultsBy('"
-						+ var + "','" + opts.getId() + "');\">");
+						+ var + "', '"
+						+ opts.getId() + "');\">");
 				result.append(var);
 				result.appendHtml("</a>");
 				if (hasSorting(var, opts.getSortingMap())) {
@@ -99,40 +97,49 @@ public class SparqlResultRenderer {
 		}
 
 		while (iterator.hasNext()) {
-			empty = false;
+			i++;
+			if ((opts.isNavigation() && i >= opts.getNavigationOffset() && i < (opts.getNavigationOffset()
+					+ opts.getNavigationLimit()))
+					|| (opts.isNavigation() && opts.isShowAll()) || !opts.isNavigation()) {
 
-			QueryRow row = iterator.next();
+				empty = false;
 
-			if (tablemode) {
-				if (zebraMode) {
-					result.appendHtml(i % 2 == 0 ? "<tr>" : "<tr class='odd'>");
-				}
-				else {
-					result.appendHtml("<tr>");
-				}
-
-			}
-
-			for (String var : variables) {
-				Node node = row.getValue(var);
-				String erg = renderNode(node, var, rawOutput, user, opts.getRdf2GoCore());
+				QueryRow row = iterator.next();
 
 				if (tablemode) {
-					result.appendHtml("<td>");
-					result.append(erg);
-					result.appendHtml("</td>\n");
-				}
-				else {
-					result.appendHtml("<li>");
-					result.append(erg);
-					result.appendHtml("</li>\n");
+					if (zebraMode) {
+						result.appendHtml(i % 2 == 0 ? "<tr>" : "<tr class='odd'>");
+					}
+					else {
+						result.appendHtml("<tr>");
+					}
+
 				}
 
+				for (String var : variables) {
+					Node node = row.getValue(var);
+					String erg = renderNode(node, var, rawOutput, user, opts.getRdf2GoCore());
+
+					if (tablemode) {
+						result.appendHtml("<td>");
+						result.append(erg);
+						result.appendHtml("</td>\n");
+					}
+					else {
+						result.appendHtml("<li>");
+						result.append(erg);
+						result.appendHtml("</li>\n");
+					}
+
+				}
+				if (tablemode) {
+					result.appendHtml("</tr>");
+				}
 			}
-			if (tablemode) {
-				result.appendHtml("</tr>");
+			else {
+				iterator.next();
 			}
-			i++;
+
 		}
 
 		if (empty) {

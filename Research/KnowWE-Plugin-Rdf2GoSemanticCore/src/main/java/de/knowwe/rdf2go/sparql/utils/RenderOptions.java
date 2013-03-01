@@ -12,9 +12,12 @@ public class RenderOptions {
 	boolean sorting;
 	boolean navigation;
 	boolean border;
-	Map sortingOrder;
+	Map<String, String> sortingOrder;
 	String id;
 	private Rdf2GoCore core;
+	int navigationOffset;
+	int navigationLimit;
+	boolean showAll;
 
 	public RenderOptions(String id) {
 		super();
@@ -25,6 +28,7 @@ public class RenderOptions {
 		this.border = false;
 		sortingOrder = new LinkedHashMap<String, String>();
 		this.id = id;
+		showAll = false;
 	}
 
 	public String getId() {
@@ -86,5 +90,30 @@ public class RenderOptions {
 	public Rdf2GoCore getRdf2GoCore() {
 		return this.core;
 	}
+
+	public int getNavigationOffset() {
+		return navigationOffset;
+	}
+
+	public void setNavigationOffset(String navigationOffset) {
+		this.navigationOffset = Integer.parseInt(navigationOffset);
+	}
+
+	public int getNavigationLimit() {
+		return navigationLimit;
+	}
+
+	public void setNavigationLimit(String navigationLimit) {
+		this.navigationLimit = Integer.parseInt(navigationLimit);
+	}
+
+	public boolean isShowAll() {
+		return showAll;
+	}
+
+	public void setShowAll(boolean showAll) {
+		this.showAll = showAll;
+	}
+
 
 }

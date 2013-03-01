@@ -22,6 +22,8 @@ package de.knowwe.rdf2go.sparql;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -106,8 +108,19 @@ public class SparqlMarkupRenderer implements Renderer {
 				if (renderOpts.isNavigation()) {
 					// do not show navigation bar if LIMIT or OFFSET is set in
 					// markup
-					sparqlString = addOffsetAndLimitToSparqlString(sparqlString, markupSection,
-							navigationOffset, navigationLimit);
+					// sparqlString =
+					// addOffsetAndLimitToSparqlString(sparqlString,
+					// markupSection,
+					// navigationOffset, navigationLimit);
+
+					if (navigationLimit.equals("All")) {
+
+						renderOpts.setShowAll(true);
+					}
+					else {
+						renderOpts.setNavigationLimit(navigationLimit);
+						renderOpts.setNavigationOffset(navigationOffset);
+					}
 
 					QueryResultTable resultSet = core.sparqlSelect(
 							sparqlString);
@@ -115,9 +128,12 @@ public class SparqlMarkupRenderer implements Renderer {
 							resultSet,
 							renderOpts, user);
 					if (!renderOpts.isRawOutput()) {
-						renderTableSizeSelector(navigationLimit, sec.getID(), result);
+						renderTableSizeSelector(navigationLimit, sec.getID(),
+								resultEntry.getSize(), result);
 						renderNavigation(navigationOffset, navigationLimit,
 								resultEntry.getSize(), sec.getID(), result);
+
+
 					}
 
 				}
@@ -140,22 +156,6 @@ public class SparqlMarkupRenderer implements Renderer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	private String addOffsetAndLimitToSparqlString(String sparqlString, Section<SparqlMarkupType> markupSection, String navigationOffset, String navigationLimit) {
-		if (!(isLimitSet(markupSection) || (isOffsetSet(markupSection)))) {
-
-			int offsetInt = Integer.parseInt(navigationOffset);
-			int limitInt;
-			if (!navigationLimit.equals("All")) limitInt = Integer.parseInt(navigationLimit);
-			else limitInt = -999;
-
-			StringBuilder sb = new StringBuilder();
-			sb.append(" OFFSET " + (offsetInt - 1));
-			if (limitInt != -999) sb.append(" LIMIT " + (limitInt - 1));
-			sparqlString += sb.toString();
-		}
-		return sparqlString;
 	}
 
 	private void setRenderOptions(Section<SparqlMarkupType> markupSection, RenderOptions renderOpts) {
@@ -259,11 +259,12 @@ public class SparqlMarkupRenderer implements Renderer {
 		return sb.toString();
 	}
 
-	private void renderTableSizeSelector(String selectedSize, String id, RenderResult result) {
+	private void renderTableSizeSelector(String selectedSize, String id, int max, RenderResult result) {
 
-		String[] sizeArray = new String[] {
-				"10", "20", "50", "100", "1000", "All" };
 		result.appendHtml("<div class='toolBar'>");
+
+		String[] sizeArray = getReasonableSizeChoices(max);
+
 		result.appendHtml("<span class=fillText>Show </span>"
 				+ "<select id='showLines'"
 				+ " onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer('"
@@ -278,8 +279,12 @@ public class SparqlMarkupRenderer implements Renderer {
 						+ "</option>");
 			}
 		}
-		result.appendHtml("</select><span class=fillText> lines </span> ");
+		result.appendHtml("</select><span class=fillText> lines of </span>  " + max);
+
 		result.appendHtml("<div class='toolSeparator'></div>");
+		result.appendHtml("</div>");
+
+
 	}
 
 	private void renderNavigation(String from, String selectedSize, int max, String id, RenderResult result) {
@@ -291,6 +296,7 @@ public class SparqlMarkupRenderer implements Renderer {
 		else {
 			selectedSizeInt = max;
 		}
+		result.appendHtml("<div class='toolBar avoidMenu'>");
 		renderToolbarButton(
 				"begin.png", "KNOWWE.plugin.semantic.actions.begin('"
 						+ id + "')",
@@ -299,16 +305,22 @@ public class SparqlMarkupRenderer implements Renderer {
 				"back.png", "KNOWWE.plugin.semantic.actions.back('"
 						+ id + "')",
 				(fromInt > 1), result);
-		result.append("<span class=fillText> Lines </span>");
-		result.append("<input size=3 id='fromLine' type=\"field\" onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer('"
+		result.appendHtml("<span class=fillText> Lines </span>");
+		result.appendHtml("<input size=3 id='fromLine' type=\"field\" onchange=\"KNOWWE.plugin.semantic.actions.refreshSparqlRenderer('"
 				+ id + "');\" value='"
 				+ from + "'>");
-		result.append("<span class=fillText> to </span>" + (fromInt + selectedSizeInt - 1));
+		result.appendHtml("<span class=fillText> to </span>" + (fromInt + selectedSizeInt - 1));
 		renderToolbarButton(
 				"forward.png", "KNOWWE.plugin.semantic.actions.forward('"
 						+ id + "')",
-				!selectedSize.equals("All"), result);
-		result.append("</div>");
+				(!selectedSize.equals("All") && (fromInt + selectedSizeInt - 1 < max)), result);
+		renderToolbarButton(
+				"end.png", "KNOWWE.plugin.semantic.actions.end('"
+						+ id + "','" + max + "')",
+				(!selectedSize.equals("All") && (fromInt + selectedSizeInt - 1 < max)), result);
+		result.appendHtml("</div>");
+
+
 	}
 
 	private void renderToolbarButton(String icon, String action, boolean enabled, RenderResult builder) {
@@ -316,19 +328,19 @@ public class SparqlMarkupRenderer implements Renderer {
 		String suffix = icon.substring(index);
 		icon = icon.substring(0, index);
 		if (enabled) {
-			builder.append("<a onclick=\"");
-			builder.append(action);
-			builder.append(";\">");
+			builder.appendHtml("<a onclick=\"");
+			builder.appendHtml(action);
+			builder.appendHtml(";\">");
 		}
-		builder.append("<span class='toolButton ");
-		builder.append(enabled ? "enabled" : "disabled");
-		builder.append("'>");
-		builder.append("<img src='KnowWEExtension/navigation_icons/");
-		builder.append(icon);
-		if (!enabled) builder.append("_deactivated");
-		builder.append(suffix).append("'></img></span>");
+		builder.appendHtml("<span class='toolButton ");
+		builder.appendHtml(enabled ? "enabled" : "disabled");
+		builder.appendHtml("'>");
+		builder.appendHtml("<img src='KnowWEExtension/navigation_icons/");
+		builder.appendHtml(icon);
+		if (!enabled) builder.appendHtml("_deactivated");
+		builder.appendHtml(suffix).appendHtml("'></img></span>");
 		if (enabled) {
-			builder.append("</a>");
+			builder.appendHtml("</a>");
 		}
 	}
 
@@ -347,25 +359,20 @@ public class SparqlMarkupRenderer implements Renderer {
 		return defaultValue;
 	}
 
-	private boolean isOffsetSet(Section<SparqlMarkupType> sec) {
-		return isConstraintSet(sec, "OFFSET");
-	}
-
-	private boolean isLimitSet(Section<SparqlMarkupType> sec) {
-		return isConstraintSet(sec, "LIMIT");
-	}
-
-	private boolean isConstraintSet(Section<SparqlMarkupType> sec, String cons) {
-		if (sec == null) {
-			return false;
+	private String[] getReasonableSizeChoices(int max) {
+		List<String> sizes = new LinkedList<String>();
+		String[] sizeArray = new String[] {
+				"10", "20", "50", "100", "1000" };
+		for (String size : sizeArray) {
+			if (Integer.parseInt(size) < max) {
+				sizes.add(size);
+			}
 		}
-		String secText = sec.getText();
-		// for future changes keep the possibility to switch this to
-		// "secText.contains(cons)"
-		if ((secText.contains("OFFSET")) || (secText.contains("LIMIT"))) {
-			return true;
-		}
-		return false;
+		sizes.add("All");
+
+
+		return sizes.toArray(new String[sizes.size()]);
+
 	}
 
 }
