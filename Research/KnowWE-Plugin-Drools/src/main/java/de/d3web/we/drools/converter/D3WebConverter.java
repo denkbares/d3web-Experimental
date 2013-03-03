@@ -26,8 +26,7 @@ import java.io.InvalidClassException;
 import java.io.OutputStreamWriter;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import de.d3web.abstraction.ActionSetQuestion;
 import de.d3web.abstraction.inference.PSMethodAbstraction;
@@ -535,7 +534,7 @@ public class D3WebConverter {
 				(ActionHeuristicPS) action);
 		else if (action instanceof ActionSetQuestion) convertSetValueAction(droolsRule,
 				(ActionSetQuestion) action);
-		else Logger.getLogger(this.getClass()).warn(
+		else Logger.getLogger(this.getClass().getName()).warning(
 				"Unable to handle ActionType " + droolsRule.getAction().getClass());
 	}
 
@@ -599,7 +598,7 @@ public class D3WebConverter {
 			actionBuilder.append(((Value) value).getValue());
 			actionBuilder.append("\"");
 		}
-		else Logger.getLogger(this.getClass()).warn(
+		else Logger.getLogger(this.getClass().getName()).warning(
 				"Unable to handle type of action value: " + value.getClass());
 	}
 
