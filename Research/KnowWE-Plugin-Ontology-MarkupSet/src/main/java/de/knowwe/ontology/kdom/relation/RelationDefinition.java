@@ -22,7 +22,6 @@ import java.util.Collection;
 
 import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.vocabulary.XSD;
 
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.AbstractType;
@@ -78,7 +77,16 @@ public class RelationDefinition extends AbstractType {
 		@Override
 		public Collection<Message> create(Article article, Section<RelationDefinition> section) {
 
-			if (section.hasErrorInSubtree()) return Messages.noMessage();
+			if (section.hasErrorInSubtree()) {
+				Section<LiteralType> literalSection = Sections.findChildOfType(section,
+						LiteralType.class);
+				Section<ObjectType> objectSection = Sections.findChildOfType(section,
+						ObjectType.class);
+				if (literalSection != null && objectSection != null) {
+					return Messages.asList(Messages.error("Multiple objects found. Only one object is allowed per relation."));
+				}
+				return Messages.noMessage();
+			}
 
 			Rdf2GoCore core = Rdf2GoCore.getInstance(article);
 
@@ -110,12 +118,10 @@ public class RelationDefinition extends AbstractType {
 			if (objectSection == null) {
 				Section<LiteralType> literalSection = Sections.findChildOfType(section,
 						LiteralType.class);
-				String literalString = literalSection.get().getLiteral(literalSection);
-				Literal literal = core.createLiteral(literalString, XSD._string);
+				Literal literal = literalSection.get().getLiteral(core, literalSection);
 				core.addStatements(core.createStatement(subjectURI, predicatedURI, literal));
 			}
 			else {
-
 				Section<AbbreviatedResourceReference> abbrObjectSection = Sections.findSuccessor(
 						objectSection, AbbreviatedResourceReference.class);
 				URI objectURI = abbrObjectSection.get().getResourceURI(core, abbrObjectSection);
