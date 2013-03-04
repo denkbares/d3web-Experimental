@@ -45,9 +45,13 @@ public class AbbreviatedResourceDefinition extends SimpleDefinition {
 
 	@Override
 	public String getTermName(Section<? extends SimpleTerm> section) {
-		String namespace = getAbbreviation(section);
+		String abbreviation = getAbbreviation(section);
 		String resource = getResource(section);
-		return namespace + ":" + resource;
+		return toTermName(abbreviation, resource);
+	}
+
+	public static String toTermName(String abbreviation, String resource) {
+		return abbreviation + ":" + resource;
 	}
 
 	public String getResource(Section<? extends SimpleTerm> section) {

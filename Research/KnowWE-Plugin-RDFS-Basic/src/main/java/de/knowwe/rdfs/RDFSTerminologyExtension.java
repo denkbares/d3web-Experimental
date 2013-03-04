@@ -64,7 +64,7 @@ public class RDFSTerminologyExtension implements TerminologyExtension {
 	private String termContainKeyCaseInsensitive(String term) {
 		Set<String> keySet = terms.keySet();
 		for (String string : keySet) {
-			if(string.equalsIgnoreCase(term)) {
+			if (string.equalsIgnoreCase(term)) {
 				return string;
 			}
 		}

@@ -26,6 +26,7 @@ import de.knowwe.core.kdom.parsing.Section;
 
 public class BlankNodeImpl extends AbstractBlankNodeImpl {
 
+	private static final long serialVersionUID = 1L;
 	private final Object section;
 
 	public BlankNodeImpl(Object section) {

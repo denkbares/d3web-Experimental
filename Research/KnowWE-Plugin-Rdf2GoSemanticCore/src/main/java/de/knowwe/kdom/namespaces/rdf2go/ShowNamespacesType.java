@@ -33,8 +33,6 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class ShowNamespacesType extends DefaultMarkupType {
 
-	private static final String MASTER_ANNOTATION = "master";
-
 	private static DefaultMarkup MARKUP = null;
 
 	static {
