@@ -48,14 +48,14 @@ public class NamespaceAbbreviationDefinition extends SimpleDefinition {
 		return getAbbreviation(section) + " - " + getNamespace(section);
 	}
 
-	private String getNamespace(Section<? extends SimpleTerm> section) {
+	public String getNamespace(Section<? extends SimpleTerm> section) {
 		Section<NamespaceDefinition> namespace = Sections.findChildOfType(section,
 				NamespaceDefinition.class);
 		String namespaceName = namespace.get().getTermName(namespace);
 		return namespaceName;
 	}
 
-	private String getAbbreviation(Section<? extends SimpleTerm> section) {
+	public String getAbbreviation(Section<? extends SimpleTerm> section) {
 		Section<AbbreviationDefinition> abbreviation = Sections.findChildOfType(section,
 				AbbreviationDefinition.class);
 		String abbreviationName = abbreviation.get().getTermName(abbreviation);
