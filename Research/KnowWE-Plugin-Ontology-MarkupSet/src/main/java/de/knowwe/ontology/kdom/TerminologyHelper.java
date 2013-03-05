@@ -56,7 +56,7 @@ public abstract class TerminologyHelper {
 	}
 
 	public void registerTerminology(Article article, Section<?> section, String query, Class<? extends Resource> termClass) {
-		long currentTimeMillis = System.currentTimeMillis();
+		// long currentTimeMillis = System.currentTimeMillis();
 		ClosableIterator<QueryRow> iterator =
 				Rdf2GoCore.getInstance(article).sparqlSelectIt(query);
 		while (iterator.hasNext()) {
@@ -75,7 +75,7 @@ public abstract class TerminologyHelper {
 			terminologyManager.registerTermDefinition(
 					section, Resource.class, identifier);
 		}
-		System.out.println(System.currentTimeMillis() - currentTimeMillis);
+		// System.out.println(System.currentTimeMillis() - currentTimeMillis);
 	}
 
 	protected abstract String getAbbreviation(String string);
