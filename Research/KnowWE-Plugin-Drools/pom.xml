@@ -142,16 +142,12 @@
 		<dependency>
 			<groupId>org.drools</groupId>
 			<artifactId>drools-core</artifactId>
-			<version>5.0.1</version>
-			<type>jar</type>
-			<scope>compile</scope>
+			<version>5.5.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.drools</groupId>
 			<artifactId>drools-compiler</artifactId>
-			<version>5.0.1</version>
-			<type>jar</type>
-			<scope>compile</scope>
+			<version>5.5.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
@@ -170,12 +166,6 @@
 			<artifactId>d3web-PluginManager</artifactId>
 			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>d3web-Persistence-Basic-jpf-plugin</artifactId>
-			<version>0.2-SNAPSHOT</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
