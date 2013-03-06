@@ -49,16 +49,6 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<!--extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="CalculateCoverageAction">
-		<parameter id="class"
-			value="de.knowwe.diaflux.coverage.CalculateCoverageAction" />
-		<parameter id="name" value="CalculateCoverageAction" />
-		<parameter id="description" value="Action CalculateCoverageAction" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension-->
-	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="ReviewProvider">
 		<parameter id="class"
@@ -69,6 +59,17 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="DiaFlux" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="LeftMenuCollapse">
+		<parameter id="class"
+			value="de.knowwe.page.LeftMenuCollapse" />
+		<parameter id="name" value="LeftMenuCollapse" />
+		<parameter id="description" value="LeftMenuCollapse" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
 	</extension>
 	
 </plugin>
