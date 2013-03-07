@@ -43,18 +43,19 @@ public class FlowDomain implements Domain {
 		this(domain.getFlow(), domain.getEndNodes());
 	}
 
-	public FlowDomain(Flow flow, EndNode endNode) {
-		this(flow, Arrays.asList(endNode));
+
+	public FlowDomain(EndNode... nodes) {
+		this(nodes[0].getFlow(), Arrays.asList(nodes));
 	}
 
-	public FlowDomain(Flow flow, Collection<EndNode> endNodes) {
+	private FlowDomain(Flow flow, Collection<EndNode> endNodes) {
 		this.flow = flow;
 		this.endNodes = new HashSet<EndNode>();
 		this.endNodes.addAll(endNodes);
 	}
 
 	public FlowDomain(Flow flow) {
-		this(flow, Collections.<EndNode> emptyList());
+		this(flow, flow.getExitNodes());
 	}
 
 	@Override
@@ -108,5 +109,6 @@ public class FlowDomain implements Domain {
 	public Collection<EndNode> getEndNodes() {
 		return Collections.unmodifiableCollection(endNodes);
 	}
+
 
 }

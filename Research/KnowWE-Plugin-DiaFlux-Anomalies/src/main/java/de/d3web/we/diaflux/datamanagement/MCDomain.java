@@ -34,16 +34,17 @@ import de.d3web.core.knowledge.terminology.QuestionMC;
  * @author Reinhard Hatko
  * @created 28.06.2012
  */
-public class MCDomain extends QuestionDomain<QuestionMC> {
+public class MCDomain implements Domain {
 
 	private final Set<Choice> choices;
+	private final QuestionMC questionMC;
 
 	public MCDomain(QuestionMC question) {
 		this(question, question.getAllAlternatives());
 	}
 
 	public MCDomain(QuestionMC question, Collection<Choice> choices) {
-		super(question);
+		questionMC = question;
 		this.choices = new HashSet<Choice>();
 		this.choices.addAll(choices);
 	}
@@ -92,6 +93,10 @@ public class MCDomain extends QuestionDomain<QuestionMC> {
 
 	public Collection<Choice> getChoices() {
 		return Collections.unmodifiableSet(choices);
+	}
+
+	public QuestionMC getQuestion() {
+		return questionMC;
 	}
 
 	@Override

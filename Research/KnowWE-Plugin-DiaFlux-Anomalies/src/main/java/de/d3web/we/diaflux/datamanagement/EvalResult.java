@@ -19,11 +19,11 @@
 package de.d3web.we.diaflux.datamanagement;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import de.d3web.core.knowledge.TerminologyObject;
 
@@ -35,67 +35,91 @@ import de.d3web.core.knowledge.TerminologyObject;
  */
 public class EvalResult {
 
-	private final Map<TerminologyObject, Domain> domains;
+	private final Map<String, Domain> domains;
 
 	public EvalResult() {
-		domains = new HashMap<TerminologyObject, Domain>();
+		domains = new HashMap<String, Domain>();
 	}
 
 	public EvalResult(TerminologyObject question, Domain domain) {
 		this();
-		domains.put(question, domain);
+		domains.put(question.getName(), domain);
 	}
 
 	/**
 	 * For use with CondOr
 	 * 
 	 * @created 28.06.2012
-	 * @param result
+	 * @param other
 	 */
-	public void mergeWith(EvalResult result) {
-		for (Map.Entry<TerminologyObject, Domain> entry : result.getEntries()) {
-			TerminologyObject q = entry.getKey();
-			Domain domain = entry.getValue();
-			if (!this.containsObject(q)) {
-				this.domains.put(q, domain);
-			} else {
-				Domain oldDomain = this.domains.remove(q);
-				this.domains.put(q, oldDomain.add(domain));
+	public EvalResult merge(EvalResult other) {
+		EvalResult result = new EvalResult();
 
+		for (String object : other.getObjects()) {
+			Domain otherDomain = other.getDomain(object);
+			if (!this.containsObject(object)) {
+				result.put(object, otherDomain);
+			} else {
+				Domain thisDomain = getDomain(object);
+				result.put(object, Domains.add(thisDomain, otherDomain));
 			}
-			
 		}
 		
+		List<String> list = new LinkedList<String>(this.getObjects());
+		list.removeAll(other.getObjects());
+
+		for (String object : list) {
+			result.put(object, getDomain(object));
+		}
+
+		return result;
+
 	}
 
 	/**
 	 * For use with CondAnd
 	 * 
 	 * @created 28.06.2012
-	 * @param result
+	 * @param other
+	 * @return
 	 */
-	public void intersectWith(EvalResult result) {
-		for (Map.Entry<TerminologyObject, Domain> entry : result.getEntries()) {
-			TerminologyObject q = entry.getKey();
-			Domain domain = entry.getValue();
-			if (!this.containsObject(q)) {
-				this.domains.put(q, domain);
+	public EvalResult intersectWith(EvalResult other) {
+		EvalResult result = new EvalResult();
+		for (String object : other.getObjects()) {
+			Domain otherDomain = other.getDomain(object);
+			if (!this.domains.containsKey(object)) {
+				result.put(object, otherDomain);
 			}
 			else {
-				Domain oldDomain = this.domains.remove(q);
-				this.domains.put(q, oldDomain.intersect(domain));
+				Domain thisDomain = this.getDomain(object);
+				result.put(object, Domains.intersect(thisDomain, otherDomain));
 
 			}
-
 		}
 
+		List<String> list = new LinkedList<String>(this.getObjects());
+		list.removeAll(other.getObjects());
+
+		for (String object : list) {
+			result.put(object, getDomain(object));
+		}
+
+		return result;
+
+	}
+
+	void put(TerminologyObject key, Domain value) {
+		this.domains.put(key.getName(), value);
+	}
+
+	void put(String key, Domain value) {
+		this.domains.put(key, value);
 	}
 
 	public void negate() {
 
-		for (TerminologyObject q : new LinkedList<TerminologyObject>(getObjects())) {
-			Domain domain = this.domains.get(q);
-			this.domains.put(q, domain.negate());
+		for (String q : new LinkedList<String>(getObjects())) {
+			put(q, getDomain(q).negate());
 		}
 
 	}
@@ -104,25 +128,29 @@ public class EvalResult {
 		return domains.isEmpty();
 	}
 
-	public boolean containsObject(TerminologyObject key) {
+	public boolean containsObject(String key) {
 		return domains.containsKey(key);
 	}
 
 	public Domain getDomain(TerminologyObject key) {
+		return domains.get(key.getName());
+	}
+
+	public Domain getDomain(String key) {
 		return domains.get(key);
 	}
 
-	public Set<TerminologyObject> getObjects() {
-		return domains.keySet();
+	public Collection<String> getObjects() {
+		return Collections.unmodifiableCollection(domains.keySet());
 	}
 
 	public Collection<Domain> getDomains() {
-		return domains.values();
+		return Collections.unmodifiableCollection(domains.values());
 	}
 
-	public Set<Entry<TerminologyObject, Domain>> getEntries() {
-		return domains.entrySet();
-	}
+	// public Set<Entry<TerminologyObject, Domain>> getEntries() {
+	// return domains.entrySet();
+	// }
 
 	@Override
 	public int hashCode() {

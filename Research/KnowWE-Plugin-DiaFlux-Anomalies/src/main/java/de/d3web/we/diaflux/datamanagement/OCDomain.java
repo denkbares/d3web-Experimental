@@ -34,16 +34,17 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
  * @author Reinhard Hatko
  * @created 28.06.2012
  */
-public class OCDomain extends QuestionDomain<QuestionOC> {
+public class OCDomain implements Domain {
 
 	private final Set<Choice> choices;
+	private final QuestionOC question;
 
 	public OCDomain(QuestionOC question) {
 		this(question, question.getAllAlternatives());
 	}
 
 	public OCDomain(QuestionOC question, Collection<Choice> choices) {
-		super(question);
+		this.question = question;
 		this.choices = new HashSet<Choice>();
 		this.choices.addAll(choices);
 	}
@@ -95,6 +96,10 @@ public class OCDomain extends QuestionDomain<QuestionOC> {
 
 	public Collection<Choice> getChoices() {
 		return Collections.unmodifiableSet(choices);
+	}
+
+	public QuestionOC getQuestion() {
+		return question;
 	}
 
 	@Override

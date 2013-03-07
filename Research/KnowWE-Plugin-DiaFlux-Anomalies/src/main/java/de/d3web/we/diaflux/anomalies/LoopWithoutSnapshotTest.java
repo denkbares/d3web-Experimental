@@ -35,17 +35,15 @@ public class LoopWithoutSnapshotTest extends AbstractAnomalyTest {
 	@Override
 	protected String test(KnowledgeBase kb) {
 		StringBuffer msg = new StringBuffer();
-		if (null != kb) {
 
-			SnapshotStrategy strategy = new SnapshotStrategy(kb);
+		SnapshotStrategy strategy = new SnapshotStrategy(kb);
 
-			PathGenerator generator = new PathGenerator(kb, strategy);
-			generator.createPaths();
+		PathGenerator generator = new PathGenerator(kb, strategy);
+		generator.createPaths();
 
-			Collection<Path> anomalies = strategy.getAnomalies();
-			for (Path path : anomalies)
-				msg.append("loop at " + path + "<br>");
-		}
+		Collection<Path> anomalies = strategy.getAnomalies();
+		for (Path path : anomalies)
+			msg.append("loop at " + path + "<br>");
 		return msg.toString();
 	}
 }

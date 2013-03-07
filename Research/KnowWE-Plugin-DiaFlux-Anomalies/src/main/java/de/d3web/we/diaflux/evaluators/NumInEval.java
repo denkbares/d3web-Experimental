@@ -18,12 +18,10 @@
  */
 package de.d3web.we.diaflux.evaluators;
 
+import de.d3web.core.inference.condition.CondNum;
 import de.d3web.core.inference.condition.CondNumIn;
 import de.d3web.core.inference.condition.Condition;
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.terminology.QuestionNum;
-import de.d3web.we.diaflux.datamanagement.EvalResult;
-import de.d3web.we.diaflux.datamanagement.NumDomain;
+import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 
 /**
  * 
@@ -31,36 +29,19 @@ import de.d3web.we.diaflux.datamanagement.NumDomain;
  * @author Reinhard Hatko
  * @created 28.06.2012
  */
-public class NumInEval implements Evaluator {
+public class NumInEval extends AbstractNumEvaluator {
+
 
 	@Override
-	public boolean canEvaluate(Condition condition) {
-		return condition.getClass().equals(CondNumIn.class);
+	protected Class<? extends Condition> getEvaluationClass() {
+		return CondNumIn.class;
 	}
+
 
 	@Override
-	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
-
-		CondNumIn condNum = (CondNumIn) condition;
-		NumDomain domain = new NumDomain((QuestionNum) condNum.getQuestion(), condNum.getInterval());
-		EvalResult result = new EvalResult(condNum.getQuestion(), domain);
-
-		return result;
+	protected NumericalInterval getInterval(CondNum condNum) {
+		return ((CondNumIn) condNum).getInterval();
 	}
 
-	@Override
-	public int hashCode() {
-		return getClass().hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return getClass().equals(obj.getClass());
-	}
-
-	@Override
-	public String toString() {
-		return getClass().getSimpleName();
-	}
 
 }

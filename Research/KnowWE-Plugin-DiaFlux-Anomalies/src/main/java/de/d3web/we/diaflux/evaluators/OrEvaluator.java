@@ -29,11 +29,12 @@ import de.d3web.we.diaflux.datamanagement.EvalResult;
  * @author Reinhard Hatko
  * @created 28.06.2012
  */
-public class OrEvaluator implements Evaluator {
+public class OrEvaluator extends AbstractEvaluator {
+
 
 	@Override
-	public boolean canEvaluate(Condition condition) {
-		return condition.getClass().equals(CondOr.class);
+	protected Class<? extends Condition> getEvaluationClass() {
+		return CondOr.class;
 	}
 
 	@Override
@@ -41,7 +42,7 @@ public class OrEvaluator implements Evaluator {
 		EvalResult result = new EvalResult();
 		for (Condition con : ((CondOr) condition).getTerms()) {
 			EvalResult evalResult = EvaluatorManager.getInstance().evaluate(con, kb);
-			result.mergeWith(evalResult);
+			result = result.merge(evalResult);
 		}
 		return result;
 

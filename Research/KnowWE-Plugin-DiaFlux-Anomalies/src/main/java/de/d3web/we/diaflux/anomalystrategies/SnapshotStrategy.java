@@ -43,7 +43,7 @@ public class SnapshotStrategy implements DFSStrategy {
 	private final Collection<Path> anomalies;
 
 	public SnapshotStrategy(KnowledgeBase kb) {
-		this.delegate = new AllPathsStrategy(false, kb);
+		this.delegate = new AllPathsStrategy(true, kb);
 		this.anomalies = new LinkedList<Path>();
 	}
 
@@ -61,7 +61,7 @@ public class SnapshotStrategy implements DFSStrategy {
 
 	public void found(Path path) {
 		delegate.found(path);
-		// Circular path
+		// Circular path without Snapshot
 		if (path.getHead() == path.getTail()) {
 			if (!(path.getHead() instanceof SnapshotNode)) {
 				anomalies.add(path);

@@ -18,28 +18,30 @@
  */
 package de.d3web.we.diaflux.evaluators;
 
+import de.d3web.core.inference.condition.CondNum;
 import de.d3web.core.inference.condition.Condition;
-import de.d3web.core.inference.condition.ConditionTrue;
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 import de.d3web.we.diaflux.datamanagement.EvalResult;
+import de.d3web.we.diaflux.datamanagement.NumDomain;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 28.06.2012
+ * @created 13.11.2012
  */
-public class TrueEvaluator extends AbstractEvaluator {
-
-
-	@Override
-	protected Class<? extends Condition> getEvaluationClass() {
-		return ConditionTrue.class;
-	}
+public abstract class AbstractNumEvaluator extends AbstractEvaluator {
 
 	@Override
 	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
-		return new EvalResult();
+		CondNum condNum = (CondNum) condition;
+		NumericalInterval interval = getInterval(condNum);
+		NumDomain domain = new NumDomain(interval);
+		return new EvalResult(condNum.getQuestion(), domain);
 	}
+
+	protected abstract NumericalInterval getInterval(CondNum condNum);
+
 
 }

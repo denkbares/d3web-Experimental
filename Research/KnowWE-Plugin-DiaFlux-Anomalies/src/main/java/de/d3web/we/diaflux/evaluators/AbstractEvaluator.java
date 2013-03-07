@@ -19,27 +19,35 @@
 package de.d3web.we.diaflux.evaluators;
 
 import de.d3web.core.inference.condition.Condition;
-import de.d3web.core.inference.condition.ConditionTrue;
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.we.diaflux.datamanagement.EvalResult;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 28.06.2012
+ * @created 13.11.2012
  */
-public class TrueEvaluator extends AbstractEvaluator {
-
+public abstract class AbstractEvaluator implements Evaluator {
 
 	@Override
-	protected Class<? extends Condition> getEvaluationClass() {
-		return ConditionTrue.class;
+	public boolean canEvaluate(Condition condition) {
+		return condition.getClass().equals(getEvaluationClass());
+	}
+
+	protected abstract Class<? extends Condition> getEvaluationClass();
+
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
 	}
 
 	@Override
-	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
-		return new EvalResult();
+	public boolean equals(Object obj) {
+		return getClass().equals(obj.getClass());
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
 	}
 
 }

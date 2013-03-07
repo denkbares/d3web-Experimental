@@ -16,30 +16,46 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.we.diaflux.evaluators;
+package de.d3web.we.diaflux.datamanagement;
 
-import de.d3web.core.inference.condition.Condition;
-import de.d3web.core.inference.condition.ConditionTrue;
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.we.diaflux.datamanagement.EvalResult;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 28.06.2012
+ * @created 13.11.2012
  */
-public class TrueEvaluator extends AbstractEvaluator {
+public class KnownDomain implements Domain {
 
 
 	@Override
-	protected Class<? extends Condition> getEvaluationClass() {
-		return ConditionTrue.class;
+	public Domain add(Domain domain) {
+		return Domains.add(this, domain);
 	}
 
 	@Override
-	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
-		return new EvalResult();
+	public Domain negate() {
+		return new UnknownDomain();
+	}
+
+	@Override
+	public boolean contains(Domain domain) {
+		return !(domain instanceof UnknownDomain);
+	}
+
+	@Override
+	public boolean intersects(Domain domain) {
+		return !(domain instanceof UnknownDomain);
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return false;
+	}
+
+	@Override
+	public Domain intersect(Domain domain) {
+		return null;
 	}
 
 }

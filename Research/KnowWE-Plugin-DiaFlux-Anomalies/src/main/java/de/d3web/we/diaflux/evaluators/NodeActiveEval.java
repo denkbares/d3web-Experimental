@@ -20,8 +20,11 @@ package de.d3web.we.diaflux.evaluators;
 
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.diaFlux.flow.EndNode;
+import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaFlux.inference.NodeActiveCondition;
 import de.d3web.we.diaflux.datamanagement.EvalResult;
+import de.d3web.we.diaflux.datamanagement.FlowDomain;
 
 
 /**
@@ -29,18 +32,21 @@ import de.d3web.we.diaflux.datamanagement.EvalResult;
  * @author Reinhard Hatko
  * @created 29.06.2012
  */
-public class NodeActiveEval implements Evaluator {
+public class NodeActiveEval extends AbstractEvaluator {
+
 
 	@Override
-	public boolean canEvaluate(Condition condition) {
-		return condition.getClass().equals(NodeActiveCondition.class);
+	protected Class<? extends Condition> getEvaluationClass() {
+		return NodeActiveCondition.class;
 	}
 
 	@Override
 	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
 		NodeActiveCondition nac = (NodeActiveCondition) condition;
-
-		return null;
+		EndNode endNode = DiaFluxUtils.findExitNode(kb, nac);
+		FlowDomain domain = new FlowDomain(endNode);
+		EvalResult result = new EvalResult(endNode.getFlow(), domain);
+		return result;
 	}
 
 }

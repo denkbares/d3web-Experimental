@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.d3web.core.knowledge.terminology.QuestionNum;
+import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 
 
@@ -33,32 +34,38 @@ import de.d3web.core.knowledge.terminology.info.NumericalInterval;
  * @author Reinhard Hatko
  * @created 21.06.2012
  */
-public class NumDomain extends QuestionDomain<QuestionNum> {
+public class NumDomain implements Domain {
 
 	private final List<NumericalInterval> intervals;
 
-	public NumDomain(QuestionNum question, List<NumericalInterval> intervals) {
-		super(question);
-		this.intervals = new LinkedList<NumericalInterval>(intervals);
-		normalize(this.intervals);
+	public NumDomain(List<NumericalInterval> intervals) {
+		this.intervals = new LinkedList<NumericalInterval>();
+		setIntervals(intervals);
 	}
 
-	// public NumDomain(NumDomain domain) {
-	// this(domain.getQuestion(), domain.intervals);
-	// }
+	private void setIntervals(List<NumericalInterval> intervals) {
+		this.intervals.clear();
+		this.intervals.addAll(intervals);
+		normalize(this.intervals);
+
+	}
 
 	public NumDomain(QuestionNum question) {
-		this(question, new NumericalInterval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY));
-
+		this(new NumericalInterval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY));
+		NumericalInterval interval = question.getInfoStore().getValue(BasicProperties.QUESTION_NUM_RANGE);
+		if (interval != null) {
+			setIntervals(Arrays.asList(interval));
+		}
 	}
 
-	public NumDomain(QuestionNum question, NumericalInterval interval) {
-		this(question, Arrays.asList(interval));
+	public NumDomain(double value) {
+		this(new NumericalInterval(value, value));
 	}
 
-	public NumDomain(QuestionNum question, double value) {
-		this(question, new NumericalInterval(value, value));
+	public NumDomain(NumericalInterval interval) {
+		this(Arrays.asList(interval));
 	}
+
 
 	@Override
 	public NumDomain add(Domain d) {
@@ -69,7 +76,7 @@ public class NumDomain extends QuestionDomain<QuestionNum> {
 
 		normalize(intervals);
 
-		return new NumDomain(getQuestion(), intervals);
+		return new NumDomain(intervals);
 	}
 
 	/**
@@ -77,7 +84,7 @@ public class NumDomain extends QuestionDomain<QuestionNum> {
 	 * @created 27.06.2012
 	 * @param intervals
 	 */
-	private void normalize(List<NumericalInterval> intervals) {
+	private static void normalize(List<NumericalInterval> intervals) {
 		removeEmpty(intervals);
 
 		Collections.sort(intervals);
@@ -149,11 +156,11 @@ public class NumDomain extends QuestionDomain<QuestionNum> {
 		intervals.addAll(rightBounded);
 		removeEmpty(intervals);
 		Collections.sort(intervals);
-		return new NumDomain(this.getQuestion(), intervals);
+		return new NumDomain(intervals);
 	}
 
 
-	private void removeEmpty(List<NumericalInterval> intervals) {
+	private static void removeEmpty(List<NumericalInterval> intervals) {
 		for (int i = intervals.size() - 1; i >= 0; i--) {
 			if (intervals.get(i).isEmpty()) {
 				intervals.remove(i);
@@ -212,7 +219,7 @@ public class NumDomain extends QuestionDomain<QuestionNum> {
 				}
 			}
 		}
-		return new NumDomain(getQuestion(), intervals);
+		return new NumDomain(intervals);
 	}
 
 	public List<NumericalInterval> getIntervals() {

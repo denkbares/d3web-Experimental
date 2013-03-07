@@ -29,15 +29,17 @@ import de.d3web.we.diaflux.datamanagement.EvalResult;
  * @author Reinhard Hatko
  * @created 29.06.2012
  */
-public class UnknownEval implements Evaluator {
+public class UnknownEval extends AbstractEvaluator {
+
 
 	@Override
-	public boolean canEvaluate(Condition condition) {
-		return condition.getClass().equals(CondUnknown.class);
+	protected Class<? extends Condition> getEvaluationClass() {
+		return CondUnknown.class;
 	}
 
 	@Override
 	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
-		return new EvalResult();
+		EvalResult result = new EvalResult();
+		return result;
 	}
 }

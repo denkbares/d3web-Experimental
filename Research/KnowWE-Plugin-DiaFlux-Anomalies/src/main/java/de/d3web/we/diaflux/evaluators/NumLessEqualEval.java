@@ -21,11 +21,7 @@ package de.d3web.we.diaflux.evaluators;
 import de.d3web.core.inference.condition.CondNum;
 import de.d3web.core.inference.condition.CondNumLessEqual;
 import de.d3web.core.inference.condition.Condition;
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.info.NumericalInterval;
-import de.d3web.we.diaflux.datamanagement.EvalResult;
-import de.d3web.we.diaflux.datamanagement.NumDomain;
 
 /**
  * 
@@ -33,22 +29,19 @@ import de.d3web.we.diaflux.datamanagement.NumDomain;
  * @author Reinhard Hatko
  * @created 28.06.2012
  */
-public class NumLessEqualEval implements Evaluator {
+public class NumLessEqualEval extends AbstractNumEvaluator {
+
 
 	@Override
-	public boolean canEvaluate(Condition condition) {
-		return condition.getClass().equals(CondNumLessEqual.class);
+	protected Class<? extends Condition> getEvaluationClass() {
+		return CondNumLessEqual.class;
 	}
 
-	@Override
-	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
 
-		CondNum condNum = (CondNum) condition;
-		NumericalInterval interval = new NumericalInterval(Double.NEGATIVE_INFINITY,
-				condNum.getConditionValue(), false, false);
-		NumDomain domain = new NumDomain((QuestionNum) condNum.getQuestion(), interval);
-		EvalResult result = new EvalResult(condNum.getQuestion(), domain);
-		return result;
+	@Override
+	protected NumericalInterval getInterval(CondNum condNum) {
+		return new NumericalInterval(Double.NEGATIVE_INFINITY, condNum.getConditionValue(), false,
+				false);
 	}
 
 }

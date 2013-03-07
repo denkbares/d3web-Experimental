@@ -19,23 +19,53 @@
 package de.d3web.we.diaflux.pathcoloring;
 
 import java.io.IOException;
+import java.util.Map;
 
-import de.knowwe.core.action.AbstractAction;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.diaFlux.flow.Edge;
+import de.d3web.diaFlux.flow.Flow;
+import de.d3web.diaFlux.flow.Node;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.diaflux.AbstractHighlightAction;
+import de.knowwe.diaflux.Highlight;
+import de.knowwe.diaflux.type.FlowchartType;
 
 /**
  * 
- * @author Roland Jerg
- * @created 08.05.2012
+ * 
+ * @author Reinhard Hatko
+ * @created 21.11.2012
  */
-public class GetAnomaliesHighlightAction extends AbstractAction {
+public class GetAnomaliesHighlightAction extends AbstractHighlightAction {
 
 	private static final String PREFIX = "cover";
 	private static final String COVER_ANOMALY = PREFIX + "Anomaly";
 
-	@Override
-	public void execute(UserActionContext context) throws IOException {
 
+	@Override
+	public String getPrefix() {
+		return PREFIX;
+	}
+
+	@Override
+	public void insertHighlighting(Section<FlowchartType> flowchart, Highlight highlight, UserActionContext context) throws IOException {
+		KnowledgeBase kb = getKB(flowchart);
+		Flow flow = findFlow(flowchart, kb);
+
+		Map<Edge, String> edges = AnomalyManager.getAnomalyManager().getAnomalyEdges(flow);
+		
+		for (Edge edge : edges.keySet()) {
+			highlight.add(edge, Highlight.CSS_CLASS, COVER_ANOMALY);
+			highlight.add(edge, Highlight.TOOL_TIP, edges.get(edge));
+		}
+		
+		Map<Node, String> nodes = AnomalyManager.getAnomalyManager().getAnomalyNodes(flow);
+
+		for (Node node : nodes.keySet()) {
+			highlight.add(node, Highlight.CSS_CLASS, COVER_ANOMALY);
+			highlight.add(node, Highlight.TOOL_TIP, nodes.get(node));
+		}
 
 	}
 

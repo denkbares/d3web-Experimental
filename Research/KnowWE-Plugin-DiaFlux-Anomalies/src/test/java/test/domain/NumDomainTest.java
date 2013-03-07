@@ -236,7 +236,7 @@ public class NumDomainTest {
 			intervals.add(parse(string));
 		}
 
-		return new NumDomain(q, intervals);
+		return new NumDomain(intervals);
 
 	}
 

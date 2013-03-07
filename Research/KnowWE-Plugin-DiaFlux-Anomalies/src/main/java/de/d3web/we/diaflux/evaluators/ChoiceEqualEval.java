@@ -32,11 +32,11 @@ import de.d3web.we.diaflux.datamanagement.OCDomain;
  * @author Reinhard Hatko
  * @created 28.06.2012
  */
-public class ChoiceEqualEval implements Evaluator {
+public class ChoiceEqualEval extends AbstractEvaluator {
 
 	@Override
-	public boolean canEvaluate(Condition condition) {
-		return condition.getClass().equals(CondEqual.class);
+	protected Class<? extends Condition> getEvaluationClass() {
+		return CondEqual.class;
 	}
 
 	@Override

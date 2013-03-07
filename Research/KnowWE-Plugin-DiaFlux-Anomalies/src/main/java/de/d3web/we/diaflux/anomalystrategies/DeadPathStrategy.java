@@ -21,11 +21,9 @@ package de.d3web.we.diaflux.anomalystrategies;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.diaFlux.flow.ComposedNode;
 import de.d3web.diaFlux.flow.DiaFluxElement;
 import de.d3web.diaFlux.flow.Edge;
@@ -80,16 +78,14 @@ public class DeadPathStrategy implements DFSStrategy {
 
 		if (offer) {
 			EvalResult result = calculateEvalResult(path);
-			result.intersectWith(resultBefore);
+			result = result.intersectWith(resultBefore);
 
-			for (Entry<TerminologyObject, Domain> entry : result.getEntries()) {
-				Domain domain = entry.getValue();
+			for (Domain domain : result.getDomains()) {
 				if (domain.isEmpty()) {
-					this.anomalies.put(path, "Dead path on edge" + el); // TODO
+					this.anomalies.put(path, "Dead path on edge " + el); // TODO
 				}
 			}
-			boolean anomalyfound = !anomalies.isEmpty();
-			return anomalyfound;
+			return anomalies.isEmpty();
 
 		}
 
@@ -117,7 +113,7 @@ public class DeadPathStrategy implements DFSStrategy {
 				Condition condition = ((Edge) el).getCondition();
 				EvalResult eval = EvaluatorManager.getInstance().evaluate(
 						condition, kb);
-				result.intersectWith(eval);
+				result = result.intersectWith(eval);
 			}
 			else {
 				// TODO eval actions

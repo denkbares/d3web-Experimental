@@ -25,7 +25,7 @@ package de.d3web.we.diaflux.datamanagement;
  * @author Reinhard Hatko
  * @created 21.06.2012
  */
-public interface Domain {
+public interface Domain extends Cloneable {
 
 
 	Domain add(Domain domain);
@@ -39,5 +39,6 @@ public interface Domain {
 	boolean isEmpty();
 
 	Domain intersect(Domain domain);
+
 
 }

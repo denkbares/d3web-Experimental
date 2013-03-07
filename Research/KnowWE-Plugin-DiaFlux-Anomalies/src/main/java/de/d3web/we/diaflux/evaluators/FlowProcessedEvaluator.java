@@ -16,32 +16,35 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.we.diaflux.anomalies;
+package de.d3web.we.diaflux.evaluators;
 
-import java.util.Map;
-
+import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.diaflux.coverage.Path;
-import de.d3web.diaflux.coverage.PathGenerator;
-import de.d3web.we.diaflux.anomalystrategies.DeadPathStrategy;
+import de.d3web.diaFlux.flow.Flow;
+import de.d3web.diaFlux.inference.DiaFluxUtils;
+import de.d3web.diaFlux.inference.FlowchartProcessedCondition;
+import de.d3web.we.diaflux.datamanagement.EvalResult;
+import de.d3web.we.diaflux.datamanagement.FlowDomain;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 06.08.2012
+ * @created 13.11.2012
  */
-public class DeadPathTest extends AbstractAnomalyTest {
+public class FlowProcessedEvaluator extends AbstractEvaluator {
 
 	@Override
-	protected String test(KnowledgeBase kb) {
-		DeadPathStrategy strategy = new DeadPathStrategy(kb);
-		PathGenerator generator = new PathGenerator(kb, strategy);
-		generator.createPaths();
-		Map<Path, String> anomalies = strategy.getAnomalies();
-		if (anomalies.isEmpty()) return "";
-		else return anomalies.values().toString();
-			
+	protected Class<? extends Condition> getEvaluationClass() {
+		return FlowchartProcessedCondition.class;
+	}
+
+	@Override
+	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
+		Flow flow = DiaFluxUtils.findFlow(kb,
+				((FlowchartProcessedCondition) condition).getFlowName());
+		FlowDomain domain = new FlowDomain(flow);
+		return new EvalResult(flow, domain);
 	}
 
 }

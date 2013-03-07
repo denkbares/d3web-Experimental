@@ -29,11 +29,11 @@ import de.d3web.we.diaflux.datamanagement.EvalResult;
  * @author Reinhard Hatko
  * @created 28.06.2012
  */
-public class NotEval implements Evaluator {
+public class NotEval extends AbstractEvaluator {
 
 	@Override
-	public boolean canEvaluate(Condition condition) {
-		return condition.getClass().equals(CondNot.class);
+	protected Class<? extends Condition> getEvaluationClass() {
+		return CondNot.class;
 	}
 
 	@Override

@@ -17,7 +17,7 @@
  		</library>
 	</runtime>
 	
-	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+	<!--extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="UnusedStartNodeTest">
 		<parameter id="class"
 			value="de.d3web.we.diaflux.anomalies.UnusedStartNodeTest" />
@@ -25,11 +25,11 @@
 		<parameter id="description" value="CITest UnusedStartNode" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-	</extension>
+	</extension-->
 	
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
-		id="DeadPathTest">
-		<parameter id="class" value="de.d3web.we.diaflux.anomalies.DeadPathTest" />
+		id="DeadPath">
+		<parameter id="class" value="de.d3web.we.diaflux.anomalies.DeadPath" />
 		<parameter id="name" value="DeadPath" />
 		<parameter id="description" value="AbstractCITest DeadPathTest" />
 		<parameter id="version" value="1.0" />
@@ -54,14 +54,14 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+	<!--extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="InconsistentValueTest">
 		<parameter id="class" value="de.d3web.we.diaflux.anomalies.InconsistentValueTest" />
 		<parameter id="name" value="InconsistentValue" />
 		<parameter id="description" value="AbstractCITest InconsistentValue" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-	</extension>
+	</extension-->
 	
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="IntersectingPostconditionTest">
@@ -90,14 +90,14 @@
 		<parameter id="priority" value="5" />
 	</extension>	
 		
-	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+	<!--extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="NoAutoStartTest">
 		<parameter id="class" value="de.d3web.we.diaflux.anomalies.NoAutoStartTest" />
 		<parameter id="name" value="NoAutoStart" />
 		<parameter id="description" value="AbstractCITest NoAutoStart" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-	</extension>
+	</extension-->
 			
 	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="RedundantStartNodeTest">
@@ -108,14 +108,14 @@
 		<parameter id="priority" value="5" />
 	</extension>
 
-	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+	<!--extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="RedundantValueTest">
 		<parameter id="class" value="de.d3web.we.diaflux.anomalies.RedundantValueTest" />
 		<parameter id="name" value="RedundantValue" />
 		<parameter id="description" value="AbstractCITest RedundantValue" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-	</extension>
+	</extension-->
 	
 	<extension plugin-id="KnowWE-Plugin-DiaFlux" point-id="DiaFluxDisplayEnhancement"
 		id="AnomaliesHighlight">

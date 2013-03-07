@@ -29,16 +29,18 @@ import de.d3web.we.diaflux.datamanagement.EvalResult;
  * @author Reinhard Hatko
  * @created 29.06.2012
  */
-public class AnsweredEval implements Evaluator {
+public class AnsweredEval extends AbstractEvaluator {
 
-	@Override
-	public boolean canEvaluate(Condition condition) {
-		return condition.getClass().equals(CondAnswered.class);
-	}
 
 	@Override
 	public EvalResult evaluate(Condition condition, KnowledgeBase kb) {
 		// TODO
 		return new EvalResult();
 	}
+
+	@Override
+	protected Class<? extends Condition> getEvaluationClass() {
+		return CondAnswered.class;
+	}
+
 }
