@@ -18,7 +18,6 @@
  */
 package de.knowwe.ontology.kdom.relation;
 
-import java.util.Collection;
 import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Literal;
@@ -26,15 +25,10 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.XSD;
 
-import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.Message;
-import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.Patterns;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.renderer.StyleRenderer;
@@ -42,16 +36,17 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class LiteralType extends AbstractType {
 
-	public static final String XSD_URI_KEY = "xsdUriKey";
 	public static final String XSD_PATTERN = "(?:\\^\\^xsd:(\\w+))";
+	public static final String LANGUAGE_TAG = "(?:@\\w+)";
+	public static final String LITERAL_SUFFIX = "(?:" + LANGUAGE_TAG + "|" + XSD_PATTERN + ")";
 
 	/**
 	 * Either single quoted word and optionally xsd type or normal quote and
 	 * mandatory xsd type.
 	 */
 	private static final String LITERAL_PATTERN =
-			Patterns.SINGLE_QUOTED + XSD_PATTERN + "?"
-					+ "|" + Patterns.QUOTED + XSD_PATTERN;
+			Patterns.SINGLE_QUOTED + LITERAL_SUFFIX + "?"
+					+ "|" + Patterns.QUOTED + LITERAL_SUFFIX;
 
 	public LiteralType() {
 		this.setSectionFinder(new RegexSectionFinder(
@@ -59,13 +54,20 @@ public class LiteralType extends AbstractType {
 		this.setRenderer(StyleRenderer.CONTENT);
 		this.addChildType(new LiteralPart());
 		this.addChildType(new XSDPart());
+		this.addChildType(new LanguageTagPart());
 	}
 
 	public Literal getLiteral(Rdf2GoCore core, Section<LiteralType> section) {
 		Section<LiteralPart> literalPartSection = Sections.findChildOfType(section,
 				LiteralPart.class);
 		Section<XSDPart> xsdPartSection = Sections.findChildOfType(section, XSDPart.class);
+		Section<LanguageTagPart> langTagPartSection = Sections.findChildOfType(section,
+				LanguageTagPart.class);
 		String literal = literalPartSection.get().getLiteral(literalPartSection);
+		if (langTagPartSection != null) {
+			return core.createLanguageTaggedLiteral(literal,
+					langTagPartSection.get().getTag(langTagPartSection));
+		}
 		URI xsdType = null;
 		if (xsdPartSection != null) {
 			xsdType = xsdPartSection.get().getXSDType(xsdPartSection);
@@ -107,30 +109,25 @@ public class LiteralType extends AbstractType {
 		}
 	}
 
+	private static class LanguageTagPart extends AbstractType {
+
+		public LanguageTagPart() {
+			this.setSectionFinder(new RegexSectionFinder(LANGUAGE_TAG));
+		}
+
+		public String getTag(Section<LanguageTagPart> section) {
+			return section.getText().substring(1);
+		}
+	}
+
 	private static class XSDPart extends AbstractType {
 
 		public XSDPart() {
 			this.setSectionFinder(new RegexSectionFinder(Pattern.compile(XSD_PATTERN), 1));
-			this.addSubtreeHandler(Priority.HIGHER, new XSDHandler());
 		}
 
 		public URI getXSDType(Section<XSDPart> section) {
-			return (URI) section.getSectionStore().getObject(XSD_URI_KEY);
-		}
-	}
-
-	private static class XSDHandler extends SubtreeHandler<XSDPart> {
-
-		@Override
-		public Collection<Message> create(Article article, Section<XSDPart> section) {
-			try {
-				URIImpl xsdURI = new URIImpl(XSD.XSD_NS + section.getText(), true);
-				section.getSectionStore().storeObject(XSD_URI_KEY, xsdURI);
-			}
-			catch (IllegalArgumentException e) {
-				return Messages.asList(Messages.error(e.getMessage()));
-			}
-			return Messages.noMessage();
+			return new URIImpl(XSD.XSD_NS + section.getText(), false);
 		}
 	}
 
