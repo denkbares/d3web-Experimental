@@ -21,7 +21,6 @@ package de.d3web.we.ci4ke.groovy;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import de.d3web.testing.Test;
 import de.d3web.we.ci4ke.build.CIConfig;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -61,7 +60,8 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 		try {
 			// TODO: how to make this working in combination with the
 			// TestingFramework?
-			Class<? extends Test<?>> testClazz = GroovyDynamicCITestHandler.
+			// Class<? extends Test<?>> testClazz =
+			GroovyDynamicCITestHandler.
 					parseGroovyCITest(sectionContent);
 			// result = testClazz.newInstance().execute();
 		}

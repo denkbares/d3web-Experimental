@@ -516,10 +516,15 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(log));
-			while ((line = br.readLine()) != null) {
-				if (uc.getUserName().equals(line.split(";")[1])) {
-					logPages.put(line.split(";")[2], line.split(";")[0]);
+			try {
+				while ((line = br.readLine()) != null) {
+					if (uc.getUserName().equals(line.split(";")[1])) {
+						logPages.put(line.split(";")[2], line.split(";")[0]);
+					}
 				}
+			}
+			finally {
+				br.close();
 			}
 		}
 		catch (FileNotFoundException e) {

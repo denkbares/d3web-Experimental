@@ -99,11 +99,11 @@ public class RedundantValueStrategy extends AbstractAnomalyStrategy {
 		if (el instanceof ActionNode) {
 			PSAction action = ((ActionNode) el).getAction();
 			if (action instanceof ActionNextQASet) {
-				List<String> var = getAskedValues((ActionNextQASet) action);
-				for (String st : var) {
-					// TreeMap<String, Node> nodes = actualAsked.get(path);
-					// nodes.put(st, (Node) el);
-				}
+				// List<String> var = getAskedValues((ActionNextQASet) action);
+				// for (String st : var) {
+				// TreeMap<String, Node> nodes = actualAsked.get(path);
+				// nodes.put(st, (Node) el);
+				// }
 			}
 			else if (action instanceof ActionSetQuestion) {
 
@@ -119,8 +119,8 @@ public class RedundantValueStrategy extends AbstractAnomalyStrategy {
 
 			else if (el instanceof Edge) {
 
-				Edge edge = (Edge) el;
-				List<String> usedVars = getConditionVar(edge);
+				// Edge edge = (Edge) el;
+				// List<String> usedVars = getConditionVar(edge);
 				// strongRemain.removeAll(usedVars);
 				// List<String> pathUsed = actualUsed.get(path);
 				// pathUsed.addAll(usedVars);
@@ -156,12 +156,7 @@ public class RedundantValueStrategy extends AbstractAnomalyStrategy {
 		}
 	}
 
-	/**
-	 * 
-	 * @created 08.05.2012
-	 * @param edge
-	 * @return
-	 */
+	@SuppressWarnings("unused")
 	private List<String> getConditionVar(Edge edge) {
 		List<String> result = new LinkedList<String>();
 		for (TerminologyObject ob : edge.getCondition().getTerminalObjects()) {
@@ -170,12 +165,7 @@ public class RedundantValueStrategy extends AbstractAnomalyStrategy {
 		return result;
 	}
 
-	/**
-	 * 
-	 * @created 11.05.2012
-	 * @param action
-	 * @return
-	 */
+	@SuppressWarnings("unused")
 	private List<String> getAskedValues(ActionNextQASet action) {
 		List<String> result = new LinkedList<String>();
 

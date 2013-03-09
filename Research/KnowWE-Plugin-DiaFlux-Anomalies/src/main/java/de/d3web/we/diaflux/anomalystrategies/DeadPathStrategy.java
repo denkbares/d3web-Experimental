@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.we.diaflux.anomalystrategies;
 
@@ -34,7 +34,6 @@ import de.d3web.we.diaflux.datamanagement.Domain;
 import de.d3web.we.diaflux.datamanagement.EvalResult;
 import de.d3web.we.diaflux.evaluators.EvaluatorManager;
 
-
 /**
  * 
  * @author Reinhard Hatko
@@ -46,7 +45,6 @@ public class DeadPathStrategy implements DFSStrategy {
 	private final DFSStrategy delegate;
 	private final Map<Path, String> anomalies;
 	private final Map<Path, EvalResult> evals;
-	private EvalResult currentResult;
 
 	public DeadPathStrategy(KnowledgeBase kb) {
 		this.kb = kb;
@@ -56,7 +54,6 @@ public class DeadPathStrategy implements DFSStrategy {
 	}
 
 	public void found(Path path) {
-		this.currentResult = null;
 	}
 
 	public List<Path> getInitialStartPaths() {
@@ -90,13 +87,6 @@ public class DeadPathStrategy implements DFSStrategy {
 		}
 
 		return offer;
-	}
-
-	private EvalResult getCurrentResult() {
-		if (currentResult == null) {
-			currentResult = new EvalResult();
-		}
-		return currentResult;
 	}
 
 	/**
@@ -140,6 +130,5 @@ public class DeadPathStrategy implements DFSStrategy {
 	public Map<Path, String> getAnomalies() {
 		return anomalies;
 	}
-
 
 }

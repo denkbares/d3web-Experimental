@@ -28,6 +28,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
@@ -37,8 +42,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
-
-import com.sun.org.apache.xpath.internal.XPathAPI;
 
 /**
  * @author mschuhmann
@@ -57,11 +60,13 @@ public class XMLUtils {
 		try {
 			SAXBuilder parser = new SAXBuilder();
 			doc = parser.build(xmlStream);
-		} catch (JDOMException e) {
+		}
+		catch (JDOMException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
@@ -69,43 +74,43 @@ public class XMLUtils {
 		return doc;
 	}
 
-//	public static byte[] dom2ByteArray(Document doc) {
-//		ByteArrayOutputStream byteArray;
-//		try {
-//			byteArray = new ByteArrayOutputStream();
-//			StreamResult sr = new StreamResult(byteArray);
-//
-//			TransformerFactory transFactory = TransformerFactory.newInstance();
-//			Transformer transformer = transFactory.newTransformer();
-//			Properties props = transformer.getOutputProperties();
-//			props.put(OutputKeys.METHOD, "xml");
-//			props.put(OutputKeys.INDENT, "yes");
-//			props.put(OutputKeys.ENCODING, "ISO-8859-1");
-//
-//			transformer.setOutputProperties(props);
-//			transformer.transform(new DOMSource(doc), sr);
-//			byte[] b = byteArray.toByteArray();
-//			return b;
-//		} catch (TransformerConfigurationException e) {
-//			if (logger.isLoggable(Level.SEVERE)) {
-//				logger.severe(e.getLocalizedMessage());
-//			}
-//		} catch (TransformerFactoryConfigurationError e) {
-//			if (logger.isLoggable(Level.SEVERE)) {
-//				logger.severe(e.getLocalizedMessage());
-//			}
-//		} catch (TransformerException e) {
-//			if (logger.isLoggable(Level.SEVERE)) {
-//				logger.severe(e.getLocalizedMessage());
-//			}
-//		}
-//		return null;
-//	}
-//
-//	public static String dom2String(Document doc) {
-//		String xmlDoc = new String(dom2ByteArray(doc));
-//		return xmlDoc;
-//	}
+	// public static byte[] dom2ByteArray(Document doc) {
+	// ByteArrayOutputStream byteArray;
+	// try {
+	// byteArray = new ByteArrayOutputStream();
+	// StreamResult sr = new StreamResult(byteArray);
+	//
+	// TransformerFactory transFactory = TransformerFactory.newInstance();
+	// Transformer transformer = transFactory.newTransformer();
+	// Properties props = transformer.getOutputProperties();
+	// props.put(OutputKeys.METHOD, "xml");
+	// props.put(OutputKeys.INDENT, "yes");
+	// props.put(OutputKeys.ENCODING, "ISO-8859-1");
+	//
+	// transformer.setOutputProperties(props);
+	// transformer.transform(new DOMSource(doc), sr);
+	// byte[] b = byteArray.toByteArray();
+	// return b;
+	// } catch (TransformerConfigurationException e) {
+	// if (logger.isLoggable(Level.SEVERE)) {
+	// logger.severe(e.getLocalizedMessage());
+	// }
+	// } catch (TransformerFactoryConfigurationError e) {
+	// if (logger.isLoggable(Level.SEVERE)) {
+	// logger.severe(e.getLocalizedMessage());
+	// }
+	// } catch (TransformerException e) {
+	// if (logger.isLoggable(Level.SEVERE)) {
+	// logger.severe(e.getLocalizedMessage());
+	// }
+	// }
+	// return null;
+	// }
+	//
+	// public static String dom2String(Document doc) {
+	// String xmlDoc = new String(dom2ByteArray(doc));
+	// return xmlDoc;
+	// }
 
 	public static Document getDocument(InputStream xmlStream) {
 		try {
@@ -114,19 +119,23 @@ public class XMLUtils {
 			DocumentBuilder builder = dbf.newDocumentBuilder();
 			Document doc = builder.parse(xmlStream);
 			return doc;
-		} catch (FactoryConfigurationError e) {
+		}
+		catch (FactoryConfigurationError e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
-		} catch (ParserConfigurationException e) {
+		}
+		catch (ParserConfigurationException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
-		} catch (SAXException e) {
+		}
+		catch (SAXException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
@@ -144,19 +153,23 @@ public class XMLUtils {
 					.getBytes());
 			Document doc = builder.parse(xmlStream);
 			return doc;
-		} catch (FactoryConfigurationError e) {
+		}
+		catch (FactoryConfigurationError e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
-		} catch (ParserConfigurationException e) {
+		}
+		catch (ParserConfigurationException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
-		} catch (SAXException e) {
+		}
+		catch (SAXException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
@@ -168,31 +181,28 @@ public class XMLUtils {
 	 * Method removeAllChilds. Removes all childs from a given node. If
 	 * (node==null) or node has no childs, nothing is done.
 	 * 
-	 * @param node
-	 *            Node node from which all childs should be deleted
+	 * @param node Node node from which all childs should be deleted
 	 */
 	public static void removeAllChilds(Node node) {
-		if (node == null)
-			return;
+		if (node == null) return;
 		NodeList tmp = node.getChildNodes();
 		for (int i = 0; i < tmp.getLength(); i++) {
 			node.removeChild(tmp.item(i));
 		}
 	}
 
-	public static Vector<String> getChildsOfNode(Document doc, String node,
-			String child) {
+	public static Vector<String> getChildsOfNode(Document doc, String node, String child) {
 		try {
 			Vector<String> result = new Vector<String>();
-			NodeList sections = XPathAPI.selectNodeList(doc, "//" + node + "/"
-					+ child);
+			NodeList sections = selectNodeList(doc, "//" + node + "/" + child);
 
 			for (int i = 0; i < sections.getLength(); i++) {
 				result.add(((Element) sections.item(i)).getFirstChild()
 						.getNodeValue());
 			}
 			return result;
-		} catch (TransformerException e) {
+		}
+		catch (XPathExpressionException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
@@ -201,19 +211,18 @@ public class XMLUtils {
 	}
 
 	public static String getTextFromNode(Document doc, String node) {
-		if (node == null)
-			return "";
-		NodeList nodelist;
+		if (node == null) return "";
 		try {
-			nodelist = XPathAPI.selectNodeList(doc, "//" + node);
-		} catch (TransformerException e) {
+			NodeList nodelist = selectNodeList(doc, "//" + node);
+			return getTextFromTextNodes(nodelist.item(0));
+		}
+		catch (XPathExpressionException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
 			return "";
 		}
 
-		return getTextFromTextNodes(nodelist.item(0));
 	}
 
 	/**
@@ -221,25 +230,22 @@ public class XMLUtils {
 	 * childs from node node (not only direct childs). If (node==null) or node
 	 * hase no text childs, an empty string is returned.
 	 * 
-	 * @param node
-	 *            Node
+	 * @param node Node
 	 * @return String
 	 */
 	public static String getTextFromTextNodes(Node node) {
-		if (node == null)
-			return "";
+		if (node == null) return "";
 		StringBuffer sb = new StringBuffer();
-		NodeList nodelist;
 		try {
-			nodelist = XPathAPI.selectNodeList(node, ".//text()");
-		} catch (TransformerException e) {
+			NodeList nodelist = selectNodeList(node, ".//text()");
+			for (int i = 0; i < nodelist.getLength(); i++) {
+				sb.append(((Text) nodelist.item(i)).getData());
+			}
+		}
+		catch (XPathExpressionException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
-			return "";
-		}
-		for (int i = 0; i < nodelist.getLength(); i++) {
-			sb.append(((Text) nodelist.item(i)).getData());
 		}
 		return sb.toString();
 	}
@@ -247,17 +253,16 @@ public class XMLUtils {
 	/**
 	 * Transforms the XML-content. Exception are submitted to LogCreator.
 	 * 
-	 * @param xmlFile
-	 *            xml-file containing the data
-	 * @param xslFile
-	 *            xsl-file containing the stylesheet
+	 * @param xmlFile xml-file containing the data
+	 * @param xslFile xsl-file containing the stylesheet
 	 * @return String output, empty String if error occured
 	 */
 	public static String transform(File xmlFile, File xslFile) {
 		try {
 			InputStream styleStream = new FileInputStream(xslFile);
 			return transform(xmlFile, styleStream);
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
@@ -295,15 +300,18 @@ public class XMLUtils {
 			xslt.transform(data, output);
 
 			return sWriter.toString();
-		} catch (TransformerConfigurationException e) {
+		}
+		catch (TransformerConfigurationException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
-		} catch (TransformerFactoryConfigurationError e) {
+		}
+		catch (TransformerFactoryConfigurationError e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
-		} catch (TransformerException e) {
+		}
+		catch (TransformerException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
@@ -333,15 +341,18 @@ public class XMLUtils {
 			xslt.transform(data, output);
 
 			return sWriter.toString();
-		} catch (TransformerConfigurationException e) {
+		}
+		catch (TransformerConfigurationException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
-		} catch (TransformerFactoryConfigurationError e) {
+		}
+		catch (TransformerFactoryConfigurationError e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
-		} catch (TransformerException e) {
+		}
+		catch (TransformerException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
@@ -352,10 +363,8 @@ public class XMLUtils {
 	/**
 	 * Transforms the XML-content. Exception are submitted to LogCreator.
 	 * 
-	 * @param xmlFile
-	 *            xml-file containing the data
-	 * @param styleStream
-	 *            InputStream xsl-InputStream containing the stylesheet
+	 * @param xmlFile xml-file containing the data
+	 * @param styleStream InputStream xsl-InputStream containing the stylesheet
 	 * @return String output, empty String if error occured
 	 */
 	public static String transform(File xmlFile, InputStream styleStream) {
@@ -363,7 +372,8 @@ public class XMLUtils {
 			InputStream dataStream = new FileInputStream(xmlFile);
 			// create XSLT Source and Result objects
 			return transform(dataStream, styleStream);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
@@ -394,16 +404,28 @@ public class XMLUtils {
 			String locateAttr, String locateAttrValue, String newAttr,
 			String newAttrValue) {
 		try {
-			NodeList sections = XPathAPI.selectNodeList(doc, "//"
+			String xpathString = "//"
 					+ "self::node()[@" + locateAttr + "='" + locateAttrValue
-					+ "']");
+					+ "']";
+			NodeList sections = selectNodeList(doc, xpathString);
 			Element elem = (Element) sections.item(0);
 			elem.setAttribute(newAttr, newAttrValue);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe(e.getLocalizedMessage());
 			}
 		}
 		return doc;
+	}
+
+	private static NodeList selectNodeList(Node doc, String xpathString) throws XPathExpressionException {
+		// return XPathAPI.selectNodeList(doc, xpathString);
+		XPathFactory factory = XPathFactory.newInstance();
+		XPath xpath = factory.newXPath();
+		XPathExpression expr = xpath.compile("//book[author='Neal Stephenson']/title/text()");
+
+		Object result = expr.evaluate(doc, XPathConstants.NODESET);
+		return (NodeList) result;
 	}
 }

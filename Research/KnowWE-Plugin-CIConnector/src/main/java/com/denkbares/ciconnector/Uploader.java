@@ -3,7 +3,6 @@ package com.denkbares.ciconnector;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
@@ -22,7 +21,8 @@ public class Uploader {
 		entity.addPart("file", new FileBody(new File(example)));
 		post.setEntity(entity);
 
-		HttpResponse response = httpclient.execute(post);
+		// HttpResponse response =
+		httpclient.execute(post);
 	}
 
 }

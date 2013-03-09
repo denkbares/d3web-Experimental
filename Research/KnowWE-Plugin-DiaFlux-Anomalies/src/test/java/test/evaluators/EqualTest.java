@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package test.evaluators;
 
@@ -34,7 +34,6 @@ import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.values.ChoiceValue;
-import de.d3web.we.diaflux.datamanagement.MCDomain;
 import de.d3web.we.diaflux.datamanagement.OCDomain;
 import de.d3web.we.diaflux.evaluators.ChoiceEqualEval;
 import de.d3web.we.diaflux.evaluators.Evaluator;
@@ -77,31 +76,12 @@ public class EqualTest {
 		assertThat(evalOC(new CondEqual(oc, new ChoiceValue("b"))), is(domainOC("b")));
 	}
 
-	@Test
-	public void testEvaluateMC() throws Exception {
-		// TODO
-		// assertThat(evalMC(new CondEqual(mc, new ChoiceValue("a"))),
-		// is(domainMC("a")));
-		// assertThat(evalMC(new CondEqual(mc, new ChoiceValue("b"))),
-		// is(domainMC("b")));
-	}
-
-
 	private OCDomain evalOC(Condition cond) {
 		return (OCDomain) eval.evaluate(cond, kb).getDomain(oc);
 	}
 
-
 	private OCDomain domainOC(String s) {
 		return new OCDomain(oc, OCDomainTest.parse(oc, s));
-	}
-
-	private MCDomain evalMC(Condition cond) {
-		return (MCDomain) eval.evaluate(cond, kb).getDomain(mc);
-	}
-
-	private MCDomain domainMC(String s) {
-		return new MCDomain(mc, OCDomainTest.parse(mc, s));
 	}
 
 }

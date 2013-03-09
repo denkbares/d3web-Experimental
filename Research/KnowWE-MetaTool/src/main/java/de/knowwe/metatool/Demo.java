@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.metatool;
 
@@ -27,7 +27,7 @@ import de.knowwe.metatool.io.JavaWriter;
 import de.knowwe.metatool.io.XMLReader;
 
 /**
- *
+ * 
  * @author Sebastian Furth
  * @created Jan 25, 2011
  */
@@ -35,17 +35,17 @@ public class Demo {
 
 	private static final String outputDir = "/home/alex/Desktop/";
 	private static final String inputFile = "src/main/resources/examples/TurtleMarkupSimple.xml";
-	
+
 	private static ParserContext pc;
 
 	public static void main(String[] args) throws IOException {
 
 		ObjectType temp = read();
-		
+
 		if (temp == null) {
 			return;
 		}
-		
+
 		write(temp);
 		// write(createObjectType());
 	}
@@ -55,10 +55,11 @@ public class Demo {
 		XMLReader reader = new XMLReader(pc);
 		try {
 			return reader.read(new File(inputFile));
-		} catch (MetatoolParseException e) {
+		}
+		catch (MetatoolParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 
@@ -76,6 +77,7 @@ public class Demo {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private static ObjectType createObjectType() {
 
 		// Child
@@ -94,10 +96,12 @@ public class Demo {
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
 
 		// Parent's custom super class
-		QualifiedClass superType = new QualifiedClass("de.knowwe.core.kdom.objects", "TermDefinition");
+		QualifiedClass superType = new QualifiedClass("de.knowwe.core.kdom.objects",
+				"TermDefinition");
 
 		// Parent's section finder
-		ParameterizedClass sectionFinder = new ParameterizedClass("de.knowwe.core.kdom.sectionFinder",
+		ParameterizedClass sectionFinder = new ParameterizedClass(
+				"de.knowwe.core.kdom.sectionFinder",
 				"RegexSectionFinder", "\".*\"");
 
 		// Parent's contraint
@@ -106,10 +110,10 @@ public class Demo {
 
 		// Creation of ObjectType
 		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
-												.setSuperType(superType)
-												.setSectionFinder(sectionFinder)
-												.addConstraint(constraint)
-												.build();
+				.setSuperType(superType)
+				.setSectionFinder(sectionFinder)
+				.addConstraint(constraint)
+				.build();
 
 		objectType.addChild(0, child1);
 		objectType.addChild(1, child2);
@@ -117,7 +121,5 @@ public class Demo {
 
 		return objectType;
 	}
-
-
 
 }

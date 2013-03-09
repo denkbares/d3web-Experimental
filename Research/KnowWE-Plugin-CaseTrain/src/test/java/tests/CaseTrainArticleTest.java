@@ -1,4 +1,5 @@
 package tests;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,30 +47,29 @@ import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 
-
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 
 /**
  * 
- * Note: Dont change the ordering in the CaseTrainWikipage.txt.
- * The tests rely on the right order of Questions/Hints/Answer/Blocks!
+ * Note: Dont change the ordering in the CaseTrainWikipage.txt. The tests rely
+ * on the right order of Questions/Hints/Answer/Blocks!
  * 
  * @author Johannes Dienst
  * @created 20.05.2011
@@ -97,8 +97,10 @@ public class CaseTrainArticleTest extends TestCase {
 	private static final String LINK_MISSING = "Link is Missing in ";
 
 	private static final String WRONG_STRING = "Wrong String detected in ";
-	private static final String WRONG_PIC_COUNT = "Wrong number of pictures in ";
-	private static final String WRONG_VIDEO_COUNT = "Wrong number of videos in ";
+	// private static final String WRONG_PIC_COUNT =
+	// "Wrong number of pictures in ";
+	// private static final String WRONG_VIDEO_COUNT =
+	// "Wrong number of videos in ";
 	private static final String WRONG_HINT_COUNT = "Wrong number of hints in ";
 	private static final String WRONG_QUESTION_COUNT = "Wrong number of questions in ";
 	private static final String WRONG_ANSWERSBLOCKS_COUNT = "Wrong number of answer-blocks in ";
@@ -130,26 +132,26 @@ public class CaseTrainArticleTest extends TestCase {
 	public void testTestCases() {
 
 		// MetaDaten
-		assertNotNull(missingComponent+MetaData.class.getName(), meta);
+		assertNotNull(missingComponent + MetaData.class.getName(), meta);
 
 		// Introduction
-		assertNotNull(missingComponent+Introduction.class.getName(), intro);
+		assertNotNull(missingComponent + Introduction.class.getName(), intro);
 
 		// Info
-		assertNotNull(missingComponent+Info.class.getName(), info);
+		assertNotNull(missingComponent + Info.class.getName(), info);
 
 		// Evaluation
-		assertNotNull(missingComponent+Evaluation.class.getName(), eval);
+		assertNotNull(missingComponent + Evaluation.class.getName(), eval);
 
 		// Conclusion
-		assertNotNull(missingComponent+Closure.class.getName(), closure);
+		assertNotNull(missingComponent + Closure.class.getName(), closure);
 
 	}
 
 	@Test
 	public void testMetaDaten() {
 		Section<BlockMarkupContent> content =
-			Sections.findSuccessor(meta, BlockMarkupContent.class);
+				Sections.findSuccessor(meta, BlockMarkupContent.class);
 		List<Section<MetaLine>> children = Sections.findChildrenOfType(content, MetaLine.class);
 		assertEquals("Wrong Meta-Attribute-Count", 25, children.size());
 	}
@@ -157,7 +159,7 @@ public class CaseTrainArticleTest extends TestCase {
 	@Test
 	public void testIntroduction() {
 		Section<BlockMarkupContent> content =
-			Sections.findSuccessor(intro, BlockMarkupContent.class);
+				Sections.findSuccessor(intro, BlockMarkupContent.class);
 		Section<Title> title = Sections.findSuccessor(content, Title.class);
 		Section<PlainText> text = Sections.findSuccessor(content, PlainText.class);
 		Section<Image> bild = Sections.findSuccessor(content, Image.class);
@@ -174,35 +176,35 @@ public class CaseTrainArticleTest extends TestCase {
 		assertNotNull(LINK_MISSING + Introduction.class.getName(), link);
 
 		// Content tests
-		assertEquals(WRONG_STRING  + Introduction.class.getName(),
+		assertEquals(WRONG_STRING + Introduction.class.getName(),
 				"Titel der Einleitung", title.getText().trim());
-		assertEquals(WRONG_STRING  + Introduction.class.getName(),
+		assertEquals(WRONG_STRING + Introduction.class.getName(),
 				"Text der Einleitung\r\n", text.getText());
 
 		// MultimediaItems test
 		Section<MultimediaItemContent> mContent =
-			Sections.findSuccessor(bild, MultimediaItemContent.class);
-		assertEquals(WRONG_STRING  + Introduction.class.getName(),
+				Sections.findSuccessor(bild, MultimediaItemContent.class);
+		assertEquals(WRONG_STRING + Introduction.class.getName(),
 				"ls6logo.gif", mContent.getText().trim());
 
 		mContent =
-			Sections.findSuccessor(video, MultimediaItemContent.class);
-		assertEquals(WRONG_STRING  + Introduction.class.getName(),
+				Sections.findSuccessor(video, MultimediaItemContent.class);
+		assertEquals(WRONG_STRING + Introduction.class.getName(),
 				"video42.avi", mContent.getText().trim());
 
 		mContent =
-			Sections.findSuccessor(audio, MultimediaItemContent.class);
-		assertEquals(WRONG_STRING  + Introduction.class.getName(),
+				Sections.findSuccessor(audio, MultimediaItemContent.class);
+		assertEquals(WRONG_STRING + Introduction.class.getName(),
 				"helloworld.mp3", mContent.getText().trim());
 
 		mContent =
-			Sections.findSuccessor(link, MultimediaItemContent.class);
-		assertEquals(WRONG_STRING  + Introduction.class.getName(),
+				Sections.findSuccessor(link, MultimediaItemContent.class);
+		assertEquals(WRONG_STRING + Introduction.class.getName(),
 				"www.org.com", mContent.getText().trim());
 
 		Section<Url> mUrl =
-			Sections.findSuccessor(link, Url.class);
-		assertEquals(WRONG_STRING  + Introduction.class.getName(),
+				Sections.findSuccessor(link, Url.class);
+		assertEquals(WRONG_STRING + Introduction.class.getName(),
 				"{DieUrl}", mUrl.getText().trim());
 	}
 
@@ -210,18 +212,19 @@ public class CaseTrainArticleTest extends TestCase {
 	public void testInfo() {
 
 		Section<BlockMarkupContent> content =
-			Sections.findSuccessor(info, BlockMarkupContent.class);
+				Sections.findSuccessor(info, BlockMarkupContent.class);
 
-		//		List<Section<Bild>> pics = new ArrayList<Section<Bild>>();
+		// List<Section<Bild>> pics = new ArrayList<Section<Bild>>();
 		Section<Image> bild = Sections.findChildOfType(content, Image.class);
 		assertNotNull(PICTURE_MISSING + Info.class.getName(), bild);
-		//		assertEquals(WRONG_PIC_COUNT + Info.class.getName(), 1, pics.size());
+		// assertEquals(WRONG_PIC_COUNT + Info.class.getName(), 1, pics.size());
 
-		//		List<Section<Video>> vids = new ArrayList<Section<Video>>();
+		// List<Section<Video>> vids = new ArrayList<Section<Video>>();
 		Section<Video> video = Sections.findChildOfType(content, Video.class);
-		//		Sections.findSuccessorsOfType(info, Video.class, vids);
+		// Sections.findSuccessorsOfType(info, Video.class, vids);
 		assertNotNull(VIDEO_MISSING + Info.class.getName(), video);
-		//		assertEquals(WRONG_VIDEO_COUNT + Info.class.getName(), 1, vids.size());
+		// assertEquals(WRONG_VIDEO_COUNT + Info.class.getName(), 1,
+		// vids.size());
 
 		Section<Audio> audio = Sections.findChildOfType(content, Audio.class);
 		assertNotNull(AUDIO_MISSING + Info.class.getName(), audio);
@@ -239,13 +242,14 @@ public class CaseTrainArticleTest extends TestCase {
 		Sections.findSuccessorsOfType(hint, PlainText.class, 2, hintPlains);
 		assertEquals("Wrong number of PlainText in " + Hint.class.getName(), 2, hintPlains.size());
 		String text = hintPlains.get(0).getText().trim();
-		assertEquals(WRONG_STRING + Hint.class.getName(),"Geben Sie mindestens 2 Probleme an.", text);
+		assertEquals(WRONG_STRING + Hint.class.getName(), "Geben Sie mindestens 2 Probleme an.",
+				text);
 		text = hintPlains.get(1).getText().trim();
-		assertEquals(WRONG_STRING + Hint.class.getName(),"Testtext.", text);
-		//		Section<Image> hintPic = Sections.findSuccessor(hint, Image.class);
-		//		assertNotNull(PICTURE_MISSING + Hint.class.getName(), hintPic);
-		//		Section<Video> hintVideo = Sections.findSuccessor(hint, Video.class);
-		//		assertNotNull(VIDEO_MISSING + Hint.class.getName(), hintVideo);
+		assertEquals(WRONG_STRING + Hint.class.getName(), "Testtext.", text);
+		// Section<Image> hintPic = Sections.findSuccessor(hint, Image.class);
+		// assertNotNull(PICTURE_MISSING + Hint.class.getName(), hintPic);
+		// Section<Video> hintVideo = Sections.findSuccessor(hint, Video.class);
+		// assertNotNull(VIDEO_MISSING + Hint.class.getName(), hintVideo);
 
 		// Questions
 		assertEquals(WRONG_QUESTION_COUNT + Info.class.getName(), 9, questions.size());
@@ -259,16 +263,17 @@ public class CaseTrainArticleTest extends TestCase {
 		assertEquals(WRONG_EXPLICATION_COUNT + Info.class.getName(), 11, explanations.size());
 
 		Section<SubblockMarkupContent> sContent =
-			Sections.findSuccessor(explanations.get(0), SubblockMarkupContent.class);
+				Sections.findSuccessor(explanations.get(0), SubblockMarkupContent.class);
 
 		List<Section<PlainText>> expPlains = new ArrayList<Section<PlainText>>();
 		Sections.findSuccessorsOfType(sContent, PlainText.class, 1, expPlains);
-		//		Sections.findSuccessorsOfType(hint, PlainText.class, hintPlains);
+		// Sections.findSuccessorsOfType(hint, PlainText.class, hintPlains);
 		assertEquals("Wrong number of PlainText in " + Hint.class.getName(), 5, expPlains.size());
 		text = hintPlains.get(0).getText().trim();
-		assertEquals(WRONG_STRING + Hint.class.getName(),"Geben Sie mindestens 2 Probleme an.", text);
+		assertEquals(WRONG_STRING + Hint.class.getName(), "Geben Sie mindestens 2 Probleme an.",
+				text);
 		text = hintPlains.get(1).getText().trim();
-		assertEquals(WRONG_STRING + Hint.class.getName(),"Testtext.", text);
+		assertEquals(WRONG_STRING + Hint.class.getName(), "Testtext.", text);
 
 		bild = Sections.findChildOfType(sContent, Image.class);
 		assertNotNull(PICTURE_MISSING + Explanation.class.getName(), bild);
@@ -290,15 +295,17 @@ public class CaseTrainArticleTest extends TestCase {
 			c = Sections.findSuccessor(q, SubblockMarkupContent.class);
 
 			weight = Sections.findSuccessor(c, QuestionWeight.class);
-			assertNotNull(QuestionWeight.class.getName() +" null", weight);
-			assertEquals(QuestionWeight.class.getName() +" not equals 1", "1", weight.getText().trim());
+			assertNotNull(QuestionWeight.class.getName() + " null", weight);
+			assertEquals(QuestionWeight.class.getName() + " not equals 1", "1",
+					weight.getText().trim());
 
 			type = Sections.findSuccessor(c, QuestionType.class);
-			assertNotNull(QuestionType.class.getName() +" null", type);
+			assertNotNull(QuestionType.class.getName() + " null", type);
 
 			text = Sections.findSuccessor(c, QuestionText.class);
-			assertNotNull(QuestionText.class.getName() +" null", text);
-			assertFalse(QuestionText.class.getName() +" is empty string", text.getText().trim().equals(""));
+			assertNotNull(QuestionText.class.getName() + " null", text);
+			assertFalse(QuestionText.class.getName() + " is empty string",
+					text.getText().trim().equals(""));
 		}
 	}
 
@@ -315,7 +322,7 @@ public class CaseTrainArticleTest extends TestCase {
 			Sections.findSuccessorsOfType(a, AnswerLine.class, lines);
 
 			actual = (lines.size() <= 0);
-			assertFalse("No "+ AnswerLine.class.getName() +" found", actual);
+			assertFalse("No " + AnswerLine.class.getName() + " found", actual);
 
 			for (Section<AnswerLine> l : lines) {
 				mark = Sections.findSuccessor(l, AnswerMark.class);
@@ -336,7 +343,8 @@ public class CaseTrainArticleTest extends TestCase {
 		// Test one AnswersBlock which has
 		// OrderMark/Praefix/Postfix/Heading
 		Section<AnswersBlock> block = antworten.get(5);
-		Section<AnswersBlockWeightMark> mar = Sections.findSuccessor(block, AnswersBlockWeightMark.class);
+		Section<AnswersBlockWeightMark> mar = Sections.findSuccessor(block,
+				AnswersBlockWeightMark.class);
 		Section<Praefix> praefix = Sections.findSuccessor(block, Praefix.class);
 		Section<Postfix> postfix = Sections.findSuccessor(block, Postfix.class);
 		Section<Heading> heading = Sections.findSuccessor(block, Heading.class);
@@ -357,25 +365,25 @@ public class CaseTrainArticleTest extends TestCase {
 
 	}
 
-
 	// We dont have to deeply test here.
 	// All deep tests are done for Info.
 	@Test
 	public void testEvaluation() {
 
 		Section<BlockMarkupContent> content =
-			Sections.findSuccessor(eval, BlockMarkupContent.class);
+				Sections.findSuccessor(eval, BlockMarkupContent.class);
 
-		//		List<Section<Bild>> pics = new ArrayList<Section<Bild>>();
+		// List<Section<Bild>> pics = new ArrayList<Section<Bild>>();
 		Section<Image> bild = Sections.findChildOfType(content, Image.class);
 		assertNotNull(PICTURE_MISSING + Info.class.getName(), bild);
-		//		assertEquals(WRONG_PIC_COUNT + Info.class.getName(), 1, pics.size());
+		// assertEquals(WRONG_PIC_COUNT + Info.class.getName(), 1, pics.size());
 
-		//		List<Section<Video>> vids = new ArrayList<Section<Video>>();
+		// List<Section<Video>> vids = new ArrayList<Section<Video>>();
 		Section<Video> video = Sections.findChildOfType(content, Video.class);
-		//		Sections.findSuccessorsOfType(info, Video.class, vids);
+		// Sections.findSuccessorsOfType(info, Video.class, vids);
 		assertNotNull(VIDEO_MISSING + Info.class.getName(), video);
-		//		assertEquals(WRONG_VIDEO_COUNT + Info.class.getName(), 1, vids.size());
+		// assertEquals(WRONG_VIDEO_COUNT + Info.class.getName(), 1,
+		// vids.size());
 
 		Section<Audio> audio = Sections.findChildOfType(content, Audio.class);
 		assertNotNull(AUDIO_MISSING + Info.class.getName(), audio);
@@ -384,7 +392,7 @@ public class CaseTrainArticleTest extends TestCase {
 		assertNotNull(LINK_MISSING + Info.class.getName(), link);
 
 		Section<EvaluationEnd> evalEnd =
-			Sections.findSuccessor(eval, EvaluationEnd.class);
+				Sections.findSuccessor(eval, EvaluationEnd.class);
 		assertNotNull(MISSING + EvaluationEnd.class.getName(), evalEnd);
 
 		List<Section<Question>> questions = new ArrayList<Section<Question>>();
@@ -395,15 +403,13 @@ public class CaseTrainArticleTest extends TestCase {
 		Sections.findSuccessorsOfType(eval, AnswersBlock.class, blocks);
 		assertEquals(WRONG_ANSWERSBLOCKS_COUNT + Evaluation.class.getName(), 2, blocks.size());
 
-
 	}
-
 
 	// TODO MultimediaTypes missing.
 	@Test
 	public void testClosure() {
 		Section<BlockMarkupContent> content =
-			Sections.findSuccessor(closure, BlockMarkupContent.class);
+				Sections.findSuccessor(closure, BlockMarkupContent.class);
 
 		Section<Title> title = Sections.findSuccessor(content, Title.class);
 		Section<PlainText> text = Sections.findSuccessor(content, PlainText.class);
@@ -421,30 +427,30 @@ public class CaseTrainArticleTest extends TestCase {
 		assertNotNull(LINK_MISSING + Closure.class.getName(), link);
 
 		// Content tests
-		assertEquals(WRONG_STRING  + Closure.class.getName(),
+		assertEquals(WRONG_STRING + Closure.class.getName(),
 				"Abschlusskommentar", title.getText().trim());
-		assertEquals(WRONG_STRING  + Closure.class.getName(),
+		assertEquals(WRONG_STRING + Closure.class.getName(),
 				"Ende des Falles!\r\n", text.getText());
 
 		// MultimediaItems test
 		Section<MultimediaItemContent> mContent =
-			Sections.findSuccessor(bild, MultimediaItemContent.class);
-		assertEquals(WRONG_STRING  + Closure.class.getName(),
+				Sections.findSuccessor(bild, MultimediaItemContent.class);
+		assertEquals(WRONG_STRING + Closure.class.getName(),
 				"ls6logo.gif", mContent.getText().trim());
 
 		mContent =
-			Sections.findSuccessor(video, MultimediaItemContent.class);
-		assertEquals(WRONG_STRING  + Closure.class.getName(),
+				Sections.findSuccessor(video, MultimediaItemContent.class);
+		assertEquals(WRONG_STRING + Closure.class.getName(),
 				"video42.avi", mContent.getText().trim());
 
 		mContent =
-			Sections.findSuccessor(link, MultimediaItemContent.class);
-		assertEquals(WRONG_STRING  + Introduction.class.getName(),
+				Sections.findSuccessor(link, MultimediaItemContent.class);
+		assertEquals(WRONG_STRING + Introduction.class.getName(),
 				"www.org.com", mContent.getText().trim());
 
 		Section<Url> mUrl =
-			Sections.findSuccessor(link, Url.class);
-		assertEquals(WRONG_STRING  + Introduction.class.getName(),
+				Sections.findSuccessor(link, Url.class);
+		assertEquals(WRONG_STRING + Introduction.class.getName(),
 				"{DieUrl}", mUrl.getText().trim());
 	}
 

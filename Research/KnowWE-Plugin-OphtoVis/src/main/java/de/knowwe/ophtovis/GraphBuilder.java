@@ -29,7 +29,8 @@ import java.util.List;
  * @created 22.10.2012
  */
 public class GraphBuilder {
-	static GraphBuilder getInstance(){
+
+	static GraphBuilder getInstance() {
 		return new GraphBuilder("");
 	}
 
@@ -91,33 +92,29 @@ public class GraphBuilder {
 	// Starknoten bauen
 
 	public GraphNode buildNode(String nodeName, int leftCor, int parentId, boolean haveChildren) {
-
 		GraphNode startNode = new GraphNode(nodeName, leftCor, id++, parentId, haveChildren);
-
 		return startNode;
-
 	}
 
-	
-	@SuppressWarnings("rawtypes")
 	public List<GraphNode> buildNodeAndCoList(GraphNode node, int leftCo, int parentID, boolean getChilds)
 	{
 		String nodeName = node.getName();
-		id=node.getId();
+		id = node.getId();
 		// TODO connectionTypes
 		List<String> childrenNames = DataBaseHelper.getConnectedNodeNamesOfType(nodeName,
 				"unterkonzept", false);
 
 		node.hasChildren = !childrenNames.isEmpty();
-			boolean first = true;
-			GraphNode node2add;
+		boolean first = true;
+		GraphNode node2add;
 		for (String name : childrenNames) {
-			if(first){
+			if (first) {
 				node2add = new GraphNode(name, leftCo, ++id, parentID,
-					false);
-			first=false;
-			}else{
-			node2add = new GraphNode(name, leftCo, ++id, node.getId(),
+						false);
+				first = false;
+			}
+			else {
+				node2add = new GraphNode(name, leftCo, ++id, node.getId(),
 						false);
 			}
 			nodeAndCoList.add(node2add);
@@ -159,25 +156,24 @@ public class GraphBuilder {
 	}
 
 	public void buildMinGraph() {
-	
 
-			// Startknoten
-			GraphNode startNode = buildNode(startNodeName, getStartLeftCo(), 1, false);
+		// Startknoten
+		GraphNode startNode = buildNode(startNodeName, getStartLeftCo(), 1, false);
 
-			do {
-				nodeAndCoList.add(startNode);
-				buildNodeAndCoList(startNode, startNode.getLeftCo() + add2Left, startNode.getId(), false);
-				temporalConnection = DataBaseHelper.getConnectedNodeNamesOfType(
-						startNode.getName(), "temporalGraph", true);
-				if (!temporalConnection.isEmpty()) {
-					GraphNode tempNode = buildNode(temporalConnection.get(0), leftCoMax + add2Left,
-							++id, false);
-					connections.add(new GraphNodeConnection(startNode, tempNode, "temporal"));
-					startNode = tempNode;
-				}
-			} while (!temporalConnection.isEmpty());
+		do {
+			nodeAndCoList.add(startNode);
+			buildNodeAndCoList(startNode, startNode.getLeftCo() + add2Left, startNode.getId(),
+					false);
+			temporalConnection = DataBaseHelper.getConnectedNodeNamesOfType(
+					startNode.getName(), "temporalGraph", true);
+			if (!temporalConnection.isEmpty()) {
+				GraphNode tempNode = buildNode(temporalConnection.get(0), leftCoMax + add2Left,
+						++id, false);
+				connections.add(new GraphNodeConnection(startNode, tempNode, "temporal"));
+				startNode = tempNode;
+			}
+		} while (!temporalConnection.isEmpty());
 
-		}
-		
-	
+	}
+
 }

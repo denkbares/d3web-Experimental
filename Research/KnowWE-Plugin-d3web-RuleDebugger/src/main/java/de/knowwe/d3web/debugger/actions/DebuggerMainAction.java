@@ -42,7 +42,6 @@ import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.d3web.debugger.DebugUtilities;
-import de.knowwe.d3web.debugger.renderer.DebuggerRuleRenderer;
 
 /**
  * An action to render the debugger's main-part.
@@ -70,7 +69,6 @@ public class DebuggerMainAction extends AbstractAction {
 	 */
 	public String renderMain(UserActionContext context) {
 		StringBuffer buffer = new StringBuffer();
-		DebuggerRuleRenderer drr = new DebuggerRuleRenderer();
 		try {
 			// knoweledgebase id
 			String kbID = context.getParameter("kbid");

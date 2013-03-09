@@ -23,15 +23,18 @@ import org.jdom.input.SAXBuilder;
 public class DiskUtils {
 
 	public static void copyFile(File in, File out) throws Exception {
+		@SuppressWarnings("resource")
 		FileChannel sourceChannel = new FileInputStream(in).getChannel();
+		@SuppressWarnings("resource")
 		FileChannel destinationChannel = new FileOutputStream(out).getChannel();
 		sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel);
 		// or
-		// destinationChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+		// destinationChannel.transferFrom(sourceChannel, 0,
+		// sourceChannel.size());
 		sourceChannel.close();
 		destinationChannel.close();
 	}
-	
+
 	public static byte[] loadPageFromDisk(String file) {
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 		try {
@@ -43,11 +46,14 @@ public class DiskUtils {
 				byteOut.write(b, 0, len);
 			}
 			in.close();
-		} catch (MalformedURLException e) {
+		}
+		catch (MalformedURLException e) {
 			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 		return byteOut.toByteArray();
@@ -60,9 +66,11 @@ public class DiskUtils {
 					new FileOutputStream(file), encoding));
 			out.write(text);
 			out.close();
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -75,9 +83,11 @@ public class DiskUtils {
 				out.write(text[i]);
 			}
 			out.close();
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -87,9 +97,11 @@ public class DiskUtils {
 			File file = new File(filename);
 			SAXBuilder parser = new SAXBuilder();
 			return parser.build(file);
-		} catch (JDOMException e) {
+		}
+		catch (JDOMException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.getLocalizedMessage();
 		}
 		return null;

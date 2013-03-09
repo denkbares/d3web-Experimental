@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -47,16 +47,14 @@ import de.knowwe.metatool.QualifiedClass;
  * SAX based Parser for the XML-Persistence of ObjectTypes. Please note that we
  * assume that the XML-file which will be parsed was validated with a XML-Schema
  * or DTD.
- *
+ * 
  * @see ObjectType
  * @author Sebastian Furth
  * @created Jan 31, 2011
  */
 public class XMLReader implements ObjectTypeReader {
-	private ParserContext parserContext;
-	
+
 	public XMLReader(ParserContext parserContext) {
-		this.parserContext = parserContext;
 	}
 
 	public ObjectType read(InputStream stream) throws IOException, MetatoolParseException {
@@ -95,19 +93,19 @@ public class XMLReader implements ObjectTypeReader {
 
 		return result;
 	}
-	
+
 	public ObjectType read(File input) throws IOException, MetatoolParseException {
 		if (input == null) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		InputStream is = new FileInputStream(input);
 		return read(is);
 	}
 
 	/**
 	 * SAX-Handler for XML-Persistence of ObjectTypes
-	 *
+	 * 
 	 * @author Sebastian Furth
 	 * @created Jan 31, 2011
 	 */
@@ -121,11 +119,15 @@ public class XMLReader implements ObjectTypeReader {
 		private ObjectType nextParent;
 		private int nextPosition;
 		private boolean color;
-		
+
 		private Locator locator;
-		
-		/* (non-Javadoc)
-		 * @see org.xml.sax.helpers.DefaultHandler#setDocumentLocator(org.xml.sax.Locator)
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * org.xml.sax.helpers.DefaultHandler#setDocumentLocator(org.xml.sax
+		 * .Locator)
 		 */
 		@Override
 		public void setDocumentLocator(Locator locator) {
@@ -162,15 +164,16 @@ public class XMLReader implements ObjectTypeReader {
 			String className = null;
 			String packageName = null;
 			boolean exists = Boolean.parseBoolean(attributes.getValue("Exists"));
-			
+
 			String qualifiedClass = attributes.getValue("QualifiedName");
-			
+
 			if (qualifiedClass != null) {
 				int pos = qualifiedClass.lastIndexOf(".");
-				
+
 				packageName = qualifiedClass.substring(0, pos);
 				className = qualifiedClass.substring(pos + 1);
-			} else {
+			}
+			else {
 				className = attributes.getValue("ClassName");
 				packageName = attributes.getValue("PackageName");
 			}
@@ -178,34 +181,39 @@ public class XMLReader implements ObjectTypeReader {
 			QualifiedClass objectTypeClass;
 			try {
 				objectTypeClass = new QualifiedClass(packageName, className);
-			} catch (IllegalArgumentException e) {
-				throw new SAXException(new MetatoolParseException("Cannot create ObjectType: " + e.getMessage(), locator));
 			}
-			
+			catch (IllegalArgumentException e) {
+				throw new SAXException(new MetatoolParseException("Cannot create ObjectType: "
+						+ e.getMessage(), locator));
+			}
+
 			try {
 				builder = new ObjectType.Builder(id, objectTypeClass, exists);
-			} catch (IllegalArgumentException e) {
-				throw new SAXException(new MetatoolParseException("Cannot create ObjectType Builder: " + e.getMessage(), locator));
+			}
+			catch (IllegalArgumentException e) {
+				throw new SAXException(new MetatoolParseException(
+						"Cannot create ObjectType Builder: " + e.getMessage(), locator));
 			}
 		}
 
 		private void changeSuperType(Attributes attributes) throws SAXException {
 			String className = null;
 			String packageName = null;
-			
+
 			String qualifiedSuperType = attributes.getValue("QualifiedSuperType");
-			
+
 			// Fallback to old method if needed
 			if (qualifiedSuperType != null) {
 				int pos = qualifiedSuperType.lastIndexOf(".");
-				
+
 				packageName = qualifiedSuperType.substring(0, pos);
 				className = qualifiedSuperType.substring(pos + 1);
-			} else {
+			}
+			else {
 				className = attributes.getValue("SuperTypeClass");
 				packageName = attributes.getValue("SuperTypePackage");
 			}
-			
+
 			// Default if even the old method doesn't yield a result
 			if (className == null && packageName == null) {
 				packageName = "de.knowwe.core.kdom";
@@ -215,10 +223,12 @@ public class XMLReader implements ObjectTypeReader {
 			QualifiedClass superTypeClass;
 			try {
 				superTypeClass = new QualifiedClass(packageName, className);
-			} catch (IllegalArgumentException e) {
-				throw new SAXException(new MetatoolParseException("Cannot set super type: " + e.getMessage(), locator));
 			}
-			
+			catch (IllegalArgumentException e) {
+				throw new SAXException(new MetatoolParseException("Cannot set super type: "
+						+ e.getMessage(), locator));
+			}
+
 			builder.setSuperType(superTypeClass);
 		}
 
@@ -231,92 +241,107 @@ public class XMLReader implements ObjectTypeReader {
 			}
 			else if (root != null) {
 				if (parent == null || !typesByID.containsKey(parent)) {
-					throw new SAXException(new MetatoolParseException(
-							"ObjectType with ID \""
-									+ parent
-									+ "\" doesn't exist. Unable to add child. Parents have to parsed before children!",
-							locator
+					throw new SAXException(
+							new MetatoolParseException(
+									"ObjectType with ID \""
+											+ parent
+											+ "\" doesn't exist. Unable to add child. Parents have to parsed before children!",
+									locator
 							));
-				} else if (position == null) {
-					throw new SAXException(new MetatoolParseException("Missing or invalid Position parameter", locator));
+				}
+				else if (position == null) {
+					throw new SAXException(new MetatoolParseException(
+							"Missing or invalid Position parameter", locator));
 				}
 			}
 		}
 
 		private void setSectionFinder(Attributes attributes) throws SAXException {
 			if (builder == null) {
-				throw new SAXException(new MetatoolParseException(
-						"There is no builder! You have specified a sectionFinder outside of an ObjectType element",
-						locator));
+				throw new SAXException(
+						new MetatoolParseException(
+								"There is no builder! You have specified a sectionFinder outside of an ObjectType element",
+								locator));
 			}
 
 			// Set SectionFinder
 			String packageName = null;
 			String className = null;
 			String value = attributes.getValue("Value") != null ? attributes.getValue("Value") : "";
-			
+
 			String qualifiedName = attributes.getValue("QualifiedName");
 			if (qualifiedName != null) {
 				int pos = qualifiedName.lastIndexOf(".");
-				
-				// Default package name if no . is in the QualifiedName attribute
+
+				// Default package name if no . is in the QualifiedName
+				// attribute
 				if (pos >= 0) {
 					packageName = qualifiedName.substring(0, pos);
 					className = qualifiedName.substring(pos + 1);
-				} else {
+				}
+				else {
 					packageName = "de.knowwe.core.kdom.sectionFinder";
 					className = qualifiedName;
 				}
-			} else {
+			}
+			else {
 				packageName = attributes.getValue("PackageName");
 				className = attributes.getValue("ClassName");
 			}
-			
+
 			ParameterizedClass sectionFinder;
 			try {
 				sectionFinder = new ParameterizedClass(packageName, className, value);
-			} catch (IllegalArgumentException e) {
-				throw new SAXException(new MetatoolParseException("Cannot set SectionFinder: " + e.getMessage(), locator));
 			}
-			
+			catch (IllegalArgumentException e) {
+				throw new SAXException(new MetatoolParseException("Cannot set SectionFinder: "
+						+ e.getMessage(), locator));
+			}
+
 			builder.setSectionFinder(sectionFinder);
 		}
 
 		private void addConstraint(Attributes attributes) throws SAXException {
 			if (builder == null) {
-				throw new SAXException(new MetatoolParseException(
-						"There is no builder! Probably you have defined the constraint on a wrong position.",
-						locator));
+				throw new SAXException(
+						new MetatoolParseException(
+								"There is no builder! Probably you have defined the constraint on a wrong position.",
+								locator));
 			}
 
 			// Add Constraint
 			String packageName = null;
 			String className = null;
-			
+
 			String qualifiedName = attributes.getValue("QualifiedName");
 			if (qualifiedName != null) {
 				int pos = qualifiedName.lastIndexOf(".");
-				
-				// Default package name if no . is in the QualifiedName attribute
+
+				// Default package name if no . is in the QualifiedName
+				// attribute
 				if (pos >= 0) {
 					packageName = qualifiedName.substring(0, pos - 1);
 					className = qualifiedName.substring(pos + 1);
-				} else {
+				}
+				else {
 					packageName = "de.knowwe.kdom.constraint";
 					className = qualifiedName;
 				}
-			} else {
+			}
+			else {
 				packageName = attributes.getValue("PackageName");
 				className = attributes.getValue("ClassName");
 			}
-			
+
 			QualifiedClass constraint;
 			try {
 				constraint = new QualifiedClass(packageName, className);
-			} catch (IllegalArgumentException e) {
-				throw new SAXException(new MetatoolParseException("Cannot add constraint: " + e.getMessage(), locator));
 			}
-			
+			catch (IllegalArgumentException e) {
+				throw new SAXException(new MetatoolParseException("Cannot add constraint: "
+						+ e.getMessage(), locator));
+			}
+
 			builder.addConstraint(constraint);
 		}
 
@@ -331,7 +356,8 @@ public class XMLReader implements ObjectTypeReader {
 				if (nextParent != null) {
 					try {
 						nextParent.addChild(nextPosition, temp);
-					} catch (IllegalArgumentException e) {
+					}
+					catch (IllegalArgumentException e) {
 						throw new SAXException(new MetatoolParseException(
 								"The Position parameter is invalid.", locator));
 					}
@@ -356,7 +382,7 @@ public class XMLReader implements ObjectTypeReader {
 		/**
 		 * Returns the "Root"-ObjectType which contains all other parsed
 		 * ObjectTypes as successors.
-		 *
+		 * 
 		 * @created Jan 31, 2011
 		 * @return "Root"-ObjectType.
 		 */

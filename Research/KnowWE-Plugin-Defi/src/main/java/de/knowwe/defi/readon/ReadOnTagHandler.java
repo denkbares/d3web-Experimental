@@ -73,11 +73,15 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 		// TODO Neuen pagelogger benutzen
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(
-					(new FileInputStream(
-							new File(path))), "UTF-8"));
-			while ((line = br.readLine()) != null) {
-				if (userContext.getUserName().equals(line.split(";")[1])
-						&& unitTitles.contains(line.split(";")[2])) page = line.split(";")[2];
+					(new FileInputStream(new File(path))), "UTF-8"));
+			try {
+				while ((line = br.readLine()) != null) {
+					if (userContext.getUserName().equals(line.split(";")[1])
+							&& unitTitles.contains(line.split(";")[2])) page = line.split(";")[2];
+				}
+			}
+			finally {
+				br.close();
 			}
 		}
 		catch (FileNotFoundException e) {

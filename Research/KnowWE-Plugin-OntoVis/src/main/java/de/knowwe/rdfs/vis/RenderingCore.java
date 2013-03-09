@@ -1019,31 +1019,6 @@ public class RenderingCore {
 		}
 	}
 
-	/**
-	 * 
-	 * @created 10.12.2012
-	 * @param to
-	 * @return
-	 */
-	private String getLabel(String concept) {
-		String query = "SELECT ?z WHERE { " + createSparqlURI(concept) + " rdfs:label  ?z }";
-		ClosableIterator<QueryRow> result =
-				Rdf2GoCore.getInstance().sparqlSelectIt(
-						query);
-		while (result.hasNext()) {
-			QueryRow queryRow = result.next();
-			String label = queryRow.getLiteralValue("z");
-			return label;
-		}
-		return concept;
-	}
-
-	/**
-	 * 
-	 * @created 29.11.2012
-	 * @param to
-	 * @return
-	 */
 	private String createTargetURL(String to) {
 		if (parameters.get(LINK_MODE) != null) {
 			if (parameters.get(LINK_MODE).equals(LINK_MODE_BROWSE)) {

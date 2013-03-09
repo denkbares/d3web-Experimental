@@ -28,7 +28,6 @@ import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * A launcher class that renders an article
