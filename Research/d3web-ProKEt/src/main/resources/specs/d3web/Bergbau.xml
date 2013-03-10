@@ -10,14 +10,17 @@
         dialogstrategy = ""
         showcontraindicated = "HIDE"
         shownonindicated = "HIDE"
-        css="questionaryCons, diagnosisVisu" 
-	
+        css="questionaryCons, diagnosisVisu, solutionPanel" 
 	dialogcolumns="1"
-	questionnairecolumns="3"
+	questionnairecolumns="1"
 	questioncolumns="1"
         solutionExplanation = "TEXTUAL" 
-        solutionSorting = "CATEGORICAL"
+        solutionSorting = "CATEG_ALPHA"
         solutionDepth = "ALL"
+        solutionDynamics = "INTERACTIVE"
+        solutionRange = "MULTIPLE"
+        solutionStructuring = "LISTING"
+        solRatingGranularity = "ABSTRACT;;;PRECISE"  
     />
     <localUIOpts />
     <dataOpts kb="Bergbau.d3web" />

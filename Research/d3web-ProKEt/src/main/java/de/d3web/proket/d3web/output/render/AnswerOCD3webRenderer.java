@@ -65,7 +65,6 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
         }
 
         StringTemplate st = null;
-        System.out.println(uiset.getDialogType());
 
         // get the template. In case user prefix was specified, the specific
         // TemplateName is returned, otherwise the base object name.

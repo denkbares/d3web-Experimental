@@ -612,10 +612,15 @@ public class D3webDialog extends HttpServlet {
 
         // set the values
         setValues(d3webSession, questions, values, request, httpSession);
-
+	
+	System.out.println("HALLO: " + d3webSession.getBlackboard().getValuedSolutions());
+	
         // "clean up" blackboard
         D3webUtils.resetAbandonedPaths(d3webSession, httpSession);
 
+	System.out.println("HALLO2: " + d3webSession.getBlackboard().getValuedSolutions());
+	
+	
         // autosave the current state
         PersistenceD3webUtils.saveCase(
                 (String) httpSession.getAttribute("user"),
@@ -665,8 +670,9 @@ public class D3webDialog extends HttpServlet {
 
         for (int i = 0; i < questions.size(); i++) {
 
+            System.out.println("D3webDialog setValues: " + questions.get(i) + " " + values.get(i));
             D3webUtils.setValue(questions.get(i), values.get(i), d3webSession);
-
+            
             // state of abstractions AFTER setting values
             Collection abstractionsAfter =
                     D3webUtils.getValuedAbstractions(d3webSession);

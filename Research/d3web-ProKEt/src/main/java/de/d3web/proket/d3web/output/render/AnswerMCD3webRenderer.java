@@ -34,6 +34,8 @@ import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
+import de.d3web.proket.d3web.utils.StringTemplateUtils;
+import de.d3web.proket.data.DialogType;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 import javax.servlet.http.HttpSession;
@@ -65,10 +67,16 @@ public class AnswerMCD3webRenderer extends AbstractD3webRenderer implements Answ
             return "";
         }
 
-        // get the fitting template. In case user prefix was specified, the
-        // specific TemplateName is returned, else the base object name.
-        StringTemplate st = TemplateUtils.getStringTemplate(
-                super.getTemplateName("McAnswerTabular"), "html");
+        // get the template. In case user prefix was specified, the specific
+        // TemplateName is returned, otherwise the base object name.
+        StringTemplate st;
+        if (uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
+            st = StringTemplateUtils.getTemplate("singleForm/MCAnswerFlat");
+        } else {
+            st = StringTemplateUtils.getTemplate("McAnswerTabular");
+            //st = TemplateUtils.getStringTemplate(
+            //        super.getTemplateName("OcAnswerTabular"), "html");
+        }
 
         st.setAttribute("fullId", getID(c));
         st.setAttribute("realAnswerType", "mc");

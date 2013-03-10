@@ -45,17 +45,6 @@
             </td>
 	</tr>
         <tr><td colspan="3"><hr></td></tr>
-        <tr>
-            <td class="topText fontOnePointTwo">7</td>
-            <td class="topText leftPadd fontOnePointTwo width50Percent">Ich bin Jurist und verfüge über juristisches Hintergrundwissen im/in...</td>
-            <td>
-                <div style="float:left;padding:10px;font-size:8pt;"><input id="UE_QUserCompetence" type="radio" name="UE_QCompetence" value="AR" style="margin-right:5px;">Arbeitsrecht</input></div>
-                <div style="float:left;padding:10px;font-size:8pt;"><input id="UE_QUserCompetence" type="radio" name="UE_QCompetence" value="Jurist" style="margin-right:5px;">anderen Rechtsgebieten</input></div>
-                <div style="float:left;padding:10px;font-size:8pt;"><input id="UE_QUserCompetence" type="radio" name="UE_QCompetence" value="NonJurist" style="margin-right:5px;">Ich bin KEIN Jurist</input></div>
-             
-            </td>
-	</tr>
-        <tr><td colspan="3"><hr></td></tr>
 	<tr>
             <td class="topText fontOnePointTwo">7</td>
             <td class="topText leftPadd fontOnePointTwo">Weitere Anmerkungen:</td>

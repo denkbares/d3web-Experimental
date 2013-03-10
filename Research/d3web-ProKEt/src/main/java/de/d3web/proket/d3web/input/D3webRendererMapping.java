@@ -232,6 +232,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
 
         try {
             String completeToGet = (prefix + userPrefix + this.get(name));
+            //System.out.println("RENDERERMAPPING: " + completeToGet);
             result = Class.forName(completeToGet);
         } catch (ClassNotFoundException cne) {
             return null;

@@ -91,6 +91,7 @@ import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import java.util.*;
 import javax.servlet.http.HttpSession;
+import sun.org.mozilla.javascript.internal.Undefined;
 
 /**
  * Util methods for the binding of d3web to the ProKEt system.
@@ -1664,7 +1665,7 @@ public class D3webUtils {
 
             // CHOICE questions
             if (question instanceof QuestionChoice) {
-                value = setQuestionChoice(question, valueString);
+                value = setQuestionChoice(question, valueString, sess);
             } // TEXT questions
             else if (question instanceof QuestionText) {
                 value = setQuestionText(question, valueString);
@@ -1689,12 +1690,13 @@ public class D3webUtils {
             }
         }
 
-        //System.out.println("BLACKBOARD: ");
-        //for (Question q : blackboard.getValuedQuestions()) {
+        System.out.println("BLACKBOARD: ");
+        for (Question q : blackboard.getValuedQuestions()) {
 
-        //System.out.println(q.getName() + " -> " + blackboard.getValue(q));
-        //}
-        //System.out.println("BLACKBOARD ENDE");
+        System.out.println(q.getName() + " -> " + blackboard.getValue(q));
+        }
+        System.out.println("BLACKBOARD ENDE");
+	System.out.println(blackboard.getValuedSolutions());
     }
 
     /**
@@ -1808,7 +1810,7 @@ public class D3webUtils {
         return value;
     }
 
-    private static Value setQuestionChoice(Question to, String valueId) {
+    private static Value setQuestionChoice(Question to, String valueId, Session sess) {
         Value value = null;
 
         if (to instanceof QuestionOC) {
@@ -1824,8 +1826,43 @@ public class D3webUtils {
                     valueName == null ? valueId : valueName);
 
         } else if (to instanceof QuestionMC) {
+            System.out.println("D3webUtils setQuestionChoice: " + valueId);
+
             if (valueId.equals("")) {
                 value = Unknown.getInstance();
+            } else if (!valueId.contains("##mcanswer##")) {
+
+                String choiceName = AbstractD3webRenderer.getObjectNameForId(valueId);
+                Choice newChoice = new Choice(choiceName == null ? valueId : choiceName);
+
+                Value currentVal = sess.getBlackboard().getValue(to);
+                MultipleChoiceValue mcvalExists;
+                if (UndefinedValue.isNotUndefinedValue(currentVal)) {
+                    mcvalExists = (MultipleChoiceValue) sess.getBlackboard().getValue(to);
+                    System.out.println("mcval Exists: " + mcvalExists);
+
+                    ArrayList< Choice> cs = (ArrayList) mcvalExists.getChoiceIDs();
+
+                    List<Choice> choicesNew = new ArrayList<Choice>();
+
+                    //if already there
+                    if (cs.contains(valueId)) {
+                        cs.remove(newChoice);
+                        choicesNew.addAll(cs);
+                    } // set val
+                    else {
+                        choicesNew.addAll(cs);
+                        choicesNew.add(newChoice);
+                    }
+                    value = MultipleChoiceValue.fromChoices(choicesNew);
+                    System.out.println("new mc val: " + value);
+                } else {
+                    ArrayList<Choice> choices = new ArrayList<Choice>();
+                    choices.add(newChoice);
+                    value = MultipleChoiceValue.fromChoices(choices);
+                     System.out.println("new mc val: " + value);
+                }
+
             } else {
                 String[] choiceIds = valueId.split("##mcanswer##");
                 List<Choice> choices = new ArrayList<Choice>();
@@ -2360,14 +2397,14 @@ public class D3webUtils {
         for (PSMethod cpsm : contribPSs) {
 
             Fact vFact = bb.getValueFact(sol, cpsm);
-            
-            if(vFact.getSource() instanceof Rule){
-                Rule rule = (Rule)vFact.getSource();
-                if(rule.getAction().getBackwardObjects().contains(sol)){
+
+            if (vFact.getSource() instanceof Rule) {
+                Rule rule = (Rule) vFact.getSource();
+                if (rule.getAction().getBackwardObjects().contains(sol)) {
                     rulesList.add(rule);
                 }
             }
-            
+
             /*
              * if (sol.getName().equals("Nadelbaum")) {
              *

@@ -701,6 +701,10 @@ function initFunctionality() {
             d3web_storeQuestionOC($(this).attr("id"));
             d3web_addFacts();
         }
+        else if($(this).attr("class").indexOf("answer-mc")!=-1){
+            d3web_storeQuestionMC($(this).attr("id"));
+            d3web_addFacts();
+        }
     });
 
 
@@ -891,15 +895,22 @@ function d3web_addFacts() {
         link = link.set("timestring", now);
     }
 
+    // TODO GO ON HERE
     var i = 0;
     for (var qid in mcStore) {
-        var mcAnswerString = "";
-        var mcAnswerSeparator = "##mcanswer##";
-        for (var j in mcStore[qid]) {
-            if (mcAnswerString != "") {
-                mcAnswerString += mcAnswerSeparator;
+        
+        // handle flat mcanswers separately
+        if(mcStore[qid].indexOf('MCFLAT')!=-1){
+            mcAnswerString = mcStore[qid].replace("MCFLAT","");
+        } else {
+            var mcAnswerString = "";
+            var mcAnswerSeparator = "##mcanswer##";
+            for (var j in mcStore[qid]) {
+                if (mcAnswerString != "") {
+                    mcAnswerString += mcAnswerSeparator;
+                }
+                mcAnswerString += mcStore[qid][j];
             }
-            mcAnswerString += mcStore[qid][j];
         }
         link = link.set("question" + i, qid).set("value" + i, mcAnswerString);
         i++;
@@ -983,7 +994,7 @@ function d3web_addFacts() {
 function d3web_storeQuestionOC(ocInput) {
     var ocQuestion;
   
-   if(typeof(ocInput) == "object") {
+    if(typeof(ocInput) == "object") {
         ocQuestion = getQuestionId(ocInput);
         ocStore[ocQuestion] = getAnswerId(ocInput);
         
@@ -1001,20 +1012,41 @@ function d3web_storeQuestionOC(ocInput) {
 
 function d3web_storeQuestionMC(mcCheckBox) {
 	
-    var mcQParent = $(mcCheckBox.parents("[id^=q_]"));
-    var mcQuestion = getQuestionId(mcCheckBox);
-    var checkBoxes = mcQParent.find(":checkbox");
+    // standard dialogs case
+    if(typeof(mcCheckbox) == "object") {
+        var mcQParent = $(mcCheckBox.parents("[id^=q_]"));
+        var mcQuestion = getQuestionId(mcCheckBox);
+        var checkBoxes = mcQParent.find(":checkbox");
 
-    // get the question-content-parent element and go through all its
-    // checkbox-children
-    var checkedBoxes = new Array();
-    checkBoxes.each(function() {
-        if ($(this).prop("checked") == true) {
-            checkedBoxes.push(getAnswerId($(this)));
+        // get the question-content-parent element and go through all its
+        // checkbox-children
+        var checkedBoxes = new Array();
+        checkBoxes.each(function() {
+            if ($(this).prop("checked") == true) {
+                checkedBoxes.push(getAnswerId($(this)));
+            }
+        });
+        mcStore[mcQuestion] = checkedBoxes;
+    }
+    // SingleForm dialog style has adapted templates
+    else {
+        alert("SingleForm MC Answer");
+        if(typeof mcCheckBox == "string"){
+            if(mcCheckBox.indexOf("a_q_")!=-1){
+                mcAnswer = $("#"+mcCheckBox).text();
+                mcAnswer = 'MCFLAT'+mcAnswer;
+                mcAnswerElement = $("#" + mcCheckBox);
+                mcQuestion = getQuestionId(mcAnswerElement);
+                alert(mcQuestion + ": " + mcAnswer);
+                
+                mcStore[mcQuestion] = mcAnswer;
+            }
         }
-    });
+    }    
+        
+    
 	
-    mcStore[mcQuestion] = checkedBoxes;
+    
 }
 
 function d3web_isAnsweredQuestion(question) {
