@@ -39,6 +39,7 @@ import org.semanticweb.owlapi.util.OWLEntityRemover;
 
 import de.d3web.core.inference.PSMethod;
 import de.d3web.core.inference.PropagationEntry;
+import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.SessionObjectSource;
 import de.d3web.core.session.Value;
@@ -168,9 +169,9 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource<OWLSessionObje
 		}
 		else {
 			logger.warning("Unable to do property assertion: "
-							+ finding.getIRI() + " "
-							+ propertyIRI + " "
-							+ objectIRI);
+					+ finding.getIRI() + " "
+					+ propertyIRI + " "
+					+ objectIRI);
 		}
 	}
 
@@ -224,6 +225,18 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource<OWLSessionObje
 		OntologyProvider provider = session.getKnowledgeBase().getKnowledgeStore().getKnowledge(
 				OntologyProvider.KNOWLEDGE_KIND);
 		return new OWLSessionObject(provider.createOntologyInstance());
+	}
+
+	@Override
+	public Set<TerminologyObject> getPotentialDerivationSources(TerminologyObject derivedObject) {
+		// TODO: check if this psmethod may provide any useful implementation?!
+		return Collections.emptySet();
+	}
+
+	@Override
+	public Set<TerminologyObject> getActiveDerivationSources(TerminologyObject derivedObject, Session session) {
+		// TODO: check if this psmethod may provide any useful implementation?!
+		return Collections.emptySet();
 	}
 
 }
