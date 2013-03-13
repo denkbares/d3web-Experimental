@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dialog 
-	header="ITree-Date/Rules"  
-	dtype="itree" 
-	dstrategy="nextquestion" 
-	css="itree, nofoot" 
+<dialogOpts 
+    header="ITree-Date/Rules"   
+    login = "OFF"
+    required = ""
+    language = ""
+    debug = "false" >
+    <globalUIOpts 
+        dialogtype="ITree"
+        dialogstrategy = "nextquestion"
+        showcontraindicated = "HIDE"
+        shownonindicated = "HIDE"
+        css="itree, nofoot" 
 	dialogcolumns="1"
 	questionnairecolumns="1"
-	questioncolumns = "1"
-	uiprefix = "ITree"
-	login = "OFF"
-	required = "none"
-	language = "de"
-        >
-	<data kb="ITree140812.d3web" />
-        
-        <ue 
-            questionnaire='OWN' 
+	questioncolumns="1"
+        solutionExplanation = "TEXTUAL" 
+        solutionSorting = ""
+        solutionDepth = "ALL"
+        solutionDynamics = "INTERACTIVE"
+        solutionRange = "SINGLE"
+        solutionStructuring = ""
+        solRatingGranularity = "ABSTRACT;;;PRECISE"    
+    />
+    <localUIOpts />
+    <dataOpts kb="ITree140812.d3web" />
+    <ueOpts logging = ""
+	    questionnaire='OWN' 
             study='' 
-            logging='' 
             feedbackform="TRUE"
             uegroup="" 
             logfile_path = ""
-            analysisoutput_path = ""
-        />
-</dialog>
+            analysisoutput_path = ""/>
+</dialogOpts>

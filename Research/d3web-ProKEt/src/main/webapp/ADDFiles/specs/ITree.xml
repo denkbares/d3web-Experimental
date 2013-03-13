@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialogOpts 
-    header="ITree Standard Style" 
-    login = ""
+    header="ITree Standard Style"   
+    login = "OFF"
     required = ""
     language = ""
     debug = "false" >
     <globalUIOpts 
         dialogtype="ITree"
         dialogstrategy = "nextquestion"
+        showcontraindicated = "HIDE"
+        shownonindicated = "HIDE"
         css="itree, nofoot" 
 	dialogcolumns="1"
 	questionnairecolumns="1"
 	questioncolumns="1"
+        solutionExplanation = "TEXTUAL" 
+        solutionSorting = ""
+        solutionDepth = "ALL"
+        solutionDynamics = "INTERACTIVE"
+        solutionRange = "SINGLE"
+        solutionStructuring = ""
+        solRatingGranularity = "ABSTRACT;;;PRECISE"    
     />
     <localUIOpts />
     <dataOpts kb="0DemoITree.d3web" />
-    <ueOpts logging = "FALSE" questionnaire="OWN" feedbackform="TRUE" />
+    <ueOpts logging = ""
+	    questionnaire='OWN' 
+            study='' 
+            feedbackform="TRUE"
+            uegroup="" 
+            logfile_path = ""
+            analysisoutput_path = ""/>
 </dialogOpts>

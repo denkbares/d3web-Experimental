@@ -195,7 +195,7 @@ public class D3webDialog extends HttpServlet {
                 source = dialogID[1];
             }
         }
-        System.out.println("D3webDialog: " + source);
+        //System.out.println("D3webDialog: " + source);
         d3webParser.setSourceToParse(source);
         d3wcon = D3webConnector.getInstance();
         d3wcon.setD3webParser(d3webParser);
@@ -226,7 +226,7 @@ public class D3webDialog extends HttpServlet {
         String initFromUploadTool = httpSession.getAttribute("initFromUpload") != null
                 ? httpSession.getAttribute("initFromUpload").toString() : "";
 
-        System.out.println("D3webDialog: " + sSave);
+        //System.out.println("D3webDialog: " + sSave);
 
         // first of all check if we come from upload tool as we need special 
         // reparse handling then
@@ -417,7 +417,7 @@ public class D3webDialog extends HttpServlet {
             if (browser.equals("Explorer")
                     && !equalOrHigher(version, "9")) {
 
-                browser = "Internet Explorer";
+		browser = "Internet Explorer";
                 writer.print(assembleBrowserCompatibilityMessage(browser, version));
 
                 writer.close();
@@ -670,7 +670,7 @@ public class D3webDialog extends HttpServlet {
 
         for (int i = 0; i < questions.size(); i++) {
 
-            System.out.println("D3webDialog setValues: " + questions.get(i) + " " + values.get(i));
+            //System.out.println("D3webDialog setValues: " + questions.get(i) + " " + values.get(i));
             D3webUtils.setValue(questions.get(i), values.get(i), d3webSession);
             
             // state of abstractions AFTER setting values
@@ -1848,10 +1848,10 @@ public class D3webDialog extends HttpServlet {
             throws IOException {
 
         httpSession.setAttribute("loginit", false);
-        System.out.println("D3webDialog: " + "PARSE");
+        //System.out.println("D3webDialog: " + "PARSE");
 
         d3webParser.parse();
-        System.out.println("D3webDialog:" + d3webParser.getKnowledgeBase());
+        //System.out.println("D3webDialog:" + d3webParser.getKnowledgeBase());
 
         String kbName = "";
 

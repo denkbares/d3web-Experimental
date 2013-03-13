@@ -68,13 +68,14 @@ public class ITreeDialog extends D3webDialog {
     @Override
     protected String getSource(HttpServletRequest request, HttpSession http) {
 
-        String source = "Default.xml"; // default
+        String source = "ITree090812.xml"; // default
         if (request.getParameter("src") != null) {
             source = request.getParameter("src");
         }
         return source.endsWith(".xml") ? source : source + ".xml";
     }
-
+    
+    
     /**
      * Add one or several given facts. Thereby, first check whether input-store
      * has elements, if yes, parse them and set them (for num/text/date
@@ -101,8 +102,8 @@ public class ITreeDialog extends D3webDialog {
 
         IQuestionD3webRenderer toRenderer =
                 AbstractD3webRenderer.getRenderer(q);
-       
-        // replace the readflow pic with empty, as this is constructed again by
+	
+	// replace the readflow pic with empty, as this is constructed again by
         // renderer call later
         writer.append(REPLACEID + "readFlow-" + AbstractD3webRenderer.getID(q));
         writer.append(REPLACECONTENT);
@@ -115,8 +116,12 @@ public class ITreeDialog extends D3webDialog {
         setValue(d3webSession, request, question, value, httpSession);
         PersistenceD3webUtils.saveCase((String) httpSession.getAttribute("user"), "autosave",
                 d3webSession);
-        TerminologyObject parent = q instanceof QContainer ? d3wcon.getKb().getRootQASet()
-                : D3webUtils.getQuestionnaireAncestor(q);
+        
+	TerminologyObject parent = 
+		q.getParents()[0] != null ? q.getParents()[0] : d3wcon.getKb().getRootQASet();
+	//TerminologyObject parent = q instanceof QContainer ? d3wcon.getKb().getRootQASet()
+        //        : D3webUtils.getQuestionnaireAncestor(q);
+	System.out.println("PARENT: " + parent.getName());
 
         // set Locale=2 = english for default
         int loc = httpSession.getAttribute("locale") != null
@@ -131,7 +136,10 @@ public class ITreeDialog extends D3webDialog {
                 parent, loc,
                 httpSession, request));
 
+	//super.show(request, response, httpSession);
     }
+    
+    
     
     @Override
      protected void rerenderSubtree(HttpServletRequest request,

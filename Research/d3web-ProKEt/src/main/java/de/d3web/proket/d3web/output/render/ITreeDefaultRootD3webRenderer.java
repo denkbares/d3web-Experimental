@@ -80,7 +80,19 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
         }
 
         D3webUESettings.UEQ ueq = D3webUESettings.getInstance().getUequestionnaire();
-        if (ueq.equals(D3webUESettings.UEQ.NONE)) {
+	if (!D3webUESettings.getInstance().getUequestionnaire().equals("NONE")) {
+            st.setAttribute("ueq", "true");
+	    
+	    if (ueq.equals(D3webUESettings.UEQ.SUS)) {
+                st.setAttribute("sus", true);
+                st.removeAttribute("own");
+            } else if (ueq.equals(D3webUESettings.UEQ.OWN)) {
+                st.setAttribute("own", true);
+                st.removeAttribute("sus");
+            }
+        }
+	
+        /*if (ueq.equals(D3webUESettings.UEQ.NONE)) {
             st.setAttribute("ueq", "true");
 
             if (ueq.equals(D3webUESettings.UEQ.SUS)) {
@@ -90,7 +102,9 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
                 st.setAttribute("own", true);
                 st.removeAttribute("sus");
             }
-        }
+        }*/
+	
+	 
         /*
          * handle custom ContainerCollection modification, e.g., enabling
          * certain JS stuff

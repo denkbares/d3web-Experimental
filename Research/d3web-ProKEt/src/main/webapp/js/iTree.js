@@ -59,7 +59,7 @@ function iTreeInit() {
     handleUnsupportedBrowsers();
     
     if(logging){
-        ue_logDialogType("ITree");    
+	ue_logDialogType("ITree");    
     }
     // this file
     generate_tooltip_functions_ynbuttons();
@@ -80,14 +80,14 @@ function iTreeInit() {
     hide_all_tooltips(); 
  
     if(logging){
-        handleLogging();
+	handleLogging();
     }
     if(ueq){
-        handleUEQ();
-        initUEQFreeFeedback();
+	handleUEQ();
+	initUEQFreeFeedback();
     }
     if(feedback){
-        handleFB();
+	handleFB();
     }
 }
 
@@ -135,7 +135,7 @@ function expandAndStyleFirstElement_iTree(){
     // only expand by javascript if not d3web, in d3web this is done by the
     // dialog/renderer
     if(!d3web){
-        toggle_sub_4boxes(rootQuestionId);
+	toggle_sub_4boxes(rootQuestionId);
     }
     
 }
@@ -147,11 +147,11 @@ function exchangeReadflowTextFirstSubQuestion(){
     
     
     $("[id^=sub-] [id^=readFlow]:first-child img").each(function(){     
-        if(!($(this).attr("qtype")!=null && $(this).attr("qtype")=="ruletype") &&
-            !($(this).attr("qtype")!=null && $(this).attr("qtype")=="scoretype")){
+	if(!($(this).attr("qtype")!=null && $(this).attr("qtype")=="ruletype") &&
+	    !($(this).attr("qtype")!=null && $(this).attr("qtype")=="scoretype")){
             
-            $(this).attr('src', 'img/If.png');
-        }
+	    $(this).attr('src', 'img/If.png');
+	}
     });
 }
 
@@ -161,30 +161,30 @@ function exchangeReadflowTextFirstSubQuestion(){
 */
 function initializeNumfields(){
     if(!d3web){
-        $('[type=num]').unbind("keydown").keydown(function(e) { 
-            var code = (e.keyCode ? e.keyCode : e.which);
-            if (code == 13) {
+	$('[type=num]').unbind("keydown").keydown(function(e) { 
+	    var code = (e.keyCode ? e.keyCode : e.which);
+	    if (code == 13) {
                 
-                handleNumFields_itreePrototype($(this));
+		handleNumFields_itreePrototype($(this));
                
-            }
-        }).unbind("focusout").focusout(function() {
+	    }
+	}).unbind("focusout").focusout(function() {
            
-            handleNumFields_itreePrototype($(this));
+	    handleNumFields_itreePrototype($(this));
            
-        });
+	});
     } else {
-        $('[type=num]').unbind("keydown").keydown(function(e) { 
-            var code = (e.keyCode ? e.keyCode : e.which);
-            if (code == 13) {
-                d3web_addFactsITree(getQuestionId($(this)), $(this).val());
+	$('[type=num]').unbind("keydown").keydown(function(e) { 
+	    var code = (e.keyCode ? e.keyCode : e.which);
+	    if (code == 13) {
+		d3web_addFactsITree(getQuestionId($(this)), $(this).val());
                
-            }
-        }).unbind("focusout").focusout(function() {
+	    }
+	}).unbind("focusout").focusout(function() {
            
-            d3web_addFactsITree(getQuestionId($(this)), $(this).val());
+	    d3web_addFactsITree(getQuestionId($(this)), $(this).val());
            
-        });
+	});
         
     }   
         
@@ -206,11 +206,11 @@ function handleNumFields_itreePrototype(el){
     var par = $(el).parents("[id^=" + "q_" + idnum + "]");
         
     if(val >= min && val <= max){
-        // set color of question --> high rating, as defining = establish
-        setColorForQuestion(par, par, "1");
+	// set color of question --> high rating, as defining = establish
+	setColorForQuestion(par, par, "1");
     } else {
-        // remove rating if value outside range
-        par.removeClass("rating-high");
+	// remove rating if value outside range
+	par.removeClass("rating-high");
     }
 
     $(el).blur();
@@ -222,14 +222,16 @@ function handleNumFields_itreePrototype(el){
 
 function initializeDateDropdowns(){
     $("[type=Yearselect]," +
-        "[type=Monthselect]," +
-        "[type=Dayselect]," +
-        "[type=Hourselect]," +
-        "[type=Minuteselect]," +
-        "[type=Secondselect]"
-        ).unbind('change').change(function() {
+	"[type=Monthselect]," +
+	"[type=Dayselect]," +
+	"[type=Hourselect]," +
+	"[type=Minuteselect]," +
+	"[type=Secondselect]"
+	).unbind('change').change(function() {
             
-        d3web_addFactsITree(getQuestionId($(this)), getDate($(this)).getTime());
+	//alert("iTreeJS DateDropdowns " + $(this).attr("id") + " - " + getQuestionId($(this)));    
+	d3web_addFactsITree($(this), getDate($(this)).getTime());
+    //d3web_addFactsITree(getQuestionId($(this)), getDate($(this)).getTime());
     });
 }
 
@@ -240,9 +242,9 @@ function initializeDateDropdowns(){
 */
 function initializeDropdownSelects(){
     $('select').unbind('change').change(function() { 
-        if(!d3web){
-            handleDropdwonSelects_itreePrototype($(this));
-        }
+	if(!d3web){
+	    handleDropdwonSelects_itreePrototype($(this));
+	}
     });
 }
 
@@ -261,12 +263,12 @@ function handleDropdwonSelects_itreePrototype(el){
     var defining = par.attr("defining");
     
     if(defining.indexOf(val)!=-1){
-        // set color of question --> high rating, as defining = establish
-        setColorForQuestion(par, par, "1");
+	// set color of question --> high rating, as defining = establish
+	setColorForQuestion(par, par, "1");
     }
     else {
-        // remove rating if value outside range
-        par.removeClass("rating-high");
+	// remove rating if value outside range
+	par.removeClass("rating-high");
     }
 
     $(el).blur();
@@ -284,14 +286,14 @@ function handleDropdwonSelects_itreePrototype(el){
 function removePropagationInfoInQuestionForFirst(){
     $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
         
-        var first = $(this).attr("id"); // get question id
+	var first = $(this).attr("id"); // get question id
         
-        if($(this).attr("id")!=undefined){  
-            var prop = $("#propagation-"+$(this).attr("id"));
+	if($(this).attr("id")!=undefined){  
+	    var prop = $("#propagation-"+$(this).attr("id"));
     
-            prop.removeClass("show");
-            prop.addClass("hide");
-        }
+	    prop.removeClass("show");
+	    prop.addClass("hide");
+	}
       
     });
     
@@ -299,13 +301,13 @@ function removePropagationInfoInQuestionForFirst(){
 
 function alwaysExpandDummyNodes(){
     $(".dummy").each(function(){
-        toggle_hide_no_alternating_colors("sub-" + $(this).attr("id"));
-        // ids of the arrow/folder image is 2-typeimg, when question is q_2    
-        var typeimgID = $(this).attr("id") + '-typeimg';
+	toggle_hide_no_alternating_colors("sub-" + $(this).attr("id"));
+	// ids of the arrow/folder image is 2-typeimg, when question is q_2    
+	var typeimgID = $(this).attr("id") + '-typeimg';
     
-        // get the div of the arrow/folder image
-        var imgDiv = $("[id^="+ typeimgID + "]");
-        imgDiv.attr('src', 'img/openedArrow.png');
+	// get the div of the arrow/folder image
+	var imgDiv = $("[id^="+ typeimgID + "]");
+	imgDiv.attr('src', 'img/openedArrow.png');
     });
 };
 
@@ -323,14 +325,14 @@ function showAuxInfo(id, title){
     // get infotext stored in additional, invisible sub-element of current q
     var infoid = "#bonus-"+id;
     if(title==undefined){
-        title = "";
+	title = "";
     }
     var auxHeader = "<b>FRAGE:</b> " + title + "<br /><br />";
     var auxinfo = $(infoid).html();
     
     // rewrite inner HTML of infopanel widget with info content
     if(auxinfo==""){
-        auxinfo = "-";
+	auxinfo = "-";
     } 
     
     $("#auxHeader").html(auxHeader);
@@ -372,19 +374,19 @@ function toggleAuxInfoPlacing(){
     
     // info currently displayed at the right side, i.e. is to be toggled to bottom
     if(html.indexOf("Nach unten")!=-1){
-        $("#auxpanelToggle").html("Zur Seite");
-        $("#auxpanel").removeClass("auxpanelRight");
-        $("#auxpanel").addClass("auxpanelBottom");
-        $("#dialog").addClass("dialogCompleteWidth");
-        $("#dialog").removeClass("dialog75Width");
+	$("#auxpanelToggle").html("Zur Seite");
+	$("#auxpanel").removeClass("auxpanelRight");
+	$("#auxpanel").addClass("auxpanelBottom");
+	$("#dialog").addClass("dialogCompleteWidth");
+	$("#dialog").removeClass("dialog75Width");
     } 
     // info displayed at the bottom
     else {
-        $("#auxpanelToggle").html("Nach unten");
-        $("#auxpanel").removeClass("auxpanelBottom");
-        $("#auxpanel").addClass("auxpanelRight");
-        $("#dialog").addClass("dialog75Width");
-        $("#dialog").removeClass("dialogCompleteWidth");
+	$("#auxpanelToggle").html("Nach unten");
+	$("#auxpanel").removeClass("auxpanelBottom");
+	$("#auxpanel").addClass("auxpanelRight");
+	$("#dialog").addClass("dialog75Width");
+	$("#dialog").removeClass("dialogCompleteWidth");
     }
     
 }
@@ -403,10 +405,9 @@ function toggle_sub_4boxes_clariHie(id) {
 function toggle_hide_ITree(id) {
    
     if(d3web){
-        id = id.replace("sub-", "");
-        
-        toggleShowStatus_ITree(id); // toggle folder image
-        hide_all_tooltips();	// on toggling all tooltips should disappear
+	id = id.replace("sub-", "");
+	toggleShowStatus_ITree(id); // toggle folder image
+	hide_all_tooltips();	// on toggling all tooltips should disappear
     } 
     
     
@@ -431,29 +432,32 @@ function toggleShowStatus_ITree(id) {
     // CLOSE the element and children
     if (imgDiv.attr('src') == 'img/openedArrow.png') {
         
-        imgDiv.attr('src', 'img/closedArrow.png');
+	imgDiv.attr('src', 'img/closedArrow.png');
        
-        if(logging && !$("#" + id).hasClass("dummy")){
-            ue_logQuestionToggle(qtext, "SHUT");
-        }
+	if(logging && !$("#" + id).hasClass("dummy")){
+	    ue_logQuestionToggle(qtext, "SHUT");
+	}
         
-        deleteExpandCookie(id);
-        writeExpandCookie(id, "C");
+	deleteExpandCookie(id);
+	writeExpandCookie(id, "C");
     } 
     
     // OPEN the element and children
     else if (imgDiv.attr('src') == 'img/closedArrow.png') {
 
-        imgDiv.attr('src', 'img/openedArrow.png');
-        if(logging && !$("#" + id).hasClass("dummy")){
-            ue_logQuestionToggle(qtext, "EXPAND");
-        }
-        //alert("toggle: " + id + " - opened");
-        deleteExpandCookie(id);
-        writeExpandCookie(id, "O");
+	imgDiv.attr('src', 'img/openedArrow.png');
+	if(logging && !$("#" + id).hasClass("dummy")){
+	    ue_logQuestionToggle(qtext, "EXPAND");
+	}
+	//alert("toggle: " + id + " - opened");
+	deleteExpandCookie(id);
+	writeExpandCookie(id, "O");
     } 
-    // re-render only changed question
+    // re-render only changed question;
+    // TODO problem: parent stuff does not get propagated!
     d3web_rerenderITreeQuestionToggle(id);
+    
+    //itree_reset();
 }
 
 
@@ -489,18 +493,18 @@ function handleITreeYNQuestions(fullId, rating) {
 function storeUserVal(question, value){
     
     switch(value){
-        case "1":
-            $(question).addClass("uv1").removeClass("uv2").removeClass("uv3").removeClass("uv0");
-            break;
-        case "2":
-            $(question).addClass("uv2").removeClass("uv1").removeClass("uv3").removeClass("uv0");
-            break;
-        case "3":
-            $(question).addClass("uv3").removeClass("uv2").removeClass("uv1").removeClass("uv0");
-            break;
-        case "0":
-            $(question).addClass("uv0").removeClass("uv2").removeClass("uv3").removeClass("uv1");
-            break;
+	case "1":
+	    $(question).addClass("uv1").removeClass("uv2").removeClass("uv3").removeClass("uv0");
+	    break;
+	case "2":
+	    $(question).addClass("uv2").removeClass("uv1").removeClass("uv3").removeClass("uv0");
+	    break;
+	case "3":
+	    $(question).addClass("uv3").removeClass("uv2").removeClass("uv1").removeClass("uv0");
+	    break;
+	case "0":
+	    $(question).addClass("uv0").removeClass("uv2").removeClass("uv3").removeClass("uv1");
+	    break;
         
     }
         
@@ -514,7 +518,7 @@ function equalUserAndKBSRating(question, chosenColor){
     
     var col = chosenColor+"";
     if(col != calculateRatingForQuestion(question)){
-        return false;
+	return false;
     }
     
     
@@ -532,38 +536,38 @@ function generate_tooltip_functions_propagation() {
            
     // if mouse is moved over an element define potential tooltips position
     $(document).mousemove(function(e) {
-        tooltip_move(e);
+	tooltip_move(e);
     });
 	
     // go through all existing tooltip triggers
     triggers.each(function() {
         	
-        var id = $(this).attr("id").replace("propagation-", "");
+	var id = $(this).attr("id").replace("propagation-", "");
         
-        var ttstart, ttend;
-        var now;
+	var ttstart, ttend;
+	var now;
                 
-        $(this).unbind('mouseover').mouseover(function() {
-            //if logging is activated get the time tooltip is triggered
-            if(logging){
-                now = new Date();
-                ttstart = now.getTime();
-            }
+	$(this).unbind('mouseover').mouseover(function() {
+	    //if logging is activated get the time tooltip is triggered
+	    if(logging){
+		now = new Date();
+		ttstart = now.getTime();
+	    }
             
-            tooltip_over_prop(id);
-        });
+	    tooltip_over_prop(id);
+	});
      
-        $(this).unbind('mouseout').mouseout(function() {
-            //if logging is activated get the time tooltip is deactivated again
-            if(logging){
-                now = new Date();
-                ttend = now.getTime();
-                ue_logInfoPopup(ttstart, ttend, $(this));
-            }
+	$(this).unbind('mouseout').mouseout(function() {
+	    //if logging is activated get the time tooltip is deactivated again
+	    if(logging){
+		now = new Date();
+		ttend = now.getTime();
+		ue_logInfoPopup(ttstart, ttend, $(this));
+	    }
           
-            tooltip_out_prop(id);
+	    tooltip_out_prop(id);
             
-        });
+	});
     });
 }
 
@@ -573,31 +577,31 @@ function tooltip_over_prop(id) {
     var target = $("[id$=" + targetid + "]");
              
     if (target.size() == 0) {
-        return;
+	return;
     }
 	
     // if target element is not currently shown
     if (target !== tooltipShown) {
 		
-        // hide old tooltip if existing
-        if (tooltipShown !== undefined) {
-            tooltip_out(tooltipShown);
-        }
+	// hide old tooltip if existing
+	if (tooltipShown !== undefined) {
+	    tooltip_out(tooltipShown);
+	}
 		
-        // store currently shown tooltip and tooltipShownTrigger
-        tooltipShown = target;
+	// store currently shown tooltip and tooltipShownTrigger
+	tooltipShown = target;
 		
-        target.css("position", "absolute");
-        var height = target.height();
-        var width = target.width();
-        if (height > 0 && width > 0 && height > width) {
-            target.css("width", height);
-            target.css("height", width);
-        }
-        //tooltip_move(element);
+	target.css("position", "absolute");
+	var height = target.height();
+	var width = target.width();
+	if (height > 0 && width > 0 && height > width) {
+	    target.css("width", height);
+	    target.css("height", width);
+	}
+	//tooltip_move(element);
 
-        target.fadeIn(300);
-        setLeftOffset(target);
+	target.fadeIn(300);
+	setLeftOffset(target);
     }
 }
 
@@ -605,11 +609,11 @@ function tooltip_out_prop(object) {
 	
     // if a jquery tooltip or
     if (object instanceof jQuery) {
-        target = object;
+	target = object;
     } else {
 		
-        // a specifically marked element
-        target = $("#tt-propagation-" + object);
+	// a specifically marked element
+	target = $("#tt-propagation-" + object);
     }
 
     target.hide(500);
@@ -624,8 +628,9 @@ function d3web_addFactsITree(qobj, value){
     
     // handle logging if activated
     if (logging) {
-        var now = ue_getCurrentDate();		
+	var now = ue_getCurrentDate();		
     }
+    
     qid = $(qobj).attr("id");
     
     // assemble ajax call
@@ -633,37 +638,42 @@ function d3web_addFactsITree(qobj, value){
     //link = link.set("timestring", now);
     
     if(!checkDateQuestion(qid)){
-        qid = qobj.closest("[id^=q_]").attr("id").replace("-imagebox", "");
-        //alert(qid +  " " + value);
+	qid = qobj.closest("[id^=q_]").attr("id").replace("-imagebox", "");
+    //alert(qid +  " " + value);
     }
     
     
     link = link.set("question", qid).set("value", value);
     
     
+    
     link = window.location.href.replace(window.location.search, "") + link;
         
   
     $.ajax({
-        type : "GET",
-        url : link,
-        cache : false, // needed for IE, call is not made otherwise
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        success : function(html) {
-            updateDialog(html);
-            initFunctionality();
-            iTreeInit();
-        },
-        error : function(html) {
-            alert("ajax error add facts");
-        }
+	type : "GET",
+	url : link,
+	cache : false, // needed for IE, call is not made otherwise
+	contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	success : function(html) {
+	   // updateDialog(html);
+	    //itree_reset();
+	    window.location.reload(true);
+	    initFunctionality();
+	    iTreeInit();
+	},
+	error : function(html) {
+	    alert("ajax error add facts");
+	}
     });
 }
 
 function checkDateQuestion(qid){
     var qtitle = $("#t-" + qid);
+    //alert(qid);
+    //alert($(qtitle).attr("id") + " has class " + $(qtitle).attr("class"));
     if(qtitle.hasClass("titleDate")){
-        return true;
+	return true;
     }
     return false;
 }
@@ -675,18 +685,25 @@ function d3web_rerenderITreeQuestionToggle(qid){
     link = window.location.href.replace(window.location.search, "") + link;
      
     $.ajax({
-        type : "GET",
-        url : link,
-        cache : false, // needed for IE, call is not made otherwise
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        success : function(html) {
+	type : "GET",
+	url : link,
+	cache : false, // needed for IE, call is not made otherwise
+	contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	success : function(html) {
           
-            updateDialog(html);
-            initFunctionality();
-            iTreeInit();
-        },
-        error : function(html) {
-            alert("ajax error add facts itree date");
-        }
+	    updateDialog(html);
+	    initFunctionality();
+	    iTreeInit();
+	},
+	error : function(html) {
+	    alert("ajax error add facts itree date");
+	}
     });
+}
+
+function itree_reset(){
+    alert("reset");
+    window.location.reload(true);
+    initFunctionality();
+    iTreeInit();
 }
