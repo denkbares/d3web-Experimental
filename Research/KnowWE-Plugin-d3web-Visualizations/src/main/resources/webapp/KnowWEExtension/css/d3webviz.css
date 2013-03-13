@@ -1,0 +1,36 @@
+.d3webdependencies .graph{
+	height: 1000px;
+	width: 100%;
+}
+
+.d3webdependencies .graph .node rect {
+  stroke-width: 3px;
+  stroke: #333;
+  fill: #fff;
+}
+
+.d3webdependencies .graph .node.faded rect, .edge.faded {
+  stroke-width: 1px;
+  stroke: #666;
+}
+
+.d3webdependencies .graph path.edge {
+  fill: none;
+  stroke: #333;
+  stroke-width: 5px;
+}
+
+.d3webdependencies .graph circle {
+  fill: #ccc;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+.d3webdependencies .graph text {
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+.d3webdependencies .graph .faded text {
+	stroke: #666;
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-d3web-Visualizations" version="0.1">
+
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+
+    <runtime>
+        <library id="de.knowwe" path="." type="code">
+            <export prefix="*" />
+        </library>
+        <library id="webapp" path="webapp/" type="resources">
+            <export prefix="*" />
+        </library>
+    </runtime>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="D3webDependenciesType">
+		<parameter id="class"
+			value="de.knowwe.d3webviz.dependency.D3webDependenciesType" />
+		<parameter id="name" value="D3webDependenciesType" />
+		<parameter id="description" value="Type D3webDependenciesType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="DependencyGraphAction">
+		<parameter id="class"
+			value="de.knowwe.d3webviz.dependency.DependencyGraphAction" />
+		<parameter id="name" value="DependencyGraphAction" />
+		<parameter id="description" value="Action DependencyGraphAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+</plugin>
