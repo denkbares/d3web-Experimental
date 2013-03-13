@@ -222,6 +222,7 @@
 		<module>KnowWE-Plugin-OWLAPIConnector</module>
 		<module>KnowWE-Plugin-DiaFlux-Review</module>
 		<module>KnowWE-Plugin-WikiBaseline</module>
+		<module>KnowWE-Plugin-d3web-Visualizations</module>
 		<module>KnowWE-Plugin-OphtoVis</module>
 		<module>KnowWE-Plugin-DataAnalysis</module>
 		<module>KnowWE-Plugin-ESAT</module>
