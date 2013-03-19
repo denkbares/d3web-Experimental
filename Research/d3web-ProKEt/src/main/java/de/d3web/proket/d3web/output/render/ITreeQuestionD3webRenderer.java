@@ -292,17 +292,18 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
         return sb.toString();
     }
 
+    // TODO
     private String assembleScoringTooltip(TerminologyObject to, String answerString, Session sess,
             TerminologyObject parent) {
 
         StringBuilder bui = new StringBuilder();
         bui.append("Addiert ");
-        bui.append(D3webUtils.getScoreForToAndAnswer(to, sess, answerString));
+        //bui.append(D3webUtils.getScoreForToAndAnswer(to, sess, answerString));
         bui.append(" zu übergeordneter Frage -> ");
         bui.append("Grenzwert üoF JA = ");
-        bui.append(D3webUtils.getRightScoreForTo(parent, sess));
+        //bui.append(D3webUtils.getRightScoreForTo(parent, sess));
         bui.append(", Grenzwert üoF NEIN = ");
-        bui.append(D3webUtils.getLeftScoreForTo(parent, sess));
+        //bui.append(D3webUtils.getLeftScoreForTo(parent, sess));
         return bui.toString();
 
     }

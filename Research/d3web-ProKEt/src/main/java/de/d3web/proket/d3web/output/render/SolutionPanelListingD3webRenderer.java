@@ -84,8 +84,8 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
         Blackboard bb = d3webs.getBlackboard();
         UISolutionPanelSettings uisols = UISolutionPanelSettings.getInstance();
         
-        System.out.println(uisols.getShowPreciseSolRating());
-                System.out.println(uisols.getShowAbstractSolRating());
+        //System.out.println(uisols.getShowPreciseSolRating());
+                //System.out.println(uisols.getShowAbstractSolRating());
         
         if(uisols.getShowAbstractSolRating() && 
                 uisols.getShowPreciseSolRating()){
@@ -193,9 +193,6 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
         }
         
         stExp.setAttribute("elementID", solution.getName());
-        
-        System.out.println(stExp.toString());
-        
         
         
         // retrieve template for the solution panel per se, first

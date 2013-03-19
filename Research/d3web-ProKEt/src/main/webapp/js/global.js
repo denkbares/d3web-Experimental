@@ -919,8 +919,8 @@ function handleSessionRedirect(loginFlag){
 
 function explanationPopupHandle(clickedID){
     if($("#"+clickedID+"_popup").hasClass("selected")) {
-        // destyle popup
-        $("#"+clickedID+"_popup").removeClass("selected");
+         //destyle popup
+         $("#"+clickedID+"_popup").removeClass("selected");
         
     } else {
         // style the calling link part

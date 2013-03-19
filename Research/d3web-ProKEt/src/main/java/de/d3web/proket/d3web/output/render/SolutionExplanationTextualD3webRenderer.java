@@ -21,9 +21,11 @@ package de.d3web.proket.d3web.output.render;
 
 import de.d3web.core.inference.PSMethod;
 import de.d3web.core.inference.PSMethodRulebased;
-import de.d3web.core.inference.Rule;
+import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import java.util.List;
 
@@ -53,27 +55,20 @@ public class SolutionExplanationTextualD3webRenderer {
         String explanationDefault = "textual rule based explanation n/a II";
         String explanation = "";
         
-        List<Rule> rules = D3webUtils.getRulesHeuristicRatingFor(sol, d3webSession);
-        
-        for (Rule rule : rules) {
+        List<TerminologyObject> deriObjects = 
+		D3webUtils.getDerivationObjectsPSMRulesFor(sol, d3webSession);
+        //System.out.println(rules.toString());
+        for (TerminologyObject to : deriObjects) {
             
-            String cond = rule.getCondition().toString();
-            String[] condSplit =cond.split("=="); 
-            String condQ = condSplit[0].trim();
-            String condV = condSplit[1].trim();
-            
-            
-            String action = rule.getAction().toString();
-            String[] split1 = action.split("\\[");
-            String[] split2 = split1[1].split("\\]");
-            String[] actSplit = split2[0].split(":");
-            String actS = actSplit[0].trim();
-            String actV = actSplit[1].trim();
-            
-            explanation = "IF (" + condQ + " = " + condV + ")\nTHEN (" 
-                    + actS + " -> " + actV + ")";
+	    Value qvalue = d3webSession.getBlackboard().getValue((ValueObject) to);
+	    Value svalue = d3webSession.getBlackboard().getValue((ValueObject) sol);
+	    
+	    
+            explanation += "IF (" + to.getName() + " = " + qvalue + ")\nTHEN (" 
+                    + sol.getName() + " -> " + svalue + ")<br />";
         }
         
+	//System.out.println("EXPL: " + explanation);
         return explanation.equals("")?explanationDefault:explanation;
     }
 }

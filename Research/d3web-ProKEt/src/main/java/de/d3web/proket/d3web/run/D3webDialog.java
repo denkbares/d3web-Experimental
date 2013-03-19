@@ -613,12 +613,12 @@ public class D3webDialog extends HttpServlet {
         // set the values
         setValues(d3webSession, questions, values, request, httpSession);
 	
-	System.out.println("HALLO: " + d3webSession.getBlackboard().getValuedSolutions());
+	//System.out.println("HALLO: " + d3webSession.getBlackboard().getValuedSolutions());
 	
         // "clean up" blackboard
         D3webUtils.resetAbandonedPaths(d3webSession, httpSession);
 
-	System.out.println("HALLO2: " + d3webSession.getBlackboard().getValuedSolutions());
+	//System.out.println("HALLO2: " + d3webSession.getBlackboard().getValuedSolutions());
 	
 	
         // autosave the current state

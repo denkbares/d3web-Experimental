@@ -19,11 +19,7 @@
  */
 package de.d3web.proket.d3web.utils;
 
-import de.d3web.abstraction.ActionSetValue;
-import de.d3web.core.inference.KnowledgeSlice;
-import de.d3web.core.inference.PSMethod;
-import de.d3web.core.inference.Rule;
-import de.d3web.core.inference.RuleSet;
+import de.d3web.core.inference.*;
 import de.d3web.core.inference.condition.CondEqual;
 import de.d3web.core.inference.condition.CondNumGreaterEqual;
 import de.d3web.core.inference.condition.CondNumLess;
@@ -91,7 +87,6 @@ import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import java.util.*;
 import javax.servlet.http.HttpSession;
-import sun.org.mozilla.javascript.internal.Undefined;
 
 /**
  * Util methods for the binding of d3web to the ProKEt system.
@@ -121,7 +116,7 @@ public class D3webUtils {
      * @return the Session
      */
     public static Session createSession(KnowledgeBase kb) {
-        return createSession(kb, DialogStrategy.NEXTFORM);
+	return createSession(kb, DialogStrategy.NEXTFORM);
     }
 
     /**
@@ -134,20 +129,20 @@ public class D3webUtils {
      */
     public static DefaultSession createSession(KnowledgeBase kb, DialogStrategy ds) {
 
-        // if DialogType given
-        if (ds != null) {
-            if (ds == DialogStrategy.NEXTQUESTION) { // one question dialog
-                return SessionFactory.createSession(
-                        null, kb, new NextUnansweredQuestionFormStrategy(), new Date());
-            } else if (ds == DialogStrategy.NEXTFORM) { // questionnaire based
-                return SessionFactory.createSession(
-                        null, kb, new CurrentQContainerFormStrategy(), new Date());
-            }
-        }
+	// if DialogType given
+	if (ds != null) {
+	    if (ds == DialogStrategy.NEXTQUESTION) { // one question dialog
+		return SessionFactory.createSession(
+			null, kb, new NextUnansweredQuestionFormStrategy(), new Date());
+	    } else if (ds == DialogStrategy.NEXTFORM) { // questionnaire based
+		return SessionFactory.createSession(
+			null, kb, new CurrentQContainerFormStrategy(), new Date());
+	    }
+	}
 
-        // per default returns questionnaire based standard questionnaires
-        return SessionFactory.createSession(
-                null, kb, new CurrentQContainerFormStrategy(), new Date());
+	// per default returns questionnaire based standard questionnaires
+	return SessionFactory.createSession(
+		null, kb, new CurrentQContainerFormStrategy(), new Date());
     }
 
     /**
@@ -160,7 +155,7 @@ public class D3webUtils {
      * @throws IOException
      */
     public static Session createSession(String kbFilename) throws IOException {
-        return createSession(getKnowledgeBase(kbFilename), DialogStrategy.NEXTQUESTION);
+	return createSession(getKnowledgeBase(kbFilename), DialogStrategy.NEXTQUESTION);
     }
 
     /**
@@ -172,9 +167,9 @@ public class D3webUtils {
      * KnowledgeBase's questions and solutions.
      */
     public static String debug(KnowledgeBase kb) {
-        StringBuilder sb = new StringBuilder();
-        debugRecurse(kb.getRootQASet(), sb, "");
-        return sb.toString();
+	StringBuilder sb = new StringBuilder();
+	debugRecurse(kb.getRootQASet(), sb, "");
+	return sb.toString();
     }
 
     /**
@@ -188,30 +183,30 @@ public class D3webUtils {
      * @param indention indentation String
      */
     private static void debugRecurse(TerminologyObject root, StringBuilder sb,
-            String indention) {
+	    String indention) {
 
-        // go through all children
-        for (TerminologyObject element : root.getChildren()) {
+	// go through all children
+	for (TerminologyObject element : root.getChildren()) {
 
-            // append indentation and element name
-            sb.append(indention).append(element.getName());
+	    // append indentation and element name
+	    sb.append(indention).append(element.getName());
 
-            // also append Choices of Questions
-            if ((element instanceof QuestionChoice)) {
-                List<Choice> alternatives = ((QuestionChoice) element).getAllAlternatives();
-                sb.append(" (");
-                for (Choice choice : alternatives) {
-                    sb.append(choice.getName()).append(", ");
-                }
-                sb.append(")\n");
+	    // also append Choices of Questions
+	    if ((element instanceof QuestionChoice)) {
+		List<Choice> alternatives = ((QuestionChoice) element).getAllAlternatives();
+		sb.append(" (");
+		for (Choice choice : alternatives) {
+		    sb.append(choice.getName()).append(", ");
+		}
+		sb.append(")\n");
 
-                // in case a Container/QASet is given, recursion goes on
-            } else if ((element instanceof QContainer)
-                    || (element instanceof QASet)) {
-                sb.append("\n");
-                debugRecurse(element, sb, indention + "\t");
-            }
-        }
+		// in case a Container/QASet is given, recursion goes on
+	    } else if ((element instanceof QContainer)
+		    || (element instanceof QASet)) {
+		sb.append("\n");
+		debugRecurse(element, sb, indention + "\t");
+	    }
+	}
     }
 
     /**
@@ -225,19 +220,19 @@ public class D3webUtils {
      */
     public static String discretizeRating(double value) {
 
-        // some reasonable default discretizing values
-        List<Double> limits = new ArrayList<Double>();
-        limits.add(49.0);
-        limits.add(79.0);
-        limits.add(100.0);
+	// some reasonable default discretizing values
+	List<Double> limits = new ArrayList<Double>();
+	limits.add(49.0);
+	limits.add(79.0);
+	limits.add(100.0);
 
-        // and some default discretized (abstract) values
-        List<String> returnValues = new ArrayList<String>();
-        returnValues.add("rating-low");
-        returnValues.add("rating-medium");
-        returnValues.add("rating-high");
+	// and some default discretized (abstract) values
+	List<String> returnValues = new ArrayList<String>();
+	returnValues.add("rating-low");
+	returnValues.add("rating-medium");
+	returnValues.add("rating-high");
 
-        return discretizeRating(limits, returnValues, value);
+	return discretizeRating(limits, returnValues, value);
     }
 
     /**
@@ -251,18 +246,18 @@ public class D3webUtils {
      * the lowest limit value higher than the value to check.
      */
     public static String discretizeRating(List<Double> limits,
-            List<String> returnValues, double value) {
-        if (value < 0) {
-            return null;
-        }
-        for (int i = 0; i < limits.size(); i++) {
-            if (value <= limits.get(i)) {
-                return returnValues.get(i);
-            }
-        }
+	    List<String> returnValues, double value) {
+	if (value < 0) {
+	    return null;
+	}
+	for (int i = 0; i < limits.size(); i++) {
+	    if (value <= limits.get(i)) {
+		return returnValues.get(i);
+	    }
+	}
 
-        // return the highest value by default
-        return returnValues.get(returnValues.size() - 1);
+	// return the highest value by default
+	return returnValues.get(returnValues.size() - 1);
     }
 
     /**
@@ -273,14 +268,14 @@ public class D3webUtils {
      * @return List of the JPF plugins in the given folder.
      */
     public static File[] getAllJPFPlugins(File folder) {
-        List<File> fileList = new ArrayList<File>();
+	List<File> fileList = new ArrayList<File>();
 
-        for (File file : folder.listFiles()) {
-            if (file.getName().contains("d3web-Plugin")) {
-                fileList.add(file);
-            }
-        }
-        return fileList.toArray(new File[fileList.size()]);
+	for (File file : folder.listFiles()) {
+	    if (file.getName().contains("d3web-Plugin")) {
+		fileList.add(file);
+	    }
+	}
+	return fileList.toArray(new File[fileList.size()]);
     }
 
     /**
@@ -302,66 +297,66 @@ public class D3webUtils {
      * there are only indicated {@link Solution}s.
      */
     public static List<Solution> getBestSolutions(final Session session,
-            Number minRating, int maxCount) {
+	    Number minRating, int maxCount) {
 
-        List<Solution> result = new LinkedList<Solution>();
+	List<Solution> result = new LinkedList<Solution>();
 
-        // get established and suggested solutions
-        List<Solution> established = session.getBlackboard().getSolutions(
-                State.ESTABLISHED);
-        List<Solution> suggested = session.getBlackboard().getSolutions(
-                State.SUGGESTED);
+	// get established and suggested solutions
+	List<Solution> established = session.getBlackboard().getSolutions(
+		State.ESTABLISHED);
+	List<Solution> suggested = session.getBlackboard().getSolutions(
+		State.SUGGESTED);
 
-        // if established solutions, just return them not regarding any limits
-        if (established.size() > 0) {
-            return established;
-        }
+	// if established solutions, just return them not regarding any limits
+	if (established.size() > 0) {
+	    return established;
+	}
 
-        // if no suggested solutions either, return empty list
-        // TODO so other solutions than estab/sugg are ignored! --> rework
-        if (suggested.size() == 0) {
-            return result;
-        }
+	// if no suggested solutions either, return empty list
+	// TODO so other solutions than estab/sugg are ignored! --> rework
+	if (suggested.size() == 0) {
+	    return result;
+	}
 
-        // sort suggested solutions according to a comparator that sorts
-        // solution objects by their rating
-        Collections.sort(suggested, new Comparator<Solution>() {
+	// sort suggested solutions according to a comparator that sorts
+	// solution objects by their rating
+	Collections.sort(suggested, new Comparator<Solution>() {
 
-            @Override
-            public int compare(Solution o1, Solution o2) {
-                if (o1 == null && o2 == null) {
-                    return 0;
-                }
-                if (o2 == null) {
-                    return 1;
-                }
-                if (o1 == null) {
-                    return -1;
-                }
-                return session.getBlackboard().getRating(o1).compareTo(
-                        session.getBlackboard().getRating(o2));
-            }
-        });
+	    @Override
+	    public int compare(Solution o1, Solution o2) {
+		if (o1 == null && o2 == null) {
+		    return 0;
+		}
+		if (o2 == null) {
+		    return 1;
+		}
+		if (o1 == null) {
+		    return -1;
+		}
+		return session.getBlackboard().getRating(o1).compareTo(
+			session.getBlackboard().getRating(o2));
+	    }
+	});
 
-        // limit for the number of solutions: minimum of either maxCount or
-        // suggested.
-        int limit = Math.min(maxCount, suggested.size());
+	// limit for the number of solutions: minimum of either maxCount or
+	// suggested.
+	int limit = Math.min(maxCount, suggested.size());
 
-        // cut off
-        for (int i = 0; i < limit; i++) {
-            result.add(suggested.get(limit - 1 - i)); // upside-down
-        }
-        return result;
+	// cut off
+	for (int i = 0; i < limit; i++) {
+	    result.add(suggested.get(limit - 1 - i)); // upside-down
+	}
+	return result;
     }
 
     public static KnowledgeBase getKnowledgeBase(String kbFilename)
-            throws IOException {
-        return getKnowledgeBase(kbFilename, "DEFAULT");
+	    throws IOException {
+	return getKnowledgeBase(kbFilename, "DEFAULT");
     }
 
     public static KnowledgeBase getKnowledgeBaseFromWUMPStorage(String kbFilename)
-            throws IOException {
-        return getKnowledgeBase(kbFilename, "WUMP");
+	    throws IOException {
+	return getKnowledgeBase(kbFilename, "WUMP");
     }
 
     /**
@@ -375,71 +370,71 @@ public class D3webUtils {
      */
     public static KnowledgeBase getKnowledgeBase(String kbFilename, String path) throws IOException {
 
-        // add .jar if it's not already there
-        if (!kbFilename.endsWith(".jar")
-                && !kbFilename.endsWith(".d3web")) {
-            kbFilename += ".d3web";
-        }
-        File kbFile = null;
+	// add .jar if it's not already there
+	if (!kbFilename.endsWith(".jar")
+		&& !kbFilename.endsWith(".d3web")) {
+	    kbFilename += ".d3web";
+	}
+	File kbFile = null;
 
-        String PATHSEP = System.getProperty("file.separator");
+	String PATHSEP = System.getProperty("file.separator");
 
-        if (path.equals("DEFAULT")) {
-            path = "/specs/d3web/";
+	if (path.equals("DEFAULT")) {
+	    path = "/specs/d3web/";
 
-            kbFile = FileUtils.getResourceFile(path + kbFilename);
+	    kbFile = FileUtils.getResourceFile(path + kbFilename);
 
-        } else if (path.contains("UPFiles")) {
-            path = "/../../UPFiles/d3web/";
-        } else if (path.contains("WUMP")) {
-            path = path + PATHSEP;
+	} else if (path.contains("UPFiles")) {
+	    path = "/../../UPFiles/d3web/";
+	} else if (path.contains("WUMP")) {
+	    path = path + PATHSEP;
 
-            kbFile = new File(path + kbFilename);
-        }
+	    kbFile = new File(path + kbFilename);
+	}
 
-        // System.out.println(path);
+	// System.out.println(path);
 
 
 
-        // Paths here are relative to the WEB-INF/classes folder!!!
+	// Paths here are relative to the WEB-INF/classes folder!!!
 
-        File libPath = FileUtils.getResourceFile("/../lib");
+	File libPath = FileUtils.getResourceFile("/../lib");
 
-        // initialize PluginManager
-        File[] files = null;
-        files = getAllJPFPlugins(libPath);
-        JPFPluginManager.init(files);
-        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+	// initialize PluginManager
+	File[] files = null;
+	files = getAllJPFPlugins(libPath);
+	JPFPluginManager.init(files);
+	PersistenceManager persistenceManager = PersistenceManager.getInstance();
 
-        //println(kbFile.getName() + " " + kbFile.getAbsolutePath());
-        //KnowledgeBase kb = persistenceManager.load(kbFile);
-        KnowledgeBase kb = persistenceManager.load(kbFile);
+	//println(kbFile.getName() + " " + kbFile.getAbsolutePath());
+	//KnowledgeBase kb = persistenceManager.load(kbFile);
+	KnowledgeBase kb = persistenceManager.load(kbFile);
 
-        // try to load knowledge base
-        return kb;
+	// try to load knowledge base
+	return kb;
 
     }
 
     public static KnowledgeBase getDocToD3webKnowledgeBase(File file) throws IOException {
 
-        // add .jar if it's not already there
-        if (!file.getName().endsWith(".jar")
-                && !file.getName().endsWith(".d3web")) {
-            return null;
+	// add .jar if it's not already there
+	if (!file.getName().endsWith(".jar")
+		&& !file.getName().endsWith(".d3web")) {
+	    return null;
 
-        }
+	}
 
-        File kbFile = file;
-        File libPath = FileUtils.getResourceFile("/../lib");
+	File kbFile = file;
+	File libPath = FileUtils.getResourceFile("/../lib");
 
-        // initialize PluginManager
-        File[] files = null;
-        files = getAllJPFPlugins(libPath);
-        JPFPluginManager.init(files);
-        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+	// initialize PluginManager
+	File[] files = null;
+	files = getAllJPFPlugins(libPath);
+	JPFPluginManager.init(files);
+	PersistenceManager persistenceManager = PersistenceManager.getInstance();
 
-        // try to load knowledge base
-        return persistenceManager.load(kbFile);
+	// try to load knowledge base
+	return persistenceManager.load(kbFile);
     }
 
     /**
@@ -451,12 +446,12 @@ public class D3webUtils {
      * represented by their name.
      */
     public static String getQuestionsAsString(KnowledgeBase kb) {
-        StringBuilder sb = new StringBuilder();
-        List<Question> questions = kb.getManager().getQuestions();
-        for (Question question : questions) {
-            sb.append(question.getName()).append("\n");
-        }
-        return sb.toString();
+	StringBuilder sb = new StringBuilder();
+	List<Question> questions = kb.getManager().getQuestions();
+	for (Question question : questions) {
+	    sb.append(question.getName()).append("\n");
+	}
+	return sb.toString();
     }
 
     /**
@@ -472,28 +467,28 @@ public class D3webUtils {
      */
     public static List<Solution> getSolutionsEstabSugg(Session session) {
 
-        List<Solution> result =
-                session.getBlackboard().getSolutions(State.ESTABLISHED);
-        if (result.size() == 0) {
-            return session.getBlackboard().getSolutions(State.SUGGESTED);
-        }
-        return result;
+	List<Solution> result =
+		session.getBlackboard().getSolutions(State.ESTABLISHED);
+	if (result.size() == 0) {
+	    return session.getBlackboard().getSolutions(State.SUGGESTED);
+	}
+	return result;
     }
 
     public static boolean isFollowUpToQCon(TerminologyObject to, TerminologyObject currentQCon) {
 
-        TerminologyObject[] parents = to.getParents();
+	TerminologyObject[] parents = to.getParents();
 
-        if (parents != null && parents.length != 0) {
-            for (TerminologyObject term : parents) {
+	if (parents != null && parents.length != 0) {
+	    for (TerminologyObject term : parents) {
 
-                if (term.equals(currentQCon)) {
-                    return false;
-                }
-            }
-        }
+		if (term.equals(currentQCon)) {
+		    return false;
+		}
+	    }
+	}
 
-        return true;
+	return true;
     }
 
     /**
@@ -506,7 +501,7 @@ public class D3webUtils {
      * @return the difference in seconds
      */
     public static float getDifference(Date d1, Date d2) {
-        return (d1.getTime() - d2.getTime()) / 1000;
+	return (d1.getTime() - d2.getTime()) / 1000;
     }
 
     /**
@@ -516,53 +511,53 @@ public class D3webUtils {
      */
     public static void streamImages() {
 
-        List<Resource> kbimages = D3webConnector.getInstance().getKb().getResources();
+	List<Resource> kbimages = D3webConnector.getInstance().getKb().getResources();
 
-        if (kbimages != null && kbimages.size() != 0) {
-            for (Resource r : kbimages) {
-                String rname = r.getPathName();
+	if (kbimages != null && kbimages.size() != 0) {
+	    for (Resource r : kbimages) {
+		String rname = r.getPathName();
 
-                if (rname.endsWith(".jpg") || rname.endsWith(".JPG")) {
-                    BufferedImage bui = ImageHandler.getResourceAsBUI(r);
-                    try {
-                        File file =
-                                new File(GlobalSettings.getInstance().getKbImgFolder()
-                                + "/" + rname);
-                        ImageIO.write(bui, "jpg", file);
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-                if (rname.endsWith(".png") || rname.endsWith(".PNG")) {
-                    BufferedImage bui = ImageHandler.getResourceAsBUI(r);
-                    try {
-                        File file =
-                                new File(GlobalSettings.getInstance().getKbImgFolder()
-                                + "/" + rname);
-                        ImageIO.write(bui, "png", file);
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+		if (rname.endsWith(".jpg") || rname.endsWith(".JPG")) {
+		    BufferedImage bui = ImageHandler.getResourceAsBUI(r);
+		    try {
+			File file =
+				new File(GlobalSettings.getInstance().getKbImgFolder()
+				+ "/" + rname);
+			ImageIO.write(bui, "jpg", file);
+		    } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		}
+		if (rname.endsWith(".png") || rname.endsWith(".PNG")) {
+		    BufferedImage bui = ImageHandler.getResourceAsBUI(r);
+		    try {
+			File file =
+				new File(GlobalSettings.getInstance().getKbImgFolder()
+				+ "/" + rname);
+			ImageIO.write(bui, "png", file);
+		    } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		}
+	    }
+	}
     }
 
     public static boolean isImageProvided(String imgName) {
-        List<Resource> kbimages = D3webConnector.getInstance().getKb().getResources();
+	List<Resource> kbimages = D3webConnector.getInstance().getKb().getResources();
 
-        if (kbimages != null && kbimages.size() != 0) {
-            for (Resource r : kbimages) {
-                String rname = r.getPathName();
-                if (rname.contains(imgName)) {
-                    return true;
-                }
-            }
-        }
+	if (kbimages != null && kbimages.size() != 0) {
+	    for (Resource r : kbimages) {
+		String rname = r.getPathName();
+		if (rname.contains(imgName)) {
+		    return true;
+		}
+	    }
+	}
 
-        return false;
+	return false;
     }
 
     /**
@@ -580,21 +575,21 @@ public class D3webUtils {
      * current set of values to set
      */
     public static boolean checkReqVal(String requiredVal, Session sess, String valToSet, String store) {
-        Blackboard blackboard = sess.getBlackboard();
+	Blackboard blackboard = sess.getBlackboard();
 
-        valToSet = valToSet.replace("q_", "").replace("_", " ");
-        store = store.replace("_", " ");
+	valToSet = valToSet.replace("q_", "").replace("_", " ");
+	store = store.replace("_", " ");
 
-        Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(requiredVal);
+	Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(requiredVal);
 
-        Fact lastFact = blackboard.getValueFact(to);
+	Fact lastFact = blackboard.getValueFact(to);
 
-        if (requiredVal.equals(valToSet)
-                || (store.contains(requiredVal))
-                || (lastFact != null && lastFact.getValue().toString() != "")) {
-            return true;
-        }
-        return false;
+	if (requiredVal.equals(valToSet)
+		|| (store.contains(requiredVal))
+		|| (lastFact != null && lastFact.getValue().toString() != "")) {
+	    return true;
+	}
+	return false;
     }
 
     /**
@@ -608,26 +603,26 @@ public class D3webUtils {
      * @param blackboard The currently active blackboard
      */
     public static void resetFollowUpsIfParentUnknown(TerminologyObject parent,
-            Blackboard blackboard) {
+	    Blackboard blackboard) {
 
-        if (parent.getChildren() != null && parent.getChildren().length != 0) {
-            for (TerminologyObject c : parent.getChildren()) {
-                if (!isIndicatedByInitQuestionnaire(c, parent, blackboard)
-                        && !isIndicatedPlain(parent, blackboard)) {
+	if (parent.getChildren() != null && parent.getChildren().length != 0) {
+	    for (TerminologyObject c : parent.getChildren()) {
+		if (!isIndicatedByInitQuestionnaire(c, parent, blackboard)
+			&& !isIndicatedPlain(parent, blackboard)) {
 
-                    Question qto =
-                            D3webConnector.getInstance().getKb().getManager().searchQuestion(
-                            c.getName());
-                    // remove a previously set value
-                    Fact lastFact = blackboard.getValueFact(qto);
-                    if (lastFact != null) {
-                        blackboard.removeValueFact(lastFact);
-                    }
-                }
+		    Question qto =
+			    D3webConnector.getInstance().getKb().getManager().searchQuestion(
+			    c.getName());
+		    // remove a previously set value
+		    Fact lastFact = blackboard.getValueFact(qto);
+		    if (lastFact != null) {
+			blackboard.removeValueFact(lastFact);
+		    }
+		}
 
-                resetFollowUpsIfParentUnknown(c, blackboard);
-            }
-        }
+		resetFollowUpsIfParentUnknown(c, blackboard);
+	    }
+	}
     }
 
     /**
@@ -663,31 +658,31 @@ public class D3webUtils {
      * false otherwise
      */
     public static boolean isDirectQContainerChild(TerminologyObject to) {
-        TerminologyObject[] parents = to.getParents();
+	TerminologyObject[] parents = to.getParents();
 
-        if (parents != null && parents.length != 0) {
-            for (TerminologyObject term : parents) {
-                if (!term.getClass().equals(QContainer.class)) {
-                    return false;
-                }
-            }
-        }
+	if (parents != null && parents.length != 0) {
+	    for (TerminologyObject term : parents) {
+		if (!term.getClass().equals(QContainer.class)) {
+		    return false;
+		}
+	    }
+	}
 
-        return true;
+	return true;
 
     }
 
     public static boolean isIndicatedByChild(TerminologyObject to, Blackboard bb) {
 
-        if (to.getChildren().length != 0) {
-            for (TerminologyObject toc : to.getChildren()) {
-                //System.out.println(toc.getName() + " " + isIndicated(to, bb));
-                if (isIndicatedPlain(toc, bb)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+	if (to.getChildren().length != 0) {
+	    for (TerminologyObject toc : to.getChildren()) {
+		//System.out.println(toc.getName() + " " + isIndicated(to, bb));
+		if (isIndicatedPlain(toc, bb)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
     /**
@@ -703,18 +698,18 @@ public class D3webUtils {
      * indicated, false otherwise
      */
     public static boolean isIndicatedPlain(TerminologyObject to, Blackboard bb) {
-        for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
+	for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
 
-            if (bb.getIndication((InterviewObject) to).getState()
-                    == de.d3web.core.knowledge.Indication.State.INDICATED
-                    || bb.getIndication((InterviewObject) to).getState()
-                    == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED) {
-                return true;
-            }
+	    if (bb.getIndication((InterviewObject) to).getState()
+		    == de.d3web.core.knowledge.Indication.State.INDICATED
+		    || bb.getIndication((InterviewObject) to).getState()
+		    == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED) {
+		return true;
+	    }
 
 
-        }
-        return false;
+	}
+	return false;
     }
 
     /**
@@ -732,45 +727,45 @@ public class D3webUtils {
      * aspects, false otherwise.
      */
     public static boolean isIndicatedByInitQuestionnaire(TerminologyObject to,
-            TerminologyObject parent, Blackboard bb) {
+	    TerminologyObject parent, Blackboard bb) {
 
-        QASet parentQASet =
-                bb.getSession().getKnowledgeBase().getManager().searchQASet(parent.getName());
+	QASet parentQASet =
+		bb.getSession().getKnowledgeBase().getManager().searchQASet(parent.getName());
 
-        for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
+	for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
 
-            // find the appropriate qaset in the knowledge base
-            if (qaSet.getName().equals(to.getName())) {
+	    // find the appropriate qaset in the knowledge base
+	    if (qaSet.getName().equals(to.getName())) {
 
-                if (isIndicatedPlain(to, bb)
-                        || D3webUtils.isInitQuestion(qaSet, parentQASet, bb)) {
-                    return true;
-                }
-            }
+		if (isIndicatedPlain(to, bb)
+			|| D3webUtils.isInitQuestion(qaSet, parentQASet, bb)) {
+		    return true;
+		}
+	    }
 
-        }
-        return false;
+	}
+	return false;
     }
 
     public static boolean isIndicatedByIndicatedQuestionnaire(TerminologyObject to,
-            TerminologyObject parent, Blackboard bb) {
+	    TerminologyObject parent, Blackboard bb) {
 
-        QASet parentQASet =
-                bb.getSession().getKnowledgeBase().getManager().searchQASet(parent.getName());
+	QASet parentQASet =
+		bb.getSession().getKnowledgeBase().getManager().searchQASet(parent.getName());
 
-        for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
+	for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
 
-            // find the appropriate qaset in the knowledge base
-            if (qaSet.getName().equals(to.getName())) {
+	    // find the appropriate qaset in the knowledge base
+	    if (qaSet.getName().equals(to.getName())) {
 
-                if (isIndicatedPlain(to, bb)
-                        || D3webUtils.isIndicatedPlain(parent, bb)) {
-                    return true;
-                }
-            }
+		if (isIndicatedPlain(to, bb)
+			|| D3webUtils.isIndicatedPlain(parent, bb)) {
+		    return true;
+		}
+	    }
 
-        }
-        return false;
+	}
+	return false;
     }
 
     /**
@@ -783,7 +778,7 @@ public class D3webUtils {
      * otherwise.
      */
     public static boolean isInitQuestionnaire(QASet qaset, Blackboard bb) {
-        return bb.getSession().getKnowledgeBase().getInitQuestions().contains(qaset);
+	return bb.getSession().getKnowledgeBase().getInitQuestions().contains(qaset);
     }
 
     /**
@@ -797,8 +792,8 @@ public class D3webUtils {
      * otherwise.
      */
     public static boolean isInitQuestion(QASet child, QASet parent, Blackboard bb) {
-        return isInitQuestionnaire(parent, bb)
-                && D3webUtils.isDirectQContainerChild(child);
+	return isInitQuestionnaire(parent, bb)
+		&& D3webUtils.isDirectQContainerChild(child);
     }
 
     /**
@@ -812,15 +807,15 @@ public class D3webUtils {
      * otherwise.
      */
     public static boolean isContraIndicated(TerminologyObject to, Blackboard bb) {
-        for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
-            // find the appropriate qaset in the knowledge base
-            if (qaSet.getName().equals(to.getName())) {
-                if (bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.CONTRA_INDICATED) {
-                    return true;
-                }
-            }
-        }
-        return false;
+	for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
+	    // find the appropriate qaset in the knowledge base
+	    if (qaSet.getName().equals(to.getName())) {
+		if (bb.getIndication((InterviewObject) to).getState() == de.d3web.core.knowledge.Indication.State.CONTRA_INDICATED) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
     /**
@@ -833,91 +828,91 @@ public class D3webUtils {
      */
     public static HashMap getIndicationSetsL1(Blackboard bb, ArrayList<TerminologyObject> l1qs) {
 
-        //System.out.println(l1qs);
+	//System.out.println(l1qs);
 
-        HashMap<TerminologyObject, Collection<TerminologyObject>> ancestors = new HashMap();
+	HashMap<TerminologyObject, Collection<TerminologyObject>> ancestors = new HashMap();
 
-        for (KnowledgeSlice ks : bb.getSession().getKnowledgeBase().getAllKnowledgeSlices()) {
+	for (KnowledgeSlice ks : bb.getSession().getKnowledgeBase().getAllKnowledgeSlices()) {
 
-            if (ks instanceof RuleSet) {
-                RuleSet rs = (RuleSet) ks;
+	    if (ks instanceof RuleSet) {
+		RuleSet rs = (RuleSet) ks;
 
-                for (Rule r : rs.getRules()) {
+		for (Rule r : rs.getRules()) {
 
-                    if (r.getAction() instanceof ActionIndication
-                            || r.getAction() instanceof ActionInstantIndication) {
+		    if (r.getAction() instanceof ActionIndication
+			    || r.getAction() instanceof ActionInstantIndication) {
 
-                        List<TerminologyObject> backObjs = (List<TerminologyObject>) r.getAction().getBackwardObjects();
-                        Collection<TerminologyObject> termObjs = (Collection<TerminologyObject>) r.getCondition().getTerminalObjects();
-
-
-                        for (TerminologyObject termi : termObjs) {
-
-                            if (l1qs.contains(termi)
-                                    && !termi.getName().equals("Please choose database level")) {
+			List<TerminologyObject> backObjs = (List<TerminologyObject>) r.getAction().getBackwardObjects();
+			Collection<TerminologyObject> termObjs = (Collection<TerminologyObject>) r.getCondition().getTerminalObjects();
 
 
-                                if (ancestors.containsKey(termi)) {
+			for (TerminologyObject termi : termObjs) {
 
-                                    Collection<TerminologyObject> saveTermis =
-                                            (Collection<TerminologyObject>) ancestors.get(termi);
-                                    for (TerminologyObject newTermi : backObjs) {
-
-                                        if (!newTermi.getName().equals("Number of mesh(s)")
-                                                && !newTermi.getName().contains("Production company")) {
+			    if (l1qs.contains(termi)
+				    && !termi.getName().equals("Please choose database level")) {
 
 
+				if (ancestors.containsKey(termi)) {
 
-                                            if (!saveTermis.contains(newTermi)) {
-                                                saveTermis.add(newTermi);
-                                            }
-                                        }
-                                    }
+				    Collection<TerminologyObject> saveTermis =
+					    (Collection<TerminologyObject>) ancestors.get(termi);
+				    for (TerminologyObject newTermi : backObjs) {
 
-                                    ancestors.put(termi, saveTermis);
-
-                                } else {
-                                    ancestors.put(termi, backObjs);
-                                }
-                            }
-
-                            /*
-                             * for(TerminologyObject pto: termi.getParents()){
-                             * if(l1qs.contains(pto)){ if
-                             * (ancestors.containsKey(termi)) {
-                             *
-                             * Collection<TerminologyObject> saveTermis =
-                             * (Collection<TerminologyObject>)
-                             * ancestors.get(termi); for (TerminologyObject
-                             * newTermi : backObjs) { if
-                             * (!saveTermis.contains(newTermi)) {
-                             * saveTermis.add(newTermi); } }
-                             *
-                             * ancestors.put(termi, saveTermis);
-                             *
-                             * } else { ancestors.put(termi, backObjs); } } }
-                             */
-                        }
-                    }
+					if (!newTermi.getName().equals("Number of mesh(s)")
+						&& !newTermi.getName().contains("Production company")) {
 
 
-                    /*
-                     * if (ancestors.containsKey(to)) { List<TerminologyObject>
-                     * saveTOs = (List<TerminologyObject>) ancestors.get(to);
-                     * for (TerminologyObject fto :
-                     * r.getAction().getForwardObjects()) { if
-                     * (!saveTOs.contains(fto)) { saveTOs.add(fto); } }
-                     * ancestors.put(to, saveTOs);
-                     *
-                     * } else { ancestors.put(to,
-                     * r.getAction().getForwardObjects()); }
-                     */
 
-                }
-            }
-        }
+					    if (!saveTermis.contains(newTermi)) {
+						saveTermis.add(newTermi);
+					    }
+					}
+				    }
 
-        return ancestors;
+				    ancestors.put(termi, saveTermis);
+
+				} else {
+				    ancestors.put(termi, backObjs);
+				}
+			    }
+
+			    /*
+			     * for(TerminologyObject pto: termi.getParents()){
+			     * if(l1qs.contains(pto)){ if
+			     * (ancestors.containsKey(termi)) {
+			     *
+			     * Collection<TerminologyObject> saveTermis =
+			     * (Collection<TerminologyObject>)
+			     * ancestors.get(termi); for (TerminologyObject
+			     * newTermi : backObjs) { if
+			     * (!saveTermis.contains(newTermi)) {
+			     * saveTermis.add(newTermi); } }
+			     *
+			     * ancestors.put(termi, saveTermis);
+			     *
+			     * } else { ancestors.put(termi, backObjs); } } }
+			     */
+			}
+		    }
+
+
+		    /*
+		     * if (ancestors.containsKey(to)) { List<TerminologyObject>
+		     * saveTOs = (List<TerminologyObject>) ancestors.get(to);
+		     * for (TerminologyObject fto :
+		     * r.getAction().getForwardObjects()) { if
+		     * (!saveTOs.contains(fto)) { saveTOs.add(fto); } }
+		     * ancestors.put(to, saveTOs);
+		     *
+		     * } else { ancestors.put(to,
+		     * r.getAction().getForwardObjects()); }
+		     */
+
+		}
+	    }
+	}
+
+	return ancestors;
     }
 
     /**
@@ -933,42 +928,42 @@ public class D3webUtils {
      * object that is indicated.
      */
     public static boolean isParentQuestionnaireIndicated(TerminologyObject to, Blackboard bb) {
-        for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
+	for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
 
-            // get questionnaires only
-            if (qaSet instanceof QContainer) {
-                QContainer qcon = (QContainer) qaSet;
+	    // get questionnaires only
+	    if (qaSet instanceof QContainer) {
+		QContainer qcon = (QContainer) qaSet;
 
-                // and check its indication state
-                if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(qcon)
-                        || bb.getIndication(qcon).getState() == de.d3web.core.knowledge.Indication.State.INDICATED
-                        || bb.getIndication(qcon).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED) {
+		// and check its indication state
+		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(qcon)
+			|| bb.getIndication(qcon).getState() == de.d3web.core.knowledge.Indication.State.INDICATED
+			|| bb.getIndication(qcon).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED) {
 
-                    // if questionnaire indicated, check whether to is its child
-                    if (hasChild(qcon, to)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+		    // if questionnaire indicated, check whether to is its child
+		    if (hasChild(qcon, to)) {
+			return true;
+		    }
+		}
+	    }
+	}
+	return false;
     }
 
     public static boolean isInit(TerminologyObject to) {
-        List<QASet> allQas = D3webConnector.getInstance().getKb().getInitQuestions();
-        for (QASet qas : allQas) {
-            if (qas.equals(to)) {
-                return true;
-            } else {
-                TerminologyObject[] tocs = qas.getChildren();
-                for (TerminologyObject toc : tocs) {
-                    if (toc.equals(to)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+	List<QASet> allQas = D3webConnector.getInstance().getKb().getInitQuestions();
+	for (QASet qas : allQas) {
+	    if (qas.equals(to)) {
+		return true;
+	    } else {
+		TerminologyObject[] tocs = qas.getChildren();
+		for (TerminologyObject toc : tocs) {
+		    if (toc.equals(to)) {
+			return true;
+		    }
+		}
+	    }
+	}
+	return false;
     }
 
     /**
@@ -984,19 +979,19 @@ public class D3webUtils {
      */
     public static boolean hasChild(TerminologyObject parent, TerminologyObject child) {
 
-        if (parent.getChildren() != null && parent.getChildren().length != 0) {
-            for (TerminologyObject c : parent.getChildren()) {
-                if (c.equals(child)) {
-                    return true;
-                }
-            }
-            for (TerminologyObject c : parent.getChildren()) {
-                if (c.getChildren().length != 0) {
-                    return hasChild(c, child);
-                }
-            }
-        }
-        return false;
+	if (parent.getChildren() != null && parent.getChildren().length != 0) {
+	    for (TerminologyObject c : parent.getChildren()) {
+		if (c.equals(child)) {
+		    return true;
+		}
+	    }
+	    for (TerminologyObject c : parent.getChildren()) {
+		if (c.getChildren().length != 0) {
+		    return hasChild(c, child);
+		}
+	    }
+	}
+	return false;
     }
 
     /**
@@ -1009,36 +1004,36 @@ public class D3webUtils {
      * @param bb
      */
     public static void resetNotIndicatedTOs(TerminologyObject parent, Blackboard bb,
-            Session sess) {
+	    Session sess) {
 
-        if (parent.getChildren() != null && parent.getChildren().length != 0) {
-            Fact lastFact = null;
+	if (parent.getChildren() != null && parent.getChildren().length != 0) {
+	    Fact lastFact = null;
 
-            Blackboard blackboard =
-                    sess.getBlackboard();
+	    Blackboard blackboard =
+		    sess.getBlackboard();
 
-            // go through all questions of the qcontainer
-            for (TerminologyObject to : parent.getChildren()) {
+	    // go through all questions of the qcontainer
+	    for (TerminologyObject to : parent.getChildren()) {
 
-                if (to instanceof Question) {
+		if (to instanceof Question) {
 
-                    Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
-                            to.getName());
+		    Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+			    to.getName());
 
-                    // workaround to assure that same question from other
-                    // questionnaire is not reset, too
-                    if (qto.getParents().length == 1) {
-                        // remove a previously set value
-                        lastFact = blackboard.getValueFact(qto);
-                        if (lastFact != null) {
-                            blackboard.removeValueFact(lastFact);
-                        }
-                        resetNotIndicatedTOs(to, bb, sess);
-                    }
+		    // workaround to assure that same question from other
+		    // questionnaire is not reset, too
+		    if (qto.getParents().length == 1) {
+			// remove a previously set value
+			lastFact = blackboard.getValueFact(qto);
+			if (lastFact != null) {
+			    blackboard.removeValueFact(lastFact);
+			}
+			resetNotIndicatedTOs(to, bb, sess);
+		    }
 
-                }
-            }
-        }
+		}
+	    }
+	}
     }
 
     /**
@@ -1051,62 +1046,62 @@ public class D3webUtils {
      */
     public static String getTOPrompt(TerminologyObject to, int locIdent) {
 
-        //int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
-        //int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
-        String prompt = null;
+	//int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+	//int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
+	String prompt = null;
 
-        switch (locIdent) {
-            case 1: // german
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN);
-                break;
-            case 2: // english
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
-                break;
-            case 3: // spanish
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, SPANISH);
-                break;
-            case 4: // italian
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ITALIAN);
-                break;
-            case 5: // french
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, Locale.FRENCH);
-                break;
-            case 6: // polish
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, POLISH);
-                break;
-            case 7: // dutch
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, DUTCH);
-                break;
-            case 8: // swedish
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, SWEDISH);
-                break;
-            case 9: // portuguese
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, PORTUGUESE);
-                break;
-            case 10: // brazilian
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, BRAZILIAN);
-                break;
+	switch (locIdent) {
+	    case 1: // german
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN);
+		break;
+	    case 2: // english
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
+		break;
+	    case 3: // spanish
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, SPANISH);
+		break;
+	    case 4: // italian
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ITALIAN);
+		break;
+	    case 5: // french
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, Locale.FRENCH);
+		break;
+	    case 6: // polish
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, POLISH);
+		break;
+	    case 7: // dutch
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, DUTCH);
+		break;
+	    case 8: // swedish
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, SWEDISH);
+		break;
+	    case 9: // portuguese
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, PORTUGUESE);
+		break;
+	    case 10: // brazilian
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, BRAZILIAN);
+		break;
 
-        }
+	}
 
-        // default fallback solution: popupPrompt in english
-        if (prompt == null) {
-            prompt = to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
-        }
+	// default fallback solution: popupPrompt in english
+	if (prompt == null) {
+	    prompt = to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
+	}
 
-        // emergency fallback: getName() if no locale specific and no default
-        // english was given
-        return prompt == null ? to.getName() : prompt;
+	// emergency fallback: getName() if no locale specific and no default
+	// english was given
+	return prompt == null ? to.getName() : prompt;
     }
 
     /**
@@ -1118,160 +1113,160 @@ public class D3webUtils {
      */
     public static String getPopupPrompt(TerminologyObject to, int locIdent) {
 
-        String popupPrompt = null;
+	String popupPrompt = null;
 
-        switch (locIdent) {
-            case 1: // german
-                popupPrompt =
-                        to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.GERMAN);
-                break;
-            case 2: // english
-                popupPrompt =
-                        to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ENGLISH);
-                break;
-            case 3: // spanish
-                popupPrompt =
-                        to.getInfoStore().getValue(ProKEtProperties.POPUP, SPANISH);
-                break;
-            case 4: // italian
-                popupPrompt =
-                        to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ITALIAN);
-                break;
-            case 5: // french
-                popupPrompt =
-                        to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.FRENCH);
-                break;
-            case 6: // polish
-                popupPrompt =
-                        to.getInfoStore().getValue(ProKEtProperties.POPUP, POLISH);
-                break;
-            case 7: // dutch
-                popupPrompt =
-                        to.getInfoStore().getValue(ProKEtProperties.POPUP, DUTCH);
-                break;
-            case 8: // swedish
-                popupPrompt =
-                        to.getInfoStore().getValue(ProKEtProperties.POPUP, SWEDISH);
-                break;
-            case 9: // portuguese
-                popupPrompt =
-                        to.getInfoStore().getValue(ProKEtProperties.POPUP, PORTUGUESE);
-                break;
-            case 10: // brazilian
-                popupPrompt =
-                        to.getInfoStore().getValue(ProKEtProperties.POPUP, BRAZILIAN);
-                break;
-        }
+	switch (locIdent) {
+	    case 1: // german
+		popupPrompt =
+			to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.GERMAN);
+		break;
+	    case 2: // english
+		popupPrompt =
+			to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ENGLISH);
+		break;
+	    case 3: // spanish
+		popupPrompt =
+			to.getInfoStore().getValue(ProKEtProperties.POPUP, SPANISH);
+		break;
+	    case 4: // italian
+		popupPrompt =
+			to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ITALIAN);
+		break;
+	    case 5: // french
+		popupPrompt =
+			to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.FRENCH);
+		break;
+	    case 6: // polish
+		popupPrompt =
+			to.getInfoStore().getValue(ProKEtProperties.POPUP, POLISH);
+		break;
+	    case 7: // dutch
+		popupPrompt =
+			to.getInfoStore().getValue(ProKEtProperties.POPUP, DUTCH);
+		break;
+	    case 8: // swedish
+		popupPrompt =
+			to.getInfoStore().getValue(ProKEtProperties.POPUP, SWEDISH);
+		break;
+	    case 9: // portuguese
+		popupPrompt =
+			to.getInfoStore().getValue(ProKEtProperties.POPUP, PORTUGUESE);
+		break;
+	    case 10: // brazilian
+		popupPrompt =
+			to.getInfoStore().getValue(ProKEtProperties.POPUP, BRAZILIAN);
+		break;
+	}
 
-        // default fallback solution: popupPrompt in english
-        if (popupPrompt == null) {
-            popupPrompt = to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ENGLISH);
-        }
+	// default fallback solution: popupPrompt in english
+	if (popupPrompt == null) {
+	    popupPrompt = to.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ENGLISH);
+	}
 
-        // emergency fallback: getName() if no locale specific and no default
-        // english was given
-        return popupPrompt == null ? to.getInfoStore().getValue(ProKEtProperties.POPUP) : popupPrompt;
+	// emergency fallback: getName() if no locale specific and no default
+	// english was given
+	return popupPrompt == null ? to.getInfoStore().getValue(ProKEtProperties.POPUP) : popupPrompt;
     }
 
     public static String getPopupPromptChoices(Choice c, int loc) {
 
-        String popupPrompt = null;
+	String popupPrompt = null;
 
-        switch (loc) {
-            case 1: // german
-                popupPrompt =
-                        c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.GERMAN);
-                break;
-            case 2: // english
-                popupPrompt =
-                        c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ENGLISH);
-                break;
-            case 3: // spanish
-                popupPrompt =
-                        c.getInfoStore().getValue(ProKEtProperties.POPUP, SPANISH);
-                break;
-            case 4: // italian
-                popupPrompt =
-                        c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ITALIAN);
-                break;
-            case 5: // french
-                popupPrompt =
-                        c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.FRENCH);
-                break;
-            case 6: // polish
-                popupPrompt =
-                        c.getInfoStore().getValue(ProKEtProperties.POPUP, POLISH);
-                break;
-            case 7: // dutch
-                popupPrompt =
-                        c.getInfoStore().getValue(ProKEtProperties.POPUP, DUTCH);
-                break;
-            case 8: // swedish
-                popupPrompt =
-                        c.getInfoStore().getValue(ProKEtProperties.POPUP, SWEDISH);
-                break;
-            case 9: // portuguese
-                popupPrompt =
-                        c.getInfoStore().getValue(ProKEtProperties.POPUP, PORTUGUESE);
-                break;
-            case 10: // brazilian
-                popupPrompt =
-                        c.getInfoStore().getValue(ProKEtProperties.POPUP, BRAZILIAN);
-                break;
-        }
+	switch (loc) {
+	    case 1: // german
+		popupPrompt =
+			c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.GERMAN);
+		break;
+	    case 2: // english
+		popupPrompt =
+			c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ENGLISH);
+		break;
+	    case 3: // spanish
+		popupPrompt =
+			c.getInfoStore().getValue(ProKEtProperties.POPUP, SPANISH);
+		break;
+	    case 4: // italian
+		popupPrompt =
+			c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ITALIAN);
+		break;
+	    case 5: // french
+		popupPrompt =
+			c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.FRENCH);
+		break;
+	    case 6: // polish
+		popupPrompt =
+			c.getInfoStore().getValue(ProKEtProperties.POPUP, POLISH);
+		break;
+	    case 7: // dutch
+		popupPrompt =
+			c.getInfoStore().getValue(ProKEtProperties.POPUP, DUTCH);
+		break;
+	    case 8: // swedish
+		popupPrompt =
+			c.getInfoStore().getValue(ProKEtProperties.POPUP, SWEDISH);
+		break;
+	    case 9: // portuguese
+		popupPrompt =
+			c.getInfoStore().getValue(ProKEtProperties.POPUP, PORTUGUESE);
+		break;
+	    case 10: // brazilian
+		popupPrompt =
+			c.getInfoStore().getValue(ProKEtProperties.POPUP, BRAZILIAN);
+		break;
+	}
 
-        // default fallback solution: popupPrompt in english
-        if (popupPrompt == null) {
-            popupPrompt = c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ENGLISH);
-        }
+	// default fallback solution: popupPrompt in english
+	if (popupPrompt == null) {
+	    popupPrompt = c.getInfoStore().getValue(ProKEtProperties.POPUP, Locale.ENGLISH);
+	}
 
-        // emergency fallback: getName() if no locale specific and no default
-        // english was given
-        return popupPrompt == null ? c.getInfoStore().getValue(ProKEtProperties.POPUP) : popupPrompt;
+	// emergency fallback: getName() if no locale specific and no default
+	// english was given
+	return popupPrompt == null ? c.getInfoStore().getValue(ProKEtProperties.POPUP) : popupPrompt;
     }
 
     public static String getDropdownDefaultPrompt(int locIdent) {
-        String prompt = null;
-        switch (locIdent) {
-            case 1: // german
-                prompt = "Please select...";//"Bitte auswählen...";
-                break;
-            case 2: // english
-                prompt = "Please select...";
-                break;
-            case 3: // spanish
-                prompt = "";
-                break;
-            case 4: // italian
-                prompt = "";
-                break;
-            case 5: // french
-                prompt = "";
-                break;
-            case 6: // polish
-                prompt = "";
-                break;
-            case 7: // dutch
-                prompt = "";
-                break;
-            case 8: // swedish
-                prompt = "";
-                break;
-            case 9: // portuguese
-                prompt = "";
-                break;
-            case 10: // brazilian
-                prompt = "";
-                break;
-        }
+	String prompt = null;
+	switch (locIdent) {
+	    case 1: // german
+		prompt = "Please select...";//"Bitte auswählen...";
+		break;
+	    case 2: // english
+		prompt = "Please select...";
+		break;
+	    case 3: // spanish
+		prompt = "";
+		break;
+	    case 4: // italian
+		prompt = "";
+		break;
+	    case 5: // french
+		prompt = "";
+		break;
+	    case 6: // polish
+		prompt = "";
+		break;
+	    case 7: // dutch
+		prompt = "";
+		break;
+	    case 8: // swedish
+		prompt = "";
+		break;
+	    case 9: // portuguese
+		prompt = "";
+		break;
+	    case 10: // brazilian
+		prompt = "";
+		break;
+	}
 
-        // default fallback solution: popupPrompt in english
-        if (prompt == null) {
-            prompt = "Please select...";
-        }
+	// default fallback solution: popupPrompt in english
+	if (prompt == null) {
+	    prompt = "Please select...";
+	}
 
-        // default popupPrompt = getName() if no locale specific was given
-        return prompt;
+	// default popupPrompt = getName() if no locale specific was given
+	return prompt;
     }
 
     /**
@@ -1283,66 +1278,66 @@ public class D3webUtils {
      * @return the popupPrompt or the name repsectively.
      */
     public static String getAnswerPrompt(TerminologyObject to,
-            Choice c, int locIdent) {
+	    Choice c, int locIdent) {
 
-        if (to instanceof QuestionYN) {
-            return getAnswerYNPrompt(c, locIdent);
-        }
+	if (to instanceof QuestionYN) {
+	    return getAnswerYNPrompt(c, locIdent);
+	}
 
-        //int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
-        //int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
-        String prompt = null;
+	//int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+	//int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
+	String prompt = null;
 
-        switch (locIdent) {
-            case 1: // german
-                prompt =
-                        c.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN);
-                break;
-            case 2: // english
-                prompt =
-                        c.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
-                break;
-            case 3: // spanish
-                prompt =
-                        c.getInfoStore().getValue(MMInfo.PROMPT, SPANISH);
-                break;
-            case 4: // italian
-                prompt =
-                        c.getInfoStore().getValue(MMInfo.PROMPT, Locale.ITALIAN);
-                break;
-            case 5: // french
-                prompt =
-                        c.getInfoStore().getValue(MMInfo.PROMPT, Locale.FRENCH);
-                break;
-            case 6: // polish
-                prompt =
-                        c.getInfoStore().getValue(MMInfo.PROMPT, POLISH);
-                break;
-            case 7: // dutch
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, DUTCH);
-                break;
-            case 8: // swedish
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, SWEDISH);
-                break;
-            case 9: // portuguese
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, PORTUGUESE);
-                break;
-            case 10: // brazilian
-                prompt =
-                        to.getInfoStore().getValue(MMInfo.PROMPT, BRAZILIAN);
-                break;
-        }
+	switch (locIdent) {
+	    case 1: // german
+		prompt =
+			c.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN);
+		break;
+	    case 2: // english
+		prompt =
+			c.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
+		break;
+	    case 3: // spanish
+		prompt =
+			c.getInfoStore().getValue(MMInfo.PROMPT, SPANISH);
+		break;
+	    case 4: // italian
+		prompt =
+			c.getInfoStore().getValue(MMInfo.PROMPT, Locale.ITALIAN);
+		break;
+	    case 5: // french
+		prompt =
+			c.getInfoStore().getValue(MMInfo.PROMPT, Locale.FRENCH);
+		break;
+	    case 6: // polish
+		prompt =
+			c.getInfoStore().getValue(MMInfo.PROMPT, POLISH);
+		break;
+	    case 7: // dutch
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, DUTCH);
+		break;
+	    case 8: // swedish
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, SWEDISH);
+		break;
+	    case 9: // portuguese
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, PORTUGUESE);
+		break;
+	    case 10: // brazilian
+		prompt =
+			to.getInfoStore().getValue(MMInfo.PROMPT, BRAZILIAN);
+		break;
+	}
 
-        // default fallback solution: popupPrompt in english
-        if (prompt == null) {
-            prompt = to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
-        }
+	// default fallback solution: popupPrompt in english
+	if (prompt == null) {
+	    prompt = to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
+	}
 
-        // default popupPrompt = getName() if no locale specific was given
-        return prompt == null ? c.getName() : prompt;
+	// default popupPrompt = getName() if no locale specific was given
+	return prompt == null ? c.getName() : prompt;
     }
 
     /**
@@ -1358,93 +1353,93 @@ public class D3webUtils {
      */
     private static String getAnswerYNPrompt(Choice c, int locIdent) {
 
-        //int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
-        //int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
-        String prompt = null;
+	//int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+	//int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
+	String prompt = null;
 
-        if (c.getName().equals("Yes")) {
+	if (c.getName().equals("Yes")) {
 
-            switch (locIdent) {
-                case 1: // german
-                    prompt = "Ja";
-                    break;
-                case 2: // english
-                    prompt = "Yes";
-                    break;
-                case 3: // spanish
-                    prompt = "Sí";
-                    break;
-                case 4: // italian
-                    prompt = "Sì";
-                    break;
-                case 5: // french
-                    prompt = "Oui";
-                    break;
-                case 6: // polish
-                    prompt = "Tak";
-                    break;
-                case 7: // dutch
-                    prompt = "";
-                    break;
-                case 8: // swedish
-                    prompt = "";
-                    break;
-                case 9: // portuguese
-                    prompt = "";
-                    break;
-                case 10: // brazilian
-                    prompt = "";
-                    break;
-            }
+	    switch (locIdent) {
+		case 1: // german
+		    prompt = "Ja";
+		    break;
+		case 2: // english
+		    prompt = "Yes";
+		    break;
+		case 3: // spanish
+		    prompt = "Sí";
+		    break;
+		case 4: // italian
+		    prompt = "Sì";
+		    break;
+		case 5: // french
+		    prompt = "Oui";
+		    break;
+		case 6: // polish
+		    prompt = "Tak";
+		    break;
+		case 7: // dutch
+		    prompt = "";
+		    break;
+		case 8: // swedish
+		    prompt = "";
+		    break;
+		case 9: // portuguese
+		    prompt = "";
+		    break;
+		case 10: // brazilian
+		    prompt = "";
+		    break;
+	    }
 
-            // default fallback solution: popupPrompt in english
-            if (prompt == null) {
-                prompt = "Yes";
-            }
+	    // default fallback solution: popupPrompt in english
+	    if (prompt == null) {
+		prompt = "Yes";
+	    }
 
-        } else {
+	} else {
 
-            switch (locIdent) {
-                case 1: // german
-                    prompt = "Nein";
-                    break;
-                case 2: // english
-                    prompt = "No";
-                    break;
-                case 3: // spanish
-                    prompt = "No";
-                    break;
-                case 4: // italian
-                    prompt = "No";
-                    break;
-                case 5: // french
-                    prompt = "Non";
-                    break;
-                case 6: // polish
-                    prompt = "Nie";
-                    break;
-                case 7: // dutch
-                    prompt = "";
-                    break;
-                case 8: // swedish
-                    prompt = "";
-                    break;
-                case 9: // portuguese
-                    prompt = "";
-                    break;
-                case 10: // brazilian
-                    prompt = "";
-                    break;
-            }
+	    switch (locIdent) {
+		case 1: // german
+		    prompt = "Nein";
+		    break;
+		case 2: // english
+		    prompt = "No";
+		    break;
+		case 3: // spanish
+		    prompt = "No";
+		    break;
+		case 4: // italian
+		    prompt = "No";
+		    break;
+		case 5: // french
+		    prompt = "Non";
+		    break;
+		case 6: // polish
+		    prompt = "Nie";
+		    break;
+		case 7: // dutch
+		    prompt = "";
+		    break;
+		case 8: // swedish
+		    prompt = "";
+		    break;
+		case 9: // portuguese
+		    prompt = "";
+		    break;
+		case 10: // brazilian
+		    prompt = "";
+		    break;
+	    }
 
-            // default fallback solution: popupPrompt in english
-            if (prompt == null) {
-                prompt = "No";
-            }
-        }
+	    // default fallback solution: popupPrompt in english
+	    if (prompt == null) {
+		prompt = "No";
+	    }
+	}
 
-        // default popupPrompt = getName() if no locale specific was given
-        return prompt == null ? c.getName() : prompt;
+	// default popupPrompt = getName() if no locale specific was given
+	return prompt == null ? c.getName() : prompt;
     }
 
     /**
@@ -1456,68 +1451,68 @@ public class D3webUtils {
      */
     public static String getUnknownPrompt(int locIdent) {
 
-        //int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
-        // int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
-        String prompt = null;
+	//int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+	// int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
+	String prompt = null;
 
-        D3webConnector d3wcon = D3webConnector.getInstance();
-        String defaultPrompt = "Unknown";
+	D3webConnector d3wcon = D3webConnector.getInstance();
+	String defaultPrompt = "Unknown";
 
-        switch (locIdent) {
-            case 1: // german
-                prompt =
-                        d3wcon.getKb().getInfoStore().getValue(
-                        MMInfo.UNKNOWN_VERBALISATION, Locale.GERMAN);
-                break;
-            case 2: // english
-                prompt =
-                        d3wcon.getKb().getInfoStore().getValue(
-                        MMInfo.UNKNOWN_VERBALISATION, Locale.ENGLISH);
-                break;
-            case 3: // spanish
-                prompt =
-                        d3wcon.getKb().getInfoStore().getValue(
-                        MMInfo.UNKNOWN_VERBALISATION, SPANISH);
-                break;
-            case 4: // italian
-                prompt =
-                        d3wcon.getKb().getInfoStore().getValue(
-                        MMInfo.UNKNOWN_VERBALISATION, Locale.ITALIAN);
-                break;
-            case 5: // french
-                prompt =
-                        d3wcon.getKb().getInfoStore().getValue(
-                        MMInfo.UNKNOWN_VERBALISATION, Locale.FRENCH);
-                break;
-            case 6: // polish
-                prompt =
-                        d3wcon.getKb().getInfoStore().getValue(
-                        MMInfo.UNKNOWN_VERBALISATION, POLISH);
-                break;
-            case 7: // dutch
-                prompt =
-                        d3wcon.getKb().getInfoStore().getValue(
-                        MMInfo.UNKNOWN_VERBALISATION, DUTCH);
-                break;
-            case 8: // swedish
-                prompt =
-                        d3wcon.getKb().getInfoStore().getValue(
-                        MMInfo.UNKNOWN_VERBALISATION, SWEDISH);
-                break;
-            case 9: // portuguese
-                prompt =
-                        d3wcon.getKb().getInfoStore().getValue(
-                        MMInfo.UNKNOWN_VERBALISATION, PORTUGUESE);
-                break;
-            case 10: // brazilian
-                prompt =
-                        d3wcon.getKb().getInfoStore().getValue(
-                        MMInfo.UNKNOWN_VERBALISATION, BRAZILIAN);
-                break;
-        }
+	switch (locIdent) {
+	    case 1: // german
+		prompt =
+			d3wcon.getKb().getInfoStore().getValue(
+			MMInfo.UNKNOWN_VERBALISATION, Locale.GERMAN);
+		break;
+	    case 2: // english
+		prompt =
+			d3wcon.getKb().getInfoStore().getValue(
+			MMInfo.UNKNOWN_VERBALISATION, Locale.ENGLISH);
+		break;
+	    case 3: // spanish
+		prompt =
+			d3wcon.getKb().getInfoStore().getValue(
+			MMInfo.UNKNOWN_VERBALISATION, SPANISH);
+		break;
+	    case 4: // italian
+		prompt =
+			d3wcon.getKb().getInfoStore().getValue(
+			MMInfo.UNKNOWN_VERBALISATION, Locale.ITALIAN);
+		break;
+	    case 5: // french
+		prompt =
+			d3wcon.getKb().getInfoStore().getValue(
+			MMInfo.UNKNOWN_VERBALISATION, Locale.FRENCH);
+		break;
+	    case 6: // polish
+		prompt =
+			d3wcon.getKb().getInfoStore().getValue(
+			MMInfo.UNKNOWN_VERBALISATION, POLISH);
+		break;
+	    case 7: // dutch
+		prompt =
+			d3wcon.getKb().getInfoStore().getValue(
+			MMInfo.UNKNOWN_VERBALISATION, DUTCH);
+		break;
+	    case 8: // swedish
+		prompt =
+			d3wcon.getKb().getInfoStore().getValue(
+			MMInfo.UNKNOWN_VERBALISATION, SWEDISH);
+		break;
+	    case 9: // portuguese
+		prompt =
+			d3wcon.getKb().getInfoStore().getValue(
+			MMInfo.UNKNOWN_VERBALISATION, PORTUGUESE);
+		break;
+	    case 10: // brazilian
+		prompt =
+			d3wcon.getKb().getInfoStore().getValue(
+			MMInfo.UNKNOWN_VERBALISATION, BRAZILIAN);
+		break;
+	}
 
-        // default popupPrompt = unknown if no locale specific popupPrompt was given
-        return prompt == null ? defaultPrompt : prompt;
+	// default popupPrompt = unknown if no locale specific popupPrompt was given
+	return prompt == null ? defaultPrompt : prompt;
     }
 
     /**
@@ -1529,43 +1524,43 @@ public class D3webUtils {
      */
     public static Locale getCurrentLocale(int locIdent) {
 
-        Locale loc = Locale.getDefault();
+	Locale loc = Locale.getDefault();
 
-        switch (locIdent) {
-            case 1: // german
-                loc = Locale.GERMAN;
-                break;
-            case 2: // english
-                loc = Locale.ENGLISH;
-                break;
-            case 3: // spanish
-                loc = SPANISH;
-                break;
-            case 4: // italian
-                loc = Locale.ITALIAN;
-                break;
-            case 5: // french
-                loc = Locale.FRENCH;
-                break;
-            case 6: // polish
-                loc = POLISH;
-                break;
-            case 7: // dutch
-                loc = DUTCH;
-                break;
-            case 8: // swedish
-                loc = SWEDISH;
-                break;
-            case 9: // portuguese
-                loc = PORTUGUESE;
-                break;
-            case 10: // brazilian
-                loc = BRAZILIAN;
-                break;
-        }
+	switch (locIdent) {
+	    case 1: // german
+		loc = Locale.GERMAN;
+		break;
+	    case 2: // english
+		loc = Locale.ENGLISH;
+		break;
+	    case 3: // spanish
+		loc = SPANISH;
+		break;
+	    case 4: // italian
+		loc = Locale.ITALIAN;
+		break;
+	    case 5: // french
+		loc = Locale.FRENCH;
+		break;
+	    case 6: // polish
+		loc = POLISH;
+		break;
+	    case 7: // dutch
+		loc = DUTCH;
+		break;
+	    case 8: // swedish
+		loc = SWEDISH;
+		break;
+	    case 9: // portuguese
+		loc = PORTUGUESE;
+		break;
+	    case 10: // brazilian
+		loc = BRAZILIAN;
+		break;
+	}
 
-        // default popupPrompt = unknown if no locale specific popupPrompt was given
-        return loc;
+	// default popupPrompt = unknown if no locale specific popupPrompt was given
+	return loc;
     }
 
     /**
@@ -1575,16 +1570,16 @@ public class D3webUtils {
      * @return the ancestor questionnaire or null if none available
      */
     public static TerminologyObject getQuestionnaireAncestor(TerminologyObject to) {
-        if (to.getParents() != null) {
-            for (TerminologyObject parent : to.getParents()) {
-                if (parent instanceof QContainer) {
-                    return parent;
-                } else {
-                    return getQuestionnaireAncestor(parent);
-                }
-            }
-        }
-        return null;
+	if (to.getParents() != null) {
+	    for (TerminologyObject parent : to.getParents()) {
+		if (parent instanceof QContainer) {
+		    return parent;
+		} else {
+		    return getQuestionnaireAncestor(parent);
+		}
+	    }
+	}
+	return null;
     }
 
     /**
@@ -1597,15 +1592,15 @@ public class D3webUtils {
      * @param diff
      */
     public static void getDiff(Set<QASet> set1, Set<QASet> set2, Set<TerminologyObject> diff) {
-        for (InterviewObject io : set1) {
-            if (!set2.contains(io)) {
-                if (io instanceof Question) {
-                    diff.add(D3webUtils.getQuestionnaireAncestor(io));
-                } else {
-                    diff.add(io);
-                }
-            }
-        }
+	for (InterviewObject io : set1) {
+	    if (!set2.contains(io)) {
+		if (io instanceof Question) {
+		    diff.add(D3webUtils.getQuestionnaireAncestor(io));
+		} else {
+		    diff.add(io);
+		}
+	    }
+	}
     }
 
     /**
@@ -1618,7 +1613,7 @@ public class D3webUtils {
      * @return the difference in seconds
      */
     public static float getDateDifference(Date d1, Date d2) {
-        return (d1.getTime() - d2.getTime()) / 1000;
+	return (d1.getTime() - d2.getTime()) / 1000;
     }
 
     /**
@@ -1634,68 +1629,68 @@ public class D3webUtils {
      */
     public static void setValue(String toId, String valueString, Session sess) {
 
-        //System.out.println(toId + " " + valueString);
+	//System.out.println(toId + " " + valueString);
 
-        if (toId == null || valueString == null) {
-            return;
-        }
+	if (toId == null || valueString == null) {
+	    return;
+	}
 
-        String toName = AbstractD3webRenderer.getObjectNameForId(toId);
+	String toName = AbstractD3webRenderer.getObjectNameForId(toId);
 
-        Blackboard blackboard = sess.getBlackboard();
-        Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
-                toName == null ? toId : toName);
-
-
-        // if TerminologyObject not found in the current KB return & do nothing
-        if (question == null) {
-            return;
-        }
-
-        String valueName = AbstractD3webRenderer.getObjectNameForId(valueString);
-
-        // init Value object...
-        Value value = null;
-
-        // check if unknown option was chosen
-        if (valueName != null && valueName.equalsIgnoreCase("unknown")) {
-            value = setQuestionToUnknown(sess, question);
-        } // otherwise, i.e., for all other "not-unknown" values
-        else {
-
-            // CHOICE questions
-            if (question instanceof QuestionChoice) {
-                value = setQuestionChoice(question, valueString, sess);
-            } // TEXT questions
-            else if (question instanceof QuestionText) {
-                value = setQuestionText(question, valueString);
-            } // NUM questions
-            else if (question instanceof QuestionNum) {
-                value = setQuestionNum(valueString);
-            } // DATE questions
-            else if (question instanceof QuestionDate) {
-                value = setQuestionDate(question, valueString);
-            }
+	Blackboard blackboard = sess.getBlackboard();
+	Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+		toName == null ? toId : toName);
 
 
-            // if reasonable value retrieved, set it for the given
-            // TerminologyObject
-            if (value != null) {
+	// if TerminologyObject not found in the current KB return & do nothing
+	if (question == null) {
+	    return;
+	}
 
-                if (UndefinedValue.isNotUndefinedValue(value)) {
-                    // add new value as UserEnteredFact
-                    Fact fact = FactFactory.createUserEnteredFact(question, value);
-                    blackboard.addValueFact(fact);
-                }
-            }
-        }
+	String valueName = AbstractD3webRenderer.getObjectNameForId(valueString);
 
-        System.out.println("BLACKBOARD: ");
-        for (Question q : blackboard.getValuedQuestions()) {
+	// init Value object...
+	Value value = null;
 
-        System.out.println(q.getName() + " -> " + blackboard.getValue(q));
-        }
-        System.out.println("BLACKBOARD ENDE");
+	// check if unknown option was chosen
+	if (valueName != null && valueName.equalsIgnoreCase("unknown")) {
+	    value = setQuestionToUnknown(sess, question);
+	} // otherwise, i.e., for all other "not-unknown" values
+	else {
+
+	    // CHOICE questions
+	    if (question instanceof QuestionChoice) {
+		value = setQuestionChoice(question, valueString, sess);
+	    } // TEXT questions
+	    else if (question instanceof QuestionText) {
+		value = setQuestionText(question, valueString);
+	    } // NUM questions
+	    else if (question instanceof QuestionNum) {
+		value = setQuestionNum(valueString);
+	    } // DATE questions
+	    else if (question instanceof QuestionDate) {
+		value = setQuestionDate(question, valueString);
+	    }
+
+
+	    // if reasonable value retrieved, set it for the given
+	    // TerminologyObject
+	    if (value != null) {
+
+		if (UndefinedValue.isNotUndefinedValue(value)) {
+		    // add new value as UserEnteredFact
+		    Fact fact = FactFactory.createUserEnteredFact(question, value);
+		    blackboard.addValueFact(fact);
+		}
+	    }
+	}
+
+	System.out.println("BLACKBOARD: ");
+	for (Question q : blackboard.getValuedQuestions()) {
+
+	    System.out.println(q.getName() + " -> " + blackboard.getValue(q));
+	}
+	System.out.println("BLACKBOARD ENDE");
 	System.out.println(blackboard.getValuedSolutions());
     }
 
@@ -1711,173 +1706,173 @@ public class D3webUtils {
      */
     public static void setValueITree(String toId, String valueString, Session sess) {
 
-        if (toId == null || valueString == null) {
-            return;
-        }
+	if (toId == null || valueString == null) {
+	    return;
+	}
 
-        String toName = AbstractD3webRenderer.getObjectNameForId(toId);
-        Blackboard blackboard = sess.getBlackboard();
-        Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
-                toName == null ? toId : toName);
-        //Question question_c =
-        //      D3webConnector.getInstance().getKb().getManager().searchQuestion(
-        //      toName == null ? toId.replace("_n", "") : toName.replace("_n", ""));
+	String toName = AbstractD3webRenderer.getObjectNameForId(toId);
+	Blackboard blackboard = sess.getBlackboard();
+	Question question = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+		toName == null ? toId : toName);
+	//Question question_c =
+	//      D3webConnector.getInstance().getKb().getManager().searchQuestion(
+	//      toName == null ? toId.replace("_n", "") : toName.replace("_n", ""));
 
-        // if TerminologyObject not found in the current KB return & do nothing
-        if (question == null) {
-            return;
-        }
+	// if TerminologyObject not found in the current KB return & do nothing
+	if (question == null) {
+	    return;
+	}
 
-        Value value = null;
+	Value value = null;
 
-        // TODO: can be removed?!
-        if (UISettings.getInstance().getDialogType().equals(DialogType.ITREE)) {
-
-
-            if (question instanceof QuestionNum) {
-                value = setQuestionNum(valueString);
-            } else if (question instanceof QuestionDate) {
-                value = setQuestionDate(question, valueString);
-            } else if (valueString != null) {
-                if (valueString.equals("1")) {
-                    value = new ChoiceValue(JNV.J.toString());
-                } else if (valueString.equals("2")) {
-                    value = new ChoiceValue(JNV.V.toString());
-                } else if (valueString.equals("3")) {
-                    value = new ChoiceValue(JNV.N.toString());
-                } else if (valueString.equals("0")) {
-                }
-            }
+	// TODO: can be removed?!
+	if (UISettings.getInstance().getDialogType().equals(DialogType.ITREE)) {
 
 
-            // if reasonable value retrieved, set it for the given
-            // TerminologyObject
-            if (value != null) {
+	    if (question instanceof QuestionNum) {
+		value = setQuestionNum(valueString);
+	    } else if (question instanceof QuestionDate) {
+		value = setQuestionDate(question, valueString);
+	    } else if (valueString != null) {
+		if (valueString.equals("1")) {
+		    value = new ChoiceValue(JNV.J.toString());
+		} else if (valueString.equals("2")) {
+		    value = new ChoiceValue(JNV.V.toString());
+		} else if (valueString.equals("3")) {
+		    value = new ChoiceValue(JNV.N.toString());
+		} else if (valueString.equals("0")) {
+		}
+	    }
 
-                if (UndefinedValue.isNotUndefinedValue(value)) {
-                    // add new value as UserEnteredFact
-                    Fact f2 = FactFactory.createUserEnteredFact(question, value);
-                    blackboard.addValueFact(f2);
-                }
+
+	    // if reasonable value retrieved, set it for the given
+	    // TerminologyObject
+	    if (value != null) {
+
+		if (UndefinedValue.isNotUndefinedValue(value)) {
+		    // add new value as UserEnteredFact
+		    Fact f2 = FactFactory.createUserEnteredFact(question, value);
+		    blackboard.addValueFact(f2);
+		}
 
 
-            } else {
-                setQuestionUndefined(sess, question);
-            }
+	    } else {
+		setQuestionUndefined(sess, question);
+	    }
 
-            //printBlackboard(sess);
-        }
+	    //printBlackboard(sess);
+	}
 
     }
 
     private static Value setQuestionDate(Question to, String valString) {
-        Value value = null;
-        try {
-            value = new DateValue(new Date(Long.parseLong(valString)));
-            //println(value);
-        } catch (NumberFormatException e) {
-            // value still null, will not be set
-        }
-        return value;
+	Value value = null;
+	try {
+	    value = new DateValue(new Date(Long.parseLong(valString)));
+	    //println(value);
+	} catch (NumberFormatException e) {
+	    // value still null, will not be set
+	}
+	return value;
     }
 
     private static Value setQuestionNum(String valString) {
-        try {
-            return new NumValue(Double.parseDouble(valString.replace(",", ".")));
-        } catch (NumberFormatException ex) {
-            return null;
-        }
+	try {
+	    return new NumValue(Double.parseDouble(valString.replace(",", ".")));
+	} catch (NumberFormatException ex) {
+	    return null;
+	}
     }
 
     private static Value setQuestionText(Question to, String valString) {
-        Value value = null;
-        String textPattern = to.getInfoStore().getValue(ProKEtProperties.TEXT_FORMAT);
-        Pattern p = null;
-        if (textPattern != null && !textPattern.isEmpty()) {
-            try {
-                p = Pattern.compile(textPattern);
-            } catch (Exception e) {
-            }
-        }
-        if (p != null) {
-            Matcher m = p.matcher(valString);
-            if (m.find()) {
-                value = new TextValue(m.group());
-            }
-        } else {
-            value = new TextValue(valString);
-        }
-        return value;
+	Value value = null;
+	String textPattern = to.getInfoStore().getValue(ProKEtProperties.TEXT_FORMAT);
+	Pattern p = null;
+	if (textPattern != null && !textPattern.isEmpty()) {
+	    try {
+		p = Pattern.compile(textPattern);
+	    } catch (Exception e) {
+	    }
+	}
+	if (p != null) {
+	    Matcher m = p.matcher(valString);
+	    if (m.find()) {
+		value = new TextValue(m.group());
+	    }
+	} else {
+	    value = new TextValue(valString);
+	}
+	return value;
     }
 
     private static Value setQuestionChoice(Question to, String valueId, Session sess) {
-        Value value = null;
+	Value value = null;
 
-        if (to instanceof QuestionOC) {
-            // valueString is the html ID of the selected item
-            String valueName = AbstractD3webRenderer.getObjectNameForId(valueId);
+	if (to instanceof QuestionOC) {
+	    // valueString is the html ID of the selected item
+	    String valueName = AbstractD3webRenderer.getObjectNameForId(valueId);
 
-            if (valueId.equals(YESSTRING)) {
-                value = KnowledgeBaseUtils.findValue(to,
-                        valueName == null ? valueId : valueName);
+	    if (valueId.equals(YESSTRING)) {
+		value = KnowledgeBaseUtils.findValue(to,
+			valueName == null ? valueId : valueName);
 
-            }
-            value = KnowledgeBaseUtils.findValue(to,
-                    valueName == null ? valueId : valueName);
+	    }
+	    value = KnowledgeBaseUtils.findValue(to,
+		    valueName == null ? valueId : valueName);
 
-        } else if (to instanceof QuestionMC) {
-            System.out.println("D3webUtils setQuestionChoice: " + valueId);
+	} else if (to instanceof QuestionMC) {
+	    System.out.println("D3webUtils setQuestionChoice: " + valueId);
 
-            if (valueId.equals("")) {
-                value = Unknown.getInstance();
-            } else if (!valueId.contains("##mcanswer##")) {
+	    if (valueId.equals("")) {
+		value = Unknown.getInstance();
+	    } else if (!valueId.contains("##mcanswer##")) {
 
-                String choiceName = AbstractD3webRenderer.getObjectNameForId(valueId);
-                Choice newChoice = new Choice(choiceName == null ? valueId : choiceName);
+		String choiceName = AbstractD3webRenderer.getObjectNameForId(valueId);
+		Choice newChoice = new Choice(choiceName == null ? valueId : choiceName);
 
-                Value currentVal = sess.getBlackboard().getValue(to);
-                MultipleChoiceValue mcvalExists;
-                if (UndefinedValue.isNotUndefinedValue(currentVal)) {
-                    mcvalExists = (MultipleChoiceValue) sess.getBlackboard().getValue(to);
-                    System.out.println("mcval Exists: " + mcvalExists);
+		Value currentVal = sess.getBlackboard().getValue(to);
+		MultipleChoiceValue mcvalExists;
+		if (UndefinedValue.isNotUndefinedValue(currentVal)) {
+		    mcvalExists = (MultipleChoiceValue) sess.getBlackboard().getValue(to);
+		    System.out.println("mcval Exists: " + mcvalExists);
 
-                    ArrayList< Choice> cs = (ArrayList) mcvalExists.getChoiceIDs();
+		    ArrayList< Choice> cs = (ArrayList) mcvalExists.getChoiceIDs();
 
-                    List<Choice> choicesNew = new ArrayList<Choice>();
+		    List<Choice> choicesNew = new ArrayList<Choice>();
 
-                    //if already there
-                    if (cs.contains(valueId)) {
-                        cs.remove(newChoice);
-                        choicesNew.addAll(cs);
-                    } // set val
-                    else {
-                        choicesNew.addAll(cs);
-                        choicesNew.add(newChoice);
-                    }
-                    value = MultipleChoiceValue.fromChoices(choicesNew);
-                    System.out.println("new mc val: " + value);
-                } else {
-                    ArrayList<Choice> choices = new ArrayList<Choice>();
-                    choices.add(newChoice);
-                    value = MultipleChoiceValue.fromChoices(choices);
-                     System.out.println("new mc val: " + value);
-                }
+		    //if already there
+		    if (cs.contains(valueId)) {
+			cs.remove(newChoice);
+			choicesNew.addAll(cs);
+		    } // set val
+		    else {
+			choicesNew.addAll(cs);
+			choicesNew.add(newChoice);
+		    }
+		    value = MultipleChoiceValue.fromChoices(choicesNew);
+		    System.out.println("new mc val: " + value);
+		} else {
+		    ArrayList<Choice> choices = new ArrayList<Choice>();
+		    choices.add(newChoice);
+		    value = MultipleChoiceValue.fromChoices(choices);
+		    System.out.println("new mc val: " + value);
+		}
 
-            } else {
-                String[] choiceIds = valueId.split("##mcanswer##");
-                List<Choice> choices = new ArrayList<Choice>();
+	    } else {
+		String[] choiceIds = valueId.split("##mcanswer##");
+		List<Choice> choices = new ArrayList<Choice>();
 
-                for (String choiceId : choiceIds) {
-                    String choiceName = AbstractD3webRenderer.getObjectNameForId(choiceId);
-                    choices.add(new Choice(choiceName == null ? choiceId : choiceName));
-                }
-                value = MultipleChoiceValue.fromChoices(choices);
+		for (String choiceId : choiceIds) {
+		    String choiceName = AbstractD3webRenderer.getObjectNameForId(choiceId);
+		    choices.add(new Choice(choiceName == null ? choiceId : choiceName));
+		}
+		value = MultipleChoiceValue.fromChoices(choices);
 
-            }
-        }
+	    }
+	}
 
 
-        return value;
+	return value;
     }
 
     /**
@@ -1889,21 +1884,21 @@ public class D3webUtils {
      * @return The Unknown fact object for the question
      */
     private static Value setQuestionToUnknown(Session sess, Question to) {
-        Blackboard blackboard = sess.getBlackboard();
+	Blackboard blackboard = sess.getBlackboard();
 
-        // remove a previously set value
-        Fact lastFact = blackboard.getValueFact(to);
-        if (lastFact != null) {
-            blackboard.removeValueFact(lastFact);
-        }
+	// remove a previously set value
+	Fact lastFact = blackboard.getValueFact(to);
+	if (lastFact != null) {
+	    blackboard.removeValueFact(lastFact);
+	}
 
-        // and add the unknown value
-        Value value = Unknown.getInstance();
-        Fact fact = FactFactory.createFact(sess, to, value,
-                PSMethodUserSelected.getInstance(),
-                PSMethodUserSelected.getInstance());
-        blackboard.addValueFact(fact);
-        return value;
+	// and add the unknown value
+	Value value = Unknown.getInstance();
+	Fact fact = FactFactory.createFact(sess, to, value,
+		PSMethodUserSelected.getInstance(),
+		PSMethodUserSelected.getInstance());
+	blackboard.addValueFact(fact);
+	return value;
     }
 
     /**
@@ -1915,15 +1910,15 @@ public class D3webUtils {
      * question
      */
     private static Value setQuestionUndefined(Session sess, Question to) {
-        Blackboard blackboard = sess.getBlackboard();
+	Blackboard blackboard = sess.getBlackboard();
 
-        // remove a previously set value
-        Fact lastFact = blackboard.getValueFact(to);
+	// remove a previously set value
+	Fact lastFact = blackboard.getValueFact(to);
 
-        if (lastFact != null) {
-            blackboard.removeValueFact(lastFact);
-        }
-        return blackboard.getValue(to);
+	if (lastFact != null) {
+	    blackboard.removeValueFact(lastFact);
+	}
+	return blackboard.getValue(to);
     }
 
     /**
@@ -1941,49 +1936,49 @@ public class D3webUtils {
      * blackboard
      */
     public static Collection<Question> resetAbandonedPaths(Session sess,
-            HttpSession httpSess) {
+	    HttpSession httpSess) {
 
-        //System.out.println("RESET ABANDONED PATHS");
-        // get all questions that were set per default initially
-        // e.g. in EuraHS, we need to init set all dropdowns as to enable the
-        // follow up mechanisms
-        ArrayList<String> initSetQuestions =
-                (ArrayList<String>) httpSess.getAttribute("initsetquestions");
+	//System.out.println("RESET ABANDONED PATHS");
+	// get all questions that were set per default initially
+	// e.g. in EuraHS, we need to init set all dropdowns as to enable the
+	// follow up mechanisms
+	ArrayList<String> initSetQuestions =
+		(ArrayList<String>) httpSess.getAttribute("initsetquestions");
 
-        Blackboard bb = sess.getBlackboard();
-        Collection<Question> resetQuestions = new LinkedList<Question>();
+	Blackboard bb = sess.getBlackboard();
+	Collection<Question> resetQuestions = new LinkedList<Question>();
 
-        Set<QASet> initQuestions = new HashSet<QASet>(
-                D3webConnector.getInstance().getKb().getInitQuestions());
-        //System.out.println("RAP: init questions - " + initQuestions.toString());
+	Set<QASet> initQuestions = new HashSet<QASet>(
+		D3webConnector.getInstance().getKb().getInitQuestions());
+	//System.out.println("RAP: init questions - " + initQuestions.toString());
 
-        // check all questions that have been lately answered 
-        for (Question question : bb.getAnsweredQuestions()) {
+	// check all questions that have been lately answered 
+	for (Question question : bb.getAnsweredQuestions()) {
 
-            // if a question is not active by being initQuestion
-            if (!isActive(question, bb, initQuestions)
-                    // and if question is not a required question
-                    && !question.getName().equals(
-                    D3webConnector.getInstance().getD3webParser().getRequired())) {
+	    // if a question is not active by being initQuestion
+	    if (!isActive(question, bb, initQuestions)
+		    // and if question is not a required question
+		    && !question.getName().equals(
+		    D3webConnector.getInstance().getD3webParser().getRequired())) {
 
-                //System.out.println("RAP: !active && !required ");
-                // and if there are initSet questions and those do not contain q
-                if ((initSetQuestions != null && !initSetQuestions.contains(question.getName()))
-                        || initSetQuestions == null) {
+		//System.out.println("RAP: !active && !required ");
+		// and if there are initSet questions and those do not contain q
+		if ((initSetQuestions != null && !initSetQuestions.contains(question.getName()))
+			|| initSetQuestions == null) {
 
-                    //System.out.println("RAP: !initially set ");
-                    //System.out.println("RAP: try removing... ");
-                    // then remove the corresponding fact from the blackboard
-                    Fact lastFact = bb.getValueFact(question);
-                    if (lastFact != null
-                            && lastFact.getPSMethod() == PSMethodUserSelected.getInstance()) {
-                        bb.removeValueFact(lastFact);
-                        resetQuestions.add(question);
-                    }
-                }
-            }
-        }
-        return resetQuestions;
+		    //System.out.println("RAP: !initially set ");
+		    //System.out.println("RAP: try removing... ");
+		    // then remove the corresponding fact from the blackboard
+		    Fact lastFact = bb.getValueFact(question);
+		    if (lastFact != null
+			    && lastFact.getPSMethod() == PSMethodUserSelected.getInstance()) {
+			bb.removeValueFact(lastFact);
+			resetQuestions.add(question);
+		    }
+		}
+	    }
+	}
+	return resetQuestions;
     }
 
     /**
@@ -1993,14 +1988,14 @@ public class D3webUtils {
      * @return
      */
     public static Set<QASet> getActiveSet(Session sess) {
-        Set<QASet> activeSet = new HashSet<QASet>();
-        Set<QASet> initQuestions = new HashSet<QASet>(sess.getKnowledgeBase().getInitQuestions());
-        for (QASet qaset : sess.getKnowledgeBase().getManager().getQASets()) {
-            if (D3webUtils.isActive(qaset, sess.getBlackboard(), initQuestions)) {
-                activeSet.add(qaset);
-            }
-        }
-        return activeSet;
+	Set<QASet> activeSet = new HashSet<QASet>();
+	Set<QASet> initQuestions = new HashSet<QASet>(sess.getKnowledgeBase().getInitQuestions());
+	for (QASet qaset : sess.getKnowledgeBase().getManager().getQASets()) {
+	    if (D3webUtils.isActive(qaset, sess.getBlackboard(), initQuestions)) {
+		activeSet.add(qaset);
+	    }
+	}
+	return activeSet;
     }
 
     /**
@@ -2014,22 +2009,22 @@ public class D3webUtils {
      * @return True, if the terminology object is (instant) indicated.
      */
     public static boolean isActive(QASet qaset, Blackboard bb, Set<QASet> initQuestions) {
-        boolean indicatedParent = false;
-        for (TerminologyObject parentQASet : qaset.getParents()) {
-            if (parentQASet instanceof QContainer
-                    && isIndicated((QASet) parentQASet, bb, initQuestions)
-                    && !isContraIndicated(qaset, bb)) {
-                indicatedParent = true;
-                break;
-            }
-        }
-        return indicatedParent || isIndicated(qaset, bb, initQuestions);
+	boolean indicatedParent = false;
+	for (TerminologyObject parentQASet : qaset.getParents()) {
+	    if (parentQASet instanceof QContainer
+		    && isIndicated((QASet) parentQASet, bb, initQuestions)
+		    && !isContraIndicated(qaset, bb)) {
+		indicatedParent = true;
+		break;
+	    }
+	}
+	return indicatedParent || isIndicated(qaset, bb, initQuestions);
     }
 
     private static boolean isIndicated(QASet qaset, Blackboard bb, Set<QASet> initQuestions) {
-        return initQuestions.contains(qaset)
-                || bb.getIndication(qaset).getState() == de.d3web.core.knowledge.Indication.State.INDICATED
-                || bb.getIndication(qaset).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED;
+	return initQuestions.contains(qaset)
+		|| bb.getIndication(qaset).getState() == de.d3web.core.knowledge.Indication.State.INDICATED
+		|| bb.getIndication(qaset).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED;
     }
 
     /**
@@ -2039,388 +2034,365 @@ public class D3webUtils {
      * @return
      */
     public static Set<TerminologyObject> getUnknownQuestions(Session sess) {
-        Set<TerminologyObject> unknownQuestions = new HashSet<TerminologyObject>();
-        for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
-            Fact mergedFact = sess.getBlackboard().getValueFact(to);
-            if (mergedFact != null && Unknown.assignedTo(mergedFact.getValue())) {
-                unknownQuestions.add(to);
-            }
-        }
-        return unknownQuestions;
+	Set<TerminologyObject> unknownQuestions = new HashSet<TerminologyObject>();
+	for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
+	    Fact mergedFact = sess.getBlackboard().getValueFact(to);
+	    if (mergedFact != null && Unknown.assignedTo(mergedFact.getValue())) {
+		unknownQuestions.add(to);
+	    }
+	}
+	return unknownQuestions;
     }
 
     public static Set<TerminologyObject> getMCQuestions(Session sess) {
-        Set<TerminologyObject> mcs = new HashSet<TerminologyObject>();
-        for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
-            if (to instanceof QuestionMC) {
-                mcs.add(to);
+	Set<TerminologyObject> mcs = new HashSet<TerminologyObject>();
+	for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
+	    if (to instanceof QuestionMC) {
+		mcs.add(to);
 
-            }
+	    }
 
-        }
-        return mcs;
+	}
+	return mcs;
     }
 
     public static String getFormattedDateFromString(Date date, String dateFormat) {
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-        String f = sdf.format(date);
-        return f;
+	SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+	String f = sdf.format(date);
+	return f;
     }
 
     public static Collection<TerminologyObject> getAbstractions(Session session) {
-        Collection<TerminologyObject> abstractionQuestions =
-                new ArrayList<TerminologyObject>();
+	Collection<TerminologyObject> abstractionQuestions =
+		new ArrayList<TerminologyObject>();
 
-        for (TerminologyObject aq : session.getKnowledgeBase().getManager().getQuestions()) {
-            if (aq.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
-                abstractionQuestions.add(aq);
-            }
-        }
+	for (TerminologyObject aq : session.getKnowledgeBase().getManager().getQuestions()) {
+	    if (aq.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
+		abstractionQuestions.add(aq);
+	    }
+	}
 
-        return abstractionQuestions;
+	return abstractionQuestions;
     }
 
     public static Collection<TerminologyObject> getValuedAbstractions(Session session) {
-        Collection<TerminologyObject> abstractionQuestions =
-                getAbstractions(session);
+	Collection<TerminologyObject> abstractionQuestions =
+		getAbstractions(session);
 
-        Collection<TerminologyObject> valuedAbstractions =
-                new ArrayList<TerminologyObject>();
+	Collection<TerminologyObject> valuedAbstractions =
+		new ArrayList<TerminologyObject>();
 
-        Collection<TerminologyObject> valuedQuestions =
-                session.getBlackboard().getValuedObjects();
+	Collection<TerminologyObject> valuedQuestions =
+		session.getBlackboard().getValuedObjects();
 
 
 
-        for (TerminologyObject abstracti : abstractionQuestions) {
-            if (valuedQuestions.contains(abstracti)) {
-                valuedAbstractions.add(abstracti);
-            }
-        }
+	for (TerminologyObject abstracti : abstractionQuestions) {
+	    if (valuedQuestions.contains(abstracti)) {
+		valuedAbstractions.add(abstracti);
+	    }
+	}
 
-        return valuedAbstractions;
+	return valuedAbstractions;
     }
 
     public static boolean hasAnsweredChildren(TerminologyObject questionnaire, Session d3websession) {
-        boolean has = false;
-        if (questionnaire.getChildren().length > 0) {
+	boolean has = false;
+	if (questionnaire.getChildren().length > 0) {
 
-            for (TerminologyObject child : questionnaire.getChildren()) {
-                if (child instanceof QContainer) {
-                    return hasAnsweredChildren(child, d3websession);
-                } else if (child instanceof Question) {
-                    Value val = d3websession.getBlackboard().getValue((ValueObject) child);
-                    if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
-                        return true;
-                    }
-                }
-            }
-        }
+	    for (TerminologyObject child : questionnaire.getChildren()) {
+		if (child instanceof QContainer) {
+		    return hasAnsweredChildren(child, d3websession);
+		} else if (child instanceof Question) {
+		    Value val = d3websession.getBlackboard().getValue((ValueObject) child);
+		    if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
+			return true;
+		    }
+		}
+	    }
+	}
 
-        return has;
+	return has;
     }
 
     /*
      * STUFF NEEDED FOR DATE QUESTIONS
      */
     public static String translateDropdownTitle(String titleID, int locIdent) {
-        String translated = "";
+	String translated = "";
 
-        switch (locIdent) {
-            case 1: // german
+	switch (locIdent) {
+	    case 1: // german
                 /*
-                 * if (titleID.equals("Y")) { translated = "Jahr:"; } else if
-                 * (titleID.equals("M")) { translated = "Monat:"; } else if
-                 * (titleID.equals("D")) { translated = "Tag:"; } else if
-                 * (titleID.equals("H")) { translated = "Stunde:"; } else if
-                 * (titleID.equals("Min")) { translated = "Minute:"; } else if
-                 * (titleID.equals("S")) { translated = "Sekunde:"; }
-                 */
-                if (titleID.equals("Y")) {
-                    translated = "Year";
-                } else if (titleID.equals("M")) {
-                    translated = "Month";
-                } else if (titleID.equals("D")) {
-                    translated = "Day";
-                } else if (titleID.equals("H")) {
-                    translated = "Hour";
-                } else if (titleID.equals("M")) {
-                    translated = "Minute";
-                } else if (titleID.equals("S")) {
-                    translated = "Second";
-                }
+		 * if (titleID.equals("Y")) { translated = "Jahr:"; } else if
+		 * (titleID.equals("M")) { translated = "Monat:"; } else if
+		 * (titleID.equals("D")) { translated = "Tag:"; } else if
+		 * (titleID.equals("H")) { translated = "Stunde:"; } else if
+		 * (titleID.equals("Min")) { translated = "Minute:"; } else if
+		 * (titleID.equals("S")) { translated = "Sekunde:"; }
+		 */
+		if (titleID.equals("Y")) {
+		    translated = "Year";
+		} else if (titleID.equals("M")) {
+		    translated = "Month";
+		} else if (titleID.equals("D")) {
+		    translated = "Day";
+		} else if (titleID.equals("H")) {
+		    translated = "Hour";
+		} else if (titleID.equals("M")) {
+		    translated = "Minute";
+		} else if (titleID.equals("S")) {
+		    translated = "Second";
+		}
 
-                break;
-            case 2: // english
+		break;
+	    case 2: // english
 
-                break;
-            case 3: // spanish
+		break;
+	    case 3: // spanish
 
-                break;
-            case 4: // italian
+		break;
+	    case 4: // italian
 
-                break;
-            case 5: // french
+		break;
+	    case 5: // french
 
-                break;
-            case 6: // polish
+		break;
+	    case 6: // polish
 
-                break;
-        }
-        if (translated == "") {
-            if (titleID.equals("Y")) {
-                translated = "Year";
-            } else if (titleID.equals("M")) {
-                translated = "Month";
-            } else if (titleID.equals("D")) {
-                translated = "Day";
-            } else if (titleID.equals("H")) {
-                translated = "Hour";
-            } else if (titleID.equals("M")) {
-                translated = "Minute";
-            } else if (titleID.equals("S")) {
-                translated = "Second";
-            }
-        }
+		break;
+	}
+	if (translated == "") {
+	    if (titleID.equals("Y")) {
+		translated = "Year";
+	    } else if (titleID.equals("M")) {
+		translated = "Month";
+	    } else if (titleID.equals("D")) {
+		translated = "Day";
+	    } else if (titleID.equals("H")) {
+		translated = "Hour";
+	    } else if (titleID.equals("M")) {
+		translated = "Minute";
+	    } else if (titleID.equals("S")) {
+		translated = "Second";
+	    }
+	}
 
-        // emergency fallback
-        return translated;
+	// emergency fallback
+	return translated;
     }
 
     public static String createYearDropDownReverse(String selectedValue) {
-        return createDropDownOptions(selectedValue, "Year", 2008, 2025);
+	return createDropDownOptions(selectedValue, "Year", 2008, 2025);
     }
 
     public static String createYearDropDown(String selectedValue) {
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        return createDropDownOptions(selectedValue, "Year", currentYear, 1900);
+	int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+	return createDropDownOptions(selectedValue, "Year", currentYear, 1900);
     }
 
     public static String createMonthDropDown(String selectedValue) {
-        return createDropDownOptions(selectedValue, "Month", 1, 12);
+	return createDropDownOptions(selectedValue, "Month", 1, 12);
     }
 
     public static String createDayDropDown(String selectedValue) {
-        return createDropDownOptions(selectedValue, "Day", 1, 31);
+	return createDropDownOptions(selectedValue, "Day", 1, 31);
     }
 
     public static String createHourDropDown(String selectedValue) {
-        return createDropDownOptions(selectedValue, "Hour", 23);
+	return createDropDownOptions(selectedValue, "Hour", 23);
     }
 
     public static String createMinuteDropDown(String selectedValue) {
-        return createDropDownOptions(selectedValue, "Minute", 59);
+	return createDropDownOptions(selectedValue, "Minute", 59);
     }
 
     public static String createSecondDropDown(String selectedValue) {
-        return createDropDownOptions(selectedValue, "Second", 59);
+	return createDropDownOptions(selectedValue, "Second", 59);
     }
 
     public static String createDropDownOptions(String selectedValue, String name, int end) {
-        return createDropDownOptions(selectedValue, name, 0, end);
+	return createDropDownOptions(selectedValue, name, 0, end);
     }
 
     public static String createDropDownOptions(String selectedValue, String name, int start, int end) {
-        ArrayList<String> measure = new ArrayList<String>();
-        boolean reverse = false;
-        if (end < start) {
-            reverse = true;
-            int temp = start;
-            start = end;
-            end = temp;
-        }
-        for (int i = start; i <= end; i++) {
-            measure.add(String.valueOf(i));
-        }
-        if (reverse) {
-            Collections.reverse(measure);
-        }
-        return "<td><select type='" + name + "select' class='" + name + "select'>\n"
-                + createDropDownOptionsWithDefault("", selectedValue,
-                measure.toArray(new String[]{})) + "<select/></td>";
+	ArrayList<String> measure = new ArrayList<String>();
+	boolean reverse = false;
+	if (end < start) {
+	    reverse = true;
+	    int temp = start;
+	    start = end;
+	    end = temp;
+	}
+	for (int i = start; i <= end; i++) {
+	    measure.add(String.valueOf(i));
+	}
+	if (reverse) {
+	    Collections.reverse(measure);
+	}
+	return "<td><select type='" + name + "select' class='" + name + "select'>\n"
+		+ createDropDownOptionsWithDefault("", selectedValue,
+		measure.toArray(new String[]{})) + "<select/></td>";
     }
 
     public static String createDropDownOptionsWithDefault(
-            String defaultValue, String selectedValue, String... options) {
-        StringBuilder builder = new StringBuilder();
-        if (defaultValue != null) {
-            builder.append("<option>" + defaultValue + "</option>\n");
-        }
+	    String defaultValue, String selectedValue, String... options) {
+	StringBuilder builder = new StringBuilder();
+	if (defaultValue != null) {
+	    builder.append("<option>" + defaultValue + "</option>\n");
+	}
 
-        for (String option : options) {
-            option = option.trim();
-            builder.append("<option value='" + option + "'"
-                    + (option.equals(selectedValue) ? "selected='selected'" : "")
-                    + ">" + option
-                    + "</option>\n");
-        }
+	for (String option : options) {
+	    option = option.trim();
+	    builder.append("<option value='" + option + "'"
+		    + (option.equals(selectedValue) ? "selected='selected'" : "")
+		    + ">" + option
+		    + "</option>\n");
+	}
 
 
 
-        return builder.toString();
+	return builder.toString();
     }
 
     public static void printBlackboardSetValues(Session sess) {
-        Blackboard blackboard = sess.getBlackboard();
-        System.out.println("BLACKBOARD: ");
-        for (Question q :
-                blackboard.getValuedQuestions()) {
+	Blackboard blackboard = sess.getBlackboard();
+	System.out.println("BLACKBOARD: ");
+	for (Question q :
+		blackboard.getValuedQuestions()) {
 
-            System.out.println(q.getName() + " -> "
-                    + blackboard.getValue(q));
-        }
-        System.out.println("BLACKBOARD ENDE");
+	    System.out.println(q.getName() + " -> "
+		    + blackboard.getValue(q));
+	}
+	System.out.println("BLACKBOARD ENDE");
     }
 
     public static void printBlackboard(Session sess) {
-        Blackboard blackboard = sess.getBlackboard();
-        KnowledgeBase kb = sess.getKnowledgeBase();
-        System.out.println("BLACKBOARD: ");
-        for (TerminologyObject to : kb.getManager().getAllTerminologyObjects()) {
+	Blackboard blackboard = sess.getBlackboard();
+	KnowledgeBase kb = sess.getKnowledgeBase();
+	System.out.println("BLACKBOARD: ");
+	for (TerminologyObject to : kb.getManager().getAllTerminologyObjects()) {
 
-            if (!(to instanceof QContainer)) {
-                System.out.println(to.getName() + " -> "
-                        + blackboard.getValue((ValueObject) to));
-            }
-        }
-        System.out.println("BLACKBOARD ENDE");
+	    if (!(to instanceof QContainer)) {
+		System.out.println(to.getName() + " -> "
+			+ blackboard.getValue((ValueObject) to));
+	    }
+	}
+	System.out.println("BLACKBOARD ENDE");
     }
 
-    public static String getScoreForToAndAnswer(TerminologyObject to, Session sess, String answerValue) {
-        Collection<KnowledgeSlice> c = sess.getKnowledgeBase().getAllKnowledgeSlices();
-
-        for (KnowledgeSlice ks : c) {
-
-            if (ks instanceof RuleSet) {
-                RuleSet rs = (RuleSet) ks;
-
-                for (Rule r : rs.getRules()) {
-
-                    if (r.getAction() instanceof ActionSetValue) {
-
-                        ActionSetValue asv = (ActionSetValue) r.getAction();
-
-                        if (asv.getQuestion().getName().endsWith("_n")
-                                && r.getCondition() instanceof CondEqual
-                                && r.getCondition().getTerminalObjects().contains(to)) {
-
-                            CondEqual ce = (CondEqual) r.getCondition();
-
-                            if (ce.getValue() instanceof ChoiceValue) {
-
-                                ChoiceValue cv = (ChoiceValue) ce.getValue();
-
-                                if (cv.toString().equals(answerValue)) {
-
-                                    return asv.getValue().toString();
-                                }
-                            }
-
-
-                        }
-
-                    }
-                }
-
-
-
-            }
-
-        }
-        return "";
+    // TODO!!
+    /*
+     * public static String getScoreForToAndAnswer(TerminologyObject to, Session
+     * sess, String answerValue) { Collection<KnowledgeSlice> c =
+     * sess.getKnowledgeBase().getAllKnowledgeSlices();
+     *
+     * for (KnowledgeSlice ks : c) {
+     *
+     * if (ks instanceof RuleSet) { RuleSet rs = (RuleSet) ks;
+     *
+     * for (Rule r : rs.getRules()) {
+     *
+     * if (r.getAction() instanceof ActionAddValueFact) {
+     *
+     * ActionAddValueFact asv = (ActionAddValueFact) r.getAction();
+     *
+     * // TODO ! if (asv.().getName().endsWith("_n") && r.getCondition()
+     * instanceof CondEqual &&
+     * r.getCondition().getTerminalObjects().contains(to)) {
+     *
+     * CondEqual ce = (CondEqual) r.getCondition();
+     *
+     * if (ce.getValue() instanceof ChoiceValue) {
+     *
+     * ChoiceValue cv = (ChoiceValue) ce.getValue();
+     *
+     * if (cv.toString().equals(answerValue)) {
+     *
+     * return asv.getValue().toString(); } }
+     *
+     *
+     * }
+     *
+     * }
+     * }
+     *
+     *
+     *
+     * }
+     *
+     * }
+     * return ""; }
+     *
+     * public static String getLeftScoreForTo(TerminologyObject to, Session
+     * sess) { Collection<KnowledgeSlice> c =
+     * sess.getKnowledgeBase().getAllKnowledgeSlices();
+     *
+     * for (KnowledgeSlice ks : c) {
+     *
+     * if (ks instanceof RuleSet) { RuleSet rs = (RuleSet) ks;
+     *
+     * for (Rule r : rs.getRules()) {
+     *
+     * if (r.getAction() instanceof ActionSetValue &&
+     * r.getCondition().getTerminalObjects().contains(to) && r.getCondition()
+     * instanceof CondNumLess) {
+     *
+     * ActionSetValue asv = (ActionSetValue) r.getAction(); if
+     * (asv.getValue().toString().equals("nein")) {
+     *
+     * CondNumLess cnl = (CondNumLess) r.getCondition(); return
+     * cnl.getConditionValue().toString(); } } } } } return ""; }
+     *
+     * public static String getRightScoreForTo(TerminologyObject to, Session
+     * sess) { Collection<KnowledgeSlice> c =
+     * sess.getKnowledgeBase().getAllKnowledgeSlices();
+     *
+     * for (KnowledgeSlice ks : c) {
+     *
+     * if (ks instanceof RuleSet) { RuleSet rs = (RuleSet) ks;
+     *
+     * for (Rule r : rs.getRules()) {
+     *
+     * if (r.getAction() instanceof ActionSetValue &&
+     * r.getCondition().getTerminalObjects().contains(to) && r.getCondition()
+     * instanceof CondNumGreaterEqual) {
+     *
+     * ActionSetValue asv = (ActionSetValue) r.getAction(); if
+     * (asv.getValue().toString().equals("ja")) { CondNumGreaterEqual cnl =
+     * (CondNumGreaterEqual) r.getCondition(); return
+     * cnl.getConditionValue().toString(); }
+     *
+     * }
+     * }
+     * }
+     * }
+     * return "";
     }
+     */
+    public static List getDerivationObjectsPSMRulesFor(TerminologyObject sol,
+	    Session d3webs) {
 
-    public static String getLeftScoreForTo(TerminologyObject to, Session sess) {
-        Collection<KnowledgeSlice> c = sess.getKnowledgeBase().getAllKnowledgeSlices();
+	List deriObjects = new ArrayList();
 
-        for (KnowledgeSlice ks : c) {
-
-            if (ks instanceof RuleSet) {
-                RuleSet rs = (RuleSet) ks;
-
-                for (Rule r : rs.getRules()) {
-
-                    if (r.getAction() instanceof ActionSetValue
-                            && r.getCondition().getTerminalObjects().contains(to)
-                            && r.getCondition() instanceof CondNumLess) {
-
-                        ActionSetValue asv = (ActionSetValue) r.getAction();
-                        if (asv.getValue().toString().equals("nein")) {
-
-                            CondNumLess cnl = (CondNumLess) r.getCondition();
-                            return cnl.getConditionValue().toString();
-                        }
-                    }
-                }
-            }
-        }
-        return "";
-    }
-
-    public static String getRightScoreForTo(TerminologyObject to, Session sess) {
-        Collection<KnowledgeSlice> c = sess.getKnowledgeBase().getAllKnowledgeSlices();
-
-        for (KnowledgeSlice ks : c) {
-
-            if (ks instanceof RuleSet) {
-                RuleSet rs = (RuleSet) ks;
-
-                for (Rule r : rs.getRules()) {
-
-                    if (r.getAction() instanceof ActionSetValue
-                            && r.getCondition().getTerminalObjects().contains(to)
-                            && r.getCondition() instanceof CondNumGreaterEqual) {
-
-                        ActionSetValue asv = (ActionSetValue) r.getAction();
-                        if (asv.getValue().toString().equals("ja")) {
-                            CondNumGreaterEqual cnl = (CondNumGreaterEqual) r.getCondition();
-                            return cnl.getConditionValue().toString();
-                        }
-
-                    }
-                }
-            }
-        }
-        return "";
-    }
-
-    public static List getRulesHeuristicRatingFor(TerminologyObject sol,
-            Session d3webs) {
-
-        List rulesList = new ArrayList();
-
-        Blackboard bb = d3webs.getBlackboard();
-        Collection<PSMethod> indicatingPSs = bb.getIndicatingPSMethods(sol);
-        Collection<PSMethod> contribPSs = bb.getContributingPSMethods(sol);
+	Blackboard bb = d3webs.getBlackboard();
 
 
-        for (PSMethod cpsm : contribPSs) {
+	Collection<PSMethod> contribPSs = bb.getContributingPSMethods(sol);
 
-            Fact vFact = bb.getValueFact(sol, cpsm);
+	for (PSMethod cpsm : contribPSs) {
 
-            if (vFact.getSource() instanceof Rule) {
-                Rule rule = (Rule) vFact.getSource();
-                if (rule.getAction().getBackwardObjects().contains(sol)) {
-                    rulesList.add(rule);
-                }
-            }
+	    if (cpsm instanceof PSMethodRulebased) {
 
-            /*
-             * if (sol.getName().equals("Nadelbaum")) {
-             *
-             * //System.out.println(d3webs.getKnowledgeBase().getAllKnowledgeSlicesFor(PSMethodHeuristic.FORWARD));
-             * Collection<RuleSet> rules =
-             * d3webs.getKnowledgeBase().getAllKnowledgeSlicesFor(PSMethodHeuristic.FORWARD);
-             *
-             * for(RuleSet r: rules){
-             *
-             * for(Rule rule: r.getRules()){
-             *
-             * if (rule.getAction().getBackwardObjects().contains(sol)){
-             * System.out.println(rule); rulesList.add(rule); } } } }
-             */
-        }
+		PSMethodRulebased psmr = (PSMethodRulebased) cpsm;
+		Set<TerminologyObject> deriSources =
+			psmr.getActiveDerivationSources(sol, d3webs);
 
-        return rulesList;
+		deriObjects.addAll(deriSources);
+	    }
+
+	}
+
+	return deriObjects;
     }
 }
