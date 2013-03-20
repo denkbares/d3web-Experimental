@@ -19,6 +19,8 @@
  */
 package de.d3web.proket.d3web.utils;
 
+import de.d3web.abstraction.ActionSetQuestion;
+import de.d3web.abstraction.formula.FormulaNumber;
 import de.d3web.core.inference.*;
 import de.d3web.core.inference.condition.CondEqual;
 import de.d3web.core.inference.condition.CondNumGreaterEqual;
@@ -2282,93 +2284,147 @@ public class D3webUtils {
     }
 
     // TODO!!
-    /*
-     * public static String getScoreForToAndAnswer(TerminologyObject to, Session
-     * sess, String answerValue) { Collection<KnowledgeSlice> c =
-     * sess.getKnowledgeBase().getAllKnowledgeSlices();
-     *
-     * for (KnowledgeSlice ks : c) {
-     *
-     * if (ks instanceof RuleSet) { RuleSet rs = (RuleSet) ks;
-     *
-     * for (Rule r : rs.getRules()) {
-     *
-     * if (r.getAction() instanceof ActionAddValueFact) {
-     *
-     * ActionAddValueFact asv = (ActionAddValueFact) r.getAction();
-     *
-     * // TODO ! if (asv.().getName().endsWith("_n") && r.getCondition()
-     * instanceof CondEqual &&
-     * r.getCondition().getTerminalObjects().contains(to)) {
-     *
-     * CondEqual ce = (CondEqual) r.getCondition();
-     *
-     * if (ce.getValue() instanceof ChoiceValue) {
-     *
-     * ChoiceValue cv = (ChoiceValue) ce.getValue();
-     *
-     * if (cv.toString().equals(answerValue)) {
-     *
-     * return asv.getValue().toString(); } }
-     *
-     *
-     * }
-     *
-     * }
-     * }
-     *
-     *
-     *
-     * }
-     *
-     * }
-     * return ""; }
-     *
-     * public static String getLeftScoreForTo(TerminologyObject to, Session
-     * sess) { Collection<KnowledgeSlice> c =
-     * sess.getKnowledgeBase().getAllKnowledgeSlices();
-     *
-     * for (KnowledgeSlice ks : c) {
-     *
-     * if (ks instanceof RuleSet) { RuleSet rs = (RuleSet) ks;
-     *
-     * for (Rule r : rs.getRules()) {
-     *
-     * if (r.getAction() instanceof ActionSetValue &&
-     * r.getCondition().getTerminalObjects().contains(to) && r.getCondition()
-     * instanceof CondNumLess) {
-     *
-     * ActionSetValue asv = (ActionSetValue) r.getAction(); if
-     * (asv.getValue().toString().equals("nein")) {
-     *
-     * CondNumLess cnl = (CondNumLess) r.getCondition(); return
-     * cnl.getConditionValue().toString(); } } } } } return ""; }
-     *
-     * public static String getRightScoreForTo(TerminologyObject to, Session
-     * sess) { Collection<KnowledgeSlice> c =
-     * sess.getKnowledgeBase().getAllKnowledgeSlices();
-     *
-     * for (KnowledgeSlice ks : c) {
-     *
-     * if (ks instanceof RuleSet) { RuleSet rs = (RuleSet) ks;
-     *
-     * for (Rule r : rs.getRules()) {
-     *
-     * if (r.getAction() instanceof ActionSetValue &&
-     * r.getCondition().getTerminalObjects().contains(to) && r.getCondition()
-     * instanceof CondNumGreaterEqual) {
-     *
-     * ActionSetValue asv = (ActionSetValue) r.getAction(); if
-     * (asv.getValue().toString().equals("ja")) { CondNumGreaterEqual cnl =
-     * (CondNumGreaterEqual) r.getCondition(); return
-     * cnl.getConditionValue().toString(); }
-     *
-     * }
-     * }
-     * }
-     * }
-     * return "";
+    public static String getScoreForToAndAnswer(TerminologyObject to, Session sess, String answerValue) {
+
+	Collection<KnowledgeSlice> c =
+		sess.getKnowledgeBase().getAllKnowledgeSlices();
+
+	for (KnowledgeSlice ks : c) {
+
+	    if (ks instanceof RuleSet) {
+		RuleSet rs = (RuleSet) ks;
+
+		for (Rule r : rs.getRules()) {
+
+		    if (r.getAction() instanceof ActionSetQuestion) {
+
+			if (r.getCondition() instanceof CondEqual) {
+
+			    CondEqual ce = (CondEqual) r.getCondition();
+			    
+			    
+			    if (ce.getQuestion().getName().equals(to.getName())) {
+				
+				if (ce.getValue().toString().equals(answerValue)) {
+
+				    
+				    ActionSetQuestion asq = (ActionSetQuestion) r.getAction();
+				    return asq.getValue().toString();
+				    
+				}
+			    }
+			}
+
+		    }
+		}
+	    }
+	}
+
+	return "";
+
     }
+
+    /**
+     * Returns the score value that is assigned parentto the given TO in case
+     * the establishing answer was provided. Used in ITree, when question is
+     * answered with the "YES/JA" value, then this method returns the score that
+     * is assigned parentto the parent question.
+     *
+     * @param parentto the parent TO, that is scored in case the child is
+     * answered in the establishing manner.
+     * @param sess the current session
+     * @return the score
+     */
+    public static String getEstablishingScoreForTO(TerminologyObject parentto, Session sess) {
+
+	Collection<KnowledgeSlice> c =
+		sess.getKnowledgeBase().getAllKnowledgeSlices();
+
+	for (KnowledgeSlice ks : c) {
+
+	    if (ks instanceof RuleSet) {
+		RuleSet rs = (RuleSet) ks;
+
+		for (Rule r : rs.getRules()) {
+
+		    if (r.getAction() instanceof ActionSetQuestion) {
+
+			ActionSetQuestion asq = (ActionSetQuestion) r.getAction();
+			// scoring is done via abstraction questions in itree
+			// FormulaNumber also can be a 
+
+			if (asq.getValue() instanceof Choice) {
+
+			    // now we have the rule that rates the given parent
+			    if (asq.getQuestion().getName().equals(parentto.getName().replace("_n", ""))) {
+
+				// always done via CondEquals
+				if (r.getCondition() instanceof CondNumGreaterEqual) {
+				    CondNumGreaterEqual cnl = (CondNumGreaterEqual) r.getCondition();
+				    return cnl.getConditionValue().toString();
+
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	}
+	return "";
+    }
+
+    public static String getExcludingScoreForTO(TerminologyObject parentto, Session sess) {
+
+	Collection<KnowledgeSlice> c =
+		sess.getKnowledgeBase().getAllKnowledgeSlices();
+
+	for (KnowledgeSlice ks : c) {
+
+	    if (ks instanceof RuleSet) {
+		RuleSet rs = (RuleSet) ks;
+
+		for (Rule r : rs.getRules()) {
+
+		    if (r.getAction() instanceof ActionSetQuestion) {
+
+			ActionSetQuestion asq = (ActionSetQuestion) r.getAction();
+			// scoring is done via abstraction questions in itree
+			// FormulaNumber also can be a 
+
+			if (asq.getValue() instanceof Choice) {
+
+			    // now we have the rule that rates the given parent
+			    if (asq.getQuestion().getName().equals(parentto.getName().replace("_n", ""))) {
+
+				// always done via CondEquals
+				if (r.getCondition() instanceof CondNumLess) {
+				    CondNumLess cnl = (CondNumLess) r.getCondition();
+				    return cnl.getConditionValue().toString();
+
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	}
+	return "";
+    }
+
+    // TODO refactor above 3 methods into one that returns the one array with
+    // all three values
+    public static String[] getScoringValuesForITreeYNQuestions() {
+	String[] svalues = {"n/a", "n/a", "n/a"};
+	return svalues;
+    }
+
+    /**
+     * Returns all derivation objects that derive the given SolutionTO sol with
+     * the help of PSMRules.
+     *
+     * @param sol the solution
+     * @param d3webs the current session
+     * @return a list of the derivation objects for solution sol
      */
     public static List getDerivationObjectsPSMRulesFor(TerminologyObject sol,
 	    Session d3webs) {

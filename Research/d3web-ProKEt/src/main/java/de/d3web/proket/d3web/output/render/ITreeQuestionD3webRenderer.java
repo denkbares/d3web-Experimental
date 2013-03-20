@@ -249,10 +249,10 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
 
             if (scoringCor != null) {
 
-                tooltipScoring = assembleScoringTooltip(to, "ja", d3webSession, scoringCor);
+                tooltipScoring = assembleScoringTooltip(to, "Ja", d3webSession, scoringCor);
                 st.setAttribute("tty", tooltipScoring);
 
-                tooltipScoring = assembleScoringTooltip(to, "nein", d3webSession, scoringCor);
+                tooltipScoring = assembleScoringTooltip(to, "Nein", d3webSession, scoringCor);
                 st.setAttribute("ttn", tooltipScoring);
             } else {
                 st.setAttribute("tty", TT_YES_REV);
@@ -268,10 +268,10 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
 
             if (scoringCor != null) {
 
-                tooltipScoring = assembleScoringTooltip(to, "ja", d3webSession, scoringCor);
+                tooltipScoring = assembleScoringTooltip(to, "Ja", d3webSession, scoringCor);
                 st.setAttribute("tty", tooltipScoring);
 
-                tooltipScoring = assembleScoringTooltip(to, "nein", d3webSession, scoringCor);
+                tooltipScoring = assembleScoringTooltip(to, "Nein", d3webSession, scoringCor);
                 st.setAttribute("ttn", tooltipScoring);
             } else {
                 st.setAttribute("tty", TT_YES);
@@ -298,12 +298,12 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
 
         StringBuilder bui = new StringBuilder();
         bui.append("Addiert ");
-        //bui.append(D3webUtils.getScoreForToAndAnswer(to, sess, answerString));
+        bui.append(D3webUtils.getScoreForToAndAnswer(to, sess, answerString));
         bui.append(" zu übergeordneter Frage -> ");
         bui.append("Grenzwert üoF JA = ");
-        //bui.append(D3webUtils.getRightScoreForTo(parent, sess));
+        bui.append(D3webUtils.getExcludingScoreForTO(parent, sess));
         bui.append(", Grenzwert üoF NEIN = ");
-        //bui.append(D3webUtils.getLeftScoreForTo(parent, sess));
+        bui.append(D3webUtils.getEstablishingScoreForTO(parent, sess));
         return bui.toString();
 
     }
