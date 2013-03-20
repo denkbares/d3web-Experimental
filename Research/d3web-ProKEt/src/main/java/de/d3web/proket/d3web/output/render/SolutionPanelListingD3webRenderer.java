@@ -20,17 +20,21 @@
 package de.d3web.proket.d3web.output.render;
 
 import de.d3web.core.inference.PSMethod;
+import de.d3web.core.inference.Rule;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.settings.UISolutionPanelSettings;
+import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import de.d3web.scoring.HeuristicRating;
 import de.d3web.scoring.inference.PSMethodHeuristic;
 import de.d3web.xcl.inference.PSMethodXCL;
 import java.util.Collection;
+import java.util.List;
+import java.util.StringTokenizer;
 import org.antlr.stringtemplate.StringTemplate;
 
 /**
@@ -183,9 +187,40 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
         // in the case of a treemap, a tailored popup that uses the respective image
         // needs to be used
         if (expType == UISolutionPanelSettings.ExplanationType.TREEMAP){
-            // explanation popup that shows image
-            stExp = StringTemplateUtils.getTemplate("solutionPanel/PopupExpImage");
-            stExp.setAttribute("expImagePath", explanation);
+            // explanation popup that shows a treemap
+            stExp = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynLink");
+            stExp.setAttribute("solid", solution.getName());
+            //stExp.setAttribute("solutiontext", solution.getName()); 
+            //stExp.setAttribute("click", "openPopupContent('$contentx$');");
+            stExp.setAttribute("contentx", explanation);            
+        
+        //in case of a clarification visulisation
+        //TODO: green or red box for question, depending on rating
+        }else if(expType == UISolutionPanelSettings.ExplanationType.CLARI){
+            //explanation popup with all the details
+            stExp = StringTemplateUtils.getTemplate("baAlina/Clari"); //template for clarification popup
+            stExp.setAttribute("sol_name", solution.getName()); //set the solution name/ title
+            
+            //get score from explanation String
+            String[] split_score = explanation.split("\\|");          
+            String score = split_score[0];
+            
+            //set text for rating: explicit score for ratinf > 70, excluded solution for -Infinity, 
+            //sugested or unclear solution for score < 70
+            if(score.equals("-Infinity")){
+                  stExp.setAttribute("rating", "Excluded solution");
+                  stExp.setAttribute("color", "#E00000");
+            }else if(Double.parseDouble(score) > 70.0){
+                stExp.setAttribute("rating", "Total score: "+score);
+                stExp.setAttribute("color", "#009933");
+
+            }else{
+                stExp.setAttribute("rating", "Sugested or unclear solution");
+                stExp.setAttribute("color", "#FFE300");
+            }
+
+          stExp.setAttribute("content", split_score[1]);
+            
         } else {
             // basic explanation popup  
             stExp = StringTemplateUtils.getTemplate("solutionPanel/PopupExp");
@@ -199,7 +234,7 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
         StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynLink");
         st.setAttribute("explanationpopup", stExp.toString());
         st.setAttribute("solid", solution.getName());
-
+        st.setAttribute("contentx", expr.getExplanationForSolution(solution, d3webs, expType));           
         /*
          * get scoring, dependent on applied problem solving method
          */

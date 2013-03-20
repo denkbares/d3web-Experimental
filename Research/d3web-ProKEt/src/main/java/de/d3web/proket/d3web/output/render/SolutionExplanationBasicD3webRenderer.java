@@ -59,15 +59,21 @@ public class SolutionExplanationBasicD3webRenderer {
             return textualSolRenderer.renderExplanationForSolution(solution, d3webs);
             
         } else if (expType == UISolutionPanelSettings.ExplanationType.TREEMAP) {
-            return "img/baAlina/treemap.png";
+            //return "img/baAlina/treemap.png";
             //System.out.println("Treemap Explanation Rendering");
             // TODO: render treemap explanation
+            
+             SolutionExplanationTreeMapD3webRenderer treemapSolRenderer = 
+                     new SolutionExplanationTreeMapD3webRenderer();
+             return treemapSolRenderer.renderExplanationForSolution(solution, d3webs);
+             
         } else if (expType == UISolutionPanelSettings.ExplanationType.RULEGRAPH) {
             // TODO: render rulegraph explanation
         } else if (expType == UISolutionPanelSettings.ExplanationType.CLARI) {
-            return "Clarification Explanation Dialog";
-            //System.out.println("Clarification Dialog Solution Rendering");
-            // TODO render clarification dialog explanation
+            
+            SolutionExplanationClarificationD3webRenderer clariSolRenderer =
+                    new SolutionExplanationClarificationD3webRenderer();
+            return clariSolRenderer.renderExplanationForSolution(solution, d3webs);
         }
 
         return renderedExplanation;

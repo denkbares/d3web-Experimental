@@ -208,16 +208,9 @@ public class SolutionPanelSingleSolutionD3webRenderer extends SolutionPanelBasic
         stExp.setAttribute("elementID", solution.getName());
         stExp.setAttribute("popupcontent", explanation);
         //System.out.println(stExp.toString());
-
-        Blackboard bb = d3webs.getBlackboard();
-
-        // retrieve template for the solution panel per se, first
-        StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynLink");
-        st.setAttribute("explanationpopup", stExp.toString());
-
-        // fill template attribute
-        st.setAttribute("solid", solution.getName());
-
+        
+        
+         Blackboard bb = d3webs.getBlackboard();
         /*
          * get scoring, dependent on applied problem solving method
          */
@@ -234,10 +227,19 @@ public class SolutionPanelSingleSolutionD3webRenderer extends SolutionPanelBasic
                 break;
             }
         }
+       
+        // retrieve template for the solution panel per se, first
+        StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynLink");
+        st.setAttribute("explanationpopup", stExp.toString());
 
-        st.setAttribute("solutiontext", solution.getName());
-        st.setAttribute("scoretext", "(" + score + ")");
+        // fill template attribute
+        st.setAttribute("solid", solution.getName());
 
+        
+
+       st.setAttribute("solutiontext", solution.getName());
+       st.setAttribute("scoretext", "(" + score + ")");
+        
 
         if (bb.getRating(solution).getState().equals(Rating.State.ESTABLISHED)) {
             st.setAttribute("src", "img/solEst.png");
