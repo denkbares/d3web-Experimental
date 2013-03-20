@@ -816,7 +816,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 
             if (to.getChildren().length > 0) {
-                System.out.println(to.getChildren().toString());
+                //System.out.println(to.getChildren().toString());
                 // check default root's children
                 for (TerminologyObject toc : to.getChildren()) {
                     //System.out.println(toc.getName());

@@ -210,7 +210,7 @@ public class ITreeQuestionD3webRenderer extends AbstractD3webRenderer implements
          */
         Value val = bb.getValue((ValueObject) to);
         st.removeAttribute("qrating");
-        System.out.println("ITreeQuestionRenderer: " + to.getName() + " " + val);
+        //System.out.println("ITreeQuestionRenderer: " + to.getName() + " " + val);
 
         if (UndefinedValue.isNotUndefinedValue(val)) {
             if (val.toString().equalsIgnoreCase(JNV.J.toString())) {

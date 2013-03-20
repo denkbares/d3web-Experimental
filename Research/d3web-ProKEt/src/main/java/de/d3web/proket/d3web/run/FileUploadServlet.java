@@ -152,17 +152,17 @@ public class FileUploadServlet extends HttpServlet {
                                     newFileName.replace(".xlsx", ".d3web").replace(".csv", ".d3web").replace(".doc", ".d3web");
                             String targetD3web = targetDir + FILESEP + fnD3web;
                             File tf = new File(targetD3web);
-                            System.out.println(tf.getAbsolutePath());
+                            //System.out.println(tf.getAbsolutePath());
                             // if old equally named file already there: delete it
                             if (tf.exists()) {
-                                System.out.println("FILE EXISTS!");
+                                //System.out.println("FILE EXISTS!");
                                 // ask whether to delete file in dialog manager
                                 response.sendRedirect(GLOBSET.getWebAppWarName()
                                     + "/DialogManager?fileExists=true&upfilename=" + newFileName.replace("%", " "));
                                
                             } else {
 
-                                System.out.println("FILE DOES NOT EXIST");
+                                //System.out.println("FILE DOES NOT EXIST");
                                 tmpFile.renameTo(new File(dirToMove, newFileName));
 
                                 HttpSession httpSession = request.getSession();

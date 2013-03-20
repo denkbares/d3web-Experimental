@@ -330,7 +330,7 @@ public class D3webXMLParserOrig {
     }
 
     public Boolean getDebug() {
-        System.out.println(XMLUtils.getBoolean((Element) dialogSpec, "debug", Boolean.FALSE));
+        //System.out.println(XMLUtils.getBoolean((Element) dialogSpec, "debug", Boolean.FALSE));
         return XMLUtils.getBoolean((Element) dialogSpec, "debug", Boolean.FALSE);
     }
     

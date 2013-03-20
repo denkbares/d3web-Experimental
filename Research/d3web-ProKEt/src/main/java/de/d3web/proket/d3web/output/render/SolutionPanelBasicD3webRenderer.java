@@ -76,7 +76,7 @@ public class SolutionPanelBasicD3webRenderer {
             }
         }
 
-        System.out.println(bui.toString());   
+        //System.out.println(bui.toString());   
         return bui.toString();
     }
 

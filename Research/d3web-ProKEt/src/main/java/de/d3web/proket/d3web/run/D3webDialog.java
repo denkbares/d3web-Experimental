@@ -1210,7 +1210,7 @@ public class D3webDialog extends HttpServlet {
         KnowledgeBase kb = d3wcon.getKb();
         // TODO Urgent: needed for EuraHS due to early reset, but not good
         // for other dialogs!
-        System.out.println("RESET: " + uis.getDialogType());
+        //System.out.println("RESET: " + uis.getDialogType());
 
         if (uis.getDialogType().equals(DialogType.EURAHS)) {
             try {
@@ -1218,7 +1218,7 @@ public class D3webDialog extends HttpServlet {
 
                 if (kb == null) {
                     d3webParser.parse();
-                    System.out.println("RESET: " + d3webParser.getKnowledgeBase());
+                    //System.out.println("RESET: " + d3webParser.getKnowledgeBase());
                     kb = d3webParser.getKnowledgeBase();
                 }
 
@@ -1536,8 +1536,8 @@ public class D3webDialog extends HttpServlet {
     }
 
     protected void updateSummary(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
-        System.out.println("UPDATE SUMMARY");
-        System.out.println(httpSession.getAttribute(D3WEB_SESSION));
+        //System.out.println("UPDATE SUMMARY");
+        //System.out.println(httpSession.getAttribute(D3WEB_SESSION));
 
         PrintWriter writer = response.getWriter();
 
@@ -1552,7 +1552,7 @@ public class D3webDialog extends HttpServlet {
                 (Session) httpSession.getAttribute(D3WEB_SESSION),
                 SummaryD3webRenderer.SummaryType.QUESTIONNAIRE, httpSession));
         writer.append("<div>");
-        System.out.println("SUMMARY1: " + writer.toString());
+        //System.out.println("SUMMARY1: " + writer.toString());
 
         String questionnaireLevel1ContendID = "level1SummaryContent";
         writer.append(REPLACEID + questionnaireLevel1ContendID);
@@ -1562,7 +1562,7 @@ public class D3webDialog extends HttpServlet {
                 (Session) httpSession.getAttribute(D3WEB_SESSION),
                 SummaryD3webRenderer.SummaryType.QUESTIONNAIRE_LEVEL1, httpSession));
         writer.append("<div>");
-        System.out.println("SUMMARY2: " + writer.toString());
+        //System.out.println("SUMMARY2: " + writer.toString());
 
         String gridContentID = "gridSummaryContent";
 
@@ -1573,7 +1573,7 @@ public class D3webDialog extends HttpServlet {
                 (Session) httpSession.getAttribute(D3WEB_SESSION),
                 SummaryD3webRenderer.SummaryType.GRID, httpSession));
         writer.append("<div>");
-        System.out.println("SUMMARY3: " + writer.toString());
+        //System.out.println("SUMMARY3: " + writer.toString());
     }
 
     protected void logInitially(HttpServletRequest request, JSONLogger logger, HttpSession httpSession) {

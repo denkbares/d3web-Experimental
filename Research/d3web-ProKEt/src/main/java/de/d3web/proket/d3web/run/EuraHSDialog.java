@@ -387,7 +387,7 @@ public class EuraHSDialog extends D3webDialog {
             session = PersistenceD3webUtils.loadUserCase(user, anonFilename);
             httpSession.setAttribute(D3WEB_SESSION, session);
             httpSession.setAttribute("lastLoaded", anonFilename);
-            System.out.println("lastLoaded in Load Case: " + anonFilename);
+            //System.out.println("lastLoaded in Load Case: " + anonFilename);
             D3webConnector.getInstance().setSession(session);
 
             JSONLogger logger =

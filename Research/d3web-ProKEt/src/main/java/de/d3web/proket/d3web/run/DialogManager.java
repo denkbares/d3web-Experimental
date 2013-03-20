@@ -1130,7 +1130,7 @@ public class DialogManager extends HttpServlet {
 
                             currentUploadFile.setWritable(true);
                             currentUploadFile.delete();
-                            System.out.println("CURRENT UPLOAD FILE: EXISTS? " + currentUploadFile.exists());
+                            //System.out.println("CURRENT UPLOAD FILE: EXISTS? " + currentUploadFile.exists());
 
                             response.sendRedirect(GLOBSET.getWebAppWarName()
                                     + "/DialogManager?upKB=done&upfilename=" + newFileName.replace("%", " "));

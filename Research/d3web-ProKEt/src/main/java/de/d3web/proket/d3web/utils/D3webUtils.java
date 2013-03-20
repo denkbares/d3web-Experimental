@@ -1823,7 +1823,7 @@ public class D3webUtils {
 		    valueName == null ? valueId : valueName);
 
 	} else if (to instanceof QuestionMC) {
-	    System.out.println("D3webUtils setQuestionChoice: " + valueId);
+	    //System.out.println("D3webUtils setQuestionChoice: " + valueId);
 
 	    if (valueId.equals("")) {
 		value = Unknown.getInstance();
@@ -1836,7 +1836,7 @@ public class D3webUtils {
 		MultipleChoiceValue mcvalExists;
 		if (UndefinedValue.isNotUndefinedValue(currentVal)) {
 		    mcvalExists = (MultipleChoiceValue) sess.getBlackboard().getValue(to);
-		    System.out.println("mcval Exists: " + mcvalExists);
+		    //System.out.println("mcval Exists: " + mcvalExists);
 
 		    ArrayList< Choice> cs = (ArrayList) mcvalExists.getChoiceIDs();
 
@@ -1852,12 +1852,12 @@ public class D3webUtils {
 			choicesNew.add(newChoice);
 		    }
 		    value = MultipleChoiceValue.fromChoices(choicesNew);
-		    System.out.println("new mc val: " + value);
+		    //System.out.println("new mc val: " + value);
 		} else {
 		    ArrayList<Choice> choices = new ArrayList<Choice>();
 		    choices.add(newChoice);
 		    value = MultipleChoiceValue.fromChoices(choices);
-		    System.out.println("new mc val: " + value);
+		    //System.out.println("new mc val: " + value);
 		}
 
 	    } else {
