@@ -31,11 +31,7 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 public class AbbreviationReference extends SimpleReference {
 
 	public AbbreviationReference() {
-		this(Priority.DEFAULT);
-	}
-
-	public AbbreviationReference(Priority registrationPriority) {
-		super(TermRegistrationScope.LOCAL, AbbreviationDefinition.class, registrationPriority);
+		super(TermRegistrationScope.LOCAL, AbbreviationDefinition.class, Priority.HIGHER);
 		this.setSectionFinder(new ConstraintSectionFinder(new RegexSectionFinder(Patterns.WORD),
 				AtMostOneFindingConstraint.getInstance()));
 		this.setRenderer(new ToolMenuDecoratingRenderer(StyleRenderer.Questionaire));

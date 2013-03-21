@@ -37,7 +37,7 @@ public class NamespaceAbbreviationDefinition extends SimpleDefinition {
 
 	public NamespaceAbbreviationDefinition() {
 		super(TermRegistrationScope.LOCAL, NamespaceAbbreviationDefinition.class);
-		this.addSubtreeHandler(Priority.HIGH, new NamespaceSubtreeHandler());
+		this.addSubtreeHandler(Priority.HIGHEST, new NamespaceSubtreeHandler());
 		this.setSectionFinder(new RegexSectionFinder("\\s*\\w+\\s+\\S+\\s*"));
 		this.addChildType(new AbbreviationDefinition());
 		this.addChildType(new NamespaceDefinition());

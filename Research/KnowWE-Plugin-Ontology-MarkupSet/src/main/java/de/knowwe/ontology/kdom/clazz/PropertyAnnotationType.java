@@ -72,6 +72,8 @@ public class PropertyAnnotationType extends AbstractType {
 			Section<AbbreviatedPropertyDefinition> propertySection = Sections.findChildOfType(
 					section, AbbreviatedPropertyDefinition.class);
 
+			if (propertySection.hasErrorInSubtree()) return Messages.noMessage();
+
 			Rdf2GoCore core = Rdf2GoCore.getInstance(article);
 
 			URI propertyURI = propertySection.get().getPropertyURI(core, propertySection);
@@ -80,11 +82,13 @@ public class PropertyAnnotationType extends AbstractType {
 					AbbreviatedResourceReference.class);
 
 			for (Section<AbbreviatedClassDefinition> classSection : classSections) {
+				if (classSection.hasErrorInSubtree()) continue;
 				URI classNameURI = classSection.get().getClassNameURI(core, classSection);
 				core.addStatements(core.createStatement(propertyURI, RDFS.domain, classNameURI));
 			}
 
 			if (rangeSection != null) {
+				if (rangeSection.hasErrorInSubtree()) return Messages.noMessage();
 				String rangeAbbreviation = rangeSection.get().getAbbreviation(rangeSection);
 				String range = rangeSection.get().getResource(rangeSection);
 				URI rangeURI = core.createURI(rangeAbbreviation, range);

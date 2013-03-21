@@ -47,7 +47,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class NamespaceFileAnnotationType extends AbstractType {
 
 	public NamespaceFileAnnotationType() {
-		this.addChildType(new AbbreviationPrefixReference(Priority.HIGH));
+		this.addChildType(new AbbreviationPrefixReference());
 		this.addChildType(new FileNameType());
 		this.setSectionFinder(new AllTextSectionFinder());
 		this.addSubtreeHandler(Priority.HIGH, new ReadOntologyFileHandler());
@@ -70,6 +70,9 @@ public class NamespaceFileAnnotationType extends AbstractType {
 				return Messages.asList(Messages.error("No namespace abbreviation found in annotation '"
 						+ section.getText()
 						+ "'"));
+			}
+			if (abbrevSection.hasErrorInSubtree()) {
+				return Messages.noMessage();
 			}
 			String path = createPath(section, fileNameSection);
 			WikiAttachment attachment = null;

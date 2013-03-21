@@ -18,7 +18,6 @@
  */
 package de.knowwe.ontology.kdom.namespace;
 
-import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.utils.Patterns;
@@ -31,14 +30,10 @@ public class AbbreviationPrefixReference extends AbstractType {
 			+ Patterns.WORD + ":\\s*";
 
 	public AbbreviationPrefixReference() {
-		this(Priority.DEFAULT);
-	}
-
-	public AbbreviationPrefixReference(Priority registrationPriority) {
 		this.setSectionFinder(new ConstraintSectionFinder(new RegexSectionFinder(
 				ABBREVIATION_PREFIX_PATTERN),
 				AtMostOneFindingConstraint.getInstance()));
-		this.addChildType(new AbbreviationReference(registrationPriority));
+		this.addChildType(new AbbreviationReference());
 	}
 
 }
