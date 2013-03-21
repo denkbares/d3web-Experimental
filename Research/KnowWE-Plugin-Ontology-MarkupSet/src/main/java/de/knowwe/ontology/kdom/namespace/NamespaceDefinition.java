@@ -18,6 +18,7 @@
  */
 package de.knowwe.ontology.kdom.namespace;
 
+import de.knowwe.core.compile.Priority;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -27,7 +28,7 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 public class NamespaceDefinition extends SimpleDefinition {
 
 	public NamespaceDefinition() {
-		super(TermRegistrationScope.LOCAL, String.class);
+		super(TermRegistrationScope.LOCAL, String.class, Priority.HIGHEST);
 		this.setSectionFinder(new AllTextFinderTrimmed());
 		this.setRenderer(new ToolMenuDecoratingRenderer(StyleRenderer.CONTENT));
 	}
