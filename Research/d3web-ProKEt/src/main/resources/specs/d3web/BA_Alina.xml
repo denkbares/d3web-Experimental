@@ -14,7 +14,7 @@
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns="1"
-        solutionExplanation = "TREEMAP" 
+        solutionExplanation = "CLARI" 
         solutionSorting = "CATEGORICAL"
         solutionDepth = "ALL"
         solutionDynamics = "INTERACTIVE"
@@ -23,6 +23,6 @@
         solRatingGranularity = "ABSTRACT;;;PRECISE"    
     />
     <localUIOpts />
-    <dataOpts kb="0DemoBaum.d3web" />
+    <dataOpts kb="BaumExt.d3web" />
     <ueOpts logging = "FALSE" />
 </dialogOpts>

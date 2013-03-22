@@ -1285,7 +1285,9 @@ public class D3webUtils {
 	if (to instanceof QuestionYN) {
 	    return getAnswerYNPrompt(c, locIdent);
 	}
-
+	
+	System.out.println(locIdent);
+	
 	//int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
 	//int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
 	String prompt = null;
@@ -1317,25 +1319,25 @@ public class D3webUtils {
 		break;
 	    case 7: // dutch
 		prompt =
-			to.getInfoStore().getValue(MMInfo.PROMPT, DUTCH);
+			c.getInfoStore().getValue(MMInfo.PROMPT, DUTCH);
 		break;
 	    case 8: // swedish
 		prompt =
-			to.getInfoStore().getValue(MMInfo.PROMPT, SWEDISH);
+			c.getInfoStore().getValue(MMInfo.PROMPT, SWEDISH);
 		break;
 	    case 9: // portuguese
 		prompt =
-			to.getInfoStore().getValue(MMInfo.PROMPT, PORTUGUESE);
+			c.getInfoStore().getValue(MMInfo.PROMPT, PORTUGUESE);
 		break;
 	    case 10: // brazilian
 		prompt =
-			to.getInfoStore().getValue(MMInfo.PROMPT, BRAZILIAN);
+			c.getInfoStore().getValue(MMInfo.PROMPT, BRAZILIAN);
 		break;
 	}
 
 	// default fallback solution: popupPrompt in english
 	if (prompt == null) {
-	    prompt = to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
+	    prompt = c.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
 	}
 
 	// default popupPrompt = getName() if no locale specific was given

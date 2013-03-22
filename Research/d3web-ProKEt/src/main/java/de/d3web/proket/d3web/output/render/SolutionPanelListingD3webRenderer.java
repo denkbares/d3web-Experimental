@@ -198,7 +198,7 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
         //TODO: green or red box for question, depending on rating
         }else if(expType == UISolutionPanelSettings.ExplanationType.CLARI){
             //explanation popup with all the details
-            stExp = StringTemplateUtils.getTemplate("baAlina/Clari"); //template for clarification popup
+	    stExp = StringTemplateUtils.getTemplate("baAlina/Clari"); //template for clarification popup
             stExp.setAttribute("sol_name", solution.getName()); //set the solution name/ title
             
             //get score from explanation String
