@@ -83,7 +83,7 @@ public class CompiledImageTag extends AbstractKnowledgeUnitType<CompiledImageTag
 			URI imageURI = new URIImpl(imageURIString);
 			URI targetURI = null;
 
-			Section<SectionHeaderObjectDefinition> contextSection = Utils.getContextSectionIfExisting(section);
+			Section<SectionHeaderObjectDefinition<?>> contextSection = Utils.getContextSectionIfExisting(section);
 			if (contextSection != null) {
 				targetURI = new URIImpl(Utils.createAnchorURLHeaderDefinition(contextSection));
 			}

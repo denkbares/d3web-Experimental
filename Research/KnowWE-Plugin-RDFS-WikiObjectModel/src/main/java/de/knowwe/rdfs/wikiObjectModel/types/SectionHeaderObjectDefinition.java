@@ -39,7 +39,7 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
  * @author Jochen Reutelshöfer (denkbares GmbH)
  * @created 09.07.2012
  */
-public class SectionHeaderObjectDefinition<TermObject> extends AbstractIRITermDefinition {
+public class SectionHeaderObjectDefinition<TermObject> extends AbstractIRITermDefinition<TermObject> {
 
 	/**
 	 * 
@@ -59,8 +59,9 @@ public class SectionHeaderObjectDefinition<TermObject> extends AbstractIRITermDe
 		public void render(Section<?> section, UserContext user, RenderResult string) {
 
 			// render anchor that corresponds to term name / URI
-			Section<SectionHeaderObjectDefinition> castedSection = Sections.cast(section,
-					SectionHeaderObjectDefinition.class);
+			Section<SectionHeaderObjectDefinition<?>> castedSection = Sections.cast(
+					section,
+					SectionHeaderObjectDefinition.getGenericClass());
 			String termName = castedSection.get().getTermName(castedSection);
 			string.appendHtml("<a name='"
 					+ termName.substring(termName.indexOf("#") + 1) + "'>");
@@ -69,6 +70,11 @@ public class SectionHeaderObjectDefinition<TermObject> extends AbstractIRITermDe
 			// render tool stuff
 			r.render(section, user, string);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Class<SectionHeaderObjectDefinition<?>> getGenericClass() {
+		return (Class<SectionHeaderObjectDefinition<?>>) (Class<?>) SectionHeaderObjectDefinition.class;
 	}
 
 	class SectionHeaderFinder implements SectionFinder {

@@ -56,7 +56,6 @@ public class ParseWebOfflineRenderer extends AbstractAction {
 				.getWikiConnector().getAllArticles(webname);
 		Set<String> articleNames = articles.keySet();
 		StringBuffer reports = new StringBuffer();
-		int problems = 0;
 		for (String name : articleNames) {
 			Article article = Article.createArticle(articles.get(name),
 					name, webname, true);
@@ -75,7 +74,6 @@ public class ParseWebOfflineRenderer extends AbstractAction {
 			reports.append(rb.getString("webparser.info.parsing")
 					+ createLink(name, webname) + "<br />");
 			if (hasErrors) {
-				problems++;
 				reports.append("<br />\n");
 			}
 		}
