@@ -23,6 +23,7 @@ import java.util.Map;
 
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.session.Session;
+import de.d3web.interview.inference.PSMethodInterview;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -56,7 +57,8 @@ public class OneQuestionDialogAction extends AbstractAction {
 
 		// if the normal button was hit, the next question will be shown
 		if (type.equals("next")) {
-			InterviewObject o = current.getInterview().nextForm().getInterviewObject();
+			InterviewObject o = current.getSessionObject(
+					current.getPSMethodInstance(PSMethodInterview.class)).nextForm().getInterviewObject();
 
 			if (o == null) {
 				// TODO move to bundle

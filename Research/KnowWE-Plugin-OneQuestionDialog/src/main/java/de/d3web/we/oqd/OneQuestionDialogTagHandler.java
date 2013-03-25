@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
+import de.d3web.interview.inference.PSMethodInterview;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.RessourceLoader;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -68,7 +69,8 @@ public class OneQuestionDialogTagHandler extends AbstractHTMLTagHandler {
 
 		Session current = OneQuestionDialogUtils.getSession(topic, web, user);
 
-		InterviewObject o = current.getInterview().nextForm().getInterviewObject();
+		InterviewObject o = current.getSessionObject(
+				current.getPSMethodInstance(PSMethodInterview.class)).nextForm().getInterviewObject();
 
 		OneQuestionDialogHistory.getInstance().addInterviewObject(o);
 
