@@ -8,7 +8,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class DecodeUrlNodeRenderer implements SparqlResultNodeRenderer {
 
 	@Override
-	public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core) {
+	public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core, RenderMode mode) {
 		try {
 			return URLDecoder.decode(text, "UTF-8");
 

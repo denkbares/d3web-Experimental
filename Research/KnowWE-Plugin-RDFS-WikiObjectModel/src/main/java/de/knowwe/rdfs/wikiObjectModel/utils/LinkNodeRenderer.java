@@ -21,18 +21,23 @@ package de.knowwe.rdfs.wikiObjectModel.utils;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.sparql.RenderMode;
 import de.knowwe.rdf2go.sparql.SparqlResultNodeRenderer;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class LinkNodeRenderer implements SparqlResultNodeRenderer {
 
 	@Override
-	public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core) {
+	public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core, RenderMode mode) {
 		String label = Rdf2GoUtils.reduceNamespace(core, text);
 		RenderResult result = new RenderResult(user);
-		result.appendHtml("<a href=\"" + text + "\">");
+		if (mode == RenderMode.HTML) {
+			result.appendHtml("<a href=\"" + text + "\">");
+		}
 		result.append(label);
-		result.appendHtml("</a>");
+		if (mode == RenderMode.HTML) {
+			result.appendHtml("</a>");
+		}
 		return result.toStringRaw();
 	}
 

@@ -9,13 +9,14 @@ import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.sparql.RenderMode;
 import de.knowwe.rdf2go.sparql.SparqlResultNodeRenderer;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class TermLinkNodeRenderer implements SparqlResultNodeRenderer {
 
 	@Override
-	public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core) {
+	public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core, RenderMode mode) {
 		String termName = Rdf2GoUtils.trimNamespace(core, text);
 		TermIdentifier identifier = new TermIdentifier(termName);
 		Collection<Section<? extends SimpleDefinition>> termDefinitions =

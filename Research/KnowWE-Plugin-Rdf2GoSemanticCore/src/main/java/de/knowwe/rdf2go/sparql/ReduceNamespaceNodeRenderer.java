@@ -7,7 +7,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 public class ReduceNamespaceNodeRenderer implements SparqlResultNodeRenderer {
 
 	@Override
-	public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core) {
+	public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core, RenderMode mode) {
 		return Rdf2GoUtils.reduceNamespace(core, text);
 	}
 

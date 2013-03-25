@@ -35,7 +35,7 @@ public class SparqlResultRenderer {
 		nodeRenderers = getNodeRenderer();
 	}
 
-	private SparqlResultNodeRenderer[] getNodeRenderer() {
+	public SparqlResultNodeRenderer[] getNodeRenderer() {
 		Extension[] extensions = PluginManager.getInstance().getExtensions(
 				Rdf2GoCore.PLUGIN_ID, POINT_ID);
 		SparqlResultNodeRenderer[] renderers = new SparqlResultNodeRenderer[extensions.length];
@@ -118,7 +118,8 @@ public class SparqlResultRenderer {
 
 				for (String var : variables) {
 					Node node = row.getValue(var);
-					String erg = renderNode(node, var, rawOutput, user, opts.getRdf2GoCore());
+					String erg = renderNode(node, var, rawOutput, user, opts.getRdf2GoCore(),
+							RenderMode.HTML);
 
 					if (tablemode) {
 						result.appendHtml("<td>");
@@ -155,7 +156,7 @@ public class SparqlResultRenderer {
 		return new SparqlRenderResult(result.toStringRaw(), i);
 	}
 
-	public String renderNode(Node node, String var, boolean rawOutput, UserContext user, Rdf2GoCore core) {
+	public String renderNode(Node node, String var, boolean rawOutput, UserContext user, Rdf2GoCore core, RenderMode mode) {
 		if (node == null) {
 			return "";
 		}
@@ -163,7 +164,7 @@ public class SparqlResultRenderer {
 		if (!rawOutput) {
 			for (SparqlResultNodeRenderer nodeRenderer : nodeRenderers) {
 				String temp = rendered;
-				rendered = nodeRenderer.renderNode(rendered, var, user, core);
+				rendered = nodeRenderer.renderNode(rendered, var, user, core, mode);
 				if (!temp.equals(rendered) && !nodeRenderer.allowFollowUpRenderer()) break;
 			}
 			rendered = Strings.maskJSPWikiMarkup(rendered);

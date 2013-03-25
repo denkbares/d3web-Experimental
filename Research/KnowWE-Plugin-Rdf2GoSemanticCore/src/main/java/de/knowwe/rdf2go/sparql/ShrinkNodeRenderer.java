@@ -9,8 +9,8 @@ public class ShrinkNodeRenderer implements SparqlResultNodeRenderer {
 	private final int maxLength = 75;
 
 	@Override
-	public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core) {
-		if (text.length() > maxLength) {
+	public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core, RenderMode mode) {
+		if ((text.length() > maxLength) && (mode == RenderMode.HTML)) {
 			String titleText = text.replaceAll("\"", "&#34;");
 			titleText = text.replaceAll("'", "&#39;");
 			RenderResult result = new RenderResult(user);

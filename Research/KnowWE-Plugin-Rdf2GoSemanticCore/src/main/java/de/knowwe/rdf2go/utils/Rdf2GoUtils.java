@@ -1,13 +1,16 @@
 package de.knowwe.rdf2go.utils;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.util.RDFTool;
 
+import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -141,4 +144,42 @@ public class Rdf2GoUtils {
 		}
 		return Strings.encodeURL(temp);
 	}
+	
+	/**
+	 * get Sparql String from Section
+	 */
+	public static String createSparqlString(Section<?> sec) {
+		String sparqlString = sec.getText();
+		sparqlString = sparqlString.trim();
+		sparqlString = sparqlString.replaceAll("\n", " ");
+		sparqlString = sparqlString.replaceAll("\r", "");
+
+		Map<String, String> nameSpaces = Rdf2GoCore.getInstance().getNameSpaces();
+
+		StringBuilder newSparqlString = new StringBuilder();
+		StringBuilder pattern = new StringBuilder(" <((");
+		boolean first = true;
+		for (String nsShort : nameSpaces.keySet()) {
+			if (first) first = false;
+			else pattern.append("|");
+			pattern.append(nsShort);
+		}
+		pattern.append("):)[^ /]");
+		int lastEnd = 0;
+		Matcher matcher = Pattern.compile(pattern.toString()).matcher(sparqlString);
+		while (matcher.find()) {
+			int start = matcher.start(1);
+			int end = matcher.end(2);
+			String nsLong = nameSpaces.get(matcher.group(2));
+			newSparqlString.append(sparqlString.substring(lastEnd, start));
+			newSparqlString.append(nsLong);
+			lastEnd = end + 1;
+		}
+
+		newSparqlString.append(sparqlString.subSequence(lastEnd, sparqlString.length()));
+		sparqlString = newSparqlString.toString();
+
+		return sparqlString;
+	}
+
 }

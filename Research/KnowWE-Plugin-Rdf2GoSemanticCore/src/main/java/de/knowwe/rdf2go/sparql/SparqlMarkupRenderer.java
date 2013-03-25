@@ -25,8 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.Cookie;
 
@@ -46,13 +44,14 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.utils.RenderOptions;
 import de.knowwe.rdf2go.sparql.utils.SparqlRenderResult;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class SparqlMarkupRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user, RenderResult result) {
 
-		String sparqlString = createSparqlString(sec);
+		String sparqlString = Rdf2GoUtils.createSparqlString(sec);
 
 		try {
 			if (sparqlString.toLowerCase().startsWith("construct")) {
@@ -66,6 +65,8 @@ public class SparqlMarkupRenderer implements Renderer {
 						SparqlMarkupType.class);
 
 				RenderOptions renderOpts = new RenderOptions(sec.getID());
+
+
 
 				// Default values
 				String navigationOffset = "1";
@@ -180,39 +181,7 @@ public class SparqlMarkupRenderer implements Renderer {
 
 	}
 
-	private String createSparqlString(Section<?> sec) {
-		String sparqlString = sec.getText();
-		sparqlString = sparqlString.trim();
-		sparqlString = sparqlString.replaceAll("\n", " ");
-		sparqlString = sparqlString.replaceAll("\r", "");
 
-		Map<String, String> nameSpaces = Rdf2GoCore.getInstance().getNameSpaces();
-
-		StringBuilder newSparqlString = new StringBuilder();
-		StringBuilder pattern = new StringBuilder(" <((");
-		boolean first = true;
-		for (String nsShort : nameSpaces.keySet()) {
-			if (first) first = false;
-			else pattern.append("|");
-			pattern.append(nsShort);
-		}
-		pattern.append("):)[^ /]");
-		int lastEnd = 0;
-		Matcher matcher = Pattern.compile(pattern.toString()).matcher(sparqlString);
-		while (matcher.find()) {
-			int start = matcher.start(1);
-			int end = matcher.end(2);
-			String nsLong = nameSpaces.get(matcher.group(2));
-			newSparqlString.append(sparqlString.substring(lastEnd, start));
-			newSparqlString.append(nsLong);
-			lastEnd = end + 1;
-		}
-
-		newSparqlString.append(sparqlString.subSequence(lastEnd, sparqlString.length()));
-		sparqlString = newSparqlString.toString();
-
-		return sparqlString;
-	}
 
 	private String modifyOrderByInSparqlString(Map<String, String> sortOrder, String sparqlString) {
 		StringBuilder sb = new StringBuilder(sparqlString);

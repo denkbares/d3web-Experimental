@@ -32,6 +32,7 @@ import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.sparql.RenderMode;
 import de.knowwe.rdf2go.sparql.SparqlResultRenderer;
 import de.knowwe.tools.Tool;
 
@@ -127,15 +128,15 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 			result.appendHtml("<tr>");
 			result.appendHtml("<td>");
 			result.append(SparqlResultRenderer.getInstance().renderNode(row.getSubject(), null,
-					false, user, core));
+					false, user, core, RenderMode.HTML));
 			result.appendHtml("</td>");
 			result.appendHtml("<td>");
 			result.append(SparqlResultRenderer.getInstance().renderNode(row.getPredicate(), null,
-					false, user, core));
+					false, user, core, RenderMode.HTML));
 			result.appendHtml("</td>");
 			result.appendHtml("<td>");
 			result.append(SparqlResultRenderer.getInstance().renderNode(row.getObject(), null,
-					false, user, core));
+					false, user, core, RenderMode.HTML));
 			result.appendHtml("</td>");
 			result.appendHtml("</tr>");
 		}

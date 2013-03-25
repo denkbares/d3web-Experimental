@@ -47,7 +47,7 @@ public interface SparqlResultNodeRenderer {
 	 * @param core TODO
 	 * @return an altered/rendered version of the given text
 	 */
-	String renderNode(String text, String variable, UserContext user, Rdf2GoCore core);
+	String renderNode(String text, String variable, UserContext user, Rdf2GoCore core, RenderMode mode);
 
 	/**
 	 * If the method returns <tt>false</tt>, the returned String of the method
