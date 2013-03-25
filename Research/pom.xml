@@ -229,7 +229,6 @@
 		<module>KnowWE-Plugin-CIConnector</module>
 		<module>KnowWE-Plugin-Flash</module>
 		<module>KnowWE-Plugin-Ontology-MarkupSet</module>
-		<module>KnowWE-Plugin-Sparql-Excel</module>
 		<module>KnowWE-Plugin-SparqlToExcel</module>
 	</modules>
 	<repositories>
