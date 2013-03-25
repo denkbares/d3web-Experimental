@@ -42,7 +42,7 @@ public class UISolutionPanelSettings {
     
     public enum SolutionSorting{ALPHABETICAL, CATEGORICAL, CATEGALPHA};
     
-    public enum SolutionStructuring{LISTING, TABLE};
+    public enum SolutionStructuring{LISTING, TABLE, TREEMAP};
     
     public enum ExplanationType{NONE, TREEMAP, TABLE, CLARI, TEXTUAL, RULEGRAPH};
     

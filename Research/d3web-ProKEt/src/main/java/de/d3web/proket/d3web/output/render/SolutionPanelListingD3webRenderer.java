@@ -20,33 +20,36 @@
 package de.d3web.proket.d3web.output.render;
 
 import de.d3web.core.inference.PSMethod;
-import de.d3web.core.inference.Rule;
+
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.settings.UISolutionPanelSettings;
-import de.d3web.proket.d3web.utils.D3webUtils;
+
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import de.d3web.scoring.HeuristicRating;
 import de.d3web.scoring.inference.PSMethodHeuristic;
 import de.d3web.xcl.inference.PSMethodXCL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.StringTokenizer;
+
 import org.antlr.stringtemplate.StringTemplate;
 
 /**
  * Basic class for rendering the solution panel or explanation component of a
  * d3web dialog
  *
- * @author Martina Freiberg @date Oct 2012
+ * @author Martina Freiberg
+ * @date Oct 2012
+ *
  */
 public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRenderer {
 
     private UISolutionPanelSettings uiSolPanelSet = UISolutionPanelSettings.getInstance();
-    
+
     /**
      * Rendering method for getting the textual listing representation of a
      * solution panel
@@ -74,6 +77,9 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
     protected void getSolutionStates(Collection<Solution> sortedSols, StringBuilder bui,
             Session d3webs) {
 
+        //Alina
+        renderAllSolutionsForTreeMap(sortedSols, bui, d3webs);
+
         for (Solution solution : sortedSols) {
             if (!solution.getName().contains("000")) {
 
@@ -82,31 +88,66 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
         }
     }
 
-    
-    private String renderState(Solution solution, Session d3webs){
-        
+    private void renderAllSolutionsForTreeMap(Collection<Solution> sortedSols, StringBuilder bui,
+            Session d3webs) {
+        UISolutionPanelSettings.ExplanationType expType =
+                uiSolPanelSet.getExplanationType();
+
+        if (expType != UISolutionPanelSettings.ExplanationType.TREEMAP || sortedSols.isEmpty()) {
+            return;
+        }
+        List<Solution> solutions = new ArrayList<Solution>();
+
+        for (Solution solution : sortedSols) {
+            if (!solution.getName().contains("000")) {
+                solutions.add(solution);
+            }
+        }
+
+        if (solutions.isEmpty()) {
+            return;
+        }
+
+        SolutionExplanationTreeMapD3webRenderer treeMapRenderer = new SolutionExplanationTreeMapD3webRenderer();
+
+        StringTemplate stExp;
+        stExp = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynTreeLink");
+        stExp.setAttribute("solid", "allSols");
+        stExp.setAttribute("contentx", treeMapRenderer.renderAllSolutionsForTreeMap(solutions, d3webs));
+        stExp.setAttribute("solutiontext", "View all Solutions as Treemap");
+        bui.append(stExp.toString());
+
+    }
+
+    private String renderState(Solution solution, Session d3webs) {
+
+
         Blackboard bb = d3webs.getBlackboard();
         UISolutionPanelSettings uisols = UISolutionPanelSettings.getInstance();
-        
+
+
         //System.out.println(uisols.getShowPreciseSolRating());
-                //System.out.println(uisols.getShowAbstractSolRating());
-        
-        if(uisols.getShowAbstractSolRating() && 
-                uisols.getShowPreciseSolRating()){
-            if(uisols.getDynamics().equals(UISolutionPanelSettings.Dynamics.STATIC)){
+        //System.out.println(uisols.getShowAbstractSolRating());
+
+
+        if (uisols.getShowAbstractSolRating()
+                && uisols.getShowPreciseSolRating()) {
+            if (uisols.getDynamics().equals(UISolutionPanelSettings.Dynamics.STATIC)) {
                 return renderStateAbstractCirclePreciseText(solution, d3webs);
             } else {
                 return renderStateAbstractCirclePreciseTextDynamic(solution, d3webs);
             }
-            
-        } else if (uisols.getShowAbstractSolRating() &&
-                !uisols.getShowPreciseSolRating()){
+
+
+        } else if (uisols.getShowAbstractSolRating()
+                && !uisols.getShowPreciseSolRating()) {
             // only abstract rating
-        } else if (!uisols.getShowAbstractSolRating() &&
-                uisols.getShowPreciseSolRating()){
+        } else if (!uisols.getShowAbstractSolRating()
+                && uisols.getShowPreciseSolRating()) {
             // only precise rating
         }
-        
+
+
         return "solution state info n/a";
     }
     /*
@@ -114,11 +155,13 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
      * abstract rating by circle icon and precise rating in ( ) after solution
      * text
      */
+
     private String renderStateAbstractCirclePreciseText(Solution solution, Session d3webs) {
 
+
         Blackboard bb = d3webs.getBlackboard();
-        
-        
+
+
         // retrieve template
         StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/Solution");
 
@@ -142,7 +185,8 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
             }
         }
 
-        
+
+
         st.setAttribute("solutiontext", solution.getName());
         st.setAttribute("scoretext", "(" + score + ")");
 
@@ -169,75 +213,98 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
             st.setAttribute("tt", "unclear");
         }
 
+
         return st.toString();
     }
-    
-    
+
     private String renderStateAbstractCirclePreciseTextDynamic(Solution solution, Session d3webs) {
 
         StringTemplate stExp;
-        
+
+
         SolutionExplanationBasicD3webRenderer expr = new SolutionExplanationBasicD3webRenderer();
-        
+
+
         UISolutionPanelSettings.ExplanationType expType =
                 uiSolPanelSet.getExplanationType();
-        
+
+
         String explanation = expr.getExplanationForSolution(solution, d3webs, expType);
-        
-        // in the case of a treemap, a tailored popup that uses the respective image
-        // needs to be used
-        if (expType == UISolutionPanelSettings.ExplanationType.TREEMAP){
+
+
+        // in the case of a treemap, a tailored popup will open in a new tab-window
+
+        if (expType == UISolutionPanelSettings.ExplanationType.TREEMAP) {
             // explanation popup that shows a treemap
-            stExp = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynLink");
+            stExp = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynTreeListLink");
             stExp.setAttribute("solid", solution.getName());
-            //stExp.setAttribute("solutiontext", solution.getName()); 
-            //stExp.setAttribute("click", "openPopupContent('$contentx$');");
-            stExp.setAttribute("contentx", explanation);            
-        
-        //in case of a clarification visulisation
-        //TODO: green or red box for question, depending on rating
-        }else if(expType == UISolutionPanelSettings.ExplanationType.CLARI){
+            stExp.setAttribute("contentx", explanation);
+
+            return decoreateSolutionWithScoring(solution, stExp, d3webs);
+
+
+
+            //in case of a clarification visulisation
+
+        } else if (expType == UISolutionPanelSettings.ExplanationType.CLARI) {
             //explanation popup with all the details
-	    stExp = StringTemplateUtils.getTemplate("baAlina/Clari"); //template for clarification popup
+            stExp = StringTemplateUtils.getTemplate("baAlina/Clari"); //template for clarification popup
             stExp.setAttribute("sol_name", solution.getName()); //set the solution name/ title
-            
+
+
             //get score from explanation String
-            String[] split_score = explanation.split("\\|");          
+            String[] split_score = explanation.split("\\|");
             String score = split_score[0];
-            
+
+
             //set text for rating: explicit score for ratinf > 70, excluded solution for -Infinity, 
             //sugested or unclear solution for score < 70
-            if(score.equals("-Infinity")){
-                  stExp.setAttribute("rating", "Excluded solution");
-                  stExp.setAttribute("color", "#E00000");
-            }else if(Double.parseDouble(score) > 70.0){
-                stExp.setAttribute("rating", "Total score: "+score);
-                stExp.setAttribute("color", "#009933");
+            Blackboard bb = d3webs.getBlackboard();
+            if (bb.getRating(solution).getState().equals(Rating.State.EXCLUDED)) {
 
-            }else{
-                stExp.setAttribute("rating", "Sugested or unclear solution");
-                stExp.setAttribute("color", "#FFE300");
+                stExp.setAttribute("rating", "Excluded solution");
+                stExp.setAttribute("color", "#EB4242");
+            } else if (bb.getRating(solution).getState().equals(Rating.State.ESTABLISHED)) {
+                stExp.setAttribute("rating", "Total score: " + score);
+                stExp.setAttribute("color", "#7CF56E");
+            } else if (bb.getRating(solution).getState().equals(Rating.State.SUGGESTED)) {
+
+                stExp.setAttribute("rating", "Total score: " + score);
+                stExp.setAttribute("color", "#EBF707");
+            } else if (bb.getRating(solution).getState().equals(Rating.State.UNCLEAR)) {
+
+
+                stExp.setAttribute("rating", "Unclear solution");
+                stExp.setAttribute("color", "#B7BAB6");
             }
 
-          stExp.setAttribute("content", split_score[1]);
-            
+            stExp.setAttribute("content", split_score[1]);
+
         } else {
             // basic explanation popup  
             stExp = StringTemplateUtils.getTemplate("solutionPanel/PopupExp");
             stExp.setAttribute("popupcontent", explanation);
         }
-        
+
+
         stExp.setAttribute("elementID", solution.getName());
-        
-        
+
+
+
+
         // retrieve template for the solution panel per se, first
         StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynLink");
         st.setAttribute("explanationpopup", stExp.toString());
         st.setAttribute("solid", solution.getName());
-        st.setAttribute("contentx", expr.getExplanationForSolution(solution, d3webs, expType));           
+
         /*
          * get scoring, dependent on applied problem solving method
          */
+
+        return decoreateSolutionWithScoring(solution, st, d3webs);
+    }
+
+    private String decoreateSolutionWithScoring(Solution solution, StringTemplate st, Session d3webs) {
         Blackboard bb = d3webs.getBlackboard();
         double score = 0.0;
         Collection<PSMethod> contributingPSMethods =
@@ -252,10 +319,12 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
                 break;
             }
         }
-        
+
+
         st.setAttribute("solutiontext", solution.getName());
         st.setAttribute("scoretext", "(" + score + ")");
-        
+
+
 
         if (bb.getRating(solution).getState().equals(Rating.State.ESTABLISHED)) {
             st.setAttribute("src", "img/solEst.png");
@@ -280,5 +349,4 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
 
         return st.toString();
     }
-    
 }

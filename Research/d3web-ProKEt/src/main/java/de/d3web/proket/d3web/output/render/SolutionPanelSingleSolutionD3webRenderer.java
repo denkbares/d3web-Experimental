@@ -21,11 +21,13 @@ package de.d3web.proket.d3web.output.render;
 
 import de.d3web.core.inference.PSMethod;
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.settings.UISolutionPanelSettings;
+import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.utils.SolutionRatingComparator;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import de.d3web.scoring.HeuristicRating;
@@ -34,13 +36,15 @@ import de.d3web.xcl.inference.PSMethodXCL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import org.antlr.stringtemplate.StringTemplate;
 
 /**
  * Basic class for rendering the solution panel or explanation component of a
  * d3web dialog
  *
- * @author Martina Freiberg @date Oct 2012
+ * @author Martina Freiberg
+ * @date Oct 2012
  */
 public class SolutionPanelSingleSolutionD3webRenderer extends SolutionPanelBasicD3webRenderer {
 
@@ -57,21 +61,21 @@ public class SolutionPanelSingleSolutionD3webRenderer extends SolutionPanelBasic
         KnowledgeBase kb = D3webConnector.getInstance().getKb();
         StringBuilder bui = new StringBuilder();
 
-	Collection<Solution> valuedSolutions =
+        Collection<Solution> valuedSolutions =
                 d3websession.getBlackboard().getValuedSolutions();
 
         Solution s = getBestRatedSolution(valuedSolutions, d3websession);
         bui.append(renderState(s, d3websession));
-        
-	return bui.toString();
+
+        return bui.toString();
     }
 
     protected Solution getBestRatedSolution(Collection<Solution> valued,
             Session d3websession) {
 
         Blackboard bb = d3websession.getBlackboard();
-        
-	if (valued.size() > 0) {
+
+        if (valued.size() > 0) {
             ArrayList<Solution> result = new ArrayList<Solution>();
             ArrayList<Solution> established = new ArrayList<Solution>();
             ArrayList<Solution> suggested = new ArrayList<Solution>();
@@ -205,12 +209,62 @@ public class SolutionPanelSingleSolutionD3webRenderer extends SolutionPanelBasic
                 uiSolPanelSet.getExplanationType();
         String explanation = expr.getExplanationForSolution(solution, d3webs, expType);
 
+        if (expType == UISolutionPanelSettings.ExplanationType.TREEMAP) {
+            // explanation popup that shows a treemap
+            stExp = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynTreeListLink");
+            stExp.setAttribute("solid", solution.getName());
+            stExp.setAttribute("contentx", explanation);
+            return decoreateSolutionWithScoring(solution, stExp, d3webs);
+            
+            //in case of a clarification visulisation
+        } else if (expType == UISolutionPanelSettings.ExplanationType.CLARI) {
+            //explanation popup with all the details
+            stExp = StringTemplateUtils.getTemplate("baAlina/Clari"); //template for clarification popup
+            stExp.setAttribute("sol_name", solution.getName()); //set the solution name/ title
+
+            //get score from explanation String
+            String[] split_score = explanation.split("\\|");
+            String score = split_score[0];
+
+            //set color for solution
+            Blackboard bb = d3webs.getBlackboard();
+            if (bb.getRating(solution).getState().equals(Rating.State.EXCLUDED)) {
+                stExp.setAttribute("rating", "Excluded solution");
+                stExp.setAttribute("color", "#EB4242");
+            } else if (bb.getRating(solution).getState().equals(Rating.State.ESTABLISHED)) {
+                stExp.setAttribute("rating", "Total score: " + score);
+                stExp.setAttribute("color", "#7CF56E");
+            } else if (bb.getRating(solution).getState().equals(Rating.State.SUGGESTED)) {
+                stExp.setAttribute("rating", "Total score: " + score);
+                stExp.setAttribute("color", "#EBF707");
+            } else if (bb.getRating(solution).getState().equals(Rating.State.UNCLEAR)) {
+                stExp.setAttribute("rating", "Unclear solution");
+                stExp.setAttribute("color", "#B7BAB6");
+            }
+
+            stExp.setAttribute("content", split_score[1]);
+
+        }
+
         stExp.setAttribute("elementID", solution.getName());
         stExp.setAttribute("popupcontent", explanation);
-        //System.out.println(stExp.toString());
-        
-        
-         Blackboard bb = d3webs.getBlackboard();
+        String expPop = stExp.toString();
+        if (expType == UISolutionPanelSettings.ExplanationType.CLARI) {
+            expPop += preGenerateAllRelatedSolutionsPopup(solution, d3webs);
+        }
+
+        // retrieve template for the solution panel per se, first
+        StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynLink");
+        st.setAttribute("explanationpopup", expPop);
+        st.setAttribute("solid", solution.getName());
+        String decoratedSol = decoreateSolutionWithScoring(solution, st, d3webs);
+
+        return decoratedSol;
+    }
+
+    private String decoreateSolutionWithScoring(Solution solution, StringTemplate st, Session d3webs) {
+
+        Blackboard bb = d3webs.getBlackboard();
         /*
          * get scoring, dependent on applied problem solving method
          */
@@ -227,19 +281,9 @@ public class SolutionPanelSingleSolutionD3webRenderer extends SolutionPanelBasic
                 break;
             }
         }
-       
-        // retrieve template for the solution panel per se, first
-        StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynLink");
-        st.setAttribute("explanationpopup", stExp.toString());
 
-        // fill template attribute
-        st.setAttribute("solid", solution.getName());
-
-        
-
-       st.setAttribute("solutiontext", solution.getName());
-       st.setAttribute("scoretext", "(" + score + ")");
-        
+        st.setAttribute("solutiontext", solution.getName());
+        st.setAttribute("scoretext", "(" + score + ")");
 
         if (bb.getRating(solution).getState().equals(Rating.State.ESTABLISHED)) {
             st.setAttribute("src", "img/solEst.png");
@@ -263,5 +307,59 @@ public class SolutionPanelSingleSolutionD3webRenderer extends SolutionPanelBasic
         }
 
         return st.toString();
+    }
+
+    private String preGenerateAllRelatedSolutionsPopup(Solution sol, Session d3webSession) {
+        String allContent = "";
+        List<TerminologyObject> deriObjects = D3webUtils.getDerivationObjectsPSMRulesFor(sol, d3webSession);
+
+        //build string with relevant answers for solution
+        for (TerminologyObject object : deriObjects) {
+
+            if (object instanceof Solution) {
+                allContent += createClariTemplate((Solution) object, d3webSession).toString();
+                allContent += preGenerateAllRelatedSolutionsPopup((Solution) object, d3webSession);
+
+            }
+
+        }
+        return allContent;
+    }
+
+    private StringTemplate createClariTemplate(Solution sol, Session d3webs) {
+        SolutionExplanationBasicD3webRenderer expr = new SolutionExplanationBasicD3webRenderer();
+        // fill in the explanation into the explanation popup:
+        UISolutionPanelSettings.ExplanationType expType =
+                uiSolPanelSet.getExplanationType();
+
+        String explanation = expr.getExplanationForSolution(sol, d3webs, expType);
+        //explanation popup with all the details
+        StringTemplate stExp = StringTemplateUtils.getTemplate("baAlina/Clari"); //template for clarification popup
+        stExp.setAttribute("sol_name", sol.getName()); //set the solution name/ title
+
+        //get score from explanation String
+        String[] split_score = explanation.split("\\|");
+        String score = split_score[0];
+
+        //set color for solution
+        Blackboard bb = d3webs.getBlackboard();
+        if (bb.getRating(sol).getState().equals(Rating.State.EXCLUDED)) {
+            stExp.setAttribute("rating", "Excluded solution");
+            stExp.setAttribute("color", "#EB4242");
+        } else if (bb.getRating(sol).getState().equals(Rating.State.ESTABLISHED)) {
+            stExp.setAttribute("rating", "Total score: " + score);
+            stExp.setAttribute("color", "#7CF56E");
+        } else if (bb.getRating(sol).getState().equals(Rating.State.SUGGESTED)) {
+            stExp.setAttribute("rating", "Total score: " + score);
+            stExp.setAttribute("color", "#EBF707");
+        } else if (bb.getRating(sol).getState().equals(Rating.State.UNCLEAR)) {
+            stExp.setAttribute("rating", "Unclear solution");
+            stExp.setAttribute("color", "#B7BAB6");
+        }
+
+        stExp.setAttribute("content", split_score[1]);
+        stExp.setAttribute("elementID", sol.getName());
+
+        return stExp;
     }
 }

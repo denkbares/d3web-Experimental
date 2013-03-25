@@ -27,7 +27,8 @@ margin-left: 20px;}
   display:none;
   position:absolute;
   text-align:left;
-  width:230px;
+  width:500px;
+right:10px;
   z-index:50;
   padding: 10px 10px 10px;
     color: black;
