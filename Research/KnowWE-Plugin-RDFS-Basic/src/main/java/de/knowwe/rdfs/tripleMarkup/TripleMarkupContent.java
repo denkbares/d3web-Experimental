@@ -93,7 +93,7 @@ class SimpleTurtleObjectSection extends AbstractType {
 
 	public SimpleTurtleObjectSection() {
 		ConstraintSectionFinder c = new ConstraintSectionFinder(
-				new RegexSectionFinder("::\\s(.*)", Pattern.DOTALL, 1));
+				new RegexSectionFinder("::(.*)", Pattern.DOTALL, 1));
 		c.addConstraint(SingleChildConstraint.getInstance());
 		this.setSectionFinder(c);
 
