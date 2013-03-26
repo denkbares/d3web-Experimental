@@ -28,7 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.junit.AfterClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -81,9 +82,15 @@ public class IncrementalCompilerTest {
 	}
 
 	@BeforeClass
-	public static void setUp() throws IOException {
+	public static void init() throws IOException {
 		InitPluginManager.init();
 		PackageManager.overrideAutocompileArticle(true);
+		TestArticleManager.getArticle(TESTFILE);
+		TestArticleManager.clear();
+	}
+
+	@Before
+	public void setUp() throws IOException {
 		TestArticleManager.getArticle(TESTFILE);
 	}
 
@@ -140,6 +147,10 @@ public class IncrementalCompilerTest {
 
 	@Test
 	public void testCorrectedTripleMarkupSimple() throws IOException {
+		// Setting the test up again (refactoring for Java7)
+		testCorrectedSimpleIRIDefinition();
+		testInvalidatedSimpleIRIDefinition();
+		// Done setting the test up again
 		/* Change text and test */
 		String oldText = " Jochen istEin:: Assi";
 		String newText = " Jochen istEin:: Assistent";
@@ -159,13 +170,29 @@ public class IncrementalCompilerTest {
 
 	@Test
 	public void testChangeAll() throws IOException {
+		// Setting the test up again (refactoring for Java7)
+		testCorrectedSimpleIRIDefinition();
+		testInvalidatedSimpleIRIDefinition();
+		String oldText = " Jochen istEin:: Assi";
+		String newText = " Jochen istEin:: Assistent";
+		changeText(oldText, newText, TripleMarkupSimple.class);
+		/* Change text and test */
+		oldText = " Peter istEin:: Assi";
+		newText = " Peter istEin:: Assistent";
+		changeText(oldText, newText, TripleMarkupSimple.class);
+		/* Change text and test */
+		oldText = "Assi subclassof:: Person";
+		newText = "Assistent subclassof:: Person";
+		changeText(oldText, newText, TripleMarkupSimple.class);
 		/* replace the whole text */
-		String oldText = getArticle().getRootSection().getText();
-		String newText = "def Schnurtzelpieper livesIn:: Dingenskirchen" + "\n\n" + "def is"
+		oldText = getArticle().getRootSection().getText();
+		newText = "def Schnurtzelpieper livesIn:: Dingenskirchen" + "\n\n" + "def is"
 				+ "\n\n" + "def livesIn" + "\n\n" + "def Dingenskirchen" + "\n\n"
 				+ "def inDaHouse" + "\n\n"
 				+ "{Schnurtzelpieper is:: inDaHouse}" + "\n\n";
 		changeText(oldText, newText, RootType.class);
+		// Done setting the test up again
+
 		/* Check that the old statements are invalid now */
 		assertFalse(core.sparqlAsk(Query.ASSIPERSON));
 		assertFalse(core.sparqlAsk(Query.JOCHENASSI));
@@ -209,13 +236,8 @@ public class IncrementalCompilerTest {
 		return null;
 	}
 
-	@AfterClass
-	public static void tearDown() {
-		// Remove the statements created in the test to avoid problems
-		Article article = TestArticleManager.getArticle(TESTFILE);
-		Rdf2GoCore.getInstance().removeStatementsForSection(article.getRootSection());
-		Rdf2GoCore.getInstance().removeAllCachedStatements();
-		// Finally remove the formerly created article
+	@After
+	public void tearDown() {
 		TestArticleManager.clear();
 	}
 
