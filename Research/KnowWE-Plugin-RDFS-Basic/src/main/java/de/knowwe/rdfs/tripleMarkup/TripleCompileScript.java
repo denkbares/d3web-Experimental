@@ -43,8 +43,11 @@ class TripleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TripleM
 
 		Section<SimpleTurtleObjectSection> objectSec = Sections.findSuccessor(
 				section, SimpleTurtleObjectSection.class);
-		Section<TurtleObjectLiteral> literalSec = Sections.findSuccessor(
-				objectSec, TurtleObjectLiteral.class);
+		Section<TurtleObjectLiteral> literalSec = null;
+		if (objectSec != null) {
+			literalSec = Sections.findSuccessor(
+					objectSec, TurtleObjectLiteral.class);
+		}
 
 		Sections.findSuccessorsOfType(section, IRITermRef.class, found);
 
