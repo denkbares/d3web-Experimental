@@ -16,40 +16,37 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.diaflux.coverage.kdtree;
+package de.knowwe.diaflux.coverageCity.metrics;
 
-import java.awt.geom.Rectangle2D;
-import java.util.LinkedList;
-import java.util.List;
+import de.d3web.diaFlux.flow.Node;
+import de.d3web.diaflux.coverage.CoverageResult;
+import de.d3web.diaflux.coverage.PathIndex;
+import de.knowwe.d3webviz.diafluxCity.metrics.AbstractColorMetric;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 05.02.2012
+ * @created 20.05.2012
  */
-public class CollectRectanglesVisitor<T extends Object> implements Visitor<T> {
-
-	private final List<Rectangle2D> rects = new LinkedList<Rectangle2D>();
-	private final double margin;
-
-	public CollectRectanglesVisitor(double margin) {
-		this.margin = margin;
+public class CoveredPathsColorMetric extends AbstractColorMetric<Node> {
+	
+	private final CoverageResult result;
+	
+	public CoveredPathsColorMetric(CoverageResult result) {
+		this.result = result;
 	}
+	
 	@Override
-	public void visit(KDNode<T> node) {
+	protected float getColorValue(Node object) {
+		PathIndex index = result.getPathIndex();
+		double allPathsCount = index.getAllPaths(object).size();
+		double coveredPathsCount = index.getCoveredPaths(object).size();
 
-		if (node.isOccupied()) {
-			Rectangle2D bounds = node.getBounds();
-			Rectangle2D result = KDUtils.subtractMargins(bounds, margin);
-
-			rects.add(result);
-		}
-
+		float f = (float) (coveredPathsCount / allPathsCount);
+		return Math.min(f, 1);
 	}
 
-	public List<Rectangle2D> getRects() {
-		return rects;
-	}
+
 
 }

@@ -16,28 +16,36 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.diaflux.coverage.gl;
+package de.knowwe.diaflux.coverageCity;
 
-import java.awt.geom.Dimension2D;
-
-import de.knowwe.diaflux.coverage.kdtree.DoubleDimension;
-import de.knowwe.diaflux.coverage.kdtree.RectanglePacker.Mapping;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.diaflux.DiaFluxDisplayEnhancement;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 08.02.2012
+ * @created 12.07.2012
  */
-public class GLNodeMapper implements Mapping<GLBuilding> {
+public class PathCoverageHighlight implements DiaFluxDisplayEnhancement {
 
-	public Dimension2D map(GLBuilding object) {
+	public static final String COVERAGE_CITY_SCOPE = "CoverageCity";
+	private static String[] SCRIPTS = new String[] { "KnowWEExtension/scripts/pathcoveragehighlight.js" };
+	private static String[] CSSS = new String[] { "KnowWEExtension/css/pathcoverage.css" };
 
-		DoubleDimension dimension = new DoubleDimension(object.getLength(),
-				object.getWidth()); // TODO
-																								// *2
-																								// ??
-		return dimension;
+	@Override
+	public boolean activate(UserContext user, String scope) {
+		return scope.equals(PathCoverageHighlight.COVERAGE_CITY_SCOPE);
+	}
+
+	@Override
+	public String[] getScripts() {
+		return SCRIPTS;
+	}
+
+	@Override
+	public String[] getStylesheets() {
+		return CSSS;
 	}
 
 }

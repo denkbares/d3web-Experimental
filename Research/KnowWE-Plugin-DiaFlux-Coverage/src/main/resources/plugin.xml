@@ -6,6 +6,7 @@
 		<import plugin-id="KnowWE-Plugin-DiaFlux" />
 		<import plugin-id="KnowWEExtensionPoints" />
 		<import plugin-id="d3web-Plugin-TestingFramework" />
+		<import plugin-id="d3web-Plugin-Tests" />
 	</requires>
 	
 	<runtime>

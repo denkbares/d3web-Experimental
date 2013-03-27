@@ -25,6 +25,7 @@ import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
+import de.d3web.test.KBTest;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
 import de.d3web.testing.TestParameter;
@@ -38,7 +39,7 @@ import de.knowwe.diaflux.coverage.DiaFluxCoverageType;
  * @author Reinhard Hatko
  * @created 26.03.2012
  */
-public class FlowCoverage extends de.d3web.testing.AbstractTest<KnowledgeBase> {
+public class FlowCoverage extends KBTest {
 
 	
 	

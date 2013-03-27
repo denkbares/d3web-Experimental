@@ -1,18 +1,25 @@
+<%@page import="de.knowwe.d3webviz.diafluxCity.metrics.MetricsSet"%>
+<%@page import="de.knowwe.diaflux.coverageCity.metrics.MaximumInSameFlowNodeCoverage"%>
+<%@page import="de.knowwe.diaflux.coverageCity.metrics.CoveredOutgoingEdgesMetric"%>
+<%@page import="de.knowwe.d3webviz.diafluxCity.metrics.OutgoingEdgesMetric"%>
+<%@page import="de.knowwe.d3webviz.diafluxCity.metrics.Constant"%>
+<%@page import="de.knowwe.diaflux.coverageCity.metrics.NodeCoverageMetric"%>
+<%@page import="de.knowwe.d3webviz.diafluxCity.metrics.Metrics"%>
+<%@page import="de.knowwe.diaflux.coverageCity.metrics.CoveredPathsColorMetric"%>
 <%@page import="de.d3web.diaflux.coverage.CoverageResult"%>
-<%@page import="de.knowwe.diaflux.coverage.PathCoverageHighlight"%>
+<%@page import="de.knowwe.diaflux.coverageCity.PathCoverageHighlight"%>
 <%@page import="de.knowwe.diaflux.type.FlowchartType"%>
 <%@page import="de.d3web.diaFlux.flow.StartNode"%>
 <%@page import="de.d3web.diaFlux.flow.Node"%>
 <%@page import="de.d3web.diaFlux.flow.FlowSet"%>
 <%@page import="de.d3web.diaFlux.inference.DiaFluxUtils"%>
-<%@page import="de.knowwe.diaflux.coverage.DiaFluxCoverageRenderer"%>
-<%@page import="de.knowwe.diaflux.coverage.gl.GLCity"%>
-<%@page import="de.knowwe.diaflux.coverage.gl.GLBuilding"%>
+<%@page import="de.knowwe.d3webviz.diafluxCity.GLCity"%>
+<%@page import="de.knowwe.d3webviz.diafluxCity.GLBuilding"%>
 <%@page import="de.d3web.diaflux.coverage.CoverageResult"%>
 <%@page import="de.d3web.core.knowledge.KnowledgeBase"%>
 <%@page import="de.knowwe.diaflux.coverage.DiaFluxCoverageType"%>
 <%@page import="de.knowwe.kdom.defaultMarkup.DefaultMarkupType"%>
-<%@page import="de.knowwe.diaflux.coverage.gl.GLCityGenerator"%>
+<%@page import="de.knowwe.d3webviz.diafluxCity.GLCityGenerator"%>
 <%@page import="de.knowwe.core.wikiConnector.WikiConnector"%>
 <%@page import="de.d3web.plugin.Extension"%>
 <%@page import="de.d3web.plugin.JPFPluginManager"%>
@@ -112,7 +119,7 @@
 <div id="container">
     
     <div id="content">
-        <canvas id="theCanvas" width="800" height="700">
+        <canvas id="diafluxCity<%=kdomID%>" width="1000" height="900">
             
         </canvas>
         
@@ -131,7 +138,15 @@ if (coverage == null){
 	city = "{}";
 } else {
 	
-	GLCity glCity = GLCityGenerator.generateCity(coverage);
+	MetricsSet<Node> metrics = new MetricsSet<Node>(Arrays.asList("Wait"), true);
+	metrics.setHeightMetric(Metrics.multiply(Metrics.relate(new
+			NodeCoverageMetric(coverage), new MaximumInSameFlowNodeCoverage(coverage)), 5));
+	metrics.setHeightMetric(new CoveredOutgoingEdgesMetric(coverage));
+	metrics.setLengthMetric(new OutgoingEdgesMetric());
+	metrics.setWidthMetric(Metrics.relate(new NodeCoverageMetric(coverage), new Constant<Node>(15)));
+	metrics.setColorMetric(new CoveredPathsColorMetric(coverage));
+	
+	GLCity glCity = GLCityGenerator.generateCity(metrics, coverage.getKb());
 	
 	city= glCity.toString();
 	List<StartNode> startnodes =  DiaFluxUtils.getAutostartNodes(coverage.getKb());
@@ -158,14 +173,14 @@ function picked(flowString){
 	//var matches = /\(([^)]*)\) \[([^]]*)\]/.exec(flowString);
 	var matches = flowString.split("+++");
 	if (matches) {
-		document.getElementById("pickResult").innerHTML = matches[0];
-		var flowEl = $('flow');
+		jq$("#pickResult").innerHTML = matches[0];
+		var flowEl = jq$('flow');
 		
 		// clicked a node, remember its id
 		if (matches[2]){
-			$('nodeid').value = matches[2];			
+			jq$('nodeid').value = matches[2];			
 		} else {
-			$('nodeid').value = '';			
+			jq$('nodeid').value = '';			
 			
 		}
 		
@@ -174,7 +189,7 @@ function picked(flowString){
 		
 			flowEl.innerHTML ="<div id='" + matches[0] + "'></div>";
 		
-			Flowchart.loadFlowchart(matches[1], $('flow').firstChild);
+			Flowchart.loadFlowchart(matches[1], jq$('flow').firstChild);
 			
 		} else {
 			// if flow did not change, highlight new node

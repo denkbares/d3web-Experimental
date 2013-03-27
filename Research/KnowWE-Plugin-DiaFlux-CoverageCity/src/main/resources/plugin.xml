@@ -5,6 +5,7 @@
 	<requires>
 		<import plugin-id="KnowWE-Plugin-DiaFlux" />
 		<import plugin-id="KnowWE-Plugin-DiaFlux-Coverage" />
+		<import plugin-id="KnowWE-Plugin-d3web-Visualizations" />
 		<import plugin-id="KnowWEExtensionPoints" />
 	</requires>
 	
@@ -19,7 +20,7 @@
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="CoverageCityToolProvider">
-		<parameter id="class" value="de.knowwe.diaflux.coverage.CoverageCityToolProvider" />
+		<parameter id="class" value="de.knowwe.diaflux.coverageCity.CoverageCityToolProvider" />
 		<parameter id="name" value="CoverageCityToolProvider" />
 		<parameter id="description"
 			value="Shows the city visualization of the coverage." />
@@ -31,7 +32,7 @@
 		<extension plugin-id="KnowWE-Plugin-DiaFlux" point-id="DiaFluxDisplayEnhancement"
 		id="PathCoverageHighlight">
 		<parameter id="class"
-			value="de.knowwe.diaflux.coverage.PathCoverageHighlight" />
+			value="de.knowwe.diaflux.coverageCity.PathCoverageHighlight" />
 		<parameter id="name" value="PathCoverageHighlight" />
 		<parameter id="description" value="PathCoverageHighlight" />
 		<parameter id="version" value="1.0" />
@@ -41,9 +42,31 @@
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="PathCoverageHighlightAction">
-		<parameter id="class" value="de.knowwe.diaflux.coverage.PathCoverageHighlightAction" />
+		<parameter id="class" value="de.knowwe.diaflux.coverageCity .PathCoverageHighlightAction" />
 		<parameter id="name" value="PathCoverageHighlightAction" />
 		<parameter id="description" value="Action PathCoverageHighlightAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="CoverageCityType">
+		<parameter id="class"
+			value="de.knowwe.diaflux.coverageCity.CoverageCityType" />
+		<parameter id="name" value="CoverageCityType" />
+		<parameter id="description" value="Type CoverageCityType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="CoverageCityAction">
+		<parameter id="class"
+			value="de.knowwe.diaflux.coverageCity.CoverageCityAction" />
+		<parameter id="name" value="CoverageCityAction" />
+		<parameter id="description" value="Action CoverageCityAction" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>

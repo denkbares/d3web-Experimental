@@ -18,18 +18,8 @@
  */
 package de.knowwe.diaflux.coverage;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
-import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
-import de.d3web.diaFlux.flow.ComposedNode;
 import de.d3web.diaFlux.flow.Flow;
-import de.d3web.diaFlux.flow.StartNode;
-import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.DiaFluxCoverageTrace;
 
 
@@ -48,51 +38,6 @@ public class CoverageUtils {
 	}
 
 
-	public static Map<Flow, Collection<ComposedNode>> createFlowStructure(KnowledgeBase base) {
-		List<StartNode> nodes = DiaFluxUtils.getAutostartNodes(base);
-		assert nodes.size() == 1; // TODO for now works only with 1
-
-		Flow callingFlow = nodes.get(0).getFlow();
-		return createFlowStructure(base, new HashMap<Flow, Collection<ComposedNode>>(), callingFlow);
-
-	}
-
-	/**
-	 * 
-	 * @created 08.02.2012
-	 * @param base
-	 * @param result
-	 * @param callingFlow
-	 * @return
-	 */
-	private static Map<Flow, Collection<ComposedNode>> createFlowStructure(KnowledgeBase base, Map<Flow, Collection<ComposedNode>> result, Flow callingFlow) {
-		Collection<ComposedNode> composed = callingFlow.getNodesOfClass(ComposedNode.class);
-		for (ComposedNode composedNode : composed) {
-			Flow calledFlow = DiaFluxUtils.getCalledFlow(base, composedNode);
-			addFlow(result, callingFlow);
-			addFlow(result, calledFlow);
-			addCall(result, callingFlow, composedNode);
-			createFlowStructure(base, result, calledFlow);
-		}
-
-		return result;
-
-	}
-
-	/**
-	 * 
-	 * @created 08.02.2012
-	 * @param result
-	 * @param calledFlow
-	 */
-	private static void addFlow(Map<Flow, Collection<ComposedNode>> result, Flow calledFlow) {
-		Collection<ComposedNode> flows = result.get(calledFlow);
-		if (flows == null) {
-			flows = new HashSet<ComposedNode>();
-			result.put(calledFlow, flows);
-		}
-	}
-
 	/**
 	 * 
 	 * @created 03.04.2012
@@ -103,16 +48,5 @@ public class CoverageUtils {
 		return flow.getName().equalsIgnoreCase("wait");
 	}
 
-	/**
-	 * 
-	 * @created 08.02.2012
-	 * @param result
-	 * @param callingFlow
-	 * @param calledFlow
-	 */
-	private static void addCall(Map<Flow, Collection<ComposedNode>> result, Flow callingFlow, ComposedNode calledNode) {
-		Collection<ComposedNode> flows = result.get(callingFlow);
-		flows.add(calledNode);
-	}
 
 }

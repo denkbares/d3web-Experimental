@@ -1,4 +1,4 @@
-package de.knowwe.diaflux.coverage;
+package de.knowwe.diaflux.coverageCity;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;

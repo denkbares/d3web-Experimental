@@ -16,37 +16,47 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.diaflux.coverage.metrics;
+package de.knowwe.diaflux.coverageCity.metrics;
 
-import de.d3web.diaFlux.flow.Edge;
-import de.d3web.diaFlux.flow.EndNode;
+import de.d3web.diaFlux.flow.Flow;
+import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.flow.Node;
+import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
+import de.knowwe.d3webviz.diafluxCity.metrics.Metric;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 08.02.2012
+ * @created 09.02.2012
  */
-public class CoveredOutgoingEdgesMetric implements Metric<Node, Double> {
+public class MaximumNodeCoverage implements Metric<Node, Double> {
 
-	private final CoverageResult result;
+	private final CoverageResult coverage;
+	private double max = Double.MIN_VALUE;
 
-	public CoveredOutgoingEdgesMetric(CoverageResult result) {
-		this.result = result;
+	public MaximumNodeCoverage(CoverageResult coverage) {
+		this.coverage = coverage;
 	}
 
 	public Double getValue(Node object) {
+		if (max >= 0) {
+			return max;
+		}
+		else {
+			FlowSet flowSet = DiaFluxUtils.getFlowSet(coverage.getKb());
+			for (Flow flow : flowSet) {
+				for (Node node : flow.getNodes()) {
+					double count = coverage.getTraceCount(node);
+					if (max < count) max = count;
+				}
 
-		if (object instanceof EndNode) return 2 * 1d;
+			}
 
-		double count = 0;
-		for (Edge edge : object.getOutgoingEdges()) {
-			if (result.getTraceCount(edge) > 0) count++;
+			return coverage.getTraceCount(object) / max;
 		}
 
-		return Math.max(2 * count/* * count */, 0.5);
 	}
 
 }

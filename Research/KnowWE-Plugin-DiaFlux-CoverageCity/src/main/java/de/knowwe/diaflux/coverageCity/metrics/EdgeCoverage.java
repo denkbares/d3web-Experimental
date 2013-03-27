@@ -16,48 +16,28 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.diaflux.coverage.kdtree;
+package de.knowwe.diaflux.coverageCity.metrics;
 
-import java.awt.geom.Dimension2D;
+import de.d3web.diaFlux.flow.Edge;
+import de.d3web.diaflux.coverage.CoverageResult;
+import de.knowwe.d3webviz.diafluxCity.metrics.Metric;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 06.02.2012
+ * @created 09.02.2012
  */
-public class DoubleDimension extends Dimension2D {
+public class EdgeCoverage implements Metric<Edge, Double> {
 
-	private double width;
-	private double height;
+	private final CoverageResult coverage;
 
-	public DoubleDimension() {
-		this(0, 0);
+	public EdgeCoverage(CoverageResult coverage) {
+		this.coverage = coverage;
 	}
 
-	public DoubleDimension(double width, double height) {
-		setSize(width, height);
-	}
-
-	@Override
-	public double getWidth() {
-		return width;
-	}
-
-	@Override
-	public double getHeight() {
-		return height;
-	}
-
-	@Override
-	public void setSize(double width, double height) {
-		this.width = width;
-		this.height = height;
-	}
-
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "[width=" + width + ",height=" + height + "]";
+	public Double getValue(Edge object) {
+		return (double) coverage.getTraceCount(object);
 	}
 
 }

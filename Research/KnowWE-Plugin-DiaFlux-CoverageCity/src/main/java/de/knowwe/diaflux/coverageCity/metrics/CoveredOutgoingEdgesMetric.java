@@ -16,41 +16,38 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.diaflux.coverage.metrics;
+package de.knowwe.diaflux.coverageCity.metrics;
+
+import de.d3web.diaFlux.flow.Edge;
+import de.d3web.diaFlux.flow.EndNode;
+import de.d3web.diaFlux.flow.Node;
+import de.d3web.diaflux.coverage.CoverageResult;
+import de.knowwe.d3webviz.diafluxCity.metrics.Metric;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 09.02.2012
+ * @created 08.02.2012
  */
-public final class Metrics {
+public class CoveredOutgoingEdgesMetric implements Metric<Node, Double> {
 
-	private Metrics() {
+	private final CoverageResult result;
+
+	public CoveredOutgoingEdgesMetric(CoverageResult result) {
+		this.result = result;
 	}
 
-	public static <I> Metric<I, Double> relate(final Metric<I, Double> metric, final Metric<I, Double> base) {
+	public Double getValue(Node object) {
 
-		return new Metric<I, Double>() {
+		if (object instanceof EndNode) return 2 * 1d;
 
-			public Double getValue(I object) {
-				double d = metric.getValue(object).doubleValue()
-						/ base.getValue(object).doubleValue();
-				return new Double(d);
-			}
+		double count = 0;
+		for (Edge edge : object.getOutgoingEdges()) {
+			if (result.getTraceCount(edge) > 0) count++;
+		}
 
-		};
-	}
-
-	public static <I> Metric<I, Double> multiply(final Metric<I, Double> metric, final double factor) {
-
-		return new Metric<I, Double>() {
-
-			public Double getValue(I object) {
-				return metric.getValue(object).doubleValue() * factor;
-			}
-
-		};
+		return Math.max(2 * count/* * count */, 0.5);
 	}
 
 }

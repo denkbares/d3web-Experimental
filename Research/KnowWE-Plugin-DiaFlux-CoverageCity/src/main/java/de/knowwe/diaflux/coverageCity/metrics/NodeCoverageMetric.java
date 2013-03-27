@@ -16,34 +16,30 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.diaflux.coverage.metrics;
+package de.knowwe.diaflux.coverageCity.metrics;
 
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaflux.coverage.CoverageResult;
-
+import de.knowwe.d3webviz.diafluxCity.metrics.Metric;
 
 /**
  * 
  * @author Reinhard Hatko
  * @created 09.02.2012
  */
-public class MaximumInSameFlowNodeCoverage implements Metric<Node, Double> {
+public class NodeCoverageMetric implements Metric<Node, Double> {
 
 	private final CoverageResult coverage;
 
-	public MaximumInSameFlowNodeCoverage(CoverageResult coverage) {
+	public NodeCoverageMetric(CoverageResult coverage) {
 		this.coverage = coverage;
+
+
 	}
 
 	public Double getValue(Node object) {
-		double max = Double.MIN_VALUE;
-		for (Node node : object.getFlow().getNodes()) {
-			int count = coverage.getTraceCount(node);
-			if (max < count) max = count;
-		}
-
-		// TODO div by 0??
-		return max;
+		double traceCount = (double) coverage.getTraceCount(object);
+		return traceCount;
 	}
 
 }

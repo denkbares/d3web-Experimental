@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.diaflux.coverage.gl;
+package de.knowwe.diaflux.coverageCity;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -26,12 +26,14 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.d3web.diaflux.coverage.DefaultCoverageResult;
 import de.d3web.diaflux.coverage.DiaFluxCoverageTrace;
@@ -40,7 +42,19 @@ import de.d3web.empiricaltesting.TestCase;
 import de.d3web.empiricaltesting.TestPersistence;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysis;
 import de.d3web.plugin.test.InitPluginManager;
+import de.knowwe.d3webviz.diafluxCity.GLBuilding;
+import de.knowwe.d3webviz.diafluxCity.GLCity;
+import de.knowwe.d3webviz.diafluxCity.GLCityGenerator;
+import de.knowwe.d3webviz.diafluxCity.GLNodeMapper;
+import de.knowwe.d3webviz.diafluxCity.metrics.Constant;
+import de.knowwe.d3webviz.diafluxCity.metrics.Metrics;
+import de.knowwe.d3webviz.diafluxCity.metrics.MetricsSet;
+import de.knowwe.d3webviz.diafluxCity.metrics.OutgoingEdgesMetric;
 import de.knowwe.diaflux.coverage.CoverageTestListener;
+import de.knowwe.diaflux.coverageCity.metrics.CoveredOutgoingEdgesMetric;
+import de.knowwe.diaflux.coverageCity.metrics.CoveredPathsColorMetric;
+import de.knowwe.diaflux.coverageCity.metrics.MaximumInSameFlowNodeCoverage;
+import de.knowwe.diaflux.coverageCity.metrics.NodeCoverageMetric;
 
 
 /**
@@ -69,7 +83,8 @@ public class GLCityTest {
 
 			CoverageResult coverage = runTest(kb, kbFile.getParentFile());
 
-			GLCity city = GLCityGenerator.generateCity(coverage);
+
+			GLCity city = GLCityGenerator.generateCity(createMetrics(coverage), kb);
 
 			System.out.println(city);
 			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -80,6 +95,26 @@ public class GLCityTest {
 			e.printStackTrace();
 		}
 	}
+
+	public static MetricsSet<Node> createMetrics(CoverageResult coverage) {
+		MetricsSet<Node> metrics = new MetricsSet<Node>(Arrays.asList("Wait"), true);
+		metrics.setHeightMetric(Metrics.multiply(Metrics.relate(new
+				NodeCoverageMetric(coverage),
+				new MaximumInSameFlowNodeCoverage(coverage)), 5));
+		metrics.setHeightMetric(new CoveredOutgoingEdgesMetric(coverage));
+		metrics.setLengthMetric(new OutgoingEdgesMetric());
+		metrics.setWidthMetric(Metrics.relate(new
+				NodeCoverageMetric(coverage),
+				new Constant<Node>(15)));
+		metrics.setColorMetric(new CoveredPathsColorMetric(coverage));
+
+		// metrics.setLengthMetric(new IncomingEdgesMetric());
+		// metrics.setHeightMetric(new IncomingEdgesMetric());
+		// metrics.setWidthMetric(new OutgoingEdgesMetric());
+		// metrics.setColorMetric(new NodeTypeColorMetric());
+		return metrics;
+	}
+
 	/**
 	 * 
 	 * @created 16.02.2012
@@ -129,6 +164,7 @@ public class GLCityTest {
 		analysis.addTestListener(listener);
 		TestCase suite = loadCases(workspace.listFiles(new FilenameFilter() {
 
+			@Override
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".xml");
 			}

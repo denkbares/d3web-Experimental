@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 University Wuerzburg, Computer Science VI
+ * Copyright (C) 2013 University Wuerzburg, Computer Science VI
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,29 +16,29 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.diaflux.coverage.kdtree;
+package de.knowwe.diaflux.coverageCity;
 
-import java.awt.geom.Rectangle2D;
+import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 06.02.2012
+ * @created 14.03.2013
  */
-public class AddRectanglesVisitor<T extends Object> implements Visitor<T> {
+public class CoverageCityType extends DefaultMarkupType {
 
-	private final Rectangle2D bounds = new Rectangle2D.Double();
+	private static final DefaultMarkup m;
 
-	@Override
-	public void visit(KDNode<T> node) {
-		if (node.isOccupied()) {
-			bounds.add(node.getBounds());
-		}
-
+	static {
+		m = new DefaultMarkup("CoverageCity");
+		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME);
 	}
 
-	public Rectangle2D getBounds() {
-		return bounds;
+	public CoverageCityType() {
+		super(m);
+		setRenderer(new CoverageCityRenderer());
 	}
-
 }
