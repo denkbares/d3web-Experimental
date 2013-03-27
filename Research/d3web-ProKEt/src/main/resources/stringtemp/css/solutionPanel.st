@@ -1,6 +1,6 @@
 #solutionPanelCell{padding-top: 70px; padding-left: 20px; padding-right: 10px; width: 20%;}
 
-#solutionPanel{background-color: lightslategray; color: white; width:252px;}
+#solutionPanel{background-color: lightslategray; color: white;}
 
 #sol_heading{font-weight: bold; font-size: 1.1em; 
 margin-left: 20px;}

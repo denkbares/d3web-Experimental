@@ -98,11 +98,12 @@ public class FileUploadServlet extends HttpServlet {
         File tmpFile = multipartRequest.getFile("uploadKB");
         if (tmpFile != null) {
 
+	    System.out.println("File Upload: " + tmpFile.getName());
             if (!tmpFile.getName().endsWith(".doc")
                     //  && !tmpFile.getName().endsWith(".d3web")
                     //&& !tmpFile.getName().endsWith(".zip")
                     //&& !tmpFile.getName().endsWith(".xls")
-                    //&& !tmpFile.getName().endsWith(".xlsx")
+                    && !tmpFile.getName().endsWith(".xlsx")
                     && !tmpFile.getName().endsWith(".csv")) {
 
                 response.sendRedirect(GLOBSET.getWebAppWarName()

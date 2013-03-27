@@ -20,7 +20,6 @@
 package de.d3web.proket.d3web.utils;
 
 import de.d3web.abstraction.ActionSetQuestion;
-import de.d3web.abstraction.formula.FormulaNumber;
 import de.d3web.core.inference.*;
 import de.d3web.core.inference.condition.CondEqual;
 import de.d3web.core.inference.condition.CondNumGreaterEqual;
@@ -46,20 +45,8 @@ import javax.imageio.ImageIO;
 
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.knowledge.*;
-import de.d3web.core.knowledge.terminology.Choice;
-import de.d3web.core.knowledge.terminology.QASet;
-import de.d3web.core.knowledge.terminology.QContainer;
-import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.QuestionChoice;
-import de.d3web.core.knowledge.terminology.QuestionDate;
-import de.d3web.core.knowledge.terminology.QuestionMC;
-import de.d3web.core.knowledge.terminology.QuestionNum;
-import de.d3web.core.knowledge.terminology.QuestionOC;
-import de.d3web.core.knowledge.terminology.QuestionText;
-import de.d3web.core.knowledge.terminology.QuestionYN;
-import de.d3web.core.knowledge.terminology.Rating;
+import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.knowledge.terminology.Rating.State;
-import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.manage.KnowledgeBaseUtils;
@@ -70,12 +57,14 @@ import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
-import de.d3web.core.session.interviewmanager.CurrentQContainerFormStrategy;
-import de.d3web.core.session.interviewmanager.NextUnansweredQuestionFormStrategy;
 import de.d3web.core.session.values.*;
 import de.d3web.indication.ActionIndication;
 import de.d3web.indication.ActionInstantIndication;
 import de.d3web.indication.inference.PSMethodUserSelected;
+
+import de.d3web.interview.Interview;
+import de.d3web.interview.inference.PSMethodInterview;
+
 import de.d3web.plugin.JPFPluginManager;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
@@ -131,20 +120,23 @@ public class D3webUtils {
      */
     public static DefaultSession createSession(KnowledgeBase kb, DialogStrategy ds) {
 
+	DefaultSession session = SessionFactory.createSession(null, kb, new Date());
+	Interview interview = session.getSessionObject(session.getPSMethodInstance(de.d3web.interview.inference.PSMethodInterview.class));
+
 	// if DialogType given
 	if (ds != null) {
 	    if (ds == DialogStrategy.NEXTQUESTION) { // one question dialog
-		return SessionFactory.createSession(
-			null, kb, new NextUnansweredQuestionFormStrategy(), new Date());
+		interview.setFormStrategy(new de.d3web.interview.NextUnansweredQuestionFormStrategy());
 	    } else if (ds == DialogStrategy.NEXTFORM) { // questionnaire based
-		return SessionFactory.createSession(
-			null, kb, new CurrentQContainerFormStrategy(), new Date());
+		interview.setFormStrategy(new de.d3web.interview.CurrentQContainerFormStrategy());
 	    }
+	} else {
+	    // default: set CurrentQContainer Strategy
+	    interview.setFormStrategy(new de.d3web.interview.CurrentQContainerFormStrategy());
 	}
 
-	// per default returns questionnaire based standard questionnaires
-	return SessionFactory.createSession(
-		null, kb, new CurrentQContainerFormStrategy(), new Date());
+
+	return session;
     }
 
     /**
@@ -1285,9 +1277,9 @@ public class D3webUtils {
 	if (to instanceof QuestionYN) {
 	    return getAnswerYNPrompt(c, locIdent);
 	}
-	
+
 	System.out.println(locIdent);
-	
+
 	//int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
 	//int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
 	String prompt = null;
@@ -2303,16 +2295,16 @@ public class D3webUtils {
 			if (r.getCondition() instanceof CondEqual) {
 
 			    CondEqual ce = (CondEqual) r.getCondition();
-			    
-			    
+
+
 			    if (ce.getQuestion().getName().equals(to.getName())) {
-				
+
 				if (ce.getValue().toString().equals(answerValue)) {
 
-				    
+
 				    ActionSetQuestion asq = (ActionSetQuestion) r.getAction();
 				    return asq.getValue().toString();
-				    
+
 				}
 			    }
 			}
