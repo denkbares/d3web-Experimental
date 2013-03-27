@@ -6,32 +6,13 @@ if (typeof KNOWWE.d3webViz == "undefined" || !KNOWWE.d3webViz) {
 	KNOWWE.d3webViz = {};
 }
 
-KNOWWE.d3webViz.createDependencyGraph = function(kdomid){	
+KNOWWE.d3webViz.createDependencyGraph = function(kdomid){
+	
+	KNOWWE.d3webViz.loadJSON('DependencyGraphAction', kdomid, renderGraph);
 
-  	var params = {
-		action : 'DependencyGraphAction',
-		SectionID: kdomid
-	};
-  	
-  	var options = {
-		url: KNOWWE.core.util.getURL( params ),
-        response : {
-            action: 'none',
-            fn: createGraph
-        }
-    };
-	
-	
-	KNOWWE.core.util.updateProcessingState(1);
-	try{
-		new _KA(options).send();
+	function renderGraph(jsonObject){
 		
-	} catch(e) {}
-	KNOWWE.core.util.updateProcessingState(-1);
-  
-	function createGraph(response){
-		
-	  var svg = d3.select("#" + kdomid +" .graph")
+	  var svg = d3.select("#graph" + kdomid)
 	  .append("svg:svg")
       .attr("width", "100%")
       .attr("height", "100%");
@@ -63,9 +44,8 @@ KNOWWE.d3webViz.createDependencyGraph = function(kdomid){
 	  
 	  svg.call(zoom);
   
-  var json = jq$.parseJSON(this.response);
-  var nodeData = json.nodes;
-  var edgeData = json.links;
+  var nodeData = jsonObject.nodes;
+  var edgeData = jsonObject.links;
   
   var graph = dagre.graph(); 
 
@@ -198,8 +178,78 @@ KNOWWE.d3webViz.createDependencyGraph = function(kdomid){
       .y(function(d) { return d.y; })
       .interpolate("linear")(points);
   }
-	  
-
 	
 };
 
+
+KNOWWE.d3webViz.loadJSON = function(action, kdomid, f){
+	var params = {
+			action : action,
+			SectionID: kdomid
+		};
+	  	
+	  	var options = {
+			url: KNOWWE.core.util.getURL( params ),
+	        response : {
+	            action: 'none',
+	            fn: function(){
+	            	var json = jq$.parseJSON(this.response);
+	            	f(json);
+	            	
+	            }
+	        }
+	    };
+		
+		
+		KNOWWE.core.util.updateProcessingState(1);
+		try{
+			new _KA(options).send();
+			
+		} catch(e) {}
+		KNOWWE.core.util.updateProcessingState(-1);  
+	
+}
+
+KNOWWE.d3webViz.createDiaFluxHierarchy = function(kdomid){
+
+	KNOWWE.d3webViz.loadJSON('DiaFluxHierarchyAction',kdomid, renderHierarchy);
+	
+	function renderHierarchy(json){
+	
+	var width = 960,
+    height = 960,
+    format = d3.format(",d");
+
+var pack = d3.layout.pack()
+    .size([width - 4, height - 4])
+    .value(function(d) { return d.size; });
+
+var vis = d3.select("#diafluxHierarchy" + kdomid).append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("class", "pack")
+  .append("g")
+    .attr("transform", "translate(2, 2)");
+
+
+  var node = vis.data([json]).selectAll("g.node")
+      .data(pack.nodes)
+    .enter().append("g")
+      .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  node.append("title")
+      .text(function(d) { return d.name + (d.children ? "" : ": " + format(d.size)); });
+
+  node.append("circle")
+      .attr("r", function(d) { return d.r; });
+
+  node.filter(function(d) { return !d.children; }).append("text")
+      .attr("text-anchor", "middle")
+      .attr("dy", ".3em")
+      .text(function(d) { return d.name.substring(0, d.r / 3); });
+
+	}
+
+	
+}

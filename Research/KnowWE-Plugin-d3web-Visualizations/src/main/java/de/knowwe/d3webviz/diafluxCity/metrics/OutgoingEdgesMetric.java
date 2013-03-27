@@ -16,37 +16,25 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
+package de.knowwe.d3webviz.diafluxCity.metrics;
 
-import de.knowwe.core.compile.packaging.PackageManager;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.d3web.diaFlux.flow.EndNode;
+import de.d3web.diaFlux.flow.Node;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 04.11.2012
+ * @created 08.02.2012
  */
-public class D3webDependenciesType extends DefaultMarkupType {
+public class OutgoingEdgesMetric implements Metric<Node, Double> {
 
-	private static final DefaultMarkup m;
-	public static final String ANNOTATION_SHOW_TYPE = "showtypes";
-	public static final String ANNOTATION_IGNORE = "ignore";
-	public static final String ANNOTATION_SHOW_ALL = "showall";
-
-	static {
-		m = new DefaultMarkup("d3webDependencies");
-		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME);
-		m.addAnnotation(ANNOTATION_SHOW_TYPE, false, "true", "false");
-		m.addAnnotation(ANNOTATION_SHOW_ALL, false, "true", "false");
-		m.addAnnotation(ANNOTATION_IGNORE);
-	}
-
-
-	public D3webDependenciesType() {
-		super(m);
-		setRenderer(new D3webDependenciesRenderer());
+	public Double getValue(Node object) {
+		if (object instanceof EndNode) return 1d;
+		else {
+			int count = object.getOutgoingEdges().size();
+			return Math.max(2 * count/* * count */, 0.5);
+		}
 	}
 
 }

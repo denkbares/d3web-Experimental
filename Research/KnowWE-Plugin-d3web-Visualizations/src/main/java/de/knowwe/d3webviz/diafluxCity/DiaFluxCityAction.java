@@ -16,12 +16,14 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
+package de.knowwe.d3webviz.diafluxCity;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.diaFlux.flow.Node;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
@@ -30,51 +32,51 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-
+import de.knowwe.d3webviz.diafluxCity.metrics.IncomingEdgesMetric;
+import de.knowwe.d3webviz.diafluxCity.metrics.MetricsSet;
+import de.knowwe.d3webviz.diafluxCity.metrics.NodeTypeColorMetric;
+import de.knowwe.d3webviz.diafluxCity.metrics.OutgoingEdgesMetric;
 
 /**
  * 
  * @author Reinhard Hatko
  * @created 26.02.2013
  */
-public class DependencyGraphAction extends AbstractAction {
+public class DiaFluxCityAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String sectionID = context.getParameter(Attributes.SECTION_ID);
 
-		Section<D3webDependenciesType> section = Sections.getSection(sectionID,
-				D3webDependenciesType.class);
+		Section<DiaFluxCityType> section = Sections.getSection(sectionID,
+				DiaFluxCityType.class);
 
 		if (section == null) {
 			// TODO error handling
 			return;
 		}
-		
+
 		Iterator<Article> iterator = KnowWEUtils.getCompilingArticles(section).iterator();
 		if (!iterator.hasNext()) return;
-		
+
 		Article article = iterator.next();
 		KnowledgeBase kb = D3webUtils.getKnowledgeBase(section.getWeb(), article.getTitle());
-		DependencyGenerator generator = new DependencyGenerator(kb);
-		
-		if (Boolean.valueOf(DefaultMarkupType.getAnnotation(section,
-				D3webDependenciesType.ANNOTATION_SHOW_TYPE)).booleanValue()) {
-			generator.setShowType(true);
-		}
 
-		if (Boolean.valueOf(DefaultMarkupType.getAnnotation(section,
-				D3webDependenciesType.ANNOTATION_SHOW_ALL)).booleanValue()) {
-			generator.setShowAll(true);
-		}
-
-		generator.setIgnores(DefaultMarkupType.getAnnotations(section,
-				D3webDependenciesType.ANNOTATION_IGNORE));
+		String city = GLCityGenerator.generateCity(createMetrics(), kb).toString();
 
 		context.setContentType("text/json");
-		context.getWriter().write(generator.createDependencyGraph());
-		
+		context.getWriter().write(city);
+
+	}
+
+	private static MetricsSet<Node> createMetrics() {
+		MetricsSet<Node> metrics = new MetricsSet<Node>(Arrays.asList("Wait"), true);
+
+		metrics.setLengthMetric(new IncomingEdgesMetric());
+		metrics.setHeightMetric(new IncomingEdgesMetric());
+		metrics.setWidthMetric(new OutgoingEdgesMetric());
+		metrics.setColorMetric(new NodeTypeColorMetric());
+		return metrics;
 	}
 
 }

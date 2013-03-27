@@ -16,37 +16,43 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
+package de.knowwe.d3webviz.diafluxCity.kdtree;
 
-import de.knowwe.core.compile.packaging.PackageManager;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import java.awt.geom.Dimension2D;
+
+import de.knowwe.d3webviz.diafluxCity.kdtree.RectanglePacker.Mapping;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 04.11.2012
+ * @created 07.02.2012
  */
-public class D3webDependenciesType extends DefaultMarkupType {
+public class MarginMapper<I> implements Mapping<I> {
 
-	private static final DefaultMarkup m;
-	public static final String ANNOTATION_SHOW_TYPE = "showtypes";
-	public static final String ANNOTATION_IGNORE = "ignore";
-	public static final String ANNOTATION_SHOW_ALL = "showall";
+	private final Mapping<I> delegate;
+	private final double margin;
 
-	static {
-		m = new DefaultMarkup("d3webDependencies");
-		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME);
-		m.addAnnotation(ANNOTATION_SHOW_TYPE, false, "true", "false");
-		m.addAnnotation(ANNOTATION_SHOW_ALL, false, "true", "false");
-		m.addAnnotation(ANNOTATION_IGNORE);
+	/**
+	 * @param delegate
+	 * @param margin
+	 */
+	public MarginMapper(Mapping<I> delegate, double margin) {
+		this.delegate = delegate;
+		this.margin = margin;
 	}
 
+	public Dimension2D map(I object) {
+		Dimension2D dim = delegate.map(object);
 
-	public D3webDependenciesType() {
-		super(m);
-		setRenderer(new D3webDependenciesRenderer());
+		return KDUtils.buffer(dim, margin);
 	}
 
+	public double getMargin() {
+		return margin;
+	}
+
+	public Mapping<I> getDelegate() {
+		return delegate;
+	}
 }

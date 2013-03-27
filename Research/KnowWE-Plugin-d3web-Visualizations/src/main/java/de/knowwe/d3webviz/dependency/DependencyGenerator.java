@@ -34,12 +34,14 @@ import de.d3web.core.utilities.Pair;
  */
 public class DependencyGenerator {
 
+	private static final Collection<DependencyExtractor> finders;
+
 	private final KnowledgeBase kb;
 	private final Collection<Dependency> dependencies;
-	private final boolean showType;
-	private static final Collection<DependencyExtractor> finders;
-	private final String[] ignores = new String[] {
-			"start", "now" };
+
+	private boolean showType;
+	private boolean showAll;
+	private String[] ignores = new String[0];
 
 	static {
 		finders = new LinkedList<DependencyExtractor>();
@@ -47,23 +49,49 @@ public class DependencyGenerator {
 		finders.add(new DiaFluxNodeExtractor());
 	}
 
-	public DependencyGenerator(KnowledgeBase kb, boolean showType) {
+	public DependencyGenerator(KnowledgeBase kb) {
 		this.kb = kb;
-		this.showType = showType;
 		this.dependencies = new LinkedList<Dependency>();
 	}
 
-	public void createDependencyGraph(StringBuilder bob) {
+	public boolean isShowType() {
+		return showType;
+	}
+
+	public void setIgnores(String[] ignores) {
+		this.ignores = ignores;
+	}
+
+	public String[] getIgnores() {
+		return ignores;
+	}
+
+	public boolean isShowAll() {
+		return showAll;
+	}
+
+	public void setShowAll(boolean showAll) {
+		this.showAll = showAll;
+	}
+
+	public void setShowType(boolean showType) {
+		this.showType = showType;
+	}
+
+	public Collection<Dependency> getDependencies() {
+		return dependencies;
+	}
+
+	public String createDependencyGraph() {
+		StringBuilder bob = new StringBuilder();
 		addDependencies();
 
 		createOutput(bob);
+		return bob.toString();
 
 	}
 
 	private void createOutput(StringBuilder bob) {
-		// bob.append("{\"nodes\": [");
-		// bob.replace(bob.length() - 1, bob.length(), "");
-		// bob.append("],\n");
 		bob.append("{");
 
 		if (showType) {
@@ -90,15 +118,14 @@ public class DependencyGenerator {
 		next:
 		for (Dependency dep : dependencies) {
 
-			for (String ignore : ignores) {
-				if (dep.getObject().getName().equals(ignore)) {
-					continue next;
-				}
-			}
+			TerminologyObject object = dep.getObject();
+			if (isIgnored(object)) continue next;
+
 			int depNode = getIndex(dep, indizes);
 			for (TerminologyObject to : dep) {
 				Pair<?, ?> edge = new Pair<Object, Object>(to, dep);
 				if (!edges.contains(edge)) {
+					if (isIgnored(to)) continue;
 					appendEdge(getIndex(to, indizes), depNode, "", bob);
 					edges.add(edge);
 				}
@@ -110,27 +137,26 @@ public class DependencyGenerator {
 
 		bob.replace(bob.length() - 1, bob.length(), "");
 		bob.append("],\n");
-		bob.append("\"nodes\": [");
 
-		for (int i = 0; i < indizes.size(); i++) {
-			Object object = indizes.get(i);
-			appendNode(object, bob);
-			// objects.remove(object);
-		}
-
-		bob.replace(bob.length() - 1, bob.length(), "");
-
-		bob.append("]\n");
+		appendNodes(bob, indizes);
 
 	}
 
-	/**
-	 * 
-	 * @created 25.01.2013
-	 * @param object
-	 * @param indizes
-	 * @return
-	 */
+	private boolean isIgnored(TerminologyObject object) {
+		for (String ignore : ignores) {
+			if (object.getName().equalsIgnoreCase(ignore)) {
+				return true;
+			}
+		}
+
+		TerminologyObject[] parents = object.getParents();
+		for (int i = 0; i < parents.length; i++) {
+			if (isIgnored(parents[i])) return true;
+		}
+
+		return false;
+	}
+
 	private <T extends Object> int getIndex(T object, List<T> indizes) {
 		if (!indizes.contains(object)) {
 			indizes.add(object);
@@ -146,12 +172,17 @@ public class DependencyGenerator {
 	 */
 	protected void createLinksOnly(StringBuilder bob) {
 		bob.append("\"links\": [");
-		List<TerminologyObject> indizes = new LinkedList<TerminologyObject>();
+		List<Object> indizes = new LinkedList<Object>();
 		List<Pair<?, ?>> edges = new LinkedList<Pair<?, ?>>();
+		next:
 		for (Dependency dep : dependencies) {
+
+			if (isIgnored(dep.getObject())) continue next;
+
 			for (TerminologyObject to : dep) {
 				Pair<?, ?> edge = new Pair<Object, Object>(dep.getObject(), to);
 				if (!edges.contains(edge)) {
+					if (isIgnored(to)) continue;
 					appendEdge(getIndex(to, indizes), getIndex(dep.getObject(), indizes), "", bob);
 					edges.add(edge);
 				}
@@ -160,30 +191,40 @@ public class DependencyGenerator {
 
 		bob.replace(bob.length() - 1, bob.length(), "");
 		bob.append("],\n");
-		// createNodes()
 
+		appendNodes(bob, indizes);
+
+	}
+
+	/**
+	 * 
+	 * @created 26.03.2013
+	 * @param bob
+	 * @param indizes
+	 */
+	private void appendNodes(StringBuilder bob, List<Object> indizes) {
 		bob.append("\"nodes\": [");
 
-		// List<TerminologyObject> objects = new
-		// LinkedList<TerminologyObject>();
-		// objects.addAll(kb.getManager().getQuestions());
-		// objects.addAll(kb.getManager().getSolutions());
+		List<TerminologyObject> objects = new LinkedList<TerminologyObject>();
+		objects.addAll(kb.getManager().getQuestions());
+		objects.addAll(kb.getManager().getSolutions());
 
 		for (int i = 0; i < indizes.size(); i++) {
 			Object object = indizes.get(i);
 			appendNode(object, bob);
-			// objects.remove(object);
+			objects.remove(object);
 
 		}
 
-		// for (TerminologyObject terminologyObject : objects) {
-		// appendNode(terminologyObject, bob);
-		// }
+		for (TerminologyObject terminologyObject : objects) {
+			if (!isIgnored(terminologyObject)) {
+				appendNode(terminologyObject, bob);
+			}
+		}
 
 		bob.replace(bob.length() - 1, bob.length(), "");
 
 		bob.append("]\n");
-
 	}
 
 	private void appendNode(Object o, StringBuilder bob) {
@@ -201,7 +242,8 @@ public class DependencyGenerator {
 		bob.append("},");
 	}
 
-	private void appendEdge(int from, int to, String options, StringBuilder bob) {
+	private boolean appendEdge(int from, int to, String options, StringBuilder bob) {
+//		if (from == -1 || to == -1) return false;
 
 		bob.append("{\"source\":\"");
 		bob.append(from);
@@ -213,6 +255,7 @@ public class DependencyGenerator {
 			bob.append(options);
 		}
 		bob.append("},");
+		return true;
 	}
 
 	private String maskJSON(String s) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 University Wuerzburg, Computer Science VI
+ * Copyright (C) 2013 University Wuerzburg, Computer Science VI
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
+package de.knowwe.d3webviz.diafluxHierarchy;
 
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
@@ -26,27 +26,21 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 /**
  * 
  * @author Reinhard Hatko
- * @created 04.11.2012
+ * @created 14.03.2013
  */
-public class D3webDependenciesType extends DefaultMarkupType {
+public class DiaFluxHierarchyType extends DefaultMarkupType {
 
 	private static final DefaultMarkup m;
-	public static final String ANNOTATION_SHOW_TYPE = "showtypes";
 	public static final String ANNOTATION_IGNORE = "ignore";
-	public static final String ANNOTATION_SHOW_ALL = "showall";
 
 	static {
-		m = new DefaultMarkup("d3webDependencies");
+		m = new DefaultMarkup("DiaFluxHierarchy");
 		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME);
-		m.addAnnotation(ANNOTATION_SHOW_TYPE, false, "true", "false");
-		m.addAnnotation(ANNOTATION_SHOW_ALL, false, "true", "false");
-		m.addAnnotation(ANNOTATION_IGNORE);
 	}
 
-
-	public D3webDependenciesType() {
+	public DiaFluxHierarchyType() {
 		super(m);
-		setRenderer(new D3webDependenciesRenderer());
+		setRenderer(new DiaFluxHierarchyRenderer());
 	}
 
 }

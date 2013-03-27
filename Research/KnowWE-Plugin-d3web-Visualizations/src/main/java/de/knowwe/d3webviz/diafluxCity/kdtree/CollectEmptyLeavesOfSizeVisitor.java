@@ -16,37 +16,39 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
+package de.knowwe.d3webviz.diafluxCity.kdtree;
 
-import de.knowwe.core.compile.packaging.PackageManager;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import java.awt.geom.Dimension2D;
+import java.util.LinkedList;
+import java.util.List;
+
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 04.11.2012
+ * @created 05.02.2012
  */
-public class D3webDependenciesType extends DefaultMarkupType {
+public class CollectEmptyLeavesOfSizeVisitor<I> implements Visitor<I> {
 
-	private static final DefaultMarkup m;
-	public static final String ANNOTATION_SHOW_TYPE = "showtypes";
-	public static final String ANNOTATION_IGNORE = "ignore";
-	public static final String ANNOTATION_SHOW_ALL = "showall";
+	private final Dimension2D minSize = new DoubleDimension();
+	private final List<KDNode<I>> nodes = new LinkedList<KDNode<I>>();
 
-	static {
-		m = new DefaultMarkup("d3webDependencies");
-		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME);
-		m.addAnnotation(ANNOTATION_SHOW_TYPE, false, "true", "false");
-		m.addAnnotation(ANNOTATION_SHOW_ALL, false, "true", "false");
-		m.addAnnotation(ANNOTATION_IGNORE);
+	public CollectEmptyLeavesOfSizeVisitor(Dimension2D dim) {
+		this.minSize.setSize(dim);
 	}
 
+	@Override
+	public void visit(KDNode<I> node) {
+		if (node.isLeaf() && !node.isOccupied()
+				&& KDUtils.rectIsBiggerThan(node.getBounds(), minSize)) {
+			nodes.add(node);
+		}
+		
+	}
 
-	public D3webDependenciesType() {
-		super(m);
-		setRenderer(new D3webDependenciesRenderer());
+	public List<KDNode<I>> getNodes() {
+		return nodes;
 	}
 
 }

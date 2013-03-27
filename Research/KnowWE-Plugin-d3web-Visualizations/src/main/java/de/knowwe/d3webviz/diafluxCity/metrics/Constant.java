@@ -16,37 +16,25 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
+package de.knowwe.d3webviz.diafluxCity.metrics;
 
-import de.knowwe.core.compile.packaging.PackageManager;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 04.11.2012
+ * @created 21.05.2012
  */
-public class D3webDependenciesType extends DefaultMarkupType {
+public class Constant<T> implements Metric<T, Double> {
 
-	private static final DefaultMarkup m;
-	public static final String ANNOTATION_SHOW_TYPE = "showtypes";
-	public static final String ANNOTATION_IGNORE = "ignore";
-	public static final String ANNOTATION_SHOW_ALL = "showall";
+	private final double constant;
 
-	static {
-		m = new DefaultMarkup("d3webDependencies");
-		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME);
-		m.addAnnotation(ANNOTATION_SHOW_TYPE, false, "true", "false");
-		m.addAnnotation(ANNOTATION_SHOW_ALL, false, "true", "false");
-		m.addAnnotation(ANNOTATION_IGNORE);
+	public Constant(double constant) {
+		this.constant = constant;
 	}
 
-
-	public D3webDependenciesType() {
-		super(m);
-		setRenderer(new D3webDependenciesRenderer());
-	}
+	public Double getValue(T object) {
+		return constant;
+	};
 
 }

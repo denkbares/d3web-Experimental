@@ -1,36 +1,55 @@
-.d3webdependencies .graph{
+.d3webdependencies .dependencies{
 	height: 1000px;
 	width: 100%;
 }
 
-.d3webdependencies .graph .node rect {
+.d3webdependencies .dependencies .node rect {
   stroke-width: 3px;
   stroke: #333;
   fill: #fff;
 }
 
-.d3webdependencies .graph .node.faded rect, .edge.faded {
+.d3webdependencies .dependencies .node.faded rect, .edge.faded {
   stroke-width: 1px;
   stroke: #666;
 }
 
-.d3webdependencies .graph path.edge {
+.d3webdependencies .dependencies path.edge {
   fill: none;
   stroke: #333;
   stroke-width: 5px;
 }
 
-.d3webdependencies .graph circle {
+.d3webdependencies .dependencies circle {
   fill: #ccc;
   stroke: #333;
   stroke-width: 1.5px;
 }
 
-.d3webdependencies .graph text {
+.d3webdependencies .dependencies text {
   font: 10px sans-serif;
   pointer-events: none;
 }
 
-.d3webdependencies .graph .faded text {
+.d3webdependencies .dependencies .faded text {
 	stroke: #666;
 }
+
+
+.diafluxHierarchy circle {
+  fill: rgb(31, 119, 180);
+  fill-opacity: .25;
+  stroke: rgb(31, 119, 180);
+  stroke-width: 1px;
+}
+
+.diafluxHierarchy .leaf circle {
+  fill: #ff7f0e;
+  fill-opacity: 1;
+}
+
+.diafluxHierarchy text {
+  font: 10px sans-serif;
+}
+
+

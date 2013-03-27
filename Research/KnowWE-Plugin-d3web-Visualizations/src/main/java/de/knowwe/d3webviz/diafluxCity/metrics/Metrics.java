@@ -16,37 +16,41 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
-
-import de.knowwe.core.compile.packaging.PackageManager;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+package de.knowwe.d3webviz.diafluxCity.metrics;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 04.11.2012
+ * @created 09.02.2012
  */
-public class D3webDependenciesType extends DefaultMarkupType {
+public final class Metrics {
 
-	private static final DefaultMarkup m;
-	public static final String ANNOTATION_SHOW_TYPE = "showtypes";
-	public static final String ANNOTATION_IGNORE = "ignore";
-	public static final String ANNOTATION_SHOW_ALL = "showall";
-
-	static {
-		m = new DefaultMarkup("d3webDependencies");
-		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME);
-		m.addAnnotation(ANNOTATION_SHOW_TYPE, false, "true", "false");
-		m.addAnnotation(ANNOTATION_SHOW_ALL, false, "true", "false");
-		m.addAnnotation(ANNOTATION_IGNORE);
+	private Metrics() {
 	}
 
+	public static <I> Metric<I, Double> relate(final Metric<I, Double> metric, final Metric<I, Double> base) {
 
-	public D3webDependenciesType() {
-		super(m);
-		setRenderer(new D3webDependenciesRenderer());
+		return new Metric<I, Double>() {
+
+			public Double getValue(I object) {
+				double d = metric.getValue(object).doubleValue()
+						/ base.getValue(object).doubleValue();
+				return new Double(d);
+			}
+
+		};
+	}
+
+	public static <I> Metric<I, Double> multiply(final Metric<I, Double> metric, final double factor) {
+
+		return new Metric<I, Double>() {
+
+			public Double getValue(I object) {
+				return metric.getValue(object).doubleValue() * factor;
+			}
+
+		};
 	}
 
 }

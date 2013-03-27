@@ -16,37 +16,45 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
+package de.knowwe.d3webviz.diafluxCity.kdtree;
 
-import de.knowwe.core.compile.packaging.PackageManager;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 04.11.2012
+ * @created 05.02.2012
  */
-public class D3webDependenciesType extends DefaultMarkupType {
+public class CollectAssignedRectangles<I> implements Visitor<I> {
 
-	private static final DefaultMarkup m;
-	public static final String ANNOTATION_SHOW_TYPE = "showtypes";
-	public static final String ANNOTATION_IGNORE = "ignore";
-	public static final String ANNOTATION_SHOW_ALL = "showall";
+	private final Map<I, Rectangle2D> rects = new HashMap<I, Rectangle2D>();
+	private final double margin;
 
-	static {
-		m = new DefaultMarkup("d3webDependencies");
-		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME);
-		m.addAnnotation(ANNOTATION_SHOW_TYPE, false, "true", "false");
-		m.addAnnotation(ANNOTATION_SHOW_ALL, false, "true", "false");
-		m.addAnnotation(ANNOTATION_IGNORE);
+	public CollectAssignedRectangles(double margin) {
+		this.margin = margin;
 	}
 
+	@Override
+	public void visit(KDNode<I> node) {
 
-	public D3webDependenciesType() {
-		super(m);
-		setRenderer(new D3webDependenciesRenderer());
+		if (node.isOccupied()) {
+			Rectangle2D bounds = node.getBounds();
+			Rectangle2D result = KDUtils.subtractMargins(bounds, margin);
+
+			rects.put(node.getValue(), result);
+		}
+
+	}
+
+	public Map<I, Rectangle2D> getAssignments() {
+		return rects;
+	}
+
+	public double getMargin() {
+		return margin;
 	}
 
 }

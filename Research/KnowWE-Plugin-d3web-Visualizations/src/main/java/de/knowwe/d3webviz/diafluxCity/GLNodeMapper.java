@@ -16,37 +16,28 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
+package de.knowwe.d3webviz.diafluxCity;
 
-import de.knowwe.core.compile.packaging.PackageManager;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import java.awt.geom.Dimension2D;
+
+import de.knowwe.d3webviz.diafluxCity.kdtree.DoubleDimension;
+import de.knowwe.d3webviz.diafluxCity.kdtree.RectanglePacker.Mapping;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 04.11.2012
+ * @created 08.02.2012
  */
-public class D3webDependenciesType extends DefaultMarkupType {
+public class GLNodeMapper implements Mapping<GLBuilding> {
 
-	private static final DefaultMarkup m;
-	public static final String ANNOTATION_SHOW_TYPE = "showtypes";
-	public static final String ANNOTATION_IGNORE = "ignore";
-	public static final String ANNOTATION_SHOW_ALL = "showall";
+	public Dimension2D map(GLBuilding object) {
 
-	static {
-		m = new DefaultMarkup("d3webDependencies");
-		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME);
-		m.addAnnotation(ANNOTATION_SHOW_TYPE, false, "true", "false");
-		m.addAnnotation(ANNOTATION_SHOW_ALL, false, "true", "false");
-		m.addAnnotation(ANNOTATION_IGNORE);
-	}
-
-
-	public D3webDependenciesType() {
-		super(m);
-		setRenderer(new D3webDependenciesRenderer());
+		DoubleDimension dimension = new DoubleDimension(object.getLength(),
+				object.getWidth()); // TODO
+																								// *2
+																								// ??
+		return dimension;
 	}
 
 }

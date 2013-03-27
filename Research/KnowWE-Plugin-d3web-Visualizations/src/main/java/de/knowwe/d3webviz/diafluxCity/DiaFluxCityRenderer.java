@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 University Wuerzburg, Computer Science VI
+ * Copyright (C) 2013 University Wuerzburg, Computer Science VI
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,34 +16,37 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
+package de.knowwe.d3webviz.diafluxCity;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 04.11.2012
+ * @created 14.03.2013
  */
-public class D3webDependenciesRenderer extends DefaultMarkupRenderer {
+public class DiaFluxCityRenderer implements Renderer {
 
 	@Override
-	protected void renderContents(Section<?> section, UserContext user, RenderResult bob) {
+	public void render(Section<?> section, UserContext user, RenderResult bob) {
 
-		bob.appendHtml("<div class=\"d3webdependencies\">");
-		bob.appendHtml("<script type=\"text/javascript\" src=\"KnowWEExtension/scripts/d3.js\"></script>");
-		bob.appendHtml("<script type=\"text/javascript\" src=\"KnowWEExtension/scripts/dagre.js\"></script>");
+		bob.appendHtml("<div class=\"diafluxCity\">");
+		bob.appendHtml("<script type=\"text/javascript\" src=\"KnowWEExtension/scripts/city.js\"></script>");
+		bob.appendHtml("<script type=\"text/javascript\" src=\"KnowWEExtension/scripts/scenejs.js\"></script>");
 		bob.appendHtml("<script type=\"text/javascript\" src=\"KnowWEExtension/scripts/d3webviz.js\"></script>");
-		bob.appendHtml("<link href=\"KnowWEExtension/css/d3webviz.css\" type=\"text/css\" rel=\"stylesheet\">");
-		bob.appendHtml("<div class=\"dependencies\" id=\"graph" + section.getID() + "\">");
-		bob.appendHtml("</div>\n");
-		bob.appendHtml("<script type=\"text/javascript\">KNOWWE.d3webViz.createDependencyGraph(\""
-				+ section.getID() + "\");</script>");
+		// bob.appendHtml("<link href=\"KnowWEExtension/css/d3webviz.css\" type=\"text/css\" rel=\"stylesheet\">");
+		bob.appendHtml("<canvas id=\"diafluxCity" + section.getID()
+				+ "\" width=\"1000\" height=\"900\">");
+		bob.appendHtml("</canvas>\n");
+
+		bob.appendHtml("<script type=\"text/javascript\">KNOWWE.d3webViz.createDiaFluxCity(\""
+				+ section.getID() + "\",'DiaFluxCityAction');</script>");
 		bob.appendHtml("</div>\n");
 
 	}
+
 }
