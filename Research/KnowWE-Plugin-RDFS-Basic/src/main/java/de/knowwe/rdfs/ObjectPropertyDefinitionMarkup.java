@@ -41,7 +41,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.basicType.EndLineComment;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -107,13 +107,13 @@ public class ObjectPropertyDefinitionMarkup extends AbstractKnowledgeUnitType<Ob
 		}
 
 		@Override
-		public boolean checkTypeConstraints(Section<? extends SimpleTerm> s) {
+		public boolean checkTypeConstraints(Section<? extends Term> s) {
 			boolean termCategory = RDFSUtil.isTermCategory(s, RDFSTermCategory.Class);
 			return termCategory;
 		}
 
 		@Override
-		public String getMessageForConstraintViolation(Section<? extends SimpleTerm> s) {
+		public String getMessageForConstraintViolation(Section<? extends Term> s) {
 			return "Only classes are allowed here";
 		}
 

@@ -35,7 +35,7 @@ import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -85,7 +85,7 @@ public class ComplexIRIDefinitionMarkup extends AbstractKnowledgeUnitType<Comple
 		}
 
 		@Override
-		public String getTermName(Section<? extends SimpleTerm> section) {
+		public String getTermName(Section<? extends Term> section) {
 			return Strings.unquote(section.getText().trim());
 		}
 	}
@@ -98,7 +98,7 @@ public class ComplexIRIDefinitionMarkup extends AbstractKnowledgeUnitType<Comple
 		}
 
 		@Override
-		public String getTermName(Section<? extends SimpleTerm> s) {
+		public String getTermName(Section<? extends Term> s) {
 			return s.getText().trim().replaceAll("::", "").trim();
 		}
 	}

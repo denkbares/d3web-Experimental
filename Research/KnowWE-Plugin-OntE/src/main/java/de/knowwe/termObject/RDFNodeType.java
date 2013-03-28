@@ -22,7 +22,7 @@ package de.knowwe.termObject;
 
 import org.ontoware.rdf2go.model.node.Node;
 
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 
 /**
@@ -32,7 +32,7 @@ import de.knowwe.core.kdom.parsing.Section;
  * @author smark
  * @created 26.05.2011
  */
-public interface RDFNodeType extends SimpleTerm {
+public interface RDFNodeType extends Term {
 
 	public Node getNode(Section<? extends RDFNodeType> s);
 }

@@ -38,7 +38,7 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -160,9 +160,9 @@ public class CompileUtils {
 		return result;
 	}
 
-	public static Collection<Section<SimpleTerm>> getAllLocalReferencesOfCompilationUnit(Section<? extends KnowledgeUnit> section) {
-		List<Section<SimpleTerm>> result = new ArrayList<Section<SimpleTerm>>();
-		Sections.findSuccessorsOfType(section, SimpleTerm.class, result);
+	public static Collection<Section<Term>> getAllLocalReferencesOfCompilationUnit(Section<? extends KnowledgeUnit> section) {
+		List<Section<Term>> result = new ArrayList<Section<Term>>();
+		Sections.findSuccessorsOfType(section, Term.class, result);
 		return result;
 	}
 

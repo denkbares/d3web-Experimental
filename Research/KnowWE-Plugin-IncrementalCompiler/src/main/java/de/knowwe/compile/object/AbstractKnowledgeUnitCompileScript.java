@@ -24,13 +24,13 @@ import java.util.Collection;
 
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 
 public abstract class AbstractKnowledgeUnitCompileScript<T extends Type> implements KnowledgeUnitCompileScript<T> {
 
 	@Override
-	public Collection<Section<? extends SimpleTerm>> getAllReferencesOfKnowledgeUnit(
+	public Collection<Section<? extends Term>> getAllReferencesOfKnowledgeUnit(
 			Section<? extends KnowledgeUnit> section) {
 
 		/*
@@ -38,11 +38,11 @@ public abstract class AbstractKnowledgeUnitCompileScript<T extends Type> impleme
 		 * knowledge-units dont overlap
 		 */
 
-		Collection<Section<SimpleTerm>> allReferencesOfCompilationUnit = CompileUtils.getAllLocalReferencesOfCompilationUnit(section);
+		Collection<Section<Term>> allReferencesOfCompilationUnit = CompileUtils.getAllLocalReferencesOfCompilationUnit(section);
 
 		// some evil workaround because of generics problem
-		Collection<Section<? extends SimpleTerm>> result = new ArrayList<Section<? extends SimpleTerm>>();
-		for (Section<SimpleTerm> ref : allReferencesOfCompilationUnit) {
+		Collection<Section<? extends Term>> result = new ArrayList<Section<? extends Term>>();
+		for (Section<Term> ref : allReferencesOfCompilationUnit) {
 			result.add(ref);
 		}
 
@@ -52,6 +52,6 @@ public abstract class AbstractKnowledgeUnitCompileScript<T extends Type> impleme
 
 	}
 
-	public abstract Collection<Section<? extends SimpleTerm>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section);
+	public abstract Collection<Section<? extends Term>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section);
 
 }

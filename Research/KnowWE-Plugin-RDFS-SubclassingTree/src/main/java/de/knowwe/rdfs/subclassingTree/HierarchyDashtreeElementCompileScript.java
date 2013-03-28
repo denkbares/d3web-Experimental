@@ -30,7 +30,7 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -63,10 +63,10 @@ public class HierarchyDashtreeElementCompileScript extends
 			Section<? extends DashTreeElement> father = DashTreeUtils
 					.getFatherDashTreeElement(element);
 			if (father != null) {
-				Section<? extends SimpleTerm> fatherElement = Sections
-						.findSuccessor(father, SimpleTerm.class);
-				Section<? extends SimpleTerm> childElement = Sections
-						.findSuccessor(element, SimpleTerm.class);
+				Section<? extends Term> fatherElement = Sections
+						.findSuccessor(father, Term.class);
+				Section<? extends Term> childElement = Sections
+						.findSuccessor(element, Term.class);
 
 				URI localURI = RDFSUtil.getURI(childElement);
 				URI fatherURI = RDFSUtil.getURI(fatherElement);
@@ -120,10 +120,10 @@ public class HierarchyDashtreeElementCompileScript extends
 	}
 
 	@Override
-	public Collection<Section<? extends SimpleTerm>> getAllReferencesOfKnowledgeUnit(
+	public Collection<Section<? extends Term>> getAllReferencesOfKnowledgeUnit(
 			Section<? extends KnowledgeUnit> section) {
 
-		Set<Section<? extends SimpleTerm>> result = new HashSet<Section<? extends SimpleTerm>>();
+		Set<Section<? extends Term>> result = new HashSet<Section<? extends Term>>();
 
 		// add child-DTE to ref-list
 		Section<? extends IRITermRef> childElement = Sections

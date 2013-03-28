@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 
 /**
@@ -33,7 +33,7 @@ import de.knowwe.core.kdom.parsing.Section;
 public abstract class SimpleKnowledgeUnitCompileScript<T extends Type> extends AbstractKnowledgeUnitCompileScript<T> {
 
 	@Override
-	public Collection<Section<? extends SimpleTerm>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section) {
+	public Collection<Section<? extends Term>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section) {
 		// no external references here
 		return Collections.emptySet();
 	}

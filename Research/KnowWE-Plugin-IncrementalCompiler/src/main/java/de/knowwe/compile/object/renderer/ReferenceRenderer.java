@@ -19,7 +19,7 @@
 package de.knowwe.compile.object.renderer;
 
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -79,7 +79,7 @@ public class ReferenceRenderer implements Renderer {
 	public void render(Section<?> section, UserContext user, RenderResult string) {
 
 		@SuppressWarnings("unchecked")
-		Section<? extends SimpleTerm> reference = (Section<? extends SimpleTerm>) section;
+		Section<? extends Term> reference = (Section<? extends Term>) section;
 
 		if (IncrementalCompiler.getInstance().getTerminology().isPredefinedObject(
 				reference.get().getTermIdentifier(reference))) {

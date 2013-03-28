@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -61,7 +61,7 @@ public class SimpleIRIDefintionMarkup extends AbstractType implements Editable {
 		}
 
 		@Override
-		public String getTermName(Section<? extends SimpleTerm> s) {
+		public String getTermName(Section<? extends Term> s) {
 			return Strings.unquote(s.getText().trim());
 		}
 

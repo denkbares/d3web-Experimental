@@ -26,7 +26,7 @@ import java.util.List;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.TypeRestrictedReference;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.DefaultMessageRenderer;
@@ -48,7 +48,7 @@ public class ReferenceSurroundingRenderer implements SurroundingRenderer {
 	@Override
 	public void renderPre(Section<?> section, UserContext user, RenderResult string) {
 		@SuppressWarnings("unchecked")
-		Section<? extends SimpleTerm> reference = (Section<? extends SimpleTerm>) section;
+		Section<? extends Term> reference = (Section<? extends Term>) section;
 
 		Collection<Message> messages = IncrementalCompiler.getInstance().checkDefinition(
 				KnowWEUtils.getTermIdentifier(reference));
@@ -87,7 +87,7 @@ public class ReferenceSurroundingRenderer implements SurroundingRenderer {
 	@Override
 	public void renderPost(Section<?> section, UserContext user, RenderResult string) {
 		@SuppressWarnings("unchecked")
-		Section<? extends SimpleTerm> reference = (Section<? extends SimpleTerm>) section;
+		Section<? extends Term> reference = (Section<? extends Term>) section;
 
 		Collection<Message> messages = IncrementalCompiler.getInstance().checkDefinition(
 				KnowWEUtils.getTermIdentifier(reference));

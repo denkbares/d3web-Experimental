@@ -50,7 +50,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.AssertSingleTermDefinitionHandler;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -229,10 +229,10 @@ public class IncrementalCompiler implements EventListener {
 		// otherwise it does not need to be in the toRemove list,
 		// indeed it must not if hazard filter activated!
 		for (Section<? extends KnowledgeUnit> section : deletedknowledge) {
-			Collection<Section<SimpleTerm>> referencesOfCompilationUnit = CompileUtils.getAllLocalReferencesOfCompilationUnit(section);
+			Collection<Section<Term>> referencesOfCompilationUnit = CompileUtils.getAllLocalReferencesOfCompilationUnit(section);
 			boolean valid = true;
 			// check for all references if had been valid in old version
-			for (Section<SimpleTerm> ref : referencesOfCompilationUnit) {
+			for (Section<Term> ref : referencesOfCompilationUnit) {
 				if (!terminology.wasValidInOldVersion(ref)) {
 					valid = false;
 				}
@@ -340,7 +340,7 @@ public class IncrementalCompiler implements EventListener {
 						"KnowledgeUnit without CompileScript: " + unit.toString());
 				continue;
 			}
-			Collection<Section<? extends SimpleTerm>> externalReferencesOfKnowledgeUnit = compileScript.getExternalReferencesOfKnowledgeUnit(
+			Collection<Section<? extends Term>> externalReferencesOfKnowledgeUnit = compileScript.getExternalReferencesOfKnowledgeUnit(
 					unit);
 			if (externalReferencesOfKnowledgeUnit != null
 					&& externalReferencesOfKnowledgeUnit.size() > 0) {
@@ -384,7 +384,7 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
-	private void removeRecursively(Section<? extends SimpleTerm> section) {
+	private void removeRecursively(Section<? extends Term> section) {
 		if (terminology.wasValidInOldVersion(section)) {
 			terminology.removeFromValidObjects(section);
 			Collection<Section<? extends KnowledgeUnit>> referencingSlices = terminology.getReferencingSlices(section);

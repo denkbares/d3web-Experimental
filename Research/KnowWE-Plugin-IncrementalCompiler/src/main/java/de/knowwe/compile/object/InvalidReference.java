@@ -18,7 +18,7 @@
  */
 package de.knowwe.compile.object;
 
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 
 /**
@@ -37,7 +37,7 @@ public class InvalidReference extends IncrementalTermReference {
 	}
 
 	@Override
-	public String getTermName(Section<? extends SimpleTerm> section) {
+	public String getTermName(Section<? extends Term> section) {
 		return "somethingthatwillneverbedefinedanywhereever!";
 	}
 

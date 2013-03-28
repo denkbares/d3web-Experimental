@@ -37,7 +37,7 @@ import de.knowwe.compile.object.renderer.SurroundingRenderer;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.SimpleReference;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -131,8 +131,8 @@ public class RelationMarkupContentType extends AbstractType {
 				}
 
 				@Override
-				public Collection<Section<? extends SimpleTerm>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section) {
-					Set<Section<? extends SimpleTerm>> result = new HashSet<Section<? extends SimpleTerm>>();
+				public Collection<Section<? extends Term>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section) {
+					Set<Section<? extends Term>> result = new HashSet<Section<? extends Term>>();
 					Collection<Section<ConceptMarkup>> conceptDefinitions = MarkupUtils.getConecptDefinitions(section);
 					for (Section<ConceptMarkup> def : conceptDefinitions) {
 						result.add(Sections.findSuccessor(def,

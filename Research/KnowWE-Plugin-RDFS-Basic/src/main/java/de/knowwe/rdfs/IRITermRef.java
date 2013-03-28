@@ -24,7 +24,7 @@ import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.compile.object.renderer.CompositeRenderer;
 import de.knowwe.compile.object.renderer.ReferenceRenderer;
 import de.knowwe.compile.object.renderer.ReferenceSurroundingRenderer;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.kdom.renderer.StyleRenderer;
 
@@ -38,7 +38,7 @@ public class IRITermRef extends IncrementalTermReference {
 	}
 
 	@Override
-	public String getTermName(Section<? extends SimpleTerm> s) {
+	public String getTermName(Section<? extends Term> s) {
 		// dirty hack for colons '::'
 		// TODO: fix
 		String identifierString = s.getText();

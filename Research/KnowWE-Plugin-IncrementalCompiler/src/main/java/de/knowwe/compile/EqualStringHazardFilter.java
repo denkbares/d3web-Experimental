@@ -13,7 +13,7 @@ import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -88,9 +88,9 @@ public class EqualStringHazardFilter {
 				KnowledgeUnit.class);
 
 		// old external refs are stored as they cannot be retrieved any more
-		Collection<Section<? extends SimpleTerm>> allOldReferences = new HashSet<Section<? extends SimpleTerm>>();
+		Collection<Section<? extends Term>> allOldReferences = new HashSet<Section<? extends Term>>();
 		@SuppressWarnings("unchecked")
-		Collection<Section<? extends SimpleTerm>> oldExternalReferences = (Collection<Section<? extends SimpleTerm>>) (KnowWEUtils.getStoredObject(
+		Collection<Section<? extends Term>> oldExternalReferences = (Collection<Section<? extends Term>>) (KnowWEUtils.getStoredObject(
 				oldSection, IncrementalCompiler.EXTERNAL_REFERENCES_OF_KNOWLEDGEUNIT));
 		if (oldExternalReferences != null) {
 			allOldReferences.addAll(oldExternalReferences);
@@ -98,13 +98,13 @@ public class EqualStringHazardFilter {
 
 		// fetching only the local references as external ones are incorrect
 		// (retrieval is based on new article version)
-		Collection<Section<SimpleTerm>> allLocalReferencesOfCompilationUnit = CompileUtils.getAllLocalReferencesOfCompilationUnit(castedOldSection);
+		Collection<Section<Term>> allLocalReferencesOfCompilationUnit = CompileUtils.getAllLocalReferencesOfCompilationUnit(castedOldSection);
 		// merge both sets
 		allOldReferences.addAll(allLocalReferencesOfCompilationUnit);
 
 		// for the new unit the normal way of fetching all refs can be used.
 
-		Collection<Section<? extends SimpleTerm>> referencesOfOtherSection = new HashSet<Section<? extends SimpleTerm>>();
+		Collection<Section<? extends Term>> referencesOfOtherSection = new HashSet<Section<? extends Term>>();
 		KnowledgeUnitCompileScript<Type> compileScript = castedOtherSection.get().getCompileScript();
 		if (compileScript != null) {
 			referencesOfOtherSection = compileScript.getAllReferencesOfKnowledgeUnit(
@@ -127,10 +127,10 @@ public class EqualStringHazardFilter {
 	 * @param referencesOfSection
 	 * @return
 	 */
-	private Collection<String> resolveTermNames(Collection<Section<? extends SimpleTerm>> referencesOfSection2) {
+	private Collection<String> resolveTermNames(Collection<Section<? extends Term>> referencesOfSection2) {
 		Collection<String> termNames = new HashSet<String>();
 
-		for (Section<? extends SimpleTerm> section : referencesOfSection2) {
+		for (Section<? extends Term> section : referencesOfSection2) {
 			termNames.add(section.get().getTermName(section));
 		}
 		return termNames;

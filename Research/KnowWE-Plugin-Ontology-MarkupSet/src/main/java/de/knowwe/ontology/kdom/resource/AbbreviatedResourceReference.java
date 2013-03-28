@@ -22,7 +22,7 @@ import org.ontoware.rdf2go.model.node.URI;
 
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.objects.SimpleReference;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -44,20 +44,20 @@ public class AbbreviatedResourceReference extends SimpleReference {
 	}
 
 	@Override
-	public String getTermName(Section<? extends SimpleTerm> section) {
+	public String getTermName(Section<? extends Term> section) {
 		String abbreviation = getAbbreviation(section);
 		String resource = getResource(section);
 		return abbreviation + ":" + resource;
 	}
 
-	public String getResource(Section<? extends SimpleTerm> section) {
+	public String getResource(Section<? extends Term> section) {
 		Section<ResourceReference> resourceSection = Sections.findChildOfType(section,
 				ResourceReference.class);
 		String resource = resourceSection.get().getTermName(resourceSection);
 		return resource;
 	}
 
-	public String getAbbreviation(Section<? extends SimpleTerm> section) {
+	public String getAbbreviation(Section<? extends Term> section) {
 		Section<AbbreviationPrefixReference> abbreviationPrefixSection = Sections.findChildOfType(
 				section, AbbreviationPrefixReference.class);
 		String abbreviation;

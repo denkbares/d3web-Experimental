@@ -20,7 +20,7 @@ package de.knowwe.wisskont.edit;
 
 import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.ObjectInfoTagHandler;
@@ -47,7 +47,7 @@ public class ObjectInfoToolProviderGerman implements ToolProvider {
 		return new Tool[] {};
 	}
 
-	protected Tool getObjectInfoPageTool(Section<? extends SimpleTerm> section, UserContext userContext) {
+	protected Tool getObjectInfoPageTool(Section<? extends Term> section, UserContext userContext) {
 		TermIdentifier termIdentifier = section.get().getTermIdentifier(section);
 		String lastPathElementExternalForm = new TermIdentifier(termIdentifier.getLastPathElement()).toExternalForm();
 		String externalTermIdentifierForm = termIdentifier.toExternalForm();

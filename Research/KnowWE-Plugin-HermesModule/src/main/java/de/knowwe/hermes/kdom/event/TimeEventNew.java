@@ -12,7 +12,7 @@ import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.AssertSingleTermDefinitionHandler;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -149,7 +149,7 @@ public class TimeEventNew extends AbstractType {
 		}
 
 		@Override
-		public String getTermName(Section<? extends SimpleTerm> s) {
+		public String getTermName(Section<? extends Term> s) {
 			return s.getText().trim();
 		}
 

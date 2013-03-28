@@ -31,7 +31,7 @@ import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.compile.terminology.TermIdentifier;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.Strings;
@@ -54,7 +54,7 @@ public class RDFSUtil {
 	 * @param s
 	 * @return
 	 */
-	public static URI getURI(Section<? extends SimpleTerm> s) {
+	public static URI getURI(Section<? extends Term> s) {
 		if (s == null) return null;
 
 		String termName = s.get().getTermName(s);
@@ -90,10 +90,10 @@ public class RDFSUtil {
 		}
 	}
 
-	public static boolean isTermCategory(Section<? extends SimpleTerm> ref, RDFSTermCategory c) {
+	public static boolean isTermCategory(Section<? extends Term> ref, RDFSTermCategory c) {
 		TermIdentifier termIdentifier = ref.get().getTermIdentifier(ref);
-		if (ref.get() instanceof SimpleTerm) {
-			termIdentifier = ((SimpleTerm) ref.get()).getTermIdentifier(ref);
+		if (ref.get() instanceof Term) {
+			termIdentifier = ((Term) ref.get()).getTermIdentifier(ref);
 		}
 		Object info = IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(
 				termIdentifier);

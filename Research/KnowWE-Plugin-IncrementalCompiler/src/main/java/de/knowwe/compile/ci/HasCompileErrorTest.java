@@ -29,7 +29,7 @@ import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.Strings;
@@ -63,7 +63,7 @@ public class HasCompileErrorTest extends AbstractTest<Article> {
 
 	}
 
-	private <T extends SimpleTerm> List<String> extractedErroneousTermNames(ReferenceManager referenceManager, List<Section<T>> terms) {
+	private <T extends Term> List<String> extractedErroneousTermNames(ReferenceManager referenceManager, List<Section<T>> terms) {
 		List<String> erroneousTerms = new ArrayList<String>();
 		for (Section<T> def : terms) {
 			if (!referenceManager.isValid(def.get().getTermIdentifier(def))) {

@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -59,7 +59,7 @@ class TripleMarkupContent extends AbstractType {
 		}
 
 		@Override
-		public boolean checkTypeConstraints(Section<? extends SimpleTerm> s) {
+		public boolean checkTypeConstraints(Section<? extends Term> s) {
 			Object info = IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(
 					s.get().getTermIdentifier(s));
 			if (info != null) {
@@ -82,7 +82,7 @@ class TripleMarkupContent extends AbstractType {
 		}
 
 		@Override
-		public String getMessageForConstraintViolation(Section<? extends SimpleTerm> s) {
+		public String getMessageForConstraintViolation(Section<? extends Term> s) {
 			return "only properties allowed here";
 		}
 	}

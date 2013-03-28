@@ -19,7 +19,7 @@
 package de.knowwe.kdom.manchester;
 
 import de.knowwe.compile.object.IncrementalTermReference;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
@@ -42,7 +42,7 @@ public class OWLTermRef extends IncrementalTermReference {
 	}
 
 	@Override
-	public String getTermName(Section<? extends SimpleTerm> s) {
+	public String getTermName(Section<? extends Term> s) {
 		// dirty hack for colons '::'
 		// TODO: fix
 		String identifierString = s.getText();

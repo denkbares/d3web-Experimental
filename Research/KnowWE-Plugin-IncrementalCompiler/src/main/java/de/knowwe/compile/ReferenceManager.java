@@ -38,7 +38,7 @@ import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -170,10 +170,10 @@ public class ReferenceManager {
 		return wasValidInOldVersion(KnowWEUtils.getTermIdentifier(s));
 	}
 
-	public Collection<Section<? extends KnowledgeUnit>> getReferencingSlices(Section<? extends SimpleTerm> section) {
+	public Collection<Section<? extends KnowledgeUnit>> getReferencingSlices(Section<? extends Term> section) {
 		Collection<Section<? extends KnowledgeUnit>> result = new HashSet<Section<? extends KnowledgeUnit>>();
 		TermIdentifier termIdentifier = KnowWEUtils.getTermIdentifier(section);
-		Set<Section<? extends SimpleTerm>> termSet = new HashSet<Section<? extends SimpleTerm>>();
+		Set<Section<? extends Term>> termSet = new HashSet<Section<? extends Term>>();
 		Set<Section<? extends SimpleReference>> refs = allReferences.get(termIdentifier);
 		if (refs != null) {
 			termSet.addAll(refs);
@@ -202,9 +202,9 @@ public class ReferenceManager {
 							"KnowledgeUnit without compile script: " + knowledge.toString());
 					continue;
 				}
-				Collection<Section<? extends SimpleTerm>> allReferencesOfKnowledgeUnit = compileScript.getAllReferencesOfKnowledgeUnit(
+				Collection<Section<? extends Term>> allReferencesOfKnowledgeUnit = compileScript.getAllReferencesOfKnowledgeUnit(
 						knowledge);
-				for (Section<? extends SimpleTerm> sliceRef : allReferencesOfKnowledgeUnit) {
+				for (Section<? extends Term> sliceRef : allReferencesOfKnowledgeUnit) {
 					TermIdentifier sliceRefTermIdentifier = KnowWEUtils.getTermIdentifier(sliceRef);
 					if (sliceRefTermIdentifier.equals(termIdentifier)) {
 						result.add(knowledge);

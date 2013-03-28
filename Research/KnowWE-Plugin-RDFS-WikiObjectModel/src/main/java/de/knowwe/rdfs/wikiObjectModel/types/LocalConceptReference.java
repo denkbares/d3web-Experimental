@@ -18,7 +18,7 @@
  */
 package de.knowwe.rdfs.wikiObjectModel.types;
 
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.kdom.sectionFinder.OneOfStringEnumFinderExact;
 import de.knowwe.rdfs.IRITermRef;
@@ -43,7 +43,7 @@ public class LocalConceptReference extends IRITermRef {
 	}
 
 	@Override
-	public String getTermName(Section<? extends SimpleTerm> s) {
+	public String getTermName(Section<? extends Term> s) {
 		return Utils.findContextConceptTermname(s);
 	}
 

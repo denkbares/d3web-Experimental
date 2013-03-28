@@ -22,7 +22,7 @@ import java.util.Collection;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.SimpleReference;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
@@ -62,11 +62,11 @@ public class ClassMemberLinkToolProvider implements ToolProvider {
 		return new Tool[] {};
 	}
 
-	protected Tool getClassMemberPageTool(Section<? extends SimpleTerm> section, UserContext userContext) {
+	protected Tool getClassMemberPageTool(Section<? extends Term> section, UserContext userContext) {
 
 		String objectName = section.getText();
-		if (section.get() instanceof SimpleTerm) {
-			objectName = ((SimpleTerm) section.get()).getTermIdentifier(section).toString();
+		if (section.get() instanceof Term) {
+			objectName = ((Term) section.get()).getTermIdentifier(section).toString();
 		}
 		String jsAction = "window.location.href = " +
 				"'Wiki.jsp?page=ClassMembers&objectname=' + encodeURIComponent('" +

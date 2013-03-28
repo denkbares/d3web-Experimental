@@ -24,7 +24,7 @@ import de.knowwe.core.compile.Priority;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -44,18 +44,18 @@ public class NamespaceAbbreviationDefinition extends SimpleDefinition {
 	}
 
 	@Override
-	public String getTermName(Section<? extends SimpleTerm> section) {
+	public String getTermName(Section<? extends Term> section) {
 		return getAbbreviation(section) + " - " + getNamespace(section);
 	}
 
-	public String getNamespace(Section<? extends SimpleTerm> section) {
+	public String getNamespace(Section<? extends Term> section) {
 		Section<NamespaceDefinition> namespace = Sections.findChildOfType(section,
 				NamespaceDefinition.class);
 		String namespaceName = namespace.get().getTermName(namespace);
 		return namespaceName;
 	}
 
-	public String getAbbreviation(Section<? extends SimpleTerm> section) {
+	public String getAbbreviation(Section<? extends Term> section) {
 		Section<AbbreviationDefinition> abbreviation = Sections.findChildOfType(section,
 				AbbreviationDefinition.class);
 		String abbreviationName = abbreviation.get().getTermName(abbreviation);

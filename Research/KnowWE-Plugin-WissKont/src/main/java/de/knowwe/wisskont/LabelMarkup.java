@@ -32,7 +32,7 @@ import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -95,8 +95,8 @@ public class LabelMarkup extends AbstractType implements Editable {
 			}
 
 			@Override
-			public Collection<Section<? extends SimpleTerm>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section) {
-				Collection<Section<? extends SimpleTerm>> result = new HashSet<Section<? extends SimpleTerm>>();
+			public Collection<Section<? extends Term>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section) {
+				Collection<Section<? extends Term>> result = new HashSet<Section<? extends Term>>();
 				List<Section<ConceptMarkup>> conecptDefinitions = MarkupUtils.getConecptDefinitions(section);
 				for (Section<ConceptMarkup> def : conecptDefinitions) {
 					result.add(Sections.findSuccessor(def, IncrementalTermDefinition.class));

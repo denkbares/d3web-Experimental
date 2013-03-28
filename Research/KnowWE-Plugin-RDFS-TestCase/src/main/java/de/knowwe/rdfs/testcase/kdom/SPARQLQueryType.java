@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.basicType.EmbracedType;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.AnonymousType;
@@ -72,7 +72,7 @@ public class SPARQLQueryType extends AbstractType {
 			else if (child.get() instanceof IRITermRef || child.get() instanceof TurtlePredicate) {
 				IRITermRef ref = (IRITermRef) child.get();
 				@SuppressWarnings("unchecked")
-				String iri = "lns:" + ref.getTermIdentifier((Section<? extends SimpleTerm>) child);
+				String iri = "lns:" + ref.getTermIdentifier((Section<? extends Term>) child);
 				query.append(iri);
 			}
 			else if (child.get() instanceof Colon) {

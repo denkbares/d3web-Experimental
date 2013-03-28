@@ -22,7 +22,7 @@ import java.util.Collection;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.SimpleReference;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
@@ -62,7 +62,7 @@ public class PropertyUseLinkToolProvider implements ToolProvider {
 		return new Tool[] {};
 	}
 
-	protected Tool getPropertyUseTool(Section<? extends SimpleTerm> section, UserContext userContext) {
+	protected Tool getPropertyUseTool(Section<? extends Term> section, UserContext userContext) {
 		String objectName = section.get().getTermIdentifier(section).toString();
 
 		String jsAction = "window.location.href = " +

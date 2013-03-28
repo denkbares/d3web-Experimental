@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.utils.Strings;
@@ -66,7 +66,7 @@ public class ConceptMarkup extends AbstractType implements Editable {
 		}
 
 		@Override
-		public String getTermName(Section<? extends SimpleTerm> s) {
+		public String getTermName(Section<? extends Term> s) {
 			return Strings.unquote(s.getText().trim());
 		}
 
