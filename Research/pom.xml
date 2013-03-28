@@ -230,6 +230,7 @@
 		<module>KnowWE-Plugin-Flash</module>
 		<module>KnowWE-Plugin-Ontology-MarkupSet</module>
 		<module>KnowWE-Plugin-SparqlToExcel</module>
+		<module>KnowWE-Plugin-Revisions</module>
 	</modules>
 	<repositories>
 		<repository>
