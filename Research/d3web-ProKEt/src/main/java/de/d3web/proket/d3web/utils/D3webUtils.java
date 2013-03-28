@@ -1681,13 +1681,13 @@ public class D3webUtils {
 	    }
 	}
 
-	System.out.println("BLACKBOARD: ");
+	/*System.out.println("BLACKBOARD: ");
 	for (Question q : blackboard.getValuedQuestions()) {
 
 	    System.out.println(q.getName() + " -> " + blackboard.getValue(q));
 	}
 	System.out.println("BLACKBOARD ENDE");
-	System.out.println(blackboard.getValuedSolutions());
+	System.out.println(blackboard.getValuedSolutions());*/
     }
 
     /**

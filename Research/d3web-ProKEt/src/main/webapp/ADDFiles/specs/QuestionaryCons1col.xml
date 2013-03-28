@@ -10,20 +10,21 @@
         dialogstrategy = "nextform"
         showcontraindicated = "HIDE"
         shownonindicated = "HIDE"
-        css="questionaryCons, diagnosisVisu" 
+        css="questionaryCons, diagnosisVisu, solutionPanel" 
         dialogcolumns="1"
         questionnairecolumns="1"
         questioncolumns="1"
         solutionExplanation = "TEXTUAL" 
-        solutionSorting = "CATEGORICAL"
+        solutionSorting = "CATEGALPHA"
         solutionDepth = "ALL"
+	solutionDynamics = "INTERACTIVE"
+	solutionRange = "MULTIPLE"
+	solutionStructuring = "LISTING"
+	solRatingGranularity = "ABSTRACT;;;PRECISE"
         unknownvisible = "TRUE"
     />
     <localUIOpts>
-        <dropdown TRUE="Fruchttyp;;;Blüten" />
-        <questioncolumns>
-            <one questions="Fruchttyp;;;Blüten"/>
-        </questioncolumns>
+        
     </localUIOpts>
     <dataOpts kb="0DemoBaum.d3web" />
     <ueOpts logging = "FALSE" />

@@ -39,7 +39,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.TemplateUtils;
-//import de.uniwue.exceparser.ExcelParserApplication;
+import de.uniwue.exceparser.ExcelParserApplication;
 import java.io.*;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -89,7 +89,7 @@ public class DialogManager extends HttpServlet {
 
 	// TODO: make property in specs
 	GLOBSET.setWebAppWarName("/UploadParseTool");
-	GLOBSET.setWebAppWarName("");
+	//GLOBSET.setWebAppWarName("");
 
 	String webappname =
 		GLOBSET.getWebAppWarName().equals("") ? "" : GLOBSET.getWebAppWarName() + "_";
@@ -168,7 +168,10 @@ public class DialogManager extends HttpServlet {
 	    show(request, response, httpSession);
 	} else if (action.equalsIgnoreCase("assembleDialog")) {
 	    assembleDialogLink(request, response, httpSession);
-	} else if (action.equalsIgnoreCase("storeDialogToUsersList")) {
+	} 	else if (action.equalsIgnoreCase("assembleDialogStartDirectly")) {
+	    assembleDialogLinkForDirectCall(request, response, httpSession);
+	}	
+	else if (action.equalsIgnoreCase("storeDialogToUsersList")) {
 	    storeDialogToUsersList(request, response, httpSession);
 	} else if (action.equalsIgnoreCase("deleteSelectedKB")) {
 	    deleteSelectedKB(request, response, httpSession);
@@ -447,13 +450,80 @@ public class DialogManager extends HttpServlet {
 
 	    } else if (specName.contains(DialogType.QUESTIONARYCONS.toString())) {
 
-		//dialogLink = GLOBSET.getWebAppWarName() + "/StandardDialog?src="
-		//      + specFile.getName().replace(".xml", "")
-		//    + "&dialogID=" + d3webKBName + "AND" + specName;
+
 		dialogLink = GLOBSET.getWebAppWarName()
 			+ "/StandardDialog?src="
 			+ specFile.getName().replace(".xml", "")
 			+ "&dialogID=" + d3webKBName + "AND" + specName;
+
+		//dialogLink = GLOBSET.getWebAppWarName() + "/StandardDialog?src="
+		//      + specFile.getName().replace(".xml", "")
+		//    + "&dialogID=" + d3webKBName + "AND" + specName;
+
+	    }
+	    System.err.println("\t - assembled dialog link: " + dialogLink);
+	}
+
+	// send link text back to JS
+	PrintWriter writer = response.getWriter();
+	if (!dialogLink.equals("")) {
+	    writer.write(dialogLink);
+	} else {
+	    writer.write("ERROR--AssembleDialog");
+	}
+	writer.close();
+    }
+    
+    
+     protected void assembleDialogLinkForDirectCall(HttpServletRequest request,
+	    HttpServletResponse response,
+	    HttpSession httpSession) throws IOException {
+
+	System.err.println("Assemble Dialog - try to assemble dialog string from selected KB & UI");
+
+	String d3webKBName = request.getParameter("kb").toString();
+	System.err.println("\t - KB name: " + d3webKBName);
+
+	String specName = request.getParameter("spec").toString();
+	System.err.println("\t - UI spec name: " + specName);
+
+	String path =
+		GLOBSET.getUploadFilesBasePath()
+		+ "/specs/" + specName + ".xml";
+
+	System.err.println("\t - dialog xml path and file name: " + path);
+
+	File specFile = new File(path);
+
+	// assemble dialog link
+	String dialogLink = "";
+
+	httpSession.setAttribute("WUMP", "true");
+	httpSession.setAttribute("initFromUpload", "init");
+
+	if (specName != null) {
+
+	    // assemble ITree Servlet Link
+	    if (specName.equalsIgnoreCase(DialogType.ITREE.toString())) {
+
+		dialogLink = 
+			 "/ITreeDialog?src="
+			+ specFile.getName().replace(".xml", "")
+			+ "&dialogID=" + d3webKBName + "AND" + specName;
+
+
+	    } else if (specName.contains(DialogType.QUESTIONARYCONS.toString())) {
+
+
+		dialogLink = 
+			 "/StandardDialog?src="
+			+ specFile.getName().replace(".xml", "")
+			+ "&dialogID=" + d3webKBName + "AND" + specName;
+
+		//dialogLink = GLOBSET.getWebAppWarName() + "/StandardDialog?src="
+		//      + specFile.getName().replace(".xml", "")
+		//    + "&dialogID=" + d3webKBName + "AND" + specName;
+
 	    }
 	    System.err.println("\t - assembled dialog link: " + dialogLink);
 	}
@@ -663,7 +733,6 @@ public class DialogManager extends HttpServlet {
 	kwF.canWrite();
 	kwF.canRead();
 
-	boolean compileError = false;
 
 	System.err.println("\t - Files for converter and parser: ");
 	System.err.println("\t\t - document path and name: " + doc);
@@ -678,25 +747,28 @@ public class DialogManager extends HttpServlet {
 	    System.out.println("DiaMan: " + docToParse.getName());
 	    // integration of Georg D. Parser with clojure here ->
 	    if (docToParse.getName().endsWith(".xlsx")) {
-		String d3webPath = upPath + FILESEP + "d3web" + FILESEP;
-		System.out.println("DiaMan: " + docToParse.getAbsolutePath());
-		//ExcelBasedKBParser.parse(docToParse.getAbsolutePath() , d3webPath+"test.txt");
 
-		//ExcelParserApplication.compile(doc, err, tmp, d3web, knowwe);
-		System.out.println("DiaMan: " + compileError);
+		boolean compiled = ExcelParserApplication.compile(doc, err, tmp, d3web, knowwe);
 
-		// OK everything fine. Then rename d3web file and store latest one
-		// in webapp/session
-		docName = docName.replace(".doc", "").replace(".xlsx", "").replace(".csv", "");
-		checkAndRenameD3webFile(docName, d3wF, http);
-		errFile.delete();
-		status = "ParseSuccess";
+		if (compiled) {
 
+		    // OK everything fine. Then rename d3web file and store latest one
+		    // in webapp/session
+		    docName = docName.replace(".doc", "").replace(".xlsx", "").replace(".csv", "");
+		    checkAndRenameD3webFile(docName, d3wF, http);
+		    errFile.delete();
+		    status = "ParseSuccess";
+
+		} else {
+
+		    // something went wrong during compilation. 
+		    System.err.println("\t - Compilation error occurred!");
+		    status = "ParseError";
+		}
 
 	    } else {
 
-		compileError = compiler.compile(doc, err, tmp, d3web, knowwe);
-
+		boolean compileError = compiler.compile(doc, err, tmp, d3web, knowwe);
 
 		System.err.println("\t - Compilation error?: " + compileError);
 		if (compileError) {
@@ -712,10 +784,6 @@ public class DialogManager extends HttpServlet {
 		    errFile.delete();
 		    status = "ParseSuccess";
 		}
-
-
-
-
 
 		Runtime rt = Runtime.getRuntime();
 		try {
@@ -733,16 +801,13 @@ public class DialogManager extends HttpServlet {
 		}
 	    }
 
-	    System.err.println(
-		    "\t - Doc Parsed: " + docToParse.getAbsolutePath());
-	    System.gc();
+	    System.err.println("\t - Doc Parsed: " + docToParse.getAbsolutePath());
 
-	    docToParse.setWritable(
-		    true);
+	    System.gc();
+	    docToParse.setWritable(true);
 	    docToParse.delete();
 
-	    System.err.println(
-		    "\t - EXISTS?: " + docToParse.exists());
+	    System.err.println("\t - EXISTS?: " + docToParse.exists());
 
 	    // MUSS FÜR ELMARS PARSER WIEDER REIN!
 	} catch (ParserConfigurationException pce) {

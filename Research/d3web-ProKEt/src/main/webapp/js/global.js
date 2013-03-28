@@ -916,16 +916,19 @@ function handleSessionRedirect(loginFlag){
 
 
 /* explanation popups */
-
+//TODO Probelm falls leerzeichen in der id
 function explanationPopupHandle(clickedID){
+    
+    id = "#" + clickedID + "_popup";
+    //alert(id); alert($(id)); alert($(id).attr("id"));
+    
     if($("#"+clickedID+"_popup").hasClass("selected")) {
          //destyle popup
          $("#"+clickedID+"_popup").removeClass("selected");
         
     } else {
         // style the calling link part
-        $("#"+clickedID+"_popup").addClass("selected");
-       
+	$("#"+clickedID+"_popup").addClass("selected");
     }
     return false;
 }

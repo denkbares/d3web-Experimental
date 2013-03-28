@@ -39,6 +39,7 @@ public class SolutionExplanationTextualD3webRenderer {
 
     public String renderExplanationForSolution(Solution solution, Session d3webSession) {
 
+	System.out.println(solution);
         List<? extends PSMethod> psms = d3webSession.getPSMethods();
         for (PSMethod psm : psms) {
             if (psm instanceof PSMethodRulebased) {
@@ -52,13 +53,14 @@ public class SolutionExplanationTextualD3webRenderer {
 
     private String renderExplanationRuleBased(Solution sol, Session d3webSession) {
 
+	System.out.println(sol);
         String explanationDefault = "textual rule based explanation n/a II";
         String explanation = "";
         
         List<TerminologyObject> deriObjects = 
 		D3webUtils.getDerivationObjectsPSMRulesFor(sol, d3webSession);
-        //System.out.println(rules.toString());
-        for (TerminologyObject to : deriObjects) {
+        
+	for (TerminologyObject to : deriObjects) {
             
 	    Value qvalue = d3webSession.getBlackboard().getValue((ValueObject) to);
 	    Value svalue = d3webSession.getBlackboard().getValue((ValueObject) sol);

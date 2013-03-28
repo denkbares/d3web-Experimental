@@ -293,7 +293,7 @@ function startDialog(){
     var kb = selArray[0];
     var spec = selArray[1];
 
-    var link = $.query.set("action", "assembleDialog")
+    var link = $.query.set("action", "assembleDialogStartDirectly")
     .set("kb", kb).set("spec", spec).toString();
         
     link = window.location.href.replace(window.location.search, "") + link;
@@ -303,6 +303,7 @@ function startDialog(){
         cache : false, // needed for IE, call is not made otherwise
         success : function(html) {
             
+	    alert(html);
             if(html.indexOf("ERROR")==-1){
                 
                 // get only the server:port substring of the url

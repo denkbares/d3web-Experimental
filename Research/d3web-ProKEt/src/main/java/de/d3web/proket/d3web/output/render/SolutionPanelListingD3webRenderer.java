@@ -158,15 +158,13 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
 
     private String renderStateAbstractCirclePreciseText(Solution solution, Session d3webs) {
 
+	Blackboard bb = d3webs.getBlackboard();
 
-        Blackboard bb = d3webs.getBlackboard();
-
-
-        // retrieve template
+	// retrieve template
         StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/Solution");
 
         // fill template attribute
-        st.setAttribute("solid", solution.getName());
+        st.setAttribute("solid", AbstractD3webRenderer.getID(solution));
 
         /*
          * get scoring, dependent on applied problem solving method
@@ -185,11 +183,8 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
             }
         }
 
-
-
         st.setAttribute("solutiontext", solution.getName());
         st.setAttribute("scoretext", "(" + score + ")");
-
 
         // TODO refactor that out of methods and make one own!
         if (bb.getRating(solution).getState().equals(Rating.State.ESTABLISHED)) {
@@ -219,18 +214,16 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
 
     private String renderStateAbstractCirclePreciseTextDynamic(Solution solution, Session d3webs) {
 
-        StringTemplate stExp;
+	StringTemplate stExp;
 
-
-        SolutionExplanationBasicD3webRenderer expr = new SolutionExplanationBasicD3webRenderer();
-
+        SolutionExplanationBasicD3webRenderer expr = 
+		new SolutionExplanationBasicD3webRenderer();
 
         UISolutionPanelSettings.ExplanationType expType =
                 uiSolPanelSet.getExplanationType();
 
-
-        String explanation = expr.getExplanationForSolution(solution, d3webs, expType);
-
+        String explanation = 
+		expr.getExplanationForSolution(solution, d3webs, expType);
 
         // in the case of a treemap, a tailored popup will open in a new tab-window
 
@@ -281,21 +274,17 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
             stExp.setAttribute("content", split_score[1]);
 
         } else {
-            // basic explanation popup  
+	    // basic explanation popup  
             stExp = StringTemplateUtils.getTemplate("solutionPanel/PopupExp");
-            stExp.setAttribute("popupcontent", explanation);
+	    stExp.setAttribute("popupcontent", explanation);
         }
 
-
-        stExp.setAttribute("elementID", solution.getName());
-
-
-
+        stExp.setAttribute("elementID", AbstractD3webRenderer.getID(solution));
 
         // retrieve template for the solution panel per se, first
         StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynLink");
         st.setAttribute("explanationpopup", stExp.toString());
-        st.setAttribute("solid", solution.getName());
+        st.setAttribute("solid", AbstractD3webRenderer.getID(solution));
 
         /*
          * get scoring, dependent on applied problem solving method
