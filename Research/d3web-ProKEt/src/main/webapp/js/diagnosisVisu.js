@@ -1,11 +1,16 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Alina Coca
+ * BA - Diagnose Visualisierung
  */
+
+//funtion for opening a Clarification Dialog from another
 function openFirstCloseSecond(firstPopUp,secondPopUp){
       $("#"+secondPopUp+"_popup").removeClass("selected");
       $("#"+firstPopUp+"_popup").addClass("selected");
 }
+
+//funtion for opening a treemap in a new tab-window: 
+//sends the explanation string to the url of the new tab
 function openPopupContent(contentx){
    contentx = contentx.split("ä").join("#0");
    contentx = contentx.split("ö").join("#1");

@@ -57,38 +57,38 @@ public class SolutionExplanationClarificationD3webRenderer {
 
     //get all the answer options for one question, exept the one witch has been picked 
     public String getOtherAnswers(TerminologyObject quest, Value existing) {
-        String other = "<div class=\"other\"> <b>Die anderen Antwort Möglichkeiten sind:</b> ";
-        List<Choice> other_answers = ((QuestionChoice) quest).getAllAlternatives();
+        String other = "<span> ["; // list of answers will be in a span HTML tag
+        List<Choice> other_answers = ((QuestionChoice) quest).getAllAlternatives(); // get all answer alternatives for one question
         for (Choice answer : other_answers) {
-            if (!answer.toString().equals(existing.toString())) {
-                other += answer.toString() + "/ ";
+            if (!answer.toString().equals(existing.toString())) { //add all  answers besides the one witch was picked in the form dialog 
+                other += answer.toString() + "/ "; //separate answers by a /
             }
         }
-        int last = other.lastIndexOf("/");
+        int last = other.lastIndexOf("/"); // delete last /
         other = other.substring(0, last);
-        other += "</div>";
+        other += "]</span>"; // close span Tag
         return other;
     }
 
     //get all the answer options for one question
     public String getAllAnswers(TerminologyObject quest) {
-        String answers = "<div class=\"other\"> <b>Die Antwort Möglichkeiten sind:</b> ";
-        List<Choice> other_answers = ((QuestionChoice) quest).getAllAlternatives();
+        String answers = "<span> ["; // list of answers will be in a span HTML tag
+        List<Choice> other_answers = ((QuestionChoice) quest).getAllAlternatives();// get all answer alternatives for one question
         for (Choice answer : other_answers) {
-            answers += answer.toString() + "/ ";
+            answers += answer.toString() + "/ "; // add all answers to the list and separate by /
         }
-        int last = answers.lastIndexOf("/");
+        int last = answers.lastIndexOf("/"); //delete last /
         answers = answers.substring(0, last);
-        answers += "</div>";
+        answers += " ]</span>"; //close span Tag
         return answers;
     }
 
     private String renderExplanationClariRuleBased(Solution sol, Session d3webSession) {
-        String text = "<div class=\"details\">Teildiagnosen:<br />";
-        String test = "";
-        //String teilSol = "";
-        List<TerminologyObject> deriObjectsForSolutions = D3webUtils.getDerivationObjectsPSMRulesFor(sol, d3webSession);
-        //build string with relevant answers for solution
+        String text = "<div class=\"details\">Teildiagnosen:<br />"; //string for the content of the Calarification Popup
+        String test = ""; //String for the relevant answers for a solution
+        List<TerminologyObject> deriObjectsForSolutions = D3webUtils.getDerivationObjectsPSMRulesFor(sol, d3webSession); 
+        
+        //build string with relevant solutions for solution and make link to their own clarification dialog
         for (TerminologyObject object : deriObjectsForSolutions) {
             if (object instanceof Solution) {
                 text += "<div id=\"" + object.getName() + "_" + sol.getName() + "_solText\" class=\"solText linkstyle cell\" onclick=\"openFirstCloseSecond('" + object.getName() + "' , '" + sol.getName() + "');\"> \n"
@@ -98,10 +98,11 @@ public class SolutionExplanationClarificationD3webRenderer {
             }
         }
         text += "</div>";
+        
         //get Blackbord and solution rating
         Blackboard bb = d3webSession.getBlackboard();
         State state = bb.getRating(sol).getState();
-        Double score = ((HeuristicRating) bb.getRating(sol)).getScore();
+        Double score = ((HeuristicRating) bb.getRating(sol)).getScore(); //rating for solution
 
         //get all the relevant rules for solution
         List<TerminologyObject> deriObjects = D3webUtils.getDerivationObjectsPSMRulesFor(sol, d3webSession);
@@ -112,7 +113,7 @@ public class SolutionExplanationClarificationD3webRenderer {
             test += rule.getName() + qvalue + ";";
         }
 
-        //get cCona//tainers and a list of the answerd questions
+        //get containers and a list of the answerd questions
         List<QContainer> allContainers = d3webSession.getKnowledgeBase().getManager().getQContainers();
         List<Question> questionList = bb.getAnsweredQuestions();
 
@@ -121,52 +122,53 @@ public class SolutionExplanationClarificationD3webRenderer {
             //only if container not root
             if (!container.getName().equals("Q000")) {
                 text += "<br /><div class=\"container\"><b>" + container.toString() + "</b></div>";
-                //if Question in container is in list (answerd questions) then print question + answer;
+                //for all the questions in one container
                 for (TerminologyObject cont : container.getChildren()) {
 
                     if (cont instanceof Question) {
 
-                        if (questionList.contains(cont)) {
-                            Value answer = bb.getValue((ValueObject) cont);
+                        if (questionList.contains(cont)) {//if Question in container is in list (answerd questions) then print question + answer;
+                            Value answer = bb.getValue((ValueObject) cont);//if answers is relevant for solutions, add green, red or yellow border
                             if (state.equals(Rating.State.ESTABLISHED) && test.contains(cont.toString() + answer.toString())) {
-                                text += "<div class=\"quest\"style=\"border: 2px solid #7CF56E\"><b>" + cont.toString() + ": </b>" + answer.toString() + "</div>" + getOtherAnswers(cont, answer);
+                                //add div with two span tags: Question : answers [alternative answers]
+                                text += "<div class=\"quest\"><b>" + cont.toString() + ": </b><span style=\"border: 2px solid #7CF56E\">" + answer.toString() + "</span>" + getOtherAnswers(cont, answer) + "</div>";
                             } else if ((state.equals(Rating.State.EXCLUDED) && test.contains(cont.toString() + answer.toString()))) {
-                                text += "<div class=\"quest\"style=\"border: 2px solid #EB4242\"><b>" + cont.toString() + ": </b>" + answer.toString() + "</div>" + getOtherAnswers(cont, answer);
+                                text += "<div class=\"quest\"><b>" + cont.toString() + ": </b><span style=\"border: 2px solid #EB4242\">" + answer.toString() + "</span>" + getOtherAnswers(cont, answer) + "</div>";
                             } else if ((state.equals(Rating.State.SUGGESTED) && test.contains(cont.toString() + answer.toString()))) {
-                                text += "<div class=\"quest\"style=\"border: 2px solid #B7BAB6\"><b>" + cont.toString() + ": </b>" + answer.toString() + "</div>" + getOtherAnswers(cont, answer);
+                                text += "<div class=\"quest\"><b>" + cont.toString() + ": </b><span style=\"border: 2px solid #EBF707\">" + answer.toString() + "</span>" + getOtherAnswers(cont, answer) + "</div>";
                             } else {
-                                text += "<div class=\"quest\"><b>" + cont.toString() + ": </b>" + answer.toString() + "</div>" + getOtherAnswers(cont, answer);
+                                text += "<div class=\"quest\"><b>" + cont.toString() + ": </b><span>" + answer.toString() + "</span>" + getOtherAnswers(cont, answer) + "</div>";
                             }
 
                             //two more for-loops for questions triggerd by specific answers
                             for (TerminologyObject child : cont.getChildren()) {
                                 Value a = bb.getValue((ValueObject) child);
                                 if (state.equals(Rating.State.ESTABLISHED) && test.contains(child.toString() + a.toString())) {
-                                    text += "<div class=\"quest\" style=\"border: 2px solid #7CF56E\"><b>" + child.toString() + ": </b>" + a.toString() + "</div>" + getOtherAnswers(child, a);
+                                    text += "<div class=\"quest\" ><b>" + child.toString() + ": </b><span style=\"border: 2px solid #7CF56E\">" + a.toString() + "</span>" + getOtherAnswers(child, a) + "</div>";
                                 } else if ((state.equals(Rating.State.EXCLUDED) && test.contains(child.toString() + a.toString()))) {
-                                    text += "<div class=\"quest\"style=\"border: 2px solid #EB4242\"><b>" + child.toString() + ": </b>" + a.toString() + "</div>" + getOtherAnswers(child, a);
+                                    text += "<div class=\"quest\"><b>" + child.toString() + ": </b><span style=\"border: 2px solid #EB4242\">" + a.toString() + "</span>" + getOtherAnswers(child, a) + "</div>";
                                 } else if ((state.equals(Rating.State.SUGGESTED) && test.contains(child.toString() + a.toString()))) {
-                                    text += "<div class=\"quest\"style=\"border: 2px solid #B7BAB6\"><b>" + child.toString() + ": </b>" + a.toString() + "</div>" + getOtherAnswers(child, a);
+                                    text += "<div class=\"quest\"><b>" + child.toString() + ": </b><span style=\"border: 2px solid #EBF707\">" + a.toString() + "</span>" + getOtherAnswers(child, a) + "</div>";
                                 } else {
-                                    text += "<div class=\"quest\"><b>" + child.toString() + ": </b>" + a.toString() + "</div>" + getOtherAnswers(child, a);
+                                    text += "<div class=\"quest\"><b>" + child.toString() + ": </b><span>" + a.toString() + "</span>" + getOtherAnswers(child, a) + "</div>";
                                 }
 
                                 for (TerminologyObject kid : child.getChildren()) {
                                     Value ans = bb.getValue((ValueObject) kid);
                                     if (state.equals(Rating.State.ESTABLISHED) && test.contains(kid.toString() + ans.toString())) {
-                                        text += "<div class=\"quest\" style=\"border: 2px solid #7CF56E\"><b>" + kid.toString() + ": </b>" + ans.toString() + "</div>" + getOtherAnswers(kid, ans);
+                                        text += "<div class=\"quest\"><b>" + kid.toString() + ": </b><span style=\"border: 2px solid #7CF56E\">" + ans.toString() + "</span>" + getOtherAnswers(kid, ans) + "</div>";
                                     } else if (state.equals(Rating.State.EXCLUDED) && test.contains(kid.toString() + ans.toString())) {
-                                        text += "<div class=\"quest\"style=\"border: 2px solid #EB4242\"><b>" + kid.toString() + ": </b>" + ans.toString() + "</div>" + getOtherAnswers(kid, ans);
+                                        text += "<div class=\"quest\"><b>" + kid.toString() + ": </b><span style=\"border: 2px solid #EB4242\">" + ans.toString() + "</span>" + getOtherAnswers(kid, ans) + "</div>";
                                     } else if ((state.equals(Rating.State.SUGGESTED) && test.contains(kid.toString() + ans.toString()))) {
-                                        text += "<div class=\"quest\"style=\"border: 2px solid #B7BAB6\"><b>" + kid.toString() + ": </b>" + ans.toString() + "</div>" + getOtherAnswers(kid, ans);
+                                        text += "<div class=\"quest\"><b>" + kid.toString() + ": </b><span style=\"border: 2px solid #EBF707\">" + ans.toString() + "</span>" + getOtherAnswers(kid, ans) + "</div>";
                                     } else {
-                                        text += "<div class=\"quest\"><b>" + kid.toString() + ": </b>" + ans.toString() + "</div>" + getOtherAnswers(kid, ans);
+                                        text += "<div class=\"quest\"><b>" + kid.toString() + ": </b><span>" + ans.toString() + "</span>" + getOtherAnswers(kid, ans) + "</div>";
                                     }
                                 }
                             }
 
-                        } else { //if the question in the container is not in the list of answerd questions
-                            text = text + "<div class=\"quest\"><b>" + cont.toString() + ": </b>" + "Frage wurde nicht beantwortet." + "</div>" + getAllAnswers(cont);
+                        } else { //if the question in the container is not in the list of answerd questions add all answers aternatives
+                            text = text + "<div class=\"quest\"><b>" + cont.toString() + ": </b>" + getAllAnswers(cont) + "</div>";
                         }
                     } else {//if container is empty or another contains an other container
                         text = text + "<br /><div class=\"container\"><b>" + container.toString() + " : " + "No Question in this container" + "</b>";
@@ -176,6 +178,6 @@ public class SolutionExplanationClarificationD3webRenderer {
             }
 
         }
-        return score + "|" + text;
+        return score + "|" + text; //return score and clarification content
     }
 }
