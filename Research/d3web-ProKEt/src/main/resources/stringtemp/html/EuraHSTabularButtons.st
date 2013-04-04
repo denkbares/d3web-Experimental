@@ -32,9 +32,22 @@
 							<div class="leftButton">
 								$CaseLoadButton()$
 							</div>
+						$elseif(loadcaseAnonym)$
+							<div class="leftButton">
+								$CaseLoadButtonAnonymized()$
+							</div>
 						$endif$
+
 						
 						$if(savecase)$
+							<div class="leftButton">
+								$CaseSaveButton()$
+							</div>
+						$elseif(savecaseAnonymOwn)$
+							<div class="leftButton">
+								$CaseSaveButton()$
+							</div>
+						$elseif(savecaseAnonym)$
 							<div class="leftButton">
 								$CaseSaveButton()$
 							</div>

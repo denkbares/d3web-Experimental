@@ -145,10 +145,10 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 	    Question durCheckQ =
 		    d3webSession.getKnowledgeBase().getManager().searchQuestion(
 		    "Duration of the operation in minutes");
-	    System.out.println(durCheckQ);
+	    //System.out.println(durCheckQ);
 	    if (durCheckQ != null && durCheckQ instanceof QuestionNum) {
 		String mins = d3webSession.getBlackboard().getValue(durCheckQ).toString();
-		System.out.println("VALUE: " + d3webSession.getBlackboard().getValue(durCheckQ) + " as String " + mins);
+		//System.out.println("VALUE: " + d3webSession.getBlackboard().getValue(durCheckQ) + " as String " + mins);
 
 		st.setAttribute("durcheck", mins);
 	    }

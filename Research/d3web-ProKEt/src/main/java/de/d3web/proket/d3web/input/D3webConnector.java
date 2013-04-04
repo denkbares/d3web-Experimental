@@ -28,7 +28,7 @@ import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
-import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
+import de.d3web.proket.d3web.settings.GeneralDialogSettings.LoginMode;
 import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.data.DialogType;
 import de.d3web.proket.data.IndicationMode;

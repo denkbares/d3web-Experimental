@@ -41,9 +41,10 @@ import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webUESettings;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.utils.D3webUtils;
-import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
+import de.d3web.proket.d3web.settings.GeneralDialogSettings.LoginMode;
 import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
+import de.d3web.proket.d3web.settings.GeneralDialogSettings;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
@@ -64,6 +65,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
     public ContainerCollection renderRoot(ContainerCollection cc,
             Session d3webSession, HttpSession http, HttpServletRequest request) {
 
+	GeneralDialogSettings gds = GeneralDialogSettings.getInstance();
         UISettings uis = UISettings.getInstance();
         Session s = ((Session) http.getAttribute("d3webSession"));
 
@@ -104,7 +106,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
         /*
          * fill some basic attributes
          */
-        st.setAttribute("header", uis.getHeader());
+        st.setAttribute("header", gds.getHeader());
         st.setAttribute("title", userprefix + "-Dialog");
 
         // load case list dependent from logged in user, e.g. MEDIASTINITIS
@@ -115,7 +117,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
         st.setAttribute("info", info);
 
         // set language variable for StringTemplate Widgets
-        String lang = uis.getLanguage();
+        String lang = gds.getLanguage();
         if (lang.equals("de")) {
             st.setAttribute("langDE", "de");
         } else if (lang.equals("en")) {

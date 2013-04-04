@@ -37,16 +37,11 @@ import java.util.HashMap;
  */
 public class UISettings {
  
-    /*
+     /*
      * The Css parsed from the d3web XML
      */
     private String css;
 
-    /*
-     * The header / title of the dialog parsed from the d3web XML
-     */
-    private String header;
-    
      /*
      * number of columns for multicolumn styles (dialog)
      */
@@ -67,19 +62,6 @@ public class UISettings {
      */
     private DialogType dialogType;
 
-    /*
-     * In case we want to internationalize
-     */
-    private String language = "en";
-    
-    /*
-     * The login mode, needed for adding the chosen form of login
-     */
-    private D3webXMLParser.LoginMode loginMode;
-    
-    private ArrayList solutionDepths;
-    
-    
     private static UISettings instance;
     
     private boolean diagnosisNavi = false;
@@ -94,11 +76,12 @@ public class UISettings {
     private boolean questionNumbering = false;
     
     
+    // TODO enum here! not in parser
     private D3webXMLParser.IndicationRepresentation showIndicated;
     private D3webXMLParser.IndicationRepresentation showContraIndicated;
     private D3webXMLParser.IndicationRepresentation showNonIndicated;
     
-    private Boolean debug;
+    
     private DialogStrategy dialogStrategy;
     private boolean unknownVisible;
     private boolean ynFlat;
@@ -135,14 +118,6 @@ public class UISettings {
         this.css = css;
     }
 
-    public String getHeader() {
-        return header;
-    }
-
-    public void setHeader(String header) {
-        this.header = header;
-    }
-
     public int getDialogColumns() {
         return this.dialogColumns;
     }
@@ -174,26 +149,8 @@ public class UISettings {
     public void setDialogType(DialogType type) {
         this.dialogType = type;
     }
-
-     public void setLanguage(String lang) {
-        this.language = lang;
-    }
-
-    public String getLanguage() {
-        return this.language;
-    }
-
-    public void setLoginMode(D3webXMLParser.LoginMode login) {
-        this.loginMode = login;
-    }
-
-    public D3webXMLParser.LoginMode getLoginMode() {
-        return this.loginMode;
-    }
     
-   
- 
-      public boolean hasDiagnosisNavi() {
+    public boolean hasDiagnosisNavi() {
         return diagnosisNavi;
     }
 
@@ -209,8 +166,6 @@ public class UISettings {
         this.questionnaireNavi = questionnaireNavi;
     }
 
-   
-    
     public D3webXMLParser.IndicationRepresentation getShowIndicated() {
         return this.showIndicated;
     }
@@ -235,22 +190,12 @@ public class UISettings {
         this.showNonIndicated = sIndi;
     }
 
-   
-
-    public String getAutocolumns() {
+   public String getAutocolumns() {
         return autocolumns;
     }
 
     public void setAutocolumns(String autocolumns) {
         this.autocolumns = autocolumns;
-    }
-
-    public Boolean getDebug() {
-        return debug;
-    }
-
-    public void setDebug(Boolean debug) {
-        this.debug = debug;
     }
 
     public DialogStrategy getDialogStrategy() {
@@ -364,6 +309,4 @@ public class UISettings {
     public void setQuestionnaireNumbering(boolean questionnaireNumbering) {
         this.questionnaireNumbering = questionnaireNumbering;
     }
-    
-    
 }

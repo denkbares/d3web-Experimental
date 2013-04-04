@@ -1278,7 +1278,7 @@ public class D3webUtils {
 	    return getAnswerYNPrompt(c, locIdent);
 	}
 
-	System.out.println(locIdent);
+	//System.out.println(locIdent);
 
 	//int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
 	//int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();

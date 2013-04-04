@@ -14,7 +14,7 @@
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns="1"
-        solutionExplanation = "TREEMAP" 
+        solutionExplanation = "TEXTUAL" 
         solutionSorting = "CATEGORICAL"
         solutionDepth = "ALL"
         solutionDynamics = "INTERACTIVE"

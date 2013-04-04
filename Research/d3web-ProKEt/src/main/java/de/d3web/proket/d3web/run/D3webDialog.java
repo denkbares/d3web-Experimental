@@ -63,15 +63,17 @@ import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.*;
 
-import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
+import de.d3web.proket.d3web.settings.GeneralDialogSettings;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
 import de.d3web.proket.d3web.output.render.IQuestionD3webRenderer;
 import de.d3web.proket.d3web.output.render.SummaryD3webRenderer;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
+import de.d3web.proket.d3web.settings.GeneralDialogSettings.LoginMode;
 import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.d3web.settings.UISolutionPanelSettings;
 import de.d3web.proket.d3web.ue.JSONLogger;
+import de.d3web.proket.d3web.utils.Encryptor;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.d3web.utils.StringTemplateUtils;
 import de.d3web.proket.data.DialogType;
@@ -120,6 +122,7 @@ public class D3webDialog extends HttpServlet {
     protected D3webXMLParser d3webParser;
     protected D3webConnector d3wcon;
     protected UISettings uis;
+    protected GeneralDialogSettings gds;
     protected UISolutionPanelSettings uisols;
     protected D3webUESettings uesettings;
     protected static Map<String, List<String>> usrDat = null;
@@ -204,6 +207,9 @@ public class D3webDialog extends HttpServlet {
         // UI settings
         uis = UISettings.getInstance();
 
+	// General settings
+	gds = GeneralDialogSettings.getInstance();
+	
         // Solution Panel UI Settings
         uisols = UISolutionPanelSettings.getInstance();
 
@@ -282,7 +288,7 @@ public class D3webDialog extends HttpServlet {
 
 
         //System.out.println(uis.getLoginMode());
-        if (uis.getLoginMode()
+        if (gds.getLoginMode()
                 == LoginMode.DB) {
             String authenticated = (String) httpSession.getAttribute("authenticated");
             if (authenticated == null || !authenticated.equals("yes")) {
@@ -427,7 +433,7 @@ public class D3webDialog extends HttpServlet {
                 // in case of DB login (as for EuraHS) redirect to the EuraHS-Login
                 // Servlet --> TODO refactor: rename EuraHS-Login Servlet or create
                 // superservlet to be overwritten
-                if (uis.getLoginMode() == LoginMode.DB) {
+                if (gds.getLoginMode() == LoginMode.DB) {
                     String authenticated = (String) httpSession.getAttribute("authenticated");
                     if (authenticated == null || !authenticated.equals("yes")) {
                         response.sendRedirect("../EuraHS-Login");
@@ -490,7 +496,7 @@ public class D3webDialog extends HttpServlet {
 
             writer.append("SESSIONVALID");
         } else {
-            writer.append(uis.getLoginMode().toString());
+            writer.append(gds.getLoginMode().toString());
         }
 
     }
@@ -1906,12 +1912,13 @@ public class D3webDialog extends HttpServlet {
         /*
          * general dialog settings
          */
-        uis.setLoginMode(d3webParser.getLoginMode());
-        uis.setHeader(d3webParser.getHeader());
-        uis.setDebug(d3webParser.getDebug());
-        uis.setLanguage(
+        gds.setLoginMode(d3webParser.getLoginMode());
+        gds.setHeader(d3webParser.getHeader());
+        gds.setDebug(d3webParser.getDebug());
+        gds.setLanguage(
                 d3webParser.getLanguage().equals("") ? "en" : d3webParser.getLanguage());
-
+	gds.setCaseSaveMode(d3webParser.getCaseSaveMode());
+	
         /*
          * global dialog ui settings
          */
@@ -2003,7 +2010,7 @@ public class D3webDialog extends HttpServlet {
         D3webUtils.streamImages();
 
         // do we need to enable debug mode?! Do we need it in httpSession?
-        if (uis.getDebug() != null && uis.getDebug()) {
+        if (gds.getDebug() != null && gds.getDebug()) {
             httpSession.setAttribute("debug", "true");
         }
     }
@@ -2102,5 +2109,59 @@ public class D3webDialog extends HttpServlet {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+    }
+    
+    
+    protected void saveCaseAnonymOwn(HttpServletRequest request, HttpServletResponse response,
+	    HttpSession httpSession) throws IOException{
+    
+	PrintWriter writer = null;
+        writer = response.getWriter();
+
+        String userFilename = request.getParameter("userfn");
+        String user = (String) httpSession.getAttribute("user");
+        String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
+        String forceString = request.getParameter("force");
+        
+        
+        // force wird im JS gesetzt, falls der User unter bereits vorhandenem
+        // Namen speichern will und das nochmal bestätigt.
+        boolean force = forceString != null && forceString.equals("true");
+
+        Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
+        
+        String fnToAnonComplete = 
+                (user != null && !user.isEmpty() ? user + File.separator : "")
+                + userFilename;
+        
+        String anonFilename =
+                Encryptor.getAnonymizedFilename(fnToAnonComplete);
+        
+        System.out.println("save case: lastLoaded " + lastLoaded + " userFilename " + userFilename + 
+                " anonFilename " + anonFilename);
+        
+        // if: really overwrite existing OR case not exists OR case exists but
+        // has been loaded for modification
+        if (force
+                || !PersistenceD3webUtils.existsCaseAnon(user, userFilename)
+                || (PersistenceD3webUtils.existsCaseAnon(user, userFilename)
+                && lastLoaded != null && lastLoaded.equals(anonFilename))) {
+
+            PersistenceD3webUtils.saveCaseAnonymized(
+                    user,
+                    userFilename,
+                    d3webSession);
+
+            httpSession.setAttribute("lastLoaded", anonFilename);
+            
+        } else {
+            writer.append("exists");
+        }
+    }
+    
+    protected void saveCaseAnonym(HttpServletRequest request, HttpServletResponse response,
+	    HttpSession httpSession) throws IOException{
+    
+	// TODO 
     }
 }

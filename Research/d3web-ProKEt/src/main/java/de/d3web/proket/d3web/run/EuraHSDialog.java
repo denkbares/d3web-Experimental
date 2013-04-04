@@ -42,6 +42,8 @@ import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.output.render.EuraHSDefaultRootD3webRenderer;
+import de.d3web.proket.d3web.settings.GeneralDialogSettings;
+import de.d3web.proket.d3web.settings.GeneralDialogSettings.CaseSaveMode;
 import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.d3web.utils.Encryptor;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
@@ -313,61 +315,25 @@ public class EuraHSDialog extends D3webDialog {
         return d3webSess;
     }
 
-    /**
-     * Saving a case, using encoded filename for anonymization
-     *
-     * @created 34.08.2012
-     *
-     * @param request ServletRequest
-     * @param response ServletResponse
-     */
+    @Override
     protected void saveCase(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
 
-        super.saveCase(request, response, httpSession);
-        /*PrintWriter writer = null;
-        writer = response.getWriter();
-
-        String userFilename = request.getParameter("userfn");
-        String user = (String) httpSession.getAttribute("user");
-        String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
-        String forceString = request.getParameter("force");
+	if(GeneralDialogSettings.getInstance().getCaseSaveMode().equals(CaseSaveMode.OWN)){
+	    // default saving of cases is own filename which is impl. in D3webDialogServlet 
+	   System.out.println("save");
+	    super.saveCase(request, response, httpSession);
+	   } else if(GeneralDialogSettings.getInstance().getCaseSaveMode().equals(CaseSaveMode.ANONYM)){
+	    // impl. method that system creates random fn and encrypts it
+	    super.saveCaseAnonym(request, response, httpSession);
+	} else if (GeneralDialogSettings.getInstance().getCaseSaveMode().equals(CaseSaveMode.ANONYM_OWN)){
+	    // user can chose filename himself and this gets encrypted
+	    System.out.println("saveanonymown");
+	    super.saveCaseAnonymOwn(request, response, httpSession);
+	}
+       
         
-        
-        // force wird im JS gesetzt, falls der User unter bereits vorhandenem
-        // Namen speichern will und das nochmal bestätigt.
-        boolean force = forceString != null && forceString.equals("true");
-
-        Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
-        
-        String fnToAnonComplete = 
-                (user != null && !user.isEmpty() ? user + File.separator : "")
-                + userFilename;
-        
-        String anonFilename =
-                Encryptor.getAnonymizedFilename(fnToAnonComplete);
-        
-        System.out.println("save case: lastLoaded " + lastLoaded + " userFilename " + userFilename + 
-                " anonFilename " + anonFilename);
-        
-        // if: really overwrite existing OR case not exists OR case exists but
-        // has been loaded for modification
-        if (force
-                || !PersistenceD3webUtils.existsCaseAnon(user, userFilename)
-                || (PersistenceD3webUtils.existsCaseAnon(user, userFilename)
-                && lastLoaded != null && lastLoaded.equals(anonFilename))) {
-
-            PersistenceD3webUtils.saveCaseAnonymized(
-                    user,
-                    userFilename,
-                    d3webSession);
-
-            httpSession.setAttribute("lastLoaded", anonFilename);
-            
-        } else {
-            writer.append("exists");
-        }*/
     }
 
     @Override
@@ -378,6 +344,8 @@ public class EuraHSDialog extends D3webDialog {
         loadCaseClearUserFilename(request, httpSession, user, filename);
     }
 
+    
+    
     private void loadCaseClearUserFilename(HttpServletRequest request, HttpSession httpSession,
             String user, String filename) {
 

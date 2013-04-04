@@ -26,6 +26,7 @@ import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.interviewmanager.Form;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
+import de.d3web.proket.d3web.settings.GeneralDialogSettings;
 import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
@@ -144,7 +145,7 @@ public class D3webDialogRenderer {
 
 		st.setAttribute("children", sb.toString());
 		// fill StringTemplate with values from the specs XML first
-		st.setAttribute("header", UISettings.getInstance().getHeader());
+		st.setAttribute("header", GeneralDialogSettings.getInstance().getHeader());
 		st.setAttribute("resetimage", "reset.gif");
 		handleCss(cc, UISettings.getInstance().getCss());
 

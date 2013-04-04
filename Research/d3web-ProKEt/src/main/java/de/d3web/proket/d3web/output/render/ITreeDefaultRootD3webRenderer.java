@@ -25,6 +25,7 @@ import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParserOrig;
+import de.d3web.proket.d3web.settings.GeneralDialogSettings;
 import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
@@ -40,142 +41,144 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
      */
     @Override
     public ContainerCollection renderRoot(ContainerCollection cc,
-            Session d3webSession, HttpSession http, HttpServletRequest request) {
+	    Session d3webSession, HttpSession http, HttpServletRequest request) {
 
-        UISettings uis = UISettings.getInstance();
-        // get the d3web base template according to dialog type
-        String userprefix = uis.getDialogType().toString();
-        StringTemplate st = TemplateUtils.getStringTemplate(
-                userprefix + "D3webDialog",
-                "html");
+	UISettings uis = UISettings.getInstance();
 
-        /*
-         * fill some basic attributes
-         */
-        st.setAttribute("headertext", uis.getHeader());
-        st.setAttribute("title", "ITree UI - Based on Num-Question Model");
+	GeneralDialogSettings gds = GeneralDialogSettings.getInstance();
 
-        // load case list dependent from logged in user, e.g. MEDIASTINITIS
-        String opts = renderUserCaseList((String) http.getAttribute("user"), http);
-        st.setAttribute("fileselectopts", opts);
+	// get the d3web base template according to dialog type
+	String userprefix = uis.getDialogType().toString();
+	StringTemplate st = TemplateUtils.getStringTemplate(
+		userprefix + "D3webDialog",
+		"html");
 
-        //String info = renderHeaderInfoLine(d3webSession);
-        //st.setAttribute("info", info);
+	/*
+	 * fill some basic attributes
+	 */
+	st.setAttribute("headertext", gds.getHeader());
+	st.setAttribute("title", "ITree UI - Based on Num-Question Model");
 
-        // set language variable for StringTemplate Widgets
-        String lang = uis.getLanguage();
-        if (lang.equals("de")) {
-            st.setAttribute("langDE", "de");
-        } else if (lang.equals("en")) {
-            st.setAttribute("langEN", "en");
-        }
+	// load case list dependent from logged in user, e.g. MEDIASTINITIS
+	String opts = renderUserCaseList((String) http.getAttribute("user"), http);
+	st.setAttribute("fileselectopts", opts);
 
-        // add some buttons for basic functionality
-        st.setAttribute("loadcase", "true");
-        st.setAttribute("savecase", "true");
-        st.setAttribute("reset", "true");
+	//String info = renderHeaderInfoLine(d3webSession);
+	//st.setAttribute("info", info);
 
-        if (D3webUESettings.getInstance().isFeedbackform()) {
-            st.setAttribute("feedback", "true");
-        }
+	// set language variable for StringTemplate Widgets
+	String lang = gds.getLanguage();
+	if (lang.equals("de")) {
+	    st.setAttribute("langDE", "de");
+	} else if (lang.equals("en")) {
+	    st.setAttribute("langEN", "en");
+	}
 
-        D3webUESettings.UEQ ueq = D3webUESettings.getInstance().getUequestionnaire();
+	// add some buttons for basic functionality
+	st.setAttribute("loadcase", "true");
+	st.setAttribute("savecase", "true");
+	st.setAttribute("reset", "true");
+
+	if (D3webUESettings.getInstance().isFeedbackform()) {
+	    st.setAttribute("feedback", "true");
+	}
+
+	D3webUESettings.UEQ ueq = D3webUESettings.getInstance().getUequestionnaire();
 	if (!D3webUESettings.getInstance().getUequestionnaire().equals("NONE")) {
-            st.setAttribute("ueq", "true");
-	    
+	    st.setAttribute("ueq", "true");
+
 	    if (ueq.equals(D3webUESettings.UEQ.SUS)) {
-                st.setAttribute("sus", true);
-                st.removeAttribute("own");
-            } else if (ueq.equals(D3webUESettings.UEQ.OWN)) {
-                st.setAttribute("own", true);
-                st.removeAttribute("sus");
-            }
+		st.setAttribute("sus", true);
+		st.removeAttribute("own");
+	    } else if (ueq.equals(D3webUESettings.UEQ.OWN)) {
+		st.setAttribute("own", true);
+		st.removeAttribute("sus");
+	    }
+	}
+
+	/*
+	 * if (ueq.equals(D3webUESettings.UEQ.NONE)) { st.setAttribute("ueq",
+	 * "true");
+	 *
+	 * if (ueq.equals(D3webUESettings.UEQ.SUS)) { st.setAttribute("sus",
+	 * true); st.removeAttribute("own"); } else if
+	 * (ueq.equals(D3webUESettings.UEQ.OWN)) { st.setAttribute("own", true);
+	 * st.removeAttribute("sus"); }
         }
-	
-        /*if (ueq.equals(D3webUESettings.UEQ.NONE)) {
-            st.setAttribute("ueq", "true");
+	 */
 
-            if (ueq.equals(D3webUESettings.UEQ.SUS)) {
-                st.setAttribute("sus", true);
-                st.removeAttribute("own");
-            } else if (ueq.equals(D3webUESettings.UEQ.OWN)) {
-                st.setAttribute("own", true);
-                st.removeAttribute("sus");
-            }
-        }*/
-	
-	 
-        /*
-         * handle custom ContainerCollection modification, e.g., enabling
-         * certain JS stuff
-         */
-        D3webXMLParser.LoginMode loginMode = 
-                D3webConnector.getInstance().getD3webParser().getLoginMode();
-        cc.js.setLoginMode(loginMode);
-        if (loginMode == D3webXMLParser.LoginMode.USRDAT) {
-            st.setAttribute("login", "true");
-        }
 
-        if (D3webConnector.getInstance().getD3webParser().getLogging().equals("ON")) {
-            st.setAttribute("logging", true);
-        }
+	/*
+	 * handle custom ContainerCollection modification, e.g., enabling
+	 * certain JS stuff
+	 */
+	GeneralDialogSettings.LoginMode loginMode =
+		D3webConnector.getInstance().getD3webParser().getLoginMode();
+	cc.js.setLoginMode(loginMode);
+	if (loginMode == GeneralDialogSettings.LoginMode.USRDAT) {
+	    st.setAttribute("login", "true");
+	}
 
-        // if logo is provided by KB
-        if (D3webUtils.isImageProvided("logo")) {
-            st.setAttribute("logo", true);
-        }
+	if (D3webConnector.getInstance().getD3webParser().getLogging().equals("ON")) {
+	    st.setAttribute("logging", true);
+	}
 
-        // handle Css
-        handleCss(cc);
+	// if logo is provided by KB
+	if (D3webUtils.isImageProvided("logo")) {
+	    st.setAttribute("logo", true);
+	}
 
-        int localeID = http.getAttribute("locale") != null 
-                 ?Integer.parseInt(http.getAttribute("locale").toString()):2;
-      // render the children
-        renderChildrenITreeNum(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet(),
-                localeID, http, request);
+	// handle Css
+	handleCss(cc);
 
-        // global JS initialization
-        defineAndAddJS(cc);
+	int localeID = http.getAttribute("locale") != null
+		? Integer.parseInt(http.getAttribute("locale").toString()) : 2;
+	// render the children
+	renderChildrenITreeNum(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet(),
+		localeID, http, request);
 
-        st.setAttribute("fullcss", cc.css.generateOutput());
-        st.setAttribute("fulljs", cc.js.generateOutput());
-        st.setDefaultArgumentValues();
+	// global JS initialization
+	defineAndAddJS(cc);
 
-        setDialogSpecificAttributes(http, st, request);
+	st.setAttribute("fullcss", cc.css.generateOutput());
+	st.setAttribute("fulljs", cc.js.generateOutput());
+	st.setDefaultArgumentValues();
 
-        cc.html.add(st.toString());
-        return cc;
+	setDialogSpecificAttributes(http, st, request);
+
+	cc.html.add(st.toString());
+	return cc;
     }
 
     @Override
     public void handleCss(ContainerCollection cc) {
 
-        D3webConnector d3wcon = D3webConnector.getInstance();
-        // css code from the specification XML
-        String css = UISettings.getInstance().getCss();
+	D3webConnector d3wcon = D3webConnector.getInstance();
+	// css code from the specification XML
+	String css = UISettings.getInstance().getCss();
 
-        if (css != null) {
-            // file reference or inline css?
-            // regex prüft ob der css-String was in der Form
-            // "file1, file2, file3" ist, also 1-mehrere CSS File Angaben
-            if (css.matches("[\\w-,\\s]*")) {
-                String[] parts = css.split(","); // aufspilitten
+	if (css != null) {
+	    // file reference or inline css?
+	    // regex prüft ob der css-String was in der Form
+	    // "file1, file2, file3" ist, also 1-mehrere CSS File Angaben
+	    if (css.matches("[\\w-,\\s]*")) {
+		String[] parts = css.split(","); // aufspilitten
 
-                for (String partCSS : parts) {
-                    // replace whitespace characters with empty string
-                    // and then get the corresponding css file
-                    StringTemplate stylesheet =
-                            TemplateUtils.getStringTemplate(partCSS.replaceAll("\\s", ""), "css");
+		for (String partCSS : parts) {
+		    // replace whitespace characters with empty string
+		    // and then get the corresponding css file
+		    StringTemplate stylesheet =
+			    TemplateUtils.getStringTemplate(partCSS.replaceAll("\\s", ""), "css");
 
-                    // if not at the end of stylesheet string
-                    if (stylesheet != null) {
+		    // if not at the end of stylesheet string
+		    if (stylesheet != null) {
 
-                        // Write css into codecontainer
-                        cc.css.add(stylesheet.toString());
-                    }
-                }
-            }
-        }
+			// Write css into codecontainer
+			cc.css.add(stylesheet.toString());
+		    }
+		}
+	    }
+	}
     }
 
     /**
@@ -188,15 +191,13 @@ public class ITreeDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
      */
     @Override
     public void defineAndAddJS(ContainerCollection cc) {
-        cc.js.enableD3Web();
-        cc.js.setITree();
+	cc.js.enableD3Web();
+	cc.js.setITree();
 
-        if (D3webUESettings.getInstance().isLogging()) {
-            cc.js.enableClickLogging();
-        }
+	if (D3webUESettings.getInstance().isLogging()) {
+	    cc.js.enableClickLogging();
+	}
 
-        cc.js.add("$(function() {iTreeInit();});", 1);
+	cc.js.add("$(function() {iTreeInit();});", 1);
     }
-
-    
 }

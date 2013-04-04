@@ -41,9 +41,14 @@ import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
+import de.d3web.proket.d3web.settings.GeneralDialogSettings;
+import de.d3web.proket.d3web.settings.GeneralDialogSettings.CaseSaveMode;
+import de.d3web.proket.d3web.settings.UISettings;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.utils.FileNameComparator;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
+import de.d3web.proket.output.container.ContainerCollection;
+import de.d3web.proket.utils.TemplateUtils;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
@@ -65,7 +70,7 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
     private static final long YEARS2 = DAY * 365 * 2;
     private static final SimpleDateFormat DD_MM_YYYY = new SimpleDateFormat("dd.MM.yyyy");
     private static final SimpleDateFormat DD_MM_YYYY_HH_MM = new SimpleDateFormat(
-            "dd.MM.yyyy HH:mm");
+	    "dd.MM.yyyy HH:mm");
     private static final String OPERATION_DATE_QUESTION_NAME = "Operation date";
     private static final String FOLLOW_UP1_NAME_SUFFIX = "Follow up (6 weeks)"; //"(Follow up 1)";
     private static final String FOLLOW_UP2_NAME_SUFFIX = "Follow up (12 month)"; //"(Follow up 2)";
@@ -82,43 +87,42 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
     // just to be sure to use the correct terminology each time
     private static enum FollowUp {
 
-        FIRST, SECOND, THIRD
+	FIRST, SECOND, THIRD
     }
-    private static Map<String, Map<String, Object>> caseCache 
-            = new HashMap<String, Map<String, Object>>();
+    private static Map<String, Map<String, Object>> caseCache = new HashMap<String, Map<String, Object>>();
 
     @Override
     public void setDialogSpecificAttributes(HttpSession httpSession, StringTemplate st, HttpServletRequest request) {
-        // ONLY FOR HERNIA, 3 custom buttons
-        st.setAttribute("summary", true);
-        st.setAttribute("statistics", true);
-        st.setAttribute("followupbutton", true);
+	// ONLY FOR HERNIA, 3 custom buttons
+	st.setAttribute("summary", true);
+	st.setAttribute("statistics", true);
+	st.setAttribute("followupbutton", true);
 
-        String ehsintro = request.getParameter("ehsintro");
-        Object ehsHttp = httpSession.getAttribute("ehsintro");
-        // Maybe better pull out, handle button click per JS and call a goToStatistics Ajax etc
+	String ehsintro = request.getParameter("ehsintro");
+	Object ehsHttp = httpSession.getAttribute("ehsintro");
+	// Maybe better pull out, handle button click per JS and call a goToStatistics Ajax etc
 
-        if (ehsHttp != null && ehsHttp.toString().equals("done")) {
-            st.setAttribute("eurahsmiddle", "true");
-            st.removeAttribute("eurahsintro");
-        } else // when coming from login, there is nothing like ehsintro set
-        if (ehsintro == null || ehsintro.equals("")
-                || ehsHttp == null || ehsHttp.toString().equals("")) {
-            st.setAttribute("eurahsintro", true);
-            st.removeAttribute("eurahsmiddle");
-            httpSession.setAttribute("ehsintro", "done");
-        }
+	if (ehsHttp != null && ehsHttp.toString().equals("done")) {
+	    st.setAttribute("eurahsmiddle", "true");
+	    st.removeAttribute("eurahsintro");
+	} else // when coming from login, there is nothing like ehsintro set
+	if (ehsintro == null || ehsintro.equals("")
+		|| ehsHttp == null || ehsHttp.toString().equals("")) {
+	    st.setAttribute("eurahsintro", true);
+	    st.removeAttribute("eurahsmiddle");
+	    httpSession.setAttribute("ehsintro", "done");
+	}
 
-        // TODO: was only in for testing. Maybe make configuration in specs
-        // st.setAttribute("eurahsmiddle", "true");
-        // st.removeAttribute("eurahsintro");
+	// TODO: was only in for testing. Maybe make configuration in specs
+	// st.setAttribute("eurahsmiddle", "true");
+	// st.removeAttribute("eurahsintro");
 
-        if (httpSession.getAttribute("level1qs") == null) {
-            httpSession.setAttribute("level1qs", parseLevel1Questions(httpSession));
-        }
-        // get the popup for the follow up table dialog window
-        String opts = renderFollowUpTable((String) httpSession.getAttribute("user"));
-        st.setAttribute("followupdialog", opts);
+	if (httpSession.getAttribute("level1qs") == null) {
+	    httpSession.setAttribute("level1qs", parseLevel1Questions(httpSession));
+	}
+	// get the popup for the follow up table dialog window
+	String opts = renderFollowUpTable((String) httpSession.getAttribute("user"));
+	st.setAttribute("followupdialog", opts);
 
     }
 
@@ -130,34 +134,34 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
      */
     private String renderFollowUpTable(String user) {
 
-        // get the cases of this user
-        //List<File> caseFiles = PersistenceD3webUtils.getCaseListNumbered(user);
-        List<File> caseFiles = PersistenceD3webUtils.getCaseList(user);
-        StringBuilder followUpTable = new StringBuilder();
+	// get the cases of this user
+	//List<File> caseFiles = PersistenceD3webUtils.getCaseListNumbered(user);
+	List<File> caseFiles = PersistenceD3webUtils.getCaseList(user);
+	StringBuilder followUpTable = new StringBuilder();
 
-        // if this user has some stored cases go through each one
-        if (caseFiles != null && caseFiles.size() > 0) {
+	// if this user has some stored cases go through each one
+	if (caseFiles != null && caseFiles.size() > 0) {
 
-            // basic table framing
-            followUpTable.append("<table style='border-spacing: 0px' border='1'>");
+	    // basic table framing
+	    followUpTable.append("<table style='border-spacing: 0px' border='1'>");
 
-            renderTableHeader(followUpTable); // insert the table header
+	    renderTableHeader(followUpTable); // insert the table header
 
-            Collections.sort(caseFiles); // sort the user's cases
+	    Collections.sort(caseFiles); // sort the user's cases
 
-            for (File caseFile : caseFiles) {
+	    for (File caseFile : caseFiles) {
 
-                // for all cases except the autocase file
-                if (!caseFile.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)
-                        && user != null) {
+		// for all cases except the autocase file
+		if (!caseFile.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)
+			&& user != null) {
 
-                    // render one row in the follow up table
-                    renderRow(user, caseFile, followUpTable);
-                }
-            }
-            followUpTable.append("</table>"); // basic table framing
-        }
-        return followUpTable.toString();
+		    // render one row in the follow up table
+		    renderRow(user, caseFile, followUpTable);
+		}
+	    }
+	    followUpTable.append("</table>"); // basic table framing
+	}
+	return followUpTable.toString();
     }
 
     /**
@@ -168,14 +172,14 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
      * framing
      */
     private void renderTableHeader(StringBuilder followUpTable) {
-        followUpTable.append("<tr>");
-        renderHeaderCell("Case Name", followUpTable);
-        renderHeaderCell("Last Modified", followUpTable);
-        renderHeaderCell("Date of Surgery", followUpTable);
-        renderHeaderCell("Follow Up (6 weeks)", followUpTable);
-        renderHeaderCell("Follow Up (12 month)", followUpTable);
-        renderHeaderCell("Follow Up (24 month)", followUpTable);
-        followUpTable.append("</tr>");
+	followUpTable.append("<tr>");
+	renderHeaderCell("Case Name", followUpTable);
+	renderHeaderCell("Last Modified", followUpTable);
+	renderHeaderCell("Date of Surgery", followUpTable);
+	renderHeaderCell("Follow Up (6 weeks)", followUpTable);
+	renderHeaderCell("Follow Up (12 month)", followUpTable);
+	renderHeaderCell("Follow Up (24 month)", followUpTable);
+	followUpTable.append("</tr>");
     }
 
     /**
@@ -185,7 +189,7 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
      * @param followUpTable The StringBuilder containing the entire table
      */
     private void renderHeaderCell(String content, StringBuilder followUpTable) {
-        followUpTable.append("<th>" + content + "</th>");
+	followUpTable.append("<th>" + content + "</th>");
     }
 
     /**
@@ -197,271 +201,277 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
      */
     private void renderRow(String user, File caseFile, StringBuilder followUpTable) {
 
-        // first parse the relevant attributes of the case into a map
-        Map<String, Object> parsedCase = parseCase(user, caseFile);
+	// first parse the relevant attributes of the case into a map
+	Map<String, Object> parsedCase = parseCase(user, caseFile);
 
-        followUpTable.append("<tr>"); // open the row
+	followUpTable.append("<tr>"); // open the row
 
-        renderFileNameCell(caseFile, followUpTable); // render file name
-        renderLastModifiedCell(caseFile, followUpTable); // render modified date
-        renderOperationDateCell(parsedCase, followUpTable); // render op date
+	renderFileNameCell(caseFile, followUpTable); // render file name
+	renderLastModifiedCell(caseFile, followUpTable); // render modified date
+	renderOperationDateCell(parsedCase, followUpTable); // render op date
 
-        // render the notification cells for each of the (currently 3) existing
-        // follow ups
-        renderFollowUpCell(parsedCase, FollowUp.FIRST, followUpTable);
-        renderFollowUpCell(parsedCase, FollowUp.SECOND, followUpTable);
-        renderFollowUpCell(parsedCase, FollowUp.THIRD, followUpTable);
+	// render the notification cells for each of the (currently 3) existing
+	// follow ups
+	renderFollowUpCell(parsedCase, FollowUp.FIRST, followUpTable);
+	renderFollowUpCell(parsedCase, FollowUp.SECOND, followUpTable);
+	renderFollowUpCell(parsedCase, FollowUp.THIRD, followUpTable);
 
-        followUpTable.append("</tr>"); // close the row
+	followUpTable.append("</tr>"); // close the row
     }
 
     /**
      * Render the filename of a case into the first column of the table
+     *
      * @param caseFile the respective vase
      * @param followUpTable The StringBuilder containing the entire FU table
      */
     private void renderFileNameCell(File caseFile, StringBuilder followUpTable) {
-        // cut the file ending from the filename
-        String filename = 
-                caseFile.getName()
-                    .substring(0, caseFile.getName().lastIndexOf("."));
-        
-        // and render the cell
-        renderCell(filename, followUpTable);
+	// cut the file ending from the filename
+	String filename =
+		caseFile.getName().substring(0, caseFile.getName().lastIndexOf("."));
+
+	// and render the cell
+	renderCell(filename, followUpTable);
     }
 
     /**
      * Render the last modified date of the case into a cell
+     *
      * @param caseFile the respective case
      * @param followUpTable The StringBuilder containing the entire FU table
      */
     private void renderLastModifiedCell(File caseFile, StringBuilder followUpTable) {
-        
-        // get last modified date and format it
-        Date lastModified = new Date(caseFile.lastModified());
-        String lastModifiedFormatted = DD_MM_YYYY_HH_MM.format(lastModified) + " h";
-        renderCell(lastModifiedFormatted, followUpTable); // render it into cell
+
+	// get last modified date and format it
+	Date lastModified = new Date(caseFile.lastModified());
+	String lastModifiedFormatted = DD_MM_YYYY_HH_MM.format(lastModified) + " h";
+	renderCell(lastModifiedFormatted, followUpTable); // render it into cell
     }
 
     /**
      * Render a cell with the operation date
+     *
      * @param parsedCase the map containing all relevant data of the case
      * @param followUpTable The StringBuilder containing the entire FU table
-     */ 
+     */
     private void renderOperationDateCell(Map<String, Object> parsedCase, StringBuilder followUpTable) {
-        
-        // get the operation date
-        boolean operationDateAnswered = 
-                (Boolean) parsedCase.get(OPERATION_DATE_ANSWERED);
-        if (!operationDateAnswered) { // of no op date: "no date found" is rendered
-            renderCell("No date found", followUpTable);
-        } else {
-            // otherwise get and render the operation date
-            Date operationDate = (Date) parsedCase.get(OPERATION_DATE);
-            String operationDateFormatted = DD_MM_YYYY.format(operationDate);
-            renderCell(operationDateFormatted, followUpTable);
-        }
+
+	// get the operation date
+	boolean operationDateAnswered =
+		(Boolean) parsedCase.get(OPERATION_DATE_ANSWERED);
+	if (!operationDateAnswered) { // of no op date: "no date found" is rendered
+	    renderCell("No date found", followUpTable);
+	} else {
+	    // otherwise get and render the operation date
+	    Date operationDate = (Date) parsedCase.get(OPERATION_DATE);
+	    String operationDateFormatted = DD_MM_YYYY.format(operationDate);
+	    renderCell(operationDateFormatted, followUpTable);
+	}
     }
 
     /**
      * Render a follow up cell
+     *
      * @param parsedCase the respective case
      * @param followUp an enum value indicating if we have the 1., 2., or 3. FU
      * @param followUpTable The StringBuilder containing the entire FU table
      */
     private void renderFollowUpCell(Map<String, Object> parsedCase,
-            FollowUp followUp, StringBuilder followUpTable) {
+	    FollowUp followUp, StringBuilder followUpTable) {
 
-        // if no operation date was answered, we can't calculate any follow ups...
-        boolean operationDateAnswered = 
-                (Boolean) parsedCase.get(OPERATION_DATE_ANSWERED);
-        if (!operationDateAnswered) {
-            // if no op date, render "Unknown"
-            renderCell("Unknown", followUpTable);
-        } else {
-            // else, get the respective FU value from the case properties map
-            boolean followUpDone = false;
-            if (followUp == FollowUp.FIRST) {
-                followUpDone = (Boolean) parsedCase.get(FOLLOW_UP1_DONE);
-            } else if (followUp == FollowUp.SECOND) {
-                followUpDone = (Boolean) parsedCase.get(FOLLOW_UP2_DONE);
-            } else if (followUp == FollowUp.THIRD) {
-                followUpDone = (Boolean) parsedCase.get(FOLLOW_UP3_DONE);
-            }
+	// if no operation date was answered, we can't calculate any follow ups...
+	boolean operationDateAnswered =
+		(Boolean) parsedCase.get(OPERATION_DATE_ANSWERED);
+	if (!operationDateAnswered) {
+	    // if no op date, render "Unknown"
+	    renderCell("Unknown", followUpTable);
+	} else {
+	    // else, get the respective FU value from the case properties map
+	    boolean followUpDone = false;
+	    if (followUp == FollowUp.FIRST) {
+		followUpDone = (Boolean) parsedCase.get(FOLLOW_UP1_DONE);
+	    } else if (followUp == FollowUp.SECOND) {
+		followUpDone = (Boolean) parsedCase.get(FOLLOW_UP2_DONE);
+	    } else if (followUp == FollowUp.THIRD) {
+		followUpDone = (Boolean) parsedCase.get(FOLLOW_UP3_DONE);
+	    }
 
-            //boolean followUpDone = (Boolean) parsedCase.get(followUp == FollowUp.FIRST
-            //      ? FOLLOW_UP1_DONE
-            //    : FOLLOW_UP2_DONE);
+	    //boolean followUpDone = (Boolean) parsedCase.get(followUp == FollowUp.FIRST
+	    //      ? FOLLOW_UP1_DONE
+	    //    : FOLLOW_UP2_DONE);
 
-            if (followUpDone) { // if done successfully
-                renderColoredCell("Done", COLOR_OK, followUpTable);
-            } else {
-                // otherwise, calculate due date by getting the op date and
-                // adding a timespan according to the FU number
-                Date operationDate = (Date) parsedCase.get(OPERATION_DATE);
-                long time = operationDate.getTime();
-                long add = 0;
+	    if (followUpDone) { // if done successfully
+		renderColoredCell("Done", COLOR_OK, followUpTable);
+	    } else {
+		// otherwise, calculate due date by getting the op date and
+		// adding a timespan according to the FU number
+		Date operationDate = (Date) parsedCase.get(OPERATION_DATE);
+		long time = operationDate.getTime();
+		long add = 0;
 
-                if (followUp == FollowUp.FIRST) {
-                    add = SIX_WEEKS;
-                } else if (followUp == FollowUp.SECOND) {
-                    add = YEAR;
-                } else if (followUp == FollowUp.THIRD) {
-                    add = YEARS2;
-                }
+		if (followUp == FollowUp.FIRST) {
+		    add = SIX_WEEKS;
+		} else if (followUp == FollowUp.SECOND) {
+		    add = YEAR;
+		} else if (followUp == FollowUp.THIRD) {
+		    add = YEARS2;
+		}
 
-                Date followUpDueDate = new Date(time + add);
-                Date now = new Date();
-                String followUpDueFormatted = 
-                        DD_MM_YYYY.format(followUpDueDate);
-                
-                // render a notification acordingly: if due is in future still,
-                // render with OK color, if due was already in the past, render
-                // with alert color
-                if (followUpDueDate.after(now)) {
-                    renderColoredCell("Due " + followUpDueFormatted, COLOR_OK, followUpTable);
-                } else {
-                    renderColoredCell("Was due " + followUpDueFormatted, COLOR_LATE, followUpTable);
-                }
-            }
-        }
+		Date followUpDueDate = new Date(time + add);
+		Date now = new Date();
+		String followUpDueFormatted =
+			DD_MM_YYYY.format(followUpDueDate);
+
+		// render a notification acordingly: if due is in future still,
+		// render with OK color, if due was already in the past, render
+		// with alert color
+		if (followUpDueDate.after(now)) {
+		    renderColoredCell("Due " + followUpDueFormatted, COLOR_OK, followUpTable);
+		} else {
+		    renderColoredCell("Was due " + followUpDueFormatted, COLOR_LATE, followUpTable);
+		}
+	    }
+	}
     }
 
     /**
      * Rendering a cell with specifically colored content
+     *
      * @param content the content
      * @param color the color string
      * @param followUpTable The StringBuilder containing the entire FU table
      */
     private void renderColoredCell(String content, String color, StringBuilder followUpTable) {
-        renderCell(getColoredText(content, color), followUpTable);
+	renderCell(getColoredText(content, color), followUpTable);
     }
 
     /**
      * Helper method for above renderedColoredCell method: returns a span
      * containing text with specific color style attribute
+     *
      * @param text the text to display
      * @param colorCode the color
      * @return the String representation of the colored-text span
      */
     private String getColoredText(String text, String colorCode) {
-        return "<span style='color:" + colorCode + "'>" + text + "</span>";
+	return "<span style='color:" + colorCode + "'>" + text + "</span>";
     }
 
     /**
      * Render a table cell with given content
+     *
      * @param content the content for the cell
      * @param followUpTable the StringBuilder containing the entire table
      */
     private void renderCell(String content, StringBuilder followUpTable) {
-        followUpTable.append("<td style='padding:3px'>" + content + "</td>");
+	followUpTable.append("<td style='padding:3px'>" + content + "</td>");
     }
 
     /**
-     * Parse a d3web case file (xml format) into a map, which contains certain 
+     * Parse a d3web case file (xml format) into a map, which contains certain
      * parameters/properties needed later on for displaying the FollowUp Table.
+     *
      * @param user the respective user
      * @param caseFile the respective case File to be parsed
      * @return the Map representation of the parameters
      */
     private Map<String, Object> parseCase(String user, File caseFile) {
-        // if exists, get the map for the respective case from the all-cases-
-        // parameters-map-cache
-        Map<String, Object> parameters = 
-                caseCache.get(caseFile.getPath());
-        
-        // if there exists a map, and if the last modification is untouched
-        // since the last modification, just return this map
-        if (parameters != null) {
-            long lastLastFileChange = (Long) parameters.get(LAST_FILE_CHANGE);
-            long lastFileChange = caseFile.lastModified();
-            if (lastLastFileChange == lastFileChange) {
-                return parameters;
-            }
-        }
-        // if the requested map does not yet exist
-        if (parameters == null) {
-            // create a new one and put it into the cache
-            parameters = new HashMap<String, Object>();
-            caseCache.put(caseFile.getPath(), parameters);
-        }
-        
-        // add the parameters last file change, last case change, FU parameters.
-        // op date etc.
-        parameters.put(LAST_FILE_CHANGE, caseFile.lastModified());
-        Session loadedUserCase = PersistenceD3webUtils.loadUserCaseUtil(user, caseFile);
-        parameters.put(LAST_CASE_CHANGE, loadedUserCase.getLastChangeDate().getTime());
-        parseFollowUpParameters(parameters, loadedUserCase);
-        parseOperationDate(parameters, loadedUserCase);
+	// if exists, get the map for the respective case from the all-cases-
+	// parameters-map-cache
+	Map<String, Object> parameters =
+		caseCache.get(caseFile.getPath());
 
-        // return the map for the requested case
-        return parameters;
+	// if there exists a map, and if the last modification is untouched
+	// since the last modification, just return this map
+	if (parameters != null) {
+	    long lastLastFileChange = (Long) parameters.get(LAST_FILE_CHANGE);
+	    long lastFileChange = caseFile.lastModified();
+	    if (lastLastFileChange == lastFileChange) {
+		return parameters;
+	    }
+	}
+	// if the requested map does not yet exist
+	if (parameters == null) {
+	    // create a new one and put it into the cache
+	    parameters = new HashMap<String, Object>();
+	    caseCache.put(caseFile.getPath(), parameters);
+	}
+
+	// add the parameters last file change, last case change, FU parameters.
+	// op date etc.
+	parameters.put(LAST_FILE_CHANGE, caseFile.lastModified());
+	Session loadedUserCase = PersistenceD3webUtils.loadUserCaseUtil(user, caseFile);
+	parameters.put(LAST_CASE_CHANGE, loadedUserCase.getLastChangeDate().getTime());
+	parseFollowUpParameters(parameters, loadedUserCase);
+	parseOperationDate(parameters, loadedUserCase);
+
+	// return the map for the requested case
+	return parameters;
 
     }
 
-    
     private void parseOperationDate(Map<String, Object> parameters, Session loadedUserCase) {
-        Question operationDateQuestion = loadedUserCase.getKnowledgeBase().getManager().searchQuestion(
-                OPERATION_DATE_QUESTION_NAME);
-        Date operationDate = null;
-        boolean operationDateAnswered = false;
-        if (operationDateQuestion == null) {
-            Logger.getLogger(this.getClass().getSimpleName()).warning(
-                    "Question '" + OPERATION_DATE_QUESTION_NAME
-                    + "' expected but not found.");
-        } else if (!(operationDateQuestion instanceof QuestionDate)) {
-            Logger.getLogger(this.getClass().getSimpleName()).warning(
-                    "Question '" + OPERATION_DATE_QUESTION_NAME
-                    + "' is expected to be of the Type '"
-                    + QuestionDate.class.getSimpleName()
-                    + "' but was '" + operationDateQuestion.getClass().getSimpleName()
-                    + "'.");
-        } else {
-            Value operationDateValue = loadedUserCase.getBlackboard().getValue(
-                    operationDateQuestion);
-            if (UndefinedValue.isNotUndefinedValue(operationDateValue)
-                    && !(operationDateValue instanceof Unknown)) {
-                operationDate = (Date) operationDateValue.getValue();
-                parameters.put(OPERATION_DATE, operationDate);
-                operationDateAnswered = true;
-            }
-        }
-        parameters.put(OPERATION_DATE_ANSWERED, operationDateAnswered);
+	Question operationDateQuestion = loadedUserCase.getKnowledgeBase().getManager().searchQuestion(
+		OPERATION_DATE_QUESTION_NAME);
+	Date operationDate = null;
+	boolean operationDateAnswered = false;
+	if (operationDateQuestion == null) {
+	    Logger.getLogger(this.getClass().getSimpleName()).warning(
+		    "Question '" + OPERATION_DATE_QUESTION_NAME
+		    + "' expected but not found.");
+	} else if (!(operationDateQuestion instanceof QuestionDate)) {
+	    Logger.getLogger(this.getClass().getSimpleName()).warning(
+		    "Question '" + OPERATION_DATE_QUESTION_NAME
+		    + "' is expected to be of the Type '"
+		    + QuestionDate.class.getSimpleName()
+		    + "' but was '" + operationDateQuestion.getClass().getSimpleName()
+		    + "'.");
+	} else {
+	    Value operationDateValue = loadedUserCase.getBlackboard().getValue(
+		    operationDateQuestion);
+	    if (UndefinedValue.isNotUndefinedValue(operationDateValue)
+		    && !(operationDateValue instanceof Unknown)) {
+		operationDate = (Date) operationDateValue.getValue();
+		parameters.put(OPERATION_DATE, operationDate);
+		operationDateAnswered = true;
+	    }
+	}
+	parameters.put(OPERATION_DATE_ANSWERED, operationDateAnswered);
     }
 
     private void parseFollowUpParameters(Map<String, Object> parameters, Session loadedUserCase) {
 
-        List<Question> allQuestions = loadedUserCase.getKnowledgeBase().getManager().getQuestions();
-        List<Question> allFollowUp1Questions = new LinkedList<Question>();
-        List<Question> allFollowUp2Questions = new LinkedList<Question>();
-        List<Question> allFollowUp3Questions = new LinkedList<Question>();
+	List<Question> allQuestions = loadedUserCase.getKnowledgeBase().getManager().getQuestions();
+	List<Question> allFollowUp1Questions = new LinkedList<Question>();
+	List<Question> allFollowUp2Questions = new LinkedList<Question>();
+	List<Question> allFollowUp3Questions = new LinkedList<Question>();
 
-        getFollowUpQuestions(allQuestions,
-                allFollowUp1Questions, allFollowUp2Questions, allFollowUp3Questions);
+	getFollowUpQuestions(allQuestions,
+		allFollowUp1Questions, allFollowUp2Questions, allFollowUp3Questions);
 
-        List<Question> allIndicatedFollowUp1Questions =
-                getIndicatedOrTopLevelQuestions(allFollowUp1Questions, loadedUserCase);
-        List<Question> allIndicatedFollowUp2Questions =
-                getIndicatedOrTopLevelQuestions(allFollowUp2Questions, loadedUserCase);
-        List<Question> allIndicatedFollowUp3Questions =
-                getIndicatedOrTopLevelQuestions(allFollowUp3Questions, loadedUserCase);
+	List<Question> allIndicatedFollowUp1Questions =
+		getIndicatedOrTopLevelQuestions(allFollowUp1Questions, loadedUserCase);
+	List<Question> allIndicatedFollowUp2Questions =
+		getIndicatedOrTopLevelQuestions(allFollowUp2Questions, loadedUserCase);
+	List<Question> allIndicatedFollowUp3Questions =
+		getIndicatedOrTopLevelQuestions(allFollowUp3Questions, loadedUserCase);
 
-        List<Question> allAnsweredQuestions = loadedUserCase.getBlackboard().getAnsweredQuestions();
-        List<Question> allAnsweredFollowUp1Questions = new LinkedList<Question>();
-        List<Question> allAnsweredFollowUp2Questions = new LinkedList<Question>();
-        List<Question> allAnsweredFollowUp3Questions = new LinkedList<Question>();
+	List<Question> allAnsweredQuestions = loadedUserCase.getBlackboard().getAnsweredQuestions();
+	List<Question> allAnsweredFollowUp1Questions = new LinkedList<Question>();
+	List<Question> allAnsweredFollowUp2Questions = new LinkedList<Question>();
+	List<Question> allAnsweredFollowUp3Questions = new LinkedList<Question>();
 
-        getFollowUpQuestions(allAnsweredQuestions, allAnsweredFollowUp1Questions,
-                allAnsweredFollowUp2Questions, allAnsweredFollowUp3Questions);
+	getFollowUpQuestions(allAnsweredQuestions, allAnsweredFollowUp1Questions,
+		allAnsweredFollowUp2Questions, allAnsweredFollowUp3Questions);
 
-        parameters.put(FOLLOW_UP1_DONE,
-                isFollowUpDone(allAnsweredFollowUp1Questions, allIndicatedFollowUp1Questions));
+	parameters.put(FOLLOW_UP1_DONE,
+		isFollowUpDone(allAnsweredFollowUp1Questions, allIndicatedFollowUp1Questions));
 
-        parameters.put(FOLLOW_UP2_DONE,
-                isFollowUpDone(allAnsweredFollowUp2Questions, allIndicatedFollowUp2Questions));
+	parameters.put(FOLLOW_UP2_DONE,
+		isFollowUpDone(allAnsweredFollowUp2Questions, allIndicatedFollowUp2Questions));
 
-        parameters.put(FOLLOW_UP3_DONE,
-                isFollowUpDone(allAnsweredFollowUp3Questions, allIndicatedFollowUp3Questions));
+	parameters.put(FOLLOW_UP3_DONE,
+		isFollowUpDone(allAnsweredFollowUp3Questions, allIndicatedFollowUp3Questions));
     }
 
     /**
@@ -472,21 +482,21 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
      */
     private boolean isFollowUpDone(List<Question> answeredQuestions, List<Question> allIndicatedQuestions) {
 
-        System.err.println("FU DONE - answeredQuestions: " + answeredQuestions.toString());
-        System.err.println("FU DONE - allIndicatedQuestions: " + allIndicatedQuestions.toString());
+	System.err.println("FU DONE - answeredQuestions: " + answeredQuestions.toString());
+	System.err.println("FU DONE - allIndicatedQuestions: " + allIndicatedQuestions.toString());
 
-        double neededNr = allIndicatedQuestions.size() * PERCENTAGE_ANSWERED_QUESTIONS_NEEDED;
-        double answeredNr = answeredQuestions.size();
+	double neededNr = allIndicatedQuestions.size() * PERCENTAGE_ANSWERED_QUESTIONS_NEEDED;
+	double answeredNr = answeredQuestions.size();
 
-        System.err.println("FU DONE - neededNr: " + neededNr);
-        System.err.println("FU DONE - answered: " + answeredNr);
+	System.err.println("FU DONE - neededNr: " + neededNr);
+	System.err.println("FU DONE - answered: " + answeredNr);
 
-        boolean percentageAnswered = answeredNr >= neededNr;
+	boolean percentageAnswered = answeredNr >= neededNr;
 
-        System.err.println("FU DONE - percentageAnswered: " + percentageAnswered);
+	System.err.println("FU DONE - percentageAnswered: " + percentageAnswered);
 
-        // answeredQuestions.size() >= allIndicatedQuestions.size() * PERCENTAGE_ANSWERED_QUESTIONS_NEEDED;
-        return percentageAnswered && !answeredQuestions.isEmpty();
+	// answeredQuestions.size() >= allIndicatedQuestions.size() * PERCENTAGE_ANSWERED_QUESTIONS_NEEDED;
+	return percentageAnswered && !answeredQuestions.isEmpty();
     }
 
     /*
@@ -494,165 +504,194 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
      * are top level questions
      */
     private List<Question> getIndicatedOrTopLevelQuestions(List<Question> questions, Session session) {
-        Blackboard blackboard = session.getBlackboard();
-        List<Question> indicatedOrTopLevelQuestions = new LinkedList<Question>();
-        for (Question question : questions) {
-            if (D3webUtils.isIndicatedPlain(question, blackboard) || isTopLevelQuestion(question)) {
-                indicatedOrTopLevelQuestions.add(question);
-            }
-        }
-        return indicatedOrTopLevelQuestions;
+	Blackboard blackboard = session.getBlackboard();
+	List<Question> indicatedOrTopLevelQuestions = new LinkedList<Question>();
+	for (Question question : questions) {
+	    if (D3webUtils.isIndicatedPlain(question, blackboard) || isTopLevelQuestion(question)) {
+		indicatedOrTopLevelQuestions.add(question);
+	    }
+	}
+	return indicatedOrTopLevelQuestions;
     }
 
     private boolean isTopLevelQuestion(Question question) {
-        TerminologyObject[] parents = question.getParents();
-        if (parents == null || parents.length == 0) {
-            return true;
-        }
-        if (parents.length > 1) {
-            return false;
-        }
-        TerminologyObject[] grandParents = parents[0].getParents();
-        if (grandParents == null || grandParents.length == 0) {
-            return true;
-        }
-        if (grandParents.length == 1
-                && grandParents[0] == question.getKnowledgeBase().getRootQASet()) {
-            return true;
-        }
-        return false;
+	TerminologyObject[] parents = question.getParents();
+	if (parents == null || parents.length == 0) {
+	    return true;
+	}
+	if (parents.length > 1) {
+	    return false;
+	}
+	TerminologyObject[] grandParents = parents[0].getParents();
+	if (grandParents == null || grandParents.length == 0) {
+	    return true;
+	}
+	if (grandParents.length == 1
+		&& grandParents[0] == question.getKnowledgeBase().getRootQASet()) {
+	    return true;
+	}
+	return false;
     }
 
     private void getFollowUpQuestions(List<Question> allQuestions,
-            List<Question> allFollowUp1Questions,
-            List<Question> allFollowUp2Questions,
-            List<Question> allFollowUp3Questions) {
-        for (Question question : allQuestions) {
-            if (question.getName().contains(FOLLOW_UP1_NAME_SUFFIX)) {
-                allFollowUp1Questions.add(question);
-            } else if (question.getName().contains(FOLLOW_UP2_NAME_SUFFIX)) {
-                allFollowUp2Questions.add(question);
-            } else if (question.getName().contains(FOLLOW_UP3_NAME_SUFFIX)) {
-                allFollowUp3Questions.add(question);
-            }
-        }
+	    List<Question> allFollowUp1Questions,
+	    List<Question> allFollowUp2Questions,
+	    List<Question> allFollowUp3Questions) {
+	for (Question question : allQuestions) {
+	    if (question.getName().contains(FOLLOW_UP1_NAME_SUFFIX)) {
+		allFollowUp1Questions.add(question);
+	    } else if (question.getName().contains(FOLLOW_UP2_NAME_SUFFIX)) {
+		allFollowUp2Questions.add(question);
+	    } else if (question.getName().contains(FOLLOW_UP3_NAME_SUFFIX)) {
+		allFollowUp3Questions.add(question);
+	    }
+	}
     }
 
     public static ArrayList<TerminologyObject> parseLevel1Questions(HttpSession http) {
 
-        ArrayList<TerminologyObject> level1qs =
-                new ArrayList<TerminologyObject>();
+	ArrayList<TerminologyObject> level1qs =
+		new ArrayList<TerminologyObject>();
 
-        Session d3webSession = (Session) http.getAttribute("d3webSession");
-        TerminologyObject root =
-                d3webSession.getKnowledgeBase().getRootQASet();
-
-
-        parseLevel1Children(http, level1qs, root, d3webSession);
-        ArrayList<TerminologyObject> finalA = new ArrayList<TerminologyObject>();
-
-        HashMap<TerminologyObject, List<TerminologyObject>> indicationSet =
-                D3webUtils.getIndicationSetsL1(d3webSession.getBlackboard(), level1qs);
-
-        //System.out.println(level1qs);
-        for (TerminologyObject to : level1qs) {
-            finalA.add(to);
-
-            if (indicationSet.containsKey(to)) {
-                for (TerminologyObject ito : indicationSet.get(to)) {
-
-                    if (!finalA.contains(ito)) {
-                        finalA.add(ito);
-                    }
+	Session d3webSession = (Session) http.getAttribute("d3webSession");
+	TerminologyObject root =
+		d3webSession.getKnowledgeBase().getRootQASet();
 
 
-                }
-            }
-        }
-        // System.out.println(finalA);
-        return finalA;
+	parseLevel1Children(http, level1qs, root, d3webSession);
+	ArrayList<TerminologyObject> finalA = new ArrayList<TerminologyObject>();
+
+	HashMap<TerminologyObject, List<TerminologyObject>> indicationSet =
+		D3webUtils.getIndicationSetsL1(d3webSession.getBlackboard(), level1qs);
+
+	//System.out.println(level1qs);
+	for (TerminologyObject to : level1qs) {
+	    finalA.add(to);
+
+	    if (indicationSet.containsKey(to)) {
+		for (TerminologyObject ito : indicationSet.get(to)) {
+
+		    if (!finalA.contains(ito)) {
+			finalA.add(ito);
+		    }
+
+
+		}
+	    }
+	}
+	// System.out.println(finalA);
+	return finalA;
     }
 
     private static void parseLevel1Children(HttpSession http, ArrayList<TerminologyObject> level1,
-            TerminologyObject to, Session d3webSession) {
+	    TerminologyObject to, Session d3webSession) {
 
-        if (to.getChildren() != null && to.getChildren().length != 0) {
+	if (to.getChildren() != null && to.getChildren().length != 0) {
 
-            for (TerminologyObject child : to.getChildren()) {
+	    for (TerminologyObject child : to.getChildren()) {
 
 
-                if (D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())
-                        || !D3webUtils.isIndicatedByInitQuestionnaire(child, to, d3webSession.getBlackboard())) {
-                    continue;
-                } else {
-                    level1.add(child);
-                    // System.out.println(child.getName());
-                    parseLevel1FUs(http, level1, child, d3webSession);
-                }
+		if (D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())
+			|| !D3webUtils.isIndicatedByInitQuestionnaire(child, to, d3webSession.getBlackboard())) {
+		    continue;
+		} else {
+		    level1.add(child);
+		    // System.out.println(child.getName());
+		    parseLevel1FUs(http, level1, child, d3webSession);
+		}
 
-            }
-        }
+	    }
+	}
     }
 
     private static void parseLevel1FUs(HttpSession http, ArrayList<TerminologyObject> level1,
-            TerminologyObject to, Session d3webSession) {
+	    TerminologyObject to, Session d3webSession) {
 
 
-        if (to.getChildren() != null && to.getChildren().length != 0
-                && to.getChildren()[0] instanceof Question) {
+	if (to.getChildren() != null && to.getChildren().length != 0
+		&& to.getChildren()[0] instanceof Question) {
 
-            // get the (probably question) children of the child
-            for (TerminologyObject childsChild : to.getChildren()) {
+	    // get the (probably question) children of the child
+	    for (TerminologyObject childsChild : to.getChildren()) {
 
-                if (D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())) {
-                    continue;
-                } else {
-                    level1.add(childsChild);
-                }
+		if (D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())) {
+		    continue;
+		} else {
+		    level1.add(childsChild);
+		}
 
-                parseLevel1FUs(http, level1, childsChild, d3webSession);
-            }
-        }
+		parseLevel1FUs(http, level1, childsChild, d3webSession);
+	    }
+	}
     }
-    
+
     @Override
     public String renderUserCaseList(String user, HttpSession http) {
 
-        Session d3web = (Session) http.getAttribute("d3webSession");
-        List<File> files = PersistenceD3webUtils.getCaseList(user);
-       
-        StringBuffer cases = new StringBuffer();
-        /*
-         * add autosaved as first item always
-         */
-        cases.append("<option");
-        cases.append(" title='" + PersistenceD3webUtils.AUTOSAVE + "'>");
-        cases.append(PersistenceD3webUtils.AUTOSAVE);
-        cases.append("</option>");
+	Session d3web = (Session) http.getAttribute("d3webSession");
+	List<File> files = PersistenceD3webUtils.getCaseList(user);
 
-        if (files != null && files.size() > 0) {
+	StringBuffer cases = new StringBuffer();
+	/*
+	 * add autosaved as first item always
+	 */
+	cases.append("<option");
+	cases.append(" title='" + PersistenceD3webUtils.AUTOSAVE + "'>");
+	cases.append(PersistenceD3webUtils.AUTOSAVE);
+	cases.append("</option>");
 
-            Collections.sort(files, new FileNameComparator());
-            //Collections.sort(files, new CaseCreationComparator());
-             
-    //         int nr = 1;
-            String nr = "";
-            for (File f : files) {
-                if (!f.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
-                    cases.append("<option");
-                    String filename = 
-                            f.getName().substring(0, f.getName().lastIndexOf(".")).replace("+", " ");
-                   
-                    cases.append(" title='"
-                            + nr + filename + "'>");
-                    cases.append(nr + filename);
-                    cases.append("</option>");
-                 //   nr++;
-                }
-                
-            }
-        }
+	if (files != null && files.size() > 0) {
 
-        return cases.toString();
+	    Collections.sort(files, new FileNameComparator());
+	    //Collections.sort(files, new CaseCreationComparator());
+
+	    //         int nr = 1;
+	    String nr = "";
+	    for (File f : files) {
+		if (!f.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
+		    cases.append("<option");
+		    String filename =
+			    f.getName().substring(0, f.getName().lastIndexOf(".")).replace("+", " ");
+
+		    cases.append(" title='"
+			    + nr + filename + "'>");
+		    cases.append(nr + filename);
+		    cases.append("</option>");
+		    //   nr++;
+		}
+
+	    }
+	}
+
+	return cases.toString();
+    }
+
+    @Override
+    public ContainerCollection renderRoot(ContainerCollection cc, Session d3webSession,
+	    HttpSession http, HttpServletRequest request) {
+
+	ContainerCollection eurahsCC =
+		super.renderRoot(cc, d3webSession, http, request);
+
+	GeneralDialogSettings gds = GeneralDialogSettings.getInstance();
+	UISettings uis = UISettings.getInstance();
+	
+	String userprefix = uis.getDialogType().toString();
+
+	StringTemplate st =
+		TemplateUtils.getStringTemplate(
+		userprefix + "D3webDialog", "html");
+
+	if (gds.getCaseSaveMode().equals(CaseSaveMode.OWN)) {
+	    st.setAttribute("loadcase", "true");
+	    st.removeAttribute("loadcaseAnonym");
+	} else if (gds.getCaseSaveMode().equals(CaseSaveMode.ANONYM_OWN)
+		|| gds.getCaseSaveMode().equals(CaseSaveMode.ANONYM)) {
+	    st.setAttribute("loadcaseAnonym", "true");
+	    st.removeAttribute("loadcase");
+	}
+
+
+	return eurahsCC;
     }
 }
