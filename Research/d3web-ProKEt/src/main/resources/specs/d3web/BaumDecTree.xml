@@ -29,7 +29,8 @@
             <two questions="N4 Frage"/>
         </questioncolumns>    
         <dropdown TRUE="N3 Frage" />
-        <largetext TRUE="Textfrage 1" FALSE="Textfrage 2" />    
+        <largetext TRUE="Textfrage 1" FALSE="Textfrage 2" />   
+	
     </localUIOpts>
     <dataOpts kb="BaumMin.d3web" />
     <ueOpts logging = "FALSE" />

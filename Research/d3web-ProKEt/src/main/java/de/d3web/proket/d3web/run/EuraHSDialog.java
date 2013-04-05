@@ -77,45 +77,43 @@ import javax.servlet.ServletException;
 public class EuraHSDialog extends D3webDialog {
 
     private static final long serialVersionUID = -4790211381203716706L;
-    private static final String EURAHS_FIRSTQUESTION = 
-            "Please enter a EuraHS registration number (NO PATIENT NAME)";
-    
+    private static final String EURAHS_FIRSTQUESTION =
+	    "Please enter a EuraHS registration number (NO PATIENT NAME)";
     private static ArrayList<String> INITDROPQS = new ArrayList<String>() {
 
-        {
-            add("Production company of the mesh");
-            add("Production company of the first mesh");
-            add("Production company of the second mesh");
-            add("Production company of the suture material, non-mesh repair");
-            add("Production company of the suture material");
-            add("Production company of the tracker device");
-            add("Production company of the glue");
-            add("Production company of the fixation device");
-        }
+	{
+	    add("Production company of the mesh");
+	    add("Production company of the first mesh");
+	    add("Production company of the second mesh");
+	    add("Production company of the suture material, non-mesh repair");
+	    add("Production company of the suture material");
+	    add("Production company of the tracker device");
+	    add("Production company of the glue");
+	    add("Production company of the fixation device");
+	}
     };
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        //System.out.println("INIT EURAHS SERVLET");
+	super.init(config);
+	//System.out.println("INIT EURAHS SERVLET");
 
-        String servletcontext = config.getServletContext().getRealPath("/");
-        GLOBSET.setServletBasePath(servletcontext);
+	String servletcontext = config.getServletContext().getRealPath("/");
+	GLOBSET.setServletBasePath(servletcontext);
 
-        d3webParser = new D3webXMLParser();
+	d3webParser = new D3webXMLParser();
 
-        String realStPath = servletcontext
-                + "WEB-INF/classes/stringtemp/html";
+	String realStPath = servletcontext
+		+ "WEB-INF/classes/stringtemp/html";
 
-        StringTemplateUtils.initializeStringTemplateStructure(realStPath);
-        
-        Utils.checkCreateFile(realStPath);
+	StringTemplateUtils.initializeStringTemplateStructure(realStPath);
+
+	Utils.checkCreateFile(realStPath);
     }
-    
-    
+
     @Override
     protected String getSource(HttpServletRequest request, HttpSession http) {
-        return "Hernia";
+	return "Hernia";
     }
 
     /**
@@ -130,34 +128,34 @@ public class EuraHSDialog extends D3webDialog {
      */
     @Override
     protected void show(HttpServletRequest request, HttpServletResponse response,
-            HttpSession httpSession)
-            throws IOException {
-        
-        PrintWriter writer = response.getWriter();
+	    HttpSession httpSession)
+	    throws IOException {
 
-        // new ContainerCollection needed each time to get an updated dialog
-        ContainerCollection cc = new ContainerCollection();
+	PrintWriter writer = response.getWriter();
 
-        Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
+	// new ContainerCollection needed each time to get an updated dialog
+	ContainerCollection cc = new ContainerCollection();
 
-        // not needed for EuraHS, would work to change dropdown text default
-        // to other Locale
-        //int loc = Integer.parseInt((String) httpSession.getAttribute("locale").toString());
+	Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
-        Session sNew = initDropdownChoiceQuestions(d3webSess, 2);
-        httpSession.setAttribute(D3WEB_SESSION, sNew);
-        httpSession.setAttribute("initsetquestions", INITDROPQS);
+	// not needed for EuraHS, would work to change dropdown text default
+	// to other Locale
+	//int loc = Integer.parseInt((String) httpSession.getAttribute("locale").toString());
 
-
-        // get the root renderer --> call getRenderer with null
-        EuraHSDefaultRootD3webRenderer d3webr = (EuraHSDefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
+	Session sNew = initDropdownChoiceQuestions(d3webSess, 2);
+	httpSession.setAttribute(D3WEB_SESSION, sNew);
+	httpSession.setAttribute("initsetquestions", INITDROPQS);
 
 
-        cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
+	// get the root renderer --> call getRenderer with null
+	EuraHSDefaultRootD3webRenderer d3webr = (EuraHSDefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
 
-        writer.print(cc.html.toString()); // deliver the rendered output
 
-        writer.close(); // and close
+	cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
+
+	writer.print(cc.html.toString()); // deliver the rendered output
+
+	writer.close(); // and close
     }
 
     /**
@@ -172,210 +170,194 @@ public class EuraHSDialog extends D3webDialog {
      */
     @Override
     protected void loginUsrDat(HttpServletRequest req,
-            HttpServletResponse res, HttpSession httpSession)
-            throws IOException {
+	    HttpServletResponse res, HttpSession httpSession)
+	    throws IOException {
 
-        // fetch the information sent via the request string from login
-        String u = req.getParameter("u");
+	// fetch the information sent via the request string from login
+	String u = req.getParameter("u");
 
-        // get the response writer for communicating back via Ajax
-        PrintWriter writer = res.getWriter();
+	// get the response writer for communicating back via Ajax
+	PrintWriter writer = res.getWriter();
 
-        httpSession.setMaxInactiveInterval(60 * 60);
+	httpSession.setMaxInactiveInterval(60 * 60);
 
-        // if no valid login
-        // if (!permitUser(u, p)) {
-        //
-        // // causes JS to display error message
-        // writer.append("nosuccess");
-        // return;
-        // }
+	// if no valid login
+	// if (!permitUser(u, p)) {
+	//
+	// // causes JS to display error message
+	// writer.append("nosuccess");
+	// return;
+	// }
 
-        // set user attribute for the HttpSession
-        httpSession.setAttribute("user", u);
+	// set user attribute for the HttpSession
+	httpSession.setAttribute("user", u);
 
-        httpSession.setAttribute("lastLoaded", "");
+	httpSession.setAttribute("lastLoaded", "");
 
-        /*
-         * in case we should have more than one user per clinic, we distinguish
-         * them by adding "_1"... to the clinic name, i.e. WUE_1, WUE_2 etc.
-         * Thus we need to extract part of the login name that also denotes the
-         * clinic name and thus the subfolder, where cases are stored that
-         * should be visible for THIS user.
-         */
-        int splitter = u.indexOf("_");
-        if (splitter != -1) {
-            String toReplace = u.substring(splitter, u.length());
-            String userSubfolder = u.replace(toReplace, "");
-            httpSession.setAttribute("user", userSubfolder);
-        }
+	/*
+	 * in case we should have more than one user per clinic, we distinguish
+	 * them by adding "_1"... to the clinic name, i.e. WUE_1, WUE_2 etc.
+	 * Thus we need to extract part of the login name that also denotes the
+	 * clinic name and thus the subfolder, where cases are stored that
+	 * should be visible for THIS user.
+	 */
+	int splitter = u.indexOf("_");
+	if (splitter != -1) {
+	    String toReplace = u.substring(splitter, u.length());
+	    String userSubfolder = u.replace(toReplace, "");
+	    httpSession.setAttribute("user", userSubfolder);
+	}
 
-        // causes JS to start new session and d3web case finally
-        writer.append("newUser");
+	// causes JS to start new session and d3web case finally
+	writer.append("newUser");
     }
 
     @Override
     protected void resetD3webSession(HttpSession httpSession) {
-        super.resetD3webSession(httpSession);
-        Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
-        String definingObject = D3webConnector.getInstance().getD3webParser().getRequired();
-        Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(
-                definingObject);
-        Fact fact = d3webSess.getBlackboard().getValueFact(to);
-        if (to != null && fact == null) {
-            D3webUtils.setValue(definingObject, generateCaseNumber(definingObject), d3webSess);
-        }
+	super.resetD3webSession(httpSession);
+	Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
+	String definingObject = D3webConnector.getInstance().getD3webParser().getRequired();
+	Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+		definingObject);
+	Fact fact = d3webSess.getBlackboard().getValueFact(to);
+	if (to != null && fact == null) {
+	    D3webUtils.setValue(definingObject, generateCaseNumber(definingObject), d3webSess);
+	}
     }
 
     public static synchronized String generateCaseNumber(String persistenceFileName) {
-        String fileName = GlobalSettings.getInstance().getCaseFolder() + File.separator + ".."
-                + File.separator + persistenceFileName + ".txt";
-        String persistence = Utils.readNumberFromTxtFile(fileName);
-        int numberOfCases = 0;
-        try {
-            numberOfCases = Integer.parseInt(persistence);
-        } catch (NumberFormatException ne) {
-        }
-        numberOfCases++;
-        writeTxtFile(fileName, String.valueOf(numberOfCases));
-        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        return date + "-" + numberOfCases;
+	String fileName = GlobalSettings.getInstance().getCaseFolder() + File.separator + ".."
+		+ File.separator + persistenceFileName + ".txt";
+	String persistence = Utils.readNumberFromTxtFile(fileName);
+	int numberOfCases = 0;
+	try {
+	    numberOfCases = Integer.parseInt(persistence);
+	} catch (NumberFormatException ne) {
+	}
+	numberOfCases++;
+	writeTxtFile(fileName, String.valueOf(numberOfCases));
+	String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+	return date + "-" + numberOfCases;
     }
 
     private static String readTxtFile(String fileName) {
-        StringBuffer inContent = new StringBuffer();
-        File file = new File(fileName);
-        if (file.exists()) {
-            try {
-                BufferedReader bufferedReader = new BufferedReader(
-                        new InputStreamReader(new FileInputStream(file)));
-                int char1 = bufferedReader.read();
-                while (char1 != -1) {
-                    inContent.append((char) char1);
-                    char1 = bufferedReader.read();
-                }
-                bufferedReader.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return inContent.toString();
+	StringBuffer inContent = new StringBuffer();
+	File file = new File(fileName);
+	if (file.exists()) {
+	    try {
+		BufferedReader bufferedReader = new BufferedReader(
+			new InputStreamReader(new FileInputStream(file)));
+		int char1 = bufferedReader.read();
+		while (char1 != -1) {
+		    inContent.append((char) char1);
+		    char1 = bufferedReader.read();
+		}
+		bufferedReader.close();
+	    } catch (Exception e) {
+		e.printStackTrace();
+	    }
+	}
+	return inContent.toString();
     }
 
     private static void writeTxtFile(String fileName, String content) {
-        try {
-            File file = new File(fileName).getCanonicalFile();
-            file.getParentFile().mkdirs();
-            FileWriter fstream = new FileWriter(file);
-            BufferedWriter out = new BufferedWriter(fstream);
-            out.write(content);
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	try {
+	    File file = new File(fileName).getCanonicalFile();
+	    file.getParentFile().mkdirs();
+	    FileWriter fstream = new FileWriter(file);
+	    BufferedWriter out = new BufferedWriter(fstream);
+	    out.write(content);
+	    out.close();
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
     }
 
     private static Session initDropdownChoiceQuestions(Session d3webSess, int loc) {
 
-        for (String iddq : INITDROPQS) {
+	for (String iddq : INITDROPQS) {
 
-            Fact f = d3webSess.getBlackboard().getValueFact(
-                    d3webSess.getKnowledgeBase().getManager().searchQuestion(iddq));
-            if (f == null) {
+	    Fact f = d3webSess.getBlackboard().getValueFact(
+		    d3webSess.getKnowledgeBase().getManager().searchQuestion(iddq));
+	    if (f == null) {
 
-                String selectChoicePrompt = "Please select...";
-                /*switch (loc) {
-                    case 1: // german
-                        selectChoicePrompt = "Bitte auswählen...";
-                        break;
-                    case 2: // english
-                        selectChoicePrompt = "Please select...";
-                        break;
-                    case 3: // spanish
-                        selectChoicePrompt = "";
-                        break;
-                    case 4: // italian
-                        selectChoicePrompt = "";
-                        break;
-                    case 5: // french
-                        selectChoicePrompt = "";
-                        break;
-                    case 6: // polish
-                        selectChoicePrompt = "";
-                        break;
-                }
-                if (selectChoicePrompt == null) {
-                    selectChoicePrompt = "Please select...";
-                }*/
-                D3webUtils.setValue(iddq, selectChoicePrompt, d3webSess);
-            }
+		String selectChoicePrompt = "Please select...";
+		/*
+		 * switch (loc) { case 1: // german selectChoicePrompt = "Bitte
+		 * auswählen..."; break; case 2: // english selectChoicePrompt =
+		 * "Please select..."; break; case 3: // spanish
+		 * selectChoicePrompt = ""; break; case 4: // italian
+		 * selectChoicePrompt = ""; break; case 5: // french
+		 * selectChoicePrompt = ""; break; case 6: // polish
+		 * selectChoicePrompt = ""; break; } if (selectChoicePrompt ==
+		 * null) { selectChoicePrompt = "Please select..."; }
+		 */
+		D3webUtils.setValue(iddq, selectChoicePrompt, d3webSess);
+	    }
 
-        }
+	}
 
-        return d3webSess;
+	return d3webSess;
     }
 
     @Override
     protected void saveCase(HttpServletRequest request,
-            HttpServletResponse response, HttpSession httpSession)
-            throws IOException {
+	    HttpServletResponse response, HttpSession httpSession)
+	    throws IOException {
 
-	if(GeneralDialogSettings.getInstance().getCaseSaveMode().equals(CaseSaveMode.OWN)){
+	if (GeneralDialogSettings.getInstance().getCaseSaveMode().equals(CaseSaveMode.OWN)) {
 	    // default saving of cases is own filename which is impl. in D3webDialogServlet 
-	   System.out.println("save");
 	    super.saveCase(request, response, httpSession);
-	   } else if(GeneralDialogSettings.getInstance().getCaseSaveMode().equals(CaseSaveMode.ANONYM)){
+	} else if (GeneralDialogSettings.getInstance().getCaseSaveMode().equals(CaseSaveMode.ANONYM)) {
 	    // impl. method that system creates random fn and encrypts it
 	    super.saveCaseAnonym(request, response, httpSession);
-	} else if (GeneralDialogSettings.getInstance().getCaseSaveMode().equals(CaseSaveMode.ANONYM_OWN)){
+	} else if (GeneralDialogSettings.getInstance().getCaseSaveMode().equals(CaseSaveMode.ANONYM_OWN)) {
 	    // user can chose filename himself and this gets encrypted
-	    System.out.println("saveanonymown");
 	    super.saveCaseAnonymOwn(request, response, httpSession);
 	}
-       
-        
+
+
     }
 
     @Override
     protected void loadCaseClear(HttpServletRequest request, HttpServletResponse response,
-            HttpSession httpSession) {
-        String filename = request.getParameter("fn");
-        String user = (String) httpSession.getAttribute("user");
-        loadCaseClearUserFilename(request, httpSession, user, filename);
+	    HttpSession httpSession) {
+	String filename = request.getParameter("fn");
+	String user = (String) httpSession.getAttribute("user");
+	loadCaseClearUserFilename(request, httpSession, user, filename);
     }
 
-    
-    
     private void loadCaseClearUserFilename(HttpServletRequest request, HttpSession httpSession,
-            String user, String filename) {
+	    String user, String filename) {
 
-        Session session = null;
-        String anonFilename = Encryptor.getAnonymizedFilename(filename);
-        if (PersistenceD3webUtils.existsCase(user, anonFilename)) {
-            session = PersistenceD3webUtils.loadUserCase(user, anonFilename);
-            httpSession.setAttribute(D3WEB_SESSION, session);
-            httpSession.setAttribute("lastLoaded", anonFilename);
-            //System.out.println("lastLoaded in Load Case: " + anonFilename);
-            D3webConnector.getInstance().setSession(session);
+	Session session = null;
+	String anonFilename = filename;
+	if (!filename.equals("autosave")) {
+	    anonFilename = Encryptor.getAnonymizedFilename(filename);
+	}
+	
+	if (PersistenceD3webUtils.existsCase(user, anonFilename)) {
+	    session = PersistenceD3webUtils.loadUserCase(user, anonFilename);
+	    httpSession.setAttribute(D3WEB_SESSION, session);
+	    httpSession.setAttribute("lastLoaded", anonFilename);
 
-            JSONLogger logger =
-                    (JSONLogger) httpSession.getAttribute("logger");
+	    D3webConnector.getInstance().setSession(session);
 
-            if (uesettings.isLogging()) {
-                ServletLogUtils.resetLogfileName(session.getId(), logger);
-                String time;
-                if (request.getParameter("timestring") != null) {
-                    time = request.getParameter("timestring").replace("+", " ");
-                } else {
-                    Date date = new Date();
-                    SimpleDateFormat sdf = new SimpleDateFormat(super.SDF_DEFAULT);
-                    time = sdf.format(date);
-                }
-                ServletLogUtils.logResume(time, session.getId(), logger);
-            }
-        }
+	    JSONLogger logger =
+		    (JSONLogger) httpSession.getAttribute("logger");
+
+	    if (uesettings.isLogging()) {
+		ServletLogUtils.resetLogfileName(session.getId(), logger);
+		String time;
+		if (request.getParameter("timestring") != null) {
+		    time = request.getParameter("timestring").replace("+", " ");
+		} else {
+		    Date date = new Date();
+		    SimpleDateFormat sdf = new SimpleDateFormat(super.SDF_DEFAULT);
+		    time = sdf.format(date);
+		}
+		ServletLogUtils.logResume(time, session.getId(), logger);
+	    }
+	}
     }
-    
-
-
 }

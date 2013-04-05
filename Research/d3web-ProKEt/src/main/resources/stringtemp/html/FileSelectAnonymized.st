@@ -6,7 +6,7 @@
 			$if (langDE)$
 		    	Fall laden
 		    $endif$">
-	<select id="caseSelect" name="files" size="12" style="width:300px;">
+	<select id="caseSelect" name="files" size="12">
     	$fileselectopts$ 
         </select>
         <div class="fileClearnameLabel">OR enter Clearname:</div>

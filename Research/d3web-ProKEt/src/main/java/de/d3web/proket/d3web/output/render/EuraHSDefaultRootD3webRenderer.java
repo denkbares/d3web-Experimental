@@ -43,12 +43,10 @@ import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.settings.GeneralDialogSettings;
 import de.d3web.proket.d3web.settings.GeneralDialogSettings.CaseSaveMode;
-import de.d3web.proket.d3web.settings.UISettings;
+import de.d3web.proket.d3web.utils.CaseCreationComparator;
 import de.d3web.proket.d3web.utils.D3webUtils;
 import de.d3web.proket.d3web.utils.FileNameComparator;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
-import de.d3web.proket.output.container.ContainerCollection;
-import de.d3web.proket.utils.TemplateUtils;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
@@ -628,6 +626,9 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
     @Override
     public String renderUserCaseList(String user, HttpSession http) {
 
+	SimpleDateFormat sdf =
+		new SimpleDateFormat("EEE, yyyy MMM dd, HH:mm:ss");
+
 	Session d3web = (Session) http.getAttribute("d3webSession");
 	List<File> files = PersistenceD3webUtils.getCaseList(user);
 
@@ -639,59 +640,57 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 	cases.append(" title='" + PersistenceD3webUtils.AUTOSAVE + "'>");
 	cases.append(PersistenceD3webUtils.AUTOSAVE);
 	cases.append("</option>");
+	Session session = null;
 
 	if (files != null && files.size() > 0) {
 
-	    Collections.sort(files, new FileNameComparator());
-	    //Collections.sort(files, new CaseCreationComparator());
+	    if (GeneralDialogSettings.getInstance().getCaseSaveMode().equals(
+		    CaseSaveMode.ANONYM_OWN)
+		    || GeneralDialogSettings.getInstance().getCaseSaveMode().equals(
+		    CaseSaveMode.ANONYM)) {
+		Collections.sort(files, new CaseCreationComparator());
+		//int nr = 1;
+		for (File f : files) {
+		    session = PersistenceD3webUtils.loadCase(f.getName());
+		    Date changeDate = session.getLastChangeDate();
 
-	    //         int nr = 1;
-	    String nr = "";
-	    for (File f : files) {
-		if (!f.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
-		    cases.append("<option");
-		    String filename =
-			    f.getName().substring(0, f.getName().lastIndexOf(".")).replace("+", " ");
+		    if (!f.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
+			cases.append("<option");
+			String filename =
+				f.getName().substring(0, f.getName().lastIndexOf(".")).replace("+", " ");
 
-		    cases.append(" title='"
-			    + nr + filename + "'>");
-		    cases.append(nr + filename);
-		    cases.append("</option>");
-		    //   nr++;
+			cases.append(" title='"
+				+ filename + "'>");
+			cases.append(sdf.format(changeDate) + "\t|\t" + filename);
+			cases.append("</option>");
+		    }
+
 		}
 
+	    } else {
+		Collections.sort(files, new FileNameComparator());
+		//         int nr = 1;
+		String nr = "";
+		for (File f : files) {
+		    if (!f.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
+			cases.append("<option");
+			String filename =
+				f.getName().substring(0, f.getName().lastIndexOf(".")).replace("+", " ");
+
+			cases.append(" title='"
+				+ nr + filename + "'>");
+			cases.append(nr + filename);
+			cases.append("</option>");
+			//   nr++;
+		    }
+
+		}
 	    }
+
+
+
 	}
 
 	return cases.toString();
-    }
-
-    @Override
-    public ContainerCollection renderRoot(ContainerCollection cc, Session d3webSession,
-	    HttpSession http, HttpServletRequest request) {
-
-	ContainerCollection eurahsCC =
-		super.renderRoot(cc, d3webSession, http, request);
-
-	GeneralDialogSettings gds = GeneralDialogSettings.getInstance();
-	UISettings uis = UISettings.getInstance();
-	
-	String userprefix = uis.getDialogType().toString();
-
-	StringTemplate st =
-		TemplateUtils.getStringTemplate(
-		userprefix + "D3webDialog", "html");
-
-	if (gds.getCaseSaveMode().equals(CaseSaveMode.OWN)) {
-	    st.setAttribute("loadcase", "true");
-	    st.removeAttribute("loadcaseAnonym");
-	} else if (gds.getCaseSaveMode().equals(CaseSaveMode.ANONYM_OWN)
-		|| gds.getCaseSaveMode().equals(CaseSaveMode.ANONYM)) {
-	    st.setAttribute("loadcaseAnonym", "true");
-	    st.removeAttribute("loadcase");
-	}
-
-
-	return eurahsCC;
     }
 }

@@ -39,8 +39,10 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.records.FactRecord;
 import de.d3web.core.records.SessionConversionFactory;
 import de.d3web.core.records.SessionRecord;
+import de.d3web.core.records.io.SessionPersistenceManager;
 import de.d3web.core.session.DefaultSession;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.SessionFactory;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.DefaultFact;
 import de.d3web.core.session.blackboard.Fact;
@@ -49,8 +51,10 @@ import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.file.records.io.SingleXMLSessionRepository;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.settings.UISettings;
+import de.d3web.proket.data.DialogType;
 import de.d3web.proket.utils.GlobalSettings;
-import java.util.Collections;
+import java.util.Date;
 
 public class PersistenceD3webUtils {
 
@@ -111,14 +115,14 @@ public class PersistenceD3webUtils {
 
             session = copyToSession(D3webConnector.getInstance().getKb(),
                     record1);
+	    
         } catch (IOException e) {
             Logger.getLogger(PersistenceD3webUtils.class.getSimpleName()).warning(
                     "'" + fileToLoad.getName() + "' for user '" + user + "' could not be loaded.");
             // e.printStackTrace();
         }
         
-
-        return session;
+	return session;
     }
 
     public static void deleteUserCase(String user, String filename) {
@@ -147,15 +151,14 @@ public class PersistenceD3webUtils {
     
     
 
-    public static void saveCase(String user,
-            String filename, Session d3webSession) {
+    public static void saveCase(String user, String filename, Session d3webSession) {
         File file = getFile(user, filename);
         if (filename.equals("autosave")) {
             new SaveThread(file, d3webSession).start();
         } else {
+	    file.setLastModified(System.currentTimeMillis());
             saveCase(file, d3webSession);
-            //file.setLastModified(saveCreateDate);
-            file.setLastModified(System.currentTimeMillis());
+            
         }
     }
 
@@ -177,32 +180,38 @@ public class PersistenceD3webUtils {
         
         anonFilename =
                 Encryptor.getAnonymizedFilename(fnToAnonComplete);
-        //System.out.println("SaveCaseAnonymized: " + anonFilename);
-       
+        
         // get the corresponding file for the current user if exists
         File file = getFile(user, anonFilename);
 
         if (filename.equals("autosave")) {
             new SaveThread(file, d3webSession).start();
         } else {
-            new SaveThread(file, d3webSession).start();
- //           saveCase(file, d3webSession);
- //           file.setLastModified(System.currentTimeMillis());
+            file.setLastModified(System.currentTimeMillis());
+	    saveCase(file, d3webSession);
         }
+	
+    }
+    
+    private static void printSessionInfo(Session d3webSession){
+	System.out.println("SAVE Session ID:\t" + d3webSession.getId());
+	System.out.println("Creation Date:\t " + d3webSession.getCreationDate());
+	System.out.println("Change Date:\t" + d3webSession.getLastChangeDate());
     }
 
     private static void saveCase(File file, Session session) {
         /*
          * d3web related persistence setup
          */
-        SessionRecord sessionRecord = SessionConversionFactory.copyToSessionRecord(
-                session);
+	session.touch(new Date(System.currentTimeMillis()));
+	SessionRecord sessionRecord = 
+		SessionConversionFactory.copyToSessionRecord(session);
         SingleXMLSessionRepository sessionRepository = new SingleXMLSessionRepository();
         sessionRepository.add(sessionRecord);
 
         try {
             sessionRepository.save(file);
-            //System.out.println("SAVED CASE to file: " + file.getCanonicalPath());
+           
         } catch (IOException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -243,13 +252,24 @@ public class PersistenceD3webUtils {
      * @throws IOException
      */
     public static Session copyToSession(KnowledgeBase knowledgeBase, SessionRecord source) throws IOException {
-        //DefaultSession target = SessionFactory.createSession(source.getId(),
-        //		knowledgeBase, source.getCreationDate());
+        
+	
+        DefaultSession target;
 
-        // in case of iTree(legal) dialogs, we need to create Sessions otherwise
-        DefaultSession target =
+	//TODO: WHY THIS? CHECK THIS IN ITREE CASE!!!
+	DialogType type = UISettings.getInstance().getDialogType();
+	if(type.equals(DialogType.ITREE)){
+	    // in case of iTree(legal) dialogs, we need to create Sessions otherwise
+	    target =
                 D3webUtils.createSession(knowledgeBase, D3webConnector.getInstance().getDialogStrat());
-
+	} else {
+	    
+	    // DEFAULT VERSION OF LOADING SESSIONS when no dialog type is needed
+	    // e.g., EuraHS
+	    target = 
+		    SessionFactory.createSession(source.getId(), knowledgeBase, source.getCreationDate());
+	}
+	
         target.setName(source.getName());
         InfoStoreUtil.copyEntries(source.getInfoStore(), target.getInfoStore());
 
@@ -284,6 +304,11 @@ public class PersistenceD3webUtils {
         //System.out.println(target.getBlackboard().getValuedQuestions());
         // this must be the last operation to overwrite all touches within
         // propagation
+	Date editDate = new Date(System.currentTimeMillis());
+	
+	//target.touch(editDate);
+	//System.out.println(target.getCreationDate());
+	//System.out.println(target.getLastChangeDate());
         target.touch(source.getLastChangeDate());
         return target;
     }

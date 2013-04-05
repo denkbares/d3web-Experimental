@@ -157,3 +157,5 @@ li.noListMarker {list-style-type: none;}
 .fileClearnameLabel{float: left; margin-top: 15px;}
 
 td > img{cursor:pointer;}
+
+#caseSelect{width: 500px;}

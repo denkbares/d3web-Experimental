@@ -40,6 +40,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import de.d3web.proket.d3web.settings.GeneralDialogSettings;
 
+
+// TODO Property for follow up dialogs
+
+
+
 /**
  * Parser for retrieving the contents of the specification XML for d3web ProKEt
  * artifacts Uses new specification structure.

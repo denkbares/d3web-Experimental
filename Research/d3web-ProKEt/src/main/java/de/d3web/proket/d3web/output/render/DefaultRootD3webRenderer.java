@@ -125,7 +125,15 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
         }
 
         // add some buttons for basic functionality
-        st.setAttribute("loadcase", "true");
+	if (gds.getCaseSaveMode().equals(GeneralDialogSettings.CaseSaveMode.OWN)) {
+	    st.setAttribute("loadcase", "true");
+	    st.removeAttribute("loadcaseAnonym");
+	} else if (gds.getCaseSaveMode().equals(GeneralDialogSettings.CaseSaveMode.ANONYM_OWN)
+		|| gds.getCaseSaveMode().equals(GeneralDialogSettings.CaseSaveMode.ANONYM)) {
+	    st.removeAttribute("loadcase");
+	    st.setAttribute("loadcaseAnonym", "true");
+	}
+        //st.setAttribute("loadcase", "true");
         st.setAttribute("savecase", "true");
         st.setAttribute("reset", "true");
 

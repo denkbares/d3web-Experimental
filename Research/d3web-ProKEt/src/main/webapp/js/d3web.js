@@ -127,7 +127,7 @@ $(function() {
 
 	var opts = {
 	    autoOpen: false,
-	    minWidth: 320,
+	    minWidth: 510,
 	    position: [ 0, getHeaderHeight()],
 	    modal: false,
 	    buttons: [{
