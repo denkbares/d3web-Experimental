@@ -39,8 +39,7 @@ public class SolutionExplanationTextualD3webRenderer {
 
     public String renderExplanationForSolution(Solution solution, Session d3webSession) {
 
-	System.out.println(solution);
-        List<? extends PSMethod> psms = d3webSession.getPSMethods();
+	List<? extends PSMethod> psms = d3webSession.getPSMethods();
         for (PSMethod psm : psms) {
             if (psm instanceof PSMethodRulebased) {
                 // we have rule based knowledge, so call rule-based expl. renderer
@@ -53,8 +52,7 @@ public class SolutionExplanationTextualD3webRenderer {
 
     private String renderExplanationRuleBased(Solution sol, Session d3webSession) {
 
-	System.out.println(sol);
-        String explanationDefault = "textual rule based explanation n/a II";
+	String explanationDefault = "textual rule based explanation n/a II";
         String explanation = "";
         
         List<TerminologyObject> deriObjects = 

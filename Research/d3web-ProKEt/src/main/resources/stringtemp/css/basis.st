@@ -176,3 +176,5 @@ body,table,div {
 .row{display: table-row;}
 
 .cell{display: table-cell; }
+
+.table{display: table;}

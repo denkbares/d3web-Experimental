@@ -303,13 +303,10 @@ public class SolutionPanelListingD3webRenderer extends SolutionPanelBasicD3webRe
         //set content string with the necesary HTML tags
         stExp.setAttribute("elementID", AbstractD3webRenderer.getID(solution));
 
-
-
-
         // retrieve template for the solution panel per se, first
         StringTemplate st = StringTemplateUtils.getTemplate("solutionPanel/SolutionDynLink");
         st.setAttribute("explanationpopup", stExp.toString());
-        st.setAttribute("solid", solution.getName());
+        st.setAttribute("solid", AbstractD3webRenderer.getID(solution));
 
         /*
          * get scoring, dependent on applied problem solving method

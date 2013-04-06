@@ -43,6 +43,7 @@ public class CaseCreationComparator implements Comparator<File> {
         Session session = null;
         session = PersistenceD3webUtils.loadCase(casefile.getName());
         
-        return session.getLastChangeDate();
+	return session.getCreationDate();
+        //return session.getLastChangeDate();
     }
 }

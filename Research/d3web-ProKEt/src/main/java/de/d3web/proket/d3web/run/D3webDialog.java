@@ -607,6 +607,8 @@ public class D3webDialog extends HttpServlet {
 	// get all questions and answers lately answered as lists
 	getParameterPairs(request, "question", "value", questions, values);
 
+	System.out.println("D3webDialog: " + questions.toString());
+	System.out.println("D3webDualog: " + values.toString());
 
 	// check if all required values are set correctly, if not, do not go on!
 	if (!handleRequiredValueCheck(writer, d3webSession, questions, values)) {

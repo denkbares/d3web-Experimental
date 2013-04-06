@@ -1681,13 +1681,14 @@ public class D3webUtils {
 	    }
 	}
 
-	/*System.out.println("BLACKBOARD: ");
-	for (Question q : blackboard.getValuedQuestions()) {
-
-	    System.out.println(q.getName() + " -> " + blackboard.getValue(q));
-	}
-	System.out.println("BLACKBOARD ENDE");
-	System.out.println(blackboard.getValuedSolutions());*/
+	/*
+	 * System.out.println("BLACKBOARD: "); for (Question q :
+	 * blackboard.getValuedQuestions()) {
+	 *
+	 * System.out.println(q.getName() + " -> " + blackboard.getValue(q)); }
+	 * System.out.println("BLACKBOARD ENDE");
+	System.out.println(blackboard.getValuedSolutions());
+	 */
     }
 
     /**
@@ -1968,6 +1969,7 @@ public class D3webUtils {
 		    Fact lastFact = bb.getValueFact(question);
 		    if (lastFact != null
 			    && lastFact.getPSMethod() == PSMethodUserSelected.getInstance()) {
+			//System.out.println("Reset: " + lastFact.toString());
 			bb.removeValueFact(lastFact);
 			resetQuestions.add(question);
 		    }
@@ -2014,13 +2016,16 @@ public class D3webUtils {
 		break;
 	    }
 	}
-	return indicatedParent || isIndicated(qaset, bb, initQuestions);
+	
+	boolean state = indicatedParent || isIndicated(qaset, bb, initQuestions); 
+	return state;
     }
 
     private static boolean isIndicated(QASet qaset, Blackboard bb, Set<QASet> initQuestions) {
-	return initQuestions.contains(qaset)
+	boolean state = initQuestions.contains(qaset)
 		|| bb.getIndication(qaset).getState() == de.d3web.core.knowledge.Indication.State.INDICATED
-		|| bb.getIndication(qaset).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED;
+		|| bb.getIndication(qaset).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED; 
+	return state;
     }
 
     /**

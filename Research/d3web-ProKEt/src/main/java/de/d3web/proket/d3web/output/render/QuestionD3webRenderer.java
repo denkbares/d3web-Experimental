@@ -196,12 +196,27 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 	 */
 
 
+	if(to.getName().equals("Intraoperative wound contamination")){
+	    System.out.println(D3webUtils.isIndicatedByInitQuestionnaire(to, parent, bb));
+	    System.out.println(!D3webUtils.isContraIndicated(to, bb));
+	    System.out.println(D3webUtils.isIndicatedPlain(to, bb));
+	    System.out.println(D3webUtils.isIndicatedByChild(parent, bb));
+	    System.out.println(D3webUtils.isIndicatedPlain(parent, bb));
+	    System.out.println(D3webUtils.isFollowUpToQCon(to, parent));
+	    
+	   System.out.println(((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb)) || !D3webUtils.isFollowUpToQCon(to, parent)));
+	}
 
-	if (D3webUtils.isIndicatedByInitQuestionnaire(to, parent, bb)
+	if ( (D3webUtils.isIndicatedByInitQuestionnaire(to, parent, bb)
+		&& !D3webUtils.isContraIndicated(to, bb)
+	    )
 		|| D3webUtils.isIndicatedPlain(to, bb)
-		|| (D3webUtils.isIndicatedByChild(parent, bb) && D3webUtils.isDirectQContainerChild(to))
-		|| (D3webUtils.isIndicatedPlain(parent, bb) && D3webUtils.isDirectQContainerChild(to))
-		|| ((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb)) || !D3webUtils.isFollowUpToQCon(to, parent))) {
+		|| (D3webUtils.isIndicatedByChild(parent, bb) && D3webUtils.isDirectQContainerChild(to) && !D3webUtils.isContraIndicated(to, bb))
+		|| (D3webUtils.isIndicatedPlain(parent, bb) && D3webUtils.isDirectQContainerChild(to) && !D3webUtils.isContraIndicated(to, bb))
+		//|| ((D3webUtils.isFollowUpToQCon(to, parent) && 
+		 //   D3webUtils.isIndicatedPlain(to, bb)) || 
+		  //  !D3webUtils.isFollowUpToQCon(to, parent))
+		) {
 
 	    st.removeAttribute("inactiveQuestion");
 	    st.removeAttribute("qstate");

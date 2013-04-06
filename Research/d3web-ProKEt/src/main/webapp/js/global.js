@@ -8,49 +8,49 @@ $(function(){
         
     if(standarddialog){    
         
-        $('a').click(function(event) {
-            event.preventDefault();
-            var qsClicked = $(this);
-            qsNavi_reload(qsClicked);
-        });   
+	$('a').click(function(event) {
+	    event.preventDefault();
+	    var qsClicked = $(this);
+	    qsNavi_reload(qsClicked);
+	});   
     
-        $.jstree._themes = "libsExternal/jsTree/themes/";
+	$.jstree._themes = "libsExternal/jsTree/themes/";
     
-        if(solutionSideNavi){
-            $("#treeNaviSolutions") 
-            .jstree({
+	if(solutionSideNavi){
+	    $("#treeNaviSolutions") 
+	    .jstree({
         
-                "themes" : {
-                    "theme":"apple", 
-                    "dots":false, 
-                    "icons":false
-                },
-                "plugins" : ["themes","html_data"]
-            })
+		"themes" : {
+		    "theme":"apple", 
+		    "dots":false, 
+		    "icons":false
+		},
+		"plugins" : ["themes","html_data"]
+	    })
     
-            .bind("loaded.jstree", function(event, data){
-                //alert("jstree is loaded");
-                });
-        }
+	    .bind("loaded.jstree", function(event, data){
+		//alert("jstree is loaded");
+		});
+	}
         
         
-        if(questionnaireSideNavi){    
-            $("#treeNaviQuestionnaires") 
-            .jstree({
+	if(questionnaireSideNavi){    
+	    $("#treeNaviQuestionnaires") 
+	    .jstree({
         
-                "themes" : {
-                    "theme":"apple", 
-                    "dots":false, 
-                    "icons":false
-                },
-                "plugins" : ["themes","html_data"]
-            })
+		"themes" : {
+		    "theme":"apple", 
+		    "dots":false, 
+		    "icons":false
+		},
+		"plugins" : ["themes","html_data"]
+	    })
     
-            .bind("loaded.jstree", function(event, data){
-                //alert("jstree is loaded");
-                });    
+	    .bind("loaded.jstree", function(event, data){
+		//alert("jstree is loaded");
+		});    
         
-        }
+	}
     }
 
     
@@ -67,17 +67,17 @@ function qsNavi_reload(element){
     link = window.location.href.replace(window.location.search, "") + link;
      
     $.ajax({
-        type : "GET",
-        url : link,
-        cache : false, // needed for IE, call is not made otherwise
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        success : function(html) {
-            alert(html);
-            updateDialog(html);
-        },
-        error : function(html) {
-            alert("ajax error reload selected questionnaire");
-        }
+	type : "GET",
+	url : link,
+	cache : false, // needed for IE, call is not made otherwise
+	contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	success : function(html) {
+	    alert(html);
+	    updateDialog(html);
+	},
+	error : function(html) {
+	    alert("ajax error reload selected questionnaire");
+	}
     });
 }
 
@@ -91,62 +91,62 @@ function generate_tooltip_functions_ynbuttons(){
 	
     // if mouse is moved over an element define potential tooltips position
     $(document).mousemove(function(e) {
-        tooltip_move(e); // in code.js
+	tooltip_move(e); // in code.js
     });
 	
     // go through all existing tooltip triggers
     triggers.each(function() {
 		
-        var ttstart, ttend;
-        var now;
+	var ttstart, ttend;
+	var now;
                 
-        $(this).unbind('mouseover').mouseover(function() {
-            //if logging is activated get the time tooltip is triggered
-            if(logging){
-                now = new Date();
-                ttstart = now.getTime();
-            }
+	$(this).unbind('mouseover').mouseover(function() {
+	    //if logging is activated get the time tooltip is triggered
+	    if(logging){
+		now = new Date();
+		ttstart = now.getTime();
+	    }
             
-            var fullId = $(this).attr("id");
+	    var fullId = $(this).attr("id");
            
-            if(fullId.indexOf("ynYes")!=-1){
-                id = $(this).attr("id").replace("ynYes-", "");
-                tooltip_over_hierarchy_buttons(id, "1");
-            } else if(fullId.indexOf("ynNo")!=-1){
-                id = $(this).attr("id").replace("ynNo-", "");
-                tooltip_over_hierarchy_buttons(id, "3");
-            } else if(fullId.indexOf("ynUn")!=-1){
-                id = $(this).attr("id").replace("ynUn-", "");
-                tooltip_over_hierarchy_buttons(id, "2");
-            } else if(fullId.indexOf("ynNan")!=-1){
-                id = $(this).attr("id").replace("ynNan-", "");
-                tooltip_over_hierarchy_buttons(id, "0");
-            }
-        });
+	    if(fullId.indexOf("ynYes")!=-1){
+		id = $(this).attr("id").replace("ynYes-", "");
+		tooltip_over_hierarchy_buttons(id, "1");
+	    } else if(fullId.indexOf("ynNo")!=-1){
+		id = $(this).attr("id").replace("ynNo-", "");
+		tooltip_over_hierarchy_buttons(id, "3");
+	    } else if(fullId.indexOf("ynUn")!=-1){
+		id = $(this).attr("id").replace("ynUn-", "");
+		tooltip_over_hierarchy_buttons(id, "2");
+	    } else if(fullId.indexOf("ynNan")!=-1){
+		id = $(this).attr("id").replace("ynNan-", "");
+		tooltip_over_hierarchy_buttons(id, "0");
+	    }
+	});
 
-        $(this).unbind('mouseout').mouseout(function() {
-            //if logging is activated get the time tooltip is deactivated again
-            if(logging){
-                now = new Date();
-                ttend = now.getTime();
-                ue_logInfoPopup(ttstart, ttend, $(this));
-            }
+	$(this).unbind('mouseout').mouseout(function() {
+	    //if logging is activated get the time tooltip is deactivated again
+	    if(logging){
+		now = new Date();
+		ttend = now.getTime();
+		ue_logInfoPopup(ttstart, ttend, $(this));
+	    }
             
-            var fullId = $(this).attr("id");
-            if(fullId.indexOf("ynYes")!=-1){
-                id = $(this).attr("id").replace("ynYes-", "");
-                tooltip_out_hierarchy_buttons(id, "1");
-            } else if(fullId.indexOf("ynNo")!=-1){
-                id = $(this).attr("id").replace("ynNo-", "");
-                tooltip_out_hierarchy_buttons(id, "3");
-            } else if(fullId.indexOf("ynUn")!=-1){
-                id = $(this).attr("id").replace("ynUn-", "");
-                tooltip_out_hierarchy_buttons(id, "2");
-            } else if(fullId.indexOf("ynNan")!=-1){
-                id = $(this).attr("id").replace("ynNan-", "");
-                tooltip_out_hierarchy_buttons(id, "0");
-            }
-        });
+	    var fullId = $(this).attr("id");
+	    if(fullId.indexOf("ynYes")!=-1){
+		id = $(this).attr("id").replace("ynYes-", "");
+		tooltip_out_hierarchy_buttons(id, "1");
+	    } else if(fullId.indexOf("ynNo")!=-1){
+		id = $(this).attr("id").replace("ynNo-", "");
+		tooltip_out_hierarchy_buttons(id, "3");
+	    } else if(fullId.indexOf("ynUn")!=-1){
+		id = $(this).attr("id").replace("ynUn-", "");
+		tooltip_out_hierarchy_buttons(id, "2");
+	    } else if(fullId.indexOf("ynNan")!=-1){
+		id = $(this).attr("id").replace("ynNan-", "");
+		tooltip_out_hierarchy_buttons(id, "0");
+	    }
+	});
     });
 }
 
@@ -157,27 +157,27 @@ function generate_tooltip_functions_ynbuttons(){
 function tooltip_out_hierarchy_buttons(object, button) {
 	
     switch(button){
-        case "1":
-            targetid = "tt-" + object + "-Y";
-            break;
-        case "2":
-            targetid = "tt-" + object + "-U";
-            break;
-        case "3":
-            targetid = "tt-" + object + "-NO";
-            break;
-        case "0":
-            targetid = "tt-" + object + "-NAN";
-            break;
+	case "1":
+	    targetid = "tt-" + object + "-Y";
+	    break;
+	case "2":
+	    targetid = "tt-" + object + "-U";
+	    break;
+	case "3":
+	    targetid = "tt-" + object + "-NO";
+	    break;
+	case "0":
+	    targetid = "tt-" + object + "-NAN";
+	    break;
     }
 
     // if a jquery tooltip or
     if (object instanceof jQuery) {
-        target = object;
+	target = object;
     } else {
 		
-        // a specifically marked element
-        target = $("#" + targetid);
+	// a specifically marked element
+	target = $("#" + targetid);
     }
 
     target.hide(500);
@@ -188,18 +188,18 @@ function tooltip_out_hierarchy_buttons(object, button) {
 function tooltip_over_hierarchy_buttons(id, button) {
    
     switch(button){
-        case "1":
-            targetid = "tt-" + id + "-Y";
-            break;
-        case "2":
-            targetid = "tt-" + id + "-U";
-            break;
-        case "3":
-            targetid = "tt-" + id + "-NO";
-            break;
-        case "0":
-            targetid = "tt-" + id + "-NAN";
-            break;
+	case "1":
+	    targetid = "tt-" + id + "-Y";
+	    break;
+	case "2":
+	    targetid = "tt-" + id + "-U";
+	    break;
+	case "3":
+	    targetid = "tt-" + id + "-NO";
+	    break;
+	case "0":
+	    targetid = "tt-" + id + "-NAN";
+	    break;
     }
     
    	
@@ -209,32 +209,32 @@ function tooltip_over_hierarchy_buttons(id, button) {
         
         
     if (target.size() == 0) {
-        return;
+	return;
     }
 	
     // if target element is not currently shown
     if (target !== tooltipShown) {
 		
-        // hide old tooltip if existing
-        if (tooltipShown !== undefined) {
-            tooltip_out(tooltipShown);
-        }
+	// hide old tooltip if existing
+	if (tooltipShown !== undefined) {
+	    tooltip_out(tooltipShown);
+	}
 		
-        // store currently shown tooltip and tooltipShownTrigger
-        tooltipShown = target;
+	// store currently shown tooltip and tooltipShownTrigger
+	tooltipShown = target;
 		
-        target.css("position", "absolute");
-        var height = target.height();
-        var width = target.width();
+	target.css("position", "absolute");
+	var height = target.height();
+	var width = target.width();
         
-        if (height > 0 && width > 0 && height > width) {
-            target.css("width", height);
-            target.css("height", width);
-        }
-        //tooltip_move(element);
+	if (height > 0 && width > 0 && height > width) {
+	    target.css("width", height);
+	    target.css("height", width);
+	}
+	//tooltip_move(element);
 
-        target.fadeIn(300);
-        setLeftOffset(target);
+	target.fadeIn(300);
+	setLeftOffset(target);
     }
 }
 
@@ -247,14 +247,14 @@ function tooltip_over_hierarchy_buttons(id, button) {
  */
 function tooltip_move(e) {
     if (tooltipShown != undefined) {
-        tooltipShown.position({
-            "my" : "left top",
-            "at" : "right bottom",
-            "of" : e,
-            "offset" : "15 15",
-            "collision" : "fit flip",
-            "bgiframe" : false
-        });
+	tooltipShown.position({
+	    "my" : "left top",
+	    "at" : "right bottom",
+	    "of" : e,
+	    "offset" : "15 15",
+	    "collision" : "fit flip",
+	    "bgiframe" : false
+	});
     }
 }
 
@@ -285,28 +285,28 @@ function setLeftOffset(target) {
     var overlap = pOffset.left + width - widthW;
     var leftOffset = pOffset.left
     if (overlap > 0){
-        leftOffset = pOffset.left - overlap;
-        if (leftOffset < 0) {
-            leftOffset = 0;
-        }
+	leftOffset = pOffset.left - overlap;
+	if (leftOffset < 0) {
+	    leftOffset = 0;
+	}
     }
    
     /* display all popups that are too far down in the dialog relatively above
      * the parent element */
     var sizeToEnd = heightW - pOffset.top;
     if(sizeToEnd < 400){
-        target.offset({
-            top: pOffset.top - height - 20, 
-            left: leftOffset
-        });
+	target.offset({
+	    top: pOffset.top - height - 20, 
+	    left: leftOffset
+	});
     } 
     
     /* display popups normally underneath the parent element */
     else {
-        target.offset({
-            top: pOffset.top + target.parent().height() + 15, 
-            left: leftOffset
-        });
+	target.offset({
+	    top: pOffset.top + target.parent().height() + 15, 
+	    left: leftOffset
+	});
     }
     target.width(width);
 }
@@ -335,61 +335,61 @@ function handleLogging(){
     link = window.location.href.replace(window.location.search, "") + link;
 	
     $.ajax({
-        type: "GET",
-        async: false,
-        cache : false, // needed for IE, call is not made otherwise
-        url: link,
-        success : function(html) {
-            if (html == "firsttime") {
-                var browser = retrieveBrowserVal();    
-                var user = retrieveUserVal();
-                ue_logBrowserAndUser(browser, user);
-            } 
-        // otherwise, no reload because this would cause endless loop
-        }
+	type: "GET",
+	async: false,
+	cache : false, // needed for IE, call is not made otherwise
+	url: link,
+	success : function(html) {
+	    if (html == "firsttime") {
+		var browser = retrieveBrowserVal();    
+		var user = retrieveUserVal();
+		ue_logBrowserAndUser(browser, user);
+	    } 
+	// otherwise, no reload because this would cause endless loop
+	}
     });
 }
 
 function handleUEQ(){
     $('#UEQButton').unbind('click').click(function(event) {
-        $("#jqUEQDialog").dialog("open");
+	$("#jqUEQDialog").dialog("open");
     });
     
     if($('#EndStudySessionButton')!=undefined){
-        $('#EndStudySessionButton').unbind('click').click(function(event) {
-            $("#jqUEQDialog").dialog("open");
-        });
+	$('#EndStudySessionButton').unbind('click').click(function(event) {
+	    $("#jqUEQDialog").dialog("open");
+	});
     }
 }
 
 function handleFB(){
     $('#FFButton').unbind('click').click(function(event) {
-        $("#fffeedback").val("");
-        $("#jqFFDialog").dialog("open");
+	$("#fffeedback").val("");
+	$("#jqFFDialog").dialog("open");
     });
 }
 
 function initUEQFreeFeedback(){
 
     $('#UE_QFreeFeedback').unbind('focus').focus(function(event) {
-        var text = $("#UE_QFreeFeedback").html();
-        if(text.indexOf("z.B.: was hat mir gut gefallen, was hat mir nicht gefallen, sind Probleme aufgetreten (technische, bez. der Interaktion oder Verständnis)...")
-            !=-1){
-            $('#UE_QFreeFeedback').html("");
-        }
+	var text = $("#UE_QFreeFeedback").html();
+	if(text.indexOf("z.B.: was hat mir gut gefallen, was hat mir nicht gefallen, sind Probleme aufgetreten (technische, bez. der Interaktion oder Verständnis)...")
+	    !=-1){
+	    $('#UE_QFreeFeedback').html("");
+	}
     
-        $('#UE_QFreeFeedback').addClass("longTextareaInputColor");
+	$('#UE_QFreeFeedback').addClass("longTextareaInputColor");
     });
     
     $('#UE_QUIRating').unbind('focus').focus(function(event) {
-        var text = $("#UE_QUIRating").val();
+	var text = $("#UE_QUIRating").val();
         
-        if(text.indexOf("Dialog 1 ODER Dialog 2 ODER Beide gleich")
-            !=-1){
-            $('#UE_QUIRating').val("");
-        }
+	if(text.indexOf("Dialog 1 ODER Dialog 2 ODER Beide gleich")
+	    !=-1){
+	    $('#UE_QUIRating').val("");
+	}
     
-        $('#UE_QUIRating').addClass("longTextfieldInputColor");
+	$('#UE_QUIRating').addClass("longTextfieldInputColor");
     });
 }
 
@@ -411,23 +411,23 @@ function stepIntoDetail(questionId){
     
     if(sub != undefined && sub.attr("id")!= undefined){
    
-        var firstChild = sub.children().first();
+	var firstChild = sub.children().first();
     
-        firstChild.addClass("show");
-        firstChild.removeClass("hide");
-        sub.addClass("show");
-        sub.removeClass("hide");
+	firstChild.addClass("show");
+	firstChild.removeClass("hide");
+	sub.addClass("show");
+	sub.removeClass("hide");
     
-        //make siblings of original question invisible
-        makeInvisibleSiblings(question);
+	//make siblings of original question invisible
+	makeInvisibleSiblings(question);
     
-        // toggle auxinfo and styling for current element
-        question.children().first().children().closest('[id^=auxpanel]').addClass("hide");
-        question.children().first().children().closest('[id^=detail]').addClass("hide");
-        question.children().first().children().closest('[id^=auxpanel]').removeClass("show");
-        question.children().first().children().closest('[id^=detail]').removeClass("show");
+	// toggle auxinfo and styling for current element
+	question.children().first().children().closest('[id^=auxpanel]').addClass("hide");
+	question.children().first().children().closest('[id^=detail]').addClass("hide");
+	question.children().first().children().closest('[id^=auxpanel]').removeClass("show");
+	question.children().first().children().closest('[id^=detail]').removeClass("show");
         
-        hide_all_tooltips();
+	hide_all_tooltips();
     }
 }
 
@@ -435,28 +435,28 @@ function stepIntoDetail(questionId){
 function makeInvisibleSiblings(original){
     
     if(original.next() != undefined && original.next().attr("id") != undefined){
-        original.next().addClass("hide");
-        original.next().removeClass("show");
-        makeInvisibleSiblings(original.next());
+	original.next().addClass("hide");
+	original.next().removeClass("show");
+	makeInvisibleSiblings(original.next());
     }
 }
 
 // needed by iTree and OQD
 function prepareQuestionLogging(question, value){
     if(question.indexOf("ynNo-" != -1)){
-        question = question.replace("ynNo-", "");
+	question = question.replace("ynNo-", "");
     } 
     if(question.indexOf("ynYes-" != -1)){
-        question = question.replace("ynYes-", "");
+	question = question.replace("ynYes-", "");
     } 
     if(question.indexOf("ynUn-" != -1)){
-        question = question.replace("ynUn-", "");
+	question = question.replace("ynUn-", "");
     }
     if(question.indexOf("ynNan-" != -1)){
-        question = question.replace("ynNan-", "");
+	question = question.replace("ynNan-", "");
     }
     if(question.indexOf("panel-" != -1)){
-        question = question.replace("panel-", "");
+	question = question.replace("panel-", "");
     }
     
     var qtext = $('#solutiontitle-' + question).html();
@@ -466,18 +466,18 @@ function prepareQuestionLogging(question, value){
     var valueVerbalization = "";
     
     switch(value){
-        case "1":
-            valueVerbalization = "Ja";
-            break;
-        case "2":
-            valueVerbalization = "Unentschieden";
-            break;
-        case "3":
-            valueVerbalization = "Nein";
-            break;
-        case "0":
-            valueVerbalization = "Unbewertet";
-            break;
+	case "1":
+	    valueVerbalization = "Ja";
+	    break;
+	case "2":
+	    valueVerbalization = "Unentschieden";
+	    break;
+	case "3":
+	    valueVerbalization = "Nein";
+	    break;
+	case "0":
+	    valueVerbalization = "Unbewertet";
+	    break;
     }
     
     ue_logQuestionValueClariPrototype(questiontext, valueVerbalization);
@@ -493,26 +493,26 @@ function setColorForQuestion(target, imgTarget, color){
     target.removeClass('rating-low rating-medium rating-high');
     
     switch (color) {
-        case "1": // approve --> green
-            target.addClass("rating-high");
-            //imgTarget.attr('src', "img/panel1.gif");
-            break;
+	case "1": // approve --> green
+	    target.addClass("rating-high");
+	    //imgTarget.attr('src', "img/panel1.gif");
+	    break;
             
-        // in case the user retracts the answer (gray) check, if 
-        // there is a calculated rating. If not, set gray
-        case "0": // undecided --> transparent
+	// in case the user retracts the answer (gray) check, if 
+	// there is a calculated rating. If not, set gray
+	case "0": // undecided --> transparent
             
-            var checkCol = calculateRatingForQuestion(target);
-            setColorForQuestionHelper(target, imgTarget, checkCol);
-            break;
-        case "2": // suggested  --> yellow
-            target.addClass("rating-medium");
-            //imgTarget.attr('src', "img/panel2.gif");
-            break;
-        case "3": // rejected -_> red
-            target.addClass("rating-low");
-            //imgTarget.attr('src', "img/panel3.gif");
-            break;
+	    var checkCol = calculateRatingForQuestion(target);
+	    setColorForQuestionHelper(target, imgTarget, checkCol);
+	    break;
+	case "2": // suggested  --> yellow
+	    target.addClass("rating-medium");
+	    //imgTarget.attr('src', "img/panel2.gif");
+	    break;
+	case "3": // rejected -_> red
+	    target.addClass("rating-low");
+	    //imgTarget.attr('src', "img/panel3.gif");
+	    break;
     }
 }
 
@@ -523,18 +523,18 @@ function setColorForQuestionHelper(target, imgTarget, color){
     target.removeClass('rating-low rating-medium rating-high');
     
     switch (color) {
-        case "1": // approve --> green
-            target.addClass("rating-high");
-            //imgTarget.attr('src', "img/panel1.gif");
-            break;
-        case "2": // suggested  --> yellow
-            target.addClass("rating-medium");
-            //imgTarget.attr('src', "img/panel2.gif");
-            break;
-        case "3": // rejected -_> red
-            target.addClass("rating-low");
-            //imgTarget.attr('src', "img/panel3.gif");
-            break;
+	case "1": // approve --> green
+	    target.addClass("rating-high");
+	    //imgTarget.attr('src', "img/panel1.gif");
+	    break;
+	case "2": // suggested  --> yellow
+	    target.addClass("rating-medium");
+	    //imgTarget.attr('src', "img/panel2.gif");
+	    break;
+	case "3": // rejected -_> red
+	    target.addClass("rating-low");
+	    //imgTarget.attr('src', "img/panel3.gif");
+	    break;
     }
 }
 
@@ -547,36 +547,36 @@ function setPropagationColor(question, userval){
     
     if(propColor != 0 && propColor != userval){
         
-        // visually present the "error" to the user
-        if((propColor=="1" && userval=="3") || (propColor=="3" && userval=="1")){
-            prop.addClass("prop1and3");
-            prop.removeClass("prop1and2");
-            prop.removeClass("prop2and3");
-        } 
-        else if((propColor=="1" && userval=="2") || (propColor=="2" && userval=="1")){
-            prop.addClass("prop1and2");
-            prop.removeClass("prop1and3");
-            prop.removeClass("prop2and3");
-        } 
-        else if((propColor=="2" && userval=="3") || (propColor=="3" && userval=="2")){
-            prop.addClass("prop2and3");
-            prop.removeClass("prop1and2");
-            prop.removeClass("prop1and3");
-        } 
+	// visually present the "error" to the user
+	if((propColor=="1" && userval=="3") || (propColor=="3" && userval=="1")){
+	    prop.addClass("prop1and3");
+	    prop.removeClass("prop1and2");
+	    prop.removeClass("prop2and3");
+	} 
+	else if((propColor=="1" && userval=="2") || (propColor=="2" && userval=="1")){
+	    prop.addClass("prop1and2");
+	    prop.removeClass("prop1and3");
+	    prop.removeClass("prop2and3");
+	} 
+	else if((propColor=="2" && userval=="3") || (propColor=="3" && userval=="2")){
+	    prop.addClass("prop2and3");
+	    prop.removeClass("prop1and2");
+	    prop.removeClass("prop1and3");
+	} 
        
-        // set the calculated value of the inner questions as question main rating
-        // for further calculation
-        setColorForQuestion($("#" + question.attr("id")), question, propColor);
+	// set the calculated value of the inner questions as question main rating
+	// for further calculation
+	setColorForQuestion($("#" + question.attr("id")), question, propColor);
     }
     if(userval != propColor && propColor != 0 && userval != undefined && userval != 0){
-        prop.removeClass("hide");
-        prop.addClass("show");
-        // needed to keep the propagation tooltip hidden!
-        prop.children().first().addClass("hide");
+	prop.removeClass("hide");
+	prop.addClass("show");
+	// needed to keep the propagation tooltip hidden!
+	prop.children().first().addClass("hide");
         
     } else {
-        prop.removeClass("show");
-        prop.addClass("hide");
+	prop.removeClass("show");
+	prop.addClass("hide");
     }
 //removePropagationInfoInQuestionForFirst();
   
@@ -586,23 +586,23 @@ function setPropColor(target, color){
     // remove existing rating=coloring classes
     target.removeClass('rating-low rating-medium rating-high');
     switch (color) {
-        case "1": // approve --> green
-            target.addClass("rating-high");
-            //imgTarget.attr('src', "img/panel1.gif");
-            break;
+	case "1": // approve --> green
+	    target.addClass("rating-high");
+	    //imgTarget.attr('src', "img/panel1.gif");
+	    break;
             
-        // in case the user retracts the answer (gray) check, if 
-        // there is a calculated rating. If not, set gray
-        case "0": // undecided --> transparent
-            break;
-        case "2": // suggested  --> yellow
-            target.addClass("rating-medium");
-            //imgTarget.attr('src', "img/panel2.gif");
-            break;
-        case "3": // rejected -_> red
-            target.addClass("rating-low");
-            //imgTarget.attr('src', "img/panel3.gif");
-            break;
+	// in case the user retracts the answer (gray) check, if 
+	// there is a calculated rating. If not, set gray
+	case "0": // undecided --> transparent
+	    break;
+	case "2": // suggested  --> yellow
+	    target.addClass("rating-medium");
+	    //imgTarget.attr('src', "img/panel2.gif");
+	    break;
+	case "3": // rejected -_> red
+	    target.addClass("rating-low");
+	    //imgTarget.attr('src', "img/panel3.gif");
+	    break;
     }
 }
 
@@ -621,63 +621,63 @@ function calculateRatingForQuestion(question){
     var ratings = "";
         
     $("#sub-" + question.attr('id')).children("div[id^='q_']").each(
-        function() {
-            var high = $(this).hasClass("rating-high");
-            var med = $(this).hasClass("rating-medium");    
-            var low = $(this).hasClass("rating-low");
+	function() {
+	    var high = $(this).hasClass("rating-high");
+	    var med = $(this).hasClass("rating-medium");    
+	    var low = $(this).hasClass("rating-low");
                 
-            if(high){
-                ratings += "1 ";
-            } else if (med){
-                ratings += "2 ";
-            } else if (low){
-                ratings += "3 ";
-            } else {
-                ratings += "0 ";
-            }
-        });
+	    if(high){
+		ratings += "1 ";
+	    } else if (med){
+		ratings += "2 ";
+	    } else if (low){
+		ratings += "3 ";
+	    } else {
+		ratings += "0 ";
+	    }
+	});
           
     // AND case
     if(ocPar){
        
-        // handle OC questions here, i.e. questions where all children
-        // need to be confirmed to get the parent confirmed
-        if(ratings.indexOf("1") != -1 &&
-            ratings.indexOf("0")==-1 && ratings.indexOf("2")==-1 && ratings.indexOf("3")==-1){
-            color = "1";  // all approved, then parent approve
-        } else if (ratings.indexOf("2") != -1 && 
-            ratings.indexOf("0")==-1 && ratings.indexOf("3")==-1){
-            color = "2";  // all known and at least one suggested, suggest parent
-        } else if(ratings.indexOf("2") != -1 && ratings.indexOf("0") != -1 
-            && ratings.indexOf("3")==-1 ){
-            color = "2"; // TODO: check if works
-        } else if (ratings.indexOf("3") != -1 ){
-            color = "3";    // one rejected, reject parent
-        } else {
-            color = "0";
-        }
+	// handle OC questions here, i.e. questions where all children
+	// need to be confirmed to get the parent confirmed
+	if(ratings.indexOf("1") != -1 &&
+	    ratings.indexOf("0")==-1 && ratings.indexOf("2")==-1 && ratings.indexOf("3")==-1){
+	    color = "1";  // all approved, then parent approve
+	} else if (ratings.indexOf("2") != -1 && 
+	    ratings.indexOf("0")==-1 && ratings.indexOf("3")==-1){
+	    color = "2";  // all known and at least one suggested, suggest parent
+	} else if(ratings.indexOf("2") != -1 && ratings.indexOf("0") != -1 
+	    && ratings.indexOf("3")==-1 ){
+	    color = "2"; // TODO: check if works
+	} else if (ratings.indexOf("3") != -1 ){
+	    color = "3";    // one rejected, reject parent
+	} else {
+	    color = "0";
+	}
            
     } 
     // OR case: here, one single confirmed (1) child is enough to get the
     // parent confirmed
     else if (mcPar){
         
-        if(ratings.indexOf("1") != -1){ 
-            color = "1";    // one confirmed, confirm par
-        }
-        else if (ratings.indexOf("2") != -1 && ratings.indexOf("3") != -1 
-            && ratings.indexOf("1") == -1 && ratings.indexOf("0") == -1){
-            color = "2";    // some undecided and some rejected, undecide parent
-        } else if(ratings.indexOf("2") != -1 && ratings.indexOf("1") == -1
-            && ratings.indexOf("0") == -1 && ratings.indexOf("3") == -1){
-            color = "2";
-        }        
-        else if (ratings.indexOf("3") != -1 && ratings.indexOf("2") == -1
-            && ratings.indexOf("1") == -1 && ratings.indexOf("0") == -1){
-            color = "3";    // all rejected, reject parent
-        } else {
-            color = "0";
-        }
+	if(ratings.indexOf("1") != -1){ 
+	    color = "1";    // one confirmed, confirm par
+	}
+	else if (ratings.indexOf("2") != -1 && ratings.indexOf("3") != -1 
+	    && ratings.indexOf("1") == -1 && ratings.indexOf("0") == -1){
+	    color = "2";    // some undecided and some rejected, undecide parent
+	} else if(ratings.indexOf("2") != -1 && ratings.indexOf("1") == -1
+	    && ratings.indexOf("0") == -1 && ratings.indexOf("3") == -1){
+	    color = "2";
+	}        
+	else if (ratings.indexOf("3") != -1 && ratings.indexOf("2") == -1
+	    && ratings.indexOf("1") == -1 && ratings.indexOf("0") == -1){
+	    color = "3";    // all rejected, reject parent
+	} else {
+	    color = "0";
+	}
     }
     
     return color;
@@ -695,34 +695,34 @@ function h4boxes_mark(object, skip_self) {
     // check object itself unless skip_self
     if (!skip_self) {
 		
-        var color; 
+	var color; 
         
-        // retrieve target element and target image
-        var target = $("#" + $(object).attr('id'));
+	// retrieve target element and target image
+	var target = $("#" + $(object).attr('id'));
         
-        var imgTarget = $("#panel-" + $(object).attr('id'));
+	var imgTarget = $("#panel-" + $(object).attr('id'));
         
-        color = calculateRatingForQuestion(object);
+	color = calculateRatingForQuestion(object);
         
        
-        if(color=="0"){
+	if(color=="0"){
             
-            if(object.hasClass("uv1")){
-                color = "1"; 
-            } else if(object.hasClass("uv2")){
-                color = "2"; 
-            } else if(object.hasClass("uv3")){
-                color = "3"; 
-            } else if(object.hasClass("uv0")){
-                color = "0"; 
-            } 
+	    if(object.hasClass("uv1")){
+		color = "1"; 
+	    } else if(object.hasClass("uv2")){
+		color = "2"; 
+	    } else if(object.hasClass("uv3")){
+		color = "3"; 
+	    } else if(object.hasClass("uv0")){
+		color = "0"; 
+	    } 
             
-        }
+	}
         
-        setColorForQuestion(target, imgTarget, color);
-        setPropagationColor(target);
-        // set image attribute to the correctly selected one
-        imgTarget.attr('src', "img/pane.png");
+	setColorForQuestion(target, imgTarget, color);
+	setPropagationColor(target);
+	// set image attribute to the correctly selected one
+	imgTarget.attr('src', "img/pane.png");
     }
 
     // get first parent div
@@ -732,18 +732,18 @@ function h4boxes_mark(object, skip_self) {
 	
     // solange die ID von walking nicht dem Pattern sub- s.o. entspricht    
     while (!reg.test($(walking).attr('id'))) {
-        // gehe weiter und ... zähle hoch
-        counter += 1;
-        if (counter > 6) // falls mehr als 6 mal probiert (dann kommt nix mehr)
-            break; // break if there is no more parent question
-        // ... setze das zu testende div auf das parent div
-        walking = $(walking).parent("div");
+	// gehe weiter und ... zähle hoch
+	counter += 1;
+	if (counter > 6) // falls mehr als 6 mal probiert (dann kommt nix mehr)
+	    break; // break if there is no more parent question
+	// ... setze das zu testende div auf das parent div
+	walking = $(walking).parent("div");
     }
 
     // get first of walking's parents of element and call 
     // recursively, also resetting the parents coloring
     $(walking).parent(":first").each(function() {
-        h4boxes_mark($(this), false);
+	h4boxes_mark($(this), false);
     });
     
     
@@ -754,61 +754,61 @@ function calculateAndHandleSolutionRating(){
     
     var solQuestion;  
     if(itree){
-        solQuestion = $("#dialog").children().first().next();
+	solQuestion = $("#dialog").children().first().next();
     } else {
-        solQuestion = $("#dialog").children().first();
+	solQuestion = $("#dialog").children().first();
     }
     var rating = calculateRatingForQuestion($(solQuestion));
     // color solution panel indicator according to solution rating
     switch (rating) {
-        case "1": // approve --> green
-            $("#solHigh").addClass("show");
-            $("#solHigh").removeClass("hide");
-            $("#solUn").addClass("hide");
-            $("#solUn").removeClass("show");
-            $("#solMed").addClass("hide");
-            $("#solMed").removeClass("show");
-            $("#solLow").addClass("hide");
-            $("#solLow").removeClass("show");
-            //var baseText = $("#solHigh").html();
-            //baseText += ",<br /> weil Frage 1 oder Frage 2 nicht bestätigt werden konnte.";
-            //$("#solHigh").html(baseText);
-            break;
+	case "1": // approve --> green
+	    $("#solHigh").addClass("show");
+	    $("#solHigh").removeClass("hide");
+	    $("#solUn").addClass("hide");
+	    $("#solUn").removeClass("show");
+	    $("#solMed").addClass("hide");
+	    $("#solMed").removeClass("show");
+	    $("#solLow").addClass("hide");
+	    $("#solLow").removeClass("show");
+	    //var baseText = $("#solHigh").html();
+	    //baseText += ",<br /> weil Frage 1 oder Frage 2 nicht bestätigt werden konnte.";
+	    //$("#solHigh").html(baseText);
+	    break;
             
-        case "0": // undecided --> transparent
-            $("#solUn").addClass("show");
-            $("#solUn").removeClass("hide");
-            $("#solHigh").addClass("hide");
-            $("#solHigh").removeClass("show");
-            $("#solMed").addClass("hide");
-            $("#solMed").removeClass("show");
-            $("#solLow").addClass("hide");
-            $("#solLow").removeClass("show");
-            break;
+	case "0": // undecided --> transparent
+	    $("#solUn").addClass("show");
+	    $("#solUn").removeClass("hide");
+	    $("#solHigh").addClass("hide");
+	    $("#solHigh").removeClass("show");
+	    $("#solMed").addClass("hide");
+	    $("#solMed").removeClass("show");
+	    $("#solLow").addClass("hide");
+	    $("#solLow").removeClass("show");
+	    break;
         
-        case "2": // suggested  --> yellow
-            $("#solMed").addClass("show");
-            $("#solMed").removeClass("hide");
-            $("#solUn").addClass("hide");
-            $("#solUn").removeClass("show");
-            $("#solHigh").addClass("hide");
-            $("#solHigh").removeClass("show");
-            $("#solLow").addClass("hide");
-            $("#solLow").removeClass("show");
-            break;
-        case "3": // rejected -_> red
-            $("#solLow").addClass("show");
-            $("#solLow").removeClass("hide");
-            $("#solUn").addClass("hide");
-            $("#solUn").removeClass("show");
-            $("#solMed").addClass("hide");
-            $("#solMed").removeClass("show");
-            $("#solHigh").addClass("hide");
-            $("#solHigh").removeClass("show");
-            //var baseText = $("#solLow").html();
-            //baseText += ",<br /> weil Frage 1 oder Frage 2 nicht bestätigt werden konnte.";
-            //$("#solLow").html(baseText);
-            break;
+	case "2": // suggested  --> yellow
+	    $("#solMed").addClass("show");
+	    $("#solMed").removeClass("hide");
+	    $("#solUn").addClass("hide");
+	    $("#solUn").removeClass("show");
+	    $("#solHigh").addClass("hide");
+	    $("#solHigh").removeClass("show");
+	    $("#solLow").addClass("hide");
+	    $("#solLow").removeClass("show");
+	    break;
+	case "3": // rejected -_> red
+	    $("#solLow").addClass("show");
+	    $("#solLow").removeClass("hide");
+	    $("#solUn").addClass("hide");
+	    $("#solUn").removeClass("show");
+	    $("#solMed").addClass("hide");
+	    $("#solMed").removeClass("show");
+	    $("#solHigh").addClass("hide");
+	    $("#solHigh").removeClass("show");
+	    //var baseText = $("#solLow").html();
+	    //baseText += ",<br /> weil Frage 1 oder Frage 2 nicht bestätigt werden konnte.";
+	    //$("#solLow").html(baseText);
+	    break;
     }
 }
 
@@ -840,33 +840,33 @@ function checkSessionStillValid(){
     var link = $.query.set("action", "checkSessionStillValid");
      
     $.ajax({
-        type : "GET",
-        url : link,
-        async: false,
-        cache : false, // needed for IE, call is not made otherwise
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        dataType: 'html',
-        success : function(html) {
+	type : "GET",
+	url : link,
+	async: false,
+	cache : false, // needed for IE, call is not made otherwise
+	contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	dataType: 'html',
+	success : function(html) {
             
-            //alert("session valid? " + html);
-            if(html.indexOf("SESSIONVALID")!= -1){
-            // do nothing with valid sessions any further
+	    //alert("session valid? " + html);
+	    if(html.indexOf("SESSIONVALID")!= -1){
+	    // do nothing with valid sessions any further
                   
-            } else if(html.indexOf("DB")!=-1){
-                handleSessionRedirect("DB");
-            } else if(html.indexOf("OFF")!=-1){
-                handleSessionRedirect("OFF");
-            }
-            else {
-                handleSessionRedirect("DB");
-            }
+	    } else if(html.indexOf("DB")!=-1){
+		handleSessionRedirect("DB");
+	    } else if(html.indexOf("OFF")!=-1){
+		handleSessionRedirect("OFF");
+	    }
+	    else {
+		handleSessionRedirect("DB");
+	    }
            
-        },
-        error : function(html) {
-            // if we come here, the previous session had expired, so
-            // send request to redirect to login
-            handleSessionRedirect("DB");
-        }
+	},
+	error : function(html) {
+	    // if we come here, the previous session had expired, so
+	    // send request to redirect to login
+	    handleSessionRedirect("DB");
+	}
     });
 }
 
@@ -893,15 +893,15 @@ function handleSessionRedirect(loginFlag){
        
     if(loginFlag == "" || loginFlag.indexOf("OFF")!=-1){
        
-        redirectLink = orig;//"http://www.google.de";
-        //window.location.href = orig;
-        document.location = redirectLink;
-        window.location.reload(true);
+	redirectLink = orig;//"http://www.google.de";
+	//window.location.href = orig;
+	document.location = redirectLink;
+	window.location.reload(true);
     }
     // handle different webapps here...
     else if(orig.indexOf("EuraHS-Dialog")!=-1 && loginFlag.indexOf("DB")!= -1){
-        redirectLink = orig.replace("EuraHS-Dialog", "EuraHS-Login");
-        document.location = redirectLink;
+	redirectLink = orig.replace("EuraHS-Dialog", "EuraHS-Login");
+	document.location = redirectLink;
     //alert(redirectLink);
                     
     } /*else if(loginFlag.indexOf("OFF")!=-1) {       
@@ -916,19 +916,17 @@ function handleSessionRedirect(loginFlag){
 
 
 /* explanation popups */
-//TODO Probelm falls leerzeichen in der id
 function explanationPopupHandle(clickedID){
     
-    id = "#" + clickedID + "_popup";
-    //alert(id); alert($(id)); alert($(id).attr("id"));
-    
-    if($("#"+clickedID+"_popup").hasClass("selected")) {
-         //destyle popup
-         $("#"+clickedID+"_popup").removeClass("selected");
+    id = clickedID + "_popup";
+   
+    if($("#"+id).hasClass("selected")) {
+	//destyle popup
+	$("#"+id).removeClass("selected");
         
     } else {
-        // style the calling link part
-	$("#"+clickedID+"_popup").addClass("selected");
+	// style the calling link part
+	$("#"+id).addClass("selected");
     }
     return false;
 }

@@ -92,10 +92,10 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      */
     public static IQuestionD3webRenderer getRenderer(TerminologyObject to) {
 
-        IQuestionD3webRenderer renderer =
-                (IQuestionD3webRenderer) D3webRendererMapping.getInstance().getRenderer(to);
+	IQuestionD3webRenderer renderer =
+		(IQuestionD3webRenderer) D3webRendererMapping.getInstance().getRenderer(to);
 
-        return renderer;
+	return renderer;
     }
 
     /**
@@ -110,10 +110,10 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      */
     public static AnswerD3webRenderer getAnswerRenderer(TerminologyObject to, Session d3webSession) {
 
-        AnswerD3webRenderer renderer =
-                D3webRendererMapping.getInstance().getAnswerRendererObject(to, d3webSession);
+	AnswerD3webRenderer renderer =
+		D3webRendererMapping.getInstance().getAnswerRendererObject(to, d3webSession);
 
-        return renderer;
+	return renderer;
     }
 
     /**
@@ -126,10 +126,10 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      */
     public static AnswerD3webRenderer getUnknownRenderer() {
 
-        AnswerD3webRenderer renderer =
-                D3webRendererMapping.getInstance().getUnknownRenderer();
+	AnswerD3webRenderer renderer =
+		D3webRendererMapping.getInstance().getUnknownRenderer();
 
-        return renderer;
+	return renderer;
     }
 
     /**
@@ -144,174 +144,148 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * @param to The TerminologyObject the children of which are rendered.
      */
     protected void renderChildren(StringTemplate st, Session d3webSession, ContainerCollection cc,
-            TerminologyObject to, int loc, HttpSession httpSession, HttpServletRequest request) {
+	    TerminologyObject to, int loc, HttpSession httpSession, HttpServletRequest request) {
 
-        boolean debug = false;
+	boolean debug = false;
 
-        if (httpSession.getAttribute("debug") != null) {
-            String deb = httpSession.getAttribute("debug").toString();
-            if (deb.equals("true")) {
-                debug = true;
-            }
-        }
-
-
-        Session s = ((Session) httpSession.getAttribute("d3webSession"));
-
-        StringBuilder childrenHTML = new StringBuilder();
-        D3webConnector d3wcon = D3webConnector.getInstance();
-
-        /*
-         * get the nr of columns setting for dialog, questionnaires and the
-         * questions.
-         */
-        // global columns for the dialog, i.e. how many questionnaires in a row
-        if (to == d3webSession.getKnowledgeBase().getRootQASet()) {
-            columnsGlobal = uiset.getDialogColumns();
-        } // global columns for the questionnaire, i.e., how many questions in a row
-        else if (to instanceof QContainer) {
-            columnsGlobal = uiset.getQuestionnaireColumns();
-        } // global columns for the questions, i.e., how many answers in a row
-        else if (to instanceof Question) {
-            columnsGlobal = uiset.getQuestionColumns();
-        }
-
-        // final columns store
-        int columns = columnsGlobal;
-        if (columnsLocal != -1) {
-            columns = columnsLocal; //local settings overwrite global settings!
-        }
-
-        // if more than one column is required, get open-table tag from
-        // TableContainer and append it to the HTML
-        if (columns > 1) {
-            if (columns == 3
-                    && to instanceof QContainer
-                    && to.getChildren().length == 4) {
-                // minor tweak to fix ugly display with 4 questions in one
-                // questionnaire
-                columns = 2;
-            }
-            String tableOpening =
-                    cc.tc.openTable(to.getName().replace(" ", "_"), columns);
-            childrenHTML.append(tableOpening);
-        }
-
-        // for each of the child elements
-        TerminologyObject[] children = to.getChildren();
-        // Blackboard bb = d3webSession.getBlackboard();
-        // System.out.println(d3webSession.getInterview().getInterviewAgenda().getCurrentlyActiveObjects().toString());
-        for (TerminologyObject child : children) {
+	if (httpSession.getAttribute("debug") != null) {
+	    String deb = httpSession.getAttribute("debug").toString();
+	    if (deb.equals("true")) {
+		debug = true;
+	    }
+	}
 
 
-            // in debug mode, set everything to instant indicated!
-            if (debug) {
-                Fact f = FactFactory.createIndicationFact(
-                        child,
-                        new Indication(Indication.State.INSTANT_INDICATED),
-                        PSMethodUserSelected.getInstance(),
-                        PSMethodUserSelected.getInstance());
-                d3webSession.getBlackboard().addInterviewFact(f);
-            }
+	Session s = ((Session) httpSession.getAttribute("d3webSession"));
+
+	StringBuilder childrenHTML = new StringBuilder();
+	D3webConnector d3wcon = D3webConnector.getInstance();
+
+	/*
+	 * get the nr of columns setting for dialog, questionnaires and the
+	 * questions.
+	 */
+	// global columns for the dialog, i.e. how many questionnaires in a row
+	if (to == d3webSession.getKnowledgeBase().getRootQASet()) {
+	    columnsGlobal = uiset.getDialogColumns();
+	} // global columns for the questionnaire, i.e., how many questions in a row
+	else if (to instanceof QContainer) {
+	    columnsGlobal = uiset.getQuestionnaireColumns();
+	} // global columns for the questions, i.e., how many answers in a row
+	else if (to instanceof Question) {
+	    columnsGlobal = uiset.getQuestionColumns();
+	}
+
+	// final columns store
+	int columns = columnsGlobal;
+	if (columnsLocal != -1) {
+	    columns = columnsLocal; //local settings overwrite global settings!
+	}
+
+	// if more than one column is required, get open-table tag from
+	// TableContainer and append it to the HTML
+	if (columns > 1) {
+	    if (columns == 3
+		    && to instanceof QContainer
+		    && to.getChildren().length == 4) {
+		// minor tweak to fix ugly display with 4 questions in one
+		// questionnaire
+		columns = 2;
+	    }
+	    String tableOpening =
+		    cc.tc.openTable(to.getName().replace(" ", "_"), columns);
+	    childrenHTML.append(tableOpening);
+	}
+
+	// for each of the child elements
+	TerminologyObject[] children = to.getChildren();
+	// Blackboard bb = d3webSession.getBlackboard();
+	// System.out.println(d3webSession.getInterview().getInterviewAgenda().getCurrentlyActiveObjects().toString());
+	for (TerminologyObject child : children) {
 
 
-            // get the matching renderer
-            IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);
+	    // in debug mode, set everything to instant indicated!
+	    if (debug) {
+		Fact f = FactFactory.createIndicationFact(
+			child,
+			new Indication(Indication.State.INSTANT_INDICATED),
+			PSMethodUserSelected.getInstance(),
+			PSMethodUserSelected.getInstance());
+		d3webSession.getBlackboard().addInterviewFact(f);
+	    }
 
-            //System.out.println(d3webSession.getBlackboard().getValue((ValueObject) child));
-            //System.out.println("Init Questions: " + d3webSession.getKnowledgeBase().getInitQuestions().toString());
-            //System.out.println("parent: " + to.getName() + " - " + D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
-            //System.out.println("child: " + child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
-            //System.out.println(child.getName() + " CI - " + D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()) + "\n");
-            //System.out.println(D3webConnector.getInstance().getIndicationMode());
 
-            if (!debug) {
+	    // get the matching renderer
+	    IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);
 
-                // !!!Activate upper block for EuraHS or Mediastinitis (auch in Follow Up Rendering)
-                // as long as other mechanism not stable!!!
+	    //System.out.println(d3webSession.getBlackboard().getValue((ValueObject) child));
+	    //System.out.println("Init Questions: " + d3webSession.getKnowledgeBase().getInitQuestions().toString());
+	    //System.out.println("parent: " + to.getName() + " - " + D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
+	    //System.out.println("child: " + child.getName() + " - " + D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
+	    //System.out.println(child.getName() + " CI - " + D3webUtils.isContraIndicated(child, d3webSession.getBlackboard()) + "\n");
+	    //System.out.println(D3webConnector.getInstance().getIndicationMode());
 
-                // only show questions if they are NOT contraindicated
-                // they ARE contraindicated by the EuraHS- only if construct
-                /*
-                 * if ((D3webConnector.getInstance().getIndicationMode() ==
-                 * IndicationMode.HIDE_UNINDICATED && child instanceof Question
-                 * && D3webUtils.isContraIndicated(child,
-                 * d3webSession.getBlackboard()))) { continue; }
-                 */
-                /*
-                 * if (to.getName().equals("Diabetes mellitus: Behandlung")) {
-                 * System.out.println("Init Questions: " +
-                 * d3webSession.getKnowledgeBase().getInitQuestions().toString());
-                 * System.out.println("parent: " + to.getName() + " - " +
-                 * D3webUtils.isIndicated(to, d3webSession.getBlackboard()));
-                 * System.out.println("child: " + child.getName() + " - " +
-                 * D3webUtils.isIndicated(child, d3webSession.getBlackboard()));
-                 * }
-                 */
+	    if (!debug) {
 
-                UISettings uis = UISettings.getInstance();
+		// !!!Activate upper block for EuraHS or Mediastinitis (auch in Follow Up Rendering)
+		// as long as other mechanism not stable!!!
 
-                //if (to.getName().equals("Welche Erkrankungen des Magen-Darm-Trakts hatten Sie?")) {
-                   /*
-                 * System.out.println("to: " + to.getName());
-                 * System.out.println(" Ind? - " +
-                 * D3webUtils.isIndicatedPlain(to,
-                 * d3webSession.getBlackboard())); System.out.println(" CInd? -
-                 * " + D3webUtils.isContraIndicated(to,
-                 * d3webSession.getBlackboard())); System.out.println("child: "
-                 * + child.getName()); System.out.println(" Ind? - " +
-                 * D3webUtils.isIndicatedPlain(child,
-                 * d3webSession.getBlackboard())); System.out.println(" Ind? - "
-                 * + D3webUtils.isIndicatedByInitQuestionnaire(child, to,
-                 * d3webSession.getBlackboard())); System.out.println(" Ind? - "
-                 * + D3webUtils.isIndicatedByIndicatedQuestionnaire(child, to,
-                 * d3webSession.getBlackboard())); System.out.println(" CInd? -
-                 * " + D3webUtils.isContraIndicated(child,
-                 * d3webSession.getBlackboard()));
-                 *///}
+		// only show questions if they are NOT contraindicated
+		// they ARE contraindicated by the EuraHS- only if construct
+		/*
+		 * if ((D3webConnector.getInstance().getIndicationMode() ==
+		 * IndicationMode.HIDE_UNINDICATED && child instanceof Question
+		 * && D3webUtils.isContraIndicated(child,
+		 * d3webSession.getBlackboard()))) { continue; }
+		 */
 
-                if (uis.getShowNonIndicated().equals(D3webXMLParser.IndicationRepresentation.HIDE)
-                        && child instanceof Question) {
+		UISettings uis = UISettings.getInstance();
 
-                    if ((!D3webUtils.isIndicatedByInitQuestionnaire(child, to, d3webSession.getBlackboard())
-                            && !D3webUtils.isIndicatedByIndicatedQuestionnaire(child, to, d3webSession.getBlackboard())) //|| (D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())
-                            //|| D3webUtils.isContraIndicated(to, d3webSession.getBlackboard()))
-                            ) {
-                        if (!uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
-                            continue;
-                        }
 
-                    }
-                }
-            }
+		// TODO: adapt so that EuraHS and Mediastinitis work!!!
+		if (uis.getShowNonIndicated().equals(D3webXMLParser.IndicationRepresentation.HIDE)
+			&& child instanceof Question) {
+
+		    if ((!D3webUtils.isIndicatedByInitQuestionnaire(child, to, d3webSession.getBlackboard())
+			    && !D3webUtils.isIndicatedByIndicatedQuestionnaire(child, to, d3webSession.getBlackboard())) 
+			    || D3webUtils.isContraIndicated(to, d3webSession.getBlackboard())
+			    || D3webUtils.isContraIndicated(child, d3webSession.getBlackboard())) {
+
+			if (!uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
+			    continue;
+			}
+
+		    }
+		}
+	    }
 
 
 
-            // receive the rendering code from the Renderer and append
-            String childHTML =
-                    childRenderer.renderTerminologyObject(d3webSession, cc, child, to, loc, httpSession, request);
-            if (childHTML != null) {
-                childrenHTML.append(childHTML);
-            }
+	    // receive the rendering code from the Renderer and append
+	    String childHTML =
+		    childRenderer.renderTerminologyObject(d3webSession, cc, child, to, loc, httpSession, request);
+	    if (childHTML != null) {
+		childrenHTML.append(childHTML);
+	    }
 
-            // if the child is a question, check recursively for follow-up-qs
-            // as this is done after having inserted the normal child, the
-            // follow up is appended in between the child and its follow-up
-            if (child instanceof Question) {
-                childrenHTML.append(renderFollowUps(d3webSession, cc, child, to, loc, httpSession, request));
-            }
-        }
-        // close the table that had been opened for multicolumn cases
-        if (columns
-                > 1) {
-            String tableClosing = cc.tc.closeTable(to.getName().replace(" ", "_"));
-            childrenHTML.append(tableClosing);
-        }
-        // if children, fill the template attribute children with children-HTML
-        if (children.length
-                > 0) {
-            st.setAttribute("children", childrenHTML.toString());
-        }
+	    // if the child is a question, check recursively for follow-up-qs
+	    // as this is done after having inserted the normal child, the
+	    // follow up is appended in between the child and its follow-up
+	    if (child instanceof Question) {
+		childrenHTML.append(renderFollowUps(d3webSession, cc, child, to, loc, httpSession, request));
+	    }
+	}
+	// close the table that had been opened for multicolumn cases
+	if (columns
+		> 1) {
+	    String tableClosing = cc.tc.closeTable(to.getName().replace(" ", "_"));
+	    childrenHTML.append(tableClosing);
+	}
+	// if children, fill the template attribute children with children-HTML
+	if (children.length
+		> 0) {
+	    st.setAttribute("children", childrenHTML.toString());
+	}
     }
 
     /**
@@ -327,204 +301,204 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * @param d3webSession TODO
      */
     protected void renderChoices(StringTemplate st, ContainerCollection cc,
-            TerminologyObject to, TerminologyObject parent, Session d3webSession,
-            int loc, HttpSession httpSession) {
+	    TerminologyObject to, TerminologyObject parent, Session d3webSession,
+	    int loc, HttpSession httpSession) {
 
-        StringBuilder childrenHTML = new StringBuilder();
+	StringBuilder childrenHTML = new StringBuilder();
 
-        // number of columns that is to be set for this element
-        int columns = 1;
+	// number of columns that is to be set for this element
+	int columns = 1;
 
-        // CAREFUL: default setting: 1-col style for q's with input field,
-        // ALSO if something different is set in xml
-        if (to instanceof QuestionNum
-                || to instanceof QuestionDate
-                || to instanceof QuestionText) {
-            columns = 1;
-        }
+	// CAREFUL: default setting: 1-col style for q's with input field,
+	// ALSO if something different is set in xml
+	if (to instanceof QuestionNum
+		|| to instanceof QuestionDate
+		|| to instanceof QuestionText) {
+	    columns = 1;
+	}
 
-        if (to instanceof QuestionChoice) {
-            // first check if global or local "autocolumn setting" is provided
-            String acSet = uiset.getAutocolumns();
-            int threshold = getThresholdFromThresholdSpecs(acSet);
-            if (((QuestionChoice) to).getAllAlternatives().size() >= threshold) {
-                columnsGlobal = getNrColumnsFromThresholdSpecs(acSet);
-            }
+	if (to instanceof QuestionChoice) {
+	    // first check if global or local "autocolumn setting" is provided
+	    String acSet = uiset.getAutocolumns();
+	    int threshold = getThresholdFromThresholdSpecs(acSet);
+	    if (((QuestionChoice) to).getAllAlternatives().size() >= threshold) {
+		columnsGlobal = getNrColumnsFromThresholdSpecs(acSet);
+	    }
 
-            HashMap<String, String> acSetLocal = uiset.getAutocolumnsQuestionsLoc();
-            if (acSetLocal.containsKey(to.getName())) {
-                acSet = acSetLocal.get(to.getName());
-                threshold = getNrColumnsFromThresholdSpecs(acSet);
-                if (((QuestionChoice) to).getAllAlternatives().size() >= threshold) {
-                    columnsLocal = getNrColumnsFromThresholdSpecs(acSet);
-                }
-            }
-
-
-            // concrete settings weigh more than autocolum setting per default
-            columnsGlobal = uiset.getQuestionColumns(); // global setting
-            // potentially overwritten by local setting
-            HashMap<String, Integer> localColumns = uiset.getQuestionColumnsLoc();
-            if (localColumns.containsKey(to.getName())) {
-                columnsLocal = localColumns.get(to.getName());
-            }
-
-            //System.out.println("specs: " + uiset.getQuestionColumns());
-            columns = columnsGlobal;
-            if (columnsLocal != -1) {
-                columns = columnsLocal; //local settings overwrite global settings!
-            }
-        }
-
-        //System.out.println("GLOB: " + columnsGlobal);
-        //System.out.println("LOC: " + columnsLocal);
-
-        // if more than one column open table tag via TableContainer and
-        // append
-        if (columns > 1) {
-            String tableOpening =
-                    cc.tc.openTable(to.getName().replace(" ", "_"), columns);
-            childrenHTML.append(tableOpening);
-        }
+	    HashMap<String, String> acSetLocal = uiset.getAutocolumnsQuestionsLoc();
+	    if (acSetLocal.containsKey(to.getName())) {
+		acSet = acSetLocal.get(to.getName());
+		threshold = getNrColumnsFromThresholdSpecs(acSet);
+		if (((QuestionChoice) to).getAllAlternatives().size() >= threshold) {
+		    columnsLocal = getNrColumnsFromThresholdSpecs(acSet);
+		}
+	    }
 
 
-        // for choice questions (oc only so far...)
-        if (to instanceof QuestionChoice) {
+	    // concrete settings weigh more than autocolum setting per default
+	    columnsGlobal = uiset.getQuestionColumns(); // global setting
+	    // potentially overwritten by local setting
+	    HashMap<String, Integer> localColumns = uiset.getQuestionColumnsLoc();
+	    if (localColumns.containsKey(to.getName())) {
+		columnsLocal = localColumns.get(to.getName());
+	    }
 
-            // here the grids are rendered for info questions
-            if (to instanceof QuestionZC) {
-                String gridString = to.getInfoStore().getValue(ProKEtProperties.GRID);
-                if (gridString != null && !gridString.isEmpty()) {
-                    childrenHTML.append(gridString);
-                } // also image upload questions are based on ZC
-                else {
+	    //System.out.println("specs: " + uiset.getQuestionColumns());
+	    columns = columnsGlobal;
+	    if (columnsLocal != -1) {
+		columns = columnsLocal; //local settings overwrite global settings!
+	    }
+	}
 
-                    // get the suiting child renderer (i.e., for answers)
-                    AnswerD3webRenderer childRenderer = getAnswerRenderer(to, d3webSession);
+	//System.out.println("GLOB: " + columnsGlobal);
+	//System.out.println("LOC: " + columnsLocal);
 
-                    // receive the matching HTML from the Renderer and append
-                    Choice c = new Choice("uploadimages");
-                    String childHTML =
-                            childRenderer.renderTerminologyObject(cc, d3webSession, c, to, parent, loc, httpSession);
-                    if (childHTML != null) {
-                        childrenHTML.append(childHTML);
-                    }
-                }
-            } else {
-
-
-                String childHTML = "";
-                AnswerD3webRenderer childRenderer = null;
-
-                // if we have a dropdown based on choice question, we need to 
-                // handle separately here before going into the all-choices loop
-                String dropdownMenuOptions = to.getInfoStore().getValue(
-                        ProKEtProperties.DROPDOWN_MENU_OPTIONS);
-
-                Boolean showDropdownGlobal =
-                        uiset.getDropdown();
-                Boolean showDropdown =
-                        uiset.getDropdownQuestionsLoc().get(to.getName()) == null
-                        ? showDropdownGlobal // nothing local set take global as default
-                        : uiset.getDropdownQuestionsLoc().get(to.getName());
+	// if more than one column open table tag via TableContainer and
+	// append
+	if (columns > 1) {
+	    String tableOpening =
+		    cc.tc.openTable(to.getName().replace(" ", "_"), columns);
+	    childrenHTML.append(tableOpening);
+	}
 
 
-                // for EuraHS (OLD) only. Refactor out!
-                if (dropdownMenuOptions != null) {
-                    childRenderer = getAnswerRenderer(to, d3webSession);
+	// for choice questions (oc only so far...)
+	if (to instanceof QuestionChoice) {
 
-                    childHTML =
-                            childRenderer.renderTerminologyObject(cc, d3webSession, null, to, parent, loc, httpSession);
-                    if (childHTML != null) {
-                        childrenHTML.append(childHTML);
-                    }
+	    // here the grids are rendered for info questions
+	    if (to instanceof QuestionZC) {
+		String gridString = to.getInfoStore().getValue(ProKEtProperties.GRID);
+		if (gridString != null && !gridString.isEmpty()) {
+		    childrenHTML.append(gridString);
+		} // also image upload questions are based on ZC
+		else {
 
-                } else if (showDropdown) {
+		    // get the suiting child renderer (i.e., for answers)
+		    AnswerD3webRenderer childRenderer = getAnswerRenderer(to, d3webSession);
 
-                    childRenderer =
-                            D3webRendererMapping.getInstance().getDropdownAnswerRenderer(to);
+		    // receive the matching HTML from the Renderer and append
+		    Choice c = new Choice("uploadimages");
+		    String childHTML =
+			    childRenderer.renderTerminologyObject(cc, d3webSession, c, to, parent, loc, httpSession);
+		    if (childHTML != null) {
+			childrenHTML.append(childHTML);
+		    }
+		}
+	    } else {
 
-                    childHTML =
-                            childRenderer.renderTerminologyObject(cc, d3webSession, null, to, parent, loc, httpSession);
-                    if (childHTML != null) {
-                        childrenHTML.append(childHTML);
-                    }
-                } else {
-                    for (Choice c : ((QuestionChoice) to).getAllAlternatives()) {
 
-                        // get the suiting child renderer (i.e., for answers)
-                        childRenderer = getAnswerRenderer(to, d3webSession);
+		String childHTML = "";
+		AnswerD3webRenderer childRenderer = null;
 
-                        // receive the matching HTML from the Renderer and append
-                        childHTML =
-                                childRenderer.renderTerminologyObject(cc, d3webSession, c, to, parent, loc, httpSession);
+		// if we have a dropdown based on choice question, we need to 
+		// handle separately here before going into the all-choices loop
+		String dropdownMenuOptions = to.getInfoStore().getValue(
+			ProKEtProperties.DROPDOWN_MENU_OPTIONS);
 
-                        if (childHTML != null) {
-                            childrenHTML.append(childHTML);
-                        }
-                    }
-                    // }
+		Boolean showDropdownGlobal =
+			uiset.getDropdown();
+		Boolean showDropdown =
+			uiset.getDropdownQuestionsLoc().get(to.getName()) == null
+			? showDropdownGlobal // nothing local set take global as default
+			: uiset.getDropdownQuestionsLoc().get(to.getName());
 
-                }
-                // otherwise (num, text, date... questions)
-            }
-        } else {
-            // get the suiting child renderer (i.e., for answers)
-            AnswerD3webRenderer childRenderer = getAnswerRenderer(to, d3webSession);
-            // System.out.println(childRenderer);
 
-            // receive the matching HTML from the Renderer and append
-            String childHTML =
-                    childRenderer.renderTerminologyObject(cc, d3webSession, null, to, parent, loc, httpSession);
-            if (childHTML != null) {
-                childrenHTML.append(childHTML);
-            }
-        }
+		// for EuraHS (OLD) only. Refactor out!
+		if (dropdownMenuOptions != null) {
+		    childRenderer = getAnswerRenderer(to, d3webSession);
 
-        // render unknown option only for NON-abstract questions
-        if (!(to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION))
-                && !(to instanceof QuestionZC)) {
+		    childHTML =
+			    childRenderer.renderTerminologyObject(cc, d3webSession, null, to, parent, loc, httpSession);
+		    if (childHTML != null) {
+			childrenHTML.append(childHTML);
+		    }
 
-            /*
-             * Append unknown answer option if specified
-             */
-            Boolean unknownGlobal = uiset.getUnknownVisible();
+		} else if (showDropdown) {
 
-            Boolean unknownLocal =
-                    uiset.getUnknownVisibleQuestionsLoc().get(to.getName()) == null
-                    ? unknownGlobal // nothing local set take global as default
-                    : uiset.getUnknownVisibleQuestionsLoc().get(to.getName());
+		    childRenderer =
+			    D3webRendererMapping.getInstance().getDropdownAnswerRenderer(to);
 
-            /*
-             * render unknown if: globally set and NOT locally deactivated OR if
-             * globally deactivated but locally set
-             */
-            if ((unknownGlobal && !(!unknownLocal))
-                    || (!unknownGlobal && unknownLocal)) {
+		    childHTML =
+			    childRenderer.renderTerminologyObject(cc, d3webSession, null, to, parent, loc, httpSession);
+		    if (childHTML != null) {
+			childrenHTML.append(childHTML);
+		    }
+		} else {
+		    for (Choice c : ((QuestionChoice) to).getAllAlternatives()) {
 
-                AnswerD3webRenderer unknownRenderer = getUnknownRenderer();
+			// get the suiting child renderer (i.e., for answers)
+			childRenderer = getAnswerRenderer(to, d3webSession);
 
-                // receive the matching HTML from the Renderer and append
-                String childHTML =
-                        unknownRenderer.renderTerminologyObject(cc, d3webSession, null, to,
-                        parent, loc, httpSession);
+			// receive the matching HTML from the Renderer and append
+			childHTML =
+				childRenderer.renderTerminologyObject(cc, d3webSession, c, to, parent, loc, httpSession);
 
-                if (childHTML != null) {
-                    childrenHTML.append(childHTML);
-                }
-            }
-        }
+			if (childHTML != null) {
+			    childrenHTML.append(childHTML);
+			}
+		    }
+		    // }
 
-        // close the table that had been opened for multicolumn
-        if (columns > 1) {
-            String tableClosing = cc.tc.closeTable(to.getName().replace(" ", "_"));
-            childrenHTML.append(tableClosing);
-        }
+		}
+		// otherwise (num, text, date... questions)
+	    }
+	} else {
+	    // get the suiting child renderer (i.e., for answers)
+	    AnswerD3webRenderer childRenderer = getAnswerRenderer(to, d3webSession);
+	    // System.out.println(childRenderer);
 
-        // if there had been children, fill the template attribute children
-        if (childrenHTML.length() > 0) {
-            st.setAttribute("children", childrenHTML.toString());
-        }
+	    // receive the matching HTML from the Renderer and append
+	    String childHTML =
+		    childRenderer.renderTerminologyObject(cc, d3webSession, null, to, parent, loc, httpSession);
+	    if (childHTML != null) {
+		childrenHTML.append(childHTML);
+	    }
+	}
+
+	// render unknown option only for NON-abstract questions
+	if (!(to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION))
+		&& !(to instanceof QuestionZC)) {
+
+	    /*
+	     * Append unknown answer option if specified
+	     */
+	    Boolean unknownGlobal = uiset.getUnknownVisible();
+
+	    Boolean unknownLocal =
+		    uiset.getUnknownVisibleQuestionsLoc().get(to.getName()) == null
+		    ? unknownGlobal // nothing local set take global as default
+		    : uiset.getUnknownVisibleQuestionsLoc().get(to.getName());
+
+	    /*
+	     * render unknown if: globally set and NOT locally deactivated OR if
+	     * globally deactivated but locally set
+	     */
+	    if ((unknownGlobal && !(!unknownLocal))
+		    || (!unknownGlobal && unknownLocal)) {
+
+		AnswerD3webRenderer unknownRenderer = getUnknownRenderer();
+
+		// receive the matching HTML from the Renderer and append
+		String childHTML =
+			unknownRenderer.renderTerminologyObject(cc, d3webSession, null, to,
+			parent, loc, httpSession);
+
+		if (childHTML != null) {
+		    childrenHTML.append(childHTML);
+		}
+	    }
+	}
+
+	// close the table that had been opened for multicolumn
+	if (columns > 1) {
+	    String tableClosing = cc.tc.closeTable(to.getName().replace(" ", "_"));
+	    childrenHTML.append(tableClosing);
+	}
+
+	// if there had been children, fill the template attribute children
+	if (childrenHTML.length() > 0) {
+	    st.setAttribute("children", childrenHTML.toString());
+	}
     }
 
     /**
@@ -542,90 +516,77 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * @return
      */
     private String renderFollowUps(Session d3webSession, ContainerCollection cc, TerminologyObject child,
-            TerminologyObject parent, int loc, HttpSession httpSession, HttpServletRequest request) {
-        StringBuilder fus = new StringBuilder();
+	    TerminologyObject parent, int loc, HttpSession httpSession, HttpServletRequest request) {
+	StringBuilder fus = new StringBuilder();
 
-        boolean debug = false;
+	boolean debug = false;
 
-        if (httpSession.getAttribute("debug") != null) {
-            String deb = httpSession.getAttribute("debug").toString();
-            if (deb.equals("true")) {
-                debug = true;
-            }
-        }
+	if (httpSession.getAttribute("debug") != null) {
+	    String deb = httpSession.getAttribute("debug").toString();
+	    if (deb.equals("true")) {
+		debug = true;
+	    }
+	}
 
-        // if child (question) has children and at least the 1st also a question
-        if (child.getChildren() != null && child.getChildren().length != 0
-                && child.getChildren()[0] instanceof Question) {
-
-
-            // get the (probably question) children of the child
-            for (TerminologyObject childsChild : child.getChildren()) {
-
-                //   System.out.println(childsChild.getName() + " Indicated: "
-                ////       + " C-Indicated: " + D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard()));
-                /*
-                 * if (!debug) { if
-                 * ((D3webConnector.getInstance().getIndicationMode() ==
-                 * IndicationMode.HIDE_UNINDICATED &&
-                 * (D3webUtils.isContraIndicated(childsChild,
-                 * d3webSession.getBlackboard())))) { continue; } }
-                 */
-
-                // for MEDIASTINITIS the above version needs to be taken as there
-                // indicated follow-questions need to be shown greyed
-                /*
-                 * if (!debug) { if
-                 * ((D3webConnector.getInstance().getIndicationMode() ==
-                 * IndicationMode.HIDE_UNINDICATED &&
-                 * (D3webUtils.isContraIndicated(childsChild,
-                 * d3webSession.getBlackboard())) || (!isIndicated(childsChild,
-                 * d3webSession.getBlackboard())))) { continue; } }
-                 */
+	// if child (question) has children and at least the 1st also a question
+	if (child.getChildren() != null && child.getChildren().length != 0
+		&& child.getChildren()[0] instanceof Question) {
 
 
-                if (!debug) {
+	    // get the (probably question) children of the child
+	    for (TerminologyObject childsChild : child.getChildren()) {
+
+		/*
+		 * if (!debug) { if
+		 * ((D3webConnector.getInstance().getIndicationMode() ==
+		 * IndicationMode.HIDE_UNINDICATED &&
+		 * (D3webUtils.isContraIndicated(childsChild,
+		 * d3webSession.getBlackboard())))) { continue; } }
+		 */
 
 
-                    //if(childsChild.getName().equals("Hat der Baum Nadeln?")){
-                    //  System.out.println("IN FU: " + D3webUtils.isIndicatedByInitQuestionnaire(childsChild, child, d3webSession.getBlackboard()));
-                    //}
-                    if (UISettings.getInstance().getShowNonIndicated().equals(
-                            D3webXMLParser.IndicationRepresentation.HIDE)
-                            && childsChild instanceof Question) {
-                        if (!D3webUtils.isIndicatedByInitQuestionnaire(childsChild, child, d3webSession.getBlackboard())) {
-                            if (!uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
-                                continue;
-                            }
-                        }
-                    }
+		// for MEDIASTINITIS the above version needs to be taken as there
+		// indicated follow-questions need to be shown greyed
+
+		if (!debug) {
 
 
-                    if (UISettings.getInstance().getShowContraIndicated().equals(
-                            D3webXMLParser.IndicationRepresentation.HIDE)
-                            && childsChild instanceof Question
-                            && D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())) {
-                        if (!uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
-                            continue;
-                        }
-                    }
-                }
+		    if (UISettings.getInstance().getShowNonIndicated().equals(
+			    D3webXMLParser.IndicationRepresentation.HIDE)
+			    && childsChild instanceof Question) {
+			if (!D3webUtils.isIndicatedByInitQuestionnaire(childsChild, child, d3webSession.getBlackboard())) {
+			    if (!uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
+				continue;
+			    }
+			}
+		    }
 
-                // get appropriate renderer
-                IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(childsChild);
 
-                // receive the rendering code from the Renderer and append
-                StringBuilder childHTML = new StringBuilder(
-                        childRenderer.renderTerminologyObject(d3webSession, cc, childsChild, parent, loc, httpSession, request));
-                if (child instanceof Question) {
-                    childHTML.append(renderFollowUps(d3webSession, cc, childsChild, parent, loc, httpSession, request));
-                }
-                if (childHTML != null) {
-                    fus.append(childHTML);
-                }
-            }
-        }
-        return fus.toString();
+		    if (UISettings.getInstance().getShowContraIndicated().equals(
+			    D3webXMLParser.IndicationRepresentation.HIDE)
+			    && childsChild instanceof Question
+			    && D3webUtils.isContraIndicated(childsChild, d3webSession.getBlackboard())) {
+			if (!uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
+			    continue;
+			}
+		    }
+		}
+
+		// get appropriate renderer
+		IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(childsChild);
+
+		// receive the rendering code from the Renderer and append
+		StringBuilder childHTML = new StringBuilder(
+			childRenderer.renderTerminologyObject(d3webSession, cc, childsChild, parent, loc, httpSession, request));
+		if (child instanceof Question) {
+		    childHTML.append(renderFollowUps(d3webSession, cc, childsChild, parent, loc, httpSession, request));
+		}
+		if (childHTML != null) {
+		    fus.append(childHTML);
+		}
+	    }
+	}
+	return fus.toString();
     }
 
     /**
@@ -643,26 +604,26 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * decorated.
      */
     protected void makeTables(TerminologyObject to, TerminologyObject parent,
-            ContainerCollection cc, StringBuilder result) {
+	    ContainerCollection cc, StringBuilder result) {
 
-        // get the parent. If not existent, return
-        if (parent.getName() == null) {
-            return;
-        }
+	// get the parent. If not existent, return
+	if (parent.getName() == null) {
+	    return;
+	}
 
-        // int colspan = dialogObject.getInheritableAttributes().getColspan();
-        int colspan = 1;
+	// int colspan = dialogObject.getInheritableAttributes().getColspan();
+	int colspan = 1;
 
-        // insert table cell opening string before the content of result which
-        // is the content/rendering of the dialog object itself
-        result.insert(0,
-                cc.tc.getNextCellOpeningString(parent.getName().replace(" ", "_"), colspan));
+	// insert table cell opening string before the content of result which
+	// is the content/rendering of the dialog object itself
+	result.insert(0,
+		cc.tc.getNextCellOpeningString(parent.getName().replace(" ", "_"), colspan));
 
-        // append table cell closing
-        result.append(cc.tc.getNextCellClosingString(parent.getName().replace(" ", "_"), colspan));
+	// append table cell closing
+	result.append(cc.tc.getNextCellClosingString(parent.getName().replace(" ", "_"), colspan));
 
-        // add to the table container
-        cc.tc.addNextCell(parent.getName().replace(" ", "_"), colspan);
+	// add to the table container
+	cc.tc.addNextCell(parent.getName().replace(" ", "_"), colspan);
     }
 
     /**
@@ -678,26 +639,26 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * @param result StringBuilder, the tables are inserted into.
      */
     protected void makeTables(Choice c, TerminologyObject parent,
-            ContainerCollection cc, StringBuilder result) {
+	    ContainerCollection cc, StringBuilder result) {
 
-        // get the parent. If not existent, return
-        if (parent.getName() == null) {
-            return;
-        }
+	// get the parent. If not existent, return
+	if (parent.getName() == null) {
+	    return;
+	}
 
-        // int colspan = dialogObject.getInheritableAttributes().getColspan();
-        int colspan = 1;
+	// int colspan = dialogObject.getInheritableAttributes().getColspan();
+	int colspan = 1;
 
-        // insert table cell opening string before the content of result which
-        // is the content/rendering of the dialog object itself
-        result.insert(0,
-                cc.tc.getNextCellOpeningString(parent.getName().replace(" ", "_"), colspan));
+	// insert table cell opening string before the content of result which
+	// is the content/rendering of the dialog object itself
+	result.insert(0,
+		cc.tc.getNextCellOpeningString(parent.getName().replace(" ", "_"), colspan));
 
-        // append table cell closing
-        result.append(cc.tc.getNextCellClosingString(parent.getName().replace(" ", "_"), colspan));
+	// append table cell closing
+	result.append(cc.tc.getNextCellClosingString(parent.getName().replace(" ", "_"), colspan));
 
-        // add to the table container
-        cc.tc.addNextCell(parent.getName().replace(" ", "_"), colspan);
+	// add to the table container
+	cc.tc.addNextCell(parent.getName().replace(" ", "_"), colspan);
     }
 
     /**
@@ -710,61 +671,72 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * @return The suitable StringTemplate name.
      */
     public String getTemplateName(String baseObjectName) {
-        String tempName = "";
-        UISettings uis = UISettings.getInstance();
-        String up = uis.getDialogType().toString();
-        if (up != "" && up != null) {
-            // hier evtl noch einfügen Prüfung auf Großbuchstaben oder
-            // automatisch umwandeln
-            tempName = up + baseObjectName;
-        } else {
-            tempName = baseObjectName;
-        }
-        return tempName;
+	String tempName = "";
+	UISettings uis = UISettings.getInstance();
+	String up = uis.getDialogType().toString();
+	if (up != "" && up != null) {
+	    // hier evtl noch einfügen Prüfung auf Großbuchstaben oder
+	    // automatisch umwandeln
+	    tempName = up + baseObjectName;
+	} else {
+	    tempName = baseObjectName;
+	}
+	return tempName;
     }
 
     public boolean isParentOfFollowUpQuIndicated(TerminologyObject to, Blackboard bb) {
-        for (Question q : bb.getSession().getKnowledgeBase().getManager().getQuestions()) {
+	for (Question q : bb.getSession().getKnowledgeBase().getManager().getQuestions()) {
 
-            // and check its indication state
-            if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(q)
-                    || bb.getIndication(q).getState() == State.INDICATED
-                    || bb.getIndication(q).getState() == State.INSTANT_INDICATED) {
+	    // and check its indication state
+	    if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(q)
+		    || bb.getIndication(q).getState() == State.INDICATED
+		    || bb.getIndication(q).getState() == State.INSTANT_INDICATED) {
 
-                return true;
-            }
-        }
-        return false;
+		return true;
+	    }
+	}
+	return false;
     }
 
     public static String getID(NamedObject no) {
 
-        String id = nameToIdMap.get(no);
-        if (id == null) {
-            String prefix = "";
+	String id = nameToIdMap.get(no);
+	if (id == null) {
+	    String prefix = "";
 
-            if (no instanceof Question) {
-                prefix = "q";
-            } else if (no instanceof QContainer) {
-                prefix = "qc";
-            } else if (no instanceof Choice) {
-                prefix = "a_" + getID(((Choice) no).getQuestion());
-            }
-            if (no != null && no.getName() != null) {
-                id = prefix + "_" + no.getName().replaceAll("\\W", "_");
-                nameToIdMap.put(no.getName(), id);
-                idToNameMap.put(id, no.getName());
-            } else {
-                // TODO: make generic
-                id = prefix + " " + "imageUpload";
-            }
-        }
-        return id;
+	    if (no instanceof Question) {
+		prefix = "q";
+	    } else if (no instanceof QContainer) {
+		prefix = "qc";
+	    } else if (no instanceof Choice) {
+		prefix = "a_" + getID(((Choice) no).getQuestion());
+	    } else if (no instanceof Solution){
+		prefix = "s";
+	    }
+	    
+	    if (no != null && no.getName() != null) {
+		if(!prefix.equals("")){
+		    id = prefix + "_" + no.getName().replaceAll("\\W", "_");
+		    System.out.println(id);
+		    nameToIdMap.put(no.getName(), id);
+		    idToNameMap.put(id, no.getName());
+		} else {
+		    id = no.getName().replaceAll("\\W", "_");
+		    nameToIdMap.put(no.getName(), id);
+		    idToNameMap.put(id, no.getName());
+		}
+		
+	    } else {
+		// TODO: make generic
+		id = prefix + " " + "imageUpload";
+	    }
+	}
+	return id;
     }
 
     // TODO: answer buttons need to be rendered by answer renderer, not within question
     public static String getObjectNameForId(String id) {
-        return idToNameMap.get(id);
+	return idToNameMap.get(id);
     }
 
     /**
@@ -807,122 +779,122 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * } } return false; }
      */
     protected void renderChildrenITreeNum(StringTemplate st, Session d3webSession, ContainerCollection cc,
-            TerminologyObject to, int loc, HttpSession httpSession, HttpServletRequest request) {
+	    TerminologyObject to, int loc, HttpSession httpSession, HttpServletRequest request) {
 
-        StringBuilder childrenHTML = new StringBuilder();
+	StringBuilder childrenHTML = new StringBuilder();
 
-        // skip default d3web root
-        if (to.getName().equals("Q000")) {
-
-
-            if (to.getChildren().length > 0) {
-                //System.out.println(to.getChildren().toString());
-                // check default root's children
-                for (TerminologyObject toc : to.getChildren()) {
-                    //System.out.println(toc.getName());
-                    //System.out.println(toc.getClass());
-
-                    // if we have direct children here, e.g. after parsing 
-                    // word specification files were the first child is a
-                    // question instead of a grouping questionnaire
-                    if (toc instanceof Question) {
-                        IQuestionD3webRenderer childRenderer =
-                                AbstractD3webRenderer.getRenderer(toc);
-
-                        String childHTML =
-                                childRenderer.renderTerminologyObject(d3webSession, cc, toc, to, loc, httpSession, request);
-                        if (childHTML != null) {
-                            childrenHTML.append(childHTML);
-                        }
-                        st.setAttribute("children", childrenHTML.toString());
-
-                    } // we have sub-grouping questionnaires
-                    else {
-                        if (!toc.getName().contains("ABSTRACTIONS")
-                                && toc.getName().equals("ROOT")) {
-                            renderChildrenITreeNum(st, d3webSession, cc, toc, loc, httpSession, request);
-                        }
-                    }
-                }
-            }
-        } else {
-
-            // get the children of the current to from the juri rules
-            TerminologyObject[] toChildren = to.getChildren();
-
-            if (toChildren != null && toChildren.length > 0) {
-
-                for (Object newChildRoot : toChildren) {
-
-                    IQuestionD3webRenderer childRenderer = null;
-                    TerminologyObject newChild = (TerminologyObject) newChildRoot;
-
-                    Boolean isDummy =
-                            newChild.getInfoStore().getValue(ProKEtProperties.DUMMY);
-
-                    // TODO: render dummy nodes specially 
-                    if (isDummy != null && isDummy.equals(true)) {
-                        childRenderer = D3webRendererMapping.getInstance().getITreeDummyRenderer();
-                    } else {
-                        childRenderer =
-                                AbstractD3webRenderer.getRenderer((TerminologyObject) newChildRoot);
+	// skip default d3web root
+	if (to.getName().equals("Q000")) {
 
 
-                    }
+	    if (to.getChildren().length > 0) {
+		//System.out.println(to.getChildren().toString());
+		// check default root's children
+		for (TerminologyObject toc : to.getChildren()) {
+		    //System.out.println(toc.getName());
+		    //System.out.println(toc.getClass());
+
+		    // if we have direct children here, e.g. after parsing 
+		    // word specification files were the first child is a
+		    // question instead of a grouping questionnaire
+		    if (toc instanceof Question) {
+			IQuestionD3webRenderer childRenderer =
+				AbstractD3webRenderer.getRenderer(toc);
+
+			String childHTML =
+				childRenderer.renderTerminologyObject(d3webSession, cc, toc, to, loc, httpSession, request);
+			if (childHTML != null) {
+			    childrenHTML.append(childHTML);
+			}
+			st.setAttribute("children", childrenHTML.toString());
+
+		    } // we have sub-grouping questionnaires
+		    else {
+			if (!toc.getName().contains("ABSTRACTIONS")
+				&& toc.getName().equals("ROOT")) {
+			    renderChildrenITreeNum(st, d3webSession, cc, toc, loc, httpSession, request);
+			}
+		    }
+		}
+	    }
+	} else {
+
+	    // get the children of the current to from the juri rules
+	    TerminologyObject[] toChildren = to.getChildren();
+
+	    if (toChildren != null && toChildren.length > 0) {
+
+		for (Object newChildRoot : toChildren) {
+
+		    IQuestionD3webRenderer childRenderer = null;
+		    TerminologyObject newChild = (TerminologyObject) newChildRoot;
+
+		    Boolean isDummy =
+			    newChild.getInfoStore().getValue(ProKEtProperties.DUMMY);
+
+		    // TODO: render dummy nodes specially 
+		    if (isDummy != null && isDummy.equals(true)) {
+			childRenderer = D3webRendererMapping.getInstance().getITreeDummyRenderer();
+		    } else {
+			childRenderer =
+				AbstractD3webRenderer.getRenderer((TerminologyObject) newChildRoot);
 
 
-                    String childHTML =
-                            childRenderer.renderTerminologyObject(d3webSession, cc, (TerminologyObject) newChildRoot, to, loc, httpSession, request);
-                    if (childHTML != null) {
-                        childrenHTML.append(childHTML);
-                    }
+		    }
 
-                }
-                // if children, fill the template attribute children with children-HTML 
-                st.setAttribute("children", childrenHTML.toString());
-            }
-        }
+
+		    String childHTML =
+			    childRenderer.renderTerminologyObject(d3webSession, cc, (TerminologyObject) newChildRoot, to, loc, httpSession, request);
+		    if (childHTML != null) {
+			childrenHTML.append(childHTML);
+		    }
+
+		}
+		// if children, fill the template attribute children with children-HTML 
+		st.setAttribute("children", childrenHTML.toString());
+	    }
+	}
 
     }
 
     // old version, currently needed for EuraHS
     protected String createDropDownOptionsOldV(int loc, String selectedValue, String... options) {
-        StringBuilder builder = new StringBuilder();
+	StringBuilder builder = new StringBuilder();
 
-        for (String option : options) {
-            option = option.trim();
-            if (option.equals("Please select...")) {
-                option = D3webUtils.getDropdownDefaultPrompt(loc);
-            }
-            builder.append("<option value='" + option + "'"
-                    + (option.equals(selectedValue) ? "selected='selected'" : "")
-                    + ">" + option
-                    + "</option>\n");
-        }
+	for (String option : options) {
+	    option = option.trim();
+	    if (option.equals("Please select...")) {
+		option = D3webUtils.getDropdownDefaultPrompt(loc);
+	    }
+	    builder.append("<option value='" + option + "'"
+		    + (option.equals(selectedValue) ? "selected='selected'" : "")
+		    + ">" + option
+		    + "</option>\n");
+	}
 
 
-        return builder.toString();
+	return builder.toString();
     }
 
     // new version according to new dialog specs
     protected String createDropDownOptions(int loc, String selectedValue, List<Choice> options) {
-        StringBuilder builder = new StringBuilder();
+	StringBuilder builder = new StringBuilder();
 
-        builder.append("<option value='Please select...'"
-                + ">" + "Please select..."
-                + "</option>\n");
+	builder.append("<option value='Please select...'"
+		+ ">" + "Please select..."
+		+ "</option>\n");
 
-        // TODO what about internationalization here?
-        for (Choice option : options) {
-            String choiceText = option.getName();
+	// TODO what about internationalization here?
+	for (Choice option : options) {
+	    String choiceText = option.getName();
 
-            builder.append("<option value='" + choiceText + "'"
-                    + (choiceText.equals(selectedValue) ? "selected='selected'" : "")
-                    + ">" + option
-                    + "</option>\n");
-        }
+	    builder.append("<option value='" + choiceText + "'"
+		    + (choiceText.equals(selectedValue) ? "selected='selected'" : "")
+		    + ">" + option
+		    + "</option>\n");
+	}
 
-        return builder.toString();
+	return builder.toString();
     }
 
     /**
@@ -937,23 +909,23 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      */
     protected Boolean getShowStateFromCookie(TerminologyObject to, Cookie[] cookies) {
 
-        List cooList = Arrays.asList(cookies);
+	List cooList = Arrays.asList(cookies);
 
-        if (cooList.size() != 0) {
-            for (Object cooOb : cooList) {
+	if (cooList.size() != 0) {
+	    for (Object cooOb : cooList) {
 
-                Cookie cookie = (Cookie) cooOb;
-                // found correct cookie
-                if (cookie.getName().replace("q_", "").equals(to.getName())) {
-                    if (cookie.getValue().equals("O")) {
-                        return true;
-                    } else if (cookie.getValue().equals("C")) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return null;
+		Cookie cookie = (Cookie) cooOb;
+		// found correct cookie
+		if (cookie.getName().replace("q_", "").equals(to.getName())) {
+		    if (cookie.getValue().equals("O")) {
+			return true;
+		    } else if (cookie.getValue().equals("C")) {
+			return false;
+		    }
+		}
+	    }
+	}
+	return null;
     }
 
     /**
@@ -964,21 +936,21 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * @return the number of columns
      */
     private int getNrColumnsFromThresholdSpecs(String def) {
-        int cols = 0;
+	int cols = 0;
 
-        if (def != null && !def.equals("")) {
-            String[] defSplit = def.split("---");
-            cols = Integer.parseInt(defSplit[1].replace("C", ""));
-        }
-        return cols;
+	if (def != null && !def.equals("")) {
+	    String[] defSplit = def.split("---");
+	    cols = Integer.parseInt(defSplit[1].replace("C", ""));
+	}
+	return cols;
     }
 
     private int getThresholdFromThresholdSpecs(String def) {
-        int thres = 0;
-        if (def != null && !def.equals("")) {
-            String[] defSplit = def.split("---");
-            thres = Integer.parseInt(defSplit[0].replace("T", ""));
-        }
-        return thres;
+	int thres = 0;
+	if (def != null && !def.equals("")) {
+	    String[] defSplit = def.split("---");
+	    thres = Integer.parseInt(defSplit[0].replace("T", ""));
+	}
+	return thres;
     }
 }

@@ -701,10 +701,11 @@ function initFunctionality() {
 	    d3web_storeQuestionOC($(this).attr("id"));
 	    d3web_addFacts();
 	}
-	else if($(this).attr("class").indexOf("answer-mc")!=-1){
-	    d3web_storeQuestionMC($(this).attr("id"));
-	    d3web_addFacts();
-	}
+	// TODO: handle otherwise/Check -> causes in this variant errors with EuraHS
+	//else if($(this).attr("class").indexOf("answer-mc")!=-1){
+	    //d3web_storeQuestionMC($(this).attr("id"));
+	    //d3web_addFacts();
+	//}
     });
 
 
@@ -1013,7 +1014,8 @@ function d3web_storeQuestionOC(ocInput) {
 function d3web_storeQuestionMC(mcCheckBox) {
 	
     // standard dialogs case
-    if(typeof(mcCheckbox) == "object") {
+    if(typeof(mcCheckbox) == "object" ||
+	typeof(mcCheckbox) == "undefined") {
 	var mcQParent = $(mcCheckBox.parents("[id^=q_]"));
 	var mcQuestion = getQuestionId(mcCheckBox);
 	var checkBoxes = mcQParent.find(":checkbox");
