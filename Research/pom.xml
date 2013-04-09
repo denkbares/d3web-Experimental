@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.uniwue.d3web</groupId>
 	<artifactId>Research</artifactId>
@@ -87,18 +88,19 @@
 				<configuration>
 					<generatePdf>true</generatePdf>
 					<generateHtml>true</generateHtml>
-					<generateXml>true</generateXml>				
+					<generateXml>true</generateXml>
 					<license><![CDATA[nrqQXAFjxdRRPQOSKOOEOvHIrnNhOJArLOsnknIHocNlqk
 									mi2KTnu3O2OFOgc7xNpMqgmU2KEa3EV2PMKJyrvsDdSe<i
 									ormQsXMMrrrOPQQPmMqSwNNQnmqNpQRMOQsvvxwVxTuSOO
 									nRmnmqmUUnourvpummmmmmUUnourvpummmmmmUUBkltN5U
-									Unmmmm]]></license>				
+									Unmmmm]]></license>
 				</configuration>
 			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -231,6 +233,7 @@
 		<module>KnowWE-Plugin-Ontology-MarkupSet</module>
 		<module>KnowWE-Plugin-SparqlToExcel</module>
 		<module>KnowWE-Plugin-Revisions</module>
+		<module>d3web-Plugin-Tests-ThrillSeeker</module>
 	</modules>
 	<repositories>
 		<repository>
@@ -292,7 +295,7 @@
 			</build>
 		</profile>
 	</profiles>
-	
+
 	<scm>
 		<connection>scm:svn:https://isci.informatik.uni-wuerzburg.de/svn/Research/trunk/Research</connection>
 		<developerConnection>scm:svn:https://isci.informatik.uni-wuerzburg.de/svn/Research/trunk/Research</developerConnection>
