@@ -8,4 +8,11 @@
   <artifactId>KnowWE-Plugin-Revisions</artifactId>
   <name>KnowWE-Plugin: Revisions</name>
   <description>KnowWE-Plugin for creating and managing wiki-revisions</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>KnowWE-core</artifactId>
+  		<version>0.2-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>
