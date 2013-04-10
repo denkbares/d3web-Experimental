@@ -237,8 +237,14 @@ public class IncludeMarkup extends DefaultMarkupType {
 						renderarticle,
 						HeaderType.class));
 				for (Section<? extends Type> section : content) {
-					DelegateRenderer.getInstance().render(section,
-							user, string);
+					Renderer r = section.get().getRenderer();
+					if (r != null) {
+						r.render(section, user, string);
+					}
+					else {
+						DelegateRenderer.getInstance().render(section,
+								user, string);
+					}
 				}
 			}
 			else {
