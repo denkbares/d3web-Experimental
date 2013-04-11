@@ -200,7 +200,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 			builder.append("\n");
 			renderTarget(user, renderarticle, builder);
 			builder.appendHtml("</div>");
-			new DefaultMarkupRenderer().renderDefaultMarkupStyled("include",
+			new IncludeDefaultMarkupRenderer().renderDefaultMarkupStyled("Include",
 					builder.toStringRaw(),
 					section.getID(), "", tools, user,
 					string);
@@ -261,7 +261,7 @@ public class IncludeMarkup extends DefaultMarkupType {
 			messages.add(noSuchSection);
 			DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, messages,
 					builder);
-			new DefaultMarkupRenderer().renderDefaultMarkupStyled("include",
+			new IncludeDefaultMarkupRenderer().renderDefaultMarkupStyled("include",
 					builder.toStringRaw(),
 					section.getID(), "", null, user,
 					string);
