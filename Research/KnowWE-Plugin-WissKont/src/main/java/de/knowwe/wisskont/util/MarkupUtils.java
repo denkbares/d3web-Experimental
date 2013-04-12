@@ -20,10 +20,17 @@ package de.knowwe.wisskont.util;
 
 import java.util.List;
 
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
+import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.URI;
+
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.wisskont.ConceptMarkup;
 
 /**
@@ -51,6 +58,43 @@ public class MarkupUtils {
 			return termSec;
 		}
 		return null;
+	}
+
+	public static boolean isDirectSubConceptOf(URI concept1, URI concept2) {
+		String sparql = "ASK { <" + concept1 + "> lns:unterkonzept <" + concept2 + ">.}";
+		boolean result = Rdf2GoCore.getInstance().sparqlAsk(sparql);
+		return result;
+	}
+
+	/**
+	 * Determines whether concept1 is a sub-concept of the second concept
+	 * (recursively), i.e., the sub-concept relation is followed transitively.
+	 * 
+	 * @created 12.04.2013
+	 * @param concept1
+	 * @param target
+	 * @return
+	 */
+	public static boolean isSubConceptOf(URI concept1, URI target) {
+		String sparql = "SELECT ?x WHERE { <" + concept1 + "> lns:unterkonzept ?x.}";
+		QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(sparql);
+
+		ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
+		if (!resultIterator.hasNext()) {
+			return false;
+		}
+		while (resultIterator.hasNext()) {
+			QueryRow parentConceptResult = resultIterator.next();
+			Node value = parentConceptResult.getValue("x");
+			URI parent = value.asURI();
+			if (parent.equals(target)) {
+				return true;
+			}
+			else {
+				return isSubConceptOf(parent, target);
+			}
+		}
+		return false;
 	}
 
 	/**

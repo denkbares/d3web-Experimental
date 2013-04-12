@@ -50,6 +50,7 @@ import de.knowwe.event.PageRenderedEvent;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.wisskont.ConceptMarkup;
+import de.knowwe.wisskont.util.Tree;
 
 /**
  * 
@@ -81,18 +82,98 @@ public class TermRecommender implements EventListener {
 		EventManager.getInstance().registerListener(this);
 	}
 
-	public List<String> getRankedTermList(UserContext user) {
+	public Tree<RatedTerm> getRatedTermTreeTop(UserContext user, int count) {
+		Tree<RatedTerm> treeCopy = new Tree<RatedTerm>(RatedTerm.ROOT);
 		String username = user.getUserName();
 		if (!data.containsKey(username)) {
-			return new ArrayList<String>(0);
+			return treeCopy;
 		}
 		else {
 			RecommendationSet recommendationSet = data.get(username);
-			Collection<String> rankedTermList = recommendationSet.getRankedTermList();
-			List<String> result = new ArrayList<String>();
-			result.addAll(rankedTermList);
-			return result;
+			List<RatedTerm> rankedTermList = recommendationSet.getRankedTermList();
+			int size = rankedTermList.size();
+			for (RatedTerm ratedTerm : rankedTermList) {
+				treeCopy.insertNode(ratedTerm);
+			}
+			int toRemove = size - count;
+			for (int i = 0; i < toRemove; i++) {
+				removeLowestRatedLeaf(treeCopy);
+			}
+			return treeCopy;
 		}
+	}
+
+	public List<RatedTerm> getRatedTermListTop(UserContext user, int count) {
+		String username = user.getUserName();
+		if (!data.containsKey(username)) {
+			return new ArrayList<RatedTerm>(0);
+		}
+		else {
+			RecommendationSet recommendationSet = data.get(username);
+			List<RatedTerm> rankedTermList = recommendationSet.getRankedTermList();
+			if (count < 0) {
+				return rankedTermList;
+
+			}
+			else {
+				int size = rankedTermList.size();
+				if (count >= size) {
+					return rankedTermList;
+				}
+				return RecommendationSet.toList(getRatedTermTreeTop(user, count));
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @created 12.04.2013
+	 * @param treeCopy
+	 */
+	private void removeLowestRatedLeaf(Tree<RatedTerm> tree) {
+		de.knowwe.wisskont.util.Tree.Node<RatedTerm> root = tree.getRoot();
+		de.knowwe.wisskont.util.Tree.Node<RatedTerm> lowestNode = findLowestRatedLeaf(root);
+		tree.removeNodeFromTree(lowestNode.getData());
+
+	}
+
+	/**
+	 * 
+	 * @created 12.04.2013
+	 * @param root
+	 * @return
+	 */
+	private de.knowwe.wisskont.util.Tree.Node<RatedTerm> findLowestRatedLeaf(de.knowwe.wisskont.util.Tree.Node<RatedTerm> root) {
+		List<de.knowwe.wisskont.util.Tree.Node<RatedTerm>> children = root.getChildren();
+		if (root.getChildren() == null || root.getChildren().size() == 0) {
+			return root;
+		}
+
+		de.knowwe.wisskont.util.Tree.Node<RatedTerm> lowest = null;
+
+		for (de.knowwe.wisskont.util.Tree.Node<RatedTerm> child : children) {
+			de.knowwe.wisskont.util.Tree.Node<RatedTerm> lowestSuccessor = findLowestRatedLeaf(child);
+			if (lowest == null) {
+				lowest = lowestSuccessor;
+			}
+			else if (lowestSuccessor.getData().getValue() < lowest.getData().getValue()) {
+				lowest = lowestSuccessor;
+			}
+		}
+		return lowest;
+	}
+
+	public List<RatedTerm> getRatedTermList(UserContext user) {
+		return getRatedTermListTop(user, -1);
+	}
+
+	public List<String> getRankedTermList(UserContext user) {
+		List<RatedTerm> ratedTermList = getRatedTermList(user);
+		List<String> result = new ArrayList<String>();
+		for (RatedTerm ratedTerm : ratedTermList) {
+			result.add(ratedTerm.getTerm());
+		}
+		return result;
 	}
 
 	@Override
