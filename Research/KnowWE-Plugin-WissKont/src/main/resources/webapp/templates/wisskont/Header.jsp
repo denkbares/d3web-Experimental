@@ -23,11 +23,17 @@
 
   <div class="pagename"><wiki:PageName /></div>
 
-  <div class="searchbox"><wiki:Include page="SearchBox.jsp" /></div>
+<!--  
+  for WISSASS project moved to left bar, c.f. Favorites.jsp
+   -->
+  <!--  <div class="searchbox"><wiki:Include page="SearchBox.jsp" /></div-->
 
   <!--  
   for WISSASS project moved to left bar, c.f. Favorites.jsp
    -->
-  <div class="breadcrumbs"><!--<fmt:message key="header.yourtrail"/>--><wiki:Breadcrumbs /></div>
+  <div class="breadcrumbs">
+  <!--<fmt:message key="header.yourtrail"/>-->
+  <!--<wiki:Breadcrumbs />-->
+  </div>
   
 </div>

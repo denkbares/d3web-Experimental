@@ -176,6 +176,7 @@ DenkbaresSkin.checkFavScroll = function () {
 };
 
 DenkbaresSkin.cleanTrail = function() {
+	return;
 	var breadcrumbs = jq$('.breadcrumbs');
 	if (breadcrumbs.length == 0) return;
 	for (var k = 0; k < breadcrumbs.length; k++) {

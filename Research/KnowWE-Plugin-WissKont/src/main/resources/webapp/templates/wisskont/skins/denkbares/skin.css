@@ -17,7 +17,7 @@
  */
  
  #wikibody {
-	width:960px;
+	width:1010px;
 	margin:1em auto;
 	padding:0.5em;
 }
@@ -34,16 +34,16 @@
 	float:none;
 }
 #favorites {
-	width:210px;
+	width:260px;
 }
 #page, #wikibody.fav-left #page, #wikibody.fav-right #page {
-	width:730px;
+	width:780px;
 }
 #collapseFavsWrapper #favorites {
 	border:none;
 }
 #wikibody.fav-slide #page {
-	width:960px;
+	width:1010px;
 }
 
 #header .userbox {
@@ -64,7 +64,7 @@
 }
 body.view, body.edit {
 	background-color: white;
-	background-image: url(page-back.png);
+	background-image: url(page-back300.png);
 	background-repeat: repeat-y;
 }
 #header {
@@ -74,7 +74,7 @@ body.view, body.edit {
 	background-position: left bottom;
 }
 #header, #footer {
-	padding:0 5px 25px 250px;
+	padding:0 5px 25px 300px;
 }
 #header .applicationlogo {
 	position:absolute;
@@ -106,7 +106,7 @@ body.view, body.edit {
 #favorites {
 	float:left;
 	margin-top: 0em;
-	width:225px;
+	width:275px;
 	padding: 0 1em;
 	background-color: transparent;
 	border-left: 0px;
@@ -149,7 +149,7 @@ body.view, body.edit {
 }
 #page { 
 	position:absolute;
-	left: 249px;
+	left: 299px;
 	right: 0px;
 	margin-top: -23px;
 	width: auto;
@@ -1100,7 +1100,7 @@ html>body #previewcontent, html>body #info, html>body #pagecontent, html>body #a
 .searchbox {
 }
 #searchForm #query {
-	width:164px;
+	width:214px;
 	padding:2px 22px 2px 2px;	
 	vertical-align: middle;
 	color:#555;

@@ -150,7 +150,6 @@ public class Tree<T extends HierarchyNode<T>> {
 		}
 		if (!descent) {
 			Node<T> newNode = new Node<T>(t);
-			System.out.println("Inserting: " + t.toString() + " under: " + parent.data.toString());
 			parent.addChild(newNode);
 			newNode.setParent(parent);
 
@@ -167,9 +166,6 @@ public class Tree<T extends HierarchyNode<T>> {
 				}
 			}
 			for (Node<T> successorSibling : successorSiblings) {
-
-				System.out.println("Re-hanging: " + successorSibling.toString() + " from: "
-						+ parent.data.toString() + " to: " + newNode.toString());
 				newNode.addChild(successorSibling);
 				parent.removeChild(successorSibling);
 				successorSibling.setParent(newNode);

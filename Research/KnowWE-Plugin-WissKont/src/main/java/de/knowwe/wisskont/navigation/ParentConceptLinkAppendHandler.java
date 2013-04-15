@@ -65,7 +65,7 @@ public class ParentConceptLinkAppendHandler implements PageAppendHandler {
 				return;
 			}
 			result.appendHtml("<div class='parentBreadcrumb'>");
-			result.append("Oberkonzept: ");
+			result.append("Oberbegriff: ");
 			while (resultIterator.hasNext()) {
 				QueryRow parentConceptResult = resultIterator.next();
 				Node value = parentConceptResult.getValue("z");

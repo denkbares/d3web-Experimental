@@ -39,7 +39,7 @@ import de.knowwe.wisskont.util.Tree.Node;
  */
 public class TermBrowserRenderUtils {
 
-	public static final int THRESHOLD_MAX_TERM_NUMBER = 18;
+	public static final int THRESHOLD_MAX_TERM_NUMBER = 20;
 	private static boolean zebra = false;
 
 	public static String renderTermBrowser(UserContext user, String searchFieldContent) {
@@ -142,7 +142,9 @@ public class TermBrowserRenderUtils {
 				+
 				"<td style='width:80%' class='termbrowser'>"
 				+ createDashes(depth)
-				+ "<div class='termname' style='display:inline'>"
+				+ "<div class='termname' style='display:inline;"
+				+ createStyle(depth)
+				+ "'>"
 				+ term.replaceAll("_", "_<wbr>")
 				+ "</div></td>"
 				+ "<td style='min-width: 48px;width:20%;'>"
@@ -164,11 +166,39 @@ public class TermBrowserRenderUtils {
 				"</tr></table></td></tr></table></div>");
 	}
 
+	/**
+	 * 
+	 * @created 15.04.2013
+	 * @param depth
+	 * @return
+	 */
+	private static String createStyle(int depth) {
+		if (depth == 0) {
+			return "font-weight:bold;";
+		}
+		if (depth == 1) {
+			return "font-size:100%;";
+		}
+		if (depth == 2) {
+			return "font-size:80%;";
+		}
+		if (depth == 3) {
+			return "font-size:60%;";
+		}
+		if (depth == 4) {
+			return "font-size:50%;";
+		}
+
+		return "";
+	}
+
 	private static String createDashes(int count) {
 		String result = "";
 
+		// if (count == 0) return "<li>";
+
 		for (int i = 0; i < count; i++) {
-			result += "-";
+			result += "&nbsp;&nbsp;";
 		}
 		if (count > 0) {
 			result += "&nbsp;";
