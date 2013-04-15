@@ -24,9 +24,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.revisions.DateType;
@@ -63,33 +65,57 @@ public class TimelineSelectAction extends AbstractAction {
 	public static String getPagesChangedTable(String web, String rev, Date date) {
 		String dateString = DateType.DATE_FORMAT.format(date);
 		WikiConnector wiki = Environment.getInstance().getWikiConnector();
-		String result = "Revision " + rev + " selected: " + dateString;
+		String result = "Revision " + rev + " selected: " + dateString
+				+ ". Differences to current revision:";
 		Collection<String> titles = wiki.getAllArticles(web).keySet();
 		HashMap<String, Integer> pageversions = new HashMap<String, Integer>();
-		result += "<table><tr><th>Page</th><th>Version</th></tr>";
+		result += "<table><tr><th>Page</th><th>Status</th></tr>";
+
+		ArticleManager currentArticleManager = Environment.getInstance().getArticleManager(web);
+		ArticleManager articleManagerAtVersion = new ArticleManager(Environment.getInstance(), web);
+		for (Article a : currentArticleManager.getArticles()) {
+			articleManagerAtVersion.registerArticle(a);
+		}
+
 		for (String title : titles) {
+			Article actualVersionOfCurrentArticle = currentArticleManager.getArticle(title);
+
+			// version number at date
+			int version = -1;
 			try {
-				int version = wiki.getVersionAtDate(title,
+				version = wiki.getVersionAtDate(title,
 						date);
-				String versionString;
-				if (version == -1) {
-					// version at date d is newest version
-					versionString = "No changes since " + dateString;
-				}
-				else if (version == -2) {
-					// page does not exist at date d
-					versionString = "Page did not exist at " + dateString;
-				}
-				else {
-					versionString = "<a href=\"" + KnowWEUtils.getURLLink(title, version) + "\">"
-							+ Integer.toString(version) + "</a>";
-				}
-				pageversions.put(title, version);
-				result += "<tr><td>" + KnowWEUtils.getLinkHTMLToArticle(title) + "</td><td>"
-						+ versionString + "</td></tr>";
 			}
 			catch (IOException e) {
 				e.printStackTrace();
+			}
+
+			if (version != -1) {
+				// page has changes
+				String versionString;
+
+				if (version != -2) {
+					// page was other version
+					versionString = "was version <a href=\""
+							+ KnowWEUtils.getURLLink(title, version)
+							+ "\">"
+							+ Integer.toString(version) + "</a>. <a href=\"#\" onClick=\"showDiff("
+							+ title + ");\">compare</a>";
+					String oldText = Environment.getInstance().getWikiConnector().getVersion(title,
+							version);
+					Article oldVersionOfCurrentArticle = Article.createArticle(oldText, title, web);
+					articleManagerAtVersion.registerArticle(oldVersionOfCurrentArticle);
+				}
+				else {
+					// page did not exist
+					versionString = "did not exist";
+
+					articleManagerAtVersion.deleteArticle(actualVersionOfCurrentArticle);
+				}
+
+				pageversions.put(title, version);
+				result += "<tr><td>" + KnowWEUtils.getLinkHTMLToArticle(title) + "</td><td>"
+						+ versionString + "</td></tr>";
 			}
 		}
 		result += "</table>";
