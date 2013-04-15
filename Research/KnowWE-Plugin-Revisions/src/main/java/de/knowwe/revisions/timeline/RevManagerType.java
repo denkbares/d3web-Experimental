@@ -26,7 +26,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author grotheer
  * @created 28.03.2013
  */
-public class TimelineType extends DefaultMarkupType {
+public class RevManagerType extends DefaultMarkupType {
 
 	private static DefaultMarkup m = null;
 
@@ -34,9 +34,9 @@ public class TimelineType extends DefaultMarkupType {
 		m = new DefaultMarkup("RevManager");
 	}
 
-	public TimelineType() {
+	public RevManagerType() {
 		super(m);
 		this.setIgnorePackageCompile(true);
-		this.setRenderer(new TimelineRenderer());
+		this.setRenderer(new RevManagerRenderer());
 	}
 }

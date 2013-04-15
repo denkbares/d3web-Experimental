@@ -26,35 +26,45 @@
         </extension>
 
 	    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-                id="TimelineType">
+                id="RevManagerType">
                 <parameter id="class"
-                        value="de.knowwe.revisions.timeline.TimelineType" />
-                <parameter id="name" value="TimelineType" />
-                <parameter id="description" value="Type TimelineType" />
+                        value="de.knowwe.revisions.timeline.RevManagerType" />
+                <parameter id="name" value="RevManagerType" />
+                <parameter id="description" value="Type RevManagerType" />
                 <parameter id="version" value="1.0" />
                 <parameter id="priority" value="5" />
                 <parameter id="scope" value="root" />
-                <parameter id="script" value="timeline.js" />
-                <parameter id="script" value="timeline-helper.js" />
+                <parameter id="script" value="KnowWE-Plugin-Revisions-Timeline.js" />
+                <parameter id="script" value="KnowWE-Plugin-Revisions.js" />
         		<parameter id="css" value="timeline.css" />
         </extension>
         
        	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-			id="TimelineSelectAction">
+			id="ShowRevisionAction">
 			<parameter id="class"
-				value="de.knowwe.revisions.timeline.TimelineSelectAction" />
-			<parameter id="name" value="TimelineSelectAction" />
-			<parameter id="description" value="Action TimelineSelectAction" />
+				value="de.knowwe.revisions.timeline.ShowRevisionAction" />
+			<parameter id="name" value="ShowRevisionAction" />
+			<parameter id="description" value="Action ShowRevisionAction" />
 			<parameter id="version" value="1.0" />
 			<parameter id="priority" value="5" />
 		</extension>
 		
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-			id="TimelineSaveAction">
+			id="SaveRevisionAction">
 			<parameter id="class"
-				value="de.knowwe.revisions.timeline.TimelineSaveAction" />
-			<parameter id="name" value="TimelineSaveAction" />
-			<parameter id="description" value="Action TimelineSaveAction" />
+				value="de.knowwe.revisions.timeline.SaveRevisionAction" />
+			<parameter id="name" value="SaveRevisionAction" />
+			<parameter id="description" value="Action SaveRevisionAction" />
+			<parameter id="version" value="1.0" />
+			<parameter id="priority" value="5" />
+		</extension>
+		
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+			id="RestoreRevisionAction">
+			<parameter id="class"
+				value="de.knowwe.revisions.RestoreRevisionAction" />
+			<parameter id="name" value="RestoreRevisionAction" />
+			<parameter id="description" value="Action RestoreRevisionAction" />
 			<parameter id="version" value="1.0" />
 			<parameter id="priority" value="5" />
 		</extension>

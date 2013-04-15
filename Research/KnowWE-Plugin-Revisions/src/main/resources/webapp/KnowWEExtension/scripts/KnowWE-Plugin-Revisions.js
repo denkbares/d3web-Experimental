@@ -41,7 +41,7 @@
 					var content = timeline.getItem(row).content;
 
 					var params = {
-						action : 'TimelineSelectAction',
+						action : 'ShowRevisionAction',
 						rev : content,
 						date : start.getTime()
 					}
@@ -63,7 +63,7 @@
 			timeline.setSelection([]);
 
 			var params = {
-				action : 'TimelineSelectAction',
+				action : 'ShowRevisionAction',
 				rev : time,
 				date : time
 			}
@@ -99,6 +99,10 @@
                 'row': count-1
             }]);
 			// action neu laden!
+            document.getElementById('addrevbtn').disabled = true;
+            document.getElementById('txtContent').disabled = true;
+            document.getElementById('addrevbtn').title = "Save the priviously created revision first.";
+
         }
 
         /**
@@ -122,7 +126,7 @@
 		            });
 
 					var params = {
-						action : 'TimelineSaveAction',
+						action : 'SaveRevisionAction',
 						rev : content,
 						date : start.getTime()
 					}
@@ -138,6 +142,10 @@
 					
 				}
             }
+            document.getElementById('addrevbtn').disabled = false;
+            document.getElementById('txtContent').disabled = false;
+            document.getElementById('addrevbtn').title = "Add new Revision";
+
         }
 
         /**
@@ -155,5 +163,28 @@
 					timeline.deleteItem(row, false);
 				}
             }
+            document.getElementById('addrevbtn').disabled = false;
+            document.getElementById('txtContent').disabled = false;
+            document.getElementById('addrevbtn').title = "Add new Revision";
         }
-		
+        
+        
+        /**
+         * Change the content of the currently selected event
+         */
+        function restoreRev(time) {
+			var params = {
+				action : 'RestoreRevisionAction',
+				date : time
+			}
+			var options = {
+					url : KNOWWE.core.util.getURL(params),
+					response : {
+						action : 'insert',
+						ids : [ 'revdetails' ],
+						fn : KNOWWE.core.util.addCollabsiblePluginHeader
+					}
+			}
+			new _KA( options ).send();
+			
+		}

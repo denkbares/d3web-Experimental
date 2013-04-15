@@ -30,9 +30,9 @@ import de.knowwe.revisions.RevisionType;
  * @author grotheer
  * @created 28.03.2013
  */
-public class TimelineRenderer extends DefaultMarkupRenderer {
+public class RevManagerRenderer extends DefaultMarkupRenderer {
 
-	public TimelineRenderer() {
+	public RevManagerRenderer() {
 		super("asdf");
 	}
 
@@ -57,10 +57,11 @@ public class TimelineRenderer extends DefaultMarkupRenderer {
 		String defaultValue = "New Revision";
 
 		html += "<div>";
-		html += "<input type=\"text\" value=\"" + defaultValue + "\" id=\"txtContent\"" +
+		html += "<input type=\"text\" value=\"" + defaultValue
+				+ "\" id=\"txtContent\"" +
 				"onblur=\"if (this.value == '') {this.value = '" + defaultValue + "';}\"" +
 				"onfocus=\"if (this.value == '" + defaultValue + "') {this.value = '';}\" />";
-		html += "<input type=\"button\" value=\"Add\" title=\"Add New Revision\" onclick=\"addRev();\">";
+		html += "<input id=\"addrevbtn\" type=\"button\" value=\"Add\" title=\"Add New Revision\" onclick=\"addRev();\">";
 		html += "</div>";
 
 		// Div for revision details

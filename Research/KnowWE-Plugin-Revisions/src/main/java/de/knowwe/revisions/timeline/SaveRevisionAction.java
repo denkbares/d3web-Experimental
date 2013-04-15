@@ -37,7 +37,7 @@ import de.knowwe.revisions.DateType;
  * @author grotheer
  * @created 28.03.2013
  */
-public class TimelineSaveAction extends AbstractAction {
+public class SaveRevisionAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -62,8 +62,8 @@ public class TimelineSaveAction extends AbstractAction {
 			Section<RootType> s = a.getRootSection();
 			sectionsMap.put(s.getID(), s.getText().concat(markup));
 			Sections.replaceSections(context, sectionsMap);
-			return "success";
+			return "<p class=\"box ok\">Revision '" + rev + "' successfully saved.";
 		}
-		return "failure";
+		return "<p class=\"box error\">Error while saving revision.";
 	}
 }

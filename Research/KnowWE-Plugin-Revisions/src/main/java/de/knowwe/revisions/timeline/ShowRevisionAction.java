@@ -38,7 +38,7 @@ import de.knowwe.revisions.DateType;
  * @author grotheer
  * @created 28.03.2013
  */
-public class TimelineSelectAction extends AbstractAction {
+public class ShowRevisionAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -48,7 +48,6 @@ public class TimelineSelectAction extends AbstractAction {
 			context.setContentType("text/html; charset=UTF-8");
 			context.getWriter().write(result);
 		}
-
 	}
 
 	private String perform(UserActionContext context) {
@@ -57,25 +56,31 @@ public class TimelineSelectAction extends AbstractAction {
 		if (params.containsKey("rev") && params.containsKey("date")) {
 			String rev = params.get("rev");
 			Date date = new Date(Long.parseLong(params.get("date")));
-			return getPagesChangedTable(context.getWeb(), rev, date);
+			return getPagesChangedTable(context, rev, date).toString();
 		}
-		return "failure";
+		return "<p class=\"box error\">Error while showing revision</p>";
 	}
 
-	public static String getPagesChangedTable(String web, String rev, Date date) {
+	public static StringBuffer getPagesChangedTable(UserActionContext context, String rev, Date date) {
 		String dateString = DateType.DATE_FORMAT.format(date);
 		WikiConnector wiki = Environment.getInstance().getWikiConnector();
-		String result = "Revision " + rev + " selected: " + dateString
-				+ ". Differences to current revision:";
-		Collection<String> titles = wiki.getAllArticles(web).keySet();
-		HashMap<String, Integer> pageversions = new HashMap<String, Integer>();
-		result += "<table><tr><th>Page</th><th>Status</th></tr>";
 
-		ArticleManager currentArticleManager = Environment.getInstance().getArticleManager(web);
-		ArticleManager articleManagerAtVersion = new ArticleManager(Environment.getInstance(), web);
+		Collection<String> titles = wiki.getAllArticles(context.getWeb()).keySet();
+		HashMap<String, Integer> pageversions = new HashMap<String, Integer>();
+
+		ArticleManager currentArticleManager = Environment.getInstance().getArticleManager(
+				context.getWeb());
+		ArticleManager articleManagerAtVersion = new ArticleManager(Environment.getInstance(),
+				context.getWeb());
 		for (Article a : currentArticleManager.getArticles()) {
 			articleManagerAtVersion.registerArticle(a);
 		}
+
+		StringBuffer result = new StringBuffer("Revision '" + rev + "' selected: Representing "
+				+ dateString
+				+ ". ");
+		titles.remove(context.getTitle());
+		StringBuffer tableContent = new StringBuffer();
 
 		for (String title : titles) {
 			Article actualVersionOfCurrentArticle = currentArticleManager.getArticle(title);
@@ -98,12 +103,16 @@ public class TimelineSelectAction extends AbstractAction {
 					// page was other version
 					versionString = "was version <a href=\""
 							+ KnowWEUtils.getURLLink(title, version)
-							+ "\">"
-							+ Integer.toString(version) + "</a>. <a href=\"#\" onClick=\"showDiff("
-							+ title + ");\">compare</a>";
-					String oldText = Environment.getInstance().getWikiConnector().getVersion(title,
+							+ "\">" + Integer.toString(version) + "</a>. "
+							+ "<a href=\"Diff.jsp?page=" + title + "&r2=" + version
+							+ "\""
+							// + "onClick=\"compareRev(" + title + ");\""
+							+ ">Compare with current</a>";
+					String oldText = Environment.getInstance().getWikiConnector().getVersion(
+							title,
 							version);
-					Article oldVersionOfCurrentArticle = Article.createArticle(oldText, title, web);
+					Article oldVersionOfCurrentArticle = Article.createArticle(oldText, title,
+							context.getWeb());
 					articleManagerAtVersion.registerArticle(oldVersionOfCurrentArticle);
 				}
 				else {
@@ -114,12 +123,23 @@ public class TimelineSelectAction extends AbstractAction {
 				}
 
 				pageversions.put(title, version);
-				result += "<tr><td>" + KnowWEUtils.getLinkHTMLToArticle(title) + "</td><td>"
-						+ versionString + "</td></tr>";
+				tableContent.append("<tr><td>" + KnowWEUtils.getLinkHTMLToArticle(title)
+						+ "</td><td>"
+						+ versionString + "</td></tr>");
 			}
 		}
-		result += "</table>";
+
+		if (tableContent.length() != 0) {
+			result.append("<a href=\"#\" onClick=\"restoreRev(" + date.getTime()
+					+ ");\">Restore this revision</a>");
+			result.append("\n\nDifferences to current revision:");
+			result.append("<table><tr><th>Page</th><th>Status</th></tr>");
+			result.append(tableContent);
+			result.append("</table>");
+		}
+		else {
+			result.append("<p class=\"box info\">No differences to current revision.</p>");
+		}
 		return result;
 	}
-
 }
