@@ -60,6 +60,7 @@
 		
         function ondragged() {
 			var time = timeline.getCustomTime().getTime();
+			timeline.setSelection([]);
 
 			var params = {
 				action : 'TimelineSelectAction',

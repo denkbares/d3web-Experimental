@@ -67,6 +67,5 @@ public class TimelineRenderer extends DefaultMarkupRenderer {
 		html += "<div id=\"revdetails\"></div>";
 		// html += after;
 		string.appendHtml(html);
-		System.out.println(html);
 	}
 }
