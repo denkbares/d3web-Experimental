@@ -178,36 +178,38 @@ DenkbaresSkin.checkFavScroll = function () {
 DenkbaresSkin.cleanTrail = function() {
 	var breadcrumbs = jq$('.breadcrumbs');
 	if (breadcrumbs.length == 0) return;
-	var crumbs = breadcrumbs.find('a.wikipage');
-	if (crumbs.length == 0) return;
-	var crumbsCheck = new Object();
-	var removeBecauseLeadingComma = false;
-	// remove duplicate entries
-	for (var i = crumbs.length - 1; i >= 0; i--) {
-		var crumb = crumbs[i];
-		var crumbText = jq$(crumb).text();
-		var existingEntry = crumbsCheck[crumbText];
-		if (typeof existingEntry == "undefined") {
-			crumbsCheck[crumbText] = i;
-		} else {
-			jq$(crumb).remove();
-			if (i == 0) removeBecauseLeadingComma = true;
+	for (var k = 0; k < breadcrumbs.length; k++) {
+		var crumbs = breadcrumbs[k].find('a.wikipage');
+		if (crumbs.length == 0) continue;
+		var crumbsCheck = new Object();
+		var removeBecauseLeadingComma = false;
+		// remove duplicate entries
+		for (var i = crumbs.length - 1; i >= 0; i--) {
+			var crumb = crumbs[i];
+			var crumbText = jq$(crumb).text();
+			var existingEntry = crumbsCheck[crumbText];	
+			if (typeof existingEntry == "undefined") {
+				crumbsCheck[crumbText] = i;
+			} else {
+				jq$(crumb).remove();
+				if (i == 0) removeBecauseLeadingComma = true;
+			}
 		}
-	}
-	// remove superfluous commas
-	var lastNodeText = "";
-	for (var i = 0; i < breadcrumbs[0].childNodes.length; i++) {
-		var childNode = breadcrumbs[0].childNodes[i];
-		var tempValue = childNode.nodeValue;
-		if ((lastNodeText == ", " || removeBecauseLeadingComma == true)
-				&& tempValue == ", ") {
-			childNode.nodeValue = "";
-			removeBecauseLeadingComma = false;
-		}		
-		lastNodeText = tempValue;
+		// remove superfluous commas
+		var lastNodeText = "";
+		for (var i = 0; i < breadcrumbs[k].childNodes.length; i++) {
+			var childNode = breadcrumbs[k].childNodes[i];
+			var tempValue = childNode.nodeValue;
+			if ((lastNodeText == ", " || removeBecauseLeadingComma == true)
+					&& tempValue == ", ") {
+				childNode.nodeValue = "";
+				removeBecauseLeadingComma = false;
+			}		
+			lastNodeText = tempValue;
 		
+		}
+		var text = jq$(breadcrumbs.first());
 	}
-	var text = jq$(breadcrumbs.first());
 }
 
 
