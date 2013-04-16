@@ -88,7 +88,7 @@ public class TimeEventNew extends AbstractType {
 	public static TimeEvent createTimeEvent(Section<TimeEventNew> s) {
 		String titleS = null;
 		Section<TitleType> title = Sections.findSuccessor(s, TitleType.class);
-		if (title != null) titleS = title.get().getTermIdentifier(title).toString();
+		if (title != null) titleS = title.get().getTermName(title);
 
 		String dateS = null;
 		Section<DateType> date = Sections.findSuccessor(s, DateType.class);
@@ -168,7 +168,7 @@ public class TimeEventNew extends AbstractType {
 							if (firstNonEmptyLineContent != null) {
 								return SectionFinderResult.createSingleItemResultList(
 										firstNonEmptyLineContent.getStart(),
-												firstNonEmptyLineContent.getEnd());
+										firstNonEmptyLineContent.getEnd());
 							}
 							return null;
 						}
