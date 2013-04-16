@@ -42,9 +42,9 @@ import java.util.ResourceBundle;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.Environment;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -919,7 +919,7 @@ public class RenderingCore {
 
 	private static String createSparqlURI(String name) {
 		Collection<Section<? extends SimpleDefinition>> definitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				new TermIdentifier(name));
+				new Identifier(name));
 		if (definitions.size() > 0) {
 			Section<? extends SimpleDefinition> def = definitions.iterator().next();
 			return "<" + RDFSUtil.getURI(def) + ">";
@@ -1023,7 +1023,7 @@ public class RenderingCore {
 		if (parameters.get(LINK_MODE) != null) {
 			if (parameters.get(LINK_MODE).equals(LINK_MODE_BROWSE)) {
 				Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-						new TermIdentifier(to));
+						new Identifier(to));
 				String targetArticle = to;
 				if (termDefinitions.size() > 0) {
 					targetArticle = termDefinitions.iterator().next().getTitle();

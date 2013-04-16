@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.d3web.strings.StringFragment;
+import de.d3web.strings.Strings;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.AbstractType;
@@ -21,8 +23,6 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
-import de.knowwe.core.utils.StringFragment;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.hermes.TimeStamp;
 import de.knowwe.hermes.kdom.event.renderer.TimeEventDateRenderer;

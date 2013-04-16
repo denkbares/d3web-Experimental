@@ -38,10 +38,10 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 

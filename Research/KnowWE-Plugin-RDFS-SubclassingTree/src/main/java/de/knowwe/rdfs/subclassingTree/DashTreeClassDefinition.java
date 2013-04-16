@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import de.d3web.strings.Strings;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
@@ -30,7 +31,6 @@ import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.RegexSectionFinderSingle;
 import de.knowwe.rdfs.AbstractIRITermDefinition;

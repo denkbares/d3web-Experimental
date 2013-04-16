@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
@@ -21,10 +21,10 @@ public class ShowUndefinedTermsTabAction extends AbstractAction {
 		html.append("<p>The ontology contains the following undefined terms:</p>");
 
 		// article --> errors
-		Map<TermIdentifier, Set<Section<? extends SimpleReference>>> errors = new HashMap<TermIdentifier, Set<Section<? extends SimpleReference>>>();
+		Map<Identifier, Set<Section<? extends SimpleReference>>> errors = new HashMap<Identifier, Set<Section<? extends SimpleReference>>>();
 
-		Map<TermIdentifier, Set<Section<? extends SimpleReference>>> refs = IncrementalCompiler.getInstance().getTerminology().getAllReferences();
-		for (TermIdentifier identifier : refs.keySet()) {
+		Map<Identifier, Set<Section<? extends SimpleReference>>> refs = IncrementalCompiler.getInstance().getTerminology().getAllReferences();
+		for (Identifier identifier : refs.keySet()) {
 			if (!IncrementalCompiler.getInstance().getTerminology().isValid(identifier)) {
 				if (errors.containsKey(identifier)) {
 					errors.get(identifier).addAll(refs.get(identifier));
@@ -35,7 +35,7 @@ public class ShowUndefinedTermsTabAction extends AbstractAction {
 			}
 		}
 
-		for (TermIdentifier termidentifier : errors.keySet()) {
+		for (Identifier termidentifier : errors.keySet()) {
 			html.append("<div id=\"onte-import-tab\" class=\"onte-box\" style=\"padding-bottom:3px;\">");
 
 			html.append("<p><strong>Term: ");

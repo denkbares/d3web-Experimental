@@ -34,12 +34,12 @@ import org.json.JSONObject;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryResultTable;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.utils.RenderOptions;
@@ -65,8 +65,6 @@ public class SparqlMarkupRenderer implements Renderer {
 						SparqlMarkupType.class);
 
 				RenderOptions renderOpts = new RenderOptions(sec.getID());
-
-
 
 				// Default values
 				String navigationOffset = "1";
@@ -134,7 +132,6 @@ public class SparqlMarkupRenderer implements Renderer {
 						renderNavigation(navigationOffset, navigationLimit,
 								resultEntry.getSize(), sec.getID(), result);
 
-
 					}
 
 				}
@@ -180,8 +177,6 @@ public class SparqlMarkupRenderer implements Renderer {
 		return annotationString != null && annotationString.equals("true");
 
 	}
-
-
 
 	private String modifyOrderByInSparqlString(Map<String, String> sortOrder, String sparqlString) {
 		StringBuilder sb = new StringBuilder(sparqlString);
@@ -253,7 +248,6 @@ public class SparqlMarkupRenderer implements Renderer {
 		result.appendHtml("<div class='toolSeparator'></div>");
 		result.appendHtml("</div>");
 
-
 	}
 
 	private void renderNavigation(String from, String selectedSize, int max, String id, RenderResult result) {
@@ -288,7 +282,6 @@ public class SparqlMarkupRenderer implements Renderer {
 						+ id + "','" + max + "')",
 				(!selectedSize.equals("All") && (fromInt + selectedSizeInt - 1 < max)), result);
 		result.appendHtml("</div>");
-
 
 	}
 
@@ -338,7 +331,6 @@ public class SparqlMarkupRenderer implements Renderer {
 			}
 		}
 		sizes.add("All");
-
 
 		return sizes.toArray(new String[sizes.size()]);
 

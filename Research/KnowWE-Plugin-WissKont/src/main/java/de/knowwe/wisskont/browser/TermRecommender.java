@@ -33,10 +33,10 @@ import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
 import de.knowwe.core.event.EventManager;
@@ -271,7 +271,7 @@ public class TermRecommender implements EventListener {
 			data.put(context.getUserName(), recommendationSet);
 		}
 		Collection<Section<? extends SimpleDefinition>> defs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				new TermIdentifier(term));
+				new Identifier(term));
 
 		if (defs.size() > 0) {
 			Section<? extends SimpleDefinition> def = defs.iterator().next();

@@ -3,7 +3,7 @@ package de.knowwe.rdfs.d3web;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.core.session.Session;
-import de.knowwe.core.utils.Strings;
+import de.d3web.strings.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class D3webRdf2GoURIs {

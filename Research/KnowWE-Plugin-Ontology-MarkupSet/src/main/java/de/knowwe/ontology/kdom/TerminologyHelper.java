@@ -21,7 +21,7 @@ package de.knowwe.ontology.kdom;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 
-import de.knowwe.core.compile.terminology.TermIdentifier;
+import de.d3web.strings.Identifier;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -65,13 +65,13 @@ public abstract class TerminologyHelper {
 			String abbreviation = getAbbreviation(value);
 			String literal = value.substring(value.indexOf("#") + 1);
 			TerminologyManager terminologyManager = KnowWEUtils.getTerminologyManager(article);
-			TermIdentifier abbrIdentifier = new TermIdentifier(
+			Identifier abbrIdentifier = new Identifier(
 					AbbreviatedResourceDefinition.toTermName(abbreviation, literal));
 			terminologyManager.registerTermDefinition(section, AbbreviationDefinition.class,
-					new TermIdentifier(abbreviation));
+					new Identifier(abbreviation));
 			terminologyManager.registerTermDefinition(
 					section, termClass, abbrIdentifier);
-			TermIdentifier identifier = new TermIdentifier(literal);
+			Identifier identifier = new Identifier(literal);
 			terminologyManager.registerTermDefinition(
 					section, Resource.class, identifier);
 		}

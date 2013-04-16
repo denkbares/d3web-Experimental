@@ -11,10 +11,11 @@ import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.NamedObject;
+import de.d3web.strings.Strings;
+import de.d3web.strings.Identifier;
 import de.d3web.we.object.D3webTerm;
 import de.d3web.we.object.D3webTermDefinition;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -22,7 +23,6 @@ import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
@@ -33,7 +33,7 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 
 		if (section.hasErrorInSubtree()) return Messages.noMessage();
 
-		TermIdentifier termIdentifier = section.get().getTermIdentifier(section);
+		Identifier termIdentifier = section.get().getTermIdentifier(section);
 		URI termIdentifierURI = Rdf2GoCore.getInstance().createlocalURI(
 				Strings.encodeURL(termIdentifier.toExternalForm()));
 
@@ -62,7 +62,7 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 			if (termObject instanceof TerminologyObject) {
 				TerminologyObject[] parents = ((TerminologyObject) termObject).getParents();
 				for (TerminologyObject parent : parents) {
-					String externalForm = new TermIdentifier(parent.getName()).toExternalForm();
+					String externalForm = new Identifier(parent.getName()).toExternalForm();
 					URI parentTermidentifierURI = Rdf2GoCore.getInstance().createlocalURI(
 							Strings.encodeURL(externalForm));
 					statements.add(Rdf2GoCore.getInstance().createStatement(termIdentifierURI,

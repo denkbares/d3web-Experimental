@@ -24,8 +24,9 @@ import java.util.Map;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.d3web.strings.Strings;
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -33,7 +34,6 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.taghandler.TagHandlerTypeContent;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.SparqlResultRenderer;
@@ -85,7 +85,7 @@ public class PropertyUseTagHandler extends AbstractTagHandler {
 		}
 
 		Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
-				TermIdentifier.fromExternalForm(externalForm));
+				Identifier.fromExternalForm(externalForm));
 
 		if (termReferences != null && termReferences.size() > 0) {
 

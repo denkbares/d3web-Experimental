@@ -52,11 +52,11 @@ import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import org.semanticweb.owlapi.vocab.OWLFacet;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
+import de.d3web.strings.Identifier;
 import de.d3web.we.kdom.condition.NonTerminalCondition;
 import de.d3web.we.kdom.condition.TerminalCondition;
 import de.knowwe.compile.ImportManager;
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -191,7 +191,7 @@ public class AxiomFactory {
 		// check conflict: imported term and local term definition
 		// if violation found, prior local term
 
-		TermIdentifier termIdentifier = new TermIdentifier(concept);
+		Identifier termIdentifier = new Identifier(concept);
 		if (IncrementalCompiler.getInstance().getTerminology().isImportedObject(termIdentifier)
 				&& !IncrementalCompiler.getInstance().getTerminology().isLocalObject(termIdentifier)) {
 			// resolve import section, which section imported the term

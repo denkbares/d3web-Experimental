@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
+import de.d3web.strings.Strings;
 import de.d3web.we.object.D3webTermDefinition;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.kdom.Article;
@@ -12,7 +13,6 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class KnowledgeBaseRdf2GoHandler extends SubtreeHandler<D3webTermDefinition<?>> {

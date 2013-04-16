@@ -24,10 +24,10 @@ import java.util.regex.Pattern;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.compile.object.renderer.CompositeRenderer;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
@@ -62,7 +62,7 @@ public abstract class RelationMarkup extends AbstractType {
 
 	protected URI createURI(String s) {
 		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
-		Collection<Section<? extends SimpleDefinition>> termDefinitions = terminology.getTermDefinitions(new TermIdentifier(
+		Collection<Section<? extends SimpleDefinition>> termDefinitions = terminology.getTermDefinitions(new Identifier(
 				s));
 		if (termDefinitions.size() > 0) {
 			return RDFSUtil.getURI(termDefinitions.iterator().next());

@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
 import de.knowwe.compile.object.InvalidReference;
@@ -38,7 +39,6 @@ import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.compile.Priority;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.compile.terminology.TerminologyExtension;
 import de.knowwe.core.event.Event;
@@ -113,7 +113,7 @@ public class IncrementalCompiler implements EventListener {
 	 * @param key
 	 * @param termIdentifier
 	 */
-	public void registerImportedTerminology(Section<? extends AbstractType> key, TermIdentifier termIdentifier) {
+	public void registerImportedTerminology(Section<? extends AbstractType> key, Identifier termIdentifier) {
 		Section<ImportedTerm> importedSection = Section.createSection(
 				termIdentifier.getLastPathElement(), new ImportedTerm(), null);
 		terminology.addImportedObject(importedSection);
@@ -441,12 +441,12 @@ public class IncrementalCompiler implements EventListener {
 	}
 
 	private boolean hasValidDefinition(Section<?> section) {
-		TermIdentifier termIdentifier = KnowWEUtils.getTermIdentifier(section);
+		Identifier termIdentifier = KnowWEUtils.getTermIdentifier(section);
 		return hasValidDefinition(termIdentifier);
 
 	}
 
-	public boolean hasValidDefinition(TermIdentifier termIdentifier) {
+	public boolean hasValidDefinition(Identifier termIdentifier) {
 
 		// System.out.println("CheckDefinition: " + termIdentifier);
 		Collection<Message> messages = checkDefinition(termIdentifier);
@@ -459,7 +459,7 @@ public class IncrementalCompiler implements EventListener {
 		return true;
 	}
 
-	public Collection<Message> checkDefinition(TermIdentifier termIdentifier) {
+	public Collection<Message> checkDefinition(Identifier termIdentifier) {
 		Collection<Message> messages = new ArrayList<Message>();
 
 		Collection<Section<? extends SimpleDefinition>> termDefiningSections = terminology.getTermDefinitions(termIdentifier);
@@ -498,7 +498,7 @@ public class IncrementalCompiler implements EventListener {
 			for (Section<SimpleReference> ref : allReferencesOfComplexDefinition) {
 				String errorMsg = "ComplexDefinition has dependency error: ";
 				// if one reference is not defined
-				TermIdentifier termIdentifier2 = KnowWEUtils.getTermIdentifier(ref);
+				Identifier termIdentifier2 = KnowWEUtils.getTermIdentifier(ref);
 				if ((!terminology.isValid(termIdentifier2))) {
 					// System.out.println("dependency error");
 					messages.add(Messages.error(errorMsg +

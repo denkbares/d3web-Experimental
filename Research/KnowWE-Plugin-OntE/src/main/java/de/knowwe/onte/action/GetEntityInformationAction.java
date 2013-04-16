@@ -23,9 +23,9 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.renderer.ManchesterOWLSyntaxHTMLColorRenderer;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
@@ -57,7 +57,7 @@ public class GetEntityInformationAction extends AbstractAction {
 		if (cls != null) {
 			OWLEntity entity = AxiomFactory.getOWLAPIEntity(providedEntity, cls);
 
-			TermIdentifier termIdentifier = new TermIdentifier(
+			Identifier termIdentifier = new Identifier(
 					OnteRenderingUtils.getDisplayName(entity));
 			html.append(
 					"<p style=\"height:30px;\"><a style=\"float:right;\" class=\"onte-button left small\" href=\"")

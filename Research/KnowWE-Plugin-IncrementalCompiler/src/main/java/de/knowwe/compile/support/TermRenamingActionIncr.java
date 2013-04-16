@@ -28,6 +28,7 @@ import java.util.Set;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.core.ArticleManager;
@@ -35,7 +36,6 @@ import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
@@ -64,7 +64,7 @@ public class TermRenamingActionIncr extends AbstractAction {
 		String web = context.getParameter(Attributes.WEB);
 		String term = context.getParameter(TERMNAME);
 		String replacement = context.getParameter(REPLACEMENT);
-		TermIdentifier termIdentifier = new TermIdentifier(term);
+		Identifier termIdentifier = new Identifier(term);
 
 		ReferenceManager referenceManager = IncrementalCompiler.getInstance().getTerminology();
 
@@ -107,18 +107,18 @@ public class TermRenamingActionIncr extends AbstractAction {
 		generateMessage(failures, success, context, termIdentifier, replacement);
 	}
 
-	private void generateMessage(Set<String> failures, Set<String> success, UserActionContext context, TermIdentifier termIdentifier, String replacement) throws IOException {
+	private void generateMessage(Set<String> failures, Set<String> success, UserActionContext context, Identifier termIdentifier, String replacement) throws IOException {
 		JSONObject response = new JSONObject();
 		try {
 			// the new external form of the TermIdentifier
 			String[] pathElements = termIdentifier.getPathElements();
-			String newLastPathElement = TermIdentifier.fromExternalForm(replacement).getLastPathElement();
+			String newLastPathElement = Identifier.fromExternalForm(replacement).getLastPathElement();
 			pathElements[pathElements.length - 1] = newLastPathElement;
-			response.append("newTermIdentifier", new TermIdentifier(pathElements).toExternalForm());
+			response.append("newTermIdentifier", new Identifier(pathElements).toExternalForm());
 
 			// the new object name
 			response.append("newObjectName",
-					new TermIdentifier(newLastPathElement).toExternalForm());
+					new Identifier(newLastPathElement).toExternalForm());
 			StringBuilder builder = new StringBuilder();
 
 			// successes

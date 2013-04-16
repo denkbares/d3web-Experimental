@@ -2,13 +2,13 @@ package de.knowwe.dataAnalysis;
 
 import java.util.regex.Pattern;
 
+import de.d3web.strings.Strings;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.RegexSectionFinderSingle;
 

@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Node;
 
+import de.d3web.strings.Strings;
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.utils.CompileUtils;
@@ -38,7 +39,6 @@ import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.RegexSectionFinderSingle;
 import de.knowwe.rdf2go.Rdf2GoCore;

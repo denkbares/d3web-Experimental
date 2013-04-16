@@ -31,7 +31,7 @@ import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 
-import de.knowwe.core.utils.Strings;
+import de.d3web.strings.Strings;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.hermes.maps.Placemark;
 import de.knowwe.rdf2go.Rdf2GoCore;

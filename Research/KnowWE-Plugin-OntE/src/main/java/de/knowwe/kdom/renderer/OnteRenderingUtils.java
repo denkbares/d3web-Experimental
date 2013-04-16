@@ -6,10 +6,10 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.ImportManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
@@ -33,7 +33,7 @@ public class OnteRenderingUtils {
 	 * @param term
 	 * @return
 	 */
-	public static boolean isKnownTerm(TermIdentifier termIdendifier) {
+	public static boolean isKnownTerm(Identifier termIdendifier) {
 		ReferenceManager manager = IncrementalCompiler.getInstance().getTerminology();
 		return manager.isValid(termIdendifier);
 	}
@@ -56,7 +56,7 @@ public class OnteRenderingUtils {
 		return null;
 	}
 
-	public static String getHyperlink(TermIdentifier termIdentifier) {
+	public static String getHyperlink(Identifier termIdentifier) {
 
 		if (IncrementalCompiler.getInstance().getTerminology().isImportedObject(termIdentifier)) {
 			Section<? extends AbstractType> importSection = ImportManager.resolveImportSection(termIdentifier);
@@ -175,7 +175,7 @@ public class OnteRenderingUtils {
 		term = term.replace("\"", "").trim();
 		Collection<Section<? extends SimpleDefinition>> termDefs =
 				IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-						new TermIdentifier(term));
+						new Identifier(term));
 
 		// only one definition allowed in the onte plugin, so simply use the
 		// first result

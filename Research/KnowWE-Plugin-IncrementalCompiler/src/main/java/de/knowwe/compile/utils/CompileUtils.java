@@ -28,11 +28,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.ImportManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
@@ -172,7 +172,7 @@ public class CompileUtils {
 		return result;
 	}
 
-	public static String createLinkToDefinition(TermIdentifier termIdentifier, UserContext user) {
+	public static String createLinkToDefinition(Identifier termIdentifier, UserContext user) {
 		Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
 				termIdentifier);
 		if (termReferences != null && termReferences.size() > 0) {

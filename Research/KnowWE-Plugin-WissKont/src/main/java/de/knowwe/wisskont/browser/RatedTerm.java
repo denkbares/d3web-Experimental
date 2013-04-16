@@ -21,7 +21,7 @@ package de.knowwe.wisskont.browser;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
-import de.knowwe.core.utils.Strings;
+import de.d3web.strings.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.wisskont.util.HierarchyNode;
 import de.knowwe.wisskont.util.MarkupUtils;

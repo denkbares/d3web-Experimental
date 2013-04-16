@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
@@ -63,7 +63,7 @@ class RangeCheckRenderer implements Renderer {
 		// IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(predName);
 
 		Object info = IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(
-				new TermIdentifier(predName));
+				new Identifier(predName));
 		String domainClassName = null;
 		String rangeClassName = null;
 		boolean warningRange = false;
@@ -102,7 +102,7 @@ class RangeCheckRenderer implements Renderer {
 			}
 			if (rangeClassName != null) {
 				URI rangeClassURI = RDFSUtil.getURI(IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-						new TermIdentifier(rangeClassName)).iterator().next());
+						new Identifier(rangeClassName)).iterator().next());
 				URI objectURI = RDFSUtil.getURI(object);
 				String queryRange = "ASK { <" + objectURI + "> <" + RDF.type + "> <"
 						+ rangeClassURI + "> .}";
@@ -112,7 +112,7 @@ class RangeCheckRenderer implements Renderer {
 
 			if (domainClassName != null) {
 				URI domainClassURI = RDFSUtil.getURI(IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-						new TermIdentifier(domainClassName)).iterator().next());
+						new Identifier(domainClassName)).iterator().next());
 
 				URI subjectURI = RDFSUtil.getURI(subject);
 

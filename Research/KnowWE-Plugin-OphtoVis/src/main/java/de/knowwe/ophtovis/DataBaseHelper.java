@@ -28,8 +28,8 @@ import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -94,7 +94,7 @@ import de.knowwe.rdfs.util.RDFSUtil;
 
 	private static String createSparqlURI(String name) {
 		Collection<Section<? extends SimpleDefinition>> definitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				new TermIdentifier(name));
+				new Identifier(name));
 		if (definitions.size() > 0) {
 			Section<? extends SimpleDefinition> def = definitions.iterator().next();
 			return "<" + RDFSUtil.getURI(def) + ">";

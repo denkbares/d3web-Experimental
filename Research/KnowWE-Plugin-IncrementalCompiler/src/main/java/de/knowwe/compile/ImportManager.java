@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import de.knowwe.core.compile.terminology.TermIdentifier;
+import de.d3web.strings.Identifier;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -74,7 +74,7 @@ public class ImportManager {
 		return Collections.unmodifiableSet(imports.get(key));
 	}
 
-	public static Section<? extends AbstractType> resolveImportSection(TermIdentifier termIdentifier) {
+	public static Section<? extends AbstractType> resolveImportSection(Identifier termIdentifier) {
 		for (Section<? extends AbstractType> importSec : imports.keySet()) {
 			for (Section<?> section : imports.get(importSec)) {
 				if (KnowWEUtils.getTermIdentifier(section).toString().equals(

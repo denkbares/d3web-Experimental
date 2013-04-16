@@ -20,11 +20,11 @@ package de.knowwe.defi.links;
 
 import java.util.Map;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * The TalkAboutTaghandler adds a link into any Wiki article. It links to a page

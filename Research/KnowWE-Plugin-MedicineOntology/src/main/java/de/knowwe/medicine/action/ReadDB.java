@@ -28,10 +28,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.medicine.DbConnection;
 import de.knowwe.medicine.Medicine;
 import de.knowwe.medicine.MedicineObject;

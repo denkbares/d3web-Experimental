@@ -27,6 +27,7 @@ import de.d3web.knowwe.type.AnnotatedString;
 import de.d3web.knowwe.type.AnnotationObject;
 import de.d3web.knowwe.type.AnnotationProperty;
 import de.d3web.knowwe.type.SimpleAnnotation;
+import de.d3web.strings.Strings;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.contexts.AnnotationContext;
 import de.knowwe.core.contexts.ContextManager;
@@ -35,7 +36,6 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 
 /**
  * 

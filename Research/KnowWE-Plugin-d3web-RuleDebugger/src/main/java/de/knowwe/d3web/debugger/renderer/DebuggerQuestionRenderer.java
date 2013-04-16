@@ -31,10 +31,10 @@ import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.UndefinedValue;
+import de.d3web.strings.Strings;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.rendering.RenderResult;
-import de.knowwe.core.utils.Strings;
 
 /**
  * Get the HTML-output for debugging a question.

@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.semanticweb.owlapi.model.OWLObjectOneOf;
 
+import de.d3web.strings.Strings;
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.NonTerminalCondition;
 import de.d3web.we.kdom.condition.helper.BracedCondition;
@@ -31,7 +32,6 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.report.Messages;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 
 /**

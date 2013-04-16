@@ -19,6 +19,7 @@
  */
 package de.knowwe.rdfs.subclassingTree;
 
+import de.d3web.strings.Strings;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.parsing.Section;
@@ -27,7 +28,6 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
 import de.knowwe.rdfs.IRITermRef;
 

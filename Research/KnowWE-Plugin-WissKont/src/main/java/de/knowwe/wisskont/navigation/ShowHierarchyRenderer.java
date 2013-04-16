@@ -29,8 +29,8 @@ import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -84,7 +84,7 @@ public class ShowHierarchyRenderer implements Renderer {
 	 */
 	private void renderSubconceptsOf(String concept, String relation, int depth, RenderResult string) {
 		Collection<Section<? extends SimpleDefinition>> defs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				new TermIdentifier(concept));
+				new Identifier(concept));
 		String query = "SELECT ?z WHERE { ?z lns:"
 				+ relation
 				+ " <"
@@ -102,7 +102,7 @@ public class ShowHierarchyRenderer implements Renderer {
 			Collection<Section<? extends SimpleDefinition>> termDefinitions = null;
 			try {
 				termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-						new TermIdentifier(URLDecoder.decode(z.replaceAll("\\+", " "), "UTF-8")));
+						new Identifier(URLDecoder.decode(z.replaceAll("\\+", " "), "UTF-8")));
 			}
 			catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
@@ -134,7 +134,7 @@ public class ShowHierarchyRenderer implements Renderer {
 	 */
 	private void appendLink(String name, RenderResult result) {
 		Collection<Section<? extends SimpleDefinition>> defs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				new TermIdentifier(name));
+				new Identifier(name));
 		URI uri = RDFSUtil.getURI(defs.iterator().next());
 
 		result.appendHtml("<a href='" + uri.toString() + "'>");

@@ -24,9 +24,9 @@ import java.util.List;
 
 import com.wcohen.ss.Levenstein;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.correction.CorrectionProvider;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
@@ -50,7 +50,7 @@ public class IncrementalTermReferenceCorrectionProvider implements CorrectionPro
 		Levenstein l = new Levenstein();
 
 		for (Section<? extends SimpleDefinition> def : defs) {
-			TermIdentifier termIdentifier = KnowWEUtils.getTermIdentifier(def);
+			Identifier termIdentifier = KnowWEUtils.getTermIdentifier(def);
 			double score = l.score(originalText, termIdentifier.getLastPathElement());
 			if (score >= -threshold) {
 				suggestions.add(new CorrectionProvider.Suggestion(

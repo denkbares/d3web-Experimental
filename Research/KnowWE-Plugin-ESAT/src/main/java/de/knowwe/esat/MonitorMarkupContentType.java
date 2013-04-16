@@ -25,9 +25,9 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.strings.Identifier;
 import de.d3web.we.object.SolutionDefinition;
 import de.knowwe.core.compile.Priority;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
@@ -74,7 +74,7 @@ public class MonitorMarkupContentType extends AbstractType {
 			knowledgeBase.getRootQASet().addChild(qWidth);
 			knowledgeBase.getManager().putTerminologyObject(qWidth);
 
-			TermIdentifier termIdentifierWidth = new TermIdentifier(solutionDef.get().getTermName(
+			Identifier termIdentifierWidth = new Identifier(solutionDef.get().getTermName(
 					solutionDef)
 					+ "_width");
 			terminologyHandler.registerTermDefinition(section, termObjectClass, termIdentifierWidth);
@@ -86,7 +86,7 @@ public class MonitorMarkupContentType extends AbstractType {
 			knowledgeBase.getRootQASet().addChild(qHeight);
 			knowledgeBase.getManager().putTerminologyObject(qHeight);
 
-			TermIdentifier termIdentifierHeigth = new TermIdentifier(solutionDef.get().getTermName(
+			Identifier termIdentifierHeigth = new Identifier(solutionDef.get().getTermName(
 					solutionDef)
 					+ "_height");
 			terminologyHandler.registerTermDefinition(section, termObjectClass,
@@ -99,7 +99,7 @@ public class MonitorMarkupContentType extends AbstractType {
 			knowledgeBase.getRootQASet().addChild(qSquare);
 			knowledgeBase.getManager().putTerminologyObject(qSquare);
 
-			TermIdentifier termIdentifier = new TermIdentifier(solutionDef.get().getTermName(
+			Identifier termIdentifier = new Identifier(solutionDef.get().getTermName(
 					solutionDef)
 					+ "_a");
 			terminologyHandler.registerTermDefinition(section, termObjectClass, termIdentifier);

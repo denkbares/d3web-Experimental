@@ -22,9 +22,9 @@ package de.knowwe.hermes.action;
 
 import java.io.IOException;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.utils.Strings;
 
 public class RenderConceptRelationPropositionsAction extends AbstractAction {
 

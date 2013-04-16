@@ -14,10 +14,10 @@ import org.ontoware.rdf2go.model.QueryRow;
 import utils.TestUtils;
 import connector.DummyConnector;
 import de.d3web.plugin.test.InitPluginManager;
+import de.d3web.strings.Strings;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.rdf2go.Rdf2GoCore;
 

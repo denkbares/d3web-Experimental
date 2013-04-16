@@ -23,7 +23,7 @@ import java.util.StringTokenizer;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 
-import de.knowwe.core.compile.terminology.TermIdentifier;
+import de.d3web.strings.Identifier;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.onte.editor.OWLApiAxiomCache;
@@ -67,7 +67,7 @@ public class ManchesterOWLSyntaxHTMLColorRenderer {
 				doc.append(curToken);
 				doc.append("</span> ");
 			}
-			else if (OnteRenderingUtils.isKnownTerm(new TermIdentifier(curToken))) {
+			else if (OnteRenderingUtils.isKnownTerm(new Identifier(curToken))) {
 
 				doc.append(" <span style=\"color:rgb(25, 180, 120);\"");
 

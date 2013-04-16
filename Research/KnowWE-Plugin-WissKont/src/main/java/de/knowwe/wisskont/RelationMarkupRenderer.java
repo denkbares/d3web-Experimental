@@ -21,13 +21,13 @@ package de.knowwe.wisskont;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.d3web.strings.Strings;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.wisskont.util.MarkupUtils;
 

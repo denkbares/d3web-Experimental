@@ -13,6 +13,7 @@ import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.manage.RuleFactory;
+import de.d3web.strings.Strings;
 import de.d3web.we.kdom.condition.Finding;
 import de.d3web.we.kdom.rules.RuleContentType;
 import de.d3web.we.object.QASetDefinition;
@@ -32,7 +33,6 @@ import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.sectionFinder.UnquotedExpressionFinder;
 

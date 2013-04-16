@@ -26,9 +26,9 @@ import java.util.Set;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
@@ -85,7 +85,7 @@ public class HierarchyDashtreeElementCompileScript extends
 							HierarchyMarkup.RELATION_ANNOTATION_KEY);
 					if (relationAnnotation != null) {
 						Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-								new TermIdentifier(relationAnnotation));
+								new Identifier(relationAnnotation));
 						if (termDefinitions != null && termDefinitions.size() > 0) {
 							Section<? extends SimpleDefinition> firstDef = termDefinitions.iterator().next();
 							if (RDFSUtil.isTermCategory(firstDef,

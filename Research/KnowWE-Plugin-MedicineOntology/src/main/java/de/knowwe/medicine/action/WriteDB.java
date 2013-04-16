@@ -28,9 +28,9 @@ import java.util.HashMap;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.medicine.DbConnection;
 import de.knowwe.medicine.Medicine;
 import de.knowwe.medicine.MedicineObject;

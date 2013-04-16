@@ -29,12 +29,12 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
+import de.d3web.strings.Strings;
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.plugin.Plugins;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.RDFSTermCategory;
@@ -91,7 +91,7 @@ public class RDFSUtil {
 	}
 
 	public static boolean isTermCategory(Section<? extends Term> ref, RDFSTermCategory c) {
-		TermIdentifier termIdentifier = ref.get().getTermIdentifier(ref);
+		Identifier termIdentifier = ref.get().getTermIdentifier(ref);
 		if (ref.get() instanceof Term) {
 			termIdentifier = ((Term) ref.get()).getTermIdentifier(ref);
 		}

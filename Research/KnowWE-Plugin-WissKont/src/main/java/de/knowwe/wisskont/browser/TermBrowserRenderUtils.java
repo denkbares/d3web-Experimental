@@ -21,13 +21,13 @@ package de.knowwe.wisskont.browser;
 import java.util.Collection;
 import java.util.List;
 
+import de.d3web.strings.Strings;
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.wisskont.util.Tree;
 import de.knowwe.wisskont.util.Tree.Node;
@@ -111,7 +111,7 @@ public class TermBrowserRenderUtils {
 		String term = t.getTerm();
 		String topic = term;
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				new TermIdentifier(term));
+				new Identifier(term));
 		if (termDefinitions.size() > 0) {
 			Section<? extends SimpleDefinition> def = termDefinitions.iterator().next();
 			topic = def.getTitle();

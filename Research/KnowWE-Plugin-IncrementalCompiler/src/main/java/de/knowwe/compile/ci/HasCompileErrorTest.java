@@ -21,6 +21,7 @@ package de.knowwe.compile.ci;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.d3web.strings.Strings;
 import de.d3web.testing.AbstractTest;
 import de.d3web.testing.Message;
 import de.knowwe.compile.IncrementalCompiler;
@@ -32,7 +33,6 @@ import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.Strings;
 
 /**
  * 

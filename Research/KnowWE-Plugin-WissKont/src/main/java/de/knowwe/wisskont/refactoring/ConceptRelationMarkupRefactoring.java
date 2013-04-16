@@ -25,13 +25,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.rdfs.tripleMarkup.TripleMarkup;
 import de.knowwe.wisskont.AssociationBidirMarkup;
 import de.knowwe.wisskont.AssociationMarkup;

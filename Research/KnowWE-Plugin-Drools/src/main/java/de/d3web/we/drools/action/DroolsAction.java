@@ -33,6 +33,8 @@ import org.json.simple.JSONValue;
 
 import com.google.gson.JsonObject;
 
+import de.d3web.strings.StringFragment;
+import de.d3web.strings.Strings;
 import de.d3web.we.drools.action.utils.DroolsUtils;
 import de.d3web.we.drools.action.utils.ResponseType;
 import de.d3web.we.drools.kdom.DroolsSessionRootType;
@@ -47,8 +49,6 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.StringFragment;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.logging.Logging;
 

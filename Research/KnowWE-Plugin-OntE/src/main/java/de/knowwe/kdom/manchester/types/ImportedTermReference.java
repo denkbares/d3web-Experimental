@@ -3,9 +3,9 @@ package de.knowwe.kdom.manchester.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.IncrementalTermReference;
-import de.knowwe.core.compile.terminology.TermIdentifier;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
@@ -31,7 +31,7 @@ public class ImportedTermReference extends IncrementalTermReference {
 				String trimmed = text.trim();
 
 				if (IncrementalCompiler.getInstance().getTerminology().isImportedObject(
-						new TermIdentifier(trimmed))) {
+						new Identifier(trimmed))) {
 
 					int currentStart = text.indexOf(trimmed);
 					List<SectionFinderResult> results = new ArrayList<SectionFinderResult>();

@@ -10,8 +10,8 @@ import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.util.RDFTool;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.utils.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class Rdf2GoUtils {
@@ -144,7 +144,7 @@ public class Rdf2GoUtils {
 		}
 		return Strings.encodeURL(temp);
 	}
-	
+
 	/**
 	 * get Sparql String from Section
 	 */

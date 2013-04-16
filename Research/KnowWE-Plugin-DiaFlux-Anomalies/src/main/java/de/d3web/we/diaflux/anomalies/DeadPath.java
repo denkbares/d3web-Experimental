@@ -26,9 +26,9 @@ import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaflux.coverage.Path;
 import de.d3web.diaflux.coverage.PathGenerator;
+import de.d3web.strings.Strings;
 import de.d3web.we.diaflux.anomalystrategies.DeadPathStrategy;
 import de.d3web.we.diaflux.pathcoloring.AnomalyManager;
-import de.knowwe.core.utils.Strings;
 
 
 /**
