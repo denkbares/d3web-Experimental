@@ -106,7 +106,7 @@
         }
 
         /**
-         * Change the content of the currently selected event
+         * Save the currently selected revision
          */
         function saveRev() {
             // retrieve the selected row
@@ -149,7 +149,7 @@
         }
 
         /**
-         * Delete the currently selected event
+         * Delete the currently selected revision
          */
         function delRev() {
             // retrieve the selected row
@@ -170,7 +170,7 @@
         
         
         /**
-         * Change the content of the currently selected event
+         * Restore the selected revision
          */
         function restoreRev(time) {
 			var params = {

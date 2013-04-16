@@ -19,6 +19,7 @@
 package de.knowwe.revisions.timeline;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -70,11 +71,11 @@ public class ShowRevisionAction extends AbstractAction {
 
 		ArticleManager currentArticleManager = Environment.getInstance().getArticleManager(
 				context.getWeb());
-		ArticleManager articleManagerAtVersion = new ArticleManager(Environment.getInstance(),
-				context.getWeb());
-		for (Article a : currentArticleManager.getArticles()) {
-			articleManagerAtVersion.registerArticle(a);
-		}
+		ArticleManager articleManagerAtVersion = new
+				ArticleManager(Environment.getInstance(),
+						context.getWeb());
+		ArrayList<Article> articlesToRegister = new ArrayList<Article>(
+				currentArticleManager.getArticles());
 
 		StringBuffer result = new StringBuffer("Revision '" + rev + "' selected: Representing "
 				+ dateString
@@ -97,6 +98,9 @@ public class ShowRevisionAction extends AbstractAction {
 
 			if (version != -1) {
 				// page has changes
+
+				articlesToRegister.remove(actualVersionOfCurrentArticle);
+
 				String versionString;
 
 				if (version != -2) {
@@ -113,13 +117,12 @@ public class ShowRevisionAction extends AbstractAction {
 							version);
 					Article oldVersionOfCurrentArticle = Article.createArticle(oldText, title,
 							context.getWeb());
-					articleManagerAtVersion.registerArticle(oldVersionOfCurrentArticle);
+					articlesToRegister.add(oldVersionOfCurrentArticle);
 				}
 				else {
 					// page did not exist
 					versionString = "did not exist";
 
-					articleManagerAtVersion.deleteArticle(actualVersionOfCurrentArticle);
 				}
 
 				pageversions.put(title, version);
@@ -127,11 +130,18 @@ public class ShowRevisionAction extends AbstractAction {
 						+ "</td><td>"
 						+ versionString + "</td></tr>");
 			}
+
+			// throw all collected articles in the new article manager
+			for (Article a : articlesToRegister) {
+				articleManagerAtVersion.registerArticle(a);
+			}
 		}
 
 		if (tableContent.length() != 0) {
 			result.append("<a href=\"#\" onClick=\"restoreRev(" + date.getTime()
 					+ ");\">Restore this revision</a>");
+			result.append("<a href=\"#\" onClick=\"downloadRev(" + date.getTime()
+					+ ");\">Download this revision</a>");
 			result.append("\n\nDifferences to current revision:");
 			result.append("<table><tr><th>Page</th><th>Status</th></tr>");
 			result.append(tableContent);
