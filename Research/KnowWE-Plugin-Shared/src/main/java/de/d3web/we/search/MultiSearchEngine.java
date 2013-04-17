@@ -127,7 +127,7 @@ public class MultiSearchEngine implements Instantiation {
 		// get all SearchProvider
 		Extension[] exts = PluginManager.getInstance().getExtensions(
 				Plugins.EXTENDED_PLUGIN_ID,
-				Plugins.EXTENDED_POINT_SearchProvider);
+				Plugins.EXTENDED_POINT_SEARCHPROVIDER);
 		for (Extension extension : exts) {
 			Object o = extension.getSingleton();
 			if (o instanceof SearchProvider) {
