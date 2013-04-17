@@ -35,7 +35,6 @@ public class Tree<T extends HierarchyNode<T>> {
 	private final Node<T> root;
 
 	public Tree(T rootData) {
-		System.out.println("Creating new Tree!");
 		root = new Node<T>(rootData);
 		root.children = new ArrayList<Node<T>>();
 	}

@@ -21,13 +21,14 @@ package de.knowwe.wisskont.browser;
 import java.util.Collection;
 import java.util.List;
 
+import de.knowwe.compile.IncrementalCompiler;
 import de.d3web.strings.Strings;
 import de.d3web.strings.Identifier;
-import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
+
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.wisskont.util.Tree;
 import de.knowwe.wisskont.util.Tree.Node;
@@ -107,7 +108,6 @@ public class TermBrowserRenderUtils {
 	}
 
 	private static void renderConcept(RatedTerm t, int depth, RenderResult string) {
-		System.out.println("rendering: " + t.toString() + " : Depth: " + depth);
 		String term = t.getTerm();
 		String topic = term;
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
@@ -140,8 +140,9 @@ public class TermBrowserRenderUtils {
 				// "<col width='80'/><col width='16'/><col width='16'/><col width='16'/>"+
 				"<tr height='23px'>"
 				+
+				createDashes(depth)
+				+
 				"<td style='width:80%' class='termbrowser'>"
-				+ createDashes(depth)
 				+ "<div class='termname' style='display:inline;"
 				+ createStyle(depth)
 				+ "'>"
@@ -173,36 +174,34 @@ public class TermBrowserRenderUtils {
 	 * @return
 	 */
 	private static String createStyle(int depth) {
+
+		String result = "";
+
 		if (depth == 0) {
-			return "font-weight:bold;";
+			result += "font-weight:bold;";
 		}
 		if (depth == 1) {
-			return "font-size:100%;";
+			result += "font-size:100%;";
 		}
 		if (depth == 2) {
-			return "font-size:80%;";
+			result += "font-size:80%;";
 		}
 		if (depth == 3) {
-			return "font-size:60%;";
+			result += "font-size:60%;";
 		}
 		if (depth == 4) {
-			return "font-size:50%;";
+			result += "font-size:50%;";
 		}
 
-		return "";
+		return result;
 	}
 
 	private static String createDashes(int count) {
-		String result = "";
+		int width = count * 15;
+		String padding = "padding:0.01em;display:block;float:left;min-width:" + width + "px;";
 
-		// if (count == 0) return "<li>";
+		String result = "<td style='" + padding + "'></td>";
 
-		for (int i = 0; i < count; i++) {
-			result += "&nbsp;&nbsp;";
-		}
-		if (count > 0) {
-			result += "&nbsp;";
-		}
 		return result;
 	}
 

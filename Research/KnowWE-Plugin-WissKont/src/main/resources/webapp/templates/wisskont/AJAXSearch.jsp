@@ -70,7 +70,7 @@
 %>
 <%
   int startitem = 0; // first item to show
-  int maxitems = 20; // number of items to show in result
+  int maxitems = 50; // number of items to show in result
 
   String parm_start    = request.getParameter( "start");
   if( parm_start != null ) startitem = Integer.parseInt( parm_start ) ;
@@ -83,6 +83,7 @@
 
   <h4><fmt:message key="find.heading.results"><fmt:param><c:out value="${param.query}"/></fmt:param></fmt:message></h4>
 
+<!-- 
   <p>
   <fmt:message key="find.externalsearch"/>
     <a class="external" 
@@ -95,10 +96,42 @@
         title="Wikipedia Search '<c:out value='${param.query}'/>'"
        target="_blank">Wikipedia</a><img class="outlink" src="images/out.png" alt="" />
   </p>
+  
+   -->
 
-  <wiki:SetPagination start="${param.start}" total="<%=list.size()%>" pagesize="20" maxlinks="9" 
+  <wiki:SetPagination start="${param.start}" total="<%=list.size()%>" pagesize="50" maxlinks="9" 
                      fmtkey="info.pagination"
                     onclick="$('start').value=%s; SearchBox.runfullsearch();" />
+  
+     
+     
+     
+     <h4>Relevante Begriffe:</h4>
+    
+    <ul>
+      <wiki:SearchResultIterator id="searchref" start="${param.start}" maxItems="<%=maxitems%>">
+
+ <c:if test="<%=searchref.getScore() == 101 %>">
+     
+        <li><wiki:LinkTo><wiki:PageName/></wiki:LinkTo>
+        <!-- <td><span class="gBar"><%= searchref.getScore() %></span></td> -->
+      
+</c:if>
+	  
+      </wiki:SearchResultIterator>
+      </ul>
+
+      <wiki:IfNoSearchResults>
+        <tr>
+          <td class="nosearchresult" colspan="2"><fmt:message key="find.noresults"/></td>
+        </tr>
+      </wiki:IfNoSearchResults>
+
+      </table>
+    </div>
+    </div>
+    
+    <h4>Relevante Textstellen:</h4>
   
     <div class="graphBars">
     <div class="zebra-table">
@@ -110,6 +143,7 @@
       </tr>
 
       <wiki:SearchResultIterator id="searchref" start="${param.start}" maxItems="<%=maxitems%>">
+       <c:if test="<%=searchref.getScore() != 101 %>">
       <tr>
         <td><wiki:LinkTo><wiki:PageName/></wiki:LinkTo></td>
         <td><span class="gBar"><%= searchref.getScore() %></span></td>
@@ -140,6 +174,7 @@
         }
 %>
 	  </c:if><%-- details --%>
+	  </c:if><!--  101 -->
       </wiki:SearchResultIterator>
 
       <wiki:IfNoSearchResults>
@@ -151,6 +186,9 @@
       </table>
     </div>
     </div>
+    
+ 
+    
     ${pagination}
 
    </wiki:SearchResults>

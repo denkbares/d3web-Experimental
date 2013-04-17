@@ -20,24 +20,38 @@ package de.knowwe.wisskont;
 
 import java.util.regex.Pattern;
 
-import de.d3web.strings.Strings;
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
+import org.ontoware.rdf2go.vocabulary.RDF;
+import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.support.Editable;
-import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.strings.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
+import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
+import de.knowwe.rdfs.util.RDFSUtil;
+import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
  * 
  * @author jochenreutelshofer
  * @created 22.11.2012
  */
-public class ConceptMarkup extends AbstractType implements Editable {
+public class ConceptMarkup extends AbstractKnowledgeUnitType<ConceptMarkup> implements Editable {
 
 	private final String REGEX;
+
+	public static URI WISSASS_CONCEPT = null;
+
+	static {
+		WISSASS_CONCEPT = new URIImpl(Rdf2GoCore.getInstance().getLocalNamespace()
+				+ "WissassConcept");
+	}
 
 	public ConceptMarkup() {
 		String keyRegex = "(Konzept:)";
@@ -48,6 +62,7 @@ public class ConceptMarkup extends AbstractType implements Editable {
 		this.addChildType(new DefinitionTerm());
 		this.addChildType(new KeyType(keyRegex));
 
+		this.setCompileScript(new ConceptCompileScript());
 		this.setRenderer(new DefaultMarkupRenderer());
 		this.setIgnorePackageCompile(true);
 	}
@@ -70,5 +85,20 @@ public class ConceptMarkup extends AbstractType implements Editable {
 			return Strings.unquote(s.getText().trim());
 		}
 
+	}
+
+	class ConceptCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<ConceptMarkup> {
+
+		@Override
+		public void insertIntoRepository(Section<ConceptMarkup> section) {
+
+			Section<IncrementalTermDefinition> termSec = MarkupUtils.getConceptDefinition(section);
+			if (termSec != null) {
+				URI subject = RDFSUtil.getURI(termSec);
+				URI pred = RDF.type;
+
+				Rdf2GoCore.getInstance().addStatement(section, subject, pred, WISSASS_CONCEPT);
+			}
+		}
 	}
 }

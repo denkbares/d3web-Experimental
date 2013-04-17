@@ -88,7 +88,7 @@ public class ParentConceptLinkAppendHandler implements PageAppendHandler {
 			}
 
 			result.appendHtml("</div>");
-			result.append("line.separator");
+			result.append(System.getProperty("line.separator"));
 		}
 	}
 
