@@ -77,12 +77,13 @@ public class ShowRevisionAction extends AbstractAction {
 		ArrayList<Article> articlesToRegister = new ArrayList<Article>(
 				currentArticleManager.getArticles());
 
-		StringBuffer result = new StringBuffer("Revision '" + rev + "' selected: Representing "
+		StringBuffer result = new StringBuffer("Revision '" + rev + "' selected:<br/>Representing "
 				+ dateString
-				+ ". ");
+				+ ".<br/>");
 		titles.remove(context.getTitle());
 		StringBuffer tableContent = new StringBuffer();
 
+		boolean actionsExist = false;
 		for (String title : titles) {
 			Article actualVersionOfCurrentArticle = currentArticleManager.getArticle(title);
 
@@ -102,16 +103,18 @@ public class ShowRevisionAction extends AbstractAction {
 				articlesToRegister.remove(actualVersionOfCurrentArticle);
 
 				String versionString;
+				String compareString = "";
 
 				if (version != -2) {
 					// page was other version
 					versionString = "was version <a href=\""
 							+ KnowWEUtils.getURLLink(title, version)
-							+ "\">" + Integer.toString(version) + "</a>. "
-							+ "<a href=\"Diff.jsp?page=" + title + "&r2=" + version
-							+ "\""
+							+ "\">" + Integer.toString(version) + "</a>. ";
+					compareString = "<a href=\"Diff.jsp?page=" + title + "&r2=" + version
+							+ "\" title=\"Compare with current revision\""
 							// + "onClick=\"compareRev(" + title + ");\""
-							+ ">Compare with current</a>";
+							+ ">Compare</a>";
+					actionsExist = true;
 					String oldText = Environment.getInstance().getWikiConnector().getVersion(
 							title,
 							version);
@@ -128,22 +131,28 @@ public class ShowRevisionAction extends AbstractAction {
 				pageversions.put(title, version);
 				tableContent.append("<tr><td>" + KnowWEUtils.getLinkHTMLToArticle(title)
 						+ "</td><td>"
-						+ versionString + "</td></tr>");
+						+ versionString + "</td><td>" + compareString + "</tr>");
 			}
+		}
 
-			// throw all collected articles in the new article manager
-			for (Article a : articlesToRegister) {
-				articleManagerAtVersion.registerArticle(a);
-			}
+		// throw all collected articles in the new article manager
+		for (Article a : articlesToRegister) {
+			articleManagerAtVersion.registerArticle(a);
 		}
 
 		if (tableContent.length() != 0) {
 			result.append("<a href=\"#\" onClick=\"restoreRev(" + date.getTime()
 					+ ");\">Restore this revision</a>");
-			result.append("<a href=\"#\" onClick=\"downloadRev(" + date.getTime()
-					+ ");\">Download this revision</a>");
+			// result.append(" ");
+			// result.append("<a href=\"#\" onClick=\"downloadRev(" +
+			// date.getTime()
+			// + ");\">Download this revision</a>");
 			result.append("\n\nDifferences to current revision:");
-			result.append("<table><tr><th>Page</th><th>Status</th></tr>");
+			result.append("<table><tr><th>Page</th><th>Status</th><th>");
+			if (actionsExist) {
+				result.append("Actions");
+			}
+			result.append("</th></tr>");
 			result.append(tableContent);
 			result.append("</table>");
 		}
