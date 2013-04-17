@@ -7,6 +7,7 @@
 <%@ page import="de.d3web.we.action.*" %>
 <%@ page import="de.knowwe.core.*" %>
 <%@ page import="de.knowwe.utils.*" %>
+<%@ page import="de.d3web.strings.*" %>
 <%@ page import="de.knowwe.user.*" %>
 <%@ page import="de.knowwe.ophtovis.*" %>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %><%!
