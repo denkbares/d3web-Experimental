@@ -122,4 +122,26 @@
         <parameter id="scope" value="PackageCompileType" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="OntologyDownloadAction">
+		<parameter id="class" value="de.knowwe.ontology.action.OntologyDownloadAction" />
+		<parameter id="name" value="OntologyDownloadAction" />
+		<parameter id="description"
+			value="Downloads a specific ontology of a named wiki article." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="OntologyDownloadProvider">
+		<parameter id="class"
+			value="de.knowwe.ontology.tools.OntologyDownloadProvider" />
+		<parameter id="name" value="OntologyDownloadProvider" />
+		<parameter id="description"
+			value="Offers a download button to download the ontology as RDF-XML." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="KnowledgeBase" />
+	</extension>
+	
 </plugin>

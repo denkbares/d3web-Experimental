@@ -186,6 +186,8 @@ public class Rdf2GoCore implements EventListener {
 
 	ResourceBundle properties = ResourceBundle.getBundle("model");
 
+	private boolean addedStatements = false;
+
 	public Rdf2GoCore() {
 		bns = "http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#";
 		lns = Environment.getInstance().getWikiConnector().getBaseUrl()
@@ -242,6 +244,7 @@ public class Rdf2GoCore implements EventListener {
 		statementsOfArticle.addAll(Arrays.asList(statements));
 		addStatementsToDuplicatedCache(article.getTitle(), statements);
 		addStatementsToInsertCache(statements);
+		addedStatements = true;
 	}
 
 	/**
@@ -264,6 +267,7 @@ public class Rdf2GoCore implements EventListener {
 		addStatementsToDuplicatedCache(section.getID(), statements);
 		addStatementToIncrementalCache(section, statements);
 		addStatementsToInsertCache(statements);
+		addedStatements = true;
 	}
 
 	/**
@@ -281,6 +285,7 @@ public class Rdf2GoCore implements EventListener {
 	public void addStatements(Statement... statements) {
 		addStatementsToDuplicatedCache(null, statements);
 		addStatementsToInsertCache(statements);
+		addedStatements = true;
 	}
 
 	private void addStatementsToDuplicatedCache(String source, Statement... statements) {
@@ -995,6 +1000,17 @@ public class Rdf2GoCore implements EventListener {
 	 */
 	public void writeModel(Writer out) throws ModelRuntimeException, IOException {
 		model.writeTo(out);
+	}
+
+	/**
+	 * Returns true if this instance is empty. An instance is empty, if the
+	 * method commit hasn't been called yet.
+	 * 
+	 * @created 19.04.2013
+	 * @return true if instance is empty, else false.
+	 */
+	public boolean isEmpty() {
+		return !addedStatements;
 	}
 
 }
