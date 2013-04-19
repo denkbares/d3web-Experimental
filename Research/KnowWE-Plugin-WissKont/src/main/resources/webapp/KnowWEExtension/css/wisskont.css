@@ -20,6 +20,10 @@ border-color: #CCCCCC;
 border-radius: 10px 10px 10px 10px;
 }
 
+.wissassTable {
+	
+}
+
 @media screen, projection {
 	.relationMarkupFrame:hover {
 		border-right: 1px solid #DDD;
@@ -114,3 +118,10 @@ cursor: pointer;
 	font-size: 75%;
 	border-bottom: 1px solid lightgrey;
 	}
+	
+.deletableListElement {
+	display: inline;	
+}
+.narrowCell {
+padding:0px;
+}	

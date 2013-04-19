@@ -65,7 +65,7 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 
 			parameterMap.put(RenderingCore.EXCLUDED_RELATIONS, "label");
 
-			parameterMap.put(RenderingCore.EXCLUDED_NODES, "Resource");
+			parameterMap.put(RenderingCore.EXCLUDED_NODES, "Resource,WissassConcept");
 
 			parameterMap.put(RenderingCore.GRAPH_SIZE, "690");
 

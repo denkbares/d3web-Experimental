@@ -239,6 +239,7 @@
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 			<parameter id="css" value="wisskont.css" />
+			<parameter id="script" value="deleteListElement.js" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -251,6 +252,7 @@
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 		<parameter id="css" value="wisskont.css" />
+					<parameter id="script" value="deleteListElement.js" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -263,6 +265,7 @@
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 			<parameter id="css" value="wisskont.css" />
+						<parameter id="script" value="deleteListElement.js" />
 	</extension>
 	
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -275,6 +278,7 @@
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 			<parameter id="css" value="wisskont.css" />
+						<parameter id="script" value="deleteListElement.js" />
 	</extension>
 	
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -287,6 +291,7 @@
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 		<parameter id="css" value="wisskont.css" />
+					<parameter id="script" value="deleteListElement.js" />
 	</extension>
 	
 			<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -310,7 +315,15 @@
 		<parameter id="version" value="1.0" />
 	</extension>
 	
-
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="DeleteListEntryAction">
+		<parameter id="class"
+			value="de.knowwe.wisskont.edit.DeleteListEntryAction" />
+		<parameter id="name" value="DeleteListEntryAction" />
+		<parameter id="description" value="Action DeleteListEntryAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
 	
     
 </plugin>

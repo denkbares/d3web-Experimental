@@ -67,7 +67,7 @@ public class RelationMarkupContentType extends AbstractType {
 
 			@Override
 			public void renderPre(Section<?> section, UserContext user, RenderResult string) {
-				string.appendHtml("<div class='relationMarkupContent' id='"
+				string.appendHtml("<span class='relationMarkupContent' id='"
 						+ section.getID() + "'>");
 
 			}
@@ -165,9 +165,21 @@ public class RelationMarkupContentType extends AbstractType {
 					public void render(Section<?> section, UserContext user, RenderResult string) {
 						Section<SimpleReference> ref = Sections.cast(section,
 								SimpleReference.class);
+
+						string.appendHtml("<span class='deletableListElement' id='"
+								+ section.getID() + "'>");
+						string.appendHtml("<table style='display:inline;' >");
+						string.appendHtml("<tr>");
+						string.appendHtml("<td class='narrowCell' style='vertical-align:text-bottom;'>");
 						string.appendHtml("<a href='" + RDFSUtil.getURI(ref)
 								+ "'>" + section.getText() + "</a>");
-
+						string.appendHtml("</td>");
+						string.appendHtml("<td class='narrowCell'>");
+						string.appendHtml("<span class='ui-icon ui-icon-circle-close deleteButton' title='Relation zu diesem Begriff löschen' ></span>");
+						string.appendHtml("</td>");
+						string.appendHtml("</tr>");
+						string.appendHtml("</table>");
+						string.appendHtml("</span>");
 					}
 				}
 			}
