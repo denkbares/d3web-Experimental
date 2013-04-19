@@ -20,6 +20,7 @@ package de.knowwe.wisskont.navigation;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Collection;
 import java.util.List;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
@@ -28,10 +29,13 @@ import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.d3web.strings.Identifier;
+import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -81,6 +85,15 @@ public class ParentConceptLinkAppendHandler implements PageAppendHandler {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
+				Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+						new Identifier(termName));
+
+				if (termDefinitions.size() > 0) {
+					urlString = Rdf2GoCore.getInstance().getLocalNamespace()
+							+ termDefinitions.iterator().next().getTitle();
+				}
+
 				result.appendHtml("<a href='" + urlString + "'>");
 				result.append(termName);
 				result.appendHtml("</a>");
