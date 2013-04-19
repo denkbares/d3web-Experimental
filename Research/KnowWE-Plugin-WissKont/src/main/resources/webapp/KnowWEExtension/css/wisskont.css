@@ -66,23 +66,33 @@ border-radius: 10px 10px 10px 10px;
 	padding-top: 10px;
 	}
 
-.termline {
+.zebraline {
 	
-	}
+}
+	
+.zebraline:hover {
+	background-color: #DDDDDD;
+}
+	
+.zebraline-white {
+	background-color: #FFFFFF;
+}
+	
+.zebraline-white:hover {
+	background-color: #DDDDDD;
+}
 	
 td.termbrowser {
 	padding: 0;
 	overflow: hidden;
-	}
+}
 	
 .termname{
 	cursor: pointer;
-	}
+}
 	
 	
-.termline:hover {
-	background-color: #DDDDDD;
-	}
+
 
 	
 .openConcept, .expandConcept, .removeConcept {

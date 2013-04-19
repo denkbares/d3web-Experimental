@@ -21,14 +21,13 @@ package de.knowwe.wisskont.browser;
 import java.util.Collection;
 import java.util.List;
 
-import de.knowwe.compile.IncrementalCompiler;
-import de.d3web.strings.Strings;
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
+import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
-
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.wisskont.util.Tree;
 import de.knowwe.wisskont.util.Tree.Node;
@@ -117,12 +116,12 @@ public class TermBrowserRenderUtils {
 			topic = def.getTitle();
 		}
 
-		String lineStyle = "";
+		String lineStyleClass = "zebraline";
 		if (!zebra) {
 			zebra = true;
 		}
 		else {
-			lineStyle += "background-color:white;";
+			lineStyleClass = "zebraline-white";
 			zebra = false;
 		}
 
@@ -132,10 +131,12 @@ public class TermBrowserRenderUtils {
 		// String divStyle = "display:inline; float:left;";
 		String divStyle = "";
 		string.appendHtml("<div id='draggable' style='"
-				+ lineStyle
-				+ "'  class='termline'>"
+				+ "'  class='termline "
+				+ lineStyleClass
+				+ "'>"
 				+
-				"<table style='table-layout:fixed'>"
+				"<table style='table-layout:fixed"
+				+ "'>"
 				+
 				// "<col width='80'/><col width='16'/><col width='16'/><col width='16'/>"+
 				"<tr height='23px'>"
