@@ -45,28 +45,47 @@ public class TermBrowserRenderUtils {
 	public static String renderTermBrowser(UserContext user, String searchFieldContent) {
 		RenderResult string = new RenderResult(user);
 		string.appendHtml("<div class='termbrowserframe'>");
-		string.appendHtml("<div class='termbrowserheader'>Benutzte Begriffe:</div>");
-		string.appendHtml("<div class='ui-widget'><table><tr><td><label for='conceptSearch' style='font-weight:normal;padding-right:0;font: 83%/140% Verdana,Arial,Helvetica,sans-serif;;'>Suche: </label></td><td><input id='conceptSearch' size='15' value='' /></td></tr></table></div>");
-		string.appendHtml("<script>" +
-				"jq$(document).ready(function() {" +
-				// "$(function() {" +
-				" var availableTags = [" +
-				generateTermnames() +
-				"];" +
-				"jq$( \"#conceptSearch\" ).autocomplete({" +
-				"source: availableTags," +
-				"select: function( event, ui ) {" +
-				"updateTermBrowser(event,ui);" +
-				"}," +
-				"});" +
-				"});" +
-				"</script>");
 
-		Tree<RatedTerm> ratedTermTreeTop = TermRecommender.getInstance().getRatedTermTreeTop(user,
-				THRESHOLD_MAX_TERM_NUMBER);
+		{
+			string.appendHtml("<div class='termbrowserheader'>Benutzte Begriffe:</div>");
 
-		renderTermTree(string, ratedTermTreeTop);
-		string.appendHtml("</div>");
+			string.appendHtml("<div class='ui-widget'>");
+			{
+				// search field
+				string.appendHtml("<table><tr>");
+				{
+					string.appendHtml("<td>");
+					string.appendHtml("<label for='conceptSearch' style='font-weight:normal;padding-right:0;font: 83%/140% Verdana,Arial,Helvetica,sans-serif;;'>Suche: </label>");
+					string.appendHtml("</td>");
+					string.appendHtml("<td><input id='conceptSearch' size='15' value='' /></td>");
+
+				}
+				string.appendHtml("</tr></table>");
+			}
+			string.appendHtml("</div>");
+
+			string.appendHtml("<script>" +
+						"jq$(document).ready(function() {" +
+						// "$(function() {" +
+					" var availableTags = [" +
+						generateTermnames() +
+						"];" +
+						"jq$( \"#conceptSearch\" ).autocomplete({" +
+						"source: availableTags," +
+						"select: function( event, ui ) {" +
+						"updateTermBrowser(event,ui);" +
+						"}," +
+						"});" +
+						"});" +
+						"</script>");
+
+			Tree<RatedTerm> ratedTermTreeTop = TermRecommender.getInstance().getRatedTermTreeTop(
+						user,
+						THRESHOLD_MAX_TERM_NUMBER);
+
+			renderTermTree(string, ratedTermTreeTop);
+
+		}
 		string.appendHtml("</div>");
 		return string.toStringRaw();
 	}
@@ -86,6 +105,7 @@ public class TermBrowserRenderUtils {
 
 			renderConceptSubTree(rootConcept, 0, string);
 		}
+		string.appendHtml("</div>");
 
 	}
 
@@ -128,44 +148,80 @@ public class TermBrowserRenderUtils {
 		String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
 		String name = Strings.encodeURL(topic);
 		String url = baseUrl + name;
-		// String divStyle = "display:inline; float:left;";
 		String divStyle = "";
 		string.appendHtml("<div id='draggable' style='"
 				+ "'  class='termline "
 				+ lineStyleClass
-				+ "'>"
-				+
-				"<table style='table-layout:fixed"
-				+ "'>"
-				+
-				// "<col width='80'/><col width='16'/><col width='16'/><col width='16'/>"+
-				"<tr height='23px'>"
-				+
-				createDashes(depth)
-				+
-				"<td style='width:80%' class='termbrowser'>"
-				+ "<div class='termname' style='display:inline;"
-				+ createStyle(depth)
-				+ "'>"
-				+ term.replaceAll("_", "_<wbr>")
-				+ "</div></td>"
-				+ "<td style='min-width: 48px;width:20%;'>"
-				+ "<table style='table-layout:fixed'><tr>"
-				+ "<td style='"
-				+ divStyle
-				+ "' class='termbrowser'><a href='"
-				+ url
-				+ "'><span class='ui-icon ui-icon-arrowreturnthick-1-e openConcept' title='Seite zu diesem Konzept öffnen' style='display:none;'></span></a></td>"
-				+
-				"<td style='"
-				+ divStyle
-				+ "' class='termbrowser'><span class='ui-icon ui-icon-circle-close removeConcept' title='Konzept aus dieser Liste herausnehmen' style='display:none;'></span></td>"
-				+
-				"<td style='"
-				+ divStyle
-				+ "' class='termbrowser'><span class='ui-icon ui-icon-arrow-4-diag expandConcept' title='Unterkonzepte in diese Liste aufnehmen' style='display:none;'></span></td>"
-				+
-				"</tr></table></td></tr></table></div>");
+				+ "'>");
+		{
+			// table with 2 cols: term name and action buttons (visible hover
+			// only)
+			string.appendHtml("<table style='table-layout:fixed'>");
+			{
+				string.appendHtml("<tr height='23px'>");
+
+				// calculate indention div for hierarchy visualization
+				string.appendHtml(createIndent(depth));
+
+				// render actual line content
+				{
+					string.appendHtml("<td style='width:80%' class='termbrowser'>");
+
+					// using different font style depending on current hierarchy
+					// depth
+					string.appendHtml("<div class='termname' style='display:inline;"
+							+ createStyle(depth)
+							+ "'>");
+
+					// insert term name
+					string.appendHtml(term.replaceAll("_", "_<wbr>"));
+					string.appendHtml("</div></td>");
+				}
+
+				// append html code for the actions that can be performed for
+				// each term
+				{
+					string.appendHtml("<td style='min-width: 48px;width:20%;'>");
+					insertActionButtons(string, url, divStyle);
+					string.appendHtml("</td>");
+				}
+				string.appendHtml("</tr>");
+			}
+			string.appendHtml("</table>");
+		}
+		string.appendHtml("</div>");
+	}
+
+	/**
+	 * 
+	 * @created 19.04.2013
+	 * @param string
+	 * @param url
+	 * @param divStyle
+	 */
+	private static void insertActionButtons(RenderResult string, String url, String divStyle) {
+		string.appendHtml("<table style='table-layout:fixed'>");
+		string.appendHtml("<tr>");
+		{
+			// hyper link to concept definition page
+			string.appendHtml("<td style='"
+					+ divStyle
+					+ "' class='termbrowser'>"
+					+ "<a href='"
+					+ url
+					+ "'><span class='ui-icon ui-icon-arrowreturnthick-1-e openConcept' title='Seite zu diesem Konzept öffnen' style='display:none;'></span></a></td>");
+
+			// delete concept from list
+			string.appendHtml("<td style='"
+					+ divStyle
+					+ "' class='termbrowser'><span class='ui-icon ui-icon-circle-close removeConcept' title='Konzept aus dieser Liste herausnehmen' style='display:none;'></span></td>");
+
+			// expand concept, i.e. add all children to this list
+			string.appendHtml("<td style='"
+					+ divStyle
+					+ "' class='termbrowser'><span class='ui-icon ui-icon-arrow-4-diag expandConcept' title='Unterkonzepte in diese Liste aufnehmen' style='display:none;'></span></td>");
+		}
+		string.appendHtml("</tr></table>");
 	}
 
 	/**
@@ -197,7 +253,7 @@ public class TermBrowserRenderUtils {
 		return result;
 	}
 
-	private static String createDashes(int count) {
+	private static String createIndent(int count) {
 		int width = count * 15;
 		String padding = "padding:0.01em;display:block;float:left;min-width:" + width + "px;";
 
