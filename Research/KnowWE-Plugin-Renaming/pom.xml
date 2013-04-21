@@ -10,7 +10,7 @@
 	<artifactId>KnowWE-Plugin-Renaming</artifactId>
 	<version>0.2-SNAPSHOT</version>
 	<name>KnowWE-Plugin-Renaming</name>
-		<build>
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -57,7 +57,7 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		  			<dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.1</version>
@@ -82,6 +82,13 @@
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-ExtensionPoints</artifactId>
 			<version>0.2-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.2</version>
+			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
