@@ -22,6 +22,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
+ * This is the type displaying the RevManagerRenderer
  * 
  * @author grotheer
  * @created 28.03.2013

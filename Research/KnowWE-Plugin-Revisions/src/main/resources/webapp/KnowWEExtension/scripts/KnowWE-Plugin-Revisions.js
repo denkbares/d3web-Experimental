@@ -1,6 +1,10 @@
         var timeline;
         var data;
         
+    	var defaultRevName = "New Revision Name";
+    	var defaultRevComment = "optional Comment";
+    	var defaultRevBtnTitle = "Add new Revision";
+        
 		window.onload=function drawVisualization() {
 
 			// specify options
@@ -26,25 +30,47 @@
             links.events.addListener(timeline, 'rangechanged', onRangeChanged);
             // Draw our timeline with the created data and options
             timeline.draw(data, options);
-			links.events.addListener(timeline, 'select', onselect);
-			links.events.addListener(timeline, 'timechanged', ondragged);
-			links.events.addListener(timeline, 'change', ondragged);
+			links.events.addListener(timeline, 'select', eventSelected);
+			links.events.addListener(timeline, 'timechanged', lineDragged);
+			links.events.addListener(timeline, 'change', eventChanged);
 
 		}
 
-        function onselect() {
+		function eventChanged() {
+			showRevision(true);
+		}
+		
+        function eventSelected() {
+        	showRevision(false);
+        }
+        	
+        function showRevision(changed) {
 			var sel = timeline.getSelection();
 			if (sel.length) {
 				if (sel[0].row != undefined) {
 					var row = sel[0].row;
 					var start = timeline.getItem(row).start;
-					var content = timeline.getItem(row).content;
-
-					var params = {
-						action : 'ShowRevisionAction',
-						rev : content,
-						date : start.getTime()
+										
+					if (timeline.getData()[row].editable == true) {
+						alert(changed);
+						// unsaved revision selected, so take the data from the form
+						var params = {
+								action : 'ShowRevisionAction',
+								rev : document.getElementById('newRevName').value,
+								comment : document.getElementById('newRevComment').value,
+								changed : changed,
+								date : start.getTime()
+							}
+					} else {
+						// saved revision selected, so take section id from data
+						var params = {
+								action : 'ShowRevisionAction',
+								rev : timeline.getItem(row).content,
+								id : data[row].id,
+								date : start.getTime()
+							}
 					}
+					
 					var options = {
 							url : KNOWWE.core.util.getURL(params),
 							response : {
@@ -58,7 +84,7 @@
 			}
 		}
 		
-        function ondragged() {
+        function lineDragged() {
 			var time = timeline.getCustomTime().getTime();
 			timeline.setSelection([]);
 
@@ -83,26 +109,45 @@
          * Add a new event
          */
         function addRev() {
-            var start = timeline.getCustomTime().getTime();
-            var content = document.getElementById("txtContent").value;
-
-            content += "<br/><a href=\"#\" onclick=\"saveRev();\">save</a> <a href=\"#\" onclick=\"delRev();\">delete</a>";
+        	// compatibility if browser has no string trim function
+            if(!String.prototype.trim) {
+          	  String.prototype.trim = function () {
+          	    return this.replace(/^\s+|\s+$/g,'');
+          	  };
+          	}
+            document.getElementById("newRevName").value = document.getElementById("newRevName").value.trim();
             
-            timeline.addItem({
-                'start': start,
-                'content': content,
-				'editable': true
-            });
+            var name = document.getElementById("newRevName").value;
 
-            var count = Object.keys(data).length;
-            timeline.setSelection([{
-                'row': count-1
-            }]);
-			// action neu laden!
-            document.getElementById('addrevbtn').disabled = true;
-            document.getElementById('txtContent').disabled = true;
-            document.getElementById('addrevbtn').title = "Save the priviously created revision first.";
+            if (name == defaultRevName || name == "") {
+            	document.getElementById("newRevName").value = defaultRevName;
+	        	document.getElementById("revdetails").innerHTML = "<p class=\"box error\">Please enter a valid name for the revision.</p>";
+            } else {
+                var date = timeline.getCustomTime().getTime();
 
+	            timeline.addItem({
+	                'start': date,
+	                'content': name + "<br/><a onclick=\"saveRev();\">save</a> <a onclick=\"delRev();\">delete</a>",
+					'editable': true
+	            });
+	
+		            var count = Object.keys(data).length;
+		            timeline.setSelection([{
+		                'row': count-1
+		            }]);
+					// action neu laden!
+		            document.getElementById('addrevbtn').disabled = true;
+		            document.getElementById('newRevName').disabled = true;
+		            if (document.getElementById('newRevComment').value == defaultRevComment) {
+		            	document.getElementById('newRevComment').value = "";
+		            }
+		            document.getElementById('newRevComment').disabled = true;
+		            document.getElementById('addrevbtn').title = "Save the priviously created revision first.";
+		            
+		        	document.getElementById("revdetails").innerHTML = "<p class=\"box ok\">Added Revision '"+name+"' to timeline.</p>"
+		        	+"<p class=\"box info\">If necessary, you can drag it to the correct position.</p>"
+		        	+"<p class=\"box info\">Don't forget to save the new revision to persistence.</p>";
+	            }
         }
 
         /**
@@ -118,7 +163,7 @@
 					var content = timeline.getItem(row).content;
 					
 					timeline.deleteItem(row, false);
-					content = content.substring(0,content.length-89)
+					content = document.getElementById("newRevName").value;
 					timeline.addItem({
 		                'start': start,
 		                'content': content,
@@ -128,7 +173,8 @@
 					var params = {
 						action : 'SaveRevisionAction',
 						rev : content,
-						date : start.getTime()
+						date : start.getTime(),
+		                comment: document.getElementById("newRevComment").value
 					}
 					var options = {
 							url : KNOWWE.core.util.getURL(params),
@@ -142,9 +188,12 @@
 					
 				}
             }
-            document.getElementById('addrevbtn').disabled = false;
-            document.getElementById('txtContent').disabled = false;
-            document.getElementById('addrevbtn').title = "Add new Revision";
+            document.getElementById('addrevbtn').removeAttribute("disabled");
+            document.getElementById('newRevName').removeAttribute("disabled");
+            document.getElementById('newRevComment').removeAttribute("disabled");
+            document.getElementById('addrevbtn').title = defaultRevBtnTitle;
+            document.getElementById('newRevName').value = defaultRevName;
+            document.getElementById('newRevComment').value = defaultRevComment;
 
         }
 
@@ -163,9 +212,11 @@
 					timeline.deleteItem(row, false);
 				}
             }
-            document.getElementById('addrevbtn').disabled = false;
-            document.getElementById('txtContent').disabled = false;
-            document.getElementById('addrevbtn').title = "Add new Revision";
+            document.getElementById('addrevbtn').removeAttribute("disabled");
+            document.getElementById('newRevName').removeAttribute("disabled");
+            document.getElementById('newRevComment').removeAttribute("disabled");
+            document.getElementById('addrevbtn').title = defaultRevBtnTitle;
+            
         }
         
         

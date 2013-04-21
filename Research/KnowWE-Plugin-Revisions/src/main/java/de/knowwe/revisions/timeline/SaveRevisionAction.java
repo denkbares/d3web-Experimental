@@ -33,6 +33,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.revisions.DateType;
 
 /**
+ * This action adds a new revision markup to the actual wiki page.
  * 
  * @author grotheer
  * @created 28.03.2013
@@ -55,7 +56,14 @@ public class SaveRevisionAction extends AbstractAction {
 			Date date = new Date(Long.parseLong(params.get("date")));
 
 			String markup = "%%Revision\n@name = " + rev + "\n@date = "
-					+ DateType.DATE_FORMAT.format(date) + "\n%";
+					+ DateType.DATE_FORMAT.format(date) + "\n";
+			if (params.containsKey("comment")) {
+				String comment = params.get("comment");
+				if (!comment.isEmpty()) {
+					markup += "@comment = " + comment + "\n";
+				}
+			}
+			markup += "%";
 
 			Article a = Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
 			HashMap<String, String> sectionsMap = new HashMap<String, String>();

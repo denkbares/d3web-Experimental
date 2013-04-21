@@ -29,6 +29,7 @@ public class RevisionType extends DefaultMarkupType {
 
 	public static final String NAME_KEY = "name";
 	public static final String DATE_KEY = "date";
+	public static final String COMMENT_KEY = "comment";
 
 	private static DefaultMarkup m = null;
 
@@ -37,6 +38,7 @@ public class RevisionType extends DefaultMarkupType {
 		m.addAnnotation(NAME_KEY, true);
 		m.addAnnotation(DATE_KEY, true);
 		m.addAnnotationContentType(DATE_KEY, new DateType());
+		m.addAnnotation(COMMENT_KEY, false);
 	}
 
 	public RevisionType() {
@@ -52,6 +54,17 @@ public class RevisionType extends DefaultMarkupType {
 		return DefaultMarkupType.getAnnotation(section, DATE_KEY);
 	}
 
+	public static String getRevisionComment(Section<RevisionType> section) {
+		return DefaultMarkupType.getAnnotation(section, COMMENT_KEY);
+	}
+
+	/**
+	 * create json data element
+	 * 
+	 * @created 21.04.2013
+	 * @param section
+	 * @return a json data element as string
+	 */
 	public static String toTimelineString(Section<RevisionType> section) {
 		Section<DateType> dateSection = Sections.findSuccessor(section, DateType.class);
 
@@ -66,7 +79,10 @@ public class RevisionType extends DefaultMarkupType {
 		if (DateType.isValid(dateSection.getText())) {
 			result += "{\n" +
 					"\'start\': new Date(" + time + "),\n" +
-					"\'content\': \'" + getRevisionName(section) + "\'\n" +
+					"\'content\': \'" + getRevisionName(section) + "\',\n" +
+					// "\'comment\': \'" + getRevisionComment(section) + "\'\n"
+					// +
+					"\'id\': \'" + section.getID() + "\'\n" +
 					"},\n";
 		}
 		else {

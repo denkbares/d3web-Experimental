@@ -30,11 +30,15 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.revisions.DateType;
+import de.knowwe.revisions.RevisionType;
 
 /**
+ * This actions shows details for the selected revision or date.
  * 
  * @author grotheer
  * @created 28.03.2013
@@ -54,16 +58,35 @@ public class ShowRevisionAction extends AbstractAction {
 	private String perform(UserActionContext context) {
 		Map<String, String> params = context.getParameters();
 
-		if (params.containsKey("rev") && params.containsKey("date")) {
-			String rev = params.get("rev");
+		if (params.containsKey("date")) {
 			Date date = new Date(Long.parseLong(params.get("date")));
-			return getPagesChangedTable(context, rev, date).toString();
+			if (params.containsKey("rev")) {
+				String rev = params.get("rev");
+
+				if (params.containsKey("id")) {
+					String id = params.get("id");
+					return getRevisionDetails(context, date, rev, id).toString();
+				}
+				else if (params.containsKey("comment") && params.containsKey("changed")) {
+					boolean changed = Boolean.parseBoolean(params.get("changed"));
+					String comment = params.get("comment");
+					return getUnsavedRevisionDetails(context, date, rev, comment, changed).toString();
+				}
+			}
+			return getDateDetails(context, date).toString();
 		}
 		return "<p class=\"box error\">Error while showing revision</p>";
 	}
 
-	public static StringBuffer getPagesChangedTable(UserActionContext context, String rev, Date date) {
-		String dateString = DateType.DATE_FORMAT.format(date);
+	/**
+	 * get all pages which have changed from the specified date until today
+	 * 
+	 * @created 21.04.2013
+	 * @param context
+	 * @param date
+	 * @return
+	 */
+	public static StringBuffer getPagesChangedTable(UserActionContext context, Date date) {
 		WikiConnector wiki = Environment.getInstance().getWikiConnector();
 
 		Collection<String> titles = wiki.getAllArticles(context.getWeb()).keySet();
@@ -77,9 +100,8 @@ public class ShowRevisionAction extends AbstractAction {
 		ArrayList<Article> articlesToRegister = new ArrayList<Article>(
 				currentArticleManager.getArticles());
 
-		StringBuffer result = new StringBuffer("Revision '" + rev + "' selected:<br/>Representing "
-				+ dateString
-				+ ".<br/>");
+		StringBuffer result = new StringBuffer();
+
 		titles.remove(context.getTitle());
 		StringBuffer tableContent = new StringBuffer();
 
@@ -141,10 +163,10 @@ public class ShowRevisionAction extends AbstractAction {
 		}
 
 		if (tableContent.length() != 0) {
-			result.append("<a href=\"#\" onClick=\"restoreRev(" + date.getTime()
-					+ ");\">Restore this revision</a>");
+			result.append("<a onClick=\"restoreRev(" + date.getTime()
+					+ ");\">Restore this state</a>");
 			// result.append(" ");
-			// result.append("<a href=\"#\" onClick=\"downloadRev(" +
+			// result.append("<a onClick=\"downloadRev(" +
 			// date.getTime()
 			// + ");\">Download this revision</a>");
 			result.append("\n\nDifferences to current revision:");
@@ -159,6 +181,60 @@ public class ShowRevisionAction extends AbstractAction {
 		else {
 			result.append("<p class=\"box info\">No differences to current revision.</p>");
 		}
+		return result;
+	}
+
+	public static StringBuffer getDateDetails(UserActionContext context, Date date) {
+		String dateString = DateType.DATE_FORMAT.format(date);
+		StringBuffer result = new StringBuffer("<p class=\"box ok\">Date "
+				+ dateString + " selected.</p>");
+		result.append(getPagesChangedTable(context, date));
+		return result;
+	}
+
+	public static StringBuffer getRevisionDetails(UserActionContext context, Date date, String rev, String id) {
+		String dateString = DateType.DATE_FORMAT.format(date);
+
+		StringBuffer result = new StringBuffer("<p class=\"box ok\">Revision '" + rev
+				+ "' selected, which is representing wiki state as of " + dateString + "</p>");
+
+		// try to get revision comment and add it
+		@SuppressWarnings("unchecked")
+		Section<RevisionType> section = (Section<RevisionType>) Sections.getSection(id);
+		if (section != null) {
+			// add the revision comment if exists
+			String comment = RevisionType.getRevisionComment(section);
+			if (comment != null) {
+				result.append("Comment:\n" + comment + "\n");
+			}
+		}
+
+		// append page version diff overview
+		result.append(getPagesChangedTable(context, date));
+		return result;
+	}
+
+	public static StringBuffer getUnsavedRevisionDetails(UserActionContext context, Date date, String rev, String comment, boolean changed) {
+
+		String dateString = DateType.DATE_FORMAT.format(date);
+
+		StringBuffer result = new StringBuffer("<p class=\"box ok\">Revision '" + rev + "' ");
+
+		if (changed) {
+			result.append("moved. It is now representing wiki state as of <b>" + dateString
+					+ "</b></p>");
+		}
+		else {
+			result.append(("selected, which is representing wiki state as of " + dateString + "</p>"));
+		}
+		// append the provided comment if not empty
+		if (!comment.isEmpty()) {
+			result.append("Comment:\n" + comment + "\n");
+		}
+
+		// append page version diff overview
+		result.append(getPagesChangedTable(context, date));
+
 		return result;
 	}
 }
