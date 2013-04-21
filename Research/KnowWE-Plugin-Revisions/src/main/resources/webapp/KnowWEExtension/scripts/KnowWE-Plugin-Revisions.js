@@ -239,3 +239,26 @@
 			new _KA( options ).send();
 			
 		}
+        
+        /**
+         * Show a text diff to current version
+         * @param title is the title of the wiki page for the diff
+         * @param version is the version to compare with
+         */
+        function showDiff(title,version) {
+        	var diffTarget = 'diffdiv';
+			var params = {
+					action : 'ShowTextDiffAction',
+					title : title,
+					version : version
+				}
+				var options = {
+						url : KNOWWE.core.util.getURL(params),
+						response : {
+							action : 'insert',
+							ids : [ diffTarget ],
+							fn : KNOWWE.core.util.addCollabsiblePluginHeader
+						}
+				}
+				new _KA( options ).send();
+        }

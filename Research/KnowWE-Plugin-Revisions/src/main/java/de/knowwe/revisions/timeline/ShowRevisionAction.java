@@ -102,7 +102,10 @@ public class ShowRevisionAction extends AbstractAction {
 
 		StringBuffer result = new StringBuffer();
 
-		titles.remove(context.getTitle());
+		// remove the current page, restoring a old version of this page should
+		// be avoided
+		// titles.remove(context.getTitle());
+
 		StringBuffer tableContent = new StringBuffer();
 
 		boolean actionsExist = false;
@@ -132,10 +135,11 @@ public class ShowRevisionAction extends AbstractAction {
 					versionString = "was version <a href=\""
 							+ KnowWEUtils.getURLLink(title, version)
 							+ "\">" + Integer.toString(version) + "</a>. ";
-					compareString = "<a href=\"Diff.jsp?page=" + title + "&r2=" + version
-							+ "\" title=\"Compare with current revision\""
-							// + "onClick=\"compareRev(" + title + ");\""
-							+ ">Compare</a>";
+					compareString = "<a " +
+							"title=\"Compare with current revision\""
+							+ "onClick=\"showDiff('" + title + "', '" + version + "');\""
+							+ ">Show Diff</a>";
+
 					actionsExist = true;
 					String oldText = Environment.getInstance().getWikiConnector().getVersion(
 							title,
@@ -163,24 +167,36 @@ public class ShowRevisionAction extends AbstractAction {
 		}
 
 		if (tableContent.length() != 0) {
+			result.append("<table border=\"1\" ><tr>");
+			// result.append("<colgroup><col width=\"1*\"><col width=\"2*\"></colgroup>");
+			result.append("<td valign='top' style='border-right: 1px solid #DDDDDD;'>");
+
 			result.append("<a onClick=\"restoreRev(" + date.getTime()
 					+ ");\">Restore this state</a>");
-			// result.append(" ");
-			// result.append("<a onClick=\"downloadRev(" +
-			// date.getTime()
-			// + ");\">Download this revision</a>");
+			result.append(" ");
+			result.append("<a onClick=\"downloadRev(" +
+					date.getTime()
+					+ ");\">Download this revision</a>");
 			result.append("\n\nDifferences to current revision:");
-			result.append("<table><tr><th>Page</th><th>Status</th><th>");
+			result.append("<table>");
+			result.append("<colgroup><col width=\"250\"><col><col></colgroup>");
+			result.append("<tr><th>Page</th><th>Status</th><th>");
+
 			if (actionsExist) {
 				result.append("Actions");
 			}
 			result.append("</th></tr>");
 			result.append(tableContent);
 			result.append("</table>");
+
+			result.append("</td><td valign='top'>");
+			result.append("<div id=\"diffdiv\"></div>");
+			result.append("</td></tr></table>");
 		}
 		else {
 			result.append("<p class=\"box info\">No differences to current revision.</p>");
 		}
+		System.out.println(result);
 		return result;
 	}
 
