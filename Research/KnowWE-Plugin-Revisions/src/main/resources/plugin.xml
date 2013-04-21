@@ -36,7 +36,7 @@
                 <parameter id="scope" value="root" />
                 <parameter id="script" value="KnowWE-Plugin-Revisions-Timeline.js" />
                 <parameter id="script" value="KnowWE-Plugin-Revisions.js" />
-        		<parameter id="css" value="timeline.css" />
+        		<parameter id="css" value="KnowWE-Plugin-Revisions-Timeline.css" />
         </extension>
         
        	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -70,11 +70,11 @@
 		</extension>
 		
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-			id="ShowTextDiffAction">
+			id="TextDiffAction">
 			<parameter id="class"
-				value="de.knowwe.revisions.ShowTextDiffAction" />
-			<parameter id="name" value="ShowTextDiffAction" />
-			<parameter id="description" value="Action ShowTextDiffAction" />
+				value="de.knowwe.revisions.diff.TextDiffAction" />
+			<parameter id="name" value="TextDiffAction" />
+			<parameter id="description" value="Action TextDiffAction" />
 			<parameter id="version" value="1.0" />
 			<parameter id="priority" value="5" />
 		</extension>
