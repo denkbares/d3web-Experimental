@@ -1,7 +1,7 @@
         var timeline;
         var data;
         
-    	var defaultRevName = "New Revision Name";
+    	var defaultRevName = "Enter Name for new Revision";
     	var defaultRevComment = "optional Comment";
     	var defaultRevBtnTitle = "Add new Revision";
         
@@ -33,6 +33,8 @@
 			links.events.addListener(timeline, 'select', eventSelected);
 			links.events.addListener(timeline, 'timechanged', lineDragged);
 			links.events.addListener(timeline, 'change', eventChanged);
+			
+			document.getElementById('fileinput').addEventListener('change', uploadRev, false);
 
 		}
 
@@ -52,10 +54,9 @@
 					var start = timeline.getItem(row).start;
 										
 					if (timeline.getData()[row].editable == true) {
-						alert(changed);
 						// unsaved revision selected, so take the data from the form
 						var params = {
-								action : 'ShowRevisionAction',
+								action : 'ShowRevision',
 								rev : document.getElementById('newRevName').value,
 								comment : document.getElementById('newRevComment').value,
 								changed : changed,
@@ -64,7 +65,7 @@
 					} else {
 						// saved revision selected, so take section id from data
 						var params = {
-								action : 'ShowRevisionAction',
+								action : 'ShowRevision',
 								rev : timeline.getItem(row).content,
 								id : data[row].id,
 								date : start.getTime()
@@ -76,11 +77,14 @@
 							response : {
 								action : 'insert',
 								ids : [ 'revdetails' ],
-								fn : KNOWWE.core.util.addCollabsiblePluginHeader
+//								fn : KNOWWE.core.util.addCollabsiblePluginHeader
 							}
 					}
 					new _KA( options ).send();
 				}
+			}
+			else {
+	        	document.getElementById("revdetails").innerHTML = "";
 			}
 		}
 		
@@ -89,7 +93,7 @@
 			timeline.setSelection([]);
 
 			var params = {
-				action : 'ShowRevisionAction',
+				action : 'ShowRevision',
 				rev : time,
 				date : time
 			}
@@ -98,7 +102,7 @@
 					response : {
 						action : 'insert',
 						ids : [ 'revdetails' ],
-						fn : KNOWWE.core.util.addCollabsiblePluginHeader
+//						fn : KNOWWE.core.util.addCollabsiblePluginHeader
 					}
 			}
 			new _KA( options ).send();
@@ -145,8 +149,8 @@
 		            document.getElementById('addrevbtn').title = "Save the priviously created revision first.";
 		            
 		        	document.getElementById("revdetails").innerHTML = "<p class=\"box ok\">Added Revision '"+name+"' to timeline.</p>"
-		        	+"<p class=\"box info\">If necessary, you can drag it to the correct position.</p>"
-		        	+"<p class=\"box info\">Don't forget to save the new revision to persistence.</p>";
+		        	+"<p class=\"box info\">If necessary, you can <b>drag</b> it to the correct position.</p>";
+		        	document.getElementById("reverror").innerHTML = "<p class=\"box info\">Don't forget to <b>save the new revision</b> to persistence.</p>";
 	            }
         }
 
@@ -171,7 +175,7 @@
 		            });
 
 					var params = {
-						action : 'SaveRevisionAction',
+						action : 'SaveRevision',
 						rev : content,
 						date : start.getTime(),
 		                comment: document.getElementById("newRevComment").value
@@ -181,20 +185,20 @@
 							response : {
 								action : 'insert',
 								ids : [ 'revdetails' ],
-								fn : KNOWWE.core.util.addCollabsiblePluginHeader
+//								fn : KNOWWE.core.util.addCollabsiblePluginHeader
 							}
 					}
 					new _KA( options ).send();
 					
+		            document.getElementById('addrevbtn').removeAttribute("disabled");
+		            document.getElementById('newRevName').removeAttribute("disabled");
+		            document.getElementById('newRevComment').removeAttribute("disabled");
+		            document.getElementById('addrevbtn').title = defaultRevBtnTitle;
+		            document.getElementById('newRevName').value = defaultRevName;
+		            document.getElementById('newRevComment').value = defaultRevComment;
+		            document.getElementById("reverror").innerHTML = "";
 				}
             }
-            document.getElementById('addrevbtn').removeAttribute("disabled");
-            document.getElementById('newRevName').removeAttribute("disabled");
-            document.getElementById('newRevComment').removeAttribute("disabled");
-            document.getElementById('addrevbtn').title = defaultRevBtnTitle;
-            document.getElementById('newRevName').value = defaultRevName;
-            document.getElementById('newRevComment').value = defaultRevComment;
-
         }
 
         /**
@@ -206,17 +210,20 @@
             if (sel.length) {
                 if (sel[0].row != undefined) {
 					var row = sel[0].row;
-					var start = timeline.getItem(row).start;
-					var content = timeline.getItem(row).content;
+//					var start = timeline.getItem(row).start;
+//					var content = timeline.getItem(row).content;
 					
 					timeline.deleteItem(row, false);
+					
+		            document.getElementById('addrevbtn').removeAttribute("disabled");
+		            document.getElementById('newRevName').removeAttribute("disabled");
+		            document.getElementById('newRevComment').removeAttribute("disabled");
+		            document.getElementById('addrevbtn').title = defaultRevBtnTitle;
+		            var title = document.getElementById('newRevName').value;
+		            document.getElementById('revdetails').innerHTML = "<p class=\"box ok\">Revision '"+title+"' <b>removed</b></p>";
+		            document.getElementById("reverror").innerHTML = "";
 				}
-            }
-            document.getElementById('addrevbtn').removeAttribute("disabled");
-            document.getElementById('newRevName').removeAttribute("disabled");
-            document.getElementById('newRevComment').removeAttribute("disabled");
-            document.getElementById('addrevbtn').title = defaultRevBtnTitle;
-            
+            }            
         }
         
         
@@ -225,7 +232,7 @@
          */
         function restoreRev(time) {
 			var params = {
-				action : 'RestoreRevisionAction',
+				action : 'RestoreRevision',
 				date : time
 			}
 			var options = {
@@ -233,7 +240,7 @@
 					response : {
 						action : 'insert',
 						ids : [ 'revdetails' ],
-						fn : KNOWWE.core.util.addCollabsiblePluginHeader
+//						fn : KNOWWE.core.util.addCollabsiblePluginHeader
 					}
 			}
 			new _KA( options ).send();
@@ -248,7 +255,7 @@
         function showDiff(title,version) {
         	var diffTarget = 'diffdiv';
 			var params = {
-					action : 'ShowTextDiffAction',
+					action : 'SimpleTextDiff',
 					title : title,
 					version : version
 				}
@@ -257,8 +264,46 @@
 						response : {
 							action : 'insert',
 							ids : [ diffTarget ],
-							fn : KNOWWE.core.util.addCollabsiblePluginHeader
+//							fn : KNOWWE.core.util.addCollabsiblePluginHeader
 						}
 				}
 				new _KA( options ).send();
+        }        
+        
+        
+        function downloadRev(date) {
+			window.location='action/DownloadRevisionZip?KWiki_Topic=Main&KWikiWeb=default_web&date='+date;
+		}
+        
+        function uploadRev(evt) {
+            var f = evt.target.files[0]; 
+
+            if (f) {
+              var r = new FileReader();
+              r.onload = function(e) { 
+        	    var contents = e.target.result;
+                alert( "Got the file.\n" 
+                      +"name: " + f.name + "\n"
+                      +"type: " + f.type + "\n"
+                      +"size: " + f.size + " bytes\n"
+                );  
+              }
+            } else { 
+              alert("Failed to load file");
+            }
+            
+//			var params = {
+//					action : 'UploadRevisionZip',
+//					title : title,
+//					version : version
+//				}
+//				var options = {
+//						url : KNOWWE.core.util.getURL(params),
+//						response : {
+//							action : 'insert',
+//							ids : [ 'revdetails' ],
+//							fn : KNOWWE.core.util.addCollabsiblePluginHeader
+//						}
+//				}
+//				new _KA( options ).send();
         }

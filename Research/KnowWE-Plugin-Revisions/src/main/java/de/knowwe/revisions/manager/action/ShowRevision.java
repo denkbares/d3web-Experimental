@@ -16,26 +16,23 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.revisions.timeline;
+package de.knowwe.revisions.manager.action;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.knowwe.core.ArticleManager;
-import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.revisions.DateType;
+import de.knowwe.revisions.DatedRevision;
+import de.knowwe.revisions.Revision;
 import de.knowwe.revisions.RevisionType;
+import de.knowwe.revisions.manager.RevisionManager;
 
 /**
  * This actions shows details for the selected revision or date.
@@ -43,7 +40,7 @@ import de.knowwe.revisions.RevisionType;
  * @author grotheer
  * @created 28.03.2013
  */
-public class ShowRevisionAction extends AbstractAction {
+public class ShowRevision extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -57,7 +54,6 @@ public class ShowRevisionAction extends AbstractAction {
 
 	private String perform(UserActionContext context) {
 		Map<String, String> params = context.getParameters();
-
 		if (params.containsKey("date")) {
 			Date date = new Date(Long.parseLong(params.get("date")));
 			if (params.containsKey("rev")) {
@@ -86,47 +82,31 @@ public class ShowRevisionAction extends AbstractAction {
 	 * @param date
 	 * @return
 	 */
-	public static StringBuffer getPagesChangedTable(UserActionContext context, Date date) {
-		WikiConnector wiki = Environment.getInstance().getWikiConnector();
-
-		Collection<String> titles = wiki.getAllArticles(context.getWeb()).keySet();
-		HashMap<String, Integer> pageversions = new HashMap<String, Integer>();
-
-		ArticleManager currentArticleManager = Environment.getInstance().getArticleManager(
-				context.getWeb());
-		ArticleManager articleManagerAtVersion = new
-				ArticleManager(Environment.getInstance(),
-						context.getWeb());
-		ArrayList<Article> articlesToRegister = new ArrayList<Article>(
-				currentArticleManager.getArticles());
-
-		StringBuffer result = new StringBuffer();
-
-		// remove the current page, restoring a old version of this page should
-		// be avoided
-		// titles.remove(context.getTitle());
-
+	public static StringBuffer getPagesChangedTable(UserActionContext context, Revision rev) {
 		StringBuffer tableContent = new StringBuffer();
 
+		boolean actionsExist = appendChangesTableContentForDefaultRevision(tableContent,
+				(DatedRevision) rev, context);
+		return ShowRevision.wrapTableAroundContent(tableContent, actionsExist, rev);
+	}
+
+	/**
+	 * 
+	 * @created 22.04.2013
+	 * @param tableContent
+	 * @return
+	 */
+	private static boolean appendChangesTableContentForDefaultRevision(StringBuffer tableContent, DatedRevision rev, UserActionContext context) {
+		HashMap<String, Integer> compareDiff = rev.compareWithCurrentState();
+
+		// remove the current (revision) page,
+		// restoring a old version of this page should be avoided
+		compareDiff.remove(context.getTitle());
+
 		boolean actionsExist = false;
-		for (String title : titles) {
-			Article actualVersionOfCurrentArticle = currentArticleManager.getArticle(title);
-
-			// version number at date
-			int version = -1;
-			try {
-				version = wiki.getVersionAtDate(title,
-						date);
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-
+		for (String title : compareDiff.keySet()) {
+			int version = compareDiff.get(title);
 			if (version != -1) {
-				// page has changes
-
-				articlesToRegister.remove(actualVersionOfCurrentArticle);
-
 				String versionString;
 				String compareString = "";
 
@@ -139,79 +119,37 @@ public class ShowRevisionAction extends AbstractAction {
 							"title=\"Compare with current revision\""
 							+ "onClick=\"showDiff('" + title + "', '" + version + "');\""
 							+ ">Show Diff</a>";
-
 					actionsExist = true;
-					String oldText = Environment.getInstance().getWikiConnector().getVersion(
-							title,
-							version);
-					Article oldVersionOfCurrentArticle = Article.createArticle(oldText, title,
-							context.getWeb());
-					articlesToRegister.add(oldVersionOfCurrentArticle);
 				}
 				else {
 					// page did not exist
 					versionString = "did not exist";
-
 				}
 
-				pageversions.put(title, version);
-				tableContent.append("<tr><td>" + KnowWEUtils.getLinkHTMLToArticle(title)
-						+ "</td><td>"
-						+ versionString + "</td><td>" + compareString + "</tr>");
+				// append a new row in html table
+				tableContent.append("<tr>");
+				tableContent.append("<td>" + KnowWEUtils.getLinkHTMLToArticle(title) + "</td>");
+				tableContent.append("<td>" + versionString + "</td>");
+				tableContent.append("<td>" + compareString + "</td>");
+				tableContent.append("<td>");
 			}
 		}
-
-		// throw all collected articles in the new article manager
-		for (Article a : articlesToRegister) {
-			articleManagerAtVersion.registerArticle(a);
-		}
-
-		if (tableContent.length() != 0) {
-			result.append("<table border=\"1\" ><tr>");
-			// result.append("<colgroup><col width=\"1*\"><col width=\"2*\"></colgroup>");
-			result.append("<td valign='top' style='border-right: 1px solid #DDDDDD;'>");
-
-			result.append("<a onClick=\"restoreRev(" + date.getTime()
-					+ ");\">Restore this state</a>");
-			result.append(" ");
-			result.append("<a onClick=\"downloadRev(" +
-					date.getTime()
-					+ ");\">Download this revision</a>");
-			result.append("\n\nDifferences to current revision:");
-			result.append("<table>");
-			result.append("<colgroup><col width=\"250\"><col><col></colgroup>");
-			result.append("<tr><th>Page</th><th>Status</th><th>");
-
-			if (actionsExist) {
-				result.append("Actions");
-			}
-			result.append("</th></tr>");
-			result.append(tableContent);
-			result.append("</table>");
-
-			result.append("</td><td valign='top'>");
-			result.append("<div id=\"diffdiv\"></div>");
-			result.append("</td></tr></table>");
-		}
-		else {
-			result.append("<p class=\"box info\">No differences to current revision.</p>");
-		}
-		System.out.println(result);
-		return result;
+		return actionsExist;
 	}
 
 	public static StringBuffer getDateDetails(UserActionContext context, Date date) {
 		String dateString = DateType.DATE_FORMAT.format(date);
 		StringBuffer result = new StringBuffer("<p class=\"box ok\">Date "
 				+ dateString + " selected.</p>");
-		result.append(getPagesChangedTable(context, date));
+		Revision rev = RevisionManager.getRM(context).getRevision(date);
+		result.append(getPagesChangedTable(context, rev));
 		return result;
 	}
 
-	public static StringBuffer getRevisionDetails(UserActionContext context, Date date, String rev, String id) {
+	public static StringBuffer getRevisionDetails(UserActionContext context, Date date, String revTitle, String id) {
 		String dateString = DateType.DATE_FORMAT.format(date);
 
-		StringBuffer result = new StringBuffer("<p class=\"box ok\">Revision '" + rev
+		StringBuffer result = new StringBuffer("<p class=\"box ok\">Revision '" + revTitle
 				+ "' selected, which is representing wiki state as of " + dateString + "</p>");
 
 		// try to get revision comment and add it
@@ -221,36 +159,91 @@ public class ShowRevisionAction extends AbstractAction {
 			// add the revision comment if exists
 			String comment = RevisionType.getRevisionComment(section);
 			if (comment != null) {
-				result.append("Comment:\n" + comment + "\n");
+				result.append("<h4>Comment:</h4>" + comment + "\n");
 			}
 		}
 
 		// append page version diff overview
-		result.append(getPagesChangedTable(context, date));
+		Revision rev = RevisionManager.getRM(context).getRevision(date);
+		result.append(getPagesChangedTable(context, rev));
 		return result;
 	}
 
-	public static StringBuffer getUnsavedRevisionDetails(UserActionContext context, Date date, String rev, String comment, boolean changed) {
-
+	public static StringBuffer getUnsavedRevisionDetails(UserActionContext context, Date date, String revTitle, String comment, boolean changed) {
 		String dateString = DateType.DATE_FORMAT.format(date);
-
-		StringBuffer result = new StringBuffer("<p class=\"box ok\">Revision '" + rev + "' ");
+		StringBuffer result = new StringBuffer("<p class=\"box ok\">Revision '" + revTitle + "' ");
 
 		if (changed) {
-			result.append("moved. It is now representing wiki state as of <b>" + dateString
+			result.append("<b>moved</b>. It is now representing wiki state as of <b>" + dateString
 					+ "</b></p>");
 		}
 		else {
 			result.append(("selected, which is representing wiki state as of " + dateString + "</p>"));
 		}
-		// append the provided comment if not empty
+		result.append("<p class=\"box info\">If necessary, you can <b>drag</b> it to the correct position.</p>");
+
+		// append the provided comment
 		if (!comment.isEmpty()) {
 			result.append("Comment:\n" + comment + "\n");
 		}
 
 		// append page version diff overview
-		result.append(getPagesChangedTable(context, date));
+		Revision rev = RevisionManager.getRM(context).getRevision(date);
+		result.append(getPagesChangedTable(context, rev));
+		return result;
+	}
 
+	/**
+	 * Wrap a html table around the tableContent
+	 * 
+	 * @created 23.04.2013
+	 * @param tableContent
+	 * @param actionsExist
+	 * @return a StringBuffer containing an html table with tableContent as
+	 *         content
+	 */
+	public static StringBuffer wrapTableAroundContent(StringBuffer tableContent, boolean actionsExist, Revision rev) {
+		StringBuffer result = new StringBuffer();
+
+		if (tableContent.length() != 0) {
+			result.append("<table border=\"1\" ><tr>");
+			// result.append("<colgroup><col width=\"1*\"><col width=\"2*\"></colgroup>");
+			result.append("<td valign='top' style='border-right: 1px solid #DDDDDD;'>");
+			result.append("<h4>Differences to current revision:</h4>");
+
+			// Beginning of inner Table
+			result.append("<table>");
+			result.append("<colgroup><col width=\"250\"><col><col></colgroup>");
+			// header row
+			result.append("<tr><th>Page</th><th>Status</th><th>");
+			if (actionsExist) {
+				result.append("Actions");
+			}
+			result.append("</th></tr>");
+			// content
+			result.append(tableContent);
+			result.append("</table>");
+			// End of inner Table
+
+			result.append("<h4>Revision Actions:</h4>");
+			if (rev instanceof DatedRevision) {
+				Date date = ((DatedRevision) rev).getDate();
+
+				result.append("<a onClick=\"restoreRev(" + date.getTime()
+						+ ");\">Restore this state</a>");
+				result.append(", ");
+				result.append("<a onClick=\"downloadRev(" +
+						date.getTime()
+						+ ");\">Download this revision</a>");
+			}
+
+			result.append("</td><td valign='top'>");
+			result.append("<div id=\"diffdiv\"></div>");
+			result.append("</td></tr></table>");
+		}
+		else {
+			result.append("<p class=\"box info\">No differences to current revision.</p>");
+		}
 		return result;
 	}
 }

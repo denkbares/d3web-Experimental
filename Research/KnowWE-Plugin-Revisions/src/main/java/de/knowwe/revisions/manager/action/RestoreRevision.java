@@ -16,14 +16,14 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.revisions;
+package de.knowwe.revisions.manager.action;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -31,14 +31,15 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.wikiConnector.WikiConnector;
+import de.knowwe.revisions.DateType;
+import de.knowwe.revisions.manager.RevisionManager;
 
 /**
  * 
  * @author grotheer
  * @created 15.04.2013
  */
-public class RestoreRevisionAction extends AbstractAction {
+public class RestoreRevision extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -73,8 +74,7 @@ public class RestoreRevisionAction extends AbstractAction {
 	}
 
 	/**
-	 * runs over all articles and searches for changed sections just like in
-	 * ShowRevisionAction but restores the old revision
+	 * get all sections to be restored
 	 * 
 	 * @created 15.04.2013
 	 * @param sectionsToUpdate the Map where the new Sections get written into
@@ -83,39 +83,26 @@ public class RestoreRevisionAction extends AbstractAction {
 	 * @return String containing message boxes
 	 */
 	private static String getSectionsToUpdate(HashMap<String, String> sectionsToUpdate, Date date, UserActionContext context) {
-		WikiConnector wiki = Environment.getInstance().getWikiConnector();
-		Collection<String> titles = wiki.getAllArticles(context.getWeb()).keySet();
 		StringBuffer messages = new StringBuffer();
 
-		// do not restore the revision page, so remove the current page from the
-		// list
+		HashMap<String, Integer> changedPages = RevisionManager.getRM(context).compareWithCurrentState(
+				date);
+		ArticleManager aman = RevisionManager.getRM(context).getArticleManager(
+				date);
 
-		titles.remove(context.getTitle());
+		// do not restore the revision page
+		changedPages.remove(context.getTitle());
 
-		for (String title : titles) {
-
-			// version number at date
-			int version = -1;
-			try {
-				version = wiki.getVersionAtDate(title,
-						date);
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
+		for (String title : changedPages.keySet()) {
+			int version = changedPages.get(title);
 
 			if (version != -1) {
 				// page has changes
 				Article currentArticle = Environment.getInstance().getArticleManager(
-						context.getWeb()).getArticle(
-						title);
+						context.getWeb()).getArticle(title);
 				if (version != -2) {
 					// page was other version, so restore the old content
-					String oldText = Environment.getInstance().getWikiConnector().getVersion(title,
-							version);
-
-					Article oldVersionOfCurrentArticle = Article.createArticle(oldText, title,
-							context.getWeb());
+					Article oldVersionOfCurrentArticle = aman.getArticle(title);
 					Section<RootType> s = oldVersionOfCurrentArticle.getRootSection();
 					sectionsToUpdate.put(currentArticle.getRootSection().getID(), s.getText());
 					messages.append("<p class=\"box ok\">Version " + version

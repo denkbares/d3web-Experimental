@@ -16,28 +16,41 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.revisions.timeline;
+package de.knowwe.revisions;
 
-import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.core.ArticleManager;
 
 /**
- * This is the type displaying the RevManagerRenderer
+ * This class represents a wiki revision.
  * 
  * @author grotheer
- * @created 28.03.2013
+ * @created 22.04.2013
  */
-public class RevManagerType extends DefaultMarkupType {
+public abstract class AbstractRevision implements Revision {
 
-	private static DefaultMarkup m = null;
+	protected String web;
+	/**
+	 * never read the article manager directly, always use getArticleManager
+	 */
+	protected ArticleManager articleManager;
 
-	static {
-		m = new DefaultMarkup("RevManager");
+	/**
+	 * @param articleManagers
+	 */
+	public AbstractRevision(String web) {
+		this.web = web;
+
+		// the article manager is filled if and only if it is used for the first
+		// time
+		articleManager = null;
 	}
 
-	public RevManagerType() {
-		super(m);
-		this.setIgnorePackageCompile(true);
-		this.setRenderer(new RevManagerRenderer());
+	public ArticleManager getArticleManager() {
+		if (articleManager == null) {
+			createArticleManager();
+		}
+		return articleManager;
 	}
+
+	protected abstract void createArticleManager();
 }

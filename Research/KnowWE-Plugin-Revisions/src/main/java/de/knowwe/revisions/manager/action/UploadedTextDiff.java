@@ -16,29 +16,23 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.revisions.timeline;
+package de.knowwe.revisions.manager.action;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.RootType;
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.revisions.DateType;
+import de.knowwe.revisions.manager.RevisionManager;
 
 /**
- * This action adds a new revision markup to the actual wiki page.
  * 
  * @author grotheer
- * @created 28.03.2013
+ * @created 22.04.2013
  */
-public class SaveRevisionAction extends AbstractAction {
+public class UploadedTextDiff extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -51,27 +45,22 @@ public class SaveRevisionAction extends AbstractAction {
 
 	private String perform(UserActionContext context) throws IOException {
 		Map<String, String> params = context.getParameters();
-		if (params.containsKey("rev") && params.containsKey("date")) {
-			String rev = params.get("rev");
-			Date date = new Date(Long.parseLong(params.get("date")));
+		if (params.containsKey("title")) {
+			String title = params.get("title");
+			Article uploadedArticle = RevisionManager.getRM(context).getUploadedRevision().getArticleManager().getArticle(
+					title);
+			String t1 = uploadedArticle.getRootSection().getText();
+			String t2 = Environment.getInstance().getWikiConnector().getVersion(title, -1);
 
-			String markup = "%%Revision\n@name = " + rev + "\n@date = "
-					+ DateType.DATE_FORMAT.format(date) + "\n";
-			if (params.containsKey("comment")) {
-				String comment = params.get("comment");
-				if (!comment.isEmpty()) {
-					markup += "@comment = " + comment + "\n";
-				}
+			String diff = SimpleTextDiff.getTextDiff(title, 0, -1, t1, t2, "\n");
+			if (!diff.isEmpty()) {
+				return "<pre>" + diff
+						+ "</pre>";
 			}
-			markup += "%";
-
-			Article a = Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
-			HashMap<String, String> sectionsMap = new HashMap<String, String>();
-			Section<RootType> s = a.getRootSection();
-			sectionsMap.put(s.getID(), s.getText().concat(markup));
-			Sections.replaceSections(context, sectionsMap);
-			return "<p class=\"box ok\">Revision '" + rev + "' successfully saved.";
+			else {
+				return "<p class=\"box error\">No differences to current page version.";
+			}
 		}
-		return "<p class=\"box error\">Error while saving revision.";
+		return "<p class=\"box error\">Error while getting text diff.";
 	}
 }

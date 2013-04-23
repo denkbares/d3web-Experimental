@@ -16,7 +16,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.revisions.diff;
+package de.knowwe.revisions.manager.action;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ import difflib.Patch;
  * @author grotheer
  * @created 21.04.2013
  */
-public class TextDiffAction extends AbstractAction {
+public class SimpleTextDiff extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -72,6 +72,9 @@ public class TextDiffAction extends AbstractAction {
 		if (version2 == -1) {
 			versionString2 = "Current version of page '" + title + "'";
 		}
+		if (version1 == 0) {
+			versionString1 = "Uploaded Version of page '" + title + "'";
+		}
 		List<String> lines1 = Arrays.asList(text1.split("\n"));
 		List<String> lines2 = Arrays.asList(text2.split("\n"));
 		Patch patch = DiffUtils.diff(lines1, lines2);
@@ -79,8 +82,20 @@ public class TextDiffAction extends AbstractAction {
 		StringBuilder builder = new StringBuilder();
 		List<String> result = DiffUtils.generateUnifiedDiff(versionString1, versionString2, lines1,
 				patch, 5);
+
+		// TODO make this line splitting better, to not break the screen
+		int limit = 100;
 		for (String line : result) {
-			builder.append(line + linebreak);
+			if (line.length() <= limit) {
+				builder.append(line + linebreak);
+			}
+			else {
+				String cuttedline = line;
+				while (cuttedline.length() > limit) {
+					builder.append(cuttedline.substring(0, limit - 1) + linebreak);
+					cuttedline = cuttedline.substring(limit, cuttedline.length() - 1);
+				}
+			}
 		}
 		return builder.toString();
 	}

@@ -24,13 +24,24 @@
                 <parameter id="priority" value="5" />
                 <parameter id="scope" value="root" />
         </extension>
+        
+       	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+                id="UploaderType">
+                <parameter id="class"
+                        value="de.knowwe.revisions.upload.UploaderType" />
+                <parameter id="name" value="UploaderType" />
+                <parameter id="description" value="Type UploaderType" />
+                <parameter id="version" value="1.0" />
+                <parameter id="priority" value="5" />
+                <parameter id="scope" value="root" />
+        </extension>
 
 	    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-                id="RevManagerType">
+                id="RevisionManagerType">
                 <parameter id="class"
-                        value="de.knowwe.revisions.timeline.RevManagerType" />
-                <parameter id="name" value="RevManagerType" />
-                <parameter id="description" value="Type RevManagerType" />
+                        value="de.knowwe.revisions.manager.RevisionManagerType" />
+                <parameter id="name" value="RevisionManagerType" />
+                <parameter id="description" value="Type RevisionManagerType" />
                 <parameter id="version" value="1.0" />
                 <parameter id="priority" value="5" />
                 <parameter id="scope" value="root" />
@@ -40,43 +51,62 @@
         </extension>
         
        	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-			id="ShowRevisionAction">
+			id="ShowRevision">
 			<parameter id="class"
-				value="de.knowwe.revisions.timeline.ShowRevisionAction" />
-			<parameter id="name" value="ShowRevisionAction" />
-			<parameter id="description" value="Action ShowRevisionAction" />
+				value="de.knowwe.revisions.manager.action.ShowRevision" />
+			<parameter id="name" value="ShowRevision" />
+			<parameter id="description" value="Show a revision" />
 			<parameter id="version" value="1.0" />
 			<parameter id="priority" value="5" />
 		</extension>
 		
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-			id="SaveRevisionAction">
+			id="SaveRevision">
 			<parameter id="class"
-				value="de.knowwe.revisions.timeline.SaveRevisionAction" />
-			<parameter id="name" value="SaveRevisionAction" />
-			<parameter id="description" value="Action SaveRevisionAction" />
+				value="de.knowwe.revisions.manager.action.SaveRevision" />
+			<parameter id="name" value="SaveRevision" />
+			<parameter id="description" value="Save a revision" />
 			<parameter id="version" value="1.0" />
 			<parameter id="priority" value="5" />
 		</extension>
 		
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-			id="RestoreRevisionAction">
+			id="RestoreRevision">
 			<parameter id="class"
-				value="de.knowwe.revisions.RestoreRevisionAction" />
-			<parameter id="name" value="RestoreRevisionAction" />
-			<parameter id="description" value="Action RestoreRevisionAction" />
+				value="de.knowwe.revisions.manager.action.RestoreRevision" />
+			<parameter id="name" value="RestoreRevision" />
+			<parameter id="description" value="Restores a revision." />
 			<parameter id="version" value="1.0" />
 			<parameter id="priority" value="5" />
 		</extension>
 		
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-			id="TextDiffAction">
+			id="SimpleTextDiff">
 			<parameter id="class"
-				value="de.knowwe.revisions.diff.TextDiffAction" />
-			<parameter id="name" value="TextDiffAction" />
-			<parameter id="description" value="Action TextDiffAction" />
+				value="de.knowwe.revisions.manager.action.SimpleTextDiff" />
+			<parameter id="name" value="SimpleTextDiff" />
+			<parameter id="description" value="Shows a simple text diff" />
 			<parameter id="version" value="1.0" />
 			<parameter id="priority" value="5" />
 		</extension>
 	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+			id="DownloadRevisionZip">
+			<parameter id="class" value="de.knowwe.revisions.manager.action.DownloadRevisionZip" />
+			<parameter id="name" value="DownloadRevisionZip" />
+			<parameter id="description"
+				value="Downloads a specific revision." />
+			<parameter id="version" value="1.0" />
+			<parameter id="priority" value="5" />
+		</extension>
+		
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+			id="UploadRevisionZip">
+			<parameter id="class" value="de.knowwe.revisions.upload.UploadRevisionZip" />
+			<parameter id="name" value="UploadRevisionZip" />
+			<parameter id="description"
+				value="Uploads a specific revision." />
+			<parameter id="version" value="1.0" />
+			<parameter id="priority" value="5" />
+		</extension>
 </plugin>
