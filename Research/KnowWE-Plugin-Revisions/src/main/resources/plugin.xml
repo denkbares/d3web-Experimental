@@ -89,6 +89,16 @@
 			<parameter id="version" value="1.0" />
 			<parameter id="priority" value="5" />
 		</extension>
+		
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+			id="UploadedTextDiff">
+			<parameter id="class"
+				value="de.knowwe.revisions.manager.action.UploadedTextDiff" />
+			<parameter id="name" value="UploadedTextDiff" />
+			<parameter id="description" value="Shows a text diff for uploaded revision page" />
+			<parameter id="version" value="1.0" />
+			<parameter id="priority" value="5" />
+		</extension>
 	
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 			id="DownloadRevisionZip">

@@ -24,7 +24,7 @@ import java.util.HashMap;
 import javax.servlet.http.HttpSession;
 
 import de.knowwe.core.ArticleManager;
-import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.revisions.DatedRevision;
 import de.knowwe.revisions.UploadedRevision;
 
@@ -75,7 +75,7 @@ public class RevisionManager {
 	 * @param context
 	 * @return
 	 */
-	public static RevisionManager getRM(UserActionContext context) {
+	public static RevisionManager getRM(UserContext context) {
 		return getRM(context.getSession(), context.getWeb());
 	}
 

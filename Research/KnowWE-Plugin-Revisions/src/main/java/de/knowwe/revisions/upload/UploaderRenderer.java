@@ -39,7 +39,7 @@ public class UploaderRenderer extends DefaultMarkupRenderer {
 		appendRevisionUploadForm(section, string);
 
 		// Div for upload details
-		string.appendHtml("<div id=\"uploadetails\"></div>");
+		string.appendHtml("<div id=\"uploaddetails\"></div>");
 	}
 
 	/**
@@ -54,9 +54,9 @@ public class UploaderRenderer extends DefaultMarkupRenderer {
 		string.appendHtml("<form  autocomplete=\"off\" action=\"action/UploadRevisionZip?KWiki_Topic="
 				+ section.getTitle() + "&KWikiWeb=" + section.getWeb()
 				+ "&\" method=\"post\" enctype=\"multipart/form-data\">");
-		string.appendHtmlElement("b", "Revision Upload: ", "");
+		string.appendHtmlElement("b", "Choose a file: ", "");
 		string.appendHtml("<input id=\"fileinput\" type=\"file\" size=\"50\" name=\"file\" />");
-		string.appendHtml("<input type=\"submit\" />");
+		string.appendHtml("<input type=\"submit\" onclick=\"uploadRev());\"/>");
 		string.appendHtml("</form>");
 		string.appendHtml("</div>");
 	}

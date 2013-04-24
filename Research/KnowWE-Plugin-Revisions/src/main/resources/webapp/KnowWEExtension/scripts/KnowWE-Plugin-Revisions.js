@@ -63,7 +63,7 @@
 								date : start.getTime()
 							}
 					} else {
-						// saved revision selected, so take section id from data
+						// saved revision selected, so take section id from data, id is 'uploaded' for uploaded revision
 						var params = {
 								action : 'ShowRevision',
 								rev : timeline.getItem(row).content,
@@ -94,7 +94,6 @@
 
 			var params = {
 				action : 'ShowRevision',
-				rev : time,
 				date : time
 			}
 			var options = {
@@ -268,42 +267,54 @@
 						}
 				}
 				new _KA( options ).send();
-        }        
+        }
         
         
         function downloadRev(date) {
 			window.location='action/DownloadRevisionZip?KWiki_Topic=Main&KWikiWeb=default_web&date='+date;
 		}
         
-        function uploadRev(evt) {
-            var f = evt.target.files[0]; 
+        function uploadRev() {
+            var name = "Uploaded Revision";
 
-            if (f) {
-              var r = new FileReader();
-              r.onload = function(e) { 
-        	    var contents = e.target.result;
-                alert( "Got the file.\n" 
-                      +"name: " + f.name + "\n"
-                      +"type: " + f.type + "\n"
-                      +"size: " + f.size + " bytes\n"
-                );  
-              }
-            } else { 
-              alert("Failed to load file");
-            }
+            var date = new Date();
+
+            timeline.addItem({
+                'start': date,
+                'content': name,
+				'editable': false
+            });
             
-//			var params = {
-//					action : 'UploadRevisionZip',
-//					title : title,
-//					version : version
-//				}
-//				var options = {
-//						url : KNOWWE.core.util.getURL(params),
-//						response : {
-//							action : 'insert',
-//							ids : [ 'revdetails' ],
+			var params = {
+					action : 'ShowRevision',
+					rev : timeline.getItem(row).content,
+					id : 'uploaded',
+					date : start.getTime()
+				}
+			var options = {
+					url : KNOWWE.core.util.getURL(params),
+					response : {
+						action : 'insert',
+						ids : [ 'revdetails' ],
+	//					fn : KNOWWE.core.util.addCollabsiblePluginHeader
+					}
+			}
+			new _KA( options ).send();
+        }
+        
+        function showUploadedDiff(title,version) {
+        	var diffTarget = 'diffdiv';
+			var params = {
+				action : 'UploadedTextDiff',
+				title : title
+			}
+			var options = {
+					url : KNOWWE.core.util.getURL(params),
+					response : {
+						action : 'insert',
+						ids : [ diffTarget ],
 //							fn : KNOWWE.core.util.addCollabsiblePluginHeader
-//						}
-//				}
-//				new _KA( options ).send();
+					}
+			}
+			new _KA( options ).send();
         }

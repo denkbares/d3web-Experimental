@@ -58,9 +58,9 @@ public class UploadedTextDiff extends AbstractAction {
 						+ "</pre>";
 			}
 			else {
-				return "<p class=\"box error\">No differences to current page version.";
+				return "<p class=\"box error\">No differences to current page version.</p>";
 			}
 		}
-		return "<p class=\"box error\">Error while getting text diff.";
+		return "<p class=\"box error\">Error while getting text diff.</p>";
 	}
 }

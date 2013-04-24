@@ -45,7 +45,7 @@ public class RevisionManagerRenderer extends DefaultMarkupRenderer {
 	protected void renderContents(Section<?> section, UserContext user, RenderResult string) {
 		appendNewRevisionPanel(string);
 
-		appendJsonDataTableAndTimeline(section, string);
+		appendJsonDataTableAndTimeline(section, string, user);
 
 		// Div for save warning message
 		string.appendHtml("<div id=\"reverror\"></div>");
@@ -92,13 +92,20 @@ public class RevisionManagerRenderer extends DefaultMarkupRenderer {
 	 * @param html
 	 * @return
 	 */
-	private static void appendJsonDataTableAndTimeline(Section<?> section, RenderResult string) {
+	private static void appendJsonDataTableAndTimeline(Section<?> section, RenderResult string, UserContext user) {
 		string.appendHtml("<script type=\"text/javascript\">\n");
 		string.appendHtml("data = [\n");
 		for (Section<RevisionType> sec : Sections.findSuccessorsOfType(section.getFather(),
 				RevisionType.class)) {
 			String line = RevisionType.toTimelineString(sec);
 			string.appendHtml(line);
+		}
+		if (RevisionManager.getRM(user).getUploadedRevision() != null) {
+			string.appendHtml("{\n" +
+					"\'start\': new Date(),\n" +
+					"\'content\': \'Uploaded Revision\',\n" +
+					"\'id\': \'uploaded\'\n" +
+					"},\n");
 		}
 		string.deleteCharAt(string.length() - 2);
 		string.appendHtml("];");

@@ -34,12 +34,12 @@ import org.apache.commons.io.IOUtils;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.revisions.UploadedRevision;
 import de.knowwe.revisions.manager.RevisionManager;
-import de.knowwe.revisions.manager.action.ShowRevision;
 
 /**
+ * Reads a zipped revision from servlet input stream and adds it to revision
+ * manager as uploaded revision
  * 
  * @author grotheer
  * @created 22.04.2013
@@ -69,74 +69,9 @@ public class UploadRevisionZip extends AbstractAction {
 			}
 			UploadedRevision rev = new UploadedRevision(context.getWeb(), pages);
 			RevisionManager.getRM(context).setUploadedRevision(rev);
-
-			String result = getRevisionDetails(context).toString();
-			if (result != null && context.getWriter() != null) {
-				context.setContentType("text/html; charset=UTF-8");
-				context.getWriter().write(result);
-			}
 		}
 		catch (FileUploadException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private static StringBuffer getRevisionDetails(UserActionContext context) {
-		StringBuffer tableContent = new StringBuffer();
-		UploadedRevision rev = RevisionManager.getRM(context).getUploadedRevision();
-
-		boolean actionsExist = appendChangesTableContent(tableContent,
-				(UploadedRevision) rev, context);
-		return ShowRevision.wrapTableAroundContent(tableContent, actionsExist, rev);
-	}
-
-	/**
-	 * 
-	 * @created 22.04.2013
-	 * @param tableContent
-	 * @return
-	 */
-	private static boolean appendChangesTableContent(StringBuffer tableContent, UploadedRevision rev, UserActionContext context) {
-		HashMap<String, Integer> compareDiff = rev.compareWithCurrentState();
-
-		// remove the current (revision) page,
-		// restoring a old version of this page should be avoided
-		compareDiff.remove(context.getTitle());
-
-		boolean actionsExist = false;
-		for (String title : compareDiff.keySet()) {
-			int version = compareDiff.get(title);
-			if (version != -1) {
-				String versionString;
-				String compareString = "";
-
-				if (version == 0) {
-					// diff
-					versionString = "changed";
-					compareString = "<a " +
-							"title=\"Compare with wiki revision\""
-							+ "onClick=\"showDiff('" + title + "', '" + version + "');\""
-							+ ">Show Diff</a>";
-					actionsExist = true;
-				}
-				else if (version == -2) {
-					versionString = "not in upload";
-				}
-				else if (version == 1) {
-					versionString = "not in wiki";
-				}
-				else {
-					versionString = "erorr";
-				}
-
-				// append a new row in html table
-				tableContent.append("<tr>");
-				tableContent.append("<td>" + KnowWEUtils.getLinkHTMLToArticle(title) + "</td>");
-				tableContent.append("<td>" + versionString + "</td>");
-				tableContent.append("<td>" + compareString + "</td>");
-				tableContent.append("<td>");
-			}
-		}
-		return actionsExist;
 	}
 }

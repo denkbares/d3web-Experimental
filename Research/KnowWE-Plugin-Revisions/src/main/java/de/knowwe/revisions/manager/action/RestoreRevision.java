@@ -55,10 +55,13 @@ public class RestoreRevision extends AbstractAction {
 		if (params.containsKey("date")) {
 			Date date = new Date(Long.parseLong(params.get("date")));
 			Date preRestoreTime = new Date();
-			String preRestoreMarkup = "%%Revision\n@name = Backup: pre-restoring revision from "
-					+ DateType.DATE_FORMAT.format(date)
-					+ "\n@date = "
-					+ DateType.DATE_FORMAT.format(preRestoreTime) + "\n%";
+			String dateString = DateType.DATE_FORMAT.format(preRestoreTime);
+			String preRestoreMarkup = "%%Revision\n" +
+					"@name = Automatic Backup\n" +
+					"@date = " + DateType.DATE_FORMAT.format(preRestoreTime) + "\n" +
+					"@comment = Automatic Backup before restoring Revision of "
+					+ DateType.DATE_FORMAT.format(date) + "\n" +
+					"%";
 
 			Article a = Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
 			HashMap<String, String> sectionsMap = new HashMap<String, String>();
@@ -100,20 +103,21 @@ public class RestoreRevision extends AbstractAction {
 				// page has changes
 				Article currentArticle = Environment.getInstance().getArticleManager(
 						context.getWeb()).getArticle(title);
+				messages.append("<p class=\"box ok\">Article '" + title + "' ");
 				if (version != -2) {
 					// page was other version, so restore the old content
 					Article oldVersionOfCurrentArticle = aman.getArticle(title);
 					Section<RootType> s = oldVersionOfCurrentArticle.getRootSection();
 					sectionsToUpdate.put(currentArticle.getRootSection().getID(), s.getText());
-					messages.append("<p class=\"box ok\">Version " + version
-							+ " restored for article '" + title + "'</p>");
+					messages.append("restored to version " + version);
 				}
 				else {
 					// page did not exist, so delete the content, but keep the
 					// page
 					sectionsToUpdate.put(currentArticle.getRootSection().getID(), "");
-					messages.append("<p class=\"box ok\">Article '" + title + "' cleared</p>");
+					messages.append("cleared");
 				}
+				messages.append("</p>");
 			}
 		}
 		return messages.toString();
