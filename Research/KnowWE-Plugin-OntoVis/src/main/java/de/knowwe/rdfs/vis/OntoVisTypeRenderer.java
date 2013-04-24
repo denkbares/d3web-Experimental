@@ -34,6 +34,10 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 		parameterMap.put(RenderingCore.CONCEPT, getConcept(user, section));
 
+		String master = getMaster(user, section);
+		if (master != null) {
+			parameterMap.put(RenderingCore.MASTER, master);
+		}
 		String exclude = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_EXCLUDERELATIONS);
 		parameterMap.put(RenderingCore.EXCLUDED_RELATIONS, exclude);
@@ -56,6 +60,18 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		RenderingCore renderer = new RenderingCore(realPath, section, parameterMap);
 		renderer.render(string);
 
+	}
+
+	/**
+	 * 
+	 * @created 24.04.2013
+	 * @param user
+	 * @param section
+	 * @return
+	 */
+	private String getMaster(UserContext user, Section<?> section) {
+		return OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_MASTER);
 	}
 
 	/**

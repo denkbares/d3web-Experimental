@@ -29,9 +29,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -41,15 +41,17 @@ import java.util.ResourceBundle;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
+import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
-import de.d3web.strings.Identifier;
-import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.Environment;
-import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdfs.util.RDFSUtil;
+import de.knowwe.rdf2go.utils.PackageCompileLinkToTermDefinitionProvider;
+import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
+import de.knowwe.rdfs.util.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.rdfs.vis.util.Utils;
 
 /**
@@ -61,6 +63,7 @@ public class RenderingCore {
 
 	public static final String FORMAT = "format";
 	public static final String CONCEPT = "concept";
+	public static final String MASTER = "master";
 	public static final String REQUESTED_HEIGHT = "requested_height";
 	public static final String REQUESTED_DEPTH = "requested_depth";
 
@@ -81,8 +84,8 @@ public class RenderingCore {
 
 	public static final String SHOW_OUTGOING_EDGES = "SHOW_OUTGOING_EDGES";
 
-	private int requestedDepth;
-	private int requestedHeight;
+	private int requestedDepth = 1;
+	private int requestedHeight = 1;
 
 	private int depth;
 	private int height;
@@ -115,6 +118,12 @@ public class RenderingCore {
 
 	Map<String, String> parameters;
 
+	private Rdf2GoCore rdfRepository = null;
+
+	private LinkToTermDefinitionProvider uriProvider = null;
+
+	private String master = null;
+
 	// appearances
 	private final String outerLabel = "[ shape=\"none\" fontsize=\"0\" fontcolor=\"white\" ];\n";
 
@@ -127,6 +136,17 @@ public class RenderingCore {
 	 * @param parameters the configuration, consider the constants of this class
 	 */
 	public RenderingCore(String realPath, Section<?> section, Map<String, String> parameters) {
+
+		String master = parameters.get(MASTER);
+		if (master != null) {
+			rdfRepository = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+			this.master = master;
+			uriProvider = new PackageCompileLinkToTermDefinitionProvider();
+		}
+		else {
+			rdfRepository = Rdf2GoCore.getInstance();
+			uriProvider = new IncrementalCompilerLinkToTermDefinitionProvider();
+		}
 
 		String requestedHeightString = parameters.get(REQUESTED_HEIGHT);
 		if (requestedHeightString != null) {
@@ -202,21 +222,30 @@ public class RenderingCore {
 	private void buildSources() {
 
 		String concept = parameters.get(CONCEPT);
+		String conceptNameEncoded = null;
+		try {
+			conceptNameEncoded = URLEncoder.encode(concept, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		URI conceptURI = new URIImpl(rdfRepository.getLocalNamespace() + conceptNameEncoded);
 
 		// if requested, the predecessor are added to the source
 		if (requestedHeight > 0) {
 			height = 0;
-			addPredecessors(concept);
+			addPredecessors(conceptURI);
 		}
-		insertMainConcept(concept);
+		insertMainConcept(conceptURI);
 		// if requested, the successors are added to the source
 		if (requestedDepth > 0) {
 			depth = 0;
-			addSuccessors(concept);
+			addSuccessors(conceptURI);
 		}
 		// if the appearance of the main concept was changed during the process,
 		// it is reset
-		insertMainConcept(concept);
+		insertMainConcept(conceptURI);
 		// check all relations again
 		checkRelations();
 		connectSources();
@@ -499,7 +528,7 @@ public class RenderingCore {
 	 */
 	private void getPredecessors() {
 		if (!isValidInt(parameters.get(REQUESTED_HEIGHT))) {
-			requestedHeight = 0;
+			requestedHeight = 1;
 		}
 		else {
 			requestedHeight = Integer.parseInt(parameters.get(REQUESTED_HEIGHT));
@@ -512,7 +541,7 @@ public class RenderingCore {
 	 */
 	private void getSuccessors() {
 		if (!isValidInt(parameters.get(REQUESTED_DEPTH))) {
-			requestedDepth = 0;
+			requestedDepth = 1;
 		}
 		else {
 			requestedDepth = Integer.parseInt(parameters.get(REQUESTED_DEPTH));
@@ -579,17 +608,26 @@ public class RenderingCore {
 	 * @param concept
 	 * @param request
 	 */
-	private void insertMainConcept(String concept) {
+	private void insertMainConcept(URI conceptURI) {
+		String concept = getConceptName(conceptURI);
 		// Main Concept Attributes
 		String style = "filled";
 		String fillcolor = "yellow";
 		String fontsize = "14";
 		String shape = "ellipse";
 
-		String askClass = "ASK { " + createSparqlURI(concept) + " rdf:type owl:Class}";
-		boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
-		String askProperty = "ASK { " + createSparqlURI(concept) + " rdf:type owl:Property}";
-		boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
+		// String askClass = "ASK { " + uriProvider.createSparqlURI(concept,
+		// rdfRepository, master)
+		// + " rdf:type owl:Class}";
+		String askClass = "ASK { <" + conceptURI.toString()
+				+ "> rdf:type owl:Class}";
+		boolean isClass = rdfRepository.sparqlAsk(askClass);
+		// String askProperty = "ASK { " + uriProvider.createSparqlURI(concept,
+		// rdfRepository, master)
+		// + " rdf:type owl:Property}";
+		String askProperty = "ASK { <" + conceptURI.toString()
+				+ "> rdf:type owl:Property}";
+		boolean isProperty = rdfRepository.sparqlAsk(askProperty);
 
 		if (isClass) {
 			shape = "rectangle";
@@ -597,7 +635,7 @@ public class RenderingCore {
 		else if (isProperty) {
 			shape = "diamond";
 		}
-		String url = createURL();
+		String url = createBaseURL();
 		String conceptKey = "\"" + concept + "\"";
 		String conceptValue = "[ URL=\"" + url + "?page=" + section.getTitle() + "&concept="
 				+ concept + "\" style=\"" + style + "\" fillcolor=\"" + fillcolor
@@ -607,15 +645,6 @@ public class RenderingCore {
 		if (dotSourceLabel.get(conceptKey) != conceptValue) {
 			dotSourceLabel.put(conceptKey, conceptValue);
 		}
-	}
-
-	/**
-	 * 
-	 * @created 29.11.2012
-	 * @return
-	 */
-	private String createURL() {
-		return Environment.getInstance().getWikiConnector().getBaseUrl() + "Wiki.jsp";
 	}
 
 	/**
@@ -728,19 +757,24 @@ public class RenderingCore {
 	 * @param concept
 	 * @param request
 	 */
-	private void addSuccessors(String concept) {
-		String query = "SELECT ?y ?z WHERE { " + createSparqlURI(concept)
-				+ " ?y ?z.}";
+	private void addSuccessors(Node conceptURI) {
+		String concept = getConceptName(conceptURI);
+		// String query = "SELECT ?y ?z WHERE { "
+		// + uriProvider.createSparqlURI(concept, rdfRepository, master)
+		// + " ?y ?z.}";
+		String query = "SELECT ?y ?z WHERE { <"
+				+ conceptURI.asURI().toString()
+				+ "> ?y ?z.}";
 		ClosableIterator<QueryRow> result =
-				Rdf2GoCore.getInstance().sparqlSelectIt(
+				rdfRepository.sparqlSelectIt(
 						query);
 		loop: while (result.hasNext()) {
 			QueryRow row = result.next();
-			String yURI = row.getValue("y").toString();
-			String y = clean(yURI.substring(yURI.indexOf("#") + 1));
+			Node yURI = row.getValue("y");
+			String y = getConceptName(yURI);
 
-			String zURI = row.getValue("z").toString();
-			String z = clean(zURI.substring(zURI.indexOf("#") + 1));
+			Node zURI = row.getValue("z");
+			String z = getConceptName(zURI);
 
 			if (excludedRelation(y)) {
 				continue loop;
@@ -748,11 +782,14 @@ public class RenderingCore {
 			if (excludedNode(z)) {
 				continue loop;
 			}
-			String askClass = "ASK { <" + zURI
+			if (isLiteral(zURI)) {
+				continue loop;
+			}
+			String askClass = "ASK { <" + zURI.asURI().toString()
 					+ "> rdf:type owl:Class}";
-			boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
-			String askProperty = "ASK { <" + zURI + "> rdf:type rdf:Property}";
-			boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
+			boolean isClass = rdfRepository.sparqlAsk(askClass);
+			String askProperty = "ASK { <" + zURI.asURI().toString() + "> rdf:type rdf:Property}";
+			boolean isProperty = rdfRepository.sparqlAsk(askProperty);
 			String type = "basic";
 
 			if (isClass) {
@@ -771,16 +808,32 @@ public class RenderingCore {
 					continue loop;
 				}
 			}
-			addConcept(concept, z, y, false, type);
+			addConcept(conceptURI, zURI, yURI, false, type);
 
 			depth++;
 			if (depth < requestedDepth) {
-				addSuccessors(z);
+				addSuccessors(zURI);
 			}
 			if (depth == requestedDepth) {
-				addOutgoingEdgesSuccessors(z);
+				addOutgoingEdgesSuccessors(zURI);
 			}
 			depth--;
+		}
+	}
+
+	/**
+	 * 
+	 * @created 24.04.2013
+	 * @param zURI
+	 * @return
+	 */
+	private boolean isLiteral(Node zURI) {
+		try {
+			zURI.asLiteral();
+			return true;
+		}
+		catch (Exception e) {
+			return false;
 		}
 	}
 
@@ -790,18 +843,23 @@ public class RenderingCore {
 	 * @param concept
 	 * @param request
 	 */
-	private void addPredecessors(String concept) {
-		String query = "SELECT ?x ?y WHERE { ?x ?y " + createSparqlURI(concept) + ". }";
+	private void addPredecessors(Node conceptURI) {
+		String concept = getConceptName(conceptURI);
+		// String query = "SELECT ?x ?y WHERE { ?x ?y "
+		// + uriProvider.createSparqlURI(concept, rdfRepository, master) +
+		// ". }";
+		String query = "SELECT ?x ?y WHERE { ?x ?y <"
+				+ conceptURI.asURI().toString() + "> . }";
 		ClosableIterator<QueryRow> result =
-				Rdf2GoCore.getInstance().sparqlSelectIt(
+				rdfRepository.sparqlSelectIt(
 						query);
 		loop: while (result.hasNext()) {
 			QueryRow row = result.next();
-			String xURI = row.getValue("x").toString();
-			String x = clean(xURI.substring(xURI.indexOf("#") + 1));
+			Node xURI = row.getValue("x");
+			String x = getConceptName(xURI);
 
-			String yURI = row.getValue("y").toString();
-			String y = clean(yURI.substring(yURI.indexOf("#") + 1));
+			Node yURI = row.getValue("y");
+			String y = getConceptName(yURI);
 
 			if (excludedRelation(y)) {
 				continue loop;
@@ -811,9 +869,9 @@ public class RenderingCore {
 			}
 
 			String askClass = "ASK { <" + xURI.toString() + "> rdf:type owl:Class}";
-			boolean isClass = Rdf2GoCore.getInstance().sparqlAsk(askClass);
+			boolean isClass = rdfRepository.sparqlAsk(askClass);
 			String askProperty = "ASK { <" + xURI.toString() + "> rdf:type rdf:Property}";
-			boolean isProperty = Rdf2GoCore.getInstance().sparqlAsk(askProperty);
+			boolean isProperty = rdfRepository.sparqlAsk(askProperty);
 			String type = "basic";
 
 			if (isClass) {
@@ -835,15 +893,15 @@ public class RenderingCore {
 
 			height++;
 			if (height < requestedHeight) {
-				addPredecessors(x);
+				addPredecessors(xURI);
 			}
 			if (height == requestedHeight) {
 
-				addOutgoingEdgesPredecessors(x);
+				addOutgoingEdgesPredecessors(xURI);
 			}
 			height--;
 
-			addConcept(x, concept, y, true, type);
+			addConcept(xURI, conceptURI, yURI, true, type);
 		}
 	}
 
@@ -855,7 +913,9 @@ public class RenderingCore {
 	 * @param concept
 	 * @param request
 	 */
-	private void addOutgoingEdgesSuccessors(String concept) {
+	private void addOutgoingEdgesSuccessors(Node conceptURI) {
+		if (isLiteral(conceptURI)) return;
+		String concept = getConceptName(conceptURI);
 		try {
 			concept = URLDecoder.decode(concept, "UTF-8");
 		}
@@ -863,25 +923,40 @@ public class RenderingCore {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String query = "SELECT ?y ?z WHERE { " + createSparqlURI(concept)
-				+ " ?y ?z.}";
+		// String query = "SELECT ?y ?z WHERE { "
+		// + uriProvider.createSparqlURI(concept, rdfRepository, master)
+		// + " ?y ?z.}";
+		String query = "SELECT ?y ?z WHERE { <"
+				+ conceptURI.asURI().toString()
+				+ "> ?y ?z.}";
 		ClosableIterator<QueryRow> result =
-				Rdf2GoCore.getInstance().sparqlSelectIt(
+				rdfRepository.sparqlSelectIt(
 						query);
 		while (result.hasNext()) {
 			QueryRow row = result.next();
-			String yURI = row.getValue("y").toString();
-			String y = clean(yURI.substring(yURI.indexOf("#") + 1));
+			Node yURI = row.getValue("y");
+			String y = getConceptName(yURI);
 
-			String zURI = row.getValue("z").toString();
-			String z = clean(zURI.substring(zURI.indexOf("#") + 1));
+			Node zURI = row.getValue("z");
+			String z = getConceptName(zURI);
 			if (excludedRelation(y)) {
 				continue;
 			}
 			if (excludedNode(z)) {
 				continue;
 			}
-			addOuterConcept(concept, z, y, false);
+			addOuterConcept(conceptURI, zURI, yURI, false);
+		}
+	}
+
+	private static String getConceptName(Node uri) {
+		try {
+			uri.asURI();
+			return urlDecode(clean(uri.asURI().toString().substring(uri.toString().indexOf("#") + 1)));
+
+		}
+		catch (ClassCastException e) {
+			return null;
 		}
 	}
 
@@ -893,19 +968,27 @@ public class RenderingCore {
 	 * @param concept
 	 * @param request
 	 */
-	private void addOutgoingEdgesPredecessors(String concept) {
+	private void addOutgoingEdgesPredecessors(Node conceptURI) {
+		if (isLiteral(conceptURI)) return;
+		String concept = getConceptName(conceptURI);
 		String conceptDecoded = urlDecode(concept);
-		String query = "SELECT ?x ?y WHERE { ?x ?y " + createSparqlURI(conceptDecoded) + "}";
+		// String query = "SELECT ?x ?y WHERE { ?x ?y "
+		// + uriProvider.createSparqlURI(conceptDecoded, rdfRepository, master)
+		// + "}";
+
+		String query = "SELECT ?x ?y WHERE { ?x ?y <"
+				+ conceptURI.asURI().toString()
+				+ ">}";
 		ClosableIterator<QueryRow> result =
-				Rdf2GoCore.getInstance().sparqlSelectIt(
+				rdfRepository.sparqlSelectIt(
 						query);
 		while (result.hasNext()) {
 			QueryRow row = result.next();
-			String xURI = row.getValue("x").toString();
-			String x = clean(xURI.substring(xURI.indexOf("#") + 1));
+			Node xURI = row.getValue("x");
+			String x = getConceptName(xURI);
 
-			String yURI = row.getValue("y").toString();
-			String y = clean(yURI.substring(yURI.indexOf("#") + 1));
+			Node yURI = row.getValue("y");
+			String y = getConceptName(yURI);
 
 			if (excludedRelation(y)) {
 				continue;
@@ -913,32 +996,8 @@ public class RenderingCore {
 			if (excludedNode(x)) {
 				continue;
 			}
-			addOuterConcept(x, concept, y, true);
+			addOuterConcept(xURI, conceptURI, yURI, true);
 		}
-	}
-
-	private static String createSparqlURI(String name) {
-		Collection<Section<? extends SimpleDefinition>> definitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				new Identifier(name));
-		if (definitions.size() > 0) {
-			Section<? extends SimpleDefinition> def = definitions.iterator().next();
-			return "<" + RDFSUtil.getURI(def) + ">";
-		}
-		name = name.replaceAll(" ", "+");
-		if (name.contains("+") || name.contains(".")) {
-			String localNamespace = Rdf2GoCore.getInstance().getLocalNamespace();
-
-			return "<" + localNamespace + name + ">";
-		}
-
-		try {
-			return "lns:" + URLDecoder.decode(name, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	private static String urlDecode(String name) {
@@ -962,7 +1021,11 @@ public class RenderingCore {
 	 *        graph)
 	 * @param type (basic, class, property)
 	 */
-	private void addConcept(String from, String to, String relation, boolean predecessor, String type) {
+	private void addConcept(Node fromURI, Node toURI, Node relationURI, boolean predecessor, String type) {
+		String from = getConceptName(fromURI);
+		String to = getConceptName(toURI);
+		String relation = getConceptName(relationURI);
+
 		String shape;
 		String fontcolor;
 		String fontsize;
@@ -1022,18 +1085,20 @@ public class RenderingCore {
 	private String createTargetURL(String to) {
 		if (parameters.get(LINK_MODE) != null) {
 			if (parameters.get(LINK_MODE).equals(LINK_MODE_BROWSE)) {
-				Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-						new Identifier(to));
-				String targetArticle = to;
-				if (termDefinitions.size() > 0) {
-					targetArticle = termDefinitions.iterator().next().getTitle();
-				}
-
-				return createURL() + "?page=" + targetArticle;
+				return uriProvider.getLinkToTermDefinition(to, master);
 			}
 		}
-		return createURL() + "?page=" + section.getTitle()
+		return createBaseURL() + "?page=" + section.getTitle()
 				+ "&concept=" + to;
+	}
+
+	/**
+	 * 
+	 * @created 29.11.2012
+	 * @return
+	 */
+	private String createBaseURL() {
+		return Environment.getInstance().getWikiConnector().getBaseUrl() + "Wiki.jsp";
 	}
 
 	/**
@@ -1069,15 +1134,20 @@ public class RenderingCore {
 	 * @param boolean predecessor (if predecessor or successor is added to the
 	 *        graph)
 	 */
-	private void addOuterConcept(String from, String to, String relation, boolean predecessor) {
+	private void addOuterConcept(Node fromURI, Node toURI, Node relationURI, boolean predecessor) {
+		String from = getConceptName(fromURI);
+		String to = getConceptName(toURI);
+		String relation = getConceptName(relationURI);
+
+		// TODO: implement rendering of literal nodes
+		if (to == null) {
+			return;
+		}
+
 		// Relation Attributes
 		String arrowhead = "none";
 		String color = "#8b8989";
 		String style = "dashed";
-
-		from = urlDecode(from);
-		to = urlDecode(to);
-		relation = urlDecode(relation);
 
 		String newLineLabelKey;
 		if (predecessor) {
@@ -1180,7 +1250,7 @@ public class RenderingCore {
 	 * 
 	 * @created 31.07.2012
 	 */
-	private String clean(String line) {
+	private static String clean(String line) {
 		if (line.matches("http:.*/?page=.*")) {
 			line = line.substring(line.indexOf("page=") + 5);
 		}
