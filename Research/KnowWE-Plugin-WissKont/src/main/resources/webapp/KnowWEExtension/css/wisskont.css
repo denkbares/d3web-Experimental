@@ -1,6 +1,6 @@
 .applicationlogo a:hover {
 	background-position: 30px 20px;
-	}
+}
 
 .relationMarkupFrame {
 	#display: inline-block;
@@ -14,10 +14,10 @@
 }
 
 .drophover {
-border-style: solid;
-border-width: 2px;
-border-color: #CCCCCC;
-border-radius: 10px 10px 10px 10px;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #CCCCCC;
+	border-radius: 10px 10px 10px 10px;
 }
 
 .wissassTable {
@@ -36,6 +36,8 @@ border-radius: 10px 10px 10px 10px;
 .relationMarkupFrame > .relationMarkup .markupText {
 	#padding-right: 120px;
 }
+
+
 .relationMarkupFrame > .relationMarkup {
 	background-color: transparent;
 	border-right: 0px;
@@ -46,6 +48,8 @@ border-radius: 10px 10px 10px 10px;
 .relationMarkupContent {
 	display: inline;	
 }
+
+
 .termbrowserheader {
 	border-bottom-style: solid;
     border-bottom-width: 1px;
@@ -68,7 +72,7 @@ border-radius: 10px 10px 10px 10px;
     border-top-width: 1px;
 	margin-top: 5px;
 	padding-top: 10px;
-	}
+}
 
 .zebraline {
 	
@@ -95,11 +99,8 @@ td.termbrowser {
 	cursor: pointer;
 }
 	
-	
 
-
-	
-.openConcept, .expandConcept, .removeConcept {
+.openConcept, .expandConcept, .removeConcept, .deleteButton {
 cursor: pointer;
 }
 
@@ -122,6 +123,7 @@ cursor: pointer;
 .deletableListElement {
 	display: inline;	
 }
+
 .narrowCell {
 padding:0px;
 }	
