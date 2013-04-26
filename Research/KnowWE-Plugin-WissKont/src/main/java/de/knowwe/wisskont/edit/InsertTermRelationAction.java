@@ -45,7 +45,7 @@ public class InsertTermRelationAction extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 		String result = perform(context);
 		if (result != null && context.getWriter() != null) {
-			context.setContentType("text/html; charset=UTF-8");
+			context.setContentType("text/plain; charset=UTF-8");
 			context.getWriter().write(result);
 		}
 

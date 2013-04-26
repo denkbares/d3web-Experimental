@@ -143,6 +143,10 @@ function sendAddedTerm(term, oldTargetID) {
 
 function rerenderSection(oldTargetID, newTargetID) {
 	
+	// clean ID that for some reason might have some reason linebreaks appended
+	var replacer = new RegExp("\r\n", "g");
+	newTargetID = newTargetID.replace(replacer, "");
+	
 	var params = {
 			action : 'ReRenderContentPartAction',
 			KdomNodeId   : newTargetID,
@@ -152,6 +156,7 @@ function rerenderSection(oldTargetID, newTargetID) {
 		 response : {
 			 fn : function() {
 					jq$('#'+oldTargetID).replaceWith(this.response);
+					initAllDeleteItem();
 				},
 		 },
 	}

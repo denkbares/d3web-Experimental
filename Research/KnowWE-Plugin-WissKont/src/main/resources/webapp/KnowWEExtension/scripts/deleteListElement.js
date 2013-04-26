@@ -1,15 +1,27 @@
 jq$(document).ready(function() {
-    jq$(".deleteButton").each(function() {
-    	jq$(this).hide();
-    });
+	initAllDeleteItem();
+});
+
+function initAllDeleteItem() {
+    hideDeleteIcons();
 
     initDeleteIconHovers();
     
-    jq$(".deleteButton").each(function() {
-    	initClickEvent(jq$(this));
-    });
+    initDeleteButtons();
     
-});
+}
+
+function initDeleteButtons() {
+	  jq$(".deleteButton").each(function() {
+	    	initClickEvent(jq$(this));
+	   });
+}
+
+function hideDeleteIcons() {
+	jq$(".deleteButton").each(function() {
+    	jq$(this).hide();
+    });
+}
 
 function initDeleteIconHovers() {
 	jq$(".deletableListElement").each(function() {
