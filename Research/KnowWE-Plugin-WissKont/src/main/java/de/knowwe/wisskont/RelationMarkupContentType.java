@@ -74,7 +74,7 @@ public class RelationMarkupContentType extends AbstractType {
 
 			@Override
 			public void renderPost(Section<?> section, UserContext user, RenderResult string) {
-				string.appendHtml("</div>");
+				string.appendHtml("</span>");
 
 			}
 		}));
