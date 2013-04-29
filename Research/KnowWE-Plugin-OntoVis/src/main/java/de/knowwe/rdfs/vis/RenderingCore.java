@@ -39,12 +39,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -64,6 +67,7 @@ public class RenderingCore {
 	public static final String FORMAT = "format";
 	public static final String CONCEPT = "concept";
 	public static final String MASTER = "master";
+	public static final String LANGUAGE = "language";
 	public static final String REQUESTED_HEIGHT = "requested_height";
 	public static final String REQUESTED_DEPTH = "requested_depth";
 
@@ -249,7 +253,8 @@ public class RenderingCore {
 		insertMainConcept(conceptURI);
 		// check all relations again
 		checkRelations();
-		connectSources();
+		dotSource = DotRenderer.connectSources(dotSource, dotSourceLabel,
+				dotSourceRelations);
 	}
 
 	/**
@@ -637,7 +642,8 @@ public class RenderingCore {
 			shape = "diamond";
 		}
 		String url = createBaseURL();
-		String conceptLabel = Utils.getRDFSLabel(conceptURI.asURI(), rdfRepository);
+		String conceptLabel = Utils.getRDFSLabel(conceptURI.asURI(), rdfRepository,
+				parameters.get(LANGUAGE));
 		if (conceptLabel == null) {
 			conceptLabel = concept;
 		}
@@ -650,7 +656,7 @@ public class RenderingCore {
 		// the main concept is inserted in the dotSource resp. reset if
 		// the appearance was changed
 		if (dotSourceLabel.get(conceptKey) != conceptValue) {
-			dotSourceLabel.put(conceptKey, conceptValue);
+			dotSourceLabel.put(Strings.unquote(conceptKey), conceptValue);
 		}
 	}
 
@@ -682,78 +688,19 @@ public class RenderingCore {
 			String[] concepts = new String[] {
 					relation.getSubject(), relation.getObject() };
 
-			if (dotSourceLabel.get(concepts[0]) != outerLabel
-					&& dotSourceLabel.get(concepts[1]) != outerLabel) {
+			String string1 = dotSourceLabel.get(concepts[0]);
+			String string2 = dotSourceLabel.get(concepts[1]);
+			if (string1 != outerLabel
+					&& string2 != outerLabel) {
 				String temp = dotSourceRelations.get(relation);
 				String labelOfRelation = temp.substring(9,
 						temp.indexOf("fontcolor") - 2);
-				dotSourceRelations.put(relation, innerRelation(labelOfRelation));
+				dotSourceRelations.put(
+						relation,
+						DotRenderer.innerRelation(labelOfRelation,
+								parameters.get(RELATION_COLOR_CODES)));
 			}
 		}
-	}
-
-	/**
-	 * Given the label of the inner relation, the method returns the String of
-	 * the appearance of the relation.
-	 * 
-	 * @created 06.09.2012
-	 * @param label
-	 */
-	private String innerRelation(String label) {
-		// Basic Relation Attributes
-		String arrowtail = "normal";
-		String fontsize = "13";
-
-		String color = getRelationColorCode(label);
-
-		return "[ label = \"" + label
-				+ "\"" + buildRelation(arrowtail, color, fontsize) + " ];\n";
-	}
-
-	/**
-	 * 
-	 * @created 07.12.2012
-	 * @param label
-	 * @return
-	 */
-	private String getRelationColorCode(String label) {
-		if (parameters.get(RELATION_COLOR_CODES) != null) {
-			String codeList = parameters.get(RELATION_COLOR_CODES);
-			String[] assignments = codeList.split(";");
-			for (String assignment : assignments) {
-				String[] ass = assignment.split(":");
-				String relationName = ass[0];
-				String colorCode = ass[1];
-				if (relationName.equals(label)) {
-					return colorCode;
-				}
-			}
-		}
-		return "black";
-	}
-
-	/**
-	 * The sources from the maps are being written into the String-dotSource.
-	 * 
-	 * @created 18.08.2012
-	 */
-	private void connectSources() {
-		// iterate over the labels and add them to the dotSource
-		Iterator<String> labelKeys = dotSourceLabel.keySet().iterator();
-		while (labelKeys.hasNext()) {
-			String key = labelKeys.next();
-			dotSource += key + dotSourceLabel.get(key);
-		}
-
-		// iterate over the relations and add them to the dotSource
-		Iterator<Edge> relationsKeys = dotSourceRelations.keySet().iterator();
-		while (relationsKeys.hasNext()) {
-			Edge key = relationsKeys.next();
-			dotSource += "\"" + key.getSubject() + "\"" + " -> " + "\"" + key.getObject() + "\" "
-					+ dotSourceRelations.get(key);
-		}
-
-		dotSource += "}";
 	}
 
 	/**
@@ -782,6 +729,18 @@ public class RenderingCore {
 
 			Node zURI = row.getValue("z");
 			String z = getConceptName(zURI);
+
+			if (y == null) {
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+						"Variable y of query was null: " + query);
+				continue;
+			}
+
+			if (z == null) {
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+						"Variable z of query was null: " + query);
+				continue;
+			}
 
 			if (excludedRelation(y)) {
 				continue loop;
@@ -868,6 +827,18 @@ public class RenderingCore {
 			Node yURI = row.getValue("y");
 			String y = getConceptName(yURI);
 
+			if (y == null) {
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+						"Variable y of query was null: " + query);
+				continue;
+			}
+
+			if (x == null) {
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+						"Variable x of query was null: " + query);
+				continue;
+			}
+
 			if (excludedRelation(y)) {
 				continue loop;
 			}
@@ -946,6 +917,19 @@ public class RenderingCore {
 
 			Node zURI = row.getValue("z");
 			String z = getConceptName(zURI);
+
+			if (y == null) {
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+						"Variable y of query was null: " + query);
+				continue;
+			}
+
+			if (z == null) {
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+						"Variable zs of query was null: " + query);
+				continue;
+			}
+
 			if (excludedRelation(y)) {
 				continue;
 			}
@@ -996,6 +980,18 @@ public class RenderingCore {
 
 			Node yURI = row.getValue("y");
 			String y = getConceptName(yURI);
+
+			if (y == null) {
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+						"Variable y of query was null: " + query);
+				continue;
+			}
+
+			if (x == null) {
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+						"Variable x of query was null: " + query);
+				continue;
+			}
 
 			if (excludedRelation(y)) {
 				continue;
@@ -1064,38 +1060,42 @@ public class RenderingCore {
 		String newLineLabelValue;
 		if (predecessor) {
 			String sourceURL = createConceptURL(from);
-			String sourceLabel = Utils.getRDFSLabel(fromURI.asURI(), rdfRepository);
+			String sourceLabel = Utils.getRDFSLabel(fromURI.asURI(), rdfRepository,
+					parameters.get(LANGUAGE));
 			if (sourceLabel == null) {
 				sourceLabel = from;
 			}
 
 			newLineLabelKey = "\"" + from + "\"";
 			newLineLabelValue = "[ URL=\"" + sourceURL + "\""
-					+ buildLabel(shape, fontcolor, fontsize)
+					+ DotRenderer.buildLabel(shape, fontcolor, fontsize)
 					+ "label=\"" + Utils.prepareLabel(sourceLabel) + "\" ];\n";
 		}
 		else {
 			String targetURL = createConceptURL(to);
-			String targetLabel = Utils.getRDFSLabel(toURI.asURI(), rdfRepository);
+			String targetLabel = Utils.getRDFSLabel(toURI.asURI(), rdfRepository,
+					parameters.get(LANGUAGE));
 			if (targetLabel == null) {
 				targetLabel = to;
 			}
 			newLineLabelKey = "\"" + to + "\"";
 			newLineLabelValue = "[ URL=\"" + targetURL + "\""
-					+ buildLabel(shape, fontcolor, fontsize) + "label=\""
+					+ DotRenderer.buildLabel(shape, fontcolor, fontsize) + "label=\""
 					+ Utils.prepareLabel(targetLabel) + "\" ];\n";
 		}
 		Edge newLineRelationsKey = new Edge(from, relation, to);
-		String newLineRelationsValue = innerRelation(relation);
+		String newLineRelationsValue = DotRenderer.innerRelation(relation,
+				parameters.get(RELATION_COLOR_CODES));
 
 		if (!dotSourceLabel.containsKey(newLineLabelKey)
 				|| (dotSourceLabel.get(newLineLabelKey) != newLineLabelValue)) {
-			dotSourceLabel.put(newLineLabelKey, newLineLabelValue);
+			dotSourceLabel.put(Strings.unquote(newLineLabelKey), newLineLabelValue);
 		}
 		if (!dotSourceRelations.containsKey(newLineRelationsKey)
 				|| (dotSourceRelations.get(newLineRelationsKey)) != newLineRelationsValue) {
 			dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);
 		}
+
 	}
 
 	private String createConceptURL(String to) {
@@ -1115,30 +1115,6 @@ public class RenderingCore {
 	 */
 	private String createBaseURL() {
 		return Environment.getInstance().getWikiConnector().getBaseUrl() + "Wiki.jsp";
-	}
-
-	/**
-	 * 
-	 * @created 04.09.2012
-	 * @param shape
-	 * @param fontcolor
-	 * @param fontsizeL
-	 */
-	private String buildLabel(String shape, String fontcolor, String fontsizeL) {
-		return " fontcolor=\"" + fontcolor + "\" shape=\"" + shape
-				+ "\" fontsize=\"" + fontsizeL + "\"";
-	}
-
-	/**
-	 * 
-	 * @created 04.09.2012
-	 * @param arrowtail
-	 * @param color
-	 * @param fontsizeR
-	 */
-	private String buildRelation(String arrowtail, String color, String fontsize) {
-		return " arrowtail=\"" + arrowtail + "\" color=\"" + color + "\" fontsize=\""
-				+ fontsize + "\"";
 	}
 
 	/**
@@ -1179,7 +1155,7 @@ public class RenderingCore {
 				+ "\" style=\"" + style + "\" ];\n";
 
 		boolean arcIsNew = !dotSourceRelations.containsKey(newLineRelationsKey);
-		boolean nodeIsNew = !dotSourceLabel.containsKey(newLineLabelKey);
+		boolean nodeIsNew = !dotSourceLabel.containsKey(Strings.unquote(newLineLabelKey));
 
 		boolean showOutgoingEdges = true;
 		if (parameters.get(SHOW_OUTGOING_EDGES) != null) {
@@ -1190,7 +1166,7 @@ public class RenderingCore {
 
 		if (showOutgoingEdges) {
 			if (nodeIsNew) {
-				dotSourceLabel.put(newLineLabelKey, outerLabel);
+				dotSourceLabel.put(Strings.unquote(newLineLabelKey), outerLabel);
 			}
 			if (arcIsNew) {
 				dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);

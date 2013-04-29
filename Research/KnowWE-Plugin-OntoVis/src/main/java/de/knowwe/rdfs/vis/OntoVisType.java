@@ -16,6 +16,7 @@ public class OntoVisType extends DefaultMarkupType {
 	public static final String ANNOTATION_SHOWCLASSES = "showClasses";
 	public static final String ANNOTATION_SHOWPROPERTIES = "showProperties";
 	public static final String ANNOTATION_MASTER = "master";
+	public static final String ANNOTATION_LANGUAGE = "language";
 
 	private static final DefaultMarkup MARKUP;
 
@@ -32,6 +33,7 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_SHOWCLASSES, false);
 		MARKUP.addAnnotation(ANNOTATION_SHOWPROPERTIES, false);
 		MARKUP.addAnnotation(ANNOTATION_MASTER, false);
+		MARKUP.addAnnotation(ANNOTATION_LANGUAGE, false);
 	}
 
 	public OntoVisType() {

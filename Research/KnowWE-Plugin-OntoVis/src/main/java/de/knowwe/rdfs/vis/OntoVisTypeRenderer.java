@@ -38,6 +38,12 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		if (master != null) {
 			parameterMap.put(RenderingCore.MASTER, master);
 		}
+		String lang = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_LANGUAGE);
+		if (lang != null) {
+			parameterMap.put(RenderingCore.LANGUAGE, lang);
+		}
+
 		String exclude = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_EXCLUDERELATIONS);
 		parameterMap.put(RenderingCore.EXCLUDED_RELATIONS, exclude);

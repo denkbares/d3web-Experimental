@@ -43,15 +43,49 @@ public class Utils {
 
 	public static final String LINE_BREAK = "\\n";
 
-	public static String getRDFSLabel(URI concept, Rdf2GoCore repo) {
+	public static String getRDFSLabel(URI concept, Rdf2GoCore repo, String languageTag) {
+
+		// try to find language specific label
+		String label = getLanguageSpecifcLabel(concept, repo, languageTag);
+
+		// otherwise use standard label
+		if (label == null) {
+
+			String query = "SELECT ?x WHERE { <" + concept.toString() + "> rdfs:label ?x.}";
+			QueryResultTable resultTable = repo.sparqlSelect(query);
+			for (QueryRow queryRow : resultTable) {
+				Node node = queryRow.getValue("x");
+				String value = node.asLiteral().toString();
+				label = value;
+				break; // we assume there is only one label
+
+			}
+		}
+		return label;
+	}
+
+	/**
+	 * 
+	 * @created 29.04.2013
+	 * @param concept
+	 * @param repo
+	 * @param languageTag
+	 * @return
+	 */
+	private static String getLanguageSpecifcLabel(URI concept, Rdf2GoCore repo, String languageTag) {
+		if (languageTag == null) return null;
 		String label = null;
 
-		String query = "SELECT ?x WHERE { <" + concept.toString() + "> rdfs:label ?x.}";
+		String query = "SELECT ?x WHERE { <" + concept.toString()
+				+ "> rdfs:label ?x. FILTER(LANGMATCHES(LANG(?x), \"" + languageTag + "\"))}";
 		QueryResultTable resultTable = repo.sparqlSelect(query);
 		for (QueryRow queryRow : resultTable) {
 			Node node = queryRow.getValue("x");
 			String value = node.asLiteral().toString();
 			label = value;
+			if (label.charAt(label.length() - 3) == '@') {
+				label = label.substring(0, label.length() - 3);
+			}
 			break; // we assume there is only one label
 
 		}

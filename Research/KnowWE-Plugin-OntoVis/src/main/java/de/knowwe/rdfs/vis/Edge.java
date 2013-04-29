@@ -18,6 +18,8 @@
  */
 package de.knowwe.rdfs.vis;
 
+import de.d3web.strings.Strings;
+
 /**
  * 
  * @author jochenreutelshofer
@@ -33,9 +35,14 @@ public class Edge {
 	 * 
 	 */
 	public Edge(String s, String p, String o) {
-		this.subject = s;
-		this.predicate = p;
-		this.object = o;
+		this.subject = Strings.unquote(s);
+		this.predicate = Strings.unquote(p);
+		this.object = Strings.unquote(o);
+	}
+
+	@Override
+	public String toString() {
+		return subject + " " + predicate + ": " + object;
 	}
 
 	@Override
