@@ -49,8 +49,8 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.utils.PackageCompileLinkToTermDefinitionProvider;
 import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
+import de.knowwe.rdf2go.utils.PackageCompileLinkToTermDefinitionProvider;
 import de.knowwe.rdfs.util.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.rdfs.vis.util.Utils;
 
@@ -173,7 +173,8 @@ public class RenderingCore {
 		ResourceBundle rb = ResourceBundle.getBundle("dotInstallation");
 		DOT_INSTALLATION = rb.getString("path");
 		tmpPath = KNOWWEEXTENSION_FOLDER + FILE_SEPARATOR + TMP_FOLDER + FILE_SEPARATOR;
-		dotSource = "digraph finite_state_machine {\n";
+		String graphtitle = "Konzeptuebersicht"; // + parameters.get(CONCEPT);
+		dotSource = "digraph " + graphtitle + " {\n";
 
 		path = realPath + FILE_SEPARATOR + tmpPath;
 
@@ -636,10 +637,16 @@ public class RenderingCore {
 			shape = "diamond";
 		}
 		String url = createBaseURL();
+		String conceptLabel = Utils.getRDFSLabel(conceptURI.asURI(), rdfRepository);
+		if (conceptLabel == null) {
+			conceptLabel = concept;
+		}
+
 		String conceptKey = "\"" + concept + "\"";
 		String conceptValue = "[ URL=\"" + url + "?page=" + section.getTitle() + "&concept="
 				+ concept + "\" style=\"" + style + "\" fillcolor=\"" + fillcolor
-				+ "\" fontsize=\"" + fontsize + "\" shape=\"" + shape + "\"];\n";
+				+ "\" fontsize=\"" + fontsize + "\" shape=\"" + shape + "\"" + "label=\""
+				+ Utils.prepareLabel(conceptLabel) + "\"];\n";
 		// the main concept is inserted in the dotSource resp. reset if
 		// the appearance was changed
 		if (dotSourceLabel.get(conceptKey) != conceptValue) {
@@ -1056,18 +1063,27 @@ public class RenderingCore {
 		String newLineLabelKey;
 		String newLineLabelValue;
 		if (predecessor) {
-			String targetURL = createTargetURL(from);
+			String sourceURL = createConceptURL(from);
+			String sourceLabel = Utils.getRDFSLabel(fromURI.asURI(), rdfRepository);
+			if (sourceLabel == null) {
+				sourceLabel = from;
+			}
+
 			newLineLabelKey = "\"" + from + "\"";
-			newLineLabelValue = "[ URL=\"" + targetURL + "\""
+			newLineLabelValue = "[ URL=\"" + sourceURL + "\""
 					+ buildLabel(shape, fontcolor, fontsize)
-					+ "label=\"" + Utils.prepareLabel(from) + "\" ];\n";
+					+ "label=\"" + Utils.prepareLabel(sourceLabel) + "\" ];\n";
 		}
 		else {
-			String targetURL = createTargetURL(to);
+			String targetURL = createConceptURL(to);
+			String targetLabel = Utils.getRDFSLabel(toURI.asURI(), rdfRepository);
+			if (targetLabel == null) {
+				targetLabel = to;
+			}
 			newLineLabelKey = "\"" + to + "\"";
 			newLineLabelValue = "[ URL=\"" + targetURL + "\""
 					+ buildLabel(shape, fontcolor, fontsize) + "label=\""
-					+ Utils.prepareLabel(to) + "\" ];\n";
+					+ Utils.prepareLabel(targetLabel) + "\" ];\n";
 		}
 		Edge newLineRelationsKey = new Edge(from, relation, to);
 		String newLineRelationsValue = innerRelation(relation);
@@ -1082,7 +1098,7 @@ public class RenderingCore {
 		}
 	}
 
-	private String createTargetURL(String to) {
+	private String createConceptURL(String to) {
 		if (parameters.get(LINK_MODE) != null) {
 			if (parameters.get(LINK_MODE).equals(LINK_MODE_BROWSE)) {
 				return uriProvider.getLinkToTermDefinition(to, master);

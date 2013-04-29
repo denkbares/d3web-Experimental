@@ -27,6 +27,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
+import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.URI;
+
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
  * 
@@ -36,6 +42,21 @@ import org.apache.commons.lang.StringEscapeUtils;
 public class Utils {
 
 	public static final String LINE_BREAK = "\\n";
+
+	public static String getRDFSLabel(URI concept, Rdf2GoCore repo) {
+		String label = null;
+
+		String query = "SELECT ?x WHERE { <" + concept.toString() + "> rdfs:label ?x.}";
+		QueryResultTable resultTable = repo.sparqlSelect(query);
+		for (QueryRow queryRow : resultTable) {
+			Node node = queryRow.getValue("x");
+			String value = node.asLiteral().toString();
+			label = value;
+			break; // we assume there is only one label
+
+		}
+		return label;
+	}
 
 	public static String prepareLabel(String string) {
 		// if (true) return string;
