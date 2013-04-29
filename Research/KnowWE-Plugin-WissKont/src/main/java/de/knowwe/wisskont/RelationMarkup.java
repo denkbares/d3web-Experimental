@@ -46,7 +46,7 @@ public abstract class RelationMarkup extends AbstractType {
 
 	public RelationMarkup(String key) {
 		String keyRegex = "(" + key + ":)";
-		REGEX = "(?i)^" + keyRegex + "\\s(.*?)\r?\n(\\s*)\r?\n";
+		REGEX = "(?i)^" + keyRegex + "\\u0020?(.*?)\r?\n(\\s*)\r?\n";
 		this.setSectionFinder(new RegexSectionFinder(REGEX,
 				Pattern.MULTILINE | Pattern.DOTALL));
 

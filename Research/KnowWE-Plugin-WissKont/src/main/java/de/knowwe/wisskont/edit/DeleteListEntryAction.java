@@ -44,13 +44,18 @@ public class DeleteListEntryAction extends AbstractAction {
 		replacementMap.put(kdomid, "");
 		Section<?> entry = Sections.getSection(kdomid);
 
+		// check whether trailing comma should be deleted
 		Section<? extends Type> father = entry.getFather().getFather();
 		List<Section<? extends Type>> siblings = father.getChildren();
 		Iterator<Section<? extends Type>> iterator = siblings.iterator();
 		Section<? extends Type> subsequentSection = null;
+		Section<? extends Type> previousSection = null;
+		Section<? extends Type> next = null;
 		while (iterator.hasNext()) {
-			Section<? extends Type> next = iterator.next();
+			Section<? extends Type> last = next;
+			next = iterator.next();
 			if (Sections.getSubtreePostOrder(next).contains(entry)) {
+				previousSection = last;
 				if (iterator.hasNext()) {
 					subsequentSection = iterator.next();
 					break;
@@ -61,6 +66,15 @@ public class DeleteListEntryAction extends AbstractAction {
 			// if followed by a comma also delete that
 			replacementMap.put(subsequentSection.getID(), "");
 		}
+		else {
+			// if not check whether leading comma needs to be deleted
+			if (previousSection != null && previousSection.getText().contains(",")) {
+				// if followed by a comma also delete that
+				replacementMap.put(previousSection.getID(), "");
+			}
+
+		}
+
 		Sections.replaceSections(context, replacementMap);
 
 	}

@@ -107,7 +107,12 @@ public class InsertTermRelationAction extends AbstractAction {
 		String result = "";
 		for (Section<? extends Type> child : children) {
 			if (child.equals(contentSection)) {
-				result += contentSection.getText() + ", " + termname;
+				String appendText = ", " + termname;
+				if (contentSection.getText().trim().length() == 0) {
+					appendText = termname; // if there is none yet, no comma
+											// needed
+				}
+				result += contentSection.getText() + appendText;
 			}
 			else {
 				result += child.getText();

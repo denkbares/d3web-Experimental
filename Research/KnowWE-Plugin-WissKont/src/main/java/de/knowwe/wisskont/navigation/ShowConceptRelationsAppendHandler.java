@@ -82,7 +82,7 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 			String colorCodes = "";
 			colorCodes += "kann: #009900;"; // green
 			colorCodes += "muss: red;";
-			colorCodes += "temporalBevor: #FFCC00;"; // dark yellow
+			colorCodes += "temporalGraph: #FFCC00;"; // dark yellow
 			colorCodes += "assoziation: blue;";
 
 			parameterMap.put(RenderingCore.RELATION_COLOR_CODES, colorCodes);
