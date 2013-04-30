@@ -34,7 +34,7 @@ import de.d3web.diaFlux.flow.Node;
 import de.d3web.indication.ActionIndication;
 import de.d3web.indication.ActionInstantIndication;
 import de.d3web.indication.ActionNextQASet;
-import de.d3web.indication.ActionRepeatedIndication;
+import de.d3web.interview.indication.ActionRepeatedIndication;
 import de.d3web.we.diaflux.pathcoloring.AnomalyManager;
 
 /**
