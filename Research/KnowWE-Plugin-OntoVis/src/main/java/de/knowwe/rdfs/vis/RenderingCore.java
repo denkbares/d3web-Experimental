@@ -38,9 +38,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
@@ -731,13 +731,13 @@ public class RenderingCore {
 			String z = getConceptName(zURI);
 
 			if (y == null) {
-				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.SEVERE,
 						"Variable y of query was null: " + query);
 				continue;
 			}
 
 			if (z == null) {
-				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.SEVERE,
 						"Variable z of query was null: " + query);
 				continue;
 			}
@@ -828,13 +828,13 @@ public class RenderingCore {
 			String y = getConceptName(yURI);
 
 			if (y == null) {
-				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.SEVERE,
 						"Variable y of query was null: " + query);
 				continue;
 			}
 
 			if (x == null) {
-				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.SEVERE,
 						"Variable x of query was null: " + query);
 				continue;
 			}
@@ -919,13 +919,13 @@ public class RenderingCore {
 			String z = getConceptName(zURI);
 
 			if (y == null) {
-				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.SEVERE,
 						"Variable y of query was null: " + query);
 				continue;
 			}
 
 			if (z == null) {
-				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.SEVERE,
 						"Variable zs of query was null: " + query);
 				continue;
 			}
@@ -982,13 +982,13 @@ public class RenderingCore {
 			String y = getConceptName(yURI);
 
 			if (y == null) {
-				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.SEVERE,
 						"Variable y of query was null: " + query);
 				continue;
 			}
 
 			if (x == null) {
-				Logger.getLogger(RenderingCore.class.getName()).log(Level.ERROR,
+				Logger.getLogger(RenderingCore.class.getName()).log(Level.SEVERE,
 						"Variable x of query was null: " + query);
 				continue;
 			}
