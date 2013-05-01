@@ -50,13 +50,13 @@ public class UploaderRenderer extends DefaultMarkupRenderer {
 	 */
 	private static void appendRevisionUploadForm(Section<?> section, RenderResult string) {
 		string.appendHtml("<div class='collapsebox'>");
-		string.appendHtmlElement("h4", "Upload Revision", "class='collapsetitle'");
-		string.appendHtml("<form  autocomplete=\"off\" action=\"action/UploadRevisionZip?KWiki_Topic="
+		string.appendHtmlElement("h4", "Upload revision", "class='collapsetitle'");
+		string.appendHtml("<form id='my_form' target='_self' autocomplete=\"off\" action=\"action/UploadRevisionZip?KWiki_Topic="
 				+ section.getTitle() + "&KWikiWeb=" + section.getWeb()
-				+ "&\" method=\"post\" enctype=\"multipart/form-data\">");
-		string.appendHtmlElement("b", "Choose a file: ", "");
-		string.appendHtml("<input id=\"fileinput\" type=\"file\" size=\"50\" name=\"file\" />");
-		string.appendHtml("<input type=\"submit\" onclick=\"uploadRev());\"/>");
+				+ "&\" method=\"POST\" enctype=\"multipart/form-data\">");
+		string.appendHtmlElement("label", "Select file: ", "");
+		string.appendHtml("<input id=\"fileinput\" type=\"file\" size=\"50\"/>");
+		string.appendHtml("<input type=\"submit\" value=\"Upload\" />");
 		string.appendHtml("</form>");
 		string.appendHtml("</div>");
 	}

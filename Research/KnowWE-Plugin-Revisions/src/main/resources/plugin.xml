@@ -51,10 +51,50 @@
         </extension>
         
        	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-			id="ShowRevision">
+			id="WikiRevDetails">
 			<parameter id="class"
-				value="de.knowwe.revisions.manager.action.ShowRevision" />
-			<parameter id="name" value="ShowRevision" />
+				value="de.knowwe.revisions.manager.action.details.WikiRevDetails" />
+			<parameter id="name" value="WikiRevDetails" />
+			<parameter id="description" value="Show a revision" />
+			<parameter id="version" value="1.0" />
+			<parameter id="priority" value="5" />
+		</extension>
+		
+       	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+			id="WikiDateDetails">
+			<parameter id="class"
+				value="de.knowwe.revisions.manager.action.details.WikiDateDetails" />
+			<parameter id="name" value="WikiDateDetails" />
+			<parameter id="description" value="Show a revision" />
+			<parameter id="version" value="1.0" />
+			<parameter id="priority" value="5" />
+		</extension>
+		
+       	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+			id="UnsavedRevDetails">
+			<parameter id="class"
+				value="de.knowwe.revisions.manager.action.details.UnsavedRevDetails" />
+			<parameter id="name" value="UnsavedRevDetails" />
+			<parameter id="description" value="Show a revision" />
+			<parameter id="version" value="1.0" />
+			<parameter id="priority" value="5" />
+		</extension>
+		
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+			id="UploadedRevDetails">
+			<parameter id="class"
+				value="de.knowwe.revisions.manager.action.details.UploadedRevDetails" />
+			<parameter id="name" value="UploadedRevDetails" />
+			<parameter id="description" value="Show a revision" />
+			<parameter id="version" value="1.0" />
+			<parameter id="priority" value="5" />
+		</extension>
+		
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+			id="CurrentRevDetails">
+			<parameter id="class"
+				value="de.knowwe.revisions.manager.action.details.CurrentRevDetails" />
+			<parameter id="name" value="CurrentRevDetails" />
 			<parameter id="description" value="Show a revision" />
 			<parameter id="version" value="1.0" />
 			<parameter id="priority" value="5" />

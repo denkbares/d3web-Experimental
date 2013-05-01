@@ -31,10 +31,14 @@ import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
+
 import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.wikiConnector.WikiAttachment;
 import de.knowwe.revisions.manager.RevisionManager;
 
 /**
@@ -88,6 +92,18 @@ public class DownloadRevisionZip extends AbstractAction {
 			zos.putNextEntry(new ZipEntry(URLEncoder.encode(article.getTitle() + ".txt", "UTF-8")));
 			zos.write(article.getRootSection().getText().getBytes("UTF-8"));
 			zos.closeEntry();
+
+			// Attachments
+			Collection<WikiAttachment> atts =
+					Environment.getInstance().getWikiConnector().getAttachments(
+							article.getTitle());
+			for (WikiAttachment att : atts) {
+				zos.putNextEntry(new ZipEntry(URLEncoder.encode(
+						att.getParentName(), "UTF-8") + "-att/"
+						+ URLEncoder.encode(att.getFileName(), "UTF-8")));
+				IOUtils.copy(att.getInputStream(), zos);
+				zos.closeEntry();
+			}
 		}
 		zos.close();
 	}

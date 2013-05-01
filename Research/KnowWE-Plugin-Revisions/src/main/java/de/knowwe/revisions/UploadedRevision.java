@@ -58,11 +58,12 @@ public class UploadedRevision extends AbstractRevision {
 
 	/**
 	 * This method runs over all current page titles and returns the
-	 * corresponding versions for the revision
+	 * corresponding versions for the articles. 4 version states
 	 * 
 	 * @created 22.04.2013
-	 * @return revision page version, -2 if page is not existing in this
-	 *         revision, -1 for the most current version
+	 * @return revision page version map, version is -2 if page is not existing
+	 *         in this revision, -1 for the most current version, 1 if the page
+	 *         does not exist in wiki
 	 */
 	@Override
 	public HashMap<String, Integer> compareWithCurrentState() {

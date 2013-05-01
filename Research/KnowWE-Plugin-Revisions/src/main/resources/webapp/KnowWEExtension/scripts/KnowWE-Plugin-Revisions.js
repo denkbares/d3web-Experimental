@@ -35,7 +35,12 @@
 			links.events.addListener(timeline, 'change', eventChanged);
 			
 			document.getElementById('fileinput').addEventListener('change', uploadRev, false);
-
+			
+			if (document.getElementById('uploadedLink').innerHTML != '') {
+				showUploadedRev();
+			} else {
+				showCurrentRev();
+			}
 		}
 
 		function eventChanged() {
@@ -52,34 +57,40 @@
 				if (sel[0].row != undefined) {
 					var row = sel[0].row;
 					var start = timeline.getItem(row).start;
-										
-					if (timeline.getData()[row].editable == true) {
-						// unsaved revision selected, so take the data from the form
-						var params = {
-								action : 'ShowRevision',
-								rev : document.getElementById('newRevName').value,
-								comment : document.getElementById('newRevComment').value,
-								changed : changed,
-								date : start.getTime()
-							}
-					} else {
-						// saved revision selected, so take section id from data, id is 'uploaded' for uploaded revision
-						var params = {
-								action : 'ShowRevision',
-								rev : timeline.getItem(row).content,
-								id : data[row].id,
-								date : start.getTime()
-							}
-					}
-					
+					var group = timeline.getItem(row).group;
+//					if (group = 'Uploaded') {
+//						var params = {
+//								action : 'UploadedRevDetails'
+//							}
+//					} else {											
+						if (timeline.getData()[row].editable == true) {
+							// unsaved revision selected, so take the data from the form
+							var params = {
+									action : 'UnsavedRevDetails',
+									rev : document.getElementById('newRevName').value,
+									comment : document.getElementById('newRevComment').value,
+									changed : changed,
+									date : start.getTime()
+								}
+						} else {
+							// saved revision selected, so take section id from data, id is 'uploaded' for uploaded revision
+							var params = {
+									action : 'WikiRevDetails',
+									rev : timeline.getItem(row).content,
+									id : data[row].id,
+									date : start.getTime()
+								}
+						}
+//					}
 					var options = {
 							url : KNOWWE.core.util.getURL(params),
 							response : {
 								action : 'insert',
-								ids : [ 'revdetails' ],
+								ids : [ 'revdetails' ]
 //								fn : KNOWWE.core.util.addCollabsiblePluginHeader
 							}
 					}
+					
 					new _KA( options ).send();
 				}
 			}
@@ -93,14 +104,14 @@
 			timeline.setSelection([]);
 
 			var params = {
-				action : 'ShowRevision',
+				action : 'WikiDateDetails',
 				date : time
 			}
 			var options = {
 					url : KNOWWE.core.util.getURL(params),
 					response : {
 						action : 'insert',
-						ids : [ 'revdetails' ],
+						ids : [ 'revdetails' ]
 //						fn : KNOWWE.core.util.addCollabsiblePluginHeader
 					}
 			}
@@ -130,7 +141,7 @@
 
 	            timeline.addItem({
 	                'start': date,
-	                'content': name + "<br/><a onclick=\"saveRev();\">save</a> <a onclick=\"delRev();\">delete</a>",
+	                'content': name + "<a onclick=\"saveRev();\"> <img title='save' src='KnowWEExtension/images/fsp_established_opt2.png'></a> <a onclick=\"delRev();\"><img title='delete' src='KnowWEExtension/images/cross.png'></a>",
 					'editable': true
 	            });
 	
@@ -238,7 +249,7 @@
 					url : KNOWWE.core.util.getURL(params),
 					response : {
 						action : 'insert',
-						ids : [ 'revdetails' ],
+						ids : [ 'revdetails' ]
 //						fn : KNOWWE.core.util.addCollabsiblePluginHeader
 					}
 			}
@@ -262,7 +273,7 @@
 						url : KNOWWE.core.util.getURL(params),
 						response : {
 							action : 'insert',
-							ids : [ diffTarget ],
+							ids : [ diffTarget ]
 //							fn : KNOWWE.core.util.addCollabsiblePluginHeader
 						}
 				}
@@ -274,34 +285,6 @@
 			window.location='action/DownloadRevisionZip?KWiki_Topic=Main&KWikiWeb=default_web&date='+date;
 		}
         
-        function uploadRev() {
-            var name = "Uploaded Revision";
-
-            var date = new Date();
-
-            timeline.addItem({
-                'start': date,
-                'content': name,
-				'editable': false
-            });
-            
-			var params = {
-					action : 'ShowRevision',
-					rev : timeline.getItem(row).content,
-					id : 'uploaded',
-					date : start.getTime()
-				}
-			var options = {
-					url : KNOWWE.core.util.getURL(params),
-					response : {
-						action : 'insert',
-						ids : [ 'revdetails' ],
-	//					fn : KNOWWE.core.util.addCollabsiblePluginHeader
-					}
-			}
-			new _KA( options ).send();
-        }
-        
         function showUploadedDiff(title,version) {
         	var diffTarget = 'diffdiv';
 			var params = {
@@ -312,9 +295,39 @@
 					url : KNOWWE.core.util.getURL(params),
 					response : {
 						action : 'insert',
-						ids : [ diffTarget ],
+						ids : [ diffTarget ]
 //							fn : KNOWWE.core.util.addCollabsiblePluginHeader
 					}
 			}
 			new _KA( options ).send();
+        }
+        
+        function showCurrentRev() {
+			var params = {
+					action : 'CurrentRevDetails'
+				}
+				var options = {
+						url : KNOWWE.core.util.getURL(params),
+						response : {
+							action : 'insert',
+							ids : [ 'revdetails' ]
+//								fn : KNOWWE.core.util.addCollabsiblePluginHeader
+						}
+				}
+				new _KA( options ).send();
+        }
+        
+        function showUploadedRev() {
+			var params = {
+					action : 'UploadedRevDetails'
+				}
+				var options = {
+						url : KNOWWE.core.util.getURL(params),
+						response : {
+							action : 'insert',
+							ids : [ 'revdetails' ]
+//								fn : KNOWWE.core.util.addCollabsiblePluginHeader
+						}
+				}
+				new _KA( options ).send();
         }

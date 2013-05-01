@@ -34,8 +34,8 @@ import de.knowwe.revisions.RevisionType;
  */
 public class RevisionManagerRenderer extends DefaultMarkupRenderer {
 
-	private static final String defaultNameValue = "Enter Name for new Revision";
-	private static final String defaultCommentValue = "optional Comment";
+	private static final String defaultNameValue = "Revision name";
+	private static final String defaultCommentValue = "Comment";
 
 	public RevisionManagerRenderer() {
 		super();
@@ -46,6 +46,13 @@ public class RevisionManagerRenderer extends DefaultMarkupRenderer {
 		appendNewRevisionPanel(string);
 
 		appendJsonDataTableAndTimeline(section, string, user);
+
+		string.appendHtml("<a onClick='showCurrentRev();'>Current revision</a>");
+		string.appendHtml(", <span id='uploadedLink'>");
+		if (RevisionManager.getRM(user).getUploadedRevision() != null) {
+			string.appendHtml("<a id='uploadedLink' onClick='showUploadedRev();'>Uploaded revision</a>");
+		}
+		string.appendHtml("</span>");
 
 		// Div for save warning message
 		string.appendHtml("<div id=\"reverror\"></div>");
@@ -65,18 +72,18 @@ public class RevisionManagerRenderer extends DefaultMarkupRenderer {
 		string.appendHtml("<div class='collapsebox'>");
 		string.appendHtmlElement("h4", "Add new revision", "class='collapsetitle'");
 		string.appendHtml("<div>");
-		string.appendHtml("<input  style=\"color:#555555;\" size=\"40\" type=\"text\" value=\""
+		string.appendHtml("<input  style=\"color:#999999;\" size=\"40\" type=\"text\" value=\""
 				+ defaultNameValue
 				+ "\" id=\"newRevName\" autocomplete=\"off\" " +
 				"onblur=\"if (this.value == '') {this.value = '" + defaultNameValue
-				+ "';this.style.color='#555555';}\"" +
+				+ "';this.style.color='#999999';}\"" +
 				"onfocus=\"if (this.value == '" + defaultNameValue
 				+ "') {this.value = '';this.style.color='#000000';}\" />");
-		string.appendHtml("<input style=\"color:#555555;\" size=\"30\" type=\"text\" value=\""
+		string.appendHtml("<input style=\"color:#999999;\" size=\"30\" type=\"text\" value=\""
 				+ defaultCommentValue
 				+ "\" id=\"newRevComment\" autocomplete=\"off\" " +
 				"onblur=\"if (this.value == '') {this.value = '" + defaultCommentValue
-				+ "';this.style.color='#555555';}\"" +
+				+ "';this.style.color='#999999';}\"" +
 				"onfocus=\"if (this.value == '" + defaultCommentValue
 				+ "') {this.value = '';this.style.color='#000000';}\" />");
 		string.appendHtml("<input id=\"addrevbtn\" autocomplete=\"off\" type=\"button\" value=\"Add\" title=\"Add New Revision\" onclick=\"addRev();\">");
@@ -100,15 +107,22 @@ public class RevisionManagerRenderer extends DefaultMarkupRenderer {
 			String line = RevisionType.toTimelineString(sec);
 			string.appendHtml(line);
 		}
-		if (RevisionManager.getRM(user).getUploadedRevision() != null) {
-			string.appendHtml("{\n" +
-					"\'start\': new Date(),\n" +
-					"\'content\': \'Uploaded Revision\',\n" +
-					"\'id\': \'uploaded\'\n" +
-					"},\n");
-		}
+		// if (RevisionManager.getRM(user).getUploadedRevision() != null) {
+		// string.appendHtml("{\n" +
+		// "\'start\': new Date(),\n" +
+		// "\'content\': \'Uploaded Revision\',\n" +
+		// // "\'group\': \'Uploaded\',\n" +
+		// "},\n");
+		// }
 		string.deleteCharAt(string.length() - 2);
 		string.appendHtml("];");
+
+		// string.appendHtml("selection = [");
+		// if (RevisionManager.getRM(user).getUploadedRevision() != null) {
+		// string.appendHtml("{'row': data.length-1}");
+		// }
+		// string.appendHtml("];");
+
 		string.appendHtml("</script>");
 		string.appendHtml("<div id=\"mytimeline\"></div>");
 	}

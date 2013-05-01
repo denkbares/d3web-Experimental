@@ -167,3 +167,18 @@ div.timeline-navigation-move-left {
 div.timeline-navigation-move-right {
     background: url('img/16/moveright.png') no-repeat center;
 }
+
+.revFileChanged {
+    background: url("../images/correction_change.gif") no-repeat scroll 0 50% transparent;
+    padding-left: 20px;
+}
+
+.revFileNew {
+    background: url("../images/plus.png") no-repeat scroll 0 50% transparent;
+    padding-left: 20px;
+}
+
+.revFileRemoved {
+    background: url("../images/minus.png") no-repeat scroll 0 50% transparent;
+    padding-left: 20px;
+}

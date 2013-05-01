@@ -54,10 +54,10 @@ public class SimpleTextDiff extends AbstractAction {
 			String t1 = Environment.getInstance().getWikiConnector().getVersion(title, version);
 			String t2 = Environment.getInstance().getWikiConnector().getVersion(title, -1);
 
+			String header = "<h4>Text-Diff for page '" + title + "':</h4>";
 			String diff = getTextDiff(title, version, -1, t1, t2, "\n");
 			if (!diff.isEmpty()) {
-				return "<pre>" + diff
-						+ "</pre>";
+				return header + "<pre>" + diff + "</pre>";
 			}
 			else {
 				return "<p class=\"box error\">No differences to current page version.";

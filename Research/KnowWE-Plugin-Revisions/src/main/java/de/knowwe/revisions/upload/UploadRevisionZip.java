@@ -46,32 +46,38 @@ import de.knowwe.revisions.manager.RevisionManager;
  */
 public class UploadRevisionZip extends AbstractAction {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(UserActionContext context) throws IOException {
+
+		HashMap<String, String> pages = new HashMap<String, String>();
+		List<FileItem> items = null;
 		try {
-			HashMap<String, String> pages = new HashMap<String, String>();
-			List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(context.getRequest());
-			for (FileItem item : items) {
-				InputStream filecontent = item.getInputStream();
-
-				ZipInputStream zin = new ZipInputStream(filecontent);
-				ZipEntry ze;
-
-				while ((ze = zin.getNextEntry()) != null) {
-					String title = URLDecoder.decode(ze.getName(), "UTF-8");
-					title = title.substring(0, title.length() - 4);
-					String content = IOUtils.toString(zin, "UTF-8");
-					zin.closeEntry();
-					pages.put(title, content);
-				}
-				zin.close();
-				filecontent.close();
-			}
-			UploadedRevision rev = new UploadedRevision(context.getWeb(), pages);
-			RevisionManager.getRM(context).setUploadedRevision(rev);
+			items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(context.getRequest());
 		}
 		catch (FileUploadException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		for (FileItem item : items) {
+			InputStream filecontent = item.getInputStream();
+
+			ZipInputStream zin = new ZipInputStream(filecontent);
+			ZipEntry ze;
+
+			while ((ze = zin.getNextEntry()) != null) {
+				String title = URLDecoder.decode(ze.getName(), "UTF-8");
+				title = title.substring(0, title.length() - 4);
+				String content = IOUtils.toString(zin, "UTF-8");
+				zin.closeEntry();
+				pages.put(title, content);
+			}
+			zin.close();
+			filecontent.close();
+		}
+		UploadedRevision rev = new UploadedRevision(context.getWeb(), pages);
+		RevisionManager.getRM(context).setUploadedRevision(rev);
+		context.sendRedirect("../Wiki.jsp?page=" + context.getTitle());
+
 	}
 }

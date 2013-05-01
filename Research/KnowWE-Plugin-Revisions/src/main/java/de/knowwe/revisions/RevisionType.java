@@ -22,6 +22,7 @@ import java.text.ParseException;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -43,6 +44,7 @@ public class RevisionType extends DefaultMarkupType {
 
 	public RevisionType() {
 		super(m);
+		this.setRenderer(NothingRenderer.getInstance());
 		this.setIgnorePackageCompile(true);
 	}
 
@@ -82,6 +84,7 @@ public class RevisionType extends DefaultMarkupType {
 					"\'content\': \'" + getRevisionName(section) + "\',\n" +
 					// "\'comment\': \'" + getRevisionComment(section) + "\'\n"
 					// +
+					// "\'group\': \'Wiki\',\n" +
 					"\'id\': \'" + section.getID() + "\'\n" +
 					"},\n";
 		}
