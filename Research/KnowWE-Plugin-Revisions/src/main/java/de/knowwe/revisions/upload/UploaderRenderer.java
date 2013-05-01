@@ -55,7 +55,7 @@ public class UploaderRenderer extends DefaultMarkupRenderer {
 				+ section.getTitle() + "&KWikiWeb=" + section.getWeb()
 				+ "&\" method=\"POST\" enctype=\"multipart/form-data\">");
 		string.appendHtmlElement("label", "Select file: ", "");
-		string.appendHtml("<input id=\"fileinput\" type=\"file\" size=\"50\"/>");
+		string.appendHtml("<input id=\"fileinput\" type=\"file\" name=\"file\" size=\"50\"/>");
 		string.appendHtml("<input type=\"submit\" value=\"Upload\" />");
 		string.appendHtml("</form>");
 		string.appendHtml("</div>");

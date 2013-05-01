@@ -66,11 +66,26 @@ public class UploadRevisionZip extends AbstractAction {
 			ZipEntry ze;
 
 			while ((ze = zin.getNextEntry()) != null) {
-				String title = URLDecoder.decode(ze.getName(), "UTF-8");
-				title = title.substring(0, title.length() - 4);
-				String content = IOUtils.toString(zin, "UTF-8");
-				zin.closeEntry();
-				pages.put(title, content);
+				String name = ze.getName();
+				if (!name.contains("/")) {
+					// this is an article
+					String title = URLDecoder.decode(name, "UTF-8");
+					title = title.substring(0, title.length() - 4);
+					String content = IOUtils.toString(zin, "UTF-8");
+					zin.closeEntry();
+					pages.put(title, content);
+				}
+				else {
+					// this is an attachment
+					String[] splittedName = name.split("/");
+					String title = URLDecoder.decode(splittedName[0], "UTF-8");
+					String filename = URLDecoder.decode(splittedName[1], "UTF-8");
+					// String content = IOUtils.toString(zin, "UTF-8");
+					// Environment.getInstance().getWikiConnector().storeAttachment(title,
+					// filename,
+					// context.getUserName(), zin);
+					zin.closeEntry();
+				}
 			}
 			zin.close();
 			filecontent.close();

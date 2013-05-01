@@ -33,9 +33,7 @@
 			links.events.addListener(timeline, 'select', eventSelected);
 			links.events.addListener(timeline, 'timechanged', lineDragged);
 			links.events.addListener(timeline, 'change', eventChanged);
-			
-			document.getElementById('fileinput').addEventListener('change', uploadRev, false);
-			
+						
 			if (document.getElementById('uploadedLink').innerHTML != '') {
 				showUploadedRev();
 			} else {
