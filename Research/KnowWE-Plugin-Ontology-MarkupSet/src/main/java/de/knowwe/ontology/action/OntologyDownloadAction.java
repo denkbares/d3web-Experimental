@@ -34,7 +34,7 @@ public class OntologyDownloadAction extends AbstractAction {
 		StringWriter writer = new StringWriter();
 		Rdf2GoCore.getInstance(web, title).writeModel(writer);
 		String content = writer.toString();
-		context.setContentLength(content.length());
+		context.setContentLength(content.getBytes().length);
 
 		context.getWriter().write(content);
 	}
