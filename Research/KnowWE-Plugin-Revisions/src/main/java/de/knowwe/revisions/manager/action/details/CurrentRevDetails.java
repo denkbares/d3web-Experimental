@@ -45,7 +45,8 @@ public class CurrentRevDetails extends AbstractAction {
 		String result = "<p class=\"box ok\">Current wiki revision selected.</p>";
 		result += "<h4>Revision actions:</h4>";
 		result += "\n";
-		result += "<a onClick=\"downloadRev(" + date.getTime() + ");\">Download</a>";
+		result += "<a onClick=\"downloadRev(" + date.getTime()
+				+ ");\" title='Download the current wiki revision'>Download</a>";
 		return result;
 	}
 }

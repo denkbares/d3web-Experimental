@@ -33,7 +33,7 @@ import de.knowwe.revisions.manager.RevisionManager;
  */
 public class UploadedRevDetails extends AbstractRevDetails {
 
-	private static final String HEADER = "<p class=\"box ok\">Uploaded Revision selected.</p>";
+	private static final String HEADER = "<p class=\"box ok\">Uploaded revision selected.</p>";
 
 	@Override
 	protected String perform(UserActionContext context) {
@@ -100,8 +100,8 @@ public class UploadedRevDetails extends AbstractRevDetails {
 	 */
 	@Override
 	protected void appendRevisionActions(Revision rev, StringBuffer result) {
-		result.append("<a onClick=\"alert('not yet implemented');\">Merge into wiki</a>");
+		result.append("<a onClick=\"alert('not yet implemented');\" title='Merge this revision into wiki'>Merge</a>");
 		result.append(", ");
-		result.append("<a onClick=\"alert('not yet implemented');\">Restore this state</a>");
+		result.append("<a onClick=\"alert('not yet implemented');\" title='Restore this revision>Restore</a>");
 	}
 }

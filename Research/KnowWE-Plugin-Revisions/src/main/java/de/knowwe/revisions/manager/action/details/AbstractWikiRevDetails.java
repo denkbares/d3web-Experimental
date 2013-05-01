@@ -86,6 +86,6 @@ public abstract class AbstractWikiRevDetails extends AbstractRevDetails {
 		result.append("\n");
 		result.append("<a onClick=\"downloadRev(" +
 				date.getTime()
-				+ ");\">Download</a>");
+				+ ");\" title='Download this revision'>Download</a>");
 	}
 }

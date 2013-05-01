@@ -47,10 +47,10 @@ public class RevisionManagerRenderer extends DefaultMarkupRenderer {
 
 		appendJsonDataTableAndTimeline(section, string, user);
 
-		string.appendHtml("<a onClick='showCurrentRev();'>Current revision</a>");
-		string.appendHtml(", <span id='uploadedLink'>");
+		string.appendHtml("<a onClick='showCurrentRev();' title='Show current wiki revision details'>Current revision</a>");
+		string.appendHtml("<span id='uploadedLink'>");
 		if (RevisionManager.getRM(user).getUploadedRevision() != null) {
-			string.appendHtml("<a id='uploadedLink' onClick='showUploadedRev();'>Uploaded revision</a>");
+			string.appendHtml(", <a onClick='showUploadedRev();' title='Show uploaded revision details'>Uploaded revision</a>");
 		}
 		string.appendHtml("</span>");
 
