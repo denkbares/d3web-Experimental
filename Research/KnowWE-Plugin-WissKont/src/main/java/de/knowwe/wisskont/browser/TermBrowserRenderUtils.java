@@ -174,7 +174,9 @@ public class TermBrowserRenderUtils {
 							+ "'>");
 
 					// insert term name
+					string.appendHtml("<a href='" + url + "'>");
 					string.appendHtml(term.replaceAll("_", "_<wbr>"));
+					string.appendHtml("</a>");
 					string.appendHtml("</div></td>");
 				}
 
@@ -203,13 +205,6 @@ public class TermBrowserRenderUtils {
 		string.appendHtml("<table style='table-layout:fixed'>");
 		string.appendHtml("<tr>");
 		{
-			// hyper link to concept definition page
-			string.appendHtml("<td style='"
-					+ divStyle
-					+ "' class='termbrowser'>"
-					+ "<a href='"
-					+ url
-					+ "'><span class='ui-icon ui-icon-arrowreturnthick-1-e openConcept' title='Seite zu diesem Konzept öffnen' style='display:none;'></span></a></td>");
 
 			// delete concept from list
 			string.appendHtml("<td style='"
