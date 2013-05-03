@@ -1,6 +1,7 @@
 package de.knowwe.rdfs.vis;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -8,7 +9,9 @@ import javax.servlet.ServletContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
@@ -31,6 +34,10 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 			format = format.toLowerCase();
 		}
 		parameterMap.put(RenderingCore.FORMAT, format);
+
+		String dotApp = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_DOT_APP);
+		parameterMap.put(RenderingCore.DOT_APP, dotApp);
 
 		parameterMap.put(RenderingCore.CONCEPT, getConcept(user, section));
 
@@ -63,6 +70,15 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		parameterMap.put(RenderingCore.REQUESTED_DEPTH, getSuccessors(section));
 		parameterMap.put(RenderingCore.REQUESTED_HEIGHT, getPredecessors(section));
 
+		String addToDOT = "";
+		List<Section<? extends AnnotationContentType>> annotationSections =
+				DefaultMarkupType.getAnnotationContentSections(section,
+						OntoVisType.ANNOTATION_ADD_TO_DOT);
+		for (Section<? extends AnnotationContentType> anno : annotationSections) {
+			if (anno != null) addToDOT += anno.getText() + "\n";
+		}
+		parameterMap.put(RenderingCore.ADD_TO_DOT, addToDOT);
+
 		RenderingCore renderer = new RenderingCore(realPath, section, parameterMap);
 		renderer.render(string);
 
@@ -86,7 +102,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 */
 	private String getPredecessors(Section<?> section) {
 		return OntoVisType.getAnnotation(section,
-					OntoVisType.ANNOTATION_PREDECESSORS);
+				OntoVisType.ANNOTATION_PREDECESSORS);
 	}
 
 	/**
@@ -95,7 +111,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 */
 	private String getSuccessors(Section<?> section) {
 		return OntoVisType.getAnnotation(section,
-					OntoVisType.ANNOTATION_SUCCESSORS);
+				OntoVisType.ANNOTATION_SUCCESSORS);
 	}
 
 	/**

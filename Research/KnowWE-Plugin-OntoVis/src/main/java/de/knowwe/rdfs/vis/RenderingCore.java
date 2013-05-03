@@ -64,6 +64,10 @@ import de.knowwe.rdfs.vis.util.Utils;
  */
 public class RenderingCore {
 
+	enum NODE_TYPE {
+		CLAAS, PROPERTY, INSTANCE, UNDEFINED
+	};
+
 	public static final String FORMAT = "format";
 	public static final String CONCEPT = "concept";
 	public static final String MASTER = "master";
@@ -83,6 +87,9 @@ public class RenderingCore {
 	public static final String LINK_MODE = "LINK_MODE";
 	public static final String LINK_MODE_JUMP = "LINK_MODE_JUMP";
 	public static final String LINK_MODE_BROWSE = "LINK_MODE_BROWSE";
+
+	public static final String DOT_APP = "dot_app";
+	public static final String ADD_TO_DOT = "add_to_dot";
 
 	public static final String RELATION_COLOR_CODES = "relation_color_codes";
 
@@ -253,8 +260,16 @@ public class RenderingCore {
 		insertMainConcept(conceptURI);
 		// check all relations again
 		checkRelations();
+		dotSource = insertPraefixed(dotSource);
 		dotSource = DotRenderer.connectSources(dotSource, dotSourceLabel,
 				dotSourceRelations);
+	}
+
+	private String insertPraefixed(String dotSource) {
+		String added = parameters.get(RenderingCore.ADD_TO_DOT);
+		if (added != null) dotSource += added;
+
+		return dotSource;
 	}
 
 	/**
@@ -389,15 +404,28 @@ public class RenderingCore {
 
 		writeDot(dot);
 		// create svg
-		String command = DOT_INSTALLATION + " " + dot.getAbsolutePath() +
+		String command = getDOTApp() + " " + dot.getAbsolutePath() +
 				" -Tsvg -o " + svg.getAbsolutePath() + "";
 		createFileOutOfDot(svg, dot, command);
 
 		// create png
-		command = DOT_INSTALLATION + " " + dot.getAbsolutePath() +
+		command = getDOTApp() + " " + dot.getAbsolutePath() +
 				" -Tpng -o " + png.getAbsolutePath() + "";
 		createFileOutOfDot(png, dot, command);
 		prepareSVG(svg);
+	}
+
+	private String getDOTApp() {
+		String app = DOT_INSTALLATION;
+		String user_def_app = parameters.get(DOT_APP);
+		if (user_def_app != null) {
+			if (app.endsWith(FILE_SEPARATOR)) app += user_def_app;
+			else {
+				app = app.substring(0, app.lastIndexOf(FILE_SEPARATOR)) + FILE_SEPARATOR
+						+ user_def_app;
+			}
+		}
+		return app;
 	}
 
 	/**
@@ -619,26 +647,13 @@ public class RenderingCore {
 		// Main Concept Attributes
 		String style = "filled";
 		String fillcolor = "yellow";
-		String fontsize = "14";
 		String shape = "ellipse";
 
-		// String askClass = "ASK { " + uriProvider.createSparqlURI(concept,
-		// rdfRepository, master)
-		// + " rdf:type owl:Class}";
-		String askClass = "ASK { <" + conceptURI.toString()
-				+ "> rdf:type owl:Class}";
-		boolean isClass = rdfRepository.sparqlAsk(askClass);
-		// String askProperty = "ASK { " + uriProvider.createSparqlURI(concept,
-		// rdfRepository, master)
-		// + " rdf:type owl:Property}";
-		String askProperty = "ASK { <" + conceptURI.toString()
-				+ "> rdf:type owl:Property}";
-		boolean isProperty = rdfRepository.sparqlAsk(askProperty);
-
-		if (isClass) {
+		NODE_TYPE type = getConceptType(conceptURI);
+		if (type == NODE_TYPE.CLAAS) {
 			shape = "rectangle";
 		}
-		else if (isProperty) {
+		else if (type == NODE_TYPE.PROPERTY) {
 			shape = "diamond";
 		}
 		String url = createBaseURL();
@@ -650,14 +665,29 @@ public class RenderingCore {
 
 		String conceptKey = "\"" + concept + "\"";
 		String conceptValue = "[ URL=\"" + url + "?page=" + section.getTitle() + "&concept="
-				+ concept + "\" style=\"" + style + "\" fillcolor=\"" + fillcolor
-				+ "\" fontsize=\"" + fontsize + "\" shape=\"" + shape + "\"" + "label=\""
+				+ concept + "\" style=\"" + style + "\" fillcolor=\"" + fillcolor + "\" " +
+				// + "\" fontsize=\"" + fontsize + "\""
+				" shape=\"" + shape + "\"" + "label=\""
 				+ Utils.prepareLabel(conceptLabel) + "\"];\n";
 		// the main concept is inserted in the dotSource resp. reset if
 		// the appearance was changed
 		if (dotSourceLabel.get(conceptKey) != conceptValue) {
 			dotSourceLabel.put(Strings.unquote(conceptKey), conceptValue);
 		}
+	}
+
+	private NODE_TYPE getConceptType(URI conceptURI) {
+		NODE_TYPE result = NODE_TYPE.UNDEFINED;
+
+		String askClass = "ASK { <" + conceptURI.toString()
+				+ "> rdf:type owl:Class}";
+		if (rdfRepository.sparqlAsk(askClass)) return NODE_TYPE.CLAAS;
+
+		String askProperty = "ASK { <" + conceptURI.toString()
+				+ "> rdf:type owl:Property}";
+		if (rdfRepository.sparqlAsk(askProperty)) return NODE_TYPE.PROPERTY;
+
+		return result;
 	}
 
 	/**
@@ -712,7 +742,7 @@ public class RenderingCore {
 	 * @param request
 	 */
 	private void addSuccessors(Node conceptURI) {
-		String concept = getConceptName(conceptURI);
+		// String concept = getConceptName(conceptURI);
 		// String query = "SELECT ?y ?z WHERE { "
 		// + uriProvider.createSparqlURI(concept, rdfRepository, master)
 		// + " ?y ?z.}";
@@ -751,30 +781,14 @@ public class RenderingCore {
 			if (isLiteral(zURI)) {
 				continue loop;
 			}
-			String askClass = "ASK { <" + zURI.asURI().toString()
-					+ "> rdf:type owl:Class}";
-			boolean isClass = rdfRepository.sparqlAsk(askClass);
-			String askProperty = "ASK { <" + zURI.asURI().toString() + "> rdf:type rdf:Property}";
-			boolean isProperty = rdfRepository.sparqlAsk(askProperty);
-			String type = "basic";
-
-			if (isClass) {
-				if (showClasses) {
-					type = "class";
-				}
-				else {
-					continue loop;
-				}
+			NODE_TYPE nodeType = getConceptType(zURI.asURI());
+			if (nodeType == NODE_TYPE.CLAAS && !showClasses) {
+				continue loop;
 			}
-			else if (isProperty) {
-				if (showProperties) {
-					type = "property";
-				}
-				else {
-					continue loop;
-				}
+			else if (nodeType == NODE_TYPE.PROPERTY && !showProperties) {
+				continue loop;
 			}
-			addConcept(conceptURI, zURI, yURI, false, type);
+			addConcept(conceptURI, zURI, yURI, false, nodeType);
 
 			depth++;
 			if (depth < requestedDepth) {
@@ -810,10 +824,6 @@ public class RenderingCore {
 	 * @param request
 	 */
 	private void addPredecessors(Node conceptURI) {
-		String concept = getConceptName(conceptURI);
-		// String query = "SELECT ?x ?y WHERE { ?x ?y "
-		// + uriProvider.createSparqlURI(concept, rdfRepository, master) +
-		// ". }";
 		String query = "SELECT ?x ?y WHERE { ?x ?y <"
 				+ conceptURI.asURI().toString() + "> . }";
 		ClosableIterator<QueryRow> result =
@@ -846,27 +856,13 @@ public class RenderingCore {
 				continue loop;
 			}
 
-			String askClass = "ASK { <" + xURI.toString() + "> rdf:type owl:Class}";
-			boolean isClass = rdfRepository.sparqlAsk(askClass);
-			String askProperty = "ASK { <" + xURI.toString() + "> rdf:type rdf:Property}";
-			boolean isProperty = rdfRepository.sparqlAsk(askProperty);
-			String type = "basic";
+			NODE_TYPE nodeType = getConceptType(xURI.asURI());
 
-			if (isClass) {
-				if (showClasses) {
-					type = "class";
-				}
-				else {
-					continue loop;
-				}
+			if (nodeType == NODE_TYPE.CLAAS && !showClasses) {
+				continue loop;
 			}
-			else if (isProperty) {
-				if (showProperties) {
-					type = "property";
-				}
-				else {
-					continue loop;
-				}
+			else if (nodeType == NODE_TYPE.PROPERTY && !showProperties) {
+				continue loop;
 			}
 
 			height++;
@@ -879,7 +875,7 @@ public class RenderingCore {
 			}
 			height--;
 
-			addConcept(xURI, conceptURI, yURI, true, type);
+			addConcept(xURI, conceptURI, yURI, true, nodeType);
 		}
 	}
 
@@ -961,8 +957,8 @@ public class RenderingCore {
 	 */
 	private void addOutgoingEdgesPredecessors(Node conceptURI) {
 		if (isLiteral(conceptURI)) return;
-		String concept = getConceptName(conceptURI);
-		String conceptDecoded = urlDecode(concept);
+		// String concept = getConceptName(conceptURI);
+		// String conceptDecoded = urlDecode(concept);
 		// String query = "SELECT ?x ?y WHERE { ?x ?y "
 		// + uriProvider.createSparqlURI(conceptDecoded, rdfRepository, master)
 		// + "}";
@@ -1022,39 +1018,18 @@ public class RenderingCore {
 	 * @param relation between from --> to
 	 * @param boolean predecessor (if predecessor or successor is added to the
 	 *        graph)
-	 * @param type (basic, class, property)
+	 * @param type (instance, class, property, undefined)
 	 */
-	private void addConcept(Node fromURI, Node toURI, Node relationURI, boolean predecessor, String type) {
+	private void addConcept(Node fromURI, Node toURI, Node relationURI, boolean predecessor, NODE_TYPE type) {
 		String from = getConceptName(fromURI);
 		String to = getConceptName(toURI);
 		String relation = getConceptName(relationURI);
-
-		String shape;
-		String fontcolor;
-		String fontsize;
 
 		from = urlDecode(from);
 		to = urlDecode(to);
 		relation = urlDecode(relation);
 
-		if (type.equals("class")) {
-			// Class Label Attributes
-			shape = "box";
-			fontcolor = "black";
-			fontsize = "14";
-		}
-		else if (type.equals("property")) {
-			// Property Label Attributes
-			shape = "septagon";
-			fontcolor = "black";
-			fontsize = "14";
-		}
-		else {
-			// Basic Label Attributes
-			shape = "ellipse";
-			fontcolor = "black";
-			fontsize = "14";
-		}
+		RenderingStyle style = getStyle(type);
 
 		String newLineLabelKey;
 		String newLineLabelValue;
@@ -1068,7 +1043,7 @@ public class RenderingCore {
 
 			newLineLabelKey = "\"" + from + "\"";
 			newLineLabelValue = "[ URL=\"" + sourceURL + "\""
-					+ DotRenderer.buildLabel(shape, fontcolor, fontsize)
+					+ DotRenderer.buildLabel(style)
 					+ "label=\"" + Utils.prepareLabel(sourceLabel) + "\" ];\n";
 		}
 		else {
@@ -1080,7 +1055,7 @@ public class RenderingCore {
 			}
 			newLineLabelKey = "\"" + to + "\"";
 			newLineLabelValue = "[ URL=\"" + targetURL + "\""
-					+ DotRenderer.buildLabel(shape, fontcolor, fontsize) + "label=\""
+					+ DotRenderer.buildLabel(style) + "label=\""
 					+ Utils.prepareLabel(targetLabel) + "\" ];\n";
 		}
 		Edge newLineRelationsKey = new Edge(from, relation, to);
@@ -1096,6 +1071,25 @@ public class RenderingCore {
 			dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);
 		}
 
+	}
+
+	private RenderingStyle getStyle(NODE_TYPE type) {
+		RenderingStyle style = new RenderingStyle();
+		style.fontcolor = "black";
+
+		if (type == NODE_TYPE.CLAAS) {
+			style.shape = "box";
+		}
+		else if (type == NODE_TYPE.PROPERTY) {
+			style.shape = "septagon";
+		}
+		else if (type == NODE_TYPE.INSTANCE) {
+			style.shape = "egg";
+		}
+		else {
+			style.shape = "box";
+		}
+		return style;
 	}
 
 	private String createConceptURL(String to) {

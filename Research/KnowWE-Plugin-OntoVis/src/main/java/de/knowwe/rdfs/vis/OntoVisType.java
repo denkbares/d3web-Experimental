@@ -18,7 +18,14 @@ public class OntoVisType extends DefaultMarkupType {
 	public static final String ANNOTATION_MASTER = "master";
 	public static final String ANNOTATION_LANGUAGE = "language";
 
+	public static final String ANNOTATION_DOT_APP = "dotApp";
+	public static final String ANNOTATION_ADD_TO_DOT = "dotAddLine";
+
 	private static final DefaultMarkup MARKUP;
+
+	private enum dot_apps {
+		dot, neato
+	};
 
 	static {
 		MARKUP = new DefaultMarkup("Vis");
@@ -34,6 +41,8 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_SHOWPROPERTIES, false);
 		MARKUP.addAnnotation(ANNOTATION_MASTER, false);
 		MARKUP.addAnnotation(ANNOTATION_LANGUAGE, false);
+		MARKUP.addAnnotation(ANNOTATION_DOT_APP, false, dot_apps.values());
+		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
 	}
 
 	public OntoVisType() {

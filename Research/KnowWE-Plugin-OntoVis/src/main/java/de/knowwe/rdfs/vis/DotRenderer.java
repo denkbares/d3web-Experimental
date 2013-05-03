@@ -32,24 +32,18 @@ public class DotRenderer {
 	 * 
 	 * @created 04.09.2012
 	 * @param shape
-	 * @param fontcolor
-	 * @param fontsizeL
 	 */
-	public static String buildLabel(String shape, String fontcolor, String fontsizeL) {
-		return " fontcolor=\"" + fontcolor + "\" shape=\"" + shape
-				+ "\" fontsize=\"" + fontsizeL + "\"";
+	public static String buildLabel(RenderingStyle style) {
+		return " shape=\"" + style.shape + "\" ";
 	}
 
 	/**
 	 * 
 	 * @created 04.09.2012
 	 * @param arrowtail
-	 * @param color
-	 * @param fontsizeR
 	 */
-	public static String buildRelation(String arrowtail, String color, String fontsize) {
-		return " arrowtail=\"" + arrowtail + "\" color=\"" + color + "\" fontsize=\""
-				+ fontsize + "\"";
+	public static String buildRelation(String arrowtail, String color) {
+		return " arrowtail=\"" + arrowtail + "\"";
 	}
 
 	/**
@@ -62,12 +56,11 @@ public class DotRenderer {
 	public static String innerRelation(String label, String relationColorCodes) {
 		// Basic Relation Attributes
 		String arrowtail = "normal";
-		String fontsize = "13";
 
 		String color = getRelationColorCode(label, relationColorCodes);
 
 		return "[ label = \"" + label
-				+ "\"" + buildRelation(arrowtail, color, fontsize) + " ];\n";
+				+ "\"" + buildRelation(arrowtail, color) + " ];\n";
 	}
 
 	/**
