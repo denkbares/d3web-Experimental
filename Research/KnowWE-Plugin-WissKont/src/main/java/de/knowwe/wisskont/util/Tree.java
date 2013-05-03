@@ -234,6 +234,19 @@ public class Tree<T extends HierarchyNode<T>> {
 			return parent;
 		}
 
+		@Override
+		public int hashCode() {
+			return data.hashCode();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof Node<?>) {
+				return data.equals(((Node<?>) obj).getData());
+			}
+			return false;
+		}
+
 		public void setParent(Node<T> parent) {
 			this.parent = parent;
 		}

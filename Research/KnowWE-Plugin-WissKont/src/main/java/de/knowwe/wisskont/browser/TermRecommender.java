@@ -18,8 +18,6 @@
  */
 package de.knowwe.wisskont.browser;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,13 +25,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.model.QueryResultTable;
-import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.Node;
-import org.ontoware.rdf2go.model.node.URI;
-
-import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.UserActionContext;
@@ -47,9 +38,8 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.event.PageRenderedEvent;
-import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.wisskont.ConceptMarkup;
+import de.knowwe.wisskont.util.MarkupUtils;
 import de.knowwe.wisskont.util.Tree;
 
 /**
@@ -270,37 +260,28 @@ public class TermRecommender implements EventListener {
 			recommendationSet = new RecommendationSet();
 			data.put(context.getUserName(), recommendationSet);
 		}
-		Collection<Section<? extends SimpleDefinition>> defs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				new Identifier(term));
+		List<String> children = MarkupUtils.getChildrenConcepts(term);
+		for (String child : children) {
+			recommendationSet.addValue(child, WEIGHT_EXPAND);
+		}
 
-		if (defs.size() > 0) {
-			Section<? extends SimpleDefinition> def = defs.iterator().next();
-			URI uri = RDFSUtil.getURI(def);
+	}
 
-			String sparql = "SELECT ?x WHERE { ?x lns:unterkonzept <" + uri + ">.}";
-			QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(sparql);
-
-			ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
-			if (!resultIterator.hasNext()) {
-				return;
-			}
-			while (resultIterator.hasNext()) {
-				QueryRow parentConceptResult = resultIterator.next();
-				Node value = parentConceptResult.getValue("x");
-				String urlString = value.asURI().toString();
-
-				String termName = "";
-				try {
-					termName = URLDecoder.decode(
-							urlString.substring(Rdf2GoCore.getInstance().getLocalNamespace().length()),
-							"UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				recommendationSet.addValue(termName, WEIGHT_EXPAND);
-			}
+	/**
+	 * 
+	 * @created 03.05.2013
+	 * @param context
+	 * @param term
+	 */
+	public void collapseTerm(UserActionContext context, String term) {
+		RecommendationSet recommendationSet = data.get(context.getUserName());
+		if (recommendationSet == null) {
+			recommendationSet = new RecommendationSet();
+			data.put(context.getUserName(), recommendationSet);
+		}
+		List<String> children = MarkupUtils.getChildrenConcepts(term);
+		for (String child : children) {
+			recommendationSet.clearValue(child);
 		}
 	}
 }

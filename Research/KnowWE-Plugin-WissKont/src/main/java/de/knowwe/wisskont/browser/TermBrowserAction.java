@@ -64,6 +64,9 @@ public class TermBrowserAction extends AbstractAction {
 			else if (command.equals("expand")) {
 				TermRecommender.getInstance().expandTerm(context, term);
 			}
+			else if (command.equals("collapse")) {
+				TermRecommender.getInstance().collapseTerm(context, term);
+			}
 			else if (command.equals("open")) {
 				// is handled by a link
 			}

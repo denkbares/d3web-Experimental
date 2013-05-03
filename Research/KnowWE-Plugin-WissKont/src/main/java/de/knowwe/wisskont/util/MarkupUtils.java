@@ -20,6 +20,8 @@ package de.knowwe.wisskont.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
@@ -28,11 +30,15 @@ import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.d3web.strings.Identifier;
+import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.core.kdom.RootType;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.wisskont.ConceptMarkup;
 
 /**
@@ -97,6 +103,41 @@ public class MarkupUtils {
 			}
 		}
 		return false;
+	}
+
+	public static List<String> getChildrenConcepts(String term) {
+		List<String> result = new ArrayList<String>();
+
+		Collection<Section<? extends SimpleDefinition>> defs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+				new Identifier(term));
+
+		if (defs.size() > 0) {
+			Section<? extends SimpleDefinition> def = defs.iterator().next();
+			URI uri = RDFSUtil.getURI(def);
+
+			String sparql = "SELECT ?x WHERE { ?x lns:unterkonzept <" + uri + ">.}";
+			QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(sparql);
+
+			ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
+			while (resultIterator.hasNext()) {
+				QueryRow parentConceptResult = resultIterator.next();
+				Node value = parentConceptResult.getValue("x");
+				String urlString = value.asURI().toString();
+
+				String termName = "";
+				try {
+					termName = URLDecoder.decode(
+							urlString.substring(Rdf2GoCore.getInstance().getLocalNamespace().length()),
+							"UTF-8");
+				}
+				catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				result.add(termName);
+			}
+		}
+		return result;
 	}
 
 	/**

@@ -122,7 +122,7 @@ public class TermBrowserRenderUtils {
 	 */
 	private static void renderConceptSubTree(Node<RatedTerm> rootConcept, int level, RenderResult string) {
 		if (!rootConcept.getData().equals(RatedTerm.ROOT)) {
-			renderConcept(rootConcept.getData(), level, string);
+			renderConcept(rootConcept, level, string);
 		}
 		level += 1;
 		List<Node<RatedTerm>> childrenSorted = rootConcept.getChildrenSorted();
@@ -132,8 +132,8 @@ public class TermBrowserRenderUtils {
 
 	}
 
-	private static void renderConcept(RatedTerm t, int depth, RenderResult string) {
-		String term = t.getTerm();
+	private static void renderConcept(Node<RatedTerm> t, int depth, RenderResult string) {
+		String term = t.getData().getTerm();
 		String topic = term;
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				new Identifier(term));
@@ -169,9 +169,17 @@ public class TermBrowserRenderUtils {
 				// calculate indention div for hierarchy visualization
 				string.appendHtml(createIndent(depth));
 
+				// append html code for the actions that can be performed for
+				// each term
+				{
+					string.appendHtml("<td style='min-width: 16px; padding:0px;'>");
+					insertActionButtonsPre(string, url, divStyle, t);
+					string.appendHtml("</td>");
+				}
+
 				// render actual line content
 				{
-					string.appendHtml("<td style='width:80%' class='termbrowser'>");
+					string.appendHtml("<td style='width:90%;padding-left:2px;' class='termbrowser'>");
 
 					// using different font style depending on current hierarchy
 					// depth
@@ -190,8 +198,8 @@ public class TermBrowserRenderUtils {
 				// append html code for the actions that can be performed for
 				// each term
 				{
-					string.appendHtml("<td style='min-width: 48px;width:20%;'>");
-					insertActionButtons(string, url, divStyle);
+					string.appendHtml("<td style='min-width: 26px;padding:0px;'>");
+					insertActionButtonsPost(string, url, divStyle);
 					string.appendHtml("</td>");
 				}
 				string.appendHtml("</tr>");
@@ -208,22 +216,90 @@ public class TermBrowserRenderUtils {
 	 * @param url
 	 * @param divStyle
 	 */
-	private static void insertActionButtons(RenderResult string, String url, String divStyle) {
+	private static void insertActionButtonsPost(RenderResult string, String url, String divStyle) {
 		string.appendHtml("<table style='table-layout:fixed'>");
 		string.appendHtml("<tr>");
 		{
 
-			// delete concept from list
-			string.appendHtml("<td style='"
-					+ divStyle
-					+ "' class='termbrowser'><span class='ui-icon ui-icon-circle-close removeConcept' title='Konzept aus dieser Liste herausnehmen' style='display:none;'></span></td>");
+			insertRemoveButton(string, divStyle);
 
-			// expand concept, i.e. add all children to this list
-			string.appendHtml("<td style='"
-					+ divStyle
-					+ "' class='termbrowser'><span class='ui-icon ui-icon-arrow-4-diag expandConcept' title='Unterkonzepte in diese Liste aufnehmen' style='display:none;'></span></td>");
+			// insertExpandButton(string, divStyle);
 		}
 		string.appendHtml("</tr></table>");
+	}
+
+	/**
+	 * 
+	 * @created 19.04.2013
+	 * @param string
+	 * @param url
+	 * @param divStyle
+	 */
+	private static void insertActionButtonsPre(RenderResult string, String url, String divStyle, Node<RatedTerm> term) {
+		boolean allChildrenShown = allChildrenShown(term);
+
+		string.appendHtml("<table style='table-layout:fixed'>");
+		string.appendHtml("<tr>");
+		{
+			if (allChildrenShown) {
+				if (!(MarkupUtils.getChildrenConcepts(term.getData().getTerm()).size() == 0)) {
+					insertCollapseButton(string, divStyle);
+				}
+			}
+			else {
+				insertExpandButton(string, divStyle);
+			}
+		}
+		string.appendHtml("</tr></table>");
+	}
+
+	/**
+	 * 
+	 * @created 03.05.2013
+	 * @param term
+	 * @return
+	 */
+	private static boolean allChildrenShown(Node<RatedTerm> term) {
+		List<String> childrenConcepts = MarkupUtils.getChildrenConcepts(term.getData().getTerm());
+		for (String childTerm : childrenConcepts) {
+			if (!term.getChildren().contains(new Node<RatedTerm>(new RatedTerm(childTerm)))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static void insertCollapseButton(RenderResult string, String divStyle) {
+		// expand concept, i.e. add all children to this list
+		string.appendHtml("<td style='"
+				+ divStyle
+				+ "' class='termbrowser'><span class='ui-icon ui-icon-minus collapseConcept hoverAction' title='Unterkonzepte aus Liste entfernen' style='display:none;'></span></td>");
+	}
+
+	/**
+	 * 
+	 * @created 03.05.2013
+	 * @param string
+	 * @param divStyle
+	 */
+	private static void insertExpandButton(RenderResult string, String divStyle) {
+		// expand concept, i.e. add all children to this list
+		string.appendHtml("<td style='"
+				+ divStyle
+				+ "' class='termbrowser'><span class='ui-icon ui-icon-plus expandConcept' title='Unterkonzepte in diese Liste aufnehmen'></span></td>");
+	}
+
+	/**
+	 * 
+	 * @created 03.05.2013
+	 * @param string
+	 * @param divStyle
+	 */
+	private static void insertRemoveButton(RenderResult string, String divStyle) {
+		// delete concept from list
+		string.appendHtml("<td style='"
+				+ divStyle
+				+ "' class='termbrowser'><span class='ui-icon ui-icon-circle-close removeConcept hoverAction' title='Konzept aus dieser Liste herausnehmen' style='display:none;'></span></td>");
 	}
 
 	/**

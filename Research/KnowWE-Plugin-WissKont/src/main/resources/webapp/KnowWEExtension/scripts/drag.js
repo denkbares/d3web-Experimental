@@ -34,6 +34,9 @@ function initAllBrowserActionEvents() {
     jq$(".expandConcept").each(function() {
     	initClickEvents(jq$(this));
     });
+    jq$(".collapseConcept").each(function() {
+    	initClickEvents(jq$(this));
+    });
 
 }
 
@@ -50,6 +53,9 @@ function handleTermActionEvent(element) {
 	}
 	if(element.hasClass('expandConcept')) {
 		command = 'expand';
+	}
+	if(element.hasClass('collapseConcept')) {
+		command = 'collapse';
 	}
 	if(element.hasClass('openConcept')) {
 		command = 'open';
@@ -95,7 +101,8 @@ function initAllIconHovers() {
 }
 
 function initIconHover(element) {
-	element.find('.ui-icon').each(
+	
+	element.find('.hoverAction').each(
 			function() {
 				var icon = jq$(this);
 				element.hover(

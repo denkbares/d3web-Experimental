@@ -100,7 +100,7 @@ td.termbrowser {
 }
 	
 
-.openConcept, .expandConcept, .removeConcept, .deleteButton {
+.openConcept, .expandConcept, .removeConcept, .deleteButton, .collapseConcept {
 cursor: pointer;
 }
 
