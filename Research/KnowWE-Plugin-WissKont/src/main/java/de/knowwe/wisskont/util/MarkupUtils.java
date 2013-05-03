@@ -18,6 +18,8 @@
  */
 package de.knowwe.wisskont.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
@@ -108,6 +110,20 @@ public class MarkupUtils {
 		List<Section<ConceptMarkup>> conceptDefinitionMarkupSections = Sections.findSuccessorsOfType(
 				rootSection, ConceptMarkup.class);
 		return conceptDefinitionMarkupSections;
+	}
+
+	public static String getConceptName(Node value) {
+		String uriString = value.toString();
+		String uriStringDecoded = null;
+		try {
+			uriStringDecoded = URLDecoder.decode(uriString, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String conceptName = uriStringDecoded.substring(uriStringDecoded.indexOf("=") + 1);
+		return conceptName;
 	}
 
 }

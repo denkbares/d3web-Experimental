@@ -21,6 +21,10 @@ package de.knowwe.wisskont.browser;
 import java.util.Collection;
 import java.util.List;
 
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
+
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 import de.knowwe.compile.IncrementalCompiler;
@@ -29,6 +33,8 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.wisskont.ConceptMarkup;
+import de.knowwe.wisskont.util.MarkupUtils;
 import de.knowwe.wisskont.util.Tree;
 import de.knowwe.wisskont.util.Tree.Node;
 
@@ -264,13 +270,20 @@ public class TermBrowserRenderUtils {
 	 * @return
 	 */
 	private static String generateTermnames() {
-		String result = "";
-		Collection<Section<? extends SimpleDefinition>> allTermDefinitions = IncrementalCompiler.getInstance().getTerminology().getAllTermDefinitions();
+		String sparql = "SELECT ?x WHERE { ?x rdf:type <" + ConceptMarkup.WISSASS_CONCEPT + ">.}";
+		QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(sparql);
+		String resultString = "";
 
-		for (Section<? extends SimpleDefinition> def : allTermDefinitions) {
-			result += "\"" + def.get().getTermName(def) + "\"" + ",\n";
+		ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
+		while (resultIterator.hasNext()) {
+			QueryRow result = resultIterator.next();
+			org.ontoware.rdf2go.model.node.Node node = result.getValue("x");
+			String termName = MarkupUtils.getConceptName(node);
+			if (termName != null) {
+				resultString += "\"" + termName + "\"" + ",\n";
+			}
+
 		}
-
-		return result;
+		return resultString;
 	}
 }

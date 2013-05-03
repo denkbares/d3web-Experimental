@@ -18,8 +18,6 @@
  */
 package de.knowwe.wisskont.searchbox;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +37,7 @@ import de.knowwe.jspwiki.PluggedSearchResult;
 import de.knowwe.jspwiki.SearchProvider;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.wisskont.ConceptMarkup;
+import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
  * 
@@ -60,7 +59,7 @@ public class ConceptSearchProvider implements SearchProvider {
 			QueryRow conceptResult = resultIterator.next();
 			Node value = conceptResult.getValue("x");
 
-			String conceptName = getConceptName(value);
+			String conceptName = MarkupUtils.getConceptName(value);
 			if (conceptName.contains(query)) {
 				WikiPage wikiPage = connector.getEngine().getPage(conceptName);
 				if (wikiPage != null) {
@@ -85,26 +84,6 @@ public class ConceptSearchProvider implements SearchProvider {
 	/**
 	 * 
 	 * @created 17.04.2013
-	 * @param value
-	 * @return
-	 */
-	private String getConceptName(Node value) {
-		String uriString = value.toString();
-		String uriStringDecoded = null;
-		try {
-			uriStringDecoded = URLDecoder.decode(uriString, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String conceptName = uriStringDecoded.substring(uriStringDecoded.indexOf("=") + 1);
-		return conceptName;
-	}
-
-	/**
-	 * 
-	 * @created 17.04.2013
 	 * @param asURI
 	 */
 	private void addChildrenConcepts(URI concept, List<WikiPage> result) {
@@ -117,7 +96,7 @@ public class ConceptSearchProvider implements SearchProvider {
 			QueryRow conceptResult = resultIterator.next();
 			Node value = conceptResult.getValue("x");
 
-			String conceptName = getConceptName(value);
+			String conceptName = MarkupUtils.getConceptName(value);
 			WikiPage wikiPage = connector.getEngine().getPage(conceptName);
 			if (wikiPage != null) {
 				if (!result.contains(wikiPage)) {
