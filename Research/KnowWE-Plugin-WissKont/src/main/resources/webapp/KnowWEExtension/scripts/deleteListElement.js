@@ -39,11 +39,12 @@ function initClickEvent(element) {
 function sendDeleteAction(element) {
 
 	var entry = element.parent().parent().parent().parent().parent();
-	var kdomid = entry.attr('id');
+	var entryKdomid = entry.attr('id');
+	var markupKdomid = entry.parent().parent().parent().parent().attr('id');
 	
 	var params = {
 			action : 'DeleteListEntryAction',
-			kdomid   : kdomid 
+			kdomid   : entryKdomid 
     }; 
 	var options = {
 		url : KNOWWE.core.util.getURL(params),
@@ -51,7 +52,8 @@ function sendDeleteAction(element) {
 			 fn : function(){
 				 // todo: smooth reload by section update
 				 // hint: reinit listeners etc.
-				 location.reload();
+				 //location.reload();
+				 rerenderSection(markupKdomid, this.responseText);
 			 }
 		 },
 	}

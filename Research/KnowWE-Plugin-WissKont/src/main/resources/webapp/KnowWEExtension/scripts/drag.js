@@ -125,7 +125,7 @@ function activateDraggables() {
 function sendAddedTerm(term, oldTargetID) {
 		
 		var params = {
-				action : 'InsertTermRelationAction',
+				action : 'InsertListEntryAction',
 				termname   : term,
 				targetID   : oldTargetID,
 	    }; 
@@ -143,7 +143,7 @@ function sendAddedTerm(term, oldTargetID) {
 
 function rerenderSection(oldTargetID, newTargetID) {
 	
-	// clean ID that for some reason might have some reason linebreaks appended
+	// clean ID that for some reason might have some linebreaks appended
 	var replacer = new RegExp("\r\n", "g");
 	newTargetID = newTargetID.replace(replacer, "");
 	

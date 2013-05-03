@@ -39,7 +39,7 @@ import de.knowwe.wisskont.RelationMarkupContentType;
  * @author jochenreutelshofer
  * @created 30.11.2012
  */
-public class InsertTermRelationAction extends AbstractAction {
+public class InsertListEntryAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {

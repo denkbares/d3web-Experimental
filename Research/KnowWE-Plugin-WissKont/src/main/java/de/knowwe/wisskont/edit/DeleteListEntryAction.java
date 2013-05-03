@@ -29,6 +29,8 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.wisskont.RelationMarkup;
+import de.knowwe.wisskont.util.SectionUtils;
 
 /**
  * 
@@ -39,43 +41,98 @@ public class DeleteListEntryAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		String kdomid = context.getParameter("kdomid");
-		Map<String, String> replacementMap = new HashMap<String, String>();
-		replacementMap.put(kdomid, "");
-		Section<?> entry = Sections.getSection(kdomid);
+		String result = perform(context);
+		if (result != null && context.getWriter() != null) {
+			context.setContentType("text/plain; charset=UTF-8");
+			context.getWriter().write(result);
+		}
 
-		// check whether trailing comma should be deleted
-		Section<? extends Type> father = entry.getFather().getFather();
-		List<Section<? extends Type>> siblings = father.getChildren();
-		Iterator<Section<? extends Type>> iterator = siblings.iterator();
-		Section<? extends Type> subsequentSection = null;
-		Section<? extends Type> previousSection = null;
-		Section<? extends Type> next = null;
-		while (iterator.hasNext()) {
-			Section<? extends Type> last = next;
-			next = iterator.next();
-			if (Sections.getSubtreePostOrder(next).contains(entry)) {
-				previousSection = last;
-				if (iterator.hasNext()) {
-					subsequentSection = iterator.next();
-					break;
+	}
+
+	public String perform(UserActionContext context) throws IOException {
+		String kdomid = context.getParameter("kdomid");
+
+		// first a temporal replacement map is created, containing also the
+		// comma to be deleted (if so)
+		Map<String, String> myTmpReplacementMap = new HashMap<String, String>();
+		myTmpReplacementMap.put(kdomid, "");
+		Section<?> entryToBeDeletedCorrupted = Sections.getSection(kdomid);
+		// the getSection-method is not reliable in this context, as the
+		// section-map seems not to be maintained correctly
+		// therefore the correct up-to-date section is retrieved other way
+
+		String title = entryToBeDeletedCorrupted.getTitle();
+		Section<? extends Type> entryToBeDeleted = SectionUtils.findSection(title, kdomid);
+		Section<RelationMarkup> relationMarkup = Sections.findAncestorOfType(entryToBeDeleted,
+				RelationMarkup.class);
+
+		{
+			// check whether trailing comma should be deleted
+			Section<? extends Type> father = entryToBeDeleted.getFather().getFather();
+			List<Section<? extends Type>> siblings = father.getChildren();
+			Iterator<Section<? extends Type>> iterator = siblings.iterator();
+			Section<? extends Type> subsequentSection = null;
+			Section<? extends Type> previousSection = null;
+			Section<? extends Type> next = null;
+			while (iterator.hasNext()) {
+				Section<? extends Type> last = next;
+				next = iterator.next();
+				if (Sections.getSubtreePostOrder(next).contains(entryToBeDeleted)) {
+					previousSection = last;
+					if (iterator.hasNext()) {
+						subsequentSection = iterator.next();
+						break;
+					}
 				}
 			}
-		}
-		if (subsequentSection != null && subsequentSection.getText().contains(",")) {
-			// if followed by a comma also delete that
-			replacementMap.put(subsequentSection.getID(), "");
-		}
-		else {
-			// if not check whether leading comma needs to be deleted
-			if (previousSection != null && previousSection.getText().contains(",")) {
+			if (subsequentSection != null && subsequentSection.getText().contains(",")) {
 				// if followed by a comma also delete that
-				replacementMap.put(previousSection.getID(), "");
+				myTmpReplacementMap.put(subsequentSection.getID(), "");
 			}
+			else {
+				// if not check whether leading comma needs to be deleted
+				if (previousSection != null && previousSection.getText().contains(",")) {
+					// if followed by a comma also delete that
+					myTmpReplacementMap.put(previousSection.getID(), "");
+				}
 
+			}
 		}
 
-		Sections.replaceSections(context, replacementMap);
+		// we calculate the new text for the entire relation markup section
+		// for actual replacement
+		StringBuffer replacementText = new StringBuffer();
+		createReplacementText(relationMarkup, myTmpReplacementMap, replacementText);
 
+		String result = "";
+		Map<String, String> replacementMap = new HashMap<String, String>();
+		replacementMap.put(relationMarkup.getID(), replacementText.toString());
+		Map<String, String> newSectionIDs = Sections.replaceSections(context, replacementMap);
+		if (newSectionIDs != null && newSectionIDs.size() > 0) {
+			// we want to return the new id of the relation-markup section
+			result = newSectionIDs.values().iterator().next();
+		}
+
+		return result;
+	}
+
+	private static void createReplacementText(Section<?> sec,
+			Map<String, String> nodesMap, StringBuffer newText) {
+
+		String text = nodesMap.get(sec.getID());
+		if (text != null) {
+			newText.append(text);
+			return;
+		}
+
+		List<Section<?>> children = sec.getChildren();
+		if (children == null || children.isEmpty()
+				|| sec.hasSharedChildren()) {
+			newText.append(sec.getText());
+			return;
+		}
+		for (Section<?> section : children) {
+			createReplacementText(section, nodesMap, newText);
+		}
 	}
 }

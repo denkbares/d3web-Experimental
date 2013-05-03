@@ -169,15 +169,16 @@ public class TermBrowserRenderUtils {
 
 					// using different font style depending on current hierarchy
 					// depth
+					string.appendHtml("<a href='" + url + "'>");
 					string.appendHtml("<div class='termname' style='display:inline;"
 							+ createStyle(depth)
 							+ "'>");
 
 					// insert term name
-					string.appendHtml("<a href='" + url + "'>");
 					string.appendHtml(term.replaceAll("_", "_<wbr>"));
+					string.appendHtml("</div>");
 					string.appendHtml("</a>");
-					string.appendHtml("</div></td>");
+					string.appendHtml("</td>");
 				}
 
 				// append html code for the actions that can be performed for
