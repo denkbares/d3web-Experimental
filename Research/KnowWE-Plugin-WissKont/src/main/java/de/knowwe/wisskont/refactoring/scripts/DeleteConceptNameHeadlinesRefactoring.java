@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 denkbares GmbH
+ * Copyright (C) 2013 denkbares GmbH
  * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
@@ -16,50 +16,61 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.refactoring;
+package de.knowwe.wisskont.refactoring.scripts;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.wisskont.refactoring.scripts.ConceptRelationMarkupRefactoring;
+import de.knowwe.core.kdom.parsing.Sections;
 
 /**
  * 
  * @author jochenreutelshofer
- * @created 05.12.2012
+ * @created 06.05.2013
  */
-public class RefactoringAction extends AbstractAction {
+public class DeleteConceptNameHeadlinesRefactoring extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		String result = perform(context);
-		if (result != null && context.getWriter() != null) {
+		refactor(context);
+		if (context.getWriter() != null) {
 			context.setContentType("text/html; charset=UTF-8");
-			context.getWriter().write(result);
+			context.getWriter().write("refactoring done");
 		}
 
 	}
 
 	/**
 	 * 
-	 * @created 05.12.2012
+	 * @created 06.05.2013
 	 * @param context
-	 * @return
 	 */
-	private String perform(UserActionContext context) {
+	private void refactor(UserActionContext context) {
 		ArticleManager articleManager = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB);
 		Collection<Article> articles = articleManager.getArticles();
 		for (Article article : articles) {
-			ConceptRelationMarkupRefactoring.refactor(article, context);
+			Map<String, String> replacementMap = new HashMap<String, String>();
+			String title = article.getTitle();
 
+			String text = article.getRootSection().getText();
+			String newText = text.replaceAll("^!!! *" + title + "\r?\n\r?\n", "");
+			replacementMap.put(article.getRootSection().getID(), newText);
+			try {
+				Sections.replaceSections(context, replacementMap);
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		return "finished";
-	}
 
+	}
 }

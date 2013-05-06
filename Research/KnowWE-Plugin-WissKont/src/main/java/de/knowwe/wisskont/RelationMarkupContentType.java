@@ -118,7 +118,12 @@ public class RelationMarkupContentType extends AbstractType {
 					Statement statement = Rdf2GoCore.getInstance().createStatement(subjectURI,
 							predicateURI,
 							objectURI);
-					System.out.println("Inserting: " + statement.toString());
+					if (relationMarkup.get().isInverseDir()) {
+						statement = Rdf2GoCore.getInstance().createStatement(objectURI,
+								predicateURI, subjectURI
+								);
+					}
+
 					Rdf2GoCore.getInstance().addStatements(section,
 							new Statement[] { statement });
 
@@ -126,7 +131,6 @@ public class RelationMarkupContentType extends AbstractType {
 
 				@Override
 				public void deleteFromRepository(Section<ObjectSegment> section) {
-					System.out.println("Trying to remove: " + section.toString());
 					Rdf2GoCore.getInstance().removeStatementsForSection(section);
 				}
 

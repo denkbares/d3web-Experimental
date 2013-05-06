@@ -60,6 +60,10 @@ public abstract class RelationMarkup extends AbstractType {
 
 	public abstract URI getRelationURI();
 
+	public boolean isInverseDir() {
+		return false;
+	}
+
 	protected URI createURI(String s) {
 		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = terminology.getTermDefinitions(new Identifier(
