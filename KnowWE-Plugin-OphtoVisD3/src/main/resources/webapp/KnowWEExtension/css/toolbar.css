@@ -1,0 +1,70 @@
+#header {
+max-width: 1060px;
+position: relative;
+color: white;
+}
+body {
+color: #222;
+font: 0px "Helvetica Neue",Helvetica,Arial,sans-serif;
+margin-left: 30px;
+}
+#headerwrap {
+background-color: #222;
+transition: background-color 1.5s;
+padding: 0;
+min-width: 1060px;
+border-bottom: 1px solid #333;
+border-top: 1px solid #333;
+box-shadow: 0 1px #000, 0 2px 1px rgba(0, 0, 0, .4);
+position: absolute;
+width: 100%;
+z-index: 15;
+top: 70px;
+left: 0px;
+
+}
+#headerwrap.fixed {
+position: fixed;
+top: 0;
+}
+ul{
+background-color: #222;
+transition: background-color 1.5s;
+list-style-type: none;
+display:inline;
+float: left;
+height: 30px;
+-webkit-padding-start: 0px;
+
+}
+li{
+background-color: #222;
+transition: background-color 1.5s;
+float: left;
+display:inline;
+padding-right: 30px;
+padding-left:30px;
+border-right: 2px solid #FFF;
+
+font: 25px "Lucida Sans",Helvetica,Arial,sans-serif;
+
+}
+a:-webkit-any-link{
+text-decoration:none !important;
+color: white;
+}
+ul.list li.active{
+background-color: #972D39; 
+transition: background-color 1.5s;
+}
+.editor{
+margin-left: 230px;
+position: absolute;
+border-left: 2px solid #FFF;
+}
+li:first-child{
+border-left: 2px solid #FFF;
+}
+.editor.active{
+background-color: #2D9734!important;
+}

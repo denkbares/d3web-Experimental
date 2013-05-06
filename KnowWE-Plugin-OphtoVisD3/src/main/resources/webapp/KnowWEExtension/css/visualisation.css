@@ -1,0 +1,151 @@
+.bubbleNode {
+  fill: rgb(31, 119, 180);
+  fill-opacity: .25;
+  stroke: rgb(31, 119, 180);
+  stroke-width: 1px;
+}
+
+.leaf bubbleNode {
+  fill: #ff7f0e;
+  fill-opacity: 1;
+}
+
+text {
+  font: 7px sans-serif;
+}
+
+path {
+  stroke: #000;
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+
+text {
+  font: 11px sans-serif;
+  cursor: pointer;
+}
+
+body {
+  width: 880px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  margin: .5em 0;
+}
+
+p#intro {
+  text-align: center;
+  margin: 1em 0;
+}
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.node {
+  font: 10px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+div.editorDiv{
+display: inline-block;
+margin-top: -5px;
+border-radius: 5px;
+background-color: #000000;
+top: 38px;
+position:absolute;
+}
+
+div.editorDiv.hidden{
+	visibility:hidden;
+}
+
+
+
+div.bar {
+display: inline-block;
+width: 200px;
+height: 100px;	
+margin-right: 2px;
+background-color: bisque;
+position: relative;
+floating: left;
+}
+
+div.bar2 {
+display: inline-block;
+width: 150px;
+height: 50px;	
+margin-right: 2px;
+background-color: teal;
+}
+
+div.dropzone {
+display: inline-block;
+border-radius: 5px;
+width: 300px;
+height: 24px;
+margin-right: 2px;
+background-color: bisque;
+position: relative;
+float: left;
+
+}
+
+.ui-state-highlight {
+background-color: red !important;
+transition: background-color 1.5s;
+}
+
+div.choosa {
+
+position: relative;
+float: left;
+margin-right: 2px;
+
+}
+
+div.buttonBar{
+position: relative;
+float: left;
+margin-right: 2px;
+
+}
+
+.infobox{
+	float:right;
+	border: 1px;
+	border-collapse: collapse;
+	border-color: black;
+	border-style: solid;
+	width: 300 px;
+	
+}
+.node rect {
+  cursor: pointer;
+  fill: #fff;
+  fill-opacity: .5;
+  stroke: #3182bd;
+  stroke-width: 1.5px;
+}
+
+.node text {
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+path.link {
+  fill: none;
+  stroke: #9ecae1;
+  stroke-width: 1.5px;
+}
+
+#breadcrumbs { display: none; 
+

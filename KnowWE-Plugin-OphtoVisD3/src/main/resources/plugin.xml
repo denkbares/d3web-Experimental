@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-OphtoVisD3" version="0.0.1">
+
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="OphtoVisType">
+		<parameter id="class"
+			value="de.knowwe.ophtovisD3.OphtoVisType" />
+		<parameter id="name" value="OphtoVisType" />
+		<parameter id="description" value="KnowWEObjectType OphtoVisType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="LinkToD3ToolProvider">
+		<parameter id="class"
+			value="de.knowwe.ophtovisD3.LinkToD3ToolProvider" />
+		<parameter id="name" value="LinkToVisualizationToolProvider" />
+		<parameter id="description" value=" LinkToVisualizationToolProvider" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="ConceptMarkup" />
+	</extension>
+			<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="AjaxAction">
+		<parameter id="class"
+			value="de.knowwe.ophtovisD3.AjaxAction" />
+		<parameter id="name" value="AjaxAction" />
+		<parameter id="description" value="Action AjaxAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="PartTreeAction">
+		<parameter id="class"
+			value="de.knowwe.ophtovisD3.PartTreeAction" />
+		<parameter id="name" value="PartTreeAction" />
+		<parameter id="description" value="Return a Part of the knowlegebase as a Tree" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
+		id="HierarchyViewAppendHandler">
+		<parameter id="class"
+			value="de.knowwe.ophtovisD3.HierarchyViewAppendHandler" />
+		<parameter id="name" value="HierarchyViewAppendHandler" />
+		<parameter id="description" value="PageAppendHandler HierarchyViewAppendHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="css" value="visualisation.css" />
+		<parameter id="script" value="infobox.js" />
+		<parameter id="script" value="d3.js" />
+	</extension>
+	
+
+</plugin>
