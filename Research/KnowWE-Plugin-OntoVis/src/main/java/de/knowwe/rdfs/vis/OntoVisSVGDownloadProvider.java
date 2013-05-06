@@ -18,7 +18,6 @@
  */
 package de.knowwe.rdfs.vis;
 
-
 import de.knowwe.core.Attributes;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
@@ -44,7 +43,7 @@ public class OntoVisSVGDownloadProvider implements ToolProvider {
 
 	protected Tool getDownloadTool(Section<?> section, UserContext userContext) {
 		// tool to provide download capability
-		String jsAction = "window.location='action/OntoVissSVGDownload" +
+		String jsAction = "window.location='action/OntoVisSVGDownload" +
 				"?" + Attributes.TOPIC + "=" + section.getTitle() +
 				"&" + Attributes.WEB + "=" + section.getWeb() +
 				"&" + Attributes.SECTION_ID + "=" + section.getID() + "'";

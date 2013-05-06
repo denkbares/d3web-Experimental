@@ -42,9 +42,11 @@ public class OntoVisDOTDownload extends AbstractAction {
 		ServletContext servletContext = context.getServletContext();
 		if (servletContext == null) return; // at wiki startup only
 		String realPath = servletContext.getRealPath("");
-		String tmpPath = "\\KnowWEExtension\\tmp\\";
+		String separator = System.getProperty("file.separator");
+		String tmpPath = separator + "KnowWEExtension" + separator + "tmp" + separator;
+
 		String path = realPath + tmpPath + "graph" + context.getParameter(Attributes.SECTION_ID)
-				+ ".svg";
+				+ ".dot";
 		File dot = new File(path);
 		String filename = dot.getName();
 		context.setContentType("application/x-bin");
@@ -53,8 +55,7 @@ public class OntoVisDOTDownload extends AbstractAction {
 		OutputStream ous = context.getOutputStream();
 		byte[] readBuffer = new byte[2156];
 		int bytesIn = 0;
-		while ((bytesIn = fis.read(readBuffer)) != -1)
-		{
+		while ((bytesIn = fis.read(readBuffer)) != -1) {
 			ous.write(readBuffer, 0, bytesIn);
 		}
 		// close the Stream
