@@ -48,7 +48,7 @@ public class RelationMarkupRenderer extends DefaultMarkupRenderer {
 					this.getClass(),
 					new Message(
 							Message.Type.WARNING,
-							"Es ist kein Konzept auf dieser Seite definiert ('konzept: <Konzeptname>'). Damit dieses Markup funktioniert, muss genau ein Konzept auf dieser Seite definiert sein."));
+							"Es ist kein Begriff auf dieser Seite definiert ('Begriff: <Begriffname>'). Damit dieses Markup funktioniert, muss genau ein Begriff auf dieser Seite definiert sein."));
 		}
 		if (conecptDefinitions.size() > 1) {
 			Messages.storeMessage(
@@ -59,7 +59,7 @@ public class RelationMarkupRenderer extends DefaultMarkupRenderer {
 							Message.Type.WARNING,
 							"Es sind mehrere Konzepte ("
 									+ verbalizeDefs(conecptDefinitions)
-									+ ") auf dieser Seite definiert. Damit dieses Markup funktioniert, darf nur genau ein Konzept auf dieser Seite definiert sein."));
+									+ ") auf dieser Seite definiert. Damit dieses Markup funktioniert, darf nur genau ein Begriff auf dieser Seite definiert sein."));
 		}
 		renderMessageBlock(section, string, Message.Type.ERROR, Message.Type.WARNING);
 	}

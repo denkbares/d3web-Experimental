@@ -57,7 +57,7 @@ public class HasCompileErrorTest extends AbstractTest<Article> {
 			return Message.SUCCESS;
 		}
 		else {
-			return new Message(Message.Type.FAILURE, "The following term have compile errors: "
+			return new Message(Message.Type.FAILURE, "The following term has compile errors: "
 					+ Strings.concat(", ", erroneousTerms));
 		}
 

@@ -23,13 +23,14 @@ import java.util.regex.Pattern;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
+
+import de.d3web.strings.Strings;
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.strings.Strings;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -54,7 +55,7 @@ public class ConceptMarkup extends AbstractKnowledgeUnitType<ConceptMarkup> impl
 	}
 
 	public ConceptMarkup() {
-		String keyRegex = "(Konzept:)";
+		String keyRegex = "(Begriff:)";
 		REGEX = "(?i)^" + keyRegex + "\\s(.+)$";
 		this.setSectionFinder(new RegexSectionFinder(REGEX,
 				Pattern.MULTILINE));
@@ -69,7 +70,7 @@ public class ConceptMarkup extends AbstractKnowledgeUnitType<ConceptMarkup> impl
 
 	@Override
 	public String getName() {
-		return "Konzept-Definition";
+		return "Begriff-Definition";
 	}
 
 	class DefinitionTerm extends IncrementalTermDefinition<String> {
