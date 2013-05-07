@@ -37,7 +37,7 @@ public class DroppableTargetSurroundingRenderer implements SurroundingRenderer {
 
 	@Override
 	public void renderPost(Section<?> section, UserContext user, RenderResult string) {
-		string.appendHtml("</div>");
+		string.appendHtml("</div>\n");
 	}
 
 }

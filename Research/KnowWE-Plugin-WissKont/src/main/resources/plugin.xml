@@ -96,11 +96,11 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="ConceptDefinitionRefactoring">
+		id="OverrideLabelRefactoring">
 		<parameter id="class"
-			value="de.knowwe.wisskont.refactoring.ConceptDefinitionRefactoring" />
-		<parameter id="name" value="ConceptDefinitionRefactoring" />
-		<parameter id="description" value="refactoring.ConceptDefinitionRefactoring" />
+			value="de.knowwe.wisskont.refactoring.scripts.OverrideLabelRefactoring" />
+		<parameter id="name" value="OverrideLabelRefactoring" />
+		<parameter id="description" value="OverrideLabelRefactoring" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 	</extension>

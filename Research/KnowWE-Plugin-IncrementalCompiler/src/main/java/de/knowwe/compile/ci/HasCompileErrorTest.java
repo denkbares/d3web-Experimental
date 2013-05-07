@@ -18,8 +18,9 @@
  */
 package de.knowwe.compile.ci;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.d3web.strings.Strings;
 import de.d3web.testing.AbstractTest;
@@ -45,7 +46,7 @@ public class HasCompileErrorTest extends AbstractTest<Article> {
 	public Message execute(Article testObject, String[] args, String[]... ignores) throws InterruptedException {
 		ReferenceManager referenceManager = IncrementalCompiler.getInstance().getTerminology();
 		Section<RootType> rootSection = testObject.getRootSection();
-		List<String> erroneousTerms = extractedErroneousTermNames(referenceManager,
+		Set<String> erroneousTerms = extractedErroneousTermNames(referenceManager,
 				Sections.findSuccessorsOfType(rootSection,
 						IncrementalTermDefinition.class));
 
@@ -57,14 +58,14 @@ public class HasCompileErrorTest extends AbstractTest<Article> {
 			return Message.SUCCESS;
 		}
 		else {
-			return new Message(Message.Type.FAILURE, "The following term has compile errors: "
+			return new Message(Message.Type.FAILURE, "The following terms have compile errors: "
 					+ Strings.concat(", ", erroneousTerms));
 		}
 
 	}
 
-	private <T extends Term> List<String> extractedErroneousTermNames(ReferenceManager referenceManager, List<Section<T>> terms) {
-		List<String> erroneousTerms = new ArrayList<String>();
+	private <T extends Term> Set<String> extractedErroneousTermNames(ReferenceManager referenceManager, List<Section<T>> terms) {
+		Set<String> erroneousTerms = new HashSet<String>();
 		for (Section<T> def : terms) {
 			if (!referenceManager.isValid(def.get().getTermIdentifier(def))) {
 				erroneousTerms.add(def.get().getTermName(def));

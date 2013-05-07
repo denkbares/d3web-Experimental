@@ -56,7 +56,7 @@ public class LabelMarkup extends AbstractType implements Editable {
 		this.setSectionFinder(new RegexSectionFinder(REGEX,
 				Pattern.MULTILINE));
 
-		this.addChildType(new LabelType());
+		this.addChildType(new LabelType(REGEX));
 		this.addChildType(new KeyType(keyRegex));
 
 		this.setRenderer(new RelationMarkupRenderer());
@@ -69,10 +69,10 @@ public class LabelMarkup extends AbstractType implements Editable {
 		return "Label";
 	}
 
-	class LabelType extends AbstractKnowledgeUnitType<LabelType> {
+	static class LabelType extends AbstractKnowledgeUnitType<LabelType> {
 
-		public LabelType() {
-			this.setSectionFinder(new RegexSectionFinder(REGEX, 0, 2));
+		public LabelType(String regex) {
+			this.setSectionFinder(new RegexSectionFinder(regex, 0, 2));
 			this.setCompileScript(new LabelCompileScript());
 		}
 
@@ -106,4 +106,5 @@ public class LabelMarkup extends AbstractType implements Editable {
 
 		}
 	}
+
 }

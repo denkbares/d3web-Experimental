@@ -26,15 +26,16 @@ import java.util.regex.Pattern;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.IncrementalTermDefinition;
+import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.compile.object.InvalidReference;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.renderer.CompositeRenderer;
 import de.knowwe.compile.object.renderer.ReferenceSurroundingRenderer;
 import de.knowwe.compile.object.renderer.SurroundingRenderer;
-import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.objects.Term;
@@ -49,6 +50,7 @@ import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquotedNonEmpty;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
+import de.knowwe.tools.ToolMenuDecoratingRenderer;
 import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
@@ -104,16 +106,22 @@ public class RelationMarkupContentType extends AbstractType {
 
 					Section<IncrementalTermDefinition> conceptDefinition = MarkupUtils.getConceptDefinition(section);
 					if (conceptDefinition == null) {
-						// TODO: error message !?
 						return; // do nothing
 					}
+
+					Section<ObjectIdentifier> objectSection = Sections.findSuccessor(section,
+							ObjectIdentifier.class);
+
+					// if there is a compile error, do not insert knowledge
+					boolean hasError = !IncrementalCompiler.getInstance().getTerminology().isValid(
+							objectSection.get().getTermIdentifier(objectSection));
+					if (hasError) return;
 
 					URI subjectURI = RDFSUtil.getURI(conceptDefinition);
 					Section<RelationMarkup> relationMarkup = Sections.findAncestorOfType(
 							section, RelationMarkup.class);
 					URI predicateURI = relationMarkup.get().getRelationURI();
-					Section<ObjectIdentifier> objectSection = Sections.findSuccessor(section,
-							ObjectIdentifier.class);
+
 					URI objectURI = RDFSUtil.getURI(objectSection);
 					Statement statement = Rdf2GoCore.getInstance().createStatement(subjectURI,
 							predicateURI,
@@ -153,14 +161,14 @@ public class RelationMarkupContentType extends AbstractType {
 
 			}
 
-			class ObjectIdentifier extends SimpleReference {
+			class ObjectIdentifier extends IncrementalTermReference {
 
 				public ObjectIdentifier() {
-					super(TermRegistrationScope.GLOBAL, String.class);
+					super(String.class);
 					this.setSectionFinder(new AllTextFinderTrimmed());
 					CompositeRenderer renderer = new CompositeRenderer(new OIRenderer(),
 							new ReferenceSurroundingRenderer());
-					this.setRenderer(renderer);
+					this.setRenderer(new ToolMenuDecoratingRenderer(renderer));
 				}
 
 				class OIRenderer implements Renderer {
@@ -170,13 +178,22 @@ public class RelationMarkupContentType extends AbstractType {
 						Section<SimpleReference> ref = Sections.cast(section,
 								SimpleReference.class);
 
+						boolean hasError = !IncrementalCompiler.getInstance().getTerminology().isValid(
+								ref.get().getTermIdentifier(ref));
+
 						string.appendHtml("<span class='deletableListElement' id='"
 								+ section.getID() + "'>");
 						string.appendHtml("<table style='display:inline;' >");
 						string.appendHtml("<tr>");
 						string.appendHtml("<td class='narrowCell' style='vertical-align:text-bottom;'>");
-						string.appendHtml("<a href='" + RDFSUtil.getURI(ref)
-								+ "'>" + section.getText() + "</a>");
+						if (!hasError) {
+							string.appendHtml("<a href='" + RDFSUtil.getURI(ref)
+									+ "'>");
+						}
+						string.appendHtml(section.getText());
+						if (!hasError) {
+							string.appendHtml("</a>");
+						}
 						string.appendHtml("</td>");
 						string.appendHtml("<td class='narrowCell'>");
 						string.appendHtml("<span class='ui-icon ui-icon-circle-close deleteButton hoverAction' title='Relation zu diesem Begriff löschen' ></span>");

@@ -47,7 +47,7 @@ public class RefactorRelationsHandler extends AbstractTagHandler {
 	public static void getButtonHTML(UserContext userContext, RenderResult html) {
 
 		String description = "Überschriften refaktorisieren";
-		String jsAction = "window.location='action/MoveConceptDefinitionTopRefactoring" +
+		String jsAction = "window.location='action/OverrideLabelRefactoring" +
 				"?" + Attributes.TOPIC + "=" + userContext.getTitle() +
 				"&" + Attributes.USER + "=" + userContext.getUserName() +
 				"&" + Attributes.WEB + "=" + Environment.DEFAULT_WEB + "'";
