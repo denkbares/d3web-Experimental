@@ -126,10 +126,6 @@
           <td class="nosearchresult" colspan="2"><fmt:message key="find.noresults"/></td>
         </tr>
       </wiki:IfNoSearchResults>
-
-      </table>
-    </div>
-    </div>
     
     <h4>Relevante Textstellen:</h4>
   
