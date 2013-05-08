@@ -1,4 +1,4 @@
-package utils;
+package de.knowwe.ophtovisD3.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;

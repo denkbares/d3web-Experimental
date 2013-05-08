@@ -1,5 +1,7 @@
 function createWheel(){
 	console.log("Anfang wheel");
+	d3.select("#vis").remove();
+	d3.select("body").append("div").attr("id", "vis");
 var width = 840,
     height = width,
     radius = width / 2,
@@ -9,9 +11,9 @@ var width = 840,
     duration = 1000;
 
 var div = d3.select("#vis");
-div.append("text").text("Hallo");
+//div.append("text").text("Hallo");
 //terst
-div.select("img").remove();
+//div.select("img").remove();
 
 var vis = div.append("svg")
     .attr("width", width + padding * 2)
@@ -23,7 +25,7 @@ var vis = div.append("svg")
 
 var partition = d3.layout.partition()
     .sort(null)
-    .value(function(d) { return 5.8 - d.depth; });
+    .value(function(d) {console.log(d); return 5.8 - d.depth; });
 
 var arc = d3.svg.arc()
     .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
@@ -33,8 +35,11 @@ var arc = d3.svg.arc()
 
 var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
 	d3.json(url, function(json) {
-  var nodes = partition.nodes({children: json});
-
+		console.log(json);
+  var nodes = partition.nodes({children: json.children});
+  nodes= nodes[0].children;
+  console.log("jetzt");
+  console.log(nodes);
 	var color = d3.scale.category20();
   var path = vis.selectAll("path").data(nodes);
   path.enter().append("path")
@@ -63,11 +68,11 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
       console.log("läuft");
   textEnter.append("tspan")
       .attr("x", 0)
-      .text(function(d) { return d.depth ? d.name.split(" ")[0] : ""; });
+      .text(function(d) {console.log(d); return d.depth ? d.data.name.split(" ")[0] : ""; });
   textEnter.append("tspan")
       .attr("x", 0)
       .attr("dy", "1em")
-      .text(function(d) { return d.depth ? d.name.split(" ")[1] || "" : ""; });
+      .text(function(d) { return d.depth ? d.data.name.split(" ")[1] || "" : ""; });
 
   function click(d) {
     path.transition()
@@ -86,7 +91,7 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
           };
         })
         .attrTween("transform", function(d) {
-          var multiline = (d.name || "").split(" ").length > 1;
+          var multiline = (d.data.name || "").split(" ").length > 1;
           return function() {
             var angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
                 rotate = angle + (multiline ? -.5 : 0);
@@ -280,6 +285,8 @@ function createForce(){
 
 function createBubble(){
 	
+	d3.select("#vis").remove();
+	d3.select("body").append("div").attr("id", "vis");
 var diameter = 960,
     format = d3.format(",d");
 
@@ -287,9 +294,9 @@ var pack = d3.layout.pack()
     .size([ diameter - 4, diameter - 4] )
     .value(function(d) {  console.log(d); return (d.data.data)*200 });
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#vis").append("svg")
     .attr("width", diameter)
-    .attr("height", diameter)
+    .attr("height", diameter+30)
   .append("g")
     .attr("transform", "translate(2,2)");
 
@@ -298,22 +305,43 @@ var params = {
  type : 'bubble'};
 var url = KNOWWE.core.util.getURL(params);
 d3.json(url, function(error, root) {
-	console.log(root);
+
+
   var node = svg.datum(root).selectAll(".node")
       .data(pack.nodes)
     .enter().append("g")
       .attr("class", function(d) { console.log(d.children);  return d.children.length>0 ? "bubbleNode" : "leaf bubbleNode"; })
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .attr("oldx" , function(d) { return d.x; })
+      .attr("oldy", function(d) { return d.y ; });
+  
+  
+    
   node.append("title")
       .text(function(d) { return d.data.name  });
 
+  function dragmove(d) {
+	    d3.select(this)
+	      .attr("x", d3.event.x)
+	      .attr("y", d3.event.y);
+	}
+	function dragend(d){
+	d3.select(this)
+	      .attr("x", 0)
+	      .attr("y", 0);
+	      
+	}
+	var drag = d3.behavior.drag()
+	  .on("drag", dragmove)
+		.on("dragend", dragend);
   node.append("circle")
-      .attr("r", function(d) {  return (d.r); });
+      .attr("r", function(d) {  return (d.r); }).call(drag);
 
   node.filter(function(d) { return !d.children.length>0; }).append("text")
       .attr("dy", ".3em")
       .style("text-anchor", "middle")
-      .text(function(d) { return d.data.name; });
+      .text(function(d) { return d.data.name; }).call(drag);
+
 });
 
 d3.select(self.frameElement).style("height", diameter + "px");
@@ -332,7 +360,12 @@ var tree = d3.layout.tree()
 var diagonal = d3.svg.diagonal.radial()
     .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
 
-var svg = d3.select("body").append("svg")
+
+d3.select("#vis").remove();
+d3.select("body").append("div").attr("id", "vis");
+console.log(vis);
+
+var svg = d3.select("#vis").append("svg")
     .attr("width", diameter)
     .attr("height", diameter - 150)
   .append("g")
@@ -357,35 +390,44 @@ d3.json( url, function(error, root) {
 
   node.append("circle")
       .attr("r", 4.5);
-
-	  d3.select(self.frameElement).style("height", diameter - 150 + "px");
-  node.append("text")
-      .attr("y", "0")
-	  .attr("x", "0")
-      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-      .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
-      .text(function(d) {return d.data.name; }).call(drag);
-});
-
-function dragmove(d) {
-    d3.select(this)
-      .attr("x", -d3.event.x)
-      .attr("y", -d3.event.y);
-}
-function dragend(d){
-	console.log(d3.event);
-d3.select(this)
-      .attr("x", 0)
-      .attr("y", 0);
-      
-}
-var drag = d3.behavior.drag()
-    .on("drag", dragmove)
+ 
+  
+  function dragmove(d) {
+	  console.log(this);
+	    d3.select(this)
+	      .attr("x", -d3.event.x)
+	      .attr("y", -d3.event.y);
+	}
+	function dragend(d){
+		console.log(d3.event);
+	d3.select(this)
+	      .attr("x", 0)
+	      .attr("y", 0);
+	      
+	}
+	var drag = d3.behavior.drag()
+	.on("drag", dragmove)
 	.on("dragend", dragend);
+ 
+
+
+	node.append("text")
+	  .attr("y", "0")
+	  .attr("x", "0")
+	  .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+	  .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
+	  .text(function(d) {console.log("ready"); return d.data.name; })
+	  .call(drag);
+
 	
+ 
+});	
 
 
-d3.select(self.frameElement).style("height", diameter - 150 + "px");
+//d3.select(self.frameElement).style("height", diameter - 150 + "px");
+
+
+
 
 
 }

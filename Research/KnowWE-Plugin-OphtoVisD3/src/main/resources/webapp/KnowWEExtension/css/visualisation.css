@@ -5,13 +5,24 @@
   stroke-width: 1px;
 }
 
-.leaf bubbleNode {
+.leaf {
   fill: #ff7f0e;
   fill-opacity: 1;
+  color: black;
+  stroke-width: 1px;
+  }
+
+.bubbleNode text {
+  font: 12px sans-serif;
+  color: black;
+  fill:black;
+  stroke-width: 0px;
 }
 
-text {
-  font: 7px sans-serif;
+#vis{
+	color:white;
+	background-color: white;
+	margin-top:30px;
 }
 
 path {

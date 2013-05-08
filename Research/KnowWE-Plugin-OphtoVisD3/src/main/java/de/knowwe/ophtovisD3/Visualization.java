@@ -126,19 +126,20 @@ public class Visualization {
 						"	<script type=\"text/javascript\" src=\""
 						+ context
 						+ "/KnowWEExtension/scripts/jquery-ui.js \"></script>\r\n"+
-						"<div id=headerwrap class=fixed>\r\n" + 
+						
 						
 						"	<script type=\"text/javascript\" src=\""
 						+ context
 						+ "/KnowWEExtension/scripts/jquery-1.9.1.js \"></script>\r\n"+
-					
+						"<div id=headerwrap class=fixed>\r\n" + 
 						"<div id=header>\r\n" + 
 						"<ul id=\"entry-list\" class=\"list\">\r\n" + 
-						"<li class=\"active menue\">Bubble </li>\r\n" + 
-						"<li class=\"menue\">Wheel </li>\r\n" + 
-						"<li class=\"menue\"> Tree </li>\r\n" + 
+						"<li class=\"active menue\" onclick=\"createBubble()\">Bubble </li>\r\n" + 
+						"<li class=\"menue\" onclick=\"createWheel()\">Wheel </li>\r\n" + 
+						"<li class=\"menue\" onclick=\"createTree()\"> Tree </li>\r\n" + 
 						"<li class=\"editor\">Editor▼</li>\r\n" + 
 						"</ul>\r\n" + 
+						"</div>\r\n" + 
 						"</div>\r\n" + 
 						"<div class=\"editorDiv hidden\">\r\n" + 
 						"<div class=\"dropzone\" id=\"source\" >1</div>\r\n" + 
@@ -164,7 +165,7 @@ public class Visualization {
 						"</div>"+
 						"</div>"
 						+
-						"<div id =vis></div>"
+						"<div id=vis></div>"
 						+
 					
 						jsCommands

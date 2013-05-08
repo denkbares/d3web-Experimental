@@ -23,9 +23,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import com.google.gson.Gson;
+
+import de.knowwe.ophtovisD3.utils.NodeWithName;
+import de.knowwe.ophtovisD3.utils.Tree;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import utils.NodeWithName;
-import utils.Tree;
 
 /**
  * 

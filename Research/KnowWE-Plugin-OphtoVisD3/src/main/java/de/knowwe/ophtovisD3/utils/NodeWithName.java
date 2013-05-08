@@ -1,4 +1,4 @@
-package utils;
+package de.knowwe.ophtovisD3.utils;
 
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
