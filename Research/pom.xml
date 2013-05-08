@@ -234,7 +234,6 @@
 		<module>KnowWE-Plugin-SparqlToExcel</module>
 		<module>KnowWE-Plugin-Revisions</module>
 		<module>d3web-Plugin-Tests-ThrillSeeker</module>
-		<module>KnowWE-Plugin-OphtoVisD3</module>
 	</modules>
 	<repositories>
 		<repository>
