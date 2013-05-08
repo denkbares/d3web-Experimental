@@ -38,5 +38,12 @@
   		<artifactId>KnowWE-Plugin-RDFS-Basic</artifactId>
   		<version>0.2-SNAPSHOT</version>
   	</dependency>
+  			<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
   </dependencies>
 </project>
