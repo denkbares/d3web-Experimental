@@ -36,6 +36,8 @@ import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysisReport;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
 import de.knowwe.core.RessourceLoader;
+import de.knowwe.core.compile.packaging.MasterAnnotationWarningHandler;
+import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
@@ -53,7 +55,6 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  */
 public class TestCaseExecutorType extends DefaultMarkupType {
 
-	public static final String ANNOTATION_MASTER = "master";
 	public static final String ANNOTATION_FILE = "file";
 	public static final String TEST_RESULT_KEY = "testcaseresult";
 	public static final String TESTCASE_KEY = "testcase";
@@ -62,7 +63,7 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 
 	static {
 		MARKUP = new DefaultMarkup("TestCaseExecutor");
-		MARKUP.addAnnotation(ANNOTATION_MASTER, false);
+		MARKUP.addAnnotation(PackageManager.ANNOTATION_MASTER, false);
 		MARKUP.addAnnotation(ANNOTATION_FILE, false);
 
 		RessourceLoader.getInstance().add("testcaseexecutor.js",
@@ -105,10 +106,12 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 		});
 
 		this.setRenderer(new TestCaseExecutorRender());
+		this.addSubtreeHandler(new MasterAnnotationWarningHandler());
 	}
 
 	public static String getMaster(Section<?> executoreSection) {
-		String master = DefaultMarkupType.getAnnotation(executoreSection, ANNOTATION_MASTER);
+		String master = DefaultMarkupType.getAnnotation(executoreSection,
+				PackageManager.ANNOTATION_MASTER);
 		return master != null ? master : executoreSection.getArticle().getTitle();
 	}
 

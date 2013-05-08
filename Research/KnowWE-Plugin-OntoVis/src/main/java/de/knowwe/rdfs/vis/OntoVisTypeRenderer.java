@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
@@ -93,7 +94,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 */
 	private String getMaster(UserContext user, Section<?> section) {
 		return OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_MASTER);
+				PackageManager.ANNOTATION_MASTER);
 	}
 
 	/**

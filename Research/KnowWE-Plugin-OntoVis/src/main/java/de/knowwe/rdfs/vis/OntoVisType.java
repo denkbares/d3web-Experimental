@@ -1,5 +1,6 @@
 package de.knowwe.rdfs.vis;
 
+import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -15,7 +16,6 @@ public class OntoVisType extends DefaultMarkupType {
 	public static final String ANNOTATION_FORMAT = "format";
 	public static final String ANNOTATION_SHOWCLASSES = "showClasses";
 	public static final String ANNOTATION_SHOWPROPERTIES = "showProperties";
-	public static final String ANNOTATION_MASTER = "master";
 	public static final String ANNOTATION_LANGUAGE = "language";
 
 	public static final String ANNOTATION_DOT_APP = "dotApp";
@@ -39,7 +39,7 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_FORMAT, false);
 		MARKUP.addAnnotation(ANNOTATION_SHOWCLASSES, false);
 		MARKUP.addAnnotation(ANNOTATION_SHOWPROPERTIES, false);
-		MARKUP.addAnnotation(ANNOTATION_MASTER, false);
+		MARKUP.addAnnotation(PackageManager.ANNOTATION_MASTER, false);
 		MARKUP.addAnnotation(ANNOTATION_LANGUAGE, false);
 		MARKUP.addAnnotation(ANNOTATION_DOT_APP, false, dot_apps.values());
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
