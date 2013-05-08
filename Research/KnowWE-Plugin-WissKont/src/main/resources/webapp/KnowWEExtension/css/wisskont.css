@@ -140,5 +140,14 @@ cursor: pointer;
 }
 
 .narrowCell {
-padding:0px;
-}	
+	padding:0px;
+}
+
+.wissassPageContents {
+	background-color: #FDFDFD;
+    border-bottom: 1px solid #CCCCCC;
+    border-left: 2px solid #CCCCCC;
+    padding-left: 6px;
+    padding-top: 4px;
+}
+

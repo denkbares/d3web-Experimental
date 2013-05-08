@@ -325,5 +325,27 @@
 		<parameter id="priority" value="4" />
 	</extension>
 	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
+		id="ContentLayoutPreHandler">
+		<parameter id="class"
+			value="de.knowwe.wisskont.layout.ContentLayoutPreHandler" />
+		<parameter id="name" value="ContentLayoutPreHandler" />
+		<parameter id="description" value="PageAppendHandler ContentLayoutPreHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="css" value="wisskont.css" />
+	</extension>
+	
+			<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
+		id="ContentLayoutPostHandler">
+		<parameter id="class"
+			value="de.knowwe.wisskont.layout.ContentLayoutPostHandler" />
+		<parameter id="name" value="ContentLayoutPostHandlers" />
+		<parameter id="description" value="PageAppendHandler ContentLayoutPostHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="1" />
+		<parameter id="css" value="wisskont.css" />
+	</extension>
+	
     
 </plugin>
