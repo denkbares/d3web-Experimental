@@ -18,7 +18,11 @@
  */
 package de.knowwe.wisskont.searchbox;
 
+import java.util.Collection;
+
+import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
@@ -58,10 +62,50 @@ public class SearchBoxMarkup extends DefaultMarkupType {
 		public void render(Section<?> section, UserContext user, RenderResult string) {
 			String contextPath = Environment.getInstance().getWikiConnector().getServletContext().getContextPath();
 
-			string.appendHtml("<div class='searchbox'><form id='searchForm' class='wikiform' accept-charset='UTF-8' action='"
-					+ contextPath
-					+ "/Search.jsp'><div style='position:relative'><input id='query' type='text' style='color:black;font-weight:bold;' accesskey='f' size='20' name='query' value='Suche' onfocus='if( this.value == this.defaultValue ) { this.value = ''}; return true; ' onblur='if( this.value == '' ) { this.value = this.defaultValue }; return true; ' autocomplete='off'><button id='searchSubmit' title='Go!' value='Go!' name='searchSubmit' type='submit'></button></div><div id='searchboxMenu' style='visibility: hidden; opacity: 0; left: 600px; top: 39px;' visibility='visible'></form></div>");
+			string.appendHtml(
+					"<div class='searchbox'><form id='searchForm' class='wikiform' accept-charset='UTF-8' action='"
+							+ contextPath
+							+ "/Search.jsp'>"
+							+ "<div style='position:relative'>"
+							+ "<input id='query' type='text' placeholder='Suche' style='color:black;font-weight:bold;' accesskey='f' size='20' name='query' onfocus=\"if( this.value == this.defaultValue ) { this.value = ''}; return true;\" onblur=\"if( this.value == '' ) { this.value = this.defaultValue }; return true;\"/>"
+							+ "<button id='searchSubmit' title='Go!' value='Go!' name='searchSubmit' type='submit'></button>"
+							+ "</div>"
+							+ "<div id='searchboxMenu' style='visibility: hidden; opacity: 0; left: 600px; top: 39px;'></div>"
+							+ "</form></div>"
+					);
+
+			string.appendHtml("<script>" +
+					"jq$(document).ready(function() {" +
+					// "$(function() {" +
+					" var availableTags = [" +
+					generateTermnames() +
+					"];" +
+					"jq$( \"#query\" ).autocomplete({" +
+					"source: availableTags," +
+					"select: function( event, ui ) {" +
+					"updateTermBrowser(event,ui);" +
+					"}," +
+					"});" +
+					"});" +
+					"</script>");
 		}
+
+	}
+
+	/**
+	 * 
+	 * @created 10.12.2012
+	 * @return
+	 */
+	private static String generateTermnames() {
+		String result = "";
+		Collection<Section<? extends SimpleDefinition>> allTermDefinitions = IncrementalCompiler.getInstance().getTerminology().getAllTermDefinitions();
+
+		for (Section<? extends SimpleDefinition> def : allTermDefinitions) {
+			result += "\"" + def.get().getTermName(def) + "\"" + ",\n";
+		}
+
+		return result;
 	}
 
 }

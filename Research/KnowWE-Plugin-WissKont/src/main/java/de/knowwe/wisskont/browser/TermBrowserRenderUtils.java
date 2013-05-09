@@ -55,36 +55,6 @@ public class TermBrowserRenderUtils {
 		{
 			string.appendHtml("<div class='termbrowserheader'>Benutzte Begriffe:</div>");
 
-			string.appendHtml("<div class='ui-widget'>");
-			{
-				// search field
-				string.appendHtml("<table><tr>");
-				{
-					string.appendHtml("<td>");
-					string.appendHtml("<label for='conceptSearch' style='font-weight:normal;padding-right:0;font: 83%/140% Verdana,Arial,Helvetica,sans-serif;;'>Suche: </label>");
-					string.appendHtml("</td>");
-					string.appendHtml("<td><input id='conceptSearch' size='15' value='' /></td>");
-
-				}
-				string.appendHtml("</tr></table>");
-			}
-			string.appendHtml("</div>");
-
-			string.appendHtml("<script>" +
-						"jq$(document).ready(function() {" +
-						// "$(function() {" +
-					" var availableTags = [" +
-						generateTermnames() +
-						"];" +
-						"jq$( \"#conceptSearch\" ).autocomplete({" +
-						"source: availableTags," +
-						"select: function( event, ui ) {" +
-						"updateTermBrowser(event,ui);" +
-						"}," +
-						"});" +
-						"});" +
-						"</script>");
-
 			Tree<RatedTerm> ratedTermTreeTop = TermRecommender.getInstance().getRatedTermTreeTop(
 						user,
 						THRESHOLD_MAX_TERM_NUMBER);
