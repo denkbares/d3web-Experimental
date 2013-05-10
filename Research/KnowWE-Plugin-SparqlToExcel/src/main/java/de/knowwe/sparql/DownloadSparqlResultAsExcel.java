@@ -33,7 +33,10 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.Message.Type;
 import de.knowwe.excel.CreateExcelFromSparql;
+import de.knowwe.notification.NotificationManager;
+import de.knowwe.notification.StandardNotification;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.SparqlContentType;
 import de.knowwe.rdf2go.sparql.SparqlMarkupType;
@@ -78,16 +81,14 @@ public class DownloadSparqlResultAsExcel extends AbstractAction {
 			workbook = CreateExcelFromSparql.addSparqlResultAsSheet(workbook, resultSet,
 					context, core);
 
-
 			workbook.write();
 			workbook.close();
 
-
-
-
 		}
 		catch (RowsExceededException e) {
-			e.printStackTrace();
+			NotificationManager notificationManager = NotificationManager.getNotificationManager(context);
+			notificationManager.addNotification(new StandardNotification(
+					"The maximum number of rows permitted on a worksheet been exceeded", Type.ERROR));
 		}
 		catch (WriteException e) {
 			e.printStackTrace();

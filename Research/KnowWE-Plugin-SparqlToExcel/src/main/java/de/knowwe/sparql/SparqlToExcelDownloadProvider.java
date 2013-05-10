@@ -51,7 +51,7 @@ public class SparqlToExcelDownloadProvider implements ToolProvider {
 				+ section.getArticle().getTitle()
 				+ ".xls'";
 		return new DefaultTool("KnowWEExtension/icons/excel.png",
-				"Download this table as an Excel file", "Download this table as an Excel file",
+				"Download as XLS", "Download this table as an Excel file",
 				jsAction);
 	}
 }

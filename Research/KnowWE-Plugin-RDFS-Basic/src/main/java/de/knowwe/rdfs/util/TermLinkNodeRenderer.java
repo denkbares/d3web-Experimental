@@ -23,7 +23,12 @@ public class TermLinkNodeRenderer implements SparqlResultNodeRenderer {
 				IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 						identifier);
 		if (termDefinitions != null && !termDefinitions.isEmpty()) {
-			return CompileUtils.createLinkToDefinition(identifier, user);
+			if (mode == RenderMode.HTML) {
+				return CompileUtils.createLinkToDefinition(identifier, user);
+			}
+			else {
+				return identifier.toExternalForm();
+			}
 		}
 		return text;
 	}

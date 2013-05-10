@@ -36,6 +36,7 @@ import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
 
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.RenderMode;
@@ -71,6 +72,7 @@ public class CreateExcelFromSparql {
 					String erg =
 							SparqlResultRenderer.getInstance().renderNode(node, variables.get(i),
 									false, user, core, RenderMode.PlainText);
+					erg = RenderResult.unmask(erg, user);
 					s.addCell(new Label(i, row, erg));
 				}
 			}
