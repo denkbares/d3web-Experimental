@@ -71,7 +71,6 @@ public class TermBrowserAction extends AbstractAction {
 				// is handled by a link
 			}
 		}
-		return new RenderResult(context).unmask(TermBrowserRenderUtils.renderTermBrowser(context,
-				term));
+		return RenderResult.unmask(TermBrowserRenderUtils.renderTermBrowser(context, term), context);
 	}
 }
