@@ -69,9 +69,8 @@ public class CreateExcelFromSparql {
 			for (int i = 0; i < variables.size(); i++) {
 				Node node = queryRow.getValue(variables.get(i));
 				if (node != null) {
-					String erg =
-							SparqlResultRenderer.getInstance().renderNode(node, variables.get(i),
-									false, user, core, RenderMode.PlainText);
+					String erg = SparqlResultRenderer.getInstance().renderNode(node,
+							variables.get(i), false, user, core, RenderMode.PlainText);
 					erg = RenderResult.unmask(erg, user);
 					s.addCell(new Label(i, row, erg));
 				}
