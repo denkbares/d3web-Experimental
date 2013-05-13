@@ -21,7 +21,9 @@
 	margin:0em auto;
 	background-image: url(page-back300.png); 
 	background-repeat: repeat-y;
-}
+	padding: 0; //overriding jspwiki.css
+ }
+
 #header, #footer {
 	padding:0;
 	width:709px;
@@ -76,7 +78,7 @@ body.view, body.edit {
 	darker blue gray:			#395277	
 	gray (slightly darker than menu): #dedede 
 	*/
-	background-color: white;
+	background-color: #395277;
 	
   	width: 1010px;
   	height: 100%;
@@ -89,7 +91,7 @@ body.view, body.edit {
 	background-position: left bottom;
 }
 #header, #footer {
-	padding:0 5px 25px 300px;
+	padding:0 0 25px 300px;
 }
 #header .applicationlogo {
 	position:absolute;
@@ -123,7 +125,7 @@ body.view, body.edit {
 	margin-top: 0em;
 	width:275px;
 	padding: 0 1em;
-	background-color: transparent;
+	background-color: #f6f6f6;
 	border-left: 0px;
 	border-top: 0px;
 	border-bottom: 0px;
