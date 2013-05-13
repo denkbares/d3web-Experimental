@@ -107,7 +107,7 @@
     </wiki:NoSuchPage>
   </div>
 
-<div class="breadcrumbs"><span style="font-weight:bold; white-space:nowrap;"><fmt:message key="header.yourtrail"/></span><wiki:Breadcrumbs /></div>
+<div class="breadcrumbs"><span style="font-weight:bold; white-space:nowrap;"><fmt:message key="header.yourtrail"/></span><br><wiki:Breadcrumbs /></div>
 
 
   </wiki:Permission>
