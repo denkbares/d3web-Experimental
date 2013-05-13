@@ -123,7 +123,7 @@ body.view, body.edit {
 #favorites {
 	float:left;
 	margin-top: 0em;
-	width:275px;
+	width:272px;
 	padding: 0 1em;
 	background-color: #f6f6f6;
 	border-left: 0px;
@@ -169,7 +169,7 @@ body.view, body.edit {
 	position:absolute;
 	left: 299px;
 	margin-top: -23px;
-	background-color:white;
+	background-color:transparent;
 }
 
 #page > .tabs {
@@ -192,6 +192,7 @@ body.view, body.edit {
 #actionsBottom {
 	text-align:right;
 	margin-bottom:0.5em;
+	background-color:white;
 }
 * html #header, * html .userbox {
 	height:1% /*hasLayout:true; --ie peekaboo/layout hack */
@@ -1388,7 +1389,7 @@ table.calendar tr.weekdays {
 	clear:both;
 	padding:0.5em;
 	border:1px solid #9ACBFB;
-	margin-bottom:0.5em;
+	background-color:white;
 }
 .tabmenu {
 	padding: 0 1em;
