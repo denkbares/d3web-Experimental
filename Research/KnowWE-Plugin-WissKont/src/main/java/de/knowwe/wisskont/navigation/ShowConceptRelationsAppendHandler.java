@@ -31,7 +31,9 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.RenderingCore;
+import de.knowwe.rdfs.vis.markup.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.wisskont.ConceptMarkup;
 
 /**
@@ -94,9 +96,9 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 
 			parameterMap.put(RenderingCore.REQUESTED_DEPTH, "1");
 			parameterMap.put(RenderingCore.REQUESTED_HEIGHT, "1");
-
 			RenderingCore renderingCore = new RenderingCore(
-					user.getServletContext().getRealPath(""), section, parameterMap);
+					user.getServletContext().getRealPath(""), section, parameterMap,
+					new IncrementalCompilerLinkToTermDefinitionProvider(), Rdf2GoCore.getInstance());
 			result.appendHtml("<div class='termgraph'>");
 			result.appendHtml("<div class='termgraphHeader'>");
 			result.appendHtml("<span style='float:left;' class='ui-icon ui-icon-circle-plus showGraph'></span>");

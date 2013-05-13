@@ -16,7 +16,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.rdfs.vis;
+package de.knowwe.rdfs.vis.markup;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,33 +25,34 @@ import java.io.OutputStream;
 
 import javax.servlet.ServletContext;
 
-import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 
 /**
  * 
  * @author Johanna Latt
- * @created 04.08.2012
+ * @created 08.07.2012
  */
-public class OntoVisDOTDownload extends AbstractAction {
+public class OntoVisDisplaySVG extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-
 		ServletContext servletContext = context.getServletContext();
 		if (servletContext == null) return; // at wiki startup only
 		String realPath = servletContext.getRealPath("");
 		String separator = System.getProperty("file.separator");
 		String tmpPath = separator + "KnowWEExtension" + separator + "tmp" + separator;
-
-		String path = realPath + tmpPath + "graph" + context.getParameter(Attributes.SECTION_ID)
-				+ ".dot";
-		File dot = new File(path);
-		String filename = dot.getName();
-		context.setContentType("application/x-bin");
-		context.setHeader("Content-Disposition", "attachment;filename=\"" + filename + "\"");
-		FileInputStream fis = new FileInputStream(dot);
+		String path = realPath + tmpPath;
+		File f = new File(path);
+		File svg = null;
+		File[] files = f.listFiles();
+		loop: for (int i = 0; i < files.length; i++) {
+			if (files[i].getName().matches("graph[a-z0-9]+\\.svg")) {
+				svg = files[i];
+				break loop;
+			}
+		}
+		FileInputStream fis = new FileInputStream(svg);
 		OutputStream ous = context.getOutputStream();
 		byte[] readBuffer = new byte[2156];
 		int bytesIn = 0;

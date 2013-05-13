@@ -18,8 +18,8 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="OntoVisType">
 		<parameter id="class"
-			value="de.knowwe.rdfs.vis.OntoVisType" />
-		<parameter id="name" value="de.knowwe.rdfs.vis.OntoVisType" />
+			value="de.knowwe.rdfs.vis.markup.OntoVisType" />
+		<parameter id="name" value="de.knowwe.rdfs.vis.markup.OntoVisType" />
 		<parameter id="description" value="KnowWEObjectType Hede.knowwe.rdfs.vis.OntoVisTypelloKnowWEType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
@@ -29,7 +29,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="OntoVisSVGDownloadProvider">
 		<parameter id="class"
-			value="de.knowwe.rdfs.vis.OntoVisSVGDownloadProvider" />
+			value="de.knowwe.rdfs.vis.markup.OntoVisSVGDownloadProvider" />
 		<parameter id="name" value="OntoVisSVGDownloadProvider" />
 		<parameter id="description"
 			value="Offers a download button to download the graph as an svg file." />
@@ -40,7 +40,7 @@
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="OntoVisSVGDownload">
-		<parameter id="class" value="de.knowwe.rdfs.vis.OntoVisSVGDownload" />
+		<parameter id="class" value="de.knowwe.rdfs.vis.markup.OntoVisSVGDownload" />
 		<parameter id="name" value="OntoVisSVGDownload" />
 		<parameter id="description"
 			value="Downloads the .svg-file of the displayed Graph" />
@@ -51,7 +51,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="OntoVisDisplaySVGProvider">
 		<parameter id="class"
-			value="de.knowwe.rdfs.vis.OntoVisDisplaySVGProvider" />
+			value="de.knowwe.rdfs.vis.markup.OntoVisDisplaySVGProvider" />
 		<parameter id="name" value="OntoVisDisplaySVGProvider" />
 		<parameter id="description"
 			value="Offers a button to display the graph" />
@@ -62,7 +62,7 @@
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="OntoVisDisplaySVG">
-		<parameter id="class" value="de.knowwe.rdfs.vis.OntoVisDisplaySVG" />
+		<parameter id="class" value="de.knowwe.rdfs.vis.markup.OntoVisDisplaySVG" />
 		<parameter id="name" value="OntoVisDisplaySVG" />
 		<parameter id="description"
 			value="Display the .svg-Graph" />
@@ -73,7 +73,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="OntoVisDOTDownloadProvider">
 		<parameter id="class"
-			value="de.knowwe.rdfs.vis.OntoVisDOTDownloadProvider" />
+			value="de.knowwe.rdfs.vis.markup.OntoVisDOTDownloadProvider" />
 		<parameter id="name" value="OntoVisDOTDownloadProvider" />
 		<parameter id="description"
 			value="Offers a download button to download the dot-file of the graph." />
@@ -84,7 +84,7 @@
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="OntoVisDOTDownload">
-		<parameter id="class" value="de.knowwe.rdfs.vis.OntoVisDOTDownload" />
+		<parameter id="class" value="de.knowwe.rdfs.vis.markup.OntoVisDOTDownload" />
 		<parameter id="name" value="OntoVisDOTDownload" />
 		<parameter id="description"
 			value="Downloads the .dot-file of the displayed Graph" />

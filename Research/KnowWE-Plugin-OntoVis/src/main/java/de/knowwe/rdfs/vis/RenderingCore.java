@@ -53,8 +53,6 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
-import de.knowwe.rdf2go.utils.PackageCompileLinkToTermDefinitionProvider;
-import de.knowwe.rdfs.util.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.rdfs.vis.util.Utils;
 
 /**
@@ -133,8 +131,6 @@ public class RenderingCore {
 
 	private LinkToTermDefinitionProvider uriProvider = null;
 
-	private String master = null;
-
 	// appearances
 	private final String outerLabel = "[ shape=\"none\" fontsize=\"0\" fontcolor=\"white\" ];\n";
 
@@ -146,18 +142,10 @@ public class RenderingCore {
 	 * @param section a section that the graph is rendered for/at
 	 * @param parameters the configuration, consider the constants of this class
 	 */
-	public RenderingCore(String realPath, Section<?> section, Map<String, String> parameters) {
+	public RenderingCore(String realPath, Section<?> section, Map<String, String> parameters, LinkToTermDefinitionProvider uriProvider, Rdf2GoCore rdfRepository) {
 
-		String master = parameters.get(MASTER);
-		if (master != null) {
-			rdfRepository = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
-			this.master = master;
-			uriProvider = new PackageCompileLinkToTermDefinitionProvider();
-		}
-		else {
-			rdfRepository = Rdf2GoCore.getInstance();
-			uriProvider = new IncrementalCompilerLinkToTermDefinitionProvider();
-		}
+		this.rdfRepository = rdfRepository;
+		this.uriProvider = uriProvider;
 
 		String requestedHeightString = parameters.get(REQUESTED_HEIGHT);
 		if (requestedHeightString != null) {
@@ -1095,7 +1083,7 @@ public class RenderingCore {
 	private String createConceptURL(String to) {
 		if (parameters.get(LINK_MODE) != null) {
 			if (parameters.get(LINK_MODE).equals(LINK_MODE_BROWSE)) {
-				return uriProvider.getLinkToTermDefinition(to, master);
+				return uriProvider.getLinkToTermDefinition(to, parameters.get(MASTER));
 			}
 		}
 		return createBaseURL() + "?page=" + section.getTitle()

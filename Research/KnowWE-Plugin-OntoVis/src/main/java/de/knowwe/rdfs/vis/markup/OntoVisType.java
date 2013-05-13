@@ -1,4 +1,4 @@
-package de.knowwe.rdfs.vis;
+package de.knowwe.rdfs.vis.markup;
 
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;

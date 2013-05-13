@@ -43,7 +43,7 @@ public class DotRenderer {
 	 * @param arrowtail
 	 */
 	public static String buildRelation(String arrowtail, String color) {
-		return " arrowtail=\"" + arrowtail + "\"";
+		return " arrowtail=\"" + arrowtail + "\" " + " color=\"" + color + "\" ";
 	}
 
 	/**

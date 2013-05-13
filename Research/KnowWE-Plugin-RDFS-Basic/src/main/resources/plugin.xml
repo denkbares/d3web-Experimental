@@ -86,6 +86,7 @@
 
 	</extension>
 	
+	<!--
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Terminology"
 		id="RDFSTerminology">
 		<parameter id="class"
@@ -97,7 +98,7 @@
 		<parameter id="priority" value="5" />
 
 	</extension>
-	
+	-->
 	<!-- deprecated markup
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TurtleMarkupSimple">

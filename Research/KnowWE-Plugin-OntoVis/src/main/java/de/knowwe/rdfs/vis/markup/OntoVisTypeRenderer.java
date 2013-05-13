@@ -1,4 +1,4 @@
-package de.knowwe.rdfs.vis;
+package de.knowwe.rdfs.vis.markup;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -13,6 +14,10 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
+import de.knowwe.rdf2go.utils.PackageCompileLinkToTermDefinitionProvider;
+import de.knowwe.rdfs.vis.RenderingCore;
 
 public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
@@ -80,7 +85,18 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		}
 		parameterMap.put(RenderingCore.ADD_TO_DOT, addToDOT);
 
-		RenderingCore renderer = new RenderingCore(realPath, section, parameterMap);
+		LinkToTermDefinitionProvider uriProvider;
+		Rdf2GoCore rdfRepository = null;
+		if (master != null) {
+			rdfRepository = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+			uriProvider = new PackageCompileLinkToTermDefinitionProvider();
+		}
+		else {
+			rdfRepository = Rdf2GoCore.getInstance();
+			uriProvider = new IncrementalCompilerLinkToTermDefinitionProvider();
+		}
+		RenderingCore renderer = new RenderingCore(realPath, section, parameterMap, uriProvider,
+				rdfRepository);
 		renderer.render(string);
 
 	}

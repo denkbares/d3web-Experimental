@@ -16,8 +16,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.rdfs.vis;
-
+package de.knowwe.rdfs.vis.markup;
 
 import de.knowwe.core.Attributes;
 import de.knowwe.core.kdom.parsing.Section;
@@ -29,9 +28,9 @@ import de.knowwe.tools.ToolProvider;
 /**
  * 
  * @author Johanna Latt
- * @created 20.06.2012
+ * @created 04.08.2012
  */
-public class OntoVisDisplaySVGProvider implements ToolProvider {
+public class OntoVisDOTDownloadProvider implements ToolProvider {
 
 	public static final String PARAM_FILENAME = "filename";
 
@@ -44,14 +43,15 @@ public class OntoVisDisplaySVGProvider implements ToolProvider {
 
 	protected Tool getDownloadTool(Section<?> section, UserContext userContext) {
 		// tool to provide download capability
-		String jsAction = "window.location='action/OntoVisDisplaySVG" +
+		String jsAction = "window.location='action/OntoVisDOTDownload" +
 				"?" + Attributes.TOPIC + "=" + section.getTitle() +
-				"&" + Attributes.WEB + "=" + section.getWeb() + "'";
+				"&" + Attributes.WEB + "=" + section.getWeb() +
+				"&" + Attributes.SECTION_ID + "=" + section.getID() + "'";
+		;
 		return new DefaultTool(
-				"KnowWEExtension/d3web/icon/comment16.png",
-				"Display the .svg",
-				"Display the graph",
+				"KnowWEExtension/d3web/icon/download16.gif",
+				"Download .dot",
+				"Download the .dot-file of the graph",
 				jsAction);
 	}
-
 }

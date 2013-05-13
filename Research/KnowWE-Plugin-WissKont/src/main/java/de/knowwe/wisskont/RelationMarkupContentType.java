@@ -196,7 +196,7 @@ public class RelationMarkupContentType extends AbstractType {
 						}
 						string.appendHtml("</td>");
 						string.appendHtml("<td class='narrowCell'>");
-						string.appendHtml("<span class='ui-icon ui-icon-circle-close deleteButton hoverAction' title='Relation zu diesem Begriff löschen' ></span>");
+						string.appendHtml("<span class='ui-icon ui-icon-circle-close deleteButton' title='Relation zu diesem Begriff löschen' ></span>");
 						string.appendHtml("</td>");
 						string.appendHtml("</tr>");
 						string.appendHtml("</table>");
