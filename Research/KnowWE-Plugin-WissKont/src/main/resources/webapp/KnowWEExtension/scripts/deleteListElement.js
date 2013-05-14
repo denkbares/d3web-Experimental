@@ -19,15 +19,33 @@ function initDeleteButtons() {
 
 function hideDeleteIcons() {
 	jq$(".deleteButton").each(function() {
-    	jq$(this).hide();
+    	jq$(this).css("visibility", "hidden" );
     });
 }
 
 function initDeleteIconHovers() {
-	jq$(".deletableListElement").each(function() {
-    	initIconHover(jq$(this));
-    });
+	
+	jq$(".deletableListElement").each(
+			function() {
+				var icon = jq$(this);
+				jq$(this).hover(
+						function () {
+							icon.find(".deleteButton").each( 
+									function() {
+										jq$(this).css("visibility", "visible" );
+									});
+						}, 
+						function () {
+							icon.find(".deleteButton").each( 
+									function() {
+										jq$(this).css("visibility", "hidden" );
+									});
+						}
+				);
+			}
+	);
 }
+
 
 function initClickEvent(element) {
 	element.bind("click", function() {
