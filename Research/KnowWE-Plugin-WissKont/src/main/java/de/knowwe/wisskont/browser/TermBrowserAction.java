@@ -59,15 +59,27 @@ public class TermBrowserAction extends AbstractAction {
 				TermRecommender.getInstance().termSearched(context, term);
 			}
 			else if (command.equals("remove")) {
+				// removes this concept from the list
 				TermRecommender.getInstance().clearTerm(context, term);
 			}
 			else if (command.equals("expand")) {
+				// adds all sub-concepts of a concept to the list
 				TermRecommender.getInstance().expandTerm(context, term);
 			}
 			else if (command.equals("collapse")) {
+				// removes all sub-concepts of a concepts from the list
 				TermRecommender.getInstance().collapseTerm(context, term);
 			}
+			else if (command.equals("collapseList")) {
+				// stores user's collapse state on server
+				TermRecommender.getInstance().collapseList(context);
+			}
+			else if (command.equals("openList")) {
+				// stores user's collapse state on server
+				TermRecommender.getInstance().openList(context);
+			}
 			else if (command.equals("open")) {
+				// opens the page for this concept
 				// is handled by a link
 			}
 		}

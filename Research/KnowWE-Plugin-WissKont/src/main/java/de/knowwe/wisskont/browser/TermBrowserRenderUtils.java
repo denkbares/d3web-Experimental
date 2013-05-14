@@ -53,13 +53,31 @@ public class TermBrowserRenderUtils {
 		string.appendHtml("<div class='termbrowserframe'>");
 
 		{
-			string.appendHtml("<div class='termbrowserheader'>Benutzte Begriffe:</div>");
+			string.appendHtml("<div class='termbrowserheader'>");
 
+			// show collapse button
+			boolean collapsed = TermRecommender.getInstance().listIsCollapsed(user);
+			String minusStyle = "";
+			String plusStyle = "";
+			if (collapsed) {
+				minusStyle = "display:none;";
+			}
+			else {
+				plusStyle = "display:none;";
+			}
+			string.appendHtml("<span style='float:left;" + plusStyle
+					+ "' class='ui-icon ui-icon-circle-plus showList'></span>");
+			string.appendHtml("<span style='float:left;" + minusStyle
+					+ "' class='ui-icon ui-icon-circle-minus hideList'></span>");
+			string.appendHtml("Benutzte Begriffe:");
+			string.appendHtml("</div>");
+
+			// render term list
 			Tree<RatedTerm> ratedTermTreeTop = TermRecommender.getInstance().getRatedTermTreeTop(
 						user,
 						THRESHOLD_MAX_TERM_NUMBER);
 
-			renderTermTree(string, ratedTermTreeTop);
+			renderTermTree(string, ratedTermTreeTop, collapsed);
 
 		}
 		string.appendHtml("</div>");
@@ -72,8 +90,13 @@ public class TermBrowserRenderUtils {
 	 * @param string
 	 * @param subList
 	 */
-	private static void renderTermTree(RenderResult string, Tree<RatedTerm> tree) {
-		string.appendHtml("<div class='termlist'>");
+	private static void renderTermTree(RenderResult string, Tree<RatedTerm> tree, boolean collapsed) {
+
+		String style = "";
+		if (collapsed) {
+			style = "display:none;";
+		}
+		string.appendHtml("<div style='" + style + "' class='termlist'>");
 
 		Node<RatedTerm> root = tree.getRoot();
 		List<Node<RatedTerm>> roots = root.getChildrenSorted();

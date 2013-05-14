@@ -33,6 +33,15 @@ import de.knowwe.wisskont.util.Tree;
 public class RecommendationSet {
 
 	private Tree<RatedTerm> terms = new Tree<RatedTerm>(RatedTerm.ROOT);
+	private boolean browserIsCollapsed = true;
+
+	public void setBrowserIsCollapsed(boolean browserIsCollapsed) {
+		this.browserIsCollapsed = browserIsCollapsed;
+	}
+
+	public boolean isBrowserIsCollapsed() {
+		return browserIsCollapsed;
+	}
 
 	public List<RatedTerm> getRankedTermList() {
 		return toList(terms);

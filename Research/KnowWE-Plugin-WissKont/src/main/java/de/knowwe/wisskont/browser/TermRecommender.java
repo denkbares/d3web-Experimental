@@ -72,6 +72,19 @@ public class TermRecommender implements EventListener {
 		EventManager.getInstance().registerListener(this);
 	}
 
+	/**
+	 * Determines is the term-browser list was open or collapsed for this user
+	 * 
+	 * @created 14.05.2013
+	 * @param user
+	 * @return
+	 */
+	public boolean listIsCollapsed(UserContext user) {
+		RecommendationSet recommendationSet = data.get(user.getUserName());
+		if (recommendationSet == null) return true;
+		return recommendationSet.isBrowserIsCollapsed();
+	}
+
 	public Tree<RatedTerm> getRatedTermTreeTop(UserContext user, int count) {
 		Tree<RatedTerm> treeCopy = new Tree<RatedTerm>(RatedTerm.ROOT);
 		String username = user.getUserName();
@@ -283,5 +296,31 @@ public class TermRecommender implements EventListener {
 		for (String child : children) {
 			recommendationSet.clearValue(child);
 		}
+	}
+
+	/**
+	 * 
+	 * @created 14.05.2013
+	 * @param context
+	 */
+	public void openList(UserActionContext context) {
+		RecommendationSet recommendationSet = data.get(context.getUserName());
+		if (recommendationSet == null) {
+			recommendationSet = new RecommendationSet();
+		}
+		recommendationSet.setBrowserIsCollapsed(false);
+	}
+
+	/**
+	 * 
+	 * @created 14.05.2013
+	 * @param context
+	 */
+	public void collapseList(UserActionContext context) {
+		RecommendationSet recommendationSet = data.get(context.getUserName());
+		if (recommendationSet == null) {
+			recommendationSet = new RecommendationSet();
+		}
+		recommendationSet.setBrowserIsCollapsed(true);
 	}
 }

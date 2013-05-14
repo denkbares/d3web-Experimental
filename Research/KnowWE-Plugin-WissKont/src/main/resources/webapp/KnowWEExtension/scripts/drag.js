@@ -21,8 +21,35 @@ jq$(document).ready(function() {
     
     initAllBrowserActionEvents();
     
-    
+    initCollapseTermBrowser();
 });
+
+
+function initCollapseTermBrowser() {
+	jq$(".showList").each(function() {
+		jq$(this).bind('click', function() {
+			jq$(".showList").hide();
+			jq$(".hideList").show();
+			jq$(".termlist").show('50');
+			// stores user's collapse state on server
+			handleTermActionEvent(jq$(this));
+		});
+		
+	});
+	jq$(".hideList").each(function() {
+		jq$(this).bind('click', function() {
+			jq$(".hideList").hide();
+			jq$(".showList").show();
+			jq$(".termlist").hide('50');
+			// stores user's collapse state on server
+			handleTermActionEvent(jq$(this));
+		});
+		
+	});
+	
+}
+
+
 
 function initAllBrowserActionEvents() {
 	jq$(".removeConcept").each(function() {
@@ -37,6 +64,7 @@ function initAllBrowserActionEvents() {
     jq$(".collapseConcept").each(function() {
     	initClickEvents(jq$(this));
     });
+    initCollapseTermBrowser();
 
 }
 
@@ -51,6 +79,12 @@ function handleTermActionEvent(element) {
 	if(element.hasClass('removeConcept')) {
 		command = 'remove';
 	}
+	if(element.hasClass('hideList')) {
+		command = 'collapseList';
+	}
+	if(element.hasClass('showList')) {
+		command = 'openList';
+	}
 	if(element.hasClass('expandConcept')) {
 		command = 'expand';
 	}
@@ -64,7 +98,9 @@ function handleTermActionEvent(element) {
 	var line = element.parent().parent().parent().parent().parent().parent();
 	var termnameElement = line.find('div.termname');
 	var term = termnameElement.html();
-	term = term.replace(/<wbr>/g, "");
+	if(term) {
+		term = term.replace(/<wbr>/g, "");
+	}
 	
 	sendTermBrowserAction(term, command);
 	
