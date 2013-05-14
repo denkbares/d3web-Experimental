@@ -34,6 +34,7 @@ public class RecommendationSet {
 
 	private Tree<RatedTerm> terms = new Tree<RatedTerm>(RatedTerm.ROOT);
 	private boolean browserIsCollapsed = true;
+	private boolean graphIsCollapsed = true;
 
 	public void setBrowserIsCollapsed(boolean browserIsCollapsed) {
 		this.browserIsCollapsed = browserIsCollapsed;
@@ -41,6 +42,14 @@ public class RecommendationSet {
 
 	public boolean isBrowserIsCollapsed() {
 		return browserIsCollapsed;
+	}
+
+	public void setGraphIsCollapsed(boolean graphIsCollapsed) {
+		this.graphIsCollapsed = graphIsCollapsed;
+	}
+
+	public boolean isGraphIsCollapsed() {
+		return graphIsCollapsed;
 	}
 
 	public List<RatedTerm> getRankedTermList() {

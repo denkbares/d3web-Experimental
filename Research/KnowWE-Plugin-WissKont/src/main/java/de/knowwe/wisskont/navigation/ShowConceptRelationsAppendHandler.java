@@ -35,6 +35,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.RenderingCore;
 import de.knowwe.rdfs.vis.markup.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.wisskont.ConceptMarkup;
+import de.knowwe.wisskont.browser.TermRecommender;
 
 /**
  * 
@@ -89,10 +90,17 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 
 			parameterMap.put(RenderingCore.RELATION_COLOR_CODES, colorCodes);
 
-			//
-			// String props = OntoVisType.getAnnotation(section,
-			// OntoVisType.ANNOTATION_SHOWPROPERTIES);
-			// parameterMap.put(RenderingCore.SHOW_PROPERTIES, props);
+			boolean collapsed = TermRecommender.getInstance().graphIsCollapsed(user);
+			String stylePlus = "";
+			String styleMinus = "";
+			String styleContent = "";
+			if (collapsed) {
+				styleContent = "display:none;";
+				styleMinus = "display:none;";
+			}
+			else {
+				stylePlus = "display:none;";
+			}
 
 			parameterMap.put(RenderingCore.REQUESTED_DEPTH, "1");
 			parameterMap.put(RenderingCore.REQUESTED_HEIGHT, "1");
@@ -101,11 +109,13 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 					new IncrementalCompilerLinkToTermDefinitionProvider(), Rdf2GoCore.getInstance());
 			result.appendHtml("<div class='termgraph'>");
 			result.appendHtml("<div class='termgraphHeader'>");
-			result.appendHtml("<span style='float:left;' class='ui-icon ui-icon-circle-plus showGraph'></span>");
-			result.appendHtml("<span style='float:left;display:none;' class='ui-icon ui-icon-circle-minus hideGraph'></span>");
+			result.appendHtml("<span style='float:left;" + stylePlus
+					+ "' class='ui-icon ui-icon-circle-plus showGraph'></span>");
+			result.appendHtml("<span style='float:left;" + styleMinus
+					+ "' class='ui-icon ui-icon-circle-minus hideGraph'></span>");
 			result.appendHtml("<div style=''>Übersicht über Begriffsverknüpfungen</div>");
 			result.appendHtml("</div>");
-			result.appendHtml("<div style='display:none;' class='termgraphcontent'>");
+			result.appendHtml("<div style='" + styleContent + "' class='termgraphcontent'>");
 			renderingCore.render(result);
 			result.appendHtml("</div>");
 			result.appendHtml("</div>");

@@ -85,6 +85,12 @@ function handleTermActionEvent(element) {
 	if(element.hasClass('showList')) {
 		command = 'openList';
 	}
+	if(element.hasClass('hideGraph')) {
+		command = 'collapseGraph';
+	}
+	if(element.hasClass('showGraph')) {
+		command = 'openGraph';
+	}
 	if(element.hasClass('expandConcept')) {
 		command = 'expand';
 	}

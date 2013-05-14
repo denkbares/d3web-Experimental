@@ -73,7 +73,7 @@ public class TermRecommender implements EventListener {
 	}
 
 	/**
-	 * Determines is the term-browser list was open or collapsed for this user
+	 * Determines if the term-browser list was open or collapsed for this user
 	 * 
 	 * @created 14.05.2013
 	 * @param user
@@ -83,6 +83,20 @@ public class TermRecommender implements EventListener {
 		RecommendationSet recommendationSet = data.get(user.getUserName());
 		if (recommendationSet == null) return true;
 		return recommendationSet.isBrowserIsCollapsed();
+	}
+
+	/**
+	 * Determines if the concept overview graph was open or collapsed for this
+	 * user
+	 * 
+	 * @created 14.05.2013
+	 * @param user
+	 * @return
+	 */
+	public boolean graphIsCollapsed(UserContext user) {
+		RecommendationSet recommendationSet = data.get(user.getUserName());
+		if (recommendationSet == null) return true;
+		return recommendationSet.isGraphIsCollapsed();
 	}
 
 	public Tree<RatedTerm> getRatedTermTreeTop(UserContext user, int count) {
@@ -322,5 +336,31 @@ public class TermRecommender implements EventListener {
 			recommendationSet = new RecommendationSet();
 		}
 		recommendationSet.setBrowserIsCollapsed(true);
+	}
+
+	/**
+	 * 
+	 * @created 14.05.2013
+	 * @param context
+	 */
+	public void openGraph(UserActionContext context) {
+		RecommendationSet recommendationSet = data.get(context.getUserName());
+		if (recommendationSet == null) {
+			recommendationSet = new RecommendationSet();
+		}
+		recommendationSet.setGraphIsCollapsed(false);
+	}
+
+	/**
+	 * 
+	 * @created 14.05.2013
+	 * @param context
+	 */
+	public void collapseGraph(UserActionContext context) {
+		RecommendationSet recommendationSet = data.get(context.getUserName());
+		if (recommendationSet == null) {
+			recommendationSet = new RecommendationSet();
+		}
+		recommendationSet.setGraphIsCollapsed(true);
 	}
 }

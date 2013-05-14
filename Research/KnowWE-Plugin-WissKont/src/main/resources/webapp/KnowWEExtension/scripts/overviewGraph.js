@@ -4,6 +4,7 @@ jq$(document).ready(function() {
 			jq$(".showGraph").hide();
 			jq$(".hideGraph").show();
 			jq$(".termgraphcontent").show('50');
+			handleTermActionEvent(jq$(this));
 		});
 	});
 	jq$(".hideGraph").each(function() {
@@ -11,6 +12,7 @@ jq$(document).ready(function() {
 			jq$(".hideGraph").hide();
 			jq$(".showGraph").show();
 			jq$(".termgraphcontent").hide('50');
+			handleTermActionEvent(jq$(this));
 		});
 	});
 });

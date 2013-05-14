@@ -70,6 +70,14 @@ public class TermBrowserAction extends AbstractAction {
 				// removes all sub-concepts of a concepts from the list
 				TermRecommender.getInstance().collapseTerm(context, term);
 			}
+			else if (command.equals("collapseGraph")) {
+				// stores user's collapse state on server
+				TermRecommender.getInstance().collapseGraph(context);
+			}
+			else if (command.equals("openGraph")) {
+				// stores user's collapse state on server
+				TermRecommender.getInstance().openGraph(context);
+			}
 			else if (command.equals("collapseList")) {
 				// stores user's collapse state on server
 				TermRecommender.getInstance().collapseList(context);
