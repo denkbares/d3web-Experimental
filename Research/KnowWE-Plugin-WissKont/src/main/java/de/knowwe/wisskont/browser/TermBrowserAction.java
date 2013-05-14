@@ -86,6 +86,14 @@ public class TermBrowserAction extends AbstractAction {
 				// stores user's collapse state on server
 				TermRecommender.getInstance().openList(context);
 			}
+			else if (command.equals("clear")) {
+				// clears the entire concept list/tree
+				TermRecommender.getInstance().clearList(context);
+			}
+			else if (command.equals("toggle")) {
+				// toggles the the collapse state of list/tree
+				TermRecommender.getInstance().toggleCollapse(context);
+			}
 			else if (command.equals("open")) {
 				// opens the page for this concept
 				// is handled by a link

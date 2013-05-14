@@ -96,7 +96,7 @@ td.termbrowser {
 }
 	
 
-.openConcept, .expandConcept, .removeConcept, .deleteButton, .collapseConcept {
+.openConcept, .expandConcept, .removeConcept, .deleteButton, .collapseConcept, .clearList, .hideList, .showList, .showGraph, .hideGraph, .toggleList {
 cursor: pointer;
 }
 

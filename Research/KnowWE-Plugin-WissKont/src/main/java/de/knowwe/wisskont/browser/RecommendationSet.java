@@ -113,4 +113,17 @@ public class RecommendationSet {
 		}
 	}
 
+	/**
+	 * Clears the entire concept list/tree, i.e. removes all entries
+	 * 
+	 * @created 14.05.2013
+	 */
+	public void clear() {
+		List<RatedTerm> list = toList(terms);
+		for (RatedTerm ratedTerm : list) {
+			clearValue(ratedTerm.getTerm());
+		}
+
+	}
+
 }

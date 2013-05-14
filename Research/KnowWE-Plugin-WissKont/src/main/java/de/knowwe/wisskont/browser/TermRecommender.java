@@ -110,7 +110,9 @@ public class TermRecommender implements EventListener {
 			List<RatedTerm> rankedTermList = recommendationSet.getRankedTermList();
 			int size = rankedTermList.size();
 			for (RatedTerm ratedTerm : rankedTermList) {
-				treeCopy.insertNode(ratedTerm);
+				if (!ratedTerm.equals(RatedTerm.ROOT)) {
+					treeCopy.insertNode(ratedTerm);
+				}
 			}
 			int toRemove = size - count;
 			for (int i = 0; i < toRemove; i++) {
@@ -321,6 +323,7 @@ public class TermRecommender implements EventListener {
 		RecommendationSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet == null) {
 			recommendationSet = new RecommendationSet();
+			data.put(context.getUserName(), recommendationSet);
 		}
 		recommendationSet.setBrowserIsCollapsed(false);
 	}
@@ -334,6 +337,7 @@ public class TermRecommender implements EventListener {
 		RecommendationSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet == null) {
 			recommendationSet = new RecommendationSet();
+			data.put(context.getUserName(), recommendationSet);
 		}
 		recommendationSet.setBrowserIsCollapsed(true);
 	}
@@ -347,6 +351,7 @@ public class TermRecommender implements EventListener {
 		RecommendationSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet == null) {
 			recommendationSet = new RecommendationSet();
+			data.put(context.getUserName(), recommendationSet);
 		}
 		recommendationSet.setGraphIsCollapsed(false);
 	}
@@ -360,7 +365,36 @@ public class TermRecommender implements EventListener {
 		RecommendationSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet == null) {
 			recommendationSet = new RecommendationSet();
+			data.put(context.getUserName(), recommendationSet);
 		}
 		recommendationSet.setGraphIsCollapsed(true);
+	}
+
+	/**
+	 * 
+	 * @created 14.05.2013
+	 * @param context
+	 */
+	public void clearList(UserActionContext context) {
+		RecommendationSet recommendationSet = data.get(context.getUserName());
+		if (recommendationSet != null) {
+			recommendationSet.clear();
+		}
+
+	}
+
+	/**
+	 * 
+	 * @created 14.05.2013
+	 * @param context
+	 */
+	public void toggleCollapse(UserActionContext context) {
+		RecommendationSet recommendationSet = data.get(context.getUserName());
+		if (recommendationSet == null) {
+			recommendationSet = new RecommendationSet();
+			data.put(context.getUserName(), recommendationSet);
+		}
+		recommendationSet.setBrowserIsCollapsed(!recommendationSet.isBrowserIsCollapsed());
+
 	}
 }

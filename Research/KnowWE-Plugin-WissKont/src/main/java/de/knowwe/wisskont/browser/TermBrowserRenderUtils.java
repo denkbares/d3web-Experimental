@@ -55,21 +55,29 @@ public class TermBrowserRenderUtils {
 		{
 			string.appendHtml("<div class='termbrowserheader'>");
 
-			// show collapse button
+			// show collapse button, headline and clear button
+			String toolTipCollapse = "Liste der Begriffe verbergen";
+			String toolTipOpen = "Liste der Begriffe aufklappen";
+			String toolTipClear = "Liste der Begriffe leeren";
 			boolean collapsed = TermRecommender.getInstance().listIsCollapsed(user);
 			String minusStyle = "";
 			String plusStyle = "";
+			String clearStyle = "float:right;";
 			if (collapsed) {
 				minusStyle = "display:none;";
+				clearStyle += "display:none;";
 			}
 			else {
 				plusStyle = "display:none;";
 			}
-			string.appendHtml("<span style='float:left;" + plusStyle
-					+ "' class='ui-icon ui-icon-circle-plus showList'></span>");
-			string.appendHtml("<span style='float:left;" + minusStyle
-					+ "' class='ui-icon ui-icon-circle-minus hideList'></span>");
-			string.appendHtml("Benutzte Begriffe:");
+			string.appendHtml("<span title='" + toolTipOpen + "' style='float:left;" + plusStyle
+					+ "' class='ui-icon ui-icon-triangle-1-e showList hoverAction'></span>");
+			string.appendHtml("<span title='" + toolTipCollapse + "' style='float:left;"
+					+ minusStyle
+					+ "' class='ui-icon ui-icon-triangle-1-s hideList hoverAction'></span>");
+			string.appendHtml("<span class='toggleList'>Benutzte Begriffe:</span>");
+			string.appendHtml("<span title='" + toolTipClear + "' style='float:left;" + clearStyle
+					+ "' class='ui-icon ui-icon-minus clearList hoverAction'></span>");
 			string.appendHtml("</div>");
 
 			// render term list
@@ -100,6 +108,9 @@ public class TermBrowserRenderUtils {
 
 		Node<RatedTerm> root = tree.getRoot();
 		List<Node<RatedTerm>> roots = root.getChildrenSorted();
+		if (roots.size() == 0) {
+			string.appendHtml("<span style='padding-left: 75px;'>-keine-</span>");
+		}
 		for (Node<RatedTerm> rootConcept : roots) {
 
 			renderConceptSubTree(rootConcept, 0, string);

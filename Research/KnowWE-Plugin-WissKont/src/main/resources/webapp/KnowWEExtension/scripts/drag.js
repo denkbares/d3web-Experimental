@@ -64,6 +64,12 @@ function initAllBrowserActionEvents() {
     jq$(".collapseConcept").each(function() {
     	initClickEvents(jq$(this));
     });
+    jq$(".clearList").each(function() {
+    	initClickEvents(jq$(this));
+    });
+    jq$(".toggleList").each(function() {
+    	initClickEvents(jq$(this));
+    });
     initCollapseTermBrowser();
 
 }
@@ -96,6 +102,12 @@ function handleTermActionEvent(element) {
 	}
 	if(element.hasClass('collapseConcept')) {
 		command = 'collapse';
+	}
+	if(element.hasClass('clearList')) {
+		command = 'clear';
+	}
+	if(element.hasClass('toggleList')) {
+		command = 'toggle';
 	}
 	if(element.hasClass('openConcept')) {
 		command = 'open';
