@@ -5,6 +5,7 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.strings.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.wisskont.util.HierarchyNode;
 import de.knowwe.wisskont.util.MarkupUtils;
 
 public class NodeWithName implements HierarchyNode<NodeWithName> {
@@ -12,7 +13,6 @@ public class NodeWithName implements HierarchyNode<NodeWithName> {
 	 String name;
 	 String data;
 	 boolean highlighted;
-	//String data;
 
 	public NodeWithName(String name) {
 		this.name = name;
@@ -20,6 +20,11 @@ public class NodeWithName implements HierarchyNode<NodeWithName> {
 	public NodeWithName(String name, String data) {
 		this.name = name;
 		this.data=data;
+	}
+	public NodeWithName(String name, String data, boolean highlighted) {
+		this.name = name;
+		this.data=data;
+		this.highlighted=highlighted;
 	}
 	public NodeWithName(String name,boolean highlighted) {
 		this.name = name;
@@ -55,10 +60,6 @@ public class NodeWithName implements HierarchyNode<NodeWithName> {
 		return name;
 	}
 
-	@Override
-	public int compareTo(NodeWithNameAndValue o) {
-		// TODO Auto-generated method stub
-		return this.name.compareTo(o.name);
-	}
+	
 
 }

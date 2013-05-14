@@ -25,8 +25,9 @@ import java.util.Set;
 import com.google.gson.Gson;
 
 import de.knowwe.ophtovisD3.utils.NodeWithName;
-import de.knowwe.ophtovisD3.utils.Tree;
+
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.wisskont.util.Tree;
 
 /**
  * 
@@ -118,44 +119,43 @@ public class GraphBuilder {
 	}
 
 	public static String buildGraph(String startConcept, String connectionType, String helpconnectionType, boolean getConnectionAmount) {
-		String result = " { \r\n ";
-		String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
-		if(!treeIsHere){
+		String result;
+		if(!false){
 		resultTree = new Tree<NodeWithName>(new NodeWithName("Wurzel","0"));
+		System.out.println("Insert Wurzel");
 		resultTree.insertNode(new NodeWithName(startConcept, DataBaseHelper.countQuerytresultstoString(startConcept)));
-		if (getConnectionAmount) result += "    \"name\": \"flare\", \r\n" +
-				"    \"children\": [";
+		System.out.println("insert " + startConcept);
+		if (getConnectionAmount) {}
 		String fatherOfTheMoment = startConcept;
 		while (!fatherOfTheMoment.isEmpty()) {
-			result += getChildConcepts(fatherOfTheMoment, connectionType, getConnectionAmount,
+			 getChildConcepts(fatherOfTheMoment, connectionType, getConnectionAmount,
 					resultTree);
 			List<String> nextfather = DataBaseHelper.getConnectedNodeNamesOfType(fatherOfTheMoment,
 					helpconnectionType, true);
+			System.out.println("fathers = " + nextfather.size());
 			if (nextfather.size() >= 1) {
 				fatherOfTheMoment = nextfather.get(0);
 				resultTree.insertNode(new NodeWithName(fatherOfTheMoment ,DataBaseHelper.countQuerytresultstoString(fatherOfTheMoment)));
-				result += " , ";
+				System.out.println("insert node" + fatherOfTheMoment);
 			}
 			else {
-				if (getConnectionAmount) result += "  ] ";
-				result += " } ";
-				result = resultTree.toHirarchyString();
+				if (getConnectionAmount) {}
+				Gson gson = new Gson();
+				result = gson.toJson(resultTree);
 				treeIsHere=true;
 				return result;
 			}
 		}}
-		
-		result += " ]  } ";
 		treeIsHere=true;
-		result = resultTree.toHirarchyString();
+		Gson gson = new Gson();
+		result = gson.toJson(resultTree);
 		return result;
 	}
 	public static String builtPartTree(String startConcept, String connectionType){
 		String root =DataBaseHelper.getRootConcept( startConcept,  connectionType);
-		System.out.println("root " + root);
 		Tree<NodeWithName> resultTree = new Tree<NodeWithName>(new NodeWithName(root));
 		resultTree =getChildConceptTree(root, connectionType, resultTree);
-		resultTree.removeNodeFromTree(new NodeWithName(startConcept));
+		resultTree.removeNodeFromTree(new NodeWithName(startConcept,DataBaseHelper.countQuerytresultstoString(startConcept),false));
 		resultTree.insertNode(new NodeWithName(startConcept, true));
 		Gson gson = new Gson();
 		return gson.toJson(resultTree);
@@ -163,8 +163,6 @@ public class GraphBuilder {
 	}
 	
 	public static Tree<NodeWithName> getChildConceptTree(String father, String connectionType, Tree<NodeWithName> tree) {
-		String resultString = "";
-		//Tree<NodeWithName> tree = new Tree<NodeWithName>(new NodeWithName(father));
 		List<String> childs = DataBaseHelper.getConnectedNodeNamesOfType(father, connectionType,
 				false);
 		if (childs.isEmpty()) {
@@ -173,7 +171,7 @@ public class GraphBuilder {
 		else {
 			for (int i = 0; i < childs.size(); i++) {
 				String string = childs.get(i);
-				tree.insertNode(new NodeWithName(childs.get(i)));
+				tree.insertNode(new NodeWithName(childs.get(i),Integer.toString(DataBaseHelper.countQuerytresults(childs.get((i))))));
 				getChildConceptTree(string, connectionType, tree);	
 				}
 			}
@@ -181,33 +179,25 @@ public class GraphBuilder {
 
 	}
 
-	public static String getChildConcepts(String father, String connectionType, boolean getConnectionAmount, Tree tree) {
+	public static String getChildConcepts(String father, String connectionType, boolean getConnectionAmount, Tree<NodeWithName> tree) {
 		String resultString = "";
-		if (getConnectionAmount) {
-			resultString = "{\"name\" : \"" + father + "\" , \"size\" : "
-					+ DataBaseHelper.countQuerytresults(father) * 2;
-		}
-		else {
-			resultString = "{\"name\" : \"" + father + "\" ";
-		}
+		System.out.println("getchild aufgerufen mit " + father);
 		List<String> childs = DataBaseHelper.getConnectedNodeNamesOfType(father, connectionType,
 				false);
+		System.out.println("Konzept hat " + childs.size());
 		if (childs.isEmpty()) {
 			return resultString += "}";
 		}
 		else {
-			resultString += ", \"children\": [";
 			for (int i = 0; i < childs.size(); i++) {
 				String string = childs.get(i);
+				if(!childs.get(i).equals(father)){
 				tree.insertNode(new NodeWithName(childs.get(i),Integer.toString(DataBaseHelper.countQuerytresults(childs.get(i)))));
+				System.out.println("einfügen " + childs.get(i));
 				resultString += getChildConcepts(string, connectionType, getConnectionAmount, tree);
-				if ((i + 1) < childs.size()) {
-					resultString += " , ";
 				}
 			}
-			resultString += " ]";
 		}
-		resultString += "}";
 		return resultString;
 
 	}

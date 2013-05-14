@@ -215,7 +215,7 @@ public class Tree<T extends HierarchyNode<T>> {
 	public static class Node<T extends HierarchyNode<T>> implements Comparable<Node<T>> {
 
 		private final T data;
-		private Node<T> parent;
+		private transient Node<T> parent;
 		private List<Node<T>> children = new ArrayList<Node<T>>();;
 
 		@Override

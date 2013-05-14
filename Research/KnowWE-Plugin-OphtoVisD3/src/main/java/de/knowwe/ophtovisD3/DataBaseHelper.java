@@ -222,26 +222,21 @@ import de.knowwe.rdfs.util.RDFSUtil;
 	}
 
 	public static String getRootConcept(String startConcept, String connectionType) {
-		boolean breaker=false;
 			do{
-				System.out.println("start : " + startConcept);
 				ArrayList<String> parent =(ArrayList<String>) getConnectedNodeNamesOfType(startConcept, connectionType, true);
-				System.out.println("ergebnisse " + parent.size());
-				if(!parent.get(0).equals("Wurzel")){
-				System.out.println("startcon =" + parent.get(0));
+				if(!parent.isEmpty()){
 				startConcept=parent.get(0);
 				}else{
 					break;
 				}
-				
-			}while(!startConcept.equals("Wurzel"));
+			}while(true);
+			
 			return startConcept;
 		
 	}
 	public static boolean conceptIsInHierachy(String concept){
 		List <String> matches= DataBaseHelper.getConnectedNodeNamesOfType(concept, "unterkonzept", true);
 		matches.addAll(DataBaseHelper.getConnectedNodeNamesOfType(concept, "unterkonzept", false));
-		System.out.println("Das sind "+ matches.size() + "matches");
 		if(matches.size()>0)
 			return true;
 		else

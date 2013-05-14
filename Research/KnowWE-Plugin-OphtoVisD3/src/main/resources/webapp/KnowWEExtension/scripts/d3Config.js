@@ -287,12 +287,12 @@ function createBubble(){
 	
 	d3.select("#vis").remove();
 	d3.select("body").append("div").attr("id", "vis");
-var diameter = 960,
+	var diameter = 960,
     format = d3.format(",d");
 
 var pack = d3.layout.pack()
     .size([ diameter - 4, diameter - 4] )
-    .value(function(d) {  console.log(d); return (d.data.data)*200 });
+    .value(function(d,i) {  console.log(d); return (d.data.data)*200 });
 
 var svg = d3.select("#vis").append("svg")
     .attr("width", diameter)
@@ -305,12 +305,12 @@ var params = {
  type : 'bubble'};
 var url = KNOWWE.core.util.getURL(params);
 d3.json(url, function(error, root) {
+console.log(root);
 
-
-  var node = svg.datum(root).selectAll(".node")
+  var node = svg.datum(root.root).selectAll(".node")
       .data(pack.nodes)
     .enter().append("g")
-      .attr("class", function(d) { console.log(d.children);  return d.children.length>0 ? "bubbleNode" : "leaf bubbleNode"; })
+      .attr("class", function(d,i) {  return d.children.length>0 ? "bubbleNode" : "leaf bubbleNode"; })
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
       .attr("oldx" , function(d) { return d.x; })
       .attr("oldy", function(d) { return d.y ; });
@@ -318,7 +318,7 @@ d3.json(url, function(error, root) {
   
     
   node.append("title")
-      .text(function(d) { return d.data.name  });
+      .text(function(d,i) { return d.data.name  });
 
   function dragmove(d) {
 	    d3.select(this)
@@ -335,12 +335,12 @@ d3.json(url, function(error, root) {
 	  .on("drag", dragmove)
 		.on("dragend", dragend);
   node.append("circle")
-      .attr("r", function(d) {  return (d.r); }).call(drag);
+      .attr("r", function(d,i) {  return (d.r); }).call(drag);
 
-  node.filter(function(d) { return !d.children.length>0; }).append("text")
+  node.filter(function(d,i) { return !(d.children.length>0); }).append("text")
       .attr("dy", ".3em")
       .style("text-anchor", "middle")
-      .text(function(d) { return d.data.name; }).call(drag);
+      .text(function(d,i) { return d.data.name; }).call(drag);
 
 });
 
@@ -363,7 +363,7 @@ var diagonal = d3.svg.diagonal.radial()
 
 d3.select("#vis").remove();
 d3.select("body").append("div").attr("id", "vis");
-console.log(vis);
+
 
 var svg = d3.select("#vis").append("svg")
     .attr("width", diameter)
@@ -416,7 +416,7 @@ d3.json( url, function(error, root) {
 	  .attr("x", "0")
 	  .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
 	  .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
-	  .text(function(d) {console.log("ready"); return d.data.name; })
+	  .text(function(d) { return d.data.name; })
 	  .call(drag);
 
 	
