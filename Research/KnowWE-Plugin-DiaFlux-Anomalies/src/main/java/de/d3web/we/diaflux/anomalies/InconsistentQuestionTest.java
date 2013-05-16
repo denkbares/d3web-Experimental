@@ -30,7 +30,9 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.diaFlux.flow.ActionNode;
 import de.d3web.diaFlux.flow.Flow;
+import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.flow.Node;
+import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.indication.ActionIndication;
 import de.d3web.indication.ActionInstantIndication;
 import de.d3web.indication.ActionNextQASet;
@@ -151,9 +153,8 @@ public class InconsistentQuestionTest extends AbstractAnomalyTest {
 		Hashtable<String, IndicationType> knownQuestions = new Hashtable<String, IndicationType>();
 
 		if (null != kb) {
-			List<Flow> flowcharts =
-						kb.getManager().getObjects(Flow.class);
-			for (Flow flow : flowcharts) {
+			FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
+			for (Flow flow : flowSet) {
 				List<Node> nodes = flow.getNodes();
 				for (Node node : nodes) {
 					if (node.getClass().equals(ActionNode.class)) {

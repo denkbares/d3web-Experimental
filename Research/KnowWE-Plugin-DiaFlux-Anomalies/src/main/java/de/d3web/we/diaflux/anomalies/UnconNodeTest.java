@@ -24,8 +24,10 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.CommentNode;
 import de.d3web.diaFlux.flow.EndNode;
 import de.d3web.diaFlux.flow.Flow;
+import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.flow.StartNode;
+import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.we.diaflux.pathcoloring.AnomalyManager;
 
 /**
@@ -92,11 +94,10 @@ public class UnconNodeTest extends AbstractAnomalyTest {
 		String resStr = "";
 
 		if (null != kb) {
-			List<Flow> flowcharts =
-					kb.getManager().getObjects(Flow.class);
+			FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
 
 			AnomalyManager anomalyManager = AnomalyManager.getAnomalyManager();
-			for (Flow flow : flowcharts) {
+			for (Flow flow : flowSet) {
 				List<Node> nodes = flow.getNodes();
 				for (Node node : nodes) {
 					if (!node.getClass().equals(CommentNode.class)) {

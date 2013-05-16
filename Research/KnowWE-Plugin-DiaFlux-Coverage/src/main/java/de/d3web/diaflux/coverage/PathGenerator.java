@@ -81,7 +81,7 @@ public class PathGenerator {
 			ComposedNode composedNode = (ComposedNode) currentNode;
 
 			if (strategy.enterSubflow(composedNode, path)) {
-				StartNode startNode = DiaFluxUtils.getCalledStartNode(kb, composedNode);
+				StartNode startNode = DiaFluxUtils.getCalledStartNode(composedNode);
 				// as long as it is no wait node, enter it
 				// if (!isWaitNode(startNode.getFlow())) {
 				path.enterFlow(composedNode);

@@ -24,8 +24,10 @@ import java.util.List;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.ComposedNode;
 import de.d3web.diaFlux.flow.Flow;
+import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.flow.StartNode;
+import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.we.diaflux.pathcoloring.AnomalyManager;
 
 /**
@@ -111,14 +113,13 @@ public class RedundantStartNodeTest extends AbstractAnomalyTest {
 	protected String test(KnowledgeBase kb) {
 		String errormsg = "";
 		if (null != kb) {
-			List<Flow> flowcharts =
-					kb.getManager().getObjects(Flow.class);
+			FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
 
 			List<StartNode> allStartNodes = new LinkedList<StartNode>();
 			List<ComposedNode> cNodes = new LinkedList<ComposedNode>();
 
 			// List of all StartNodes except for autostarting Flowchart
-			for (Flow flow : flowcharts) {
+			for (Flow flow : flowSet) {
 				if (!flow.isAutostart()) {
 					List<StartNode> startNodes = flow.getStartNodes();
 					for (StartNode start : startNodes) {
@@ -128,7 +129,7 @@ public class RedundantStartNodeTest extends AbstractAnomalyTest {
 			}
 
 			// List of all ComposedNodes
-			for (Flow flow : flowcharts) {
+			for (Flow flow : flowSet) {
 				List<Node> nodes = flow.getNodes();
 				for (Node node : nodes) {
 					if (node.getClass().equals(ComposedNode.class)) {

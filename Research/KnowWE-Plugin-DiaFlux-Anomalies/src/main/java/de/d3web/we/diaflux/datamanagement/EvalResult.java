@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.terminology.NamedObject;
 
 /**
  * This class represents the results of an evaluation of a condition or action.
@@ -41,7 +42,7 @@ public class EvalResult {
 		domains = new HashMap<String, Domain>();
 	}
 
-	public EvalResult(TerminologyObject question, Domain domain) {
+	public EvalResult(NamedObject question, Domain domain) {
 		this();
 		domains.put(question.getName(), domain);
 	}

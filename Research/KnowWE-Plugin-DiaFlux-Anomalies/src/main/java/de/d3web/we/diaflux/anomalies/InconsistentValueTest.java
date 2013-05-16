@@ -35,8 +35,10 @@ import de.d3web.diaFlux.flow.ComposedNode;
 import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.EndNode;
 import de.d3web.diaFlux.flow.Flow;
+import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.flow.StartNode;
+import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.indication.ActionNextQASet;
 import de.d3web.we.diaflux.pathcoloring.AnomalyManager;
 
@@ -154,7 +156,7 @@ public class InconsistentValueTest extends AbstractAnomalyTest {
 			Node nextNode = edge.getEndNode();
 			if (Status.UNVISITED == status.get(nextNode)) {
 				if (nextNode instanceof ComposedNode) {
-					StartNode sNode = getStartFromComposed((ComposedNode) nextNode);
+					StartNode sNode = DiaFluxUtils.getCalledStartNode((ComposedNode) nextNode);
 					if (sNode != null) {
 						nextNode = sNode;
 					}
@@ -203,29 +205,6 @@ public class InconsistentValueTest extends AbstractAnomalyTest {
 		return result;
 	}
 
-	/**
-	 * 
-	 * @created 08.05.2012
-	 * @param node
-	 * @return
-	 */
-	private StartNode getStartFromComposed(ComposedNode node) {
-		String calledFlow = node.getCalledFlowName();
-		String calledStart = node.getCalledStartNodeName();
-		KnowledgeBase kb = node.getFlow().getKnowledgeBase();
-		List<Flow> flowcharts =
-				kb.getManager().getObjects(Flow.class);
-		for (Flow flow : flowcharts) {
-			if (flow.getName().equals(calledFlow)) {
-				for (Node n : flow.getNodes()) {
-					if (n.getName().equals(calledStart)) {
-						return (StartNode) n;
-					}
-				}
-			}
-		}
-		return null;
-	}
 
 	/**
 	 * 
@@ -237,9 +216,8 @@ public class InconsistentValueTest extends AbstractAnomalyTest {
 		List<ComposedNode> result = new LinkedList<ComposedNode>();
 		String subFlow = node.getFlow().getName();
 		KnowledgeBase kb = node.getFlow().getKnowledgeBase();
-		List<Flow> flowcharts =
-				kb.getManager().getObjects(Flow.class);
-		for (Flow flow : flowcharts) {
+		FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
+		for (Flow flow : flowSet) {
 			for (Node n : flow.getNodes()) {
 				if (n instanceof ComposedNode) {
 					ComposedNode cNode = (ComposedNode) n;
@@ -259,13 +237,12 @@ public class InconsistentValueTest extends AbstractAnomalyTest {
 		List<String> unusedValues = new LinkedList<String>();
 		StringBuffer error = new StringBuffer();
 		if (null != kb) {
-			List<Flow> flowcharts =
-					kb.getManager().getObjects(Flow.class);
-			for (Flow flow : flowcharts) {
+			FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
+			for (Flow flow : flowSet) {
 				allNodes.addAll(flow.getNodes());
 			}
 			init(status, allNodes);
-			for (Flow flow : flowcharts) {
+			for (Flow flow : flowSet) {
 				if (flow.isAutostart()) {
 					for (Node node : flow.getStartNodes()) {
 						error.append(visit(node, status, unusedValues));
