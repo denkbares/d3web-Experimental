@@ -169,6 +169,22 @@ public class SparqlResultRenderer {
 			}
 			rendered = KnowWEUtils.maskJSPWikiMarkup(rendered);
 		}
+
+		// HOTFIX: reduce output
+		rendered = reduceString(rendered);
+
+		return rendered;
+	}
+
+	private String reduceString(String rendered) {
+		if (rendered.endsWith("^^http://www.w3.org/2001/XMLSchema#string")) rendered = rendered.substring(
+				0, rendered.length() - 41);
+		if (rendered.endsWith("@de") || rendered.endsWith("@en") || rendered.endsWith("@fr")) {
+			rendered = rendered.substring(0, rendered.length() - 3);
+		}
+		if (rendered.startsWith("lns:")) {
+			rendered = rendered.substring(4);
+		}
 		return rendered;
 	}
 
