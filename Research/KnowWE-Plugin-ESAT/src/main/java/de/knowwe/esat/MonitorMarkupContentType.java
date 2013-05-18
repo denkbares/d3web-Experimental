@@ -104,6 +104,18 @@ public class MonitorMarkupContentType extends AbstractType {
 					+ "_a");
 			terminologyHandler.registerTermDefinition(section, termObjectClass, termIdentifier);
 
+			// create area variable
+			QuestionNum qQuotient = new QuestionNum(knowledgeBase, solution.getName() + "_q");
+			qQuotient.getInfoStore().addValue(BasicProperties.ABSTRACTION_QUESTION,
+					Boolean.TRUE);
+			knowledgeBase.getRootQASet().addChild(qQuotient);
+			knowledgeBase.getManager().putTerminologyObject(qQuotient);
+
+			Identifier termIdentifierQ = new Identifier(solutionDef.get().getTermName(
+					solutionDef)
+					+ "_q");
+			terminologyHandler.registerTermDefinition(section, termObjectClass, termIdentifierQ);
+
 			return new ArrayList<Message>(0);
 		}
 
