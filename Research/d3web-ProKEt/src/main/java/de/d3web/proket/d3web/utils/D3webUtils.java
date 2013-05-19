@@ -1381,7 +1381,8 @@ public class D3webUtils {
 		    prompt = "";
 		    break;
 		case 9: // portuguese
-		    prompt = "";
+		    prompt = "Sim";
+		    
 		    break;
 		case 10: // brazilian
 		    prompt = "";
@@ -1421,7 +1422,17 @@ public class D3webUtils {
 		    prompt = "";
 		    break;
 		case 9: // portuguese
-		    prompt = "";
+		    prompt = "Não";
+		    //System.out.println(c);
+		    //System.out.println(c.getInfoStore().getValue(MMInfo.PROMPT));
+		    //System.out.println(
+			//    c.getInfoStore().getValue(MMInfo.PROMPT, POLISH));
+		    //System.out.println(
+			//    c.getInfoStore().getValue(MMInfo.PROMPT));
+		    
+		   //System.out.println(
+			//    c.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN));
+		    
 		    break;
 		case 10: // brazilian
 		    prompt = "";
