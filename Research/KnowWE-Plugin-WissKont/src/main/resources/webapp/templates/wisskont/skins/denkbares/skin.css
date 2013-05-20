@@ -72,12 +72,13 @@ body.view, body.edit {
 	background-repeat: repeat-y;*/
 	
 	/*
-	gray (same as for menu): 	#f6f6f6
-	light blue:					#d1e3f5	
-	darker gray:				#434442	
-	darker blue gray:			#395277	
-	gray (slightly darker than menu): #dedede 
+		gray (same as for menu): 	#f6f6f6
+		light blue:					#d1e3f5	
+		darker gray:				#434442	
+		darker blue gray:			#395277	
+		gray (slightly darker than menu): #dedede 
 	*/
+	/*background-image: url(pattern_darkblue.png);*/
 	background-color: #395277;
 	
   	width: 1010px;
@@ -95,8 +96,9 @@ body.view, body.edit {
 }
 #header .applicationlogo {
 	position:absolute;
-	left:0em; 
+	left:2.5em; 
 	right:auto;
+	top:-0.5em;
 	width:225px;
 }
 #footer .applicationlogo,
@@ -432,7 +434,7 @@ img.attlink {
 } 
 .applicationlogo a {
 	display:block;
-	height:76px;
+	height:90px;
 	width:224px;
 	overflow:hidden;
 	margin-left:auto;
