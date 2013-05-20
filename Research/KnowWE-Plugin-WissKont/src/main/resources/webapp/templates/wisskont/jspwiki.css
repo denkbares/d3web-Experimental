@@ -1185,7 +1185,7 @@ html>body #previewcontent, html>body #info, html>body #pagecontent, html>body #a
 	width:16px; 
 	height:16px;
 	border:none;
-	background: #fff url(images/search.gif) no-repeat center;
+	background: url(images/search_2.gif) no-repeat center;
 	overflow:hidden;	
     text-indent:16px;
     cursor:pointer;
