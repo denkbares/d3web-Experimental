@@ -113,7 +113,7 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 					+ "' class='ui-icon ui-icon-triangle-1-e showGraph'></span>");
 			result.appendHtml("<span style='float:left;" + styleMinus
 					+ "' class='ui-icon ui-icon-triangle-1-s hideGraph'></span>");
-			result.appendHtml("<div style=''>Übersicht über Begriffsverknüpfungen</div>");
+			result.appendHtml("<div class='toggleGraph' style='font-weight:bold;'>Übersicht über Begriffsverknüpfungen</div>");
 			result.appendHtml("</div>");
 			result.appendHtml("<div style='" + styleContent + "' class='termgraphcontent'>");
 			renderingCore.render(result);

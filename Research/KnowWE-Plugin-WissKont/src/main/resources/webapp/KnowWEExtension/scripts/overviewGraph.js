@@ -15,4 +15,13 @@ jq$(document).ready(function() {
 			handleTermActionEvent(jq$(this));
 		});
 	});
+	
+	jq$(".toggleGraph").each(function() {
+		jq$(this).bind('click', function() {
+			jq$(".hideGraph").toggle();
+			jq$(".showGraph").toggle();
+			jq$(".termgraphcontent").toggle('50');
+			handleTermActionEvent(jq$(this));
+		});
+	});
 });
