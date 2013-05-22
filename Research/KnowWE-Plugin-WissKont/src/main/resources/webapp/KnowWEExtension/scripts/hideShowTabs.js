@@ -10,11 +10,17 @@ function hideViewTab() {
 }
 
 function hideAttachTab() {
-    document.getElementById('menu-attach').style.visibility='hidden'; 
+    var element = document.getElementById('menu-attach');
+	if(element) {
+		element.style.visibility='hidden';
+	}
 }
 
 function initShowTabs() {
-	  document.getElementById('more-attach').onclick = showTabs;
+	var element = document.getElementById('more-attach');
+	if(element) {
+		element.onclick = showTabs;
+	}
 }
 
 function showTabs() {
