@@ -4,6 +4,7 @@
     
     <requires>
         <import plugin-id="KnowWEExtensionPoints" />
+        <import plugin-id="d3web-Plugin-TestingFramework" />
     </requires>
     
     <runtime>
@@ -26,6 +27,26 @@
 		<parameter id="priority" value="4" />
 		<parameter id="css" value="wisskont.css" />
 		<parameter id="script" value="overviewGraph.js" />
+	</extension>
+	
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="SingleParent">
+		<parameter id="class"
+			value="de.knowwe.wisskont.ci.SingleParentTest" />
+		<parameter id="name" value="SingleParent" />
+		<parameter id="description" value="CITest SingleParent" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+		
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="Orphan">
+		<parameter id="class"
+			value="de.knowwe.wisskont.ci.OrphanTest" />
+		<parameter id="name" value="Orphan" />
+		<parameter id="description" value="CITest Orphan" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"

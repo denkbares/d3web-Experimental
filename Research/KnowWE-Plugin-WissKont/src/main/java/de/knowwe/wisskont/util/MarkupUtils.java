@@ -105,6 +105,31 @@ public class MarkupUtils {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @created 22.05.2013
+	 * @param testObject
+	 * @param concept
+	 * @return
+	 */
+	public static List<String> getParents(Rdf2GoCore testObject, URI concept) {
+		String parentQuery = "SELECT ?x WHERE { <" + concept.toString()
+				+ "> lns:unterkonzept ?x.}";
+		QueryResultTable resultTable = testObject.sparqlSelect(parentQuery);
+		ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
+
+		List<String> parents = new ArrayList<String>();
+		while (resultIterator.hasNext()) {
+			QueryRow parentConceptResult = resultIterator.next();
+			Node value = parentConceptResult.getValue("x");
+			URI parent = value.asURI();
+			parents.add(MarkupUtils.getConceptName(parent));
+
+		}
+
+		return parents;
+	}
+
 	public static List<String> getChildrenConcepts(String term) {
 		List<String> result = new ArrayList<String>();
 
