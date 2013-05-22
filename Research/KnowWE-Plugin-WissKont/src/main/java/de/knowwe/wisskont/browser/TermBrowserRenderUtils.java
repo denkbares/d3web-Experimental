@@ -125,6 +125,8 @@ public class TermBrowserRenderUtils {
 	 * @param rootConcept
 	 */
 	private static void renderConceptSubTree(Node<RatedTerm> rootConcept, int level, RenderResult string) {
+		string.append("\n"); // append newline into html-code from time to time
+								// to avoid jspwiki bug
 		if (!rootConcept.getData().equals(RatedTerm.ROOT)) {
 			renderConcept(rootConcept, level, string);
 		}

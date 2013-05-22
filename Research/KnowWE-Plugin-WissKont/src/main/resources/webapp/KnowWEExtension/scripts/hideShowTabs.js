@@ -25,21 +25,31 @@ function initShowTabs() {
 
 function showTabs() {
 	var view = document.getElementById('menu-pagecontent');
-	view.style.visibility='visible';
-	view.setAttribute('class', '');
+	if(view) {
+		view.style.visibility='visible';
+		view.setAttribute('class', '');
+	}
 	
 	var attach = document.getElementById('menu-attach');
-	attach.style.visibility='visible';
-	attach.setAttribute('class', 'activetab');
+	if(attach) {
+		attach.style.visibility='visible';
+		attach.setAttribute('class', 'activetab');
+	}
 	
 	hidePageContent();
 	showAttachPage();	
 }
 
 function hidePageContent() {
-	document.getElementById('pagecontent').setAttribute('class', 'hidetab');
+	var elementById=document.getElementById('pagecontent');
+	if(elementById) {
+		elementById.setAttribute('class', 'hidetab');
+	}
 }
 
 function showAttachPage() {
-	document.getElementById('attach').setAttribute('class', '');	
+	var elementById=document.getElementById('attach');
+	if(elementById) {
+		elementById.setAttribute('class', '');	
+	}
 }
