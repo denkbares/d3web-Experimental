@@ -31,7 +31,7 @@ public class ContentLayoutPreHandler implements PageAppendHandler {
 
 	@Override
 	public void append(String web, String topic, UserContext user, RenderResult result) {
-		result.appendHtml("<div class='wissassPageContents'>");
+		result.appendHtml("<div class='wissassPageContents'>" + "\n");
 
 	}
 
