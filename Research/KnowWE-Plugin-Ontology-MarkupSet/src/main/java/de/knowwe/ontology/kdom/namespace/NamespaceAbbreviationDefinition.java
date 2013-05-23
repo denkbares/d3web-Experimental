@@ -51,7 +51,7 @@ public class NamespaceAbbreviationDefinition extends SimpleDefinition {
 	public String getNamespace(Section<? extends Term> section) {
 		Section<NamespaceDefinition> namespace = Sections.findChildOfType(section,
 				NamespaceDefinition.class);
-		String namespaceName = namespace.get().getTermName(namespace);
+		String namespaceName = namespace.getText();
 		return namespaceName;
 	}
 
