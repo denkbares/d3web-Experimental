@@ -181,6 +181,30 @@ public class RenderingCore {
 		dotSourceRelations = new LinkedHashMap<Edge, String>();
 	}
 
+	private String getSectionTitle() {
+		if (section != null) {
+			return section.getTitle();
+		}
+
+		return "ForTestingOnly";
+	}
+
+	private String getSectionID() {
+		if (section != null) {
+			return section.getID();
+		}
+
+		return "ForTestingOnly";
+	}
+
+	public void createDotSource() {
+		getAnnotations();
+
+		setSizeAndRankDir();
+
+		buildSources();
+	}
+
 	/**
 	 * Starts the actual rendering process. Generates doc file and images files.
 	 * Adds corresponding html source to the passed StringBuilder.
@@ -190,23 +214,9 @@ public class RenderingCore {
 	 *        builder
 	 */
 	public void render(RenderResult builder) {
+		createDotSource();
 
-		getAnnotations();
-
-		setSizeAndRankDir();
-
-		buildSources();
-		try {
-			writeFiles(section);
-		}
-		catch (FileNotFoundException e) {
-			// TODO: render proper message
-			builder.append("Warning:" + e.toString());
-		}
-		catch (IOException e) {
-			// TODO: render proper message
-			builder.append("Warning:" + e.toString());
-		}
+		writeFiles(section);
 
 		// actually render HTML-content
 		createHTMLOutput(builder);
@@ -277,9 +287,9 @@ public class RenderingCore {
 		String div_open = "<div style=\"" + style + "\">";
 		String div_close = "</div>";
 		String png_default = div_open + "<img alt='graph' src='"
-				+ tmpPath + "graph" + section.getID() + ".png'>" + div_close;
+				+ tmpPath + "graph" + getSectionID() + ".png'>" + div_close;
 		String svg = div_open + "<object data='" + tmpPath
-				+ "graph" + section.getID() + ".svg' type=\"image/svg+xml\">" + png_default
+				+ "graph" + getSectionID() + ".svg' type=\"image/svg+xml\">" + png_default
 				+ "</object>" + div_close;
 		String format = parameters.get(FORMAT);
 		if (format == null) {
@@ -300,7 +310,7 @@ public class RenderingCore {
 	 * @param path
 	 */
 	private File createFile(String type, String path) {
-		String filename = path + "graph" + section.getID()
+		String filename = path + "graph" + getSectionID()
 				+ "." + type;
 		File f = new File(filename);
 		return f;
@@ -378,7 +388,7 @@ public class RenderingCore {
 	 * 
 	 * @created 20.08.2012
 	 */
-	public void writeFiles(Section<?> section) throws FileNotFoundException, IOException {
+	public void writeFiles(Section<?> section) {
 		File dot = createFile("dot", path);
 		File svg = createFile("svg", path);
 		File png = createFile("png", path);
@@ -394,13 +404,28 @@ public class RenderingCore {
 		// create svg
 		String command = getDOTApp() + " " + dot.getAbsolutePath() +
 				" -Tsvg -o " + svg.getAbsolutePath() + "";
-		createFileOutOfDot(svg, dot, command);
 
-		// create png
-		command = getDOTApp() + " " + dot.getAbsolutePath() +
-				" -Tpng -o " + png.getAbsolutePath() + "";
-		createFileOutOfDot(png, dot, command);
-		prepareSVG(svg);
+		try {
+
+			createFileOutOfDot(svg, dot, command);
+
+			// create png
+			command = getDOTApp() + " " + dot.getAbsolutePath() +
+					" -Tpng -o " + png.getAbsolutePath() + "";
+			createFileOutOfDot(png, dot, command);
+			prepareSVG(svg);
+		}
+		catch (FileNotFoundException e) {
+			Logger.getLogger(this.getClass().getName()).log(Level.WARNING, e.toString());
+		}
+		catch (IOException e) {
+			Logger.getLogger(this.getClass().getName()).log(Level.WARNING, e.toString());
+		}
+
+	}
+
+	public String getDotSource() {
+		return dotSource;
 	}
 
 	private String getDOTApp() {
@@ -652,7 +677,7 @@ public class RenderingCore {
 		}
 
 		String conceptKey = "\"" + concept + "\"";
-		String conceptValue = "[ URL=\"" + url + "?page=" + section.getTitle() + "&concept="
+		String conceptValue = "[ URL=\"" + url + "?page=" + getSectionTitle() + "&concept="
 				+ concept + "\" style=\"" + style + "\" fillcolor=\"" + fillcolor + "\" " +
 				// + "\" fontsize=\"" + fontsize + "\""
 				" shape=\"" + shape + "\"" + "label=\""
@@ -730,10 +755,7 @@ public class RenderingCore {
 	 * @param request
 	 */
 	private void addSuccessors(Node conceptURI) {
-		// String concept = getConceptName(conceptURI);
-		// String query = "SELECT ?y ?z WHERE { "
-		// + uriProvider.createSparqlURI(concept, rdfRepository, master)
-		// + " ?y ?z.}";
+
 		String query = "SELECT ?y ?z WHERE { <"
 				+ conceptURI.asURI().toString()
 				+ "> ?y ?z.}";
@@ -882,12 +904,9 @@ public class RenderingCore {
 			concept = URLDecoder.decode(concept, "UTF-8");
 		}
 		catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// String query = "SELECT ?y ?z WHERE { "
-		// + uriProvider.createSparqlURI(concept, rdfRepository, master)
-		// + " ?y ?z.}";
+
 		String query = "SELECT ?y ?z WHERE { <"
 				+ conceptURI.asURI().toString()
 				+ "> ?y ?z.}";
@@ -945,11 +964,6 @@ public class RenderingCore {
 	 */
 	private void addOutgoingEdgesPredecessors(Node conceptURI) {
 		if (isLiteral(conceptURI)) return;
-		// String concept = getConceptName(conceptURI);
-		// String conceptDecoded = urlDecode(concept);
-		// String query = "SELECT ?x ?y WHERE { ?x ?y "
-		// + uriProvider.createSparqlURI(conceptDecoded, rdfRepository, master)
-		// + "}";
 
 		String query = "SELECT ?x ?y WHERE { ?x ?y <"
 				+ conceptURI.asURI().toString()
@@ -1086,7 +1100,7 @@ public class RenderingCore {
 				return uriProvider.getLinkToTermDefinition(to, parameters.get(MASTER));
 			}
 		}
-		return createBaseURL() + "?page=" + section.getTitle()
+		return createBaseURL() + "?page=" + getSectionTitle()
 				+ "&concept=" + to;
 	}
 
@@ -1096,7 +1110,14 @@ public class RenderingCore {
 	 * @return
 	 */
 	private String createBaseURL() {
-		return Environment.getInstance().getWikiConnector().getBaseUrl() + "Wiki.jsp";
+		if (Environment.getInstance() != null
+				&& Environment.getInstance().getWikiConnector() != null) {
+			return Environment.getInstance().getWikiConnector().getBaseUrl() + "Wiki.jsp";
+		}
+		else {
+			// for tests only
+			return "http://localhost:8080/KnowWE/Wiki.jsp";
+		}
 	}
 
 	/**
