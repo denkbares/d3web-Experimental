@@ -32,12 +32,14 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -116,7 +118,7 @@ public class RenderingCore {
 
 	// sources for the dot-file
 	private String dotSource;
-	private final Map<String, String> dotSourceLabel;
+	private final Map<ConceptNode, String> dotSourceLabel;
 	private final Map<Edge, String> dotSourceRelations;
 
 	// Annotations
@@ -133,6 +135,8 @@ public class RenderingCore {
 
 	// appearances
 	private final String outerLabel = "[ shape=\"none\" fontsize=\"0\" fontcolor=\"white\" ];\n";
+
+	private final Set<Edge> edges = new HashSet<Edge>();
 
 	/**
 	 * Allows to create a new Rendering Core. For each rendering task a new one
@@ -177,8 +181,11 @@ public class RenderingCore {
 
 		path = realPath + FILE_SEPARATOR + tmpPath;
 
-		dotSourceLabel = new LinkedHashMap<String, String>();
+		dotSourceLabel = new LinkedHashMap<ConceptNode, String>();
 		dotSourceRelations = new LinkedHashMap<Edge, String>();
+
+		// set config values
+		getAnnotations();
 	}
 
 	private String getSectionTitle() {
@@ -198,11 +205,10 @@ public class RenderingCore {
 	}
 
 	public void createDotSource() {
-		getAnnotations();
 
 		setSizeAndRankDir();
 
-		buildSources();
+		selectGraphData();
 	}
 
 	/**
@@ -229,7 +235,7 @@ public class RenderingCore {
 	 * @param concept
 	 * @param request
 	 */
-	private void buildSources() {
+	private void selectGraphData() {
 
 		String concept = parameters.get(CONCEPT);
 		String conceptNameEncoded = null;
@@ -685,7 +691,8 @@ public class RenderingCore {
 		// the main concept is inserted in the dotSource resp. reset if
 		// the appearance was changed
 		if (dotSourceLabel.get(conceptKey) != conceptValue) {
-			dotSourceLabel.put(Strings.unquote(conceptKey), conceptValue);
+			dotSourceLabel.put(new ConceptNode(Strings.unquote(conceptKey)),
+					conceptValue);
 		}
 	}
 
@@ -731,8 +738,8 @@ public class RenderingCore {
 			String[] concepts = new String[] {
 					relation.getSubject(), relation.getObject() };
 
-			String string1 = dotSourceLabel.get(concepts[0]);
-			String string2 = dotSourceLabel.get(concepts[1]);
+			String string1 = dotSourceLabel.get(new ConceptNode(concepts[0]));
+			String string2 = dotSourceLabel.get(new ConceptNode(concepts[1]));
 			if (string1 != outerLabel
 					&& string2 != outerLabel) {
 				String temp = dotSourceRelations.get(relation);
@@ -839,7 +846,7 @@ public class RenderingCore {
 		ClosableIterator<QueryRow> result =
 				rdfRepository.sparqlSelectIt(
 						query);
-		loop: while (result.hasNext()) {
+		while (result.hasNext()) {
 			QueryRow row = result.next();
 			Node xURI = row.getValue("x");
 			String x = getConceptName(xURI);
@@ -860,19 +867,19 @@ public class RenderingCore {
 			}
 
 			if (excludedRelation(y)) {
-				continue loop;
+				continue;
 			}
 			if (excludedNode(x)) {
-				continue loop;
+				continue;
 			}
 
 			NODE_TYPE nodeType = getConceptType(xURI.asURI());
 
 			if (nodeType == NODE_TYPE.CLAAS && !showClasses) {
-				continue loop;
+				continue;
 			}
 			else if (nodeType == NODE_TYPE.PROPERTY && !showProperties) {
-				continue loop;
+				continue;
 			}
 
 			height++;
@@ -1031,7 +1038,9 @@ public class RenderingCore {
 		to = urlDecode(to);
 		relation = urlDecode(relation);
 
-		RenderingStyle style = getStyle(type);
+		this.edges.add(new Edge(from, relation, to, type));
+
+		RenderingStyle style = DotRenderer.getStyle(type);
 
 		String newLineLabelKey;
 		String newLineLabelValue;
@@ -1064,34 +1073,15 @@ public class RenderingCore {
 		String newLineRelationsValue = DotRenderer.innerRelation(relation,
 				parameters.get(RELATION_COLOR_CODES));
 
-		if (!dotSourceLabel.containsKey(newLineLabelKey)
-				|| (dotSourceLabel.get(newLineLabelKey) != newLineLabelValue)) {
-			dotSourceLabel.put(Strings.unquote(newLineLabelKey), newLineLabelValue);
+		if (!dotSourceLabel.containsKey(new ConceptNode(newLineLabelKey))
+				|| (dotSourceLabel.get(new ConceptNode(newLineLabelKey)) != newLineLabelValue)) {
+			dotSourceLabel.put(new ConceptNode(Strings.unquote(newLineLabelKey)), newLineLabelValue);
 		}
 		if (!dotSourceRelations.containsKey(newLineRelationsKey)
 				|| (dotSourceRelations.get(newLineRelationsKey)) != newLineRelationsValue) {
 			dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);
 		}
 
-	}
-
-	private RenderingStyle getStyle(NODE_TYPE type) {
-		RenderingStyle style = new RenderingStyle();
-		style.fontcolor = "black";
-
-		if (type == NODE_TYPE.CLAAS) {
-			style.shape = "box";
-		}
-		else if (type == NODE_TYPE.PROPERTY) {
-			style.shape = "septagon";
-		}
-		else if (type == NODE_TYPE.INSTANCE) {
-			style.shape = "egg";
-		}
-		else {
-			style.shape = "box";
-		}
-		return style;
 	}
 
 	private String createConceptURL(String to) {
@@ -1158,7 +1148,8 @@ public class RenderingCore {
 				+ "\" style=\"" + style + "\" ];\n";
 
 		boolean arcIsNew = !dotSourceRelations.containsKey(newLineRelationsKey);
-		boolean nodeIsNew = !dotSourceLabel.containsKey(Strings.unquote(newLineLabelKey));
+		boolean nodeIsNew = !dotSourceLabel.containsKey(new ConceptNode(
+				Strings.unquote(newLineLabelKey)));
 
 		boolean showOutgoingEdges = true;
 		if (parameters.get(SHOW_OUTGOING_EDGES) != null) {
@@ -1169,7 +1160,7 @@ public class RenderingCore {
 
 		if (showOutgoingEdges) {
 			if (nodeIsNew) {
-				dotSourceLabel.put(Strings.unquote(newLineLabelKey), outerLabel);
+				dotSourceLabel.put(new ConceptNode(Strings.unquote(newLineLabelKey)), outerLabel);
 			}
 			if (arcIsNew) {
 				dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);

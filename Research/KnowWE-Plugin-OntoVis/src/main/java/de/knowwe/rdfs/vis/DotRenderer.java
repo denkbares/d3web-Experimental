@@ -21,6 +21,8 @@ package de.knowwe.rdfs.vis;
 import java.util.Iterator;
 import java.util.Map;
 
+import de.knowwe.rdfs.vis.RenderingCore.NODE_TYPE;
+
 /**
  * 
  * @author jochenreutelshofer
@@ -85,17 +87,36 @@ public class DotRenderer {
 		return "black";
 	}
 
+	public static RenderingStyle getStyle(NODE_TYPE type) {
+		RenderingStyle style = new RenderingStyle();
+		style.fontcolor = "black";
+
+		if (type == NODE_TYPE.CLAAS) {
+			style.shape = "box";
+		}
+		else if (type == NODE_TYPE.PROPERTY) {
+			style.shape = "septagon";
+		}
+		else if (type == NODE_TYPE.INSTANCE) {
+			style.shape = "egg";
+		}
+		else {
+			style.shape = "box";
+		}
+		return style;
+	}
+
 	/**
 	 * The sources from the maps are being written into the String-dotSource.
 	 * 
 	 * @created 18.08.2012
 	 */
-	public static String connectSources(String dotSource, Map<String, String> dotSourceLabel, Map<Edge, String> dotSourceRelations) {
+	public static String connectSources(String dotSource, Map<ConceptNode, String> dotSourceLabel, Map<Edge, String> dotSourceRelations) {
 		// iterate over the labels and add them to the dotSource
-		Iterator<String> labelKeys = dotSourceLabel.keySet().iterator();
+		Iterator<ConceptNode> labelKeys = dotSourceLabel.keySet().iterator();
 		while (labelKeys.hasNext()) {
-			String key = labelKeys.next();
-			dotSource += "\"" + key + "\"" + dotSourceLabel.get(key);
+			ConceptNode key = labelKeys.next();
+			dotSource += "\"" + key.getName() + "\"" + dotSourceLabel.get(key);
 		}
 
 		// iterate over the relations and add them to the dotSource

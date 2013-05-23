@@ -30,14 +30,20 @@ public class Edge {
 	private final String subject;
 	private final String predicate;
 	private final String object;
+	private final RenderingCore.NODE_TYPE nodeType;
 
 	/**
 	 * 
 	 */
 	public Edge(String s, String p, String o) {
+		this(s, p, o, RenderingCore.NODE_TYPE.UNDEFINED);
+	}
+
+	public Edge(String s, String p, String o, RenderingCore.NODE_TYPE nodeType) {
 		this.subject = Strings.unquote(s);
 		this.predicate = Strings.unquote(p);
 		this.object = Strings.unquote(o);
+		this.nodeType = nodeType;
 	}
 
 	@Override
