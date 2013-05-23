@@ -18,15 +18,6 @@
  */
 package de.knowwe.rdfs.vis;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -38,7 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,6 +45,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
+import de.knowwe.rdfs.vis.util.FileUtils;
 import de.knowwe.rdfs.vis.util.Utils;
 
 /**
@@ -106,15 +97,11 @@ public class RenderingCore {
 
 	private String graphSize;
 
-	// path of the local dot-Installation
-	private static String DOT_INSTALLATION;
-
 	// paths
 	private final String tmpPath;
-	private static final String TMP_FOLDER = "tmp";
-	private static final String KNOWWEEXTENSION_FOLDER = "KnowWEExtension";
+	// private static final String TMP_FOLDER = "tmp";
+	// private static final String KNOWWEEXTENSION_FOLDER = "KnowWEExtension";
 	private final String path;
-	private static String FILE_SEPARATOR = System.getProperty("file.separator");
 
 	// sources for the dot-file
 	private String dotSource;
@@ -173,13 +160,14 @@ public class RenderingCore {
 
 		this.parameters = parameters;
 		this.section = section;
-		ResourceBundle rb = ResourceBundle.getBundle("dotInstallation");
-		DOT_INSTALLATION = rb.getString("path");
-		tmpPath = KNOWWEEXTENSION_FOLDER + FILE_SEPARATOR + TMP_FOLDER + FILE_SEPARATOR;
-		String graphtitle = "Konzeptuebersicht"; // + parameters.get(CONCEPT);
+
+		tmpPath = FileUtils.KNOWWEEXTENSION_FOLDER + FileUtils.FILE_SEPARATOR
+				+ FileUtils.TMP_FOLDER
+				+ FileUtils.FILE_SEPARATOR;
+		String graphtitle = "Konzeptuebersicht";
 		dotSource = "digraph " + graphtitle + " {\n";
 
-		path = realPath + FILE_SEPARATOR + tmpPath;
+		path = realPath + FileUtils.FILE_SEPARATOR + tmpPath;
 
 		dotSourceLabel = new LinkedHashMap<ConceptNode, String>();
 		dotSourceRelations = new LinkedHashMap<Edge, String>();
@@ -196,7 +184,7 @@ public class RenderingCore {
 		return "ForTestingOnly";
 	}
 
-	private String getSectionID() {
+	public static String getSectionID(Section<?> section) {
 		if (section != null) {
 			return section.getID();
 		}
@@ -222,7 +210,7 @@ public class RenderingCore {
 	public void render(RenderResult builder) {
 		createDotSource();
 
-		writeFiles(section);
+		DotRenderer.createAndwriteDOTFiles(section, dotSource, path, parameters.get(DOT_APP));
 
 		// actually render HTML-content
 		createHTMLOutput(builder);
@@ -293,9 +281,9 @@ public class RenderingCore {
 		String div_open = "<div style=\"" + style + "\">";
 		String div_close = "</div>";
 		String png_default = div_open + "<img alt='graph' src='"
-				+ tmpPath + "graph" + getSectionID() + ".png'>" + div_close;
+				+ tmpPath + "graph" + getSectionID(section) + ".png'>" + div_close;
 		String svg = div_open + "<object data='" + tmpPath
-				+ "graph" + getSectionID() + ".svg' type=\"image/svg+xml\">" + png_default
+				+ "graph" + getSectionID(section) + ".svg' type=\"image/svg+xml\">" + png_default
 				+ "</object>" + div_close;
 		String format = parameters.get(FORMAT);
 		if (format == null) {
@@ -309,229 +297,8 @@ public class RenderingCore {
 		}
 	}
 
-	/**
-	 * 
-	 * @created 18.08.2012
-	 * @param type
-	 * @param path
-	 */
-	private File createFile(String type, String path) {
-		String filename = path + "graph" + getSectionID()
-				+ "." + type;
-		File f = new File(filename);
-		return f;
-	}
-
-	/**
-	 * 
-	 * @created 20.08.2012
-	 * @param dot
-	 */
-	private void writeDot(File dot) {
-		try {
-			checkWriteable(dot);
-			FileWriter writer;
-			writer = new FileWriter(dot);
-			writer.append(dotSource);
-			writer.flush();
-			writer.close();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Method, that adds the target-tag to every URL in the svg-file and if
-	 * requested changes the height and width of the graph.
-	 * 
-	 * @created 01.08.2012
-	 * @param svg
-	 */
-	private void prepareSVG(File svg) throws FileNotFoundException, IOException {
-		FileInputStream fs = null;
-		InputStreamReader in = null;
-		BufferedReader br = null;
-		StringBuffer sb = new StringBuffer();
-		String line;
-
-		fs = new FileInputStream(svg);
-		in = new InputStreamReader(fs);
-		br = new BufferedReader(in);
-
-		while (true) {
-			line = br.readLine();
-			if (line == null) break;
-			line = checkLine(line);
-			sb.append(line + "\n");
-		}
-
-		fs.close();
-		in.close();
-		br.close();
-
-		FileWriter fstream = new FileWriter(svg);
-		BufferedWriter outobj = new BufferedWriter(fstream);
-		outobj.write(sb.toString());
-		outobj.close();
-	}
-
-	/**
-	 * 
-	 * @created 20.08.2012
-	 * @param line
-	 */
-	private String checkLine(String line) {
-		// adds target-tag to every URL
-		if (line.matches("<a xlink:href=.*")) {
-			line = line.substring(0, line.length() - 1) + " target=\"_top\">";
-		}
-		return line;
-	}
-
-	/**
-	 * The dot, svg and png files are created and written.
-	 * 
-	 * @created 20.08.2012
-	 */
-	public void writeFiles(Section<?> section) {
-		File dot = createFile("dot", path);
-		File svg = createFile("svg", path);
-		File png = createFile("png", path);
-
-		// TODO all files are being deleted and still it happens that the old
-		// files/graph is being displayed when the user chooses a different
-		// concept
-		dot.delete();
-		svg.delete();
-		png.delete();
-
-		writeDot(dot);
-		// create svg
-		String command = getDOTApp() + " " + dot.getAbsolutePath() +
-				" -Tsvg -o " + svg.getAbsolutePath() + "";
-
-		try {
-
-			createFileOutOfDot(svg, dot, command);
-
-			// create png
-			command = getDOTApp() + " " + dot.getAbsolutePath() +
-					" -Tpng -o " + png.getAbsolutePath() + "";
-			createFileOutOfDot(png, dot, command);
-			prepareSVG(svg);
-		}
-		catch (FileNotFoundException e) {
-			Logger.getLogger(this.getClass().getName()).log(Level.WARNING, e.toString());
-		}
-		catch (IOException e) {
-			Logger.getLogger(this.getClass().getName()).log(Level.WARNING, e.toString());
-		}
-
-	}
-
 	public String getDotSource() {
 		return dotSource;
-	}
-
-	private String getDOTApp() {
-		String app = DOT_INSTALLATION;
-		String user_def_app = parameters.get(DOT_APP);
-		if (user_def_app != null) {
-			if (app.endsWith(FILE_SEPARATOR)) app += user_def_app;
-			else {
-				app = app.substring(0, app.lastIndexOf(FILE_SEPARATOR)) + FILE_SEPARATOR
-						+ user_def_app;
-			}
-		}
-		return app;
-	}
-
-	/**
-	 * 
-	 * @created 20.08.2012
-	 * @param file
-	 * @param dot
-	 * @param command
-	 */
-	private void createFileOutOfDot(File file, File dot, String command) throws IOException {
-		checkWriteable(file);
-		checkReadable(dot);
-		try {
-			Process process = Runtime.getRuntime().exec(command);
-			process.waitFor();
-			int exitValue = process.exitValue();
-			if (exitValue != 0) {
-				printStream(process.getErrorStream());
-				throw new IOException("Command could not successfully be executed: " + command);
-			}
-
-		}
-		catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void printStream(InputStream str) throws IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(str));
-		String inputLine;
-		while ((inputLine = in.readLine()) != null)
-			System.out.println(inputLine);
-		in.close();
-	}
-
-	/**
-	 * Check if the specified file and the required folder structure can be
-	 * written. This prevents failures later on when the pdf will be created. If
-	 * the file cannot be written an {@link IOException} is thrown.
-	 * 
-	 * @created 20.04.2011
-	 * @param file the file to be written
-	 * @throws IOException if the file cannot be written
-	 */
-	private static void checkWriteable(File file) throws IOException {
-		// create/check target output folder
-		File parent = file.getAbsoluteFile().getParentFile();
-		parent.mkdirs();
-		if (!parent.exists()) {
-			throw new IOException(
-					"failed to create non-existing parent folder: " + parent.getCanonicalPath());
-		}
-		// if there is already a file that cannot be overwritten,
-		// throw an exception
-		if (file.exists() && !file.canWrite()) {
-			throw new IOException(
-					"output file cannot be written: " + file.getCanonicalPath());
-		}
-
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-			}
-			catch (IOException io) {
-				throw new IOException(
-						"output file could not be created: " + file.getCanonicalPath());
-			}
-		}
-	}
-
-	/**
-	 * Checks if the specified file can be read. If not an {@link IOException}
-	 * is thrown.
-	 * 
-	 * @created 20.04.2011
-	 * @param file the file to read from
-	 * @throws IOException if the file cannot be read
-	 */
-	private static void checkReadable(File file) throws IOException {
-		if (!file.exists()) {
-			throw new FileNotFoundException(
-					"file does not exist: " + file.getCanonicalPath());
-		}
-		if (!file.canRead()) {
-			throw new IOException(
-					"file cannot be read:" + file.getCanonicalPath());
-		}
 	}
 
 	/**
