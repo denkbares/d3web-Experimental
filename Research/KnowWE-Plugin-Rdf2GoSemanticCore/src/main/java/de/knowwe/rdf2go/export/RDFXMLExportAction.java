@@ -46,7 +46,7 @@ public class RDFXMLExportAction extends AbstractAction {
 		StringWriter stringWriter = new StringWriter();
 		Rdf2GoCore.getInstance().writeModel(stringWriter);
 		String string = stringWriter.toString();
-		context.setContentLength(string.length());
+		context.setContentLength(string.getBytes().length);
 
 		context.getWriter().write(string);
 
