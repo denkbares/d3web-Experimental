@@ -46,6 +46,7 @@ import org.ontoware.rdf2go.Reasoning;
 import org.ontoware.rdf2go.exception.MalformedQueryException;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.exception.ReasoningNotSupportedException;
+import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.Statement;
@@ -178,7 +179,7 @@ public class Rdf2GoCore implements EventListener {
 	 * is the full namespace, e.g. rdf and
 	 * http://www.w3.org/1999/02/22-rdf-syntax-ns#
 	 */
-	private Map<String, String> namespaces;
+	private final Map<String, String> namespaces = new HashMap<String, String>();;
 
 	private Set<Statement> insertCache;
 
@@ -192,6 +193,12 @@ public class Rdf2GoCore implements EventListener {
 		bns = "http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#";
 		lns = Environment.getInstance().getWikiConnector().getBaseUrl()
 				+ "Wiki.jsp?page=";
+	}
+
+	public Rdf2GoCore(String lns, Model model) {
+		bns = "http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#";
+		this.lns = lns;
+		this.model = model;
 	}
 
 	/**
@@ -598,7 +605,6 @@ public class Rdf2GoCore implements EventListener {
 		insertCache = new HashSet<Statement>();
 		removeCache = new HashSet<Statement>();
 
-		namespaces = new HashMap<String, String>();
 		namespaces.putAll(model.getNamespaces());
 		initDefaultNamespaces();
 		EventManager.getInstance().registerListener(this);
