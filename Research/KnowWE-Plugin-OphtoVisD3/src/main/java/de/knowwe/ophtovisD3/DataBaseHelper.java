@@ -34,9 +34,11 @@ import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.ophtovisD3.utils.Connections;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.util.RDFSUtil;
+import de.knowwe.wisskont.util.MarkupUtils;
 
 
  /**
@@ -158,6 +160,7 @@ import de.knowwe.rdfs.util.RDFSUtil;
 			if(reverse){
 				table = Rdf2GoCore.getInstance().sparqlSelect(
 						"SELECT ?a ?b WHERE {  ?b ?a  " + sparqlConcept + "}");
+				System.out.println(table.iterator().hasNext());
 			}else{
 			table = Rdf2GoCore.getInstance().sparqlSelect(
 					"SELECT ?a ?b WHERE {  " + sparqlConcept + " ?a ?b}");
@@ -165,15 +168,28 @@ import de.knowwe.rdfs.util.RDFSUtil;
 			return table;
 		}
 		
-//		public static HashMap <String,String> querytableToHashmap(QueryResultTable table){
-//			HashMap<String, String> result = new HashMap<String, String>();
-//			for (QueryRow queryRow : table) {
-//				String connectionType =queryRow.getLiteralValue("a");
-//				if (connectionType.equals("unterkonzept")) {
-//					
-//				}
-//			}
-//		}
+		public static LinkedList <String []> querytableToList(QueryResultTable table){
+			LinkedList <String []> result= new LinkedList <String []>();
+			for (QueryRow queryRow : table) {
+				Node node=queryRow.getValue("a");
+				String connectionType =MarkupUtils.getConceptName(node);
+				node=queryRow.getValue("b");
+				String connectedNode=MarkupUtils.getConceptName(node);
+				String [] pair={connectionType,connectedNode};
+				if(!connectionType.contains("rdf-")){
+				result.add(pair);
+				}
+			}
+			return result;
+		}
+		
+		public static Connections getConnectionObject(String concept){
+			QueryResultTable out =getAllConnections(concept, false); 
+			QueryResultTable in  =getAllConnections(concept, true); 
+			LinkedList<String []> outList =querytableToList(out);
+			LinkedList<String []> inList =querytableToList(in);
+			return new Connections(inList, outList); 
+		}
 	
 	/**
 	 * This Method tries to get the first Object of a Chain in Order to get the whole DB connected by this Type

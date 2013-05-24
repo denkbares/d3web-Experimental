@@ -11,9 +11,7 @@ var width = 840,
     duration = 1000;
 
 var div = d3.select("#vis");
-//div.append("text").text("Hallo");
-//terst
-//div.select("img").remove();
+
 
 var vis = div.append("svg")
     .attr("width", width + padding * 2)
@@ -35,9 +33,10 @@ var arc = d3.svg.arc()
 
 var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
 	d3.json(url, function(json) {
+		console.log("jetzt json");
 		console.log(json);
-  var nodes = partition.nodes({children: json.children});
-  nodes= nodes[0].children;
+  var nodes = partition.nodes({children: json.root.children});
+  //nodes= nodes[0].children;
   console.log("jetzt");
   console.log(nodes);
 	var color = d3.scale.category20();
@@ -45,8 +44,8 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
   path.enter().append("path")
       .attr("id", function(d, i) { return "path-" + i; })
       .attr("d", arc)
-      .style("fill",function(d, i) { return color(i); })
-      .on("click", click);
+      .style("fill",function(d, i) { return color(i); });
+      //.on("click", click);
 
   var text = vis.selectAll("text").data(nodes);
   var textEnter = text.enter().append("text")
@@ -61,9 +60,9 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
             rotate = angle + (multiline ? -.5 : 0);
         return "rotate(" + rotate + ")translate(" + (y(d.y) + padding) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
       })
-      .attr("visibility", function(e) {
-          return (e.depth<2) ? null : d3.select(this).style("visibility", "hidden");
-        })
+     // .attr("visibility", function(e) {
+       //   return (e.depth<2) ? null : d3.select(this).style("visibility", "hidden");
+       // })
       .on("click", click);
       console.log("läuft");
   textEnter.append("tspan")
@@ -106,6 +105,8 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
 });
 
 function isParentOf(p, c) {
+	console.log("p kommt");
+	console.log(p.children);
   if (p === c) return true;
   if (p.children) {
     return p.children.some(function(d) {
@@ -367,13 +368,15 @@ d3.select("body").append("div").attr("id", "vis");
 
 var svg = d3.select("#vis").append("svg")
     .attr("width", diameter)
-    .attr("height", diameter - 150)
+    .attr("height", diameter)
   .append("g")
     .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
 var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
 d3.json( url, function(error, root) {
-  var nodes = tree.nodes(root),
+	console.log("root");
+	console.log(root.root);
+  var nodes = tree.nodes(root.root),
       links = tree.links(nodes);
 
   var link = svg.selectAll(".link")
@@ -416,7 +419,7 @@ d3.json( url, function(error, root) {
 	  .attr("x", "0")
 	  .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
 	  .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
-	  .text(function(d) { return d.data.name; })
+	  .text(function(d) {console.log("d");console.log(d); return d.data.name; })
 	  .call(drag);
 
 	

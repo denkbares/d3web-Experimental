@@ -55,6 +55,15 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="ConnectionsAction">
+		<parameter id="class"
+			value="de.knowwe.ophtovisD3.ConnectionsAction" />
+		<parameter id="name" value="ConnectionsAction" />
+		<parameter id="description" value="Return all Connectuions of the Corresponding concept" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
 	<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
 		id="HierarchyViewAppendHandler">
 		<parameter id="class"
@@ -62,7 +71,7 @@
 		<parameter id="name" value="HierarchyViewAppendHandler" />
 		<parameter id="description" value="PageAppendHandler HierarchyViewAppendHandler" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="4" />
+		<parameter id="priority" value="0" />
 		<parameter id="css" value="visualisation.css" />
 		<parameter id="script" value="infobox.js" />
 		<parameter id="script" value="d3.js" />

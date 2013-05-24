@@ -4,21 +4,21 @@ import java.io.IOException;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.ophtovisD3.utils.Connections;
 import de.knowwe.ophtovisD3.utils.JsonFactory;
 
 
-public class PartTreeAction extends AbstractAction {
+public class ConnectionsAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String concept = context.getParameter("concept");
 		if(concept==null)
 			concept="";
-		
-		String responseString =GraphBuilder.builtPartTree(concept,"unterkonzept");
+		Connections con =DataBaseHelper.getConnectionObject(concept);
+		String response = JsonFactory.toJSON(con);
 		context.setContentType("application/json; charset=UTF-8");
-		context.getWriter().write(responseString);
-		System.out.println(JsonFactory.toJSON(DataBaseHelper.getConnectionObject(concept)));
+		context.getWriter().write(response);
 	}
 
 }

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 import com.google.gson.Gson;
 
+import de.knowwe.ophtovisD3.utils.Connections;
 import de.knowwe.ophtovisD3.utils.NodeWithName;
 
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -199,7 +200,5 @@ public class GraphBuilder {
 			}
 		}
 		return resultString;
-
 	}
-
 }

@@ -21,6 +21,7 @@ var vis = d3.select("#chart").append("svg:svg")
     .attr("transform", "translate(20,30)");
 
 d3.json( url, function(json) {
+	
 console.log(json);
   json.x0 = 0;
   json.y0 = 0;
@@ -89,7 +90,7 @@ function update(source) {
   link.enter().insert("svg:path", "g")
       .attr("class", "link")
       .attr("d", function(d) {
-        var o = {x: source.x0, y: source.y0};
+        var o = {x: source.x, y: source.y};
         return diagonal({source: o, target: o});
       })
     .transition()
@@ -130,7 +131,36 @@ function click(d) {
 }
 
 function color(d) {
-return d.data.highlighted ? "#991100" : d._children ? "#232323" : d.children.length>0 ? "#ababab" : "#888888";
+return d.data.highlighted ? "#0855DD" : d._children ? "#232323" : d.children.length>0 ? "#ababab" : "#888888";
 }
+	
+}
+function renderConnections(url){
+	d3.json(url, function(json){
+		d3.select("#chart").append("div").attr("class", "connectionInfo");
+		d3.select(".connectionInfo").append("ul").attr("id","outgoing").attr("class", "info").text("Ausgehend");
+		for (var i = 0; i <json.outgoing.length; i++){
+			var such = json.outgoing[i][0];
+			if((d3.select("#outgoing").select('#' + such)[0][0])==null){
+			d3.select("#outgoing").append("ul").attr("id" ,json.outgoing[i][0]).text(json.outgoing[i][0]);
+			}
+			}
+		for (var i = 0; i <json.outgoing.length; i++){
+			var kat = json.outgoing[i][0];
+		d3.select("#outgoing").select('#'+kat).append("li").text(json.outgoing[i][1]);
+		}
+		d3.select(".connectionInfo").append("ul").attr("id","incoming").attr("class", "info").text("Eingehend");
+		for (var i = 0; i <json.incoming.length; i++){
+			var such = json.incoming[i][0];
+			if((d3.select("#incoming").select('#' + such)[0][0])==null){
+			d3.select("#incoming").append("ul").attr("id" ,json.incoming[i][0]).text(json.incoming[i][0]);
+			}
+			}
+		for (var i = 0; i <json.incoming.length; i++){
+			var kat = json.incoming[i][0];
+		d3.select("#incoming").select('#'+kat).append("li").text(json.incoming[i][1]);
+		}
+		
+	});
 	
 }
