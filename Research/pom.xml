@@ -170,7 +170,7 @@
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.surefire.reportsPath>target/surefire-reports</sonar.surefire.reportsPath>
 		<sonar.clover.reportPath>target/site/clover/clover.xml</sonar.clover.reportPath>
-		<versionatorVersion>1.5</versionatorVersion>
+		<versionatorVersion>1.7</versionatorVersion>
 		<d3webCoreVersion>0.2-SNAPSHOT</d3webCoreVersion>
 	</properties>
 	<modules>
@@ -184,7 +184,6 @@
 		<module>KnowWE-Plugin-Rdf2GoSemanticCore</module>
 		<module>KnowWE-Plugin-Renaming</module>
 		<module>KnowWE-MetaTool</module>
-
 		<module>KnowWE-Plugin-OntE</module>
 		<module>d3web-Plugin-OWL</module>
 		<module>KnowWE-Plugin-d3web-OWL</module>
