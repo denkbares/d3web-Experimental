@@ -96,7 +96,7 @@ body.view, body.edit {
 }
 #header .applicationlogo {
 	position:absolute;
-	left:2.5em; 
+	left:1.8em; 
 	right:auto;
 	top:-0.5em;
 	width:225px;
@@ -170,7 +170,7 @@ body.view, body.edit {
 #page { 
 	position:absolute;
 	left: 299px;
-	margin-top: -23px;
+	margin-top: -24px;
 	background-color:transparent;
 }
 
