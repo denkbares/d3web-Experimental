@@ -1,9 +1,27 @@
 jq$(document).ready(function() {
-	hideViewTab();
-	hideAttachTab();
+	initTabsOnLoad();
 	
-	initShowTabs();
+	initShowTabsOnClick();
 });
+
+function initTabsOnLoad() {
+	var attachTab = document.getElementById('menu-attach');
+	if (attachTab) {
+		if (attachTab.style.visibility === 'visible') {
+			showTabs();
+		} else {
+			hideViewTab();
+			hideAttachTab();
+		}
+	}		
+} 
+
+function initShowTabsOnClick() {
+	var element = document.getElementById('more-attach');
+	if(element) {
+		element.onclick = showTabs;
+	}
+}
 
 function hideViewTab() {
     document.getElementById('menu-pagecontent').style.visibility='hidden';
@@ -16,28 +34,30 @@ function hideAttachTab() {
 	}
 }
 
-function initShowTabs() {
-	var element = document.getElementById('more-attach');
-	if(element) {
-		element.onclick = showTabs;
-	}
-}
-
-function showTabs() {
+function showViewTab() {
 	var view = document.getElementById('menu-pagecontent');
 	if(view) {
 		view.style.visibility='visible';
-		view.setAttribute('class', '');
 	}
-	
+}
+
+function showAttachTab() {
 	var attach = document.getElementById('menu-attach');
 	if(attach) {
 		attach.style.visibility='visible';
-		attach.setAttribute('class', 'activetab');
 	}
-	
-	hidePageContent();
-	showAttachPage();	
+}
+
+function setTabActive(element) {
+	if (element) {
+		element.setAttribute('class', 'activetab');
+	}
+}
+
+function setTabInactive(element) {
+	if (element) {
+		element.setAttribute('class', '');
+	}
 }
 
 function hidePageContent() {
@@ -53,3 +73,17 @@ function showAttachPage() {
 		elementById.setAttribute('class', '');	
 	}
 }
+
+function showTabs() {
+	var view = document.getElementById('menu-pagecontent');
+	showViewTab();
+	setTabInactive(view);
+
+	var attach = document.getElementById('menu-attach');
+	showAttachTab();
+	setTabActive(attach);
+	
+	hidePageContent();
+	showAttachPage();	
+}
+
