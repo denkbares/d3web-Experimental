@@ -18,12 +18,15 @@
  */
 package de.knowwe.wisskont.navigation;
 
+import java.io.IOException;
 import java.util.Map;
 
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.jspwiki.JSPWikiConnector;
 
 /**
  * 
@@ -41,8 +44,24 @@ public class AttachmentsLinkHandler extends AbstractTagHandler {
 
 	@Override
 	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
+		// Count number of attachments
+		int attCount = -1;
+		try {
+			JSPWikiConnector connector = (JSPWikiConnector) Environment.getInstance().getWikiConnector();
+			attCount = connector.getAttachments(userContext.getTitle()).size();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 
-		result.appendHtml("<a id='more-attach' accesskey='a' class='activetab' onload='document.getElementById('menu-attach').style.visibility='hidden';' onclick='document.getElementById('menu-attach').style.visibility='visible';'><span class='accesskey'>A</span>ttach</a>");
+		String html = "<a id='more-attach' accesskey='a' class='activetab'><span class='accesskey'>A</span>ttach";
+		// If there are attachments, add the number to the menu item
+		if (attCount > 0) {
+			html += " (" + attCount + ") ";
+		}
+		html += "</a>";
+
+		result.appendHtml(html);
 
 	}
 	// http://localhost:8080/KnowWE/PageInfo.jsp?page=Ophthalmologische%20Vorbereitung
