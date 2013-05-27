@@ -62,7 +62,8 @@ String findParam( PageContext ctx, String key )
 	
 	String content = "";
 		Visualization.visualiseBubble(concept, result);
-		content = Strings.unmaskJSPWikiMarkup(result.toString());
+		
+		content = RenderResult.unmask(result.toString(), context);
 
 	
 	%><%=content %>
