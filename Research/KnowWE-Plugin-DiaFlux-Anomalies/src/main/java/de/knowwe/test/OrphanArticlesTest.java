@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -61,7 +62,7 @@ public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 		this.addParameter("ignoreUsers", Mode.Optional, "Ignore user articles.", "true", "false");
 
 		this.addIgnoreParameter("articles", Type.Regex, Mode.Optional,
-				"A RegEx specifying articles that should be excluded from this test.");
+				"A RegEx specifying articles that are excluded from this test, ie. they are allowed to be orphaned.");
 
 	}
 
@@ -71,12 +72,12 @@ public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 
 		ArticleManager manager = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB);
-		Collection<Article> allArticles = manager.getArticles();
+
 
 		// links may not match the exact case, so use lowercase first...
 		Collection<String> titles = getAllArticlesLowercase(manager);
 
-		for (Article article : allArticles) {
+		for (Article article : manager.getArticles()) {
 			List<Section<LinkType>> links =
 					Sections.findSuccessorsOfType(article.getRootSection(),
 							LinkType.class);
@@ -88,18 +89,20 @@ public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 
 		titles.removeAll(ROOTS);
 
+		titles = Utils.filterIgnored(titles, Utils.compileIgnores(ignores));
+
 		if (titles.isEmpty()) return Message.SUCCESS;
 
 		// ...later get correct case
 		List<String> result = getTitlesCorrectCase(manager, titles);
 
 		// optionally remove empty articles
-		if (args.length >= 1 && Boolean.valueOf(args[0]).booleanValue()) {
+		if (checkBooleanArg(args, 0)) {
 			filterEmpty(result, manager);
 		}
 
 		// optionally remove user articles
-		if (args.length >= 2 && Boolean.valueOf(args[1]).booleanValue()) {
+		if (checkBooleanArg(args, 1)) {
 			filterUserArticles(result);
 		}
 
@@ -109,6 +112,20 @@ public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 
 		return Utils.createErrorMessage(result,
 				"The following articles are not reachable by links: ", Article.class);
+	}
+
+	protected static boolean checkBooleanArg(String[] args, int index) {
+		return args.length >= index + 1 && Boolean.valueOf(args[index]).booleanValue();
+	}
+
+	protected static Collection<Article> filterArticles(Collection<Article> allArticles, Collection<Pattern> ignorePatterns) {
+		Collection<Article> result = new LinkedList<Article>();
+
+		for (Article article : allArticles) {
+			if (!Utils.isIgnored(article.getTitle(), ignorePatterns)) result.add(article);
+		}
+		return result;
+
 	}
 
 	/**

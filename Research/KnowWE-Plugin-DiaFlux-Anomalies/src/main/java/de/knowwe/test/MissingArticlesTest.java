@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import de.d3web.testing.AbstractTest;
 import de.d3web.testing.Message;
@@ -69,7 +70,7 @@ public class MissingArticlesTest extends AbstractTest<ArticleManager> {
 		// match lower case...
 		Collection<String> titles = OrphanArticlesTest.getAllArticlesLowercase(manager);
 		boolean ignoreAttachments = false;
-		if (args.length >= 1 && Boolean.valueOf(args[0]).booleanValue()) {
+		if (OrphanArticlesTest.checkBooleanArg(args, 0)) {
 			ignoreAttachments = true;
 		}
 
@@ -117,9 +118,13 @@ public class MissingArticlesTest extends AbstractTest<ArticleManager> {
 
 		List<String> erroneousArticles = new LinkedList<String>();
 		List<String> missingArticles = new LinkedList<String>();
+		Collection<Pattern> ignorePatterns = Utils.compileIgnores(ignores);
+
 		for (Section<LinkType> link : missingLinks) {
 			String containingArticle = link.getTitle();
 			String missingArticle = LinkType.getLink(link);
+			if (Utils.isIgnored(missingArticle, ignorePatterns)) continue;
+
 			if (!erroneousArticles.contains(containingArticle)) erroneousArticles.add(containingArticle);
 			if (!missingArticles.contains(missingArticle)) missingArticles.add(missingArticle);
 		}
@@ -133,7 +138,7 @@ public class MissingArticlesTest extends AbstractTest<ArticleManager> {
 			bob.append(link);
 			bob.append("\n");
 		}
-		bob.append("\nThose are referenced on the following articles :");
+		bob.append("\nThose are referenced on the following articles:");
 
 		return Utils.createErrorMessage(erroneousArticles,
 				bob.toString(), Article.class);
