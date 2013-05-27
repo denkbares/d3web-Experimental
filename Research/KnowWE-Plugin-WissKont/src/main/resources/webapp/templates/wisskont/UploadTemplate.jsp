@@ -21,7 +21,7 @@
   <meta name="robots" content="noindex,nofollow" />
 </head>
 
-<body>
+<body class="view">
 
 <div id="wikibody" class="${prefs.Orientation}">
 
