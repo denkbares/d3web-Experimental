@@ -1,3 +1,4 @@
+/* Dependencies */
 .d3webdependencies .dependencies{
 	height: 1000px;
 	width: 100%;
@@ -35,7 +36,7 @@
 	stroke: #666;
 }
 
-
+/* Hierarchy*/
 .diafluxHierarchy circle {
   fill: rgb(31, 119, 180);
   fill-opacity: .25;
@@ -51,5 +52,23 @@
 .diafluxHierarchy text {
   font: 10px sans-serif;
 }
+
+
+/*Coupling Matrix */
+
+.diafluxCouplingMatrix  .background {
+    fill: #EEEEEE;
+}
+.diafluxCouplingMatrix  line {
+    stroke: #FFFFFF;
+}
+.diafluxCouplingMatrix  text.active {
+    fill: red;
+}
+
+.diafluxCouplingMatrix svg {
+    font: 10px sans-serif;
+}
+
 
 
