@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.ophtovisD3.utils.JsonFactory;
 
 
 public class PartTreeAction extends AbstractAction {
@@ -18,7 +17,6 @@ public class PartTreeAction extends AbstractAction {
 		String responseString =GraphBuilder.builtPartTree(concept,"unterkonzept");
 		context.setContentType("application/json; charset=UTF-8");
 		context.getWriter().write(responseString);
-		System.out.println(JsonFactory.toJSON(DataBaseHelper.getConnectionObject(concept)));
 	}
 
 }

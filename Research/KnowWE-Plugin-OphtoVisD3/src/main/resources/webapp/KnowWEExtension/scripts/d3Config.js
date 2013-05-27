@@ -1,5 +1,4 @@
 function createWheel(){
-	console.log("Anfang wheel");
 	d3.select("#vis").remove();
 	d3.select("body").append("div").attr("id", "vis");
 var width = 840,
@@ -23,7 +22,7 @@ var vis = div.append("svg")
 
 var partition = d3.layout.partition()
     .sort(null)
-    .value(function(d) {console.log(d); return 5.8 - d.depth; });
+    .value(function(d) { return 5.8 - d.depth; });
 
 var arc = d3.svg.arc()
     .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
@@ -33,15 +32,11 @@ var arc = d3.svg.arc()
 
 var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
 	d3.json(url, function(json) {
-		console.log("jetzt json");
-		console.log(json);
   var nodes = partition.nodes({children: json.root.children});
-  //nodes= nodes[0].children;
-  console.log("jetzt");
-  console.log(nodes);
+
 	var color = d3.scale.category20();
-  var path = vis.selectAll("path").data(nodes);
-  path.enter().append("path")
+  	var path = vis.selectAll("path").data(nodes);
+  	path.enter().append("path")
       .attr("id", function(d, i) { return "path-" + i; })
       .attr("d", arc)
       .style("fill",function(d, i) { return color(i); });
@@ -64,10 +59,10 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
        //   return (e.depth<2) ? null : d3.select(this).style("visibility", "hidden");
        // })
       .on("click", click);
-      console.log("läuft");
+ 
   textEnter.append("tspan")
       .attr("x", 0)
-      .text(function(d) {console.log(d); return d.depth ? d.data.name.split(" ")[0] : ""; });
+      .text(function(d) { return d.depth ? d.data.name.split(" ")[0] : ""; });
   textEnter.append("tspan")
       .attr("x", 0)
       .attr("dy", "1em")
@@ -105,8 +100,6 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
 });
 
 function isParentOf(p, c) {
-	console.log("p kommt");
-	console.log(p.children);
   if (p === c) return true;
   if (p.children) {
     return p.children.some(function(d) {
@@ -293,7 +286,7 @@ function createBubble(){
 
 var pack = d3.layout.pack()
     .size([ diameter - 4, diameter - 4] )
-    .value(function(d,i) {  console.log(d); return (d.data.data)*200 });
+    .value(function(d,i) { return (d.data.data)*200 });
 
 var svg = d3.select("#vis").append("svg")
     .attr("width", diameter)
@@ -306,7 +299,7 @@ var params = {
  type : 'bubble'};
 var url = KNOWWE.core.util.getURL(params);
 d3.json(url, function(error, root) {
-console.log(root);
+
 
   var node = svg.datum(root.root).selectAll(".node")
       .data(pack.nodes)
@@ -374,8 +367,7 @@ var svg = d3.select("#vis").append("svg")
 
 var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
 d3.json( url, function(error, root) {
-	console.log("root");
-	console.log(root.root);
+
   var nodes = tree.nodes(root.root),
       links = tree.links(nodes);
 
@@ -396,13 +388,11 @@ d3.json( url, function(error, root) {
  
   
   function dragmove(d) {
-	  console.log(this);
 	    d3.select(this)
 	      .attr("x", -d3.event.x)
 	      .attr("y", -d3.event.y);
 	}
 	function dragend(d){
-		console.log(d3.event);
 	d3.select(this)
 	      .attr("x", 0)
 	      .attr("y", 0);
@@ -419,7 +409,7 @@ d3.json( url, function(error, root) {
 	  .attr("x", "0")
 	  .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
 	  .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
-	  .text(function(d) {console.log("d");console.log(d); return d.data.name; })
+	  .text(function(d) {return d.data.name; })
 	  .call(drag);
 
 	

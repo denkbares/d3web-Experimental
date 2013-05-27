@@ -134,6 +134,7 @@ public class Visualization {
 						"<div id=headerwrap class=fixed>\r\n" + 
 						"<div id=header>\r\n" + 
 						"<ul id=\"entry-list\" class=\"list\">\r\n" + 
+						"<li class=\"active menue\" >Visualisierungstypen :   </li>\r\n" + 
 						"<li class=\"active menue\" onclick=\"createBubble()\">Bubble </li>\r\n" + 
 						"<li class=\"menue\" onclick=\"createWheel()\">Wheel </li>\r\n" + 
 						"<li class=\"menue\" onclick=\"createTree()\"> Tree </li>\r\n" + 

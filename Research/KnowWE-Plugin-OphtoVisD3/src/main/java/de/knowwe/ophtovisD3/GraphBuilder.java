@@ -24,10 +24,9 @@ import java.util.List;
 import java.util.Set;
 import com.google.gson.Gson;
 
-import de.knowwe.ophtovisD3.utils.Connections;
 import de.knowwe.ophtovisD3.utils.NodeWithName;
 
-import de.knowwe.rdf2go.Rdf2GoCore;
+
 import de.knowwe.wisskont.util.Tree;
 
 /**
@@ -123,9 +122,7 @@ public class GraphBuilder {
 		String result;
 		if(!false){
 		resultTree = new Tree<NodeWithName>(new NodeWithName("Wurzel","0"));
-		System.out.println("Insert Wurzel");
 		resultTree.insertNode(new NodeWithName(startConcept, DataBaseHelper.countQuerytresultstoString(startConcept)));
-		System.out.println("insert " + startConcept);
 		if (getConnectionAmount) {}
 		String fatherOfTheMoment = startConcept;
 		while (!fatherOfTheMoment.isEmpty()) {
@@ -133,11 +130,9 @@ public class GraphBuilder {
 					resultTree);
 			List<String> nextfather = DataBaseHelper.getConnectedNodeNamesOfType(fatherOfTheMoment,
 					helpconnectionType, true);
-			System.out.println("fathers = " + nextfather.size());
 			if (nextfather.size() >= 1) {
 				fatherOfTheMoment = nextfather.get(0);
 				resultTree.insertNode(new NodeWithName(fatherOfTheMoment ,DataBaseHelper.countQuerytresultstoString(fatherOfTheMoment)));
-				System.out.println("insert node" + fatherOfTheMoment);
 			}
 			else {
 				if (getConnectionAmount) {}
@@ -182,10 +177,8 @@ public class GraphBuilder {
 
 	public static String getChildConcepts(String father, String connectionType, boolean getConnectionAmount, Tree<NodeWithName> tree) {
 		String resultString = "";
-		System.out.println("getchild aufgerufen mit " + father);
 		List<String> childs = DataBaseHelper.getConnectedNodeNamesOfType(father, connectionType,
 				false);
-		System.out.println("Konzept hat " + childs.size());
 		if (childs.isEmpty()) {
 			return resultString += "}";
 		}
@@ -194,7 +187,6 @@ public class GraphBuilder {
 				String string = childs.get(i);
 				if(!childs.get(i).equals(father)){
 				tree.insertNode(new NodeWithName(childs.get(i),Integer.toString(DataBaseHelper.countQuerytresults(childs.get(i)))));
-				System.out.println("einfügen " + childs.get(i));
 				resultString += getChildConcepts(string, connectionType, getConnectionAmount, tree);
 				}
 			}

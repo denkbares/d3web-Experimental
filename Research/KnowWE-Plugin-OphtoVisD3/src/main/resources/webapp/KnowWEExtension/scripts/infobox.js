@@ -22,10 +22,8 @@ var vis = d3.select("#chart").append("svg:svg")
 
 d3.json( url, function(json) {
 	
-console.log(json);
   json.x0 = 0;
   json.y0 = 0;
-  console.log(json);
   update(root = json.root);
 });
 
@@ -162,5 +160,11 @@ function renderConnections(url){
 		}
 		
 	});
+	
+}
+
+function collapseInfobox(){
+	jQuery("#chart").toggleClass("hidden");
+	
 	
 }

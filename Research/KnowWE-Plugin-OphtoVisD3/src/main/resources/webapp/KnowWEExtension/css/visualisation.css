@@ -218,7 +218,25 @@ background-color: #F3F3F3;
 }
 
 /*infoBox2 ---------------------------------------------------------------------------*/
+.prepageappend{
+overflow-x: hidden;
 
+}
+.prepageappend{
+overflow-x: hidden;
+}
+.termgraph{
+overflow-x: hidden;
+}
+.defaultMarkupFrame{
+overflow-x: hidden;
+}
+.parentBreadcrumb{
+overflow-x: hidden;
+}
+.wissassPageContents{
+overflow-x: hidden;
+}
 
 #breadcrumbs { display: none; 
 

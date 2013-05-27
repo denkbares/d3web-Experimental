@@ -22,7 +22,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -160,7 +159,6 @@ import de.knowwe.wisskont.util.MarkupUtils;
 			if(reverse){
 				table = Rdf2GoCore.getInstance().sparqlSelect(
 						"SELECT ?a ?b WHERE {  ?b ?a  " + sparqlConcept + "}");
-				System.out.println(table.iterator().hasNext());
 			}else{
 			table = Rdf2GoCore.getInstance().sparqlSelect(
 					"SELECT ?a ?b WHERE {  " + sparqlConcept + " ?a ?b}");

@@ -33,7 +33,7 @@ transition: background-color 1.5s;
 list-style-type: none;
 display:inline;
 float: left;
-height: 30px;
+height: 15px;
 -webkit-padding-start: 0px;
 
 }
@@ -46,7 +46,7 @@ padding-right: 30px;
 padding-left:30px;
 border-right: 2px solid #FFF;
 
-font: 25px "Lucida Sans",Helvetica,Arial,sans-serif;
+font: 15px "Lucida Sans",Helvetica,Arial,sans-serif;
 
 }
 a:-webkit-any-link{
@@ -67,4 +67,10 @@ border-left: 2px solid #FFF;
 }
 .editor.active{
 background-color: #2D9734!important;
+}
+.hidden{
+visability :hidden;
+}
+.prepageappend{
+overflow-x: hidden;
 }
