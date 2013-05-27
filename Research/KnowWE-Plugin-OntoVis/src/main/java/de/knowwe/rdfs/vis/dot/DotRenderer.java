@@ -16,7 +16,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.rdfs.vis;
+package de.knowwe.rdfs.vis.dot;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -29,11 +29,15 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.rdfs.vis.ConceptNode;
+import de.knowwe.rdfs.vis.Edge;
+import de.knowwe.rdfs.vis.RenderingCore;
 import de.knowwe.rdfs.vis.RenderingCore.NODE_TYPE;
+import de.knowwe.rdfs.vis.SubGraphData;
 import de.knowwe.rdfs.vis.util.FileUtils;
 import de.knowwe.rdfs.vis.util.Utils;
 
@@ -128,8 +132,9 @@ public class DotRenderer {
 	 * 
 	 * @created 18.08.2012
 	 */
-	public static String createDotSources(String dotSource, Map<ConceptNode, String> dotSourceLabel, Map<Edge, String> dotSourceRelations, Map<String, String> parameters) {
+	public static String createDotSources(SubGraphData data, Map<String, String> parameters) {
 		String graphtitle = "Konzeptuebersicht";
+		String dotSource = "";
 		dotSource = "digraph " + graphtitle + " {\n";
 		dotSource = insertPraefixed(dotSource, parameters);
 		dotSource += DotRenderer.setSizeAndRankDir(parameters.get(RenderingCore.RANK_DIRECTION),
@@ -138,38 +143,20 @@ public class DotRenderer {
 		// dotSource += generateGraphSource(dotSourceLabel, dotSourceRelations,
 		// parameters);
 
-		dotSource += generateGraphSource2(dotSourceLabel, dotSourceRelations,
-				parameters);
+		dotSource += generateGraphSource(data, parameters);
 
 		dotSource += "}";
 
 		return dotSource;
 	}
 
-	private static String generateGraphSource(Map<ConceptNode, String> dotSourceLabel, Map<Edge, String> dotSourceRelations, Map<String, String> parameters) {
-		String dotSource = "";
-		// iterate over the labels and add them to the dotSource
-		Iterator<ConceptNode> labelKeys = dotSourceLabel.keySet().iterator();
-		while (labelKeys.hasNext()) {
-			ConceptNode key = labelKeys.next();
-			dotSource += "\"" + key.getName() + "\"" + dotSourceLabel.get(key);
-		}
-
-		// iterate over the relations and add them to the dotSource
-		Iterator<Edge> relationsKeys = dotSourceRelations.keySet().iterator();
-		while (relationsKeys.hasNext()) {
-			Edge key = relationsKeys.next();
-			dotSource += "\"" + key.getSubject() + "\"" + " -> " + "\"" + key.getObject() + "\" "
-					+ dotSourceRelations.get(key);
-		}
-		return dotSource;
-	}
-
-	private static String generateGraphSource2(Map<ConceptNode, String> dotSourceLabel, Map<Edge, String> dotSourceRelations, Map<String, String> parameters) {
+	private static String generateGraphSource(SubGraphData data, Map<String, String> parameters) {
+		Set<ConceptNode> dotSourceLabel = data.getConceptDeclaration();
+		Set<Edge> dotSourceRelations = data.getEdges();
 		String dotSource = "";
 
 		// iterate over the labels and add them to the dotSource
-		Iterator<ConceptNode> conceptDeclarations = dotSourceLabel.keySet().iterator();
+		Iterator<ConceptNode> conceptDeclarations = dotSourceLabel.iterator();
 		while (conceptDeclarations.hasNext()) {
 			ConceptNode key = conceptDeclarations.next();
 			RenderingStyle style = DotRenderer.getStyle(key.getType());
@@ -191,7 +178,7 @@ public class DotRenderer {
 		}
 
 		// iterate over the relations and add them to the dotSource
-		Iterator<Edge> relationsKeys = dotSourceRelations.keySet().iterator();
+		Iterator<Edge> relationsKeys = dotSourceRelations.iterator();
 		while (relationsKeys.hasNext()) {
 			Edge key = relationsKeys.next();
 			String label = DotRenderer.innerRelation(key.getPredicate(),
@@ -306,10 +293,15 @@ public class DotRenderer {
 	 * 
 	 * @created 20.08.2012
 	 */
-	public static void createAndwriteDOTFiles(Section<?> section, String dotSource, String path, String user_app_path) {
-		File dot = createFile("dot", path, section);
-		File svg = createFile("svg", path, section);
-		File png = createFile("png", path, section);
+	public static void createAndwriteDOTFiles(String sectionID, String dotSource, String realPath, String user_app_path) {
+		String tmpPath = FileUtils.KNOWWEEXTENSION_FOLDER + FileUtils.FILE_SEPARATOR
+				+ FileUtils.TMP_FOLDER
+				+ FileUtils.FILE_SEPARATOR;
+		String path = realPath + FileUtils.FILE_SEPARATOR + tmpPath;
+
+		File dot = createFile("dot", path, sectionID);
+		File svg = createFile("svg", path, sectionID);
+		File png = createFile("png", path, sectionID);
 
 		// TODO all files are being deleted and still it happens that the old
 		// files/graph is being displayed when the user chooses a different
@@ -452,11 +444,23 @@ public class DotRenderer {
 	 * @param type
 	 * @param path
 	 */
-	private static File createFile(String type, String path, Section<?> section) {
-		String filename = path + "graph" + RenderingCore.getSectionID(section)
+	private static File createFile(String type, String path, String sectionID) {
+		String filename = path + "graph" + sectionID
 				+ "." + type;
 		File f = new File(filename);
 		return f;
 	}
 
+	/**
+	 * A data class for storing the style info of a node/property etc.
+	 * 
+	 * @author Joachim Baumeister (denkbares GmbH)
+	 * @created 02.05.2013
+	 */
+	static class RenderingStyle {
+
+		String shape = "box";
+		String fontcolor = "black";
+		String fontsize = "10";
+	}
 }

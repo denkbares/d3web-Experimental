@@ -23,13 +23,9 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,13 +35,12 @@ import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
-import de.d3web.strings.Strings;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
-import de.knowwe.rdfs.vis.util.FileUtils;
+import de.knowwe.rdfs.vis.dot.DOTVisualizationRenderer;
 import de.knowwe.rdfs.vis.util.Utils;
 
 /**
@@ -55,7 +50,7 @@ import de.knowwe.rdfs.vis.util.Utils;
  */
 public class RenderingCore {
 
-	enum NODE_TYPE {
+	public enum NODE_TYPE {
 		CLAAS, PROPERTY, INSTANCE, UNDEFINED
 	};
 
@@ -82,6 +77,8 @@ public class RenderingCore {
 	public static final String DOT_APP = "dot_app";
 	public static final String ADD_TO_DOT = "add_to_dot";
 	public static final String TITLE = "title";
+	public static final String SECTION_ID = "section-id";
+	public static final String REAL_PATH = "realpath";
 
 	public static final String RELATION_COLOR_CODES = "relation_color_codes";
 
@@ -97,18 +94,10 @@ public class RenderingCore {
 	boolean showProperties;
 	boolean showOutgoingEdges = true;
 
-	// paths
-	private final String tmpPath;
-	// private static final String TMP_FOLDER = "tmp";
-	// private static final String KNOWWEEXTENSION_FOLDER = "KnowWEExtension";
-	private final String path;
+	// stores the actual subset of the rdf-graph to rendered
+	private final SubGraphData data;
 
-	// sources for the dot-file
-	private String dotSource;
-	private final Map<ConceptNode, String> dotSourceLabel;
-	private final Map<Edge, String> dotSourceRelations;
-
-	// Annotations
+	// concept and relation names which are black-listed
 	private List<String> excludedNodes;
 	private List<String> excludedRelations;
 
@@ -120,7 +109,7 @@ public class RenderingCore {
 
 	private LinkToTermDefinitionProvider uriProvider = null;
 
-	private final Set<Edge> edges = new HashSet<Edge>();
+	private GraphVisualizationRenderer sourceRenderer = null;
 
 	/**
 	 * Allows to create a new Rendering Core. For each rendering task a new one
@@ -163,19 +152,16 @@ public class RenderingCore {
 
 		this.parameters = parameters;
 		this.section = section;
+
+		parameters.put(REAL_PATH, realPath);
 		parameters.put(TITLE, getSectionTitle());
+		parameters.put(SECTION_ID, getSectionID(section));
 
-		tmpPath = FileUtils.KNOWWEEXTENSION_FOLDER + FileUtils.FILE_SEPARATOR
-				+ FileUtils.TMP_FOLDER
-				+ FileUtils.FILE_SEPARATOR;
-
-		path = realPath + FileUtils.FILE_SEPARATOR + tmpPath;
-
-		dotSourceLabel = new LinkedHashMap<ConceptNode, String>();
-		dotSourceRelations = new LinkedHashMap<Edge, String>();
+		data = new SubGraphData();
+		sourceRenderer = new DOTVisualizationRenderer(data, parameters);
 
 		// set config values
-		getAnnotations();
+		setConfigurationParameters();
 	}
 
 	public String getSectionTitle() {
@@ -198,8 +184,12 @@ public class RenderingCore {
 
 		selectGraphData();
 
-		dotSource = DotRenderer.createDotSources(dotSource, dotSourceLabel,
-				dotSourceRelations, parameters);
+		createSource();
+
+	}
+
+	public void createSource() {
+		this.sourceRenderer.generateSource();
 	}
 
 	/**
@@ -213,10 +203,8 @@ public class RenderingCore {
 	public void render(RenderResult builder) {
 		createData();
 
-		DotRenderer.createAndwriteDOTFiles(section, dotSource, path, parameters.get(DOT_APP));
+		builder.appendHtml(sourceRenderer.getHTMLIncludeSnipplet());
 
-		// actually render HTML-content
-		createHTMLOutput(builder);
 	}
 
 	/**
@@ -254,45 +242,12 @@ public class RenderingCore {
 		// it is reset
 		insertMainConcept(conceptURI);
 		// check all relations again
-		checkRelations();
+		// checkRelations();
 
 	}
 
-	/**
-	 * 
-	 * @created 03.09.2012
-	 * @param StringBuilder
-	 */
-	private void createHTMLOutput(RenderResult string) {
-		String style = "max-height:1000px; ";
-		if (parameters.get(SHOW_SCROLLBAR) != null
-				&& parameters.get(SHOW_SCROLLBAR).equals("false")) {
-			// no scroll-bars
-		}
-		else {
-			style += "overflow:scroll";
-		}
-		String div_open = "<div style=\"" + style + "\">";
-		String div_close = "</div>";
-		String png_default = div_open + "<img alt='graph' src='"
-				+ tmpPath + "graph" + getSectionID(section) + ".png'>" + div_close;
-		String svg = div_open + "<object data='" + tmpPath
-				+ "graph" + getSectionID(section) + ".svg' type=\"image/svg+xml\">" + png_default
-				+ "</object>" + div_close;
-		String format = parameters.get(FORMAT);
-		if (format == null) {
-			string.appendHtml(png_default);
-		}
-		else if (format.equals("svg")) {
-			string.appendHtml(svg);
-		}
-		else {
-			string.appendHtml(png_default);
-		}
-	}
-
-	public String getDotSource() {
-		return dotSource;
+	public String getSource() {
+		return this.sourceRenderer.getSource();
 	}
 
 	/**
@@ -300,7 +255,7 @@ public class RenderingCore {
 	 * @created 20.08.2012
 	 * @param user
 	 */
-	private void getAnnotations() {
+	private void setConfigurationParameters() {
 		getSuccessors();
 		getPredecessors();
 
@@ -369,20 +324,15 @@ public class RenderingCore {
 	private void getShowAnnotations() {
 
 		String classes = parameters.get(SHOW_CLASSES);
-		if (classes == null) {
-			showClasses = true;
-		}
-		else if (classes.equals("false")) {
+		if (classes != null && classes.equals("false")) {
 			showClasses = false;
 		}
 		else {
 			showClasses = true;
 		}
+
 		String properties = parameters.get(SHOW_PROPERTIES);
-		if (properties == null) {
-			showProperties = true;
-		}
-		else if (properties.equals("false")) {
+		if (properties != null && properties.equals("false")) {
 			showProperties = false;
 		}
 		else {
@@ -404,19 +354,13 @@ public class RenderingCore {
 		if (conceptLabel == null) {
 			conceptLabel = concept;
 		}
-		String conceptKey = "\"" + concept + "\"";
-		String conceptValue = DotRenderer.getRootLabel(concept, conceptLabel, parameters,
-				getConceptType(conceptURI));
 		// the main concept is inserted in the dotSource resp. reset if
 		// the appearance was changed
-		ConceptNode conceptNode = new ConceptNode(Strings.unquote(conceptKey),
+		ConceptNode conceptNode = new ConceptNode(concept,
 				getConceptType(conceptURI),
 				conceptURI.toString(), conceptLabel);
 		conceptNode.setRoot(true);
-		if (dotSourceLabel.get(conceptNode) != conceptValue) {
-			dotSourceLabel.put(conceptNode,
-					conceptValue);
-		}
+		data.addConcept(conceptNode);
 	}
 
 	private NODE_TYPE getConceptType(URI conceptURI) {
@@ -431,49 +375,6 @@ public class RenderingCore {
 		if (rdfRepository.sparqlAsk(askProperty)) return NODE_TYPE.PROPERTY;
 
 		return result;
-	}
-
-	/**
-	 * All inner relations (relations between two inner nodes) are checked if
-	 * their appearance equals the appearance of the relation to an outer node.
-	 * If that is the case it is corrected.
-	 * 
-	 * @created 04.09.2012
-	 */
-	private void checkRelations() {
-		// First step: Iterate over all relations and check if it's an outer
-		// relation (gray, dashed and no arrowhead). If it is, save it.
-		List<Edge> keysWithGrayRelation = new LinkedList<Edge>();
-		Iterator<Edge> keys = dotSourceRelations.keySet().iterator();
-		while (keys.hasNext()) {
-			Edge key = keys.next();
-			if (dotSourceRelations.get(key).contains("fontcolor=\"white\"")) {
-				keysWithGrayRelation.add(key);
-			}
-		}
-
-		// Second step: Now check both concepts of those relations and see, if
-		// they are both normal (inner) nodes. If they are, the relation
-		// shouldnt be gray, so it will be changed.
-		Iterator<Edge> relations = keysWithGrayRelation.iterator();
-		while (relations.hasNext()) {
-			Edge relation = relations.next();
-			String[] concepts = new String[] {
-					relation.getSubject(), relation.getObject() };
-
-			String string1 = dotSourceLabel.get(new ConceptNode(concepts[0]));
-			String string2 = dotSourceLabel.get(new ConceptNode(concepts[1]));
-			if (string1 != DotRenderer.outerLabel
-					&& string2 != DotRenderer.outerLabel) {
-				String temp = dotSourceRelations.get(relation);
-				String labelOfRelation = temp.substring(9,
-						temp.indexOf("fontcolor") - 2);
-				dotSourceRelations.put(
-						relation,
-						DotRenderer.innerRelation(labelOfRelation,
-								parameters.get(RELATION_COLOR_CODES)));
-			}
-		}
 	}
 
 	/**
@@ -757,63 +658,30 @@ public class RenderingCore {
 		String to = getConceptName(toURI);
 		String relation = getConceptName(relationURI);
 
-		from = urlDecode(from);
-		to = urlDecode(to);
-		relation = urlDecode(relation);
-
-		RenderingStyle style = DotRenderer.getStyle(type);
-
-		String newLineLabelKey;
-		String newLineLabelValue;
 		ConceptNode conceptNode = null;
+		String currentConcept = null;
+		Node currentURI = null;
 		if (predecessor) {
-			String sourceURL = createConceptURL(from);
-			String sourceLabel = Utils.getRDFSLabel(fromURI.asURI(), rdfRepository,
-					parameters.get(LANGUAGE));
-			if (sourceLabel == null) {
-				sourceLabel = from;
-			}
-
-			newLineLabelKey = "\"" + from + "\"";
-			newLineLabelValue = DotRenderer.createDotConceptLabel(style, sourceURL, sourceLabel);
-			conceptNode = new ConceptNode(from, type, sourceURL, sourceLabel);
+			currentConcept = from;
+			currentURI = fromURI;
 		}
 		else {
-			String targetURL = createConceptURL(to);
-			String targetLabel = Utils.getRDFSLabel(toURI.asURI(), rdfRepository,
-					parameters.get(LANGUAGE));
-			if (targetLabel == null) {
-				targetLabel = to;
-			}
-			newLineLabelKey = "\"" + to + "\"";
-			newLineLabelValue = DotRenderer.createDotConceptLabel(style, targetURL, targetLabel);
-			conceptNode = new ConceptNode(to, type, targetURL, targetLabel);
+			currentConcept = to;
+			currentURI = toURI;
 		}
-		Edge newLineRelationsKey = new Edge(from, relation, to, type);
-		this.edges.add(newLineRelationsKey);
-		String newLineRelationsValue = DotRenderer.innerRelation(relation,
-				parameters.get(RELATION_COLOR_CODES));
+		String currentURL = createConceptURL(currentConcept);
+		String currentLabel = Utils.getRDFSLabel(currentURI.asURI(), rdfRepository,
+				parameters.get(LANGUAGE));
+		if (currentLabel == null) {
+			currentLabel = currentConcept;
+		}
+		conceptNode = new ConceptNode(currentConcept, type, currentURL, currentLabel);
 
-		String labelKeyUnquoted = Strings.unquote(newLineLabelKey);
-		if (!dotSourceLabel.containsKey(conceptNode)) {
-			// not yet stored
-			dotSourceLabel.put(conceptNode, newLineLabelValue);
-		}
-		if ((dotSourceLabel.get(conceptNode) != newLineLabelValue)) {
-			// if stored, but as outer, set as inner
-			Set<ConceptNode> keySet = dotSourceLabel.keySet();
-			for (ConceptNode node : keySet) {
-				if (node.getName().equals(labelKeyUnquoted)) {
-					conceptNode.setOuter(false);
-					dotSourceLabel.put(conceptNode, newLineLabelValue);
-					break;
-				}
-			}
-		}
-		if (!dotSourceRelations.containsKey(newLineRelationsKey)
-				|| (dotSourceRelations.get(newLineRelationsKey)) != newLineRelationsValue) {
-			dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);
-		}
+		Edge newLineRelationsKey = new Edge(from, relation, to, type);
+
+		conceptNode.setOuter(false);
+		data.addConcept(conceptNode);
+		data.addEdge(newLineRelationsKey);
 
 	}
 
@@ -862,29 +730,28 @@ public class RenderingCore {
 			return;
 		}
 
-		String newLineLabelKey;
+		String currentConcept = null;
 		if (predecessor) {
-			newLineLabelKey = "\"" + from + "\"";
+			currentConcept = from;
 		}
 		else {
-			newLineLabelKey = "\"" + to + "\"";
+			currentConcept = to;
 		}
-		Edge edge = new Edge(from, relation, to);
-		String newLineRelationsValue = DotRenderer.getOuterEdgeLabel(relation);
 
-		boolean edgeIsNew = !dotSourceRelations.containsKey(edge);
-		boolean nodeIsNew = !dotSourceLabel.containsKey(new ConceptNode(
-				Strings.unquote(newLineLabelKey)));
+		Edge edge = new Edge(from, relation, to);
+		boolean edgeIsNew = !data.getEdges().contains(edge);
+		boolean nodeIsNew = !data.getConceptDeclaration().contains(new ConceptNode(
+				currentConcept));
 
 		if (showOutgoingEdges) {
 			if (nodeIsNew) {
-				ConceptNode node = new ConceptNode(Strings.unquote(newLineLabelKey));
+				ConceptNode node = new ConceptNode(currentConcept);
 				node.setOuter(true);
-				dotSourceLabel.put(node, DotRenderer.outerLabel);
+				data.addConcept(node);
 			}
 			if (edgeIsNew) {
 				edge.setOuter(true);
-				dotSourceRelations.put(edge, newLineRelationsValue);
+				data.addEdge(edge);
 			}
 		}
 		else {
@@ -892,7 +759,7 @@ public class RenderingCore {
 			if (!nodeIsNew) {
 				// but show if its node is internal one already
 				edge.setOuter(false);
-				dotSourceRelations.put(edge, newLineRelationsValue);
+				data.addEdge(edge);
 			}
 		}
 

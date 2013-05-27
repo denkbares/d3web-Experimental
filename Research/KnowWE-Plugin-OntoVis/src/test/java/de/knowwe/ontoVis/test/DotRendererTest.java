@@ -113,7 +113,7 @@ public class DotRendererTest {
 
 		renderingCore.createData();
 
-		String generatedSource = renderingCore.getDotSource();
+		String generatedSource = renderingCore.getSource();
 		String expectedSource = null;
 		try {
 			expectedSource = Strings.readFile(new File("src/test/resources/graph-OP-Methoden.dot"));
@@ -156,7 +156,7 @@ public class DotRendererTest {
 
 		renderingCore.createData();
 
-		String generatedSource = renderingCore.getDotSource();
+		String generatedSource = renderingCore.getSource();
 		String expectedSource = null;
 		try {
 			expectedSource = Strings.readFile(new File("src/test/resources/graph-Phako.dot"));

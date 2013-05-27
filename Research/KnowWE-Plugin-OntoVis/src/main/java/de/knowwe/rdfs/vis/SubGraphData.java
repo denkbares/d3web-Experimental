@@ -18,15 +18,42 @@
  */
 package de.knowwe.rdfs.vis;
 
-/**
- * A data class for storing the style info of a node/property etc.
- * 
- * @author Joachim Baumeister (denkbares GmbH)
- * @created 02.05.2013
- */
-public class RenderingStyle {
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-	String shape = "box";
-	String fontcolor = "black";
-	String fontsize = "10";
+/**
+ * Contains a sub-set of a graph.
+ * 
+ * @author jochenreutelshofer
+ * @created 27.05.2013
+ */
+public class SubGraphData {
+
+	private final Set<ConceptNode> concepts;
+	private final Set<Edge> edges;
+
+	/**
+ * 
+ */
+	public SubGraphData() {
+		concepts = new LinkedHashSet<ConceptNode>();
+		edges = new LinkedHashSet<Edge>();
+	}
+
+	public Set<ConceptNode> getConceptDeclaration() {
+		return concepts;
+	}
+
+	public Set<Edge> getEdges() {
+		return edges;
+	}
+
+	public void addEdge(Edge e) {
+		edges.add(e);
+	}
+
+	public void addConcept(ConceptNode n) {
+		concepts.add(n);
+	}
+
 }
