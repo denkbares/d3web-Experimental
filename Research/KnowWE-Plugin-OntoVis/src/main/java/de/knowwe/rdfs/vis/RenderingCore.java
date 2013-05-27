@@ -81,6 +81,7 @@ public class RenderingCore {
 
 	public static final String DOT_APP = "dot_app";
 	public static final String ADD_TO_DOT = "add_to_dot";
+	public static final String TITLE = "title";
 
 	public static final String RELATION_COLOR_CODES = "relation_color_codes";
 
@@ -94,8 +95,7 @@ public class RenderingCore {
 
 	boolean showClasses;
 	boolean showProperties;
-
-	private String graphSize;
+	boolean showOutgoingEdges = true;
 
 	// paths
 	private final String tmpPath;
@@ -114,14 +114,11 @@ public class RenderingCore {
 
 	private final Section<?> section;
 
-	Map<String, String> parameters;
+	private final Map<String, String> parameters;
 
 	private Rdf2GoCore rdfRepository = null;
 
 	private LinkToTermDefinitionProvider uriProvider = null;
-
-	// appearances
-	private final String outerLabel = "[ shape=\"none\" fontsize=\"0\" fontcolor=\"white\" ];\n";
 
 	private final Set<Edge> edges = new HashSet<Edge>();
 
@@ -158,14 +155,19 @@ public class RenderingCore {
 			}
 		}
 
+		if (parameters.get(SHOW_OUTGOING_EDGES) != null) {
+			if (parameters.get(SHOW_OUTGOING_EDGES).equals("false")) {
+				showOutgoingEdges = false;
+			}
+		}
+
 		this.parameters = parameters;
 		this.section = section;
+		parameters.put(TITLE, getSectionTitle());
 
 		tmpPath = FileUtils.KNOWWEEXTENSION_FOLDER + FileUtils.FILE_SEPARATOR
 				+ FileUtils.TMP_FOLDER
 				+ FileUtils.FILE_SEPARATOR;
-		String graphtitle = "Konzeptuebersicht";
-		dotSource = "digraph " + graphtitle + " {\n";
 
 		path = realPath + FileUtils.FILE_SEPARATOR + tmpPath;
 
@@ -176,7 +178,7 @@ public class RenderingCore {
 		getAnnotations();
 	}
 
-	private String getSectionTitle() {
+	public String getSectionTitle() {
 		if (section != null) {
 			return section.getTitle();
 		}
@@ -192,11 +194,12 @@ public class RenderingCore {
 		return "ForTestingOnly";
 	}
 
-	public void createDotSource() {
-
-		setSizeAndRankDir();
+	public void createData() {
 
 		selectGraphData();
+
+		dotSource = DotRenderer.createDotSources(dotSource, dotSourceLabel,
+				dotSourceRelations, parameters);
 	}
 
 	/**
@@ -208,7 +211,7 @@ public class RenderingCore {
 	 *        builder
 	 */
 	public void render(RenderResult builder) {
-		createDotSource();
+		createData();
 
 		DotRenderer.createAndwriteDOTFiles(section, dotSource, path, parameters.get(DOT_APP));
 
@@ -252,16 +255,7 @@ public class RenderingCore {
 		insertMainConcept(conceptURI);
 		// check all relations again
 		checkRelations();
-		dotSource = insertPraefixed(dotSource);
-		dotSource = DotRenderer.connectSources(dotSource, dotSourceLabel,
-				dotSourceRelations);
-	}
 
-	private String insertPraefixed(String dotSource) {
-		String added = parameters.get(RenderingCore.ADD_TO_DOT);
-		if (added != null) dotSource += added;
-
-		return dotSource;
 	}
 
 	/**
@@ -309,37 +303,11 @@ public class RenderingCore {
 	private void getAnnotations() {
 		getSuccessors();
 		getPredecessors();
-		graphSize = parameters.get(GRAPH_SIZE);
 
 		getExcludedNodes();
 		getExcludedRelations();
 
 		getShowAnnotations();
-	}
-
-	/**
-	 * 
-	 * 
-	 * @created 30.10.2012
-	 */
-	private void setSizeAndRankDir() {
-		String rankDir = "TB";
-		String rankDirSetting = parameters.get(RANK_DIRECTION);
-		if (rankDirSetting != null) {
-			rankDir = rankDirSetting;
-		}
-		if (graphSize != null) {
-			if (graphSize.matches("\\d+px")) {
-				graphSize = graphSize.substring(0, graphSize.length() - 2);
-				dotSource += "graph [ rankdir=\"" + rankDir + "\"]\n";
-			}
-			if (graphSize.matches("\\d+")) {
-				dotSource += "graph [size=\""
-						+ String.valueOf(Double.valueOf(graphSize) * 0.010415597) + "!\""
-						+ " rankdir=\"" + rankDir + "\"]\n";
-			}
-		}
-
 	}
 
 	/**
@@ -430,35 +398,23 @@ public class RenderingCore {
 	 */
 	private void insertMainConcept(URI conceptURI) {
 		String concept = getConceptName(conceptURI);
-		// Main Concept Attributes
-		String style = "filled";
-		String fillcolor = "yellow";
-		String shape = "ellipse";
 
-		NODE_TYPE type = getConceptType(conceptURI);
-		if (type == NODE_TYPE.CLAAS) {
-			shape = "rectangle";
-		}
-		else if (type == NODE_TYPE.PROPERTY) {
-			shape = "diamond";
-		}
-		String url = createBaseURL();
 		String conceptLabel = Utils.getRDFSLabel(conceptURI.asURI(), rdfRepository,
 				parameters.get(LANGUAGE));
 		if (conceptLabel == null) {
 			conceptLabel = concept;
 		}
-
 		String conceptKey = "\"" + concept + "\"";
-		String conceptValue = "[ URL=\"" + url + "?page=" + getSectionTitle() + "&concept="
-				+ concept + "\" style=\"" + style + "\" fillcolor=\"" + fillcolor + "\" " +
-				// + "\" fontsize=\"" + fontsize + "\""
-				" shape=\"" + shape + "\"" + "label=\""
-				+ Utils.prepareLabel(conceptLabel) + "\"];\n";
+		String conceptValue = DotRenderer.getRootLabel(concept, conceptLabel, parameters,
+				getConceptType(conceptURI));
 		// the main concept is inserted in the dotSource resp. reset if
 		// the appearance was changed
-		if (dotSourceLabel.get(conceptKey) != conceptValue) {
-			dotSourceLabel.put(new ConceptNode(Strings.unquote(conceptKey)),
+		ConceptNode conceptNode = new ConceptNode(Strings.unquote(conceptKey),
+				getConceptType(conceptURI),
+				conceptURI.toString(), conceptLabel);
+		conceptNode.setRoot(true);
+		if (dotSourceLabel.get(conceptNode) != conceptValue) {
+			dotSourceLabel.put(conceptNode,
 					conceptValue);
 		}
 	}
@@ -507,8 +463,8 @@ public class RenderingCore {
 
 			String string1 = dotSourceLabel.get(new ConceptNode(concepts[0]));
 			String string2 = dotSourceLabel.get(new ConceptNode(concepts[1]));
-			if (string1 != outerLabel
-					&& string2 != outerLabel) {
+			if (string1 != DotRenderer.outerLabel
+					&& string2 != DotRenderer.outerLabel) {
 				String temp = dotSourceRelations.get(relation);
 				String labelOfRelation = temp.substring(9,
 						temp.indexOf("fontcolor") - 2);
@@ -717,7 +673,7 @@ public class RenderingCore {
 		}
 	}
 
-	private static String getConceptName(Node uri) {
+	public static String getConceptName(Node uri) {
 		try {
 			uri.asURI();
 			return urlDecode(clean(uri.asURI().toString().substring(uri.toString().indexOf("#") + 1)));
@@ -805,12 +761,11 @@ public class RenderingCore {
 		to = urlDecode(to);
 		relation = urlDecode(relation);
 
-		this.edges.add(new Edge(from, relation, to, type));
-
 		RenderingStyle style = DotRenderer.getStyle(type);
 
 		String newLineLabelKey;
 		String newLineLabelValue;
+		ConceptNode conceptNode = null;
 		if (predecessor) {
 			String sourceURL = createConceptURL(from);
 			String sourceLabel = Utils.getRDFSLabel(fromURI.asURI(), rdfRepository,
@@ -820,9 +775,8 @@ public class RenderingCore {
 			}
 
 			newLineLabelKey = "\"" + from + "\"";
-			newLineLabelValue = "[ URL=\"" + sourceURL + "\""
-					+ DotRenderer.buildLabel(style)
-					+ "label=\"" + Utils.prepareLabel(sourceLabel) + "\" ];\n";
+			newLineLabelValue = DotRenderer.createDotConceptLabel(style, sourceURL, sourceLabel);
+			conceptNode = new ConceptNode(from, type, sourceURL, sourceLabel);
 		}
 		else {
 			String targetURL = createConceptURL(to);
@@ -832,17 +786,29 @@ public class RenderingCore {
 				targetLabel = to;
 			}
 			newLineLabelKey = "\"" + to + "\"";
-			newLineLabelValue = "[ URL=\"" + targetURL + "\""
-					+ DotRenderer.buildLabel(style) + "label=\""
-					+ Utils.prepareLabel(targetLabel) + "\" ];\n";
+			newLineLabelValue = DotRenderer.createDotConceptLabel(style, targetURL, targetLabel);
+			conceptNode = new ConceptNode(to, type, targetURL, targetLabel);
 		}
-		Edge newLineRelationsKey = new Edge(from, relation, to);
+		Edge newLineRelationsKey = new Edge(from, relation, to, type);
+		this.edges.add(newLineRelationsKey);
 		String newLineRelationsValue = DotRenderer.innerRelation(relation,
 				parameters.get(RELATION_COLOR_CODES));
 
-		if (!dotSourceLabel.containsKey(new ConceptNode(newLineLabelKey))
-				|| (dotSourceLabel.get(new ConceptNode(newLineLabelKey)) != newLineLabelValue)) {
-			dotSourceLabel.put(new ConceptNode(Strings.unquote(newLineLabelKey)), newLineLabelValue);
+		String labelKeyUnquoted = Strings.unquote(newLineLabelKey);
+		if (!dotSourceLabel.containsKey(conceptNode)) {
+			// not yet stored
+			dotSourceLabel.put(conceptNode, newLineLabelValue);
+		}
+		if ((dotSourceLabel.get(conceptNode) != newLineLabelValue)) {
+			// if stored, but as outer, set as inner
+			Set<ConceptNode> keySet = dotSourceLabel.keySet();
+			for (ConceptNode node : keySet) {
+				if (node.getName().equals(labelKeyUnquoted)) {
+					conceptNode.setOuter(false);
+					dotSourceLabel.put(conceptNode, newLineLabelValue);
+					break;
+				}
+			}
 		}
 		if (!dotSourceRelations.containsKey(newLineRelationsKey)
 				|| (dotSourceRelations.get(newLineRelationsKey)) != newLineRelationsValue) {
@@ -866,7 +832,7 @@ public class RenderingCore {
 	 * @created 29.11.2012
 	 * @return
 	 */
-	private String createBaseURL() {
+	public static String createBaseURL() {
 		if (Environment.getInstance() != null
 				&& Environment.getInstance().getWikiConnector() != null) {
 			return Environment.getInstance().getWikiConnector().getBaseUrl() + "Wiki.jsp";
@@ -896,11 +862,6 @@ public class RenderingCore {
 			return;
 		}
 
-		// Relation Attributes
-		String arrowhead = "none";
-		String color = "#8b8989";
-		String style = "dashed";
-
 		String newLineLabelKey;
 		if (predecessor) {
 			newLineLabelKey = "\"" + from + "\"";
@@ -908,36 +869,30 @@ public class RenderingCore {
 		else {
 			newLineLabelKey = "\"" + to + "\"";
 		}
-		Edge newLineRelationsKey = new Edge(from, relation, to);
-		String newLineRelationsValue = "[ label=\"" + relation
-				+ "\" fontcolor=\"white\" arrowhead=\""
-				+ arrowhead + "\" color=\"" + color
-				+ "\" style=\"" + style + "\" ];\n";
+		Edge edge = new Edge(from, relation, to);
+		String newLineRelationsValue = DotRenderer.getOuterEdgeLabel(relation);
 
-		boolean arcIsNew = !dotSourceRelations.containsKey(newLineRelationsKey);
+		boolean edgeIsNew = !dotSourceRelations.containsKey(edge);
 		boolean nodeIsNew = !dotSourceLabel.containsKey(new ConceptNode(
 				Strings.unquote(newLineLabelKey)));
 
-		boolean showOutgoingEdges = true;
-		if (parameters.get(SHOW_OUTGOING_EDGES) != null) {
-			if (parameters.get(SHOW_OUTGOING_EDGES).equals("false")) {
-				showOutgoingEdges = false;
-			}
-		}
-
 		if (showOutgoingEdges) {
 			if (nodeIsNew) {
-				dotSourceLabel.put(new ConceptNode(Strings.unquote(newLineLabelKey)), outerLabel);
+				ConceptNode node = new ConceptNode(Strings.unquote(newLineLabelKey));
+				node.setOuter(true);
+				dotSourceLabel.put(node, DotRenderer.outerLabel);
 			}
-			if (arcIsNew) {
-				dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);
+			if (edgeIsNew) {
+				edge.setOuter(true);
+				dotSourceRelations.put(edge, newLineRelationsValue);
 			}
 		}
 		else {
 			// do not show outgoing edges
 			if (!nodeIsNew) {
 				// but show if its node is internal one already
-				dotSourceRelations.put(newLineRelationsKey, newLineRelationsValue);
+				edge.setOuter(false);
+				dotSourceRelations.put(edge, newLineRelationsValue);
 			}
 		}
 

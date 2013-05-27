@@ -111,7 +111,7 @@ public class DotRendererTest {
 		RenderingCore renderingCore = new RenderingCore("", null, parameterMap,
 				new DummyLinkToTermDefinitionProvider(), rdfRepository);
 
-		renderingCore.createDotSource();
+		renderingCore.createData();
 
 		String generatedSource = renderingCore.getDotSource();
 		String expectedSource = null;
@@ -154,7 +154,7 @@ public class DotRendererTest {
 		RenderingCore renderingCore = new RenderingCore("", null, parameterMap,
 				new DummyLinkToTermDefinitionProvider(), rdfRepository);
 
-		renderingCore.createDotSource();
+		renderingCore.createData();
 
 		String generatedSource = renderingCore.getDotSource();
 		String expectedSource = null;

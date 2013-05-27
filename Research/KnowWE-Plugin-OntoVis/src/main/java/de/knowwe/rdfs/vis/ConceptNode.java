@@ -18,6 +18,8 @@
  */
 package de.knowwe.rdfs.vis;
 
+import de.knowwe.rdfs.vis.RenderingCore.NODE_TYPE;
+
 /**
  * 
  * @author jochenreutelshofer
@@ -26,12 +28,55 @@ package de.knowwe.rdfs.vis;
 public class ConceptNode {
 
 	private final String name;
+	private String conceptUrl = null;
+	private String conceptLabel = null;
+	private boolean outer = false;
+	private boolean root = false;
+	private NODE_TYPE type;
+
+	public NODE_TYPE getType() {
+		return type;
+	}
+
+	public boolean isRoot() {
+		return root;
+	}
+
+	public void setRoot(boolean root) {
+		this.root = root;
+	}
+
+	public void setOuter(boolean outer) {
+		this.outer = outer;
+	}
+
+	public boolean isOuter() {
+		return outer;
+	}
 
 	/**
 	 * 
 	 */
 	public ConceptNode(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * 
+	 */
+	public ConceptNode(String name, NODE_TYPE type, String url, String label) {
+		this(name);
+		this.type = type;
+		this.conceptLabel = label;
+		this.conceptUrl = url;
+	}
+
+	public String getConceptUrl() {
+		return conceptUrl;
+	}
+
+	public String getConceptLabel() {
+		return conceptLabel;
 	}
 
 	public String getName() {

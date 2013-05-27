@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.rdfs.vis.RenderingCore.NODE_TYPE;
 import de.knowwe.rdfs.vis.util.FileUtils;
+import de.knowwe.rdfs.vis.util.Utils;
 
 /**
  * 
@@ -42,6 +43,9 @@ import de.knowwe.rdfs.vis.util.FileUtils;
  * @created 29.04.2013
  */
 public class DotRenderer {
+
+	// appearance of outer node
+	public static final String outerLabel = "[ shape=\"none\" fontsize=\"0\" fontcolor=\"white\" ];\n";
 
 	/**
 	 * 
@@ -124,7 +128,26 @@ public class DotRenderer {
 	 * 
 	 * @created 18.08.2012
 	 */
-	public static String connectSources(String dotSource, Map<ConceptNode, String> dotSourceLabel, Map<Edge, String> dotSourceRelations) {
+	public static String createDotSources(String dotSource, Map<ConceptNode, String> dotSourceLabel, Map<Edge, String> dotSourceRelations, Map<String, String> parameters) {
+		String graphtitle = "Konzeptuebersicht";
+		dotSource = "digraph " + graphtitle + " {\n";
+		dotSource = insertPraefixed(dotSource, parameters);
+		dotSource += DotRenderer.setSizeAndRankDir(parameters.get(RenderingCore.RANK_DIRECTION),
+				parameters.get(RenderingCore.GRAPH_SIZE));
+
+		// dotSource += generateGraphSource(dotSourceLabel, dotSourceRelations,
+		// parameters);
+
+		dotSource += generateGraphSource2(dotSourceLabel, dotSourceRelations,
+				parameters);
+
+		dotSource += "}";
+
+		return dotSource;
+	}
+
+	private static String generateGraphSource(Map<ConceptNode, String> dotSourceLabel, Map<Edge, String> dotSourceRelations, Map<String, String> parameters) {
+		String dotSource = "";
 		// iterate over the labels and add them to the dotSource
 		Iterator<ConceptNode> labelKeys = dotSourceLabel.keySet().iterator();
 		while (labelKeys.hasNext()) {
@@ -139,10 +162,143 @@ public class DotRenderer {
 			dotSource += "\"" + key.getSubject() + "\"" + " -> " + "\"" + key.getObject() + "\" "
 					+ dotSourceRelations.get(key);
 		}
+		return dotSource;
+	}
 
-		dotSource += "}";
+	private static String generateGraphSource2(Map<ConceptNode, String> dotSourceLabel, Map<Edge, String> dotSourceRelations, Map<String, String> parameters) {
+		String dotSource = "";
+
+		// iterate over the labels and add them to the dotSource
+		Iterator<ConceptNode> conceptDeclarations = dotSourceLabel.keySet().iterator();
+		while (conceptDeclarations.hasNext()) {
+			ConceptNode key = conceptDeclarations.next();
+			RenderingStyle style = DotRenderer.getStyle(key.getType());
+			String label = "";
+
+			if (key.isRoot()) {
+				label = getRootLabel(key.getName(), key.getConceptLabel(), parameters,
+						key.getType());
+			}
+			else if (key.isOuter()) {
+				label = DotRenderer.outerLabel;
+			}
+			else {
+				label = DotRenderer.createDotConceptLabel(style, key.getConceptUrl(),
+						key.getConceptLabel());
+			}
+			dotSource += "\"" + key.getName() + "\"" + label;
+
+		}
+
+		// iterate over the relations and add them to the dotSource
+		Iterator<Edge> relationsKeys = dotSourceRelations.keySet().iterator();
+		while (relationsKeys.hasNext()) {
+			Edge key = relationsKeys.next();
+			String label = DotRenderer.innerRelation(key.getPredicate(),
+					parameters.get(RenderingCore.RELATION_COLOR_CODES));
+			if (key.isOuter()) {
+				label = DotRenderer.getOuterEdgeLabel(key.getPredicate());
+			}
+			dotSource += "\"" + key.getSubject() + "\"" + " -> " + "\"" + key.getObject() + "\" "
+					+ label;
+		}
+		return dotSource;
+	}
+
+	/**
+	 * 
+	 * @created 27.05.2013
+	 * @param concept
+	 * @param style
+	 * @param fillcolor
+	 * @param shape
+	 * @param url
+	 * @param conceptLabel
+	 * @return
+	 */
+	public static String getRootLabel(String concept, String conceptLabel, Map<String, String> parameters,
+			NODE_TYPE type) {
+
+		if (conceptLabel == null) {
+			conceptLabel = concept;
+		}
+
+		// Main Concept Attributes
+		String style = "filled";
+		String fillcolor = "yellow";
+		String shape = "ellipse";
+
+		if (type == NODE_TYPE.CLAAS) {
+			shape = "rectangle";
+		}
+		else if (type == NODE_TYPE.PROPERTY) {
+			shape = "diamond";
+		}
+		String url = RenderingCore.createBaseURL();
+
+		String conceptValue = "[ URL=\"" + url + "?page=" + parameters.get(RenderingCore.TITLE)
+				+ "&concept="
+				+ concept + "\" style=\"" + style + "\" fillcolor=\"" + fillcolor + "\" " +
+				// + "\" fontsize=\"" + fontsize + "\""
+				" shape=\"" + shape + "\"" + "label=\""
+				+ Utils.prepareLabel(conceptLabel) + "\"];\n";
+		return conceptValue;
+	}
+
+	/**
+	 * 
+	 * @created 27.05.2013
+	 * @param relation
+	 * @param arrowhead
+	 * @param color
+	 * @param style
+	 * @return
+	 */
+	public static String getOuterEdgeLabel(String relation) {
+		// Relation Attributes
+		String arrowhead = "none";
+		String color = "#8b8989";
+		String style = "dashed";
+
+		String newLineRelationsValue = "[ label=\"" + relation
+				+ "\" fontcolor=\"white\" arrowhead=\""
+				+ arrowhead + "\" color=\"" + color
+				+ "\" style=\"" + style + "\" ];\n";
+		return newLineRelationsValue;
+	}
+
+	private static String insertPraefixed(String dotSource, Map<String, String> parameters) {
+		String added = parameters.get(RenderingCore.ADD_TO_DOT);
+		if (added != null) dotSource += added;
 
 		return dotSource;
+	}
+
+	/**
+	 * 
+	 * 
+	 * @created 30.10.2012
+	 */
+	public static String setSizeAndRankDir(String rankDirSetting, String graphSize) {
+		String source = "";
+		String rankDir = "TB";
+
+		if (rankDirSetting != null) {
+			rankDir = rankDirSetting;
+		}
+		if (graphSize != null) {
+			if (graphSize.matches("\\d+px")) {
+				graphSize = graphSize.substring(0, graphSize.length() - 2);
+				source += "graph [ rankdir=\"" + rankDir + "\"]\n";
+			}
+			if (graphSize.matches("\\d+")) {
+				source += "graph [size=\""
+						+ String.valueOf(Double.valueOf(graphSize) * 0.010415597) + "!\""
+						+ " rankdir=\"" + rankDir + "\"]\n";
+			}
+		}
+		return source;
+
 	}
 
 	/**
@@ -184,6 +340,22 @@ public class DotRenderer {
 			Logger.getLogger(DotRenderer.class.getName()).log(Level.WARNING, e.toString());
 		}
 
+	}
+
+	/**
+	 * 
+	 * @created 27.05.2013
+	 * @param style
+	 * @param targetURL
+	 * @param targetLabel
+	 * @return
+	 */
+	public static String createDotConceptLabel(RenderingStyle style, String targetURL, String targetLabel) {
+		String newLineLabelValue;
+		newLineLabelValue = "[ URL=\"" + targetURL + "\""
+				+ DotRenderer.buildLabel(style) + "label=\""
+				+ Utils.prepareLabel(targetLabel) + "\" ];\n";
+		return newLineLabelValue;
 	}
 
 	public static String getDOTApp(String user_def_app) {

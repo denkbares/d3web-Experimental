@@ -32,6 +32,16 @@ public class Edge {
 	private final String object;
 	private final RenderingCore.NODE_TYPE nodeType;
 
+	private boolean outer = false;
+
+	public void setOuter(boolean outer) {
+		this.outer = outer;
+	}
+
+	public boolean isOuter() {
+		return outer;
+	}
+
 	/**
 	 * 
 	 */
