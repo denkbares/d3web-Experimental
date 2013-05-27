@@ -65,14 +65,14 @@ public class ReviewConsistencyTest extends AbstractTest<Article> {
 			}
 		}
 		catch (IOException e) {
-			return new Message(Type.FAILURE, "Error while checking attachments of '"
+			return new Message(Type.ERROR, "Error while checking attachments of '"
 					+ testObject.getTitle() + "':\n" + e.getMessage());
 		}
 		if (missingFlows.isEmpty()) {
 			return new Message(Type.SUCCESS);
 		}
 		else {
-			return new Message(Type.ERROR, "No flowcharts found named: " + missingFlows);
+			return new Message(Type.FAILURE, "No flowcharts found named: " + missingFlows);
 		}
 
 	}
