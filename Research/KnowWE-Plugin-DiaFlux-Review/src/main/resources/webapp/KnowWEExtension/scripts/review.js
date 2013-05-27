@@ -912,6 +912,14 @@ KNOWWE.helper.observer.subscribe("flowchartrendered", function(){
 });
 
 KNOWWE.helper.observer.subscribe("flowchartlinked", function(){
-	var nodes = jq$(this.flow.dom).find('.Node a>div:first-child').unwrap();
+	var nodes = jq$(this.flow.dom).find('.Node a>div:first-child');
+	var links = jq$(this.flow.dom).find('.Node a');
+	links.on('click', function(e){
+		// prevent def link behavior, if ctrl is not clicked (opens in new window)
+		if (!e.ctrlKey) {
+			e.preventDefault();
+		}
+	});
+//	nodes.unwrap();
 });
 
