@@ -18,7 +18,6 @@
  */
 package de.knowwe.d3webviz.diafluxHierarchy;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,14 +30,9 @@ import de.d3web.diaFlux.flow.ComposedNode;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.StartNode;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
-import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.Attributes;
-import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.d3webviz.AbstractD3webVizAction;
 
 
 /**
@@ -47,40 +41,10 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Reinhard Hatko
  * @created 14.03.2013
  */
-public class DiaFluxHierarchyAction extends AbstractAction {
+public class DiaFluxHierarchyAction extends AbstractD3webVizAction {
 
 	@Override
-	public void execute(UserActionContext context) throws IOException {
-		String sectionID = context.getParameter(Attributes.SECTION_ID);
-
-		Section<DiaFluxHierarchyType> section = Sections.getSection(sectionID,
-				DiaFluxHierarchyType.class);
-
-		if (section == null) {
-			// TODO error handling
-			return;
-		}
-		
-		Iterator<Article> iterator = KnowWEUtils.getCompilingArticles(section).iterator();
-		if (!iterator.hasNext()) return;
-		
-		Article article = iterator.next();
-		KnowledgeBase kb = D3webUtils.getKnowledgeBase(section.getWeb(), article.getTitle());
-		
-		String result = createHierarchy(kb);
-		
-		context.setContentType("text/json");
-		context.getWriter().write(result);
-		
-	}
-
-	/**
-	 * 
-	 * @created 14.03.2013
-	 * @param kb
-	 * @param bob
-	 */
-	private String createHierarchy(KnowledgeBase kb) {
+	protected String createOutput(KnowledgeBase kb, Section<?> section, UserActionContext context) {
 
 		Map<Flow, Collection<ComposedNode>> structure = DiaFluxUtils.createFlowStructure(kb);
 		Map<Flow, String> result = new HashMap<Flow, String>();

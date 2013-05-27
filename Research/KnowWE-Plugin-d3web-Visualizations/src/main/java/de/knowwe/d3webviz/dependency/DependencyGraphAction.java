@@ -18,18 +18,10 @@
  */
 package de.knowwe.d3webviz.dependency;
 
-import java.io.IOException;
-import java.util.Iterator;
-
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.Attributes;
-import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.d3webviz.AbstractD3webVizAction;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 
@@ -38,27 +30,12 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author Reinhard Hatko
  * @created 26.02.2013
  */
-public class DependencyGraphAction extends AbstractAction {
+public class DependencyGraphAction extends AbstractD3webVizAction {
 
 	@Override
-	public void execute(UserActionContext context) throws IOException {
-		String sectionID = context.getParameter(Attributes.SECTION_ID);
-
-		Section<D3webDependenciesType> section = Sections.getSection(sectionID,
-				D3webDependenciesType.class);
-
-		if (section == null) {
-			// TODO error handling
-			return;
-		}
-		
-		Iterator<Article> iterator = KnowWEUtils.getCompilingArticles(section).iterator();
-		if (!iterator.hasNext()) return;
-		
-		Article article = iterator.next();
-		KnowledgeBase kb = D3webUtils.getKnowledgeBase(section.getWeb(), article.getTitle());
+	protected String createOutput(KnowledgeBase kb, Section<?> section, UserActionContext context) {
 		DependencyGenerator generator = new DependencyGenerator(kb);
-		
+
 		if (Boolean.valueOf(DefaultMarkupType.getAnnotation(section,
 				D3webDependenciesType.ANNOTATION_SHOW_TYPE)).booleanValue()) {
 			generator.setShowType(true);
@@ -72,9 +49,8 @@ public class DependencyGraphAction extends AbstractAction {
 		generator.setIgnores(DefaultMarkupType.getAnnotations(section,
 				D3webDependenciesType.ANNOTATION_IGNORE));
 
-		context.setContentType("text/json");
-		context.getWriter().write(generator.createDependencyGraph());
-		
+		return generator.createDependencyGraph();
 	}
+
 
 }

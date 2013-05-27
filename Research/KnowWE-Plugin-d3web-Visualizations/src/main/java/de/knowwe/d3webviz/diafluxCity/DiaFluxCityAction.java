@@ -18,20 +18,13 @@
  */
 package de.knowwe.d3webviz.diafluxCity;
 
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Iterator;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.Node;
-import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.Attributes;
-import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.d3webviz.AbstractD3webVizAction;
 import de.knowwe.d3webviz.diafluxCity.metrics.IncomingEdgesMetric;
 import de.knowwe.d3webviz.diafluxCity.metrics.MetricsSet;
 import de.knowwe.d3webviz.diafluxCity.metrics.NodeTypeColorMetric;
@@ -42,31 +35,11 @@ import de.knowwe.d3webviz.diafluxCity.metrics.OutgoingEdgesMetric;
  * @author Reinhard Hatko
  * @created 26.02.2013
  */
-public class DiaFluxCityAction extends AbstractAction {
+public class DiaFluxCityAction extends AbstractD3webVizAction {
 
 	@Override
-	public void execute(UserActionContext context) throws IOException {
-		String sectionID = context.getParameter(Attributes.SECTION_ID);
-
-		Section<DiaFluxCityType> section = Sections.getSection(sectionID,
-				DiaFluxCityType.class);
-
-		if (section == null) {
-			// TODO error handling
-			return;
-		}
-
-		Iterator<Article> iterator = KnowWEUtils.getCompilingArticles(section).iterator();
-		if (!iterator.hasNext()) return;
-
-		Article article = iterator.next();
-		KnowledgeBase kb = D3webUtils.getKnowledgeBase(section.getWeb(), article.getTitle());
-
-		String city = GLCityGenerator.generateCity(createMetrics(), kb).toString();
-
-		context.setContentType("text/json");
-		context.getWriter().write(city);
-
+	protected String createOutput(KnowledgeBase kb, Section<?> section, UserActionContext context) {
+		return GLCityGenerator.generateCity(createMetrics(), kb).toString();
 	}
 
 	private static MetricsSet<Node> createMetrics() {
