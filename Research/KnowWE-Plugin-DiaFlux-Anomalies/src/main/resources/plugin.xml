@@ -99,14 +99,6 @@
 		<parameter id="priority" value="5" />
 	</extension-->
 			
-	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
-		id="RedundantStartNodeTest">
-		<parameter id="class" value="de.d3web.we.diaflux.anomalies.RedundantStartNodeTest" />
-		<parameter id="name" value="RedundantStartNode" />
-		<parameter id="description" value="AbstractCITest RedundantStartNode" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
 
 	<!--extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="RedundantValueTest">
