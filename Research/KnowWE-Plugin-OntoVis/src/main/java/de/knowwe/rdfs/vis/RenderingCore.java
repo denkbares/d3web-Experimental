@@ -158,13 +158,15 @@ public class RenderingCore {
 		parameters.put(SECTION_ID, getSectionID(section));
 
 		data = new SubGraphData();
+
+		// current default source renderer is DOT
 		sourceRenderer = new DOTVisualizationRenderer(data, parameters);
 
 		// set config values
 		setConfigurationParameters();
 	}
 
-	public String getSectionTitle() {
+	private String getSectionTitle() {
 		if (section != null) {
 			return section.getTitle();
 		}
@@ -182,14 +184,12 @@ public class RenderingCore {
 
 	public void createData() {
 
+		// select the relevant sub-graph from the overall rdf-graph
 		selectGraphData();
 
-		createSource();
-
-	}
-
-	public void createSource() {
+		// create the source representation using the configured source-renderer
 		this.sourceRenderer.generateSource();
+
 	}
 
 	/**
@@ -238,11 +238,6 @@ public class RenderingCore {
 			depth = 0;
 			addSuccessors(conceptURI);
 		}
-		// if the appearance of the main concept was changed during the process,
-		// it is reset
-		insertMainConcept(conceptURI);
-		// check all relations again
-		// checkRelations();
 
 	}
 
@@ -354,8 +349,7 @@ public class RenderingCore {
 		if (conceptLabel == null) {
 			conceptLabel = concept;
 		}
-		// the main concept is inserted in the dotSource resp. reset if
-		// the appearance was changed
+		// the main concept is inserted
 		ConceptNode conceptNode = new ConceptNode(concept,
 				getConceptType(conceptURI),
 				conceptURI.toString(), conceptLabel);
