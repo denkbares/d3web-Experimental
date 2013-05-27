@@ -119,20 +119,21 @@ DiaFlux.ReviewTool = (function(flow) {
 		saveReview : function(review, kdomid){
 			var params = {
 				action : 'SaveReviewAction',
-				SectionID: kdomid,
-		        review: review.toXML()
+				SectionID: kdomid
 			};
 			
 			var options = {
-				url: KNOWWE.core.util.getURL( params )
-				
+				url: KNOWWE.core.util.getURL( params ),
+				data: review.toXML()
+								
 		    };
 			
 			KNOWWE.core.util.updateProcessingState(1);
 			try{
 				new _KA(options).send();
-				
-			} catch(e) {}
+			} catch(e) {
+				//TODO
+			}
 			KNOWWE.core.util.updateProcessingState(-1);
 			this.setModified(false);
 		},
@@ -307,7 +308,7 @@ DiaFlux.ReviewTool = (function(flow) {
 
 			this.renderIcon(priorityDiv, PRIORITIES, item.getPriority());
 			this.renderIcon(stateDiv, STATES, item.getState());
-			jq$('<div>', {'class' : 'reviewText'}).text(DiaFlux.Review.escapeHTML(item.getDescription())).appendTo(container);
+			jq$('<div>', {'class' : 'reviewText'}).text(item.getDescription()).appendTo(container);
 			this.renderComments(container, item);
 			if (editable){
 				this.addItemActions(item, infoDiv);
@@ -325,9 +326,9 @@ DiaFlux.ReviewTool = (function(flow) {
 			return 'Wiki.jsp?page=' + page +'&version=' + item.getPageRev() + '&item=' +item.getId();
 		},
 		
-		createDiffLink : function(version){
+		createDiffLink : function(version1, version2){
 			var page = KNOWWE.helper.gup('page');
-			return 'Diff.jsp?page=' + page +'&r1=-1&r2=' + version;
+			return 'Diff.jsp?page=' + page +'&r1=' + version2 +'&r2=' + version1;
 		},
 			
 		handleSelection : function(li){
@@ -496,8 +497,10 @@ DiaFlux.ReviewTool = (function(flow) {
 					if (state == 0){
 						hint.text("This issue was changed to '" + STATES[0] + "' again.")
 					} else {
+						//TODO would be better, if each comment had a pagerev, in case its state is set to open again
+						var diffLink = this.createDiffLink(item.getPageRev(), comments[i].getResolvedPageRev());
 						hint.text("This issue was changed to '" + STATES[1] + "'. ")
-						.append(jq$('<a>', {href: this.createDiffLink(comments[i].getResolvedPageRev())}).text("Show differences."));
+						.append(jq$('<a>', {href: diffLink}).text("Show differences."));
 					}
 					var stateDiv = jq$('<div>', {'class' : 'reviewItemState'}).appendTo(infoDiv);
 					stateDiv.append(this.renderIcon(hint, STATES, state));
@@ -662,10 +665,10 @@ DiaFlux.Review = function(flowName, idCounter){
 	}
 }
 
-DiaFlux.Review.escapeHTML = function(string) {
+// TODO use an appropriate escape routine
+DiaFlux.Review.escapeXML = function(string) {
 	return jq$('<div>').text(string).html();
 }
-
 
 DiaFlux.Review.fromXML = function(xml){
 	var idCounter = parseInt(xml.getElementsByTagName('review')[0].getAttribute('idCounter'));
@@ -789,7 +792,7 @@ DiaFlux.ReviewItem = function(id){
 			
 			xml += '</comments>\n';
 			
-			xml += '<description>' + DiaFlux.Review.escapeHTML(this.getDescription()) + '</description>\n';
+//			xml += '<description>' + DiaFlux.Review.escapeXML(this.getDescription()) + '</description>\n';
 			xml += '<markings>\n';
 			
 			var markings = this.getMarkings();
@@ -878,7 +881,7 @@ DiaFlux.ReviewComment = function(date, author) {
 			xml += 'date="' + this.getDate() + '" ';
 			xml += 'resolvedPageRev="' + this.getResolvedPageRev() + '" ';
 			xml += 'author="' + this.getAuthor() +'">';
-			xml += DiaFlux.Review.escapeHTML(this.getText());
+			xml += DiaFlux.Review.escapeXML(this.getText());
 			xml += '</comment>\n'
 			
 			return xml;

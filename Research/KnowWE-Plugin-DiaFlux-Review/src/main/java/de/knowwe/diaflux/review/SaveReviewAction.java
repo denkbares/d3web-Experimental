@@ -40,7 +40,7 @@ import de.knowwe.diaflux.type.FlowchartType;
  */
 public class SaveReviewAction extends AbstractAction {
 
-	public static final String REVIEW_NAME = "review";
+	public static final String REVIEW_NAME = "data";
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
