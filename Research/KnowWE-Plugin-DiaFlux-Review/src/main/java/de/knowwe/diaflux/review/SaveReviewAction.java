@@ -59,7 +59,7 @@ public class SaveReviewAction extends AbstractAction {
 		String flowName = FlowchartType.getFlowchartName(flowSec);
 		WikiConnector connector = Environment.getInstance().getWikiConnector();
 		InputStream stream = new ByteArrayInputStream(reviewXML.getBytes());
-		connector.storeAttachment(article.getTitle(), flowName + ".review.xml",
+		connector.storeAttachment(article.getTitle(), flowName + LoadReviewAction.REVIEW_EXTENSION,
 				context.getUserName(), stream);
 
 	}

@@ -46,6 +46,8 @@ import de.knowwe.diaflux.type.FlowchartType;
  */
 public class LoadReviewAction extends AbstractAction {
 
+	public static final String REVIEW_EXTENSION = ".review.xml";
+
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String kdomid = context.getParameter(Attributes.SECTION_ID);
@@ -54,7 +56,7 @@ public class LoadReviewAction extends AbstractAction {
 		String flowName = FlowchartType.getFlowchartName(flowSec);
 		WikiConnector connector = Environment.getInstance().getWikiConnector();
 
-		String filename = article.getTitle() + "/" + flowName + ".review.xml";
+		String filename = article.getTitle() + "/" + flowName + REVIEW_EXTENSION;
 		WikiAttachment attachment = connector.getAttachment(filename);
 
 		context.setContentType("text/xml");

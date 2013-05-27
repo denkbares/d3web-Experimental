@@ -5,6 +5,7 @@
 	<requires>
 		<import plugin-id="KnowWE-Plugin-DiaFlux" />
 		<import plugin-id="KnowWEExtensionPoints" />
+		<import plugin-id="d3web-Plugin-TestingFramework" />
 	</requires>
 	
 	<runtime>
@@ -60,6 +61,17 @@
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="DiaFlux" />
 	</extension>
+	
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="ReviewConsistency">
+		<parameter id="class"
+			value="de.knowwe.diaflux.review.ReviewConsistencyTest" />
+		<parameter id="name" value="ReviewConsistency" />
+		<parameter id="description" value="CITest ReviewConsistency" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="LeftMenuCollapse">
