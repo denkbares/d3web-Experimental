@@ -62,5 +62,75 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
+	
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="NonExitableFlowchart">
+		<parameter id="class"
+			value="de.d3web.diaflux.test.NonExitableFlowchartTest" />
+		<parameter id="name" value="NonExitableFlowchart" />
+		<parameter id="description" value="CITest NonExitableFlowchart" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="DistinctFlowcharts">
+		<parameter id="class"
+			value="de.d3web.diaflux.test.DistinctFlowchartsTest" />
+		<parameter id="name" value="DistinctFlowcharts" />
+		<parameter id="description" value="CITest DistinctFlowcharts" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="DeadEnd">
+		<parameter id="class"
+			value="de.d3web.diaflux.test.DeadEndTest" />
+		<parameter id="name" value="DeadEnd" />
+		<parameter id="description" value="CITest DeadEnd" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="RedundantStartNode">
+		<parameter id="class"
+			value="de.d3web.diaflux.test.RedundantStartNodeTest" />
+		<parameter id="name" value="RedundantStartNode" />
+		<parameter id="description" value="CITest RedundantStartNode" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="RedundantDecisionNode">
+		<parameter id="class"
+			value="de.d3web.diaflux.test.RedundantDecisionNodeTest" />
+		<parameter id="name" value="RedundantDecisionNode" />
+		<parameter id="description" value="CITest RedundantDecisionNode" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="RedundantExitNode">
+		<parameter id="class"
+			value="de.d3web.diaflux.test.RedundantExitNodeTest" />
+		<parameter id="name" value="RedundantExitNode" />
+		<parameter id="description" value="CITest RedundantExitNode" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<!--extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="DiaFluxCyclomaticComplexity">
+		<parameter id="class"
+			value="de.d3web.diaflux.metrics.DiaFluxCyclomaticComplexity" />
+		<parameter id="name" value="DiaFluxCyclomaticComplexity" />
+		<parameter id="description" value="CITest DiaFluxCyclomaticComplexity" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension-->
 
 </plugin>
