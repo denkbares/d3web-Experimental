@@ -18,12 +18,15 @@
  */
 package de.knowwe.ophtovisD3;
 
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import de.knowwe.ophtovisD3.utils.JsonFactory;
 import de.knowwe.ophtovisD3.utils.NodeWithName;
 
 
@@ -149,16 +152,15 @@ public class GraphBuilder {
 	}
 	public static String builtPartTree(String startConcept, String connectionType){
 		String root =DataBaseHelper.getRootConcept( startConcept,  connectionType);
-		Tree<NodeWithName> resultTree = new Tree<NodeWithName>(new NodeWithName(root));
-		resultTree =getChildConceptTree(root, connectionType, resultTree);
-		resultTree.removeNodeFromTree(new NodeWithName(startConcept,DataBaseHelper.countQuerytresultstoString(startConcept),false));
-		resultTree.insertNode(new NodeWithName(startConcept, true));
-		Gson gson = new Gson();
-		return gson.toJson(resultTree);
+		boolean highlight =(root.equals(startConcept));
+		Tree<NodeWithName> resultTree = new Tree<NodeWithName>(new NodeWithName(root,highlight));
+		resultTree =getChildConceptTree(root, connectionType, resultTree, startConcept);
+
+		return JsonFactory.toJSON(resultTree);
 		
 	}
 	
-	public static Tree<NodeWithName> getChildConceptTree(String father, String connectionType, Tree<NodeWithName> tree) {
+	public static Tree<NodeWithName> getChildConceptTree(String father, String connectionType, Tree<NodeWithName> tree, String toHighlight) {
 		List<String> childs = DataBaseHelper.getConnectedNodeNamesOfType(father, connectionType,
 				false);
 		if (childs.isEmpty()) {
@@ -167,8 +169,13 @@ public class GraphBuilder {
 		else {
 			for (int i = 0; i < childs.size(); i++) {
 				String string = childs.get(i);
-				tree.insertNode(new NodeWithName(childs.get(i),Integer.toString(DataBaseHelper.countQuerytresults(childs.get((i))))));
-				getChildConceptTree(string, connectionType, tree);	
+				if(!childs.get(i).equals(father)){
+				boolean highlight =false;
+				if(childs.get(i).equals(toHighlight))
+					highlight=true;
+				tree.insertNode(new NodeWithName(childs.get(i),Integer.toString(DataBaseHelper.countQuerytresults(childs.get(i))),highlight));
+				getChildConceptTree(string, connectionType, tree,toHighlight);	
+				}
 				}
 			}
 		return tree;

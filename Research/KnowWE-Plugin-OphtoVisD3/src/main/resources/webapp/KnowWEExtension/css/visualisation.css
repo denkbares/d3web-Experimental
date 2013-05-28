@@ -132,10 +132,9 @@ margin-right: 2px;
 
 .infobox{
 	float:right;
-	border: 1px;
+	background-color: #F9F9F9;
+	border: 1px solid #ddd;
 	border-collapse: collapse;
-	border-color: black;
-	border-style: solid;
 	width: 300 px;
 	
 }
@@ -236,6 +235,10 @@ overflow-x: hidden;
 }
 .wissassPageContents{
 overflow-x: hidden;
+}
+.colapser{
+ text-align: center;
+ font-size: 14px;
 }
 
 #breadcrumbs { display: none; 

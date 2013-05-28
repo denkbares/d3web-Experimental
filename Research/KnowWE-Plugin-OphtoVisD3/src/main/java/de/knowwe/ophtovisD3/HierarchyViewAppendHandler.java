@@ -11,12 +11,12 @@ public class HierarchyViewAppendHandler implements PageAppendHandler {
 	public void append(String web, String topic, UserContext user, RenderResult result) {
 		if(DataBaseHelper.conceptIsInHierachy(topic)){
 		result.appendHtml("<div class=infobox>");
-		result.appendHtml("<div class=\"Colapser\" onclick=\"collapseInfobox()\" >Infobox  ▲</div>");
+		result.appendHtml("<div class=\"colapser\" onclick=\"collapseInfobox()\" >Infobox  ▲</div>");
 		result.appendHtml("<div id=\"chart\"></div>");
 		result.appendHtml("<script> createSidebarTree(\"" + topic + "\")</script>");
 		}
-		result.appendHtml("<script> var url =KNOWWE.core.util.getURL({action : 'ConnectionsAction', concept : \"" + topic + "\"});");
-		result.appendHtml("renderConnections(url); </script>");
+		//result.appendHtml("<script> var url =KNOWWE.core.util.getURL({action : 'ConnectionsAction', concept : \"" + topic + "\"});");
+		//result.appendHtml("renderConnections(url); </script>");
 		result.appendHtml("</Div>");
 	}
 

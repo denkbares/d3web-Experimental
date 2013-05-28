@@ -1,15 +1,15 @@
 function createSidebarTree(con){
 	var url = KNOWWE.core.util.getURL({action : 'PartTreeAction', concept : con});
-	w = 360,
+	w = 270,
     h = 800,
     i = 0,
     barHeight = 20,
-    barWidth = w * .6,
+    barWidth = w * .7,
     duration = 400,
     root ="";
 
 var tree = d3.layout.tree()
-    .size([h, 100]);
+    .size([h, 50]);
 
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
@@ -18,10 +18,9 @@ var vis = d3.select("#chart").append("svg:svg")
     .attr("width", w)
     .attr("height", h)
   .append("svg:g")
-    .attr("transform", "translate(20,30)");
+    .attr("transform", "translate(10,10)");
 
 d3.json( url, function(json) {
-	
   json.x0 = 0;
   json.y0 = 0;
   update(root = json.root);
@@ -34,10 +33,12 @@ function update(source) {
   var nodes = tree.nodes(root);
   
   // Compute the "layout".
+  var high=0;
   nodes.forEach(function(n, i) {
     n.x = i * barHeight;
+    high++;
   });
-  
+  jQuery("svg").attr("height",high*barHeight+10)
   // Update the nodes…
   var node = vis.selectAll("g.node")
       .data(nodes, function(d) { return d.id || (d.id = ++i); });
@@ -165,6 +166,7 @@ function renderConnections(url){
 
 function collapseInfobox(){
 	jQuery("#chart").toggleClass("hidden");
+	jQuery(".colapser").text(jQuery(".colapser").text()==="Infobox  ▲" ?"Infobox  ▼" : "Infobox  ▲");
 	
 	
 }

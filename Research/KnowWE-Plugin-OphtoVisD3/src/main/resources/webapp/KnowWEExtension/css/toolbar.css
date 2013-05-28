@@ -71,6 +71,12 @@ background-color: #2D9734!important;
 .hidden{
 visability :hidden;
 }
+.colapser{
+background-color: black;
+ vertical-align:middle;
+ color:white;
+ font: 12px;
+}
 .prepageappend{
 overflow-x: hidden;
 }

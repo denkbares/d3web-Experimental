@@ -29,7 +29,7 @@ public class NodeWithName implements HierarchyNode<NodeWithName> {
 	public NodeWithName(String name,boolean highlighted) {
 		this.name = name;
 
-		this.highlighted=true;
+		this.highlighted=highlighted;
 	}
 	
 
