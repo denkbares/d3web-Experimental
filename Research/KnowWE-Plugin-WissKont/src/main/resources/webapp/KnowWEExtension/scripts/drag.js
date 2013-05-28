@@ -97,6 +97,9 @@ function handleTermActionEvent(element) {
 	if(element.hasClass('showGraph')) {
 		command = 'openGraph';
 	}
+	if(element.hasClass('toggleGraph')) {
+		command = 'toggleGraph';
+	}
 	if(element.hasClass('expandConcept')) {
 		command = 'expand';
 	}

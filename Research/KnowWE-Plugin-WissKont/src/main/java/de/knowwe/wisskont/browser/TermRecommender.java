@@ -397,4 +397,19 @@ public class TermRecommender implements EventListener {
 		recommendationSet.setBrowserIsCollapsed(!recommendationSet.isBrowserIsCollapsed());
 
 	}
+
+	/**
+	 * 
+	 * @created 28.05.2013
+	 * @param context
+	 */
+	public void toggleGraph(UserActionContext context) {
+		RecommendationSet recommendationSet = data.get(context.getUserName());
+		if (recommendationSet == null) {
+			recommendationSet = new RecommendationSet();
+			data.put(context.getUserName(), recommendationSet);
+		}
+		recommendationSet.setGraphIsCollapsed(!recommendationSet.isGraphIsCollapsed());
+
+	}
 }

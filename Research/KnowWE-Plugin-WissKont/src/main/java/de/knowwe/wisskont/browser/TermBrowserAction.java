@@ -78,6 +78,10 @@ public class TermBrowserAction extends AbstractAction {
 				// stores user's collapse state on server
 				TermRecommender.getInstance().openGraph(context);
 			}
+			else if (command.equals("toggleGraph")) {
+				// stores user's collapse state on server
+				TermRecommender.getInstance().toggleGraph(context);
+			}
 			else if (command.equals("collapseList")) {
 				// stores user's collapse state on server
 				TermRecommender.getInstance().collapseList(context);
