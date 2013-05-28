@@ -671,7 +671,7 @@ public class RenderingCore {
 		}
 		conceptNode = new ConceptNode(currentConcept, type, currentURL, currentLabel);
 
-		Edge newLineRelationsKey = new Edge(from, relation, to, type);
+		Edge newLineRelationsKey = new Edge(from, relation, to);
 
 		conceptNode.setOuter(false);
 		data.addConcept(conceptNode);

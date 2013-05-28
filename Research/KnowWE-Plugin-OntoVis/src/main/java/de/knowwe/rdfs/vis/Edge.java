@@ -21,6 +21,8 @@ package de.knowwe.rdfs.vis;
 import de.d3web.strings.Strings;
 
 /**
+ * An edge in a named graph comprising a source node (predicate), a named
+ * relation (predicate), and a target node (object).
  * 
  * @author jochenreutelshofer
  * @created 06.12.2012
@@ -30,7 +32,6 @@ public class Edge {
 	private final String subject;
 	private final String predicate;
 	private final String object;
-	private final RenderingCore.NODE_TYPE nodeType;
 
 	private boolean outer = false;
 
@@ -42,18 +43,10 @@ public class Edge {
 		return outer;
 	}
 
-	/**
-	 * 
-	 */
 	public Edge(String s, String p, String o) {
-		this(s, p, o, RenderingCore.NODE_TYPE.UNDEFINED);
-	}
-
-	public Edge(String s, String p, String o, RenderingCore.NODE_TYPE nodeType) {
 		this.subject = Strings.unquote(s);
 		this.predicate = Strings.unquote(p);
 		this.object = Strings.unquote(o);
-		this.nodeType = nodeType;
 	}
 
 	@Override
