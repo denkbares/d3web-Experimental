@@ -44,7 +44,7 @@
 		<parameter id="priority" value="3" />
 	</extension>
 	
-	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
+	<!--extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
 			point-id="SparqlResultNodeRenderer"
 			id="ShrinkNodeRenderer">
 		<parameter id="class"
@@ -53,6 +53,28 @@
 		<parameter id="description" value="NodeRenderer ShrinkNodeRenderer" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="1000" />
+	</extension-->
+	
+	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
+			point-id="SparqlResultNodeRenderer"
+			id="TrimDataTypeNodeRenderer">
+		<parameter id="class"
+			value="de.knowwe.rdf2go.sparql.TrimDataTypeNodeRenderer" />
+		<parameter id="name" value="TrimDataTypeNodeRenderer" />
+		<parameter id="description" value="NodeRenderer TrimDataTypeNodeRenderer" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="50" />
+	</extension>
+	
+	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
+			point-id="SparqlResultNodeRenderer"
+			id="TrimNamespaceNodeRenderer">
+		<parameter id="class"
+			value="de.knowwe.rdf2go.sparql.TrimNamespaceNodeRenderer" />
+		<parameter id="name" value="TrimNamespaceNodeRenderer" />
+		<parameter id="description" value="NodeRenderer TrimNamespaceNodeRenderer" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="50" />
 	</extension>
 	
 	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
