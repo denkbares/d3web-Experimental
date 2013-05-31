@@ -56,8 +56,8 @@ public class SubGraphData {
 		if (concepts.contains(n)) {
 			// due to equals not regarding outer-flag
 			concepts.remove(n);
-			concepts.add(n);
 		}
+		concepts.add(n);
 	}
 
 }
