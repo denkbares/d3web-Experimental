@@ -70,6 +70,9 @@ function initAllBrowserActionEvents() {
     jq$(".toggleList").each(function() {
     	initClickEvents(jq$(this));
     });
+    jq$(".addParentConcept").each(function() {
+    	initClickEvents(jq$(this));
+    });
     initCollapseTermBrowser();
 
 }
@@ -84,6 +87,9 @@ function handleTermActionEvent(element) {
 	var command = 'noop'
 	if(element.hasClass('removeConcept')) {
 		command = 'remove';
+	}
+	if(element.hasClass('addParentConcept')) {
+		command = 'addParent';
 	}
 	if(element.hasClass('hideList')) {
 		command = 'collapseList';

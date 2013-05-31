@@ -66,6 +66,10 @@ public class TermBrowserAction extends AbstractAction {
 				// adds all sub-concepts of a concept to the list
 				TermRecommender.getInstance().expandTerm(context, term);
 			}
+			else if (command.equals("addParent")) {
+				// adds all sub-concepts of a concept to the list
+				TermRecommender.getInstance().addParentTerm(context, term);
+			}
 			else if (command.equals("collapse")) {
 				// removes all sub-concepts of a concepts from the list
 				TermRecommender.getInstance().collapseTerm(context, term);

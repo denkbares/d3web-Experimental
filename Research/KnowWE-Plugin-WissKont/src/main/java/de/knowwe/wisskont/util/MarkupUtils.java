@@ -130,6 +130,41 @@ public class MarkupUtils {
 		return parents;
 	}
 
+	public static List<String> getParentConcepts(String term) {
+		List<String> result = new ArrayList<String>();
+
+		Collection<Section<? extends SimpleDefinition>> defs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+				new Identifier(term));
+
+		if (defs.size() > 0) {
+			Section<? extends SimpleDefinition> def = defs.iterator().next();
+			URI uri = RDFSUtil.getURI(def);
+
+			String sparql = "SELECT ?x WHERE { <" + uri + "> lns:unterkonzept ?x.}";
+			QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(sparql);
+
+			ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
+			while (resultIterator.hasNext()) {
+				QueryRow parentConceptResult = resultIterator.next();
+				Node value = parentConceptResult.getValue("x");
+				String urlString = value.asURI().toString();
+
+				String termName = "";
+				try {
+					termName = URLDecoder.decode(
+							urlString.substring(Rdf2GoCore.getInstance().getLocalNamespace().length()),
+							"UTF-8");
+				}
+				catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				result.add(termName);
+			}
+		}
+		return result;
+	}
+
 	public static List<String> getChildrenConcepts(String term) {
 		List<String> result = new ArrayList<String>();
 

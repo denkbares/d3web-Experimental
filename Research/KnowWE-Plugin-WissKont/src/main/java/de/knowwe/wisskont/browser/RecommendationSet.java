@@ -33,7 +33,7 @@ import de.knowwe.wisskont.util.Tree;
 public class RecommendationSet {
 
 	private Tree<RatedTerm> terms = new Tree<RatedTerm>(RatedTerm.ROOT);
-	private boolean browserIsCollapsed = true;
+	private boolean browserIsCollapsed = false;
 	private boolean graphIsCollapsed = true;
 
 	public void setBrowserIsCollapsed(boolean browserIsCollapsed) {

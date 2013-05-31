@@ -21,10 +21,6 @@ package de.knowwe.wisskont.browser;
 import java.util.Collection;
 import java.util.List;
 
-import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.model.QueryResultTable;
-import org.ontoware.rdf2go.model.QueryRow;
-
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 import de.knowwe.compile.IncrementalCompiler;
@@ -33,7 +29,6 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.wisskont.ConceptMarkup;
 import de.knowwe.wisskont.util.MarkupUtils;
 import de.knowwe.wisskont.util.Tree;
 import de.knowwe.wisskont.util.Tree.Node;
@@ -166,13 +161,13 @@ public class TermBrowserRenderUtils {
 				+ lineStyleClass
 				+ "'>");
 		{
-			// table with 2 cols: term name and action buttons (visible hover
+			// table with 2 columns: term name and action buttons (visible hover
 			// only)
 			string.appendHtml("<table style='table-layout:fixed'>");
 			{
 				string.appendHtml("<tr height='23px'>");
 
-				// calculate indention div for hierarchy visualization
+				// calculate indents div for hierarchy visualization
 				string.appendHtml(createIndent(depth));
 
 				// append html code for the actions that can be performed for
@@ -205,7 +200,7 @@ public class TermBrowserRenderUtils {
 				// each term
 				{
 					string.appendHtml("<td style='min-width: 26px;padding:0px;'>");
-					insertActionButtonsPost(string, url, divStyle);
+					insertActionButtonsPost(string, url, divStyle, term, depth);
 					string.appendHtml("</td>");
 				}
 				string.appendHtml("</tr>");
@@ -222,14 +217,14 @@ public class TermBrowserRenderUtils {
 	 * @param url
 	 * @param divStyle
 	 */
-	private static void insertActionButtonsPost(RenderResult string, String url, String divStyle) {
+	private static void insertActionButtonsPost(RenderResult string, String url, String divStyle, String term, int level) {
 		string.appendHtml("<table style='table-layout:fixed'>");
 		string.appendHtml("<tr>");
 		{
 
+			insertAddParentButton(string, divStyle, term, level);
 			insertRemoveButton(string, divStyle);
 
-			// insertExpandButton(string, divStyle);
 		}
 		string.appendHtml("</tr></table>");
 	}
@@ -279,7 +274,7 @@ public class TermBrowserRenderUtils {
 		// expand concept, i.e. add all children to this list
 		string.appendHtml("<td style='"
 				+ divStyle
-				+ "' class='termbrowser'><span class='ui-icon ui-icon-minus collapseConcept hoverAction' title='Unterkonzepte aus Liste entfernen' style='display:none;'></span></td>");
+				+ "' class='termbrowser'><span class='ui-icon ui-icon-minus collapseConcept hoverAction' title='Unterbegriffe aus Liste entfernen' style='display:none;'></span></td>");
 	}
 
 	/**
@@ -292,7 +287,7 @@ public class TermBrowserRenderUtils {
 		// expand concept, i.e. add all children to this list
 		string.appendHtml("<td style='"
 				+ divStyle
-				+ "' class='termbrowser'><span class='ui-icon ui-icon-plus expandConcept' title='Unterkonzepte in diese Liste aufnehmen'></span></td>");
+				+ "' class='termbrowser'><span class='ui-icon ui-icon-plus expandConcept' title='Unterbegriff in diese Liste aufnehmen'></span></td>");
 	}
 
 	/**
@@ -305,7 +300,27 @@ public class TermBrowserRenderUtils {
 		// delete concept from list
 		string.appendHtml("<td style='"
 				+ divStyle
-				+ "' class='termbrowser'><span class='ui-icon ui-icon-circle-close removeConcept hoverAction' title='Konzept aus dieser Liste herausnehmen' style='display:none;'></span></td>");
+				+ "' class='termbrowser'><span class='ui-icon ui-icon-circle-close removeConcept hoverAction' title='Begriff aus dieser Liste herausnehmen' style='display:none;'></span></td>");
+	}
+
+	/**
+	 * 
+	 * @created 03.05.2013
+	 * @param string
+	 * @param divStyle
+	 */
+	private static void insertAddParentButton(RenderResult string, String divStyle, String term, int level) {
+		if (level == 0) {
+
+			List<String> parentConcepts = MarkupUtils.getParentConcepts(term);
+			if (parentConcepts.size() > 0) {
+
+				// add parent concept to list
+				string.appendHtml("<td style='"
+						+ divStyle
+						+ "' class='termbrowser'><span class='ui-icon ui-icon-arrowreturnthick-1-n addParentConcept hoverAction' title='Oberbegriff dieser Liste hinzufügen' style='display:none;'></span></td>");
+			}
+		}
 	}
 
 	/**
@@ -346,26 +361,4 @@ public class TermBrowserRenderUtils {
 		return result;
 	}
 
-	/**
-	 * 
-	 * @created 10.12.2012
-	 * @return
-	 */
-	private static String generateTermnames() {
-		String sparql = "SELECT ?x WHERE { ?x rdf:type <" + ConceptMarkup.WISSASS_CONCEPT + ">.}";
-		QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(sparql);
-		String resultString = "";
-
-		ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
-		while (resultIterator.hasNext()) {
-			QueryRow result = resultIterator.next();
-			org.ontoware.rdf2go.model.node.Node node = result.getValue("x");
-			String termName = MarkupUtils.getConceptName(node);
-			if (termName != null) {
-				resultString += "\"" + termName + "\"" + ",\n";
-			}
-
-		}
-		return resultString;
-	}
 }

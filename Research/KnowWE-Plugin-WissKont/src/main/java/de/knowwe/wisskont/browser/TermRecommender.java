@@ -81,7 +81,7 @@ public class TermRecommender implements EventListener {
 	 */
 	public boolean listIsCollapsed(UserContext user) {
 		RecommendationSet recommendationSet = data.get(user.getUserName());
-		if (recommendationSet == null) return true;
+		if (recommendationSet == null) return false;
 		return recommendationSet.isBrowserIsCollapsed();
 	}
 
@@ -410,6 +410,28 @@ public class TermRecommender implements EventListener {
 			data.put(context.getUserName(), recommendationSet);
 		}
 		recommendationSet.setGraphIsCollapsed(!recommendationSet.isGraphIsCollapsed());
+
+	}
+
+	/**
+	 * 
+	 * @created 31.05.2013
+	 * @param context
+	 * @param term
+	 */
+	public void addParentTerm(UserActionContext context, String term) {
+		RecommendationSet recommendationSet = data.get(context.getUserName());
+		if (recommendationSet == null) {
+			recommendationSet = new RecommendationSet();
+			data.put(context.getUserName(), recommendationSet);
+		}
+		List<String> parents = MarkupUtils.getParentConcepts(term);
+		// there should be only one parent
+		if (parents.size() > 0) {
+			// in any case we only take the first one
+			String parent = parents.get(0);
+			recommendationSet.addValue(parent, WEIGHT_EXPAND);
+		}
 
 	}
 }
