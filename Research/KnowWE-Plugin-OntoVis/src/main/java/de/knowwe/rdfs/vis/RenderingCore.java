@@ -554,7 +554,7 @@ public class RenderingCore {
 
 			if (z == null) {
 				Logger.getLogger(RenderingCore.class.getName()).log(Level.SEVERE,
-						"Variable zs of query was null: " + query);
+						"Variable z of query was null: " + query);
 				continue;
 			}
 
