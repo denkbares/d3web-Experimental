@@ -15,7 +15,6 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Fact;
-import de.d3web.strings.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
@@ -41,19 +40,19 @@ public class D3webRdf2GoSessionManager {
 		URI sessionURI = core.createlocalURI(Session.class.getSimpleName());
 
 		// lns:sessionId rdf:type lns:Session
-		statements.add(core.createStatement(sessionIdURI, RDF.type, sessionURI));
+		Rdf2GoUtils.addStatement(sessionIdURI, RDF.type, sessionURI, statements);
 
 		Literal timeLiteral = core.createLiteral(Long.toString(session.getCreationDate().getTime()));
 		URI hasCreationDateURI = core.createlocalURI("hasCreationDate");
 
 		// lns:sessionId lns:hasCreationDate "time milliseconds"
-		statements.add(core.createStatement(sessionIdURI, hasCreationDateURI, timeLiteral));
+		Rdf2GoUtils.addStatement(sessionIdURI, hasCreationDateURI, timeLiteral, statements);
 
 		URI usesKnowledgeBaseURI = core.createlocalURI("usesKnowledgeBase");
-		URI knowledgeBaseIdURI = core.createlocalURI(session.getKnowledgeBase().getId());
 
 		// lns:sessionId lns:usesKnowledgeBase lns:knowledgeBaseId
-		statements.add(core.createStatement(sessionIdURI, usesKnowledgeBaseURI, knowledgeBaseIdURI));
+		Rdf2GoUtils.addStatement(sessionIdURI, usesKnowledgeBaseURI,
+				session.getKnowledgeBase().getId(), statements);
 
 		statementCache.addStatements(session, statements);
 
@@ -76,35 +75,33 @@ public class D3webRdf2GoSessionManager {
 	public void addFactAsStatements(Session session, TerminologyObject terminologyObject, Value value) {
 		Rdf2GoCore core = Rdf2GoCore.getInstance();
 
-		Set<Statement> factStatements = new HashSet<Statement>();
+		Set<Statement> statements = new HashSet<Statement>();
 
 		BlankNode factNode = core.createBlankNode();
 
 		// blank node (Fact) rdf:type lns:Fact
-		factStatements.add(core.createStatement(factNode, RDF.type, D3webRdf2GoURIs.getFactURI()));
+		Rdf2GoUtils.addStatement(factNode, RDF.type, D3webRdf2GoURIs.getFactURI(), statements);
 
 		// lns:sessionID lns:hasFact blank node (Fact)
 		URI sessionIdURI = D3webRdf2GoURIs.getSessionIdURI(session);
-		factStatements.add(core.createStatement(sessionIdURI, D3webRdf2GoURIs.getHasFactURI(),
-				factNode));
-
-		URI toNameURI = core.createlocalURI(Strings.encodeURL(terminologyObject.getName()));
+		Rdf2GoUtils.addStatement(sessionIdURI, D3webRdf2GoURIs.getHasFactURI(), factNode,
+				statements);
 
 		// blank node (Fact) lns:hasTerminologyObject lns:toName
-		factStatements.add(core.createStatement(factNode,
-				D3webRdf2GoURIs.getHasTerminologyObjectURI(), toNameURI));
+		Rdf2GoUtils.addStatement(factNode, D3webRdf2GoURIs.getHasTerminologyObjectURI(),
+				terminologyObject.getName(), statements);
 
 		Node valueNode = getValueNode(value);
 
 		// blank node (Fact) lns:hasValue lns:value
-		factStatements.add(core.createStatement(factNode, D3webRdf2GoURIs.getHasValueURI(),
-				valueNode));
+		Rdf2GoUtils.addStatement(factNode, D3webRdf2GoURIs.getHasValueURI(),
+				valueNode, statements);
 
 		// add fact statements to cache
-		getInstance().statementCache.addStatements(session, terminologyObject, factStatements);
+		getInstance().statementCache.addStatements(session, terminologyObject, statements);
 
 		// add fact statements to the core
-		core.addStatements(Rdf2GoUtils.toArray(factStatements));
+		core.addStatements(Rdf2GoUtils.toArray(statements));
 	}
 
 	private Node getValueNode(Value value) {

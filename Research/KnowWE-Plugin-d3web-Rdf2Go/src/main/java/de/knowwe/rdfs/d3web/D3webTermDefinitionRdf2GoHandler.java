@@ -11,35 +11,31 @@ import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.NamedObject;
-import de.d3web.strings.Strings;
 import de.d3web.strings.Identifier;
-import de.d3web.we.object.D3webTerm;
+import de.d3web.strings.Strings;
 import de.d3web.we.object.D3webTermDefinition;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
-public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDefinition<?>> {
+public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDefinition<NamedObject>> {
 
 	@Override
-	public Collection<Message> create(Article article, Section<D3webTermDefinition<?>> section) {
+	public Collection<Message> create(Article article, Section<D3webTermDefinition<NamedObject>> section) {
 
 		if (section.hasErrorInSubtree()) return Messages.noMessage();
 
 		Identifier termIdentifier = section.get().getTermIdentifier(section);
+		String externalForm = Rdf2GoUtils.getCleanedExternalForm(termIdentifier);
 		URI termIdentifierURI = Rdf2GoCore.getInstance().createlocalURI(
-				Strings.encodeURL(termIdentifier.toExternalForm()));
+				externalForm);
 
 		Class<?> termObjectClass = section.get().getTermObjectClass(section);
-		URI termObjectClassURI = Rdf2GoCore.getInstance().createlocalURI(
-				termObjectClass.getSimpleName());
 
 		// URI hasInstanceURI =
 		// Rdf2GoCore.getInstance().createlocalURI("hasInstance");
@@ -47,28 +43,19 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 		List<Statement> statements = new ArrayList<Statement>();
 
 		// lns:TermIdentifier rdf:type lns:TermObjectClass
-		statements.add(Rdf2GoCore.getInstance().createStatement(termIdentifierURI, RDF.type,
-				termObjectClassURI));
+		Rdf2GoUtils.addStatement(termIdentifierURI, RDF.type, termObjectClass.getSimpleName(),
+				statements);
 
 		// lns:TermIdentifier rdf:subclassOf lns:parentTermIdentifier
-		Section<?> termDefiningSection = KnowWEUtils.getTerminologyManager(article).getTermDefiningSection(
-				termIdentifier);
-		if (termDefiningSection.get() instanceof D3webTerm) {
-			@SuppressWarnings("rawtypes")
-			Section<D3webTerm> d3webTermSection = Sections.cast(termDefiningSection,
-					D3webTerm.class);
-			@SuppressWarnings("unchecked")
-			NamedObject termObject = d3webTermSection.get().getTermObject(article, d3webTermSection);
-			if (termObject instanceof TerminologyObject) {
-				TerminologyObject[] parents = ((TerminologyObject) termObject).getParents();
-				for (TerminologyObject parent : parents) {
-					String externalForm = new Identifier(parent.getName()).toExternalForm();
-					URI parentTermidentifierURI = Rdf2GoCore.getInstance().createlocalURI(
-							Strings.encodeURL(externalForm));
-					statements.add(Rdf2GoCore.getInstance().createStatement(termIdentifierURI,
-							RDFS.subClassOf,
-							parentTermidentifierURI));
-				}
+		NamedObject termObject = section.get().getTermObject(article, section);
+		if (termObject instanceof TerminologyObject) {
+			TerminologyObject[] parents = ((TerminologyObject) termObject).getParents();
+			for (TerminologyObject parent : parents) {
+				String parentExternalForm = Rdf2GoUtils.getCleanedExternalForm(new Identifier(
+						parent.getName()));
+				Rdf2GoUtils.addStatement(termIdentifierURI,
+						RDFS.subClassOf,
+						parentExternalForm, statements);
 			}
 		}
 
@@ -86,9 +73,8 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 		// "isTerminologyObjectOf");
 
 		// lns:KbName ln:hasTerminologyObject lns:TermIdentifier
-		statements.add(Rdf2GoCore.getInstance().createStatement(kbNameURI,
-				D3webRdf2GoURIs.getHasTerminologyObjectURI(),
-				termIdentifierURI));
+		Rdf2GoUtils.addStatement(kbNameURI, D3webRdf2GoURIs.getHasTerminologyObjectURI(),
+				externalForm, statements);
 
 		// lns:TermIdentifier lns:isTerminologyObjectOf lns:KbName
 		// statements.add(Rdf2GoCore.getInstance().createStatement(termIdentifierURI,
@@ -99,4 +85,5 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 
 		return Messages.noMessage();
 	}
+
 }

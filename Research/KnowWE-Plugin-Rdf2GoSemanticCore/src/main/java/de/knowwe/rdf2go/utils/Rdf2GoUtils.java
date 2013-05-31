@@ -7,12 +7,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.Resource;
+import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.util.RDFTool;
+import org.ontoware.rdf2go.vocabulary.RDFS;
 
+import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.Rdf2GoCore.Rdf2GoReasoning;
 
 public class Rdf2GoUtils {
 
@@ -180,6 +186,53 @@ public class Rdf2GoUtils {
 		sparqlString = newSparqlString.toString();
 
 		return sparqlString;
+	}
+
+	public static void addStringLiteral(String subject, String predicate, String literalText, Collection<Statement> statements) {
+		URI subjectUri = Rdf2GoCore.getInstance().createlocalURI(subject);
+		URI predicateUri = Rdf2GoCore.getInstance().createlocalURI(predicate);
+		Literal literal = Rdf2GoCore.getInstance().createLiteral(literalText);
+		addStatement(subjectUri, predicateUri, literal, statements);
+	}
+
+	/**
+	 * Creates a statement and adds it to the list of statements. Additionally,
+	 * in case of RDF reasoning, the rdfs label of the object is created and
+	 * added.
+	 * 
+	 */
+	public static void addStatement(String subject, String predicate, String object, Collection<Statement> statements) {
+		Rdf2GoCore core = Rdf2GoCore.getInstance();
+		URI subjectUri = core.createlocalURI(subject);
+		URI predicateUri = core.createlocalURI(predicate);
+		addStatement(subjectUri, predicateUri, object, statements);
+	}
+
+	/**
+	 * Creates a statement and adds it to the list of statements. Additionally,
+	 * in case of RDF reasoning, the rdfs label of the object is created and
+	 * added.
+	 * 
+	 */
+	public static void addStatement(Resource subject, URI predicate, String object, Collection<Statement> statements) {
+		Rdf2GoCore core = Rdf2GoCore.getInstance();
+		URI objectUri = core.createlocalURI(object);
+		addStatement(subject, predicate, objectUri, statements);
+		if (core.getReasoningType().equals(Rdf2GoReasoning.RDF)) {
+			addStatement(objectUri, RDFS.label, core.createLiteral(object), statements);
+		}
+	}
+
+	public static void addStatement(Resource subject, URI predicate, Node object, Collection<Statement> statements) {
+		statements.add(Rdf2GoCore.getInstance().createStatement(subject, predicate, object));
+	}
+
+	public static String getCleanedExternalForm(Identifier identifier) {
+		String externalForm = identifier.toExternalForm();
+		if (identifier.getPathElements().length == 1) {
+			externalForm = Strings.unquote(externalForm);
+		}
+		return externalForm;
 	}
 
 }
