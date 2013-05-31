@@ -53,7 +53,11 @@ public class SubGraphData {
 	}
 
 	public void addConcept(ConceptNode n) {
-		concepts.add(n);
+		if (concepts.contains(n)) {
+			// due to equals not regarding outer-flag
+			concepts.remove(n);
+			concepts.add(n);
+		}
 	}
 
 }
