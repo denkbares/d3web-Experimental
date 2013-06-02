@@ -28,7 +28,7 @@ import de.knowwe.tagging.TagEditPanel;
 public class AppendTagEditHandler implements PageAppendHandler {
 
 	@Override
-	public void append(String web, String topic, UserContext user, RenderResult result) {
+	public void append(String web, String title, UserContext user, RenderResult result) {
 		result.append("\\\\[{If group='Editoren'\n\n");
 		TagEditPanel.render(user, result);
 		result.append("}]");

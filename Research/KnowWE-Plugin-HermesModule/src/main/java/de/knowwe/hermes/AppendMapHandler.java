@@ -45,12 +45,12 @@ public class AppendMapHandler implements PageAppendHandler {
 	private static final String SPARQL_PLACE = "select ?x ?lat ?long where {?x lns:hasLatitude ?lat . ?x lns:hasLongitude ?long }";
 
 	@Override
-	public void append(String web, String topic, UserContext user, RenderResult result) {
+	public void append(String web, String title, UserContext user, RenderResult result) {
 
 		if (Environment.getInstance().getWikiConnector().userIsMemberOfGroup(
 				group, user.getRequest())) {
 
-			String content = Environment.getInstance().getArticle(web, topic).getRootSection().getText();
+			String content = Environment.getInstance().getArticle(web, title).getRootSection().getText();
 
 			List<Placemark> l = getPlacemarks(content);
 

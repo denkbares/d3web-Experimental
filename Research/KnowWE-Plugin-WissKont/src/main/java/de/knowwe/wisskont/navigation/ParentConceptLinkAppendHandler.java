@@ -52,9 +52,9 @@ import de.knowwe.wisskont.ConceptMarkup;
 public class ParentConceptLinkAppendHandler implements PageAppendHandler {
 
 	@Override
-	public void append(String web, String topic, UserContext user, RenderResult result) {
+	public void append(String web, String title, UserContext user, RenderResult result) {
 
-		Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB, topic);
+		Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB, title);
 		List<Section<ConceptMarkup>> conceptMarkups = Sections.findSuccessorsOfType(
 				article.getRootSection(), ConceptMarkup.class);
 		if (conceptMarkups.size() == 1) {

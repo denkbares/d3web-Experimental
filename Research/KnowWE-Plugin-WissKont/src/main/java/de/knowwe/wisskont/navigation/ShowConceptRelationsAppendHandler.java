@@ -45,10 +45,10 @@ import de.knowwe.wisskont.browser.TermRecommender;
 public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 
 	@Override
-	public void append(String web, String topic, UserContext user, RenderResult result) {
+	public void append(String web, String title, UserContext user, RenderResult result) {
 		ArticleManager articleManager = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB);
-		Article article = articleManager.getArticle(topic);
+		Article article = articleManager.getArticle(title);
 		Section<?> section = article.getRootSection();
 		List<Section<ConceptMarkup>> conceptMarkups = Sections.findSuccessorsOfType(
 				article.getRootSection(), ConceptMarkup.class);

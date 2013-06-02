@@ -30,7 +30,7 @@ import de.knowwe.core.user.UserContext;
 public class ContentLayoutPostHandler implements PageAppendHandler {
 
 	@Override
-	public void append(String web, String topic, UserContext user, RenderResult result) {
+	public void append(String web, String title, UserContext user, RenderResult result) {
 		result.appendHtml("</div>");
 
 	}

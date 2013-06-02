@@ -36,7 +36,7 @@ public class PageLoggerHandler implements PageAppendHandler {
 	public boolean log = true;
 
 	@Override
-	public void append(String web, String topic,
+	public void append(String web, String title,
 			UserContext user, RenderResult result) {
 		if (log) {
 			try {
