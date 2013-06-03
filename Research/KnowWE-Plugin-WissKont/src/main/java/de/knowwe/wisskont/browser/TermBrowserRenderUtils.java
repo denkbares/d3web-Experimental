@@ -199,7 +199,7 @@ public class TermBrowserRenderUtils {
 				// append html code for the actions that can be performed for
 				// each term
 				{
-					string.appendHtml("<td style='min-width: 26px;padding:0px;'>");
+					string.appendHtml("<td style='min-width: 32px;max-width: 32px;padding:0px;'>");
 					insertActionButtonsPost(string, url, divStyle, term, depth);
 					string.appendHtml("</td>");
 				}
@@ -239,7 +239,7 @@ public class TermBrowserRenderUtils {
 	private static void insertActionButtonsPre(RenderResult string, String url, String divStyle, Node<RatedTerm> term) {
 		boolean allChildrenShown = allChildrenShown(term);
 
-		string.appendHtml("<table style='table-layout:fixed'>");
+		string.appendHtml("<table style='padding:0px;table-layout:fixed'>");
 		string.appendHtml("<tr>");
 		{
 			if (allChildrenShown) {
@@ -320,7 +320,26 @@ public class TermBrowserRenderUtils {
 						+ divStyle
 						+ "' class='termbrowser'><span class='ui-icon ui-icon-arrowreturnthick-1-n addParentConcept hoverAction' title='Oberbegriff dieser Liste hinzufügen' style='display:none;'></span></td>");
 			}
+			else {
+				// to have a fixed layout of the remaining button
+				addDummyTableCell(string, 16);
+			}
 		}
+		else {
+			// to have a fixed layout of the remaining button
+			addDummyTableCell(string, 16);
+		}
+	}
+
+	/**
+	 * 
+	 * @created 03.06.2013
+	 * @param i
+	 */
+	private static void addDummyTableCell(RenderResult string, int i) {
+
+		string.appendHtml("<td style='' class='termbrowser'><span style='background-position: -96px -224px;' class='ui-icon' title='Oberbegriff dieser Liste hinzufügen' style='display:none;'></span></td>");
+
 	}
 
 	/**
