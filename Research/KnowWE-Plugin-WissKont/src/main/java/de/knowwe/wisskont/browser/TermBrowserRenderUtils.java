@@ -338,7 +338,7 @@ public class TermBrowserRenderUtils {
 	 */
 	private static void addDummyTableCell(RenderResult string, int i) {
 
-		string.appendHtml("<td style='' class='termbrowser'><span style='background-position: -96px -224px;' class='ui-icon' title='Oberbegriff dieser Liste hinzufügen' style='display:none;'></span></td>");
+		string.appendHtml("<td style='' class='termbrowser'><span style='background-position: -96px -224px;' class='ui-icon' style='display:none;'></span></td>");
 
 	}
 

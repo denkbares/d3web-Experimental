@@ -183,7 +183,7 @@ public class RelationMarkupContentType extends AbstractType {
 
 						string.appendHtml("<span class='deletableListElement' id='"
 								+ section.getID() + "'>");
-						string.appendHtml("<table style='display:inline;' >");
+						string.appendHtml("<table style='display:inline-block;' >");
 						string.appendHtml("<tr>");
 						string.appendHtml("<td class='narrowCell' style='vertical-align:text-bottom;'>");
 						if (!hasError) {
