@@ -18,8 +18,6 @@
  */
 package de.knowwe.rdfs.vis;
 
-import de.d3web.strings.Strings;
-
 /**
  * An edge in a named graph comprising a source node (predicate), a named
  * relation (predicate), and a target node (object).
@@ -29,24 +27,18 @@ import de.d3web.strings.Strings;
  */
 public class Edge {
 
-	private final String subject;
+	private final ConceptNode subject;
 	private final String predicate;
-	private final String object;
-
-	private boolean outer = false;
-
-	public void setOuter(boolean outer) {
-		this.outer = outer;
-	}
+	private final ConceptNode object;
 
 	public boolean isOuter() {
-		return outer;
+		return subject.isOuter() || object.isOuter();
 	}
 
-	public Edge(String s, String p, String o) {
-		this.subject = Strings.unquote(s);
-		this.predicate = Strings.unquote(p);
-		this.object = Strings.unquote(o);
+	public Edge(ConceptNode s, String p, ConceptNode o) {
+		this.subject = s;
+		this.predicate = p;
+		this.object = o;
 	}
 
 	@Override
@@ -70,7 +62,7 @@ public class Edge {
 		return super.equals(obj);
 	}
 
-	public String getSubject() {
+	public ConceptNode getSubject() {
 		return subject;
 	}
 
@@ -78,7 +70,7 @@ public class Edge {
 		return predicate;
 	}
 
-	public String getObject() {
+	public ConceptNode getObject() {
 		return object;
 	}
 

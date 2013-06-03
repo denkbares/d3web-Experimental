@@ -26,6 +26,8 @@ import de.knowwe.rdfs.vis.SubGraphData;
 import de.knowwe.rdfs.vis.util.FileUtils;
 
 /**
+ * A GraphVisualizationRenderer using DOT/GraphViz for the visualization of the
+ * SubGraphData.
  * 
  * @author jochenreutelshofer
  * @created 27.05.2013

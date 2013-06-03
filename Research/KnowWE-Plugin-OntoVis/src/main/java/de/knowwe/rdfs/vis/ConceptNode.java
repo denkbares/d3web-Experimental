@@ -18,6 +18,7 @@
  */
 package de.knowwe.rdfs.vis;
 
+import de.d3web.strings.Strings;
 import de.knowwe.rdfs.vis.RenderingCore.NODE_TYPE;
 
 /**
@@ -58,7 +59,7 @@ public class ConceptNode {
 	 * 
 	 */
 	public ConceptNode(String name) {
-		this.name = name;
+		this.name = Strings.unquote(name);
 	}
 
 	/**
@@ -67,8 +68,19 @@ public class ConceptNode {
 	public ConceptNode(String name, NODE_TYPE type, String url, String label) {
 		this(name);
 		this.type = type;
+		if (label == null) {
+			throw new NullPointerException("label is null");
+		}
+		if (url == null) {
+			throw new NullPointerException("url is null");
+		}
 		this.conceptLabel = label;
 		this.conceptUrl = url;
+	}
+
+	@Override
+	public String toString() {
+		return this.getClass().getName() + " :" + getName();
 	}
 
 	public String getConceptUrl() {

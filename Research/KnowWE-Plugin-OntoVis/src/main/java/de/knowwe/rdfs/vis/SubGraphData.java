@@ -18,7 +18,10 @@
  */
 package de.knowwe.rdfs.vis;
 
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,19 +32,23 @@ import java.util.Set;
  */
 public class SubGraphData {
 
-	private final Set<ConceptNode> concepts;
+	private final Map<String, ConceptNode> concepts;
 	private final Set<Edge> edges;
 
 	/**
  * 
  */
 	public SubGraphData() {
-		concepts = new LinkedHashSet<ConceptNode>();
+		concepts = new LinkedHashMap<String, ConceptNode>();
 		edges = new LinkedHashSet<Edge>();
 	}
 
-	public Set<ConceptNode> getConceptDeclaration() {
-		return concepts;
+	public Collection<ConceptNode> getConceptDeclarations() {
+		return concepts.values();
+	}
+
+	public ConceptNode getConcept(String name) {
+		return concepts.get(name);
 	}
 
 	public Set<Edge> getEdges() {
@@ -53,11 +60,11 @@ public class SubGraphData {
 	}
 
 	public void addConcept(ConceptNode n) {
-		if (concepts.contains(n)) {
+		if (concepts.containsValue(n)) {
 			// due to equals not regarding outer-flag
-			concepts.remove(n);
+			concepts.remove(n.getName());
 		}
-		concepts.add(n);
+		concepts.put(n.getName(), n);
 	}
 
 }

@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -56,7 +57,7 @@ public class DotRenderer {
 	 * @created 04.09.2012
 	 * @param shape
 	 */
-	public static String buildLabel(RenderingStyle style) {
+	private static String buildLabel(RenderingStyle style) {
 		return " shape=\"" + style.shape + "\" ";
 	}
 
@@ -65,7 +66,7 @@ public class DotRenderer {
 	 * @created 04.09.2012
 	 * @param arrowtail
 	 */
-	public static String buildRelation(String arrowtail, String color) {
+	private static String buildRelation(String arrowtail, String color) {
 		return " arrowtail=\"" + arrowtail + "\" " + " color=\"" + color + "\" ";
 	}
 
@@ -76,7 +77,7 @@ public class DotRenderer {
 	 * @created 06.09.2012
 	 * @param label
 	 */
-	public static String innerRelation(String label, String relationColorCodes) {
+	private static String innerRelation(String label, String relationColorCodes) {
 		// Basic Relation Attributes
 		String arrowtail = "normal";
 
@@ -108,7 +109,7 @@ public class DotRenderer {
 		return "black";
 	}
 
-	public static RenderingStyle getStyle(NODE_TYPE type) {
+	private static RenderingStyle getStyle(NODE_TYPE type) {
 		RenderingStyle style = new RenderingStyle();
 		style.fontcolor = "black";
 
@@ -151,7 +152,7 @@ public class DotRenderer {
 	}
 
 	private static String generateGraphSource(SubGraphData data, Map<String, String> parameters) {
-		Set<ConceptNode> dotSourceLabel = data.getConceptDeclaration();
+		Collection<ConceptNode> dotSourceLabel = data.getConceptDeclarations();
 		Set<Edge> dotSourceRelations = data.getEdges();
 		String dotSource = "";
 
@@ -184,9 +185,11 @@ public class DotRenderer {
 			String label = DotRenderer.innerRelation(key.getPredicate(),
 					parameters.get(RenderingCore.RELATION_COLOR_CODES));
 			if (key.isOuter()) {
-				label = DotRenderer.getOuterEdgeLabel(key.getPredicate());
+				boolean arrowHead = key.getSubject().isOuter();
+				label = DotRenderer.getOuterEdgeLabel(key.getPredicate(), arrowHead);
 			}
-			dotSource += "\"" + key.getSubject() + "\"" + " -> " + "\"" + key.getObject() + "\" "
+			dotSource += "\"" + key.getSubject().getName() + "\"" + " -> " + "\""
+					+ key.getObject().getName() + "\" "
 					+ label;
 		}
 		return dotSource;
@@ -203,7 +206,7 @@ public class DotRenderer {
 	 * @param conceptLabel
 	 * @return
 	 */
-	public static String getRootLabel(String concept, String conceptLabel, Map<String, String> parameters,
+	private static String getRootLabel(String concept, String conceptLabel, Map<String, String> parameters,
 			NODE_TYPE type) {
 
 		if (conceptLabel == null) {
@@ -241,15 +244,19 @@ public class DotRenderer {
 	 * @param style
 	 * @return
 	 */
-	public static String getOuterEdgeLabel(String relation) {
+	private static String getOuterEdgeLabel(String relation, boolean showArrowHead) {
 		// Relation Attributes
-		String arrowhead = "none";
+		String arrowhead = "arrowhead=\"none\" ";
+		String arrowtail = "";
+		if (showArrowHead) {
+			arrowhead = "";
+			arrowtail = "arrowtail = \"normal\" ";
+		}
 		String color = "#8b8989";
 		String style = "dashed";
 
 		String newLineRelationsValue = "[ label=\"" + relation
-				+ "\" fontcolor=\"white\" arrowhead=\""
-				+ arrowhead + "\" color=\"" + color
+				+ "\" fontcolor=\"#8b8989\" " + arrowhead + arrowtail + " color=\"" + color
 				+ "\" style=\"" + style + "\" ];\n";
 		return newLineRelationsValue;
 	}
@@ -266,7 +273,7 @@ public class DotRenderer {
 	 * 
 	 * @created 30.10.2012
 	 */
-	public static String setSizeAndRankDir(String rankDirSetting, String graphSize) {
+	private static String setSizeAndRankDir(String rankDirSetting, String graphSize) {
 		String source = "";
 		String rankDir = "TB";
 
@@ -342,7 +349,7 @@ public class DotRenderer {
 	 * @param targetLabel
 	 * @return
 	 */
-	public static String createDotConceptLabel(RenderingStyle style, String targetURL, String targetLabel) {
+	private static String createDotConceptLabel(RenderingStyle style, String targetURL, String targetLabel) {
 		String newLineLabelValue;
 		newLineLabelValue = "[ URL=\"" + targetURL + "\""
 				+ DotRenderer.buildLabel(style) + "label=\""
@@ -350,7 +357,7 @@ public class DotRenderer {
 		return newLineLabelValue;
 	}
 
-	public static String getDOTApp(String user_def_app) {
+	private static String getDOTApp(String user_def_app) {
 		ResourceBundle rb = ResourceBundle.getBundle("dotInstallation");
 		String DOT_INSTALLATION = rb.getString("path");
 		String app = DOT_INSTALLATION;

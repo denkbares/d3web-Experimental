@@ -652,29 +652,36 @@ public class RenderingCore {
 		String to = getConceptName(toURI);
 		String relation = getConceptName(relationURI);
 
-		ConceptNode conceptNode = null;
-		String currentConcept = null;
-		Node currentURI = null;
-		if (predecessor) {
-			currentConcept = from;
-			currentURI = fromURI;
-		}
-		else {
-			currentConcept = to;
-			currentURI = toURI;
-		}
-		String currentURL = createConceptURL(currentConcept);
-		String currentLabel = Utils.getRDFSLabel(currentURI.asURI(), rdfRepository,
-				parameters.get(LANGUAGE));
-		if (currentLabel == null) {
-			currentLabel = currentConcept;
-		}
-		conceptNode = new ConceptNode(currentConcept, type, currentURL, currentLabel);
+		ConceptNode toNode = null;
+		ConceptNode fromNode = null;
 
-		Edge newLineRelationsKey = new Edge(from, relation, to);
+		toNode = data.getConcept(to);
+		if (toNode == null) {
+			String label = Utils.getRDFSLabel(
+					toURI.asURI(), rdfRepository,
+					parameters.get(LANGUAGE));
+			if (label == null) {
+				label = to;
+			}
+			toNode = new ConceptNode(to, type, createConceptURL(to), label);
+			data.addConcept(toNode);
+		}
+		toNode.setOuter(false);
+		fromNode = data.getConcept(from);
+		if (fromNode == null) {
+			String label = Utils.getRDFSLabel(
+					fromURI.asURI(), rdfRepository,
+					parameters.get(LANGUAGE));
+			if (label == null) {
+				label = from;
+			}
+			fromNode = new ConceptNode(from, type, createConceptURL(from), label);
+			data.addConcept(fromNode);
+		}
+		fromNode.setOuter(false);
 
-		conceptNode.setOuter(false);
-		data.addConcept(conceptNode);
+		Edge newLineRelationsKey = new Edge(fromNode, relation, toNode);
+
 		data.addEdge(newLineRelationsKey);
 
 	}
@@ -726,25 +733,60 @@ public class RenderingCore {
 
 		String currentConcept = null;
 		if (predecessor) {
+			// from is current new one
 			currentConcept = from;
 		}
 		else {
+			// to is current new one
 			currentConcept = to;
 		}
-
-		Edge edge = new Edge(from, relation, to);
-		boolean edgeIsNew = !data.getEdges().contains(edge);
-		boolean nodeIsNew = !data.getConceptDeclaration().contains(new ConceptNode(
+		boolean nodeIsNew = !data.getConceptDeclarations().contains(new ConceptNode(
 				currentConcept));
+
+		ConceptNode toNode = data.getConcept(to);
+		if (toNode == null) {
+			String label = Utils.getRDFSLabel(
+					toURI.asURI(), rdfRepository,
+					parameters.get(LANGUAGE));
+			if (label == null) {
+				label = to;
+			}
+			toNode = new ConceptNode(to, NODE_TYPE.UNDEFINED,
+					createConceptURL(to),
+					label);
+		}
+		ConceptNode fromNode = data.getConcept(from);
+		if (fromNode == null) {
+			String label = Utils.getRDFSLabel(
+					fromURI.asURI(), rdfRepository,
+					parameters.get(LANGUAGE));
+			if (label == null) {
+				label = from;
+			}
+			fromNode = new ConceptNode(from, NODE_TYPE.UNDEFINED,
+					createConceptURL(from),
+					label);
+		}
+
+		Edge edge = new Edge(fromNode, relation, toNode);
+
+		boolean edgeIsNew = !data.getEdges().contains(edge);
 
 		if (showOutgoingEdges) {
 			if (nodeIsNew) {
-				ConceptNode node = new ConceptNode(currentConcept);
-				node.setOuter(true);
-				data.addConcept(node);
+				if (predecessor) {
+					// from is current new one
+					fromNode.setOuter(true);
+					data.addConcept(fromNode);
+				}
+				else {
+					// to is current new one
+					toNode.setOuter(true);
+					data.addConcept(toNode);
+				}
+
 			}
 			if (edgeIsNew) {
-				edge.setOuter(true);
 				data.addEdge(edge);
 			}
 		}
@@ -752,7 +794,6 @@ public class RenderingCore {
 			// do not show outgoing edges
 			if (!nodeIsNew) {
 				// but show if its node is internal one already
-				edge.setOuter(false);
 				data.addEdge(edge);
 			}
 		}

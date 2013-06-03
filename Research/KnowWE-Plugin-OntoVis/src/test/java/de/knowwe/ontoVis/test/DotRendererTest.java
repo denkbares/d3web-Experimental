@@ -127,7 +127,7 @@ public class DotRendererTest {
 		// therefore we need some fuzzy-compare
 
 		assertEquals(
-				"Length of generated dot-source does not match lenght of expected dot-source.",
+				"Length of generated dot-source does not match length of expected dot-source.",
 				expectedSource.length(),
 				generatedSource.length());
 		List<Byte> expectedBytes = asSortedByteList(expectedSource);
@@ -170,7 +170,7 @@ public class DotRendererTest {
 		// therefore we need some fuzzy-compare
 
 		assertEquals(
-				"Length of generated dot-source does not match lenght of expected dot-source.",
+				"Length of generated dot-source does not match length of expected dot-source.",
 				expectedSource.length(),
 				generatedSource.length());
 		List<Byte> expectedBytes = asSortedByteList(expectedSource);
