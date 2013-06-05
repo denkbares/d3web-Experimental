@@ -234,6 +234,7 @@
 		<module>KnowWE-Plugin-Revisions</module>
 		<module>d3web-Plugin-Tests-ThrillSeeker</module>
 		<module>KnowWE-Plugin-OphtoVisD3</module>
+		<module>KnowWE-Plugin-TermBrowser</module>
 	</modules>
 	<repositories>
 		<repository>
