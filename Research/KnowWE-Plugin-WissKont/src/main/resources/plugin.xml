@@ -5,6 +5,7 @@
     <requires>
         <import plugin-id="KnowWEExtensionPoints" />
         <import plugin-id="d3web-Plugin-TestingFramework" />
+        <import plugin-id="KnowWE-Plugin-TermBrowser" />
     </requires>
     
     <runtime>
@@ -71,19 +72,6 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="TermBrowserMarkup">
-		<parameter id="class"
-			value="de.knowwe.wisskont.browser.TermBrowserMarkup" />
-		<parameter id="name" value="TermBrowserMarkup" />
-		<parameter id="description" value="KnowWEObjectType TermBrowserMarkup" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="4" />
-		<parameter id="scope" value="root" />
-		<parameter id="script" value="drag.js" />
-		<parameter id="css" value="jquery-ui.css" />
-	</extension>
-	
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="SearchBoxMarkup">
@@ -96,36 +84,39 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="TermBrowserAction">
+
+	
+	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
+		id="ListMarkupDragDropInserter">
 		<parameter id="class"
-			value="de.knowwe.wisskont.browser.TermBrowserAction" />
-		<parameter id="name" value="TermBrowserAction" />
-		<parameter id="description" value="Action TermBrowserAction" />
+			value="de.knowwe.wisskont.ListMarkupDragDropInserter" />
+		<parameter id="name" value="ListMarkupDragDropInserter" />
+		<parameter id="description" value="Actions ListMarkupDragDropInserter" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 	</extension>
 	
-	<!--extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="InsertListEntryAction">
+	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="HierarchyProvider"
+		id="WissassHierarchyProvider">
 		<parameter id="class"
-			value="de.knowwe.wisskont.edit.InsertListEntryAction" />
-		<parameter id="name" value="InsertListEntryAction" />
-		<parameter id="description" value="Actions InsertListEntryAction" />
+			value="de.knowwe.wisskont.browser.WissassHierarchyProvider" />
+		<parameter id="name" value="WissassHierarchyProvider" />
+		<parameter id="description" value="WissassHierarchyProvider" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
-	</extension-->
+	</extension>
+	
+	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="TermDetector"
+		id="WissassTermDetector">
+		<parameter id="class"
+			value="de.knowwe.wisskont.browser.WissassTermDetector" />
+		<parameter id="name" value="WissassTermDetector" />
+		<parameter id="description" value="WissassTermDetector" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
 	
 		
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="DragDropEditActionManager">
-		<parameter id="class"
-			value="de.knowwe.wisskont.browser.DragDropEditActionManager" />
-		<parameter id="name" value="DragDropEditActionManager" />
-		<parameter id="description" value="Actions DragDropEditActionManager" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="4" />
-	</extension>
 	
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -301,7 +292,7 @@
 						<parameter id="script" value="deleteListElement.js" />
 	</extension>
 	
-		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="AssociationBidirMarkup">
 		<parameter id="class"
 			value="de.knowwe.wisskont.AssociationBidirMarkup" />
@@ -314,7 +305,7 @@
 						<parameter id="script" value="deleteListElement.js" />
 	</extension>
 	
-		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="CanBidirMarkup">
 		<parameter id="class"
 			value="de.knowwe.wisskont.CanBidirMarkup" />
@@ -327,7 +318,7 @@
 					<parameter id="script" value="deleteListElement.js" />
 	</extension>
 	
-			<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TemporalMarkup">
 		<parameter id="class"
 			value="de.knowwe.wisskont.TemporalMarkup" />

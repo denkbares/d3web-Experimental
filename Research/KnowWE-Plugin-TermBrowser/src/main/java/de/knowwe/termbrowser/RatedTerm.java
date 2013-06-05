@@ -16,9 +16,9 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.browser;
+package de.knowwe.termbrowser;
 
-import de.knowwe.wisskont.util.HierarchyNode;
+import de.knowwe.termbrowser.util.HierarchyNode;
 
 /**
  * 
@@ -76,13 +76,13 @@ public class RatedTerm implements HierarchyNode<RatedTerm> {
 	}
 
 	@Override
-	public boolean isSubNodeOf(RatedTerm node) {
+	public boolean isSubNodeOf(RatedTerm node, HierarchyProvider hierarchy) {
 		if (node.equals(RatedTerm.ROOT)) return false;
 
 		String thisTerm = this.term;
 		String otherTerm = node.term;
 
-		return new WissassHierarchyProvider().isSubNodeOf(thisTerm, otherTerm);
+		return hierarchy.isSubNodeOf(thisTerm, otherTerm);
 
 	}
 

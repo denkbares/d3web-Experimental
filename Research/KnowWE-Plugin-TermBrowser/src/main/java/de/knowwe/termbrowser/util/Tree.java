@@ -16,7 +16,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.util;
+package de.knowwe.termbrowser.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import de.knowwe.termbrowser.HierarchyProvider;
 
 /**
  * 
@@ -33,10 +35,12 @@ import java.util.Set;
 public class Tree<T extends HierarchyNode<T>> {
 
 	private final Node<T> root;
+	private final HierarchyProvider hierarchy;
 
-	public Tree(T rootData) {
+	public Tree(T rootData, HierarchyProvider h) {
 		root = new Node<T>(rootData);
 		root.children = new ArrayList<Node<T>>();
+		this.hierarchy = h;
 	}
 
 	public Node<T> getRoot() {
@@ -141,7 +145,7 @@ public class Tree<T extends HierarchyNode<T>> {
 		boolean descent = false;
 		while (descentIterator.hasNext()) {
 			Node<T> child = descentIterator.next();
-			if (t.isSubNodeOf(child.data)) {
+			if (t.isSubNodeOf(child.data, hierarchy)) {
 				insertNodeUnder(t, child);
 				descent = true;
 				break;
@@ -158,7 +162,7 @@ public class Tree<T extends HierarchyNode<T>> {
 			while (checkSiblingsIterator.hasNext()) {
 				Node<T> sibling = checkSiblingsIterator.next();
 				if (sibling.data.equals(t)) continue;
-				if (sibling.data.isSubNodeOf(t)) {
+				if (sibling.data.isSubNodeOf(t, hierarchy)) {
 					// re-hang sibling to be successor of t
 					successorSiblings.add(sibling);
 

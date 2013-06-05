@@ -16,20 +16,16 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.browser;
+package de.knowwe.termbrowser.util;
 
-import java.util.List;
+import de.knowwe.termbrowser.HierarchyProvider;
 
 /**
  * 
  * @author jochenreutelshofer
- * @created 03.06.2013
+ * @created 12.04.2013
  */
-public interface HierarchyProvider {
+public interface HierarchyNode<T> extends Comparable<T> {
 
-	public List<String> getChildren(String term);
-
-	public List<String> getParents(String term);
-
-	public boolean isSubNodeOf(String term1, String term2);
+	public boolean isSubNodeOf(T term, HierarchyProvider hierarchy);
 }

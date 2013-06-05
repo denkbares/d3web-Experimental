@@ -16,14 +16,20 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.util;
+package de.knowwe.termbrowser;
+
+import java.util.Map;
+
+import de.knowwe.core.kdom.Article;
 
 /**
  * 
  * @author jochenreutelshofer
- * @created 12.04.2013
+ * @created 03.06.2013
  */
-public interface HierarchyNode<T> extends Comparable<T> {
+public interface InterestingTermDetector {
 
-	public boolean isSubNodeOf(T term);
+	public static final String EXTENSION_POINT_TERM_DETECTOR = "TermDetector";
+
+	public Map<String, Double> getWeightedTermsOfInterest(Article a);
 }

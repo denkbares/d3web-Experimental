@@ -29,6 +29,7 @@ import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.termbrowser.InterestingTermDetector;
 import de.knowwe.wisskont.ConceptMarkup;
 
 /**

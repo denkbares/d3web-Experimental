@@ -16,18 +16,22 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.browser;
+package de.knowwe.termbrowser;
 
-import java.util.Map;
-
-import de.knowwe.core.kdom.Article;
+import java.util.List;
 
 /**
  * 
  * @author jochenreutelshofer
  * @created 03.06.2013
  */
-public interface InterestingTermDetector {
+public interface HierarchyProvider {
 
-	public Map<String, Double> getWeightedTermsOfInterest(Article a);
+	public static final String EXTENSION_POINT_HIERARCHY_PROVIDER = "HierarchyProvider";
+
+	public List<String> getChildren(String term);
+
+	public List<String> getParents(String term);
+
+	public boolean isSubNodeOf(String term1, String term2);
 }

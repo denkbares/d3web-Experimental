@@ -16,19 +16,20 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.browser;
+package de.knowwe.termbrowser;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import de.d3web.plugin.Extension;
+import de.d3web.plugin.PluginManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.wisskont.ListMarkupDragDropInserter;
 
 /**
  * 
@@ -37,19 +38,26 @@ import de.knowwe.wisskont.ListMarkupDragDropInserter;
  */
 public class DragDropEditActionManager extends AbstractAction {
 
+	public static final String DRAG_DROP_INSERTER = "DragDropInserter";
+
 	List<DragDropEditInserter<?>> inserters = new ArrayList<DragDropEditInserter<?>>();
 
 	/**
 	 * 
 	 */
 	public DragDropEditActionManager() {
-		// todo load extensions from plugin framework
-		inserters.add(new ListMarkupDragDropInserter());
+		Extension[] extensions = PluginManager.getInstance().getExtensions(
+				"KnowWE-Plugin-TermBrowser", DRAG_DROP_INSERTER);
+		for (Extension extension : extensions) {
+			Object inserterInstance = extension.getNewInstance();
+			if (inserterInstance instanceof DragDropEditInserter) {
+				inserters.add((DragDropEditInserter<?>) inserterInstance);
+			}
+		}
 	}
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		// TODO load and select appropriate DragDropEditInserter
 		String result = perform(context);
 		if (result != null && context.getWriter() != null) {
 			context.setContentType("text/plain; charset=UTF-8");

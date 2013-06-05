@@ -16,7 +16,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.browser;
+package de.knowwe.termbrowser;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,11 +28,9 @@ import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
-import de.knowwe.wisskont.util.MarkupUtils;
-import de.knowwe.wisskont.util.Tree;
-import de.knowwe.wisskont.util.Tree.Node;
+import de.knowwe.termbrowser.util.Tree;
+import de.knowwe.termbrowser.util.Tree.Node;
 
 /**
  * 
@@ -43,6 +41,8 @@ public class TermBrowserRenderUtils {
 
 	public static final int THRESHOLD_MAX_TERM_NUMBER = 15;
 	private static boolean zebra = false;
+
+	private static HierarchyProvider hierarchy = RecommendationSet.getPluggedHierarchyProvider();
 
 	public static String renderTermBrowser(UserContext user, LinkToTermDefinitionProvider linkProvider) {
 		RenderResult string = new RenderResult(user);
@@ -127,7 +127,7 @@ public class TermBrowserRenderUtils {
 			renderConcept(rootConcept, level, string, linkProvider);
 		}
 		level += 1;
-		List<Node<RatedTerm>> childrenSorted = rootConcept.getChildrenSorted();
+		List<de.knowwe.termbrowser.util.Tree.Node<RatedTerm>> childrenSorted = rootConcept.getChildrenSorted();
 		for (Node<RatedTerm> node : childrenSorted) {
 			renderConceptSubTree(node, level, string, linkProvider);
 		}
@@ -153,7 +153,6 @@ public class TermBrowserRenderUtils {
 			zebra = false;
 		}
 
-		String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
 		String name = Strings.encodeURL(topic);
 		String url = linkProvider.getLinkToTermDefinition(name, null);
 		// baseUrl + name;
@@ -245,7 +244,7 @@ public class TermBrowserRenderUtils {
 		string.appendHtml("<tr>");
 		{
 			if (allChildrenShown) {
-				if (!(MarkupUtils.getChildrenConcepts(term.getData().getTerm()).size() == 0)) {
+				if (!(hierarchy.getChildren(term.getData().getTerm()).size() == 0)) {
 					insertCollapseButton(string, divStyle);
 				}
 			}
@@ -263,7 +262,7 @@ public class TermBrowserRenderUtils {
 	 * @return
 	 */
 	private static boolean allChildrenShown(Node<RatedTerm> term) {
-		List<String> childrenConcepts = MarkupUtils.getChildrenConcepts(term.getData().getTerm());
+		List<String> childrenConcepts = hierarchy.getChildren(term.getData().getTerm());
 		for (String childTerm : childrenConcepts) {
 			if (!term.getChildren().contains(new Node<RatedTerm>(new RatedTerm(childTerm)))) {
 				return false;
@@ -314,7 +313,7 @@ public class TermBrowserRenderUtils {
 	private static void insertAddParentButton(RenderResult string, String divStyle, String term, int level) {
 		if (level == 0) {
 
-			List<String> parentConcepts = MarkupUtils.getParentConcepts(term);
+			List<String> parentConcepts = hierarchy.getParents(term);
 			if (parentConcepts.size() > 0) {
 
 				// add parent concept to list

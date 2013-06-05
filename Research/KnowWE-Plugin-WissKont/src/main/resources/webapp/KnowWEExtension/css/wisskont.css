@@ -13,12 +13,7 @@
 	border-bottom: 1px solid white;
 }
 
-.drophover {
-	border-style: solid;
-	border-width: 2px;
-	border-color: #CCCCCC;
-	border-radius: 10px 10px 10px 10px;
-}
+
 
 .wissassTable {
 	
@@ -50,55 +45,6 @@
 }
 
 
-.termbrowserheader {
-    font-weight: bold;
-}
-	
-.termbrowserframe {
-	border-style: solid;
-	border-width: 2px;
-	border-color: #CCCCCC;
-	background-color: ##F9F9F0;
-	padding: 6px;
-	border-radius: 10px 10px 10px 10px;
-}
-
-.termlist {
-	border-top-style: solid;
-    border-top-width: 1px;
-	margin-top: 5px;
-	padding-top: 10px;
-}
-
-.zebraline {
-	
-}
-	
-.zebraline:hover {
-	background-color: #DDDDDD;
-}
-	
-.zebraline-white {
-	background-color: #FFFFFF;
-}
-	
-.zebraline-white:hover {
-	background-color: #DDDDDD;
-}
-	
-td.termbrowser {
-	padding: 0px;
-	overflow: hidden;
-}
-	
-.termname{
-	cursor: pointer;
-}
-	
-
-.openConcept, .expandConcept, .removeConcept, .deleteButton, .collapseConcept, .clearList, .hideList, .showList, .addParentConcept, .showGraph, .hideGraph, .toggleGraph, .toggleList {
-cursor: pointer;
-}
 
 .termgraph{
 	border-style: solid;
@@ -135,9 +81,6 @@ cursor: pointer;
 
 }
 
-.narrowCell {
-	padding:0px;
-}
 
 .wissassPageContents {
 	background-color: #FDFDFD;

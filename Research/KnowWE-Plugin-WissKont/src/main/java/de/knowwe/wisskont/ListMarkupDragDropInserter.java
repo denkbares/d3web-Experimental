@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.RenderResult;
-import de.knowwe.wisskont.browser.DragDropEditInserter;
+import de.knowwe.termbrowser.DragDropEditInserter;
 
 /**
  * 

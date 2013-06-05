@@ -16,7 +16,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.browser;
+package de.knowwe.termbrowser;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import de.d3web.plugin.Extension;
+import de.d3web.plugin.PluginManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.event.Event;
@@ -33,8 +35,8 @@ import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.event.PageRenderedEvent;
-import de.knowwe.wisskont.util.MarkupUtils;
-import de.knowwe.wisskont.util.Tree;
+import de.knowwe.termbrowser.util.Tree;
+import de.knowwe.termbrowser.util.Tree.Node;
 
 /**
  * 
@@ -55,13 +57,36 @@ public class TermRecommender implements EventListener {
 		return instance;
 	}
 
+	private InterestingTermDetector termDetector = null;
+	private HierarchyProvider hierarchy = null;
 	private final Map<String, RecommendationSet> data = new HashMap<String, RecommendationSet>();
 
 	/**
 	 * 
 	 */
 	private TermRecommender() {
+		hierarchy = RecommendationSet.getPluggedHierarchyProvider();
+		termDetector = getPluggedTermDetector();
 		EventManager.getInstance().registerListener(this);
+
+	}
+
+	/**
+	 * 
+	 * @created 05.06.2013
+	 * @return
+	 */
+	private InterestingTermDetector getPluggedTermDetector() {
+		InterestingTermDetector h = null;
+		Extension[] extensions = PluginManager.getInstance().getExtensions(
+				"KnowWE-Plugin-TermBrowser", InterestingTermDetector.EXTENSION_POINT_TERM_DETECTOR);
+		for (Extension extension : extensions) {
+			Object newInstance = extension.getNewInstance();
+			if (newInstance instanceof InterestingTermDetector) {
+				h = (InterestingTermDetector) newInstance;
+			}
+		}
+		return h;
 	}
 
 	/**
@@ -91,8 +116,9 @@ public class TermRecommender implements EventListener {
 		return recommendationSet.isGraphIsCollapsed();
 	}
 
-	public Tree<RatedTerm> getRatedTermTreeTop(UserContext user, int count) {
-		Tree<RatedTerm> treeCopy = new Tree<RatedTerm>(RatedTerm.ROOT);
+	public de.knowwe.termbrowser.util.Tree<RatedTerm> getRatedTermTreeTop(UserContext user, int count) {
+		Tree<RatedTerm> treeCopy = new Tree<RatedTerm>(RatedTerm.ROOT,
+				RecommendationSet.getPluggedHierarchyProvider());
 		String username = user.getUserName();
 		if (!data.containsKey(username)) {
 			return treeCopy;
@@ -142,8 +168,8 @@ public class TermRecommender implements EventListener {
 	 * @param treeCopy
 	 */
 	private void removeLowestRatedLeaf(Tree<RatedTerm> tree) {
-		de.knowwe.wisskont.util.Tree.Node<RatedTerm> root = tree.getRoot();
-		de.knowwe.wisskont.util.Tree.Node<RatedTerm> lowestNode = findLowestRatedLeaf(root);
+		Tree.Node<RatedTerm> root = tree.getRoot();
+		Tree.Node<RatedTerm> lowestNode = findLowestRatedLeaf(root);
 		tree.removeNodeFromTree(lowestNode.getData());
 
 	}
@@ -154,16 +180,16 @@ public class TermRecommender implements EventListener {
 	 * @param root
 	 * @return
 	 */
-	private de.knowwe.wisskont.util.Tree.Node<RatedTerm> findLowestRatedLeaf(de.knowwe.wisskont.util.Tree.Node<RatedTerm> root) {
-		List<de.knowwe.wisskont.util.Tree.Node<RatedTerm>> children = root.getChildren();
+	private Tree.Node<RatedTerm> findLowestRatedLeaf(Node<RatedTerm> root) {
+		List<Node<RatedTerm>> children = root.getChildren();
 		if (root.getChildren() == null || root.getChildren().size() == 0) {
 			return root;
 		}
 
-		de.knowwe.wisskont.util.Tree.Node<RatedTerm> lowest = null;
+		Node<RatedTerm> lowest = null;
 
-		for (de.knowwe.wisskont.util.Tree.Node<RatedTerm> child : children) {
-			de.knowwe.wisskont.util.Tree.Node<RatedTerm> lowestSuccessor = findLowestRatedLeaf(child);
+		for (Node<RatedTerm> child : children) {
+			Node<RatedTerm> lowestSuccessor = findLowestRatedLeaf(child);
 			if (lowest == null) {
 				lowest = lowestSuccessor;
 			}
@@ -224,7 +250,7 @@ public class TermRecommender implements EventListener {
 				data.put(user.getUserName(), set);
 			}
 
-			Map<String, Double> interestingTerms = new WissassTermDetector().getWeightedTermsOfInterest(article);
+			Map<String, Double> interestingTerms = termDetector.getWeightedTermsOfInterest(article);
 
 			for (String term : interestingTerms.keySet()) {
 				set.addValue(term, interestingTerms.get(term));
@@ -260,7 +286,7 @@ public class TermRecommender implements EventListener {
 			recommendationSet = new RecommendationSet();
 			data.put(context.getUserName(), recommendationSet);
 		}
-		List<String> children = MarkupUtils.getChildrenConcepts(term);
+		List<String> children = hierarchy.getChildren(term);
 		for (String child : children) {
 			recommendationSet.addValue(child, WEIGHT_EXPAND);
 		}
@@ -279,7 +305,7 @@ public class TermRecommender implements EventListener {
 			recommendationSet = new RecommendationSet();
 			data.put(context.getUserName(), recommendationSet);
 		}
-		List<String> children = MarkupUtils.getChildrenConcepts(term);
+		List<String> children = hierarchy.getChildren(term);
 		for (String child : children) {
 			recommendationSet.clearValue(child);
 		}
@@ -396,7 +422,7 @@ public class TermRecommender implements EventListener {
 			recommendationSet = new RecommendationSet();
 			data.put(context.getUserName(), recommendationSet);
 		}
-		List<String> parents = MarkupUtils.getParentConcepts(term);
+		List<String> parents = hierarchy.getParents(term);
 		// there should be only one parent
 		if (parents.size() > 0) {
 			// in any case we only take the first one

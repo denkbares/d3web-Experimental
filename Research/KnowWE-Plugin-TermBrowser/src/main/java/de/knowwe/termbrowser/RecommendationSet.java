@@ -16,14 +16,16 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.browser;
+package de.knowwe.termbrowser;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
 
-import de.knowwe.wisskont.util.Tree;
+import de.d3web.plugin.Extension;
+import de.d3web.plugin.PluginManager;
+import de.knowwe.termbrowser.util.Tree;
 
 /**
  * 
@@ -32,9 +34,35 @@ import de.knowwe.wisskont.util.Tree;
  */
 public class RecommendationSet {
 
-	private Tree<RatedTerm> terms = new Tree<RatedTerm>(RatedTerm.ROOT);
+	private Tree<RatedTerm> terms = null;
 	private boolean browserIsCollapsed = false;
 	private boolean graphIsCollapsed = true;
+
+	/**
+	 * 
+	 */
+	public RecommendationSet() {
+		HierarchyProvider h = getPluggedHierarchyProvider();
+		terms = new Tree<RatedTerm>(RatedTerm.ROOT, h);
+	}
+
+	/**
+	 * 
+	 * @created 05.06.2013
+	 * @return
+	 */
+	public static HierarchyProvider getPluggedHierarchyProvider() {
+		HierarchyProvider h = null;
+		Extension[] extensions = PluginManager.getInstance().getExtensions(
+				"KnowWE-Plugin-TermBrowser", HierarchyProvider.EXTENSION_POINT_HIERARCHY_PROVIDER);
+		for (Extension extension : extensions) {
+			Object newInstance = extension.getSingleton();
+			if (newInstance instanceof HierarchyProvider) {
+				h = (HierarchyProvider) newInstance;
+			}
+		}
+		return h;
+	}
 
 	public void setBrowserIsCollapsed(boolean browserIsCollapsed) {
 		this.browserIsCollapsed = browserIsCollapsed;
@@ -88,7 +116,7 @@ public class RecommendationSet {
 
 	public void discount(double factor) {
 		// build up tree newly
-		Tree<RatedTerm> newTree = new Tree<RatedTerm>(RatedTerm.ROOT);
+		Tree<RatedTerm> newTree = new Tree<RatedTerm>(RatedTerm.ROOT, getPluggedHierarchyProvider());
 		List<RatedTerm> allTerms = getRankedTermList();
 		for (RatedTerm ratedTerm : allTerms) {
 			double newValue = ratedTerm.getValue() * factor;

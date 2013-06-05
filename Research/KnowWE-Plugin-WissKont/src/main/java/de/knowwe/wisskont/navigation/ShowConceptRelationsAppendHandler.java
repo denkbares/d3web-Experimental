@@ -34,8 +34,8 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.RenderingCore;
 import de.knowwe.rdfs.vis.markup.IncrementalCompilerLinkToTermDefinitionProvider;
+import de.knowwe.termbrowser.TermRecommender;
 import de.knowwe.wisskont.ConceptMarkup;
-import de.knowwe.wisskont.browser.TermRecommender;
 
 /**
  * 
