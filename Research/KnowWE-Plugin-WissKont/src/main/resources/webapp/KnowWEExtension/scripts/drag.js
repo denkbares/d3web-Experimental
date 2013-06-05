@@ -1,8 +1,19 @@
 jq$(document).ready(function() {
     jq$(".termline").each(activateDraggables);
         
-    jq$(".relationMarkup").each(function() {
-    	jq$(this).droppable({
+    jq$(".dropTargetMarkup").each(function() {
+    	initDropableMarkupSection(jq$(this));
+    });
+
+    initAllIconHovers();
+    
+    initAllBrowserActionEvents();
+    
+    initCollapseTermBrowser();
+});
+
+function initDropableMarkupSection(element) {
+	element.droppable({
     			drop: function(event, ui) { 
     				var termElement = ui.draggable;
     				var termnameDiv = termElement.find("div.termname");
@@ -14,16 +25,8 @@ jq$(document).ready(function() {
     				sendAddedTerm(termname, markupID);
     				},
     			hoverClass: "drophover",
-    	})
     });
-
-    initAllIconHovers();
-    
-    initAllBrowserActionEvents();
-    
-    initCollapseTermBrowser();
-});
-
+}
 
 function initCollapseTermBrowser() {
 	jq$(".showList").each(function() {
@@ -225,7 +228,10 @@ function rerenderSection(oldTargetID, newTargetID) {
 		url : KNOWWE.core.util.getURL(params),
 		 response : {
 			 fn : function() {
-					jq$('#'+oldTargetID).replaceWith(this.response);
+				 	var markupBlockOld = jq$('#'+oldTargetID).parent();
+					markupBlockOld.replaceWith(this.response);
+					var markupBlockNew = jq$('#'+newTargetID).parent();
+					initDropableMarkupSection(markupBlockNew);
 					initAllDeleteItem();
 				},
 		 },
