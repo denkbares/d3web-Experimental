@@ -14,6 +14,7 @@ public class HierarchyViewAppendHandler implements PageAppendHandler {
 			result.appendHtml("<div id=\"chart\"></div>");
 			result.appendHtml("<script> createSidebarTree(\"" + topic + "\")</script>");
 			result.appendHtml("</div>");
+			result.appendHtml("<script>jQuery(document).ready(function() {jQuery(\".leftmenu\").append(jQuery(\".infobox\"))});</script>");
 		}
 		// result.appendHtml("<script> var url =KNOWWE.core.util.getURL({action : 'ConnectionsAction', concept : \""
 		// + topic + "\"});");

@@ -7,7 +7,8 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.strings.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.wisskont.util.HierarchyNode;
+import de.knowwe.termbrowser.HierarchyProvider;
+import de.knowwe.termbrowser.util.HierarchyNode;
 import de.knowwe.wisskont.util.MarkupUtils;
 
 public class NodeWithName implements HierarchyNode<NodeWithName> {
@@ -39,12 +40,11 @@ public class NodeWithName implements HierarchyNode<NodeWithName> {
 
 	@Override
 	public int compareTo(NodeWithName o) {
-		// TODO implement
 		return this.name.compareTo(o.name);
 	}
 
 	@Override
-	public boolean isSubNodeOf(NodeWithName term) {
+	public boolean isSubNodeOf(NodeWithName term, HierarchyProvider hierarchy) {
 		if (name.equals(term.name)) return false;
 		String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
 

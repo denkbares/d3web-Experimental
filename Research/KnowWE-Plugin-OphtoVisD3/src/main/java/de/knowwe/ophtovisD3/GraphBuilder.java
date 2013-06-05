@@ -18,19 +18,17 @@
  */
 package de.knowwe.ophtovisD3;
 
-import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import de.knowwe.ophtovisD3.utils.JsonFactory;
 import de.knowwe.ophtovisD3.utils.NodeWithName;
-
-
-import de.knowwe.wisskont.util.Tree;
+import de.knowwe.termbrowser.util.Tree;
+import de.knowwe.wisskont.browser.WissassHierarchyProvider;
 
 /**
  * 
@@ -41,7 +39,7 @@ public class GraphBuilder {
 
 	static LinkedList<Integer[]> connections = new LinkedList<Integer[]>();
 	static int indexNumber = 0;
-	static Tree <NodeWithName>resultTree;
+	static Tree<NodeWithName> resultTree;
 	static boolean treeIsHere = false;
 
 	public GraphBuilder() {
@@ -123,43 +121,52 @@ public class GraphBuilder {
 
 	public static String buildGraph(String startConcept, String connectionType, String helpconnectionType, boolean getConnectionAmount) {
 		String result;
-		if(!false){
-		resultTree = new Tree<NodeWithName>(new NodeWithName("Wurzel","0"));
-		resultTree.insertNode(new NodeWithName(startConcept, DataBaseHelper.countQuerytresultstoString(startConcept)));
-		if (getConnectionAmount) {}
-		String fatherOfTheMoment = startConcept;
-		while (!fatherOfTheMoment.isEmpty()) {
-			 getChildConcepts(fatherOfTheMoment, connectionType, getConnectionAmount,
-					resultTree);
-			List<String> nextfather = DataBaseHelper.getConnectedNodeNamesOfType(fatherOfTheMoment,
-					helpconnectionType, true);
-			if (nextfather.size() >= 1) {
-				fatherOfTheMoment = nextfather.get(0);
-				resultTree.insertNode(new NodeWithName(fatherOfTheMoment ,DataBaseHelper.countQuerytresultstoString(fatherOfTheMoment)));
+		if (!false) {
+			resultTree = new Tree<NodeWithName>(new NodeWithName("Wurzel", "0"),
+					new WissassHierarchyProvider());
+			resultTree.insertNode(new NodeWithName(startConcept,
+					DataBaseHelper.countQuerytresultstoString(startConcept)));
+			if (getConnectionAmount) {
 			}
-			else {
-				if (getConnectionAmount) {}
-				Gson gson = new Gson();
-				result = gson.toJson(resultTree);
-				treeIsHere=true;
-				return result;
+			String fatherOfTheMoment = startConcept;
+			while (!fatherOfTheMoment.isEmpty()) {
+				getChildConcepts(fatherOfTheMoment, connectionType, getConnectionAmount,
+						resultTree);
+				List<String> nextfather = DataBaseHelper.getConnectedNodeNamesOfType(
+						fatherOfTheMoment,
+						helpconnectionType, true);
+				if (nextfather.size() >= 1) {
+					fatherOfTheMoment = nextfather.get(0);
+					resultTree.insertNode(new NodeWithName(fatherOfTheMoment,
+							DataBaseHelper.countQuerytresultstoString(fatherOfTheMoment)));
+				}
+				else {
+					if (getConnectionAmount) {
+					}
+					Gson gson = new Gson();
+					result = gson.toJson(resultTree);
+					treeIsHere = true;
+					return result;
+				}
 			}
-		}}
-		treeIsHere=true;
+		}
+		treeIsHere = true;
 		Gson gson = new Gson();
 		result = gson.toJson(resultTree);
 		return result;
 	}
-	public static String builtPartTree(String startConcept, String connectionType){
-		String root =DataBaseHelper.getRootConcept( startConcept,  connectionType);
-		boolean highlight =(root.equals(startConcept));
-		Tree<NodeWithName> resultTree = new Tree<NodeWithName>(new NodeWithName(root,highlight));
-		resultTree =getChildConceptTree(root, connectionType, resultTree, startConcept);
+
+	public static String builtPartTree(String startConcept, String connectionType) {
+		String root = DataBaseHelper.getRootConcept(startConcept, connectionType);
+		boolean highlight = (root.equals(startConcept));
+		Tree<NodeWithName> resultTree = new Tree<NodeWithName>(new NodeWithName(root, highlight),
+				new WissassHierarchyProvider());
+		resultTree = getChildConceptTree(root, connectionType, resultTree, startConcept);
 
 		return JsonFactory.toJSON(resultTree);
-		
+
 	}
-	
+
 	public static Tree<NodeWithName> getChildConceptTree(String father, String connectionType, Tree<NodeWithName> tree, String toHighlight) {
 		List<String> childs = DataBaseHelper.getConnectedNodeNamesOfType(father, connectionType,
 				false);
@@ -169,15 +176,16 @@ public class GraphBuilder {
 		else {
 			for (int i = 0; i < childs.size(); i++) {
 				String string = childs.get(i);
-				if(!childs.get(i).equals(father)){
-				boolean highlight =false;
-				if(childs.get(i).equals(toHighlight))
-					highlight=true;
-				tree.insertNode(new NodeWithName(childs.get(i),Integer.toString(DataBaseHelper.countQuerytresults(childs.get(i))),highlight));
-				getChildConceptTree(string, connectionType, tree,toHighlight);	
-				}
+				if (!childs.get(i).equals(father)) {
+					boolean highlight = false;
+					if (childs.get(i).equals(toHighlight)) highlight = true;
+					tree.insertNode(new NodeWithName(childs.get(i),
+							Integer.toString(DataBaseHelper.countQuerytresults(childs.get(i))),
+							highlight));
+					getChildConceptTree(string, connectionType, tree, toHighlight);
 				}
 			}
+		}
 		return tree;
 
 	}
@@ -192,9 +200,11 @@ public class GraphBuilder {
 		else {
 			for (int i = 0; i < childs.size(); i++) {
 				String string = childs.get(i);
-				if(!childs.get(i).equals(father)){
-				tree.insertNode(new NodeWithName(childs.get(i),Integer.toString(DataBaseHelper.countQuerytresults(childs.get(i)))));
-				resultString += getChildConcepts(string, connectionType, getConnectionAmount, tree);
+				if (!childs.get(i).equals(father)) {
+					tree.insertNode(new NodeWithName(childs.get(i),
+							Integer.toString(DataBaseHelper.countQuerytresults(childs.get(i)))));
+					resultString += getChildConcepts(string, connectionType, getConnectionAmount,
+							tree);
 				}
 			}
 		}
