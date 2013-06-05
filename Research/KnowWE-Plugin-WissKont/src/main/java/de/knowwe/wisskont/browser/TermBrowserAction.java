@@ -23,6 +23,7 @@ import java.io.IOException;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.rendering.RenderResult;
+import de.knowwe.rdfs.vis.markup.IncrementalCompilerLinkToTermDefinitionProvider;
 
 /**
  * 
@@ -107,6 +108,7 @@ public class TermBrowserAction extends AbstractAction {
 				// is handled by a link
 			}
 		}
-		return RenderResult.unmask(TermBrowserRenderUtils.renderTermBrowser(context, term), context);
+		return RenderResult.unmask(TermBrowserRenderUtils.renderTermBrowser(context,
+				new IncrementalCompilerLinkToTermDefinitionProvider()), context);
 	}
 }

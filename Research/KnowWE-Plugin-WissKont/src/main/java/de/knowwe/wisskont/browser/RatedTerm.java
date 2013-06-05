@@ -18,13 +18,7 @@
  */
 package de.knowwe.wisskont.browser;
 
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
-
-import de.d3web.strings.Strings;
-import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.wisskont.util.HierarchyNode;
-import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
  * 
@@ -84,17 +78,12 @@ public class RatedTerm implements HierarchyNode<RatedTerm> {
 	@Override
 	public boolean isSubNodeOf(RatedTerm node) {
 		if (node.equals(RatedTerm.ROOT)) return false;
-		String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
 
-		String thisConceptURLString = Strings.encodeURL(this.term);
-		String thisURL = baseUrl + thisConceptURLString;
-		URI thisURI = new URIImpl(thisURL);
+		String thisTerm = this.term;
+		String otherTerm = node.term;
 
-		String otherConceptURLString = Strings.encodeURL(node.term);
-		String otherURL = baseUrl + otherConceptURLString;
-		URI otherURI = new URIImpl(otherURL);
+		return new WissassHierarchyProvider().isSubNodeOf(thisTerm, otherTerm);
 
-		return MarkupUtils.isSubConceptOf(thisURI, otherURI);
 	}
 
 	/**

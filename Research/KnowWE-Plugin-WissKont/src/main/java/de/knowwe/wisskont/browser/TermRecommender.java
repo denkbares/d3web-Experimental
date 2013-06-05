@@ -25,20 +25,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
 import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.objects.SimpleDefinition;
-import de.knowwe.core.kdom.objects.SimpleReference;
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.event.PageRenderedEvent;
-import de.knowwe.wisskont.ConceptMarkup;
 import de.knowwe.wisskont.util.MarkupUtils;
 import de.knowwe.wisskont.util.Tree;
 
@@ -49,8 +43,6 @@ import de.knowwe.wisskont.util.Tree;
  */
 public class TermRecommender implements EventListener {
 
-	private static final double WEIGHT_REFERENCE = 0.5;
-	private static final double WEIGHT_DEFINITION = 1.0;
 	private static final double WEIGHT_EXPAND = 1.5;
 	private static final double WEIGHT_SEARCHED = 2.0;
 
@@ -232,31 +224,10 @@ public class TermRecommender implements EventListener {
 				data.put(user.getUserName(), set);
 			}
 
-			List<Section<SimpleDefinition>> definitions = Sections.findSuccessorsOfType(
-					article.getRootSection(), SimpleDefinition.class);
-			for (Section<SimpleDefinition> def : definitions) {
-				String termname = def.get().getTermName(def);
-				// only those defined by by concept markups are added to the
-				// term recommender
-				if (Sections.findAncestorOfType(def, ConceptMarkup.class) != null) {
-					set.addValue(termname, WEIGHT_DEFINITION);
-				}
-			}
+			Map<String, Double> interestingTerms = new WissassTermDetector().getWeightedTermsOfInterest(article);
 
-			List<Section<SimpleReference>> references = Sections.findSuccessorsOfType(
-					article.getRootSection(), SimpleReference.class);
-			for (Section<SimpleReference> ref : references) {
-				String termname = ref.get().getTermName(ref);
-				Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-						ref.get().getTermIdentifier(ref));
-				if (termDefinitions.size() > 0) {
-					Section<? extends SimpleDefinition> def = termDefinitions.iterator().next();
-					// only those defined by concept markups are added to the
-					// term recommender
-					if (Sections.findAncestorOfType(def, ConceptMarkup.class) != null) {
-						set.addValue(termname, WEIGHT_REFERENCE);
-					}
-				}
+			for (String term : interestingTerms.keySet()) {
+				set.addValue(term, interestingTerms.get(term));
 			}
 
 		}

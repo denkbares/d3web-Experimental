@@ -195,7 +195,7 @@ function activateDraggables() {
 function sendAddedTerm(term, oldTargetID) {
 		
 		var params = {
-				action : 'InsertListEntryAction',
+				action : 'DragDropEditActionManager',
 				termname   : term,
 				targetID   : oldTargetID,
 	    }; 

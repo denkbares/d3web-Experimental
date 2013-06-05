@@ -29,6 +29,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
 import de.knowwe.wisskont.util.MarkupUtils;
 import de.knowwe.wisskont.util.Tree;
 import de.knowwe.wisskont.util.Tree.Node;
@@ -40,10 +41,10 @@ import de.knowwe.wisskont.util.Tree.Node;
  */
 public class TermBrowserRenderUtils {
 
-	public static final int THRESHOLD_MAX_TERM_NUMBER = 20;
+	public static final int THRESHOLD_MAX_TERM_NUMBER = 15;
 	private static boolean zebra = false;
 
-	public static String renderTermBrowser(UserContext user, String searchFieldContent) {
+	public static String renderTermBrowser(UserContext user, LinkToTermDefinitionProvider linkProvider) {
 		RenderResult string = new RenderResult(user);
 		string.appendHtml("<div class='termbrowserframe'>");
 
@@ -80,7 +81,7 @@ public class TermBrowserRenderUtils {
 						user,
 						THRESHOLD_MAX_TERM_NUMBER);
 
-			renderTermTree(string, ratedTermTreeTop, collapsed);
+			renderTermTree(string, ratedTermTreeTop, collapsed, linkProvider);
 
 		}
 		string.appendHtml("</div>");
@@ -93,7 +94,7 @@ public class TermBrowserRenderUtils {
 	 * @param string
 	 * @param subList
 	 */
-	private static void renderTermTree(RenderResult string, Tree<RatedTerm> tree, boolean collapsed) {
+	private static void renderTermTree(RenderResult string, Tree<RatedTerm> tree, boolean collapsed, LinkToTermDefinitionProvider linkProvider) {
 
 		String style = "";
 		if (collapsed) {
@@ -108,7 +109,7 @@ public class TermBrowserRenderUtils {
 		}
 		for (Node<RatedTerm> rootConcept : roots) {
 
-			renderConceptSubTree(rootConcept, 0, string);
+			renderConceptSubTree(rootConcept, 0, string, linkProvider);
 		}
 		string.appendHtml("</div>");
 
@@ -119,21 +120,21 @@ public class TermBrowserRenderUtils {
 	 * @created 12.04.2013
 	 * @param rootConcept
 	 */
-	private static void renderConceptSubTree(Node<RatedTerm> rootConcept, int level, RenderResult string) {
+	private static void renderConceptSubTree(Node<RatedTerm> rootConcept, int level, RenderResult string, LinkToTermDefinitionProvider linkProvider) {
 		string.append("\n"); // append newline into html-code from time to time
 								// to avoid jspwiki bug
 		if (!rootConcept.getData().equals(RatedTerm.ROOT)) {
-			renderConcept(rootConcept, level, string);
+			renderConcept(rootConcept, level, string, linkProvider);
 		}
 		level += 1;
 		List<Node<RatedTerm>> childrenSorted = rootConcept.getChildrenSorted();
 		for (Node<RatedTerm> node : childrenSorted) {
-			renderConceptSubTree(node, level, string);
+			renderConceptSubTree(node, level, string, linkProvider);
 		}
 
 	}
 
-	private static void renderConcept(Node<RatedTerm> t, int depth, RenderResult string) {
+	private static void renderConcept(Node<RatedTerm> t, int depth, RenderResult string, LinkToTermDefinitionProvider linkProvider) {
 		String term = t.getData().getTerm();
 		String topic = term;
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
@@ -154,7 +155,8 @@ public class TermBrowserRenderUtils {
 
 		String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
 		String name = Strings.encodeURL(topic);
-		String url = baseUrl + name;
+		String url = linkProvider.getLinkToTermDefinition(name, null);
+		// baseUrl + name;
 		String divStyle = "";
 		string.appendHtml("<div id='draggable' style='"
 				+ "'  class='termline "

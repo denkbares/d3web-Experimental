@@ -23,6 +23,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryResultTable;
@@ -83,9 +84,15 @@ public class MarkupUtils {
 	 * @param target
 	 * @return
 	 */
-	public static boolean isSubConceptOf(URI concept1, URI target) {
+	public static boolean isSubConceptOf(URI concept1, URI target, Set<URI> terms) {
+		terms.add(concept1);
 		String sparql = "SELECT ?x WHERE { <" + concept1 + "> lns:unterkonzept ?x.}";
 		QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(sparql);
+
+		// direct ask (necessary ?)
+		String sparqlAsk = "ASK { <" + concept1 + "> lns:unterkonzept <" + target + ">.}";
+		boolean isChild = Rdf2GoCore.getInstance().sparqlAsk(sparqlAsk);
+		if (isChild) return true;
 
 		ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
 		if (!resultIterator.hasNext()) {
@@ -96,10 +103,14 @@ public class MarkupUtils {
 			Node value = parentConceptResult.getValue("x");
 			URI parent = value.asURI();
 			if (parent.equals(target)) {
+				// this case also could be (is?) handled by a directs ask query
 				return true;
 			}
 			else {
-				return isSubConceptOf(parent, target);
+				// beware of circles in the hierarchy network
+				if (!terms.contains(parent)) {
+					return isSubConceptOf(parent, target, terms);
+				}
 			}
 		}
 		return false;

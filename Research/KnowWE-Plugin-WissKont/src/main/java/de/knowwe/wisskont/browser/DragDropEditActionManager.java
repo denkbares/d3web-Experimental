@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 denkbares GmbH
+ * Copyright (C) 2013 denkbares GmbH
  * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
@@ -16,33 +16,40 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.edit;
+package de.knowwe.wisskont.browser;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.RenderResult;
-import de.knowwe.wisskont.RelationMarkupContentType;
+import de.knowwe.wisskont.ListMarkupDragDropInserter;
 
 /**
  * 
  * @author jochenreutelshofer
- * @created 30.11.2012
+ * @created 04.06.2013
  */
-public class InsertListEntryAction extends AbstractAction {
+public class DragDropEditActionManager extends AbstractAction {
+
+	List<DragDropEditInserter<?>> inserters = new ArrayList<DragDropEditInserter<?>>();
+
+	/**
+	 * 
+	 */
+	public DragDropEditActionManager() {
+		// todo load extensions from plugin framework
+		inserters.add(new ListMarkupDragDropInserter());
+	}
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
+		// TODO load and select appropriate DragDropEditInserter
 		String result = perform(context);
 		if (result != null && context.getWriter() != null) {
 			context.setContentType("text/plain; charset=UTF-8");
@@ -51,7 +58,13 @@ public class InsertListEntryAction extends AbstractAction {
 
 	}
 
-	public String perform(UserActionContext context) throws IOException {
+	/**
+	 * 
+	 * @created 04.06.2013
+	 * @param context
+	 * @return
+	 */
+	private String perform(UserActionContext context) throws IOException {
 		String title = context.getTitle();
 		boolean mayEdit = Environment.getInstance().getWikiConnector().userCanEditArticle(title,
 				context.getRequest());
@@ -68,56 +81,18 @@ public class InsertListEntryAction extends AbstractAction {
 
 			}
 
-			String replaceText = createReplaceText(section, termname);
-
-			Map<String, String> nodesMap = new HashMap<String, String>();
-			nodesMap.put(
-					section.getID(), replaceText
-					);
-			String result = "done";
-
-			Map<String, String> newSectionIDs = Sections.replaceSections(context, nodesMap);
-			if (newSectionIDs != null && newSectionIDs.size() > 0) {
-				// Section<?> sectionNewVersion = Sections.getSection();
-				result = newSectionIDs.values().iterator().next();
+			for (DragDropEditInserter<?> inserter : this.inserters) {
+				if (inserter.getTypeClass().isAssignableFrom(section.get().getClass())) {
+					return inserter.insert(section, termname, null, context);
+				}
 			}
 
-			// hotfix: workaround to trigger update of the sectionID map
-			DelegateRenderer.getInstance().render(section, context, new
-					RenderResult(context));
-			return result;
 		}
 		else {
 			return "You are not allowed to edit this page.";
 		}
 
+		return null;
 	}
 
-	/**
-	 * 
-	 * @created 01.12.2012
-	 * @param section
-	 * @param termname
-	 * @return
-	 */
-	private String createReplaceText(Section<?> section, String termname) {
-		Section<RelationMarkupContentType> contentSection = Sections.findSuccessor(section,
-				RelationMarkupContentType.class);
-		List<Section<? extends Type>> children = section.getChildren();
-		String result = "";
-		for (Section<? extends Type> child : children) {
-			if (child.equals(contentSection)) {
-				String appendText = ", " + termname;
-				if (contentSection.getText().trim().length() == 0) {
-					appendText = termname; // if there is none yet, no comma
-											// needed
-				}
-				result += contentSection.getText() + appendText;
-			}
-			else {
-				result += child.getText();
-			}
-		}
-		return result;
-	}
 }
