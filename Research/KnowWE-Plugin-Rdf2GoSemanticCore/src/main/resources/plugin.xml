@@ -68,6 +68,17 @@
 	
 	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
 			point-id="SparqlResultNodeRenderer"
+			id="TrimLocaleNodeRenderer">
+		<parameter id="class"
+			value="de.knowwe.rdf2go.sparql.TrimLocaleNodeRenderer" />
+		<parameter id="name" value="TrimLocaleNodeRenderer" />
+		<parameter id="description" value="NodeRenderer TrimLocaleNodeRenderer" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="60" />
+	</extension>
+	
+	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
+			point-id="SparqlResultNodeRenderer"
 			id="TrimNamespaceNodeRenderer">
 		<parameter id="class"
 			value="de.knowwe.rdf2go.sparql.TrimNamespaceNodeRenderer" />
