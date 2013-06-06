@@ -4,7 +4,7 @@ $(".menue").removeClass("active");
 $(this).addClass("active");
 });
 $(".editor").click(function(){
-$(".editorDiv").toggleClass("hidden");
+$(".chart").toggleClass("hidden");
 $(this).toggleClass("active");
 var $e = $(this);
 $e
@@ -20,4 +20,3 @@ $(".dropzone").droppable({
 	}
 	});
 });
-var test = $(".menue");

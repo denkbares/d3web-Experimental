@@ -1,15 +1,15 @@
 function createSidebarTree(con){
 	var url = KNOWWE.core.util.getURL({action : 'PartTreeAction', concept : con});
-	w = 270,
+	w = 300,
     h = 800,
     i = 0,
     barHeight = 20,
-    barWidth = w * .7,
+    barWidth = w * .8,
     duration = 400,
     root ="";
 
 var tree = d3.layout.tree()
-    .size([h, 50]);
+    .size([h, 30]);
 
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
@@ -19,6 +19,7 @@ var vis = d3.select("#chart").append("svg:svg")
     .attr("height", h)
   .append("svg:g")
     .attr("transform", "translate(10,10)");
+
 
 d3.json( url, function(json) {
   json.x0 = 0;
@@ -59,7 +60,7 @@ function update(source) {
   nodeEnter.append("svg:text")
       .attr("dy", 3.5)
       .attr("dx", 5.5)
-      .text(function(d) { return d.data.name; });
+      .text(function(d) {return d.data.name; });
   
   // Transition nodes to their new position.
   nodeEnter.transition()

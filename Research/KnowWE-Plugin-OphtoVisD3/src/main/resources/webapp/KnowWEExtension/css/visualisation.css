@@ -130,13 +130,13 @@ margin-right: 2px;
 
 }
 
-.infobox{
-	float:right;
-	background-color: #F9F9F9;
-	border: 1px solid #ddd;
-	border-collapse: collapse;
-	width: 300 px;
-	
+.infobox {
+float: right;
+background-color: #F9F9F9;
+border: 2px solid #cccccc;
+border-collapse: collapse;
+width: 333px;
+border-radius: 10px;
 }
 .node rect {
   cursor: pointer;
@@ -221,24 +221,15 @@ background-color: #F3F3F3;
 overflow-x: hidden;
 
 }
-.prepageappend{
-overflow-x: hidden;
-}
-.termgraph{
-overflow-x: hidden;
-}
-.defaultMarkupFrame{
-overflow-x: hidden;
-}
-.parentBreadcrumb{
-overflow-x: hidden;
-}
-.wissassPageContents{
-overflow-x: hidden;
-}
-.colapser{
- text-align: center;
- font-size: 14px;
+
+.colapser {
+font-weight: bold;
+text-align: center;
+border-bottom-style: solid;
+border-bottom-width: 1px;
+margin-bottom: 5px;
+padding-bottom: 5px;
+padding-top: 5px;
 }
 
 #breadcrumbs { display: none; 

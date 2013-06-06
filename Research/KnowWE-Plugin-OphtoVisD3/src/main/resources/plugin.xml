@@ -64,18 +64,20 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
-	<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
-		id="HierarchyViewAppendHandler">
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="InfoboxMarkup">
 		<parameter id="class"
-			value="de.knowwe.ophtovisD3.HierarchyViewAppendHandler" />
-		<parameter id="name" value="HierarchyViewAppendHandler" />
-		<parameter id="description" value="PageAppendHandler HierarchyViewAppendHandler" />
+			value="de.knowwe.ophtovisD3.InfoboxMarkup" />
+		<parameter id="name" value="InfoboxMarkup" />
+		<parameter id="description" value="KnowWEObjectType Infobox" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="0" />
-		<parameter id="css" value="visualisation.css" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
 		<parameter id="script" value="infobox.js" />
 		<parameter id="script" value="d3.js" />
+		<parameter id="css" value="visualisation.css" />
 	</extension>
+	
 	
 
 </plugin>
