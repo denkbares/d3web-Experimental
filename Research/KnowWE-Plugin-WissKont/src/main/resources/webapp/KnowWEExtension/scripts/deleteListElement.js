@@ -56,7 +56,7 @@ function initClickEvent(element) {
 
 function sendDeleteAction(element) {
 
-	var entry = element.parent().parent().parent().parent().parent();
+	var entry = element.parent().parent();
 	var entryKdomid = entry.attr('id');
 	var markupKdomid = entry.parent().parent().parent().parent().attr('id');
 	

@@ -233,6 +233,7 @@ function rerenderSection(oldTargetID, newTargetID) {
 					var markupBlockNew = jq$('#'+newTargetID).parent();
 					initDropableMarkupSection(markupBlockNew);
 					initAllDeleteItem();
+					KNOWWE.core.rerendercontent.animateDefaultMarkupMenu(markupBlockNew);
 				},
 		 },
 	}

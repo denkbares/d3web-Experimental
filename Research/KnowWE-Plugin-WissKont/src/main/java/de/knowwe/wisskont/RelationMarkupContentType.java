@@ -44,8 +44,10 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquotedNonEmpty;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -69,7 +71,7 @@ public class RelationMarkupContentType extends AbstractType {
 
 			@Override
 			public void renderPre(Section<?> section, UserContext user, RenderResult string) {
-				string.appendHtml("<span class='relationMarkupContent' id='"
+				string.appendHtml("<span class='relationMarkupContent clearfix' id='"
 						+ section.getID() + "'>");
 
 			}
@@ -87,6 +89,18 @@ public class RelationMarkupContentType extends AbstractType {
 		public RelationLine() {
 			this.setSectionFinder(new LineSectionFinder());
 			this.addChildType(new ObjectSegment());
+			this.addChildType(new ListSeparatorType());
+		}
+
+		class ListSeparatorType extends AbstractType {
+
+			/**
+			 * 
+			 */
+			public ListSeparatorType() {
+				this.setSectionFinder(new AllTextSectionFinder());
+				this.setRenderer(new StyleRenderer("float:left;"));
+			}
 		}
 
 		class ObjectSegment extends AbstractKnowledgeUnitType<ObjectSegment> {
@@ -181,25 +195,27 @@ public class RelationMarkupContentType extends AbstractType {
 						boolean hasError = !IncrementalCompiler.getInstance().getTerminology().isValid(
 								ref.get().getTermIdentifier(ref));
 
-						string.appendHtml("<span class='deletableListElement' id='"
+						string.appendHtml("<span class='deletableListElement' style='float:left;' id='"
 								+ section.getID() + "'>");
-						string.appendHtml("<table style='display:inline-block;' >");
-						string.appendHtml("<tr>");
-						string.appendHtml("<td class='narrowCell' style='vertical-align:text-bottom;'>");
+						// string.appendHtml("<table style='display:inline-block;' >");
+						// string.appendHtml("<tr>");
+						// string.appendHtml("<div class='toolsMenuDecorator' style='position:absolute;float: left;'></div>");
+						string.appendHtml("<span class='' style=''>");
 						if (!hasError) {
-							string.appendHtml("<a href='" + RDFSUtil.getURI(ref)
+							string.appendHtml("<a  style='position:relative;float:left;' href='"
+									+ RDFSUtil.getURI(ref)
 									+ "'>");
 						}
 						string.appendHtml(section.getText());
 						if (!hasError) {
 							string.appendHtml("</a>");
 						}
-						string.appendHtml("</td>");
-						string.appendHtml("<td class='narrowCell'>");
-						string.appendHtml("<span class='ui-icon ui-icon-circlesmall-close deleteButton' style='width: 12px;margin-left: -3px;' title='Relation zu diesem Begriff löschen' ></span>");
-						string.appendHtml("</td>");
-						string.appendHtml("</tr>");
-						string.appendHtml("</table>");
+						string.appendHtml("<span class='ui-icon ui-icon-circle-close deleteButton' style='float:left;position:relative;' title='Relation zu diesem Begriff löschen' ></span>");
+						string.appendHtml("</span>");
+						// string.appendHtml("<td class='narrowCell'>");
+						// string.appendHtml("</td>");
+						// string.appendHtml("</tr>");
+						// string.appendHtml("</table>");
 						string.appendHtml("</span>");
 					}
 				}

@@ -77,9 +77,10 @@ public class DragDropEditActionManager extends AbstractAction {
 		boolean mayEdit = Environment.getInstance().getWikiConnector().userCanEditArticle(title,
 				context.getRequest());
 		if (mayEdit) {
-
 			String termname = context.getParameter("termname");
 			String targetIDString = context.getParameter("targetID");
+			System.out.println("Performing add action for ID: " + targetIDString + " appending: "
+					+ termname);
 			Section<?> section = Sections.getSection(targetIDString);
 
 			if (section == null) {

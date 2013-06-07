@@ -30,7 +30,7 @@ import de.knowwe.kdom.renderer.StyleRenderer;
 public class KeyType extends AbstractType {
 
 	public KeyType(String keyRegex) {
-		this.setRenderer(new StyleRenderer("font-weight:bold;"));
+		this.setRenderer(new StyleRenderer("font-weight:bold;float:left;"));
 		this.setSectionFinder(new RegexSectionFinder("(?i)" + keyRegex,
 				1));
 	}
