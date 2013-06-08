@@ -5,9 +5,12 @@ import java.util.Collection;
 import java.util.List;
 
 import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.node.BlankNode;
+import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
+import org.ontoware.rdf2go.vocabulary.XSD;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.NamedObject;
@@ -32,7 +35,8 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 
 		Identifier termIdentifier = section.get().getTermIdentifier(section);
 		String externalForm = Rdf2GoUtils.getCleanedExternalForm(termIdentifier);
-		URI termIdentifierURI = Rdf2GoCore.getInstance().createlocalURI(
+		Rdf2GoCore core = Rdf2GoCore.getInstance();
+		URI termIdentifierURI = core.createlocalURI(
 				externalForm);
 
 		Class<?> termObjectClass = section.get().getTermObjectClass(section);
@@ -53,9 +57,24 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 			for (TerminologyObject parent : parents) {
 				String parentExternalForm = Rdf2GoUtils.getCleanedExternalForm(new Identifier(
 						parent.getName()));
+				int index = findIndex(parent.getChildren(), termObject);
 				Rdf2GoUtils.addStatement(termIdentifierURI,
 						RDFS.subClassOf,
 						parentExternalForm, statements);
+				BlankNode orderNode = core.createBlankNode();
+				URI hasIndexInfoURI = core.createlocalURI("hasIndexInfo");
+				Rdf2GoUtils.addStatement(termIdentifierURI,
+						hasIndexInfoURI, orderNode, statements);
+				URI hasIndexURI = core.createlocalURI("hasIndex");
+				Literal indexLiteral = core.createDatatypeLiteral(
+						Integer.toString(index), XSD._int);
+				Rdf2GoUtils.addStatement(orderNode,
+						hasIndexURI, indexLiteral, statements);
+				URI indexOfURI = core.createlocalURI("isIndexOf");
+				URI parentIdentifierURI = core.createlocalURI(
+						parentExternalForm);
+				Rdf2GoUtils.addStatement(orderNode,
+						indexOfURI, parentIdentifierURI, statements);
 			}
 		}
 
@@ -66,7 +85,7 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 
 		String kbName = D3webUtils.getKnowledgeBase(article).getId();
 
-		URI kbNameURI = Rdf2GoCore.getInstance().createlocalURI(Strings.encodeURL(kbName));
+		URI kbNameURI = core.createlocalURI(Strings.encodeURL(kbName));
 
 		// URI isTerminologyObjectOfURI =
 		// Rdf2GoCore.getInstance().createlocalURI(
@@ -81,9 +100,17 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 		// isTerminologyObjectOfURI,
 		// kbNameURI));
 
-		Rdf2GoCore.getInstance().addStatements(article, Rdf2GoUtils.toArray(statements));
+		core.addStatements(article, Rdf2GoUtils.toArray(statements));
 
 		return Messages.noMessage();
+	}
+
+	private int findIndex(TerminologyObject[] children, NamedObject termObject) {
+		for (int i = 0; i < children.length; i++) {
+			if (children[i] == termObject) return i;
+		}
+		// should not happen!
+		return -1;
 	}
 
 }

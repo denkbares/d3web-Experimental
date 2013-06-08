@@ -1,5 +1,7 @@
 package de.knowwe.rdf2go.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -144,9 +146,11 @@ public class Rdf2GoUtils {
 	public static String cleanUp(String string) {
 		String temp = string;
 		try {
-			temp = Strings.decodeURL(string);
+			temp = URLDecoder.decode(temp, "UTF-8");
 		}
 		catch (IllegalArgumentException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 		}
 		return Strings.encodeURL(temp);
 	}
