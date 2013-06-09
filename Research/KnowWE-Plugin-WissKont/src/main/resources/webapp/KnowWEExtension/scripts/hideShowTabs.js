@@ -75,6 +75,8 @@ function showAttachPage() {
 }
 
 function showTabs() {
+	makePageFit();
+	
 	var view = document.getElementById('menu-pagecontent');
 	showViewTab();
 	setTabInactive(view);
@@ -87,3 +89,27 @@ function showTabs() {
 	showAttachPage();	
 }
 
+function makePageFit() {
+	// basically needed heights and values
+	var header = jq$('#header');
+	if (header) var heightHeader = header.height() + parseFloat(header.css('padding-top')) + parseFloat(header.css('padding-bottom'));
+	
+	var tabs = jq$('.tabs').first();
+	if (!tabs) return;
+	
+	var attach = jq$('#attach').first();
+	if (!attach) return;
+	
+	// check page size
+	var wHeight = window.getHeight();	
+	var heightPage = attach.height() + parseFloat(tabs.css('padding-top')) + parseFloat(tabs.css('padding-bottom'));
+	if (heightPage < (wHeight - heightHeader - 20)) {
+		// make page fit to screen height
+		wHeight = window.getHeight();
+		var page = document.getElementById('actionsBottom');
+		if (page) {
+			var padding = wHeight - heightHeader - heightPage - 20 + "px";
+			page.style.paddingBottom = padding;
+		}
+	}
+}

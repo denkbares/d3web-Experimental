@@ -193,7 +193,6 @@ body.view, body.edit {
 }
 #actionsBottom {
 	text-align:right;
-	margin-bottom:0.5em;
 	background-color:white;
 }
 * html #header, * html .userbox {
