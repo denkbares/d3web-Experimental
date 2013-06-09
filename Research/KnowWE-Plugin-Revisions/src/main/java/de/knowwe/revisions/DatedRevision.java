@@ -76,9 +76,41 @@ public class DatedRevision extends AbstractRevision {
 	 */
 	public HashMap<String, Integer> getArticleVersions() {
 		if (articleVersions == null) {
-			compareWithCurrentState();
+			cacheArticleVersions();
 		}
 		return articleVersions;
+	}
+
+	/**
+	 * This method runs over all current page titles collects the version at the
+	 * date of the revision
+	 * 
+	 * @created 22.04.2013
+	 */
+	protected void cacheArticleVersions() {
+		articleVersions = new HashMap<String, Integer>();
+
+		WikiConnector wiki = Environment.getInstance().getWikiConnector();
+		Collection<String> titles = wiki.getAllArticles(web).keySet();
+
+		for (String title : titles) {
+			int version;
+			try {
+				version = wiki.getVersionAtDate(title, date);
+			}
+			catch (IOException e) {
+				version = -2;
+				e.printStackTrace();
+			}
+
+			if (version != -2) {
+				if (version == -1) {
+					version =
+							Environment.getInstance().getWikiConnector().getVersion(title);
+				}
+				articleVersions.put(title, version);
+			}
+		}
 	}
 
 	/**
@@ -89,38 +121,28 @@ public class DatedRevision extends AbstractRevision {
 	 * @return revision page version, -2 if page is did not exist, -1 for the
 	 *         most current version
 	 */
+	@Override
 	public HashMap<String, Integer> compareWithCurrentState() {
-		boolean updateArticleVersions = false;
-		if (articleVersions == null) {
-			updateArticleVersions = true;
-			articleVersions = new HashMap<String, Integer>();
-		}
-
+		HashMap<String, Integer> pageVersions = getArticleVersions();
 		HashMap<String, Integer> result = new HashMap<String, Integer>();
 
 		WikiConnector wiki = Environment.getInstance().getWikiConnector();
 		Collection<String> titles = wiki.getAllArticles(web).keySet();
 
 		for (String title : titles) {
-			int version = -1;
-			try {
-				version = wiki.getVersionAtDate(title, date);
+			int version;
+			// get cached version
+			if (pageVersions.containsKey(title)) {
+				version = pageVersions.get(title);
+				if (version == wiki.getVersion(title)) {
+					version = -1;
+				}
 			}
-			catch (IOException e) {
-				// TODO throw error message
-				e.printStackTrace();
+			else {
+				version = -2;
 			}
 
 			result.put(title, version);
-
-			if (updateArticleVersions) {
-				if (version != -2) {
-					if (version == -1) {
-						version = Environment.getInstance().getWikiConnector().getVersion(title);
-					}
-					articleVersions.put(title, version);
-				}
-			}
 		}
 		return result;
 	}

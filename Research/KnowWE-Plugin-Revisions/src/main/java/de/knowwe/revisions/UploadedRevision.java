@@ -36,13 +36,19 @@ import de.knowwe.core.kdom.parsing.Section;
 public class UploadedRevision extends AbstractRevision {
 
 	private HashMap<String, String> articles;
+	private String filename;
 
 	/**
 	 * @param web
 	 */
-	public UploadedRevision(String web, HashMap<String, String> articles) {
+	public UploadedRevision(String web, HashMap<String, String> articles, String filename) {
 		super(web);
 		this.articles = articles;
+		this.filename = filename;
+	}
+
+	public String getFilename() {
+		return filename;
 	}
 
 	@Override

@@ -70,12 +70,14 @@ public abstract class AbstractRevDetails extends AbstractAction {
 			result.append("<table border=\"1\" ><tr>");
 			result.append("<colgroup><col width=\"400px\"><col></colgroup>");
 
-			result.append("<td valign='top' style='border-right: 1px solid #DDDDDD;'>");
+			result.append("<td valign='top'>");
 
-			result.append("<h4>Differences to current revision:</h4>");
+			result.append("<div class='collapsebox'>");
+			result.append("<h4 class='collapsetitle'>Differences to current revision:</h4>");
+			result.append("<div class='collapsebody'>");
 
-			result.append("<div>");
 			result.append(pageDiffOverview);
+			result.append("</div>");
 			result.append("</div>");
 
 			result.append("</td>");

@@ -21,7 +21,6 @@ package de.knowwe.revisions.manager.action;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
@@ -39,7 +38,7 @@ import de.knowwe.revisions.manager.RevisionManager;
  * @author grotheer
  * @created 15.04.2013
  */
-public class RestoreRevision extends AbstractAction {
+public class RestoreUploadedRevision extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -51,29 +50,24 @@ public class RestoreRevision extends AbstractAction {
 	}
 
 	private String perform(UserActionContext context) throws IOException {
-		Map<String, String> params = context.getParameters();
-		if (params.containsKey("date")) {
-			Date date = new Date(Long.parseLong(params.get("date")));
-			Date preRestoreTime = new Date();
-			String dateString = DateType.DATE_FORMAT.format(preRestoreTime);
-			String preRestoreMarkup = "%%Revision\n" +
-					"@name = Automatic Backup\n" +
-					"@date = " + dateString + "\n" +
-					"@comment = Automatic Backup before restoring Revision of "
-					+ DateType.DATE_FORMAT.format(date) + "\n" +
-					"%";
 
-			Article a = Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
-			HashMap<String, String> sectionsMap = new HashMap<String, String>();
-			Section<RootType> s = a.getRootSection();
-			sectionsMap.put(s.getID(), s.getText().concat(preRestoreMarkup));
+		Date preRestoreTime = new Date();
+		String dateString = DateType.DATE_FORMAT.format(preRestoreTime);
+		String preRestoreMarkup = "%%Revision\n" +
+				"@name = Automatic Backup\n" +
+				"@date = " + dateString + "\n" +
+				"@comment = Automatic Backup before restoring uploaded revision\n" +
+				"%";
 
-			String message = getSectionsToUpdate(sectionsMap, date, context);
-			Sections.replaceSections(context, sectionsMap);
+		Article a = Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
+		HashMap<String, String> sectionsMap = new HashMap<String, String>();
+		Section<RootType> s = a.getRootSection();
+		sectionsMap.put(s.getID(), s.getText().concat(preRestoreMarkup));
 
-			return message;
-		}
-		return "<p class=\"box error\">Error while restoring revision</p>";
+		String message = getSectionsToUpdate(sectionsMap, context);
+		Sections.replaceSections(context, sectionsMap);
+
+		return message;
 	}
 
 	/**
@@ -85,13 +79,11 @@ public class RestoreRevision extends AbstractAction {
 	 * @param context
 	 * @return String containing message boxes
 	 */
-	private static String getSectionsToUpdate(HashMap<String, String> sectionsToUpdate, Date date, UserActionContext context) {
+	private static String getSectionsToUpdate(HashMap<String, String> sectionsToUpdate, UserActionContext context) {
 		StringBuffer messages = new StringBuffer();
 
-		HashMap<String, Integer> changedPages = RevisionManager.getRM(context).compareWithCurrentState(
-				date);
-		ArticleManager aman = RevisionManager.getRM(context).getArticleManager(
-				date);
+		HashMap<String, Integer> changedPages = RevisionManager.getRM(context).getUploadedRevision().compareWithCurrentState();
+		ArticleManager aman = RevisionManager.getRM(context).getUploadedRevision().getArticleManager();
 
 		// do not restore the revision page
 		changedPages.remove(context.getTitle());
@@ -109,7 +101,7 @@ public class RestoreRevision extends AbstractAction {
 					Article oldVersionOfCurrentArticle = aman.getArticle(title);
 					Section<RootType> s = oldVersionOfCurrentArticle.getRootSection();
 					sectionsToUpdate.put(currentArticle.getRootSection().getID(), s.getText());
-					messages.append("restored to version " + version);
+					messages.append("restored to uploaded version");
 				}
 				else {
 					// page did not exist, so delete the content, but keep the

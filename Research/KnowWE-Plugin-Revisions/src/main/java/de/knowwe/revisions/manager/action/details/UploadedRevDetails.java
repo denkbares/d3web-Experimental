@@ -33,12 +33,10 @@ import de.knowwe.revisions.manager.RevisionManager;
  */
 public class UploadedRevDetails extends AbstractRevDetails {
 
-	private static final String HEADER = "<p class=\"box ok\">Uploaded revision selected.</p>";
-
 	@Override
 	protected String perform(UserActionContext context) {
 		UploadedRevision rev = RevisionManager.getRM(context).getUploadedRevision();
-		return getRevDetailsTable(rev, HEADER, null, context).toString();
+		return getRevDetailsTable(rev, getHeader(context), null, context).toString();
 	}
 
 	/**
@@ -92,6 +90,13 @@ public class UploadedRevDetails extends AbstractRevDetails {
 		return string.toString();
 	}
 
+	private String getHeader(UserActionContext context) {
+		String result = "<p class=\"box ok\">Uploaded revision selected: ";
+		result += RevisionManager.getRM(context).getUploadedRevision().getFilename();
+		result += "</p>";
+		return result;
+	}
+
 	/**
 	 * 
 	 * @created 01.05.2013
@@ -102,6 +107,6 @@ public class UploadedRevDetails extends AbstractRevDetails {
 	protected void appendRevisionActions(Revision rev, StringBuffer result) {
 		result.append("<a onClick=\"alert('not yet implemented');\" title='Merge this revision into wiki'>Merge</a>");
 		result.append(", ");
-		result.append("<a onClick=\"alert('not yet implemented');\" title='Restore this revision>Restore</a>");
+		result.append("<a onClick=\"restoreUploadedRev();\" title='Restore this revision'>Restore</a>");
 	}
 }

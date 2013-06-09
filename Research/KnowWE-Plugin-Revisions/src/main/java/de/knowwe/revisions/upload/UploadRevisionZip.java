@@ -52,6 +52,7 @@ public class UploadRevisionZip extends AbstractAction {
 
 		HashMap<String, String> pages = new HashMap<String, String>();
 		List<FileItem> items = null;
+		String zipname = null;
 		try {
 			items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(context.getRequest());
 		}
@@ -60,6 +61,7 @@ public class UploadRevisionZip extends AbstractAction {
 			e.printStackTrace();
 		}
 		for (FileItem item : items) {
+			zipname = item.getName();
 			InputStream filecontent = item.getInputStream();
 
 			ZipInputStream zin = new ZipInputStream(filecontent);
@@ -80,6 +82,8 @@ public class UploadRevisionZip extends AbstractAction {
 					String[] splittedName = name.split("/");
 					String title = URLDecoder.decode(splittedName[0], "UTF-8");
 					String filename = URLDecoder.decode(splittedName[1], "UTF-8");
+
+					System.out.println("Attachment: " + name);
 					// String content = IOUtils.toString(zin, "UTF-8");
 					// Environment.getInstance().getWikiConnector().storeAttachment(title,
 					// filename,
@@ -90,8 +94,10 @@ public class UploadRevisionZip extends AbstractAction {
 			zin.close();
 			filecontent.close();
 		}
-		UploadedRevision rev = new UploadedRevision(context.getWeb(), pages);
-		RevisionManager.getRM(context).setUploadedRevision(rev);
+		if (zipname != null) {
+			UploadedRevision rev = new UploadedRevision(context.getWeb(), pages, zipname);
+			RevisionManager.getRM(context).setUploadedRevision(rev);
+		}
 		context.sendRedirect("../Wiki.jsp?page=" + context.getTitle());
 
 	}

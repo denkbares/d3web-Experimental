@@ -84,8 +84,8 @@
 							url : KNOWWE.core.util.getURL(params),
 							response : {
 								action : 'insert',
-								ids : [ 'revdetails' ]
-//								fn : KNOWWE.core.util.addCollabsiblePluginHeader
+								ids : [ 'revdetails' ],
+								fn : KNOWWE.core.util.addCollabsiblePluginHeader
 							}
 					}
 					
@@ -109,8 +109,8 @@
 					url : KNOWWE.core.util.getURL(params),
 					response : {
 						action : 'insert',
-						ids : [ 'revdetails' ]
-//						fn : KNOWWE.core.util.addCollabsiblePluginHeader
+						ids : [ 'revdetails' ],
+						fn : KNOWWE.core.util.addCollabsiblePluginHeader
 					}
 			}
 			new _KA( options ).send();
@@ -239,20 +239,44 @@
          * Restore the selected revision
          */
         function restoreRev(time) {
-			var params = {
-				action : 'RestoreRevision',
-				date : time
-			}
-			var options = {
-					url : KNOWWE.core.util.getURL(params),
-					response : {
-						action : 'insert',
-						ids : [ 'revdetails' ]
-//						fn : KNOWWE.core.util.addCollabsiblePluginHeader
-					}
-			}
-			new _KA( options ).send();
-			
+        	if (confirm('Do you ready want to restore this revision?')) {
+    			var params = {
+    					action : 'RestoreRevision',
+    					date : time
+    				}
+    				var options = {
+    						url : KNOWWE.core.util.getURL(params),
+    						response : {
+    							action : 'insert',
+    							ids : [ 'revdetails' ]
+//    							fn : KNOWWE.core.util.addCollabsiblePluginHeader
+    						}
+    				}
+    				new _KA( options ).send();
+        	} else {
+        	    // Do nothing!
+        	}
+		}
+        
+        /**
+         * Restore the selected revision
+         */
+        function restoreUploadedRev() {
+        	if (confirm('Do you ready want to overwrite wiki content with uploaded revision?')) {
+    			var params = {
+    					action : 'RestoreUploadedRevision'    				}
+    				var options = {
+    						url : KNOWWE.core.util.getURL(params),
+    						response : {
+    							action : 'insert',
+    							ids : [ 'revdetails' ]
+//    							fn : KNOWWE.core.util.addCollabsiblePluginHeader
+    						}
+    				}
+    				new _KA( options ).send();
+        	} else {
+        	    // Do nothing!
+        	}
 		}
         
         /**
@@ -323,8 +347,8 @@
 						url : KNOWWE.core.util.getURL(params),
 						response : {
 							action : 'insert',
-							ids : [ 'revdetails' ]
-//								fn : KNOWWE.core.util.addCollabsiblePluginHeader
+							ids : [ 'revdetails' ],
+							fn : KNOWWE.core.util.addCollabsiblePluginHeader
 						}
 				}
 				new _KA( options ).send();

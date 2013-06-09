@@ -48,6 +48,7 @@
                 <parameter id="script" value="KnowWE-Plugin-Revisions-Timeline.js" />
                 <parameter id="script" value="KnowWE-Plugin-Revisions.js" />
         		<parameter id="css" value="KnowWE-Plugin-Revisions-Timeline.css" />
+        		<parameter id="css" value="KnowWE-Plugin-Revisions.css" />
         </extension>
         
        	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -116,6 +117,16 @@
 				value="de.knowwe.revisions.manager.action.RestoreRevision" />
 			<parameter id="name" value="RestoreRevision" />
 			<parameter id="description" value="Restores a revision." />
+			<parameter id="version" value="1.0" />
+			<parameter id="priority" value="5" />
+		</extension>
+		
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+			id="RestoreUploadedRevision">
+			<parameter id="class"
+				value="de.knowwe.revisions.manager.action.RestoreUploadedRevision" />
+			<parameter id="name" value="RestoreUploadedRevision" />
+			<parameter id="description" value="Restores a uploaded revision." />
 			<parameter id="version" value="1.0" />
 			<parameter id="priority" value="5" />
 		</extension>

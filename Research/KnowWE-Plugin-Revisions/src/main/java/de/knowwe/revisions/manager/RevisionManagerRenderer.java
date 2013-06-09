@@ -18,6 +18,8 @@
  */
 package de.knowwe.revisions.manager;
 
+import java.util.List;
+
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -102,21 +104,25 @@ public class RevisionManagerRenderer extends DefaultMarkupRenderer {
 	private static void appendJsonDataTableAndTimeline(Section<?> section, RenderResult string, UserContext user) {
 		string.appendHtml("<script type=\"text/javascript\">\n");
 		string.appendHtml("data = [\n");
-		for (Section<RevisionType> sec : Sections.findSuccessorsOfType(section.getFather(),
-				RevisionType.class)) {
-			String line = RevisionType.toTimelineString(sec);
-			string.appendHtml(line);
-		}
-		// if (RevisionManager.getRM(user).getUploadedRevision() != null) {
-		// string.appendHtml("{\n" +
-		// "\'start\': new Date(),\n" +
-		// "\'content\': \'Uploaded Revision\',\n" +
-		// // "\'group\': \'Uploaded\',\n" +
-		// "},\n");
-		// }
-		string.deleteCharAt(string.length() - 2);
-		string.appendHtml("];");
+		List<Section<RevisionType>> sections = Sections.findSuccessorsOfType(section.getFather(),
+				RevisionType.class);
+		if (!sections.isEmpty()) {
 
+			for (Section<RevisionType> sec : sections) {
+				String line = RevisionType.toTimelineString(sec);
+				string.appendHtml(line);
+			}
+			// if (RevisionManager.getRM(user).getUploadedRevision() != null) {
+			// string.appendHtml("{\n" +
+			// "\'start\': new Date(),\n" +
+			// "\'content\': \'Uploaded Revision\',\n" +
+			// // "\'group\': \'Uploaded\',\n" +
+			// "},\n");
+			// }
+			string.deleteCharAt(string.length() - 2);
+		}
+
+		string.appendHtml("];");
 		// string.appendHtml("selection = [");
 		// if (RevisionManager.getRM(user).getUploadedRevision() != null) {
 		// string.appendHtml("{'row': data.length-1}");
