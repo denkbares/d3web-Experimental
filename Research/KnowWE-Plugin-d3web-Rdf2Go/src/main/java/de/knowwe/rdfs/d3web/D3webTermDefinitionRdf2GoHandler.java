@@ -5,14 +5,12 @@ import java.util.Collection;
 import java.util.List;
 
 import org.ontoware.rdf2go.model.Statement;
-import org.ontoware.rdf2go.model.node.BlankNode;
-import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
-import org.ontoware.rdf2go.vocabulary.XSD;
 
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
@@ -51,31 +49,20 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 				statements);
 
 		// lns:TermIdentifier rdf:subclassOf lns:parentTermIdentifier
-		NamedObject termObject = section.get().getTermObject(article, section);
-		if (termObject instanceof TerminologyObject) {
-			TerminologyObject[] parents = ((TerminologyObject) termObject).getParents();
-			for (TerminologyObject parent : parents) {
-				String parentExternalForm = Rdf2GoUtils.getCleanedExternalForm(new Identifier(
-						parent.getName()));
-				int index = findIndex(parent.getChildren(), termObject);
-				Rdf2GoUtils.addStatement(termIdentifierURI,
-						RDFS.subClassOf,
-						parentExternalForm, statements);
-				BlankNode orderNode = core.createBlankNode();
-				URI hasIndexInfoURI = core.createlocalURI("hasIndexInfo");
-				Rdf2GoUtils.addStatement(termIdentifierURI,
-						hasIndexInfoURI, orderNode, statements);
-				URI hasIndexURI = core.createlocalURI("hasIndex");
-				Literal indexLiteral = core.createDatatypeLiteral(
-						Integer.toString(index), XSD._int);
-				Rdf2GoUtils.addStatement(orderNode,
-						hasIndexURI, indexLiteral, statements);
-				URI indexOfURI = core.createlocalURI("isIndexOf");
-				URI parentIdentifierURI = core.createlocalURI(
-						parentExternalForm);
-				Rdf2GoUtils.addStatement(orderNode,
-						indexOfURI, parentIdentifierURI, statements);
-			}
+		NamedObject namedObject = section.get().getTermObject(article, section);
+		TerminologyObject[] parents = new TerminologyObject[0];
+		if (namedObject instanceof TerminologyObject) {
+			parents = ((TerminologyObject) namedObject).getParents();
+		}
+		else if (namedObject instanceof Choice) {
+			parents = new TerminologyObject[] { ((Choice) namedObject).getQuestion() };
+		}
+		for (TerminologyObject parent : parents) {
+			String parentExternalForm = Rdf2GoUtils.getCleanedExternalForm(new Identifier(
+					parent.getName()));
+			Rdf2GoUtils.addStatement(termIdentifierURI,
+					RDFS.subClassOf,
+					parentExternalForm, statements);
 		}
 
 		// lns:TermObjectClass lns:hasInstance lns:TermIdentifier
@@ -103,14 +90,6 @@ public class D3webTermDefinitionRdf2GoHandler extends SubtreeHandler<D3webTermDe
 		core.addStatements(article, Rdf2GoUtils.toArray(statements));
 
 		return Messages.noMessage();
-	}
-
-	private int findIndex(TerminologyObject[] children, NamedObject termObject) {
-		for (int i = 0; i < children.length; i++) {
-			if (children[i] == termObject) return i;
-		}
-		// should not happen!
-		return -1;
 	}
 
 }
