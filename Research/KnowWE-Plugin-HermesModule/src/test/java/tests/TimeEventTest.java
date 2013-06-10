@@ -79,6 +79,7 @@ public class TimeEventTest extends TestCase {
 		eventsInput.remove(1);
 
 		TestUtils.processAndUpdateArticleJunit(null, content, testtopic, Environment.DEFAULT_WEB);
+		Rdf2GoCore.getInstance().commit();
 
 		String querystring = "select ?x ?t ?desc ?dd ?imp  where {?x lns:hasDescription ?desc . ?x lns:hasTitle ?t . ?x lns:hasDateDescription ?dd . ?x lns:hasImportance ?imp }";
 		ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance().sparqlSelectIt(querystring);

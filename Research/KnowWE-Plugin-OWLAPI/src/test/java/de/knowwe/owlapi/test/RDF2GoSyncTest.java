@@ -38,11 +38,9 @@ import connector.DummyConnector;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
-import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.event.ArticleUpdatesFinishedEvent;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.owlapi.RDF2GoSync;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -73,11 +71,11 @@ public class RDF2GoSyncTest {
 		Rdf2GoCore core = Rdf2GoCore.getInstance();
 		// Add the axioms
 		RDF2GoSync.synchronize(axioms, sec, RDF2GoSync.Mode.ADD);
-		EventManager.getInstance().fireEvent(new ArticleUpdatesFinishedEvent());
+		Rdf2GoCore.getInstance().commit();
 		assertTrue(core.sparqlAsk(SPARQL.ASUBCLASSB));
 		// Remove the axioms
 		RDF2GoSync.synchronize(axioms, sec, RDF2GoSync.Mode.REMOVE);
-		EventManager.getInstance().fireEvent(new ArticleUpdatesFinishedEvent());
+		Rdf2GoCore.getInstance().commit();
 		assertFalse(core.sparqlAsk(SPARQL.ASUBCLASSB));
 	}
 

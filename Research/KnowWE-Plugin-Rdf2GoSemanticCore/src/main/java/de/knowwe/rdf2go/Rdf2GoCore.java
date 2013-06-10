@@ -69,7 +69,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.event.ArticleUpdatesFinishedEvent;
+import de.knowwe.event.ArticleCreatedEvent;
 import de.knowwe.event.FullParseEvent;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
@@ -507,7 +507,7 @@ public class Rdf2GoCore implements EventListener {
 		ArrayList<Class<? extends Event>> events = new ArrayList<Class<? extends Event>>(
 				2);
 		events.add(FullParseEvent.class);
-		events.add(ArticleUpdatesFinishedEvent.class);
+		events.add(ArticleCreatedEvent.class);
 		return events;
 	}
 
@@ -721,12 +721,11 @@ public class Rdf2GoCore implements EventListener {
 			Article article = ((FullParseEvent) event).getArticle();
 			removeStatementsOfArticle(article);
 			removeInstance(article);
-			commit();
 		}
 
-		// if (event instanceof ArticleUpdatesFinishedEvent) {
-		// commit();
-		// }
+		if (event instanceof ArticleCreatedEvent) {
+			commit();
+		}
 	}
 
 	public void readFrom(InputStream in) throws ModelRuntimeException, IOException {
