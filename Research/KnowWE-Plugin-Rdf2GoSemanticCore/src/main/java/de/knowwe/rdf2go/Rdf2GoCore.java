@@ -721,10 +721,12 @@ public class Rdf2GoCore implements EventListener {
 			Article article = ((FullParseEvent) event).getArticle();
 			removeStatementsOfArticle(article);
 			removeInstance(article);
-		}
-		if (event instanceof ArticleUpdatesFinishedEvent) {
 			commit();
 		}
+
+		// if (event instanceof ArticleUpdatesFinishedEvent) {
+		// commit();
+		// }
 	}
 
 	public void readFrom(InputStream in) throws ModelRuntimeException, IOException {
