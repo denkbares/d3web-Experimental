@@ -4,7 +4,7 @@ function createSidebarTree(con){
     h = 800,
     i = 0,
     barHeight = 20,
-    barWidth = w * .8,
+    barWidth = w * .7,
     duration = 400,
     root ="";
 
@@ -60,7 +60,7 @@ function update(source) {
   nodeEnter.append("svg:text")
       .attr("dy", 3.5)
       .attr("dx", 5.5)
-      .text(function(d) {return d.data.name; });
+      .text(function(d) { return d.data.name; });
   
   // Transition nodes to their new position.
   nodeEnter.transition()
@@ -137,23 +137,26 @@ return d.data.highlighted ? "#0855DD" : d._children ? "#232323" : d.children.len
 }
 function renderConnections(url){
 	d3.json(url, function(json){
-		d3.select("#chart").append("div").attr("class", "connectionInfo");
-		d3.select(".connectionInfo").append("ul").attr("id","outgoing").attr("class", "info").text("Ausgehend");
+		jQuery('#infolist').html('');
+		d3.select("#infolist").append("div").attr("class", "connectionInfo2");
+		
+		d3.select(".connectionInfo2").append("ul").attr("id","outgoing").text("Ausgehende Relationen");
 		for (var i = 0; i <json.outgoing.length; i++){
 			var such = json.outgoing[i][0];
 			if((d3.select("#outgoing").select('#' + such)[0][0])==null){
-			d3.select("#outgoing").append("ul").attr("id" ,json.outgoing[i][0]).text(json.outgoing[i][0]);
+			d3.select("#outgoing").append("ul").attr("id" ,json.outgoing[i][0]).text("\""+json.outgoing[i][0]+"\"");
 			}
 			}
 		for (var i = 0; i <json.outgoing.length; i++){
 			var kat = json.outgoing[i][0];
 		d3.select("#outgoing").select('#'+kat).append("li").text(json.outgoing[i][1]);
+	
 		}
-		d3.select(".connectionInfo").append("ul").attr("id","incoming").attr("class", "info").text("Eingehend");
+		d3.select(".connectionInfo2").append("ul").attr("id","incoming").text("Eingehende Relationen");
 		for (var i = 0; i <json.incoming.length; i++){
 			var such = json.incoming[i][0];
 			if((d3.select("#incoming").select('#' + such)[0][0])==null){
-			d3.select("#incoming").append("ul").attr("id" ,json.incoming[i][0]).text(json.incoming[i][0]);
+			d3.select("#incoming").append("ul").attr("id" ,json.incoming[i][0]).text("\""+json.incoming[i][0]+"\"");
 			}
 			}
 		for (var i = 0; i <json.incoming.length; i++){

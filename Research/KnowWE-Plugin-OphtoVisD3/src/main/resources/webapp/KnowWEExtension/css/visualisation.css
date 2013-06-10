@@ -217,20 +217,92 @@ background-color: #F3F3F3;
 }
 
 /*infoBox2 ---------------------------------------------------------------------------*/
-.prepageappend{
-overflow-x: hidden;
+.colapser{
+ text-align: center;
+ font-size: 14px;
+}
+
+/*VISIBILITY of INFOLIST ---------------------------------------------------------------------------*/
+/*infoBox 3---------------------------------------------------------------------------*/
+.connectionInfo2{
+
+ border: 1px solid #000;
+ margin: 2em;
+ width: 300px;
+ padding: 5px;
 
 }
 
-.colapser {
+.connectionInfo2 ul{
+	
+padding-bottom: 4px; /*bottom spacing between menu items*/	
+font: bold 14px Arial;
+color: black;
+/*background: black;*/
+text-transform: uppercase;
+/*padding: 4px 0 4px 10px; /*header text is indented 10px*/
+list-style-type: none;
+margin: 0;
+padding: 0;
+list-style-type: none;
+
+}
+.connectionInfo2 ul ul{
+margin-left: 20px;	
+/*padding-bottom: 4px;*/ /*bottom spacing between menu items*/
+padding-top: 4px; /*bottom spacing between menu items*/
+font: bold italic 14px Arial;
+color: black;
+/*background: E2DFDF;*/
+text-transform: uppercase;
+list-style-type: none;
+}
+
+.connectionInfo2 ul li{
+margin-left: 10px;	
+padding-bottom: 2px; /*bottom spacing between menu items*/
+padding-top: 4px; /*bottom spacing between menu items*/
+font: 12px Arial;
+color: black;
+/*background: white;*/
+text-transform: uppercase;
+list-style-type: none;
+
+}
+
+
+.connectionInfo2 ul li a{
+color: #A70303;
+/*background: url(KnowWEExtension/images/arrow_right.png) no-repeat center left;*/ /*custom bullet list image*/
+display: block;
+padding: 2px 0;
+padding-left: 19px; /*link text is indented 19px*/
+text-decoration: none;
 font-weight: bold;
-text-align: center;
-border-bottom-style: solid;
-border-bottom-width: 1px;
-margin-bottom: 5px;
-padding-bottom: 5px;
-padding-top: 5px;
+border-bottom: 1px solid #dadada;
+font-size: 90%;
 }
 
-#breadcrumbs { display: none; 
+.connectionInfo2 ul li a:visited{
+color: #A70303;
+}
 
+.connectionInfo2 ul li:hover{ 
+color: #A70303;
+background-color: #F3F3F3;
+}
+
+/*infoBox 3---------------------------------------------------------------------------*/
+
+#infolist{
+	display: inline-block;
+	position: absolute;
+	width: 400px;
+	height:400px;
+	top: 100px;
+	left: 1000px;
+
+	  }
+
+.hidden { visibility: hidden; display: none;}
+.unhidden { visibility: visible; display: block;}

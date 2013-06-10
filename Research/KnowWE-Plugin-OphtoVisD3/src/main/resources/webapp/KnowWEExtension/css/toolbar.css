@@ -21,13 +21,14 @@ width: 100%;
 z-index: 15;
 top: 70px;
 left: 0px;
-
+height: 18px;
 }
 #headerwrap.fixed {
 position: fixed;
 top: 0;
+
 }
-ul{
+ul.list{
 background-color: #222;
 transition: background-color 1.5s;
 list-style-type: none;
@@ -37,7 +38,7 @@ height: 15px;
 -webkit-padding-start: 0px;
 
 }
-li{
+li.menue{
 background-color: #222;
 transition: background-color 1.5s;
 float: left;
@@ -76,4 +77,7 @@ background-color: black;
  vertical-align:middle;
  color:white;
  font: 12px;
+}
+.prepageappend{
+overflow-x: hidden;
 }

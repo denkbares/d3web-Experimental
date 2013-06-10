@@ -1,4 +1,6 @@
 function createWheel(){
+	
+	visChange();
 	d3.select("#vis").remove();
 	d3.select("body").append("div").attr("id", "vis");
 var width = 840,
@@ -58,7 +60,7 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
      // .attr("visibility", function(e) {
        //   return (e.depth<2) ? null : d3.select(this).style("visibility", "hidden");
        // })
-      .on("click", click);
+      .on("click", function(d){clickTextEventHandler(d)});
  
   textEnter.append("tspan")
       .attr("x", 0)
@@ -69,6 +71,8 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
       .text(function(d) { return d.depth ? d.data.name.split(" ")[1] || "" : ""; });
 
   function click(d) {
+  	console.log($(this).text());
+  	clickTextEventHandler(d);
     path.transition()
       .duration(duration)
       .attrTween("d", arcTween(d));
@@ -277,7 +281,27 @@ function createForce(){
 	
 }
 
+
+function visChange(){
+	$("#infolist").removeClass('unhidden');
+	$("#infolist").addClass('hidden');
+}
+function clickTextEventHandler(d){
+	
+	var clickedName = d.data.name;
+	  	console.log(d.data.name);
+	
+	$("#infolist").addClass('unhidden');
+		
+	var url = KNOWWE.core.util.getURL({action : 'ConnectionsAction', concept : clickedName});
+	renderConnections(url);
+	
+	
+}
+
 function createBubble(){
+	
+	visChange();
 	
 	d3.select("#vis").remove();
 	d3.select("body").append("div").attr("id", "vis");
@@ -329,12 +353,15 @@ d3.json(url, function(error, root) {
 	  .on("drag", dragmove)
 		.on("dragend", dragend);
   node.append("circle")
+   	  .on("click", function(d){clickTextEventHandler(d)})
       .attr("r", function(d,i) {  return (d.r); }).call(drag);
 
   node.filter(function(d,i) { return !(d.children.length>0); }).append("text")
       .attr("dy", ".3em")
       .style("text-anchor", "middle")
-      .text(function(d,i) { return d.data.name; }).call(drag);
+      .text(function(d,i) { return d.data.name; })
+      .on("click", function(d){clickTextEventHandler(d)})
+      .call(drag);
 
 });
 
@@ -344,6 +371,7 @@ d3.select(self.frameElement).style("height", diameter + "px");
 }
 function createTree(){
 
+visChange();
 
 var diameter = 960;
 
@@ -381,9 +409,10 @@ d3.json( url, function(error, root) {
       .data(nodes)
     .enter().append("g")
       .attr("class", "node")
-      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
 
   node.append("circle")
+        .on("click", function(d){clickTextEventHandler(d)})
       .attr("r", 4.5);
  
   
@@ -410,6 +439,7 @@ d3.json( url, function(error, root) {
 	  .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
 	  .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
 	  .text(function(d) {return d.data.name; })
+	  .on("click", function(d){clickTextEventHandler(d)})
 	  .call(drag);
 
 	
