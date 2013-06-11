@@ -146,7 +146,7 @@ public class Rdf2GoUtils {
 	public static String cleanUp(String string) {
 		String temp = string;
 		try {
-			temp = URLDecoder.decode(temp, "UTF-8");
+			temp = URLDecoder.decode(string, "UTF-8");
 		}
 		catch (IllegalArgumentException e) {
 		}
@@ -228,7 +228,26 @@ public class Rdf2GoUtils {
 	}
 
 	public static void addStatement(Resource subject, URI predicate, Node object, Collection<Statement> statements) {
+		Rdf2GoCore core = Rdf2GoCore.getInstance();
+		if (core.getReasoningType().equals(Rdf2GoReasoning.RDF)) {
+			createUriLabel(core, subject, statements);
+			createUriLabel(core, predicate, statements);
+			createUriLabel(core, object, statements);
+		}
 		statements.add(Rdf2GoCore.getInstance().createStatement(subject, predicate, object));
+	}
+
+	private static void createUriLabel(Rdf2GoCore core, Node node, Collection<Statement> statements) {
+		if (node instanceof URI) {
+			URI uriNode = node.asURI();
+			String uriNodeString = uriNode.toString();
+			if (uriNodeString.startsWith(core.getLocalNamespace())) {
+				String stringPart = uriNodeString.substring(core.getLocalNamespace().length());
+				Literal nodeLiteral = core.createLiteral(Strings.decodeURL(stringPart));
+				statements.add(Rdf2GoCore.getInstance().createStatement(uriNode, RDFS.label,
+						nodeLiteral));
+			}
+		}
 	}
 
 	public static String getCleanedExternalForm(Identifier identifier) {
