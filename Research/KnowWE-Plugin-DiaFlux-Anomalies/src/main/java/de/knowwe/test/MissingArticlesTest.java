@@ -129,6 +129,8 @@ public class MissingArticlesTest extends AbstractTest<ArticleManager> {
 			if (!missingArticles.contains(missingArticle)) missingArticles.add(missingArticle);
 		}
 
+		if (missingArticles.isEmpty()) return Message.SUCCESS;
+
 		Collections.sort(erroneousArticles);
 		Collections.sort(missingArticles);
 
