@@ -19,13 +19,14 @@
 package de.d3web.test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import de.d3web.core.inference.PSMethod;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.dependency.Dependency;
+import de.d3web.dependency.DependencyFinder;
 
 
 /**
@@ -58,12 +59,6 @@ public class UnusedQuestionTest extends KBObjectsTest {
 		return new ArrayList<TerminologyObject>(kb.getManager().getQuestions());
 	}
 
-	@Override
-	protected String[] getAdditionalIgnores(String[] args) {
-		return new String[] {
-				"now", "start" };
-	}
-
 	/**
 	 * 
 	 * @created 25.03.2013
@@ -72,16 +67,13 @@ public class UnusedQuestionTest extends KBObjectsTest {
 	 */
 	protected static void checkUsage(KnowledgeBase kb, List<TerminologyObject> result) {
 
+		Map<TerminologyObject, Collection<Dependency>> dependencies = DependencyFinder.getBackwardDependencies(kb);
+
 		// could be optimized to iterate only over objects of same type, eg
 		// questions
 		for (TerminologyObject o : kb.getManager().getAllTerminologyObjects()) {
-			if (o.getKnowledgeStore().getKnowledge().length != 0) {
+			if (dependencies.containsKey(o)) {
 				result.remove(o);
-			}
-			Map<PSMethod, Set<TerminologyObject>> derivations = UnderivedQuestionTest.getAllDerivationsFor(o);
-
-			for (PSMethod psm : derivations.keySet()) {
-				result.removeAll(derivations.get(psm));
 			}
 
 		}

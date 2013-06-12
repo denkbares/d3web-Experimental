@@ -117,11 +117,11 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 					if (k < intersection.size() - 1) bob.append(",");
 
 				}
-				bob.append(",");
-				bob.append("\"type\":");
-				bob.append(""); // TODO
-
 				bob.append("]");
+				// bob.append(",");
+				// bob.append("\"type\":");
+				// bob.append(""); // TODO
+
 
 				bob.append("}");
 				if (j < size - 1) bob.append(",");

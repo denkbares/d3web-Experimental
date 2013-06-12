@@ -19,11 +19,15 @@
 package de.d3web.test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.dependency.Dependency;
+import de.d3web.dependency.DependencyFinder;
 
 
 /**
@@ -52,12 +56,15 @@ public class UnderivedSolutionTest extends KBObjectsTest {
 	@Override
 	protected List<TerminologyObject> doTest(KnowledgeBase kb, List<TerminologyObject> objects, String[] args) {
 
+		Map<TerminologyObject, Collection<Dependency>> forward = DependencyFinder.getForwardDependencies(kb);
+
 		List<TerminologyObject> result = new LinkedList<TerminologyObject>();
 
 		for (TerminologyObject object : objects) {
-			if (UnderivedQuestionTest.getAllDerivationsFor(object).isEmpty()) {
+			if (!forward.containsKey(object)) {
 				result.add(object);
 			}
+
 		}
 
 		result.remove(kb.getRootSolution());

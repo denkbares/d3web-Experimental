@@ -26,8 +26,6 @@ import java.util.List;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.utilities.NamedObjectComparator;
-import de.d3web.test.D3webTestUtils;
-import de.d3web.test.KBTest;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
 import de.d3web.testing.TestParameter.Mode;
@@ -99,7 +97,8 @@ public abstract class KBObjectsTest extends KBTest {
 	 * @return
 	 */
 	protected String[] getAdditionalIgnores(String[] args) {
-		return new String[0];
+		return new String[] {
+				"now", "start" };
 	}
 
 	protected abstract List<TerminologyObject> doTest(KnowledgeBase kb, List<TerminologyObject> objects, String[] args);

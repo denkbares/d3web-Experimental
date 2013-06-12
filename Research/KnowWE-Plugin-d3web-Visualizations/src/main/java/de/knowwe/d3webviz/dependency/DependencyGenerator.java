@@ -25,6 +25,8 @@ import java.util.List;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.utilities.Pair;
+import de.d3web.dependency.Dependency;
+import de.d3web.dependency.DependencyFinder;
 
 /**
  * 
@@ -34,8 +36,6 @@ import de.d3web.core.utilities.Pair;
  */
 public class DependencyGenerator {
 
-	private static final Collection<DependencyExtractor> finders;
-
 	private final KnowledgeBase kb;
 	private final Collection<Dependency> dependencies;
 
@@ -43,11 +43,6 @@ public class DependencyGenerator {
 	private boolean showAll;
 	private String[] ignores = new String[0];
 
-	static {
-		finders = new LinkedList<DependencyExtractor>();
-		finders.add(new RuleExtractor());
-		finders.add(new DiaFluxNodeExtractor());
-	}
 
 	public DependencyGenerator(KnowledgeBase kb) {
 		this.kb = kb;
@@ -84,7 +79,7 @@ public class DependencyGenerator {
 
 	public String createDependencyGraph() {
 		StringBuilder bob = new StringBuilder();
-		addDependencies();
+		this.dependencies.addAll(DependencyFinder.getDependencies(kb));
 
 		createOutput(bob);
 		return bob.toString();
@@ -262,13 +257,5 @@ public class DependencyGenerator {
 		return s.replaceAll("\"", "\\\"");
 	}
 
-	private void addDependencies() {
-
-		for (DependencyExtractor finder : finders) {
-			this.dependencies.addAll(finder.getDependencies(kb));
-			
-		}
-
-	}
 
 }

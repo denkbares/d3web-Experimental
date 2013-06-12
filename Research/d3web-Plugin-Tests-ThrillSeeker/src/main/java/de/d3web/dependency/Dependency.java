@@ -16,9 +16,10 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
+package de.d3web.dependency;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import de.d3web.core.inference.PSMethod;
@@ -31,14 +32,22 @@ import de.d3web.core.knowledge.TerminologyObject;
  */
 public class Dependency implements Iterable<TerminologyObject> {
 	
+	public enum Type {
+		Derivation, // values are directly used to calculate dependent object
+		Precondition // values are not used to calculate dependent object, e.g.
+						// condition in a rule
+	}
+	
 	private final TerminologyObject object;
 	private final Collection<TerminologyObject> dependencies;
+	private final Type type;
 	private final Class<? extends PSMethod> psMethod;
 	private final String verbalization;
 	
-	public Dependency(TerminologyObject object, Collection<TerminologyObject> dependencies, Class<? extends PSMethod> psMethod, String verbalization) {
+	public Dependency(TerminologyObject object, Collection<? extends TerminologyObject> dependencies, Type type, Class<? extends PSMethod> psMethod, String verbalization) {
 		this.object = object;
-		this.dependencies = dependencies;
+		this.dependencies = new HashSet<TerminologyObject>(dependencies);
+		this.type = type;
 		this.psMethod = psMethod;
 		this.verbalization = verbalization;
 	}
@@ -59,9 +68,13 @@ public class Dependency implements Iterable<TerminologyObject> {
 		return verbalization;
 	}
 	
+	public Type getType() {
+		return type;
+	}
+
 	@Override
 	public Iterator<TerminologyObject> iterator() {
-		return getBackwardObjects().iterator();
+		return dependencies.iterator();
 	}
 
 	@Override

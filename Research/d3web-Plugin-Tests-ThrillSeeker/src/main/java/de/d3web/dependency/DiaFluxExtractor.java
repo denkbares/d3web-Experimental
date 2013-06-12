@@ -16,20 +16,23 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
+package de.d3web.dependency;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
+import de.d3web.core.inference.ActionAddValueFact;
 import de.d3web.core.inference.PSAction;
+import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.inference.condition.ConditionTrue;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.diaFlux.flow.ActionNode;
+import de.d3web.diaFlux.flow.Edge;
+import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
-import de.d3web.diaFlux.flow.NodeList;
+import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaFlux.inference.FluxSolver;
 
 
@@ -38,35 +41,38 @@ import de.d3web.diaFlux.inference.FluxSolver;
  * @author Reinhard Hatko
  * @created 12.11.2012
  */
-class DiaFluxNodeExtractor implements DependencyExtractor {
+public class DiaFluxExtractor implements DependencyExtractor {
 
 	@Override
 	public Collection<Dependency> getDependencies(KnowledgeBase kb) {
-		Collection<NodeList> slices = kb.getAllKnowledgeSlicesFor(FluxSolver.DEPENDANT_NODES);
+		if (!DiaFluxUtils.hasFlows(kb)) return Collections.emptyList();
+
 		Set<Dependency> result = new HashSet<Dependency>();
 
-		for (NodeList nodes : slices) {
+		for (Flow flow : DiaFluxUtils.getFlowSet(kb)) {
 
-			if (nodes == null || nodes.getNodes().isEmpty()) continue;
-
-
-			for (Node node : nodes.getNodes()) {
+			for (Node node : flow.getNodes()) {
 				if (node instanceof ActionNode) {
 					PSAction action = ((ActionNode) node).getAction();
 
-					List<TerminologyObject> objects = new LinkedList<TerminologyObject>();
-
-					for (TerminologyObject terminologyObject : action.getForwardObjects()) {
-						objects.add(terminologyObject);
+					if (action instanceof ActionAddValueFact) {
+						String verbalization = node.getFlow().getName() + "" + node.getID();
+						result.add(DependencyFinder.createDependency((ActionAddValueFact) action,
+								FluxSolver.class));
 					}
 
-
-					result.add(new Dependency(action.getBackwardObjects().get(0),
-							objects, FluxSolver.class, node.getFlow().getName() + "" + node.getID()));
 				}
 			}
-		}
 
+			for (Edge edge : flow.getEdges()) {
+				Condition condition = edge.getCondition();
+				if (condition instanceof ConditionTrue) continue;
+
+				result.add(DependencyFinder.createDependency(condition, FluxSolver.class));
+
+			}
+
+		}
 
 		return result;
 

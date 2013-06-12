@@ -16,20 +16,20 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
+package de.d3web.dependency;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
-import de.d3web.abstraction.inference.PSMethodAbstraction;
+import de.d3web.core.inference.ActionAddValueFact;
 import de.d3web.core.inference.PSAction;
+import de.d3web.core.inference.PSMethodRulebased;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.RuleSet;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.TerminologyObject;
 
 /**
  * 
@@ -38,12 +38,36 @@ import de.d3web.core.knowledge.TerminologyObject;
  */
 public class RuleExtractor implements DependencyExtractor {
 
+	private final Class<? extends PSMethodRulebased> psm;
+
+	public RuleExtractor(Class<? extends PSMethodRulebased> psm) {
+		this.psm = psm;
+	}
 
 	@Override
 	public Collection<Dependency> getDependencies(KnowledgeBase kb) {
 
-		Collection<RuleSet> slices = kb.getAllKnowledgeSlicesFor(PSMethodAbstraction.FORWARD);
+		try {
+			Set<Dependency> result = new HashSet<Dependency>();
 
+			result.addAll(getDependencies(kb.getAllKnowledgeSlicesFor(PSMethodRulebased.getBackwardKind(psm))));
+			result.addAll(getDependencies(kb.getAllKnowledgeSlicesFor(PSMethodRulebased.getForwardKind(psm))));
+			return result;
+		}
+		catch (NoSuchElementException e) {
+			return Collections.emptyList();
+		}
+
+
+	}
+
+	/**
+	 * 
+	 * @created 07.06.2013
+	 * @param slices
+	 * @return
+	 */
+	private Set<Dependency> getDependencies(Collection<RuleSet> slices) {
 		Set<Dependency> result = new HashSet<Dependency>();
 		
 		for (RuleSet rules : slices) {
@@ -51,35 +75,16 @@ public class RuleExtractor implements DependencyExtractor {
 			if (rules == null) continue;
 
 			for (Rule rule : rules.getRules()) {
-				Dependency dependency = createDependency(rule);
-				if (dependency != null)
-				result.add(dependency);
+				PSAction action = rule.getAction();
+				if (action instanceof ActionAddValueFact) {
+					result.add(DependencyFinder.createDependency((ActionAddValueFact) action, psm));
+				}
+				result.add(DependencyFinder.createDependency(rule.getCondition(), psm));
 			}
 
 		}
-
-
 		return result;
 	}
 
-	/**
-	 * 
-	 * @created 23.01.2013
-	 * @param rule
-	 * @return
-	 */
-	public Dependency createDependency(Rule rule) {
-		PSAction action = rule.getAction();
-		List<TerminologyObject> objects = new LinkedList<TerminologyObject>();
-
-		for (TerminologyObject terminologyObject : action.getForwardObjects()) {
-			objects.add(terminologyObject);
-		}
-
-
-		Dependency dependency = new Dependency(action.getBackwardObjects().get(0), objects,
-				PSMethodAbstraction.class, rule.getClass().getName() + rule.hashCode());
-		return dependency;
-	}
 
 }

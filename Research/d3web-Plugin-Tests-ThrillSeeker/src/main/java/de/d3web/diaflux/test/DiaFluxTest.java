@@ -77,6 +77,8 @@ public abstract class DiaFluxTest extends KBTest {
 
 	/**
 	 * This method implements the test logic.
+	 * 
+	 * @return s the collection of erroneous flowcharts
 	 */
 	protected abstract Collection<Flow> doTest(KnowledgeBase testObject, List<Flow> flows);
 

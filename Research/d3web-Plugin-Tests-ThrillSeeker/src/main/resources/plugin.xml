@@ -122,6 +122,16 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
+
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="DiaFluxDocumentation">
+		<parameter id="class"
+			value="de.d3web.diaflux.test.DiaFluxDocumentationTest" />
+		<parameter id="name" value="DiaFluxDocumentation" />
+		<parameter id="description" value="CITest DiaFluxDocumentation" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
 	
 	<!--extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="DiaFluxCyclomaticComplexity">

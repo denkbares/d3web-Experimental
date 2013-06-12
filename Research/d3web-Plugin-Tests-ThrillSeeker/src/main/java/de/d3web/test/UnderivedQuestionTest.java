@@ -19,16 +19,15 @@
 package de.d3web.test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import de.d3web.core.inference.PSMethod;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.session.SessionFactory;
+import de.d3web.dependency.Dependency;
+import de.d3web.dependency.DependencyFinder;
 
 
 /**
@@ -53,10 +52,12 @@ public class UnderivedQuestionTest extends KBObjectsTest {
 	@Override
 	protected List<TerminologyObject> doTest(KnowledgeBase kb, List<TerminologyObject> objects, String[] args) {
 
+		Map<TerminologyObject, Collection<Dependency>> forward = DependencyFinder.getForwardDependencies(kb);
+
 		List<TerminologyObject> result = new LinkedList<TerminologyObject>();
 
 		for (TerminologyObject object : objects) {
-			if (getAllDerivationsFor(object).isEmpty()) {
+			if (!forward.containsKey(object)) {
 				result.add(object);
 			}
 
@@ -65,43 +66,12 @@ public class UnderivedQuestionTest extends KBObjectsTest {
 		return result;
 	}
 
-	@Override
-	protected String[] getAdditionalIgnores(String[] args) {
-		return new String[] {
-				"now", "start" };
-	}
-
 
 	@Override
 	protected List<TerminologyObject> getBaseObjects(KnowledgeBase kb, String[] args) {
 		return new ArrayList<TerminologyObject>(kb.getManager().getQuestions());
 	}
 
-	/**
-	 * Returns all derivations for the supplied object by PSM. Only PSMs with an
-	 * actual derivation are added.
-	 * 
-	 * @created 25.03.2013
-	 * @param kb the
-	 * @param question
-	 * @return
-	 */
-	public static Map<PSMethod, Set<TerminologyObject>> getAllDerivationsFor(TerminologyObject question) {
-		Map<PSMethod, Set<TerminologyObject>> result = new HashMap<PSMethod, Set<TerminologyObject>>();
-
-		List<? extends PSMethod> psMethods = SessionFactory.createSession(
-				question.getKnowledgeBase()).getPSMethods();
-
-		for (PSMethod psMethod : psMethods) {
-			Set<TerminologyObject> sources = psMethod.getPotentialDerivationSources(question);
-
-			if (!sources.isEmpty()) {
-				result.put(psMethod, sources);
-			}
-		}
-		
-		return result;
-	}
 
 
 }

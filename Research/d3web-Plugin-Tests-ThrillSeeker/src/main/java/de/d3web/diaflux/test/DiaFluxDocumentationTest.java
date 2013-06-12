@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 University Wuerzburg, Computer Science VI
+ * Copyright (C) 2013 University Wuerzburg, Computer Science VI
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,19 +16,45 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.d3webviz.dependency;
+package de.d3web.diaflux.test;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
+import de.d3web.diaFlux.flow.Flow;
+
 
 /**
  * 
  * @author Reinhard Hatko
- * @created 12.11.2012
+ * @created 12.06.2013
  */
-public interface DependencyExtractor {
+public class DiaFluxDocumentationTest extends DiaFluxTest {
 
-	Collection<Dependency> getDependencies(KnowledgeBase kb);
+	public DiaFluxDocumentationTest() {
+		super("The knowledge base contains {0} flowcharts without documentation:");
+	}
+
+	@Override
+	public String getDescription() {
+		return "Checks, if each flow in a kb has the property 'Description' set.";
+	}
+
+	@Override
+	protected Collection<Flow> doTest(KnowledgeBase testObject, List<Flow> flows) {
+
+		Collection<Flow> result = new LinkedList<Flow>();
+
+		for (Flow flow : flows) {
+			if (!flow.getInfoStore().contains(MMInfo.DESCRIPTION)) {
+				result.add(flow);
+			}
+		}
+
+		return result;
+	}
 
 }

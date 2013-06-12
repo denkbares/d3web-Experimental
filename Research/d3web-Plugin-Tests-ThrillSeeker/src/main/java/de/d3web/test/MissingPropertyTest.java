@@ -106,6 +106,11 @@ public class MissingPropertyTest extends KBObjectsTest {
 				errorObjects.size(), args[0], args[1] };
 	}
 
+	@Override
+	protected String[] getAdditionalIgnores(String[] args) {
+		return super.getAdditionalIgnores(args);
+	}
+
 	/**
 	 * 
 	 * @created 26.03.2013
