@@ -74,6 +74,17 @@
 	
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ReviewList">
+		<parameter id="class"
+			value="de.knowwe.diaflux.review.ReviewListType" />
+		<parameter id="name" value="ReviewList" />
+		<parameter id="description" value="ReviewList" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="LeftMenuCollapse">
 		<parameter id="class"
 			value="de.knowwe.page.LeftMenuCollapse" />
