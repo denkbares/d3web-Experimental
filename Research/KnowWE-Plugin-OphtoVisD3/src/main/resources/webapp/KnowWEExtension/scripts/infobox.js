@@ -149,7 +149,10 @@ function renderConnections(url){
 			}
 		for (var i = 0; i <json.outgoing.length; i++){
 			var kat = json.outgoing[i][0];
-		d3.select("#outgoing").select('#'+kat).append("li").text(json.outgoing[i][1]);
+		d3.select("#outgoing").select('#'+kat)	      
+		.append("li")
+		.html(" <a href=\"Wiki.jsp?page="+json.outgoing[i][1]+"\" > "+json.outgoing[i][1]+" </a> ");
+
 	
 		}
 		d3.select(".connectionInfo2").append("ul").attr("id","incoming").text("Eingehende Relationen");
@@ -161,7 +164,8 @@ function renderConnections(url){
 			}
 		for (var i = 0; i <json.incoming.length; i++){
 			var kat = json.incoming[i][0];
-		d3.select("#incoming").select('#'+kat).append("li").text(json.incoming[i][1]);
+		d3.select("#incoming").select('#'+kat).append("li")
+		.html(" <a href=\"Wiki.jsp?page="+json.incoming[i][1]+"\" > "+json.incoming[i][1]+" </a> ");
 		}
 		
 	});
