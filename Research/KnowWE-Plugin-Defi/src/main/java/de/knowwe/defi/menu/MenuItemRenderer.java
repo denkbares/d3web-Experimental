@@ -177,7 +177,7 @@ public class MenuItemRenderer implements Renderer {
 			}
 		}
 
-		List<Date> dates = TimeTableUtilities.getTimeTable(user);
+		List<Date> dates = TimeTableUtilities.getPersonalTimeTable(user);
 		Date current = new Date();
 		Date unitDate = null;
 		if (dates.size() > unitNumber) {

@@ -42,18 +42,6 @@ public class TimeTableMarkup extends DefaultMarkupType {
 		super(markup);
 	}
 
-	// @Override
-	// public KnowWEDomRenderer getRenderer() {
-	// return new KnowWEDomRenderer() {
-	// @Override
-	// public void render(Article article, Section sec, UserContext user,
-	// StringBuilder string) {
-	// user.getParameters().put(TableRenderer.QUICK_EDIT_FLAG, "false");
-	// DelegateRenderer.getInstance().render(article, sec, user, string);
-	// }
-	// };
-	// }
-
 	public static List<Date> getDates(Section<TimeTableMarkup> s) {
 		List<Date> result = new ArrayList<Date>();
 		List<Section<DateT>> found = new ArrayList<Section<DateT>>();

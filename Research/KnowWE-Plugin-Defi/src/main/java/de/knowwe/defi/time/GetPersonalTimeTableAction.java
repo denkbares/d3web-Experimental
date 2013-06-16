@@ -20,11 +20,13 @@ package de.knowwe.defi.time;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.defi.menu.MenuUtilities;
 
 
 /**
@@ -37,16 +39,21 @@ public class GetPersonalTimeTableAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String user = context.getParameter("user");
-		List<Date> timetable = TimeTableUtilities.getTimeTable(user);
-
-		StringBuilder dates = new StringBuilder();
+		List<Date> dates = new ArrayList<Date>();
+		StringBuilder datesStr = new StringBuilder();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-		for (Date date : timetable) {
-			dates.append(sdf.format(date) + "#");
-		}
-		dates.delete(dates.length() - 1, dates.length());
-		context.getWriter().write(dates.toString());
 
+		dates.addAll(TimeTableUtilities.getPersonalTimeTable(user));
+		for (Date date : dates) {
+			datesStr.append(sdf.format(date) + "#");
+		}
+
+		for (int i = dates.size(); i < MenuUtilities.getRootUnits().size(); i++) {
+			datesStr.append("-#");
+		}
+
+		datesStr.delete(datesStr.length() - 1, datesStr.length());
+		context.getWriter().write(datesStr.toString());
 	}
 
 }

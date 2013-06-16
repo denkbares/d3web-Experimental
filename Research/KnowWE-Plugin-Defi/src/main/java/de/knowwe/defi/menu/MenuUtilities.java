@@ -138,7 +138,7 @@ public class MenuUtilities {
 			}
 		}
 
-		List<Date> dates = TimeTableUtilities.getTimeTable(user);
+		List<Date> dates = TimeTableUtilities.getPersonalTimeTable(user);
 		Date current = new Date();
 		Date unitDate = null;
 		if (unitNumber < dates.size()) {

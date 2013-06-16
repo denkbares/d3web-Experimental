@@ -31,6 +31,7 @@ import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.wikiConnector.WikiConnector;
+import de.knowwe.defi.menu.MenuUtilities;
 import de.knowwe.defi.utils.ReplaceSectionUtils;
 
 /**
@@ -43,10 +44,11 @@ public class TimeTableAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String[] days = context.getParameter("inputs").split(":");
-		String timetableContent = createTimeTableTemplate(days);
 		ArticleManager mgr = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
 		WikiConnector wikiConnector = Environment.getInstance().getWikiConnector();
+		String timetableContent = createTimeTableTemplate(days);
 		String pageName = TimeTableUtilities.getTimeTableTemplatePagename();
+
 
 		// timetable doesn't exist
 		if (!wikiConnector.doesArticleExist(pageName)) {
@@ -78,6 +80,9 @@ public class TimeTableAction extends AbstractAction {
 		String content = "%%ZeitplanTemplate" + System.getProperty("line.separator");
 		for (String number : days) {
 			content += number + System.getProperty("line.separator");
+		}
+		for (int i = days.length; i < MenuUtilities.getRootUnits().size(); i++) {
+			content += 0 + System.getProperty("line.separator");
 		}
 		content += "%";
 
