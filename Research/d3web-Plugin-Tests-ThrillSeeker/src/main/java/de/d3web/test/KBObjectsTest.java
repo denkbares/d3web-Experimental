@@ -47,6 +47,11 @@ public abstract class KBObjectsTest extends KBTest {
 				de.d3web.testing.TestParameter.Type.Regex,
 				Mode.Mandatory,
 				"A regular expression naming those d3web objects or their parents to be excluded from the tests.");
+		addIgnoreParameter(
+				"children",
+				Mode.Optional,
+				"A boolean value, determining if the children should also be ignored", "true",
+				"false");
 	}
 
 	@Override
@@ -98,7 +103,7 @@ public abstract class KBObjectsTest extends KBTest {
 	 */
 	protected String[] getAdditionalIgnores(String[] args) {
 		return new String[] {
-				"now", "start" };
+				"now", "start", "P000" };
 	}
 
 	protected abstract List<TerminologyObject> doTest(KnowledgeBase kb, List<TerminologyObject> objects, String[] args);
