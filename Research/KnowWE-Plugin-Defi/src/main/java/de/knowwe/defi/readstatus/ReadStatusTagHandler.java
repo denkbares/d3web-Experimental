@@ -18,7 +18,6 @@
  */
 package de.knowwe.defi.readstatus;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -61,85 +60,70 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	@Override
 	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 		StringBuilder readstatus = new StringBuilder();
-		List<Section<DashTreeElement>> units = MenuUtilities.getAllUnits();
+		List<Section<DashTreeElement>> rootUnits = MenuUtilities.getRootUnits();
+		List<Section<DashTreeElement>> allUnits = MenuUtilities.getAllUnits();
 		List<Date> dates = TimeTableUtilities.getPersonalTimeTable(userContext.getUserName());
-		List<String> readbuttons = new ArrayList<String>();
-		// Zählt Rooteinheiten
-		int rootCounter = 0;
-		// Einheit komplett gelesen?
-		boolean read = true;
-		// -1: vergangen, 0: aktiv; 1: anstehend
-		int timeStatus = 0;
 		Date current = new Date();
-		Date unitDate = new Date();
-		Calendar calendar = new GregorianCalendar();
+		boolean unitsOpen = false;
 
-		for (Section<DashTreeElement> rootUnit : units) {
-
-			// Ist die Einheit eine Rooteinheit?
-			if (DashTreeUtils.getDashLevel(rootUnit) == 0) {
-				// Datum der Einheit
-				if (rootCounter >= dates.size()) {
-					result.appendHtml("<p>Fehler: Zu wenig Zeiteinheiten im <a href='Wiki.jsp?page=Zeitplan'>Zeitplan</a> vorhanden</p>");
-					return;
-				}
-
-				unitDate = dates.get(rootCounter);
-				// Hole alle Readbuttons aller Untereinheiten und der Einheit
-				readbuttons = searchForReadbuttons(MenuUtilities.getSubUnits(rootUnit, units));
-
-				for (int i = 0; i < readbuttons.size(); i++) {
-					// Prüfe ob alle Buttons der Lektion geklickt wurden
-					if (!getReadbuttonStatus(readbuttons.get(i),
-							userContext.getUserName())) read = false;
-				}
-
-				calendar.setTime(dates.get(rootCounter));
-				calendar.add(Calendar.DAY_OF_MONTH, DAYS_UNTIL_WARNING);
-				Date warning = calendar.getTime();
-
-				// Einheit anstehend
-				if (unitDate.after(current)) {
-					timeStatus = 1;
-				}
-				// Einheit aktiv
-				else if (rootCounter + 1 < dates.size()
-						&& dates.get(rootCounter + 1).after(current)) {
-					timeStatus = 0;
-				}
-				// Letzte Einheit
-				else if (rootCounter + 1 == dates.size()) {
-					if (current.before(warning)) timeStatus = 0;
-					else timeStatus = -1;
-				}
-				// Einheit vergangen
-				else {
-					timeStatus = -1;
-				}
-
-				/* ------------------------------------------------------------ */
-				/* AUSGABE */
-				/* ------------------------------------------------------------ */
-				if (!read) {
-					readstatus.append("<li class='readstatus'>");
-					if (timeStatus == -1 || (timeStatus == 0 && !current.before(warning))) readstatus.append("In ");
-					readstatus.append("<a href='Wiki.jsp?page="
-							+ getPageName(rootUnit) + "'>" + getLabel(rootUnit)
-							+ "</a> ");
-
-					if (timeStatus == -1 || (timeStatus == 0 && !current.before(warning))) readstatus.append(" haben Sie noch nicht alle Seiten bearbeitet!");
-
-					readstatus.append("</li>");
-				}
-				/* ------------------------------------------------------------ */
-
-				read = true;
-				rootCounter++;
-			}
-
+		// Prüfe ob jeder root unit ein Zeitpunkt zugewiesen wurde
+		if (rootUnits.size() > dates.size()) {
+			result.appendHtml("<p>Fehler: Zu wenig Zeiteinheiten im <a href='Wiki.jsp?page=Zeitplan'>Zeitplan</a> vorhanden</p>");
+			return;
 		}
 
+		for (int i = 0; i < rootUnits.size(); i++) {
+			Section<DashTreeElement> unit = rootUnits.get(i);
+			int unread = 0;
+
+			// Prüfe ob alle Buttons einer Einheit beantwortet wurden
+			List<String> rBtnsForUnit = searchForReadbuttons(MenuUtilities.getSubUnits(unit,
+					allUnits));
+			for (String readBtn : rBtnsForUnit) {
+				if (!getReadbuttonStatus(readBtn, userContext.getUserName())) unread++;
+			}
+
+			if (unread == 0)
+				continue;
+
+			// Daten
+			Date unitDate = dates.get(i);
+			Date warningDate = getDateOfWarning(unitDate);
+
+			/* ------------------------------------------------------------ */
+			/* AUSGABE */
+			/* ------------------------------------------------------------ */
+			if (current.compareTo(unitDate) >= 0) {
+				readstatus.append("<li class='readstatus'>");
+				if (current.compareTo(warningDate) >= 0) readstatus.append("In ");
+				readstatus.append("<a href='Wiki.jsp?page=" + getPageName(unit) + "'>"
+						+ getLabel(unit) + "</a>");
+				if (current.compareTo(warningDate) >= 0) readstatus.append(" haben Sie " + unread
+						+ " Bewertungen noch nicht abgegeben.");
+				readstatus.append("</li>");
+
+				unitsOpen = true;
+			}
+			/* ------------------------------------------------------------ */
+		}
+
+		if (!unitsOpen) readstatus.append("<li style='list-style: none'>Keine offenen Bewertungen</li>");
+
 		result.appendHtml(readstatus.toString());
+	}
+
+	/**
+	 * Calculate date of warning.
+	 * 
+	 * @param date
+	 * @created 17.06.2013
+	 * @return
+	 */
+	private Date getDateOfWarning(Date date) {
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		calendar.add(Calendar.DAY_OF_MONTH, DAYS_UNTIL_WARNING);
+		return calendar.getTime();
 	}
 
 	/**
