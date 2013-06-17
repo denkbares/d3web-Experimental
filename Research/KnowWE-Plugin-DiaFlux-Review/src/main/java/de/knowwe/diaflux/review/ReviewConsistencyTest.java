@@ -101,7 +101,7 @@ public class ReviewConsistencyTest extends AbstractTest<Article> {
 
 	@Override
 	public String getDescription() {
-		return "This test checks, if a flow is present for each review file. As reviews are assigned by name, reviews can be 'lost', when renaming flows.";
+		return "This test checks, if a flow is present for each review file. As reviews are assigned by name, reviews can be lost, when renaming flows.";
 	}
 
 
