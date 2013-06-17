@@ -1,7 +1,7 @@
 function mailForm(id) {
 	var nachricht = document.getElementById(id).nachricht.value;
 	if (nachricht == "") {
-		alert("Sie haben keine Nachricht eingegeben");
+		defiAlert("Sie haben keine Nachricht eingegeben");
 		return false;
 	}
 
@@ -17,8 +17,7 @@ function mailForm(id) {
 			action : '',
 			ids : [ '' ],
 			fn : function() {
-				alert(this.responseText);
-				document.location.reload();
+				defiAlert(this.responseText, function() {location.reload();});
 			}
 		}
 	}

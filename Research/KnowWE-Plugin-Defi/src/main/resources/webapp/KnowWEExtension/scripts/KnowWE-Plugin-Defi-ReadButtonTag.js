@@ -10,7 +10,7 @@ function sendReadbutton(id, threshold) {
 	}
 	
 	if (checked == -1) {
-		alert('Bitte wählen Sie eine Bewertung aus')
+		defiAlert('Bitte wählen Sie eine Bewertung aus')
 		return;
 	}
 	

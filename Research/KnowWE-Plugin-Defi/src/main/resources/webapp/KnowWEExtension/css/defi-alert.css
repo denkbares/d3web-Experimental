@@ -1,6 +1,6 @@
 #alertDialog {
 	width: 350px;
-	position: absolute;
+	position: fixed;
 	top: 10px;
 	left: 10px;
 	padding: 20px 20px;

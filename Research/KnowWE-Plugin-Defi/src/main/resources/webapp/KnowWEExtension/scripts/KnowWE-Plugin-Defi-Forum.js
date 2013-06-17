@@ -11,12 +11,12 @@ function forumForm(form) {
 
 function sendforumForm(id) {
 	if (document.getElementsByName(id+"_topic")[0].value == "") {
-		alert("Bitte geben Sie eine Überschrift an.");
+		defiAlert("Bitte geben Sie eine Überschrift an.");
 		return;
 	}
 	
 	if (document.getElementsByName(id+"_text")[0].value == "") {
-		alert("Bitte geben Sie eine Nachricht ein.");
+		defiAlert("Bitte geben Sie eine Nachricht ein.");
 		return;
 	}
 			
@@ -37,8 +37,10 @@ function sendforumForm(id) {
 				ids : [ '' ],
 				fn : function(){ 
 						var res = this.responseText.split("\n");
-						if(res[0] != "") alert(res[0]); 
-						window.location = "Wiki.jsp?page="+res[1];
+						if(res[0] != "") 
+							defiAlert(res[0], function() {window.location = "Wiki.jsp?page="+res[1];}); 
+						else
+							window.location = "Wiki.jsp?page="+res[1];
 					}
 			}
 	}

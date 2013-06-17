@@ -21,22 +21,22 @@ function registerUser() {
 	
 	if (loginname.value == "") {
 		loginname.style.borderColor = "red";
-		alert("Bitte einen Benutzernamen eingeben.");
+		defiAlert("Bitte einen Benutzernamen eingeben.");
 		return;
 	}
 	if (password.value == "") {
 		password.style.borderColor = "red";
-		alert("Bitte ein Passwort eingeben.");
+		defiAlert("Bitte ein Passwort eingeben.");
 		return;
 	}
 	if (password.value != password2.value) {
 		password.style.borderColor = "red";
 		password2.style.borderColor = "red";
-		alert("Die Passwörter müssen übereinstimmen.");
+		defiAlert("Die Passwörter müssen übereinstimmen.");
 		return;
 	}
 	if (fullname.value == "") {
-		alert("Bitte den vollen Namen eingeben.");
+		defiAlert("Bitte den vollen Namen eingeben.");
 		return;
 	}
 	
@@ -55,8 +55,7 @@ function registerUser() {
 				action : '',
 				ids : [ '' ],
 				fn : function() {
-					alert(this.responseText);
-					document.location.reload();
+					defiAlert(this.responseText, function() {location.reload();});
 				}
 			}
 	}
@@ -79,8 +78,7 @@ function deleteUser(username) {
 			action : '',
 			ids : [ '' ],
 			fn : function() {
-				alert(this.responseText);
-				document.location.reload();
+				defiAlert(this.responseText, function() {location.reload();});
 			}
 		}
 	}
@@ -124,7 +122,7 @@ function editUser(i, username) {
 	}
 	
 	if (password.value != password2.value) {
-		alert("Die Passwörter müssen übereinstimmen.");
+		defiAlert("Die Passwörter müssen übereinstimmen.");
 		password.style.borderColor = "red";
 		password2.style.borderColor = "red";
 		return;
@@ -143,8 +141,7 @@ function editUser(i, username) {
 				action : '',
 				ids : [ '' ],
 				fn : function() {
-					alert(this.responseText);
-					document.location.reload();
+					defiAlert(this.responseText, function() {location.reload();});
 				}
 			}
 	}

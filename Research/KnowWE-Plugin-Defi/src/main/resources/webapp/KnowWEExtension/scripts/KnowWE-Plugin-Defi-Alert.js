@@ -1,8 +1,8 @@
-//TODO: Schwacher workaround
-if(document.getElementById) {
-	window.alert = function(txt) {
-		alertCalled(txt);
-	}
+var reload;
+
+function defiAlert(txt, reload) {
+	this.reload = reload;
+	alertCalled(txt);
 }
 
 function alertCalled(txt) {
@@ -22,16 +22,18 @@ function alertCalled(txt) {
 	alertDiv.innerHTML = createAlertInnerHTML(txt);
 }
 
-function alertClosed() {
-	document.getElementsByTagName("body")[0].removeChild(document.getElementById("alertDialog"));
-	document.getElementsByTagName("body")[0].removeChild(document.getElementById("alertDialogModal"));
-}
-
 function createAlertInnerHTML(txt) {
 	var innerHTML = "<p>"+txt+"</p>";
 	innerHTML += "<input type='button' value='OK' onclick='alertClosed()' />";
 		
 	return innerHTML;
+}
+
+function alertClosed() {
+	document.getElementsByTagName("body")[0].removeChild(document.getElementById("alertDialog"));
+	document.getElementsByTagName("body")[0].removeChild(document.getElementById("alertDialogModal"));
+
+	if (reload) location.reload();
 }
 
 function linkAlertCalled(txt, link) {

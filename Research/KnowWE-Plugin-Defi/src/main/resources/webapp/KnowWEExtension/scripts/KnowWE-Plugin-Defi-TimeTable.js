@@ -28,8 +28,7 @@ function changeTimeTableTemplate() {
 			action : '',
 			ids : [ '' ],
 			fn : function() {
-				alert(this.responseText);
-				location.reload(2500);
+				defiAlert(this.responseText, function() {location.reload();});
 			}
 		}
 	}
@@ -81,8 +80,7 @@ function changePersonalTimeTable() {
 			action : '',
 			ids : [ '' ],
 			fn : function() {
-				alert(this.responseText);
-				document.location.reload(2000);
+				defiAlert(this.responseText, function() {location.reload();});
 			}
 		}
 	}
