@@ -497,10 +497,19 @@ DiaFlux.ReviewTool = (function(flow) {
 					if (state == 0){
 						hint.text("This issue was changed to '" + STATES[0] + "' again.")
 					} else {
-						//TODO would be better, if each comment had a pagerev, in case its state is set to open again
-						var diffLink = this.createDiffLink(item.getPageRev(), comments[i].getResolvedPageRev());
-						hint.text("This issue was changed to '" + STATES[1] + "'. ")
-						.append(jq$('<a>', {href: diffLink}).text("Show differences."));
+						var issueRev = item.getPageRev();
+						var resolvedRev = comments[i].getResolvedPageRev();
+						var diffChild;
+						if (issueRev == resolvedRev){
+							diffChild = jq$('<span>').text("No differences.");
+							
+						} else {
+							//TODO would be better, if each comment had a pagerev, in case its state is set to open again
+							var diffLink = this.createDiffLink(issueRev, resolvedRev);
+							diffChild = jq$('<a>', {href: diffLink}).text("Show differences.")
+						}
+						
+						hint.text("This issue was changed to '" + STATES[1] + "'. ").append(diffChild);
 					}
 					var stateDiv = jq$('<div>', {'class' : 'reviewItemState'}).appendTo(infoDiv);
 					stateDiv.append(this.renderIcon(hint, STATES, state));
