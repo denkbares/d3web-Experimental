@@ -132,6 +132,16 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
+
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="InformalNode">
+		<parameter id="class"
+			value="de.d3web.diaflux.test.InformalNodeTest" />
+		<parameter id="name" value="InformalNode" />
+		<parameter id="description" value="CITest InformalNode" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
 	
 	<!--extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
 		id="DiaFluxCyclomaticComplexity">
