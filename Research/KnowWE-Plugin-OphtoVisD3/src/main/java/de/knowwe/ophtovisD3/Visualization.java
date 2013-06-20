@@ -62,6 +62,12 @@ public class Visualization {
 						+ context
 						+ "/KnowWEExtension/css/toolbar.css\">"
 						+
+						// visCollapsableTree
+						"	<link rel=\"stylesheet\" href=\""
+						+ context
+						+ "/KnowWEExtension/css/visCollapsableTreeStyle.css\">"
+						//
+						+
 						"	<script type=\"text/javascript\" src=\""
 						+ context
 						+ "/KnowWEExtension/scripts/d3.js \"></script>\r\n"
@@ -70,6 +76,12 @@ public class Visualization {
 						+ context
 						+ "/KnowWEExtension/scripts/d3Config.js \"></script>\r\n"
 						+
+						// visCollapsableTree
+						"	<script type=\"text/javascript\" src=\""
+						+ context
+						+ "/KnowWEExtension/scripts/visCollapsableTree.js \"></script>\r\n"
+						+
+						//
 						"	<script type=\"text/javascript\" src=\""
 						+ context
 						+ "/KnowWEExtension/scripts/jquery-1.9.1.js \"></script>\r\n"+
@@ -139,6 +151,10 @@ public class Visualization {
 						"<li class=\"active menue\" onclick=\"createBubble()\">Bubble </li>\r\n" +
 						"<li class=\"menue\" onclick=\"createWheel()\">Wheel </li>\r\n" +
 						"<li class=\"menue\" onclick=\"createTree()\"> Tree </li>\r\n" +
+						// "<li class=\"menue\" onclick=\"createTreeDiagonal()\"> Tree diagonal </li>\r\n"
+						// +
+						"<li class=\"menue\" onclick=\"createTreeCollapsable()\"> Tree Collapsable </li>\r\n"
+						+
 //						"<li class=\"editor\">Editor▼</li>\r\n" +
 						"</ul>\r\n" +
 						"</div>\r\n" +
