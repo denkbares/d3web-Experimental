@@ -65,6 +65,10 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 				OntoVisType.ANNOTATION_EXCLUDENODES);
 		parameterMap.put(RenderingCore.EXCLUDED_NODES, excludeNodes);
 
+		String outgoingEdges = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_OUTGOING_EDGES);
+		parameterMap.put(RenderingCore.SHOW_OUTGOING_EDGES, outgoingEdges);
+
 		String classes = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_SHOWCLASSES);
 		parameterMap.put(RenderingCore.SHOW_CLASSES, classes);
