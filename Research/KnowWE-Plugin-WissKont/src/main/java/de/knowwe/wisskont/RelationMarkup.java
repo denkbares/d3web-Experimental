@@ -34,6 +34,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
+import de.knowwe.termbrowser.DroppableTargetSurroundingRenderer;
 
 /**
  * 

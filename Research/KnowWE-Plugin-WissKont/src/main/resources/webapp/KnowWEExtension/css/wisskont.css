@@ -76,7 +76,7 @@ clear: both;
 	}
 	
 .deletableListElement:hover {
-	background-color: #CCCCCC;
+	background-color: #DDDDDD;
 	display: inline;
 	border: 1px dotted black;
     border-radius: 8px 8px 8px 8px;
