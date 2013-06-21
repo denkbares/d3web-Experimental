@@ -24,6 +24,8 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 
 /**
+ * Renders an html element with a css class for making this section a
+ * drop-target.
  * 
  * @author jochenreutelshofer
  * @created 30.11.2012
@@ -32,12 +34,17 @@ public class DroppableTargetSurroundingRenderer implements SurroundingRenderer {
 
 	@Override
 	public void renderPre(Section<?> section, UserContext user, RenderResult string) {
-		string.appendHtml("<div class='dropTargetMarkup'>");
+		if (section.getText().trim().length() > 0) {
+			string.appendHtml("<div class='dropTargetMarkup'>");
+
+		}
 	}
 
 	@Override
 	public void renderPost(Section<?> section, UserContext user, RenderResult string) {
-		string.appendHtml("</div>\n");
+		if (section.getText().trim().length() > 0) {
+			string.appendHtml("</div>\n");
+		}
 	}
 
 }
