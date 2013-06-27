@@ -52,7 +52,7 @@ public class Rdf2GoPropagationListener implements PropagationListener {
 	public void propagationFinished(Session session, Collection<PropagationEntry> entries) {
 		for (PropagationEntry entry : entries) {
 			TerminologyObject changedObject = entry.getObject();
-			D3webRdf2GoSessionManager mgr = D3webRdf2GoSessionManager.getInstance();
+			Rdf2GoSessionManager mgr = Rdf2GoSessionManager.getInstance();
 			mgr.removeFactStatements(session, changedObject);
 			mgr.addFactAsStatements(session, changedObject, entry.getNewValue());
 		}

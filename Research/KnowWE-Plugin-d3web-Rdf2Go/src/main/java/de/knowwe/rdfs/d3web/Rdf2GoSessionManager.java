@@ -18,25 +18,25 @@ import de.d3web.core.session.blackboard.Fact;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
-public class D3webRdf2GoSessionManager {
+public class Rdf2GoSessionManager {
 
 	private final StatementCache statementCache = new StatementCache();
 
-	private static D3webRdf2GoSessionManager instance = null;
+	private static Rdf2GoSessionManager instance = null;
 
-	public static D3webRdf2GoSessionManager getInstance() {
-		if (instance == null) instance = new D3webRdf2GoSessionManager();
+	public static Rdf2GoSessionManager getInstance() {
+		if (instance == null) instance = new Rdf2GoSessionManager();
 		return instance;
 	}
 
-	private D3webRdf2GoSessionManager() {
+	private Rdf2GoSessionManager() {
 
 	}
 
 	public void addSession(Session session, boolean commitAfterPropagation) {
 		Set<Statement> statements = new HashSet<Statement>();
 		Rdf2GoCore core = Rdf2GoCore.getInstance();
-		URI sessionIdURI = D3webRdf2GoURIs.getSessionIdURI(session);
+		URI sessionIdURI = Rdf2GoD3webUtils.getSessionIdURI(session);
 		URI sessionURI = core.createlocalURI(Session.class.getSimpleName());
 
 		// lns:sessionId rdf:type lns:Session
@@ -80,21 +80,21 @@ public class D3webRdf2GoSessionManager {
 		BlankNode factNode = core.createBlankNode();
 
 		// blank node (Fact) rdf:type lns:Fact
-		Rdf2GoUtils.addStatement(factNode, RDF.type, D3webRdf2GoURIs.getFactURI(), statements);
+		Rdf2GoUtils.addStatement(factNode, RDF.type, Rdf2GoD3webUtils.getFactURI(), statements);
 
 		// lns:sessionID lns:hasFact blank node (Fact)
-		URI sessionIdURI = D3webRdf2GoURIs.getSessionIdURI(session);
-		Rdf2GoUtils.addStatement(sessionIdURI, D3webRdf2GoURIs.getHasFactURI(), factNode,
+		URI sessionIdURI = Rdf2GoD3webUtils.getSessionIdURI(session);
+		Rdf2GoUtils.addStatement(sessionIdURI, Rdf2GoD3webUtils.getHasFactURI(), factNode,
 				statements);
 
 		// blank node (Fact) lns:hasTerminologyObject lns:toName
-		Rdf2GoUtils.addStatement(factNode, D3webRdf2GoURIs.getHasTerminologyObjectURI(),
+		Rdf2GoUtils.addStatement(factNode, Rdf2GoD3webUtils.getHasTerminologyObjectURI(),
 				terminologyObject.getName(), statements);
 
 		Node valueNode = getValueNode(value);
 
 		// blank node (Fact) lns:hasValue lns:value
-		Rdf2GoUtils.addStatement(factNode, D3webRdf2GoURIs.getHasValueURI(),
+		Rdf2GoUtils.addStatement(factNode, Rdf2GoD3webUtils.getHasValueURI(),
 				valueNode, statements);
 
 		// add fact statements to cache

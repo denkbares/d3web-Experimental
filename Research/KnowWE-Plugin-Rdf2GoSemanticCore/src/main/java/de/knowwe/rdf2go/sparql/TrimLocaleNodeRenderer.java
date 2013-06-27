@@ -25,6 +25,10 @@ public class TrimLocaleNodeRenderer implements SparqlResultNodeRenderer {
 
 	@Override
 	public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core, RenderMode mode) {
+		return trimLocale(text);
+	}
+
+	public static String trimLocale(String text) {
 		return text.replaceAll("@(?:de|en|fr|it|es|ru)$", "");
 	}
 

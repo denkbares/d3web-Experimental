@@ -16,10 +16,10 @@
 	</runtime>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="SubtreeHandler"
-		id="D3webTermDefinitionRdf2GoHandler">
-		<parameter id="class" value="de.knowwe.rdfs.d3web.D3webTermDefinitionRdf2GoHandler" />
-		<parameter id="name" value="D3webTermDefinitionRdf2GoHandler" />
-		<parameter id="description" value="Handler D3webTermDefinitionRdf2GoHandler" />
+		id="Rdf2GoTermDefinitionHandler">
+		<parameter id="class" value="de.knowwe.rdfs.d3web.Rdf2GoTermDefinitionHandler" />
+		<parameter id="name" value="Rdf2GoTermDefinitionHandler" />
+		<parameter id="description" value="Handler Rdf2GoTermDefinitionHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="handlerpriority" value="-200" />
@@ -29,12 +29,22 @@
 		<parameter id="scope" value="AnswerDefinition" />
 	</extension>
 
+	<extension plugin-id="KnowWEExtensionPoints" point-id="SubtreeHandler"
+		id="Rdf2GoPropertyHandler">
+		<parameter id="class" value="de.knowwe.rdfs.d3web.Rdf2GoPropertyHandler" />
+		<parameter id="name" value="Rdf2GoPropertyHandler" />
+		<parameter id="description" value="Handler Rdf2GoPropertyHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="handlerpriority" value="-200" />
+		<parameter id="scope" value="PropertyDeclarationType" />
+	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="SubtreeHandler"
-		id="KnowledgeBaseRdf2GoHandler">
-		<parameter id="class" value="de.knowwe.rdfs.d3web.KnowledgeBaseRdf2GoHandler" />
-		<parameter id="name" value="KnowledgeBaseRdf2GoHandler" />
-		<parameter id="description" value="Handler KnowledgeBaseRdf2GoHandler" />
+		id="Rdf2GoKnowledgeBaseHandler">
+		<parameter id="class" value="de.knowwe.rdfs.d3web.Rdf2GoKnowledgeBaseHandler" />
+		<parameter id="name" value="Rdf2GoKnowledgeBaseHandler" />
+		<parameter id="description" value="Handler Rdf2GoKnowledgeBaseHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="handlerpriority" value="-200" />

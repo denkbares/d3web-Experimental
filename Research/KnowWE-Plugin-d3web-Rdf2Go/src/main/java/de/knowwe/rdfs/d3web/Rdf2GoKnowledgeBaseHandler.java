@@ -16,7 +16,6 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
-import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 import de.d3web.we.object.D3webTermDefinition;
 import de.d3web.we.utils.D3webUtils;
@@ -28,7 +27,7 @@ import de.knowwe.core.report.Messages;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
-public class KnowledgeBaseRdf2GoHandler extends SubtreeHandler<D3webTermDefinition<?>> {
+public class Rdf2GoKnowledgeBaseHandler extends SubtreeHandler<D3webTermDefinition<?>> {
 
 	@Override
 	public Collection<Message> create(Article article, Section<D3webTermDefinition<?>> section) {
@@ -58,16 +57,7 @@ public class KnowledgeBaseRdf2GoHandler extends SubtreeHandler<D3webTermDefiniti
 	}
 
 	private void addNamedObjectChildrenIndexes(Article article, NamedObject namedObject) {
-		Identifier termIdentifier;
-		if (namedObject instanceof Choice) {
-			termIdentifier = new Identifier(((Choice) namedObject).getQuestion().getName(),
-					namedObject.getName());
-
-		}
-		else {
-			termIdentifier = new Identifier(namedObject.getName());
-		}
-		String externalForm = Rdf2GoUtils.getCleanedExternalForm(termIdentifier);
+		String externalForm = Rdf2GoD3webUtils.getIdentifierExternalForm(namedObject);
 		Rdf2GoCore core = Rdf2GoCore.getInstance();
 		URI termIdentifierURI = core.createlocalURI(externalForm);
 
@@ -81,8 +71,7 @@ public class KnowledgeBaseRdf2GoHandler extends SubtreeHandler<D3webTermDefiniti
 			parents = new TerminologyObject[] { ((Choice) namedObject).getQuestion() };
 		}
 		for (TerminologyObject parent : parents) {
-			String parentExternalForm = Rdf2GoUtils.getCleanedExternalForm(new Identifier(
-					parent.getName()));
+			String parentExternalForm = Rdf2GoD3webUtils.getIdentifierExternalForm(parent);
 			int index = -1;
 			if (namedObject instanceof TerminologyObject) {
 				TerminologyObject[] children = parent.getChildren();
