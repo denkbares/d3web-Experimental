@@ -16,37 +16,34 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.termbrowser;
+package de.knowwe.wisskont;
 
-import java.io.IOException;
-import java.util.List;
-
-import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.parsing.Section;
+import org.ontoware.rdf2go.model.node.URI;
 
 /**
  * 
  * @author jochenreutelshofer
- * @created 04.06.2013
+ * @created 25.06.2013
  */
-public interface DragDropEditInserter<T extends Type> {
+public class CaveMarkup extends RelationMarkup {
+
+	public static final String KEY = "cave";
 
 	/**
-	 * 
-	 * @created 21.06.2013
-	 * @param s
-	 * @param droppedTerm
-	 * @param relationKind
-	 * @param context
-	 * @return the new kdom-id of the corresponding section after modification
-	 *         and parsing
-	 * @throws IOException
+	 * @param key
 	 */
-	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException;
+	public CaveMarkup() {
+		super(KEY);
+	}
 
-	public List<String> provideInsertRelationOptions(Section<?> s, String droppedTerm);
+	@Override
+	public String getName() {
+		return "Cave-Relationen";
+	}
 
-	public Class<T> getTypeClass();
+	@Override
+	public URI getRelationURI() {
+		return createURI(KEY);
+	}
 
 }

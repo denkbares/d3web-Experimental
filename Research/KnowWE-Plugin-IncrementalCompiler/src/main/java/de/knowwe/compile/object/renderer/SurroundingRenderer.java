@@ -23,6 +23,8 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 
 /**
+ * A renderer with pre- and post hook that can be used to embrace other content
+ * (e.g., with an html-element).
  * 
  * @author jochenreutelshofer
  * @created 28.11.2012

@@ -468,6 +468,15 @@ public class IncrementalCompiler implements EventListener {
 			return messages;
 		}
 
+		// TermIdentifier matches equalsIgnoreCase, we need strong equals here
+		if (termDefiningSections.size() == 1) {
+			Section<? extends SimpleDefinition> def = termDefiningSections.iterator().next();
+			if (!termIdentifier.getLastPathElement().equals(def.get().getTermName(def))) {
+				messages.add(Messages.noSuchObjectError(termIdentifier.toString()));
+				return messages;
+			}
+		}
+
 		if (termDefiningSections.size() > 1) {
 			if (terminology.isPredefinedObject(termIdentifier)) {
 				messages.add(Messages.warning("This is a predefined term. " +

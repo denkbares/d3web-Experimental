@@ -20,7 +20,12 @@ function initDropableMarkupSection(element) {
     				var termname = termnameDiv.html();
     				termname = termname.replace(/<wbr>/g, "");
     				var markupElement = jq$(this).find("div.defaultMarkupFrame");
+    				
     				var markupID = markupElement.attr('id');
+    				if(!markupID) {
+    					markupID = jq$(this).attr('dragdropid');
+    				}
+    				
     				//alert('dropped: '+ termname + ' on id: '+markupID  );
     				sendAddedTerm(termname, markupID);
     				},
@@ -228,17 +233,33 @@ function rerenderSection(oldTargetID, newTargetID) {
 		url : KNOWWE.core.util.getURL(params),
 		 response : {
 			 fn : function() {
-				 	var markupBlockOld = jq$('#'+oldTargetID).parent();
+				 if(this.response.toLowerCase().indexOf("not found") >= 0) {
+						// if section can not be rerendered correctly for instance because multiple sections have changed/been created
+						 location.reload();
+				} else {
+				 
+				 	// insert re-rendered content block
+				 	var markupBlockOld = jq$('div[dragdropid="'+oldTargetID+'"]');
+				 	if(!markupBlockOld) {
+				 		markupBlockOld = jq$('#'+oldTargetID).parent();
+				 	}
 					markupBlockOld.replaceWith(this.response);
-					var markupBlockNew = jq$('#'+newTargetID).parent();
+					
+					// re-init edit-functionalities for inserted part
+					var markupBlockNew = jq$('div[dragdropid="'+newTargetID+'"]');
+					if(!markupBlockNew) {
+						markupBlockNew = jq$('#'+newTargetID).parent();
+					}
 					initDropableMarkupSection(markupBlockNew);
 					initAllDeleteItem();
 					KNOWWE.core.rerendercontent.animateDefaultMarkupMenu(markupBlockNew);
-				},
+				}
+			},
 		 },
 	}
 	
-	 new _KA(options).send();
+		new _KA(options).send();
+	
 }
 
 function updateTermBrowser(event, ui) {

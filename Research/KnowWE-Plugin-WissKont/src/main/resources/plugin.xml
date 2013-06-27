@@ -267,6 +267,19 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="CaveMarkup">
+		<parameter id="class"
+			value="de.knowwe.wisskont.CaveMarkup" />
+		<parameter id="name" value="CaveMarkup" />
+		<parameter id="description" value="KnowWEObjectType CaveMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+		<parameter id="css" value="wisskont.css" />
+		<parameter id="script" value="deleteListElement.js" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="CanMarkup">
 		<parameter id="class"
 			value="de.knowwe.wisskont.CanMarkup" />
