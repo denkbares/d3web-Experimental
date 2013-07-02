@@ -62,6 +62,7 @@ public class ForumBoxAction extends AbstractAction {
 		String topic = map.get("ForumArticleTopic");
 		String web = context.getWeb();
 
+
 		boolean canEditPage = Environment.getInstance().getWikiConnector().userCanEditArticle(
 				topic, context.getRequest());
 
@@ -81,6 +82,7 @@ public class ForumBoxAction extends AbstractAction {
 				// // do nothing!
 				// }
 
+				text = makeValidXML(text);
 				text = text.replace("\n", "\\\\ ");
 
 				Article article = Environment.getInstance().getArticle(web, topic);
@@ -129,5 +131,21 @@ public class ForumBoxAction extends AbstractAction {
 		}
 
 		return "{\"msg\" : \"error\"}";
+	}
+
+	/**
+	 * 
+	 * @created 02.07.2013
+	 * @param text
+	 * @return
+	 */
+	private String makeValidXML(String text) {
+		text = text.replace("&", "&amp;");
+		text = text.replace(">", "&gt;");
+		text = text.replace("<", "&lt;");
+		text = text.replace("\"", "&quot;");
+		text = text.replace("'", "&apos;");
+
+		return text;
 	}
 }
