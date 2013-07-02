@@ -53,6 +53,9 @@
 			var sel = timeline.getSelection();
 			if (sel.length) {
 				if (sel[0].row != undefined) {
+		        	var id = 'revdetails';
+		        	setLoading(id);
+		        	
 					var row = sel[0].row;
 					var start = timeline.getItem(row).start;
 					var group = timeline.getItem(row).group;
@@ -84,7 +87,7 @@
 							url : KNOWWE.core.util.getURL(params),
 							response : {
 								action : 'insert',
-								ids : [ 'revdetails' ],
+								ids : [ id ],
 								fn : KNOWWE.core.util.addCollabsiblePluginHeader
 							}
 					}
@@ -98,6 +101,9 @@
 		}
 		
         function lineDragged() {
+        	var id = 'revdetails';
+        	setLoading(id);
+        	
 			var time = timeline.getCustomTime().getTime();
 			timeline.setSelection([]);
 
@@ -109,7 +115,7 @@
 					url : KNOWWE.core.util.getURL(params),
 					response : {
 						action : 'insert',
-						ids : [ 'revdetails' ],
+						ids : [ id ],
 						fn : KNOWWE.core.util.addCollabsiblePluginHeader
 					}
 			}
@@ -240,6 +246,8 @@
          */
         function restoreRev(time) {
         	if (confirm('Do you ready want to restore this revision?')) {
+            	var id = 'revdetails';
+            	setLoading(id);
     			var params = {
     					action : 'RestoreRevision',
     					date : time
@@ -248,7 +256,7 @@
     						url : KNOWWE.core.util.getURL(params),
     						response : {
     							action : 'insert',
-    							ids : [ 'revdetails' ]
+    							ids : [ id ]
 //    							fn : KNOWWE.core.util.addCollabsiblePluginHeader
     						}
     				}
@@ -263,13 +271,15 @@
          */
         function restoreUploadedRev() {
         	if (confirm('Do you ready want to overwrite wiki content with uploaded revision?')) {
+            	var id = 'revdetails';
+            	setLoading(id);
     			var params = {
     					action : 'RestoreUploadedRevision'    				}
     				var options = {
     						url : KNOWWE.core.util.getURL(params),
     						response : {
     							action : 'insert',
-    							ids : [ 'revdetails' ]
+    							ids : [ id ]
 //    							fn : KNOWWE.core.util.addCollabsiblePluginHeader
     						}
     				}
@@ -286,6 +296,7 @@
          */
         function showDiff(title,version) {
         	var diffTarget = 'diffdiv';
+        	setLoading(diffTarget);
 			var params = {
 					action : 'SimpleTextDiff',
 					title : title,
@@ -309,6 +320,7 @@
         
         function showUploadedDiff(title,version) {
         	var diffTarget = 'diffdiv';
+        	setLoading(diffTarget);
 			var params = {
 				action : 'UploadedTextDiff',
 				title : title
@@ -325,6 +337,8 @@
         }
         
         function showCurrentRev() {
+        	var id = 'revdetails';
+        	setLoading(id);
 			var params = {
 					action : 'CurrentRevDetails'
 				}
@@ -332,7 +346,7 @@
 						url : KNOWWE.core.util.getURL(params),
 						response : {
 							action : 'insert',
-							ids : [ 'revdetails' ]
+							ids : [ id ]
 //								fn : KNOWWE.core.util.addCollabsiblePluginHeader
 						}
 				}
@@ -340,6 +354,8 @@
         }
         
         function showUploadedRev() {
+        	var id = 'revdetails';
+        	setLoading(id);
 			var params = {
 					action : 'UploadedRevDetails'
 				}
@@ -347,9 +363,14 @@
 						url : KNOWWE.core.util.getURL(params),
 						response : {
 							action : 'insert',
-							ids : [ 'revdetails' ],
+							ids : [ id ],
 							fn : KNOWWE.core.util.addCollabsiblePluginHeader
 						}
 				}
 				new _KA( options ).send();
         }
+        
+        function setLoading(id) {
+        	document.getElementById(id).innerHTML = "<p class=\"box warning\">Loading ...</p>";
+        }
+        

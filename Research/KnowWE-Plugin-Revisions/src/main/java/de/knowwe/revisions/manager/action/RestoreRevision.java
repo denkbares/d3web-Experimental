@@ -103,21 +103,26 @@ public class RestoreRevision extends AbstractAction {
 				// page has changes
 				Article currentArticle = Environment.getInstance().getArticleManager(
 						context.getWeb()).getArticle(title);
-				messages.append("<p class=\"box ok\">Article '" + title + "' ");
-				if (version != -2) {
-					// page was other version, so restore the old content
-					Article oldVersionOfCurrentArticle = aman.getArticle(title);
-					Section<RootType> s = oldVersionOfCurrentArticle.getRootSection();
-					sectionsToUpdate.put(currentArticle.getRootSection().getID(), s.getText());
-					messages.append("restored to version " + version);
+				if (currentArticle != null) {
+					messages.append("<p class=\"box ok\">Article '" + title + "' ");
+					if (version != -2) {
+						// page was other version, so restore the old content
+						Article oldVersionOfCurrentArticle = aman.getArticle(title);
+						Section<RootType> s = oldVersionOfCurrentArticle.getRootSection();
+						sectionsToUpdate.put(currentArticle.getRootSection().getID(), s.getText());
+						messages.append("restored to version " + version);
+					}
+					else {
+						// page did not exist, so delete the content, but keep
+						// the page
+						sectionsToUpdate.put(currentArticle.getRootSection().getID(), "");
+						messages.append("cleared");
+					}
+					messages.append("</p>");
 				}
 				else {
-					// page did not exist, so delete the content, but keep the
-					// page
-					sectionsToUpdate.put(currentArticle.getRootSection().getID(), "");
-					messages.append("cleared");
+					// TODO: why does this happen??
 				}
-				messages.append("</p>");
 			}
 		}
 		return messages.toString();
