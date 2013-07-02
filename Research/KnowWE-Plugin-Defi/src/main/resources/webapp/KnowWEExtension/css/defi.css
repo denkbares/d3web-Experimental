@@ -112,7 +112,10 @@ table.menulink * {
 /* Readstatus */
 li.readstatus {
 	list-style-type: none;
-	color:red;
+}
+li.readstatusWARN {
+	list-style-type: none;
+	color: red;
 }
 /* Login */
 #login_defi {

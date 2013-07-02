@@ -1,8 +1,7 @@
 #alertDialog {
 	width: 350px;
 	position: fixed;
-	top: 10px;
-	left: 10px;
+	margin: 0;
 	padding: 20px 20px;
 	background-color: white;	
 	z-index: 2000;
@@ -20,7 +19,7 @@
 #alertDialog input {
 }
 #alertDialogModal {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;

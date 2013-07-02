@@ -19,9 +19,10 @@
 package de.knowwe.defi.forum;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.security.Principal;
 import java.text.ParseException;
@@ -399,20 +400,21 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	 */
 	private String getForumAttribute(String attribute, String forumXML) {
 		String attributeContent = "";
+		DocumentBuilderFactory dbf =
+					DocumentBuilderFactory.newInstance();
+		DocumentBuilder db;
 
 		try {
-			DocumentBuilderFactory dbf =
-					DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
+			db = dbf.newDocumentBuilder();
 			InputSource is = new InputSource();
 			is.setCharacterStream(new StringReader(forumXML));
 
-			Document doc = db.parse(is);
+			Document doc;
+			doc = db.parse(is);
 			NodeList nodes = doc.getElementsByTagName("forum");
 
 			Element knoten = (Element) nodes.item(0);
 			attributeContent = knoten.getAttribute(attribute);
-
 		}
 		catch (Exception e) {
 			return "";
@@ -429,8 +431,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	public int getNumberOfNewEntries(String forumXML, String date) {
 		int number = 0;
 		Date thresholdDate, entryDate;
-
 		thresholdDate = stringToDate(date);
+
 		if (thresholdDate != null) {
 
 			try {
@@ -515,11 +517,15 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		String line;
 
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(log));
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(log),
+					"UTF-8"));
 			try {
 				while ((line = br.readLine()) != null) {
-					if (uc.getUserName().equals(line.split(";")[1])) {
-						logPages.put(line.split(";")[2], line.split(";")[0]);
+					String date = line.split(";")[0];
+					String name = line.split(";")[1];
+					String title = line.split(";")[2];
+					if (uc.getUserName().equals(name)) {
+						logPages.put(title, date);
 					}
 				}
 			}

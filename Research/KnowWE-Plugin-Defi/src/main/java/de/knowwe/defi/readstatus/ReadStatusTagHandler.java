@@ -94,11 +94,10 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 			/* AUSGABE */
 			/* ------------------------------------------------------------ */
 			if (current.compareTo(unitDate) >= 0) {
-				readstatus.append("<li class='readstatus'>");
-				if (current.compareTo(warningDate) >= 0) readstatus.append("In ");
-				readstatus.append("<a href='Wiki.jsp?page=" + getPageName(unit) + "'>"
-						+ getLabel(unit) + "</a>");
-				if (current.compareTo(warningDate) >= 0) readstatus.append(" haben Sie " + unread
+				if (current.compareTo(warningDate) == -1) readstatus.append("<li class='readstatus'>");
+				else readstatus.append("<li class='readstatusWARN'>");
+				readstatus.append("In <a href='Wiki.jsp?page=" + getPageName(unit) + "'>"
+						+ getLabel(unit) + "</a> haben Sie " + unread
 						+ " Bewertungen noch nicht abgegeben.");
 				readstatus.append("</li>");
 

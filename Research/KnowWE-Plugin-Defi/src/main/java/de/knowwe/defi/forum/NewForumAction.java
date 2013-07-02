@@ -64,7 +64,7 @@ public class NewForumAction extends AbstractAction {
 
 		String content = "";
 		// links above the forum
-		content += "<a class=\"forumLinkLeft\" href=\"\" onclick=\"javascript:history.back();return false;\">"
+		content += "<a class=\"forumLinkLeft\" href=\"\" onclick=\"javascript:location.href = document.referrer;return false;\">"
 				+ BACK_BUTTON + "</a>\n";
 		content += "<a class=\"forumLinkRight\" href=\"Wiki.jsp?page=Diskussion\">" + FORUM_BUTTON
 				+ "</a>\n";
@@ -83,7 +83,7 @@ public class NewForumAction extends AbstractAction {
 		}
 
 		// links under the forum
-		content += "\n<br /><br />\n<a class=\"forumLinkLeft\" href=\"\" onclick=\"javascript:history.back();return false;\">"
+		content += "\n<br /><br />\n<a class=\"forumLinkLeft\" href=\"\" onclick=\"javascript:location.href = document.referrer;return false;\">"
 				+ BACK_BUTTON + "</a>\n";
 		content += "<a class=\"forumLinkRight\" href=\"Wiki.jsp?page=Diskussion\">" + FORUM_BUTTON
 				+ "</a>\n";
