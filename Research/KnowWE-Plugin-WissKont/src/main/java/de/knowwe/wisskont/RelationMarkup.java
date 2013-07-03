@@ -43,20 +43,26 @@ import de.knowwe.termbrowser.DroppableTargetSurroundingRenderer;
  */
 public abstract class RelationMarkup extends AbstractType {
 
-	private String REGEX = "";
-
 	public RelationMarkup(String key) {
-		String keyRegex = "(" + key + ":)";
-		REGEX = "(?i)^" + keyRegex + "\\u0020?(.*?)\r?\n(\\s*)\r?\n";
+		String REGEX = getLineRegex(key);
 		this.setSectionFinder(new RegexSectionFinder(REGEX,
 				Pattern.MULTILINE | Pattern.DOTALL));
 
 		this.addChildType(new RelationMarkupContentType(REGEX));
-		this.addChildType(new KeyType(keyRegex));
+		this.addChildType(new KeyType(getKeyRegex(key)));
 		CompositeRenderer renderer = new CompositeRenderer(new RelationMarkupRenderer(),
 				new DroppableTargetSurroundingRenderer());
 		this.setRenderer(renderer);
 		this.setIgnorePackageCompile(true);
+	}
+
+	protected String getLineRegex(String key) {
+		String keyRegex = getKeyRegex(key);
+		return "(?i)^" + keyRegex + "\\u0020?(.*?)\r?\n(\\s*)\r?\n";
+	}
+
+	protected String getKeyRegex(String key) {
+		return "(" + key + ":)";
 	}
 
 	public abstract URI getRelationURI();

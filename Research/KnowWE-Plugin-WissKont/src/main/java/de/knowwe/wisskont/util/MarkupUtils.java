@@ -41,6 +41,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.wisskont.ConceptMarkup;
+import de.knowwe.wisskont.SubconceptMarkup;
 
 /**
  * 
@@ -86,11 +87,13 @@ public class MarkupUtils {
 	 */
 	public static boolean isSubConceptOf(URI concept1, URI target, Set<URI> terms) {
 		terms.add(concept1);
-		String sparql = "SELECT ?x WHERE { <" + concept1 + "> lns:unterkonzept ?x.}";
+		String sparql = "SELECT ?x WHERE { <" + concept1 + "> lns:"
+				+ SubconceptMarkup.SUBCONCEPT_PROPERTY + " ?x.}";
 		QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(sparql);
 
 		// direct ask (necessary ?)
-		String sparqlAsk = "ASK { <" + concept1 + "> lns:unterkonzept <" + target + ">.}";
+		String sparqlAsk = "ASK { <" + concept1 + "> lns:" + SubconceptMarkup.SUBCONCEPT_PROPERTY
+				+ " <" + target + ">.}";
 		boolean isChild = Rdf2GoCore.getInstance().sparqlAsk(sparqlAsk);
 		if (isChild) return true;
 
@@ -141,6 +144,32 @@ public class MarkupUtils {
 		return parents;
 	}
 
+	/**
+	 * 
+	 * @created 22.05.2013
+	 * @param testObject
+	 * @param concept
+	 * @return
+	 */
+	public static List<String> getChildren(Rdf2GoCore testObject, URI concept) {
+		String parentQuery = "SELECT ?x WHERE { ?x lns:" + SubconceptMarkup.SUBCONCEPT_PROPERTY
+				+ " <" + concept.toString()
+				+ ">.}";
+		QueryResultTable resultTable = testObject.sparqlSelect(parentQuery);
+		ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
+
+		List<String> parents = new ArrayList<String>();
+		while (resultIterator.hasNext()) {
+			QueryRow parentConceptResult = resultIterator.next();
+			Node value = parentConceptResult.getValue("x");
+			URI parent = value.asURI();
+			parents.add(MarkupUtils.getConceptName(parent));
+
+		}
+
+		return parents;
+	}
+
 	public static List<String> getParentConcepts(String term) {
 		List<String> result = new ArrayList<String>();
 
@@ -151,7 +180,8 @@ public class MarkupUtils {
 			Section<? extends SimpleDefinition> def = defs.iterator().next();
 			URI uri = RDFSUtil.getURI(def);
 
-			String sparql = "SELECT ?x WHERE { <" + uri + "> lns:unterkonzept ?x.}";
+			String sparql = "SELECT ?x WHERE { <" + uri + "> lns:"
+					+ SubconceptMarkup.SUBCONCEPT_PROPERTY + " ?x.}";
 			QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(sparql);
 
 			ClosableIterator<QueryRow> resultIterator = resultTable.iterator();

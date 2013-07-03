@@ -19,7 +19,7 @@
 package de.knowwe.wisskont;
 
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.kdom.objects.SimpleReference;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -36,8 +36,8 @@ public class OIDeleteItemRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> section, UserContext user, RenderResult string) {
-		Section<SimpleReference> ref = Sections.cast(section,
-				SimpleReference.class);
+		Section<Term> ref = Sections.cast(section,
+				Term.class);
 
 		boolean hasError = !IncrementalCompiler.getInstance().getTerminology().isValid(
 				ref.get().getTermIdentifier(ref));

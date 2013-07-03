@@ -88,8 +88,12 @@ public class ConceptListContent extends AbstractType {
 					return; // do nothing
 				}
 
-				Section<ListObjectIdentifier> objectSection = Sections.findSuccessor(section,
-						ListObjectIdentifier.class);
+				Section<Term> objectSection = Sections.findSuccessor(section,
+						Term.class);
+
+				if (objectSection == null) {
+					System.out.println("Objectsection is null! " + section.getArticle().getTitle());
+				}
 
 				// if there is a compile error, do not insert knowledge
 				boolean hasError = !IncrementalCompiler.getInstance().getTerminology().isValid(

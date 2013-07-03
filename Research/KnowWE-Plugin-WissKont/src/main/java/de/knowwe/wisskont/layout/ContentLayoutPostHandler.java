@@ -31,7 +31,7 @@ public class ContentLayoutPostHandler implements PageAppendHandler {
 
 	@Override
 	public void append(String web, String title, UserContext user, RenderResult result) {
-		result.appendHtml("</div>");
+		result.appendHtml("<hr>");
 
 	}
 

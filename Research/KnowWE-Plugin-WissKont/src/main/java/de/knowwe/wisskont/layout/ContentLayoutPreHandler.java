@@ -31,7 +31,10 @@ public class ContentLayoutPreHandler implements PageAppendHandler {
 
 	@Override
 	public void append(String web, String title, UserContext user, RenderResult result) {
-		result.appendHtml("<div class='wissassPageContents'>" + "\n");
+		// unfortunately kills edit mode
+		// result.appendHtml("<div class='wissassPageContents'>" + "\n");
+
+		result.appendHtml("<hr>" + "\n");
 
 	}
 

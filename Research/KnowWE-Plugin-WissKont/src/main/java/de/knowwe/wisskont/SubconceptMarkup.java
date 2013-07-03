@@ -28,6 +28,7 @@ import org.ontoware.rdf2go.model.node.URI;
 public class SubconceptMarkup extends RelationMarkup {
 
 	public static final String KEY = "Unterbegriffe";
+	public static final String SUBCONCEPT_PROPERTY = "unterkonzept";
 
 	/**
 	 * @param key
@@ -43,7 +44,7 @@ public class SubconceptMarkup extends RelationMarkup {
 
 	@Override
 	public URI getRelationURI() {
-		return createURI("unterkonzept");
+		return createURI(SUBCONCEPT_PROPERTY);
 	}
 
 	@Override
