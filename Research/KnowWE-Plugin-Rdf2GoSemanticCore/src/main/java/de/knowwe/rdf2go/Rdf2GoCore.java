@@ -711,7 +711,7 @@ public class Rdf2GoCore implements EventListener {
 			buffy.append(verbalizeStatement(statement) + "\n");
 		}
 		buffy.append("Done after " + (System.currentTimeMillis() - start) + "ms");
-		Logger.getLogger(this.getClass().getName()).log(Level.INFO,
+		Logger.getLogger(this.getClass().getName()).log(Level.FINE,
 				key + buffy.toString());
 	}
 
