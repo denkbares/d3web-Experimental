@@ -72,7 +72,11 @@ public class CreateExcelFromSparql {
 					String erg = SparqlResultRenderer.getInstance().renderNode(node,
 							variables.get(i), false, user, core, RenderMode.PlainText);
 					erg = RenderResult.unmask(erg, user);
-					s.addCell(new Label(i, row, erg));
+					erg = erg.replace("&nbsp;", " ");
+					WritableCellFormat format = new WritableCellFormat();
+					format.setWrap(true);
+					s.addCell(new Label(i, row, erg, format));
+
 				}
 			}
 			row++;

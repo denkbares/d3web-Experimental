@@ -13,7 +13,6 @@ import de.d3web.plugin.PluginManager;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.utils.RenderOptions;
 import de.knowwe.rdf2go.sparql.utils.SparqlRenderResult;
@@ -167,9 +166,8 @@ public class SparqlResultRenderer {
 				rendered = nodeRenderer.renderNode(rendered, var, user, core, mode);
 				if (!temp.equals(rendered) && !nodeRenderer.allowFollowUpRenderer()) break;
 			}
-			rendered = KnowWEUtils.maskJSPWikiMarkup(rendered);
+			// rendered = KnowWEUtils.maskJSPWikiMarkup(rendered);
 		}
-
 		return rendered;
 	}
 
