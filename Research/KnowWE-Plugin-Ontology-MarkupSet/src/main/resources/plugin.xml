@@ -71,6 +71,17 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TurtleMarkup">
+		<parameter id="class"
+			value="de.knowwe.ontology.kdom.turtle.TurtleMarkup" />
+		<parameter id="name" value="RelationType" />
+		<parameter id="description" value="Type RelationType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
         id="OntologyMarkupInstantEditToolProvider">
         <parameter id="class"
