@@ -18,8 +18,9 @@
  */
 package de.knowwe.wisskont;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.strings.Strings;
@@ -55,7 +56,7 @@ public class ValuesMarkup extends RelationMarkup {
 		boolean replaced = Types.replaceType(contentType, ListObjectIdentifier.class,
 				new ValueDefinitionListElement(new OIDeleteItemRenderer()));
 		if (!replaced) {
-			Logger.getLogger(this.getClass()).log(Priority.ERROR, "Type NOT REPLACED ! ");
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Type NOT REPLACED ! ");
 		}
 	}
 
