@@ -45,6 +45,13 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 				OntoVisType.ANNOTATION_DOT_APP);
 		parameterMap.put(RenderingCore.DOT_APP, dotApp);
 
+		String rendererType = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_RENDERER);
+		parameterMap.put(RenderingCore.RENDERER, rendererType);
+
+		String visualization = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_VISUALIZATION);
+		parameterMap.put(RenderingCore.VISUALIZATION, visualization);
+
 		parameterMap.put(RenderingCore.CONCEPT, getConcept(user, section));
 
 		String master = getMaster(user, section);

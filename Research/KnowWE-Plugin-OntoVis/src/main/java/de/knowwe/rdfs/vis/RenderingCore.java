@@ -40,6 +40,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
+import de.knowwe.rdfs.vis.d3.D3VisualizationRenderer;
 import de.knowwe.rdfs.vis.dot.DOTVisualizationRenderer;
 import de.knowwe.rdfs.vis.util.Utils;
 
@@ -53,6 +54,10 @@ public class RenderingCore {
 	public enum NODE_TYPE {
 		CLAAS, PROPERTY, INSTANCE, UNDEFINED
 	};
+
+	public static final String RENDERER = "renderer";
+
+	public static final String VISUALIZATION = "visualization";
 
 	public static final String FORMAT = "format";
 	public static final String CONCEPT = "concept";
@@ -160,7 +165,11 @@ public class RenderingCore {
 		data = new SubGraphData();
 
 		// current default source renderer is DOT
-		sourceRenderer = new DOTVisualizationRenderer(data, parameters);
+		String renderer = parameters.get(RenderingCore.RENDERER);
+		if (renderer != null && renderer.equals("d3")) {
+			sourceRenderer = new D3VisualizationRenderer(data, parameters);
+		}
+		else sourceRenderer = new DOTVisualizationRenderer(data, parameters);
 
 		// set config values
 		setConfigurationParameters();

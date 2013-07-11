@@ -22,10 +22,21 @@ public class OntoVisType extends DefaultMarkupType {
 	public static final String ANNOTATION_DOT_APP = "dotApp";
 	public static final String ANNOTATION_ADD_TO_DOT = "dotAddLine";
 
+	public static final String ANNOTATION_RENDERER = "renderer";
+	public static final String ANNOTATION_VISUALIZATION = "visualization";
+
 	private static final DefaultMarkup MARKUP;
 
 	private enum dot_apps {
 		dot, neato
+	};
+
+	private enum renderer {
+		dot, d3
+	};
+
+	private enum visualizations {
+		wheel, force
 	};
 
 	static {
@@ -46,6 +57,8 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
 		MARKUP.addAnnotation(ANNOTATION_OUTGOING_EDGES, false, new String[] {
 				"true", "false" });
+		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, renderer.values());
+		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, visualizations.values());
 	}
 
 	public OntoVisType() {

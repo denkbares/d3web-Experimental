@@ -319,16 +319,16 @@ public class DotRenderer {
 
 		FileUtils.writeFile(dot, dotSource);
 		// create svg
-		String command = getDOTApp(user_app_path) + " " + dot.getAbsolutePath() +
-				" -Tsvg -o " + svg.getAbsolutePath() + "";
+		String command = getDOTApp(user_app_path) + " \"" + dot.getAbsolutePath() +
+				"\" -Tsvg -o \"" + svg.getAbsolutePath() + "\"";
 
 		try {
 
 			createFileOutOfDot(svg, dot, command);
 
 			// create png
-			command = getDOTApp(user_app_path) + " " + dot.getAbsolutePath() +
-					" -Tpng -o " + png.getAbsolutePath() + "";
+			command = getDOTApp(user_app_path) + " \"" + dot.getAbsolutePath() +
+					"\" -Tpng -o \"" + png.getAbsolutePath() + "\"";
 			createFileOutOfDot(png, dot, command);
 			prepareSVG(svg);
 		}
