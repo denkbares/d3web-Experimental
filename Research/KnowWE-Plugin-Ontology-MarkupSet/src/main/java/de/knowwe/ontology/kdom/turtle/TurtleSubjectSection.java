@@ -43,13 +43,9 @@ public class TurtleSubjectSection extends AbstractType {
 		childrenTypes.add(new SubjectBNode());
 		childrenTypes.add(new TurtleSubject());
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder(
-				"(^\\s.*?)\\b[^\\s]*::", Pattern.DOTALL | Pattern.MULTILINE, 1));
+				"(^.*?)\\b[^\\s]*::", Pattern.DOTALL | Pattern.MULTILINE, 1));
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
-		// setCustomRenderer(new
-		// GenericHTMLRenderer<TurtleSubjectSection>("span",
-		// new String[] {
-		// "style", "color: red;", "title", "TurtleSubjectSection" }));
 	}
 
 }
