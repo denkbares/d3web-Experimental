@@ -140,7 +140,7 @@ public class GraphBuilder {
 	public static String buildGraph(String startConcept, String connectionType, String helpconnectionType, boolean getConnectionAmount) {
 		String result, label;
 		System.out.println("Graphbuilder started");
-	    	GraphbuilderForeignKB.buildTree();
+	    //	GraphbuilderForeignKB.buildTree();
 		if (!false) {
 			resultTree = new Tree<NodeWithName>(new NodeWithName("Wurzel", "Wissensbasis"),
 					new WissassHierarchyProvider());
