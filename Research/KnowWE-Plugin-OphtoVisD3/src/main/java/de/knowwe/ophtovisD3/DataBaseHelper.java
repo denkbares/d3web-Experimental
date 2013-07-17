@@ -210,7 +210,7 @@ import de.knowwe.wisskont.util.MarkupUtils;
 
 	// before CCC
 
-	private static String createSparqlURI(String name) {
+	public static String createSparqlURI(String name) {
 		Collection<Section<? extends SimpleDefinition>> definitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				new Identifier(name));
 		if (definitions.size() > 0) {
@@ -255,6 +255,35 @@ import de.knowwe.wisskont.util.MarkupUtils;
 			return true;
 		else
 			return false;
+	}
+
+	public static LinkedList<String> getAllObjectsConnectedBy(String connectionType) {
+		LinkedList<String> result = new LinkedList<String>();
+		QueryResultTable table = null;
+		System.out.println("SELECT ?a ?b WHERE { ?a " + connectionType+ " ?b}");
+			table = Rdf2GoCore.getInstance().sparqlSelect(
+					"SELECT ?a ?b WHERE { ?a lns:" + connectionType+ " ?b}");
+		
+		for (QueryRow row : table) {
+			Node node = row.getValue("a");
+			Node node2 = row.getValue("b");
+			String keyurl = Rdf2GoUtils.getLocalName(node); 
+			String keyurl2 = Rdf2GoUtils.getLocalName(node2); 
+			try {
+				keyurl = URLDecoder.decode(keyurl, "UTF-8");
+				keyurl2 = URLDecoder.decode(keyurl2, "UTF-8");
+			}
+			catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			String key = keyurl.substring(keyurl.indexOf("=") + 1);
+			String key2 = keyurl2.substring(keyurl.indexOf("=") + 1);
+			if (!key.contains("Resource")) {
+				result.add(key);
+				result.add(key2);
+			}
+		}
+		return result;
 	}
 
 }

@@ -27,6 +27,8 @@ import com.google.gson.Gson;
 
 import de.knowwe.ophtovisD3.utils.JsonFactory;
 import de.knowwe.ophtovisD3.utils.NodeWithName;
+import de.knowwe.ophtovisD3.utils.StringShortener;
+import de.knowwe.ophtovisD3.utils.StringShortener.ElliminationType;
 import de.knowwe.termbrowser.util.Tree;
 import de.knowwe.wisskont.browser.WissassHierarchyProvider;
 
@@ -41,6 +43,7 @@ public class GraphBuilder {
 	static int indexNumber = 0;
 	static Tree<NodeWithName> resultTree;
 	static boolean treeIsHere = false;
+	static StringShortener shorty = new StringShortener(ElliminationType.MIDDLE, 12);
 
 	public GraphBuilder() {
 		connections = new LinkedList<Integer[]>();
@@ -118,17 +121,32 @@ public class GraphBuilder {
 		}
 		return result += "]";
 	}
+	
+	public static String buildGraphExperimental(String connectionType, String highlighted){
+		LinkedList <String> resultList = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
+		resultTree = new Tree<NodeWithName>(new NodeWithName("Wurzel", "Wissensbasis"),
+				new WissassHierarchyProvider());
+		String label, result;
+		for (String string : resultList) {
+			label = shorty.shorten(string);
+			resultTree.insertNode(new NodeWithName(string, label));
+		}
+		resultTree = hightlightConcept(resultTree, highlighted);
+		result =JsonFactory.toJSON(resultTree);
+		return result;
+		
+	}
 
 	public static String buildGraph(String startConcept, String connectionType, String helpconnectionType, boolean getConnectionAmount) {
-		String result;
+		String result, label;
+		System.out.println("Graphbuilder started");
+	    	GraphbuilderForeignKB.buildTree();
 		if (!false) {
-			resultTree = new Tree<NodeWithName>(new NodeWithName("Wurzel", "0"),
+			resultTree = new Tree<NodeWithName>(new NodeWithName("Wurzel", "Wissensbasis"),
 					new WissassHierarchyProvider());
-			resultTree.insertNode(new NodeWithName(startConcept,
-					DataBaseHelper.countQuerytresultstoString(startConcept)));
-			if (getConnectionAmount) {
-			}
-			String fatherOfTheMoment = startConcept;
+			label =shorty.shorten("Anamnese_Patientensituation");
+			resultTree.insertNode(new NodeWithName("Anamnese_Patientensituation",label));
+			String fatherOfTheMoment = "Anamnese_Patientensituation";
 			while (!fatherOfTheMoment.isEmpty()) {
 				getChildConcepts(fatherOfTheMoment, connectionType, getConnectionAmount,
 						resultTree);
@@ -137,23 +155,36 @@ public class GraphBuilder {
 						helpconnectionType, true);
 				if (nextfather.size() >= 1) {
 					fatherOfTheMoment = nextfather.get(0);
+					label=shorty.shorten(fatherOfTheMoment);
 					resultTree.insertNode(new NodeWithName(fatherOfTheMoment,
-							DataBaseHelper.countQuerytresultstoString(fatherOfTheMoment)));
-				}
-				else {
-					if (getConnectionAmount) {
-					}
-					Gson gson = new Gson();
-					result = gson.toJson(resultTree);
-					treeIsHere = true;
-					return result;
+							label));
+				}else{
+					break;
 				}
 			}
 		}
 		treeIsHere = true;
-		Gson gson = new Gson();
-		result = gson.toJson(resultTree);
+		resultTree = hightlightConcept(resultTree, startConcept);
+		result =JsonFactory.toJSON(resultTree);
 		return result;
+	}
+	
+	public static Tree<NodeWithName>hightlightConcept(Tree<NodeWithName> tree, String conceptToHightlight){
+		NodeWithName toAlter =tree.find(new NodeWithName(conceptToHightlight, shorty.shorten(conceptToHightlight)));
+		if(!(toAlter==null)){
+		toAlter.setHighligted();
+		tree.insertNode(toAlter);
+		}else{
+			NodeWithName toDelete =null;
+			Set<NodeWithName> nodes =tree.getNodes();
+			for (NodeWithName nodeWithName : nodes) {
+				if(nodeWithName.toString().equals(conceptToHightlight))
+					toDelete=nodeWithName;
+			}
+			boolean worked= tree.removeNodeFromTree(toDelete);
+			tree.insertNode(new NodeWithName(conceptToHightlight, null, shorty.shorten(conceptToHightlight), true));
+		}
+		return tree;
 	}
 
 	public static String builtPartTree(String startConcept, String connectionType) {
@@ -179,6 +210,7 @@ public class GraphBuilder {
 				if (!childs.get(i).equals(father)) {
 					boolean highlight = false;
 					if (childs.get(i).equals(toHighlight)) highlight = true;
+					shorty.shorten(childs.get(i));
 					tree.insertNode(new NodeWithName(childs.get(i),
 							Integer.toString(DataBaseHelper.countQuerytresults(childs.get(i))),
 							highlight));
@@ -192,6 +224,7 @@ public class GraphBuilder {
 
 	public static String getChildConcepts(String father, String connectionType, boolean getConnectionAmount, Tree<NodeWithName> tree) {
 		String resultString = "";
+		String label;
 		List<String> childs = DataBaseHelper.getConnectedNodeNamesOfType(father, connectionType,
 				false);
 		if (childs.isEmpty()) {
@@ -201,8 +234,9 @@ public class GraphBuilder {
 			for (int i = 0; i < childs.size(); i++) {
 				String string = childs.get(i);
 				if (!childs.get(i).equals(father)) {
+					label =shorty.shorten(childs.get(i));
 					tree.insertNode(new NodeWithName(childs.get(i),
-							Integer.toString(DataBaseHelper.countQuerytresults(childs.get(i)))));
+							label));
 					resultString += getChildConcepts(string, connectionType, getConnectionAmount,
 							tree);
 				}
