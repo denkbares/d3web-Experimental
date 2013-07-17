@@ -18,10 +18,11 @@
  */
 package de.knowwe.d3web.owl;
 
+import de.knowwe.core.compile.packaging.PackageAnnotationNameType;
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.compile.packaging.PackageTermReference;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * Type for providing OWL ontologies. The provided ontologies will be attached
@@ -41,8 +42,10 @@ public class OntologyProviderType extends DefaultMarkupType {
 		MARKUP = new DefaultMarkup(MARKUP_NAME);
 		MARKUP.addAnnotation(ANNOTATION_SRC, false);
 		MARKUP.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME, false);
-		MARKUP.addAnnotationRenderer(PackageManager.PACKAGE_ATTRIBUTE_NAME,
-				StyleRenderer.ANNOTATION);
+		MARKUP.addAnnotationNameType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageAnnotationNameType());
+		MARKUP.addAnnotationContentType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageTermReference());
 	}
 
 	public OntologyProviderType() {

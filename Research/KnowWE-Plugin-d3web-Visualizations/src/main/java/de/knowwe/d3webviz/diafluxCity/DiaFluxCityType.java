@@ -18,7 +18,9 @@
  */
 package de.knowwe.d3webviz.diafluxCity;
 
+import de.knowwe.core.compile.packaging.PackageAnnotationNameType;
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.compile.packaging.PackageTermReference;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -35,6 +37,10 @@ public class DiaFluxCityType extends DefaultMarkupType {
 	static {
 		m = new DefaultMarkup("DiaFluxCity");
 		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME);
+		m.addAnnotationNameType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageAnnotationNameType());
+		m.addAnnotationContentType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageTermReference());
 	}
 
 	public DiaFluxCityType() {

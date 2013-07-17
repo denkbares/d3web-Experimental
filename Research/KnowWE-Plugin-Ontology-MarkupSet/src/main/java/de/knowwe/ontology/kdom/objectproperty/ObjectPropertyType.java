@@ -24,7 +24,9 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
+import de.knowwe.core.compile.packaging.PackageAnnotationNameType;
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.compile.packaging.PackageTermReference;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -47,6 +49,10 @@ public class ObjectPropertyType extends DefaultMarkupType {
 	static {
 		MARKUP = new DefaultMarkup("ObjectProperty");
 		MARKUP.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotationNameType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageAnnotationNameType());
+		MARKUP.addAnnotationContentType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageTermReference());
 		MARKUP.addAnnotation(DOMAIN_ANNOTATION_NAME, false);
 		MARKUP.addAnnotationContentType(DOMAIN_ANNOTATION_NAME, new DomainRangeAnnotationType(
 				DomainRangeAnnotationType.DomainRange.DOMAIN));

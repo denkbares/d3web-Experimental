@@ -18,11 +18,12 @@
  */
 package de.knowwe.esat;
 
+import de.knowwe.core.compile.packaging.PackageAnnotationNameType;
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.compile.packaging.PackageTermReference;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * 
@@ -46,8 +47,10 @@ public class MonitorMarkup extends DefaultMarkupType {
 		m = new DefaultMarkup("monitor");
 		m.addContentType(new MonitorMarkupContentType());
 		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME, false);
-		m.addAnnotationRenderer(PackageManager.PACKAGE_ATTRIBUTE_NAME,
-				StyleRenderer.ANNOTATION);
+		m.addAnnotationNameType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageAnnotationNameType());
+		m.addAnnotationContentType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageTermReference());
 		m.addAnnotation(LINK, false);
 		m.addAnnotation(NAME, false);
 		m.addAnnotation(BREITE, false);

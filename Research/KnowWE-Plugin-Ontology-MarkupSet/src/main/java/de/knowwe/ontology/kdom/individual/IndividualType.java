@@ -18,7 +18,9 @@
  */
 package de.knowwe.ontology.kdom.individual;
 
+import de.knowwe.core.compile.packaging.PackageAnnotationNameType;
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.compile.packaging.PackageTermReference;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.ontology.kdom.OntologyLineType;
@@ -32,6 +34,10 @@ public class IndividualType extends DefaultMarkupType {
 	static {
 		MARKUP = new DefaultMarkup("Individual");
 		MARKUP.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotationNameType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageAnnotationNameType());
+		MARKUP.addAnnotationContentType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageTermReference());
 		MARKUP.addAnnotation(IndividualType.TYPE_ANNOTATION_NAME, false);
 		MARKUP.addAnnotationContentType(TYPE_ANNOTATION_NAME, new AbbreviatedResourceReference());
 		OntologyLineType lineType = new OntologyLineType();

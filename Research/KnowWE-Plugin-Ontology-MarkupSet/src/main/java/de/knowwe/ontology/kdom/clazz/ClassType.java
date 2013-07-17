@@ -18,7 +18,9 @@
  */
 package de.knowwe.ontology.kdom.clazz;
 
+import de.knowwe.core.compile.packaging.PackageAnnotationNameType;
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.compile.packaging.PackageTermReference;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.ontology.kdom.OntologyLineType;
@@ -31,6 +33,10 @@ public class ClassType extends DefaultMarkupType {
 	static {
 		MARKUP = new DefaultMarkup("Class");
 		MARKUP.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotationNameType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageAnnotationNameType());
+		MARKUP.addAnnotationContentType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageTermReference());
 		MARKUP.addAnnotation(PROPERTY_ANNOTATION_NAME, false);
 		MARKUP.addAnnotationContentType(PROPERTY_ANNOTATION_NAME, new PropertyAnnotationType());
 		OntologyLineType lineType = new OntologyLineType();

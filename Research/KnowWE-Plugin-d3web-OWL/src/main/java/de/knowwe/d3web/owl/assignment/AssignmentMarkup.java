@@ -18,11 +18,12 @@
  */
 package de.knowwe.d3web.owl.assignment;
 
+import de.knowwe.core.compile.packaging.PackageAnnotationNameType;
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.compile.packaging.PackageTermReference;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * 
@@ -38,8 +39,10 @@ public class AssignmentMarkup extends DefaultMarkupType {
 		MARKUP = new DefaultMarkup("Assignment");
 		MARKUP.addContentType(new AssignmentContentType());
 		MARKUP.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME, false);
-		MARKUP.addAnnotationRenderer(PackageManager.PACKAGE_ATTRIBUTE_NAME,
-				StyleRenderer.ANNOTATION);
+		MARKUP.addAnnotationNameType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageAnnotationNameType());
+		MARKUP.addAnnotationContentType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageTermReference());
 		MARKUP.addAnnotation(BASEURI, false);
 	}
 

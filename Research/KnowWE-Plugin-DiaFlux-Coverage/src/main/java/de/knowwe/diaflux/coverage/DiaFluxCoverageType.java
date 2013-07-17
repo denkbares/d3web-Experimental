@@ -22,12 +22,13 @@ import de.d3web.core.session.SessionFactory;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.d3web.diaflux.coverage.DiaFluxCoverageTrace;
 import de.knowwe.core.RessourceLoader;
+import de.knowwe.core.compile.packaging.PackageAnnotationNameType;
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.compile.packaging.PackageTermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.diaflux.type.FlowchartType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * 
@@ -44,8 +45,10 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 		MARKUP = new DefaultMarkup("DiaFluxCoverage");
 		MARKUP.addContentType(new FlowchartType());
 		MARKUP.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME, false);
-		MARKUP.addAnnotationRenderer(PackageManager.PACKAGE_ATTRIBUTE_NAME,
-				StyleRenderer.ANNOTATION);
+		MARKUP.addAnnotationNameType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageAnnotationNameType());
+		MARKUP.addAnnotationContentType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
+				new PackageTermReference());
 
 	}
 
