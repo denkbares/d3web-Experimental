@@ -21,7 +21,8 @@ function drawForce(size, array, linksList) {
     				.links(links)
     				.size([width, height])
     				.linkDistance(200)
-    				.charge(-300)
+    				.charge(-300) 
+    				.gravity(0.05)
     				.on("tick", tick)
     				.start();
 	
@@ -31,7 +32,7 @@ function drawForce(size, array, linksList) {
 	    			.attr("width", width)
 	    			.attr("height", height);
 	
-	svg.append("svg:defs").selectAll("marker")
+	var marker = svg.append("svg:defs").selectAll("marker")
 	    		.data(linksList)
 	    	.enter().append("svg:marker")
 	    		.attr("id", String)
@@ -48,7 +49,8 @@ function drawForce(size, array, linksList) {
     			.data(force.links())
     		.enter().append("svg:path")
     			.attr("class", function(d) { return "link " + d.type; })
-    			.attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+    			.attr("marker-end", function(d) { return "url(#" + d.type + ")"; })
+    			.attr("id", function(d,i) { return "path" + i; });
 
 	var circle = svg.append("svg:g").selectAll("circle")
 				.data(force.nodes())
@@ -56,21 +58,38 @@ function drawForce(size, array, linksList) {
 				.attr("r", 10)
 				.call(force.drag);
 
-	var text = svg.append("svg:g").selectAll("g")
+	var nodelabel = svg.append("svg:g").selectAll("g")
     			.data(force.nodes())
     		.enter().append("svg:g");
 	
-	// A copy of the text with a thick white stroke for legibility.
-	text.append("svg:text")
-	    .attr("x", 8)
-	    .attr("y", ".31em")
-	    .attr("class", "shadow")
-	    .text(function(d) { return d.name; });
-
-	text.append("svg:text")
-	    .attr("x", 8)
-	    .attr("y", ".31em")
-	    .text(function(d) { return d.name; });
+		// A copy of the text with a thick white stroke for legibility.
+		nodelabel.append("svg:text")
+			.attr("x", 8)
+			.attr("y", ".31em")
+			.attr("class", "shadow")
+			.text(function(d) { return d.name; });
+		
+		nodelabel.append("svg:text")
+			.attr("x", 8)
+			.attr("y", ".31em")
+			.text(function(d) { return d.name; });
+		
+	var edgelabel = svg.append("svg:g").selectAll(".edgelabel")
+			.data(force.links())
+		.enter().append("svg:text")
+			.style("pointer-events", "none")
+			.attr({'class':'edgelabel',
+				'id':function(d){ return d.type; },
+//				'dx':80,
+				'dy':-5,
+				'font-size':10,
+				'fill':'#aaa'});
+	
+		edgelabel.append("svg:textPath")
+      		.attr('xlink:href', function(d,i) {return '#path' + i})
+      		.attr("startOffset", "30%")
+      		.style("pointer-events", "none")
+      		.text(function(d){ return d.type; });
 	
 	// Use elliptical arc path segments to doubly-encode directionality.
 	function tick() {
@@ -85,7 +104,7 @@ function drawForce(size, array, linksList) {
 			return "translate(" + d.x + "," + d.y + ")";
 		});
 
-		text.attr("transform", function(d) {
+		nodelabel.attr("transform", function(d) {
 			return "translate(" + d.x + "," + d.y + ")";
 		});
 	}
