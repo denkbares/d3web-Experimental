@@ -689,6 +689,14 @@ public class RenderingCore {
 		}
 		fromNode.setOuter(false);
 
+		// look for label for the property
+		String relationLabel = Utils.getRDFSLabel(
+				relationURI.asURI(), rdfRepository,
+				parameters.get(LANGUAGE));
+		if (relationLabel != null) {
+			relation = relationLabel;
+		}
+
 		Edge newLineRelationsKey = new Edge(fromNode, relation, toNode);
 
 		data.addEdge(newLineRelationsKey);
