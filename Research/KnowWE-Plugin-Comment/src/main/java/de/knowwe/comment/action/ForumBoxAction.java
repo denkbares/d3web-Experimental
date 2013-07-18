@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import de.d3web.strings.Strings;
 import de.d3web.we.event.NewCommentEvent;
 import de.knowwe.comment.forum.Forum;
 import de.knowwe.comment.forum.ForumRenderer;
@@ -82,10 +83,13 @@ public class ForumBoxAction extends AbstractAction {
 				// // do nothing!
 				// }
 
-				text = makeValidXML(text);
 				text = text.replace("\n", "\\\\ ");
 
 				Article article = Environment.getInstance().getArticle(web, topic);
+				if (article == null) {
+					topic = Strings.decodeURL(topic);
+					article = Environment.getInstance().getArticle(web, topic);
+				}
 				Section<?> sec = article.getRootSection();
 				List<Section<XMLTail>> found = new ArrayList<Section<XMLTail>>();
 
@@ -133,19 +137,4 @@ public class ForumBoxAction extends AbstractAction {
 		return "{\"msg\" : \"error\"}";
 	}
 
-	/**
-	 * 
-	 * @created 02.07.2013
-	 * @param text
-	 * @return
-	 */
-	private String makeValidXML(String text) {
-		text = text.replace("&", "&amp;");
-		text = text.replace(">", "&gt;");
-		text = text.replace("<", "&lt;");
-		text = text.replace("\"", "&quot;");
-		text = text.replace("'", "&apos;");
-
-		return text;
-	}
 }
