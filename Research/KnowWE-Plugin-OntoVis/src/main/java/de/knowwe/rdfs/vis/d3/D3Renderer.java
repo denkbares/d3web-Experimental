@@ -89,13 +89,13 @@ public class D3Renderer {
 	private static void drawForce(SubGraphData data, Map<String, String> parameters) {
 		// write the JSON source for the force-visualization
 		writeJSONForceSource(data);
-	
+
 		// include all necessary scripts and files
 		htmlsource += IncludeUtils.includeFile(FILE_TYPE.JAVASCRIPT, context
 				+ "/KnowWEExtension/scripts/d3force.js");
 		htmlsource += IncludeUtils.includeFile(FILE_TYPE.CSS, context
 				+ "/KnowWEExtension/css/d3force.css");
-	
+
 		// draw the force-visualization
 		htmlsource += "<script>";
 		htmlsource += " drawForce(" + parameters.get(RenderingCore.GRAPH_SIZE) +
@@ -175,8 +175,19 @@ public class D3Renderer {
 		while (iterator.hasNext()) {
 			Edge next = iterator.next();
 			String p = next.getPredicate();
-			arraySource += "{source: \"" + next.getSubject().toString() + "\", ";
-			arraySource += "target: \"" + next.getObject().toString() + "\", ";
+
+			String subjectLabel = next.getSubject().getConceptLabel();
+			if (subjectLabel == null) {
+				subjectLabel = next.getSubject().getName();
+			}
+
+			String objectLabel = next.getObject().getConceptLabel();
+			if (objectLabel == null) {
+				objectLabel = next.getObject().getName();
+			}
+
+			arraySource += "{source: \"" + subjectLabel + "\", ";
+			arraySource += "target: \"" + objectLabel + "\", ";
 			arraySource += "type: \"" + p + "\"}";
 			if (iterator.hasNext()) {
 				arraySource += ",";

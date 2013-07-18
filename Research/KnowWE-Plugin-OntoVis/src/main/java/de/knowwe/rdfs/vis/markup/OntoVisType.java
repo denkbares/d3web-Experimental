@@ -31,11 +31,11 @@ public class OntoVisType extends DefaultMarkupType {
 		dot, neato
 	};
 
-	private enum renderer {
+	public enum Renderer {
 		dot, d3
 	};
 
-	private enum visualizations {
+	public enum Visualizations {
 		wheel, force
 	};
 
@@ -57,8 +57,8 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
 		MARKUP.addAnnotation(ANNOTATION_OUTGOING_EDGES, false, new String[] {
 				"true", "false" });
-		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, renderer.values());
-		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, visualizations.values());
+		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, Renderer.values());
+		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
 	}
 
 	public OntoVisType() {

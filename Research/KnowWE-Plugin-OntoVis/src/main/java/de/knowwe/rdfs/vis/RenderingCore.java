@@ -42,6 +42,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
 import de.knowwe.rdfs.vis.d3.D3VisualizationRenderer;
 import de.knowwe.rdfs.vis.dot.DOTVisualizationRenderer;
+import de.knowwe.rdfs.vis.markup.OntoVisType;
 import de.knowwe.rdfs.vis.util.Utils;
 
 /**
@@ -166,7 +167,7 @@ public class RenderingCore {
 
 		// current default source renderer is DOT
 		String renderer = parameters.get(RenderingCore.RENDERER);
-		if (renderer != null && renderer.equals("d3")) {
+		if (renderer != null && renderer.equals(OntoVisType.Renderer.d3.name())) {
 			sourceRenderer = new D3VisualizationRenderer(data, parameters);
 		}
 		else sourceRenderer = new DOTVisualizationRenderer(data, parameters);
