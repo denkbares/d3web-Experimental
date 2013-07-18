@@ -48,7 +48,7 @@ public class ReadbuttonSubmitAction extends AbstractAction {
 		ArticleManager mgr = Environment.getInstance().getArticleManager(context.getWeb());
 		if (!Environment.getInstance().getWikiConnector().doesArticleExist(dataPagename)) {
 			// create new article
-			String newContent = "[{ALLOW view All}]\n[{ALLOW delete " + username + "}]\n";
+			String newContent = "[{ALLOW view admin}]\n[{ALLOW delete " + username + "}]\n";
 			Environment.getInstance().getWikiConnector().createArticle(
 					dataPagename, newContent.toString(), "Defi-system");
 			Article article = Article.createArticle(newContent.toString(),

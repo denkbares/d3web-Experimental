@@ -100,11 +100,12 @@ public class SubmitTableContentAction extends AbstractAction {
 		ArticleManager articleManager = Environment.getInstance().getArticleManager(
 				defaultWeb);
 		String articleNameForData = getDataArticleNameForUser(username);
-		Article article2 = articleManager.getArticle(
+		Article dataArticle = articleManager.getArticle(
 				articleNameForData);
-		if (article2 == null) {
+		if (dataArticle == null) {
 			// create new article
 			String newContent = createNewMarkupString(tableid, inputDataAll);
+			newContent = "[{ALLOW view admin}]\n[{ALLOW delete " + username + "}]\n" + newContent;
 			Environment.getInstance().getWikiConnector().createArticle(
 					articleNameForData, newContent.toString(), "Defi-system");
 			Article article = Article.createArticle(newContent.toString(),
@@ -113,17 +114,17 @@ public class SubmitTableContentAction extends AbstractAction {
 			Environment.getInstance().getArticleManager(
 					defaultWeb)
 					.registerArticle(article);
-			article2 = articleManager.getArticle(
+			dataArticle = articleManager.getArticle(
 					articleNameForData);
 		}
 		else {
 			Section<TableEntryContentType> contentSection = findContentSectionForTableID(
-					tableid, article2);
+					tableid, dataArticle);
 			Map<String, String> nodesMap = new HashMap<String, String>();
 			if (contentSection == null) {
 				// append entire block to page
-				nodesMap.put(article2.getRootSection().getID(),
-						article2.getRootSection().getText() + "\n"
+				nodesMap.put(dataArticle.getRootSection().getID(),
+						dataArticle.getRootSection().getText() + "\n"
 								+ createNewMarkupString(
 										tableid, inputDataAll));
 			}
