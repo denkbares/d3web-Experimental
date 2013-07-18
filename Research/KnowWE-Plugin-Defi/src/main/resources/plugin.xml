@@ -236,15 +236,15 @@
     </extension>  
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
-        id="ForumMenuTagHandler">
-        <parameter id="class" value="de.knowwe.defi.forum.ForumMenuTagHandler" />
-        <parameter id="name" value="ForumMenuTagHandler" />
-        <parameter id="description" value="TagHandler ForumMenuTagHandler" />
+        id="DiscussionTagHandler">
+        <parameter id="class" value="de.knowwe.defi.forum.DiscussionTagHandler" />
+        <parameter id="name" value="DiscussionTagHandler" />
+        <parameter id="description" value="TagHandler DiscussionTagHandler" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
-        <parameter id="css" value="defi.css" />
+        <parameter id="css" value="defi-discussion.css" />
         <parameter id="script" value="KnowWE-Plugin-Defi-Forum.js" />
-    </extension>  
+    </extension>   
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
         id="FeedbackTagHandler">

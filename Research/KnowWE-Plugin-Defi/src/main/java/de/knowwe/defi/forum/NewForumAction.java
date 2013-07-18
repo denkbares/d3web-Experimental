@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ecyrd.jspwiki.WikiEngine;
 import com.ecyrd.jspwiki.util.MailUtil;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
@@ -70,17 +71,11 @@ public class NewForumAction extends AbstractAction {
 				+ "</a>\n";
 		content += "<div style='clear:both'></div>\n";
 
-		if (pageName == "Sonstiges") {
-			content += "\n<forum topic='" + topic + "' name='" + topic + "'>\n" +
+		String name = (pageName.equals("Sonstiges")) ? topic : topic + " (" + pageName + ")";
+		content += "\n<forum topic='" + Strings.encodeHtml(topic) + "' unit='" + pageName
+				+ "' name='" + Strings.encodeHtml(name) + "'>\n" +
 					"<box name=\"" + username + "\" date=\"" + sdf.format(now.getTime()) + "\">"
 					+ message + "</box>\n</forum>";
-		}
-		else {
-			content += "\n<forum topic='" + topic + "' unit='" + pageName + "' name='" + topic
-					+ " (" + pageName + ")" + "'>\n" +
-					"<box name=\"" + username + "\" date=\"" + sdf.format(now.getTime()) + "\">"
-					+ message + "</box>\n</forum>";
-		}
 
 		// links under the forum
 		content += "\n<br /><br />\n<a class=\"forumLinkLeft\" href=\"\" onclick=\"javascript:location.href = document.referrer;return false;\">"
@@ -118,7 +113,7 @@ public class NewForumAction extends AbstractAction {
 		catch (MessagingException e) {
 		}
 
-		responseString += title;
+		responseString += Strings.encodeURL(title);
 		HttpServletResponse response = context.getResponse();
 		response.getWriter().write(responseString);
 	}

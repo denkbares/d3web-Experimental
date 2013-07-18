@@ -24,6 +24,7 @@ import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletResponse;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
@@ -56,19 +57,20 @@ public class PersonalMessageAction extends AbstractAction {
 			// Erstelle Forum
 			String content = "";
 			// links above the forum
-			content += "<a class=\"forumLinkLeft\" href=\"\" onclick=\"javascript:history.back();return false;\">"
+			content += "<a class=\"forumLinkLeft\" href=\"\" onclick=\"javascript:location.href = document.referrer;return false;\">"
 					+ BACK_BUTTON + "</a>\n";
 			content += "<a class=\"forumLinkRight\" href=\"Wiki.jsp?page=Diskussion\">"
 					+ FORUM_BUTTON
 					+ "</a>\n";
 			content += "<div style='clear:both'></div>\n";
 
-			content += "\n<forum topic='" + topic + "' name='" + name + "'>\n" +
+			content += "\n<forum topic='" + Strings.encodeHtml(topic) + "' unit='chat' name='"
+					+ Strings.encodeHtml(name) + "'>\n" +
 					"<box name=\"" + username + "\" date=\"" + sdf.format(now.getTime())
 					+ "\"></box>\n</forum>";
 
 			// links under the forum
-			content += "\n<br /><br />\n<a class=\"forumLinkLeft\" href=\"\" onclick=\"javascript:history.back();return false;\">"
+			content += "\n<br /><br />\n<a class=\"forumLinkLeft\" href=\"\" onclick=\"javascript:location.href = document.referrer;return false;\">"
 					+ BACK_BUTTON + "</a>\n";
 			content += "<a class=\"forumLinkRight\" href=\"Wiki.jsp?page=Diskussion\">"
 					+ FORUM_BUTTON
@@ -82,6 +84,6 @@ public class PersonalMessageAction extends AbstractAction {
 		}
 
 		HttpServletResponse response = context.getResponse();
-		response.sendRedirect("Wiki.jsp?redirect=" + topic);
+		response.sendRedirect("Wiki.jsp?redirect=" + Strings.encodeURL(topic));
 	}
 }

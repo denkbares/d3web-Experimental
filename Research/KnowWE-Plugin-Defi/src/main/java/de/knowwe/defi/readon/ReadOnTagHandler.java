@@ -76,8 +76,9 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 					(new FileInputStream(new File(path))), "UTF-8"));
 			try {
 				while ((line = br.readLine()) != null) {
-					if (userContext.getUserName().equals(line.split(";")[1])
-							&& unitTitles.contains(line.split(";")[2])) page = line.split(";")[2];
+					String name = line.split(PageLoggerHandler.getSeparator())[1];
+					String title = line.split(PageLoggerHandler.getSeparator())[2];
+					if (userContext.getUserName().equals(name) && unitTitles.contains(title)) page = title;
 				}
 			}
 			finally {

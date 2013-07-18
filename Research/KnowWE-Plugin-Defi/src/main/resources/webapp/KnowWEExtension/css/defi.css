@@ -98,6 +98,7 @@ table.menulink {
 table.menulink * {
 	width:170px;
 }
+/* */
 .defi-bttn {
     padding:5px 5px 5px 25px;
     background-color: #dcdcdc;
@@ -143,87 +144,6 @@ a.forumLinkLeft {
  }
 div.forumTextareaContainer textarea {
 	width: 100%;
-}
-/* Forum Menu */
-table.forumMenu {
-	display:inline-block;
-	width:800px !important;
-	margin-right:20px;
-	overflow:hidden;
-}
-table.forumMenu tr {
-	border:1px solid black;
-	display:inline-table;
-	width:798px;
-}
-table.forumMenu tr.inactive {
-	background-color:grey;
-	color:#CCC;
-	height:75px;
-}
-table.forumMenu th {
-	text-align:center;
-	background-color:#063D79;
-	padding:0.5em 0.25em 0.25em;
-	color:white;
-	font-size:110%;
-	font-variant:small-caps;
-}
-table.forumMenu td {
-	padding-top:10px;
-}
-table.forumMenu tr td.fm_new, table.forumMenu tr td.fm_old {
-	width:10px;
-}
-table.forumMenu tr td.fm_new {
-	background-color:green;
-}
-table.forumMenu tr td.fm_old {
-	background-color:grey;
-}
-table.forumMenu input[type="button"].fm_open {
-	float:right;
-}
-table.forumMenu span.fm_new {
-	color:red;
-}
-table.forumMenu textarea, table.forumMenu input[type="text"] {
-	font-size: 130%;	
-	font-family: monospace;
-}
-table.forumMenu select {
-	font-size:100%;
-}
-table.forumMenu img, table.forumMenu div.userchat, table.forumMenu span.userchat {
-	display:inline-block;
-	margin-bottom: 5px;
-}
-table.forumMenu div.userchat {
-	width:100%;
-	text-align:center;
-}
-table.forumMenu div.userchat p {
-	font-weight: bold;
-	padding: 0;
-	margin: 0;	
-}
-table.forumMenu img {
-	float:left;
-}
-table.forumMenu span.userchat {
-	margin-top:1.5em;
-}
-table.forumMenu span.online {
-	color:green;
-}
-table.forumMenu span.offline {
-	color:red;
-}
-table.forumMenu li {
-	list-style: square;	
-}
-p.fm_newforum {
-	margin:0 0 8px 0;
 }
 /* aboutme */
 h1.aboutme, h2.aboutme
@@ -299,4 +219,55 @@ div.privatecom {
 }
 div.privatecom span {
 	margin-right: 20px;
+}
+/* Menu */
+td.menulinkroot {
+    color:#CCCCCC;
+    background-color: #064080;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+}
+td.menulinkrootclosed {
+    color: #AAAAAA;
+    background-color: #595959;
+    text-decoration:none;
+    font-weight: bold;
+}
+td.menulink {
+	background-color: #CCCCCC;
+    color: #000000;
+    cursor: pointer;
+    text-decoration: none;
+}
+td.menulinkcurrent, td.menulinkrootcurrent {
+	background-color: #F8BB90;
+    color: #000000;
+    cursor: pointer;
+    text-decoration: none;
+}
+td.menulinkroot a {
+	color:#CCCCCC !important;
+}
+td.menulink a, td.menulinkcurrent a, td.menulinkrootcurrent a {
+	color:#000000 !important;	
+}
+td.menulinkrootcurrent {
+	font-weight:bold;
+}
+td.menulinkroot:hover {
+	background-color:highlight;
+}
+td.menulink:hover {
+	background-color:#eee;
+}
+table.menulink td {
+	padding:0.25em 0.5em;
+	border:2px solid white;
+}
+table.menulink {
+	border-collapse:collapse;
+}
+table.menulink * {
+	width:170px;
 }
