@@ -145,62 +145,11 @@ public class SparqlVisTypeRenderer implements Renderer {
 			Node toURI = row.getValue(variables.get(2));
 			String to = RenderingCore.getConceptName(toURI);
 
-			// is the target node a literal ?
-			Literal toLiteral = null;
-			LanguageTagLiteral languageTagLiteral = null;
-			try {
-				toLiteral = toURI.asLiteral();
-				languageTagLiteral = toURI.asLanguageTagLiteral();
-			}
-			catch (ClassCastException e) {
-			}
+			ConceptNode fromNode = createNode(parameters, rdfRepository, uriProvider,
+					section, data, fromURI, from);
 
-			ConceptNode toNode = null;
-			ConceptNode fromNode = null;
-
-			if (toLiteral != null) {
-				toNode = data.getConcept(to);
-			}
-			NODE_TYPE type = NODE_TYPE.UNDEFINED;
-			if (toNode == null) {
-				String label = null;
-				if (toLiteral == null) {
-					label = Utils.getRDFSLabel(
-							toURI.asURI(), rdfRepository,
-							parameters.get(RenderingCore.LANGUAGE));
-				}
-				if (label == null && toLiteral == null) {
-					label = to;
-				}
-				if (toLiteral != null) {
-					type = NODE_TYPE.LITERAL;
-					if (languageTagLiteral != null) {
-						label = languageTagLiteral.getValue().replaceAll(
-								languageTagLiteral.getLanguageTag(), "");
-					}
-					else {
-
-						label = toLiteral.toString();
-					}
-					to = "literal" + System.currentTimeMillis();
-				}
-				toNode = new ConceptNode(to, type, createConceptURL(to, parameters,
-						section,
-						uriProvider), label);
-				data.addConcept(toNode);
-			}
-			fromNode = data.getConcept(from);
-			if (fromNode == null) {
-				String label = Utils.getRDFSLabel(
-						fromURI.asURI(), rdfRepository,
-						parameters.get(RenderingCore.LANGUAGE));
-				if (label == null) {
-					label = from;
-				}
-				fromNode = new ConceptNode(from, type, createConceptURL(from,
-						parameters, section, uriProvider), label);
-				data.addConcept(fromNode);
-			}
+			ConceptNode toNode = createNode(parameters, rdfRepository, uriProvider, section,
+					data, toURI, to);
 
 			// look for label for the property
 			String relationLabel = Utils.getRDFSLabel(
@@ -217,6 +166,68 @@ public class SparqlVisTypeRenderer implements Renderer {
 		}
 
 		return data;
+	}
+
+	/**
+	 * 
+	 * @created 23.07.2013
+	 * @param parameters
+	 * @param rdfRepository
+	 * @param uriProvider
+	 * @param section
+	 * @param data
+	 * @param toURI
+	 * @param to
+	 * @param toLiteral
+	 * @param languageTagLiteral
+	 * @return
+	 */
+	private ConceptNode createNode(Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, SubGraphData data, Node toURI, String to) {
+
+		// is the node a literal ?
+		Literal toLiteral = null;
+		LanguageTagLiteral languageTagLiteral = null;
+		try {
+			toLiteral = toURI.asLiteral();
+			languageTagLiteral = toURI.asLanguageTagLiteral();
+		}
+		catch (ClassCastException e) {
+		}
+
+		ConceptNode toNode = null;
+
+		if (toLiteral != null) {
+			toNode = data.getConcept(to);
+		}
+		if (toNode == null) {
+			NODE_TYPE type = NODE_TYPE.UNDEFINED;
+			String label = null;
+			if (toLiteral == null) {
+				label = Utils.getRDFSLabel(
+						toURI.asURI(), rdfRepository,
+						parameters.get(RenderingCore.LANGUAGE));
+			}
+			if (label == null && toLiteral == null) {
+				label = to;
+			}
+			if (toLiteral != null) {
+				type = NODE_TYPE.LITERAL;
+				if (languageTagLiteral != null) {
+					label = languageTagLiteral.getValue().replaceAll(
+							languageTagLiteral.getLanguageTag(), "");
+				}
+				else {
+
+					label = toLiteral.toString();
+				}
+				to = "literal" + System.currentTimeMillis(); // some unique name
+			}
+			toNode = new ConceptNode(to, type, createConceptURL(to, parameters,
+					section,
+					uriProvider), label);
+			data.addConcept(toNode);
+		}
+		return toNode;
 	}
 
 	/**
