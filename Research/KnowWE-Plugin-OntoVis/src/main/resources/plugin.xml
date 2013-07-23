@@ -47,6 +47,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="Vis" />
+		<parameter id="scope" value="SparqlVis" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -69,6 +70,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="Vis" />
+		<parameter id="scope" value="SparqlVis" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -91,6 +93,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="Vis" />
+		<parameter id="scope" value="SparqlVis" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"

@@ -18,9 +18,9 @@ import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
@@ -36,10 +36,10 @@ import de.knowwe.rdfs.vis.dot.DOTVisualizationRenderer;
 import de.knowwe.rdfs.vis.markup.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.rdfs.vis.util.Utils;
 
-public class SparqlVisTypeRenderer extends DefaultMarkupRenderer {
+public class SparqlVisTypeRenderer implements Renderer {
 
 	@Override
-	public void renderContents(Section<?> content, UserContext user, RenderResult string) {
+	public void render(Section<?> content, UserContext user, RenderResult string) {
 
 		Section<SparqlVisType> section = Sections.findAncestorOfType(content,
 				SparqlVisType.class);

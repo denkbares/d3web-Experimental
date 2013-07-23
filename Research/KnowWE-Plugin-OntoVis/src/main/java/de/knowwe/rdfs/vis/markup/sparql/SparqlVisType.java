@@ -19,8 +19,10 @@
 package de.knowwe.rdfs.vis.markup.sparql;
 
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
  * 
@@ -68,6 +70,17 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
 		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, Renderer.values());
 		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
+		MARKUP.addAnnotationRenderer(Rdf2GoCore.MASTER_ANNOTATION, NothingRenderer.getInstance());
+		MARKUP.addAnnotationRenderer(ANNOTATION_COMMENT, NothingRenderer.getInstance());
+		MARKUP.addAnnotationRenderer(ANNOTATION_SIZE, NothingRenderer.getInstance());
+		MARKUP.addAnnotationRenderer(ANNOTATION_FORMAT, NothingRenderer.getInstance());
+		MARKUP.addAnnotationRenderer(PackageManager.ANNOTATION_MASTER,
+				NothingRenderer.getInstance());
+		MARKUP.addAnnotationRenderer(ANNOTATION_LANGUAGE, NothingRenderer.getInstance());
+		MARKUP.addAnnotationRenderer(ANNOTATION_DOT_APP, NothingRenderer.getInstance());
+		MARKUP.addAnnotationRenderer(ANNOTATION_ADD_TO_DOT, NothingRenderer.getInstance());
+		MARKUP.addAnnotationRenderer(ANNOTATION_RENDERER, NothingRenderer.getInstance());
+		MARKUP.addAnnotationRenderer(ANNOTATION_VISUALIZATION, NothingRenderer.getInstance());
 	}
 
 	public SparqlVisType() {
