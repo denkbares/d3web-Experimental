@@ -101,9 +101,6 @@ public final class TestCaseExecutorUtils {
 		html.append("</p>");
 
 		html.append("<p style='margin-left:22px'>");
-		html.append("Precision: ");
-		html.append(result.precision());
-		html.append("<br />");
 		html.append("Recall: ");
 		html.append(result.recall());
 		html.append("<br /><br />");
@@ -131,9 +128,6 @@ public final class TestCaseExecutorUtils {
 
 		// TestCase TestCaseAnalysisReport Details
 		html.append("<p style='margin-left:22px'>");
-		html.append("Precision: ");
-		html.append(formatter.format(result.precision()));
-		html.append("<br />");
 		html.append("Recall: ");
 		html.append(formatter.format(result.recall()));
 		html.append("<br /><br />");
@@ -238,7 +232,7 @@ public final class TestCaseExecutorUtils {
 	 * @return
 	 */
 	public static String renderTestAnalysisResult(TestCase t, TestCaseAnalysisReport result, ResourceBundle rb, MessageFormat mf) {
-		if (result.precision() == 1.0 && result.recall() == 1.0) {
+		if (result.recall() == 1.0) {
 			return renderTestCasePassed(t, result, rb, mf);
 
 		}
@@ -265,9 +259,6 @@ public final class TestCaseExecutorUtils {
 
 		// TestCase TestCaseAnalysisReport Detais
 		html.append("<p style='margin-left:22px'>");
-		html.append("Precision: ");
-		html.append(formatter.format(result.precision()));
-		html.append("<br />");
 		html.append("Recall: ");
 		html.append(formatter.format(result.recall()));
 		html.append("</p>\n");
