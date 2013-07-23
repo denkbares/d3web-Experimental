@@ -9,7 +9,6 @@ import javax.servlet.ServletContext;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.LanguageTagLiteral;
 import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
 
@@ -151,7 +150,8 @@ public class SparqlVisTypeRenderer implements Renderer {
 			ConceptNode toNode = createNode(parameters, rdfRepository, uriProvider, section,
 					data, toURI, to);
 
-			String relationLabel = createRelationLabel(parameters, rdfRepository, relationURI, relation);
+			String relationLabel = createRelationLabel(parameters, rdfRepository, relationURI,
+					relation);
 
 			Edge newLineRelationsKey = new Edge(fromNode, relationLabel, toNode);
 
@@ -165,22 +165,17 @@ public class SparqlVisTypeRenderer implements Renderer {
 	private String createRelationLabel(Map<String, String> parameters, Rdf2GoCore rdfRepository, Node relationURI, String relation) {
 		// is the node a literal ?
 		Literal toLiteral = null;
-		LanguageTagLiteral languageTagLiteral = null;
 		try {
 			toLiteral = relationURI.asLiteral();
-			languageTagLiteral = relationURI.asLanguageTagLiteral();
 		}
 		catch (ClassCastException e) {
 		}
 
 		String relationName = relation;
 		if (toLiteral != null) {
-			if (languageTagLiteral != null) {
-				relationName = languageTagLiteral.getValue().replaceAll(
-						languageTagLiteral.getLanguageTag(), "");
-			}
-			else {
-				relationName = toLiteral.toString();
+			relationName = toLiteral.toString();
+			if (relationName.contains("@")) {
+				relationName = relationName.substring(0, relationName.indexOf('@'));
 			}
 		}
 		else {
@@ -213,10 +208,8 @@ public class SparqlVisTypeRenderer implements Renderer {
 
 		// is the node a literal ?
 		Literal toLiteral = null;
-		LanguageTagLiteral languageTagLiteral = null;
 		try {
 			toLiteral = toURI.asLiteral();
-			languageTagLiteral = toURI.asLanguageTagLiteral();
 		}
 		catch (ClassCastException e) {
 		}
@@ -239,13 +232,9 @@ public class SparqlVisTypeRenderer implements Renderer {
 			}
 			if (toLiteral != null) {
 				type = NODE_TYPE.LITERAL;
-				if (languageTagLiteral != null) {
-					label = languageTagLiteral.getValue().replaceAll(
-							languageTagLiteral.getLanguageTag(), "");
-				}
-				else {
-
-					label = toLiteral.toString();
+				label = toLiteral.toString();
+				if (label.contains("@")) {
+					label = label.substring(0, label.indexOf('@'));
 				}
 				to = "literal" + System.currentTimeMillis(); // some unique name
 			}
