@@ -151,21 +151,48 @@ public class SparqlVisTypeRenderer implements Renderer {
 			ConceptNode toNode = createNode(parameters, rdfRepository, uriProvider, section,
 					data, toURI, to);
 
-			// look for label for the property
-			String relationLabel = Utils.getRDFSLabel(
-					relationURI.asURI(), rdfRepository,
-					parameters.get(RenderingCore.LANGUAGE));
-			if (relationLabel != null) {
-				relation = relationLabel;
-			}
+			String relationLabel = createRelationLabel(parameters, rdfRepository, relationURI, relation);
 
-			Edge newLineRelationsKey = new Edge(fromNode, relation, toNode);
+			Edge newLineRelationsKey = new Edge(fromNode, relationLabel, toNode);
 
 			data.addEdge(newLineRelationsKey);
 
 		}
 
 		return data;
+	}
+
+	private String createRelationLabel(Map<String, String> parameters, Rdf2GoCore rdfRepository, Node relationURI, String relation) {
+		// is the node a literal ?
+		Literal toLiteral = null;
+		LanguageTagLiteral languageTagLiteral = null;
+		try {
+			toLiteral = relationURI.asLiteral();
+			languageTagLiteral = relationURI.asLanguageTagLiteral();
+		}
+		catch (ClassCastException e) {
+		}
+
+		String relationName = relation;
+		if (toLiteral != null) {
+			if (languageTagLiteral != null) {
+				relationName = languageTagLiteral.getValue().replaceAll(
+						languageTagLiteral.getLanguageTag(), "");
+			}
+			else {
+				relationName = toLiteral.toString();
+			}
+		}
+		else {
+			// if it is no literal look for label for the URI
+			String relationLabel = Utils.getRDFSLabel(
+					relationURI.asURI(), rdfRepository,
+					parameters.get(RenderingCore.LANGUAGE));
+			if (relationLabel != null) {
+				relationName = relationLabel;
+			}
+		}
+		return relationName;
 	}
 
 	/**
