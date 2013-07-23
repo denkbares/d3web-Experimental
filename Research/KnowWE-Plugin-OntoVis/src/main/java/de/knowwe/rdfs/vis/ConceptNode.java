@@ -68,6 +68,9 @@ public class ConceptNode {
 	public ConceptNode(String name, NODE_TYPE type, String url, String label) {
 		this(name);
 		this.type = type;
+		if (name == null) {
+			throw new NullPointerException("name is null");
+		}
 		if (label == null) {
 			throw new NullPointerException("label is null");
 		}

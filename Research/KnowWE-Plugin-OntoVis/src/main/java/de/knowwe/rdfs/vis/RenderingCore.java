@@ -53,7 +53,7 @@ import de.knowwe.rdfs.vis.util.Utils;
 public class RenderingCore {
 
 	public enum NODE_TYPE {
-		CLAAS, PROPERTY, INSTANCE, UNDEFINED
+		CLAAS, PROPERTY, INSTANCE, UNDEFINED, LITERAL
 	};
 
 	public static final String RENDERER = "renderer";
@@ -160,7 +160,7 @@ public class RenderingCore {
 		this.section = section;
 
 		parameters.put(REAL_PATH, realPath);
-		parameters.put(TITLE, getSectionTitle());
+		parameters.put(TITLE, getSectionTitle(section));
 		parameters.put(SECTION_ID, getSectionID(section));
 
 		data = new SubGraphData();
@@ -176,7 +176,7 @@ public class RenderingCore {
 		setConfigurationParameters();
 	}
 
-	private String getSectionTitle() {
+	public static String getSectionTitle(Section<?> section) {
 		if (section != null) {
 			return section.getTitle();
 		}
@@ -710,7 +710,7 @@ public class RenderingCore {
 				return uriProvider.getLinkToTermDefinition(to, parameters.get(MASTER));
 			}
 		}
-		return createBaseURL() + "?page=" + getSectionTitle()
+		return createBaseURL() + "?page=" + getSectionTitle(section)
 				+ "&concept=" + to;
 	}
 
