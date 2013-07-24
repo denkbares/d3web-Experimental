@@ -77,7 +77,15 @@
 		<parameter id="script" value="d3.js" />
 		<parameter id="css" value="visualisation.css" />
 	</extension>
-	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
+        id="DatabaseChangeListener">
+        <parameter id="class"
+            value="de.knowwe.ophtovisD3.DatabaseChangeListener" />
+        <parameter id="name" value="DatabaseChangeListener" />
+        <parameter id="description" value="EventListener DatabaseChangeListener" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension> 
 	
 
 </plugin>

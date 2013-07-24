@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gson.Gson;
 
 import de.knowwe.ophtovisD3.utils.JsonFactory;
 import de.knowwe.ophtovisD3.utils.NodeWithName;
@@ -123,16 +122,19 @@ public class GraphBuilder {
 	}
 	
 	public static String buildGraphExperimental(String connectionType, String highlighted){
+		if(!treeIsHere){
 		LinkedList <String> resultList = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
 		resultTree = new Tree<NodeWithName>(new NodeWithName("Wurzel", "Wissensbasis"),
 				new WissassHierarchyProvider());
-		String label, result;
+		String label;
 		for (String string : resultList) {
 			label = shorty.shorten(string);
 			resultTree.insertNode(new NodeWithName(string, label));
 		}
-		resultTree = hightlightConcept(resultTree, highlighted);
-		result =JsonFactory.toJSON(resultTree);
+		treeIsHere=true;
+		}
+		Tree<NodeWithName> resultTreeHighlighted = hightlightConcept(resultTree, highlighted);
+		String result =JsonFactory.toJSON(resultTreeHighlighted);
 		return result;
 		
 	}
@@ -172,17 +174,8 @@ public class GraphBuilder {
 	public static Tree<NodeWithName>hightlightConcept(Tree<NodeWithName> tree, String conceptToHightlight){
 		NodeWithName toAlter =tree.find(new NodeWithName(conceptToHightlight, shorty.shorten(conceptToHightlight)));
 		if(!(toAlter==null)){
-		toAlter.setHighligted();
-		tree.insertNode(toAlter);
-		}else{
-			NodeWithName toDelete =null;
-			Set<NodeWithName> nodes =tree.getNodes();
-			for (NodeWithName nodeWithName : nodes) {
-				if(nodeWithName.toString().equals(conceptToHightlight))
-					toDelete=nodeWithName;
-			}
-			boolean worked= tree.removeNodeFromTree(toDelete);
-			tree.insertNode(new NodeWithName(conceptToHightlight, null, shorty.shorten(conceptToHightlight), true));
+			toAlter.setHighligted();
+			tree.insertNode(toAlter);
 		}
 		return tree;
 	}

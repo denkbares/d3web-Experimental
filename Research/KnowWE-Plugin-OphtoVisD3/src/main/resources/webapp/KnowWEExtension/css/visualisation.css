@@ -153,7 +153,7 @@ border-radius: 10px;
 
 path.link {
   fill: none;
-  stroke: black;
+  stroke: rgb(150, 150, 150);
   stroke-width: 1px;
 }
 /*infoBox2 ---------------------------------------------------------------------------*/
@@ -306,3 +306,29 @@ background-color: #F3F3F3;
 
 .hidden { visibility: hidden; display: none;}
 .unhidden { visibility: visible; display: block;}
+
+circle {
+  fill: #ccc;
+  stroke: #999;
+  pointer-events: all;
+}
+
+circle.parent {
+  fill: #1f77b4;
+  fill-opacity: .1;
+  stroke: steelblue;
+}
+circle.highlighted {
+  fill: red;
+  fill-opacity: .1;
+  stroke: steelblue;
+}
+
+circle.parent:hover {
+  stroke: #ff7f0e;
+  stroke-width: .5px;
+}
+
+circle.child {
+  pointer-events: none;
+}
