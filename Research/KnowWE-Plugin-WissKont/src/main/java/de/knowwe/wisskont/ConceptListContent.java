@@ -20,11 +20,32 @@ package de.knowwe.wisskont;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.d3web.core.inference.KnowledgeSlice;
+import de.d3web.core.inference.Rule;
+import de.d3web.core.inference.RuleSet;
+import de.d3web.core.inference.condition.CondEqual;
+import de.d3web.core.inference.condition.CondKnown;
+import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.KnowledgeStore;
+import de.d3web.core.knowledge.TerminologyManager;
+import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.terminology.Choice;
+import de.d3web.core.knowledge.terminology.QuestionOC;
+import de.d3web.core.knowledge.terminology.Solution;
+import de.d3web.core.manage.RuleFactory;
+import de.d3web.core.session.values.ChoiceValue;
+import de.d3web.scoring.ActionHeuristicPS;
+import de.d3web.scoring.Score;
+import de.d3web.scoring.inference.PSMethodHeuristic;
 import de.knowwe.annotation.type.list.ListObjectIdentifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
@@ -33,15 +54,18 @@ import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.InvalidReference;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquotedNonEmpty;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
+import de.knowwe.wisskont.dss.KnowledgeBaseInstantiation;
 import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
@@ -118,11 +142,123 @@ public class ConceptListContent extends AbstractType {
 				Rdf2GoCore.getInstance().addStatements(section,
 						new Statement[] { statement });
 
+				Section<RelationMarkup> markup = Sections.findAncestorOfType(section,
+						RelationMarkup.class);
+				createD3webDerivationRule(section, conceptDefinition, objectSection, markup);
+
+			}
+
+			private void createD3webDerivationRule(Section<ObjectSegment> section, Section<IncrementalTermDefinition> conceptDefinition, Section<Term> objectSection, Section<? extends RelationMarkup> markup) {
+				if (!(markup.get() instanceof MustMarkup || markup.get() instanceof CanMarkup || markup.get() instanceof CaveMarkup)) {
+					return;
+				}
+
+				String keyword = markup.get().getDerivationMessagePrefix();
+
+				String subjectTermName = conceptDefinition.get().getTermName(conceptDefinition);
+				String objectTermName = objectSection.get().getTermName(objectSection);
+
+				Article article = conceptDefinition.getArticle();
+				Section<ValuesMarkup> values = Sections.findSuccessor(article.getRootSection(),
+						ValuesMarkup.class);
+				if (values != null) {
+
+					KnowledgeBase kb = KnowledgeBaseInstantiation.getKB();
+					TerminologyManager manager = kb.getManager();
+					TerminologyObject object = manager.search(subjectTermName);
+					QuestionOC question = null;
+					if (object == null) {
+						object = ValuesMarkup.createQuestionOCWithValues(values, manager,
+								subjectTermName);
+					}
+					if (object instanceof QuestionOC) {
+						question = (QuestionOC) object;
+					}
+
+					if (question == null) {
+						Logger.getLogger(this.getClass().getName()).log(
+								Level.SEVERE,
+								"Could not create Question for ValuesMarkup"
+										+ objectSection.toString());
+						throw new NullPointerException();
+						// return;
+					}
+
+					TerminologyObject solObject = manager.search(objectTermName);
+					Solution solution = null;
+					if (solObject == null) {
+						solution = KnowledgeBaseInstantiation.createSolution(objectSection,
+								keyword, question);
+					}
+					else {
+						if (solObject instanceof Solution) {
+							solution = (Solution) solObject;
+						}
+					}
+					boolean isYN = isYNQuestion(question);
+					Condition cond = null;
+					if (isYN) {
+						Choice yes = getAnswerYes(question);
+						cond = new CondEqual(question, new ChoiceValue(yes));
+					}
+					else {
+						cond = new CondKnown(question);
+					}
+
+					ActionHeuristicPS a = null;
+					if (solution != null) {
+						a = new ActionHeuristicPS();
+						a.setSolution(solution);
+						a.setScore(Score.P7);
+					}
+					if (a != null && cond != null) {
+						Rule r = RuleFactory.createRule(a, cond,
+									null, PSMethodHeuristic.class);
+						if (r != null) {
+							KnowWEUtils.storeObject(article, section, RULE_STORE_KEY, r);
+						}
+					}
+				}
+
+			}
+
+			private static final String RULE_STORE_KEY = "RULE_STORE_KEY";
+
+			/**
+			 * 
+			 * @created 25.07.2013
+			 * @param question
+			 */
+			private boolean isYNQuestion(QuestionOC question) {
+				return getAnswerYes(question) != null;
+			}
+
+			private Choice getAnswerYes(QuestionOC question) {
+				List<Choice> allAlternatives = question.getAllAlternatives();
+				for (Choice choice : allAlternatives) {
+					if (choice.getName().equalsIgnoreCase("ja") && allAlternatives.size() == 2) {
+						return choice;
+					}
+				}
+				return null;
 			}
 
 			@Override
 			public void deleteFromRepository(Section<ObjectSegment> section) {
 				Rdf2GoCore.getInstance().removeStatementsForSection(section);
+				Object storedObject = KnowWEUtils.getStoredObject(section.getArticle(), section,
+						RULE_STORE_KEY);
+				if (storedObject instanceof Rule) {
+					Rule r = (Rule) storedObject;
+					KnowledgeStore knowledgeStore = KnowledgeBaseInstantiation.getKB().getKnowledgeStore();
+					KnowledgeSlice[] knowledge = knowledgeStore.getKnowledge();
+					for (KnowledgeSlice knowledgeSlice : knowledge) {
+						if (knowledgeSlice instanceof RuleSet) {
+							((RuleSet) knowledgeSlice).removeRule(r);
+						}
+					}
+
+				}
 			}
 
 			@Override

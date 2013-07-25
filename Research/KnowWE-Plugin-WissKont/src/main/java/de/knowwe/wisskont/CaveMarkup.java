@@ -46,4 +46,9 @@ public class CaveMarkup extends RelationMarkup {
 		return createURI(KEY);
 	}
 
+	@Override
+	public String getDerivationMessagePrefix() {
+		return "VORSICHT ";
+	}
+
 }

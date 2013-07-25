@@ -46,4 +46,10 @@ public class TemporalMarkup extends RelationMarkup {
 		return createURI(KEY);
 	}
 
+	@Override
+	public String getDerivationMessagePrefix() {
+		// not required
+		return null;
+	}
+
 }

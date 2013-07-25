@@ -46,4 +46,9 @@ public class MustMarkup extends RelationMarkup {
 		return createURI(KEY);
 	}
 
+	@Override
+	public String getDerivationMessagePrefix() {
+		return "MUSS";
+	}
+
 }

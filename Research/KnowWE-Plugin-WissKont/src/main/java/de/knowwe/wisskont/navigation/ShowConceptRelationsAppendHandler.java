@@ -34,6 +34,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.RenderingCore;
 import de.knowwe.rdfs.vis.markup.IncrementalCompilerLinkToTermDefinitionProvider;
+import de.knowwe.rdfs.vis.markup.OntoVisType;
 import de.knowwe.termbrowser.TermRecommender;
 import de.knowwe.wisskont.ConceptMarkup;
 
@@ -81,6 +82,11 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 			parameterMap.put(RenderingCore.SHOW_CLASSES, "false");
 
 			parameterMap.put(RenderingCore.SHOW_SCROLLBAR, "false");
+
+			// which kind of visualization ???
+			parameterMap.put(RenderingCore.RENDERER, OntoVisType.Renderer.d3.name());
+			parameterMap.put(RenderingCore.VISUALIZATION,
+					OntoVisType.Visualizations.force.name());
 
 			String colorCodes = "";
 			colorCodes += "kann: #009900;"; // green

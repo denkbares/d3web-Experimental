@@ -51,7 +51,8 @@ import de.knowwe.wisskont.SubconceptMarkup;
 public class MarkupUtils {
 
 	/**
-	 * Finds the concept definition iff there is exactly _one_ on this page.
+	 * Finds the concept definition of the local page iff there is exactly _one_
+	 * on this page.
 	 * 
 	 * @created 28.11.2012
 	 * @param section

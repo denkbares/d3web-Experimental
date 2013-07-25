@@ -58,7 +58,7 @@ public abstract class RelationMarkup extends AbstractType {
 
 	protected String getLineRegex(String key) {
 		String keyRegex = getKeyRegex(key);
-		return "(?i)^" + keyRegex + "\\u0020?(.*?)\r?\n(\\s*)\r?\n";
+		return "(?i)^" + keyRegex + "\\u0020?(.*?)(\r?\n(\\s*)\r?\n|$)";
 	}
 
 	protected String getKeyRegex(String key) {
@@ -66,6 +66,8 @@ public abstract class RelationMarkup extends AbstractType {
 	}
 
 	public abstract URI getRelationURI();
+
+	public abstract String getDerivationMessagePrefix();
 
 	public boolean isInverseDir() {
 		return false;

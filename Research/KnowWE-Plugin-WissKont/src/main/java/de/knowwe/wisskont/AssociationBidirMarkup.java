@@ -45,4 +45,10 @@ public class AssociationBidirMarkup extends RelationMarkup {
 	public URI getRelationURI() {
 		return createURI(KEY);
 	}
+
+	@Override
+	public String getDerivationMessagePrefix() {
+		// not required
+		return null;
+	}
 }

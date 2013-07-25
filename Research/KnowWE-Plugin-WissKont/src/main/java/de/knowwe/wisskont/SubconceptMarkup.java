@@ -52,4 +52,10 @@ public class SubconceptMarkup extends RelationMarkup {
 		return true;
 	}
 
+	@Override
+	public String getDerivationMessagePrefix() {
+		// not required
+		return null;
+	}
+
 }
