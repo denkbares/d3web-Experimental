@@ -31,6 +31,7 @@ public class HierarchyNode {
 	private boolean isInSourceYet = false;
 
 	public HierarchyNode(ConceptNode source) {
+		if (source == null) throw new NullPointerException();
 		this.source = source;
 		name = source.getName();
 		children = new LinkedList<HierarchyNode>();

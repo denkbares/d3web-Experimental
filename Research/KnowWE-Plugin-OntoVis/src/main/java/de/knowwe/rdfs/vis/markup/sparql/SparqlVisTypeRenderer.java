@@ -31,8 +31,10 @@ import de.knowwe.rdfs.vis.GraphVisualizationRenderer;
 import de.knowwe.rdfs.vis.RenderingCore;
 import de.knowwe.rdfs.vis.RenderingCore.NODE_TYPE;
 import de.knowwe.rdfs.vis.SubGraphData;
+import de.knowwe.rdfs.vis.d3.D3VisualizationRenderer;
 import de.knowwe.rdfs.vis.dot.DOTVisualizationRenderer;
 import de.knowwe.rdfs.vis.markup.IncrementalCompilerLinkToTermDefinitionProvider;
+import de.knowwe.rdfs.vis.markup.OntoVisType;
 import de.knowwe.rdfs.vis.util.Utils;
 
 public class SparqlVisTypeRenderer implements Renderer {
@@ -114,7 +116,20 @@ public class SparqlVisTypeRenderer implements Renderer {
 		SubGraphData data = convertToGraph(resultSet, parameterMap, rdfRepository, uriProvider,
 				section);
 
+		String conceptName = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONCEPT);
+		if (conceptName == null && data.getConceptDeclarations().size() > 0) {
+			// if no center concept has explicitly been specified, take any
+			conceptName = data.getConceptDeclarations().iterator().next().getName();
+		}
+		parameterMap.put(RenderingCore.CONCEPT, conceptName);
+
+		// current default source renderer is DOT
 		GraphVisualizationRenderer graphRenderer = new DOTVisualizationRenderer(data, parameterMap);
+		String renderer = parameterMap.get(RenderingCore.RENDERER);
+		if (renderer != null && renderer.equals(OntoVisType.Renderer.d3.name())) {
+			graphRenderer = new D3VisualizationRenderer(data, parameterMap);
+		}
+
 		graphRenderer.generateSource();
 		String renderedContent = graphRenderer.getHTMLIncludeSnipplet();
 		string.appendHtml(renderedContent);

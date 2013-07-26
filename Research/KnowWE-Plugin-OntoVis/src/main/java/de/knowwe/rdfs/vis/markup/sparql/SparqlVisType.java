@@ -32,6 +32,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class SparqlVisType extends DefaultMarkupType {
 
+	public static final String ANNOTATION_CONCEPT = "concept";
 	public static final String ANNOTATION_COMMENT = "comment";
 	public static final String ANNOTATION_SIZE = "size";
 	public static final String ANNOTATION_FORMAT = "format";
@@ -61,6 +62,7 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP = new DefaultMarkup("SparqlVis");
 		SparqlVisContentType sparqlContentType = new SparqlVisContentType();
 		MARKUP.addContentType(sparqlContentType);
+		MARKUP.addAnnotation(ANNOTATION_CONCEPT, false);
 		MARKUP.addAnnotation(ANNOTATION_COMMENT, false);
 		MARKUP.addAnnotation(ANNOTATION_SIZE, false);
 		MARKUP.addAnnotation(ANNOTATION_FORMAT, false);
