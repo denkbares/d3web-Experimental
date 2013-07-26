@@ -251,7 +251,6 @@ public class SparqlVisTypeRenderer implements Renderer {
 				if (label.contains("@")) {
 					label = label.substring(0, label.indexOf('@'));
 				}
-				to = "literal" + System.currentTimeMillis(); // some unique name
 			}
 			toNode = new ConceptNode(to, type, createConceptURL(to, parameters,
 					section,
