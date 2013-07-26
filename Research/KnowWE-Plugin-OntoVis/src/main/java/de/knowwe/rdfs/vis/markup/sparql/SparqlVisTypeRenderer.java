@@ -151,19 +151,17 @@ public class SparqlVisTypeRenderer implements Renderer {
 			QueryRow row = iterator.next();
 
 			Node fromURI = row.getValue(variables.get(0));
-			String from = RenderingCore.getConceptName(fromURI);
 
 			Node relationURI = row.getValue(variables.get(1));
 			String relation = RenderingCore.getConceptName(relationURI);
 
 			Node toURI = row.getValue(variables.get(2));
-			String to = RenderingCore.getConceptName(toURI);
 
 			ConceptNode fromNode = createNode(parameters, rdfRepository, uriProvider,
-					section, data, fromURI, from);
+					section, data, fromURI);
 
 			ConceptNode toNode = createNode(parameters, rdfRepository, uriProvider, section,
-					data, toURI, to);
+					data, toURI);
 
 			String relationLabel = createRelationLabel(parameters, rdfRepository, relationURI,
 					relation);
@@ -219,12 +217,15 @@ public class SparqlVisTypeRenderer implements Renderer {
 	 * @param languageTagLiteral
 	 * @return
 	 */
-	private ConceptNode createNode(Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, SubGraphData data, Node toURI, String to) {
-
+	private ConceptNode createNode(Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, SubGraphData data, Node toURI) {
+		String to = RenderingCore.getConceptName(toURI);
 		// is the node a literal ?
 		Literal toLiteral = null;
 		try {
 			toLiteral = toURI.asLiteral();
+			if (to == null) {
+				to = toLiteral.toString();
+			}
 		}
 		catch (ClassCastException e) {
 		}
