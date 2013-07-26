@@ -45,6 +45,9 @@ public class D3Renderer {
 
 	private static String context;
 
+	// sectionID in paramter rein schreiben (im markup bekannt) und div dann so
+	// benennen (id dann
+	// mit ins javascript übergeben)
 	public static String createD3HTMLSource(SubGraphData data, Map<String, String> parameters) {
 		context = Environment.getInstance().getWikiConnector().getServletContext().getContextPath();
 
@@ -98,9 +101,12 @@ public class D3Renderer {
 
 		// draw the force-visualization
 		htmlsource += "<script>";
-		htmlsource += " drawForce(" + parameters.get(RenderingCore.GRAPH_SIZE) +
-				", " + arraySource
-				+ ", " + arrayLinks + ")";
+		htmlsource += " drawForce(" + parameters.get(RenderingCore.GRAPH_SIZE)
+				+ ", " + arraySource
+				+ ", " + arrayLinks
+				+ ", " + "\"" + RenderingCore.createBaseURL() + "\""
+				+ ", " + "\"" + parameters.get(RenderingCore.TITLE) + "\""
+				+ ")";
 		htmlsource += "</script>";
 	}
 

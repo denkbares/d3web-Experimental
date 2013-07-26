@@ -1,4 +1,5 @@
-function drawForce(size, array, linksList) { 
+function drawForce(size, array, linksList, baseurl, title) { 
+	url = baseurl + "?page=" + title + "&concept=";
 	
 	var links = array;
 	
@@ -52,11 +53,14 @@ function drawForce(size, array, linksList) {
     			.attr("marker-end", function(d) { return "url(#" + d.type + ")"; })
     			.attr("id", function(d,i) { return "path" + i; });
 
-	var circle = svg.append("svg:g").selectAll("circle")
+	var circle = svg.append("svg:g").selectAll("a")
 				.data(force.nodes())
-			.enter().append("svg:circle")
-				.attr("r", 10)
-				.call(force.drag);
+				.enter().append("svg:a")
+					.attr("xlink:href", function(d) { return url + d.name })
+					.attr("target", "_top")
+				.append("svg:circle")
+					.attr("r", 10)
+					.call(force.drag);
 
 	var nodelabel = svg.append("svg:g").selectAll("g")
     			.data(force.nodes())
