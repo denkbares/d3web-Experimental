@@ -76,6 +76,7 @@ public class PersonalMessageAction extends AbstractAction {
 					+ FORUM_BUTTON
 					+ "</a>\n";
 			content += "<div style='clear:both'></div>\n";
+			content = "[{VIEW" + content;
 
 			Environment.getInstance().buildAndRegisterArticle(content,
 						topic, Environment.DEFAULT_WEB);
