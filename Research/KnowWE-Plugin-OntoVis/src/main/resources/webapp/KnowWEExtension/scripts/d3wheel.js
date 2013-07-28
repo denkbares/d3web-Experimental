@@ -11,7 +11,7 @@ function drawWheel(size, json) {
 	    y = d3.scale.pow().domain([0, 1]).range([0, radius]),
 		color = d3.scale.category20c();
 	
-	var div = d3.select("#d3");
+	var div = d3.select("#d3" + sectionID);
 	
 	var svg = div.append("svg")
 	    .attr("width", width + padding * 2)
@@ -135,7 +135,8 @@ function drawWheel(size, json) {
 			// L*a*b* might be better here...
 			return d3.hsl((a.h + b.h) / 2, a.s * 1.2, a.l / 1.2);
 		}
-		return "#ffe4c4";
+		// ffe4c4
+		return "#0F8B0A";
 	} 
 	
 	function maxY(d) {

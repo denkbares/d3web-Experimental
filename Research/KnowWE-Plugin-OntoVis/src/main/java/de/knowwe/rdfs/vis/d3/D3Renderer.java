@@ -53,7 +53,8 @@ public class D3Renderer {
 
 		String visualization = parameters.get(RenderingCore.VISUALIZATION);
 
-		htmlsource = "<div id=\"d3\" style=\"overflow:scroll\">\r\n";
+		htmlsource = "<div id=\"d3" + parameters.get(RenderingCore.SECTION_ID)
+				+ "\" style=\"overflow:scroll\">\r\n";
 
 		// include the necessary d3.js sources
 		htmlsource += IncludeUtils.includeFile(FILE_TYPE.JAVASCRIPT, context
@@ -83,8 +84,10 @@ public class D3Renderer {
 
 		// draw the wheel-visualization
 		htmlsource += "<script>";
-		htmlsource += " drawWheel(" + parameters.get(RenderingCore.GRAPH_SIZE) +
-				", " + jsonSource
+		htmlsource += " drawWheel("
+				+ parameters.get(RenderingCore.GRAPH_SIZE)
+				+ ", " + jsonSource
+				+ ", " + "\"" + parameters.get(RenderingCore.SECTION_ID) + "\""
 				+ ") ";
 		htmlsource += "</script>";
 	}
@@ -101,11 +104,13 @@ public class D3Renderer {
 
 		// draw the force-visualization
 		htmlsource += "<script>";
-		htmlsource += " drawForce(" + parameters.get(RenderingCore.GRAPH_SIZE)
+		htmlsource += " drawForce("
+				+ parameters.get(RenderingCore.GRAPH_SIZE)
 				+ ", " + arraySource
 				+ ", " + arrayLinks
 				+ ", " + "\"" + RenderingCore.createBaseURL() + "\""
 				+ ", " + "\"" + parameters.get(RenderingCore.TITLE) + "\""
+				+ ", " + "\"" + parameters.get(RenderingCore.SECTION_ID) + "\""
 				+ ")";
 		htmlsource += "</script>";
 	}

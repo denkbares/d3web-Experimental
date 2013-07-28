@@ -1,4 +1,4 @@
-function drawForce(size, array, linksList, baseurl, title) { 
+function drawForce(size, array, linksList, baseurl, title, sectionID) { 
 	url = baseurl + "?page=" + title + "&concept=";
 	
 	var links = array;
@@ -27,7 +27,7 @@ function drawForce(size, array, linksList, baseurl, title) {
     				.on("tick", tick)
     				.start();
 	
-	var div = d3.select("#d3");
+	var div = d3.select("#d3" + sectionID);
 	
 	var svg = div.append("svg:svg")
 	    			.attr("width", width)
@@ -51,7 +51,7 @@ function drawForce(size, array, linksList, baseurl, title) {
     		.enter().append("svg:path")
     			.attr("class", function(d) { return "link " + d.type; })
     			.attr("marker-end", function(d) { return "url(#" + d.type + ")"; })
-    			.attr("id", function(d,i) { return "path" + i; });
+    			.attr("id", function(d,i) { return sectionID + "path" + i; });
 
 	var circle = svg.append("svg:g").selectAll("a")
 				.data(force.nodes())
@@ -90,7 +90,7 @@ function drawForce(size, array, linksList, baseurl, title) {
 				'fill':'#aaa'});
 	
 		edgelabel.append("svg:textPath")
-      		.attr('xlink:href', function(d,i) {return '#path' + i})
+      		.attr('xlink:href', function(d,i) {return "#" + sectionID + "path" + i})
       		.attr("startOffset", "30%")
       		.style("pointer-events", "none")
       		.text(function(d){ return d.type; });
