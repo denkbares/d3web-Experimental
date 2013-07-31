@@ -22,6 +22,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,8 @@ import de.knowwe.comment.forum.Forum;
 import de.knowwe.comment.forum.ForumBox;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.defi.logger.PageLoggerHandler;
+import de.knowwe.defi.logger.DefiPageEventLogger;
+import de.knowwe.defi.logger.DefiPageLogLine;
 import de.knowwe.kdom.xml.AbstractXMLType;
 
 /**
@@ -44,7 +46,15 @@ public class DiscussionUtils {
 	 */
 	public static int getNumberOfNewEntries(Section<? extends Forum> forum, String user) {
 		List<Section<ForumBox>> boxes = Sections.findSuccessorsOfType(forum, ForumBox.class);
-		HashMap<String, String> logPages = PageLoggerHandler.checkLogFor(user);
+		HashMap<String, String> logPages = new HashMap<String, String>();
+
+		for (DefiPageLogLine logLine : DefiPageEventLogger.getLogLines()) {
+			String lineUser = logLine.getUser();
+			String title = logLine.getPage();
+			String date = logLine.getStartDate() + " " + logLine.getstartTime();
+			if (lineUser.equals(user)) logPages.put(title, date);
+		}
+
 		String lastVisit = logPages.get(forum.getTitle());
 		int numberOfNewEntries = 0;
 
@@ -63,27 +73,23 @@ public class DiscussionUtils {
 	/**
 	 * String into Date.
 	 */
-	public static Date stringToDate(String s) {
-		SimpleDateFormat sdfToDate = new SimpleDateFormat(
-				"yyyy-MM-dd HH:mm:ss");
+	public static Date stringToDate(String dateString) {
 		Date date = null;
+		LinkedList<SimpleDateFormat> formats = new LinkedList<SimpleDateFormat>();
+		formats.add(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"));
+		formats.add(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+		formats.add(new SimpleDateFormat("dd.MM.yyyy HH:mm"));
+		formats.add(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss"));
 
-		try {
-			date = sdfToDate.parse(s);
-		}
-		catch (ParseException e) {
+		for (SimpleDateFormat sdf : formats) {
 			try {
-				sdfToDate = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-				date = sdfToDate.parse(s);
+				date = sdf.parse(dateString);
 			}
-			catch (ParseException e1) {
-				try {
-					sdfToDate = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-					date = sdfToDate.parse(s);
-				}
-				catch (ParseException e2) {
-				}
+			catch (ParseException e) {
+				continue;
 			}
+
+			break;
 		}
 
 		return date;

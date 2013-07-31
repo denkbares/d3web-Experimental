@@ -20,93 +20,22 @@
 
 package de.knowwe.defi.logger;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-
-import de.knowwe.core.Environment;
 import de.knowwe.core.append.PageAppendHandler;
+import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.defi.event.DefiPageEvent;
 
 public class PageLoggerHandler implements PageAppendHandler {
-
-	public boolean log = true;
-	private final static String PATH = Environment.getInstance().getWikiConnector().getSavePath()
-			+ "/Pagelogger.log";
-	private final static String SEPARATOR = "###";
 
 	@Override
 	public void append(String web, String title,
 			UserContext user, RenderResult result) {
-		if (log) {
-			try {
-				BufferedWriter buffy = new BufferedWriter(new OutputStreamWriter(
-						new FileOutputStream(PATH, true), "UTF-8"));
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String uhrzeit = sdf.format(new Date(System.currentTimeMillis()));
-				buffy.append(uhrzeit + "###" + user.getUserName() + "###" + user.getTitle() + "\n");
-				buffy.close();
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	/**
-	 * Suche im Log nach Zeilen des Users.
-	 */
-	public static HashMap<String, String> checkLogFor(String user) {
-		HashMap<String, String> logPages = new HashMap<String, String>();
-		String log = PageLoggerHandler.getPath();
-		String line;
-
-		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(log),
-					"UTF-8"));
-			try {
-				while ((line = br.readLine()) != null) {
-					String date = line.split(PageLoggerHandler.getSeparator())[0];
-					String name = line.split(PageLoggerHandler.getSeparator())[1];
-					String title = line.split(PageLoggerHandler.getSeparator())[2];
-					if (user.equals(name)) {
-						logPages.put(title, date);
-					}
-				}
-			}
-			finally {
-				br.close();
-			}
-		}
-		catch (FileNotFoundException e) {
-		}
-		catch (IOException e) {
-		}
-
-		return logPages;
+		EventManager.getInstance().fireEvent(new DefiPageEvent(user.getUserName(), title));
 	}
 
 	@Override
 	public boolean isPre() {
 		return false;
-	}
-
-	public static String getPath() {
-
-		return PATH;
-	}
-
-	public static String getSeparator() {
-
-		return SEPARATOR;
 	}
 }

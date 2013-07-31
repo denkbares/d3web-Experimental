@@ -18,12 +18,6 @@
  */
 package de.knowwe.defi.readon;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -32,12 +26,12 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.defi.logger.PageLoggerHandler;
+import de.knowwe.defi.logger.DefiPageEventLogger;
+import de.knowwe.defi.logger.DefiPageLogLine;
 import de.knowwe.defi.menu.MenuUtilities;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 
 /**
- * 
  * @author dupke
  */
 public class ReadOnTagHandler extends AbstractTagHandler {
@@ -55,43 +49,30 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 	@Override
 	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 		StringBuilder readon = new StringBuilder();
-		String path = PageLoggerHandler.getPath();
-		String line;
-		String page = "";
-		// Hole Lektionen aus dem Left Menu
+		String title = "";
+
+		// Füge Lektionenseiten hinzu
 		List<Section<DashTreeElement>> units = MenuUtilities.getAllUnits();
 		List<String> unitTitles = new LinkedList<String>();
 		for (Section<DashTreeElement> unit : units) {
 			unitTitles.add(MenuUtilities.getUnitPagename(unit));
 		}
 
-		// Füge zusätzliche Seiten an
+		// Füge zusätzliche Seiten hinzu
 		for (String s : ADDITIONAL_PAGES) {
 			unitTitles.add(s);
 		}
 
-		// TODO Neuen pagelogger benutzen
-		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					(new FileInputStream(new File(path))), "UTF-8"));
-			try {
-				while ((line = br.readLine()) != null) {
-					String name = line.split(PageLoggerHandler.getSeparator())[1];
-					String title = line.split(PageLoggerHandler.getSeparator())[2];
-					if (userContext.getUserName().equals(name) && unitTitles.contains(title)) page = title;
-				}
-			}
-			finally {
-				br.close();
-			}
-		}
-		catch (FileNotFoundException e) {
-		}
-		catch (IOException e) {
+		// Durchsuche den Log nach letzter besuchter Seite
+		for (DefiPageLogLine logLine : DefiPageEventLogger.getLogLines()) {
+			String userName = logLine.getUser();
+			String page = logLine.getPage();
+			if (userContext.getUserName().equals(userName) && unitTitles.contains(page)) title = page;
 		}
 
-		if (page.equals("")) readon.append("<p>-</p>");
-		else readon.append("<p><a href='Wiki.jsp?page=" + page + "'>" + page
+		// Gebe letzte besuchte Seite aus oder - für keine Seite
+		if (title.equals("")) readon.append("<p>-</p>");
+		else readon.append("<p><a href='Wiki.jsp?page=" + title + "'>" + title
 				+ "</a></p>");
 
 		result.appendHtml(readon.toString());
