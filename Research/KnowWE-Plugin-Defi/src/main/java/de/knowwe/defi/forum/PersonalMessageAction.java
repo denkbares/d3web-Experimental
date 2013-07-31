@@ -56,6 +56,8 @@ public class PersonalMessageAction extends AbstractAction {
 		if (mgr.getArticle(topic) == null) {
 			// Erstelle Forum
 			String content = "";
+			// rights
+			content += "[{ALLOW edit " + user1 + "," + user2 + "}]\n\n";
 			// links above the forum
 			content += "<a class=\"forumLinkLeft\" href=\"\" onclick=\"javascript:location.href = document.referrer;return false;\">"
 					+ BACK_BUTTON + "</a>\n";
@@ -76,7 +78,6 @@ public class PersonalMessageAction extends AbstractAction {
 					+ FORUM_BUTTON
 					+ "</a>\n";
 			content += "<div style='clear:both'></div>\n";
-			content = "[{VIEW" + content;
 
 			Environment.getInstance().buildAndRegisterArticle(content,
 						topic, Environment.DEFAULT_WEB);

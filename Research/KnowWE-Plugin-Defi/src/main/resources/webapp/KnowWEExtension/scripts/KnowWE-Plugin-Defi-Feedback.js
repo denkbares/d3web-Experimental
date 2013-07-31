@@ -76,7 +76,7 @@ function confirmFeedback() {
 	alertDivModal.id = "alertDialogModal";
 
 	// position - alert-box
-	alertDiv.style.top = document.documentElement.scrollTop + 200 + "px";
+	alertDiv.style.top = (window.innerHeight - 100 - alertDiv.offsetHeight)/2 + "px";
 	alertDiv.style.left = (document.documentElement.scrollWidth - alertDiv.offsetWidth)/2 + "px";
 	// position - background
 	alertDivModal.style.height = document.documentElement.scrollHeight + "px";

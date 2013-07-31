@@ -90,7 +90,8 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 		catch (IOException e) {
 		}
 
-		readon.append("<p><a href='Wiki.jsp?page=" + page + "'>" + page
+		if (page.equals("")) readon.append("<p>-</p>");
+		else readon.append("<p><a href='Wiki.jsp?page=" + page + "'>" + page
 				+ "</a></p>");
 
 		result.appendHtml(readon.toString());
