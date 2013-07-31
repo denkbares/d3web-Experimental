@@ -77,9 +77,9 @@ public class DiscussionUtils {
 		Date date = null;
 		LinkedList<SimpleDateFormat> formats = new LinkedList<SimpleDateFormat>();
 		formats.add(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"));
+		formats.add(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss"));
 		formats.add(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 		formats.add(new SimpleDateFormat("dd.MM.yyyy HH:mm"));
-		formats.add(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss"));
 
 		for (SimpleDateFormat sdf : formats) {
 			try {

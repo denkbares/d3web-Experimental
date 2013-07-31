@@ -90,7 +90,7 @@ public class DefiPageLogLine {
 	}
 
 	public void setStartDate(String date_start) {
-		this.startDate = date_start;
+		this.startDate = date_start.replace("-", ".");
 	}
 
 	public void setStartTime(String time_start) {
