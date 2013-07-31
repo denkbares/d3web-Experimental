@@ -26,6 +26,7 @@ package de.knowwe.defi.logger;
  */
 public class DefiPageLogLine {
 
+	/** Line entries **/
 	private String user;
 	private String page;
 	private String startDate;
@@ -90,7 +91,7 @@ public class DefiPageLogLine {
 	}
 
 	public void setStartDate(String date_start) {
-		this.startDate = date_start.replace("-", ".");
+		this.startDate = date_start;
 	}
 
 	public void setStartTime(String time_start) {
@@ -111,22 +112,6 @@ public class DefiPageLogLine {
 
 	public void setPage(String page) {
 		this.page = page;
-	}
-
-	public boolean equalsUserAndNotStart(DefiPageLogLine lastEntry) {
-		if (startDate == null) {
-			if (lastEntry.startDate != null) return false;
-		}
-		else if (startDate.equals(lastEntry.startDate)) return false;
-		if (startTime == null) {
-			if (lastEntry.startTime != null) return false;
-		}
-		else if (startTime.equals(lastEntry.startTime)) return false;
-		if (user == null) {
-			if (lastEntry.user != null) return false;
-		}
-		else if (!user.equals(lastEntry.user)) return false;
-		return true;
 	}
 
 	@Override

@@ -37,24 +37,43 @@ import de.knowwe.core.Environment;
  * @author dupke
  * @created 31.07.2013
  */
-public class DefiPageEventLogger {
-	private final static String FILENAME = "DefiPageLog.log";
+public class DefiSessionEventLogger {
+
+	private final static String FILENAME = "DefiSessionLog.log";
 	private final static String PATH = Environment.getInstance().getWikiConnector().getSavePath()
 			+ "\\" + FILENAME;
 	/** Sepearator between entries in a logline **/
 	private final static String SEPARATOR = "___";
 
+
 	/**
-	 * Set end to last page entry and start to new page entry.
+	 * Write a new login entry into defis session log.
 	 */
-	public static void logEntry(DefiPageLogLine line) {
-		// find last entry for user and fill end
-		updateLastEntry(line);
-		// write new entry
-		writeToPageLog(Arrays.asList(line.toString()), true);
+	public static void logLogin(DefiSessionLogLine line) {
+		writeToSessionLog(Arrays.asList(line.toString()), true);
 	}
 
-	private static void writeToPageLog(List<String> logLines, boolean append) {
+	/**
+	 * Write a new logout entry into defis session log.
+	 */
+	public static void logLogout(DefiSessionLogLine last) {
+		updateLastLogLineForUser(last);
+	}
+
+	/**
+	 * Find and return the last authentication action for user.
+	 */
+	public static DefiSessionLogLine findLastEntryForUser(String user) {
+		DefiSessionLogLine lastEntry = null;
+
+		for (DefiSessionLogLine logLine : getLogLines()) {
+			if (logLine.getUser().equals(user)) lastEntry = logLine;
+		}
+	
+		return (lastEntry == null) ? new DefiSessionLogLine() : lastEntry;
+	}
+
+	private static void writeToSessionLog(List<String> logLines, boolean append) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(PATH, append));
 			for (String line : logLines) {
@@ -69,60 +88,21 @@ public class DefiPageEventLogger {
 		}
 	}
 
-	private static void updateLastEntry(DefiPageLogLine newEntry) {
-		DefiPageLogLine lastEntry = findLastEntryForUser(newEntry.getUser());
-		if (lastEntry == null) return;
+	private static void updateLastLogLineForUser(DefiSessionLogLine last) {
 		List<String> userlog = new LinkedList<String>();
 		boolean added = false;
 
-		lastEntry.setEndDate(newEntry.getStartDate());
-		lastEntry.setEndTime(newEntry.getstartTime());
-		for (DefiPageLogLine logLines : getLogLines()) {
-			if (!added && logLines.getUser().equals(lastEntry.getUser())
-					&& logLines.getEndDate().equals(DefiPageLogLine.getNoDataString())) {
-				userlog.add(lastEntry.toString());
+		for (DefiSessionLogLine logLine : getLogLines()) {
+			if (!added && logLine.equalLogin(last)) {
+				userlog.add(last.toString());
 				added = true;
 			}
 			else {
-				userlog.add(logLines.toString());
+				userlog.add(logLine.toString());
 			}
 		}
-		writeToPageLog(userlog, false);
-	}
 
-	public static void updateLastEntryOnLogout(String user, String date, String time) {
-		DefiPageLogLine lastEntry = findLastEntryForUser(user);
-		if (lastEntry == null) return;
-		List<String> userlog = new LinkedList<String>();
-		boolean added = false;
-
-		lastEntry.setEndDate(date);
-		lastEntry.setEndTime(time);
-		for (DefiPageLogLine logLines : getLogLines()) {
-			if (!added && logLines.getUser().equals(lastEntry.getUser())
-					&& logLines.getEndDate().equals(DefiPageLogLine.getNoDataString())) {
-				userlog.add(lastEntry.toString());
-				added = true;
-			}
-			else {
-				userlog.add(logLines.toString());
-			}
-		}
-		writeToPageLog(userlog, false);
-	}
-
-	/**
-	 * Find and return the last page entry for user.
-	 */
-	public static DefiPageLogLine findLastEntryForUser(String user) {
-		if (!(new File(PATH)).exists()) return null;
-
-		DefiPageLogLine lastEntry = null;
-		for (DefiPageLogLine logLine : getLogLines()) {
-			if (logLine.getUser().equals(user)) lastEntry = logLine;
-		}
-
-		return lastEntry;
+		writeToSessionLog(userlog, false);
 	}
 
 	public static String getPath() {
@@ -133,15 +113,15 @@ public class DefiPageEventLogger {
 		return SEPARATOR;
 	}
 
-	public static List<DefiPageLogLine> getLogLines() {
-		LinkedList<DefiPageLogLine> loglines = new LinkedList<DefiPageLogLine>();
+	public static List<DefiSessionLogLine> getLogLines() {
+		LinkedList<DefiSessionLogLine> loglines = new LinkedList<DefiSessionLogLine>();
 		BufferedReader br = null;
 		String line;
 		try {
 			br = new BufferedReader(new InputStreamReader(
 					(new FileInputStream(new File(PATH))), "UTF-8"));
 			while ((line = br.readLine()) != null) {
-				loglines.add(new DefiPageLogLine(line));
+				loglines.add(new DefiSessionLogLine(line));
 			}
 		}
 		catch (FileNotFoundException e) {
@@ -155,7 +135,7 @@ public class DefiPageEventLogger {
 			catch (IOException e) {
 			}
 		}
-	
+
 		return loglines;
 	}
 }

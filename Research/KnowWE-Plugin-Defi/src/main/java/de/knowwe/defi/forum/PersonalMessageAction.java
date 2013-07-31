@@ -66,7 +66,8 @@ public class PersonalMessageAction extends AbstractAction {
 					+ "</a>\n";
 			content += "<div style='clear:both'></div>\n";
 
-			content += "\n<forum topic='" + Strings.encodeHtml(topic) + "' unit='chat' name='"
+			content += "\n<forum user1='" + user1 + "' user2='" + user2 + "' topic='"
+					+ Strings.encodeHtml(topic) + "' unit='chat' name='"
 					+ Strings.encodeHtml(name) + "'>\n" +
 					"<box name=\"" + username + "\" date=\"" + sdf.format(now.getTime())
 					+ "\"></box>\n</forum>";

@@ -55,7 +55,7 @@ public class DefiLoggerUtils {
 	}
 
 	public static String getDateOfWikiEvent(WikiEvent e) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 		String date = sdf.format(new Date(e.getWhen()));
 
 		return date;
@@ -74,7 +74,7 @@ public class DefiLoggerUtils {
 	 * @return
 	 */
 	public static String getCurrentDate() {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 		String date = sdf.format(new Date(System.currentTimeMillis()));
 
 		return date;
