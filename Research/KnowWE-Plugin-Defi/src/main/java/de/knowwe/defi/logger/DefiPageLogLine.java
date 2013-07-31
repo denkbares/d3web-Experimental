@@ -37,8 +37,8 @@ public class DefiPageLogLine {
 	/** Separator S used in pagelog **/
 	private final String S = DefiPageEventLogger.getSeparator();
 	/** Regex to find pagelogline **/
-	private final String MATCH_ME = "[^" + S + "]*" + S + "[^" + S + "]*" + S + "[^" + S + "]*" + S
-			+ "[^" + S + "]*" + S + "[^" + S + "]*" + S + "[^" + S + "]*";
+	private final String MATCH_ME = "^((?!" + S + ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S
+			+ ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+$";
 
 	public DefiPageLogLine(String s) {
 		if (!s.matches(MATCH_ME)) throw new IllegalArgumentException(
