@@ -33,7 +33,9 @@ import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
+import de.knowwe.compile.ReferenceManager;
 import de.knowwe.compile.object.IncrementalTermDefinition;
+import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
@@ -60,13 +62,22 @@ public class MarkupUtils {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static Section<IncrementalTermDefinition> getConceptDefinition(Section<?> section) {
-		List<Section<ConceptMarkup>> conceptDefinitionMarkupSections = getConecptDefinitions(section);
+		List<Section<ConceptMarkup>> conceptDefinitionMarkupSections = getConecptDefinitionForLocalPage(section);
 		if (conceptDefinitionMarkupSections.size() == 1) {
 			Section<ConceptMarkup> defSection = conceptDefinitionMarkupSections.get(0);
 			Section<IncrementalTermDefinition> termSec = Sections.findSuccessor(
 					defSection,
 					IncrementalTermDefinition.class);
 			return termSec;
+		}
+		return null;
+	}
+
+	public static Section<? extends SimpleDefinition> getConceptDefinitionGlobal(Section<? extends IncrementalTermReference> section) {
+		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
+		Collection<Section<? extends SimpleDefinition>> termDefinitions = terminology.getTermDefinitions(section);
+		if (termDefinitions.size() == 1) {
+			return termDefinitions.iterator().next();
 		}
 		return null;
 	}
@@ -248,7 +259,7 @@ public class MarkupUtils {
 	 * @param section
 	 * @return
 	 */
-	public static List<Section<ConceptMarkup>> getConecptDefinitions(Section<?> section) {
+	public static List<Section<ConceptMarkup>> getConecptDefinitionForLocalPage(Section<?> section) {
 		Section<RootType> rootSection = Sections.findAncestorOfType(section, RootType.class);
 		List<Section<ConceptMarkup>> conceptDefinitionMarkupSections = Sections.findSuccessorsOfType(
 				rootSection, ConceptMarkup.class);

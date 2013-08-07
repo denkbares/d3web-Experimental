@@ -97,7 +97,7 @@ public class LabelMarkup extends AbstractType implements Editable {
 			@Override
 			public Collection<Section<? extends Term>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section) {
 				Collection<Section<? extends Term>> result = new HashSet<Section<? extends Term>>();
-				List<Section<ConceptMarkup>> conecptDefinitions = MarkupUtils.getConecptDefinitions(section);
+				List<Section<ConceptMarkup>> conecptDefinitions = MarkupUtils.getConecptDefinitionForLocalPage(section);
 				for (Section<ConceptMarkup> def : conecptDefinitions) {
 					result.add(Sections.findSuccessor(def, IncrementalTermDefinition.class));
 				}

@@ -40,7 +40,7 @@ public class RelationMarkupRenderer extends DefaultMarkupRenderer {
 
 	@Override
 	public void renderMessages(Section<?> section, RenderResult string) {
-		List<Section<ConceptMarkup>> conecptDefinitions = MarkupUtils.getConecptDefinitions(section);
+		List<Section<ConceptMarkup>> conecptDefinitions = MarkupUtils.getConecptDefinitionForLocalPage(section);
 		if (conecptDefinitions.size() == 0) {
 			Messages.storeMessage(
 					null,

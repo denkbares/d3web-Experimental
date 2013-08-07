@@ -28,14 +28,11 @@ import java.util.logging.Logger;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.Rule;
-import de.d3web.core.inference.RuleSet;
 import de.d3web.core.inference.condition.CondEqual;
 import de.d3web.core.inference.condition.CondKnown;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.KnowledgeStore;
 import de.d3web.core.knowledge.TerminologyManager;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
@@ -250,21 +247,14 @@ public class ConceptListContent extends AbstractType {
 						RULE_STORE_KEY);
 				if (storedObject instanceof Rule) {
 					Rule r = (Rule) storedObject;
-					KnowledgeStore knowledgeStore = KnowledgeBaseInstantiation.getKB().getKnowledgeStore();
-					KnowledgeSlice[] knowledge = knowledgeStore.getKnowledge();
-					for (KnowledgeSlice knowledgeSlice : knowledge) {
-						if (knowledgeSlice instanceof RuleSet) {
-							((RuleSet) knowledgeSlice).removeRule(r);
-						}
-					}
-
+					KnowledgeBaseInstantiation.removeRuleFromKB(r);
 				}
 			}
 
 			@Override
 			public Collection<Section<? extends Term>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section) {
 				Set<Section<? extends Term>> result = new HashSet<Section<? extends Term>>();
-				Collection<Section<ConceptMarkup>> conceptDefinitions = MarkupUtils.getConecptDefinitions(section);
+				Collection<Section<ConceptMarkup>> conceptDefinitions = MarkupUtils.getConecptDefinitionForLocalPage(section);
 				for (Section<ConceptMarkup> def : conceptDefinitions) {
 					result.add(Sections.findSuccessor(def,
 							IncrementalTermDefinition.class));

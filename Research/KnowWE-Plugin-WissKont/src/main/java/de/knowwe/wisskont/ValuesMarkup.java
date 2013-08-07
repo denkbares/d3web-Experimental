@@ -116,8 +116,8 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 			if (valueText.length() == 0) {
 				return null;
 			}
-			return Strings.unquote(conceptDefinition.get().getTermName(conceptDefinition) + " "
-					+ s.getText().trim());
+			return Strings.unquote(getLongAnswerName(
+					conceptDefinition.get().getTermName(conceptDefinition), s.getText().trim()));
 		}
 
 	}
@@ -140,7 +140,7 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
 			TerminologyManager manager = knowledgeBase.getManager();
 
-			List<Section<ConceptMarkup>> conecptDefinitions = MarkupUtils.getConecptDefinitions(section);
+			List<Section<ConceptMarkup>> conecptDefinitions = MarkupUtils.getConecptDefinitionForLocalPage(section);
 			if (conecptDefinitions.size() != 1) return;
 			Section<ConceptMarkup> conceptMarkup = conecptDefinitions.get(0);
 			Section<TermDefinition> mainTerm = Sections.findSuccessor(conceptMarkup,
@@ -173,6 +173,15 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 
 	public static final String VALUE_STORE_KEY = "VALUE_STORE_KEY";
 
+	public static String getShortAnswerName(String concept, String fullAnswer) {
+		return fullAnswer.substring(concept.length()).trim();
+	}
+
+	public static String getLongAnswerName(String parentConceptName, String shortAnswer) {
+		return parentConceptName + " "
+				+ shortAnswer;
+	}
+
 	/**
 	 * 
 	 * @created 25.07.2013
@@ -191,7 +200,7 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 			for (Section<ValueDefinitionListElement> listElement : values) {
 				Section<Term> answerTerm = Sections.findSuccessor(listElement, Term.class);
 				String answerName = answerTerm.get().getTermName(answerTerm);
-				question.addAlternative(new Choice(answerName.substring(termName.length()).trim()));
+				question.addAlternative(new Choice(getShortAnswerName(termName, answerName)));
 			}
 			manager.putTerminologyObject(question);
 

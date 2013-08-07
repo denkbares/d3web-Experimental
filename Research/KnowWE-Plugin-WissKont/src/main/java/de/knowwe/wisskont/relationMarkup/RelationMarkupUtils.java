@@ -16,27 +16,35 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.annotation.type.list;
-
-import de.knowwe.compile.object.IncrementalTermReference;
-import de.knowwe.compile.object.renderer.CompositeRenderer;
-import de.knowwe.compile.object.renderer.ReferenceSurroundingRenderer;
-import de.knowwe.core.kdom.rendering.Renderer;
-import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+package de.knowwe.wisskont.relationMarkup;
 
 /**
  * 
  * @author jochenreutelshofer
- * @created 22.06.2013
+ * @created 06.08.2013
  */
-public class ListObjectIdentifier extends IncrementalTermReference {
+public class RelationMarkupUtils {
 
-	public ListObjectIdentifier(Renderer r) {
-		super(String.class);
-		this.setSectionFinder(new AllTextFinderTrimmed());
-		CompositeRenderer renderer = new CompositeRenderer(r,
-				new ReferenceSurroundingRenderer());
-		this.setRenderer(renderer);
+	public static String getLineRegex(String key) {
+		return getLineRegex(key, true);
+	}
+
+	public static String getLineRegex(String key, boolean withColon) {
+		String keyRegex = getKeyRegex(key, withColon);
+		return "(?i)^" + keyRegex + "\\u0020?(.*?)(\r?\n(\\s*)\r?\n|$)";
+	}
+
+	public static String getKeyRegex(String key) {
+		return getKeyRegex(key, true);
+	}
+
+	public static String getKeyRegex(String key, boolean withColon) {
+		String result = "(" + key;
+		if (withColon) {
+			result += ":";
+		}
+		result += ")";
+		return result;
 	}
 
 }

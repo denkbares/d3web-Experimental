@@ -16,27 +16,23 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.annotation.type.list;
+package de.knowwe.wisskont.object;
 
-import de.knowwe.compile.object.IncrementalTermReference;
-import de.knowwe.compile.object.renderer.CompositeRenderer;
-import de.knowwe.compile.object.renderer.ReferenceSurroundingRenderer;
+import de.knowwe.compile.object.renderer.ReferenceRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
-import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * 
  * @author jochenreutelshofer
- * @created 22.06.2013
+ * @created 07.08.2013
  */
-public class ListObjectIdentifier extends IncrementalTermReference {
+public class WisskontReferenceRenderer extends ReferenceRenderer {
 
-	public ListObjectIdentifier(Renderer r) {
-		super(String.class);
-		this.setSectionFinder(new AllTextFinderTrimmed());
-		CompositeRenderer renderer = new CompositeRenderer(r,
-				new ReferenceSurroundingRenderer());
-		this.setRenderer(renderer);
-	}
+	final Renderer REF_RENDERER = new StyleRenderer(
+					"color:rgb(25, 180, 120)");
+
+	final Renderer PREDEFINDED_TERM_RENDERER = new StyleRenderer(
+					"font-weight:bold;font-color:black");
 
 }

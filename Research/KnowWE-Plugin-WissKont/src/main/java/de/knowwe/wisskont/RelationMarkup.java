@@ -35,6 +35,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.termbrowser.DroppableTargetSurroundingRenderer;
+import de.knowwe.wisskont.relationMarkup.RelationMarkupUtils;
 
 /**
  * 
@@ -44,25 +45,16 @@ import de.knowwe.termbrowser.DroppableTargetSurroundingRenderer;
 public abstract class RelationMarkup extends AbstractType {
 
 	public RelationMarkup(String key) {
-		String REGEX = getLineRegex(key);
+		String REGEX = RelationMarkupUtils.getLineRegex(key);
 		this.setSectionFinder(new RegexSectionFinder(REGEX,
 				Pattern.MULTILINE | Pattern.DOTALL));
 
 		this.addChildType(new RelationMarkupContentType(REGEX));
-		this.addChildType(new KeyType(getKeyRegex(key)));
+		this.addChildType(new KeyType(RelationMarkupUtils.getKeyRegex(key)));
 		CompositeRenderer renderer = new CompositeRenderer(new RelationMarkupRenderer(),
 				new DroppableTargetSurroundingRenderer());
 		this.setRenderer(renderer);
 		this.setIgnorePackageCompile(true);
-	}
-
-	protected String getLineRegex(String key) {
-		String keyRegex = getKeyRegex(key);
-		return "(?i)^" + keyRegex + "\\u0020?(.*?)(\r?\n(\\s*)\r?\n|$)";
-	}
-
-	protected String getKeyRegex(String key) {
-		return "(" + key + ":)";
 	}
 
 	public abstract URI getRelationURI();

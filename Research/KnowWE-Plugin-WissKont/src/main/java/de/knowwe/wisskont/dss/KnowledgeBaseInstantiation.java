@@ -18,11 +18,16 @@
  */
 package de.knowwe.wisskont.dss;
 
+import java.util.Collection;
+import java.util.Collections;
+
+import de.d3web.core.inference.KnowledgeSlice;
+import de.d3web.core.inference.Rule;
+import de.d3web.core.inference.RuleSet;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyManager;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.QContainer;
-import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.we.basic.D3webKnowledgeHandler;
@@ -56,7 +61,11 @@ public class KnowledgeBaseInstantiation implements Instantiation {
 		return knowledgeBase;
 	}
 
-	public static Solution createSolution(Section<Term> term, String prefix, Question q) {
+	public static Solution createSolution(Section<Term> term, String prefix, TerminologyObject q) {
+		return createSolutionForObjects(term, prefix, Collections.singletonList(q));
+	}
+
+	public static Solution createSolutionForObjects(Section<? extends Term> term, String prefix, Collection<? extends TerminologyObject> derivingObjects) {
 		KnowledgeBase kb = getKB();
 		String termName = prefix + " " + term.get().getTermName(term);
 		TerminologyObject found = kb.getManager().search(termName);
@@ -70,7 +79,13 @@ public class KnowledgeBaseInstantiation implements Instantiation {
 			}
 		}
 		Solution solution = new Solution(kb.getRootSolution(), termName);
-		solution.getInfoStore().addValue(MMInfo.DESCRIPTION, "(" + q.getName() + ")");
+		String shortExplanation = "";
+		for (TerminologyObject terminologyObject : derivingObjects) {
+			shortExplanation += (terminologyObject.getName() + " ,");
+		}
+		shortExplanation = shortExplanation.substring(0, shortExplanation.length() - 1);
+
+		solution.getInfoStore().addValue(MMInfo.DESCRIPTION, "(" + shortExplanation + ")");
 		String link = "";
 		link += Environment.getInstance().getWikiConnector().getBaseUrl();
 		link += "Wiki.jsp?page=";
@@ -79,5 +94,30 @@ public class KnowledgeBaseInstantiation implements Instantiation {
 		solution.getInfoStore().addValue(MMInfo.LINK, link);
 		kb.getManager().putTerminologyObject(solution);
 		return solution;
+	}
+
+	/**
+	 * 
+	 * @created 07.08.2013
+	 * @param r
+	 */
+	public static void removeRuleFromKB(Rule r) {
+		Collection<? extends TerminologyObject> forwardObjects = r.getCondition().getTerminalObjects();
+		removeRuleFromObjects(r, forwardObjects);
+		Collection<? extends TerminologyObject> backwardObjectsAction = r.getAction().getBackwardObjects();
+		removeRuleFromObjects(r, backwardObjectsAction);
+		Collection<? extends TerminologyObject> forwardObjectsAction = r.getAction().getForwardObjects();
+		removeRuleFromObjects(r, forwardObjectsAction);
+	}
+
+	private static void removeRuleFromObjects(Rule r, Collection<? extends TerminologyObject> forwardObjects) {
+		for (TerminologyObject terminologyObject : forwardObjects) {
+			KnowledgeSlice[] slices = terminologyObject.getKnowledgeStore().getKnowledge();
+			for (KnowledgeSlice knowledgeSlice : slices) {
+				if (knowledgeSlice instanceof RuleSet) {
+					((RuleSet) knowledgeSlice).removeRule(r);
+				}
+			}
+		}
 	}
 }

@@ -91,6 +91,17 @@
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="WisskontSolutionPanel">
+		<parameter id="class"
+			value="de.knowwe.wisskont.interview.WisskontSolutionPanel" />
+		<parameter id="name" value="WisskontQuickI" />
+		<parameter id="description" value="KnowWEObjectType WisskontSolutionPanel" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="ConceptMarkup">
@@ -380,6 +391,18 @@
 			value="de.knowwe.wisskont.TemporalMarkup" />
 		<parameter id="name" value="TemporalMarkup" />
 		<parameter id="description" value="KnowWEObjectType TemporalMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+		<parameter id="css" value="wisskont.css" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="RuleMarkup">
+		<parameter id="class"
+			value="de.knowwe.wisskont.rule.RuleMarkup" />
+		<parameter id="name" value="RuleMarkup" />
+		<parameter id="description" value="KnowWEObjectType RuleMarkup" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
