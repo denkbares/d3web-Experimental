@@ -90,6 +90,10 @@ public class DeadEndTest extends DiaFluxTest {
 					if (successor instanceof ComposedNode && successor.getOutgoingEdges().isEmpty()) {
 						Flow calledFlow = DiaFluxUtils.getCalledFlow(testObject,
 								(ComposedNode) successor);
+
+						// ignores KB errors
+						if (calledFlow == null) continue nextnode;
+
 						if (calledFlow.getExitNodes().isEmpty()) continue nextnode;
 					}
 				}
