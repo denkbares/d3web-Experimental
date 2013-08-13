@@ -29,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.core.ArticleManager;
@@ -62,7 +63,7 @@ public class TermRenamingActionIncr extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 
 		String web = context.getParameter(Attributes.WEB);
-		String term = context.getParameter(TERMNAME);
+		String term = Strings.unquote(context.getParameter(TERMNAME));
 		String replacement = context.getParameter(REPLACEMENT);
 		Identifier termIdentifier = new Identifier(term);
 

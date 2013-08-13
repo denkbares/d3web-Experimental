@@ -41,11 +41,11 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
  */
 public class ReferenceRenderer implements Renderer {
 
-	final Renderer REF_RENDERER =
+	protected Renderer REF_RENDERER =
 			new ToolMenuDecoratingRenderer(new StyleRenderer(
 					"color:rgb(25, 180, 120)"));
 
-	final Renderer PREDEFINDED_TERM_RENDERER =
+	protected Renderer PREDEFINDED_TERM_RENDERER =
 			new ToolMenuDecoratingRenderer(new StyleRenderer(
 					"font-weight:bold;font-color:black"));
 

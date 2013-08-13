@@ -20,13 +20,21 @@
 
 package de.knowwe.compile.object;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.objects.SimpleReference;
+import de.knowwe.core.kdom.objects.Term;
+import de.knowwe.core.kdom.parsing.Section;
 
 public abstract class IncrementalTermReference extends SimpleReference {
 
 	public IncrementalTermReference(Class<?> termObjectClass) {
 		super(TermRegistrationScope.GLOBAL, termObjectClass);
+	}
+
+	@Override
+	public String getTermName(Section<? extends Term> section) {
+		return Strings.unquote(section.getText());
 	}
 
 }
