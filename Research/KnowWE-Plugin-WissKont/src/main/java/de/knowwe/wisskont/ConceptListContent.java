@@ -36,6 +36,7 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyManager;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
+import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.manage.RuleFactory;
@@ -171,7 +172,10 @@ public class ConceptListContent extends AbstractType {
 					if (object instanceof QuestionOC) {
 						question = (QuestionOC) object;
 					}
-
+					if (object instanceof QuestionNum) {
+						// we cannot create a rule..
+						return;
+					}
 					if (question == null) {
 						Logger.getLogger(this.getClass().getName()).log(
 								Level.SEVERE,

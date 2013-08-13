@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.URI;
 
@@ -32,6 +33,7 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.strings.Strings;
 import de.d3web.we.utils.D3webUtils;
@@ -43,6 +45,7 @@ import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.renderer.CompositeRenderer;
 import de.knowwe.compile.object.renderer.ReferenceSurroundingRenderer;
 import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.objects.TermDefinition;
@@ -50,6 +53,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.Types;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
@@ -73,8 +77,22 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 		Type contentType = Types.findSuccessorType(this, RelationMarkupContentType.class);
 		boolean replaced = Types.replaceType(contentType, ListObjectIdentifier.class,
 				new ValueDefinitionListElement(new OIDeleteItemRenderer()));
+
+		this.addChildType(0, new NumericalValueMarkerType());
+
 		if (!replaced) {
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Type NOT REPLACED ! ");
+		}
+	}
+
+	public static class NumericalValueMarkerType extends AbstractType {
+
+		/**
+		 * 
+		 */
+		public NumericalValueMarkerType() {
+			this.setSectionFinder(new RegexSectionFinder("num\\.\\s(.*?)", Pattern.DOTALL
+					| Pattern.MULTILINE));
 		}
 	}
 
@@ -148,8 +166,14 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 			String termName = mainTerm.get().getTermName(mainTerm);
 			TerminologyObject foundObject = manager.search(termName);
 			if (foundObject == null) {
-
-				createQuestionOCWithValues(section, manager, termName);
+				Section<NumericalValueMarkerType> numMarker = Sections.findSuccessor(
+						section, NumericalValueMarkerType.class);
+				if (numMarker != null) {
+					createQuestionNum(section, manager, termName);
+				}
+				else {
+					createQuestionOCWithValues(section, manager, termName);
+				}
 			}
 
 		}
@@ -180,6 +204,21 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 	public static String getLongAnswerName(String parentConceptName, String shortAnswer) {
 		return parentConceptName + " "
 				+ shortAnswer;
+	}
+
+	public static Question createQuestionNum(Section<ValuesMarkup> section, TerminologyManager manager, String termName) {
+
+		TerminologyObject questionnaire = manager.search(KnowledgeBaseInstantiation.PATIENTENDATEN);
+		if (questionnaire != null && questionnaire instanceof QASet) {
+			QuestionNum question = new QuestionNum((QASet) questionnaire, termName);
+			manager.putTerminologyObject(question);
+			KnowWEUtils.storeObject(
+					Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
+							KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE),
+					section, VALUE_STORE_KEY, question);
+			return question;
+		}
+		return null;
 	}
 
 	/**

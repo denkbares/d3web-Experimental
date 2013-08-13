@@ -38,7 +38,6 @@ import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.scoring.ActionHeuristicPS;
 import de.d3web.scoring.Score;
 import de.d3web.scoring.inference.PSMethodHeuristic;
-import de.d3web.strings.Strings;
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.D3webCondition;
 import de.d3web.we.kdom.condition.Finding;
@@ -68,12 +67,11 @@ import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.kdom.renderer.StyleRenderer;
-import de.knowwe.wisskont.KeyType;
+import de.knowwe.termbrowser.DroppableTargetSurroundingRenderer;
 import de.knowwe.wisskont.ValuesMarkup;
 import de.knowwe.wisskont.dss.KnowledgeBaseInstantiation;
 import de.knowwe.wisskont.relationMarkup.RelationMarkupUtils;
@@ -90,14 +88,20 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 	 * 
 	 */
 	public RuleMarkup() {
+
+		// breaks rendering (linkbreaks after keywords)
+		// this.setRenderer(new DefaultMarkupRenderer());
+
 		String key = "WENN";
 		String REGEX = RelationMarkupUtils.getLineRegex(key, false);
 		this.setSectionFinder(new RegexSectionFinder(REGEX,
 				Pattern.MULTILINE | Pattern.DOTALL));
 
 		this.addChildType(new RuleMarkupContentType(REGEX));
-		KeyType keyType = new KeyType(RelationMarkupUtils.getKeyRegex(key, false));
-		keyType.setRenderer(new StyleRenderer("font-weight:bold;"));
+		RuleKeyType keyType = new RuleKeyType(RelationMarkupUtils.getKeyRegex(key, false));
+		CompositeRenderer renderer = new CompositeRenderer(new StyleRenderer("font-weight:bold;"),
+				new DroppableTargetSurroundingRenderer());
+		keyType.setRenderer(renderer);
 		this.addChildType(keyType);
 
 		// this.setRenderer(renderer);
@@ -127,14 +131,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 		public RuleContent() {
 			this.setSectionFinder(new AllTextFinderTrimmed());
 
-			// then key
-			AnonymousType thenType = new AnonymousType("dann");
-			thenType.setRenderer(new StyleRenderer("font-weight:bold;"));
-			RegexSectionFinder finder = new RegexSectionFinder("(?i)DANN");
-			ConstraintSectionFinder csf = new ConstraintSectionFinder(finder,
-					AtMostOneFindingConstraint.getInstance());
-			thenType.setSectionFinder(csf);
-			this.addChildType(thenType);
+			this.addChildType(new RuleActionKeyType());
 
 			// condition
 			this.addChildType(new ConditionArea());
@@ -199,24 +196,26 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 			Section<ValuesMarkup> markup = Sections.findAncestorOfType(conceptDefinition,
 					ValuesMarkup.class);
 
+			if (markup == null) return null;
+
 			Object o = KnowWEUtils.getStoredObject(
 					Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 							KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE),
 					markup, ValuesMarkup.VALUE_STORE_KEY);
 
-			QuestionChoice choice = null;
+			QuestionChoice qChoice = null;
 			if (o instanceof QuestionChoice) {
-				choice = (QuestionChoice) o;
+				qChoice = (QuestionChoice) o;
 			}
-			if (choice == null) return null;
+			if (qChoice == null) return null;
 
-			List<Choice> allAlternatives = choice.getAllAlternatives();
-			for (Choice answer : allAlternatives) {
-				if (ValuesMarkup.getLongAnswerName(choice.getName(), answer.getName()).equals(
-						Strings.unquote(concept.get().getTermIdentifier(concept).toString()))) {
-					ChoiceValue value = new ChoiceValue(
-							answer);
-					return new CondEqual(choice, value);
+			List<Choice> allAlternatives = qChoice.getAllAlternatives();
+			for (Choice choice : allAlternatives) {
+				String longAnswerName = ValuesMarkup.getLongAnswerName(qChoice.getName(),
+						choice.getName());
+				if (longAnswerName.equals(concept.get().getTermName(concept))) {
+					ChoiceValue v = new ChoiceValue(choice);
+					return new CondEqual(qChoice, v);
 				}
 			}
 
@@ -247,6 +246,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 			// create condition
 			Section<CompositeCondition> cond = Sections.findSuccessor(section,
 					CompositeCondition.class);
+			if (cond == null) return;
 			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
 
@@ -256,6 +256,14 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 			for (Section<WisskontChoiceFinding> terminal : terminals) {
 				Condition createdCondition = terminal.get().createCondition(article, terminal);
 				KnowWEUtils.storeObject(article, terminal, "cond-store-key",
+						createdCondition);
+			}
+			List<Section<NumericalFinding>> numFindingTerminals = Sections.findSuccessorsOfType(
+					cond,
+					NumericalFinding.class);
+			for (Section<NumericalFinding> condNumSection : numFindingTerminals) {
+				Condition createdCondition = CondUtils.createCondNum(condNumSection);
+				KnowWEUtils.storeObject(article, condNumSection, "cond-store-key",
 						createdCondition);
 			}
 

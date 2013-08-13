@@ -84,9 +84,12 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 			parameterMap.put(RenderingCore.SHOW_SCROLLBAR, "false");
 
 			// which kind of visualization ???
-			parameterMap.put(RenderingCore.RENDERER, OntoVisType.Renderer.d3.name());
-			parameterMap.put(RenderingCore.VISUALIZATION,
-					OntoVisType.Visualizations.force.name());
+			// parameterMap.put(RenderingCore.RENDERER,
+			// OntoVisType.Renderer.d3.name());
+			// parameterMap.put(RenderingCore.VISUALIZATION,
+			// OntoVisType.Visualizations.force.name());
+
+			parameterMap.put(RenderingCore.RENDERER, OntoVisType.Renderer.dot.name());
 
 			String colorCodes = "";
 			colorCodes += "kann: #009900;"; // green

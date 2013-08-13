@@ -35,9 +35,9 @@ import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.compile.object.IncrementalTermDefinition;
-import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -73,7 +73,7 @@ public class MarkupUtils {
 		return null;
 	}
 
-	public static Section<? extends SimpleDefinition> getConceptDefinitionGlobal(Section<? extends IncrementalTermReference> section) {
+	public static Section<? extends SimpleDefinition> getConceptDefinitionGlobal(Section<? extends Term> section) {
 		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = terminology.getTermDefinitions(section);
 		if (termDefinitions.size() == 1) {

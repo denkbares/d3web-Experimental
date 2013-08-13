@@ -29,7 +29,8 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.rdfs.util.RDFSUtil;
+import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
+import de.knowwe.rdfs.vis.markup.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 /**
@@ -38,6 +39,8 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
  * @created 22.06.2013
  */
 public class ListObjectIdentifier extends IncrementalTermReference {
+
+	private static LinkToTermDefinitionProvider linkProvider = new IncrementalCompilerLinkToTermDefinitionProvider();
 
 	public ListObjectIdentifier() {
 		super(String.class);
@@ -63,9 +66,10 @@ public class ListObjectIdentifier extends IncrementalTermReference {
 			// string.appendHtml("<tr>");
 			// string.appendHtml("<div class='toolsMenuDecorator' style='position:absolute;float: left;'></div>");
 			string.appendHtml("<span class='' style=''>");
+
 			if (!hasError) {
 				string.appendHtml("<a  style='position:relative;float:left;' href='"
-						+ RDFSUtil.getURI(ref)
+						+ linkProvider.getLinkToTermDefinition(ref.get().getTermName(ref), null)
 						+ "'>");
 			}
 			string.appendHtml(section.getText());

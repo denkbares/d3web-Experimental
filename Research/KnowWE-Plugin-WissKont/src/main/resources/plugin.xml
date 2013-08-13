@@ -138,6 +138,26 @@
 		<parameter id="priority" value="4" />
 	</extension>
 	
+	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
+		id="RuleConditionDropInserter">
+		<parameter id="class"
+			value="de.knowwe.wisskont.rule.RuleConditionDropInserter" />
+		<parameter id="name" value="RuleConditionDropInserter" />
+		<parameter id="description" value="Inserter RuleConditionDropInserter" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+	
+	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
+		id="RuleActionDropInserter">
+		<parameter id="class"
+			value="de.knowwe.wisskont.rule.RuleActionDropInserter" />
+		<parameter id="name" value="RuleActionDropInserter" />
+		<parameter id="description" value="Inserter RuleActionDropInserter" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+	
 	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="HierarchyProvider"
 		id="WissassHierarchyProvider">
 		<parameter id="class"

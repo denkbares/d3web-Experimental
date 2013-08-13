@@ -67,15 +67,19 @@ public class KnowledgeBaseInstantiation implements Instantiation {
 
 	public static Solution createSolutionForObjects(Section<? extends Term> term, String prefix, Collection<? extends TerminologyObject> derivingObjects) {
 		KnowledgeBase kb = getKB();
-		String termName = prefix + " " + term.get().getTermName(term);
+		String termName = prefix + " " + term.get().getTermName(term) + ";";
+		termName = termName.trim();
 		TerminologyObject found = kb.getManager().search(termName);
 		if (found != null) {
 			if (found instanceof Solution) {
 				return (Solution) found;
 			}
 			else {
-				throw new IllegalStateException("Object with this name already existing! ("
-						+ found.toString() + ")");
+				//
+				// throw new
+				// IllegalStateException("Object with this name already existing! ("
+				// + found.toString() + ")");
+				// just create lazy
 			}
 		}
 		Solution solution = new Solution(kb.getRootSolution(), termName);
