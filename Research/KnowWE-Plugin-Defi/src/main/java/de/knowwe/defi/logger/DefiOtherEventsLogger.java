@@ -41,7 +41,7 @@ public class DefiOtherEventsLogger {
 	
 	private final static String FILENAME = "DefiOtherEventsLog.log";
 	private final static String PATH = Environment.getInstance().getWikiConnector().getSavePath()
-			+ "\\" + FILENAME;
+			+ "/" + FILENAME;
 	/** Sepearator between entries in a logline **/
 	public final static String SEPARATOR = "___";
 	public final static String EXT_LINK_PREFIX = "Externer Link";

@@ -40,7 +40,7 @@ public class DefiCommentEventLogger {
 
 	private final static String FILENAME = "DefiForumLog.log";
 	private final static String PATH = Environment.getInstance().getWikiConnector().getSavePath()
-			+ "\\" + FILENAME;
+			+ "/" + FILENAME;
 	/** Sepearator between entries in a logline **/
 	private final static String SEPARATOR = "___";
 
