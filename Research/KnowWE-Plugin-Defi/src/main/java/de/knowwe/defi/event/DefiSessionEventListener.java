@@ -31,7 +31,6 @@ import de.knowwe.defi.logger.DefiLoggerUtils;
 import de.knowwe.defi.logger.DefiPageEventLogger;
 import de.knowwe.defi.logger.DefiSessionEventLogger;
 import de.knowwe.defi.logger.DefiSessionLogLine;
-import de.knowwe.defi.logger.DefiUserDataLogger;
 
 /**
  * 
@@ -63,7 +62,6 @@ public class DefiSessionEventListener implements WikiEventListener {
 			line.setLoginDate(dateOfWikiEvent);
 			line.setLoginTime(timeOfWikiEvent);
 			DefiSessionEventLogger.logLogin(line);
-			DefiUserDataLogger.userLoggedIn(line.getUser());
 		}
 		else {
 			DefiSessionLogLine last = DefiSessionEventLogger.findLastEntryForUser(line.getUser());
