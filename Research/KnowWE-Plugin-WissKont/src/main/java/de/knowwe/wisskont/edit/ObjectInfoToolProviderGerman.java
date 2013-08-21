@@ -18,13 +18,11 @@
  */
 package de.knowwe.wisskont.edit;
 
-import de.d3web.strings.Identifier;
-import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.taghandler.ObjectInfoTagHandler;
+import de.knowwe.core.toolprovider.ObjectInfoPageToolProvider;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
@@ -48,25 +46,11 @@ public class ObjectInfoToolProviderGerman implements ToolProvider {
 	}
 
 	protected Tool getObjectInfoPageTool(Section<? extends Term> section, UserContext userContext) {
-		Identifier termIdentifier = section.get().getTermIdentifier(section);
-		String lastPathElementExternalForm = new Identifier(termIdentifier.getLastPathElement()).toExternalForm();
-		String externalTermIdentifierForm = termIdentifier.toExternalForm();
-		String jsAction = "window.location.href = "
-				+ "'Wiki.jsp?page=ObjectInfoPage&amp;" + ObjectInfoTagHandler.TERM_IDENTIFIER
-				+ "=' + encodeURIComponent('"
-				+ maskTermForHTML(externalTermIdentifierForm)
-				+ "') + '&amp;" + ObjectInfoTagHandler.OBJECT_NAME + "=' + encodeURIComponent('"
-				+ maskTermForHTML(lastPathElementExternalForm) + "')";
 		return new DefaultTool(
 				"KnowWEExtension/d3web/icon/infoPage16.png",
 				"Umbenennen",
 				"Öffnet eine Seite zum Umbenennen des Konzeptes in der ganzen Wissensbasis.",
-				jsAction);
+				ObjectInfoPageToolProvider.createJSAction(section));
 	}
 
-	private String maskTermForHTML(String string) {
-		string = string.replace("\\", "\\\\");
-		string = Strings.encodeHtml(string);
-		return string;
-	}
 }
