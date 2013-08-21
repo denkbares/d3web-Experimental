@@ -26,8 +26,8 @@ public class KnowledgebaseDeployProvider implements ToolProvider {
 		}
 		String jsAction = "window.location='action/DeployAction" +
 				"?" + Attributes.TOPIC + "=" + section.getTitle() +
-				"&" + Attributes.WEB + "=" + section.getWeb() +
-				"&" + DownloadKnowledgeBase.PARAM_FILENAME + "=" + kbName + ".d3web'";
+				"&amp;" + Attributes.WEB + "=" + section.getWeb() +
+				"&amp;" + DownloadKnowledgeBase.PARAM_FILENAME + "=" + kbName + ".d3web'";
 		return new DefaultTool(
 				"KnowWEExtension/images/export_wiz.gif",
 				"Deploy",

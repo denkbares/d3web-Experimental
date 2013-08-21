@@ -52,8 +52,8 @@ public class UploaderRenderer extends DefaultMarkupRenderer {
 		string.appendHtml("<div class='collapsebox'>");
 		string.appendHtmlElement("h4", "Upload revision", "class='collapsetitle'");
 		string.appendHtml("<form id='my_form' target='_self' autocomplete=\"off\" action=\"action/UploadRevisionZip?KWiki_Topic="
-				+ section.getTitle() + "&KWikiWeb=" + section.getWeb()
-				+ "&\" method=\"POST\" enctype=\"multipart/form-data\">");
+				+ section.getTitle() + "&amp;KWikiWeb=" + section.getWeb()
+				+ "&amp;\" method=\"POST\" enctype=\"multipart/form-data\">");
 		string.appendHtmlElement("label", "Select file: ", "");
 		string.appendHtml("<input id=\"fileinput\" type=\"file\" name=\"file\" size=\"50\"/>");
 		string.appendHtml("<input type=\"submit\" value=\"Upload\" />");

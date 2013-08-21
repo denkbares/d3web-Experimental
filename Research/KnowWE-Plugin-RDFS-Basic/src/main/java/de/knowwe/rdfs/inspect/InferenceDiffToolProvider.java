@@ -62,9 +62,9 @@ public class InferenceDiffToolProvider implements ToolProvider {
 		// if (s == null) return null;
 
 		String jsAction = "window.location.href = "
-				+ "'Wiki.jsp?page=InferenceDiff&section=' + encodeURIComponent('"
+				+ "'Wiki.jsp?page=InferenceDiff&amp;section=' + encodeURIComponent('"
 				+ section.getID()
-				+ "') + '&topic='+ encodeURIComponent('"
+				+ "') + '&amp;topic='+ encodeURIComponent('"
 				+ section.getTitle()
 				+ "')";
 		return new DefaultTool(

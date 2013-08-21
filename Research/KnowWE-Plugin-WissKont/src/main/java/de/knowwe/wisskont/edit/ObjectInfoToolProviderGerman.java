@@ -18,8 +18,8 @@
  */
 package de.knowwe.wisskont.edit;
 
-import de.d3web.strings.Strings;
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
@@ -52,10 +52,10 @@ public class ObjectInfoToolProviderGerman implements ToolProvider {
 		String lastPathElementExternalForm = new Identifier(termIdentifier.getLastPathElement()).toExternalForm();
 		String externalTermIdentifierForm = termIdentifier.toExternalForm();
 		String jsAction = "window.location.href = "
-				+ "'Wiki.jsp?page=ObjectInfoPage&" + ObjectInfoTagHandler.TERM_IDENTIFIER
+				+ "'Wiki.jsp?page=ObjectInfoPage&amp;" + ObjectInfoTagHandler.TERM_IDENTIFIER
 				+ "=' + encodeURIComponent('"
 				+ maskTermForHTML(externalTermIdentifierForm)
-				+ "') + '&" + ObjectInfoTagHandler.OBJECT_NAME + "=' + encodeURIComponent('"
+				+ "') + '&amp;" + ObjectInfoTagHandler.OBJECT_NAME + "=' + encodeURIComponent('"
 				+ maskTermForHTML(lastPathElementExternalForm) + "')";
 		return new DefaultTool(
 				"KnowWEExtension/d3web/icon/infoPage16.png",

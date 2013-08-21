@@ -45,8 +45,8 @@ public class OntoVisDOTDownloadProvider implements ToolProvider {
 		// tool to provide download capability
 		String jsAction = "window.location='action/OntoVisDOTDownload" +
 				"?" + Attributes.TOPIC + "=" + section.getTitle() +
-				"&" + Attributes.WEB + "=" + section.getWeb() +
-				"&" + Attributes.SECTION_ID + "=" + section.getID() + "'";
+				"&amp;" + Attributes.WEB + "=" + section.getWeb() +
+				"&amp;" + Attributes.SECTION_ID + "=" + section.getID() + "'";
 		;
 		return new DefaultTool(
 				"KnowWEExtension/d3web/icon/download16.gif",

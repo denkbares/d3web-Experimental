@@ -69,7 +69,7 @@ public class ClassMemberLinkToolProvider implements ToolProvider {
 			objectName = ((Term) section.get()).getTermIdentifier(section).toString();
 		}
 		String jsAction = "window.location.href = " +
-				"'Wiki.jsp?page=ClassMembers&objectname=' + encodeURIComponent('" +
+				"'Wiki.jsp?page=ClassMembers&amp;objectname=' + encodeURIComponent('" +
 				objectName + "')";
 		return new DefaultTool(
 				"KnowWEExtension/images/dt_icon_realisation.gif",

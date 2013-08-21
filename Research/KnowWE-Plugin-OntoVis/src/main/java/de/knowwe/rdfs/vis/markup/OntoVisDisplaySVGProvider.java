@@ -18,7 +18,6 @@
  */
 package de.knowwe.rdfs.vis.markup;
 
-
 import de.knowwe.core.Attributes;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
@@ -46,7 +45,7 @@ public class OntoVisDisplaySVGProvider implements ToolProvider {
 		// tool to provide download capability
 		String jsAction = "window.location='action/OntoVisDisplaySVG" +
 				"?" + Attributes.TOPIC + "=" + section.getTitle() +
-				"&" + Attributes.WEB + "=" + section.getWeb() + "'";
+				"&amp;" + Attributes.WEB + "=" + section.getWeb() + "'";
 		return new DefaultTool(
 				"KnowWEExtension/d3web/icon/comment16.png",
 				"Display the .svg",

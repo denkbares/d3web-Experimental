@@ -34,8 +34,9 @@ public class TestcaseTableDownloadProvider implements ToolProvider {
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 
-		String jsAction = "window.location='action/TestcaseDownload?type=case&KWiki_Topic="
-				+ section.getTitle() + "&web=" + section.getWeb() + "&nodeid=" + section.getID()
+		String jsAction = "window.location='action/TestcaseDownload?type=case&amp;KWiki_Topic="
+				+ section.getTitle() + "&amp;web=" + section.getWeb() + "&amp;nodeid="
+				+ section.getID()
 				+ "'";
 
 		return new Tool[] { new DefaultTool(

@@ -45,7 +45,7 @@ public class WikiZIPDownloadProvider implements ToolProvider {
 		// tool to provide download capability
 		String jsAction = "window.location='action/DownloadWikiZIP" +
 				"?" + Attributes.TOPIC + "=" + section.getTitle() +
-				"&" + Attributes.WEB + "=" + section.getWeb() + "'";
+				"&amp;" + Attributes.WEB + "=" + section.getWeb() + "'";
 		return new DefaultTool(
 				"KnowWEExtension/images/zip.jpg",
 				"Download Wiki Zip",

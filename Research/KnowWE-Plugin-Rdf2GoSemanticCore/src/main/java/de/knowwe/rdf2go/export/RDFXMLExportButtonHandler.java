@@ -45,13 +45,12 @@ public class RDFXMLExportButtonHandler extends AbstractTagHandler {
 		String description = "Download Ontology as RDF/XML";
 		String jsAction = "window.location='action/RDFXMLExportAction" +
 				"?" + Attributes.TOPIC + "=" + "RDF" +
-				"&" + Attributes.WEB + "=" + Environment.DEFAULT_WEB +
-				"&" + "filename" + "=" + "ontology" + ".xml'";
+				"&amp;" + Attributes.WEB + "=" + Environment.DEFAULT_WEB +
+				"&amp;" + "filename" + "=" + "ontology" + ".xml'";
 
 		html.appendHtml("<a href=\"javascript:");
 		html.appendHtml(jsAction);
-		html.appendHtml(";void(0);\" ");
-		html.appendHtml("\" title=\"");
+		html.appendHtml(";void(0);\" title=\"");
 		html.appendHtml(Strings.encodeHtml(description));
 		html.appendHtml("\" class=\"onte-button left small\">");
 		html.appendHtml("<img src=\"KnowWEExtension/images/disk.png\" style=\"");

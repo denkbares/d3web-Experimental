@@ -75,7 +75,7 @@ public class DescribeIndividualLinkToolProvider implements ToolProvider {
 
 		String jsAction = "window.location.href = "
 				+
-				"'Wiki.jsp?page=IndividualDescription&objectname=' + encodeURIComponent('"
+				"'Wiki.jsp?page=IndividualDescription&amp;objectname=' + encodeURIComponent('"
 				+
 				objectName + "')";
 		return new DefaultTool(

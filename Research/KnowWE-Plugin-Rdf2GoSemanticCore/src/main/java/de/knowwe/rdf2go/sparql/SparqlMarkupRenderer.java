@@ -300,7 +300,7 @@ public class SparqlMarkupRenderer implements Renderer {
 		builder.appendHtml("<img src='KnowWEExtension/navigation_icons/");
 		builder.appendHtml(icon);
 		if (!enabled) builder.appendHtml("_deactivated");
-		builder.appendHtml(suffix).appendHtml("'></img></span>");
+		builder.appendHtml(suffix).appendHtml("' /></span>");
 		if (enabled) {
 			builder.appendHtml("</a>");
 		}

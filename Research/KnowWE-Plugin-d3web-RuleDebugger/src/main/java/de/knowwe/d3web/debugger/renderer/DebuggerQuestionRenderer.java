@@ -93,7 +93,7 @@ public class DebuggerQuestionRenderer {
 			renderQuestionText((QuestionText) q, valueText, kbid, title, inside, buffer);
 		}
 
-		buffer.appendHtml("<a href='Wiki.jsp?page=ObjectInfoPage&objectname="
+		buffer.appendHtml("<a href='Wiki.jsp?page=ObjectInfoPage&amp;objectname="
 				+ Strings.encodeHtml(q.getName())
 				+ "' class='dquestionLink'>Show Info Page</a>");
 

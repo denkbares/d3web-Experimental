@@ -44,7 +44,7 @@ public class OwlDownloadHandler extends AbstractHTMLTagHandler {
 	@Override
 	public void renderHTML(String web, String topic, UserContext user, Map<String, String> values, RenderResult result) {
 		String prefix = "";
-		String icon = "<img src=\"KnowWEExtension/images/disk.png\" title=\"Owl download\" /></img>";
+		String icon = "<img src=\"KnowWEExtension/images/disk.png\" title=\"Owl download\" />";
 		result.appendHtml("<a href=\"" + prefix + "OwlDownload.jsp\">" + icon + "</a>");
 	}
 }

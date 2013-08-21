@@ -48,7 +48,7 @@ public class Video extends MultimediaItem {
 				string.appendHtml("<img height='70' src='");
 				string.append("attach/" + sec.getArticle().getTitle() + "/");
 				string.append(bildURL.getText().trim());
-				string.appendHtml("'></img>");
+				string.appendHtml("' />");
 			}
 		});
 

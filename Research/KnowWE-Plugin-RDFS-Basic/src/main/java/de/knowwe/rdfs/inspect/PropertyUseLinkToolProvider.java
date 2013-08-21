@@ -66,7 +66,7 @@ public class PropertyUseLinkToolProvider implements ToolProvider {
 		String objectName = section.get().getTermIdentifier(section).toString();
 
 		String jsAction = "window.location.href = " +
-				"'Wiki.jsp?page=PropertyUse&objectname=' + encodeURIComponent('" +
+				"'Wiki.jsp?page=PropertyUse&amp;objectname=' + encodeURIComponent('" +
 				objectName + "')";
 		return new DefaultTool(
 				"KnowWEExtension/images/dt_icon_realisation.gif",

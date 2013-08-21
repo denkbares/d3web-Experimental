@@ -48,8 +48,8 @@ public class RelationMarkupRefactoringToolProvider implements ToolProvider {
 	private String getJSScript(UserContext userContext) {
 		String jsAction = "window.location='action/RefactoringAction" +
 				"?" + Attributes.TOPIC + "=" + userContext.getTitle() +
-				"&" + Attributes.USER + "=" + userContext.getUserName() +
-				"&" + Attributes.WEB + "=" + Environment.DEFAULT_WEB + "'";
+				"&amp;" + Attributes.USER + "=" + userContext.getUserName() +
+				"&amp;" + Attributes.WEB + "=" + Environment.DEFAULT_WEB + "'";
 		;
 		return jsAction;
 	}

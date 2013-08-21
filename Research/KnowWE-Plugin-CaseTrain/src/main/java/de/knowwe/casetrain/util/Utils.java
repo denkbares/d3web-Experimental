@@ -153,7 +153,7 @@ public class Utils {
 							? " href=\"javascript:" + t.getJSAction() + ";undefined;\""
 							: "") +
 					" title=\"" + t.getDescription() + "\">" +
-					(hasIcon ? ("<img src=\"" + icon + "\"></img>") : "") +
+					(hasIcon ? ("<img src=\"" + icon + "\" />") : "") +
 					"</" + (jsAction == null ? "span" : "a") + ">" +
 					"</span>");
 		}
