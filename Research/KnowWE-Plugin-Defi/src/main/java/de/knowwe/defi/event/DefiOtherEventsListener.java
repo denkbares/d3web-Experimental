@@ -23,35 +23,36 @@ import java.util.Collection;
 
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
-import de.knowwe.defi.logger.DefiLoggerUtils;
-import de.knowwe.defi.logger.DefiPageEventLogger;
-import de.knowwe.defi.logger.DefiPageLogLine;
+import de.knowwe.defi.logger.DefiOtherEventsLogger;
 
 
 /**
  * 
  * @author dupke
- * @created 31.07.2013
+ * @created 21.08.2013
  */
-public class DefiPageEventListener implements EventListener {
+public class DefiOtherEventsListener implements EventListener {
 
 	@Override
 	public Collection<Class<? extends Event>> getEvents() {
 		ArrayList<Class<? extends Event>> events = new ArrayList<Class<? extends Event>>(1);
-		events.add(DefiPageEvent.class);
+		events.add(DefiExternalLinkEvent.class);
+		events.add(DefiFeedbackSavedEvent.class);
 
 		return events;
 	}
 
 	@Override
 	public void notify(Event event) {
-			DefiPageEvent defiPageEvent = (DefiPageEvent) event;
-			DefiPageLogLine line = new DefiPageLogLine();
-			line.setUser(defiPageEvent.getUser());
-			line.setPage(defiPageEvent.getPage());
-			line.setStartDate(DefiLoggerUtils.getCurrentDate());
-			line.setStartTime(DefiLoggerUtils.getCurrentTime());
-			DefiPageEventLogger.logEntry(line);
+		if (event instanceof DefiExternalLinkEvent) {
+			DefiExternalLinkEvent defiExtEvent = (DefiExternalLinkEvent) event;
+			DefiOtherEventsLogger.logExternalLinkEvent(defiExtEvent.getUser(),
+					defiExtEvent.getLink());
+		}
+		else if (event instanceof DefiFeedbackSavedEvent) {
+			DefiFeedbackSavedEvent defiFeedbackEvent = (DefiFeedbackSavedEvent) event;
+			DefiOtherEventsLogger.logFeedbackEvent(defiFeedbackEvent.getUser());
+		}
 	}
 
 }

@@ -66,14 +66,6 @@ public class DefiCommentEventListener implements EventListener {
 		final NewCommentEvent comEvent = (NewCommentEvent) event;
 		DefiCommentLogLine commentLogLine = getLogLineOfForum(comEvent);
 		DefiCommentEventLogger.logComment(commentLogLine);
-		// Thread t = new Thread(new Runnable() {
-		//
-		// @Override
-		// public void run() {
-		// notifyMail(comEvent.getTopic());
-		// }
-		// });
-		// t.start();
 		notifyMail(comEvent.getTopic());
 	}
 
@@ -114,6 +106,9 @@ public class DefiCommentEventListener implements EventListener {
 		String date = lastBoxMap.get("date");
 		logLine.setDate(date.split(" ")[0]);
 		logLine.setTime(date.split(" ")[1]);
+
+		// Topic
+		logLine.setTopic(event.getTopic());
 
 		return logLine;
 	}

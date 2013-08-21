@@ -28,7 +28,11 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
+import de.knowwe.core.Environment;
 import de.knowwe.defi.aboutMe.AboutMe;
 
 /**
@@ -39,11 +43,6 @@ import de.knowwe.defi.aboutMe.AboutMe;
  */
 public class DefiUtils {
 
-	/**
-	 *
-	 *
-	 * @created 17.02.2011
-	 */
 	public static String lastLogin() {
 		String logout_file = System.getProperty("java.io.tmpdir") + File.separatorChar
 				+ AboutMe.LOGOUT_FILENAME;
@@ -84,5 +83,17 @@ public class DefiUtils {
 		}
 		in.close();
 		return buffy.toString();
+	}
+
+	public static List<String> getAllDefiArticleNames() {
+		List<String> articles = new LinkedList<String>();
+		Map<String, String> allArticles = Environment.getInstance().getWikiConnector().getAllArticles(
+				Environment.DEFAULT_WEB);
+		for (String page : allArticles.keySet()) {
+			articles.add(page);
+		}
+		articles.add("EmergencyPlan.jsp");
+		articles.add("Zusatzmodul");
+		return articles;
 	}
 }

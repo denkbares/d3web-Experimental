@@ -24,12 +24,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.knowwe.core.ArticleManager;
-import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.defi.user.UserUtilities;
 import de.knowwe.defi.utils.ReplaceSectionUtils;
 
 /**
@@ -40,26 +38,10 @@ public class ReadbuttonSubmitAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		String username = context.getUserName();
-		String dataPagename = username + "_data";
-
-		// search on "_data"-page for the button
-		dataPagename = context.getUserName() + "_data";
-		ArticleManager mgr = Environment.getInstance().getArticleManager(context.getWeb());
-		if (!Environment.getInstance().getWikiConnector().doesArticleExist(dataPagename)) {
-			// create new article
-			String newContent = "[{ALLOW view admin}]\n[{ALLOW delete " + username + "}]\n";
-			Environment.getInstance().getWikiConnector().createArticle(
-					dataPagename, newContent.toString(), "Defi-system");
-			Article article = Article.createArticle(newContent.toString(),
-					dataPagename, context.getWeb(), true);
-			Environment.getInstance().getArticleManager(
-					context.getWeb()).registerArticle(article);
-		}
-
-		Section<?> sec = mgr.getArticle(dataPagename).getRootSection();
 		Map<String, String> nodesMap = new HashMap<String, String>();
-		nodesMap.put(sec.getID(), sec.getText() + "\n" + createNewMarkupString(context));
+		Section<?> dataSection = UserUtilities.getDataPage(context.getUserName()).getRootSection();
+		nodesMap.put(dataSection.getID(), dataSection.getText() + "\n"
+				+ createNewMarkupString(context));
 
 		// submit change
 		ReplaceSectionUtils.replaceSections(context, nodesMap);
@@ -72,6 +54,7 @@ public class ReadbuttonSubmitAction extends AbstractAction {
 		String label = context.getParameter("label");
 		String discussed = context.getParameter("discussed");
 		String closed = context.getParameter("closed");
+		String page = context.getTitle();
 		String date = (new SimpleDateFormat("dd.MM.yyyy HH:mm")).format((new Date()));
 
 		if (label.equals("")) label = "--";
@@ -84,6 +67,7 @@ public class ReadbuttonSubmitAction extends AbstractAction {
 		newContent.append("@label:" + label + "\n");
 		newContent.append("@discussed:" + discussed + "\n");
 		newContent.append("@closed:" + closed + "\n");
+		newContent.append("@page:" + page + "\n");
 		newContent.append("@date:" + date + "\n");
 		newContent.append("%\n");
 

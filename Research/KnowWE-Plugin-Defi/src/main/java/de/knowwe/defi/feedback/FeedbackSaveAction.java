@@ -25,7 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.event.EventManager;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.defi.event.DefiFeedbackSavedEvent;
 
 /**
  * The FeedbackSaveAction stores the user input of the feedback form in a file
@@ -65,6 +67,9 @@ public class FeedbackSaveAction extends AbstractAction {
 		xml.append("</feedback>");
 
 		KnowWEUtils.writeFile(path + "/" + filename, xml.toString());
+
+		// fire event
+		EventManager.getInstance().fireEvent(new DefiFeedbackSavedEvent(context.getUserName()));
 
 		HttpServletResponse response = context.getResponse();
 		response.sendRedirect("Wiki.jsp?page=BefragungAbgeschlossen");

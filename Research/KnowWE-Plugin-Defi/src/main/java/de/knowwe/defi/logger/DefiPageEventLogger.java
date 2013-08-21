@@ -48,6 +48,9 @@ public class DefiPageEventLogger {
 	 * Set end to last page entry and start to new page entry.
 	 */
 	public static void logEntry(DefiPageLogLine line) {
+		// if last page visited equals current page -> return
+		DefiPageLogLine lastEntry = findLastEntryForUser(line.getUser());
+		if (lastEntry != null && lastEntry.getPage().equals(line.getPage())) return;
 		// find last entry for user and fill end
 		updateLastEntry(line);
 		// write new entry
@@ -150,7 +153,7 @@ public class DefiPageEventLogger {
 		}
 		finally {
 			try {
-				br.close();
+				if (br != null) br.close();
 			}
 			catch (IOException e) {
 			}

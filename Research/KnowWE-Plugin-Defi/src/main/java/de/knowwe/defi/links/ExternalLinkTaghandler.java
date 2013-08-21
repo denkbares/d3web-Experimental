@@ -57,7 +57,8 @@ public class ExternalLinkTaghandler extends AbstractTagHandler {
 			String externalLinkHintText = "Sie verlassen nun die Webseite von ICD-Forum und folgen einem externen Link. Wir haben keinen Einfluss auf den Inhalt der folgenden Webseite und sind nicht für den Inhalt verantwortlich.";
 
 			result.appendHtml("<a href='#' onclick='linkAlertCalled(\""
-					+ externalLinkHintText + "\", \"" + url + "\")'>");
+					+ externalLinkHintText + "\", \"" + url + "\");externalLinkClicked(\"" + url
+					+ "\")'>");
 			result.append(text);
 			result.appendHtml("</a>");
 			return;

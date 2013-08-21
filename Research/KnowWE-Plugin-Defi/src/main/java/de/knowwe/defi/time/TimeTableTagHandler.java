@@ -73,7 +73,6 @@ public class TimeTableTagHandler extends AbstractTagHandler {
 		timetable.append("<br /><br />");
 
 		// timetable for single user
-		// TODO: Zeitplan für einzelnen user auslesen und eintragen
 		timetable.append("<h3>Individueller Zeitplan</h3><hr />");
 		timetable.append("<p>Benutzer: <select name='users' onChange='displayPersonalTimeTable(this.options[this.selectedIndex].value)'>");
 		timetable.append("<option value='' style='display:none;'></option>");

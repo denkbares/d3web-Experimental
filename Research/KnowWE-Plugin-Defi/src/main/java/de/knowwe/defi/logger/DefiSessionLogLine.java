@@ -136,6 +136,10 @@ public class DefiSessionLogLine {
 		return true;
 	}
 
+	public String getLoginDateTime() {
+		return getLoginDate() + " " + getLoginTime();
+	}
+
 	@Override
 	public String toString() {
 		return user + S + loginDate + S + loginTime + S + logOutDate + S + logOutTime + S + timeout;

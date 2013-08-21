@@ -1,3 +1,5 @@
+<%@page import="de.knowwe.core.event.EventManager"%>
+<%@page import="de.knowwe.defi.event.DefiPageEvent"%>
 <%@page import="com.ecyrd.jspwiki.*" %>
 <%@page import="de.knowwe.jspwiki.*" %>
 <%@page import="de.knowwe.core.*" %>
@@ -30,6 +32,9 @@
 	
 	String requestUser = (String)parameters.get("user");
 	boolean requestUserCorrect = (requestUser.equals(context.getUserName()));
+	
+	// send page event
+	EventManager.getInstance().fireEvent(new DefiPageEvent(context.getUserName(), "EmergencyPlan.jsp"));
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 

@@ -39,6 +39,7 @@ public class ReadbuttonType extends DefaultMarkupType {
 		MARKUP.addAnnotation("label", false);
 		MARKUP.addAnnotation("discussed", true);
 		MARKUP.addAnnotation("closed", true);
+		MARKUP.addAnnotation("page", true);
 		MARKUP.addAnnotation("id", true);
 	}
 

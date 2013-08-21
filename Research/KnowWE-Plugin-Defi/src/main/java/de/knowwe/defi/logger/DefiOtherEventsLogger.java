@@ -31,31 +31,41 @@ import java.util.List;
 
 import de.knowwe.core.Environment;
 
+
 /**
  * 
  * @author dupke
- * @created 31.07.2013
+ * @created 21.08.2013
  */
-public class DefiCommentEventLogger {
-
-	private final static String FILENAME = "DefiForumLog.log";
+public class DefiOtherEventsLogger {
+	
+	private final static String FILENAME = "DefiOtherEventsLog.log";
 	private final static String PATH = Environment.getInstance().getWikiConnector().getSavePath()
 			+ "\\" + FILENAME;
 	/** Sepearator between entries in a logline **/
-	private final static String SEPARATOR = "___";
+	public final static String SEPARATOR = "___";
+	public final static String EXT_LINK_PREFIX = "Externer Link";
+	public final static String FEEDBACK_PREFIX = "Feedback";
 
-	public static void logComment(DefiCommentLogLine commentLogLine) {
-		writeToForumLog(commentLogLine.toString());
+	public static void logExternalLinkEvent(String user, String link) {
+		String datetime = DefiLoggerUtils.getCurrentDate() + " " + DefiLoggerUtils.getCurrentTime();
+		logEvent(EXT_LINK_PREFIX + SEPARATOR + user + SEPARATOR + link + SEPARATOR + datetime);
 	}
 
-	private static void writeToForumLog(String logLine) {
+	public static void logFeedbackEvent(String user) {
+		String datetime = DefiLoggerUtils.getCurrentDate() + " " + DefiLoggerUtils.getCurrentTime();
+		logEvent(FEEDBACK_PREFIX + SEPARATOR + user + SEPARATOR + datetime);
+	}
+
+	private static void logEvent(String logline) {
 		BufferedWriter writer = null;
 		try {
 			writer = new BufferedWriter(new FileWriter(PATH, true));
-			writer.append(logLine);
+			writer.append(logline);
 			writer.newLine();
 		}
 		catch (IOException e) {
+			e.printStackTrace();
 		}
 		finally {
 			try {
@@ -66,15 +76,15 @@ public class DefiCommentEventLogger {
 		}
 	}
 
-	public static List<DefiCommentLogLine> getLogLines() {
-		LinkedList<DefiCommentLogLine> loglines = new LinkedList<DefiCommentLogLine>();
+	public static List<String> getLogLines(String prefix) {
+		LinkedList<String> loglines = new LinkedList<String>();
 		BufferedReader br = null;
 		String line;
 		try {
 			br = new BufferedReader(new InputStreamReader(
 					(new FileInputStream(new File(PATH))), "UTF-8"));
 			while ((line = br.readLine()) != null) {
-				loglines.add(new DefiCommentLogLine(line));
+				if (line.startsWith(prefix)) loglines.add(line);
 			}
 		}
 		catch (FileNotFoundException e) {
@@ -92,11 +102,8 @@ public class DefiCommentEventLogger {
 		return loglines;
 	}
 
-	public static String getSeparator() {
-		return SEPARATOR;
-	}
-
 	public static String getPath() {
 		return PATH;
 	}
+
 }

@@ -34,6 +34,7 @@ public class DefiCommentLogLine {
 	private String adressee;
 	private String response;
 	private String unit;
+	private String topic;
 
 	private final static String NO_DATA = "--";
 	/** Separator S used in pagelog **/
@@ -41,7 +42,7 @@ public class DefiCommentLogLine {
 	/** Regex to find pagelogline **/
 	private final String MATCH_ME = "^((?!" + S + ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S
 			+ ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+"
-			+ S + "((?!" + S + ").)+$";
+			+ S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+$";
 
 	/**
 	 * @param user comment's author
@@ -62,6 +63,7 @@ public class DefiCommentLogLine {
 		adressee = parts[4];
 		response = parts[5];
 		unit = parts[6];
+		topic = parts[7];
 	}
 
 	public DefiCommentLogLine() {
@@ -72,6 +74,7 @@ public class DefiCommentLogLine {
 		adressee = NO_DATA;
 		response = NO_DATA;
 		unit = NO_DATA;
+		topic = NO_DATA;
 	}
 
 	public String getUser() {
@@ -130,10 +133,18 @@ public class DefiCommentLogLine {
 		this.unit = unit;
 	}
 
+	public String getTopic() {
+		return topic;
+	}
+
+	public void setTopic(String topic) {
+		this.topic = topic;
+	}
+
 	@Override
 	public String toString() {
 		return user + S + msg + S + date + S + time + S + adressee + S + response + S
-				+ unit;
+				+ unit + S + topic;
 	}
 
 }

@@ -18,40 +18,29 @@
  */
 package de.knowwe.defi.event;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import de.knowwe.core.event.Event;
-import de.knowwe.core.event.EventListener;
-import de.knowwe.defi.logger.DefiLoggerUtils;
-import de.knowwe.defi.logger.DefiPageEventLogger;
-import de.knowwe.defi.logger.DefiPageLogLine;
 
 
 /**
  * 
  * @author dupke
- * @created 31.07.2013
+ * @created 21.08.2013
  */
-public class DefiPageEventListener implements EventListener {
+public class DefiExternalLinkEvent extends Event {
 
-	@Override
-	public Collection<Class<? extends Event>> getEvents() {
-		ArrayList<Class<? extends Event>> events = new ArrayList<Class<? extends Event>>(1);
-		events.add(DefiPageEvent.class);
+	private final String EVENT_USER;
+	private final String EVENT_LINK;
 
-		return events;
+	public DefiExternalLinkEvent(String user, String link) {
+		EVENT_USER = user;
+		EVENT_LINK = link;
 	}
 
-	@Override
-	public void notify(Event event) {
-			DefiPageEvent defiPageEvent = (DefiPageEvent) event;
-			DefiPageLogLine line = new DefiPageLogLine();
-			line.setUser(defiPageEvent.getUser());
-			line.setPage(defiPageEvent.getPage());
-			line.setStartDate(DefiLoggerUtils.getCurrentDate());
-			line.setStartTime(DefiLoggerUtils.getCurrentTime());
-			DefiPageEventLogger.logEntry(line);
+	public String getUser() {
+		return EVENT_USER;
 	}
 
+	public String getLink() {
+		return EVENT_LINK;
+	}
 }

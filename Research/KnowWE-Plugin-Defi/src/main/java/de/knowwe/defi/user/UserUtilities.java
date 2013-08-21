@@ -21,7 +21,10 @@ package de.knowwe.defi.user;
 import java.io.FileInputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -35,8 +38,19 @@ import org.xml.sax.InputSource;
 import com.ecyrd.jspwiki.WikiEngine;
 import com.ecyrd.jspwiki.auth.user.UserProfile;
 
+import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.defi.logger.DefiCommentEventLogger;
+import de.knowwe.defi.logger.DefiCommentLogLine;
+import de.knowwe.defi.logger.DefiPageEventLogger;
+import de.knowwe.defi.logger.DefiPageLogLine;
+import de.knowwe.defi.readbutton.ReadbuttonType;
 import de.knowwe.jspwiki.JSPWikiConnector;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * 
@@ -91,4 +105,53 @@ public class UserUtilities {
 		return created;
 	}
 
+	public static Article getDataPage(String user) {
+		String dataPage = user + "_data";
+		ArticleManager mgr = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
+		if (!Environment.getInstance().getWikiConnector().doesArticleExist(dataPage)) {
+			// create new article
+			String newContent = "[{ALLOW view admin}]\n[{ALLOW delete " + user + "}]\n";
+			Environment.getInstance().getWikiConnector().createArticle(
+					dataPage, newContent.toString(), "Defi-system");
+			Article article = Article.createArticle(newContent.toString(),
+					dataPage, Environment.DEFAULT_WEB, true);
+			Environment.getInstance().getArticleManager(
+					Environment.DEFAULT_WEB).registerArticle(article);
+		}
+		return mgr.getArticle(dataPage);
+	}
+
+	public static List<String> getRatedPages(String user) {
+		// rated pages
+		Section<RootType> dataSec = getDataPage(user).getRootSection();
+		List<String> ratedPages = new ArrayList<String>();
+		for (Section<ReadbuttonType> sec : Sections.findChildrenOfType(dataSec,
+				ReadbuttonType.class)) {
+			ratedPages.add(DefaultMarkupType.getAnnotation(sec, "page"));
+		}
+
+		return ratedPages;
+	}
+
+	public static List<String> getVisitedPages(String user) {
+		List<String> visitedPages = new ArrayList<String>();
+		// visited pages
+		for (DefiPageLogLine logLine : DefiPageEventLogger.getLogLines()) {
+			if (user.equals(logLine.getUser())) {
+				visitedPages.add(logLine.getPage());
+			}
+		}
+		return visitedPages;
+	}
+
+	public static List<DefiCommentLogLine> getComments(String user) {
+		List<DefiCommentLogLine> logLines = DefiCommentEventLogger.getLogLines();
+		List<DefiCommentLogLine> userComments = new LinkedList<DefiCommentLogLine>();
+		for (DefiCommentLogLine logLine : logLines) {
+			if (logLine.getUser().equals(user)) userComments.add(logLine);
+
+		}
+
+		return userComments;
+	}
 }

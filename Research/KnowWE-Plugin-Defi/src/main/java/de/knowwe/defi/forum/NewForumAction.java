@@ -32,10 +32,12 @@ import com.ecyrd.jspwiki.WikiEngine;
 import com.ecyrd.jspwiki.util.MailUtil;
 
 import de.d3web.strings.Strings;
+import de.d3web.we.event.NewCommentEvent;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.event.EventManager;
 
 /**
  * Reachable from the ForumMenu. Builds new forum.
@@ -96,6 +98,8 @@ public class NewForumAction extends AbstractAction {
 			responseString = "Ein Forum zu diesem Thema existiert bereits.\n";
 		}
 
+		/* fire event */
+		EventManager.getInstance().fireEvent(new NewCommentEvent(message, title));
 		/* Send mail */
 		String nachricht = "Neuer Forumeintrag auf der Seite '" + title + "'";
 		String subject = "Defi - neuer Forumeintrag";

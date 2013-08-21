@@ -148,6 +148,7 @@
         <parameter id="description" value="TagHandler ExternalLinkTaghandler" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
+        <parameter id="script" value="KnowWE-Plugin-Defi-ExternalLink.js" />
         <parameter id="css" value="defi.css" />
     </extension>
     
@@ -295,6 +296,17 @@
         <parameter id="priority" value="5" />
         <parameter id="css" value="defi-timetable.css" />
         <parameter id="script" value="KnowWE-Plugin-Defi-TimeTable.js" />
+    </extension>   
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="DataTagHandler">
+        <parameter id="class" value="de.knowwe.defi.data.DataTagHandler" />
+        <parameter id="name" value="DataTagHandler" />
+        <parameter id="description" value="TagHandler DataTagHandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="css" value="defi-data.css" />
+        <parameter id="script" value="KnowWE-Plugin-Defi-Data.js" />
     </extension>   
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -467,6 +479,26 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="GetPersonalDataAction">
+        <parameter id="class"
+            value="de.knowwe.defi.data.GetPersonalDataAction" />
+        <parameter id="name" value="GetPersonalDataAction" />
+        <parameter id="description" value="Action GetPersonalDataAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="LogExternalLinkAction">
+        <parameter id="class"
+            value="de.knowwe.defi.links.LogExternalLinkAction" />
+        <parameter id="name" value="LogExternalLinkAction" />
+        <parameter id="description" value="Action LogExternalLinkAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
         id="DefiCommentEventListener">
@@ -504,6 +536,16 @@
             value="de.knowwe.defi.event.DefiSessionEventListener" />
         <parameter id="name" value="DefiSessionEventListener" />
         <parameter id="description" value="EventListener DefiSessionEventListener" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension> 
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
+        id="DefiOtherEventsListener">
+        <parameter id="class"
+            value="de.knowwe.defi.event.DefiOtherEventsListener" />
+        <parameter id="name" value="DefiOtherEventsListener" />
+        <parameter id="description" value="EventListener DefiOtherEventsListener" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension> 

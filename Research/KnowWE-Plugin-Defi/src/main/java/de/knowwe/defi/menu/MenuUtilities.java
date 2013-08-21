@@ -96,10 +96,14 @@ public class MenuUtilities {
 				add = false;
 			}
 
-			if (add) subUnits.add(sec);
+			if (add && !subUnits.contains(sec)) subUnits.add(sec);
 		}
 
 		return subUnits;
+	}
+	
+	public static List<Section<DashTreeElement>> getSubUnits(Section<DashTreeElement> rootUnit) {
+		return getSubUnits(rootUnit, getAllUnits());
 	}
 
 	/**
