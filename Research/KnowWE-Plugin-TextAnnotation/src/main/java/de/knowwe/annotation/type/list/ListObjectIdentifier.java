@@ -23,6 +23,7 @@ import de.knowwe.compile.object.renderer.CompositeRenderer;
 import de.knowwe.compile.object.renderer.ReferenceSurroundingRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 /**
  * 
@@ -36,7 +37,7 @@ public class ListObjectIdentifier extends IncrementalTermReference {
 		this.setSectionFinder(new AllTextFinderTrimmed());
 		CompositeRenderer renderer = new CompositeRenderer(r,
 				new ReferenceSurroundingRenderer());
-		this.setRenderer(renderer);
+		this.setRenderer(new ToolMenuDecoratingRenderer(renderer));
 	}
 
 }
