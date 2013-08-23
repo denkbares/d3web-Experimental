@@ -1,4 +1,4 @@
-function drawWheel(size, json) { 
+function drawWheel(size, json, sectionID) { 
 	var width = 650;
 	if (size != null) {
 		width = size;
