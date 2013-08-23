@@ -68,6 +68,7 @@ import de.knowwe.wisskont.util.MarkupUtils;
 public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 
 	private static final String key = "Werte";
+	private static final String VALUE_PROPERTY = "wertebereich";
 
 	/**
 	 * 
@@ -98,17 +99,17 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 
 	@Override
 	public String getName() {
-		return "Werte-Bereich des Patienten";
+		return "Werte-Bereich des Begriffs";
 	}
 
 	@Override
 	public boolean isInverseDir() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public URI getRelationURI() {
-		return createURI(SubconceptMarkup.SUBCONCEPT_PROPERTY);
+		return createURI(VALUE_PROPERTY);
 	}
 
 	class ValueDefinitionListElement extends IncrementalTermDefinition<String> {
