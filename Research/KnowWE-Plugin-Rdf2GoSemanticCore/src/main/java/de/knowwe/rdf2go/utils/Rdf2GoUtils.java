@@ -252,7 +252,7 @@ public class Rdf2GoUtils {
 
 	public static String getCleanedExternalForm(Identifier identifier) {
 		String externalForm = identifier.toExternalForm();
-		if (identifier.getPathElements().length == 1) {
+		if (identifier.countPathElements() == 1) {
 			externalForm = Strings.unquote(externalForm);
 		}
 		return externalForm;
