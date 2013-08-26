@@ -6,6 +6,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 
 public class StylesDocument {
+
 	Document doc;
 
 	public StylesDocument(Document doc) {
@@ -13,6 +14,7 @@ public class StylesDocument {
 		init();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void init() {
 		StyleManager.getInstance().addStyles(
 				(List<Element>)

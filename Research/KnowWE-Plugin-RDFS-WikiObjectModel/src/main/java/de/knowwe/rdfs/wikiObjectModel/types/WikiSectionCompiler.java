@@ -29,11 +29,12 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
 import de.knowwe.core.Environment;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.jspwiki.types.SectionContentType;
 import de.knowwe.jspwiki.types.HeaderType;
+import de.knowwe.jspwiki.types.SectionContentType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
@@ -45,10 +46,10 @@ import de.knowwe.rdfs.wikiObjectModel.WikiObjectModel;
  * @author Jochen Reutelshöfer (denkbares GmbH)
  * @created 06.07.2012
  */
-public class WikiSectionCompiler extends AbstractKnowledgeUnitCompileScriptRDFS {
+public class WikiSectionCompiler<T extends Type> extends AbstractKnowledgeUnitCompileScriptRDFS<T> {
 
 	@Override
-	public void insertIntoRepository(Section section) {
+	public void insertIntoRepository(Section<T> section) {
 
 		List<Statement> data = new ArrayList<Statement>();
 

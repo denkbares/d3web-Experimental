@@ -119,7 +119,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractKnowledgeUnitType<Ob
 
 	}
 
-	class PropertyDef extends AbstractIRITermDefinition implements TypedTermDefinition {
+	class PropertyDef extends AbstractIRITermDefinition<Term> implements TypedTermDefinition {
 
 		public PropertyDef() {
 			this.setSectionFinder(new RegexSectionFinder(OBJECT_PROPERTY_REGEX, 0, 1));
@@ -173,6 +173,7 @@ class DomainRangeCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<Ob
 		List<Section<IRITermRef>> refs = Sections.findSuccessorsOfType(section,
 				IRITermRef.class);
 		if (refs.size() == 2) {
+			@SuppressWarnings("rawtypes")
 			Section<IncrementalTermDefinition> propDef = Sections.findSuccessor(
 					section, IncrementalTermDefinition.class);
 			URI propURI = RDFSUtil.getURI(propDef);

@@ -1,8 +1,6 @@
 package officeconverter.odt;
 
-
 import java.util.List;
-
 
 import officeconverter.Config;
 import officeconverter.html.HTMLElement;
@@ -12,8 +10,8 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Text;
 
-
 public class ContentDocument {
+
 	Config c;
 	Document doc;
 
@@ -30,6 +28,7 @@ public class ContentDocument {
 		init();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void init() {
 
 		Element docRoot = doc.getRootElement();
@@ -51,22 +50,27 @@ public class ContentDocument {
 	private String recode(String html) {
 		try {
 			return Unicode2Html.getHtmlStringWithCheckOnISOControls(html);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	private String convert(List<Element> elements, StringBuilder buffy) {
 		for (Object elem : elements) {
 			if (elem instanceof Text) {
 				buffy.append(recode(((Text) elem).getText()));
-			} else if (elem instanceof Element) {
+			}
+			else if (elem instanceof Element) {
 				HTMLElement htmlElement = new HTMLElement(c, (Element) elem);
 				buffy.append(htmlElement.getStartTag());
-				if (((Element) elem).getContent() == null || ((Element) elem).getContent().isEmpty()) {
+				if (((Element) elem).getContent() == null
+						|| ((Element) elem).getContent().isEmpty()) {
 					buffy.append(recode(((Element) elem).getTextTrim()));
-				} else {
+				}
+				else {
 					convert(((Element) elem).getContent(), buffy);
 				}
 				buffy.append(htmlElement.getEndTag());

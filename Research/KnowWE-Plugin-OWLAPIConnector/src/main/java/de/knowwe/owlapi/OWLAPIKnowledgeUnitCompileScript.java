@@ -50,7 +50,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends S
 	/**
 	 * Cache for the OWLAxioms. Enables incremental compilation.
 	 */
-	private static final Map<CompileSection, Set<OWLAxiom>> axiomCache = new HashMap<CompileSection, Set<OWLAxiom>>();
+	private static final Map<CompileSection<?>, Set<OWLAxiom>> axiomCache = new HashMap<CompileSection<?>, Set<OWLAxiom>>();
 
 	/**
 	 * The instance of the {@link OWLAPIConnector} handles the access to the
@@ -103,7 +103,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends S
 
 	@Override
 	public void deleteFromRepository(Section<T> section) {
-		Set<OWLAxiom> axioms = axiomCache.remove(new CompileSection(section));
+		Set<OWLAxiom> axioms = axiomCache.remove(new CompileSection<T>(section));
 		connector.removeAxioms(axioms);
 	}
 
@@ -112,7 +112,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends S
 		Collection<Message> messages = new LinkedList<Message>();
 		Set<OWLAxiom> axioms = createOWLAxioms(section, messages);
 		connector.addAxioms(axioms);
-		axiomCache.put(new CompileSection(section), axioms);
+		axiomCache.put(new CompileSection<T>(section), axioms);
 
 		// store messages found while compiling the current section
 		Messages.storeMessages(section.getArticle(), section, getClass(), messages);

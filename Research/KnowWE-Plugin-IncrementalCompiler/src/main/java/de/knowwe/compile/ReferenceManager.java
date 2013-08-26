@@ -35,7 +35,6 @@ import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.core.kdom.RootType;
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.objects.Term;
@@ -196,7 +195,7 @@ public class ReferenceManager {
 			List<Section<KnowledgeUnit>> allKnowledgeUnitsOfArticle = Sections.findSuccessorsOfType(
 					rootSection, KnowledgeUnit.class);
 			for (Section<KnowledgeUnit> knowledge : allKnowledgeUnitsOfArticle) {
-				KnowledgeUnitCompileScript<Type> compileScript = knowledge.get().getCompileScript();
+				KnowledgeUnitCompileScript<?> compileScript = knowledge.get().getCompileScript();
 				if (compileScript == null) {
 					Logger.getLogger(this.getClass().getName()).warning(
 							"KnowledgeUnit without compile script: " + knowledge.toString());

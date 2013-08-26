@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
-import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.empiricaltesting.TestCase;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysisReport;
 import de.d3web.we.utils.D3webUtils;
@@ -32,7 +31,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 
 		String master = TestCaseExecutorType.getMaster(section);
 		// no kb would cause massive amount of nullpointers
-		KnowledgeBase kb = D3webUtils.getKnowledgeBase(user.getWeb(), master);
+		/* KnowledgeBase kb = */D3webUtils.getKnowledgeBase(user.getWeb(), master);
 
 		TestCaseAnalysisReport report = (TestCaseAnalysisReport) section.getSectionStore().getObject(
 				TestCaseExecutorType.TEST_RESULT_KEY);

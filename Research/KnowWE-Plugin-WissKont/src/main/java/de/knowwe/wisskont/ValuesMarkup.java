@@ -127,6 +127,7 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 
 		@Override
 		public String getTermName(Section<? extends Term> s) {
+			@SuppressWarnings("rawtypes")
 			Section<IncrementalTermDefinition> conceptDefinition = MarkupUtils.getConceptDefinition(s);
 			if (conceptDefinition == null) {
 				return null; // do nothing

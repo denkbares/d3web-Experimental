@@ -19,7 +19,6 @@
  */
 package de.knowwe.rdfs.subclassingTree;
 
-import de.d3web.strings.Strings;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.parsing.Section;
@@ -46,7 +45,7 @@ public class HierarchyDashtreeElementContent extends DashTreeElementContent
 	}
 
 	@Override
-	public KnowledgeUnitCompileScript getCompileScript() {
+	public KnowledgeUnitCompileScript<?> getCompileScript() {
 		return new HierarchyDashtreeElementCompileScript();
 	}
 

@@ -93,6 +93,7 @@ public class ConceptMarkup extends AbstractKnowledgeUnitType<ConceptMarkup> impl
 		@Override
 		public void insertIntoRepository(Section<ConceptMarkup> section) {
 
+			@SuppressWarnings("rawtypes")
 			Section<IncrementalTermDefinition> termSec = MarkupUtils.getConceptDefinition(section);
 			if (termSec != null) {
 				URI subject = RDFSUtil.getURI(termSec);

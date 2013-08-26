@@ -157,22 +157,22 @@ public class ShowHierarchyRenderer implements Renderer {
 		return s;
 	}
 
-	private static String createSparqlURI(String name) {
-		name = name.replaceAll(" ", "+");
-		if (name.contains("+") || name.contains(".")) {
-			String localNamespace = Rdf2GoCore.getInstance().getLocalNamespace();
-
-			return "<" + localNamespace + name + ">";
-		}
-
-		try {
-			return "lns:" + URLDecoder.decode(name, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
+	// private static String createSparqlURI(String name) {
+	// name = name.replaceAll(" ", "+");
+	// if (name.contains("+") || name.contains(".")) {
+	// String localNamespace = Rdf2GoCore.getInstance().getLocalNamespace();
+	//
+	// return "<" + localNamespace + name + ">";
+	// }
+	//
+	// try {
+	// return "lns:" + URLDecoder.decode(name, "UTF-8");
+	// }
+	// catch (UnsupportedEncodingException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// return null;
+	// }
 
 }

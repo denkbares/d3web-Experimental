@@ -50,7 +50,7 @@ public abstract class OWLAPIRDFKnowledgeUnitCompileScript<T extends Type> extend
 	/**
 	 * Cache for the OWLAxioms. Enables incremental compilation.
 	 */
-	private static final Map<CompileSection, Set<OWLAxiom>> axiomCache = new HashMap<CompileSection, Set<OWLAxiom>>();
+	private static final Map<CompileSection<?>, Set<OWLAxiom>> axiomCache = new HashMap<CompileSection<?>, Set<OWLAxiom>>();
 
 	/**
 	 * The instance of the {@link OWLAPIConnector} handles the access to the
@@ -104,7 +104,7 @@ public abstract class OWLAPIRDFKnowledgeUnitCompileScript<T extends Type> extend
 	@Override
 	public void deleteFromRepository(Section<T> section) {
 		deleteFromOntology(section);
-		Set<OWLAxiom> axioms = axiomCache.remove(new CompileSection(section));
+		Set<OWLAxiom> axioms = axiomCache.remove(new CompileSection<T>(section));
 		connector.removeAxioms(axioms);
 		if (sync) {
 			RDF2GoSync.synchronize(axioms, section, RDF2GoSync.Mode.REMOVE);
@@ -116,7 +116,7 @@ public abstract class OWLAPIRDFKnowledgeUnitCompileScript<T extends Type> extend
 		Collection<Message> messages = new LinkedList<Message>();
 		Set<OWLAxiom> axioms = createOWLAxioms(section, messages);
 		connector.addAxioms(axioms);
-		axiomCache.put(new CompileSection(section), axioms);
+		axiomCache.put(new CompileSection<T>(section), axioms);
 
 		// store messages found while compiling the current section
 		Messages.storeMessages(section.getArticle(), section, getClass(), messages);

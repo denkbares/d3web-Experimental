@@ -73,11 +73,11 @@ class RangeCheckRenderer implements Renderer {
 						RDFSTermCategory.ObjectProperty)) {
 
 			if (info instanceof Map) {
-				Set keyset = ((Map) info).keySet();
+				Set<?> keyset = ((Map<?, ?>) info).keySet();
 				for (Object key : keyset) {
 					if (key.equals(
 							ObjectPropertyDefinitionMarkup.RDFS_DOMAIN_KEY)) {
-						Object o = ((Map) info).get(key);
+						Object o = ((Map<?, ?>) info).get(key);
 						if (o instanceof String) {
 							domainClassName = (String) o;
 						}
@@ -89,7 +89,7 @@ class RangeCheckRenderer implements Renderer {
 					}
 					if (key.equals(
 							ObjectPropertyDefinitionMarkup.RDFS_RANGE_KEY)) {
-						Object o = ((Map) info).get(key);
+						Object o = ((Map<?, ?>) info).get(key);
 						if (o instanceof String) {
 							rangeClassName = (String) o;
 						}

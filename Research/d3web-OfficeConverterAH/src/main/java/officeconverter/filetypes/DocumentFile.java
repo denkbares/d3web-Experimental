@@ -1,6 +1,5 @@
 /*
  * Created on 12.05.2004 by Chris
- *  
  */
 package officeconverter.filetypes;
 
@@ -14,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 import officeconverter.Config;
 import officeconverter.ConvertException;
@@ -41,30 +39,39 @@ import de.casetrain.cleanup.Cleaner;
  * @author Chris 12.05.2004
  */
 public abstract class DocumentFile {
-	
+
 	private final static class ImgDescr {
+
 		int number;
 		String name;
-		String ext;
 		String clipping;
 		String scaling;
-		
-		ImgDescr(String name, String ext, String clipping, String scaling, int number) {
+
+		ImgDescr(String name, String clipping, String scaling, int number) {
 			this.number = number;
 			this.name = name;
-			this.ext = ext;
 			this.clipping = clipping;
 			this.scaling = scaling;
 		}
-		
-		public int getNumber() { return number; }
-		public String getName() { return name; }
-		public String getExt() { return ext; }
-		public String getClipping() { return clipping; }
-		public String getScaling() { return scaling; }
+
+		public int getNumber() {
+			return number;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getClipping() {
+			return clipping;
+		}
+
+		public String getScaling() {
+			return scaling;
+		}
 	}
-	
-	//Liste für bereits vorhandene Bilder!
+
+	// Liste für bereits vorhandene Bilder!
 	List<ImgDescr> images = new LinkedList<ImgDescr>();
 	protected MetaDocument metaDocument = null;
 	protected StylesDocument stylesDocument = null;
@@ -76,23 +83,29 @@ public abstract class DocumentFile {
 		this.caseDocumentURL = caseDocumentURL;
 		this.config = config;
 	}
-	
+
 	public abstract URL getCaseDocumentURL();
+
 	public abstract URL getBaseURL() throws MalformedURLException;
+
 	public abstract Document getCaseDocument() throws ConvertException;
+
 	public abstract Document getStylesDocument() throws ConvertException;
+
 	public abstract Document getMetaDocument() throws ConvertException;
+
 	public abstract ContentDocument getContentDocument();
-	
+
 	private static Document getJDomDocument(InputStream xmlStream) throws JDOMException, IOException {
 		Document doc = null;
 		SAXBuilder parser = new SAXBuilder();
 		parser.setEntityResolver(new EntityResolver() {
+
 			public InputSource resolveEntity(String publicId, String systemId) {
 				if ("-//OpenOffice.org//DTD OfficeDocument 1.0//EN".equals(publicId)) {
 					URL officeDTD =
-						getClass().getResource(
-							"/importOpenOfficeDocuments/dtd/officedocument/1_0/office.dtd");
+							getClass().getResource(
+									"/importOpenOfficeDocuments/dtd/officedocument/1_0/office.dtd");
 					return new InputSource(officeDTD.toExternalForm());
 				}
 				return null;
@@ -111,13 +124,16 @@ public abstract class DocumentFile {
 			in = FileType.openStream(docUrl);
 			Document content = getJDomDocument(in);
 			return content;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new ConvertException(e);
-		} finally {
+		}
+		finally {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (IOException e) {
+				}
+				catch (IOException e) {
 					throw new ConvertException(e);
 				}
 			}
@@ -144,16 +160,14 @@ public abstract class DocumentFile {
 	}
 
 	private boolean checkFileType(String fileType) {
-		return
-			"jpg".equalsIgnoreCase(fileType)
-			|| "png".equalsIgnoreCase(fileType)
-		;
+		return "jpg".equalsIgnoreCase(fileType)
+				|| "png".equalsIgnoreCase(fileType);
 	}
-	
+
 	private final static Pattern IMAGE =
-		Pattern.compile(
-			"img src=\"(.+?)\"(?:\\s+clip=\"(.*?)\")?(\\Wscaling[\\W][\\w|\\s|\\.|,]+[\\W])?"
-		);
+			Pattern.compile(
+					"img src=\"(.+?)\"(?:\\s+clip=\"(.*?)\")?(\\Wscaling[\\W][\\w|\\s|\\.|,]+[\\W])?"
+					);
 
 	private final static Pattern FILENAME = Pattern.compile("(\\w*)\\.(\\w*)");
 
@@ -163,14 +177,13 @@ public abstract class DocumentFile {
 	 * 
 	 * @param baseDir
 	 * @return HTML-document
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	private String getAsHTML(Config config, File baseDir) {
-		if (getContentDocument() == null)
-			return "";
-		
+		if (getContentDocument() == null) return "";
+
 		StringBuffer buffy = new StringBuffer();
-		
+
 		String subDir = config.getEmbeddedObjectsDir();
 
 		int imgCounter = 1;
@@ -178,15 +191,15 @@ public abstract class DocumentFile {
 		Matcher matcher = IMAGE.matcher(getContentDocument().getHtml());
 		while (matcher.find()) {
 			boolean oleObject = false;
-			
+
 			String imageSrc = matcher.group(1);
 			if (imageSrc.startsWith("./ObjectReplacements")) {
 				oleObject = true;
 				imageSrc =
-					imageSrc.replaceAll(
-						"./ObjectReplacements",
-						"ObjectReplacements"
-					);
+						imageSrc.replaceAll(
+								"./ObjectReplacements",
+								"ObjectReplacements"
+								);
 			}
 			try {
 				URL docUrl = new URL("jar", "", getCaseDocumentURL()
@@ -197,8 +210,7 @@ public abstract class DocumentFile {
 				imgDir.mkdir();
 
 				int pos = imageSrc.lastIndexOf("/");
-				if (pos == -1)
-					pos = imageSrc.lastIndexOf(File.separator);
+				if (pos == -1) pos = imageSrc.lastIndexOf(File.separator);
 				String imageFilename = imageSrc.substring(pos + 1, imageSrc.length());
 
 				String fileType = getFiletype(imageFilename);
@@ -213,116 +225,124 @@ public abstract class DocumentFile {
 					Logging.getLogger().info(imageSrc + " has wrong file format.");
 					continue;
 				}
-				
+
 				Logging.getLogger().info("Processing Image #" + imgCounter);
-				
-			    String clipping = matcher.group(2);
-			    String scaling = matcher.group(3);
-			    
-			    //Identisches Bild schon enthalten?
-			    boolean newImage = true;
-			    int t = 0;
-			    
+
+				String clipping = matcher.group(2);
+				String scaling = matcher.group(3);
+
+				// Identisches Bild schon enthalten?
+				boolean newImage = true;
+				int t = 0;
+
 				Matcher mTemp = FILENAME.matcher(imageFilename);
 				if (!mTemp.matches()) {
 					newImage = false;
 					Logging.getLogger().info(
-						"filename not as expected (NAME.EXT)"
-					);
+							"filename not as expected (NAME.EXT)"
+							);
 				}
-				
+
 				String name = mTemp.group(1);
 				String ext = mTemp.group(2);
 
-			    if (!(images.isEmpty()))
-				    for (ImgDescr lTemp : images) {
-				    	if (newImage
-			    			&& lTemp.getName().equals(name))
-				    	{
-				    		if (!lTemp.getClipping().equals(clipping) || !lTemp.getScaling().equals(scaling))
-				    			t++;
-				    			// selbes Ursprungsbild, aber unterschiedl. Clipping/Scaling-Werte
-				    			// --> in neuer Datei speichern!
-				    		else {
-				    			t = lTemp.getNumber();
-				    			newImage = false;
-				    		}
-				    	}
-				    }
-			    
-			    if (newImage) {
-			    	
-			    	//Bild d. Liste hinzufügen, um später auf doppelte Bilder zu prüfen
-			    	images.add(new ImgDescr(name, ext, clipping, scaling, t));
-			    
-			    	//neuer Dateiname = alter Name + _Zähler
-			    	imageFilename =
-			    		t != 0
-			    		? name + "_" + t + "." + ext
-	    				: name + "." + ext
-    				;
-				    
-			    	Logging.getLogger().info(
-			    		"Writing image " + imageFilename + " to " + baseDir + "..."
-		    		);
-			    	
-				    File outputFile =
-						new File(imgDir, imageFilename);
-				    boolean writeDirect = clipping == null || "".equals(clipping); // clipping-werte eigtl. immer vorhanden, wenn nicht beschnitten, dann 0,0,0,0
-				    if (!writeDirect)
-				    	writeDirect =
-				    		!new ImageClipping().clipImage(config, docUrl, outputFile, clipping, scaling, Logging.getLogger());
-				    		// ImageClipping decides if it should write this out (and does if true)
-				    if (writeDirect) {
-				    	try {
+				if (!(images.isEmpty())) for (ImgDescr lTemp : images) {
+					if (newImage
+							&& lTemp.getName().equals(name))
+					{
+						if (!lTemp.getClipping().equals(clipping)
+								|| !lTemp.getScaling().equals(scaling)) t++;
+						// selbes Ursprungsbild, aber unterschiedl.
+						// Clipping/Scaling-Werte
+						// --> in neuer Datei speichern!
+						else {
+							t = lTemp.getNumber();
+							newImage = false;
+						}
+					}
+				}
+
+				if (newImage) {
+
+					// Bild d. Liste hinzufügen, um später auf doppelte Bilder
+					// zu prüfen
+					images.add(new ImgDescr(name, clipping, scaling, t));
+
+					// neuer Dateiname = alter Name + _Zähler
+					imageFilename =
+							t != 0
+									? name + "_" + t + "." + ext
+									: name + "." + ext;
+
+					Logging.getLogger().info(
+							"Writing image " + imageFilename + " to " + baseDir + "..."
+							);
+
+					File outputFile =
+							new File(imgDir, imageFilename);
+					boolean writeDirect = clipping == null || "".equals(clipping); // clipping-werte
+																					// eigtl.
+																					// immer
+																					// vorhanden,
+																					// wenn
+																					// nicht
+																					// beschnitten,
+																					// dann
+																					// 0,0,0,0
+					if (!writeDirect) writeDirect =
+							!new ImageClipping().clipImage(config, docUrl, outputFile, clipping,
+									scaling, Logging.getLogger());
+					// ImageClipping decides if it should write this out (and
+					// does if true)
+					if (writeDirect) {
+						try {
 							InputStream in = FileType.openStream(docUrl);
 							FileOutputStream out = new FileOutputStream(outputFile);
-							
+
 							int len;
 							byte b[] = new byte[8192];
 							while ((len = in.read(b)) != -1)
 								out.write(b, 0, len);
 							in.close();
 							out.close();
-				    	} catch (Exception ex) {
-					    	Logging.getLogger().info("write error.");
-				    	}
-				     }
-			    } else
-			    	Logging.getLogger().info("same img existing - skipped");
-			    
-			    matcher.appendReplacement(
-		    		buffy,
-		    		"img src=\"" + subDir + "/" + imageFilename + "\""
-	    		);
+						}
+						catch (Exception ex) {
+							Logging.getLogger().info("write error.");
+						}
+					}
+				}
+				else Logging.getLogger().info("same img existing - skipped");
 
-			    imgCounter++;
-			} catch (IOException e1) {
+				matcher.appendReplacement(
+						buffy,
+						"img src=\"" + subDir + "/" + imageFilename + "\""
+						);
+
+				imgCounter++;
+			}
+			catch (IOException e1) {
 				e1.printStackTrace();
 			}
 		}
-		
-		if (imgCounter > 1)
-			Logging.getLogger().info("Finished processing all images.");
-		
+
+		if (imgCounter > 1) Logging.getLogger().info("Finished processing all images.");
+
 		matcher.appendTail(buffy);
 		return buffy.toString();
 	}
 
+	public void saveAsHtml(File baseDir, String filename, Config config) {
 
-	public void saveAsHtml(File baseDir, String filename, Config config)  {
-		
-		String html = getAsHTML(config, baseDir);		
-		
-		if (config.isConvertCharacterEntities())
-			html = HTMLUtil.convertCharacterEntities(html);
-		
+		String html = getAsHTML(config, baseDir);
+
+		if (config.isConvertCharacterEntities()) html = HTMLUtil.convertCharacterEntities(html);
+
 		html = ConverterUtils.convertEntities(html, config.leaveUmlauts());
-		
+
 		html = Cleaner.removeTags(html, "span");
 
 		DiskUtils.savePageToDisk(new File(baseDir, filename), html, config.getEncoding());
-		
+
 		Logging.getLogger().info("file " + filename + " saved as html.");
 
 	}

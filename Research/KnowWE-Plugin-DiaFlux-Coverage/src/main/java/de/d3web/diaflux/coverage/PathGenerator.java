@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.diaflux.coverage;
 
@@ -53,19 +53,18 @@ public class PathGenerator {
 		this.startPaths = new HashSet<Path>();
 	}
 
+	public KnowledgeBase getKB() {
+		return kb;
+	}
+
 	public void createPaths() {
-
 		startPaths.addAll(strategy.getInitialStartPaths());
-
 		while (!startPaths.isEmpty()) {
 			Path path = startPaths.iterator().next();
 			startPaths.remove(path);
 			// System.out.println("Starting at: " + path);
 			continuePath(path);
-
 		}
-
-
 	}
 
 	private boolean addStartPath(Path path) {
@@ -87,12 +86,10 @@ public class PathGenerator {
 				path.enterFlow(composedNode);
 				continueOnNode(path, startNode);
 				return;
-
 			}
 			else {
 				// just continue with the outgoing edges of the composed node
 			}
-
 		}
 
 		List<Edge> edges = new LinkedList<Edge>();
@@ -121,25 +118,18 @@ public class PathGenerator {
 						}
 					}
 				}
-
 			}
-
-
 		}
 		else {
-
 			for (Edge edge : currentNode.getOutgoingEdges()) {
 				if (strategy.followEdge(edge, path)) {
 					edges.add(edge);
 				}
-
 			}
 		}
 
 		continueOnEdges(path, edges);
-
 	}
-
 
 	/**
 	 * 
@@ -155,16 +145,12 @@ public class PathGenerator {
 				continueOnNode(newPath, edge.getEndNode());
 				continued = true;
 			}
-
 		}
 
 		if (!continued) {
 			foundPath(path);
-
 		}
-
 	}
-
 
 	private void continueOnNode(Path path, Node node) {
 
@@ -177,7 +163,6 @@ public class PathGenerator {
 		}
 
 		strategy.finished(newPath);
-
 	}
 
 	/**
@@ -192,6 +177,4 @@ public class PathGenerator {
 			addStartPath(startPath);
 		}
 	}
-
-
 }

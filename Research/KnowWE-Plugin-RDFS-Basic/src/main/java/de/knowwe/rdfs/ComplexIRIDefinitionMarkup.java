@@ -78,7 +78,7 @@ public class ComplexIRIDefinitionMarkup extends AbstractKnowledgeUnitType<Comple
 		}
 	}
 
-	class DefinitionTerm extends AbstractIRITermDefinition {
+	class DefinitionTerm extends AbstractIRITermDefinition<Term> {
 
 		public DefinitionTerm() {
 			this.setSectionFinder(new RegexSectionFinderSingle(Pattern.compile(REGEX), 1));

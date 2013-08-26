@@ -81,6 +81,7 @@ public class LabelMarkup extends AbstractType implements Editable {
 			@Override
 			public void insertIntoRepository(Section<LabelType> section) {
 
+				@SuppressWarnings("rawtypes")
 				Section<IncrementalTermDefinition> termSec = MarkupUtils.getConceptDefinition(section);
 				if (termSec != null) {
 					URI subject = RDFSUtil.getURI(termSec);

@@ -58,6 +58,7 @@ public class ParentConceptLinkAppendHandler implements PageAppendHandler {
 		List<Section<ConceptMarkup>> conceptMarkups = Sections.findSuccessorsOfType(
 				article.getRootSection(), ConceptMarkup.class);
 		if (conceptMarkups.size() == 1) {
+			@SuppressWarnings("rawtypes")
 			Section<IncrementalTermDefinition> def = Sections.findSuccessor(conceptMarkups.get(0),
 					IncrementalTermDefinition.class);
 			URI uri = RDFSUtil.getURI(def);

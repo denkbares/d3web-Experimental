@@ -334,7 +334,7 @@ public class IncrementalCompiler implements EventListener {
 		List<Section<KnowledgeUnit>> allKnowledgeUnits = Sections.findSuccessorsOfType(rootSection,
 				KnowledgeUnit.class);
 		for (Section<KnowledgeUnit> unit : allKnowledgeUnits) {
-			KnowledgeUnitCompileScript<Type> compileScript = unit.get().getCompileScript();
+			KnowledgeUnitCompileScript<?> compileScript = unit.get().getCompileScript();
 			if (compileScript == null) {
 				Logger.getLogger(this.getClass().getName()).warning(
 						"KnowledgeUnit without CompileScript: " + unit.toString());
@@ -521,8 +521,8 @@ public class IncrementalCompiler implements EventListener {
 								complexDef, ref)) { // or has a wrong type
 					messages.add(Messages.error(
 							errorMsg + ((ComplexDefinitionWithTypeConstraints) complexDef.get())
-											.getProblemMessageForConstraintViolation(complexDef,
-													ref) + " :" + termIdentifier2.toString()));
+									.getProblemMessageForConstraintViolation(complexDef,
+											ref) + " :" + termIdentifier2.toString()));
 					return messages;
 				}
 			}

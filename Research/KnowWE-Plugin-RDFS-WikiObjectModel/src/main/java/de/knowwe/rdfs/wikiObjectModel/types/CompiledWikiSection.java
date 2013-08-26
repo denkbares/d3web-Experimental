@@ -31,8 +31,8 @@ import de.knowwe.jspwiki.types.HeaderType;
 public class CompiledWikiSection extends HeaderType implements KnowledgeUnit {
 
 	@Override
-	public <T extends Type> KnowledgeUnitCompileScript<T> getCompileScript() {
-		return new WikiSectionCompiler();
+	public KnowledgeUnitCompileScript<?> getCompileScript() {
+		return new WikiSectionCompiler<Type>();
 	}
 
 }

@@ -105,6 +105,7 @@ public class ConceptListContent extends AbstractType {
 
 				if (section.getText().length() == 0) return;
 
+				@SuppressWarnings("rawtypes")
 				Section<IncrementalTermDefinition> conceptDefinition = MarkupUtils.getConceptDefinition(section);
 				if (conceptDefinition == null) {
 					return; // do nothing
@@ -146,7 +147,7 @@ public class ConceptListContent extends AbstractType {
 
 			}
 
-			private void createD3webDerivationRule(Section<ObjectSegment> section, Section<IncrementalTermDefinition> conceptDefinition, Section<Term> objectSection, Section<? extends RelationMarkup> markup) {
+			private void createD3webDerivationRule(Section<ObjectSegment> section, @SuppressWarnings("rawtypes") Section<IncrementalTermDefinition> conceptDefinition, Section<Term> objectSection, Section<? extends RelationMarkup> markup) {
 				if (!(markup.get() instanceof MustMarkup || markup.get() instanceof CanMarkup || markup.get() instanceof CaveMarkup)) {
 					return;
 				}
@@ -214,7 +215,7 @@ public class ConceptListContent extends AbstractType {
 					}
 					if (a != null && cond != null) {
 						Rule r = RuleFactory.createRule(a, cond,
-									null, PSMethodHeuristic.class);
+								null, PSMethodHeuristic.class);
 						if (r != null) {
 							KnowWEUtils.storeObject(article, section, RULE_STORE_KEY, r);
 						}

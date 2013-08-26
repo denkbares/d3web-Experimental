@@ -64,8 +64,8 @@ class TripleMarkupContent extends AbstractType {
 					s.get().getTermIdentifier(s));
 			if (info != null) {
 				if (info instanceof Map) {
-					Map<String, ? extends Object> map = (Map<String, ? extends Object>) info;
-					Set<String> keyset = map.keySet();
+					Map<?, ?> map = (Map<?, ?>) info;
+					Set<?> keyset = map.keySet();
 					for (Object key : keyset) {
 						if (map.get(key) instanceof RDFSTermCategory) {
 							RDFSTermCategory rdfsTermCategory = (RDFSTermCategory) map.get(key);

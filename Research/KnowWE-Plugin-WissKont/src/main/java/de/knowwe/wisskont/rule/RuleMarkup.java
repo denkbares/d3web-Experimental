@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -218,7 +217,6 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 					return new CondEqual(qChoice, v);
 				}
 			}
-
 			return null;
 		}
 	}
@@ -296,14 +294,13 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 
 				if (a != null && d3Cond != null) {
 					Rule r = RuleFactory.createRule(a, d3Cond,
-								null, PSMethodHeuristic.class);
+							null, PSMethodHeuristic.class);
 					if (r != null) {
 						rules.add(r);
 					}
 				}
 			}
 			KnowWEUtils.storeObject(article, section, RULE_STORE_KEY, rules);
-
 		}
 
 		private static final String RULE_STORE_KEY = "RULE_STORE_KEY";
@@ -314,24 +311,20 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 					Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 							KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE), section, RULE_STORE_KEY);
 			if (storedObject instanceof Set) {
-				Set<?> set = (Set) storedObject;
-				Iterator<?> iterator = set.iterator();
+				Set<?> set = (Set<?>) storedObject;
 				for (Object object : set) {
 					if (object instanceof Rule) {
 						Rule r = (Rule) object;
 						KnowledgeBaseInstantiation.removeRuleFromKB(r);
-
 					}
 				}
 				set.clear();
 			}
-
 		}
 
 		@Override
 		public Collection<Section<? extends Term>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section) {
 			return Collections.emptyList();
 		}
-
 	}
 }

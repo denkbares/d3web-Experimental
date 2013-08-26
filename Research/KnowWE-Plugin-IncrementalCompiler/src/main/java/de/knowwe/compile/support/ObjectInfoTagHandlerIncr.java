@@ -24,7 +24,6 @@ import java.util.Set;
 import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
@@ -36,30 +35,20 @@ public class ObjectInfoTagHandlerIncr extends de.knowwe.core.taghandler.ObjectIn
 	}
 
 	@Override
-	protected void getTermDefinitions(Article currentArticle, Identifier termIdentifier, Set<Section<?>> definitions) {
-
+	protected void findTermSections(String web, Identifier termIdentifier, Set<Section<?>> definitions, Set<Section<?>> references) {
 		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = terminology.getTermDefinitions(termIdentifier);
 		if (termDefinitions != null) {
 			for (Section<?> section : termDefinitions) {
 				definitions.add(section);
 			}
-
 		}
-
-	}
-
-	@Override
-	protected void getTermReferences(Article currentArticle, Identifier termIdentifier, Set<Section<?>> references) {
-		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
 		Collection<Section<? extends SimpleReference>> termReferences = terminology.getTermReferences(termIdentifier);
 		if (termReferences != null) {
 			for (Section<?> section : termReferences) {
 				references.add(section);
 			}
-
 		}
-
 	}
 
 	@Override

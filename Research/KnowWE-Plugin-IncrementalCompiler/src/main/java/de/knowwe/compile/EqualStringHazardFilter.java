@@ -105,7 +105,7 @@ public class EqualStringHazardFilter {
 		// for the new unit the normal way of fetching all refs can be used.
 
 		Collection<Section<? extends Term>> referencesOfOtherSection = new HashSet<Section<? extends Term>>();
-		KnowledgeUnitCompileScript<Type> compileScript = castedOtherSection.get().getCompileScript();
+		KnowledgeUnitCompileScript<?> compileScript = castedOtherSection.get().getCompileScript();
 		if (compileScript != null) {
 			referencesOfOtherSection = compileScript.getAllReferencesOfKnowledgeUnit(
 					castedOtherSection);

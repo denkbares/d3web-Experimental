@@ -20,6 +20,7 @@ package de.knowwe.rdfs.subclassingTree;
 
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
+import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
 import de.knowwe.rdfs.AbstractIRITermDefinition;
@@ -34,14 +35,14 @@ public class HierarchyDashTreeElementContentDef extends DashTreeElementContent
 
 	public HierarchyDashTreeElementContentDef() {
 
-		AbstractIRITermDefinition def = new AbstractIRITermDefinition() {
+		AbstractIRITermDefinition<Term> def = new AbstractIRITermDefinition<Term>() {
 		};
 		def.setSectionFinder(new AllTextFinderTrimmed());
 		this.addChildType(def);
 	}
 
 	@Override
-	public KnowledgeUnitCompileScript getCompileScript() {
+	public KnowledgeUnitCompileScript<?> getCompileScript() {
 		return new HierarchyDashtreeElementCompileScript();
 	}
 
