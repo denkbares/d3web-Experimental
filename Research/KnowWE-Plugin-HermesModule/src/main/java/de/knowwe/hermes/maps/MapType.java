@@ -56,7 +56,7 @@ public class MapType extends AbstractXMLType {
 	public List<Type> getChildrenTypes() {
 		childrenTypes.add(new AbstractXMLType("iframe"));
 		this.setRenderer(new MapRenderer());
-		return childrenTypes;
+		return childrenTypes.getChildrenTypes();
 	}
 
 	private class MapTypeOWLSubTreeHandler extends RDF2GoSubtreeHandler<MapType> {
