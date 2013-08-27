@@ -9,8 +9,10 @@ public class ClassPreviewRenderer extends DefaultMarkupPreviewRenderer {
 		// otherwise show at least defined class and relevant properties
 		addPreviewItem(
 				Scope.getScope("ClassType/ContentType/OntologyLineType/AbbreviatedClassDefinition"),
-				Preview.all);
-		addPreviewItem(Scope.getScope("ClassType/@property"), Preview.relevantOrAll);
+				Select.all);
+		addPreviewItem(Scope.getScope("ClassType/@property"), Select.relevantOrAll);
 
+		// add white spaces in between
+		addTextBeforeAnnotations();
 	}
 }

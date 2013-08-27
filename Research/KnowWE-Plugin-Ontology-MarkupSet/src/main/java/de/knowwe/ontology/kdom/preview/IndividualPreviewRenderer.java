@@ -8,7 +8,9 @@ public class IndividualPreviewRenderer extends DefaultMarkupPreviewRenderer {
 	public IndividualPreviewRenderer() {
 		addPreviewItem(
 				Scope.getScope("IndividualType/ContentType/OntologyLineType/AbbreviatedIndividualDefinition"),
-				Preview.relevantOrAll);
-		addPreviewItem(Scope.getScope("IndividualType/@type"), Preview.all);
+				Select.relevantOrAll);
+		addPreviewItem(Scope.getScope("IndividualType/@type"), Select.all);
+
+		addTextBeforeAnnotations();
 	}
 }
