@@ -152,16 +152,6 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
-		id="KnowWETypeActivationHandler">
-		<parameter id="class"
-			value="de.d3web.we.taghandler.KnowWETypeActivationHandler" />
-		<parameter id="name" value="KnowWETypeActivationHandler" />
-		<parameter id="description" value="TagHandler KnowWETypeActivationHandler" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
-	
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="ReportOveview">
