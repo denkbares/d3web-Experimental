@@ -159,12 +159,12 @@
 	
 	<extension plugin-id="KnowWE-Plugin-Core" point-id="PreviewRenderer"
 		id="TurtlePreviewRenderer">
-		<parameter id="class" value="de.knowwe.core.preview.DefaultPreviewRenderer" />
+		<parameter id="class" value="de.knowwe.ontology.kdom.preview.TurtlePreviewRenderer" />
 		<parameter id="name" value="TurtlePreviewRenderer" />
 		<parameter id="description" value="Renders a preview of a turtle ontology markup." />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="TutleMarkup/Content" />
+		<parameter id="scope" value="TurtleMarkup/**/TurtleMarkupN3Content" />
 	</extension>	
 
 	<extension plugin-id="KnowWE-Plugin-Core" point-id="PreviewRenderer"
@@ -174,32 +174,19 @@
 		<parameter id="description" value="Renders a preview of a relation ontology markup." />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="RelationDefinition" />
+		<parameter id="scope" value="RelationType/**/RelationDefinition" />
 	</extension>	
 
-	<!-- looking for properties in classes, use the specifically defined preview -->
 	<extension plugin-id="KnowWE-Plugin-Core" point-id="PreviewRenderer"
-		id="ClassPropertyPreviewRenderer">
+		id="ClassPreviewRenderer">
 		<parameter id="class" value="de.knowwe.ontology.kdom.preview.ClassPreviewRenderer" />
-		<parameter id="name" value="ClassPropertyPreviewRenderer" />
+		<parameter id="name" value="ClassPreviewRenderer" />
 		<parameter id="description" value="Renders a preview of a class ontology markup." />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="ClassType/@property" />
-	</extension>	
-	
-	<!-- looking for all other objects (=class name) use whole section -->
-	<extension plugin-id="KnowWE-Plugin-Core" point-id="PreviewRenderer"
-		id="ClassFullPreviewRenderer">
-		<parameter id="class" value="de.knowwe.core.preview.DefaultPreviewRenderer" />
-		<parameter id="name" value="ClassFullPreviewRenderer" />
-		<parameter id="description" value="Renders a preview of a class ontology markup." />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="6" />
 		<parameter id="scope" value="ClassType" />
 	</extension>	
-		
-	<!-- looking for declared individuals, use the specifically defined preview -->
+			
 	<extension plugin-id="KnowWE-Plugin-Core" point-id="PreviewRenderer"
 		id="IndividualPreviewRenderer">
 		<parameter id="class" value="de.knowwe.ontology.kdom.preview.IndividualPreviewRenderer" />
@@ -207,7 +194,7 @@
 		<parameter id="description" value="Renders a preview of an individual ontology markup." />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="IndividualType/**/OntologyLineType" />
+		<parameter id="scope" value="IndividualType" />
 	</extension>	
 		
 </plugin>

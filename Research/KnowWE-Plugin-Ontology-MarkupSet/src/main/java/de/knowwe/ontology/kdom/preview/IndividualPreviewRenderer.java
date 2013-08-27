@@ -6,7 +6,9 @@ import de.knowwe.core.utils.Scope;
 public class IndividualPreviewRenderer extends DefaultMarkupPreviewRenderer {
 
 	public IndividualPreviewRenderer() {
-		addPreviewItem(Scope.getScope("IndividualType/ContentType/OntologyLineType"), false);
-		addPreviewItem(Scope.getScope("IndividualType/@type"), true);
+		addPreviewItem(
+				Scope.getScope("IndividualType/ContentType/OntologyLineType/AbbreviatedIndividualDefinition"),
+				Preview.relevantOrAll);
+		addPreviewItem(Scope.getScope("IndividualType/@type"), Preview.all);
 	}
 }
