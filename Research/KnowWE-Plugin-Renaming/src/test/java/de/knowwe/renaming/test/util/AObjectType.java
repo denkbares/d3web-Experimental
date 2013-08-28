@@ -26,7 +26,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 public class AObjectType extends AbstractType {
 
 	public AObjectType() {
-		this.sectionFinder = new RegexSectionFinder("a");
+		this.setSectionFinder(new RegexSectionFinder("a"));
 	}
 
 	private static AObjectType instance;

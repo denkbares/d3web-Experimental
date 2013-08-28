@@ -50,8 +50,8 @@ public class DroolsFact extends AbstractType {
 
 	public DroolsFact() {
 		setSectionFinder(new RegexSectionFinder("Input.*;"));
-		childrenTypes.add(new DroolsFactInput());
-		childrenTypes.add(new DroolsFactOptions());
+		this.addChildType(new DroolsFactInput());
+		this.addChildType(new DroolsFactOptions());
 		addSubtreeHandler(Priority.HIGH, new DroolsFactSubtreeHandler());
 	}
 

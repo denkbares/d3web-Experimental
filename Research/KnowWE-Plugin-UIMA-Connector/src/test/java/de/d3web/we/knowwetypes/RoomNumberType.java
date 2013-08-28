@@ -33,9 +33,9 @@ public class RoomNumberType extends AbstractType {
 		fI.setSectionFinder(
 				new FeatureSectionFinder(
 						"org.apache.uima.tutorial.RoomNumber:building", false));
-		this.childrenTypes.add(fI);
-		this.sectionFinder = new TypeSectionFinder(
+		this.addChildType(fI);
+		this.setSectionFinder(new TypeSectionFinder(
 				"org.apache.uima.tutorial.RoomNumber",false);
-		this.childrenTypes.add(new BuildingType());
+		this.addChildType(new BuildingType());
 	}
 }

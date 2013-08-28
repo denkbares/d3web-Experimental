@@ -38,7 +38,7 @@ public class CommentTypeTagName extends AbstractType {
 		}
 		regexString.replace(regexString.length() - 1, regexString.length(), ")");
 
-		sectionFinder = new RegexSectionFinder(regexString + "");
+		setSectionFinder(new RegexSectionFinder(regexString + ""));
 	}
 
 }

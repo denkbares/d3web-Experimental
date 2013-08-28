@@ -27,7 +27,7 @@ public class BuildingType extends AbstractType {
 
 	@Override
 	protected void init() {
-		this.sectionFinder = new NestedTypeSectionFinder(
+		this.setSectionFinder(new NestedTypeSectionFinder(
 				"org.apache.uima.tutorial.RoomNumber:building", false);
 	}
 }

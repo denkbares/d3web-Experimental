@@ -30,11 +30,11 @@ public class AnnotationContent extends AbstractType {
 
 	public AnnotationContent() {
 		AnnotationMapSign annotationMapSign = new AnnotationMapSign();
-		this.childrenTypes.add(annotationMapSign);
-		this.childrenTypes.add(new AnnotatedString(annotationMapSign));
-		this.childrenTypes.add(new AnnotationObject());
+		this.addChildType(annotationMapSign);
+		this.addChildType(new AnnotatedString(annotationMapSign));
+		this.addChildType(new AnnotationObject());
 
-		this.sectionFinder = new AllTextSectionFinder();
+		this.setSectionFinder(new AllTextSectionFinder());
 
 	}
 }

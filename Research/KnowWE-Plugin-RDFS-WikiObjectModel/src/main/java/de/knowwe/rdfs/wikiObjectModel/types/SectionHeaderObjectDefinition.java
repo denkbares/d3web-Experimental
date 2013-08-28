@@ -45,7 +45,7 @@ public class SectionHeaderObjectDefinition<TermObject> extends AbstractIRITermDe
 	 * 
 	 */
 	public SectionHeaderObjectDefinition() {
-		this.sectionFinder = new SectionHeaderFinder();
+		this.setSectionFinder(new SectionHeaderFinder());
 		this.setRenderer(new SectionHeaderObjectDefinitionRenderer());
 	}
 

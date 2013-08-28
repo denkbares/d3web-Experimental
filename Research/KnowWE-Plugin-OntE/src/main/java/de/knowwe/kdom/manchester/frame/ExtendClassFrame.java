@@ -15,9 +15,7 @@ public class ExtendClassFrame extends ClassFrame {
 		// Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
 		// this.setSectionFinder(new RegexSectionFinder(p, 3));
 
-		int pos = this.getChildrenTypes().indexOf(OWLClassDefinition.getInstance());
-		this.removeChildType(OWLClassDefinition.class);
-		this.childrenTypes.add(pos, new EntityReference(KEYWORD));
+		this.replaceChildType(new EntityReference(KEYWORD), OWLClassDefinition.class);
 	}
 
 	/**

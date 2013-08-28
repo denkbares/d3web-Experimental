@@ -33,7 +33,7 @@ public class TurtlePredicateSection extends AbstractType {
 
 	public TurtlePredicateSection() {
 
-		childrenTypes.add(new TurtlePredicate());
+		this.addChildType(new TurtlePredicate());
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder(
 				"([^\\s]*::)", Pattern.DOTALL, 1));
 		setSectionFinder(c);

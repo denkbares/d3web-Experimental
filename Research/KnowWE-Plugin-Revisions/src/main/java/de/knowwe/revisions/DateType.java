@@ -48,7 +48,7 @@ public class DateType extends AbstractType {
 	private static final Pattern DATE_PATTERN = Pattern.compile(DATE);
 
 	public DateType() {
-		sectionFinder = new AllTextFinderTrimmed();
+		setSectionFinder(new AllTextFinderTrimmed());
 		addSubtreeHandler(new DateSubtreeHandler());
 	}
 

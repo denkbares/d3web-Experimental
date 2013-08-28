@@ -15,9 +15,7 @@ public class ExtendObjectPropertyFrame extends ObjectPropertyFrame {
 		// Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
 		// this.setSectionFinder(new RegexSectionFinder(p));
 
-		int pos = this.getChildrenTypes().indexOf(ObjectPropertyDefinition.getInstance());
-		this.removeChildType(ObjectPropertyDefinition.class);
-		this.childrenTypes.add(pos, new EntityReference(KEYWORD));
+		this.replaceChildType(new EntityReference(KEYWORD), ObjectPropertyDefinition.class);
 	}
 
 	/**

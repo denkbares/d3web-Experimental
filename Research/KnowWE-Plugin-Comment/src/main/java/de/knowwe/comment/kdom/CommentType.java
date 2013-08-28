@@ -41,12 +41,12 @@ public class CommentType extends AbstractType {
 			}
 			regexString.replace(regexString.length() - 1, regexString.length(), ")");
 
-			sectionFinder = new RegexSectionFinder("<" + regexString + "[0-9]* [^>]*>");
+			setSectionFinder(new RegexSectionFinder("<" + regexString + "[0-9]* [^>]*>"));
 
-			childrenTypes.add(new CommentTypeStartSymbol());
-			childrenTypes.add(new CommentTypeTag());
-			childrenTypes.add(new CommentTypeEndSymbol());
-			childrenTypes.add(new CommentTypeContent());
+			this.addChildType(new CommentTypeStartSymbol());
+			this.addChildType(new CommentTypeTag());
+			this.addChildType(new CommentTypeEndSymbol());
+			this.addChildType(new CommentTypeContent());
 
 		}
 		this.setRenderer(new CommentRenderer());

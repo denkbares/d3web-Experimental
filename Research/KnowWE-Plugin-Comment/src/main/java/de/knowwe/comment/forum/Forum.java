@@ -29,7 +29,7 @@ public class Forum extends AbstractXMLType {
 	public Forum() {
 		super("forum");
 		this.setRenderer(new ForumRenderer());
-		childrenTypes.add(new ForumBox());
+		this.addChildType(new ForumBox());
 	}
 
 	public static Forum getInstance() {

@@ -28,9 +28,9 @@ public class WordObjectType extends AbstractType {
 	private static WordObjectType instance;
 
 	public WordObjectType() {
-		this.childrenTypes.add(new AStarObjectType());
-		this.childrenTypes.add(new BStarObjectType());
-		this.sectionFinder = new RegexSectionFinder("[ab]+");
+		this.addChildType(new AStarObjectType());
+		this.addChildType(new BStarObjectType());
+		this.setSectionFinder(new RegexSectionFinder("[ab]+"));
 	}
 
 	public static WordObjectType getInstance() {

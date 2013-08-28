@@ -42,7 +42,7 @@ public class LocationDefinitionType extends AbstractType {
 	private static final String END_TAG = ">>";
 
 	public LocationDefinitionType() {
-		sectionFinder = new RegexSectionFinder(START_TAG + "[\\w|\\W]*?" + END_TAG);
+		setSectionFinder(new RegexSectionFinder(START_TAG + "[\\w|\\W]*?" + END_TAG));
 		this.setRenderer(LocationRenderer.getInstance());
 		this.addSubtreeHandler(new LocationDefinitionTypeOWLSubTreeHandler());
 	}

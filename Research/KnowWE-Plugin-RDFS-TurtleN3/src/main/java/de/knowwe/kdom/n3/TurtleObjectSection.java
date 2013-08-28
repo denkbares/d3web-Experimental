@@ -30,9 +30,9 @@ public class TurtleObjectSection extends AbstractType {
 
 	public TurtleObjectSection() {
 
-		childrenTypes.add(new TurtleObjectBlankNode());
-		childrenTypes.add(new TurtleObjectLiteral());
-		childrenTypes.add(new TurtleObjectTerm());
+		this.addChildType(new TurtleObjectBlankNode());
+		this.addChildType(new TurtleObjectLiteral());
+		this.addChildType(new TurtleObjectTerm());
 		setSectionFinder(new SplitSectionFinderUnquoted(","));
 
 		// setCustomRenderer(new

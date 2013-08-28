@@ -26,7 +26,7 @@ import de.knowwe.core.kdom.AbstractType;
 public class BObjectType extends AbstractType {
 
 	public BObjectType() {
-		this.sectionFinder = new RegexSectionFinder("b");
+		this.setSectionFinder(new RegexSectionFinder("b"));
 	}
 
 	private static BObjectType instance;

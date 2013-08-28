@@ -31,7 +31,7 @@ public class DroolsFactOptions extends AbstractType {
 
 	public DroolsFactOptions() {
 		setSectionFinder(new RegexSectionFinder("\\(.*?\\)"));
-		childrenTypes.add(new DroolsFactName());
-		childrenTypes.add(new DroolsFactValues());
+		this.addChildType(new DroolsFactName());
+		this.addChildType(new DroolsFactValues());
 	}
 }

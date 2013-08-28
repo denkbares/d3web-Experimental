@@ -36,13 +36,13 @@ public class HeaderLine extends AbstractType {
 	public HeaderLine() {
 		AnonymousType before = new AnonymousType("Before");
 		before.setSectionFinder(new RegexSectionFinder("\\s*"));
-		childrenTypes.add(before);
+		this.addChildType(before);
 		AnonymousType after = new AnonymousType("After");
 		after.setSectionFinder(new RegexSectionFinder("\\r?\\n"));
-		childrenTypes.add(after);
-		childrenTypes.add(new CornerCell());
-		childrenTypes.add(new SolutionCell());
-		childrenTypes.add(new Bar());
+		this.addChildType(after);
+		this.addChildType(new CornerCell());
+		this.addChildType(new SolutionCell());
+		this.addChildType(new Bar());
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder("\\s*(\\|{1,2}.*?)\\r?\\n",Pattern.DOTALL|Pattern.MULTILINE,0));
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());

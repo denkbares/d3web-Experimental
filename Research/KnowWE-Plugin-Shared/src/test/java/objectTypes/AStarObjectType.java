@@ -28,8 +28,8 @@ public class AStarObjectType extends AbstractType {
 	private static AStarObjectType instance;
 
 	public AStarObjectType() {
-		this.childrenTypes.add(new AObjectType());
-		this.sectionFinder = new RegexSectionFinder("a+");
+		this.addChildType(new AObjectType());
+		this.setSectionFinder(new RegexSectionFinder("a+"));
 	}
 
 	public static AStarObjectType getInstance() {

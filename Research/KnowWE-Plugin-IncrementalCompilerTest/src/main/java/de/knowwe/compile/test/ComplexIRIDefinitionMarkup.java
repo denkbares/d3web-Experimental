@@ -53,7 +53,7 @@ public class ComplexIRIDefinitionMarkup extends AbstractKnowledgeUnitType<Comple
 	public ComplexIRIDefinitionMarkup() {
 		this.setCompileScript(new ComplexIRIDefinitionCompileScript());
 
-		this.sectionFinder = new RegexSectionFinder(REGEX_DEF + REGEX, Pattern.MULTILINE);
+		this.setSectionFinder(new RegexSectionFinder(REGEX_DEF + REGEX, Pattern.MULTILINE));
 
 		this.addChildType(new DefType());
 		this.addChildType(new DefinitionTerm());
@@ -93,8 +93,8 @@ public class ComplexIRIDefinitionMarkup extends AbstractKnowledgeUnitType<Comple
 	class Predicate extends IRITermRef {
 
 		public Predicate() {
-			this.sectionFinder = new RegexSectionFinderSingle("\\b([^\\s]*)::",
-					Pattern.DOTALL, 1);
+			this.setSectionFinder(new RegexSectionFinderSingle("\\b([^\\s]*)::",
+					Pattern.DOTALL, 1));
 		}
 
 		@Override
@@ -106,10 +106,9 @@ public class ComplexIRIDefinitionMarkup extends AbstractKnowledgeUnitType<Comple
 	class Object extends IRITermRef {
 
 		public Object() {
-			this.sectionFinder = new RegexSectionFinderSingle("::\\s(.*)",
-					Pattern.DOTALL, 1);
+			this.setSectionFinder(new RegexSectionFinderSingle("::\\s(.*)",
+					Pattern.DOTALL, 1));
 		}
-
 		// @Override
 		// public TermIdentifier getTermIdentifier(Section<? extends SimpleTerm>
 		// s) {

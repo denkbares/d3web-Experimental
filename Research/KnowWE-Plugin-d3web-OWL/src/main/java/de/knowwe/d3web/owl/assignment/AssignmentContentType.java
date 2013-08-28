@@ -31,12 +31,12 @@ public class AssignmentContentType extends AbstractType {
 
 	public AssignmentContentType() {
 		/* We take almost the whole content */
-		this.sectionFinder = new AllTextFinderTrimmed();
+		this.setSectionFinder(new AllTextFinderTrimmed());
 		/* ChildrenTypes */
-		this.childrenTypes.add(new CommentLineType());
-		this.childrenTypes.add(new ChoiceValueAssignmentType());
-		this.childrenTypes.add(new YesNoAssignmentType());
-		this.childrenTypes.add(new RatingAssignmentType());
+		this.addChildType(new CommentLineType());
+		this.addChildType(new ChoiceValueAssignmentType());
+		this.addChildType(new YesNoAssignmentType());
+		this.addChildType(new RatingAssignmentType());
 	}
 
 }

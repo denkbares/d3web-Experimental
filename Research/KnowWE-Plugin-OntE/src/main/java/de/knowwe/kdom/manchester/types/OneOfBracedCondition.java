@@ -49,7 +49,7 @@ public class OneOfBracedCondition extends NonTerminalCondition {
 	public static final char CURLY_BRACKET_CLOSED = '\u007D';
 
 	public OneOfBracedCondition() {
-		this.sectionFinder = OneOfExpressionFinder.createEmbracedExpressionFinder();
+		this.setSectionFinder(OneOfExpressionFinder.createEmbracedExpressionFinder());
 	}
 }
 
@@ -59,9 +59,7 @@ public class OneOfBracedCondition extends NonTerminalCondition {
 class OneOfExpressionFinder implements SectionFinder {
 
 	public static SectionFinder createEmbracedExpressionFinder() {
-		ConstraintSectionFinder sectionFinder = new ConstraintSectionFinder(
-					new OneOfExpressionFinder());
-		return sectionFinder;
+		return new ConstraintSectionFinder(new OneOfExpressionFinder());
 	}
 
 	@Override
@@ -82,22 +80,22 @@ class OneOfExpressionFinder implements SectionFinder {
 		// throw error if no corresponding closing bracket can be found
 		if (closingBracket == -1) {
 			Messages.storeMessage(father.getArticle(), father,
-						this.getClass(), Messages.syntaxError("missing \""
-								+ OneOfBracedCondition.CURLY_BRACKET_CLOSED + "\""));
+					this.getClass(), Messages.syntaxError("missing \""
+							+ OneOfBracedCondition.CURLY_BRACKET_CLOSED + "\""));
 			return null;
 		}
 		else {
 			Messages.clearMessages(father.getArticle(), father,
-						this.getClass());
+					this.getClass());
 		}
 
 		// an embracedExpression needs to to start and end with '(' and ')'
 		if (startsWithOpen
-						&& trimmed.endsWith(Character.toString(OneOfBracedCondition.CURLY_BRACKET_CLOSED))) {
+				&& trimmed.endsWith(Character.toString(OneOfBracedCondition.CURLY_BRACKET_CLOSED))) {
 			// and the ending ')' needs to close the opening
 			if (closingBracket == trimmed.length() - 1) {
 				return SectionFinderResult.createSingleItemList(new SectionFinderResult(
-								leadingSpaces, text.length() - followingSpaces));
+						leadingSpaces, text.length() - followingSpaces));
 			}
 
 		}
@@ -108,12 +106,12 @@ class OneOfExpressionFinder implements SectionFinder {
 		// the closing bracket but nothing in between!
 		if (trimmed.startsWith(Character.toString(OneOfBracedCondition.CURLY_BRACKET_OPEN))) {
 			if (lastEndLineCommentSymbol > -1
-						&& !CompositeCondition.hasLineBreakAfterComment(trimmed)) {
+					&& !CompositeCondition.hasLineBreakAfterComment(trimmed)) {
 				// TODO fix: < 3 is inaccurate
 				// better check that there is no other expression in between
 				if (lastEndLineCommentSymbol - closingBracket < 3) {
 					return SectionFinderResult.createSingleItemList(new SectionFinderResult(
-									leadingSpaces, text.length()));
+							leadingSpaces, text.length()));
 				}
 			}
 

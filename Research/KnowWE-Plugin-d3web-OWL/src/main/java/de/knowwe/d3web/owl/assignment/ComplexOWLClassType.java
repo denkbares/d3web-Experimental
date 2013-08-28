@@ -33,7 +33,7 @@ public class ComplexOWLClassType extends AbstractType implements AssignmentRegEx
 
 	public ComplexOWLClassType() {
 		this.setRenderer(new StyleRenderer("color:rgb(91, 112, 190)"));
-		this.sectionFinder = new RegexSectionFinder(COMPLEXCLASS, Pattern.CASE_INSENSITIVE, 2);
+		this.setSectionFinder(new RegexSectionFinder(COMPLEXCLASS, Pattern.CASE_INSENSITIVE, 2));
 	}
 
 }

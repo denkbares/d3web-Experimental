@@ -32,7 +32,7 @@ public class TurtleComplete extends AbstractKnowledgeUnitType<TurtleComplete> {
 
 	public TurtleComplete() {
 
-		childrenTypes.add(new TurtleMarkupN3());
+		this.addChildType(new TurtleMarkupN3());
 		setSectionFinder(new RegexSectionFinder("ttl:.*?\\.", Pattern.DOTALL
 				| Pattern.MULTILINE, 0));
 

@@ -33,11 +33,11 @@ public class TurtleMarkupN3 extends AbstractType {
 	public TurtleMarkupN3() {
 		AnonymousType before = new AnonymousType("Before");
 		before.setSectionFinder(new RegexSectionFinder("ttl:"));
-		childrenTypes.add(before);
+		this.addChildType(before);
 		AnonymousType after = new AnonymousType("After");
 		after.setSectionFinder(new RegexSectionFinder("\\."));
-		childrenTypes.add(after);
-		childrenTypes.add(new TurtleMarkupN3Content());
+		this.addChildType(after);
+		this.addChildType(new TurtleMarkupN3Content());
 		setSectionFinder(new RegexSectionFinder("ttl:?(.*?)\\.", Pattern.DOTALL
 				| Pattern.MULTILINE, 1));
 

@@ -56,7 +56,7 @@ public class DefaultFrame<T extends DefaultFrame<T>> extends AbstractKnowledgeUn
 
 	public void setKnownDescriptions(List<Type> types) {
 		for (Type type : types) {
-			this.childrenTypes.add(type);
+			this.addChildType(type);
 		}
 	}
 }

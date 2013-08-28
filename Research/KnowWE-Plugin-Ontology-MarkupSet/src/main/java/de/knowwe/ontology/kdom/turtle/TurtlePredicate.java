@@ -35,7 +35,7 @@ public class TurtlePredicate extends AbbreviatedResourceReference {
 	public TurtlePredicate() {
 		AnonymousType after = new AnonymousType("After");
 		after.setSectionFinder(new RegexSectionFinder("::"));
-		childrenTypes.add(after);
+		this.addChildType(after);
 
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder(
 				"([^\\s]*)::", Pattern.DOTALL, 1));

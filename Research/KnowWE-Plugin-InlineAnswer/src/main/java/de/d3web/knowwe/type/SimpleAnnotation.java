@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 public class SimpleAnnotation extends AbstractType {
 
 	public SimpleAnnotation() {
-		this.sectionFinder = new AllTextFinderTrimmed();
+		this.setSectionFinder(new AllTextFinderTrimmed());
 	}
 
 }

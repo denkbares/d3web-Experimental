@@ -49,7 +49,7 @@ public class RatingAssignmentType extends AssignmentType {
 
 	public RatingAssignmentType() {
 		// SectionFinder
-		this.sectionFinder = new RegexSectionFinder(REGEX, Pattern.CASE_INSENSITIVE, 0);
+		this.setSectionFinder(new RegexSectionFinder(REGEX, Pattern.CASE_INSENSITIVE, 0));
 		/* ChildrenTypes */
 		this.addChildType(new ComplexOWLClassType());
 		this.addChildType(new QuantifierType());

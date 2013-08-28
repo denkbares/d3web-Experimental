@@ -72,9 +72,7 @@ public class BraceElement extends NonTerminalCondition {
 class BracedExpressionFinder implements SectionFinder {
 
 	public static SectionFinder createEmbracedExpressionFinder() {
-		ConstraintSectionFinder sectionFinder = new ConstraintSectionFinder(
-				new BracedExpressionFinder());
-		return sectionFinder;
+		return new ConstraintSectionFinder(new BracedExpressionFinder());
 	}
 
 	@Override

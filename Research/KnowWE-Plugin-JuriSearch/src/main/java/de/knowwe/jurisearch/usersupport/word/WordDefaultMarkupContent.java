@@ -34,6 +34,6 @@ public class WordDefaultMarkupContent extends AbstractType
 
 	public WordDefaultMarkupContent()
 	{
-		this.sectionFinder = new AllTextSectionFinder();
+		this.setSectionFinder(new AllTextSectionFinder();
 	}
 }

@@ -37,11 +37,11 @@ public class TurtleSubjectSection extends AbstractType {
 	public TurtleSubjectSection() {
 		AnonymousType after = new AnonymousType("After");
 		after.setSectionFinder(new RegexSectionFinder("\\b[^\\s]*::"));
-		childrenTypes.add(after);
-		childrenTypes.add(new LeadingSpaces());
-		childrenTypes.add(new TrailingSpaces());
-		childrenTypes.add(new SubjectBNode());
-		childrenTypes.add(new TurtleSubject());
+		this.addChildType(after);
+		this.addChildType(new LeadingSpaces());
+		this.addChildType(new TrailingSpaces());
+		this.addChildType(new SubjectBNode());
+		this.addChildType(new TurtleSubject());
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder(
 				"(^.*?)\\b[^\\s]*::", Pattern.DOTALL | Pattern.MULTILINE, 1));
 		setSectionFinder(c);

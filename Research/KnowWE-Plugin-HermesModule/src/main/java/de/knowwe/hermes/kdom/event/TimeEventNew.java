@@ -47,16 +47,16 @@ public class TimeEventNew extends AbstractType {
 
 	public TimeEventNew() {
 
-		this.sectionFinder = new RegexSectionFinder("\\r?\\n(" + START_TAG
-				+ ".*?" + END_TAG + ")\\r?\\n", Pattern.DOTALL, 1);
+		this.setSectionFinder(new RegexSectionFinder("\\r?\\n(" + START_TAG
+				+ ".*?" + END_TAG + ")\\r?\\n", Pattern.DOTALL, 1));
 
 		AnonymousType opening = new AnonymousTypeInvisible("EventStart");
 		opening.setSectionFinder(new RegexSectionFinder(START_TAG));
-		this.childrenTypes.add(opening);
+		this.addChildType(opening);
 
 		AnonymousType closing = new AnonymousTypeInvisible("EventEnd");
 		closing.setSectionFinder(new RegexSectionFinder(END_TAG));
-		this.childrenTypes.add(closing);
+		this.addChildType(closing);
 
 		ImportanceType imp = new ImportanceType();
 		this.addChildType(imp);
@@ -67,9 +67,9 @@ public class TimeEventNew extends AbstractType {
 		DateType date = new DateType();
 		this.addChildType(date);
 
-		this.childrenTypes.add(SourceType);
+		this.addChildType(SourceType);
 
-		this.childrenTypes.add(DescriptionType);
+		this.addChildType(DescriptionType);
 
 		this.setRenderer(new TimeEventRenderer());
 
@@ -145,7 +145,7 @@ public class TimeEventNew extends AbstractType {
 				}
 			});
 			cf.addConstraint(SingleChildConstraint.getInstance());
-			this.sectionFinder = cf;
+			this.setSectionFinder(cf);
 		}
 
 		@Override
@@ -174,7 +174,7 @@ public class TimeEventNew extends AbstractType {
 						}
 					});
 			cf.addConstraint(SingleChildConstraint.getInstance());
-			this.sectionFinder = cf;
+			this.setSectionFinder(cf);
 
 			// check for correct importance value
 			this.addSubtreeHandler(new TimeEventAttributeHandler<DateType>() {
@@ -251,7 +251,7 @@ public class TimeEventNew extends AbstractType {
 						}
 					});
 			cf.addConstraint(SingleChildConstraint.getInstance());
-			this.sectionFinder = cf;
+			this.setSectionFinder(cf);
 
 			// check for correct importance value
 			this.addSubtreeHandler(new TimeEventAttributeHandler<ImportanceType>() {
@@ -290,7 +290,7 @@ public class TimeEventNew extends AbstractType {
 
 		public Source() {
 			this.setRenderer(new TimeEventSrcRenderer());
-			this.sectionFinder = new RegexSectionFinder("(QUELLE:.*)\\r?\\n", 9999, 1);
+			this.setSectionFinder(new RegexSectionFinder("(QUELLE:.*)\\r?\\n", 9999, 1));
 		}
 
 		static String getSourceName(Section<Source> s) {
@@ -305,11 +305,11 @@ public class TimeEventNew extends AbstractType {
 			// SemanticAnnotation semanticAnnotation = new SemanticAnnotation();
 			//
 			// // first grab annotated concepts
-			// this.childrenTypes.add(semanticAnnotation);
+			// this.addChildType(semanticAnnotation);
 
 			// then search for un-annotated concepts
-			// this.childrenTypes.add(new PersonOccurrence());
-			// this.childrenTypes.add(new LocationOccurrence());
+			// this.addChildType(new PersonOccurrence());
+			// this.addChildType(new LocationOccurrence());
 
 			// renderer
 			this.setRenderer(new TimeEventDescRenderer());
@@ -319,7 +319,7 @@ public class TimeEventNew extends AbstractType {
 			ConstraintSectionFinder f = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
 			f.addConstraint(SingleChildConstraint.getInstance());
-			this.sectionFinder = f;
+			this.setSectionFinder(f);
 		}
 	}
 }

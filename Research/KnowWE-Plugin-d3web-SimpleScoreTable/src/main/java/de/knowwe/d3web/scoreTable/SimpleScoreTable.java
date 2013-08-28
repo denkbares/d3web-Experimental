@@ -34,8 +34,8 @@ public class SimpleScoreTable extends AbstractType {
 
 	public SimpleScoreTable() {
 
-		childrenTypes.add(new HeaderLine());
-		childrenTypes.add(new ContentLine());
+		this.addChildType(new HeaderLine());
+		this.addChildType(new ContentLine());
 		this.setSectionFinder(new AllTextFinderTrimmed());
 		this.setRenderer(new Renderer() {
 

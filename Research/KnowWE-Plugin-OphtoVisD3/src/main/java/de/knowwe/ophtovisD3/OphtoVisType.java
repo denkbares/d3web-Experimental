@@ -40,7 +40,7 @@ public class OphtoVisType extends AbstractType {
 		 * You can create your own, or reuse own from the
 		 * KnowWE core library like done here:
 		 */
-		// this.sectionFinder = new RegexSectionFinder("MyRegularExpression");
+		// this.setSectionFinder(new RegexSectionFinder("MyRegularExpression");
 
 		this.setSectionFinder(new RegexSectionFinder("VIS:(.*?)\\r?\\n"));
 		

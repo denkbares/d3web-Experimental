@@ -27,9 +27,9 @@ public class WordObjectType extends AbstractType {
 	private static WordObjectType instance;
 
 	public WordObjectType() {
-		this.childrenTypes.add(new AStarObjectType());
-		this.childrenTypes.add(new BStarObjectType());
-		this.sectionFinder = new de.knowwe.core.kdom.sectionFinder.RegexSectionFinder("[ab]+");
+		this.addChildType(new AStarObjectType());
+		this.addChildType(new BStarObjectType());
+		this.setSectionFinder(new de.knowwe.core.kdom.sectionFinder.RegexSectionFinder("[ab]+"));
 	}
 
 	public static WordObjectType getInstance() {

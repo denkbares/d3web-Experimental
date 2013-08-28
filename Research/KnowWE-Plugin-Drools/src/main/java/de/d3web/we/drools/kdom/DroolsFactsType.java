@@ -41,10 +41,9 @@ public class DroolsFactsType extends AbstractType {
 
 	public DroolsFactsType() {
 		setSectionFinder(new AllTextSectionFinder());
-		childrenTypes.add(new CommentLineType());
-		childrenTypes.add(new DroolsFact());
+		this.addChildType(new CommentLineType());
+		this.addChildType(new DroolsFact());
 		addSubtreeHandler(Priority.DEFAULT, new DroolsFactsSubtreeHandler());
-		;
 	}
 
 	static class DroolsFactsSubtreeHandler extends SubtreeHandler<DroolsFactsType> {

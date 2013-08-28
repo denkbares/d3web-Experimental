@@ -29,8 +29,8 @@ public class TurtlePredSentence extends AbstractType {
 
 	public TurtlePredSentence() {
 
-		childrenTypes.add(new TurtlePredicateSection());
-		childrenTypes.add(new TurtleObjectSection());
+		this.addChildType(new TurtlePredicateSection());
+		this.addChildType(new TurtleObjectSection());
 		setSectionFinder(new SplitSectionFinderUnquoted(";"));
 
 		// setCustomRenderer(new GenericHTMLRenderer<TurtlePredSentence>("span",

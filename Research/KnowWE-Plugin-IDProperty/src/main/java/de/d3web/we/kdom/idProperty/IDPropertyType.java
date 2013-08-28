@@ -121,7 +121,7 @@ public class IDPropertyType extends AbstractType {
 	class IDPropertyDefinition extends StringDefinition {
 
 		public IDPropertyDefinition() {
-			SectionFinder sectionFinder = new ConstraintSectionFinder(
+			SectionFinder setSectionFinder(new ConstraintSectionFinder(
 					new AllTextFinderTrimmed(), SingleChildConstraint.getInstance());
 			this.setSectionFinder(sectionFinder);
 			this.setCustomRenderer(StyleRenderer.SOLUTION);

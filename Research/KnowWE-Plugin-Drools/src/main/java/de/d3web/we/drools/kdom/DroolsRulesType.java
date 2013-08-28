@@ -32,6 +32,6 @@ public class DroolsRulesType extends AbstractType {
 
 	public DroolsRulesType() {
 		setSectionFinder(new AllTextSectionFinder());
-		childrenTypes.add(new DroolsRule());
+		this.addChildType(new DroolsRule());
 	}
 }

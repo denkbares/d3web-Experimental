@@ -35,7 +35,7 @@ import de.knowwe.kdom.renderer.StyleRenderer;
 public class BulletCommentType extends AbstractType {
 
 	public BulletCommentType() {
-		this.sectionFinder = new BulletCommentFinder();
+		this.setSectionFinder(new BulletCommentFinder());
 		this.setRenderer(StyleRenderer.COMMENT);
 	}
 

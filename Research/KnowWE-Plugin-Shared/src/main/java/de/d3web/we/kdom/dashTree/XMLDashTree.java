@@ -33,13 +33,13 @@ public class XMLDashTree extends AbstractXMLType {
 
 	public XMLDashTree() {
 		super("DashTree");
-		this.childrenTypes.add(new XMLDashTreeContent());
+		this.addChildType(new XMLDashTreeContent());
 	}
 
 	class XMLDashTreeContent extends XMLContent {
 
 		protected XMLDashTreeContent() {
-			this.childrenTypes.add(new DashTree());
+			this.addChildType(new DashTree());
 		}
 
 	}

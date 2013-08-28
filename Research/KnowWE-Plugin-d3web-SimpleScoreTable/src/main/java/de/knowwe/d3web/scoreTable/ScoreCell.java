@@ -37,8 +37,8 @@ public class ScoreCell extends AbstractType {
 	public ScoreCell() {
 		AnonymousType before = new AnonymousType("Before");
 		before.setSectionFinder(new RegexSectionFinder("\\|"));
-		childrenTypes.add(before);
-		childrenTypes.add(new Score());
+		this.addChildType(before);
+		this.addChildType(new Score());
 		RegexSectionFinder finder = new RegexSectionFinder("\\|([^\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1);
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(finder);
 		csf.addConstraint(NonEmptyConstraint.getInstance());

@@ -33,12 +33,12 @@ public class TurtleObjectLiteral extends AbstractType {
 	public TurtleObjectLiteral() {
 		AnonymousType before = new AnonymousType("Before");
 		before.setSectionFinder(new RegexSectionFinder("'"));
-		childrenTypes.add(before);
+		this.addChildType(before);
 		AnonymousType after = new AnonymousType("After");
 		after.setSectionFinder(new RegexSectionFinder("'"));
-		childrenTypes.add(after);
-		childrenTypes.add(new LanguageTag());
-		childrenTypes.add(new TurtleObjectLiteralText());
+		this.addChildType(after);
+		this.addChildType(new LanguageTag());
+		this.addChildType(new TurtleObjectLiteralText());
 		setSectionFinder(new RegexSectionFinder("'(.*?)'(" + LanguageTag.REGEX + ")?",
 				Pattern.DOTALL, 0));
 

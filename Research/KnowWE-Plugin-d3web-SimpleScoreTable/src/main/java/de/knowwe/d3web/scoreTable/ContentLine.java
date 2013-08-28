@@ -34,13 +34,13 @@ public class ContentLine extends AbstractType {
 	public ContentLine() {
 		AnonymousType before = new AnonymousType("Before");
 		before.setSectionFinder(new RegexSectionFinder("\\s*"));
-		childrenTypes.add(before);
+		this.addChildType(before);
 		AnonymousType after = new AnonymousType("After");
 		after.setSectionFinder(new RegexSectionFinder("\\r?\\n"));
-		childrenTypes.add(after);
-		childrenTypes.add(new CondCell());
-		childrenTypes.add(new ScoreCell());
-		childrenTypes.add(new Bar());
+		this.addChildType(after);
+		this.addChildType(new CondCell());
+		this.addChildType(new ScoreCell());
+		this.addChildType(new Bar());
 		setSectionFinder(new RegexSectionFinder("\\s*(\\|{1,2}.*?)(?:\\r?\\n|\\z)", Pattern.DOTALL
 				| Pattern.MULTILINE, 0));
 		setRenderer(new TableLineRenderer());

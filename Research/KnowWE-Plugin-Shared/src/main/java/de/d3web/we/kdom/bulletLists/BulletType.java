@@ -32,7 +32,7 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 public class BulletType extends AbstractType {
 
 	public BulletType() {
-		this.sectionFinder = new BulletFinder();
+		this.setSectionFinder(new BulletFinder());
 	}
 
 	class BulletFinder implements SectionFinder {

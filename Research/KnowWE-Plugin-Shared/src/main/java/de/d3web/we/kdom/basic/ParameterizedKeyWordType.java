@@ -46,18 +46,17 @@ public abstract class ParameterizedKeyWordType extends AbstractType {
 	// ugly, but only workaround to configure according to constructor
 	// parameters
 	private void initintern() {
-		this.sectionFinder = new RegexSectionFinder(keyword + "\\[[^\\]]*]");
-		this.childrenTypes.add(new KeywordType(keyword));
-		this.childrenTypes.add(new SquareBracedType(type));
+		this.setSectionFinder(new RegexSectionFinder(keyword + "\\[[^\\]]*]"));
+		this.addChildType(new KeywordType(keyword));
+		this.addChildType(new SquareBracedType(type));
 
 	}
 
 	private static class KeywordType extends AbstractType {
 
 		public KeywordType(String keyword) {
-			this.sectionFinder = new RegexSectionFinder(keyword);
+			this.setSectionFinder(new RegexSectionFinder(keyword));
 		}
-
 	}
 
 }

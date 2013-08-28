@@ -36,7 +36,7 @@ public class CondCell extends DefaultCompositeCondition {
 		AnonymousType before = new AnonymousType("Before");
 		
 		before.setSectionFinder(new RegexSectionFinder("\\|"));
-		childrenTypes.add(before);
+		this.addChildType(before);
 
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder("\\|([^\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1));
 		setSectionFinder(c);

@@ -38,9 +38,9 @@ public class CommentTypeTag extends AbstractType {
 		}
 		regexString.replace(regexString.length() - 1, regexString.length(), ")");
 
-		sectionFinder = new RegexSectionFinder(regexString + "[0-9]* ");
-		childrenTypes.add(new CommentTypeTagName());
-		childrenTypes.add(new CommentTypeTagID());
+		setSectionFinder(new RegexSectionFinder(regexString + "[0-9]* "));
+		this.addChildType(new CommentTypeTagName());
+		this.addChildType(new CommentTypeTagID());
 	}
 
 }

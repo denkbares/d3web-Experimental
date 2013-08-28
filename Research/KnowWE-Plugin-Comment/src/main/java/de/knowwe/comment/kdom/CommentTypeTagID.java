@@ -26,7 +26,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 public class CommentTypeTagID extends AbstractType {
 
 	public CommentTypeTagID() {
-		sectionFinder = new RegexSectionFinder("[0-9]* ");
+		setSectionFinder(new RegexSectionFinder("[0-9]* "));
 	}
 
 }

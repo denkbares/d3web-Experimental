@@ -29,7 +29,7 @@ public class TurtleObjectBlankNode extends AbstractType {
 
 	public TurtleObjectBlankNode() {
 
-		childrenTypes.add(new TurtleObjectBlankNodeContent());
+		this.addChildType(new TurtleObjectBlankNodeContent());
 		setSectionFinder(new EmbracedContentFinder('[', ']'));
 
 		// setCustomRenderer(new

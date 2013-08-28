@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 public class AnnotationMapSign extends AbstractType {
 
 	public AnnotationMapSign() {
-		this.sectionFinder = new RegexSectionFinder("<=>");
+		this.setSectionFinder(new RegexSectionFinder("<=>"));
 	}
 
 }

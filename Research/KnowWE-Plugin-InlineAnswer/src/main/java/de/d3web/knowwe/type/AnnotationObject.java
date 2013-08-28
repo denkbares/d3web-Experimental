@@ -29,9 +29,9 @@ import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 public class AnnotationObject extends AbstractType {
 
 	public AnnotationObject() {
-		this.childrenTypes.add(new AnnotationProperty());
-		this.childrenTypes.add(new SimpleAnnotation());
-		this.sectionFinder = new AllTextFinderTrimmed();
+		this.addChildType(new AnnotationProperty());
+		this.addChildType(new SimpleAnnotation());
+		this.setSectionFinder(new AllTextFinderTrimmed());
 	}
 
 }

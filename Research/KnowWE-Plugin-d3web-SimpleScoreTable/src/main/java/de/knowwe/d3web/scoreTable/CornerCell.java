@@ -37,7 +37,7 @@ public class CornerCell extends AbstractType {
 	public CornerCell() {
 		AnonymousType before = new AnonymousType("Before");
 		before.setRenderer(NothingRenderer.getInstance());
-		childrenTypes.add(before);
+		this.addChildType(before);
 
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder("\\|([^\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1));
 		setSectionFinder(c);

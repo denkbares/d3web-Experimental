@@ -15,9 +15,7 @@ public class ExtendIndividualFrame extends IndividualFrame {
 		// Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
 		// this.setSectionFinder(new RegexSectionFinder(p));
 
-		int pos = this.getChildrenTypes().indexOf(IndividualDefinition.getInstance());
-		this.removeChildType(IndividualDefinition.class);
-		this.childrenTypes.add(pos, new EntityReference(KEYWORD));
+		this.replaceChildType(new EntityReference(KEYWORD), IndividualDefinition.class);
 	}
 
 	/**

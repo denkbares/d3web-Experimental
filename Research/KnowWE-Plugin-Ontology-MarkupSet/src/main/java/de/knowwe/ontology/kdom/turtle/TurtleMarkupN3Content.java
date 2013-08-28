@@ -31,8 +31,8 @@ public class TurtleMarkupN3Content extends AbstractType {
 
 	public TurtleMarkupN3Content() {
 		TurtleMarkupN3Content.instance = this;
-		childrenTypes.add(new TurtleSubjectSection());
-		childrenTypes.add(new TurtlePredSentence());
+		this.addChildType(new TurtleSubjectSection());
+		this.addChildType(new TurtlePredSentence());
 		setSectionFinder(new AllTextSectionFinder());
 
 		// setCustomRenderer(new

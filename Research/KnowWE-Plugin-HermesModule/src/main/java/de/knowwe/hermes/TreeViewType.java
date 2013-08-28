@@ -37,8 +37,8 @@ public class TreeViewType extends AbstractType {
 	public static final String END_TAG = "%TreeEnd";
 
 	public TreeViewType() {
-		sectionFinder = new RegexSectionFinder(START_TAG + "[\\w|\\W]*?"
-				+ END_TAG);
+		setSectionFinder(new RegexSectionFinder(START_TAG + "[\\w|\\W]*?"
+				+ END_TAG));
 		this.setRenderer(new TreeViewRenderer());
 	}
 

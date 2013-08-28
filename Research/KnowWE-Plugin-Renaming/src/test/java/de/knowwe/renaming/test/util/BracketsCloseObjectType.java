@@ -25,7 +25,7 @@ import de.knowwe.core.kdom.AbstractType;
 public class BracketsCloseObjectType extends AbstractType {
 
 	public BracketsCloseObjectType() {
-		this.sectionFinder = new StringSectionFinder("-");
+		this.setSectionFinder(new StringSectionFinder("-"));
 	}
 
 	private static BracketsCloseObjectType instance;

@@ -43,7 +43,7 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 public class OneOfBracedConditionContent extends NonTerminalCondition {
 
 	public OneOfBracedConditionContent() {
-		this.sectionFinder = new OneOfConditionContentFinder();
+		this.setSectionFinder(new OneOfConditionContentFinder());
 	}
 
 	class OneOfConditionContentFinder implements SectionFinder {
@@ -54,11 +54,11 @@ public class OneOfBracedConditionContent extends NonTerminalCondition {
 			int leadingSpaces = text.indexOf(trimmed);
 			if (trimmed.startsWith(Character.toString(OneOfBracedCondition.CURLY_BRACKET_OPEN))) {
 				int closingBracket = Strings.findIndexOfClosingBracket(trimmed, 0,
-							OneOfBracedCondition.CURLY_BRACKET_OPEN,
+						OneOfBracedCondition.CURLY_BRACKET_OPEN,
 						OneOfBracedCondition.CURLY_BRACKET_CLOSED);
 
 				return SectionFinderResult.createSingleItemList(new SectionFinderResult(
-							leadingSpaces + 1, closingBracket));
+						leadingSpaces + 1, closingBracket));
 
 			}
 			return null;

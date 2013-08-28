@@ -57,8 +57,8 @@ public class CSS extends AbstractXMLType {
 
 	@Override
 	public List<Type> getChildrenTypes() {
-		childrenTypes.add(getInstance());
-		return childrenTypes.getChildrenTypes();
+		this.addChildType(getInstance());
+		return super.getChildrenTypes();
 	}
 
 }

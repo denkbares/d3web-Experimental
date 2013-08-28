@@ -48,10 +48,10 @@ public class Annotation extends AbstractType {
 		at1.setSectionFinder(new RegexSectionFinder(ANNOTATIONBEGIN));
 		AnonymousType at2 = new AnonymousType("InlineAnnotationEnd");
 		at2.setSectionFinder(new RegexSectionFinder(ANNOTATIONEND));
-		this.childrenTypes.add(at1);
-		this.childrenTypes.add(at2);
-		this.childrenTypes.add(new AnnotationContent());
-		this.sectionFinder = new AnnotationSectionFinder();
+		this.addChildType(at1);
+		this.addChildType(at2);
+		this.addChildType(new AnnotationContent());
+		this.setSectionFinder(new AnnotationSectionFinder());
 		this.setRenderer(new AnnotationInlineAnswerRenderer());
 	}
 

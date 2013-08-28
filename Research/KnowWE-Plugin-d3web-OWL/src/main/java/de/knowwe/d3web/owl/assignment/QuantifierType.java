@@ -33,7 +33,7 @@ public class QuantifierType extends AbstractType implements AssignmentRegEx {
 
 	public QuantifierType() {
 		this.setRenderer(new StyleRenderer("font-weight: bold"));
-		this.sectionFinder = new RegexSectionFinder(QUANTIFIER, Pattern.CASE_INSENSITIVE, 0);
+		this.setSectionFinder(new RegexSectionFinder(QUANTIFIER, Pattern.CASE_INSENSITIVE, 0));
 	}
 
 }

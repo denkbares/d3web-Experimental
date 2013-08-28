@@ -49,7 +49,7 @@ public class WimVentTable extends AbstractType {
 	public WimVentTable() {
 		this.addChildType(new WimVentRuleTableHeaderLine());
 		this.addChildType(new WimVentRuleTableRuleLine());
-		this.sectionFinder = new AllTextSectionFinder();
+		this.setSectionFinder(new AllTextSectionFinder());
 		this.setRenderer(new TableRenderer());
 	}
 
@@ -71,16 +71,15 @@ public class WimVentTable extends AbstractType {
 
 		public WimVentRuleTableHeaderLine() {
 			// there has to be exactly one
-			SectionFinder s = this.sectionFinder;
+			SectionFinder s = this.getSectionFinder();
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(s);
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
-			this.sectionFinder = csf;
+			this.setSectionFinder(csf);
 
 			QuestionReference questionReference = new QuestionReference();
 			questionReference.setSectionFinder(new AllTextFinderTrimmed());
 			this.injectTableCellContentChildtype(questionReference);
 		}
-
 	}
 
 	class WimVentRuleTableRuleLine extends TableLine {

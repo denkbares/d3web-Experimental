@@ -25,11 +25,11 @@ import de.knowwe.core.kdom.AbstractType;
 public class SplitObjectType extends AbstractType {
 
 	public SplitObjectType() {
-		this.childrenTypes.add(new BracketsCloseObjectType());
-		this.childrenTypes.add(new BracketsOpenObjectType());
-		this.childrenTypes.add(new AStarObjectType());
-		this.childrenTypes.add(new BStarObjectType());
-		this.sectionFinder = new de.knowwe.core.kdom.sectionFinder.RegexSectionFinder("-[^-.]*-");
+		this.addChildType(new BracketsCloseObjectType());
+		this.addChildType(new BracketsOpenObjectType());
+		this.addChildType(new AStarObjectType());
+		this.addChildType(new BStarObjectType());
+		this.setSectionFinder(new de.knowwe.core.kdom.sectionFinder.RegexSectionFinder("-[^-.]*-"));
 	}
 
 	private static SplitObjectType instance;

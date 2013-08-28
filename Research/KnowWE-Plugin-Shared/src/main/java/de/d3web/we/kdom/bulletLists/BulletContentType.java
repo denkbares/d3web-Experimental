@@ -26,7 +26,7 @@ import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 public class BulletContentType extends AbstractType {
 
 	public BulletContentType() {
-		this.sectionFinder = new AllTextFinderTrimmed();
+		this.setSectionFinder(new AllTextFinderTrimmed());
 	}
 
 }

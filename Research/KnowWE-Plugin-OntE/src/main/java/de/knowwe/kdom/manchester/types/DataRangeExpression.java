@@ -36,14 +36,14 @@ public class DataRangeExpression extends CompositeCondition {
 		// NonTerminalListContent listContent = new NonTerminalListContent();
 		// listContent.addChildType(this);
 		// list.addChildType(listContent);
-		// this.childrenTypes.add(ccChildren - 1, list);
+		// this.addChildType(ccChildren - 1, list);
 
 		// ... or a OneOfBracedList
 		OneOfBracedCondition oneOf = new OneOfBracedCondition();
 		OneOfBracedConditionContent oneOfContent = new OneOfBracedConditionContent();
 		oneOfContent.addChildType(this);
 		oneOf.addChildType(oneOfContent);
-		this.childrenTypes.add(ccChildren - 1, oneOf);
+		this.addChildType(ccChildren - 1, oneOf);
 
 		// ... or finally a TerminalCondition which stops the recursive descent
 		// DataType, literal list, dataTyperestriction datarange
