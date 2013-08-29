@@ -47,6 +47,8 @@ public class MapType extends AbstractXMLType {
 
 	private static final DecimalFormat format = new DecimalFormat("#.###");
 
+	private boolean initialized = false;
+
 	public MapType() {
 		super("Map");
 		this.addSubtreeHandler(new MapTypeOWLSubTreeHandler());
@@ -55,7 +57,10 @@ public class MapType extends AbstractXMLType {
 
 	@Override
 	public List<Type> getChildrenTypes() {
-		this.addChildType(new AbstractXMLType("iframe"));
+		if (!initialized) {
+			this.addChildType(new AbstractXMLType("iframe"));
+			initialized = true;
+		}
 		return super.getChildrenTypes();
 	}
 

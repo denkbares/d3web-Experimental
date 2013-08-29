@@ -41,14 +41,7 @@ import de.knowwe.kdom.xml.AbstractXMLType;
  */
 public class CSS extends AbstractXMLType {
 
-	private static CSS instance = null;
-
-	public static CSS getInstance() {
-		if (instance == null) {
-			instance = new CSS();
-		}
-		return instance;
-	}
+	private boolean initialized = false;
 
 	public CSS() {
 		super("CSS");
@@ -57,7 +50,10 @@ public class CSS extends AbstractXMLType {
 
 	@Override
 	public List<Type> getChildrenTypes() {
-		this.addChildType(getInstance());
+		if (!initialized) {
+			this.addChildType(new CSS());
+			initialized = true;
+		}
 		return super.getChildrenTypes();
 	}
 
