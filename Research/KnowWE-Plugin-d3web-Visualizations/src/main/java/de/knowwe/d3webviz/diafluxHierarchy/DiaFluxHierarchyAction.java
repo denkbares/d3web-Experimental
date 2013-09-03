@@ -68,7 +68,7 @@ public class DiaFluxHierarchyAction extends AbstractD3webVizAction {
 			for (Flow temp : structure.keySet()) {
 				Collection<ComposedNode> calledFlows = structure.get(temp);
 				for (ComposedNode composedNode : new ArrayList<ComposedNode>(calledFlows)) {
-					if (DiaFluxUtils.getCalledFlow(kb, composedNode) == flow) {
+					if (DiaFluxUtils.getCalledFlow(composedNode) == flow) {
 						calledFlows.remove(composedNode);
 					}
 				}
@@ -97,7 +97,7 @@ public class DiaFluxHierarchyAction extends AbstractD3webVizAction {
 		Collection<String> childs = new ArrayList<String>();
 		for (Iterator<ComposedNode> iterator = flow.getNodesOfClass(ComposedNode.class).iterator(); iterator.hasNext();) {
 			ComposedNode node = iterator.next();
-			Flow calledFlow = DiaFluxUtils.getCalledFlow(kb, node);
+			Flow calledFlow = DiaFluxUtils.getCalledFlow(node);
 			String child = result.remove(calledFlow);
 			// can be null in a leaf, that calls a flow, that came in
 			// the tree earlier and is inserted elsewhere

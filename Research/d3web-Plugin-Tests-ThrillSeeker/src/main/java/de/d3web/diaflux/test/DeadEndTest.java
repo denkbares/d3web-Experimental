@@ -88,8 +88,7 @@ public class DeadEndTest extends DiaFluxTest {
 					// a dead end is allowed on a composed node for a flow with
 					// no exit nodes
 					if (successor instanceof ComposedNode && successor.getOutgoingEdges().isEmpty()) {
-						Flow calledFlow = DiaFluxUtils.getCalledFlow(testObject,
-								(ComposedNode) successor);
+						Flow calledFlow = DiaFluxUtils.getCalledFlow((ComposedNode) successor);
 
 						// ignores KB errors
 						if (calledFlow == null) continue nextnode;

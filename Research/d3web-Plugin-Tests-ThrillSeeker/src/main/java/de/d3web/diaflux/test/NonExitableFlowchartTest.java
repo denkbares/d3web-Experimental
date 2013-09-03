@@ -58,7 +58,7 @@ public class NonExitableFlowchartTest extends DiaFluxTest {
 				List<Edge> edges = node.getOutgoingEdges();
 				for (Edge edge : edges) {
 					if (edge.getCondition() instanceof FlowchartProcessedCondition) {
-						Flow calledFlow = DiaFluxUtils.getCalledFlow(testObject, node);
+						Flow calledFlow = DiaFluxUtils.getCalledFlow(node);
 						if (calledFlow.getExitNodes().isEmpty()) {
 							erroneousFlows.add(flow);
 						}

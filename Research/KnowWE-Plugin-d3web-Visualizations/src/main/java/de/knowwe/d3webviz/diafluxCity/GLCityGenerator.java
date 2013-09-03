@@ -84,7 +84,7 @@ public class GLCityGenerator {
 			for (Flow temp : structure.keySet()) {
 				Collection<ComposedNode> calledFlows = structure.get(temp);
 				for (ComposedNode composedNode : new ArrayList<ComposedNode>(calledFlows)) {
-					if (DiaFluxUtils.getCalledFlow(kb, composedNode) == flow) {
+					if (DiaFluxUtils.getCalledFlow(composedNode) == flow) {
 						calledFlows.remove(composedNode);
 					}
 				}
@@ -120,7 +120,7 @@ public class GLCityGenerator {
 
 			GLBuilding box;
 			if (node instanceof ComposedNode) {
-				Flow calledFlow = DiaFluxUtils.getCalledFlow(kb, (ComposedNode) node);
+				Flow calledFlow = DiaFluxUtils.getCalledFlow((ComposedNode) node);
 				if (metrics.isIgnoredFlow(calledFlow)) {
 					box = createBuilding(node, metrics);
 

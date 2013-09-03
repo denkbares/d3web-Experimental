@@ -240,8 +240,7 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 	 * @param result
 	 */
 	private static void getCallHierarchies(Flow flow, Collection<ComposedNode> currentHierarchy, Collection<Collection<ComposedNode>> result) {
-		List<ComposedNode> callingNodes = DiaFluxUtils.getCallingNodes(flow.getKnowledgeBase(),
-				flow);
+		List<ComposedNode> callingNodes = DiaFluxUtils.getCallingNodes(flow);
 		if (callingNodes.isEmpty()) {
 			result.add(currentHierarchy);
 		}
@@ -278,7 +277,7 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 		Collection<ComposedNode> calls = caller.getNodesOfClass(ComposedNode.class);
 
 		for (ComposedNode composedNode : calls) {
-			if (DiaFluxUtils.getCalledFlow(composedNode.getFlow().getKnowledgeBase(), composedNode) == callee) return true;
+			if (DiaFluxUtils.getCalledFlow(composedNode) == callee) return true;
 		}
 		return false;
 

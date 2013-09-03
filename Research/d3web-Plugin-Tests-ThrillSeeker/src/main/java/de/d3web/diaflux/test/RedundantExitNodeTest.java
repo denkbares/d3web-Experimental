@@ -56,7 +56,7 @@ public class RedundantExitNodeTest extends DiaFluxTest {
 			List<EndNode> exitNodes = new LinkedList<EndNode>(flow.getExitNodes());
 			if (exitNodes.size() < 2) continue;
 
-			List<ComposedNode> callingNodes = DiaFluxUtils.getCallingNodes(testObject, flow);
+			List<ComposedNode> callingNodes = DiaFluxUtils.getCallingNodes(flow);
 			// ignored uncalled flows
 			if (callingNodes.isEmpty()) continue nextFlow;
 
