@@ -29,6 +29,7 @@ import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.rdfs.vis.RenderingCore;
 
 /**
  * 
@@ -60,12 +61,16 @@ public class SearchBoxMarkup extends DefaultMarkupType {
 
 		@Override
 		public void render(Section<?> section, UserContext user, RenderResult string) {
+			String termnames = generateTermnames();
+			String url = RenderingCore.createBaseURL() + "?page=";
 			String contextPath = Environment.getInstance().getWikiConnector().getServletContext().getContextPath();
+			String parameters = termnames + ",'" + url + "','" + contextPath + "'";
 
 			string.appendHtml(
-					"<div class='searchbox'><form id='searchForm' class='wikiform' accept-charset='UTF-8' action='"
-							+ contextPath
-							+ "/Search.jsp'>"
+					"<div class='searchbox'><form id='searchForm' target='_self' method='POST' class='wikiform' accept-charset='UTF-8' "
+							+ "onSubmit=\"redirectSearch("
+							+ parameters
+							+ ");\">"
 							+ "<div style='position:relative'>"
 							+ "<input id='query' type='text' placeholder='Suche' style='color:black;font-weight:bold;' accesskey='f' size='20' name='query' onfocus=\"if( this.value == this.defaultValue ) { this.value = ''}; return true;\" onblur=\"if( this.value == '' ) { this.value = this.defaultValue }; return true;\"/>"
 							+ "<button id='searchSubmit' title='Go!' value='Go!' name='searchSubmit' type='submit'></button>"
@@ -77,9 +82,9 @@ public class SearchBoxMarkup extends DefaultMarkupType {
 			string.appendHtml("<script>" +
 					"jq$(document).ready(function() {" +
 					// "$(function() {" +
-					" var availableTags = [" +
-					generateTermnames() +
-					"];" +
+					" var availableTags = " +
+					termnames +
+					";" +
 					"jq$( \"#query\" ).autocomplete({" +
 					"source: availableTags," +
 					"select: function( event, ui ) {" +
@@ -88,6 +93,13 @@ public class SearchBoxMarkup extends DefaultMarkupType {
 					"});" +
 					"});" +
 					"</script>");
+
+			// redirecting either to the Search.jsp page or a specific page,
+			// depending on the submitted term
+			string.appendHtml("<script type=\"text/javascript\"\n" +
+					"src=\"" + contextPath
+					+ "/KnowWEExtension/scripts/redirectSearch.js\" charset=\"utf-8\">" +
+					"</script>\n");
 		}
 
 	}
@@ -98,14 +110,17 @@ public class SearchBoxMarkup extends DefaultMarkupType {
 	 * @return
 	 */
 	private static String generateTermnames() {
-		String result = "";
+		String result = "[";
 		Collection<Section<? extends SimpleDefinition>> allTermDefinitions = IncrementalCompiler.getInstance().getTerminology().getAllTermDefinitions();
 
 		for (Section<? extends SimpleDefinition> def : allTermDefinitions) {
-			result += "\"" + def.get().getTermName(def) + "\"" + ",\n";
+			result += "'" + def.get().getTermName(def) + "'" + ",\n";
 		}
+
+		result += "]";
 
 		return result;
 	}
 
 }
+
