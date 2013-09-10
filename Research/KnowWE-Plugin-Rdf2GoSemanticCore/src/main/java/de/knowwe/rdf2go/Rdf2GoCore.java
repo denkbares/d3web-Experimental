@@ -166,7 +166,11 @@ public class Rdf2GoCore implements EventListener {
 	 */
 	private Map<String, WeakHashMap<Section<?>, List<Statement>>> incrementalStatementCache;
 
-	private Map<Statement, Set<String>> duplicateStatements;
+	/**
+	 * We use a map or ArrayLists here because we will have a lot of Lists with
+	 * mostly 1 elements. HashSets or such would be memory overhead.
+	 */
+	private Map<Statement, ArrayList<String>> duplicateStatements;
 
 	/**
 	 * This statement cache gets cleaned with the full parse of an article. If a
@@ -297,12 +301,14 @@ public class Rdf2GoCore implements EventListener {
 
 	private void addStatementsToDuplicatedCache(String source, Statement... statements) {
 		for (Statement statement : statements) {
-			Set<String> registeredSourcesForStatements = duplicateStatements.get(statement);
+			ArrayList<String> registeredSourcesForStatements = duplicateStatements.get(statement);
 			if (registeredSourcesForStatements == null) {
-				registeredSourcesForStatements = new HashSet<String>();
+				registeredSourcesForStatements = new ArrayList<String>(1);
 				duplicateStatements.put(statement, registeredSourcesForStatements);
 			}
-			registeredSourcesForStatements.add(source);
+			if (!registeredSourcesForStatements.contains(source)) {
+				registeredSourcesForStatements.add(source);
+			}
 		}
 	}
 
@@ -600,7 +606,7 @@ public class Rdf2GoCore implements EventListener {
 	private void init() {
 		initModel();
 		incrementalStatementCache = new HashMap<String, WeakHashMap<Section<? extends Type>, List<Statement>>>();
-		duplicateStatements = new HashMap<Statement, Set<String>>();
+		duplicateStatements = new HashMap<Statement, ArrayList<String>>();
 
 		insertCache = new HashSet<Statement>();
 		removeCache = new HashSet<Statement>();
@@ -769,7 +775,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	private boolean removeStatementFromDuplicateCache(Statement statement, String key) {
-		Set<String> sectionIDsForStatement = duplicateStatements.get(statement);
+		ArrayList<String> sectionIDsForStatement = duplicateStatements.get(statement);
 		boolean removed = false;
 		if (sectionIDsForStatement != null) {
 			removed = sectionIDsForStatement.remove(key);
