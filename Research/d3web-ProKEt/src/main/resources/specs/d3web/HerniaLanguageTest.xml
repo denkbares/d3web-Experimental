@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="Default Dialog - Example"  
+	dtype="singleform" 
+	dstrategy="nextuaquestion" 
+	css="medi2colsHernia, nonavigation" 
+	dialogcolumns="1"
+	questionnairecolumns="3"
+	questioncolumns = "2"
+	uiprefix = "EuraHS" 
+	login = ""
+        required = "none"
+	language = ""
+	>
+	<data kb="HerniaLanguageTest.d3web" />
+        
+        <ue logging = "TRUE" 
+            questionnaire="SUS"
+            feedbackform = "TRUE"/>
+</dialog>

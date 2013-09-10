@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>Research</artifactId>
+    <groupId>de.uniwue.d3web</groupId>
+    <version>0.2-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <artifactId>metatool-test-launcher</artifactId>
+  
+  	<dependencies>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-GlobalTestUtils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-Plugin-ExtensionPoints</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+		</dependency>
+	</dependencies>
+  	<name>KnowWE Metatool Launcher</name>
+</project>

@@ -1,0 +1,94 @@
+!!! Dokumentation - Markup
+
+[{TableOfContents}]
+
+!! Allgemeines
+----
+Für das Markup werden drei Sections definiert, die DroolsFactsSection, welche die Terminologie
+beinhaltet, die DroolsRulesSection, welche das Regelwissen bereitstellt sowie die DroolsSessionSection,
+welche Befehle speichern und nacheinander abarbeiten kann.
+
+!! DroolsFactsSection
+----
+Die Terminologie wird in der DroolsFactsSection durch typisierte Input-Statements definiert. Gültige
+Input-Typen sind OC, MC, Num und Solution, die im Folgenden erklärt werden. Sämtliche Objekte
+werden dem working memory von Drools zugeführt.
+
+{{{
+%%DroolsFacts
+Input<OC>("Starter", {"does not turn over", "turns over"});
+Input<MC>("Driving", {"insufficient power on partial load", "insufficient power
+on full load", "unsteady idle speed", "no /else"});
+Input<Num>("Year of construction");
+Input<Solution>("Bad ignition timing");
+Input<Solution>("Flat battery");
+%
+}}}
+
+!One Choice Inputs
+----
+Der One Choice Input stellt eine Einfachauswahlmöglichkeit bereit. Hier wird ein OC-Input Starter definiert, welcher zwei mögliche Antwortalternativen bietet: does not turn over und turns over.
+
+{{{
+Input<OC>("Starter", {"does not turn over", "turns over"});
+}}}
+
+!Multiple Choice Inputs
+----
+Der Multiple Choice Input erlaubt es, mehrere Antwortalternativen auszuwählen. Im Beispiel ist Driving ein MC-Input mit folgenden Antwortmöglichkeiten: insufficient power on partial load, insufficient power on full load, unsteady idle speed sowie no /else.
+
+{{{
+Input<MC>("Driving", {"insufficient power on partial load", "insufficient power on full load", "unsteady idle speed", "no /else"});
+}}}
+
+!Numerical Inputs
+----
+Bei Year of Construction handelt es sich um einen numerischen Input, der keine Vorgabewerte hat.
+
+{{{
+Input<Num>("Year of construction");
+}}}
+
+!Solution Inputs
+----
+Bad ignition timing und Flat battery stellen Lösungs-Inputs dar, d.h. sie stellen Lösungen wiederum in Input-Form dar, um eine Abstraktionsmöglichkeit innerhalb des Systems zu gewährleisten.
+
+{{{
+Input<Solution>("Bad ignition timing");
+Input<Solution>("Flat battery");
+}}}
+
+!! DroolsRulesSection
+----
+In der DroolsRulesSection wird das Regelwissen formalisiert. Hierbei wird das Format der DRL, der Drools Rule Language verwendet.
+
+{{{
+  %%Drools-Rules
+  rule "Flat battery"
+    when
+      $value : Value(value == "does not turn over")
+      Input(name == "Starter" && values contains $value)
+      $solution : SolutionInput(name == "Flat battery")
+    then
+      $solution.setValue(P5);
+  end
+  
+  rule "Exclusion of bad ignition timing"
+    when
+      $value : Value(value == "turns over")
+      not Input(name == "Starter" && values contains $value)
+      $solution : SolutionInput(name == "Bad ignition timing")
+    then
+      $solution.setValue(N7);
+  end
+  %
+}}}
+
+Jede Regel besteht aus einem Titel („Flat battery“), einem Bedingungsteil (when. . . ), sowie einem Aktionsteil (then. . . ).
+
+Im Bedingungsteil werden die Vorbedingungen formuliert, welche erfüllt sein müssen, damit diese Regel feuern kann. Ferner werden Variablen initialisiert, welche im Aktionsteil benötigt werden. In der Beispielregel „Flat battery“ wird zunächst der Value does not turn over aus dem working memory von Drools abgerufen und überprüft, ob der Input mit der Bezeichnung Starter auf diesen Value gesetzt ist. Anschließend wird die Variable $solution initialisiert, welche für den Aktionsteil benötigt wird.
+
+Im Aktionsteil wir der zuvor initialisierten $solution-Variable der Wert P5 hinzugefügt.
+
+!! DroolsSessionSection
+----

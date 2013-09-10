@@ -1,0 +1,829 @@
+
+
+/*<agl.folder "Defaults (globale Settings fuer Schriftarten und -groessen, Farben etc.) ------------------------------------------------ ">*/
+body	{
+	margin: 0px 0px 0px 0px;
+	font-family: "Verdana", "Lucida Grande", "Lucida Sans", "Arial", "Helvetica", sans-serif;
+	font-size: 11px;
+	/*color: #505050; schwarz liefert besseren Kontrast */
+	color: #000000;
+	min-width: 990px;
+}
+
+body.links	{}
+body.home	{}
+
+img { border:none; }
+
+A  {text-decoration: none;} /* Darstellung von Links - NICHT die Farbe */
+A:link  {color : #0a3fcd;} /* Linkfarbe */
+A:Visited  {color : #0a3fcd;} /* besuchter Link; nicht #051e60 sondern identisch zu Standard */
+A:Active  {color : #0a3fcd;} /* aktiver Link */
+A:Hover  {color : #0a3fcd; text-decoration: underline;} /* Mouseover */
+
+p, td, th, div, input, textarea, select, h1, h2, h3, h4, h5, h6, ul, ol, li, font, dl, dt, dd, marquee {
+	font-family: inherit;
+	font-size: inherit;
+}
+
+table, form	{
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+}
+
+table {border-collapse: collapse;}
+tr {vertical-align: top;}
+
+hr {width: 100%; height: 1px; background-color:black;}
+
+blockquote {margin: 0px 0px 5px 20px; padding: 0px;}
+
+/* -------- LISTEN */
+ul {
+ margin: 0px 0px 5px 0px;
+ padding: 0px;
+}
+
+  ul li {
+    list-style-image: url(/images/btn_liste.gif); list-style-type: square;
+    /* einruecken des listenbildes */
+    margin: 2px 0px 0px 15px;
+    padding: 0px 0px 0px 0px;
+  }
+
+ol {margin: 0px; padding: 0px;}
+
+  ol li {list-style-type: decimal;
+    /* einruecken des listenpunktes */
+    /*margin: 2px 0px 0px 25px; 25px war zu wenig für mehrstellige Nummern*/
+    margin: 2px 0px 0px 4em;
+    padding: 0px 0px 0px;
+  }
+
+dt {
+	margin-bottom: 2px;
+	padding-top: 10px;
+	clear: both;
+}
+
+dd {margin-bottom: 5px;}
+
+H1, H2, H3, H4, H5, H6 {margin: 0px; padding: 0px;}
+
+H1 {font-size: 1.5em; line-height: 100%; color: #000000; font-weight: bold; margin: 15px 0px 15px 0px;}
+H2 {font-size: 1.3em; line-height: 100%; color: #000000; font-weight: bold; margin: 15px 0px 15px 0px;}
+H3 {font-size: 1.2em; line-height: 100%; color: #000000; font-weight: bold; margin: 15px 0px 10px 0px;}
+H4 {font-size: 1.1em; line-height: 100%; color: #000000; font-weight: bold; margin: 10px 0px 5px 0px;}
+H5 {font-size: 0.91em; line-height: 100%; color: #999999; font-weight: bold; margin: 5px 0px 5px 0px; padding-bottom: 5px; border-bottom: 1px solid #696969;}
+H6 {font-size: 0.91em; line-height: 100%; color: #999999; font-weight: bold; margin: 15px 0px 5px 0px;}
+
+/******************/
+/* Headers, plain */
+/******************/
+H1.csc-firstHeader, H2.csc-firstHeader, H3.csc-firstHeader, H4.csc-firstHeader, H5.csc-firstHeader, H6.csc-firstHeader {margin-top: 0px; padding-top: 0px;}
+
+/* Header date */
+.headerdate, .csc-header-date, p.csc-header-date {font-size: 0.85em;}
+
+/* Subheader, general */
+P.csc-subheader {}
+
+/* Subheader, specific */
+P.csc-subheader-0 { font-style: normal; }
+P.csc-subheader-1 {font-size: 1.3em; line-height: 100%; color: #696969; font-weight: bold;}
+P.csc-subheader-2 {font-size: 1.2em; line-height: 100%; color: #696969; font-weight: bold;}
+P.csc-subheader-3 { color: #696969; font-weight: bold;}
+
+.bodytext {line-height: 150%; margin: 5px 0px 10px 0px; padding: 0px;}
+blockquote .bodytext {margin: 0px 0px 5px 0px;}
+
+/********************************/
+/* Frames, spacing, link-to-top */
+/********************************/
+P.csc-linkToTop { text-align: right; }
+P.csc-linkToTop A {}
+
+.csc-frame-invisible {}
+
+.csc-frame-rulerBefore {
+	border-top: 1px solid #696969;
+	padding-top: 5px;
+}
+
+  .csc-frame-rulerBefore h1, .csc-frame-rulerBefore h2, .csc-frame-rulerBefore h3, .csc-frame-rulerBefore h4, .csc-frame-rulerBefore h5  {margin-top: 5px;}
+
+.csc-frame-rulerAfter {
+	border-bottom: 1px solid #696969;
+	padding-bottom: 5px;
+}
+
+.csc-frame-indent {margin-left: 20px;}
+.csc-frame-indent3366 {margin-left: 100px;}
+.csc-frame-indent6633 {margin-left: 200px;}
+
+.csc-frame-frame1 {
+	border: 1px solid #696969;
+	padding: 5px;
+	font-size: 0.91em;
+}
+  .csc-frame-frame1 h1, .csc-frame-frame1 h2, .csc-frame-frame1 h3, .csc-frame-frame1 h4, .csc-frame-frame1 h5  {margin-top: 5px;}
+
+
+.csc-frame-frame2 {
+	background-color: #ebf5ff;
+	font-size: 0.91em;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
+}
+
+  .csc-frame-frame2 h1, .csc-frame-frame2 h2, .csc-frame-frame2 h3, .csc-frame-frame2 h4, .csc-frame-frame2 h5  {margin-top: 5px;}
+  .csc-frame-frame2 h5 {background-color: #ffffff; margin-top: 0px;}
+  
+  .csc-frame-frame2 h1, .csc-frame-frame2 h2, .csc-frame-frame2 h3, .csc-frame-frame2 h4, .csc-frame-frame2 h6, .csc-frame-frame2 .bodytext, .csc-frame-frame2 div, .csc-frame-frame2 ul, .csc-frame-frame2 ol {padding-left: 5px; padding-right: 5px;}
+/* Ende Frames */
+
+.csi-text h1, .csi-text h2, .csi-text h3, .csi-text h4, .csi-text h4 {margin-top: 0px;}
+
+/* --- EXT: CSC ---------------------------------------------------------------------------------------------------------------- */
+/**********/
+/* Images */
+/**********/
+
+/* Images / Captions */
+.csc-textpic-caption, .caption {color: #696969;
+	font-size: 0.85em;
+	line-height: 13px;
+	margin: 0px 20px 10px 20px;
+	padding: 5px 0px;
+	font-style: italic;
+}
+
+/*****************/
+/* Various Forms */
+/*****************/
+
+/* Login and Search forms generally: */
+FORM TABLE TR TD { padding: 0px 2px 2px 0px; }
+FORM TABLE TR TD P {margin: 0px;}
+FORM TABLE TR TD.csc-form-labelcell, FORM TABLE TR TD.csc-form-commentcell {width: 100px;}
+FORM TABLE TR TD.csc-form-fieldcell {}
+FORM TABLE TR TD.csc-form-fieldcell INPUT, FORM TABLE TR TD.csc-form-fieldcell SELECT, FORM TABLE TR TD.csc-form-fieldcell TEXTAREA { border: 1px solid #696969; }
+FORM TABLE TR TD.csc-form-labelcell P.csc-form-label-req { font-weight: bold; }
+
+/* Email form, specifically */
+FORM TABLE.csc-mailform TR TD.csc-form-labelcell  { }
+
+#mailform fieldset.csc-mailform {
+	padding:  5px;
+}
+
+#mailform fieldset.csc-mailform .csc-mailform-field {
+	padding:  10px 0px 10px 0px; 
+}
+
+#mailform fieldset.csc-mailform .csc-mailform-field label {
+	float:       left;
+	/*font-size:             90%;*/
+	font-weight: bold;
+	width:       300px;
+	clear: left;
+}
+
+/* Search form, specifically */
+TABLE.csc-searchform P {margin: 0px;}
+FORM TABLE.csc-searchform {}
+FORM TABLE.csc-searchform TR TD { padding: 0px 2px 2px 0px; }
+FORM TABLE.csc-searchform TR TD.csc-form-labelcell, FORM TABLE.csc-searchform TR TD.csc-form-commentcell { font-weight: bold; }
+FORM TABLE.csc-searchform TR TD.csc-form-fieldcell INPUT, FORM TABLE.csc-searchform TR TD.csc-form-fieldcell SELECT {}
+
+/* Login form, specifically */
+TABLE.csc-loginform P {margin: 0px;}
+FORM TABLE.csc-loginform TD { padding: 0px 2px 2px 0px; }
+
+/*****************/
+/* Mailform */
+/*****************/
+
+.csc-mailform {border: 0; padding: 0px;}
+.csc-mailform label {display: block; float: left; width: 100px;}
+.csc-mailform-field {padding: 2px 0px;}
+/*.csc-mailform-field textarea {border: 1px solid; }*/
+.csc-mailform-label {}
+.csc-mailform-radio {border: 0px; background-color: transparent; width: auto;}
+.csc-mailform-check {border: 0px; background-color: transparent; width: auto;}
+.csc-mailform-submit {margin-left: 100px;}
+
+/* ----- Sitemaps, Menus etc. ----- */
+
+.csc-sitemap {}
+.csc-sitemap ul {}
+li.csc-section {}
+
+/*****************************/
+/* Menu / Sitemap, generally */
+/*****************************/
+ul.csc-menu {
+  margin: 0px;
+  padding: 0px;
+}
+
+/* Menu / Sitemap, "Menu of these pages" */
+ul.csc-menu-def {}
+
+  ul.csc-menu li {
+    list-style-image: url(/images/btn_liste.gif);
+    /* einruecken des listenbildes */
+    margin: 2px 0px 0px 15px;
+    /* abstand listenbild - text */
+    padding: 0px 0px 0px 2px;
+  }
+
+/* Menu / Sitemap, "Menu of subpages to these pages" */
+ul.csc-menu-1 {}
+
+/* Menu / Sitemap, "Section index (pagecontent w/Index checked)" */
+ul.csc-menu-3 {}
+
+/* Menu / Sitemap, "Menu of subpages to these pages (with abstract)" */
+dl.csc-menu-4 {}
+
+/* Menu / Sitemap, "Recently updated pages" */
+ul.csc-menu-5 {}
+
+/* Menu / Sitemap, "Related pages (based on keywords)" */
+ul.csc-menu-6 {}
+
+/* Menu / Sitemap, "Menu of subpages to these pages + sections" */
+ul.csc-menu-7 {}
+
+/* damit man nicht bei jedem Menue diese default-Werte neu setzen muss!
+Achtung - Formatierung wird von Haendlerseiten uebernommen!!! */
+.menu ul {margin: 0px; padding: 0px;}
+
+	.menu a {text-decoration: none;}
+	.menu a:link, .menu a:visited {text-decoration: none; color: inherit;}
+/* Horizontale Menues */
+#mainnav ul,
+#menu_oben ul,
+#langmenu ul,
+#rootline ul {white-space: nowrap;}
+
+#mainnav li,
+#menu_oben li,
+#langmenu li,
+#rootline li {
+		list-style: none;
+		list-style-image: none;
+		display: inline;
+		padding: 0px 10px 0px 0px;
+		margin: 0px 10px 0px 0px;
+		border-right: 1px solid;
+	}
+
+	#mainnav li.firstitem,
+	#menu_oben li.firstitem,
+	#langmenu li.firstitem,
+	#rootline li.firstitem {border-left: 0px; padding-left: 0px; margin-left: 0px;}
+
+
+	#mainnav li.lastitem,
+	#menu_oben li.lastitem,
+	#langmenu li.lastitem,
+	#rootline li.lastitem {border-right: 0px solid; padding-right: 0px; margin-right: 0px;}
+
+/* Vertikale Menues, aber OHNE Listenbild */
+	#menu_links li,
+	#menu_rechts li {
+		list-style: none;
+		list-style-image: none;
+		padding: 0px 0px 5px 0px;
+		margin: 0px 0px 0px 0px;
+	}
+
+/* Hauptmenue */
+#mainnav {
+    height: 20px;
+    /*background-color: #696969;*/
+    text-transform: uppercase;
+}
+
+#mainnav ul {padding: 2px 0px 0px 280px; height: 20px;}
+#mainnav li {margin: 0px; padding: 0px; border: 0px; display: inline;}
+#mainnav a {padding: 0.25em 20px;}
+
+#mainnav a:link, #mainnav a:visited, #mainnav a.active, #mainnav a.active:link, #mainnav a.active:visited  {color: #ffffff;}
+
+/*
+#mainnav a:active, #mainnav a:hover,
+#mainnav a.current, #mainnav a.current:link, #mainnav a.current:visited {background-color: #063d79; color: #ffffff;}
+*/
+
+/* --------------------------------------- */
+
+/* Menue rechts */
+
+#menu_rechts li {
+	padding: 2px 0px 2px 0px;
+	font-weight: bold;
+}
+
+	#menu_rechts .sub li {font-weight: normal; padding-left: 15px;}
+	
+	#menu_rechts a:link, #menu_rechts a:visited, #menu_rechts a:active, #menu_rechts a:hover {color: #505050;}
+	
+	#menu_rechts a:active, #menu_rechts a:hover {color : #0a3fcd;}
+ #menu_rechts a.active, #menu_rechts a.active:link, #menu_rechts a.active:visited {color: #505050;}
+
+/* --------------------------------------- */
+
+/* Untermenue */
+
+#menu_links {margin: 15px 0px 0px 15px;}
+#links {margin: 15px 0px 0px 15px;}
+#menu_links ul {margin: 0px; padding: 0px;}
+
+#menu_links li {
+        display: block;
+        margin: 0px;
+        padding: 0px;
+        border-bottom: 1px solid #d0d0d0;
+    }
+
+#menu_links li.active { background-color: #ebf5ff; border-color: #ffffff;}
+#menu_links li.head {display: none;}
+
+/* einzelne Links generell */
+    #menu_links a {
+        display: block;
+        /*padding: 5px 5px 5px 20px;*/
+        padding: 4px 5px 4px 20px;
+        background-position: 8px 8px;
+        background-repeat: no-repeat;
+    }
+
+#menu_links .menuhead a {background-color: #e0e0e0;}
+#menu_links .lastitem .menuhead a {border-top: 20px solid #ffffff;}
+#menu_links li.active .menuhead a {border-bottom: 1px solid #d0d0d0;}
+#menu_links a.active, #menu_links a.current {font-weight: bold;}
+#menu_links a:hover, #menu_links a.active {background-image: url(/images/btn_liste.gif);}
+#menu_links a.current, #menu_links a.current:hover {background-image: url(/images/btn_liste_invert.gif); border-bottom: 1px solid #d0d0d0;}
+
+/* verschiedene Menue-Ebenen ------------- */
+#menu_links .sub li {border-color: #ffffff;}
+#menu_links .sub li.lastitem {border-bottom: 1px;}
+
+#menu_links .sub a {padding-left: 35px; background-position: 22px 8px;}
+#menu_links .sub2 a {padding-left: 55px; background-position: 40px 8px;}
+#menu_links .sub3 a {padding-left: 75px; background-position: 60px 8px;}
+#menu_links .sub4 a {padding-left: 100px; background-position: 80px 8px;}
+#menu_links .sub5 a {padding-left: 120px; background-position: 105px 8px;}
+
+/* Farben der Links im Menue */
+#menu_links a:link, #menu_links a:visited, #menu_links a:active, #menu_links a:hover {color: #000000;}
+#menu_links a:active, #menu_links a:hover, #menu_links a.active, #menu_links a.active:link, #menu_links a.active:visited {background-color: #ebf5ff;}
+
+/* --------------------------------------- */
+
+
+/* Rootline */
+
+#rootline {
+	position: absolute;
+
+	top: 110px;
+	left: 280px;
+	font-weight: bold;
+	color: #063d79;
+}
+
+	#rootline a:link, #rootline a:visited,
+	#rootline a:active, #rootline a:hover,
+ #rootline a.active, #rootline a.active:link, #rootline a.active:visited    { color: #063d79;}
+
+/* --------------------------------------- */
+
+/* Impressums-Link */
+
+#menu_oben,
+#langmenu {
+	position: absolute;
+	
+	z-index: 50;
+	top: 15px;
+	right: 10px;
+	width: auto;
+	color: #ffffff;
+	text-transform: uppercase;
+	font-size: 0.91em;
+}
+
+#langmenu {z-index: 51; right: 380px; left: auto;}
+
+#menu_oben ul {text-align: right;}
+
+	#menu_oben a:link, #menu_oben a:visited,
+	#menu_oben a:active, #menu_oben a:hover,
+ #menu_oben a.active, #menu_oben a.active:link, #menu_oben a.active:visited,
+ 	#langmenu a:link, #langmenu a:visited,
+	#langmenu a:active, #langmenu a:hover,
+ #langmenu a.active, #langmenu a.active:link, #langmenu a.active:visited {color: #ffffff;}
+ 
+ #menu_oben a:active, #menu_oben a:hover,
+ #langmenu a:active, #langmenu a:hover {text-decoration: underline;}
+
+/* --------------------------------------- */
+
+#langmenu {}
+
+/*</agl.folder>*/
+
+/*<agl.folder "--- CONTENT: MAINTEMPLATE  ----------------------------------------------------------------------------------------------------------------">*/
+/* Positionierung des Inhalts, Seitenlayout */
+#head {
+	height: 72px;
+	/*background-color: #063d79;*/
+	border-color: #6f6e6e;
+	border-top: 1px;
+	border-bottom: 1px;
+	/*background-image: url(/images/bg_head.gif);*/
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+}
+
+#container {
+	position: relative;
+	/* width: 990px; */
+	margin-top: 45px;
+	width: 99%;
+}
+
+#unilogo {
+	position: absolute;
+	
+	min-width: 900px;
+	top: 0px;
+	left: 0px;
+}
+
+#unilogo .csc-textpic-imagewrap {margin: 0px;}
+
+#unilogo .csc-textpic,
+#unilogo .csc-textpic-left,
+#unilogo .csc-textpic-right,
+#unilogo .csc-textpic-above {margin: 0px; padding: 0px; display: inline; text-align: left;}
+
+#unilogo .csc-text,
+#unilogo .csc-textpic-caption,
+#unilogo .csc-textpic-clear {float: none; clear: none; display: none;}
+
+/* ----------------------- Spalten ----------------------- */
+
+#rechtespalte {
+  float: left;
+  width: 100%; 
+  margin-right: -100%;
+	/* this needs to be less than 100% for Moz/Mac which thinks 
+         it's empty otherwise. The difference is made up by putting a 
+         negative left margin on the left float:
+	   Note IE/Mac doesn't like this method ~ it wants the 100% so it can 
+	   be fed in using IE only CSS below becasue IE/Win also works with the 100% method.  
+	*/
+}
+
+#linkespalte {
+  float: left;
+  width: 250px;
+  margin-left: 0;
+   /* the difference to make the left colum appear flush left */
+}
+
+
+/*************       For IE Mac           **************/
+/* IE/Win is also using these rules, but it doesn't mind */
+* html div#rechtespalte {margin-right: -100%;}
+* html div#linkespalte {margin-left: 0;}
+
+
+  #content {	margin: 0px 0px 0px 0px;}
+
+  #servicelinks	  {
+  		clear: both;
+    margin: 25px 0px 10px 280px;
+    font-size: 0.85em;
+  }
+  
+    #printlink, #pdflink {
+      padding-right: 5px;
+      margin-right: 5px;
+      border-right: 1px solid;
+      float: left;
+    }
+    #lastupdate {padding-left: 5px;}
+    
+#infoline {
+	clear: both;
+	border-top: 1px solid #d0d0d0;
+	text-align: right;
+	text-transform: uppercase;
+	font-size: 0.85em;
+	margin-left: 280px;
+}
+
+#infoline p {
+	margin: 5px 0px 0px 0px;
+	padding: 0px;
+	line-height: 100%;
+}
+
+/* --------------- CONTENT: Misc --------------- */
+#search          {
+    position: absolute;
+
+	top: 110px;
+	left: 15px;
+	width: 235px;
+	color: #696969;
+	padding: 0px 0px 2px 0px;
+	border-bottom: 1px solid;
+	font-size: 0.85em;
+}
+
+  #search form {}
+  
+    #search input.topsuchfeld {
+      border: 1px dashed silver;
+      width: 205px;
+      height: 15px;
+      font-size: 1em;
+    }
+
+    #search .formsubmit, #search input.formsubmit {
+    margin: 0px 0px -2px 2px;
+    height: 14px;
+    width: 14px;
+    }
+
+/* Breiten unterschiedlich bei Standard- u. Popup-Seiten */
+
+.colwidth {width: 48%;}
+.fullwidth {width: 100%;}
+.nofloat {float:none;}
+
+
+.indent {
+  padding: 0px;
+  margin: 0px 0px 0px 20px;
+}
+
+/* Positionierung des Inhalts, Formatierung der Inhaltsbereiche des Inhaltstemplates */
+#left {float: left; width: 70%;}
+#right {float: right; width: 28%;}
+
+
+#colNormal {}
+#colLeft {float: left;}
+#colRight {float: right;}
+#colBorder {}
+#colFusszeile {clear: both;}
+
+#fakultaetslogo img {margin-bottom: 50px;}
+/*</agl.folder>*/
+
+/*<agl.folder "--- POPUP OVERWRITES - ----------------------------------------------------------------------------------------------------------------">*/
+body.popup	{margin: 20px;}
+
+.popup #container, .popup #content {width: auto; height: auto; margin: 0px; padding: 0px;}
+.popup #left {width: 66%;}
+.popup #right {width: 33%;}
+/*</agl.folder>*/
+
+/*<agl.folder "--- global classes - ----------------------------------------------------------------------------------------------------------------">*/
+.menuskip,
+#mainnav li.menuskip,
+#menu_links li.menuskip,
+#langmenu li.menuskip,
+#zielgruppennav li.menuskip,
+#menu_oben li.menuskip,
+#langmenu li.menuskip {display: none;}
+
+.divider { width: 100%; height: 1px; border-top: 1px solid #696969; margin: 10px 0px; }
+
+.pagebrowser         {
+	line-height: 18px;
+	font-size: 0.91em;
+	text-align: center;
+	margin: 10px 0px 10px 0px;
+	padding: 0px 20px 0px 0px;
+	}
+
+/*  clearer - prevent floated images from overlapping the div-containers they are wrapped in  */
+.clearer, .contentclearer, .csc-textpic-clear {
+	width: 1px;
+	height: 1px;
+	clear: both;
+	font-size:1px;
+	line-height:0px;
+}
+
+/* in diversen Extension-Templates vewendete Klassen fuer backlinks, floating images, image captions.... */
+.smalltext { font-size: 0.85em; line-height: 110%}
+.date { 	font-size: 0.85em; color: #696969;}
+.morelink, .category {font-size: 0.91em;}
+
+.header           {
+	font-weight: bold;
+	font-size: 1.2em;
+	margin: 5px 0px 5px 0px;
+}
+
+.subheader          {
+	font-weight: bold;
+	line-height: 130%;
+	margin: 0px 0px 10px 0px;
+	font-size: 1.2em;
+}
+/*  backlink immer UNTERHALB des contents, inkl. aller floats  */
+.backlink         {
+    font-weight: normal;
+    padding: 20px 0px 0px 0px;
+    clear: both;
+}
+/*</agl.folder>*/
+
+/*<agl.folder "--- SPECIALS / SPECIAL CLASSES ----------------------------------------------------------------------------------------------------------------">*/
+/* diverse Farbwerte etc. */
+.leftcontent {padding-right: 5px}
+.rightcontent {padding-left: 5px}
+
+.bgcolor { background-color: #ffffff }
+.linie {background-color: #808080; width: 100%; height: 1px }
+.tableheader  {color: #ffffff;  font-weight: bold; background-color: #f5f5f5 }
+.noborder {border: 0px;}
+
+.error	 { color: #990000;
+	font-weight: bold;
+}
+
+.loginerror	 { 
+	color: #990000;
+	line-height: 100%;
+}
+/*</agl.folder>*/
+
+
+/*<agl.folder "--- TABELLEN, LISTEN: DEFAULTS ----------------------------------------------------------------------------------------------------------------">*/
+.fulltable  {border: 0px}
+
+.fulltable th {
+	text-align: left;
+	vertical-align: top;
+	font-weight: bold;
+	background-color: #696969;
+	color : #ffffff;
+	border: 1px solid #696969;
+	padding: 1px 2px 1px 2px;
+	border-spacing: 0px;
+}
+
+/* hintergrundfarbe ueberschreiben */
+.fulltable th.color6 {background-color: #063d79;}
+
+.recordlist_fulltable         {
+	table-layout: auto;
+	border: 1px solid #696969;
+	margin: 10px 0px 10px 0px;
+}
+
+.recordlist_fulltable th {
+	text-align: left;
+	vertical-align: top;
+	font-weight: bold;
+	
+	background-color: #696969;
+	color : #ffffff;
+	border: 1px solid #696969;
+	padding: 1px 2px 1px 2px;
+	border-spacing: 0px;
+}
+
+.recordlist_fulltable td {
+	border: 1px solid #696969;
+	padding: 2px 2px 2px 2px;
+	border-spacing: 0px;
+}
+
+/* keine Border fuer zellen mit dieser klasse */
+.recordlist_fulltable td.noborder {border: 0px;}
+/*</agl.folder>*/
+
+/*<agl.folder "--- FORMULARE: DEFAULTS ----------------------------------------------------------------------------------------------------------------">*/
+.buttons input {
+	background-color: #dcdcdc;
+	border: 1px solid;
+	margin-right: 5px;
+}
+
+.form, .formfull {
+	background-color: #ffffff;
+	border: 1px solid;
+	}
+
+.form_date      {
+	background-color: #ffffff;
+	border: 1px solid;
+	width: 60px;
+	}
+
+.form_password      {
+	background-color: #ffffff;
+	border: 1px solid;
+	width: 100px;
+	}
+
+.form_xsmall_text {
+	background-color: #ffffff;
+	border: 1px solid;
+	width: 50px;
+	}
+.form_small_text {
+	background-color: #ffffff;
+	border: 1px solid;
+	width: 110px;
+	}
+.form_medium_text {
+	background-color: #ffffff;
+	border: 1px solid;
+	width: 180px;
+}
+
+.form_medium2_text {
+	background-color: #ffffff;
+	border: 1px solid;
+	width: 250px;
+}
+
+.form_large_text {
+	background-color: #ffffff;
+	border: 1px solid;
+	width: 360px;
+	}
+
+.form_xlarge_text {
+	background-color: #ffffff;
+	border: 1px solid;
+	width: 500px;
+	}
+
+.form_xxlarge_text {
+	background-color: #ffffff;
+	border: 1px solid;
+	width: 700px;
+	}
+
+.form_xsmall_select {
+	border: 1px solid;
+	width: 50px;
+	}
+.form_small_select {
+	border: 1px solid;
+	width: 110px;
+	}
+.form_medium_select {
+	border: 1px solid;
+	width: 180px;
+	}
+
+.form_medium2_select {
+	border: 1px solid;
+	width: 250px;
+}
+
+.form_large_select {
+	border: 1px solid;
+	width: 360px;
+	}
+
+.form_check {	border: 0px;}
+
+.form_radio {	border: 0px;}
+/*</agl.folder>*/
+
+/*<agl.folder "--- FORMULARE: TABELLEN ----------------------------------------------------------------------------------------------------------------">*/
+.formtable {}
+
+  .formtable th {
+    text-align: left;
+    vertical-align: top;
+    font-weight: bold;
+    color : #999900;
+    padding: 4px 3px 4px 0px;
+  }
+
+  .formtable td {padding: 0px 5px 5px 0px;}
+
+  .formtable .formfull {
+  	width: 450px;
+  	overflow: auto;
+  }
+/*</agl.folder>*/
+

@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dialog css="medi2cols, nonavigation, nofoot" 
+	    header="Medizinische OP-Patientendaten-Erfassung" send-button="true" type="med">
+	
+	<questionnaire title="Demographische Daten" columns="3">
+		<question type="num" title="Alter des Patienten">
+			<answer text="Jahre"></answer>
+		</question>
+		<question answer-type="oc" title="Geschlecht des Patienten">
+			<answer title="Männlich" />
+			<answer title="Weiblich" />
+		</question>
+		<question answer-type="num" title="OP-Datum">
+			<answer title="Monat" />
+			<answer title="Jahr" />
+		</question>
+	</questionnaire>
+	
+	<questionnaire title="Präoperative Daten (Initial OP)" columns="3">
+		<question type="num" title="Größe des Patienten">
+			<answer text="Wert in Metern"></answer>
+		</question>
+		<question type="num" title="Gewicht des Patienten">
+			<answer text="Wert in Kilogramm"></answer>
+		</question>
+		
+		<!-- TODO BMI Question berechnet sich aus den beiden vorher -->
+	
+		<question answer-type="oc" title="COPD">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="num" title="HbA1c">
+			<answer title="Wert in mmol/l" />
+		</question>
+		<question answer-type="oc" title="Konsumierende Erkrankung">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="num" title="EF">
+			<answer title="Wert in %" />
+		</question>
+		<question answer-type="num" title="Kreatinin">
+			<answer title="Wert in mg/dl" />
+		</question>
+		<question answer-type="num" title="Harnstoff">
+			<answer title="Wert in mg/dl" />
+		</question>
+		<question answer-type="oc" title="pAVK">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Immunsuppresive Therapie">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Notfall">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Osteoporose">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+	</questionnaire>
+	
+	<questionnaire title="Intraoperative Daten (Initial OP)" columns="3">
+		<question type="mc" title="OP-Art">
+			<answer text="ACVB"></answer>
+			<answer text="Klappenchirurgie"></answer>
+			<answer text="Kombination"></answer>
+			<answer text="Aortenchirurgie"></answer>
+			<answer text="Andere"></answer>
+		</question>
+		<question answer-type="oc" title="LIMA">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="RIMA">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		
+		<!-- TODO BIMA berechnet sich aus LIMA und RIMA -->
+		<question answer-type="oc" title="BIMA">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		
+		<question answer-type="oc" title="Pedikeltechnik">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="num" title="OP-Zeit (gesamt)">
+			<answer title="Wert in Minuten" />
+		</question>
+		<question answer-type="num" title="HLM-Zeit">
+			<answer title="Wert in Minuten" />
+		</question>
+		<question answer-type="num" title="X-clamp-Zeit">
+			<answer title="Wert in Minuten" />
+		</question>
+		<question answer-type="num" title="Anzahl EK's (intraoperativ)">
+			<answer title="" />
+		</question>
+		<question answer-type="num" title="Anzal FFP's (intraoperativ)">
+			<answer title="" />
+		</question>
+		<question answer-type="num" title="Anzahl TK's (intraoperativ)">
+			<answer title="" />
+		</question>
+		<question answer-type="oc" title="Knochenwachs">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Retrostemaler Gentamycinschwamm">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="mc" title="Sternumverschlusstechnik">
+			<answer title="Trans/peristernale Drahtcerclagen" />
+			<answer title="8-Touren" />
+			<answer title="Bänder" />
+			<answer title="andere" />
+		</question>
+		
+		<!-- TODO Klären: nur fragen falls oben Drahtcerclagen geantwortet?! -->
+		<!-- Folgefragen in ProET, Abstraktionsfragen -->
+		<question answer-type="num" title="Anzahl der Drahtcerglagen">
+			<answer title="" />
+		</question>
+	</questionnaire>
+	
+	<questionnaire title="Postoperative Daten (Initial-OP)" columns="3">
+		<question type="num" title="Beatmungsdauer">
+			<answer text="(in Stunden)"></answer>
+		</question>
+		<question type="num" title="ITS-Aufenthalt">
+			<answer text="(in Tagen)"></answer>
+		</question>
+		<question type="num" title="Anzahl EK's (postoperativ)">
+			<answer text=""></answer>
+		</question>
+		<question type="num" title="Anzahl FFP's (postoperativ)">
+			<answer text=""></answer>
+		</question>
+		<question type="num" title="Anzahl TK's (postoperativ)">
+			<answer text=""></answer>
+		</question>
+	</questionnaire>
+	
+</dialog>

@@ -1,0 +1,64 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-WikiBaseline" version="0.0.1">
+	
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="BaselineType">
+		<parameter id="class"
+			value="de.knowwe.baseline.BaselineType" />
+		<parameter id="name" value="BaselineType" />
+		<parameter id="description" value="Type BaselineType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="baseline.js" />
+        <parameter id="css" value="baseline.css" />		
+	</extension>
+		
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="CreateBaselineAction">
+		<parameter id="class"
+			value="de.knowwe.baseline.CreateBaselineAction" />
+		<parameter id="name" value="CreateBaselineAction" />
+		<parameter id="description" value="Action CreateBaselineAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="CompareBaselinesAction">
+		<parameter id="class"
+			value="de.knowwe.baseline.CompareBaselinesAction" />
+		<parameter id="name" value="CompareBaselinesAction" />
+		<parameter id="description" value="Action CompareBaselinesAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="BaselineToolProvider">
+		<parameter id="class"
+			value="de.knowwe.baseline.BaselineToolProvider" />
+		<parameter id="name" value="BaselineToolProvider" />
+		<parameter id="description" value="Baseline tools" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="Baseline" />
+	</extension>
+	
+	
+</plugin>

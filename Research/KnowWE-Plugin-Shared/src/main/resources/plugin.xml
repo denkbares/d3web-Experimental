@@ -1,0 +1,207 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-Shared" version="0.0.1">
+	
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+	<!-- commented out
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Instantiation"
+		id="MultiSearchEngine">
+		<parameter id="class"
+			value="de.d3web.we.search.MultiSearchEngine" />
+		<parameter id="name" value="MultiSearchEngine" />
+		<parameter id="description" value="Instantiation MultiSearchEngine" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4.9" />
+	</extension>
+	-->
+
+
+	
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="CSS">
+		<parameter id="class"
+			value="de.d3web.we.kdom.css.CSS" />
+		<parameter id="name" value="CSS" />
+		<parameter id="description" value="Type CSS" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="Template">
+		<parameter id="class"
+			value="de.d3web.we.kdom.wikiTemplate.Template" />
+		<parameter id="name" value="Template" />
+		<parameter id="description" value="Type Template" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="3" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+			
+	<!-- was moved out
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="KnowWETypeActivationHandler">
+		<parameter id="class"
+			value="de.d3web.we.action.KnowWETypeActivationHandler" />
+		<parameter id="name" value="KnowWETypeActivationHandler" />
+		<parameter id="description" value="Action KnowWETypeActivationHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="TagHandlingAction">
+		<parameter id="class"
+			value="de.d3web.we.action.TagHandlingAction" />
+		<parameter id="name" value="TagHandlingAction" />
+		<parameter id="description" value="Action TagHandlingAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	-->
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="AppendToPageContentAction">
+		<parameter id="class"
+			value="de.d3web.we.action.AppendToPageContentAction" />
+		<parameter id="name" value="AppendToPageContentAction" />
+		<parameter id="description" value="Action AppendToPageContentAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+		
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="ParseWebOfflineRenderer">
+		<parameter id="class"
+			value="de.d3web.we.action.ParseWebOfflineRenderer" />
+		<parameter id="name" value="ParseWebOfflineRenderer" />
+		<parameter id="description" value="Action ParseWebOfflineRenderer" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="TemplateGenerationAction">
+		<parameter id="class"
+			value="de.d3web.we.action.TemplateGenerationAction" />
+		<parameter id="name" value="TemplateGenerationAction" />
+		<parameter id="description" value="Action TemplateGenerationAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+		
+		
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="ParseFullLocalPageButton">
+		<parameter id="class"
+			value="de.d3web.we.taghandler.ParseFullLocalPageButton" />
+		<parameter id="name" value="ParseFullLocalPageButton" />
+		<parameter id="description" value="TagHandler ParseFullLocalPageButton" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="ValidatorHandler">
+		<parameter id="class"
+			value="de.d3web.we.taghandler.ValidatorHandler" />
+		<parameter id="name" value="ValidatorHandler" />
+		<parameter id="description" value="TagHandler ValidatorHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="TemplateTagHandler">
+		<parameter id="class"
+			value="de.d3web.we.taghandler.TemplateTagHandler" />
+		<parameter id="name" value="TemplateTagHandler" />
+		<parameter id="description" value="TagHandler TemplateTagHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="script" value="KnowWE-Plugin-Shared.js" />
+	</extension>
+	
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="ImportKnOfficeHandler">
+		<parameter id="class"
+			value="de.d3web.we.taghandler.ImportKnOfficeHandler" />
+		<parameter id="name" value="ImportKnOfficeHandler" />
+		<parameter id="description" value="TagHandler ImportKnOfficeHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="ReportOveview">
+		<parameter id="class"
+			value="de.d3web.we.taghandler.ReportOverview" />
+		<parameter id="name" value="ReportOveview" />
+		<parameter id="description" value="TagHandler ReportOveview" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="RenderRestrictionStart">
+		<parameter id="class"
+			value="de.d3web.we.kdom.renderRestriction.RenderRestrictionStart" />
+		<parameter id="name" value="RenderRestrictionStart" />
+		<parameter id="description" value="Type RenderRestrictionStart" />
+		<parameter id="scope" value="root" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="RenderRestrictionEnd">
+		<parameter id="class"
+			value="de.d3web.we.kdom.renderRestriction.RenderRestrictionEnd" />
+		<parameter id="name" value="RenderRestrictionEnd" />
+		<parameter id="description" value="Type RenderRestrictionEnd" />
+		<parameter id="scope" value="root" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="ParseAllButton">
+		<parameter id="class"
+			value="de.d3web.we.taghandler.ParseAllButton" />
+		<parameter id="name" value="ParseAllButton" />
+		<parameter id="description" value="TagHandler ParseAllButton" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="SearchProvider" id="JSPWikiSearchProvider">
+		<parameter id="class" value="de.knowwe.core.jsp.JSPWikiSearchConnector" />
+		<parameter id="name" value="JSPWikiSearchProvider" />
+		<parameter id="description" value="KnowWESearchProvider JSPWikiSearchConnector" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5.0" />
+	</extension>
+
+
+</plugin>

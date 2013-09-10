@@ -1,0 +1,86 @@
+def Wolpertinger
+
+Class Fabelwesen
+
+!!! Chapter 1
+
+
+Der Wolpertinger ist ein bayerisches Fabelwesen, dessen genauer Ursprung unklar ist. Bekannt ist nur, dass Tierpräparatoren im 19. Jahrhundert begannen, Präparate aus Körperteilen von unterschiedlichen Tierarten zusammenzusetzen, um diese an leichtgläubige Touristen zu verkaufen.
+
+Im Grunde handelt es sich beim Wolpertinger um ein gewöhnliches Mischwesen, wie sie bereits aus der Antike bekannt sind. Allerdings gab es kein festes Schema, d. h. es wurden zum Beispiel Eichhörnchen mit Entenschnäbeln versehen oder Hasen mit Entenflügeln.
+
+
+> this describes:: Wolpertinger
+
+!! Section 11
+
+Die Etymologie vom Wolpertinger...
+
+
+! Paragraph 111
+
+Die Brüder Grimm berichten in ihrer Deutschen Sagensammlung von einem Wesen, das 1753 Kreißl genannt wurde, und auch der Sprachforscher Johann Andreas Schmeller nannte die Nähe zum heutigen kreischen.
+
+! Paragraph 112
+
+Die Herkunft der Bezeichnung Wolpertinger ist ungeklärt. Das Deutsche Jagd- und Fischereimuseum in München führt die Bezeichnung auf Glasmacher aus der Ortschaft Wolterdingen bei Donaueschingen zurück. Diese fertigten Schnapsgläser in Form von Tiergestalten, die allgemein Wolterdinger genannt wurden. Durch sprachliche Abschleifung soll daraus der Wolpertinger entstanden sein.
+
+! Paragraph 113
+
+Der heutige Name kann leicht variieren, je nach Gegend heißt er auch Wolperdinger, Woipertinger, Woiperdinger, Volpertinger, Walpertinger oder Wulpertinger. In Teilen Niederbayerns wird das Fabelwesen als Oibadrischl bezeichnet, in der Oberpfalz als Rammeschucksn, in Niederösterreich und Teilen Salzburgs ist der Begriff Raurackl in verschiedenen Schreibweisen geläufig; der Schriftsteller Ludwig Ganghofer bezeichnete das Wesen als Hirschbockbirkfuchsauergams.
+
+
+
+!! Section 12
+
+! Paragraph 121
+
+Die z. B. im Wolpertinger-Museum in Mittenwald und im Deutschen Jagd- und Fischereimuseum ausgestellten Exemplare der präparierten Bälger zeigen den Wolpertinger zumeist mit einem gehörnten Hasenkopf. Dem Körper sind in der Regel die Extremitäten verschiedener Tierarten angefügt. So besitzt der Wolpertinger oft Flügel statt Vorderläufe und die Hinterbeine sind mit den Füßen von Wasservögeln ausgebildet. Die Zusammenstellung ist der Fantasie des Tierpräparators überlassen.
+
+[{Image src='Wolpertinger.jpg' width='..' height='..' align='left|center|right' style='..' class='..' }]
+
+
+
+! Paragraph 122
+
+Der deutsche Schriftsteller Walter Moers gab in seinem Werk "Rumo & Die Wunder im Dunkeln" dem Wolpertinger ein neues Aussehen. Dabei handelt es sich aber um einen zamonischen Wolpertinger. So sind in seinem Werk die Wolpertinger eine Mischung aus Wolf und Reh. Somit besitzen sie die Angriffslust und Stärke eines Wolfes, aber sind grazil und beweglich wie ein Reh.
+
+
+!!! Chapter 2
+
+Weitere Fabelwesen
+
+> this describes:: Fabelwesen
+
+!! Section 21
+
+!! Section 22
+
+!!! Chapter 3
+
+
+!! Section 31
+
+! Paragraph 311
+
+
+
+
+
+
+%%sparql
+SELECT ?x WHERE { ?x ns:describes lns:Wolpertinger}
+%
+
+
+%%sparql
+SELECT ?x WHERE { ?x ns:describesAspectOf lns:Wolpertinger}
+%
+
+%%sparql
+SELECT ?x ?z WHERE { ?x ns:illustrates ?z}
+%
+
+%%sparql
+SELECT ?x ?z WHERE { ?x ns:hasContentKDOMID ?z}
+%

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogOpts 
+    header="Demo - iTree"  
+    login = ""
+    required = ""
+    language = ""
+    debug = "false" >
+    <globalUIOpts 
+        dialogtype="ITree"
+        dialogstrategy = "nextquestion"
+        css="itree, nofoot" 
+	dialogcolumns="1"
+	questionnairecolumns="3"
+	questioncolumns="1"
+    />
+    <localUIOpts />
+    <dataOpts kb="0DemoITree.d3web" />
+    <ueOpts logging = "FALSE" />
+</dialogOpts>

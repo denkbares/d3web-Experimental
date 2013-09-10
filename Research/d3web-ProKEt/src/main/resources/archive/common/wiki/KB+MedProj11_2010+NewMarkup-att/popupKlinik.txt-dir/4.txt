@@ -1,0 +1,33 @@
+Zur eindeutigen Unterscheidung der Kliniken in München, Berlin und Hamburg verwenden Sie bitte nachfolgende Kürzel:
+<table width="200px">
+<tbody>
+	<tr>
+		<td width="25%">München</td>
+		<td>
+			<ul>
+				<li>M_BHZ (München BHZ)</li>
+				<li>M_BOG (München Bogenhausen)</li>
+				<li>M_GRH (München Großhadern)</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td width="25%">Berlin</td>
+		<td>
+			<ul>
+				<li>B_BHZ (Berlin BHZ)</li>
+				<li>B_CHA (Berlin Charité)</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td width="25%">Hamburg</td>
+		<td>
+			<ul>
+				<li>HH_EPD (Hamburg Eppendorf)</li>
+				<li>HH_STG (Hamburg St. Georg)</li>
+			</ul>
+		</td>
+	</tr>
+</tbody>
+</table>

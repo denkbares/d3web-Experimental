@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogOpts 
+    header="Baumdiagnose - SingleForm"  
+    login = ""
+    required = ""
+    language = ""
+    debug = "false" >
+    <globalUIOpts 
+        dialogtype="SingleForm"
+        dialogstrategy = ""
+        showcontraindicated = "HIDE"
+        shownonindicated = "HIDE"
+        css="singleForm, diagnosisVisu, solutionPanel" 	
+        dialogcolumns="2"
+        questionnairecolumns="1"
+        questioncolumns="1"
+        solRatingGranularity = "ABSTRACT;;;PRECISE"
+        solutionDynamics = "INTERACTIVE"
+        solutionRange = "SINGLE"
+        solutionStructuring = "LISTING"
+        solutionExplanation = "TEXTUAL" 
+        solutionSorting = "CATEGALPHA"
+        solutionDepth = "ALL"
+        unknownvisible = "TRUE"
+        questionNumbering = "FALSE"
+        questionnaireNumbering = "TRUE"
+    />
+    
+    <dataOpts kb="0DemoBaum.d3web" />
+    <ueOpts logging = "FALSE" />
+</dialogOpts>

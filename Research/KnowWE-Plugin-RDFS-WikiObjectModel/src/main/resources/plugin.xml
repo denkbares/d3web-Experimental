@@ -1,0 +1,93 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-RDFS-WikiObjectModel" version="0.0.1">
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+		<import plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+		
+	<extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore"
+			point-id="SparqlResultNodeRenderer"
+			id="LinkNodeRenderer">
+		<parameter id="class"
+			value="de.knowwe.rdfs.wikiObjectModel.utils.LinkNodeRenderer" />
+		<parameter id="name" value="LinkNodeRenderer" />
+		<parameter id="description" value="NodeRenderer LinkNodeRenderer" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="10" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Instantiation"
+		id="WikiObjectModel">
+		<parameter id="class"
+			value="de.knowwe.rdfs.wikiObjectModel.WikiObjectModel" />
+		<parameter id="name" value="WikiObjectModel" />
+		<parameter id="description" value="Instantiation to add the WikiObjectModel to the RDF2GoCore" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="CompiledWikiSection">
+		<parameter id="class" value="de.knowwe.rdfs.wikiObjectModel.types.CompiledWikiSection" />
+		<parameter id="name" value="SectionType" />
+		<parameter id="description" value="Represents a SectionType in KDOM" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="1" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="SectionHeaderObjectDefinition">
+		<parameter id="class" value="de.knowwe.rdfs.wikiObjectModel.types.SectionHeaderObjectDefinition" />
+		<parameter id="name" value="SectionHeaderObjectDefinition" />
+		<parameter id="description" value="Defines a section header as RDFS-object" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="1" />
+		<parameter id="scope" value="SectionHeaderType" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="LocalConceptReference">
+		<parameter id="class" value="de.knowwe.rdfs.wikiObjectModel.types.LocalConceptReference" />
+		<parameter id="name" value="LocalConceptReference" />
+		<parameter id="description" value="this as reference to local section" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="1" />
+		<parameter id="scope" value="SimpleTurtleSubjectSection" />
+		<parameter id="scope" value="SimpleTurtleObjectSection" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="CompiledImageTag">
+		<parameter id="class" value="de.knowwe.rdfs.wikiObjectModel.types.CompiledImageTag" />
+		<parameter id="name" value="CompiledImageTag" />
+		<parameter id="description" value="Compiles the images in the wiki sources to rdf" />
+		<parameter id="version" value="0.2" />
+		<parameter id="priority" value="1.0" />
+		<parameter id="scope" value="ImageType" />
+	</extension>
+	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Terminology"
+		id="WikiObjectModelTerminology">
+		<parameter id="class"
+			value="de.knowwe.rdfs.wikiObjectModel.WikiObjectModelTerminologyExtension" />
+		<parameter id="name" value="WikiObjectModelTerminologyExtension" />
+		<parameter id="description"
+			value="Introduce WikiObjectModel-Terminology to TerminologyManager." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+
+	</extension>
+
+</plugin>

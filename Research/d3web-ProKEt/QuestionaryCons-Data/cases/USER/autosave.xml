@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><repository>
+<session changed="2013-01-25 11:29:40.493" created="2013-01-25 11:29:40.492" id="0b191ecc-a3a2-489d-bed5-ea24720b0ad1">
+<name/>
+<facts>
+<valueFacts>
+<fact objectName="now" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2013-01-25 11:29:46.768</dateValue>
+</fact>
+<fact objectName="start" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2013-01-25 11:29:40.492</dateValue>
+</fact>
+<fact objectName="EF2" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>No</choiceValue>
+</fact>
+<fact objectName="EF1" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>No</choiceValue>
+</fact>
+</valueFacts>
+<interviewFacts>
+<fact objectName="Startfragebogen2" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="FF1" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<indication>INSTANT_INDICATED</indication>
+</fact>
+<fact objectName="Startfragebogen1" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="FF2" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<indication>INSTANT_INDICATED</indication>
+</fact>
+</interviewFacts>
+</facts>
+<protocol>
+<entry date="2013-01-25 11:29:40.508" objectName="EF1" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Yes</choiceValue>
+</entry>
+<entry date="2013-01-25 11:29:41.785" objectName="EF2" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Yes</choiceValue>
+</entry>
+<entry date="2013-01-25 11:29:45.329" objectName="EF1" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>No</choiceValue>
+</entry>
+<entry date="2013-01-25 11:29:46.768" objectName="EF2" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>No</choiceValue>
+</entry>
+</protocol>
+</session>
+</repository>

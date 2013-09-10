@@ -1,0 +1,271 @@
+!! Demo Fall in KnowWE
+
+<<Metadaten:
+FALL_ID:INFO_INFO6_AH_DEMO23072008
+FALL_TITEL:Demofall (Spielzeugklinik)
+FALL_AUTOR:Alexander Hörnlein
+FALL_VERSION:1
+FALL_DATUM:23.07.2008
+BESTEHEN_AB:0.75
+FALL_PUNKTZAHL:1
+HISTORIE: nix
+FALL_TODO: vervollständigen
+FALL_TODO: Mach was
+SCHWIERIGKEIT : Sehr sehr schwer
+VORAUSSETZUNGEN : NullkommaNichts
+HINWEIS : Bitte nicht bearbeiten
+FALL_KOMMENTAR : Dies ist ein Testfall
+SCHLAGWORTE : Case Train Fall
+FALL_TODO : Test TODO
+HISTORIE : 1.0
+ZEIT_ANZEIGEN : ja
+ZEIT_GEWICHT : 20
+ZEIT_GRENZE100 : 600
+ZEIT_GRENZE0 : 300
+FEEDBACK : Eine Erkärung
+HINTERGRUNDWISSEN : http://casetrain.uni-wuerzburg.de/index.shtml
+HW_LINKTEXT : Das ist der LinkText
+SPRACHE : en
+>>
+
+<<Einleitung: Titel der Einleitung
+Text der Einleitung
+{Bild: ls6logo.gif}
+{Video: video42.avi}
+{Audio: helloworld.mp3}
+{Link: www.org.com}{DieUrl}
+>>
+
+<<Info: Differentialdiagnose
+Der Teddy ist in anscheinend schlechtem Allgemeinzustand.
+
+{Bild: knowwe_logo.gif}
+{Video: video23.avi}
+{Audio: helloworld.mp3}
+{Link: www.org.com}{DieUrl}
+
+<Frage: 1-MC
+Welche Probleme mit diesem Spielzeug kommen nun in Frage?
+>
+<Hinweis: Geben Sie mindestens 2 Probleme an.
+{Bild: ls6logo.gif}
+Testtext.
+>
+	<Antworten:
+		{+}Fremdkörper{AntwortExplanation}
+		{+}Ausflockung{AntwortExplanation}
+		{-}Offene Nähte{AntwortExplanation}
+		{-}Lockere Extremitäten{AntwortExplanation}
+		{-}Lockere Kleinteile{AntwortExplanation}
+	>
+
+<Erklärung: Geben Sie mindestens 2 Probleme an.
+{Bild: ls6logo.gif}
+{Video: video23.avi}
+{Audio: helloworld.mp3}
+{Link: www.org.com}{DieUrl}
+Testtext.
+>
+
+<Frage: 1-OC
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{+}Wegwerfen{AntwortExplanation}
+{+} Neuen Teddy kaufen{AntwortExplanation}
+{0.2} Mit Klebeband fixen{AntwortExplanation}
+>
+<Hinweis: Gehen Sie vorsichtig vor2!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-W
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{+}{r}Wegwerfen{AntwortExplanation}
+>
+<Hinweis: Gehen Sie vorsichtig vor3!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-W
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{+}{2}Wegwerfen{AntwortExplanation}
+>
+<Hinweis: Gehen Sie vorsichtig vor4!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-MN Wie hoch ist die Mortalität bei vegetativer Dystonie?
+>
+<Antworten:
+{1}
+{0.3}20 30{AntwortExplanation}
+{0.6}24 26{AntwortExplanation}
+{1}25{AntwortExplanation}
+
+Präfix: männlich
+
+Postfix: %
+>
+	
+	<Antworten:
+		{2}
+		{0.3}20 40{AntwortExplanation}
+		{0.6}27 33{AntwortExplanation}
+		{1}30{AntwortExplanation}
+
+		Präfix: weiblich
+
+		Postfix: %
+
+		Überschrift: Überschrift
+	>
+<Antworten:
+{3}
+{.3}20 35{AntwortExplanation}
+{.6}26 29{AntwortExplanation}
+{1}27.5{AntwortExplanation}
+
+Präfix: Gesamt
+
+Postfix: %
+>
+<Hinweis: Gehen Sie vorsichtig vor5!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-UMW
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{+}{2}Wegwerfen{AntwortExplanation}
+>
+<Hinweis: Gehen Sie vorsichtig vor6!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Antworten:
+{+}{r}Wegwerfen*{AntwortExplanation}
+>
+<Hinweis: Gehen Sie vorsichtig vor7!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-OMW
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{1}
+{+}{2}Wegwerfen{AntwortExplanation}
+>
+<Hinweis: Gehen Sie vorsichtig vor8!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Antworten:
+{2}
+{+}{r}Wegwerfen*{AntwortExplanation}
+>
+<Hinweis: Gehen Sie vorsichtig vor9!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-N
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{0.3}20 30{AntwortExplanation}
+{0.6}24 26{AntwortExplanation}
+{1}25{AntwortExplanation}
+
+Präfix:männlich
+
+Postfix:%
+>
+<Hinweis: Gehen Sie vorsichtig vor10!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-T
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{+} Eine Textfrage gibt im Normalfall keine Punkte!{AntwortExplanation}
+>
+<Hinweis: Gehen Sie vorsichtig vor11!
+>
+<Erklärung:
+Die erklärung...
+>
+
+>>
+
+<<Evaluation: Evaluation
+Um diesen Fall weiter verbessern zu können, beantworten Sie uns bitte noch zwei kurze Fragen.
+
+{Audio: helloworld.mp3}
+{Link: www.org.com}{DieUrl}
+{Bild: ls6logo.gif}
+{Video: video42.avi}
+
+<Frage: 0-OC Welche Schulnote geben Sie dem Fall?
+>
+<Antworten:
+{-}1
+{-}2
+{-}3
+{-}4
+>
+
+<Frage:	0-MC Welchen Aussagen können Sie zustimmen?
+>
+<Antworten:
+{-}Die Bearbeitung dieses Falles hat mich auf die Klausur vorbereitet.
+{-}Der Online-Fall ist eine gute Ergänzung zur Präsenzveranstaltung.
+{-}Die Mediadaten zum Fall sind von ausreichender Qualität
+{-}Das verlinkte Hintergrundwissen hat mir dabei geholfen, den Fall zu bearbeiten.
+>
+
+<EvaluationEnd: Ende der Evaluation
+Das wars!
+>
+>>
+
+<<Abschluss: Abschlusskommentar
+Ende des Falles!
+{Bild: ls6logo.gif}
+{Video: video42.avi}
+{Audio: helloworld.mp3}
+{Link: www.org.com}{DieUrl}
+>>
+
+

@@ -1,0 +1,48 @@
+li.runTestExecutor {
+	list-style-image: url(../images/testcaseexecutor/run.gif);
+	cursor: pointer;
+}
+
+div.selectXMLFile {
+	cursor: pointer;
+}
+
+
+div.runCasesButton {
+	background-image: url(../images/testcaseexecutor/run.gif);
+	height: 16px;
+	width: 16px;
+	cursor: pointer;
+	float: left;
+	margin-top: 2px;
+	margin-left: 3px;
+}
+
+span.highlightOnHover:hover {
+	background-color: #90EE90 ;
+}
+
+div#backToCaseSelection {
+	cursor: pointer;
+}
+
+div#buttons{
+	margin-top: 10px;
+	margin-left: 5px;
+}
+
+.noPadding{
+	padding: 0px;
+}
+
+tr.borderBottom {
+	border-bottom: 1px solid black;	
+}
+
+tr.borderTop {
+	border-top: 1px solid black;	
+}
+
+td.borderRight {
+	border-right: 1px solid black;	
+}

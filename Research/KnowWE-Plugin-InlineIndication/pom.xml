@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>Research</artifactId>
+    <groupId>de.uniwue.d3web</groupId>
+    <version>0.2-SNAPSHOT</version>
+  </parent>
+  <groupId>de.uniwue.d3web</groupId>
+  <artifactId>KnowWE-Plugin-InlineIndication</artifactId>
+  <name>KnowWE-Plugin-InlineIndication</name>
+  <version>0.2-SNAPSHOT</version>
+  <description>This is a small plugin containing the type InlineIndicationCondition, which is pluged to QuestionLine and QClass line in case the plugin is loaded.
+InlineIndicationCondition allows to prevent a Question or Questionnaire from being indicated, except another question is answered in the right way.</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>KnowWE-Plugin-d3web-MarkupSet</artifactId>
+  		<version>0.2-SNAPSHOT</version>
+  		<scope>compile</scope>
+  	</dependency>
+  </dependencies>
+</project>

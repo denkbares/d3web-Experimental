@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dialog css="rheuma, nonavigation, nofoot" 
+	header="Herz-Medizinische OP-Patientendaten-Erfassung" send-button="true" type="med">
+	
+	<questionnaire title="Demographische Daten">
+		<question type="num" title="Alter des Patienten">
+			<answer text="Jahre"></answer>
+		</question>
+		<question answer-type="oc" title="Geschlecht des Patienten">
+			<answer title="Männlich" />
+			<answer title="Weiblich" />
+		</question>
+		<question answer-type="date" title="OP-Datum">
+			<answer title="Bitte auswählen" />
+		</question>
+	</questionnaire>
+	
+	<questionnaire title="Präoperative Daten (Initial OP)" >
+		<question type="num" title="Größe des Patienten">
+			<answer text="m"></answer>
+		</question>
+		<question type="num" title="Gewicht des Patienten">
+			<answer text="kg"></answer>
+		</question>
+		<question answer-type="oc" title="COPD">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="num" title="HbA1c">
+			<answer title="mmol/l" />
+		</question>
+		<question answer-type="oc" title="Konsumierende Erkrankung">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="num" title="EF">
+			<answer title="%" />
+		</question>
+		<question answer-type="num" title="Kreatinin">
+			<answer title="mg/dl" />
+		</question>
+		<question answer-type="num" title="Harnstoff">
+			<answer title="mg/dl" />
+		</question>
+		<question answer-type="oc" title="pAVK">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Immunsuppresive Therapie">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Notfall">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Osteoporose">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+	</questionnaire>
+	
+	<questionnaire title="Intraoperative Daten (Initial OP)" >
+		<question type="oc" title="OP-Art">
+			<answer text="ACVB"></answer>
+			<answer text="Klappenchirurgie"></answer>
+			<answer text="Kombination"></answer>
+			<answer text="Aortenchirurgie"></answer>
+			<answer text="Andere"></answer>
+		</question>
+		<question answer-type="oc" title="LIMA">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="RIMA">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="BIMA">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Pedikeltechnik">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="num" title="OP-Zeit (gesamt)">
+			<answer title="min" />
+		</question>
+		<question answer-type="num" title="HLM-Zeit">
+			<answer title="min" />
+		</question>
+		<question answer-type="num" title="X-clamp-Zeit">
+			<answer title="minuten" />
+		</question>
+		<question answer-type="num" title="Anzahl EK's (intraoperativ)">
+			<answer title="" />
+		</question>
+		<question answer-type="num" title="Anzal FFP's (intraoperativ)">
+			<answer title="" />
+		</question>
+		<question answer-type="num" title="Anzahl TK's (intraoperativ)">
+			<answer title="" />
+		</question>
+		<question answer-type="oc" title="Knochenwachs">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Retrostemaler Gentamycinschwamm">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Sternumverschlusstechnik">
+			<answer title="Trans/peristernale Drahtcerclagen" />
+			<answer title="8-Touren" />
+			<answer title="Bänder" />
+			<answer title="Andere" />
+		</question>
+		<!-- TODO Klären: nur fragen falls oben Drahtcerclagen geantwortet?! -->
+		<question answer-type="num" title="Anzahl der Drahtcerglagen">
+			<answer title="" />
+		</question>
+	</questionnaire>
+	
+	<questionnaire title="Postoperative Daten (Initial-OP)" >
+		<question type="num" title="Beatmungsdauer">
+			<answer text="h"></answer>
+		</question>
+		<question type="num" title="ITS-Aufenthalt">
+			<answer text="Tage"></answer>
+		</question>
+		<question type="num" title="Anzahl EK's (postop.)">
+			<answer text=""></answer>
+		</question>
+		<question type="num" title="Anzahl FFP's (postop.)">
+			<answer text=""></answer>
+		</question>
+		<question type="num" title="Anzahl TK's (postop.)">
+			<answer text=""></answer>
+		</question>
+		<question answer-type="oc" title="Revision">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question type="num" title="Blutungsmenge (bis Drainagen ex)">
+			<answer text="ml"></answer>
+		</question>
+		<question answer-type="oc" title="Durchgangssyndrom">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Thorax-Stützweste">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Glucoseprotokoll">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+			<question type="num" title="Zeitspanne Initial-OP zur Revision (wg. V.a.Infekt)">
+			<answer text="Tage"></answer>
+		</question>
+			<question answer-type="oc" title="Fieber">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Sekret">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Überwärmung">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question answer-type="oc" title="Rötung">
+			<answer title="Ja" />
+			<answer title="Nein" />
+		</question>
+		<question type="num" title="Leukozyten">
+			<answer text="μl"></answer>
+		</question>
+		<question type="num" title="CRP">
+			<answer text="mg/dl"></answer>
+		</question>
+		<question type="num" title="PCT">
+			<answer text="ng/ml"></answer>
+		</question>
+		<question type="oc" title="Periop. Antibiose">
+			<answer text="Cefalosporin"></answer>
+			<answer text="Andere"></answer>
+		</question>
+		<question type="num" title="Blutungsmenge (bis Drainagen ex)">
+			<answer text="ml"></answer>
+		</question>
+	</questionnaire>
+	
+	<questionnaire title="Intraop. Daten bei Revision" >
+		<question type="oc" title="Sternumsituation">
+			<answer text="stabil"></answer>
+			<answer text="instabil"></answer>
+			<answer text="querfrakturiert"></answer>
+			<answer text="mehrfachfrakturiert"></answer>
+		</question>
+		<question title="Bildfrage Thorax" text="Bitte markieren Sie die relevanten Teile:" 
+			type="image" answer-type="mc" image="">
+			<answer title="a1" shape="rect" coords="70,2,129,70" />
+			<answer title="a2" shape="rect" coords="42,76,85,105" />
+		</question>
+		<question type="oc" title="Jet-Lavage">
+			<answer text="Ja"></answer>
+			<answer text="Nein"></answer>
+		</question>
+		<question type="oc" title="Keimnachweis">
+			<answer text="Staphylokokkus aureus"></answer>
+			<answer text="MRSA"></answer>
+			<answer text="Koagulaseneg. Staphylokokken"></answer>
+			<answer text="Enterokokken"></answer>
+			<answer text="Streptokokken"></answer>
+			<answer text="Escherichia coli"></answer>
+			<answer text="Enterobacteriaceae"></answer>
+			<answer text="Pseudomonas"></answer>
+			<answer text="Pilze"></answer>
+			<answer text="Viren"></answer>
+			<answer text="Andere"></answer>
+		</question>
+		<question type="oc" title="Behandlung">
+			<answer text="VAC"></answer>
+			<answer text="Reverdrahtung"></answer>
+			<answer text="Andere"></answer>
+		</question>
+		<question type="num" title="Postop. Beatmungsdauer (gesamt)">
+			<answer text="Tage"></answer>
+		</question>
+		<question type="num" title="Postop. ITS-Aufenthalt (gesamt)">
+			<answer text="Tage"></answer>
+		</question>
+		<question type="num" title="Postop. KH-Aufenthalt (gesamt)">
+			<answer text="Tage"></answer>
+		</question>
+		<question type="num" title="Nachblutungsmenge (gesamt)">
+			<answer text="ml"></answer>
+		</question>
+		<question type="oc" title="Follow-up 30 Tage nach 1. Revision">
+			<answer text="Verstorben"></answer>
+			<answer text="Entlassen mit reizlosen Wundverhältnissen"></answer>
+			<answer text="Wundinfekt weiterhin in Behandlung"></answer>
+		</question>
+		<question type="text" title="Besonderheiten">
+			<answer text=""></answer>
+		</question>
+	</questionnaire>
+	
+	<questionnaire title="Bei VAC Therapie:" >
+		<question type="num" title="Anzahl der VAC Wechsel bis zum sek. Thoraxverschluss">
+			<answer text="Jahre"></answer>
+		</question>
+		<question answer-type="oc" title="Wechselintervalle">
+			<answer title="2-täglich" />
+			<answer title="3-täglich" />
+			<answer title="> 3-täglich" />
+		</question>
+		<question answer-type="oc" title="Kriterium zum sek. Thoraxverschluss">
+			<answer title="steril" />
+			<answer title="suffizient" />
+			<answer title="Andere" />
+		</question>
+	</questionnaire>
+	
+	<questionnaire title="Bei Reverdrahtung" >
+		<question answer-type="oc" title="Spülung">
+			<answer title="Klar" />
+			<answer title="Braunol" />
+			<answer title="Octenisept" />
+			<answer title="Andere" />
+		</question>
+		<question answer-type="oc" title="Art der Spülung">
+			<answer title="Kontinuierlich" />
+			<answer title="Diskontinuierlich" />
+		</question>
+		<question type="num" title="Spülmenge in 24h">
+			<answer text="ml"></answer>
+		</question>
+		<question type="num" title="Dauer der Spülung">
+			<answer text="Tage"></answer>
+		</question>
+	</questionnaire>
+</dialog>

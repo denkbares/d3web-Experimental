@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository>
+<session changed="2011-03-09 14:43:48.342" created="2011-03-09 14:43:48.341" id="37b05510-53a6-4ba1-ba99-7a12b237539c">
+<name/>
+<facts>
+<valueFacts>
+<fact objectName="QuestionNum" psm="class de.d3web.indication.inference.PSMethodUserSelected">
+<numValue>-29.2</numValue>
+</fact>
+<fact objectName="Question" psm="class de.d3web.indication.inference.PSMethodUserSelected">
+<unknown/>
+</fact>
+<fact objectName="Solution2" psm="class de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="999.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+<fact objectName="Solution" psm="class de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="999.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+</valueFacts>
+<interviewFacts>
+<fact objectName="Question2" psm="class de.d3web.indication.inference.PSMethodUserSelected">
+<indication>INDICATED</indication>
+</fact>
+</interviewFacts>
+</facts>
+<protocol>
+<entry date="2011-03-09 14:43:48.342" objectName="Question" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<unknown/>
+</entry>
+<entry date="2011-03-09 14:43:48.342" objectName="QuestionNum" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<numValue>-29.2</numValue>
+</entry>
+</protocol>
+</session>
+</repository>
+<!--original-->

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="Mini Test KB"  
+	dtype="singleform" 
+	dstrategy="nextuaquestion" 
+	css="medi2cols, nonavigation" 
+	dialogcolumns="1"
+	questionnairecolumns="1"
+	userprefix = "" >
+	<data kb="Mini.d3web" />
+</dialog>

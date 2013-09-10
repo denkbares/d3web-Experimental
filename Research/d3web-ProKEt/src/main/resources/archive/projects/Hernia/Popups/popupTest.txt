@@ -1,0 +1,9 @@
+<table id="popupTable">
+<tbody>
+	<tr>
+	<td> 
+		<img src="kbimg/Fig7_Areas.JPG" alt="Fig7_Areas">
+	</td>
+	</tr>
+</tbody>
+</table>

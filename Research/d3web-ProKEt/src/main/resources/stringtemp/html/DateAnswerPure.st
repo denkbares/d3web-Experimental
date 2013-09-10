@@ -1,0 +1,14 @@
+<div id="$fullId$" class="answer $fullId$ $if(realAnswerType)$answer-$realAnswerType$$endif$">
+	
+	$title$
+	
+	$if(readonly)$
+		<input id="f_$fullId$" type="readonly" $if(selection)$value="$selection$"$endif$ title="$title$" $if(width)$size="$width$"$endif$ />
+	$else$
+		$dropdown_menu$
+	$endif$
+	
+	
+	$Tooltip()$
+	$text$
+</div>

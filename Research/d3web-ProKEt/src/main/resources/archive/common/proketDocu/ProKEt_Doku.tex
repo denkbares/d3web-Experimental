@@ -1,0 +1,510 @@
+\documentclass[a4paper,10pt]{scrreprt}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+
+% Title Page
+\title{ProKEt - Documentation\\
+	\Large{25/01/2011}
+	}
+\author{Martina Freiberg}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\chapter{General}
+
+\section{Ingredients of ProKEt dialogs}
+To provide an overview, the 'ingredients' of ProKEt dialogs are listed in the following. 
+Those are all file types and mechanisms needed to assemble a final dialog.
+\begin{itemize}
+	\item A \textbf{specification} of the dialog
+	\begin{itemize}
+		\item The complete XML dialog specification (pure prototyping)
+		\item A d3web knowledge base and a minimal XML dialog specification (d3web/extensible prototyping)
+	\end{itemize}
+	\item A \textbf{dialog Servlet}
+	\begin{itemize}
+		\item \texttt{de.d3web.proket.run.DialogServlet} (pure prototyping)
+		\item \texttt{de.d3web.proket.d3web.run.D3webDialogServlet} (d3web/extensible prototyping)
+	\end{itemize}
+	\texttt{DialogServlet} and \texttt{D3webDialogServlet} are the basic development servlets for running pure or extensible prototypes, respectively.
+	For creating own / tailored servlets (that may, e.g., be project-specific, or for calling other rendering mechanisms or the like), see Section \ref{howtoservlets}.\\
+	Those servlets can either be called separately, but dialogs specified according to Sections \ref{howtopureprototyping} and \ref{howtod3webprototyping} are also automatically added to the \texttt{ControlCenter} Servlet, that provides a listing of all currently active and ready-to-use dialogs and prototypes in ProKEt.
+	\item \textbf{Appropriate renderers} that are called/initiated by the servlets first, and may further call themselves or required sub-renderers recursively.\\
+	An overview of already existing renderer classes both for pure and d3web prototyping is listed in Appendix \ref{apprenderers} 
+	\item \textbf{Appropriate StringTemplate files} that specify the 'widgets' of the dialog, i.e., all needed HTML elements  and which are filled within the renderers 
+	\item \textbf{JavaScript files} for providing interactivity. 
+	For pure prototype dialogs, at least the \texttt{code.js} file is required, for d3web dialogs at least \texttt{d3webBasic.js} and \texttt{d3web.js} are required. All those JS files are found in the \texttt{src/main/webapps/js} folder.\\
+	If further interactivity/functionality is needed, either those files need to be extended, or additional files are to be provided and included.
+	\item Some \textbf{CSS} for styling	
+\end{itemize}
+
+\section{Usage / Use Cases}
+For ProKEt, there are mainly two use cases:
+\begin{itemize}
+	\item Pure Prototyping
+	\item Prototyping with knowledge base integration
+\end{itemize}
+Regarding \textit{Pure Prototyping}, the main goal is to enable quick experiments with a more informal type of 
+knowledge (data) base in the form of an XML file (see Section \ref{howtopureprototyping}). Thereby, different dialog types, 
+"structuring" of the knowledge, as well as general style aspects, can be investigated in an quick \& 
+easy manner. The complete workflow is described in Section \ref{howtopureprototyping}.\par
+\textit{Prototyping with knowledge base integration} on the other hand provides the possibilities:
+\begin{itemize}
+	\item to test knowledge base - prototype-type combinations \\
+	(e.g., in case a knowledge base already exists or is specified due to the project, or when certain 
+	constraints regarding the prototype/dialog type are already given due to the project)
+	\item to use the knowledge base as a specification of the desired interactivity (follow-up questions,
+	abstractions, etc.)
+\end{itemize}
+Therefore, a d3web knowledge base can be loaded and used with the tool as a 
+"database", and thus in that regards replaces the XML specification). Regarding the definition of specific properties---e.g.
+ column-style for questionnaire, or properties of a single question only---a tailored 'minimal XML' specification is still needed. The
+complete workflow is described in Section \ref{howtod3webprototyping}.
+
+\section{Requirements} \label{requirements}
+ProKEt first and basically is a Java-Project, that is best used from within an IDE as, e.g, Eclipse. The program
+logic is implemented in Java, as is also is the d3web toolkit. The resulting prototypes are 
+based on HTML, StringTemplate, JavaScript/AJAX, CSS, and are assembled and deployed as Servlets. 
+Essential requirements are:
+\begin{itemize}
+	\item Java installation --- currently used: Version Java 1.6.0\_13\\
+	http://www.oracle.com/technetwork/java/javase/downloads/index.html
+	\item Tomcat (or other Servlet-enabling server) --- currently used: Apache Tomcat 6.0.28\\
+	http://tomcat.apache.org/download-60.cgi
+	\item Maven (for project \& dependency management) --- currently used: Apache Maven 2.2.1\\
+	http://maven.apache.org/download.html
+	\item SVN (standalone console-based or Eclipse/IDE SVN integration for repository access)
+	\item Eclipse (or similar) --- currently used: \textbf{Eclipse Helios for Java EE (important!) users} Release 1, 2010\\
+	http://www.eclipse.org/downloads/\\ \\
+	Specific additional requirements for Eclipse which can be loaded via the Help--Install New Software... Dialog (SVN stuff only if integrated SVN is desired):
+	\begin{itemize}
+		\item Maven Integration for Eclipse --- currently: 0.10.2\\
+		http://m2eclipse.sonatype.org/sites/m2e
+		\item Maven Integration for WTP (important for web project setup) --- currently: 0.11.1\\
+		http://m2eclipse.sonatype.org/sites/m2e-extras
+		\item Subversive Integration for M2Eclipse --- currently 1.0.2\\
+		http://www.polarion.org/projects/subversive/download/integrations/update-site/
+		\item Subversive SVN Team Provider --- currently 0.7.9\\
+		http://download.eclipse.org/releases/helios (unter COLLABORATION)
+		\item SVNKit 1.3.2. or Native JavaHL 1.6 (SVN connectors)\\
+		http://community.polarion.com/projects/subversive/download/eclipse/2.0/helios-site/
+	\end{itemize}
+	\item Text/XML/Web Editors---optionally, if not integrated in IDE or others are desired 
+\end{itemize}
+
+\chapter{HowTo...}
+
+
+\section{...general Setup---IDE etc}
+Required projects (and links for installation files) are listed in Section \ref{requirements}.
+Install Java and Tomcat. Unpack Maven somewhere on your disc. Install Eclipse with all the listed plugins/features.
+Set it up for using the installed Tomcat, Java, and the unpacked Maven installation (NOT the Eclipse integrated one!), 
+as well as SVN for repository access.
+
+
+\section{...get and set up required projects in the workspace}
+\begin{itemize}
+	\item \textbf{(complete) d3web project}:\\
+		https://isci.informatik.uni-wuerzburg.de/svn/d3web-core $\rightarrow$ trunk $\rightarrow$ d3web
+	\item \textbf{d3web-ProKEt project}:\\
+	https://isci.informatik.uni-wuerzburg.de/svn/Research $\rightarrow$ trunk $\rightarrow$ Research
+	\item \textbf{Checkout d3web and d3web-ProKEt as Maven projects}
+	\item \textbf{d3web-ProKEt Project properties: adapt deployment}\\ 
+	maven dependencies need to be transferred into Web-INF/lib:\\
+	right click project $\rightarrow$ Deployment Assembly $\rightarrow$  Add... $\rightarrow$ Java Build Path Entries $\rightarrow$ Maven Dependencies
+	\item \textbf{Maven package \& install d3web project} \\
+	(right click: Maven $\rightarrow$ update snapshots, dependencies, project configuration)
+	\item \textbf{Maven install ProKEt}\\
+	(right click: Maven $\rightarrow$ update snapshots, dependencies, project configuration)
+	\item \textbf{Run ControlCenter (or any other built single Dialog Servlet) on server from within Eclipse}:\\
+	Select/Open ControlCenter.java $\rightarrow$ Run as... (from run menu) $\rightarrow$ Run on server
+\end{itemize}
+
+
+\section{...get familiar with ProKEt (data- and folder structures)}
+In the following, a listing of the data- and folder structures of the ProKEt project, in the hierarchical order as it 
+also appears in the project itself.\\\par
+
+\begin{footnotesize}
+\textbf{d3web-ProKEt}
+\begin{itemize}
+	\item \textbf{Deployment Descriptor: d3webProKEt}\\
+	is the web.xml file, specifies context stuff, references, servlets etc
+	\item \textbf{Java Resources}
+	\begin{itemize}
+		\item \textbf{src/main/java} \\
+		Java source code (see below for specific Java package structures)
+		\item \textbf{src/main/resources} Other than java resources
+		\begin{itemize}
+			\item \textbf{archive}Storage for old / working / todo / project specific stuff
+			\begin{itemize}
+				\item \textbf{common} stuff common to several projects, e.g. ProKEt documentation, wiki pages (kb def),...
+				\item \textbf{css} archived style files (working)
+				\item \textbf{kb} archived knowledge bases (working)
+				\item \textbf{projects} archived project stuff, should contain subfolder for each project, and within there shoud store at least the needed dialog specs files, and necessary custom css if used.
+				\item \textbf{specs} archived dialog specifications, subfolders d3web and (pure) prototypes
+				\item \textbf{stringtemp} archived HTML/StringTemplate files
+				\item \textbf{toCheck} Stuff that is currently archived and not used, yet also unclear whether it works. Needs to be checked.
+			\end{itemize}	
+			\item \textbf{controlcenterResources} Some stuff for the ControlCenter or single dialog webapps templates (currently without 
+			subfolders)
+			\item \textbf{specs} Specification of prototypes
+			\begin{itemize}
+				\item \textbf{d3web} Here go the d3web knowledge bases and corresponding specification XMLs 
+				\item \textbf{prototypes} Here go pure-prototype specification XMLs
+			\end{itemize}
+			\item \textbf{stringtemp} StringTemplate and CSS files
+			\begin{itemize}
+				\item \textbf{css} CSS style files. Saved as StringTemplate files (ending .st) also, as to ensure
+				the usage of variables also in CSS styles.
+				\item \textbf{html} StringTemplate files specifying the HTML framework for dialogs and dialog elements (questions, answers, tooltops, etc...).
+			\end{itemize}
+		\end{itemize}
+		\item \textbf{src/test/java} \\
+		for tests, not in use currently :-/
+		\item \textbf{src/test/resources}\\
+		for tests, not in use currently :-/
+		\item \textbf{Libraries} References/navigates to (automatically) linked libraries as Tomcat, EAR, JRE, WebApp 
+		Libraries and Maven Dependencies (as specified in the pom.xml)
+	\end{itemize}
+	\item \textbf{JavaScript Resources} JavaScript references and navigator
+	\begin{itemize}
+		\item \textbf{src/main/webapp} everthing JS, as contained in the webapp folders
+		\item \textbf{ECMAScript Built-In} and \textbf{ECMA 3 Browser Support}
+	\end{itemize}
+	\item \textbf{.settings} Contains all necessary .settings files. As an exceptions, those settings do NOT need to be excluded from synchronizing (as in other projects) as they are necessary to get the Maven + WTP project config to work
+	\item \textbf{src} The sources
+	\begin{itemize}
+		\item \textbf{main} Non-test sources
+		\begin{itemize}
+			\item \textbf{java} contains above src/main/java
+			\item \textbf{resources} contains above src/main/resources
+			\item \textbf{webapp} Additional stuff needed for the webapp
+			\begin{itemize}
+				\item \textbf{cases} Storage for persistence. Here the xml files containing the data are stored.
+				\item \textbf{img} Images needed for the webapp, e.g. global icons (for tooltip sign etc)
+				\item \textbf{js} Used JavaScript: custom JavaScript files needed for pure and d3web integrating prototyping
+				\item \textbf{libsExternal} External JavaScript libraries: jquery and jqueryUi stuff in corresponding subfolders
+				\item \textbf{META-INF} 
+				\item \textbf{WEB-INF} Contains web.xml that is also referenced by Deployment Descriptor
+				\item \textbf{index.jsp} Optional index file, starting point of the webapp\\
+				redirects to ControlCenter page per default
+			\end{itemize}
+		\end{itemize}
+		\item \textbf{test} Test sources, not used currently
+	\end{itemize}
+	\item \textbf{target} Resulting .war file to be put on server, containing everything compiled into what is required
+	to run either the ControlCenter webapp (more than one dialog at one time) or single Dialog Servlets.
+	\item \textbf{.classpath} Classpath configuration
+	\item \textbf{.project Project specific settings}
+	\item \textbf{pom.xml} Specification of Maven dependencies (dependent projects etc)
+	\item \textbf{TODO.txt} mostly "global" ToDos, i.e., required for the entire ProKEt project. ToDos for specific dialog projects (e.g., Hernia) should be stored in the archive/projects/project\_folder location
+\end{itemize}
+\end{footnotesize}
+
+
+\section{...run dialogs with ProKEt (basic workflow)}\label{rundialogsbasic}
+ProKEt---with a basic set of renderers, specifications, templates, styles for several basic dialog types etc---provides an easy mechanism to create new (slightly adapted) dialogs.\\
+\textit{A listing of currently existing (and working) dialog types---both pure prototype and d3web-based dialogs---is provided in Appendix \ref{appdialogtypes} (with screenshots).}\\\\
+A new dialog, that may slightly extend/adapt existing dialog types (say, with regards to the applied CSS), is created by:
+\begin{itemize}
+	\item Creating the specification (see Sections \ref{howtopureprototyping})---if desired with slight adaptions, e.g., referencing other CSS styles, creating other structuring of elements by using questionnaires, etc.
+	\item Placing the specification(s) in the corresponding, appropriate specification folder \texttt{src/main/resources/specs/prototypes} or \texttt{src/main/resources/specs/d3web}
+	\item Compiling the d3web-ProKEt project: maven 'clean package install', with 'update snapshots'
+	\item Refreshing the target folder
+	\item Running the \texttt{ControlCenter} servlet in your browser by calling\\
+	\texttt{http://localhost:8080/d3web-ProKEt/ControlCenter}\\
+	 (the specific localhost link might vary depending on the respective local tomcat installation/configuration)
+	\item Selecting the dialog in the respective sub-menu (Pure Prototype Dialogs / d3web Dialogs)\\
+	Dialogs are listed with the name of their specification file, ignoring the file ending. 
+	If a dialog has, for example, been specified as \texttt{dialog1.xml} as pure prototype, it is listed in the Pure Prototype Dialogs sub-menu as \texttt{dialog1}
+\end{itemize} 
+
+
+\section{...create a pure prototype (pure XML specification)} \label{howtopureprototyping}
+This HowTo explains, how to create a prototype purely with the XML specification (e.g., for quick mockups) and assuming that existing renderers / css styles / StringTemplate files are used.\\
+\textit{($\rightarrow$ adapting styles, StringTemplate templates, and renderers: see \ref{howtocss}, \ref{howtostringtemplate}, and \ref{howtorenderer})} \\\\
+Definition of all 'knowledge' objects (questions, answers) and their properties (question types etc) is done in a specific XML format. Example:
+\begin{verbatim}
+	<?xml version="1.0" encoding="UTF-8"?>
+	<dialog css="rheuma, nofoot, nonavigation" 
+	        header="Rheumatic Disease Consultation"  
+	        type="rheuma">
+    <questionnaire>
+        <question type="zc" title="Dear user..." send-button="true"> 
+            <answer title="The following ..." />
+        </question>
+        <question answer-type="num" title="How old are you?" send-button="true">
+            <answer title="years" />
+        </question>
+        <question answer-type="oc" title="What is your sex?" send-button="true">
+            <answer title="male" />
+            <answer title="female" />
+        </question>
+        <question type="image" answer-type="mc" image="human.png"
+                  title="Please mark ..." send-button="true">
+            <answer title="Head" shape="rect" coords="70,2,129,70" />
+            <answer title="Left Shoulder" shape="rect" coords="42,76,85,105" />
+        </question>
+    </questionnaire>
+</dialog>
+\end{verbatim}
+In the dialog-tag, the basic dialog properties are set, as e.g. the CSS to be used or the dialog type, or dialog title. Then, a dialog basically consists of questions and answers, which can be further grouped (structured) by questionnaires (as in the example).\\\\
+\textit{A complete listing of all elements and properties can be found in Appendix \ref{appspecificationpp}}\\\\
+%
+For automatically running the so specified dialog, the XML specification simply needs to be put in \texttt{src/main/resources/specs/prototypes} and is then automatically added to the ControlCenter Servlet, which provides an overview of all dialogs currently existing in the ProKEt project (in the respective specs folders).
+
+
+\section{...create a prototype with d3web KB specification} \label{howtod3webprototyping}
+This HowTo describes, how a dialog with knowledge base integration is created assuming that existing renderers / css styles / StringTemplate files are used.\\
+\textit{($\rightarrow$ adapting styles, StringTemplate templates, and renderers: see \ref{howtocss}, \ref{howtostringtemplate}, and \ref{howtorenderer})} \\\\
+Therefore, two specification files are needed:
+\begin{itemize}
+	\item The d3web knowledge base\\
+	specifies the knowledge, i.e., basic dialog objects as questionnaires, questions, answers, additional descriptions etc 
+	
+	\item The 'minimal XML specification' file\\
+	This file contains all properties that are not (easily or reasonably) mappable by the d3web knowledge base. For example, it can specify whether the dialog should be extended by a login mechanism or not. 
+	An example:
+	\begin{verbatim}
+		<?xml version="1.0" encoding="UTF-8"?>
+		<dialog 
+		    header="EuraHS"  
+		    dtype="singleform" 
+		    dstrategy="nextuaquestion" 
+		    css="med2cols, nonavigation" 
+		    dialogcolumns="1"
+		    questionnairecolumns="3"
+		    login = "no">
+		    <data kb="HerniaApr2011.d3web" />
+		</dialog>
+	\end{verbatim}
+\end{itemize}
+		
+As the example shows, e.g., the dialog title (header), css, login-yes/-no, but also properties as whether the questionnaire should consist of several columns (here: 3) are defined. In the $<data>$ tag, the d3web knowledge base is referenced, that should be used for this dialog.\\
+\textit{A complete listing of all elements and properties can be found in Appendix \ref{appspecificationdp}}	\\\\
+%
+\noindent For automatically running a dialog, specified by those two files, both files need to be put into \texttt{src/main/resources/specs/d3web}; then the corresponding d3web dialog is automatically added to the ControlCenter servlet.
+
+
+
+\section{...change CSS style}\label{howtocss}
+This HowTo shows, how already existing (pure or d3web) prototypes can be adapted as to use different CSS files or even single commands for specific dialog elements.
+
+\begin{itemize}
+	\item Use a completely new CSS definition file
+	\begin{enumerate}
+		\item Create new CSS file from scratch, specify the desired elements (listing of most often used base elements
+		in Appendix \ref{appcss})
+		\item Alternatively built upon existing CSS file(s). \\
+		To avoid accidentally overwriting important base CSS files needed for the standard to-show-prototypes, please best copy \& paste an existing CSS file that provides most or at least some of the desired styling, adjust it 
+		accordingly and name it properly. \\
+		\textit{Those critical CSS files are listed in Appendix \ref{appcssBase}.}
+		\item Include reference to the CSS file into XML specification by using the\\
+		css='$<$cssfilename$>$' command within the $<$dialog$>$ tag, both for the pure XML and minmal d3web XML specification
+		\item Save the file and refresh the Servlet---either ControlCenter or single Dialog Servlet---on
+		the Tomcat server.
+	\end{enumerate}
+	\item Add CSS commands to single dialog elements (currently only for pure prototypes). 
+	\begin{enumerate}
+		\item Search the specification of the element to be styled in the XML prototype specification file, and add 
+		the CSS command similar to adding the reference to a CSS file. \\
+		An example: $<$question type='oc' columns='3' ... \textit{css='border: none;' ... $>$}
+		\item Save the file and refresh the Servlet---either ControlCenter or single Dialog Servlet---on
+		the Tomcat server.
+	\end{enumerate}
+\end{itemize} 
+
+
+\section{...change HTML template(s)}\label{howtostringtemplate}
+TODO
+
+
+\section{...write own/tailored renderers}\label{howtorenderer}
+TODO
+
+
+\section{...add additional widgets}
+TODO\\\\
+This HowTo explains, how additional widgets can be added to the system. 
+Examples are specific Popups, or Grids (for summarizing information). 
+The mechanism is explained at the example of adding a Grid-Widget, that inserts grids that summarize specific information into the dialog.
+\begin{itemize}
+	\item The knowledge base needs to be extended as to contain the additional information.\\
+	In this case, the description is modified to contain a reference to the grid name, e.g.
+	question.description = GRID\_grid1, where GRID is the 'markup' for grid and 'grid1' the name of the grid.
+	\item Alternatively, the additional information needs to be added to the minimal XML and the D3webXMLParser is to be adapted correspondingly.
+	\item In the Question-Renderer we need to ask, whether the current question is marked as a GRID question.
+	\item If so, we need to call the sub-Renderer (GridD3webRenderer?!) here.
+	\item This renderer should fill a custom GridTemplate (Grid.st ?!) with the appropriate content.
+	\item HERNIA: Maybe in OUR case we should have a super-Renderer GridD3webRenderer and then create one Renderer for each grid (e.g. Grid1HerniaRenderer... ?!) --> look through the grids in what point they vary etc...
+\end{itemize}
+
+
+
+\section{...update a d3web dialog due to KB update}
+To update a dialog due to an update of the KB...:
+\begin{enumerate}
+	\item Copy the new knowledge base file into  \texttt{src/main/resources/specs/d3web} 
+	\item Check that knowledge base naming and KB reference in the minimal XML are equal, and adapt if necessary
+	\item Compile d3web-ProKEt (maven 'clean package install' with update snapshots)
+	\item Refresh target folder
+	\item Re-run ControlCenter, or only D3webDialog servlet, (or alternative, tailored servlet) on server
+\end{enumerate}
+
+
+
+\section{...create own/tailored d3web dialog servlets}\label{howtoservlets}
+The default development servlet for d3web dialogs is \texttt{D3webDialog.java}. 
+This provides all base functionality for running d3web dialogs, and for running them depending on the given
+\texttt{src} parameter in the query string. 
+Thus, there are two ways for running d3web dialog servlets:
+\begin{itemize}
+	\item \texttt{http://localhost:8080/d3web-ProKEt/ControlCenter}\\
+	Via the ControlCenter, this lists all specified dialogs from the \texttt{specs/d3web} folder and the desired one just needs to be chosen from the d3web Dialogs sub-menu
+	\item \texttt{http://localhost:8080/d3web-ProKEt/D3webDialog?src=Mediastinitis}\\
+	directly opening the specific link in the browser, for a dialog specification named \texttt{Mediastinitis.xml}
+\end{itemize}
+(note: the localhost-link part might vary depending on the local tomcat installation/configuration)\\\\
+%
+\textbf{However, it might be necessary or desired to create specific servlets, e.g., if special/adapted functionality is required only for a specific project.} \\\\
+In the following, we assume that a tailored servlet \texttt{MyProject} should be created and set up for running with the ProKEt base system.
+\begin{enumerate}
+	\item Copy \texttt{D3webDialog.java} to \texttt{MyProject.java}
+	\item Adapt the servlet if necessary (e.g., only reference the one required XML specification file, for example, see the \texttt{Mediastinitis.java} tailored Servlet)
+	\item Add appropriate entries to the \texttt{web.xml == deployment descriptor} for the servlet class and URL mapping
+	\item Adapt \texttt{index.jsp} so it forwards to the correct servlet, here MyProject (instead of ControlCenter)
+	\item Compile d3web-ProKEt (maven compile 'clean package install', with 'update snapshots') and refresh target folder
+	\item \texttt{Rename} resulting snapshot to MyProject.war
+	\item Deploy MyProject.war on tomcat server\\
+	- e.g. wms server 132.187.15.128, root, w3ltfrieden\\
+	- stop tomcat, copy .war into webapps folder, restart tomcat\\
+	- call url http://wmswiki.informatik.uni-wuerzburg.de/MyPro\\
+\end{enumerate}
+
+
+\section{...global settings and user settings}
+There are two types of settings needed when running a dialog-servlet: \textit{global} and {user specific} settings.
+They need to be distinguished, as there can be settings, that don't vary for different users (e.g., the knowledge base) and settings, that have to vary from user to user (e.g., the d3webSession). 
+This is due to the fact, that the dialog app as a whole is running on one server, yet for every user a different dialog instance is created, to make it possible that different users can access and use the app from different locations at the same time.
+\begin{itemize}
+	\item Global Settings:\\
+	Are defined in the class \texttt{de.d3web.proket.utils.GlobalSettings.java}.\\
+	There exists only one instance of this class (Singleton pattern); all settings defined here, are required and \textbf{don't change in different running dialog instances}\\
+	Examples: knowledge base, basic system paths, the global persistence base folder, non-varying dialog properties (dialog type...)
+	\item User Specific Settings:\\
+	Are defined in the servlet classes and stored in the \texttt{HttpSession} of each user.\\
+	Settings defined that way \textbf{vary from user to user} in the different running dialog instances.\\
+	Examples: d3webSession, the latest loaded file/case (lastLoaded), needed when saving a case as to know whether the current user has the right to overwrite the already existing file (which he has when he loaded it previously), login-relevant data
+\end{itemize}
+
+\section{...make (JS) module insertion dynamic}
+Goal of this HowTo is, to enable a (JS-based) module (e.g., login mechanism) dynamically. 
+That is, in the specification XML of the d3web-dialog something like $<module>=<value>$ should be provided and depending on value, the module should be added to the dialog or not.
+This HowTo explains the mechanisms on the example of the \textbf{login mechanism}.\\\par
+The login mechanism consists of the following parts: 
+\begin{itemize}
+	\item \texttt{login.js and encrypt.js}\\
+	Two JS files, that contain the definition and logic of the login dialog (which in this case is a JQuery UI dialog widget).
+	\item \texttt{LoginDialog.st}\\
+	A StringTemplate file, that defines the $<div>$ element containing the dialog widget's elements (as input fields etc.)
+\end{itemize}
+To provide the possibility of inserting this module dependent on the specification in the d3web-dialog XML file, the following steps have to be taken:
+\begin{itemize}
+	\item Adapt \texttt{D3webXMLParser.java}\\
+	The parser needs to provide an adequate method to read and return the value from the XML spec properly (in this case: \texttt{getLogin}, a method returning a boolean TRUE if the login value is yes, FALSE, if the login value is no)
+	\item Adapt the D3webDialog StringTemplate definition \texttt{D3webDialog.st}\\
+	Here, we need to insert a dynamic StringTemplate part
+	\begin{verbatim}
+		$if(login)$
+		    $LoginDialog()$
+		$endif$
+	\end{verbatim}
+	This basically means: if (somewhere in the rendering workflow) the login-StringTemplate variable is given a value, then the sub-StringTemplate \texttt{LoginDialog} is inserted. Otherwise it is just ignored. 
+	\item Adapt the \texttt{JSCodeContainer.java}\\
+	In the JSCodeContainer we need a variable login (default: false), dependent on which (in \texttt{generateOutput()}), the desired JS-files are included or not:
+	\begin{verbatim}
+	if (login) {
+	    ownBibs.add("login.js");
+	    ownBibs.add("encrypt.js");
+	}
+	\end{verbatim}
+	Also, we need a method that sets the variable value, so it can be modified from "outside" (e.g., from the Renderers):
+	\begin{verbatim}
+		public void enableLogin() {
+		    login = true;
+		}
+	\end{verbatim}
+	\item Adapt the Renderer\\
+	The appropriate Renderer---in our case: \texttt{D3webRenderer}---or alternatively a sub-Renderer needs to be adapted to set the StringTemplate variable to the required value. Also, the JS ContainerCollection needs to be told that it should include the login.js and encrypt.js.\\
+In the case of the login mechanism, in D3webRenderer we read the value from the D3webXMLParser, and if it returns "true" (meaning, login is to be inserted), we set the variable for the StringTemplate and notify the JSCodeContainer: 
+	\begin{verbatim}
+		if (D3webConnector.getInstance().getD3webParser().getLogin()) {
+		    
+		    //set the attribute for the StringTemplate to include LoginDialog.st
+		    st.setAttribute("login", "true");
+		
+		    // tell JSCodeContainer to set login att to true so JS is included
+		    cc.js.enableLogin();
+		}
+	\end{verbatim}	
+\end{itemize}
+Now it is possible to set the property "login = yes" in the d3web-dialog XML (see snippet below) and the JS based login mechanism is added to the dialog.
+\begin{verbatim}
+	<?xml version="1.0" encoding="UTF-8"?>
+	<dialog 
+	    header="EuraHS"  
+	    css="med2cols, nonavigation" 
+	    ...further properties...
+	    login = "no"
+	>
+	<data kb="HerniaApr2011.d3web" />
+	</dialog>
+\end{verbatim}
+
+\section{...create skeletal Prototype (widget) Structures with StringTemplate}
+
+\section{...use predefined JS/JQuery(UI) libs}
+\begin{itemize}
+	\item put javascript stuff of lib into webapp/js/SUBFOLDER (for jquerystuff e.g. /jquery)
+	\item link library to where it is needed:\\
+	- for ControlCenter modify controlcenter.st\\
+	- for Dialog to use it, modify JSCodeContainer (for libs that are common to all potential dialogs to come) or put
+	it directly into a Renderer (see example in D3webRenderer)
+	\item if css/images are needed, put them into webapp/css/SUBFOLDER(optionally)
+	\item link to css where it is needed: \\
+	- as before also in CSSCodeContainer or directly in Renderer class
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% APPENDIX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{secnumdepth}{1}
+\appendix
+\addchap{Appendix}
+
+\chapter{XML Spec. Pure Prototyping}\label{appspecificationpp}
+
+\chapter{XML Spec. d3web Prototyping}\label{appspecificationdp}
+
+\chapter{Basic Renderers in ProKEt}\label{apprenderers}
+
+\chapter{Basic Dialog Types in ProKEt}\label{appdialogtypes}
+
+\chapter{Common CSS classes} \label{appcss}
+Overview/Listing of basic CSS classes used for most prototypes...
+
+\chapter{Basic CSS files (DO NOT change)}  \label{appcssBase}
+Listing of basic CSS files that are required to run the default/standard dialog types.
+Those are \textbf{NOT TO BE CHANGED}. 
+If a dialog is to built upon existing styles, please copy \& paste (and rename) those files, but do NOT overwrite.
+
+\chapter{Basic StringTemplate files (NOT to be changed!)} \label{appstBase}
+Listing of basic StringTemplate files that are required to run the default/standard dialog types.
+Those are \textbf{NOT TO BE CHANGED}. 
+If a dialog is to built upon existing styles, please copy \& paste (and rename) those files, but do NOT overwrite.
+
+\chapter{Troubleshooting}
+
+\end{document}

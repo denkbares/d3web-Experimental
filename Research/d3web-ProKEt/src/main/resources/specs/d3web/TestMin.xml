@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogOpts 
+    header="Testdialog BA ACOCA"  
+    login = ""
+    required = ""
+    language = ""
+    debug = "false" >
+    <globalUIOpts 
+        dialogtype="QuestionaryCons"
+        dialogstrategy = ""
+        showcontraindicated = "HIDE"
+        shownonindicated = "HIDE"
+        css="questionaryCons, diagnosisVisu, solutionPanel" 
+	dialogcolumns="1"
+	questionnairecolumns="3"
+	questioncolumns="1"
+        solutionExplanation = "TEXTUAL" 
+        solutionSorting = "CATEGORICAL"
+        solutionDepth = "ALL"
+        solutionDynamics = "INTERACTIVE"
+        solutionRange = "MULTIPLE"
+        solutionStructuring = "LISTING"
+        solRatingGranularity = "ABSTRACT;;;PRECISE"    
+    />
+    <localUIOpts />
+    <dataOpts kb="TestMin.d3web" />
+    <ueOpts logging = "FALSE" />
+</dialogOpts>

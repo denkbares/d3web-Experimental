@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-DiaFlux-Coverage" version="0.0.1">
+	
+	<requires>
+		<import plugin-id="KnowWE-Plugin-DiaFlux" />
+		<import plugin-id="KnowWEExtensionPoints" />
+		<import plugin-id="d3web-Plugin-TestingFramework" />
+		<import plugin-id="d3web-Plugin-Tests" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="DiaFluxCoverageType">
+		<parameter id="class"
+			value="de.knowwe.diaflux.coverage.DiaFluxCoverageType" />
+		<parameter id="name" value="DiaFluxCoverageType" />
+		<parameter id="description" value="DiaFluxCoverageType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWE-Plugin-DiaFlux" point-id="DiaFluxDisplayEnhancement"
+		id="DiaFluxCoverageHighlight">
+		<parameter id="class"
+			value="de.knowwe.diaflux.coverage.DiaFluxCoverageHighlight" />
+		<parameter id="name" value="DiaFluxCoverageHighlight" />
+		<parameter id="description" value="DiaFluxCoverageHighlight" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="diafluxcoverage" />
+		<parameter id="scope" value="diaflux" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="GetCoverageHighlightAction">
+		<parameter id="class"
+			value="de.knowwe.diaflux.coverage.GetCoverageHighlightAction" />
+		<parameter id="name" value="GetCoverageHighlightAction" />
+		<parameter id="description" value="Action GetCoverageHighlightAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="CalculateCoverageAction">
+		<parameter id="class"
+			value="de.knowwe.diaflux.coverage.CalculateCoverageAction" />
+		<parameter id="name" value="CalculateCoverageAction" />
+		<parameter id="description" value="Action CalculateCoverageAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="CoverageProvider">
+		<parameter id="class"
+			value="de.knowwe.diaflux.coverage.CoverageProvider" />
+		<parameter id="name" value="CoverageProvider" />
+		<parameter id="description"
+			value="Enables coverage for active nodes and edges." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="DiaFlux" />
+	</extension>
+	
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="FlowCoverageTest">
+		<parameter id="class" value="de.knowwe.diaflux.coverage.ci.FlowCoverage" />
+		<parameter id="name" value="FlowCoverageTest" />
+		<parameter id="description" value="AbstractCITest FlowCoverageTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+</plugin>

@@ -1,0 +1,334 @@
+.bubbleNode {
+  fill: rgb(31, 119, 180);
+  fill-opacity: .25;
+  stroke: rgb(31, 119, 180);
+  stroke-width: 1px;
+}
+
+.leaf {
+  fill: #ff7f0e;
+  fill-opacity: 1;
+  color: black;
+  stroke-width: 1px;
+  }
+
+.bubbleNode text {
+  font: 12px sans-serif;
+  color: black;
+  fill:black;
+  stroke-width: 0px;
+}
+
+#vis{
+	color:white;
+	background-color: white;
+	margin-top:30px;
+}
+
+path {
+  stroke: #000;
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+
+text {
+  font: 11px sans-serif;
+  cursor: pointer;
+}
+
+body {
+  width: 100%;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  margin: .5em 0;
+}
+
+p#intro {
+  text-align: center;
+  margin: 1em 0;
+}
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.node {
+  font: 10px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+div.editorDiv{
+display: inline-block;
+margin-top: -5px;
+border-radius: 5px;
+background-color: #000000;
+top: 38px;
+position:absolute;
+}
+
+div.editorDiv.hidden{
+	visibility:hidden;
+}
+
+
+
+div.bar {
+display: inline-block;
+width: 200px;
+height: 100px;	
+margin-right: 2px;
+background-color: bisque;
+position: relative;
+floating: left;
+}
+
+div.bar2 {
+display: inline-block;
+width: 150px;
+height: 50px;	
+margin-right: 2px;
+background-color: teal;
+}
+
+div.dropzone {
+display: inline-block;
+border-radius: 5px;
+width: 300px;
+height: 24px;
+margin-right: 2px;
+background-color: bisque;
+position: relative;
+float: left;
+
+}
+
+.ui-state-highlight {
+background-color: red !important;
+transition: background-color 1.5s;
+}
+
+div.choosa {
+
+position: relative;
+float: left;
+margin-right: 2px;
+
+}
+
+div.buttonBar{
+position: relative;
+float: left;
+margin-right: 2px;
+
+}
+
+.infobox {
+float: right;
+background-color: #F9F9F9;
+border: 2px solid #cccccc;
+border-collapse: collapse;
+width: 333px;
+border-radius: 10px;
+}
+.node rect {
+  cursor: pointer;
+  fill: #fff;
+  fill-opacity: .5;
+  stroke: black;
+  stroke-width: 0.5px;
+}
+
+.node text {
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+path.link {
+  fill: none;
+  stroke: rgb(150, 150, 150);
+  stroke-width: 1px;
+}
+/*infoBox2 ---------------------------------------------------------------------------*/
+div.connectionInfo{
+
+ border: 1px solid #000;
+ margin: 2em;
+ width: 300px;
+ padding: 5px;
+
+}
+
+.connectionInfo ul{
+font: bold 14px Arial;
+color: white;
+background: black;
+text-transform: uppercase;
+padding: 4px 0 4px 10px; /*header text is indented 10px*/
+list-style-type: none;
+margin: 0;
+padding: 0;
+
+}
+.connectionInfo ul ul{
+padding-bottom: 2px; /*bottom spacing between menu items*/
+font: bold 14px Arial;
+color: black;
+background: #888888;
+text-transform: uppercase;
+list-style-type: none;
+}
+
+.connectionInfo ul li{
+padding-bottom: 2px; /*bottom spacing between menu items*/
+font: bold 10px Arial;
+color: black;
+background: white;
+text-transform: uppercase;
+list-style-type: none;
+}
+
+.connectionInfo ul li a{
+color: #A70303;
+background: url(KnowWEExtension/images/arrow_right.png) no-repeat center left; /*custom bullet list image*/
+display: block;
+padding: 2px 0;
+padding-left: 19px; /*link text is indented 19px*/
+text-decoration: none;
+font-weight: bold;
+border-bottom: 1px solid #dadada;
+font-size: 90%;
+}
+
+.connectionInfo ul li a:visited{
+color: #A70303;
+}
+
+.connectionInfo ul li a:hover{ 
+color: #A70303;
+background-color: #F3F3F3;
+}
+
+/*infoBox2 ---------------------------------------------------------------------------*/
+.colapser{
+ text-align: center;
+ font-size: 14px;
+}
+
+/*VISIBILITY of INFOLIST ---------------------------------------------------------------------------*/
+/*infoBox 3---------------------------------------------------------------------------*/
+.connectionInfo2{
+
+ border: 1px solid #000;
+ margin: 2em;
+ width: 300px;
+ padding: 5px;
+
+}
+
+.connectionInfo2 ul{
+	
+padding-bottom: 4px; /*bottom spacing between menu items*/	
+font: bold 14px Arial;
+color: black;
+/*background: black;*/
+text-transform: uppercase;
+/*padding: 4px 0 4px 10px; /*header text is indented 10px*/
+list-style-type: none;
+margin: 0;
+padding: 0;
+list-style-type: none;
+
+}
+.connectionInfo2 ul ul{
+margin-left: 20px;	
+/*padding-bottom: 4px;*/ /*bottom spacing between menu items*/
+padding-top: 4px; /*bottom spacing between menu items*/
+font: bold italic 14px Arial;
+color: black;
+/*background: E2DFDF;*/
+text-transform: uppercase;
+list-style-type: none;
+}
+
+.connectionInfo2 ul li{
+margin-left: 10px;	
+padding-bottom: 2px; /*bottom spacing between menu items*/
+padding-top: 4px; /*bottom spacing between menu items*/
+font: 12px Arial;
+color: black;
+/*background: white;*/
+text-transform: uppercase;
+list-style-type: none;
+
+}
+
+
+.connectionInfo2 ul li a{
+color: #A70303;
+/*background: url(KnowWEExtension/images/arrow_right.png) no-repeat center left;*/ /*custom bullet list image*/
+display: block;
+padding: 2px 0;
+padding-left: 19px; /*link text is indented 19px*/
+text-decoration: none;
+font-weight: bold;
+border-bottom: 1px solid #dadada;
+font-size: 90%;
+}
+
+.connectionInfo2 ul li a:visited{
+color: #A70303;
+}
+
+.connectionInfo2 ul li:hover{ 
+color: #A70303;
+background-color: #F3F3F3;
+}
+
+/*infoBox 3---------------------------------------------------------------------------*/
+
+#infolist{
+	display: inline-block;
+	position: absolute;
+	width: 400px;
+	height:400px;
+	top: 100px;
+	left: 1000px;
+
+	  }
+
+.hidden { visibility: hidden; display: none;}
+.unhidden { visibility: visible; display: block;}
+
+circle {
+  fill: #ccc;
+  stroke: #999;
+  pointer-events: all;
+}
+
+circle.parent {
+  fill: #1f77b4;
+  fill-opacity: .1;
+  stroke: steelblue;
+}
+circle.highlighted {
+  fill: red;
+  fill-opacity: .1;
+  stroke: steelblue;
+}
+
+circle.parent:hover {
+  stroke: #ff7f0e;
+  stroke-width: .5px;
+}
+
+circle.child {
+  pointer-events: none;
+}

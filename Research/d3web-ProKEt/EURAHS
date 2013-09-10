@@ -1,0 +1,10 @@
+WICHTIG:
+--------
+- die EuraHS KB die in ProKEt eingecheckt ist ist NICHT die originale, die 
+    deployt ist, aufgrund einiger Dependency Probleme mit closed Source
+    jars von denkbares
+    -> um die EuraHS KB aus dem Wiki lokal testen zu können ist es nötig, aus
+    der KB die TimeDB Sachen rauszunehmen, dh auf der Seite Abstractions gibt
+    es einen Abschnitt in dem Tag/Monatsberechnungen durchgeführt werden
+    Wenn das nicht ins d3web kommt, kann man EuraHS auch lokal und ohne
+    TimeDB Plugin laufen lassen

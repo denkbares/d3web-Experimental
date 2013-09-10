@@ -1,0 +1,75 @@
+<table border='1' cellspacing="0" cellpadding="3">
+  <tr>
+    <td colspan="6" style="padding:5px"><b>E H S - Incisional VentralHernia Classification</b></td>
+  </tr>
+  <tr>
+    <th rowspan="5" colspan="2">Midline</th>
+    <td colspan="2" style="padding:2px">subxiphoidal</td>
+    <td style="padding:2px">M1</td>
+    <td width="25px" align="center" style="color: green">##Mark the incisional hernia areas involved|choice|M1##</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:2px">epigastric</td>
+    <td style="padding:2px">M2</td>
+    <td align="center" style="color: green">##Mark the incisional hernia areas involved|choice|M2##</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:2px">umbilical</td>
+    <td style="padding:2px">M3</td>
+    <td align="center" style="color: green">##Mark the incisional hernia areas involved|choice|M3##</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:2px">infraumbilical</td>
+    <td style="padding:2px">M3</td>
+    <td align="center" style="color: green">##Mark the incisional hernia areas involved|choice|M4##</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:2px">suprapubic</td>
+    <td style="padding:2px">M3</td>
+    <td align="center" style="color: green">##Mark the incisional hernia areas involved|choice|M5##</td>
+  </tr>
+  <tr>
+    <th rowspan="4" colspan="2">Lateral</th>
+    <td colspan="2" style="padding:2px">subcostal</td>
+    <td style="padding:2px">L1</td>
+    <td align="center" style="color: green">##Mark the incisional hernia areas involved|choice|L1:L|L1:R##</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:2px">flank</td>
+    <td style="padding:2px">L2</td>
+    <td align="center" style="color: green">##Mark the incisional hernia areas involved|choice|L2:L|L2:R##</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:2px">iliac</td>
+    <td style="padding:2px">L3</td>
+    <td align="center" style="color: green">##Mark the incisional hernia areas involved|choice|L3:L|L3:R##</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:2px">lumbar</td>
+    <td style="padding:2px">L4</td>
+    <td align="center" style="color: green">##Mark the incisional hernia areas involved|choice|L4:L|L4:R##</td>
+  </tr>
+</table>
+<table border='1' cellspacing="0" cellpadding="3">
+  <colgroup>
+    <col width="82">
+    <col width="82">
+    <col width="82">
+    <col width="82">
+  </colgroup>
+  <tr>
+    <td colspan="2" style="padding:2px"><b>Recurrent incisional hernia?</b></td>
+    <td colspan="1" style="padding:2px" align="center"><span>Yes</span><br/><span style="color: green">##Please select incisional ventral hernia|choice|Recurrent epigastric hernia|Recurrent umbilical hernia|Recurrent lumbar hernia|Recurrent Spighelian hernia##</span></td>
+    <td  colspan="1" style="padding:2px" align="center"><span>No</span><br/><span style="color: green">##Please select incisional ventral hernia|choice|Incisional ventral hernia##</span></td> 
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:2px"><span>lenght (cm): </span><span style="color: green">##Length of the hernia|num|,##</span></td>
+    <td colspan="2" style="padding:2px"><span>width (cm): </span><span style="color: green">##Width of the hernia|num|,##</span></td>
+  </tr>
+  <tr>
+    <td colspan="1" style="padding:2px"><b>Width<p/>cm</b></td>
+    <td colspan="1" style="padding:2px" align="center"><b>W1</b><p/>< 5 cm<p/><span style="color: green">##Width of the hernia|num|,5##</span></td>
+    <td colspan="1" style="padding:2px" align="center"><b>W2</b><p/>5 - 10 cm<p/><span style="color: green">##Width of the hernia|num|5,10##</span></td>
+    <td colspan="1" style="padding:2px" align="center"><b>W3</b><p/>> 10 cm<p/><span style="color: green">##Width of the hernia|num|10,##</span></td>
+  </tr>
+</table>

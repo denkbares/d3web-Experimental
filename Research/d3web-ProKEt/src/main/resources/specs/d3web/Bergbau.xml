@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogOpts 
+    header="Bergbau Diagnose und Verbesserung"  
+    login = ""
+    required = ""
+    language = ""
+    debug = "false" >
+    <globalUIOpts 
+        dialogtype="QuestionaryCons"
+        dialogstrategy = ""
+        showcontraindicated = "HIDE"
+        shownonindicated = "HIDE"
+        css="questionaryCons, diagnosisVisu, solutionPanel" 
+	dialogcolumns="1"
+	questionnairecolumns="1"
+	questioncolumns="1"
+        solutionExplanation = "TEXTUAL" 
+        solutionSorting = "CATEG_ALPHA"
+        solutionDepth = "ALL"
+        solutionDynamics = "INTERACTIVE"
+        solutionRange = "MULTIPLE"
+        solutionStructuring = "LISTING"
+        solRatingGranularity = "ABSTRACT;;;PRECISE"  
+    />
+    <localUIOpts />
+    <dataOpts kb="Bergbau.d3web" />
+    <ueOpts logging = "FALSE" />
+</dialogOpts>

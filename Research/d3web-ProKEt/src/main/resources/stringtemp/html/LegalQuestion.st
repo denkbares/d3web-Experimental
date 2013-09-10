@@ -1,0 +1,28 @@
+<div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$">
+	<div id="$id$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
+		<img id="$id$-typeimg" alt="type" src="$typeimg$" height="16" width="35" onclick="toggle_sub_4boxes('$fullId$')">
+    	<img height="16" 
+		$if(noChildren)$usemap="#panel-$fullId$"$endif$ 
+		src="img/pane.png" style="border: medium none;" id="panel-$fullId$" 
+		$if(hasChildren)$onclick="toggle_sub_4boxes('$fullId$')"$endif$>
+    </div> 
+    <div class="title t-$fullId$" id="t-$fullId$ " onmouseover="showAuxInfo('$fullId$', '$title$')" onmouseout="hideAuxInfo()">
+        $title$
+		$Tooltip()$
+		$Image()$
+		$text$
+		<map name="panel-$fullId$">
+			<area href="javascript:h4boxes('1','panel-$fullId$')" coords="0,0,26,18" shape="rect">
+			<area href="javascript:h4boxes('3','panel-$fullId$')" coords="26,0,51,18" shape="rect">
+			<area href="javascript:h4boxes('2','panel-$fullId$')" coords="51,0,70,18" shape="rect">
+			<area href="javascript:h4boxes('0','panel-$fullId$')" coords="70,0,86,18" shape="rect">
+		</map>
+<div id="propagation-$fullId$" class="propagation"></div>
+	</div>
+	
+	$if(children)$<div id="sub-$fullId$" class="sub-$fullId$" style="padding-left:30px;display:none">
+		$children$
+	</div>$endif$
+	
+	<div id="bonus-$fullId$" style="display:none">$bonusText$</div>
+</div>

@@ -1,0 +1,106 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-IncrementalCompiler" version="0.0.1">
+	
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+		<import plugin-id="d3web-Plugin-TestingFramework" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="HasCompileErrorsTest">
+		<parameter id="class"
+			value="de.knowwe.compile.ci.HasCompileErrorTest" />
+		<parameter id="name" value="HasCompileErrors" />
+		<parameter id="description" value="CITEST HasCompileErrorsTest" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
+		id="IncrementalCompiler">
+		<parameter id="class"
+			value="de.knowwe.compile.IncrementalCompiler" />
+		<parameter id="name" value="IncrementalCompiler" />
+		<parameter id="description" value="EventListener IncrementalCompiler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CorrectionProvider"
+		id="IRITermCorrectionProvider">
+		<parameter id="class"
+			value="de.knowwe.compile.correction.IncrementalTermReferenceCorrectionProvider" />
+		<parameter id="name" value="IncrementalTermReferenceCorrectionProvider" />
+		<parameter id="description"
+			value="Generates correction suggestions for RDFS" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="105" />
+		<parameter id="scope" value="IncrementalTermReference" />
+	</extension>
+	
+
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="ObjectInfoTagHandlerIncr">
+		<parameter id="class" value="de.knowwe.compile.support.ObjectInfoTagHandlerIncr" />
+		<parameter id="name" value="ObjectInfoTagHandlerIncr" />
+		<parameter id="description" value="TagHandler ObjectInfoTagHandlerIncr" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="2" />
+		<parameter id="script" value="KnowWE-Plugin-Core.js" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="CorrectionToolProvider">
+		<parameter id="class"
+			value="de.knowwe.compile.correction.IncrementalCorrectionToolProvider" />
+		<parameter id="name" value="CorrectionToolProvider" />
+		<parameter id="description"
+			value="Offers to quickly correct typos in term references." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="TermReference" />
+		<parameter id="scope" value="IncrementalTermReference" />
+		<parameter id="scope" value="IRITermRef" />
+	</extension>
+	
+    <extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+        id="ImportedConceptPageLinkProvider">
+        <parameter id="class"
+            value="de.knowwe.compile.support.ImportedConceptPageLinkProvider" />
+        <parameter id="name" value="ImportedConceptPageLinkProvider" />
+        <parameter id="description"
+            value="Offers quick jump to links for imported terms" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="scope" value="TermReference" />
+        <parameter id="scope" value="IncrementalTermReference" />
+        <parameter id="scope" value="IRITermRef" />
+    </extension>
+
+	    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="TermRenamingActionIncr">
+        <parameter id="class"
+            value="de.knowwe.compile.support.TermRenamingActionIncr" />
+        <parameter id="name" value="TermRenamingActionIncr" />
+        <parameter id="description" value="Action TermRenamingActionIncr" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="4" />
+    </extension>
+    
+	
+	
+
+
+	
+</plugin>

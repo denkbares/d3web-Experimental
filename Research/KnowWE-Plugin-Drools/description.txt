@@ -1,0 +1,1 @@
+This project contains a basic knowledge acquisition platform for open source rule engine drools (http://www.jboss.org/drools/).

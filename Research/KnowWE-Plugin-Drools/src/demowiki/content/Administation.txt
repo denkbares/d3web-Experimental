@@ -1,0 +1,11 @@
+[{KnowWEPlugin adminpanel}]
+
+[{KnowWEPlugin parseAllButton}]
+
+%%prettify 
+{{{
+<namespaces>
+w: http://www.umweltbundesamt.de/wisec# 
+</namespaces>
+}}}
+/%

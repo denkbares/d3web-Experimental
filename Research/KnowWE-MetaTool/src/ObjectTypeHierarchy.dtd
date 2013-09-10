@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT ObjectTypeHierarchy (ObjectType+)>
+<!ELEMENT ObjectType (ChildrenTypes?, CustomRenderer?, (SubtreeHandler|AnonymousSubtreeHandler)*, (CustomSectionFinder | RegExSectionFinder | AllTextSectionFinder))>
+<!ATTLIST ObjectType
+	ClassName CDATA #REQUIRED
+	Extends CDATA #REQUIRED
+	Position CDATA #IMPLIED>
+<!ELEMENT ChildrenTypes (ObjectType+)>
+<!ELEMENT CustomRenderer EMPTY>
+<!ATTLIST CustomRenderer
+	ClassName CDATA #REQUIRED
+	Package CDATA #REQUIRED>
+<!ELEMENT SubtreeHandler EMPTY>
+<!ATTLIST SubtreeHandler
+	ClassName CDATA #REQUIRED
+	Package CDATA #REQUIRED>
+<!ELEMENT AnonymousSubtreeHandler EMPTY>
+<!ATTLIST AnonymousSubtreeHandler
+	Name CDATA #REQUIRED
+	Extends CDATA #REQUIRED>
+<!ELEMENT CustomSectionFinder EMPTY>
+<!ATTLIST CustomSectionFinder
+	ClassName CDATA #REQUIRED
+	Package CDATA #REQUIRED>
+<!ELEMENT RegExSectionFinder (RegEx)>
+<!ELEMENT RegEx (#PCDATA)>
+<!ELEMENT AllTextSectionFinder EMPTY>

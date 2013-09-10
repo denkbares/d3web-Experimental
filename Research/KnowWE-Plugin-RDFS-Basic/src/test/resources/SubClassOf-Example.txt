@@ -1,0 +1,12 @@
+!! Mini-Test für den inkrementellen Compiler
+
+Class Person
+
+Class Mammal
+
+Class Animal
+
+
+>Person subclassOf:: Mammal
+
+>Mammal subclassOf:: Animal

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="Bergbau Diagnose und Verbesserung"  
+	dtype="singleform" 
+	indicationmode="hide_unindicated"
+	dstrategy="nextform"
+	css="questionaryCons, diagnosisVisu" 
+	dialogcolumns="1"
+	questionnairecolumns="3"
+	questioncolumns="1"
+	uiprefix = "QuestionaryCons"
+        login = ""
+        required = "NONE"
+	language = ""
+        debug = "false"
+        solutionExplanation = "TEXTUAL" 
+        solutionDepth = "ESTABLISHED"
+        diagnosisNavi = "FALSE"
+        questionnaireNavi = "FALSE"
+        >
+	<data kb="Kombitabelle.d3web" />
+        <ue logging = "FALSE" />
+</dialog>

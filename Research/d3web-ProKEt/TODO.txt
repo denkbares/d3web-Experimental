@@ -1,0 +1,269 @@
+---------------
+-- TODO Doku --
+---------------
+HOW TO 
+-- add new renderers for new widgets
+-- create StringTemplate file
+-- derive Renderer from D3webRenderer or sub-renderers
+-- adapt renderer chosing class RendererMapping
+
+LISTING of all widgets
+LISTING of all properties
+LISTING of possible dialog styles etc
+
+
+  	 
+------------------------
+FREECHOICE/QUICKI Dialog
+-------------------------  	 
+- QuickI/Clarification dialog komplett anpassen wie QuickI
+-- toggle/untoggle
+-- unknown option
+-- versch. Question Typen
+-- Datumsfragen
+-- ! d3web Anbindung!
+
+
+-----------
+PROTOTYPING
+-----------
+* Folgefragen?!
+* Abstraktionsfragen?!
+* Multicolumn Style: ohne Tabellen? besser?
+* Bonustext auch bei Hierarchy Statistik? 
+DONE Titel aus dem Questionnaire rausziehen/eigen taggen
+
+
+
+----------------------------------
+---- ALLG  D3WEB Dialog  TODOS ---
+----------------------------------
+
+DONE - replace Renderer-chosing algorithm?! -->  Erstmal so lassen, funktioniert
+DONE - styling of required fields marker and warning!
+DONE - Click in Textfields logs automatically with null --> desired?! NO!
+DONE - Reload / refresh --> new case?! --> NO!
+DONE - When switching dialogs, content is not loaded, needs a new-case click
+
+
+!! LATER - Building Blocks, Modularisierung, Drag and Drop, Visual Edit
+LATER - logout link? Passiert automatisch nach 60 Minuten    
+LATER - Anzeigen welcher Benutzer gerade eingeloggt ist?!
+LATER - Parallelzugriff auf Dateien verhindern (wenn user derselben usergroup sich einloggen)?!
+  --> erstmal kein Handlungsbedarf, sollte nicht/sehr selten vorkommen da eh nur ein-zwei Bearbeiter pro Klinik
+
+
+- Neues Typ-Konzept: noch umsetzen, bisher gibt es nur eine Form Dialoge
+  -- Dialog Kategorien sind in DialogType (Enum) definiert, jeder Dialog gehört einem solchen 
+     Basis-Typen an (momentan SingleForm, Multiform, Hierarchical, und default)
+  -- DialogType definiert, welche Art Strategie für das anzeigen von Fragen verwendet werden soll
+  	 momentan All, NextForm, NextUAQuestion
+  -- Abhängig vom Typ d3web reinladen oder nicht: für SingleForm/All braucht man den gesamten Tree von 
+     Anfang an, für MultipleForm nicht
+
+
+- check all attributes / naming
+- check templates as to be built of elements as described in papers
+- before image inclusion call method to find out whether image exists or 
+  whether dummy should be used
+- SETTING values: only use the store, not the single val any more!
+- REQUIRED VALUES: currently, only a single value can be specified as "always required", e.g., if its needed for
+	autosaving mechanism (filename assembly in the MEDIASTINITIS case). Make this more flexible to specify several vals?! 
+- Style: Abstand Answers und Radio/CheckButtons: geht teilweise kaputt
+    (EuraHS) - Vermutung: liegt an prozentualer Angabe irgendwo
+
+
+--------------------
+--- REFACTORINGS ---
+--------------------
+
+DONE - New case --> new logfile is written, but we need new logger, too
+DONE - Setting of default -Data folder
+DONE - Startup JS Errors/JQuery Errors!
+DONE - logging zeug raus aus js und in eigenes js file
+DONE - Fehler bei checkrange numquestions --> manchmal kann man die Werte falsch setzen!
+DONE - refactor naming of log functions: remove d3web prefiX
+DONE - unknown zu weit rechts verrückt bei num/text questinos - changed in UnknownTabular.st to 99% width...
+DONE (hoffentlich) - startup error when starting with EuraHS: Case-Number.txt Permission denied und
+    NullPointer (mail Albrecht) --> könnte daran liegen wenn man nicht das Servlet selbst sondern
+    über ControlCenter startet...
+DONE - Refactor logging to log ids from id table for consistency
+DONE - Log ids of infopopups --> also ids from id table!
+DONE - Log end value --> timespan
+
+- REFACTOR all Templates: everything to CSS, out of template files!
+- REFACTOR Fallsortierung im Laden-Menü: Groß-/Kleinschreibung anders berücksichtigen
+- REFACTOR enter error messages as attribute in StringTemplate, not in JS
+
+- REFACTOR adapt hierarchical examples to new "markup"
+- REFACTOR js file(s)
+- rename bonusText in auxInfo or so.
+- REFACTOR Renderers
+- Refactor Control Center:
+  Problem = when starting dialogs via ...D3webDialig?src=Mediastinitis, only the
+    Mediastinitis.xml is read but not the specific Mediastinitis Servlet is sstartet. 
+    Problem when specific stuff, e.g. login reading/preprocessing is only done in this
+    servlet...
+- REFACTOR: check all stuff in GlobalSettings, D3webConnector and Servlets
+    refactor user-related stuff (e.g. session, language, logger... out to UserSettings
+    and provide per httpSession
+- REFACTOR: styles. Check basic styles, e.g. button sizes, and only adapt colors in specific
+CSSs
+
+- REFACTOR: clean JavaScript: 
+    - move jquery dialog definitions to separate file
+
+- UNIFY prototypes and d3web systems with regards to
+    - js
+    - StringTemplate
+    - CSS
+
+- REFACTOR: have general utility stuff, e.g. file reading, modular in separate package
+
+-------------------------------------------
+--- MEDIASTINITIS (Projekt Herzmedizin) ---
+-------------------------------------------
+
+- Alte Fälle laden Problem:
+    wenn alter Fall geladen wird und geändert, kann man nicht mehr abspeichern!
+- Num-questions: Plausibilitätsprüfung!
+
+----------
+JuriSearch
+----------
+DONE - Zusatzinfo-Kasten: mitscrollen lassen?! --> erstmal fixed
+DONE - Additional Info for more questions, more content
+DONE - Also show aux info when mouseovering the arrow
+DONE - Unterscheidung und/oder Fragen prototyping!!!
+DONE - Refactor IDs: answer type of legal questions is set twice
+DONE - Add notification if user sets parent-rating that contradicts calculated child-rating
+DONE - Andere Fragetypen in hierarchy --> oc mit popup, num
+DONE - Refactor Hierarchy prototypes as to use own attributes AND/OR instead of OC/MC 
+DONE - Panel Images umbenennen --> sind jetzt CSS BUTTONS
+DONE - Panel Areas vergrößern/anpassen --> CSS BUTTONS
+
+- CHECK div styles of hierarichal --> if too small, design is destroyed
+- d3web: Introtext über KB
+Maybe Later - Ausprobieren Schrift über Pfeil
+- JS interactivity für num und oc fragen
+- Install IE check as beforedialog
+- deploy automatically wiki to dialog
+
+- Get Dialog Header, zB Mietrecht-Beratung, from .doc filename or the like
+- Rename specs for pdf links and webapp links in prototype specs in
+    - PDFLINK / .pdf
+    - LINK / .link
+    - WWWLINK / .wwwlink
+- Create local webapp "Juri"
+
+- neuer Fall, speichern, reset etc
+
+
+!!! - d3web Anbindung
+- Styling header: print button, feedback
+- Print Button --> Baum
+
+-
+
+LÖSUNG IMMER SICHTBAR
+
+
+--------------
+--- EuraHS ---
+--------------
+DONE - Ajax Error Add facts bei Bildfragen --> Logging?! 
+ 	[Muysoms]
+DONE - Hernien Bild: klären, welche Seite per Klick gewählt wird (r/l vertauscht)
+	[Simmermacher]
+DONE - if I do not do a QoL score preop, but I want to answer all questions as unknown, I need 9 clicks. 
+	Is it possible to have in one click decided not to do the QoL?
+DONE - Zusätzliches "Additional Visits" für "irgendwelche" Infos nach dem 2. Follow Up, s. mail 	
+DONE - Follow Up mark "done" checken (selber mal ein Beispiel eingeben)
+DONE - Folgefrage 115: bei primary route nicht anzeigen --> Mesh Scar kommt aber jetzt ganz am Ende...
+DONE - Question 148 	Classification of surgical complications --> answer Grade 0
+DONE - Question 148 --> Popup adaption?!
+DONE - In this session question 115: "Was the complete scar repaired?" was shown.
+DONE - >IE Meldung englisch
+DONE - Internet Explorer 9
+DONE - (Basis) Images Upload (Frank spricht hierfür erstmal mit Alex H.)
+DONE - Grid Summary --> download .txt Button deaktivieren
+DONE - Kopfzeile Grid: Leerzeichen fehlt
+DONE - Summary --> incisional recurrent hernia "problem"
+
+DONE - Frage 139 Intrahospital complications 
+    if answered with "no complications", question 148 Classification of surgical complications 
+    should be disabled
+DONE - mention imageupload [muysoms] --> link or session timeout
+- test IE8 and mail to [craessarts]
+- check firefox 3 [uli]
+
+
+
+INTERNET EXPLORER QUIRKS
+------------------------
+- popups are displayed completely transparent --> obviously IE doesn't display
+  the half-transparency CSS stuff. 
+- dauert alles zu lange 
+- welche Version?
+- download txt button not invisible for grid
+- ! Browser Check: configure per specs which way to include (beforelogin, beforedialog)
+- Bildfragen
+
+
+
+
+
+
+
+USABILITY EXTENSION
+-------------------
+DONE - feedback form for prototypes also!
+DONE - write questionnaire data to files 
+DONE - switch usability questionnaires by property, e.g allow "uequestionnaire=SUS" or
+"uequestionnaire=OWN"
+DONE - own questionnaire --> some usability questions with schulnotenskala and freetext "sonstiges"
+
+
+- refactor sendmail to send this file
+-- txtfilename = logfile currently is send in mail, but _ are not displayed
+instead of text in mail?! (needed, files will be stored on server also
+- tweak styling of feedback/questionnaire dialogs
+- internationalize questionnaires
+- for above, also log appropriately WHICH Questionnaire was included
+- property based configuration of usability metrics / evaluation
+- visualization of appropriate results (WHICH ONES?)
+- Logging: when end session logtime is BEFORE save button click
+- Logging Questionnaire: remove + from free field
+
+
+- Refactor language stuff for prototypes (ger/eng) bzw. generally
+    (language config file with all texts for dialog elements such as buttons etc?!)
+- Read intermed solutions and correct ratings from csv file instead code based hashmap
+
+
+---Logging----
+DONE - Umlaute (zB Mediastinitis)
+DONE - Logging of image answers
+DONE - allow "" in Feedback
+
+- check sind alle wichtigen Elemente geloggt?
+- check logging completely, also for productive systems as EuraHS
+- redeploy EuraHS and Mediastinitis if done
+- Feedback Felder größer
+
+
+
+
+IMPORTANT:
+-----------
+PARSER ELMAR
+- doppelt vorkommende Fragen werden übergangen?!
+- Resourcen (zB PDF Links)
+
+
+TOOL ALEX und WIKI JURI
+- Tool Alex Pfade flexibel
+- Tool Alex check in maven proj if done above
+- Check multiple questions in tree
+
+

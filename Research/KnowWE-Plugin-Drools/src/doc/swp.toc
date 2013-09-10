@@ -1,0 +1,29 @@
+\contentsline {chapter}{\numberline {1}Business Rules}{2}{chapter.1}
+\contentsline {chapter}{\numberline {2}Kollaboratives Knowledge Engineering in Wikis}{3}{chapter.2}
+\contentsline {section}{\numberline {2.1}Klassisches und kollaboratives KE}{3}{section.2.1}
+\contentsline {section}{\numberline {2.2}M\IeC {\"o}glichkeiten zum kollaborativen KE}{3}{section.2.2}
+\contentsline {section}{\numberline {2.3}Was ist KnowWE?}{3}{section.2.3}
+\contentsline {chapter}{\numberline {3}Technische Umsetzung}{5}{chapter.3}
+\contentsline {section}{\numberline {3.1}Technische Grundlagen von KnowWE}{5}{section.3.1}
+\contentsline {section}{\numberline {3.2}Terminologie im DroolsPlugin}{5}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Inputs}{5}{subsection.3.2.1}
+\contentsline {subsubsection}{ChoiceInput}{5}{section*.2}
+\contentsline {subsubsection}{NumInput}{6}{section*.3}
+\contentsline {subsubsection}{SolutionInput}{6}{section*.4}
+\contentsline {subsection}{\numberline {3.2.2}Values}{7}{subsection.3.2.2}
+\contentsline {section}{\numberline {3.3}Wiki-Markup}{7}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}DroolsFactsSection}{7}{subsection.3.3.1}
+\contentsline {subsubsection}{One Choice Inputs}{7}{section*.5}
+\contentsline {subsubsection}{Multiple Choice Inputs}{8}{section*.6}
+\contentsline {subsubsection}{Numerical Inputs}{8}{section*.7}
+\contentsline {subsubsection}{Solution Inputs}{8}{section*.8}
+\contentsline {subsection}{\numberline {3.3.2}DroolsRulesSection}{8}{subsection.3.3.2}
+\contentsline {subsection}{\numberline {3.3.3}DroolsSessionSection}{9}{subsection.3.3.3}
+\contentsline {section}{\numberline {3.4}Die Drools Shell}{10}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Benutzung}{12}{subsection.3.4.1}
+\contentsline {subsubsection}{Verf\IeC {\"u}gbare Kommandos}{12}{section*.9}
+\contentsline {subsubsection}{Autocompletion}{12}{section*.10}
+\contentsline {chapter}{\numberline {A}Gesamte UML-Diagramme}{13}{appendix.A}
+\contentsline {section}{\numberline {A.1}OOA-Model}{13}{section.A.1}
+\contentsline {section}{\numberline {A.2}OOD-Model}{14}{section.A.2}
+\contentsline {chapter}{\numberline {B}Beispiel: Car Diagnosis}{15}{appendix.B}

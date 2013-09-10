@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogOpts 
+    header="Homeopathic Advice"  
+    login = ""
+    required = ""
+    language = ""
+    debug = "false" >
+    <globalUIOpts 
+        dialogtype="SingleForm"
+        dialogstrategy = ""
+        showcontraindicated = "HIDE"
+        shownonindicated = "HIDE"
+        css="singleForm, diagnosisVisu, solutionPanel" 	
+        dialogcolumns="1"
+        questionnairecolumns="2"
+        questioncolumns="1"
+        solRatingGranularity = "ABSTRACT;;;PRECISE"
+        solutionDynamics = "INTERACTIVE"
+        solutionRange = "SINGLE"
+        solutionStructuring = "LISTING"
+        solutionExplanation = "TEXTUAL" 
+        solutionSorting = "CATEGALPHA"
+        solutionDepth = "ALL"
+        unknownvisible = "TRUE"
+        questionNumbering = "FALSE"
+        questionnaireNumbering = "TRUE"
+    />
+    
+    <dataOpts kb="HomeoColdMC.d3web" />
+    <ueOpts logging = "FALSE" />
+</dialogOpts>

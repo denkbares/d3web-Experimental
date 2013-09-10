@@ -1,0 +1,50 @@
+Defining individuals using 'def':
+
+offdef Jochen Reutelshoefer
+
+offdef Joachim Baumeister
+
+
+Defining classes using 'Class':
+
+Class Document
+
+Class Person12
+
+
+
+Definition of properties:
+
+ObjectProperty authorOff(Person12, Document)
+
+
+doffef hasTitle type:: DatatypeProperty
+
+def hasAuthor  inverseOf:: authorOff
+
+> hasAuthor type:: ObjectProperty
+
+Creating basic triple introduced by '>':
+
+off> hasTitle domain:: Document
+
+
+Creating more complex assertions using turtle syntax:
+
+tofftl: Jochen Reutelhoefer type:: Person4
+    ,authorOf:: [ hasAuthor:: Joachim Baumeister].
+
+    
+Creating class hierarchies using dash-tree markup:
+%%subclassoff
+Thing
+- Person4
+- Document
+-- def Paper
+% 
+
+
+<sparql2go>
+SELECT ?x WHERE { ?x rdf:type lns:HenneEi .}
+
+</sparql2go>

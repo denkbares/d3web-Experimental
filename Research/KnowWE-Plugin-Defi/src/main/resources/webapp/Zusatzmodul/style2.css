@@ -1,0 +1,101 @@
+body {
+	background-color: rgb(6,61,121);
+	font-family: sans-serif;
+	font: Verdana;
+	font-size: 14pt;
+	color: white;
+	border: solid;
+	border-color: rgb(6,61,121);
+	border-width: thick;
+	padding: 1%;
+	text-align: center;
+}
+
+a {
+	color: rgb(6,61,121);
+	font-size: 14pt;
+	font-weight: bold;
+}
+
+
+
+
+ a:hover{color:#FF8C00;}
+ a:active{color:#FF8C00;}
+
+.navitext{
+	color: rgb(216,218,220);
+}
+
+.centeralign {
+	text-align: center;
+}
+
+.left {
+	text-align: left;
+}
+
+#block {
+   background: rgb(216,218,220);
+	color: black;
+	display:block;
+   padding: 5;
+   border: 1px solid black;
+	width: 600px;
+	text-align: center;
+   }
+
+
+h1 {
+	text-align: center;
+	background-color: rgb(216,218,220);
+	color: rgb(6,61,121);
+	font-size: 18pt;
+	line-height: 1em;
+}
+
+h3 {
+	font-size: 30pt;
+	font-weight: 900;
+	color: rgb(6,61,121);
+}
+
+h4{
+	font-size:18pt;
+	font-weight:500;
+	color: black;
+	line-height: 1em;
+}
+
+.center {
+	text-align: center;
+}
+
+table {
+	border: 0;
+	width: 600px;
+	height: 120px;
+	background-color: rgb(216,218,220);
+	text-align: center;
+	padding: 0;
+	line-height: 2em;
+}
+
+td.2{
+border: 0;
+width: 300px;
+font-weight: bold;
+background-color: rgb(6,61,121);
+}
+
+tr.2{
+border: 0;
+width: 300px;
+font-weight: bold;
+background-color: rgb(6,61,121);
+}
+
+h2 {
+	color: rgb(216,218,220);
+	font-size: 15pt;
+}

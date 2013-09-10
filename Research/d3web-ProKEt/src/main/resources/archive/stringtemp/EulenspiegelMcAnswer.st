@@ -1,0 +1,1 @@
+<div id="$fullId$" class="answer $fullId$  $if(realAnswerType)$answer-$realAnswerType$$endif$" onClick="javascript:flat_button_toggle('$fullId$');" $if(style)$ style="$style$;"$endif$><div id="f_$fullId$" class="f_$fullId$ not-selected">$AnswerTitleTooltip()$ $Image()$ $text$</div></div>

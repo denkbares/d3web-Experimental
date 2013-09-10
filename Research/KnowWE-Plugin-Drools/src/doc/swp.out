@@ -1,0 +1,20 @@
+\BOOKMARK [0][-]{chapter.1}{Business Rules}{}
+\BOOKMARK [0][-]{chapter.2}{Kollaboratives Knowledge Engineering in Wikis}{}
+\BOOKMARK [1][-]{section.2.1}{Klassisches und kollaboratives KE}{chapter.2}
+\BOOKMARK [1][-]{section.2.2}{M\366glichkeiten zum kollaborativen KE}{chapter.2}
+\BOOKMARK [1][-]{section.2.3}{Was ist KnowWE?}{chapter.2}
+\BOOKMARK [0][-]{chapter.3}{Technische Umsetzung}{}
+\BOOKMARK [1][-]{section.3.1}{Technische Grundlagen von KnowWE}{chapter.3}
+\BOOKMARK [1][-]{section.3.2}{Terminologie im DroolsPlugin}{chapter.3}
+\BOOKMARK [2][-]{subsection.3.2.1}{Inputs}{section.3.2}
+\BOOKMARK [2][-]{subsection.3.2.2}{Values}{section.3.2}
+\BOOKMARK [1][-]{section.3.3}{Wiki-Markup}{chapter.3}
+\BOOKMARK [2][-]{subsection.3.3.1}{DroolsFactsSection}{section.3.3}
+\BOOKMARK [2][-]{subsection.3.3.2}{DroolsRulesSection}{section.3.3}
+\BOOKMARK [2][-]{subsection.3.3.3}{DroolsSessionSection}{section.3.3}
+\BOOKMARK [1][-]{section.3.4}{Die Drools Shell}{chapter.3}
+\BOOKMARK [2][-]{subsection.3.4.1}{Benutzung}{section.3.4}
+\BOOKMARK [0][-]{appendix.A}{Gesamte UML-Diagramme}{}
+\BOOKMARK [1][-]{section.A.1}{OOA-Model}{appendix.A}
+\BOOKMARK [1][-]{section.A.2}{OOD-Model}{appendix.A}
+\BOOKMARK [0][-]{appendix.B}{Beispiel: Car Diagnosis}{}

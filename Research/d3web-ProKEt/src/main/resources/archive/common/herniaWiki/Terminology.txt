@@ -1,0 +1,536 @@
+This article contains the knowledge, respectively the dialog of the hernia project.
+%%Question
+EuraHS Initialisation #1 
+- Please enter a EuraHS registration number instead of a patient name [text]
+//Albrecht: Zusätzlich soll eine laufende Nummer vom System vergeben werden und als nich änderbare Kennzahl sichtbar sein
+- Please select your hernia route [oc]
+-- Primary ventral hernia route
+--- "Please select primary ventral hernia" [oc]
+---- Epigastric hernia
+---- Umbilical hernia
+---- Lumbar hernia
+---- Spighelian hernia
+-- Incisional ventral hernia route
+--- "Please select incisional ventral hernia" [oc]
+---- Incisional ventral hernia
+---- Recurrent epigastric hernia
+---- Recurrent umbilical hernia
+---- Recurrent lumbar hernia
+---- Recurrent Spighelian hernia
+-- Parastomal hernia route
+
+
+@package: Hernia
+%
+
+
+%%Question
+Common Route #2
+- Please choose database level [oc]
+-- Level 1
+-- Level 2
+- Year of birth [date] // muss in Zukunft angepasst werden
+// Für Uli: Kongruenzen der Kalender-Daten einfügen
+- Gender [oc]
+-- Male
+-- Female
+- Is the patient aware, that data-recording being performed? [oc]
+-- Yes
+-- Not applicable to my country
+@package: Hernia
+
+
+%
+
+%%Question
+Comorbidities &only if: Please choose database level = Level 2 &
+- Are there Comorbidities? [yn]
+-- Yes
+--- Select Comorbidities [mc]
+---- "Diabetes mellitus type I (juvenile)"
+----- "SOC Score of Diabetes mellitus type I (juvenile)" [text] //Beim löschen der letzten MC Alternative verschwindet die Folgefrage nicht
+---- "Diabetes mellitus type II (adult)"
+----- "SOC Score of Diabetes mellitus type II (adult)" [text] //Wäre besser direkt hinter der Alternative eine drop-down Antwort auszuwählen
+---- Cardiac disease
+----- "SOC Score of cardiac disease" [text]
+---- Arterial hypertension
+----- "SOC Score of arterial hypertension" [text]
+---- Pulmonary disease
+----- "SOC Score of pulmonary disease" [text]
+---- Hepatic disease
+----- "SOC Score of hepatic disease" [text]
+----- Ascites present [yn]
+---- Renal disease
+----- "SOC Score of renal disease" [text]
+----- Haemodialysis [yn]
+----- Peritoneal dialysis [yn]
+---- Malignant disease
+----- "SOC Score of malignant disease" [text]
+----- Curative treatment [yn]
+@package: Hernia
+%
+
+%%Question
+Risk factors &only if: Please choose database level = Level 2 &
+- Are there other risk factors? [yn]
+-- Yes
+--- Select risk factors [mc]
+---- Aneurysm disease
+---- Collagen related disease
+----- Type of collagen related disease: [oc]
+------ Lung emphysema
+------ Marfan´s syndrome
+------ Ehlers Danlos
+------ Polycystic kidney disease
+---- Personal history of previous hernia repair at another site
+---- "Family history of hernia surgery (more than 2 first grade relatives)"
+---- "Long term use of corticosteroids"
+---- "Use of immunosuppressant medication"
+---- "Use of anticoagulant therap{y (warfarin/cumarine)"
+--- Weight of patient [num]{kg} (0 500)
+--- Height of patient [num]{cm} (0 300)
+--- BMI: [num]{kg/m2}<abstract>
+@package: Hernia
+%
+
+%%Question
+Other risk factors &only if: Please choose database level = Level 2 &
+- Occupation [oc]
+-- Heavy physical labour
+-- Mild physical labour
+-- Desk based labour
+-- No employment
+- Sporting activities [oc]
+-- None
+-- "Sporadic (1/month)"
+-- "Moderate (1/week)"
+-- "Intense (>1/week)"
+- Smoking history [oc]
+-- Never smoked
+-- "Ex-smoker (stopped >12 months)"
+-- Occasional smoker
+-- Daily smoker
+--- Pack years [num]
+@package: Hernia
+%
+
+%%Question
+Primary ventral hernia route 
+- Width of the ventral hernia [num] {cm}
+- Length of the ventral hernia [num] {cm}
+- Diameter of the ventral hernia [num] {cm} <abstract>
+- Reducibility of the ventral hernia [oc] &only if: Please choose database level = Level 2 &
+-- Completely reducible
+-- Partially reducible
+-- Non reducible
+- Indication for ventral hernia surgery [oc] &only if: Please choose database level = Level 2 &
+-- Elective
+-- Emergency
+@package: Hernia
+%
+
+%%Question
+Incisional ventral hernia route 
+- Width of the hernia [num] {cm}
+- Length of the hernia [num] {cm}
+- Reducibility of the hernia [oc] &only if: Please choose database level = Level 2 &
+-- Completely reducible
+-- Partially reducible
+-- Non reducible
+- Indication for incisional ventral hernia surgery [oc] &only if: Please choose database level = Level 2 &
+-- Elective
+-- Emergency
+- Mark the incisional hernia areas involved [mc] //Bitte die Umrahmung beim Anklicken auch im Bild fest machen und z.B. mit der gleichen gelben Farbe wie die Pop-ups markieren.
+-- M1
+-- M2
+-- M3
+-- M4
+-- M5
+-- "L1:L"
+-- "L1:R"
+-- "L2:L"
+-- "L2:R"
+-- "L3:L"
+-- "L3:R"
+-- "L4:L"
+-- "L4:R"
+- "Upload fotography" [info] 
+// Albrecht: bitte den erhöhten Aufwand zur Erstellung berücksichtigen, dass dieses Tool auch bis Mitte Dezember funktionsfähing ist.
+- Date of operation that caused the incisional hernia [date] &only if: Please choose database level = Level 2 &
+- "Type of operation (speciality) that caused the incisional hernia" [oc] &only if: Please choose database level = Level 2 &
+-- Gastrointestinal
+-- Abdominal wall surgery
+-- Gynecological
+-- Vascular
+-- Orthopedic
+-- Plastic surgery
+-- Thoracic surgery
+-- Urological
+- Recurrent hernia [yn]
+-- Yes
+--- Number of previous incisional ventral hernia repairs [num] &only if: Please choose database level = Level 2 &
+--- Has there been a previous mesh repair? [yn]
+---- Yes
+----- Date of last repair [date]
+----- Method of previous repair [oc]
+------ Laparoscopic
+------ Open
+----- Reducibility of the previous hernia [oc]
+------ Completely reducible
+------ Partially reducible
+------ Not reducible
+----- Indication for previous surgery [oc]
+------ Elective
+------ Emergency
+- Trocar hernia [yn]
+@package: Hernia
+%
+
+%%Question
+Parastomal hernia route
+- Years since stoma creation [num] &only if: Please choose database level = Level 2 &
+- Years with parastomal hernia [num] &only if: Please choose database level = Level 2 &
+- Type of stoma [oc]
+-- Colostomy
+-- Ilestomy
+-- Ileal conduit
+- Indication for stoma creation [oc] &only if: Please choose database level = Level 2 &
+-- Malignancy
+-- Benign disease
+- Indication for parastomal hernia surgery [oc] &only if: Please choose database level = Level 2 &
+-- Elective
+-- Emergency
+- Symptoms of the parastomal hernia [mc] &only if: Please choose database level = Level 2 &
+-- None
+-- Pain
+-- Incarceration
+-- Obstruction
+-- Cosmetic
+-- Difficulty with bag appliance
+- Previous repair of the parastomal hernia [yn]
+-- Yes
+--- Number of previous parastomal hernia repairs [num] &only if: Please choose database level = Level 2 &
+--- Has there been a previous parastomal mesh repair? [yn]
+---- Yes
+----- Date of last parastomal hernia repair [date]
+----- Method of previous parastomal repair [oc]
+------ Laparoscopic
+------ Open
+----- Reducibility of the previous parastomal hernia [oc]
+------ Completely reducible
+------ Partially reducible
+------ Not reducible
+----- Indication for previous parastomal hernia surgery [oc]
+------ Elective
+------ Emergency
+- Width of the parastomal hernia [num] {cm}
+- Length of the parastomal hernia [num] {cm}
+- Is there a concomitant incisional hernia present [yn]
+-- Yes
+--- Localisation of the concomitant incisional hernia [mc]
+---- M1
+---- M2
+---- M3
+---- M4
+---- M5
+---- "L1:L"
+---- "L1:R"
+---- "L2:L"
+---- "L2:R"
+---- "L3:L"
+---- "L3:R"
+---- "L4:L"
+---- "L4:R"
+@package: Hernia
+%
+
+
+%%Question
+Common Route - Preoperative Quality of life - Pain at the site of the hernia &only if: Please choose database level = Level 2 &
+- "In rest (preoperative)" [text]
+- "During activities (preoperative)" [text]
+- "Worst pain felt during the last week (preoperative)" [text]
+@package: Hernia
+%
+
+%%Question
+Common Route - Preoperative Quality of life - Restrictions of activities &only if: Please choose database level = Level 2 &
+- "Daily activities (preoperative)" [text]
+- "Outside the house (preoperative)" [text]
+- "During sports (preoperative)"[text]
+- "During heavy labour (preoperative)" [text]
+@package: Hernia
+%
+
+%%Question
+Common Route - Preoperative Quality of life - Esthetical discomfort &only if: Please choose database level = Level 2 &
+- "The shape of your abdomen (preoperative)" [text]
+- "The hernia itself (preoperative)" [text]
+@package: Hernia
+%
+
+%%Question
+Common Route - Operative data #6
+- Operation date [date]
+- Anaesthesia [oc]
+-- General
+-- Regional
+-- Local
+- Antibiotic prophylaxis [mc] &only if: Please choose database level = Level 2 &
+-- None
+-- Single dose
+-- "More than 1 dose of prophylactic antibiotics"
+-- "Prolonged (therapeutic)"
+-- Patient is already on antibiotic for infection
+- Intraoperative wound contamination [oc] &only if: Please choose database level = Level 2 &
+-- Class I
+-- Class II
+-- Class III
+-- Class IV
+- Operator [oc] &only if: Please choose database level = Level 2 &
+-- "Consultant (Senior) surgeon"
+-- "Registrar (Resident) without supervision"
+-- "Registrar (Resident) without direct supervision (surgeon not scrubbed in)"
+-- "Registrar (Resident) with direct supervisor (surgeon scrubbed in)"
+- "Start of operation (first incision)" [date] &only if: Please choose database level = Level 2 &
+- "End of operation (last skin suture)" [date] &only if: Please choose database level = Level 2 &
+- "Duration of the operation in minutes" [num] &only if: Please choose database level = Level 2 &
+//Albrecht: Automatische Kalkulationsfunktion in Munuten einfügen
+//Albrecht: Keine Sekunden-Angabe
+- Contents of the hernia sac [mc] &only if: Please choose database level = Level 2 &
+-- None
+-- Small bowel
+-- Colon
+-- Stomach
+-- Greater omentum
+-- Ovary
+-- Appendix
+-- Bladder
+-- Other
+- Incarceration [yn] &only if: Please choose database level = Level 2 &
+- Bowel repair or resection nequired [mc] &only if: Please choose database level = Level 2 &
+-- No
+-- "Yes (small bowel)"
+-- "Yes (colon)"
+@package: Hernia
+%
+
+%%Question
+Common Route - Operative data - Approach #7
+- Type of access [mc]
+-- Open surgery
+-- Laparoscopic surgery
+--- Number of ports used [num]
+--- Conversion to open [yn]
+@package: Hernia
+%
+
+%%Question
+Common Route - Operative Data - Concomitant procedures &only if: Please choose database level = Level 2 &
+- Concomitant abdominal surgery [yn]
+-- Yes
+--- Type of Concomitant abdominal surgery [mc]
+---- Gastrointestinal surgery
+----- Concomitant gastrointestinal surgery on? [mc]
+------ Gallbladder
+------ Stomach
+------ Small bowel
+------ Colon
+------ Liver/spleen/pancreas
+---- Other hernia repair
+---- Gynecological
+---- Urological
+---- Vascular
+---- Other
+- Is the hernia repair the main indication for surgery? [yn]
+@package: Hernia
+%
+
+%%Question
+Common Route - Operative Data - Surgical technique #9
+- Surgical technique [oc]
+-- Non mesh repair
+--- Type of non mesh repair [oc]
+---- Suture repair
+----- Type of suture repair [oc]
+------ Single suture
+------ Running suture
+----- Name of the suture material [text]
+---- Component separation technique without mesh augmentation
+----- Name of suture material [text]
+-- Mesh repair
+--- "Number of mesh(s)" [oc]
+---- One
+----- Name of mesh [text]
+----- Production company of the mesh [text]
+---- Two
+----- Name of first mesh [text]
+----- Name of second mesh [text]
+----- Production company of the first mesh [text]
+----- Production company of the second mesh [text]
+--- "Mesh position(s)" [mc]
+---- Onlay
+---- Inlay
+---- Retromuscular
+---- Preperitoneal
+---- Intraperitoneal
+---- Combination of above
+---- Plug 
+//Albrecht: Hier muss noch ein Pop-up Eingefügt werden
+---- Not-classifiable
+--- Was the hernia defect closed? [yn] &only if: Please choose database level = Level 2 &
+--- Width of the implanted mesh [num] {cm} &only if: Please choose database level = Level 2 &
+--- Length of the implanted mesh [num] {cm} &only if: Please choose database level = Level 2 &
+--- Size of the implanted mesh [num] {cm^2} <abstract> &only if: Please choose database level = Level 2 &
+//Albrecht: wird bei Änderung nicht aktualisiert 
+//Albrecht: Soll auch bei Level 1 erscheinen (immer erscheinen) 
+--- Estimated minimal overlap of the mesh beyond the hernia defect [num] {cm} &only if: Please choose database level = Level 2 &
+--- "Was the complete scar repaired by the mesh?" [yn]
+--- Fixation of the mesh [mc]
+---- No fixation
+---- Suture
+----- Name of the suture material [text]
+----- "Transfascial (transabdominal)" [yn]
+---- Fixation device
+----- Name of tracker device [text]
+//Uli: Liste der Devices 
+----- Production company of the tracker device [text]
+//Uli: Liste der Firmen
+---- Glue
+----- Type of glue [oc]
+------ Biologic
+------ Synthetic
+----- Name of the glue [text]
+----- Production company of the glue [text]
+//Uli: Liste der Firmen
+-- Component separation + mesh
+@package: Hernia
+%
+
+%%Question
+Common Route - Operation data - Intraoperative complications &only if: Please choose database level = Level 2 &
+- Conversion from laparoscopic to open surgery [yn]
+-- Yes
+--- "Reason(s) for conversion" [mc]
+---- Bleeding
+---- Adhesions
+---- Bowel injury
+---- Bladder injury
+---- Technical problems
+---- Other
+- Intraoperative complications [yn]
+-- Yes
+--- Types of intraoperative complications [mc]
+---- Severe bleeding
+----- Origin of bleeding [mc]
+------ Abdominal wall
+------ Mesentery
+------ Liver
+------ Spleen
+------ Large retroperitoneal vessels
+---- Bowel lesion
+----- Type of lesion [mc]
+------ Stomach
+------ Small bowel
+------ Colon
+------- Severity [oc]
+------ Sero-muscular tear
+------ Full thickness injury
+----- Management of intestinal lesion [mc]
+------ Suture repair
+------ Bowel resection with anastomosis
+------ Ostomy
+---- Bladder injury
+---- "General complication (e.g. cardiac)"
+---- Other
+@package: Hernia
+%
+
+%%Question
+Common Route - Discharge data #11
+- Date of discharge [date] //Muss später sein als "Operation date"
+- Hour of discharge [date]
+- Duration of stay in days [num]
+- Intrahospital complications [mc]
+-- No Complications
+-- Bleeding complications
+--- Type of bleeding complications [mc] &only if: Please choose database level = Level 2 &
+---- Abdominal wall bleeding or hematoma
+---- Intraperitoneal bleeding
+----- Treatment [oc]
+------ Non needed
+------ Transfusion
+---- Revision not under general anaesthesia
+---- Revision under general anaesthesia
+-- "Surgical site infection (SSI)"
+--- Type of SSI [oc] &only if: Please choose database level = Level 2 &
+---- Superficial
+---- Deep
+---- Intra-abdominal
+--- Mesh infection [yn] &only if: Please choose database level = Level 2 &
+---- Yes
+----- Was mesh removed [oc]
+------ Yes
+------ No
+------ Partial
+-- Postoperative seroma
+-- Prolonged ileus or obstruction
+-- Organ lesion or perforation
+-- Urinary complication
+-- General complications
+- Did the patient need intensive care because of life threatening complications? [yn]
+-- Yes
+--- Type of life threatening complications [oc]
+---- Single organ failure
+---- Multiple organ failure
+- Did the patient die postoperatively? [yn]
+- Classification of surgical complications [mc]
+-- Grade I
+-- Grade II 
+-- Grade III
+-- Grade IIIa
+-- Grade IIIb
+-- Grade IV
+-- Grade IVa
+-- Grade IVb
+-- Grade V
+- Type of data collection [oc]
+-- Prospective
+-- Retrospective
+@package: Hernia
+%
+
+
+%%rule
+IF Please select your hernia route = Primary ventral hernia route
+THEN Primary ventral hernia route
+
+IF Please select your hernia route = Incisional ventral hernia route
+THEN Incisional ventral hernia route
+
+IF Please select your hernia route = Parastomal hernia route
+THEN Parastomal hernia route
+
+IF KNOWN[Weight of patient] AND KNOWN[Height of patient]
+THEN BMI: = (("Weight of patient" / ("Height of patient" * "Height of patient")) * 10000)
+
+IF KNOWN[Width of the ventral hernia] AND KNOWN[Length of the ventral hernia]
+THEN Diameter of the ventral hernia = (Width of the ventral hernia + Length of the ventral hernia) / 2
+
+IF KNOWN[Width of the implanted mesh] AND KNOWN[Length of the implanted mesh]
+THEN Size of the implanted mesh = (Width of the implanted mesh * Length of the implanted mesh)
+
+
+@package: Hernia
+%
+
+!!! TODOs
+
+Änderungen, die noch umgesetzt werden müssen
+
+|| Schlüsselwort || Beschreibung
+| TODO1          | Ein Beispielproblem, welches mehrere Stellen der Wissensbasis betrifft
+| TODO2          | weiteres Beispiel
+
+
+----

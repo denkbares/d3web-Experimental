@@ -1,0 +1,6 @@
+This plugin visualizes the pathes covered by testcases.
+
+Example markup:
+%%DiaFluxCoverage
+@master Main
+%

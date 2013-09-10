@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog type="hierarchy" css="statistic, nofoot" header="Statistical Calculation Recommender">
+	
+	<question >
+	<answer title="Series of measurements comparison based on categorical attributes" > 
+		<question >
+		<answer title="Small count dataset" >
+			<solution title="Fisher's exact test"></solution>
+		</answer>
+		</question>
+		<question >
+		<answer title="Large count dataset" >
+			<question >
+			<answer title="Count data of a single group" >
+				<solution title="z test for categorical data"></solution>
+			</answer>
+			</question>
+			<question >
+			<answer title="Count data of more than two groups" >
+				<solution title="Contingency table test"></solution>
+			</answer>
+			</question>
+			<question >
+			<answer title="Count data of exactly two groups" >
+				<question >
+				<answer title="Unpaired count data of two groups" >
+					<solution title="Chi square test, unpaired" tooltip="The chi square test is any statistical hypothesis test in which the sampling 
+					 distribution of the test statistic is a chi-square distribution when the null hypothesis is true, or any in which this is asymptotically true, 
+					 meaning that the sampling distribution (if the null hypothesis is true) can be made to approximate a chi-square distribution as closely as
+					 desired by making the sample size large enough."></solution>
+				</answer>
+				</question>
+				<question >
+				<answer title="Paired count data of two groups" >
+					<solution title="Chi square test, paired"></solution>
+				</answer>
+				</question>
+			</answer>
+			</question>
+		</answer>
+		</question>
+	</answer>
+	</question>
+	<question >
+	<answer title="Series of measurements comparison based on quantitative attributes" >
+		<question >
+		<answer title="Two series of measurements for two groups" >
+			<question >
+			<answer title="Two paired series of measurements" >
+				<solution title="z test paired"></solution>
+			</answer>
+			</question>
+			<question >
+			<answer title="Two unpaired series of measurements" >
+				<question >
+				<answer title="Large group size of at least 30" >
+					<solution title="z test unpaired"></solution>
+				</answer>
+				</question>
+				<question >
+				<answer title="Small group size of less than 30" >
+					<question >
+					<answer title="Normal distribution of both unpaired series of measurements" >
+						<solution title="t test unpaired"></solution>
+					</answer>
+					</question>
+					<question >
+					<answer title="No normal distribution of both unpaired series of measurements" >
+						<solution title="Wilcoxon rank sum test"></solution>
+					</answer>
+					</question>
+				</answer>
+				</question>
+			</answer>
+			</question>
+		</answer>
+		</question>
+		<question >
+		<answer title="One series of measurements for one group" >
+			<question >
+			<answer title="Large group size of more than 30" >
+				<solution title="t test"></solution>
+			</answer>
+			</question>
+			<question >
+			<answer title="Small group size of less than 30" >
+				<question >
+				<answer title="Normal distribution of the data" >
+					<solution title="t test"></solution>
+				</answer>
+				</question>
+				<question >
+				<answer title="No normal distribution of the data" >
+						<solution title="Wilcoxon signed rank test"></solution>
+				</answer>
+				</question>
+			</answer>
+			</question>
+		</answer>
+		</question>
+	</answer>
+	</question>
+</dialog>
+
+			

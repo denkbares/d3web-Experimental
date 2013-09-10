@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository>
+<session changed="2012-11-27 10:06:28.349" created="2012-11-27 10:06:28.349" id="c43d0213-50a3-4237-8edb-b9e2f1eefeb2">
+<name/>
+<facts>
+<valueFacts>
+<fact objectName="now" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2012-11-27 10:06:37.980</dateValue>
+</fact>
+<fact objectName="start" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2012-11-27 10:06:28.349</dateValue>
+</fact>
+<fact objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Asien</choiceValue>
+</fact>
+<fact objectName="Asien, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>China</choiceValue>
+</fact>
+<fact objectName="China" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="999.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+</valueFacts>
+<interviewFacts>
+<fact objectName="Lagerstätte" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Asien, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Wo befindet sich die Lägerstätte ?" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+</interviewFacts>
+</facts>
+<protocol>
+<entry date="2012-11-27 10:06:29.318" objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Afrika</choiceValue>
+</entry>
+<entry date="2012-11-27 10:06:30.353" objectName="Afrika, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Algerien</choiceValue>
+</entry>
+<entry date="2012-11-27 10:06:31.343" objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Asien</choiceValue>
+</entry>
+<entry date="2012-11-27 10:06:32.61" objectName="Asien, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Bangladesch</choiceValue>
+</entry>
+<entry date="2012-11-27 10:06:32.725" objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Afrika</choiceValue>
+</entry>
+<entry date="2012-11-27 10:06:35.902" objectName="Afrika, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Algerien</choiceValue>
+</entry>
+<entry date="2012-11-27 10:06:36.631" objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Asien</choiceValue>
+</entry>
+<entry date="2012-11-27 10:06:37.980" objectName="Asien, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>China</choiceValue>
+</entry>
+</protocol>
+</session>
+</repository>

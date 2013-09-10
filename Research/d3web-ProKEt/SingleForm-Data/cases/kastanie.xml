@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><repository>
+<session changed="2013-02-20 13:15:21.869" created="2013-02-20 13:15:21.868" id="6b8a6a52-af11-4165-8cd0-b99862a23c65">
+<name/>
+<facts>
+<valueFacts>
+<fact objectName="Fruchttyp" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Kastanie</choiceValue>
+</fact>
+<fact objectName="Einheimische Baumart?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="start" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2013-02-20 13:15:21.868</dateValue>
+</fact>
+<fact objectName="now" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2013-02-20 13:15:38.776</dateValue>
+</fact>
+<fact objectName="Hat der Baum Nadeln?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>No</choiceValue>
+</fact>
+<fact objectName="Anderer Baum" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="10.0" type="heuristic">SUGGESTED</rating>
+</fact>
+<fact objectName="Kiefer" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="-Infinity" type="heuristic">EXCLUDED</rating>
+</fact>
+<fact objectName="Ahorn" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="10.0" type="heuristic">SUGGESTED</rating>
+</fact>
+<fact objectName="Fichte" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="-Infinity" type="heuristic">EXCLUDED</rating>
+</fact>
+<fact objectName="Nadelbaum" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="-Infinity" type="heuristic">EXCLUDED</rating>
+</fact>
+<fact objectName="Eiche" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="10.0" type="heuristic">SUGGESTED</rating>
+</fact>
+<fact objectName="Tanne" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="-Infinity" type="heuristic">EXCLUDED</rating>
+</fact>
+<fact objectName="Linde" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="10.0" type="heuristic">SUGGESTED</rating>
+</fact>
+<fact objectName="Buche" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="10.0" type="heuristic">SUGGESTED</rating>
+</fact>
+<fact objectName="Kastanie" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="1009.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+<fact objectName="Birke" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="10.0" type="heuristic">SUGGESTED</rating>
+</fact>
+<fact objectName="Laubbaum" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="999.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+<fact objectName="Esche" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="10.0" type="heuristic">SUGGESTED</rating>
+</fact>
+</valueFacts>
+<interviewFacts>
+<fact objectName="Früchte und Blüten" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Stamm" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Blätter" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Einstiegsuntersuchung" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Hat der Baum Nadeln?" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+</interviewFacts>
+</facts>
+<protocol>
+<entry date="2013-02-20 13:15:25.961" objectName="Einheimische Baumart?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Yes</choiceValue>
+</entry>
+<entry date="2013-02-20 13:15:28.324" objectName="Einheimische Baumart?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>No</choiceValue>
+</entry>
+<entry date="2013-02-20 13:15:30.502" objectName="Fruchttyp" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Kastanie</choiceValue>
+</entry>
+<entry date="2013-02-20 13:15:33.410" objectName="Fruchttyp" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Kastanie</choiceValue>
+</entry>
+<entry date="2013-02-20 13:15:35.320" objectName="Einheimische Baumart?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Yes</choiceValue>
+</entry>
+<entry date="2013-02-20 13:15:36.891" objectName="Hat der Baum Nadeln?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>No</choiceValue>
+</entry>
+<entry date="2013-02-20 13:15:38.776" objectName="Fruchttyp" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Kastanie</choiceValue>
+</entry>
+</protocol>
+</session>
+</repository>

@@ -1,0 +1,20 @@
+[{Image src='droolslogo.png' width='100%' }]
+
+----
+
+!!! Drools Demos
+
+* [Car Diagnosis|Drools-CarDiagnosis]
+* [Thermostat|Drools-Thermostat]
+
+!!! Dokumentation
+
+* [Terminologie|Drools-Doku-Terminology]
+* [Mark-Up|Drools-Doku-Markup]
+* [Shell|Drools-Doku-Shell]
+* [OOA-Modell]
+* [OOD-Modell]
+* [Download PDF-Dokumentation]
+\\\
+----
+__KnowWE-Plugin-Drools__: A KnowWE Plugin running the JBoss Drools Expert Rule Engine by ''Sebastian Furth'', ''Alexander Legler'' and ''Florian Ziegler''

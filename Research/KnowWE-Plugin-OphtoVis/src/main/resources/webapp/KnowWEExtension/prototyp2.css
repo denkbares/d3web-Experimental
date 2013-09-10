@@ -1,0 +1,328 @@
+.window { 
+	
+border:1px solid #346789;
+
+overflow:hidden;
+
+/*line-height:0em;*/
+
+opacity:0.9;
+
+font-size:1em;
+    
+/*text-align:center;*/
+
+
+z-index:20; 
+
+
+/*position:absolute;*/
+position: relative;
+
+/*Hintergrundfarbe der Knoten*/
+
+/*background-color:#E52020;*/
+background-color:#E6E6E6;
+
+color:black;
+
+font-family:helvetica;
+
+
+/*---------------------------------------------------------------*/
+/*optional attributes*/
+/*box-shadow: 2px 2px 19px #aaa;
+   -o-box-shadow: 2px 2px 19px #aaa;
+   -webkit-box-shadow: 2px 2px 19px #aaa;
+  -moz-box-shadow: 2px 2px 19px #aaa;
+-moz-border-radius:0.5em;
+border-radius:0.5em;
+}
+filter:alpha(opacity=99);*/
+
+/*width:8em; 
+height:1.5em;*/
+
+/*padding-top:0px;*/
+
+/*padding-bottom:0em;*/
+
+   /* min-height: 0.5em;
+    display: table-cell;
+    vertical-align: top ;
+	*/
+
+/*height: 100%;
+background-color: #ffffff;
+width: 80%;
+margin: auto
+overflow: auto*/
+
+/*line-height:5em;*/
+
+/*line-height:auto;*/
+
+/*padding:1em;*/
+
+/*---------------------------------------------------------------*/
+
+}
+
+.node {
+	
+	width: 200px;
+	top: 100px;
+	margin-right: 100px;
+	margin-top: 10px;
+	position: relative;
+	
+}
+
+
+
+.collapsedInfo {
+	
+
+		background-color: #FF0000;
+			
+}
+
+
+/*.notCollapsedInfo {
+		/*background-color: #008000;
+		top: 10px;
+		left: 10px;
+		width: 200px;
+		height: 50px;*/
+		
+				/*
+				background-color: #008000;
+		top: 2px;
+		bottom: 10px;
+		left: 1px;
+		width: 5px;
+		height: 5px;
+		float: left;
+			/*right: 1px;*/
+		/*	position: absolute;*/
+		
+		
+/*width:0.0002em;*/
+/*height:25%;*/
+/*top:3px;
+left:3px;
+overflow:auto;*/
+
+
+
+
+.window:hover {
+/*
+box-shadow: 2px 2px 19px #444;
+   -o-box-shadow: 2px 2px 19px #444;
+   -webkit-box-shadow: 2px 2px 19px #444;
+   -moz-box-shadow: 2px 2px 19px #444;
+    opacity:0.6;
+filter:alpha(opacity=60);*/
+
+}
+
+.active {
+	border:1px dotted green;
+}
+.hover {
+	border:1px dotted red;
+}
+ul{  margin-left:300px; 
+}
+
+
+
+/* button 
+---------------------------------------------- */
+.button {
+	display: inline-block;
+	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
+	*display: inline;
+	vertical-align: baseline;
+	margin: 2 2px;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	font: 14px/100% Arial, Helvetica, sans-serif;
+	/*padding: .5em 2em .55em;*/
+	text-shadow: 0 1px 1px rgba(0,0,0,.3);
+	-webkit-border-radius: .5em; 
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+
+	/*-------------------------------*/
+	width: 25px;
+	height: 25px;
+	float: left;
+	position: static;
+	/*--------------------------------*/
+}
+.button:hover {
+	text-decoration: none;
+}
+.button:active {
+	position: relative;
+	top: 1px;
+}
+
+/* blue */
+
+.plus {
+				background-image: url(images/plus2.png);
+	
+}
+
+
+.blue {
+	color: #d9eef7;
+	border: solid 1px #0076a3;
+	background: #0095cd;
+	background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+	background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
+			background-image: url(images/plus2.png);
+}
+.blue:hover {
+	background: #007ead;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+	background: -moz-linear-gradient(top,  #0095cc,  #00678e);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
+}
+.blue:active {
+	color: #80bed6;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
+	background: -moz-linear-gradient(top,  #0078a5,  #00adee);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+}
+
+
+/* red */
+.red {
+	color: #faddde;
+	border: solid 1px #980c10;
+	background: #d81b21;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ed1c24), to(#aa1317));
+	background: -moz-linear-gradient(top,  #ed1c24,  #aa1317);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ed1c24', endColorstr='#aa1317');
+}
+.red:hover {
+	background: #b61318;
+	background: -webkit-gradient(linear, left top, left bottom, from(#c9151b), to(#a11115));
+	background: -moz-linear-gradient(top,  #c9151b,  #a11115);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#c9151b', endColorstr='#a11115');
+}
+.red:active {
+	color: #de898c;
+	background: -webkit-gradient(linear, left top, left bottom, from(#aa1317), to(#ed1c24));
+	background: -moz-linear-gradient(top,  #aa1317,  #ed1c24);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#aa1317', endColorstr='#ed1c24');
+}
+
+
+
+
+.buttons
+{
+display: inline-block;
+background: #eeeeee; /* Old browsers */
+background: -moz-linear-gradient(top, #eeeeee 0%, #eeeeee 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#eeeeee)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #eeeeee 0%,#eeeeee 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #eeeeee 0%,#eeeeee 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, #eeeeee 0%,#eeeeee 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, #eeeeee 0%,#eeeeee 100%); /* W3C */
+border: 1px solid #a1a1a1;
+/*padding: 0 2em;*/
+margin: 0.5em;
+font: bold 1em/2em Arial, Helvetica;
+text-decoration: none;
+color: #333;
+-moz-border-radius: .2em;
+-webkit-border-radius: .2em;
+border-radius: .2em;
+	cursor: pointer;
+	
+	float: left;
+
+
+}
+
+.buttons:before
+{
+
+/*float: left;
+width: 1em;*/
+text-align: center;
+font-size: 1.7em;
+/*margin: 0 0.5em 0 -1em;*/
+/*padding: 0 .2em;*/
+pointer-events: none;
+}
+
+/*Forms*/
+.fwd:before    { content: "\002B"; }
+/*.fwd:before  { content: "\2770";}*/
+.back:before  { content: "\2212";}
+
+/* http://www.utf8-chartable.de */
+/* .add:before    { content: "\271A"; }
+.edit:before   { content: "\270E"; }
+.delete:before { content: "\2718";}
+.save:before   { content: "\2714";}
+.email:before  { content: "\2709";}
+.cross:before  { content: "\2716"; */
+
+/* Positionen der einzelnen Knoten */
+
+/*#knoten1 { top:17em; left:10em;}
+
+#knoten11 { top:20em; left:15em;}
+#knoten111 { top:37em; left:20em;}
+#knoten112 { top:47em; left:20em;}
+
+
+
+#knoten2 { top:17em; left:30em;}
+#knoten3 { top:17em; left:50em; }
+
+#knoten31 { top:27em; left:65em;}
+#knoten311 { top:37em; left:75em;}
+#knoten312 { top:47em; left:75em;}
+
+
+#knoten4 { top:17em; left:70em;}
+
+
+
+
+
+
+#knoten12 { top:57em; left:15em;}*/
+/*
+._jsPlumb_connector { z-index:4; }
+._jsPlumb_endpoint, .endpointTargetLabel, .endpointSourceLabel{ z-index:21;cursor:pointer; }
+.hl { border:3px solid red; }
+#debug { position:absolute; background-color:black; color:red; z-index:5000 }
+*/
+/*
+.aLabel {
+ 	background-color:white; 
+	padding:0.4em; 
+	font:35px sans-serif; 
+	color:#444;
+	z-index:21;
+	border:1px dotted gray;
+	opacity:0.8;
+	filter:alpha(opacity=80);
+} */

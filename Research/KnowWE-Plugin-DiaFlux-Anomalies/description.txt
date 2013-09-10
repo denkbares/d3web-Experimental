@@ -1,0 +1,3 @@
+BA Thesis Roland Jerg
+
+Detection of anomalies in DiaFlux models

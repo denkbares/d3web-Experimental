@@ -1,0 +1,46 @@
+%%Question
+LanguageTest
+- Please enter a EuraHS registration number instead of a patient name [text]
+- Please select your hernia route [yn]
+SecondQuestionnaire
+- Another question [yn]
+
+@package: Language
+%
+
+%%Property
+LanguageTest.prompt.en = "Language Test"
+SecondQuestionnaire.prompt.en = "Second Questionnaire"
+Another question.prompt.en = "English"
+
+LanguageTest.prompt.de = "Sprach Test"
+SecondQuestionnaire.prompt.de = "Zweiter Fragebogen"
+Another question.prompt.de = "Andere Frage"
+
+LanguageTest.prompt.fr = "En Francais"
+SecondQuestionnaire.prompt.fr = "En Francais 2"
+
+LanguageTest.prompt.it = "Italian"
+SecondQuestionnaire.prompt.it = "Italian II"
+
+LanguageTest.prompt.es = "Spanish"
+SecondQuestionnaire.prompt.es = "Spanish II"
+
+LanguageTest.prompt.pl = "Polish"
+SecondQuestionnaire.prompt.pl = "Polish II"
+
+@package: Language
+%
+
+%%Solution
+Dummy
+
+@package: Language
+%
+
+
+%%knowledgebase 
+Languages
+@Comment: Test Knowledge Base for Multilingualism
+@uses: Language
+%

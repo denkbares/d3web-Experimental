@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="Minimal Test Dialog"  
+	dtype="singleform" 
+	dstrategy="nextquestion" 
+        indicationmode="hide_unindicated"
+        showcontraindicated="HIDE"
+        shownonindicated="HIDE"
+	css="medi2colsMediastinitis, nonavigation" 
+	dialogcolumns="1"
+	questionnairecolumns="3"
+	questioncolumns = "2"
+	uiprefix = "Mediastinitis" 
+	login = "USRDAT"
+	required = "Betreffende Klinik"
+        debug = "FALSE">
+	>
+        <ue />
+	<data kb="MediastinitisDez2011.d3web" />
+</dialog>

@@ -1,0 +1,34 @@
+Zur eindeutigen Unterscheidung der Kliniken in München, Berlin und Hamburg verwenden Sie bitte nachfolgende Kürzel:
+<table>
+<tbody>
+	<tr>
+		<td>München</td>
+		<td>
+			<ul>
+				<li>M_BOG</li>
+				<li>M_CHA</li>
+				<li>M_</li>
+			<ul>
+		</td>
+	</tr>
+	<tr>
+		<td>Berlin</td>
+		<td>
+			<ul>
+				<li>B_CHA</li>
+				<li>B_</li>
+				<li>B_</li>
+			<ul>
+		</td>
+	</tr>
+	<tr>
+		<td>Hamburg</td>
+		<td>
+			<ul>
+				<li>HH_</li>
+				<li>HH_</li>
+			<ul>
+		</td>
+	</tr>
+</tbody>
+</table>

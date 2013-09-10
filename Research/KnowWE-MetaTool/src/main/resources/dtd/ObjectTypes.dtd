@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT ObjectTypes (ObjectType+)>
+<!ATTLIST ObjectTypes
+	Author CDATA #IMPLIED
+	CreationDate CDATA #IMPLIED
+	LastEdited CDATA #IMPLIED>
+<!ELEMENT ObjectType (SectionFinder?, Color?)>
+<!ATTLIST ObjectType
+	ID ID #REQUIRED
+	PackageName CDATA #REQUIRED
+	ClassName CDATA #REQUIRED
+	SuperTypePackage CDATA #REQUIRED
+	SuperTypeClass CDATA #REQUIRED
+	Parent IDREF #IMPLIED
+	Position CDATA #IMPLIED
+	Exists (true|false) #IMPLIED>
+<!ELEMENT Color (#PCDATA)>
+<!ELEMENT SectionFinder (Constraint*)>
+<!ATTLIST SectionFinder
+	ClassName CDATA #REQUIRED
+	Package CDATA #IMPLIED>
+<!ELEMENT Constraint EMPTY>
+<!ATTLIST Constraint
+	ClassName CDATA #REQUIRED
+	Package CDATA #IMPLIED> 

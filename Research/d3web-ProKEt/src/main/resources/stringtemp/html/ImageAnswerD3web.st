@@ -1,0 +1,10 @@
+<polygon points="$coords$"
+title="$title$" id="polygon-IMG_$fullId$"
+style="fill: #000000; opacity: $opacity$;"
+clickedopacity="0.5"
+unclickedopacity="0"
+mouseoveropacity="0.3"
+oldmouseoveropacity="0"
+answerid="IMG_$fullId$"
+type="imagepolygon"
+></polygon>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="Standard Einfrage-Dialog"  
+	dtype="singleform" 
+	indicationmode="hide_unindicated"
+	dstrategy="nextquestion"
+	css="diagnosisVisu, hallo" 
+	dialogcolumns="1"
+	questionnairecolumns="1"
+	questioncolumns="1"
+	uiprefix = "OQDCons"
+        login = ""
+        required = "NONE"
+	language = ""
+        debug = "false"
+        solutionExplanation = "TEXTUAL" 
+        solutionDepth = "ALL"
+        diagnosisNavi = "FALSE"
+        questionnaireNavi = "FALSE"
+        >
+	<data kb="Bergbau191112.d3web" />
+        <ue 
+            logging = "FALSE"
+            feedback = "FALSE"
+            questionnaire = "NONE"
+            />
+</dialog>

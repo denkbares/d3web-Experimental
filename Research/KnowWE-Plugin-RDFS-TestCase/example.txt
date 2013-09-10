@@ -1,0 +1,32 @@
+%%RDFSTestCase
+SELECT ?z
+WHERE {
+  KnowWE hasAuthor:: ?z .
+}
+
+<=>
+
+Jochen Reutelshoefer
+Joachim Baumeister
+
+@name: TestCase-Name
+%
+
+
+%%RDFSTestCase
+SELECT ?x ?y
+WHERE {
+  ?x hasAuthor:: ?y .
+}
+
+<=>
+
+KnowWE, Jochen Reutelshoefer
+
+@name: TestCase-Name2
+%
+
+
+----
+
+[{KnowWEPlugin renderKDOM}]

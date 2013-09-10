@@ -1,0 +1,80 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="d3web-Plugin-OWL" version="0.0.1">
+
+	<requires>
+		<import plugin-id="d3web-Kernel-ExtensionPoints" />
+		<import plugin-id="KnowledgePersistenceExtensionPoints" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+	<extension plugin-id="KnowledgePersistenceExtensionPoints" point-id="KnowledgeReader"
+		id="OWLPersistenceHandler.Reader">
+		<parameter id="class"
+			value="de.d3web.owl.io.OWLPersistenceHandler" />
+		<parameter id="name" value="OWLPersistenceHandler" />
+		<parameter id="description" value="KnowledgeReader for owl ontologies" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="2" />
+		<parameter id="filename" value="kb/ontology.owl" />
+	</extension>
+	
+	<extension plugin-id="KnowledgePersistenceExtensionPoints" point-id="KnowledgeWriter"
+		id="OWLPersistenceHandler.Writer">
+		<parameter id="class"
+			value="de.d3web.owl.io.OWLPersistenceHandler" />
+		<parameter id="name" value="OWLPersistenceHandler" />
+		<parameter id="description" value="KnowledgeWriter for owl ontologies" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="2" />
+		<parameter id="filename" value="kb/ontology.owl" />
+	</extension>
+	
+	<extension plugin-id="KnowledgePersistenceExtensionPoints" point-id="KnowledgeReader"
+		id="AssignmentPersistenceHandler.Reader">
+		<parameter id="class"
+			value="de.d3web.owl.io.AssignmentPersistenceHandler" />
+		<parameter id="name" value="AssignmentPersistenceHandler" />
+		<parameter id="description" value="KnowledgeReader for assignments" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="2" />
+		<parameter id="filename" value="kb/assignments.xml" />
+	</extension>
+	
+	<extension plugin-id="KnowledgePersistenceExtensionPoints" point-id="KnowledgeWriter"
+		id="AssignmentPersistenceHandler.Writer">
+		<parameter id="class"
+			value="de.d3web.owl.io.AssignmentPersistenceHandler" />
+		<parameter id="name" value="AssignmentPersistenceHandler" />
+		<parameter id="description" value="KnowledgeWriter for assignments" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="2" />
+		<parameter id="filename" value="kb/assignments.xml" />
+	</extension>
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="PSMethod"
+		id="PSMethodOWL">
+		<parameter id="class"
+			value="de.d3web.owl.inference.PSMethodOWL" />
+		<parameter id="name" value="PSMethodOWL" />
+		<parameter id="description" value="PSMethod which delegates reasoning to the OWLAPI" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="6" />
+	</extension>
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Autodetect"
+		id="OWLAutoDetect">
+		<parameter id="class"
+			value="de.d3web.owl.OWLAutoDetect" />
+		<parameter id="name" value="OWLAutoDetect" />
+		<parameter id="description" value="Detects if there is an ontology in the KB" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+</plugin>

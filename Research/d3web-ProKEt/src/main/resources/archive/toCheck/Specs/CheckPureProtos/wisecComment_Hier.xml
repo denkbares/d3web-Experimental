@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dialog css="hierarchy, nofoot" 
+	header="WISEC Kommentierung" send-button="true" type="hierarchy">
+	
+	<question >
+	<answer title="Compliance Check/Letter of Communication von Registrierungsdossiers" > 
+		<question >
+		<answer title="Es beschäftigt sich bereits ein Team mit der Substanz" >
+			<solution title="Deligieren an Stoffteam"></solution>
+		</answer>
+		</question>
+		<question >
+		<answer title="Es beschäftigt noch kein Team mit der Substanz" >
+		</answer>
+		</question>
+	</answer>
+	</question>
+	<question>
+	<answer title="Kommentierung von Testing Proposals">
+		<question >
+		<answer title="Umweltbezug nicht gegeben" >
+			<solution title="Dokumentation/Ende"></solution>
+		</answer>
+		</question>
+		<question >
+		<answer title="Umweltbezug gegeben" >
+			<question >
+			<answer title="Read Across/QSAR Vorschlag gegeben" >
+				<solution title="QSAR Team einschalten"></solution>
+			</answer>
+			</question>
+			<question >
+			<answer title="Read Across/QSAR Vorschlag nicht gegeben" >
+				<solution title="Okotox Team einschalten"></solution>
+			</answer>
+			</question>
+		</answer>
+		</question>
+	</answer>
+	</question>
+	<question>
+	<answer title="Beantwortung von Anfragen (REACH-Helpdesk)">
+	</answer>
+	</question>
+</dialog>

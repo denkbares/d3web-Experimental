@@ -1,0 +1,2 @@
+This project contains the basic compoments for ontology engineering with KnowWE. 
+It relies on the project Rdf2GoSemanticCore which provides the access to a semantic repository

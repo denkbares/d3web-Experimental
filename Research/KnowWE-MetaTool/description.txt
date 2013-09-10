@@ -1,0 +1,1 @@
+This project forms a developer support tool which simplifies the creation of new markups/plugins for knowledge acquisition with KnowWE.

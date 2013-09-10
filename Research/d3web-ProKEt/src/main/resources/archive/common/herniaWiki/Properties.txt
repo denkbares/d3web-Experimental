@@ -1,0 +1,83 @@
+%%Property
+Hernia.unknownVisible = true
+
+@package: Hernia
+%
+
+%%Property
+Please choose database level.init = Level 1
+
+@package: Hernia
+%
+
+
+%%Property
+Please enter a EuraHS registration number instead of a patient name.use_as_filename = true
+
+@package: Hernia
+%
+
+%%Property
+"Start of operation (first incision)".before = "End of operation (last skin suture)"
+"End of operation (last skin suture)".after = "Start of operation (first incision)"
+
+@package: Hernia
+%
+
+%%Property
+Year of birth.date_format = yyyy
+Date of operation that caused the incisional hernia.date_format = dd.MM.yyyy OR MM.yyyy OR yyyy
+Date of last repair.date_format = dd.MM.yyyy OR MM.yyyy OR yyyy
+Operation date.date_format = dd.MM.yyyy
+"Start of operation (first incision)".date_format = HH:mm:ss OR HH:mm
+"End of operation (last skin suture)".date_format = HH:mm:ss OR HH:mm
+Date of discharge.date_format = dd.MM.yyyy
+Hour of discharge.date_format = HH
+
+"Date of death (Follow up 1)".date_format = dd.MM.yyyy
+"Date of follow up (Follow up 1)".date_format = dd.MM.yyyy
+"Date of diagnosis of recurrent hernia (Follow up 1)".date_format = dd.MM.yyyy
+"Date of repair done (Follow up 1)".date_format = dd.MM.yyyy
+
+"Date of death (Follow up 2)".date_format = dd.MM.yyyy
+"Date of follow up (Follow up 2)".date_format = dd.MM.yyyy
+"Date of diagnosis of recurrent hernia (Follow up 1)".date_format = dd.MM.yyyy
+"Date of repair done (Follow up 2)".date_format = dd.MM.yyyy
+
+@package: Hernia
+%
+
+%%Property
+Case-Number.show_in_header = true
+Case-Number.position_in_header = 1
+
+@package: Hernia
+%
+
+%%Property
+Please choose database level.show_in_header = true
+Please choose database level.position_in_header = 2
+Please choose database level.header_text = Level
+
+Please choose database level#Level 1.header_text = 1
+Please choose database level#Level 2.header_text = 2
+
+@package: Hernia
+%
+
+
+%%Property
+Please select your hernia route.show_in_header = true
+Please select your hernia route.position_in_header = 3
+Please select your hernia route.header_text = Route
+
+Please select your hernia route#Primary ventral hernia route.header_text = Primary ventral hernia
+Please select your hernia route#Incisional ventral hernia route .header_text = Incisional ventral hernia
+Please select your hernia route#Parastomal hernia route.header_text = Parastomal hernia
+
+@package: Hernia
+%
+
+
+
+

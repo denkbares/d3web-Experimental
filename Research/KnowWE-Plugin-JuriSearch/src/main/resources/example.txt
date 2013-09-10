@@ -1,0 +1,73 @@
+DashTree:
+* Dummy-Knoten sind immer Ja-Nein-Vielleicht-Fragen. Sie werden direkt im Baum mit ~[dummy] (hinter einem Text) angelegt und benötigen keine extra Teminologie-Definition wie "normale" anderen Fragen. Dennoch müssen sie einen eindeutigen Namen haben.
+* Bei allen Fragen im DashTree gibt es folgende Flags:
+** ~[und], ~[oder] und ~[score] wie gehabt, nur neue Klammern (score ist noch nicht implementiert)
+** ~[bestätigendeAntwort] zur Festlegung, dass diese Frage die Antwort "bestätigendeAntwort" als positive Antwort gewertet wird. Bei Dummy-Fragen gibt es stattdessen nur das Flag ~[nein].
+\\
+Terminologie:
+* Zur Definition der Antwortmöglichkeiten, können alle möglichen Antworten unter die Frage geschrieben werden (in eckigen Klammern).
+* Alternativ kann man die Standard-Antworten erzeugen, indem ~[jnv] hinter die Frage geschrieben wird (Ja-Nein-Vielleicht-Frage)
+* wenn keine der beiden oberen Alternativen verwendet wird, hat die definierte keine Antworten!
+* Erklärungen werden mit dem WikiToHtml-Parser direkt als Html in die KB gespeichert. Dies funktioniert aber erst nach dem hochfahren des Wikis, da beim hochfahren das Jspwiki noch nicht richtig initialisiert ist. Daher muss bei einem "gefüllten" Wiki ein extra Fullparse durchgeführt werden.
+
+%%WordExportImport
+@package default
+%
+
+[{KnowWEPlugin parseallbutton}]
+
+ %%knowledgebase
+uses: default
+%
+
+
+Im folgenden wird ein Fragebaum definiert. Jede Frage (außer Dummy-Fragen) muss unten eine Defnition haben.
+%%baum
+War das Wetter gestern gut?
+- Hat es geregnet oder war der Boden nass? [dummy][nein][oder]
+-- Hat es geregnet?
+-- War der Boden trocken? [nein]
+- War es warm?
+- Wie war die Sicht? [klar] [frei]
+%
+
+FRAGE
+War das Wetter gestern gut?
+[ja]
+[nein]
+[vielleicht]
+Erläuterung:
+Dies ist eine Frage mit den Antworten 'Ja', 'Nein' und 'Vielleicht' und Erläuterung.
+
+
+FRAGE
+War das Wetter gestern gut? [jnv]
+Erläuterung:
+Dies ist ebenfalls eine Frage mit den Antworten 'Ja', 'Nein' und 'Vielleicht', jedoch in Kurzschreibweise, und Erläuterung.
+
+
+FRAGE
+Hat es geregnet? [jnv]
+Standard-Frage, man kann auch 'Erläuterung:' weglassen.
+
+
+FRAGE
+War der Boden trocken? [jnv]
+Erläuterung:
+Noch eine Standard-Frage, nichts neues.
+
+
+FRAGE
+War es warm? [jnv]
+Noch eine Standard-Frage, nichts neues.
+
+
+Man kann auch die Erläuterung weglassen:
+FRAGE
+Wie war die Sicht?
+[klar]
+[trüb]
+[frei]
+
+
+Am Ende dürfen nicht die Zeilenumbrüche fehlen.
