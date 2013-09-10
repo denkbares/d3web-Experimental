@@ -1,15 +1,7 @@
 package de.knowwe.ophtovisD3.utils;
 
-import java.util.HashSet;
-
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
-
-import de.d3web.strings.Strings;
-import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.termbrowser.HierarchyProvider;
 import de.knowwe.termbrowser.util.HierarchyNode;
-import de.knowwe.wisskont.util.MarkupUtils;
 
 public class NodeWithName implements HierarchyNode<NodeWithName> {
 
@@ -57,18 +49,9 @@ public class NodeWithName implements HierarchyNode<NodeWithName> {
 
 	@Override
 	public boolean isSubNodeOf(NodeWithName term, HierarchyProvider hierarchy) {
-		if (name.equals(term.name)) return false;
-		String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
 
-		String thisConceptURLString = Strings.encodeURL(this.name);
-		String thisURL = baseUrl + thisConceptURLString;
-		URI thisURI = new URIImpl(thisURL);
 
-		String otherConceptURLString = Strings.encodeURL(term.name);
-		String otherURL = baseUrl + otherConceptURLString;
-		URI otherURI = new URIImpl(otherURL);
-
-		return MarkupUtils.isSubConceptOf(thisURI, otherURI, new HashSet<URI>());
+		return hierarchy.isSubNodeOf(this.name, term.name);
 	}
 
 	@Override

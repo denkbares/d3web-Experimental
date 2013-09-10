@@ -19,15 +19,17 @@
 package de.knowwe.ophtovisD3;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-
 
 import de.knowwe.ophtovisD3.utils.JsonFactory;
 import de.knowwe.ophtovisD3.utils.NodeWithName;
 import de.knowwe.ophtovisD3.utils.StringShortener;
 import de.knowwe.ophtovisD3.utils.StringShortener.ElliminationType;
+import de.knowwe.ophtovisD3.utils.VisualizationHierarchyProvider;
 import de.knowwe.termbrowser.util.Tree;
 import de.knowwe.wisskont.browser.WissassHierarchyProvider;
 
@@ -122,16 +124,16 @@ public class GraphBuilder {
 	}
 	
 	public static String buildGraphExperimental(String connectionType, String highlighted){
-		if(!treeIsHere){
-		LinkedList <String> resultList = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
+			Map<String, String> parentChildPairs = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
 		resultTree = new Tree<NodeWithName>(new NodeWithName("Wurzel", "Wissensbasis"),
-				new WissassHierarchyProvider());
+				new VisualizationHierarchyProvider(parentChildPairs));
+		HashSet<String> allConcepts = new HashSet<String>();
+		allConcepts.addAll(parentChildPairs.keySet());
+		allConcepts.addAll(parentChildPairs.values());
 		String label;
-		for (String string : resultList) {
+		for (String string : allConcepts) {
 			label = shorty.shorten(string);
 			resultTree.insertNode(new NodeWithName(string, label));
-		}
-		treeIsHere=true;
 		}
 		Tree<NodeWithName> resultTreeHighlighted = hightlightConcept(resultTree, highlighted);
 		String result =JsonFactory.toJSON(resultTreeHighlighted);

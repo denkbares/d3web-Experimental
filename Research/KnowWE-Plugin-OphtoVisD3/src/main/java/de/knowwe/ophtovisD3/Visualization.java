@@ -150,10 +150,19 @@ public class Visualization {
 						"<li class=\"active menue\" >Visualisierungstypen :   </li>\r\n" +
 						"<li class=\"active menue\" onclick=\"createBubble()\">Bubble </li>\r\n" +
 						"<li class=\"menue\" onclick=\"createWheel()\">Wheel </li>\r\n" +
-						"<li class=\"menue\" onclick=\"createTree()\"> Tree </li>\r\n" +
+						"<li class=\"menue\" onclick=\"createReingold()\"> ReingoldTree </li>\r\n"
+						+
+						"<li class=\"menue\" onclick=\"createReingoldCollapsible()\"> ReingoldColl </li>\r\n"
+						+
 						// "<li class=\"menue\" onclick=\"createTreeDiagonal()\"> Tree diagonal </li>\r\n"
 						// +
 						"<li class=\"menue\" onclick=\"createTreeCollapsable()\"> Tree Collapsable </li>\r\n"
+						+
+						"<li class=\"menue\" onclick=\"createCollForce()\"> ColForceLabeled </li>\r\n"
+						+
+						"<li class=\"menue\" onclick=\"createTreeDiagonal()\"> DiagonalTree </li>\r\n"
+						+
+						"<li class=\"menue\" onclick=\"createFixRootTree()\"> FixedRootTree </li>\r\n"
 						+
 //						"<li class=\"editor\">Editor▼</li>\r\n" +
 						"</ul>\r\n" +

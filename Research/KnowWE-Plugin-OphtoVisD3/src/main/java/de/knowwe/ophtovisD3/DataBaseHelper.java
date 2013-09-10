@@ -22,8 +22,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
@@ -182,11 +184,11 @@ import de.knowwe.wisskont.util.MarkupUtils;
 		}
 		
 		public static Connections getConnectionObject(String concept){
-			QueryResultTable out =getAllConnections(concept, false); 
-			QueryResultTable in  =getAllConnections(concept, true); 
+			QueryResultTable out =getAllConnections(concept, false);
+			QueryResultTable in  =getAllConnections(concept, true);
 			LinkedList<String []> outList =querytableToList(out);
 			LinkedList<String []> inList =querytableToList(in);
-			return new Connections(inList, outList); 
+			return new Connections(inList, outList);
 		}
 	
 	/**
@@ -257,32 +259,37 @@ import de.knowwe.wisskont.util.MarkupUtils;
 			return false;
 	}
 
-	public static LinkedList<String> getAllObjectsConnectedBy(String connectionType) {
-		LinkedList<String> result = new LinkedList<String>();
+	public static Map<String, String> getAllObjectsConnectedBy(String connectionType) {
+		Map<String, String> result = new HashMap<String, String>();
 		QueryResultTable table = null;
 		System.out.println("SELECT ?a ?b WHERE { ?a " + connectionType+ " ?b}");
 			table = Rdf2GoCore.getInstance().sparqlSelect(
 					"SELECT ?a ?b WHERE { ?a lns:" + connectionType+ " ?b}");
 		
 		for (QueryRow row : table) {
+			// Child
 			Node node = row.getValue("a");
+			// Parent
 			Node node2 = row.getValue("b");
-			String keyurl = Rdf2GoUtils.getLocalName(node); 
-			String keyurl2 = Rdf2GoUtils.getLocalName(node2); 
-			try {
-				keyurl = URLDecoder.decode(keyurl, "UTF-8");
-				keyurl2 = URLDecoder.decode(keyurl2, "UTF-8");
+			String childConcept = MarkupUtils.getConceptName(node);
+			String parentConcept = MarkupUtils.getConceptName(node2);
+
+			// String keyurl = Rdf2GoUtils.getLocalName(node);
+			// String keyurl2 = Rdf2GoUtils.getLocalName(node2);
+			// try {
+			// keyurl = URLDecoder.decode(keyurl, "UTF-8");
+			// keyurl2 = URLDecoder.decode(keyurl2, "UTF-8");
+			// }
+			// catch (UnsupportedEncodingException e) {
+			// e.printStackTrace();
+			// }
+			// Rdf2GoUtils.
+			// String key = keyurl.substring(keyurl.indexOf("=") + 1);
+			// String key2 = keyurl2.substring(keyurl2.indexOf("=") + 1);
+			// if (!key.contains("Resource")) {
+			result.put(childConcept, parentConcept);
+
 			}
-			catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-			String key = keyurl.substring(keyurl.indexOf("=") + 1);
-			String key2 = keyurl2.substring(keyurl.indexOf("=") + 1);
-			if (!key.contains("Resource")) {
-				result.add(key);
-				result.add(key2);
-			}
-		}
 		return result;
 	}
 
