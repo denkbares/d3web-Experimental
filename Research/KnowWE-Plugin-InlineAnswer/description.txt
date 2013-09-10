@@ -1,2 +1,0 @@
-Holds all classes for InlineAnnotations. InlineAnnotations currently supports only the "asks"
-property. So you can Answer Questions from the KnowledgeBase in a text.

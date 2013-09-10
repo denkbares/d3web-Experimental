@@ -1,1 +1,0 @@
-<!-- no answers in this dialog type //-->

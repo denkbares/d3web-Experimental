@@ -1,1 +1,0 @@
-$if(title)$<div id="text-$fullId$" class="title t-$fullId$">$title$</div>$endif$

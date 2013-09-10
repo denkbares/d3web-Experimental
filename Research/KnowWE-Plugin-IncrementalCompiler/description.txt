@@ -1,3 +1,0 @@
-This project implements the incremental compilation algorithm as proposed by
-the paper at KCAP2011 entitled 'Incremental Compilation of Knowledge Documents for
-Markup-based Closed-World Authoring'.

@@ -1,3 +1,0 @@
-!!! Dokumentation - OOA-Modell
-
-[{Image src='ooa.png' width='100%' }]

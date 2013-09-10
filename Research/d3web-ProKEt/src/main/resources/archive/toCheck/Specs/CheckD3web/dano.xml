@@ -1,4 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<dialog header="Dano KB Prototype"  dtype="singleform" dstrategy="uaquestion" css="classic, nofoot">
-	<data kb="dano.jar" />
-</dialog>
