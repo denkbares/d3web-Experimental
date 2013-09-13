@@ -45,8 +45,7 @@ public class RelationMarkupContentType extends AbstractType {
 			@Override
 			public void renderPre(Section<?> section, UserContext user, RenderResult string) {
 				string.appendHtml("<span class='relationMarkupContent clearfix' id='"
-						+ section.getID() + "'>");
-
+						+ section.getID() + "' style='display:inline' >");
 			}
 
 			@Override

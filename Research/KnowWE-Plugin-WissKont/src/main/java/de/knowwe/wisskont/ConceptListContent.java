@@ -58,7 +58,6 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquotedNonEmpty;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -86,7 +85,7 @@ public class ConceptListContent extends AbstractType {
 		 */
 		public ListSeparatorType() {
 			this.setSectionFinder(new AllTextSectionFinder());
-			this.setRenderer(new StyleRenderer("float:left;"));
+			// this.setRenderer(new StyleRenderer("float:left;"));
 		}
 	}
 

@@ -42,14 +42,14 @@ public class OIDeleteItemRenderer implements Renderer {
 		boolean hasError = !IncrementalCompiler.getInstance().getTerminology().isValid(
 				ref.get().getTermIdentifier(ref));
 
-		string.appendHtml("<span class='deletableListElement' style='float:left;' id='"
+		string.appendHtml("<span class='deletableListElement' id='"
 				+ section.getID() + "'>");
 		// string.appendHtml("<table style='display:inline-block;' >");
 		// string.appendHtml("<tr>");
 		// string.appendHtml("<div class='toolsMenuDecorator' style='position:absolute;float: left;'></div>");
-		string.appendHtml("<span class='' style=''>");
+		string.appendHtml("<span class='' style='position:relative'>");
 		if (!hasError) {
-			string.appendHtml("<a  style='position:relative;float:left;' href='"
+			string.appendHtml("<a  style='white-space: nowrap' href='"
 					+ RDFSUtil.getURI(ref)
 					+ "'>");
 		}
@@ -57,7 +57,7 @@ public class OIDeleteItemRenderer implements Renderer {
 		if (!hasError) {
 			string.appendHtml("</a>");
 		}
-		string.appendHtml("<span class='ui-icon ui-icon-circle-close deleteButton' style='float:left;position:relative;' title='Relation zu diesem Begriff löschen' ></span>");
+		// string.appendHtml("<span class='ui-icon ui-icon-circle-close deleteButton' style='float:left;position:relative;' title='Relation zu diesem Begriff löschen' ></span>");
 		string.appendHtml("</span>");
 		// string.appendHtml("<td class='narrowCell'>");
 		// string.appendHtml("</td>");

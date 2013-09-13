@@ -54,11 +54,10 @@ function initClickEvent(element) {
 }
 
 
-function sendDeleteAction(element) {
+function sendDeleteAction(entryKdomid) {
 
-	var entry = element.parent().parent();
-	var entryKdomid = entry.attr('id');
-	var markupKdomid = entry.parent().parent().parent().parent().attr('id');
+	var entry = jq$("#" + entryKdomid);
+	var markupKdomid = entry.parent().parent().parent().parent().parent().attr('id');
 	
 	var params = {
 			action : 'DeleteListEntryAction',
