@@ -345,7 +345,7 @@ public class Rdf2GoCore implements EventListener {
 	 * 
 	 * @created 12.06.2012
 	 */
-	public void commit() {
+	public synchronized void commit() {
 		int removeSize = removeCache.size();
 		int insertSize = insertCache.size();
 		boolean verboseLog = removeSize + insertSize < 50;
