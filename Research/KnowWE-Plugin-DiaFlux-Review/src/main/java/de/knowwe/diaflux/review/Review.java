@@ -27,7 +27,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import de.d3web.core.io.utilities.Util;
+import de.d3web.core.io.utilities.XMLUtil;
 
 /**
  * Data class to store the most important attributes of a review.
@@ -92,7 +92,7 @@ public class Review {
 	}
 
 	public static Collection<Review> read(InputStream stream) throws IOException {
-		Document document = Util.streamToDocument(stream);
+		Document document = XMLUtil.streamToDocument(stream);
 		Collection<Review> result = new LinkedList<Review>();
 
 		String flowName = document.getElementsByTagName("review").item(0).getAttributes().getNamedItem(

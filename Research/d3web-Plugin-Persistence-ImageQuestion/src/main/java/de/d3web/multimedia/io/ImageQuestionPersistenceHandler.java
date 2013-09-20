@@ -32,7 +32,6 @@ import org.w3c.dom.Element;
 import de.d3web.core.io.KnowledgeReader;
 import de.d3web.core.io.KnowledgeWriter;
 import de.d3web.core.io.progress.ProgressListener;
-import de.d3web.core.io.utilities.Util;
 import de.d3web.core.io.utilities.XMLUtil;
 import de.d3web.core.knowledge.InfoStore;
 import de.d3web.core.knowledge.KnowledgeBase;
@@ -54,7 +53,7 @@ public class ImageQuestionPersistenceHandler implements KnowledgeReader, Knowled
 
 		listener.updateProgress(0, "Starting to load picture questions");
 
-		Document doc = Util.streamToDocument(stream);
+		Document doc = XMLUtil.streamToDocument(stream);
 		List<Element> childNodes = XMLUtil.getElementList(doc.getChildNodes());
 
 		// Check for right DocumentStructure
@@ -112,7 +111,7 @@ public class ImageQuestionPersistenceHandler implements KnowledgeReader, Knowled
 		int maxvalue = getEstimatedSize(knowledgeBase);
 		float aktvalue = 0;
 
-		Document doc = Util.createEmptyDocument();
+		Document doc = XMLUtil.createEmptyDocument();
 		Element root = doc.createElement("Questions");
 		List<Question> questions = knowledgeBase.getManager().getQuestions();
 
@@ -140,7 +139,7 @@ public class ImageQuestionPersistenceHandler implements KnowledgeReader, Knowled
 		doc.appendChild(root);
 
 		listener.updateProgress(1, "Image Question saved");
-		Util.writeDocumentToOutputStream(doc, stream);
+		XMLUtil.writeDocumentToOutputStream(doc, stream);
 
 	}
 

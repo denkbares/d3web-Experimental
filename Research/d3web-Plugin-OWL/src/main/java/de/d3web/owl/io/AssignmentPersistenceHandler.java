@@ -33,7 +33,7 @@ import org.w3c.dom.NodeList;
 import de.d3web.core.io.KnowledgeReader;
 import de.d3web.core.io.KnowledgeWriter;
 import de.d3web.core.io.progress.ProgressListener;
-import de.d3web.core.io.utilities.Util;
+import de.d3web.core.io.utilities.XMLUtil;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionYN;
@@ -64,7 +64,7 @@ public class AssignmentPersistenceHandler implements KnowledgeReader, KnowledgeW
 	@Override
 	public void write(KnowledgeBase kb, OutputStream stream, ProgressListener listener) throws IOException {
 		// Create document and root element
-		Document doc = Util.createEmptyDocument();
+		Document doc = XMLUtil.createEmptyDocument();
 		Element root = doc.createElement(ASSIGNMENTS);
 		doc.appendChild(root);
 
@@ -83,7 +83,7 @@ public class AssignmentPersistenceHandler implements KnowledgeReader, KnowledgeW
 		}
 
 		// Save the created document
-		Util.writeDocumentToOutputStream(doc, stream);
+		XMLUtil.writeDocumentToOutputStream(doc, stream);
 	}
 
 	private Node getAssignmentElement(Assignment assignment, Document doc) {
@@ -120,7 +120,7 @@ public class AssignmentPersistenceHandler implements KnowledgeReader, KnowledgeW
 	@Override
 	public void read(KnowledgeBase kb, InputStream stream, ProgressListener listener) throws IOException {
 		// create object for xml document
-		Document doc = Util.streamToDocument(stream);
+		Document doc = XMLUtil.streamToDocument(stream);
 		listener.updateProgress(0, "Loading knowledge base: assignments");
 
 		// get all assignment elements
