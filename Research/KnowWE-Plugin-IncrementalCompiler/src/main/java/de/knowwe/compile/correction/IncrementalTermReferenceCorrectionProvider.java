@@ -38,15 +38,21 @@ public class IncrementalTermReferenceCorrectionProvider implements CorrectionPro
 
 	@Override
 	public List<CorrectionProvider.Suggestion> getSuggestions(Article article, Section<?> section, int threshold) {
+		List<CorrectionProvider.Suggestion> suggestions = new LinkedList<CorrectionProvider.Suggestion>();
 		if (!(section.get() instanceof SimpleReference)) {
-			return null;
+			return suggestions;
 		}
 
 		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
+
+		if (terminology.isValid(new Identifier(section.getText()))) {
+			// if reference is valid, no correction is proposed
+			return suggestions;
+		}
+
 		Collection<Section<? extends SimpleDefinition>> defs = terminology.getAllTermDefinitions();
 
 		String originalText = section.getText();
-		List<CorrectionProvider.Suggestion> suggestions = new LinkedList<CorrectionProvider.Suggestion>();
 		Levenstein l = new Levenstein();
 
 		for (Section<? extends SimpleDefinition> def : defs) {

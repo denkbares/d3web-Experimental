@@ -60,6 +60,8 @@
 		<parameter id="script" value="KnowWE-Plugin-Core.js" />
 	</extension>
 	
+	<!-- already added in project KnowWE-Plugin-Core -->
+	<!--
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="CorrectionToolProvider">
 		<parameter id="class"
@@ -73,6 +75,7 @@
 		<parameter id="scope" value="IncrementalTermReference" />
 		<parameter id="scope" value="IRITermRef" />
 	</extension>
+	-->
 	
     <extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
         id="ImportedConceptPageLinkProvider">
