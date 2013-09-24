@@ -25,8 +25,8 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
@@ -60,7 +60,7 @@ public class SelfRestriction extends AbstractType {
 
 		Pattern p = Pattern.compile(REGEX, Pattern.DOTALL);
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(new RegexSectionFinder(p, 1));
-		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 
 		ObjectPropertyExpression ope = new ObjectPropertyExpression();
 		ope.setSectionFinder(csf);

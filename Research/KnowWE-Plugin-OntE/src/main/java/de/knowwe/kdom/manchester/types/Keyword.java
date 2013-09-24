@@ -24,8 +24,8 @@ import java.util.regex.Pattern;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 
 /**
  *
@@ -38,7 +38,7 @@ public class Keyword extends AbstractType {
 	public Keyword(String pattern) {
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(new RegexSectionFinder(pattern,
 				Pattern.MULTILINE));
-		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 		this.setSectionFinder(csf);
 	}
 

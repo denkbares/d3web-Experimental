@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.casetrain.info;
 
@@ -37,13 +37,12 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 
 /**
- * Antwort is a Antwort Line.
- * Contains a AntwortContent which has the following syntax:
- * {Markierung}Antwort{Antwortspezifische Erklärung}
+ * Antwort is a Antwort Line. Contains a AntwortContent which has the following
+ * syntax: {Markierung}Antwort{Antwortspezifische Erklärung}
  * 
  * 
  * @author Jochen
@@ -75,15 +74,15 @@ public class AnswerLine extends AbstractType {
 			Matcher m = p.matcher(text);
 			if (m.matches()) return results;
 
-			p = Pattern.compile("\\s*"+Praefix.NAME+":.*");
+			p = Pattern.compile("\\s*" + Praefix.NAME + ":.*");
 			m = p.matcher(text);
 			if (m.matches()) return results;
 
-			p = Pattern.compile("\\s*"+Postfix.NAME+":.*");
+			p = Pattern.compile("\\s*" + Postfix.NAME + ":.*");
 			m = p.matcher(text);
 			if (m.matches()) return results;
 
-			p = Pattern.compile("\\s*"+Heading.NAME+":.*");
+			p = Pattern.compile("\\s*" + Heading.NAME + ":.*");
 			m = p.matcher(text);
 			if (m.matches()) return results;
 
@@ -104,9 +103,8 @@ public class AnswerLine extends AbstractType {
 	}
 
 	/**
-	 * NumAnswerText can be an Interval. This method
-	 * returns this Interval or null if it is not an
-	 * Interval.
+	 * NumAnswerText can be an Interval. This method returns this Interval or
+	 * null if it is not an Interval.
 	 * 
 	 * @created 18.05.2011
 	 * @param antwortText
@@ -118,7 +116,8 @@ public class AnswerLine extends AbstractType {
 			try {
 				new BigDecimal(i[0]);
 				new BigDecimal(i[1]);
-			} catch(NumberFormatException e) {
+			}
+			catch (NumberFormatException e) {
 				return null;
 			}
 			return i;
@@ -127,8 +126,8 @@ public class AnswerLine extends AbstractType {
 	}
 
 	/**
-	 * Returns the PosFactor of a given AntwortMarkierung-Section.
-	 * If none is specified then it returns 1.
+	 * Returns the PosFactor of a given AntwortMarkierung-Section. If none is
+	 * specified then it returns 1.
 	 * 
 	 * @created 13.05.2011
 	 * @param sec
@@ -138,7 +137,7 @@ public class AnswerLine extends AbstractType {
 		Section<AnswerMark> mark = Sections.findSuccessor(sec, AnswerMark.class);
 		if (mark == null) return "1";
 		String markText = mark.getText().trim();
-		markText = markText.substring(1, markText.length()-1);
+		markText = markText.substring(1, markText.length() - 1);
 		markText = AnswerLine.replaceFactorWithNumber(markText);
 		String[] factors = markText.trim().split("[ ]+");
 		return factors[0];
@@ -146,8 +145,8 @@ public class AnswerLine extends AbstractType {
 
 	/**
 	 * 
-	 * Returns the NegFactor of a given AntwortMarkierung-Section.
-	 * If none is specified then it returns null;
+	 * Returns the NegFactor of a given AntwortMarkierung-Section. If none is
+	 * specified then it returns null;
 	 * 
 	 * @created 13.05.2011
 	 * @param sec
@@ -157,7 +156,7 @@ public class AnswerLine extends AbstractType {
 		Section<AnswerMark> mark = Sections.findSuccessor(sec, AnswerMark.class);
 		if (mark == null) return null;
 		String markText = mark.getText().trim();
-		markText = markText.substring(1, markText.length()-1);
+		markText = markText.substring(1, markText.length() - 1);
 		markText = AnswerLine.replaceFactorWithNumber(markText);
 		String[] factors = markText.trim().split("[ ]+");
 		if (factors.length < 2) return null;
@@ -184,7 +183,7 @@ public class AnswerLine extends AbstractType {
 			this.setRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder(regex));
-			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
 			this.addSubtreeHandler(AnswerMarkHandler.getInstance());
 		}
@@ -203,7 +202,7 @@ public class AnswerLine extends AbstractType {
 			this.setRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder("\\{[rf1-9]}"));
-			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
 		}
 
@@ -217,15 +216,15 @@ public class AnswerLine extends AbstractType {
 	public class AnswerText extends AbstractType {
 
 		// TODO Regex only recognizes {r}word
-		//      not regex in full.
-		//			String regex = "(\\{.*?\\})?([\\w]{1}[äüöÄÜÖß]?[ 0-9]*)+";
+		// not regex in full.
+		// String regex = "(\\{.*?\\})?([\\w]{1}[äüöÄÜÖß]?[ 0-9]*)+";
 
 		public AnswerText() {
 			this.setRenderer(MouseOverTitleRenderer.getInstance());
-			//				ConstraintSectionFinder csf = new ConstraintSectionFinder(
-			//						new RegexSectionFinder(regex));
-			//				csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
-			//				this.setSectionFinder(csf);
+			// ConstraintSectionFinder csf = new ConstraintSectionFinder(
+			// new RegexSectionFinder(regex));
+			// csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+			// this.setSectionFinder(csf);
 			this.setSectionFinder(new AntwortTextSectionFinder());
 		}
 
@@ -267,10 +266,8 @@ public class AnswerLine extends AbstractType {
 
 		public AnswerExplanation() {
 			this.setRenderer(MouseOverTitleRenderer.getInstance());
-			ConstraintSectionFinder csf = new ConstraintSectionFinder(
-					new RegexSectionFinder(regex));
-			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
-			this.setSectionFinder(csf);
+			this.setSectionFinder(new ConstraintSectionFinder(
+					new RegexSectionFinder(regex), AtMostOneFindingConstraint.getInstance()));
 		}
 	}
 }

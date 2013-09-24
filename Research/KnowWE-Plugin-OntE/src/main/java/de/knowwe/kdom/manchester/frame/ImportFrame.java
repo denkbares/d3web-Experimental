@@ -27,8 +27,8 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 import de.knowwe.kdom.manchester.compile.ImportFrameCompileScript;
 import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.renderer.IRITypeRenderer;
@@ -122,7 +122,7 @@ class ImportIRI extends AbstractType {
 
 	public ImportIRI() {
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(new IRISectionFinder());
-		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
 		this.setRenderer(new IRITypeRenderer());
@@ -141,7 +141,7 @@ class ImportPrefix extends AbstractType {
 
 	public ImportPrefix() {
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(new RegexSectionFinder(PATTERN));
-		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 		this.setSectionFinder(csf);
 	}
 }

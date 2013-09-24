@@ -26,8 +26,8 @@ import java.util.regex.Pattern;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.renderer.IRITypeRenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
@@ -77,7 +77,7 @@ class Prefix extends AbstractType {
 	public Prefix() {
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(new RegexSectionFinder(
 				"([a-z0-9]*:)"));
-		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
 		this.setRenderer(PREFIX_RENDERER);
@@ -94,7 +94,7 @@ class PrefixIRI extends AbstractType {
 
 	public PrefixIRI() {
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(new IRISectionFinder());
-		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
 		this.setRenderer(new IRITypeRenderer());

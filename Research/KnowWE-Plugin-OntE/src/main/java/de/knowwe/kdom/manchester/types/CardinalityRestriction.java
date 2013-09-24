@@ -25,8 +25,8 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
@@ -62,7 +62,7 @@ public class CardinalityRestriction extends AbstractType {
 
 		Pattern p = Pattern.compile(REGEX);
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(new RegexSectionFinder(p, 1));
-		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 		PropertyExpression ope = new PropertyExpression();
 		ope.setSectionFinder(csf);
 		this.addChildType(ope);

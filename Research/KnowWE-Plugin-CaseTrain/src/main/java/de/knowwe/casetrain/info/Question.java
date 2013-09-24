@@ -36,8 +36,8 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.report.Message;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
@@ -89,7 +89,7 @@ public class Question extends SubblockMarkup {
 						QuestionText.class);
 				if (fragetextSection == null) {
 					messages.add(Utils.missingComponentWarning(
-									bundle.getString("QUESTION_TEXT")));
+							bundle.getString("QUESTION_TEXT")));
 				}
 
 				return messages;
@@ -111,7 +111,7 @@ public class Question extends SubblockMarkup {
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder(
 							AnswersBlockValidator.getInstance().getRegexAsString()));
-			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
 			this.setRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
 		}

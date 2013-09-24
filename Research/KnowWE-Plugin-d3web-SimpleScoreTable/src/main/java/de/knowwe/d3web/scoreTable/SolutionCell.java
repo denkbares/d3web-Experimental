@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.d3web.scoreTable.renderer.TableCellRenderer;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.constraint.NonEmptyConstraint;
+import de.knowwe.kdom.constraint.NoBlankSectionsConstraint;
 
 public class SolutionCell extends AbstractType {
 
@@ -40,7 +40,7 @@ public class SolutionCell extends AbstractType {
 		this.addChildType(new Solution());
 		RegexSectionFinder finder = new RegexSectionFinder("\\|([^\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1);
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(finder);
-		csf.addConstraint(NonEmptyConstraint.getInstance());
+		csf.addConstraint(NoBlankSectionsConstraint.getInstance());
 		setSectionFinder(csf);
 
 		setRenderer(new TableCellRenderer());

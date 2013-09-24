@@ -5,8 +5,8 @@ import java.util.List;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.renderer.IRITypeRenderer;
@@ -43,7 +43,7 @@ class OntologyIRI extends AbstractType {
 	public OntologyIRI() {
 
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(new IRISectionFinder());
-		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
 		this.setRenderer(new IRITypeRenderer());
@@ -54,7 +54,7 @@ class OntologyVersionIRI extends AbstractType {
 
 	public OntologyVersionIRI() {
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(new IRISectionFinder());
-		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
 		this.setRenderer(new IRITypeRenderer());

@@ -33,8 +33,8 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.table.TableCellContent;
 import de.knowwe.kdom.table.TableLine;
@@ -73,7 +73,7 @@ public class WimVentTable extends AbstractType {
 			// there has to be exactly one
 			SectionFinder s = this.getSectionFinder();
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(s);
-			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
 
 			QuestionReference questionReference = new QuestionReference();
