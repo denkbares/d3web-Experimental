@@ -8,6 +8,9 @@
   <groupId>de.uniwue.d3web</groupId>
   <artifactId>KnowWE-Plugin-OWLAPIConnector</artifactId>
   <version>0.2-SNAPSHOT</version>
+  <properties>
+      <pellet.version>2.3.0</pellet.version>
+  </properties>
   <dependencies>
   		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
@@ -36,56 +39,56 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>pellet-owlapiv3</groupId>
-			<artifactId>pellet-owlapiv3</artifactId>
-			<version>pellet-owlapiv3</version>
-		</dependency>
-		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-IncrementalCompiler</artifactId>
 			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
+      <dependency>
+          <groupId>aterm-java</groupId>
+          <artifactId>aterm-java</artifactId>
+          <version>1.6</version>
+      </dependency>
 		<dependency>
-			<groupId>pellet-core</groupId>
+			<groupId>com.clarkparsia.pellet</groupId>
 			<artifactId>pellet-core</artifactId>
-			<version>pellet-core</version>
+			<version>${pellet.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>pellet-explanation</groupId>
+			<groupId>com.clarkparsia.pellet</groupId>
 			<artifactId>pellet-explanation</artifactId>
-			<version>pellet-explanation</version>
+			<version>${pellet.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>aterm-java</groupId>
-			<artifactId>aterm-java</artifactId>
-			<version>1.6</version>
-		</dependency>
-		<dependency>
-			<groupId>pellet-query</groupId>
+			<groupId>com.clarkparsia.pellet</groupId>
 			<artifactId>pellet-query</artifactId>
-			<version>pellet-query</version>
+			<version>${pellet.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>pellet-datatypes</groupId>
+			<groupId>com.clarkparsia.pellet</groupId>
 			<artifactId>pellet-datatypes</artifactId>
-			<version>pellet-datatypes</version>
+			<version>${pellet.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>pellet-jena</groupId>
+			<groupId>com.clarkparsia.pellet</groupId>
 			<artifactId>pellet-jena</artifactId>
-			<version>pellet-jena</version>
+			<version>${pellet.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>pellet-rules</groupId>
+			<groupId>com.clarkparsia.pellet</groupId>
 			<artifactId>pellet-rules</artifactId>
-			<version>pellet-rules</version>
+			<version>${pellet.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>pellet-el</groupId>
+			<groupId>com.clarkparsia.pellet</groupId>
 			<artifactId>pellet-el</artifactId>
-			<version>pellet-el</version>
+			<version>${pellet.version}</version>
 		</dependency>
+      <dependency>
+          <groupId>com.clarkparsia.pellet</groupId>
+          <artifactId>pellet-owlapiv3</artifactId>
+          <version>${pellet.version}</version>
+      </dependency>
 		<dependency>
 			<groupId>com.hp.hpl.jena</groupId>
 			<artifactId>jena</artifactId>
