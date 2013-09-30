@@ -3,7 +3,8 @@ function redirectSearch(termnames, url, contextPath) {
 	var availableTags = termnames;
 	
 	if (contains(availableTags, searchedTerm)) {
-		jq$('#searchForm').attr("action", url + searchedTerm);
+		var page = getPagename(searchedTerm);
+		jq$('#searchForm').attr("action", url + page);
 		return false;
 	} else {
 		jq$('#searchForm').attr("action", contextPath + '/Search.jsp');
@@ -19,4 +20,26 @@ function contains(a, obj) {
        }
     }
     return false;
+}
+
+
+
+function getPagename(termname) {
+	var page = "";
+	var params = {
+			action : 'GetTermPageAction',
+			term   : termname
+    }; 
+	var options = {
+		url : KNOWWE.core.util.getURL(params),
+		async : false,
+		 response : {
+			 fn : function(){
+				 page = this.response;
+			 }
+		 },
+	};
+	
+	 new _KA(options).send();
+	 return page;
 }
