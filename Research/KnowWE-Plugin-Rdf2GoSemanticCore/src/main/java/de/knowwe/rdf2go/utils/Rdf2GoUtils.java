@@ -137,7 +137,7 @@ public class Rdf2GoUtils {
 		String knownAbbreviation = parseKnownAbbreviation(core, string);
 		if (knownAbbreviation == null) return string;
 		return string.replaceFirst(Pattern.quote(toNamespacePrefix(knownAbbreviation)),
-				Rdf2GoCore.getInstance().getNameSpaces().get(knownAbbreviation));
+				core.getNameSpaces().get(knownAbbreviation));
 	}
 
 	/**
