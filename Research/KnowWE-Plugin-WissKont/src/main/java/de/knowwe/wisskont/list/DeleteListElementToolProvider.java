@@ -7,7 +7,6 @@ import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
 
-
 public class DeleteListElementToolProvider implements ToolProvider {
 
 	@Override
@@ -18,10 +17,9 @@ public class DeleteListElementToolProvider implements ToolProvider {
 
 		DefaultTool tool = new DefaultTool(
 				iconPath,
-				"Delete",
-				"Delete this element from the list",
+				"Löschen",
+				"Diesen Begriff aus der Liste entfernen",
 				jsAction);
 		return new Tool[] { tool };
 	}
-
 }
