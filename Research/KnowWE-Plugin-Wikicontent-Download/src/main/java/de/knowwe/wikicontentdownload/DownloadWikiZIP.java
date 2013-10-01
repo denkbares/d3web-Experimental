@@ -51,6 +51,8 @@ import de.knowwe.jspwiki.JSPWikiConnector;
 public class DownloadWikiZIP extends AbstractAction {
 
 	private File wikiParent;
+	public static final String FINGERPRINT_ENTRY_PREFIX = "fingerprint/";
+
 	public static final String PARAM_FILENAME = "filename";
 	public static final String PARAM_FINGERPRINT = "fingerprint";
 	public static final String PARAM_VERSIONS = "versions";
@@ -96,7 +98,7 @@ public class DownloadWikiZIP extends AbstractAction {
 			Fingerprint.createFingerprint(articles, tempDir);
 			File[] files = tempDir.listFiles();
 			for (File file : files) {
-				String relativePath = "fingerprint/" + file.getName();
+				String relativePath = FINGERPRINT_ENTRY_PREFIX + file.getName();
 				addZipEntry(relativePath, file, zos);
 			}
 		}
