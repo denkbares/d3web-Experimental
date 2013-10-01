@@ -26,14 +26,21 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import de.d3web.utils.Files;
+import de.d3web.utils.Streams;
+import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.Article;
+import de.knowwe.fingerprint.Fingerprint;
 import de.knowwe.jspwiki.JSPWikiConnector;
 
 /**
@@ -44,23 +51,29 @@ import de.knowwe.jspwiki.JSPWikiConnector;
 public class DownloadWikiZIP extends AbstractAction {
 
 	private File wikiParent;
-	private boolean firstLevel = true;
-	private JSPWikiConnector con;
 	public static final String PARAM_FILENAME = "filename";
+	public static final String PARAM_FINGERPRINT = "fingerprint";
+	public static final String PARAM_VERSIONS = "versions";
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		this.con = (JSPWikiConnector) Environment.getInstance().getWikiConnector();
+		JSPWikiConnector con = (JSPWikiConnector) Environment.getInstance().getWikiConnector();
 		String wikiSavepath = con.getWikiProperty("var.basedir");
 		this.wikiParent = new File(new File(wikiSavepath).getParent());
 		String[] directoryName = wikiSavepath.split("/");
+
 		String filename = directoryName[directoryName.length - 1] + ".zip";
 		context.setContentType("application/x-bin");
 		context.setHeader("Content-Disposition", "attachment;filename=\"" + filename + "\"");
+
+		boolean fingerprint = Boolean.valueOf(context.getParameter(PARAM_FINGERPRINT, "false"));
+		boolean versions = Boolean.valueOf(context.getParameter(PARAM_VERSIONS, "false"));
+
 		OutputStream outs = context.getOutputStream();
 		ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(outs));
 		try {
-			zipDir(wikiSavepath, zos, context);
+			zipDir(wikiSavepath, zos, context, 0, versions);
+			if (fingerprint) zipFingerprint(zos, context);
 			zos.close();
 		}
 		catch (Exception ioe) {
@@ -71,6 +84,27 @@ public class DownloadWikiZIP extends AbstractAction {
 		outs.close();
 	}
 
+	private void zipFingerprint(ZipOutputStream zos, UserActionContext context) throws IOException {
+		File tempDir = Files.createTempDir();
+		try {
+			ArticleManager manager = Environment.getInstance().getArticleManager(
+					Environment.DEFAULT_WEB);
+			Collection<Article> articles = new LinkedList<Article>();
+			for (Article article : manager.getArticles()) {
+				if (checkRights(article, context)) articles.add(article);
+			}
+			Fingerprint.createFingerprint(articles, tempDir);
+			File[] files = tempDir.listFiles();
+			for (File file : files) {
+				String relativePath = "fingerprint/" + file.getName();
+				addZipEntry(relativePath, file, zos);
+			}
+		}
+		finally {
+			Files.recursiveDelete(tempDir);
+		}
+	}
+
 	/**
 	 * Zips the files in the given directory and writes the resulting zip-File
 	 * to the ZipOutputStream.
@@ -79,57 +113,54 @@ public class DownloadWikiZIP extends AbstractAction {
 	 * @param savepath
 	 * @param zos
 	 */
-	private void zipDir(String savepath, ZipOutputStream zos, UserActionContext context) {
-		try {
-			// create a new File object based on the directory we have to zip
-			File f = new File(savepath);
-			String[] wikiList;
-			// get a cleaned listing of the directory content
-			// if the current file is on the first level of the Wiki or the name
-			// of the current file is "OLD", the rights for those file(s) have
-			// to be checked additionally
-			if (firstLevel || f.getName() == "OLD") {
-				wikiList = cleanFiles(checkRights(f, context));
-			}
-			else {
-				wikiList = cleanFiles(f.list());
-			}
-			byte[] readBuffer = new byte[2156];
-			int bytesIn = 0;
-			// loop through wikiList and zip the files
-			for (int i = 0; i < wikiList.length; i++) {
-				File file = new File(f, wikiList[i]);
-				// if the File object is a directory, this function is called
-				// again to add its content recursively
-				if (file.isDirectory()) {
-					String filePath = file.getPath();
-					zipDir(filePath, zos, context);
-					// loop again
-					continue;
-				}
-				// if we reached here, the File object wiki was not
-				// a directory
-				FileInputStream fis = new FileInputStream(file);
-				// relativize the savepath of the file against the savepath
-				// of the parentfolder of the actual wiki-folder
-				String relativePath = wikiParent.toURI().relativize(file.toURI()).getPath();
-				// create a new zip entry
-				ZipEntry zip = new ZipEntry(relativePath);
-				// place the zip entry in the ZipOutputStream object
-				zos.putNextEntry(zip);
-				// write the content of the file to the ZipOutputStream
-				while ((bytesIn = fis.read(readBuffer)) != -1)
-				{
-					zos.write(readBuffer, 0, bytesIn);
-				}
-				// close the Stream
-				fis.close();
-			}
+	private void zipDir(String savepath, ZipOutputStream zos, UserActionContext context, int level, boolean includeOld) throws IOException {
+		// create a new File object based on the directory we have to zip
+		File f = new File(savepath);
+		String[] wikiList;
+		// get a cleaned listing of the directory content
+		// if the current file is on the first level of the Wiki or the name
+		// of the current file is "OLD", the rights for those file(s) have
+		// to be checked additionally
+		if (level == 0) {
+			wikiList = cleanFiles(checkRights(f, context));
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
+		else if (level == 1 && f.getName().equals("OLD")) {
+			if (!includeOld) return;
+			wikiList = cleanFiles(checkRights(f, context));
 		}
+		else {
+			wikiList = cleanFiles(f.list());
+		}
+		// loop through wikiList and zip the files
+		for (int i = 0; i < wikiList.length; i++) {
+			File file = new File(f, wikiList[i]);
+			// if the File object is a directory, this function is called
+			// again to add its content recursively
+			if (file.isDirectory()) {
+				String filePath = file.getPath();
+				zipDir(filePath, zos, context, level + 1, includeOld);
+				// loop again
+				continue;
+			}
+			// relativize the savepath of the file against the savepath
+			// of the parentfolder of the actual wiki-folder
+			String relativePath = wikiParent.toURI().relativize(file.toURI()).getPath();
+			addZipEntry(relativePath, file, zos);
+		}
+	}
+
+	private void addZipEntry(String relativePath, File file, ZipOutputStream zos) throws IOException {
+		// if we reached here, the File object wiki was not
+		// a directory
+		FileInputStream fis = new FileInputStream(file);
+		// create a new zip entry
+		ZipEntry zip = new ZipEntry(relativePath);
+		// place the zip entry in the ZipOutputStream object
+		zos.putNextEntry(zip);
+		// write the content of the file to the ZipOutputStream
+		Streams.stream(fis, zos);
+		// close the Stream
+		fis.close();
 	}
 
 	/**
@@ -143,6 +174,7 @@ public class DownloadWikiZIP extends AbstractAction {
 	 *         them
 	 */
 	private String[] checkRights(File file, UserActionContext context) {
+		JSPWikiConnector con = (JSPWikiConnector) Environment.getInstance().getWikiConnector();
 		ArrayList<String> checkedList = new ArrayList<String>();
 		String[] fileList = file.list();
 		for (int i = 0; i < fileList.length; i++) {
@@ -189,12 +221,12 @@ public class DownloadWikiZIP extends AbstractAction {
 			}
 
 		}
-		// the method is always called for the first time when the zipDir-method
-		// zips the first level of the Wiki. After calling this method once, the
-		// zipDir-method is no longer working on the first level of the Wiki and
-		// thus firstLevel is now false.
-		firstLevel = false;
 		return checkedList.toArray(new String[checkedList.size()]);
+	}
+
+	private boolean checkRights(Article article, UserActionContext context) {
+		JSPWikiConnector con = (JSPWikiConnector) Environment.getInstance().getWikiConnector();
+		return con.userCanViewArticle(article.getTitle(), context.getRequest());
 	}
 
 	/**

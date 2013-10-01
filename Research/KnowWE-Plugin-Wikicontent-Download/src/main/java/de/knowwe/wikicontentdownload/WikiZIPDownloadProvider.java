@@ -36,20 +36,29 @@ public class WikiZIPDownloadProvider implements ToolProvider {
 
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
-		// and provide both download and refresh as tools
-		Tool download = getDownloadTool(section, userContext);
-		return new Tool[] { download };
+		// and provide both downloads as tools
+		return new Tool[] {
+				getDownloadTool(section, userContext, false),
+				getDownloadTool(section, userContext, true)
+		};
 	}
 
-	protected Tool getDownloadTool(Section<?> section, UserContext userContext) {
+	protected Tool getDownloadTool(Section<?> section, UserContext userContext, boolean fingerprint) {
 		// tool to provide download capability
 		String jsAction = "window.location='action/DownloadWikiZIP" +
 				"?" + Attributes.TOPIC + "=" + section.getTitle() +
-				"&amp;" + Attributes.WEB + "=" + section.getWeb() + "'";
+				"&amp;" + Attributes.WEB + "=" + section.getWeb() +
+				"&amp;" + DownloadWikiZIP.PARAM_FINGERPRINT + "=" + fingerprint +
+				"&amp;" + DownloadWikiZIP.PARAM_VERSIONS + "=" + !fingerprint +
+				"'";
 		return new DefaultTool(
 				"KnowWEExtension/images/zip.jpg",
-				"Download Wiki Zip",
-				"Download the entire Wiki as a Zip-File.",
+				fingerprint
+						? "Download Finger-Print"
+						: "Download Wiki Zip",
+				fingerprint
+						? "Download the entire Wiki as a Zip-File, including a finger-print for debug purposes, but no version history."
+						: "Download the entire Wiki as a Zip-File.",
 				jsAction);
 	}
 
