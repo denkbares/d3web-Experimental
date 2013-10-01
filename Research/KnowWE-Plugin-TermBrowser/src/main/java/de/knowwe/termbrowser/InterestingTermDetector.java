@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.Article;
  */
 public interface InterestingTermDetector {
 
-	public static final String EXTENSION_POINT_TERM_DETECTOR = "TermDetector";
+	static final String EXTENSION_POINT_TERM_DETECTOR = "TermDetector";
 
-	public Map<String, Double> getWeightedTermsOfInterest(Article a);
+	Map<String, Double> getWeightedTermsOfInterest(Article a);
 }

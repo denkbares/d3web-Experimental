@@ -23,8 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
 
-import de.d3web.plugin.Extension;
-import de.d3web.plugin.PluginManager;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.termbrowser.util.Tree;
 
 /**
@@ -37,31 +36,20 @@ public class RecommendationSet {
 	private Tree<RatedTerm> terms = null;
 	private boolean browserIsCollapsed = false;
 	private boolean graphIsCollapsed = true;
+	private final TermBrowserHierarchy hierarchy;
 
 	/**
 	 * 
 	 */
-	public RecommendationSet() {
-		HierarchyProvider h = getPluggedHierarchyProvider();
-		terms = new Tree<RatedTerm>(RatedTerm.ROOT, h);
+	public RecommendationSet(String master, List<String> relations) {
+		hierarchy = new TermBrowserHierarchy(master, relations);
+		terms = new Tree<RatedTerm>(RatedTerm.ROOT, hierarchy);
 	}
 
-	/**
-	 * 
-	 * @created 05.06.2013
-	 * @return
-	 */
-	public static HierarchyProvider getPluggedHierarchyProvider() {
-		HierarchyProvider h = null;
-		Extension[] extensions = PluginManager.getInstance().getExtensions(
-				"KnowWE-Plugin-TermBrowser", HierarchyProvider.EXTENSION_POINT_HIERARCHY_PROVIDER);
-		for (Extension extension : extensions) {
-			Object newInstance = extension.getSingleton();
-			if (newInstance instanceof HierarchyProvider) {
-				h = (HierarchyProvider) newInstance;
-			}
-		}
-		return h;
+	public static RecommendationSet createRecommendationSet(UserContext user) {
+		String masta = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
+		List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
+		return new RecommendationSet(masta, relations);
 	}
 
 	public void setBrowserIsCollapsed(boolean browserIsCollapsed) {
@@ -116,7 +104,7 @@ public class RecommendationSet {
 
 	public void discount(double factor) {
 		// build up tree newly
-		Tree<RatedTerm> newTree = new Tree<RatedTerm>(RatedTerm.ROOT, getPluggedHierarchyProvider());
+		Tree<RatedTerm> newTree = new Tree<RatedTerm>(RatedTerm.ROOT, hierarchy);
 		List<RatedTerm> allTerms = getRankedTermList();
 		for (RatedTerm ratedTerm : allTerms) {
 			double newValue = ratedTerm.getValue() * factor;
@@ -126,6 +114,10 @@ public class RecommendationSet {
 		}
 
 		terms = newTree;
+	}
+
+	public TermBrowserHierarchy getHierarchy() {
+		return hierarchy;
 	}
 
 	static class ValueComparator implements Comparator<RatedTerm> {

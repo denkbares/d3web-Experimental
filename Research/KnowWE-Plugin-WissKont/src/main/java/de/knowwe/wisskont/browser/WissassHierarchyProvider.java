@@ -18,7 +18,6 @@
  */
 package de.knowwe.wisskont.browser;
 
-import java.util.HashSet;
 import java.util.List;
 
 import org.ontoware.rdf2go.model.node.URI;
@@ -26,7 +25,9 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.strings.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.HierarchyUtils;
 import de.knowwe.termbrowser.HierarchyProvider;
+import de.knowwe.wisskont.SubconceptMarkup;
 import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
@@ -58,6 +59,19 @@ public class WissassHierarchyProvider implements HierarchyProvider {
 		String otherURL = baseUrl + otherConceptURLString;
 		URI otherURI = new URIImpl(otherURL);
 
-		return MarkupUtils.isSubConceptOf(thisURI, otherURI, new HashSet<URI>());
+		return HierarchyUtils.isSubConceptOf(thisURI, otherURI, new URIImpl(
+				baseUrl + SubconceptMarkup.SUBCONCEPT_PROPERTY), null);
+	}
+
+	@Override
+	public void setAdditionalHierarchyRelations(List<String> relations) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setMaster(String master) {
+		// TODO Auto-generated method stub
+
 	}
 }

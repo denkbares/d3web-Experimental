@@ -37,14 +37,31 @@ import de.knowwe.termbrowser.util.Tree.Node;
  * @author jochenreutelshofer
  * @created 10.12.2012
  */
-public class TermBrowserRenderUtils {
+public class TermBrowserRender {
 
 	public static final int THRESHOLD_MAX_TERM_NUMBER = 15;
 	private static boolean zebra = false;
 
-	private static HierarchyProvider hierarchy = RecommendationSet.getPluggedHierarchyProvider();
+	private final UserContext user;
+	private final de.knowwe.core.utils.LinkToTermDefinitionProvider linkProvider;
+	private final String master;
+	private TermBrowserHierarchy hierarchy = null;
 
-	public static String renderTermBrowser(UserContext user, de.knowwe.core.utils.LinkToTermDefinitionProvider linkProvider) {
+	/**
+	 * 
+	 */
+	public TermBrowserRender(UserContext user, de.knowwe.core.utils.LinkToTermDefinitionProvider linkProvider, String master) {
+		this.user = user;
+		this.linkProvider = linkProvider;
+		this.master = master;
+		RecommendationSet recommendationSet = TermRecommender.getInstance().getRecommendationSet(
+				user);
+		if (recommendationSet != null) {
+			hierarchy = recommendationSet.getHierarchy();
+		}
+	}
+
+	public String renderTermBrowser() {
 		RenderResult string = new RenderResult(user);
 		string.appendHtml("<div class='termbrowserframe'>");
 
@@ -81,7 +98,7 @@ public class TermBrowserRenderUtils {
 						user,
 						THRESHOLD_MAX_TERM_NUMBER);
 
-			renderTermTree(string, ratedTermTreeTop, collapsed, linkProvider);
+			renderTermTree(string, ratedTermTreeTop, collapsed, linkProvider, master);
 
 		}
 		string.appendHtml("</div>");
@@ -94,7 +111,7 @@ public class TermBrowserRenderUtils {
 	 * @param string
 	 * @param subList
 	 */
-	private static void renderTermTree(RenderResult string, Tree<RatedTerm> tree, boolean collapsed, LinkToTermDefinitionProvider linkProvider) {
+	private void renderTermTree(RenderResult string, Tree<RatedTerm> tree, boolean collapsed, LinkToTermDefinitionProvider linkProvider, String master) {
 
 		String style = "";
 		if (collapsed) {
@@ -109,7 +126,7 @@ public class TermBrowserRenderUtils {
 		}
 		for (Node<RatedTerm> rootConcept : roots) {
 
-			renderConceptSubTree(rootConcept, 0, string, linkProvider);
+			renderConceptSubTree(rootConcept, 0, string, linkProvider, master);
 		}
 		string.appendHtml("</div>");
 
@@ -120,21 +137,21 @@ public class TermBrowserRenderUtils {
 	 * @created 12.04.2013
 	 * @param rootConcept
 	 */
-	private static void renderConceptSubTree(Node<RatedTerm> rootConcept, int level, RenderResult string, LinkToTermDefinitionProvider linkProvider) {
+	private void renderConceptSubTree(Node<RatedTerm> rootConcept, int level, RenderResult string, LinkToTermDefinitionProvider linkProvider, String master) {
 		string.append("\n"); // append newline into html-code from time to time
 								// to avoid jspwiki bug
 		if (!rootConcept.getData().equals(RatedTerm.ROOT)) {
-			renderConcept(rootConcept, level, string, linkProvider);
+			renderConcept(rootConcept, level, string, linkProvider, master);
 		}
 		level += 1;
 		List<de.knowwe.termbrowser.util.Tree.Node<RatedTerm>> childrenSorted = rootConcept.getChildrenSorted();
 		for (Node<RatedTerm> node : childrenSorted) {
-			renderConceptSubTree(node, level, string, linkProvider);
+			renderConceptSubTree(node, level, string, linkProvider, master);
 		}
 
 	}
 
-	private static void renderConcept(Node<RatedTerm> t, int depth, RenderResult string, LinkToTermDefinitionProvider linkProvider) {
+	private void renderConcept(Node<RatedTerm> t, int depth, RenderResult string, LinkToTermDefinitionProvider linkProvider, String master) {
 		String term = t.getData().getTerm();
 		String topic = term;
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
@@ -175,7 +192,7 @@ public class TermBrowserRenderUtils {
 				// each term
 				{
 					string.appendHtml("<td style='min-width: 16px; padding:0px;'>");
-					insertActionButtonsPre(string, url, divStyle, t);
+					insertActionButtonsPre(string, url, divStyle, t, master);
 					string.appendHtml("</td>");
 				}
 
@@ -201,7 +218,7 @@ public class TermBrowserRenderUtils {
 				// each term
 				{
 					string.appendHtml("<td style='min-width: 32px;max-width: 32px;padding:0px;'>");
-					insertActionButtonsPost(string, url, divStyle, term, depth);
+					insertActionButtonsPost(string, url, divStyle, term, depth, master);
 					string.appendHtml("</td>");
 				}
 				string.appendHtml("</tr>");
@@ -218,12 +235,12 @@ public class TermBrowserRenderUtils {
 	 * @param url
 	 * @param divStyle
 	 */
-	private static void insertActionButtonsPost(RenderResult string, String url, String divStyle, String term, int level) {
+	private void insertActionButtonsPost(RenderResult string, String url, String divStyle, String term, int level, String master) {
 		string.appendHtml("<table style='table-layout:fixed'>");
 		string.appendHtml("<tr>");
 		{
 
-			insertAddParentButton(string, divStyle, term, level);
+			insertAddParentButton(string, divStyle, term, level, master);
 			insertRemoveButton(string, divStyle);
 
 		}
@@ -237,8 +254,8 @@ public class TermBrowserRenderUtils {
 	 * @param url
 	 * @param divStyle
 	 */
-	private static void insertActionButtonsPre(RenderResult string, String url, String divStyle, Node<RatedTerm> term) {
-		boolean allChildrenShown = allChildrenShown(term);
+	private void insertActionButtonsPre(RenderResult string, String url, String divStyle, Node<RatedTerm> term, String master) {
+		boolean allChildrenShown = allChildrenShown(term, master);
 
 		string.appendHtml("<table style='padding:0px;table-layout:fixed'>");
 		string.appendHtml("<tr>");
@@ -261,7 +278,7 @@ public class TermBrowserRenderUtils {
 	 * @param term
 	 * @return
 	 */
-	private static boolean allChildrenShown(Node<RatedTerm> term) {
+	private boolean allChildrenShown(Node<RatedTerm> term, String master) {
 		List<String> childrenConcepts = hierarchy.getChildren(term.getData().getTerm());
 		for (String childTerm : childrenConcepts) {
 			if (!term.getChildren().contains(new Node<RatedTerm>(new RatedTerm(childTerm)))) {
@@ -284,7 +301,7 @@ public class TermBrowserRenderUtils {
 	 * @param string
 	 * @param divStyle
 	 */
-	private static void insertExpandButton(RenderResult string, String divStyle) {
+	private void insertExpandButton(RenderResult string, String divStyle) {
 		// expand concept, i.e. add all children to this list
 		string.appendHtml("<td style='"
 				+ divStyle
@@ -297,7 +314,7 @@ public class TermBrowserRenderUtils {
 	 * @param string
 	 * @param divStyle
 	 */
-	private static void insertRemoveButton(RenderResult string, String divStyle) {
+	private void insertRemoveButton(RenderResult string, String divStyle) {
 		// delete concept from list
 		string.appendHtml("<td style='"
 				+ divStyle
@@ -310,7 +327,7 @@ public class TermBrowserRenderUtils {
 	 * @param string
 	 * @param divStyle
 	 */
-	private static void insertAddParentButton(RenderResult string, String divStyle, String term, int level) {
+	private void insertAddParentButton(RenderResult string, String divStyle, String term, int level, String master) {
 		if (level == 0) {
 
 			List<String> parentConcepts = hierarchy.getParents(term);

@@ -260,7 +260,7 @@ public class Tree<T extends HierarchyNode<T>> {
 		}
 
 		public void addChild(Node<T> n) {
-			if(!children.contains(n)) {
+			if (!children.contains(n)) {
 				children.add(n);
 				n.parent = this;
 			}

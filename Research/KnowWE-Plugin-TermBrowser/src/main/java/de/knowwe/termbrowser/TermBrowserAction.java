@@ -50,6 +50,7 @@ public class TermBrowserAction extends AbstractAction {
 	private String perform(UserActionContext context) {
 		String command = context.getParameter("command");
 		String term = context.getParameter("term");
+		String master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(context);
 		if (term == null) {
 			term = "";
 		}
@@ -107,8 +108,9 @@ public class TermBrowserAction extends AbstractAction {
 				// is handled by a link
 			}
 		}
-		return RenderResult.unmask(TermBrowserRenderUtils.renderTermBrowser(context,
-				new de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider()),
+		return RenderResult.unmask(new TermBrowserRender(context,
+				new de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider(),
+				master).renderTermBrowser(),
 				context);
 	}
 }

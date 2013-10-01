@@ -18,7 +18,15 @@
  */
 package de.knowwe.termbrowser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import de.knowwe.core.Environment;
+import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
@@ -32,31 +40,79 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  */
 public class TermBrowserMarkup extends DefaultMarkupType {
 
+	private static final String HIERARCHY = "hierarchy";
+	private static final DefaultMarkup MARKUP;
+
 	public TermBrowserMarkup(DefaultMarkup markup) {
 		super(markup);
 		setIgnorePackageCompile(true);
-		this.setRenderer(new TermBrowserRenderer());
+		this.setRenderer(new TermBrowserMarkupRenderer());
 	}
 
-	private static DefaultMarkup m = null;
-
 	static {
-		m = new DefaultMarkup("termbrowser");
-
+		MARKUP = new DefaultMarkup("termbrowser");
+		MARKUP.addAnnotation(PackageManager.ANNOTATION_MASTER, false);
+		MARKUP.addAnnotation(HIERARCHY, false);
 	}
 
 	public TermBrowserMarkup() {
-		super(m);
+		super(MARKUP);
 		setIgnorePackageCompile(true);
-		this.setRenderer(new TermBrowserRenderer());
+		this.setRenderer(new TermBrowserMarkupRenderer());
 	}
 
-	class TermBrowserRenderer implements Renderer {
+	public static String getCurrentTermbrowserMarkupMaster(UserContext user) {
+		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
+		if (termBrowser != null) {
+			return DefaultMarkupType.getAnnotation(termBrowser,
+					PackageManager.ANNOTATION_MASTER);
+		}
+		return null;
+	}
+
+	public static List<String> getCurrentTermbrowserMarkupHierarchyRelations(UserContext user) {
+		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
+		if (termBrowser != null) {
+			String hierarchyData = DefaultMarkupType.getAnnotation(termBrowser,
+					HIERARCHY);
+			if (hierarchyData == null) return new ArrayList<String>();
+			String[] split = hierarchyData.split(",");
+			List<String> list = Arrays.asList(split);
+			return list;
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @created 01.10.2013
+	 * @param user
+	 * @return
+	 */
+	private static Section<TermBrowserMarkup> getTermBrowserMarkup(UserContext user) {
+		Article article = Environment.getInstance().getArticleManager(user.getWeb()).getArticle(
+				user.getTitle());
+		Section<TermBrowserMarkup> termBrowser = Sections.findSuccessor(article.getRootSection(),
+				TermBrowserMarkup.class);
+		if (termBrowser == null) {
+			Article leftMenu = Environment.getInstance().getArticleManager(user.getWeb()).getArticle(
+					"LeftMenu");
+			termBrowser = Sections.findSuccessor(leftMenu.getRootSection(),
+					TermBrowserMarkup.class);
+		}
+		return termBrowser;
+	}
+
+	class TermBrowserMarkupRenderer implements Renderer {
 
 		@Override
 		public void render(Section<?> section, UserContext user, RenderResult string) {
-			string.append(TermBrowserRenderUtils.renderTermBrowser(user,
-					new de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider()));
+			String master = DefaultMarkupType.getAnnotation(section,
+					PackageManager.ANNOTATION_MASTER);
+			TermBrowserRender renderer = new TermBrowserRender(user,
+					new de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider(),
+					master);
+			string.append(renderer.renderTermBrowser());
 		}
 
 	}

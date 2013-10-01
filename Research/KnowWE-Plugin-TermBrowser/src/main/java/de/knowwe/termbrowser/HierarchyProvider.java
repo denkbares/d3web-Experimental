@@ -29,9 +29,13 @@ public interface HierarchyProvider {
 
 	public static final String EXTENSION_POINT_HIERARCHY_PROVIDER = "HierarchyProvider";
 
-	public List<String> getChildren(String term);
+	void setAdditionalHierarchyRelations(List<String> relations);
 
-	public List<String> getParents(String term);
+	void setMaster(String master);
 
-	public boolean isSubNodeOf(String term1, String term2);
+	List<String> getChildren(String term);
+
+	List<String> getParents(String term);
+
+	boolean isSubNodeOf(String term1, String term2);
 }

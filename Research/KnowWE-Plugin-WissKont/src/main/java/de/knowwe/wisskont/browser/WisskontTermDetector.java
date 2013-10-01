@@ -37,7 +37,7 @@ import de.knowwe.wisskont.ConceptMarkup;
  * @author jochenreutelshofer
  * @created 03.06.2013
  */
-public class WissassTermDetector implements InterestingTermDetector {
+public class WisskontTermDetector implements InterestingTermDetector {
 
 	private static final double WEIGHT_REFERENCE = 0.5;
 	private static final double WEIGHT_DEFINITION = 1.0;

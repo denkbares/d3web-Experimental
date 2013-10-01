@@ -45,34 +45,6 @@ public class IncrementalCompilerLinkToTermDefinitionProvider implements de.knoww
 		return createBaseURL() + "?page=" + targetArticle;
 	}
 
-	// @Override
-	// public String createSparqlURI(String name, Rdf2GoCore repository, String
-	// masterArticle) {
-	// if (name == null) return null;
-	// Collection<Section<? extends SimpleDefinition>> definitions =
-	// IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-	// new Identifier(name));
-	// if (definitions.size() > 0) {
-	// Section<? extends SimpleDefinition> def = definitions.iterator().next();
-	// return "<" + RDFSUtil.getURI(def) + ">";
-	// }
-	// name = name.replaceAll(" ", "+");
-	// if (name.contains("+") || name.contains(".")) {
-	// String localNamespace = repository.getLocalNamespace();
-	//
-	// return "<" + localNamespace + name + ">";
-	// }
-	//
-	// try {
-	// return "lns:" + URLDecoder.decode(name, "UTF-8");
-	// }
-	// catch (UnsupportedEncodingException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// return null;
-	// }
-
 	/**
 	 * 
 	 * @created 29.11.2012

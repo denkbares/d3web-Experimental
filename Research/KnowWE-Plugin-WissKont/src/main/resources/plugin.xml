@@ -169,16 +169,14 @@
 	</extension>
 	
 	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="TermDetector"
-		id="WissassTermDetector">
+		id="WisskontTermDetector">
 		<parameter id="class"
-			value="de.knowwe.wisskont.browser.WissassTermDetector" />
-		<parameter id="name" value="WissassTermDetector" />
-		<parameter id="description" value="WissassTermDetector" />
+			value="de.knowwe.wisskont.browser.WisskontTermDetector" />
+		<parameter id="name" value="WisskontTermDetector" />
+		<parameter id="description" value="WisskontTermDetector" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 	</extension>
-	
-		
 	
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
