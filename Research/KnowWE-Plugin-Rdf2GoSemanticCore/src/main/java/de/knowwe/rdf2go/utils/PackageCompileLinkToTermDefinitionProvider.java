@@ -24,6 +24,7 @@ import de.d3web.strings.Identifier;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 
 /**
  * 

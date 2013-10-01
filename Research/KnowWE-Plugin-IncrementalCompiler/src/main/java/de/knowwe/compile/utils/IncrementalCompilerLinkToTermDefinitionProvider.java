@@ -16,7 +16,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.rdfs.vis.markup;
+package de.knowwe.compile.utils;
 
 import java.util.Collection;
 
@@ -25,14 +25,13 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
 
 /**
  * 
  * @author jochenreutelshofer
  * @created 24.04.2013
  */
-public class IncrementalCompilerLinkToTermDefinitionProvider implements LinkToTermDefinitionProvider {
+public class IncrementalCompilerLinkToTermDefinitionProvider implements de.knowwe.core.utils.LinkToTermDefinitionProvider {
 
 	@Override
 	public String getLinkToTermDefinition(String name, String masterArticle) {

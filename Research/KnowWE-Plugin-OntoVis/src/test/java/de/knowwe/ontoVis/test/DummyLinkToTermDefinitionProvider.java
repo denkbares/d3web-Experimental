@@ -18,7 +18,7 @@
  */
 package de.knowwe.ontoVis.test;
 
-import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
+import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 
 /**
  * 

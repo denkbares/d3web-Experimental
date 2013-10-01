@@ -12,6 +12,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
 
+import de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
@@ -19,10 +20,10 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
 import de.knowwe.rdf2go.utils.PackageCompileLinkToTermDefinitionProvider;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.vis.ConceptNode;
@@ -33,7 +34,6 @@ import de.knowwe.rdfs.vis.RenderingCore.NODE_TYPE;
 import de.knowwe.rdfs.vis.SubGraphData;
 import de.knowwe.rdfs.vis.d3.D3VisualizationRenderer;
 import de.knowwe.rdfs.vis.dot.DOTVisualizationRenderer;
-import de.knowwe.rdfs.vis.markup.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.rdfs.vis.markup.OntoVisType;
 import de.knowwe.rdfs.vis.util.Utils;
 

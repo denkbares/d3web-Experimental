@@ -24,7 +24,6 @@ import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.rdfs.vis.markup.IncrementalCompilerLinkToTermDefinitionProvider;
 
 /**
  * 
@@ -57,7 +56,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		@Override
 		public void render(Section<?> section, UserContext user, RenderResult string) {
 			string.append(TermBrowserRenderUtils.renderTermBrowser(user,
-					new IncrementalCompilerLinkToTermDefinitionProvider()));
+					new de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider()));
 		}
 
 	}

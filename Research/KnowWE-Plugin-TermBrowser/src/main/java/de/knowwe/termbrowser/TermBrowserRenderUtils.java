@@ -28,7 +28,7 @@ import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.rdf2go.utils.LinkToTermDefinitionProvider;
+import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.termbrowser.util.Tree;
 import de.knowwe.termbrowser.util.Tree.Node;
 
@@ -44,7 +44,7 @@ public class TermBrowserRenderUtils {
 
 	private static HierarchyProvider hierarchy = RecommendationSet.getPluggedHierarchyProvider();
 
-	public static String renderTermBrowser(UserContext user, LinkToTermDefinitionProvider linkProvider) {
+	public static String renderTermBrowser(UserContext user, de.knowwe.core.utils.LinkToTermDefinitionProvider linkProvider) {
 		RenderResult string = new RenderResult(user);
 		string.appendHtml("<div class='termbrowserframe'>");
 
