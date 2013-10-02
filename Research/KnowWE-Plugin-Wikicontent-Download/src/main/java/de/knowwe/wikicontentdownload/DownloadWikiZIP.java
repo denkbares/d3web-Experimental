@@ -23,9 +23,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.zip.ZipEntry;
@@ -42,6 +39,7 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.fingerprint.Fingerprint;
 import de.knowwe.jspwiki.JSPWikiConnector;
+import de.knowwe.jspwiki.WikiFileProviderUtils;
 
 /**
  * 
@@ -50,7 +48,6 @@ import de.knowwe.jspwiki.JSPWikiConnector;
  */
 public class DownloadWikiZIP extends AbstractAction {
 
-	private File wikiParent;
 	public static final String FINGERPRINT_ENTRY_PREFIX = "fingerprint/";
 
 	public static final String PARAM_FILENAME = "filename";
@@ -59,12 +56,17 @@ public class DownloadWikiZIP extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		JSPWikiConnector con = (JSPWikiConnector) Environment.getInstance().getWikiConnector();
-		String wikiSavepath = con.getWikiProperty("var.basedir");
-		this.wikiParent = new File(new File(wikiSavepath).getParent());
-		String[] directoryName = wikiSavepath.split("/");
 
-		String filename = directoryName[directoryName.length - 1] + ".zip";
+		if (!context.userIsAdmin()) {
+			context.sendError(HttpServletResponse.SC_FORBIDDEN,
+					"Administration access required to dowload wiki content.");
+			return;
+		}
+
+		JSPWikiConnector con = (JSPWikiConnector) Environment.getInstance().getWikiConnector();
+		File wikiFolder = new File(con.getWikiProperty("var.basedir"));
+
+		String filename = wikiFolder.getName() + ".zip";
 		context.setContentType("application/x-bin");
 		context.setHeader("Content-Disposition", "attachment;filename=\"" + filename + "\"");
 
@@ -74,7 +76,7 @@ public class DownloadWikiZIP extends AbstractAction {
 		OutputStream outs = context.getOutputStream();
 		ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(outs));
 		try {
-			zipDir(wikiSavepath, zos, context, 0, versions);
+			zipDir(wikiFolder, zos, context, versions);
 			if (fingerprint) zipFingerprint(zos, context);
 			zos.close();
 		}
@@ -99,7 +101,7 @@ public class DownloadWikiZIP extends AbstractAction {
 			File[] files = tempDir.listFiles();
 			for (File file : files) {
 				String relativePath = FINGERPRINT_ENTRY_PREFIX + file.getName();
-				addZipEntry(relativePath, file, zos);
+				addZipEntry(file, relativePath, zos);
 			}
 		}
 		finally {
@@ -112,46 +114,39 @@ public class DownloadWikiZIP extends AbstractAction {
 	 * to the ZipOutputStream.
 	 * 
 	 * @created 21.04.2012
-	 * @param savepath
+	 * @param wikiRootFolder the folder to be zipped
 	 * @param zos
 	 */
-	private void zipDir(String savepath, ZipOutputStream zos, UserActionContext context, int level, boolean includeOld) throws IOException {
-		// create a new File object based on the directory we have to zip
-		File f = new File(savepath);
-		String[] wikiList;
-		// get a cleaned listing of the directory content
-		// if the current file is on the first level of the Wiki or the name
-		// of the current file is "OLD", the rights for those file(s) have
-		// to be checked additionally
-		if (level == 0) {
-			wikiList = cleanFiles(checkRights(f, context));
+	private void zipDir(File wikiRootFolder, ZipOutputStream zos, UserActionContext context, boolean includeOld) throws IOException {
+		zipDir(wikiRootFolder, wikiRootFolder, zos, context, 0, includeOld);
+	}
+
+	private void zipDir(File wikiRootFolder, File file, ZipOutputStream zos, UserActionContext context, int level, boolean includeOld) throws IOException {
+
+		// ignore all files if they belong to an article
+		// we have no read access for
+		Article article = WikiFileProviderUtils.getArticle(
+				context.getWeb(), wikiRootFolder, file);
+		if (article != null && !checkRights(article, context)) {
+			return;
 		}
-		else if (level == 1 && f.getName().equals("OLD")) {
-			if (!includeOld) return;
-			wikiList = cleanFiles(checkRights(f, context));
-		}
-		else {
-			wikiList = cleanFiles(f.list());
-		}
-		// loop through wikiList and zip the files
-		for (int i = 0; i < wikiList.length; i++) {
-			File file = new File(f, wikiList[i]);
-			// if the File object is a directory, this function is called
-			// again to add its content recursively
-			if (file.isDirectory()) {
-				String filePath = file.getPath();
-				zipDir(filePath, zos, context, level + 1, includeOld);
-				// loop again
-				continue;
-			}
+
+		if (file.isFile()) {
 			// relativize the savepath of the file against the savepath
 			// of the parentfolder of the actual wiki-folder
-			String relativePath = wikiParent.toURI().relativize(file.toURI()).getPath();
-			addZipEntry(relativePath, file, zos);
+			String relativePath = wikiRootFolder.getParentFile().toURI().relativize(file.toURI()).getPath();
+			addZipEntry(file, relativePath, zos);
+		}
+		else {
+			for (File child : file.listFiles()) {
+				if (isHidden(child)) continue;
+				if (!includeOld && level == 0 && child.getName().equals("OLD")) continue;
+				zipDir(wikiRootFolder, child, zos, context, level + 1, includeOld);
+			}
 		}
 	}
 
-	private void addZipEntry(String relativePath, File file, ZipOutputStream zos) throws IOException {
+	private void addZipEntry(File file, String relativePath, ZipOutputStream zos) throws IOException {
 		// if we reached here, the File object wiki was not
 		// a directory
 		FileInputStream fis = new FileInputStream(file);
@@ -165,92 +160,21 @@ public class DownloadWikiZIP extends AbstractAction {
 		fis.close();
 	}
 
-	/**
-	 * Returns all files in the given file, for which the user has the rights to
-	 * view them.
-	 * 
-	 * @created 08.05.2012
-	 * @param file
-	 * @return a list of files (as String array) containing all files of the
-	 *         given file, for which the user has the rights to view and zip
-	 *         them
-	 */
-	private String[] checkRights(File file, UserActionContext context) {
-		JSPWikiConnector con = (JSPWikiConnector) Environment.getInstance().getWikiConnector();
-		ArrayList<String> checkedList = new ArrayList<String>();
-		String[] fileList = file.list();
-		for (int i = 0; i < fileList.length; i++) {
-			File f = new File(file, fileList[i]);
-			if (f.isDirectory()) {
-				try {
-					String title = fileList[i];
-					if (title.length() > 3
-							&& title.substring(title.length() - 4, title.length()) == "-att") {
-						// if the current file is a directory, has more than 3
-						// characters and the last four characters of its name
-						// are "-att", those last four characters have to be a
-						// cut off and the resulting title has to be decoded
-						title = URLDecoder.decode(
-								title.substring(0, title.length() - 4),
-								"UTF8");
-					}
-					else {
-						// all other directories (including all directories in
-						// the folder "OLD" of the first level) can be decoded
-						// without cutting anything off
-						title = URLDecoder.decode(title, "UTF8");
-					}
-					// if the user has the rights to view the file at
-					// fileList[i], the file is added to the checked List
-					if (con.userCanViewArticle(title, context.getRequest())) {
-						checkedList.add(fileList[i]);
-					}
-				}
-				catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
-			}
-			else {
-				try {
-					String title = URLDecoder.decode(fileList[i], "UTF8");
-					if (con.userCanViewArticle(title, context.getRequest())) {
-						checkedList.add(fileList[i]);
-					}
-				}
-				catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
-			}
-
-		}
-		return checkedList.toArray(new String[checkedList.size()]);
-	}
-
 	private boolean checkRights(Article article, UserActionContext context) {
 		JSPWikiConnector con = (JSPWikiConnector) Environment.getInstance().getWikiConnector();
 		return con.userCanViewArticle(article.getTitle(), context.getRequest());
 	}
 
 	/**
-	 * Cleans the given fileList from all directories and files that match the
-	 * regular expression "\.[\p{L}\d]*" (like ".svn") and should therefore not
-	 * be zipped in the zipDir method. The result is returned as a String array.
+	 * Returns if the file matches the regular expression
+	 * "\.[\p{L}\d]*" (like ".svn") and should therefore not be zipped in the
+	 * zipDir method.
 	 * 
 	 * @created 29.04.2012
-	 * @param fileList
-	 * @return cleaned fileList as String array
+	 * @param file the file to be checked
+	 * @return if the file is a hidden file
 	 */
-	private String[] cleanFiles(String[] fileList) {
-		ArrayList<String> cleanedList = new ArrayList<String>();
-		// loop through all files in fileList
-		for (int i = 0; i < fileList.length; i++) {
-			if (fileList[i].matches("\\.[\\p{L}\\d]*")) {
-				continue;
-			}
-			else {
-				cleanedList.add(fileList[i]);
-			}
-		}
-		return cleanedList.toArray(new String[cleanedList.size()]);
+	private boolean isHidden(File file) {
+		return file.getName().matches("\\.[\\p{L}\\d]*");
 	}
 }

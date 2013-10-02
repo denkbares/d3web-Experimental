@@ -37,6 +37,9 @@ public class WikiZIPDownloadProvider implements ToolProvider {
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		// and provide both downloads as tools
+		if (!userContext.userIsAdmin()) {
+			return new Tool[0];
+		}
 		return new Tool[] {
 				getDownloadTool(section, userContext, false),
 				getDownloadTool(section, userContext, true)
