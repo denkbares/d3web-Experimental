@@ -101,6 +101,17 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends S
 		this.sync = sync;
 	}
 
+	/**
+	 * Returns whether the axiom inserted should be synchronized with a
+	 * RDF2Go-Store.
+	 * 
+	 * @created 02.10.2013
+	 * @return whether the axiom inserted should be synchronized
+	 */
+	public boolean isSync() {
+		return sync;
+	}
+
 	@Override
 	public void deleteFromRepository(Section<T> section) {
 		Set<OWLAxiom> axioms = axiomCache.remove(new CompileSection<T>(section));

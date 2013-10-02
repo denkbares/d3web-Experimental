@@ -77,7 +77,7 @@ public class Utils {
 	}
 
 	public static String findContextConceptTermname(Section<?> s) {
-		Section<SectionHeaderObjectDefinition<?>> headerObjectSection = getContextSectionIfExisting(s);
+		Section<SectionHeaderObjectDefinition> headerObjectSection = getContextSectionIfExisting(s);
 
 		if (headerObjectSection != null) {
 			return headerObjectSection.get().getTermName(headerObjectSection);
@@ -85,11 +85,11 @@ public class Utils {
 		return s.getTitle();
 	}
 
-	public static Section<SectionHeaderObjectDefinition<?>> getContextSectionIfExisting(Section<?> s) {
+	public static Section<SectionHeaderObjectDefinition> getContextSectionIfExisting(Section<?> s) {
 		Section<HeaderType> section = Sections.findAncestorOfType(s,
 				HeaderType.class);
 		if (section != null) {
-			Section<SectionHeaderObjectDefinition<?>> headerObjectSection = Sections.findSuccessor(
+			Section<SectionHeaderObjectDefinition> headerObjectSection = Sections.findSuccessor(
 					section, SectionHeaderObjectDefinition.getGenericClass());
 			return headerObjectSection;
 

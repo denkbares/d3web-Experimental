@@ -32,7 +32,6 @@ import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.basicType.EndLineComment;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
-import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -55,7 +54,7 @@ public class ClassDefinitionMarkup extends AbstractKnowledgeUnitType<ClassDefini
 		this.setRenderer(new PreEnvRenderer());
 	}
 
-	class ClassDef extends AbstractIRITermDefinition<Term> implements TypedTermDefinition {
+	class ClassDef extends AbstractIRITermDefinition implements TypedTermDefinition {
 
 		public ClassDef() {
 			this.setSectionFinder(new RegexSectionFinder(CLASS_REGEX,

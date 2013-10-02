@@ -26,9 +26,9 @@ import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
-public abstract class AbstractIRITermDefinition<TermObject> extends IncrementalTermDefinition<String> {
+public abstract class AbstractIRITermDefinition extends IncrementalTermDefinition<String> {
 
-	final Renderer CLASS_RENDERER = new TermDefinitionRenderer<TermObject>(
+	final Renderer CLASS_RENDERER = new TermDefinitionRenderer<String>(
 			new ToolMenuDecoratingRenderer(
 					new StyleRenderer("color:rgb(125, 80, 102)")));
 

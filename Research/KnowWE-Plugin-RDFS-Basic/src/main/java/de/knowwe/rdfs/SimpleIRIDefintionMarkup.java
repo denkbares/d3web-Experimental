@@ -54,7 +54,7 @@ public class SimpleIRIDefintionMarkup extends AbstractType implements Editable {
 		}
 	}
 
-	class DefinitionTerm extends AbstractIRITermDefinition<Term> {
+	class DefinitionTerm extends AbstractIRITermDefinition {
 
 		public DefinitionTerm() {
 			this.setSectionFinder(new AllTextFinderTrimmed());

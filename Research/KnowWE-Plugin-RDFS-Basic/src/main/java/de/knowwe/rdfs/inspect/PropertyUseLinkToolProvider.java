@@ -47,7 +47,6 @@ public class PropertyUseLinkToolProvider implements ToolProvider {
 
 		}
 		if (section.get() instanceof AbstractIRITermDefinition) {
-			@SuppressWarnings("rawtypes")
 			Section<? extends AbstractIRITermDefinition> def = Sections.cast(section,
 					AbstractIRITermDefinition.class);
 			Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(

@@ -59,24 +59,23 @@ public class StartQuizAction extends AbstractAction {
 		if (kdomid != null) {
 			Object storedValues = KnowWEUtils.getStoredObject(sec.getArticle(), sec,
 					TagHandlerAttributeSubTreeHandler.ATTRIBUTE_MAP);
-			if (storedValues != null) {
-				if (storedValues instanceof Map) {
-					Map<String, String> attValues = (Map<String, String>) storedValues;
-					if (attValues.containsKey("from")) {
-						try {
-							from = Integer.parseInt(attValues.get("from"));
-						}
-						catch (NumberFormatException e) {
-
-						}
+			if (storedValues instanceof Map) {
+				@SuppressWarnings("unchecked")
+				Map<String, String> attValues = (Map<String, String>) storedValues;
+				if (attValues.containsKey("from")) {
+					try {
+						from = Integer.parseInt(attValues.get("from"));
 					}
-					if (attValues.containsKey("to")) {
-						try {
-							to = Integer.parseInt(attValues.get("to"));
-						}
-						catch (NumberFormatException e) {
+					catch (NumberFormatException e) {
 
-						}
+					}
+				}
+				if (attValues.containsKey("to")) {
+					try {
+						to = Integer.parseInt(attValues.get("to"));
+					}
+					catch (NumberFormatException e) {
+
 					}
 				}
 			}

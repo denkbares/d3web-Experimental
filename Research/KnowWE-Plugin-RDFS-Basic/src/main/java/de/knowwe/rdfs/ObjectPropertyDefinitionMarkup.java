@@ -119,7 +119,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractKnowledgeUnitType<Ob
 
 	}
 
-	class PropertyDef extends AbstractIRITermDefinition<Term> implements TypedTermDefinition {
+	class PropertyDef extends AbstractIRITermDefinition implements TypedTermDefinition {
 
 		public PropertyDef() {
 			this.setSectionFinder(new RegexSectionFinder(OBJECT_PROPERTY_REGEX, 0, 1));

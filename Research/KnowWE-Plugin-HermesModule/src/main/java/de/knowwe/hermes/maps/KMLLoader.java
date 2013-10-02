@@ -67,6 +67,7 @@ public class KMLLoader {
 		List<Placemark> result = new ArrayList<Placemark>();
 
 		ElementFilter plmFilter = new ElementFilter("Placemark");
+		@SuppressWarnings("unchecked")
 		Iterator<Element> plIterator = doc.getDescendants(plmFilter);
 		while (plIterator.hasNext()) {
 			Element placemarkElem = plIterator.next();

@@ -20,7 +20,6 @@ package de.knowwe.revisions.upload;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -32,6 +31,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.revisions.UploadedRevision;
@@ -57,9 +57,9 @@ public class UploadRevisionZip extends AbstractAction {
 			items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(context.getRequest());
 		}
 		catch (FileUploadException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new IOException("error during processing upload", e);
 		}
+
 		for (FileItem item : items) {
 			zipname = item.getName();
 			InputStream filecontent = item.getInputStream();
@@ -71,19 +71,20 @@ public class UploadRevisionZip extends AbstractAction {
 				String name = ze.getName();
 				if (!name.contains("/")) {
 					// this is an article
-					String title = URLDecoder.decode(name, "UTF-8");
+					String title = Strings.decodeURL(name);
 					title = title.substring(0, title.length() - 4);
 					String content = IOUtils.toString(zin, "UTF-8");
 					zin.closeEntry();
 					pages.put(title, content);
 				}
 				else {
+					// TODO: what to do here?
 					// this is an attachment
-					String[] splittedName = name.split("/");
-					String title = URLDecoder.decode(splittedName[0], "UTF-8");
-					String filename = URLDecoder.decode(splittedName[1], "UTF-8");
-
-					System.out.println("Attachment: " + name);
+					// String[] splittedName = name.split("/");
+					// String title = Strings.decodeURL(splittedName[0]);
+					// String filename = Strings.decodeURL(splittedName[1]);
+					//
+					// System.out.println("Attachment: " + name);
 					// String content = IOUtils.toString(zin, "UTF-8");
 					// Environment.getInstance().getWikiConnector().storeAttachment(title,
 					// filename,

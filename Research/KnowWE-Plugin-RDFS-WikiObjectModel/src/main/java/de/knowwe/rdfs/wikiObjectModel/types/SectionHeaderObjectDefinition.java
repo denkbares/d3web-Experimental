@@ -39,7 +39,7 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
  * @author Jochen Reutelshöfer (denkbares GmbH)
  * @created 09.07.2012
  */
-public class SectionHeaderObjectDefinition<TermObject> extends AbstractIRITermDefinition<TermObject> {
+public class SectionHeaderObjectDefinition extends AbstractIRITermDefinition {
 
 	/**
 	 * 
@@ -51,7 +51,7 @@ public class SectionHeaderObjectDefinition<TermObject> extends AbstractIRITermDe
 
 	class SectionHeaderObjectDefinitionRenderer implements Renderer {
 
-		private final Renderer r = new TermDefinitionRenderer<TermObject>(
+		private final Renderer r = new TermDefinitionRenderer<Term>(
 				new ToolMenuDecoratingRenderer(
 						new StyleRenderer("color:rgb(0, 0, 0)")));
 
@@ -59,7 +59,7 @@ public class SectionHeaderObjectDefinition<TermObject> extends AbstractIRITermDe
 		public void render(Section<?> section, UserContext user, RenderResult string) {
 
 			// render anchor that corresponds to term name / URI
-			Section<SectionHeaderObjectDefinition<?>> castedSection = Sections.cast(
+			Section<SectionHeaderObjectDefinition> castedSection = Sections.cast(
 					section,
 					SectionHeaderObjectDefinition.getGenericClass());
 			String termName = castedSection.get().getTermName(castedSection);
@@ -72,9 +72,8 @@ public class SectionHeaderObjectDefinition<TermObject> extends AbstractIRITermDe
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Class<SectionHeaderObjectDefinition<?>> getGenericClass() {
-		return (Class<SectionHeaderObjectDefinition<?>>) (Class<?>) SectionHeaderObjectDefinition.class;
+	public static Class<SectionHeaderObjectDefinition> getGenericClass() {
+		return SectionHeaderObjectDefinition.class;
 	}
 
 	class SectionHeaderFinder implements SectionFinder {

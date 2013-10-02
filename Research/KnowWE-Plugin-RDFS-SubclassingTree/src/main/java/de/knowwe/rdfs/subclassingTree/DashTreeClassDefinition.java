@@ -61,7 +61,7 @@ public class DashTreeClassDefinition extends AbstractType {
 		}
 	}
 
-	class DefinitionTerm extends AbstractIRITermDefinition<Term> implements TypedTermDefinition {
+	class DefinitionTerm extends AbstractIRITermDefinition implements TypedTermDefinition {
 
 		public DefinitionTerm() {
 			this.setSectionFinder(new AllTextFinderTrimmed());
