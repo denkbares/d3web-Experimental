@@ -58,7 +58,6 @@
 		<parameter id="script" value="termbrowser.js" />
 		<parameter id="css" value="jquery-ui.css" />
 		<parameter id="css" value="termbrowser.css" />
-		<parameter id="css" value="wisskont.css" />
 	</extension>
 	
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"

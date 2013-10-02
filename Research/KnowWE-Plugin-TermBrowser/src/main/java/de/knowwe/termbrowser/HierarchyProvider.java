@@ -18,6 +18,7 @@
  */
 package de.knowwe.termbrowser;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -38,4 +39,6 @@ public interface HierarchyProvider {
 	List<String> getParents(String term);
 
 	boolean isSubNodeOf(String term1, String term2);
+
+	Collection<String> getAllTerms();
 }

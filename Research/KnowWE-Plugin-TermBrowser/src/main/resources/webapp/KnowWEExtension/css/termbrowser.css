@@ -18,6 +18,13 @@
 	border-radius: 10px 10px 10px 10px;
 }
 
+.searchBox {
+	border-top-style: solid;
+    border-top-width: 1px;
+	margin-top: 5px;
+	padding-top: 5px;	
+}
+
 .termlist {
 	border-top-style: solid;
     border-top-width: 1px;

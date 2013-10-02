@@ -21,11 +21,7 @@ package de.knowwe.termbrowser;
 import java.util.Collection;
 import java.util.List;
 
-import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
-import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.kdom.objects.SimpleDefinition;
-import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
@@ -54,11 +50,10 @@ public class TermBrowserRender {
 		this.user = user;
 		this.linkProvider = linkProvider;
 		this.master = master;
-		RecommendationSet recommendationSet = TermRecommender.getInstance().getRecommendationSet(
-				user);
-		if (recommendationSet != null) {
-			hierarchy = recommendationSet.getHierarchy();
-		}
+
+		List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
+		hierarchy = new TermBrowserHierarchy(master, relations);
+
 	}
 
 	public String renderTermBrowser() {
@@ -91,8 +86,11 @@ public class TermBrowserRender {
 			string.appendHtml("<span class='toggleList'>Benutzte Begriffe:</span>");
 			string.appendHtml("<span title='" + toolTipClear + "' style='float:left;" + clearStyle
 					+ "' class='ui-icon ui-icon-minus clearList hoverAction'></span>");
-			string.appendHtml("</div>");
 
+			if (TermBrowserMarkup.getCurrentTermbrowserMarkupSearchSlotFlag(user)) {
+				renderSearchSlot(string);
+			}
+			string.appendHtml("</div>");
 			// render term list
 			Tree<RatedTerm> ratedTermTreeTop = TermRecommender.getInstance().getRatedTermTreeTop(
 						user,
@@ -103,6 +101,61 @@ public class TermBrowserRender {
 		}
 		string.appendHtml("</div>");
 		return string.toStringRaw();
+	}
+
+	/**
+	 * 
+	 * @created 02.10.2013
+	 * @param string
+	 */
+	private void renderSearchSlot(RenderResult string) {
+		string.appendHtml("<div class='ui-widget searchBox'>");
+		{
+			// search field
+			string.appendHtml("<table><tr>");
+			{
+				string.appendHtml("<td>");
+				string.appendHtml("<label for='conceptSearch' style='font-weight:normal;padding-right:0;font: 83%/140% Verdana,Arial,Helvetica,sans-serif;;'>Suche: </label>");
+				string.appendHtml("</td>");
+				string.appendHtml("<td><input id='conceptSearch' size='15' value='' /></td>");
+
+			}
+			string.appendHtml("</tr></table>");
+		}
+		string.appendHtml("</div>");
+
+		string.appendHtml("<script>" +
+				"jq$(document).ready(function() {" +
+				// "$(function() {" +
+				" var availableTags = [" +
+				generateTermnames() +
+				"];" +
+				"jq$( \"#conceptSearch\" ).autocomplete({" +
+				"source: availableTags," +
+				"select: function( event, ui ) {" +
+				"updateTermBrowser(event,ui);" +
+				"}," +
+				"});" +
+				"});" +
+				"</script>");
+
+	}
+
+	/**
+	 * 
+	 * @created 10.12.2012
+	 * @return
+	 */
+	private String generateTermnames() {
+
+		String result = "";
+		Collection<String> allTermDefinitions = hierarchy.getAllTerms();
+
+		for (String name : allTermDefinitions) {
+			result += "\"" + name + "\"" + ",\n";
+		}
+
+		return result;
 	}
 
 	/**
@@ -154,13 +207,6 @@ public class TermBrowserRender {
 	private void renderConcept(Node<RatedTerm> t, int depth, RenderResult string, LinkToTermDefinitionProvider linkProvider, String master) {
 		String term = t.getData().getTerm();
 		String topic = term;
-		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				new Identifier(term));
-		if (termDefinitions.size() > 0) {
-			Section<? extends SimpleDefinition> def = termDefinitions.iterator().next();
-			topic = def.getTitle();
-		}
-
 		String lineStyleClass = "zebraline";
 		if (!zebra) {
 			zebra = true;
@@ -171,7 +217,7 @@ public class TermBrowserRender {
 		}
 
 		String name = Strings.encodeURL(topic);
-		String url = linkProvider.getLinkToTermDefinition(name, null);
+		String url = linkProvider.getLinkToTermDefinition(name, master);
 		// baseUrl + name;
 		String divStyle = "";
 		string.appendHtml("<div id='draggable' style='"

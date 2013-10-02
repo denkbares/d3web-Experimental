@@ -19,6 +19,7 @@
 package de.knowwe.ophtovisD3.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -82,6 +83,12 @@ public class VisualizationHierarchyProvider implements HierarchyProvider {
 	public void setMaster(String master) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public Collection<String> getAllTerms() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

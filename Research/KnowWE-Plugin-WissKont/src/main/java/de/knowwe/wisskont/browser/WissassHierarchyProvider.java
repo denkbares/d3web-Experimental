@@ -18,12 +18,18 @@
  */
 package de.knowwe.wisskont.browser;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.strings.Strings;
+import de.knowwe.compile.IncrementalCompiler;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
+import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.HierarchyUtils;
 import de.knowwe.termbrowser.HierarchyProvider;
@@ -73,5 +79,16 @@ public class WissassHierarchyProvider implements HierarchyProvider {
 	public void setMaster(String master) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public Collection<String> getAllTerms() {
+		Collection<Section<? extends SimpleDefinition>> allTermDefinitions =
+				IncrementalCompiler.getInstance().getTerminology().getAllTermDefinitions();
+		Set<String> result = new HashSet<String>();
+		for (Section<? extends SimpleDefinition> def : allTermDefinitions) {
+			result.add(def.get().getTermName(def));
+		}
+		return result;
 	}
 }

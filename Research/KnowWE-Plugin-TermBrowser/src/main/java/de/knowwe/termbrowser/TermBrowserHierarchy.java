@@ -19,6 +19,7 @@
 package de.knowwe.termbrowser;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import de.d3web.plugin.Extension;
@@ -101,6 +102,12 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 	public void setMaster(String master) {
 		this.master = master;
 
+	}
+
+	@Override
+	public Collection<String> getAllTerms() {
+		hierarchyProvider.setMaster(master);
+		return hierarchyProvider.getAllTerms();
 	}
 
 }
