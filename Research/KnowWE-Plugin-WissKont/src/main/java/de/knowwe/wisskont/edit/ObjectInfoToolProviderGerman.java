@@ -22,7 +22,7 @@ import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.toolprovider.ObjectInfoPageToolProvider;
+import de.knowwe.core.tools.ObjectInfoPageToolProvider;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
