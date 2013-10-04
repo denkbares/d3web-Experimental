@@ -29,11 +29,11 @@
 	</extension>
 	
 	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="TermDetector"
-		id="DefaultTermDetector">
+		id="OntologyTermDetector">
 		<parameter id="class"
-			value="de.knowwe.termbrowser.DefaultTermDetector" />
-		<parameter id="name" value="DefaultTermDetector" />
-		<parameter id="description" value="DefaultTermDetector" />
+			value="de.knowwe.ontology.browser.OntologyTermDetector" />
+		<parameter id="name" value="OntologyTermDetector" />
+		<parameter id="description" value="OntologyTermDetector" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 	</extension>
