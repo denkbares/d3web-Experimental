@@ -236,6 +236,8 @@
 		<module>KnowWE-Plugin-TermBrowser</module>
 		<module>KnowWE-Plugin-OphtoVisD3</module>
 		<module>KnowWE-Plugin-TextAnnotation</module>
+		<module>KnowWE-Plugin-Ontology-TermBrowser</module>
+		<module>KnowWE-Plugin-d3web-TermBrowser</module>
 	</modules>
 	<repositories>
 		<repository>
