@@ -44,6 +44,7 @@ public class Fingerprint {
 			new KDOMScanner(),
 			new MessageScanner(),
 			new KBScanner(),
+			new TestCaseScanner(),
 			new DashboadScanner()
 	};
 

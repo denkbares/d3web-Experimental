@@ -31,17 +31,22 @@ public class DashboadScanner implements Scanner {
 		if (dashboardTypes.isEmpty()) return;
 
 		PrintStream out = new PrintStream(target);
-		for (Section<CIDashboardType> section : dashboardTypes) {
-			CIDashboard dashboard = CIDashboard.getDashboard(section);
-			out.printf("<!-- Dashboard %s -->\n", dashboard.getDashboardName());
-			InputStream in = dashboard.getBuildAttachment().getInputStream();
-			try {
-				Streams.stream(in, out);
+		try {
+			for (Section<CIDashboardType> section : dashboardTypes) {
+				CIDashboard dashboard = CIDashboard.getDashboard(section);
+				out.printf("<!-- Dashboard %s -->\n", dashboard.getDashboardName());
+				InputStream in = dashboard.getBuildAttachment().getInputStream();
+				try {
+					Streams.stream(in, out);
+				}
+				finally {
+					in.close();
+				}
+				out.print("\n");
 			}
-			finally {
-				in.close();
-			}
-			out.print("\n\n");
+		}
+		finally {
+			out.close();
 		}
 	}
 
