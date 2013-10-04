@@ -42,14 +42,16 @@ public class TermBrowserRender {
 	private final de.knowwe.core.utils.LinkToTermDefinitionProvider linkProvider;
 	private final String master;
 	private TermBrowserHierarchy hierarchy = null;
+	private boolean hierarchyPrefixAbbreviation = true;
 
 	/**
 	 * 
 	 */
-	public TermBrowserRender(UserContext user, de.knowwe.core.utils.LinkToTermDefinitionProvider linkProvider, String master) {
+	public TermBrowserRender(UserContext user, de.knowwe.core.utils.LinkToTermDefinitionProvider linkProvider, String master, boolean prefixAbbreviation) {
 		this.user = user;
 		this.linkProvider = linkProvider;
 		this.master = master;
+		this.hierarchyPrefixAbbreviation = prefixAbbreviation;
 
 		List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
 		hierarchy = new TermBrowserHierarchy(master, relations);
@@ -263,9 +265,11 @@ public class TermBrowserRender {
 
 					// insert term name
 					String label = term;
-					String parentName = t.getParent().getData().getTerm();
-					if (term.startsWith(parentName)) {
-						label = term.substring(parentName.length());
+					if (hierarchyPrefixAbbreviation) {
+						String parentName = t.getParent().getData().getTerm();
+						if (term.startsWith(parentName)) {
+							label = term.substring(parentName.length());
+						}
 					}
 					label = label.replaceAll("_", "_<wbr>");
 					string.appendHtml(label);
@@ -302,8 +306,8 @@ public class TermBrowserRender {
 		string.appendHtml("<table style='table-layout:fixed'>");
 		string.appendHtml("<tr>");
 		{
-			insertObjectInfoLinkButton(string, divStyle, term);
 			insertAddParentButton(string, divStyle, term, level);
+			insertObjectInfoLinkButton(string, divStyle, term);
 			insertRemoveButton(string, divStyle);
 
 		}

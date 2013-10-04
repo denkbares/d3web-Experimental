@@ -44,6 +44,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 
 	private static final String HIERARCHY = "hierarchy";
 	private static final String SEARCH_SLOT = "searchslot";
+	private static final String PREFIX_ABBREVIATION = "abbreviation";
 	private static final String TITLE = "title";
 	private static final DefaultMarkup MARKUP;
 
@@ -59,6 +60,8 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		MARKUP.addAnnotation(HIERARCHY, false);
 		MARKUP.addAnnotation(TITLE, false);
 		MARKUP.addAnnotation(SEARCH_SLOT, false, new String[] {
+				"true", "false" });
+		MARKUP.addAnnotation(PREFIX_ABBREVIATION, false, new String[] {
 				"true", "false" });
 	}
 
@@ -91,6 +94,17 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		if (termBrowser != null) {
 			String s = DefaultMarkupType.getAnnotation(termBrowser,
 					SEARCH_SLOT);
+			if (s == null) return false;
+			if (s.equals("false")) return false;
+			if (s.equals("true")) return true;
+		}
+		return false;
+	}
+
+	public static boolean getCurrentTermbrowserMarkupPrefixAbbreviationFlag(UserContext user) {
+		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
+		if (termBrowser != null) {
+			String s = DefaultMarkupType.getAnnotation(termBrowser, PREFIX_ABBREVIATION);
 			if (s == null) return false;
 			if (s.equals("false")) return false;
 			if (s.equals("true")) return true;
@@ -147,9 +161,12 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 			else {
 				linkProvider = new PackageCompileLinkToTermDefinitionProvider();
 			}
+
+			boolean abbreviationFlag = TermBrowserMarkup.getCurrentTermbrowserMarkupPrefixAbbreviationFlag(user);
+
 			TermBrowserRender renderer = new TermBrowserRender(user,
 					linkProvider,
-					master);
+					master, abbreviationFlag);
 			string.append(renderer.renderTermBrowser());
 		}
 	}

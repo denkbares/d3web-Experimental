@@ -37,7 +37,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 public class DefaultTermDetector extends AbstractTermDetector {
 
 	@Override
-	protected Collection<Section<? extends TermDefinition>> getDefs(Section<TermReference> ref, String master) {
+	protected Collection<Section<? extends TermDefinition>> getDefs(Section<? extends TermReference> ref, String master) {
 		TerminologyManager terminologyManager = Environment.getInstance().getTerminologyManager(
 				Environment.DEFAULT_WEB, master);
 		Section<?> termDefiningSection = terminologyManager.getTermDefiningSection(ref.get().getTermIdentifier(
@@ -49,5 +49,9 @@ public class DefaultTermDetector extends AbstractTermDetector {
 			result.add(def);
 		}
 		return result;
+	}
+
+	public static Collection<Section<? extends TermDefinition>> getDefinitions(Section<? extends TermReference> ref, String master) {
+		return new DefaultTermDetector().getDefs(ref, master);
 	}
 }

@@ -36,9 +36,6 @@ import de.knowwe.core.kdom.parsing.Sections;
  */
 public abstract class AbstractTermDetector implements InterestingTermDetector {
 
-	private static final double WEIGHT_REFERENCE = 0.5;
-	private static final double WEIGHT_DEFINITION = 1.0;
-
 	@Override
 	public Map<String, Double> getWeightedTermsOfInterest(Article article, String master) {
 		Map<String, Double> interestingTerms = new HashMap<String, Double>();
@@ -77,5 +74,5 @@ public abstract class AbstractTermDetector implements InterestingTermDetector {
 	 * @param ref
 	 * @return
 	 */
-	protected abstract Collection<Section<? extends TermDefinition>> getDefs(Section<TermReference> ref, String master);
+	protected abstract Collection<Section<? extends TermDefinition>> getDefs(Section<? extends TermReference> ref, String master);
 }
