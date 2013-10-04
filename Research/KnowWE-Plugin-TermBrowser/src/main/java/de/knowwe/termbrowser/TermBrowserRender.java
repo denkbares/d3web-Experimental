@@ -427,14 +427,17 @@ public class TermBrowserRender {
 		String encodedTerm = term; // maskTermForHTML(term);
 		String identifier = encodedTerm;
 		String objectName = encodedTerm;
+		String closingQuote = "";
 		if (term.contains("#")) {
 			String[] elements = term.split("#");
 			objectName = elements[1];
+			closingQuote = "\"";
+			identifier = identifier.replace("#", "#\"");
 		}
-		String encodedIdenifier = Strings.encodeURL(identifier.replace("#", "#\""));
+		String encodedIdenifier = Strings.encodeURL(identifier);
 		String linkURL = "Wiki.jsp?page=ObjectInfoPage&termIdentifier="
 				+ encodedIdenifier
-				+ "\"&objectname=\"" + objectName + "\"";
+				+ closingQuote + "&objectname=\"" + objectName + "\"";
 		string.appendHtml("<td style='"
 						+ divStyle
 						+ "' class='termbrowser'><a href='"
