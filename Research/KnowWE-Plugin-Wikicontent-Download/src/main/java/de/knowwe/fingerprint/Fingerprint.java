@@ -26,11 +26,25 @@ import de.knowwe.version.taghandler.VersionTagHandler;
 
 public class Fingerprint {
 
-	private static final String FINGERPRINT = "_fingerprint.txt";
+	public static interface LineFilter {
+
+		boolean accept(String line);
+	}
+
+	public static LineFilter ALL_LINES = new LineFilter() {
+
+		@Override
+		public boolean accept(String line) {
+			return true;
+		}
+	};
+
+	private static final String FINGERPRINT = "_fingerprint.info";
 	private static final Scanner[] scanners = new Scanner[] {
 			new KDOMScanner(),
 			new MessageScanner(),
-			new KBScanner()
+			new KBScanner(),
+			new DashboadScanner()
 	};
 
 	public static void createFingerprint(String web, File folder) throws IOException {
@@ -119,7 +133,9 @@ public class Fingerprint {
 		// header
 		page.append("|| Article");
 		for (Scanner scanner : scanners) {
-			page.append(" || ").append(scanner.getItemName());
+			String name = scanner.getItemName();
+			name = name.replaceAll("(\\w[\\s+-=?,.;:#'/\\\\\\[\\]\"§$%&]+)(\\w)", "$1\\\\\\\\$2");
+			page.append(" || ").append(name);
 		}
 		page.append("\n");
 		// and one line for each article
@@ -190,15 +206,23 @@ public class Fingerprint {
 	}
 
 	static Diff compareTextFiles(File file1, File file2) throws IOException {
+		return compareTextFiles(file1, file2, ALL_LINES);
+	}
+
+	static Diff compareTextFiles(File file1, File file2, LineFilter filter) throws IOException {
 		Diff result = new Diff();
 		String text1 = Files.getText(file1);
 		String text2 = Files.getText(file2);
 
-		compareText(text1, text2, result);
+		compareText(text1, text2, filter, result);
 		return result;
 	}
 
 	static void compareText(String text1, String text2, Diff result) {
+		compareText(text1, text2, ALL_LINES, result);
+	}
+
+	static void compareText(String text1, String text2, LineFilter filter, Diff result) {
 		String[] lines1 = text1.split("\\n");
 		String[] lines2 = text2.split("\\n");
 
@@ -226,20 +250,24 @@ public class Fingerprint {
 				j++;
 			}
 			else if (opt[i + 1][j] >= opt[i][j + 1]) {
-				result.fail("[-] " + lines1[i++]);
+				String line = lines1[i++];
+				if (filter.accept(line)) result.fail("[-] " + line);
 			}
 			else {
-				result.fail("[+] " + lines2[j++]);
+				String line = lines2[j++];
+				if (filter.accept(line)) result.fail("[+] " + line);
 			}
 		}
 
 		// dump out one remainder of one string if the other is exhausted
 		while (i < count1 || j < count2) {
 			if (i == count1) {
-				result.fail("[+] " + lines2[j++]);
+				String line = lines2[j++];
+				if (filter.accept(line)) result.fail("[+] " + line);
 			}
 			else if (j == count2) {
-				result.fail("[-] " + lines1[i++]);
+				String line = lines1[i++];
+				if (filter.accept(line)) result.fail("[-] " + line);
 			}
 		}
 	}

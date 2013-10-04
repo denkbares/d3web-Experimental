@@ -145,7 +145,7 @@ public class KBScanner implements Scanner {
 
 	@Override
 	public String getItemName() {
-		return "KnowlegdeBase";
+		return "Knowlegde Base";
 	}
 
 }
