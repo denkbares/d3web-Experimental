@@ -43,7 +43,7 @@ public class IncrementalTermDetector extends AbstractTermDetector {
 	 * @return
 	 */
 	@Override
-	protected Collection<Section<? extends TermDefinition>> getDefs(Section<TermReference> ref, String master) {
+	protected Collection<Section<? extends TermDefinition>> getDefs(Section<? extends TermReference> ref, String master) {
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				ref.get().getTermIdentifier(ref));
 		Set<Section<? extends TermDefinition>> result = new HashSet<Section<? extends TermDefinition>>();
