@@ -13,7 +13,6 @@ import de.d3web.we.ci4ke.hook.CIHookManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.fingerprint.Fingerprint.LineFilter;
 
 public class DashboadScanner implements Scanner {
 
@@ -62,17 +61,9 @@ public class DashboadScanner implements Scanner {
 
 	@Override
 	public Diff compare(File file1, File file2) throws IOException {
-		LineFilter filter = new LineFilter() {
-
-			@Override
-			public boolean accept(String line) {
-				// ignore declaration line
-				if (line.matches("<\\?xml .*\\?>")) return false;
-				// ignore build metadata (date, build-nr, ...)
-				if (line.matches("<build xmlns=\"http://www.denkbares.com\".*>")) return false;
-				return true;
-			}
-		};
+		LineFilter filter = new SkipRegexLinesFilter(
+				"<\\?xml .*\\?>",
+				"<build xmlns=\"http://www.denkbares.com\".*>");
 		return Fingerprint.compareTextFiles(file1, file2, filter);
 	}
 

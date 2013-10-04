@@ -13,6 +13,7 @@ import java.util.zip.ZipFile;
 
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.session.SessionFactory;
 import de.d3web.utils.Streams;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.kdom.Article;
@@ -28,7 +29,9 @@ public class KBScanner implements Scanner {
 		if (!compilingArticles.contains(article.getTitle())) return;
 
 		// write the base
+		// create Session to trigger lazy stuff like "start" and "now";
 		KnowledgeBase base = D3webUtils.getKnowledgeBase(article);
+		SessionFactory.createSession(base);
 		PersistenceManager persistance = PersistenceManager.getInstance();
 		persistance.save(base, target);
 	}
@@ -108,8 +111,15 @@ public class KBScanner implements Scanner {
 	}
 
 	private void checkEqual(ZipFile expectedZip, ZipFile actualZip, String entryName, Diff diff) throws IOException {
+		LineFilter filter = new SkipRegexLinesFilter(
+				"<\\?xml .*\\?>",
+				"</?infoStore>",
+				"<entry property=\"created\">",
+				"</entry>",
+				"<Date>.*</Date>");
+
 		String skipTo = null;
-		if (entryName.equals("kb/basic.xml")) skipTo = "</infoStore>";
+		if (entryName.equals("kb/basic.xml")) skipTo = "<InitQuestions>";
 		// if (entryName.equals("kb/settings.xml")) skipTo = "</plugins>";
 
 		// ignore xml declaration line if xml and nothing is skipped
@@ -121,8 +131,8 @@ public class KBScanner implements Scanner {
 		expected = expected.replace("\r", "");
 		actual = actual.replace("\r", "");
 		if (!actual.equals(expected)) {
-			diff.fail("zip entry " + entryName + " has changed contents:");
-			Fingerprint.compareText(expected, actual, diff);
+			diff.message("zip entry " + entryName + " has changed contents:");
+			Fingerprint.compareText(expected, actual, filter, diff);
 		}
 	}
 

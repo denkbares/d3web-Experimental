@@ -26,18 +26,7 @@ import de.knowwe.version.taghandler.VersionTagHandler;
 
 public class Fingerprint {
 
-	public static interface LineFilter {
-
-		boolean accept(String line);
-	}
-
-	public static LineFilter ALL_LINES = new LineFilter() {
-
-		@Override
-		public boolean accept(String line) {
-			return true;
-		}
-	};
+	public static final LineFilter ALL_LINES = new AllLinesFilter();
 
 	private static final String FINGERPRINT = "_fingerprint.info";
 	private static final Scanner[] scanners = new Scanner[] {

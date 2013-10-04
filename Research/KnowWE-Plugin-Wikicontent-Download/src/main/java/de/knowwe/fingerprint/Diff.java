@@ -18,6 +18,10 @@ public class Diff {
 
 	public void fail(String message) {
 		this.equal = false;
+		message(message);
+	}
+
+	public void message(String message) {
 		messages.add(message);
 	}
 
