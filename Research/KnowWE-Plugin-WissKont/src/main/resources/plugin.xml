@@ -169,9 +169,9 @@
 	</extension>
 	
 	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="TermDetector"
-		id="WisskontTermDetector">
+		id="IncrementalTermDetector">
 		<parameter id="class"
-			value="de.knowwe.wisskont.browser.WisskontTermDetector" />
+			value="de.knowwe.wisskont.browser.IncrementalTermDetector" />
 		<parameter id="name" value="WisskontTermDetector" />
 		<parameter id="description" value="WisskontTermDetector" />
 		<parameter id="version" value="1.0" />

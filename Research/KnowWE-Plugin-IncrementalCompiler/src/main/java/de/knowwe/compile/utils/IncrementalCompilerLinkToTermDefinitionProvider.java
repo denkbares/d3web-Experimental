@@ -41,6 +41,9 @@ public class IncrementalCompilerLinkToTermDefinitionProvider implements de.knoww
 		if (termDefinitions.size() > 0) {
 			targetArticle = termDefinitions.iterator().next().getTitle();
 		}
+		else {
+			return null;
+		}
 
 		return createBaseURL() + "?page=" + targetArticle;
 	}

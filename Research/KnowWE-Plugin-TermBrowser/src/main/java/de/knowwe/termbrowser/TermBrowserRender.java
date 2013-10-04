@@ -83,7 +83,14 @@ public class TermBrowserRender {
 			string.appendHtml("<span title='" + toolTipCollapse + "' style='float:left;"
 					+ minusStyle
 					+ "' class='ui-icon ui-icon-triangle-1-s hideList hoverAction'></span>");
-			string.appendHtml("<span class='toggleList'>Benutzte Begriffe:</span>");
+
+			// set box header title
+			String title = "Benutzte Begriffe";
+			String markupTitle = TermBrowserMarkup.getCurrentTermbrowserMarkupTitle(user);
+			if (markupTitle != null) {
+				title = markupTitle;
+			}
+			string.appendHtml("<span class='toggleList'>" + title + ":</span>");
 			string.appendHtml("<span title='" + toolTipClear + "' style='float:left;" + clearStyle
 					+ "' class='ui-icon ui-icon-minus clearList hoverAction'></span>");
 
@@ -205,8 +212,8 @@ public class TermBrowserRender {
 	}
 
 	private void renderConcept(Node<RatedTerm> t, int depth, RenderResult string, LinkToTermDefinitionProvider linkProvider, String master) {
+
 		String term = t.getData().getTerm();
-		String topic = term;
 		String lineStyleClass = "zebraline";
 		if (!zebra) {
 			zebra = true;
@@ -216,8 +223,7 @@ public class TermBrowserRender {
 			zebra = false;
 		}
 
-		String name = Strings.encodeURL(topic);
-		String url = linkProvider.getLinkToTermDefinition(name, master);
+		String url = linkProvider.getLinkToTermDefinition(term, master);
 		// baseUrl + name;
 		String divStyle = "";
 		string.appendHtml("<div id='draggable' style='"
@@ -238,7 +244,7 @@ public class TermBrowserRender {
 				// each term
 				{
 					string.appendHtml("<td style='min-width: 16px; padding:0px;'>");
-					insertActionButtonsPre(string, url, divStyle, t, master);
+					insertActionButtonsPre(string, url, divStyle, t);
 					string.appendHtml("</td>");
 				}
 
@@ -248,23 +254,34 @@ public class TermBrowserRender {
 
 					// using different font style depending on current hierarchy
 					// depth
-					string.appendHtml("<a href='" + url + "'>");
+					if (url != null) {
+						string.appendHtml("<a href='" + url + "'>");
+					}
 					string.appendHtml("<div class='termname' style='display:inline;"
 							+ createStyle(depth)
 							+ "'>");
 
 					// insert term name
-					string.appendHtml(term.replaceAll("_", "_<wbr>"));
+					String label = term;
+					String parentName = t.getParent().getData().getTerm();
+					if (term.startsWith(parentName)) {
+						label = term.substring(parentName.length());
+					}
+					label = label.replaceAll("_", "_<wbr>");
+					string.appendHtml(label);
 					string.appendHtml("</div>");
-					string.appendHtml("</a>");
+					if (url != null) {
+						string.appendHtml("</a>");
+					}
+
 					string.appendHtml("</td>");
 				}
 
 				// append html code for the actions that can be performed for
 				// each term
 				{
-					string.appendHtml("<td style='min-width: 32px;max-width: 32px;padding:0px;'>");
-					insertActionButtonsPost(string, url, divStyle, term, depth, master);
+					string.appendHtml("<td style='min-width: 48px;max-width: 48px;padding:0px;'>");
+					insertActionButtonsPost(string, url, divStyle, term, depth);
 					string.appendHtml("</td>");
 				}
 				string.appendHtml("</tr>");
@@ -281,12 +298,12 @@ public class TermBrowserRender {
 	 * @param url
 	 * @param divStyle
 	 */
-	private void insertActionButtonsPost(RenderResult string, String url, String divStyle, String term, int level, String master) {
+	private void insertActionButtonsPost(RenderResult string, String url, String divStyle, String term, int level) {
 		string.appendHtml("<table style='table-layout:fixed'>");
 		string.appendHtml("<tr>");
 		{
-
-			insertAddParentButton(string, divStyle, term, level, master);
+			insertObjectInfoLinkButton(string, divStyle, term);
+			insertAddParentButton(string, divStyle, term, level);
 			insertRemoveButton(string, divStyle);
 
 		}
@@ -300,8 +317,8 @@ public class TermBrowserRender {
 	 * @param url
 	 * @param divStyle
 	 */
-	private void insertActionButtonsPre(RenderResult string, String url, String divStyle, Node<RatedTerm> term, String master) {
-		boolean allChildrenShown = allChildrenShown(term, master);
+	private void insertActionButtonsPre(RenderResult string, String url, String divStyle, Node<RatedTerm> term) {
+		boolean allChildrenShown = allChildrenShown(term);
 
 		string.appendHtml("<table style='padding:0px;table-layout:fixed'>");
 		string.appendHtml("<tr>");
@@ -324,7 +341,7 @@ public class TermBrowserRender {
 	 * @param term
 	 * @return
 	 */
-	private boolean allChildrenShown(Node<RatedTerm> term, String master) {
+	private boolean allChildrenShown(Node<RatedTerm> term) {
 		List<String> childrenConcepts = hierarchy.getChildren(term.getData().getTerm());
 		for (String childTerm : childrenConcepts) {
 			if (!term.getChildren().contains(new Node<RatedTerm>(new RatedTerm(childTerm)))) {
@@ -373,7 +390,7 @@ public class TermBrowserRender {
 	 * @param string
 	 * @param divStyle
 	 */
-	private void insertAddParentButton(RenderResult string, String divStyle, String term, int level, String master) {
+	private void insertAddParentButton(RenderResult string, String divStyle, String term, int level) {
 		if (level == 0) {
 
 			List<String> parentConcepts = hierarchy.getParents(term);
@@ -393,6 +410,32 @@ public class TermBrowserRender {
 			// to have a fixed layout of the remaining button
 			addDummyTableCell(string, 16);
 		}
+	}
+
+	/**
+	 * 
+	 * @created 03.05.2013
+	 * @param string
+	 * @param divStyle
+	 */
+	private void insertObjectInfoLinkButton(RenderResult string, String divStyle, String term) {
+		// Wiki.jsp?page=ObjectInfoPage&termIdentifier="Damaged idle speed system"&objectname="Damaged idle speed system"
+		String encodedTerm = term; // maskTermForHTML(term);
+		String identifier = encodedTerm;
+		String objectName = encodedTerm;
+		if (term.contains("#")) {
+			String[] elements = term.split("#");
+			objectName = elements[1];
+		}
+		String encodedIdenifier = Strings.encodeURL(identifier.replace("#", "#\""));
+		String linkURL = "Wiki.jsp?page=ObjectInfoPage&termIdentifier="
+				+ encodedIdenifier
+				+ "\"&objectname=\"" + objectName + "\"";
+		string.appendHtml("<td style='"
+						+ divStyle
+						+ "' class='termbrowser'><a href='"
+				+ linkURL
+				+ "' ><span class='ui-icon ui-icon-info objectInfoLink hoverAction' title='Zur Info-Seite des Begriffs' style='display:none;'></span></a></td>");
 	}
 
 	/**

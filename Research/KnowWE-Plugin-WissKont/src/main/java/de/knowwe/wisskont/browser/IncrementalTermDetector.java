@@ -16,38 +16,41 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.termbrowser;
+package de.knowwe.wisskont.browser;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.knowwe.core.Environment;
-import de.knowwe.core.compile.terminology.TerminologyManager;
+import de.knowwe.compile.IncrementalCompiler;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.termbrowser.AbstractTermDetector;
 
 /**
  * 
  * @author jochenreutelshofer
- * @created 02.10.2013
+ * @created 03.06.2013
  */
-public class DefaultTermDetector extends AbstractTermDetector {
+public class IncrementalTermDetector extends AbstractTermDetector {
 
+	/**
+	 * 
+	 * @created 02.10.2013
+	 * @param ref
+	 * @return
+	 */
 	@Override
 	protected Collection<Section<? extends TermDefinition>> getDefs(Section<TermReference> ref, String master) {
-		TerminologyManager terminologyManager = Environment.getInstance().getTerminologyManager(
-				Environment.DEFAULT_WEB, master);
-		Section<?> termDefiningSection = terminologyManager.getTermDefiningSection(ref.get().getTermIdentifier(
-				ref));
+		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+				ref.get().getTermIdentifier(ref));
 		Set<Section<? extends TermDefinition>> result = new HashSet<Section<? extends TermDefinition>>();
-		if (termDefiningSection.get() instanceof TermDefinition) {
-			Section<? extends TermDefinition> def = Sections.cast(termDefiningSection,
-					TermDefinition.class);
-			result.add(def);
+		for (Section<? extends SimpleDefinition> section : termDefinitions) {
+			result.add(section);
 		}
 		return result;
 	}
+
 }

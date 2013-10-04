@@ -31,5 +31,5 @@ public interface InterestingTermDetector {
 
 	static final String EXTENSION_POINT_TERM_DETECTOR = "TermDetector";
 
-	Map<String, Double> getWeightedTermsOfInterest(Article a);
+	Map<String, Double> getWeightedTermsOfInterest(Article a, String master);
 }

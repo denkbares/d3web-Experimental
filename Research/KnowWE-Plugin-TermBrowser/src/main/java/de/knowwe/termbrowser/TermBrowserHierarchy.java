@@ -107,7 +107,8 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 	@Override
 	public Collection<String> getAllTerms() {
 		hierarchyProvider.setMaster(master);
-		return hierarchyProvider.getAllTerms();
+		Collection<String> result = hierarchyProvider.getAllTerms();
+		return result;
 	}
 
 }

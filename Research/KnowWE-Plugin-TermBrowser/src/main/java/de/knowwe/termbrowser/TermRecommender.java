@@ -256,7 +256,8 @@ public class TermRecommender implements EventListener {
 				data.put(user.getUserName(), set);
 			}
 
-			Map<String, Double> interestingTerms = termDetector.getWeightedTermsOfInterest(article);
+			Map<String, Double> interestingTerms = termDetector.getWeightedTermsOfInterest(article,
+					master);
 
 			for (String term : interestingTerms.keySet()) {
 				set.addValue(term, interestingTerms.get(term));
