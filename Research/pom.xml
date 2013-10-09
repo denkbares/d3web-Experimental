@@ -174,23 +174,14 @@
 		<d3webCoreVersion>0.2-SNAPSHOT</d3webCoreVersion>
 	</properties>
 	<modules>
-		<module>KnowWE-Plugin-CI4KE-Groovy-Addons</module>
 		<module>KnowWE-Plugin-Comment</module>
-		<module>KnowWE-Plugin-HermesModule</module>
-		<module>KnowWE-Plugin-Shared</module>
-		<module>KnowWE-Plugin-OneQuestionDialog</module>
 		<module>d3web-Plugin-Persistence-ImageQuestion</module>
 		<module>KnowWE-Plugin-Defi</module>
 		<module>KnowWE-Plugin-Rdf2GoSemanticCore</module>
 		<module>KnowWE-Plugin-Renaming</module>
-		<module>KnowWE-MetaTool</module>
 		<module>KnowWE-Plugin-OntE</module>
-		<module>d3web-Plugin-OWL</module>
-		<module>KnowWE-Plugin-d3web-OWL</module>
-		<module>KnowWE-Plugin-WimVentRuleTable</module>
 		<module>KnowWE-Plugin-CaseTrain</module>
 		<module>d3web-Plugin-ProKEtProperties</module>
-		<module>KnowWE-Plugin-TestCaseExecutor</module>
 		<module>KnowWE-Plugin-DiaFlux-Refactoring</module>
 		<module>KnowWE-Plugin-OWLAPI</module>
 		<module>KnowWE-Plugin-Example</module>
@@ -199,21 +190,17 @@
 		<module>KnowWE-Plugin-InlineIndication</module>
 		<module>KnowWE-Plugin-InlineAnswer</module>
 		<module>KnowWE-Plugin-DiaFlux-Coverage</module>
-		<module>metatool-test-launcher</module>
 		<module>KnowWE-Plugin-RDFS-Basic</module>
 		<module>KnowWE-Plugin-ConceptPageLinkToolProvider</module>
 		<module>KnowWE-Plugin-RDFS-TurtleN3</module>
 		<module>KnowWE-Plugin-d3web-SimpleScoreTable</module>
 		<module>KnowWE-Plugin-RDFS-SubclassingTree</module>
-		<module>KnowWE-Plugin-MedicineOntology</module>
 		<module>KnowWE-Plugin-DiaFlux-Anomalies</module>
-		<module>KnowWE-Plugin-CodeMirror</module>
 		<module>KnowWE-Plugin-RDFS-TestCase</module>
 		<module>KnowWE-Plugin-TestcaseTable-Extensions</module>
 		<module>KnowWE-Plugin-d3web-RuleDebugger</module>
 		<module>KnowWE-Plugin-DiaFlux-CoverageCity</module>
 		<module>KnowWE-Plugin-Wikicontent-Download</module>
-		<module>d3web-OfficeConverterAH</module>
 		<module>KnowWE-Plugin-WissKont</module>
 		<module>KnowWE-Plugin-d3web-Rdf2Go</module>
 		<module>KnowWE-Plugin-RDFS-WikiObjectModel</module>
