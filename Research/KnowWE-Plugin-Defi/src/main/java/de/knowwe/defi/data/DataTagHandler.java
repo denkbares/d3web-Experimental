@@ -106,7 +106,7 @@ public class DataTagHandler extends AbstractTagHandler {
 		try {
 			loglinks.append(LOG_HEADLINE);
 			loglinks.append("<ul>");
-			for (WikiAttachment wa : KnowWEUtils.getAttachments(".*(.log)", title)) {
+			for (WikiAttachment wa : KnowWEUtils.getAttachments(title, ".*(.log)")) {
 				loglinks.append("<li class='defi_log_dl'><a href='attach/" + wa.getPath() + "'>"
 						+ wa.getFileName() + "</a></li>");
 			}
