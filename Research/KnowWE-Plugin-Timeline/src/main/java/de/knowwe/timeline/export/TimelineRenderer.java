@@ -21,7 +21,7 @@ package de.knowwe.timeline.export;
 import java.util.Arrays;
 import java.util.List;
 
-import de.d3web.core.utilities.Triple;
+import de.d3web.utils.Triple;
 import de.d3web.we.knowledgebase.KnowledgeBaseType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;

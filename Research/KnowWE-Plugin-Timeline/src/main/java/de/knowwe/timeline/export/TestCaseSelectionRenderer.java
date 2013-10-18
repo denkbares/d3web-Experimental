@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.timeline.export;
 
@@ -26,8 +26,8 @@ import java.util.TreeSet;
 
 import javax.servlet.http.Cookie;
 
-import de.d3web.core.utilities.Triple;
 import de.d3web.strings.Strings;
+import de.d3web.utils.Triple;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -44,6 +44,7 @@ import de.knowwe.testcases.TestCaseProvider;
  * @author Tobias Bleifuss, Steffen Hoefner
  */
 class TestCaseSelectionRenderer {
+
 	private static String SELECTOR_KEY = "selectedValue";
 	Section<?> section;
 	UserContext user;
@@ -65,8 +66,7 @@ class TestCaseSelectionRenderer {
 
 		boolean found = false;
 		for (Triple<TestCaseProvider, Section<?>, Article> triple : providers) {
-			if (triple.getA().getTestCase() == null)
-				continue;
+			if (triple.getA().getTestCase() == null) continue;
 
 			found = true;
 
@@ -84,8 +84,7 @@ class TestCaseSelectionRenderer {
 	}
 
 	private String getSelectedId() {
-		if (user == null)
-			return "";
+		if (user == null) return "";
 
 		// String key = generateSelectedTestCaseCookieKey(section);
 		// TODO: generate cookie key
@@ -126,8 +125,7 @@ class TestCaseSelectionRenderer {
 	private void generateOption(RenderResult result, String selectedID, String id,
 			String displayedID) {
 		result.appendHtml("<option value='").appendHtml(id).appendHtml("'");
-		if (id.equals(selectedID))
- result.appendHtml("selected='selected'");
+		if (id.equals(selectedID)) result.appendHtml("selected='selected'");
 		result.appendHtml(">").appendHtml(displayedID).appendHtml("</option>");
 	}
 
@@ -146,7 +144,8 @@ class TestCaseSelectionRenderer {
 				sections)) {
 			if (testCasePlayerTypeSection.equals(s)) {
 				break;
-			} else {
+			}
+			else {
 				i++;
 			}
 		}

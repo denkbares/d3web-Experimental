@@ -22,21 +22,14 @@ import java.io.IOException;
 import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.utilities.Triple;
 import de.d3web.testcase.model.TestCase;
+import de.d3web.utils.Triple;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.testcases.TestCaseProvider;
-import de.knowwe.timeline.IDataProvider;
-import de.knowwe.timeline.Query;
-import de.knowwe.timeline.TestCaseDataProvider;
-import de.knowwe.timeline.export.TimelineContentType.TimelineLine;
-import de.knowwe.timeline.parser.ParseException;
-import de.knowwe.timeline.parser.Token;
-import de.knowwe.timeline.serialization.TimelineDrawer;
 
 /**
  * 

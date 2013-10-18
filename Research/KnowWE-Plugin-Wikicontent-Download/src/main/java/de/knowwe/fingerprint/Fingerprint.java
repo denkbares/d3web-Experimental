@@ -16,9 +16,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.d3web.core.utilities.Pair;
 import de.d3web.strings.Strings;
 import de.d3web.utils.Files;
+import de.d3web.utils.Pair;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;

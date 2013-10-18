@@ -24,9 +24,9 @@ import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.utilities.Pair;
 import de.d3web.dependency.Dependency;
 import de.d3web.dependency.DependencyFinder;
+import de.d3web.utils.Pair;
 
 /**
  * 
