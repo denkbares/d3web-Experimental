@@ -35,6 +35,7 @@ import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -707,7 +708,8 @@ public class RenderingCore {
 	private String createConceptURL(String to) {
 		if (parameters.get(LINK_MODE) != null) {
 			if (parameters.get(LINK_MODE).equals(LINK_MODE_BROWSE)) {
-				return uriProvider.getLinkToTermDefinition(to, parameters.get(MASTER));
+				return uriProvider.getLinkToTermDefinition(new Identifier(to),
+						parameters.get(MASTER));
 			}
 		}
 		return createBaseURL() + "?page=" + getSectionTitle(section)

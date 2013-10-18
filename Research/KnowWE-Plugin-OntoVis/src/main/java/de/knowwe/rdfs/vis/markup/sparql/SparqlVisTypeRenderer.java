@@ -12,6 +12,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
@@ -276,7 +277,8 @@ public class SparqlVisTypeRenderer implements Renderer {
 	private String createConceptURL(String to, Map<String, String> parameters, Section<?> s, LinkToTermDefinitionProvider uriProvider) {
 		if (parameters.get(RenderingCore.LINK_MODE) != null) {
 			if (parameters.get(RenderingCore.LINK_MODE).equals(RenderingCore.LINK_MODE_BROWSE)) {
-				return uriProvider.getLinkToTermDefinition(to, parameters.get(RenderingCore.MASTER));
+				return uriProvider.getLinkToTermDefinition(new Identifier(to),
+						parameters.get(RenderingCore.MASTER));
 			}
 		}
 		return RenderingCore.createBaseURL() + "?page=" + RenderingCore.getSectionTitle(s)

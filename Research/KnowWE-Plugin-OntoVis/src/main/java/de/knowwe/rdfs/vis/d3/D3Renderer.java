@@ -74,7 +74,9 @@ public class D3Renderer {
 
 	private static void drawWheel(SubGraphData data, Map<String, String> parameters) {
 		// write the JSON source for the wheel-visualization
-		writeJSONWheelSource(data, parameters.get(RenderingCore.CONCEPT));
+		String concept = parameters.get(RenderingCore.CONCEPT);
+		if (concept == null) return;
+		writeJSONWheelSource(data, concept);
 
 		// include all necessary scripts and files
 		htmlsource += IncludeUtils.includeFile(FILE_TYPE.JAVASCRIPT, context
