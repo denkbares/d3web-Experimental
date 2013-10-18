@@ -40,6 +40,16 @@
 		<parameter id="priority" value="4" />
 	</extension>
 	
+	<extension plugin-id="d3web-Plugin-TestingFramework" point-id="Test"
+		id="DescriptionChecker">
+		<parameter id="class"
+			value="de.knowwe.wisskont.ci.DescriptionChecker" />
+		<parameter id="name" value="DescriptionChecker" />
+		<parameter id="description" value="CITest DescriptionChecker" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Instantiation"
 		id="KnowledgeBaseInstantiation">
 		<parameter id="class"
