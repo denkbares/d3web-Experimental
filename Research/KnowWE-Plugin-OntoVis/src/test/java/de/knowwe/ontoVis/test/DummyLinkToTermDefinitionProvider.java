@@ -19,6 +19,7 @@
 package de.knowwe.ontoVis.test;
 
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 
 /**
@@ -30,7 +31,8 @@ public class DummyLinkToTermDefinitionProvider implements LinkToTermDefinitionPr
 
 	@Override
 	public String getLinkToTermDefinition(Identifier name, String masterArticle) {
-		return "http://localhost:8080/KnowWE/Wiki.jsp?page=" + name;
+		return "http://localhost:8080/KnowWE/Wiki.jsp?page="
+				+ Strings.unquote(name.toExternalForm());
 	}
 
 }
