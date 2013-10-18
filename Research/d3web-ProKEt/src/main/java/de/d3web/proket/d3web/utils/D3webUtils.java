@@ -1278,7 +1278,7 @@ public class D3webUtils {
 	    return getAnswerYNPrompt(c, locIdent);
 	}
 
-	//System.out.println(locIdent);
+	System.out.println("Locale Identifier:" + locIdent);
 
 	//int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
 	//int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
@@ -1327,11 +1327,18 @@ public class D3webUtils {
 		break;
 	}
 
+	System.out.println("Prompt1: " + prompt);
+	
 	// default fallback solution: popupPrompt in english
 	if (prompt == null) {
 	    prompt = c.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
 	}
 
+	System.out.println("Prompt2: " + c.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH));
+	prompt = prompt == null ? c.getName() : prompt;
+	System.out.println("Prompt3: " + prompt);
+	
+	
 	// default popupPrompt = getName() if no locale specific was given
 	return prompt == null ? c.getName() : prompt;
     }
@@ -1375,7 +1382,7 @@ public class D3webUtils {
 		    prompt = "Tak";
 		    break;
 		case 7: // dutch
-		    prompt = "";
+		    prompt = "Ja";
 		    break;
 		case 8: // swedish
 		    prompt = "";
@@ -1416,7 +1423,7 @@ public class D3webUtils {
 		    prompt = "Nie";
 		    break;
 		case 7: // dutch
-		    prompt = "";
+		    prompt = "Neen";
 		    break;
 		case 8: // swedish
 		    prompt = "";

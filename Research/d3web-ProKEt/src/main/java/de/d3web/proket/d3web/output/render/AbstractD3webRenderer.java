@@ -778,6 +778,17 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
      * System.out.println(rule.isDisjunctive()); return rule.isDisjunctive(); }
      * } } return false; }
      */
+    
+    /**
+     * Rendering of ITree Questions
+     * @param st
+     * @param d3webSession
+     * @param cc
+     * @param to
+     * @param loc
+     * @param httpSession
+     * @param request 
+     */
     protected void renderChildrenITreeNum(StringTemplate st, Session d3webSession, ContainerCollection cc,
 	    TerminologyObject to, int loc, HttpSession httpSession, HttpServletRequest request) {
 
