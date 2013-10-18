@@ -223,6 +223,8 @@
 		<module>KnowWE-Plugin-TextAnnotation</module>
 		<module>KnowWE-Plugin-Ontology-TermBrowser</module>
 		<module>KnowWE-Plugin-d3web-TermBrowser</module>
+		<module>KnowWE-Plugin-DiaFlux-Review</module>
+		<module>KnowWE-Plugin-Timeline</module>
 	</modules>
 	<repositories>
 		<repository>
