@@ -21,9 +21,10 @@ package de.knowwe.termbrowser;
 import java.util.Collection;
 import java.util.List;
 
-import de.d3web.strings.Strings;
+import de.d3web.strings.Identifier;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.termbrowser.util.Tree;
 import de.knowwe.termbrowser.util.Tree.Node;
@@ -158,10 +159,11 @@ public class TermBrowserRender {
 	private String generateTermnames() {
 
 		String result = "";
-		Collection<String> allTermDefinitions = hierarchy.getAllTerms();
+		Collection<Identifier> allTermDefinitions = hierarchy.getAllTerms();
 
-		for (String name : allTermDefinitions) {
-			result += "\"" + name + "\"" + ",\n";
+		for (Identifier name : allTermDefinitions) {
+			String label = name.toExternalForm().replaceAll("\"", "");
+			result += "\"" + label + "\"" + ",\n";
 		}
 
 		return result;
@@ -215,7 +217,7 @@ public class TermBrowserRender {
 
 	private void renderConcept(Node<RatedTerm> t, int depth, RenderResult string, LinkToTermDefinitionProvider linkProvider, String master) {
 
-		String term = t.getData().getTerm();
+		Identifier term = t.getData().getTerm();
 		String lineStyleClass = "zebraline";
 		if (!zebra) {
 			zebra = true;
@@ -264,13 +266,14 @@ public class TermBrowserRender {
 							+ "'>");
 
 					// insert term name
-					String label = term;
+					String label = term.toExternalForm();
 					if (hierarchyPrefixAbbreviation) {
-						String parentName = t.getParent().getData().getTerm();
-						if (term.startsWith(parentName)) {
-							label = term.substring(parentName.length());
+						String parentName = t.getParent().getData().getTerm().toExternalForm();
+						if (term.toExternalForm().startsWith(parentName)) {
+							label = term.toExternalForm().substring(parentName.length());
 						}
 					}
+					label = label.replaceAll("\"", "");
 					label = label.replaceAll("_", "_<wbr>");
 					string.appendHtml(label);
 					string.appendHtml("</div>");
@@ -302,7 +305,7 @@ public class TermBrowserRender {
 	 * @param url
 	 * @param divStyle
 	 */
-	private void insertActionButtonsPost(RenderResult string, String url, String divStyle, String term, int level) {
+	private void insertActionButtonsPost(RenderResult string, String url, String divStyle, Identifier term, int level) {
 		string.appendHtml("<table style='table-layout:fixed'>");
 		string.appendHtml("<tr>");
 		{
@@ -346,8 +349,8 @@ public class TermBrowserRender {
 	 * @return
 	 */
 	private boolean allChildrenShown(Node<RatedTerm> term) {
-		List<String> childrenConcepts = hierarchy.getChildren(term.getData().getTerm());
-		for (String childTerm : childrenConcepts) {
+		List<Identifier> childrenConcepts = hierarchy.getChildren(term.getData().getTerm());
+		for (Identifier childTerm : childrenConcepts) {
 			if (!term.getChildren().contains(new Node<RatedTerm>(new RatedTerm(childTerm)))) {
 				return false;
 			}
@@ -394,10 +397,10 @@ public class TermBrowserRender {
 	 * @param string
 	 * @param divStyle
 	 */
-	private void insertAddParentButton(RenderResult string, String divStyle, String term, int level) {
+	private void insertAddParentButton(RenderResult string, String divStyle, Identifier term, int level) {
 		if (level == 0) {
 
-			List<String> parentConcepts = hierarchy.getParents(term);
+			List<Identifier> parentConcepts = hierarchy.getParents(term);
 			if (parentConcepts.size() > 0) {
 
 				// add parent concept to list
@@ -422,26 +425,27 @@ public class TermBrowserRender {
 	 * @param string
 	 * @param divStyle
 	 */
-	private void insertObjectInfoLinkButton(RenderResult string, String divStyle, String term) {
+	private void insertObjectInfoLinkButton(RenderResult string, String divStyle, Identifier term) {
 		// Wiki.jsp?page=ObjectInfoPage&termIdentifier="Damaged idle speed system"&objectname="Damaged idle speed system"
-		String encodedTerm = term; // maskTermForHTML(term);
-		String identifier = encodedTerm;
-		String objectName = encodedTerm;
-		String closingQuote = "";
-		if (term.contains("#")) {
-			String[] elements = term.split("#");
-			objectName = elements[1];
-			closingQuote = "\"";
-			identifier = identifier.replace("#", "#\"");
-		}
-		String encodedIdenifier = Strings.encodeURL(identifier);
-		String linkURL = "Wiki.jsp?page=ObjectInfoPage&termIdentifier="
-				+ encodedIdenifier
-				+ closingQuote + "&objectname=\"" + objectName + "\"";
+		// String encodedTerm = term.toString(); // maskTermForHTML(term);
+		// String identifier = encodedTerm;
+		// String objectName = encodedTerm;
+		// String closingQuote = "";
+		// if (term.contains("#")) {
+		// String[] elements = term.split("#");
+		// objectName = elements[1];
+		// closingQuote = "\"";
+		// identifier = identifier.replace("#", "#\"");
+		// }
+		// String encodedIdenifier = Strings.encodeURL(identifier);
+		String linkToObjectInfoPage = KnowWEUtils.getURLLinkToObjectInfoPage(term);
+		// String linkURL = "Wiki.jsp?page=ObjectInfoPage&termIdentifier="
+		// + encodedIdenifier
+		// + closingQuote + "&objectname=\"" + objectName + "\"";
 		string.appendHtml("<td style='"
 						+ divStyle
 						+ "' class='termbrowser'><a href='"
-				+ linkURL
+				+ linkToObjectInfoPage
 				+ "' ><span class='ui-icon ui-icon-info objectInfoLink hoverAction' title='Zur Info-Seite des Begriffs' style='display:none;'></span></a></td>");
 	}
 

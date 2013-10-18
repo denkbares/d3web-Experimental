@@ -1,5 +1,6 @@
 package de.knowwe.ophtovisD3.utils;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.termbrowser.HierarchyProvider;
 import de.knowwe.termbrowser.util.HierarchyNode;
 
@@ -17,7 +18,7 @@ public class NodeWithName implements HierarchyNode<NodeWithName> {
 	public NodeWithName(String name, String label) {
 		this.name = name;
 		this.label = label;
-		this.data=50+"";
+		this.data = 50 + "";
 	}
 
 	public NodeWithName(String name, String data, boolean highlighted) {
@@ -25,10 +26,11 @@ public class NodeWithName implements HierarchyNode<NodeWithName> {
 		this.data = data;
 		this.highlighted = highlighted;
 	}
-	public NodeWithName(String name, String data, String label,  boolean highlighted) {
+
+	public NodeWithName(String name, String data, String label, boolean highlighted) {
 		this.name = name;
 		this.data = data;
-		this.label=label;
+		this.label = label;
 		this.highlighted = highlighted;
 	}
 
@@ -42,16 +44,15 @@ public class NodeWithName implements HierarchyNode<NodeWithName> {
 	public int compareTo(NodeWithName o) {
 		return this.name.compareTo(o.name);
 	}
-	
-	public void setHighligted(){
-		this.highlighted=true;
+
+	public void setHighligted() {
+		this.highlighted = true;
 	}
 
 	@Override
 	public boolean isSubNodeOf(NodeWithName term, HierarchyProvider hierarchy) {
 
-
-		return hierarchy.isSubNodeOf(this.name, term.name);
+		return hierarchy.isSubNodeOf(new Identifier(this.name), new Identifier(term.name));
 	}
 
 	@Override
@@ -63,11 +64,11 @@ public class NodeWithName implements HierarchyNode<NodeWithName> {
 	public int hashCode() {
 		return name.hashCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object arg0) {
-		if(arg0 instanceof NodeWithName) {
-			return this.name.equals(((NodeWithName)arg0).name);
+		if (arg0 instanceof NodeWithName) {
+			return this.name.equals(((NodeWithName) arg0).name);
 		}
 		return false;
 	}

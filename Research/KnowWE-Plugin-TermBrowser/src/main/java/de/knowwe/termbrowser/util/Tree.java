@@ -201,6 +201,9 @@ public class Tree<T extends HierarchyNode<T>> {
 					found = true;
 				}
 			}
+			if (found) {
+				break;
+			}
 		}
 		if (foundNode != null) {
 			removeChildNode(foundNode, node);

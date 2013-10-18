@@ -24,6 +24,7 @@ import java.util.List;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
+import de.d3web.strings.Identifier;
 
 /**
  * 
@@ -72,21 +73,21 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 	}
 
 	@Override
-	public List<String> getChildren(String term) {
+	public List<Identifier> getChildren(Identifier term) {
 		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
 		hierarchyProvider.setMaster(master);
 		return hierarchyProvider.getChildren(term);
 	}
 
 	@Override
-	public List<String> getParents(String term) {
+	public List<Identifier> getParents(Identifier term) {
 		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
 		hierarchyProvider.setMaster(master);
 		return hierarchyProvider.getParents(term);
 	}
 
 	@Override
-	public boolean isSubNodeOf(String term1, String term2) {
+	public boolean isSubNodeOf(Identifier term1, Identifier term2) {
 		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
 		hierarchyProvider.setMaster(master);
 		return hierarchyProvider.isSubNodeOf(term1, term2);
@@ -105,9 +106,9 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 	}
 
 	@Override
-	public Collection<String> getAllTerms() {
+	public Collection<Identifier> getAllTerms() {
 		hierarchyProvider.setMaster(master);
-		Collection<String> result = hierarchyProvider.getAllTerms();
+		Collection<Identifier> result = hierarchyProvider.getAllTerms();
 		return result;
 	}
 

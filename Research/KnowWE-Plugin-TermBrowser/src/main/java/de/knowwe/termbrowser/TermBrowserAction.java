@@ -20,6 +20,7 @@ package de.knowwe.termbrowser;
 
 import java.io.IOException;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -59,23 +60,23 @@ public class TermBrowserAction extends AbstractAction {
 		else {
 			if (command.equals("searched")) {
 				// update ranking weights
-				TermRecommender.getInstance().termSearched(context, term);
+				TermRecommender.getInstance().termSearched(context, createTermIdentifier(term));
 			}
 			else if (command.equals("remove")) {
 				// removes this concept from the list
-				TermRecommender.getInstance().clearTerm(context, term);
+				TermRecommender.getInstance().clearTerm(context, createTermIdentifier(term));
 			}
 			else if (command.equals("expand")) {
 				// adds all sub-concepts of a concept to the list
-				TermRecommender.getInstance().expandTerm(context, term);
+				TermRecommender.getInstance().expandTerm(context, createTermIdentifier(term));
 			}
 			else if (command.equals("addParent")) {
 				// adds all sub-concepts of a concept to the list
-				TermRecommender.getInstance().addParentTerm(context, term);
+				TermRecommender.getInstance().addParentTerm(context, createTermIdentifier(term));
 			}
 			else if (command.equals("collapse")) {
 				// removes all sub-concepts of a concepts from the list
-				TermRecommender.getInstance().collapseTerm(context, term);
+				TermRecommender.getInstance().collapseTerm(context, createTermIdentifier(term));
 			}
 			else if (command.equals("collapseGraph")) {
 				// stores user's collapse state on server
@@ -120,5 +121,15 @@ public class TermBrowserAction extends AbstractAction {
 		boolean abbreviationFlag = TermBrowserMarkup.getCurrentTermbrowserMarkupPrefixAbbreviationFlag(context);
 		return RenderResult.unmask(new TermBrowserRender(context,
 				linkProvider, master, abbreviationFlag).renderTermBrowser(), context);
+	}
+
+	/**
+	 * 
+	 * @created 10.10.2013
+	 * @param term
+	 * @return
+	 */
+	private Identifier createTermIdentifier(String term) {
+		return new Identifier(term);
 	}
 }

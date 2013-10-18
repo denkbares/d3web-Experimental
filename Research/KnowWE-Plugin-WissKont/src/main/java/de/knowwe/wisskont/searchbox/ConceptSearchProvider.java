@@ -59,7 +59,7 @@ public class ConceptSearchProvider implements SearchProvider {
 			QueryRow conceptResult = resultIterator.next();
 			Node value = conceptResult.getValue("x");
 
-			String conceptName = MarkupUtils.getConceptName(value);
+			String conceptName = MarkupUtils.getConceptName(value).toExternalForm();
 			if (conceptName.contains(query)) {
 				WikiPage wikiPage = connector.getEngine().getPage(conceptName);
 				if (wikiPage != null) {
@@ -96,7 +96,7 @@ public class ConceptSearchProvider implements SearchProvider {
 			QueryRow conceptResult = resultIterator.next();
 			Node value = conceptResult.getValue("x");
 
-			String conceptName = MarkupUtils.getConceptName(value);
+			String conceptName = MarkupUtils.getConceptName(value).toExternalForm();
 			WikiPage wikiPage = connector.getEngine().getPage(conceptName);
 			if (wikiPage != null) {
 				if (!result.contains(wikiPage)) {

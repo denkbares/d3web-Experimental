@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.objects.TermReference;
@@ -37,17 +38,13 @@ import de.knowwe.core.kdom.parsing.Sections;
 public abstract class AbstractTermDetector implements InterestingTermDetector {
 
 	@Override
-	public Map<String, Double> getWeightedTermsOfInterest(Article article, String master) {
-		Map<String, Double> interestingTerms = new HashMap<String, Double>();
+	public Map<Identifier, Double> getWeightedTermsOfInterest(Article article, String master) {
+		Map<Identifier, Double> interestingTerms = new HashMap<Identifier, Double>();
 
 		List<Section<TermDefinition>> definitions = Sections.findSuccessorsOfType(
 				article.getRootSection(), TermDefinition.class);
 		for (Section<TermDefinition> def : definitions) {
-			String termname = def.get().getTermIdentifier(def).toExternalForm().replaceAll("\"", "");
-			// if (termname.contains(":")) {
-			// termname = termname.substring(termname.indexOf(":") + 1);
-			// }
-			interestingTerms.put(termname, WEIGHT_DEFINITION);
+			interestingTerms.put(def.get().getTermIdentifier(def), WEIGHT_DEFINITION);
 		}
 
 		List<Section<TermReference>> references = Sections.findSuccessorsOfType(
@@ -56,12 +53,7 @@ public abstract class AbstractTermDetector implements InterestingTermDetector {
 			// String termname = ref.get().getTermName(ref);
 			Collection<Section<? extends TermDefinition>> termDefinitions = getDefs(ref, master);
 			if (termDefinitions.size() > 0) {
-				String termname = ref.get().getTermIdentifier(ref).toExternalForm().replaceAll(
-						"\"", "");
-				// if (termname.contains(":")) {
-				// termname = termname.substring(termname.indexOf(":") + 1);
-				// }
-				interestingTerms.put(termname, WEIGHT_REFERENCE);
+				interestingTerms.put(ref.get().getTermIdentifier(ref), WEIGHT_REFERENCE);
 			}
 		}
 

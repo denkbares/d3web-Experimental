@@ -68,7 +68,7 @@ import de.knowwe.wisskont.util.MarkupUtils;
 public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 
 	private static final String key = "Werte";
-	private static final String VALUE_PROPERTY = "wertebereich";
+	public static final String VALUE_PROPERTY = "wertebereich";
 
 	/**
 	 * 

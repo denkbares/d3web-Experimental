@@ -26,6 +26,7 @@ import java.util.Set;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
+import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
@@ -34,6 +35,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.HierarchyUtils;
 import de.knowwe.termbrowser.HierarchyProvider;
 import de.knowwe.wisskont.SubconceptMarkup;
+import de.knowwe.wisskont.ValuesMarkup;
 import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
@@ -44,29 +46,35 @@ import de.knowwe.wisskont.util.MarkupUtils;
 public class WissassHierarchyProvider implements HierarchyProvider {
 
 	@Override
-	public List<String> getChildren(String term) {
+	public List<Identifier> getChildren(Identifier term) {
 		return MarkupUtils.getChildrenConcepts(term);
 	}
 
 	@Override
-	public List<String> getParents(String term) {
+	public List<Identifier> getParents(Identifier term) {
 		return MarkupUtils.getParentConcepts(term);
 	}
 
 	@Override
-	public boolean isSubNodeOf(String term1, String term2) {
+	public boolean isSubNodeOf(Identifier term1, Identifier term2) {
 		String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
 
-		String thisConceptURLString = Strings.encodeURL(term1);
+		String thisConceptURLString = Strings.encodeURL(Strings.unquote(term1.toExternalForm()));
 		String thisURL = baseUrl + thisConceptURLString;
 		URI thisURI = new URIImpl(thisURL);
 
-		String otherConceptURLString = Strings.encodeURL(term2);
+		String otherConceptURLString = Strings.encodeURL(Strings.unquote(term2.toExternalForm()));
 		String otherURL = baseUrl + otherConceptURLString;
 		URI otherURI = new URIImpl(otherURL);
 
+		// TODO: disjunct does not support transitivity properly
+		// FIX: there should be a list of properties passed to the
+		// isSubConcept-Method
+		// HINT: consider direction of property respectively!
 		return HierarchyUtils.isSubConceptOf(thisURI, otherURI, new URIImpl(
-				baseUrl + SubconceptMarkup.SUBCONCEPT_PROPERTY), null);
+				baseUrl + SubconceptMarkup.SUBCONCEPT_PROPERTY), null)
+				|| HierarchyUtils.isSubConceptOf(otherURI, thisURI, new URIImpl(
+						baseUrl + ValuesMarkup.VALUE_PROPERTY), null);
 	}
 
 	@Override
@@ -82,12 +90,12 @@ public class WissassHierarchyProvider implements HierarchyProvider {
 	}
 
 	@Override
-	public Collection<String> getAllTerms() {
+	public Collection<Identifier> getAllTerms() {
 		Collection<Section<? extends SimpleDefinition>> allTermDefinitions =
 				IncrementalCompiler.getInstance().getTerminology().getAllTermDefinitions();
-		Set<String> result = new HashSet<String>();
+		Set<Identifier> result = new HashSet<Identifier>();
 		for (Section<? extends SimpleDefinition> def : allTermDefinitions) {
-			result.add(def.get().getTermName(def));
+			result.add(def.get().getTermIdentifier(def));
 		}
 		return result;
 	}

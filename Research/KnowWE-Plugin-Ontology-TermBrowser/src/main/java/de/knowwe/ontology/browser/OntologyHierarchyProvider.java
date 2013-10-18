@@ -18,16 +18,17 @@
  */
 package de.knowwe.ontology.browser;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -51,11 +52,25 @@ public class OntologyHierarchyProvider implements HierarchyProvider {
 	}
 
 	@Override
-	public List<String> getChildren(String term) {
+	public List<Identifier> getChildren(Identifier termID) {
 		Rdf2GoCore core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
-		term = expandTermLocalNSIfNecessary(term, core);
+		String term = expandTermLocalNSIfNecessary(termID.toExternalForm().replaceAll("\"", ""),
+				core);
+		String[] parts = term.split(":");
+		List<String> encodedParts = new ArrayList<String>();
+		for (String identifierPart : parts) {
+			try {
+				encodedParts.add(URLEncoder.encode(identifierPart, "UTF-8"));
+			}
+			catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		term = Strings.concat(":", encodedParts);
 		URI termURI = new URIImpl(Rdf2GoUtils.expandNamespace(core, term));
-		List<String> result = new ArrayList<String>();
+		List<Identifier> result = new ArrayList<Identifier>();
 
 		for (String relation : relations) {
 
@@ -64,8 +79,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider {
 					master);
 			for (URI uri : childrenConcepts2) {
 				String reducedNamespace = Rdf2GoUtils.reduceNamespace(core, uri.toString());
-				String name = reducedNamespace.substring(reducedNamespace.indexOf(":") + 1);
-				result.add(name);
+				result.add(new Identifier(reducedNamespace));
 			}
 		}
 
@@ -73,12 +87,25 @@ public class OntologyHierarchyProvider implements HierarchyProvider {
 	}
 
 	@Override
-	public List<String> getParents(String term) {
+	public List<Identifier> getParents(Identifier termID) {
 		Rdf2GoCore core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
-		term = expandTermLocalNSIfNecessary(term, core);
+		String term = expandTermLocalNSIfNecessary(termID.toExternalForm().replaceAll("\"", ""),
+				core);
+		String[] parts = term.split(":");
+		List<String> encodedParts = new ArrayList<String>();
+		for (String identifierPart : parts) {
+			try {
+				encodedParts.add(URLEncoder.encode(identifierPart, "UTF-8"));
+			}
+			catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
+		}
+		term = Strings.concat(":", encodedParts);
 		URI termURI = new URIImpl(Rdf2GoUtils.expandNamespace(core, term));
-		List<String> result = new ArrayList<String>();
+		List<Identifier> result = new ArrayList<Identifier>();
 
 		for (String relation : relations) {
 
@@ -87,8 +114,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider {
 					master);
 			for (URI uri : childrenConcepts2) {
 				String reducedNamespace = Rdf2GoUtils.reduceNamespace(core, uri.toString());
-				String name = reducedNamespace.substring(reducedNamespace.indexOf(":") + 1);
-				result.add(name);
+				result.add(new Identifier(reducedNamespace));
 			}
 		}
 
@@ -110,10 +136,10 @@ public class OntologyHierarchyProvider implements HierarchyProvider {
 	}
 
 	@Override
-	public boolean isSubNodeOf(String term1, String term2) {
+	public boolean isSubNodeOf(Identifier termID1, Identifier termID2) {
 		Rdf2GoCore core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
-		term1 = expandTermLocalNSIfNecessary(term1, core);
-		term2 = expandTermLocalNSIfNecessary(term2, core);
+		String term1 = expandTermLocalNSIfNecessary(termID1.toExternalForm(), core);
+		String term2 = expandTermLocalNSIfNecessary(termID2.toExternalForm(), core);
 		URI term1URI = new URIImpl(Rdf2GoUtils.expandNamespace(core, term1));
 		URI term2URI = new URIImpl(Rdf2GoUtils.expandNamespace(core, term2));
 
@@ -132,15 +158,10 @@ public class OntologyHierarchyProvider implements HierarchyProvider {
 	}
 
 	@Override
-	public Collection<String> getAllTerms() {
+	public Collection<Identifier> getAllTerms() {
 		TerminologyManager terminologyManager = Environment.getInstance().getTerminologyManager(
 				Environment.DEFAULT_WEB, master);
-		Collection<Identifier> definedTerms = terminologyManager.getAllDefinedTerms();
-		Set<String> result = new HashSet<String>();
-		for (Identifier definedTerm : definedTerms) {
-			result.add(definedTerm.getLastPathElement());
-		}
-		return result;
+		return terminologyManager.getAllDefinedTerms();
 	}
 
 }

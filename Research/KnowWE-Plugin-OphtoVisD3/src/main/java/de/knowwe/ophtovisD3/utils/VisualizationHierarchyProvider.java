@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.NotImplementedException;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.termbrowser.HierarchyProvider;
 
 /**
@@ -44,23 +45,23 @@ public class VisualizationHierarchyProvider implements HierarchyProvider {
 	}
 
 	@Override
-	public List<String> getChildren(String term) {
+	public List<Identifier> getChildren(Identifier term) {
 		throw new NotImplementedException();
 
 	}
 
 	@Override
-	public List<String> getParents(String term) {
-		List<String> parent = new ArrayList<String>();
-		String parentString = parentChildPairs.get(term);
+	public List<Identifier> getParents(Identifier term) {
+		List<Identifier> parent = new ArrayList<Identifier>();
+		String parentString = parentChildPairs.get(term.toExternalForm());
 		if (!(parentString == null || parentString.isEmpty())) {
-			parent.add(parentString);
+			parent.add(new Identifier(parentString));
 		}
 		return parent;
 	}
 
 	@Override
-	public boolean isSubNodeOf(String subnode, String term) {
+	public boolean isSubNodeOf(Identifier subnode, Identifier term) {
 		String parentString = parentChildPairs.get(subnode);
 		if (parentString == null) {
 			return false;
@@ -69,7 +70,7 @@ public class VisualizationHierarchyProvider implements HierarchyProvider {
 			return true;
 		}
 		else {
-			return isSubNodeOf(parentString, term);
+			return isSubNodeOf(new Identifier(parentString), term);
 		}
 	}
 
@@ -86,7 +87,7 @@ public class VisualizationHierarchyProvider implements HierarchyProvider {
 	}
 
 	@Override
-	public Collection<String> getAllTerms() {
+	public Collection<Identifier> getAllTerms() {
 		// TODO Auto-generated method stub
 		return null;
 	}

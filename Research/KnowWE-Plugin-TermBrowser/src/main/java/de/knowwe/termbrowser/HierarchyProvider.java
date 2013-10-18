@@ -21,6 +21,8 @@ package de.knowwe.termbrowser;
 import java.util.Collection;
 import java.util.List;
 
+import de.d3web.strings.Identifier;
+
 /**
  * 
  * @author jochenreutelshofer
@@ -34,11 +36,11 @@ public interface HierarchyProvider {
 
 	void setMaster(String master);
 
-	List<String> getChildren(String term);
+	List<Identifier> getChildren(Identifier term);
 
-	List<String> getParents(String term);
+	List<Identifier> getParents(Identifier term);
 
-	boolean isSubNodeOf(String term1, String term2);
+	boolean isSubNodeOf(Identifier term1, Identifier term2);
 
-	Collection<String> getAllTerms();
+	Collection<Identifier> getAllTerms();
 }

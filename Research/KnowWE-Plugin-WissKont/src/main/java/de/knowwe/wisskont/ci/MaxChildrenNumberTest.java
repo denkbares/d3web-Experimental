@@ -73,15 +73,15 @@ public class MaxChildrenNumberTest extends AbstractTest<Rdf2GoCore> {
 		QueryResultTable resultTable = testObject.sparqlSelect(conceptQuery);
 		ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
 
-		SortedMap<String, List<String>> errors = new TreeMap<String, List<String>>();
+		SortedMap<String, List<Identifier>> errors = new TreeMap<String, List<Identifier>>();
 
 		while (resultIterator.hasNext()) {
 			QueryRow parentConceptResult = resultIterator.next();
 			Node value = parentConceptResult.getValue("x");
 			URI concept = value.asURI();
-			List<String> children = MarkupUtils.getChildren(testObject, concept);
+			List<Identifier> children = MarkupUtils.getChildren(testObject, concept);
 			if (children.size() > maxThreshold) {
-				errors.put(MarkupUtils.getConceptName(concept), children);
+				errors.put(MarkupUtils.getConceptName(concept).toExternalForm(), children);
 			}
 		}
 
@@ -94,7 +94,7 @@ public class MaxChildrenNumberTest extends AbstractTest<Rdf2GoCore> {
 
 	}
 
-	private Message generateErrorMessage(Map<String, List<String>> errors, int max) {
+	private Message generateErrorMessage(Map<String, List<Identifier>> errors, int max) {
 		String messageText = "Die folgenden Begriffe haben mehr als " + max + " Unterbegriffe:";
 		Set<String> keySet = errors.keySet();
 		List<MessageObject> messageObjects = new ArrayList<MessageObject>();
@@ -108,13 +108,13 @@ public class MaxChildrenNumberTest extends AbstractTest<Rdf2GoCore> {
 
 			}
 			messageText += "\n* " + label + " (";
-			List<String> parents = errors.get(string);
+			List<Identifier> parents = errors.get(string);
 			messageText += Strings.concat(", ", parents);
 			messageText += ")";
 			messageObjects.add(new MessageObject(label, Article.class));
-			for (String parent : parents) {
+			for (Identifier parent : parents) {
 				Collection<Section<? extends SimpleDefinition>> parentDefs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-						new Identifier(parent));
+						parent);
 				String parentLabel = string;
 				if (parentDefs.size() > 0) {
 					Section<? extends SimpleDefinition> pDef = parentDefs.iterator().next();

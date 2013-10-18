@@ -43,6 +43,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.wisskont.ConceptMarkup;
 import de.knowwe.wisskont.SubconceptMarkup;
+import de.knowwe.wisskont.ValuesMarkup;
 
 /**
  * 
@@ -88,13 +89,13 @@ public class MarkupUtils {
 	 * @param concept
 	 * @return
 	 */
-	public static List<String> getParents(Rdf2GoCore testObject, URI concept) {
+	public static List<Identifier> getParents(Rdf2GoCore testObject, URI concept) {
 		String parentQuery = "SELECT ?x WHERE { <" + concept.toString()
 				+ "> lns:unterkonzept ?x.}";
 		QueryResultTable resultTable = testObject.sparqlSelect(parentQuery);
 		ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
 
-		List<String> parents = new ArrayList<String>();
+		List<Identifier> parents = new ArrayList<Identifier>();
 		while (resultIterator.hasNext()) {
 			QueryRow parentConceptResult = resultIterator.next();
 			Node value = parentConceptResult.getValue("x");
@@ -113,14 +114,14 @@ public class MarkupUtils {
 	 * @param concept
 	 * @return
 	 */
-	public static List<String> getChildren(Rdf2GoCore testObject, URI concept) {
+	public static List<Identifier> getChildren(Rdf2GoCore testObject, URI concept) {
 		String parentQuery = "SELECT ?x WHERE { ?x lns:" + SubconceptMarkup.SUBCONCEPT_PROPERTY
 				+ " <" + concept.toString()
 				+ ">.}";
 		QueryResultTable resultTable = testObject.sparqlSelect(parentQuery);
 		ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
 
-		List<String> parents = new ArrayList<String>();
+		List<Identifier> parents = new ArrayList<Identifier>();
 		while (resultIterator.hasNext()) {
 			QueryRow parentConceptResult = resultIterator.next();
 			Node value = parentConceptResult.getValue("x");
@@ -132,72 +133,88 @@ public class MarkupUtils {
 		return parents;
 	}
 
-	public static List<String> getParentConcepts(String term) {
-		List<String> result = new ArrayList<String>();
+	public static List<Identifier> getParentConcepts(Identifier term) {
+		List<Identifier> result = new ArrayList<Identifier>();
 
 		Collection<Section<? extends SimpleDefinition>> defs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				new Identifier(term));
+				term);
 
 		if (defs.size() > 0) {
 			Section<? extends SimpleDefinition> def = defs.iterator().next();
 			URI uri = RDFSUtil.getURI(def);
 
-			String sparql = "SELECT ?x WHERE { <" + uri + "> lns:"
+			List<String> sparqls = new ArrayList<String>();
+			String sparqlSubconcept = "SELECT ?x WHERE { <" + uri + "> lns:"
 					+ SubconceptMarkup.SUBCONCEPT_PROPERTY + " ?x.}";
-			QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(sparql);
+			sparqls.add(sparqlSubconcept);
+			String sparqlValue = "SELECT ?x WHERE { ?x lns:"
+					+ ValuesMarkup.VALUE_PROPERTY + "<" + uri + "> .}";
+			sparqls.add(sparqlValue);
+			for (String query : sparqls) {
 
-			ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
-			while (resultIterator.hasNext()) {
-				QueryRow parentConceptResult = resultIterator.next();
-				Node value = parentConceptResult.getValue("x");
-				String urlString = value.asURI().toString();
+				QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(query);
 
-				String termName = "";
-				try {
-					termName = URLDecoder.decode(
-							urlString.substring(Rdf2GoCore.getInstance().getLocalNamespace().length()),
-							"UTF-8");
+				ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
+				while (resultIterator.hasNext()) {
+					QueryRow parentConceptResult = resultIterator.next();
+					Node value = parentConceptResult.getValue("x");
+					String urlString = value.asURI().toString();
+
+					String termName = "";
+					try {
+						termName = URLDecoder.decode(
+								urlString.substring(Rdf2GoCore.getInstance().getLocalNamespace().length()),
+								"UTF-8");
+					}
+					catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					result.add(new Identifier(termName));
 				}
-				catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				result.add(termName);
 			}
 		}
 		return result;
 	}
 
-	public static List<String> getChildrenConcepts(String term) {
-		List<String> result = new ArrayList<String>();
+	public static List<Identifier> getChildrenConcepts(Identifier term) {
+		List<Identifier> result = new ArrayList<Identifier>();
 
 		Collection<Section<? extends SimpleDefinition>> defs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				new Identifier(term));
+				term);
 
 		if (defs.size() > 0) {
 			Section<? extends SimpleDefinition> def = defs.iterator().next();
 			URI uri = RDFSUtil.getURI(def);
 
-			String sparql = "SELECT ?x WHERE { ?x lns:unterkonzept <" + uri + ">.}";
-			QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(sparql);
+			List<String> sparqls = new ArrayList<String>();
+			String sparqlSuconcept = "SELECT ?x WHERE { ?x lns:unterkonzept <" + uri + ">.}";
+			sparqls.add(sparqlSuconcept);
+			String sparqlValue = "SELECT ?x WHERE { <" + uri + "> lns:"
+					+ ValuesMarkup.VALUE_PROPERTY + " ?x .}";
+			sparqls.add(sparqlValue);
+			for (String query : sparqls) {
 
-			ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
-			while (resultIterator.hasNext()) {
-				QueryRow parentConceptResult = resultIterator.next();
-				Node value = parentConceptResult.getValue("x");
-				String urlString = value.asURI().toString();
+				QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(query);
 
-				String termName = "";
-				try {
-					termName = URLDecoder.decode(
-							urlString.substring(Rdf2GoCore.getInstance().getLocalNamespace().length()),
-							"UTF-8");
+				ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
+				while (resultIterator.hasNext()) {
+					QueryRow parentConceptResult = resultIterator.next();
+					Node value = parentConceptResult.getValue("x");
+					String urlString = value.asURI().toString();
+
+					String termName = "";
+					try {
+						termName = URLDecoder.decode(
+								urlString.substring(Rdf2GoCore.getInstance().getLocalNamespace().length()),
+								"UTF-8");
+					}
+					catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					result.add(new Identifier(termName));
 				}
-				catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				result.add(termName);
 			}
 		}
 		return result;
@@ -216,7 +233,7 @@ public class MarkupUtils {
 		return conceptDefinitionMarkupSections;
 	}
 
-	public static String getConceptName(Node value) {
+	public static Identifier getConceptName(Node value) {
 		String uriString = value.toString();
 		String uriStringDecoded = null;
 		try {
@@ -227,7 +244,7 @@ public class MarkupUtils {
 			e.printStackTrace();
 		}
 		String conceptName = uriStringDecoded.substring(uriStringDecoded.indexOf("=") + 1);
-		return conceptName;
+		return new Identifier(conceptName);
 	}
 
 }

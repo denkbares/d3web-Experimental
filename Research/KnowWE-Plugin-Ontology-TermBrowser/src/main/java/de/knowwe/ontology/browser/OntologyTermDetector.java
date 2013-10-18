@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
@@ -40,21 +41,20 @@ import de.knowwe.termbrowser.InterestingTermDetector;
 public class OntologyTermDetector implements InterestingTermDetector {
 
 	@Override
-	public Map<String, Double> getWeightedTermsOfInterest(Article a, String master) {
-		Map<String, Double> interestingTerms = new HashMap<String, Double>();
+	public Map<Identifier, Double> getWeightedTermsOfInterest(Article a, String master) {
+		Map<Identifier, Double> interestingTerms = new HashMap<Identifier, Double>();
 
 		List<Section<AbbreviatedResourceDefinition>> definitions = Sections.findSuccessorsOfType(
 				a.getRootSection(), AbbreviatedResourceDefinition.class);
 		for (Section<AbbreviatedResourceDefinition> def : definitions) {
-			String termname = def.get().getTermIdentifier(def).toExternalForm().replaceAll("\"", "");
+			Identifier termname = def.get().getTermIdentifier(def);
 			interestingTerms.put(termname, WEIGHT_DEFINITION);
 		}
 
 		List<Section<AbbreviatedResourceReference>> references = Sections.findSuccessorsOfType(
 				a.getRootSection(), AbbreviatedResourceReference.class);
 		for (Section<AbbreviatedResourceReference> ref : references) {
-			String termname = ref.get().getTermIdentifier(ref).toExternalForm().replaceAll(
-					"\"", "");
+			Identifier termname = ref.get().getTermIdentifier(ref);
 			Collection<Section<? extends TermDefinition>> termDefinitions = DefaultTermDetector.getDefinitions(
 					ref, master);
 			if (termDefinitions.size() > 0) {

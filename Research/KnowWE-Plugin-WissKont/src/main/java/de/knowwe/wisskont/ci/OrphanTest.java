@@ -59,15 +59,15 @@ public class OrphanTest extends AbstractTest<Rdf2GoCore> {
 		QueryResultTable resultTable = testObject.sparqlSelect(conceptQuery);
 		ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
 
-		SortedMap<String, List<String>> errors = new TreeMap<String, List<String>>();
+		SortedMap<String, List<Identifier>> errors = new TreeMap<String, List<Identifier>>();
 
 		while (resultIterator.hasNext()) {
 			QueryRow parentConceptResult = resultIterator.next();
 			Node value = parentConceptResult.getValue("x");
 			URI concept = value.asURI();
-			List<String> parents = MarkupUtils.getParents(testObject, concept);
+			List<Identifier> parents = MarkupUtils.getParents(testObject, concept);
 			if (parents.size() == 0) {
-				errors.put(MarkupUtils.getConceptName(concept), parents);
+				errors.put(MarkupUtils.getConceptName(concept).toExternalForm(), parents);
 			}
 		}
 
@@ -86,7 +86,7 @@ public class OrphanTest extends AbstractTest<Rdf2GoCore> {
 	 * @param errors
 	 * @return
 	 */
-	private Message generateErrorMessage(Map<String, List<String>> errors) {
+	private Message generateErrorMessage(Map<String, List<Identifier>> errors) {
 		String messageText = "The following concepts have no parents:";
 		Set<String> keySet = errors.keySet();
 		List<MessageObject> messageObjects = new ArrayList<MessageObject>();

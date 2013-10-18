@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.termbrowser.util.Tree;
 
@@ -82,11 +83,11 @@ public class RecommendationSet {
 		return new ArrayList<RatedTerm>(list);
 	}
 
-	public void clearValue(String term) {
+	public void clearValue(Identifier term) {
 		terms.removeNodeFromTree(new RatedTerm(term));
 	}
 
-	public void addValue(String term, Double increment) {
+	public void addValue(Identifier term, Double increment) {
 		RatedTerm newTerm = new RatedTerm(term);
 		RatedTerm existingValuedTerm = terms.find(newTerm);
 		if (existingValuedTerm != null) {

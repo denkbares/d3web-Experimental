@@ -30,6 +30,7 @@ import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
 import de.d3web.we.object.D3webTermDefinition;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
@@ -60,16 +61,15 @@ public class D3webHierarchyProvider implements HierarchyProvider {
 	}
 
 	@Override
-	public List<String> getChildren(String term) {
-		List<String> childrenList = new ArrayList<String>();
+	public List<Identifier> getChildren(Identifier term) {
+		List<Identifier> childrenList = new ArrayList<Identifier>();
 		TerminologyManager terminologyManager = Environment.getInstance().getTerminologyManager(
 				Environment.DEFAULT_WEB, master);
 
-		Section<?> definingSection = terminologyManager.getTermDefiningSection(new Identifier(
-				term.split("#")));
+		Section<?> definingSection = terminologyManager.getTermDefiningSection(term);
 		KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB, master);
 		de.d3web.core.knowledge.TerminologyManager manager = knowledgeBase.getManager();
-		NamedObject namedObject = manager.search(term);
+		NamedObject namedObject = manager.search(term.toExternalForm());
 		if (namedObject == null) {
 			Section<D3webTermDefinition> def = Sections.cast(definingSection,
 					D3webTermDefinition.class);
@@ -85,11 +85,11 @@ public class D3webHierarchyProvider implements HierarchyProvider {
 		List<NamedObject> childrenD3web = getChildrenD3web(namedObject);
 		for (NamedObject childD3web : childrenD3web) {
 			if (childD3web instanceof Choice) {
-				childrenList.add(((Choice) childD3web).getQuestion().getName() + "#"
-						+ childD3web.getName());
+				childrenList.add(new Identifier(new String[] {
+						((Choice) childD3web).getQuestion().getName(), childD3web.getName() }));
 			}
 			else {
-				childrenList.add(childD3web.getName());
+				childrenList.add(new Identifier(childD3web.getName()));
 			}
 		}
 		return childrenList;
@@ -134,15 +134,14 @@ public class D3webHierarchyProvider implements HierarchyProvider {
 	}
 
 	@Override
-	public List<String> getParents(String term) {
-		List<String> parentList = new ArrayList<String>();
+	public List<Identifier> getParents(Identifier term) {
+		List<Identifier> parentList = new ArrayList<Identifier>();
 		TerminologyManager terminologyManager = Environment.getInstance().getTerminologyManager(
 				Environment.DEFAULT_WEB, master);
-		Section<?> definingSection = terminologyManager.getTermDefiningSection(new Identifier(
-				term.split("#")));
+		Section<?> definingSection = terminologyManager.getTermDefiningSection(term);
 		KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB, master);
 		de.d3web.core.knowledge.TerminologyManager manager = knowledgeBase.getManager();
-		NamedObject namedObject = manager.search(term);
+		NamedObject namedObject = manager.search(term.toExternalForm());
 		if (namedObject == null) {
 			Section<D3webTermDefinition> def = Sections.cast(definingSection,
 					D3webTermDefinition.class);
@@ -158,18 +157,18 @@ public class D3webHierarchyProvider implements HierarchyProvider {
 
 		List<NamedObject> parentsD3web = getParentsD3web(namedObject);
 		for (NamedObject parentD3web : parentsD3web) {
-			parentList.add(parentD3web.getName());
+			parentList.add(new Identifier(parentD3web.getName()));
 		}
 
 		return parentList;
 	}
 
 	@Override
-	public boolean isSubNodeOf(String term1, String term2) {
+	public boolean isSubNodeOf(Identifier term1, Identifier term2) {
 
-		NamedObject object1 = findTermForName(term1);
+		NamedObject object1 = findTermForName(term1.toExternalForm());
 
-		NamedObject object2 = findTermForName(term2);
+		NamedObject object2 = findTermForName(term2.toExternalForm());
 		return isSubObjectTrans(object1, object2);
 	}
 
@@ -185,11 +184,11 @@ public class D3webHierarchyProvider implements HierarchyProvider {
 		if (term.contains("#")) {
 			String[] split = term.split("#");
 			if (split.length == 2) {
-				TerminologyObject question = manager.search(split[0]);
+				TerminologyObject question = manager.search(Strings.unquote(split[0]));
 				if (question instanceof QuestionChoice) {
 					List<Choice> children = ((QuestionChoice) question).getAllAlternatives();
 					for (Choice terminologyObject : children) {
-						if (terminologyObject.getName().equals(split[1])) {
+						if (terminologyObject.getName().equals(Strings.unquote(split[1]))) {
 							return terminologyObject;
 						}
 					}
@@ -197,7 +196,7 @@ public class D3webHierarchyProvider implements HierarchyProvider {
 			}
 		}
 		else {
-			return manager.search(term);
+			return manager.search(Strings.unquote(term));
 		}
 		return null;
 	}
@@ -213,13 +212,13 @@ public class D3webHierarchyProvider implements HierarchyProvider {
 	}
 
 	@Override
-	public Collection<String> getAllTerms() {
+	public Collection<Identifier> getAllTerms() {
 		KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB, master);
 		de.d3web.core.knowledge.TerminologyManager manager = knowledgeBase.getManager();
-		Set<String> result = new HashSet<String>();
+		Set<Identifier> result = new HashSet<Identifier>();
 		Collection<TerminologyObject> allTerminologyObjects = manager.getAllTerminologyObjects();
 		for (TerminologyObject terminologyObject : allTerminologyObjects) {
-			result.add(terminologyObject.toString());
+			result.add(new Identifier(terminologyObject.toString()));
 		}
 		return result;
 	}

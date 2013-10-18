@@ -27,6 +27,7 @@ import java.util.Map;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
+import de.d3web.strings.Identifier;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.event.Event;
@@ -209,9 +210,9 @@ public class TermRecommender implements EventListener {
 		return getRatedTermListTop(user, -1);
 	}
 
-	public List<String> getRankedTermList(UserContext user) {
+	public List<Identifier> getRankedTermList(UserContext user) {
 		List<RatedTerm> ratedTermList = getRatedTermList(user);
-		List<String> result = new ArrayList<String>();
+		List<Identifier> result = new ArrayList<Identifier>();
 		for (RatedTerm ratedTerm : ratedTermList) {
 			result.add(ratedTerm.getTerm());
 		}
@@ -225,7 +226,7 @@ public class TermRecommender implements EventListener {
 		return result;
 	}
 
-	public void termSearched(UserContext user, String term) {
+	public void termSearched(UserContext user, Identifier term) {
 		RecommendationSet set = null;
 		if (data.containsKey(user.getUserName())) {
 			set = data.get(user.getUserName());
@@ -256,10 +257,11 @@ public class TermRecommender implements EventListener {
 				data.put(user.getUserName(), set);
 			}
 
-			Map<String, Double> interestingTerms = termDetector.getWeightedTermsOfInterest(article,
+			Map<Identifier, Double> interestingTerms = termDetector.getWeightedTermsOfInterest(
+					article,
 					master);
 
-			for (String term : interestingTerms.keySet()) {
+			for (Identifier term : interestingTerms.keySet()) {
 				set.addValue(term, interestingTerms.get(term));
 			}
 
@@ -273,7 +275,7 @@ public class TermRecommender implements EventListener {
 	 * @param context
 	 * @param term
 	 */
-	public void clearTerm(UserActionContext context, String term) {
+	public void clearTerm(UserActionContext context, Identifier term) {
 		RecommendationSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet != null) {
 			recommendationSet.clearValue(term);
@@ -287,15 +289,15 @@ public class TermRecommender implements EventListener {
 	 * @param context
 	 * @param term
 	 */
-	public void expandTerm(UserActionContext context, String term) {
+	public void expandTerm(UserActionContext context, Identifier term) {
 		RecommendationSet recommendationSet = data.get(context.getUserName());
 
 		if (recommendationSet == null) {
 			recommendationSet = RecommendationSet.createRecommendationSet(context);
 			data.put(context.getUserName(), recommendationSet);
 		}
-		List<String> children = recommendationSet.getHierarchy().getChildren(term);
-		for (String child : children) {
+		List<Identifier> children = recommendationSet.getHierarchy().getChildren(term);
+		for (Identifier child : children) {
 			recommendationSet.addValue(child, WEIGHT_EXPAND);
 		}
 
@@ -307,14 +309,14 @@ public class TermRecommender implements EventListener {
 	 * @param context
 	 * @param term
 	 */
-	public void collapseTerm(UserActionContext context, String term) {
+	public void collapseTerm(UserActionContext context, Identifier term) {
 		RecommendationSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet == null) {
 			recommendationSet = RecommendationSet.createRecommendationSet(context);
 			data.put(context.getUserName(), recommendationSet);
 		}
-		List<String> children = recommendationSet.getHierarchy().getChildren(term);
-		for (String child : children) {
+		List<Identifier> children = recommendationSet.getHierarchy().getChildren(term);
+		for (Identifier child : children) {
 			recommendationSet.clearValue(child);
 		}
 	}
@@ -424,17 +426,17 @@ public class TermRecommender implements EventListener {
 	 * @param context
 	 * @param term
 	 */
-	public void addParentTerm(UserActionContext context, String term) {
+	public void addParentTerm(UserActionContext context, Identifier term) {
 		RecommendationSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet == null) {
 			recommendationSet = RecommendationSet.createRecommendationSet(context);
 			data.put(context.getUserName(), recommendationSet);
 		}
-		List<String> parents = recommendationSet.getHierarchy().getParents(term);
+		List<Identifier> parents = recommendationSet.getHierarchy().getParents(term);
 		// there should be only one parent
 		if (parents.size() > 0) {
 			// in any case we only take the first one
-			String parent = parents.get(0);
+			Identifier parent = parents.get(0);
 			recommendationSet.addValue(parent, WEIGHT_EXPAND);
 		}
 

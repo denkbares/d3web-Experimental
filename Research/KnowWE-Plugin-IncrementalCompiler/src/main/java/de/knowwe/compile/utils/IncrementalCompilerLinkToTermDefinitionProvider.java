@@ -34,10 +34,10 @@ import de.knowwe.core.kdom.parsing.Section;
 public class IncrementalCompilerLinkToTermDefinitionProvider implements de.knowwe.core.utils.LinkToTermDefinitionProvider {
 
 	@Override
-	public String getLinkToTermDefinition(String name, String masterArticle) {
+	public String getLinkToTermDefinition(Identifier name, String masterArticle) {
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				new Identifier(name));
-		String targetArticle = name;
+				name);
+		String targetArticle = name.toExternalForm();
 		if (termDefinitions.size() > 0) {
 			targetArticle = termDefinitions.iterator().next().getTitle();
 		}
