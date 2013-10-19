@@ -98,7 +98,6 @@ body,table,div {
 .tooltip-trigger {
 	width: 1em;
 	height: 1em;
-	cursor: help;
 	background-image: url(img/hint.png);
 	background-repeat: no-repeat;
 }

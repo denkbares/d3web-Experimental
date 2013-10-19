@@ -905,7 +905,7 @@ function tooltip_out(object) {
             target = $("#"+idDetail);
         } 
         
-        if(object.attr("id").indexOf("Button")!=-1){
+        else if(object.attr("id").indexOf("Button")!=-1){
             if(object.attr("class").indexOf("endstudy-tt-trigger")!=-1){
                 target = $("#tt-endstudy");
             } else if (object.attr("class").indexOf("feedback-tt-trigger")){
@@ -913,20 +913,26 @@ function tooltip_out(object) {
             }
         }
     
-        if(object.attr("id").indexOf("typeimg")!=-1){
+        else if(object.attr("id").indexOf("typeimg")!=-1){
             id = object.attr("id").replace("-typeimg", "");
             target = $("#tt-"+id);
         }
+	
+	else if(object.attr("class").indexOf("-tt-trigger tooltip-trigger")!=-1){
+	    id = object.attr("class").replace("-tt-trigger tooltip-trigger","");
+	    target = $("#tt-" +  id);
+	}
       
     } else if (object.attr("id").indexOf("detail"!=-1)){
         target = $("#tt-" + object.attr("id"));
        
-    } else {      
-        target = $("#tt-" + object);
+    } else {    
+	
+	target = $("#tt-" + object);
     }
 
     if(target != null){
-        target.hide(500);
+	target.hide(500);
         tooltipShown = undefined;
     }
     
@@ -940,8 +946,8 @@ function tooltip_out(object) {
  * Generate functionality for tooltip elements
  */
 function generate_tooltip_functions() {
-	
-    triggers = $("[class$='-tt-trigger']");
+
+    triggers = $("[class*='-tt-trigger']");
 	
     // if mouse is moved over an element define potential tooltips position
     $(document).mousemove(function(e) {
@@ -950,7 +956,6 @@ function generate_tooltip_functions() {
 	
     // go through all existing tooltip triggers
     triggers.each(function() {
-        	
                
         // complete class name
         var classComplete = $(this).attr("class");
@@ -976,6 +981,8 @@ function generate_tooltip_functions() {
         var ttstart, ttend;
         var now;
                 
+	
+	
         $(this).unbind('mouseover').mouseover(function() {
             //if logging is activated get the time tooltip is triggered
             if(logging){
@@ -995,6 +1002,8 @@ function generate_tooltip_functions() {
             }
           
             tooltip_out($(this));
+	    //
+            //tooltip_out(id);
             
         });
     });

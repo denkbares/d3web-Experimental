@@ -240,16 +240,16 @@ public class Renderer implements IRenderer {
         for (IDialogObject child : children) {
 
             // Setup for the hierarchical counter of questions
-            count++;
+            //count++;
 
             // skip the topmost question (=diagnosis) 
-            if (dialogObject instanceof Question
+            /*if (dialogObject instanceof Question
                     && dialogObject.getParent() instanceof Dialog) {
                 ((Question) child).setCounter(Integer.toString(count));
             } else // otherwise only count, if dialog Objects are questions
             if (!(dialogObject instanceof Dialog)) {
                 addCount(dialogObject, child, count);
-            }
+            }*/
 
 
             // get the matching renderer
