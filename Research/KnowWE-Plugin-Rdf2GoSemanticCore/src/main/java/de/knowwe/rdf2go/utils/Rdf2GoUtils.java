@@ -69,6 +69,10 @@ public class Rdf2GoUtils {
 			string = string.replaceAll(Pattern.quote(cur.getValue()),
 					toNamespacePrefix(cur.getKey()));
 		}
+		// also checking local namespace
+		if (string.startsWith(core.getLocalNamespace())) {
+			string = string.replace(core.getLocalNamespace(), Rdf2GoCore.LNS_ABBREVIATION + ":");
+		}
 		return string;
 	}
 

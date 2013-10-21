@@ -84,7 +84,7 @@ public class DotRendererTest {
 
 		parameterMap.put(RenderingCore.EXCLUDED_RELATIONS, "label");
 
-		parameterMap.put(RenderingCore.EXCLUDED_NODES, "Resource,WissassConcept");
+		parameterMap.put(RenderingCore.EXCLUDED_NODES, "rdfs:Resource,WissassConcept");
 
 		parameterMap.put(RenderingCore.GRAPH_SIZE, "690");
 
@@ -144,9 +144,9 @@ public class DotRendererTest {
 
 		parameterMap.put(RenderingCore.CONCEPT, "Phakoemulsifikation");
 
-		parameterMap.put(RenderingCore.EXCLUDED_RELATIONS, "subClassOf");
+		parameterMap.put(RenderingCore.EXCLUDED_RELATIONS, "rdfs:subClassOf");
 
-		parameterMap.put(RenderingCore.EXCLUDED_NODES, "Resource,WissassConcept,Class");
+		parameterMap.put(RenderingCore.EXCLUDED_NODES, "rdfs:Resource,WissassConcept,Class");
 
 		parameterMap.put(RenderingCore.REQUESTED_DEPTH, "2");
 		parameterMap.put(RenderingCore.REQUESTED_HEIGHT, "2");
