@@ -154,7 +154,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 			Node fromURI = row.getValue(variables.get(0));
 
 			Node relationURI = row.getValue(variables.get(1));
-			String relation = RenderingCore.getConceptName(relationURI);
+			String relation = RenderingCore.getConceptName(relationURI, rdfRepository);
 
 			Node toURI = row.getValue(variables.get(2));
 
@@ -219,7 +219,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 	 * @return
 	 */
 	private ConceptNode createNode(Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, SubGraphData data, Node toURI) {
-		String to = RenderingCore.getConceptName(toURI);
+		String to = RenderingCore.getConceptName(toURI, rdfRepository);
 		// is the node a literal ?
 		Literal toLiteral = null;
 		try {

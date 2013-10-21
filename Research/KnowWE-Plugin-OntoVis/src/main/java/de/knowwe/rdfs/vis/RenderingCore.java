@@ -41,6 +41,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.vis.d3.D3VisualizationRenderer;
 import de.knowwe.rdfs.vis.dot.DOTVisualizationRenderer;
 import de.knowwe.rdfs.vis.markup.OntoVisType;
@@ -229,14 +230,22 @@ public class RenderingCore {
 
 		String concept = parameters.get(CONCEPT);
 		String conceptNameEncoded = null;
-		try {
-			conceptNameEncoded = URLEncoder.encode(concept, "UTF-8");
+
+		String url = null;
+		if (concept.contains(":")) {
+			url = Rdf2GoUtils.expandNamespace(rdfRepository, concept);
 		}
-		catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		else {
+			try {
+				conceptNameEncoded = URLEncoder.encode(concept, "UTF-8");
+			}
+			catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			url = rdfRepository.getLocalNamespace() + conceptNameEncoded;
 		}
-		URI conceptURI = new URIImpl(rdfRepository.getLocalNamespace() + conceptNameEncoded);
+		URI conceptURI = new URIImpl(url);
 
 		// if requested, the predecessor are added to the source
 		if (requestedHeight > 0) {
@@ -579,15 +588,28 @@ public class RenderingCore {
 		}
 	}
 
-	public static String getConceptName(Node uri) {
+	public static String getConceptName(Node uri, Rdf2GoCore repo) {
 		try {
-			uri.asURI();
-			return urlDecode(clean(uri.asURI().toString().substring(uri.toString().indexOf("#") + 1)));
+			String reducedNamespace = Rdf2GoUtils.reduceNamespace(repo,
+					uri.asURI().toString());
+			String[] splitURI = reducedNamespace.split(":");
+			String namespace = splitURI[0];
+			String name = splitURI[1];
+			if (namespace.equals("lns")) {
+				return urlDecode(name);
+			}
+			else {
+				return namespace + ":" + urlDecode(name);
+			}
 
 		}
 		catch (ClassCastException e) {
 			return null;
 		}
+	}
+
+	public String getConceptName(Node uri) {
+		return getConceptName(uri, this.rdfRepository);
 	}
 
 	/**
@@ -872,19 +894,6 @@ public class RenderingCore {
 		catch (Exception e) {
 			return false;
 		}
-	}
-
-	/**
-	 * If line is an URL it is cut and only the String behind "page=" is
-	 * returned.
-	 * 
-	 * @created 31.07.2012
-	 */
-	private static String clean(String line) {
-		if (line.matches("http:.*/?page=.*")) {
-			line = line.substring(line.indexOf("page=") + 5);
-		}
-		return line;
 	}
 
 }
