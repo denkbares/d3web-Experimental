@@ -199,7 +199,6 @@
 		<module>KnowWE-Plugin-TestcaseTable-Extensions</module>
 		<module>KnowWE-Plugin-d3web-RuleDebugger</module>
 		<module>KnowWE-Plugin-DiaFlux-CoverageCity</module>
-		<module>KnowWE-Plugin-Wikicontent-Download</module>
 		<module>KnowWE-Plugin-WissKont</module>
 		<module>KnowWE-Plugin-d3web-Rdf2Go</module>
 		<module>KnowWE-Plugin-RDFS-WikiObjectModel</module>
