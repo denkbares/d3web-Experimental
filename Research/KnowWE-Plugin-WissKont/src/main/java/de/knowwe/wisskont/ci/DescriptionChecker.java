@@ -43,6 +43,7 @@ public class DescriptionChecker extends AbstractTest<Article> {
 	/**
 	 * 
 	 */
+	
 	public DescriptionChecker() {
 		this.addParameter(
 				"Minimale Anzahl notwendiger Zeichen für Beschreibung",

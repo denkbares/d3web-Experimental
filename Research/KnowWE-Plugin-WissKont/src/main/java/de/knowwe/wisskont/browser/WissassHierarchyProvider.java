@@ -18,6 +18,7 @@
  */
 package de.knowwe.wisskont.browser;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -44,6 +45,8 @@ import de.knowwe.wisskont.util.MarkupUtils;
  * @created 03.06.2013
  */
 public class WissassHierarchyProvider implements HierarchyProvider {
+	
+	public static final String MAIN_CONCEPT = "Wissass-Begriff";
 
 	@Override
 	public List<Identifier> getChildren(Identifier term) {
@@ -98,5 +101,12 @@ public class WissassHierarchyProvider implements HierarchyProvider {
 			result.add(def.get().getTermIdentifier(def));
 		}
 		return result;
+	}
+
+	@Override
+	public Collection<Identifier> getStartupTerms() {
+		List<Identifier> startTerms = new ArrayList<Identifier>();
+		startTerms.add(new Identifier(MAIN_CONCEPT));
+		return startTerms;
 	}
 }

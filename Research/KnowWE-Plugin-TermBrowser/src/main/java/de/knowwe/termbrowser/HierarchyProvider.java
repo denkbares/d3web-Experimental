@@ -43,4 +43,7 @@ public interface HierarchyProvider {
 	boolean isSubNodeOf(Identifier term1, Identifier term2);
 
 	Collection<Identifier> getAllTerms();
+	
+	Collection<Identifier> getStartupTerms();
+	
 }

@@ -164,4 +164,10 @@ public class OntologyHierarchyProvider implements HierarchyProvider {
 		return terminologyManager.getAllDefinedTerms();
 	}
 
+	@Override
+	public Collection<Identifier> getStartupTerms() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -125,7 +125,15 @@ public class TermRecommender implements EventListener {
 		if (!data.containsKey(username)) {
 			String masta = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
 			List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
-			return new Tree<RatedTerm>(RatedTerm.ROOT, new TermBrowserHierarchy(masta, relations));
+			TermBrowserHierarchy hierarchy = new TermBrowserHierarchy(masta, relations);
+			Tree<RatedTerm> tree = new Tree<RatedTerm>(RatedTerm.ROOT, hierarchy);
+			Collection<Identifier> startupTerms = hierarchy.getStartupTerms();
+			if(startupTerms != null) {
+				for (Identifier identifier : startupTerms) {
+					tree.insertNode(new RatedTerm(identifier));
+				}
+			}
+			return tree;
 		}
 		else {
 			RecommendationSet recommendationSet = data.get(username);
@@ -300,6 +308,8 @@ public class TermRecommender implements EventListener {
 		for (Identifier child : children) {
 			recommendationSet.addValue(child, WEIGHT_EXPAND);
 		}
+		// also add some score to the expanded concept itself
+		recommendationSet.addValue(term, WEIGHT_EXPAND);
 
 	}
 

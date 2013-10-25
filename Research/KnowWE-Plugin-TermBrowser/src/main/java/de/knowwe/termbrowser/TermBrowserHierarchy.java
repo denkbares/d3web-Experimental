@@ -112,4 +112,9 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 		return result;
 	}
 
+	@Override
+	public Collection<Identifier> getStartupTerms() {
+		return hierarchyProvider.getStartupTerms();
+	}
+
 }

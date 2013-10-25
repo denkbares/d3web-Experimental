@@ -223,4 +223,10 @@ public class D3webHierarchyProvider implements HierarchyProvider {
 		return result;
 	}
 
+	@Override
+	public Collection<Identifier> getStartupTerms() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

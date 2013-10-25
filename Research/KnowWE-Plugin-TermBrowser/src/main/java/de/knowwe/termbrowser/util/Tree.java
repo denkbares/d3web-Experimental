@@ -19,12 +19,14 @@
 package de.knowwe.termbrowser.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import de.d3web.strings.Identifier;
 import de.knowwe.termbrowser.HierarchyProvider;
 
 /**
