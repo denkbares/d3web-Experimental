@@ -27,13 +27,6 @@ package de.d3web.proket.data;
  */
 public enum DialogType {
     
-    /*
-     * Pub consultation dialog or medical diagnosis clarification
-     */
-    CLARIFICATION ("Clarfication"),
-    /*
-     * e.g. in JuriSearch, Clarification modules
-     */
     FREECHOICE ("Freechoice"),
     SINGLEFORM ("SingleForm"),
     /*
@@ -42,7 +35,7 @@ public enum DialogType {
     ITREE ("ITree"),
      /*
      * The Standard form based dialog, only for documentatn, i.e. without
-     * solution panel
+     * solution panel, e.g. EuraHS
      */
     STANDARD ("Standard"),
     /*
@@ -50,7 +43,12 @@ public enum DialogType {
      * panel
      */
     QUESTIONARYCONS ("QuestionaryCons"),
-    EURAHS("EuraHS");
+    
+    EURAHS("EuraHS"),
+    
+    OQD ("OQD"), 
+    
+    DAILY ("Daily");
     
     
     private String stringrep;

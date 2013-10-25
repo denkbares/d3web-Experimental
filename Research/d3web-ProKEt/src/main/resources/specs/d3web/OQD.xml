@@ -4,14 +4,13 @@
 	language = "" debug = "false"
 	>  
 	<globalUIOpts 
-	dialogtype="singleform" 
+	dialogtype="OQD" 
 	shownonindicated="HIDE"
 	dialogstrategy="nextquestion"
 	css="diagnosisVisu, hallo" 
 	dialogcolumns="1"
 	questionnairecolumns="1"
 	questioncolumns="1"
-	uiprefix = "OQDCons"
 	solutionDynamics = "STATIC"
         solutionExplanation = "TEXTUAL" 
         solutionDepth = "ALL"

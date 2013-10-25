@@ -717,7 +717,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	    if (no != null && no.getName() != null) {
 		if(!prefix.equals("")){
 		    id = prefix + "_" + no.getName().replaceAll("\\W", "_");
-		    System.out.println(id);
+		    //System.out.println(id);
 		    nameToIdMap.put(no.getName(), id);
 		    idToNameMap.put(id, no.getName());
 		} else {
@@ -963,5 +963,72 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	    thres = Integer.parseInt(defSplit[0].replace("T", ""));
 	}
 	return thres;
+    }
+    
+    //
+    // for One Question Dialogs
+     protected void renderChildrenOQD(StringTemplate st, Session d3webSession, ContainerCollection cc,
+	    TerminologyObject to, int loc, HttpSession httpSession, HttpServletRequest request) {
+
+	StringBuilder childrenHTML = new StringBuilder();
+	
+	
+	/*
+	 * get the nr of columns setting for dialog, questionnaires and the
+	 * questions.
+	 */
+	if (to instanceof Question) {
+	    columnsGlobal = uiset.getQuestionColumns();
+	}
+
+	// final columns store
+	int columns = columnsGlobal;
+	if (columnsLocal != -1) {
+	    columns = columnsLocal; //local settings overwrite global settings!
+	}
+
+	// if more than one column is required, get open-table tag from
+	// TableContainer and append it to the HTML
+	if (columns > 1) {
+	    if (columns == 3
+		    && to instanceof QContainer
+		    && to.getChildren().length == 4) {
+		// minor tweak to fix ugly display with 4 questions in one
+		// questionnaire
+		columns = 2;
+	    }
+	    String tableOpening =
+		    cc.tc.openTable(to.getName().replace(" ", "_"), columns);
+	    childrenHTML.append(tableOpening);
+	}
+
+	// for each of the child elements
+	TerminologyObject[] children = to.getChildren();
+	
+	for (TerminologyObject child : children) {
+
+
+	    // get the matching renderer
+	    IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);
+
+	    // receive the rendering code from the Renderer and append
+	    String childHTML =
+		    childRenderer.renderTerminologyObject(d3webSession, cc, child, to, loc, httpSession, request);
+	    if (childHTML != null) {
+		childrenHTML.append(childHTML);
+	    }
+
+	}
+	// close the table that had been opened for multicolumn cases
+	if (columns
+		> 1) {
+	    String tableClosing = cc.tc.closeTable(to.getName().replace(" ", "_"));
+	    childrenHTML.append(tableClosing);
+	}
+	// if children, fill the template attribute children with children-HTML
+	if (children.length
+		> 0) {
+	    st.setAttribute("children", childrenHTML.toString());
+	}
     }
 }

@@ -54,111 +54,155 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
      * Specifically adapted for OCAnswer rendering
      */
     public String renderTerminologyObject(ContainerCollection cc, Session d3webSession,
-            Choice c, TerminologyObject to, TerminologyObject parent, int loc,
-            HttpSession httpSession) {
+	    Choice c, TerminologyObject to, TerminologyObject parent, int loc,
+	    HttpSession httpSession) {
 
-        StringBuilder sb = new StringBuilder();
-
-        // return if the InterviewObject is null
-        if (to == null) {
-            return "";
-        }
-
-        StringTemplate st = null;
-
-        // get the template. In case user prefix was specified, the specific
-        // TemplateName is returned, otherwise the base object name.
-        if (uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
-            st = StringTemplateUtils.getTemplate("singleForm/OCAnswerFlat");
-        } else {
-            st = StringTemplateUtils.getTemplate("OcAnswerTabular");
-            //st = TemplateUtils.getStringTemplate(
-            //        super.getTemplateName("OcAnswerTabular"), "html");
-        }
-        st.setAttribute("fullId", getID(c));// .getName().replace(" ", "_"));
-        st.setAttribute("realAnswerType", "oc");
-        st.setAttribute("parentFullId", getID(to));// getName().replace(" ",
-        // "_"));
-
-
-        String resString = D3webUtils.getPopupPromptChoices(c, loc);
-        if (resString != null) {
-            st.setAttribute("tooltip", resString);
-        }
-
-        Blackboard bb = d3webSession.getBlackboard();
-        Value value = bb.getValue((ValueObject) to);
-
-
-        // TODO: question count as property!
-        //st.setAttribute("text", c.getName());
-        st.setAttribute("text", D3webUtils.getAnswerPrompt(to, c, loc));
-        st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
-        if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
-            st.setAttribute("imageAnswer", "true");
-        }
+	// some basic initialisation stuff
+	StringBuilder sb = new StringBuilder();
+	StringTemplate st = null;
+	// return if the InterviewObject is null
+	if (to == null) {
+	    return "";
+	}
 
 
 
-        // if question is an abstraction question --> readonly
-        if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
-            st.setAttribute("readonly", "true");
-            st.setAttribute("inactive", "true");
-        }
+	// get the template. In case user prefix was specified, the specific
+	// TemplateName is returned, otherwise the base object name.
+	if (uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
+	    st = StringTemplateUtils.getTemplate("singleForm/OCAnswerFlat");
+	} else {
+	    st = StringTemplateUtils.getTemplate("OcAnswerTabular");
+	}
 
-        //System.out.println(to.getName());
-        //System.out.println(parent.getName() + isIndicated(parent, bb));
-        //System.out.println();
-        // QContainer indicated
+	st.setAttribute("fullId", getID(c));// .getName().replace(" ", "_"));
+	st.setAttribute("realAnswerType", "oc");
+	st.setAttribute("parentFullId", getID(to));// getName().replace(" ",
+	// "_"));
+
+
+	String resString = D3webUtils.getPopupPromptChoices(c, loc);
+	if (resString != null) {
+	    st.setAttribute("tooltip", resString);
+	}
+
+	Blackboard bb = d3webSession.getBlackboard();
+	Value value = bb.getValue((ValueObject) to);
+
+	st.setAttribute("text", D3webUtils.getAnswerPrompt(to, c, loc));
+	st.setAttribute("count", D3webConnector.getInstance().getTOCount(to));
+	if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
+	    st.setAttribute("imageAnswer", "true");
+	}
+
+
+
+
+
+	//System.out.println(to.getName());
+	//System.out.println(parent.getName() + isIndicated(parent, bb));
+	//System.out.println();
+	// QContainer indicated
         /*
-         * if
-         * (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
-         * || D3webUtils.isIndicatedPlain(parent, bb) ||
-         * D3webUtils.isIndicatedByChild(parent, bb)) {
-         *
-         * if (D3webUtils.isIndicatedPlain(parent, bb) ||
-         * D3webUtils.isIndicatedPlain(to, bb)) {
-         *
-         *
-         * // show, if indicated follow up if ((D3webUtils.isFollowUpToQCon(to,
-         * parent) && D3webUtils.isIndicatedPlain(to, bb)) ||
-         * (!D3webUtils.isFollowUpToQCon(to, parent))) {
-         * st.removeAttribute("readonly"); st.removeAttribute("inactive");
-         * st.removeAttribute("qstate"); st.setAttribute("qstate", ""); } else {
-         * st.setAttribute("inactive", "true"); st.setAttribute("readonly",
-         * "true"); }
-         *
-         * } else { st.setAttribute("inactive", "true");
-         * st.setAttribute("readonly", "true"); } } else {
-         * st.setAttribute("inactive", "true"); st.setAttribute("readonly",
-         * "true"); }
-         */
+	 * if
+	 * (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
+	 * || D3webUtils.isIndicatedPlain(parent, bb) ||
+	 * D3webUtils.isIndicatedByChild(parent, bb)) {
+	 *
+	 * if (D3webUtils.isIndicatedPlain(parent, bb) ||
+	 * D3webUtils.isIndicatedPlain(to, bb)) {
+	 *
+	 *
+	 * // show, if indicated follow up if ((D3webUtils.isFollowUpToQCon(to,
+	 * parent) && D3webUtils.isIndicatedPlain(to, bb)) ||
+	 * (!D3webUtils.isFollowUpToQCon(to, parent))) {
+	 * st.removeAttribute("readonly"); st.removeAttribute("inactive");
+	 * st.removeAttribute("qstate"); st.setAttribute("qstate", ""); } else {
+	 * st.setAttribute("inactive", "true"); st.setAttribute("readonly",
+	 * "true"); }
+	 *
+	 * } else { st.setAttribute("inactive", "true");
+	 * st.setAttribute("readonly", "true"); } } else {
+	 * st.setAttribute("inactive", "true"); st.setAttribute("readonly",
+	 * "true"); }
+	 */
 
 
 
-        if (D3webUtils.isIndicatedByInitQuestionnaire(to, parent, bb)
-                || D3webUtils.isIndicatedPlain(to, bb)
-                || (D3webUtils.isIndicatedByChild(parent, bb) && D3webUtils.isDirectQContainerChild(to))
-                || (D3webUtils.isIndicatedPlain(parent, bb) && D3webUtils.isDirectQContainerChild(to))
-                || ((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb)) || !D3webUtils.isFollowUpToQCon(to, parent))) {
+	renderVisibility(to, parent, bb, st);
 
-            st.removeAttribute("inactive");
-            st.removeAttribute("readonly");
-            st.removeAttribute("qstate");
-            st.setAttribute("qstate", "");
+	renderSelection(to, parent, bb, st, c);
 
-        } else {
-            if (!uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
+	sb.append(st.toString());
 
-                st.setAttribute("readonly", "true");
-                st.setAttribute("inactive", "true");
-            }
-        }
+	super.makeTables(c, to, cc, sb);
 
+	return sb.toString();
+    }
 
+    /**
+     * Handles all stuff related to visibility; e.g. showing or hiding non
+     * indicated objects, displaying abstraction questions per default in grey
+     * mode etc.
+     *
+     * @param to
+     * @param parent
+     * @param bb
+     * @param st
+     */
+    private void renderVisibility(TerminologyObject to, TerminologyObject parent,
+	    Blackboard bb, StringTemplate st) {
 
+	// if question is an abstraction question --> readonly
+	if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
+	    st.setAttribute("readonly", "true");
+	    st.setAttribute("inactive", "true");
+	}
 
-        // if value of the to=question equals this choice
+	if (uiset.getDialogType().equals(DialogType.QUESTIONARYCONS)
+		|| uiset.getDialogType().equals(DialogType.EURAHS)) {
+	    if (D3webUtils.isIndicatedByInitQuestionnaire(to, parent, bb)
+		    || D3webUtils.isIndicatedPlain(to, bb)
+		    || (D3webUtils.isIndicatedByChild(parent, bb) && D3webUtils.isDirectQContainerChild(to))
+		    || (D3webUtils.isIndicatedPlain(parent, bb) && D3webUtils.isDirectQContainerChild(to))
+		    || ((D3webUtils.isFollowUpToQCon(to, parent) && D3webUtils.isIndicatedPlain(to, bb)) || !D3webUtils.isFollowUpToQCon(to, parent))) {
+
+		st.removeAttribute("inactive");
+		st.removeAttribute("readonly");
+		st.removeAttribute("qstate");
+		st.setAttribute("qstate", "");
+
+	    } else {
+		if (!uiset.getDialogType().equals(DialogType.SINGLEFORM)) {
+
+		    st.setAttribute("readonly", "true");
+		    st.setAttribute("inactive", "true");
+		}
+	    }
+	} else if (uiset.getDialogType().equals(DialogType.OQD)) {
+	    st.removeAttribute("inactive");
+	    st.removeAttribute("readonly");
+	    st.removeAttribute("qstate");
+	    st.setAttribute("qstate", "");
+	}
+    }
+
+    /**
+     * Render the selection of the answer, i.e., which checkbox of the
+     * parent question is highlighted,
+     * is the color styling of the answer alternative active, etc.
+     * @param to
+     * @param parent
+     * @param bb
+     * @param st
+     * @param c 
+     */
+    private void renderSelection(TerminologyObject to, TerminologyObject parent,
+	    Blackboard bb, StringTemplate st, Choice c) {
+
+        Value value = bb.getValue((ValueObject) to);
+	
+	 // if value of the to=question equals this choice
         if (value.toString().equals(c.toString())) {
 
             // if to=question is abstraction question, was readonly before, but
@@ -178,11 +222,5 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
             st.removeAttribute("selection");
             st.setAttribute("selection", "");
         }
-
-        sb.append(st.toString());
-
-        super.makeTables(c, to, cc, sb);
-
-        return sb.toString();
     }
 }

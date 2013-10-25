@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><repository>
+<session changed="2013-10-25 22:20:12.903" created="2013-10-25 22:20:05.241" id="1017bca0-c44e-4a59-a77e-9cdfd18cd8c2">
+<name/>
+<facts>
+<valueFacts>
+<fact objectName="now" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2013-10-25 22:20:12.902</dateValue>
+</fact>
+<fact objectName="start" psm="cc.d3web.history.ps.PSMethodTimeDB">
+<dateValue>2013-10-25 22:20:05.241</dateValue>
+</fact>
+<fact objectName="Welche Kategorie von Werkzeugen wird zur Erkundung von Tagebaulagerstätten verwendet ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>manuelle Werkzeuge</choiceValue>
+</fact>
+<fact objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Afrika</choiceValue>
+</fact>
+<fact objectName="Tagebau - Welche Rohstoffart wird abgebaut ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>metallische Rohstoffe</choiceValue>
+</fact>
+<fact objectName="Afrika, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Algerien</choiceValue>
+</fact>
+<fact objectName="Welcher Lagerstättentyp liegt vor ?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Tagebau (Übertage)</choiceValue>
+</fact>
+<fact objectName="Algerien" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="999.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+<fact objectName="Tagebau Erkundung teilmechanisch" psm="de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="999.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+</valueFacts>
+<interviewFacts>
+<fact objectName="Technik - Tagebau" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Lagerstätte" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Tagebau - Welche Rohstoffart wird abgebaut ?" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Afrika, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Wo befindet sich die Lägerstätte ?" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+</interviewFacts>
+</facts>
+<protocol>
+<entry date="2013-10-25 22:20:07.717" objectName="Auf welchem Kontinent befindet sich die Lagerstätte ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Afrika</choiceValue>
+</entry>
+<entry date="2013-10-25 22:20:09.19" objectName="Afrika, und in welchem Land ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Algerien</choiceValue>
+</entry>
+<entry date="2013-10-25 22:20:10.39" objectName="Welcher Lagerstättentyp liegt vor ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Tagebau (Übertage)</choiceValue>
+</entry>
+<entry date="2013-10-25 22:20:11.256" objectName="Tagebau - Welche Rohstoffart wird abgebaut ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>metallische Rohstoffe</choiceValue>
+</entry>
+<entry date="2013-10-25 22:20:12.902" objectName="Welche Kategorie von Werkzeugen wird zur Erkundung von Tagebaulagerstätten verwendet ?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>manuelle Werkzeuge</choiceValue>
+</entry>
+</protocol>
+</session>
+</repository>

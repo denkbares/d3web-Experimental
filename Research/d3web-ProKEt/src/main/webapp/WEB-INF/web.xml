@@ -69,6 +69,10 @@
         <servlet-name>FileUploadServlet</servlet-name>
         <servlet-class>de.d3web.proket.d3web.run.FileUploadServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>OQD</servlet-name>
+        <servlet-class>de.d3web.proket.d3web.run.OQD</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HelloServlet</servlet-name>
         <url-pattern>/HelloServlet</url-pattern>
@@ -128,5 +132,9 @@
     <servlet-mapping>
         <servlet-name>StandardDialog</servlet-name>
         <url-pattern>/StandardDialog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OQD</servlet-name>
+        <url-pattern>/OQD</url-pattern>
     </servlet-mapping>
 </web-app>

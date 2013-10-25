@@ -64,6 +64,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
     private static final String QUESTION = "Question";
     private static final String DEFAULT = "Default";
     private static final String OC_DROP_ANSWERS = "OCDrop";
+    private static final String OQD = "OQD";
     //private static final String QUESTIONARYCONS = "QUESTIONARYCONS";
     //private static final String ITREE = "ITREE";
     //private static final String STANDARD = "STANDARD";
@@ -107,7 +108,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
         this.put(ITREENUM_NUM, ITreeNumQuestionD3webRenderer.class.getSimpleName());
         this.put(ITREENUM_DATE, ITreeDateQuestionD3webRenderer.class.getSimpleName());
 
-        //this.put(QUESTIONARYCONS, "QuestionaryCons");
+        this.put(OQD, OQDDefaultRootD3webRenderer.class.getSimpleName());
     }
 
     /**
@@ -121,7 +122,8 @@ public class D3webRendererMapping extends HashMap<String, String> {
      */
     public AbstractD3webRenderer getRenderer(TerminologyObject to) {
         String userPref = UISettings.getInstance().getDialogType().toString();
-
+	
+	
         String name = DEFAULT;
         if (to == null) {
             return (AbstractD3webRenderer) getRenderer(userPref, name);
@@ -153,7 +155,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
             name = Q_CONT;
         }
 
-        return (AbstractD3webRenderer) getRenderer(name);
+        return (AbstractD3webRenderer) getRenderer(userPref, name);
     }
 
     /**
@@ -227,12 +229,11 @@ public class D3webRendererMapping extends HashMap<String, String> {
 
     private Object getRenderer(String userPrefix, String name) {
 
-        String prefix = GlobalSettings.getInstance().getD3webRendererPath();
+	String prefix = GlobalSettings.getInstance().getD3webRendererPath();
         Class<?> result = null;
 
         try {
             String completeToGet = (prefix + userPrefix + this.get(name));
-            //System.out.println("RENDERERMAPPING: " + completeToGet);
             result = Class.forName(completeToGet);
         } catch (ClassNotFoundException cne) {
             return null;

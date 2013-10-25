@@ -61,9 +61,9 @@ import de.d3web.core.session.values.*;
 import de.d3web.indication.ActionIndication;
 import de.d3web.indication.ActionInstantIndication;
 import de.d3web.indication.inference.PSMethodUserSelected;
+import de.d3web.interview.Form;
 
 import de.d3web.interview.Interview;
-import de.d3web.interview.inference.PSMethodInterview;
 
 import de.d3web.plugin.JPFPluginManager;
 import de.d3web.proket.d3web.input.D3webConnector;
@@ -126,6 +126,7 @@ public class D3webUtils {
 	// if DialogType given
 	if (ds != null) {
 	    if (ds == DialogStrategy.NEXTQUESTION) { // one question dialog
+
 		interview.setFormStrategy(new de.d3web.interview.NextUnansweredQuestionFormStrategy());
 	    } else if (ds == DialogStrategy.NEXTFORM) { // questionnaire based
 		interview.setFormStrategy(new de.d3web.interview.CurrentQContainerFormStrategy());
@@ -1278,8 +1279,6 @@ public class D3webUtils {
 	    return getAnswerYNPrompt(c, locIdent);
 	}
 
-	System.out.println("Locale Identifier:" + locIdent);
-
 	//int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
 	//int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
 	String prompt = null;
@@ -1327,18 +1326,15 @@ public class D3webUtils {
 		break;
 	}
 
-	System.out.println("Prompt1: " + prompt);
-	
+
 	// default fallback solution: popupPrompt in english
 	if (prompt == null) {
 	    prompt = c.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
 	}
 
-	System.out.println("Prompt2: " + c.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH));
 	prompt = prompt == null ? c.getName() : prompt;
-	System.out.println("Prompt3: " + prompt);
-	
-	
+
+
 	// default popupPrompt = getName() if no locale specific was given
 	return prompt == null ? c.getName() : prompt;
     }
@@ -1389,7 +1385,7 @@ public class D3webUtils {
 		    break;
 		case 9: // portuguese
 		    prompt = "Sim";
-		    
+
 		    break;
 		case 10: // brazilian
 		    prompt = "";
@@ -1433,13 +1429,13 @@ public class D3webUtils {
 		    //System.out.println(c);
 		    //System.out.println(c.getInfoStore().getValue(MMInfo.PROMPT));
 		    //System.out.println(
-			//    c.getInfoStore().getValue(MMInfo.PROMPT, POLISH));
+		    //    c.getInfoStore().getValue(MMInfo.PROMPT, POLISH));
 		    //System.out.println(
-			//    c.getInfoStore().getValue(MMInfo.PROMPT));
-		    
-		   //System.out.println(
-			//    c.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN));
-		    
+		    //    c.getInfoStore().getValue(MMInfo.PROMPT));
+
+		    //System.out.println(
+		    //    c.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN));
+
 		    break;
 		case 10: // brazilian
 		    prompt = "";
@@ -1705,7 +1701,7 @@ public class D3webUtils {
 	 *
 	 * System.out.println(q.getName() + " -> " + blackboard.getValue(q)); }
 	 * System.out.println("BLACKBOARD ENDE");
-	System.out.println(blackboard.getValuedSolutions());
+	 * System.out.println(blackboard.getValuedSolutions());
 	 */
     }
 
@@ -2034,15 +2030,15 @@ public class D3webUtils {
 		break;
 	    }
 	}
-	
-	boolean state = indicatedParent || isIndicated(qaset, bb, initQuestions); 
+
+	boolean state = indicatedParent || isIndicated(qaset, bb, initQuestions);
 	return state;
     }
 
     private static boolean isIndicated(QASet qaset, Blackboard bb, Set<QASet> initQuestions) {
 	boolean state = initQuestions.contains(qaset)
 		|| bb.getIndication(qaset).getState() == de.d3web.core.knowledge.Indication.State.INDICATED
-		|| bb.getIndication(qaset).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED; 
+		|| bb.getIndication(qaset).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED;
 	return state;
     }
 
@@ -2467,5 +2463,22 @@ public class D3webUtils {
 	}
 
 	return deriObjects;
+    }
+
+    /**
+     * Returns the next question of the interview in the current session, if 
+     * none available, returns null
+     */
+    public static TerminologyObject getNextQuestion(Session d3webSession) {
+
+	Interview interview = d3webSession.getSessionObject(d3webSession.getPSMethodInstance(
+		de.d3web.interview.inference.PSMethodInterview.class));
+
+	Form activeForm = interview.nextForm();
+
+	if (activeForm.getInterviewObject() instanceof Question) {
+	    return (Question) activeForm.getInterviewObject();
+	}
+	return null;
     }
 }

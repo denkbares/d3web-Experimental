@@ -80,6 +80,10 @@ public class JSCodeContainer implements ICodeContainer {
         itree = true;
     }
 
+    public void setOQD(){
+	oqd = true;
+    }
+    
     public void enableQuestionnaireSideNavi() {
         qsSideNavi = true;
     }
@@ -250,6 +254,8 @@ public class JSCodeContainer implements ICodeContainer {
 
         if (oqd) {
             add("var oqd = true;", 0);
+	    ownBibs.add("oqd.js");
+            
         } else {
             add("var oqd = false;", 0);
         }

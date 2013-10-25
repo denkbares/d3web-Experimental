@@ -62,12 +62,9 @@ import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.*;
+import de.d3web.proket.d3web.output.render.*;
 
 import de.d3web.proket.d3web.settings.GeneralDialogSettings;
-import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
-import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
-import de.d3web.proket.d3web.output.render.IQuestionD3webRenderer;
-import de.d3web.proket.d3web.output.render.SummaryD3webRenderer;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.settings.GeneralDialogSettings.CaseSaveMode;
 import de.d3web.proket.d3web.settings.GeneralDialogSettings.LoginMode;
@@ -599,53 +596,54 @@ public class D3webDialog extends HttpServlet {
 	    HttpServletResponse response, HttpSession httpSession)
 	    throws IOException {
 
-	PrintWriter writer = response.getWriter();
-	Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
-	List<String> questions = new ArrayList<String>();
-	List<String> values = new ArrayList<String>();
-
-	// get all questions and answers lately answered as lists
-	getParameterPairs(request, "question", "value", questions, values);
-
-	System.out.println("D3webDialog: " + questions.toString());
-	System.out.println("D3webDualog: " + values.toString());
-
-	// check if all required values are set correctly, if not, do not go on!
-	if (!handleRequiredValueCheck(writer, d3webSession, questions, values)) {
-	    return;
-	}
-
-	// save beforeState
-	DialogState stateBefore = new DialogState(d3webSession);
-	//System.out.println("BEF: " + stateBefore.answeredQuestions); 
-
-	// set the values
-	setValues(d3webSession, questions, values, request, httpSession);
-
-	//System.out.println("HALLO: " + d3webSession.getBlackboard().getValuedSolutions());
-
-	// "clean up" blackboard
-	D3webUtils.resetAbandonedPaths(d3webSession, httpSession);
-
-	//System.out.println("HALLO2: " + d3webSession.getBlackboard().getValuedSolutions());
+	
 
 
-	// autosave the current state
-	PersistenceD3webUtils.saveCase(
-		(String) httpSession.getAttribute("user"),
-		"autosave",
-		d3webSession);
+	    PrintWriter writer = response.getWriter();
+	    Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
+	    List<String> questions = new ArrayList<String>();
+	    List<String> values = new ArrayList<String>();
 
-	// save afterState
-	DialogState stateAfter = new DialogState(d3webSession);
-	//System.out.println("AFT:" +stateAfter.answeredQuestions);
+	    // get all questions and answers lately answered as lists
+	    getParameterPairs(request, "question", "value", questions, values);
 
-	// calculate the difference set of before and after states of the dialog
-	Set<TerminologyObject> diff = calculateDiff(d3webSession, stateBefore, stateAfter);
+	    // check if all required values are set correctly, if not, do not go on!
+	    if (!handleRequiredValueCheck(writer, d3webSession, questions, values)) {
+		return;
+	    }
+
+	    // save beforeState
+	    DialogState stateBefore = new DialogState(d3webSession);
+	    //System.out.println("BEF: " + stateBefore.answeredQuestions); 
+
+	    // set the values
+	    setValues(d3webSession, questions, values, request, httpSession);
+
+	    //System.out.println("HALLO: " + d3webSession.getBlackboard().getValuedSolutions());
+
+	    // "clean up" blackboard
+	    D3webUtils.resetAbandonedPaths(d3webSession, httpSession);
+
+	    //System.out.println("HALLO2: " + d3webSession.getBlackboard().getValuedSolutions());
 
 
-	// update the dialog (partially, i.e. all changed questions)
-	renderAndUpdateDiff(writer, d3webSession, diff, httpSession, request);
+	    // autosave the current state
+	    PersistenceD3webUtils.saveCase(
+		    (String) httpSession.getAttribute("user"),
+		    "autosave",
+		    d3webSession);
+
+	    // save afterState
+	    DialogState stateAfter = new DialogState(d3webSession);
+	    //System.out.println("AFT:" +stateAfter.answeredQuestions);
+
+	    // calculate the difference set of before and after states of the dialog
+	    Set<TerminologyObject> diff = calculateDiff(d3webSession, stateBefore, stateAfter);
+
+
+	    // update the dialog (partially, i.e. all changed questions)
+	    renderAndUpdateDiff(writer, d3webSession, diff, httpSession, request);
+	
     }
 
     /**
@@ -662,7 +660,7 @@ public class D3webDialog extends HttpServlet {
 	all.addAll(questions);
 	all.addAll(values);
 	String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
-	if (!reqVal.equals("") && !checkReqVal(reqVal, d3webSession, all)) {
+	if (!(reqVal.equals("") || reqVal.equals("NONE")) && !checkReqVal(reqVal, d3webSession, all)) {
 	    writer.append("##missingfield##");
 	    writer.append(reqVal);
 	    return false;
@@ -1247,7 +1245,7 @@ public class D3webDialog extends HttpServlet {
 	}
 
 	Session d3webSession =
-		D3webUtils.createSession(kb, d3wcon.getDialogStrat());
+		D3webUtils.createSession(kb, uis.getDialogStrategy());
 
 	httpSession.setAttribute(D3WEB_SESSION, d3webSession);
 	httpSession.setAttribute("lastLoaded", "");
@@ -1299,7 +1297,17 @@ public class D3webDialog extends HttpServlet {
 	ContainerCollection cc = new ContainerCollection();
 	Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
-	cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
+	//System.out.println("RendererClass: " + d3webr.getClass());
+
+	// if one question dialog, call special render method for initial rendering
+	if (UISettings.getInstance().getDialogType().equals(DialogType.OQD)) {
+	    cc = renderOQD(d3webSess, d3webr, cc, request, httpSession);
+	   
+	} // otherwise render the root in default (recursive all initialising) manner
+	else {
+	    cc = d3webr.renderRoot(cc, d3webSess, httpSession, request);
+	}
+
 	writer.print(cc.html.toString()); // deliver the rendered output
 	writer.close(); // and close
     }
@@ -2174,4 +2182,32 @@ public class D3webDialog extends HttpServlet {
 	    HttpSession httpSession) throws IOException {
 	// TODO 
     }
+
+    //
+    // OQD STUFF
+    //
+    protected ContainerCollection renderOQD(Session d3webs,
+	    DefaultRootD3webRenderer d3webr,
+	    ContainerCollection cc,
+	    HttpServletRequest request,
+	    HttpSession http) {
+
+	TerminologyObject activeQuestion = D3webUtils.getNextQuestion(d3webs);
+	
+	// then, the interview is over -> show results
+	if (activeQuestion == null) {
+
+	    // render notification that no interview objects are available
+	    cc = ((OQDDefaultRootD3webRenderer) d3webr).renderNoObjectsNotification(cc, d3webs, http, request);
+
+	} else {
+
+	    // one question dialog initial rendering
+	    cc = d3webr.renderRoot(cc, d3webs, http, request);
+	}
+
+	return cc;
+    }
+
+   
 }

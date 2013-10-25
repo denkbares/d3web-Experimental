@@ -965,7 +965,8 @@ function d3web_addFacts() {
 		    $(errorPlaceholder).html("<font color=\"red\">" + warning + "</font>");
 		    alert("Please fill in the required, marked field(s) first!");
    
-		} else {
+		} 
+		else {
 		    updateDialog(html);
 		    //window.location.reload(true);
 		    //init_all();
