@@ -26,6 +26,7 @@ import java.util.Map;
 import org.apache.commons.lang.NotImplementedException;
 
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
 import de.knowwe.termbrowser.HierarchyProvider;
 
 /**
@@ -53,7 +54,7 @@ public class VisualizationHierarchyProvider implements HierarchyProvider {
 	@Override
 	public List<Identifier> getParents(Identifier term) {
 		List<Identifier> parent = new ArrayList<Identifier>();
-		String parentString = parentChildPairs.get(term.toExternalForm());
+		String parentString = parentChildPairs.get(Strings.unquote(term.toExternalForm()));
 		if (!(parentString == null || parentString.isEmpty())) {
 			parent.add(new Identifier(parentString));
 		}
@@ -62,11 +63,11 @@ public class VisualizationHierarchyProvider implements HierarchyProvider {
 
 	@Override
 	public boolean isSubNodeOf(Identifier subnode, Identifier term) {
-		String parentString = parentChildPairs.get(subnode);
+		String parentString = parentChildPairs.get(Strings.unquote(subnode.toExternalForm()));
 		if (parentString == null) {
 			return false;
 		}
-		if (term.equals(parentString)) {
+		if (Strings.unquote(term.toExternalForm()).equals(parentString)) {
 			return true;
 		}
 		else {
