@@ -41,7 +41,9 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 	 * 
 	 */
 	public TermBrowserHierarchy(String master, List<String> relations) {
-		hierarchyRelations.addAll(relations);
+		if(relations != null){
+			hierarchyRelations.addAll(relations);
+		}
 		this.master = master;
 		hierarchyProvider = TermBrowserHierarchy.getPluggedHierarchyProvider();
 	}

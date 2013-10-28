@@ -36,7 +36,9 @@ public class FileUtils {
 	public static final String TMP_FOLDER = "tmp";
 	public static final String KNOWWEEXTENSION_FOLDER = "KnowWEExtension";
 	public static final String FILE_SEPARATOR = System.getProperty("file.separator");
+	public static final String TOMCAT_PATH_SEPARATOR = "/";
 
+	
 	/**
 	 * 
 	 * @created 20.08.2012

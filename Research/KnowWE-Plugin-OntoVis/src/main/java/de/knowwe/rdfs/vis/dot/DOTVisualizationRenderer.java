@@ -86,9 +86,9 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 		String div_open = "<div style=\"" + style + "\">";
 		String div_close = "</div>";
 		String sectionID = parameters.get(RenderingCore.SECTION_ID);
-		String tmpPath = FileUtils.KNOWWEEXTENSION_FOLDER + FileUtils.FILE_SEPARATOR
+		String tmpPath = FileUtils.KNOWWEEXTENSION_FOLDER + FileUtils.TOMCAT_PATH_SEPARATOR
 				+ FileUtils.TMP_FOLDER
-				+ FileUtils.FILE_SEPARATOR;
+				+ FileUtils.TOMCAT_PATH_SEPARATOR;
 
 		String png_default = div_open + "<img alt='graph' src='"
 				+ tmpPath + "graph" + sectionID + ".png'>" + div_close;
