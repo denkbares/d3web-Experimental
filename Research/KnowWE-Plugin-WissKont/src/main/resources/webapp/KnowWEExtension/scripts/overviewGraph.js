@@ -1,4 +1,12 @@
 jq$(document).ready(function() {
+	
+	initOverviewGraphCollapse();
+	
+	addListenerFunctionForDropEditUpdate(rerenderOverviewGraph);
+
+});
+
+function initOverviewGraphCollapse() {
 	jq$(".showGraph").each(function() {
 		jq$(this).bind('click', function() {
 			jq$(".showGraph").hide();
@@ -23,5 +31,26 @@ jq$(document).ready(function() {
 			jq$(".termgraphcontent").toggle('50');
 			handleTermActionEvent(jq$(this));
 		});
-	});
-});
+	});	
+}
+
+
+function rerenderOverviewGraph() {
+	var params = {
+			action : 'RerenderConceptOverviewAction',
+    }; 
+	var options = {
+		url : KNOWWE.core.util.getURL(params),
+		 response : {
+			 fn : function() {
+				 	// insert re-rendered graph block
+				 	var termGraphElement = jq$('.termgraph');
+					termGraphElement.replaceWith(this.response);
+					initOverviewGraphCollapse();
+			},
+		 },
+	}
+	
+	new _KA(options).send();
+
+}

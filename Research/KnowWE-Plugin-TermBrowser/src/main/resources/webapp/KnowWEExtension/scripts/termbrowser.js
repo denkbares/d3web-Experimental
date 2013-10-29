@@ -10,7 +10,23 @@ jq$(document).ready(function() {
     initAllBrowserActionEvents();
     
     initCollapseTermBrowser();
+
 });
+
+/*
+ * here we store a set of functions that will be called when a drag-drop-edit has been performed
+ * those can be registered, for example to update visualization components
+ */ 
+var dropEditUpdateFunctions = [];
+
+function addListenerFunctionForDropEditUpdate(func) {
+	// push if not already there
+	if(dropEditUpdateFunctions.indexOf(func) == -1) {
+		dropEditUpdateFunctions.push(func);
+	}
+}
+
+
 
 function initDropableMarkupSection(element) {
 	element.droppable({
@@ -212,6 +228,12 @@ function sendAddedTerm(term, oldTargetID) {
 			 response : {
 				 fn : function(){
 					 rerenderSection(oldTargetID, this.responseText);
+					 
+					 // execute registered listener functions
+					 // e.g., for update of KB visualization components
+					 for (var i = 0; i < dropEditUpdateFunctions.length; i++) {
+						    dropEditUpdateFunctions[i]();
+					 }
 				 }
 			 },
 		}

@@ -71,6 +71,8 @@ function sendDeleteAction(entryKdomid) {
 				 // hint: reinit listeners etc.
 				 //location.reload();
 				 rerenderSection(markupKdomid, this.responseText);
+				 
+				 rerenderOverviewGraph();
 			 }
 		 },
 	}

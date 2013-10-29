@@ -200,6 +200,16 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="RerenderConceptOverviewAction">
+		<parameter id="class"
+			value="de.knowwe.wisskont.navigation.RerenderConceptOverviewAction" />
+		<parameter id="name" value="RerenderConceptOverviewAction" />
+		<parameter id="description" value="RerenderConceptOverviewAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="MoveConceptDefinitionTopRefactoring">
 		<parameter id="class"
 			value="de.knowwe.wisskont.refactoring.scripts.MoveConceptDefinitionTopRefactoring" />
