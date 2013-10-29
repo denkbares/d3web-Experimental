@@ -99,7 +99,7 @@ public abstract class OWLAPISubtreeHandler<T extends Type> extends SubtreeHandle
 	 *        active).
 	 */
 	public OWLAPISubtreeHandler(OWLAPIConnector connector, boolean sync) {
-		super(true);
+		super(false);
 		if (connector == null) {
 			throw new NullPointerException("The connector can't be null!");
 		}
