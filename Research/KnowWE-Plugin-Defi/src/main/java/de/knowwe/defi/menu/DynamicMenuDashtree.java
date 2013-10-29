@@ -19,6 +19,7 @@
  */
 package de.knowwe.defi.menu;
 
+import de.knowwe.core.kdom.Types;
 import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.kdom.dashtree.DashTree;
@@ -30,7 +31,7 @@ public class DynamicMenuDashtree extends DashTree {
 		replaceDashTreeElementContentType(new DynamicMenuItem());
 		this.setSectionFinder(new AllTextSectionFinder());
 
-		de.knowwe.core.kdom.Types.injectRendererToSuccessorType(this, DashesPrefix.class,
+		Types.injectRendererToSuccessors(this, DashesPrefix.class,
 				NothingRenderer.getInstance());
 	}
 

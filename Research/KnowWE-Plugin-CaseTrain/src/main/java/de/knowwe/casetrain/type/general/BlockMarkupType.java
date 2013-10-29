@@ -24,11 +24,9 @@ import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.MessageRenderer;
-import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 
 /**
@@ -42,54 +40,11 @@ import de.knowwe.kdom.AnonymousTypeInvisible;
  */
 public abstract class BlockMarkupType extends AbstractType {
 
-	// Warnings are only rendered in message block
-	// @Override
-	// public MessageRenderer getWarningRenderer() {
-	// return new MessageRenderer() {
-	//
-	// @Override
-	// public String preRenderMessage(KDOMReportMessage m, UserContext user) {
-	// return "";
-	// }
-	//
-	// @Override
-	// public String postRenderMessage(KDOMReportMessage m, UserContext user) {
-	// return "";
-	// }
-	// };
-	// }
-
 	@Override
-	public MessageRenderer getNoticeRenderer() {
-		return new MessageRenderer() {
-
-			@Override
-			public void postRenderMessage(Message m, UserContext user, String source, RenderResult result) {
-
-			}
-
-			@Override
-			public void preRenderMessage(Message m, UserContext user, String source, RenderResult result) {
-
-			}
-		};
+	public MessageRenderer getMessageRenderer(Message.Type messageType) {
+		if (Message.Type.INFO.equals(messageType)) return null;
+		return super.getMessageRenderer(messageType);
 	}
-
-	// @Override
-	// public MessageRenderer getErrorRenderer() {
-	// return new MessageRenderer() {
-	//
-	// @Override
-	// public String preRenderMessage(KDOMReportMessage m, UserContext user) {
-	// return "";
-	// }
-	//
-	// @Override
-	// public String postRenderMessage(KDOMReportMessage m, UserContext user) {
-	// return "";
-	// }
-	// };
-	// }
 
 	private final String key;
 	public static final String START_TAG = "<<";
