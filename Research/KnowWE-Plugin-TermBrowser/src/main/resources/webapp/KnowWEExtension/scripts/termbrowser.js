@@ -265,7 +265,9 @@ function rerenderSection(oldTargetID, newTargetID) {
 				 	if(!markupBlockOld) {
 				 		markupBlockOld = jq$('#'+oldTargetID).parent();
 				 	}
-					markupBlockOld.replaceWith(this.response);
+				 	var replaceContent = this.response;
+				 	replaceContent = cleanStringFromTrailingLinebreaks(replaceContent);
+					markupBlockOld.replaceWith(replaceContent);
 					
 					// re-init edit-functionalities for inserted part
 					var markupBlockNew = jq$('div[dragdropid="'+newTargetID+'"]');
@@ -273,8 +275,8 @@ function rerenderSection(oldTargetID, newTargetID) {
 						markupBlockNew = jq$('#'+newTargetID).parent();
 					}
 					initDropableMarkupSection(markupBlockNew);
-					initAllDeleteItem();
 					KNOWWE.core.rerendercontent.animateDefaultMarkupMenu(markupBlockNew);
+					ToolMenu.decorateToolMenus(markupBlockNew);
 				}
 			},
 		 },
@@ -282,6 +284,14 @@ function rerenderSection(oldTargetID, newTargetID) {
 	
 		new _KA(options).send();
 	
+}
+
+
+function cleanStringFromTrailingLinebreaks(str) {
+	while(str.lastIndexOf('\r\n') == str.length - 2) {
+		str = str.substring(0, str.length - 2);
+	}
+	return str;
 }
 
 function updateTermBrowser(event, ui) {
