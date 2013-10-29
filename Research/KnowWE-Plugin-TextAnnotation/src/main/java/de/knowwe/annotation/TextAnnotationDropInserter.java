@@ -42,7 +42,7 @@ public class TextAnnotationDropInserter implements DragDropEditInserter<Annotata
 
 	@Override
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
-		if (s.get().isAssignableFromType(AnnotatableParagraph.class)) {
+		if (Sections.hasType(s, AnnotatableParagraph.class)) {
 			Section<AnnotatableParagraph> section = Sections.cast(s, AnnotatableParagraph.class);
 
 			String replaceText = createReplaceText(section, droppedTerm);

@@ -40,7 +40,7 @@ public class RuleConditionDropInserter implements DragDropEditInserter<RuleKeyTy
 
 	@Override
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
-		if (s.get().isAssignableFromType(RuleKeyType.class)) {
+		if (Sections.hasType(s, RuleKeyType.class)) {
 			Section<RuleKeyType> section = Sections.cast(s, RuleKeyType.class);
 			Section<RuleMarkup> rule = Sections.findAncestorOfType(section, RuleMarkup.class);
 			Section<ConditionArea> condition = Sections.findSuccessor(rule, ConditionArea.class);

@@ -161,14 +161,14 @@ public class Evaluation extends BlockMarkupType {
 				boolean moreAnswersBlocks = false;
 				for (Section<?> sec : children) {
 
-					if (sec.get().isType(Hint.class) || sec.get().isType(Title.class)
-							|| sec.get().isType(PlainText.class)
-							|| sec.get().isType(Link.class)
-							|| sec.get().isType(Explanation.class)) {
+					if (Sections.hasType(sec, Hint.class) || Sections.hasType(sec, Title.class)
+							|| Sections.hasType(sec, PlainText.class)
+							|| Sections.hasType(sec, Link.class)
+							|| Sections.hasType(sec, Explanation.class)) {
 						continue;
 					}
 
-					if (sec.get().isType(Question.class)) {
+					if (Sections.hasType(sec, Question.class)) {
 
 						if (actual == null) {
 							actual = sec;
@@ -181,7 +181,7 @@ public class Evaluation extends BlockMarkupType {
 						continue;
 					}
 
-					if (sec.get().isType(AnswersBlock.class)) {
+					if (Sections.hasType(sec, AnswersBlock.class)) {
 						// test if multiple Antworten are possible
 						// Only by UMW,OMW,MN
 						if (!antwortenMissing) {

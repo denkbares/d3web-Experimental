@@ -197,26 +197,26 @@ public class XMLUtils {
 			for (Section<?> child : childs) {
 
 				// First PlainText+Some Multimedia
-				if (child.get().isType(PlainText.class)) {
+				if (Sections.hasType(child, PlainText.class)) {
 					XMLUtils.clearPlainText(
 							child, simpleSec.getContentOrMultimediaItemOrFormula());
 					continue;
 				}
 
-				if (child.get().isAssignableFromType(Link.class)) {
+				if (Sections.hasType(child, Link.class)) {
 					String original = child.getText();
 					simpleSec.getContentOrMultimediaItemOrFormula().add(original);
 					continue;
 				}
 
-				if (child.get().isAssignableFromType(MultimediaItem.class)) {
+				if (Sections.hasType(child, MultimediaItem.class)) {
 					Mmitem it = fac.createMmitem();
 					XMLUtils.configureMmitem(it, child);
 					simpleSec.getContentOrMultimediaItemOrFormula().add(it);
 					continue;
 				}
 
-				if (child.get().isType(Question.class)) {
+				if (Sections.hasType(child, Question.class)) {
 					if (!frageChilds.isEmpty()) {
 						XMLUtils.addQuestions(simpleSec, frageChilds, fac);
 					}
@@ -224,9 +224,9 @@ public class XMLUtils {
 					frageChilds.add(child);
 					continue;
 				}
-				if ((child.get().isType(Hint.class))
-						|| (child.get().isType(AnswersBlock.class))
-						|| (child.get().isType(Explanation.class))) {
+				if ((Sections.hasType(child, Hint.class))
+						|| (Sections.hasType(child, AnswersBlock.class))
+						|| (Sections.hasType(child, Explanation.class))) {
 					frageChilds.add(child);
 				}
 
@@ -297,13 +297,13 @@ public class XMLUtils {
 
 		List<Section<?>> contentChildren = null;
 
-		if (introSec.get().isAssignableFromType(BlockMarkupType.class)) {
+		if (Sections.hasType(introSec, BlockMarkupType.class)) {
 			Section<BlockMarkupContent> s =
 					Sections.findSuccessor(introSec, BlockMarkupContent.class);
 			contentChildren = s.getChildren();
 		}
 
-		if (introSec.get().isAssignableFromType(SubblockMarkup.class)) {
+		if (Sections.hasType(introSec, SubblockMarkup.class)) {
 			Section<SubblockMarkupContent> s =
 					Sections.findSuccessor(introSec, SubblockMarkupContent.class);
 			contentChildren = s.getChildren();
@@ -312,24 +312,24 @@ public class XMLUtils {
 		Titledmmcontent titledmmContent = fac.createTitledmmcontent();
 
 		for (Section<?> sec : contentChildren) {
-			if (sec.get().isType(Title.class)) {
+			if (Sections.hasType(sec, Title.class)) {
 				titledmmContent.setTitle(XMLUtils.clearPlainText(sec));
 				continue;
 			}
 
-			if (sec.get().isType(PlainText.class)) {
+			if (Sections.hasType(sec, PlainText.class)) {
 				XMLUtils.clearPlainText(
 						sec, titledmmContent.getContentOrMultimediaItemOrFormula());
 				continue;
 			}
 
-			if (sec.get().isAssignableFromType(Link.class)) {
+			if (Sections.hasType(sec, Link.class)) {
 				String original = sec.getText();
 				titledmmContent.getContentOrMultimediaItemOrFormula().add(original);
 				continue;
 			}
 
-			if (sec.get().isAssignableFromType(MultimediaItem.class)) {
+			if (Sections.hasType(sec, MultimediaItem.class)) {
 				Mmitem it = fac.createMmitem();
 				XMLUtils.configureMmitem(it, sec);
 				titledmmContent.getContentOrMultimediaItemOrFormula().add(it);
@@ -337,9 +337,9 @@ public class XMLUtils {
 			}
 		}
 
-		if (introSec.get().isType(Introduction.class)) c.setIntro(titledmmContent);
+		if (Sections.hasType(introSec, Introduction.class)) c.setIntro(titledmmContent);
 
-		if (introSec.get().isType(Closure.class)) {
+		if (Sections.hasType(introSec, Closure.class)) {
 			Extro ex = fac.createCaseExtro();
 			ex.setTitle(titledmmContent.getTitle());
 			ex.getContentOrMultimediaItemOrFormula().
@@ -351,9 +351,9 @@ public class XMLUtils {
 
 	private static void configureMmitem(Mmitem it, Section<?> sec) {
 		String type = "";
-		if (sec.get().isType(Image.class)) type = "image";
-		if (sec.get().isType(Video.class)) type = "video";
-		if (sec.get().isType(Audio.class)) type = "audio";
+		if (Sections.hasType(sec, Image.class)) type = "image";
+		if (Sections.hasType(sec, Video.class)) type = "video";
+		if (Sections.hasType(sec, Audio.class)) type = "audio";
 		it.setType(type);
 		it.setURL(sec.getChildren().get(1).getText().trim());
 	}
@@ -418,7 +418,7 @@ public class XMLUtils {
 			if (attName.equals(MetaAttributes.CASE_TITLE)) metaObj.setTitle(attContent);
 			if (attName.equals(MetaAttributes.CASE_VERSION)) metaObj.setVersion(attContent);
 			if (attName.equals(MetaAttributes.DURATION_MIN)) metaObj.setDurationMinutes(new Long(
-						attContent));
+					attContent));
 			if (attName.equals(MetaAttributes.DIFFICULTY)) metaObj.setDifficulty(attContent);
 			if (attName.equals(MetaAttributes.REQUIREMENTS)) metaObj.setPrereqs(attContent);
 			if (attName.equals(MetaAttributes.HINT)) metaObj.setNotice(attContent);
@@ -439,19 +439,19 @@ public class XMLUtils {
 			for (Map.Entry<String, String> e : scoreAtts.entrySet()) {
 
 				if (e.getKey().equals(MetaAttributes.TIME_LIMIT0)) score.setMaxTimeSeconds(new Long(
-							e.getValue()));
+						e.getValue()));
 
 				if (e.getKey().equals(MetaAttributes.CASE_PASS)) score.setMinScoreForSuccess(new BigDecimal(
-							e.getValue()));
+						e.getValue()));
 
 				if (e.getKey().equals(MetaAttributes.TIME_LIMIT100)) score.setOkTimeSeconds(new Long(
-							e.getValue()));
+						e.getValue()));
 
 				if (e.getKey().equals(MetaAttributes.CASE_POINTS)) score.setWeight(new BigDecimal(
-							e.getValue()));
+						e.getValue()));
 
 				if (e.getKey().equals(MetaAttributes.TIME_WEIGHT)) score.setWeightTime(new BigDecimal(
-							e.getValue()));
+						e.getValue()));
 			}
 			metaObj.setScore(score);
 		}
@@ -467,7 +467,7 @@ public class XMLUtils {
 				if (e.getKey().equals(MetaAttributes.LANGUAGE)) misc.setLanguage(e.getValue());
 
 				if (e.getKey().equals(MetaAttributes.SHOW_TIME)) misc.setShowClock(new Boolean(
-							e.getValue()));
+						e.getValue()));
 			}
 			metaObj.setMisc(misc);
 		}
@@ -508,26 +508,26 @@ public class XMLUtils {
 			for (Section<?> child : childs) {
 
 				// First PlainText+Some Multimedia
-				if (child.get().isType(PlainText.class)) {
+				if (Sections.hasType(child, PlainText.class)) {
 					XMLUtils.clearPlainText(child,
 							simpleSec.getContentOrMultimediaItemOrFormula());
 					continue;
 				}
 
-				if (child.get().isAssignableFromType(Link.class)) {
+				if (Sections.hasType(child, Link.class)) {
 					String original = child.getText();
 					simpleSec.getContentOrMultimediaItemOrFormula().add(original);
 					continue;
 				}
 
-				if (child.get().isAssignableFromType(MultimediaItem.class)) {
+				if (Sections.hasType(child, MultimediaItem.class)) {
 					Mmitem it = fac.createMmitem();
 					XMLUtils.configureMmitem(it, child);
 					simpleSec.getContentOrMultimediaItemOrFormula().add(it);
 					continue;
 				}
 
-				if (child.get().isType(Question.class)) {
+				if (Sections.hasType(child, Question.class)) {
 					if (!frageChilds.isEmpty()) {
 						XMLUtils.addQuestions(simpleSec, frageChilds, fac);
 					}
@@ -535,13 +535,13 @@ public class XMLUtils {
 					frageChilds.add(child);
 					continue;
 				}
-				if ((child.get().isType(Hint.class))
-						|| (child.get().isType(AnswersBlock.class))
-						|| (child.get().isType(Explanation.class))) {
+				if ((Sections.hasType(child, Hint.class))
+						|| (Sections.hasType(child, AnswersBlock.class))
+						|| (Sections.hasType(child, Explanation.class))) {
 					frageChilds.add(child);
 				}
 
-				if (child.get().isType(Title.class)) {
+				if (Sections.hasType(child, Title.class)) {
 					simpleSec.setTitle(XMLUtils.clearPlainText(child));
 					continue;
 				}
@@ -649,21 +649,21 @@ public class XMLUtils {
 
 		for (Section<?> sec : frageChilds) {
 
-			if (sec.get().isType(Hint.class)) {
+			if (Sections.hasType(sec, Hint.class)) {
 				Mmmixedcontent it = fac.createMmmixedcontent();
 				XMLUtils.renderHinweisOrErklaerung(it, sec, fac);
 				question.setInfo(it);
 				continue;
 			}
 
-			if (sec.get().isType(AnswersBlock.class)) {
+			if (Sections.hasType(sec, AnswersBlock.class)) {
 				XMLUtils.addAntwortenWithBinding(
 						question, (Section<AnswersBlock>) sec, fac);
 				continue;
 			}
 
 			// Feedback is Erklaerung
-			if (sec.get().isType(Explanation.class)) {
+			if (Sections.hasType(sec, Explanation.class)) {
 				Mmcontent it = fac.createMmcontent();
 				XMLUtils.renderHinweisOrErklaerung(it, sec, fac);
 				question.setFeedback(it);
@@ -690,9 +690,9 @@ public class XMLUtils {
 		for (Section<?> s : Sections.findSuccessor(
 				antworten, SubblockMarkupContent.class).getChildren()) {
 
-			if (s.get().isType(PlainText.class)
-					|| s.get().isType(AnswersBlockWeightMark.class)
-					|| s.get().isType(AnonymousType.class)) continue;
+			if (Sections.hasType(s, PlainText.class)
+					|| Sections.hasType(s, AnswersBlockWeightMark.class)
+					|| Sections.hasExactType(s, AnonymousType.class)) continue;
 
 			// PosFactor and NegFactor
 			String posFactor = AnswerLine.getPosFactor((Section<AnswerLine>) s);
@@ -909,18 +909,18 @@ public class XMLUtils {
 
 		for (Section<?> s : Sections.findSuccessor(sec, SubblockMarkupContent.class).getChildren()) {
 
-			if (s.get().isType(PlainText.class)) {
+			if (Sections.hasType(s, PlainText.class)) {
 				XMLUtils.clearPlainText(s, itList);
 				continue;
 			}
 
-			if (s.get().isAssignableFromType(Link.class)) {
+			if (Sections.hasType(s, Link.class)) {
 				String original = s.getText();
 				itList.add(original);
 				continue;
 			}
 
-			if (s.get().isAssignableFromType(MultimediaItem.class)) {
+			if (Sections.hasType(s, MultimediaItem.class)) {
 				Mmitem item = fac.createMmitem();
 				XMLUtils.configureMmitem(item, s);
 				itList.add(item);
@@ -936,18 +936,18 @@ public class XMLUtils {
 
 		for (Section<?> s : Sections.findSuccessor(sec, SubblockMarkupContent.class).getChildren()) {
 
-			if (s.get().isType(PlainText.class)) {
+			if (Sections.hasType(s, PlainText.class)) {
 				XMLUtils.clearPlainText(s, itList);
 				continue;
 			}
 
-			if (s.get().isAssignableFromType(Link.class)) {
+			if (Sections.hasType(s, Link.class)) {
 				String original = s.getText();
 				itList.add(original);
 				continue;
 			}
 
-			if (s.get().isAssignableFromType(MultimediaItem.class)) {
+			if (Sections.hasType(s, MultimediaItem.class)) {
 				Mmitem item = fac.createMmitem();
 				XMLUtils.configureMmitem(item, s);
 				itList.add(fac.createMultimediaItem(item));

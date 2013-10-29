@@ -39,7 +39,7 @@ public class ConceptListDropInserter implements DragDropEditInserter<ConceptList
 
 	@Override
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
-		if (s.get().isAssignableFromType(ConceptList.class)) {
+		if (Sections.hasType(s, ConceptList.class)) {
 			Section<ConceptList> section = Sections.cast(s, ConceptList.class);
 
 			String replaceText = createReplaceText(section, droppedTerm);

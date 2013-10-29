@@ -77,17 +77,17 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 			return messages;
 		}
 
-		if (s.get().isAssignableFromType(Image.class)) {
+		if (Sections.hasType(s, Image.class)) {
 			if (!attachmentFileNames.contains(t)) {
 				messages.add(Utils.missingPictureError(t));
 			}
 			if (!(t.endsWith(".gif") || t.endsWith(".jpg") || t.endsWith("png"))) {
 				messages.add(Utils.invalidArgumentError(
-								bundle.getString("WRONG_IMAGE_FORMAT")));
+						bundle.getString("WRONG_IMAGE_FORMAT")));
 			}
 
 		}
-		else if (s.get().isAssignableFromType(Video.class)) {
+		else if (Sections.hasType(s, Video.class)) {
 			if (!attachmentFileNames.contains(t)) {
 				messages.add(Utils.missingVideoError(t));
 			}
@@ -98,7 +98,7 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 			}
 
 		}
-		else if (s.get().isAssignableFromType(Audio.class)) {
+		else if (Sections.hasType(s, Audio.class)) {
 			if (!attachmentFileNames.contains(t)) messages.add(Utils.missingAudioError(t));
 			if (!t.endsWith(".mp3")) {
 				messages.add(

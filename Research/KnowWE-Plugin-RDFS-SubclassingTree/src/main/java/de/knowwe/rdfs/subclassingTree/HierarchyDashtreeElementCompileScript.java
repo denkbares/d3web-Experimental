@@ -59,7 +59,7 @@ public class HierarchyDashtreeElementCompileScript extends
 		Collection<Message> messages = new LinkedList<Message>();
 
 		Section<?> element = elementContent.getFather();
-		if (element.get().isAssignableFromType(DashTreeElement.class)) {
+		if (Sections.hasType(element, DashTreeElement.class)) {
 			Section<? extends DashTreeElement> father = DashTreeUtils
 					.getFatherDashTreeElement(element);
 			if (father != null) {

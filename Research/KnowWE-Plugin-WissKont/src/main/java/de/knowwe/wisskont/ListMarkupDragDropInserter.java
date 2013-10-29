@@ -40,7 +40,7 @@ public class ListMarkupDragDropInserter implements DragDropEditInserter<Relation
 
 	@Override
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
-		if (s.get().isAssignableFromType(RelationMarkup.class)) {
+		if (Sections.hasType(s, RelationMarkup.class)) {
 			Section<RelationMarkup> section = Sections.cast(s, RelationMarkup.class);
 
 			String replaceText = createReplaceText(section, droppedTerm);

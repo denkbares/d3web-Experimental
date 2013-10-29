@@ -43,7 +43,7 @@ public class HeadlineDragDropInserter implements DragDropEditInserter<HeaderType
 
 	@Override
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
-		if (s.get().isAssignableFromType(HeaderType.class)) {
+		if (Sections.hasType(s, HeaderType.class)) {
 
 			List<Section<? extends Type>> siblings = s.getFather().getChildren();
 

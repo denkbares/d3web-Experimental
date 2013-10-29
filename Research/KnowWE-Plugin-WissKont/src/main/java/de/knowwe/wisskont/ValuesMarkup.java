@@ -55,7 +55,6 @@ import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.Types;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 import de.knowwe.wisskont.dss.KnowledgeBaseInstantiation;
 import de.knowwe.wisskont.util.MarkupUtils;
@@ -75,8 +74,10 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 	 */
 	public ValuesMarkup() {
 		super(key);
-		Type contentType = Types.findSuccessorType(this, RelationMarkupContentType.class);
-		boolean replaced = Types.replaceType(contentType, ListObjectIdentifier.class,
+		Type contentType = de.knowwe.core.kdom.Types.findSuccessorType(this,
+				RelationMarkupContentType.class);
+		boolean replaced = de.knowwe.core.kdom.Types.replaceType(contentType,
+				ListObjectIdentifier.class,
 				new ValueDefinitionListElement(new OIDeleteItemRenderer()));
 
 		this.addChildType(0, new NumericalValueMarkerType());
