@@ -1,4 +1,5 @@
 digraph Konzeptuebersicht {
+graph [ rankdir="LR"]
 "Vorderkammerzugang_Schnitt1"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&concept=Vorderkammerzugang_Schnitt1" shape="box" label="Vorderkammerzugang\nSchnitt1\n" ];
 "Patientenpositionierung-Chirurgischer Zugang"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&concept=Patientenpositionierung-Chirurgischer Zugang" shape="box" label="Patientenpositionierung-Chirurgischer\nZugang\n" ];
 "Phako in Hinterkammer"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&concept=Phako in Hinterkammer" shape="box" label="Phako in\nHinterkammer\n" ];
@@ -9,7 +10,7 @@ digraph Konzeptuebersicht {
 "Vorderkammer Schnitt"[ shape="none" fontsize="0" fontcolor="white" ];
 "Vorderkammerzugang/Schnitt"[ shape="none" fontsize="0" fontcolor="white" ];
 "Kapsulotomie-Rhexis"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&concept=Kapsulotomie-Rhexis" shape="box" label="Kapsulotomie-Rhexis" ];
-"Phakoemulsifikation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&concept=Phakoemulsifikation" style="filled" fillcolor="yellow"  shape="ellipse"label="Phakoemulsifikation"];
+"Phakoemulsifikation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&concept=Phakoemulsifikation" style="filled" fillcolor="yellow"  shape="ellipse" label="Phakoemulsifikation"];
 "OP-Methoden"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&concept=OP-Methoden" shape="box" label="OP-Methoden" ];
 "Intraoperative Komplikation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&concept=Intraoperative Komplikation" shape="box" label="Intraoperative\nKomplikation\n" ];
 "Postoperative Komplikation"[ shape="none" fontsize="0" fontcolor="white" ];
@@ -19,10 +20,10 @@ digraph Konzeptuebersicht {
 "Phako in Hinterkammer" -> "Phakoemulsifikation" [ label = "unterkonzept" arrowtail="normal"  color="black"  ];
 "Patientenpositionierung-Chirurgischer Zugang" -> "Phakoemulsifikation" [ label = "unterkonzept" arrowtail="normal"  color="black"  ];
 "Phako in Irisebene_Hinterkammer" -> "Phakoemulsifikation" [ label = "unterkonzept" arrowtail="normal"  color="black"  ];
-"Phako in Irisebene_Hinterkammer" -> "Phako" [ label = "kann" arrowtail="normal"  color="black"  ];
 "Phako in Vorderkammer" -> "Phako" [ label = "kann" arrowtail="normal"  color="black"  ];
 "Phako in Hinterkammer" -> "Phako" [ label = "kann" arrowtail="normal"  color="black"  ];
 "Modifizierte Phako in Hinterkammer" -> "Phako" [ label = "kann" arrowtail="normal"  color="black"  ];
+"Phako in Irisebene_Hinterkammer" -> "Phako" [ label = "kann" arrowtail="normal"  color="black"  ];
 "Vorderkammer Schnitt" -> "Kapsulotomie-Rhexis" [ label="muss" fontcolor="#8b8989" arrowtail = "normal"  color="#8b8989" style="dashed" ];
 "Vorderkammerzugang/Schnitt" -> "Kapsulotomie-Rhexis" [ label="muss" fontcolor="#8b8989" arrowtail = "normal"  color="#8b8989" style="dashed" ];
 "Vorderkammer Schnitt" -> "Kapsulotomie-Rhexis" [ label="temporalBevor" fontcolor="#8b8989" arrowtail = "normal"  color="#8b8989" style="dashed" ];
