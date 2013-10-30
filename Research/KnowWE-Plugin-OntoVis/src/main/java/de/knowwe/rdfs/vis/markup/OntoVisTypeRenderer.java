@@ -18,7 +18,7 @@ import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdfs.vis.RenderingCore;
+import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 
 public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
@@ -32,7 +32,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 		Map<String, String> parameterMap = new HashMap<String, String>();
 
-		parameterMap.put(RenderingCore.GRAPH_SIZE, OntoVisType.getAnnotation(section,
+		parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_SIZE));
 
 		String format = OntoVisType.getAnnotation(section,
@@ -40,53 +40,53 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		if (format != null) {
 			format = format.toLowerCase();
 		}
-		parameterMap.put(RenderingCore.FORMAT, format);
+		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 
 		String dotApp = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_DOT_APP);
-		parameterMap.put(RenderingCore.DOT_APP, dotApp);
+		parameterMap.put(OntoGraphDataBuilder.DOT_APP, dotApp);
 
 		String rendererType = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_RENDERER);
-		parameterMap.put(RenderingCore.RENDERER, rendererType);
+		parameterMap.put(OntoGraphDataBuilder.RENDERER, rendererType);
 
 		String visualization = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_VISUALIZATION);
-		parameterMap.put(RenderingCore.VISUALIZATION, visualization);
+		parameterMap.put(OntoGraphDataBuilder.VISUALIZATION, visualization);
 
-		parameterMap.put(RenderingCore.CONCEPT, getConcept(user, section));
+		parameterMap.put(OntoGraphDataBuilder.CONCEPT, getConcept(user, section));
 
 		String master = getMaster(user, section);
 		if (master != null) {
-			parameterMap.put(RenderingCore.MASTER, master);
+			parameterMap.put(OntoGraphDataBuilder.MASTER, master);
 		}
 		String lang = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_LANGUAGE);
 		if (lang != null) {
-			parameterMap.put(RenderingCore.LANGUAGE, lang);
+			parameterMap.put(OntoGraphDataBuilder.LANGUAGE, lang);
 		}
 
 		String exclude = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_EXCLUDERELATIONS);
-		parameterMap.put(RenderingCore.EXCLUDED_RELATIONS, exclude);
+		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, exclude);
 
 		String excludeNodes = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_EXCLUDENODES);
-		parameterMap.put(RenderingCore.EXCLUDED_NODES, excludeNodes);
+		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, excludeNodes);
 
 		String outgoingEdges = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_OUTGOING_EDGES);
-		parameterMap.put(RenderingCore.SHOW_OUTGOING_EDGES, outgoingEdges);
+		parameterMap.put(OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, outgoingEdges);
 
 		String classes = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_SHOWCLASSES);
-		parameterMap.put(RenderingCore.SHOW_CLASSES, classes);
+		parameterMap.put(OntoGraphDataBuilder.SHOW_CLASSES, classes);
 
 		String props = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_SHOWPROPERTIES);
-		parameterMap.put(RenderingCore.SHOW_PROPERTIES, props);
+		parameterMap.put(OntoGraphDataBuilder.SHOW_PROPERTIES, props);
 
-		parameterMap.put(RenderingCore.REQUESTED_DEPTH, getSuccessors(section));
-		parameterMap.put(RenderingCore.REQUESTED_HEIGHT, getPredecessors(section));
+		parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, getSuccessors(section));
+		parameterMap.put(OntoGraphDataBuilder.REQUESTED_HEIGHT, getPredecessors(section));
 
 		String addToDOT = "";
 		List<Section<? extends AnnotationContentType>> annotationSections =
@@ -95,7 +95,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		for (Section<? extends AnnotationContentType> anno : annotationSections) {
 			if (anno != null) addToDOT += anno.getText() + "\n";
 		}
-		parameterMap.put(RenderingCore.ADD_TO_DOT, addToDOT);
+		parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, addToDOT);
 
 		LinkToTermDefinitionProvider uriProvider;
 		Rdf2GoCore rdfRepository = null;
@@ -107,10 +107,13 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 			rdfRepository = Rdf2GoCore.getInstance();
 			uriProvider = new IncrementalCompilerLinkToTermDefinitionProvider();
 		}
-		RenderingCore renderer = new RenderingCore(realPath, section, parameterMap, uriProvider,
+		// RenderingCore renderer = new RenderingCore(realPath, section,
+		// parameterMap, uriProvider,
+		// rdfRepository);
+		OntoGraphDataBuilder builder = new OntoGraphDataBuilder(realPath, section, parameterMap,
+				uriProvider,
 				rdfRepository);
-		renderer.render(string);
-
+		builder.render(string);
 	}
 
 	/**

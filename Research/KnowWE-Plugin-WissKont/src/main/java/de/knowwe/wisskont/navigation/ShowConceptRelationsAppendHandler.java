@@ -33,9 +33,9 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdfs.vis.RenderingCore;
-import de.knowwe.rdfs.vis.markup.OntoVisType;
+import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 import de.knowwe.termbrowser.TermRecommender;
+import de.knowwe.visualization.GraphDataBuilder;
 import de.knowwe.wisskont.ConceptMarkup;
 
 /**
@@ -58,38 +58,38 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 					SimpleDefinition.class);
 			Map<String, String> parameterMap = new HashMap<String, String>();
 
-			// parameterMap.put(RenderingCore.GRAPH_SIZE,
+			// parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE,
 			// OntoVisType.getAnnotation(section,
 			// OntoVisType.ANNOTATION_SIZE));
 
 			String format = "svg";
-			parameterMap.put(RenderingCore.FORMAT, format);
+			parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 
-			parameterMap.put(RenderingCore.CONCEPT, def.get().getTermName(def));
+			parameterMap.put(OntoGraphDataBuilder.CONCEPT, def.get().getTermName(def));
 
-			parameterMap.put(RenderingCore.EXCLUDED_RELATIONS, "label");
+			parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "label");
 
-			parameterMap.put(RenderingCore.EXCLUDED_NODES, "rdfs:Resource,WissassConcept");
+			parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,WissassConcept");
 
-			parameterMap.put(RenderingCore.GRAPH_SIZE, "690");
+			parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, "690");
 
-			parameterMap.put(RenderingCore.RANK_DIRECTION, "RL");
+			parameterMap.put(OntoGraphDataBuilder.RANK_DIRECTION, "RL");
 
-			parameterMap.put(RenderingCore.LINK_MODE, RenderingCore.LINK_MODE_BROWSE);
+			parameterMap.put(OntoGraphDataBuilder.LINK_MODE, OntoGraphDataBuilder.LINK_MODE_BROWSE);
 
-			parameterMap.put(RenderingCore.SHOW_OUTGOING_EDGES, "false");
+			parameterMap.put(OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, "false");
 
-			parameterMap.put(RenderingCore.SHOW_CLASSES, "false");
+			parameterMap.put(OntoGraphDataBuilder.SHOW_CLASSES, "false");
 
-			parameterMap.put(RenderingCore.SHOW_SCROLLBAR, "false");
+			parameterMap.put(OntoGraphDataBuilder.SHOW_SCROLLBAR, "false");
 
 			// which kind of visualization ???
-			// parameterMap.put(RenderingCore.RENDERER,
+			// parameterMap.put(OntoGraphDataBuilder.RENDERER,
 			// OntoVisType.Renderer.d3.name());
-			// parameterMap.put(RenderingCore.VISUALIZATION,
+			// parameterMap.put(OntoGraphDataBuilder.VISUALIZATION,
 			// OntoVisType.Visualizations.force.name());
 
-			parameterMap.put(RenderingCore.RENDERER, OntoVisType.Renderer.dot.name());
+			parameterMap.put(OntoGraphDataBuilder.RENDERER, GraphDataBuilder.Renderer.dot.name());
 
 			String colorCodes = "";
 			colorCodes += "kann: #009900;"; // green
@@ -98,7 +98,7 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 			colorCodes += "assoziation: blue;";
 			colorCodes += "cave: purple";
 
-			parameterMap.put(RenderingCore.RELATION_COLOR_CODES, colorCodes);
+			parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, colorCodes);
 
 			boolean collapsed = TermRecommender.getInstance().graphIsCollapsed(user);
 			String stylePlus = "";
@@ -112,9 +112,9 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 				stylePlus = "display:none;";
 			}
 
-			parameterMap.put(RenderingCore.REQUESTED_DEPTH, "1");
-			parameterMap.put(RenderingCore.REQUESTED_HEIGHT, "1");
-			RenderingCore renderingCore = new RenderingCore(
+			parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, "1");
+			parameterMap.put(OntoGraphDataBuilder.REQUESTED_HEIGHT, "1");
+			OntoGraphDataBuilder OntoGraphDataBuilder = new OntoGraphDataBuilder(
 					user.getServletContext().getRealPath(""), section, parameterMap,
 					new IncrementalCompilerLinkToTermDefinitionProvider(), Rdf2GoCore.getInstance());
 			result.appendHtml("<div class='termgraph'>");
@@ -126,7 +126,7 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 			result.appendHtml("<div class='toggleGraph' style='font-weight:bold;'>Übersicht über Begriffsverknüpfungen</div>");
 			result.appendHtml("</div>");
 			result.appendHtml("<div style='" + styleContent + "' class='termgraphcontent'>");
-			renderingCore.render(result);
+			OntoGraphDataBuilder.render(result);
 			result.appendHtml("</div>");
 			result.appendHtml("</div>");
 		}

@@ -3,6 +3,7 @@ package de.knowwe.rdfs.vis.markup;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.visualization.GraphDataBuilder;
 
 public class OntoVisType extends DefaultMarkupType {
 
@@ -31,10 +32,6 @@ public class OntoVisType extends DefaultMarkupType {
 		dot, neato
 	};
 
-	public enum Renderer {
-		dot, d3
-	};
-
 	public enum Visualizations {
 		wheel, force
 	};
@@ -57,7 +54,7 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
 		MARKUP.addAnnotation(ANNOTATION_OUTGOING_EDGES, false, new String[] {
 				"true", "false" });
-		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, Renderer.values());
+		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
 		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
 	}
 

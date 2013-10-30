@@ -23,6 +23,7 @@ import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.visualization.GraphDataBuilder;
 
 /**
  * 
@@ -50,10 +51,6 @@ public class SparqlVisType extends DefaultMarkupType {
 			dot, neato
 	};
 
-	public enum Renderer {
-			dot, d3
-	};
-
 	public enum Visualizations {
 			wheel, force
 	};
@@ -70,7 +67,7 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_LANGUAGE, false);
 		MARKUP.addAnnotation(ANNOTATION_DOT_APP, false, dot_apps.values());
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
-		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, Renderer.values());
+		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
 		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
 		MARKUP.addAnnotationRenderer(Rdf2GoCore.MASTER_ANNOTATION, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_COMMENT, NothingRenderer.getInstance());

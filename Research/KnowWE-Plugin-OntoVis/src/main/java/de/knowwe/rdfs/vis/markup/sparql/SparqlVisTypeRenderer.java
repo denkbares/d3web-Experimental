@@ -27,16 +27,17 @@ import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
-import de.knowwe.rdfs.vis.ConceptNode;
-import de.knowwe.rdfs.vis.Edge;
-import de.knowwe.rdfs.vis.GraphVisualizationRenderer;
-import de.knowwe.rdfs.vis.RenderingCore;
-import de.knowwe.rdfs.vis.RenderingCore.NODE_TYPE;
-import de.knowwe.rdfs.vis.SubGraphData;
-import de.knowwe.rdfs.vis.d3.D3VisualizationRenderer;
-import de.knowwe.rdfs.vis.dot.DOTVisualizationRenderer;
+import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 import de.knowwe.rdfs.vis.markup.OntoVisType;
 import de.knowwe.rdfs.vis.util.Utils;
+import de.knowwe.visualization.ConceptNode;
+import de.knowwe.visualization.Edge;
+import de.knowwe.visualization.GraphDataBuilder;
+import de.knowwe.visualization.GraphDataBuilder.NODE_TYPE;
+import de.knowwe.visualization.GraphVisualizationRenderer;
+import de.knowwe.visualization.SubGraphData;
+import de.knowwe.visualization.d3.D3VisualizationRenderer;
+import de.knowwe.visualization.dot.DOTVisualizationRenderer;
 
 public class SparqlVisTypeRenderer implements Renderer {
 
@@ -53,11 +54,11 @@ public class SparqlVisTypeRenderer implements Renderer {
 
 		Map<String, String> parameterMap = new HashMap<String, String>();
 
-		parameterMap.put(RenderingCore.REAL_PATH, realPath);
+		parameterMap.put(OntoGraphDataBuilder.REAL_PATH, realPath);
 
-		parameterMap.put(RenderingCore.SECTION_ID, section.getID());
+		parameterMap.put(OntoGraphDataBuilder.SECTION_ID, section.getID());
 
-		parameterMap.put(RenderingCore.GRAPH_SIZE, SparqlVisType.getAnnotation(section,
+		parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_SIZE));
 
 		String format = SparqlVisType.getAnnotation(section,
@@ -65,28 +66,28 @@ public class SparqlVisTypeRenderer implements Renderer {
 		if (format != null) {
 			format = format.toLowerCase();
 		}
-		parameterMap.put(RenderingCore.FORMAT, format);
+		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 
 		String dotApp = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_DOT_APP);
-		parameterMap.put(RenderingCore.DOT_APP, dotApp);
+		parameterMap.put(OntoGraphDataBuilder.DOT_APP, dotApp);
 
 		String rendererType = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_RENDERER);
-		parameterMap.put(RenderingCore.RENDERER, rendererType);
+		parameterMap.put(OntoGraphDataBuilder.RENDERER, rendererType);
 
 		String visualization = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_VISUALIZATION);
-		parameterMap.put(RenderingCore.VISUALIZATION, visualization);
+		parameterMap.put(OntoGraphDataBuilder.VISUALIZATION, visualization);
 
 		String master = getMaster(user, section);
 		if (master != null) {
-			parameterMap.put(RenderingCore.MASTER, master);
+			parameterMap.put(OntoGraphDataBuilder.MASTER, master);
 		}
 		String lang = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_LANGUAGE);
 		if (lang != null) {
-			parameterMap.put(RenderingCore.LANGUAGE, lang);
+			parameterMap.put(OntoGraphDataBuilder.LANGUAGE, lang);
 		}
 
 		String addToDOT = "";
@@ -96,7 +97,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 		for (Section<? extends AnnotationContentType> anno : annotationSections) {
 			if (anno != null) addToDOT += anno.getText() + "\n";
 		}
-		parameterMap.put(RenderingCore.ADD_TO_DOT, addToDOT);
+		parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, addToDOT);
 
 		LinkToTermDefinitionProvider uriProvider;
 		Rdf2GoCore rdfRepository = null;
@@ -122,12 +123,12 @@ public class SparqlVisTypeRenderer implements Renderer {
 			// if no center concept has explicitly been specified, take any
 			conceptName = data.getConceptDeclarations().iterator().next().getName();
 		}
-		parameterMap.put(RenderingCore.CONCEPT, conceptName);
+		parameterMap.put(OntoGraphDataBuilder.CONCEPT, conceptName);
 
 		// current default source renderer is DOT
 		GraphVisualizationRenderer graphRenderer = new DOTVisualizationRenderer(data, parameterMap);
-		String renderer = parameterMap.get(RenderingCore.RENDERER);
-		if (renderer != null && renderer.equals(OntoVisType.Renderer.d3.name())) {
+		String renderer = parameterMap.get(OntoGraphDataBuilder.RENDERER);
+		if (renderer != null && renderer.equals(GraphDataBuilder.Renderer.d3.name())) {
 			graphRenderer = new D3VisualizationRenderer(data, parameterMap);
 		}
 
@@ -154,7 +155,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 			Node fromURI = row.getValue(variables.get(0));
 
 			Node relationURI = row.getValue(variables.get(1));
-			String relation = RenderingCore.getConceptName(relationURI, rdfRepository);
+			String relation = OntoGraphDataBuilder.getConceptName(relationURI, rdfRepository);
 
 			Node toURI = row.getValue(variables.get(2));
 
@@ -196,7 +197,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 			// if it is no literal look for label for the URI
 			String relationLabel = Utils.getRDFSLabel(
 					relationURI.asURI(), rdfRepository,
-					parameters.get(RenderingCore.LANGUAGE));
+					parameters.get(OntoGraphDataBuilder.LANGUAGE));
 			if (relationLabel != null) {
 				relationName = relationLabel;
 			}
@@ -219,7 +220,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 	 * @return
 	 */
 	private ConceptNode createNode(Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, SubGraphData data, Node toURI) {
-		String to = RenderingCore.getConceptName(toURI, rdfRepository);
+		String to = OntoGraphDataBuilder.getConceptName(toURI, rdfRepository);
 		// is the node a literal ?
 		Literal toLiteral = null;
 		try {
@@ -242,7 +243,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 			if (toLiteral == null) {
 				label = Utils.getRDFSLabel(
 						toURI.asURI(), rdfRepository,
-						parameters.get(RenderingCore.LANGUAGE));
+						parameters.get(OntoGraphDataBuilder.LANGUAGE));
 			}
 			if (label == null && toLiteral == null) {
 				label = to;
@@ -275,13 +276,15 @@ public class SparqlVisTypeRenderer implements Renderer {
 	}
 
 	private String createConceptURL(String to, Map<String, String> parameters, Section<?> s, LinkToTermDefinitionProvider uriProvider) {
-		if (parameters.get(RenderingCore.LINK_MODE) != null) {
-			if (parameters.get(RenderingCore.LINK_MODE).equals(RenderingCore.LINK_MODE_BROWSE)) {
+		if (parameters.get(OntoGraphDataBuilder.LINK_MODE) != null) {
+			if (parameters.get(OntoGraphDataBuilder.LINK_MODE).equals(
+					OntoGraphDataBuilder.LINK_MODE_BROWSE)) {
 				return uriProvider.getLinkToTermDefinition(new Identifier(to),
-						parameters.get(RenderingCore.MASTER));
+						parameters.get(OntoGraphDataBuilder.MASTER));
 			}
 		}
-		return RenderingCore.createBaseURL() + "?page=" + RenderingCore.getSectionTitle(s)
+		return OntoGraphDataBuilder.createBaseURL() + "?page="
+				+ OntoGraphDataBuilder.getSectionTitle(s)
 				+ "&concept=" + to;
 	}
 

@@ -21,7 +21,7 @@ import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.strings.Strings;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdfs.vis.RenderingCore;
+import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 
 /*
  * Copyright (C) 2013 denkbares GmbH
@@ -78,25 +78,25 @@ public class DotRendererTest {
 	public void testA() {
 		Map<String, String> parameterMap = new HashMap<String, String>();
 		String format = "svg";
-		parameterMap.put(RenderingCore.FORMAT, format);
+		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 
-		parameterMap.put(RenderingCore.CONCEPT, "OP-Methoden");
+		parameterMap.put(OntoGraphDataBuilder.CONCEPT, "OP-Methoden");
 
-		parameterMap.put(RenderingCore.EXCLUDED_RELATIONS, "label");
+		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "label");
 
-		parameterMap.put(RenderingCore.EXCLUDED_NODES, "rdfs:Resource,WissassConcept");
+		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,WissassConcept");
 
-		parameterMap.put(RenderingCore.GRAPH_SIZE, "690");
+		parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, "690");
 
-		parameterMap.put(RenderingCore.RANK_DIRECTION, "RL");
+		parameterMap.put(OntoGraphDataBuilder.RANK_DIRECTION, "RL");
 
-		parameterMap.put(RenderingCore.LINK_MODE, RenderingCore.LINK_MODE_BROWSE);
+		parameterMap.put(OntoGraphDataBuilder.LINK_MODE, OntoGraphDataBuilder.LINK_MODE_BROWSE);
 
-		parameterMap.put(RenderingCore.SHOW_OUTGOING_EDGES, "false");
+		parameterMap.put(OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, "false");
 
-		parameterMap.put(RenderingCore.SHOW_CLASSES, "false");
+		parameterMap.put(OntoGraphDataBuilder.SHOW_CLASSES, "false");
 
-		parameterMap.put(RenderingCore.SHOW_SCROLLBAR, "false");
+		parameterMap.put(OntoGraphDataBuilder.SHOW_SCROLLBAR, "false");
 
 		String colorCodes = "";
 		colorCodes += "kann: #009900;"; // green
@@ -104,16 +104,17 @@ public class DotRendererTest {
 		colorCodes += "temporalGraph: #FFCC00;"; // dark yellow
 		colorCodes += "assoziation: blue;";
 
-		parameterMap.put(RenderingCore.RELATION_COLOR_CODES, colorCodes);
+		parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, colorCodes);
 
-		parameterMap.put(RenderingCore.REQUESTED_DEPTH, "1");
-		parameterMap.put(RenderingCore.REQUESTED_HEIGHT, "1");
-		RenderingCore renderingCore = new RenderingCore("", null, parameterMap,
+		parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, "1");
+		parameterMap.put(OntoGraphDataBuilder.REQUESTED_HEIGHT, "1");
+		OntoGraphDataBuilder OntoGraphDataBuilder = new OntoGraphDataBuilder("", null,
+				parameterMap,
 				new DummyLinkToTermDefinitionProvider(), rdfRepository);
 
-		renderingCore.createData();
+		OntoGraphDataBuilder.createData();
 
-		String generatedSource = renderingCore.getSource();
+		String generatedSource = OntoGraphDataBuilder.getSource();
 		String expectedSource = null;
 		try {
 			expectedSource = Strings.readFile(new File("src/test/resources/graph-OP-Methoden.dot"));
@@ -142,21 +143,22 @@ public class DotRendererTest {
 	public void testB() {
 		Map<String, String> parameterMap = new HashMap<String, String>();
 
-		parameterMap.put(RenderingCore.CONCEPT, "Phakoemulsifikation");
+		parameterMap.put(OntoGraphDataBuilder.CONCEPT, "Phakoemulsifikation");
 
-		parameterMap.put(RenderingCore.EXCLUDED_RELATIONS, "rdfs:subClassOf");
+		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "rdfs:subClassOf");
 
-		parameterMap.put(RenderingCore.EXCLUDED_NODES, "rdfs:Resource,WissassConcept,Class");
+		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,WissassConcept,Class");
 
-		parameterMap.put(RenderingCore.REQUESTED_DEPTH, "2");
-		parameterMap.put(RenderingCore.REQUESTED_HEIGHT, "2");
+		parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, "2");
+		parameterMap.put(OntoGraphDataBuilder.REQUESTED_HEIGHT, "2");
 
-		RenderingCore renderingCore = new RenderingCore("", null, parameterMap,
+		OntoGraphDataBuilder OntoGraphDataBuilder = new OntoGraphDataBuilder("", null,
+				parameterMap,
 				new DummyLinkToTermDefinitionProvider(), rdfRepository);
 
-		renderingCore.createData();
+		OntoGraphDataBuilder.createData();
 
-		String generatedSource = renderingCore.getSource();
+		String generatedSource = OntoGraphDataBuilder.getSource();
 		String expectedSource = null;
 		try {
 			expectedSource = Strings.readFile(new File("src/test/resources/graph-Phako.dot"));

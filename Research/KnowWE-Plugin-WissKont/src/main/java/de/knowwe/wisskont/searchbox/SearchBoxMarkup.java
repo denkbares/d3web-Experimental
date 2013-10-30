@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.rdfs.vis.RenderingCore;
+import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 
 /**
  * 
@@ -62,7 +62,7 @@ public class SearchBoxMarkup extends DefaultMarkupType {
 		@Override
 		public void render(Section<?> section, UserContext user, RenderResult string) {
 			String termnames = generateTermnames();
-			String url = RenderingCore.createBaseURL() + "?page=";
+			String url = OntoGraphDataBuilder.createBaseURL() + "?page=";
 			String contextPath = Environment.getInstance().getWikiConnector().getServletContext().getContextPath();
 			String parameters = termnames + ",'" + url + "','" + contextPath + "'";
 
