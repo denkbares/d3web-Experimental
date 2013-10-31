@@ -18,10 +18,10 @@
  */
 package de.knowwe.termbrowser;
 
-import de.knowwe.compile.object.renderer.SurroundingRenderer;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.render.SurroundingRenderer;
 
 /**
  * Renders an html element with a css class for making this section a
