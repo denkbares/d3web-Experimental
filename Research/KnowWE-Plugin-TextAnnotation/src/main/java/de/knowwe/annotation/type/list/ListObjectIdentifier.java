@@ -19,10 +19,10 @@
 package de.knowwe.annotation.type.list;
 
 import de.knowwe.compile.object.IncrementalTermReference;
-import de.knowwe.compile.object.renderer.CompositeRenderer;
 import de.knowwe.compile.object.renderer.ReferenceSurroundingRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.kdom.render.CompositeRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 /**
