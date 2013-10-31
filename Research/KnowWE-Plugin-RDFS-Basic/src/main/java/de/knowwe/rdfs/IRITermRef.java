@@ -21,11 +21,11 @@
 package de.knowwe.rdfs;
 
 import de.knowwe.compile.object.IncrementalTermReference;
-import de.knowwe.compile.object.renderer.CompositeRenderer;
 import de.knowwe.compile.object.renderer.ReferenceRenderer;
 import de.knowwe.compile.object.renderer.ReferenceSurroundingRenderer;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.kdom.render.CompositeRenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 
 public class IRITermRef extends IncrementalTermReference {

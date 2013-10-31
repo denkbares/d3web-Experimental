@@ -20,13 +20,13 @@ package de.knowwe.wisskont;
 
 import java.util.regex.Pattern;
 
-import de.knowwe.compile.object.renderer.CompositeRenderer;
-import de.knowwe.compile.object.renderer.SurroundingRenderer;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.render.CompositeRenderer;
+import de.knowwe.kdom.render.SurroundingRenderer;
 
 /**
  * 
