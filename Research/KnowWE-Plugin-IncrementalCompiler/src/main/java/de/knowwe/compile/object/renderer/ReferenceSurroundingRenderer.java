@@ -33,7 +33,7 @@ import de.knowwe.core.report.DefaultMessageRenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.render.SurroundingRenderer;
+import de.knowwe.kdom.renderer.SurroundingRenderer;
 
 /**
  * 
