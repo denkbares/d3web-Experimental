@@ -21,7 +21,7 @@ package de.knowwe.termbrowser;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.kdom.render.SurroundingRenderer;
+import de.knowwe.kdom.renderer.SurroundingRenderer;
 
 /**
  * Renders an html element with a css class for making this section a
