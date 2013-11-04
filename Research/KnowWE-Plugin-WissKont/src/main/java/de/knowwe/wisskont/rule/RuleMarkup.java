@@ -68,7 +68,7 @@ import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
-import de.knowwe.kdom.render.CompositeRenderer;
+import de.knowwe.kdom.renderer.CompositeRenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.termbrowser.DroppableTargetSurroundingRenderer;
 import de.knowwe.wisskont.ValuesMarkup;

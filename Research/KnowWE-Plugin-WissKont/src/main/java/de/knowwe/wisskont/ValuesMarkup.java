@@ -54,7 +54,7 @@ import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.render.CompositeRenderer;
+import de.knowwe.kdom.renderer.CompositeRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 import de.knowwe.wisskont.dss.KnowledgeBaseInstantiation;
 import de.knowwe.wisskont.util.MarkupUtils;
