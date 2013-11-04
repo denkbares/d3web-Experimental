@@ -20,7 +20,7 @@ package de.knowwe.annotation.type;
 
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.jspwiki.types.WikiTextType;
-import de.knowwe.kdom.render.CompositeRenderer;
+import de.knowwe.kdom.renderer.CompositeRenderer;
 import de.knowwe.termbrowser.DroppableTargetSurroundingRenderer;
 
 /**

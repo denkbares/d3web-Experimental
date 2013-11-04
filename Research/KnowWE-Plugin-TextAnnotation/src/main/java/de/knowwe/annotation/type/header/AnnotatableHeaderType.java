@@ -19,7 +19,7 @@
 package de.knowwe.annotation.type.header;
 
 import de.knowwe.jspwiki.types.HeaderType;
-import de.knowwe.kdom.render.CompositeRenderer;
+import de.knowwe.kdom.renderer.CompositeRenderer;
 
 /**
  * 

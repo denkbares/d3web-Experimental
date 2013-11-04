@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 import de.knowwe.annotation.type.AnnotatedConceptsType;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.kdom.render.CompositeRenderer;
+import de.knowwe.kdom.renderer.CompositeRenderer;
 import de.knowwe.termbrowser.DroppableTargetSurroundingRenderer;
 
 /**
