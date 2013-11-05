@@ -1,5 +1,6 @@
 package de.knowwe.rdfs.vis.markup.sparql;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +21,13 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Message.Type;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.core.utils.PackageCompileLinkToTermDefinitionProvider;
 import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
@@ -43,6 +47,8 @@ public class SparqlVisTypeRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> content, UserContext user, RenderResult string) {
+
+		List<Message> messages = new ArrayList<Message>();
 
 		Section<SparqlVisType> section = Sections.findAncestorOfType(content,
 				SparqlVisType.class);
@@ -116,24 +122,36 @@ public class SparqlVisTypeRenderer implements Renderer {
 				sparqlString);
 
 		SubGraphData data = convertToGraph(resultSet, parameterMap, rdfRepository, uriProvider,
-				section);
+				section, messages);
+
 
 		String conceptName = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONCEPT);
-		if (conceptName == null && data.getConceptDeclarations().size() > 0) {
+		if (data != null && conceptName == null && data.getConceptDeclarations().size() > 0) {
 			// if no center concept has explicitly been specified, take any
 			conceptName = data.getConceptDeclarations().iterator().next().getName();
 		}
 		parameterMap.put(OntoGraphDataBuilder.CONCEPT, conceptName);
 
-		// current default source renderer is DOT
-		GraphVisualizationRenderer graphRenderer = new DOTVisualizationRenderer(data, parameterMap);
-		String renderer = parameterMap.get(OntoGraphDataBuilder.RENDERER);
-		if (renderer != null && renderer.equals(GraphDataBuilder.Renderer.d3.name())) {
-			graphRenderer = new D3VisualizationRenderer(data, parameterMap);
-		}
+		String renderedContent = "";
 
-		graphRenderer.generateSource();
-		String renderedContent = graphRenderer.getHTMLIncludeSnipplet();
+		if (data != null) {
+
+			// current default source renderer is DOT
+			GraphVisualizationRenderer graphRenderer = new DOTVisualizationRenderer(data,
+					parameterMap);
+			String renderer = parameterMap.get(OntoGraphDataBuilder.RENDERER);
+			if (renderer != null && renderer.equals(GraphDataBuilder.Renderer.d3.name())) {
+				graphRenderer = new D3VisualizationRenderer(data, parameterMap);
+			}
+
+			graphRenderer.generateSource();
+			renderedContent = graphRenderer.getHTMLIncludeSnipplet();
+
+		}
+		if (messages.size() > 0) {
+		DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, messages,
+				string);
+		}
 		string.appendHtml(renderedContent);
 
 	}
@@ -142,12 +160,18 @@ public class SparqlVisTypeRenderer implements Renderer {
 	 * 
 	 * @created 23.07.2013
 	 * @param resultSet
+	 * @param messages
 	 * @return
 	 */
-	private SubGraphData convertToGraph(QueryResultTable resultSet, Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section) {
+	private SubGraphData convertToGraph(QueryResultTable resultSet, Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, List<Message> messages) {
 		SubGraphData data = new SubGraphData();
 		List<String> variables = resultSet.getVariables();
-		if (variables.size() < 3) return null;
+		if (variables.size() < 3) {
+			Message m = new Message(Type.ERROR,
+					"A sparqlvis query requires exactly three variables!");
+			messages.add(m);
+			return null;
+		}
 		ClosableIterator<QueryRow> iterator = resultSet.iterator();
 		while (iterator.hasNext()) {
 			QueryRow row = iterator.next();
@@ -173,7 +197,12 @@ public class SparqlVisTypeRenderer implements Renderer {
 			data.addEdge(newLineRelationsKey);
 
 		}
-
+		if (data.getConceptDeclarations().size() == 0) {
+			Message m = new Message(Type.ERROR,
+					"The query produced an empty result set!");
+			messages.add(m);
+			return null;
+		}
 		return data;
 	}
 
