@@ -24,6 +24,11 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
+		<parameter id="css" value="d3force.css" />
+		<parameter id="css" value="d3wheel.css" />
+		<parameter id="script" value="d3.v3.js" />
+		<parameter id="script" value="d3force.js" />
+		<parameter id="script" value="d3wheel.js" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -35,6 +40,11 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
+		<parameter id="css" value="d3force.css" />
+		<parameter id="css" value="d3wheel.css" />
+		<parameter id="script" value="d3.v3.js" />
+		<parameter id="script" value="d3force.js" />
+		<parameter id="script" value="d3wheel.js" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
