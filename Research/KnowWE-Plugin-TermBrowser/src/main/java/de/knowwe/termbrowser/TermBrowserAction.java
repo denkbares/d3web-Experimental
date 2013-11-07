@@ -119,7 +119,7 @@ public class TermBrowserAction extends AbstractAction {
 			linkProvider = new PackageCompileLinkToTermDefinitionProvider();
 		}
 		boolean abbreviationFlag = TermBrowserMarkup.getCurrentTermbrowserMarkupPrefixAbbreviationFlag(context);
-		return RenderResult.unmask(new TermBrowserRender(context,
+		return RenderResult.unmask(new TermBrowserRenderer(context,
 				linkProvider, master, abbreviationFlag).renderTermBrowser(), context);
 	}
 

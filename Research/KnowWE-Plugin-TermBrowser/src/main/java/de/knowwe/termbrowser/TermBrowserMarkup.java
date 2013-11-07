@@ -164,7 +164,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 
 			boolean abbreviationFlag = TermBrowserMarkup.getCurrentTermbrowserMarkupPrefixAbbreviationFlag(user);
 
-			TermBrowserRender renderer = new TermBrowserRender(user,
+			TermBrowserRenderer renderer = new TermBrowserRenderer(user,
 					linkProvider,
 					master, abbreviationFlag);
 			string.append(renderer.renderTermBrowser());

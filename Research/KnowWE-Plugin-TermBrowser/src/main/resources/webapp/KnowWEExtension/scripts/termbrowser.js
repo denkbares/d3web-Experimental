@@ -257,7 +257,7 @@ function rerenderSection(oldTargetID, newTargetID) {
 		url : KNOWWE.core.util.getURL(params),
 		response : {
 			fn : function() {
-				if (this.response.toLowerCase().indexOf("not found") >= 0) {
+				if (this.response.toLowerCase().startsWith("not found")) {
 					// if section can not be rerendered correctly for instance
 					// because multiple sections have changed/been created
 					location.reload();
@@ -280,9 +280,12 @@ function rerenderSection(oldTargetID, newTargetID) {
 					// re-init edit-functionalities for inserted part
 					var markupBlockNew = jq$('div[dragdropid="' + newTargetID
 							+ '"]');
-					if (!markupBlockNew) {
-						markupBlockNew = jq$('#' + newTargetID).parent();
+					if (markupBlockNew.length == 0) {
+						markupBlockNew = jq$('#' + newTargetID);
 					}
+					markupBlockNew.find(".dropTargetMarkup").each(function() {
+						initDropableMarkupSection(jq$(this));
+					});
 					initDropableMarkupSection(markupBlockNew);
 					KNOWWE.core.rerendercontent
 							.animateDefaultMarkupMenu(markupBlockNew);

@@ -18,10 +18,11 @@
  */
 package de.knowwe.termbrowser;
 
+import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.kdom.renderer.SurroundingRenderer;
 
 /**
  * Renders an html element with a css class for making this section a
@@ -30,9 +31,8 @@ import de.knowwe.kdom.renderer.SurroundingRenderer;
  * @author jochenreutelshofer
  * @created 30.11.2012
  */
-public class DroppableTargetSurroundingRenderer implements SurroundingRenderer {
+public class DroppableTargetSurroundingRenderer implements Renderer {
 
-	@Override
 	public void renderPre(Section<?> section, UserContext user, RenderResult string) {
 		if (section.getText().trim().length() > 3) {
 			string.appendHtml("<div style='display:inline;' dragdropid='" + section.getID()
@@ -41,11 +41,25 @@ public class DroppableTargetSurroundingRenderer implements SurroundingRenderer {
 		}
 	}
 
-	@Override
 	public void renderPost(Section<?> section, UserContext user, RenderResult string) {
 		if (section.getText().trim().length() > 3) {
-			string.appendHtml("</div>\n");
+			string.appendHtml("</div>");
 		}
+	}
+
+	@Override
+	public void render(Section<?> section, UserContext user, RenderResult result) {
+		renderPre(section, user, result);
+
+		// call original (and potentially additional plugged) renderers
+		Renderer nextRendererForType = Environment.getInstance().getNextRendererForType(
+				section.get(), this);
+		if (nextRendererForType != null) {
+			nextRendererForType.render(section, user, result);
+		}
+
+		renderPost(section, user, result);
+
 	}
 
 }

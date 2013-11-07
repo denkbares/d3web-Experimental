@@ -38,11 +38,14 @@ public class DefaultTermDetector extends AbstractTermDetector {
 
 	@Override
 	protected Collection<Section<? extends TermDefinition>> getDefs(Section<? extends TermReference> ref, String master) {
+		Set<Section<? extends TermDefinition>> result = new HashSet<Section<? extends TermDefinition>>();
 		TerminologyManager terminologyManager = Environment.getInstance().getTerminologyManager(
 				Environment.DEFAULT_WEB, master);
 		Section<?> termDefiningSection = terminologyManager.getTermDefiningSection(ref.get().getTermIdentifier(
 				ref));
-		Set<Section<? extends TermDefinition>> result = new HashSet<Section<? extends TermDefinition>>();
+		if (termDefiningSection == null) {
+			return result;
+		}
 		if (termDefiningSection.get() instanceof TermDefinition) {
 			Section<? extends TermDefinition> def = Sections.cast(termDefiningSection,
 					TermDefinition.class);

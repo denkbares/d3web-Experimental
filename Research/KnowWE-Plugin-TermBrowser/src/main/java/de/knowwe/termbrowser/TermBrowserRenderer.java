@@ -34,7 +34,7 @@ import de.knowwe.termbrowser.util.Tree.Node;
  * @author jochenreutelshofer
  * @created 10.12.2012
  */
-public class TermBrowserRender {
+public class TermBrowserRenderer {
 
 	public static final int THRESHOLD_MAX_TERM_NUMBER = 15;
 	private static boolean zebra = false;
@@ -48,7 +48,7 @@ public class TermBrowserRender {
 	/**
 	 * 
 	 */
-	public TermBrowserRender(UserContext user, de.knowwe.core.utils.LinkToTermDefinitionProvider linkProvider, String master, boolean prefixAbbreviation) {
+	public TermBrowserRenderer(UserContext user, de.knowwe.core.utils.LinkToTermDefinitionProvider linkProvider, String master, boolean prefixAbbreviation) {
 		this.user = user;
 		this.linkProvider = linkProvider;
 		this.master = master;
