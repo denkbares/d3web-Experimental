@@ -20,6 +20,8 @@ package de.knowwe.defi.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import com.ecyrd.jspwiki.WikiEngine;
@@ -29,7 +31,6 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.WikiAttachment;
 import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.defi.logger.DefiCommentEventLogger;
@@ -103,18 +104,24 @@ public class DataTagHandler extends AbstractTagHandler {
 
 	private String renderLogDownloadLinks(String title) {
 		StringBuilder loglinks = new StringBuilder();
+		List<WikiAttachment> attachments = new LinkedList<WikiAttachment>();
 		try {
-			loglinks.append(LOG_HEADLINE);
-			loglinks.append("<ul>");
-			for (WikiAttachment wa : KnowWEUtils.getAttachments(title, ".*(.log)")) {
-				loglinks.append("<li class='defi_log_dl'><a href='attach/" + wa.getPath() + "'>"
-						+ wa.getFileName() + "</a></li>");
+			for (WikiAttachment att : Environment.getInstance().getWikiConnector().getAttachments(
+					title)) {
+				if (att.getFileName().startsWith("Defi") && att.getFileName().endsWith(".log")) attachments.add(att);
 			}
-			loglinks.append("</ul>");
 		}
-		catch (IOException e) {
-			e.printStackTrace();
+		catch (IOException e1) {
+			e1.printStackTrace();
 		}
+
+		loglinks.append(LOG_HEADLINE);
+		loglinks.append("<ul>");
+		for (WikiAttachment wa : attachments) {
+			loglinks.append("<li class='defi_log_dl'><a href='attach/" + wa.getPath() + "'>"
+					+ wa.getFileName() + "</a></li>");
+		}
+		loglinks.append("</ul>");
 
 		return loglinks.toString();
 	}
