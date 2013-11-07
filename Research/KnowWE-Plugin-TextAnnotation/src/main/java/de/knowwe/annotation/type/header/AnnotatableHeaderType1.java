@@ -28,9 +28,6 @@ import de.knowwe.kdom.renderer.CompositeRenderer;
  */
 public class AnnotatableHeaderType1 extends HeaderType1 {
 
-	/**
- * 
- */
 	public AnnotatableHeaderType1() {
 		this.setRenderer(new CompositeRenderer(new HeaderDragDropSurroundingRenderer()));
 	}
