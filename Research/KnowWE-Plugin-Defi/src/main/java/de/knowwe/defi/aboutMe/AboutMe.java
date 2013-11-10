@@ -90,9 +90,12 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 		this.setRenderer(new AboutMeRenderer());
 		this.setIgnorePackageCompile(true);
 
-		ServletContext context = Environment.getInstance().getContext();
-		WikiEngine en = WikiEngine.getInstance(context, null);
-		WikiEventManager.addWikiEventListener(en.getAuthenticationManager(), this);
+		// TODO:
+		// "java.lang.NullPointerException: Used WikiConnector can not provide a ServletContext"
+			ServletContext context = Environment.getInstance().getContext();
+			WikiEngine en = WikiEngine.getInstance(context, null);
+			WikiEventManager.addWikiEventListener(en.getAuthenticationManager(),
+					this);
 	}
 
 	@Override

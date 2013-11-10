@@ -43,7 +43,7 @@ public class DefiSessionEventLogger {
 	private final static String PATH = Environment.getInstance().getWikiConnector().getSavePath()
 			+ "/" + FILENAME;
 	/** Sepearator between entries in a logline **/
-	private final static String SEPARATOR = "___";
+	private final static String SEPARATOR = DefiLoggerUtils.SEPARATOR;
 
 
 	/**
