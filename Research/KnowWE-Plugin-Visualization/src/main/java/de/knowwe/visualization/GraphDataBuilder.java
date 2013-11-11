@@ -80,6 +80,8 @@ public abstract class GraphDataBuilder<T extends Object> {
 	public static final String TITLE = "title";
 	public static final String SECTION_ID = "section-id";
 	public static final String REAL_PATH = "realpath";
+	
+	public static final String D3_FORCE_VISUALISATION_STYLE = "d3_force_visualisation_style";
 
 	public static final String RELATION_COLOR_CODES = "relation_color_codes";
 

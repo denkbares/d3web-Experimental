@@ -44,6 +44,7 @@ public class SparqlVisType extends DefaultMarkupType {
 
 	public static final String ANNOTATION_RENDERER = "renderer";
 	public static final String ANNOTATION_VISUALIZATION = "visualization";
+	public static final String ANNOTATION_DESIGN = "design";
 
 	private static final DefaultMarkup MARKUP;
 
@@ -69,6 +70,7 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
 		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
 		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
+		MARKUP.addAnnotation(ANNOTATION_DESIGN, false);
 		MARKUP.addAnnotationRenderer(Rdf2GoCore.MASTER_ANNOTATION, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_COMMENT, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_SIZE, NothingRenderer.getInstance());

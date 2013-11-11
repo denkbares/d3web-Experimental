@@ -1,7 +1,9 @@
 package de.knowwe.rdfs.vis.markup.sparql;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +17,11 @@ import org.ontoware.rdf2go.model.node.Node;
 
 import de.d3web.strings.Identifier;
 import de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider;
+import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -59,6 +64,51 @@ public class SparqlVisTypeRenderer implements Renderer {
 		String realPath = servletContext.getRealPath("");
 
 		Map<String, String> parameterMap = new HashMap<String, String>();
+		
+		String layout = SparqlVisType.getAnnotation(section, SparqlVisType.ANNOTATION_DESIGN);
+		if(layout!=null) {
+			
+			String cssText = null;
+			
+			ArticleManager articleManager = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB);
+			Collection<Article> articles = articleManager.getArticles();
+				
+			for (Article article : articles) {
+				Section<RootType> rootSection = article.getRootSection();
+				// search layouttypes
+				List<Section<SparqlVisDesignType>> sparqlVisDesignSections = Sections.findSuccessorsOfType(rootSection, SparqlVisDesignType.class);
+				
+				for(Section<SparqlVisDesignType> currentSection : sparqlVisDesignSections) {
+					
+					String currentLayout = SparqlVisDesignType.getAnnotation(currentSection, SparqlVisDesignType.ANNOTATION_NAME);
+					if(currentLayout.equals(layout)) {
+						
+						cssText = SparqlVisDesignType.getContentSection(currentSection).getText();
+						
+					}
+					
+				}
+			}
+			
+			if(cssText!=null) {
+				
+				parameterMap.put(OntoGraphDataBuilder.D3_FORCE_VISUALISATION_STYLE, cssText);} 
+			else {
+				Message noSuchLayout = new Message(Message.Type.WARNING,
+						"No such layout " + layout + " found!");
+				Collection<Message> warnings = new HashSet<Message>();
+				messages.add(noSuchLayout);
+				DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING,warnings,
+						string);
+				
+			}
+			
+		}
+		
+
+
+
 
 		parameterMap.put(OntoGraphDataBuilder.REAL_PATH, realPath);
 

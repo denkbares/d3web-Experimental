@@ -115,6 +115,15 @@ public class D3Renderer {
 				+ ", " + "\"" + parameters.get(GraphDataBuilder.SECTION_ID) + "\""
 				+ ")";
 		htmlsource += "</script>";
+		
+		//implement layout style 
+				String cssCode = parameters.get(GraphDataBuilder.D3_FORCE_VISUALISATION_STYLE);
+				if(cssCode!=null ) {
+					htmlsource += "<style type=\"text/css\">";
+					htmlsource += cssCode;
+					htmlsource += "</style>";
+					
+				}
 	}
 
 	/**
