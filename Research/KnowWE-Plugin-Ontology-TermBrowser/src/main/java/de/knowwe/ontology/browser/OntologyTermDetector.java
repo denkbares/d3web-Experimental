@@ -28,8 +28,8 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.ontology.kdom.resource.AbbreviatedResourceDefinition;
-import de.knowwe.ontology.kdom.resource.AbbreviatedResourceReference;
+import de.knowwe.ontology.kdom.resource.ResourceDefinition;
+import de.knowwe.ontology.kdom.resource.ResourceReference;
 import de.knowwe.termbrowser.DefaultTermDetector;
 import de.knowwe.termbrowser.InterestingTermDetector;
 
@@ -44,16 +44,16 @@ public class OntologyTermDetector implements InterestingTermDetector {
 	public Map<Identifier, Double> getWeightedTermsOfInterest(Article a, String master) {
 		Map<Identifier, Double> interestingTerms = new HashMap<Identifier, Double>();
 
-		List<Section<AbbreviatedResourceDefinition>> definitions = Sections.findSuccessorsOfType(
-				a.getRootSection(), AbbreviatedResourceDefinition.class);
-		for (Section<AbbreviatedResourceDefinition> def : definitions) {
+		List<Section<ResourceDefinition>> definitions = Sections.findSuccessorsOfType(
+				a.getRootSection(), ResourceDefinition.class);
+		for (Section<ResourceDefinition> def : definitions) {
 			Identifier termname = def.get().getTermIdentifier(def);
 			interestingTerms.put(termname, WEIGHT_DEFINITION);
 		}
 
-		List<Section<AbbreviatedResourceReference>> references = Sections.findSuccessorsOfType(
-				a.getRootSection(), AbbreviatedResourceReference.class);
-		for (Section<AbbreviatedResourceReference> ref : references) {
+		List<Section<ResourceReference>> references = Sections.findSuccessorsOfType(
+				a.getRootSection(), ResourceReference.class);
+		for (Section<ResourceReference> ref : references) {
 			Identifier termname = ref.get().getTermIdentifier(ref);
 			Collection<Section<? extends TermDefinition>> termDefinitions = DefaultTermDetector.getDefinitions(
 					ref, master);
