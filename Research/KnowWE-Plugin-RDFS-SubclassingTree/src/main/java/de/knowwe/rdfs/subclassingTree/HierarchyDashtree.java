@@ -27,7 +27,7 @@ public class HierarchyDashtree extends DashTree {
 
 	public HierarchyDashtree(DashTreeElementContent contentType) {
 		replaceDashTreeElementContentType(contentType);
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(AllTextSectionFinder.getInstance());
 	}
 
 }

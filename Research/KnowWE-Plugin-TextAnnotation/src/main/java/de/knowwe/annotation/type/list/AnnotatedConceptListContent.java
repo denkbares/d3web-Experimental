@@ -50,7 +50,7 @@ public class AnnotatedConceptListContent extends AbstractType {
 		 * 
 		 */
 		public ListSeparatorType() {
-			this.setSectionFinder(new AllTextSectionFinder());
+			this.setSectionFinder(AllTextSectionFinder.getInstance());
 		}
 	}
 

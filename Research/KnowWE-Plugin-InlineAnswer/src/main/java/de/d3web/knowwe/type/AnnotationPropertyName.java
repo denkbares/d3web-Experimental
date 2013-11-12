@@ -30,7 +30,7 @@ public class AnnotationPropertyName extends
 		AbstractType {
 
 	public AnnotationPropertyName() {
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(AllTextSectionFinder.getInstance());
 	}
 
 }

@@ -175,7 +175,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 		 * 
 		 */
 		public WisskontChoiceFinding() {
-			this.setSectionFinder(new AllTextSectionFinder());
+			this.setSectionFinder(AllTextSectionFinder.getInstance());
 			CompositeRenderer renderer = new CompositeRenderer(DelegateRenderer.getInstance(),
 					new ReferenceSurroundingRenderer());
 			this.addChildType(new ListObjectIdentifier(renderer));

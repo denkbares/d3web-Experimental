@@ -34,7 +34,7 @@ public class AnnotationContent extends AbstractType {
 		this.addChildType(new AnnotatedString(annotationMapSign));
 		this.addChildType(new AnnotationObject());
 
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(AllTextSectionFinder.getInstance());
 
 	}
 }

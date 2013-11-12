@@ -55,7 +55,7 @@ public class CompiledImageTag extends AbstractKnowledgeUnitType<CompiledImageTag
 		this.setCompileScript(new ImageCompileScript());
 
 		// is plugged as only child into ImageType which does the parsing
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(AllTextSectionFinder.getInstance());
 
 		this.addChildType(new ImageTypeContent());
 	}

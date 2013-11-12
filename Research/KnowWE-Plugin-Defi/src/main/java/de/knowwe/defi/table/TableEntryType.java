@@ -62,7 +62,7 @@ class TableEntryContentType extends AbstractType {
 
 	public TableEntryContentType() {
 		this.addChildType(new VersionEntry());
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(AllTextSectionFinder.getInstance());
 	}
 }
 

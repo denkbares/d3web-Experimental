@@ -29,7 +29,7 @@ public class DynamicMenuDashtree extends DashTree {
 
 	public DynamicMenuDashtree() {
 		replaceDashTreeElementContentType(new DynamicMenuItem());
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(AllTextSectionFinder.getInstance());
 
 		Types.injectRendererToSuccessors(this, DashesPrefix.class,
 				NothingRenderer.getInstance());

@@ -24,7 +24,7 @@ import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 public class DefineTableContentType extends AbstractType {
 	
 	public DefineTableContentType(){
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(AllTextSectionFinder.getInstance());
 		this.addChildType(new TableTemplateType());
 		
 	}

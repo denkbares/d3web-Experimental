@@ -34,7 +34,7 @@ import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 public class TimeTableTemplateContentType extends AbstractType {
 
 	public TimeTableTemplateContentType() {
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(AllTextSectionFinder.getInstance());
 		this.addChildType(new TimeTableLine());
 	}
 
@@ -50,7 +50,7 @@ public class TimeTableTemplateContentType extends AbstractType {
 class NumberOfDaysT extends AbstractType {
 
 	public NumberOfDaysT() {
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(AllTextSectionFinder.getInstance());
 		this.addSubtreeHandler(new NumberOfDaysChecker());
 	}
 

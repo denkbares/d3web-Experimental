@@ -25,7 +25,7 @@ import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 public class SparqlVisContentType extends AbstractType {
 
 	public SparqlVisContentType() {
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(AllTextSectionFinder.getInstance());
 		this.setRenderer(new SparqlVisTypeRenderer());
 		this.setIgnorePackageCompile(true);
 	}

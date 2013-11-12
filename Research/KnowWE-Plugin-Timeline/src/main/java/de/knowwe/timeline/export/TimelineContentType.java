@@ -29,7 +29,7 @@ import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 public class TimelineContentType extends AbstractType {
 
 	public TimelineContentType() {
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(AllTextSectionFinder.getInstance());
 
 		this.addChildType(new TimelineLine());
 	}

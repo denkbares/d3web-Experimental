@@ -85,7 +85,7 @@ public class ManchesterMarkup extends AbstractType {
 		private static ManchesterMarkupContentType instance = null;
 
 		protected ManchesterMarkupContentType() {
-			this.setSectionFinder(new AllTextSectionFinder());
+			this.setSectionFinder(AllTextSectionFinder.getInstance());
 
 			this.addChildType(new ClassFrame());
 			this.addChildType(new IndividualFrame());

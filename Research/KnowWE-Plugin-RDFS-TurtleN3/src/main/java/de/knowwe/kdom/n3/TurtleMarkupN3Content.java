@@ -33,7 +33,7 @@ public class TurtleMarkupN3Content extends AbstractType {
 		TurtleMarkupN3Content.instance = this;
 		this.addChildType(new TurtleSubjectSection());
 		this.addChildType(new TurtlePredSentence());
-		setSectionFinder(new AllTextSectionFinder());
+		setSectionFinder(AllTextSectionFinder.getInstance());
 
 		// setCustomRenderer(new
 		// GenericHTMLRenderer<TurtleMarkupN3Content>("span",

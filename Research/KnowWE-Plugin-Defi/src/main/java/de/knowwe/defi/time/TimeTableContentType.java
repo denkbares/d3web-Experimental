@@ -36,7 +36,7 @@ import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 public class TimeTableContentType extends AbstractType {
 
 	public TimeTableContentType() {
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(AllTextSectionFinder.getInstance());
 
 		this.addChildType(new TimeTableLine());
 	}
@@ -56,7 +56,7 @@ class DateT extends AbstractType {
 			"dd.MM.yyyy");
 
 	public DateT() {
-		this.setSectionFinder(new AllTextSectionFinder());
+		this.setSectionFinder(AllTextSectionFinder.getInstance());
 		this.addSubtreeHandler(new DateChecker());
 	}
 

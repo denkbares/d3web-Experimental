@@ -84,7 +84,7 @@ public class ConceptListContent extends AbstractType {
 		 * 
 		 */
 		public ListSeparatorType() {
-			this.setSectionFinder(new AllTextSectionFinder());
+			this.setSectionFinder(AllTextSectionFinder.getInstance());
 			// this.setRenderer(new StyleRenderer("float:left;"));
 		}
 	}

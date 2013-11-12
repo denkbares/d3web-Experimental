@@ -60,7 +60,7 @@ public class SPARQLQueryContentType extends AbstractType {
 		iri.setSectionFinder(new AllTextFinderTrimmed());
 		addChildType(iri);
 
-		setSectionFinder(new AllTextSectionFinder());
+		setSectionFinder(AllTextSectionFinder.getInstance());
 	}
 
 }

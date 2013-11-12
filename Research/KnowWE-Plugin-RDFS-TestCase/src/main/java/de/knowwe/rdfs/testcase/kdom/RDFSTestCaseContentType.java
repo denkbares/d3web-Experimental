@@ -50,7 +50,7 @@ public class RDFSTestCaseContentType extends AbstractType {
 		addSubtreeHandler(new RDFSTestCaseHandler());
 
 		// set section finder
-		setSectionFinder(new AllTextSectionFinder());
+		setSectionFinder(AllTextSectionFinder.getInstance());
 	}
 
 }
