@@ -90,9 +90,9 @@ public class NewForumAction extends AbstractAction {
 		else title = "Forum zu " + pageName + " (" + topic + ")";
 		if (mgr.getArticle(title) == null) {
 			Environment.getInstance().buildAndRegisterArticle(content,
-						title, Environment.DEFAULT_WEB);
+					title, Environment.DEFAULT_WEB);
 			Environment.getInstance().getWikiConnector()
-						.createArticle(title, content, username);
+					.createArticle(title, content, username);
 		}
 		else {
 			responseString = "Ein Forum zu diesem Thema existiert bereits.\n";

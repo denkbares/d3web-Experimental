@@ -36,6 +36,7 @@ import com.ecyrd.jspwiki.event.WikiSecurityEvent;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.defi.user.UserUtilities;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -129,6 +130,8 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 				String content = pagePermissions + "%%aboutme\n%\n";
 				Environment.getInstance().getWikiConnector()
 						.createArticle(fullName, content, loginName);
+				// create data page
+				UserUtilities.getDataPage(fullName);
 
 			}
 		}

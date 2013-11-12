@@ -19,59 +19,23 @@
 package de.knowwe.defi.readbutton;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.defi.user.UserUtilities;
-import de.knowwe.defi.utils.ReplaceSectionUtils;
 
 /**
- * 
  * @author dupke
  */
 public class ReadbuttonSubmitAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		Map<String, String> nodesMap = new HashMap<String, String>();
-		Section<?> dataSection = UserUtilities.getDataPage(context.getUserName()).getRootSection();
-		nodesMap.put(dataSection.getID(), dataSection.getText() + "\n"
-				+ createNewMarkupString(context));
 
-		// submit change
-		ReplaceSectionUtils.replaceSections(context, nodesMap);
-	}
+		// Check file, make it if not exists, return if error occurs
+		if (!ReadbuttonUtilities.checkRateLogFile()) return;
 
-	private String createNewMarkupString(UserActionContext context) {
-		String id = context.getParameter("id");
-		String realValue = context.getParameter("realvalue");
-		String value = context.getParameter("value");
-		String label = context.getParameter("label");
-		String discussed = context.getParameter("discussed");
-		String closed = context.getParameter("closed");
-		String page = context.getTitle();
-		String date = (new SimpleDateFormat("dd.MM.yyyy HH:mm")).format((new Date()));
-
-		if (label.equals("")) label = "--";
-
-		StringBuffer newContent = new StringBuffer();
-		newContent.append("%%readbutton\n");
-		newContent.append("@id:" + id + "\n");
-		newContent.append("@realvalue:" + realValue + "\n");
-		newContent.append("@value:" + value + "\n");
-		newContent.append("@label:" + label + "\n");
-		newContent.append("@discussed:" + discussed + "\n");
-		newContent.append("@closed:" + closed + "\n");
-		newContent.append("@page:" + page + "\n");
-		newContent.append("@date:" + date + "\n");
-		newContent.append("%\n");
-
-		return newContent.toString();
+		// Write rate into log
+		ReadbuttonUtilities.logPageRate(context.getUserName(), context.getTitle(), context.getParameters());
 	}
 
 }

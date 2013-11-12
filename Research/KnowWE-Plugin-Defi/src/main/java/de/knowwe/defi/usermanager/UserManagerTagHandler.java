@@ -113,7 +113,7 @@ public class UserManagerTagHandler extends AbstractTagHandler {
 			builder.append("</td></tr>\n");
 			builder.append("<tr><td colspan='3'><div style='display:none;margin-bottom:15px'>");
 			builder.append(getNewUserForm());
-			builder.append("<input type='button' onclick='registerUser()' value='abschicken' />");
+			builder.append("<input type='button' onclick='registerUser()' value='Erstellen' />");
 			builder.append("<input type='button' onclick='showEditUser(" + i
 					+ ")' value='Abbrechen' />");
 			builder.append("</div></td></tr>");

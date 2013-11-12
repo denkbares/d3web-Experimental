@@ -18,19 +18,15 @@
  */
 package de.knowwe.defi.readbutton;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * With the readbutton, the user can rate a lesson. If the rated value is lower
@@ -43,6 +39,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 	private static final int DEFAULT_NUMBER = 4;
 	private static final String ERROR_MISSING_ID = "Das Attribut 'id' fehlt.";
+	private static final String ERROR_DOUBLE_ID = "Ein Readbutton mit dieser id existiert bereits.";
 	private static final String BUTTON_DISCUSS = ">> Ja, mit dem Berater dar&uuml;ber sprechen <<";
 	private static final String BUTTON_DONT_DISCUSS = ">> Nein, danke <<";
 	private static final String BUTTON_ANSWERED = "Ihre R&uuml;ckmeldung wurde erfasst. Vielen Dank!";
@@ -69,12 +66,12 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 	@Override
 	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 		StringBuilder builder = new StringBuilder();
-		String id, dataPagename, closed = "Nein";
+		String id, closed = "Nein";
 		String[] values;
-		List<String> ids = new LinkedList<String>();
 		int number, threshold, checkedValue = -1;
 		String berater = ResourceBundle.getBundle("KnowWE_Defi_config").getString(
 				"defi.berater");
+
 
 		// only asserted user can see readbuttons.
 		if (!userContext.userIsAsserted()) {
@@ -90,8 +87,6 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			return;
 		}
 
-		// TODO: ID-Check
-
 		// get attributes
 		if (parameters.containsKey(NUMBER)) number = Integer.parseInt(parameters.get(NUMBER));
 		else number = DEFAULT_NUMBER;
@@ -101,23 +96,21 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 		values = getValues(number, parameters);
 
-		// search on "_data"-page for the button
-		dataPagename = userContext.getUserName() + "_data";
-		ArticleManager mgr = Environment.getInstance().getArticleManager(userContext.getWeb());
-		if (Environment.getInstance().getWikiConnector().doesArticleExist(dataPagename)) {
-			Section<?> sec = mgr.getArticle(dataPagename).getRootSection();
-			List<Section<ReadbuttonType>> rbSecs = Sections.findSuccessorsOfType(sec,
-					ReadbuttonType.class);
-			for (Section<ReadbuttonType> rbSec : rbSecs) {
-				// collect all ids
-				ids.add(DefaultMarkupType.getAnnotation(rbSec, "id"));
-				// get checked value of the button
-				if (id.equals(DefaultMarkupType.getAnnotation(rbSec, "id"))) {
-					checkedValue = Integer.parseInt(DefaultMarkupType.getAnnotation(rbSec,
-							"realvalue"));
-					closed = DefaultMarkupType.getAnnotation(rbSec, "closed");
-				}
-			}
+		// TODO CHECK DOUBLE ID
+		if (!ReadbuttonUtilities.checkID(id, userContext.getTitle())) {
+			result.appendHtml("<span class='warning'>" + ERROR_DOUBLE_ID +
+					"</span>");
+			return;
+		}
+		
+		// search for readbutton in log
+		ArrayList<String> readbutton = ReadbuttonUtilities.getReadbutton(id, userContext.getUserName());
+		try {
+			checkedValue = Integer.parseInt(readbutton.get(4));
+			closed = readbutton.get(8);
+		}
+		catch (IndexOutOfBoundsException e) {
+
 		}
 
 		// render button

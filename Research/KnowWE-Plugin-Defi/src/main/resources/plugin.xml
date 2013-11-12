@@ -48,19 +48,7 @@
 		<parameter id="priority" value="100"  />
 		<parameter id="scope" value="root" />
 	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="ReadbuttonType">
-		<parameter id="class" value="de.knowwe.defi.readbutton.ReadbuttonType" />
-		<parameter id="name" value="ReadbuttonType" />
-		<parameter id="description" value="Type ReadbuttonType" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5"  />
-		<parameter id="scope" value="root" />
-		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
-		<parameter id="css" value="defi.css" />
-	</extension>	
-	
+
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="DefineTableMarkup">
 		<parameter id="class" value="de.knowwe.defi.table.DefineTableMarkup" />

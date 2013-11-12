@@ -1,7 +1,5 @@
-<%@page import="de.knowwe.kdom.defaultMarkup.DefaultMarkupType"%>
+<%@page import="de.knowwe.defi.readbutton.ReadbuttonUtilities"%>
 <%@page import="java.util.List"%>
-<%@page import="de.knowwe.core.ArticleManager"%>
-<%@page import="de.knowwe.defi.readbutton.ReadbuttonType"%>
 <%@page import="java.util.ResourceBundle"%>
 <%@page import="de.knowwe.core.Environment"%>
 <%@page import="de.knowwe.jspwiki.JSPWikiConnector"%>
@@ -38,19 +36,7 @@
 	// if user has visited welcomepage, redirect him to welcomepage_firsttime
 	boolean welcomePage_firstTime = false;
 	if (user.getTitle().equals(WELCOME_PAGE)) {
-		welcomePage_firstTime = true;
-		String[] readpages = new String[0];
-		String dataPagename = user.getUserName() + "_data";
-		ArticleManager mgr = Environment.getInstance().getArticleManager(user.getWeb());
-		if (Environment.getInstance().getArticle(user.getWeb(), dataPagename) != null) {
-			Section<?> sec = mgr.getArticle(dataPagename).getRootSection();
-			List<Section<ReadbuttonType>> rbSecs = Sections.findSuccessorsOfType(sec,
-					ReadbuttonType.class);
-			for (Section<ReadbuttonType> rbSec : rbSecs) {
-				if (BUTTON_ID.equals(DefaultMarkupType.getAnnotation(rbSec, "id")))
-					welcomePage_firstTime = false;
-			}
-		}
+		welcomePage_firstTime = !ReadbuttonUtilities.isPageRated(BUTTON_ID, user.getUserName());
 	}
 	
 if(welcomePage_firstTime) {

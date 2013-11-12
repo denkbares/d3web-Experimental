@@ -25,7 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
@@ -35,11 +34,10 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.defi.menu.MenuUtilities;
-import de.knowwe.defi.readbutton.ReadbuttonType;
+import de.knowwe.defi.readbutton.ReadbuttonUtilities;
 import de.knowwe.defi.time.TimeTableUtilities;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * 
@@ -157,18 +155,8 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	 * @return true = geklickt, false = noch nicht geklickt
 	 */
 	private boolean getReadbuttonStatus(String readbutton, String userName) {
-		String dataPagename = userName + "_data";
-		ArticleManager mgr = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
-		if (Environment.getInstance().getWikiConnector().doesArticleExist(dataPagename)) {
-			Section<?> sec = mgr.getArticle(dataPagename).getRootSection();
-			List<Section<ReadbuttonType>> rbSecs = Sections.findSuccessorsOfType(sec,
-					ReadbuttonType.class);
-			for (Section<ReadbuttonType> rbSec : rbSecs) {
-				if (readbutton.equals(DefaultMarkupType.getAnnotation(rbSec, "id"))) return true;
-			}
-		}
 
-		return false;
+		return ReadbuttonUtilities.isPageRated(readbutton, userName);
 	}
 
 	/**

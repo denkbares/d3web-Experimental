@@ -33,7 +33,6 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.wikiConnector.WikiAttachment;
@@ -44,7 +43,7 @@ import de.knowwe.defi.logger.DefiPageLogLine;
 import de.knowwe.defi.logger.DefiSessionEventLogger;
 import de.knowwe.defi.logger.DefiSessionLogLine;
 import de.knowwe.defi.menu.MenuUtilities;
-import de.knowwe.defi.readbutton.ReadbuttonType;
+import de.knowwe.defi.readbutton.ReadbuttonUtilities;
 import de.knowwe.defi.table.TableEntryType;
 import de.knowwe.defi.user.UserUtilities;
 import de.knowwe.defi.utils.DefiUtils;
@@ -123,7 +122,7 @@ public class GetPersonalDataAction extends AbstractAction {
 	private String getPageData(String user) {
 		StringBuilder xml = new StringBuilder();
 		List<String> visitedPages = UserUtilities.getVisitedPages(user);
-		List<String> ratedPages = UserUtilities.getRatedPages(user);
+		List<String> ratedPages = ReadbuttonUtilities.getRatedPages(user);
 		// visits/rates per unit
 		HashMap<Section<DashTreeElement>, Integer> visitsPerUnit = new HashMap<Section<DashTreeElement>, Integer>();
 		HashMap<Section<DashTreeElement>, Integer> ratesPerUnit = new HashMap<Section<DashTreeElement>, Integer>();
@@ -331,22 +330,27 @@ public class GetPersonalDataAction extends AbstractAction {
 	}
 
 	private String getReadbuttonData(String user) {
-		StringBuilder xml = new StringBuilder();
-		Section<RootType> dataPage = UserUtilities.getDataPage(user).getRootSection();
-		xml.append(SEP + "Bewertungen" + LS + SEP);
-		for (Section<ReadbuttonType> readButton : Sections.findChildrenOfType(dataPage,
-				ReadbuttonType.class)) {
-			String id = DefaultMarkupType.getAnnotation(readButton, "id");
-			String page = DefaultMarkupType.getAnnotation(readButton, "page");
-			String value = DefaultMarkupType.getAnnotation(readButton, "realvalue");
-			String label = DefaultMarkupType.getAnnotation(readButton, "label");
-			String date = DefaultMarkupType.getAnnotation(readButton, "date");
-			xml.append("- " + page + "(" + id + ")" + " am " + date + ": " + value + "(" + label
-					+ ")" + LS);
-		}
-		xml.append(LS);
+		// TODO Readbuttonlog auslesen
+		// StringBuilder xml = new StringBuilder();
+		// Section<RootType> dataPage =
+		// UserUtilities.getDataPage(user).getRootSection();
+		// xml.append(SEP + "Bewertungen" + LS + SEP);
+		// for (Section<ReadbuttonType> readButton :
+		// Sections.findChildrenOfType(dataPage,
+		// ReadbuttonType.class)) {
+		// String id = DefaultMarkupType.getAnnotation(readButton, "id");
+		// String page = DefaultMarkupType.getAnnotation(readButton, "page");
+		// String value = DefaultMarkupType.getAnnotation(readButton,
+		// "realvalue");
+		// String label = DefaultMarkupType.getAnnotation(readButton, "label");
+		// String date = DefaultMarkupType.getAnnotation(readButton, "date");
+		// xml.append("- " + page + "(" + id + ")" + " am " + date + ": " +
+		// value + "(" + label
+		// + ")" + LS);
+		// }
+		// xml.append(LS);
 
-		return xml.toString();
+		return "";
 	}
 
 }

@@ -48,7 +48,11 @@ public class TimeTableTagHandler extends AbstractTagHandler {
 
 	@Override
 	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
-		if (!userContext.userIsAdmin()) return; // only admin may see this
+		if (!userContext.userIsAdmin()) return; // only
+																		// admin
+																		// may
+																		// see
+																		// this
 		StringBuilder timetable = new StringBuilder();
 		List<Section<DashTreeElement>> units = MenuUtilities.getRootUnits();
 		JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(

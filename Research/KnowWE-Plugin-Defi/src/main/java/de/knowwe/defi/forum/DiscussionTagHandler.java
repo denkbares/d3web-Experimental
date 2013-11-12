@@ -114,7 +114,9 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 		disc.append(buildUnitRows(units, userContext.getUserName()));
 		disc.append(buildChatRows(chats, userContext.getUserName()));
 		disc.append(buildOtherRow(others, userContext.getUserName()));
-		if (userContext.userIsAdmin()) disc.append(buildErrorRow(errors));
+		if (userContext.userIsAdmin()) {
+			disc.append(buildErrorRow(errors));
+		}
 		disc.append("</table>");
 
 		result.appendHtml(disc.toString());
