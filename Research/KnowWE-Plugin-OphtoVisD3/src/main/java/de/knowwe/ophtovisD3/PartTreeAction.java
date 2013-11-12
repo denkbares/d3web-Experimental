@@ -14,7 +14,7 @@ public class PartTreeAction extends AbstractAction {
 		if(concept==null)
 			concept="";
 		
-		String responseString =GraphBuilder.builtPartTree(concept,"unterkonzept");
+		String responseString =GraphBuilder.buildPartTree(concept,"unterkonzept");
 		context.setContentType("application/json; charset=UTF-8");
 		context.getWriter().write(responseString);
 	}

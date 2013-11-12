@@ -182,7 +182,7 @@ public class GraphBuilder {
 		return tree;
 	}
 
-	public static String builtPartTree(String startConcept, String connectionType) {
+	public static String buildPartTree(String startConcept, String connectionType) {
 		String root = DataBaseHelper.getRootConcept(startConcept, connectionType);
 		boolean highlight = (root.equals(startConcept));
 		Tree<NodeWithName> resultTree = new Tree<NodeWithName>(new NodeWithName(root, highlight),
