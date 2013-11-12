@@ -20,7 +20,7 @@ public class AjaxAction extends AbstractAction {
 			type="";
 		String responseString ="";
 		if(type.equals("force")){
-			responseString =builder.bulidNamesandConnectionsJSON("Anamnese_Patientensituation", "unterkonzept");
+			responseString =builder.buildNamesandConnectionsJSON("Anamnese_Patientensituation", "unterkonzept");
 		}else if((type.equals("bubble"))){
 			 //responseString = GraphBuilder.buildGraph(concept, "unterkonzept", "temporalGraph",true);
 			 responseString = GraphBuilder.buildGraphExperimental("unterkonzept", concept);

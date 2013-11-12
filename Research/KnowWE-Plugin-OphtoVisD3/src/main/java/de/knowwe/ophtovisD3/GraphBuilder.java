@@ -92,7 +92,7 @@ public class GraphBuilder {
 		}
 	}
 
-	public String bulidNamesandConnectionsJSON(String startConcept, String connectionType) {
+	public String buildNamesandConnectionsJSON(String startConcept, String connectionType) {
 		return "{ " + buildNamesJSON(startConcept, connectionType) + " , " + buildConnectionsJSON()
 				+ " } ";
 
