@@ -25,9 +25,11 @@
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 		<parameter id="css" value="d3force.css" />
+		<parameter id="css" value="d3tree.css" />
 		<parameter id="css" value="d3wheel.css" />
 		<parameter id="script" value="d3.v3.js" />
 		<parameter id="script" value="d3force.js" />
+		<parameter id="script" value="d3tree.js" />
 		<parameter id="script" value="d3wheel.js" />
 	</extension>
 	
@@ -41,9 +43,11 @@
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 		<parameter id="css" value="d3force.css" />
+		<parameter id="css" value="d3tree.css" />
 		<parameter id="css" value="d3wheel.css" />
 		<parameter id="script" value="d3.v3.js" />
 		<parameter id="script" value="d3force.js" />
+		<parameter id="script" value="d3tree.js" />
 		<parameter id="script" value="d3wheel.js" />
 	</extension>
 	

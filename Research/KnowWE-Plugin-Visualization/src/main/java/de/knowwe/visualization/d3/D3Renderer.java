@@ -64,12 +64,47 @@ public class D3Renderer {
 		if (visualization != null && visualization.equals("force")) {
 			drawForce(data, parameters);
 		}
+		else if (visualization != null && visualization.equals("tree")) {
+			drawCollapsibleTree(data, parameters);
+		}
 		else {
 			drawWheel(data, parameters);
 		}
 
 		htmlsource += "</div>";
 		return htmlsource;
+	}
+
+	private static void drawCollapsibleTree(SubGraphData data, Map<String, String> parameters) {
+
+		// uses the same JSON source as the wheel visualization
+		String concept = parameters.get(GraphDataBuilder.CONCEPT);
+		if (concept == null) return;
+		writeJSONWheelSource(data, concept);
+
+		// include all necessary scripts and files
+		htmlsource += IncludeUtils.includeFile(FILE_TYPE.JAVASCRIPT, context
+				+ "/KnowWEExtension/scripts/d3tree.js");
+		htmlsource += IncludeUtils.includeFile(FILE_TYPE.CSS, context
+				+ "/KnowWEExtension/css/d3tree.css");
+
+		// draw the collapsible tree visualization
+		htmlsource += "<script>";
+		htmlsource += " drawTree("
+				+ parameters.get(GraphDataBuilder.GRAPH_SIZE)
+				+ ", " + jsonSource
+				+ ", " + "\"" + parameters.get(GraphDataBuilder.SECTION_ID) + "\""
+				+ ") ";
+		htmlsource += "</script>";
+
+		// implement layout style
+		String cssCode = parameters.get(GraphDataBuilder.D3_FORCE_VISUALISATION_STYLE);
+		if (cssCode != null) {
+			htmlsource += "<style type=\"text/css\">";
+			htmlsource += cssCode;
+			htmlsource += "</style>";
+		}
+
 	}
 
 	private static void drawWheel(SubGraphData data, Map<String, String> parameters) {
@@ -92,6 +127,14 @@ public class D3Renderer {
 				+ ", " + "\"" + parameters.get(GraphDataBuilder.SECTION_ID) + "\""
 				+ ") ";
 		htmlsource += "</script>";
+
+		// implement layout style
+		String cssCode = parameters.get(GraphDataBuilder.D3_FORCE_VISUALISATION_STYLE);
+		if (cssCode != null) {
+			htmlsource += "<style type=\"text/css\">";
+			htmlsource += cssCode;
+			htmlsource += "</style>";
+		}
 	}
 
 	private static void drawForce(SubGraphData data, Map<String, String> parameters) {
@@ -115,15 +158,15 @@ public class D3Renderer {
 				+ ", " + "\"" + parameters.get(GraphDataBuilder.SECTION_ID) + "\""
 				+ ")";
 		htmlsource += "</script>";
-		
-		//implement layout style 
-				String cssCode = parameters.get(GraphDataBuilder.D3_FORCE_VISUALISATION_STYLE);
-				if(cssCode!=null ) {
-					htmlsource += "<style type=\"text/css\">";
-					htmlsource += cssCode;
-					htmlsource += "</style>";
-					
-				}
+
+		// implement layout style
+		String cssCode = parameters.get(GraphDataBuilder.D3_FORCE_VISUALISATION_STYLE);
+		if (cssCode != null) {
+			htmlsource += "<style type=\"text/css\">";
+			htmlsource += cssCode;
+			htmlsource += "</style>";
+
+		}
 	}
 
 	/**

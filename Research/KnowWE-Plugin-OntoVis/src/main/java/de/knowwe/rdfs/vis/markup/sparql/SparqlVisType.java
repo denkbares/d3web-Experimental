@@ -53,7 +53,7 @@ public class SparqlVisType extends DefaultMarkupType {
 	};
 
 	public enum Visualizations {
-			wheel, force
+			wheel, force, tree
 	};
 
 	static {
