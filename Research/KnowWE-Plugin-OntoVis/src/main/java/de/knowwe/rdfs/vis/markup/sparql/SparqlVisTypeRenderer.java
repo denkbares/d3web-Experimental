@@ -64,51 +64,50 @@ public class SparqlVisTypeRenderer implements Renderer {
 		String realPath = servletContext.getRealPath("");
 
 		Map<String, String> parameterMap = new HashMap<String, String>();
-		
+
 		String layout = SparqlVisType.getAnnotation(section, SparqlVisType.ANNOTATION_DESIGN);
-		if(layout!=null) {
-			
+		if (layout != null) {
+
 			String cssText = null;
-			
+
 			ArticleManager articleManager = Environment.getInstance().getArticleManager(
-				Environment.DEFAULT_WEB);
+					Environment.DEFAULT_WEB);
 			Collection<Article> articles = articleManager.getArticles();
-				
+
 			for (Article article : articles) {
 				Section<RootType> rootSection = article.getRootSection();
 				// search layouttypes
-				List<Section<SparqlVisDesignType>> sparqlVisDesignSections = Sections.findSuccessorsOfType(rootSection, SparqlVisDesignType.class);
-				
-				for(Section<SparqlVisDesignType> currentSection : sparqlVisDesignSections) {
-					
-					String currentLayout = SparqlVisDesignType.getAnnotation(currentSection, SparqlVisDesignType.ANNOTATION_NAME);
-					if(currentLayout.equals(layout)) {
-						
+				List<Section<SparqlVisDesignType>> sparqlVisDesignSections = Sections.findSuccessorsOfType(
+						rootSection, SparqlVisDesignType.class);
+
+				for (Section<SparqlVisDesignType> currentSection : sparqlVisDesignSections) {
+
+					String currentLayout = SparqlVisDesignType.getAnnotation(currentSection,
+							SparqlVisDesignType.ANNOTATION_NAME);
+					if (currentLayout.equals(layout)) {
+
 						cssText = SparqlVisDesignType.getContentSection(currentSection).getText();
-						
+
 					}
-					
+
 				}
 			}
-			
-			if(cssText!=null) {
-				
-				parameterMap.put(OntoGraphDataBuilder.D3_FORCE_VISUALISATION_STYLE, cssText);} 
+
+			if (cssText != null) {
+
+				parameterMap.put(OntoGraphDataBuilder.D3_FORCE_VISUALISATION_STYLE, cssText);
+			}
 			else {
 				Message noSuchLayout = new Message(Message.Type.WARNING,
 						"No such layout " + layout + " found!");
 				Collection<Message> warnings = new HashSet<Message>();
 				messages.add(noSuchLayout);
-				DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING,warnings,
+				DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, warnings,
 						string);
-				
+
 			}
-			
+
 		}
-		
-
-
-
 
 		parameterMap.put(OntoGraphDataBuilder.REAL_PATH, realPath);
 
@@ -166,14 +165,13 @@ public class SparqlVisTypeRenderer implements Renderer {
 			uriProvider = new IncrementalCompilerLinkToTermDefinitionProvider();
 		}
 
-		String sparqlString = Rdf2GoUtils.createSparqlString(content);
+		String sparqlString = Rdf2GoUtils.createSparqlString(content.getText());
 
 		QueryResultTable resultSet = rdfRepository.sparqlSelect(
 				sparqlString);
 
 		SubGraphData data = convertToGraph(resultSet, parameterMap, rdfRepository, uriProvider,
 				section, messages);
-
 
 		String conceptName = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONCEPT);
 		if (data != null && conceptName == null && data.getConceptDeclarations().size() > 0) {
@@ -199,8 +197,8 @@ public class SparqlVisTypeRenderer implements Renderer {
 
 		}
 		if (messages.size() > 0) {
-		DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, messages,
-				string);
+			DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, messages,
+					string);
 		}
 		string.appendHtml(renderedContent);
 

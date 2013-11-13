@@ -55,6 +55,12 @@ public class SaveCIInfoAction extends AbstractAction {
 
 		while (Article.isArticleCurrentlyBuilding(Environment.DEFAULT_WEB, ARTICLE)) {
 			// wait...
+			try {
+				Thread.sleep(1);
+			}
+			catch (InterruptedException e) {
+				// do nothing here
+			}
 		}
 
 		// trigger rebuild

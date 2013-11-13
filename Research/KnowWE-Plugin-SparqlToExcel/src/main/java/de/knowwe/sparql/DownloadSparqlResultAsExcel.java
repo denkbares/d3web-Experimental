@@ -72,7 +72,7 @@ public class DownloadSparqlResultAsExcel extends AbstractAction {
 					SparqlMarkupType.class);
 
 			Rdf2GoCore core = Rdf2GoCore.getInstance(realMarkupSection);
-			String sparql = Rdf2GoUtils.createSparqlString(markupSection);
+			String sparql = Rdf2GoUtils.createSparqlString(markupSection.getText());
 			QueryResultTable resultSet = core.sparqlSelect(sparql);
 
 			OutputStream outputStream = context.getOutputStream();
