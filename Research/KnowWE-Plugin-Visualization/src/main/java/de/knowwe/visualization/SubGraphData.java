@@ -48,7 +48,16 @@ public class SubGraphData {
 	}
 
 	public ConceptNode getConcept(String name) {
-		return concepts.get(name);
+		ConceptNode node = concepts.get(name);
+		if (node != null) return node;
+		else {
+			// try to make a weaker search, when no concept with the given
+			// name was found
+			for (String key : concepts.keySet()) {
+				if (key.startsWith(name)) return concepts.get(key);
+			}
+			return null;
+		}
 	}
 
 	public Set<Edge> getEdges() {

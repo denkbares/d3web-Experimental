@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.knowwe.core.Environment;
+import de.knowwe.visualization.ConceptNode;
 import de.knowwe.visualization.Edge;
 import de.knowwe.visualization.GraphDataBuilder;
 import de.knowwe.visualization.SubGraphData;
@@ -180,7 +181,8 @@ public class D3Renderer {
 		jsonSource = "{\n";
 		jsonSource += "\"concept\": \"" + concept + "\"";
 
-		HierarchyTree tree = new HierarchyTree(data.getConcept(concept), data);
+		ConceptNode conceptRoot = data.getConcept(concept);
+		HierarchyTree tree = new HierarchyTree(conceptRoot, data);
 		HierarchyNode root = tree.getRoot();
 
 		if (root.hasChildren()) {
