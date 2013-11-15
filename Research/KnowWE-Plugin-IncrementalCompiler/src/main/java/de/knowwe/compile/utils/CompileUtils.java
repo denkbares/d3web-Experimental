@@ -32,6 +32,7 @@ import de.d3web.strings.Identifier;
 import de.knowwe.compile.ImportManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.ComplexDefinition;
+import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
@@ -150,11 +151,12 @@ public class CompileUtils {
 	 * @param oldSectionsNotReused
 	 * @return
 	 */
-	public static Collection<Section<SimpleDefinition>> filterDefinitions(Collection<Section<? extends Type>> oldSectionsNotReused) {
-		Collection<Section<SimpleDefinition>> result = new HashSet<Section<SimpleDefinition>>();
+	@SuppressWarnings("rawtypes")
+	public static Collection<Section<IncrementalTermDefinition>> filterDefinitions(Collection<Section<? extends Type>> oldSectionsNotReused) {
+		Collection<Section<IncrementalTermDefinition>> result = new HashSet<Section<IncrementalTermDefinition>>();
 		for (Section<? extends Type> section : oldSectionsNotReused) {
-			if (section.get() instanceof SimpleDefinition) {
-				result.add(Sections.cast(section, SimpleDefinition.class));
+			if (section.get() instanceof IncrementalTermDefinition<?>) {
+				result.add(Sections.cast(section, IncrementalTermDefinition.class));
 			}
 		}
 		return result;

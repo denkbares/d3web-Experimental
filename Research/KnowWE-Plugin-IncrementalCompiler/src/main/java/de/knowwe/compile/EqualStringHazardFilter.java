@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.LocationDependantKnowledgeUnit;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -136,7 +136,8 @@ public class EqualStringHazardFilter {
 		return termNames;
 	}
 
-	public void filterDefs(Collection<Section<SimpleDefinition>> insert, Collection<Section<SimpleDefinition>> remove) {
+	@SuppressWarnings("rawtypes")
+	public void filterDefs(Collection<Section<IncrementalTermDefinition>> insert, Collection<Section<IncrementalTermDefinition>> remove) {
 		// NOTE: This weird collection juggling using CompileSections is
 		// necessary because the equals of the Sections class itself does not
 		// have the characteristics required here.
@@ -145,22 +146,22 @@ public class EqualStringHazardFilter {
 		// and remove it from both (once respectively!)
 
 		// transform Section-collections to CompileSection-collections
-		Collection<CompileSection<SimpleDefinition>> removeSet = new ArrayList<CompileSection<SimpleDefinition>>();
-		for (Section<SimpleDefinition> section : remove) {
-			removeSet.add(new CompileSection<SimpleDefinition>(section));
+		Collection<CompileSection<IncrementalTermDefinition>> removeSet = new ArrayList<CompileSection<IncrementalTermDefinition>>();
+		for (Section<IncrementalTermDefinition> section : remove) {
+			removeSet.add(new CompileSection<IncrementalTermDefinition>(section));
 		}
 
-		Collection<CompileSection<SimpleDefinition>> insertSet = new ArrayList<CompileSection<SimpleDefinition>>();
-		for (Section<SimpleDefinition> section : insert) {
-			insertSet.add(new CompileSection<SimpleDefinition>(section));
+		Collection<CompileSection<IncrementalTermDefinition>> insertSet = new ArrayList<CompileSection<IncrementalTermDefinition>>();
+		for (Section<IncrementalTermDefinition> section : insert) {
+			insertSet.add(new CompileSection<IncrementalTermDefinition>(section));
 		}
 
 		boolean changes = false; // for efficiency only
 
 		// find corresponding sections
-		Iterator<CompileSection<SimpleDefinition>> removeIter = removeSet.iterator();
+		Iterator<CompileSection<IncrementalTermDefinition>> removeIter = removeSet.iterator();
 		while (removeIter.hasNext()) {
-			CompileSection<SimpleDefinition> next = removeIter.next();
+			CompileSection<IncrementalTermDefinition> next = removeIter.next();
 			if (insertSet.contains(next)) {
 				// item found in both sets, removing from both
 
@@ -168,7 +169,7 @@ public class EqualStringHazardFilter {
 				// this is a problem if a term with same name is newly as a
 				// different type
 				// therefore compare SectionTypes of definitions
-				Section<SimpleDefinition> section1 = next.getSection();
+				Section<IncrementalTermDefinition> section1 = next.getSection();
 				// retrieve reference on other object
 				// (equals-but-not-really-equal-problem)
 				Section<?> section2 = retrieveSection2(section1, insertSet);
@@ -201,11 +202,11 @@ public class EqualStringHazardFilter {
 		// refill original sets with remaining sections
 		if (changes) {
 			insert.clear();
-			for (CompileSection<SimpleDefinition> compileSection : insertSet) {
+			for (CompileSection<IncrementalTermDefinition> compileSection : insertSet) {
 				insert.add(compileSection.getSection());
 			}
 			remove.clear();
-			for (CompileSection<SimpleDefinition> compileSection : removeSet) {
+			for (CompileSection<IncrementalTermDefinition> compileSection : removeSet) {
 				remove.add(compileSection.getSection());
 			}
 		}

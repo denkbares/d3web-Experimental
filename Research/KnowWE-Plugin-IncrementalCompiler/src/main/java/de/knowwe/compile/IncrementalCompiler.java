@@ -33,6 +33,7 @@ import de.d3web.plugin.PluginManager;
 import de.d3web.strings.Identifier;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
+import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.InvalidReference;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
@@ -243,8 +244,8 @@ public class IncrementalCompiler implements EventListener {
 		}
 
 		// check deleted objects
-		Collection<Section<SimpleDefinition>> deletedObjectDefintions = CompileUtils.filterDefinitions(oldSectionsNotReused);
-		Collection<Section<SimpleDefinition>> createdObjectDefintions = CompileUtils.filterDefinitions(newSectionsNotReused);
+		Collection<Section<IncrementalTermDefinition>> deletedObjectDefintions = CompileUtils.filterDefinitions(oldSectionsNotReused);
+		Collection<Section<IncrementalTermDefinition>> createdObjectDefintions = CompileUtils.filterDefinitions(newSectionsNotReused);
 		hazardFilter.filterDefs(createdObjectDefintions,
 				deletedObjectDefintions);
 		for (Section<? extends SimpleDefinition> section : deletedObjectDefintions) {
