@@ -67,7 +67,7 @@ public class D3webHierarchyProvider implements HierarchyProvider {
 				Environment.DEFAULT_WEB, master);
 
 		Section<?> definingSection = terminologyManager.getTermDefiningSection(term);
-		if (!(definingSection.get() instanceof D3webTermDefinition)) return childrenList;
+		if (definingSection == null || !(definingSection.get() instanceof D3webTermDefinition)) return childrenList;
 		KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB, master);
 		de.d3web.core.knowledge.TerminologyManager manager = knowledgeBase.getManager();
 		NamedObject namedObject = manager.search(term.toExternalForm());
@@ -140,7 +140,7 @@ public class D3webHierarchyProvider implements HierarchyProvider {
 		TerminologyManager terminologyManager = Environment.getInstance().getTerminologyManager(
 				Environment.DEFAULT_WEB, master);
 		Section<?> definingSection = terminologyManager.getTermDefiningSection(term);
-		if (!(definingSection.get() instanceof D3webTermDefinition)) return parentList;
+		if (definingSection == null || !(definingSection.get() instanceof D3webTermDefinition)) return parentList;
 		KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB, master);
 		de.d3web.core.knowledge.TerminologyManager manager = knowledgeBase.getManager();
 		NamedObject namedObject = manager.search(term.toExternalForm());
