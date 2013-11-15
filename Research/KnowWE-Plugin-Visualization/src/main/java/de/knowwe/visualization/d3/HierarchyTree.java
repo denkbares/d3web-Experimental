@@ -43,6 +43,9 @@ public class HierarchyTree {
 	private final List<HierarchyNode> containedNodes;
 
 	public HierarchyTree(ConceptNode root, SubGraphData data) {
+		if (root == null) {
+			throw new NullPointerException();
+		}
 		this.root = new HierarchyNode(root);
 		this.data = data;
 		containedNodes = new LinkedList<HierarchyNode>();

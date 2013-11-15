@@ -66,7 +66,12 @@ public class D3Renderer {
 			drawForce(data, parameters);
 		}
 		else if (visualization != null && visualization.equals("tree")) {
-			drawCollapsibleTree(data, parameters);
+			try {
+				drawCollapsibleTree(data, parameters);
+			}
+			catch (IllegalArgumentException e) {
+				htmlsource += "<div class='error'> No valid root concept specified </div>";
+			}
 		}
 		else {
 			drawWheel(data, parameters);
@@ -76,7 +81,7 @@ public class D3Renderer {
 		return htmlsource;
 	}
 
-	private static void drawCollapsibleTree(SubGraphData data, Map<String, String> parameters) {
+	private static void drawCollapsibleTree(SubGraphData data, Map<String, String> parameters) throws IllegalArgumentException {
 
 		// uses the same JSON source as the wheel visualization
 		String concept = parameters.get(GraphDataBuilder.CONCEPT);
@@ -108,7 +113,7 @@ public class D3Renderer {
 
 	}
 
-	private static void drawWheel(SubGraphData data, Map<String, String> parameters) {
+	private static void drawWheel(SubGraphData data, Map<String, String> parameters) throws IllegalArgumentException {
 		// write the JSON source for the wheel-visualization
 		String concept = parameters.get(GraphDataBuilder.CONCEPT);
 		if (concept == null) return;
@@ -177,11 +182,15 @@ public class D3Renderer {
 	 * @param data
 	 * @param the main concept on which the data bases on
 	 */
-	private static void writeJSONWheelSource(SubGraphData data, String concept) {
+	private static void writeJSONWheelSource(SubGraphData data, String concept) throws IllegalArgumentException {
 		jsonSource = "{\n";
 		jsonSource += "\"concept\": \"" + concept + "\"";
 
 		ConceptNode conceptRoot = data.getConcept(concept);
+		if (conceptRoot == null) {
+			throw new IllegalArgumentException(
+					"no root concept specified for hierarchy visualization");
+		}
 		HierarchyTree tree = new HierarchyTree(conceptRoot, data);
 		HierarchyNode root = tree.getRoot();
 
