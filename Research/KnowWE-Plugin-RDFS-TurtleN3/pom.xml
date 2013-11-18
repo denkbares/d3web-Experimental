@@ -35,11 +35,6 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>metatool-test-launcher</artifactId>
-			<version>0.2-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-IncrementalCompiler</artifactId>
 			<version>0.2-SNAPSHOT</version>
 		</dependency>
