@@ -113,6 +113,8 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 
 	@Override
 	public Collection<Identifier> getAllTerms() {
+		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
+		hierarchyProvider.setCategories(hierarchyCategories);
 		hierarchyProvider.setMaster(master);
 		Collection<Identifier> result = hierarchyProvider.getAllTerms();
 		return result;

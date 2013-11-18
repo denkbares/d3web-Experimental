@@ -29,8 +29,8 @@ import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.terminology.TerminologyManager;
+import de.knowwe.ontology.browser.util.HierarchyUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.utils.HierarchyUtils;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.termbrowser.HierarchyProvider;
 
