@@ -129,7 +129,7 @@ public class MarkupUtils {
 			parents.add(MarkupUtils.getConceptName(parent));
 
 		}
-
+		resultIterator.close();
 		return parents;
 	}
 

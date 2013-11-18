@@ -32,8 +32,8 @@ import de.d3web.strings.Strings;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.ontology.browser.util.HierarchyUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.utils.HierarchyUtils;
 import de.knowwe.termbrowser.HierarchyProvider;
 import de.knowwe.wisskont.SubconceptMarkup;
 import de.knowwe.wisskont.ValuesMarkup;
@@ -108,5 +108,11 @@ public class WissassHierarchyProvider implements HierarchyProvider {
 		List<Identifier> startTerms = new ArrayList<Identifier>();
 		startTerms.add(new Identifier(MAIN_CONCEPT));
 		return startTerms;
+	}
+
+	@Override
+	public void setCategories(List<String> categories) {
+		// TODO Auto-generated method stub
+
 	}
 }

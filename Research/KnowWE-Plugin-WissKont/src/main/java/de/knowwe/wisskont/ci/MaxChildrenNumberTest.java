@@ -58,7 +58,7 @@ public class MaxChildrenNumberTest extends AbstractTest<Rdf2GoCore> {
 	 * 
 	 */
 	public MaxChildrenNumberTest() {
-		this.addParameter("Maximale Anzahl Unterkonzepte", Type.Number, Mode.Mandatory,
+		this.addParameter("Maximale Anzahl Unterbegriffe", Type.Number, Mode.Mandatory,
 				"Gibt an die Schwelle an ab wievielen Unterbegriffe der Test anschlägt.");
 	}
 
@@ -84,7 +84,7 @@ public class MaxChildrenNumberTest extends AbstractTest<Rdf2GoCore> {
 				errors.put(MarkupUtils.getConceptName(concept).toExternalForm(), children);
 			}
 		}
-
+		resultIterator.close();
 		if (errors.size() == 0) {
 			return Message.SUCCESS;
 		}
