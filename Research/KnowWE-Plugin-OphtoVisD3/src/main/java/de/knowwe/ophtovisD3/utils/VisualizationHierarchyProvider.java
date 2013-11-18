@@ -99,4 +99,10 @@ public class VisualizationHierarchyProvider implements HierarchyProvider {
 		return null;
 	}
 
+	@Override
+	public void setCategories(List<String> categories) {
+		// TODO Auto-generated method stub
+
+	}
+
 }
