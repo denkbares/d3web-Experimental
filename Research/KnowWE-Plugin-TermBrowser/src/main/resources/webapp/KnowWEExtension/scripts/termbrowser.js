@@ -144,7 +144,7 @@ function handleTermActionEvent(element) {
 	}
 
 	var line = element.parent().parent().parent().parent().parent().parent();
-	var termnameElement = line.find('div.termname');
+	var termnameElement = line.find('div.termname').find('div.termID');
 	var term = termnameElement.html();
 	if (term) {
 		term = term.replace(/<wbr>/g, "");

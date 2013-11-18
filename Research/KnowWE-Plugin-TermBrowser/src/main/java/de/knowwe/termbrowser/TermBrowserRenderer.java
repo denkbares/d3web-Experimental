@@ -277,8 +277,15 @@ public class TermBrowserRenderer {
 					label = label.replaceAll("\"", "");
 					label = label.replaceAll("_", "_<wbr>");
 					if (label.startsWith("_<wbr>")) {
-						label = "_" + label.substring(6);
+						label = label.substring(6);
 					}
+
+					// insert exact term name to be used for action calls
+					string.appendHtml("<div class='termID'>");
+					string.append(term.toExternalForm());
+					string.appendHtml("</div>");
+
+					// add label for display
 					string.appendHtml(label);
 					string.appendHtml("</div>");
 					if (url != null) {

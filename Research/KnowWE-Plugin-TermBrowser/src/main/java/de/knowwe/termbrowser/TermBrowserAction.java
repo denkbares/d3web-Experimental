@@ -130,6 +130,7 @@ public class TermBrowserAction extends AbstractAction {
 	 * @return
 	 */
 	private Identifier createTermIdentifier(String term) {
+		// TODO: caution: this will break if identifier names contain '#' !!
 		return new Identifier(term.split("#"));
 	}
 }
