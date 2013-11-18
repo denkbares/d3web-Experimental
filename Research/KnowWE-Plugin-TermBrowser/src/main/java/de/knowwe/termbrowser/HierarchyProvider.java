@@ -31,6 +31,8 @@ import de.d3web.strings.Identifier;
 public interface HierarchyProvider {
 
 	public static final String EXTENSION_POINT_HIERARCHY_PROVIDER = "HierarchyProvider";
+	
+	void setCategories(List<String> categories);
 
 	void setAdditionalHierarchyRelations(List<String> relations);
 

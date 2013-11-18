@@ -43,6 +43,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 public class TermBrowserMarkup extends DefaultMarkupType {
 
 	private static final String HIERARCHY = "hierarchy";
+	private static final String CATEGORIES = "categories";
 	private static final String SEARCH_SLOT = "searchslot";
 	private static final String PREFIX_ABBREVIATION = "abbreviation";
 	private static final String TITLE = "title";
@@ -58,6 +59,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		MARKUP = new DefaultMarkup("termbrowser");
 		MARKUP.addAnnotation(PackageManager.ANNOTATION_MASTER, false);
 		MARKUP.addAnnotation(HIERARCHY, false);
+		MARKUP.addAnnotation(CATEGORIES, false);
 		MARKUP.addAnnotation(TITLE, false);
 		MARKUP.addAnnotation(SEARCH_SLOT, false, new String[] {
 				"true", "false" });
@@ -117,6 +119,19 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		if (termBrowser != null) {
 			String hierarchyData = DefaultMarkupType.getAnnotation(termBrowser,
 					HIERARCHY);
+			if (hierarchyData == null) return new ArrayList<String>();
+			String[] split = hierarchyData.split(",");
+			List<String> list = Arrays.asList(split);
+			return list;
+		}
+		return null;
+	}
+
+	public static List<String> getCurrentTermbrowserMarkupHierarchyCategories(UserContext user) {
+		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
+		if (termBrowser != null) {
+			String hierarchyData = DefaultMarkupType.getAnnotation(termBrowser,
+					CATEGORIES);
 			if (hierarchyData == null) return new ArrayList<String>();
 			String[] split = hierarchyData.split(",");
 			List<String> list = Arrays.asList(split);

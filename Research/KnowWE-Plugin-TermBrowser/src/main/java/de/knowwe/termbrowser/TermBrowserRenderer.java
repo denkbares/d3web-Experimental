@@ -55,7 +55,8 @@ public class TermBrowserRenderer {
 		this.hierarchyPrefixAbbreviation = prefixAbbreviation;
 
 		List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
-		hierarchy = new TermBrowserHierarchy(master, relations);
+		List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
+		hierarchy = new TermBrowserHierarchy(master, relations, categories);
 
 	}
 
@@ -275,6 +276,9 @@ public class TermBrowserRenderer {
 					}
 					label = label.replaceAll("\"", "");
 					label = label.replaceAll("_", "_<wbr>");
+					if (label.startsWith("_<wbr>")) {
+						label = "_" + label.substring(6);
+					}
 					string.appendHtml(label);
 					string.appendHtml("</div>");
 					if (url != null) {

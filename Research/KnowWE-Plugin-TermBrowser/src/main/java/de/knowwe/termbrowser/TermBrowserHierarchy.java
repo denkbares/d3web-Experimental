@@ -34,17 +34,19 @@ import de.d3web.strings.Identifier;
 public class TermBrowserHierarchy implements HierarchyProvider {
 
 	private List<String> hierarchyRelations = new ArrayList<String>();
+	private List<String> hierarchyCategories = new ArrayList<String>();
 	private String master = null;
 	private final HierarchyProvider hierarchyProvider;
 
 	/**
 	 * 
 	 */
-	public TermBrowserHierarchy(String master, List<String> relations) {
+	public TermBrowserHierarchy(String master, List<String> relations, List<String> categories) {
 		if(relations != null){
 			hierarchyRelations.addAll(relations);
 		}
 		this.master = master;
+		this.hierarchyCategories = categories;
 		hierarchyProvider = TermBrowserHierarchy.getPluggedHierarchyProvider();
 	}
 
@@ -62,21 +64,21 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 	 * @return
 	 */
 	public static HierarchyProvider getPluggedHierarchyProvider() {
-		HierarchyProvider h = null;
 		Extension[] extensions = PluginManager.getInstance().getExtensions(
 				"KnowWE-Plugin-TermBrowser", HierarchyProvider.EXTENSION_POINT_HIERARCHY_PROVIDER);
 		for (Extension extension : extensions) {
 			Object newInstance = extension.getSingleton();
 			if (newInstance instanceof HierarchyProvider) {
-				h = (HierarchyProvider) newInstance;
+				return (HierarchyProvider) newInstance;
 			}
 		}
-		return h;
+		return null;
 	}
 
 	@Override
 	public List<Identifier> getChildren(Identifier term) {
 		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
+		hierarchyProvider.setCategories(hierarchyCategories);
 		hierarchyProvider.setMaster(master);
 		return hierarchyProvider.getChildren(term);
 	}
@@ -84,6 +86,7 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 	@Override
 	public List<Identifier> getParents(Identifier term) {
 		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
+		hierarchyProvider.setCategories(hierarchyCategories);
 		hierarchyProvider.setMaster(master);
 		return hierarchyProvider.getParents(term);
 	}
@@ -91,6 +94,7 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 	@Override
 	public boolean isSubNodeOf(Identifier term1, Identifier term2) {
 		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
+		hierarchyProvider.setCategories(hierarchyCategories);
 		hierarchyProvider.setMaster(master);
 		return hierarchyProvider.isSubNodeOf(term1, term2);
 	}
@@ -117,6 +121,12 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 	@Override
 	public Collection<Identifier> getStartupTerms() {
 		return hierarchyProvider.getStartupTerms();
+	}
+
+	@Override
+	public void setCategories(List<String> categories) {
+		this.hierarchyProvider.setCategories(categories);
+
 	}
 
 }

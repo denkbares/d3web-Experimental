@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.Article;
  */
 public interface InterestingTermDetector {
 
-	public static final double WEIGHT_REFERENCE = 0.5;
+	public static final double WEIGHT_REFERENCE = 0.0;
 	public static final double WEIGHT_DEFINITION = 1.0;
 
 	static final String EXTENSION_POINT_TERM_DETECTOR = "TermDetector";

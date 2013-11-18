@@ -42,15 +42,16 @@ public class RecommendationSet {
 	/**
 	 * 
 	 */
-	public RecommendationSet(String master, List<String> relations) {
-		hierarchy = new TermBrowserHierarchy(master, relations);
+	public RecommendationSet(String master, List<String> relations, List<String> categories) {
+		hierarchy = new TermBrowserHierarchy(master, relations, categories);
 		terms = new Tree<RatedTerm>(RatedTerm.ROOT, hierarchy);
 	}
 
 	public static RecommendationSet createRecommendationSet(UserContext user) {
 		String masta = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
 		List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
-		return new RecommendationSet(masta, relations);
+		List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
+		return new RecommendationSet(masta, relations, categories);
 	}
 
 	public void setBrowserIsCollapsed(boolean browserIsCollapsed) {

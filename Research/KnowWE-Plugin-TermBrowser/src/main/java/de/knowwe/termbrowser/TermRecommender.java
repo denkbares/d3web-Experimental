@@ -125,7 +125,8 @@ public class TermRecommender implements EventListener {
 		if (!data.containsKey(username)) {
 			String masta = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
 			List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
-			TermBrowserHierarchy hierarchy = new TermBrowserHierarchy(masta, relations);
+			List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
+			TermBrowserHierarchy hierarchy = new TermBrowserHierarchy(masta, relations, categories);
 			Tree<RatedTerm> tree = new Tree<RatedTerm>(RatedTerm.ROOT, hierarchy);
 			Collection<Identifier> startupTerms = hierarchy.getStartupTerms();
 			if(startupTerms != null) {
@@ -255,13 +256,14 @@ public class TermRecommender implements EventListener {
 			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB, title);
 			String master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
 			List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
+			List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
 			RecommendationSet set = null;
 			if (data.containsKey(user.getUserName())) {
 				set = data.get(user.getUserName());
 				set.discount(0.8);
 			}
 			else {
-				set = new RecommendationSet(master, relations);
+				set = new RecommendationSet(master, relations, categories);
 				data.put(user.getUserName(), set);
 			}
 
