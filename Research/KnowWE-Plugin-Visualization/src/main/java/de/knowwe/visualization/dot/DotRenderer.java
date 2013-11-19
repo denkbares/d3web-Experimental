@@ -172,7 +172,7 @@ public class DotRenderer {
 			}
 			else {
 				label = DotRenderer.createDotConceptLabel(style, key.getConceptUrl(),
-						key.getConceptLabel());
+						clearLabel(key.getConceptLabel()));
 			}
 			dotSource += "\"" + key.getName() + "\"" + label;
 
@@ -193,6 +193,14 @@ public class DotRenderer {
 					+ label;
 		}
 		return dotSource;
+	}
+
+	private static String clearLabel(String label) {
+		String xsdStringAnnotation = "^^http://www.w3.org/2001/XMLSchema#string";
+		if (label.endsWith(xsdStringAnnotation)) {
+			label = label.substring(0, label.length() - xsdStringAnnotation.length());
+		}
+		return label;
 	}
 
 	/**
