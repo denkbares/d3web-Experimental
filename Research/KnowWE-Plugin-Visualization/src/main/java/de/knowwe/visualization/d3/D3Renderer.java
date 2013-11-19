@@ -201,6 +201,18 @@ public class D3Renderer {
 		jsonSource += "\n}";
 	}
 
+	private static String getLabel(HierarchyNode node) {
+		String label = node.getName();
+		if (node.getLabel() != null) {
+			String xsdStringAnnotation = "^^http://www.w3.org/2001/XMLSchema#string";
+			label = node.getLabel();
+			if (label.endsWith(xsdStringAnnotation)) {
+				label = label.substring(0, label.length() - xsdStringAnnotation.length());
+			}
+		}
+		return label;
+	}
+
 	/**
 	 * Adds the children of the given HierarchyNode to the jsonSource
 	 * 
@@ -216,7 +228,7 @@ public class D3Renderer {
 			// if the child is not in the source yet: Add it so source and loop
 			// through it's children
 			if (!next.isInSourceYet()) {
-				jsonSource += "{\"concept\": \"" + next.getName() + "\"";
+				jsonSource += "{\"concept\": \"" + getLabel(next) + "\"";
 				next.setIsInSourceYet(true);
 				if (next.hasChildren()) {
 					addChildrenToSource(next);
@@ -226,7 +238,7 @@ public class D3Renderer {
 			// ...otherwise only add the child but don't go further in the tree
 			// (-> endless loop)
 			else {
-				jsonSource += "{\"concept\": \"" + next.getName() + "\"\n}";
+				jsonSource += "{\"concept\": \"" + getLabel(next) + "\"\n}";
 			}
 			if (iterator.hasNext()) {
 				// not last element yet

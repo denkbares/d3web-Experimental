@@ -26,14 +26,12 @@ import de.knowwe.visualization.ConceptNode;
 public class HierarchyNode {
 
 	private final List<HierarchyNode> children;
-	private final String name;
 	private final ConceptNode source;
 	private boolean isInSourceYet = false;
 
 	public HierarchyNode(ConceptNode source) {
 		if (source == null) throw new NullPointerException();
 		this.source = source;
-		name = source.getName();
 		children = new LinkedList<HierarchyNode>();
 	}
 
@@ -55,7 +53,11 @@ public class HierarchyNode {
 	}
 
 	public String getName() {
-		return name;
+		return source.getName();
+	}
+
+	public String getLabel() {
+		return source.getConceptLabel();
 	}
 
 	public ConceptNode getConceptNode() {
@@ -68,16 +70,21 @@ public class HierarchyNode {
 
 	@Override
 	public String toString() {
-		return name;
+		return source.toString();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) return false;
 		if (obj instanceof HierarchyNode) {
-			return name.equals(((HierarchyNode) obj).name);
+			return source.equals(((HierarchyNode) obj).source);
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return source.hashCode();
 	}
 
 	public boolean isInSourceYet() {
