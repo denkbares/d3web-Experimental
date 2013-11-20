@@ -38,6 +38,7 @@ public class SparqlVisType extends DefaultMarkupType {
 	public static final String ANNOTATION_SIZE = "size";
 	public static final String ANNOTATION_FORMAT = "format";
 	public static final String ANNOTATION_LANGUAGE = "language";
+	public static final String ANNOTATION_LINK_MODE = "linkMode";
 
 	public static final String ANNOTATION_DOT_APP = "dotApp";
 	public static final String ANNOTATION_ADD_TO_DOT = "dotAddLine";
@@ -50,6 +51,10 @@ public class SparqlVisType extends DefaultMarkupType {
 
 	private enum dot_apps {
 			dot, neato
+	};
+
+	public enum LinkMode {
+		jump, browse
 	};
 
 	public enum Visualizations {
@@ -70,6 +75,7 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
 		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
 		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
+		MARKUP.addAnnotation(ANNOTATION_LINK_MODE, false, LinkMode.values());
 		MARKUP.addAnnotation(ANNOTATION_DESIGN, false);
 		MARKUP.addAnnotationRenderer(Rdf2GoCore.MASTER_ANNOTATION, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_COMMENT, NothingRenderer.getInstance());

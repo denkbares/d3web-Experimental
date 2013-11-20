@@ -16,6 +16,7 @@ import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
 
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
 import de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
@@ -65,6 +66,8 @@ public class SparqlVisTypeRenderer implements Renderer {
 
 		Map<String, String> parameterMap = new HashMap<String, String>();
 
+
+		// set css layout to be used
 		String layout = SparqlVisType.getAnnotation(section, SparqlVisType.ANNOTATION_DESIGN);
 		if (layout != null) {
 
@@ -113,9 +116,11 @@ public class SparqlVisTypeRenderer implements Renderer {
 
 		parameterMap.put(OntoGraphDataBuilder.SECTION_ID, section.getID());
 
+		// set panel size
 		parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_SIZE));
 
+		// set format (png/svg)
 		String format = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_FORMAT);
 		if (format != null) {
@@ -123,27 +128,42 @@ public class SparqlVisTypeRenderer implements Renderer {
 		}
 		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 
+		// additional dot source code
 		String dotApp = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_DOT_APP);
 		parameterMap.put(OntoGraphDataBuilder.DOT_APP, dotApp);
 
+		// set renderer
 		String rendererType = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_RENDERER);
 		parameterMap.put(OntoGraphDataBuilder.RENDERER, rendererType);
 
+		// set visualization
 		String visualization = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_VISUALIZATION);
 		parameterMap.put(OntoGraphDataBuilder.VISUALIZATION, visualization);
 
+		// set master
 		String master = getMaster(user, section);
 		if (master != null) {
 			parameterMap.put(OntoGraphDataBuilder.MASTER, master);
 		}
+
+		// set language
 		String lang = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_LANGUAGE);
 		if (lang != null) {
 			parameterMap.put(OntoGraphDataBuilder.LANGUAGE, lang);
 		}
+
+		// set link mode
+		String linkModeValue = SparqlVisType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_LINK_MODE);
+		if (linkModeValue == null) {
+			// default link mode is 'jump'
+			linkModeValue = SparqlVisType.LinkMode.jump.name();
+		}
+		parameterMap.put(OntoGraphDataBuilder.LINK_MODE, linkModeValue);
 
 		String addToDOT = "";
 		List<Section<? extends AnnotationContentType>> annotationSections =
@@ -165,15 +185,21 @@ public class SparqlVisTypeRenderer implements Renderer {
 			uriProvider = new IncrementalCompilerLinkToTermDefinitionProvider();
 		}
 
+		// evaluate sparql query and create graph data
 		String sparqlString = Rdf2GoUtils.createSparqlString(content.getText());
-
 		QueryResultTable resultSet = rdfRepository.sparqlSelect(
 				sparqlString);
-
 		SubGraphData data = convertToGraph(resultSet, parameterMap, rdfRepository, uriProvider,
 				section, messages);
 
-		String conceptName = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONCEPT);
+		// read passed concept parameter from browser url if existing
+		String conceptName = user.getParameter("concept");
+
+		// otherwise use annotation value
+		if (conceptName == null) {
+			conceptName = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONCEPT);
+		}
+		// if no concept is specified, finally take first guess
 		if (data != null && conceptName == null && data.getConceptDeclarations().size() > 0) {
 			// if no center concept has explicitly been specified, take any
 			conceptName = data.getConceptDeclarations().iterator().next().getName();
@@ -356,7 +382,14 @@ public class SparqlVisTypeRenderer implements Renderer {
 		if (parameters.get(OntoGraphDataBuilder.LINK_MODE) != null) {
 			if (parameters.get(OntoGraphDataBuilder.LINK_MODE).equals(
 					OntoGraphDataBuilder.LINK_MODE_BROWSE)) {
-				return uriProvider.getLinkToTermDefinition(new Identifier(to),
+				Identifier identifier = new Identifier(to);
+				String[] identifierParts = to.split(":");
+				if (identifierParts.length == 2) {
+					identifier = new Identifier(new String[] {
+							identifierParts[0], Strings.decodeURL(identifierParts[1]) });
+
+				}
+				return uriProvider.getLinkToTermDefinition(identifier,
 						parameters.get(OntoGraphDataBuilder.MASTER));
 			}
 		}
