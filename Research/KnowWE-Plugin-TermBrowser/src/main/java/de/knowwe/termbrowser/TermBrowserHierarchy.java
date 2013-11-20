@@ -131,4 +131,9 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 
 	}
 
+	@Override
+	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
+		return hierarchyProvider.filterInterestingTerms(terms);
+	}
+
 }

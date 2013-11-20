@@ -29,6 +29,7 @@ import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.terminology.TerminologyManager;
+import de.knowwe.ontology.browser.cache.SparqlCacheManager;
 import de.knowwe.ontology.browser.util.HierarchyUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
@@ -149,6 +150,51 @@ public class OntologyHierarchyProvider implements HierarchyProvider {
 	public Collection<Identifier> getStartupTerms() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
+
+		// we do not filter if no filter classes are defined
+		if (categories.size() == 0) return terms;
+
+		Rdf2GoCore core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+		List<Identifier> resultConcepts = new ArrayList<Identifier>();
+		List<String> classes = this.categories;
+		List<URI> classURIs = new ArrayList<URI>();
+
+		for (String clazz : classes) {
+			String expandedNamespace = Rdf2GoUtils.expandNamespace(
+					core,
+					clazz);
+			URI classURI = new URIImpl(expandedNamespace);
+			classURIs.add(classURI);
+		}
+		
+		// we check for each term whether it is instance of at least one of the
+		// filter classes
+		for (Identifier term : terms) {
+			String[] pathElements = term.getPathElements();
+			if(pathElements.length == 2) {
+				URI termURI = core.createURI(pathElements[0], pathElements[1]);
+				for (URI classURI : classURIs) {
+					String query = "ASK { " + termURI.toSPARQL() + " rdf:type "
+							+ classURI.toSPARQL()
+							+ ".}";
+					boolean isInstanceOfClass = SparqlCacheManager.getInstance().getCachedSparqlEndpoint(
+							core).executeSparqlAskQuery(query);
+					if (isInstanceOfClass) {
+						resultConcepts.add(term);
+						break;
+					}
+				}
+			} else {
+				// we ignore other stuff (namespace and package defs..etc)
+			}
+		}
+
+
+		return resultConcepts;
 	}
 
 }

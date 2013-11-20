@@ -105,4 +105,10 @@ public class VisualizationHierarchyProvider implements HierarchyProvider {
 
 	}
 
+	@Override
+	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

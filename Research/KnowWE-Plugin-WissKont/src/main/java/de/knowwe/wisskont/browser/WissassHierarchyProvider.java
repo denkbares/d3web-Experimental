@@ -115,4 +115,10 @@ public class WissassHierarchyProvider implements HierarchyProvider {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
+		// we do not filter for now
+		return terms;
+	}
 }

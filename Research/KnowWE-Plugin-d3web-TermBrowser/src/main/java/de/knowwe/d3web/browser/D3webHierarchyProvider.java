@@ -237,4 +237,10 @@ public class D3webHierarchyProvider implements HierarchyProvider {
 
 	}
 
+	@Override
+	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
+		// we do not filter until now
+		return terms;
+	}
+
 }

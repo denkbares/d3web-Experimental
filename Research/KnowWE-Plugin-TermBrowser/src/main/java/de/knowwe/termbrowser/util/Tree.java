@@ -19,14 +19,12 @@
 package de.knowwe.termbrowser.util;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import de.d3web.strings.Identifier;
 import de.knowwe.termbrowser.HierarchyProvider;
 
 /**
@@ -57,17 +55,37 @@ public class Tree<T extends HierarchyNode<T>> {
 		return findRecursive(t, root);
 	}
 
+	public Node<T> getNode(T t) {
+		Set<Node<T>> nodes = getNodes();
+		for (Node<T> node : nodes) {
+			if (node.data.equals(t)) {
+				return node;
+			}
+		}
+		return null;
+	}
+
 	public T findRecursive(T t, Node<T> node) {
+		// TODO: is this reasonable ? (linear search followed by recursive
+		// one...)
+		Node<T> n = getNode(t);
+		if (n == null) return null;
+		Node<T> foundNode = findRecursiveNode(n, node);
+		if (foundNode == null) return null;
+		return foundNode.data;
+	}
+
+	public Node<T> findRecursiveNode(Node<T> t, Node<T> node) {
 		List<Node<T>> children = node.getChildren();
 		Iterator<Node<T>> iterator = children.iterator();
 		while (iterator.hasNext()) {
 			Node<T> child = iterator.next();
 			if (child.data.equals(t)) {
-				return child.data;
+				return child;
 			}
 			else {
 				// other search recursive
-				T found = findRecursive(t, child);
+				Node<T> found = findRecursiveNode(t, child);
 				if (found != null) {
 					return found;
 				}
@@ -82,9 +100,25 @@ public class Tree<T extends HierarchyNode<T>> {
 	 * @created 12.04.2013
 	 * @return
 	 */
-	public Set<T> getNodes() {
-		Set<T> result = new HashSet<T>();
+	public Set<Node<T>> getNodes() {
+		Set<Node<T>> result = new HashSet<Node<T>>();
 		collectNodes(root, result);
+		return result;
+	}
+
+	/**
+	 * Returns all nodes contained in this tree.
+	 * 
+	 * @created 12.04.2013
+	 * @return
+	 */
+	public Set<T> getNodeContents() {
+		Set<Node<T>> nodes = new HashSet<Node<T>>();
+		collectNodes(root, nodes);
+		Set<T> result = new HashSet<T>();
+		for (Node<T> node : nodes) {
+			result.add(node.data);
+		}
 		return result;
 	}
 
@@ -94,8 +128,8 @@ public class Tree<T extends HierarchyNode<T>> {
 	 * @param root2
 	 * @param result
 	 */
-	private void collectNodes(Node<T> n, Set<T> result) {
-		result.add(n.data);
+	private void collectNodes(Node<T> n, Set<Node<T>> result) {
+		result.add(n);
 		List<Node<T>> children = n.getChildren();
 		for (Node<T> child : children) {
 			collectNodes(child, result);
@@ -103,7 +137,7 @@ public class Tree<T extends HierarchyNode<T>> {
 	}
 
 	public int getNodeCount() {
-		Set<T> set = new HashSet<T>();
+		Set<Node<T>> set = new HashSet<Node<T>>();
 		collectNodes(getRoot(), set);
 		return set.size();
 	}

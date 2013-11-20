@@ -267,11 +267,17 @@ public class TermRecommender implements EventListener {
 				data.put(user.getUserName(), set);
 			}
 
+
 			Map<Identifier, Double> interestingTerms = termDetector.getWeightedTermsOfInterest(
 					article,
 					master);
 
-			for (Identifier term : interestingTerms.keySet()) {
+			// we add the values for the terms filtered by the hierarchy
+			// provider
+			Collection<Identifier> filteredTerms = set.getHierarchy().filterInterestingTerms(
+					interestingTerms.keySet());
+
+			for (Identifier term : filteredTerms) {
 				set.addValue(term, interestingTerms.get(term));
 			}
 

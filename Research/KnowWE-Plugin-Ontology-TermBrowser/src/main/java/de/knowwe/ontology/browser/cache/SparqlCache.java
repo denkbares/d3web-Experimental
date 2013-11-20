@@ -14,7 +14,8 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class SparqlCache {
 	
-	private final Map<String, List<URI>> data = new HashMap<String, List<URI>>();
+	private final Map<String, List<URI>> selectQueryData = new HashMap<String, List<URI>>();
+	private final Map<String, Boolean> askQueryData = new HashMap<String, Boolean>();
 
 	private Rdf2GoCore core = null;
 
@@ -23,8 +24,8 @@ public class SparqlCache {
 	}
 
 	public List<URI> executeSingleVariableSparqlSelectQuery(String query) {
-		if (data.containsKey(query)) {
-			return data.get(query);
+		if (selectQueryData.containsKey(query)) {
+			return selectQueryData.get(query);
 		}
 		else {
 			QueryResultTable resultTable = core.sparqlSelect(query);
@@ -34,14 +35,26 @@ public class SparqlCache {
 				Node value = queryRow.getValue(variable);
 				resultSet.add(value.asURI());
 			}
-			data.put(query, resultSet);
+			selectQueryData.put(query, resultSet);
 			return resultSet;
+		}
+	}
+
+	public boolean executeSparqlAskQuery(String query) {
+		if (askQueryData.containsKey(query)) {
+			return askQueryData.get(query);
+		}
+		else {
+			boolean result = core.sparqlAsk(query);
+			askQueryData.put(query, new Boolean(result));
+			return result;
 		}
 	}
 
 
 	public void clear() {
-		data.clear();
+		selectQueryData.clear();
+		askQueryData.clear();
 	}
 
 }

@@ -26,6 +26,7 @@ import java.util.TreeSet;
 import de.d3web.strings.Identifier;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.termbrowser.util.Tree;
+import de.knowwe.termbrowser.util.Tree.Node;
 
 /**
  * 
@@ -78,7 +79,7 @@ public class RecommendationSet {
 		ValueComparator bvc = new ValueComparator();
 		TreeSet<RatedTerm> list = new TreeSet<RatedTerm>(bvc);
 
-		list.addAll(tree.getNodes());
+		list.addAll(tree.getNodeContents());
 		list.remove(RatedTerm.ROOT);
 
 		return new ArrayList<RatedTerm>(list);
@@ -109,7 +110,14 @@ public class RecommendationSet {
 		Tree<RatedTerm> newTree = new Tree<RatedTerm>(RatedTerm.ROOT, hierarchy);
 		List<RatedTerm> allTerms = getRankedTermList();
 		for (RatedTerm ratedTerm : allTerms) {
-			double newValue = ratedTerm.getValue() * factor;
+			double newValue = ratedTerm.getValue();
+
+			// we discount only leafs
+			Node<RatedTerm> formerNode = terms.getNode(ratedTerm);
+			if (formerNode.getChildren().size() == 0) {
+				newValue *= factor;
+
+			}
 			if (newValue > 0.1) {
 				newTree.insertNode(new RatedTerm(ratedTerm.getTerm(), newValue));
 			}
