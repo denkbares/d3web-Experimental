@@ -194,6 +194,10 @@ public class D3Renderer {
 		HierarchyTree tree = new HierarchyTree(conceptRoot, data);
 		HierarchyNode root = tree.getRoot();
 
+		String conceptUrl = root.getConceptNode().getConceptUrl();
+
+		jsonSource += ",\n";
+		jsonSource += "\"conceptUrl\": \"" + conceptUrl + "\"";
 		if (root.hasChildren()) {
 			addChildrenToSource(root);
 		}
@@ -229,6 +233,8 @@ public class D3Renderer {
 			// through it's children
 			if (!next.isInSourceYet()) {
 				jsonSource += "{\"concept\": \"" + getLabel(next) + "\"";
+				jsonSource += ",\n\"conceptUrl\": \"" + next.getConceptNode().getConceptUrl()
+						+ "\" ";
 				next.setIsInSourceYet(true);
 				if (next.hasChildren()) {
 					addChildrenToSource(next);
@@ -238,7 +244,8 @@ public class D3Renderer {
 			// ...otherwise only add the child but don't go further in the tree
 			// (-> endless loop)
 			else {
-				jsonSource += "{\"concept\": \"" + getLabel(next) + "\"\n}";
+				jsonSource += "{\"concept\": \"" + getLabel(next) + "\"\n";
+				jsonSource += "\"conceptUrl\": \"" + next.getConceptNode().getConceptUrl() + "\"\n";
 			}
 			if (iterator.hasNext()) {
 				// not last element yet

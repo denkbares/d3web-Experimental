@@ -46,7 +46,7 @@ circle {
 
 text {
   font: 15px sans-serif;
-  pointer-events: none;
+
 }
 
 text.shadow {

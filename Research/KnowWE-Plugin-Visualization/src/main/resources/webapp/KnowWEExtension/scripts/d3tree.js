@@ -2,7 +2,7 @@ function drawTree(size, jsonsource, sectionID) {
 	
 	
 	
-	var margin = {top: 20, right: 120, bottom: 20, left: 120},
+	var margin = {top: 20, right: 120, bottom: 20, left: 180},
     	width = 960 - margin.right - margin.left,
     	height = 800 - margin.top - margin.bottom;
    
@@ -31,7 +31,7 @@ function drawTree(size, jsonsource, sectionID) {
 	
 	 root = jsonsource;
 	 root.x0 = height / 2;
-	 root.y0 = 0;
+	 root.y0 = 10;
 
 	 function collapse(d) {
 	    if (d.children) {
@@ -69,12 +69,18 @@ function drawTree(size, jsonsource, sectionID) {
 		      .attr("r", 1e-6)
 		      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
-		  nodeEnter.append("text")
-		      .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
-		      .attr("dy", ".35em")
-		      .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
-		      .text(function(d) { return d.concept; })
-		      .style("fill-opacity", 1e-6);
+		  // Adding the links 
+		  var $a = nodeEnter.append("svg:a")
+		  	.attr("xlink:href", function(d) { return d.conceptUrl;})
+		  		  
+		  // Creating Node text labels
+		  $a.append("text")
+		  	.attr("x", function(d) { return d.children || d._children ? -10 : 10; })
+		  	.attr("dy", ".35em")
+		  	.attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+		  	.text(function(d) { return d.concept; })
+		  	.style("fill-opacity", 1e-6)
+		  	.style("pointer-events", "auto");
 
 		  // Transition nodes to their new position.
 		  var nodeUpdate = node.transition()
