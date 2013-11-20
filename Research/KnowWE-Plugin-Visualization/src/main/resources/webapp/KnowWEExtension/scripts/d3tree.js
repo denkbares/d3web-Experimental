@@ -71,7 +71,7 @@ function drawTree(size, jsonsource, sectionID) {
 
 		  // Adding the links 
 		  var $a = nodeEnter.append("svg:a")
-		  	.attr("xlink:href", function(d) { return d.conceptUrl;})
+		  	.attr("xlink:href", function(d) { return decodeURIComponent(d.conceptUrl);})
 		  		  
 		  // Creating Node text labels
 		  $a.append("text")

@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.Environment;
 import de.knowwe.visualization.ConceptNode;
 import de.knowwe.visualization.Edge;
@@ -231,9 +232,10 @@ public class D3Renderer {
 			HierarchyNode next = iterator.next();
 			// if the child is not in the source yet: Add it so source and loop
 			// through it's children
+			String targetURL = Strings.encodeURL(next.getConceptNode().getConceptUrl());
 			if (!next.isInSourceYet()) {
 				jsonSource += "{\"concept\": \"" + getLabel(next) + "\"";
-				jsonSource += ",\n\"conceptUrl\": \"" + next.getConceptNode().getConceptUrl()
+				jsonSource += ",\n\"conceptUrl\": \"" + targetURL
 						+ "\" ";
 				next.setIsInSourceYet(true);
 				if (next.hasChildren()) {
@@ -245,7 +247,7 @@ public class D3Renderer {
 			// (-> endless loop)
 			else {
 				jsonSource += "{\"concept\": \"" + getLabel(next) + "\"\n";
-				jsonSource += "\"conceptUrl\": \"" + next.getConceptNode().getConceptUrl() + "\"\n";
+				jsonSource += "\"conceptUrl\": \"" + targetURL + "\"\n";
 			}
 			if (iterator.hasNext()) {
 				// not last element yet
