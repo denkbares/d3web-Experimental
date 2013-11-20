@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
@@ -114,30 +115,25 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		return false;
 	}
 
-	public static List<String> getCurrentTermbrowserMarkupHierarchyRelations(UserContext user) {
+	private static List<String> getCommaSeparatedAnnotationList(UserContext user, String annotationName) {
 		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
 		if (termBrowser != null) {
 			String hierarchyData = DefaultMarkupType.getAnnotation(termBrowser,
-					HIERARCHY);
+					annotationName);
 			if (hierarchyData == null) return new ArrayList<String>();
 			String[] split = hierarchyData.split(",");
 			List<String> list = Arrays.asList(split);
-			return list;
+			return Strings.trim(list);
 		}
 		return null;
 	}
 
+	public static List<String> getCurrentTermbrowserMarkupHierarchyRelations(UserContext user) {
+		return getCommaSeparatedAnnotationList(user, HIERARCHY);
+	}
+
 	public static List<String> getCurrentTermbrowserMarkupHierarchyCategories(UserContext user) {
-		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
-		if (termBrowser != null) {
-			String hierarchyData = DefaultMarkupType.getAnnotation(termBrowser,
-					CATEGORIES);
-			if (hierarchyData == null) return new ArrayList<String>();
-			String[] split = hierarchyData.split(",");
-			List<String> list = Arrays.asList(split);
-			return list;
-		}
-		return null;
+		return getCommaSeparatedAnnotationList(user, CATEGORIES);
 	}
 
 	/**
