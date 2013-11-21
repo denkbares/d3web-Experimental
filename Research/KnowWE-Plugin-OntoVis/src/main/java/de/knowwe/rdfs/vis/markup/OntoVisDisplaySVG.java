@@ -39,19 +39,14 @@ public class OntoVisDisplaySVG extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 		ServletContext servletContext = context.getServletContext();
 		if (servletContext == null) return; // at wiki startup only
+
+		String sectionID = context.getParameter("SectionID");
 		String realPath = servletContext.getRealPath("");
 		String separator = System.getProperty("file.separator");
 		String tmpPath = separator + "KnowWEExtension" + separator + "tmp" + separator;
-		String path = realPath + tmpPath;
-		File f = new File(path);
-		File svg = null;
-		File[] files = f.listFiles();
-		loop: for (int i = 0; i < files.length; i++) {
-			if (files[i].getName().matches("graph[a-z0-9]+\\.svg")) {
-				svg = files[i];
-				break loop;
-			}
-		}
+		String path = realPath + tmpPath + "graph" + sectionID + ".svg";
+
+		File svg = new File(path);
 		FileInputStream fis = new FileInputStream(svg);
 		OutputStream ous = context.getOutputStream();
 		byte[] readBuffer = new byte[2156];

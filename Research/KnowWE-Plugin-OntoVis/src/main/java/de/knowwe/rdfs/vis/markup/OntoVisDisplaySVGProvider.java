@@ -45,7 +45,8 @@ public class OntoVisDisplaySVGProvider implements ToolProvider {
 		// tool to provide download capability
 		String jsAction = "window.location='action/OntoVisDisplaySVG" +
 				"?" + Attributes.TOPIC + "=" + section.getTitle() +
-				"&amp;" + Attributes.WEB + "=" + section.getWeb() + "'";
+				"&amp;" + Attributes.WEB + "=" + section.getWeb() +
+				"&amp;" + Attributes.SECTION_ID + "=" + section.getID() + "'";
 		return new DefaultTool(
 				"KnowWEExtension/d3web/icon/comment16.png",
 				"Display the .svg",
