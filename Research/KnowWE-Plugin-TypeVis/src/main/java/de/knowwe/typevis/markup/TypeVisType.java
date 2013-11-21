@@ -6,7 +6,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 public class TypeVisType extends DefaultMarkupType {
 
-	public static final String ANNOTATION_CONCEPT = "concept";
+	public static final String ANNOTATION_CONCEPT = "type";
 	public static final String ANNOTATION_COMMENT = "comment";
 	public static final String ANNOTATION_SUCCESSORS = "successors";
 	public static final String ANNOTATION_EXCLUDENODES = "excludeNodes";

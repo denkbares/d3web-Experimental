@@ -42,11 +42,13 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 
 	private String concept;
 
+	// list of all instances of the requested type and its subclasses
 	private List<Type> conceptTypes;
+	// list of already visited types to prevent endless loops
 	private List<Type> visited;
 
 	private Class<?> visTypeClass;
-	private List<Type> inheritedTypes;
+	// whether the class of the requested concept could be found or not
 	private boolean couldFindClass = true;
 
 	public TypeGraphDataBuilder(String realPath, Section<?> section, Map<String, String> parameters, LinkToTermDefinitionProvider uriProvider) {
@@ -59,11 +61,6 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 
 		findClassOfConcept();
 		findChildAndSubclassTypes();
-
-		// add inherited types to the graph
-		if (inheritedTypes.size() > 0) {
-			addInheritedTypes();
-		}
 
 		for (Type t : conceptTypes) {
 			insertMainConcept(t);
@@ -82,15 +79,12 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 	private void getConceptName() {
 		String conceptWithPackageDeclaration = getEncodedConceptName();
 
-		// get concept name without package declaration
+		// get concept name without package declaration (if existant)
 		String[] parts = conceptWithPackageDeclaration.split("\\.");
 		concept = parts[parts.length - 1];
-
 	}
 
 	private void findClassOfConcept() {
-		inheritedTypes = new LinkedList<Type>();
-
 		try {
 			visTypeClass = Class.forName(getEncodedConceptName());
 		}
@@ -101,26 +95,25 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 	}
 
 	private void findChildAndSubclassTypes() {
-		visited = new LinkedList<Type>();
 		conceptTypes = new LinkedList<Type>();
+		visited = new LinkedList<Type>();
 
 		RootType rt = RootType.getInstance();
 		if (rt.getName().equals(concept)) conceptTypes.add(rt);
 
-		findAllMatchingConceptTypes(rt);
+		addAllMatchingConceptTypes(rt);
 	}
 
 	/**
 	 * Recursively finds all Types in the type hierarchy that match the
-	 * requested concept-String and adds them to the conceptType-List.
-	 * Furthermore the predecessor of the requested concept is added and it is
-	 * checked if the current child is a subclass of the requested concept's
-	 * class.
+	 * requested type-String or any subclass of it. Those are added to the
+	 * conceptType-List. Furthermore the predecessors of the requested type and
+	 * its subclasses are added to the graph.
 	 * 
 	 * @created 21.10.2013
 	 * @param concept
 	 */
-	private void findAllMatchingConceptTypes(Type type) {
+	private void addAllMatchingConceptTypes(Type type) {
 		List<Type> children = type.getChildrenTypes();
 		if (children == null) return;
 
@@ -136,7 +129,9 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 			if (couldFindClass) {
 				Class<?> currentTreeTypeClass = child.getClass();
 				if (visTypeClass.isAssignableFrom(currentTreeTypeClass)) {
-					inheritedTypes.add(child);
+					conceptTypes.add(child);
+					// add predecessor
+					addConcept(type, child, null, NODE_TYPE.INSTANCE);
 				}
 			}
 
@@ -146,51 +141,8 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 				addConcept(type, child, null, NODE_TYPE.INSTANCE);
 			}
 
-			findAllMatchingConceptTypes(child);
+			addAllMatchingConceptTypes(child);
 		}
-	}
-
-	/**
-	 * All Types that inherit from the requested main concept are being added to
-	 * the graph.
-	 * 
-	 * @created 26.10.2013
-	 */
-	private void addInheritedTypes() {
-		insertMainInheritanceConept(concept);
-		for (Type t : inheritedTypes) {
-			addInheritanceConcept(concept, t.getName());
-		}
-	}
-
-	private void insertMainInheritanceConept(String concept) {
-		ConceptNode conceptNode = new ConceptNode(concept,
-				NODE_TYPE.CLASS,
-				concept, concept);
-		conceptNode.setRoot(true);
-		data.addConcept(conceptNode);
-	}
-
-	private void addInheritanceConcept(String from, String to) {
-		ConceptNode toNode = null;
-		ConceptNode fromNode = null;
-
-		toNode = data.getConcept(to);
-		if (toNode == null) {
-			toNode = new ConceptNode(to, NODE_TYPE.CLASS, createConceptURL(to), to);
-			data.addConcept(toNode);
-		}
-		toNode.setOuter(false);
-
-		fromNode = data.getConcept(from);
-		if (fromNode == null) {
-			fromNode = new ConceptNode(from, NODE_TYPE.CLASS, createConceptURL(from), from);
-			data.addConcept(fromNode);
-		}
-		fromNode.setOuter(false);
-
-		Edge newLineRelationsKey = new Edge(fromNode, "subclass", toNode);
-		data.addEdge(newLineRelationsKey);
 	}
 
 	@Override
@@ -333,7 +285,6 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 				data.addEdge(edge);
 			}
 		}
-
 	}
 
 }
