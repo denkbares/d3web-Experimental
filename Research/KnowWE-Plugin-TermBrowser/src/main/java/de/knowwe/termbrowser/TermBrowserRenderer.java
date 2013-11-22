@@ -262,31 +262,29 @@ public class TermBrowserRenderer {
 					if (url != null) {
 						string.appendHtml("<a href='" + url + "'>");
 					}
-					string.appendHtml("<div class='termname' style='display:inline;"
+					string.appendHtml("<div class='termname' title='" + term.toExternalForm()
+							+ "' style='display:inline;"
 							+ createStyle(depth)
 							+ "'>");
 
 					// insert term name
-					String label = term.toExternalForm();
+
+					String label = getLabel(term);
 					if (hierarchyPrefixAbbreviation) {
-						String parentName = t.getParent().getData().getTerm().toExternalForm();
-						if (term.toExternalForm().startsWith(parentName)) {
-							label = term.toExternalForm().substring(parentName.length());
+						Identifier parentID = t.getParent().getData().getTerm();
+						String parentLabel = getLabel(parentID);
+						if (label.startsWith(parentLabel)) {
+							label = label.substring(parentLabel.length());
 						}
-					}
-					label = label.replaceAll("\"", "");
-					label = label.replaceAll("_", "_<wbr>");
-					if (label.startsWith("_<wbr>")) {
-						label = label.substring(6);
 					}
 
 					// insert exact term name to be used for action calls
-					string.appendHtml("<div class='termID'>");
+					string.appendHtml("<div class='termID' >");
 					string.append(term.toExternalForm());
 					string.appendHtml("</div>");
 
 					// add label for display
-					string.appendHtml(label);
+					string.appendHtml(label.trim());
 					string.appendHtml("</div>");
 					if (url != null) {
 						string.appendHtml("</a>");
@@ -307,6 +305,19 @@ public class TermBrowserRenderer {
 			string.appendHtml("</table>");
 		}
 		string.appendHtml("</div>");
+	}
+
+	private String getLabel(Identifier term) {
+		String[] identifierParts = term.getPathElements();
+		String label = term.toExternalForm();
+		if (identifierParts.length == 2) {
+			label = identifierParts[1];
+		}
+
+		label = label.replaceAll("\"", "");
+		label = label.replaceAll("_", " ");
+
+		return label;
 	}
 
 	/**
