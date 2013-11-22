@@ -260,7 +260,7 @@ public class TermBrowserRenderer {
 					// using different font style depending on current hierarchy
 					// depth
 					if (url != null) {
-						string.appendHtml("<a href='" + url + "'>");
+						string.appendHtml("<a href=\"" + url + "\">");
 					}
 					string.appendHtml("<div class='termname' title='" + term.toExternalForm()
 							+ "' style='display:inline;"
