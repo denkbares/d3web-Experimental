@@ -41,13 +41,16 @@ public class OIDeleteItemRenderer implements Renderer {
 
 		boolean hasError = !IncrementalCompiler.getInstance().getTerminology().isValid(
 				ref.get().getTermIdentifier(ref));
+		boolean ff = determineBrowser(user);
 
 		string.appendHtml("<span class='deletableListElement' id='"
 				+ section.getID() + "'>");
-		// string.appendHtml("<table style='display:inline-block;' >");
-		// string.appendHtml("<tr>");
-		// string.appendHtml("<div class='toolsMenuDecorator' style='position:absolute;float: left;'></div>");
-		string.appendHtml("<span class='' style='position:relative'>");
+		string.appendHtml("<span class='' style='position:relative; white-space: nowrap;");
+		if (ff) {
+			string.appendHtml("display: inline-flex;");
+		}
+		string.appendHtml("'>");
+
 		if (!hasError) {
 			string.appendHtml("<a  style='white-space: nowrap' href='"
 					+ RDFSUtil.getURI(ref)
@@ -57,12 +60,22 @@ public class OIDeleteItemRenderer implements Renderer {
 		if (!hasError) {
 			string.appendHtml("</a>");
 		}
-		// string.appendHtml("<span class='ui-icon ui-icon-circle-close deleteButton' style='float:left;position:relative;' title='Relation zu diesem Begriff löschen' ></span>");
+
 		string.appendHtml("</span>");
-		// string.appendHtml("<td class='narrowCell'>");
-		// string.appendHtml("</td>");
-		// string.appendHtml("</tr>");
-		// string.appendHtml("</table>");
 		string.appendHtml("</span>");
+	}
+
+	/**
+	 * 
+	 * @created 24.11.2013
+	 * @return
+	 */
+	private boolean determineBrowser(UserContext user) {
+		String browser = user.getRequest().getHeader("user-agent").toLowerCase();
+
+		if (browser.contains("firefox")) {
+			return true;
+		}
+		return false;
 	}
 }
