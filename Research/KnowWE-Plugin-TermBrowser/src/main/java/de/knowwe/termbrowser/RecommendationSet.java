@@ -45,7 +45,7 @@ public class RecommendationSet {
 	 */
 	public RecommendationSet(String master, List<String> relations, List<String> categories) {
 		hierarchy = new TermBrowserHierarchy(master, relations, categories);
-		terms = new Tree<RatedTerm>(RatedTerm.ROOT, hierarchy);
+		terms = new Tree<RatedTerm>(RatedTerm.ROOT);
 	}
 
 	public static RecommendationSet createRecommendationSet(UserContext user) {
@@ -86,11 +86,11 @@ public class RecommendationSet {
 	}
 
 	public void clearValue(Identifier term) {
-		terms.removeNodeFromTree(new RatedTerm(term));
+		terms.removeNodeFromTree(new RatedTerm(term, hierarchy));
 	}
 
 	public void addValue(Identifier term, Double increment) {
-		RatedTerm newTerm = new RatedTerm(term);
+		RatedTerm newTerm = new RatedTerm(term, hierarchy);
 		RatedTerm existingValuedTerm = terms.find(newTerm);
 		if (existingValuedTerm != null) {
 			existingValuedTerm.incrValue(increment);
@@ -107,7 +107,7 @@ public class RecommendationSet {
 
 	public void discount(double factor) {
 		// build up tree newly
-		Tree<RatedTerm> newTree = new Tree<RatedTerm>(RatedTerm.ROOT, hierarchy);
+		Tree<RatedTerm> newTree = new Tree<RatedTerm>(RatedTerm.ROOT);
 		List<RatedTerm> allTerms = getRankedTermList();
 		for (RatedTerm ratedTerm : allTerms) {
 			double newValue = ratedTerm.getValue();
@@ -119,7 +119,7 @@ public class RecommendationSet {
 
 			}
 			if (newValue > 0.1) {
-				newTree.insertNode(new RatedTerm(ratedTerm.getTerm(), newValue));
+				newTree.insertNode(new RatedTerm(ratedTerm.getTerm(), newValue, hierarchy));
 			}
 		}
 

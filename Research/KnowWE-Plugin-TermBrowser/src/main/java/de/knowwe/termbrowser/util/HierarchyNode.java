@@ -18,7 +18,6 @@
  */
 package de.knowwe.termbrowser.util;
 
-import de.knowwe.termbrowser.HierarchyProvider;
 
 /**
  * 
@@ -27,5 +26,5 @@ import de.knowwe.termbrowser.HierarchyProvider;
  */
 public interface HierarchyNode<T> extends Comparable<T> {
 
-	public boolean isSubNodeOf(T term, HierarchyProvider hierarchy);
+	public boolean isSubNodeOf(T term);
 }

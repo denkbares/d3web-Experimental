@@ -1,8 +1,8 @@
 package de.knowwe.ophtovisD3.utils;
 
 import de.d3web.strings.Identifier;
-import de.knowwe.termbrowser.HierarchyProvider;
 import de.knowwe.termbrowser.util.HierarchyNode;
+import de.knowwe.termbrowser.util.SubnodeRelationProvider;
 
 public class NodeWithName implements HierarchyNode<NodeWithName> {
 
@@ -10,34 +10,39 @@ public class NodeWithName implements HierarchyNode<NodeWithName> {
 	String data;
 	String label;
 	boolean highlighted;
+	private final SubnodeRelationProvider hierarchy;
 
-	public NodeWithName(String name) {
+	public NodeWithName(String name, SubnodeRelationProvider h) {
 		this.name = name;
+		this.hierarchy = h;
 	}
 
-	public NodeWithName(String name, String label) {
+	public NodeWithName(String name, String label, SubnodeRelationProvider h) {
 		this.name = name;
 		this.label = label;
 		this.data = 50 + "";
+		this.hierarchy = h;
 	}
 
-	public NodeWithName(String name, String data, boolean highlighted) {
+	public NodeWithName(String name, String data, boolean highlighted, SubnodeRelationProvider h) {
 		this.name = name;
 		this.data = data;
 		this.highlighted = highlighted;
+		this.hierarchy = h;
 	}
 
-	public NodeWithName(String name, String data, String label, boolean highlighted) {
+	public NodeWithName(String name, String data, String label, boolean highlighted, SubnodeRelationProvider h) {
 		this.name = name;
 		this.data = data;
 		this.label = label;
 		this.highlighted = highlighted;
+		this.hierarchy = h;
 	}
 
-	public NodeWithName(String name, boolean highlighted) {
+	public NodeWithName(String name, boolean highlighted, SubnodeRelationProvider h) {
 		this.name = name;
-
 		this.highlighted = highlighted;
+		this.hierarchy = h;
 	}
 
 	@Override
@@ -50,7 +55,7 @@ public class NodeWithName implements HierarchyNode<NodeWithName> {
 	}
 
 	@Override
-	public boolean isSubNodeOf(NodeWithName term, HierarchyProvider hierarchy) {
+	public boolean isSubNodeOf(NodeWithName term) {
 
 		return hierarchy.isSubNodeOf(new Identifier(this.name), new Identifier(term.name));
 	}

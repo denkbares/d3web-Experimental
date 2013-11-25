@@ -127,11 +127,11 @@ public class TermRecommender implements EventListener {
 			List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
 			List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
 			TermBrowserHierarchy hierarchy = new TermBrowserHierarchy(masta, relations, categories);
-			Tree<RatedTerm> tree = new Tree<RatedTerm>(RatedTerm.ROOT, hierarchy);
+			Tree<RatedTerm> tree = new Tree<RatedTerm>(RatedTerm.ROOT);
 			Collection<Identifier> startupTerms = hierarchy.getStartupTerms();
 			if(startupTerms != null) {
 				for (Identifier identifier : startupTerms) {
-					tree.insertNode(new RatedTerm(identifier));
+					tree.insertNode(new RatedTerm(identifier, hierarchy));
 				}
 			}
 			return tree;
@@ -139,8 +139,7 @@ public class TermRecommender implements EventListener {
 		else {
 			RecommendationSet recommendationSet = data.get(username);
 			List<RatedTerm> rankedTermList = recommendationSet.getRankedTermList();
-			Tree<RatedTerm> treeCopy = new Tree<RatedTerm>(RatedTerm.ROOT,
-					recommendationSet.getHierarchy());
+			Tree<RatedTerm> treeCopy = new Tree<RatedTerm>(RatedTerm.ROOT);
 			int size = rankedTermList.size();
 			for (RatedTerm ratedTerm : rankedTermList) {
 				if (!ratedTerm.equals(RatedTerm.ROOT)) {

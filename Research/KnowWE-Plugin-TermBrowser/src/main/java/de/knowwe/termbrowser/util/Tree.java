@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import de.knowwe.termbrowser.HierarchyProvider;
-
 /**
  * 
  * @author jochenreutelshofer
@@ -35,12 +33,11 @@ import de.knowwe.termbrowser.HierarchyProvider;
 public class Tree<T extends HierarchyNode<T>> {
 
 	private final Node<T> root;
-	private final HierarchyProvider hierarchy;
 
-	public Tree(T rootData, HierarchyProvider h) {
+
+	public Tree(T rootData) {
 		root = new Node<T>(rootData);
 		root.children = new ArrayList<Node<T>>();
-		this.hierarchy = h;
 	}
 
 	public Node<T> getRoot() {
@@ -181,7 +178,7 @@ public class Tree<T extends HierarchyNode<T>> {
 		boolean descent = false;
 		while (descentIterator.hasNext()) {
 			Node<T> child = descentIterator.next();
-			if (t.isSubNodeOf(child.data, hierarchy)) {
+			if (t.isSubNodeOf(child.data)) {
 				insertNodeUnder(t, child);
 				descent = true;
 				break;
@@ -198,7 +195,7 @@ public class Tree<T extends HierarchyNode<T>> {
 			while (checkSiblingsIterator.hasNext()) {
 				Node<T> sibling = checkSiblingsIterator.next();
 				if (sibling.data.equals(t)) continue;
-				if (sibling.data.isSubNodeOf(t, hierarchy)) {
+				if (sibling.data.isSubNodeOf(t)) {
 					// re-hang sibling to be successor of t
 					successorSiblings.add(sibling);
 

@@ -20,6 +20,7 @@ package de.knowwe.termbrowser;
 
 import de.d3web.strings.Identifier;
 import de.knowwe.termbrowser.util.HierarchyNode;
+import de.knowwe.termbrowser.util.SubnodeRelationProvider;
 
 /**
  * 
@@ -28,10 +29,13 @@ import de.knowwe.termbrowser.util.HierarchyNode;
  */
 public class RatedTerm implements HierarchyNode<RatedTerm> {
 
-	public static final RatedTerm ROOT = new RatedTerm(new Identifier("TERMBROWSER_ROOT"));
+	public static final RatedTerm ROOT = new RatedTerm(new Identifier("TERMBROWSER_ROOT"),
+			new RootSubNodeHierarchyProvider());
 
 	private final Identifier term;
 	private double value;
+
+	private final SubnodeRelationProvider hierarchy;
 
 	@Override
 	public String toString() {
@@ -50,8 +54,9 @@ public class RatedTerm implements HierarchyNode<RatedTerm> {
 	/**
 	 * 
 	 */
-	public RatedTerm(Identifier term) {
+	public RatedTerm(Identifier term, SubnodeRelationProvider h) {
 		this.term = term;
+		this.hierarchy = h;
 	}
 
 	public double getValue() {
@@ -66,8 +71,8 @@ public class RatedTerm implements HierarchyNode<RatedTerm> {
 		return term;
 	}
 
-	public RatedTerm(Identifier term, double v) {
-		this(term);
+	public RatedTerm(Identifier term, double v, SubnodeRelationProvider h) {
+		this(term, h);
 		value = v;
 	}
 
@@ -77,7 +82,7 @@ public class RatedTerm implements HierarchyNode<RatedTerm> {
 	}
 
 	@Override
-	public boolean isSubNodeOf(RatedTerm node, HierarchyProvider hierarchy) {
+	public boolean isSubNodeOf(RatedTerm node) {
 		if (node.equals(RatedTerm.ROOT)) return false;
 
 		Identifier thisTerm = this.term;

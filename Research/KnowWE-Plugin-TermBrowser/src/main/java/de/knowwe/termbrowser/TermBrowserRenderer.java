@@ -373,7 +373,8 @@ public class TermBrowserRenderer {
 	private boolean allChildrenShown(Node<RatedTerm> term) {
 		List<Identifier> childrenConcepts = hierarchy.getChildren(term.getData().getTerm());
 		for (Identifier childTerm : childrenConcepts) {
-			if (!term.getChildren().contains(new Node<RatedTerm>(new RatedTerm(childTerm)))) {
+			if (!term.getChildren().contains(
+					new Node<RatedTerm>(new RatedTerm(childTerm, hierarchy)))) {
 				return false;
 			}
 		}

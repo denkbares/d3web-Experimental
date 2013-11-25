@@ -22,13 +22,14 @@ import java.util.Collection;
 import java.util.List;
 
 import de.d3web.strings.Identifier;
+import de.knowwe.termbrowser.util.SubnodeRelationProvider;
 
 /**
  * 
  * @author Jochen Reutelshoefer
  * @created 03.06.2013
  */
-public interface HierarchyProvider {
+public interface HierarchyProvider extends SubnodeRelationProvider {
 
 	public static final String EXTENSION_POINT_HIERARCHY_PROVIDER = "HierarchyProvider";
 	
@@ -94,17 +95,6 @@ public interface HierarchyProvider {
 	 * @return
 	 */
 	List<Identifier> getParents(Identifier term);
-
-	/**
-	 * Determines whether term1 is a child of term2 according to the hierarchy
-	 * represented by this HierarchyProvider.
-	 * 
-	 * @created 20.11.2013
-	 * @param term1
-	 * @param term2
-	 * @return
-	 */
-	boolean isSubNodeOf(Identifier term1, Identifier term2);
 
 	/**
 	 * Returns all terms that are valid for this termbrowser. They are filtered
