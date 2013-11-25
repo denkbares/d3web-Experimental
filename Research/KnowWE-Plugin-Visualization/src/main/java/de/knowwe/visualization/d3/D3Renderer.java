@@ -246,8 +246,9 @@ public class D3Renderer {
 			// ...otherwise only add the child but don't go further in the tree
 			// (-> endless loop)
 			else {
-				jsonSource += "{\"concept\": \"" + getLabel(next) + "\"\n";
-				jsonSource += "\"conceptUrl\": \"" + targetURL + "\"\n";
+				jsonSource += "{\"concept\": \"" + getLabel(next) + "\"";
+				jsonSource += ",\n\"conceptUrl\": \"" + targetURL + "\"\n";
+				jsonSource += "}";
 			}
 			if (iterator.hasNext()) {
 				// not last element yet

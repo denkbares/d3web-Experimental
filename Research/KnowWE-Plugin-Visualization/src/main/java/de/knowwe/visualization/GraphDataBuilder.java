@@ -72,8 +72,8 @@ public abstract class GraphDataBuilder<T extends Object> {
 	public static final String GRAPH_SIZE = "graph_size";
 	public static final String RANK_DIRECTION = "rank_direction";
 	public static final String LINK_MODE = "LINK_MODE";
-	public static final String LINK_MODE_JUMP = "LINK_MODE_JUMP";
-	public static final String LINK_MODE_BROWSE = "LINK_MODE_BROWSE";
+	public static final String LINK_MODE_JUMP = "jump";
+	public static final String LINK_MODE_BROWSE = "browse";
 
 	public static final String DOT_APP = "dot_app";
 	public static final String ADD_TO_DOT = "add_to_dot";

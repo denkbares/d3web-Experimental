@@ -18,6 +18,9 @@
  */
 package de.knowwe.visualization;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import de.d3web.strings.Strings;
 import de.knowwe.visualization.GraphDataBuilder.NODE_TYPE;
 
@@ -75,7 +78,8 @@ public class ConceptNode {
 			throw new NullPointerException("label is null");
 		}
 		if (url == null) {
-			throw new NullPointerException("url is null");
+			Logger.getLogger(this.getClass().getName()).log(Level.WARNING,
+					"URL of ConceptNode is null: " + name);
 		}
 		this.conceptLabel = label;
 		this.conceptUrl = url;
