@@ -44,7 +44,7 @@ import de.knowwe.termbrowser.HierarchyProvider;
  * @author jochenreutelshofer
  * @created 02.10.2013
  */
-public class D3webHierarchyProvider implements HierarchyProvider {
+public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 
 	private List<String> relations = null;
 	private String master = null;
@@ -166,7 +166,7 @@ public class D3webHierarchyProvider implements HierarchyProvider {
 	}
 
 	@Override
-	public boolean isSubNodeOf(Identifier term1, Identifier term2) {
+	public boolean isSuccessorOf(Identifier term1, Identifier term2) {
 
 		NamedObject object1 = findTermForName(term1.toExternalForm());
 

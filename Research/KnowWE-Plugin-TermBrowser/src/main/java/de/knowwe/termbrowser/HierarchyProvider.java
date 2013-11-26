@@ -21,15 +21,15 @@ package de.knowwe.termbrowser;
 import java.util.Collection;
 import java.util.List;
 
+import de.d3web.collections.PartialHierarchy;
 import de.d3web.strings.Identifier;
-import de.knowwe.termbrowser.util.SubnodeRelationProvider;
 
 /**
  * 
  * @author Jochen Reutelshoefer
  * @created 03.06.2013
  */
-public interface HierarchyProvider extends SubnodeRelationProvider {
+public interface HierarchyProvider<T> extends PartialHierarchy<T> {
 
 	public static final String EXTENSION_POINT_HIERARCHY_PROVIDER = "HierarchyProvider";
 	

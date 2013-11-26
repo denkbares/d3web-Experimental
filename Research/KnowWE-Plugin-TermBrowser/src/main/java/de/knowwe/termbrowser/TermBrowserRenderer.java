@@ -21,13 +21,13 @@ package de.knowwe.termbrowser;
 import java.util.Collection;
 import java.util.List;
 
+import de.d3web.collections.PartialHierarchyTree;
+import de.d3web.collections.PartialHierarchyTree.Node;
 import de.d3web.strings.Identifier;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
-import de.knowwe.termbrowser.util.Tree;
-import de.knowwe.termbrowser.util.Tree.Node;
 
 /**
  * 
@@ -103,9 +103,9 @@ public class TermBrowserRenderer {
 			}
 			string.appendHtml("</div>");
 			// render term list
-			Tree<RatedTerm> ratedTermTreeTop = TermRecommender.getInstance().getRatedTermTreeTop(
-						user,
-						THRESHOLD_MAX_TERM_NUMBER);
+			PartialHierarchyTree<RatedTerm> ratedTermTreeTop = TermRecommender.getInstance().getRatedTermTreeTop(
+					user,
+					THRESHOLD_MAX_TERM_NUMBER);
 
 			renderTermTree(string, ratedTermTreeTop, collapsed, linkProvider, master);
 
@@ -176,7 +176,7 @@ public class TermBrowserRenderer {
 	 * @param string
 	 * @param subList
 	 */
-	private void renderTermTree(RenderResult string, Tree<RatedTerm> tree, boolean collapsed, LinkToTermDefinitionProvider linkProvider, String master) {
+	private void renderTermTree(RenderResult string, PartialHierarchyTree<RatedTerm> tree, boolean collapsed, LinkToTermDefinitionProvider linkProvider, String master) {
 
 		String style = "";
 		if (collapsed) {
@@ -185,7 +185,7 @@ public class TermBrowserRenderer {
 		string.appendHtml("<div style='" + style + "' class='termlist'>");
 
 		Node<RatedTerm> root = tree.getRoot();
-		List<Node<RatedTerm>> roots = root.getChildrenSorted();
+		List<Node<RatedTerm>> roots = root.getChildrenSortedDefault();
 		if (roots.size() == 0) {
 			string.appendHtml("<span style='padding-left: 75px;'>-keine-</span>");
 		}
@@ -205,11 +205,9 @@ public class TermBrowserRenderer {
 	private void renderConceptSubTree(Node<RatedTerm> rootConcept, int level, RenderResult string, LinkToTermDefinitionProvider linkProvider, String master) {
 		string.append("\n"); // append newline into html-code from time to time
 								// to avoid jspwiki bug
-		if (!rootConcept.getData().equals(RatedTerm.ROOT)) {
-			renderConcept(rootConcept, level, string, linkProvider, master);
-		}
+		renderConcept(rootConcept, level, string, linkProvider, master);
 		level += 1;
-		List<de.knowwe.termbrowser.util.Tree.Node<RatedTerm>> childrenSorted = rootConcept.getChildrenSorted();
+		List<de.d3web.collections.PartialHierarchyTree.Node<RatedTerm>> childrenSorted = rootConcept.getChildrenSortedDefault();
 		for (Node<RatedTerm> node : childrenSorted) {
 			renderConceptSubTree(node, level, string, linkProvider, master);
 		}
@@ -271,10 +269,13 @@ public class TermBrowserRenderer {
 
 					String label = getLabel(term);
 					if (hierarchyPrefixAbbreviation) {
-						Identifier parentID = t.getParent().getData().getTerm();
-						String parentLabel = getLabel(parentID);
-						if (label.startsWith(parentLabel)) {
-							label = label.substring(parentLabel.length());
+						Node<RatedTerm> parent = t.getParent();
+						if (parent != null) {
+							Identifier parentID = parent.getData().getTerm();
+							String parentLabel = getLabel(parentID);
+							if (label.startsWith(parentLabel)) {
+								label = label.substring(parentLabel.length());
+							}
 						}
 					}
 
@@ -374,7 +375,7 @@ public class TermBrowserRenderer {
 		List<Identifier> childrenConcepts = hierarchy.getChildren(term.getData().getTerm());
 		for (Identifier childTerm : childrenConcepts) {
 			if (!term.getChildren().contains(
-					new Node<RatedTerm>(new RatedTerm(childTerm, hierarchy)))) {
+					new Node<RatedTerm>(new RatedTerm(childTerm)))) {
 				return false;
 			}
 		}
@@ -466,8 +467,8 @@ public class TermBrowserRenderer {
 		// + encodedIdenifier
 		// + closingQuote + "&objectname=\"" + objectName + "\"";
 		string.appendHtml("<td style='"
-						+ divStyle
-						+ "' class='termbrowser'><a href='"
+				+ divStyle
+				+ "' class='termbrowser'><a href='"
 				+ linkToObjectInfoPage
 				+ "' ><span class='ui-icon ui-icon-info objectInfoLink hoverAction' title='Zur Info-Seite des Begriffs' style='display:none;'></span></a></td>");
 	}

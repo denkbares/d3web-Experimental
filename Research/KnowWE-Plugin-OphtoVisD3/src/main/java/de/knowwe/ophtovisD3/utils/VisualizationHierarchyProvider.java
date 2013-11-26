@@ -18,23 +18,18 @@
  */
 package de.knowwe.ophtovisD3.utils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.NotImplementedException;
-
+import de.d3web.collections.PartialHierarchy;
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
-import de.knowwe.termbrowser.HierarchyProvider;
 
 /**
  * 
  * @author adm_rieder
  * @created 10.09.2013
  */
-public class VisualizationHierarchyProvider implements HierarchyProvider {
+public class VisualizationHierarchyProvider implements PartialHierarchy<NodeWithName> {
 
 	private final Map<String, String> parentChildPairs;
 
@@ -45,24 +40,8 @@ public class VisualizationHierarchyProvider implements HierarchyProvider {
 		this.parentChildPairs = parentChildPairs;
 	}
 
-	@Override
-	public List<Identifier> getChildren(Identifier term) {
-		throw new NotImplementedException();
 
-	}
-
-	@Override
-	public List<Identifier> getParents(Identifier term) {
-		List<Identifier> parent = new ArrayList<Identifier>();
-		String parentString = parentChildPairs.get(Strings.unquote(term.toExternalForm()));
-		if (!(parentString == null || parentString.isEmpty())) {
-			parent.add(new Identifier(parentString));
-		}
-		return parent;
-	}
-
-	@Override
-	public boolean isSubNodeOf(Identifier subnode, Identifier term) {
+	private boolean isSuccessorOf(Identifier subnode, Identifier term) {
 		String parentString = parentChildPairs.get(Strings.unquote(subnode.toExternalForm()));
 		if (parentString == null) {
 			return false;
@@ -71,44 +50,14 @@ public class VisualizationHierarchyProvider implements HierarchyProvider {
 			return true;
 		}
 		else {
-			return isSubNodeOf(new Identifier(parentString), term);
+			return isSuccessorOf(new Identifier(parentString), term);
 		}
 	}
 
-	@Override
-	public void setAdditionalHierarchyRelations(List<String> relations) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
-	public void setMaster(String master) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Collection<Identifier> getAllTerms() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<Identifier> getStartupTerms() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setCategories(List<String> categories) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean isSuccessorOf(NodeWithName node1, NodeWithName node2) {
+		return isSuccessorOf(new Identifier(node1.name), new Identifier(node2.name));
 	}
 
 }

@@ -23,10 +23,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
 
+import de.d3web.collections.PartialHierarchyTree;
+import de.d3web.collections.PartialHierarchyTree.Node;
 import de.d3web.strings.Identifier;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.termbrowser.util.Tree;
-import de.knowwe.termbrowser.util.Tree.Node;
 
 /**
  * 
@@ -35,7 +35,7 @@ import de.knowwe.termbrowser.util.Tree.Node;
  */
 public class RecommendationSet {
 
-	private Tree<RatedTerm> terms = null;
+	private PartialHierarchyTree<RatedTerm> terms = null;
 	private boolean browserIsCollapsed = false;
 	private boolean graphIsCollapsed = true;
 	private final TermBrowserHierarchy hierarchy;
@@ -45,7 +45,7 @@ public class RecommendationSet {
 	 */
 	public RecommendationSet(String master, List<String> relations, List<String> categories) {
 		hierarchy = new TermBrowserHierarchy(master, relations, categories);
-		terms = new Tree<RatedTerm>(RatedTerm.ROOT);
+		terms = new PartialHierarchyTree<RatedTerm>(hierarchy);
 	}
 
 	public static RecommendationSet createRecommendationSet(UserContext user) {
@@ -75,24 +75,24 @@ public class RecommendationSet {
 		return toList(terms);
 	}
 
-	public static List<RatedTerm> toList(Tree<RatedTerm> tree) {
+	public static List<RatedTerm> toList(PartialHierarchyTree<RatedTerm> tree) {
 		ValueComparator bvc = new ValueComparator();
 		TreeSet<RatedTerm> list = new TreeSet<RatedTerm>(bvc);
 
 		list.addAll(tree.getNodeContents());
-		list.remove(RatedTerm.ROOT);
 
 		return new ArrayList<RatedTerm>(list);
 	}
 
 	public void clearValue(Identifier term) {
-		terms.removeNodeFromTree(new RatedTerm(term, hierarchy));
+		terms.removeNodeFromTree(new RatedTerm(term));
 	}
 
 	public void addValue(Identifier term, Double increment) {
-		RatedTerm newTerm = new RatedTerm(term, hierarchy);
-		RatedTerm existingValuedTerm = terms.find(newTerm);
-		if (existingValuedTerm != null) {
+		RatedTerm newTerm = new RatedTerm(term);
+		Node<RatedTerm> node = terms.find(newTerm);
+		if (node != null) {
+			RatedTerm existingValuedTerm = node.getData();
 			existingValuedTerm.incrValue(increment);
 		}
 		else {
@@ -101,25 +101,27 @@ public class RecommendationSet {
 		}
 	}
 
-	public Tree<RatedTerm> getTerms() {
+	public PartialHierarchyTree<RatedTerm> getTerms() {
 		return terms;
 	}
 
 	public void discount(double factor) {
 		// build up tree newly
-		Tree<RatedTerm> newTree = new Tree<RatedTerm>(RatedTerm.ROOT);
+		PartialHierarchyTree<RatedTerm> newTree = new PartialHierarchyTree<RatedTerm>(hierarchy);
 		List<RatedTerm> allTerms = getRankedTermList();
 		for (RatedTerm ratedTerm : allTerms) {
 			double newValue = ratedTerm.getValue();
 
 			// we discount only leafs
-			Node<RatedTerm> formerNode = terms.getNode(ratedTerm);
-			if (formerNode.getChildren().size() == 0) {
-				newValue *= factor;
+			Node<RatedTerm> formerNode = terms.find(ratedTerm);
+			if (formerNode != null) {
 
+				if (formerNode.getChildren().size() == 0) {
+					newValue *= factor;
+				}
 			}
 			if (newValue > 0.1) {
-				newTree.insertNode(new RatedTerm(ratedTerm.getTerm(), newValue, hierarchy));
+				newTree.insertNode(new RatedTerm(ratedTerm.getTerm(), newValue));
 			}
 		}
 

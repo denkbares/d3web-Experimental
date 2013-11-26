@@ -40,7 +40,7 @@ import de.knowwe.termbrowser.HierarchyProvider;
  * @author jochenreutelshofer
  * @created 01.10.2013
  */
-public class OntologyHierarchyProvider implements HierarchyProvider {
+public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> {
 
 	protected List<String> categories = new ArrayList<String>();
 	protected List<String> relations = null;
@@ -119,7 +119,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider {
 
 
 	@Override
-	public boolean isSubNodeOf(Identifier termID1, Identifier termID2) {
+	public boolean isSuccessorOf(Identifier termID1, Identifier termID2) {
 		Rdf2GoCore core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
 
 		URI term1URI = new URIImpl(getURIString(termID1));

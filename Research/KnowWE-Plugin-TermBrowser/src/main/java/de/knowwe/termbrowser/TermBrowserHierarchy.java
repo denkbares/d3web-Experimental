@@ -31,12 +31,12 @@ import de.d3web.strings.Identifier;
  * @author jochenreutelshofer
  * @created 01.10.2013
  */
-public class TermBrowserHierarchy implements HierarchyProvider {
+public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 
 	private List<String> hierarchyRelations = new ArrayList<String>();
 	private List<String> hierarchyCategories = new ArrayList<String>();
 	private String master = null;
-	private final HierarchyProvider hierarchyProvider;
+	private final HierarchyProvider<Identifier> hierarchyProvider;
 
 	/**
 	 * 
@@ -63,13 +63,14 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 	 * @created 05.06.2013
 	 * @return
 	 */
-	public static HierarchyProvider getPluggedHierarchyProvider() {
+	@SuppressWarnings("unchecked")
+	public static HierarchyProvider<Identifier> getPluggedHierarchyProvider() {
 		Extension[] extensions = PluginManager.getInstance().getExtensions(
 				"KnowWE-Plugin-TermBrowser", HierarchyProvider.EXTENSION_POINT_HIERARCHY_PROVIDER);
 		for (Extension extension : extensions) {
 			Object newInstance = extension.getSingleton();
 			if (newInstance instanceof HierarchyProvider) {
-				return (HierarchyProvider) newInstance;
+				return (HierarchyProvider<Identifier>) newInstance;
 			}
 		}
 		return null;
@@ -91,12 +92,11 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 		return hierarchyProvider.getParents(term);
 	}
 
-	@Override
-	public boolean isSubNodeOf(Identifier term1, Identifier term2) {
+	private boolean isSubNodeOf(Identifier term1, Identifier term2) {
 		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
 		hierarchyProvider.setCategories(hierarchyCategories);
 		hierarchyProvider.setMaster(master);
-		return hierarchyProvider.isSubNodeOf(term1, term2);
+		return hierarchyProvider.isSuccessorOf(term1, term2);
 	}
 
 	@Override
@@ -134,6 +134,11 @@ public class TermBrowserHierarchy implements HierarchyProvider {
 	@Override
 	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
 		return hierarchyProvider.filterInterestingTerms(terms);
+	}
+
+	@Override
+	public boolean isSuccessorOf(RatedTerm node1, RatedTerm node2) {
+		return isSubNodeOf(node1.getTerm(), node2.getTerm());
 	}
 
 }

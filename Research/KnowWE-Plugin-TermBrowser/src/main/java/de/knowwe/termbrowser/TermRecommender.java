@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import de.d3web.collections.PartialHierarchyTree;
+import de.d3web.collections.PartialHierarchyTree.Node;
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.d3web.strings.Identifier;
@@ -36,8 +38,6 @@ import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.event.PageRenderedEvent;
-import de.knowwe.termbrowser.util.Tree;
-import de.knowwe.termbrowser.util.Tree.Node;
 
 /**
  * 
@@ -120,18 +120,18 @@ public class TermRecommender implements EventListener {
 		return data.get(user.getUserName());
 	}
 
-	public de.knowwe.termbrowser.util.Tree<RatedTerm> getRatedTermTreeTop(UserContext user, int count) {
+	public de.d3web.collections.PartialHierarchyTree<RatedTerm> getRatedTermTreeTop(UserContext user, int count) {
 		String username = user.getUserName();
 		if (!data.containsKey(username)) {
 			String masta = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
 			List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
 			List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
 			TermBrowserHierarchy hierarchy = new TermBrowserHierarchy(masta, relations, categories);
-			Tree<RatedTerm> tree = new Tree<RatedTerm>(RatedTerm.ROOT);
+			PartialHierarchyTree<RatedTerm> tree = new PartialHierarchyTree<RatedTerm>(hierarchy);
 			Collection<Identifier> startupTerms = hierarchy.getStartupTerms();
 			if(startupTerms != null) {
 				for (Identifier identifier : startupTerms) {
-					tree.insertNode(new RatedTerm(identifier, hierarchy));
+					tree.insertNode(new RatedTerm(identifier));
 				}
 			}
 			return tree;
@@ -139,12 +139,11 @@ public class TermRecommender implements EventListener {
 		else {
 			RecommendationSet recommendationSet = data.get(username);
 			List<RatedTerm> rankedTermList = recommendationSet.getRankedTermList();
-			Tree<RatedTerm> treeCopy = new Tree<RatedTerm>(RatedTerm.ROOT);
+			PartialHierarchyTree<RatedTerm> treeCopy = new PartialHierarchyTree<RatedTerm>(
+					recommendationSet.getHierarchy());
 			int size = rankedTermList.size();
 			for (RatedTerm ratedTerm : rankedTermList) {
-				if (!ratedTerm.equals(RatedTerm.ROOT)) {
 					treeCopy.insertNode(ratedTerm);
-				}
 			}
 			int toRemove = size - count;
 			for (int i = 0; i < toRemove; i++) {
@@ -181,9 +180,9 @@ public class TermRecommender implements EventListener {
 	 * @created 12.04.2013
 	 * @param treeCopy
 	 */
-	private void removeLowestRatedLeaf(Tree<RatedTerm> tree) {
-		Tree.Node<RatedTerm> root = tree.getRoot();
-		Tree.Node<RatedTerm> lowestNode = findLowestRatedLeaf(root);
+	private void removeLowestRatedLeaf(PartialHierarchyTree<RatedTerm> tree) {
+		PartialHierarchyTree.Node<RatedTerm> root = tree.getRoot();
+		PartialHierarchyTree.Node<RatedTerm> lowestNode = findLowestRatedLeaf(root);
 		tree.removeNodeFromTree(lowestNode.getData());
 
 	}
@@ -194,7 +193,7 @@ public class TermRecommender implements EventListener {
 	 * @param root
 	 * @return
 	 */
-	private Tree.Node<RatedTerm> findLowestRatedLeaf(Node<RatedTerm> root) {
+	private PartialHierarchyTree.Node<RatedTerm> findLowestRatedLeaf(Node<RatedTerm> root) {
 		List<Node<RatedTerm>> children = root.getChildren();
 		if (root.getChildren() == null || root.getChildren().size() == 0) {
 			return root;

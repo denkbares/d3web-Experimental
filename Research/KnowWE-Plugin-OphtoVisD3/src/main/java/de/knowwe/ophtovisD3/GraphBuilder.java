@@ -25,13 +25,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.d3web.collections.PartialHierarchyTree;
+import de.d3web.collections.PartialHierarchyTree.Node;
 import de.knowwe.ophtovisD3.utils.JsonFactory;
 import de.knowwe.ophtovisD3.utils.NodeWithName;
 import de.knowwe.ophtovisD3.utils.StringShortener;
 import de.knowwe.ophtovisD3.utils.StringShortener.ElliminationType;
 import de.knowwe.ophtovisD3.utils.VisualizationHierarchyProvider;
-import de.knowwe.termbrowser.util.Tree;
-import de.knowwe.wisskont.browser.WissassHierarchyProvider;
 
 /**
  * 
@@ -42,7 +42,7 @@ public class GraphBuilder {
 
 	static LinkedList<Integer[]> connections = new LinkedList<Integer[]>();
 	static int indexNumber = 0;
-	static Tree<NodeWithName> resultTree;
+	static PartialHierarchyTree<NodeWithName> resultTree;
 	static boolean treeIsHere = false;
 	static StringShortener shorty = new StringShortener(ElliminationType.MIDDLE, 12);
 
@@ -125,18 +125,17 @@ public class GraphBuilder {
 	
 	public static String buildGraphExperimental(String connectionType, String highlighted){
 			Map<String, String> parentChildPairs = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
-		resultTree = new Tree<NodeWithName>(new NodeWithName("Wurzel", "Wissensbasis",
-				new VisualizationHierarchyProvider(parentChildPairs)));
+		resultTree = new PartialHierarchyTree<NodeWithName>(new VisualizationHierarchyProvider(
+				parentChildPairs));
 		HashSet<String> allConcepts = new HashSet<String>();
 		allConcepts.addAll(parentChildPairs.keySet());
 		allConcepts.addAll(parentChildPairs.values());
 		String label;
 		for (String string : allConcepts) {
 			label = shorty.shorten(string);
-			resultTree.insertNode(new NodeWithName(string, label,
-					new VisualizationHierarchyProvider(parentChildPairs)));
+			resultTree.insertNode(new NodeWithName(string, label));
 		}
-		Tree<NodeWithName> resultTreeHighlighted = hightlightConcept(resultTree, highlighted,
+		PartialHierarchyTree<NodeWithName> resultTreeHighlighted = hightlightConcept(resultTree, highlighted,
 				connectionType);
 		String result =JsonFactory.toJSON(resultTreeHighlighted);
 		return result;
@@ -148,11 +147,12 @@ public class GraphBuilder {
 		System.out.println("Graphbuilder started");
 	    //	GraphbuilderForeignKB.buildTree();
 		if (!false) {
-			resultTree = new Tree<NodeWithName>(new NodeWithName("Wurzel", "Wissensbasis",
-					new WissassHierarchyProvider()));
+			Map<String, String> parentChildPairs = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
+
+			resultTree = new PartialHierarchyTree<NodeWithName>(new VisualizationHierarchyProvider(
+					parentChildPairs));
 			label =shorty.shorten("Anamnese_Patientensituation");
-			resultTree.insertNode(new NodeWithName("Anamnese_Patientensituation", label,
-					new WissassHierarchyProvider()));
+			resultTree.insertNode(new NodeWithName("Anamnese_Patientensituation", label));
 			String fatherOfTheMoment = "Anamnese_Patientensituation";
 			while (!fatherOfTheMoment.isEmpty()) {
 				getChildConcepts(fatherOfTheMoment, connectionType, getConnectionAmount,
@@ -164,7 +164,7 @@ public class GraphBuilder {
 					fatherOfTheMoment = nextfather.get(0);
 					label=shorty.shorten(fatherOfTheMoment);
 					resultTree.insertNode(new NodeWithName(fatherOfTheMoment,
-							label, new WissassHierarchyProvider()));
+							label));
 				}else{
 					break;
 				}
@@ -176,31 +176,32 @@ public class GraphBuilder {
 		return result;
 	}
 	
-	public static Tree<NodeWithName> hightlightConcept(Tree<NodeWithName> tree, String conceptToHightlight, String connectionType) {
-		Map<String, String> parentChildPairs = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
-		NodeWithName toAlter = tree.find(new NodeWithName(conceptToHightlight,
-				shorty.shorten(conceptToHightlight), new VisualizationHierarchyProvider(
-						parentChildPairs)));
+	public static PartialHierarchyTree<NodeWithName> hightlightConcept(PartialHierarchyTree<NodeWithName> tree, String conceptToHightlight, String connectionType) {
+		Node<NodeWithName> toAlter = tree.find(new NodeWithName(conceptToHightlight,
+				shorty.shorten(conceptToHightlight)));
 		if(!(toAlter==null)){
-			toAlter.setHighligted();
-			tree.insertNode(toAlter);
+			toAlter.getData().setHighligted();
+			tree.insertNode(toAlter.getData());
 		}
 		return tree;
 	}
 
 	public static String buildPartTree(String startConcept, String connectionType) {
+		Map<String, String> parentChildPairs = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
+
 		String root = DataBaseHelper.getRootConcept(startConcept, connectionType);
 		boolean highlight = (root.equals(startConcept));
-		Tree<NodeWithName> resultTree = new Tree<NodeWithName>(new NodeWithName(root, highlight,
-				new WissassHierarchyProvider()));
+		PartialHierarchyTree<NodeWithName> resultTree = new PartialHierarchyTree<NodeWithName>(
+				new VisualizationHierarchyProvider(
+						parentChildPairs));
+		resultTree.insertNode(new NodeWithName(root, highlight));
 		resultTree = getChildConceptTree(root, connectionType, resultTree, startConcept);
 
 		return JsonFactory.toJSON(resultTree);
 
 	}
 
-	public static Tree<NodeWithName> getChildConceptTree(String father, String connectionType, Tree<NodeWithName> tree, String toHighlight) {
-		Map<String, String> parentChildPairs = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
+	public static PartialHierarchyTree<NodeWithName> getChildConceptTree(String father, String connectionType, PartialHierarchyTree<NodeWithName> tree, String toHighlight) {
 		List<String> childs = DataBaseHelper.getConnectedNodeNamesOfType(father, connectionType,
 				false);
 		if (childs.isEmpty()) {
@@ -215,7 +216,7 @@ public class GraphBuilder {
 					shorty.shorten(childs.get(i));
 					tree.insertNode(new NodeWithName(childs.get(i),
 							Integer.toString(DataBaseHelper.countQuerytresults(childs.get(i))),
-							highlight, new VisualizationHierarchyProvider(parentChildPairs)));
+							highlight));
 					getChildConceptTree(string, connectionType, tree, toHighlight);
 				}
 			}
@@ -224,8 +225,7 @@ public class GraphBuilder {
 
 	}
 
-	public static String getChildConcepts(String father, String connectionType, boolean getConnectionAmount, Tree<NodeWithName> tree) {
-		Map<String, String> parentChildPairs = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
+	public static String getChildConcepts(String father, String connectionType, boolean getConnectionAmount, PartialHierarchyTree<NodeWithName> tree) {
 		String resultString = "";
 		String label;
 		List<String> childs = DataBaseHelper.getConnectedNodeNamesOfType(father, connectionType,
@@ -239,7 +239,7 @@ public class GraphBuilder {
 				if (!childs.get(i).equals(father)) {
 					label =shorty.shorten(childs.get(i));
 					tree.insertNode(new NodeWithName(childs.get(i),
-							label, new VisualizationHierarchyProvider(parentChildPairs)));
+							label));
 					resultString += getChildConcepts(string, connectionType, getConnectionAmount,
 							tree);
 				}

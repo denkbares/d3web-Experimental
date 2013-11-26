@@ -1,4 +1,4 @@
-package de.knowwe.termbrowser.util;
+package de.knowwe.termbrowser;
 
 import de.d3web.strings.Identifier;
 

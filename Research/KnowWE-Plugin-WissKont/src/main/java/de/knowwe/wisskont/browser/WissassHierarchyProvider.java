@@ -44,7 +44,7 @@ import de.knowwe.wisskont.util.MarkupUtils;
  * @author jochenreutelshofer
  * @created 03.06.2013
  */
-public class WissassHierarchyProvider implements HierarchyProvider {
+public class WissassHierarchyProvider implements HierarchyProvider<Identifier> {
 	
 	public static final String MAIN_CONCEPT = "Wissass-Begriff";
 
@@ -59,7 +59,7 @@ public class WissassHierarchyProvider implements HierarchyProvider {
 	}
 
 	@Override
-	public boolean isSubNodeOf(Identifier term1, Identifier term2) {
+	public boolean isSuccessorOf(Identifier term1, Identifier term2) {
 		String baseUrl = Rdf2GoCore.getInstance().getLocalNamespace();
 
 		String thisConceptURLString = Strings.encodeURL(Strings.unquote(term1.toExternalForm()));
