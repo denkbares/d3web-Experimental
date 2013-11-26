@@ -1,6 +1,5 @@
 package de.knowwe.ophtovisD3.utils;
 
-import de.knowwe.termbrowser.SubnodeRelationProvider;
 
 public class NodeWithName implements Comparable<NodeWithName> {
 
@@ -25,7 +24,7 @@ public class NodeWithName implements Comparable<NodeWithName> {
 		this.highlighted = highlighted;
 	}
 
-	public NodeWithName(String name, String data, String label, boolean highlighted, SubnodeRelationProvider h) {
+	public NodeWithName(String name, String data, String label, boolean highlighted) {
 		this.name = name;
 		this.data = data;
 		this.label = label;
