@@ -129,7 +129,7 @@ public class MenuUtilities {
 	 * Is the unit open?
 	 */
 	public static boolean isUnitOpen(Section<DashTreeElement> sec, String user) {
-		Section<? extends Type> dashtree = sec.getFather().getFather().getFather();
+		Section<? extends Type> dashtree = sec.getParent().getParent().getParent();
 		List<Section<DashTreeElement>> found = new ArrayList<Section<DashTreeElement>>();
 		Sections.findSuccessorsOfType(dashtree, DashTreeElement.class, 3, found);
 

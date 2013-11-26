@@ -108,7 +108,7 @@ public class MenuItemRenderer implements Renderer {
 				hidden = false;
 			}
 			List<Section<DynamicMenuItem>> found = new ArrayList<Section<DynamicMenuItem>>();
-			Sections.findSuccessorsOfType(root.getFather(), DynamicMenuItem.class, found);
+			Sections.findSuccessorsOfType(root.getParent(), DynamicMenuItem.class, found);
 			for (Section<DynamicMenuItem> section : found) {
 				if (pagename.equals(currentPage) || isSubpageOf(currentPage, section)) {
 					hidden = false;
@@ -151,7 +151,7 @@ public class MenuItemRenderer implements Renderer {
 		Section<DashTreeElement> dtElement = Sections.findAncestorOfType(section,
 				DashTreeElement.class);
 		List<Section<DashTreeElementContent>> found = new ArrayList<Section<DashTreeElementContent>>();
-		Sections.findSuccessorsOfType(dtElement.getFather(),
+		Sections.findSuccessorsOfType(dtElement.getParent(),
 				DashTreeElementContent.class, found);
 
 		for (Section<DashTreeElementContent> section2 : found) {
@@ -164,7 +164,7 @@ public class MenuItemRenderer implements Renderer {
 	}
 
 	private boolean isFree(Section<?> sec, String user) {
-		Section<? extends Type> dashtree = sec.getFather().getFather().getFather();
+		Section<? extends Type> dashtree = sec.getParent().getParent().getParent();
 		List<Section<DynamicMenuItem>> found = new ArrayList<Section<DynamicMenuItem>>();
 		Sections.findSuccessorsOfType(dashtree, DynamicMenuItem.class, 3, found);
 

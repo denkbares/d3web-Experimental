@@ -75,12 +75,12 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 
 		for (int versionIndex = 0; versionIndex < versionsExisting; versionIndex++) {
 			user.getParameters().put(VERSION_KEY, Integer.toString(versionIndex));
-			DelegateRenderer.getInstance().render(table.getFather(),
+			DelegateRenderer.getInstance().render(table.getParent(),
 					user,
 					string);
 		}
 		if (versionsExisting == 0) {
-			DelegateRenderer.getInstance().render(table.getFather(),
+			DelegateRenderer.getInstance().render(table.getParent(),
 					user,
 					string);
 		}

@@ -347,10 +347,10 @@ public class WordBasedRenamingAction extends AbstractAction {
 
 				Section<?> sec = Sections.findSmallestSectionContaining(article.getRootSection(),
 						start, end);
-				while (sec.get() instanceof PlainText && sec.getFather() != null) {
-					sec = sec.getFather();
+				while (sec.get() instanceof PlainText && sec.getParent() != null) {
+					sec = sec.getParent();
 				}
-				int startInSec = start - sec.getAbsolutePositionStartInArticle();
+				int startInSec = start - sec.getOffsetInArticle();
 
 				WordBasedRenameFinding f =
 						new WordBasedRenameFinding(startInSec, length,

@@ -64,8 +64,8 @@ public class WordBasedRenameFinding implements Comparable<WordBasedRenameFinding
 	 * @return
 	 */
 	public static String getContext(int start, Section<?> sec, String articletext, int findingLength) {
-		int startIndex = start + sec.getAbsolutePositionStartInArticle();
-		int endIndex = findingLength + start + sec.getAbsolutePositionStartInArticle();
+		int startIndex = start + sec.getOffsetInArticle();
+		int endIndex = findingLength + start + sec.getOffsetInArticle();
 		String result = articletext.substring(startIndex, endIndex);
 		return result;
 	}

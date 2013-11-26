@@ -45,7 +45,7 @@ public class HeadlineDragDropInserter implements DragDropEditInserter<HeaderType
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
 		if (Sections.hasType(s, HeaderType.class)) {
 
-			List<Section<? extends Type>> siblings = s.getFather().getChildren();
+			List<Section<? extends Type>> siblings = s.getParent().getChildren();
 
 			Section<ConceptList> list = searchExistingConceptList(s, siblings);
 

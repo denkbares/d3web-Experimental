@@ -104,7 +104,7 @@ public class RevisionManagerRenderer extends DefaultMarkupRenderer {
 	private static void appendJsonDataTableAndTimeline(Section<?> section, RenderResult string, UserContext user) {
 		string.appendHtml("<script type=\"text/javascript\">\n");
 		string.appendHtml("data = [\n");
-		List<Section<RevisionType>> sections = Sections.findSuccessorsOfType(section.getFather(),
+		List<Section<RevisionType>> sections = Sections.findSuccessorsOfType(section.getParent(),
 				RevisionType.class);
 		if (!sections.isEmpty()) {
 

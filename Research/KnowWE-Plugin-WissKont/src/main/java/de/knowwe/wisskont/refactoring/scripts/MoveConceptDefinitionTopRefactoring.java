@@ -92,7 +92,7 @@ public class MoveConceptDefinitionTopRefactoring extends AbstractAction {
 				for (Section<? extends SimpleReference> section : termReferences) {
 					if (section.getTitle().equals("Konzepthierarchie")) {
 						List<Section<TermReference>> children = new ArrayList<Section<TermReference>>();
-						Section<? extends Type> searchRoot = section.getFather().getFather().getFather();
+						Section<? extends Type> searchRoot = section.getParent().getParent().getParent();
 						if (!(searchRoot.get() instanceof DashSubtree)) {
 							continue;
 						}

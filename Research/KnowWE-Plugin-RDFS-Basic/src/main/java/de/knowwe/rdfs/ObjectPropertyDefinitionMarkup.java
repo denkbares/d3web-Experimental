@@ -135,7 +135,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractKnowledgeUnitType<Ob
 
 			// add domain and range information
 			List<Section<ClassRef>> classRefs = Sections.findSuccessorsOfType(
-					s.getFather(), ClassRef.class);
+					s.getParent(), ClassRef.class);
 			if (classRefs.size() == 2) {
 				map.put(RDFS_DOMAIN_KEY,
 						classRefs.get(0).get().getTermIdentifier(classRefs.get(0)).toExternalForm());

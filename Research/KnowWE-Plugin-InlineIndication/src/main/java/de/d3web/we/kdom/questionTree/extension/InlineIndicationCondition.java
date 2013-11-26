@@ -107,7 +107,7 @@ public class InlineIndicationCondition extends AbstractType {
 			Section<Finding> finding = Sections.findSuccessor(s, Finding.class);
 
 			@SuppressWarnings("rawtypes")
-			Section<QASetDefinition> qDef = Sections.findSuccessor(s.getFather(),
+			Section<QASetDefinition> qDef = Sections.findSuccessor(s.getParent(),
 					QASetDefinition.class);
 			Collection<Message> msgs = new HashSet<Message>();
 			if (finding != null && qDef != null) {

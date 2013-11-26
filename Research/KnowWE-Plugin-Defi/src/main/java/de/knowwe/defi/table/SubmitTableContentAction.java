@@ -134,7 +134,7 @@ public class SubmitTableContentAction extends AbstractAction {
 				// override date
 				String date = (new SimpleDateFormat("dd.MM.yyy, HH:mm")).format(new Date());
 				Section<? extends AnnotationContentType> dateSec = DefaultMarkupType.getAnnotationContentSection(
-						contentSection.getFather().getFather(), "date");
+						contentSection.getParent().getParent(), "date");
 				nodesMap.put(dateSec.getID(), date);
 			}
 

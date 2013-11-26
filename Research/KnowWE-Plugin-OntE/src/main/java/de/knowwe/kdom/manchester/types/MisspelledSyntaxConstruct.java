@@ -55,7 +55,7 @@ public class MisspelledSyntaxConstruct extends AbstractType {
 				String messageText = "";
 				StringBuilder corrections = new StringBuilder();
 				for (CorrectionProvider.Suggestion sug : SpellingUtils.getCorrections(
-						s.getFather(),
+						s.getParent(),
 						s.getText())) {
 					corrections.append(sug.getSuggestion());
 				}

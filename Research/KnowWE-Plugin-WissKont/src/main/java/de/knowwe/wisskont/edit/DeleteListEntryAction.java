@@ -68,7 +68,7 @@ public class DeleteListEntryAction extends AbstractAction {
 
 		{
 			// check whether trailing comma should be deleted
-			Section<? extends Type> father = entryToBeDeleted.getFather().getFather();
+			Section<? extends Type> father = entryToBeDeleted.getParent().getParent();
 			List<Section<? extends Type>> siblings = father.getChildren();
 			Iterator<Section<? extends Type>> iterator = siblings.iterator();
 			Section<? extends Type> subsequentSection = null;

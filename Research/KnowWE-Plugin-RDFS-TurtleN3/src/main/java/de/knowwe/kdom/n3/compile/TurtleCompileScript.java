@@ -108,16 +108,16 @@ public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<
 		}
 
 		Section<TurtlePredicate> predSec = Sections.findSuccessor(
-				objectSec.getFather(), TurtlePredicate.class);
+				objectSec.getParent(), TurtlePredicate.class);
 
 		URI predURI = RDFSUtil.getURI(predSec);
 
 		Section<TurtleSubject> subjectSec = Sections.findSuccessor(
-				objectSec.getFather().getFather(), TurtleSubject.class);
+				objectSec.getParent().getParent(), TurtleSubject.class);
 		Resource subjectURI = RDFSUtil.getURI(subjectSec);
 		if (subjectURI == null) {
 			subjectURI = new BlankNodeImpl(Sections.findSuccessor(
-					objectSec.getFather().getFather().getFather(),
+					objectSec.getParent().getParent().getParent(),
 					TurtleMarkupN3Content.class));
 		}
 

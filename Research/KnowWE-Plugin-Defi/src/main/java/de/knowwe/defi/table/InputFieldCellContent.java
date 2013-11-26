@@ -97,7 +97,7 @@ public class InputFieldCellContent extends AbstractType {
 
 		public static String getStoredContentForInput(Section<?> sec, int version, String username) {
 			List<Section<InputFieldCellContent>> found = new ArrayList<Section<InputFieldCellContent>>();
-			Sections.findSuccessorsOfType(sec.getFather().getFather().getFather().getFather(),
+			Sections.findSuccessorsOfType(sec.getParent().getParent().getParent().getParent(),
 					InputFieldCellContent.class,
 					found);
 			int number = found.indexOf(sec);

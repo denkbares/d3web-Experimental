@@ -71,7 +71,7 @@ public class DescriptionChecker extends AbstractTest<Article> {
 			}
 			if (descriptionHeader != null) {
 
-				int offSetFromFatherText = descriptionHeader.getOffSetFromFatherText();
+				int offSetFromFatherText = descriptionHeader.getOffsetInParent();
 				int descriptionBeginning = offSetFromFatherText
 						+ descriptionHeader.getText().length();
 				int articleLength = testObject.getRootSection().getText().length();

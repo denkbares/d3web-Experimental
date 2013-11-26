@@ -59,8 +59,8 @@ public class BlockMarkupContentRenderer implements Renderer {
 		if (!titl.isEmpty()) {
 			tString = titl.get(0).getText().trim();
 		}
-		else if (bundle.getString(sec.getFather().get().getName()) != null) {
-			tString = bundle.getString(sec.getFather().get().getName());
+		else if (bundle.getString(sec.getParent().get().getName()) != null) {
+			tString = bundle.getString(sec.getParent().get().getName());
 		}
 
 		string.appendHtml("! "
