@@ -37,11 +37,11 @@
 }
 
 .zebraline {
-	
+	background-color: #EEEEEE;
 }
 	
 .zebraline:hover {
-	background-color: #DDDDDD;
+	background-color: #CCCCCC;
 }
 	
 .zebraline-white {
@@ -49,7 +49,7 @@
 }
 	
 .zebraline-white:hover {
-	background-color: #DDDDDD;
+	background-color: #CCCCCC;
 }
 	
 td.termbrowser {

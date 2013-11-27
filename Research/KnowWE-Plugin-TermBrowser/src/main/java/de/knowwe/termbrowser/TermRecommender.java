@@ -117,12 +117,13 @@ public class TermRecommender implements EventListener {
 	}
 
 	public RecommendationSet getRecommendationSet(UserContext user) {
-		return data.get(user.getUserName());
+		return findRecommendationSet(user);
 	}
 
 	public de.d3web.collections.PartialHierarchyTree<RatedTerm> getRatedTermTreeTop(UserContext user, int count) {
 		String username = user.getUserName();
 		if (!data.containsKey(username)) {
+			// init new term set
 			String masta = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
 			List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
 			List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
@@ -137,6 +138,7 @@ public class TermRecommender implements EventListener {
 			return tree;
 		}
 		else {
+			// existing term set
 			RecommendationSet recommendationSet = data.get(username);
 			List<RatedTerm> rankedTermList = recommendationSet.getRankedTermList();
 			PartialHierarchyTree<RatedTerm> treeCopy = new PartialHierarchyTree<RatedTerm>(
@@ -146,6 +148,10 @@ public class TermRecommender implements EventListener {
 					treeCopy.insertNode(ratedTerm);
 			}
 			int toRemove = size - count;
+			if (count == -1) {
+				// -1 stand for infinite size of term browser list
+				toRemove = 0;
+			}
 			for (int i = 0; i < toRemove; i++) {
 				removeLowestRatedLeaf(treeCopy);
 			}
@@ -289,7 +295,7 @@ public class TermRecommender implements EventListener {
 	 * @param context
 	 * @param term
 	 */
-	public void clearTerm(UserActionContext context, Identifier term) {
+	public void clearTerm(UserContext context, Identifier term) {
 		RecommendationSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet != null) {
 			recommendationSet.clearValue(term);
@@ -304,12 +310,12 @@ public class TermRecommender implements EventListener {
 	 * @param term
 	 */
 	public void expandTerm(UserActionContext context, Identifier term) {
-		RecommendationSet recommendationSet = data.get(context.getUserName());
+		RecommendationSet recommendationSet = findRecommendationSet(context);
 
-		if (recommendationSet == null) {
-			recommendationSet = RecommendationSet.createRecommendationSet(context);
-			data.put(context.getUserName(), recommendationSet);
-		}
+		// discount existing terms to make sure expanded ones are top rated
+		recommendationSet.discount(0.9);
+
+		// add children
 		List<Identifier> children = recommendationSet.getHierarchy().getChildren(term);
 		for (Identifier child : children) {
 			recommendationSet.addValue(child, WEIGHT_EXPAND);
@@ -319,6 +325,16 @@ public class TermRecommender implements EventListener {
 
 	}
 
+	private RecommendationSet findRecommendationSet(UserContext context) {
+		RecommendationSet recommendationSet = data.get(context.getUserName());
+		if (recommendationSet == null) {
+			recommendationSet = RecommendationSet.createRecommendationSet(context);
+			data.put(context.getUserName(), recommendationSet);
+		}
+		recommendationSet.updateUserData(context);
+		return recommendationSet;
+	}
+
 	/**
 	 * 
 	 * @created 03.05.2013
@@ -326,11 +342,8 @@ public class TermRecommender implements EventListener {
 	 * @param term
 	 */
 	public void collapseTerm(UserActionContext context, Identifier term) {
-		RecommendationSet recommendationSet = data.get(context.getUserName());
-		if (recommendationSet == null) {
-			recommendationSet = RecommendationSet.createRecommendationSet(context);
-			data.put(context.getUserName(), recommendationSet);
-		}
+		RecommendationSet recommendationSet = findRecommendationSet(context);
+
 		List<Identifier> children = recommendationSet.getHierarchy().getChildren(term);
 		for (Identifier child : children) {
 			recommendationSet.clearValue(child);
@@ -342,12 +355,8 @@ public class TermRecommender implements EventListener {
 	 * @created 14.05.2013
 	 * @param context
 	 */
-	public void openList(UserActionContext context) {
-		RecommendationSet recommendationSet = data.get(context.getUserName());
-		if (recommendationSet == null) {
-			recommendationSet = RecommendationSet.createRecommendationSet(context);
-			data.put(context.getUserName(), recommendationSet);
-		}
+	public void openList(UserContext context) {
+		RecommendationSet recommendationSet = findRecommendationSet(context);
 		recommendationSet.setBrowserIsCollapsed(false);
 	}
 
@@ -357,11 +366,7 @@ public class TermRecommender implements EventListener {
 	 * @param context
 	 */
 	public void collapseList(UserActionContext context) {
-		RecommendationSet recommendationSet = data.get(context.getUserName());
-		if (recommendationSet == null) {
-			recommendationSet = RecommendationSet.createRecommendationSet(context);
-			data.put(context.getUserName(), recommendationSet);
-		}
+		RecommendationSet recommendationSet = findRecommendationSet(context);
 		recommendationSet.setBrowserIsCollapsed(true);
 	}
 
@@ -371,11 +376,7 @@ public class TermRecommender implements EventListener {
 	 * @param context
 	 */
 	public void openGraph(UserActionContext context) {
-		RecommendationSet recommendationSet = data.get(context.getUserName());
-		if (recommendationSet == null) {
-			recommendationSet = RecommendationSet.createRecommendationSet(context);
-			data.put(context.getUserName(), recommendationSet);
-		}
+		RecommendationSet recommendationSet = findRecommendationSet(context);
 		recommendationSet.setGraphIsCollapsed(false);
 	}
 
@@ -385,11 +386,7 @@ public class TermRecommender implements EventListener {
 	 * @param context
 	 */
 	public void collapseGraph(UserActionContext context) {
-		RecommendationSet recommendationSet = data.get(context.getUserName());
-		if (recommendationSet == null) {
-			recommendationSet = RecommendationSet.createRecommendationSet(context);
-			data.put(context.getUserName(), recommendationSet);
-		}
+		RecommendationSet recommendationSet = findRecommendationSet(context);
 		recommendationSet.setGraphIsCollapsed(true);
 	}
 
@@ -398,7 +395,7 @@ public class TermRecommender implements EventListener {
 	 * @created 14.05.2013
 	 * @param context
 	 */
-	public void clearList(UserActionContext context) {
+	public void clearList(UserContext context) {
 		RecommendationSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet != null) {
 			recommendationSet.clear();
@@ -411,12 +408,8 @@ public class TermRecommender implements EventListener {
 	 * @created 14.05.2013
 	 * @param context
 	 */
-	public void toggleCollapse(UserActionContext context) {
-		RecommendationSet recommendationSet = data.get(context.getUserName());
-		if (recommendationSet == null) {
-			recommendationSet = RecommendationSet.createRecommendationSet(context);
-			data.put(context.getUserName(), recommendationSet);
-		}
+	public void toggleCollapse(UserContext context) {
+		RecommendationSet recommendationSet = findRecommendationSet(context);
 		recommendationSet.setBrowserIsCollapsed(!recommendationSet.isBrowserIsCollapsed());
 
 	}
@@ -427,11 +420,7 @@ public class TermRecommender implements EventListener {
 	 * @param context
 	 */
 	public void toggleGraph(UserActionContext context) {
-		RecommendationSet recommendationSet = data.get(context.getUserName());
-		if (recommendationSet == null) {
-			recommendationSet = RecommendationSet.createRecommendationSet(context);
-			data.put(context.getUserName(), recommendationSet);
-		}
+		RecommendationSet recommendationSet = findRecommendationSet(context);
 		recommendationSet.setGraphIsCollapsed(!recommendationSet.isGraphIsCollapsed());
 
 	}
@@ -443,11 +432,7 @@ public class TermRecommender implements EventListener {
 	 * @param term
 	 */
 	public void addParentTerm(UserActionContext context, Identifier term) {
-		RecommendationSet recommendationSet = data.get(context.getUserName());
-		if (recommendationSet == null) {
-			recommendationSet = RecommendationSet.createRecommendationSet(context);
-			data.put(context.getUserName(), recommendationSet);
-		}
+		RecommendationSet recommendationSet = findRecommendationSet(context);
 		List<Identifier> parents = recommendationSet.getHierarchy().getParents(term);
 		// there should be only one parent
 		if (parents.size() > 0) {

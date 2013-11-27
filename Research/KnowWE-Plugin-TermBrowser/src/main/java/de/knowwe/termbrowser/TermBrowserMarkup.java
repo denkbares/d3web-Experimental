@@ -21,7 +21,9 @@ package de.knowwe.termbrowser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
+import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
@@ -38,7 +40,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshoefer
  * @created 29.11.2012
  */
 public class TermBrowserMarkup extends DefaultMarkupType {
@@ -46,8 +48,11 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 	private static final String HIERARCHY = "hierarchy";
 	private static final String CATEGORIES = "categories";
 	private static final String SEARCH_SLOT = "searchslot";
+	private static final String START_CONCEPT = "startConcept";
+	private static final String CLEAR_ON_LOAD = "clearOnLoad";
 	private static final String PREFIX_ABBREVIATION = "abbreviation";
 	private static final String TITLE = "title";
+	private static final String SIZE = "size";
 	private static final DefaultMarkup MARKUP;
 
 	public TermBrowserMarkup(DefaultMarkup markup) {
@@ -60,9 +65,13 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		MARKUP = new DefaultMarkup("termbrowser");
 		MARKUP.addAnnotation(PackageManager.ANNOTATION_MASTER, false);
 		MARKUP.addAnnotation(HIERARCHY, false);
+		MARKUP.addAnnotation(SIZE, false, Pattern.compile("[0-9]+"));
 		MARKUP.addAnnotation(CATEGORIES, false);
+		MARKUP.addAnnotation(START_CONCEPT, false);
 		MARKUP.addAnnotation(TITLE, false);
 		MARKUP.addAnnotation(SEARCH_SLOT, false, new String[] {
+				"true", "false" });
+		MARKUP.addAnnotation(CLEAR_ON_LOAD, false, new String[] {
 				"true", "false" });
 		MARKUP.addAnnotation(PREFIX_ABBREVIATION, false, new String[] {
 				"true", "false" });
@@ -72,6 +81,21 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		super(MARKUP);
 		setIgnorePackageCompile(true);
 		this.setRenderer(new TermBrowserMarkupRenderer());
+	}
+
+	public static int getCurrentTermBrowserMarkupSize(UserContext user) {
+		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
+		if (termBrowser != null) {
+			String sizeString = DefaultMarkupType.getAnnotation(termBrowser,
+					SIZE);
+			try {
+				return Integer.parseInt(sizeString);
+			}
+			catch (NumberFormatException e) {
+				// ignore
+			}
+		}
+		return 0;
 	}
 
 	public static String getCurrentTermbrowserMarkupMaster(UserContext user) {
@@ -92,11 +116,32 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		return null;
 	}
 
+	public static String getCurrentTermbrowserMarkupStartConcept(UserContext user) {
+		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
+		if (termBrowser != null) {
+			return DefaultMarkupType.getAnnotation(termBrowser,
+					START_CONCEPT);
+		}
+		return null;
+	}
+
 	public static boolean getCurrentTermbrowserMarkupSearchSlotFlag(UserContext user) {
 		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
 		if (termBrowser != null) {
 			String s = DefaultMarkupType.getAnnotation(termBrowser,
 					SEARCH_SLOT);
+			if (s == null) return false;
+			if (s.equals("false")) return false;
+			if (s.equals("true")) return true;
+		}
+		return false;
+	}
+
+	public static boolean getCurrentTermbrowserMarkupClearOnLoadFlag(UserContext user) {
+		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
+		if (termBrowser != null) {
+			String s = DefaultMarkupType.getAnnotation(termBrowser,
+					CLEAR_ON_LOAD);
 			if (s == null) return false;
 			if (s.equals("false")) return false;
 			if (s.equals("true")) return true;
@@ -142,7 +187,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 	 * @param user
 	 * @return
 	 */
-	private static Section<TermBrowserMarkup> getTermBrowserMarkup(UserContext user) {
+	public static Section<TermBrowserMarkup> getTermBrowserMarkup(UserContext user) {
 		Article article = Environment.getInstance().getArticleManager(user.getWeb()).getArticle(
 				user.getTitle());
 		Section<TermBrowserMarkup> termBrowser = null;
@@ -174,6 +219,20 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 			}
 
 			boolean abbreviationFlag = TermBrowserMarkup.getCurrentTermbrowserMarkupPrefixAbbreviationFlag(user);
+
+			// check whether term set should be cleared before rendering
+			boolean clearData = TermBrowserMarkup.getCurrentTermbrowserMarkupClearOnLoadFlag(user);
+			if (clearData) {
+				TermRecommender.getInstance().clearList(user);
+			}
+
+			// insert static start term
+			String startConcept = TermBrowserMarkup.getCurrentTermbrowserMarkupStartConcept(user);
+			if (startConcept != null && startConcept.trim().length() > 0) {
+				RecommendationSet recommendationSet = TermRecommender.getInstance().getRecommendationSet(
+						user);
+				recommendationSet.addValue(new Identifier(startConcept.split("#")), 1.0);
+			}
 
 			TermBrowserRenderer renderer = new TermBrowserRenderer(user,
 					linkProvider,

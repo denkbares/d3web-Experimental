@@ -102,10 +102,19 @@ public class TermBrowserRenderer {
 				renderSearchSlot(string);
 			}
 			string.appendHtml("</div>");
+
+			int browserSize = THRESHOLD_MAX_TERM_NUMBER;
+
+			int userSpecifiedSize = TermBrowserMarkup.getCurrentTermBrowserMarkupSize(user);
+			// value 0 is when user has not set size annotation
+			if (userSpecifiedSize != 0) {
+				browserSize = userSpecifiedSize;
+			}
+
 			// render term list
 			PartialHierarchyTree<RatedTerm> ratedTermTreeTop = TermRecommender.getInstance().getRatedTermTreeTop(
 					user,
-					THRESHOLD_MAX_TERM_NUMBER);
+					browserSize);
 
 			renderTermTree(string, ratedTermTreeTop, collapsed, linkProvider, master);
 

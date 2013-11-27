@@ -21,6 +21,7 @@ package de.knowwe.termbrowser;
 import java.io.IOException;
 
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -123,6 +124,7 @@ public class TermBrowserAction extends AbstractAction {
 				linkProvider, master, abbreviationFlag).renderTermBrowser(), context);
 	}
 
+
 	/**
 	 * 
 	 * @created 10.10.2013
@@ -131,6 +133,10 @@ public class TermBrowserAction extends AbstractAction {
 	 */
 	private Identifier createTermIdentifier(String term) {
 		// TODO: caution: this will break if identifier names contain '#' !!
-		return new Identifier(term.split("#"));
+		String[] split = term.split("#");
+		for (int i = 0; i < split.length; i++) {
+			split[i] = Strings.unquote(split[i]);
+		}
+		return new Identifier(split);
 	}
 }

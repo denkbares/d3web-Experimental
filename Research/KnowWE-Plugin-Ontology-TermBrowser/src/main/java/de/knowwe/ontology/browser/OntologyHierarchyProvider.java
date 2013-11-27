@@ -156,7 +156,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
 
 		// we do not filter if no filter classes are defined
-		if (categories.size() == 0) return terms;
+		if (categories == null || categories.size() == 0) return terms;
 
 		Rdf2GoCore core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
 		List<Identifier> resultConcepts = new ArrayList<Identifier>();

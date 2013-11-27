@@ -158,4 +158,20 @@ public class RecommendationSet {
 
 	}
 
+	public void updateUserData(UserContext context) {
+
+		// update master
+		String master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(context);
+		getHierarchy().setMaster(master);
+
+		// update hierarchy categories
+		List<String> hierarchyCategories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(context);
+		getHierarchy().setCategories(hierarchyCategories);
+
+		// update relations
+		List<String> hierarchyRelations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(context);
+		getHierarchy().setAdditionalHierarchyRelations(hierarchyRelations);
+
+	}
+
 }
