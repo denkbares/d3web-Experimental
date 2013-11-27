@@ -32,6 +32,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.io.progress.DummyProgressListener;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
@@ -64,7 +65,7 @@ public class ImageQuestionPersistenceHandlerTest {
 		new QuestionNum(kb, "QGelenkstatus2");
 		File file = new File("src/test/resources/picturequestions.xml");
 		BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
-		ph.read(kb, in, new DummyProgressListener());
+		ph.read(PersistenceManager.getInstance(), kb, in, new DummyProgressListener());
 	}
 
 	@Test
@@ -178,7 +179,7 @@ public class ImageQuestionPersistenceHandlerTest {
 				return sb.toString();
 			}
 		};
-		bph.write(kb, stream, new DummyProgressListener());
+		bph.write(PersistenceManager.getInstance(), kb, stream, new DummyProgressListener());
 		String xmlcode = stream.toString();
 		XMLTag isTag = new XMLTag(XMLTagUtils.generateNodeFromXMLCode(xmlcode, "Questions", 0));
 
@@ -187,7 +188,7 @@ public class ImageQuestionPersistenceHandlerTest {
 
 	private void buildShouldTag() {
 
-		// TODO I dont know why,
+		// I dont know why,
 		// but this has to be in this order
 		// Johannes Dienst
 		XMLTag question2 = new XMLTag("Question");

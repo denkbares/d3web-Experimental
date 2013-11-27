@@ -31,6 +31,7 @@ import org.w3c.dom.Element;
 
 import de.d3web.core.io.KnowledgeReader;
 import de.d3web.core.io.KnowledgeWriter;
+import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.io.progress.ProgressListener;
 import de.d3web.core.io.utilities.XMLUtil;
 import de.d3web.core.knowledge.InfoStore;
@@ -48,8 +49,8 @@ import de.d3web.core.knowledge.terminology.Question;
 public class ImageQuestionPersistenceHandler implements KnowledgeReader, KnowledgeWriter {
 
 	@Override
-	public void read(KnowledgeBase knowledgeBase, InputStream stream,
-			ProgressListener listener) throws IOException {
+	public void read(PersistenceManager persistenceManager, KnowledgeBase knowledgeBase,
+			InputStream stream, ProgressListener listener) throws IOException {
 
 		listener.updateProgress(0, "Starting to load picture questions");
 
@@ -105,8 +106,8 @@ public class ImageQuestionPersistenceHandler implements KnowledgeReader, Knowled
 	}
 
 	@Override
-	public void write(KnowledgeBase knowledgeBase, OutputStream stream,
-			ProgressListener listener) throws IOException {
+	public void write(PersistenceManager persistenceManager, KnowledgeBase knowledgeBase,
+			OutputStream stream, ProgressListener listener) throws IOException {
 		listener.updateProgress(0, "Starting to save Image Questions");
 		int maxvalue = getEstimatedSize(knowledgeBase);
 		float aktvalue = 0;
