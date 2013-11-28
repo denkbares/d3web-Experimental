@@ -14,7 +14,7 @@ body {
 	height:auto !important;
 	height:100%;
 	margin:auto;
-    top: 20px; left: 0; right: 0;
+    top: 40px; left: 0; right: 0;
 }
    
   
@@ -57,7 +57,7 @@ body {
 	
 #footer{
 	position:absolute;
-	bottom:0;
+	top:-40px;
 	left:0;
 	right:0;
 	width:53em;
@@ -70,12 +70,12 @@ body {
 
 #bottom {
 	z-index:9999;
-	position:absolute; top:20px; text-align:left; right:0;left:0;
+	position:absolute; top:0px; text-align:left; right:0;left:0;
 
 }
 #date {
 	z-index:9998;
-	position:absolute; top:20px; left:0; right:0px; margin-right:3.5%;
+	position:absolute; top:0px; left:73%; right:0px; margin-right:3.5%;
 }
   
 .clearfix:after {
@@ -87,33 +87,29 @@ body {
 	visibility:hidden;
 }
 .clearfix {
-    display:inline-block;
-}
-/* Bereich nicht für IE-mac Anfang \*/
-* html .clearfix {
     height:1%;
 }
-.clearfix {
-    display:block;
-}
-/* Bereich nicht für IE-mac Ende */	
-			
 
-	
+
+/* IE-Patch für IE 7*/
+*:first-child+html .clearfix { min-height: 0; }
+
+/* IE-Patch für IE 6*/
+* html .clearfix { height: 1%; }
 
 	
 /* Blocks*/
 
 #block {
-	position:relative; top:0px; left:0; right:0; 
+	position:relative; top:80px; left:0; right:0; 
 	background: white;
     display:block;
-	padding: 20px;
+	padding: 40px;
 	border: 0px solid black;
     margin-left: auto;
     margin-right: auto;
     margin-top: -5%;
-    margin-bottom: 2%;
+    margin-bottom: 12%;
     width: 90%;
     text-align: left;
 }
@@ -139,9 +135,6 @@ body {
         background-color: #CCCCCC;
         width: 226px;
         float: left;
-		border-radius:5px;
-		-moz-border-radius: 5px;
-		-webkit-border-radius:5px;
 		}
 
 #spalteM {
@@ -151,9 +144,6 @@ body {
         background-color: #CCCCCC;
         width: 226px;
         float: left;
-		border-radius:5px;
-		-moz-border-radius: 5px;
-		-webkit-border-radius:5px;
 
 		}		
 		
@@ -165,9 +155,6 @@ body {
         width: 226px;
         float: right;
 		margin-right:-5px;
-		border-radius:5px;
-		-moz-border-radius: 5px;
-		-webkit-border-radius:5px;
 		}
 
 
@@ -266,20 +253,13 @@ a.menu:active  { color:#063D79; background-color:#FF8C00; text-decoration:none; 
 /*---------------------------- Hauptmenü-----------------------------*/
 	
 #menu_container {
-	position:relative; top:auto; left:0; right:0; margin-left: auto; margin-right: auto;
+	position:relative; 0; left:0; right:0; margin-left: auto; margin-right: auto;
 	z-index: 9990;
-	width:49.7em;
+	width:49em;
 	height:60px;
 	background:black;
 	background:rgb(6,61,121);
 	clear:both;
-	border-radius:5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius:5px;
-	margin-bottom:10px;
-	-moz-box-shadow: 8px 8px 8px #888;
-	-webkit-box-shadow: 8px 8px 8px #888;
-	box-shadow: 8px 8px 8px #888;
 }
 
 #menu_container ul {
@@ -289,15 +269,12 @@ a.menu:active  { color:#063D79; background-color:#FF8C00; text-decoration:none; 
 }
 
 #menu_container li {
-	display:block;
 	float:left;
 	text-align:center;
-	padding-left:4.25%;
-	padding-right:4%;
+	padding-left:3%;
+	padding-right:3%;
 	border-right: 0px solid rgb(216, 218, 220);
     border-right: 0px solid rgba(216, 218, 220, .5);
-    -webkit-background-clip: padding-box; /* for Safari */
-    background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
 	color:rgb(216, 218, 220);
 	font-size:14pt;
 	width:auto;
@@ -307,29 +284,11 @@ a.menu:active  { color:#063D79; background-color:#FF8C00; text-decoration:none; 
 }
 
 
-#menu_container > li:hover {
+#menu_container  li:hover {
 	color:#DF7401;
 	text-decoration:none;
-	-webkit-transition: all .5s ease;
-	-moz-transition: all .5s ease;
-	-ms-transition: all .5s ease;
-	-o-transition: all .5s ease;
-	transition: all .5s ease;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius-bottomleft: 5px;
-	-webkit-border-top-left-radius: 5px;
-	-webkit-border-bottom-left-radius: 5px;
-	border-top-left-radius: 5px;
-	border-bottom-left-radius: 5px;
 }
 
-#menu_container li {
-	-webkit-transition: all .5s ease;
-	-moz-transition: all .5s ease;
-	-ms-transition: all .5s ease;
-	-o-transition: all .5s ease;
-	transition: all .5s ease;
-  }
 
 #menu_container li a {
 	display:block;
@@ -355,14 +314,9 @@ a.menu:active  { color:#063D79; background-color:#FF8C00; text-decoration:none; 
 #menu_container ul li ul {
 	display:none;
 }
-#menu_container ul li:hover > ul {
+#menu_container ul li:hover  ul {
 	display: block;
 	float:left;
-	-webkit-transition: all .5s ease;
-	-moz-transition: all .5s ease;
-	-ms-transition: all .5s ease;
-	-o-transition: all .5s ease;
-	transition: all .5s ease;
 }
 	
 #menu_container ul li:hover a {
@@ -374,8 +328,7 @@ a.menu:active  { color:#063D79; background-color:#FF8C00; text-decoration:none; 
 /*---------------------------- Untermenü ----------------------------*/
 
 #menu {
-   position:relative; top:auto; margin-left: auto; margin-right: auto; 
-   margin-top: -10%;
+   position:relative; top:90px; margin-left: auto; margin-right: auto; 
 	 z-index:9999;
 	 width:43em;
 	height:30px;
@@ -383,13 +336,7 @@ a.menu:active  { color:#063D79; background-color:#FF8C00; text-decoration:none; 
 	 border-style:solid;
 	 border-color:rgb(6,61,121);
 	clear:both;
-	border-radius:5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius:5px;
-	margin-bottom:10px;
-	-moz-box-shadow: 8px 8px 8px #888;
-	-webkit-box-shadow: 8px 8px 8px #888;
-	box-shadow: 8px 8px 8px #888;
+
 }
 
 #menu ul {
@@ -407,38 +354,17 @@ a.menu:active  { color:#063D79; background-color:#FF8C00; text-decoration:none; 
 	padding-left:3.5%;
 	border-right: 0px solid rgb(216, 218, 220);
     border-right: 0px solid rgba(216, 218, 220, .5);
-    -webkit-background-clip: padding-box; /* for Safari */
-    background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
 	width:auto%;
 	height:30px;
 	line-height:30px;
 	text-align: center;
 }
 
-#menu > li:hover {
+#menu li:hover {
 	color:#FF8C00;
 	text-decoration:none;
-	-webkit-transition: all .5s ease;
-	-moz-transition: all .5s ease;
-	-ms-transition: all .5s ease;
-	-o-transition: all .5s ease;
-	transition: all .5s ease;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius-bottomleft: 5px;
-	-webkit-border-top-left-radius: 5px;
-	-webkit-border-bottom-left-radius: 5px;
-	border-top-left-radius: 5px;
-	border-bottom-left-radius: 5px;
 }
 
-#menu li {
-	
-	-webkit-transition: all .5s ease;
-	-moz-transition: all .5s ease;
-	-ms-transition: all .5s ease;
-	-o-transition: all .5s ease;
-	transition: all .5s ease;
-  }
 
 #menu li a {
 	display:block;
@@ -462,15 +388,10 @@ a.menu:active  { color:#063D79; background-color:#FF8C00; text-decoration:none; 
 #menu ul li ul {
 	display:none;
 }
-#menu ul li:hover > ul {
+#menu ul li:hover ul {
 	color:#FF8C00; 
 	display: block;
 	float:left;
-	-webkit-transition: all .5s ease;
-	-moz-transition: all .5s ease;
-	-ms-transition: all .5s ease;
-	-o-transition: all .5s ease;
-	transition: all .5s ease;
 }
 	
 #menu ul li:hover a {
