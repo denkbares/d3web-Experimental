@@ -19,7 +19,7 @@ function sendReadbutton(id, threshold) {
 	discussed = '';
 	close = '';
 	if (realvalue <= threshold) {
-		discussed = 'Noch nicht';
+		discussed = 'Nein';
 		close = 'Nein';
 	}
 	else {

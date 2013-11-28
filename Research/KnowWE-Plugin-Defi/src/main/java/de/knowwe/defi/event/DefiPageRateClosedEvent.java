@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 University Wuerzburg, Computer Science VI
+ * Copyright (C) 2013 University Wuerzburg, Computer Science VI
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,27 +16,36 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.defi.readbutton;
+package de.knowwe.defi.event;
 
-import java.io.IOException;
-
-import de.knowwe.core.action.AbstractAction;
-import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.event.EventManager;
-import de.knowwe.defi.event.DefiPageRateClosedEvent;
+import de.knowwe.core.event.Event;
 
 /**
- * Updates the 'discussed'-annotation for a readbutton.
  * 
  * @author dupke
+ * @created 19.11.2013
  */
-public class ReadbuttonLinkClickedAction extends AbstractAction {
+public class DefiPageRateClosedEvent extends Event {
 
-	@Override
-	public void execute(UserActionContext context) throws IOException {
-		String username = context.getUserName();
-		String id = context.getParameter("id");
-		String discussed = context.getParameter("discussed");
-		EventManager.getInstance().fireEvent(new DefiPageRateClosedEvent(id, username, discussed));
+	private final String EVENT_ID;
+	private final String EVENT_USER;
+	private final String EVENT_DISCUSSED;
+
+	public DefiPageRateClosedEvent(String id, String user, String discussed) {
+		EVENT_ID = id;
+		EVENT_USER = user;
+		EVENT_DISCUSSED = discussed;
+	}
+
+	public String getId() {
+		return EVENT_ID;
+	}
+
+	public String getUser() {
+		return EVENT_USER;
+	}
+
+	public String getDiscussed() {
+		return EVENT_DISCUSSED;
 	}
 }

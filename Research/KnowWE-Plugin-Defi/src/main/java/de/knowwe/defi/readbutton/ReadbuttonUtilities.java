@@ -18,107 +18,40 @@
  */
 package de.knowwe.defi.readbutton;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
-import de.knowwe.core.Environment;
-import de.knowwe.defi.logger.DefiLoggerUtils;
+import de.knowwe.defi.logger.DefiPageRateEventLogger;
+import de.knowwe.defi.logger.DefiPageRateLogLine;
 
 /**
  * @author dupke
  */
 public class ReadbuttonUtilities {
 
-	private final static String FILENAME = "DefiRatedPages.log";
-	private final static String PATH = Environment.getInstance().getWikiConnector().getSavePath()
-			+ "/" + FILENAME;
-	/** Sepearator between entries in a logline **/
-	private final static String SEPARATOR = DefiLoggerUtils.SEPARATOR;
+	/**
+	 * Search for the readbutton with the given id and user.
+	 */
+	public static DefiPageRateLogLine getReadbutton(String id, String user) {
+		DefiPageRateLogLine readbutton = null;
 
-	public static boolean checkRateLogFile() {
-		File rateLog = new File(PATH);
-		if (!rateLog.exists()) {
-			try {
-				rateLog.createNewFile();
-			}
-			catch (IOException e) {
-				return false;
-			}
-		}
-		return rateLog.exists();
-	}
-
-	public static void logPageRate(String user, String title, Map<String, String> rateInfos) {
-		String date = (new SimpleDateFormat("dd.MM.yyyy HH:mm")).format((new Date()));
-
-		StringBuffer rate = new StringBuffer();
-		rate.append(rateInfos.get("id") + SEPARATOR);
-		rate.append(title + SEPARATOR);
-		rate.append(user + SEPARATOR);
-		rate.append(date + SEPARATOR);
-		rate.append(rateInfos.get("realvalue") + SEPARATOR);
-		rate.append(rateInfos.get("value") + SEPARATOR);
-		rate.append(rateInfos.get("label") + SEPARATOR);
-		rate.append(rateInfos.get("discussed") + SEPARATOR);
-		rate.append(rateInfos.get("closed"));
-
-		writePageRate(Arrays.asList(rate.toString()), true);
-	}
-
-	private static void writePageRate(List<String> list, boolean append) {
-		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(PATH, append));
-			for (String line : list) {
-				writer.append(line);
-				writer.newLine();
-			}
-			writer.close();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static ArrayList<String> getReadbutton(String id, String userName) {
-		ArrayList<String> readbutton = new ArrayList<String>();
-		String logline = "";
-
-		for (String line : getLogLines()) {
-			String rId = line.split(SEPARATOR)[0];
-			String rUser = line.split(SEPARATOR)[2];
-
-			if (id.equals(rId) && userName.equals(rUser)) {
-				logline = line;
+		for (DefiPageRateLogLine line : DefiPageRateEventLogger.getLogLines()) {
+			if (id.equals(line.getId()) && user.equals(line.getUser())) {
+				readbutton = line;
 				break;
 			}
-		}
-
-		for (String info : logline.split(SEPARATOR)) {
-			readbutton.add(info);
 		}
 
 		return readbutton;
 	}
 
+	/**
+	 * Check if there is a readbutton with the given id but other page.
+	 */
 	public static boolean checkID(String id, String title) {
+		for (DefiPageRateLogLine line : DefiPageRateEventLogger.getLogLines()) {
 
-		for (String line : getLogLines()) {
-			String rId = line.split(SEPARATOR)[0];
-			String rTitle = line.split(SEPARATOR)[1];
-
-			if (id.equals(rId) && !title.equals(rTitle)) {
+			if (id.equals(line.getId()) && !title.equals(line.getPage())) {
 				return false;
 			}
 		}
@@ -126,82 +59,22 @@ public class ReadbuttonUtilities {
 		return true;
 	}
 
-	public static List<String> getLogLines() {
-		ArrayList<String> loglines = new ArrayList<String>();
-		BufferedReader br = null;
-		String line;
-		try {
-			br = new BufferedReader(new InputStreamReader(
-					(new FileInputStream(new File(PATH))), "UTF-8"));
-			while ((line = br.readLine()) != null) {
-				loglines.add(line);
-			}
-		}
-		catch (FileNotFoundException e) {
-		}
-		catch (IOException e) {
-		}
-		finally {
-			try {
-				if (br != null) br.close();
-			}
-			catch (IOException e) {
-			}
-		}
-
-		return loglines;
+	/**
+	 * Check if a readbutton is already rated.
+	 */
+	public static boolean isPageRated(String id, String user) {
+		return getReadbutton(id, user) != null;
 	}
 
-	public static void refreshLine(String id, String username, String discussed) {
-		// disc = 7 close = 8
-		List<String> logLines = getLogLines();
-		ArrayList<String> newLogLines = new ArrayList<String>();
-
-		for (String line : logLines) {
-			String rId = line.split(SEPARATOR)[0];
-			String rUser = line.split(SEPARATOR)[2];
-			String rDisc = line.split(SEPARATOR)[7];
-
-			if (id.equals(rId) && username.equals(rUser)) {
-				StringBuilder newLogline = new StringBuilder();
-				for (int i = 0; i < 7; i++) {
-					newLogline.append(line.split(SEPARATOR)[i] + SEPARATOR);
-				}
-				newLogline.append(discussed.equals("Nein") ? rDisc : "Ja");
-				newLogline.append(SEPARATOR);
-				newLogline.append(discussed.equals("Nein") ? "Ja" : "Nein");
-				newLogLines.add(newLogline.toString());
-			}
-			else {
-				newLogLines.add(line);
-			}
-		}
-
-		writePageRate(newLogLines, false);
-	}
-
-	public static boolean isPageRated(String id, String userName) {
-
-		for (String line : getLogLines()) {
-			String rId = line.split(SEPARATOR)[0];
-			String rUser = line.split(SEPARATOR)[2];
-
-			if (id.equals(rId) && userName.equals(rUser)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
+	/**
+	 * Returns a list of all rated pages.
+	 */
 	public static List<String> getRatedPages(String user) {
 		List<String> ratedPages = new ArrayList<String>();
-		for (String line : getLogLines()) {
-			String title = line.split(SEPARATOR)[1];
-			String rUser = line.split(SEPARATOR)[2];
+		for (DefiPageRateLogLine line : DefiPageRateEventLogger.getLogLines()) {
 
-			if (user.equals(rUser)) {
-				ratedPages.add(title);
+			if (user.equals(line.getUser())) {
+				ratedPages.add(line.getPage());
 			}
 		}
 

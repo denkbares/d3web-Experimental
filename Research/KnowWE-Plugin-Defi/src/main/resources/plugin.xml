@@ -537,6 +537,16 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension> 
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
+        id="DefiPageRatedEventListener">
+        <parameter id="class"
+            value="de.knowwe.defi.event.DefiPageRatedEventListener" />
+        <parameter id="name" value="DefiPageRatedEventListener" />
+        <parameter id="description" value="EventListener DefiPageRatedEventListener" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension> 
        
     <extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
         id="PageLoggerHandler">

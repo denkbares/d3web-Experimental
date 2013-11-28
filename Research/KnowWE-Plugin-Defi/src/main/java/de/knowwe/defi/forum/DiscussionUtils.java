@@ -63,7 +63,7 @@ public class DiscussionUtils {
 		for (Section<ForumBox> box : boxes) {
 			Map<String, String> boxMap = AbstractXMLType.getAttributeMapFor(box);
 			Date boxDate = stringToDate(boxMap.get("date"));
-			if (boxDate.after(lastVisitDate)) numberOfNewEntries++;
+			if (!boxMap.get("name").equals(user) && boxDate.after(lastVisitDate)) numberOfNewEntries++;
 
 		}
 

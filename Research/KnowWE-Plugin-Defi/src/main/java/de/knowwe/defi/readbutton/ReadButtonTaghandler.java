@@ -18,7 +18,6 @@
  */
 package de.knowwe.defi.readbutton;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -27,6 +26,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.defi.logger.DefiPageRateLogLine;
 
 /**
  * With the readbutton, the user can rate a lesson. If the rated value is lower
@@ -72,7 +72,6 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 		String berater = ResourceBundle.getBundle("KnowWE_Defi_config").getString(
 				"defi.berater");
 
-
 		// only asserted user can see readbuttons.
 		if (!userContext.userIsAsserted()) {
 			return;
@@ -86,6 +85,12 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			result.appendHtml("<span class='warning'>" + ERROR_MISSING_ID + "</span>");
 			return;
 		}
+		// CHECK DOUBLE ID
+		if (!ReadbuttonUtilities.checkID(id, userContext.getTitle())) {
+			result.appendHtml("<span class='warning'>" + ERROR_DOUBLE_ID +
+					"</span>");
+			return;
+		}
 
 		// get attributes
 		if (parameters.containsKey(NUMBER)) number = Integer.parseInt(parameters.get(NUMBER));
@@ -96,21 +101,12 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 		values = getValues(number, parameters);
 
-		// TODO CHECK DOUBLE ID
-		if (!ReadbuttonUtilities.checkID(id, userContext.getTitle())) {
-			result.appendHtml("<span class='warning'>" + ERROR_DOUBLE_ID +
-					"</span>");
-			return;
-		}
-		
 		// search for readbutton in log
-		ArrayList<String> readbutton = ReadbuttonUtilities.getReadbutton(id, userContext.getUserName());
-		try {
-			checkedValue = Integer.parseInt(readbutton.get(4));
-			closed = readbutton.get(8);
-		}
-		catch (IndexOutOfBoundsException e) {
-
+		DefiPageRateLogLine readbutton = ReadbuttonUtilities.getReadbutton(id,
+				userContext.getUserName());
+		if (readbutton != null) {
+			checkedValue = Integer.parseInt(readbutton.getRealvalue());
+			closed = readbutton.getClosed();
 		}
 
 		// render button
@@ -175,7 +171,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 	 * Get HTML-output for the link.
 	 */
 	private String addLink(Map<String, String> parameters, String username, String berater) {
-		StringBuilder zelda = new StringBuilder();
+		StringBuilder linkBuilder = new StringBuilder();
 		String link, linkText;
 		String id = parameters.get(ID);
 
@@ -190,15 +186,15 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 		if (parameters.containsKey(LINKTEXT)) linkText = parameters.get(LINKTEXT);
 		else linkText = link;
-		zelda.append("<div class='linkBorder'><p>Möchten Sie das Thema mit dem Berater besprechen?</p>");
-		zelda.append("<p class='discuss'><a href='' onclick=\"readbuttonDiscuss('" + id
+		linkBuilder.append("<div class='linkBorder'><p>Möchten Sie das Thema mit dem Berater besprechen?</p>");
+		linkBuilder.append("<p class='discuss'><a href='' onclick=\"readbuttonDiscuss('" + id
 				+ "');newChat('" + berater + "', '"
 				+ username + "');return false\">" + BUTTON_DISCUSS + "</a>");
-		zelda.append(" - <a href='#' onclick=\"readbuttonCloseLink('" + id + "');return false\">"
+		linkBuilder.append(" - <a href='#' onclick=\"readbuttonCloseLink('" + id + "');return false\">"
 				+ BUTTON_DONT_DISCUSS + "</a></p>");
-		zelda.append("<a href='" + link + "' target='_blank'>" + linkText + "</a></div>");
+		linkBuilder.append("<a href='" + link + "' target='_blank'>" + linkText + "</a></div>");
 
-		return zelda.toString();
+		return linkBuilder.toString();
 	}
 
 	private String[] getValues(int number, Map<String, String> parameters) {

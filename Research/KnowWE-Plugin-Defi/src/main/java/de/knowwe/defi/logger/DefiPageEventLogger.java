@@ -23,9 +23,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,17 +59,24 @@ public class DefiPageEventLogger {
 	}
 
 	private static void writeToPageLog(List<String> logLines, boolean append) {
+		BufferedWriter out = null;
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(PATH, append));
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(PATH, append),
+					"ISO-8859-1"));
 			for (String line : logLines) {
-				writer.append(line);
-				writer.newLine();
+				out.write(line);
+				out.newLine();
 			}
-
-			writer.close();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
+		}
+		finally {
+			try {
+				out.close();
+			}
+			catch (IOException e) {
+			}
 		}
 	}
 
@@ -142,7 +150,7 @@ public class DefiPageEventLogger {
 		String line;
 		try {
 			br = new BufferedReader(new InputStreamReader(
-					(new FileInputStream(new File(PATH))), "UTF-8"));
+					(new FileInputStream(new File(PATH))), "ISO-8859-1"));
 			while ((line = br.readLine()) != null) {
 				loglines.add(new DefiPageLogLine(line));
 			}

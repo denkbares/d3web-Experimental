@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2013 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.defi.logger;
 
@@ -23,14 +23,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.knowwe.core.Environment;
-
 
 /**
  * 
@@ -38,7 +38,7 @@ import de.knowwe.core.Environment;
  * @created 21.08.2013
  */
 public class DefiOtherEventsLogger {
-	
+
 	private final static String FILENAME = "DefiOtherEventsLog.log";
 	private final static String PATH = Environment.getInstance().getWikiConnector().getSavePath()
 			+ "/" + FILENAME;
@@ -58,18 +58,19 @@ public class DefiOtherEventsLogger {
 	}
 
 	private static void logEvent(String logline) {
-		BufferedWriter writer = null;
+		BufferedWriter out = null;
 		try {
-			writer = new BufferedWriter(new FileWriter(PATH, true));
-			writer.append(logline);
-			writer.newLine();
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(PATH, true),
+					"ISO-8859-1"));
+			out.write(logline);
+			out.newLine();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
 		finally {
 			try {
-				writer.close();
+				out.close();
 			}
 			catch (IOException e) {
 			}
@@ -82,7 +83,7 @@ public class DefiOtherEventsLogger {
 		String line;
 		try {
 			br = new BufferedReader(new InputStreamReader(
-					(new FileInputStream(new File(PATH))), "UTF-8"));
+					(new FileInputStream(new File(PATH))), "ISO-8859-1"));
 			while ((line = br.readLine()) != null) {
 				if (line.startsWith(prefix)) loglines.add(line);
 			}

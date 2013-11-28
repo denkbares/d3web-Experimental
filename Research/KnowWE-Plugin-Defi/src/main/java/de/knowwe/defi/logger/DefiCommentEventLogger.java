@@ -23,9 +23,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -49,17 +50,19 @@ public class DefiCommentEventLogger {
 	}
 
 	private static void writeToForumLog(String logLine) {
-		BufferedWriter writer = null;
+		BufferedWriter out = null;
 		try {
-			writer = new BufferedWriter(new FileWriter(PATH, true));
-			writer.append(logLine);
-			writer.newLine();
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(PATH, true),
+					"ISO-8859-1"));
+				out.write(logLine);
+				out.newLine();
 		}
 		catch (IOException e) {
+			e.printStackTrace();
 		}
 		finally {
 			try {
-				writer.close();
+				out.close();
 			}
 			catch (IOException e) {
 			}
@@ -72,7 +75,7 @@ public class DefiCommentEventLogger {
 		String line;
 		try {
 			br = new BufferedReader(new InputStreamReader(
-					(new FileInputStream(new File(PATH))), "UTF-8"));
+					(new FileInputStream(new File(PATH))), "ISO-8859-1"));
 			while ((line = br.readLine()) != null) {
 				loglines.add(new DefiCommentLogLine(line));
 			}
