@@ -18,7 +18,6 @@
  */
 package de.knowwe.ontology.browser.util;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -71,13 +70,13 @@ public class HierarchyUtils {
 	private static List<URI> selectTripleObjects(URI subject, URI predicate, String master) {
 
 		String sparql = "SELECT ?x WHERE { <" + subject.toString() + "> <"
-					+ predicate.toString() + "> ?x.}";
+				+ predicate.toString() + "> ?x.}";
 		return executeSimpleSelectQuery(sparql, master);
 	}
 
 	private static List<URI> selectTripleSubjects(URI predicate, URI object, String master) {
 		String sparql = "SELECT ?x WHERE { ?x <" + predicate.toString() + "> <"
-					+ object.toString() + ">.}";
+				+ object.toString() + ">.}";
 		return executeSimpleSelectQuery(sparql, master);
 	}
 
@@ -89,7 +88,7 @@ public class HierarchyUtils {
 	 */
 	private static List<URI> executeSimpleSelectQuery(String sparql, String master) {
 
-		List<URI> result = new ArrayList<URI>();
+		// List<URI> result = new ArrayList<URI>();
 		Rdf2GoCore core = null;
 		if (master == null || master.trim().length() == 0) {
 			core = Rdf2GoCore.getInstance();
