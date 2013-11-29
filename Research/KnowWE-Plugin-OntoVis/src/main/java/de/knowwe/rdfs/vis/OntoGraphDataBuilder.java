@@ -178,7 +178,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		ClosableIterator<QueryRow> result =
 				rdfRepository.sparqlSelectIt(
 						query);
-		loop: while (result.hasNext()) {
+		while (result.hasNext()) {
 			QueryRow row = result.next();
 			Node yURI = row.getValue("y");
 			String y = getConceptName(yURI);
@@ -199,20 +199,23 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			}
 
 			if (excludedRelation(y)) {
-				continue loop;
+				continue;
 			}
 			if (excludedNode(z)) {
-				continue loop;
+				continue;
+			}
+			if (!filteredClass(z) && !filteredRelation(y)) {
+				continue;
 			}
 			if (isLiteral(zURI)) {
-				continue loop;
+				continue;
 			}
 			NODE_TYPE nodeType = getConceptType(zURI.asURI());
 			if (nodeType == NODE_TYPE.CLASS && !showClasses()) {
-				continue loop;
+				continue;
 			}
 			else if (nodeType == NODE_TYPE.PROPERTY && !showProperties()) {
-				continue loop;
+				continue;
 			}
 			addConcept(conceptURI, zURI, yURI, nodeType);
 
@@ -258,6 +261,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 				continue;
 			}
 			if (excludedNode(x)) {
+				continue;
+			}
+			if (!filteredClass(x) && !filteredRelation(y)) {
 				continue;
 			}
 
@@ -327,6 +333,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			if (excludedNode(z)) {
 				continue;
 			}
+			if (!filteredClass(z) && !filteredRelation(y)) {
+				continue;
+			}
 			addOuterConcept(conceptURI, zURI, yURI, false);
 		}
 	}
@@ -365,6 +374,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 				continue;
 			}
 			if (excludedNode(x)) {
+				continue;
+			}
+			if (!filteredClass(x) && !filteredRelation(y)) {
 				continue;
 			}
 			addOuterConcept(xURI, conceptURI, yURI, true);

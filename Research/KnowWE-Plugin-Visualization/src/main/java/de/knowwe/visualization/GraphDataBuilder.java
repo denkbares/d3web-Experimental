@@ -65,6 +65,9 @@ public abstract class GraphDataBuilder<T extends Object> {
 	public static final String EXCLUDED_NODES = "excluded_nodes";
 	public static final String EXCLUDED_RELATIONS = "excluded_relations";
 
+	public static final String FILTERED_CLASSES = "filtered_classes";
+	public static final String FILTERED_RELATIONS = "filtered_relations";
+
 	public static final String SHOW_CLASSES = "show_classes";
 	public static final String SHOW_PROPERTIES = "show_properties";
 	public static final String SHOW_SCROLLBAR = "show_scrollbar";
@@ -80,7 +83,7 @@ public abstract class GraphDataBuilder<T extends Object> {
 	public static final String TITLE = "title";
 	public static final String SECTION_ID = "section-id";
 	public static final String REAL_PATH = "realpath";
-	
+
 	public static final String D3_FORCE_VISUALISATION_STYLE = "d3_force_visualisation_style";
 
 	public static final String RELATION_COLOR_CODES = "relation_color_codes";
@@ -101,6 +104,9 @@ public abstract class GraphDataBuilder<T extends Object> {
 	private List<String> excludedNodes;
 	private List<String> excludedRelations;
 
+	private List<String> filteredClasses;
+	private List<String> filteredRelations;
+
 	private Section<?> section;
 
 	private Map<String, String> parameters;
@@ -108,19 +114,19 @@ public abstract class GraphDataBuilder<T extends Object> {
 	private LinkToTermDefinitionProvider uriProvider = null;
 
 	private GraphVisualizationRenderer sourceRenderer = null;
-	
+
 	public Map<String, String> getParameterMap() {
 		return parameters;
 	}
-	
+
 	public boolean showProperties() {
 		return showProperties;
 	}
-	
+
 	public boolean showOutgoingEdges() {
 		return showOutgoingEdges;
 	}
-	
+
 	public boolean showClasses() {
 		return showClasses;
 	}
@@ -221,7 +227,7 @@ public abstract class GraphDataBuilder<T extends Object> {
 	 * @param request
 	 */
 	public abstract void selectGraphData();
-	
+
 	public String getEncodedConceptName() {
 		String concept = parameters.get(CONCEPT);
 		String conceptNameEncoded = null;
@@ -249,6 +255,9 @@ public abstract class GraphDataBuilder<T extends Object> {
 
 		getExcludedNodes();
 		getExcludedRelations();
+
+		getFilteredClasses();
+		getFilteredRelations();
 
 		getShowAnnotations();
 	}
@@ -296,6 +305,34 @@ public abstract class GraphDataBuilder<T extends Object> {
 		if (exclude != null) {
 			String[] array = exclude.split(",");
 			excludedNodes = Arrays.asList(array);
+		}
+	}
+
+	/**
+	 * 
+	 * 
+	 * @created 24.11.2013
+	 */
+	private void getFilteredClasses() {
+		filteredClasses = new ArrayList<String>();
+		String filters = parameters.get(FILTERED_CLASSES);
+		if (filters != null) {
+			String[] array = filters.split(",");
+			filteredClasses = Arrays.asList(array);
+		}
+	}
+
+	/**
+	 * 
+	 * 
+	 * @created 24.11.2013
+	 */
+	private void getFilteredRelations() {
+		filteredRelations = new ArrayList<String>();
+		String filters = parameters.get(FILTERED_RELATIONS);
+		if (filters != null) {
+			String[] array = filters.split(",");
+			filteredRelations = Arrays.asList(array);
 		}
 	}
 
@@ -460,6 +497,47 @@ public abstract class GraphDataBuilder<T extends Object> {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Tests if the given class x is set as a filtered class in the annotations.
+	 * 
+	 * @created 24.11.2013
+	 * @param x
+	 * @return
+	 */
+	public boolean filteredClass(String x) {
+		if (filteredClasses != null) {
+			if (filteredClasses.size() == 0 && filteredRelations.size() == 0) return true;
+			Iterator<String> iterator = filteredClasses.iterator();
+			while (iterator.hasNext()) {
+				String next = iterator.next().trim();
+				if (x.matches(next)) return true;
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Tests if the given relation y is set as a filtered relation in the
+	 * annotations.
+	 * 
+	 * @created 24.11.2013
+	 * @param x
+	 * @return
+	 */
+	public boolean filteredRelation(String y) {
+		if (filteredRelations != null) {
+			if (filteredRelations.size() == 0 && filteredClasses.size() == 0) return true;
+			Iterator<String> iterator = filteredRelations.iterator();
+			while (iterator.hasNext()) {
+				String next = iterator.next().trim();
+				if (y.matches(next)) return true;
+			}
+			return false;
+		}
+		return true;
 	}
 
 	/**

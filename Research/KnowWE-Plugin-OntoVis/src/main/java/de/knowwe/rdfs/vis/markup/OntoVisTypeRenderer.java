@@ -73,6 +73,14 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 				OntoVisType.ANNOTATION_EXCLUDENODES);
 		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, excludeNodes);
 
+		String filteredClasses = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_FILTERCLASSES);
+		parameterMap.put(OntoGraphDataBuilder.FILTERED_CLASSES, filteredClasses);
+
+		String filteredRelations = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_FILTERRELATIONS);
+		parameterMap.put(OntoGraphDataBuilder.FILTERED_RELATIONS, filteredRelations);
+
 		String outgoingEdges = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_OUTGOING_EDGES);
 		parameterMap.put(OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, outgoingEdges);
