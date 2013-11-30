@@ -41,6 +41,11 @@ public class CoverageProvider implements ToolProvider {
 		return new Tool[] { refresh };
 	}
 
+	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		return true;
+	}
+
 	protected Tool getHighlightTool(Section<?> section, UserContext userContext) {
 
 		boolean dohighlighting =
@@ -53,7 +58,10 @@ public class CoverageProvider implements ToolProvider {
 					DiaFluxTraceHighlight.getDeactivationJSAction());
 		}
 		else {
-			return new DefaultTool(ICON, "Show Coverage", description,
+			return new DefaultTool(
+					ICON,
+					"Show Coverage",
+					description,
 					DiaFluxTraceHighlight.getActivationJSAction(DiaFluxCoverageHighlight.COVERAGE_HIGHLIGHT));
 		}
 	}

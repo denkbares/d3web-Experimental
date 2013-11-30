@@ -32,6 +32,11 @@ import de.knowwe.tools.ToolProvider;
 public class TestcaseTableDownloadProvider implements ToolProvider {
 
 	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		return true;
+	}
+
+	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 
 		String jsAction = "window.location='action/TestcaseDownload?type=case&amp;KWiki_Topic="

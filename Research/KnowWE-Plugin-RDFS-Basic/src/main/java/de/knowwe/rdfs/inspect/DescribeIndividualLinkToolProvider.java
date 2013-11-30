@@ -34,11 +34,11 @@ import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.tools.ToolUtils;
 
 public class DescribeIndividualLinkToolProvider implements ToolProvider {
 
-	@Override
-	public Tool[] getTools(Section<?> section, UserContext userContext) {
+	private Section<? extends Term> getReferenceSection(Section<?> section, UserContext userContext) {
 
 		if (section.get() instanceof IRITermRef) {
 			Section<? extends IRITermRef> ref = Sections.cast(section, IRITermRef.class);
@@ -46,9 +46,8 @@ public class DescribeIndividualLinkToolProvider implements ToolProvider {
 					&& !RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class)
 					&& !RDFSUtil.isTermCategory(ref,
 							RDFSTermCategory.DataTypeProperty)) {
-				return new Tool[] { getDescribeIndividualTool(ref, userContext) };
+				return ref;
 			}
-
 		}
 		if (section.get() instanceof AbstractIRITermDefinition) {
 			Section<? extends AbstractIRITermDefinition> def = Sections.cast(section,
@@ -61,13 +60,23 @@ public class DescribeIndividualLinkToolProvider implements ToolProvider {
 						&& !RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class)
 						&& !RDFSUtil.isTermCategory(ref,
 								RDFSTermCategory.DataTypeProperty)) {
-					return new Tool[] { getDescribeIndividualTool(ref,
-							userContext) };
+					return ref;
 				}
 			}
-
 		}
-		return new Tool[] {};
+		return null;
+	}
+
+	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		return getReferenceSection(section, userContext) != null;
+	}
+
+	@Override
+	public Tool[] getTools(Section<?> section, UserContext userContext) {
+		Section<? extends Term> ref = getReferenceSection(section, userContext);
+		if (ref == null) return ToolUtils.emptyToolArray();
+		return new Tool[] { getDescribeIndividualTool(ref, userContext) };
 	}
 
 	protected Tool getDescribeIndividualTool(Section<? extends Term> section, UserContext userContext) {

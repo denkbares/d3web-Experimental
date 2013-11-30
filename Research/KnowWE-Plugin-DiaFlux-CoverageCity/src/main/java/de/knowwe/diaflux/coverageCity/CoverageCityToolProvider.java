@@ -13,14 +13,17 @@ public class CoverageCityToolProvider implements ToolProvider {
 		String url =
 				"CoverageCity.jsp?kdomID=" + section.getID();
 		String winID = section.getID().replaceAll("[^\\w]", "_");
-		
+
 		String jsAction = "javascript:window.open('" + url + "', '" + winID + "');";
-		
-		return new Tool[]{
-			new DefaultTool(null, "Show CoverageCity", "Shows the city visualization of the coverage", jsAction) 
-			
-			
+
+		return new Tool[] {
+				new DefaultTool(null, "Show CoverageCity",
+						"Shows the city visualization of the coverage", jsAction)
 		};
 	}
 
+	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		return true;
+	}
 }

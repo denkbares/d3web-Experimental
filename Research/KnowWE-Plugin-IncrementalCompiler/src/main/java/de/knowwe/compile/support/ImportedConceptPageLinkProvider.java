@@ -10,6 +10,7 @@ import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.tools.ToolUtils;
 
 /**
  * 
@@ -20,23 +21,29 @@ import de.knowwe.tools.ToolProvider;
 public class ImportedConceptPageLinkProvider implements ToolProvider {
 
 	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		return getImportLocation(section) != null;
+	}
+
+	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
+		Section<? extends AbstractType> importLocation = getImportLocation(section);
+		if (importLocation != null) {
+			return new Tool[] { getConceptInfoPageTool(importLocation) };
+		}
+		return ToolUtils.emptyToolArray();
+	}
 
+	private Section<? extends AbstractType> getImportLocation(Section<?> section) {
 		if (section.get() instanceof SimpleReference) {
-
 			boolean isImported = IncrementalCompiler.getInstance().getTerminology().isImportedObject(
 					KnowWEUtils.getTermIdentifier(section));
-
 			if (isImported) {
 				Section<? extends AbstractType> importLocation = ImportManager.resolveImportSection(KnowWEUtils.getTermIdentifier(section));
-
-				if (importLocation != null) {
-					return new Tool[] { getConceptInfoPageTool(importLocation) };
-				}
-				return new Tool[] {};
+				return importLocation;
 			}
 		}
-		return new Tool[] {};
+		return null;
 	}
 
 	protected Tool getConceptInfoPageTool(Section<? extends AbstractType> section) {

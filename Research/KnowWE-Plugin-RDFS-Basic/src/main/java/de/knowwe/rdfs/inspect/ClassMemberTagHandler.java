@@ -25,8 +25,8 @@ import java.util.Map;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.strings.Strings;
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
@@ -39,7 +39,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.SparqlResultRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
-import de.knowwe.tools.Tool;
+import de.knowwe.tools.ToolSet;
 import de.knowwe.tools.ToolUtils;
 
 public class ClassMemberTagHandler extends AbstractTagHandler {
@@ -61,7 +61,7 @@ public class ClassMemberTagHandler extends AbstractTagHandler {
 		Section<TagHandlerTypeContent> tagNameSection = Sections.findSuccessor(section,
 				TagHandlerTypeContent.class);
 		String sectionID = section.getID();
-		Tool[] tools = ToolUtils.getTools(tagNameSection, userContext);
+		ToolSet tools = ToolUtils.getTools(tagNameSection, userContext);
 
 		RenderResult buffer = new RenderResult(result);
 		String cssClassName = "type_" + section.get().getName();

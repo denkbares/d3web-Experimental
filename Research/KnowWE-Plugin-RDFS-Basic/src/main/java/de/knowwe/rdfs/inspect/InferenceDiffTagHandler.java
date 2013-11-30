@@ -34,7 +34,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.RenderMode;
 import de.knowwe.rdf2go.sparql.SparqlResultRenderer;
-import de.knowwe.tools.Tool;
+import de.knowwe.tools.ToolUtils;
 
 /**
  * The StatementImportanceTagHandler shows to a given RDFS statement how
@@ -90,7 +90,7 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 		RenderResult buffer = new RenderResult(user);
 		String cssClassName = "type_" + section.get().getName();
 		defaultMarkupRenderer.renderDefaultMarkupStyled(
-				getTagName(), html.toStringRaw(), sectionID, cssClassName, new Tool[] {},
+				getTagName(), html.toStringRaw(), sectionID, cssClassName, ToolUtils.emptyTools(),
 				user,
 				buffer);
 		result.appendJSPWikiMarkup(buffer);

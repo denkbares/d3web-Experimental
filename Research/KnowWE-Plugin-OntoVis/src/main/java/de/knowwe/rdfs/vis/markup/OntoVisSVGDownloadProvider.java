@@ -35,6 +35,11 @@ public class OntoVisSVGDownloadProvider implements ToolProvider {
 	public static final String PARAM_FILENAME = "filename";
 
 	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		return true;
+	}
+
+	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		// and provide both download and refresh as tools
 		Tool download = getDownloadTool(section, userContext);

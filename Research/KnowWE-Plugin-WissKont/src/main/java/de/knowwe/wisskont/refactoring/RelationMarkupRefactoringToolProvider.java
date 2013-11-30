@@ -34,6 +34,11 @@ import de.knowwe.tools.ToolProvider;
 public class RelationMarkupRefactoringToolProvider implements ToolProvider {
 
 	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		return true;
+	}
+
+	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		return new Tool[] { new DefaultTool("KnowWEExtension/images/dt_icon_realisation2.gif",
 				"Relationen umbauen",

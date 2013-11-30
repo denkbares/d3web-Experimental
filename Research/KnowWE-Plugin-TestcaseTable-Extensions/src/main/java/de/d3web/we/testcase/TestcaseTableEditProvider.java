@@ -35,7 +35,12 @@ public class TestcaseTableEditProvider implements ToolProvider {
 
 	protected String getEditProviderCall() {
 		return "KNOWWE.plugin.testcasetable.editProvider";
+	}
 
+	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		Section<Table> content = Sections.findSuccessor(section, Table.class);
+		return content != null;
 	}
 
 	@Override

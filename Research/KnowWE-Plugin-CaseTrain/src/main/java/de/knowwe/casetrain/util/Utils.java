@@ -30,6 +30,7 @@ import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.Tool;
+import de.knowwe.tools.ToolSet;
 import de.knowwe.tools.ToolUtils;
 
 public class Utils {
@@ -138,7 +139,7 @@ public class Utils {
 
 		StringBuilder string = new StringBuilder();
 
-		Tool[] tools = ToolUtils.getTools(sec, user);
+		ToolSet tools = ToolUtils.getTools(sec, user);
 
 		for (Tool t : tools) {
 			String icon = t.getIconPath();

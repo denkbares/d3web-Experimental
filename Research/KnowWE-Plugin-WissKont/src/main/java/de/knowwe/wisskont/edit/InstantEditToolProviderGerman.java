@@ -32,15 +32,20 @@ import de.knowwe.tools.ToolProvider;
 public class InstantEditToolProviderGerman implements ToolProvider {
 
 	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		return true;
+	}
+
+	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		return new Tool[] { getQuickEditPageTool(section, userContext) };
 	}
 
 	protected Tool getQuickEditPageTool(Section<?> section, UserContext userContext) {
 		return new InstantEditTool(
-					"KnowWEExtension/images/pencil.png",
-					"Editieren",
-					"Diesen Abschnitt editieren",
-					section);
+				"KnowWEExtension/images/pencil.png",
+				"Editieren",
+				"Diesen Abschnitt editieren",
+				section);
 	}
 }

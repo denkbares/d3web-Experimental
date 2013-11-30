@@ -18,24 +18,8 @@
  */
 package de.knowwe.compile.correction;
 
-import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.compile.ReferenceManager;
-import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.core.correction.CorrectionToolProvider;
-import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.utils.KnowWEUtils;
 
 public class IncrementalCorrectionToolProvider extends CorrectionToolProvider {
 
-	@Override
-	protected boolean hasError(Article article, Section<?> section) {
-		boolean error = true;
-		if (section.get() instanceof IncrementalTermReference) {
-			ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
-			error = !terminology.isValid(KnowWEUtils.getTermIdentifier(section));
-		}
-
-		return super.hasError(article, section) || error;
-	}
 }

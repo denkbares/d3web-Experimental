@@ -27,6 +27,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.tools.ToolUtils;
 
 /**
  * 
@@ -36,13 +37,20 @@ import de.knowwe.tools.ToolProvider;
 public class ObjectInfoToolProviderGerman implements ToolProvider {
 
 	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		Section<SimpleDefinition> definition =
+				Sections.findSuccessor(section, SimpleDefinition.class);
+		return definition != null;
+	}
+
+	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		Section<SimpleDefinition> definition = Sections.findSuccessor(section,
 				SimpleDefinition.class);
 		if (definition != null) {
 			return new Tool[] { getObjectInfoPageTool(definition, userContext) };
 		}
-		return new Tool[] {};
+		return ToolUtils.emptyToolArray();
 	}
 
 	protected Tool getObjectInfoPageTool(Section<? extends Term> section, UserContext userContext) {

@@ -33,18 +33,23 @@ import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.tools.ToolUtils;
 
 public class ClassMemberLinkToolProvider implements ToolProvider {
 
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
+		Section<? extends Term> reference = getReferenceSection(section);
+		if (reference == null) return ToolUtils.emptyToolArray();
+		return new Tool[] { getClassMemberPageTool(reference, userContext) };
+	}
 
+	private Section<? extends Term> getReferenceSection(Section<?> section) {
 		if (section.get() instanceof IRITermRef) {
 			Section<? extends IRITermRef> ref = Sections.cast(section, IRITermRef.class);
 			if (RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class)) {
-				return new Tool[] { getClassMemberPageTool(ref, userContext) };
+				return ref;
 			}
-
 		}
 		if (section.get() instanceof AbstractIRITermDefinition) {
 			Section<? extends AbstractIRITermDefinition> def = Sections.cast(section,
@@ -54,12 +59,16 @@ public class ClassMemberLinkToolProvider implements ToolProvider {
 			if (termReferences != null && termReferences.size() > 0) {
 				Section<? extends SimpleReference> ref = termReferences.iterator().next();
 				if (RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class)) {
-					return new Tool[] { getClassMemberPageTool(ref, userContext) };
+					return ref;
 				}
 			}
-
 		}
-		return new Tool[] {};
+		return null;
+	}
+
+	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		return getReferenceSection(section) != null;
 	}
 
 	protected Tool getClassMemberPageTool(Section<? extends Term> section, UserContext userContext) {

@@ -28,6 +28,7 @@ import de.knowwe.kdom.manchester.frame.ObjectPropertyFrame;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.tools.ToolUtils;
 
 /**
  * The CreateEntityToolProvider offers help with quick creation of not yet
@@ -46,12 +47,17 @@ import de.knowwe.tools.ToolProvider;
 public class CreateEntityToolProvider implements ToolProvider {
 
 	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		return section.hasErrorInSubtree();
+	}
+
+	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 
 		// section does not have an error in the subtree, that means there are
 		// now unknown terms, so return (no creation feature needed)
 		if (!section.hasErrorInSubtree()) {
-			return new Tool[] {};
+			return ToolUtils.emptyToolArray();
 		}
 
 		@SuppressWarnings("unchecked")

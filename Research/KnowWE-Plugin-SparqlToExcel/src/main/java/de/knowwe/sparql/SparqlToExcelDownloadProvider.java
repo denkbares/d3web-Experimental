@@ -33,6 +33,11 @@ import de.knowwe.tools.ToolProvider;
 public class SparqlToExcelDownloadProvider implements ToolProvider {
 
 	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		return true;
+	}
+
+	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		// and provide both download and refresh as tools
 		Tool ExcelTool = getDownloadExcelTool(section, userContext);

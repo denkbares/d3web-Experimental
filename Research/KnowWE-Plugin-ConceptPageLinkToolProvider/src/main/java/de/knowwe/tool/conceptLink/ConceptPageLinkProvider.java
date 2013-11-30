@@ -24,52 +24,67 @@ import java.util.Collection;
 
 import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
+import de.knowwe.compile.ReferenceManager;
 import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.tools.ToolUtils;
 
 public class ConceptPageLinkProvider implements ToolProvider {
 
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 
-		String text = section.getText();
+		Section<?> definition = getDefinitionSection(section);
+		if (definition == null) return ToolUtils.emptyToolArray();
 
-		if (section.get() instanceof IncrementalTermReference) {
-			@SuppressWarnings("unchecked")
-			Section<IncrementalTermReference> incSection = (Section<IncrementalTermReference>) section;
-			Identifier termIdentifier = incSection.get().getTermIdentifier(incSection);
-			Collection<Section<? extends SimpleDefinition>> definitions =
-					IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-							termIdentifier);
-			if (definitions != null && definitions.size() > 0) {
-				Section<?> definition = definitions.iterator().next();
-				Article defArticle = definition.getArticle();
-
-				if (defArticle == null) {
-					return new Tool[] {}; // predefined term
-				}
-				String defArticleName = defArticle.getTitle();
-				StringBuffer link = new StringBuffer();
-				link.append(defArticleName);
-				link.append("#");
-				link.append(definition.getID());
-
-				text = link.toString();
-			}
+		Article defArticle = definition.getArticle();
+		if (defArticle == null) {
+			// predefined term
+			return ToolUtils.emptyToolArray();
 		}
 
-		Tool t = new DefaultTool(
+		String defArticleName = defArticle.getTitle();
+		StringBuffer link = new StringBuffer();
+		link.append(defArticleName);
+		link.append("#");
+		link.append(definition.getID());
+
+		String text = link.toString();
+		Tool tool = new DefaultTool(
 				"KnowWEExtension/images/dt_icon_premises.gif",
 				"<a href='Wiki.jsp?page=" + text + "'>" + "To definition" + "</a>",
 				text,
 				null);
-		return new Tool[] { t };
+		return new Tool[] { tool };
+	}
+
+	private Section<?> getDefinitionSection(Section<?> section) {
+		Section<?> definition = null;
+		if (section.get() instanceof IncrementalTermReference) {
+			Section<IncrementalTermReference> incSection = Sections.cast(section,
+					IncrementalTermReference.class);
+			Identifier termIdentifier = incSection.get().getTermIdentifier(incSection);
+			ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
+			Collection<Section<? extends SimpleDefinition>> definitions =
+					terminology.getTermDefinitions(termIdentifier);
+			if (definitions != null && definitions.size() > 0) {
+				definition = definitions.iterator().next();
+			}
+		}
+		return definition;
+	}
+
+	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		Section<?> definition = getDefinitionSection(section);
+		return definition != null && definition.getArticle() != null;
 	}
 
 }

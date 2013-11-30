@@ -1,54 +1,45 @@
 package de.knowwe.util;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.Set;
 
-import de.d3web.plugin.Extension;
-import de.d3web.plugin.PluginManager;
-import de.knowwe.core.correction.CorrectionProvider;
+import de.knowwe.core.correction.CorrectionProvider.Suggestion;
+import de.knowwe.core.correction.CorrectionToolProvider;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.utils.ScopeUtils;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.tools.ToolUtils;
 
 public class KeywordCorrectionToolProvider implements ToolProvider {
 
 	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		if (!hasErrors(section)) return false;
+		Set<Suggestion> suggestions = CorrectionToolProvider.getSuggestions(section, 1);
+		return !suggestions.isEmpty();
+	}
+
+	private boolean hasErrors(Section<?> section) {
+		for (Article article : KnowWEUtils.getCompilingArticles(section)) {
+			if (section.hasErrorInSubtree(article)) return true;
+		}
+		return false;
+	}
+
+	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
-		List<CorrectionProvider.Suggestion> suggestions = new LinkedList<CorrectionProvider.Suggestion>();
-		ResourceBundle wikiConfig = KnowWEUtils.getConfigBundle();
-
-		int threshold = Integer.valueOf(wikiConfig.getString("knowweplugin.correction.threshold"));
-		Article article = KnowWEUtils.getCompilingArticles(section).iterator().next();
-		if (!section.hasErrorInSubtree(article)) {
-			return new Tool[0];
+		if (!hasErrors(section)) {
+			return ToolUtils.emptyToolArray();
 		}
 
-		for (CorrectionProvider c : getProviders(section)) {
-			List<CorrectionProvider.Suggestion> s = c.getSuggestions(article, section, threshold);
-
-			if (s != null) {
-				suggestions.addAll(s);
-			}
-		}
-
-		// Ensure there are no duplicates
-		suggestions = new LinkedList<CorrectionProvider.Suggestion>(
-				new HashSet<CorrectionProvider.Suggestion>(suggestions));
-
-		// Sort by ascending distance
-		Collections.sort(suggestions);
-
-		if (suggestions.size() == 0) {
-			return new Tool[0];
+		List<Suggestion> suggestions = CorrectionToolProvider.getSuggestions(section);
+		if (suggestions.isEmpty()) {
+			return ToolUtils.emptyToolArray();
 		}
 
 		Tool[] tools = new Tool[suggestions.size() + 1];
@@ -56,7 +47,7 @@ public class KeywordCorrectionToolProvider implements ToolProvider {
 		tools[0] = new DefaultTool(
 				"KnowWEExtension/images/quickfix.gif",
 				Messages.getMessageBundle().getString("KnowWE.Correction.do"),
-				Messages.getMessageBundle().getString("KnowWE.Correction.do"),
+				"",
 				null,
 				"correct"
 				);
@@ -74,17 +65,4 @@ public class KeywordCorrectionToolProvider implements ToolProvider {
 		return tools;
 	}
 
-	public static CorrectionProvider[] getProviders(Section<?> section) {
-		Extension[] extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
-				"CorrectionProvider");
-		extensions = ScopeUtils.getMatchingExtensions(extensions, section);
-		CorrectionProvider[] providers = new CorrectionProvider[extensions.length];
-
-		for (int i = 0; i < extensions.length; i++) {
-			Extension extension = extensions[i];
-			providers[i] = (CorrectionProvider) extension.getSingleton();
-		}
-
-		return providers;
-	}
 }

@@ -32,6 +32,11 @@ import de.knowwe.tools.ToolProvider;
 public class TestcaseImportProvider implements ToolProvider {
 
 	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		return true;
+	}
+
+	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 
 		String jsAction = "Testcase.importTestcase('" + section.getID() + "')";

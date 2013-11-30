@@ -26,6 +26,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.tools.ToolUtils;
 
 /**
  * The StatementImportanceToolProvider allows the user to determine the
@@ -38,28 +39,24 @@ import de.knowwe.tools.ToolProvider;
 public class InferenceDiffToolProvider implements ToolProvider {
 
 	@Override
+	public boolean hasTools(Section<?> section, UserContext userContext) {
+		Section<KnowledgeUnit> knowledgeUnit =
+				Sections.findAncestorOfType(section, KnowledgeUnit.class);
+		return knowledgeUnit != null;
+	}
+
+	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
-		Section<KnowledgeUnit> knowledgeUnit = Sections.findAncestorOfType(section,
-				KnowledgeUnit.class);
-		if (knowledgeUnit == null) return new Tool[] {};
-		return new Tool[] { getStatementImportancePageTool(knowledgeUnit,
-				userContext) };
+		Section<KnowledgeUnit> knowledgeUnit =
+				Sections.findAncestorOfType(section, KnowledgeUnit.class);
+		if (knowledgeUnit == null) return ToolUtils.emptyToolArray();
+		return new Tool[] { getStatementImportancePageTool(knowledgeUnit, userContext) };
 	}
 
 	/**
 	 * Returns the Tool for the StatementImportancePageTool.
-	 * 
-	 * @created 01.06.2011
-	 * @param article
-	 * @param section
-	 * @param userContext
-	 * @return
 	 */
 	protected Tool getStatementImportancePageTool(Section<?> section, UserContext userContext) {
-
-		// Section<?> s = Sections.findAncestorOfType(section,
-		// TurtleMarkup.class);
-		// if (s == null) return null;
 
 		String jsAction = "window.location.href = "
 				+ "'Wiki.jsp?page=InferenceDiff&amp;section=' + encodeURIComponent('"

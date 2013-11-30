@@ -6,6 +6,7 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.Tool;
+import de.knowwe.tools.ToolSet;
 import de.knowwe.tools.ToolUtils;
 
 public class TurtleN3Renderer implements Renderer {
@@ -34,7 +35,7 @@ public class TurtleN3Renderer implements Renderer {
 
 		StringBuilder string = new StringBuilder();
 
-		Tool[] tools = ToolUtils.getTools(sec, user);
+		ToolSet tools = ToolUtils.getTools(sec, user);
 
 		for (Tool t : tools) {
 			String icon = t.getIconPath();
