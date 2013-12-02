@@ -31,6 +31,7 @@
 		<parameter id="script" value="d3force.js" />
 		<parameter id="script" value="d3tree.js" />
 		<parameter id="script" value="d3wheel.js" />
+		<parameter id="script" value="d3download.js" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -49,6 +50,7 @@
 		<parameter id="script" value="d3force.js" />
 		<parameter id="script" value="d3tree.js" />
 		<parameter id="script" value="d3wheel.js" />
+		<parameter id="script" value="d3download.js" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -81,6 +83,15 @@
 		<parameter id="name" value="OntoVisSVGDownload" />
 		<parameter id="description"
 			value="Downloads the .svg-file of the displayed Graph" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="OntoVisSVGD3Download">
+		<parameter id="class" value="de.knowwe.rdfs.vis.markup.OntoVisSVGD3Download" />
+		<parameter id="name" value="OntoVisSVGD3Download" />
+		<parameter id="description" value="Downloads the .svg-file of the displayed graph" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
