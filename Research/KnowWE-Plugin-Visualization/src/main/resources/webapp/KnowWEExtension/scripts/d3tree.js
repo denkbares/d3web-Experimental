@@ -22,6 +22,7 @@ function drawTree(size, jsonsource, sectionID) {
 	var div = d3.select("#d3" + sectionID);
 	
 	var svg = div.append("svg")
+				.attr("id", "svg"+sectionID)
 				.attr("min-width", width + margin.right + margin.left)
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g")
