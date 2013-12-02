@@ -40,12 +40,12 @@ KNOWWE.plugin.comment = function(){
             
             var params = {
                     action : 'ForumBoxAction',
-                    ForumBoxText : text,
                     ForumArticleTopic : topic
                 }
             
             var options = {
                     url : KNOWWE.core.util.getURL( params ),
+                    data : text,
                     response : {
                         action : 'none',
                         ids : [],

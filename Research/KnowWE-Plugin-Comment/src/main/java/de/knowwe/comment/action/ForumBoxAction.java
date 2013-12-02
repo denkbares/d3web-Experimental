@@ -59,7 +59,7 @@ public class ForumBoxAction extends AbstractAction {
 
 		Map<String, String> map = context.getParameters();
 
-		String text = map.get("ForumBoxText");
+		String text = map.get("data");
 		String topic = map.get("ForumArticleTopic");
 		String web = context.getWeb();
 
