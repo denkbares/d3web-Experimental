@@ -51,7 +51,7 @@ public class ReadbuttonUtilities {
 	public static boolean checkID(String id, String title) {
 		for (DefiPageRateLogLine line : DefiPageRateEventLogger.getLogLines()) {
 
-			if (id.equals(line.getId()) && !title.equals(line.getPage())) {
+			if (id.equals(line.getId()) && !title.equalsIgnoreCase(line.getPage())) {
 				return false;
 			}
 		}
