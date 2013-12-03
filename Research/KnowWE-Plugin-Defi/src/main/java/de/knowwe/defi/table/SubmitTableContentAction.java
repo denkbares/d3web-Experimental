@@ -60,7 +60,7 @@ public class SubmitTableContentAction extends AbstractAction {
 			newContent.append(renderMarkupForOneVersion(versionCounter, map));
 			versionCounter++;
 		}
-		newContent.append("-");
+		newContent.append("-\n");
 		return newContent.toString();
 	}
 
@@ -105,7 +105,7 @@ public class SubmitTableContentAction extends AbstractAction {
 		if (dataArticle == null) {
 			// create new article
 			String newContent = createNewMarkupString(tableid, inputDataAll);
-			newContent = "[{ALLOW view admin}]\n[{ALLOW delete " + username + "}]\n" + newContent;
+			newContent = "[{ALLOW view admin}]\n\n" + newContent;
 			Environment.getInstance().getWikiConnector().createArticle(
 					articleNameForData, newContent.toString(), "Defi-system");
 			Article article = Article.createArticle(newContent.toString(),
