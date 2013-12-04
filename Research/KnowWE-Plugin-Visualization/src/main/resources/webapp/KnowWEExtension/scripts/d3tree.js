@@ -2,7 +2,7 @@ function drawTree(size, jsonsource, sectionID) {
 	
 	
 	
-	var margin = {top: 20, right: 120, bottom: 20, left: 180},
+	var margin = {top: 20, right: 120, bottom: 20, left: 120},
     	width = 960 - margin.right - margin.left,
     	height = 800 - margin.top - margin.bottom;
    
@@ -26,7 +26,7 @@ function drawTree(size, jsonsource, sectionID) {
 				.attr("min-width", width + margin.right + margin.left)
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g")
-				.attr("transform", "translate(" + margin.left + "," + margin.top + ", 'fast')");
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	
 	
 	

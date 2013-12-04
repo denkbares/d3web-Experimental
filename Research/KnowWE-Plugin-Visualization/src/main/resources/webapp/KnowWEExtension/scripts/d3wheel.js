@@ -15,6 +15,7 @@ function drawWheel(size, json, sectionID) {
 	var div = d3.select("#d3" + sectionID);
 	
 	var svg = div.append("svg")
+		.attr("id", "svg"+sectionID)
 	    .attr("width", width + padding * 2)
 	    .attr("height", height + padding * 2) 
 	  .append("g")
