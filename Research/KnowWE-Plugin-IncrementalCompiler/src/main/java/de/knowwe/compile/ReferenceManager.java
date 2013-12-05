@@ -237,6 +237,7 @@ public class ReferenceManager {
 
 	public void registerTermDefinition(Section<? extends SimpleDefinition> section) {
 		Identifier identifier = KnowWEUtils.getTermIdentifier(section);
+		if (identifier == null) return; // does not define a term in this case
 		if (allDefinitions.containsKey(identifier)) {
 			allDefinitions.get(identifier).add(section);
 		}
