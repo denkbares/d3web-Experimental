@@ -232,7 +232,13 @@ public class D3Renderer {
 			HierarchyNode next = iterator.next();
 			// if the child is not in the source yet: Add it so source and loop
 			// through it's children
-			String targetURL = Strings.encodeURL(next.getConceptNode().getConceptUrl());
+			String conceptUrl = next.getConceptNode().getConceptUrl();
+
+			String targetURL = "";
+			if (conceptUrl != null) {
+				targetURL = Strings.encodeURL(conceptUrl);
+			}
+
 			if (!next.isInSourceYet()) {
 				jsonSource += "{\"concept\": \"" + getLabel(next) + "\"";
 				jsonSource += ",\n\"conceptUrl\": \"" + targetURL
