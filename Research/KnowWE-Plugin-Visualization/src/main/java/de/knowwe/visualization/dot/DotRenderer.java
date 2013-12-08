@@ -139,7 +139,7 @@ public class DotRenderer {
 		dotSource = "digraph " + graphtitle + " {\n";
 		dotSource = insertPraefixed(dotSource, parameters);
 		dotSource += DotRenderer.setSizeAndRankDir(parameters.get(GraphDataBuilder.RANK_DIRECTION),
-				parameters.get(GraphDataBuilder.GRAPH_SIZE));
+				parameters.get(GraphDataBuilder.GRAPH_SIZE), data.getConceptDeclarations().size());
 
 		// dotSource += generateGraphSource(dotSourceLabel, dotSourceRelations,
 		// parameters);
@@ -281,7 +281,7 @@ public class DotRenderer {
 	 * 
 	 * @created 30.10.2012
 	 */
-	private static String setSizeAndRankDir(String rankDirSetting, String graphSize) {
+	private static String setSizeAndRankDir(String rankDirSetting, String graphSize, int numberOfConcepts) {
 		String source = "";
 		String rankDir = "LR";
 
@@ -298,11 +298,36 @@ public class DotRenderer {
 						+ String.valueOf(Double.valueOf(graphSize) * 0.010415597) + "!\""
 						+ " rankdir=\"" + rankDir + "\"]\n";
 			}
+			else {
+				source += "graph [size=\""
+						+ calculateAutomaticGraphSize(numberOfConcepts) + "!\""
+						+ " rankdir=\"" + rankDir + "\"]\n";
+			}
 		}
 		else {
-			source += "graph [ rankdir=\"" + rankDir + "\"]\n";
+			if (numberOfConcepts == 1 || numberOfConcepts == 2) {
+				source += "graph [size=\""
+						+ calculateAutomaticGraphSize(numberOfConcepts) + "!\""
+						+ " rankdir=\"" + rankDir + "\"]\n";
+			}
+			else {
+				source += "graph [rankdir=\"" + rankDir + "\"]\n";
+			}
+
 		}
 		return source;
+	}
+
+	/**
+	 * 
+	 * @created 08.12.2013
+	 * @param numberOfConcepts
+	 * @return
+	 */
+	private static String calculateAutomaticGraphSize(int numberOfConcepts) {
+		if (numberOfConcepts == 1) return "1";
+		if (numberOfConcepts == 2) return "3";
+		return null;
 	}
 
 	/**
