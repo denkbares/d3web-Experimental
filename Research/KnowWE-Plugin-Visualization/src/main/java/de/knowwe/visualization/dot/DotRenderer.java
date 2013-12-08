@@ -311,7 +311,7 @@ public class DotRenderer {
 						+ " rankdir=\"" + rankDir + "\"]\n";
 			}
 			else {
-				source += "graph [rankdir=\"" + rankDir + "\"]\n";
+				source += "graph [ rankdir=\"" + rankDir + "\"]\n";
 			}
 
 		}
