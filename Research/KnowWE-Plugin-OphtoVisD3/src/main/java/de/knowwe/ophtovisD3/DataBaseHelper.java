@@ -49,6 +49,7 @@ import de.knowwe.wisskont.util.MarkupUtils;
  */
 public class DataBaseHelper {
 
+	// Teilmethode fragt nach Verbindungen in DBconType unterkonzept, liefert
 	public static List<String> getConnectedNodeNamesOfType(String startNode,
 			String conType, boolean reverse) {
 		List<String> connectedNodesList = new ArrayList<String>();
@@ -234,6 +235,7 @@ public class DataBaseHelper {
 
 	}
 
+	// liefert den Parent Node, fuer Breadcrubs verwenden
 	public static String getRootConcept(String startConcept,
 			String connectionType) {
 		do {

@@ -70,6 +70,7 @@ public class GraphBuilder {
 		return connections;
 	}
 
+	// get all connections to other concepts of this concept
 	public static HashMap<Integer, String> getNameandConnectionof(String startConcept, String connectionType, HashMap<Integer, String> list, int index) {
 		int dadIndex = indexNumber;
 		List<String> childs = DataBaseHelper.getConnectedNodeNamesOfType(startConcept,
