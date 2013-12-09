@@ -44,7 +44,7 @@ public class GraphBuilder {
 	static int indexNumber = 0;
 	static PartialHierarchyTree<NodeWithName> resultTree;
 	static boolean treeIsHere = false;
-	static StringShortener shorty = new StringShortener(ElliminationType.MIDDLE, 12);
+	static StringShortener shorty = new StringShortener(ElliminationType.NORMAL, 12);
 
 	public GraphBuilder() {
 		connections = new LinkedList<Integer[]>();

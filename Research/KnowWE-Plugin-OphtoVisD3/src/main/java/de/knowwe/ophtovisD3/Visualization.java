@@ -104,11 +104,7 @@ public class Visualization {
 						+ "/KnowWEExtension/scripts/jquery-1.9.1.js \"></script>\r\n"+
 						"	<script type=\"text/javascript\" src=\""
 						+ context
-						+ "/KnowWEExtension/scripts/OphtoToolbar.js \"></script>\r\n"+
-						// new menu javascript
-						"	<script type=\"text/javascript\" src=\""
-						+ context
-						+ "/KnowWEExtension/scripts/jquery.min.js \"></script>\r\n"
+						+ "/KnowWEExtension/scripts/OphtoToolbar.js \"></script>\r\n"
 						+
 						// new menu javascript
 						"	<script type=\"text/javascript\" src=\""
@@ -127,11 +123,7 @@ public class Visualization {
 						+
 						"<script type='text/javascript' src='KnowWEExtension/scripts/quicki.js'></script>"
 						+
-						"<script type='text/javascript' src='KnowWEExtension/scripts/overviewGraph.js'></script>"
-						+
 						"<script type='text/javascript' src='KnowWEExtension/scripts/correction.js'></script>"
-						+
-						"<script type='text/javascript' src='KnowWEExtension/scripts/jquery.treeTable.js'></script>"
 						+
 						"<script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-Rdf2GoSemanticCore.js'></script>"
 						+
@@ -144,8 +136,6 @@ public class Visualization {
 						"<script type='text/javascript' src='KnowWEExtension/scripts/saveQuicki.js'></script>"
 						+
 						"<script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-Plugin-Core.js'></script>"
-						+
-						"<script type='text/javascript' src='KnowWEExtension/scripts/toolsMenuDecorator.js'></script>"
 						+
 						"<script type='text/javascript' src='KnowWEExtension/scripts/DefaultTableEditTool.js'></script>"
 						+
