@@ -2,7 +2,7 @@ function createWheel(){
 	
 	visChange();
 	d3.select("#vis").remove();
-	d3.select("body").append("div").attr("id", "vis");
+	d3.select("#center-container").append("div").attr("id", "vis");
 var width = 840,
     height = width,
     radius = width / 2,
@@ -304,10 +304,10 @@ function createBubble(){
 	visChange();
 	
 	d3.select("#vis").remove();
-	d3.select("body").append("div").attr("id", "vis");
+	d3.select("#center-container").append("div").attr("id", "vis");
 
-	var w = 1280,
-	    h = 800,
+	var w = 1720,
+	    h = 1000,
 	    r = 720,
 	    x = d3.scale.linear().range([0, r]),
 	    y = d3.scale.linear().range([0, r]),
@@ -336,7 +336,7 @@ function createBubble(){
 	  vis.selectAll("circle")
 	      .data(nodes)
 	    .enter().append("svg:circle")
-	      .attr("class", function(d) {console.log(d.data.highlighted); return d.data.highlighted ? "highlighted" :  d.children ? "parent" : "child"; })
+	      .attr("class", function(d) {console.log(d); return d.data ? d.data.highlighted ? "highlighted" :  d.children ? "parent" : "child" : ""; })
 	      .attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; })
 	      .attr("r", function(d) { return d.r; })
@@ -351,7 +351,8 @@ function createBubble(){
 	      .attr("dy", ".35em")
 	      .attr("text-anchor", "middle")
 	      .style("opacity", function(d) { return d.r > 20 ? 1 : 0; })
-	      .text(function(d) { return d.data.label; });
+	      // if d.data ein Attribut in js, then return d.data label, else return ""
+	      .text(function(d) { return d.data ? d.data.label : ""; });
 
 	  d3.select(window).on("click", function() { zoom(root); });
 	});
