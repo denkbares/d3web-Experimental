@@ -41,7 +41,7 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
   	path.enter().append("path")
       .attr("id", function(d, i) { return "path-" + i; })
       .attr("d", arc)
-      .style("fill",function(d, i) { return color(i); });
+      .style("fill",function(d) {return colour(d); });
       //.on("click", click);
 
   var text = vis.selectAll("text").data(nodes);
@@ -64,11 +64,11 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
  
   textEnter.append("tspan")
       .attr("x", 0)
-      .text(function(d) { return d.depth ? d.data.name.split(" ")[0] : ""; });
+      .text(function(d) { return d.depth ? d.data.label.split(" ")[0] : ""; });
   textEnter.append("tspan")
       .attr("x", 0)
       .attr("dy", "1em")
-      .text(function(d) { return d.depth ? d.data.name.split(" ")[1] || "" : ""; });
+      .text(function(d) { return d.depth ? d.data.label.split(" ")[1] || "" : ""; });
 
   function click(d) {
   	console.log($(this).text());
@@ -113,8 +113,8 @@ function isParentOf(p, c) {
   return false;
 }
 
-function colour(d) {
-  if (d.children) {
+function colour(daten) {
+/*  if (d.children) {
     // There is a maximum of two children!
     var colours = d.children.map(colour),
         a = d3.hsl(colours[0]),
@@ -122,7 +122,13 @@ function colour(d) {
     // L*a*b* might be better here...
     return d3.hsl((a.h + b.h) / 2, a.s * 1.2, a.l / 1.2);
   }
-  return d.colour || "#fff";
+  return d.colour || "#fff";*/
+ console.log("hier kommen die daten         "); console.log(daten);
+ return  daten.children ? daten.children[0] ? (daten.children.some(function(c) { return c.children[0]; })
+		      ?  "#395277" 
+		      :  "#577aae" )
+		      :  "#90a7ca" 
+		      : "#90a7ca";
 }
 
 // Interpolate the scales!
