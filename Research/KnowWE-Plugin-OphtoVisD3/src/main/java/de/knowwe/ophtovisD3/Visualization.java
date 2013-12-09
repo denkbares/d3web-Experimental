@@ -58,14 +58,25 @@ public class Visualization {
 						+ context
 						+ "/KnowWEExtension/css/visualisation.css\">"
 						+
+						// base style
 						"	<link rel=\"stylesheet\" href=\""
 						+ context
-						+ "/KnowWEExtension/css/toolbar.css\">"
+						+ "/KnowWEExtension/css/base_style_vis.css\">"
 						+
+						// "	<link rel=\"stylesheet\" href=\""
+						// + context
+						// + "/KnowWEExtension/css/toolbar.css\">"
+						// +
 						// visCollapsableTree
 						"	<link rel=\"stylesheet\" href=\""
 						+ context
 						+ "/KnowWEExtension/css/visCollapsableTreeStyle.css\">"
+						//
+						+
+						// new navigation menu css
+						"	<link rel=\"stylesheet\" href=\""
+						+ context
+						+ "/KnowWEExtension/css/nav_menu.css\">"
 						//
 						+
 						"	<script type=\"text/javascript\" src=\""
@@ -82,12 +93,28 @@ public class Visualization {
 						+ "/KnowWEExtension/scripts/visCollapsableTree.js \"></script>\r\n"
 						+
 						//
+						// Highlight selected Node
+						"	<script type=\"text/javascript\" src=\""
+						+ context
+						+ "/KnowWEExtension/scripts/findAndSelect.js \"></script>\r\n"
+						+
+						//
 						"	<script type=\"text/javascript\" src=\""
 						+ context
 						+ "/KnowWEExtension/scripts/jquery-1.9.1.js \"></script>\r\n"+
 						"	<script type=\"text/javascript\" src=\""
 						+ context
 						+ "/KnowWEExtension/scripts/OphtoToolbar.js \"></script>\r\n"+
+						// new menu javascript
+						"	<script type=\"text/javascript\" src=\""
+						+ context
+						+ "/KnowWEExtension/scripts/jquery.min.js \"></script>\r\n"
+						+
+						// new menu javascript
+						"	<script type=\"text/javascript\" src=\""
+						+ context
+						+ "/KnowWEExtension/scripts/nav_menu_jquery.js \"></script>\r\n"
+						+
 						"<script type='text/javascript' src='KnowWEExtension/scripts/jquery-autosize.min.js'>"
 						+
 						"</script></script><script type='text/javascript' src='KnowWEExtension/scripts/jquery-compatibility.js'></script>"
@@ -144,65 +171,137 @@ public class Visualization {
 						"	<script type=\"text/javascript\" src=\""
 						+ context
 						+ "/KnowWEExtension/scripts/jquery-1.9.1.js \"></script>\r\n"+
-						"<div id=headerwrap class=fixed>\r\n" +
-						"<div id=header>\r\n" +
-						"<ul id=\"entry-list\" class=\"list\">\r\n" +
-						"<li class=\"active menue\" >Visualisierungstypen :   </li>\r\n" +
-						"<li class=\"active menue\" onclick=\"createBubble()\">Bubble </li>\r\n" +
-						"<li class=\"menue\" onclick=\"createWheel()\">Wheel </li>\r\n" +
-						"<li class=\"menue\" onclick=\"createReingold()\"> ReingoldTree </li>\r\n"
-						+
-						"<li class=\"menue\" onclick=\"createReingoldCollapsible()\"> ReingoldColl </li>\r\n"
-						+
-						// "<li class=\"menue\" onclick=\"createTreeDiagonal()\"> Tree diagonal </li>\r\n"
+						// old menu
+						// "<div id=headerwrap class=fixed>\r\n" +
+						// "<div id=header>\r\n" +
+						// "<ul id=\"entry-list\" class=\"list\">\r\n" +
+						// "<li class=\"active menue\" >Visualisierungstypen :   </li>\r\n"
 						// +
-						"<li class=\"menue\" onclick=\"createTreeCollapsable()\"> Tree Collapsable </li>\r\n"
+						// "<li class=\"active menue\" onclick=\"createBubble()\">Bubble </li>\r\n"
+						// +
+						// "<li class=\"menue\" onclick=\"createWheel()\">Wheel </li>\r\n"
+						// +
+						// "<li class=\"menue\" onclick=\"createReingold()\"> ReingoldTree </li>\r\n"
+						// +
+						// "<li class=\"menue\" onclick=\"createReingoldCollapsible()\"> ReingoldColl </li>\r\n"
+						// +
+						// //
+						// "<li class=\"menue\" onclick=\"createTreeDiagonal()\"> Tree diagonal </li>\r\n"
+						// // +
+						// "<li class=\"menue\" onclick=\"createTreeCollapsable()\"> Tree Collapsable </li>\r\n"
+						// +
+						// "<li class=\"menue\" onclick=\"createCollForce()\"> ColForceLabeled </li>\r\n"
+						// +
+						// "<li class=\"menue\" onclick=\"createTreeDiagonal()\"> DiagonalTree </li>\r\n"
+						// +
+						// "<li class=\"menue\" onclick=\"createFixRootTree()\"> FixedRootTree </li>\r\n"
+						// +
+						// "<li class=\"editor\">Editor▼</li>\r\n"
+						// +
+						// "</ul>\r\n" +
+						// "</div>\r\n" +
+						// "</div>\r\n" +
+						// old menu
+						// main container start
+						"<div id=\"container\">"
+						+ "<div id=\"left-container\">"
+						+ "</div>"
+						+ "<div id=\"center-container\">"
+						// -------------DISCO div with d3js MAGIC
 						+
-						"<li class=\"menue\" onclick=\"createCollForce()\"> ColForceLabeled </li>\r\n"
+						"<div id=\"vis\"></div>"
+						+ "</div>"
+						+ "<div id=\"right-container\">"
+						+ "</div>"
+						// new navigation menu
+						// Navigation Bar div
+						+ "<div id=\"cssmenu\">"// -------------Navigation
 						+
-						"<li class=\"menue\" onclick=\"createTreeDiagonal()\"> DiagonalTree </li>\r\n"
+						"<ul>"// ul main
 						+
-						"<li class=\"menue\" onclick=\"createFixRootTree()\"> FixedRootTree </li>\r\n"
+						"<li class=\"active\"><a href=\"index.html\"><span>Visualisierungen</span></a></li>"// li
 						+
-//						"<li class=\"editor\">Editor▼</li>\r\n" +
-						"</ul>\r\n" +
-						"</div>\r\n" +
-						"</div>\r\n" +
-						"<div class=\"editorDiv hidden\">\r\n" +
-						"<div class=\"dropzone\" id=\"source\" >1</div>\r\n" +
-						"\r\n" +
-						"<div class=\"choosa\">\r\n" +
-						"<select id=\"relSelect\" data-placeholder=\"Relation...\" class=\"chzn-select\" style=\"width:150px\"  tabindex=\"-1\">\r\n" +
-						" <!--clear value option-->\r\n" +
-						" <option value=\"\"></option>\r\n" +
-						"  <option value=\"unterkonzept\">unterkonzept</option>\r\n" +
-						"   <option value=\"\">kann</option>\r\n" +
-						"    <option value=\"\">muss</option>\r\n" +
-						"</select>\r\n" +
-						"</div>\r\n" +
-						"\r\n" +
-						"\r\n" +
-						"\r\n" +
-						"<div class=\"dropzone\" id=\"target\" >2</div>\r\n" +
-						"\r\n" +
-						"\r\n" +
-						"<div class=\"buttonBar\" >\r\n" +
-						"<input type=\"button\" value=\"OK\" ></input>\r\n" +
-						"<input type=\"button\" value=\"DEL\"></input>\r\n" +
-						"</div>"+
+						"<li class=\"has-sub\" onclick=\"createBubble()\"><a href=\"#\"><span>Circle Packing</span></a></li>"
+						+
+						"<li class=\"has-sub\" onclick=\"createWheel()\"><a href=\"#\"><span>Radial Treemap</span></a></li>"
+						+
+						"<li class=\"has-sub\" onclick=\"createReingold()\"><a href=\"#\"><span>Reingold-Tilford Tree</span></a></li>"
+						+
+						"<li class=\"has-sub\" onclick=\"createTreeCollapsable()\"><a href=\"#\"><span>Collapsible Tree</span></a></li>"
+						+
+						"<li class=\"has-sub\" onclick=\"createCollForce()\"><a href=\"#\"><span>Force Graph Labeled</span></a></li>"
+						+
+						"<li class=\"has-sub\"><a href=\"#\"><span>Experimental I</span></a>"
+						+ "<ul>"
+						+ "<li onclick=\"createTreeDiagonal()\"><a href=\"#\"><span>Experiment TreeDiag</span></a></li>"// li
+						+ "<li onclick=\"createCollForceTest()\"><a href=\"#\"><span>Coll Force Test</span></a></li>"// li
+						+ "<li class=\"last\"><a href=\"#\"><span>Experiment 3</span></a></li>"// li
+						+ "</ul>"
+						+
+						"<li class=\"has-sub\"><a href=\"#\"><span>Experimental II</span></a>"
+						+ "<ul>"
+						+ "<li><a href=\"#\"><span>Experiment 1</span></a></li>"// li
+						+ "<li><a href=\"#\"><span>Experiment 2</span></a></li>"// li
+						+ "<li class=\"last\"><a href=\"#\"><span>Experiment 3</span></a></li>"// li
+						+ "</ul>"
+						+ "<li class=\"has-sub\"><a href=\"javascript:history.back()\"><span>Back to WIKI</span></a></li>"
+						// Highlight selected Node
+						+ "<li class=\"last\" onclick=\"highlightSelectedNode()\"><a href=\"#\"><span>Highlight</span></a></li>"
+						// Highlight selected Node
+						+
+						"</ul>"// ul main
+						+ // Breadcrumbs
+						"<div class=\"breadcrumbs\">"
+						+
+						"<div class=\"item\">"
+						+ "<a href=\"#home\">Vis ></a>"
+						+ "</div>"
+						+ "</div>"// breadcrumbs end
+						// + "<div class=\"items\">"
+						// + "<ul>"
+						// +
+						// "<li onclick=\"updateBreadcrumbs\"><a href=\"#test1\">Test 1</a></li>"
+						// + "<li><a href=\"#test2\">Test 2</a></li>"
+						// + "</ul>"
+						// + "</div>"// items end
+						+ "</div>"// -------------Navigation end
+						+
+						// new navigation menu
+						// "<div class=\"editorDiv hidden\">\r\n" +
+						// "<div class=\"dropzone\" id=\"source\" >1</div>\r\n"
+						// +
+						// "\r\n" +
+						// "<div class=\"choosa\">\r\n" +
+						// "<select id=\"relSelect\" data-placeholder=\"Relation...\" class=\"chzn-select\" style=\"width:150px\"  tabindex=\"-1\">\r\n"
+						// +
+						// " <!--clear value option-->\r\n" +
+						// " <option value=\"\"></option>\r\n" +
+						// "  <option value=\"unterkonzept\">unterkonzept</option>\r\n"
+						// +
+						// "   <option value=\"\">kann</option>\r\n" +
+						// "    <option value=\"\">muss</option>\r\n" +
+						// "</select>\r\n" +
+						// "</div>\r\n" +
+						// "\r\n" +
+						// "\r\n" +
+						// "\r\n" +
+						// "<div class=\"dropzone\" id=\"target\" >2</div>\r\n"
+						// +
+						// "\r\n" +
+						// "\r\n" +
+						// "<div class=\"buttonBar\" >\r\n" +
+						// "<input type=\"button\" value=\"OK\" ></input>\r\n" +
+						// "<input type=\"button\" value=\"DEL\"></input>\r\n" +
+						// "</div>"+
+						// "</div>"
+						// +
+						// //
+						// "<div class=\"hidden\" id=\"infolist\" ></div>\r\n"
+						// +
+						// main container end
 						"</div>"
 						+
-						//
-						"<div class=\"hidden\" id=\"infolist\" ></div>\r\n"
-						//
-						+
-						"<div id=vis></div>"
-						+
-					
 						jsCommands
-				
-						
-						
 				);
 	}
 
