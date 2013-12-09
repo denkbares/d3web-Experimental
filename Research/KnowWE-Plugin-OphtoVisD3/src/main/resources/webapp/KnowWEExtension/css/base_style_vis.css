@@ -55,7 +55,7 @@ a {
 #left-container {
 	width:200px;
     left:0;
-    background-image:url('col2.png');
+    background-image:url('../images/col2.png');
     background-position:center right;
     border-left:1px solid #ddd;
     
@@ -65,7 +65,7 @@ a {
 #right-container {
 	width:0px;
     right:0;
-    background-image:url('col1.png');
+    background-image:url('../images/col1.png');
     background-position:center left;
     border-right:1px solid #ddd;
 }
