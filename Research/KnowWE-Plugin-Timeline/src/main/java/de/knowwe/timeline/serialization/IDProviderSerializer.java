@@ -10,10 +10,10 @@ import com.google.gson.JsonSerializer;
  * 
  * @author Tobias Bleifuss, Steffen Hoefner
  */
-class IDProviderSerializer implements JsonSerializer<IDProvider> {
+class IDProviderSerializer implements JsonSerializer<IDProvider<?>> {
 
 	@Override
-	public JsonElement serialize(IDProvider src, Type typeOfSrc, JsonSerializationContext context) {
+	public JsonElement serialize(IDProvider<?> src, Type typeOfSrc, JsonSerializationContext context) {
 		return context.serialize(src.getIds());
 	}
 
