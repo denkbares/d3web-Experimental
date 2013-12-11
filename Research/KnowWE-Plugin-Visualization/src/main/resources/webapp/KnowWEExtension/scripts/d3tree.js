@@ -1,18 +1,28 @@
 function drawTree(size, jsonsource, sectionID) {
 	
+	// define layout 
 	
+	var margin = {top: 20, right: 120, bottom: 20, left: 20};
+    	
+	var i = 0,
+    	duration = 750,
+    	root;
 	
-	var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    	width = 960 - margin.right - margin.left,
+	 root = jsonsource;
+	 root.x0 = height / 2;
+	 root.y0 = 10;
+
+	 // compute left margin based on rootlabel length 
+	 margin.left = margin.left + root.concept.length * 5;
+	
+	 var width = 960 - margin.right - margin.left,
     	height = 800 - margin.top - margin.bottom;
    
 	if(size != null) {
 		width = size - margin.right - margin.left;
 	}
-	var i = 0,
-    	duration = 750,
-    	root;
-
+	
+	 
 	var tree = d3.layout.tree()
     	.size([height, width]);
 
@@ -28,12 +38,99 @@ function drawTree(size, jsonsource, sectionID) {
 				.append("g")
 				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	
+	// initialize zoom behaviour
+	
+	 d3.select("#svg"+sectionID)
+     .call(d3.behavior.zoom()
+     .scaleExtent([0.5, 5])
+     .on("zoom", zoom))
+	 .on("mouseclick.zoom", null);
 	
 	
-	 root = jsonsource;
-	 root.x0 = height / 2;
-	 root.y0 = 10;
-
+	// create buttons
+	
+	var expandButton = div.append("input")
+			.attr("type", "button")
+			.attr("id", "expandButton"+sectionID)
+			.attr("class", "d3treeButton")
+			.attr("value", "Expand all")
+			.on("click", function (d) {
+				if(root.children) {
+				click(root);
+				}
+				expandAllChildren(root);
+											 
+			});
+	
+	var collapseButton = div.append("input")
+			.attr("type" , "button")
+			.attr("id", "collapseButton"+sectionID)
+			.attr("class", "d3treeButton")
+			.attr("value", "Collapse all")
+			.on("click", function (d){
+				collapse(root);
+				update(root);
+			})
+	
+	var increaseTreeSizeButton = div.append("input")
+			.attr("type" , "button")
+			.attr("id", "zoomInButton"+sectionID)
+			.attr("class", "d3treeButton")
+			.attr("value", "Increase tree size")
+			.on("click", function (d){
+				
+				tree.size([tree.size()[0]*1.5, tree.size()[1]*1.5]);
+				update(root);
+			})
+			
+	var decreaseTreeSizeButton = div.append("input")
+			.attr("type" , "button")
+			.attr("id", "zoomInButton"+sectionID)
+			.attr("class", "d3treeButton")
+			.attr("value", "Decrease tree size")
+			.on("click", function (d){
+				tree.size([tree.size()[0]/1.5, tree.size()[1]/1.5]);
+				update(root);
+			})
+	
+	var increaseLabelsButton = div.append("input")
+			.attr("type" , "button")
+			.attr("id", "zoomInButton"+sectionID)
+			.attr("class", "d3treeButton")
+			.attr("value", "Increase label size")
+			.on("click", function (d){
+				
+				
+				var rootnode = svg.select("g.node")[0];
+				var text = jq$(rootnode).find("text")[0];
+				var fontsize = window.getComputedStyle(text).fontSize;
+				fontsize = parseFloat(fontsize);
+				fontsize *= 1.5;
+				svg.selectAll("text")
+					.style("font-size", fontsize+"px");
+				
+				update(root);
+			})
+			
+	var decreaseLabelsButton = div.append("input")
+			.attr("type" , "button")
+			.attr("id", "zoomInButton"+sectionID)
+			.attr("class", "d3treeButton")
+			.attr("value", "Decrease label size")
+			.on("click", function (d){
+				
+				var rootnode = svg.select("g.node")[0];
+				var text = jq$(rootnode).find("text")[0];
+				var fontsize = window.getComputedStyle(text).fontSize;
+				fontsize = parseFloat(fontsize);
+				fontsize /= 1.5;
+				svg.selectAll("text")
+					.style("font-size", fontsize+"px");
+				
+				update(root);
+			})
+			
+	// collapse node and all of its children - update source afterwards
 	 function collapse(d) {
 	    if (d.children) {
 	      d._children = d.children;
@@ -42,12 +139,8 @@ function drawTree(size, jsonsource, sectionID) {
 	    }
 	  }
 
-	  root.children.forEach(collapse);
-	  update(root);
-	
-	d3.select(self.frameElement).style("height", "800px");
-
-	function update(source) {
+	// compute new layout
+	 function update(source) {
 
 		  // Compute the new tree layout.
 		  var nodes = tree.nodes(root).reverse(),
@@ -68,7 +161,7 @@ function drawTree(size, jsonsource, sectionID) {
 
 		  nodeEnter.append("circle")
 		      .attr("r", 1e-6)
-		      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+		      .attr("class", function(d) { return d._children? "coloured" : null});
 
 		  // Adding the links 
 		  var $a = nodeEnter.append("svg:a")
@@ -89,8 +182,9 @@ function drawTree(size, jsonsource, sectionID) {
 		      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
 		  nodeUpdate.select("circle")
-		      .attr("r", 4.5)
-		      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+	      		.attr("r", 4.5)
+	      		.attr("class", function(d) { return d._children? "coloured" : null});
+
 
 		  nodeUpdate.select("text")
 		      .style("fill-opacity", 1);
@@ -138,10 +232,14 @@ function drawTree(size, jsonsource, sectionID) {
 		    d.x0 = d.x;
 		    d.y0 = d.y;
 		  });
+		  
+		  
+		 
+		  
 		}
-
-		// Toggle children on click.
-		function click(d) {
+	 
+	// Toggle children on click.
+	 function click(d) {
 		  if (d.children) {
 		    d._children = d.children;
 		    d.children = null;
@@ -152,5 +250,47 @@ function drawTree(size, jsonsource, sectionID) {
 		  update(d);
 		}
 
+	// expand node and all of its children 
+	 function expandAllChildren(node) {
+			
+			
+			if(node._children) {
+				click(node);
+				node.children.forEach(expandAllChildren);
+			} else if(node.children){
+				node.children.forEach(expandAllChildren);
+			}
+			
+}
+
+	 function zoom() {
+		 
+		 var scale = d3.event.scale,
+		        translation = d3.event.translate,
+		        tbound = -height * scale,
+		        bbound = height * scale,
+		        lbound = (-width + margin.right) * scale,
+		        rbound = (width - margin.left) * scale;
+		    // limit translation to thresholds
+		    translation = [
+		        Math.max(Math.min(translation[0], rbound), lbound),
+		        Math.max(Math.min(translation[1], bbound), tbound)
+		    ];
+		    
+		   
+		    svg.attr("transform", "translate(" + translation + ")" + " scale(" + scale + ")");
+		    
+		}
+	
+
+	
+	
+	 root.children.forEach(collapse);
+	 update(root);
+	
+	d3.select(self.frameElement).style("height", "800px");
+	
+
+		
 	
 }
