@@ -221,7 +221,6 @@
 		<module>KnowWE-Plugin-Ontology-TermBrowser</module>
 		<module>KnowWE-Plugin-d3web-TermBrowser</module>
 		<module>KnowWE-Plugin-DiaFlux-Review</module>
-		<module>KnowWE-Plugin-Timeline</module>
 		<module>KnowWE-Plugin-Visualization</module>
 		<module>KnowWE-Plugin-TypeVis</module>
 	</modules>
