@@ -57,10 +57,20 @@ public class IncrementalTermReferenceCorrectionProvider implements CorrectionPro
 
 		for (Section<? extends SimpleDefinition> def : defs) {
 			Identifier termIdentifier = KnowWEUtils.getTermIdentifier(def);
-			double score = l.score(originalText, termIdentifier.getLastPathElement());
+			String termIdentifierElement = termIdentifier.getLastPathElement();
+			String originalTextRegex = originalText.replace(" ", ".*");
+
+			/* levenstein test */
+			double score = l.score(originalText, termIdentifierElement);
 			if (score >= -threshold) {
 				suggestions.add(new CorrectionProvider.Suggestion(
-						termIdentifier.getLastPathElement(), (int) score));
+						termIdentifierElement, (int) score));
+			}
+			/* infix test */
+			else if (termIdentifierElement.matches(".*" + originalTextRegex + ".*")) {
+				int infixScore = termIdentifierElement.length() - originalText.length();
+				suggestions.add(new CorrectionProvider.Suggestion(
+						termIdentifierElement, infixScore));
 			}
 		}
 
