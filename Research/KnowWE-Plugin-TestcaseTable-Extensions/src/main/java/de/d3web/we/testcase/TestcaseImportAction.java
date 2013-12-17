@@ -116,7 +116,7 @@ public class TestcaseImportAction extends AbstractAction {
 
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		nodesMap.put(sectionID, stcs);
-		Sections.replaceSections(context, nodesMap);
+		Sections.replaceSections(context, nodesMap).sendErrors(context);
 		context.getResponse().sendRedirect("Wiki.jsp?page=" + section.getTitle());
 	}
 

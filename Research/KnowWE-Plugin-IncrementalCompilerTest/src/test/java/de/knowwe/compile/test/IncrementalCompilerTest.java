@@ -43,6 +43,7 @@ import de.knowwe.compile.test.util.Query;
 import de.knowwe.compile.test.util.Vocabulary;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
+import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
@@ -214,8 +215,8 @@ public class IncrementalCompilerTest {
 		if (oldSection != null) {
 			Map<String, String> nodesMap = new HashMap<String, String>();
 			nodesMap.put(oldSection.getID(), newText);
-			Sections.replaceSections(TestUtils.createTestActionContext("",
-					""), nodesMap);
+			UserActionContext context = TestUtils.createTestActionContext("", "");
+			Sections.replaceSections(context, nodesMap).sendErrors(context);
 		}
 		else {
 			Logger.getLogger(getClass().getName()).severe("Unable to get section with text: " +

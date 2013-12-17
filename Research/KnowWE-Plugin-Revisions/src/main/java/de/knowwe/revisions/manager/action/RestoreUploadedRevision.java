@@ -65,7 +65,7 @@ public class RestoreUploadedRevision extends AbstractAction {
 		sectionsMap.put(s.getID(), s.getText().concat(preRestoreMarkup));
 
 		String message = getSectionsToUpdate(sectionsMap, context);
-		Sections.replaceSections(context, sectionsMap);
+		Sections.replaceSections(context, sectionsMap).sendErrors(context);
 
 		return message;
 	}

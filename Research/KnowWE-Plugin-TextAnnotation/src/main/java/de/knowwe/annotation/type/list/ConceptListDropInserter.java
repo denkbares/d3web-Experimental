@@ -26,6 +26,7 @@ import java.util.Map;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.parsing.Sections.ReplaceResult;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.termbrowser.DragDropEditInserter;
@@ -50,7 +51,9 @@ public class ConceptListDropInserter implements DragDropEditInserter<ConceptList
 					);
 			String result = "done";
 
-			Map<String, String> newSectionIDs = Sections.replaceSections(context, nodesMap);
+			ReplaceResult replaceResult = Sections.replaceSections(context, nodesMap);
+			replaceResult.sendErrors(context);
+			Map<String, String> newSectionIDs = replaceResult.getSectionMapping();
 			if (newSectionIDs != null && newSectionIDs.size() > 0) {
 				// Section<?> sectionNewVersion = Sections.getSection();
 				result = newSectionIDs.values().iterator().next();

@@ -64,7 +64,7 @@ public class DeleteConceptNameHeadlinesRefactoring extends AbstractAction {
 			String newText = text.replaceAll("^!!! *" + title + "\r?\n\r?\n", "");
 			replacementMap.put(article.getRootSection().getID(), newText);
 			try {
-				Sections.replaceSections(context, replacementMap);
+				Sections.replaceSections(context, replacementMap).sendErrors(context);
 			}
 			catch (IOException e) {
 				// TODO Auto-generated catch block

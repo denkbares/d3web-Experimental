@@ -75,7 +75,7 @@ public class OverrideLabelRefactoring extends AbstractAction {
 					String cleanedName = name.replaceAll("_", " ");
 					replacementMap.put(label.getID(), cleanedName);
 					try {
-						Sections.replaceSections(context, replacementMap);
+						Sections.replaceSections(context, replacementMap).sendErrors(context);
 					}
 					catch (IOException e) {
 						// TODO Auto-generated catch block

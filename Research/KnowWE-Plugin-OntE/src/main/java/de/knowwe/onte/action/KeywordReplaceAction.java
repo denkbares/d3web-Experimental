@@ -29,6 +29,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.KDOMReplaceTermNameAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.manchester.types.MisspelledSyntaxConstruct;
@@ -77,7 +78,7 @@ public class KeywordReplaceAction extends AbstractAction {
 		String newNodeText = originalText.replace(originalText, newText);
 
 		nodesMap.put(nodeID, newNodeText);
-		Sections.replaceSections(context, nodesMap);
+		Sections.replaceSections(context, nodesMap).sendErrors(context);
 
 		context.setContentType("text/html; charset=UTF-8");
 		context.getWriter().write("done");

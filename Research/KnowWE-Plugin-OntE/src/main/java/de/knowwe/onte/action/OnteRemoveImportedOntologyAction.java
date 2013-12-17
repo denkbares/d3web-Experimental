@@ -44,7 +44,7 @@ public class OnteRemoveImportedOntologyAction extends AbstractAction {
 
 				Map<String, String> nodesMap = new HashMap<String, String>();
 				nodesMap.put(section.getID(), "");
-				Sections.replaceSections(context, nodesMap);
+				Sections.replaceSections(context, nodesMap).sendErrors(context);
 				// mgr.replaceKDOMNodesSaveAndBuild(context, articleName,
 				// nodesMap);
 

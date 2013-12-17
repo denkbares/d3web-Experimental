@@ -29,6 +29,7 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.parsing.Sections.ReplaceResult;
 import de.knowwe.wisskont.RelationMarkup;
 import de.knowwe.wisskont.util.SectionUtils;
 
@@ -107,7 +108,9 @@ public class DeleteListEntryAction extends AbstractAction {
 		String result = "";
 		Map<String, String> replacementMap = new HashMap<String, String>();
 		replacementMap.put(relationMarkup.getID(), replacementText.toString());
-		Map<String, String> newSectionIDs = Sections.replaceSections(context, replacementMap);
+		ReplaceResult replaceResult = Sections.replaceSections(context, replacementMap);
+		replaceResult.sendErrors(context);
+		Map<String, String> newSectionIDs = replaceResult.getSectionMapping();
 		if (newSectionIDs != null && newSectionIDs.size() > 0) {
 			// we want to return the new id of the relation-markup section
 			result = newSectionIDs.values().iterator().next();

@@ -69,7 +69,7 @@ public class RestoreRevision extends AbstractAction {
 			sectionsMap.put(s.getID(), s.getText().concat(preRestoreMarkup));
 
 			String message = getSectionsToUpdate(sectionsMap, date, context);
-			Sections.replaceSections(context, sectionsMap);
+			Sections.replaceSections(context, sectionsMap).sendErrors(context);
 
 			return message;
 		}

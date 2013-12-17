@@ -123,7 +123,7 @@ public class ConceptRelationMarkupRefactoring {
 			Section<TripleMarkup> firstTriple = triples.get(0);
 			replacementMap.put(firstTriple.getID(), overallCodeBlob);
 			try {
-				Sections.replaceSections(user, replacementMap);
+				Sections.replaceSections(user, replacementMap).sendErrors(user);
 			}
 			catch (IOException e) {
 				// TODO Auto-generated catch block

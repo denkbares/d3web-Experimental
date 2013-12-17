@@ -103,7 +103,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 				nodesMap.put(section.getID(),
 						section.getText().replace(replacement,
 								createHiddenComment(replacement, possibleDelimiter, context)));
-				Sections.replaceSections(context, nodesMap);
+				Sections.replaceSections(context, nodesMap).sendErrors(context);
 
 				// .. and finally delete the page lock
 				Environment.getInstance().getWikiConnector().unlockArticle(articlename,

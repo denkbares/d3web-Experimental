@@ -64,7 +64,7 @@ public class ConceptDefinitionRefactoring extends AbstractAction {
 		}
 
 		try {
-			Sections.replaceSections(user, replacementMap);
+			Sections.replaceSections(user, replacementMap).sendErrors(user);
 		}
 		catch (IOException e) {
 			// TODO Auto-generated catch block

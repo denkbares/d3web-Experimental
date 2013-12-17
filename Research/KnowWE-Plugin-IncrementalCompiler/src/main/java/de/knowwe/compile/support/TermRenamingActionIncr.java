@@ -159,8 +159,7 @@ public class TermRenamingActionIncr extends AbstractAction {
 					nodesMap.put(section.getID(), replacement);
 
 				}
-				Sections.replaceSections(context,
-						nodesMap);
+				Sections.replaceSections(context, nodesMap).sendErrors(context);
 				success.add(articlename);
 			}
 			else {

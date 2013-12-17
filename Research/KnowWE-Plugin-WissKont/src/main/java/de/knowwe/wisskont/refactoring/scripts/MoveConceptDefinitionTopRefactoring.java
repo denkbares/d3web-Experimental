@@ -122,7 +122,7 @@ public class MoveConceptDefinitionTopRefactoring extends AbstractAction {
 					replacementMap.put(insertAfterSection.getID(), insertAfterSection.getText()
 							+ newText);
 					try {
-						Sections.replaceSections(context, replacementMap);
+						Sections.replaceSections(context, replacementMap).sendErrors(context);
 					}
 					catch (IOException e) {
 						// TODO Auto-generated catch block
