@@ -17,7 +17,9 @@ function drawTree(size, jsonsource, sectionID) {
 	
 	 var width = 960 - margin.right - margin.left,
     	height = 800 - margin.top - margin.bottom;
-   
+	 
+	 var depth;
+	 var fixedDepth = false;
 	if(size != null) {
 		width = size - margin.right - margin.left;
 	}
@@ -32,6 +34,7 @@ function drawTree(size, jsonsource, sectionID) {
 	var div = d3.select("#d3" + sectionID);
 	
 // create buttons
+	
 	
 	var expandButton = div.append("input")
 			.attr("type", "button")
@@ -103,6 +106,18 @@ function drawTree(size, jsonsource, sectionID) {
 					.style("font-size", fontsize+"px");
 				
 			})
+			
+	var fixDepth = div.append("input")
+			.attr("type" , "button")
+			.attr("id", "fixDepth"+sectionID)
+			.attr("class", "d3treeButton")
+			.attr("value", "fix depth")
+			.on("click", function (d){
+				
+				fixedDepth = true;
+				depth = 300;
+				
+			})
 	
 	var svg = div.append("svg")
 				.attr("id", "svg"+sectionID)
@@ -130,6 +145,7 @@ function drawTree(size, jsonsource, sectionID) {
 	    }
 	  }
 
+	 
 	// compute new layout                                    
 	 function update(source) {
 
@@ -140,9 +156,8 @@ function drawTree(size, jsonsource, sectionID) {
 		  var nodes = tree.nodes(root).reverse(),
 		      links = tree.links(nodes);
 
-		  
-		  // Normalize for fixed-depth.
-		  nodes.forEach(function(d) { d.y = d.depth * 300; });
+		  var sourcenode;
+			 
 
 		  // Update the nodes…
 		  var node = svg.selectAll("g.node")
@@ -153,17 +168,11 @@ function drawTree(size, jsonsource, sectionID) {
 		      .attr("class", "node")
 		      .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
 		      .attr("concept", function(d) {return d.concept})
-		      .attr("expanded", function(d) { 
-		    	  if(d.expanded=="true") {
-		    		  return true;
-		    	  } else {
-		    		  return false;
-		    	  }
-		      
-		      })
+		      .attr("expanded", "false")
 		      .on("click", click);
-
-		  nodeEnter.append("circle")
+		 
+		
+		nodeEnter.append("circle")
 		      .attr("r", 1e-6)
 		      
 
@@ -180,6 +189,40 @@ function drawTree(size, jsonsource, sectionID) {
 		  	.style("pointer-events", "auto")
 		  	.style("font-size", fontsize+"px");
 
+		var rootnode = jq$("g.node[concept='" + source.concept + "']")[0];
+		var rootIsExpanded = rootnode.getAttribute("expanded");
+		
+		if(fixedDepth == false) {
+		// compute depth and normalize nodes 
+			
+			for(var k = 0; k<nodes.length;k++) {
+				 if(nodes[k].concept==source.concept) {
+					 sourcenode = nodes[k];
+				 	}
+			}
+			
+			if(rootIsExpanded=="false") {
+						
+			depth = computeExpandDepth(sourcenode);
+		
+			
+
+		} else if(rootIsExpanded="true") {
+			
+			depth = computeCollapseDepth(sourcenode);
+			
+
+		}
+			
+		
+		} else {
+			depth = 250;
+		}
+		
+		nodes.forEach(function(d) { d.y = d.depth * depth; });
+		
+		
+		
 		  // Transition nodes to their new position.
 		  var nodeUpdate = node.transition()
 		      .duration(duration)
@@ -242,26 +285,24 @@ function drawTree(size, jsonsource, sectionID) {
 		  
 		  
 		  
-		  var rootnode = jq$("g.node[concept='" + source.concept + "']")[0];
-			 var text = jq$(rootnode).find("text");
-			 var rootIsExpanded = rootnode.getAttribute("expanded");
+		  
+			 var text = jq$(rootnode).find("text")[0];
+			 
 			 if(rootIsExpanded=="true") {
 				 rootnode.setAttribute("expanded", "false");
-				 text.attr("x", "10");
-				 text.attr("text-anchor", "start");
+				 text.setAttribute("x", "10");
+				 text.setAttribute("text-anchor", "start");
 			 } else if(rootIsExpanded=="false"){
 				 rootnode.setAttribute("expanded", "true");
-				 text.attr("x", "-10");
-				 text.attr("text-anchor", "end");
+				 text.setAttribute("x", "-10");
+				 text.setAttribute("text-anchor", "end");
 			 }
 			  
 			 svg.selectAll("g.node")
 			  	.attr("class", function(d) { return d._children? "node expandable" : "node"});
 			
-	
-		
-		  
-		 
+				  
+			 
 		  
 		}
 	 
@@ -289,7 +330,89 @@ function drawTree(size, jsonsource, sectionID) {
 			}
 			
 }
-
+	 
+// compute the necessary space between current and successor layer of the tree
+	 function computeExpandDepth(node) {
+		 
+		 if(node.depth==0) {
+			 
+			 return 150;
+		 }
+		 var sibblingNodes = new Array();
+		 var childNodes = node.children;
+		 var nodes = tree.nodes(root);
+		 var depth = node.depth;
+		 
+		 nodes.forEach(function(d) {
+			
+			if(d.depth==depth) {
+				 sibblingNodes.push(d);
+			 } 
+		 })
+		 
+		 
+		 
+		 // find maximal label length in current layer
+		 var maxLength = getMaximalLabelLength(sibblingNodes);
+		 // find maximal label length in last layer
+		 
+		 var maxLength1 = getMaximalLabelLength(childNodes);
+		 
+		 maxLength += maxLength1;
+		 var maxLength0 = computeCollapseDepth(node);
+		 if(maxLength<maxLength0) {
+			 return maxLength0;
+		 } else return maxLength;
+	 }
+	 
+	 function computeCollapseDepth(node) {
+		 
+		 if(node.depth==0) {
+			 
+			 return 150;
+		 }
+		 var sibblingNodes = new Array();
+		 var parentNodes = new Array();
+		 var nodes = tree.nodes(root);
+		 var depth = node.depth;
+		 
+		 nodes.forEach(function(d) {
+			
+			if(d.depth==depth) {
+				 sibblingNodes.push(d);
+			 } else if(d.depth==depth-1) {
+				 parentNodes.push(d);
+			 }
+		 })
+		 
+		 var maxLength = getMaximalLabelLength(sibblingNodes);
+		 // find maximal label length in last layer
+		 
+		 var maxLength2 = getMaximalLabelLength(parentNodes);
+		 
+		 maxLength += maxLength2;
+		 return maxLength;
+	 }
+	 
+	 // compute the maximal label length
+	 // param: node array 
+	 function getMaximalLabelLength(node) {
+		 var maxLength = 0;
+		 for(var k = 0; k<node.length;k++) {
+			 var concept = node[k].concept;
+			 var gNode = jq$("g[concept='"+node[k].concept+"']")[0];
+			 var text = jq$(gNode).find("text")[0];
+			 var length = text.getComputedTextLength();
+			 if(length>maxLength) {
+				 maxLength=length;
+			 }
+		 }
+		 
+		 return maxLength;
+	 }
+	 
+	 
+	 // implement the zoom functionality 
 	 function zoom() {
 		 
 		 var scale = d3.event.scale,
