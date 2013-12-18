@@ -31,7 +31,7 @@ function initDropableMarkupSection(element) {
 	element.droppable({
 		drop : function(event, ui) {
 			var termElement = ui.draggable;
-			var termnameDiv = termElement.find("div.termname");
+			var termnameDiv = termElement.find("div.termID");
 			var termname = termnameDiv.html();
 			termname = termname.replace(/<wbr>/g, "");
 			var markupElement = jq$(this).find("div.defaultMarkupFrame");
