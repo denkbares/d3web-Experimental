@@ -8,13 +8,12 @@
   stroke-width: 1.5px;
 }
 
-.node circle.coloured {
+.node.expandable circle {
 	fill: lightsteelblue;
 }
 
 .node text {
   font: sans-serif;
-  font-size: 15;
 }
 
 .link {

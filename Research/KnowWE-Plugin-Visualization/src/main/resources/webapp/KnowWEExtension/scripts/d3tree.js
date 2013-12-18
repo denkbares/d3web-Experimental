@@ -3,7 +3,7 @@ function drawTree(size, jsonsource, sectionID) {
 	// define layout 
 	
 	var margin = {top: 20, right: 120, bottom: 20, left: 20};
-    	
+    var fontsize = 10;
 	var i = 0,
     	duration = 750,
     	root;
@@ -31,23 +31,7 @@ function drawTree(size, jsonsource, sectionID) {
 
 	var div = d3.select("#d3" + sectionID);
 	
-	var svg = div.append("svg")
-				.attr("id", "svg"+sectionID)
-				.attr("min-width", width + margin.right + margin.left)
-				.attr("height", height + margin.top + margin.bottom)
-				.append("g")
-				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-	
-	// initialize zoom behaviour
-	
-	 d3.select("#svg"+sectionID)
-     .call(d3.behavior.zoom()
-     .scaleExtent([0.5, 5])
-     .on("zoom", zoom))
-	 .on("mouseclick.zoom", null);
-	
-	
-	// create buttons
+// create buttons
 	
 	var expandButton = div.append("input")
 			.attr("type", "button")
@@ -101,15 +85,10 @@ function drawTree(size, jsonsource, sectionID) {
 			.on("click", function (d){
 				
 				
-				var rootnode = svg.select("g.node")[0];
-				var text = jq$(rootnode).find("text")[0];
-				var fontsize = window.getComputedStyle(text).fontSize;
-				fontsize = parseFloat(fontsize);
-				fontsize *= 1.5;
+				fontsize = fontsize*1.1;
 				svg.selectAll("text")
-					.style("font-size", fontsize+"px");
+				.style("font-size", fontsize+"px");
 				
-				update(root);
 			})
 			
 	var decreaseLabelsButton = div.append("input")
@@ -119,16 +98,28 @@ function drawTree(size, jsonsource, sectionID) {
 			.attr("value", "Decrease label size")
 			.on("click", function (d){
 				
-				var rootnode = svg.select("g.node")[0];
-				var text = jq$(rootnode).find("text")[0];
-				var fontsize = window.getComputedStyle(text).fontSize;
-				fontsize = parseFloat(fontsize);
-				fontsize /= 1.5;
+				fontsize = fontsize/1.1;
 				svg.selectAll("text")
 					.style("font-size", fontsize+"px");
 				
-				update(root);
 			})
+	
+	var svg = div.append("svg")
+				.attr("id", "svg"+sectionID)
+				.attr("min-width", width + margin.right + margin.left)
+				.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	
+	// initialize zoom behaviour
+	
+	 d3.select("#svg"+sectionID)
+     .call(d3.behavior.zoom()
+     .scaleExtent([0.5, 5])
+     .on("zoom", zoom))
+	 .on("mouseclick.zoom", null);
+	
+	
 			
 	// collapse node and all of its children - update source afterwards
 	 function collapse(d) {
@@ -139,15 +130,19 @@ function drawTree(size, jsonsource, sectionID) {
 	    }
 	  }
 
-	// compute new layout
+	// compute new layout                                    
 	 function update(source) {
 
+		 
+		 
+		 
 		  // Compute the new tree layout.
 		  var nodes = tree.nodes(root).reverse(),
 		      links = tree.links(nodes);
 
+		  
 		  // Normalize for fixed-depth.
-		  nodes.forEach(function(d) { d.y = d.depth * 180; });
+		  nodes.forEach(function(d) { d.y = d.depth * 300; });
 
 		  // Update the nodes…
 		  var node = svg.selectAll("g.node")
@@ -157,11 +152,20 @@ function drawTree(size, jsonsource, sectionID) {
 		  var nodeEnter = node.enter().append("g")
 		      .attr("class", "node")
 		      .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+		      .attr("concept", function(d) {return d.concept})
+		      .attr("expanded", function(d) { 
+		    	  if(d.expanded=="true") {
+		    		  return true;
+		    	  } else {
+		    		  return false;
+		    	  }
+		      
+		      })
 		      .on("click", click);
 
 		  nodeEnter.append("circle")
 		      .attr("r", 1e-6)
-		      .attr("class", function(d) { return d._children? "coloured" : null});
+		      
 
 		  // Adding the links 
 		  var $a = nodeEnter.append("svg:a")
@@ -169,12 +173,12 @@ function drawTree(size, jsonsource, sectionID) {
 		  		  
 		  // Creating Node text labels
 		  $a.append("text")
-		  	.attr("x", function(d) { return d.children || d._children ? -10 : 10; })
+		  	.attr("x", function(d) { return d.children || d._children ? 10 : 10; })
 		  	.attr("dy", ".35em")
-		  	.attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
 		  	.text(function(d) { return d.concept; })
 		  	.style("fill-opacity", 1e-6)
-		  	.style("pointer-events", "auto");
+		  	.style("pointer-events", "auto")
+		  	.style("font-size", fontsize+"px");
 
 		  // Transition nodes to their new position.
 		  var nodeUpdate = node.transition()
@@ -183,8 +187,7 @@ function drawTree(size, jsonsource, sectionID) {
 
 		  nodeUpdate.select("circle")
 	      		.attr("r", 4.5)
-	      		.attr("class", function(d) { return d._children? "coloured" : null});
-
+	      		
 
 		  nodeUpdate.select("text")
 		      .style("fill-opacity", 1);
@@ -227,12 +230,36 @@ function drawTree(size, jsonsource, sectionID) {
 		      })
 		      .remove();
 
+		  
 		  // Stash the old positions for transition.
 		  nodes.forEach(function(d) {
 		    d.x0 = d.x;
 		    d.y0 = d.y;
 		  });
 		  
+		  // update position of all text labels
+		
+		  
+		  
+		  
+		  var rootnode = jq$("g.node[concept='" + source.concept + "']")[0];
+			 var text = jq$(rootnode).find("text");
+			 var rootIsExpanded = rootnode.getAttribute("expanded");
+			 if(rootIsExpanded=="true") {
+				 rootnode.setAttribute("expanded", "false");
+				 text.attr("x", "10");
+				 text.attr("text-anchor", "start");
+			 } else if(rootIsExpanded=="false"){
+				 rootnode.setAttribute("expanded", "true");
+				 text.attr("x", "-10");
+				 text.attr("text-anchor", "end");
+			 }
+			  
+			 svg.selectAll("g.node")
+			  	.attr("class", function(d) { return d._children? "node expandable" : "node"});
+			
+	
+		
 		  
 		 
 		  
