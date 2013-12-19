@@ -11,11 +11,11 @@ KNOWWE.d3webViz.createDiaFluxCity = function(kdomid, action, pickf){
 	KNOWWE.d3webViz.loadJSON(action, kdomid, renderCity);
 
 	function renderCity(city) {
-        KNOWWE.d3webViz.renderCity(city, kdomid);
+        KNOWWE.d3webViz.renderCity(city, kdomid, pickf);
     }
 }
 
-KNOWWE.d3webViz.renderCity = function(city, kdomid, dist, far) {
+KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
 
     var yaw = -46;
     var pitch = -21;
@@ -196,7 +196,7 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, dist, far) {
             var hit = scene.pick(coords.x, coords.y, {rayPick : true});
 
             if (hit) {
-                if (pickf) pickf(kdomid, hit.name);
+                if (pickf) pickf(kdomid, hit);
 //					picked(hit.name);
             } else { // Nothing picked
             }
@@ -300,8 +300,8 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, dist, far) {
 
 }
 
-KNOWWE.d3webViz.coveragePick = function(kdomid, flowString){
-	var matches = flowString.split("+++");
+KNOWWE.d3webViz.coveragePick = function(kdomid, hit){
+	var matches = hit.name.split("+++");
 	if (matches) {
 		var currentFlow = jq$("#pickResult" + kdomid).val(); 
 		
