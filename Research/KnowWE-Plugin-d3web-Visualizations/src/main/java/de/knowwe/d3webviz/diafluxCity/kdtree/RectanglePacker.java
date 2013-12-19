@@ -18,24 +18,16 @@
  */
 package de.knowwe.d3webviz.diafluxCity.kdtree;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.NavigableMap;
-import java.util.Random;
-import java.util.TreeMap;
-
-import javax.imageio.ImageIO;
 
 /**
  * 
@@ -69,7 +61,7 @@ public class RectanglePacker {
 
 		KDNode<Dimension2D> root = pack(dimensions, map);
 
-		printResult(root, "d:\\city");
+		printResult(root, "/Users/sebastian/Desktop/Test");
 
 	}
 

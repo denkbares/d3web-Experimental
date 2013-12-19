@@ -24,9 +24,9 @@ package de.knowwe.d3webviz.diafluxCity;
  */
 public class GLCity {
 
-	private final GLDistrict district;
+	private final GLBuilding district;
 
-	public GLCity(GLDistrict district) {
+	public GLCity(GLBuilding district) {
 		this.district = district;
 	}
 

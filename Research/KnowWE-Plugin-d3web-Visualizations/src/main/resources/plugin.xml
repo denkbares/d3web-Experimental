@@ -87,6 +87,10 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
+        <parameter id="css" value="d3webviz.css" />
+        <parameter id="script" value="city.js" />
+        <parameter id="script" value="d3webviz.js" />
+        <parameter id="script" value="scenejs.js" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
