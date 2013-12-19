@@ -456,7 +456,7 @@ public class DotRenderer {
 	 */
 	private static String checkLine(String line) {
 		// adds target-tag to every URL
-		if (line.matches("<a xlink:href=.*")) {
+		if (line.matches(".*<a xlink:href=.*")) {
 			line = line.substring(0, line.length() - 1) + " target=\"_top\">";
 		}
 		return line;
