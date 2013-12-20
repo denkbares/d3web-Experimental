@@ -19,6 +19,7 @@ import org.ontoware.rdf2go.model.Model;
 
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.strings.Strings;
+import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
@@ -59,7 +60,8 @@ public class DotRendererTest {
 		RDF2Go.register(new de.knowwe.rdf2go.modelfactory.SesameSwiftOwlimModelFactory());
 		Model model = RDF2Go.getModelFactory().createModel();
 		model.open();
-		rdfRepository = new Rdf2GoCore("http://localhost:8080/KnowWE/Wiki.jsp?page=", model);
+		rdfRepository = new Rdf2GoCore(Environment.DEFAULT_WEB,
+				"http://localhost:8080/KnowWE/Wiki.jsp?page=", model);
 		// rdfRepository.addNamespace("ns", bns);
 		// rdfRepository.addNamespace(LNS_ABBREVIATION, lns);
 		rdfRepository.addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
