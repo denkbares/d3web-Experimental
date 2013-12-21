@@ -21,7 +21,6 @@ package de.knowwe.rdfs.vis.markup;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
@@ -50,14 +49,13 @@ public class OntoVisSVGDownloadProvider implements ToolProvider {
 	protected Tool getDownloadTool(Section<?> section, UserContext userContext) {
 		// tool to provide download capability
 
-		if (SparqlVisType.getAnnotation(section, SparqlVisType.ANNOTATION_RENDERER).equals("d3")) {
-
+		String renderer = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_RENDERER);
+		if (renderer != null && renderer.equals("d3")) {
 			String jsAction = "downloadSVG('" + section.getID() + "')";
 			return new DefaultTool("KnowWEExtension/d3web/icon/download16.gif",
 					"Download .svg",
 					"Download the d3 graph as an .svg-file",
 					jsAction);
-
 		}
 
 		String jsAction = "window.location='action/OntoVisSVGDownload" +
