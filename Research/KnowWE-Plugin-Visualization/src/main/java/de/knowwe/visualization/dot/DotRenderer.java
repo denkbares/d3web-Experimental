@@ -18,21 +18,25 @@
  */
 package de.knowwe.visualization.dot;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.jdom.Attribute;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 import de.knowwe.visualization.ConceptNode;
 import de.knowwe.visualization.Edge;
@@ -40,6 +44,7 @@ import de.knowwe.visualization.GraphDataBuilder;
 import de.knowwe.visualization.GraphDataBuilder.NODE_TYPE;
 import de.knowwe.visualization.SubGraphData;
 import de.knowwe.visualization.util.FileUtils;
+import de.knowwe.visualization.util.SAXBuilderSingleton;
 import de.knowwe.visualization.util.Utils;
 
 /**
@@ -415,52 +420,58 @@ public class DotRenderer {
 	}
 
 	/**
-	 * Method, that adds the target-tag to every URL in the svg-file and if
-	 * requested changes the height and width of the graph.
+	 * Adds the target-tag to every URL in the svg-file
 	 * 
 	 * @created 01.08.2012
 	 * @param svg
 	 */
 	private static void prepareSVG(File svg) throws FileNotFoundException, IOException {
-		FileInputStream fs = null;
-		InputStreamReader in = null;
-		BufferedReader br = null;
-		StringBuffer sb = new StringBuffer();
-		String line;
+		try {
+			Document doc = SAXBuilderSingleton.getInstance().build(svg);
+			Element root = doc.getRootElement();
+			if (root == null) return;
 
-		fs = new FileInputStream(svg);
-		in = new InputStreamReader(fs);
-		br = new BufferedReader(in);
+			findAElements(root);
 
-		while (true) {
-			line = br.readLine();
-			if (line == null) break;
-			line = checkLine(line);
-			sb.append(line + "\n");
+			XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+			xmlOutputter.output(doc, new FileWriter(svg));
 		}
-
-		fs.close();
-		in.close();
-		br.close();
-
-		FileWriter fstream = new FileWriter(svg);
-		BufferedWriter outobj = new BufferedWriter(fstream);
-		outobj.write(sb.toString());
-		outobj.close();
+		catch (JDOMException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
+	 * Iterates through all the children of root to find all a-tag elements.
 	 * 
-	 * @created 20.08.2012
-	 * @param line
+	 * @created 21.12.2013
+	 * @param root
 	 */
-	private static String checkLine(String line) {
-		// adds target-tag to every URL
-		if (line.matches(".*<a xlink:href=.*")) {
-			line = line.substring(0, line.length() - 1) + " target=\"_top\">";
+	private static void findAElements(Element root) {
+		List<?> children = root.getChildren();
+		Iterator<?> iter = children.iterator();
+		while (iter.hasNext()) {
+			Element childElement = (Element) iter.next();
+			if (childElement.getName().equals("a")) {
+				addTargetAttribute(childElement);
+			}
+			else {
+				findAElements(childElement);
+			}
 		}
-		return line;
 	}
+
+	/**
+	 * Adds the target-attribute to the element.
+	 * 
+	 * @created 21.12.2013
+	 * @param element
+	 */
+	private static void addTargetAttribute(Element element) {
+		Attribute target = new Attribute("target", "_top");
+		element.setAttribute(target);
+	}
+
 
 	/**
 	 * 
