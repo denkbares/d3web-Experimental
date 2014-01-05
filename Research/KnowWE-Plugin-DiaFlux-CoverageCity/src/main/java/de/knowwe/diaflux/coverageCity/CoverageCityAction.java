@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2013 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.diaflux.coverageCity;
 
@@ -36,16 +36,17 @@ import de.d3web.diaflux.coverage.DefaultCoverageResult;
 import de.d3web.diaflux.coverage.DiaFluxCoverageTrace;
 import de.d3web.testcase.TestCaseUtils;
 import de.d3web.testcase.model.TestCase;
+import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.d3webviz.diafluxCity.GLCityGenerator;
 import de.knowwe.d3webviz.diafluxCity.metrics.Constant;
 import de.knowwe.d3webviz.diafluxCity.metrics.Metrics;
@@ -81,7 +82,7 @@ public class CoverageCityAction extends AbstractAction {
 			return;
 		}
 
-		Iterator<Article> iterator = KnowWEUtils.getCompilingArticles(section).iterator();
+		Iterator<Article> iterator = Compilers.getCompilingArticles(section).iterator();
 		if (!iterator.hasNext()) return;
 
 		Article article = iterator.next();
@@ -117,7 +118,7 @@ public class CoverageCityAction extends AbstractAction {
 		// if (result != null) return result;
 
 		Environment env = Environment.getInstance();
-		PackageManager packageManager = env.getPackageManager(coverageSec.getWeb());
+		PackageManager packageManager = Compilers.getPackageManager(coverageSec);
 
 		// Map<String, String> articles =
 		// Environment.getInstance().getWikiConnector().getAllArticles(
@@ -153,7 +154,7 @@ public class CoverageCityAction extends AbstractAction {
 			for (Section<?> potentioalTestCaseSection : sectionsCompiledByArticle) {
 				TestCaseProviderStorage testCaseProviderStorage =
 						(TestCaseProviderStorage) potentioalTestCaseSection.getSectionStore().getObject(
-								article,
+								Compilers.getCompiler(article, D3webCompiler.class),
 								TestCaseProviderStorage.KEY);
 				if (testCaseProviderStorage != null) {
 					for (TestCaseProvider testCaseProvider : testCaseProviderStorage.getTestCaseProviders()) {

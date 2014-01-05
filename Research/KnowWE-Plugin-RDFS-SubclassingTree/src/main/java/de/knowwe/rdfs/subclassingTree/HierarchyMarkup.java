@@ -26,7 +26,6 @@ public class HierarchyMarkup extends DefaultMarkupType {
 
 	public HierarchyMarkup(DefaultMarkup markup) {
 		super(markup);
-		setIgnorePackageCompile(true);
 	}
 
 	public static final String RELATION_ANNOTATION_KEY = "relation";
@@ -42,7 +41,5 @@ public class HierarchyMarkup extends DefaultMarkupType {
 
 	public HierarchyMarkup() {
 		super(m);
-		setIgnorePackageCompile(true);
-
 	}
 }

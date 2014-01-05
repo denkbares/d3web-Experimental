@@ -119,7 +119,7 @@ public abstract class OWLAPIRDFKnowledgeUnitCompileScript<T extends Type> extend
 		axiomCache.put(new CompileSection<T>(section), axioms);
 
 		// store messages found while compiling the current section
-		Messages.storeMessages(section.getArticle(), section, getClass(), messages);
+		Messages.storeMessages(section, getClass(), messages);
 		insertIntoOntology(section);
 
 		if (sync) {

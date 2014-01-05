@@ -44,7 +44,7 @@ public class MultimediaItem extends AbstractType {
 		content = new MultimediaItemContent(REGEX);
 		this.addChildType(content);
 
-		this.addSubtreeHandler(new MultimediaItemHandler());
+		this.addCompileScript(new MultimediaItemHandler());
 
 		// this.addSubtreeHandler(new GeneralSubtreeHandler<MultimediaItem>() {
 		//

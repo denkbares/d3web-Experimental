@@ -6,8 +6,8 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 08.12.2011
  */
@@ -24,13 +24,12 @@ public class PelletSparqlAsk extends DefaultMarkupType {
 	public PelletSparqlAsk() {
 		super(MARKUP);
 		this.setRenderer(new PelletAskRenderer());
-		this.setIgnorePackageCompile(true);
 	}
 
 	/**
 	 * Appends a simple how to use message to the output if the
 	 * {@link TagHandler} was used incorrectly.
-	 *
+	 * 
 	 * @created 20.09.2011
 	 * @return String The how to use message
 	 */

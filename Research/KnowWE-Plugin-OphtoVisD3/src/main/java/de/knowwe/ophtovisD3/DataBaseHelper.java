@@ -57,7 +57,8 @@ public class DataBaseHelper {
 
 		try {
 			startNode = URLDecoder.decode(startNode, "UTF-8");
-		} catch (UnsupportedEncodingException e1) {
+		}
+		catch (UnsupportedEncodingException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
@@ -68,17 +69,19 @@ public class DataBaseHelper {
 			table = Rdf2GoCore.getInstance().sparqlSelect(
 					"SELECT ?a WHERE {" + startNode + " lns:" + conType
 							+ " ?a}");
-		} else {
+		}
+		else {
 			table = Rdf2GoCore.getInstance().sparqlSelect(
 
-			"SELECT ?a WHERE { ?a  lns:" + conType + " " + startNode + "}");
+					"SELECT ?a WHERE { ?a  lns:" + conType + " " + startNode + "}");
 		}
 		for (QueryRow row : table) {
 			Node node = row.getValue("a");// .toString();// in der Hashmap das
 			String keyurl = Rdf2GoUtils.getLocalName(node); // Praedikat
 			try {
 				keyurl = URLDecoder.decode(keyurl, "UTF-8");
-			} catch (UnsupportedEncodingException e) {
+			}
+			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
 
@@ -101,7 +104,8 @@ public class DataBaseHelper {
 		if (from) {
 			table = Rdf2GoCore.getInstance().sparqlSelect(
 					"SELECT ?a WHERE { ?a lns:" + connection + " ?b}");
-		} else {
+		}
+		else {
 			table = Rdf2GoCore.getInstance().sparqlSelect(
 					"SELECT ?a WHERE { ?b lns:" + connection + " ?a}");
 		}
@@ -110,7 +114,8 @@ public class DataBaseHelper {
 			String keyurl = Rdf2GoUtils.getLocalName(node); // Praedikat
 			try {
 				keyurl = URLDecoder.decode(keyurl, "UTF-8");
-			} catch (UnsupportedEncodingException e) {
+			}
+			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
 
@@ -150,7 +155,8 @@ public class DataBaseHelper {
 		QueryResultTable table = null;
 		try {
 			concept = URLDecoder.decode(concept, "UTF-8");
-		} catch (UnsupportedEncodingException e1) {
+		}
+		catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		}
 		String sparqlConcept = createSparqlURI(concept);
@@ -159,7 +165,8 @@ public class DataBaseHelper {
 		if (reverse) {
 			table = Rdf2GoCore.getInstance().sparqlSelect(
 					"SELECT ?a ?b WHERE {  ?b ?a  " + sparqlConcept + "}");
-		} else {
+		}
+		else {
 			table = Rdf2GoCore.getInstance().sparqlSelect(
 					"SELECT ?a ?b WHERE {  " + sparqlConcept + " ?a ?b}");
 		}
@@ -175,7 +182,8 @@ public class DataBaseHelper {
 			node = queryRow.getValue("b");
 			String connectedNode = MarkupUtils.getConceptName(node)
 					.toExternalForm();
-			String[] pair = { connectionType, connectedNode };
+			String[] pair = {
+					connectionType, connectedNode };
 			if (!connectionType.contains("rdf-")) {
 				result.add(pair);
 			}
@@ -227,7 +235,8 @@ public class DataBaseHelper {
 
 		try {
 			return "lns:" + URLDecoder.decode(name, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -243,7 +252,8 @@ public class DataBaseHelper {
 					startConcept, connectionType, true);
 			if (!parent.isEmpty()) {
 				startConcept = parent.get(0);
-			} else {
+			}
+			else {
 				break;
 			}
 		} while (true);
@@ -257,10 +267,8 @@ public class DataBaseHelper {
 				concept, "unterkonzept", true);
 		matches.addAll(DataBaseHelper.getConnectedNodeNamesOfType(concept,
 				"unterkonzept", false));
-		if (matches.size() > 0)
-			return true;
-		else
-			return false;
+		if (matches.size() > 0) return true;
+		else return false;
 	}
 
 	public static Map<String, String> getAllObjectsConnectedBy(

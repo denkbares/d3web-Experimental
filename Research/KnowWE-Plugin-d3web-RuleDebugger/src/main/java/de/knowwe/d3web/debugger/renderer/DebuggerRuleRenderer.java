@@ -44,6 +44,7 @@ import de.d3web.we.kdom.rules.action.RuleAction;
 import de.d3web.we.object.QuestionReference;
 import de.d3web.we.object.SolutionReference;
 import de.d3web.we.utils.D3webUtils;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -52,7 +53,6 @@ import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * Renders rules to provide a debugging-layout.
@@ -64,15 +64,15 @@ public class DebuggerRuleRenderer implements Renderer {
 	@Override
 	public void render(Section<?> sec, UserContext user,
 			RenderResult string) {
-		Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
+		Article article = Compilers.getCompilingArticles(sec).iterator().next();
 		KnowledgeBase kb = D3webUtils.getKnowledgeBase(article.getWeb(), article.getTitle());
 		Session session = SessionProvider.getSession(user, kb);
 		Section<RuleAction> ruleAction = Sections.findSuccessor(sec,
 				RuleAction.class);
 		Rule r = null;
 		if (ruleAction != null) {
-			r = (Rule) KnowWEUtils.getStoredObject(article, ruleAction,
-					RuleContentType.ruleStoreKey);
+			r = (Rule) Compilers.getStoredObject(D3webUtils.getD3webCompiler(article), ruleAction,
+					RuleContentType.RULE_STORE_KEY);
 		}
 		String title = user.getTitle();
 

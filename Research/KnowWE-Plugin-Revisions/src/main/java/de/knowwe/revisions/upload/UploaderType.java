@@ -37,7 +37,6 @@ public class UploaderType extends DefaultMarkupType {
 
 	public UploaderType() {
 		super(m);
-		this.setIgnorePackageCompile(true);
 		this.setRenderer(new UploaderRenderer());
 	}
 }

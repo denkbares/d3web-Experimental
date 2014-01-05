@@ -19,7 +19,6 @@
 package de.knowwe.casetrain.info;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -30,15 +29,16 @@ import de.knowwe.casetrain.type.general.Title;
 import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Video;
 import de.knowwe.casetrain.util.Utils;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
  * 
@@ -58,10 +58,10 @@ public class Question extends SubblockMarkup {
 		this.addContentType(new QuestionType());
 		this.addContentType(new QuestionText());
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Question>() {
+		this.addCompileScript(new DefaultGlobalScript<Question>() {
 
 			@Override
-			public Collection<Message> create(Article article, Section<Question> s) {
+			public void compile(DefaultGlobalCompiler compiler, Section<Question> s) {
 
 				List<Message> messages = new ArrayList<Message>(0);
 
@@ -92,7 +92,7 @@ public class Question extends SubblockMarkup {
 							bundle.getString("QUESTION_TEXT")));
 				}
 
-				return messages;
+				Messages.storeMessages(s, getClass(), messages);
 			}
 		});
 	}

@@ -21,15 +21,15 @@
 package de.knowwe.compile.object;
 
 import de.d3web.strings.Strings;
-import de.knowwe.core.compile.terminology.TermRegistrationScope;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 
-public abstract class IncrementalTermReference extends SimpleReference {
+public abstract class IncrementalTermReference extends SimpleReference<DefaultGlobalCompiler> {
 
 	public IncrementalTermReference(Class<?> termObjectClass) {
-		super(TermRegistrationScope.GLOBAL, termObjectClass);
+		super(DefaultGlobalCompiler.class, termObjectClass);
 	}
 
 	@Override

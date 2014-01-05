@@ -33,7 +33,7 @@ import de.d3web.core.knowledge.InfoStore;
 import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.knowledge.terminology.info.Property;
-import de.knowwe.core.kdom.Article;
+import de.d3web.we.knowledgebase.D3webCompiler;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -43,6 +43,7 @@ import de.knowwe.d3web.property.PropertyDeclarationHandler;
 import de.knowwe.d3web.property.PropertyDeclarationType;
 import de.knowwe.d3web.property.PropertyObjectReference;
 import de.knowwe.d3web.property.PropertyType;
+import de.knowwe.rdf2go.Rdf2GoCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
@@ -55,7 +56,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 public class Rdf2GoPropertyHandler extends PropertyDeclarationHandler {
 
 	@Override
-	public Collection<Message> create(Article article, Section<PropertyDeclarationType> section) {
+	public Collection<Message> create(D3webCompiler compiler, Section<PropertyDeclarationType> section) {
 		// get Property
 		Section<PropertyType> propertySection = Sections.findSuccessor(section,
 				PropertyType.class);
@@ -74,7 +75,7 @@ public class Rdf2GoPropertyHandler extends PropertyDeclarationHandler {
 		if (namendObjectSection == null) {
 			return Messages.asList();
 		}
-		List<NamedObject> objects = getNamedObjects(article, namendObjectSection);
+		List<NamedObject> objects = getNamedObjects(compiler, namendObjectSection);
 		if (objects.isEmpty()) {
 			return Messages.asList();
 		}
@@ -91,27 +92,33 @@ public class Rdf2GoPropertyHandler extends PropertyDeclarationHandler {
 		if (content == null || content.trim().isEmpty()) {
 			return Messages.asList();
 		}
+		Collection<Rdf2GoCompiler> rdf2GoCompilers = Rdf2GoD3webUtils.getRdf2GoCompilers(compiler,
+				section);
+		for (Rdf2GoCompiler rdf2GoCompiler : rdf2GoCompilers) {
 
-		List<Statement> statements = new ArrayList<Statement>();
-		Rdf2GoCore core = Rdf2GoCore.getInstance();
-		for (NamedObject namedObject : objects) {
-			String externalForm = Rdf2GoD3webUtils.getIdentifierExternalForm(namedObject);
-			// lns:Identifier lns:has[Property] "propertyString"@Locale
-			URI identifierURI = Rdf2GoCore.getInstance().createlocalURI(externalForm);
-			URI propertyNameURI = Rdf2GoCore.getInstance().createlocalURI(
-					"has" + WordUtils.capitalize(property.getName()));
-			Literal contentLiteral;
-			if (locale == InfoStore.NO_LANGUAGE) {
-				contentLiteral = Rdf2GoCore.getInstance().createLiteral(content);
-			}
-			else {
-				contentLiteral = Rdf2GoCore.getInstance().createLanguageTaggedLiteral(content,
-						locale.getLanguage());
-			}
-			Rdf2GoUtils.addStatement(identifierURI, propertyNameURI, contentLiteral, statements);
+			List<Statement> statements = new ArrayList<Statement>();
+			Rdf2GoCore core = rdf2GoCompiler.getRdf2GoCore();
+			;
+			for (NamedObject namedObject : objects) {
+				String externalForm = Rdf2GoD3webUtils.getIdentifierExternalForm(namedObject);
+				// lns:Identifier lns:has[Property] "propertyString"@Locale
+				URI identifierURI = core.createlocalURI(externalForm);
+				URI propertyNameURI = core.createlocalURI(
+						"has" + WordUtils.capitalize(property.getName()));
+				Literal contentLiteral;
+				if (locale == InfoStore.NO_LANGUAGE) {
+					contentLiteral = core.createLiteral(content);
+				}
+				else {
+					contentLiteral = core.createLanguageTaggedLiteral(content,
+							locale.getLanguage());
+				}
+				Rdf2GoUtils.addStatement(core, identifierURI, propertyNameURI, contentLiteral,
+						statements);
 
+			}
+			core.addStatements(compiler, Rdf2GoUtils.toArray(statements));
 		}
-		core.addStatements(article, Rdf2GoUtils.toArray(statements));
 
 		return Messages.asList();
 	}

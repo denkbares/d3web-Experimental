@@ -114,7 +114,7 @@ public class TypeVisTypeRenderer extends DefaultMarkupRenderer {
 	 */
 	private String getMaster(UserContext user, Section<?> section) {
 		return TypeVisType.getAnnotation(section,
-				PackageManager.ANNOTATION_MASTER);
+				PackageManager.MASTER_ATTRIBUTE_NAME);
 	}
 
 	private String getSuccessors(Section<?> section) {

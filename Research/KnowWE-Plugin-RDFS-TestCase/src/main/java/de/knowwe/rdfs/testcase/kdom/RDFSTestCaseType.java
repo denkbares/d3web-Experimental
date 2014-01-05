@@ -45,8 +45,7 @@ public class RDFSTestCaseType extends DefaultMarkupType {
 
 	public RDFSTestCaseType() {
 		super(MARKUP);
-		this.setIgnorePackageCompile(true);
-		this.addSubtreeHandler(new RDFSTestCaseHandler());
+		this.addCompileScript(new RDFSTestCaseHandler());
 		this.setRenderer(new RDFSTestCaseRenderer());
 	}
 

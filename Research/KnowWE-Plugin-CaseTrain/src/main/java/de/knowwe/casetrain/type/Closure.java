@@ -21,7 +21,6 @@
 package de.knowwe.casetrain.type;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import de.knowwe.casetrain.type.general.BlockMarkupType;
@@ -31,12 +30,13 @@ import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Link;
 import de.knowwe.casetrain.type.multimedia.Video;
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
+import de.knowwe.core.report.Messages;
 
 /**
  * 
@@ -56,10 +56,10 @@ public class Closure extends BlockMarkupType {
 		this.addContentType(new Link());
 		this.addContentType(new Audio());
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Closure>() {
+		this.addCompileScript(new DefaultGlobalScript<Closure>() {
 
 			@Override
-			public Collection<Message> create(Article article, Section<Closure> s) {
+			public void compile(DefaultGlobalCompiler compiler, Section<Closure> s) {
 
 				List<Message> messages = new ArrayList<Message>(0);
 
@@ -81,8 +81,9 @@ public class Closure extends BlockMarkupType {
 					messages.add(Utils.missingPictureNotice(Closure.class.getSimpleName()));
 				}
 
-				return messages;
+				Messages.storeMessages(s, getClass(), messages);
 			}
+
 		});
 	}
 

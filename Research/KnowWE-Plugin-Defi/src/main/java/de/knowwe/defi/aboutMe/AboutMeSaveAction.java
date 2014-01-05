@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.defi.aboutMe;
 
@@ -24,9 +24,9 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletResponse;
 
 import de.knowwe.core.ArticleManager;
-import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.defi.utils.ReplaceSectionUtils;
@@ -34,7 +34,7 @@ import de.knowwe.defi.utils.ReplaceSectionUtils;
 /**
  * The AboutMeSaveAction stores the information provided in the AboutMe-Edit
  * view into the article named after the user's name.
- *
+ * 
  * @author smark
  * @created 25.01.2011
  */
@@ -55,7 +55,7 @@ public class AboutMeSaveAction extends AbstractAction {
 		String username = context.getUserName();
 		String web = context.getWeb();
 
-		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
+		ArticleManager mgr = Compilers.getDefaultArticleManager(web);
 		Section<?> section = mgr.getArticle(title).getRootSection();
 		Section<AboutMe> child = Sections.findSuccessor(section, AboutMe.class);
 

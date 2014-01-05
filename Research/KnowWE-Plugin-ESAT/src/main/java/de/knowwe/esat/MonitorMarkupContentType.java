@@ -26,17 +26,16 @@ import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.strings.Identifier;
+import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.object.SolutionDefinition;
+import de.d3web.we.reviseHandler.D3webHandler;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
-import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * 
@@ -51,20 +50,20 @@ public class MonitorMarkupContentType extends AbstractType {
 	public MonitorMarkupContentType() {
 		this.setSectionFinder(new AllTextFinderTrimmed());
 		this.addChildType(new MonitorSolutionDefinition());
-		this.addSubtreeHandler(Priority.HIGHEST, new
+		this.addCompileScript(Priority.HIGHEST, new
 				CreateSquareQuestionTermHandler());
-		this.addSubtreeHandler(new CreateMonitorKnowledgeHandler());
+		this.addCompileScript(new CreateMonitorKnowledgeHandler());
 	}
 
-	class CreateSquareQuestionTermHandler extends SubtreeHandler<MonitorMarkupContentType> {
+	class CreateSquareQuestionTermHandler extends D3webHandler<MonitorMarkupContentType> {
 
 		@Override
-		public Collection<Message> create(Article article, Section<MonitorMarkupContentType> section) {
+		public Collection<Message> create(D3webCompiler compiler, Section<MonitorMarkupContentType> section) {
 			Section<SolutionDefinition> solutionDef = Sections.findSuccessor(section,
 					SolutionDefinition.class);
-			Solution solution = solutionDef.get().getTermObject(article, solutionDef);
+			Solution solution = solutionDef.get().getTermObject(compiler, solutionDef);
 			KnowledgeBase knowledgeBase = solution.getKnowledgeBase();
-			TerminologyManager terminologyHandler = KnowWEUtils.getTerminologyManager(article);
+			TerminologyManager terminologyHandler = compiler.getTerminologyManager();
 			Class<?> termObjectClass = QuestionNum.class;
 
 			// create width variable
@@ -77,7 +76,7 @@ public class MonitorMarkupContentType extends AbstractType {
 			Identifier termIdentifierWidth = new Identifier(solutionDef.get().getTermName(
 					solutionDef)
 					+ "_width");
-			terminologyHandler.registerTermDefinition(section, termObjectClass, termIdentifierWidth);
+			terminologyHandler.registerTermDefinition(compiler, section, termObjectClass, termIdentifierWidth);
 
 			// create height variable
 			QuestionNum qHeight = new QuestionNum(knowledgeBase, solution.getName() + "_height");
@@ -89,8 +88,8 @@ public class MonitorMarkupContentType extends AbstractType {
 			Identifier termIdentifierHeigth = new Identifier(solutionDef.get().getTermName(
 					solutionDef)
 					+ "_height");
-			terminologyHandler.registerTermDefinition(section, termObjectClass,
-					termIdentifierHeigth);
+			terminologyHandler.registerTermDefinition(compiler, section,
+					termObjectClass, termIdentifierHeigth);
 
 			// create area variable
 			QuestionNum qSquare = new QuestionNum(knowledgeBase, solution.getName() + "_a");
@@ -102,7 +101,7 @@ public class MonitorMarkupContentType extends AbstractType {
 			Identifier termIdentifier = new Identifier(solutionDef.get().getTermName(
 					solutionDef)
 					+ "_a");
-			terminologyHandler.registerTermDefinition(section, termObjectClass, termIdentifier);
+			terminologyHandler.registerTermDefinition(compiler, section, termObjectClass, termIdentifier);
 
 			// create area variable
 			QuestionNum qQuotient = new QuestionNum(knowledgeBase, solution.getName() + "_q");
@@ -114,7 +113,7 @@ public class MonitorMarkupContentType extends AbstractType {
 			Identifier termIdentifierQ = new Identifier(solutionDef.get().getTermName(
 					solutionDef)
 					+ "_q");
-			terminologyHandler.registerTermDefinition(section, termObjectClass, termIdentifierQ);
+			terminologyHandler.registerTermDefinition(compiler, section, termObjectClass, termIdentifierQ);
 
 			return new ArrayList<Message>(0);
 		}

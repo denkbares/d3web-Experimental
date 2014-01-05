@@ -68,6 +68,6 @@ public class CommentModule implements Instantiation {
 	}
 
 	@Override
-	public void init() {
+	public void init(String web) {
 	}
 }

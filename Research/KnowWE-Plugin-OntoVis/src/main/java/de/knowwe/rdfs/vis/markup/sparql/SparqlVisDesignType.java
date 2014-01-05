@@ -39,7 +39,6 @@ public class SparqlVisDesignType extends DefaultMarkupType {
 	
 	public SparqlVisDesignType() {
 		super(MARKUP); 
-		this.setIgnorePackageCompile(true);
 	}
 
 }

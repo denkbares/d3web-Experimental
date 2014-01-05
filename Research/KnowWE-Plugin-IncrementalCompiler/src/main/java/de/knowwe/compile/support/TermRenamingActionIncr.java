@@ -100,7 +100,7 @@ public class TermRenamingActionIncr extends AbstractAction {
 			articleSecs.add(section);
 		}
 
-		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
+		ArticleManager mgr = Environment.getInstance().getDefaultArticleManager(web);
 		Set<String> failures = new HashSet<String>();
 		Set<String> success = new HashSet<String>();
 		renameTerms(allTerms, replacement, mgr, context, failures,
@@ -159,7 +159,8 @@ public class TermRenamingActionIncr extends AbstractAction {
 					nodesMap.put(section.getID(), replacement);
 
 				}
-				Sections.replaceSections(context, nodesMap).sendErrors(context);
+				Sections.replaceSections(context,
+						nodesMap).sendErrors(context);
 				success.add(articlename);
 			}
 			else {

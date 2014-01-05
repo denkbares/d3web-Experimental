@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import de.knowwe.core.ArticleManager;
+import de.knowwe.core.DefaultArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
@@ -35,8 +36,8 @@ import de.knowwe.core.kdom.parsing.Section;
  */
 public class UploadedRevision extends AbstractRevision {
 
-	private HashMap<String, String> articles;
-	private String filename;
+	private final HashMap<String, String> articles;
+	private final String filename;
 
 	/**
 	 * @param web
@@ -53,7 +54,7 @@ public class UploadedRevision extends AbstractRevision {
 
 	@Override
 	protected void createArticleManager() {
-		articleManager = new ArticleManager(Environment.getInstance(), web);
+		articleManager = new DefaultArticleManager(Environment.getInstance(), web);
 
 		for (String title : articles.keySet()) {
 			String text = articles.get(title);
@@ -75,7 +76,7 @@ public class UploadedRevision extends AbstractRevision {
 	public HashMap<String, Integer> compareWithCurrentState() {
 		HashMap<String, Integer> result = new HashMap<String, Integer>();
 
-		ArticleManager stdAM = Environment.getInstance().getArticleManager(web);
+		ArticleManager stdAM = Environment.getInstance().getDefaultArticleManager(web);
 		HashSet<Article> unprocessedStdArticles = new HashSet<Article>(stdAM.getArticles());
 
 		for (Article article : getArticleManager().getArticles()) {

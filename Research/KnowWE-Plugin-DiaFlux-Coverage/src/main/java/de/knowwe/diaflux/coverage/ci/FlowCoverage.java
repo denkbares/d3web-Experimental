@@ -18,7 +18,7 @@
  */
 package de.knowwe.diaflux.coverage.ci;
 
-import java.util.List;
+import java.util.Collection;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.Flow;
@@ -30,6 +30,7 @@ import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
 import de.d3web.testing.TestParameter;
 import de.knowwe.core.Environment;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.diaflux.coverage.DiaFluxCoverageType;
@@ -41,22 +42,21 @@ import de.knowwe.diaflux.coverage.DiaFluxCoverageType;
  */
 public class FlowCoverage extends KBTest {
 
-	
-	
 	public FlowCoverage() {
-		this.addParameter("param1", TestParameter.Type.String, TestParameter.Mode.Mandatory, "description param1");
-		this.addParameter("param2", TestParameter.Type.String, TestParameter.Mode.Mandatory, "description param2");
+		this.addParameter("param1", TestParameter.Type.String, TestParameter.Mode.Mandatory,
+				"description param1");
+		this.addParameter("param2", TestParameter.Type.String, TestParameter.Mode.Mandatory,
+				"description param2");
 	}
-	
+
 	@Override
 	public Message execute(KnowledgeBase kb, String[] args, String[]... ignores) {
 
 		String packageName = args[1];
 
-		Environment env = Environment.getInstance();
-		PackageManager packageManager = env.getPackageManager(Environment.DEFAULT_WEB);
+		PackageManager packageManager = Compilers.getDefaultPackageManager(Environment.DEFAULT_WEB);
 
-		List<Section<?>> sectionsOfPackage = packageManager.getSectionsOfPackage(packageName);
+		Collection<Section<?>> sectionsOfPackage = packageManager.getSectionsOfPackage(packageName);
 
 		CoverageResult result = null;
 		for (Section<?> section : sectionsOfPackage) {
@@ -90,7 +90,6 @@ public class FlowCoverage extends KBTest {
 
 		}
 	}
-
 
 	@Override
 	public Class<KnowledgeBase> getTestObjectClass() {

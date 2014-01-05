@@ -24,11 +24,11 @@ import java.io.IOException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.test.util.Query;
@@ -41,6 +41,7 @@ import de.knowwe.rdfs.test.util.Vocabulary;
  * @author Jochen Reutelshoefer
  * @created Sept 21, 2011
  */
+@Ignore
 public class SubPropertyOfTest {
 
 	private final Rdf2GoCore core = Rdf2GoCore.getInstance();
@@ -50,7 +51,6 @@ public class SubPropertyOfTest {
 	@BeforeClass
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
-		PackageManager.overrideAutocompileArticle(true);
 		TestArticleManager.getArticle(TESTFILE);
 	}
 

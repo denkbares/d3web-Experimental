@@ -39,7 +39,7 @@ public class AbstractKnowledgeUnitType<T extends AbstractKnowledgeUnitType<T>> e
 	public AbstractKnowledgeUnitType() {
 		Extension[] exts = PluginManager.getInstance().getExtensions(
 				Plugins.EXTENDED_PLUGIN_ID,
-				Plugins.EXTENDED_POINT_COMPILESCRIPT);
+				Plugins.EXTENDED_POINT_IncrementalCompileScript);
 		for (Extension extension : exts) {
 			String parameter = extension.getParameter("scope");
 			String thisClassName = this.getClass().getCanonicalName();

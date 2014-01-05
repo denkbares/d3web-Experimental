@@ -19,18 +19,17 @@
 package de.knowwe.rdfs.testcase.kdom;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.compile.Compilers;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.validator.Validator;
@@ -43,24 +42,28 @@ import de.knowwe.rdfs.testcase.RDFSTestCase;
  * @author Sebastian Furth
  * @created 20.12.2011
  */
-public class RDFSTestCaseHandler extends SubtreeHandler<RDFSTestCaseType> {
+public class RDFSTestCaseHandler extends DefaultGlobalScript<RDFSTestCaseType> {
 
 	@Override
-	public Collection<Message> create(Article article, Section<RDFSTestCaseType> section) {
+	public void compile(DefaultGlobalCompiler compiler, Section<RDFSTestCaseType> section) {
 
 		// Get name
 		String name = DefaultMarkupType.getAnnotation(section,
 				RDFSTestCaseType.ANNOTATION_NAME);
 
 		if (name == null) {
-			return Messages.asList(Messages.error("The test case has no name!"));
+			Messages.storeMessage(section, this.getClass(),
+					Messages.error("The test case has no name!"));
+			return;
 		}
 
 		// Get and validate SPARQL-Query
 		Section<SPARQLQueryType> sparqlSection = Sections.findSuccessor(section,
 				SPARQLQueryType.class);
 		if (sparqlSection == null) {
-			return Messages.asList(Messages.syntaxError("Unable to find SPARQL-Query! Check the syntax!"));
+			Messages.storeMessage(section, this.getClass(),
+					Messages.syntaxError("Unable to find SPARQL-Query! Check the syntax!"));
+			return;
 		}
 		String sparqlQuery = SPARQLQueryType.getSPARQLQuery(sparqlSection);
 		ValidatorResult validation = Validator.validate(Rdf2GoCore.getInstance(), sparqlQuery);
@@ -71,7 +74,8 @@ public class RDFSTestCaseHandler extends SubtreeHandler<RDFSTestCaseType> {
 
 				messages.add(Messages.syntaxError(e.getLocalizedMessage()));
 			}
-			return messages;
+			Messages.storeMessages(section, this.getClass(), messages);
+			return;
 		}
 
 		// create new test case
@@ -82,7 +86,9 @@ public class RDFSTestCaseHandler extends SubtreeHandler<RDFSTestCaseType> {
 				Sections.findSuccessorsOfType(section, ExpectedBindingType.class);
 
 		if (expectedBindings == null || expectedBindings.isEmpty()) {
-			return Messages.asList(Messages.syntaxError("Unable to find expected bindings! Check the syntax!"));
+			Messages.storeMessage(section, this.getClass(),
+					Messages.syntaxError("Unable to find expected bindings! Check the syntax!"));
+			return;
 		}
 
 		for (Section<ExpectedBindingType> expectedBinding : expectedBindings) {
@@ -91,8 +97,10 @@ public class RDFSTestCaseHandler extends SubtreeHandler<RDFSTestCaseType> {
 			List<Section<ValueType>> values =
 					Sections.findSuccessorsOfType(expectedBinding, ValueType.class);
 			if (values == null || values.isEmpty()) {
-				return Messages.asList(Messages.syntaxError("There is no value in binding: "
-						+ expectedBinding.getText()));
+				Messages.storeMessage(section, this.getClass(),
+						Messages.syntaxError("There is no value in binding: "
+								+ expectedBinding.getText()));
+				return;
 			}
 
 			// create binding object, add values and add it to the test case
@@ -110,15 +118,17 @@ public class RDFSTestCaseHandler extends SubtreeHandler<RDFSTestCaseType> {
 				PlainText.class);
 		for (Section<PlainText> plainText : plainTexts) {
 			if (!plainText.getText().matches("\\s*")) {
-				return Messages.asList(Messages.syntaxError("There is an syntax errors in the expected binding: "
-						+ plainText.getText().trim()));
+				Messages.storeMessage(section, this.getClass(),
+						Messages.syntaxError("There is an syntax errors in the expected binding: "
+								+ plainText.getText().trim()));
+				return;
 			}
 		}
 
 		// save RDFS test case in KnowWE's object store
 		String key = RDFSTestCaseType.MARKUP_NAME + testCase.getName();
-		KnowWEUtils.storeObject(article, section, key, testCase);
+		Compilers.storeObject(section, key, testCase);
 
-		return Collections.emptyList();
 	}
+
 }

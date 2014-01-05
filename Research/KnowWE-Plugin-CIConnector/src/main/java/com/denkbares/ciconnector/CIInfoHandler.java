@@ -18,12 +18,11 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
 import de.knowwe.core.Environment;
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.wikiConnector.WikiAttachment;
-import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
@@ -31,7 +30,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
  * @author Sebastian Furth
  * @created 17.12.2012
  */
-public class CIInfoHandler extends RDF2GoSubtreeHandler<CIInfoType> {
+public class CIInfoHandler extends DefaultGlobalScript<CIInfoType> {
 
 	private static final String EL_PLUGIN = "plugin";
 	private static final String EL_DESCRIPTION = "description";
@@ -47,24 +46,26 @@ public class CIInfoHandler extends RDF2GoSubtreeHandler<CIInfoType> {
 	private static final String ATT_AUTHOR = "author";
 
 	@Override
-	public Collection<Message> create(Article article, Section<CIInfoType> section) {
+	public void compile(DefaultGlobalCompiler compiler, Section<CIInfoType> section) {
 
 		try {
-			Collection<CIInfo> infos = getCIInfos(article);
-			createTriples(article, infos);
+			Collection<CIInfo> infos = getCIInfos();
+			createTriples(section, infos);
 		}
 		catch (IOException e) {
-			return Messages.asList(Messages.warning("Unable to load CI-Info"));
+			Messages.storeMessage(section, getClass(), Messages.warning("Unable to load CI-Info"));
+			return;
 		}
 		catch (JDOMException e) {
-			return Messages.asList(Messages.warning("Unable to load CI-Info"));
+			Messages.storeMessage(section, getClass(), Messages.warning("Unable to load CI-Info"));
+			return;
 		}
 
-		return Messages.noMessage();
+		Messages.clearMessages(section, getClass());
 
 	}
 
-	private void createTriples(Article article, Collection<CIInfo> infos) {
+	private void createTriples(Section<?> section, Collection<CIInfo> infos) {
 
 		Rdf2GoCore core = Rdf2GoCore.getInstance();
 
@@ -86,40 +87,40 @@ public class CIInfoHandler extends RDF2GoSubtreeHandler<CIInfoType> {
 
 			// lns:Plugin-X rdf:Type lns:Plugin
 			URI pluginURI = core.createlocalURI(info.getPlugin());
-			core.addStatements(article, core.createStatement(pluginURI, RDF.type, pluginTypeURI));
-			core.addStatements(article, core.createStatement(pluginURI, hasIDURI,
+			core.addStatements(section, core.createStatement(pluginURI, RDF.type, pluginTypeURI));
+			core.addStatements(section, core.createStatement(pluginURI, hasIDURI,
 					core.createLiteral(info.getPlugin())));
 
 			// lns:Plugin-X lns:hasDescription "description"
-			core.addStatements(article, core.createStatement(pluginURI, hasDescriptionURI,
+			core.addStatements(section, core.createStatement(pluginURI, hasDescriptionURI,
 					core.createLiteral(info.getDescription())));
 
 			// changes...
 			for (Change change : info.getChanges()) {
 				BlankNode changeURI = core.createBlankNode();
-				core.addStatements(article,
+				core.addStatements(section,
 						core.createStatement(changeURI, RDF.type, changeTypeURI));
-				core.addStatements(article, core.createStatement(changeURI, hasTimeStampURI,
+				core.addStatements(section, core.createStatement(changeURI, hasTimeStampURI,
 						core.createLiteral(change.getTimestamp())));
-				core.addStatements(article, core.createStatement(changeURI, hasRevisionURI,
+				core.addStatements(section, core.createStatement(changeURI, hasRevisionURI,
 						core.createLiteral(change.getRevision())));
-				core.addStatements(article, core.createStatement(changeURI, hasAuthorURI,
+				core.addStatements(section, core.createStatement(changeURI, hasAuthorURI,
 						core.createLiteral(change.getAuthor())));
-				core.addStatements(article, core.createStatement(changeURI, hasCommitTextURI,
+				core.addStatements(section, core.createStatement(changeURI, hasCommitTextURI,
 						core.createLiteral(change.getCommitText())));
-				core.addStatements(article,
+				core.addStatements(section,
 						core.createStatement(pluginURI, hasChangeURI, changeURI));
 			}
 
 			// stats...
 			for (Entry<String, String> stat : info.getStat().entrySet()) {
 				BlankNode statURI = core.createBlankNode();
-				core.addStatements(article, core.createStatement(statURI, RDF.type, statTypeURI));
-				core.addStatements(article, core.createStatement(statURI, hasKeyURI,
+				core.addStatements(section, core.createStatement(statURI, RDF.type, statTypeURI));
+				core.addStatements(section, core.createStatement(statURI, hasKeyURI,
 						core.createLiteral(stat.getKey())));
-				core.addStatements(article, core.createStatement(statURI, hasValueURI,
+				core.addStatements(section, core.createStatement(statURI, hasValueURI,
 						core.createLiteral(stat.getValue())));
-				core.addStatements(article, core.createStatement(pluginURI, hasStatURI, statURI));
+				core.addStatements(section, core.createStatement(pluginURI, hasStatURI, statURI));
 			}
 
 			core.commit();
@@ -128,7 +129,7 @@ public class CIInfoHandler extends RDF2GoSubtreeHandler<CIInfoType> {
 
 	}
 
-	private Collection<CIInfo> getCIInfos(Article article) throws IOException, JDOMException {
+	private Collection<CIInfo> getCIInfos() throws IOException, JDOMException {
 
 		Collection<CIInfo> result = new LinkedList<CIInfo>();
 		Collection<WikiAttachment> attachments =
@@ -190,5 +191,11 @@ public class CIInfoHandler extends RDF2GoSubtreeHandler<CIInfoType> {
 		}
 
 		return result;
+	}
+
+	@Override
+	public void destroy(DefaultGlobalCompiler compiler, Section<CIInfoType> section) {
+		// TODO Auto-generated method stub
+
 	}
 }

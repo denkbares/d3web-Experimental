@@ -119,7 +119,7 @@ public class RDFSUtil {
 
 		Extension[] exts = PluginManager.getInstance().getExtensions(
 				Plugins.EXTENDED_PLUGIN_ID,
-				Plugins.EXTENDED_POINT_TERMINOLOGY);
+				Plugins.EXTENDED_POINT_Terminology);
 		for (Extension extension : exts) {
 			Object o = extension.getSingleton();
 

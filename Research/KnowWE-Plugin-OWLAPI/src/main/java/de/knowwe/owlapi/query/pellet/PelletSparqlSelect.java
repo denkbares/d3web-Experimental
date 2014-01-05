@@ -6,8 +6,8 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 08.12.2011
  */
@@ -24,7 +24,6 @@ public class PelletSparqlSelect extends DefaultMarkupType {
 	public PelletSparqlSelect() {
 		super(MARKUP);
 		this.setRenderer(new PelletSelectRenderer());
-		this.setIgnorePackageCompile(true);
 	}
 
 	/**

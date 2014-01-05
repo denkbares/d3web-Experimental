@@ -66,7 +66,7 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 			return;
 		}
 
-		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
+		ArticleManager mgr = Environment.getInstance().getDefaultArticleManager(web);
 		Collection<Article> articles = mgr.getArticles();
 		RenderResult anchors = new RenderResult(user);
 		RenderResult concepts = new RenderResult(user);

@@ -623,7 +623,7 @@ public class AxiomFactory {
 
 			if (r.isObjectProperty(restrictionSection)) {
 				OWLEntity entity = getOWLAPIEntity(r.getObjectProperty(restrictionSection),
-								OWLObjectProperty.class);
+						OWLObjectProperty.class);
 				exp.add((OWLObjectProperty) entity);
 			}
 		}

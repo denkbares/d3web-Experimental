@@ -93,7 +93,7 @@ public class RestoreUploadedRevision extends AbstractAction {
 
 			if (version != -1) {
 				// page has changes
-				Article currentArticle = Environment.getInstance().getArticleManager(
+				Article currentArticle = Environment.getInstance().getDefaultArticleManager(
 						context.getWeb()).getArticle(title);
 				messages.append("<p class=\"box ok\">Article '" + title + "' ");
 				if (version != -2) {

@@ -27,8 +27,8 @@ import com.wcohen.ss.Levenstein;
 import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
+import de.knowwe.core.compile.terminology.TermCompiler;
 import de.knowwe.core.correction.CorrectionProvider;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
@@ -37,7 +37,7 @@ import de.knowwe.core.utils.KnowWEUtils;
 public class IncrementalTermReferenceCorrectionProvider implements CorrectionProvider {
 
 	@Override
-	public List<CorrectionProvider.Suggestion> getSuggestions(Article article, Section<?> section, int threshold) {
+	public List<CorrectionProvider.Suggestion> getSuggestions(TermCompiler compiler, Section<?> section, int threshold) {
 		List<CorrectionProvider.Suggestion> suggestions = new LinkedList<CorrectionProvider.Suggestion>();
 		if (!(section.get() instanceof SimpleReference)) {
 			return suggestions;

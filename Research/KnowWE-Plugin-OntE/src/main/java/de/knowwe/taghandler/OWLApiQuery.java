@@ -45,7 +45,6 @@ public class OWLApiQuery extends DefaultMarkupType {
 	public OWLApiQuery() {
 		super(MARKUP);
 		this.setRenderer(new OWLApiQueryRenderer());
-		this.setIgnorePackageCompile(true);
 	}
 
 }

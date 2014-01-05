@@ -43,7 +43,7 @@ public class D3webDependenciesType extends DefaultMarkupType {
 		m.addAnnotationNameType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
 				new PackageAnnotationNameType());
 		m.addAnnotationContentType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
-				new PackageTerm(true));
+				new PackageTerm());
 		m.addAnnotation(ANNOTATION_SHOW_TYPE, false, "true", "false");
 		m.addAnnotation(ANNOTATION_SHOW_ALL, false, "true", "false");
 		m.addAnnotation(ANNOTATION_IGNORE);

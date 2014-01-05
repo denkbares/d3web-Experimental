@@ -101,7 +101,7 @@ public class RestoreRevision extends AbstractAction {
 
 			if (version != -1) {
 				// page has changes
-				Article currentArticle = Environment.getInstance().getArticleManager(
+				Article currentArticle = Environment.getInstance().getDefaultArticleManager(
 						context.getWeb()).getArticle(title);
 				if (currentArticle != null) {
 					messages.append("<p class=\"box ok\">Article '" + title + "' ");

@@ -26,9 +26,9 @@ import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
+import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.object.SolutionDefinition;
-import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.knowwe.core.kdom.Article;
+import de.d3web.we.reviseHandler.D3webHandler;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -39,10 +39,10 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author jochenreutelshofer
  * @created 18.11.2012
  */
-public class CreateMonitorKnowledgeHandler extends D3webSubtreeHandler<MonitorMarkupContentType> {
+public class CreateMonitorKnowledgeHandler extends D3webHandler<MonitorMarkupContentType> {
 
 	@Override
-	public Collection<Message> create(Article article, Section<MonitorMarkupContentType> section) {
+	public Collection<Message> create(D3webCompiler compiler, Section<MonitorMarkupContentType> section) {
 
 		Section<DefaultMarkupType> defaultMarkup = Sections.findAncestorOfType(section,
 				DefaultMarkupType.class);
@@ -52,7 +52,7 @@ public class CreateMonitorKnowledgeHandler extends D3webSubtreeHandler<MonitorMa
 
 		Section<SolutionDefinition> solutionDef = Sections.findSuccessor(section,
 				SolutionDefinition.class);
-		Solution solution = solutionDef.get().getTermObject(article, solutionDef);
+		Solution solution = solutionDef.get().getTermObject(compiler, solutionDef);
 		solution.getInfoStore().addValue(MMInfo.DESCRIPTION, Locale.GERMAN,
 				solutionDescription);
 

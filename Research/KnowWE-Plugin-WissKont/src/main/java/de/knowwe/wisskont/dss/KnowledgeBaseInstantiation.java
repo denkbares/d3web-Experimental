@@ -30,7 +30,6 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
-import de.d3web.we.basic.D3webKnowledgeHandler;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.objects.Term;
@@ -46,18 +45,19 @@ public class KnowledgeBaseInstantiation implements Instantiation {
 
 	public static final String PATIENTENDATEN = "Patientendaten";
 	public static final String WISSKONT_KNOWLEDGE = "WisskontKnowledge";
+	private String web;
 
 	@Override
-	public void init() {
-		KnowledgeBase knowledgeBase = getKB();
+	public void init(String web) {
+		this.web = web;
+		KnowledgeBase knowledgeBase = getKB(web);
 		TerminologyManager manager = knowledgeBase.getManager();
 		manager.putTerminologyObject(new QContainer(knowledgeBase.getRootQASet(), PATIENTENDATEN));
 
 	}
 
-	public static KnowledgeBase getKB() {
-		D3webKnowledgeHandler knowledgeRepresentationHandler = D3webUtils.getKnowledgeRepresentationHandler(Environment.DEFAULT_WEB);
-		KnowledgeBase knowledgeBase = knowledgeRepresentationHandler.getKnowledgeBase(WISSKONT_KNOWLEDGE);
+	public static KnowledgeBase getKB(String web) {
+		KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(web, WISSKONT_KNOWLEDGE);
 		return knowledgeBase;
 	}
 
@@ -66,7 +66,7 @@ public class KnowledgeBaseInstantiation implements Instantiation {
 	}
 
 	public static Solution createSolutionForObjects(Section<? extends Term> term, String prefix, Collection<? extends TerminologyObject> derivingObjects) {
-		KnowledgeBase kb = getKB();
+		KnowledgeBase kb = getKB(term.getWeb());
 		String termName = prefix + " " + term.get().getTermName(term) + ";";
 		termName = termName.trim();
 		TerminologyObject found = kb.getManager().search(termName);

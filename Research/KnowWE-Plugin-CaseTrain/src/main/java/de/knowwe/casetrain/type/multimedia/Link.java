@@ -42,7 +42,7 @@ public class Link extends MultimediaItem {
 	public Link() {
 		super(REGEX);
 
-		this.clearSubtreeHandlers();
+		this.clearCompileScripts();
 		this.addChildType(new Url());
 
 		this.setRenderer(new Renderer() {

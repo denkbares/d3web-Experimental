@@ -5,11 +5,9 @@ import java.util.Set;
 
 import de.knowwe.core.correction.CorrectionProvider.Suggestion;
 import de.knowwe.core.correction.CorrectionToolProvider;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
@@ -25,9 +23,8 @@ public class KeywordCorrectionToolProvider implements ToolProvider {
 	}
 
 	private boolean hasErrors(Section<?> section) {
-		for (Article article : KnowWEUtils.getCompilingArticles(section)) {
-			if (section.hasErrorInSubtree(article)) return true;
-		}
+		if (section.hasErrorInSubtree()) return true;
+
 		return false;
 	}
 

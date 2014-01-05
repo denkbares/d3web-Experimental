@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -39,14 +39,16 @@ public class ScoreCell extends AbstractType {
 		before.setSectionFinder(new RegexSectionFinder("\\|"));
 		this.addChildType(before);
 		this.addChildType(new Score());
-		RegexSectionFinder finder = new RegexSectionFinder("\\|([^\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1);
+		RegexSectionFinder finder = new RegexSectionFinder("\\|([^\\|]*)", Pattern.DOTALL
+				| Pattern.MULTILINE, 1);
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(finder);
 		csf.addConstraint(NoBlankSectionsConstraint.getInstance());
 		setSectionFinder(csf);
 
-		//setCustomRenderer(new GenericHTMLRenderer<ScoreCell>("span", new String[] {"style", "color: black;", "title", "ScoreCell"}));
+		// setCustomRenderer(new GenericHTMLRenderer<ScoreCell>("span", new
+		// String[] {"style", "color: black;", "title", "ScoreCell"}));
 		setRenderer(new TableCellRenderer());
-		this.addSubtreeHandler(Priority.LOW,new ScoreTableCellSubtreeHandler());
+		this.addCompileScript(Priority.LOW, new ScoreTableCellSubtreeHandler());
 	}
 
 }

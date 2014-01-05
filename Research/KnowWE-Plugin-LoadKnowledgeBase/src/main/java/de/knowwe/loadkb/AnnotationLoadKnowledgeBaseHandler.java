@@ -12,26 +12,25 @@ import java.util.UUID;
 
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.we.basic.D3webKnowledgeHandler;
+import de.d3web.we.basic.KnowledgeBaseManager;
+import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.knowledgebase.KnowledgeBaseType;
-import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.d3web.we.utils.D3webUtils;
+import de.d3web.we.reviseHandler.D3webHandler;
 import de.knowwe.core.Environment;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.WikiAttachment;
 import de.knowwe.core.wikiConnector.WikiConnector;
 
-public class AnnotationLoadKnowledgeBaseHandler extends D3webSubtreeHandler<KnowledgeBaseType> {
+public class AnnotationLoadKnowledgeBaseHandler extends D3webHandler<KnowledgeBaseType> {
 
 	private static final String TMP_LOADED_KB_PATH = "/tmp/loadedKB";
 	public static final String ANNOTATION_LOAD = "load";
 	private final Collection<Message> messages = new LinkedList<Message>();
 
 	@Override
-	public Collection<Message> create(Article article, Section<KnowledgeBaseType> section) {
+	public Collection<Message> create(D3webCompiler compiler, Section<KnowledgeBaseType> section) {
 
 		String[] annotations = KnowledgeBaseType.getAnnotations(
 				section,
@@ -47,19 +46,18 @@ public class AnnotationLoadKnowledgeBaseHandler extends D3webSubtreeHandler<Know
 
 		if (annotations.length > 1) {
 			messages.add(new Message(Message.Type.WARNING,
-					"You used @load twice. Only the first will be executed!"));
+					"You used @load twice. Only the first one will be executed!"));
 		}
 
 		String filename = annotations[0];
 
 		try {
-			KnowledgeBase kb = loadKnowledgeBaseFromFile(article, filename);
+			KnowledgeBase kb = loadKnowledgeBaseFromFile(compiler, section, filename);
 
 			if (kb != null) {
 
-				D3webKnowledgeHandler knowledgeRepresentationHandler = D3webUtils.getKnowledgeRepresentationHandler(Environment.DEFAULT_WEB);
-				knowledgeRepresentationHandler.initArticle(article);
-				knowledgeRepresentationHandler.setKnowledgeBase(article.getTitle(), kb);
+				KnowledgeBaseManager.getInstance(section.getWeb()).setKnowledgeBase(
+						compiler.getCompileSection(), kb);
 			}
 		}
 
@@ -76,8 +74,8 @@ public class AnnotationLoadKnowledgeBaseHandler extends D3webSubtreeHandler<Know
 		return messages;
 	}
 
-	private KnowledgeBase loadKnowledgeBaseFromFile(Article article, String filename) throws IOException, FileNotFoundException {
-		WikiAttachment attachment = KnowWEUtils.getAttachment(article.getTitle(),
+	private KnowledgeBase loadKnowledgeBaseFromFile(D3webCompiler compiler, Section<?> section, String filename) throws IOException, FileNotFoundException {
+		WikiAttachment attachment = KnowWEUtils.getAttachment(section.getTitle(),
 				filename);
 
 		if (attachment == null) {

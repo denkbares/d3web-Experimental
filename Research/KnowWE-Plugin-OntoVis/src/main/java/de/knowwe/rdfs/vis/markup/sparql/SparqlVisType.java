@@ -22,7 +22,6 @@ import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.visualization.GraphDataBuilder;
 
 /**
@@ -50,7 +49,7 @@ public class SparqlVisType extends DefaultMarkupType {
 	private static final DefaultMarkup MARKUP;
 
 	private enum dot_apps {
-			dot, neato
+		dot, neato
 	};
 
 	public enum LinkMode {
@@ -58,7 +57,7 @@ public class SparqlVisType extends DefaultMarkupType {
 	};
 
 	public enum Visualizations {
-			wheel, force, tree
+		wheel, force, tree
 	};
 
 	static {
@@ -69,7 +68,7 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_COMMENT, false);
 		MARKUP.addAnnotation(ANNOTATION_SIZE, false);
 		MARKUP.addAnnotation(ANNOTATION_FORMAT, false);
-		MARKUP.addAnnotation(PackageManager.ANNOTATION_MASTER, false);
+		MARKUP.addAnnotation(PackageManager.MASTER_ATTRIBUTE_NAME, false);
 		MARKUP.addAnnotation(ANNOTATION_LANGUAGE, false);
 		MARKUP.addAnnotation(ANNOTATION_DOT_APP, false, dot_apps.values());
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
@@ -77,11 +76,10 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
 		MARKUP.addAnnotation(ANNOTATION_LINK_MODE, false, LinkMode.values());
 		MARKUP.addAnnotation(ANNOTATION_DESIGN, false);
-		MARKUP.addAnnotationRenderer(Rdf2GoCore.MASTER_ANNOTATION, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_COMMENT, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_SIZE, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_FORMAT, NothingRenderer.getInstance());
-		MARKUP.addAnnotationRenderer(PackageManager.ANNOTATION_MASTER,
+		MARKUP.addAnnotationRenderer(PackageManager.MASTER_ATTRIBUTE_NAME,
 				NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_LANGUAGE, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_DOT_APP, NothingRenderer.getInstance());
@@ -92,7 +90,6 @@ public class SparqlVisType extends DefaultMarkupType {
 
 	public SparqlVisType() {
 		super(MARKUP);
-		this.setIgnorePackageCompile(true);
 	}
 
 }

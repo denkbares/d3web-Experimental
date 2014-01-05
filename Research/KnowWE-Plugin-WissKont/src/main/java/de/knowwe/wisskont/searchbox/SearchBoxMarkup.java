@@ -40,7 +40,6 @@ public class SearchBoxMarkup extends DefaultMarkupType {
 
 	public SearchBoxMarkup(DefaultMarkup markup) {
 		super(markup);
-		setIgnorePackageCompile(true);
 		this.setRenderer(new SearchBoxRenderer());
 	}
 
@@ -53,7 +52,6 @@ public class SearchBoxMarkup extends DefaultMarkupType {
 
 	public SearchBoxMarkup() {
 		super(m);
-		setIgnorePackageCompile(true);
 		this.setRenderer(new SearchBoxRenderer());
 	}
 
@@ -123,4 +121,3 @@ public class SearchBoxMarkup extends DefaultMarkupType {
 	}
 
 }
-

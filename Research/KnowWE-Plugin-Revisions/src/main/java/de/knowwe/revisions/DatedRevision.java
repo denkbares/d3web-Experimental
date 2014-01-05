@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import de.knowwe.core.ArticleManager;
+import de.knowwe.core.DefaultArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.wikiConnector.WikiConnector;
@@ -38,7 +38,7 @@ import de.knowwe.core.wikiConnector.WikiConnector;
  */
 public class DatedRevision extends AbstractRevision {
 
-	private Date date;
+	private final Date date;
 	private HashMap<String, Integer> articleVersions;
 
 	/**
@@ -55,7 +55,7 @@ public class DatedRevision extends AbstractRevision {
 
 	@Override
 	protected void createArticleManager() {
-		articleManager = new ArticleManager(Environment.getInstance(), web);
+		articleManager = new DefaultArticleManager(Environment.getInstance(), web);
 
 		for (Entry<String, Integer> entry : getArticleVersions().entrySet()) {
 			String title = entry.getKey();

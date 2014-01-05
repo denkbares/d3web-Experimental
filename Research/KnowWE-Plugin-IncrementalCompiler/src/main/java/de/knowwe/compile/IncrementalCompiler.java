@@ -39,8 +39,9 @@ import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.utils.CompileUtils;
+import de.knowwe.core.compile.Compilers;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
 import de.knowwe.core.compile.Priority;
-import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.compile.terminology.TerminologyExtension;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
@@ -48,7 +49,7 @@ import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.AssertSingleTermDefinitionHandler;
+import de.knowwe.core.kdom.objects.AssertSingleTermDefinitionScript;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.objects.Term;
@@ -97,7 +98,7 @@ public class IncrementalCompiler implements EventListener {
 		// extension point for plugins defining predefined terminology
 		Extension[] exts = PluginManager.getInstance().getExtensions(
 				Plugins.EXTENDED_PLUGIN_ID,
-				Plugins.EXTENDED_POINT_TERMINOLOGY);
+				Plugins.EXTENDED_POINT_Terminology);
 		for (Extension extension : exts) {
 			Object o = extension.getSingleton();
 			if (o instanceof TerminologyExtension) {
@@ -152,20 +153,21 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
-	class PreDefinedTerm extends SimpleDefinition {
+	class PreDefinedTerm extends SimpleDefinition<DefaultGlobalCompiler> {
 
 		public PreDefinedTerm() {
-			super(TermRegistrationScope.GLOBAL, String.class);
-			this.addSubtreeHandler(Priority.HIGH, new AssertSingleTermDefinitionHandler(
-					TermRegistrationScope.GLOBAL));
+			super(DefaultGlobalCompiler.class, String.class);
+			this.addCompileScript(Priority.HIGH,
+					new AssertSingleTermDefinitionScript<DefaultGlobalCompiler>(
+							DefaultGlobalCompiler.class));
 		}
 
 	}
 
-	class ImportedTerm extends SimpleDefinition {
+	class ImportedTerm extends SimpleDefinition<DefaultGlobalCompiler> {
 
 		public ImportedTerm() {
-			super(TermRegistrationScope.GLOBAL, String.class);
+			super(DefaultGlobalCompiler.class, String.class);
 		}
 
 	}
@@ -345,7 +347,7 @@ public class IncrementalCompiler implements EventListener {
 					unit);
 			if (externalReferencesOfKnowledgeUnit != null
 					&& externalReferencesOfKnowledgeUnit.size() > 0) {
-				KnowWEUtils.storeObject(null, unit,
+				Compilers.storeObject(unit,
 						EXTERNAL_REFERENCES_OF_KNOWLEDGEUNIT, externalReferencesOfKnowledgeUnit);
 
 			}

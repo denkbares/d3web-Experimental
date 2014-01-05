@@ -99,8 +99,7 @@ public class ReplaceSectionUtils {
 		}
 
 		List<Section<?>> children = sec.getChildren();
-		if (children == null || children.isEmpty()
-				|| sec.hasSharedChildren()) {
+		if (children == null || children.isEmpty()) {
 			newText.append(sec.getText());
 			return;
 		}

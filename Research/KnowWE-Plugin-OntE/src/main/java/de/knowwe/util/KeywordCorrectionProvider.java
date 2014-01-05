@@ -26,8 +26,8 @@ import java.util.Set;
 
 import com.wcohen.ss.Levenstein;
 
+import de.knowwe.core.compile.terminology.TermCompiler;
 import de.knowwe.core.correction.CorrectionProvider;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.manchester.frame.DefaultFrame;
@@ -42,7 +42,7 @@ import de.knowwe.kdom.manchester.types.MisspelledSyntaxConstruct;
 public class KeywordCorrectionProvider implements CorrectionProvider {
 
 	@Override
-	public List<CorrectionProvider.Suggestion> getSuggestions(Article article, Section<?> section, int threshold) {
+	public List<CorrectionProvider.Suggestion> getSuggestions(TermCompiler compiler, Section<?> section, int threshold) {
 		if (!(section.get() instanceof MisspelledSyntaxConstruct)) {
 			return null;
 		}

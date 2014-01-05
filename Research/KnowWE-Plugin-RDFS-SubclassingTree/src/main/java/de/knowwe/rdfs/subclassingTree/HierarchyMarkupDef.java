@@ -31,7 +31,6 @@ public class HierarchyMarkupDef extends DefaultMarkupType {
 
 	public HierarchyMarkupDef(DefaultMarkup markup) {
 		super(markup);
-		setIgnorePackageCompile(true);
 	}
 
 	private static DefaultMarkup m = null;
@@ -44,6 +43,5 @@ public class HierarchyMarkupDef extends DefaultMarkupType {
 
 	public HierarchyMarkupDef() {
 		super(m);
-		setIgnorePackageCompile(true);
 	}
 }

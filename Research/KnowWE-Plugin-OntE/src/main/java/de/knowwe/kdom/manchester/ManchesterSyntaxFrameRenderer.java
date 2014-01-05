@@ -28,7 +28,6 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
-import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
@@ -86,7 +85,7 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 	 * @param StringBuilder string
 	 */
 	private void renderMessages(Section<? extends Type> section, RenderResult string) {
-		Map<String, Collection<Message>> messagesFromSubtree = Messages.getMessagesFromSubtree(
+		Map<de.knowwe.core.compile.Compiler, Collection<Message>> messagesFromSubtree = Messages.getMessagesMapFromSubtree(
 				section, Message.Type.ERROR, Message.Type.WARNING);
 		Collection<Message> allmsgs = new LinkedList<Message>();
 		for (Collection<Message> msgs : messagesFromSubtree.values()) {

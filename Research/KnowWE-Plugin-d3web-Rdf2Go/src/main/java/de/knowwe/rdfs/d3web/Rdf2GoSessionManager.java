@@ -1,6 +1,8 @@
 package de.knowwe.rdfs.d3web;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.ontoware.rdf2go.model.Statement;
@@ -20,41 +22,40 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class Rdf2GoSessionManager {
 
-	private final StatementCache statementCache = new StatementCache();
+	private final Map<TerminologyObject, Set<Statement>> statementCache = new HashMap<TerminologyObject, Set<Statement>>();
 
-	private static Rdf2GoSessionManager instance = null;
+	private final Rdf2GoCore core;
 
-	public static Rdf2GoSessionManager getInstance() {
-		if (instance == null) instance = new Rdf2GoSessionManager();
-		return instance;
+	public Rdf2GoSessionManager(Rdf2GoCore core) {
+		this.core = core;
 	}
 
-	private Rdf2GoSessionManager() {
-
+	public void commit() {
+		this.core.commit();
 	}
 
 	public void addSession(Session session, boolean commitAfterPropagation) {
 		Set<Statement> statements = new HashSet<Statement>();
-		Rdf2GoCore core = Rdf2GoCore.getInstance();
-		URI sessionIdURI = Rdf2GoD3webUtils.getSessionIdURI(session);
+		URI sessionIdURI = Rdf2GoD3webUtils.getSessionIdURI(core, session);
 		URI sessionURI = core.createlocalURI(Session.class.getSimpleName());
 
 		// lns:sessionId rdf:type lns:Session
-		Rdf2GoUtils.addStatement(sessionIdURI, RDF.type, sessionURI, statements);
+		Rdf2GoUtils.addStatement(core, sessionIdURI, RDF.type, sessionURI, statements);
 
 		Literal timeLiteral = core.createLiteral(Long.toString(session.getCreationDate().getTime()));
 		URI hasCreationDateURI = core.createlocalURI("hasCreationDate");
 
 		// lns:sessionId lns:hasCreationDate "time milliseconds"
-		Rdf2GoUtils.addStatement(sessionIdURI, hasCreationDateURI, timeLiteral, statements);
+		Rdf2GoUtils.addStatement(core, sessionIdURI, hasCreationDateURI, timeLiteral,
+				statements);
 
 		URI usesKnowledgeBaseURI = core.createlocalURI("usesKnowledgeBase");
 
 		// lns:sessionId lns:usesKnowledgeBase lns:knowledgeBaseId
-		Rdf2GoUtils.addStatement(sessionIdURI, usesKnowledgeBaseURI,
-				session.getKnowledgeBase().getId(), statements);
+		Rdf2GoUtils.addStatement(core, sessionIdURI,
+				usesKnowledgeBaseURI, session.getKnowledgeBase().getId(), statements);
 
-		statementCache.addStatements(session, statements);
+		statementCache.put(null, statements);
 
 		// add value facts already present in the session
 		for (TerminologyObject valuedObject : session.getBlackboard().getValuedObjects()) {
@@ -68,44 +69,44 @@ public class Rdf2GoSessionManager {
 		// add propagation listener update the Rdf2GoCore with the changes in
 		// the session
 		session.getPropagationManager().addListener(
-				new Rdf2GoPropagationListener(commitAfterPropagation));
+				new Rdf2GoPropagationListener(this, commitAfterPropagation));
 
 	}
 
 	public void addFactAsStatements(Session session, TerminologyObject terminologyObject, Value value) {
-		Rdf2GoCore core = Rdf2GoCore.getInstance();
 
 		Set<Statement> statements = new HashSet<Statement>();
 
 		BlankNode factNode = core.createBlankNode();
 
 		// blank node (Fact) rdf:type lns:Fact
-		Rdf2GoUtils.addStatement(factNode, RDF.type, Rdf2GoD3webUtils.getFactURI(), statements);
-
-		// lns:sessionID lns:hasFact blank node (Fact)
-		URI sessionIdURI = Rdf2GoD3webUtils.getSessionIdURI(session);
-		Rdf2GoUtils.addStatement(sessionIdURI, Rdf2GoD3webUtils.getHasFactURI(), factNode,
+		Rdf2GoUtils.addStatement(core, factNode, RDF.type, Rdf2GoD3webUtils.getFactURI(core),
 				statements);
 
+		// lns:sessionID lns:hasFact blank node (Fact)
+		URI sessionIdURI = Rdf2GoD3webUtils.getSessionIdURI(core, session);
+		Rdf2GoUtils.addStatement(core, sessionIdURI, Rdf2GoD3webUtils.getHasFactURI(core),
+				factNode, statements);
+
 		// blank node (Fact) lns:hasTerminologyObject lns:toName
-		Rdf2GoUtils.addStatement(factNode, Rdf2GoD3webUtils.getHasTerminologyObjectURI(),
-				terminologyObject.getName(), statements);
+		Rdf2GoUtils.addStatement(core, factNode,
+				Rdf2GoD3webUtils.getHasTerminologyObjectURI(core), terminologyObject.getName(),
+				statements);
 
 		Node valueNode = getValueNode(value);
 
 		// blank node (Fact) lns:hasValue lns:value
-		Rdf2GoUtils.addStatement(factNode, Rdf2GoD3webUtils.getHasValueURI(),
-				valueNode, statements);
+		Rdf2GoUtils.addStatement(core, factNode,
+				Rdf2GoD3webUtils.getHasValueURI(core), valueNode, statements);
 
 		// add fact statements to cache
-		getInstance().statementCache.addStatements(session, terminologyObject, statements);
+		statementCache.put(terminologyObject, statements);
 
 		// add fact statements to the core
 		core.addStatements(Rdf2GoUtils.toArray(statements));
 	}
 
 	private Node getValueNode(Value value) {
-		Rdf2GoCore core = Rdf2GoCore.getInstance();
 		Object object = value.getValue();
 		if (object instanceof Integer) {
 			return core.createDatatypeLiteral(object.toString(), XSD._integer);
@@ -123,14 +124,13 @@ public class Rdf2GoSessionManager {
 	}
 
 	public void removeFactStatements(Session session, TerminologyObject terminologyObject) {
-		Set<Statement> removedStatements = getInstance().statementCache.removeStatements(session,
-				terminologyObject);
-		Rdf2GoCore.getInstance().removeStatements(removedStatements);
+		core.removeStatements(statementCache.get(terminologyObject));
 	}
 
 	public void removeSession(Session session) {
-		Set<Statement> removedStatements = getInstance().statementCache.removeStatements(session);
-		Rdf2GoCore.getInstance().removeStatements(removedStatements);
+		for (Set<Statement> set : statementCache.values()) {
+			core.removeStatements(set);
+		}
 	}
 
 }

@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import utils.TestArticleManager;
@@ -21,7 +22,6 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -29,6 +29,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
+@Ignore
 public class ComplexDefinitionRefactoringTest {
 
 	private static final String AUTHOR_OF_EXAMPLE = "authorOf-Example";
@@ -46,7 +47,6 @@ public class ComplexDefinitionRefactoringTest {
 	@BeforeClass
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
-		PackageManager.overrideAutocompileArticle(true);
 
 		// System.out.println(IncrementalCompiler.getInstance().getTerminology().toString());
 

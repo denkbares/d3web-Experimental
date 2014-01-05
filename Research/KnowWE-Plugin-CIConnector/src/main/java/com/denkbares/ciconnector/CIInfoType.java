@@ -23,8 +23,7 @@ public class CIInfoType extends DefaultMarkupType {
 
 	public CIInfoType() {
 		super(MARKUP);
-		this.setIgnorePackageCompile(true);
-		this.addSubtreeHandler(new CIInfoHandler());
+		this.addCompileScript(new CIInfoHandler());
 	}
 
 }

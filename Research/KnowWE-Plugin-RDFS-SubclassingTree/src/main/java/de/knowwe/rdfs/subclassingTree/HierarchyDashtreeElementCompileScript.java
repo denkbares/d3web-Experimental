@@ -107,15 +107,14 @@ public class HierarchyDashtreeElementCompileScript extends
 						}
 					}
 					if (Messages.getErrors(messages).size() == 0) {
-						Rdf2GoCore.getInstance().addStatement(childElement,
-								localURI, predicate, fatherURI);
+						Rdf2GoCore.getInstance().addStatement(
+								childElement, localURI, predicate, fatherURI);
 					}
 				}
 			}
 		}
 		// store messages found while compiling the current section
-		Messages.storeMessages(elementContent.getArticle(), elementContent, getClass(),
-				messages);
+		Messages.storeMessages(elementContent, getClass(), messages);
 
 	}
 

@@ -68,7 +68,6 @@ public class WisskontQuickI extends QuickInterviewMarkup {
 	 */
 	public WisskontQuickI() {
 		super(m2);
-		this.clearSubtreeHandlers();
-		this.setIgnorePackageCompile(true);
+		this.clearCompileScripts();
 	}
 }

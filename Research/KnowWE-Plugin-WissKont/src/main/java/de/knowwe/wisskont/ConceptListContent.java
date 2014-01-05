@@ -44,6 +44,7 @@ import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.scoring.ActionHeuristicPS;
 import de.d3web.scoring.Score;
 import de.d3web.scoring.inference.PSMethodHeuristic;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.annotation.type.list.ListObjectIdentifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
@@ -51,13 +52,13 @@ import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.InvalidReference;
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquotedNonEmpty;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -161,7 +162,7 @@ public class ConceptListContent extends AbstractType {
 						ValuesMarkup.class);
 				if (values != null) {
 
-					KnowledgeBase kb = KnowledgeBaseInstantiation.getKB();
+					KnowledgeBase kb = KnowledgeBaseInstantiation.getKB(section.getWeb());
 					TerminologyManager manager = kb.getManager();
 					TerminologyObject object = manager.search(subjectTermName);
 					QuestionOC question = null;
@@ -216,7 +217,8 @@ public class ConceptListContent extends AbstractType {
 						Rule r = RuleFactory.createRule(a, cond,
 								null, PSMethodHeuristic.class);
 						if (r != null) {
-							KnowWEUtils.storeObject(article, section, RULE_STORE_KEY, r);
+							Compilers.storeObject(D3webUtils.getD3webCompiler(article), section,
+									RULE_STORE_KEY, r);
 						}
 					}
 				}
@@ -247,7 +249,8 @@ public class ConceptListContent extends AbstractType {
 			@Override
 			public void deleteFromRepository(Section<ObjectSegment> section) {
 				Rdf2GoCore.getInstance().removeStatementsForSection(section);
-				Object storedObject = KnowWEUtils.getStoredObject(section.getArticle(), section,
+				Object storedObject = Compilers.getStoredObject(
+						D3webUtils.getD3webCompiler(section.getArticle()), section,
 						RULE_STORE_KEY);
 				if (storedObject instanceof Rule) {
 					Rule r = (Rule) storedObject;

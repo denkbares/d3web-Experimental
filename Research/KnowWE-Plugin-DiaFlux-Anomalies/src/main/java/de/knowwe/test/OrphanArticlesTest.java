@@ -70,7 +70,7 @@ public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 	public Message execute(ArticleManager testObject, String[] args, String[]...
 			ignores) throws InterruptedException {
 
-		ArticleManager manager = Environment.getInstance().getArticleManager(
+		ArticleManager manager = Environment.getInstance().getDefaultArticleManager(
 				Environment.DEFAULT_WEB);
 
 

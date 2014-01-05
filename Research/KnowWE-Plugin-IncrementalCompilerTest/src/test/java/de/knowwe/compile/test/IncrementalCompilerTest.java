@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import utils.TestArticleManager;
@@ -44,7 +45,6 @@ import de.knowwe.compile.test.util.Vocabulary;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
@@ -66,6 +66,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
  * @author Sebastian Furth
  * @created Jun 17, 2011
  */
+@Ignore
 public class IncrementalCompilerTest {
 
 	/* The underlying test article */
@@ -85,7 +86,6 @@ public class IncrementalCompilerTest {
 	@BeforeClass
 	public static void init() throws IOException {
 		InitPluginManager.init();
-		PackageManager.overrideAutocompileArticle(true);
 		TestArticleManager.getArticle(TESTFILE);
 		TestArticleManager.clear();
 	}

@@ -38,7 +38,7 @@ public class TypeVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_EXCLUDENODES, false);
 		MARKUP.addAnnotation(ANNOTATION_SIZE, false);
 		MARKUP.addAnnotation(ANNOTATION_FORMAT, false);
-		MARKUP.addAnnotation(PackageManager.ANNOTATION_MASTER, false);
+		MARKUP.addAnnotation(PackageManager.MASTER_ATTRIBUTE_NAME, false);
 		MARKUP.addAnnotation(ANNOTATION_LANGUAGE, false);
 		MARKUP.addAnnotation(ANNOTATION_DOT_APP, false, dot_apps.values());
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
@@ -49,7 +49,6 @@ public class TypeVisType extends DefaultMarkupType {
 
 	public TypeVisType() {
 		super(MARKUP);
-		this.setIgnorePackageCompile(true);
 		this.setRenderer(new TypeVisTypeRenderer());
 	}
 

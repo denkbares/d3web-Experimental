@@ -33,11 +33,13 @@ import de.d3web.diaflux.coverage.DefaultCoverageResult;
 import de.d3web.diaflux.coverage.DiaFluxCoverageTrace;
 import de.d3web.testcase.TestCaseUtils;
 import de.d3web.testcase.model.TestCase;
+import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -123,7 +125,7 @@ public class CalculateCoverageAction extends AbstractAction {
 	 */
 	public static void calculateCoverage(Section<DiaFluxCoverageType> coverageSec) {
 		Environment env = Environment.getInstance();
-		PackageManager packageManager = env.getPackageManager(coverageSec.getWeb());
+		PackageManager packageManager = Compilers.getPackageManager(coverageSec);
 
 		// Map<String, String> articles =
 		// Environment.getInstance().getWikiConnector().getAllArticles(
@@ -160,7 +162,7 @@ public class CalculateCoverageAction extends AbstractAction {
 			for (Section<?> potentioalTestCaseSection : sectionsCompiledByArticle) {
 				TestCaseProviderStorage testCaseProviderStorage =
 						(TestCaseProviderStorage) potentioalTestCaseSection.getSectionStore().getObject(
-								article,
+								Compilers.getCompiler(article, D3webCompiler.class),
 								TestCaseProviderStorage.KEY);
 				if (testCaseProviderStorage != null) {
 					for (TestCaseProvider testCaseProvider : testCaseProviderStorage.getTestCaseProviders()) {

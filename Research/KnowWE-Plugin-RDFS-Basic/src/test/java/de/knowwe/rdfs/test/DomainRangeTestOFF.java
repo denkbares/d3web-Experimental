@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.test.util.Query;
@@ -50,7 +49,6 @@ public class DomainRangeTestOFF {
 	@BeforeClass
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
-		PackageManager.overrideAutocompileArticle(true);
 
 		// System.out.println(IncrementalCompiler.getInstance().getTerminology().toString());
 

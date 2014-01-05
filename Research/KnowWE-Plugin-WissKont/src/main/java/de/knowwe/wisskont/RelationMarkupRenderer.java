@@ -42,24 +42,15 @@ public class RelationMarkupRenderer extends DefaultMarkupRenderer {
 	public void renderMessages(Section<?> section, RenderResult string) {
 		List<Section<ConceptMarkup>> conecptDefinitions = MarkupUtils.getConecptDefinitionForLocalPage(section);
 		if (conecptDefinitions.size() == 0) {
-			Messages.storeMessage(
-					null,
-					section,
-					this.getClass(),
-					new Message(
-							Message.Type.WARNING,
-							"Es ist kein Begriff auf dieser Seite definiert ('Begriff: <Begriffname>'). Damit dieses Markup funktioniert, muss genau ein Begriff auf dieser Seite definiert sein."));
+			Message msg = Messages.warning("Es ist kein Begriff auf dieser Seite definiert ('Begriff: <Begriffname>'). Damit dieses Markup funktioniert, muss genau ein Begriff auf dieser Seite definiert sein.");
+			Messages.storeMessage(section,
+					this.getClass(), msg);
 		}
 		if (conecptDefinitions.size() > 1) {
-			Messages.storeMessage(
-					null,
-					section,
-					this.getClass(),
-					new Message(
-							Message.Type.WARNING,
-							"Es sind mehrere Konzepte ("
-									+ verbalizeDefs(conecptDefinitions)
-									+ ") auf dieser Seite definiert. Damit dieses Markup funktioniert, darf nur genau ein Begriff auf dieser Seite definiert sein."));
+			Message msg = Messages.warning("Es sind mehrere Konzepte ("
+					+ verbalizeDefs(conecptDefinitions)
+					+ ") auf dieser Seite definiert. Damit dieses Markup funktioniert, darf nur genau ein Begriff auf dieser Seite definiert sein.");
+			Messages.storeMessage(section, this.getClass(), msg);
 		}
 		renderMessageBlock(section, string, Message.Type.ERROR, Message.Type.WARNING);
 	}

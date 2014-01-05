@@ -164,7 +164,7 @@ public class WikiObjectModel implements Instantiation {
 	}
 
 	@Override
-	public void init() {
+	public void init(String web) {
 		Rdf2GoCore.getInstance().addStatements(Rdf2GoUtils.toArray(getWikiObjectModelData()));
 
 	}

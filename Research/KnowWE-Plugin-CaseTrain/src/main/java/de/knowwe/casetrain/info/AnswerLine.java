@@ -185,7 +185,7 @@ public class AnswerLine extends AbstractType {
 					new RegexSectionFinder(regex));
 			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
-			this.addSubtreeHandler(AnswerMarkHandler.getInstance());
+			this.addCompileScript(AnswerMarkHandler.getInstance());
 		}
 
 	}

@@ -24,7 +24,7 @@
 	<parameter id="version" value="1.0"/>
 </extension>
 
-<extension id="TurtleCompileScript" plugin-id="KnowWEExtensionPoints" point-id="CompileScript">
+<extension id="TurtleCompileScript" plugin-id="KnowWEExtensionPoints" point-id="IncrementalCompileScript">
 	<parameter id="priority" value="5"/>
 	<parameter id="scope" value="de.knowwe.kdom.n3.TurtleComplete"/>
 	<parameter id="description" value="TurtleCompileScript"/>

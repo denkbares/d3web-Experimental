@@ -21,11 +21,10 @@
 package de.knowwe.casetrain.info;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TreeSet;
 
 import de.knowwe.casetrain.info.Question.QuestionType;
 import de.knowwe.casetrain.type.Closure;
@@ -39,7 +38,8 @@ import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Link;
 import de.knowwe.casetrain.type.multimedia.Video;
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
@@ -49,8 +49,6 @@ import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
  * 
@@ -84,18 +82,14 @@ public class Info extends BlockMarkupType {
 						+ ((Info) sec.get()).getCSSClass()
 						+ "'>");
 				string.appendHtml("<div class='Infostart'></div>");
-				Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 				Utils.renderKDOMReportMessageBlock(
-						Messages.getErrors(Messages.getMessagesFromSubtree(
-								article, sec)), string);
+						Messages.getErrors(Messages.getMessagesFromSubtree(sec)), string);
 
 				Utils.renderKDOMReportMessageBlock(
-						Messages.getWarnings(Messages.getMessagesFromSubtree(
-								article, sec)), string);
+						Messages.getWarnings(Messages.getMessagesFromSubtree(sec)), string);
 
 				Utils.renderKDOMReportMessageBlock(
-						Messages.getNotices(Messages.getMessagesFromSubtree(
-								article, sec)), string);
+						Messages.getNotices(Messages.getMessagesFromSubtree(sec)), string);
 
 				Section<BlockMarkupContent> con =
 						Sections.findSuccessor(sec, BlockMarkupContent.class);
@@ -105,10 +99,10 @@ public class Info extends BlockMarkupType {
 			}
 		});
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Info>() {
+		this.addCompileScript(new DefaultGlobalScript<Info>() {
 
 			@Override
-			public Collection<Message> create(Article article, Section<Info> s) {
+			public void compile(DefaultGlobalCompiler compiler, Section<Info> s) {
 
 				List<Message> messages = new ArrayList<Message>(0);
 
@@ -150,9 +144,9 @@ public class Info extends BlockMarkupType {
 				// ///////////////////////////////////////////////////////////////
 
 				// reduce duplicate messages
-				Set<Message> set = new HashSet<Message>();
+				Set<Message> set = new TreeSet<Message>();
 				set.addAll(messages);
-				return set;
+				Messages.storeMessages(s, getClass(), set);
 
 			}
 

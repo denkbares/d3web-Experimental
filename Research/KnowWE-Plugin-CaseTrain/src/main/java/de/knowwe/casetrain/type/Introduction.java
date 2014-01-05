@@ -21,7 +21,6 @@
 package de.knowwe.casetrain.type;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import de.knowwe.casetrain.type.general.BlockMarkupType;
@@ -31,12 +30,13 @@ import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Link;
 import de.knowwe.casetrain.type.multimedia.Video;
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
+import de.knowwe.core.report.Messages;
 
 /**
  * 
@@ -56,10 +56,10 @@ public class Introduction extends BlockMarkupType {
 		this.addContentType(new Link());
 		this.addContentType(new Audio());
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Introduction>() {
+		this.addCompileScript(new DefaultGlobalScript<Introduction>() {
 
 			@Override
-			public Collection<Message> create(Article article, Section<Introduction> s) {
+			public void compile(DefaultGlobalCompiler compiler, Section<Introduction> s) {
 
 				List<Message> messages = new ArrayList<Message>(0);
 
@@ -74,16 +74,15 @@ public class Introduction extends BlockMarkupType {
 				Section<PlainText> plain = Sections.findSuccessor(s, PlainText.class);
 				if (plain == null) {
 					messages.add(Utils.missingContentWarning(
-									Introduction.class.getSimpleName()));
+							Introduction.class.getSimpleName()));
 				}
 
 				Section<Image> pic = Sections.findSuccessor(s, Image.class);
 				if (pic == null) {
 					messages.add(Utils.missingPictureNotice(
-									Introduction.class.getSimpleName()));
+							Introduction.class.getSimpleName()));
 				}
-
-				return messages;
+				Messages.storeMessages(s, getClass(), messages);
 			}
 		});
 	}

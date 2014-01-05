@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.knowwe.core.Environment;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -81,8 +82,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 				if (!getReadbuttonStatus(readBtn, userContext.getUserName())) unread++;
 			}
 
-			if (unread == 0)
-				continue;
+			if (unread == 0) continue;
 
 			// Daten
 			Date unitDate = dates.get(i);
@@ -133,7 +133,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 		List<String> readbuttons = new LinkedList<String>();
 
 		for (Section<DashTreeElement> s : units) {
-			Article unit = Environment.getInstance().getArticleManager(
+			Article unit = Compilers.getDefaultArticleManager(
 					Environment.DEFAULT_WEB).getArticle(getPageName(s));
 
 			if (unit != null) {

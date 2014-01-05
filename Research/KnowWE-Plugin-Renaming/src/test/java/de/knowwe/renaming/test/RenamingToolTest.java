@@ -27,6 +27,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
+
+import org.junit.Ignore;
+
 import utils.TestUtils;
 import connector.DummyConnector;
 import de.d3web.plugin.test.InitPluginManager;
@@ -39,6 +42,7 @@ import de.knowwe.renaming.taghandler.WordBasedRenamingAction;
 import de.knowwe.renaming.test.util.SplitObjectType;
 import de.knowwe.renaming.test.util.WordObjectType;
 
+@Ignore
 public class RenamingToolTest extends TestCase {
 
 	@Override
@@ -100,8 +104,8 @@ public class RenamingToolTest extends TestCase {
 		// after
 		for (int i = 0; i < 3; i++) {
 			actual = WordBasedRenameFinding.getAdditionalContext
-						(start, "a", i, 3,
-								article.getRootSection().getText());
+					(start, "a", i, 3,
+							article.getRootSection().getText());
 			assertEquals("After context wrong", expected[i], actual);
 		}
 
@@ -110,8 +114,8 @@ public class RenamingToolTest extends TestCase {
 				"", "aaa ", "bbb aaa ", "aaa bbb aaa " };
 		for (int i = 0; i < 4; i++) {
 			actual = WordBasedRenameFinding.getAdditionalContext
-						(start, "p", i, 3,
-								article.getRootSection().getText());
+					(start, "p", i, 3,
+							article.getRootSection().getText());
 			assertEquals("Previous context wrong", expected[i], actual);
 		}
 
@@ -134,8 +138,8 @@ public class RenamingToolTest extends TestCase {
 		start = 17;
 		for (int i = 0; i < 5; i++) {
 			actual = WordBasedRenameFinding.getAdditionalContext
-						(start, "a", i, 3,
-								article.getRootSection().getText());
+					(start, "a", i, 3,
+							article.getRootSection().getText());
 			assertEquals("After context wrong", expected[i], actual);
 		}
 
@@ -145,8 +149,8 @@ public class RenamingToolTest extends TestCase {
 		start = 17;
 		for (int i = 0; i < 5; i++) {
 			actual = WordBasedRenameFinding.getAdditionalContext
-						(start, "p", i, 3,
-								article.getRootSection().getText());
+					(start, "p", i, 3,
+							article.getRootSection().getText());
 			assertEquals("Previous context wrong", expected[i], actual);
 		}
 	}

@@ -45,7 +45,6 @@ public class RevisionType extends DefaultMarkupType {
 	public RevisionType() {
 		super(m);
 		this.setRenderer(NothingRenderer.getInstance());
-		this.setIgnorePackageCompile(true);
 	}
 
 	public static String getRevisionName(Section<RevisionType> section) {

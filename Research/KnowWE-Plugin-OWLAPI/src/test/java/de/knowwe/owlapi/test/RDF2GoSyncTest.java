@@ -37,7 +37,6 @@ import utils.TestUtils;
 import connector.DummyConnector;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Environment;
-import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
@@ -58,7 +57,6 @@ public class RDF2GoSyncTest {
 	@BeforeClass
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
-		PackageManager.overrideAutocompileArticle(true);
 		DummyConnector connector = new DummyConnector();
 		connector.setKnowWEExtensionPath(TestUtils.createKnowWEExtensionPath());
 		Environment.initInstance(connector);

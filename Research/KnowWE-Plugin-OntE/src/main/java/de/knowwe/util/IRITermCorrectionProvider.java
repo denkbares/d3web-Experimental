@@ -7,13 +7,13 @@ import java.util.List;
 import com.wcohen.ss.Levenstein;
 
 import de.d3web.strings.Identifier;
+import de.knowwe.core.compile.Compilers;
+import de.knowwe.core.compile.terminology.TermCompiler;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.correction.CorrectionProvider;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * A Correction Provider for OWLTermReferences
@@ -24,12 +24,12 @@ import de.knowwe.core.utils.KnowWEUtils;
 public class IRITermCorrectionProvider implements CorrectionProvider {
 
 	@Override
-	public List<CorrectionProvider.Suggestion> getSuggestions(Article article, Section<?> section, int threshold) {
+	public List<CorrectionProvider.Suggestion> getSuggestions(TermCompiler compiler, Section<?> section, int threshold) {
 		if (!(section.get() instanceof Term)) {
 			return null;
 		}
 
-		TerminologyManager terminologyHandler = KnowWEUtils.getGlobalTerminologyManager(article.getWeb());
+		TerminologyManager terminologyHandler = Compilers.getGlobalTerminologyManager(section.getWeb());
 		Term termReference = ((Term) section.get());
 
 		Collection<Identifier> localTermMatches = terminologyHandler.getAllDefinedTermsOfType(

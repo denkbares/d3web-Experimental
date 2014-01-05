@@ -19,7 +19,6 @@
 package de.knowwe.casetrain.evaluation;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -39,7 +38,8 @@ import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Link;
 import de.knowwe.casetrain.type.multimedia.Video;
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
@@ -49,8 +49,6 @@ import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
  * 
@@ -80,18 +78,14 @@ public class Evaluation extends BlockMarkupType {
 						+ ((Evaluation) sec.get()).getCSSClass()
 						+ "'>");
 				string.appendHtml("<div class='Evaluationstart'></div>");
-				Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 				Utils.renderKDOMReportMessageBlock(
-						Messages.getErrors(Messages.getMessagesFromSubtree(
-								article, sec)), string);
+						Messages.getErrors(Messages.getMessagesFromSubtree(sec)), string);
 
 				Utils.renderKDOMReportMessageBlock(
-						Messages.getWarnings(Messages.getMessagesFromSubtree(
-								article, sec)), string);
+						Messages.getWarnings(Messages.getMessagesFromSubtree(sec)), string);
 
 				Utils.renderKDOMReportMessageBlock(
-						Messages.getNotices(Messages.getMessagesFromSubtree(
-								article, sec)), string);
+						Messages.getNotices(Messages.getMessagesFromSubtree(sec)), string);
 				Section<BlockMarkupContent> con =
 						Sections.findSuccessor(sec, BlockMarkupContent.class);
 				BlockMarkupContentRenderer.getInstance().render(con, user, string);
@@ -100,10 +94,10 @@ public class Evaluation extends BlockMarkupType {
 			}
 		});
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Evaluation>() {
+		this.addCompileScript(new DefaultGlobalScript<Evaluation>() {
 
 			@Override
-			public Collection<Message> create(Article article, Section<Evaluation> s) {
+			public void compile(DefaultGlobalCompiler compiler, Section<Evaluation> s) {
 
 				List<Message> messages = new ArrayList<Message>(0);
 
@@ -120,7 +114,7 @@ public class Evaluation extends BlockMarkupType {
 					messages.addAll(this.testQuestionAnswerComposition(s));
 				}
 
-				return messages;
+				Messages.storeMessages(s, getClass(), messages);
 			}
 
 /**

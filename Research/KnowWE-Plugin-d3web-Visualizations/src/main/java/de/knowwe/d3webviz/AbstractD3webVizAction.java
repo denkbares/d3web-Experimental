@@ -26,10 +26,10 @@ import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * 
@@ -50,7 +50,7 @@ public abstract class AbstractD3webVizAction extends AbstractAction {
 			return;
 		}
 		
-		Iterator<Article> iterator = KnowWEUtils.getCompilingArticles(section).iterator();
+		Iterator<Article> iterator = Compilers.getCompilingArticles(section).iterator();
 		if (!iterator.hasNext()) return;
 		
 		Article article = iterator.next();

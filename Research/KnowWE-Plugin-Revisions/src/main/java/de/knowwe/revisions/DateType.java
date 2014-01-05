@@ -27,11 +27,11 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalHandler;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 
@@ -49,7 +49,7 @@ public class DateType extends AbstractType {
 
 	public DateType() {
 		setSectionFinder(new AllTextFinderTrimmed());
-		addSubtreeHandler(new DateSubtreeHandler());
+		addCompileScript(new DateSubtreeHandler());
 	}
 
 	public static boolean isValid(String sectionText) {
@@ -68,17 +68,17 @@ public class DateType extends AbstractType {
 		return DATE_FORMAT.parse(dateString).getTime();
 	}
 
-	class DateSubtreeHandler extends SubtreeHandler<DateType> {
+	class DateSubtreeHandler extends DefaultGlobalHandler<DateType> {
 
 		@Override
-		public Collection<Message> create(Article article, Section<DateType> s) {
+		public Collection<Message> create(DefaultGlobalCompiler compiler, Section<DateType> section) {
 			System.out.println("running");
-			if (DateType.isValid(s.getText())) {
+			if (DateType.isValid(section.getText())) {
 				return Collections.emptyList();
 			}
 			else {
 				LinkedList<Message> list = new LinkedList<Message>();
-				list.add(Messages.syntaxError("Invalid date: '" + s.getText() + "'"));
+				list.add(Messages.syntaxError("Invalid date: '" + section.getText() + "'"));
 
 				return list;
 

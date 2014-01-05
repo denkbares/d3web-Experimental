@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
-import de.knowwe.core.Environment;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -57,13 +57,12 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 
 	public TermBrowserMarkup(DefaultMarkup markup) {
 		super(markup);
-		setIgnorePackageCompile(true);
 		this.setRenderer(new TermBrowserMarkupRenderer());
 	}
 
 	static {
 		MARKUP = new DefaultMarkup("termbrowser");
-		MARKUP.addAnnotation(PackageManager.ANNOTATION_MASTER, false);
+		MARKUP.addAnnotation(PackageManager.MASTER_ATTRIBUTE_NAME, false);
 		MARKUP.addAnnotation(HIERARCHY, false);
 		MARKUP.addAnnotation(SIZE, false, Pattern.compile("[0-9]+"));
 		MARKUP.addAnnotation(CATEGORIES, false);
@@ -79,7 +78,6 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 
 	public TermBrowserMarkup() {
 		super(MARKUP);
-		setIgnorePackageCompile(true);
 		this.setRenderer(new TermBrowserMarkupRenderer());
 	}
 
@@ -102,7 +100,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
 		if (termBrowser != null) {
 			return DefaultMarkupType.getAnnotation(termBrowser,
-					PackageManager.ANNOTATION_MASTER);
+					PackageManager.MASTER_ATTRIBUTE_NAME);
 		}
 		return null;
 	}
@@ -188,7 +186,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 	 * @return
 	 */
 	public static Section<TermBrowserMarkup> getTermBrowserMarkup(UserContext user) {
-		Article article = Environment.getInstance().getArticleManager(user.getWeb()).getArticle(
+		Article article = Compilers.getDefaultArticleManager(user.getWeb()).getArticle(
 				user.getTitle());
 		Section<TermBrowserMarkup> termBrowser = null;
 		if (article != null) {
@@ -196,7 +194,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 					TermBrowserMarkup.class);
 		}
 		if (termBrowser == null) {
-			Article leftMenu = Environment.getInstance().getArticleManager(user.getWeb()).getArticle(
+			Article leftMenu = Compilers.getDefaultArticleManager(user.getWeb()).getArticle(
 					"LeftMenu");
 			termBrowser = Sections.findSuccessor(leftMenu.getRootSection(),
 					TermBrowserMarkup.class);
@@ -209,7 +207,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		@Override
 		public void render(Section<?> section, UserContext user, RenderResult string) {
 			String master = DefaultMarkupType.getAnnotation(section,
-					PackageManager.ANNOTATION_MASTER);
+					PackageManager.MASTER_ATTRIBUTE_NAME);
 			LinkToTermDefinitionProvider linkProvider = null;
 			if (master == null) {
 				linkProvider = new de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider();

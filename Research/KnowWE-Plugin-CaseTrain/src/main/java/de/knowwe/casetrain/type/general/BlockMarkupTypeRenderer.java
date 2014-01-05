@@ -19,14 +19,12 @@
 package de.knowwe.casetrain.type.general;
 
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * 
@@ -41,15 +39,14 @@ public class BlockMarkupTypeRenderer implements Renderer {
 		string.appendHtml("<div class='"
 				+ ((BlockMarkupType) sec.get()).getCSSClass()
 				+ "'>");
-		Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 		Utils.renderKDOMReportMessageBlock(Messages.getErrors(Messages.getMessagesFromSubtree(
-				article, sec)), string);
+				sec)), string);
 
 		Utils.renderKDOMReportMessageBlock(Messages.getWarnings(Messages.getMessagesFromSubtree(
-				article, sec)), string);
+				sec)), string);
 
 		Utils.renderKDOMReportMessageBlock(Messages.getNotices(Messages.getMessagesFromSubtree(
-				article, sec)), string);
+				sec)), string);
 
 		// TODO Delegation renders PlainText around collapsebox!
 		// string.append(KnowWEUtils.maskHTML("<pre id=\""

@@ -28,7 +28,6 @@ public class SparqlVisContentType extends AbstractType {
 	public SparqlVisContentType() {
 		this.setSectionFinder(AllTextSectionFinder.getInstance());
 		this.setRenderer(new AsynchronRenderer(new SparqlVisTypeRenderer()));
-		this.setIgnorePackageCompile(true);
 	}
 
 }

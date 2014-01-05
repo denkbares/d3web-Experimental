@@ -26,11 +26,12 @@ import java.util.WeakHashMap;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 
 /**
  * OWLAPISubtreeHandler class which provides access to an OWL ontology
@@ -51,7 +52,7 @@ import de.knowwe.core.report.Message;
  * @author Sebastian Furth
  * @created May 24, 2011
  */
-public abstract class OWLAPISubtreeHandler<T extends Type> extends SubtreeHandler<T> {
+public abstract class OWLAPISubtreeHandler<T extends Type> extends DefaultGlobalScript<T> {
 
 	/**
 	 * Cache for the OWLAxioms. Enables incremental compilation.
@@ -99,7 +100,6 @@ public abstract class OWLAPISubtreeHandler<T extends Type> extends SubtreeHandle
 	 *        active).
 	 */
 	public OWLAPISubtreeHandler(OWLAPIConnector connector, boolean sync) {
-		super(false);
 		if (connector == null) {
 			throw new NullPointerException("The connector can't be null!");
 		}
@@ -118,22 +118,22 @@ public abstract class OWLAPISubtreeHandler<T extends Type> extends SubtreeHandle
 	 * @return a @link{Set} of @link{OWLAxiom}s which will be added to the
 	 *         ontology.
 	 */
-	public abstract Set<OWLAxiom> createOWLAxioms(Article article, Section<T> s, Collection<Message> messages);
+	public abstract Set<OWLAxiom> createOWLAxioms(de.knowwe.core.compile.Compiler compiler, Section<T> s, Collection<Message> messages);
 
 	@Override
-	public Collection<Message> create(Article article, Section<T> s) {
+	public void compile(DefaultGlobalCompiler compiler, Section<T> s) {
 		Collection<Message> messages = new LinkedList<Message>();
-		Set<OWLAxiom> axioms = createOWLAxioms(article, s, messages);
+		Set<OWLAxiom> axioms = createOWLAxioms(compiler, s, messages);
 		connector.addAxioms(axioms);
 		axiomCache.put(s, axioms);
 		if (sync) {
 			RDF2GoSync.synchronize(axioms, s, RDF2GoSync.Mode.ADD);
 		}
-		return messages;
+		Messages.storeMessages(s, getClass(), messages);
 	}
 
 	@Override
-	public void destroy(Article article, Section<T> s) {
+	public void destroy(DefaultGlobalCompiler compiler, Section<T> s) {
 		Set<OWLAxiom> axioms = axiomCache.remove(s);
 		connector.removeAxioms(axioms);
 		if (sync) {

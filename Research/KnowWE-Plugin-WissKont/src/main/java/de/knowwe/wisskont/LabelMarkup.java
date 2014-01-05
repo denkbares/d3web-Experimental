@@ -60,7 +60,6 @@ public class LabelMarkup extends AbstractType implements Editable {
 		this.addChildType(new KeyType(keyRegex));
 
 		this.setRenderer(new RelationMarkupRenderer());
-		this.setIgnorePackageCompile(true);
 
 	}
 

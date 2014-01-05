@@ -76,7 +76,7 @@ public class ParseXMLAction extends AbstractAction {
 					"</span>");
 			return buildi.toString();
 		}
-		Collection<Message> allmsgs = Messages.getMessagesFromSubtree(article, sec);
+		Collection<Message> allmsgs = Messages.getMessagesFromSubtree(null, sec);
 		Collection<Message> errors = Messages.getErrors(allmsgs);
 		Collection<Message> warnings = Messages.getWarnings(allmsgs);
 		Collection<Message> notices = Messages.getNotices(allmsgs);

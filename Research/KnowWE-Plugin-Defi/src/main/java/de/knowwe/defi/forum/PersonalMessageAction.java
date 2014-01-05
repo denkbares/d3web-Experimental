@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.defi.forum;
 
@@ -29,6 +29,7 @@ import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.Compilers;
 
 /**
  * 
@@ -47,7 +48,7 @@ public class PersonalMessageAction extends AbstractAction {
 		String user2 = context.getParameter("user2");
 		GregorianCalendar now = new GregorianCalendar();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		ArticleManager mgr = Environment.getInstance().getArticleManager(
+		ArticleManager mgr = Compilers.getDefaultArticleManager(
 				Environment.DEFAULT_WEB);
 
 		String topic = "Persoenliche Nachrichten(" + user1 + "," + user2 + ")";
@@ -81,9 +82,9 @@ public class PersonalMessageAction extends AbstractAction {
 			content += "<div style='clear:both'></div>\n";
 
 			Environment.getInstance().buildAndRegisterArticle(content,
-						topic, Environment.DEFAULT_WEB);
+					topic, Environment.DEFAULT_WEB);
 			Environment.getInstance().getWikiConnector()
-						.createArticle(topic, content, username);
+					.createArticle(topic, content, username);
 		}
 
 		HttpServletResponse response = context.getResponse();

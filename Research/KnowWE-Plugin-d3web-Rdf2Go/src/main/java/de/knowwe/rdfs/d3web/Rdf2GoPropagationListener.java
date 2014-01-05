@@ -7,11 +7,11 @@ import de.d3web.core.inference.PropagationEntry;
 import de.d3web.core.inference.PropagationListener;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.session.Session;
-import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class Rdf2GoPropagationListener implements PropagationListener {
 
 	private final boolean commitAfterPropagation;
+	private final Rdf2GoSessionManager mgr;
 
 	/**
 	 * Constructor for the {@link Rdf2GoPropagationListener}.
@@ -19,18 +19,9 @@ public class Rdf2GoPropagationListener implements PropagationListener {
 	 * @param commitAfterPropagation set this to true, if you want the Listener
 	 *        to commit the changes itself after each propagation
 	 */
-	public Rdf2GoPropagationListener(boolean commitAfterPropagation) {
+	public Rdf2GoPropagationListener(Rdf2GoSessionManager manager, boolean commitAfterPropagation) {
 		this.commitAfterPropagation = commitAfterPropagation;
-	}
-
-	/**
-	 * Constructor for the {@link Rdf2GoPropagationListener}. Using this
-	 * constructor, the Listener commits the changes in the session after each
-	 * propagation.
-	 * 
-	 */
-	public Rdf2GoPropagationListener() {
-		this(true);
+		this.mgr = manager;
 	}
 
 	@Override
@@ -52,7 +43,7 @@ public class Rdf2GoPropagationListener implements PropagationListener {
 	public void propagationFinished(Session session, Collection<PropagationEntry> entries) {
 		for (PropagationEntry entry : entries) {
 			TerminologyObject changedObject = entry.getObject();
-			Rdf2GoSessionManager mgr = Rdf2GoSessionManager.getInstance();
+
 			mgr.removeFactStatements(session, changedObject);
 			mgr.addFactAsStatements(session, changedObject, entry.getNewValue());
 		}
@@ -61,7 +52,7 @@ public class Rdf2GoPropagationListener implements PropagationListener {
 
 				@Override
 				public void run() {
-					Rdf2GoCore.getInstance().commit();
+					mgr.commit();
 				}
 			};
 			thread.start();

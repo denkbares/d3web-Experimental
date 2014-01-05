@@ -31,13 +31,13 @@ import junit.framework.TestCase;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
 import utils.TestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
-import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.onte.test.util.OWLGenerationVocabulary;
 import de.knowwe.onte.test.util.OWLReasoningUtils;
 
@@ -49,6 +49,7 @@ import de.knowwe.onte.test.util.OWLReasoningUtils;
  * @author Stefan Mark
  * @created 23.09.2011
  */
+@Ignore
 public class OWLGenerationTest {
 
 	/* The underlying test article */
@@ -59,7 +60,6 @@ public class OWLGenerationTest {
 	@BeforeClass
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
-		PackageManager.overrideAutocompileArticle(true);
 		TestArticleManager.getArticle(TESTFILE);
 
 		// OWLEntailment.write();

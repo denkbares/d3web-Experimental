@@ -66,7 +66,7 @@ public class MoveConceptDefinitionTopRefactoring extends AbstractAction {
 	 * @param context
 	 */
 	private void refactor(UserActionContext context) {
-		ArticleManager articleManager = Environment.getInstance().getArticleManager(
+		ArticleManager articleManager = Environment.getInstance().getDefaultArticleManager(
 				Environment.DEFAULT_WEB);
 		Collection<Article> articles = articleManager.getArticles();
 		for (Article article : articles) {

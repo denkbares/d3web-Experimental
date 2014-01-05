@@ -20,18 +20,14 @@ package de.knowwe.defi.time;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 public class TimeTableContentType extends AbstractType {
 
@@ -57,23 +53,22 @@ class DateT extends AbstractType {
 
 	public DateT() {
 		this.setSectionFinder(AllTextSectionFinder.getInstance());
-		this.addSubtreeHandler(new DateChecker());
+		this.addCompileScript(new DateChecker());
 	}
 
-	class DateChecker extends GeneralSubtreeHandler<DateT> {
+	class DateChecker extends DefaultGlobalScript<DateT> {
 
 		@Override
-		public Collection<Message> create(Article article, Section<DateT> s) {
+		public void compile(DefaultGlobalCompiler compiler, Section<DateT> s) {
 			String dateText = s.getText().trim();
 			try {
 				dateFormat.parse(dateText);
 			}
 			catch (ParseException e) {
-				List<Message> messages = new ArrayList<Message>(1);
-				messages.add(Messages.error("Invalid Date: " + dateText));
-				return messages;
+				Messages.storeMessage(s, getClass(),
+						Messages.error("Invalid Date: " + dateText));
+
 			}
-			return new ArrayList<Message>(0);
 		}
 
 	}

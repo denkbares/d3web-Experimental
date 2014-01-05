@@ -40,7 +40,7 @@ public class CoverageCityType extends DefaultMarkupType {
 		m.addAnnotationNameType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
 				new PackageAnnotationNameType());
 		m.addAnnotationContentType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
-				new PackageTerm(true));
+				new PackageTerm());
 	}
 
 	public CoverageCityType() {

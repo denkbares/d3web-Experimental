@@ -133,7 +133,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 */
 	private String getMaster(UserContext user, Section<?> section) {
 		return OntoVisType.getAnnotation(section,
-				PackageManager.ANNOTATION_MASTER);
+				PackageManager.MASTER_ATTRIBUTE_NAME);
 	}
 
 	/**

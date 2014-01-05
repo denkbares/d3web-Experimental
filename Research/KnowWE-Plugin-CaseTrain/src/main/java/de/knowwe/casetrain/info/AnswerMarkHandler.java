@@ -19,16 +19,16 @@
 package de.knowwe.casetrain.info;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import de.knowwe.casetrain.info.AnswerLine.AnswerMark;
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
+import de.knowwe.core.report.Messages;
 
 /**
  * Simply checks, if the string t inside {t} has the allowed symbols. +/-/number
@@ -36,7 +36,7 @@ import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
  * @author Johannes Dienst
  * @created 08.05.2011
  */
-public class AnswerMarkHandler extends GeneralSubtreeHandler<AnswerMark> {
+public class AnswerMarkHandler extends DefaultGlobalScript<AnswerMark> {
 
 	ResourceBundle bundle = ResourceBundle.getBundle("casetrain_messages");
 
@@ -55,19 +55,19 @@ public class AnswerMarkHandler extends GeneralSubtreeHandler<AnswerMark> {
 	}
 
 	@Override
-	public Collection<Message> create(Article article, Section<AnswerMark> s) {
+	public void compile(DefaultGlobalCompiler compiler, Section<AnswerMark> s) {
 
-		List<Message> messages = new ArrayList<Message>();
 		String content = s.getText().substring(1, s.getText().length() - 1).trim();
 
 		for (String string : symbols) {
 			if (content.equals(string)) {
-				return messages;
+				return;
 			}
 		}
 
 		double d1 = 0.0;
 		double d2 = -1.0;
+		List<Message> messages = new ArrayList<Message>();
 		try {
 			String[] doubles = content.split("[ ]+");
 			if (doubles.length > 2) throw new IllegalArgumentException();
@@ -76,8 +76,9 @@ public class AnswerMarkHandler extends GeneralSubtreeHandler<AnswerMark> {
 		}
 		catch (Exception e) {
 			messages.add(Utils.invalidArgumentError(
-							bundle.getString("WRONG_ANSWER_MARK")));
-			return messages;
+					bundle.getString("WRONG_ANSWER_MARK")));
+			Messages.storeMessages(s, getClass(), messages);
+			return;
 		}
 
 		if (d1 < 0) {
@@ -91,6 +92,7 @@ public class AnswerMarkHandler extends GeneralSubtreeHandler<AnswerMark> {
 					Utils.invalidArgumentError(
 							bundle.getString("LOWER_ZERO")));
 		}
-		return messages;
+		Messages.storeMessages(s, getClass(), messages);
 	}
+
 }

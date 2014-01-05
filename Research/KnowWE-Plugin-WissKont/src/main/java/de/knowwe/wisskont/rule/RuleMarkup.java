@@ -43,6 +43,7 @@ import de.d3web.we.kdom.condition.Finding;
 import de.d3web.we.kdom.condition.KDOMConditionFactory;
 import de.d3web.we.kdom.condition.NumericalFinding;
 import de.d3web.we.kdom.condition.NumericalIntervallFinding;
+import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.annotation.type.list.ListObjectIdentifier;
 import de.knowwe.compile.IncrementalCompiler;
@@ -52,6 +53,7 @@ import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.renderer.ReferenceSurroundingRenderer;
 import de.knowwe.core.Environment;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
@@ -64,7 +66,6 @@ import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
@@ -104,7 +105,6 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 		this.addChildType(keyType);
 
 		// this.setRenderer(renderer);
-		this.setIgnorePackageCompile(true);
 
 		this.setCompileScript(new WisskontRuleCreator());
 	}
@@ -179,11 +179,10 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 			CompositeRenderer renderer = new CompositeRenderer(DelegateRenderer.getInstance(),
 					new ReferenceSurroundingRenderer());
 			this.addChildType(new ListObjectIdentifier(renderer));
-			this.setIgnorePackageCompile(true);
 		}
 
 		@Override
-		protected Condition createCondition(Article article, Section<WisskontChoiceFinding> section) {
+		protected Condition createCondition(D3webCompiler compiler, Section<WisskontChoiceFinding> section) {
 			Section<ListObjectIdentifier> concept = Sections.findSuccessor(section,
 					ListObjectIdentifier.class);
 
@@ -197,9 +196,10 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 
 			if (markup == null) return null;
 
-			Object o = KnowWEUtils.getStoredObject(
-					Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
-							KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE),
+			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
+					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
+			Object o = Compilers.getStoredObject(
+					D3webUtils.getD3webCompiler(article),
 					markup, ValuesMarkup.VALUE_STORE_KEY);
 
 			QuestionChoice qChoice = null;
@@ -251,9 +251,12 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 			// make sure that terminals are created and stored
 			List<Section<WisskontChoiceFinding>> terminals = Sections.findSuccessorsOfType(cond,
 					WisskontChoiceFinding.class);
+			D3webCompiler d3webCompiler = D3webUtils.getD3webCompiler(article);
 			for (Section<WisskontChoiceFinding> terminal : terminals) {
-				Condition createdCondition = terminal.get().createCondition(article, terminal);
-				KnowWEUtils.storeObject(article, terminal, "cond-store-key",
+				Condition createdCondition = terminal.get().createCondition(
+						d3webCompiler, terminal);
+				Compilers.storeObject(d3webCompiler, terminal,
+						"cond-store-key",
 						createdCondition);
 			}
 			List<Section<NumericalFinding>> numFindingTerminals = Sections.findSuccessorsOfType(
@@ -261,13 +264,13 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 					NumericalFinding.class);
 			for (Section<NumericalFinding> condNumSection : numFindingTerminals) {
 				Condition createdCondition = CondUtils.createCondNum(condNumSection);
-				KnowWEUtils.storeObject(article, condNumSection, "cond-store-key",
+				Compilers.storeObject(d3webCompiler, condNumSection,
+						"cond-store-key",
 						createdCondition);
 			}
 
 			Condition d3Cond = KDOMConditionFactory.createCondition(
-					article,
-					cond);
+					d3webCompiler, cond);
 
 			if (d3Cond == null) return;
 
@@ -300,16 +303,18 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 					}
 				}
 			}
-			KnowWEUtils.storeObject(article, section, RULE_STORE_KEY, rules);
+			Compilers.storeObject(D3webUtils.getD3webCompiler(article), section, RULE_STORE_KEY,
+					rules);
 		}
 
 		private static final String RULE_STORE_KEY = "RULE_STORE_KEY";
 
 		@Override
 		public void deleteFromRepository(Section<RuleMarkup> section) {
-			Object storedObject = KnowWEUtils.getStoredObject(
-					Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
-							KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE), section, RULE_STORE_KEY);
+			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
+					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
+			Object storedObject = Compilers.getStoredObject(
+					D3webUtils.getD3webCompiler(article), section, RULE_STORE_KEY);
 			if (storedObject instanceof Set) {
 				Set<?> set = (Set<?>) storedObject;
 				for (Object object : set) {

@@ -21,6 +21,7 @@ package de.knowwe.kdom.manchester.types;
 import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -55,7 +56,7 @@ public class CardinalityRestriction extends AbstractType {
 	/**
 	 *
 	 */
-	public CardinalityRestriction(AbstractType type) {
+	public CardinalityRestriction(Type type) {
 
 		SectionFinder sf = new RegexSectionFinder(REGEX);
 		this.setSectionFinder(sf);

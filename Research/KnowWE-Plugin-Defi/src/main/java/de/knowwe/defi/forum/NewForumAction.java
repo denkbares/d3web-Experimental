@@ -37,6 +37,7 @@ import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.event.EventManager;
 
 /**
@@ -62,7 +63,7 @@ public class NewForumAction extends AbstractAction {
 		String responseString = "\n";
 		GregorianCalendar now = new GregorianCalendar();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-		ArticleManager mgr = Environment.getInstance().getArticleManager(
+		ArticleManager mgr = Compilers.getDefaultArticleManager(
 				Environment.DEFAULT_WEB);
 
 		String content = "";
@@ -76,8 +77,8 @@ public class NewForumAction extends AbstractAction {
 		String name = (pageName.equals("Sonstiges")) ? topic : topic + " (" + pageName + ")";
 		content += "\n<forum topic='" + Strings.encodeHtml(topic) + "' unit='" + pageName
 				+ "' name='" + Strings.encodeHtml(name) + "'>\n" +
-					"<box name=\"" + username + "\" date=\"" + sdf.format(now.getTime()) + "\">"
-					+ message + "</box>\n</forum>";
+				"<box name=\"" + username + "\" date=\"" + sdf.format(now.getTime()) + "\">"
+				+ message + "</box>\n</forum>";
 
 		// links under the forum
 		content += "\n<br /><br />\n<a class=\"forumLinkLeft\" href=\"\" onclick=\"javascript:location.href = document.referrer;return false;\">"

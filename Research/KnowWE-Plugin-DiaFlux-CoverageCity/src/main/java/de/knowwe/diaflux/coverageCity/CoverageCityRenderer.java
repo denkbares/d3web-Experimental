@@ -18,22 +18,11 @@
  */
 package de.knowwe.diaflux.coverageCity;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.diaFlux.flow.StartNode;
-import de.d3web.diaFlux.inference.DiaFluxUtils;
-import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.diaflux.FlowchartUtils;
-import de.knowwe.diaflux.type.FlowchartType;
 
 /**
  * 
@@ -59,42 +48,10 @@ public class CoverageCityRenderer implements Renderer {
 		bob.appendHtml("<div id='pickresult" + id + "'></div>\n");
 		bob.appendHtml("<div id='nodeId" + id + "'></div>\n");
 
-		// TODO error handling
-		Set<String> articles = getCompilingArticles(section);
-
-		String art = articles.iterator().next();
-		KnowledgeBase base = D3webUtils.getKnowledgeBase(section.getWeb(), art);
-
-		List<StartNode> nodes = DiaFluxUtils.getAutostartNodes(base);
-
-		if (nodes.isEmpty()) {
-
-			bob.appendHtml("No Autostart node found.");
-			bob.appendHtml("</div>\n");
-			return;
-		}
-		Section<FlowchartType> flow = FlowchartUtils.findFlowchartSection(section.getWeb(),
-				nodes.get(0).getFlow().getName());
-
-		bob.append(FlowchartUtils.prepareFlowchartRenderer(user, "flowDisplay" + id, flow.getID(),
+		bob.append(FlowchartUtils.prepareFlowchartRenderer(user, "flowDisplay" + id, null,
 				PathCoverageHighlight.COVERAGE_CITY_SCOPE, true));
 
 		bob.appendHtml("</div>\n");
 
 	}
-
-	private static Set<String> getCompilingArticles(Section<?> section) {
-		Set<String> compilingArticles = new HashSet<String>();
-		PackageManager packageManager = KnowWEUtils.getPackageManager(section.getArticle().getWeb());
-		if (section != null) {
-			for (String packageName : section.getPackageNames()) {
-				compilingArticles.addAll(packageManager.getCompilingArticles(packageName));
-			}
-		}
-		if (compilingArticles.isEmpty()) {
-			compilingArticles.addAll(packageManager.getCompilingArticles());
-		}
-		return compilingArticles;
-	}
-
 }

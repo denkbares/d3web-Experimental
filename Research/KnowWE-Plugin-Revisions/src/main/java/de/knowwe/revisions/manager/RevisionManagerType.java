@@ -37,7 +37,6 @@ public class RevisionManagerType extends DefaultMarkupType {
 
 	public RevisionManagerType() {
 		super(m);
-		this.setIgnorePackageCompile(true);
 		this.setRenderer(new RevisionManagerRenderer());
 	}
 }

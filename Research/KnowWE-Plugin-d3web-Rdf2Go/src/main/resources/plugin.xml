@@ -15,39 +15,39 @@
 		</library>
 	</runtime>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="SubtreeHandler"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CompileScript"
 		id="Rdf2GoTermDefinitionHandler">
 		<parameter id="class" value="de.knowwe.rdfs.d3web.Rdf2GoTermDefinitionHandler" />
 		<parameter id="name" value="Rdf2GoTermDefinitionHandler" />
 		<parameter id="description" value="Handler Rdf2GoTermDefinitionHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="handlerpriority" value="-200" />
+		<parameter id="compilepriority" value="200" />
 		<parameter id="scope" value="QuestionDefinition" />
 		<parameter id="scope" value="QuestionnaireDefinition" />
 		<parameter id="scope" value="SolutionDefinition" />
 		<parameter id="scope" value="AnswerDefinition" />
 	</extension>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="SubtreeHandler"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CompileScript"
 		id="Rdf2GoPropertyHandler">
 		<parameter id="class" value="de.knowwe.rdfs.d3web.Rdf2GoPropertyHandler" />
 		<parameter id="name" value="Rdf2GoPropertyHandler" />
 		<parameter id="description" value="Handler Rdf2GoPropertyHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="handlerpriority" value="-200" />
+		<parameter id="compilepriority" value="-200" />
 		<parameter id="scope" value="PropertyDeclarationType" />
 	</extension>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="SubtreeHandler"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CompileScript"
 		id="Rdf2GoKnowledgeBaseHandler">
 		<parameter id="class" value="de.knowwe.rdfs.d3web.Rdf2GoKnowledgeBaseHandler" />
 		<parameter id="name" value="Rdf2GoKnowledgeBaseHandler" />
 		<parameter id="description" value="Handler Rdf2GoKnowledgeBaseHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="handlerpriority" value="-200" />
+		<parameter id="compilepriority" value="-200" />
 		<parameter id="scope" value="KnowledgeBaseType" />
 	</extension>
 		

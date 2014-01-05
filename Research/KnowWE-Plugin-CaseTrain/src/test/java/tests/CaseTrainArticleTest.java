@@ -6,6 +6,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import utils.TestArticleManager;
@@ -74,6 +75,7 @@ import de.knowwe.core.kdom.parsing.Sections;
  * @author Johannes Dienst
  * @created 20.05.2011
  */
+@Ignore
 public class CaseTrainArticleTest extends TestCase {
 
 	private final String TESTSUITEARTICLE = "src/test/resources/CaseTrainWikipage.txt";

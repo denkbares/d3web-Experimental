@@ -91,14 +91,14 @@ class BracedExpressionFinder implements SectionFinder {
 
 		// closing brace could not be found -> throw error message
 		if (closingBracket == -1) {
-			Messages.storeMessage(father.getArticle(), father,
+			Messages.storeMessage(father,
 					this.getClass(), Messages.syntaxError("missing \""
 							+ BraceElement.CLOSED + "\""));
 			return null;
 		}
 		else {
 			// clear messages and look for matching braces
-			Messages.clearMessages(father.getArticle(), father, this.getClass());
+			Messages.clearMessages(father, this.getClass());
 		}
 
 		int leadingSpaces = text.indexOf(trimmed);

@@ -30,7 +30,6 @@ public class ShowHierarchyMarkup extends DefaultMarkupType {
 
 	public ShowHierarchyMarkup(DefaultMarkup markup) {
 		super(markup);
-		setIgnorePackageCompile(true);
 		this.setRenderer(new ShowHierarchyRenderer());
 	}
 
@@ -48,7 +47,6 @@ public class ShowHierarchyMarkup extends DefaultMarkupType {
 
 	public ShowHierarchyMarkup() {
 		super(m);
-		setIgnorePackageCompile(true);
 		this.setRenderer(new ShowHierarchyRenderer());
 	}
 

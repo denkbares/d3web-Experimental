@@ -20,7 +20,6 @@
 package de.knowwe.casetrain.type;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -28,7 +27,8 @@ import de.knowwe.casetrain.info.Info;
 import de.knowwe.casetrain.type.general.BlockMarkupContent;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -37,9 +37,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.AnonymousType;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
  * 
@@ -68,18 +66,14 @@ public class MetaData extends BlockMarkupType {
 
 			@Override
 			public void render(Section<?> sec, UserContext user, RenderResult string) {
-				Article article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 				Utils.renderKDOMReportMessageBlock(
-						Messages.getErrors(Messages.getMessagesFromSubtree(
-								article, sec)), string);
+						Messages.getErrors(Messages.getMessagesFromSubtree(sec)), string);
 
 				Utils.renderKDOMReportMessageBlock(
-						Messages.getWarnings(Messages.getMessagesFromSubtree(
-								article, sec)), string);
+						Messages.getWarnings(Messages.getMessagesFromSubtree(sec)), string);
 
 				Utils.renderKDOMReportMessageBlock(
-						Messages.getNotices(Messages.getMessagesFromSubtree(
-								article, sec)), string);
+						Messages.getNotices(Messages.getMessagesFromSubtree(sec)), string);
 
 				string.append("%%collapsebox-closed \r\n");
 				string.append("! "
@@ -117,10 +111,10 @@ public class MetaData extends BlockMarkupType {
 			}
 		});
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<MetaData>() {
+		this.addCompileScript(new DefaultGlobalScript<MetaData>() {
 
 			@Override
-			public Collection<Message> create(Article article, Section<MetaData> s) {
+			public void compile(DefaultGlobalCompiler compiler, Section<MetaData> s) {
 
 				List<Message> messages = new ArrayList<Message>(0);
 				Section<Info> infoSection = Sections.findSuccessor(s.getArticle().getRootSection(),
@@ -134,8 +128,9 @@ public class MetaData extends BlockMarkupType {
 				List<Section<AttributeName>> atts = new ArrayList<Section<AttributeName>>();
 				Sections.findSuccessorsOfType(s, AttributeName.class, atts);
 				messages.addAll(MetaAttributes.getInstance().compareAttributeList(atts));
-				return messages;
+				Messages.storeMessages(s, getClass(), messages);
 			}
+
 		});
 	}
 

@@ -20,6 +20,7 @@ package de.knowwe.sparql;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collection;
 
 import jxl.Workbook;
 import jxl.write.WritableWorkbook;
@@ -31,12 +32,14 @@ import org.ontoware.rdf2go.model.QueryResultTable;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message.Type;
 import de.knowwe.excel.CreateExcelFromSparql;
 import de.knowwe.notification.NotificationManager;
 import de.knowwe.notification.StandardNotification;
+import de.knowwe.rdf2go.Rdf2GoCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.SparqlContentType;
 import de.knowwe.rdf2go.sparql.SparqlMarkupType;
@@ -70,17 +73,20 @@ public class DownloadSparqlResultAsExcel extends AbstractAction {
 			Section<SparqlMarkupType> realMarkupSection = Sections.findAncestorOfType(
 					markupSection,
 					SparqlMarkupType.class);
+			Collection<Rdf2GoCompiler> compilers = Compilers.getCompilers(realMarkupSection,
+					Rdf2GoCompiler.class);
+			if (!compilers.isEmpty()) {
+				Rdf2GoCore core = compilers.iterator().next().getRdf2GoCore();
+				String sparql = Rdf2GoUtils.createSparqlString(core, markupSection.getText());
+				QueryResultTable resultSet = core.sparqlSelect(sparql);
 
-			Rdf2GoCore core = Rdf2GoCore.getInstance(realMarkupSection);
-			String sparql = Rdf2GoUtils.createSparqlString(markupSection.getText());
-			QueryResultTable resultSet = core.sparqlSelect(sparql);
+				OutputStream outputStream = context.getOutputStream();
 
-			OutputStream outputStream = context.getOutputStream();
+				workbook = Workbook.createWorkbook(outputStream);
+				workbook = CreateExcelFromSparql.addSparqlResultAsSheet(workbook, resultSet,
+						context, core);
 
-			workbook = Workbook.createWorkbook(outputStream);
-			workbook = CreateExcelFromSparql.addSparqlResultAsSheet(workbook, resultSet,
-					context, core);
-
+			}
 			workbook.write();
 			workbook.close();
 

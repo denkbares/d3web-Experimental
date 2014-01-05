@@ -11,17 +11,17 @@ import de.d3web.scoring.ActionHeuristicPS;
 import de.d3web.scoring.Score;
 import de.d3web.scoring.inference.PSMethodHeuristic;
 import de.d3web.we.kdom.condition.KDOMConditionFactory;
-import de.d3web.we.reviseHandler.D3webSubtreeHandler;
+import de.d3web.we.knowledgebase.D3webCompiler;
+import de.d3web.we.reviseHandler.D3webHandler;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
-import de.knowwe.core.utils.KnowWEUtils;
 
-public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell> {
+public class ScoreTableCellSubtreeHandler extends D3webHandler<ScoreCell> {
 
 	private static final String ruleStoreKey = "rule-store-key";
 
@@ -30,7 +30,7 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 	}
 
 	@Override
-	public Collection<Message> create(Article article,
+	public Collection<Message> create(D3webCompiler article,
 			Section<ScoreCell> section) {
 
 		List<Message> messages = new ArrayList<Message>();
@@ -73,7 +73,7 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 					solution);
 
 			Condition d3webCond = KDOMConditionFactory.createCondition(article, condition);
-			
+
 			Score score = D3webUtils.getScoreForString(section.getText().trim());
 			if (score == null) return messages;
 
@@ -88,7 +88,7 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 						+ "' and column '" + solution + "'"));
 			}
 			else {
-				KnowWEUtils.storeObject(article, section, ruleStoreKey, r);
+				Compilers.storeObject(article, section, ruleStoreKey, r);
 				messages.add(Messages.objectCreatedNotice(
 						"Rule"));
 			}

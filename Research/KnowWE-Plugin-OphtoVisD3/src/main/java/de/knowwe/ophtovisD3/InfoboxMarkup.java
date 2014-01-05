@@ -7,13 +7,10 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
-
-
 public class InfoboxMarkup extends DefaultMarkupType {
 
 	public InfoboxMarkup(DefaultMarkup markup) {
 		super(markup);
-		setIgnorePackageCompile(true);
 		this.setRenderer(new InfoboxRenderer());
 	}
 
@@ -26,7 +23,6 @@ public class InfoboxMarkup extends DefaultMarkupType {
 
 	public InfoboxMarkup() {
 		super(m);
-		setIgnorePackageCompile(true);
 		this.setRenderer(new InfoboxRenderer());
 	}
 

@@ -19,21 +19,20 @@
 package de.knowwe.casetrain.info;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import de.knowwe.casetrain.renderer.DivStyleClassRenderer;
 import de.knowwe.casetrain.renderer.SpanClassRenderer;
 import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.util.Utils;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.AnonymousType;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
  * Part of Info: Contains Antwort-Lines.
@@ -54,20 +53,19 @@ public class AnswersBlock extends SubblockMarkup {
 		this.addContentType(new Heading());
 		this.addContentType(new AnswersBlockWeightMark());
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Question>() {
+		this.addCompileScript(new DefaultGlobalScript<Question>() {
 
 			@Override
-			public Collection<Message> create(Article article, Section<Question> s) {
+			public void compile(DefaultGlobalCompiler compiler, Section<Question> s) {
 
-				List<Message> messages = new ArrayList<Message>(0);
 				List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
 				Sections.findSuccessorsOfType(s, AnswerLine.class, found);
 
 				if (found.isEmpty()) {
-					messages.add(Utils.missingComponentWarning(AnswerLine.class.getSimpleName()));
+					Messages.storeMessage(s, getClass(),
+							Utils.missingComponentWarning(AnswerLine.class.getSimpleName()));
 				}
 
-				return messages;
 			}
 		});
 	}

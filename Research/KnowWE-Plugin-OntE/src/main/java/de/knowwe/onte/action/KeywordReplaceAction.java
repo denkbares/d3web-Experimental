@@ -29,7 +29,6 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.KDOMReplaceTermNameAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.manchester.types.MisspelledSyntaxConstruct;

@@ -48,7 +48,7 @@ public class WisskontSolutionPanel extends ShowSolutionsType {
 
 	static {
 		MARKUP = new DefaultMarkup("WisskontSolutions");
-		MARKUP.addAnnotation(PackageManager.ANNOTATION_MASTER, true);
+		MARKUP.addAnnotation(PackageManager.MASTER_ATTRIBUTE_NAME, true);
 		MARKUP.addAnnotation(ANNOTATION_ESTABLISHED, false, BoolValue.values());
 		MARKUP.addAnnotation(ANNOTATION_SUGGESTED, false, BoolValue.values());
 		MARKUP.addAnnotation(ANNOTATION_EXCLUDED, false, BoolValue.values());
@@ -68,6 +68,6 @@ public class WisskontSolutionPanel extends ShowSolutionsType {
 	 */
 	public WisskontSolutionPanel() {
 		super();
-		this.clearSubtreeHandlers();
+		this.clearCompileScripts();
 	}
 }

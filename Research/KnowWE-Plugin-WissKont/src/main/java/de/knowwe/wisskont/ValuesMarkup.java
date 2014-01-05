@@ -44,7 +44,9 @@ import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.renderer.ReferenceSurroundingRenderer;
 import de.knowwe.core.Environment;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.objects.TermDefinition;
@@ -53,7 +55,6 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.renderer.CompositeRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 import de.knowwe.wisskont.dss.KnowledgeBaseInstantiation;
@@ -186,7 +187,7 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 			KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB,
 					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
 			TerminologyManager manager = knowledgeBase.getManager();
-			Object storedObject = KnowWEUtils.getStoredObject(section, VALUE_STORE_KEY);
+			Object storedObject = Compilers.getStoredObject(section, VALUE_STORE_KEY);
 			if (storedObject instanceof QuestionOC) {
 				QuestionOC qoc = ((QuestionOC) storedObject);
 				List<Choice> allAlternatives = qoc.getAllAlternatives();
@@ -215,9 +216,10 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 		if (questionnaire != null && questionnaire instanceof QASet) {
 			QuestionNum question = new QuestionNum((QASet) questionnaire, termName);
 			manager.putTerminologyObject(question);
-			KnowWEUtils.storeObject(
-					Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
-							KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE),
+			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
+					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
+			Compilers.storeObject(
+					D3webUtils.getD3webCompiler(article),
 					section, VALUE_STORE_KEY, question);
 			return question;
 		}
@@ -246,9 +248,10 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 			}
 			manager.putTerminologyObject(question);
 
-			KnowWEUtils.storeObject(
-					Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
-							KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE),
+			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
+					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
+			Compilers.storeObject(
+					D3webUtils.getD3webCompiler(article),
 					section, VALUE_STORE_KEY, question);
 			return question;
 		}

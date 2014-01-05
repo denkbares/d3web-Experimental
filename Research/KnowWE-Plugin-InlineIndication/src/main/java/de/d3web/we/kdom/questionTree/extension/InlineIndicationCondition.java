@@ -16,10 +16,11 @@ import de.d3web.core.manage.RuleFactory;
 import de.d3web.strings.Strings;
 import de.d3web.we.kdom.condition.Finding;
 import de.d3web.we.kdom.rules.RuleContentType;
+import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.object.QASetDefinition;
-import de.d3web.we.reviseHandler.D3webSubtreeHandler;
+import de.d3web.we.reviseHandler.D3webHandler;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -32,7 +33,6 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.sectionFinder.UnquotedExpressionFinder;
 
@@ -49,7 +49,7 @@ public class InlineIndicationCondition extends AbstractType {
 	private static final String END_KEY = "&";
 
 	public InlineIndicationCondition() {
-		this.addSubtreeHandler(new CreateIndicationRulesHandler());
+		this.addCompileScript(new CreateIndicationRulesHandler());
 		this.setSectionFinder(new InlineIndiFinder());
 
 		// TODO find better way to crop open and closing signs
@@ -95,12 +95,12 @@ public class InlineIndicationCondition extends AbstractType {
 
 	}
 
-	static class CreateIndicationRulesHandler extends D3webSubtreeHandler<InlineIndicationCondition> {
+	static class CreateIndicationRulesHandler extends D3webHandler<InlineIndicationCondition> {
 
 		@Override
-		public Collection<Message> create(Article article, Section<InlineIndicationCondition> s) {
+		public Collection<Message> create(D3webCompiler compiler, Section<InlineIndicationCondition> s) {
 
-			if (s.hasErrorInSubtree(article)) {
+			if (s.hasErrorInSubtree(compiler)) {
 				return Messages.asList(Messages.creationFailedWarning("Rule"));
 			}
 
@@ -113,9 +113,9 @@ public class InlineIndicationCondition extends AbstractType {
 			if (finding != null && qDef != null) {
 
 				@SuppressWarnings("unchecked")
-				QASet qaset = (QASet) qDef.get().getTermObject(article, qDef);
+				QASet qaset = (QASet) qDef.get().getTermObject(compiler, qDef);
 
-				Condition condition = finding.get().getCondition(article, finding);
+				Condition condition = finding.get().getCondition(compiler, finding);
 				if (condition == null) {
 					msgs.add(Messages.objectCreationError(Condition.class.getSimpleName()));
 					return msgs;
@@ -134,7 +134,7 @@ public class InlineIndicationCondition extends AbstractType {
 					msgs.add(Messages.objectCreationError(Rule.class.getSimpleName()));
 				}
 				if (r != null && !(qaset instanceof QContainer && r2 == null)) {
-					KnowWEUtils.storeObject(article, s, RuleContentType.ruleStoreKey, r);
+					Compilers.storeObject(compiler, s, RuleContentType.RULE_STORE_KEY, r);
 					return Messages.asList(Messages.objectCreatedNotice("Rule"));
 				}
 

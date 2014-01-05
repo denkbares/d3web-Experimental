@@ -50,7 +50,7 @@ public class MonitorMarkup extends DefaultMarkupType {
 		m.addAnnotationNameType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
 				new PackageAnnotationNameType());
 		m.addAnnotationContentType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
-				new PackageTerm(true));
+				new PackageTerm());
 		m.addAnnotation(LINK, false);
 		m.addAnnotation(NAME, false);
 		m.addAnnotation(BREITE, false);

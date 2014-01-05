@@ -65,7 +65,6 @@ public class ConceptMarkup extends AbstractKnowledgeUnitType<ConceptMarkup> impl
 
 		this.setCompileScript(new ConceptCompileScript());
 		this.setRenderer(new DefaultMarkupRenderer());
-		this.setIgnorePackageCompile(true);
 	}
 
 	@Override

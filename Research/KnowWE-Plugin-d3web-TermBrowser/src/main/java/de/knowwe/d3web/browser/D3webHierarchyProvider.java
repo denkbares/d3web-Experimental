@@ -31,10 +31,13 @@ import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
+import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.object.D3webTermDefinition;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.terminology.TerminologyManager;
+import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.termbrowser.HierarchyProvider;
@@ -75,9 +78,10 @@ public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 			Section<D3webTermDefinition> def = Sections.cast(definingSection,
 					D3webTermDefinition.class);
 			if (def != null) {
-
+				Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
+						master);
 				namedObject = def.get().getTermObject(
-						Environment.getInstance().getArticle(Environment.DEFAULT_WEB, master), def);
+						Compilers.getCompiler(article, D3webCompiler.class), def);
 			}
 			if (namedObject == null) {
 				return childrenList;
@@ -148,9 +152,11 @@ public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 			Section<D3webTermDefinition> def = Sections.cast(definingSection,
 					D3webTermDefinition.class);
 			if (def != null) {
+				Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
+						master);
 
 				namedObject = def.get().getTermObject(
-						Environment.getInstance().getArticle(Environment.DEFAULT_WEB, master), def);
+						Compilers.getCompiler(article, D3webCompiler.class), def);
 			}
 			if (namedObject == null) {
 				return parentList;

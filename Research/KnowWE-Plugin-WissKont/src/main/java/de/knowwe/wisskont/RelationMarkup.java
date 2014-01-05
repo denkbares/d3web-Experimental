@@ -54,7 +54,6 @@ public abstract class RelationMarkup extends AbstractType {
 		CompositeRenderer renderer = new CompositeRenderer(new RelationMarkupRenderer(),
 				new DroppableTargetSurroundingRenderer());
 		this.setRenderer(renderer);
-		this.setIgnorePackageCompile(true);
 	}
 
 	public abstract URI getRelationURI();

@@ -66,14 +66,13 @@ public class SparqlVisTypeRenderer implements Renderer {
 
 		Map<String, String> parameterMap = new HashMap<String, String>();
 
-
 		// set css layout to be used
 		String layout = SparqlVisType.getAnnotation(section, SparqlVisType.ANNOTATION_DESIGN);
 		if (layout != null) {
 
 			String cssText = null;
 
-			ArticleManager articleManager = Environment.getInstance().getArticleManager(
+			ArticleManager articleManager = Environment.getInstance().getDefaultArticleManager(
 					Environment.DEFAULT_WEB);
 			Collection<Article> articles = articleManager.getArticles();
 
@@ -175,21 +174,23 @@ public class SparqlVisTypeRenderer implements Renderer {
 		parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, addToDOT);
 
 		LinkToTermDefinitionProvider uriProvider;
-		Rdf2GoCore rdfRepository = null;
-		if (master != null) {
-			rdfRepository = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
-			uriProvider = new PackageCompileLinkToTermDefinitionProvider();
+		Section<DefaultMarkupType> defMarkupSection = Sections.cast(section,
+				DefaultMarkupType.class);
+		Rdf2GoCore core = Rdf2GoUtils.getRdf2GoCore(defMarkupSection);
+		String globalAnnotation = DefaultMarkupType.getAnnotation(section, Rdf2GoCore.GLOBAL);
+		if (globalAnnotation != null && globalAnnotation.equals("true")) {
+			uriProvider = new IncrementalCompilerLinkToTermDefinitionProvider();
 		}
 		else {
-			rdfRepository = Rdf2GoCore.getInstance();
-			uriProvider = new IncrementalCompilerLinkToTermDefinitionProvider();
+			uriProvider = new PackageCompileLinkToTermDefinitionProvider();
 		}
 
 		// evaluate sparql query and create graph data
-		String sparqlString = Rdf2GoUtils.createSparqlString(content.getText());
-		QueryResultTable resultSet = rdfRepository.sparqlSelect(
+		String sparqlString = Rdf2GoUtils.createSparqlString(core, content.getText());
+
+		QueryResultTable resultSet = core.sparqlSelect(
 				sparqlString);
-		SubGraphData data = convertToGraph(resultSet, parameterMap, rdfRepository, uriProvider,
+		SubGraphData data = convertToGraph(resultSet, parameterMap, core, uriProvider,
 				section, messages);
 
 		// read passed concept parameter from browser url if existing
@@ -201,6 +202,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 		}
 		// if no concept is specified, finally take first guess
 		if (data != null && conceptName == null && data.getConceptDeclarations().size() > 0) {
+
 			// if no center concept has explicitly been specified, take any
 			conceptName = data.getConceptDeclarations().iterator().next().getName();
 		}
@@ -226,6 +228,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 			DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, messages,
 					string);
 		}
+
 		string.appendHtml(renderedContent);
 
 	}
@@ -375,7 +378,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 	 */
 	private String getMaster(UserContext user, Section<?> section) {
 		return SparqlVisType.getAnnotation(section,
-				PackageManager.ANNOTATION_MASTER);
+				PackageManager.MASTER_ATTRIBUTE_NAME);
 	}
 
 	private String createConceptURL(String to, Map<String, String> parameters, Section<?> s, LinkToTermDefinitionProvider uriProvider) {

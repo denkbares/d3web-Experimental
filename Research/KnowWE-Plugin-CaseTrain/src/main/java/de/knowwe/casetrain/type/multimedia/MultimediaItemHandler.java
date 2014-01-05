@@ -20,7 +20,6 @@ package de.knowwe.casetrain.type.multimedia;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -29,37 +28,39 @@ import java.util.logging.Logger;
 import de.knowwe.casetrain.type.multimedia.MultimediaItem.MultimediaItemContent;
 import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.Environment;
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.wikiConnector.WikiAttachment;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
  * 
  * @author Johannes Dienst
  * @created 30.05.2011
  */
-public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem> {
+public class MultimediaItemHandler extends DefaultGlobalScript<MultimediaItem> {
 
 	private final ResourceBundle bundle = ResourceBundle.getBundle("casetrain_messages");
 
 	@Override
-	public Collection<Message> create(Article article, Section<MultimediaItem> s) {
+	public void compile(DefaultGlobalCompiler compiler, Section<MultimediaItem> s) {
 
 		List<Message> messages = new ArrayList<Message>(0);
 
 		List<WikiAttachment> attachments;
 		try {
 			attachments = Environment.getInstance().getWikiConnector()
-					.getAttachments(article.getTitle());
+					.getAttachments(s.getTitle());
 		}
 		catch (IOException e) {
 			Logger.getLogger(getClass().getName()).log(Level.SEVERE,
 					"cannot access wiki attachment", e);
 			messages.add(Utils.missingContentWarning(MultimediaItem.class.getSimpleName()));
-			return messages;
+			Messages.storeMessages(s, getClass(), messages);
+			return;
 		}
 
 		List<String> attachmentFileNames = new ArrayList<String>(attachments.size());
@@ -74,7 +75,8 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 
 		if (t.equals("")) {
 			messages.add(Utils.missingContentWarning(MultimediaItem.class.getSimpleName()));
-			return messages;
+			Messages.storeMessages(s, getClass(), messages);
+			return;
 		}
 
 		if (Sections.hasType(s, Image.class)) {
@@ -113,7 +115,7 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 		//
 		// }
 
-		return messages;
+		Messages.storeMessages(s, getClass(), messages);
 	}
 
 }

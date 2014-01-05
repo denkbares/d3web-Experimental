@@ -47,7 +47,7 @@ public class TimeTableMarkup extends DefaultMarkupType {
 		List<Section<DateT>> found = new ArrayList<Section<DateT>>();
 		Sections.findSuccessorsOfType(s, DateT.class, found);
 		for (Section<DateT> section : found) {
-			if (!section.hasErrorInSubtree(s.getArticle())) {
+			if (!section.hasErrorInSubtree()) {
 				Date d = null;
 				try {
 					d = DateT.dateFormat.parse(section.getText().trim());

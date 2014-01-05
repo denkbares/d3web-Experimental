@@ -31,6 +31,7 @@ import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -97,7 +98,7 @@ public class SubmitTableContentAction extends AbstractAction {
 
 		String username = context.getParameter("user");
 		String defaultWeb = Environment.DEFAULT_WEB;
-		ArticleManager articleManager = Environment.getInstance().getArticleManager(
+		ArticleManager articleManager = Compilers.getDefaultArticleManager(
 				defaultWeb);
 		String articleNameForData = getDataArticleNameForUser(username);
 		Article dataArticle = articleManager.getArticle(
@@ -111,7 +112,7 @@ public class SubmitTableContentAction extends AbstractAction {
 			Article article = Article.createArticle(newContent.toString(),
 					articleNameForData, defaultWeb, true);
 
-			Environment.getInstance().getArticleManager(
+			Compilers.getDefaultArticleManager(
 					defaultWeb)
 					.registerArticle(article);
 			dataArticle = articleManager.getArticle(

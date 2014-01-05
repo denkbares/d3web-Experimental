@@ -18,20 +18,16 @@
  */
 package de.knowwe.casetrain.evaluation;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import de.knowwe.casetrain.type.Closure;
 import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.type.general.SubblockMarkupContent;
 import de.knowwe.casetrain.type.general.Title;
 import de.knowwe.casetrain.util.Utils;
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.compile.DefaultGlobalCompiler;
+import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.Message;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
+import de.knowwe.core.report.Messages;
 
 /**
  * 
@@ -44,12 +40,10 @@ public class EvaluationEnd extends SubblockMarkup {
 		super("EvaluationEnd");
 		this.addContentType(new Title());
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Closure>() {
+		this.addCompileScript(new DefaultGlobalScript<Closure>() {
 
 			@Override
-			public Collection<Message> create(Article article, Section<Closure> s) {
-
-				List<Message> messages = new ArrayList<Message>(0);
+			public void compile(DefaultGlobalCompiler compiler, Section<Closure> s) {
 
 				// Section<Title> title = Sections.findSuccessor(s,
 				// Title.class);
@@ -60,11 +54,12 @@ public class EvaluationEnd extends SubblockMarkup {
 				Section<SubblockMarkupContent> plain =
 						Sections.findSuccessor(s, SubblockMarkupContent.class);
 				if (plain.getText() == null || plain.getText().trim().equals("")) {
-					messages.add(Utils.missingContentWarning(EvaluationEnd.class.getSimpleName()));
+					Messages.storeMessage(s, getClass(),
+							Utils.missingContentWarning(EvaluationEnd.class.getSimpleName()));
 				}
 
-				return messages;
 			}
+
 		});
 	}
 

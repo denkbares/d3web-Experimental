@@ -47,7 +47,7 @@ public class RDFSTestCaseContentType extends AbstractType {
 		addChildType(sparqlQuery);
 
 		// add subtree handler
-		addSubtreeHandler(new RDFSTestCaseHandler());
+		addCompileScript(new RDFSTestCaseHandler());
 
 		// set section finder
 		setSectionFinder(AllTextSectionFinder.getInstance());

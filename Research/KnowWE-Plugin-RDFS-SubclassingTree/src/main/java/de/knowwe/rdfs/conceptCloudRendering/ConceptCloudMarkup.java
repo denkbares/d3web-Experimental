@@ -33,7 +33,6 @@ public class ConceptCloudMarkup extends DefaultMarkupType {
 
 	public ConceptCloudMarkup(DefaultMarkup markup) {
 		super(markup);
-		this.setIgnorePackageCompile(true);
 	}
 
 	private static DefaultMarkup m = null;
@@ -46,7 +45,6 @@ public class ConceptCloudMarkup extends DefaultMarkupType {
 
 	public ConceptCloudMarkup() {
 		super(m);
-		this.setIgnorePackageCompile(true);
 		this.setRenderer(new CloudRenderer());
 	}
 
