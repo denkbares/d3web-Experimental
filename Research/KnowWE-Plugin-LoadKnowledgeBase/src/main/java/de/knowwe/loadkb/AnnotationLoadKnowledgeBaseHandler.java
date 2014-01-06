@@ -12,10 +12,10 @@ import java.util.UUID;
 
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.we.basic.KnowledgeBaseManager;
 import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.knowledgebase.KnowledgeBaseType;
 import de.d3web.we.reviseHandler.D3webHandler;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
@@ -55,9 +55,7 @@ public class AnnotationLoadKnowledgeBaseHandler extends D3webHandler<KnowledgeBa
 			KnowledgeBase kb = loadKnowledgeBaseFromFile(compiler, section, filename);
 
 			if (kb != null) {
-
-				KnowledgeBaseManager.getInstance(section.getWeb()).setKnowledgeBase(
-						compiler.getCompileSection(), kb);
+				D3webUtils.getD3webCompiler(section).setKnowledgeBase(kb);
 			}
 		}
 
