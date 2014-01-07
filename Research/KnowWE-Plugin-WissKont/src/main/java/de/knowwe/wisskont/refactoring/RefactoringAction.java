@@ -52,7 +52,7 @@ public class RefactoringAction extends AbstractAction {
 	 * @return
 	 */
 	private String perform(UserActionContext context) {
-		ArticleManager articleManager = Environment.getInstance().getDefaultArticleManager(
+		ArticleManager articleManager = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB);
 		Collection<Article> articles = articleManager.getArticles();
 		for (Article article : articles) {

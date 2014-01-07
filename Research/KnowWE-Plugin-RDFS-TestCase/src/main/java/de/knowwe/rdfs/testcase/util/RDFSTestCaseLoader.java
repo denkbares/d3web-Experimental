@@ -49,7 +49,7 @@ public class RDFSTestCaseLoader {
 	 */
 	public static RDFSTestCase loadTestCase(String article, String web, String testCaseName) {
 
-		Article a = Environment.getInstance().getDefaultArticleManager(web).getArticle(article);
+		Article a = Environment.getInstance().getArticleManager(web).getArticle(article);
 
 		RDFSTestCase testCase = null;
 

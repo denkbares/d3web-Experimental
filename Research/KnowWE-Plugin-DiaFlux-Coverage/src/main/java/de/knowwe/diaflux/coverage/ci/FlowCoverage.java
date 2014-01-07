@@ -54,7 +54,7 @@ public class FlowCoverage extends KBTest {
 
 		String packageName = args[1];
 
-		PackageManager packageManager = Compilers.getDefaultPackageManager(Environment.DEFAULT_WEB);
+		PackageManager packageManager = Compilers.getPackageManager(Environment.DEFAULT_WEB);
 
 		Collection<Section<?>> sectionsOfPackage = packageManager.getSectionsOfPackage(packageName);
 

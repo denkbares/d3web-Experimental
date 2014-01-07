@@ -55,7 +55,7 @@ public class OntEToolbarTagHandler extends AbstractHTMLTagHandler {
 		}
 
 		ArticleManager mgr =
-				Environment.getInstance().getDefaultArticleManager(web);
+				Environment.getInstance().getArticleManager(web);
 		Article article = mgr.getArticle(user.getTitle());
 
 		ToolbarButton[] buttons = ToolbarUtils.getButtons(article, user);

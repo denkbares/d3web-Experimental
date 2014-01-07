@@ -134,7 +134,7 @@ public class InputFieldCellContent extends AbstractType {
 
 		public static Section<TableEntryType> findTableToShow(String id, String username) {
 			String dataArticleNameForUser = SubmitTableContentAction.getDataArticleNameForUser(username);
-			Article article = Compilers.getDefaultArticleManager(
+			Article article = Compilers.getArticleManager(
 					Environment.DEFAULT_WEB).getArticle(dataArticleNameForUser);
 			if (article == null) return null;
 			List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();

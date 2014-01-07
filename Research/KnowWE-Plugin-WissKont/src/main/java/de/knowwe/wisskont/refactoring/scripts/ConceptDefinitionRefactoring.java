@@ -42,7 +42,7 @@ import de.knowwe.rdfs.SimpleIRIDefintionMarkup;
 public class ConceptDefinitionRefactoring extends AbstractAction {
 
 	public void refactor(UserActionContext user) {
-		ArticleManager articleManager = Environment.getInstance().getDefaultArticleManager(
+		ArticleManager articleManager = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB);
 		Collection<Article> articles = articleManager.getArticles();
 		Map<String, String> replacementMap = new HashMap<String, String>();

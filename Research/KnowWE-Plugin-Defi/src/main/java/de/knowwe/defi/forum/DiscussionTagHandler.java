@@ -353,7 +353,7 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 	 */
 	private List<Section<? extends Forum>> getAllForums() {
 		List<Section<? extends Forum>> forums = new LinkedList<Section<? extends Forum>>();
-		Iterator<Article> it = Compilers.getDefaultArticleManager(Environment.DEFAULT_WEB).getArticleIterator();
+		Iterator<Article> it = Compilers.getArticleManager(Environment.DEFAULT_WEB).getArticleIterator();
 
 		while (it.hasNext()) {
 			for (Section<? extends Type> sec : Sections.getSubtreePreOrder(it.next().getRootSection())) {

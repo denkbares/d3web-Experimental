@@ -133,7 +133,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 		List<String> readbuttons = new LinkedList<String>();
 
 		for (Section<DashTreeElement> s : units) {
-			Article unit = Compilers.getDefaultArticleManager(
+			Article unit = Compilers.getArticleManager(
 					Environment.DEFAULT_WEB).getArticle(getPageName(s));
 
 			if (unit != null) {

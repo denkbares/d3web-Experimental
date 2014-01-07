@@ -45,7 +45,7 @@ public class TimeTableAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String[] days = context.getParameter("inputs").split(":");
-		ArticleManager mgr = Compilers.getDefaultArticleManager(Environment.DEFAULT_WEB);
+		ArticleManager mgr = Compilers.getArticleManager(Environment.DEFAULT_WEB);
 		WikiConnector wikiConnector = Environment.getInstance().getWikiConnector();
 		String timetableContent = createTimeTableTemplate(days);
 		String pageName = TimeTableUtilities.getTimeTableTemplatePagename();

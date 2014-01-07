@@ -112,7 +112,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 	}
 
 	private Section<DefineTableMarkup> findTableToShow(String id) {
-		Collection<Article> articles = Compilers.getDefaultArticleManager(
+		Collection<Article> articles = Compilers.getArticleManager(
 				Environment.DEFAULT_WEB).getArticles();
 		for (Article article : articles) {
 			List<Section<DefineTableMarkup>> tables = new ArrayList<Section<DefineTableMarkup>>();

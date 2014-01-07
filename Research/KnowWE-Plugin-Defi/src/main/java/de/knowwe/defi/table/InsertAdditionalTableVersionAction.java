@@ -41,7 +41,7 @@ public class InsertAdditionalTableVersionAction extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 		String username = context.getUserName();
 		String articleName = SubmitTableContentAction.getDataArticleNameForUser(username);
-		ArticleManager articleManager = Compilers.getDefaultArticleManager(
+		ArticleManager articleManager = Compilers.getArticleManager(
 				Environment.DEFAULT_WEB);
 		Article article = articleManager.getArticle(
 				articleName);

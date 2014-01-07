@@ -137,7 +137,7 @@ public class WordBasedRenamingAction extends AbstractAction {
 		String additionalText = "";
 
 		Iterator<Article> iter =
-				Environment.getInstance().getDefaultArticleManager(web).getArticleIterator();
+				Environment.getInstance().getArticleManager(web).getArticleIterator();
 		while (iter.hasNext()) {
 			Article article = iter.next();
 
@@ -319,7 +319,7 @@ public class WordBasedRenamingAction extends AbstractAction {
 		Map<Article, Collection<WordBasedRenameFinding>> map =
 				new HashMap<Article, Collection<WordBasedRenameFinding>>();
 		Iterator<Article> iter =
-				Environment.getInstance().getDefaultArticleManager(web).getArticleIterator();
+				Environment.getInstance().getArticleManager(web).getArticleIterator();
 
 		if (!regex) {
 			query = Pattern.quote(query);

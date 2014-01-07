@@ -45,7 +45,7 @@ public class MenuUtilities {
 	 */
 	public static List<Section<DashTreeElement>> getAllUnits() {
 		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
-		Article leftMenu = Compilers.getDefaultArticleManager(
+		Article leftMenu = Compilers.getArticleManager(
 				Environment.DEFAULT_WEB).getArticle("LeftMenu");
 
 		if (leftMenu != null) {
@@ -64,7 +64,7 @@ public class MenuUtilities {
 	public static List<Section<DashTreeElement>> getRootUnits() {
 		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
 		List<Section<DashTreeElement>> rootUnits = new LinkedList<Section<DashTreeElement>>();
-		Article leftMenu = Compilers.getDefaultArticleManager(
+		Article leftMenu = Compilers.getArticleManager(
 				Environment.DEFAULT_WEB).getArticle("LeftMenu");
 
 		if (leftMenu != null) {

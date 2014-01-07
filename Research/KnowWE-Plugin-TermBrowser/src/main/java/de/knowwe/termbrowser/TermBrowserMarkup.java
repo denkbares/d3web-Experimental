@@ -186,7 +186,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 	 * @return
 	 */
 	public static Section<TermBrowserMarkup> getTermBrowserMarkup(UserContext user) {
-		Article article = Compilers.getDefaultArticleManager(user.getWeb()).getArticle(
+		Article article = Compilers.getArticleManager(user.getWeb()).getArticle(
 				user.getTitle());
 		Section<TermBrowserMarkup> termBrowser = null;
 		if (article != null) {
@@ -194,7 +194,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 					TermBrowserMarkup.class);
 		}
 		if (termBrowser == null) {
-			Article leftMenu = Compilers.getDefaultArticleManager(user.getWeb()).getArticle(
+			Article leftMenu = Compilers.getArticleManager(user.getWeb()).getArticle(
 					"LeftMenu");
 			termBrowser = Sections.findSuccessor(leftMenu.getRootSection(),
 					TermBrowserMarkup.class);

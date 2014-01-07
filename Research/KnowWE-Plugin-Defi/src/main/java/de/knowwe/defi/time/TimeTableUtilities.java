@@ -56,7 +56,7 @@ public class TimeTableUtilities {
 		UserDatabase udb = eng.getUserManager().getUserDatabase();
 		UserProfile userProfile;
 		List<Date> dates = new ArrayList<Date>();
-		ArticleManager mgr = Compilers.getDefaultArticleManager(Environment.DEFAULT_WEB);
+		ArticleManager mgr = Compilers.getArticleManager(Environment.DEFAULT_WEB);
 		Article article = mgr.getArticle(getTimeTablePageForUser(user));
 		Section<TimeTableMarkup> timetable = null;
 
@@ -117,7 +117,7 @@ public class TimeTableUtilities {
 	 */
 	public static Article buildPersonalTimeTable(UserProfile user) {
 		WikiConnector wikiConnector = Environment.getInstance().getWikiConnector();
-		ArticleManager mgr = Compilers.getDefaultArticleManager(Environment.DEFAULT_WEB);
+		ArticleManager mgr = Compilers.getArticleManager(Environment.DEFAULT_WEB);
 		String pageName = getTimeTablePageForUser(user.getFullname());
 		String timetable = generatePersonalTimeTableContent(user);
 		Article article = mgr.getArticle(pageName);

@@ -162,7 +162,7 @@ public class DebugUtilities {
 
 		// get the knowledgebase's article
 		Collection<D3webCompiler> compilers = Compilers.getCompilers(
-				Compilers.getDefaultArticleManager(Environment.DEFAULT_WEB), D3webCompiler.class);
+				Compilers.getArticleManager(Environment.DEFAULT_WEB), D3webCompiler.class);
 		for (D3webCompiler d3webCompiler : compilers) {
 			if (d3webCompiler.getKnowledgeBase() == kb) {
 				ruleCompiler = d3webCompiler;
@@ -170,7 +170,7 @@ public class DebugUtilities {
 			}
 		}
 
-		for (Article article : Environment.getInstance().getDefaultArticleManager(
+		for (Article article : Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB).getArticles()) {
 
 			rules = Sections.findSuccessorsOfType(article.getRootSection(), RuleAction.class);

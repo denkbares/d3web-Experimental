@@ -49,7 +49,7 @@ public class GlobalReplaceAction extends AbstractAction {
 				context);
 
 		String replacement = context.getParameter(Attributes.FOCUSED_TERM);
-		ArticleManager mgr = Environment.getInstance().getDefaultArticleManager(
+		ArticleManager mgr = Environment.getInstance().getArticleManager(
 				context.getWeb());
 		String web = context.getWeb();
 

@@ -48,7 +48,7 @@ public class PersonalMessageAction extends AbstractAction {
 		String user2 = context.getParameter("user2");
 		GregorianCalendar now = new GregorianCalendar();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		ArticleManager mgr = Compilers.getDefaultArticleManager(
+		ArticleManager mgr = Compilers.getArticleManager(
 				Environment.DEFAULT_WEB);
 
 		String topic = "Persoenliche Nachrichten(" + user1 + "," + user2 + ")";

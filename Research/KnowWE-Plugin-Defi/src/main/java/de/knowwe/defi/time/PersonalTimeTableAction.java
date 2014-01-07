@@ -46,7 +46,7 @@ public class PersonalTimeTableAction extends AbstractAction {
 		String[] dates = context.getParameter("inputs").split("#");
 		String user = context.getParameter("user");
 		String timetableContent = createTimeTable(dates);
-		ArticleManager mgr = Compilers.getDefaultArticleManager(Environment.DEFAULT_WEB);
+		ArticleManager mgr = Compilers.getArticleManager(Environment.DEFAULT_WEB);
 		WikiConnector wikiConnector = Environment.getInstance().getWikiConnector();
 		String pageName = TimeTableUtilities.getTimeTablePageForUser(user);
 

@@ -76,7 +76,7 @@ public class UploadedRevision extends AbstractRevision {
 	public HashMap<String, Integer> compareWithCurrentState() {
 		HashMap<String, Integer> result = new HashMap<String, Integer>();
 
-		ArticleManager stdAM = Environment.getInstance().getDefaultArticleManager(web);
+		ArticleManager stdAM = Environment.getInstance().getArticleManager(web);
 		HashSet<Article> unprocessedStdArticles = new HashSet<Article>(stdAM.getArticles());
 
 		for (Article article : getArticleManager().getArticles()) {

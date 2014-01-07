@@ -47,7 +47,7 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 
 	@Override
 	public void append(String web, String title, UserContext user, RenderResult result) {
-		ArticleManager articleManager = Environment.getInstance().getDefaultArticleManager(
+		ArticleManager articleManager = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB);
 		Article article = articleManager.getArticle(title);
 		Section<?> section = article.getRootSection();

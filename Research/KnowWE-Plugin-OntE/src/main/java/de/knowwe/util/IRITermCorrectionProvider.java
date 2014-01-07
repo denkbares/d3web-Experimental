@@ -7,7 +7,6 @@ import java.util.List;
 import com.wcohen.ss.Levenstein;
 
 import de.d3web.strings.Identifier;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.terminology.TermCompiler;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.correction.CorrectionProvider;
@@ -29,12 +28,11 @@ public class IRITermCorrectionProvider implements CorrectionProvider {
 			return null;
 		}
 
-		TerminologyManager terminologyHandler = Compilers.getGlobalTerminologyManager(section.getWeb());
+		TerminologyManager terminologyHandler = compiler.getTerminologyManager();
 		Term termReference = ((Term) section.get());
 
 		Collection<Identifier> localTermMatches = terminologyHandler.getAllDefinedTermsOfType(
-				termReference.getTermObjectClass(Sections.cast(section, Term.class))
-				);
+				termReference.getTermObjectClass(Sections.cast(section, Term.class)));
 
 		String originalText = section.getText();
 		List<CorrectionProvider.Suggestion> suggestions = new LinkedList<CorrectionProvider.Suggestion>();

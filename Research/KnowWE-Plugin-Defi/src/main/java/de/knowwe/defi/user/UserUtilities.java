@@ -105,7 +105,7 @@ public class UserUtilities {
 
 	public static Article getDataPage(String user) {
 		String dataPage = user + "_data";
-		ArticleManager mgr = Compilers.getDefaultArticleManager(Environment.DEFAULT_WEB);
+		ArticleManager mgr = Compilers.getArticleManager(Environment.DEFAULT_WEB);
 		if (!Environment.getInstance().getWikiConnector().doesArticleExist(dataPage)) {
 			// create new article
 			String newContent = "[{ALLOW view admin}]\n[{ALLOW delete " + user + "}]\n";
@@ -113,7 +113,7 @@ public class UserUtilities {
 					dataPage, newContent.toString(), "Defi-system");
 			Article article = Article.createArticle(newContent.toString(),
 					dataPage, Environment.DEFAULT_WEB, true);
-			Compilers.getDefaultArticleManager(
+			Compilers.getArticleManager(
 					Environment.DEFAULT_WEB).registerArticle(article);
 		}
 		return mgr.getArticle(dataPage);

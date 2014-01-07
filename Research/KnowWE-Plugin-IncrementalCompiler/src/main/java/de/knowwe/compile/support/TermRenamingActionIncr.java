@@ -100,7 +100,7 @@ public class TermRenamingActionIncr extends AbstractAction {
 			articleSecs.add(section);
 		}
 
-		ArticleManager mgr = Environment.getInstance().getDefaultArticleManager(web);
+		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
 		Set<String> failures = new HashSet<String>();
 		Set<String> success = new HashSet<String>();
 		renameTerms(allTerms, replacement, mgr, context, failures,

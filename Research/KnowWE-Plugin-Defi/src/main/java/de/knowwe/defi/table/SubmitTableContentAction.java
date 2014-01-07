@@ -98,7 +98,7 @@ public class SubmitTableContentAction extends AbstractAction {
 
 		String username = context.getParameter("user");
 		String defaultWeb = Environment.DEFAULT_WEB;
-		ArticleManager articleManager = Compilers.getDefaultArticleManager(
+		ArticleManager articleManager = Compilers.getArticleManager(
 				defaultWeb);
 		String articleNameForData = getDataArticleNameForUser(username);
 		Article dataArticle = articleManager.getArticle(
@@ -112,7 +112,7 @@ public class SubmitTableContentAction extends AbstractAction {
 			Article article = Article.createArticle(newContent.toString(),
 					articleNameForData, defaultWeb, true);
 
-			Compilers.getDefaultArticleManager(
+			Compilers.getArticleManager(
 					defaultWeb)
 					.registerArticle(article);
 			dataArticle = articleManager.getArticle(
