@@ -26,7 +26,7 @@ import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 
-public abstract class IncrementalTermReference extends SimpleReference<DefaultGlobalCompiler> {
+public abstract class IncrementalTermReference extends SimpleReference {
 
 	public IncrementalTermReference(Class<?> termObjectClass) {
 		super(DefaultGlobalCompiler.class, termObjectClass);

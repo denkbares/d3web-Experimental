@@ -153,7 +153,7 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
-	class PreDefinedTerm extends SimpleDefinition<DefaultGlobalCompiler> {
+	class PreDefinedTerm extends SimpleDefinition {
 
 		public PreDefinedTerm() {
 			super(DefaultGlobalCompiler.class, String.class);
@@ -164,7 +164,7 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
-	class ImportedTerm extends SimpleDefinition<DefaultGlobalCompiler> {
+	class ImportedTerm extends SimpleDefinition {
 
 		public ImportedTerm() {
 			super(DefaultGlobalCompiler.class, String.class);

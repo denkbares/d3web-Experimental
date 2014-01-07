@@ -23,7 +23,7 @@ package de.knowwe.compile.object;
 import de.knowwe.core.compile.DefaultGlobalCompiler;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 
-public abstract class IncrementalTermDefinition<TermObject> extends SimpleDefinition<DefaultGlobalCompiler> {
+public abstract class IncrementalTermDefinition<TermObject> extends SimpleDefinition {
 
 	public IncrementalTermDefinition(Class<?> termObjectClass) {
 		super(DefaultGlobalCompiler.class, termObjectClass);
