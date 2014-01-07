@@ -45,6 +45,7 @@ import de.knowwe.compile.test.util.Vocabulary;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
@@ -66,7 +67,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
  * @author Sebastian Furth
  * @created Jun 17, 2011
  */
-@Ignore
+
 public class IncrementalCompilerTest {
 
 	/* The underlying test article */
@@ -92,7 +93,9 @@ public class IncrementalCompilerTest {
 
 	@Before
 	public void setUp() throws IOException {
+		waitForCompilation();
 		TestArticleManager.getArticle(TESTFILE);
+		core.commit();
 	}
 
 	@Test
@@ -101,6 +104,10 @@ public class IncrementalCompilerTest {
 		String[] defs = {
 				"subclasso", "Pete", "Peter", "Wuerzburg", "istEin", "wohntIn", "Assi", "Jochen",
 				"Perso", "Reinhard" };
+		
+		
+		waitForCompilation();
+		
 
 		// Test existence of TermDefinitions
 		for (String def : defs) {
@@ -111,11 +118,17 @@ public class IncrementalCompilerTest {
 
 	@Test
 	public void testComplexIRIDefinitionMarkup() {
+		
+		waitForCompilation();
 		assertTrue(core.sparqlAsk(Query.JOCHENWUERZBURG));
 	}
 
 	@Test
 	public void testTripleMarkupSimple() {
+		
+		waitForCompilation();
+		
+		
 		assertTrue(core.sparqlAsk(Query.JOCHENASSI));
 		assertTrue(core.sparqlAsk(Query.PETERASSI));
 		// This one has compile errors and shouldn't be in the store!
@@ -130,6 +143,10 @@ public class IncrementalCompilerTest {
 		String oldText = "def Perso";
 		String newText = "def Person";
 		changeText(oldText, newText, SimpleIRIDefintionMarkup.class);
+		
+		waitForCompilation();
+		core.commit();
+		
 		// Check that the statement is now valid
 		assertTrue(core.sparqlAsk(Query.ASSIPERSON));
 	}
@@ -140,6 +157,11 @@ public class IncrementalCompilerTest {
 		String oldText = "def Assi";
 		String newText = "def Assistent";
 		changeText(oldText, newText, SimpleIRIDefintionMarkup.class);
+		
+		
+		waitForCompilation();
+		core.commit();
+		
 		/* Check that the statements are invalid now */
 		assertFalse(core.sparqlAsk(Query.JOCHENASSI));
 		assertFalse(core.sparqlAsk(Query.PETERASSI));
@@ -156,17 +178,41 @@ public class IncrementalCompilerTest {
 		String oldText = " Jochen istEin:: Assi";
 		String newText = " Jochen istEin:: Assistent";
 		changeText(oldText, newText, TripleMarkupSimple.class);
+		
+		
+		
+		waitForCompilation();
+		core.commit();
 		assertTrue(core.sparqlAsk(Query.Update.JOCHENASSISTENT));
+		
 		/* Change text and test */
 		oldText = " Peter istEin:: Assi";
 		newText = " Peter istEin:: Assistent";
 		changeText(oldText, newText, TripleMarkupSimple.class);
+		
+		waitForCompilation();
+		core.commit();
 		assertTrue(core.sparqlAsk(Query.Update.PETERASSISTENT));
+		
+		
 		/* Change text and test */
 		oldText = "Assi subclassof:: Person";
 		newText = "Assistent subclassof:: Person";
 		changeText(oldText, newText, TripleMarkupSimple.class);
+		
+		
+		waitForCompilation();
+		core.commit();
+		
 		assertTrue(core.sparqlAsk(Query.Update.ASSISTENTPERSON));
+	}
+	
+	private static void waitForCompilation() {
+		try {
+			Compilers.getCompilerManager(Environment.DEFAULT_WEB).awaitTermination();
+		}
+		catch (InterruptedException e) {
+		}
 	}
 
 	@Test
@@ -176,23 +222,45 @@ public class IncrementalCompilerTest {
 		testInvalidatedSimpleIRIDefinition();
 		String oldText = " Jochen istEin:: Assi";
 		String newText = " Jochen istEin:: Assistent";
+		
+		waitForCompilation();
+		core.commit();
 		changeText(oldText, newText, TripleMarkupSimple.class);
+		
+		
 		/* Change text and test */
 		oldText = " Peter istEin:: Assi";
 		newText = " Peter istEin:: Assistent";
+		
+		waitForCompilation();
+		core.commit();
 		changeText(oldText, newText, TripleMarkupSimple.class);
+		
+		
 		/* Change text and test */
 		oldText = "Assi subclassof:: Person";
 		newText = "Assistent subclassof:: Person";
+		
+		waitForCompilation();
+		core.commit();
 		changeText(oldText, newText, TripleMarkupSimple.class);
+		
+
 		/* replace the whole text */
 		oldText = getArticle().getRootSection().getText();
 		newText = "def Schnurtzelpieper livesIn:: Dingenskirchen" + "\n\n" + "def is"
 				+ "\n\n" + "def livesIn" + "\n\n" + "def Dingenskirchen" + "\n\n"
 				+ "def inDaHouse" + "\n\n"
 				+ "{Schnurtzelpieper is:: inDaHouse}" + "\n\n";
+		
+		waitForCompilation();
+		core.commit();
 		changeText(oldText, newText, RootType.class);
+		
 		// Done setting the test up again
+		
+		waitForCompilation();
+		core.commit();
 
 		/* Check that the old statements are invalid now */
 		assertFalse(core.sparqlAsk(Query.ASSIPERSON));
@@ -239,6 +307,7 @@ public class IncrementalCompilerTest {
 
 	@After
 	public void tearDown() {
+		waitForCompilation();
 		TestArticleManager.clear();
 	}
 
