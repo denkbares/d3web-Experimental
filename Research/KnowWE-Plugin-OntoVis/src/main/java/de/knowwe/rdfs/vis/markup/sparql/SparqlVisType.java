@@ -22,6 +22,7 @@ import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.rdf2go.sparql.Rdf2GoCoreCheckRenderer;
 import de.knowwe.visualization.GraphDataBuilder;
 
 /**
@@ -90,6 +91,7 @@ public class SparqlVisType extends DefaultMarkupType {
 
 	public SparqlVisType() {
 		super(MARKUP);
+		this.setRenderer(new Rdf2GoCoreCheckRenderer());
 	}
 
 }

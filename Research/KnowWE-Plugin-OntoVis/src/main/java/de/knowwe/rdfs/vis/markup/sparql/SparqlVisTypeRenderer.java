@@ -54,10 +54,17 @@ public class SparqlVisTypeRenderer implements Renderer {
 	@Override
 	public void render(Section<?> content, UserContext user, RenderResult string) {
 
-		List<Message> messages = new ArrayList<Message>();
-
 		Section<SparqlVisType> section = Sections.findAncestorOfType(content,
 				SparqlVisType.class);
+		Section<DefaultMarkupType> defMarkupSection = Sections.cast(section,
+				DefaultMarkupType.class);
+		Rdf2GoCore core = Rdf2GoUtils.getRdf2GoCore(defMarkupSection);
+		if (core == null) {
+			string.appendHtmlElement("div", "");
+			return;
+		}
+
+		List<Message> messages = new ArrayList<Message>();
 
 		ServletContext servletContext = user.getServletContext();
 		if (servletContext == null) return; // at wiki startup only
@@ -174,9 +181,6 @@ public class SparqlVisTypeRenderer implements Renderer {
 		parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, addToDOT);
 
 		LinkToTermDefinitionProvider uriProvider;
-		Section<DefaultMarkupType> defMarkupSection = Sections.cast(section,
-				DefaultMarkupType.class);
-		Rdf2GoCore core = Rdf2GoUtils.getRdf2GoCore(defMarkupSection);
 		String globalAnnotation = DefaultMarkupType.getAnnotation(section, Rdf2GoCore.GLOBAL);
 		if (globalAnnotation != null && globalAnnotation.equals("true")) {
 			uriProvider = new IncrementalCompilerLinkToTermDefinitionProvider();
