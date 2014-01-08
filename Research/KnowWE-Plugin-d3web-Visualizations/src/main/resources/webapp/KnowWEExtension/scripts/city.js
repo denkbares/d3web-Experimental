@@ -3,19 +3,19 @@ if (typeof KNOWWE == "undefined" || !KNOWWE) {
 }
 
 if (typeof KNOWWE.d3webViz == "undefined" || !KNOWWE.d3webViz) {
-	KNOWWE.d3webViz = {};
+    KNOWWE.d3webViz = {};
 }
 
-KNOWWE.d3webViz.createDiaFluxCity = function(kdomid, action, pickf){
+KNOWWE.d3webViz.createDiaFluxCity = function (kdomid, action, pickf) {
 
-	KNOWWE.d3webViz.loadJSON(action, kdomid, renderCity);
+    KNOWWE.d3webViz.loadJSON(action, kdomid, renderCity);
 
-	function renderCity(city) {
+    function renderCity(city) {
         KNOWWE.d3webViz.renderCity(city, kdomid, pickf);
     }
 }
 
-KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
+KNOWWE.d3webViz.renderCity = function (city, kdomid, pickf, dist, far, scrollstep) {
 
     var yaw = -46;
     var pitch = -21;
@@ -24,6 +24,9 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
     }
     if (!far) {
         var far = 3000;
+    }
+    if (!scrollstep) {
+        var scrollstep = 2;
     }
 
     SceneJS.createScene({
@@ -43,9 +46,9 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
             {
                 type: "lookAt",
                 id: "theLookAt",
-                eye : { x: 0.0, y: 10.0, z: dist },
-                look : { y:0.0 },
-                up : { y: -1.0 },
+                eye: { x: 0.0, y: 10.0, z: dist },
+                look: { y: 0.0 },
+                up: { y: -1.0 },
 
                 nodes: [
 
@@ -55,10 +58,10 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
                         type: "camera",
                         optics: {
                             type: "perspective",
-                            fovy : 25.0,
-                            aspect : 1.47,
-                            near : 0.10,
-                            far : far
+                            fovy: 25.0,
+                            aspect: 1.47,
+                            near: 0.10,
+                            far: far
                         },
 
                         nodes: [
@@ -69,8 +72,8 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
                                 type: "renderer",
                                 clearColor: { r: 1, g: 1, b: 1 },
                                 clear: {
-                                    depth : true,
-                                    color : true
+                                    depth: true,
+                                    color: true
                                 },
 
                                 nodes: [
@@ -79,42 +82,58 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
                                      */
                                     {
                                         type: "light",
-                                        mode:                   "dir",
-                                        color:                  { r: 1.0, g: 1.0, b: 1.0 },
-                                        diffuse:                true,
-                                        specular:               true,
-                                        dir:                    { x: 5.0, y: -5, z: 1.0 }
+                                        mode: "dir",
+                                        color: { r: 1.0, g: 1.0, b: 1.0 },
+                                        diffuse: true,
+                                        specular: true,
+                                        dir: { x: 1.0, y: 1.0, z: -1.0 }
                                     },
                                     {
                                         type: "light",
-                                        mode:                   "dir",
-                                        color:                  { r: 1.0, g: 1.0, b: 0.8 },
-                                        diffuse:                true,
-                                        specular:               false,
-                                        dir:                    { x: 10, y: 5, z: 1.0 }
+                                        mode: "dir",
+                                        color: { r: 1.0, g: 1.0, b: 0.8 },
+                                        diffuse: true,
+                                        specular: false,
+                                        dir: { x: -1.0, y: -1.0, z: -1.0 }
                                     },
-                                    {
-                                        type: "light",
-                                        mode:                   "dir",
-                                        color:                  { r: 1.0, g: 1.0, b: 0.8 },
-                                        diffuse:                true,
-                                        specular:               false,
-                                        dir:                    { x: -20, y: -15, z: 1.0 }
-                                    },
+//                                    {
+//                                        type: "light",
+//                                        mode:                   "dir",
+//                                        color:                  { r: 1.0, g: 1.0, b: 1.0 },
+//                                        diffuse:                true,
+//                                        specular:               true,
+//                                        dir:                    { x: 5.0, y: -5, z: 1.0 }
+//                                    },
+//                                    {
+//                                        type: "light",
+//                                        mode:                   "dir",
+//                                        color:                  { r: 1.0, g: 1.0, b: 0.8 },
+//                                        diffuse:                true,
+//                                        specular:               false,
+//                                        dir:                    { x: 10, y: 5, z: 1.0 }
+//                                    },
+//                                    {
+//                                        type: "light",
+//                                        mode:                   "dir",
+//                                        color:                  { r: 1.0, g: 1.0, b: 0.8 },
+//                                        diffuse:                true,
+//                                        specular:               false,
+//                                        dir:                    { x: -20, y: -15, z: 1.0 }
+//                                    },
                                     /* Modelling transforms - note the IDs, "pitch" and "yaw"
                                      */
                                     {
                                         type: "rotate",
                                         id: "pitch",
                                         angle: pitch,
-                                        x : 1.0,
+                                        x: 1.0,
 
                                         nodes: [
                                             {
                                                 type: "rotate",
                                                 id: "yaw",
                                                 angle: yaw,
-                                                y : 1.0,
+                                                y: 1.0,
 
                                                 nodes: [
 
@@ -123,10 +142,10 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
                                                     {
                                                         type: "material",
                                                         emit: 50,
-                                                        baseColor:      { r: 0.5, g: 0.5, b: 0.6 },
-                                                        specularColor:  { r: 0.9, g: 0.9, b: 0.9 },
-                                                        specular:       1.0,
-                                                        shine:          70.0,
+                                                        baseColor: { r: 0.5, g: 0.5, b: 0.6 },
+                                                        specularColor: { r: 0.9, g: 0.9, b: 0.9 },
+                                                        specular: 1.0,
+                                                        shine: 70.0,
                                                         alpha: 0.5,
                                                         flags: {
                                                             transparent: true
@@ -193,14 +212,14 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
         if (!dragging) {
             var coords = clickCoordsWithinElement(event);
 
-            var hit = scene.pick(coords.x, coords.y, {rayPick : true});
+            var hit = scene.pick(coords.x, coords.y, {rayPick: true});
 
             if (hit) {
-                if (pickf) pickf(kdomid, hit);
+                if (pickf) pickf(event, kdomid, hit);
 //					picked(hit.name);
             } else { // Nothing picked
             }
-        } else{
+        } else {
             //		alert(yaw);
             //		alert(pitch);
         }
@@ -213,7 +232,7 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
     function mouseMove(event) {
         if (mouseButtonDown) {
             dragging = true;
-            if (!rightclick){
+            if (!rightclick) {
                 yaw += (event.clientX - lastX) * 0.5;
                 pitch += (event.clientY - lastY) * 0.5;
 
@@ -240,9 +259,9 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
         }
         if (delta) {
             if (delta < 0) {
-                dist -= 2.0;
+                dist -= scrollstep;
             } else {
-                dist += 2.0;
+                dist += scrollstep;
             }
         }
         if (event.preventDefault)
@@ -262,7 +281,7 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
      */
 
     scene.start({
-        idleFunc: function() {
+        idleFunc: function () {
             if (newInput) {
                 yawNode.set("angle", yaw);
                 pitchNode.set("angle", pitch);
@@ -282,12 +301,11 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
             coords.x = event.x;
             coords.y = event.y;
         } else {
-            var element = event.target ;
+            var element = event.target;
             var totalOffsetLeft = 0;
-            var totalOffsetTop = 0 ;
+            var totalOffsetTop = 0;
 
-            while (element.offsetParent)
-            {
+            while (element.offsetParent) {
                 totalOffsetLeft += element.offsetLeft;
                 totalOffsetTop += element.offsetTop;
                 element = element.offsetParent;
@@ -300,37 +318,37 @@ KNOWWE.d3webViz.renderCity = function(city, kdomid, pickf, dist, far) {
 
 }
 
-KNOWWE.d3webViz.coveragePick = function(kdomid, hit){
-	var matches = hit.name.split("+++");
-	if (matches) {
-		var currentFlow = jq$("#pickResult" + kdomid).val(); 
-		
-		// clicked a node, remember its id
-		var nodeid = matches[2] ? matches[2] : '';
-		
-		var flowEl = jq$('flowDisplay' + kdomid);
+KNOWWE.d3webViz.coveragePick = function (event, kdomid, hit) {
+    var matches = hit.name.split("+++");
+    if (matches) {
+        var currentFlow = jq$("#pickResult" + kdomid).val();
 
-		//load flowchart, if it changed
-		if (currentFlow != matches[1]) {
-			
+        // clicked a node, remember its id
+        var nodeid = matches[2] ? matches[2] : '';
+
+        var flowEl = jq$('flowDisplay' + kdomid);
+
+        //load flowchart, if it changed
+        if (currentFlow != matches[1]) {
+
 //			var newContainer  = jq$("<div>", {id: matches[0]}).appendTo(flowEl);
-		
+
 //			flowEl.innerHTML ="<div id='" + matches[0] + "'></div>";
-			flowEl.empty();
-			Flowchart.loadFlowchart(matches[1], 'flowDisplay' + kdomid);
-			
-		} else {
-			// if flow did not change, highlight new node
-			if (matches[2]) {
-				DiaFlux.Highlight.getHighlights.call({flow: flowEl[0].__flowchart}, 'PathCoverageHighlightAction', {coveragesection: kdomid, nodeid: nodeid});
-			}	
-		}
-		
-		jq$("#pickResult" + kdomid).val(matches[1]);
-		
-		
-	}
-	
+            flowEl.empty();
+            Flowchart.loadFlowchart(matches[1], 'flowDisplay' + kdomid);
+
+        } else {
+            // if flow did not change, highlight new node
+            if (matches[2]) {
+                DiaFlux.Highlight.getHighlights.call({flow: flowEl[0].__flowchart}, 'PathCoverageHighlightAction', {coveragesection: kdomid, nodeid: nodeid});
+            }
+        }
+
+        jq$("#pickResult" + kdomid).val(matches[1]);
+
+
+    }
+
 }
 
 
