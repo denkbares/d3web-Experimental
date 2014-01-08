@@ -192,31 +192,38 @@ function drawTree(size, jsonsource, sectionID) {
 		var rootnode = jq$("g.node[concept='" + source.concept + "']")[0];
 		var rootIsExpanded = rootnode.getAttribute("expanded");
 		
+		  
+		  // update position of all text labels
+		
+		  var text = jq$(rootnode).find("text")[0];
+			 
+			 if(rootIsExpanded=="true") {
+				 rootnode.setAttribute("expanded", "false");
+				 text.setAttribute("x", "10");
+				 text.setAttribute("text-anchor", "start");
+			 } else if(rootIsExpanded=="false"){
+				 rootnode.setAttribute("expanded", "true");
+				 text.setAttribute("x", "-10");
+				 text.setAttribute("text-anchor", "end");
+			 }
+			  
+		
+		
 		if(fixedDepth == false) {
 		// compute depth and normalize nodes 
 			
 			for(var k = 0; k<nodes.length;k++) {
 				 if(nodes[k].concept==source.concept) {
 					 sourcenode = nodes[k];
+					 break;
 				 	}
 			}
 			
-			if(rootIsExpanded=="false") {
-						
-			depth = computeExpandDepth(sourcenode);
-		
-			
-
-		} else if(rootIsExpanded="true") {
-			
-			depth = computeCollapseDepth(sourcenode);
-			
-
-		}
-			
+		depth = computeDepth(sourcenode);
 		
 		} else {
-			depth = 250;
+			
+			depth = 200;
 		}
 		
 		nodes.forEach(function(d) { d.y = d.depth * depth; });
@@ -279,25 +286,7 @@ function drawTree(size, jsonsource, sectionID) {
 		    d.x0 = d.x;
 		    d.y0 = d.y;
 		  });
-		  
-		  // update position of all text labels
 		
-		  
-		  
-		  
-		  
-			 var text = jq$(rootnode).find("text")[0];
-			 
-			 if(rootIsExpanded=="true") {
-				 rootnode.setAttribute("expanded", "false");
-				 text.setAttribute("x", "10");
-				 text.setAttribute("text-anchor", "start");
-			 } else if(rootIsExpanded=="false"){
-				 rootnode.setAttribute("expanded", "true");
-				 text.setAttribute("x", "-10");
-				 text.setAttribute("text-anchor", "end");
-			 }
-			  
 			 svg.selectAll("g.node")
 			  	.attr("class", function(d) { return d._children? "node expandable" : "node"});
 			
@@ -332,85 +321,91 @@ function drawTree(size, jsonsource, sectionID) {
 }
 	 
 // compute the necessary space between current and successor layer of the tree
-	 function computeExpandDepth(node) {
+	 function computeDepth(node) {
 		 
 		 if(node.depth==0) {
 			 
-			 return 150;
-		 }
-		 var sibblingNodes = new Array();
-		 var childNodes = node.children;
-		 var nodes = tree.nodes(root);
-		 var depth = node.depth;
-		 
-		 nodes.forEach(function(d) {
-			
-			if(d.depth==depth) {
-				 sibblingNodes.push(d);
-			 } 
-		 })
-		 
-		 
-		 
-		 // find maximal label length in current layer
-		 var maxLength = getMaximalLabelLength(sibblingNodes);
-		 // find maximal label length in last layer
-		 
-		 var maxLength1 = getMaximalLabelLength(childNodes);
-		 
-		 maxLength += maxLength1;
-		 var maxLength0 = computeCollapseDepth(node);
-		 if(maxLength<maxLength0) {
-			 return maxLength0;
-		 } else return maxLength;
-	 }
-	 
-	 function computeCollapseDepth(node) {
-		 
-		 if(node.depth==0) {
-			 
-			 return 150;
+			 return 200;
 		 }
 		 var sibblingNodes = new Array();
 		 var parentNodes = new Array();
 		 var nodes = tree.nodes(root);
-		 var depth = node.depth;
-		 
+		 var depth = 0;
 		 nodes.forEach(function(d) {
-			
-			if(d.depth==depth) {
-				 sibblingNodes.push(d);
-			 } else if(d.depth==depth-1) {
-				 parentNodes.push(d);
+			 if(d.depth>depth) {
+				 depth = d.depth;
 			 }
 		 })
+		
 		 
-		 var maxLength = getMaximalLabelLength(sibblingNodes);
-		 // find maximal label length in last layer
+		 var requiredSpace = 0;
 		 
-		 var maxLength2 = getMaximalLabelLength(parentNodes);
+		 for(var i = 1; i<= depth; i++) {
+			 
+			 sibblingNodes = [];
+			 parentNodes = [];
+			  nodes.forEach(function(d) {
+				
+				if(d.depth==depth-i+1) {
+					 sibblingNodes.push(d);
+				 } else if(d.depth==depth-i) {
+					 parentNodes.push(d);
+				 }
+			  })
+			 
+			 var requiredSpaceLeft = getMaximalExpandedLabelLength(sibblingNodes);
+			 requiredSpaceLeft+= getMaximalCollapsedLabelLength(parentNodes);
+			 if(requiredSpaceLeft>requiredSpace) {
+				 requiredSpace = requiredSpaceLeft;
+			 }
+			  
+		 }
 		 
-		 maxLength += maxLength2;
-		 return maxLength;
+		if(requiredSpace<150) {
+			return 150;
+		} else return requiredSpace;
 	 }
 	 
-	 // compute the maximal label length
-	 // param: node array 
-	 function getMaximalLabelLength(node) {
+	 
+	 // compute the maximal length of all collapsed labels in the curren tree layer 
+	 function getMaximalCollapsedLabelLength(node) {
 		 var maxLength = 0;
 		 for(var k = 0; k<node.length;k++) {
 			 var concept = node[k].concept;
 			 var gNode = jq$("g[concept='"+node[k].concept+"']")[0];
+			 if(gNode.getAttribute("expanded")=="false") {
 			 var text = jq$(gNode).find("text")[0];
 			 var length = text.getComputedTextLength();
-			 if(length>maxLength) {
-				 maxLength=length;
+			 	if(length>maxLength) {
+			 		maxLength=length;
+			 	}
 			 }
 		 }
 		 
+		 // add distance between node and label
+		 maxLength+= 15;
 		 return maxLength;
 	 }
 	 
+// compute the maximal length of all expanded labels in the curren tree layer 
+	 function getMaximalExpandedLabelLength(node) {
+		 var maxLength = 0;
+		 for(var k = 0; k<node.length;k++) {
+			 var concept = node[k].concept;
+			 var gNode = jq$("g[concept='"+node[k].concept+"']")[0];
+			 if(gNode.getAttribute("expanded")=="true") {  
+				 var text = jq$(gNode).find("text")[0];
+				 var length = text.getComputedTextLength();
+				 if(length>maxLength) {
+					 maxLength=length;
+				 }	
+			 }
+		}
+		 
+		 // add distance between node and label
+		 maxLength+= 15;
+		 return maxLength;
+	 }
 	 
 	 // implement the zoom functionality 
 	 function zoom() {

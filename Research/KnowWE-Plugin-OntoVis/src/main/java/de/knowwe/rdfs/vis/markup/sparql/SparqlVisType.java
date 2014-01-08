@@ -78,6 +78,7 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
 		MARKUP.addAnnotation(ANNOTATION_LINK_MODE, false, LinkMode.values());
 		MARKUP.addAnnotation(ANNOTATION_DESIGN, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_CONCEPT, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_COMMENT, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_SIZE, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_FORMAT, NothingRenderer.getInstance());

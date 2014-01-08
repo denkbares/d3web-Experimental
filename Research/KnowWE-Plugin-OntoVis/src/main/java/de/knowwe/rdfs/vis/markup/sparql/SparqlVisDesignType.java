@@ -20,6 +20,8 @@ package de.knowwe.rdfs.vis.markup.sparql;
 
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.core.kdom.rendering.NothingRenderer;
+
 
 public class SparqlVisDesignType extends DefaultMarkupType {
 	
@@ -33,7 +35,7 @@ public class SparqlVisDesignType extends DefaultMarkupType {
 	static {
 		MARKUP = new DefaultMarkup("SparqlVisDesign");
 		MARKUP.addAnnotation(ANNOTATION_NAME, true);
-	
+		MARKUP.addAnnotationRenderer(ANNOTATION_NAME, NothingRenderer.getInstance());
 		
 	}
 	
