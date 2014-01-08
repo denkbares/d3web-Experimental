@@ -1,8 +1,10 @@
 package de.knowwe.rdfs.vis.markup;
 
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.visualization.GraphDataBuilder;
 
 public class OntoVisType extends DefaultMarkupType {
@@ -58,6 +60,8 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
 		MARKUP.addAnnotation(ANNOTATION_OUTGOING_EDGES, false, new String[] {
 				"true", "false" });
+		MARKUP.addAnnotation(Rdf2GoCore.GLOBAL, false, "true", "false");
+		MARKUP.addAnnotationRenderer(Rdf2GoCore.GLOBAL, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
 		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
 	}

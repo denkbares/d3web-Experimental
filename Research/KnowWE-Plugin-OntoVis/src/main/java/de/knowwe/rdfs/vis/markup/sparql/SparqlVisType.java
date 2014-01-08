@@ -22,6 +22,7 @@ import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.Rdf2GoCoreCheckRenderer;
 import de.knowwe.visualization.GraphDataBuilder;
 
@@ -82,6 +83,8 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotationRenderer(ANNOTATION_FORMAT, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(PackageManager.MASTER_ATTRIBUTE_NAME,
 				NothingRenderer.getInstance());
+		MARKUP.addAnnotation(Rdf2GoCore.GLOBAL, false, "true", "false");
+		MARKUP.addAnnotationRenderer(Rdf2GoCore.GLOBAL, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_LANGUAGE, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_DOT_APP, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_ADD_TO_DOT, NothingRenderer.getInstance());

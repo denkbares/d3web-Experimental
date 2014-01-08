@@ -99,6 +99,11 @@ public class ConceptMarkup extends AbstractKnowledgeUnitType<ConceptMarkup> impl
 				URI pred = RDF.type;
 
 				Rdf2GoCore.getInstance().addStatement(section, subject, pred, WISSASS_CONCEPT);
+				/*
+				 * finally commit triples
+				 */
+				Rdf2GoCore.getInstance().commit();
+
 			}
 		}
 	}

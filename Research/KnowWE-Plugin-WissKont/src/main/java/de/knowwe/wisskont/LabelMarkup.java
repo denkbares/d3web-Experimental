@@ -87,6 +87,11 @@ public class LabelMarkup extends AbstractType implements Editable {
 					URI pred = RDFS.label;
 					Literal literal = Rdf2GoCore.getInstance().createLiteral(section.getText());
 					Rdf2GoCore.getInstance().addStatement(section, subject, pred, literal);
+					/*
+					 * finally commit triples
+					 */
+					Rdf2GoCore.getInstance().commit();
+
 				}
 				else {
 					// TODO: create warning: multiple concepts defined on this

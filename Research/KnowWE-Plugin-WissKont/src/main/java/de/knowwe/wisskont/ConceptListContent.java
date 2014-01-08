@@ -145,6 +145,11 @@ public class ConceptListContent extends AbstractType {
 						RelationMarkup.class);
 				createD3webDerivationRule(section, conceptDefinition, objectSection, markup);
 
+				/*
+				 * finally commit triples
+				 */
+				Rdf2GoCore.getInstance().commit();
+
 			}
 
 			private void createD3webDerivationRule(Section<ObjectSegment> section, @SuppressWarnings("rawtypes") Section<IncrementalTermDefinition> conceptDefinition, Section<Term> objectSection, Section<? extends RelationMarkup> markup) {
