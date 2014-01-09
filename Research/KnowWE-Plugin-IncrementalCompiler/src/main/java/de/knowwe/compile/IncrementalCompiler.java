@@ -58,7 +58,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.event.KDOMCreatedEvent;
+import de.knowwe.event.ArticleRegisteredEvent;
 import de.knowwe.plugin.Plugins;
 
 /**
@@ -175,20 +175,20 @@ public class IncrementalCompiler implements EventListener {
 	@Override
 	public Collection<Class<? extends Event>> getEvents() {
 		List<Class<? extends Event>> list = new ArrayList<Class<? extends Event>>();
-		list.add(KDOMCreatedEvent.class);
+		list.add(ArticleRegisteredEvent.class);
 		return list;
 	}
 
 	@Override
 	public void notify(Event event) {
-		if (event instanceof KDOMCreatedEvent) {
-			compileChanges((KDOMCreatedEvent) event);
+		if (event instanceof ArticleRegisteredEvent) {
+			compileChanges((ArticleRegisteredEvent) event);
 		}
 
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void compileChanges(KDOMCreatedEvent event) {
+	private void compileChanges(ArticleRegisteredEvent event) {
 		Article modifiedArticle = event.getArticle();
 		Collection<Section<? extends Type>> newSectionsNotReused = CompileUtils.findSectionsNotReused(modifiedArticle);
 		Article lastVersionOfArticle = modifiedArticle.getLastVersionOfArticle();
