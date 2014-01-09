@@ -44,8 +44,6 @@ class TripleMarkupContent extends AbstractType {
 		this.addChildType(new SimpleTurtlePredicate());
 		this.addChildType(new SimpleTurtleSubjectSection());
 		this.addChildType(new SimpleTurtleObjectSection());
-
-		this.setRenderer(new RangeCheckRenderer());
 	}
 
 	class SimpleTurtlePredicate extends IRITermRef implements TypeRestrictedReference {
