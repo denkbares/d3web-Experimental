@@ -23,7 +23,7 @@ import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.report.Messages;
+import de.knowwe.core.report.CompilerError;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 
 public class TimeTableTemplateContentType extends AbstractType {
@@ -59,12 +59,9 @@ class NumberOfDaysT extends AbstractType {
 				if (number < 0) throw new NumberFormatException();
 			}
 			catch (NumberFormatException e) {
-				Messages.storeMessage(s, getClass(),
-						Messages.error("Invalid Number: " + numberText));
-
+				throw new CompilerError("Invalid Number: " + numberText);
 			}
 
 		}
-
 	}
 }

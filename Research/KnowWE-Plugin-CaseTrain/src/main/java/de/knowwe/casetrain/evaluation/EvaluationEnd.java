@@ -27,7 +27,7 @@ import de.knowwe.core.compile.DefaultGlobalCompiler;
 import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.Messages;
+import de.knowwe.core.report.CompilerMessage;
 
 /**
  * 
@@ -54,7 +54,7 @@ public class EvaluationEnd extends SubblockMarkup {
 				Section<SubblockMarkupContent> plain =
 						Sections.findSuccessor(s, SubblockMarkupContent.class);
 				if (plain.getText() == null || plain.getText().trim().equals("")) {
-					Messages.storeMessage(s, getClass(),
+					throw new CompilerMessage(
 							Utils.missingContentWarning(EvaluationEnd.class.getSimpleName()));
 				}
 

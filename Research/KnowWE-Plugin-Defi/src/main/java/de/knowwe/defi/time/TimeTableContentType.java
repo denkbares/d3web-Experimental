@@ -26,7 +26,7 @@ import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.report.Messages;
+import de.knowwe.core.report.CompilerError;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 
 public class TimeTableContentType extends AbstractType {
@@ -65,11 +65,8 @@ class DateT extends AbstractType {
 				dateFormat.parse(dateText);
 			}
 			catch (ParseException e) {
-				Messages.storeMessage(s, getClass(),
-						Messages.error("Invalid Date: " + dateText));
-
+				throw new CompilerError("Invalid Date: " + dateText);
 			}
 		}
-
 	}
 }

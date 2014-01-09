@@ -21,7 +21,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.compile.DefaultGlobalCompiler;
 import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.Messages;
+import de.knowwe.core.report.CompilerWarning;
 import de.knowwe.core.wikiConnector.WikiAttachment;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -53,16 +53,11 @@ public class CIInfoHandler extends DefaultGlobalScript<CIInfoType> {
 			createTriples(section, infos);
 		}
 		catch (IOException e) {
-			Messages.storeMessage(section, getClass(), Messages.warning("Unable to load CI-Info"));
-			return;
+			throw new CompilerWarning("Unable to load CI-Info");
 		}
 		catch (JDOMException e) {
-			Messages.storeMessage(section, getClass(), Messages.warning("Unable to load CI-Info"));
-			return;
+			throw new CompilerWarning("Unable to load CI-Info");
 		}
-
-		Messages.clearMessages(section, getClass());
-
 	}
 
 	private void createTriples(Section<?> section, Collection<CIInfo> infos) {

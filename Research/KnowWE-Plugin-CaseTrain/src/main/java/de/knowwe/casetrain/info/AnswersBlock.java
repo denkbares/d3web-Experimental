@@ -31,7 +31,7 @@ import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.report.Messages;
+import de.knowwe.core.report.CompilerMessage;
 import de.knowwe.kdom.AnonymousType;
 
 /**
@@ -62,7 +62,7 @@ public class AnswersBlock extends SubblockMarkup {
 				Sections.findSuccessorsOfType(s, AnswerLine.class, found);
 
 				if (found.isEmpty()) {
-					Messages.storeMessage(s, getClass(),
+					throw new CompilerMessage(
 							Utils.missingComponentWarning(AnswerLine.class.getSimpleName()));
 				}
 

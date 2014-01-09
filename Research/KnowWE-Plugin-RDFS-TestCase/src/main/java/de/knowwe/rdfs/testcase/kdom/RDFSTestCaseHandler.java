@@ -28,6 +28,8 @@ import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.CompilerError;
+import de.knowwe.core.report.CompilerMessage;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -52,18 +54,14 @@ public class RDFSTestCaseHandler extends DefaultGlobalScript<RDFSTestCaseType> {
 				RDFSTestCaseType.ANNOTATION_NAME);
 
 		if (name == null) {
-			Messages.storeMessage(section, this.getClass(),
-					Messages.error("The test case has no name!"));
-			return;
+			throw new CompilerError("The test case has no name!");
 		}
 
 		// Get and validate SPARQL-Query
 		Section<SPARQLQueryType> sparqlSection = Sections.findSuccessor(section,
 				SPARQLQueryType.class);
 		if (sparqlSection == null) {
-			Messages.storeMessage(section, this.getClass(),
-					Messages.syntaxError("Unable to find SPARQL-Query! Check the syntax!"));
-			return;
+			throw new CompilerError("Unable to find SPARQL-Query! Check the syntax!");
 		}
 		String sparqlQuery = SPARQLQueryType.getSPARQLQuery(sparqlSection);
 		ValidatorResult validation = Validator.validate(Rdf2GoCore.getInstance(), sparqlQuery);
@@ -86,9 +84,8 @@ public class RDFSTestCaseHandler extends DefaultGlobalScript<RDFSTestCaseType> {
 				Sections.findSuccessorsOfType(section, ExpectedBindingType.class);
 
 		if (expectedBindings == null || expectedBindings.isEmpty()) {
-			Messages.storeMessage(section, this.getClass(),
+			throw new CompilerMessage(
 					Messages.syntaxError("Unable to find expected bindings! Check the syntax!"));
-			return;
 		}
 
 		for (Section<ExpectedBindingType> expectedBinding : expectedBindings) {
@@ -97,10 +94,9 @@ public class RDFSTestCaseHandler extends DefaultGlobalScript<RDFSTestCaseType> {
 			List<Section<ValueType>> values =
 					Sections.findSuccessorsOfType(expectedBinding, ValueType.class);
 			if (values == null || values.isEmpty()) {
-				Messages.storeMessage(section, this.getClass(),
+				throw new CompilerMessage(
 						Messages.syntaxError("There is no value in binding: "
 								+ expectedBinding.getText()));
-				return;
 			}
 
 			// create binding object, add values and add it to the test case
@@ -118,10 +114,9 @@ public class RDFSTestCaseHandler extends DefaultGlobalScript<RDFSTestCaseType> {
 				PlainText.class);
 		for (Section<PlainText> plainText : plainTexts) {
 			if (!plainText.getText().matches("\\s*")) {
-				Messages.storeMessage(section, this.getClass(),
+				throw new CompilerMessage(
 						Messages.syntaxError("There is an syntax errors in the expected binding: "
 								+ plainText.getText().trim()));
-				return;
 			}
 		}
 
@@ -130,5 +125,4 @@ public class RDFSTestCaseHandler extends DefaultGlobalScript<RDFSTestCaseType> {
 		Compilers.storeObject(section, key, testCase);
 
 	}
-
 }

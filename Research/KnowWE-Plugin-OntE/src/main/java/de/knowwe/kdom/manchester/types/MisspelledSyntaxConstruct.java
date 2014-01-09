@@ -30,6 +30,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.core.report.CompilerMessage;
 import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
@@ -58,7 +59,7 @@ public class MisspelledSyntaxConstruct extends AbstractType {
 					corrections.append(sug.getSuggestion());
 				}
 
-				Messages.storeMessage(s, getClass(), Messages.syntaxError(
+				throw new CompilerMessage(Messages.syntaxError(
 						messageText + s.getText() + "; Did you mean: " + corrections));
 			}
 
