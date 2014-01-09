@@ -31,7 +31,6 @@ import junit.framework.TestCase;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
@@ -49,7 +48,6 @@ import de.knowwe.onte.test.util.OWLReasoningUtils;
  * @author Stefan Mark
  * @created 23.09.2011
  */
-@Ignore
 public class OWLPizzaTest {
 
 	/* The underlying test article */
