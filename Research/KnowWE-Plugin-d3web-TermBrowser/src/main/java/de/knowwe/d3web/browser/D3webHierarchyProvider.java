@@ -20,6 +20,7 @@ package de.knowwe.d3web.browser;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -222,6 +223,8 @@ public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 	@Override
 	public Collection<Identifier> getAllTerms() {
 		KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB, master);
+		if (knowledgeBase == null) return Collections.emptySet();
+
 		de.d3web.core.knowledge.TerminologyManager manager = knowledgeBase.getManager();
 		Set<Identifier> result = new HashSet<Identifier>();
 		Collection<TerminologyObject> allTerminologyObjects = manager.getAllTerminologyObjects();
