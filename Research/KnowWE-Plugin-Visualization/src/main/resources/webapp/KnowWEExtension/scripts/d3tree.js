@@ -427,10 +427,7 @@ function drawTree(size, jsonsource, sectionID) {
 		    
 		}
 	
-
-	
-	
-	 root.children.forEach(collapse);
+	 if (root.children) root.children.forEach(collapse);
 	 update(root);
 	
 	d3.select(self.frameElement).style("height", "800px");
