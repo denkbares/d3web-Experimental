@@ -26,9 +26,9 @@ import javax.servlet.http.HttpServletResponse;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.defi.utils.ReplaceSectionUtils;
 
 /**
@@ -55,7 +55,7 @@ public class AboutMeSaveAction extends AbstractAction {
 		String username = context.getUserName();
 		String web = context.getWeb();
 
-		ArticleManager mgr = Compilers.getArticleManager(web);
+		ArticleManager mgr = KnowWEUtils.getArticleManager(web);
 		Section<?> section = mgr.getArticle(title).getRootSection();
 		Section<AboutMe> child = Sections.findSuccessor(section, AboutMe.class);
 

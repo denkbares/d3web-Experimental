@@ -39,7 +39,6 @@ import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.utils.CompileUtils;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.DefaultGlobalCompiler;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.compile.terminology.TerminologyExtension;
@@ -347,7 +346,7 @@ public class IncrementalCompiler implements EventListener {
 					unit);
 			if (externalReferencesOfKnowledgeUnit != null
 					&& externalReferencesOfKnowledgeUnit.size() > 0) {
-				Compilers.storeObject(unit,
+				KnowWEUtils.storeObject(unit,
 						EXTERNAL_REFERENCES_OF_KNOWLEDGEUNIT, externalReferencesOfKnowledgeUnit);
 
 			}

@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -33,6 +32,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.core.utils.PackageCompileLinkToTermDefinitionProvider;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
@@ -186,7 +186,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 	 * @return
 	 */
 	public static Section<TermBrowserMarkup> getTermBrowserMarkup(UserContext user) {
-		Article article = Compilers.getArticleManager(user.getWeb()).getArticle(
+		Article article = KnowWEUtils.getArticleManager(user.getWeb()).getArticle(
 				user.getTitle());
 		Section<TermBrowserMarkup> termBrowser = null;
 		if (article != null) {
@@ -194,7 +194,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 					TermBrowserMarkup.class);
 		}
 		if (termBrowser == null) {
-			Article leftMenu = Compilers.getArticleManager(user.getWeb()).getArticle(
+			Article leftMenu = KnowWEUtils.getArticleManager(user.getWeb()).getArticle(
 					"LeftMenu");
 			termBrowser = Sections.findSuccessor(leftMenu.getRootSection(),
 					TermBrowserMarkup.class);

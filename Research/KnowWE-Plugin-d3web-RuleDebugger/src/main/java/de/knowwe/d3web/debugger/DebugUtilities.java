@@ -38,6 +38,7 @@ import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * Some useful functions and variables for the d3web-debugger.
@@ -162,7 +163,7 @@ public class DebugUtilities {
 
 		// get the knowledgebase's article
 		Collection<D3webCompiler> compilers = Compilers.getCompilers(
-				Compilers.getArticleManager(Environment.DEFAULT_WEB), D3webCompiler.class);
+				KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB), D3webCompiler.class);
 		for (D3webCompiler d3webCompiler : compilers) {
 			if (d3webCompiler.getKnowledgeBase() == kb) {
 				ruleCompiler = d3webCompiler;
@@ -176,7 +177,7 @@ public class DebugUtilities {
 			rules = Sections.findSuccessorsOfType(article.getRootSection(), RuleAction.class);
 			for (Section<RuleAction> ruleAction : rules) {
 
-				rule = (Rule) Compilers.getStoredObject(ruleCompiler, ruleAction,
+				rule = (Rule) KnowWEUtils.getStoredObject(ruleCompiler, ruleAction,
 						RuleContentType.RULE_STORE_KEY);
 
 				if (rule != null && rule.equals(r)) return ruleAction;

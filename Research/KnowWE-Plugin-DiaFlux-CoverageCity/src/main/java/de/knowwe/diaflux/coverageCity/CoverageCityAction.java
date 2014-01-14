@@ -47,6 +47,7 @@ import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.d3webviz.diafluxCity.GLCityGenerator;
 import de.knowwe.d3webviz.diafluxCity.metrics.Constant;
 import de.knowwe.d3webviz.diafluxCity.metrics.Metrics;
@@ -118,7 +119,7 @@ public class CoverageCityAction extends AbstractAction {
 		// if (result != null) return result;
 
 		Environment env = Environment.getInstance();
-		PackageManager packageManager = Compilers.getPackageManager(coverageSec);
+		PackageManager packageManager = KnowWEUtils.getPackageManager(coverageSec);
 
 		// Map<String, String> articles =
 		// Environment.getInstance().getWikiConnector().getAllArticles(

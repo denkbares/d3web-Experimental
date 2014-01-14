@@ -25,13 +25,13 @@ import de.d3web.we.kdom.condition.NumericalFinding.Comparator;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.Environment;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.basicType.Number;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.wisskont.ValuesMarkup;
 import de.knowwe.wisskont.ValuesMarkup.NumericalValueMarkerType;
 import de.knowwe.wisskont.dss.KnowledgeBaseInstantiation;
@@ -69,7 +69,7 @@ public class CondUtils {
 
 		Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 				KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
-		Object o = Compilers.getStoredObject(
+		Object o = KnowWEUtils.getStoredObject(
 				D3webUtils.getD3webCompiler(article),
 				markup, ValuesMarkup.VALUE_STORE_KEY);
 

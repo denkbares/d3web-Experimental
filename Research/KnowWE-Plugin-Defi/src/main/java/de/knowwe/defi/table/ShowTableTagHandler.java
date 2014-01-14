@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.knowwe.core.Environment;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -32,6 +31,7 @@ import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.table.Table;
 
@@ -112,7 +112,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 	}
 
 	private Section<DefineTableMarkup> findTableToShow(String id) {
-		Collection<Article> articles = Compilers.getArticleManager(
+		Collection<Article> articles = KnowWEUtils.getArticleManager(
 				Environment.DEFAULT_WEB).getArticles();
 		for (Article article : articles) {
 			List<Section<DefineTableMarkup>> tables = new ArrayList<Section<DefineTableMarkup>>();

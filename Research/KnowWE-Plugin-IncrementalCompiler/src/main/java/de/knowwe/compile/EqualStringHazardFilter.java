@@ -12,11 +12,11 @@ import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.LocationDependantKnowledgeUnit;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.compile.utils.CompileUtils;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 
 public class EqualStringHazardFilter {
 
@@ -90,7 +90,7 @@ public class EqualStringHazardFilter {
 		// old external refs are stored as they cannot be retrieved any more
 		Collection<Section<? extends Term>> allOldReferences = new HashSet<Section<? extends Term>>();
 		@SuppressWarnings("unchecked")
-		Collection<Section<? extends Term>> oldExternalReferences = (Collection<Section<? extends Term>>) (Compilers.getStoredObject(
+		Collection<Section<? extends Term>> oldExternalReferences = (Collection<Section<? extends Term>>) (KnowWEUtils.getStoredObject(
 				oldSection, IncrementalCompiler.EXTERNAL_REFERENCES_OF_KNOWLEDGEUNIT));
 		if (oldExternalReferences != null) {
 			allOldReferences.addAll(oldExternalReferences);

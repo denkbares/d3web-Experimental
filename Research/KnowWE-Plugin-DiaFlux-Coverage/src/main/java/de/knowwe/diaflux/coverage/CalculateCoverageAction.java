@@ -44,6 +44,7 @@ import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.testcases.TestCaseProvider;
 import de.knowwe.testcases.TestCaseProviderStorage;
@@ -125,7 +126,7 @@ public class CalculateCoverageAction extends AbstractAction {
 	 */
 	public static void calculateCoverage(Section<DiaFluxCoverageType> coverageSec) {
 		Environment env = Environment.getInstance();
-		PackageManager packageManager = Compilers.getPackageManager(coverageSec);
+		PackageManager packageManager = KnowWEUtils.getPackageManager(coverageSec);
 
 		// Map<String, String> articles =
 		// Environment.getInstance().getWikiConnector().getAllArticles(

@@ -14,12 +14,12 @@ import de.d3web.we.kdom.condition.KDOMConditionFactory;
 import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.reviseHandler.D3webHandler;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
+import de.knowwe.core.utils.KnowWEUtils;
 
 public class ScoreTableCellSubtreeHandler extends D3webHandler<ScoreCell> {
 
@@ -88,7 +88,7 @@ public class ScoreTableCellSubtreeHandler extends D3webHandler<ScoreCell> {
 						+ "' and column '" + solution + "'"));
 			}
 			else {
-				Compilers.storeObject(article, section, ruleStoreKey, r);
+				KnowWEUtils.storeObject(article, section, ruleStoreKey, r);
 				messages.add(Messages.objectCreatedNotice(
 						"Rule"));
 			}

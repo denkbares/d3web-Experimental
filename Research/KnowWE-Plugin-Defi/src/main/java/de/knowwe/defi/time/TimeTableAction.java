@@ -26,11 +26,11 @@ import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.defi.menu.MenuUtilities;
 import de.knowwe.defi.utils.ReplaceSectionUtils;
@@ -45,7 +45,7 @@ public class TimeTableAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String[] days = context.getParameter("inputs").split(":");
-		ArticleManager mgr = Compilers.getArticleManager(Environment.DEFAULT_WEB);
+		ArticleManager mgr = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB);
 		WikiConnector wikiConnector = Environment.getInstance().getWikiConnector();
 		String timetableContent = createTimeTableTemplate(days);
 		String pageName = TimeTableUtilities.getTimeTableTemplatePagename();

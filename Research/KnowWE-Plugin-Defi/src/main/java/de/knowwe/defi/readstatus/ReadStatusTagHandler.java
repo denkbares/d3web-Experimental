@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.knowwe.core.Environment;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -34,6 +33,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.defi.menu.MenuUtilities;
 import de.knowwe.defi.readbutton.ReadbuttonUtilities;
 import de.knowwe.defi.time.TimeTableUtilities;
@@ -133,7 +133,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 		List<String> readbuttons = new LinkedList<String>();
 
 		for (Section<DashTreeElement> s : units) {
-			Article unit = Compilers.getArticleManager(
+			Article unit = KnowWEUtils.getArticleManager(
 					Environment.DEFAULT_WEB).getArticle(getPageName(s));
 
 			if (unit != null) {

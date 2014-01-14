@@ -26,11 +26,11 @@ import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.defi.utils.ReplaceSectionUtils;
 
@@ -46,7 +46,7 @@ public class PersonalTimeTableAction extends AbstractAction {
 		String[] dates = context.getParameter("inputs").split("#");
 		String user = context.getParameter("user");
 		String timetableContent = createTimeTable(dates);
-		ArticleManager mgr = Compilers.getArticleManager(Environment.DEFAULT_WEB);
+		ArticleManager mgr = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB);
 		WikiConnector wikiConnector = Environment.getInstance().getWikiConnector();
 		String pageName = TimeTableUtilities.getTimeTablePageForUser(user);
 

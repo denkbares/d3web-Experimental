@@ -24,11 +24,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.knowwe.core.Environment;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.defi.time.TimeTableUtilities;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
@@ -45,7 +45,7 @@ public class MenuUtilities {
 	 */
 	public static List<Section<DashTreeElement>> getAllUnits() {
 		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
-		Article leftMenu = Compilers.getArticleManager(
+		Article leftMenu = KnowWEUtils.getArticleManager(
 				Environment.DEFAULT_WEB).getArticle("LeftMenu");
 
 		if (leftMenu != null) {
@@ -64,7 +64,7 @@ public class MenuUtilities {
 	public static List<Section<DashTreeElement>> getRootUnits() {
 		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
 		List<Section<DashTreeElement>> rootUnits = new LinkedList<Section<DashTreeElement>>();
-		Article leftMenu = Compilers.getArticleManager(
+		Article leftMenu = KnowWEUtils.getArticleManager(
 				Environment.DEFAULT_WEB).getArticle("LeftMenu");
 
 		if (leftMenu != null) {

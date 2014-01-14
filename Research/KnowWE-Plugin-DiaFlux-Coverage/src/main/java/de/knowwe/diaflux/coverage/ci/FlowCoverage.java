@@ -30,9 +30,9 @@ import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
 import de.d3web.testing.TestParameter;
 import de.knowwe.core.Environment;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.diaflux.coverage.DiaFluxCoverageType;
 
 /**
@@ -54,7 +54,7 @@ public class FlowCoverage extends KBTest {
 
 		String packageName = args[1];
 
-		PackageManager packageManager = Compilers.getPackageManager(Environment.DEFAULT_WEB);
+		PackageManager packageManager = KnowWEUtils.getPackageManager(Environment.DEFAULT_WEB);
 
 		Collection<Section<?>> sectionsOfPackage = packageManager.getSectionsOfPackage(packageName);
 

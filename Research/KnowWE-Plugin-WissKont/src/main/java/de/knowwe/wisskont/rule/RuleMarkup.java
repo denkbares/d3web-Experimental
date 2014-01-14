@@ -53,7 +53,6 @@ import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.renderer.ReferenceSurroundingRenderer;
 import de.knowwe.core.Environment;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
@@ -66,6 +65,7 @@ import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
@@ -198,7 +198,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 
 			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
-			Object o = Compilers.getStoredObject(
+			Object o = KnowWEUtils.getStoredObject(
 					D3webUtils.getD3webCompiler(article),
 					markup, ValuesMarkup.VALUE_STORE_KEY);
 
@@ -255,7 +255,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 			for (Section<WisskontChoiceFinding> terminal : terminals) {
 				Condition createdCondition = terminal.get().createCondition(
 						d3webCompiler, terminal);
-				Compilers.storeObject(d3webCompiler, terminal,
+				KnowWEUtils.storeObject(d3webCompiler, terminal,
 						"cond-store-key",
 						createdCondition);
 			}
@@ -264,7 +264,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 					NumericalFinding.class);
 			for (Section<NumericalFinding> condNumSection : numFindingTerminals) {
 				Condition createdCondition = CondUtils.createCondNum(condNumSection);
-				Compilers.storeObject(d3webCompiler, condNumSection,
+				KnowWEUtils.storeObject(d3webCompiler, condNumSection,
 						"cond-store-key",
 						createdCondition);
 			}
@@ -303,7 +303,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 					}
 				}
 			}
-			Compilers.storeObject(D3webUtils.getD3webCompiler(article), section, RULE_STORE_KEY,
+			KnowWEUtils.storeObject(D3webUtils.getD3webCompiler(article), section, RULE_STORE_KEY,
 					rules);
 		}
 
@@ -313,7 +313,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 		public void deleteFromRepository(Section<RuleMarkup> section) {
 			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
-			Object storedObject = Compilers.getStoredObject(
+			Object storedObject = KnowWEUtils.getStoredObject(
 					D3webUtils.getD3webCompiler(article), section, RULE_STORE_KEY);
 			if (storedObject instanceof Set) {
 				Set<?> set = (Set<?>) storedObject;

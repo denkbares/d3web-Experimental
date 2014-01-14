@@ -29,7 +29,7 @@ import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.Compilers;
+import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * 
@@ -48,7 +48,7 @@ public class PersonalMessageAction extends AbstractAction {
 		String user2 = context.getParameter("user2");
 		GregorianCalendar now = new GregorianCalendar();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		ArticleManager mgr = Compilers.getArticleManager(
+		ArticleManager mgr = KnowWEUtils.getArticleManager(
 				Environment.DEFAULT_WEB);
 
 		String topic = "Persoenliche Nachrichten(" + user1 + "," + user2 + ")";

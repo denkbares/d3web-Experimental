@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.DefaultGlobalCompiler;
 import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.basicType.PlainText;
@@ -32,6 +31,7 @@ import de.knowwe.core.report.CompilerError;
 import de.knowwe.core.report.CompilerMessage;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.validator.Validator;
@@ -122,7 +122,7 @@ public class RDFSTestCaseHandler extends DefaultGlobalScript<RDFSTestCaseType> {
 
 		// save RDFS test case in KnowWE's object store
 		String key = RDFSTestCaseType.MARKUP_NAME + testCase.getName();
-		Compilers.storeObject(section, key, testCase);
+		KnowWEUtils.storeObject(section, key, testCase);
 
 	}
 }

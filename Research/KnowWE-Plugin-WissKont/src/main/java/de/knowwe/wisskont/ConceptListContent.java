@@ -52,13 +52,13 @@ import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.InvalidReference;
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquotedNonEmpty;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -222,7 +222,7 @@ public class ConceptListContent extends AbstractType {
 						Rule r = RuleFactory.createRule(a, cond,
 								null, PSMethodHeuristic.class);
 						if (r != null) {
-							Compilers.storeObject(D3webUtils.getD3webCompiler(article), section,
+							KnowWEUtils.storeObject(D3webUtils.getD3webCompiler(article), section,
 									RULE_STORE_KEY, r);
 						}
 					}
@@ -254,7 +254,7 @@ public class ConceptListContent extends AbstractType {
 			@Override
 			public void deleteFromRepository(Section<ObjectSegment> section) {
 				Rdf2GoCore.getInstance().removeStatementsForSection(section);
-				Object storedObject = Compilers.getStoredObject(
+				Object storedObject = KnowWEUtils.getStoredObject(
 						D3webUtils.getD3webCompiler(section.getArticle()), section,
 						RULE_STORE_KEY);
 				if (storedObject instanceof Rule) {

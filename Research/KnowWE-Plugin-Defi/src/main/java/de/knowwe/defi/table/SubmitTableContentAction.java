@@ -31,10 +31,10 @@ import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.defi.utils.ReplaceSectionUtils;
 import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -98,7 +98,7 @@ public class SubmitTableContentAction extends AbstractAction {
 
 		String username = context.getParameter("user");
 		String defaultWeb = Environment.DEFAULT_WEB;
-		ArticleManager articleManager = Compilers.getArticleManager(
+		ArticleManager articleManager = KnowWEUtils.getArticleManager(
 				defaultWeb);
 		String articleNameForData = getDataArticleNameForUser(username);
 		Article dataArticle = articleManager.getArticle(
@@ -112,7 +112,7 @@ public class SubmitTableContentAction extends AbstractAction {
 			Article article = Article.createArticle(newContent.toString(),
 					articleNameForData, defaultWeb, true);
 
-			Compilers.getArticleManager(
+			KnowWEUtils.getArticleManager(
 					defaultWeb)
 					.registerArticle(article);
 			dataArticle = articleManager.getArticle(

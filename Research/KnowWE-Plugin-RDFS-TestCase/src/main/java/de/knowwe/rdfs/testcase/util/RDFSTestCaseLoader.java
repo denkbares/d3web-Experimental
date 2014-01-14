@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import de.knowwe.core.Environment;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdfs.testcase.RDFSTestCase;
 import de.knowwe.rdfs.testcase.kdom.RDFSTestCaseType;
@@ -69,7 +69,7 @@ public class RDFSTestCaseLoader {
 
 					// load test case if name matches
 					if (name.equals(testCaseName)) {
-						testCase = (RDFSTestCase) Compilers.getStoredObject(s,
+						testCase = (RDFSTestCase) KnowWEUtils.getStoredObject(s,
 								RDFSTestCaseType.MARKUP_NAME + testCaseName);
 					}
 				}

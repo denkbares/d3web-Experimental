@@ -34,7 +34,6 @@ import com.ecyrd.jspwiki.auth.user.UserDatabase;
 import de.d3web.strings.Strings;
 import de.knowwe.comment.forum.Forum;
 import de.knowwe.core.Environment;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -42,6 +41,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.defi.aboutMe.AboutMe;
 import de.knowwe.defi.menu.MenuUtilities;
 import de.knowwe.jspwiki.JSPWikiConnector;
@@ -353,7 +353,7 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 	 */
 	private List<Section<? extends Forum>> getAllForums() {
 		List<Section<? extends Forum>> forums = new LinkedList<Section<? extends Forum>>();
-		Iterator<Article> it = Compilers.getArticleManager(Environment.DEFAULT_WEB).getArticleIterator();
+		Iterator<Article> it = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB).getArticleIterator();
 
 		while (it.hasNext()) {
 			for (Section<? extends Type> sec : Sections.getSubtreePreOrder(it.next().getRootSection())) {

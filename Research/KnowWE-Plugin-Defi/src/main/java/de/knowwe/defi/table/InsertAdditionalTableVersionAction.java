@@ -29,10 +29,10 @@ import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.defi.utils.ReplaceSectionUtils;
 
 public class InsertAdditionalTableVersionAction extends AbstractAction {
@@ -41,7 +41,7 @@ public class InsertAdditionalTableVersionAction extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 		String username = context.getUserName();
 		String articleName = SubmitTableContentAction.getDataArticleNameForUser(username);
-		ArticleManager articleManager = Compilers.getArticleManager(
+		ArticleManager articleManager = KnowWEUtils.getArticleManager(
 				Environment.DEFAULT_WEB);
 		Article article = articleManager.getArticle(
 				articleName);

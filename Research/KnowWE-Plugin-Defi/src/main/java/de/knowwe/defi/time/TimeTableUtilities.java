@@ -33,10 +33,10 @@ import com.ecyrd.jspwiki.auth.user.UserProfile;
 
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.defi.menu.MenuUtilities;
 import de.knowwe.defi.user.UserUtilities;
@@ -56,7 +56,7 @@ public class TimeTableUtilities {
 		UserDatabase udb = eng.getUserManager().getUserDatabase();
 		UserProfile userProfile;
 		List<Date> dates = new ArrayList<Date>();
-		ArticleManager mgr = Compilers.getArticleManager(Environment.DEFAULT_WEB);
+		ArticleManager mgr = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB);
 		Article article = mgr.getArticle(getTimeTablePageForUser(user));
 		Section<TimeTableMarkup> timetable = null;
 
@@ -117,7 +117,7 @@ public class TimeTableUtilities {
 	 */
 	public static Article buildPersonalTimeTable(UserProfile user) {
 		WikiConnector wikiConnector = Environment.getInstance().getWikiConnector();
-		ArticleManager mgr = Compilers.getArticleManager(Environment.DEFAULT_WEB);
+		ArticleManager mgr = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB);
 		String pageName = getTimeTablePageForUser(user.getFullname());
 		String timetable = generatePersonalTimeTableContent(user);
 		Article article = mgr.getArticle(pageName);
