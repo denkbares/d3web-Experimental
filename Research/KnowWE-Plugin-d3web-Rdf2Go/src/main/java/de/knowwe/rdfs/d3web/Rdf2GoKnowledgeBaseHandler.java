@@ -18,31 +18,34 @@ import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.strings.Strings;
 import de.d3web.we.knowledgebase.D3webCompiler;
-import de.d3web.we.object.D3webTermDefinition;
-import de.d3web.we.reviseHandler.D3webHandler;
+import de.d3web.we.knowledgebase.KnowledgeBaseType;
 import de.d3web.we.utils.D3webUtils;
+import de.knowwe.core.compile.Compilers;
+import de.knowwe.core.compile.packaging.PackageCompileType;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
+import de.knowwe.ontology.compile.OntologyCompiler;
+import de.knowwe.ontology.compile.OntologyHandler;
 import de.knowwe.rdf2go.Rdf2GoCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
-public class Rdf2GoKnowledgeBaseHandler extends D3webHandler<D3webTermDefinition<?>> {
+public class Rdf2GoKnowledgeBaseHandler extends OntologyHandler<KnowledgeBaseType> {
 
 	@Override
-	public Collection<Message> create(D3webCompiler compiler, Section<D3webTermDefinition<?>> section) {
+	public Collection<Message> create(OntologyCompiler compiler, Section<KnowledgeBaseType> section) {
 
 		if (section.hasErrorInSubtree()) return Messages.noMessage();
 
-		Collection<Rdf2GoCompiler> rdf2Gocompilers = Rdf2GoD3webUtils.getRdf2GoCompilers(compiler,
-				section);
-		for (Rdf2GoCompiler rdf2GoCompiler : rdf2Gocompilers) {
+		Section<PackageCompileType> compileSection = Sections.findSuccessor(section,
+				PackageCompileType.class);
+		D3webCompiler d3webCompiler = Compilers.getCompiler(compileSection, D3webCompiler.class);
 
-			addKnowledgeBaseInfo(rdf2GoCompiler, compiler, section);
+		addKnowledgeBaseInfo(compiler, d3webCompiler, section);
 
-			addChildrenIndexes(rdf2GoCompiler, compiler);
-		}
+		addChildrenIndexes(compiler, d3webCompiler, section);
 
 		return Messages.noMessage();
 	}
@@ -53,18 +56,19 @@ public class Rdf2GoKnowledgeBaseHandler extends D3webHandler<D3webTermDefinition
 	 * after the compilation of the TerminologyObjects and do it only once.
 	 * 
 	 * @param rdf2GoCompiler
+	 * @param section
 	 * 
 	 * @created 10.06.2013
 	 */
-	private void addChildrenIndexes(Rdf2GoCompiler rdf2GoCompiler, D3webCompiler compiler) {
-		KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(compiler);
+	private void addChildrenIndexes(Rdf2GoCompiler rdf2GoCompiler, D3webCompiler d3webCompiler, Section<KnowledgeBaseType> section) {
+		KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(d3webCompiler);
 		Collection<TerminologyObject> allTerminologyObjects = knowledgeBase.getManager().getAllTerminologyObjects();
 		for (NamedObject terminologyObject : allTerminologyObjects) {
-			addNamedObjectChildrenIndexes(rdf2GoCompiler, compiler, terminologyObject);
+			addNamedObjectChildrenIndexes(rdf2GoCompiler, d3webCompiler, terminologyObject, section);
 		}
 	}
 
-	private void addNamedObjectChildrenIndexes(Rdf2GoCompiler rdf2GoCompiler, D3webCompiler compiler, NamedObject namedObject) {
+	private void addNamedObjectChildrenIndexes(Rdf2GoCompiler rdf2GoCompiler, D3webCompiler d3webCompiler, NamedObject namedObject, Section<KnowledgeBaseType> section) {
 		String externalForm = Rdf2GoD3webUtils.getIdentifierExternalForm(namedObject);
 		Rdf2GoCore core = rdf2GoCompiler.getRdf2GoCore();
 		URI termIdentifierURI = core.createlocalURI(externalForm);
@@ -111,11 +115,11 @@ public class Rdf2GoKnowledgeBaseHandler extends D3webHandler<D3webTermDefinition
 					indexNode, indexOfURI, parentIdentifierURI, statements);
 		}
 
-		core.addStatements(compiler, Rdf2GoUtils.toArray(statements));
+		core.addStatements(section, Rdf2GoUtils.toArray(statements));
 
 	}
 
-	private void addKnowledgeBaseInfo(Rdf2GoCompiler rdf2GoCompiler, D3webCompiler compiler, Section<D3webTermDefinition<?>> section) {
+	private void addKnowledgeBaseInfo(Rdf2GoCompiler rdf2GoCompiler, D3webCompiler compiler, Section<KnowledgeBaseType> section) {
 		String kbName = D3webUtils.getKnowledgeBase(compiler).getId();
 		Rdf2GoCore core = rdf2GoCompiler.getRdf2GoCore();
 		URI articleNameURI = core.createlocalURI(
@@ -129,13 +133,18 @@ public class Rdf2GoKnowledgeBaseHandler extends D3webHandler<D3webTermDefinition
 
 		// Subject: lns:ArticleName Predicate: lns:defines Object:
 		// lns:KbName
-		core.addStatements(compiler, core.createStatement(
+		core.addStatements(section, core.createStatement(
 				articleNameURI, definesURI, kbNameURI));
 
 		// Subject: lns:ArticleName Predicate: rdf:type Object:
 		// lns:Article
-		core.addStatements(compiler, core.createStatement(articleNameURI,
+		core.addStatements(section, core.createStatement(articleNameURI,
 				RDF.type, articleURI));
+	}
+
+	@Override
+	public void destroy(OntologyCompiler compiler, Section<KnowledgeBaseType> section) {
+		compiler.getRdf2GoCore().removeStatementsForSection(section);
 	}
 
 }

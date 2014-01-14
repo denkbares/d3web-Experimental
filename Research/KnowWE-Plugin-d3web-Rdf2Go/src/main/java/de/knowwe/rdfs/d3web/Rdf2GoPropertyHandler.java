@@ -34,6 +34,7 @@ import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.we.knowledgebase.D3webCompiler;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -43,7 +44,8 @@ import de.knowwe.d3web.property.PropertyDeclarationHandler;
 import de.knowwe.d3web.property.PropertyDeclarationType;
 import de.knowwe.d3web.property.PropertyObjectReference;
 import de.knowwe.d3web.property.PropertyType;
-import de.knowwe.rdf2go.Rdf2GoCompiler;
+import de.knowwe.ontology.compile.OntologyCompiler;
+import de.knowwe.ontology.compile.OntologyHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
@@ -53,10 +55,18 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
  * @author Albrecht Striffler
  * @created 26.06.2013
  */
-public class Rdf2GoPropertyHandler extends PropertyDeclarationHandler {
+public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationType> {
 
 	@Override
-	public Collection<Message> create(D3webCompiler compiler, Section<PropertyDeclarationType> section) {
+	public Collection<Message> create(OntologyCompiler rdf2GoCompiler, Section<PropertyDeclarationType> section) {
+
+		Collection<D3webCompiler> compilers = Compilers.getCompilers(section, D3webCompiler.class);
+		if (compilers.isEmpty()) {
+			return Messages.noMessage();
+		}
+
+		D3webCompiler compiler = compilers.iterator().next();
+
 		// get Property
 		Section<PropertyType> propertySection = Sections.findSuccessor(section,
 				PropertyType.class);
@@ -75,12 +85,13 @@ public class Rdf2GoPropertyHandler extends PropertyDeclarationHandler {
 		if (namendObjectSection == null) {
 			return Messages.asList();
 		}
-		List<NamedObject> objects = getNamedObjects(compiler, namendObjectSection);
+		List<NamedObject> objects = PropertyDeclarationHandler.getNamedObjects(compiler,
+				namendObjectSection);
 		if (objects.isEmpty()) {
 			return Messages.asList();
 		}
 
-		Locale locale = getLocale(section);
+		Locale locale = PropertyDeclarationHandler.getLocale(section);
 
 		// get content
 		Section<PropertyContentType> contentSection = Sections.findSuccessor(section,
@@ -92,34 +103,42 @@ public class Rdf2GoPropertyHandler extends PropertyDeclarationHandler {
 		if (content == null || content.trim().isEmpty()) {
 			return Messages.asList();
 		}
-		Collection<Rdf2GoCompiler> rdf2GoCompilers = Rdf2GoD3webUtils.getRdf2GoCompilers(compiler,
-				section);
-		for (Rdf2GoCompiler rdf2GoCompiler : rdf2GoCompilers) {
 
-			List<Statement> statements = new ArrayList<Statement>();
-			Rdf2GoCore core = rdf2GoCompiler.getRdf2GoCore();
-			;
-			for (NamedObject namedObject : objects) {
-				String externalForm = Rdf2GoD3webUtils.getIdentifierExternalForm(namedObject);
-				// lns:Identifier lns:has[Property] "propertyString"@Locale
-				URI identifierURI = core.createlocalURI(externalForm);
-				URI propertyNameURI = core.createlocalURI(
-						"has" + WordUtils.capitalize(property.getName()));
-				Literal contentLiteral;
-				if (locale == InfoStore.NO_LANGUAGE) {
-					contentLiteral = core.createLiteral(content);
-				}
-				else {
-					contentLiteral = core.createLanguageTaggedLiteral(content,
-							locale.getLanguage());
-				}
-				Rdf2GoUtils.addStatement(core, identifierURI, propertyNameURI, contentLiteral,
-						statements);
-
+		List<Statement> statements = new ArrayList<Statement>();
+		Rdf2GoCore core = rdf2GoCompiler.getRdf2GoCore();
+		for (NamedObject namedObject : objects) {
+			String externalForm = Rdf2GoD3webUtils.getIdentifierExternalForm(namedObject);
+			// lns:Identifier lns:has[Property] "propertyString"@Locale
+			URI identifierURI = core.createlocalURI(externalForm);
+			URI propertyNameURI = core.createlocalURI(
+					"has" + WordUtils.capitalize(property.getName()));
+			Literal contentLiteral;
+			if (locale == InfoStore.NO_LANGUAGE) {
+				contentLiteral = core.createLiteral(content);
 			}
+			else {
+				contentLiteral = core.createLanguageTaggedLiteral(content,
+						locale.getLanguage());
+			}
+			Rdf2GoUtils.addStatement(core, identifierURI, propertyNameURI, contentLiteral,
+					statements);
+
 			core.addStatements(compiler, Rdf2GoUtils.toArray(statements));
 		}
 
+		if (compilers.size() > 1) {
+			return Messages.asList(Messages.warning("Property is used in multiple knowledge bases,"
+					+ " ontology was only created"
+					+ " for the version of knowledge base '"
+					+ compiler.getKnowledgeBase().getName() + "'"));
+		}
 		return Messages.asList();
 	}
+
+	@Override
+	public void destroy(OntologyCompiler compiler, Section<PropertyDeclarationType> section) {
+		// TODO Auto-generated method stub
+
+	}
+
 }
