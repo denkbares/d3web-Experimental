@@ -200,6 +200,16 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="FillInMissingDefaultListsRefactoring">
+		<parameter id="class"
+			value="de.knowwe.wisskont.refactoring.scripts.FillInMissingDefaultListsRefactoring" />
+		<parameter id="name" value="FillInMissingDefaultListsRefactoring" />
+		<parameter id="description" value="FillInMissingDefaultListsRefactoring" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="RerenderConceptOverviewAction">
 		<parameter id="class"
 			value="de.knowwe.wisskont.navigation.RerenderConceptOverviewAction" />
@@ -235,6 +245,16 @@
 			value="de.knowwe.wisskont.refactoring.RefactorRelationsHandler" />
 		<parameter id="name" value="RefactorRelationsHandler" />
 		<parameter id="description" value="Action RefactorRelationsHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="FillInMissingDefaultListsHandler">
+		<parameter id="class"
+			value="de.knowwe.wisskont.refactoring.FillInMissingDefaultListsHandler" />
+		<parameter id="name" value="FillInMissingDefaultListsHandler" />
+		<parameter id="description" value="Action FillInMissingDefaultListsHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 	</extension>
