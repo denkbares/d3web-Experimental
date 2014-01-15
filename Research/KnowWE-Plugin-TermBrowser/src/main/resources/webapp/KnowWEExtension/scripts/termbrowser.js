@@ -11,7 +11,33 @@ jq$(document).ready(function() {
 
 	initCollapseTermBrowser();
 
+	initSemanticAutocompletionSlot();
+	
 });
+
+/*
+ * init semantic autocompletion slot
+ */
+function initSemanticAutocompletionSlot() {
+	window.setTimeout(function() {
+		jq$(".termbrowserframe").each(function() {
+			var termbrowserframeElement = jq$(this);
+			var inputElement = termbrowserframeElement.find(".semanticautocompletion");
+			var textboxListObject = KNOWWE.plugin.semanticautocompletion.actions.getTextboxListInstance(inputElement);
+			textboxListObject.addEvent('bitAdd', completionItemSelected); 
+		});
+	});
+}
+
+function completionItemSelected(bitObject) {
+	var value = bitObject.getValue();
+	var firstList = value[0];
+	if(firstList) {
+		var jsonObject = jq$.parseJSON(firstList);
+		var uri = jsonObject['concept'];
+		sendTermBrowserAction(uri, 'searched');
+	}
+}
 
 /*
  * here we store a set of functions that will be called when a drag-drop-edit

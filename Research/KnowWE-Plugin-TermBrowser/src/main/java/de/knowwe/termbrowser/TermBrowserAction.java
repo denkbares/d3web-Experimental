@@ -22,11 +22,14 @@ import java.io.IOException;
 
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
+import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.core.utils.PackageCompileLinkToTermDefinitionProvider;
+import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
  * 
@@ -55,6 +58,16 @@ public class TermBrowserAction extends AbstractAction {
 		String command = context.getParameter("command");
 		String term = context.getParameter("term");
 		String master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(context);
+
+		/*
+		 * treat case when the semantic-autocompletion slot sends full URIs
+		 */
+		if (term != null && term.startsWith("http:")) {
+			Rdf2GoCore core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+			term = Rdf2GoUtils.reduceNamespace(core, term);
+			term = term.replace(":", "#");
+		}
+
 		if (term == null) {
 			term = "";
 		}

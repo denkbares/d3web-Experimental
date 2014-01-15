@@ -53,7 +53,7 @@
 		<parameter id="name" value="TermBrowserMarkup" />
 		<parameter id="description" value="KnowWEObjectType TermBrowserMarkup" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="4" />
+		<parameter id="priority" value="6" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="termbrowser.js" />
 		<parameter id="css" value="jquery-ui.css" />

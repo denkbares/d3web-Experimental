@@ -60,6 +60,25 @@ public class TermBrowserRenderer {
 
 	}
 
+	// private OntologyCompletionProviderConfig
+	// getOntologyCompletionProviderConfig(Rdf2GoCore core, UserContext user) {
+	// String[] classArray = new String[] {
+	// "ssc:Component", "ssc:Malfunction", "ssc:Location", "rdf:Property" };
+	// for (int i = 0; i < classArray.length; i++) {
+	// classArray[i] = Rdf2GoUtils.expandNamespace(core, classArray[i]);
+	// }
+	// Collection<String> classes = Arrays.asList(classArray);
+	// Collection<String> textProperties =
+	// Arrays.asList(Rdf2GoUtils.expandNamespace(core,
+	// "rdfs:label"));
+	// Collection<String> altLanguages = Arrays.asList("de");
+	// String titleProperty = Rdf2GoUtils.expandNamespace(core, "rdfs:label");
+	// String displayLanguage = "en";
+	// return new OntologyCompletionProviderConfig(classes, "ssc:type",
+	// titleProperty,
+	// textProperties, displayLanguage, altLanguages);
+	// }
+
 	public String renderTermBrowser() {
 		RenderResult string = new RenderResult(user);
 		string.appendHtml("<div class='termbrowserframe'>");
@@ -101,7 +120,46 @@ public class TermBrowserRenderer {
 			if (TermBrowserMarkup.getCurrentTermbrowserMarkupSearchSlotFlag(user)) {
 				renderSearchSlot(string);
 			}
-			string.appendHtml("</div>");
+
+			/*
+			 * render semantic autocompletion search slot
+			 */
+			boolean renderSemanticAutocompletionSlot = false;
+			{
+				/*
+				 * init semantic autocompletion
+				 */
+				// String master =
+				// TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
+				// Article article =
+				// Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
+				// master);
+				// Rdf2GoCore core = Rdf2GoCore.getInstance(article);
+				// OntologyCompletionProviderConfig config =
+				// getOntologyCompletionProviderConfig(core,
+				// user);
+				// Collection<Constraint> constraints = Collections.emptyList();
+				// SemanticAutocompletionManager.initializeSemanticAutocompletion(config,
+				// constraints,
+				// article);
+				// renderSemanticAutocompletionSlot = true;
+
+				/*
+				 * html from SemanticAutocompletionType
+				 */
+				if (renderSemanticAutocompletionSlot) {
+					string.appendHtml("<div>");
+					string.appendHtml("<span class='semanticautocompletionmaster' style='display:none'>");
+					string.append(master);
+					string.appendHtml("</span>");
+					string.appendHtml("<input type='text' name='Semantic Autocompletion' value='' class='semanticautocompletion' ");
+					string.appendHtml("id='semanticautocompletion-");
+					string.appendHtml(Integer.toString(TermBrowserMarkup.getTermBrowserMarkup(user).hashCode()));
+					string.appendHtml("' />");
+					string.appendHtml("</div>");
+				}
+
+			}
 
 			int browserSize = THRESHOLD_MAX_TERM_NUMBER;
 
