@@ -19,7 +19,7 @@ function drawTree(size, jsonsource, sectionID) {
     	height = 800 - margin.top - margin.bottom;
 	 
 	 var depth;
-	 var fixedDepth = false;
+
 	if(size != null) {
 		width = size - margin.right - margin.left;
 	}
@@ -33,11 +33,20 @@ function drawTree(size, jsonsource, sectionID) {
 
 	var div = d3.select("#d3" + sectionID);
 	
-// create buttons
+
+	
+	var svg = div.append("svg")
+				.attr("id", "svg"+sectionID)
+				.attr("min-width", width + margin.right + margin.left)
+				.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	
 	
-	var expandButton = div.append("input")
-			.attr("type", "button")
+	// create buttons
+	
+	
+	var expandButton = div.append("button")
 			.attr("id", "expandButton"+sectionID)
 			.attr("class", "d3treeButton")
 			.attr("value", "Expand all")
@@ -47,20 +56,11 @@ function drawTree(size, jsonsource, sectionID) {
 				}
 				expandAllChildren(root);
 											 
-			});
-	
-	var collapseButton = div.append("input")
-			.attr("type" , "button")
-			.attr("id", "collapseButton"+sectionID)
-			.attr("class", "d3treeButton")
-			.attr("value", "Collapse all")
-			.on("click", function (d){
-				collapse(root);
-				update(root);
 			})
+			.append("img")
+			.attr("src", "KnowWEExtension/images/treevis_icon_expandall.gif");
 	
-	var increaseTreeSizeButton = div.append("input")
-			.attr("type" , "button")
+	var increaseTreeSizeButton = div.append("button")
 			.attr("id", "zoomInButton"+sectionID)
 			.attr("class", "d3treeButton")
 			.attr("value", "Increase tree size")
@@ -68,20 +68,25 @@ function drawTree(size, jsonsource, sectionID) {
 				
 				tree.size([tree.size()[0]*1.5, tree.size()[1]*1.5]);
 				update(root);
+				updateLabels(root);
 			})
+			.append("img")
+			.attr("src", "KnowWEExtension/images/treevis_icon_increase.gif");
 			
-	var decreaseTreeSizeButton = div.append("input")
-			.attr("type" , "button")
+	var decreaseTreeSizeButton = div.append("button")
 			.attr("id", "zoomInButton"+sectionID)
 			.attr("class", "d3treeButton")
 			.attr("value", "Decrease tree size")
 			.on("click", function (d){
 				tree.size([tree.size()[0]/1.5, tree.size()[1]/1.5]);
 				update(root);
+				updateLabels(root);
 			})
+			.append("img")
+			.attr("src", "KnowWEExtension/images/treevis_icon_decrease.gif");
+
 	
-	var increaseLabelsButton = div.append("input")
-			.attr("type" , "button")
+	var increaseLabelsButton = div.append("button")
 			.attr("id", "zoomInButton"+sectionID)
 			.attr("class", "d3treeButton")
 			.attr("value", "Increase label size")
@@ -93,10 +98,13 @@ function drawTree(size, jsonsource, sectionID) {
 				.style("font-size", fontsize+"px");
 				
 			})
+			.append("img")
+			.attr("src", "KnowWEExtension/images/treevis_icon_zoomin.gif");
+
 			
-	var decreaseLabelsButton = div.append("input")
+	var decreaseLabelsButton = div.append("button")
 			.attr("type" , "button")
-			.attr("id", "zoomInButton"+sectionID)
+			.attr("id", "zoomOutButton"+sectionID)
 			.attr("class", "d3treeButton")
 			.attr("value", "Decrease label size")
 			.on("click", function (d){
@@ -106,27 +114,10 @@ function drawTree(size, jsonsource, sectionID) {
 					.style("font-size", fontsize+"px");
 				
 			})
+			.append("img")
+			.attr("src", "KnowWEExtension/images/treevis_icon_zoomout.gif");
 			
-	var fixDepth = div.append("input")
-			.attr("type" , "button")
-			.attr("id", "fixDepth"+sectionID)
-			.attr("class", "d3treeButton")
-			.attr("value", "fix depth")
-			.on("click", function (d){
-				
-				fixedDepth = true;
-				depth = 300;
-				
-			})
-	
-	var svg = div.append("svg")
-				.attr("id", "svg"+sectionID)
-				.attr("min-width", width + margin.right + margin.left)
-				.attr("height", height + margin.top + margin.bottom)
-				.append("g")
-				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-	
-	// initialize zoom behaviour
+				// initialize zoom behaviour
 	
 	 d3.select("#svg"+sectionID)
      .call(d3.behavior.zoom()
@@ -135,17 +126,6 @@ function drawTree(size, jsonsource, sectionID) {
 	 .on("mouseclick.zoom", null);
 	
 	
-			
-	// collapse node and all of its children - update source afterwards
-	 function collapse(d) {
-	    if (d.children) {
-	      d._children = d.children;
-	      d._children.forEach(collapse);
-	      d.children = null;
-	    }
-	  }
-
-	 
 	// compute new layout                                    
 	 function update(source) {
 
@@ -189,30 +169,15 @@ function drawTree(size, jsonsource, sectionID) {
 		  	.style("pointer-events", "auto")
 		  	.style("font-size", fontsize+"px");
 
-		var rootnode = jq$("g.node[concept='" + source.concept + "']")[0];
-		var rootIsExpanded = rootnode.getAttribute("expanded");
 		
-		  
-		  // update position of all text labels
+		 // update position of all text labels
 		
-		  var text = jq$(rootnode).find("text")[0];
-			 
-			 if(rootIsExpanded=="true") {
-				 rootnode.setAttribute("expanded", "false");
-				 text.setAttribute("x", "10");
-				 text.setAttribute("text-anchor", "start");
-			 } else if(rootIsExpanded=="false"){
-				 rootnode.setAttribute("expanded", "true");
-				 text.setAttribute("x", "-10");
-				 text.setAttribute("text-anchor", "end");
-			 }
-			  
+		updateLabels(source);
 		
-		
-		if(fixedDepth == false) {
+
 		// compute depth and normalize nodes 
 			
-			for(var k = 0; k<nodes.length;k++) {
+		for(var k = 0; k<nodes.length;k++) {
 				 if(nodes[k].concept==source.concept) {
 					 sourcenode = nodes[k];
 					 break;
@@ -221,10 +186,6 @@ function drawTree(size, jsonsource, sectionID) {
 			
 		depth = computeDepth(sourcenode);
 		
-		} else {
-			
-			depth = 200;
-		}
 		
 		nodes.forEach(function(d) { d.y = d.depth * depth; });
 		
@@ -298,15 +259,37 @@ function drawTree(size, jsonsource, sectionID) {
 	// Toggle children on click.
 	 function click(d) {
 		  if (d.children) {
-		    d._children = d.children;
-		    d.children = null;
+		    collapseAllChildren(d);
 		  } else {
 		    d.children = d._children;
 		    d._children = null;
 		  }
+		  
 		  update(d);
+		  
 		}
 
+	 
+	 function updateLabels(node) {
+		 
+		 var rootnode = jq$("g.node[concept='" + node.concept + "']")[0];
+			var rootIsExpanded = rootnode.getAttribute("expanded");
+			
+			  
+			  // update position of all text labels
+			
+			  var text = jq$(rootnode).find("text")[0];
+				 
+				 if(rootIsExpanded=="true") {
+					 rootnode.setAttribute("expanded", "false");
+					 text.setAttribute("x", "10");
+					 text.setAttribute("text-anchor", "start");
+				 } else if(rootIsExpanded=="false"){
+					 rootnode.setAttribute("expanded", "true");
+					 text.setAttribute("x", "-10");
+					 text.setAttribute("text-anchor", "end");
+				}
+	 }
 	// expand node and all of its children 
 	 function expandAllChildren(node) {
 			
@@ -319,6 +302,15 @@ function drawTree(size, jsonsource, sectionID) {
 			}
 			
 }
+	 
+	 // collapse node and all of its children
+	 function collapseAllChildren(node) {
+		 if(node.children){
+			 node.children.forEach(collapseAllChildren);
+			 node._children = node.children;
+			 node.children = null;
+		 }
+	 }
 	 
 // compute the necessary space between current and successor layer of the tree
 	 function computeDepth(node) {
@@ -427,7 +419,10 @@ function drawTree(size, jsonsource, sectionID) {
 		    
 		}
 	
-	 if (root.children) root.children.forEach(collapse);
+
+	
+	
+	 root.children.forEach(collapseAllChildren);
 	 update(root);
 	
 	d3.select(self.frameElement).style("height", "800px");
