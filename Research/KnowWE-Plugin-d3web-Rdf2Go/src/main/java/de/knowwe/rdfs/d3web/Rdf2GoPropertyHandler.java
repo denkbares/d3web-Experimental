@@ -111,7 +111,7 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 			// lns:Identifier lns:has[Property] "propertyString"@Locale
 			URI identifierURI = core.createlocalURI(externalForm);
 			URI propertyNameURI = core.createlocalURI(
-					"has" + WordUtils.capitalize(property.getName()));
+					getD3webPropertyAsOntologyProperty(property));
 			Literal contentLiteral;
 			if (locale == InfoStore.NO_LANGUAGE) {
 				contentLiteral = core.createLiteral(content);
@@ -133,6 +133,10 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 					+ compiler.getKnowledgeBase().getName() + "'"));
 		}
 		return Messages.asList();
+	}
+
+	public static String getD3webPropertyAsOntologyProperty(Property<?> property) {
+		return "has" + WordUtils.capitalize(property.getName());
 	}
 
 	@Override
