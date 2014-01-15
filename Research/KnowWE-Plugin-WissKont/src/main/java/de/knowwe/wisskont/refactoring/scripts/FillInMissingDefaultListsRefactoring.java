@@ -214,8 +214,7 @@ public class FillInMissingDefaultListsRefactoring extends AbstractAction {
 			}
 
 			if (caveMarkup != null && associationMarkup == null) {
-				key = mustMarkup.getID();
-				value = CANKEY + mustMarkup.getText();
+				value = canMarkup.getText() + "\n" + MUSTKEY;
 				replacementMap.put(key, value);
 
 				key = caveMarkup.getID();
