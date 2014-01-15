@@ -61,7 +61,7 @@ function drawTree(size, jsonsource, sectionID) {
 			.attr("src", "KnowWEExtension/images/treevis_icon_expandall.gif");
 	
 	var increaseTreeSizeButton = div.append("button")
-			.attr("id", "zoomInButton"+sectionID)
+			.attr("id", "IncreaseButton"+sectionID)
 			.attr("class", "d3treeButton")
 			.attr("value", "Increase tree size")
 			.on("click", function (d){
@@ -74,7 +74,7 @@ function drawTree(size, jsonsource, sectionID) {
 			.attr("src", "KnowWEExtension/images/treevis_icon_increase.gif");
 			
 	var decreaseTreeSizeButton = div.append("button")
-			.attr("id", "zoomInButton"+sectionID)
+			.attr("id", "DecreaseButton"+sectionID)
 			.attr("class", "d3treeButton")
 			.attr("value", "Decrease tree size")
 			.on("click", function (d){
@@ -158,14 +158,15 @@ function drawTree(size, jsonsource, sectionID) {
 
 		  // Adding the links 
 		  var $a = nodeEnter.append("svg:a")
-		  	.attr("xlink:href", function(d) { return decodeURIComponent(d.conceptUrl);})
+		  .attr("xlink:href", function(d) { return decodeURIComponent(d.conceptUrl);});
+		  	
 		  		  
 		  // Creating Node text labels
 		  $a.append("text")
+		  	.attr("class", "nodetext")
 		  	.attr("x", function(d) { return d.children || d._children ? 10 : 10; })
 		  	.attr("dy", ".35em")
 		  	.text(function(d) { return d.concept; })
-		  	.style("fill-opacity", 1e-6)
 		  	.style("pointer-events", "auto")
 		  	.style("font-size", fontsize+"px");
 

@@ -4,7 +4,7 @@
 
 .node circle {
   fill: #fff;
-  stroke: steelblue;
+  stroke: darkblue;
   stroke-width: 1.5px;
 }
 
@@ -12,13 +12,15 @@
 	fill: lightsteelblue;
 }
 
-.node text {
-  font: sans-serif;
+
+text.nodetext {
+	fill: blue;
+
 }
 
-.link {
+path.link {
   fill: none;
-  stroke: #ccc;
+  stroke: grey;
   stroke-width: 1.5px;
 }
 
