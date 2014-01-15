@@ -188,6 +188,8 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 		public void deleteFromRepository(Section<ValuesMarkup> section) {
 			KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB,
 					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
+			if (knowledgeBase == null) return;
+
 			TerminologyManager manager = knowledgeBase.getManager();
 			Object storedObject = KnowWEUtils.getStoredObject(section, VALUE_STORE_KEY);
 			if (storedObject instanceof QuestionOC) {
