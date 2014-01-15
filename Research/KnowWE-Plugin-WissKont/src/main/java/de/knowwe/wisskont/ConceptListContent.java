@@ -168,6 +168,8 @@ public class ConceptListContent extends AbstractType {
 				if (values != null) {
 
 					KnowledgeBase kb = KnowledgeBaseInstantiation.getKB(section.getWeb());
+					if (kb == null) return;
+
 					TerminologyManager manager = kb.getManager();
 					TerminologyObject object = manager.search(subjectTermName);
 					QuestionOC question = null;

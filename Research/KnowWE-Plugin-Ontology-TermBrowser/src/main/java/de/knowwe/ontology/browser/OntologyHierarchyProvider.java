@@ -69,13 +69,24 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 	}
 
 	private String getURIString(Identifier termID) {
-		Rdf2GoCore core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+		Rdf2GoCore core = getCore();
 		return Rdf2GoUtils.expandNamespace(core, getShortURI(termID));
+	}
+
+	private Rdf2GoCore getCore() {
+		Rdf2GoCore core = null;
+		if (master == null) {
+			core = Rdf2GoCore.getInstance();
+		}
+		else {
+			core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+		}
+		return core;
 	}
 
 	@Override
 	public List<Identifier> getChildren(Identifier termID) {
-		Rdf2GoCore core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+		Rdf2GoCore core = getCore();
 
 		URI termURI = new URIImpl(Rdf2GoUtils.expandNamespace(core, getShortURI(termID)));
 		List<Identifier> result = new ArrayList<Identifier>();
@@ -97,7 +108,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 
 	@Override
 	public List<Identifier> getParents(Identifier termID) {
-		Rdf2GoCore core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+		Rdf2GoCore core = getCore();
 
 		URI termURI = new URIImpl(getURIString(termID));
 		List<Identifier> result = new ArrayList<Identifier>();
@@ -120,7 +131,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 
 	@Override
 	public boolean isSuccessorOf(Identifier termID1, Identifier termID2) {
-		Rdf2GoCore core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+		Rdf2GoCore core = getCore();
 
 		URI term1URI = new URIImpl(getURIString(termID1));
 		URI term2URI = new URIImpl(getURIString(termID2));

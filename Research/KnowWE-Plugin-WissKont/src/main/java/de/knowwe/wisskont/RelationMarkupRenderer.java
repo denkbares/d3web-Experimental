@@ -55,6 +55,7 @@ public class RelationMarkupRenderer extends DefaultMarkupRenderer {
 		renderMessageBlock(section, string, Message.Type.ERROR, Message.Type.WARNING);
 	}
 
+
 	/**
 	 * 
 	 * @created 28.11.2012

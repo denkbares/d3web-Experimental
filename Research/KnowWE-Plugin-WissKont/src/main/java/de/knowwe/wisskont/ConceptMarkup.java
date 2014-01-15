@@ -30,6 +30,7 @@ import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
@@ -64,7 +65,17 @@ public class ConceptMarkup extends AbstractKnowledgeUnitType<ConceptMarkup> impl
 		this.addChildType(new KeyType(keyRegex));
 
 		this.setCompileScript(new ConceptCompileScript());
-		this.setRenderer(new DefaultMarkupRenderer());
+		this.setRenderer(new ConceptMarkupRenderer());
+	}
+
+	class ConceptMarkupRenderer extends DefaultMarkupRenderer {
+
+		@Override
+		public void renderMessages(Section<?> section, RenderResult string) {
+			/*
+			 * prevent messages from being rendered
+			 */
+		}
 	}
 
 	@Override

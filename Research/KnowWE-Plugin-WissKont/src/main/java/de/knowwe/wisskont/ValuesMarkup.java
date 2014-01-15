@@ -160,6 +160,8 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 		public void insertIntoRepository(Section<ValuesMarkup> section) {
 			KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB,
 					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
+			if (knowledgeBase == null) return;
+
 			TerminologyManager manager = knowledgeBase.getManager();
 
 			List<Section<ConceptMarkup>> conecptDefinitions = MarkupUtils.getConecptDefinitionForLocalPage(section);

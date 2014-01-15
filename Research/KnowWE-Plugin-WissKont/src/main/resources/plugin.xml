@@ -175,7 +175,7 @@
 		<parameter id="name" value="WissassHierarchyProvider" />
 		<parameter id="description" value="WissassHierarchyProvider" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="4" />
+		<parameter id="priority" value="1" />
 	</extension>
 	
 	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="TermDetector"
