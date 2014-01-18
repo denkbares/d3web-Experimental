@@ -56,7 +56,7 @@ public class AnswersBlock extends SubblockMarkup {
 		this.addCompileScript(new DefaultGlobalScript<Question>() {
 
 			@Override
-			public void compile(DefaultGlobalCompiler compiler, Section<Question> s) {
+			public void compile(DefaultGlobalCompiler compiler, Section<Question> s) throws CompilerMessage {
 
 				List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
 				Sections.findSuccessorsOfType(s, AnswerLine.class, found);

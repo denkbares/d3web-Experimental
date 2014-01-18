@@ -43,7 +43,7 @@ public class EvaluationEnd extends SubblockMarkup {
 		this.addCompileScript(new DefaultGlobalScript<Closure>() {
 
 			@Override
-			public void compile(DefaultGlobalCompiler compiler, Section<Closure> s) {
+			public void compile(DefaultGlobalCompiler compiler, Section<Closure> s) throws CompilerMessage {
 
 				// Section<Title> title = Sections.findSuccessor(s,
 				// Title.class);

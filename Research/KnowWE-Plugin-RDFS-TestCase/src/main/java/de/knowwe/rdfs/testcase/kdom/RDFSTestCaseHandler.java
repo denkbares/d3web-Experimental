@@ -27,7 +27,6 @@ import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.CompilerError;
 import de.knowwe.core.report.CompilerMessage;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
@@ -47,21 +46,21 @@ import de.knowwe.rdfs.testcase.RDFSTestCase;
 public class RDFSTestCaseHandler extends DefaultGlobalScript<RDFSTestCaseType> {
 
 	@Override
-	public void compile(DefaultGlobalCompiler compiler, Section<RDFSTestCaseType> section) {
+	public void compile(DefaultGlobalCompiler compiler, Section<RDFSTestCaseType> section) throws CompilerMessage {
 
 		// Get name
 		String name = DefaultMarkupType.getAnnotation(section,
 				RDFSTestCaseType.ANNOTATION_NAME);
 
 		if (name == null) {
-			throw new CompilerError("The test case has no name!");
+			throw CompilerMessage.error("The test case has no name!");
 		}
 
 		// Get and validate SPARQL-Query
 		Section<SPARQLQueryType> sparqlSection = Sections.findSuccessor(section,
 				SPARQLQueryType.class);
 		if (sparqlSection == null) {
-			throw new CompilerError("Unable to find SPARQL-Query! Check the syntax!");
+			throw CompilerMessage.error("Unable to find SPARQL-Query! Check the syntax!");
 		}
 		String sparqlQuery = SPARQLQueryType.getSPARQLQuery(sparqlSection);
 		ValidatorResult validation = Validator.validate(Rdf2GoCore.getInstance(), sparqlQuery);

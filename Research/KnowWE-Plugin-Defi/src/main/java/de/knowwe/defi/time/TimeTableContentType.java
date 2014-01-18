@@ -26,7 +26,7 @@ import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.report.CompilerError;
+import de.knowwe.core.report.CompilerMessage;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 
 public class TimeTableContentType extends AbstractType {
@@ -59,13 +59,13 @@ class DateT extends AbstractType {
 	class DateChecker extends DefaultGlobalScript<DateT> {
 
 		@Override
-		public void compile(DefaultGlobalCompiler compiler, Section<DateT> s) {
+		public void compile(DefaultGlobalCompiler compiler, Section<DateT> s) throws CompilerMessage {
 			String dateText = s.getText().trim();
 			try {
 				dateFormat.parse(dateText);
 			}
 			catch (ParseException e) {
-				throw new CompilerError("Invalid Date: " + dateText);
+				throw CompilerMessage.error("Invalid Date: " + dateText);
 			}
 		}
 	}

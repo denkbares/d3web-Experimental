@@ -49,7 +49,7 @@ public class MisspelledSyntaxConstruct extends AbstractType {
 		this.addCompileScript(new DefaultGlobalScript<MisspelledSyntaxConstruct>() {
 
 			@Override
-			public void compile(DefaultGlobalCompiler compiler, Section<MisspelledSyntaxConstruct> s) {
+			public void compile(DefaultGlobalCompiler compiler, Section<MisspelledSyntaxConstruct> s) throws CompilerMessage {
 
 				String messageText = "";
 				StringBuilder corrections = new StringBuilder();

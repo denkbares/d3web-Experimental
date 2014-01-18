@@ -21,7 +21,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.compile.DefaultGlobalCompiler;
 import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.CompilerWarning;
+import de.knowwe.core.report.CompilerMessage;
 import de.knowwe.core.wikiConnector.WikiAttachment;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -46,17 +46,17 @@ public class CIInfoHandler extends DefaultGlobalScript<CIInfoType> {
 	private static final String ATT_AUTHOR = "author";
 
 	@Override
-	public void compile(DefaultGlobalCompiler compiler, Section<CIInfoType> section) {
+	public void compile(DefaultGlobalCompiler compiler, Section<CIInfoType> section) throws CompilerMessage {
 
 		try {
 			Collection<CIInfo> infos = getCIInfos();
 			createTriples(section, infos);
 		}
 		catch (IOException e) {
-			throw new CompilerWarning("Unable to load CI-Info");
+			throw CompilerMessage.warning("Unable to load CI-Info");
 		}
 		catch (JDOMException e) {
-			throw new CompilerWarning("Unable to load CI-Info");
+			throw CompilerMessage.warning("Unable to load CI-Info");
 		}
 	}
 
