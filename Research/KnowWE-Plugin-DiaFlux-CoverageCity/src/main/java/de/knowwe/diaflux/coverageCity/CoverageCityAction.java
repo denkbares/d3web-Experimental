@@ -118,7 +118,6 @@ public class CoverageCityAction extends AbstractAction {
 		//
 		// if (result != null) return result;
 
-		Environment env = Environment.getInstance();
 		PackageManager packageManager = KnowWEUtils.getPackageManager(coverageSec);
 
 		// Map<String, String> articles =

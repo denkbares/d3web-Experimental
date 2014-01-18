@@ -125,7 +125,6 @@ public class CalculateCoverageAction extends AbstractAction {
 	 * @param coverageSec
 	 */
 	public static void calculateCoverage(Section<DiaFluxCoverageType> coverageSec) {
-		Environment env = Environment.getInstance();
 		PackageManager packageManager = KnowWEUtils.getPackageManager(coverageSec);
 
 		// Map<String, String> articles =
