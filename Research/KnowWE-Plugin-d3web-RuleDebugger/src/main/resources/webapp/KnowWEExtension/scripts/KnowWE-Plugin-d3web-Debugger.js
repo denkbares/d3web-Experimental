@@ -343,6 +343,9 @@ KNOWWE.plugin.debuggr = function(){
          * 		sends the chosen answer
          */
         sendChoice : function(element, inside, params) {
+        	
+         	val sectionId = jq$(element).parents('.quickinterview').attr('sectionId');
+         	
         	rel = eval("(" + element.getAttribute('rel') + ")");
         	
         	pDefault = {
@@ -350,6 +353,7 @@ KNOWWE.plugin.debuggr = function(){
 		            namespace : rel.ns,
 		            ObjectID : rel.qid,
 		            TermName : rel.qid
+		            SectionID : sectionId,
 			}
         	
         	pDefault = KNOWWE.helper.enrich( params, pDefault );
