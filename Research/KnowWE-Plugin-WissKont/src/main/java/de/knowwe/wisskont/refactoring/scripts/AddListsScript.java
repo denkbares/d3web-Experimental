@@ -1,6 +1,7 @@
 package de.knowwe.wisskont.refactoring.scripts;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +32,6 @@ public class AddListsScript extends AbstractAction {
 	private final String CAVEKEY = CaveMarkup.KEY + ": \n";
 	private final String ASSOCIATIONKEY = AssociationMarkup.KEY + ": \n";
 
-
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		refactor(context);
@@ -45,7 +45,6 @@ public class AddListsScript extends AbstractAction {
 		ArticleManager articleManager = Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB);
 		Collection<Article> articles = articleManager.getArticles();
-
 
 		articleManager.open();
 		try {
@@ -82,13 +81,14 @@ public class AddListsScript extends AbstractAction {
 		}
 	}
 
-	Class[] markupClasses = {
-			CanMarkup.class, MustMarkup.class, CaveMarkup.class, AssociationMarkup.class };
+	@SuppressWarnings("unchecked")
+	List<Class<? extends Type>> markupClasses = Arrays.<Class<? extends Type>> asList(
+			CanMarkup.class, MustMarkup.class, CaveMarkup.class, AssociationMarkup.class);
 	String[] appendTexts = {
 			CANKEY, MUSTKEY, CAVEKEY, ASSOCIATIONKEY };
 
 	private String createReplaceText(Section<? extends Type> parentSection) {
-		String text = ""; 
+		String text = "";
 		boolean[] addedFlags = new boolean[4];
 		List<Section<? extends Type>> children = parentSection.getChildren();
 		for (Section<? extends Type> child : children) {
@@ -98,19 +98,18 @@ public class AddListsScript extends AbstractAction {
 				if (!(child.get() instanceof SubconceptMarkup)) {
 					// we need to add those missing before
 					for (int i = 0; i < 4; i++) {
-						if (child.get().getClass().equals(markupClasses[i])) {
+						if (child.get().getClass().equals(markupClasses.get(i))) {
 							break;
 						}
 						// add those which are missing and have not been added
 						if ((!addedFlags[i])
-								&& (!containsMarkupSection(markupClasses[i], parentSection))) {
+								&& (!containsMarkupSection(markupClasses.get(i), parentSection))) {
 							text += appendTexts[i];
 							addedFlags[i] = true;
 						}
 					}
 
 				}
-
 
 				/*
 				 * if this is the last list item, append all missing ones
@@ -130,7 +129,7 @@ public class AddListsScript extends AbstractAction {
 				text += "\n\n";
 				for (int i = 0; i < 4; i++) {
 					if ((!addedFlags[i])
-							&& (!containsMarkupSection(markupClasses[i], parentSection))) {
+							&& (!containsMarkupSection(markupClasses.get(i), parentSection))) {
 						text += appendTexts[i];
 						addedFlags[i] = true;
 					}
