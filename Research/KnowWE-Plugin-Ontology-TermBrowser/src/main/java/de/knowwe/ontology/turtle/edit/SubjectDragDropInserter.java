@@ -17,11 +17,10 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.ontology.turtle.PredicateObjectSentenceList;
 import de.knowwe.ontology.turtle.PredicateSentence;
-import de.knowwe.ontology.turtle.Subject;
 import de.knowwe.ontology.turtle.TurtleSentence;
 import de.knowwe.termbrowser.DragDropEditInserter;
 
-public class SubjectDragDropInserter implements DragDropEditInserter<Subject> {
+public class SubjectDragDropInserter implements DragDropEditInserter {
 
 	@Override
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
@@ -106,9 +105,5 @@ public class SubjectDragDropInserter implements DragDropEditInserter<Subject> {
 		return null;
 	}
 
-	@Override
-	public Class<Subject> getTypeClass() {
-		return Subject.class;
-	}
 
 }

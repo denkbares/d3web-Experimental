@@ -46,6 +46,7 @@
 		<parameter id="description" value="PredicateDragDropInserter" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="1" />
+		<parameter id="scope" value="Predicate" />
 	</extension>
 	
 	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
@@ -56,6 +57,18 @@
 		<parameter id="description" value="SubjectDragDropInserter" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="1" />
+		<parameter id="scope" value="Subject" />
+	</extension>
+	
+	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
+		id="ExpectedSparqlResultCellDragDropInserter">
+		<parameter id="class"
+			value="de.knowwe.ontology.browser.ci.ExpectedSparqlResultCellDragDropInserter" />
+		<parameter id="name" value="ExpectedSparqlResultCellDragDropInserter" />
+		<parameter id="description" value="ExpectedSparqlResultCellDragDropInserter" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="1" />
+		<parameter id="scope" value="ExpectedSparqlResultTableCellContent" />
 	</extension>
 	
 	

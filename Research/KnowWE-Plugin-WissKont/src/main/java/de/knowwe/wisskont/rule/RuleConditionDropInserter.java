@@ -37,7 +37,7 @@ import de.knowwe.wisskont.rule.RuleMarkup.ConditionArea;
  * @author jochenreutelshofer
  * @created 08.08.2013
  */
-public class RuleConditionDropInserter implements DragDropEditInserter<RuleKeyType> {
+public class RuleConditionDropInserter implements DragDropEditInserter {
 
 	@Override
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
@@ -83,9 +83,5 @@ public class RuleConditionDropInserter implements DragDropEditInserter<RuleKeyTy
 		return null;
 	}
 
-	@Override
-	public Class<RuleKeyType> getTypeClass() {
-		return RuleKeyType.class;
-	}
 
 }

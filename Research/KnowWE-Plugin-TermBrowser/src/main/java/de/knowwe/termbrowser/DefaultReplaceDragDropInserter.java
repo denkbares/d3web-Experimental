@@ -16,12 +16,13 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.wisskont.rule;
+package de.knowwe.termbrowser;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
@@ -29,48 +30,41 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.parsing.Sections.ReplaceResult;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.RenderResult;
-import de.knowwe.termbrowser.DragDropEditInserter;
-import de.knowwe.wisskont.rule.RuleMarkup.ActionArea;
+
+
 
 /**
+ * Allows to completely replaces the target section with the give text.
  * 
  * @author jochenreutelshofer
- * @created 08.08.2013
+ * @created 20.01.2014
  */
-public class RuleActionDropInserter implements DragDropEditInserter {
+public class DefaultReplaceDragDropInserter implements DragDropEditInserter {
 
 	@Override
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
-		if (Sections.hasType(s, RuleActionKeyType.class)) {
-			Section<RuleActionKeyType> section = Sections.cast(s, RuleActionKeyType.class);
-			Section<RuleMarkup> rule = Sections.findAncestorOfType(section, RuleMarkup.class);
-			Section<ActionArea> action = Sections.findSuccessor(rule, ActionArea.class);
-			Map<String, String> nodesMap = new HashMap<String, String>();
-			if (action != null && action.getText().trim().length() > 0) {
-				String replaceText = action.getText() + "; " + droppedTerm;
-				nodesMap.put(action.getID(), replaceText);
-			}
-			else {
-				String replaceText = section.getText() + " " + droppedTerm;
-				nodesMap.put(section.getID(), replaceText);
-			}
-			String result = "done";
+		String replaceText = droppedTerm;
 
-			ReplaceResult replaceResult = Sections.replaceSections(context, nodesMap);
-			replaceResult.sendErrors(context);
-			Map<String, String> newSectionIDs = replaceResult.getSectionMapping();
-			if (newSectionIDs != null && newSectionIDs.size() > 0) {
-				// Section<?> sectionNewVersion = Sections.getSection();
-				result = newSectionIDs.values().iterator().next();
-			}
+		Map<String, String> nodesMap = new HashMap<String, String>();
 
-			// hotfix: workaround to trigger update of the sectionID map
-			DelegateRenderer.getInstance().render(section, context, new
-					RenderResult(context));
+		nodesMap.put(s.getID(), replaceText);
+		String result = "done";
 
-			return result;
+		ReplaceResult replaceResult = Sections.replaceSections(context, nodesMap);
+		replaceResult.sendErrors(context);
+		Map<String, String> newSectionIDs = replaceResult.getSectionMapping();
+		if (newSectionIDs != null && newSectionIDs.size() > 0) {
+			Entry<String, String> entry =
+					newSectionIDs.entrySet().iterator().next();
+			result = entry.getKey() + "#" + entry.getValue();
+			// result = newSectionIDs.values().iterator().next();
 		}
-		return "error on drop insertion - wrong type";
+
+		// hotfix: workaround to trigger update of the sectionID map
+		DelegateRenderer.getInstance().render(s, context,
+				new RenderResult(context));
+
+		return result;
 	}
 
 	@Override
@@ -78,5 +72,7 @@ public class RuleActionDropInserter implements DragDropEditInserter {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 }

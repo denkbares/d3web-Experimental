@@ -19,8 +19,12 @@
 package de.knowwe.termbrowser;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
@@ -30,6 +34,7 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.Scope;
 
 /**
  * 
@@ -40,7 +45,7 @@ public class DragDropEditActionManager extends AbstractAction {
 
 	public static final String DRAG_DROP_INSERTER = "DragDropInserter";
 
-	List<DragDropEditInserter<?>> inserters = new ArrayList<DragDropEditInserter<?>>();
+	Map<DragDropEditInserter, Collection<Scope>> inserters = new HashMap<DragDropEditInserter, Collection<Scope>>();
 
 	/**
 	 * 
@@ -50,8 +55,13 @@ public class DragDropEditActionManager extends AbstractAction {
 				"KnowWE-Plugin-TermBrowser", DRAG_DROP_INSERTER);
 		for (Extension extension : extensions) {
 			Object inserterInstance = extension.getNewInstance();
+			List<String> scopeValues = extension.getParameters("scope");
 			if (inserterInstance instanceof DragDropEditInserter) {
-				inserters.add((DragDropEditInserter<?>) inserterInstance);
+				Set<Scope> scopes = new HashSet<Scope>();
+				for (String string : scopeValues) {
+					scopes.add(Scope.getScope(string));
+				}
+				inserters.put((DragDropEditInserter) inserterInstance, scopes);
 			}
 		}
 	}
@@ -85,20 +95,21 @@ public class DragDropEditActionManager extends AbstractAction {
 				String message = "Section not found: " + targetIDString;
 				Log.warning(message);
 				return message;
-
 			}
 
-			for (DragDropEditInserter<?> inserter : this.inserters) {
-				if (inserter.getTypeClass().isAssignableFrom(section.get().getClass())) {
-					return inserter.insert(section, termname, null, context);
+			for (DragDropEditInserter inserter : this.inserters.keySet()) {
+				Collection<Scope> scopes = this.inserters.get(inserter);
+				for (Scope scope : scopes) {
+					List<Section<?>> match = scope.getMatchingSuccessors(section);
+					if (match.contains(section)) {
+						return inserter.insert(section, termname, null, context);
+					}
 				}
 			}
-
 		}
 		else {
 			return "You are not allowed to edit this page.";
 		}
-
 		return null;
 	}
 

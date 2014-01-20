@@ -1,4 +1,4 @@
-package de.knowwe.ontology.turtle.edit;
+package de.knowwe.ontology.browser.ci;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -8,33 +8,25 @@ import java.util.Map.Entry;
 
 import de.d3web.strings.Strings;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.parsing.Sections.ReplaceResult;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.ontology.turtle.Object;
-import de.knowwe.ontology.turtle.ObjectList;
-import de.knowwe.ontology.turtle.PredicateSentence;
 import de.knowwe.termbrowser.DragDropEditInserter;
 
 
-public class PredicateDragDropInserter implements DragDropEditInserter {
+public class ExpectedSparqlResultCellDragDropInserter implements DragDropEditInserter{
 
 	@Override
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
-		Section<PredicateSentence> sentence = Sections.findAncestorOfType(s,
-				PredicateSentence.class);
 
-		Section<?> sectionToBeReplaced = sentence;
-
+		Section<?> sectionToBeReplaced = s;
 		Section<DefaultMarkupType> defaultMarkupSection =
 				Sections.findAncestorOfType(s, DefaultMarkupType.class);
 		if (defaultMarkupSection != null) {
 			sectionToBeReplaced = defaultMarkupSection;
-
 		}
 
 
@@ -42,23 +34,11 @@ public class PredicateDragDropInserter implements DragDropEditInserter {
 
 		String shortURI = split[0] + ":" + Strings.encodeURL(split[1]);
 
-		List<Section<Object>> objects = Sections.findSuccessorsOfType(sentence, Object.class);
+		String replaceText =
+					createDefaultMarkupReplaceText(defaultMarkupSection,
+						s,
+						shortURI);
 		Map<String, String> nodesMap = new HashMap<String, String>();
-		String replaceText = null;
-		if (objects == null || objects.size() == 0) {
-			replaceText =
-					createDefaultMarkupReplaceText(defaultMarkupSection,
-							sentence,
-							sentence.getText() + " " + shortURI);
-		}
-		else {
-			String predSentenceReplaceText = createReplaceTextPredicateSentence(sentence, shortURI);
-			replaceText =
-					createDefaultMarkupReplaceText(defaultMarkupSection,
-							sentence,
-							predSentenceReplaceText);
-		}
-		
 		nodesMap.put(sectionToBeReplaced.getID(), replaceText);
 		String result = "done";
 
@@ -76,7 +56,12 @@ public class PredicateDragDropInserter implements DragDropEditInserter {
 				new RenderResult(context));
 
 		return result;
-		
+	}
+
+	@Override
+	public List<String> provideInsertRelationOptions(Section<?> s, String droppedTerm) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private String createDefaultMarkupReplaceText(Section<DefaultMarkupType> defaultMarkupSection, Section<?> toBeReplaced, String replacement) {
@@ -87,26 +72,5 @@ public class PredicateDragDropInserter implements DragDropEditInserter {
 		return replacedText.toString();
 	}
 
-
-	private String createReplaceTextPredicateSentence(Section<PredicateSentence> section, String appendName) {
-		List<Section<? extends Type>> children = section.getChildren();
-		String result = "";
-		for (Section<? extends Type> child : children) {
-			if (child.get() instanceof ObjectList) {
-				String appendText = ", " + appendName;
-				result += child.getText() + appendText;
-			}
-			else {
-				result += child.getText();
-			}
-		}
-		return result;
-	}
-
-	@Override
-	public List<String> provideInsertRelationOptions(Section<?> s, String droppedTerm) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

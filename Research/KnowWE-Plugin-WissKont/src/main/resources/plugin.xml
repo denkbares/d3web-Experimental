@@ -146,6 +146,7 @@
 		<parameter id="description" value="Actions ListMarkupDragDropInserter" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
+		<parameter id="scope" value="RelationMarkup">
 	</extension>
 	
 	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
@@ -156,6 +157,7 @@
 		<parameter id="description" value="Inserter RuleConditionDropInserter" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
+		<parameter id="scope" value="RuleKeyType">
 	</extension>
 	
 	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
@@ -166,6 +168,7 @@
 		<parameter id="description" value="Inserter RuleActionDropInserter" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
+		
 	</extension>
 	
 	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="HierarchyProvider"

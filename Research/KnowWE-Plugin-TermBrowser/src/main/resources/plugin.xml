@@ -18,6 +18,7 @@
 		<parameter-def id="description" />
 		<parameter-def id="version" />
 		<parameter-def id="priority" type="number" />
+		<parameter-def id="scope" type="string" />
 	</extension-point>
 	
 	<extension-point id="HierarchyProvider">
@@ -78,6 +79,7 @@
 		<parameter id="description" value="Inserter TermDragDropInserter" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
+		<parameter id="scope" value="TermReference" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Renderer"
@@ -89,6 +91,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="D3webTermReference" />
+		<parameter id="scope" value="ExpectedSparqlResultTableCellContent" />
 	</extension>
 	
 	

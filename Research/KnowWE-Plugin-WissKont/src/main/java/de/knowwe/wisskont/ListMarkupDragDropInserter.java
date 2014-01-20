@@ -37,7 +37,7 @@ import de.knowwe.termbrowser.DragDropEditInserter;
  * @author jochenreutelshofer
  * @created 04.06.2013
  */
-public class ListMarkupDragDropInserter implements DragDropEditInserter<RelationMarkup> {
+public class ListMarkupDragDropInserter implements DragDropEditInserter {
 
 	@Override
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
@@ -104,11 +104,6 @@ public class ListMarkupDragDropInserter implements DragDropEditInserter<Relation
 
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public Class<RelationMarkup> getTypeClass() {
-		return RelationMarkup.class;
 	}
 
 }
