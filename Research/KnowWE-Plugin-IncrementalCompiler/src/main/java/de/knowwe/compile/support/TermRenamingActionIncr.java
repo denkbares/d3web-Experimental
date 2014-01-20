@@ -148,7 +148,8 @@ public class TermRenamingActionIncr extends AbstractAction {
 			UserActionContext context,
 			Set<String> failures,
 			Set<String> success) throws IOException {
-
+		mgr.open();
+		try {
 		for (String articlename : allTerms.keySet()) {
 			if (Environment.getInstance().getWikiConnector().userCanEditArticle(
 					articlename, context.getRequest())) {
@@ -166,6 +167,10 @@ public class TermRenamingActionIncr extends AbstractAction {
 			else {
 				failures.add(articlename);
 			}
+		}
+		}
+		finally {
+			mgr.commit();
 		}
 
 	}
