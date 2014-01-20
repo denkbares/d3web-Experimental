@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -17,6 +16,7 @@ import utils.TestArticleManager;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.strings.Identifier;
+import de.d3web.utils.Log;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
@@ -104,7 +104,7 @@ public class ComplexDefinitionRefactoringTest {
 			Sections.replaceSections(context, nodesMap).sendErrors(context);
 		}
 		else {
-			Logger.getLogger(getClass().getName()).severe("Unable to get section with text: " +
+			Log.severe("Unable to get section with text: " +
 					oldText);
 		}
 	}

@@ -27,9 +27,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import de.d3web.strings.Identifier;
+import de.d3web.utils.Log;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
@@ -197,8 +197,7 @@ public class ReferenceManager {
 			for (Section<KnowledgeUnit> knowledge : allKnowledgeUnitsOfArticle) {
 				KnowledgeUnitCompileScript<?> compileScript = knowledge.get().getCompileScript();
 				if (compileScript == null) {
-					Logger.getLogger(this.getClass().getName()).warning(
-							"KnowledgeUnit without compile script: " + knowledge.toString());
+					Log.warning("KnowledgeUnit without compile script: " + knowledge.toString());
 					continue;
 				}
 				Collection<Section<? extends Term>> allReferencesOfKnowledgeUnit = compileScript.getAllReferencesOfKnowledgeUnit(

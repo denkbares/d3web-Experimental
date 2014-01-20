@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.logging.Logger;
 
+import de.d3web.utils.Log;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
@@ -111,8 +111,7 @@ public class EqualStringHazardFilter {
 					castedOtherSection);
 		}
 		else {
-			Logger.getLogger(this.getClass().getName()).warning(
-					"KnowledgeUnit without CompileScript: " + castedOtherSection.toString());
+			Log.warning("KnowledgeUnit without CompileScript: " + castedOtherSection.toString());
 		}
 
 		Collection<String> termNamesOther = resolveTermNames(referencesOfOtherSection);

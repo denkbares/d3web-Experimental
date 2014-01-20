@@ -21,10 +21,10 @@ package de.knowwe.termbrowser;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
+import de.d3web.utils.Log;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -83,7 +83,7 @@ public class DragDropEditActionManager extends AbstractAction {
 
 			if (section == null) {
 				String message = "Section not found: " + targetIDString;
-				Logger.getLogger(this.getClass().getName()).warning(message);
+				Log.warning(message);
 				return message;
 
 			}

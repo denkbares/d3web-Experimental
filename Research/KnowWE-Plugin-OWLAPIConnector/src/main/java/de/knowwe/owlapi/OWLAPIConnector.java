@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AddImport;
@@ -37,6 +36,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
 
+import de.d3web.utils.Log;
 import de.knowwe.core.Environment;
 
 /**
@@ -112,8 +112,7 @@ public class OWLAPIConnector {
 			return instance;
 		}
 		catch (OWLOntologyCreationException e) {
-			Logger.getLogger(OWLAPIConnector.class.getSimpleName()).severe(
-					"Unable to create new OWLOntology instance for IRI: " + baseIRI);
+			Log.severe("Unable to create new OWLOntology instance for IRI: " + baseIRI);
 		}
 		return null;
 	}

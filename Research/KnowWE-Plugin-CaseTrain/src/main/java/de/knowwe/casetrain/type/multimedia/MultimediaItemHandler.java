@@ -22,9 +22,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import de.d3web.utils.Log;
 import de.knowwe.casetrain.type.multimedia.MultimediaItem.MultimediaItemContent;
 import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.Environment;
@@ -56,8 +55,7 @@ public class MultimediaItemHandler extends DefaultGlobalScript<MultimediaItem> {
 					.getAttachments(s.getTitle());
 		}
 		catch (IOException e) {
-			Logger.getLogger(getClass().getName()).log(Level.SEVERE,
-					"cannot access wiki attachment", e);
+			Log.severe("cannot access wiki attachment", e);
 			messages.add(Utils.missingContentWarning(MultimediaItem.class.getSimpleName()));
 			Messages.storeMessages(s, getClass(), messages);
 			return;

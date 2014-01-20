@@ -23,8 +23,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
@@ -32,6 +30,7 @@ import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
+import de.d3web.utils.Log;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -187,14 +186,12 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			String z = getConceptName(zURI);
 
 			if (y == null) {
-				Logger.getLogger(OntoGraphDataBuilder.class.getName()).log(Level.SEVERE,
-						"Variable y of query was null: " + query);
+				Log.severe("Variable y of query was null: " + query);
 				continue;
 			}
 
 			if (z == null) {
-				Logger.getLogger(OntoGraphDataBuilder.class.getName()).log(Level.SEVERE,
-						"Variable z of query was null: " + query);
+				Log.severe("Variable z of query was null: " + query);
 				continue;
 			}
 
@@ -246,14 +243,12 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			String y = getConceptName(yURI);
 
 			if (y == null) {
-				Logger.getLogger(OntoGraphDataBuilder.class.getName()).log(Level.SEVERE,
-						"Variable y of query was null: " + query);
+				Log.severe("Variable y of query was null: " + query);
 				continue;
 			}
 
 			if (x == null) {
-				Logger.getLogger(OntoGraphDataBuilder.class.getName()).log(Level.SEVERE,
-						"Variable x of query was null: " + query);
+				Log.severe("Variable x of query was null: " + query);
 				continue;
 			}
 
@@ -316,14 +311,12 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			String z = getConceptName(zURI);
 
 			if (y == null) {
-				Logger.getLogger(OntoGraphDataBuilder.class.getName()).log(Level.SEVERE,
-						"Variable y of query was null: " + query);
+				Log.severe("Variable y of query was null: " + query);
 				continue;
 			}
 
 			if (z == null) {
-				Logger.getLogger(OntoGraphDataBuilder.class.getName()).log(Level.SEVERE,
-						"Variable z of query was null: " + query);
+				Log.severe("Variable z of query was null: " + query);
 				continue;
 			}
 
@@ -359,14 +352,12 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			String y = getConceptName(yURI);
 
 			if (y == null) {
-				Logger.getLogger(OntoGraphDataBuilder.class.getName()).log(Level.SEVERE,
-						"Variable y of query was null: " + query);
+				Log.severe("Variable y of query was null: " + query);
 				continue;
 			}
 
 			if (x == null) {
-				Logger.getLogger(OntoGraphDataBuilder.class.getName()).log(Level.SEVERE,
-						"Variable x of query was null: " + query);
+				Log.severe("Variable x of query was null: " + query);
 				continue;
 			}
 

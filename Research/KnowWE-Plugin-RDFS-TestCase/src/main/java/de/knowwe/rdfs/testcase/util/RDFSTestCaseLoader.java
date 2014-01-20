@@ -19,8 +19,8 @@
 package de.knowwe.rdfs.testcase.util;
 
 import java.util.List;
-import java.util.logging.Logger;
 
+import de.d3web.utils.Log;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -76,21 +76,18 @@ public class RDFSTestCaseLoader {
 
 				// test case wasn't found
 				if (testCase == null) {
-					Logger.getLogger(RDFSTestCaseLoader.class.getName()).warning(
-							"Article: \"" + article + "\" doesn't contain a test case named \""
+					Log.warning("Article: \"" + article + "\" doesn't contain a test case named \""
 									+ testCaseName + "\".");
 				}
 			}
 
 			else {
-				Logger.getLogger(RDFSTestCaseLoader.class.getName()).warning(
-						"Article: \"" + article + "\" doesn't contain any test case");
+				Log.warning("Article: \"" + article + "\" doesn't contain any test case");
 			}
 
 		}
 		else {
-			Logger.getLogger(RDFSTestCaseLoader.class.getName()).warning(
-					"Article: \"" + article + "\" wasn't found. Unable to load test case!");
+			Log.warning("Article: \"" + article + "\" wasn't found. Unable to load test case!");
 		}
 
 		return testCase;

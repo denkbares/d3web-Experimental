@@ -22,8 +22,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
@@ -44,6 +42,7 @@ import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.scoring.ActionHeuristicPS;
 import de.d3web.scoring.Score;
 import de.d3web.scoring.inference.PSMethodHeuristic;
+import de.d3web.utils.Log;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.annotation.type.list.ListObjectIdentifier;
 import de.knowwe.compile.IncrementalCompiler;
@@ -185,10 +184,8 @@ public class ConceptListContent extends AbstractType {
 						return;
 					}
 					if (question == null) {
-						Logger.getLogger(this.getClass().getName()).log(
-								Level.SEVERE,
-								"Could not create Question for ValuesMarkup"
-										+ objectSection.toString());
+						Log.severe("Could not create Question for ValuesMarkup"
+								+ objectSection.toString());
 						throw new NullPointerException();
 						// return;
 					}

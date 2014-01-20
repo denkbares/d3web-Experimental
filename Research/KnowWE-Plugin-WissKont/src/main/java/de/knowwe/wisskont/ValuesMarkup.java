@@ -21,8 +21,6 @@ package de.knowwe.wisskont;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.URI;
@@ -36,6 +34,7 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.strings.Strings;
+import de.d3web.utils.Log;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.annotation.type.list.ListObjectIdentifier;
 import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
@@ -84,7 +83,7 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 		this.addChildType(0, new NumericalValueMarkerType());
 
 		if (!replaced) {
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Type NOT REPLACED ! ");
+			Log.severe("Type NOT REPLACED ! ");
 		}
 	}
 

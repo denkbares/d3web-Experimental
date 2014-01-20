@@ -21,12 +21,12 @@ package de.knowwe.onte.ci4ke;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.semanticweb.owlapi.model.IRI;
 
 import de.d3web.testing.TestObjectContainer;
 import de.d3web.testing.TestObjectProvider;
+import de.d3web.utils.Log;
 import de.knowwe.owlapi.OWLAPIConnector;
 
 /**
@@ -39,8 +39,7 @@ public class OWLAPITestObjectProvider implements TestObjectProvider {
 	@Override
 	public <T> List<TestObjectContainer<T>> getTestObjects(Class<T> c, String id) {
 		if (c == null) {
-			Logger.getLogger(this.getClass().getName()).warning(
-					"Class given to TestObjectProvider was 'null'");
+			Log.warning("Class given to TestObjectProvider was 'null'");
 			return Collections.emptyList();
 		}
 		if (!c.equals(OWLAPIConnector.class)) {

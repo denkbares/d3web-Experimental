@@ -29,8 +29,8 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
-import de.d3web.strings.Strings;
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;

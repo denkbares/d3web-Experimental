@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.Before;
@@ -37,6 +36,7 @@ import utils.TestArticleManager;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.strings.Identifier;
+import de.d3web.utils.Log;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.compile.test.util.Query;
@@ -275,7 +275,7 @@ public class IncrementalCompilerTest {
 			Sections.replaceSections(context, nodesMap).sendErrors(context);
 		}
 		else {
-			Logger.getLogger(getClass().getName()).severe("Unable to get section with text: " +
+			Log.severe("Unable to get section with text: " +
 					oldText);
 		}
 	}

@@ -414,12 +414,10 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 	Date operationDate = null;
 	boolean operationDateAnswered = false;
 	if (operationDateQuestion == null) {
-	    Logger.getLogger(this.getClass().getSimpleName()).warning(
-		    "Question '" + OPERATION_DATE_QUESTION_NAME
+	    LogD3.warning("Question '" + OPERATION_DATE_QUESTION_NAME
 		    + "' expected but not found.");
 	} else if (!(operationDateQuestion instanceof QuestionDate)) {
-	    Logger.getLogger(this.getClass().getSimpleName()).warning(
-		    "Question '" + OPERATION_DATE_QUESTION_NAME
+	    LogD3.warning("Question '" + OPERATION_DATE_QUESTION_NAME
 		    + "' is expected to be of the Type '"
 		    + QuestionDate.class.getSimpleName()
 		    + "' but was '" + operationDateQuestion.getClass().getSimpleName()

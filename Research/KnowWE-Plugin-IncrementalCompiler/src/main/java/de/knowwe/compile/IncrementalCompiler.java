@@ -26,11 +26,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.d3web.strings.Identifier;
+import de.d3web.utils.Log;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
 import de.knowwe.compile.object.IncrementalTermDefinition;
@@ -338,8 +338,7 @@ public class IncrementalCompiler implements EventListener {
 		for (Section<KnowledgeUnit> unit : allKnowledgeUnits) {
 			KnowledgeUnitCompileScript<?> compileScript = unit.get().getCompileScript();
 			if (compileScript == null) {
-				Logger.getLogger(this.getClass().getName()).warning(
-						"KnowledgeUnit without CompileScript: " + unit.toString());
+				Log.warning("KnowledgeUnit without CompileScript: " + unit.toString());
 				continue;
 			}
 			Collection<Section<? extends Term>> externalReferencesOfKnowledgeUnit = compileScript.getExternalReferencesOfKnowledgeUnit(

@@ -117,8 +117,7 @@ public class PersistenceD3webUtils {
                     record1);
 	    
         } catch (IOException e) {
-            Logger.getLogger(PersistenceD3webUtils.class.getSimpleName()).warning(
-                    "'" + fileToLoad.getName() + "' for user '" + user + "' could not be loaded.");
+            LogD3.warning("'" + fileToLoad.getName() + "' for user '" + user + "' could not be loaded.");
             // e.printStackTrace();
         }
         
@@ -334,18 +333,15 @@ public class PersistenceD3webUtils {
                         TerminologyObject object = kb.getManager().search(
                                 factRecord.getObjectName());
                         if (object == null) {
-                            Logger.getLogger(PersistenceD3webUtils.class.getSimpleName()).info(
-                                    "Object '" + factRecord.getObjectName()
+                            LogD3.info("Object '" + factRecord.getObjectName()
                                     + "' not found in knowledge base. Discarding value.");
                         } else if (object instanceof QuestionMC && value instanceof ChoiceValue) {
-                            Logger.getLogger(PersistenceD3webUtils.class.getSimpleName()).info(
-                                    "QuestionMC '"
+                            LogD3.info("QuestionMC '"
                                     + factRecord.getObjectName()
                                     + "' expects a MultipleChoiceValue. Discarding ChoiceValue.");
                         } else if (object instanceof QuestionOC
                                 && value instanceof MultipleChoiceValue) {
-                            Logger.getLogger(PersistenceD3webUtils.class.getSimpleName()).info(
-                                    "QuestionOC '"
+                            LogD3.info("QuestionOC '"
                                     + factRecord.getObjectName()
                                     + "' expects a ChoiceValue. Discarding MultipleChoiceValue.");
                         } else {

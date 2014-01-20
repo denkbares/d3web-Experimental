@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.jdom.Attribute;
 import org.jdom.Document;
@@ -38,6 +36,7 @@ import org.jdom.JDOMException;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import de.d3web.utils.Log;
 import de.knowwe.visualization.ConceptNode;
 import de.knowwe.visualization.Edge;
 import de.knowwe.visualization.GraphDataBuilder;
@@ -380,10 +379,10 @@ public class DotRenderer {
 			prepareSVG(svg);
 		}
 		catch (FileNotFoundException e) {
-			Logger.getLogger(DotRenderer.class.getName()).log(Level.WARNING, e.toString());
+			Log.warning(e.toString());
 		}
 		catch (IOException e) {
-			Logger.getLogger(DotRenderer.class.getName()).log(Level.WARNING, e.toString());
+			Log.warning(e.toString());
 		}
 
 	}

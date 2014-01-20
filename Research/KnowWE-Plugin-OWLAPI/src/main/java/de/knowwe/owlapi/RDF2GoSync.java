@@ -27,7 +27,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
@@ -41,6 +40,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
+import de.d3web.utils.Log;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
@@ -124,8 +124,7 @@ public class RDF2GoSync {
 			return bos.toString("UTF-8");
 		}
 		catch (Exception e) {
-			Logger.getLogger(RDF2GoSync.class.getSimpleName()).severe(
-					"Unable to convert ontology to RDF.");
+			Log.severe("Unable to convert ontology to RDF.");
 		}
 		// We definitely have to remove the temp ontology!
 		manager.removeOntology(tempOntology);
@@ -141,8 +140,7 @@ public class RDF2GoSync {
 			return tempOntology;
 		}
 		catch (OWLOntologyCreationException e) {
-			Logger.getLogger(RDF2GoSync.class.getSimpleName()).severe(
-					"Unable to create new OWLOntology instance.");
+			Log.severe("Unable to create new OWLOntology instance.");
 		}
 		return null;
 	}
@@ -195,8 +193,7 @@ public class RDF2GoSync {
 		catch (UnsupportedEncodingException e) {
 			exceptionMessage = e.getMessage();
 		}
-		Logger.getLogger(RDF2GoSync.class.getSimpleName()).severe(
-				"Unable to create new OWLOntology instance: " + exceptionMessage);
+		Log.severe("Unable to create new OWLOntology instance: " + exceptionMessage);
 		return null;
 	}
 
