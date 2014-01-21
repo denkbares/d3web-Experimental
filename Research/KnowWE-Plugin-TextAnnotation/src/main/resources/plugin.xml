@@ -25,6 +25,7 @@
 		<parameter id="description" value="DragAndDropEditInserter TextAnnotationDropInserter" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
+		<parameter id="scope" value="AnnotatableParagraph" />
 	</extension>
     	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -78,6 +79,7 @@
 		<parameter id="description" value="DragAndDropEditInserter HeadlineDropInserter" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
+		<parameter id="scope" value="HeaderType" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -98,6 +100,7 @@
 		<parameter id="description" value="DragAndDropEditInserter ConceptListDropInserter" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
+		<parameter id="scope" value="ConceptList" />
 	</extension>
 	
 	

@@ -39,7 +39,7 @@ import de.knowwe.termbrowser.DragDropEditInserter;
  * @author jochenreutelshofer
  * @created 21.06.2013
  */
-public class TextAnnotationDropInserter implements DragDropEditInserter<AnnotatableParagraph> {
+public class TextAnnotationDropInserter implements DragDropEditInserter {
 
 	@Override
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
@@ -133,11 +133,6 @@ public class TextAnnotationDropInserter implements DragDropEditInserter<Annotata
 	public List<String> provideInsertRelationOptions(Section<?> s, String droppedTerm) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public Class<AnnotatableParagraph> getTypeClass() {
-		return AnnotatableParagraph.class;
 	}
 
 }

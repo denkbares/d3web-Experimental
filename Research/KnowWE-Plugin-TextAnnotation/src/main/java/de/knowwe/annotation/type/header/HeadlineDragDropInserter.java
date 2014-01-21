@@ -40,7 +40,7 @@ import de.knowwe.termbrowser.DragDropEditInserter;
  * @author jochenreutelshofer
  * @created 23.06.2013
  */
-public class HeadlineDragDropInserter implements DragDropEditInserter<HeaderType> {
+public class HeadlineDragDropInserter implements DragDropEditInserter {
 
 	@Override
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
@@ -151,9 +151,6 @@ public class HeadlineDragDropInserter implements DragDropEditInserter<HeaderType
 		return null;
 	}
 
-	@Override
-	public Class<HeaderType> getTypeClass() {
-		return HeaderType.class;
-	}
+
 
 }

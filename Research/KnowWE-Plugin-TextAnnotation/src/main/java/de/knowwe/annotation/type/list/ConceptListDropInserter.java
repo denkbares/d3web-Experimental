@@ -36,7 +36,7 @@ import de.knowwe.termbrowser.DragDropEditInserter;
  * @author jochenreutelshofer
  * @created 23.06.2013
  */
-public class ConceptListDropInserter implements DragDropEditInserter<ConceptList> {
+public class ConceptListDropInserter implements DragDropEditInserter {
 
 	@Override
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
@@ -106,8 +106,4 @@ public class ConceptListDropInserter implements DragDropEditInserter<ConceptList
 		return null;
 	}
 
-	@Override
-	public Class<ConceptList> getTypeClass() {
-		return ConceptList.class;
-	}
 }
