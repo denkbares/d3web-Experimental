@@ -38,6 +38,16 @@ public class RecommendationSet {
 	private PartialHierarchyTree<RatedTerm> terms = null;
 	private boolean browserIsCollapsed = false;
 	private boolean graphIsCollapsed = true;
+	private Identifier addedLatest = null;
+
+	public Identifier getTermAddedLatest() {
+		return addedLatest;
+	}
+
+	public void setTermAddedLatest(Identifier addedLatest) {
+		this.addedLatest = addedLatest;
+	}
+
 	private final TermBrowserHierarchy hierarchy;
 
 	/**

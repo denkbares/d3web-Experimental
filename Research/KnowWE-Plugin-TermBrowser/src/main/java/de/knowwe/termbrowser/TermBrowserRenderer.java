@@ -305,7 +305,12 @@ public class TermBrowserRenderer {
 			// only)
 			string.appendHtml("<table style='table-layout:fixed'>");
 			{
-				string.appendHtml("<tr height='23px'>");
+				String conceptRowStyle = "entryLine";
+				if (TermRecommender.getInstance().getLatestAddedTerm(user) != null
+						&& TermRecommender.getInstance().getLatestAddedTerm(user).equals(term)) {
+					conceptRowStyle  = "entryLine-highlighted";
+				}
+				string.appendHtml("<tr height='23px' class='" + conceptRowStyle + "'>");
 
 				// calculate indents div for hierarchy visualization
 				string.appendHtml(createIndent(depth));

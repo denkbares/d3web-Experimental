@@ -25,6 +25,12 @@
 	padding-top: 5px;	
 }
 
+.entryLine-highlighted {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #AAAAAA;
+}
+
 .termlist {
 	border-top-style: solid;
     border-top-width: 1px;

@@ -102,6 +102,12 @@ public class TermRecommender implements EventListener {
 		return recommendationSet.isBrowserIsCollapsed();
 	}
 
+	public Identifier getLatestAddedTerm(UserContext user) {
+		RecommendationSet recommendationSet = data.get(user.getUserName());
+		if (recommendationSet == null) return null;
+		return recommendationSet.getTermAddedLatest();
+	}
+
 	/**
 	 * Determines if the concept overview graph was open or collapsed for this
 	 * user
@@ -250,6 +256,7 @@ public class TermRecommender implements EventListener {
 			data.put(user.getUserName(), set);
 		}
 		set.addValue(term, WEIGHT_SEARCHED);
+		set.setTermAddedLatest(term);
 	}
 
 	@Override
@@ -299,6 +306,7 @@ public class TermRecommender implements EventListener {
 		RecommendationSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet != null) {
 			recommendationSet.clearValue(term);
+			recommendationSet.setTermAddedLatest(null);
 		}
 
 	}
@@ -322,6 +330,7 @@ public class TermRecommender implements EventListener {
 		}
 		// also add some score to the expanded concept itself
 		recommendationSet.addValue(term, WEIGHT_EXPAND);
+		recommendationSet.setTermAddedLatest(term);
 
 	}
 
@@ -348,6 +357,7 @@ public class TermRecommender implements EventListener {
 		for (Identifier child : children) {
 			recommendationSet.clearValue(child);
 		}
+		recommendationSet.setTermAddedLatest(null);
 	}
 
 	/**
@@ -399,6 +409,7 @@ public class TermRecommender implements EventListener {
 		RecommendationSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet != null) {
 			recommendationSet.clear();
+			recommendationSet.setTermAddedLatest(null);
 		}
 
 	}
@@ -439,6 +450,7 @@ public class TermRecommender implements EventListener {
 			// in any case we only take the first one
 			Identifier parent = parents.get(0);
 			recommendationSet.addValue(parent, WEIGHT_EXPAND);
+			recommendationSet.setTermAddedLatest(parent);
 		}
 
 	}
