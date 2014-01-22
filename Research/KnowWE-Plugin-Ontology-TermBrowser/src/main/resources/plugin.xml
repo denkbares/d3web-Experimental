@@ -70,7 +70,73 @@
 		<parameter id="priority" value="1" />
 		<parameter id="scope" value="ExpectedSparqlResultTableCellContent" />
 	</extension>
+
 	
+	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
+		id="TurtleSemicolonDragDropInserter">
+		<parameter id="class"
+			value="de.knowwe.ontology.turtle.edit.TurtleSemicolonDragDropInserter" />
+		<parameter id="name" value="TurtleSemicolonDragDropInserter" />
+		<parameter id="description" value="TurtleSemicolonDragDropInserter" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="1" />
+		<parameter id="scope" value="TurtleDragDropSemicolonType" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TurtleDragDropSemicolonType">
+		<parameter id="class"
+			value="de.knowwe.ontology.turtle.edit.TurtleDragDropSemicolonType" />
+		<parameter id="name" value="TurtleDragDropSemicolonType" />
+		<parameter id="description" value="Type TurtleDragDropSemicolonType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="PredicateObjectSentenceList" />
+	</extension>
+	
+	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
+		id="TurtleCommaDragDropInserter">
+		<parameter id="class"
+			value="de.knowwe.ontology.turtle.edit.TurtleCommaDragDropInserter" />
+		<parameter id="name" value="TurtleCommaDragDropInserter" />
+		<parameter id="description" value="TurtleCommaDragDropInserter" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="1" />
+		<parameter id="scope" value="TurtleDragDropCommaType" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TurtleDragDropCommaType">
+		<parameter id="class"
+			value="de.knowwe.ontology.turtle.edit.TurtleDragDropCommaType" />
+		<parameter id="name" value="TurtleDragDropCommaType" />
+		<parameter id="description" value="Type TurtleDragDropCommaType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="ObjectList" />
+	</extension>
+	
+	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
+		id="TurtleDotDragDropInserter">
+		<parameter id="class"
+			value="de.knowwe.ontology.turtle.edit.TurtleDotDragDropInserter" />
+		<parameter id="name" value="TurtleDotDragDropInserter" />
+		<parameter id="description" value="TurtleDotDragDropInserter" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="1" />
+		<parameter id="scope" value="TurtleDragDropDotType" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TurtleDragDropDotType">
+		<parameter id="class"
+			value="de.knowwe.ontology.turtle.edit.TurtleDragDropDotType" />
+		<parameter id="name" value="TurtleDragDropDotType" />
+		<parameter id="description" value="Type TurtleDragDropDotType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="TurtleContent" />
+	</extension>
 	
 	
 </plugin>

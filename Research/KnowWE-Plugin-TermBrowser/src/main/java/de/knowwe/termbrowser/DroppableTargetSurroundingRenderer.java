@@ -34,7 +34,7 @@ public class DroppableTargetSurroundingRenderer implements SurroundingRenderer {
 
 	@Override
 	public void renderPre(Section<?> section, UserContext user, RenderResult string) {
-		if (section.getText().trim().length() > 3) {
+		if (section.getText().trim().length() > 0) {
 			string.appendHtml("<div style='display:inline;' dragdropid='" + section.getID()
 					+ "' class='dropTargetMarkup'>");
 
@@ -43,7 +43,7 @@ public class DroppableTargetSurroundingRenderer implements SurroundingRenderer {
 
 	@Override
 	public void renderPost(Section<?> section, UserContext user, RenderResult string) {
-		if (section.getText().trim().length() > 3) {
+		if (section.getText().trim().length() > 0) {
 			string.appendHtml("</div>");
 		}
 	}

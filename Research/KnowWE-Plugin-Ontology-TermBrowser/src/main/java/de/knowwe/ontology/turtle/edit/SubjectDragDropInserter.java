@@ -1,90 +1,38 @@
+/*
+ * Copyright (C) 2013 denkbares GmbH
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
+ */
 package de.knowwe.ontology.turtle.edit;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import de.d3web.strings.Strings;
-import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.parsing.Sections.ReplaceResult;
-import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.RenderResult;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.ontology.turtle.PredicateObjectSentenceList;
 import de.knowwe.ontology.turtle.PredicateSentence;
 import de.knowwe.ontology.turtle.TurtleSentence;
-import de.knowwe.termbrowser.DragDropEditInserter;
+import de.knowwe.termbrowser.DefaultMarkupDragDropInserter;
 
-public class SubjectDragDropInserter implements DragDropEditInserter {
+public class SubjectDragDropInserter extends DefaultMarkupDragDropInserter {
 
-	@Override
-	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
-		Section<TurtleSentence> sentence = Sections.findAncestorOfType(s,
-				TurtleSentence.class);
 
-		Section<?> sectionToBeReplaced = sentence;
-
-		String[] split = droppedTerm.split("#");
-
-		String shortURI = split[0] + ":" + Strings.encodeURL(split[1]);
-
-		List<Section<PredicateSentence>> predSentences = Sections.findSuccessorsOfType(sentence,
-				PredicateSentence.class);
-		Map<String, String> nodesMap = new HashMap<String, String>();
-		String replaceText = null;
-		if (predSentences == null || predSentences.size() == 0) {
-			replaceText = s.getText() + " " + shortURI;
-		}
-		else {
-			Section<DefaultMarkupType> defaultMarkupSection =
-					Sections.findAncestorOfType(
-							s,
-							DefaultMarkupType.class);
-			if (defaultMarkupSection != null) {
-				sectionToBeReplaced = defaultMarkupSection;
-
-			}
-			String predSentenceReplaceText = createReplaceTextPredicateSentence(sentence, shortURI);
-			replaceText =
-					createDefaultMarkupReplaceText(defaultMarkupSection,
-							sentence,
-							predSentenceReplaceText);
-		}
-
-		nodesMap.put(sectionToBeReplaced.getID(), replaceText);
-		String result = "done";
-
-		ReplaceResult replaceResult = Sections.replaceSections(context, nodesMap);
-		replaceResult.sendErrors(context);
-		Map<String, String> newSectionIDs = replaceResult.getSectionMapping();
-		if (newSectionIDs != null && newSectionIDs.size() > 0) {
-			Entry<String, String> entry =
-					newSectionIDs.entrySet().iterator().next();
-			result = entry.getKey() + "#" + entry.getValue();
-		}
-
-		// hotfix: workaround to trigger update of the sectionID map
-		DelegateRenderer.getInstance().render(s, context,
-				new RenderResult(context));
-
-		return result;
-
-	}
-
-	private String createDefaultMarkupReplaceText(Section<DefaultMarkupType> defaultMarkupSection, Section<?> toBeReplaced, String replacement) {
-		Map<String, String> nodesMap = new HashMap<String, String>();
-		nodesMap.put(toBeReplaced.getID(), replacement);
-		StringBuffer replacedText = Sections.collectTextAndReplaceNode(defaultMarkupSection,
-				nodesMap);
-		return replacedText.toString();
-	}
-
-	private String createReplaceTextPredicateSentence(Section<TurtleSentence> section, String appendName) {
+	private String createReplaceTextPredicateSentence(Section<?> section, String appendName) {
 		List<Section<? extends Type>> children = section.getChildren();
 		String result = "";
 		for (Section<? extends Type> child : children) {
@@ -105,5 +53,31 @@ public class SubjectDragDropInserter implements DragDropEditInserter {
 		return null;
 	}
 
+	@Override
+	protected Section<?> findSectionToBeReplaced(Section<?> s) {
+		Section<TurtleSentence> sentence = Sections.findAncestorOfType(s,
+				TurtleSentence.class);
+		return sentence;
+	}
+
+	@Override
+	protected String createReplaceTextForSelectedSection(Section<?> section, String dropText) {
+
+		String[] split = dropText.split("#");
+
+		String shortURI = split[0] + ":" + Strings.encodeURL(split[1]);
+
+		List<Section<PredicateSentence>> predSentences = Sections.findSuccessorsOfType(section,
+				PredicateSentence.class);
+		String replaceText = null;
+		if (predSentences == null || predSentences.size() == 0) {
+			replaceText = section.getText() + " " + shortURI;
+		}
+		else {
+			replaceText = createReplaceTextPredicateSentence(section, shortURI);
+		}
+
+		return replaceText;
+	}
 
 }
