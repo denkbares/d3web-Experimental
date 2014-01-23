@@ -18,15 +18,23 @@
  */
 package de.knowwe.ontology.browser.util;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
+import de.knowwe.core.compile.Compilers;
+import de.knowwe.core.compile.packaging.PackageCompileType;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.ontology.browser.cache.SparqlCache;
 import de.knowwe.ontology.browser.cache.SparqlCacheManager;
+import de.knowwe.ontology.compile.OntologyCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
@@ -94,7 +102,7 @@ public class HierarchyUtils {
 			core = Rdf2GoCore.getInstance();
 		}
 		else {
-			core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+			core = getCompiler(master).getRdf2GoCore();
 		}
 
 		SparqlCache sparqlCache = SparqlCacheManager.getInstance().getCachedSparqlEndpoint(core);
@@ -111,6 +119,25 @@ public class HierarchyUtils {
 		// }
 		// return result;
 	}
+
+	public static OntologyCompiler getCompiler(String master) {
+		ArticleManager articleManager = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB);
+		OntologyCompiler compiler = null;
+		Collection<OntologyCompiler> compilers = Compilers.getCompilers(articleManager,
+				OntologyCompiler.class);
+		for (OntologyCompiler ontologyCompiler : compilers) {
+			Section<? extends PackageCompileType> compileSection = ontologyCompiler.getCompileSection();
+			Section<DefaultMarkupType> defaultMarkup = Sections.findAncestorOfType(compileSection,
+					DefaultMarkupType.class);
+			if (defaultMarkup.getText().contains(master) || defaultMarkup.getTitle().equals(master)) {
+				compiler = ontologyCompiler;
+			}
+		}
+		return compiler;
+	}
+	
+
 
 	/**
 	 * Determines whether concept1 is a sub-concept of the second concept
@@ -134,7 +161,7 @@ public class HierarchyUtils {
 			core = Rdf2GoCore.getInstance();
 		}
 		else {
-			core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+			core = getCompiler(master).getRdf2GoCore();
 		}
 
 		// // direct ask (necessary ?)

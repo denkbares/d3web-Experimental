@@ -27,7 +27,6 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
-import de.knowwe.core.Environment;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.ontology.browser.cache.SparqlCacheManager;
 import de.knowwe.ontology.browser.util.HierarchyUtils;
@@ -79,10 +78,12 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 			core = Rdf2GoCore.getInstance();
 		}
 		else {
-			core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+			core = HierarchyUtils.getCompiler(master).getRdf2GoCore();
 		}
 		return core;
 	}
+
+
 
 	@Override
 	public List<Identifier> getChildren(Identifier termID) {
@@ -152,8 +153,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 
 	@Override
 	public Collection<Identifier> getAllTerms() {
-		TerminologyManager terminologyManager = Environment.getInstance().getTerminologyManager(
-				Environment.DEFAULT_WEB, master);
+		TerminologyManager terminologyManager = HierarchyUtils.getCompiler(master).getTerminologyManager();
 		return terminologyManager.getAllDefinedTerms();
 	}
 
@@ -163,13 +163,14 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 		return null;
 	}
 
+
 	@Override
 	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
 
 		// we do not filter if no filter classes are defined
 		if (categories == null || categories.size() == 0) return terms;
 
-		Rdf2GoCore core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+		Rdf2GoCore core = HierarchyUtils.getCompiler(master).getRdf2GoCore();
 		List<Identifier> resultConcepts = new ArrayList<Identifier>();
 		List<String> classes = this.categories;
 		List<URI> classURIs = new ArrayList<URI>();
