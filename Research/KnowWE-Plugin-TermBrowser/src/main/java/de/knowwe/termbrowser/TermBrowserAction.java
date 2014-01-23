@@ -19,15 +19,24 @@
 package de.knowwe.termbrowser;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
+import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.Compilers;
+import de.knowwe.core.compile.PackageCompiler;
+import de.knowwe.core.compile.packaging.PackageCompileType;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.core.utils.PackageCompileLinkToTermDefinitionProvider;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.rdf2go.Rdf2GoCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
@@ -48,6 +57,24 @@ public class TermBrowserAction extends AbstractAction {
 
 	}
 
+	public static Rdf2GoCompiler getCompiler(String master) {
+		ArticleManager articleManager = Environment.getInstance().getArticleManager(
+				Environment.DEFAULT_WEB);
+		Rdf2GoCompiler compiler = null;
+		Collection<PackageCompiler> compilers = Compilers.getCompilers(articleManager,
+				PackageCompiler.class);
+		for (PackageCompiler ontologyCompiler : compilers) {
+			Section<? extends PackageCompileType> compileSection = ontologyCompiler.getCompileSection();
+			Section<DefaultMarkupType> defaultMarkup = Sections.findAncestorOfType(compileSection,
+					DefaultMarkupType.class);
+			if ((defaultMarkup.getText().contains(master) || defaultMarkup.getTitle().equals(master))
+					&& ontologyCompiler instanceof Rdf2GoCompiler) {
+				compiler = (Rdf2GoCompiler) ontologyCompiler;
+			}
+		}
+		return compiler;
+	}
+
 	/**
 	 * 
 	 * @created 10.12.2012
@@ -63,7 +90,7 @@ public class TermBrowserAction extends AbstractAction {
 		 * treat case when the semantic-autocompletion slot sends full URIs
 		 */
 		if (term != null && term.startsWith("http:")) {
-			Rdf2GoCore core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+			Rdf2GoCore core = getCompiler(master).getRdf2GoCore();
 			term = Rdf2GoUtils.reduceNamespace(core, term);
 			term = term.replace(":", "#");
 		}
