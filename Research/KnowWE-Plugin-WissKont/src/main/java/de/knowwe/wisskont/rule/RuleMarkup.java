@@ -199,7 +199,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
 			Object o = KnowWEUtils.getStoredObject(
-					D3webUtils.getD3webCompiler(article),
+					D3webUtils.getCompiler(article),
 					markup, ValuesMarkup.VALUE_STORE_KEY);
 
 			QuestionChoice qChoice = null;
@@ -251,7 +251,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 			// make sure that terminals are created and stored
 			List<Section<WisskontChoiceFinding>> terminals = Sections.findSuccessorsOfType(cond,
 					WisskontChoiceFinding.class);
-			D3webCompiler d3webCompiler = D3webUtils.getD3webCompiler(article);
+			D3webCompiler d3webCompiler = D3webUtils.getCompiler(article);
 			for (Section<WisskontChoiceFinding> terminal : terminals) {
 				Condition createdCondition = terminal.get().createCondition(
 						d3webCompiler, terminal);
@@ -303,7 +303,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 					}
 				}
 			}
-			KnowWEUtils.storeObject(D3webUtils.getD3webCompiler(article), section, RULE_STORE_KEY,
+			KnowWEUtils.storeObject(D3webUtils.getCompiler(article), section, RULE_STORE_KEY,
 					rules);
 		}
 
@@ -314,7 +314,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
 			Object storedObject = KnowWEUtils.getStoredObject(
-					D3webUtils.getD3webCompiler(article), section, RULE_STORE_KEY);
+					D3webUtils.getCompiler(article), section, RULE_STORE_KEY);
 			if (storedObject instanceof Set) {
 				Set<?> set = (Set<?>) storedObject;
 				for (Object object : set) {

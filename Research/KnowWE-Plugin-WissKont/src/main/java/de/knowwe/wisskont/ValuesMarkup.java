@@ -222,7 +222,7 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
 			KnowWEUtils.storeObject(
-					D3webUtils.getD3webCompiler(article),
+					D3webUtils.getCompiler(article),
 					section, VALUE_STORE_KEY, question);
 			return question;
 		}
@@ -254,7 +254,7 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
 			KnowWEUtils.storeObject(
-					D3webUtils.getD3webCompiler(article),
+					D3webUtils.getCompiler(article),
 					section, VALUE_STORE_KEY, question);
 			return question;
 		}

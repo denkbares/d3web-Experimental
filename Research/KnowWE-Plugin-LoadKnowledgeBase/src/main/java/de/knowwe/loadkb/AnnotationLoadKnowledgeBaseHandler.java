@@ -55,7 +55,7 @@ public class AnnotationLoadKnowledgeBaseHandler extends D3webHandler<KnowledgeBa
 			KnowledgeBase kb = loadKnowledgeBaseFromFile(compiler, section, filename);
 
 			if (kb != null) {
-				D3webUtils.getD3webCompiler(section).setKnowledgeBase(kb);
+				D3webUtils.getCompiler(section).setKnowledgeBase(kb);
 			}
 		}
 

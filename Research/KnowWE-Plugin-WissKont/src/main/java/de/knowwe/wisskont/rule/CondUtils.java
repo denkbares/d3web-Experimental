@@ -70,7 +70,7 @@ public class CondUtils {
 		Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 				KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
 		Object o = KnowWEUtils.getStoredObject(
-				D3webUtils.getD3webCompiler(article),
+				D3webUtils.getCompiler(article),
 				markup, ValuesMarkup.VALUE_STORE_KEY);
 
 		QuestionNum qNum = null;

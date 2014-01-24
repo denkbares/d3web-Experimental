@@ -72,7 +72,7 @@ public class DebuggerRuleRenderer implements Renderer {
 				RuleAction.class);
 		Rule r = null;
 		if (ruleAction != null) {
-			r = (Rule) KnowWEUtils.getStoredObject(D3webUtils.getD3webCompiler(article), ruleAction,
+			r = (Rule) KnowWEUtils.getStoredObject(D3webUtils.getCompiler(article), ruleAction,
 					RuleContentType.RULE_STORE_KEY);
 		}
 		String title = user.getTitle();

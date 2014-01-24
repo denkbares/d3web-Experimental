@@ -221,7 +221,7 @@ public class ConceptListContent extends AbstractType {
 						Rule r = RuleFactory.createRule(a, cond,
 								null, PSMethodHeuristic.class);
 						if (r != null) {
-							KnowWEUtils.storeObject(D3webUtils.getD3webCompiler(article), section,
+							KnowWEUtils.storeObject(D3webUtils.getCompiler(article), section,
 									RULE_STORE_KEY, r);
 						}
 					}
@@ -254,7 +254,7 @@ public class ConceptListContent extends AbstractType {
 			public void deleteFromRepository(Section<ObjectSegment> section) {
 				Rdf2GoCore.getInstance().removeStatementsForSection(section);
 				Object storedObject = KnowWEUtils.getStoredObject(
-						D3webUtils.getD3webCompiler(section.getArticle()), section,
+						D3webUtils.getCompiler(section.getArticle()), section,
 						RULE_STORE_KEY);
 				if (storedObject instanceof Rule) {
 					Rule r = (Rule) storedObject;

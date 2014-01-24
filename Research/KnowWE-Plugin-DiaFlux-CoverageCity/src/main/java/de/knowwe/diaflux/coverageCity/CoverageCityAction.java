@@ -20,9 +20,8 @@ package de.knowwe.diaflux.coverageCity;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -36,15 +35,11 @@ import de.d3web.diaflux.coverage.DefaultCoverageResult;
 import de.d3web.diaflux.coverage.DiaFluxCoverageTrace;
 import de.d3web.testcase.TestCaseUtils;
 import de.d3web.testcase.model.TestCase;
-import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.Attributes;
-import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.packaging.PackageManager;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -83,11 +78,7 @@ public class CoverageCityAction extends AbstractAction {
 			return;
 		}
 
-		Iterator<Article> iterator = Compilers.getCompilingArticles(section).iterator();
-		if (!iterator.hasNext()) return;
-
-		Article article = iterator.next();
-		KnowledgeBase kb = D3webUtils.getKnowledgeBase(section.getWeb(), article.getTitle());
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(section);
 
 		CoverageResult coverage = calculateCoverage(section, kb);
 
@@ -120,55 +111,21 @@ public class CoverageCityAction extends AbstractAction {
 
 		PackageManager packageManager = KnowWEUtils.getPackageManager(coverageSec);
 
-		// Map<String, String> articles =
-		// Environment.getInstance().getWikiConnector().getAllArticles(
-		// context.getWeb());
-		String[] packages = DefaultMarkupType.getPackages(coverageSec);
-		List<String> articles = new LinkedList<String>();
-		for (String packageName : packages) {
-			articles.addAll(packageManager.getCompilingArticles(packageName));
-		}
-
+		Set<String> packageNames = coverageSec.getPackageNames();
+		String[] packageArray = packageNames.toArray(new String[packageNames.size()]);
+		Collection<Section<?>> sectionsOfPackages = packageManager.getSectionsOfPackage(packageArray);
 		List<DiaFluxCoverageTrace> results = new LinkedList<DiaFluxCoverageTrace>();
-		for (String title : articles) {
-			Article article = Environment.getInstance().getArticle(coverageSec.getWeb(),
-					title);
+		for (Section<?> potentioalTestCaseSection : sectionsOfPackages) {
+			if (!(potentioalTestCaseSection.get() instanceof DefaultMarkupType)) continue;
+			TestCaseProviderStorage testCaseProviderStorage = de.knowwe.testcases.TestCaseUtils.getTestCaseProviderStorage(
+					potentioalTestCaseSection);
 
-			// List<Section<KnowledgeBaseType>> knowledgeBaseSections =
-			// Sections.findSuccessorsOfType(
-			// article.getRootSection(), KnowledgeBaseType.class);
-			//
-			// if (knowledgeBaseSections.size() != 1) {
-			// continue;
-			// }
-
-			// Section<KnowledgeBaseType> kbSection =
-			// knowledgeBaseSections.get(0);
-
-			Set<Section<?>> sectionsCompiledByArticle = new HashSet<Section<?>>();
-			// TODO use all packages of KB or only those of the defined packages
-			// for (String packageName : compiledPackages) {
-			for (String packageName : packages) {
-				sectionsCompiledByArticle.addAll(packageManager.getSectionsOfPackage(packageName));
-			}
-			for (Section<?> potentioalTestCaseSection : sectionsCompiledByArticle) {
-				TestCaseProviderStorage testCaseProviderStorage =
-						(TestCaseProviderStorage) potentioalTestCaseSection.getSectionStore().getObject(
-								Compilers.getCompiler(article, D3webCompiler.class),
-								TestCaseProviderStorage.KEY);
-				if (testCaseProviderStorage != null) {
-					for (TestCaseProvider testCaseProvider : testCaseProviderStorage.getTestCaseProviders()) {
-						Session session = runTestCase(testCaseProvider, kb);
-						results.add(CoverageUtils.getCoverage(session));
-					}
+			if (testCaseProviderStorage != null) {
+				for (TestCaseProvider testCaseProvider : testCaseProviderStorage.getTestCaseProviders()) {
+					Session session = runTestCase(testCaseProvider, kb);
+					results.add(CoverageUtils.getCoverage(session));
 				}
 			}
-			// TODO fixme: only works for 1 compiling KB, use article in
-			// storeObject??
-			System.out.println("No of coveragse;: " + results.size());
-
-			// Path2GraphViz.createPaths(kb, result.getPathCounts().keySet());
-
 		}
 		result = DefaultCoverageResult.calculateResult(results, kb);
 		coverageSec.getSectionStore().storeObject(DiaFluxCoverageType.COVERAGE_RESULT, result);
