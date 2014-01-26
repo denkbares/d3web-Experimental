@@ -19,7 +19,6 @@
  */
 package de.knowwe.rdfs.vis;
 
-import com.sun.istack.internal.NotNull;
 import de.d3web.utils.Log;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
@@ -58,7 +57,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 	 * @param section a section that the graph is rendered for/at
 	 * @param parameters the configuration, consider the constants of this class
 	 */
-	public OntoGraphDataBuilder(String realPath, Section<?> section, Map<String, String> parameters, LinkToTermDefinitionProvider uriProvider, @NotNull Rdf2GoCore rdfRepository) {
+	public OntoGraphDataBuilder(String realPath, Section<?> section, Map<String, String> parameters, LinkToTermDefinitionProvider uriProvider, Rdf2GoCore rdfRepository) {
 		if (rdfRepository == null) {
 			throw new NullPointerException("The RDF repository can't be null!");
 		}
