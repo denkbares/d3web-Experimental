@@ -19,17 +19,7 @@
  */
 package de.knowwe.rdfs.vis;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.Map;
-
-import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.Node;
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
-
+import com.sun.istack.internal.NotNull;
 import de.d3web.utils.Log;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
@@ -39,6 +29,15 @@ import de.knowwe.rdfs.vis.util.Utils;
 import de.knowwe.visualization.ConceptNode;
 import de.knowwe.visualization.Edge;
 import de.knowwe.visualization.GraphDataBuilder;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.QueryRow;
+import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Map;
 
 /**
  * @author Johanna Latt
@@ -59,7 +58,10 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 	 * @param section a section that the graph is rendered for/at
 	 * @param parameters the configuration, consider the constants of this class
 	 */
-	public OntoGraphDataBuilder(String realPath, Section<?> section, Map<String, String> parameters, LinkToTermDefinitionProvider uriProvider, Rdf2GoCore rdfRepository) {
+	public OntoGraphDataBuilder(String realPath, Section<?> section, Map<String, String> parameters, LinkToTermDefinitionProvider uriProvider, @NotNull Rdf2GoCore rdfRepository) {
+		if (rdfRepository == null) {
+			throw new NullPointerException("The RDF repository can't be null!");
+		}
 		this.rdfRepository = rdfRepository;
 		initialiseData(realPath, section, parameters, uriProvider);
 	}
@@ -105,8 +107,8 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 	/**
 	 * 
 	 * @created 24.04.2013
-	 * @param zURI
-	 * @return
+	 * @param zURI the original node
+	 * @return literal representation of the specified node
 	 */
 	private boolean isLiteral(Node zURI) {
 		try {
@@ -124,7 +126,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		String concept = getParameterMap().get(CONCEPT);
 		String conceptNameEncoded = null;
 
-		String url = null;
+		String url;
 		if (concept.contains(":")) {
 			url = Rdf2GoUtils.expandNamespace(rdfRepository, concept);
 		}
@@ -288,13 +290,13 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 	@Override
 	public void addOutgoingEdgesSuccessors(Node conceptURI) {
 		if (isLiteral(conceptURI)) return;
-		String concept = getConceptName(conceptURI);
-		try {
-			concept = URLDecoder.decode(concept, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+//		String concept = getConceptName(conceptURI);
+//		try {
+//			concept = URLDecoder.decode(concept, "UTF-8");
+//		}
+//		catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//		}
 
 		String query = "SELECT ?y ?z WHERE { <"
 				+ conceptURI.asURI().toString()
@@ -380,8 +382,8 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		String to = getConceptName(toURI);
 		String relation = getConceptName(relationURI);
 
-		ConceptNode toNode = null;
-		ConceptNode fromNode = null;
+		ConceptNode toNode;
+		ConceptNode fromNode;
 
 		toNode = data.getConcept(to);
 		if (toNode == null) {
@@ -433,7 +435,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			return;
 		}
 
-		String currentConcept = null;
+		String currentConcept;
 		if (predecessor) {
 			// from is current new one
 			currentConcept = from;
