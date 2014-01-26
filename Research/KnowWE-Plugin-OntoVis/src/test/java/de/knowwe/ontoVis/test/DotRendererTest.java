@@ -1,6 +1,13 @@
 package de.knowwe.ontoVis.test;
 
-import static org.junit.Assert.assertEquals;
+import de.d3web.plugin.test.InitPluginManager;
+import de.d3web.strings.Strings;
+import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.ontoware.rdf2go.RDF2Go;
+import org.ontoware.rdf2go.model.Model;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,15 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.ontoware.rdf2go.RDF2Go;
-import org.ontoware.rdf2go.model.Model;
-
-import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.strings.Strings;
-import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
+import static org.junit.Assert.assertEquals;
 
 /*
  * Copyright (C) 2013 denkbares GmbH
@@ -81,7 +80,7 @@ public class DotRendererTest {
 
 		parameterMap.put(OntoGraphDataBuilder.CONCEPT, "OP-Methoden");
 
-		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "label");
+		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "label,owl:sameAs");
 
 		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,WissassConcept");
 
@@ -128,8 +127,8 @@ public class DotRendererTest {
 
 		assertEquals(
 				"Length of generated dot-source does not match length of expected dot-source.",
-				expectedSource.length(),
-				generatedSource.length());
+				String.valueOf(expectedSource).length(),
+				String.valueOf(generatedSource).length());
 		List<Byte> expectedBytes = asSortedByteList(expectedSource);
 		List<Byte> generatedBytes = asSortedByteList(generatedSource);
 
@@ -144,9 +143,9 @@ public class DotRendererTest {
 
 		parameterMap.put(OntoGraphDataBuilder.CONCEPT, "Phakoemulsifikation");
 
-		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "rdfs:subClassOf");
+		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "rdfs:subClassOf,owl:sameAs");
 
-		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,WissassConcept,Class");
+		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,WissassConcept,Class,owl:Thing");
 
 		parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, "2");
 		parameterMap.put(OntoGraphDataBuilder.REQUESTED_HEIGHT, "2");
@@ -172,8 +171,8 @@ public class DotRendererTest {
 
 		assertEquals(
 				"Length of generated dot-source does not match length of expected dot-source.",
-				expectedSource.length(),
-				generatedSource.length());
+				String.valueOf(expectedSource).length(),
+				String.valueOf(generatedSource).length());
 		List<Byte> expectedBytes = asSortedByteList(expectedSource);
 		List<Byte> generatedBytes = asSortedByteList(generatedSource);
 
@@ -182,12 +181,6 @@ public class DotRendererTest {
 				expectedBytes, generatedBytes);
 	}
 
-	/**
-	 * 
-	 * @created 23.05.2013
-	 * @param expectedSource
-	 * @return
-	 */
 	private List<Byte> asSortedByteList(String expectedSource) {
 		byte[] bytes = expectedSource.getBytes();
 		Byte[] Bytes = new Byte[bytes.length];
@@ -197,14 +190,6 @@ public class DotRendererTest {
 		List<Byte> list = Arrays.asList(Bytes);
 		Collections.sort(list);
 		return list;
-	}
-
-	public enum Rdf2GoModel {
-		JENA, BIGOWLIM, SESAME, SWIFTOWLIM
-	}
-
-	public enum Rdf2GoReasoning {
-		RDF, RDFS, OWL
 	}
 
 }
