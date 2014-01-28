@@ -1,10 +1,11 @@
 package de.knowwe.rdfs.d3web;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
+import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
+import de.d3web.core.session.blackboard.Fact;
+import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.Literal;
@@ -13,12 +14,10 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.XSD;
 
-import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.session.Session;
-import de.d3web.core.session.Value;
-import de.d3web.core.session.blackboard.Fact;
-import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.utils.Rdf2GoUtils;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Rdf2GoSessionManager {
 
@@ -124,7 +123,8 @@ public class Rdf2GoSessionManager {
 	}
 
 	public void removeFactStatements(Session session, TerminologyObject terminologyObject) {
-		core.removeStatements(statementCache.get(terminologyObject));
+		Set<Statement> statements = statementCache.get(terminologyObject);
+		if (statements != null) core.removeStatements(statements);
 	}
 
 	public void removeSession(Session session) {
