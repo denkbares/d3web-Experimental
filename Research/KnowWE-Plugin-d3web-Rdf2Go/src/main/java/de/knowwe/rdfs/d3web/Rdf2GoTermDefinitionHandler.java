@@ -75,7 +75,7 @@ public class Rdf2GoTermDefinitionHandler extends OntologyHandler<D3webTermDefini
 		// hasInstanceURI,
 		// termIdentifierURI));
 
-		String kbName = D3webUtils.getKnowledgeBase(compiler).getId();
+		String kbName = D3webUtils.getKnowledgeBase(section).getId();
 
 		URI kbNameURI = core.createlocalURI(Strings.encodeURL(kbName));
 
