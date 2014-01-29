@@ -58,7 +58,7 @@ public class ObjectInfoToolProviderGerman implements ToolProvider {
 				"KnowWEExtension/d3web/icon/infoPage16.png",
 				"Umbenennen",
 				"Öffnet eine Seite zum Umbenennen des Konzeptes in der ganzen Wissensbasis.",
-				ObjectInfoPageToolProvider.createJSAction(section));
+				ObjectInfoPageToolProvider.createObjectInfoJSAction(section));
 	}
 
 }
