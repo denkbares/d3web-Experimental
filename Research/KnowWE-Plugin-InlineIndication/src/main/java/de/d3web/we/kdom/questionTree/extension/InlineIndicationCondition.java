@@ -15,7 +15,7 @@ import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.manage.RuleFactory;
 import de.d3web.strings.Strings;
 import de.d3web.we.kdom.condition.Finding;
-import de.d3web.we.kdom.rules.RuleContentType;
+import de.d3web.we.kdom.rules.RuleCompileScript;
 import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.object.QASetDefinition;
 import de.d3web.we.reviseHandler.D3webHandler;
@@ -134,7 +134,7 @@ public class InlineIndicationCondition extends AbstractType {
 					msgs.add(Messages.objectCreationError(Rule.class.getSimpleName()));
 				}
 				if (r != null && !(qaset instanceof QContainer && r2 == null)) {
-					KnowWEUtils.storeObject(compiler, s, RuleContentType.RULE_STORE_KEY, r);
+					KnowWEUtils.storeObject(compiler, s, RuleCompileScript.RULE_STORE_KEY, r);
 					return Messages.asList(Messages.objectCreatedNotice("Rule"));
 				}
 

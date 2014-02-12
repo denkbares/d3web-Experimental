@@ -30,7 +30,7 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
-import de.d3web.we.kdom.rules.RuleContentType;
+import de.d3web.we.kdom.rules.RuleCompileScript;
 import de.d3web.we.kdom.rules.action.RuleAction;
 import de.d3web.we.knowledgebase.D3webCompiler;
 import de.knowwe.core.Environment;
@@ -178,7 +178,7 @@ public class DebugUtilities {
 			for (Section<RuleAction> ruleAction : rules) {
 
 				rule = (Rule) KnowWEUtils.getStoredObject(ruleCompiler, ruleAction,
-						RuleContentType.RULE_STORE_KEY);
+						RuleCompileScript.RULE_STORE_KEY);
 
 				if (rule != null && rule.equals(r)) return ruleAction;
 			}

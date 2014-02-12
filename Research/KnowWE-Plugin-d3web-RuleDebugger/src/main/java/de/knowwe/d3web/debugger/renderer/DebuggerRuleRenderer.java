@@ -38,8 +38,8 @@ import de.d3web.we.kdom.condition.Disjunct;
 import de.d3web.we.kdom.condition.NegatedExpression;
 import de.d3web.we.kdom.condition.helper.BracedCondition;
 import de.d3web.we.kdom.condition.helper.BracedConditionContent;
-import de.d3web.we.kdom.rule.ConditionArea;
-import de.d3web.we.kdom.rules.RuleContentType;
+import de.d3web.we.kdom.rules.ConditionArea;
+import de.d3web.we.kdom.rules.RuleCompileScript;
 import de.d3web.we.kdom.rules.action.RuleAction;
 import de.d3web.we.object.QuestionReference;
 import de.d3web.we.object.SolutionReference;
@@ -73,7 +73,7 @@ public class DebuggerRuleRenderer implements Renderer {
 		Rule r = null;
 		if (ruleAction != null) {
 			r = (Rule) KnowWEUtils.getStoredObject(D3webUtils.getCompiler(article), ruleAction,
-					RuleContentType.RULE_STORE_KEY);
+					RuleCompileScript.RULE_STORE_KEY);
 		}
 		String title = user.getTitle();
 
