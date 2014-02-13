@@ -21,7 +21,7 @@ package de.knowwe.diaflux.coverage;
 import de.d3web.core.session.SessionFactory;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.d3web.diaflux.coverage.DiaFluxCoverageTrace;
-import de.knowwe.core.RessourceLoader;
+import de.knowwe.core.ResourceLoader;
 import de.knowwe.core.compile.packaging.PackageAnnotationNameType;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.compile.packaging.PackageTerm;
@@ -54,8 +54,8 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 
 	public DiaFluxCoverageType() {
 		super(MARKUP);
-		RessourceLoader.getInstance().add("diafluxcoverage.js",
-				RessourceLoader.RESOURCE_SCRIPT);
+		ResourceLoader.getInstance().add("diafluxcoverage.js",
+				ResourceLoader.RESOURCE_SCRIPT);
 
 		setRenderer(new DiaFluxCoverageRenderer());
 

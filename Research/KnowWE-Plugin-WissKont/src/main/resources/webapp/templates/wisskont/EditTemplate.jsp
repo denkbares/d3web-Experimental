@@ -22,7 +22,7 @@
     </wiki:CheckRequestContext>
   </title>
   <meta name="robots" content="noindex,follow" />
-  <script type="text/javascript" src="KnowWEExtension/scripts/jquery-1.7.1.js"></script>
+  <script type="text/javascript" src="KnowWEExtension/scripts/jquery-2.1.0.min.js"></script>
   <script type="text/javascript" src="KnowWEExtension/scripts/jquery-compatibility.js"></script>
   <wiki:Include page="commonheader.jsp"/>
   <script type="text/javascript" src="KnowWEExtension/scripts/KnowWE-Plugin-AutoComplete.js"></script>
