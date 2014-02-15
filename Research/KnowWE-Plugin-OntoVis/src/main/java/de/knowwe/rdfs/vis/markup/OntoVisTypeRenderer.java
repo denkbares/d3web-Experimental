@@ -1,5 +1,11 @@
 package de.knowwe.rdfs.vis.markup;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletContext;
+
 import de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.packaging.PackageManager;
@@ -14,11 +20,6 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
-
-import javax.servlet.ServletContext;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
