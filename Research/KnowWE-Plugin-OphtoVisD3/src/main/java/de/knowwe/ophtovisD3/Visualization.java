@@ -42,7 +42,7 @@ public class Visualization {
 	}
 
 	public static void visualiseBubble(String concept, RenderResult result){
-				appendHtmlWrap(" <script> createBubble() </script>", result);
+		appendHtmlWrap(" <script> createBubble('" + concept + "') </script>", result);
 		
 	}
 	/**
@@ -79,9 +79,24 @@ public class Visualization {
 						+ "/KnowWEExtension/css/nav_menu.css\">"
 						//
 						+
+						// breadcrumbs.css
+						"	<link rel=\"stylesheet\" href=\""
+						+ context
+						+ "/KnowWEExtension/css/breadcrumbs.css\">"
+						//
+						+
 						"	<script type=\"text/javascript\" src=\""
 						+ context
 						+ "/KnowWEExtension/scripts/d3.js \"></script>\r\n"
+						+
+						"	<script type=\"text/javascript\" src=\""
+						+ context
+						+ "/KnowWEExtension/scripts/searchbarVis.js \"></script>\r\n"
+						+
+						// Breadcrumbs import
+						"	<script type=\"text/javascript\" src=\""
+						+ context
+						+ "/KnowWEExtension/scripts/breadcrumb.js \"></script>\r\n"
 						+
 						"	<script type=\"text/javascript\" src=\""
 						+ context
@@ -93,15 +108,14 @@ public class Visualization {
 						+ "/KnowWEExtension/scripts/visCollapsableTree.js \"></script>\r\n"
 						+
 						//
-						// Highlight selected Node
-						"	<script type=\"text/javascript\" src=\""
-						+ context
-						+ "/KnowWEExtension/scripts/findAndSelect.js \"></script>\r\n"
-						+
 						//
 						"	<script type=\"text/javascript\" src=\""
 						+ context
 						+ "/KnowWEExtension/scripts/jquery-1.9.1.js \"></script>\r\n"+
+						"<script type='text/javascript' src='KnowWEExtension/scripts/jquery-compatibility.js'></script>"
+						+
+						"<script type='text/javascript' src='scripts/mootools.js'></script>"
+						+
 						"	<script type=\"text/javascript\" src=\""
 						+ context
 						+ "/KnowWEExtension/scripts/OphtoToolbar.js \"></script>\r\n"
@@ -111,9 +125,7 @@ public class Visualization {
 						+ context
 						+ "/KnowWEExtension/scripts/nav_menu_jquery.js \"></script>\r\n"
 						+
-						"<script type='text/javascript' src='KnowWEExtension/scripts/jquery-autosize.min.js'>"
-						+
-						"</script></script><script type='text/javascript' src='KnowWEExtension/scripts/jquery-compatibility.js'></script>"
+						"<script type='text/javascript' src='KnowWEExtension/scripts/jquery-autosize.min.js'></script>"
 						+
 						"<script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-helper.js'></script>"
 						+
@@ -197,6 +209,15 @@ public class Visualization {
 						+ "<div id=\"left-container\">"
 						+ "</div>"
 						+ "<div id=\"center-container\">"
+						+ // Breadcrumbs
+							// "<div id=\"breadcrumb\" class=\"breadcrumbs\">"
+							// +
+						"<div id=\"crumb-container\" class=\"cr-cont\">"
+						+
+						"<div id=\"breadcrumb\" class=\"crumbs\">"
+						+ "<a href=\"#home\"> </a>"
+						+ "</div>"
+						+ "</div>"// breadcrumbs end
 						// -------------DISCO div with d3js MAGIC
 						+
 						"<div id=\"vis\"></div>"
@@ -226,6 +247,7 @@ public class Visualization {
 						+ "<li onclick=\"createTreeDiagonal()\"><a href=\"#\"><span>Experiment TreeDiag</span></a></li>"// li
 						+ "<li onclick=\"createCollForceTest()\"><a href=\"#\"><span>Coll Force Test</span></a></li>"// li
 						+ "<li class=\"last\"><a href=\"#\"><span>Experiment 3</span></a></li>"// li
+						+ "<li class=\"last\" onclick=\"createCollForceTest()\"><a href=\"#\"><span>Experiment JIT</span></a></li>"// li
 						+ "</ul>"
 						+
 						"<li class=\"has-sub\"><a href=\"#\"><span>Experimental II</span></a>"
@@ -235,18 +257,21 @@ public class Visualization {
 						+ "<li class=\"last\"><a href=\"#\"><span>Experiment 3</span></a></li>"// li
 						+ "</ul>"
 						+ "<li class=\"has-sub\"><a href=\"javascript:history.back()\"><span>Back to WIKI</span></a></li>"
-						// Highlight selected Node
-						+ "<li class=\"last\" onclick=\"highlightSelectedNode()\"><a href=\"#\"><span>Highlight</span></a></li>"
-						// Highlight selected Node
 						+
 						"</ul>"// ul main
-						+ // Breadcrumbs
-						"<div class=\"breadcrumbs\">"
+						// searchbar start
 						+
-						"<div class=\"item\">"
-						+ "<a href=\"#home\">Vis ></a>"
-						+ "</div>"
-						+ "</div>"// breadcrumbs end
+						"<div id=\"tfheader\">\r\n"
+						+
+						"<form id=\"tfnewsearch\">\r\n"
+						+
+						"<input type=\"text\" id=\"tfq2b\" class=\"tftextinput2\" name=\"q\" size=\"21\" maxlength=\"120\" value=\"Search\" onkeyup=\"searchInVis(this.value)\" onclick=\"this.value=''\"> \r\n"
+						+
+						"</form>\r\n"
+						+
+						"<div class=\"tfclear\"></div>\r\n"
+						+
+						"	</div>"
 						// + "<div class=\"items\">"
 						// + "<ul>"
 						// +
@@ -255,7 +280,6 @@ public class Visualization {
 						// + "</ul>"
 						// + "</div>"// items end
 						+ "</div>"// -------------Navigation end
-						+
 						// new navigation menu
 						// "<div class=\"editorDiv hidden\">\r\n" +
 						// "<div class=\"dropzone\" id=\"source\" >1</div>\r\n"
@@ -289,6 +313,7 @@ public class Visualization {
 						// "<div class=\"hidden\" id=\"infolist\" ></div>\r\n"
 						// +
 						// main container end
+						+
 						"</div>"
 						+
 						jsCommands

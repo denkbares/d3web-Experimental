@@ -108,6 +108,9 @@ function createReingold(){
 
 visChange();
 
+breadcrumb(globalStartConcept);
+
+
 var diameter = 1960;
 
 var tree = d3.layout.tree()
@@ -144,7 +147,8 @@ d3.json( url, function(error, root) {
       .data(nodes)
     .enter().append("g")
       .attr("class", "node")
-      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
+      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+      .on("click", function(d) { d.data ? breadcrumb(d.data.name) : ""; });
 
   node.append("circle")
         .on("click", function(d){clickTextEventHandler(d)})
@@ -174,8 +178,9 @@ d3.json( url, function(error, root) {
 	  .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
 	  .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
 	  .text(function(d) {return d.data ? d.data.name : ""; })
-	  .on("click", function(d){clickTextEventHandler(d)})
-	  .call(drag);
+	  .on("click.info", function(d){clickTextEventHandler(d)})
+	  .on("click.breadcrmb", function(d) { d.data ? breadcrumb(d.data.name) : ""; })
+;
 
 	
  
@@ -290,6 +295,8 @@ function createTreeCollapsable(){
     
     visChange();
     
+    breadcrumb(globalStartConcept);
+    
     d3.select("#vis").remove();
     d3.select("#center-container").append("div").attr("id", "vis");
     
@@ -377,17 +384,19 @@ function update(source) {
   var nodeEnter = node.enter().append("svg:g")
       .attr("class", "node")
       .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-      .on("click", function(d) { 
+      .on("click", function(d) { d.data ? breadcrumb(d.data.name) : ""; })
+      ;
+
+  nodeEnter.append("svg:circle")
+      .attr("r", 1e-6)
+     .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
+     .on("click", function(d) { 
           console.log("------------------on click");
           console.log(d.data.name);
                     console.log("------------------on click children");
           console.log(d.children == null);
                     console.log(d._children == null);
           toggle(d); update(d); });
-
-  nodeEnter.append("svg:circle")
-      .attr("r", 1e-6)
-     .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
       
 
@@ -420,7 +429,10 @@ function update(source) {
      else 
     {return d._children.length>>0 ? "end" : "start"; };})
       .text(function(d) { return d.data ? d.data.name : ""; })
-      .style("fill-opacity", 1e-6);
+      .style("fill-opacity", 1e-6)
+      //Breadcrumb
+      
+      ;
   // Transition nodes to their new position.
   var nodeUpdate = node.transition()
       .duration(duration)
@@ -1021,8 +1033,8 @@ function flatten(root) {
 }
 //
 function visChange(){
-    $("#infolist").removeClass('unhidden');
-    $("#infolist").addClass('hidden');
+    jq$("#infolist").removeClass('unhidden');
+    jq$("#infolist").addClass('hidden');
 }
 
 

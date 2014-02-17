@@ -248,4 +248,79 @@ public class GraphBuilder {
 		}
 		return resultString;
 	}
+
+	public PartialHierarchyTree<NodeWithName> getFamilyTree(String startConcept, String connectionType) {
+
+		boolean parentAvailable = true;
+
+		Map<String, String> parentChildPairs = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
+
+		PartialHierarchyTree<NodeWithName> pht = new PartialHierarchyTree<NodeWithName>(
+				new VisualizationHierarchyProvider(
+						parentChildPairs));
+
+		pht.insertNode(new NodeWithName(startConcept));
+
+		while (parentAvailable) {
+
+			List<String> list = DataBaseHelper.getConnectedNodeNamesOfType(startConcept,
+					connectionType, true);
+			if (list.size() > 0) {
+
+				pht.insertNode(new NodeWithName(list.get(0)));
+
+				startConcept = list.get(0);
+
+			}
+			else {
+				parentAvailable = false;
+			}
+
+		}
+
+		return pht;
+
+	}
+
+	// new approach with list
+
+	public List<String> getFamilyTreeList(String startConcept, String connectionType) {
+
+		boolean parentAvailable = true;
+
+		List<String> trace2root = new LinkedList<String>();
+
+		if (DataBaseHelper.getConnectedNodeNamesOfType(startConcept,
+				connectionType, true).size() > 0)
+		{
+			trace2root.add(startConcept);
+		}
+		else {
+			// bei nicht vorhandenem vaterknoten nur dast startkonzept
+			trace2root.add(startConcept);
+			parentAvailable = false;
+		}
+
+		while (parentAvailable) {
+
+			List<String> list = DataBaseHelper.getConnectedNodeNamesOfType(startConcept,
+					connectionType, true); // reverse Parameter auf true, damit
+											// nicht Nachfolger sd Vorgaenger
+
+			if (list.size() > 0) {
+
+				trace2root.add(list.get(0));
+
+				startConcept = list.get(0);
+
+			}
+			else {
+				parentAvailable = false;
+			}
+
+		}
+
+		return trace2root;
+
+	}
 }

@@ -1,20 +1,20 @@
-﻿$(document).ready(function($) {
-$(".menue").click(function(){
-$(".menue").removeClass("active");
-$(this).addClass("active");
+﻿jq$(document).ready(function(jq$) {
+jq$(".menue").click(function(){
+jq$(".menue").removeClass("active");
+jq$(this).addClass("active");
 });
-$(".editor").click(function(){
-$(".chart").toggleClass("hidden");
-$(this).toggleClass("active");
-var $e = $(this);
-$e
-.text($e.text() === "Editor▼" ? "Editor▲" : "Editor▼");
+jq$(".editor").click(function(){
+jq$(".chart").toggleClass("hidden");
+jq$(this).toggleClass("active");
+var jq$e = jq$(this);
+jq$e
+.text(jq$e.text() === "Editor▼" ? "Editor▲" : "Editor▼");
 
 });  
-$(".dropzone").droppable({
+jq$(".dropzone").droppable({
 	drop: function( event, ui ) {
 	var text= ui.draggable.text();
-	$( this )
+	jq$( this )
 	.addClass( "ui-state-highlight" )
 	.html(ui.draggable.text());
 	}

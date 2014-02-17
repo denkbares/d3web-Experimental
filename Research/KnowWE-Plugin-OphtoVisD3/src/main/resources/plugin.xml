@@ -46,6 +46,15 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="BreadcrumbAction">
+		<parameter id="class"
+			value="de.knowwe.ophtovisD3.BreadcrumbAction" />
+		<parameter id="name" value="BreadcrumbAction" />
+		<parameter id="description" value="Action BreadcrumbAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="PartTreeAction">
 		<parameter id="class"

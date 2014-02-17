@@ -1,6 +1,11 @@
+var globalStartConcept;
+
 function createWheel(){
 	
 	visChange();
+	
+	breadcrumb(globalStartConcept);
+	
 	d3.select("#vis").remove();
 	d3.select("#center-container").append("div").attr("id", "vis");
 var width = 840,
@@ -41,7 +46,8 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
   	path.enter().append("path")
       .attr("id", function(d, i) { return "path-" + i; })
       .attr("d", arc)
-      .style("fill",function(d) {return colour(d); });
+      .style("fill",function(d) {return colour(d); })
+      .on("click", function(d) { d.data ? breadcrumb(d.data.name) : ""; });
       //.on("click", click);
 
   var text = vis.selectAll("text").data(nodes);
@@ -60,7 +66,8 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
      // .attr("visibility", function(e) {
        //   return (e.depth<2) ? null : d3.select(this).style("visibility", "hidden");
        // })
-      .on("click", function(d){clickTextEventHandler(d)});
+      .on("click.info", function(d){clickTextEventHandler(d)})
+      .on("click.breadcrmb", function(d) { d.data ? breadcrumb(d.data.name) : ""; });
  
   textEnter.append("tspan")
       .attr("x", 0)
@@ -71,7 +78,7 @@ var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
       .text(function(d) { return d.depth ? d.data.label.split(" ")[1] || "" : ""; });
 
   function click(d) {
-  	console.log($(this).text());
+  	console.log(jq$(this).text());
   	clickTextEventHandler(d);
     path.transition()
       .duration(duration)
@@ -289,15 +296,15 @@ function createForce(){
 }
 
 function visChange(){
-	$("#infolist").removeClass('unhidden');
-	$("#infolist").addClass('hidden');
+	jq$("#infolist").removeClass('unhidden');
+	jq$("#infolist").addClass('hidden');
 }
 function clickTextEventHandler(d){
 	
 	var clickedName = d.data.name;
 	  	console.log(d.data.name);
 	
-	$("#infolist").addClass('unhidden');
+	jq$("#infolist").addClass('unhidden');
 		
 	var url = KNOWWE.core.util.getURL({action : 'ConnectionsAction', concept : clickedName});
 	renderConnections(url);
@@ -306,8 +313,14 @@ function clickTextEventHandler(d){
 }
 
 
-function createBubble(){
+function createBubble(concept){
+	
+	if (concept){globalStartConcept = concept}else{ globalStartConcept= "Praeop Vorbereitung" };
+	
+	
 	visChange();
+
+	breadcrumb(globalStartConcept);
 	
 	d3.select("#vis").remove();
 	d3.select("#center-container").append("div").attr("id", "vis");
@@ -346,7 +359,9 @@ function createBubble(){
 	      .attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; })
 	      .attr("r", function(d) { return d.r; })
-	      .on("click", function(d) { return zoom(node == d ? root : d); });
+	      .on("click.zoom", function(d) { return zoom(node == d ? root : d); })
+	      .on("click.breadcrmb", function(d) { d.data ? breadcrumb(d.data.name) : ""; })
+	      ;
 
 	  vis.selectAll("text")
 	      .data(nodes)
@@ -378,7 +393,7 @@ function createBubble(){
 
 	  t.selectAll("text")
 	      .attr("x", function(d) { return x(d.x); })
-	      .attr("y", function(d) {console.log((y(d.y)+ 0.75 *d.r));return (d.children[0]) ? (y(d.y)+ 0.75 *d.r) : y(d.y)  ;})
+	      .attr("y", function(d) {return (d.children[0]) ? (y(d.y)+ 0.75 *d.r) : y(d.y)  ;})
 	      .style("opacity", function(d) { return k * d.r > 20 ? 1 : 0; });
 
 	  node = d;

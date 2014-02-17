@@ -1,9 +1,9 @@
 package de.knowwe.ophtovisD3;
 
 import java.io.IOException;
+
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.ophtovisD3.GraphBuilder;
 
 
 public class AjaxAction extends AbstractAction {
@@ -37,3 +37,4 @@ public class AjaxAction extends AbstractAction {
 	}
 
 }
+
