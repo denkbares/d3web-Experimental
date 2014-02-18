@@ -81,7 +81,7 @@ public class ListMarkupDragDropInserter implements DragDropEditInserter {
 	private String createReplaceText(Section<?> section, String termname) {
 		Section<RelationMarkupContentType> contentSection = Sections.findSuccessor(section,
 				RelationMarkupContentType.class);
-		List<Section<? extends Type>> children = section.getChildren();
+		List<Section<?>> children = section.getChildren();
 		String result = "";
 		for (Section<? extends Type> child : children) {
 			if (child.equals(contentSection)) {

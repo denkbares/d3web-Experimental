@@ -65,7 +65,7 @@ public class OverrideLabelRefactoring extends AbstractAction {
 					ConceptMarkup.class);
 
 			if (labelMarkup != null && conceptMarkup != null) {
-				List<Section<? extends Type>> children = labelMarkup.getChildren();
+				List<Section<?>> children = labelMarkup.getChildren();
 				Section<? extends Type> label = children.get(2);
 				if (label != null && label.get().getName().contains("LabelType")
 						&& label.getText().contains("..")) {

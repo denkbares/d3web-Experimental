@@ -46,7 +46,7 @@ public class HeadlineDragDropInserter implements DragDropEditInserter {
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
 		if (Sections.hasType(s, HeaderType.class)) {
 
-			List<Section<? extends Type>> siblings = s.getParent().getChildren();
+			List<Section<?>> siblings = s.getParent().getChildren();
 
 			Section<ConceptList> list = searchExistingConceptList(s, siblings);
 
@@ -98,7 +98,7 @@ public class HeadlineDragDropInserter implements DragDropEditInserter {
 	 * @param siblings
 	 * @return
 	 */
-	private Section<ConceptList> searchExistingConceptList(Section<?> s, List<Section<? extends Type>> siblings) {
+	private Section<ConceptList> searchExistingConceptList(Section<?> s, List<Section<?>> siblings) {
 		// Search for existing list of concepts to append term
 		Section<ConceptList> list = null;
 		boolean found = false;

@@ -57,14 +57,14 @@ import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * Renders rules to provide a debugging-layout.
- * 
+ *
  * @author dupke
  */
 public class DebuggerRuleRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> sec, UserContext user,
-			RenderResult string) {
+					   RenderResult string) {
 		Article article = Compilers.getCompilingArticles(sec).iterator().next();
 		KnowledgeBase kb = D3webUtils.getKnowledgeBase(article.getWeb(), article.getTitle());
 		Session session = SessionProvider.getSession(user, kb);
@@ -77,7 +77,7 @@ public class DebuggerRuleRenderer implements Renderer {
 		}
 		String title = user.getTitle();
 
-		List<Section<? extends Type>> ruleSections = sec.getChildren();
+		List<Section<?>> ruleSections = sec.getChildren();
 
 		if (r != null && session != null) {
 			if (r.hasFired(session)) {
@@ -107,7 +107,7 @@ public class DebuggerRuleRenderer implements Renderer {
 	}
 
 	public static void renderConditionSection(Section<?> condSection, Condition cond, Session session, String title, boolean inside, RenderResult string, UserContext user) {
-		List<Section<? extends Type>> children = condSection.getChildren();
+		List<Section<?>> children = condSection.getChildren();
 		for (Section<? extends Type> section : children) {
 			if (section.get() instanceof CompositeCondition) {
 				renderCondition(Sections.cast(section, CompositeCondition.class), cond,
@@ -121,9 +121,8 @@ public class DebuggerRuleRenderer implements Renderer {
 
 	/**
 	 * Get the rendering for a condition.
-	 * 
-	 * @param inside If the rule is display inside the debugger, it has to use
-	 *        different js-functions.
+	 *
+	 * @param inside If the rule is display inside the debugger, it has to use different js-functions.
 	 */
 	public static void renderCondition(Section<CompositeCondition> condSection, Condition cond, Session session, String title, boolean inside, RenderResult string, UserContext user) {
 
@@ -140,7 +139,7 @@ public class DebuggerRuleRenderer implements Renderer {
 		}
 
 		// handle div
-		List<Section<? extends Type>> children = condSection.getChildren();
+		List<Section<?>> children = condSection.getChildren();
 		if (Sections.findChildOfType(condSection, BracedCondition.class) != null) {
 
 			for (Section<? extends Type> child : children) {
@@ -204,10 +203,10 @@ public class DebuggerRuleRenderer implements Renderer {
 	}
 
 	private static void renderBracedCondition(Section<? extends Type> section, Condition condition, Session session, String title, boolean inside, RenderResult string, UserContext user) {
-		List<Section<? extends Type>> children = section.getChildren();
+		List<Section<?>> children = section.getChildren();
 		for (Section<? extends Type> child : children) {
 			if (child.get() instanceof BracedConditionContent) {
-				List<Section<? extends Type>> contentChildren = child.getChildren();
+				List<Section<?>> contentChildren = child.getChildren();
 				for (Section<? extends Type> contentChild : contentChildren) {
 					if (contentChild.get() instanceof CompositeCondition) {
 						renderCondition(Sections.cast(contentChild, CompositeCondition.class),
@@ -228,11 +227,11 @@ public class DebuggerRuleRenderer implements Renderer {
 
 	private static void renderTerminalCondition(Section<?> condSection, Condition cond, Session session, String title, boolean inside, RenderResult builder, UserContext user) {
 
-		List<Section<? extends Type>> children = condSection.getChildren();
+		List<Section<?>> children = condSection.getChildren();
 		for (Section<? extends Type> child : children) {
 			if (child.get() instanceof D3webCondition) {
-				List<Section<? extends Type>> grandChildren = child.getChildren();
-				for (Section<? extends Type> grandChild : grandChildren) {
+				List<Section<?>> grandChildren = child.getChildren();
+				for (Section<?> grandChild : grandChildren) {
 					if (grandChild.get() instanceof QuestionReference) {
 						if (cond instanceof CondQuestion) {
 							DebuggerQuestionRenderer.renderQuestion(
@@ -267,11 +266,10 @@ public class DebuggerRuleRenderer implements Renderer {
 	}
 
 	/**
-	 * 
-	 * @created 24.10.2012
 	 * @param child
 	 * @param user
 	 * @param builder
+	 * @created 24.10.2012
 	 */
 	private static void delegateMaskJSPWikiMarkup(Section<? extends Type> child, UserContext user, RenderResult builder) {
 		RenderResult buffy = new RenderResult(builder);
@@ -280,11 +278,10 @@ public class DebuggerRuleRenderer implements Renderer {
 	}
 
 	/**
-	 * 
-	 * @created 24.10.2012
 	 * @param child
 	 * @param user
 	 * @param builder
+	 * @created 24.10.2012
 	 */
 	private static void renderMaskJSPWikiMarkup(Renderer r, Section<? extends Type> child, UserContext user, RenderResult builder) {
 		RenderResult buffy = new RenderResult(builder);

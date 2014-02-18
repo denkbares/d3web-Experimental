@@ -75,7 +75,7 @@ public class CompileUtils {
 	}
 
 	private static void addNonReusedSection(Section<? extends Type> section, Collection<Section<? extends Type>> result) {
-		List<Section<? extends Type>> children = section.getChildren();
+		List<Section<?>> children = section.getChildren();
 		for (Section<? extends Type> child : children) {
 			if (child.isReusedBy(child.getArticle().getTitle())) {
 				// old section
@@ -112,7 +112,7 @@ public class CompileUtils {
 	}
 
 	private static void addOldNonReusedSection(Section<? extends Type> section, Collection<Section<? extends Type>> result, Article lastVersionOfArticle) {
-		List<Section<? extends Type>> children = section.getChildren();
+		List<Section<?>> children = section.getChildren();
 		for (Section<? extends Type> child : children) {
 			if (child.getArticle() == lastVersionOfArticle) {
 				// old section

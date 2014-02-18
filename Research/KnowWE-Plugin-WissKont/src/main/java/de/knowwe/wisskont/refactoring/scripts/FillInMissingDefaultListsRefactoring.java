@@ -118,7 +118,7 @@ public class FillInMissingDefaultListsRefactoring extends AbstractAction {
 	 * @created 09.01.2014
 	 */
 	private void insertMarkups(Section<? extends Type> rootSection, Map<String, String> replacementMap) {
-		List<Section<? extends Type>> rootChildren = rootSection.getChildren();
+		List<Section<?>> rootChildren = rootSection.getChildren();
 		String key;
 		String value;
 

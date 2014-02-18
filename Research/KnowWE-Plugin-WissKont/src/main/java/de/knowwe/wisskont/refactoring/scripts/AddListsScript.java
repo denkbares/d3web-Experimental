@@ -90,8 +90,8 @@ public class AddListsScript extends AbstractAction {
 	private String createReplaceText(Section<? extends Type> parentSection) {
 		String text = "";
 		boolean[] addedFlags = new boolean[4];
-		List<Section<? extends Type>> children = parentSection.getChildren();
-		for (Section<? extends Type> child : children) {
+		List<Section<?>> children = parentSection.getChildren();
+		for (Section<?> child : children) {
 			boolean isLastList = false;
 			if (child.get() instanceof RelationMarkup) {
 

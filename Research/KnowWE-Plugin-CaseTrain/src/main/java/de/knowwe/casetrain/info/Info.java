@@ -118,7 +118,7 @@ public class Info extends BlockMarkupType {
 				 * Info has no content if: - Only title as children and no other
 				 * children - It has no children at all
 				 */
-				List<Section<? extends Type>> blockMarkupChildren =
+				List<Section<?>> blockMarkupChildren =
 						Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
 				if (((title != null) && (blockMarkupChildren.size() == 1))
 						|| blockMarkupChildren.size() == 0) {
@@ -184,8 +184,8 @@ public class Info extends BlockMarkupType {
 				Section<BlockMarkupContent> content =
 						Sections.findSuccessor(s, BlockMarkupContent.class);
 
-				List<Section<? extends Type>> children =
-						new ArrayList<Section<? extends Type>>(content.getChildren());
+				List<Section<?>> children =
+						new ArrayList<Section<?>>(content.getChildren());
 
 				Section<? extends Type> actual = null;
 

@@ -70,13 +70,13 @@ public class DeleteListEntryAction extends AbstractAction {
 		{
 			// check whether trailing comma should be deleted
 			Section<? extends Type> father = entryToBeDeleted.getParent().getParent();
-			List<Section<? extends Type>> siblings = father.getChildren();
-			Iterator<Section<? extends Type>> iterator = siblings.iterator();
-			Section<? extends Type> subsequentSection = null;
-			Section<? extends Type> previousSection = null;
-			Section<? extends Type> next = null;
+			List<Section<?>> siblings = father.getChildren();
+			Iterator<Section<?>> iterator = siblings.iterator();
+			Section<?> subsequentSection = null;
+			Section<?> previousSection = null;
+			Section<?> next = null;
 			while (iterator.hasNext()) {
-				Section<? extends Type> last = next;
+				Section<?> last = next;
 				next = iterator.next();
 				if (Sections.getSubtreePostOrder(next).contains(entryToBeDeleted)) {
 					previousSection = last;

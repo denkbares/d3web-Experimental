@@ -105,7 +105,7 @@ public class Evaluation extends BlockMarkupType {
 				 * Evaluation has no content if: - Only title as children and no
 				 * other children - It has no children at all
 				 */
-				List<Section<? extends Type>> blockMarkupChildren =
+				List<Section<?>> blockMarkupChildren =
 						Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
 				if (blockMarkupChildren.size() == 0) {
 					messages.add(Utils.missingContentWarning(Info.class.getSimpleName()));
@@ -148,7 +148,7 @@ public class Evaluation extends BlockMarkupType {
 				 * 
 				 * Also validates the given AnswerBlock.
 				 */
-				List<Section<? extends Type>> children =
+				List<Section<?>> children =
 						Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
 				Section<? extends Type> actual = null;
 				boolean antwortenMissing = true;

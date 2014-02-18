@@ -44,13 +44,12 @@ public class SectionUtils {
 	/**
 	 * 
 	 * @created 03.05.2013
-	 * @param rootSection
 	 * @param kdomid
 	 * @return
 	 */
-	private static Section<? extends Type> findSection(Section<? extends Type> section, String kdomid) {
+	private static Section<? extends Type> findSection(Section<?> section, String kdomid) {
 		if (section.getID().equals(kdomid)) return section;
-		List<Section<? extends Type>> children = section.getChildren();
+		List<Section<?>> children = section.getChildren();
 
 		Section<? extends Type> result = null;
 		for (Section<? extends Type> child : children) {

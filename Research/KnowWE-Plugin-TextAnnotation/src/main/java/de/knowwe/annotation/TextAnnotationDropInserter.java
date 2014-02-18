@@ -84,7 +84,7 @@ public class TextAnnotationDropInserter implements DragDropEditInserter {
 				AnnotatedConceptsType.class);
 		if (contentSection != null) {
 
-			List<Section<? extends Type>> children = section.getChildren();
+			List<Section<?>> children = section.getChildren();
 			String result = "";
 			for (Section<? extends Type> child : children) {
 				if (child.equals(contentSection)) {

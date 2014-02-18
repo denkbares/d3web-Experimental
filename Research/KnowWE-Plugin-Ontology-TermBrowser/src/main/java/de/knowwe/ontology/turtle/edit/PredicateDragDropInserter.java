@@ -69,7 +69,7 @@ public class PredicateDragDropInserter extends DefaultMarkupDragDropInserter {
 	}
 
 	private String createReplaceTextPredicateSentence(Section<?> section, String appendName) {
-		List<Section<? extends Type>> children = section.getChildren();
+		List<Section<?>> children = section.getChildren();
 		String result = "";
 		for (Section<? extends Type> child : children) {
 			if (child.get() instanceof ObjectList) {
