@@ -24,7 +24,9 @@ function initSemanticAutocompletionSlot() {
 			var termbrowserframeElement = jq$(this);
 			var inputElement = termbrowserframeElement.find(".semanticautocompletion");
 			var textboxListObject = KNOWWE.plugin.semanticautocompletion.actions.getTextboxListInstance(inputElement);
-			textboxListObject.addEvent('bitAdd', completionItemSelected); 
+			if (textboxListObject) {
+				textboxListObject.addEvent('bitAdd', completionItemSelected);
+			}
 		});
 	});
 }
@@ -70,7 +72,7 @@ function initDropableMarkupSection(element) {
 			// alert('dropped: '+ termname + ' on id: '+markupID );
 			sendAddedTerm(termname, markupID);
 		},
-		hoverClass : "drophover",
+		hoverClass : "drophover"
 	});
 }
 
@@ -184,7 +186,7 @@ function sendTermBrowserAction(term, command) {
 	var params = {
 		action : 'TermBrowserAction',
 		term : term,
-		command : command,
+		command : command
 	};
 	var options = {
 		url : KNOWWE.core.util.getURL(params),
@@ -198,7 +200,7 @@ function sendTermBrowserAction(term, command) {
 				initAllIconHovers();
 				initAllBrowserActionEvents();
 			}
-		},
+		}
 	}
 
 	new _KA(options).send();
@@ -226,7 +228,7 @@ function activateDraggables() {
 	jq$(this).draggable({
 		distance : 20,
 		opacity : 0.55,
-		revert : true,
+		revert : true
 	});
 
 }
@@ -236,7 +238,7 @@ function sendAddedTerm(term, oldTargetID) {
 	var params = {
 		action : 'DragDropEditActionManager',
 		termname : term,
-		targetID : oldTargetID,
+		targetID : oldTargetID
 	};
 	var options = {
 		url : KNOWWE.core.util.getURL(params),
@@ -263,7 +265,7 @@ function sendAddedTerm(term, oldTargetID) {
 					dropEditUpdateFunctions[i]();
 				}
 			}
-		},
+		}
 	}
 
 	new _KA(options).send();
@@ -277,7 +279,7 @@ function rerenderSection(oldTargetID, newTargetID) {
 
 	var params = {
 		action : 'ReRenderContentPartAction',
-		KdomNodeId : newTargetID,
+		KdomNodeId : newTargetID
 	};
 	var options = {
 		url : KNOWWE.core.util.getURL(params),
@@ -317,8 +319,8 @@ function rerenderSection(oldTargetID, newTargetID) {
 							.animateDefaultMarkupMenu(markupBlockNew);
 					ToolMenu.decorateToolMenus(markupBlockNew);
 				}
-			},
-		},
+			}
+		}
 	}
 
 	new _KA(options).send();
