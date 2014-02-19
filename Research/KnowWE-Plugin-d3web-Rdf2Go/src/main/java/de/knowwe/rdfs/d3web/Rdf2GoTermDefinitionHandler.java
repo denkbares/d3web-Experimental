@@ -35,7 +35,6 @@ public class Rdf2GoTermDefinitionHandler extends OntologyHandler<D3webTermDefini
 		if (compilers.isEmpty()) {
 			return Messages.noMessage();
 		}
-
 		D3webCompiler d3webCompiler = compilers.iterator().next();
 
 		NamedObject namedObject = section.get().getTermObject(d3webCompiler, section);
