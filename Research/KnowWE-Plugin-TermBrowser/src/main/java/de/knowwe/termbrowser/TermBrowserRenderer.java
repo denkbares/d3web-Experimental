@@ -18,9 +18,6 @@
  */
 package de.knowwe.termbrowser;
 
-import java.util.Collection;
-import java.util.List;
-
 import de.d3web.collections.PartialHierarchyTree;
 import de.d3web.collections.PartialHierarchyTree.Node;
 import de.d3web.strings.Identifier;
@@ -28,6 +25,9 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 
@@ -175,7 +175,7 @@ public class TermBrowserRenderer {
 					browserSize);
 
 			renderTermTree(string, ratedTermTreeTop, collapsed, linkProvider, master);
-
+			string.appendHtml("</div>");
 		}
 		string.appendHtml("</div>");
 		return string.toStringRaw();
@@ -236,13 +236,6 @@ public class TermBrowserRenderer {
 
 		return result;
 	}
-
-	/**
-	 * 
-	 * @created 12.04.2013
-	 * @param string
-	 * @param subList
-	 */
 	private void renderTermTree(RenderResult string, PartialHierarchyTree<RatedTerm> tree, boolean collapsed, LinkToTermDefinitionProvider linkProvider, String master) {
 
 		String style = "";
@@ -264,11 +257,6 @@ public class TermBrowserRenderer {
 
 	}
 
-	/**
-	 * 
-	 * @created 12.04.2013
-	 * @param rootConcept
-	 */
 	private void renderConceptSubTree(Node<RatedTerm> rootConcept, int level, RenderResult string, LinkToTermDefinitionProvider linkProvider, String master) {
 		string.append("\n"); // append newline into html-code from time to time
 								// to avoid jspwiki bug
