@@ -42,8 +42,12 @@ import de.knowwe.termbrowser.HierarchyProvider;
 public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> {
 
 	protected List<String> categories = new ArrayList<String>();
+	protected List<String> ignoredTerms = new ArrayList<String>();
+
 	protected List<String> relations = null;
 	protected String master = null;
+
+	protected boolean mixedRelationHierarchyMode = false;
 
 	@Override
 	public void setAdditionalHierarchyRelations(List<String> relations) {
@@ -100,11 +104,27 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 			for (URI uri : childrenConcepts2) {
 				String reducedNamespace = Rdf2GoUtils.reduceNamespace(core,
 						Strings.decodeURL(uri.toString()));
-				result.add(new Identifier(reducedNamespace.split(":")));
+				/*
+				 * we check the ignore list and we check whether the term is
+				 * child of itself
+				 */
+				if (!(isIgnored(reducedNamespace)
+				|| termID.equals(new Identifier(reducedNamespace.split(":"))))) {
+					result.add(new Identifier(reducedNamespace.split(":")));
+				}
 			}
 		}
 
 		return result;
+	}
+
+	private boolean isIgnored(String term) {
+		for (String ignoredTerm : ignoredTerms) {
+			if (term.equals(ignoredTerm)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -140,7 +160,18 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 		for (String relation : relations) {
 			boolean is = HierarchyUtils.isSubConceptOf(term1URI, term2URI, new URIImpl(
 					Rdf2GoUtils.expandNamespace(core, relation)), master);
-			if (is) return true;
+			if (is) {
+				return true;
+			}
+			else {
+				if (mixedRelationHierarchyMode) {
+					List<Identifier> children = getChildren(termID2);
+					for (Identifier child : children) {
+						boolean found = isSuccessorOf(termID1, child);
+						if (found) return true;
+					}
+				}
+			}
 		}
 
 		return false;
@@ -207,6 +238,12 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 
 
 		return resultConcepts;
+	}
+
+	@Override
+	public void setIgnoredTerms(List<String> ignoredTerms) {
+		this.ignoredTerms = ignoredTerms;
+
 	}
 
 }

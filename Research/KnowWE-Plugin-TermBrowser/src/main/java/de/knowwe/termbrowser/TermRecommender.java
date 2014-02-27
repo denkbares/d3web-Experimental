@@ -133,7 +133,9 @@ public class TermRecommender implements EventListener {
 			String masta = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
 			List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
 			List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
-			TermBrowserHierarchy hierarchy = new TermBrowserHierarchy(masta, relations, categories);
+			List<String> ignores = TermBrowserMarkup.getCurrentTermbrowserIgnoredTerms(user);
+			TermBrowserHierarchy hierarchy = new TermBrowserHierarchy(masta, relations, categories,
+					ignores);
 			PartialHierarchyTree<RatedTerm> tree = new PartialHierarchyTree<RatedTerm>(hierarchy);
 			Collection<Identifier> startupTerms = hierarchy.getStartupTerms();
 			if(startupTerms != null) {
@@ -266,15 +268,16 @@ public class TermRecommender implements EventListener {
 			UserContext user = ((PageRenderedEvent) event).getUser();
 			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB, title);
 			String master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
-			List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
-			List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
 			RecommendationSet set = null;
 			if (data.containsKey(user.getUserName())) {
 				set = data.get(user.getUserName());
 				set.discount(0.8);
 			}
 			else {
-				set = new RecommendationSet(master, relations, categories);
+				List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
+				List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
+				List<String> ignores = TermBrowserMarkup.getCurrentTermbrowserIgnoredTerms(user);
+				set = new RecommendationSet(master, relations, categories, ignores);
 				data.put(user.getUserName(), set);
 			}
 

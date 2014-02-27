@@ -53,8 +53,8 @@ public class RecommendationSet {
 	/**
 	 * 
 	 */
-	public RecommendationSet(String master, List<String> relations, List<String> categories) {
-		hierarchy = new TermBrowserHierarchy(master, relations, categories);
+	public RecommendationSet(String master, List<String> relations, List<String> categories, List<String> ignores) {
+		hierarchy = new TermBrowserHierarchy(master, relations, categories, ignores);
 		terms = new PartialHierarchyTree<RatedTerm>(hierarchy);
 	}
 
@@ -62,7 +62,8 @@ public class RecommendationSet {
 		String masta = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
 		List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
 		List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
-		return new RecommendationSet(masta, relations, categories);
+		List<String> ignores = TermBrowserMarkup.getCurrentTermbrowserIgnoredTerms(user);
+		return new RecommendationSet(masta, relations, categories, ignores);
 	}
 
 	public void setBrowserIsCollapsed(boolean browserIsCollapsed) {

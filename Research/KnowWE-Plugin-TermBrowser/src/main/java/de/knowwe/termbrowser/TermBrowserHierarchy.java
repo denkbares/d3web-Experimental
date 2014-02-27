@@ -35,23 +35,29 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 
 	private List<String> hierarchyRelations = new ArrayList<String>();
 	private List<String> hierarchyCategories = new ArrayList<String>();
+	private List<String> ignoredTerms = new ArrayList<String>();
 	private String master = null;
 	private final HierarchyProvider<Identifier> hierarchyProvider;
 
 	/**
 	 * 
 	 */
-	public TermBrowserHierarchy(String master, List<String> relations, List<String> categories) {
+	public TermBrowserHierarchy(String master, List<String> relations, List<String> categories, List<String> ignoredTerms) {
 		if(relations != null){
 			hierarchyRelations.addAll(relations);
 		}
 		this.master = master;
 		this.hierarchyCategories = categories;
+		this.ignoredTerms = ignoredTerms;
 		hierarchyProvider = TermBrowserHierarchy.getPluggedHierarchyProvider();
 	}
 
 	public List<String> getHierarchyRelations() {
 		return hierarchyRelations;
+	}
+
+	public List<String> getIgnoredConcepts() {
+		return ignoredTerms;
 	}
 
 	public String getMaster() {
@@ -80,6 +86,7 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 	public List<Identifier> getChildren(Identifier term) {
 		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
 		hierarchyProvider.setCategories(hierarchyCategories);
+		this.hierarchyProvider.setCategories(ignoredTerms);
 		hierarchyProvider.setMaster(master);
 		return hierarchyProvider.getChildren(term);
 	}
@@ -88,6 +95,7 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 	public List<Identifier> getParents(Identifier term) {
 		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
 		hierarchyProvider.setCategories(hierarchyCategories);
+		this.hierarchyProvider.setCategories(ignoredTerms);
 		hierarchyProvider.setMaster(master);
 		return hierarchyProvider.getParents(term);
 	}
@@ -95,6 +103,7 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 	private boolean isSubNodeOf(Identifier term1, Identifier term2) {
 		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
 		hierarchyProvider.setCategories(hierarchyCategories);
+		this.hierarchyProvider.setCategories(ignoredTerms);
 		hierarchyProvider.setMaster(master);
 		return hierarchyProvider.isSuccessorOf(term1, term2);
 	}
@@ -115,6 +124,7 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 	public Collection<Identifier> getAllTerms() {
 		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
 		hierarchyProvider.setCategories(hierarchyCategories);
+		this.hierarchyProvider.setIgnoredTerms(ignoredTerms);
 		hierarchyProvider.setMaster(master);
 		Collection<Identifier> result = hierarchyProvider.getAllTerms();
 		return result;
@@ -139,6 +149,12 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 	@Override
 	public boolean isSuccessorOf(RatedTerm node1, RatedTerm node2) {
 		return isSubNodeOf(node1.getTerm(), node2.getTerm());
+	}
+
+	@Override
+	public void setIgnoredTerms(List<String> ignoredTerms) {
+		this.ignoredTerms = ignoredTerms;
+		this.hierarchyProvider.setCategories(ignoredTerms);
 	}
 
 }

@@ -45,6 +45,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  */
 public class TermBrowserMarkup extends DefaultMarkupType {
 
+	private static final String IGNORE = "ignore";
 	private static final String HIERARCHY = "hierarchy";
 	private static final String CATEGORIES = "categories";
 	private static final String SEARCH_SLOT = "searchslot";
@@ -66,6 +67,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		MARKUP.addAnnotation(HIERARCHY, false);
 		MARKUP.addAnnotation(SIZE, false, Pattern.compile("[0-9]+"));
 		MARKUP.addAnnotation(CATEGORIES, false);
+		MARKUP.addAnnotation(IGNORE, false);
 		MARKUP.addAnnotation(START_CONCEPT, false);
 		MARKUP.addAnnotation(TITLE, false);
 		MARKUP.addAnnotation(SEARCH_SLOT, false, new String[] {
@@ -177,6 +179,10 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 
 	public static List<String> getCurrentTermbrowserMarkupHierarchyCategories(UserContext user) {
 		return getCommaSeparatedAnnotationList(user, CATEGORIES);
+	}
+
+	public static List<String> getCurrentTermbrowserIgnoredTerms(UserContext user) {
+		return getCommaSeparatedAnnotationList(user, IGNORE);
 	}
 
 	/**

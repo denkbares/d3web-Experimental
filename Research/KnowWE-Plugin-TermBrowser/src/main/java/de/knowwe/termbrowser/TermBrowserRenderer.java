@@ -18,6 +18,9 @@
  */
 package de.knowwe.termbrowser;
 
+import java.util.Collection;
+import java.util.List;
+
 import de.d3web.collections.PartialHierarchyTree;
 import de.d3web.collections.PartialHierarchyTree.Node;
 import de.d3web.strings.Identifier;
@@ -25,9 +28,6 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * 
@@ -56,7 +56,8 @@ public class TermBrowserRenderer {
 
 		List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
 		List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
-		hierarchy = new TermBrowserHierarchy(master, relations, categories);
+		List<String> ignores = TermBrowserMarkup.getCurrentTermbrowserIgnoredTerms(user);
+		hierarchy = new TermBrowserHierarchy(master, relations, categories, ignores);
 
 	}
 
@@ -419,7 +420,10 @@ public class TermBrowserRenderer {
 				}
 			}
 			else {
-				insertExpandButton(string, divStyle);
+				if (!(hierarchy.getChildren(term.getData().getTerm()).size() == 0)) {
+					
+					insertExpandButton(string, divStyle);
+				}
 			}
 		}
 		string.appendHtml("</tr></table>");

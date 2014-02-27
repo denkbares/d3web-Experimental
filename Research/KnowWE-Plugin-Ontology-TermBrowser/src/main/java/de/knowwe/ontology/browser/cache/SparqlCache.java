@@ -33,7 +33,13 @@ public class SparqlCache {
 			List<URI> resultSet = new ArrayList<URI>();
 			for (QueryRow queryRow : resultTable) {
 				Node value = queryRow.getValue(variable);
-				resultSet.add(value.asURI());
+				try {
+					URI uri = value.asURI();
+					resultSet.add(uri);
+				}
+				catch (ClassCastException e) {
+					// if it's not any URI (e.g. BlankNode) we ignore the node
+				}
 			}
 			selectQueryData.put(query, resultSet);
 			return resultSet;

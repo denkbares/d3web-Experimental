@@ -45,6 +45,17 @@ public interface HierarchyProvider<T> extends PartialHierarchy<T> {
 	void setCategories(List<String> categories);
 
 	/**
+	 * Sets a list of term categories that will be used to filter the terms that
+	 * occur in the termbrowser
+	 * 
+	 * (categories for instance can be specified by the user in markup)
+	 * 
+	 * @created 20.11.2013
+	 * @param categories
+	 */
+	void setIgnoredTerms(List<String> ignoredTerms);
+
+	/**
 	 * Filters the set of terms according to the filter categories set in
 	 * setCategories().
 	 * 
