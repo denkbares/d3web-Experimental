@@ -66,7 +66,7 @@ public abstract class KBObjectsTest extends KBTest {
 		if (errorObjects.size() > 0) {
 			Collections.sort(errorObjects, new NamedObjectComparator());
 			String error = formatErrorMessage(errorObjects, args);
-			return D3webTestUtils.createErrorMessage(errorObjects,
+			return D3webTestUtils.createFailure(errorObjects,
 					error);
 		}
 		else {

@@ -68,7 +68,7 @@ public abstract class DiaFluxTest extends KBTest {
 			List<Flow> sortedFlows = new ArrayList<Flow>(erroneousFlows);
 			Collections.sort(sortedFlows, new NamedObjectComparator());
 			String error = formatErrorMessage(sortedFlows, args);
-			return D3webTestUtils.createErrorMessage(sortedFlows, error);
+			return D3webTestUtils.createFailure(sortedFlows, error);
 		}
 		else {
 			return new Message(Type.SUCCESS);

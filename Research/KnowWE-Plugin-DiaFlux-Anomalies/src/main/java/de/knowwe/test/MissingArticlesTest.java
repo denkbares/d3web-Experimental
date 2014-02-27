@@ -31,7 +31,7 @@ import de.d3web.testing.AbstractTest;
 import de.d3web.testing.Message;
 import de.d3web.testing.TestParameter.Mode;
 import de.d3web.testing.TestParameter.Type;
-import de.d3web.testing.Utils;
+import de.d3web.testing.TestingUtils;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
@@ -118,12 +118,12 @@ public class MissingArticlesTest extends AbstractTest<ArticleManager> {
 
 		List<String> erroneousArticles = new LinkedList<String>();
 		List<String> missingArticles = new LinkedList<String>();
-		Collection<Pattern> ignorePatterns = Utils.compileIgnores(ignores);
+		Collection<Pattern> ignorePatterns = TestingUtils.compileIgnores(ignores);
 
 		for (Section<LinkType> link : missingLinks) {
 			String containingArticle = link.getTitle();
 			String missingArticle = LinkType.getLink(link);
-			if (Utils.isIgnored(missingArticle, ignorePatterns)) continue;
+			if (TestingUtils.isIgnored(missingArticle, ignorePatterns)) continue;
 
 			if (!erroneousArticles.contains(containingArticle)) erroneousArticles.add(containingArticle);
 			if (!missingArticles.contains(missingArticle)) missingArticles.add(missingArticle);
@@ -142,8 +142,8 @@ public class MissingArticlesTest extends AbstractTest<ArticleManager> {
 		}
 		bob.append("\nThose are referenced on the following articles:");
 
-		return Utils.createErrorMessage(erroneousArticles,
-				bob.toString(), Article.class);
+		return TestingUtils.createFailure(bob.toString(), erroneousArticles,
+				Article.class);
 	}
 
 	/**

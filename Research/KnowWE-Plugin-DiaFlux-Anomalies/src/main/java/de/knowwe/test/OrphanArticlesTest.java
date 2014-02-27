@@ -31,7 +31,7 @@ import de.d3web.testing.AbstractTest;
 import de.d3web.testing.Message;
 import de.d3web.testing.TestParameter.Mode;
 import de.d3web.testing.TestParameter.Type;
-import de.d3web.testing.Utils;
+import de.d3web.testing.TestingUtils;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
@@ -89,7 +89,7 @@ public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 
 		titles.removeAll(ROOTS);
 
-		titles = Utils.filterIgnored(titles, Utils.compileIgnores(ignores));
+		titles = TestingUtils.filterIgnored(titles, TestingUtils.compileIgnores(ignores));
 
 		if (titles.isEmpty()) return Message.SUCCESS;
 
@@ -110,8 +110,8 @@ public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 
 		if (result.isEmpty()) return Message.SUCCESS;
 
-		return Utils.createErrorMessage(result,
-				"The following articles are not reachable by links: ", Article.class);
+		return TestingUtils.createFailure("The following articles are not reachable by links: ", result,
+				Article.class);
 	}
 
 	protected static boolean checkBooleanArg(String[] args, int index) {
@@ -122,7 +122,7 @@ public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 		Collection<Article> result = new LinkedList<Article>();
 
 		for (Article article : allArticles) {
-			if (!Utils.isIgnored(article.getTitle(), ignorePatterns)) result.add(article);
+			if (!TestingUtils.isIgnored(article.getTitle(), ignorePatterns)) result.add(article);
 		}
 		return result;
 
