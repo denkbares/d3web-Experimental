@@ -41,11 +41,12 @@ public class SimpleScoreTable extends AbstractType {
 
 			@Override
 			public void render(Section<?> section, UserContext user,
-					RenderResult string) {
+							   RenderResult string) {
+				string.appendHtmlTag("div", "style", "overflow-x: scroll");
 				string.appendHtml("<table class='wikitable' border='1' style='margin-right: 50px'>");
 				DelegateRenderer.getInstance().render(section, user, string);
 				string.appendHtml("</table>");
-
+				string.appendHtmlTag("/div");
 			}
 		});
 	}

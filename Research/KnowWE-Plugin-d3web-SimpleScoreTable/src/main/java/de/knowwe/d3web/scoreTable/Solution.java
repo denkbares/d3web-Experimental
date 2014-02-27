@@ -23,7 +23,10 @@
 package de.knowwe.d3web.scoreTable;
 
 import de.d3web.we.object.SolutionReference;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.kdom.renderer.StyleRenderer;
+import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public class Solution extends SolutionReference {
 
@@ -31,8 +34,13 @@ public class Solution extends SolutionReference {
 
 
 		setSectionFinder(new AllTextFinderTrimmed());
+		Renderer solutionRenderer = StyleRenderer.SOLUTION;
+		if (solutionRenderer instanceof ToolMenuDecoratingRenderer) {
+			Renderer decoratedRenderer = ((ToolMenuDecoratingRenderer) solutionRenderer).getDecoratedRenderer();
+			solutionRenderer = new ToolMenuDecoratingRenderer(decoratedRenderer);
+		}
+		this.setRenderer(solutionRenderer);
 
-		//setCustomRenderer(new GenericHTMLRenderer<Solution>("span", new String[] {"style", "color: grey;", "title", "Solution"}));
 	}
 
 }
