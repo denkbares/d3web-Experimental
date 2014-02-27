@@ -121,4 +121,10 @@ public class WissassHierarchyProvider implements HierarchyProvider<Identifier> {
 		// we do not filter for now
 		return terms;
 	}
+
+	@Override
+	public void setIgnoredTerms(List<String> ignoredTerms) {
+		// we do not filter for now
+
+	}
 }
