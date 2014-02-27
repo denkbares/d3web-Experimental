@@ -31,7 +31,6 @@ import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.core.knowledge.InfoStore;
 import de.d3web.core.knowledge.terminology.NamedObject;
-import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.we.knowledgebase.D3webCompiler;
 import de.knowwe.core.compile.Compilers;
@@ -51,7 +50,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
  * Adds selected properties to the Rdf2GoCore..
- * 
+ *
  * @author Albrecht Striffler
  * @created 26.06.2013
  */
@@ -74,8 +73,7 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 			return Messages.asList();
 		}
 		Property<?> property = propertySection.get().getProperty(propertySection);
-		if (property == null
-				|| !(property.equals(MMInfo.DESCRIPTION) || property.equals(MMInfo.PROMPT) || property.equals(MMInfo.LINK))) {
+		if (property == null) {
 			return Messages.asList();
 		}
 
