@@ -252,4 +252,10 @@ public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 		return terms;
 	}
 
+	@Override
+	public void setIgnoredTerms(List<String> ignoredTerms) {
+		// we dont have ignored terms
+
+	}
+
 }
