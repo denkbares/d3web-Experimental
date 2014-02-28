@@ -130,7 +130,6 @@ public class Utils {
 	 * in the future.
 	 * 
 	 * @created 12.11.2011
-	 * @param article
 	 * @param sec
 	 * @param user
 	 * @return
@@ -143,7 +142,7 @@ public class Utils {
 
 		for (Tool t : tools) {
 			String icon = t.getIconPath();
-			String jsAction = t.getJSAction();
+			String jsAction = t.getAction();
 			boolean hasIcon = icon != null && !icon.trim().isEmpty();
 
 			string.append("<span class=\"" + t.getClass().getSimpleName() + "\" >"
@@ -151,7 +150,7 @@ public class Utils {
 					+ (jsAction == null ? "span" : "a")
 					+ " class=\"markupMenuItem\""
 					+ (jsAction != null
-							? " href=\"javascript:" + t.getJSAction() + ";undefined;\""
+							? " href=\"javascript:" + t.getAction() + ";undefined;\""
 							: "") +
 					" title=\"" + t.getDescription() + "\">" +
 					(hasIcon ? ("<img src=\"" + icon + "\" />") : "") +

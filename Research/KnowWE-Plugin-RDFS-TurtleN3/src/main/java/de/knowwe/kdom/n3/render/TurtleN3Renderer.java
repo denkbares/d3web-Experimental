@@ -39,7 +39,7 @@ public class TurtleN3Renderer implements Renderer {
 
 		for (Tool t : tools) {
 			String icon = t.getIconPath();
-			String jsAction = t.getJSAction();
+			String jsAction = t.getAction();
 			boolean hasIcon = icon != null && !icon.trim().isEmpty();
 
 			string.append("<span class=\"" + t.getClass().getSimpleName() + "\" >"
@@ -47,7 +47,7 @@ public class TurtleN3Renderer implements Renderer {
 					+ (jsAction == null ? "span" : "a")
 					+ " class=\"markupMenuItem\""
 					+ (jsAction != null
-							? " href=\"javascript:" + t.getJSAction() + ";undefined;\""
+							? " href=\"javascript:" + t.getAction() + ";undefined;\""
 							: "") +
 					" title=\"" + t.getDescription() + "\">" +
 					(hasIcon ? ("<img src=\"" + icon + "\" />") : "") +
