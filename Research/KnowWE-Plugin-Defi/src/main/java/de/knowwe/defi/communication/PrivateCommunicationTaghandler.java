@@ -48,7 +48,7 @@ public class PrivateCommunicationTaghandler extends AbstractTagHandler {
 		}
 
 		if (forum == null) numberOfNewEntries = 0;
-		else numberOfNewEntries = DiscussionUtils.getNumberOfNewEntries(forum,
+		else numberOfNewEntries = DiscussionUtils.getNumberOfNewEntriesInForum(forum,
 				context.getUserName());
 
 		if (numberOfNewEntries != 0) html.append("<div class='privatecom' style='border-right: 30px solid green'>");

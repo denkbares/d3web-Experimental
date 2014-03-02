@@ -1,4 +1,5 @@
-<%@page import="de.knowwe.defi.readbutton.ReadbuttonUtilities"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ResourceBundle"%>
 <%@page import="de.knowwe.core.Environment"%>
@@ -8,12 +9,17 @@
 <%@page import="java.util.HashMap"%>
 <%@ page import="com.ecyrd.jspwiki.*"%>
 <%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
+<%@page import="de.knowwe.core.event.EventManager"%>
 <%@page import="de.knowwe.core.kdom.parsing.Section"%>
-<%@page import="de.knowwe.core.kdom.parsing.Sections" %>
+<%@page import="de.knowwe.core.kdom.parsing.Sections"%>
 <%@page import="de.knowwe.core.kdom.Article"%>
 <%@ page import="de.knowwe.defi.*"%>
-<%@page import="de.knowwe.defi.utils.DefiUtils"%><fmt:setLocale
-	value="${prefs.Language}" />
+<%@page import="de.knowwe.defi.forum.DiscussionUtils"%>
+<%@page import="de.knowwe.defi.readbutton.ReadbuttonUtilities"%>
+<%@page import="de.knowwe.defi.utils.DefiUtils"%>
+<%@page import="de.knowwe.defi.event.DefiPageEvent"%>
+
+<fmt:setLocale value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default" />
 <%
 	final String WELCOME_PAGE = "Startseite";
@@ -23,15 +29,15 @@
 	WikiContext c = WikiContext.findContext(pageContext);
 	String frontpage = c.getEngine().getFrontPage();
 	JSPWikiUserContext user = new JSPWikiUserContext(c, new HashMap<String, String>());
-	JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(
-	Environment.getInstance().getContext(), null));
+	JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(Environment.getInstance().getContext(), null));
+	EventManager.getInstance().fireEvent(new DefiPageEvent(user.getUserName(), user.getTitle()));
 	String[] activeUsers = wc.getAllActiveUsers();
-	boolean beraterOnline = false;
-	String berater = ResourceBundle.getBundle("KnowWE_Defi_config").getString(
-	"defi.berater");
-	for (String s : activeUsers) {
-		if (s.equals(berater)) beraterOnline = true;
-	}
+	String berater = ResourceBundle.getBundle("KnowWE_Defi_config").getString("defi.berater");
+	List<String> activeUserList = Arrays.asList(activeUsers);
+	String therapistImg = activeUserList.contains(berater) ? "KnowWEExtension/images/berater_farbig.jpg" : "KnowWEExtension/images/berater_grau.jpg";
+
+	// new message?
+	String groupImg = DiscussionUtils.userHasNewMessage(user.getUserName()) ? "KnowWEExtension/images/GruppeNeueNachricht.png" : "KnowWEExtension/images/Gruppe.png";
 	
 	// if user has visited welcomepage, redirect him to welcomepage_firsttime
 	boolean welcomePage_firstTime = false;
@@ -45,10 +51,12 @@ if(welcomePage_firstTime) {
 	if(!document.URL.match(/Login.jsp/))
 		window.location.href = "Wiki.jsp?page=<%=WELCOME_PAGE_FIRSTTIME%>";
 </script>
-<% } %>
+<%
+	}
+%>
 
 <div id="header">
-	
+
 	<div class="titlebox">
 		<wiki:InsertPage page="TitleBox" />
 	</div>
@@ -58,32 +66,32 @@ if(welcomePage_firstTime) {
 			title="<fmt:message key='actions.home.title' ><fmt:param><%=frontpage%></fmt:param></fmt:message> ">
 			<!--<fmt:message key='actions.home' />--> <img
 			src="KnowWEExtension/images/Logo_icd-forum.gif" height="101px"
-			width="143px" alt="ICD-Forum Logo" /> ICD-Forum </a>
+			width="143px" alt="ICD-Forum Logo" /> ICD-Forum
+		</a>
 	</div>
 
 	<div class="companylogo"></div>
 
-		<div class="infobox">
-			<span>Kontakt-Funktionen</span>
-			<div>
-				<a href=""  onclick="newChat('<%= berater %>', '<%= user.getUserName() %>');return false" class="infobox_link" onmouseover="document.getElementById('infobox1').style.backgroundColor = '#eeeeee';" onmouseout="document.getElementById('infobox1').style.backgroundColor = '#F9F9F9';">
-				<img src="KnowWEExtension/images/
-				<% if (beraterOnline) { %>
-					berater_farbig.jpg
-				<% } else { %>
-					berater_grau.jpg
-				<% } %>
-				" height="92px" width="70px" alt="Berater" style="margin:9px 0 0 0;" />
+	<div class="infobox">
+		<span>Kontakt-Funktionen</span>
+		<div>
+			<a href="" onclick="newChat('<%=berater%>', '<%=user.getUserName()%>');return false" class="infobox_link"
+				onmouseover="document.getElementById('infobox1').style.backgroundColor = '#eeeeee';"
+				onmouseout="document.getElementById('infobox1').style.backgroundColor = '#F9F9F9';">
+				<img src="<%= therapistImg %>" height="92px" width="70px" alt="Berater" style="margin: 9px 0 0 0;" />
 				<span id="infobox1">Berater Dr. Schulz</span>
-				</a>
-			</div>
-			<div>
-				<a href="Wiki.jsp?page=Diskussion" class="infobox_link" onmouseover="document.getElementById('infobox2').style.backgroundColor = '#eeeeee';" onmouseout="document.getElementById('infobox2').style.backgroundColor = '#F9F9F9';"><img
-				src="KnowWEExtension/images/Gruppe.png" height="100px" width="133px"
-				alt="Gruppe" style="margin:3px 0 -2px 0;" />
-				<span style="margin:0 0 0 0;" id="infobox2">Diskussion</span></a>
-			</div>
+			</a>
 		</div>
+		<div>
+			<a href="Wiki.jsp?page=Diskussion" class="infobox_link"
+				onmouseover="document.getElementById('infobox2').style.backgroundColor = '#eeeeee';"
+				onmouseout="document.getElementById('infobox2').style.backgroundColor = '#F9F9F9';">
+				<img src="<%= groupImg %>" height="100px" width="133px" 
+					alt="Gruppe" style="margin: 3px 0 -2px 0;" /> 
+				<span style="margin: 0 0 0 0;" id="infobox2">Diskussion</span>
+			</a>
+		</div>
+	</div>
 
 	<wiki:Include page="UserBox.jsp" />
 

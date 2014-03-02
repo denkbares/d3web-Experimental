@@ -20,7 +20,6 @@ package de.knowwe.defi.forum;
 
 import java.security.Principal;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -35,13 +34,11 @@ import de.d3web.strings.Strings;
 import de.knowwe.comment.forum.Forum;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.defi.aboutMe.AboutMe;
 import de.knowwe.defi.menu.MenuUtilities;
 import de.knowwe.jspwiki.JSPWikiConnector;
@@ -100,7 +97,7 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 		}
 
 		// Foren zuordnen
-		for (Section<? extends Forum> forum : getAllForums()) {
+		for (Section<? extends Forum> forum : DiscussionUtils.getAllForums()) {
 			Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(forum);
 			String unit = mapFor.get("unit");
 
@@ -143,7 +140,7 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 			else {
 				tmp.append("<tr><td>" + unitName + buildFormButton(unitName) + "<ul>");
 				for (Section<? extends Forum> forum : units) {
-					int newEntries = DiscussionUtils.getNumberOfNewEntries(forum, user);
+					int newEntries = DiscussionUtils.getNumberOfNewEntriesInForum(forum, user);
 					Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(forum);
 					if (unitName.equals(mapFor.get("unit"))) {
 						tmp.append("<li><a href='Wiki.jsp?page="
@@ -201,7 +198,7 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 					break;
 				}
 			}
-			if (forum != null && DiscussionUtils.getNumberOfNewEntries(forum, userName) != 0) newEntry = true;
+			if (forum != null && DiscussionUtils.getNumberOfNewEntriesInForum(forum, userName) > 0) newEntry = true;
 
 			// Baue Zeile für User
 			tmp.append(buildChatRow(online, user, names, newEntry));
@@ -255,7 +252,7 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 			Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(forum);
 			tmp.append("<li><a href='Wiki.jsp?page=" + Strings.encodeURL(forum.getTitle()) + "'>"
 					+ mapFor.get("topic") + "</a>");
-			int newEntries = DiscussionUtils.getNumberOfNewEntries(forum, user);
+			int newEntries = DiscussionUtils.getNumberOfNewEntriesInForum(forum, user);
 			if (newEntries != 0) newEntry = true;
 			tmp.append(getNewEntriesSpan(newEntries));
 			tmp.append("</li>");
@@ -346,24 +343,6 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 		return online
 				? "<span class='online'>online</span>"
 				: "<span class='offline'>offline</span>";
-	}
-
-	/**
-	 * Hole alle Foren aus den Artikeln.
-	 */
-	private List<Section<? extends Forum>> getAllForums() {
-		List<Section<? extends Forum>> forums = new LinkedList<Section<? extends Forum>>();
-		Iterator<Article> it = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB).getArticleIterator();
-
-		while (it.hasNext()) {
-			for (Section<? extends Type> sec : Sections.getSubtreePreOrder(it.next().getRootSection())) {
-				Section<? extends Forum> forum = Sections.findSuccessor(sec, Forum.class);
-				if (forum != null && !forums.contains(forum)) forums.add(forum);
-			}
-
-		}
-
-		return forums;
 	}
 
 	/**
