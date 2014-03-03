@@ -53,11 +53,11 @@ public class OneOfBracedConditionContent extends NonTerminalCondition {
 			String trimmed = text.trim();
 			int leadingSpaces = text.indexOf(trimmed);
 			if (trimmed.startsWith(Character.toString(OneOfBracedCondition.CURLY_BRACKET_OPEN))) {
-				int closingBracket = Strings.findIndexOfClosingBracket(trimmed, 0,
+				int closingBracket = Strings.indexOfClosingBracket(trimmed, 0,
 						OneOfBracedCondition.CURLY_BRACKET_OPEN,
 						OneOfBracedCondition.CURLY_BRACKET_CLOSED);
 
-				return SectionFinderResult.createSingleItemList(new SectionFinderResult(
+				return SectionFinderResult.singleItemList(new SectionFinderResult(
 						leadingSpaces + 1, closingBracket));
 
 			}

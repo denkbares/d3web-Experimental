@@ -22,7 +22,7 @@ package de.knowwe.kdom.manchester;
 import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
 import de.knowwe.kdom.manchester.frame.DataPropertyFrame;
@@ -85,7 +85,7 @@ public class ManchesterMarkup extends AbstractType {
 		private static ManchesterMarkupContentType instance = null;
 
 		protected ManchesterMarkupContentType() {
-			this.setSectionFinder(AllTextSectionFinder.getInstance());
+			this.setSectionFinder(AllTextFinder.getInstance());
 
 			this.addChildType(new ClassFrame());
 			this.addChildType(new IndividualFrame());

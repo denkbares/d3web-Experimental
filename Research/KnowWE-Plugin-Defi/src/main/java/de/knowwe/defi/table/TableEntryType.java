@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -62,7 +62,7 @@ class TableEntryContentType extends AbstractType {
 
 	public TableEntryContentType() {
 		this.addChildType(new VersionEntry());
-		this.setSectionFinder(AllTextSectionFinder.getInstance());
+		this.setSectionFinder(AllTextFinder.getInstance());
 	}
 }
 

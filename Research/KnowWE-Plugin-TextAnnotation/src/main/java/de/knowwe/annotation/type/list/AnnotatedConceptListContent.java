@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 import de.knowwe.annotation.type.AnnotatedConceptsType;
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquotedNonEmpty;
 
@@ -50,7 +50,7 @@ public class AnnotatedConceptListContent extends AbstractType {
 		 * 
 		 */
 		public ListSeparatorType() {
-			this.setSectionFinder(AllTextSectionFinder.getInstance());
+			this.setSectionFinder(AllTextFinder.getInstance());
 		}
 	}
 

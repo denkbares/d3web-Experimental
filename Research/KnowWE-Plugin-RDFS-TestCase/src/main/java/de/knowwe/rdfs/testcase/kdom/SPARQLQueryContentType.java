@@ -19,8 +19,8 @@
 package de.knowwe.rdfs.testcase.kdom;
 
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.n3.TurtleObjectBlankNode;
@@ -60,7 +60,7 @@ public class SPARQLQueryContentType extends AbstractType {
 		iri.setSectionFinder(new AllTextFinderTrimmed());
 		addChildType(iri);
 
-		setSectionFinder(AllTextSectionFinder.getInstance());
+		setSectionFinder(AllTextFinder.getInstance());
 	}
 
 }

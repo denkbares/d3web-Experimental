@@ -68,7 +68,7 @@ class OneOfExpressionFinder implements SectionFinder {
 		int leadingSpaces = text.indexOf(trimmed);
 		int followingSpaces = text.length() - trimmed.length() - leadingSpaces;
 		boolean startsWithOpen = trimmed.startsWith(Character.toString(OneOfBracedCondition.CURLY_BRACKET_OPEN));
-		int closingBracket = Strings.findIndexOfClosingBracket(trimmed, 0,
+		int closingBracket = Strings.indexOfClosingBracket(trimmed, 0,
 				OneOfBracedCondition.CURLY_BRACKET_OPEN, OneOfBracedCondition.CURLY_BRACKET_CLOSED);
 
 		// if it doesnt start with an opening bracket
@@ -92,7 +92,7 @@ class OneOfExpressionFinder implements SectionFinder {
 				&& trimmed.endsWith(Character.toString(OneOfBracedCondition.CURLY_BRACKET_CLOSED))) {
 			// and the ending ')' needs to close the opening
 			if (closingBracket == trimmed.length() - 1) {
-				return SectionFinderResult.createSingleItemList(new SectionFinderResult(
+				return SectionFinderResult.singleItemList(new SectionFinderResult(
 						leadingSpaces, text.length() - followingSpaces));
 			}
 
@@ -108,7 +108,7 @@ class OneOfExpressionFinder implements SectionFinder {
 				// TODO fix: < 3 is inaccurate
 				// better check that there is no other expression in between
 				if (lastEndLineCommentSymbol - closingBracket < 3) {
-					return SectionFinderResult.createSingleItemList(new SectionFinderResult(
+					return SectionFinderResult.singleItemList(new SectionFinderResult(
 							leadingSpaces, text.length()));
 				}
 			}

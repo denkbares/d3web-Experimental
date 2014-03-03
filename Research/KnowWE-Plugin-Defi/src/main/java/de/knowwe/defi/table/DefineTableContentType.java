@@ -19,12 +19,12 @@
 package de.knowwe.defi.table;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
 
 public class DefineTableContentType extends AbstractType {
 	
 	public DefineTableContentType(){
-		this.setSectionFinder(AllTextSectionFinder.getInstance());
+		this.setSectionFinder(AllTextFinder.getInstance());
 		this.addChildType(new TableTemplateType());
 		
 	}

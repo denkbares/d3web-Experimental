@@ -20,7 +20,7 @@ package de.knowwe.rdfs.wikiObjectModel.types;
 
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.kdom.sectionFinder.OneOfStringEnumFinderExact;
+import de.knowwe.kdom.sectionFinder.OneOfStringFinderExact;
 import de.knowwe.rdfs.IRITermRef;
 import de.knowwe.rdfs.wikiObjectModel.Utils;
 
@@ -39,7 +39,7 @@ public class LocalConceptReference extends IRITermRef {
 	 * 
 	 */
 	public LocalConceptReference() {
-		this.setSectionFinder(new OneOfStringEnumFinderExact(THIS_KEYS));
+		this.setSectionFinder(new OneOfStringFinderExact(THIS_KEYS));
 	}
 
 	@Override

@@ -90,7 +90,7 @@ public class SectionHeaderObjectDefinition extends AbstractIRITermDefinition {
 				index++;
 				headerText = headerText.substring(1);
 			}
-			return SectionFinderResult.createSingleItemResultList(index, text.length());
+			return SectionFinderResult.singleItemList(index, text.length());
 		}
 
 	}

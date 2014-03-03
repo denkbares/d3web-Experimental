@@ -23,7 +23,7 @@
 package de.knowwe.kdom.n3;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
 
 public class TurtleMarkupN3Content extends AbstractType {
 
@@ -33,7 +33,7 @@ public class TurtleMarkupN3Content extends AbstractType {
 		TurtleMarkupN3Content.instance = this;
 		this.addChildType(new TurtleSubjectSection());
 		this.addChildType(new TurtlePredSentence());
-		setSectionFinder(AllTextSectionFinder.getInstance());
+		setSectionFinder(AllTextFinder.getInstance());
 
 		// setCustomRenderer(new
 		// GenericHTMLRenderer<TurtleMarkupN3Content>("span",

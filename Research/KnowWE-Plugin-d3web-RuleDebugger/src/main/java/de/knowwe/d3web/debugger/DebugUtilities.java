@@ -31,7 +31,7 @@ import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
 import de.d3web.we.kdom.rules.RuleCompileScript;
-import de.d3web.we.kdom.rules.action.RuleAction;
+import de.d3web.we.kdom.rules.RuleType;
 import de.d3web.we.knowledgebase.D3webCompiler;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.Compilers;
@@ -155,11 +155,11 @@ public class DebugUtilities {
 	/**
 	 * Get the path to the rule's article.
 	 */
-	public static Section<RuleAction> getRuleResource(Rule r, Session session) {
+	public static Section<RuleType> getRuleResource(Rule r, Session session) {
 		KnowledgeBase kb = session.getKnowledgeBase();
 		D3webCompiler ruleCompiler = null;
 		Rule rule;
-		List<Section<RuleAction>> rules;
+		List<Section<RuleType>> rules;
 
 		// get the knowledgebase's article
 		Collection<D3webCompiler> compilers = Compilers.getCompilers(
@@ -174,8 +174,8 @@ public class DebugUtilities {
 		for (Article article : Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB).getArticles()) {
 
-			rules = Sections.findSuccessorsOfType(article.getRootSection(), RuleAction.class);
-			for (Section<RuleAction> ruleAction : rules) {
+			rules = Sections.findSuccessorsOfType(article.getRootSection(), RuleType.class);
+			for (Section<RuleType> ruleAction : rules) {
 
 				rule = (Rule) KnowWEUtils.getStoredObject(ruleCompiler, ruleAction,
 						RuleCompileScript.RULE_STORE_KEY);

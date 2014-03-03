@@ -81,7 +81,7 @@ class BracedExpressionFinder implements SectionFinder {
 		String trimmed = text.trim();
 		boolean startsWithOpen = trimmed.startsWith(Character.toString(BraceElement.OPEN));
 
-		int closingBracket = Strings.findIndexOfClosingBracket(trimmed, 0,
+		int closingBracket = Strings.indexOfClosingBracket(trimmed, 0,
 				BraceElement.OPEN, BraceElement.CLOSED);
 
 		// text does not start with open brace, return null
@@ -108,7 +108,7 @@ class BracedExpressionFinder implements SectionFinder {
 		if (startsWithOpen && trimmed.endsWith(Character.toString(BraceElement.CLOSED))) {
 			// and the ending ')' needs to close the opening
 			if (closingBracket == trimmed.length() - 1) {
-				return SectionFinderResult.createSingleItemList(new SectionFinderResult(
+				return SectionFinderResult.singleItemList(new SectionFinderResult(
 						leadingSpaces, text.length() - followingSpaces));
 			}
 
@@ -124,7 +124,7 @@ class BracedExpressionFinder implements SectionFinder {
 				// TODO fix: < 3 is inaccurate
 				// better check that there is no other expression in between
 				if (lastEndLineCommentSymbol - closingBracket < 3) {
-					return SectionFinderResult.createSingleItemList(new SectionFinderResult(
+					return SectionFinderResult.singleItemList(new SectionFinderResult(
 							leadingSpaces, text.length()));
 				}
 			}

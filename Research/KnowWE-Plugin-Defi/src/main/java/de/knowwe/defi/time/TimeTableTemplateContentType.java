@@ -22,14 +22,14 @@ import de.knowwe.core.compile.DefaultGlobalCompiler;
 import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
 import de.knowwe.core.report.CompilerMessage;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 
 public class TimeTableTemplateContentType extends AbstractType {
 
 	public TimeTableTemplateContentType() {
-		this.setSectionFinder(AllTextSectionFinder.getInstance());
+		this.setSectionFinder(AllTextFinder.getInstance());
 		this.addChildType(new TimeTableLine());
 	}
 
@@ -45,7 +45,7 @@ public class TimeTableTemplateContentType extends AbstractType {
 class NumberOfDaysT extends AbstractType {
 
 	public NumberOfDaysT() {
-		this.setSectionFinder(AllTextSectionFinder.getInstance());
+		this.setSectionFinder(AllTextFinder.getInstance());
 		this.addCompileScript(new NumberOfDaysChecker());
 	}
 

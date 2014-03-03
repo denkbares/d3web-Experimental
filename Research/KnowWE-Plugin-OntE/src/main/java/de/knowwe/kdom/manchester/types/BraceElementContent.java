@@ -58,11 +58,11 @@ public class BraceElementContent extends NonTerminalCondition {
 			String trimmed = text.trim();
 			int leadingSpaces = text.indexOf(trimmed);
 			if (trimmed.startsWith(Character.toString(OPEN))) {
-				int closingBracket = Strings.findIndexOfClosingBracket(trimmed, 0,
-							OPEN, CLOSED);
+				int closingBracket = Strings.indexOfClosingBracket(trimmed, 0,
+						OPEN, CLOSED);
 
-				return SectionFinderResult.createSingleItemList(new SectionFinderResult(
-							leadingSpaces + 1, closingBracket));
+				return SectionFinderResult.singleItemList(new SectionFinderResult(
+						leadingSpaces + 1, closingBracket));
 
 			}
 			return null;

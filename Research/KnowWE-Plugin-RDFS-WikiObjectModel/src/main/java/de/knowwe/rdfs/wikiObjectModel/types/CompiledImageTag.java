@@ -33,7 +33,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.jspwiki.types.ImageType;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -55,7 +55,7 @@ public class CompiledImageTag extends AbstractKnowledgeUnitType<CompiledImageTag
 		this.setCompileScript(new ImageCompileScript());
 
 		// is plugged as only child into ImageType which does the parsing
-		this.setSectionFinder(AllTextSectionFinder.getInstance());
+		this.setSectionFinder(AllTextFinder.getInstance());
 
 		this.addChildType(new ImageTypeContent());
 	}

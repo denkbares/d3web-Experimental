@@ -19,7 +19,7 @@
  */
 package de.knowwe.rdfs.subclassingTree;
 
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
 import de.knowwe.kdom.dashtree.DashTree;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
 
@@ -27,7 +27,7 @@ public class HierarchyDashtree extends DashTree {
 
 	public HierarchyDashtree(DashTreeElementContent contentType) {
 		replaceDashTreeElementContentType(contentType);
-		this.setSectionFinder(AllTextSectionFinder.getInstance());
+		this.setSectionFinder(AllTextFinder.getInstance());
 	}
 
 }

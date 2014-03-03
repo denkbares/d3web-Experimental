@@ -25,14 +25,14 @@ import de.knowwe.core.compile.DefaultGlobalCompiler;
 import de.knowwe.core.compile.DefaultGlobalCompiler.DefaultGlobalScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
 import de.knowwe.core.report.CompilerMessage;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 
 public class TimeTableContentType extends AbstractType {
 
 	public TimeTableContentType() {
-		this.setSectionFinder(AllTextSectionFinder.getInstance());
+		this.setSectionFinder(AllTextFinder.getInstance());
 
 		this.addChildType(new TimeTableLine());
 	}
@@ -52,7 +52,7 @@ class DateT extends AbstractType {
 			"dd.MM.yyyy");
 
 	public DateT() {
-		this.setSectionFinder(AllTextSectionFinder.getInstance());
+		this.setSectionFinder(AllTextFinder.getInstance());
 		this.addCompileScript(new DateChecker());
 	}
 

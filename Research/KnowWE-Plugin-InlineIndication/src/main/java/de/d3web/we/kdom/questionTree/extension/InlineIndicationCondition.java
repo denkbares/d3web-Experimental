@@ -87,7 +87,7 @@ public class InlineIndicationCondition extends AbstractType {
 			if (matcher.find()) {
 				int start = matcher.start();
 				int end = Strings.lastIndexOfUnquoted(text, END_KEY);
-				return SectionFinderResult.createSingleItemList(new SectionFinderResult(start,
+				return SectionFinderResult.singleItemList(new SectionFinderResult(start,
 						end + 1));
 			}
 			return null;

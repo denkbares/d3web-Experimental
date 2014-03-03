@@ -33,8 +33,8 @@ public class KeywordSectionFinder implements SectionFinder {
 		if (p.matcher(text).find()) {
 			String trimmed = text.trim();
 			int leadingSpaces = text.indexOf(trimmed);
-			return SectionFinderResult.createSingleItemList(new SectionFinderResult(
-						leadingSpaces, text.length()));
+			return SectionFinderResult.singleItemList(new SectionFinderResult(
+					leadingSpaces, text.length()));
 		}
 		return null;
 	}

@@ -20,7 +20,7 @@ package de.knowwe.rdfs.testcase.kdom;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.basicType.PlainText;
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.sectionFinder.AllBeforeTypeSectionFinder;
 
@@ -50,7 +50,7 @@ public class RDFSTestCaseContentType extends AbstractType {
 		addCompileScript(new RDFSTestCaseHandler());
 
 		// set section finder
-		setSectionFinder(AllTextSectionFinder.getInstance());
+		setSectionFinder(AllTextFinder.getInstance());
 	}
 
 }

@@ -25,9 +25,8 @@ import de.d3web.core.inference.Rule;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.SessionProvider;
-import de.d3web.we.kdom.rules.ConditionActionRuleContent;
-import de.d3web.we.kdom.rules.ConditionArea;
-import de.d3web.we.kdom.rules.action.RuleAction;
+import de.d3web.we.kdom.rules.RuleType;
+import de.d3web.we.kdom.rules.condition.ConditionContainer;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -73,12 +72,10 @@ public class DebuggerRuleboxAction extends AbstractAction {
 			buffer.append("<span ruleid='" + ruleid + "'>");
 			for (Rule r : rules) {
 				if (r.hashCode() == ruleid) {
-					Section<RuleAction> ruleAction = DebugUtilities.getRuleResource(r, session);
-					Section<ConditionActionRuleContent> conditionActionRuleSection = Sections.findAncestorOfType(
-							ruleAction, ConditionActionRuleContent.class);
-					Section<ConditionArea> cond = Sections.findSuccessor(
-							conditionActionRuleSection, ConditionArea.class);
-					ruleArticle = ruleAction.getTitle();
+					Section<RuleType> ruleSection = DebugUtilities.getRuleResource(r, session);
+					Section<ConditionContainer> cond = Sections.findSuccessor(
+							ruleSection, ConditionContainer.class);
+					ruleArticle = ruleSection.getTitle();
 					if (ruleArticle.equals("")) ruleArticle = context.getTitle();
 					DebuggerRuleRenderer.renderConditionSection(cond, r.getCondition(),
 							session, title, true, buffer, context);

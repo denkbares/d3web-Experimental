@@ -61,8 +61,8 @@ import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -175,7 +175,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 		 * 
 		 */
 		public WisskontChoiceFinding() {
-			this.setSectionFinder(AllTextSectionFinder.getInstance());
+			this.setSectionFinder(AllTextFinder.getInstance());
 			CompositeRenderer renderer = new CompositeRenderer(DelegateRenderer.getInstance(),
 					new ReferenceSurroundingRenderer());
 			this.addChildType(new ListObjectIdentifier(renderer));

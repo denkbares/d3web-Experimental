@@ -38,9 +38,9 @@ import de.d3web.we.kdom.condition.Disjunct;
 import de.d3web.we.kdom.condition.NegatedExpression;
 import de.d3web.we.kdom.condition.helper.BracedCondition;
 import de.d3web.we.kdom.condition.helper.BracedConditionContent;
-import de.d3web.we.kdom.rules.ConditionArea;
 import de.d3web.we.kdom.rules.RuleCompileScript;
-import de.d3web.we.kdom.rules.action.RuleAction;
+import de.d3web.we.kdom.rules.RuleType;
+import de.d3web.we.kdom.rules.condition.ConditionContainer;
 import de.d3web.we.object.QuestionReference;
 import de.d3web.we.object.SolutionReference;
 import de.d3web.we.utils.D3webUtils;
@@ -68,11 +68,11 @@ public class DebuggerRuleRenderer implements Renderer {
 		Article article = Compilers.getCompilingArticles(sec).iterator().next();
 		KnowledgeBase kb = D3webUtils.getKnowledgeBase(article.getWeb(), article.getTitle());
 		Session session = SessionProvider.getSession(user, kb);
-		Section<RuleAction> ruleAction = Sections.findSuccessor(sec,
-				RuleAction.class);
+		Section<RuleType> ruleSection = Sections.findSuccessor(sec,
+				RuleType.class);
 		Rule r = null;
-		if (ruleAction != null) {
-			r = (Rule) KnowWEUtils.getStoredObject(D3webUtils.getCompiler(article), ruleAction,
+		if (ruleSection != null) {
+			r = (Rule) KnowWEUtils.getStoredObject(D3webUtils.getCompiler(article), ruleSection,
 					RuleCompileScript.RULE_STORE_KEY);
 		}
 		String title = user.getTitle();
@@ -90,7 +90,7 @@ public class DebuggerRuleRenderer implements Renderer {
 						+ "'>");
 			}
 			for (Section<? extends Type> section : ruleSections) {
-				if (section.get() instanceof ConditionArea) {
+				if (section.get() instanceof ConditionContainer) {
 					// condition
 					renderConditionSection(section, r.getCondition(), session, title, false,
 							string, user);
