@@ -227,15 +227,13 @@ public class TermBrowserRenderer {
 	 */
 	private String generateTermnames() {
 
-		String result = "";
 		Collection<Identifier> allTermDefinitions = hierarchy.getAllTerms();
-
+		StringBuilder builder = new StringBuilder();
 		for (Identifier name : allTermDefinitions) {
-			String label = name.toExternalForm().replaceAll("\"", "");
-			result += "\"" + label + "\"" + ",\n";
+			builder.append("\"").append(name.toExternalForm().replaceAll("\"", "")).append("\",\n");
 		}
 
-		return result;
+		return builder.toString();
 	}
 	private void renderTermTree(RenderResult string, PartialHierarchyTree<RatedTerm> tree, boolean collapsed, LinkToTermDefinitionProvider linkProvider, String master) {
 
