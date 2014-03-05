@@ -229,7 +229,7 @@ public class ConceptListContent extends AbstractType {
 
 			}
 
-			private static final String RULE_STORE_KEY = "RULE_STORE_KEY";
+			private static final String RULE_STORE_KEY = "DEFAULT_RULE_STORE_KEY";
 
 			/**
 			 * 

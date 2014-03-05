@@ -307,7 +307,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 					rules);
 		}
 
-		private static final String RULE_STORE_KEY = "RULE_STORE_KEY";
+		private static final String RULE_STORE_KEY = "DEFAULT_RULE_STORE_KEY";
 
 		@Override
 		public void deleteFromRepository(Section<RuleMarkup> section) {

@@ -159,7 +159,7 @@ public class DebugUtilities {
 		KnowledgeBase kb = session.getKnowledgeBase();
 		D3webCompiler ruleCompiler = null;
 		Rule rule;
-		List<Section<RuleType>> rules;
+		List<Section<RuleType>> ruleSections;
 
 		// get the knowledgebase's article
 		Collection<D3webCompiler> compilers = Compilers.getCompilers(
@@ -174,13 +174,12 @@ public class DebugUtilities {
 		for (Article article : Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB).getArticles()) {
 
-			rules = Sections.findSuccessorsOfType(article.getRootSection(), RuleType.class);
-			for (Section<RuleType> ruleAction : rules) {
+			ruleSections = Sections.findSuccessorsOfType(article.getRootSection(), RuleType.class);
+			for (Section<RuleType> ruleSection : ruleSections) {
 
-				rule = (Rule) KnowWEUtils.getStoredObject(ruleCompiler, ruleAction,
-						RuleCompileScript.RULE_STORE_KEY);
+				rule = RuleCompileScript.getRule(ruleCompiler, ruleSection);
 
-				if (rule != null && rule.equals(r)) return ruleAction;
+				if (rule != null && rule.equals(r)) return ruleSection;
 			}
 		}
 

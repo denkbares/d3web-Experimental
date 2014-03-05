@@ -53,7 +53,6 @@ import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * Renders rules to provide a debugging-layout.
@@ -72,8 +71,7 @@ public class DebuggerRuleRenderer implements Renderer {
 				RuleType.class);
 		Rule r = null;
 		if (ruleSection != null) {
-			r = (Rule) KnowWEUtils.getStoredObject(D3webUtils.getCompiler(article), ruleSection,
-					RuleCompileScript.RULE_STORE_KEY);
+			r = RuleCompileScript.getRule(D3webUtils.getCompiler(article), ruleSection);
 		}
 		String title = user.getTitle();
 

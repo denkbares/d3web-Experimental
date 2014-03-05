@@ -15,7 +15,6 @@ import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.manage.RuleFactory;
 import de.d3web.strings.Strings;
 import de.d3web.we.kdom.condition.Finding;
-import de.d3web.we.kdom.rules.RuleCompileScript;
 import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.object.QASetDefinition;
 import de.d3web.we.reviseHandler.D3webHandler;
@@ -32,7 +31,6 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.sectionFinder.UnquotedExpressionFinder;
 
@@ -134,7 +132,6 @@ public class InlineIndicationCondition extends AbstractType {
 					msgs.add(Messages.objectCreationError(Rule.class.getSimpleName()));
 				}
 				if (r != null && !(qaset instanceof QContainer && r2 == null)) {
-					KnowWEUtils.storeObject(compiler, s, RuleCompileScript.RULE_STORE_KEY, r);
 					return Messages.asList(Messages.objectCreatedNotice("Rule"));
 				}
 
