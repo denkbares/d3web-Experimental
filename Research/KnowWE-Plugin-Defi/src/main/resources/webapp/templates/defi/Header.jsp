@@ -21,6 +21,13 @@
 
 <fmt:setLocale value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default" />
+
+<wiki:UserCheck status="asserted">
+	<script type="text/javascript">
+	if(!document.URL.match(/Login.jsp/))
+		window.location.href = "Login.jsp";
+	</script>
+</wiki:UserCheck>
 <%
 	final String WELCOME_PAGE = "Startseite";
 	final String WELCOME_PAGE_FIRSTTIME = WELCOME_PAGE + "_firstTime";
@@ -75,20 +82,23 @@ if(welcomePage_firstTime) {
 	<div class="infobox">
 		<span>Kontakt-Funktionen</span>
 		<div>
-			<a href="" onclick="newChat('<%=berater%>', '<%=user.getUserName()%>');return false" class="infobox_link"
+			<a href=""
+				onclick="newChat('<%=berater%>', '<%=user.getUserName()%>');return false"
+				class="infobox_link"
 				onmouseover="document.getElementById('infobox1').style.backgroundColor = '#eeeeee';"
 				onmouseout="document.getElementById('infobox1').style.backgroundColor = '#F9F9F9';">
-				<img src="<%= therapistImg %>" height="92px" width="70px" alt="Berater" style="margin: 9px 0 0 0;" />
-				<span id="infobox1">Berater Dr. Schulz</span>
+				<img src="<%=therapistImg%>" height="92px" width="70px"
+				alt="Berater" style="margin: 9px 0 0 0;" /> <span id="infobox1">Berater
+					Dr. Schulz</span>
 			</a>
 		</div>
 		<div>
 			<a href="Wiki.jsp?page=Diskussion" class="infobox_link"
 				onmouseover="document.getElementById('infobox2').style.backgroundColor = '#eeeeee';"
 				onmouseout="document.getElementById('infobox2').style.backgroundColor = '#F9F9F9';">
-				<img src="<%= groupImg %>" height="100px" width="133px" 
-					alt="Gruppe" style="margin: 3px 0 -2px 0;" /> 
-				<span style="margin: 0 0 0 0;" id="infobox2">Diskussion</span>
+				<img src="<%=groupImg%>" height="100px" width="133px" alt="Gruppe"
+				style="margin: 3px 0 -2px 0;" /> <span style="margin: 0 0 0 0;"
+				id="infobox2">Diskussion</span>
 			</a>
 		</div>
 	</div>
