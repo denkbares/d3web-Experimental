@@ -83,6 +83,7 @@ public class ForumBoxAction extends AbstractAction {
 				// // do nothing!
 				// }
 
+				text = Strings.encodeHtml(text);
 				text = text.replace("\n", "\\\\ ");
 
 				Article article = Environment.getInstance().getArticle(web, topic);
@@ -124,7 +125,8 @@ public class ForumBoxAction extends AbstractAction {
 						topic, buffi.toString(), context);
 
 				// fire new comment event
-				EventManager.getInstance().fireEvent(new NewCommentEvent(text, topic));
+				EventManager.getInstance().fireEvent(
+						new NewCommentEvent(Strings.decodeHtml(text), topic));
 
 				String refreshUrl = Environment.getInstance().getWikiConnector().getBaseUrl();
 				refreshUrl += "Wiki.jsp?page=" + topic;
