@@ -45,6 +45,7 @@ public class DefiSessionEventLogger {
 			+ "/" + FILENAME;
 	/** Sepearator between entries in a logline **/
 	private final static String SEPARATOR = DefiLoggerUtils.SEPARATOR;
+	private static final String SEPARATOR_UNICODE = DefiLoggerUtils.SEPARATOR_UNICODE;
 
 
 	/**
@@ -119,6 +120,10 @@ public class DefiSessionEventLogger {
 
 	public static String getSeparator() {
 		return SEPARATOR;
+	}
+
+	public static String getSeparatorUnicode() {
+		return SEPARATOR_UNICODE;
 	}
 
 	public static List<DefiSessionLogLine> getLogLines() {

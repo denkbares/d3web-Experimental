@@ -38,7 +38,8 @@ import de.knowwe.core.Environment;
 public class DefiLoggerUtils {
 
 	/** Sepearator between entries in a logline **/
-	public final static String SEPARATOR = ";";
+	public final static String SEPARATOR = "~";
+	public final static String SEPARATOR_UNICODE = "&#126;";
 
 	public static String getUserNameOfWikiSecurityEvent(WikiSecurityEvent e) {
 		WikiEngine eng = WikiEngine.getInstance(Environment.getInstance().getContext(),

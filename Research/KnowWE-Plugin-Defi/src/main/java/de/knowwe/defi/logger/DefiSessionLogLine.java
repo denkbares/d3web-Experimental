@@ -36,11 +36,13 @@ public class DefiSessionLogLine {
 
 	private final static String NO_DATA = "--";
 
-	/** Separator S used in pagelog **/
+	/** Separator S used in session log **/
 	private final String S = DefiSessionEventLogger.getSeparator();
-	/** Regex to find sessionlogline **/
-	private final String MATCH_ME = "^((?!" + S + ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S
-			+ ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+$";
+	private final String SU = DefiSessionEventLogger.getSeparatorUnicode();
+	/** Regex to find session log line **/
+	private final String MATCH_ME = "^((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\"
+			+ S + "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S + "((?!\\"
+			+ S + ").)+\\" + S + "((?!\\" + S + ").)+$";
 
 	public DefiSessionLogLine(String s) {
 		if (!s.matches(MATCH_ME)) throw new IllegalArgumentException(
@@ -69,55 +71,59 @@ public class DefiSessionLogLine {
 	}
 
 	public String getUser() {
-		return user;
+		return user.replace(SU, S);
 	}
 
 	public String getLoginDate() {
-		return loginDate;
+		return loginDate.replace(SU, S);
 	}
 
 	public String getLoginTime() {
-		return loginTime;
+		return loginTime.replace(SU, S);
+	}
+
+	public String getLoginDateTime() {
+		return getLoginDate() + " " + getLoginTime();
 	}
 
 	public String getLogOutDate() {
-		return logOutDate;
+		return logOutDate.replace(SU, S);
 	}
 
 	public String getLogOutTime() {
-		return logOutTime;
+		return logOutTime.replace(SU, S);
 	}
 
 	public String getTimeout() {
-		return timeout;
+		return timeout.replace(SU, S);
 	}
 
 	public void setUser(String user) {
-		this.user = user;
+		this.user = user.replace(S, SU);
 	}
 
 	public void setLoginDate(String date) {
-		this.loginDate = date;
+		this.loginDate = date.replace(S, SU);
 	}
 
 	public void setLoginTime(String loginTime) {
-		this.loginTime = loginTime;
+		this.loginTime = loginTime.replace(S, SU);
 	}
 
 	public void setLogOutDate(String logOutDate) {
-		this.logOutDate = logOutDate;
+		this.logOutDate = logOutDate.replace(S, SU);
 	}
 
 	public void setLogOutTime(String logOutTime) {
-		this.logOutTime = logOutTime;
+		this.logOutTime = logOutTime.replace(S, SU);
 	}
 
 	public void setTimeout(String timeout) {
-		this.timeout = timeout;
+		this.timeout = timeout.replace(S, SU);
 	}
 
 	public void setTimeout(boolean timeout) {
-		this.timeout = String.valueOf(timeout);
+		this.timeout = String.valueOf(timeout).replace(S, SU);
 	}
 
 	public boolean equalLogin(DefiSessionLogLine line) {
@@ -134,10 +140,6 @@ public class DefiSessionLogLine {
 		}
 		else if (!user.equals(line.user)) return false;
 		return true;
-	}
-
-	public String getLoginDateTime() {
-		return getLoginDate() + " " + getLoginTime();
 	}
 
 	@Override

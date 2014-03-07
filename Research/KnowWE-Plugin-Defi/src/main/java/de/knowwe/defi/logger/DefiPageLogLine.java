@@ -35,11 +35,13 @@ public class DefiPageLogLine {
 	private String endTime;
 
 	private final static String NO_DATA = "--";
-	/** Separator S used in pagelog **/
+	/** Separator S used in page log **/
 	private final String S = DefiPageEventLogger.getSeparator();
-	/** Regex to find pagelogline **/
-	private final String MATCH_ME = "^((?!" + S + ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S
-			+ ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+$";
+	private final String SU = DefiPageEventLogger.getSeparatorUnicode();
+	/** Regex to find page log line **/
+	private final String MATCH_ME = "^((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\"
+			+ S + "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S
+			+ "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+$";
 
 	public DefiPageLogLine(String s) {
 		if (!s.matches(MATCH_ME)) throw new IllegalArgumentException(
@@ -86,32 +88,32 @@ public class DefiPageLogLine {
 		return endTime;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
-	}
-
-	public void setStartDate(String date_start) {
-		this.startDate = date_start;
-	}
-
-	public void setStartTime(String time_start) {
-		this.startTime = time_start;
-	}
-
-	public void setEndDate(String date_end) {
-		this.endDate = date_end;
-	}
-
-	public void setEndTime(String time_end) {
-		this.endTime = time_end;
-	}
-
 	public String getPage() {
 		return page;
 	}
 
+	public void setUser(String user) {
+		this.user = user.replace(S, SU);
+	}
+
+	public void setStartDate(String date_start) {
+		this.startDate = date_start.replace(S, SU);
+	}
+
+	public void setStartTime(String time_start) {
+		this.startTime = time_start.replace(S, SU);
+	}
+
+	public void setEndDate(String date_end) {
+		this.endDate = date_end.replace(S, SU);
+	}
+
+	public void setEndTime(String time_end) {
+		this.endTime = time_end.replace(S, SU);
+	}
+
 	public void setPage(String page) {
-		this.page = page;
+		this.page = page.replace(S, SU);
 	}
 
 	@Override

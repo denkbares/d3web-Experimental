@@ -44,6 +44,7 @@ public class DefiCommentEventLogger {
 			+ "/" + FILENAME;
 	/** Sepearator between entries in a logline **/
 	private final static String SEPARATOR = DefiLoggerUtils.SEPARATOR;
+	private static final String UNICODE = DefiLoggerUtils.SEPARATOR_UNICODE;
 
 	public static void logComment(DefiCommentLogLine commentLogLine) {
 		writeToForumLog(commentLogLine.toString());
@@ -97,6 +98,10 @@ public class DefiCommentEventLogger {
 
 	public static String getSeparator() {
 		return SEPARATOR;
+	}
+
+	public static String getSeperatorUnicode() {
+		return UNICODE;
 	}
 
 	public static String getPath() {

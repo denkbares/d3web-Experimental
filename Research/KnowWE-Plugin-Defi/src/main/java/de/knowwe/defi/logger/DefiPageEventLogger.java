@@ -44,6 +44,7 @@ public class DefiPageEventLogger {
 			+ "/" + FILENAME;
 	/** Sepearator between entries in a logline **/
 	private final static String SEPARATOR = DefiLoggerUtils.SEPARATOR;
+	private static final String SEPARATOR_UNICODE = DefiLoggerUtils.SEPARATOR_UNICODE;
 
 	/**
 	 * Set end to last page entry and start to new page entry.
@@ -142,6 +143,10 @@ public class DefiPageEventLogger {
 
 	public static String getSeparator() {
 		return SEPARATOR;
+	}
+
+	public static String getSeparatorUnicode() {
+		return SEPARATOR_UNICODE;
 	}
 
 	public static List<DefiPageLogLine> getLogLines() {

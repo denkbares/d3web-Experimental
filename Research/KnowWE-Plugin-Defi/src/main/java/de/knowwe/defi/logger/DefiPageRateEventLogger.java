@@ -47,6 +47,7 @@ public class DefiPageRateEventLogger {
 			+ "/" + FILENAME;
 	/** Sepearator between entries in a logline **/
 	private final static String SEPARATOR = DefiLoggerUtils.SEPARATOR;
+	private static final String SEPARATOR_UNICODE = DefiLoggerUtils.SEPARATOR_UNICODE;
 
 	public static void logEvent(DefiPageRatedEvent event) {
 		DefiPageRateLogLine logline = new DefiPageRateLogLine(event);
@@ -138,5 +139,9 @@ public class DefiPageRateEventLogger {
 
 	public static String getSeparator() {
 		return SEPARATOR;
+	}
+
+	public static String getSeparatorUnicode() {
+		return SEPARATOR_UNICODE;
 	}
 }

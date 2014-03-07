@@ -40,12 +40,14 @@ public class DefiPageRateLogLine {
 
 	private final static String NO_DATA = "--";
 
-	/** Separator S used in pagelog **/
+	/** Separator S used in rate log **/
 	private final String S = DefiPageRateEventLogger.getSeparator();
-	/** Regex to find sessionlogline **/
-	private final String MATCH_ME = "^((?!" + S + ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S
-			+ ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+"
-			+ S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+$";
+	private final String SU = DefiPageRateEventLogger.getSeparatorUnicode();
+	/** Regex to find rate log line **/
+	private final String MATCH_ME = "^((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S
+			+ "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\"
+			+ S + "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S
+			+ "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+$";
 
 	public DefiPageRateLogLine(String s) {
 		if (!s.matches(MATCH_ME)) throw new IllegalArgumentException(
@@ -76,51 +78,51 @@ public class DefiPageRateLogLine {
 	}
 
 	public DefiPageRateLogLine(DefiPageRatedEvent event) {
-		id = event.getId();
-		page = event.getTitle();
-		user = event.getUser();
-		date = event.getDate();
-		realvalue = event.getRealvalue();
-		value = event.getValue().equals("") ? NO_DATA : event.getValue();
-		label = event.getLabel().equals("") ? NO_DATA : event.getLabel();
-		discussed = event.getDiscussed();
-		closed = event.getClosed().equals("") ? NO_DATA : event.getClosed();
+		setId(event.getId());
+		setPage(event.getTitle());
+		setUser(event.getUser());
+		setDate(event.getDate());
+		setRealvalue(event.getRealvalue());
+		setValue(event.getValue().equals("") ? NO_DATA : event.getValue());
+		setLabel(event.getLabel().equals("") ? NO_DATA : event.getLabel());
+		setDiscussed(event.getDiscussed());
+		setClosed(event.getClosed().equals("") ? NO_DATA : event.getClosed());
 	}
 
 	public String getId() {
-		return id;
+		return id.replace(SU, S);
 	}
 
 	public String getPage() {
-		return page;
+		return page.replace(SU, S);
 	}
 
 	public String getUser() {
-		return user;
+		return user.replace(SU, S);
 	}
 
 	public String getDate() {
-		return date;
+		return date.replace(SU, S);
 	}
 
 	public String getRealvalue() {
-		return realvalue;
+		return realvalue.replace(SU, S);
 	}
 
 	public String getValue() {
-		return value;
+		return value.replace(SU, S);
 	}
 
 	public String getLabel() {
-		return label;
+		return label.replace(SU, S);
 	}
 
 	public String getDiscussed() {
-		return discussed;
+		return discussed.replace(SU, S);
 	}
 
 	public String getClosed() {
-		return closed;
+		return closed.replace(SU, S);
 	}
 
 	public static String getNoData() {
@@ -128,39 +130,39 @@ public class DefiPageRateLogLine {
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		this.id = id.replace(S, SU);
 	}
 
 	public void setPage(String page) {
-		this.page = page;
+		this.page = page.replace(S, SU);
 	}
 
 	public void setUser(String user) {
-		this.user = user;
+		this.user = user.replace(S, SU);
 	}
 
 	public void setDate(String date) {
-		this.date = date;
+		this.date = date.replace(S, SU);
 	}
 
 	public void setRealvalue(String realvalue) {
-		this.realvalue = realvalue;
+		this.realvalue = realvalue.replace(S, SU);
 	}
 
 	public void setValue(String value) {
-		this.value = value;
+		this.value = value.replace(S, SU);
 	}
 
 	public void setLabel(String label) {
-		this.label = label;
+		this.label = label.replace(S, SU);
 	}
 
 	public void setDiscussed(String discussed) {
-		this.discussed = discussed;
+		this.discussed = discussed.replace(S, SU);
 	}
 
 	public void setClosed(String closed) {
-		this.closed = closed;
+		this.closed = closed.replace(S, SU);
 	}
 
 	public boolean equalsLogLine(DefiPageRateLogLine line) {

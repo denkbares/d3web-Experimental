@@ -155,7 +155,6 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	 * @return true = geklickt, false = noch nicht geklickt
 	 */
 	private boolean getReadbuttonStatus(String readbutton, String userName) {
-
 		return ReadbuttonUtilities.isPageRated(readbutton, userName);
 	}
 

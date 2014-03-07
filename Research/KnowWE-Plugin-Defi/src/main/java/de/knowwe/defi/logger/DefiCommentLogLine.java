@@ -37,12 +37,14 @@ public class DefiCommentLogLine {
 	private String topic;
 
 	private final static String NO_DATA = "--";
-	/** Separator S used in pagelog **/
+	/** Separator S used in comment log **/
 	private final String S = DefiCommentEventLogger.getSeparator();
-	/** Regex to find pagelogline **/
-	private final String MATCH_ME = "^((?!" + S + ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S
-			+ ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+"
-			+ S + "((?!" + S + ").)+" + S + "((?!" + S + ").)+$";
+	private final String SU = DefiCommentEventLogger.getSeperatorUnicode();
+	/** Regex to find comment log line **/
+	private final String MATCH_ME = "^((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S
+			+ "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\"
+			+ S + "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S + "((?!\\"
+			+ S + ").)+$";
 
 	/**
 	 * @param user comment's author
@@ -78,67 +80,67 @@ public class DefiCommentLogLine {
 	}
 
 	public String getUser() {
-		return user;
+		return user.replace(SU, S);
 	}
 
 	public String getMsg() {
-		return msg;
+		return msg.replace(SU, S);
 	}
 
 	public String getDate() {
-		return date;
+		return date.replace(SU, S);
 	}
 
 	public String getTime() {
-		return time;
+		return time.replace(SU, S);
 	}
 
 	public String getAdressee() {
-		return adressee;
+		return adressee.replace(SU, S);
 	}
 
 	public String getResponse() {
-		return response;
+		return response.replace(SU, S);
 	}
 
 	public String getUnit() {
-		return unit;
-	}
-
-	public void setUser(String user) {
-		this.user = user;
-	}
-
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public void setTime(String time) {
-		this.time = time;
-	}
-
-	public void setAdressee(String adressee) {
-		this.adressee = adressee;
-	}
-
-	public void setResponse(String response) {
-		this.response = response;
-	}
-
-	public void setUnit(String unit) {
-		this.unit = unit;
+		return unit.replace(SU, S);
 	}
 
 	public String getTopic() {
-		return topic;
+		return topic.replace(SU, S);
+	}
+
+	public void setUser(String user) {
+		this.user = user.replace(S, SU);
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg.replace(S, SU);
+	}
+
+	public void setDate(String date) {
+		this.date = date.replace(S, SU);
+	}
+
+	public void setTime(String time) {
+		this.time = time.replace(S, SU);
+	}
+
+	public void setAdressee(String adressee) {
+		this.adressee = adressee.replace(S, SU);
+	}
+
+	public void setResponse(String response) {
+		this.response = response.replace(S, SU);
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit.replace(S, SU);
 	}
 
 	public void setTopic(String topic) {
-		this.topic = topic;
+		this.topic = topic.replace(S, SU);
 	}
 
 	@Override
