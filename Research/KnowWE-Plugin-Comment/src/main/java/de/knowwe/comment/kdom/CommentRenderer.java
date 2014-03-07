@@ -98,8 +98,7 @@ public class CommentRenderer implements Renderer {
 				Sections.findChildOfType(idSec, PlainText.class).setText(newID + " ");
 
 				// save id:
-				StringBuilder buffy = new StringBuilder();
-				sec.getArticle().getRootSection().collectTextsFromLeaves(buffy);
+				String leaveText = sec.getArticle().getRootSection().collectTextsFromLeaves();
 
 				if (title.length() > 0) {
 					pageName = clean(title);
@@ -109,12 +108,16 @@ public class CommentRenderer implements Renderer {
 				// create new wikipage:
 				if (!wikiConnector.doesArticleExist(pageName)) {
 
-					StringBuffer saveContent = new StringBuffer();
-					saveContent.append("<forum" + (title == "" ? "" : " name=\"" + title + "\" ")
-							+ "ref=\"Wiki.jsp?page=" + sec.getTitle() + "#"
-							+ pageName.replace(" ", "+") + "\">\n");
-					saveContent.append("<box name=" + user.getUserName() + "; date="
-							+ ForumRenderer.getDate() + ">" + commentContent + "</box>\n</forum>");
+					StringBuilder saveContent = new StringBuilder();
+					saveContent.append("<forum")
+							.append(title == "" ? "" : " name=\"" + title + "\" ")
+							.append("ref=\"Wiki.jsp?page=").append(sec.getTitle())
+							.append("#").append(pageName.replace(" ", "+"))
+							.append("\">\n");
+					saveContent.append("<box name=").append(user.getUserName())
+							.append("; date=").append(ForumRenderer.getDate())
+							.append(">")
+							.append(commentContent).append("</box>\n</forum>");
 
 					instance.getWikiConnector().createArticle(pageName, saveContent.toString(),
 							user.getUserName());
@@ -142,14 +145,12 @@ public class CommentRenderer implements Renderer {
 					forumSec.collectTextsFromLeaves(buffi);
 					user.getParameters().put(Attributes.WEB, forumSec.getWeb());
 					instance.getWikiConnector().writeArticleToWikiPersistence(
-							sec.getTitle(), buffy.toString(), user);
-
+							sec.getTitle(), leaveText, user);
 				}
 
 				user.getParameters().put(Attributes.WEB, sec.getWeb());
 				instance.getWikiConnector().writeArticleToWikiPersistence(
-						sec.getTitle(), buffy.toString(), user);
-
+						sec.getTitle(), leaveText, user);
 			}
 			else {
 				int newID = Integer.valueOf(id);
@@ -164,34 +165,39 @@ public class CommentRenderer implements Renderer {
 				// create new wikipage with failure message caused by changing
 				// manually the id
 				if (!wikiConnector.doesArticleExist(pageName)) {
-					StringBuffer saveContent = new StringBuffer();
+					StringBuilder saveContent = new StringBuilder();
 
 					// if you want only one Error-page activate this:
 					// pageName="ID_ERROR";
 
 					saveContent.append("<CSS style=\"color:red; font-size:19px\">ATTENTION: Someone changed the id manually!</CSS>\\\\\n\\\\\n");
-					saveContent.append("<forum" + (title == "" ? "" : " name=\"" + title + "\" ")
-							+ "ref=\"Wiki.jsp?page=" + sec.getTitle() + "#"
-							+ pageName.replace(" ", "+") + "\">\n");
-					saveContent.append("<box name=System; date=" + ForumRenderer.getDate() + ">"
-							+ commentContent + "</box>\n</forum>");
+					saveContent.append("<forum")
+							.append(title == "" ? "" : " name=\"" + title + "\" ")
+							.append("ref=\"Wiki.jsp?page=").append(sec.getTitle())
+							.append("#").append(pageName.replace(" ", "+"))
+							.append("\">\n");
+					saveContent.append("<box name=System; date=")
+							.append(ForumRenderer.getDate())
+							.append(">")
+							.append(commentContent)
+							.append("</box>\n</forum>");
 					instance.getWikiConnector().createArticle(pageName, saveContent.toString(),
 							user.getUserName());
 				}
-
 			}
 
 			String imageDir = "KnowWEExtension/" + commentTypes.get(commentTag);
-			toHTML.append("<a name='" + pageName.replace(" ", "+")
-					+ "'></a><a target=_blank href=Wiki.jsp?page=" + pageName.replace(" ", "+")
-					+ "><img src=" + imageDir + " title='" + commentContent + "'></a>");
-
+			toHTML.append("<a name='")
+					.append(pageName.replace(" ", "+"))
+					.append("'></a><a target=_blank href=Wiki.jsp?page=")
+					.append(pageName.replace(" ", "+"))
+					.append("><img src=").append(imageDir)
+					.append(" title='").append(commentContent)
+					.append("'></a>");
 		}
 		catch (Exception e) {
-
 			// do nothing if WikiEngine is not properly started yet
 		}
-
 		string.appendHtml(toHTML.toString());
 	}
 }
