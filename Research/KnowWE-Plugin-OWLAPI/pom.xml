@@ -9,7 +9,7 @@
 	<groupId>de.uniwue.d3web</groupId>
 	<artifactId>KnowWE-Plugin-OWLAPI</artifactId>
 	<version>0.2-SNAPSHOT</version>
-	<name>KnowWE-Plugin: OWLAPI</name>
+	<name>KnowWE-Plugin-OWLAPI</name>
 	<description>Connector to the OWLAPI</description>
     <properties>
         <pellet.version>2.3.0</pellet.version>

@@ -8,7 +8,7 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>KnowWE-Plugin-RDFS-TestCase</artifactId>
-	<name>KnowWE-Plugin: RDFS-TestCase</name>
+	<name>KnowWE-Plugin-RDFS-TestCase</name>
 	<description>Plugin providing functionality for RDFS test cases</description>
 	<version>0.2-SNAPSHOT</version>
 

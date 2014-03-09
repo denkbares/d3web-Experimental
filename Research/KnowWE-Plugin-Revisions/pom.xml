@@ -6,7 +6,7 @@
     <version>0.2-SNAPSHOT</version>
   </parent>
   <artifactId>KnowWE-Plugin-Revisions</artifactId>
-  <name>KnowWE-Plugin: Revisions</name>
+  <name>KnowWE-Plugin-Revisions</name>
   <description>KnowWE-Plugin for creating and managing wiki-revisions</description>
   <dependencies>
   	<dependency>
