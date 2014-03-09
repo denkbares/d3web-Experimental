@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import de.knowwe.comment.forum.Forum;
 import de.knowwe.comment.forum.ForumBox;
@@ -95,15 +96,46 @@ public class DiscussionUtils {
 	}
 
 	/**
-	 * Does the user have a new messages?
+	 * Checks whether the user has a new message from the therapist.
 	 */
-	public static Boolean userHasNewMessage(String user) {
+	public static Boolean userHasNewTherapistMessage(String user) {
 
 		for (Section<? extends Forum> forum : getAllForums()) {
 			Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(forum);
 			if (!mapFor.get("unit").equals("chat")) continue;
 
 			try {
+				String berater = ResourceBundle.getBundle("KnowWE_Defi_config").getString(
+						"defi.berater");
+				if (!mapFor.get("user1").equals(berater) && !mapFor.get("user2").equals(berater)) continue;
+
+				if ((mapFor.get("user1").equals(user) || mapFor.get("user2").equals(user))
+						&& getNumberOfNewEntriesInForum(forum, user) > 0) return true;
+			}
+			catch (NullPointerException e) {
+				// old chats don't have the user attribute
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Checks whether the user has a new message from another user.
+	 */
+	public static Boolean userHasNewUserMessage(String user) {
+
+		for (Section<? extends Forum> forum : getAllForums()) {
+			Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(forum);
+			if (!mapFor.get("unit").equals("chat")) continue;
+
+			try {
+				String berater = ResourceBundle.getBundle("KnowWE_Defi_config").getString(
+						"defi.berater");
+				if (!user.equals(berater)
+						&& (mapFor.get("user1").equals(berater) || mapFor.get("user2").equals(
+								berater))) continue;
+
 				if ((mapFor.get("user1").equals(user) || mapFor.get("user2").equals(user))
 						&& getNumberOfNewEntriesInForum(forum, user) > 0)
 					return true;

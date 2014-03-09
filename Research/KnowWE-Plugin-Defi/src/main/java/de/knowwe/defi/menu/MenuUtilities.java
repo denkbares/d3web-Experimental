@@ -18,14 +18,12 @@
  */
 package de.knowwe.defi.menu;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -110,7 +108,7 @@ public class MenuUtilities {
 	/**
 	 * Get the unit's pagename.
 	 */
-	public static String getUnitPagename(Section<DashTreeElement> sec) {
+	public static String getUnitPagename(Section<? extends DashTreeElement> sec) {
 		String title = sec.getText().trim();
 		if (DashTreeUtils.getDashLevel(sec) == 1) {
 			title = title.substring(2);
@@ -126,23 +124,24 @@ public class MenuUtilities {
 		return title;
 	}
 
+	public static Section<? extends DashTreeElement> getRootUnit(Section<? extends DashTreeElement> unit) {
+		int dashLevel = DashTreeUtils.getDashLevel(unit);
+		for (int i = 0; i < dashLevel; i++) {
+			unit = DashTreeUtils.getFatherDashTreeElement(unit);
+		}
+		return unit;
+	}
+
 	/**
 	 * Is the unit open?
 	 */
-	public static boolean isUnitOpen(Section<DashTreeElement> sec, String user) {
-		Section<? extends Type> dashtree = sec.getParent().getParent().getParent();
-		List<Section<DashTreeElement>> found = new ArrayList<Section<DashTreeElement>>();
-		Sections.findSuccessorsOfType(dashtree, DashTreeElement.class, 3, found);
+	public static boolean isUnitOpen(Section<? extends DashTreeElement> unit, String user) {
 
-		int unitNumber = -1;
-		for (int i = 0; i < found.size(); i++) {
-			if (found.get(i).getID().equals(
-					sec.getID())) {
-				unitNumber = i;
-				break;
-			}
-		}
+		List<Section<DashTreeElement>> rootUnits = getRootUnits();
+		Section<? extends DashTreeElement> rootUnit = getRootUnit(unit);
+		int unitNumber = rootUnits.indexOf(rootUnit);
 
+		// find unit start date
 		List<Date> dates = TimeTableUtilities.getPersonalTimeTable(user);
 		Date current = new Date();
 		Date unitDate = null;

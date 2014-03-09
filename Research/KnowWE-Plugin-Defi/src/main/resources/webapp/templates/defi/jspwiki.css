@@ -52,52 +52,6 @@
 	margin:0;
 	padding:0;
 }
-.infobox {
-	float:left;
-    height:161px;
-    width:360px;
-    margin:0 6px 0 0;
-    padding:0;
-    overflow:hidden;
-    background-color:#d8dadc;
-}
-.infobox * {
-	margin:0;
-	padding:0;
-}
-.infobox div {
-	width:50%;
-	float:left;
-}
-.infobox span {
-	height:21px;
-	width:100%;
-	background-color:#F9F9F9;
-	display:inline-block;
-	font-size:17px;
-	padding:0.25em 0 !important;
-	border:1px solid #063D79;
-}
-.infobox span:FIRST-CHILD {
-	height:19px;
-	font-size:18px;
-	text-align:center;
-	padding:0 0 0.3em !important;
-	margin:0 !important;
-	border-top:0;
-	border-left:0;
-	border-right:0;
-}
-.infobox a.infobox_link {
-	width:100%;
-	height:161px;
-	display:inline-block;
-	text-align:center;
-	text-decoration:none;
-}
-.infobox a.infobox_link:hover {
-	background-color:#eeeeee;
-}
 #header .companylogo { 
 	display:none; 
 }

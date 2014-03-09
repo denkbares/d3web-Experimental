@@ -1,3 +1,6 @@
+<%@page import="de.knowwe.kdom.dashtree.DashTreeElement"%>
+<%@page import="de.knowwe.defi.menu.MenuUtilities"%>
+<%@page import="java.util.Collections"%>
 <%@page import="java.util.Arrays"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -18,7 +21,11 @@
 <%@page import="de.knowwe.defi.readbutton.ReadbuttonUtilities"%>
 <%@page import="de.knowwe.defi.utils.DefiUtils"%>
 <%@page import="de.knowwe.defi.event.DefiPageEvent"%>
-
+<%
+	final String WELCOME_PAGE = "Startseite";
+	final String WELCOME_PAGE_FIRSTTIME = WELCOME_PAGE + "_firstTime";
+	final String BUTTON_ID = "firstpage";
+%>
 <fmt:setLocale value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default" />
 
@@ -29,30 +36,53 @@
 	</script>
 </wiki:UserCheck>
 <%
-	final String WELCOME_PAGE = "Startseite";
-	final String WELCOME_PAGE_FIRSTTIME = WELCOME_PAGE + "_firstTime";
-	final String BUTTON_ID = "firstpage";
-
 	WikiContext c = WikiContext.findContext(pageContext);
-	String frontpage = c.getEngine().getFrontPage();
 	JSPWikiUserContext user = new JSPWikiUserContext(c, new HashMap<String, String>());
 	JSPWikiConnector wc = new JSPWikiConnector(WikiEngine.getInstance(Environment.getInstance().getContext(), null));
-	EventManager.getInstance().fireEvent(new DefiPageEvent(user.getUserName(), user.getTitle()));
-	String[] activeUsers = wc.getAllActiveUsers();
-	String berater = ResourceBundle.getBundle("KnowWE_Defi_config").getString("defi.berater");
-	List<String> activeUserList = Arrays.asList(activeUsers);
-	String therapistImg = activeUserList.contains(berater) ? "KnowWEExtension/images/berater_farbig.jpg" : "KnowWEExtension/images/berater_grau.jpg";
+%>
 
+<%
+	// if user is not allowed to visit this unit, show 404
+	for (Section<DashTreeElement> unit : MenuUtilities.getAllUnits())  {
+		
+		// find visited unit, check whether it is opened or closed
+		if (MenuUtilities.getUnitPagename(unit).equals(user.getTitle()) && !MenuUtilities.isUnitOpen(unit, user.getUserName())) {
+%>
+			<script type="text/javascript">
+			if(!document.URL.match(/Login.jsp/))
+				window.location.href = "403.jsp";
+			</script>
+<%
+		}
+	}
+%>
+
+<%
+	// fire page event
+	EventManager.getInstance().fireEvent(new DefiPageEvent(user.getUserName(), user.getTitle()));
+	
+	// therapist online?
+	String berater = ResourceBundle.getBundle("KnowWE_Defi_config").getString("defi.berater");
+	String therapistImg = Arrays.asList(wc.getAllActiveUsers()).contains(berater) ? "KnowWEExtension/images/berater_farbig.jpg" : "KnowWEExtension/images/berater_grau.jpg";
+	
+	// sort user names for chat
+	String[] usernames = { berater , user.getUserName() };
+	Arrays.sort(usernames);
+	
 	// new message?
-	String groupImg = DiscussionUtils.userHasNewMessage(user.getUserName()) ? "KnowWEExtension/images/GruppeNeueNachricht.png" : "KnowWEExtension/images/Gruppe.png";
+	boolean newTherapistMsg = DiscussionUtils.userHasNewTherapistMessage(user.getUserName());
+	boolean newChatMsg = DiscussionUtils.userHasNewUserMessage(user.getUserName());
+	if (newTherapistMsg && user.getUserName().equals(berater)) {
+		newTherapistMsg = false;
+		newChatMsg = true;
+	}
 	
 	// if user has visited welcomepage, redirect him to welcomepage_firsttime
 	boolean welcomePage_firstTime = false;
 	if (user.getTitle().equals(WELCOME_PAGE)) {
 		welcomePage_firstTime = !ReadbuttonUtilities.isPageRated(BUTTON_ID, user.getUserName());
 	}
-	
-if(welcomePage_firstTime) {
+	if(welcomePage_firstTime) {
 %>
 <script type="text/javascript">
 	if(!document.URL.match(/Login.jsp/))
@@ -70,7 +100,7 @@ if(welcomePage_firstTime) {
 
 	<div class="applicationlogo">
 		<a id="logo" href="Wiki.jsp?page=Startseite"
-			title="<fmt:message key='actions.home.title' ><fmt:param><%=frontpage%></fmt:param></fmt:message> ">
+			title="<fmt:message key='actions.home.title' ><fmt:param><%=c.getEngine().getFrontPage()%></fmt:param></fmt:message> ">
 			<!--<fmt:message key='actions.home' />--> <img
 			src="KnowWEExtension/images/Logo_icd-forum.gif" height="101px"
 			width="143px" alt="ICD-Forum Logo" /> ICD-Forum
@@ -80,25 +110,32 @@ if(welcomePage_firstTime) {
 	<div class="companylogo"></div>
 
 	<div class="infobox">
-		<span>Kontakt-Funktionen</span>
-		<div>
-			<a href=""
-				onclick="newChat('<%=berater%>', '<%=user.getUserName()%>');return false"
-				class="infobox_link"
+		<span class="label topic">Kontakt-Funktionen</span>
+		
+		<!-- TODO: Neu designen mit css, container -> relativ, inhalt absolut -->
+		
+		<div class="therapistbox">
+			<a href="" onclick="newChat('<%=usernames[0]%>', '<%=usernames[1]%>');return false"
 				onmouseover="document.getElementById('infobox1').style.backgroundColor = '#eeeeee';"
 				onmouseout="document.getElementById('infobox1').style.backgroundColor = '#F9F9F9';">
-				<img src="<%=therapistImg%>" height="92px" width="70px"
-				alt="Berater" style="margin: 9px 0 0 0;" /> <span id="infobox1">Berater
-					Dr. Schulz</span>
+				
+				<img src="<%=therapistImg%>" height="92px" width="70px" alt="Berater" />
+				<% if (newTherapistMsg) { %>
+					<p><span>Sie haben Post!</span></p>
+				<% } %>
+				<span class="label" id="infobox1">Berater Dr. Schulz</span>
 			</a>
 		</div>
-		<div>
-			<a href="Wiki.jsp?page=Diskussion" class="infobox_link"
+		
+		<div class="chatbox">
+			<a href="Wiki.jsp?page=Diskussion"
 				onmouseover="document.getElementById('infobox2').style.backgroundColor = '#eeeeee';"
 				onmouseout="document.getElementById('infobox2').style.backgroundColor = '#F9F9F9';">
-				<img src="<%=groupImg%>" height="100px" width="133px" alt="Gruppe"
-				style="margin: 3px 0 -2px 0;" /> <span style="margin: 0 0 0 0;"
-				id="infobox2">Diskussion</span>
+				<img src="KnowWEExtension/images/Gruppe.png" height="100px" width="133px" alt="Gruppe"/>
+				<% if (newChatMsg) { %>
+					<p><span>Sie haben Post!</span></p>
+				<% } %>
+				<span class="label" id="infobox2">Diskussion</span>
 			</a>
 		</div>
 	</div>
