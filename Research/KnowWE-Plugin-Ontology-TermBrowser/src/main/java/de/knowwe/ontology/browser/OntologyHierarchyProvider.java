@@ -27,10 +27,12 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.ontology.browser.cache.SparqlCacheManager;
 import de.knowwe.ontology.browser.util.HierarchyUtils;
+import de.knowwe.rdf2go.Rdf2GoCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.termbrowser.HierarchyProvider;
@@ -46,8 +48,9 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 	protected List<String> categories = new ArrayList<String>();
 	protected List<String> ignoredTerms = new ArrayList<String>();
 
-	protected List<String> relations = null;
+	protected List<String> relations = new ArrayList<String>();
 	protected String master = null;
+	protected UserContext user = null;
 
 	protected boolean mixedRelationHierarchyMode = false;
 
@@ -59,8 +62,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 					"lns:", termElements[0] };
 		}
 
-		String shortURI = termElements[0] + ":" + Strings.encodeURL(termElements[1]);
-		return shortURI;
+		return termElements[0] + ":" + Strings.encodeURL(termElements[1]);
 	}
 
 	private String getURIString(Identifier termID) {
@@ -69,12 +71,13 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 	}
 
 	private Rdf2GoCore getCore() {
-		Rdf2GoCore core = null;
+		Rdf2GoCore core;
 		if (master == null) {
 			core = Rdf2GoCore.getInstance();
 		}
 		else {
-			core = HierarchyUtils.getCompiler(master).getRdf2GoCore();
+			Rdf2GoCompiler compiler = Compilers.getCompiler(TermBrowserMarkup.getTermBrowserMarkup(user), Rdf2GoCompiler.class);
+			core = compiler.getRdf2GoCore();
 		}
 		return core;
 	}
@@ -218,9 +221,10 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 						break;
 					}
 				}
-			} else {
-				// we ignore other stuff (namespace and package defs..etc)
 			}
+			//else {
+			// we ignore other stuff (namespace and package defs..etc)
+			//}
 		}
 
 
@@ -230,10 +234,11 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 
 	@Override
 	public void updateSettings(UserContext user) {
-		relations.addAll(TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user));
+		relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
 		categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
 		ignoredTerms = TermBrowserMarkup.getCurrentTermbrowserIgnoredTerms(user);
 		this.master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
+		this.user = user;
 	}
 
 }
