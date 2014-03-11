@@ -27,6 +27,7 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
+import de.knowwe.core.Environment;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.user.UserContext;
@@ -39,7 +40,6 @@ import de.knowwe.termbrowser.HierarchyProvider;
 import de.knowwe.termbrowser.TermBrowserMarkup;
 
 /**
- * 
  * @author jochenreutelshofer
  * @created 01.10.2013
  */
@@ -77,12 +77,16 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 		}
 		else {
 			Rdf2GoCompiler compiler = Compilers.getCompiler(TermBrowserMarkup.getTermBrowserMarkup(user), Rdf2GoCompiler.class);
-			core = compiler.getRdf2GoCore();
+			if (compiler == null) {
+				core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
+			}
+			else {
+				core = compiler.getRdf2GoCore();
+			}
+
 		}
 		return core;
 	}
-
-
 
 	@Override
 	public List<Identifier> getChildren(Identifier termID) {
@@ -104,7 +108,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 				 * child of itself
 				 */
 				if (!(isIgnored(reducedNamespace)
-				|| termID.equals(new Identifier(reducedNamespace.split(":"))))) {
+						|| termID.equals(new Identifier(reducedNamespace.split(":"))))) {
 					result.add(new Identifier(reducedNamespace.split(":")));
 				}
 			}
@@ -143,7 +147,6 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 
 		return result;
 	}
-
 
 	@Override
 	public boolean isSuccessorOf(Identifier termID1, Identifier termID2) {
@@ -184,7 +187,6 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 		return null;
 	}
 
-
 	@Override
 	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
 
@@ -203,12 +205,12 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 			URI classURI = new URIImpl(expandedNamespace);
 			classURIs.add(classURI);
 		}
-		
+
 		// we check for each term whether it is instance of at least one of the
 		// filter classes
 		for (Identifier term : terms) {
 			String[] pathElements = term.getPathElements();
-			if(pathElements.length == 2) {
+			if (pathElements.length == 2) {
 				URI termURI = core.createURI(pathElements[0], pathElements[1]);
 				for (URI classURI : classURIs) {
 					String query = "ASK { " + termURI.toSPARQL() + " rdf:type "
@@ -227,10 +229,8 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 			//}
 		}
 
-
 		return resultConcepts;
 	}
-
 
 	@Override
 	public void updateSettings(UserContext user) {
