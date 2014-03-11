@@ -1,24 +1,24 @@
 .treeCollapsable .link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 4.5px;
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 5px;
 }
 
 .treeCollapsable .node circle {
-  cursor: pointer;
-  fill: #fff;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+	cursor: pointer;
+	fill: #fff;
+	stroke: steelblue;
+	stroke-width: 1px;
 }
 
 .treeCollapsable .node text {
-  font-size: 11px;
+	font-size: 11px;
 }
 
 .treeCollapsable path.link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 1.5px;
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 1px;
 }
 
 /*#chart, #header, #footer {
@@ -95,13 +95,13 @@ line {
 */
 
 .treeCollapsable a:hover {
-  color: #666;
+	color: #666;
 }
 
 .treeCollapsable .hint {
-  position: absolute;
-  right: 0;
-  width: 1280px;
-  font-size: 12px;
-  color: #999;
+	position: absolute;
+	right: 0;
+	width: 1280px;
+	font-size: 12px;
+	color: #999;
 }

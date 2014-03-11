@@ -1,12 +1,13 @@
 package de.knowwe.ophtovisD3.utils;
 
+import com.sun.javafx.beans.annotations.NonNull;
 
 public class NodeWithName implements Comparable<NodeWithName> {
 
-	String name;
-	String data;
-	String label;
-	boolean highlighted;
+	final String name;
+	private String data;
+	private String label;
+	private boolean highlighted;
 
 	public NodeWithName(String name) {
 		this.name = name;
@@ -37,15 +38,13 @@ public class NodeWithName implements Comparable<NodeWithName> {
 	}
 
 	@Override
-	public int compareTo(NodeWithName o) {
+	public int compareTo(@NonNull NodeWithName o) {
 		return this.name.compareTo(o.name);
 	}
 
 	public void setHighligted() {
 		this.highlighted = true;
 	}
-
-
 
 	@Override
 	public String toString() {

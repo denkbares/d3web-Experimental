@@ -25,7 +25,6 @@ import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 
 /**
- * 
  * @author adm_rieder
  * @created 10.09.2013
  */
@@ -34,26 +33,20 @@ public class VisualizationHierarchyProvider implements PartialHierarchy<NodeWith
 	private final Map<String, String> parentChildPairs;
 
 	/**
-	 * 
+	 *
 	 */
 	public VisualizationHierarchyProvider(Map<String, String> parentChildPairs) {
 		this.parentChildPairs = parentChildPairs;
 	}
-
 
 	private boolean isSuccessorOf(Identifier subnode, Identifier term) {
 		String parentString = parentChildPairs.get(Strings.unquote(subnode.toExternalForm()));
 		if (parentString == null) {
 			return false;
 		}
-		if (Strings.unquote(term.toExternalForm()).equals(parentString)) {
-			return true;
-		}
-		else {
-			return isSuccessorOf(new Identifier(parentString), term);
-		}
+		return Strings.unquote(term.toExternalForm())
+				.equals(parentString) || isSuccessorOf(new Identifier(parentString), term);
 	}
-
 
 	@Override
 	public boolean isSuccessorOf(NodeWithName node1, NodeWithName node2) {

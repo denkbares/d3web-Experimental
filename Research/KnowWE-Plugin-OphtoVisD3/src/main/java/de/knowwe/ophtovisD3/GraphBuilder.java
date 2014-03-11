@@ -34,24 +34,23 @@ import de.knowwe.ophtovisD3.utils.StringShortener.ElliminationType;
 import de.knowwe.ophtovisD3.utils.VisualizationHierarchyProvider;
 
 /**
- * 
  * @author adm_rieder
  * @created 22.10.2012
  */
-public class GraphBuilder {
+class GraphBuilder {
 
-	static LinkedList<Integer[]> connections = new LinkedList<Integer[]>();
-	static int indexNumber = 0;
-	static PartialHierarchyTree<NodeWithName> resultTree;
+	private static LinkedList<Integer[]> connections = new LinkedList<Integer[]>();
+	private static int indexNumber = 0;
+	private static PartialHierarchyTree<NodeWithName> resultTree;
 	static boolean treeIsHere = false;
-	static StringShortener shorty = new StringShortener(ElliminationType.NORMAL, 12);
+	private static final StringShortener shorty = new StringShortener(ElliminationType.NORMAL, 12);
 
 	public GraphBuilder() {
 		connections = new LinkedList<Integer[]>();
 		indexNumber = 0;
 	}
 
-	public static HashMap<Integer, String> buildNameandConnectionList(String startConcept, String connectionType) {
+	private static HashMap<Integer, String> buildNameandConnectionList(String startConcept, String connectionType) {
 		HashMap<Integer, String> nameAndNumber = new HashMap<Integer, String>();
 		String nextcocept = startConcept;
 		do {
@@ -71,7 +70,7 @@ public class GraphBuilder {
 	}
 
 	// get all connections to other concepts of this concept
-	public static HashMap<Integer, String> getNameandConnectionof(String startConcept, String connectionType, HashMap<Integer, String> list, int index) {
+	private static HashMap<Integer, String> getNameandConnectionof(String startConcept, String connectionType, HashMap<Integer, String> list, int index) {
 		int dadIndex = indexNumber;
 		List<String> childs = DataBaseHelper.getConnectedNodeNamesOfType(startConcept,
 				connectionType, false);
@@ -99,7 +98,7 @@ public class GraphBuilder {
 
 	}
 
-	public String buildNamesJSON(String startConcept, String connectionType) {
+	String buildNamesJSON(String startConcept, String connectionType) {
 		String result = "\"nodes\": [";
 		HashMap<Integer, String> map = buildNameandConnectionList(startConcept, connectionType);
 		Set<Integer> keys = map.keySet();
@@ -113,7 +112,7 @@ public class GraphBuilder {
 		return result += "]";
 	}
 
-	public String buildConnectionsJSON() {
+	String buildConnectionsJSON() {
 		String result = "\"edges\": [";
 		int i = 0;
 		for (Integer[] ints : connections) {
@@ -123,9 +122,9 @@ public class GraphBuilder {
 		}
 		return result += "]";
 	}
-	
-	public static String buildGraphExperimental(String connectionType, String highlighted){
-			Map<String, String> parentChildPairs = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
+
+	public static String buildGraphExperimental(String connectionType, String highlighted) {
+		Map<String, String> parentChildPairs = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
 		resultTree = new PartialHierarchyTree<NodeWithName>(new VisualizationHierarchyProvider(
 				parentChildPairs));
 		HashSet<String> allConcepts = new HashSet<String>();
@@ -138,21 +137,20 @@ public class GraphBuilder {
 		}
 		PartialHierarchyTree<NodeWithName> resultTreeHighlighted = hightlightConcept(resultTree, highlighted,
 				connectionType);
-		String result =JsonFactory.toJSON(resultTreeHighlighted);
-		return result;
-		
+		return JsonFactory.toJSON(resultTreeHighlighted);
+
 	}
 
 	public static String buildGraph(String startConcept, String connectionType, String helpconnectionType, boolean getConnectionAmount) {
 		String result, label;
 		System.out.println("Graphbuilder started");
-	    //	GraphbuilderForeignKB.buildTree();
-		if (!false) {
+		//	GraphbuilderForeignKB.buildTree();
+		if (true) {
 			Map<String, String> parentChildPairs = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
 
 			resultTree = new PartialHierarchyTree<NodeWithName>(new VisualizationHierarchyProvider(
 					parentChildPairs));
-			label =shorty.shorten("Anamnese_Patientensituation");
+			label = shorty.shorten("Anamnese_Patientensituation");
 			resultTree.insertNode(new NodeWithName("Anamnese_Patientensituation", label));
 			String fatherOfTheMoment = "Anamnese_Patientensituation";
 			while (!fatherOfTheMoment.isEmpty()) {
@@ -163,10 +161,11 @@ public class GraphBuilder {
 						helpconnectionType, true);
 				if (nextfather.size() >= 1) {
 					fatherOfTheMoment = nextfather.get(0);
-					label=shorty.shorten(fatherOfTheMoment);
+					label = shorty.shorten(fatherOfTheMoment);
 					resultTree.insertNode(new NodeWithName(fatherOfTheMoment,
 							label));
-				}else{
+				}
+				else {
 					break;
 				}
 			}
@@ -176,11 +175,11 @@ public class GraphBuilder {
 		result = JsonFactory.toJSON(resultTree);
 		return result;
 	}
-	
-	public static PartialHierarchyTree<NodeWithName> hightlightConcept(PartialHierarchyTree<NodeWithName> tree, String conceptToHightlight, String connectionType) {
+
+	private static PartialHierarchyTree<NodeWithName> hightlightConcept(PartialHierarchyTree<NodeWithName> tree, String conceptToHightlight, String connectionType) {
 		Node<NodeWithName> toAlter = tree.find(new NodeWithName(conceptToHightlight,
 				shorty.shorten(conceptToHightlight)));
-		if(!(toAlter==null)){
+		if (!(toAlter == null)) {
 			toAlter.getData().setHighligted();
 			tree.insertNode(toAlter.getData());
 		}
@@ -202,21 +201,20 @@ public class GraphBuilder {
 
 	}
 
-	public static PartialHierarchyTree<NodeWithName> getChildConceptTree(String father, String connectionType, PartialHierarchyTree<NodeWithName> tree, String toHighlight) {
+	private static PartialHierarchyTree<NodeWithName> getChildConceptTree(String father, String connectionType, PartialHierarchyTree<NodeWithName> tree, String toHighlight) {
 		List<String> childs = DataBaseHelper.getConnectedNodeNamesOfType(father, connectionType,
 				false);
 		if (childs.isEmpty()) {
 			return tree;
 		}
 		else {
-			for (int i = 0; i < childs.size(); i++) {
-				String string = childs.get(i);
-				if (!childs.get(i).equals(father)) {
+			for (String string : childs) {
+				if (!string.equals(father)) {
 					boolean highlight = false;
-					if (childs.get(i).equals(toHighlight)) highlight = true;
-					shorty.shorten(childs.get(i));
-					tree.insertNode(new NodeWithName(childs.get(i),
-							Integer.toString(DataBaseHelper.countQuerytresults(childs.get(i))),
+					if (string.equals(toHighlight)) highlight = true;
+					shorty.shorten(string);
+					tree.insertNode(new NodeWithName(string,
+							Integer.toString(DataBaseHelper.countQuerytresults(string)),
 							highlight));
 					getChildConceptTree(string, connectionType, tree, toHighlight);
 				}
@@ -226,7 +224,7 @@ public class GraphBuilder {
 
 	}
 
-	public static String getChildConcepts(String father, String connectionType, boolean getConnectionAmount, PartialHierarchyTree<NodeWithName> tree) {
+	private static String getChildConcepts(String father, String connectionType, boolean getConnectionAmount, PartialHierarchyTree<NodeWithName> tree) {
 		String resultString = "";
 		String label;
 		List<String> childs = DataBaseHelper.getConnectedNodeNamesOfType(father, connectionType,
@@ -235,11 +233,10 @@ public class GraphBuilder {
 			return resultString += "}";
 		}
 		else {
-			for (int i = 0; i < childs.size(); i++) {
-				String string = childs.get(i);
-				if (!childs.get(i).equals(father)) {
-					label =shorty.shorten(childs.get(i));
-					tree.insertNode(new NodeWithName(childs.get(i),
+			for (String string : childs) {
+				if (!string.equals(father)) {
+					label = shorty.shorten(string);
+					tree.insertNode(new NodeWithName(string,
 							label));
 					resultString += getChildConcepts(string, connectionType, getConnectionAmount,
 							tree);
@@ -291,8 +288,7 @@ public class GraphBuilder {
 		List<String> trace2root = new LinkedList<String>();
 
 		if (DataBaseHelper.getConnectedNodeNamesOfType(startConcept,
-				connectionType, true).size() > 0)
-		{
+				connectionType, true).size() > 0) {
 			trace2root.add(startConcept);
 		}
 		else {
@@ -305,7 +301,7 @@ public class GraphBuilder {
 
 			List<String> list = DataBaseHelper.getConnectedNodeNamesOfType(startConcept,
 					connectionType, true); // reverse Parameter auf true, damit
-											// nicht Nachfolger sd Vorgaenger
+			// nicht Nachfolger sd Vorgaenger
 
 			if (list.size() > 0) {
 

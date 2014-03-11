@@ -18,56 +18,41 @@
  */
 package de.knowwe.ophtovisD3;
 
-
 /**
- * 
  * @author adm_rieder
  * @created 22.10.2012
  */
-public class GraphNode
-{
+class GraphNode {
 
 	private String name;
 
 	private String label;
-	GraphNode [] children;
+	GraphNode[] children;
 
 	boolean hasChildren = false;
 
-	public GraphNode(String name, String label)
-	{
-		this.name=name;
-		this.label=label;
+	public GraphNode(String name, String label) {
+		this.name = name;
+		this.label = label;
 	}
 
-	
 	public String getName() {
 		return name;
 	}
 
-	
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	
 	public String getLabel() {
 		return label;
 	}
 
-	
 	public void setLabel(String label) {
 		this.label = label;
 	}
 
-
-
-
-
-	
 	// ////////////////////////////////////////////////////////////////////////////////
-
-
 
 }
 

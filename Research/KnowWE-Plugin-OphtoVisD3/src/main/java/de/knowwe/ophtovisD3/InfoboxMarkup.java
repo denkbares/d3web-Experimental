@@ -26,7 +26,7 @@ public class InfoboxMarkup extends DefaultMarkupType {
 		this.setRenderer(new InfoboxRenderer());
 	}
 
-	class InfoboxRenderer implements Renderer {
+	private class InfoboxRenderer implements Renderer {
 
 		@Override
 		public void render(Section<?> section, UserContext user, RenderResult string) {

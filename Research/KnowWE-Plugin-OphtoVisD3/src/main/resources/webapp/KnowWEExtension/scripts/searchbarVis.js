@@ -1,29 +1,29 @@
-
 var oldSearchTerm;
 
-function searchInVis (searchterm){
-console.log(searchterm.length);
+function searchInVis(searchterm) {
+	console.log(searchterm.length);
 
-if (searchterm.length>=1){
-undoHighlighting();
+	if (searchterm.length >= 1) {
+		undoHighlighting();
 
-oldSearchTerm = searchterm;
+		oldSearchTerm = searchterm;
 
-d3.selectAll("text").filter(function(d, i){ return (this.textContent.indexOf(searchterm) >= 0); }).style("fill","red");	
+		d3.selectAll("text").filter(function(d, i) {
+			return (this.textContent.indexOf(searchterm) >= 0);
+		}).style("fill", "red");
+	}
+	else {
+		undoHighlighting();
+		oldSearchTerm = "";
+	}
+
 }
-else{
-	undoHighlighting();
-	oldSearchTerm = "";
-}
-		
-};
+function undoHighlighting() {
 
-function undoHighlighting(){
-	
-	
-	
-d3.selectAll("text").filter(function(d, i){ return (this.textContent.indexOf(oldSearchTerm) >= 0); }).style("fill","black");
-	
-	
-	
+
+	d3.selectAll("text").filter(function(d, i) {
+		return (this.textContent.indexOf(oldSearchTerm) >= 0);
+	}).style("fill", "black");
+
+
 }

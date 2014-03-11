@@ -43,15 +43,14 @@ import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
- * 
  * @author chris
  * @created 01.10.2012
  */
-public class DataBaseHelper {
+class DataBaseHelper {
 
 	// Teilmethode fragt nach Verbindungen in DBconType unterkonzept, liefert
 	public static List<String> getConnectedNodeNamesOfType(String startNode,
-			String conType, boolean reverse) {
+														   String conType, boolean reverse) {
 		List<String> connectedNodesList = new ArrayList<String>();
 		QueryResultTable table = null;
 
@@ -150,8 +149,8 @@ public class DataBaseHelper {
 		return i + "";
 	}
 
-	public static QueryResultTable getAllConnections(String concept,
-			boolean reverse) {
+	private static QueryResultTable getAllConnections(String concept,
+													  boolean reverse) {
 		QueryResultTable table = null;
 		try {
 			concept = URLDecoder.decode(concept, "UTF-8");
@@ -173,7 +172,7 @@ public class DataBaseHelper {
 		return table;
 	}
 
-	public static LinkedList<String[]> querytableToList(QueryResultTable table) {
+	private static LinkedList<String[]> querytableToList(QueryResultTable table) {
 		LinkedList<String[]> result = new LinkedList<String[]>();
 		for (QueryRow queryRow : table) {
 			Node node = queryRow.getValue("a");
@@ -200,12 +199,11 @@ public class DataBaseHelper {
 	}
 
 	/**
-	 * This Method tries to get the first Object of a Chain in Order to get the
-	 * whole DB connected by this Type
-	 * 
-	 * @created 12.03.2013
-	 * @param relationType
+	 * This Method tries to get the first Object of a Chain in Order to get the whole DB connected by this Type
+	 *
+	 * @param relationType Defines the type of the connection to the desired Chain member
 	 * @return
+	 * @created 12.03.2013
 	 */
 	public static String getFirstObjectOfChain(String relationType) {
 
@@ -215,7 +213,7 @@ public class DataBaseHelper {
 
 	// before CCC
 
-	public static String createSparqlURI(String name) {
+	private static String createSparqlURI(String name) {
 		name = Strings.unquote(name);
 		Collection<Section<? extends SimpleDefinition>> definitions = IncrementalCompiler
 				.getInstance().getTerminology()
@@ -246,7 +244,7 @@ public class DataBaseHelper {
 
 	// liefert den Parent Node, fuer Breadcrubs verwenden
 	public static String getRootConcept(String startConcept,
-			String connectionType) {
+										String connectionType) {
 		do {
 			ArrayList<String> parent = (ArrayList<String>) getConnectedNodeNamesOfType(
 					startConcept, connectionType, true);

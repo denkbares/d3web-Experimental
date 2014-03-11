@@ -22,36 +22,37 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.rendering.RenderResult;
 
 /**
- * 
  * @author adm_rieder
  * @created 07.11.2012
  */
 public class Visualization {
-					   
-	public static void visualise(String concept, RenderResult result){
-			appendHtmlWrap("<script> createKnoten() </script>", result);
+
+	public static void visualise(String concept, RenderResult result) {
+		appendHtmlWrap("<script> createKnoten() </script>", result);
 	}
-	public static void visualiseWheel(String concept, RenderResult result){
+
+	public static void visualiseWheel(String concept, RenderResult result) {
 		appendHtmlWrap(" <script> createWheel() </script>", result);
-}
-	public static void visualiseTree(String concept, RenderResult result){
+	}
+
+	public static void visualiseTree(String concept, RenderResult result) {
 		appendHtmlWrap(" <script> createTree() </script>", result);
-}
-	public static void visualiseForce(String concept, RenderResult result){
+	}
+
+	public static void visualiseForce(String concept, RenderResult result) {
 		appendHtmlWrap(" <script> createForce() </script>", result);
 	}
 
-	public static void visualiseBubble(String concept, RenderResult result){
+	public static void visualiseBubble(String concept, RenderResult result) {
 		appendHtmlWrap(" <script> createBubble('" + concept + "') </script>", result);
-		
+
 	}
+
 	/**
-	 * Adds some of the Basic Websitefeatures with are common in all the
-	 * Graphvisualisations
-	 * 
+	 * Adds some of the Basic Websitefeatures with are common in all the Graphvisualisations
 	 */
-	
-	public static void appendHtmlWrap(String jsCommands, RenderResult result) {
+
+	private static void appendHtmlWrap(String jsCommands, RenderResult result) {
 		String context = Environment.getInstance().getWikiConnector().getServletContext().getContextPath();
 		result.appendHtml(
 				"	<link rel=\"stylesheet\" href=\""
@@ -111,7 +112,7 @@ public class Visualization {
 						//
 						"	<script type=\"text/javascript\" src=\""
 						+ context
-						+ "/KnowWEExtension/scripts/jquery-1.9.1.js \"></script>\r\n"+
+						+ "/KnowWEExtension/scripts/jquery-1.9.1.js \"></script>\r\n" +
 						"<script type='text/javascript' src='KnowWEExtension/scripts/jquery-compatibility.js'></script>"
 						+
 						"<script type='text/javascript' src='scripts/mootools.js'></script>"
@@ -163,7 +164,7 @@ public class Visualization {
 						+
 						"	<script type=\"text/javascript\" src=\""
 						+ context
-						+ "/KnowWEExtension/scripts/jquery-ui.js \"></script>\r\n"+
+						+ "/KnowWEExtension/scripts/jquery-ui.js \"></script>\r\n" +
 						//
 						"	<script type=\"text/javascript\" src=\""
 						+ context
@@ -172,7 +173,7 @@ public class Visualization {
 						//
 						"	<script type=\"text/javascript\" src=\""
 						+ context
-						+ "/KnowWEExtension/scripts/jquery-1.9.1.js \"></script>\r\n"+
+						+ "/KnowWEExtension/scripts/jquery-1.9.1.js \"></script>\r\n" +
 						// old menu
 						// "<div id=headerwrap class=fixed>\r\n" +
 						// "<div id=header>\r\n" +
@@ -210,8 +211,8 @@ public class Visualization {
 						+ "</div>"
 						+ "<div id=\"center-container\">"
 						+ // Breadcrumbs
-							// "<div id=\"breadcrumb\" class=\"breadcrumbs\">"
-							// +
+						// "<div id=\"breadcrumb\" class=\"breadcrumbs\">"
+						// +
 						"<div id=\"crumb-container\" class=\"cr-cont\">"
 						+
 						"<div id=\"breadcrumb\" class=\"crumbs\">"
@@ -317,12 +318,7 @@ public class Visualization {
 						"</div>"
 						+
 						jsCommands
-				);
+		);
 	}
 
-	
-	
-	
-
-	
 }
