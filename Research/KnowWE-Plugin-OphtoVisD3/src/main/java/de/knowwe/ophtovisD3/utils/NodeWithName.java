@@ -1,7 +1,5 @@
 package de.knowwe.ophtovisD3.utils;
 
-import com.sun.javafx.beans.annotations.NonNull;
-
 public class NodeWithName implements Comparable<NodeWithName> {
 
 	final String name;
@@ -38,7 +36,7 @@ public class NodeWithName implements Comparable<NodeWithName> {
 	}
 
 	@Override
-	public int compareTo(@NonNull NodeWithName o) {
+	public int compareTo(NodeWithName o) {
 		return this.name.compareTo(o.name);
 	}
 
