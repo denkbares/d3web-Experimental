@@ -23,6 +23,7 @@ import java.util.List;
 
 import de.d3web.collections.PartialHierarchy;
 import de.d3web.strings.Identifier;
+import de.knowwe.core.user.UserContext;
 
 /**
  * 
@@ -33,61 +34,10 @@ public interface HierarchyProvider<T> extends PartialHierarchy<T> {
 
 	public static final String EXTENSION_POINT_HIERARCHY_PROVIDER = "HierarchyProvider";
 	
-	/**
-	 * Sets a list of term categories that will be used to filter the terms that
-	 * occur in the termbrowser
-	 * 
-	 * (categories for instance can be specified by the user in markup)
-	 * 
-	 * @created 20.11.2013
-	 * @param categories
-	 */
-	void setCategories(List<String> categories);
+	void updateSettings(UserContext user);
 
-	/**
-	 * Sets a list of term categories that will be used to filter the terms that
-	 * occur in the termbrowser
-	 * 
-	 * (categories for instance can be specified by the user in markup)
-	 * 
-	 * @created 20.11.2013
-	 * @param categories
-	 */
-	void setIgnoredTerms(List<String> ignoredTerms);
 
-	/**
-	 * Filters the set of terms according to the filter categories set in
-	 * setCategories().
-	 * 
-	 * Filtering is not necessary, i.e., also the full collection can be
-	 * returned agains
-	 * 
-	 * @created 20.11.2013
-	 * @param terms
-	 * @return
-	 */
 	Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms);
-
-	/**
-	 * Allows to specify the hierarchical relations that should be used by the
-	 * termbrowser. This is not necessarily required if the HierarchyProvider
-	 * uses hard coded hierarchy relations internally.
-	 * 
-	 * (relations for instance can be specified by the user in markup)
-	 * 
-	 * @created 20.11.2013
-	 * @param relations
-	 */
-	void setAdditionalHierarchyRelations(List<String> relations);
-
-	/**
-	 * Set the master article of the knowledge base that should be used by the
-	 * HierarchyProvider
-	 * 
-	 * @created 20.11.2013
-	 * @param master
-	 */
-	void setMaster(String master);
 
 	/**
 	 * Returns all children terms for the specified terms.

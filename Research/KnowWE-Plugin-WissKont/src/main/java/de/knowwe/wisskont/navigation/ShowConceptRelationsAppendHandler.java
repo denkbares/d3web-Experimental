@@ -34,7 +34,7 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
-import de.knowwe.termbrowser.TermRecommender;
+import de.knowwe.termbrowser.TermSetManager;
 import de.knowwe.visualization.GraphDataBuilder;
 import de.knowwe.wisskont.ConceptMarkup;
 
@@ -100,7 +100,7 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 
 			parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, colorCodes);
 
-			boolean collapsed = TermRecommender.getInstance().graphIsCollapsed(user);
+			boolean collapsed = TermSetManager.getInstance().graphIsCollapsed(user);
 			String stylePlus = "";
 			String styleMinus = "";
 			String styleContent = "";

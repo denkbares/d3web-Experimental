@@ -18,13 +18,14 @@
  */
 package de.knowwe.termbrowser;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.d3web.strings.Identifier;
+import de.d3web.utils.Log;
+import de.knowwe.core.user.UserContext;
 
 /**
  * 
@@ -33,35 +34,17 @@ import de.d3web.strings.Identifier;
  */
 public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 
-	private List<String> hierarchyRelations = new ArrayList<String>();
-	private List<String> hierarchyCategories = new ArrayList<String>();
-	private List<String> ignoredTerms = new ArrayList<String>();
-	private String master = null;
 	private final HierarchyProvider<Identifier> hierarchyProvider;
-
+	private final UserContext user;
 	/**
 	 * 
 	 */
-	public TermBrowserHierarchy(String master, List<String> relations, List<String> categories, List<String> ignoredTerms) {
-		if(relations != null){
-			hierarchyRelations.addAll(relations);
-		}
-		this.master = master;
-		this.hierarchyCategories = categories;
-		this.ignoredTerms = ignoredTerms;
-		hierarchyProvider = TermBrowserHierarchy.getPluggedHierarchyProvider();
-	}
-
-	public List<String> getHierarchyRelations() {
-		return hierarchyRelations;
-	}
-
-	public List<String> getIgnoredConcepts() {
-		return ignoredTerms;
-	}
-
-	public String getMaster() {
-		return master;
+	public TermBrowserHierarchy(UserContext user) {
+		
+		this.user = user;
+		String provider = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyProvider(user);
+		hierarchyProvider = TermBrowserHierarchy.getPluggedHierarchyProvider(provider);
+		hierarchyProvider.updateSettings(user);
 	}
 
 	/**
@@ -70,62 +53,47 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static HierarchyProvider<Identifier> getPluggedHierarchyProvider() {
+	public static HierarchyProvider<Identifier> getPluggedHierarchyProvider(String provider) {
 		Extension[] extensions = PluginManager.getInstance().getExtensions(
 				"KnowWE-Plugin-TermBrowser", HierarchyProvider.EXTENSION_POINT_HIERARCHY_PROVIDER);
 		for (Extension extension : extensions) {
 			Object newInstance = extension.getSingleton();
 			if (newInstance instanceof HierarchyProvider) {
-				return (HierarchyProvider<Identifier>) newInstance;
+				if (provider == null || provider.length() == 0) {
+					return (HierarchyProvider<Identifier>) newInstance;
+				}
+				else {
+					if (newInstance.getClass().getName().endsWith(provider)) {
+						return (HierarchyProvider<Identifier>) newInstance;
+					}
+				}
 			}
 		}
+		Log.warning("No HierarchyProvider found to populate TermBrowser: Either none is loaded by the Plugin-Framework or the @provider annotation in the TermBrowser-Markup is set incorrectly.");
 		return null;
 	}
 
 	@Override
 	public List<Identifier> getChildren(Identifier term) {
-		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
-		hierarchyProvider.setCategories(hierarchyCategories);
-		this.hierarchyProvider.setCategories(ignoredTerms);
-		hierarchyProvider.setMaster(master);
+		this.hierarchyProvider.updateSettings(user);
 		return hierarchyProvider.getChildren(term);
 	}
 
 	@Override
 	public List<Identifier> getParents(Identifier term) {
-		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
-		hierarchyProvider.setCategories(hierarchyCategories);
-		this.hierarchyProvider.setCategories(ignoredTerms);
-		hierarchyProvider.setMaster(master);
+		this.hierarchyProvider.updateSettings(user);
 		return hierarchyProvider.getParents(term);
 	}
 
 	private boolean isSubNodeOf(Identifier term1, Identifier term2) {
-		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
-		hierarchyProvider.setCategories(hierarchyCategories);
-		this.hierarchyProvider.setCategories(ignoredTerms);
-		hierarchyProvider.setMaster(master);
+		this.hierarchyProvider.updateSettings(user);
 		return hierarchyProvider.isSuccessorOf(term1, term2);
 	}
 
-	@Override
-	public void setAdditionalHierarchyRelations(List<String> relations) {
-		hierarchyRelations = relations;
-
-	}
-
-	@Override
-	public void setMaster(String master) {
-		this.master = master;
-
-	}
 
 	@Override
 	public Collection<Identifier> getAllTerms() {
-		hierarchyProvider.setAdditionalHierarchyRelations(hierarchyRelations);
-		hierarchyProvider.setCategories(hierarchyCategories);
-		this.hierarchyProvider.setIgnoredTerms(ignoredTerms);
-		hierarchyProvider.setMaster(master);
+		this.hierarchyProvider.updateSettings(user);
 		Collection<Identifier> result = hierarchyProvider.getAllTerms();
 		return result;
 	}
@@ -135,11 +103,6 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 		return hierarchyProvider.getStartupTerms();
 	}
 
-	@Override
-	public void setCategories(List<String> categories) {
-		this.hierarchyProvider.setCategories(categories);
-
-	}
 
 	@Override
 	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
@@ -151,10 +114,10 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 		return isSubNodeOf(node1.getTerm(), node2.getTerm());
 	}
 
+
 	@Override
-	public void setIgnoredTerms(List<String> ignoredTerms) {
-		this.ignoredTerms = ignoredTerms;
-		this.hierarchyProvider.setCategories(ignoredTerms);
+	public void updateSettings(UserContext user) {
+		this.hierarchyProvider.updateSettings(user);
 	}
 
 }

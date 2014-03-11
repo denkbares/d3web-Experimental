@@ -32,6 +32,7 @@ import de.d3web.strings.Strings;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.ontology.browser.util.HierarchyUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.termbrowser.HierarchyProvider;
@@ -80,17 +81,6 @@ public class WissassHierarchyProvider implements HierarchyProvider<Identifier> {
 						baseUrl + ValuesMarkup.VALUE_PROPERTY), null);
 	}
 
-	@Override
-	public void setAdditionalHierarchyRelations(List<String> relations) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setMaster(String master) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public Collection<Identifier> getAllTerms() {
@@ -110,11 +100,7 @@ public class WissassHierarchyProvider implements HierarchyProvider<Identifier> {
 		return startTerms;
 	}
 
-	@Override
-	public void setCategories(List<String> categories) {
-		// TODO Auto-generated method stub
 
-	}
 
 	@Override
 	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
@@ -122,9 +108,9 @@ public class WissassHierarchyProvider implements HierarchyProvider<Identifier> {
 		return terms;
 	}
 
-	@Override
-	public void setIgnoredTerms(List<String> ignoredTerms) {
-		// we do not filter for now
 
+	@Override
+	public void updateSettings(UserContext user) {
+		// nothing to update
 	}
 }

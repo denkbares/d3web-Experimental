@@ -52,6 +52,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 	private static final String START_CONCEPT = "startConcept";
 	private static final String CLEAR_ON_LOAD = "clearOnLoad";
 	private static final String PREFIX_ABBREVIATION = "abbreviation";
+	private static final String HIERARCHY_PROVIDER = "provider";
 	private static final String TITLE = "title";
 	private static final String SIZE = "size";
 	private static final DefaultMarkup MARKUP;
@@ -70,6 +71,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		MARKUP.addAnnotation(IGNORE, false);
 		MARKUP.addAnnotation(START_CONCEPT, false);
 		MARKUP.addAnnotation(TITLE, false);
+		MARKUP.addAnnotation(HIERARCHY_PROVIDER, false);
 		MARKUP.addAnnotation(SEARCH_SLOT, false, new String[] {
 				"true", "false" });
 		MARKUP.addAnnotation(CLEAR_ON_LOAD, false, new String[] {
@@ -103,6 +105,15 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		if (termBrowser != null) {
 			return DefaultMarkupType.getAnnotation(termBrowser,
 					PackageManager.MASTER_ATTRIBUTE_NAME);
+		}
+		return null;
+	}
+
+	public static String getCurrentTermbrowserMarkupHierarchyProvider(UserContext user) {
+		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
+		if (termBrowser != null) {
+			return DefaultMarkupType.getAnnotation(termBrowser,
+					HIERARCHY_PROVIDER);
 		}
 		return null;
 	}
@@ -227,13 +238,13 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 			// check whether term set should be cleared before rendering
 			boolean clearData = TermBrowserMarkup.getCurrentTermbrowserMarkupClearOnLoadFlag(user);
 			if (clearData) {
-				TermRecommender.getInstance().clearList(user);
+				TermSetManager.getInstance().clearList(user);
 			}
 
 			// insert static start term
 			String startConcept = TermBrowserMarkup.getCurrentTermbrowserMarkupStartConcept(user);
 			if (startConcept != null && startConcept.trim().length() > 0) {
-				RecommendationSet recommendationSet = TermRecommender.getInstance().getRecommendationSet(
+				TermSet recommendationSet = TermSetManager.getInstance().getRecommendationSet(
 						user);
 				recommendationSet.addValue(new Identifier(startConcept.split("#")), 1.0);
 			}

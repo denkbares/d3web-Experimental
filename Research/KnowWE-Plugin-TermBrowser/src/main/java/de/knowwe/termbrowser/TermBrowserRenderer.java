@@ -53,12 +53,7 @@ public class TermBrowserRenderer {
 		this.linkProvider = linkProvider;
 		this.master = master;
 		this.hierarchyPrefixAbbreviation = prefixAbbreviation;
-
-		List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
-		List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
-		List<String> ignores = TermBrowserMarkup.getCurrentTermbrowserIgnoredTerms(user);
-		hierarchy = new TermBrowserHierarchy(master, relations, categories, ignores);
-
+		hierarchy = new TermBrowserHierarchy(user);
 	}
 
 	// private OntologyCompletionProviderConfig
@@ -91,7 +86,7 @@ public class TermBrowserRenderer {
 			String toolTipCollapse = "Liste der Begriffe verbergen";
 			String toolTipOpen = "Liste der Begriffe aufklappen";
 			String toolTipClear = "Liste der Begriffe leeren";
-			boolean collapsed = TermRecommender.getInstance().listIsCollapsed(user);
+			boolean collapsed = TermSetManager.getInstance().listIsCollapsed(user);
 			String minusStyle = "";
 			String plusStyle = "";
 			String clearStyle = "float:right;";
@@ -171,7 +166,7 @@ public class TermBrowserRenderer {
 			}
 
 			// render term list
-			PartialHierarchyTree<RatedTerm> ratedTermTreeTop = TermRecommender.getInstance().getRatedTermTreeTop(
+			PartialHierarchyTree<RatedTerm> ratedTermTreeTop = TermSetManager.getInstance().getRatedTermTreeTop(
 					user,
 					browserSize);
 
@@ -293,8 +288,8 @@ public class TermBrowserRenderer {
 			string.appendHtml("<table style='table-layout:fixed'>");
 			{
 				String conceptRowStyle = "entryLine";
-				if (TermRecommender.getInstance().getLatestAddedTerm(user) != null
-						&& TermRecommender.getInstance().getLatestAddedTerm(user).equals(term)) {
+				if (TermSetManager.getInstance().getLatestAddedTerm(user) != null
+						&& TermSetManager.getInstance().getLatestAddedTerm(user).equals(term)) {
 					conceptRowStyle  = "entryLine-highlighted";
 				}
 				string.appendHtml("<tr height='23px' class='" + conceptRowStyle + "'>");

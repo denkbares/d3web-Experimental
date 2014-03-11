@@ -101,51 +101,51 @@ public class TermBrowserAction extends AbstractAction {
 		else {
 			if (command.equals("searched")) {
 				// update ranking weights
-				TermRecommender.getInstance().termSearched(context, createTermIdentifier(term));
+				TermSetManager.getInstance().termSearched(context, createTermIdentifier(term));
 			}
 			else if (command.equals("remove")) {
 				// removes this concept from the list
-				TermRecommender.getInstance().clearTerm(context, createTermIdentifier(term));
+				TermSetManager.getInstance().clearTerm(context, createTermIdentifier(term));
 			}
 			else if (command.equals("expand")) {
 				// adds all sub-concepts of a concept to the list
-				TermRecommender.getInstance().expandTerm(context, createTermIdentifier(term));
+				TermSetManager.getInstance().expandTerm(context, createTermIdentifier(term));
 			}
 			else if (command.equals("addParent")) {
 				// adds all sub-concepts of a concept to the list
-				TermRecommender.getInstance().addParentTerm(context, createTermIdentifier(term));
+				TermSetManager.getInstance().addParentTerm(context, createTermIdentifier(term));
 			}
 			else if (command.equals("collapse")) {
 				// removes all sub-concepts of a concepts from the list
-				TermRecommender.getInstance().collapseTerm(context, createTermIdentifier(term));
+				TermSetManager.getInstance().collapseTerm(context, createTermIdentifier(term));
 			}
 			else if (command.equals("collapseGraph")) {
 				// stores user's collapse state on server
-				TermRecommender.getInstance().collapseGraph(context);
+				TermSetManager.getInstance().collapseGraph(context);
 			}
 			else if (command.equals("openGraph")) {
 				// stores user's collapse state on server
-				TermRecommender.getInstance().openGraph(context);
+				TermSetManager.getInstance().openGraph(context);
 			}
 			else if (command.equals("toggleGraph")) {
 				// stores user's collapse state on server
-				TermRecommender.getInstance().toggleGraph(context);
+				TermSetManager.getInstance().toggleGraph(context);
 			}
 			else if (command.equals("collapseList")) {
 				// stores user's collapse state on server
-				TermRecommender.getInstance().collapseList(context);
+				TermSetManager.getInstance().collapseList(context);
 			}
 			else if (command.equals("openList")) {
 				// stores user's collapse state on server
-				TermRecommender.getInstance().openList(context);
+				TermSetManager.getInstance().openList(context);
 			}
 			else if (command.equals("clear")) {
 				// clears the entire concept list/tree
-				TermRecommender.getInstance().clearList(context);
+				TermSetManager.getInstance().clearList(context);
 			}
 			else if (command.equals("toggle")) {
 				// toggles the the collapse state of list/tree
-				TermRecommender.getInstance().toggleCollapse(context);
+				TermSetManager.getInstance().toggleCollapse(context);
 			}
 			else if (command.equals("open")) {
 				// opens the page for this concept

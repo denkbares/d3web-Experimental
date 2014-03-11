@@ -33,7 +33,7 @@ import de.knowwe.core.user.UserContext;
  * @author jochenreutelshofer
  * @created 05.12.2012
  */
-public class RecommendationSet {
+public class TermSet {
 
 	private PartialHierarchyTree<RatedTerm> terms = null;
 	private boolean browserIsCollapsed = false;
@@ -53,17 +53,13 @@ public class RecommendationSet {
 	/**
 	 * 
 	 */
-	public RecommendationSet(String master, List<String> relations, List<String> categories, List<String> ignores) {
-		hierarchy = new TermBrowserHierarchy(master, relations, categories, ignores);
+	public TermSet(UserContext user) {
+		hierarchy = new TermBrowserHierarchy(user);
 		terms = new PartialHierarchyTree<RatedTerm>(hierarchy);
 	}
 
-	public static RecommendationSet createRecommendationSet(UserContext user) {
-		String masta = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
-		List<String> relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
-		List<String> categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
-		List<String> ignores = TermBrowserMarkup.getCurrentTermbrowserIgnoredTerms(user);
-		return new RecommendationSet(masta, relations, categories, ignores);
+	public static TermSet createRecommendationSet(UserContext user) {
+		return new TermSet(user);
 	}
 
 	public void setBrowserIsCollapsed(boolean browserIsCollapsed) {
@@ -170,19 +166,7 @@ public class RecommendationSet {
 	}
 
 	public void updateUserData(UserContext context) {
-
-		// update master
-		String master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(context);
-		getHierarchy().setMaster(master);
-
-		// update hierarchy categories
-		List<String> hierarchyCategories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(context);
-		getHierarchy().setCategories(hierarchyCategories);
-
-		// update relations
-		List<String> hierarchyRelations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(context);
-		getHierarchy().setAdditionalHierarchyRelations(hierarchyRelations);
-
+		getHierarchy().updateSettings(context);
 	}
 
 }

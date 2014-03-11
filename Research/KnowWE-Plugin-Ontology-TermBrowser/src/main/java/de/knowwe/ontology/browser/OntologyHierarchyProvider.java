@@ -28,11 +28,13 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 import de.knowwe.core.compile.terminology.TerminologyManager;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.ontology.browser.cache.SparqlCacheManager;
 import de.knowwe.ontology.browser.util.HierarchyUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.termbrowser.HierarchyProvider;
+import de.knowwe.termbrowser.TermBrowserMarkup;
 
 /**
  * 
@@ -48,16 +50,6 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 	protected String master = null;
 
 	protected boolean mixedRelationHierarchyMode = false;
-
-	@Override
-	public void setAdditionalHierarchyRelations(List<String> relations) {
-		this.relations = relations;
-	}
-
-	@Override
-	public void setCategories(List<String> categories) {
-		this.categories = categories;
-	}
 
 	private String getShortURI(Identifier termID) {
 		String[] termElements = termID.getPathElements();
@@ -178,11 +170,6 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 	}
 
 	@Override
-	public void setMaster(String master) {
-		this.master = master;
-	}
-
-	@Override
 	public Collection<Identifier> getAllTerms() {
 		TerminologyManager terminologyManager = HierarchyUtils.getCompiler(master).getTerminologyManager();
 		return terminologyManager.getAllDefinedTerms();
@@ -240,10 +227,13 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 		return resultConcepts;
 	}
 
-	@Override
-	public void setIgnoredTerms(List<String> ignoredTerms) {
-		this.ignoredTerms = ignoredTerms;
 
+	@Override
+	public void updateSettings(UserContext user) {
+		relations.addAll(TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user));
+		categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
+		ignoredTerms = TermBrowserMarkup.getCurrentTermbrowserIgnoredTerms(user);
+		this.master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
 	}
 
 }

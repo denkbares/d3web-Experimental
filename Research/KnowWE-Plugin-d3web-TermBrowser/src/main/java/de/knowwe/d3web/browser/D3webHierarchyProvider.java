@@ -41,7 +41,9 @@ import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.termbrowser.HierarchyProvider;
+import de.knowwe.termbrowser.TermBrowserMarkup;
 
 /**
  * 
@@ -50,19 +52,10 @@ import de.knowwe.termbrowser.HierarchyProvider;
  */
 public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 
-	private List<String> relations = null;
+	private final List<String> relations = new ArrayList<String>();
 	private String master = null;
+	private UserContext user = null;
 
-	@Override
-	public void setAdditionalHierarchyRelations(List<String> relations) {
-		this.relations = relations;
-	}
-
-	@Override
-	public void setMaster(String master) {
-		this.master = master;
-
-	}
 
 	@Override
 	public List<Identifier> getChildren(Identifier term) {
@@ -188,7 +181,9 @@ public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 	 * @return
 	 */
 	private NamedObject findTermForName(String term) {
-		KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB, master);
+		Section<TermBrowserMarkup> termBrowserMarkup = TermBrowserMarkup.getTermBrowserMarkup(user);
+		D3webCompiler compiler = Compilers.getCompiler(termBrowserMarkup, D3webCompiler.class);
+		KnowledgeBase knowledgeBase = compiler.getKnowledgeBase();
 		de.d3web.core.knowledge.TerminologyManager manager = knowledgeBase.getManager();
 		if (term.contains("#")) {
 			String[] split = term.split("#");
@@ -222,7 +217,10 @@ public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 
 	@Override
 	public Collection<Identifier> getAllTerms() {
-		KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB, master);
+		Section<TermBrowserMarkup> termBrowserMarkup = TermBrowserMarkup.getTermBrowserMarkup(user);
+		D3webCompiler compiler = Compilers.getCompiler(termBrowserMarkup, D3webCompiler.class);
+		if (compiler == null) return Collections.emptySet();
+		KnowledgeBase knowledgeBase = compiler.getKnowledgeBase();
 		if (knowledgeBase == null) return Collections.emptySet();
 
 		de.d3web.core.knowledge.TerminologyManager manager = knowledgeBase.getManager();
@@ -241,21 +239,19 @@ public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 	}
 
 	@Override
-	public void setCategories(List<String> categories) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
 		// we do not filter until now
 		return terms;
 	}
 
 	@Override
-	public void setIgnoredTerms(List<String> ignoredTerms) {
-		// we dont have ignored terms
-
+	public void updateSettings(UserContext user) {
+		this.user = user;
+		List<String> rels = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
+		if (rels != null) {
+			relations.addAll(rels);
+		}
+		this.master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
 	}
 
 }
