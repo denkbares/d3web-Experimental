@@ -61,7 +61,7 @@ public class HierarchyDashtreeElementCompileScript extends
 		Section<?> element = elementContent.getParent();
 		if (Sections.hasType(element, DashTreeElement.class)) {
 			Section<? extends DashTreeElement> father = DashTreeUtils
-					.getFatherDashTreeElement(element);
+					.getParentDashTreeElement(element);
 			if (father != null) {
 				Section<? extends Term> fatherElement = Sections
 						.findSuccessor(father, Term.class);
@@ -134,7 +134,7 @@ public class HierarchyDashtreeElementCompileScript extends
 
 		// add parent-DTE to ref-list
 		Section<? extends DashTreeElement> father = DashTreeUtils
-				.getFatherDashTreeElement(section);
+				.getParentDashTreeElement(section);
 		if (father != null) {
 
 			Section<? extends IRITermRef> fatherElement = Sections

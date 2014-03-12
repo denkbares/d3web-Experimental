@@ -1,14 +1,17 @@
 package de.knowwe.rdfs.d3web;
 
+import java.util.Collection;
+
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.core.knowledge.terminology.Choice;
-import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.session.Session;
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.kdom.dashtree.DashTreeElement;
+import de.knowwe.kdom.dashtree.DashTreeUtils;
+import de.knowwe.ontology.compile.OntologyCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class Rdf2GoD3webUtils {
 
@@ -32,18 +35,18 @@ public class Rdf2GoD3webUtils {
 		return core.createlocalURI("hasTerminologyObject");
 	}
 
-	public static String getIdentifierExternalForm(NamedObject namedObject) {
-		Identifier termIdentifier;
-		if (namedObject instanceof Choice) {
-			termIdentifier = new Identifier(((Choice) namedObject).getQuestion().getName(),
-					namedObject.getName());
-
+	public static boolean hasParentDashTreeElement(OntologyCompiler compiler, Identifier parentIdentifier) {
+		boolean hasParent = false;
+		Collection<Section<?>> termDefiningSections = compiler.getTerminologyManager()
+				.getTermDefiningSections(parentIdentifier);
+		for (Section<?> termDefiningSection : termDefiningSections) {
+			Section<? extends DashTreeElement> fatherDashTreeElement = DashTreeUtils.getParentDashTreeElement(termDefiningSection);
+			if (fatherDashTreeElement != null) {
+				hasParent = true;
+				break;
+			}
 		}
-		else {
-			termIdentifier = new Identifier(namedObject.getName());
-		}
-		String externalForm = Rdf2GoUtils.getCleanedExternalForm(termIdentifier);
-		return externalForm;
+		return hasParent;
 	}
 
 }

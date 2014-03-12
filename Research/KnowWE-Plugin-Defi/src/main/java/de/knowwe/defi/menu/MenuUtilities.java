@@ -127,7 +127,7 @@ public class MenuUtilities {
 	public static Section<? extends DashTreeElement> getRootUnit(Section<? extends DashTreeElement> unit) {
 		int dashLevel = DashTreeUtils.getDashLevel(unit);
 		for (int i = 0; i < dashLevel; i++) {
-			unit = DashTreeUtils.getFatherDashTreeElement(unit);
+			unit = DashTreeUtils.getParentDashTreeElement(unit);
 		}
 		return unit;
 	}

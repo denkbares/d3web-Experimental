@@ -101,7 +101,7 @@ public class MenuItemRenderer implements Renderer {
 		}
 		else {
 			// checken ob Einheit gewählt ist
-			Section<? extends DashTreeElement> root = DashTreeUtils.getFatherDashTreeElement(sec);
+			Section<? extends DashTreeElement> root = DashTreeUtils.getParentDashTreeElement(sec);
 			Section<DashTreeElementContent> rootContent = Sections.findChildOfType(root,
 					DashTreeElementContent.class);
 			if (getPageName(rootContent).equals(currentPage)) {

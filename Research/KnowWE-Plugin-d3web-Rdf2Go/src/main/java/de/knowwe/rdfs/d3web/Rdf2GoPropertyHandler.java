@@ -30,10 +30,11 @@ import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.core.knowledge.InfoStore;
-import de.d3web.core.knowledge.terminology.NamedObject;
+import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.info.Property;
-import de.d3web.we.knowledgebase.D3webCompiler;
-import de.knowwe.core.compile.Compilers;
+import de.d3web.strings.Identifier;
+import de.d3web.we.object.NamedObjectReference;
+import de.d3web.we.object.QuestionReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -57,14 +58,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationType> {
 
 	@Override
-	public Collection<Message> create(OntologyCompiler rdf2GoCompiler, Section<PropertyDeclarationType> section) {
-
-		Collection<D3webCompiler> compilers = Compilers.getCompilers(section, D3webCompiler.class);
-		if (compilers.isEmpty()) {
-			return Messages.noMessage();
-		}
-
-		D3webCompiler compiler = compilers.iterator().next();
+	public Collection<Message> create(OntologyCompiler compiler, Section<PropertyDeclarationType> section) {
 
 		// get Property
 		Section<PropertyType> propertySection = Sections.findSuccessor(section,
@@ -83,8 +77,7 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 		if (namendObjectSection == null) {
 			return Messages.asList();
 		}
-		List<NamedObject> objects = PropertyDeclarationHandler.getNamedObjects(compiler,
-				namendObjectSection);
+		List<Identifier> objects = getObjectIdentifiers(compiler, namendObjectSection);
 		if (objects.isEmpty()) {
 			return Messages.asList();
 		}
@@ -103,9 +96,9 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 		}
 
 		List<Statement> statements = new ArrayList<Statement>();
-		Rdf2GoCore core = rdf2GoCompiler.getRdf2GoCore();
-		for (NamedObject namedObject : objects) {
-			String externalForm = Rdf2GoD3webUtils.getIdentifierExternalForm(namedObject);
+		Rdf2GoCore core = compiler.getRdf2GoCore();
+		for (Identifier namedObject : objects) {
+			String externalForm = Rdf2GoUtils.getCleanedExternalForm(namedObject);
 			// lns:Identifier lns:has[Property] "propertyString"@Locale
 			URI identifierURI = core.createlocalURI(externalForm);
 			URI propertyNameURI = core.createlocalURI(
@@ -124,12 +117,6 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 			core.addStatements(compiler, Rdf2GoUtils.toArray(statements));
 		}
 
-		if (compilers.size() > 1) {
-			return Messages.asList(Messages.warning("Property is used in multiple knowledge bases,"
-					+ " ontology was only created"
-					+ " for the version of knowledge base '"
-					+ compiler.getKnowledgeBase().getName() + "'"));
-		}
 		return Messages.asList();
 	}
 
@@ -139,8 +126,40 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 
 	@Override
 	public void destroy(OntologyCompiler compiler, Section<PropertyDeclarationType> section) {
-		// TODO Auto-generated method stub
-
+		compiler.getRdf2GoCore().removeStatementsForSection(section);
 	}
+
+	private List<Identifier> getObjectIdentifiers(OntologyCompiler compiler, Section<PropertyObjectReference> namendObjectSection) {
+		List<Identifier> objects = new ArrayList<Identifier>(1);
+		Section<PropertyObjectReference.PropertyAnswerReference> answerReferenceSection =
+				Sections.findChildOfType(namendObjectSection, PropertyObjectReference.PropertyAnswerReference.class);
+		if (answerReferenceSection != null) {
+			Section<QuestionReference> questionReferenceSection = Sections.findChildOfType(
+					namendObjectSection, QuestionReference.class);
+			Identifier answerIdentifier = answerReferenceSection.get().getTermIdentifier(answerReferenceSection);
+			if (questionReferenceSection != null && questionReferenceSection.getText().isEmpty()) {
+				// question is a wild card, get all questions with the given
+				// answer.
+				Collection<Identifier> choiceIdentifiers = compiler.getTerminologyManager()
+						.getAllDefinedTermsOfType(Choice.class);
+				for (Identifier choiceIdentifier : choiceIdentifiers) {
+					if (choiceIdentifier.getLastPathElement().equals(answerIdentifier.getLastPathElement())) {
+						objects.add(choiceIdentifier);
+					}
+				}
+			} else {
+				objects.add(answerIdentifier);
+			}
+		}
+		if (objects.isEmpty()) {
+			Section<NamedObjectReference> namedObjectReference = Sections.findChildOfType(namendObjectSection,
+					NamedObjectReference.class);
+			if (namedObjectReference != null) {
+				objects.add(namedObjectReference.get().getTermIdentifier(namedObjectReference));
+			}
+		}
+		return objects;
+	}
+
 
 }
