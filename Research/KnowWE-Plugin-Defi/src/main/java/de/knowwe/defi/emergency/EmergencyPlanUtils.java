@@ -35,15 +35,10 @@ import de.knowwe.defi.table.TableEntryType;
 public class EmergencyPlanUtils {
 
 	private static final String NAME = "name";
-	private static final String EMERGENCY_NUMBER = "tel1";
-	private static final String CARDIOLOGIST = "tel2";
-	private static final String PHYSICIAN = "tel3";
-	private static final String EMERGENCY_PERSON = "tel4";
+	private static final String EMERGENCY_NUMBER = "emtel";
+	private static final String GENERAL = "general";
 	private static final String MEDIC = "med";
 	private static final int NUMBER_OF_MEDICS = 5;
-	private static final String BLOOD_TYPE = "blood";
-	private static final String DIAGNOSIS = "disease";
-	private static final String ICD_MODEL = "model";
 
 	/**
 	 * tableid: name INPUT0: name of patient
@@ -60,53 +55,53 @@ public class EmergencyPlanUtils {
 	}
 
 	/**
-	 * tableid: tel2 INPUT0: Cardiologist INPUT1: Tele
+	 * tableid: emtel INPUT1: Cardiologist INPUT2: Tele
 	 * 
 	 * @created 25.10.2011
 	 * @param user
 	 * @return
 	 */
 	public static String getCardiologist(String user) {
-		String entry = getTableEntry(CARDIOLOGIST, user);
-		String doctor = getEntryLine(entry, "INPUT0");
-		String phonenumber = getEntryLine(entry, "INPUT1");
+		String entry = getTableEntry(EMERGENCY_NUMBER, user);
+		String doctor = getEntryLine(entry, "INPUT1");
+		String phonenumber = getEntryLine(entry, "INPUT2");
 		
 
 		return doctorTemplate(doctor, phonenumber);
 	}
 
 	/**
-	 * tableid: tel3 INPUT0: Physician INPUT1: Tele
+	 * tableid: emtel INPUT3: Physician INPUT4: Tele
 	 * 
 	 * @created 25.10.2011
 	 * @param user
 	 * @return
 	 */
 	public static String getPhysician(String user) {
-		String entry = getTableEntry(PHYSICIAN, user);
-		String doctor = getEntryLine(entry, "INPUT0");
-		String phonenumber = getEntryLine(entry, "INPUT1");
+		String entry = getTableEntry(EMERGENCY_NUMBER, user);
+		String doctor = getEntryLine(entry, "INPUT3");
+		String phonenumber = getEntryLine(entry, "INPUT4");
 
 		return doctorTemplate(doctor, phonenumber);
 	}
 
 	/**
-	 * tableid: tel4 INPUT0: EmergencyPerson INPUT1: Tele
+	 * tableid: emtel INPUT5: EmergencyPerson INPUT6: Tele
 	 * 
 	 * @created 25.10.2011
 	 * @param user
 	 * @return
 	 */
 	public static String getEmergencyPerson(String user) {
-		String entry = getTableEntry(EMERGENCY_PERSON, user);
-		String doctor = getEntryLine(entry, "INPUT0");
-		String phonenumber = getEntryLine(entry, "INPUT1");
+		String entry = getTableEntry(EMERGENCY_NUMBER, user);
+		String doctor = getEntryLine(entry, "INPUT5");
+		String phonenumber = getEntryLine(entry, "INPUT6");
 
 		return doctorTemplate(doctor, phonenumber);
 	}
 
 	/**
-	 * tableid: tel1 INPUT0: EmergencyNumber
+	 * tableid: emtel INPUT0: EmergencyNumber
 	 * 
 	 * @created 25.10.2011
 	 * @param user
@@ -119,7 +114,7 @@ public class EmergencyPlanUtils {
 	}
 
 	/**
-	 * tableid: med1, med2, med3, med4, med5 INPUT0: drug INPUT1: dose
+	 * tableid: med INPUT0: drug INPUT1: dose
 	 * 
 	 * @created 25.10.2011
 	 * @param user
@@ -129,10 +124,10 @@ public class EmergencyPlanUtils {
 		String entry, drug, dose;
 		StringBuilder html = new StringBuilder();
 
-		for (int i = 1; i <= NUMBER_OF_MEDICS; i++) {
-			entry = getTableEntry(MEDIC + i, user);
-			drug = getEntryLine(entry, "INPUT0");
-			dose = getEntryLine(entry, "INPUT1");
+		for (int i = 0; i < NUMBER_OF_MEDICS; i++) {
+			entry = getTableEntry(MEDIC, user);
+			drug = getEntryLine(entry, "INPUT" + (i * 2));
+			dose = getEntryLine(entry, "INPUT" + (i * 2 + 1));
 
 			html.append(medTemplate(drug, dose));
 
@@ -142,53 +137,53 @@ public class EmergencyPlanUtils {
 	}
 
 	/**
-	 * tableid: blood INPUT0: blood group
+	 * tableid: general INPUT3: blood group
 	 * 
 	 * @created 25.10.2011
 	 * @param user
 	 * @return
 	 */
 	public static String getBloodType(String user) {
-		String entry = getTableEntry(BLOOD_TYPE, user);
+		String entry = getTableEntry(GENERAL, user);
 
-		return getEntryLine(entry, "INPUT0");
+		return getEntryLine(entry, "INPUT3");
 	}
 
 	/**
-	 * tableid: disease INPUT0: diagnosis
+	 * tableid: general INPUT2: diagnosis
 	 * 
 	 * @created 25.10.2011
 	 * @param user
 	 * @return
 	 */
 	public static String getDiagnosis(String user) {
-		String entry = getTableEntry(DIAGNOSIS, user);
+		String entry = getTableEntry(GENERAL, user);
 
-		return getEntryLine(entry, "INPUT0");
+		return getEntryLine(entry, "INPUT2");
 	}
 
 	/**
-	 * tableid: model INPUT0: title
+	 * tableid: general INPUT0: title
 	 * 
 	 * @created 25.10.2011
 	 * @param user
 	 * @return
 	 */
 	public static String getICDModelTitle(String user) {
-		String entry = getTableEntry(ICD_MODEL, user);
+		String entry = getTableEntry(GENERAL, user);
 
 		return getEntryLine(entry, "INPUT0");
 	}
 
 	/**
-	 * tableid: model INPUT1: type
+	 * tableid: general INPUT1: type
 	 * 
 	 * @created 25.10.2011
 	 * @param user
 	 * @return
 	 */
 	public static String getICDModelID(String user) {
-		String entry = getTableEntry(ICD_MODEL, user);
+		String entry = getTableEntry(GENERAL, user);
 
 		return getEntryLine(entry, "INPUT1");
 	}

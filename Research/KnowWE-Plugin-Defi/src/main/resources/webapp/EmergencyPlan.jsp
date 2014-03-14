@@ -92,7 +92,7 @@
 		text-align: center;
 		background-color: white;
 		position: relative;
-		top: 78px;
+		top: 65px;
 		display: block;
 		margin: 0 6px;
 		line-height: 18pt;
@@ -184,7 +184,7 @@
 if(requestUserCorrect) {
 %>
 <table id="emergency">
-	<tr><td style="background-image:url(KnowWEExtension/images/front3.png);height: 200px;"><span class='first'>
+	<tr><td style="background-image:url(KnowWEExtension/images/EmergencyPlanTop.png);height: 167px;"><span class='first'>
 	<%=EmergencyPlanUtils.getPatientName(context.getUserName())%>&nbsp;</span></td></tr>
 	<tr><td class="tel">
 		<p class='NotrufNummer'>Notruf: <%=EmergencyPlanUtils.getEmergencyNumber(context.getUserName())%></p>

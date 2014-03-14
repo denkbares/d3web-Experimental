@@ -38,7 +38,7 @@ public class EmergencyPlanTagHandler extends AbstractHTMLTagHandler {
 	 * @param name
 	 */
 	public EmergencyPlanTagHandler() {
-		super("defi.emergency");
+		super("emergency");
 	}
 
 	@Override
