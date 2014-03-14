@@ -1,11 +1,10 @@
 package de.knowwe.rdfs.d3web;
 
-import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.session.Session;
-import de.d3web.core.session.Value;
-import de.d3web.core.session.blackboard.Fact;
-import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.utils.Rdf2GoUtils;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.Literal;
@@ -14,10 +13,12 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.XSD;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
+import de.d3web.core.session.blackboard.Fact;
+import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class Rdf2GoSessionManager {
 
@@ -51,8 +52,9 @@ public class Rdf2GoSessionManager {
 		URI usesKnowledgeBaseURI = core.createlocalURI("usesKnowledgeBase");
 
 		// lns:sessionId lns:usesKnowledgeBase lns:knowledgeBaseId
-		Rdf2GoUtils.addStatement(core, sessionIdURI,
-				usesKnowledgeBaseURI, session.getKnowledgeBase().getId(), statements);
+		String id = session.getKnowledgeBase().getId();
+		if (id == null) id = "noId";
+		Rdf2GoUtils.addStatement(core, sessionIdURI, usesKnowledgeBaseURI, id, statements);
 
 		statementCache.put(null, statements);
 
