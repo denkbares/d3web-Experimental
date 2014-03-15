@@ -34,7 +34,7 @@ public class Rdf2GoSessionManager {
 		this.core.commit();
 	}
 
-	public void addSession(Session session, boolean commitAfterPropagation) {
+	public void addSessionToRdf2GoCore(Session session, boolean commitAfterPropagation) {
 		Set<Statement> statements = new HashSet<Statement>();
 		URI sessionIdURI = Rdf2GoD3webUtils.getSessionIdURI(core, session);
 		URI sessionURI = core.createlocalURI(Session.class.getSimpleName());
@@ -129,7 +129,7 @@ public class Rdf2GoSessionManager {
 		if (statements != null) core.removeStatements(statements);
 	}
 
-	public void removeSession(Session session) {
+	public void removeSessionFromRdf2GoCore(Session session) {
 		for (Set<Statement> set : statementCache.values()) {
 			core.removeStatements(set);
 		}

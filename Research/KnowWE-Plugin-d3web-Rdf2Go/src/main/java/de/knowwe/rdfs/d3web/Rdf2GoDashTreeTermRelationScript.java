@@ -55,7 +55,7 @@ public abstract class Rdf2GoDashTreeTermRelationScript extends DashTreeTermRelat
 		// since we also have to destroy all defining sections, we also have to compile all defining sections
 		Collection<Section<?>> termDefiningSections = compiler.getTerminologyManager()
 				.getTermDefiningSections(parentSection.get().getTermIdentifier(parentSection));
-		compiler.addSectionsToCompile(termDefiningSections);
+		compiler.addSectionsToCompile(termDefiningSections, this.getClass());
 
 		Rdf2GoCore core = compiler.getRdf2GoCore();
 		URI parentURI = core.createlocalURI(Rdf2GoUtils.getCleanedExternalForm(parentIdentifier));
@@ -96,13 +96,14 @@ public abstract class Rdf2GoDashTreeTermRelationScript extends DashTreeTermRelat
 
 	@Override
 	public void destroy(OntologyCompiler compiler, Section<TermDefinition> section) {
+		compiler.getRdf2GoCore().removeStatementsForSection(section);
+		if (section.getSectionStore().getObject(compiler, RELATIONS_ADDED) == null) return;
 		Collection<Section<?>> termDefiningSections = compiler.getTerminologyManager()
 				.getTermDefiningSections(section.get().getTermIdentifier(section));
-		compiler.addSectionsToDestroy(termDefiningSections);
+		compiler.addSectionsToDestroy(termDefiningSections, this.getClass());
 		// we don't exactly know where the relations were added, so we destroy all defining sections
 		for (Section<?> termDefiningSection : termDefiningSections) {
 			termDefiningSection.getSectionStore().storeObject(compiler, RELATIONS_ADDED, null);
 		}
-		compiler.getRdf2GoCore().removeStatementsForSection(section);
 	}
 }
