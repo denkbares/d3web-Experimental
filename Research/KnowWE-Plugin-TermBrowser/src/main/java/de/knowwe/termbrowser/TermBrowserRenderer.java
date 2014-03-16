@@ -30,7 +30,6 @@ import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 
 /**
- * 
  * @author jochenreutelshofer
  * @created 10.12.2012
  */
@@ -46,7 +45,7 @@ public class TermBrowserRenderer {
 	private boolean hierarchyPrefixAbbreviation = true;
 
 	/**
-	 * 
+	 *
 	 */
 	public TermBrowserRenderer(UserContext user, de.knowwe.core.utils.LinkToTermDefinitionProvider linkProvider, String master, boolean prefixAbbreviation) {
 		this.user = user;
@@ -178,9 +177,8 @@ public class TermBrowserRenderer {
 	}
 
 	/**
-	 * 
-	 * @created 02.10.2013
 	 * @param string
+	 * @created 02.10.2013
 	 */
 	private void renderSearchSlot(RenderResult string) {
 		string.appendHtml("<div class='ui-widget searchBox'>");
@@ -216,9 +214,8 @@ public class TermBrowserRenderer {
 	}
 
 	/**
-	 * 
-	 * @created 10.12.2012
 	 * @return
+	 * @created 10.12.2012
 	 */
 	private String generateTermnames() {
 
@@ -230,6 +227,7 @@ public class TermBrowserRenderer {
 
 		return builder.toString();
 	}
+
 	private void renderTermTree(RenderResult string, PartialHierarchyTree<RatedTerm> tree, boolean collapsed, LinkToTermDefinitionProvider linkProvider, String master) {
 
 		String style = "";
@@ -253,7 +251,7 @@ public class TermBrowserRenderer {
 
 	private void renderConceptSubTree(Node<RatedTerm> rootConcept, int level, RenderResult string, LinkToTermDefinitionProvider linkProvider, String master) {
 		string.append("\n"); // append newline into html-code from time to time
-								// to avoid jspwiki bug
+		// to avoid jspwiki bug
 		renderConcept(rootConcept, level, string, linkProvider, master);
 		level += 1;
 		List<de.d3web.collections.PartialHierarchyTree.Node<RatedTerm>> childrenSorted = rootConcept.getChildrenSortedDefault();
@@ -290,7 +288,7 @@ public class TermBrowserRenderer {
 				String conceptRowStyle = "entryLine";
 				if (TermSetManager.getInstance().getLatestAddedTerm(user) != null
 						&& TermSetManager.getInstance().getLatestAddedTerm(user).equals(term)) {
-					conceptRowStyle  = "entryLine-highlighted";
+					conceptRowStyle = "entryLine-highlighted";
 				}
 				string.appendHtml("<tr height='23px' class='" + conceptRowStyle + "'>");
 
@@ -332,6 +330,8 @@ public class TermBrowserRenderer {
 							}
 						}
 					}
+					// insert linebreaks for camelCase
+					label = addCamlCaseLinebreaks(label);
 
 					// insert exact term name to be used for action calls
 					string.appendHtml("<div class='termID' >");
@@ -362,6 +362,25 @@ public class TermBrowserRenderer {
 		string.appendHtml("</div>");
 	}
 
+	private String addCamlCaseLinebreaks(String label) {
+		int latestLinebreak = 0;
+		int length = label.length();
+		int i = 0;
+		while (i < length) {
+
+			if (Character.isLowerCase(label.charAt(i))) {
+				if (i + 1 < length && Character.isLowerCase(label.charAt(i) + 1)) {
+					label = label.substring(0, i + 1) + "<wbr>" + label.substring(i + 1);
+					length += 5;
+					i += 5;
+				}
+			}
+			i++;
+		}
+
+		return label;
+	}
+
 	private String getLabel(Identifier term) {
 		String[] identifierParts = term.getPathElements();
 		String label = term.toExternalForm();
@@ -376,11 +395,10 @@ public class TermBrowserRenderer {
 	}
 
 	/**
-	 * 
-	 * @created 19.04.2013
 	 * @param string
 	 * @param url
 	 * @param divStyle
+	 * @created 19.04.2013
 	 */
 	private void insertActionButtonsPost(RenderResult string, String url, String divStyle, Identifier term, int level) {
 		string.appendHtml("<table style='table-layout:fixed'>");
@@ -395,11 +413,10 @@ public class TermBrowserRenderer {
 	}
 
 	/**
-	 * 
-	 * @created 19.04.2013
 	 * @param string
 	 * @param url
 	 * @param divStyle
+	 * @created 19.04.2013
 	 */
 	private void insertActionButtonsPre(RenderResult string, String url, String divStyle, Node<RatedTerm> term) {
 		boolean allChildrenShown = allChildrenShown(term);
@@ -414,7 +431,7 @@ public class TermBrowserRenderer {
 			}
 			else {
 				if (!(hierarchy.getChildren(term.getData().getTerm()).size() == 0)) {
-					
+
 					insertExpandButton(string, divStyle);
 				}
 			}
@@ -423,10 +440,9 @@ public class TermBrowserRenderer {
 	}
 
 	/**
-	 * 
-	 * @created 03.05.2013
 	 * @param term
 	 * @return
+	 * @created 03.05.2013
 	 */
 	private boolean allChildrenShown(Node<RatedTerm> term) {
 		List<Identifier> childrenConcepts = hierarchy.getChildren(term.getData().getTerm());
@@ -447,10 +463,9 @@ public class TermBrowserRenderer {
 	}
 
 	/**
-	 * 
-	 * @created 03.05.2013
 	 * @param string
 	 * @param divStyle
+	 * @created 03.05.2013
 	 */
 	private void insertExpandButton(RenderResult string, String divStyle) {
 		// expand concept, i.e. add all children to this list
@@ -460,10 +475,9 @@ public class TermBrowserRenderer {
 	}
 
 	/**
-	 * 
-	 * @created 03.05.2013
 	 * @param string
 	 * @param divStyle
+	 * @created 03.05.2013
 	 */
 	private void insertRemoveButton(RenderResult string, String divStyle) {
 		// delete concept from list
@@ -473,10 +487,9 @@ public class TermBrowserRenderer {
 	}
 
 	/**
-	 * 
-	 * @created 03.05.2013
 	 * @param string
 	 * @param divStyle
+	 * @created 03.05.2013
 	 */
 	private void insertAddParentButton(RenderResult string, String divStyle, Identifier term, int level) {
 		if (level == 0) {
@@ -501,10 +514,9 @@ public class TermBrowserRenderer {
 	}
 
 	/**
-	 * 
-	 * @created 03.05.2013
 	 * @param string
 	 * @param divStyle
+	 * @created 03.05.2013
 	 */
 	private void insertObjectInfoLinkButton(RenderResult string, String divStyle, Identifier term) {
 		// Wiki.jsp?page=ObjectInfoPage&termIdentifier="Damaged idle speed system"&objectname="Damaged idle speed system"
@@ -531,9 +543,8 @@ public class TermBrowserRenderer {
 	}
 
 	/**
-	 * 
-	 * @created 03.06.2013
 	 * @param i
+	 * @created 03.06.2013
 	 */
 	private static void addDummyTableCell(RenderResult string, int i) {
 
@@ -542,10 +553,9 @@ public class TermBrowserRenderer {
 	}
 
 	/**
-	 * 
-	 * @created 15.04.2013
 	 * @param depth
 	 * @return
+	 * @created 15.04.2013
 	 */
 	private static String createStyle(int depth) {
 

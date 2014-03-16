@@ -20,7 +20,11 @@ package de.knowwe.ontology.browser;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
@@ -28,8 +32,12 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 import de.knowwe.core.Environment;
+import de.knowwe.core.compile.CompilerFinishedEvent;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.terminology.TerminologyManager;
+import de.knowwe.core.event.Event;
+import de.knowwe.core.event.EventListener;
+import de.knowwe.core.event.EventManager;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.ontology.browser.cache.SparqlCacheManager;
 import de.knowwe.ontology.browser.util.HierarchyUtils;
@@ -43,7 +51,7 @@ import de.knowwe.termbrowser.TermBrowserMarkup;
  * @author jochenreutelshofer
  * @created 01.10.2013
  */
-public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> {
+public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>, EventListener {
 
 	protected List<String> categories = new ArrayList<String>();
 	protected List<String> ignoredTerms = new ArrayList<String>();
@@ -52,7 +60,13 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 	protected String master = null;
 	protected UserContext user = null;
 
+	protected Map<Identifier, Set<Identifier>> successorshipCache = new HashMap<Identifier, Set<Identifier>>();
+
 	protected boolean mixedRelationHierarchyMode = false;
+
+	public OntologyHierarchyProvider() {
+		EventManager.getInstance().registerListener(this);
+	}
 
 	private String getShortURI(Identifier termID) {
 		String[] termElements = termID.getPathElements();
@@ -114,6 +128,16 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 			}
 		}
 
+		/*
+		fill data into cache (to make isSuccessorOf-calls more efficient)
+		 */
+		Set<Identifier> successors = successorshipCache.get(termID);
+		if (successors == null) {
+			successors = new HashSet<Identifier>();
+			successorshipCache.put(termID, successors);
+		}
+		successors.addAll(result);
+
 		return result;
 	}
 
@@ -145,11 +169,31 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 			}
 		}
 
+		/*
+		fill data into cache (to make isSuccessorOf-calls more efficient)
+		 */
+		for (Identifier parent : result) {
+			addSuccessorToCache(parent, termID);
+		}
+
 		return result;
+	}
+
+	private void addSuccessorToCache(Identifier parent, Identifier successor) {
+		Set<Identifier> successors = successorshipCache.get(parent);
+		if (successors == null) {
+			successors = new HashSet<Identifier>();
+			successorshipCache.put(parent, successors);
+		}
+		successors.add(successor);
 	}
 
 	@Override
 	public boolean isSuccessorOf(Identifier termID1, Identifier termID2) {
+		if (successorshipCache.containsKey(termID2) && successorshipCache.get(termID2).contains(termID1)) {
+			return true;
+		}
+
 		Rdf2GoCore core = getCore();
 
 		URI term1URI = new URIImpl(getURIString(termID1));
@@ -159,6 +203,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 			boolean is = HierarchyUtils.isSubConceptOf(term1URI, term2URI, new URIImpl(
 					Rdf2GoUtils.expandNamespace(core, relation)), master);
 			if (is) {
+				addSuccessorToCache(termID2, termID1);
 				return true;
 			}
 			else {
@@ -166,7 +211,10 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 					List<Identifier> children = getChildren(termID2);
 					for (Identifier child : children) {
 						boolean found = isSuccessorOf(termID1, child);
-						if (found) return true;
+						if (found) {
+							addSuccessorToCache(termID2, termID1);
+							return true;
+						}
 					}
 				}
 			}
@@ -241,4 +289,15 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier> 
 		this.user = user;
 	}
 
+	@Override
+	public Collection<Class<? extends Event>> getEvents() {
+		List<Class<? extends Event>> events = new ArrayList<Class<? extends Event>>();
+		events.add(CompilerFinishedEvent.class);
+		return events;
+	}
+
+	@Override
+	public void notify(Event event) {
+		this.successorshipCache.clear();
+	}
 }
