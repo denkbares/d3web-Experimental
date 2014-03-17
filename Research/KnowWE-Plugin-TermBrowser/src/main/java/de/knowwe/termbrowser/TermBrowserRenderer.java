@@ -363,16 +363,22 @@ public class TermBrowserRenderer {
 	}
 
 	private String addCamlCaseLinebreaks(String label) {
-		int latestLinebreak = 0;
+
 		int length = label.length();
 		int i = 0;
 		while (i < length) {
 
 			if (Character.isLowerCase(label.charAt(i))) {
-				if (i + 1 < length && Character.isLowerCase(label.charAt(i) + 1)) {
-					label = label.substring(0, i + 1) + "<wbr>" + label.substring(i + 1);
-					length += 5;
-					i += 5;
+				if (i + 1 < length) {
+
+					char nextChar = label.charAt(i + 1);
+					boolean nextIsUpper = Character.isUpperCase(nextChar);
+					if (nextIsUpper) {
+						label = label.substring(0, i + 1) + "<wbr>" + label.substring(i + 1);
+						length += 5;
+						i += 5;
+
+					}
 				}
 			}
 			i++;
