@@ -75,12 +75,6 @@ public class TermBrowserAction extends AbstractAction {
 		return compiler;
 	}
 
-	/**
-	 * 
-	 * @created 10.12.2012
-	 * @param context
-	 * @return
-	 */
 	private String perform(UserActionContext context) {
 		String command = context.getParameter("command");
 		String term = context.getParameter("term");
@@ -95,10 +89,7 @@ public class TermBrowserAction extends AbstractAction {
 			term = term.replace(":", "#");
 		}
 
-		if (term == null) {
-			term = "";
-		}
-		else {
+		if (term != null) {
 			if (command.equals("searched")) {
 				// update ranking weights
 				TermSetManager.getInstance().termSearched(context, createTermIdentifier(term));
@@ -154,7 +145,20 @@ public class TermBrowserAction extends AbstractAction {
 		}
 		LinkToTermDefinitionProvider linkProvider = null;
 		if (master == null) {
-			linkProvider = new de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider();
+			// TODO: completely remove dependency to IncrementalCompiler
+			try {
+				linkProvider = (LinkToTermDefinitionProvider) Class.forName(
+						"de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider")
+						.newInstance();
+			}
+			catch (Exception e) {
+				linkProvider = new LinkToTermDefinitionProvider() {
+					@Override
+					public String getLinkToTermDefinition(Identifier name, String masterArticle) {
+						return null;
+					}
+				};
+			}
 		}
 		else {
 			linkProvider = new PackageCompileLinkToTermDefinitionProvider();
@@ -165,12 +169,6 @@ public class TermBrowserAction extends AbstractAction {
 	}
 
 
-	/**
-	 * 
-	 * @created 10.10.2013
-	 * @param term
-	 * @return
-	 */
 	private Identifier createTermIdentifier(String term) {
 		// TODO: caution: this will break if identifier names contain '#' !!
 		String[] split = term.split("#");

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider;
+import de.d3web.strings.Identifier;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
@@ -56,7 +56,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 		parameterMap.put(OntoGraphDataBuilder.CONCEPT, getConcept(user, section));
 
-		String master = getMaster(user, section);
+		String master = getMaster(section);
 		if (master != null) {
 			parameterMap.put(OntoGraphDataBuilder.MASTER, master);
 		}
@@ -107,32 +107,36 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, addToDOT);
 
 		LinkToTermDefinitionProvider uriProvider;
-		Rdf2GoCore rdfRepository = null;
+		Rdf2GoCore rdfRepository;
 		if (master != null) {
 			rdfRepository = Compilers.getCompiler(section, Rdf2GoCompiler.class).getRdf2GoCore();
 			uriProvider = new PackageCompileLinkToTermDefinitionProvider();
 		}
 		else {
 			rdfRepository = Rdf2GoCore.getInstance();
-			uriProvider = new IncrementalCompilerLinkToTermDefinitionProvider();
+			// TODO: completely remove dependency to IncrementalCompiler
+			try {
+				uriProvider = (LinkToTermDefinitionProvider) Class.forName(
+						"de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider")
+						.newInstance();
+			}
+			catch (Exception e) {
+				uriProvider = new LinkToTermDefinitionProvider() {
+					@Override
+					public String getLinkToTermDefinition(Identifier name, String masterArticle) {
+						return null;
+					}
+				};
+			}
 		}
-		// RenderingCore renderer = new RenderingCore(realPath, section,
-		// parameterMap, uriProvider,
-		// rdfRepository);
+
 		OntoGraphDataBuilder builder = new OntoGraphDataBuilder(realPath, section, parameterMap,
 				uriProvider,
 				rdfRepository);
 		builder.render(string);
 	}
 
-	/**
-	 * 
-	 * @created 24.04.2013
-	 * @param user
-	 * @param section
-	 * @return
-	 */
-	private String getMaster(UserContext user, Section<?> section) {
+	private String getMaster(Section<?> section) {
 		return OntoVisType.getAnnotation(section,
 				PackageManager.MASTER_ATTRIBUTE_NAME);
 	}
@@ -160,8 +164,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @created 18.08.2012
 	 */
 	private String getConcept(UserContext user, Section<?> section) {
-		String parameter = null;
-		parameter = user.getParameter("concept");
+		String parameter = user.getParameter("concept");
 		if (parameter != null) {
 			return parameter;
 		}

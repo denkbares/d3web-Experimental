@@ -56,11 +56,6 @@ public class DotRenderer {
 	// appearance of outer node
 	public static final String outerLabel = "[ shape=\"none\" fontsize=\"0\" fontcolor=\"white\" ];\n";
 
-	/**
-	 * 
-	 * @created 04.09.2012
-	 * @param shape
-	 */
 	private static String buildLabel(RenderingStyle style) {
 		return " shape=\"" + style.shape + "\" ";
 	}
@@ -207,17 +202,6 @@ public class DotRenderer {
 		return label;
 	}
 
-	/**
-	 * 
-	 * @created 27.05.2013
-	 * @param concept
-	 * @param style
-	 * @param fillcolor
-	 * @param shape
-	 * @param url
-	 * @param conceptLabel
-	 * @return
-	 */
 	private static String getRootLabel(String concept, String conceptLabel, Map<String, String> parameters,
 			NODE_TYPE type) {
 
@@ -247,15 +231,6 @@ public class DotRenderer {
 		return conceptValue;
 	}
 
-	/**
-	 * 
-	 * @created 27.05.2013
-	 * @param relation
-	 * @param arrowhead
-	 * @param color
-	 * @param style
-	 * @return
-	 */
 	private static String getOuterEdgeLabel(String relation, boolean showArrowHead) {
 		// Relation Attributes
 		String arrowhead = "arrowhead=\"none\" ";
@@ -322,12 +297,6 @@ public class DotRenderer {
 		return source;
 	}
 
-	/**
-	 * 
-	 * @created 08.12.2013
-	 * @param numberOfConcepts
-	 * @return
-	 */
 	private static String calculateAutomaticGraphSize(int numberOfConcepts) {
 		if (numberOfConcepts == 1) return "1";
 		if (numberOfConcepts == 2) return "3";
@@ -387,14 +356,6 @@ public class DotRenderer {
 
 	}
 
-	/**
-	 * 
-	 * @created 27.05.2013
-	 * @param style
-	 * @param targetURL
-	 * @param targetLabel
-	 * @return
-	 */
 	private static String createDotConceptLabel(RenderingStyle style, String targetURL, String targetLabel) {
 		String newLineLabelValue;
 		newLineLabelValue = "[ URL=\"" + targetURL + "\""

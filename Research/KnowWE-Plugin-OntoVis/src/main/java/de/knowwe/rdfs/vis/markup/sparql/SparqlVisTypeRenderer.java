@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Literal;
@@ -17,7 +16,6 @@ import org.ontoware.rdf2go.model.node.Node;
 
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
-import de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
@@ -150,7 +148,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 		parameterMap.put(OntoGraphDataBuilder.VISUALIZATION, visualization);
 
 		// set master
-		String master = getMaster(user, section);
+		String master = getMaster(section);
 		if (master != null) {
 			parameterMap.put(OntoGraphDataBuilder.MASTER, master);
 		}
@@ -183,7 +181,20 @@ public class SparqlVisTypeRenderer implements Renderer {
 		LinkToTermDefinitionProvider uriProvider;
 		String globalAnnotation = DefaultMarkupType.getAnnotation(section, Rdf2GoCore.GLOBAL);
 		if (globalAnnotation != null && globalAnnotation.equals("true")) {
-			uriProvider = new IncrementalCompilerLinkToTermDefinitionProvider();
+			// TODO: completely remove dependency to IncrementalCompiler
+			try {
+				uriProvider = (LinkToTermDefinitionProvider) Class.forName(
+						"de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider")
+						.newInstance();
+			}
+			catch (Exception e) {
+				uriProvider = new LinkToTermDefinitionProvider() {
+					@Override
+					public String getLinkToTermDefinition(Identifier name, String masterArticle) {
+						return null;
+					}
+				};
+			}
 		}
 		else {
 			uriProvider = new PackageCompileLinkToTermDefinitionProvider();
@@ -237,13 +248,6 @@ public class SparqlVisTypeRenderer implements Renderer {
 
 	}
 
-	/**
-	 * 
-	 * @created 23.07.2013
-	 * @param resultSet
-	 * @param messages
-	 * @return
-	 */
 	private SubGraphData convertToGraph(QueryResultTable resultSet, Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, List<Message> messages) {
 		SubGraphData data = new SubGraphData();
 		List<String> variables = resultSet.getVariables();
@@ -253,10 +257,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 			messages.add(m);
 			return null;
 		}
-		ClosableIterator<QueryRow> iterator = resultSet.iterator();
-		while (iterator.hasNext()) {
-			QueryRow row = iterator.next();
-
+		for (QueryRow row : resultSet) {
 			Node fromURI = row.getValue(variables.get(0));
 
 			Node relationURI = row.getValue(variables.get(1));
@@ -294,6 +295,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 			toLiteral = relationURI.asLiteral();
 		}
 		catch (ClassCastException e) {
+			// do nothing
 		}
 
 		String relationName = relation;
@@ -315,20 +317,6 @@ public class SparqlVisTypeRenderer implements Renderer {
 		return relationName;
 	}
 
-	/**
-	 * 
-	 * @created 23.07.2013
-	 * @param parameters
-	 * @param rdfRepository
-	 * @param uriProvider
-	 * @param section
-	 * @param data
-	 * @param toURI
-	 * @param to
-	 * @param toLiteral
-	 * @param languageTagLiteral
-	 * @return
-	 */
 	private ConceptNode createNode(Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, SubGraphData data, Node toURI) {
 		String to = OntoGraphDataBuilder.getConceptName(toURI, rdfRepository);
 		// is the node a literal ?
@@ -340,6 +328,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 			}
 		}
 		catch (ClassCastException e) {
+			// do nothing
 		}
 
 		ConceptNode toNode = null;
@@ -373,14 +362,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 		return toNode;
 	}
 
-	/**
-	 * 
-	 * @created 24.04.2013
-	 * @param user
-	 * @param section
-	 * @return
-	 */
-	private String getMaster(UserContext user, Section<?> section) {
+	private String getMaster(Section<?> section) {
 		return SparqlVisType.getAnnotation(section,
 				PackageManager.MASTER_ATTRIBUTE_NAME);
 	}
@@ -392,8 +374,8 @@ public class SparqlVisTypeRenderer implements Renderer {
 				Identifier identifier = new Identifier(to);
 				String[] identifierParts = to.split(":");
 				if (identifierParts.length == 2) {
-					identifier = new Identifier(new String[] {
-							identifierParts[0], Strings.decodeURL(identifierParts[1]) });
+					identifier = new Identifier(
+							identifierParts[0], Strings.decodeURL(identifierParts[1]));
 
 				}
 				return uriProvider.getLinkToTermDefinition(identifier,

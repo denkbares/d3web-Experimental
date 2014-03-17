@@ -39,7 +39,6 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
- * 
  * @author Jochen Reutelshoefer
  * @created 29.11.2012
  */
@@ -72,12 +71,9 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		MARKUP.addAnnotation(START_CONCEPT, false);
 		MARKUP.addAnnotation(TITLE, false);
 		MARKUP.addAnnotation(HIERARCHY_PROVIDER, false);
-		MARKUP.addAnnotation(SEARCH_SLOT, false, new String[] {
-				"true", "false" });
-		MARKUP.addAnnotation(CLEAR_ON_LOAD, false, new String[] {
-				"true", "false" });
-		MARKUP.addAnnotation(PREFIX_ABBREVIATION, false, new String[] {
-				"true", "false" });
+		MARKUP.addAnnotation(SEARCH_SLOT, false, "true", "false" );
+		MARKUP.addAnnotation(CLEAR_ON_LOAD, false, "true", "false");
+		MARKUP.addAnnotation(PREFIX_ABBREVIATION, false, "true", "false");
 	}
 
 	public TermBrowserMarkup() {
@@ -196,12 +192,6 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		return getCommaSeparatedAnnotationList(user, IGNORE);
 	}
 
-	/**
-	 * 
-	 * @created 01.10.2013
-	 * @param user
-	 * @return
-	 */
 	public static Section<TermBrowserMarkup> getTermBrowserMarkup(UserContext user) {
 		Article article = KnowWEUtils.getArticleManager(user.getWeb()).getArticle(
 				user.getTitle());
@@ -225,9 +215,22 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		public void render(Section<?> section, UserContext user, RenderResult string) {
 			String master = DefaultMarkupType.getAnnotation(section,
 					PackageManager.MASTER_ATTRIBUTE_NAME);
-			LinkToTermDefinitionProvider linkProvider = null;
+			LinkToTermDefinitionProvider linkProvider;
 			if (master == null) {
-				linkProvider = new de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider();
+				// TODO: completely remove dependency to IncrementalCompiler
+				try {
+					linkProvider = (LinkToTermDefinitionProvider) Class.forName(
+							"de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider")
+							.newInstance();
+				}
+				catch (Exception e) {
+					linkProvider = new LinkToTermDefinitionProvider() {
+						@Override
+						public String getLinkToTermDefinition(Identifier name, String masterArticle) {
+							return null;
+						}
+					};
+				}
 			}
 			else {
 				linkProvider = new PackageCompileLinkToTermDefinitionProvider();
