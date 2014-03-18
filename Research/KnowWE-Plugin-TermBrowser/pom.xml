@@ -8,7 +8,7 @@
   <groupId>de.uniwue.d3web</groupId>
   <artifactId>KnowWE-Plugin-TermBrowser</artifactId>
   <version>0.2-SNAPSHOT</version>
-  <name>TermBrowser</name>
+  <name>KnowWE-Plugin-TermBrowser</name>
   <description>A framework for a browser that provides a list of knowledge base terms recently used, organized hierarchically and allowing for drag-and-drop editing.</description>
   <dependencies>
   	<dependency>

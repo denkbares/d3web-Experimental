@@ -7,7 +7,7 @@
   </parent>
   <groupId>de.uniwue.d3web</groupId>
   <artifactId>KnowWE-Plugin-DiaFlux-Refactoring</artifactId>
-  <name>KnowWE Plugin: DiaFlux-Refactoring</name>
+  <name>KnowWE-Plugin-DiaFlux-Refactoring</name>
   <version>0.2-SNAPSHOT</version>
   <dependencies>
   	<dependency>

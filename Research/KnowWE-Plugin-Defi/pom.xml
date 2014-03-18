@@ -11,7 +11,7 @@
 
 	<groupId>de.uniwue.d3web</groupId>
 	<artifactId>KnowWE-Plugin-Defi</artifactId>
-	<name>KnowWE Plugin: Defi</name>
+	<name>KnowWE-Plugin-Defi</name>
 	<version>0.2-SNAPSHOT</version>
 
 	<build>

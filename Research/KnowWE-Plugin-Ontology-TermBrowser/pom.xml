@@ -8,7 +8,7 @@
   <groupId>de.uniwue.d3web</groupId>
   <artifactId>KnowWE-Plugin-Ontology-TermBrowser</artifactId>
   <version>0.2-SNAPSHOT</version>
-  <name>Ontology TermBrowser</name>
+  <name>KnowWE-Plugin-Ontology-TermBrowserr</name>
   <description>Provides a TermBrowser for the terms in the ontology</description>
   <build>
 		<plugins>
