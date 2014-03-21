@@ -30,7 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import de.knowwe.core.Environment;
 import de.knowwe.defi.aboutMe.AboutMe;
@@ -87,11 +86,9 @@ public class DefiUtils {
 
 	public static List<String> getAllDefiArticleNames() {
 		List<String> articles = new LinkedList<String>();
-		Map<String, String> allArticles = Environment.getInstance().getWikiConnector().getAllArticles(
-				Environment.DEFAULT_WEB);
-		for (String page : allArticles.keySet()) {
-			articles.add(page);
-		}
+
+		articles.addAll(Environment.getInstance().getWikiConnector().getAllArticles(
+				Environment.DEFAULT_WEB).keySet());
 		articles.add("EmergencyPlan.jsp");
 		articles.add("Zusatzmodul");
 		return articles;

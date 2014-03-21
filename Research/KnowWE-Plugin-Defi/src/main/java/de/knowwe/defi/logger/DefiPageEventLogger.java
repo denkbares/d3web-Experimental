@@ -42,6 +42,7 @@ public class DefiPageEventLogger {
 	private final static String FILENAME = "DefiPageLog.log";
 	private final static String PATH = Environment.getInstance().getWikiConnector().getSavePath()
 			+ "/" + FILENAME;
+	private final static String ENCODING = DefiLoggerUtils.getEncoding();
 	/** Sepearator between entries in a logline **/
 	private final static String SEPARATOR = DefiLoggerUtils.SEPARATOR;
 	private static final String SEPARATOR_UNICODE = DefiLoggerUtils.SEPARATOR_UNICODE;
@@ -63,7 +64,7 @@ public class DefiPageEventLogger {
 		BufferedWriter out = null;
 		try {
 			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(PATH, append),
-					"ISO-8859-1"));
+					ENCODING));
 			for (String line : logLines) {
 				out.write(line);
 				out.newLine();
@@ -155,7 +156,7 @@ public class DefiPageEventLogger {
 		String line;
 		try {
 			br = new BufferedReader(new InputStreamReader(
-					(new FileInputStream(new File(PATH))), "ISO-8859-1"));
+					(new FileInputStream(new File(PATH))), ENCODING));
 			while ((line = br.readLine()) != null) {
 				loglines.add(new DefiPageLogLine(line));
 			}

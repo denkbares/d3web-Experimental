@@ -42,6 +42,7 @@ public class DefiOtherEventsLogger {
 	private final static String FILENAME = "DefiOtherEventsLog.log";
 	private final static String PATH = Environment.getInstance().getWikiConnector().getSavePath()
 			+ "/" + FILENAME;
+	private final static String ENCODING = DefiLoggerUtils.getEncoding();
 	/** Sepearator between entries in a logline **/
 	public final static String SEPARATOR = DefiLoggerUtils.SEPARATOR;
 	public final static String EXT_LINK_PREFIX = "Externer Link";
@@ -61,7 +62,7 @@ public class DefiOtherEventsLogger {
 		BufferedWriter out = null;
 		try {
 			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(PATH, true),
-					"ISO-8859-1"));
+					ENCODING));
 			out.write(logline);
 			out.newLine();
 		}
@@ -83,7 +84,7 @@ public class DefiOtherEventsLogger {
 		String line;
 		try {
 			br = new BufferedReader(new InputStreamReader(
-					(new FileInputStream(new File(PATH))), "ISO-8859-1"));
+					(new FileInputStream(new File(PATH))), ENCODING));
 			while ((line = br.readLine()) != null) {
 				if (line.startsWith(prefix)) loglines.add(line);
 			}

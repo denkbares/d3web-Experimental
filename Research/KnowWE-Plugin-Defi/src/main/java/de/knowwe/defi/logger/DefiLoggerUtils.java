@@ -40,6 +40,8 @@ public class DefiLoggerUtils {
 	/** Sepearator between entries in a logline **/
 	public final static String SEPARATOR = "~";
 	public final static String SEPARATOR_UNICODE = "&#126;";
+	/** encoding **/
+	public final static String ENCODING = "UTF-8";
 
 	public static String getUserNameOfWikiSecurityEvent(WikiSecurityEvent e) {
 		WikiEngine eng = WikiEngine.getInstance(Environment.getInstance().getContext(),
@@ -94,5 +96,14 @@ public class DefiLoggerUtils {
 		String time = sdf.format(new Date(System.currentTimeMillis()));
 
 		return time;
+	}
+
+	/**
+	 * 
+	 * @created Mar 19, 2014
+	 * @return
+	 */
+	public static String getEncoding() {
+		return ENCODING;
 	}
 }

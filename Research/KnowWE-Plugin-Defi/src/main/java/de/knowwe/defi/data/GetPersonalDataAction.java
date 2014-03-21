@@ -148,7 +148,9 @@ public class GetPersonalDataAction extends AbstractAction {
 			visitsPerPage.put(page, 0);
 		}
 		for (String page : visitedPages) {
-			visitsPerPage.put(page, visitsPerPage.get(page) + 1);
+			if (visitsPerPage.containsKey(page)) visitsPerPage.put(page,
+					visitsPerPage.get(page) + 1);
+			else visitsPerPage.put(page, 1);
 		}
 
 		// render visited pages

@@ -36,6 +36,7 @@ import de.knowwe.core.wikiConnector.WikiConnector;
 import de.knowwe.defi.logger.DefiCommentEventLogger;
 import de.knowwe.defi.logger.DefiOtherEventsLogger;
 import de.knowwe.defi.logger.DefiPageEventLogger;
+import de.knowwe.defi.logger.DefiPageRateEventLogger;
 import de.knowwe.defi.logger.DefiSessionEventLogger;
 import de.knowwe.jspwiki.JSPWikiConnector;
 
@@ -76,25 +77,28 @@ public class DataTagHandler extends AbstractTagHandler {
 		File sessionlog = new File(DefiSessionEventLogger.getPath());
 		File commentlog = new File(DefiCommentEventLogger.getPath());
 		File extlog = new File(DefiOtherEventsLogger.getPath());
+		File ratelog = new File(DefiPageRateEventLogger.getPath());
 		
 		try {
 			boolean addPage = pagelog.exists();
 			boolean addSession = sessionlog.exists();
 			boolean addComment = commentlog.exists();
 			boolean addExtLink = extlog.exists();
+			boolean addRate = ratelog.exists();
 			for (WikiAttachment wikiAttachment : wc.getAttachments(title)) {
 				String attachmentName = wikiAttachment.getFileName();
 				long attachmentSize = wikiAttachment.getSize();
-				if (attachmentName.equals(pagelog.getName())) addPage =
-						(attachmentSize != pagelog.length());
+				if (attachmentName.equals(pagelog.getName())) addPage = (attachmentSize != pagelog.length());
 				else if (attachmentName.equals(sessionlog.getName())) addSession = (attachmentSize != sessionlog.length());
 				else if (attachmentName.equals(commentlog.getName())) addComment = (attachmentSize != commentlog.length());
 				else if (attachmentName.equals(extlog.getName())) addExtLink = (attachmentSize != extlog.length());
+				else if (attachmentName.equals(ratelog.getName())) addRate = (attachmentSize != ratelog.length());
 			}
 			if (addPage) wc.storeAttachment(title, "Wiki", pagelog);
 			if (addSession) wc.storeAttachment(title, "Wiki", sessionlog);
 			if (addComment) wc.storeAttachment(title, "Wiki", commentlog);
 			if (addExtLink) wc.storeAttachment(title, "Wiki", extlog);
+			if (addRate) wc.storeAttachment(title, "Wiki", ratelog);
 		}
 		catch (IOException e) {
 			e.printStackTrace();

@@ -54,12 +54,14 @@ public class DefiCommentLogLine {
 	 * @param unit unit number
 	 */
 	public DefiCommentLogLine(String line) {
-		if (!line.matches(MATCH_ME)) throw new IllegalArgumentException(
-				"line has not the correct syntax.");
+		if (!line.matches(MATCH_ME)) {
+			throw new IllegalArgumentException(
+					"line has not the correct syntax.");
+		}
 
 		String[] parts = line.split(S);
 		user = parts[0];
-		msg = parts[1];
+		msg = parts[1].replace(System.getProperty("line.separator"), "\\\\ ");
 		date = parts[2];
 		time = parts[3];
 		adressee = parts[4];
@@ -116,7 +118,7 @@ public class DefiCommentLogLine {
 	}
 
 	public void setMsg(String msg) {
-		this.msg = msg.replace(S, SU);
+		this.msg = msg.replace(S, SU).replace(System.getProperty("line.separator"), "\\\\ ");
 	}
 
 	public void setDate(String date) {

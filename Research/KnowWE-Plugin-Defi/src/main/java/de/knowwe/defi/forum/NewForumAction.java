@@ -26,7 +26,6 @@ import java.util.ResourceBundle;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletResponse;
 
 import com.ecyrd.jspwiki.WikiEngine;
 import com.ecyrd.jspwiki.util.MailUtil;
@@ -59,6 +58,7 @@ public class NewForumAction extends AbstractAction {
 		String topic = context.getParameter("topic");
 		// Nachricht
 		String message = context.getParameter("message");
+		message = Strings.encodeHtml(message).replace("\n", "\\\\ ");
 		String title = "";
 		String responseString = "\n";
 		GregorianCalendar now = new GregorianCalendar();
@@ -100,7 +100,8 @@ public class NewForumAction extends AbstractAction {
 		}
 
 		/* fire event */
-		EventManager.getInstance().fireEvent(new NewCommentEvent(message, title));
+		EventManager.getInstance().fireEvent(
+				new NewCommentEvent(Strings.decodeHtml(message), title));
 		/* Send mail */
 		String nachricht = "Neuer Forumeintrag auf der Seite '" + title + "'";
 		String subject = "Defi - neuer Forumeintrag";
@@ -119,7 +120,6 @@ public class NewForumAction extends AbstractAction {
 		}
 
 		responseString += Strings.encodeURL(title);
-		HttpServletResponse response = context.getResponse();
-		response.getWriter().write(responseString);
+		context.getWriter().write(responseString);
 	}
 }

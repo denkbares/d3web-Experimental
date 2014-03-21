@@ -42,6 +42,7 @@ public class DefiCommentEventLogger {
 	private final static String FILENAME = "DefiForumLog.log";
 	private final static String PATH = Environment.getInstance().getWikiConnector().getSavePath()
 			+ "/" + FILENAME;
+	private final static String ENCODING = DefiLoggerUtils.getEncoding();
 	/** Sepearator between entries in a logline **/
 	private final static String SEPARATOR = DefiLoggerUtils.SEPARATOR;
 	private static final String UNICODE = DefiLoggerUtils.SEPARATOR_UNICODE;
@@ -54,7 +55,7 @@ public class DefiCommentEventLogger {
 		BufferedWriter out = null;
 		try {
 			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(PATH, true),
-					"ISO-8859-1"));
+					ENCODING));
 				out.write(logLine);
 				out.newLine();
 		}
@@ -76,7 +77,7 @@ public class DefiCommentEventLogger {
 		String line;
 		try {
 			br = new BufferedReader(new InputStreamReader(
-					(new FileInputStream(new File(PATH))), "ISO-8859-1"));
+					(new FileInputStream(new File(PATH))), ENCODING));
 			while ((line = br.readLine()) != null) {
 				loglines.add(new DefiCommentLogLine(line));
 			}
