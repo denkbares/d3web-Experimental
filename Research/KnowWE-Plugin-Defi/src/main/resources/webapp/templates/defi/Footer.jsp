@@ -10,7 +10,7 @@
 %> 
 <div id="footer">
   <div class="logosDefi">
-  	<img src="KnowWEExtension/images/logos-alle.png" width="565" height="70" alt="Logos" />
+  	<img src="KnowWEExtension/images/LogoLeiste.jpg" width="607" height="70" alt="Logos" />
   </div>
 
   <div class="footerlinks">
