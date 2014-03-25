@@ -137,6 +137,24 @@
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="TurtleContent" />
 	</extension>
-	
-	
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Renderer" id="TermDragRenderer">
+		<parameter id="class" value="de.knowwe.ontology.turtle.edit.TermDragRenderer" />
+		<parameter id="name" value="TermDragRenderer" />
+		<parameter id="description" value="Type TermDragRenderer" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="TurtleURI" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Renderer" id="TermLazyDragRenderer">
+		<parameter id="class" value="de.knowwe.ontology.turtle.edit.TermLazyDragRenderer" />
+		<parameter id="name" value="TermLazyDragRenderer" />
+		<parameter id="description" value="Type TermLazyDragRenderer" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="LazyURIReference" />
+	</extension>
+
+
 </plugin>

@@ -52,6 +52,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 	private static final String CLEAR_ON_LOAD = "clearOnLoad";
 	private static final String PREFIX_ABBREVIATION = "abbreviation";
 	private static final String HIERARCHY_PROVIDER = "provider";
+	private static final String AUTOMATED_TERM_COLLECTION = "autoCollect";
 	private static final String TITLE = "title";
 	private static final String SIZE = "size";
 	private static final DefaultMarkup MARKUP;
@@ -71,9 +72,10 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		MARKUP.addAnnotation(START_CONCEPT, false);
 		MARKUP.addAnnotation(TITLE, false);
 		MARKUP.addAnnotation(HIERARCHY_PROVIDER, false);
-		MARKUP.addAnnotation(SEARCH_SLOT, false, "true", "false" );
+		MARKUP.addAnnotation(SEARCH_SLOT, false, "true", "false");
 		MARKUP.addAnnotation(CLEAR_ON_LOAD, false, "true", "false");
 		MARKUP.addAnnotation(PREFIX_ABBREVIATION, false, "true", "false");
+		MARKUP.addAnnotation(AUTOMATED_TERM_COLLECTION, false, "true", "false");
 	}
 
 	public TermBrowserMarkup() {
@@ -123,20 +125,23 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 		return null;
 	}
 
-	public static String getCurrentTermbrowserMarkupStartConcept(UserContext user) {
-		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
-		if (termBrowser != null) {
-			return DefaultMarkupType.getAnnotation(termBrowser,
-					START_CONCEPT);
-		}
-		return null;
-	}
-
 	public static boolean getCurrentTermbrowserMarkupSearchSlotFlag(UserContext user) {
 		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
 		if (termBrowser != null) {
 			String s = DefaultMarkupType.getAnnotation(termBrowser,
 					SEARCH_SLOT);
+			if (s == null) return false;
+			if (s.equals("false")) return false;
+			if (s.equals("true")) return true;
+		}
+		return false;
+	}
+
+	public static boolean getCurrentTermbrowserMarkupAutoCollectFlag(UserContext user) {
+		Section<TermBrowserMarkup> termBrowser = getTermBrowserMarkup(user);
+		if (termBrowser != null) {
+			String s = DefaultMarkupType.getAnnotation(termBrowser,
+					AUTOMATED_TERM_COLLECTION);
 			if (s == null) return false;
 			if (s.equals("false")) return false;
 			if (s.equals("true")) return true;
@@ -177,7 +182,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 			List<String> list = Arrays.asList(split);
 			return Strings.trim(list);
 		}
-		return null;
+		return new ArrayList<String>(0);
 	}
 
 	public static List<String> getCurrentTermbrowserMarkupHierarchyRelations(UserContext user) {
@@ -190,6 +195,10 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 
 	public static List<String> getCurrentTermbrowserIgnoredTerms(UserContext user) {
 		return getCommaSeparatedAnnotationList(user, IGNORE);
+	}
+
+	public static List<String> getCurrentTermbrowserMarkupStartConcept(UserContext user) {
+		return getCommaSeparatedAnnotationList(user, START_CONCEPT);
 	}
 
 	public static Section<TermBrowserMarkup> getTermBrowserMarkup(UserContext user) {
@@ -244,13 +253,13 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 				TermSetManager.getInstance().clearList(user);
 			}
 
-			// insert static start term
-			String startConcept = TermBrowserMarkup.getCurrentTermbrowserMarkupStartConcept(user);
+/*			// insert static start term
+			List<String> startConcept = TermBrowserMarkup.getCurrentTermbrowserMarkupStartConcept(user);
 			if (startConcept != null && startConcept.trim().length() > 0) {
 				TermSet recommendationSet = TermSetManager.getInstance().getRecommendationSet(
 						user);
 				recommendationSet.addValue(new Identifier(startConcept.split("#")), 1.0);
-			}
+			}*/
 
 			TermBrowserRenderer renderer = new TermBrowserRenderer(user,
 					linkProvider,

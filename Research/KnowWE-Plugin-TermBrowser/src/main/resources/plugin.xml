@@ -1,11 +1,11 @@
-<?xml version="1.0" ?>
-<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<?xml version="1.0" ?><!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0"
+	"http://jpf.sourceforge.net/plugin_1_0.dtd">
 <plugin id="KnowWE-Plugin-TermBrowser" version="0.0.1">
-	
+
 	<requires>
 		<import plugin-id="KnowWEExtensionPoints" />
 	</requires>
-	
+
 	<runtime>
 		<library id="webapp" path="webapp/" type="resources">
 			<export prefix="*" />
@@ -20,7 +20,7 @@
 		<parameter-def id="priority" type="number" />
 		<parameter-def id="scope" type="string" />
 	</extension-point>
-	
+
 	<extension-point id="HierarchyProvider">
 		<parameter-def id="class" />
 		<parameter-def id="name" />
@@ -28,7 +28,7 @@
 		<parameter-def id="version" />
 		<parameter-def id="priority" type="number" />
 	</extension-point>
-	
+
 	<extension-point id="TermDetector">
 		<parameter-def id="class" />
 		<parameter-def id="name" />
@@ -36,21 +36,17 @@
 		<parameter-def id="version" />
 		<parameter-def id="priority" type="number" />
 	</extension-point>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="DragDropEditActionManager">
-		<parameter id="class"
-			value="de.knowwe.termbrowser.DragDropEditActionManager" />
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action" id="DragDropEditActionManager">
+		<parameter id="class" value="de.knowwe.termbrowser.DragDropEditActionManager" />
 		<parameter id="name" value="DragDropEditActionManager" />
 		<parameter id="description" value="Actions DragDropEditActionManager" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="TermBrowserMarkup">
-		<parameter id="class"
-			value="de.knowwe.termbrowser.TermBrowserMarkup" />
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type" id="TermBrowserMarkup">
+		<parameter id="class" value="de.knowwe.termbrowser.TermBrowserMarkup" />
 		<parameter id="name" value="TermBrowserMarkup" />
 		<parameter id="description" value="KnowWEObjectType TermBrowserMarkup" />
 		<parameter id="version" value="1.0" />
@@ -60,32 +56,26 @@
 		<parameter id="css" value="jquery-ui.css" />
 		<parameter id="css" value="termbrowser.css" />
 	</extension>
-	
-		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="TermBrowserAction">
-		<parameter id="class"
-			value="de.knowwe.termbrowser.TermBrowserAction" />
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action" id="TermBrowserAction">
+		<parameter id="class" value="de.knowwe.termbrowser.TermBrowserAction" />
 		<parameter id="name" value="TermBrowserAction" />
 		<parameter id="description" value="Action TermBrowserAction" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 	</extension>
-	
-	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
-		id="TermDragDropInserter">
-		<parameter id="class"
-			value="de.knowwe.object.TermDragDropInserter" />
+
+	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter" id="TermDragDropInserter">
+		<parameter id="class" value="de.knowwe.object.TermDragDropInserter" />
 		<parameter id="name" value="TermDragDropInserter" />
 		<parameter id="description" value="Inserter TermDragDropInserter" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="TermReference" />
 	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Renderer"
-		id="DroppableTargetSurroundingRenderer">
-		<parameter id="class"
-			value="de.knowwe.termbrowser.DropTargetRenderer" />
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Renderer" id="DroppableTargetSurroundingRenderer">
+		<parameter id="class" value="de.knowwe.termbrowser.DropTargetRenderer" />
 		<parameter id="name" value="TermDragDropInserter" />
 		<parameter id="description" value="SurroundingRenderer DroppableTargetSurroundingRenderer" />
 		<parameter id="version" value="1.0" />
@@ -93,6 +83,14 @@
 		<parameter id="scope" value="D3webTermReference" />
 		<parameter id="scope" value="ExpectedSparqlResultTableCellContent" />
 	</extension>
-	
-	
+
+	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="HierarchyProvider" id="WikiPageHierarchyProvider">
+		<parameter id="class" value="de.knowwe.termbrowser.pages.WikiPageHierarchyProvider" />
+		<parameter id="name" value="WikiPageHierarchyProvider" />
+		<parameter id="description" value="WikiPageHierarchyProvider" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+
+
 </plugin>

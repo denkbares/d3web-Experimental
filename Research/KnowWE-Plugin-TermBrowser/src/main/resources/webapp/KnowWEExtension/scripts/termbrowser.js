@@ -1,8 +1,14 @@
 jq$(document).ready(function() {
 	jq$(".termline").each(activateDraggables);
+	jq$(".dragMarkupTerm").each(activateDraggables);
+
 
 	jq$(".dropTargetMarkup").each(function() {
 		initDropableMarkupSection(jq$(this));
+	});
+
+	jq$(".termlist").each(function() {
+		initDropableTermList(jq$(this));
 	});
 
 	initAllIconHovers();
@@ -12,7 +18,7 @@ jq$(document).ready(function() {
 	initCollapseTermBrowser();
 
 	initSemanticAutocompletionSlot();
-	
+
 });
 
 /*
@@ -34,7 +40,7 @@ function initSemanticAutocompletionSlot() {
 function completionItemSelected(bitObject) {
 	var value = bitObject.getValue();
 	var firstList = value[0];
-	if(firstList) {
+	if (firstList) {
 		var jsonObject = jq$.parseJSON(firstList);
 		var uri = jsonObject['concept'];
 		sendTermBrowserAction(uri, 'searched');
@@ -71,6 +77,20 @@ function initDropableMarkupSection(element) {
 
 			// alert('dropped: '+ termname + ' on id: '+markupID );
 			sendAddedTerm(termname, markupID);
+		},
+		hoverClass : "drophover"
+	});
+}
+
+function initDropableTermList(element) {
+	element.droppable({
+		drop : function(event, ui) {
+			var termElement = ui.draggable;
+			var termnameDiv = termElement.find("div.termID");
+			var termname = termnameDiv.html();
+			//alert(termname);
+
+			sendTermBrowserAction(termname, 'searched');
 		},
 		hoverClass : "drophover"
 	});
@@ -133,7 +153,8 @@ function initClickEvents(element) {
 }
 
 function handleTermActionEvent(element) {
-	var command = 'noop'
+	var command = 'noop';
+
 	if (element.hasClass('removeConcept')) {
 		command = 'remove';
 	}
@@ -197,6 +218,10 @@ function sendTermBrowserAction(term, command) {
 
 				// re-init js features
 				jq$(".termline").each(activateDraggables);
+				jq$(".termlist").each(function() {
+					initDropableTermList(jq$(this));
+				});
+
 				initAllIconHovers();
 				initAllBrowserActionEvents();
 			}
@@ -293,9 +318,9 @@ function rerenderSection(oldTargetID, newTargetID) {
 
 					// insert re-rendered content block
 					var directSelector = 'div[dragdropid="' + oldTargetID
-					+ '"]';
+						+ '"]';
 					var markupBlockOld;
-					if(jq$(directSelector).exists()) {
+					if (jq$(directSelector).exists()) {
 						markupBlockOld = jq$(directSelector);
 					}
 					else {
@@ -307,7 +332,7 @@ function rerenderSection(oldTargetID, newTargetID) {
 
 					// re-init edit-functionalities for inserted part
 					var markupBlockNew = jq$('div[dragdropid="' + newTargetID
-							+ '"]');
+						+ '"]');
 					if (markupBlockNew.length == 0) {
 						markupBlockNew = jq$('#' + newTargetID);
 					}
@@ -316,7 +341,7 @@ function rerenderSection(oldTargetID, newTargetID) {
 					});
 					initDropableMarkupSection(markupBlockNew);
 					KNOWWE.core.rerendercontent
-							.animateDefaultMarkupMenu(markupBlockNew);
+						.animateDefaultMarkupMenu(markupBlockNew);
 					ToolMenu.decorateToolMenus(markupBlockNew);
 				}
 			}

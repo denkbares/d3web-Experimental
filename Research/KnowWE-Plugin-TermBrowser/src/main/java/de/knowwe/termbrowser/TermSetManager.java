@@ -40,7 +40,6 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.event.PageRenderedEvent;
 
 /**
- * 
  * @author jochenreutelshofer
  * @created 05.12.2012
  */
@@ -50,6 +49,7 @@ public class TermSetManager implements EventListener {
 	private static final double WEIGHT_SEARCHED = 2.0;
 
 	private static TermSetManager instance;
+	private boolean automatedTermDetection = false;
 
 	public static TermSetManager getInstance() {
 		if (instance == null) {
@@ -62,7 +62,7 @@ public class TermSetManager implements EventListener {
 	private final Map<String, TermSet> data = new HashMap<String, TermSet>();
 
 	/**
-	 * 
+	 *
 	 */
 	private TermSetManager() {
 		termDetector = getPluggedTermDetector();
@@ -70,9 +70,8 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * 
-	 * @created 05.06.2013
 	 * @return
+	 * @created 05.06.2013
 	 */
 	private InterestingTermDetector getPluggedTermDetector() {
 		InterestingTermDetector h = null;
@@ -89,10 +88,10 @@ public class TermSetManager implements EventListener {
 
 	/**
 	 * Determines if the term-browser list was open or collapsed for this user
-	 * 
-	 * @created 14.05.2013
+	 *
 	 * @param user
 	 * @return
+	 * @created 14.05.2013
 	 */
 	public boolean listIsCollapsed(UserContext user) {
 		TermSet recommendationSet = data.get(user.getUserName());
@@ -107,12 +106,11 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * Determines if the concept overview graph was open or collapsed for this
-	 * user
-	 * 
-	 * @created 14.05.2013
+	 * Determines if the concept overview graph was open or collapsed for this user
+	 *
 	 * @param user
 	 * @return
+	 * @created 14.05.2013
 	 */
 	public boolean graphIsCollapsed(UserContext user) {
 		TermSet recommendationSet = data.get(user.getUserName());
@@ -126,38 +124,24 @@ public class TermSetManager implements EventListener {
 
 	public de.d3web.collections.PartialHierarchyTree<RatedTerm> getRatedTermTreeTop(UserContext user, int count) {
 		String username = user.getUserName();
-		if (!data.containsKey(username)) {
-			// init new term set
-			TermBrowserHierarchy hierarchy = new TermBrowserHierarchy(user);
-			PartialHierarchyTree<RatedTerm> tree = new PartialHierarchyTree<RatedTerm>(hierarchy);
-			Collection<Identifier> startupTerms = hierarchy.getStartupTerms();
-			if(startupTerms != null) {
-				for (Identifier identifier : startupTerms) {
-					tree.insertNode(new RatedTerm(identifier));
-				}
-			}
-			return tree;
+		TermSet termSet = findRecommendationSet(user);
+
+		List<RatedTerm> rankedTermList = termSet.getRankedTermList();
+		PartialHierarchyTree<RatedTerm> treeCopy = new PartialHierarchyTree<RatedTerm>(
+				termSet.getHierarchy());
+		int size = rankedTermList.size();
+		for (RatedTerm ratedTerm : rankedTermList) {
+			treeCopy.insertNode(ratedTerm);
 		}
-		else {
-			// existing term set
-			TermSet recommendationSet = data.get(username);
-			List<RatedTerm> rankedTermList = recommendationSet.getRankedTermList();
-			PartialHierarchyTree<RatedTerm> treeCopy = new PartialHierarchyTree<RatedTerm>(
-					recommendationSet.getHierarchy());
-			int size = rankedTermList.size();
-			for (RatedTerm ratedTerm : rankedTermList) {
-					treeCopy.insertNode(ratedTerm);
-			}
-			int toRemove = size - count;
-			if (count == -1) {
-				// -1 stand for infinite size of term browser list
-				toRemove = 0;
-			}
-			for (int i = 0; i < toRemove; i++) {
-				removeLowestRatedLeaf(treeCopy);
-			}
-			return treeCopy;
+		int toRemove = size - count;
+		if (count == -1) {
+			// -1 stands for infinite size of term browser list
+			toRemove = 0;
 		}
+		for (int i = 0; i < toRemove; i++) {
+			removeLowestRatedLeaf(treeCopy);
+		}
+		return treeCopy;
 	}
 
 	public List<RatedTerm> getRatedTermListTop(UserContext user, int count) {
@@ -183,9 +167,8 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * 
+	 * @param tree
 	 * @created 12.04.2013
-	 * @param treeCopy
 	 */
 	private void removeLowestRatedLeaf(PartialHierarchyTree<RatedTerm> tree) {
 		PartialHierarchyTree.Node<RatedTerm> root = tree.getRoot();
@@ -195,10 +178,9 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * 
-	 * @created 12.04.2013
 	 * @param root
 	 * @return
+	 * @created 12.04.2013
 	 */
 	private PartialHierarchyTree.Node<RatedTerm> findLowestRatedLeaf(Node<RatedTerm> root) {
 		List<Node<RatedTerm>> children = root.getChildren();
@@ -260,28 +242,26 @@ public class TermSetManager implements EventListener {
 			String title = ((PageRenderedEvent) event).getTitle();
 			UserContext user = ((PageRenderedEvent) event).getUser();
 			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB, title);
-			TermSet set = null;
-			if (data.containsKey(user.getUserName())) {
-				set = data.get(user.getUserName());
-				set.discount(0.8);
-			}
-			else {
-				set = new TermSet(user);
-				data.put(user.getUserName(), set);
-			}
+			TermSet set = findRecommendationSet(user);
+			set.discount(0.8);
 
-			String master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
-			Map<Identifier, Double> interestingTerms = termDetector.getWeightedTermsOfInterest(
-					article,
-					master);
+			boolean autoCollect = TermBrowserMarkup.getCurrentTermbrowserMarkupAutoCollectFlag(user);
 
-			// we add the values for the terms filtered by the hierarchy
-			// provider
-			Collection<Identifier> filteredTerms = set.getHierarchy().filterInterestingTerms(
-					interestingTerms.keySet());
+			if (autoCollect) {
 
-			for (Identifier term : filteredTerms) {
-				set.addValue(term, interestingTerms.get(term));
+				String master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
+				Map<Identifier, Double> interestingTerms = termDetector.getWeightedTermsOfInterest(
+						article,
+						master);
+
+				// we add the values for the terms filtered by the hierarchy
+				// provider
+				Collection<Identifier> filteredTerms = set.getHierarchy().filterInterestingTerms(
+						interestingTerms.keySet());
+
+				for (Identifier term : filteredTerms) {
+					set.addValue(term, interestingTerms.get(term));
+				}
 			}
 
 		}
@@ -289,10 +269,9 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * 
-	 * @created 11.12.2012
 	 * @param context
 	 * @param term
+	 * @created 11.12.2012
 	 */
 	public void clearTerm(UserContext context, Identifier term) {
 		TermSet recommendationSet = data.get(context.getUserName());
@@ -304,10 +283,9 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * 
-	 * @created 11.12.2012
 	 * @param context
 	 * @param term
+	 * @created 11.12.2012
 	 */
 	public void expandTerm(UserActionContext context, Identifier term) {
 		TermSet recommendationSet = findRecommendationSet(context);
@@ -330,6 +308,12 @@ public class TermSetManager implements EventListener {
 		TermSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet == null) {
 			recommendationSet = TermSet.createRecommendationSet(context);
+			Collection<Identifier> startupTerms = recommendationSet.getHierarchy().getStartupTerms();
+			if (startupTerms != null) {
+				for (Identifier identifier : startupTerms) {
+					recommendationSet.addValue(identifier, 1.0);
+				}
+			}
 			data.put(context.getUserName(), recommendationSet);
 		}
 		recommendationSet.updateUserData(context);
@@ -337,10 +321,9 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * 
-	 * @created 03.05.2013
 	 * @param context
 	 * @param term
+	 * @created 03.05.2013
 	 */
 	public void collapseTerm(UserActionContext context, Identifier term) {
 		TermSet recommendationSet = findRecommendationSet(context);
@@ -353,9 +336,8 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * 
-	 * @created 14.05.2013
 	 * @param context
+	 * @created 14.05.2013
 	 */
 	public void openList(UserContext context) {
 		TermSet recommendationSet = findRecommendationSet(context);
@@ -363,9 +345,8 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * 
-	 * @created 14.05.2013
 	 * @param context
+	 * @created 14.05.2013
 	 */
 	public void collapseList(UserActionContext context) {
 		TermSet recommendationSet = findRecommendationSet(context);
@@ -373,9 +354,8 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * 
-	 * @created 14.05.2013
 	 * @param context
+	 * @created 14.05.2013
 	 */
 	public void openGraph(UserActionContext context) {
 		TermSet recommendationSet = findRecommendationSet(context);
@@ -383,9 +363,8 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * 
-	 * @created 14.05.2013
 	 * @param context
+	 * @created 14.05.2013
 	 */
 	public void collapseGraph(UserActionContext context) {
 		TermSet recommendationSet = findRecommendationSet(context);
@@ -393,23 +372,27 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * 
-	 * @created 14.05.2013
 	 * @param context
+	 * @created 14.05.2013
 	 */
 	public void clearList(UserContext context) {
 		TermSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet != null) {
 			recommendationSet.clear();
 			recommendationSet.setTermAddedLatest(null);
+			TermBrowserHierarchy hierarchy = recommendationSet.getHierarchy();
+			Collection<Identifier> startupTerms = hierarchy.getStartupTerms();
+			if (startupTerms != null) {
+				for (Identifier identifier : startupTerms) {
+					recommendationSet.addValue(identifier, 1.0);
+				}
+			}
 		}
-
 	}
 
 	/**
-	 * 
-	 * @created 14.05.2013
 	 * @param context
+	 * @created 14.05.2013
 	 */
 	public void toggleCollapse(UserContext context) {
 		TermSet recommendationSet = findRecommendationSet(context);
@@ -418,9 +401,8 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * 
-	 * @created 28.05.2013
 	 * @param context
+	 * @created 28.05.2013
 	 */
 	public void toggleGraph(UserActionContext context) {
 		TermSet recommendationSet = findRecommendationSet(context);
@@ -429,10 +411,9 @@ public class TermSetManager implements EventListener {
 	}
 
 	/**
-	 * 
-	 * @created 31.05.2013
 	 * @param context
 	 * @param term
+	 * @created 31.05.2013
 	 */
 	public void addParentTerm(UserActionContext context, Identifier term) {
 		TermSet recommendationSet = findRecommendationSet(context);

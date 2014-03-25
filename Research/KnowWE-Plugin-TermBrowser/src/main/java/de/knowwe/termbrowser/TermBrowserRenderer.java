@@ -221,8 +221,12 @@ public class TermBrowserRenderer {
 
 		Collection<Identifier> allTermDefinitions = hierarchy.getAllTerms();
 		StringBuilder builder = new StringBuilder();
-		for (Identifier name : allTermDefinitions) {
-			builder.append("\"").append(name.toExternalForm().replaceAll("\"", "")).append("\",\n");
+
+		if (allTermDefinitions != null) {
+
+			for (Identifier name : allTermDefinitions) {
+				builder.append("\"").append(name.toExternalForm().replaceAll("\"", "")).append("\",\n");
+			}
 		}
 
 		return builder.toString();
@@ -234,7 +238,7 @@ public class TermBrowserRenderer {
 		if (collapsed) {
 			style = "display:none;";
 		}
-		string.appendHtml("<div style='" + style + "' class='termlist'>");
+		string.appendHtml("<div id='droppable' style='" + style + "' class='termlist'>");
 
 		Node<RatedTerm> root = tree.getRoot();
 		List<Node<RatedTerm>> roots = root.getChildrenSortedDefault();
@@ -274,6 +278,9 @@ public class TermBrowserRenderer {
 		}
 
 		String url = linkProvider.getLinkToTermDefinition(term, master);
+		if (url == null) {
+			url = KnowWEUtils.getURLLink(term.getLastPathElement());
+		}
 		// baseUrl + name;
 		String divStyle = "";
 		string.appendHtml("<div id='draggable' style='"

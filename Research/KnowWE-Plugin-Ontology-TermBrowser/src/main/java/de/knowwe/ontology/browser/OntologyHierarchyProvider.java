@@ -54,6 +54,7 @@ import de.knowwe.termbrowser.TermBrowserMarkup;
 public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>, EventListener {
 
 	protected List<String> categories = new ArrayList<String>();
+	protected List<String> startConceptList = new ArrayList<String>();
 	protected List<String> ignoredTerms = new ArrayList<String>();
 
 	protected List<String> relations = new ArrayList<String>();
@@ -62,7 +63,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 
 	protected Map<Identifier, Set<Identifier>> successorshipCache = new HashMap<Identifier, Set<Identifier>>();
 
-	protected boolean mixedRelationHierarchyMode = false;
+	protected boolean mixedRelationHierarchyMode = true;
 
 	public OntologyHierarchyProvider() {
 		EventManager.getInstance().registerListener(this);
@@ -231,8 +232,11 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 
 	@Override
 	public Collection<Identifier> getStartupTerms() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Identifier> startConcepts = new ArrayList<Identifier>();
+		for (String startConceptName : startConceptList) {
+			startConcepts.add(new Identifier(startConceptName.split(":")));
+		}
+		return startConcepts;
 	}
 
 	@Override
@@ -285,6 +289,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 		relations = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyRelations(user);
 		categories = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyCategories(user);
 		ignoredTerms = TermBrowserMarkup.getCurrentTermbrowserIgnoredTerms(user);
+		startConceptList = TermBrowserMarkup.getCurrentTermbrowserMarkupStartConcept(user);
 		this.master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
 		this.user = user;
 	}

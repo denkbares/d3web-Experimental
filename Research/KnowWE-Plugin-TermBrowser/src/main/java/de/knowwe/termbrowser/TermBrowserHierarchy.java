@@ -28,7 +28,6 @@ import de.d3web.utils.Log;
 import de.knowwe.core.user.UserContext;
 
 /**
- * 
  * @author jochenreutelshofer
  * @created 01.10.2013
  */
@@ -36,11 +35,12 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 
 	private final HierarchyProvider<Identifier> hierarchyProvider;
 	private final UserContext user;
+
 	/**
-	 * 
+	 *
 	 */
 	public TermBrowserHierarchy(UserContext user) {
-		
+
 		this.user = user;
 		String provider = TermBrowserMarkup.getCurrentTermbrowserMarkupHierarchyProvider(user);
 		hierarchyProvider = TermBrowserHierarchy.getPluggedHierarchyProvider(provider);
@@ -48,9 +48,8 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 	}
 
 	/**
-	 * 
-	 * @created 05.06.2013
 	 * @return
+	 * @created 05.06.2013
 	 */
 	@SuppressWarnings("unchecked")
 	public static HierarchyProvider<Identifier> getPluggedHierarchyProvider(String provider) {
@@ -90,7 +89,6 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 		return hierarchyProvider.isSuccessorOf(term1, term2);
 	}
 
-
 	@Override
 	public Collection<Identifier> getAllTerms() {
 		this.hierarchyProvider.updateSettings(user);
@@ -100,9 +98,9 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 
 	@Override
 	public Collection<Identifier> getStartupTerms() {
+		this.hierarchyProvider.updateSettings(user);
 		return hierarchyProvider.getStartupTerms();
 	}
-
 
 	@Override
 	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
@@ -113,7 +111,6 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 	public boolean isSuccessorOf(RatedTerm node1, RatedTerm node2) {
 		return isSubNodeOf(node1.getTerm(), node2.getTerm());
 	}
-
 
 	@Override
 	public void updateSettings(UserContext user) {
