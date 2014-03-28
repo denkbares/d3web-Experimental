@@ -38,7 +38,7 @@ public class TermDragRenderer implements Renderer {
 	public void render(Section<?> section, UserContext user, RenderResult result) {
 
 		String identifier = getIdentifierString(section);
-		result.appendHtml("<div style='display:inline;' class='dragMarkupTerm'>");
+		result.appendHtml("<div style='display:inline;position:static !important;' class='dragMarkupTerm'>");
 		result.appendHtml("<div class='termID'>" + identifier + "</div>");
 		Renderer nextRenderer = Environment.getInstance().getNextRendererForType(section.get(), this);
 		if (nextRenderer == null) {
