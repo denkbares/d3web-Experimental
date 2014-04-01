@@ -20,3 +20,7 @@
 .toolMenuDecorated {
 	white-space: normal !important;
 }
+
+.type_ScoreTable .markupText {
+	white-space: normal !important;
+}
