@@ -237,161 +237,125 @@ function createKnoten() {
 				return zoom(node == d ? root : d);
 			});
 
-		vis.selectAll("text")
-			.data(nodes)
-			.enter().append("svg:text")
-			.attr("class", function(d) {
-				return d.children ? "parent" : "child";
-			})
-			.attr("x", function(d) {
-				return (d.x + 100);
-			})
-			.attr("y", function(d) {
-				return d.y;
-			})
-			.attr("dy", ".35em")
-			.attr("text-anchor", "middle")
-			.style("opacity", function(d) {
-				return d.r > 20 ? 1 : 0;
-			})
-			.text(function(d) {
-				return d.name;
-			});
+  vis.selectAll("text")
+      .data(nodes)
+    .enter().append("svg:text")
+      .attr("class", function(d) { return d.children ? "parent" : "child"; })
+      .attr("x", function(d) { return (d.x+100); })
+      .attr("y", function(d) { return d.y; })
+      .attr("dy", ".35em")
+      .attr("text-anchor", "middle")
+      .style("opacity", function(d) { return d.r > 20 ? 1 : 0; })
+      .text(function(d) { return d.name; });
 
-		d3.select(window).on("click", function() {
-			zoom(root);
-		});
-	});
+  d3.select(window).on("click", function() { zoom(root); });
+});
 
-	function zoom(d, i) {
-		var k = r / d.r / 2;
-		x.domain([d.x - d.r, d.x + d.r]);
-		y.domain([d.y - d.r, d.y + d.r]);
+function zoom(d, i) {
+  var k = r / d.r / 2;
+  x.domain([d.x - d.r, d.x + d.r]);
+  y.domain([d.y - d.r, d.y + d.r]);
 
-		var t = vis.transition()
-			.duration(d3.event.altKey ? 7500 : 750);
+  var t = vis.transition()
+      .duration(d3.event.altKey ? 7500 : 750);
 
-		t.selectAll("circle")
-			.attr("cx", function(d) {
-				return x(d.x);
-			})
-			.attr("cy", function(d) {
-				return y(d.y);
-			})
-			.attr("r", function(d) {
-				return k * d.r;
-			});
+  t.selectAll("circle")
+      .attr("cx", function(d) { return x(d.x); })
+      .attr("cy", function(d) { return y(d.y); })
+      .attr("r", function(d) { return k * d.r; });
 
-		t.selectAll("text")
-			.attr("x", function(d) {
-				return x(d.x);
-			})
-			.attr("y", function(d) {
-				return y(d.y);
-			})
-			.style("opacity", function(d) {
-				return k * d.r > 20 ? 1 : 0;
-			});
+  t.selectAll("text")
+      .attr("x", function(d) { return x(d.x); })
+      .attr("y", function(d) { return y(d.y); })
+      .style("opacity", function(d) { return k * d.r > 20 ? 1 : 0; });
 
-		node = d;
-		d3.event.stopPropagation();
-	}
+  node = d;
+  d3.event.stopPropagation();
 }
-function createForce() {
-	//Width and height
-	var w = 500;
-	var h = 300;
+}
+function createForce(){
+		//Width and height
+			var w = 500;
+			var h = 300;
 
-	//Original data
-	var params = {
-		action : 'AjaxAction',
-		type : 'force'};
-	var url = KNOWWE.core.util.getURL(params);
-	d3.json(url, function(error, root) {
+			//Original data
+			var params = { 
+ 							action : 'AjaxAction' ,  
+							type : 'force'};
+			var url = KNOWWE.core.util.getURL(params);
+			d3.json(url, function(error, root) {
+		
+			//Initialize a default force layout, using the nodes and edges in dataset
+			var force = d3.layout.force()
+								 .nodes(root.nodes)
+								 .links(root.edges)
+								 .size([w, h])
+								 .linkDistance([50])
+								 .charge([-100])
+								 .start();
 
-		//Initialize a default force layout, using the nodes and edges in dataset
-		var force = d3.layout.force()
-			.nodes(root.nodes)
-			.links(root.edges)
-			.size([w, h])
-			.linkDistance([50])
-			.charge([-100])
-			.start();
+	
+			var colors = d3.scale.category10();
 
+			//Create SVG element
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
 
-		var colors = d3.scale.category10();
+			//Create edges as lines
+			var edges = svg.selectAll("line")
+				.data(root.edges)
+				.enter()
+				.append("line")
+				.style("stroke", "#ccc")
+				.style("stroke-width", 1);
 
-		//Create SVG element
-		var svg = d3.select("body")
-			.append("svg")
-			.attr("width", w)
-			.attr("height", h);
-
-		//Create edges as lines
-		var edges = svg.selectAll("line")
-			.data(root.edges)
-			.enter()
-			.append("line")
-			.style("stroke", "#ccc")
-			.style("stroke-width", 1);
-
-		//Create nodes as circles
-		var nodes = svg.selectAll("circle")
-			.data(root.nodes)
-			.enter()
-			.append("circle")
-			.attr("r", 10)
-			.style("fill", function(d, i) {
-				return colors(i);
-			})
-			.call(force.drag);
-
-
-		//Every time the simulation "ticks", this will be called
-		force.on("tick", function() {
-
-			edges.attr("x1", function(d) {
-				return d.source.x;
-			})
-				.attr("y1", function(d) {
-					return d.source.y;
+			//Create nodes as circles
+			var nodes = svg.selectAll("circle")
+				.data(root.nodes)
+				.enter()
+				.append("circle")
+				.attr("r", 10)
+				.style("fill", function(d, i) {
+					return colors(i);
 				})
-				.attr("x2", function(d) {
-					return d.target.x;
-				})
-				.attr("y2", function(d) {
-					return d.target.y;
-				});
+				.call(force.drag);
 
-			nodes.attr("cx", function(d) {
-				return d.x;
-			})
-				.attr("cy", function(d) {
-					return d.y;
-				});
 
-		});
+			//Every time the simulation "ticks", this will be called
+			force.on("tick", function() {
 
-	});
+				edges.attr("x1", function(d) { return d.source.x; })
+					 .attr("y1", function(d) { return d.source.y; })
+					 .attr("x2", function(d) { return d.target.x; })
+					 .attr("y2", function(d) { return d.target.y; });
 
+				nodes.attr("cx", function(d) { return d.x; })
+					 .attr("cy", function(d) { return d.y; });
+
+			});
+
+	}  )  ; 
+	
 
 }
 
-function visChange() {
+function visChange(){
 	jq$("#infolist").removeClass('unhidden');
 	jq$("#infolist").addClass('hidden');
 }
-function clickTextEventHandler(d) {
-
+function clickTextEventHandler(d){
+	
 	var clickedName = d.data.name;
-	console.log(d.data.name);
-
+	  	console.log(d.data.name);
+	
 	jq$("#infolist").addClass('unhidden');
-
+		
 	var url = KNOWWE.core.util.getURL({action : 'ConnectionsAction', concept : clickedName});
 	renderConnections(url);
-
-
+	
+	
 }
 
 
@@ -523,18 +487,19 @@ function createBubble(concept) {
 		node = d;
 		d3.event.stopPropagation();
 	}
+	
+	window.addEventListener('load', function(e){
+jq$(document).ready(function() {
+$(window).keydown(function(event){
+if(event.keyCode == 13) {
+event.preventDefault();
+return false;
 }
-window.addEventListener('load', function(e) {
-	jq$(document).ready(function() {
-		$(window).keydown(function(event) {
-			if (event.keyCode == 13) {
-				event.preventDefault();
-				return false;
-			}
-		});
-	});
 });
-
+});
+});
+	
+}
 	
 
 

@@ -69,6 +69,11 @@ public class Visualization {
 						// + "/KnowWEExtension/css/toolbar.css\">"
 						// +
 						// visCollapsableTree
+						// base style
+						"	<link rel=\"stylesheet\" href=\""
+						+ context
+						+ "/KnowWEExtension/css/scoreStyle.css\">"
+						+
 						"	<link rel=\"stylesheet\" href=\""
 						+ context
 						+ "/KnowWEExtension/css/visCollapsableTreeStyle.css\">"
@@ -240,23 +245,39 @@ public class Visualization {
 						"<li class=\"has-sub\" onclick=\"createReingold()\"><a href=\"#\"><span>Reingold-Tilford Tree</span></a></li>"
 						+
 						"<li class=\"has-sub\" onclick=\"createTreeCollapsable()\"><a href=\"#\"><span>Collapsible Tree</span></a></li>"
-						+
-						"<li class=\"has-sub\" onclick=\"createCollForce()\"><a href=\"#\"><span>Force Graph Labeled</span></a></li>"
+						// +
+						// "<li class=\"has-sub\" onclick=\"createCollForce()\"><a href=\"#\"><span>Force Graph Labeled</span></a></li>"
 						+
 						"<li class=\"has-sub\"><a href=\"#\"><span>Experimental I</span></a>"
 						+ "<ul>"
-						+ "<li onclick=\"createTreeDiagonal()\"><a href=\"#\"><span>Experiment TreeDiag</span></a></li>"// li
-						+ "<li onclick=\"createCollForceTest()\"><a href=\"#\"><span>Coll Force Test</span></a></li>"// li
-						+ "<li class=\"last\"><a href=\"#\"><span>Experiment 3</span></a></li>"// li
-						+ "<li class=\"last\" onclick=\"createCollForceTest()\"><a href=\"#\"><span>Experiment JIT</span></a></li>"// li
-						+ "</ul>"
+						 +
+						"<li onclick=\"createPerformanceTree()\"><a href=\"#\"><span>Performance Tree</span></a></li>"//
 						+
-						"<li class=\"has-sub\"><a href=\"#\"><span>Experimental II</span></a>"
-						+ "<ul>"
-						+ "<li><a href=\"#\"><span>Experiment 1</span></a></li>"// li
-						+ "<li><a href=\"#\"><span>Experiment 2</span></a></li>"// li
-						+ "<li class=\"last\"><a href=\"#\"><span>Experiment 3</span></a></li>"// li
-						+ "</ul>"
+						// "<li onclick=\"createTreeDiagonal()\"><a href=\"#\"><span>Experiment TreeDiag</span></a></li>"//
+						// li
+						// +
+						// "<li onclick=\"createCollForceTest()\"><a href=\"#\"><span>Coll Force Test</span></a></li>"//
+						// li
+						// +
+						// "<li class=\"last\"><a href=\"#\"><span>Experiment 3</span></a></li>"//
+						// li
+						// +
+						// "<li class=\"last\" onclick=\"createCollForceTest()\"><a href=\"#\"><span>Experiment JIT</span></a></li>"//
+						// li
+						// + "</ul>"
+						// +
+						// "<li class=\"has-sub\"><a href=\"#\"><span>Experimental II</span></a>"
+						// + "<ul>"
+						// +
+						// "<li><a href=\"#\"><span>Experiment 1</span></a></li>"//
+						// li
+						// +
+						// "<li><a href=\"#\"><span>Experiment 2</span></a></li>"//
+						// li
+						// +
+						// "<li class=\"last\"><a href=\"#\"><span>Experiment 3</span></a></li>"//
+						// li
+						"</ul>"
 						+ "<li class=\"has-sub\"><a href=\"javascript:history.back()\"><span>Back to WIKI</span></a></li>"
 						+
 						"</ul>"// ul main
