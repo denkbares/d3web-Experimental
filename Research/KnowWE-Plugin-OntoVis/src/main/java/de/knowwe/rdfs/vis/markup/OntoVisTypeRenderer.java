@@ -106,13 +106,11 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		}
 		parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, addToDOT);
 
+		Rdf2GoCompiler compiler = Compilers.getCompiler(section, Rdf2GoCompiler.class);
 		LinkToTermDefinitionProvider uriProvider;
+
 		Rdf2GoCore rdfRepository;
-		if (master != null) {
-			rdfRepository = Compilers.getCompiler(section, Rdf2GoCompiler.class).getRdf2GoCore();
-			uriProvider = new PackageCompileLinkToTermDefinitionProvider();
-		}
-		else {
+		if (compiler == null) {
 			rdfRepository = Rdf2GoCore.getInstance();
 			// TODO: completely remove dependency to IncrementalCompiler
 			try {
@@ -128,6 +126,10 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 					}
 				};
 			}
+		}
+		else {
+			rdfRepository = compiler.getRdf2GoCore();
+			uriProvider = new PackageCompileLinkToTermDefinitionProvider();
 		}
 
 		OntoGraphDataBuilder builder = new OntoGraphDataBuilder(realPath, section, parameterMap,

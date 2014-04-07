@@ -11,11 +11,14 @@ import javax.servlet.ServletContext;
 
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
+import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
+import de.d3web.utils.Log;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.packaging.PackageManager;
@@ -48,6 +51,8 @@ import de.knowwe.visualization.d3.D3VisualizationRenderer;
 import de.knowwe.visualization.dot.DOTVisualizationRenderer;
 
 public class SparqlVisTypeRenderer implements Renderer {
+
+	private static final boolean SHOW_LABEL_FOR_URI = false;
 
 	@Override
 	public void render(Section<?> content, UserContext user, RenderResult string) {
@@ -318,48 +323,101 @@ public class SparqlVisTypeRenderer implements Renderer {
 	}
 
 	private ConceptNode createNode(Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, SubGraphData data, Node toURI) {
-		String to = OntoGraphDataBuilder.getConceptName(toURI, rdfRepository);
-		// is the node a literal ?
+		ConceptNode visNode = null;
+
+		NODE_TYPE type = NODE_TYPE.UNDEFINED;
 		Literal toLiteral = null;
+		String label = null;
+		String identifier = null;
+
+
+		/*
+		1. case: Node is Literal
+		 */
 		try {
 			toLiteral = toURI.asLiteral();
-			if (to == null) {
-				to = toLiteral.toString();
+			//add hashcode to identifier to have distinct dot nodes for literals used in different contexts, e.g. "1"
+			identifier = toLiteral.toString() + toLiteral.hashCode();
+			type = NODE_TYPE.LITERAL;
+			label = toLiteral.toString();
+			if (label.contains("@")) {
+				label = label.substring(0, label.indexOf('@'));
 			}
+
+			visNode = new ConceptNode(identifier, type, createConceptURL(identifier, parameters,
+					section,
+					uriProvider), "\"" + label + "\"");
+			data.addConcept(visNode);
+			return visNode;
 		}
 		catch (ClassCastException e) {
-			// do nothing
+			// do nothing as this is just a type check
 		}
 
-		ConceptNode toNode = null;
+		/*
+		2. case: Node is BlankNode
+		 */
+		BlankNode bNode = null;
+		try {
+			bNode = toURI.asBlankNode();
+			identifier = bNode.toString();
 
-		if (toLiteral != null) {
-			toNode = data.getConcept(to);
+			visNode = data.getConcept(identifier);
+			if (visNode == null) {
+				type = NODE_TYPE.BLANKNODE;
+				label = bNode.toString();
+				visNode = new ConceptNode(identifier, type, createConceptURL(identifier, parameters,
+						section,
+						uriProvider), label);
+				data.addConcept(visNode);
+			}
+			return visNode;
+
 		}
-		if (toNode == null) {
-			NODE_TYPE type = NODE_TYPE.UNDEFINED;
-			String label = null;
-			if (toLiteral == null) {
-				label = Utils.getRDFSLabel(
-						toURI.asURI(), rdfRepository,
-						parameters.get(OntoGraphDataBuilder.LANGUAGE));
-			}
-			if (label == null && toLiteral == null) {
-				label = to;
-			}
-			if (toLiteral != null) {
-				type = NODE_TYPE.LITERAL;
-				label = toLiteral.toString();
-				if (label.contains("@")) {
-					label = label.substring(0, label.indexOf('@'));
+		catch (ClassCastException e) {
+			// do nothing as this is just a type check
+		}
+
+
+		/*
+		3. case: Node is URI-Resource
+		 */
+		try {
+			URI uri = toURI.asURI();
+			identifier = OntoGraphDataBuilder.getConceptName(toURI, rdfRepository);
+			visNode = data.getConcept(identifier);
+
+			if (visNode == null) {
+
+				type = NODE_TYPE.UNDEFINED;
+				if (Rdf2GoUtils.isClass(rdfRepository, uri)) {
+					type = NODE_TYPE.CLASS;
 				}
+				if (Rdf2GoUtils.isProperty(rdfRepository, uri)) {
+					type = NODE_TYPE.PROPERTY;
+				}
+				if (SparqlVisTypeRenderer.SHOW_LABEL_FOR_URI) {
+					label = Utils.getRDFSLabel(
+							toURI, rdfRepository,
+							parameters.get(OntoGraphDataBuilder.LANGUAGE));
+				}
+				if (label == null) {
+					label = identifier;
+				}
+				visNode = new ConceptNode(identifier, type, createConceptURL(identifier, parameters,
+						section,
+						uriProvider), label);
+				data.addConcept(visNode);
 			}
-			toNode = new ConceptNode(to, type, createConceptURL(to, parameters,
-					section,
-					uriProvider), label);
-			data.addConcept(toNode);
+			return visNode;
 		}
-		return toNode;
+		catch (ClassCastException e) {
+			// do nothing as this is just a type check
+		}
+
+		// this case should/can never happen!
+		Log.severe("No valid Node type!");
+		return null;
 	}
 
 	private String getMaster(Section<?> section) {

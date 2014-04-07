@@ -26,7 +26,7 @@ import java.util.Set;
 
 /**
  * Contains a sub-set of a graph.
- * 
+ *
  * @author jochenreutelshofer
  * @created 27.05.2013
  */
@@ -36,8 +36,8 @@ public class SubGraphData {
 	private final Set<Edge> edges;
 
 	/**
- * 
- */
+	 *
+	 */
 	public SubGraphData() {
 		concepts = new LinkedHashMap<String, ConceptNode>();
 		edges = new LinkedHashSet<Edge>();

@@ -21,12 +21,10 @@ package de.knowwe.rdfs.vis.util;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
-import org.ontoware.rdf2go.model.node.URI;
 
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
- * 
  * @author jochenreutelshofer
  * @created 29.11.2012
  */
@@ -34,7 +32,7 @@ public class Utils {
 
 	public static final String LINE_BREAK = "\\n";
 
-	public static String getRDFSLabel(URI concept, Rdf2GoCore repo, String languageTag) {
+	public static String getRDFSLabel(Node concept, Rdf2GoCore repo, String languageTag) {
 
 		// try to find language specific label
 		String label = getLanguageSpecifcLabel(concept, repo, languageTag);
@@ -56,14 +54,13 @@ public class Utils {
 	}
 
 	/**
-	 * 
-	 * @created 29.04.2013
 	 * @param concept
 	 * @param repo
 	 * @param languageTag
 	 * @return
+	 * @created 29.04.2013
 	 */
-	private static String getLanguageSpecifcLabel(URI concept, Rdf2GoCore repo, String languageTag) {
+	private static String getLanguageSpecifcLabel(Node concept, Rdf2GoCore repo, String languageTag) {
 		if (languageTag == null) return null;
 		String label = null;
 

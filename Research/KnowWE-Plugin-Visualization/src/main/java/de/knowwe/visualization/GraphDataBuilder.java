@@ -37,19 +37,23 @@ import de.knowwe.visualization.d3.D3VisualizationRenderer;
 import de.knowwe.visualization.dot.DOTVisualizationRenderer;
 
 /**
+ * @param <T> The type of data the graph is supposed to visualize
  * @author Johanna Latt
  * @created 11.10.2013
- * @param <T> The type of data the graph is supposed to visualize
  */
 public abstract class GraphDataBuilder<T extends Object> {
 
 	public enum NODE_TYPE {
-		CLASS, PROPERTY, INSTANCE, UNDEFINED, LITERAL
-	};
+		CLASS, PROPERTY, INSTANCE, UNDEFINED, LITERAL, BLANKNODE,
+	}
+
+	;
 
 	public enum Renderer {
 		dot, d3
-	};
+	}
+
+	;
 
 	public static final String RENDERER = "renderer";
 
@@ -174,7 +178,9 @@ public abstract class GraphDataBuilder<T extends Object> {
 		if (renderer != null && renderer.equals(Renderer.d3.name())) {
 			sourceRenderer = new D3VisualizationRenderer(data, parameters);
 		}
-		else sourceRenderer = new DOTVisualizationRenderer(data, parameters);
+		else {
+			sourceRenderer = new DOTVisualizationRenderer(data, parameters);
+		}
 
 		// set config values
 		setConfigurationParameters();
@@ -206,12 +212,11 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	/**
-	 * Starts the actual rendering process. Generates doc file and images files.
-	 * Adds corresponding html source to the passed StringBuilder.
-	 * 
+	 * Starts the actual rendering process. Generates doc file and images files. Adds corresponding html source to the
+	 * passed StringBuilder.
+	 *
+	 * @param builder html source showing the generated images is added to this builder
 	 * @created 29.11.2012
-	 * @param builder html source showing the generated images is added to this
-	 *        builder
 	 */
 	public void render(RenderResult builder) {
 		createData();
@@ -221,10 +226,10 @@ public abstract class GraphDataBuilder<T extends Object> {
 
 	/**
 	 * Adds all requested concepts and information to the dotSources (the maps).
-	 * 
-	 * @created 20.08.2012
+	 *
 	 * @param concept
 	 * @param request
+	 * @created 20.08.2012
 	 */
 	public abstract void selectGraphData();
 
@@ -245,9 +250,8 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	/**
-	 * 
-	 * @created 20.08.2012
 	 * @param user
+	 * @created 20.08.2012
 	 */
 	private void setConfigurationParameters() {
 		getSuccessors();
@@ -263,7 +267,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	/**
-	 * 
 	 * @created 18.08.2012
 	 */
 	private void getPredecessors() {
@@ -273,7 +276,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	/**
-	 * 
 	 * @created 18.08.2012
 	 */
 	private void getSuccessors() {
@@ -283,7 +285,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	/**
-	 * 
 	 * @created 20.08.2012
 	 */
 	private void getExcludedRelations() {
@@ -296,7 +297,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	/**
-	 * 
 	 * @created 20.08.2012
 	 */
 	private void getExcludedNodes() {
@@ -309,8 +309,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	/**
-	 * 
-	 * 
 	 * @created 24.11.2013
 	 */
 	private void getFilteredClasses() {
@@ -323,8 +321,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	/**
-	 * 
-	 * 
 	 * @created 24.11.2013
 	 */
 	private void getFilteredRelations() {
@@ -337,7 +333,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	/**
-	 * 
 	 * @created 13.09.2012
 	 */
 	private void getShowAnnotations() {
@@ -360,71 +355,62 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	/**
-	 * 
-	 * @created 18.08.2012
 	 * @param concept
 	 * @param request
+	 * @created 18.08.2012
 	 */
 	public abstract void insertMainConcept(T concept);
 
 	/**
-	 * Method, that recursively adds all successors of the requested concept up
-	 * to the chosen depth.
-	 * 
-	 * @created 26.06.2012
+	 * Method, that recursively adds all successors of the requested concept up to the chosen depth.
+	 *
 	 * @param concept
 	 * @param request
+	 * @created 26.06.2012
 	 */
 	public abstract void addSuccessors(T concept);
 
 	/**
-	 * 
-	 * @created 03.08.2012
 	 * @param concept
 	 * @param request
+	 * @created 03.08.2012
 	 */
 	public abstract void addPredecessors(T concept);
 
 	/**
-	 * Adds (gray) relations to the last (successor) nodes of the graph, showing
-	 * the nodes that still follow.
-	 * 
-	 * @created 26.06.2012
+	 * Adds (gray) relations to the last (successor) nodes of the graph, showing the nodes that still follow.
+	 *
 	 * @param concept
 	 * @param request
+	 * @created 26.06.2012
 	 */
 	public abstract void addOutgoingEdgesSuccessors(T concept);
 
 	/**
-	 * Adds (gray) relations to the last (predecessor) nodes of the graph,
-	 * showing the nodes that still follow.
-	 * 
-	 * @created 26.06.2012
+	 * Adds (gray) relations to the last (predecessor) nodes of the graph, showing the nodes that still follow.
+	 *
 	 * @param concept
 	 * @param request
+	 * @created 26.06.2012
 	 */
 	public abstract void addOutgoingEdgesPredecessors(T concept);
 
 	/**
-	 * 
-	 * @created 20.08.2012
 	 * @param from
 	 * @param to
 	 * @param relation between from --> to
-	 * @param boolean predecessor (if predecessor or successor is added to the
-	 *        graph)
-	 * @param type (instance, class, property, undefined)
+	 * @param boolean  predecessor (if predecessor or successor is added to the graph)
+	 * @param type     (instance, class, property, undefined)
+	 * @created 20.08.2012
 	 */
 	public abstract void addConcept(T from, T to, T relation, NODE_TYPE type);
 
 	/**
-	 * 
-	 * @created 20.08.2012
 	 * @param from
 	 * @param to
 	 * @param relation between from --> to
-	 * @param boolean predecessor (if predecessor or successor is added to the
-	 *        graph)
+	 * @param boolean  predecessor (if predecessor or successor is added to the graph)
+	 * @created 20.08.2012
 	 */
 	public abstract void addOuterConcept(T from, T to, T relation, boolean predecessor);
 
@@ -450,9 +436,8 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	/**
-	 * 
-	 * @created 29.11.2012
 	 * @return
+	 * @created 29.11.2012
 	 */
 	public static String createBaseURL() {
 		if (Environment.getInstance() != null
@@ -467,9 +452,9 @@ public abstract class GraphDataBuilder<T extends Object> {
 
 	/**
 	 * Tests if the given node x is being excluded in the annotations.
-	 * 
-	 * @created 20.08.2012
+	 *
 	 * @param x
+	 * @created 20.08.2012
 	 */
 	public boolean excludedNode(String x) {
 		if (excludedNodes != null) {
@@ -484,9 +469,9 @@ public abstract class GraphDataBuilder<T extends Object> {
 
 	/**
 	 * Test if the given relation y is being excluded in the annotations.
-	 * 
-	 * @created 20.08.2012
+	 *
 	 * @param y
+	 * @created 20.08.2012
 	 */
 	public boolean excludedRelation(String y) {
 		if (excludedRelations != null) {
@@ -501,10 +486,10 @@ public abstract class GraphDataBuilder<T extends Object> {
 
 	/**
 	 * Tests if the given class x is set as a filtered class in the annotations.
-	 * 
-	 * @created 24.11.2013
+	 *
 	 * @param x
 	 * @return
+	 * @created 24.11.2013
 	 */
 	public boolean filteredClass(String x) {
 		if (filteredClasses != null) {
@@ -520,12 +505,11 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	/**
-	 * Tests if the given relation y is set as a filtered relation in the
-	 * annotations.
-	 * 
-	 * @created 24.11.2013
+	 * Tests if the given relation y is set as a filtered relation in the annotations.
+	 *
 	 * @param x
 	 * @return
+	 * @created 24.11.2013
 	 */
 	public boolean filteredRelation(String y) {
 		if (filteredRelations != null) {
@@ -542,9 +526,9 @@ public abstract class GraphDataBuilder<T extends Object> {
 
 	/**
 	 * Tests if input is a valid int for the depth/height of the graph.
-	 * 
-	 * @created 20.08.2012
+	 *
 	 * @param input
+	 * @created 20.08.2012
 	 */
 	private boolean isValidInt(String input) {
 		try {

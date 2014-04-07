@@ -36,6 +36,7 @@ import org.jdom.JDOMException;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import de.d3web.strings.Strings;
 import de.d3web.utils.Log;
 import de.knowwe.visualization.ConceptNode;
 import de.knowwe.visualization.Edge;
@@ -47,7 +48,6 @@ import de.knowwe.visualization.util.SAXBuilderSingleton;
 import de.knowwe.visualization.util.Utils;
 
 /**
- * 
  * @author jochenreutelshofer
  * @created 29.04.2013
  */
@@ -57,24 +57,30 @@ public class DotRenderer {
 	public static final String outerLabel = "[ shape=\"none\" fontsize=\"0\" fontcolor=\"white\" ];\n";
 
 	private static String buildLabel(RenderingStyle style) {
-		return " shape=\"" + style.shape + "\" ";
+		StringBuilder result = new StringBuilder();
+		result.append(" shape=\"").append(style.shape).append("\" ");
+		if (!Strings.isBlank(style.style)) {
+			result.append(" style=\"").append(style.style).append("\" ");
+		}
+		if (!Strings.isBlank(style.fillcolor)) {
+			result.append(" fillcolor=\"").append(style.fillcolor).append("\" ");
+		}
+		return result.toString();
 	}
 
 	/**
-	 * 
-	 * @created 04.09.2012
 	 * @param arrowtail
+	 * @created 04.09.2012
 	 */
 	private static String buildRelation(String arrowtail, String color) {
 		return " arrowtail=\"" + arrowtail + "\" " + " color=\"" + color + "\" ";
 	}
 
 	/**
-	 * Given the label of the inner relation, the method returns the String of
-	 * the appearance of the relation.
-	 * 
-	 * @created 06.09.2012
+	 * Given the label of the inner relation, the method returns the String of the appearance of the relation.
+	 *
 	 * @param label
+	 * @created 06.09.2012
 	 */
 	private static String innerRelation(String label, String relationColorCodes) {
 		// Basic Relation Attributes
@@ -87,10 +93,9 @@ public class DotRenderer {
 	}
 
 	/**
-	 * 
-	 * @created 07.12.2012
 	 * @param label
 	 * @return
+	 * @created 07.12.2012
 	 */
 	private static String getRelationColorCode(String label, String relationColorCodes) {
 		if (relationColorCodes != null) {
@@ -114,22 +119,33 @@ public class DotRenderer {
 
 		if (type == NODE_TYPE.CLASS) {
 			style.shape = "box";
-		}
-		else if (type == NODE_TYPE.PROPERTY) {
-			style.shape = "septagon";
+			style.style = "bold";
 		}
 		else if (type == NODE_TYPE.INSTANCE) {
-			style.shape = "egg";
+			style.shape = "box";
+			style.style = "rounded";
+		}
+		else if (type == NODE_TYPE.PROPERTY) {
+			style.shape = "hexagon";
+		}
+		else if (type == NODE_TYPE.BLANKNODE) {
+			style.shape = "diamond";
+		}
+		else if (type == NODE_TYPE.LITERAL) {
+			style.shape = "box";
+			style.style = "filled";
+			style.fillcolor = "lightgray";
 		}
 		else {
 			style.shape = "box";
+			style.style = "rounded";
 		}
 		return style;
 	}
 
 	/**
 	 * The sources from the maps are being written into the String-dotSource.
-	 * 
+	 *
 	 * @created 18.08.2012
 	 */
 	public static String createDotSources(SubGraphData data, Map<String, String> parameters) {
@@ -203,7 +219,7 @@ public class DotRenderer {
 	}
 
 	private static String getRootLabel(String concept, String conceptLabel, Map<String, String> parameters,
-			NODE_TYPE type) {
+									   NODE_TYPE type) {
 
 		if (conceptLabel == null) {
 			conceptLabel = concept;
@@ -256,8 +272,6 @@ public class DotRenderer {
 	}
 
 	/**
-	 * 
-	 * 
 	 * @created 30.10.2012
 	 */
 	private static String setSizeAndRankDir(String rankDirSetting, String graphSize, int numberOfConcepts) {
@@ -305,7 +319,7 @@ public class DotRenderer {
 
 	/**
 	 * The dot, svg and png files are created and written.
-	 * 
+	 *
 	 * @created 20.08.2012
 	 */
 	public static void createAndwriteDOTFiles(String sectionID, String dotSource, String realPath, String user_app_path) {
@@ -369,7 +383,9 @@ public class DotRenderer {
 		String DOT_INSTALLATION = rb.getString("path");
 		String app = DOT_INSTALLATION;
 		if (user_def_app != null) {
-			if (app.endsWith(FileUtils.FILE_SEPARATOR)) app += user_def_app;
+			if (app.endsWith(FileUtils.FILE_SEPARATOR)) {
+				app += user_def_app;
+			}
 			else {
 				app = app.substring(0, app.lastIndexOf(FileUtils.FILE_SEPARATOR))
 						+ FileUtils.FILE_SEPARATOR
@@ -381,9 +397,9 @@ public class DotRenderer {
 
 	/**
 	 * Adds the target-tag to every URL in the svg-file
-	 * 
-	 * @created 01.08.2012
+	 *
 	 * @param svg
+	 * @created 01.08.2012
 	 */
 	private static void prepareSVG(File svg) throws FileNotFoundException, IOException {
 		try {
@@ -403,9 +419,9 @@ public class DotRenderer {
 
 	/**
 	 * Iterates through all the children of root to find all a-tag elements.
-	 * 
-	 * @created 21.12.2013
+	 *
 	 * @param root
+	 * @created 21.12.2013
 	 */
 	private static void findAElements(Element root) {
 		List<?> children = root.getChildren();
@@ -423,22 +439,20 @@ public class DotRenderer {
 
 	/**
 	 * Adds the target-attribute to the element.
-	 * 
-	 * @created 21.12.2013
+	 *
 	 * @param element
+	 * @created 21.12.2013
 	 */
 	private static void addTargetAttribute(Element element) {
 		Attribute target = new Attribute("target", "_top");
 		element.setAttribute(target);
 	}
 
-
 	/**
-	 * 
-	 * @created 20.08.2012
 	 * @param file
 	 * @param dot
 	 * @param command
+	 * @created 20.08.2012
 	 */
 	private static void createFileOutOfDot(File file, File dot, String command) throws IOException {
 		FileUtils.checkWriteable(file);
@@ -459,10 +473,9 @@ public class DotRenderer {
 	}
 
 	/**
-	 * 
-	 * @created 18.08.2012
 	 * @param type
 	 * @param path
+	 * @created 18.08.2012
 	 */
 	private static File createFile(String type, String path, String sectionID) {
 		String filename = path + "graph" + sectionID
@@ -473,7 +486,7 @@ public class DotRenderer {
 
 	/**
 	 * A data class for storing the style info of a node/property etc.
-	 * 
+	 *
 	 * @author Joachim Baumeister (denkbares GmbH)
 	 * @created 02.05.2013
 	 */
@@ -482,5 +495,7 @@ public class DotRenderer {
 		String shape = "box";
 		String fontcolor = "black";
 		String fontsize = "10";
+		String style = "";
+		String fillcolor = "";
 	}
 }
