@@ -142,6 +142,11 @@ public class SparqlVisTypeRenderer implements Renderer {
 				SparqlVisType.ANNOTATION_DOT_APP);
 		parameterMap.put(OntoGraphDataBuilder.DOT_APP, dotApp);
 
+		// additional dot source code
+		String rankDir = SparqlVisType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_RANK_DIR);
+		parameterMap.put(OntoGraphDataBuilder.RANK_DIRECTION, rankDir);
+
 		// set renderer
 		String rendererType = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_RENDERER);
@@ -263,15 +268,21 @@ public class SparqlVisTypeRenderer implements Renderer {
 			return null;
 		}
 		for (QueryRow row : resultSet) {
+
 			Node fromURI = row.getValue(variables.get(0));
 
 			Node relationURI = row.getValue(variables.get(1));
-			String relation = OntoGraphDataBuilder.getConceptName(relationURI, rdfRepository);
 
 			Node toURI = row.getValue(variables.get(2));
 
+			if (fromURI == null || toURI == null || relationURI == null) {
+				Log.warning("incomplete query result row: " + row.toString());
+				continue;
+			}
+
 			ConceptNode fromNode = createNode(parameters, rdfRepository, uriProvider,
 					section, data, fromURI);
+			String relation = OntoGraphDataBuilder.getConceptName(relationURI, rdfRepository);
 
 			ConceptNode toNode = createNode(parameters, rdfRepository, uriProvider, section,
 					data, toURI);
@@ -436,8 +447,12 @@ public class SparqlVisTypeRenderer implements Renderer {
 							identifierParts[0], Strings.decodeURL(identifierParts[1]));
 
 				}
-				return uriProvider.getLinkToTermDefinition(identifier,
+				String url = uriProvider.getLinkToTermDefinition(identifier,
 						parameters.get(OntoGraphDataBuilder.MASTER));
+				if (!url.startsWith("http:")) {
+					url = Environment.getInstance().getWikiConnector().getBaseUrl() + url;
+				}
+				return url;
 			}
 		}
 		return OntoGraphDataBuilder.createBaseURL() + "?page="

@@ -41,6 +41,8 @@ public class SparqlVisType extends DefaultMarkupType {
 	public static final String ANNOTATION_LANGUAGE = "language";
 	public static final String ANNOTATION_LINK_MODE = "linkMode";
 
+	public static final String ANNOTATION_RANK_DIR = "rankDir";
+
 	public static final String ANNOTATION_DOT_APP = "dotApp";
 	public static final String ANNOTATION_ADD_TO_DOT = "dotAddLine";
 
@@ -77,6 +79,7 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
 		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
 		MARKUP.addAnnotation(ANNOTATION_LINK_MODE, false, LinkMode.values());
+		MARKUP.addAnnotationRenderer(ANNOTATION_LINK_MODE, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(ANNOTATION_DESIGN, false);
 		MARKUP.addAnnotationRenderer(ANNOTATION_DESIGN, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_CONCEPT, NothingRenderer.getInstance());
@@ -86,6 +89,8 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotationRenderer(PackageManager.MASTER_ATTRIBUTE_NAME,
 				NothingRenderer.getInstance());
 		MARKUP.addAnnotation(Rdf2GoCore.GLOBAL, false, "true", "false");
+		MARKUP.addAnnotation(ANNOTATION_RANK_DIR, false, "LR", "RL", "TB", "BT");
+		MARKUP.addAnnotationRenderer(ANNOTATION_RANK_DIR, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(Rdf2GoCore.GLOBAL, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_LANGUAGE, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_DOT_APP, NothingRenderer.getInstance());

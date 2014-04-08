@@ -19,6 +19,17 @@
  */
 package de.knowwe.rdfs.vis;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Map;
+
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.QueryRow;
+import org.ontoware.rdf2go.model.node.Literal;
+import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
+
 import de.d3web.utils.Log;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
@@ -28,15 +39,6 @@ import de.knowwe.rdfs.vis.util.Utils;
 import de.knowwe.visualization.ConceptNode;
 import de.knowwe.visualization.Edge;
 import de.knowwe.visualization.GraphDataBuilder;
-import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.Node;
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Map;
 
 /**
  * @author Johanna Latt
@@ -50,11 +52,10 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 	private int height = 0;
 
 	/**
-	 * Allows to create a new Ontology Rendering Core. For each rendering task a
-	 * new one should be created.
-	 * 
-	 * @param realPath webapp path
-	 * @param section a section that the graph is rendered for/at
+	 * Allows to create a new Ontology Rendering Core. For each rendering task a new one should be created.
+	 *
+	 * @param realPath   webapp path
+	 * @param section    a section that the graph is rendered for/at
 	 * @param parameters the configuration, consider the constants of this class
 	 */
 	public OntoGraphDataBuilder(String realPath, Section<?> section, Map<String, String> parameters, LinkToTermDefinitionProvider uriProvider, Rdf2GoCore rdfRepository) {
@@ -70,6 +71,19 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 	}
 
 	public static String getConceptName(Node uri, Rdf2GoCore repo) {
+		/*
+		handle string/literal
+		 */
+		try {
+			Literal string = uri.asLiteral();
+			return string.toString();
+		}
+		catch (ClassCastException e) {
+			// do noting, was for check only
+		}
+		/*
+		handle URI
+		 */
 		try {
 			String reducedNamespace = Rdf2GoUtils.reduceNamespace(repo,
 					uri.asURI().toString());
@@ -104,10 +118,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 	}
 
 	/**
-	 * 
-	 * @created 24.04.2013
 	 * @param zURI the original node
 	 * @return literal representation of the specified node
+	 * @created 24.04.2013
 	 */
 	private boolean isLiteral(Node zURI) {
 		try {
