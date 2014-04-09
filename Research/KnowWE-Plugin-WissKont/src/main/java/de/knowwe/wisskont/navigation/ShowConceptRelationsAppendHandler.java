@@ -39,7 +39,6 @@ import de.knowwe.visualization.GraphDataBuilder;
 import de.knowwe.wisskont.ConceptMarkup;
 
 /**
- * 
  * @author jochenreutelshofer
  * @created 29.11.2012
  */
@@ -92,11 +91,11 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 			parameterMap.put(OntoGraphDataBuilder.RENDERER, GraphDataBuilder.Renderer.dot.name());
 
 			String colorCodes = "";
-			colorCodes += "kann: #009900;"; // green
-			colorCodes += "muss: red;";
-			colorCodes += "temporalGraph: #FFCC00;"; // dark yellow
-			colorCodes += "assoziation: blue;";
-			colorCodes += "cave: purple";
+			colorCodes += "kann #009900;"; // green
+			colorCodes += "muss red;";
+			colorCodes += "temporalGraph #FFCC00;"; // dark yellow
+			colorCodes += "assoziation blue;";
+			colorCodes += "cave purple";
 
 			parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, colorCodes);
 

@@ -25,7 +25,6 @@ import java.util.Map;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
@@ -67,41 +66,10 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 	}
 
 	public String getConceptName(Node uri) {
-		return getConceptName(uri, this.rdfRepository);
+		return Utils.getConceptName(uri, this.rdfRepository);
 	}
 
-	public static String getConceptName(Node uri, Rdf2GoCore repo) {
-		/*
-		handle string/literal
-		 */
-		try {
-			Literal string = uri.asLiteral();
-			return string.toString();
-		}
-		catch (ClassCastException e) {
-			// do noting, was for check only
-		}
-		/*
-		handle URI
-		 */
-		try {
-			String reducedNamespace = Rdf2GoUtils.reduceNamespace(repo,
-					uri.asURI().toString());
-			String[] splitURI = reducedNamespace.split(":");
-			String namespace = splitURI[0];
-			String name = splitURI[1];
-			if (namespace.equals("lns")) {
-				return urlDecode(name);
-			}
-			else {
-				return namespace + ":" + urlDecode(name);
-			}
 
-		}
-		catch (ClassCastException e) {
-			return null;
-		}
-	}
 
 	private NODE_TYPE getConceptType(URI conceptURI) {
 		NODE_TYPE result = NODE_TYPE.UNDEFINED;
@@ -234,7 +202,8 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			if (depth < requestedDepth) {
 				addSuccessors(zURI);
 			}
-			if (depth == requestedDepth) {
+			// todo: remove check for outgoingedges (kills links between rim concepts)
+			if (depth == requestedDepth && showOutgoingEdges()) {
 				addOutgoingEdgesSuccessors(zURI);
 			}
 			depth--;
@@ -289,8 +258,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			if (height < requestedHeight) {
 				addPredecessors(xURI);
 			}
-			if (height == requestedHeight) {
 
+			// todo: remove check for outgoingedges (kills links between rim concepts)
+			if (height == requestedHeight && showOutgoingEdges()) {
 				addOutgoingEdgesPredecessors(xURI);
 			}
 			height--;
@@ -397,8 +367,13 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		ConceptNode toNode;
 		ConceptNode fromNode;
 
-		toNode = data.getConcept(to);
+		toNode = Utils.createNode(this.getParameterMap(), this.rdfRepository, this.uriProvider, this.section, this.data, toURI, true);
+
+		/*toNode = data.getConcept(to);
 		if (toNode == null) {
+
+
+
 			String label = Utils.getRDFSLabel(
 					toURI.asURI(), rdfRepository,
 					getParameterMap().get(LANGUAGE));
@@ -407,9 +382,12 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			}
 			toNode = new ConceptNode(to, type, createConceptURL(to), label);
 			data.addConcept(toNode);
-		}
+		}*/
 		toNode.setOuter(false);
-		fromNode = data.getConcept(from);
+
+		fromNode = Utils.createNode(this.getParameterMap(), this.rdfRepository, this.uriProvider, this.section, this.data, fromURI, true);
+
+		/*fromNode = data.getConcept(from);
 		if (fromNode == null) {
 			String label = Utils.getRDFSLabel(
 					fromURI.asURI(), rdfRepository,
@@ -419,7 +397,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			}
 			fromNode = new ConceptNode(from, type, createConceptURL(from), label);
 			data.addConcept(fromNode);
-		}
+		}*/
 		fromNode.setOuter(false);
 
 		// look for label for the property
@@ -459,7 +437,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		boolean nodeIsNew = !data.getConceptDeclarations().contains(new ConceptNode(
 				currentConcept));
 
-		ConceptNode toNode = data.getConcept(to);
+		ConceptNode toNode = Utils.createNode(this.getParameterMap(), this.rdfRepository, this.uriProvider, this.section, this.data, toURI, false);
+		/*ConceptNode toNode = data.getConcept(to);
+
 		if (toNode == null) {
 			String label = Utils.getRDFSLabel(
 					toURI.asURI(), rdfRepository,
@@ -470,8 +450,10 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			toNode = new ConceptNode(to, NODE_TYPE.UNDEFINED,
 					createConceptURL(to),
 					label);
-		}
-		ConceptNode fromNode = data.getConcept(from);
+		}*/
+
+		ConceptNode fromNode = Utils.createNode(this.getParameterMap(), this.rdfRepository, this.uriProvider, this.section, this.data, fromURI, false);
+/*		ConceptNode fromNode = data.getConcept(from);
 		if (fromNode == null) {
 			String label = Utils.getRDFSLabel(
 					fromURI.asURI(), rdfRepository,
@@ -482,7 +464,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			fromNode = new ConceptNode(from, NODE_TYPE.UNDEFINED,
 					createConceptURL(from),
 					label);
-		}
+		}*/
 
 		Edge edge = new Edge(fromNode, relation, toNode);
 

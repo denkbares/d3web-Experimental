@@ -1,12 +1,12 @@
 package de.knowwe.rdfs.vis.markup;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
 
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.parsing.Section;
@@ -14,12 +14,12 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.core.utils.PackageCompileLinkToTermDefinitionProvider;
-import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
+import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
+import de.knowwe.rdfs.vis.util.Utils;
 
 public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
@@ -94,17 +94,33 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 				OntoVisType.ANNOTATION_SHOWPROPERTIES);
 		parameterMap.put(OntoGraphDataBuilder.SHOW_PROPERTIES, props);
 
+		// set flag for use of labels
+		String labelValue = SparqlVisType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_LABELS);
+		parameterMap.put(OntoGraphDataBuilder.USE_LABELS, labelValue);
+
+		// set rank direction of graph layout
+		String rankDir = SparqlVisType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_RANK_DIR);
+		parameterMap.put(OntoGraphDataBuilder.RANK_DIRECTION, rankDir);
+
+		// set link mode
+		String linkModeValue = SparqlVisType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_LINK_MODE);
+		if (linkModeValue == null) {
+			// default link mode is 'jump'
+			linkModeValue = SparqlVisType.LinkMode.jump.name();
+		}
+		parameterMap.put(OntoGraphDataBuilder.LINK_MODE, linkModeValue);
+
 		parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, getSuccessors(section));
 		parameterMap.put(OntoGraphDataBuilder.REQUESTED_HEIGHT, getPredecessors(section));
 
-		String addToDOT = "";
-		List<Section<? extends AnnotationContentType>> annotationSections =
-				DefaultMarkupType.getAnnotationContentSections(section,
-						OntoVisType.ANNOTATION_ADD_TO_DOT);
-		for (Section<? extends AnnotationContentType> anno : annotationSections) {
-			if (anno != null) addToDOT += anno.getText() + "\n";
+		String dotAppPrefix = SparqlVisType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_DOT_APP);
+		if (dotAppPrefix != null) {
+			parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, dotAppPrefix + "\n");
 		}
-		parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, addToDOT);
 
 		Rdf2GoCompiler compiler = Compilers.getCompiler(section, Rdf2GoCompiler.class);
 		LinkToTermDefinitionProvider uriProvider;
@@ -132,6 +148,19 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 			uriProvider = new PackageCompileLinkToTermDefinitionProvider();
 		}
 
+		String colorRelationName = SparqlVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_COLORS);
+
+		String colorCodes = "";
+		colorCodes += "ssc:installedAt #009900;"; // green
+		colorCodes += "ssc:isSubComponentOf red;";
+		colorCodes += "ssc:locatedAt #FFCC00;"; // dark yellow
+		colorCodes += "ssc:hasPart blue;";
+		colorCodes += "ssc:type purple";
+		if (!Strings.isBlank(colorRelationName)) {
+			parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, Utils.createColorCodings(colorRelationName, rdfRepository));
+		}
+
 		OntoGraphDataBuilder builder = new OntoGraphDataBuilder(realPath, section, parameterMap,
 				uriProvider,
 				rdfRepository);
@@ -144,7 +173,6 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	}
 
 	/**
-	 * 
 	 * @created 18.08.2012
 	 */
 	private String getPredecessors(Section<?> section) {
@@ -153,7 +181,6 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	}
 
 	/**
-	 * 
 	 * @created 18.08.2012
 	 */
 	private String getSuccessors(Section<?> section) {
@@ -162,7 +189,6 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	}
 
 	/**
-	 * 
 	 * @created 18.08.2012
 	 */
 	private String getConcept(UserContext user, Section<?> section) {

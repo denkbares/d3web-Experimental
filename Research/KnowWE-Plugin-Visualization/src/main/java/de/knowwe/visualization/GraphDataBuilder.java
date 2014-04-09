@@ -20,7 +20,6 @@
 package de.knowwe.visualization;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,6 +74,7 @@ public abstract class GraphDataBuilder<T extends Object> {
 	public static final String SHOW_CLASSES = "show_classes";
 	public static final String SHOW_PROPERTIES = "show_properties";
 	public static final String SHOW_SCROLLBAR = "show_scrollbar";
+	public static final String USE_LABELS = "use_labels";
 
 	public static final String GRAPH_SIZE = "graph_size";
 	public static final String RANK_DIRECTION = "rank_direction";
@@ -111,11 +111,11 @@ public abstract class GraphDataBuilder<T extends Object> {
 	private List<String> filteredClasses;
 	private List<String> filteredRelations;
 
-	private Section<?> section;
+	protected Section<?> section;
 
 	private Map<String, String> parameters;
 
-	private LinkToTermDefinitionProvider uriProvider = null;
+	protected LinkToTermDefinitionProvider uriProvider = null;
 
 	private GraphVisualizationRenderer sourceRenderer = null;
 
@@ -413,16 +413,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 	 * @created 20.08.2012
 	 */
 	public abstract void addOuterConcept(T from, T to, T relation, boolean predecessor);
-
-	public static String urlDecode(String name) {
-		try {
-			return URLDecoder.decode(name, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 
 	public String createConceptURL(String to) {
 		if (parameters.get(LINK_MODE) != null) {

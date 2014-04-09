@@ -6,11 +6,13 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.renderer.AsynchronRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
 import de.knowwe.visualization.GraphDataBuilder;
 
 public class OntoVisType extends DefaultMarkupType {
 
 	public static final String ANNOTATION_CONCEPT = "concept";
+	public static final String ANNOTATION_COLORS = "colors";
 	public static final String ANNOTATION_COMMENT = "comment";
 	public static final String ANNOTATION_SUCCESSORS = "successors";
 	public static final String ANNOTATION_PREDECESSORS = "predecessors";
@@ -35,15 +37,21 @@ public class OntoVisType extends DefaultMarkupType {
 
 	private enum dot_apps {
 		dot, neato
-	};
+	}
+
+	;
 
 	public enum Visualizations {
 		wheel, force
-	};
+	}
+
+	;
 
 	static {
 		MARKUP = new DefaultMarkup("Vis");
 		MARKUP.addAnnotation(ANNOTATION_CONCEPT, true);
+		MARKUP.addAnnotation(ANNOTATION_COLORS, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_COLORS, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(ANNOTATION_COMMENT, false);
 		MARKUP.addAnnotation(ANNOTATION_SUCCESSORS, false);
 		MARKUP.addAnnotation(ANNOTATION_PREDECESSORS, false);
@@ -52,6 +60,7 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_FILTERCLASSES, false);
 		MARKUP.addAnnotation(ANNOTATION_FILTERRELATIONS, false);
 		MARKUP.addAnnotation(ANNOTATION_SIZE, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_SIZE, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(ANNOTATION_FORMAT, false);
 		MARKUP.addAnnotation(ANNOTATION_SHOWCLASSES, false);
 		MARKUP.addAnnotation(ANNOTATION_SHOWPROPERTIES, false);
@@ -65,6 +74,12 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotationRenderer(Rdf2GoCore.GLOBAL, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
 		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
+		MARKUP.addAnnotation(SparqlVisType.ANNOTATION_LINK_MODE, false, SparqlVisType.LinkMode.values());
+		MARKUP.addAnnotationRenderer(SparqlVisType.ANNOTATION_LINK_MODE, NothingRenderer.getInstance());
+		MARKUP.addAnnotation(SparqlVisType.ANNOTATION_RANK_DIR, false, "LR", "RL", "TB", "BT");
+		MARKUP.addAnnotationRenderer(SparqlVisType.ANNOTATION_RANK_DIR, NothingRenderer.getInstance());
+		MARKUP.addAnnotation(SparqlVisType.ANNOTATION_LABELS, false, "true", "false");
+		MARKUP.addAnnotationRenderer(SparqlVisType.ANNOTATION_LABELS, NothingRenderer.getInstance());
 	}
 
 	public OntoVisType() {

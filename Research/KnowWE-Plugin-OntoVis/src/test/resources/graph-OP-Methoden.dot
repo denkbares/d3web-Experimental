@@ -13,6 +13,6 @@ graph [size="7.18676193!" rankdir="RL"]
 "ICCE" -> "OP-Methoden" [ label = "unterkonzept" arrowtail="normal"  color="black"  ];
 "Phakoemulsifikation" -> "OP-Methoden" [ label = "unterkonzept" arrowtail="normal"  color="black"  ];
 "Einsatz Viskoelastischer Substanzen" -> "OP-Methoden" [ label = "unterkonzept" arrowtail="normal"  color="black"  ];
-"IOL Implantation" -> "OP-Methoden" [ label = "temporalGraph" arrowtail="normal"  color=" #FFCC00"  ];
-"OP-Methoden" -> "Intraoperative Komplikation" [ label = "temporalGraph" arrowtail="normal"  color=" #FFCC00"  ];
+"IOL Implantation" -> "OP-Methoden" [ label = "temporalGraph" arrowtail="normal"  color="#FFCC00"  ];
+"OP-Methoden" -> "Intraoperative Komplikation" [ label = "temporalGraph" arrowtail="normal"  color="#FFCC00"  ];
 }

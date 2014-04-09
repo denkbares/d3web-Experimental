@@ -24,6 +24,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.Rdf2GoCoreCheckRenderer;
+import de.knowwe.rdfs.vis.markup.OntoVisType;
 import de.knowwe.visualization.GraphDataBuilder;
 
 /**
@@ -49,6 +50,7 @@ public class SparqlVisType extends DefaultMarkupType {
 	public static final String ANNOTATION_RENDERER = "renderer";
 	public static final String ANNOTATION_VISUALIZATION = "visualization";
 	public static final String ANNOTATION_DESIGN = "design";
+	public static final String ANNOTATION_LABELS = "labels";
 
 	private static final DefaultMarkup MARKUP;
 
@@ -89,14 +91,18 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotationRenderer(PackageManager.MASTER_ATTRIBUTE_NAME,
 				NothingRenderer.getInstance());
 		MARKUP.addAnnotation(Rdf2GoCore.GLOBAL, false, "true", "false");
+		MARKUP.addAnnotationRenderer(Rdf2GoCore.GLOBAL, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(ANNOTATION_RANK_DIR, false, "LR", "RL", "TB", "BT");
 		MARKUP.addAnnotationRenderer(ANNOTATION_RANK_DIR, NothingRenderer.getInstance());
-		MARKUP.addAnnotationRenderer(Rdf2GoCore.GLOBAL, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_LANGUAGE, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_DOT_APP, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_ADD_TO_DOT, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_RENDERER, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_VISUALIZATION, NothingRenderer.getInstance());
+		MARKUP.addAnnotation(ANNOTATION_LABELS, false, "true", "false");
+		MARKUP.addAnnotation(OntoVisType.ANNOTATION_COLORS, false);
+		MARKUP.addAnnotationRenderer(OntoVisType.ANNOTATION_COLORS, NothingRenderer.getInstance());
+		MARKUP.addAnnotationRenderer(ANNOTATION_LABELS, NothingRenderer.getInstance());
 	}
 
 	public SparqlVisType() {

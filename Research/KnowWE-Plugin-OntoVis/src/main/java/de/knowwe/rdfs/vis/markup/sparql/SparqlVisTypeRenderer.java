@@ -11,13 +11,10 @@ import javax.servlet.ServletContext;
 
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
-import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.strings.Identifier;
-import de.d3web.strings.Strings;
 import de.d3web.utils.Log;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
@@ -44,7 +41,6 @@ import de.knowwe.rdfs.vis.util.Utils;
 import de.knowwe.visualization.ConceptNode;
 import de.knowwe.visualization.Edge;
 import de.knowwe.visualization.GraphDataBuilder;
-import de.knowwe.visualization.GraphDataBuilder.NODE_TYPE;
 import de.knowwe.visualization.GraphVisualizationRenderer;
 import de.knowwe.visualization.SubGraphData;
 import de.knowwe.visualization.d3.D3VisualizationRenderer;
@@ -142,10 +138,15 @@ public class SparqlVisTypeRenderer implements Renderer {
 				SparqlVisType.ANNOTATION_DOT_APP);
 		parameterMap.put(OntoGraphDataBuilder.DOT_APP, dotApp);
 
-		// additional dot source code
+		// set rank direction of graph layout
 		String rankDir = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_RANK_DIR);
 		parameterMap.put(OntoGraphDataBuilder.RANK_DIRECTION, rankDir);
+
+		// set flag for use of labels
+		String labelValue = SparqlVisType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_LABELS);
+		parameterMap.put(OntoGraphDataBuilder.USE_LABELS, labelValue);
 
 		// set renderer
 		String rendererType = SparqlVisType.getAnnotation(section,
@@ -280,12 +281,12 @@ public class SparqlVisTypeRenderer implements Renderer {
 				continue;
 			}
 
-			ConceptNode fromNode = createNode(parameters, rdfRepository, uriProvider,
-					section, data, fromURI);
-			String relation = OntoGraphDataBuilder.getConceptName(relationURI, rdfRepository);
+			ConceptNode fromNode = Utils.createNode(parameters, rdfRepository, uriProvider,
+					section, data, fromURI, true);
+			String relation = Utils.getConceptName(relationURI, rdfRepository);
 
-			ConceptNode toNode = createNode(parameters, rdfRepository, uriProvider, section,
-					data, toURI);
+			ConceptNode toNode = Utils.createNode(parameters, rdfRepository, uriProvider, section,
+					data, toURI, true);
 
 			String relationLabel = createRelationLabel(parameters, rdfRepository, relationURI,
 					relation);
@@ -333,131 +334,13 @@ public class SparqlVisTypeRenderer implements Renderer {
 		return relationName;
 	}
 
-	private ConceptNode createNode(Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, SubGraphData data, Node toURI) {
-		ConceptNode visNode = null;
 
-		NODE_TYPE type = NODE_TYPE.UNDEFINED;
-		Literal toLiteral = null;
-		String label = null;
-		String identifier = null;
-
-
-		/*
-		1. case: Node is Literal
-		 */
-		try {
-			toLiteral = toURI.asLiteral();
-			//add hashcode to identifier to have distinct dot nodes for literals used in different contexts, e.g. "1"
-			identifier = toLiteral.toString() + toLiteral.hashCode();
-			type = NODE_TYPE.LITERAL;
-			label = toLiteral.toString();
-			if (label.contains("@")) {
-				label = label.substring(0, label.indexOf('@'));
-			}
-
-			visNode = new ConceptNode(identifier, type, createConceptURL(identifier, parameters,
-					section,
-					uriProvider), "\"" + label + "\"");
-			data.addConcept(visNode);
-			return visNode;
-		}
-		catch (ClassCastException e) {
-			// do nothing as this is just a type check
-		}
-
-		/*
-		2. case: Node is BlankNode
-		 */
-		BlankNode bNode = null;
-		try {
-			bNode = toURI.asBlankNode();
-			identifier = bNode.toString();
-
-			visNode = data.getConcept(identifier);
-			if (visNode == null) {
-				type = NODE_TYPE.BLANKNODE;
-				label = bNode.toString();
-				visNode = new ConceptNode(identifier, type, createConceptURL(identifier, parameters,
-						section,
-						uriProvider), label);
-				data.addConcept(visNode);
-			}
-			return visNode;
-
-		}
-		catch (ClassCastException e) {
-			// do nothing as this is just a type check
-		}
-
-
-		/*
-		3. case: Node is URI-Resource
-		 */
-		try {
-			URI uri = toURI.asURI();
-			identifier = OntoGraphDataBuilder.getConceptName(toURI, rdfRepository);
-			visNode = data.getConcept(identifier);
-
-			if (visNode == null) {
-
-				type = NODE_TYPE.UNDEFINED;
-				if (Rdf2GoUtils.isClass(rdfRepository, uri)) {
-					type = NODE_TYPE.CLASS;
-				}
-				if (Rdf2GoUtils.isProperty(rdfRepository, uri)) {
-					type = NODE_TYPE.PROPERTY;
-				}
-				if (SparqlVisTypeRenderer.SHOW_LABEL_FOR_URI) {
-					label = Utils.getRDFSLabel(
-							toURI, rdfRepository,
-							parameters.get(OntoGraphDataBuilder.LANGUAGE));
-				}
-				if (label == null) {
-					label = identifier;
-				}
-				visNode = new ConceptNode(identifier, type, createConceptURL(identifier, parameters,
-						section,
-						uriProvider), label);
-				data.addConcept(visNode);
-			}
-			return visNode;
-		}
-		catch (ClassCastException e) {
-			// do nothing as this is just a type check
-		}
-
-		// this case should/can never happen!
-		Log.severe("No valid Node type!");
-		return null;
-	}
 
 	private String getMaster(Section<?> section) {
 		return SparqlVisType.getAnnotation(section,
 				PackageManager.MASTER_ATTRIBUTE_NAME);
 	}
 
-	private String createConceptURL(String to, Map<String, String> parameters, Section<?> s, LinkToTermDefinitionProvider uriProvider) {
-		if (parameters.get(OntoGraphDataBuilder.LINK_MODE) != null) {
-			if (parameters.get(OntoGraphDataBuilder.LINK_MODE).equals(
-					OntoGraphDataBuilder.LINK_MODE_BROWSE)) {
-				Identifier identifier = new Identifier(to);
-				String[] identifierParts = to.split(":");
-				if (identifierParts.length == 2) {
-					identifier = new Identifier(
-							identifierParts[0], Strings.decodeURL(identifierParts[1]));
 
-				}
-				String url = uriProvider.getLinkToTermDefinition(identifier,
-						parameters.get(OntoGraphDataBuilder.MASTER));
-				if (!url.startsWith("http:")) {
-					url = Environment.getInstance().getWikiConnector().getBaseUrl() + url;
-				}
-				return url;
-			}
-		}
-		return OntoGraphDataBuilder.createBaseURL() + "?page="
-				+ OntoGraphDataBuilder.getSectionTitle(s)
-				+ "&concept=" + to;
-	}
 
 }

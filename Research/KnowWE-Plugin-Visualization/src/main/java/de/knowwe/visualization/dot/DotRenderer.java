@@ -102,8 +102,11 @@ public class DotRenderer {
 			String codeList = relationColorCodes;
 			String[] assignments = codeList.split(";");
 			for (String assignment : assignments) {
-				String[] ass = assignment.split(":");
+				String[] ass = assignment.split(" ");
 				String relationName = ass[0];
+				if (relationName.endsWith(":")) {
+					relationName = relationName.substring(0, relationName.length() - 1);
+				}
 				String colorCode = ass[1];
 				if (relationName.equals(label)) {
 					return colorCode;
@@ -186,8 +189,14 @@ public class DotRenderer {
 				label = DotRenderer.outerLabel;
 			}
 			else {
-				label = DotRenderer.createDotConceptLabel(style, key.getConceptUrl(),
-						clearLabel(key.getConceptLabel()));
+				String nodeLabel = clearLabel(key.getConceptLabel());
+				if (parameters.get(GraphDataBuilder.USE_LABELS) != null && parameters.get(GraphDataBuilder.USE_LABELS)
+						.equals("false")) {
+					// use of labels suppressed by the user -> show concept name, i.e. uri
+					nodeLabel = key.getName();
+				}
+				label = DotRenderer.createDotConceptLabel(style, key.getConceptUrl(), nodeLabel
+				);
 			}
 			dotSource += "\"" + key.getName() + "\"" + label;
 
@@ -238,12 +247,19 @@ public class DotRenderer {
 		}
 		String url = GraphDataBuilder.createBaseURL();
 
+		String label = Utils.prepareLabel(conceptLabel);
+		if (parameters.get(GraphDataBuilder.USE_LABELS) != null && parameters.get(GraphDataBuilder.USE_LABELS)
+				.equals("false")) {
+			// use of labels suppressed by the user -> show concept name, i.e. uri
+			label = concept;
+		}
+
 		String conceptValue = "[ URL=\"" + url + "?page=" + parameters.get(GraphDataBuilder.TITLE)
 				+ "&concept="
 				+ concept + "\" style=\"" + style + "\" fillcolor=\"" + fillcolor + "\" " +
 				// + "\" fontsize=\"" + fontsize + "\""
 				" shape=\"" + shape + "\"" + " label=\""
-				+ Utils.prepareLabel(conceptLabel) + "\"];\n";
+				+ label + "\"];\n";
 		return conceptValue;
 	}
 

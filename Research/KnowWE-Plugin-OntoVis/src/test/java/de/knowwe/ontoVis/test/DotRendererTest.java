@@ -1,15 +1,5 @@
 package de.knowwe.ontoVis.test;
 
-import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.strings.Strings;
-import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.RuleSet;
-import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.ontoware.rdf2go.RDF2Go;
-import org.ontoware.rdf2go.model.Model;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,6 +9,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.ontoware.rdf2go.RDF2Go;
+import org.ontoware.rdf2go.model.Model;
+
+import de.d3web.plugin.test.InitPluginManager;
+import de.d3web.strings.Strings;
+import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.RuleSet;
+import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 
 import static org.junit.Assert.assertEquals;
 
@@ -107,13 +108,13 @@ public class DotRendererTest {
 
 		parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, "1");
 		parameterMap.put(OntoGraphDataBuilder.REQUESTED_HEIGHT, "1");
-		OntoGraphDataBuilder OntoGraphDataBuilder = new OntoGraphDataBuilder("", null,
+		OntoGraphDataBuilder ontoGraphDataBuilder = new OntoGraphDataBuilder("", null,
 				parameterMap,
 				new DummyLinkToTermDefinitionProvider(), rdfRepository);
 
-		OntoGraphDataBuilder.createData();
+		ontoGraphDataBuilder.createData();
 
-		String generatedSource = OntoGraphDataBuilder.getSource();
+		String generatedSource = ontoGraphDataBuilder.getSource();
 		String expectedSource = null;
 		try {
 			expectedSource = Strings.readFile(new File("src/test/resources/graph-OP-Methoden.dot"));
