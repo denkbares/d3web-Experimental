@@ -103,13 +103,16 @@ public class DotRenderer {
 			String[] assignments = codeList.split(";");
 			for (String assignment : assignments) {
 				String[] ass = assignment.split(" ");
-				String relationName = ass[0];
-				if (relationName.endsWith(":")) {
-					relationName = relationName.substring(0, relationName.length() - 1);
-				}
-				String colorCode = ass[1];
-				if (relationName.equals(label)) {
-					return colorCode;
+				if (ass.length == 2) {
+
+					String relationName = ass[0];
+					if (relationName.endsWith(":")) {
+						relationName = relationName.substring(0, relationName.length() - 1);
+					}
+					String colorCode = ass[1];
+					if (relationName.equals(label)) {
+						return colorCode;
+					}
 				}
 			}
 		}
@@ -229,7 +232,6 @@ public class DotRenderer {
 		}
 		return label;
 	}
-
 
 	private static String getOuterEdgeLabel(String relation, boolean showArrowHead) {
 		// Relation Attributes

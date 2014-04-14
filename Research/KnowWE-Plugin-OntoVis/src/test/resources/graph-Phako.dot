@@ -15,6 +15,7 @@ graph [ rankdir="LR"]
 "OP-Methoden"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=OP-Methoden"  shape="box"  style="rounded" label="OP-Methoden" ];
 "OP-MethodenONTOVIS-LITERAL"[  shape="box"  style="filled"  fillcolor="lightgray" label="&quot;OP-Methoden&quot;" ];
 "Intraoperative Komplikation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=Intraoperative Komplikation"  shape="box"  style="rounded" label="Intraoperative\nKomplikation\n" ];
+"Intraoperative KomplikationONTOVIS-LITERAL"[ shape="none" fontsize="0" fontcolor="white" ];
 "Postoperative Komplikation"[ shape="none" fontsize="0" fontcolor="white" ];
 "Patientenpositionierung-Chirurgischer Zugang" -> "Vorderkammerzugang_Schnitt1" [ label = "muss" arrowtail="normal"  color="black"  ];
 "Patientenpositionierung-Chirurgischer Zugang" -> "Vorderkammerzugang_Schnitt1" [ label = "temporalBevor" arrowtail="normal"  color="black"  ];
@@ -37,6 +38,6 @@ graph [ rankdir="LR"]
 "Phakoemulsifikation" -> "OP-Methoden" [ label = "unterkonzept" arrowtail="normal"  color="black"  ];
 "OP-Methoden" -> "OP-MethodenONTOVIS-LITERAL" [ label = "rdfs:label" arrowtail="normal"  color="black"  ];
 "OP-Methoden" -> "Intraoperative Komplikation" [ label = "temporalGraph" arrowtail="normal"  color="black"  ];
-"Intraoperative Komplikation" -> "Intraoperative KomplikationONTOVIS-LITERAL" [ label = "rdfs:label" arrowtail="normal"  color="black"  ];
+"Intraoperative Komplikation" -> "Intraoperative KomplikationONTOVIS-LITERAL" [ label="rdfs:label" fontcolor="#8b8989" arrowhead="none"  color="#8b8989" style="dashed" ];
 "Intraoperative Komplikation" -> "Postoperative Komplikation" [ label="temporalGraph" fontcolor="#8b8989" arrowhead="none"  color="#8b8989" style="dashed" ];
 }
