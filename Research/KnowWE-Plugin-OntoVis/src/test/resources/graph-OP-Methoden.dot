@@ -1,18 +1,20 @@
 digraph Konzeptuebersicht {
 graph [size="7.18676193!" rankdir="RL"]
-"Kombinierte Verfahren"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=Kombinierte Verfahren" shape="box"  style="rounded" label="Kombinierte\nVerfahren\n" ];
-"ECCE"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ECCE" shape="box"  style="rounded" label="ECCE" ];
-"Phakoemulsifikation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=Phakoemulsifikation" shape="box"  style="rounded" label="Phakoemulsifikation" ];
-"ICCE"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ICCE" shape="box"  style="rounded" label="ICCE" ];
-"Einsatz Viskoelastischer Substanzen"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=Einsatz Viskoelastischer Substanzen" shape="box"  style="rounded" label="Einsatz\nViskoelastischer\nSubstanzen\n" ];
-"IOL Implantation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=IOL Implantation" shape="box"  style="rounded" label="IOL\nImplantation\n" ];
-"OP-Methoden"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&concept=OP-Methoden" style="filled" fillcolor="yellow"  shape="ellipse" label="OP-Methoden"];
-"Intraoperative Komplikation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=Intraoperative Komplikation" shape="box"  style="rounded" label="Intraoperative\nKomplikation\n" ];
+"Kombinierte Verfahren"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=Kombinierte Verfahren"  shape="box"  style="rounded" label="Kombinierte\nVerfahren\n" ];
+"ECCE"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ECCE"  shape="box"  style="rounded" label="ECCE" ];
+"ICCE"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ICCE"  shape="box"  style="rounded" label="ICCE" ];
+"Phakoemulsifikation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=Phakoemulsifikation"  shape="box"  style="rounded" label="Phakoemulsifikation" ];
+"Einsatz Viskoelastischer Substanzen"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=Einsatz Viskoelastischer Substanzen"  shape="box"  style="rounded" label="Einsatz\nViskoelastischer\nSubstanzen\n" ];
+"IOL Implantation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=IOL Implantation"  shape="box"  style="rounded" label="IOL\nImplantation\n" ];
+"OP-Methoden"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=OP-Methoden"  shape="box"  style="rounded,filled"  fillcolor="yellow" label="OP-Methoden" ];
+"OP-MethodenONTOVIS-LITERAL"[  shape="box"  style="filled"  fillcolor="lightgray" label="&quot;OP-Methoden&quot;" ];
+"Intraoperative Komplikation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=Intraoperative Komplikation"  shape="box"  style="rounded" label="Intraoperative\nKomplikation\n" ];
 "Kombinierte Verfahren" -> "OP-Methoden" [ label = "unterkonzept" arrowtail="normal"  color="black"  ];
 "ECCE" -> "OP-Methoden" [ label = "unterkonzept" arrowtail="normal"  color="black"  ];
 "ICCE" -> "OP-Methoden" [ label = "unterkonzept" arrowtail="normal"  color="black"  ];
 "Phakoemulsifikation" -> "OP-Methoden" [ label = "unterkonzept" arrowtail="normal"  color="black"  ];
 "Einsatz Viskoelastischer Substanzen" -> "OP-Methoden" [ label = "unterkonzept" arrowtail="normal"  color="black"  ];
 "IOL Implantation" -> "OP-Methoden" [ label = "temporalGraph" arrowtail="normal"  color="#FFCC00"  ];
+"OP-Methoden" -> "OP-MethodenONTOVIS-LITERAL" [ label = "rdfs:label" arrowtail="normal"  color="black"  ];
 "OP-Methoden" -> "Intraoperative Komplikation" [ label = "temporalGraph" arrowtail="normal"  color="#FFCC00"  ];
 }

@@ -48,7 +48,7 @@ import static org.junit.Assert.assertEquals;
  * @created 23.05.2013
  */
 
-public class DotRendererTes {
+public class DotRendererTest {
 
 	static Rdf2GoCore rdfRepository = null;
 
