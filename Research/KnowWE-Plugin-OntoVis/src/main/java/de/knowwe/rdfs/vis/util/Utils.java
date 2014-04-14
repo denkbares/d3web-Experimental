@@ -113,17 +113,25 @@ public class Utils {
 		 */
 		try {
 			toLiteral = toURI.asLiteral();
-			//add hashcode to identifier to have distinct dot nodes for literals used in different contexts, e.g. "1"
-			identifier = toLiteral.toString() + toLiteral.hashCode();
+			//add a key to identifier to have distinguish between concepts and literals, e.g., <lns:Q> and "Q"
+			identifier = toLiteral.toString() + "ONTOVIS-LITERAL";
 			type = GraphDataBuilder.NODE_TYPE.LITERAL;
 			label = toLiteral.toString();
 			if (label.contains("@")) {
-				label = label.substring(0, label.indexOf('@'));
+				String lang = label.substring(label.indexOf('@') + 1);
+				label = "\"" + label.substring(0, label.indexOf('@')) + "\"" + " (" + lang + ")";
+			}
+			else {
+				label = Strings.quote(label);
 			}
 
-			visNode = new ConceptNode(identifier, type, createConceptURL(identifier, parameters,
-					section,
-					uriProvider), "\"" + label + "\"");
+			String url = null;
+			if (!(type == GraphDataBuilder.NODE_TYPE.LITERAL || type == GraphDataBuilder.NODE_TYPE.BLANKNODE)) {
+				url = createConceptURL(identifier, parameters,
+						section,
+						uriProvider);
+			}
+			visNode = new ConceptNode(identifier, type, url, label);
 			if (insertNewNode) {
 				data.addConcept(visNode);
 			}

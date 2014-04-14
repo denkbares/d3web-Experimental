@@ -19,11 +19,9 @@
 package de.knowwe.visualization;
 
 import de.d3web.strings.Strings;
-import de.d3web.utils.Log;
 import de.knowwe.visualization.GraphDataBuilder.NODE_TYPE;
 
 /**
- * 
  * @author jochenreutelshofer
  * @created 23.05.2013
  */
@@ -57,14 +55,14 @@ public class ConceptNode {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public ConceptNode(String name) {
 		this.name = Strings.unquote(name);
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public ConceptNode(String name, NODE_TYPE type, String url, String label) {
 		this(name);
@@ -74,9 +72,6 @@ public class ConceptNode {
 		}
 		if (label == null) {
 			throw new NullPointerException("label is null");
-		}
-		if (url == null) {
-			Log.warning("URL of ConceptNode is null: " + name);
 		}
 		this.conceptLabel = label;
 		this.conceptUrl = url;

@@ -69,17 +69,22 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		return Utils.getConceptName(uri, this.rdfRepository);
 	}
 
+	private NODE_TYPE getConceptType(Node conceptURI) {
+		if (isLiteral(conceptURI)) {
+			return NODE_TYPE.LITERAL;
+		}
+		if (isBlankNode(conceptURI)) {
+			return NODE_TYPE.BLANKNODE;
+		}
 
-
-	private NODE_TYPE getConceptType(URI conceptURI) {
 		NODE_TYPE result = NODE_TYPE.UNDEFINED;
 
 		String askClass = "ASK { <" + conceptURI.toString()
-				+ "> rdf:type owl:Class}";
+				+ "> rdf:type rdfs:Class}";
 		if (rdfRepository.sparqlAsk(askClass)) return NODE_TYPE.CLASS;
 
 		String askProperty = "ASK { <" + conceptURI.toString()
-				+ "> rdf:type owl:Property}";
+				+ "> rdf:type rdf:Property}";
 		if (rdfRepository.sparqlAsk(askProperty)) return NODE_TYPE.PROPERTY;
 
 		return result;
@@ -93,6 +98,16 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 	private boolean isLiteral(Node zURI) {
 		try {
 			zURI.asLiteral();
+			return true;
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
+
+	private boolean isBlankNode(Node zURI) {
+		try {
+			zURI.asBlankNode();
 			return true;
 		}
 		catch (Exception e) {
@@ -153,6 +168,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 	@Override
 	public void addSuccessors(Node conceptURI) {
+		// literals cannot have successors
+		if (isLiteral(conceptURI)) return;
+
 		String query = "SELECT ?y ?z WHERE { <"
 				+ conceptURI.asURI().toString()
 				+ "> ?y ?z.}";
@@ -166,36 +184,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 			Node zURI = row.getValue("z");
 			String z = getConceptName(zURI);
+			NODE_TYPE nodeType = getConceptType(zURI);
+			if (checkTripleFilters(query, y, z, nodeType)) continue;
 
-			if (y == null) {
-				Log.severe("Variable y of query was null: " + query);
-				continue;
-			}
-
-			if (z == null) {
-				Log.severe("Variable z of query was null: " + query);
-				continue;
-			}
-
-			if (excludedRelation(y)) {
-				continue;
-			}
-			if (excludedNode(z)) {
-				continue;
-			}
-			if (!filteredClass(z) && !filteredRelation(y)) {
-				continue;
-			}
-			if (isLiteral(zURI)) {
-				continue;
-			}
-			NODE_TYPE nodeType = getConceptType(zURI.asURI());
-			if (nodeType == NODE_TYPE.CLASS && !showClasses()) {
-				continue;
-			}
-			else if (nodeType == NODE_TYPE.PROPERTY && !showProperties()) {
-				continue;
-			}
 			addConcept(conceptURI, zURI, yURI, nodeType);
 
 			depth++;
@@ -224,35 +215,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 			Node yURI = row.getValue("y");
 			String y = getConceptName(yURI);
+			NODE_TYPE nodeType = getConceptType(xURI);
 
-			if (y == null) {
-				Log.severe("Variable y of query was null: " + query);
-				continue;
-			}
-
-			if (x == null) {
-				Log.severe("Variable x of query was null: " + query);
-				continue;
-			}
-
-			if (excludedRelation(y)) {
-				continue;
-			}
-			if (excludedNode(x)) {
-				continue;
-			}
-			if (!filteredClass(x) && !filteredRelation(y)) {
-				continue;
-			}
-
-			NODE_TYPE nodeType = getConceptType(xURI.asURI());
-
-			if (nodeType == NODE_TYPE.CLASS && !showClasses()) {
-				continue;
-			}
-			else if (nodeType == NODE_TYPE.PROPERTY && !showProperties()) {
-				continue;
-			}
+			if (checkTripleFilters(query, y, x, nodeType)) continue;
 
 			height++;
 			if (height < requestedHeight) {
@@ -293,28 +258,39 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 			Node zURI = row.getValue("z");
 			String z = getConceptName(zURI);
+			NODE_TYPE nodeType = getConceptType(zURI);
 
-			if (y == null) {
-				Log.severe("Variable y of query was null: " + query);
-				continue;
-			}
+			if (checkTripleFilters(query, y, z, nodeType)) continue;
 
-			if (z == null) {
-				Log.severe("Variable z of query was null: " + query);
-				continue;
-			}
-
-			if (excludedRelation(y)) {
-				continue;
-			}
-			if (excludedNode(z)) {
-				continue;
-			}
-			if (!filteredClass(z) && !filteredRelation(y)) {
-				continue;
-			}
 			addOuterConcept(conceptURI, zURI, yURI, false);
 		}
+	}
+
+	private boolean checkTripleFilters(String query, String y, String z, NODE_TYPE nodeType) {
+		if (y == null) {
+			Log.severe("Variable y of query was null: " + query);
+			return true;
+		}
+		if (z == null) {
+			Log.severe("Variable z of query was null: " + query);
+			return true;
+		}
+		if (excludedRelation(y)) {
+			return true;
+		}
+		if (excludedNode(z)) {
+			return true;
+		}
+		if (!filteredClass(z) && !filteredRelation(y)) {
+			return true;
+		}
+		if (nodeType == NODE_TYPE.CLASS && !showClasses()) {
+			return true;
+		}
+		else if (nodeType == NODE_TYPE.PROPERTY && !showProperties()) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -331,37 +307,19 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			QueryRow row = result.next();
 			Node xURI = row.getValue("x");
 			String x = getConceptName(xURI);
+			NODE_TYPE nodeType = getConceptType(xURI);
 
 			Node yURI = row.getValue("y");
 			String y = getConceptName(yURI);
 
-			if (y == null) {
-				Log.severe("Variable y of query was null: " + query);
-				continue;
-			}
+			if (checkTripleFilters(query, y, x, nodeType)) continue;
 
-			if (x == null) {
-				Log.severe("Variable x of query was null: " + query);
-				continue;
-			}
-
-			if (excludedRelation(y)) {
-				continue;
-			}
-			if (excludedNode(x)) {
-				continue;
-			}
-			if (!filteredClass(x) && !filteredRelation(y)) {
-				continue;
-			}
 			addOuterConcept(xURI, conceptURI, yURI, true);
 		}
 	}
 
 	@Override
 	public void addConcept(Node fromURI, Node toURI, Node relationURI, NODE_TYPE type) {
-		String from = getConceptName(fromURI);
-		String to = getConceptName(toURI);
 		String relation = getConceptName(relationURI);
 
 		ConceptNode toNode;
@@ -401,9 +359,19 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		fromNode.setOuter(false);
 
 		// look for label for the property
-		String relationLabel = Utils.getRDFSLabel(
-				relationURI.asURI(), rdfRepository,
-				getParameterMap().get(LANGUAGE));
+		String relationLabel = null;
+
+		if (getParameterMap().get(OntoGraphDataBuilder.USE_LABELS) != null && !getParameterMap().get(OntoGraphDataBuilder.USE_LABELS)
+				.equals("false")) {
+			relationLabel = Utils.getRDFSLabel(
+					relationURI.asURI(), rdfRepository,
+					getParameterMap().get(LANGUAGE));
+			if (relationLabel != null && relationLabel.charAt(relationLabel.length() - 3) == '@') {
+				// do not show language tag of relation labels
+				relationLabel = relationLabel.substring(0, relationLabel.length() - 3);
+			}
+		}
+
 		if (relationLabel != null) {
 			relation = relationLabel;
 		}

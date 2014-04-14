@@ -159,9 +159,6 @@ public class DotRenderer {
 		dotSource += DotRenderer.setSizeAndRankDir(parameters.get(GraphDataBuilder.RANK_DIRECTION),
 				parameters.get(GraphDataBuilder.GRAPH_SIZE), data.getConceptDeclarations().size());
 
-		// dotSource += generateGraphSource(dotSourceLabel, dotSourceRelations,
-		// parameters);
-
 		dotSource += generateGraphSource(data, parameters);
 
 		dotSource += "}";
@@ -179,23 +176,29 @@ public class DotRenderer {
 		while (conceptDeclarations.hasNext()) {
 			ConceptNode key = conceptDeclarations.next();
 			RenderingStyle style = DotRenderer.getStyle(key.getType());
+
+			// root is rendered highlighted
+			if (key.isRoot()) {
+				style.style += ",filled";
+				style.fillcolor = "yellow";
+			}
+
 			String label = "";
 
-			if (key.isRoot()) {
-				label = getRootLabel(key.getName(), key.getConceptLabel(), parameters,
-						key.getType());
-			}
-			else if (key.isOuter()) {
+			if (key.isOuter()) {
 				label = DotRenderer.outerLabel;
 			}
 			else {
 				String nodeLabel = clearLabel(key.getConceptLabel());
-				if (parameters.get(GraphDataBuilder.USE_LABELS) != null && parameters.get(GraphDataBuilder.USE_LABELS)
+				//nodeLabel = "<<B>"+nodeLabel+"</B>>";
+
+				if ((!key.getType().equals(NODE_TYPE.LITERAL)) &&
+						parameters.get(GraphDataBuilder.USE_LABELS) != null && parameters.get(GraphDataBuilder.USE_LABELS)
 						.equals("false")) {
 					// use of labels suppressed by the user -> show concept name, i.e. uri
 					nodeLabel = key.getName();
 				}
-				label = DotRenderer.createDotConceptLabel(style, key.getConceptUrl(), nodeLabel
+				label = DotRenderer.createDotConceptLabel(style, key.getConceptUrl(), nodeLabel, true
 				);
 			}
 			dotSource += "\"" + key.getName() + "\"" + label;
@@ -227,41 +230,6 @@ public class DotRenderer {
 		return label;
 	}
 
-	private static String getRootLabel(String concept, String conceptLabel, Map<String, String> parameters,
-									   NODE_TYPE type) {
-
-		if (conceptLabel == null) {
-			conceptLabel = concept;
-		}
-
-		// Main Concept Attributes
-		String style = "filled";
-		String fillcolor = "yellow";
-		String shape = "ellipse";
-
-		if (type == NODE_TYPE.CLASS) {
-			shape = "rectangle";
-		}
-		else if (type == NODE_TYPE.PROPERTY) {
-			shape = "diamond";
-		}
-		String url = GraphDataBuilder.createBaseURL();
-
-		String label = Utils.prepareLabel(conceptLabel);
-		if (parameters.get(GraphDataBuilder.USE_LABELS) != null && parameters.get(GraphDataBuilder.USE_LABELS)
-				.equals("false")) {
-			// use of labels suppressed by the user -> show concept name, i.e. uri
-			label = concept;
-		}
-
-		String conceptValue = "[ URL=\"" + url + "?page=" + parameters.get(GraphDataBuilder.TITLE)
-				+ "&concept="
-				+ concept + "\" style=\"" + style + "\" fillcolor=\"" + fillcolor + "\" " +
-				// + "\" fontsize=\"" + fontsize + "\""
-				" shape=\"" + shape + "\"" + " label=\""
-				+ label + "\"];\n";
-		return conceptValue;
-	}
 
 	private static String getOuterEdgeLabel(String relation, boolean showArrowHead) {
 		// Relation Attributes
@@ -386,11 +354,20 @@ public class DotRenderer {
 
 	}
 
-	private static String createDotConceptLabel(RenderingStyle style, String targetURL, String targetLabel) {
+	private static String createDotConceptLabel(RenderingStyle style, String targetURL, String targetLabel, boolean prepareLabel) {
 		String newLineLabelValue;
-		newLineLabelValue = "[ URL=\"" + targetURL + "\""
-				+ DotRenderer.buildLabel(style) + "label=\""
-				+ Utils.prepareLabel(targetLabel) + "\" ];\n";
+		String url = "";
+		if (targetURL != null) {
+			url = "URL=\"" + Strings.encodeHtml(targetURL) + "\" ";
+		}
+		if (prepareLabel) {
+			// prevents HTML rendering !
+			targetLabel = "\"" + Utils.prepareLabel(targetLabel) + "\"";
+		}
+
+		newLineLabelValue = "[ " + url
+				+ DotRenderer.buildLabel(style) + "label="
+				+ targetLabel + " ];\n";
 		return newLineLabelValue;
 	}
 
