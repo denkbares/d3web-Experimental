@@ -119,8 +119,8 @@ public class CommentRenderer implements Renderer {
 							.append(">")
 							.append(commentContent).append("</box>\n</forum>");
 
-					instance.getWikiConnector().createArticle(pageName, saveContent.toString(),
-							user.getUserName());
+					instance.getWikiConnector().createArticle(pageName, user.getUserName(), saveContent.toString()
+					);
 
 				}
 				else { // page exists ==> add a new box:
@@ -181,8 +181,8 @@ public class CommentRenderer implements Renderer {
 							.append(">")
 							.append(commentContent)
 							.append("</box>\n</forum>");
-					instance.getWikiConnector().createArticle(pageName, saveContent.toString(),
-							user.getUserName());
+					instance.getWikiConnector().createArticle(pageName, user.getUserName(), saveContent.toString()
+					);
 				}
 			}
 

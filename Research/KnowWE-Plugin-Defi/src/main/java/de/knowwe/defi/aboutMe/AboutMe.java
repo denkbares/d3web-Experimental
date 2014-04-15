@@ -128,7 +128,7 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 						+ fullName + "}]\n\n";
 				String content = pagePermissions + "%%aboutme\n%\n";
 				Environment.getInstance().getWikiConnector()
-						.createArticle(fullName, content, loginName);
+						.createArticle(fullName, loginName, content);
 				// create data page
 				UserUtilities.getDataPage(fullName);
 

@@ -108,7 +108,7 @@ public class SubmitTableContentAction extends AbstractAction {
 			String newContent = createNewMarkupString(tableid, inputDataAll);
 			newContent = "[{ALLOW view admin}]\n\n" + newContent;
 			Environment.getInstance().getWikiConnector().createArticle(
-					articleNameForData, newContent.toString(), "Defi-system");
+					articleNameForData, "Defi-system", newContent.toString());
 			Article article = Article.createArticle(newContent.toString(),
 					articleNameForData, defaultWeb, true);
 

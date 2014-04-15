@@ -93,7 +93,7 @@ public class NewForumAction extends AbstractAction {
 			Environment.getInstance().buildAndRegisterArticle(content,
 					title, Environment.DEFAULT_WEB);
 			Environment.getInstance().getWikiConnector()
-					.createArticle(title, content, username);
+					.createArticle(title, username, content);
 		}
 		else {
 			responseString = "Ein Forum zu diesem Thema existiert bereits.\n";

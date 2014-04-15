@@ -84,7 +84,7 @@ public class PersonalMessageAction extends AbstractAction {
 			Environment.getInstance().buildAndRegisterArticle(content,
 					topic, Environment.DEFAULT_WEB);
 			Environment.getInstance().getWikiConnector()
-					.createArticle(topic, content, username);
+					.createArticle(topic, username, content);
 		}
 
 		HttpServletResponse response = context.getResponse();

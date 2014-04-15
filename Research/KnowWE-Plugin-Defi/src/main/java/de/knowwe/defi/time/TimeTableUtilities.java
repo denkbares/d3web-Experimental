@@ -127,7 +127,7 @@ public class TimeTableUtilities {
 			mgr.deleteArticle(mgr.getArticle(pageName));
 		}
 
-		wikiConnector.createArticle(pageName, timetable, "Defi-system");
+		wikiConnector.createArticle(pageName, "Defi-system", timetable);
 		article = Article.createArticle(timetable, pageName, Environment.DEFAULT_WEB);
 		mgr.registerArticle(article);
 

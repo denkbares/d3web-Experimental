@@ -52,7 +52,7 @@ public class TimeTableAction extends AbstractAction {
 
 		// timetable doesn't exist
 		if (!wikiConnector.doesArticleExist(pageName)) {
-			wikiConnector.createArticle(pageName, timetableContent, "Defi-system");
+			wikiConnector.createArticle(pageName, "Defi-system", timetableContent);
 			mgr.registerArticle(Article.createArticle(timetableContent,
 					pageName, Environment.DEFAULT_WEB));
 		}
