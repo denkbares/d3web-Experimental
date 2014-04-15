@@ -166,7 +166,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		// the main concept is inserted
 		ConceptNode conceptNode = new ConceptNode(concept,
 				getConceptType(conceptURI.asURI()),
-				conceptURI.toString(), conceptLabel);
+				conceptURI.toString(), conceptLabel, Utils.getStyle(getConceptType(conceptURI)));
 		conceptNode.setRoot(true);
 		data.addConcept(conceptNode);
 

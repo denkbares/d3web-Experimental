@@ -46,13 +46,9 @@ public abstract class GraphDataBuilder<T extends Object> {
 		CLASS, PROPERTY, INSTANCE, UNDEFINED, LITERAL, BLANKNODE,
 	}
 
-	;
-
 	public enum Renderer {
 		dot, d3
 	}
-
-	;
 
 	public static final String RENDERER = "renderer";
 
@@ -91,6 +87,7 @@ public abstract class GraphDataBuilder<T extends Object> {
 	public static final String D3_FORCE_VISUALISATION_STYLE = "d3_force_visualisation_style";
 
 	public static final String RELATION_COLOR_CODES = "relation_color_codes";
+	public static final String CLASS_COLOR_CODES = "class_color_codes";
 
 	public static final String SHOW_OUTGOING_EDGES = "SHOW_OUTGOING_EDGES";
 
@@ -227,8 +224,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 	/**
 	 * Adds all requested concepts and information to the dotSources (the maps).
 	 *
-	 * @param concept
-	 * @param request
 	 * @created 20.08.2012
 	 */
 	public abstract void selectGraphData();
@@ -250,7 +245,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	/**
-	 * @param user
 	 * @created 20.08.2012
 	 */
 	private void setConfigurationParameters() {
@@ -356,7 +350,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 
 	/**
 	 * @param concept
-	 * @param request
 	 * @created 18.08.2012
 	 */
 	public abstract void insertMainConcept(T concept);
@@ -365,14 +358,12 @@ public abstract class GraphDataBuilder<T extends Object> {
 	 * Method, that recursively adds all successors of the requested concept up to the chosen depth.
 	 *
 	 * @param concept
-	 * @param request
 	 * @created 26.06.2012
 	 */
 	public abstract void addSuccessors(T concept);
 
 	/**
 	 * @param concept
-	 * @param request
 	 * @created 03.08.2012
 	 */
 	public abstract void addPredecessors(T concept);
@@ -381,7 +372,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 	 * Adds (gray) relations to the last (successor) nodes of the graph, showing the nodes that still follow.
 	 *
 	 * @param concept
-	 * @param request
 	 * @created 26.06.2012
 	 */
 	public abstract void addOutgoingEdgesSuccessors(T concept);
@@ -390,7 +380,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 	 * Adds (gray) relations to the last (predecessor) nodes of the graph, showing the nodes that still follow.
 	 *
 	 * @param concept
-	 * @param request
 	 * @created 26.06.2012
 	 */
 	public abstract void addOutgoingEdgesPredecessors(T concept);
@@ -399,7 +388,6 @@ public abstract class GraphDataBuilder<T extends Object> {
 	 * @param from
 	 * @param to
 	 * @param relation between from --> to
-	 * @param boolean  predecessor (if predecessor or successor is added to the graph)
 	 * @param type     (instance, class, property, undefined)
 	 * @created 20.08.2012
 	 */
@@ -409,7 +397,7 @@ public abstract class GraphDataBuilder<T extends Object> {
 	 * @param from
 	 * @param to
 	 * @param relation between from --> to
-	 * @param boolean  predecessor (if predecessor or successor is added to the graph)
+	 * @param predecessor (if predecessor or successor is added to the graph)
 	 * @created 20.08.2012
 	 */
 	public abstract void addOuterConcept(T from, T to, T relation, boolean predecessor);
@@ -497,7 +485,7 @@ public abstract class GraphDataBuilder<T extends Object> {
 	/**
 	 * Tests if the given relation y is set as a filtered relation in the annotations.
 	 *
-	 * @param x
+	 * @param y
 	 * @return
 	 * @created 24.11.2013
 	 */

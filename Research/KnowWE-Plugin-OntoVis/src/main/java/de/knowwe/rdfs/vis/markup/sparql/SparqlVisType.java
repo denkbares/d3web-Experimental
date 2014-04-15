@@ -103,6 +103,7 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_COLORS, false);
 		MARKUP.addAnnotationRenderer(OntoVisType.ANNOTATION_COLORS, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_LABELS, NothingRenderer.getInstance());
+
 	}
 
 	public SparqlVisType() {

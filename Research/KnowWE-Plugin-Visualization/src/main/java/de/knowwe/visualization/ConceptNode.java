@@ -20,6 +20,7 @@ package de.knowwe.visualization;
 
 import de.d3web.strings.Strings;
 import de.knowwe.visualization.GraphDataBuilder.NODE_TYPE;
+import de.knowwe.visualization.dot.RenderingStyle;
 
 /**
  * @author jochenreutelshofer
@@ -33,6 +34,11 @@ public class ConceptNode {
 	private boolean outer = false;
 	private boolean root = false;
 	private NODE_TYPE type;
+	private RenderingStyle style = null;
+
+	public RenderingStyle getStyle() {
+		return style;
+	}
 
 	public NODE_TYPE getType() {
 		return type;
@@ -75,6 +81,15 @@ public class ConceptNode {
 		}
 		this.conceptLabel = label;
 		this.conceptUrl = url;
+		this.style = new RenderingStyle();
+	}
+
+	/**
+	 *
+	 */
+	public ConceptNode(String name, NODE_TYPE type, String url, String label, RenderingStyle style) {
+		this(name, type, url, label);
+		this.style = style;
 	}
 
 	@Override

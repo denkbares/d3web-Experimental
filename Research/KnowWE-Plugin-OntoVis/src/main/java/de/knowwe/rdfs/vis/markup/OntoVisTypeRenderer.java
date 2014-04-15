@@ -151,14 +151,9 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		String colorRelationName = SparqlVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_COLORS);
 
-		String colorCodes = "";
-		colorCodes += "ssc:installedAt #009900;"; // green
-		colorCodes += "ssc:isSubComponentOf red;";
-		colorCodes += "ssc:locatedAt #FFCC00;"; // dark yellow
-		colorCodes += "ssc:hasPart blue;";
-		colorCodes += "ssc:type purple";
 		if (!Strings.isBlank(colorRelationName)) {
-			parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, Utils.createColorCodings(colorRelationName, rdfRepository));
+			parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, Utils.createColorCodings(colorRelationName, rdfRepository, "rdf:Property"));
+			parameterMap.put(OntoGraphDataBuilder.CLASS_COLOR_CODES, Utils.createColorCodings(colorRelationName, rdfRepository, "rdfs:Class"));
 		}
 
 		OntoGraphDataBuilder builder = new OntoGraphDataBuilder(realPath, section, parameterMap,

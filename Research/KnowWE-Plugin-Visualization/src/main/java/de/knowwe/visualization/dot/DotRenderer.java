@@ -58,12 +58,12 @@ public class DotRenderer {
 
 	private static String buildLabel(RenderingStyle style) {
 		StringBuilder result = new StringBuilder();
-		result.append(" shape=\"").append(style.shape).append("\" ");
-		if (!Strings.isBlank(style.style)) {
-			result.append(" style=\"").append(style.style).append("\" ");
+		result.append(" shape=\"").append(style.getShape()).append("\" ");
+		if (!Strings.isBlank(style.getStyle())) {
+			result.append(" style=\"").append(style.getStyle()).append("\" ");
 		}
-		if (!Strings.isBlank(style.fillcolor)) {
-			result.append(" fillcolor=\"").append(style.fillcolor).append("\" ");
+		if (!Strings.isBlank(style.getFillcolor())) {
+			result.append(" fillcolor=\"").append(style.getFillcolor()).append("\" ");
 		}
 		return result.toString();
 	}
@@ -86,67 +86,13 @@ public class DotRenderer {
 		// Basic Relation Attributes
 		String arrowtail = "normal";
 
-		String color = getRelationColorCode(label, relationColorCodes);
-
+		String color = Utils.getColorCode(label, relationColorCodes);
+		if (color == null) {
+			// black is default
+			color = "black";
+		}
 		return "[ label = \"" + label
 				+ "\"" + buildRelation(arrowtail, color) + " ];\n";
-	}
-
-	/**
-	 * @param label
-	 * @return
-	 * @created 07.12.2012
-	 */
-	private static String getRelationColorCode(String label, String relationColorCodes) {
-		if (relationColorCodes != null) {
-			String codeList = relationColorCodes;
-			String[] assignments = codeList.split(";");
-			for (String assignment : assignments) {
-				String[] ass = assignment.split(" ");
-				if (ass.length == 2) {
-
-					String relationName = ass[0];
-					if (relationName.endsWith(":")) {
-						relationName = relationName.substring(0, relationName.length() - 1);
-					}
-					String colorCode = ass[1];
-					if (relationName.equals(label)) {
-						return colorCode;
-					}
-				}
-			}
-		}
-		return "black";
-	}
-
-	private static RenderingStyle getStyle(NODE_TYPE type) {
-		RenderingStyle style = new RenderingStyle();
-		style.fontcolor = "black";
-
-		if (type == NODE_TYPE.CLASS) {
-			style.shape = "box";
-			style.style = "bold";
-		}
-		else if (type == NODE_TYPE.INSTANCE) {
-			style.shape = "box";
-			style.style = "rounded";
-		}
-		else if (type == NODE_TYPE.PROPERTY) {
-			style.shape = "hexagon";
-		}
-		else if (type == NODE_TYPE.BLANKNODE) {
-			style.shape = "diamond";
-		}
-		else if (type == NODE_TYPE.LITERAL) {
-			style.shape = "box";
-			style.style = "filled";
-			style.fillcolor = "lightgray";
-		}
-		else {
-			style.shape = "box";
-			style.style = "rounded";
-		}
-		return style;
 	}
 
 	/**
@@ -178,12 +124,13 @@ public class DotRenderer {
 		Iterator<ConceptNode> conceptDeclarations = dotSourceLabel.iterator();
 		while (conceptDeclarations.hasNext()) {
 			ConceptNode key = conceptDeclarations.next();
-			RenderingStyle style = DotRenderer.getStyle(key.getType());
+
+			RenderingStyle style = key.getStyle();
 
 			// root is rendered highlighted
 			if (key.isRoot()) {
-				style.style += ",filled";
-				style.fillcolor = "yellow";
+				style.addStyle("filled");
+				style.setFillcolor("yellow");
 			}
 
 			String label = "";
@@ -479,18 +426,4 @@ public class DotRenderer {
 		return f;
 	}
 
-	/**
-	 * A data class for storing the style info of a node/property etc.
-	 *
-	 * @author Joachim Baumeister (denkbares GmbH)
-	 * @created 02.05.2013
-	 */
-	static class RenderingStyle {
-
-		String shape = "box";
-		String fontcolor = "black";
-		String fontsize = "10";
-		String style = "";
-		String fillcolor = "";
-	}
 }

@@ -28,12 +28,41 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
+import de.d3web.strings.Strings;
+
 /**
  * 
  * @author jochenreutelshofer
  * @created 29.11.2012
  */
 public class Utils {
+
+	/**
+	 * @param label
+	 * @return
+	 * @created 07.12.2012
+	 */
+	public static String getColorCode(String label, String relationColorCodes) {
+		if (relationColorCodes != null && !Strings.isBlank(relationColorCodes)) {
+			String codeList = relationColorCodes;
+			String[] assignments = codeList.split(";");
+			for (String assignment : assignments) {
+				String[] ass = assignment.split(" ");
+				if (ass.length == 2) {
+
+					String relationName = ass[0];
+					if (relationName.endsWith(":")) {
+						relationName = relationName.substring(0, relationName.length() - 1);
+					}
+					String colorCode = ass[1];
+					if (relationName.equals(label)) {
+						return colorCode;
+					}
+				}
+			}
+		}
+		return null;
+	}
 
 	public static final String LINE_BREAK = "\\n";
 

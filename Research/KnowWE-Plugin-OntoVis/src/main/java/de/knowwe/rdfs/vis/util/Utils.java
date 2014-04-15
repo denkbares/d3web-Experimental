@@ -20,6 +20,7 @@ package de.knowwe.rdfs.vis.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Collection;
 import java.util.Map;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
@@ -42,6 +43,7 @@ import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 import de.knowwe.visualization.ConceptNode;
 import de.knowwe.visualization.GraphDataBuilder;
 import de.knowwe.visualization.SubGraphData;
+import de.knowwe.visualization.dot.RenderingStyle;
 
 /**
  * @author jochenreutelshofer
@@ -131,7 +133,8 @@ public class Utils {
 						section,
 						uriProvider);
 			}
-			visNode = new ConceptNode(identifier, type, url, label);
+			RenderingStyle style = Utils.getStyle(type);
+			visNode = new ConceptNode(identifier, type, url, label, style);
 			if (insertNewNode) {
 				data.addConcept(visNode);
 			}
@@ -153,9 +156,10 @@ public class Utils {
 			if (visNode == null) {
 				type = GraphDataBuilder.NODE_TYPE.BLANKNODE;
 				label = bNode.toString();
+				RenderingStyle style = Utils.getStyle(type);
 				visNode = new ConceptNode(identifier, type, createConceptURL(identifier, parameters,
 						section,
-						uriProvider), label);
+						uriProvider), label, style);
 				if (insertNewNode) {
 					data.addConcept(visNode);
 				}
@@ -194,9 +198,11 @@ public class Utils {
 				if (label == null) {
 					label = identifier;
 				}
+				RenderingStyle style = Utils.getStyle(type);
+				Utils.setClassColorCoding(toURI, style, parameters, rdfRepository);
 				visNode = new ConceptNode(identifier, type, createConceptURL(identifier, parameters,
 						section,
-						uriProvider), label);
+						uriProvider), label, style);
 				if (insertNewNode) {
 					data.addConcept(visNode);
 				}
@@ -210,6 +216,38 @@ public class Utils {
 		// this case should/can never happen!
 		Log.severe("No valid Node type!");
 		return null;
+	}
+
+	private static RenderingStyle setClassColorCoding(Node node, RenderingStyle style, Map<String, String> parameters, Rdf2GoCore rdfRepository) {
+		String classColorScheme = parameters.get(GraphDataBuilder.CLASS_COLOR_CODES);
+		if (classColorScheme != null && !Strings.isBlank(classColorScheme)) {
+			String shortURI = Rdf2GoUtils.reduceNamespace(rdfRepository, node.asURI().toString());
+			if (Rdf2GoUtils.isClass(rdfRepository, node.asURI())) {
+				String color = findColor(shortURI, classColorScheme);
+				if (color != null) {
+					style.setFillcolor(color);
+				}
+			}
+			else {
+				Collection<URI> classURIs = Rdf2GoUtils.getClasses(rdfRepository, node.asURI());
+				for (URI classURI : classURIs) {
+					String shortURIClass = Rdf2GoUtils.reduceNamespace(rdfRepository, classURI.asURI().toString());
+					String color = findColor(shortURIClass, classColorScheme);
+					if (color != null) {
+						style.setFillcolor(color);
+						break;
+					}
+				}
+			}
+
+		}
+		return style;
+	}
+
+	private static String findColor(String shortURIClass, String classColorScheme) {
+
+		String color = de.knowwe.visualization.util.Utils.getColorCode(shortURIClass, classColorScheme);
+		return color;
 	}
 
 	private static String createConceptURL(String to, Map<String, String> parameters, Section<?> s, LinkToTermDefinitionProvider uriProvider) {
@@ -279,24 +317,54 @@ public class Utils {
 		return null;
 	}
 
-	public static String createColorCodings(String relationName, Rdf2GoCore core) {
+	public static String createColorCodings(String relationName, Rdf2GoCore core, String entityName) {
 		StringBuffer result = new StringBuffer();
 
-		String query = "SELECT ?property ?color WHERE {" +
-				"?property rdf:type rdf:Property ." +
-				"?property " + relationName + " ?color" +
+		String query = "SELECT ?entity ?color WHERE {" +
+				"?entity rdf:type " + entityName + " ." +
+				"?entity " + relationName + " ?color" +
 				"}";
 		QueryResultTable resultTable = core.sparqlSelect(query);
 		ClosableIterator<QueryRow> iterator = resultTable.iterator();
 		while (iterator.hasNext()) {
 			QueryRow row = iterator.next();
-			Node property = row.getValue("property");
+			Node entity = row.getValue("entity");
 			String color = row.getLiteralValue("color");
-			String shortURI = Rdf2GoUtils.reduceNamespace(core, property.toString());
+			String shortURI = Rdf2GoUtils.reduceNamespace(core, entity.toString());
 			result.append(shortURI + " " + color + ";");
 		}
 
 		return result.toString().trim();
+	}
+
+	public static RenderingStyle getStyle(GraphDataBuilder.NODE_TYPE type) {
+		RenderingStyle style = new RenderingStyle();
+		style.setFontcolor("black");
+
+		if (type == GraphDataBuilder.NODE_TYPE.CLASS) {
+			style.setShape("box");
+			style.setStyle("bold");
+		}
+		else if (type == GraphDataBuilder.NODE_TYPE.INSTANCE) {
+			style.setShape("box");
+			style.setStyle("rounded");
+		}
+		else if (type == GraphDataBuilder.NODE_TYPE.PROPERTY) {
+			style.setShape("hexagon");
+		}
+		else if (type == GraphDataBuilder.NODE_TYPE.BLANKNODE) {
+			style.setShape("diamond");
+		}
+		else if (type == GraphDataBuilder.NODE_TYPE.LITERAL) {
+			style.setShape("box");
+			style.setStyle("filled");
+			style.setFillcolor("lightgray");
+		}
+		else {
+			style.setShape("box");
+			style.setStyle("rounded");
+		}
+		return style;
 	}
 
 }

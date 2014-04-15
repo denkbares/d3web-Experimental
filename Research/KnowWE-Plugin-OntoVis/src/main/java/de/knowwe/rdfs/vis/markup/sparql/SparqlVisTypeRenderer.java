@@ -15,6 +15,7 @@ import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
 
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
 import de.d3web.utils.Log;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
@@ -142,6 +143,14 @@ public class SparqlVisTypeRenderer implements Renderer {
 		String rankDir = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_RANK_DIR);
 		parameterMap.put(OntoGraphDataBuilder.RANK_DIRECTION, rankDir);
+
+		// set color codings if existing
+		String colorRelationName = SparqlVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_COLORS);
+		if (!Strings.isBlank(colorRelationName)) {
+			parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, Utils.createColorCodings(colorRelationName, core, "rdf:Property"));
+			parameterMap.put(OntoGraphDataBuilder.CLASS_COLOR_CODES, Utils.createColorCodings(colorRelationName, core, "rdfs:Class"));
+		}
 
 		// set flag for use of labels
 		String labelValue = SparqlVisType.getAnnotation(section,
