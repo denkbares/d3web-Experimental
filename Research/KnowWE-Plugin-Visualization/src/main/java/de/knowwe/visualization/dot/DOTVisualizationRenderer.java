@@ -48,8 +48,8 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 
 	@Override
 	public String generateSource() {
-		source = DotRenderer.createDotSources(data, parameters);
-		DotRenderer.createAndwriteDOTFiles(parameters.get(GraphDataBuilder.SECTION_ID), source,
+		source = DOTRenderer.createDotSources(data, parameters);
+		DOTRenderer.createAndwriteDOTFiles(parameters.get(GraphDataBuilder.SECTION_ID), source,
 				parameters.get(GraphDataBuilder.REAL_PATH),
 				parameters.get(GraphDataBuilder.DOT_APP));
 		return source;
@@ -71,7 +71,6 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 	/**
 	 * 
 	 * @created 03.09.2012
-	 * @param StringBuilder
 	 */
 	private String createHTMLOutput() {
 		StringBuffer html = new StringBuffer();

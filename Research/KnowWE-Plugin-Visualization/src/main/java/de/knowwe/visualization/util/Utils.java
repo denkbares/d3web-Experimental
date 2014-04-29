@@ -18,6 +18,12 @@
  */
 package de.knowwe.visualization.util;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,8 +44,6 @@ import de.d3web.strings.Strings;
 public class Utils {
 
 	/**
-	 * @param label
-	 * @return
 	 * @created 07.12.2012
 	 */
 	public static String getColorCode(String label, String relationColorCodes) {
@@ -222,6 +226,56 @@ public class Utils {
 		String OS = System.getProperty("os.name").toLowerCase();
 		return (OS.indexOf("sunos") >= 0);
 
+	}
+
+	public static boolean isFileClosed(File file) {
+		if (isWindows()) return isFileClosedWindows(file);
+		return isFileClosedUnix(file);
+	}
+
+	private static boolean isFileClosedUnix(File file) {
+		try {
+			Process plsof = new ProcessBuilder(new String[]{ "lsof", "|", "grep", file.getAbsolutePath() })
+					.start();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(plsof.getInputStream()));
+			String line;
+			while ((line = reader.readLine()) != null) {
+				if (line.contains(file.getAbsolutePath())) {
+					reader.close();
+					plsof.destroy();
+					return false;
+				}
+			}
+			reader.close();
+			plsof.destroy();
+		}
+		catch (Exception ex) {
+			// TODO: handle exception ...
+		}
+		return true;
+	}
+
+	private static boolean isFileClosedWindows(File file) {
+		boolean closed;
+		FileChannel channel = null;
+		try {
+			channel = new RandomAccessFile(file, "rw").getChannel();
+			closed = true;
+		}
+		catch (Exception ex) {
+			closed = false;
+		}
+		finally {
+			if (channel != null) {
+				try {
+					channel.close();
+				}
+				catch (IOException ex) {
+					// exception handling
+				}
+			}
+		}
+		return closed;
 	}
 
 }

@@ -28,6 +28,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.jdom.Attribute;
 import org.jdom.Document;
@@ -51,7 +57,7 @@ import de.knowwe.visualization.util.Utils;
  * @author jochenreutelshofer
  * @created 29.04.2013
  */
-public class DotRenderer {
+public class DOTRenderer {
 
 	// appearance of outer node
 	public static final String outerLabel = "[ shape=\"none\" fontsize=\"0\" fontcolor=\"white\" ];\n";
@@ -68,10 +74,6 @@ public class DotRenderer {
 		return result.toString();
 	}
 
-	/**
-	 * @param arrowtail
-	 * @created 04.09.2012
-	 */
 	private static String buildRelation(String arrowtail, String color) {
 		return " arrowtail=\"" + arrowtail + "\" " + " color=\"" + color + "\" ";
 	}
@@ -79,7 +81,6 @@ public class DotRenderer {
 	/**
 	 * Given the label of the inner relation, the method returns the String of the appearance of the relation.
 	 *
-	 * @param label
 	 * @created 06.09.2012
 	 */
 	private static String innerRelation(String label, String relationColorCodes) {
@@ -102,10 +103,9 @@ public class DotRenderer {
 	 */
 	public static String createDotSources(SubGraphData data, Map<String, String> parameters) {
 		String graphtitle = "Konzeptuebersicht";
-		String dotSource = "";
-		dotSource = "digraph " + graphtitle + " {\n";
+		String dotSource = "digraph " + graphtitle + " {\n";
 		dotSource = insertPraefixed(dotSource, parameters);
-		dotSource += DotRenderer.setSizeAndRankDir(parameters.get(GraphDataBuilder.RANK_DIRECTION),
+		dotSource += DOTRenderer.setSizeAndRankDir(parameters.get(GraphDataBuilder.RANK_DIRECTION),
 				parameters.get(GraphDataBuilder.GRAPH_SIZE), data.getConceptDeclarations().size());
 
 		dotSource += generateGraphSource(data, parameters);
@@ -121,9 +121,7 @@ public class DotRenderer {
 		String dotSource = "";
 
 		// iterate over the labels and add them to the dotSource
-		Iterator<ConceptNode> conceptDeclarations = dotSourceLabel.iterator();
-		while (conceptDeclarations.hasNext()) {
-			ConceptNode key = conceptDeclarations.next();
+		for (ConceptNode key : dotSourceLabel) {
 
 			RenderingStyle style = key.getStyle();
 
@@ -133,10 +131,10 @@ public class DotRenderer {
 				style.setFillcolor("yellow");
 			}
 
-			String label = "";
+			String label;
 
 			if (key.isOuter()) {
-				label = DotRenderer.outerLabel;
+				label = DOTRenderer.outerLabel;
 			}
 			else {
 				String nodeLabel = clearLabel(key.getConceptLabel());
@@ -148,22 +146,19 @@ public class DotRenderer {
 					// use of labels suppressed by the user -> show concept name, i.e. uri
 					nodeLabel = key.getName();
 				}
-				label = DotRenderer.createDotConceptLabel(style, key.getConceptUrl(), nodeLabel, true
-				);
+				label = DOTRenderer.createDotConceptLabel(style, key.getConceptUrl(), nodeLabel, true);
 			}
 			dotSource += "\"" + key.getName() + "\"" + label;
 
 		}
 
 		// iterate over the relations and add them to the dotSource
-		Iterator<Edge> relationsKeys = dotSourceRelations.iterator();
-		while (relationsKeys.hasNext()) {
-			Edge key = relationsKeys.next();
-			String label = DotRenderer.innerRelation(key.getPredicate(),
+		for (Edge key : dotSourceRelations) {
+			String label = DOTRenderer.innerRelation(key.getPredicate(),
 					parameters.get(GraphDataBuilder.RELATION_COLOR_CODES));
 			if (key.isOuter()) {
 				boolean arrowHead = key.getSubject().isOuter();
-				label = DotRenderer.getOuterEdgeLabel(key.getPredicate(), arrowHead);
+				label = DOTRenderer.getOuterEdgeLabel(key.getPredicate(), arrowHead);
 			}
 			dotSource += "\"" + key.getSubject().getName() + "\"" + " -> " + "\""
 					+ key.getObject().getName() + "\" "
@@ -191,10 +186,9 @@ public class DotRenderer {
 		String color = "#8b8989";
 		String style = "dashed";
 
-		String newLineRelationsValue = "[ label=\"" + relation
+		return "[ label=\"" + relation
 				+ "\" fontcolor=\"#8b8989\" " + arrowhead + arrowtail + " color=\"" + color
 				+ "\" style=\"" + style + "\" ];\n";
-		return newLineRelationsValue;
 	}
 
 	private static String insertPraefixed(String dotSource, Map<String, String> parameters) {
@@ -292,13 +286,14 @@ public class DotRenderer {
 			}
 
 			createFileOutOfDot(png, dot, command);
-			prepareSVG(svg);
+			int timeout = 10000;
+			prepareSVG(svg, timeout);
 		}
 		catch (FileNotFoundException e) {
-			Log.warning(e.toString());
+			Log.warning(e.getMessage(), e);
 		}
 		catch (IOException e) {
-			Log.warning(e.toString());
+			Log.warning(e.getMessage(), e);
 		}
 
 	}
@@ -315,15 +310,14 @@ public class DotRenderer {
 		}
 
 		newLineLabelValue = "[ " + url
-				+ DotRenderer.buildLabel(style) + "label="
+				+ DOTRenderer.buildLabel(style) + "label="
 				+ targetLabel + " ];\n";
 		return newLineLabelValue;
 	}
 
 	private static String getDOTApp(String user_def_app) {
 		ResourceBundle rb = ResourceBundle.getBundle("dotInstallation");
-		String DOT_INSTALLATION = rb.getString("path");
-		String app = DOT_INSTALLATION;
+		String app = rb.getString("path");
 		if (user_def_app != null) {
 			if (app.endsWith(FileUtils.FILE_SEPARATOR)) {
 				app += user_def_app;
@@ -340,11 +334,34 @@ public class DotRenderer {
 	/**
 	 * Adds the target-tag to every URL in the svg-file
 	 *
-	 * @param svg
 	 * @created 01.08.2012
 	 */
-	private static void prepareSVG(File svg) throws FileNotFoundException, IOException {
+	private static void prepareSVG(final File svg, final int timeout) throws IOException {
 		try {
+
+			// check if svg file is closed, otherwise wait timeout second
+			ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+			final Future<Boolean> handler = executor.submit(new Callable() {
+				@Override
+				public Boolean call() throws Exception {
+					while (!Utils.isFileClosed(svg)) {
+						// wait
+					}
+					return true;
+				}
+			});
+
+			// cancel handler after timeout seconds
+			executor.schedule(new Runnable(){
+				@Override
+				public void run(){
+					handler.cancel(true);
+				}
+			}, timeout, TimeUnit.MILLISECONDS);
+
+			// svg hasn't been closed yet, return
+			if (!handler.get()) return;
+
 			Document doc = SAXBuilderSingleton.getInstance().build(svg);
 			Element root = doc.getRootElement();
 			if (root == null) return;
@@ -355,14 +372,19 @@ public class DotRenderer {
 			xmlOutputter.output(doc, new FileWriter(svg));
 		}
 		catch (JDOMException e) {
-			e.printStackTrace();
+			Log.warning(e.getMessage(), e);
+		}
+		catch (InterruptedException e) {
+			Log.warning(e.getMessage(), e);
+		}
+		catch (ExecutionException e) {
+			Log.warning(e.getMessage(), e);
 		}
 	}
 
 	/**
 	 * Iterates through all the children of root to find all a-tag elements.
 	 *
-	 * @param root
 	 * @created 21.12.2013
 	 */
 	private static void findAElements(Element root) {
@@ -382,7 +404,6 @@ public class DotRenderer {
 	/**
 	 * Adds the target-attribute to the element.
 	 *
-	 * @param element
 	 * @created 21.12.2013
 	 */
 	private static void addTargetAttribute(Element element) {
@@ -390,12 +411,6 @@ public class DotRenderer {
 		element.setAttribute(target);
 	}
 
-	/**
-	 * @param file
-	 * @param dot
-	 * @param command
-	 * @created 20.08.2012
-	 */
 	private static void createFileOutOfDot(File file, File dot, String command) throws IOException {
 		FileUtils.checkWriteable(file);
 		FileUtils.checkReadable(dot);
@@ -410,20 +425,14 @@ public class DotRenderer {
 
 		}
 		catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.warning(e.getMessage(), e);
 		}
 	}
 
-	/**
-	 * @param type
-	 * @param path
-	 * @created 18.08.2012
-	 */
 	private static File createFile(String type, String path, String sectionID) {
 		String filename = path + "graph" + sectionID
 				+ "." + type;
-		File f = new File(filename);
-		return f;
+		return new File(filename);
 	}
 
 }
