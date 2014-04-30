@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_6" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="KnowWE-Plugin-d3web-MarkupSet" />
+    <orderEntry type="module" module-name="KnowWE-core" />
+    <orderEntry type="library" name="Maven: commons-fileupload:commons-fileupload:1.2.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:servlet-api:6.0.20" level="project" />
+    <orderEntry type="library" name="Maven: com.wchoen:secondstring:20060615" level="project" />
+    <orderEntry type="module" module-name="d3web-PluginManager" />
+    <orderEntry type="library" name="Maven: net.sf.jpf:jpf:1.5" level="project" />
+    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.0.4" level="project" />
+    <orderEntry type="module" module-name="d3web-Utils" />
+    <orderEntry type="library" name="Maven: org.json:json:20090211" level="project" />
+    <orderEntry type="module" module-name="KnowWE-Plugin-d3web-basic" />
+    <orderEntry type="module" module-name="d3web-Kernel" />
+    <orderEntry type="module" module-name="d3web-Plugin-Kernel-ExtensionPoints" />
+    <orderEntry type="module" module-name="d3web-Plugin-BasicProperties" />
+    <orderEntry type="module" module-name="d3web-Persistence" />
+    <orderEntry type="library" name="Maven: xmlunit:xmlunit:1.3" level="project" />
+    <orderEntry type="module" module-name="d3web-Plugin-Persistence-ExtensionPoints" />
+    <orderEntry type="module" module-name="d3web-Plugin-XCL" />
+    <orderEntry type="module" module-name="d3web-Plugin-Persistence-Basic" />
+    <orderEntry type="library" name="Maven: junit:junit:4.8.1" level="project" />
+    <orderEntry type="module" module-name="d3web-Plugin-Interview" />
+    <orderEntry type="module" module-name="KnowWE-Plugin-Core" />
+    <orderEntry type="module" module-name="KnowWE-KDOMParseUtils" />
+    <orderEntry type="module" module-name="KnowWE-Plugin-ExtensionPoints" />
+    <orderEntry type="module" module-name="d3web-Plugin-SessionPersistence-Basic" />
+    <orderEntry type="module" module-name="d3web-SessionPersistence" />
+    <orderEntry type="module" module-name="d3web-Plugin-SessionPersistence-ExtensionPoints" />
+    <orderEntry type="module" module-name="KnowWE-Plugin-Table" />
+    <orderEntry type="module" module-name="KnowWE-Plugin-InstantEdit" />
+    <orderEntry type="library" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
+  </component>
+</module>
+
