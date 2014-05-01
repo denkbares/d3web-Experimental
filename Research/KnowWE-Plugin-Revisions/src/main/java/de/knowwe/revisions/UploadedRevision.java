@@ -54,7 +54,7 @@ public class UploadedRevision extends AbstractRevision {
 
 	@Override
 	protected void createArticleManager() {
-		articleManager = new DefaultArticleManager(Environment.getInstance(), web);
+		articleManager = new DefaultArticleManager(web);
 
 		for (String title : articles.keySet()) {
 			String text = articles.get(title);

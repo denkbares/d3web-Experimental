@@ -75,7 +75,7 @@ public class WikiPageHierarchyProvider implements HierarchyProvider<Identifier> 
 	@Override
 	public List<Identifier> getParents(Identifier term) {
 		ArticleManager articleManager = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
-		Iterator<Article> articleIterator = articleManager.getArticleIterator();
+		Iterator<Article> articleIterator = articleManager.getArticles().iterator();
 		while (articleIterator.hasNext()) {
 			Article next = articleIterator.next();
 			List<Section<LinkType>> successorsOfType = Sections.findSuccessorsOfType(next.getRootSection(), LinkType.class);
@@ -95,7 +95,7 @@ public class WikiPageHierarchyProvider implements HierarchyProvider<Identifier> 
 	@Override
 	public Collection<Identifier> getAllTerms() {
 		ArticleManager articleManager = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
-		Iterator<Article> articleIterator = articleManager.getArticleIterator();
+		Iterator<Article> articleIterator = articleManager.getArticles().iterator();
 		List<Identifier> result = new ArrayList<Identifier>();
 		while (articleIterator.hasNext()) {
 			result.add(new Identifier(articleIterator.next().getTitle()));

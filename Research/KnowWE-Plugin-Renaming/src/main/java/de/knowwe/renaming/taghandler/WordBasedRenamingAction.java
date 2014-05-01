@@ -118,7 +118,6 @@ public class WordBasedRenamingAction extends AbstractAction {
 	 * Returns an additional text passage around the search result. So the user
 	 * can view the result in a larger context.
 	 * 
-	 * @param amtURL additional text parameters
 	 * @param web
 	 * @param query user query string
 	 * @return additional text area
@@ -137,7 +136,7 @@ public class WordBasedRenamingAction extends AbstractAction {
 		String additionalText = "";
 
 		Iterator<Article> iter =
-				Environment.getInstance().getArticleManager(web).getArticleIterator();
+				Environment.getInstance().getArticleManager(web).getArticles().iterator();
 		while (iter.hasNext()) {
 			Article article = iter.next();
 
@@ -319,7 +318,7 @@ public class WordBasedRenamingAction extends AbstractAction {
 		Map<Article, Collection<WordBasedRenameFinding>> map =
 				new HashMap<Article, Collection<WordBasedRenameFinding>>();
 		Iterator<Article> iter =
-				Environment.getInstance().getArticleManager(web).getArticleIterator();
+				Environment.getInstance().getArticleManager(web).getArticles().iterator();
 
 		if (!regex) {
 			query = Pattern.quote(query);
@@ -368,7 +367,6 @@ public class WordBasedRenamingAction extends AbstractAction {
 	 * Creates the buttons to navigate through the context.
 	 * 
 	 * @param article the article containing section
-	 * @param section where the query was found
 	 * @param sectionIndex position of the section in the article
 	 * @param curWords currently amount of words displayed
 	 * @param direction [p]revious [a]fter

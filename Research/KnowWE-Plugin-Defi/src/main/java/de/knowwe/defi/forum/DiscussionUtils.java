@@ -52,7 +52,7 @@ public class DiscussionUtils {
 	 */
 	public static List<Section<? extends Forum>> getAllForums() {
 		List<Section<? extends Forum>> forums = new LinkedList<Section<? extends Forum>>();
-		Iterator<Article> it = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB).getArticleIterator();
+		Iterator<Article> it = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB).getArticles().iterator();
 
 		while (it.hasNext()) {
 			for (Section<? extends Type> sec : Sections.getSubtreePreOrder(it.next().getRootSection())) {

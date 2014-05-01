@@ -41,9 +41,6 @@ public class DatedRevision extends AbstractRevision {
 	private final Date date;
 	private HashMap<String, Integer> articleVersions;
 
-	/**
-	 * @param articleManagers
-	 */
 	public DatedRevision(Date date, String web) {
 		super(web);
 		this.date = date;
@@ -55,7 +52,7 @@ public class DatedRevision extends AbstractRevision {
 
 	@Override
 	protected void createArticleManager() {
-		articleManager = new DefaultArticleManager(Environment.getInstance(), web);
+		articleManager = new DefaultArticleManager(web);
 
 		for (Entry<String, Integer> entry : getArticleVersions().entrySet()) {
 			String title = entry.getKey();
