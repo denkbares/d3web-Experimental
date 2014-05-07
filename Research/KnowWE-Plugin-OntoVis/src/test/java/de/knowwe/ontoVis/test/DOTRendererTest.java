@@ -19,6 +19,7 @@ import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.strings.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.RuleSet;
+import de.knowwe.rdf2go.modelfactory.OWLIMLiteModelFactory;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 
 import static org.junit.Assert.assertEquals;
@@ -56,7 +57,7 @@ public class DOTRendererTest {
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
 
-		RDF2Go.register(new de.knowwe.rdf2go.modelfactory.SesameSwiftOwlimModelFactory(RuleSet.OWL2_RL_REDUCED));
+		RDF2Go.register(new OWLIMLiteModelFactory(RuleSet.OWL2_RL_REDUCED));
 		Model model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		rdfRepository = new Rdf2GoCore("http://localhost:8080/KnowWE/Wiki.jsp?page=",
