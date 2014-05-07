@@ -57,11 +57,11 @@ public class DOTRendererTest {
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
 
-		RDF2Go.register(new OWLIMLiteModelFactory(RuleSet.OWL2_RL_REDUCED));
+		RDF2Go.register(new OWLIMLiteModelFactory(RuleSet.OWL2_RL_REDUCED_OPTIMIZED));
 		Model model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		rdfRepository = new Rdf2GoCore("http://localhost:8080/KnowWE/Wiki.jsp?page=",
-				"http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#", model, RuleSet.OWL2_RL_REDUCED);
+				"http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#", model, RuleSet.OWL2_RL_REDUCED_OPTIMIZED);
 		// rdfRepository.addNamespace("ns", bns);
 		// rdfRepository.addNamespace(LNS_ABBREVIATION, lns);
 		rdfRepository.addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
