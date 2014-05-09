@@ -1,3 +1,25 @@
+if (typeof KNOWWE == "undefined" || !KNOWWE) {
+	/**
+	 * The KNOWWE global namespace object. If KNOWWE is already defined, the
+	 * existing KNOWWE object will not be overwritten so that defined namespaces
+	 * are preserved.
+	 */
+	var KNOWWE = {};
+}
+if (typeof KNOWWE.plugin == "undefined" || !KNOWWE.plugin) {
+	/**
+	 * The KNOWWE.plugin global namespace object. If KNOWWE.plugin is already
+	 * defined, the existing KNOWWE.plugin object will not be overwritten so
+	 * that defined namespaces are preserved.
+	 */
+	KNOWWE.plugin = {};
+}
+/**
+ * Namespace: KNOWWE.plugin.semanticautocompletion The KNOWWE plugin semantic
+ * autocompletion namespace. Initialized empty to ensure existence.
+ */
+KNOWWE.plugin.termbrowser;
+
 jq$(document).ready(function() {
 	jq$(".termline").each(activateDraggables);
 	jq$(".dragMarkupTerm").each(activateDraggables);
@@ -18,6 +40,8 @@ jq$(document).ready(function() {
 	initCollapseTermBrowser();
 
 	initSemanticAutocompletionSlot();
+
+	KNOWWE.plugin.termbrowser = {};
 
 });
 
