@@ -127,8 +127,7 @@ public class DOTRenderer {
 
 			// root is rendered highlighted
 			if (key.isRoot()) {
-				style.addStyle("filled");
-				style.setFillcolor("yellow");
+				style.addStyle("bold");
 			}
 
 			String label;

@@ -263,10 +263,12 @@ public class Utils {
 				}
 				String url = uriProvider.getLinkToTermDefinition(identifier,
 						parameters.get(OntoGraphDataBuilder.MASTER));
-				if (!url.startsWith("http:")) {
-					url = Environment.getInstance().getWikiConnector().getBaseUrl() + url;
+				if (url != null) {
+					if (!url.startsWith("http:")) {
+						url = Environment.getInstance().getWikiConnector().getBaseUrl() + url;
+					}
+					return url;
 				}
-				return url;
 			}
 		}
 		return OntoGraphDataBuilder.createBaseURL() + "?page="

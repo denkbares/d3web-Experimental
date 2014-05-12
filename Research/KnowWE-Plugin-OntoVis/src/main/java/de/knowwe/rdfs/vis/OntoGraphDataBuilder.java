@@ -164,9 +164,12 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			conceptLabel = concept;
 		}
 		// the main concept is inserted
-		ConceptNode conceptNode = new ConceptNode(concept,
+		// TODO: use Utils.createNode() to obtain correct coloring of root
+		/*ConceptNode conceptNode = new ConceptNode(concept,
 				getConceptType(conceptURI.asURI()),
 				conceptURI.toString(), conceptLabel, Utils.getStyle(getConceptType(conceptURI)));
+*/
+		ConceptNode conceptNode = Utils.createNode(getParameterMap(), rdfRepository, uriProvider, section, data, conceptURI, true);
 		conceptNode.setRoot(true);
 		data.addConcept(conceptNode);
 
