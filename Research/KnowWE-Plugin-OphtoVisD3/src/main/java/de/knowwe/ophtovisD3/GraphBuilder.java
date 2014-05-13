@@ -34,6 +34,7 @@ import de.knowwe.ophtovisD3.utils.StringShortener.ElliminationType;
 import de.knowwe.ophtovisD3.utils.VisualizationHierarchyProvider;
 
 /**
+ *
  * @author adm_rieder
  * @created 22.10.2012
  */
@@ -43,6 +44,7 @@ class GraphBuilder {
 	private static int indexNumber = 0;
 	private static PartialHierarchyTree<NodeWithName> resultTree;
 	static boolean treeIsHere = false;
+	//TODO Abkuerzungsevaluation 4 Variationen, 2ter Parameter Laenge des Labels
 	private static final StringShortener shorty = new StringShortener(ElliminationType.NORMAL, 12);
 
 	public GraphBuilder() {
@@ -55,8 +57,8 @@ class GraphBuilder {
 		String nextcocept = startConcept;
 		do {
 			nameAndNumber.put(indexNumber, nextcocept);
-			nameAndNumber = getNameandConnectionof(nextcocept, connectionType, nameAndNumber,
-					indexNumber);
+			nameAndNumber = getNameandConnectionof(nextcocept, connectionType, nameAndNumber
+			);
 			List<String> sucsessor = DataBaseHelper.getConnectedNodeNamesOfType(nextcocept,
 					"temporalGraph", true);
 			if (!sucsessor.isEmpty()) nextcocept = sucsessor.get(0);
@@ -65,12 +67,8 @@ class GraphBuilder {
 		return nameAndNumber;
 	}
 
-	public LinkedList<Integer[]> getconnections() {
-		return connections;
-	}
-
 	// get all connections to other concepts of this concept
-	private static HashMap<Integer, String> getNameandConnectionof(String startConcept, String connectionType, HashMap<Integer, String> list, int index) {
+	private static HashMap<Integer, String> getNameandConnectionof(String startConcept, String connectionType, HashMap<Integer, String> list) {
 		int dadIndex = indexNumber;
 		List<String> childs = DataBaseHelper.getConnectedNodeNamesOfType(startConcept,
 				connectionType, false);
@@ -81,7 +79,7 @@ class GraphBuilder {
 					Integer[] toAdd = {
 							dadIndex, indexNumber };
 					connections.add(toAdd);
-					list = getNameandConnectionof(child, connectionType, list, indexNumber);
+					list = getNameandConnectionof(child, connectionType, list);
 				}
 			}
 
@@ -143,31 +141,28 @@ class GraphBuilder {
 
 	public static String buildGraph(String startConcept, String connectionType, String helpconnectionType, boolean getConnectionAmount) {
 		String result, label;
-		System.out.println("Graphbuilder started");
 		//	GraphbuilderForeignKB.buildTree();
-		if (true) {
-			Map<String, String> parentChildPairs = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
+		Map<String, String> parentChildPairs = DataBaseHelper.getAllObjectsConnectedBy(connectionType);
 
-			resultTree = new PartialHierarchyTree<NodeWithName>(new VisualizationHierarchyProvider(
-					parentChildPairs));
-			label = shorty.shorten("Anamnese_Patientensituation");
-			resultTree.insertNode(new NodeWithName("Anamnese_Patientensituation", label));
-			String fatherOfTheMoment = "Anamnese_Patientensituation";
-			while (!fatherOfTheMoment.isEmpty()) {
-				getChildConcepts(fatherOfTheMoment, connectionType, getConnectionAmount,
-						resultTree);
-				List<String> nextfather = DataBaseHelper.getConnectedNodeNamesOfType(
-						fatherOfTheMoment,
-						helpconnectionType, true);
-				if (nextfather.size() >= 1) {
-					fatherOfTheMoment = nextfather.get(0);
-					label = shorty.shorten(fatherOfTheMoment);
-					resultTree.insertNode(new NodeWithName(fatherOfTheMoment,
-							label));
-				}
-				else {
-					break;
-				}
+		resultTree = new PartialHierarchyTree<NodeWithName>(new VisualizationHierarchyProvider(
+				parentChildPairs));
+		label = shorty.shorten("Anamnese_Patientensituation");
+		resultTree.insertNode(new NodeWithName("Anamnese_Patientensituation", label));
+		String fatherOfTheMoment = "Anamnese_Patientensituation";
+		while (!fatherOfTheMoment.isEmpty()) {
+			getChildConcepts(fatherOfTheMoment, connectionType, getConnectionAmount,
+					resultTree);
+			List<String> nextfather = DataBaseHelper.getConnectedNodeNamesOfType(
+					fatherOfTheMoment,
+					helpconnectionType, true);
+			if (nextfather.size() >= 1) {
+				fatherOfTheMoment = nextfather.get(0);
+				label = shorty.shorten(fatherOfTheMoment);
+				resultTree.insertNode(new NodeWithName(fatherOfTheMoment,
+						label));
+			}
+			else {
+				break;
 			}
 		}
 		treeIsHere = true;
@@ -289,6 +284,7 @@ class GraphBuilder {
 
 		if (DataBaseHelper.getConnectedNodeNamesOfType(startConcept,
 				connectionType, true).size() > 0) {
+			startConcept = DataBaseHelper.unquote(startConcept);
 			trace2root.add(startConcept);
 		}
 		else {

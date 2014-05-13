@@ -52,7 +52,7 @@ class DataBaseHelper {
 	public static List<String> getConnectedNodeNamesOfType(String startNode,
 														   String conType, boolean reverse) {
 		List<String> connectedNodesList = new ArrayList<String>();
-		QueryResultTable table = null;
+		QueryResultTable table;
 
 		try {
 			startNode = URLDecoder.decode(startNode, "UTF-8");
@@ -76,7 +76,7 @@ class DataBaseHelper {
 		}
 		for (QueryRow row : table) {
 			Node node = row.getValue("a");// .toString();// in der Hashmap das
-			String keyurl = Rdf2GoUtils.getLocalName(node); // Praedikat
+			String keyurl = Rdf2GoUtils.getLocalName(node);// Praedikat
 			try {
 				keyurl = URLDecoder.decode(keyurl, "UTF-8");
 			}
@@ -85,6 +85,8 @@ class DataBaseHelper {
 			}
 
 			String key = keyurl.substring(keyurl.indexOf("=") + 1);// hier wird
+
+			key = unquote(key);
 			if (!key.contains("Resource")) {
 				connectedNodesList.add(key);
 			}
@@ -99,7 +101,7 @@ class DataBaseHelper {
 
 		LinkedList<String> result = new LinkedList<String>();
 		connection = createSparqlURI(connection);
-		QueryResultTable table = null;
+		QueryResultTable table;
 		if (from) {
 			table = Rdf2GoCore.getInstance().sparqlSelect(
 					"SELECT ?a WHERE { ?a lns:" + connection + " ?b}");
@@ -111,6 +113,7 @@ class DataBaseHelper {
 		for (QueryRow row : table) {
 			Node node = row.getValue("a");// .toString();// in der Hashmap das
 			String keyurl = Rdf2GoUtils.getLocalName(node); // Praedikat
+
 			try {
 				keyurl = URLDecoder.decode(keyurl, "UTF-8");
 			}
@@ -139,19 +142,9 @@ class DataBaseHelper {
 		return i;
 	}
 
-	public static String countQuerytresultstoString(String concept) {
-		QueryResultTable table = getAllConnections(concept, false);
-		int i = 0;
-		for (@SuppressWarnings("unused")
-		QueryRow queryRow : table) {
-			i++;
-		}
-		return i + "";
-	}
-
 	private static QueryResultTable getAllConnections(String concept,
 													  boolean reverse) {
-		QueryResultTable table = null;
+		QueryResultTable table;
 		try {
 			concept = URLDecoder.decode(concept, "UTF-8");
 		}
@@ -159,8 +152,7 @@ class DataBaseHelper {
 			e1.printStackTrace();
 		}
 		String sparqlConcept = createSparqlURI(concept);
-		System.out
-				.println("SELECT ?a ?b WHERE {  " + sparqlConcept + " ?a ?b}");
+
 		if (reverse) {
 			table = Rdf2GoCore.getInstance().sparqlSelect(
 					"SELECT ?a ?b WHERE {  ?b ?a  " + sparqlConcept + "}");
@@ -172,15 +164,28 @@ class DataBaseHelper {
 		return table;
 	}
 
+	static String unquote(String s) {
+
+		if (s != null
+				&& ((s.startsWith("\"") && s.endsWith("\""))
+				|| (s.startsWith("'") && s.endsWith("'")))) {
+
+			s = s.substring(1, s.length() - 1);
+		}
+		return s;
+	}
+
 	private static LinkedList<String[]> querytableToList(QueryResultTable table) {
 		LinkedList<String[]> result = new LinkedList<String[]>();
 		for (QueryRow queryRow : table) {
 			Node node = queryRow.getValue("a");
 			String connectionType = MarkupUtils.getConceptName(node)
 					.toExternalForm();
+			connectionType = unquote(connectionType);
 			node = queryRow.getValue("b");
 			String connectedNode = MarkupUtils.getConceptName(node)
 					.toExternalForm();
+			connectedNode = unquote(connectedNode);
 			String[] pair = {
 					connectionType, connectedNode };
 			if (!connectionType.contains("rdf-")) {
@@ -202,7 +207,6 @@ class DataBaseHelper {
 	 * This Method tries to get the first Object of a Chain in Order to get the whole DB connected by this Type
 	 *
 	 * @param relationType Defines the type of the connection to the desired Chain member
-	 * @return
 	 * @created 12.03.2013
 	 */
 	public static String getFirstObjectOfChain(String relationType) {
@@ -272,9 +276,8 @@ class DataBaseHelper {
 	public static Map<String, String> getAllObjectsConnectedBy(
 			String connectionType) {
 		Map<String, String> result = new HashMap<String, String>();
-		QueryResultTable table = null;
-		System.out
-				.println("SELECT ?a ?b WHERE { ?a " + connectionType + " ?b}");
+		QueryResultTable table;
+
 		table = Rdf2GoCore.getInstance().sparqlSelect(
 				"SELECT ?a ?b WHERE { ?a lns:" + connectionType + " ?b}");
 
@@ -285,22 +288,11 @@ class DataBaseHelper {
 			Node node2 = row.getValue("b");
 			String childConcept = MarkupUtils.getConceptName(node)
 					.toExternalForm();
+			childConcept = unquote(childConcept);
 			String parentConcept = MarkupUtils.getConceptName(node2)
 					.toExternalForm();
+			parentConcept = unquote(parentConcept);
 
-			// String keyurl = Rdf2GoUtils.getLocalName(node);
-			// String keyurl2 = Rdf2GoUtils.getLocalName(node2);
-			// try {
-			// keyurl = URLDecoder.decode(keyurl, "UTF-8");
-			// keyurl2 = URLDecoder.decode(keyurl2, "UTF-8");
-			// }
-			// catch (UnsupportedEncodingException e) {
-			// e.printStackTrace();
-			// }
-			// Rdf2GoUtils.
-			// String key = keyurl.substring(keyurl.indexOf("=") + 1);
-			// String key2 = keyurl2.substring(keyurl2.indexOf("=") + 1);
-			// if (!key.contains("Resource")) {
 			result.put(childConcept, parentConcept);
 
 		}

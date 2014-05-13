@@ -21,7 +21,6 @@ public class DatabaseChangeListener implements EventListener {
 	public void notify(Event event) {
 		if (event instanceof OntologyCompilerFinishedEvent) {
 			OntologyCompilerFinishedEvent e = (OntologyCompilerFinishedEvent) event;
-			System.out.println(e.toString());
 			GraphBuilder.treeIsHere = false;
 			GraphBuilder.buildGraphExperimental("unterkonzept", "");
 		}

@@ -1,7 +1,6 @@
 var oldSearchTerm;
 
 function searchInVis(searchterm) {
-	console.log(searchterm.length);
 
 	if (searchterm.length >= 1) {
 		undoHighlighting();

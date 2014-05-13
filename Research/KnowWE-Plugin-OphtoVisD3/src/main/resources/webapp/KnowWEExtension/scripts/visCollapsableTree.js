@@ -21,11 +21,6 @@ function createTreeDiagonal() {
 
 	var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
 
-	console.log("------------------");
-	console.log(url);
-	console.log("------------------");
-
-
 	var tree = d3.layout.tree()
 //    .size([1200,600]);
 		.size([2700, 1500]);
@@ -35,8 +30,6 @@ function createTreeDiagonal() {
 
 		var nodes = tree.nodes(root.root),
 			links = tree.links(nodes);
-		console.log(root);
-
 
 		// Create a svg canvas
 		var vis = d3.select("#vis").append("svg:svg")
@@ -63,10 +56,6 @@ function createTreeDiagonal() {
 		// Create an array with all the links
 //     var links = tree.links(nodes);
 
-//      console.log(treeData)
-//      console.log(nodes);
-//      console.log(links);
-
 		var link = vis.selectAll("pathlink")
 			.data(links)
 			.enter().append("svg:path")
@@ -92,7 +81,6 @@ function createTreeDiagonal() {
 			})
 			.attr("dy", 3)
 			.attr("text-anchor", function(d) {
-				console.log(d.children[0]);
 				return d.children[0] ? "end" : "start";
 			})
 			.text(function(d) {
@@ -351,16 +339,9 @@ function createTreeCollapsable() {
 
 	var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
 
-	console.log("------------------");
-	console.log(url);
-	console.log("------------------");
-
-
 	d3.json(url, function(json) {
 
 		root = json.root;
-
-		console.log(root);
 
 		root.x0 = h / 2;
 		root.y0 = 0;
@@ -430,11 +411,6 @@ function createTreeCollapsable() {
 				return d._children ? "lightsteelblue" : "#fff";
 			})
 			.on("click", function(d) {
-				console.log("------------------on click");
-				console.log(d.data.name);
-				console.log("------------------on click children");
-				console.log(d.children == null);
-				console.log(d._children == null);
 				toggle(d);
 				update(d);
 			});
@@ -443,17 +419,6 @@ function createTreeCollapsable() {
 		nodeEnter.append("svg:text")
 
 			.attr("x", function(d) {
-				console.log("------------------nodeEnter d");
-				//              console.log(d);
-				//             console.log("------------------nodeenter d.data.name");
-				// console.log(d.data.name);
-				// console.log("------------------");
-				// console.log("------------------nodeenter d.children");
-				// console.log(d.children);
-				// console.log("------------------");
-				// console.log("------------------nodeenter d._children");
-				// console.log(d._children);
-				// console.log("------------------xxxxxxxxxxx")
 
 				if (( (d._children === undefined) || (d._children === null) )) {
 					return -15
@@ -560,9 +525,6 @@ function createTreeCollapsable() {
 
 // Toggle children.
 	function toggle(d) {
-		console.log("-------------------------------------------");
-		console.log(d);
-//  if (d !== undefined){
 
 		if (d.children) {
 			d._children = d.children;
@@ -604,10 +566,6 @@ function createCollForce() {
 		.attr("height", h);
 
 	var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
-
-	console.log("------------------");
-	console.log(url);
-	console.log("------------------");
 
 	d3.json(url, function(json) {
 		root = json.root;
@@ -868,10 +826,6 @@ function createCollForceTest() {
 
 	var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
 
-	console.log("------------------");
-	console.log(url);
-	console.log("------------------");
-
 	d3.json(url, function(json) {
 		root = json.root;
 		updateDepth();
@@ -1107,149 +1061,142 @@ function createCollForceTest() {
 //----------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------
 //-----------------------------------------------------Experiment Performance Tree
-function createPerformanceTree(){
+function createPerformanceTree() {
 
-var normFac = 90
-var fontSize = 10
-var lineSpace = 2
+	var normFac = 90
+	var fontSize = 10
+	var lineSpace = 2
 //var boxHeight = 60
 //var boxWidth = 130
-var boxHeight = 30
-var boxWidth = 160
-var infoBoxHeight = boxHeight*4.5
-var infoBoxWidth = boxWidth*4.5
-var width = 960
-var height = 1000
-var yscale_performancebar = d3.scale.linear()
-                            .domain([0,1])
-                            .rangeRound([boxHeight/2,-boxHeight/2])
+	var boxHeight = 30
+	var boxWidth = 160
+	var infoBoxHeight = boxHeight * 4.5
+	var infoBoxWidth = boxWidth * 4.5
+	var width = 960
+	var height = 1000
+	var yscale_performancebar = d3.scale.linear()
+		.domain([0, 1])
+		.rangeRound([boxHeight / 2, -boxHeight / 2])
 
 
-visChange();
+	visChange();
 
-d3.select("#vis").remove();
-d3.select("body").append("div").attr("id", "vis");
+	d3.select("#vis").remove();
+	d3.select("body").append("div").attr("id", "vis");
 
-d3.select("#vis").attr("class", "treeDiagonal");
+	d3.select("#vis").attr("class", "treeDiagonal");
 
- //JSON object with the data
-  var treeData = {"name" : "A", "info" : "tst", "children" : [
-        {"name" : "A1" },
-        {"name" : "A2" },
-        {"name" : "A3", "children": [
-              {"name" : "A31", "children" :[
-        {"name" : "A311" },
-        {"name" : "A312" }
-]}] }
-  ]};
-  
-  var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
+	//JSON object with the data
+	var treeData = {"name" : "A", "info" : "tst", "children" : [
+		{"name" : "A1" },
+		{"name" : "A2" },
+		{"name" : "A3", "children" : [
+			{"name" : "A31", "children" : [
+				{"name" : "A311" },
+				{"name" : "A312" }
+			]}
+		] }
+	]};
 
-    console.log("------------------");
-            console.log(url);
-                    console.log("------------------");
-                    
-                    
-var tree = d3.layout.tree()
+	var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
+
+
+	var tree = d3.layout.tree()
 //.size([1200,600]);
-.size([2700,1500]);
+		.size([2700, 1500]);
 
 
-d3.json( url, function(error, root) {
+	d3.json(url, function(error, root) {
 
-var nodes = tree.nodes(root.root),
-  links = tree.links(nodes);
-        console.log(root);
-  
+		var nodes = tree.nodes(root.root),
+			links = tree.links(nodes);
 
-
-  // Create a svg canvas
-  var vis = d3.select("#vis").append("svg:svg")
+		// Create a svg canvas
+		var vis = d3.select("#vis").append("svg:svg")
 //  .attr("width", 1200)
 //  .attr("height", 1600)
-        .attr("width", 2700+160)
-  .attr("height", 3000)
-  .append("svg:g")
+			.attr("width", 2700 + 160)
+			.attr("height", 3000)
+			.append("svg:g")
 //  .attr("transform", "translate(160, 100)"); // shift everything to the right
-  .attr("transform", "translate(160, 50)"); // shift everything to the right
+			.attr("transform", "translate(160, 50)"); // shift everything to the right
 
-  // Create a tree "canvas"
+		// Create a tree "canvas"
 
 
-  var diagonal = d3.svg.diagonal()
-  // change x and y (for the left to right tree)
+		var diagonal = d3.svg.diagonal()
+			// change x and y (for the left to right tree)
 //   .projection(function(d) { return [d.y, d.x]; });
-        .projection(function(d) { return [d.y, d.x]; });
+			.projection(function(d) {
+				return [d.y, d.x];
+			});
 
-  // Preparing the data for the tree layout, convert data into an array of nodes
+		// Preparing the data for the tree layout, convert data into an array of nodes
 //  var nodes = tree.nodes(treeData);
-  // Create an array with all the links
+		// Create an array with all the links
 // var links = tree.links(nodes);
 
-//  console.log(treeData)
-//  console.log(nodes);
-//  console.log(links);
+		var link = vis.selectAll("pathlink")
+			.data(links)
+			.enter().append("svg:path")
+			.attr("class", "link")
+			.attr("d", diagonal)
 
-  var link = vis.selectAll("pathlink")
-  .data(links)
-  .enter().append("svg:path")
-  .attr("class", "link")
-  .attr("d", diagonal)
-
-  var node = vis.selectAll("g.node")
-  .data(nodes)
-  .enter().append("svg:g")
-  .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+		var node = vis.selectAll("g.node")
+			.data(nodes)
+			.enter().append("svg:g")
+			.attr("transform", function(d) {
+				return "translate(" + d.y + "," + d.x + ")";
+			})
 
 
+		// Add the dot at every node
+		node.append("rect")
+			.attr('class', 'nodebox')
+			.attr("x", -boxWidth / 2)
+			.attr("y", -boxHeight / 2)
+			.attr("width", boxWidth)
+			.attr("height", boxHeight);
+
+		node.append("rect")
+			.attr('id', 'performancebar')
+			.attr("x", boxWidth / 2 * 1.05)
+			.attr("width", boxWidth / 10)
+			.style("fill", "red")
+			.style("stroke", "red")
+			.attr("y", boxHeight / 2)
+			.attr("height", 10);
 
 
-  // Add the dot at every node
-  node.append("rect")
-            .attr('class', 'nodebox')
-            .attr("x", -boxWidth/2)
-            .attr("y", -boxHeight/2)
-            .attr("width", boxWidth)
-            .attr("height", boxHeight);
-            
-            node.append("rect")
-        .attr('id', 'performancebar')
-        .attr("x", boxWidth/2*1.05)
-        .attr("width", boxWidth/10)
-        .style("fill", "red")
-        .style("stroke", "red")
-        .attr("y", boxHeight/2)
-        .attr("height", 10);
-        
-        
-        node.append("text")
-        .attr("id", "nodetitle")
-        .attr("class", "nodeTitle")
-        .attr("y", -boxHeight/2 + fontSize + 2*lineSpace)
-        .attr("text-anchor", "middle")
-        .text(function(d) { return d.data ? d.data.name : ""; });
-  
-  
+		node.append("text")
+			.attr("id", "nodetitle")
+			.attr("class", "nodeTitle")
+			.attr("y", -boxHeight / 2 + fontSize + 2 * lineSpace)
+			.attr("text-anchor", "middle")
+			.text(function(d) {
+				return d.data ? d.data.name : "";
+			});
+
+
 //  node.append("svg:circle")
 //  .attr("r", 3.5);
 
-  // place the name atribute left or right depending if children
-/*      node.append("svg:text")
-  .attr("dx", function(d) { return d.children[0] ? -8 : 8; })
-  .attr("dy", 3)
-  .attr("text-anchor", function(d) { if( ( (d._children === undefined)||(d._children === null) ) )
-{return "end"}
- else 
-{return d._children.length>>0 ? "end" : "start"; };})
-  .text(function(d) { return d.data ? d.data.name : ""; })
+		// place the name atribute left or right depending if children
+		/*      node.append("svg:text")
+		 .attr("dx", function(d) { return d.children[0] ? -8 : 8; })
+		 .attr("dy", 3)
+		 .attr("text-anchor", function(d) { if( ( (d._children === undefined)||(d._children === null) ) )
+		 {return "end"}
+		 else
+		 {return d._children.length>>0 ? "end" : "start"; };})
+		 .text(function(d) { return d.data ? d.data.name : ""; })
 
-  //Breadcrumb
-  
-  ;*/
-  
-     });//json
-     
-     
+		 //Breadcrumb
+
+		 ;*/
+
+	});//json
+
 
 }
 //
@@ -1284,10 +1231,6 @@ function createFixRootTree() {
 		.attr("height", h);
 
 	var url = KNOWWE.core.util.getURL({action : 'AjaxAction'});
-
-	console.log("------------------");
-	console.log(url);
-	console.log("------------------");
 
 	d3.json(url, function(json) {
 

@@ -10,6 +10,7 @@ public class StringShortener {
 		this.targetSize = targetsize;
 	}
 
+	//TODO Abkuerzungsevaluation
 	public String shorten(String startword) {
 		String result = startword;
 		if (startword.length() > targetSize) {
@@ -19,14 +20,12 @@ public class StringShortener {
 					result += "..";
 					break;
 				case VOCALELIMIATION:
-					//System.out.println("Vokalelimination " + targetSize );
 					int currentPosition = result.length();
 					while (result.length() > targetSize) {
 						currentPosition--;
-						//	System.out.println(result + " " + currentPosition);
 						char current = result.charAt(currentPosition);
 						if (current == 'a' || current == 'A' || current == 'e' || current == 'E' || current == 'i' || current == 'I' || current == 'o' || current == 'O' || current == 'u' || current == 'U') {
-							//System.out.println("respos"+result + " " + currentPosition);
+
 							result = result.substring(0, currentPosition) + result.substring(currentPosition + 1, result
 									.length());
 						}
@@ -45,7 +44,7 @@ public class StringShortener {
 								.length());
 					}
 					else {
-						//	System.out.println("start = " + startword);
+
 						result = startword.substring(0, targetSize / 2 - 1) + "..." + startword.substring(targetSize / 2 + dif, startword
 								.length());
 					}
@@ -54,7 +53,7 @@ public class StringShortener {
 					break;
 
 			}
-			//System.out.println("Länge von " + result + " ist " +result.length());
+
 		}
 		return result;
 

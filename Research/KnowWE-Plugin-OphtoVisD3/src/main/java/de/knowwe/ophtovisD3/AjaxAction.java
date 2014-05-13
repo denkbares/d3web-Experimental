@@ -11,18 +11,18 @@ public class AjaxAction extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 
 		GraphBuilder builder = new GraphBuilder();
-		String type, concept = "";
+		String type, concept;
 		type = context.getParameter("type");
 		concept = context.getParameter("concept");
 
-		if (type == null)
+		if (type == null) {
 			type = "";
+		}
 		String connectionType = context.getParameter("contype");
-		System.out.println("connectionType = " + connectionType);
 		if (connectionType == null) {
 			connectionType = "unterkonzept";
 		}
-		String responseString = "";
+		String responseString;
 		if (type.equals("force")) {
 			responseString = builder.buildNamesandConnectionsJSON("Anamnese_Patientensituation", connectionType);
 		}

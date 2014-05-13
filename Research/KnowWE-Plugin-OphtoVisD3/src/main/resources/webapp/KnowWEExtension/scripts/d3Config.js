@@ -79,8 +79,6 @@ function createWheel() {
 				return "rotate(" + rotate + ")translate(" + (y(d.y) + padding) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
 			})
 			.attr("visibility", function(e) {
-				console.log('jetzt kommt e');
-				console.log(e.data);
 				return (e.depth < 2) ? null : d3.select(this).style("visibility", "hidden");
 			})
 			.on("click.info", function(d) {
@@ -103,7 +101,6 @@ function createWheel() {
 			});
 
 		function click(d) {
-			console.log(jq$(this).text());
 			clickTextEventHandler(d);
 			path.transition()
 				.duration(duration)
@@ -157,8 +154,7 @@ function createWheel() {
 		 return d3.hsl((a.h + b.h) / 2, a.s * 1.2, a.l / 1.2);
 		 }
 		 return d.colour || "#fff";*/
-		console.log("hier kommen die daten         ");
-		console.log(daten);
+
 		return  daten.children ? daten.children[0] ? (daten.children.some(function(c) {
 			return c.children[0];
 		})
@@ -345,11 +341,11 @@ function visChange(){
 	jq$("#infolist").removeClass('unhidden');
 	jq$("#infolist").addClass('hidden');
 }
+//TODO Infobar anzeigen
 function clickTextEventHandler(d){
 	
 	var clickedName = d.data.name;
-	  	console.log(d.data.name);
-	
+
 	jq$("#infolist").addClass('unhidden');
 		
 	var url = KNOWWE.core.util.getURL({action : 'ConnectionsAction', concept : clickedName});
@@ -384,7 +380,6 @@ function createBubble(concept) {
 	var pack = d3.layout.pack()
 		.size([r, r])
 		.value(function(d) {
-			console.log(d);
 			return d.data.data;
 		});
 
@@ -398,7 +393,6 @@ function createBubble(concept) {
 		type : 'bubble'};
 	var url = KNOWWE.core.util.getURL(params);
 	d3.json(url, function(data) {
-		console.log(data.root.children);
 		node = root = data.root;
 
 		var nodes = pack.nodes(root);
@@ -407,7 +401,6 @@ function createBubble(concept) {
 			.data(nodes)
 			.enter().append("svg:circle")
 			.attr("class", function(d) {
-				console.log(d);
 				return d.data ? d.data.highlighted ? "highlighted" : d.children ? "parent" : "child" : "";
 			})
 			.attr("cx", function(d) {

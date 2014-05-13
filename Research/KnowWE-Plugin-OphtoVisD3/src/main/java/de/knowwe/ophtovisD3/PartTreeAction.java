@@ -14,8 +14,7 @@ public class PartTreeAction extends AbstractAction {
 			concept = "";
 		}
 		String connectionType = context.getParameter("contype");
-		System.out.println("connectionType = " + connectionType);
-		System.out.println("test");
+
 		if (connectionType == null) {
 			connectionType = "unterkonzept";
 		}
