@@ -26,5 +26,15 @@
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 	</extension>
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="OntologySummary">
+		<parameter id="class"
+			value="de.knowwe.ontology.summary.OntologySummaryMarkup" />
+		<parameter id="name" value="OntologySummaryMarkup" />
+		<parameter id="description" value="KnowWEObjectType OntologySummaryMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
 
 </plugin>
