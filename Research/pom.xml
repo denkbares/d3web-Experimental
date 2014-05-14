@@ -222,7 +222,6 @@
 		<module>KnowWE-Plugin-Visualization</module>
 		<module>KnowWE-Plugin-TypeVis</module>
 		<module>KnowWE-Plugin-KnowledgeSummary</module>
-		<module>KnowWE-Plugin-OntologyDebugger</module>
 	</modules>
 	<repositories>
 		<repository>
