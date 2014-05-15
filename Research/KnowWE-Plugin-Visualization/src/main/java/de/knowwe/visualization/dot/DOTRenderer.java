@@ -117,53 +117,138 @@ public class DOTRenderer {
 
 	private static String generateGraphSource(SubGraphData data, Map<String, String> parameters) {
 		Collection<ConceptNode> dotSourceLabel = data.getConceptDeclarations();
-		Set<Edge> dotSourceRelations = data.getEdges();
-		String dotSource = "";
+		final Map<ConceptNode, Set<Edge>> clusters = data.getClusters();
+		StringBuilder dotSource = new StringBuilder();
 
 		// iterate over the labels and add them to the dotSource
-		for (ConceptNode key : dotSourceLabel) {
+		for (ConceptNode node : dotSourceLabel) {
 
-			RenderingStyle style = key.getStyle();
+			RenderingStyle style = node.getStyle();
 
 			// root is rendered highlighted
-			if (key.isRoot()) {
+			if (node.isRoot()) {
 				style.addStyle("bold");
 			}
 
 			String label;
 
-			if (key.isOuter()) {
+			if (node.isOuter()) {
 				label = DOTRenderer.outerLabel;
 			}
 			else {
-				String nodeLabel = clearLabel(key.getConceptLabel());
+				String nodeLabel = clearLabel(node.getConceptLabel());
 				//nodeLabel = "<<B>"+nodeLabel+"</B>>";
 
-				if ((!key.getType().equals(NODE_TYPE.LITERAL)) &&
+				if ((!node.getType().equals(NODE_TYPE.LITERAL)) &&
 						parameters.get(GraphDataBuilder.USE_LABELS) != null && parameters.get(GraphDataBuilder.USE_LABELS)
 						.equals("false")) {
 					// use of labels suppressed by the user -> show concept name, i.e. uri
-					nodeLabel = key.getName();
+					nodeLabel = createHTMLTable(node, data);
 				}
-				label = DOTRenderer.createDotConceptLabel(style, key.getConceptUrl(), nodeLabel, true);
+				else {
+					nodeLabel = "\"" + Utils.prepareLabel(nodeLabel) + "\"";
+				}
+
+				label = DOTRenderer.createDotConceptLabel(style, node.getConceptUrl(), nodeLabel, true);
 			}
-			dotSource += "\"" + key.getName() + "\"" + label;
+			dotSource.append("\"" + node.getName() + "\"" + label);
 
 		}
 
-		// iterate over the relations and add them to the dotSource
-		for (Edge key : dotSourceRelations) {
-			String label = DOTRenderer.innerRelation(key.getPredicate(),
-					parameters.get(GraphDataBuilder.RELATION_COLOR_CODES));
-			if (key.isOuter()) {
-				boolean arrowHead = key.getSubject().isOuter();
-				label = DOTRenderer.getOuterEdgeLabel(key.getPredicate(), arrowHead);
-			}
-			dotSource += "\"" + key.getSubject().getName() + "\"" + " -> " + "\""
-					+ key.getObject().getName() + "\" "
-					+ label;
+		/*
+		iterate over the relations and add them to the dotSource
+		 */
+
+		// add level zero "default cluster"
+		for (Edge key : clusters.get(ConceptNode.DEFAULT_CLUSTER_NODE)) {
+			appendEdgeSource(parameters, dotSource, key);
 		}
-		return dotSource;
+
+		// add real clusters
+		/*
+		final Set<ConceptNode> clusterNodes = clusters.keySet();
+		for (ConceptNode clusterNode : clusterNodes) {
+			if(clusterNode != ConceptNode.DEFAULT_CLUSTER_NODE) {
+				// create graph cluster
+				final Set<Edge> clusterEdges = clusters.get(clusterNode);
+				if(clusterEdges.size() > 0) {
+					String clusterName = "subgraph cluster_"+Math.abs(clusterNode.getName().hashCode());
+					dotSource.append(clusterName +" {\n");
+					dotSource.append("color=black;\n" +
+							"style = \"dotted,rounded\";\n");
+					String clazz = clusterNode.getClazz();
+					if(clazz != null && clazz.length() > 0) {
+						dotSource.append("label =<<B>"+clazz+"</B>>\n");
+					}
+					for (Edge clusterEdge : clusterEdges) {
+						appendEdgeSource(parameters, dotSource, clusterEdge);
+					}
+					dotSource.append("}\n");
+				}
+			}
+		}
+		*/
+		return dotSource.toString();
+	}
+
+	private static String createHTMLTable(ConceptNode node, SubGraphData data) {
+		final Map<ConceptNode, Set<Edge>> clusters = data.getClusters();
+		final Set<Edge> edges = clusters.get(node);
+		String nodeLabel = node.getName();
+		nodeLabel = "\"" + Utils.prepareLabel(nodeLabel) + "\"";
+		if (edges == null || edges.size() == 0) {
+			return nodeLabel;
+		}
+		else {
+			// create table with cluster edges
+			StringBuilder buffy = new StringBuilder();
+			buffy.append("<");  // start html label
+			buffy.append("<TABLE BORDER=\"0\">");
+
+			// header row with actual node clazz and name
+			buffy.append("<TR>");
+			buffy.append("<TD BORDER=\"2\">");
+			buffy.append("<I>");
+			buffy.append(node.getClazz());
+			buffy.append("</I>");
+			buffy.append("</TD>");
+
+			String conceptName = nodeLabel.replace("\\n", "<BR ALIGN=\"CENTER\"/>");
+
+			buffy.append("<TD BORDER=\"2\">");
+			buffy.append("<B>");
+			buffy.append(Strings.unquote(conceptName));
+			buffy.append("</B>");
+			buffy.append("</TD>");
+			buffy.append("</TR>");
+
+			for (Edge edge : edges) {
+				buffy.append("<TR>");
+				buffy.append("<TD BORDER=\"1\">");
+				buffy.append(edge.getPredicate());
+				buffy.append("</TD>");
+
+				buffy.append("<TD BORDER=\"1\">");
+				buffy.append(edge.getObject().getConceptLabel());
+				buffy.append("</TD>");
+				buffy.append("</TR>");
+			}
+			buffy.append("</TABLE>");
+			buffy.append(">");  // start html label
+			return buffy.toString();
+		}
+	}
+
+	private static void appendEdgeSource(Map<String, String> parameters, StringBuilder dotSource, Edge key) {
+		String label = DOTRenderer.innerRelation(key.getPredicate(),
+				parameters.get(GraphDataBuilder.RELATION_COLOR_CODES));
+		if (key.isOuter()) {
+			boolean arrowHead = key.getSubject().isOuter();
+			label = DOTRenderer.getOuterEdgeLabel(key.getPredicate(), arrowHead);
+		}
+		dotSource.append("\"" + key.getSubject().getName() + "\"" + " -> " + "\""
+				+ key.getObject().getName() + "\" "
+				+ label);
 	}
 
 	private static String clearLabel(String label) {
@@ -305,7 +390,7 @@ public class DOTRenderer {
 		}
 		if (prepareLabel) {
 			// prevents HTML rendering !
-			targetLabel = "\"" + Utils.prepareLabel(targetLabel) + "\"";
+
 		}
 
 		newLineLabelValue = "[ " + url
@@ -351,9 +436,9 @@ public class DOTRenderer {
 			});
 
 			// cancel handler after timeout seconds
-			executor.schedule(new Runnable(){
+			executor.schedule(new Runnable() {
 				@Override
-				public void run(){
+				public void run() {
 					handler.cancel(true);
 				}
 			}, timeout, TimeUnit.MILLISECONDS);

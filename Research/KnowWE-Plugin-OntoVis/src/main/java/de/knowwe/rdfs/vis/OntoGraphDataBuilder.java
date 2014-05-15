@@ -32,6 +32,7 @@ import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
+import de.d3web.strings.Strings;
 import de.d3web.utils.Log;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
@@ -152,6 +153,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		if (requestedDepth > 0) {
 			addSuccessors(conceptURI);
 		}
+
+		SubpropertyEliminator.eliminateSubproperties(data, rdfRepository);
+		data.clearIsolatedNodesFromDefaultLevel();
 	}
 
 	@Override
@@ -168,7 +172,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		/*ConceptNode conceptNode = new ConceptNode(concept,
 				getConceptType(conceptURI.asURI()),
 				conceptURI.toString(), conceptLabel, Utils.getStyle(getConceptType(conceptURI)));
-*/
+		*/
 		ConceptNode conceptNode = Utils.createNode(getParameterMap(), rdfRepository, uriProvider, section, data, conceptURI, true);
 		conceptNode.setRoot(true);
 		data.addConcept(conceptNode);
@@ -177,14 +181,20 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 	@Override
 	public void addSuccessors(Node conceptURI) {
+		addSuccessors(conceptURI, false);
+	}
+
+	public void addSuccessors(Node conceptURI, boolean labelsOnly) {
 		// literals cannot have successors
 		if (isLiteral(conceptURI)) return;
 
-		if (expandedSuccessors.contains(conceptURI)) {
-			// already expanded
-			return;
+		if (!labelsOnly) {
+			if (expandedSuccessors.contains(conceptURI)) {
+				// already expanded
+				return;
+			}
+			expandedSuccessors.add(conceptURI);
 		}
-		expandedSuccessors.add(conceptURI);
 
 		String query = "SELECT ?y ?z WHERE { <"
 				+ conceptURI.asURI().toString()
@@ -200,7 +210,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			Node zURI = row.getValue("z");
 			String z = getConceptName(zURI);
 			NODE_TYPE nodeType = getConceptType(zURI);
-			if (checkTripleFilters(query, y, z, nodeType)) continue;
+			if (checkTripleFilters(query, y, z, nodeType, labelsOnly)) continue;
 
 			addConcept(conceptURI, zURI, yURI, nodeType);
 
@@ -210,6 +220,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			}
 			if (depth == requestedDepth) {
 				addOutgoingEdgesSuccessors(zURI);
+				addSuccessors(zURI, true);
 			}
 			depth--;
 		}
@@ -242,10 +253,12 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			height++;
 			if (height < requestedHeight) {
 				addPredecessors(xURI);
+				addSuccessors(xURI, true);
 			}
 
 			if (height == requestedHeight) {
 				addOutgoingEdgesPredecessors(xURI);
+				addSuccessors(xURI, true);
 			}
 			height--;
 
@@ -279,6 +292,10 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 	}
 
 	private boolean checkTripleFilters(String query, String y, String z, NODE_TYPE nodeType) {
+		return checkTripleFilters(query, y, z, nodeType, false);
+	}
+
+	private boolean checkTripleFilters(String query, String y, String z, NODE_TYPE nodeType, boolean labelsOnly) {
 		if (y == null) {
 			Log.severe("Variable y of query was null: " + query);
 			return true;
@@ -302,6 +319,17 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		else if (nodeType == NODE_TYPE.PROPERTY && !showProperties()) {
 			return true;
 		}
+
+		if (labelsOnly) {
+			if (nodeType.equals(NODE_TYPE.LITERAL) || isTypeRelation(y)) {
+				// only literals and type assertions are not filtered out
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+
 		return false;
 	}
 
@@ -336,6 +364,15 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 	public void addConcept(Node fromURI, Node toURI, Node relationURI, NODE_TYPE type) {
 		String relation = getConceptName(relationURI);
 
+
+/*
+cluster change
+ */
+		String clazz = null;
+		if (isTypeRelation(relation)) {
+			clazz = getConceptName(toURI);
+		}
+
 		ConceptNode toNode;
 		ConceptNode fromNode;
 
@@ -343,7 +380,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 		toNode.setOuter(false);
 
-		fromNode = Utils.createNode(this.getParameterMap(), this.rdfRepository, this.uriProvider, this.section, this.data, fromURI, true);
+		fromNode = Utils.createNode(this.getParameterMap(), this.rdfRepository, this.uriProvider, this.section, this.data, fromURI, true, clazz);
 
 		fromNode.setOuter(false);
 
@@ -365,10 +402,19 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			relation = relationLabel;
 		}
 
-		Edge newLineRelationsKey = new Edge(fromNode, relation, toNode);
+		if (Strings.isBlank(clazz)) {
+			// classes are rendered as cluster labels - so no extra edge is required
+			Edge edge = new Edge(fromNode, relation, toNode);
+			addEdge(edge);
+		}
 
-		data.addEdge(newLineRelationsKey);
+	}
 
+	private boolean isTypeRelation(String relation) {
+		if (relation.length() > 4 && relation.substring(relation.length() - 4).equalsIgnoreCase("type")) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -382,11 +428,17 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			return;
 		}
 
-		String currentConcept;
+		/*
+		cluster change
+		 */
+		String clazz = null;
+		if (isTypeRelation(relation)) {
+			clazz = getConceptName(toURI);
+		}
 
 		ConceptNode toNode = Utils.createNode(this.getParameterMap(), this.rdfRepository, this.uriProvider, this.section, this.data, toURI, false);
 
-		ConceptNode fromNode = Utils.createNode(this.getParameterMap(), this.rdfRepository, this.uriProvider, this.section, this.data, fromURI, false);
+		ConceptNode fromNode = Utils.createNode(this.getParameterMap(), this.rdfRepository, this.uriProvider, this.section, this.data, fromURI, false, clazz);
 
 		ConceptNode current = null;
 		if (predecessor) {
@@ -402,7 +454,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 		Edge edge = new Edge(fromNode, relation, toNode);
 
-		boolean edgeIsNew = !data.getEdges().contains(edge);
+		boolean edgeIsNew = !data.getAllEdges().contains(edge);
 
 		if (showOutgoingEdges()) {
 			if (nodeIsNew) {
@@ -419,16 +471,50 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 			}
 			if (edgeIsNew) {
-				data.addEdge(edge);
+
+				addEdge(edge);
+
 			}
 		}
 		else {
 			// do not show outgoing edges
 			if (!nodeIsNew) {
-				// but show if its node is internal one already
-				data.addEdge(edge);
+				// but show if its node is internal one already, i.e. node would exist even without this edge
+				if (!isTypeRelation(relation)) { // cluster change
+					addEdge(edge);
+				}
+
+			}
+			else {
+				// exception for labels:
+				// labels are shown for rim concepts even if out of scope in principle
+				if (isLiteralEdge(edge)) {
+					final ConceptNode label = edge.getObject();
+					data.addConcept(label);
+					addEdge(edge);
+				}
 			}
 		}
+	}
+
+	/**
+	 * adds an edge to the graph data object in the following way: if the edge is a label it will be added to a cluster
+	 * for the subject node. The edge will be added at default level (no cluster) otherwise
+	 *
+	 * @param edge
+	 */
+	private void addEdge(Edge edge) {
+		if (isLiteralEdge(edge)) {
+			// this is a label edge
+			data.addEdgeToCluster(edge.getSubject(), edge);
+		}
+		else {
+			data.addEdge(edge);
+		}
+	}
+
+	private boolean isLiteralEdge(Edge edge) {
+		return edge.getObject().getType().equals(NODE_TYPE.LITERAL);
 	}
 
 }

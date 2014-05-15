@@ -28,6 +28,9 @@ import de.knowwe.visualization.dot.RenderingStyle;
  */
 public class ConceptNode {
 
+	public static final ConceptNode DEFAULT_CLUSTER_NODE = new ConceptNode("DEFAULT_CLUSTER_NODE");
+
+	private String clazz = null;
 	private final String name;
 	private String conceptUrl = null;
 	private String conceptLabel = null;
@@ -70,7 +73,7 @@ public class ConceptNode {
 	/**
 	 *
 	 */
-	public ConceptNode(String name, NODE_TYPE type, String url, String label) {
+	public ConceptNode(String name, NODE_TYPE type, String url, String label, String clazz) {
 		this(name);
 		this.type = type;
 		if (name == null) {
@@ -81,6 +84,7 @@ public class ConceptNode {
 		}
 		this.conceptLabel = label;
 		this.conceptUrl = url;
+		this.clazz = clazz;
 		this.style = new RenderingStyle();
 	}
 
@@ -88,7 +92,15 @@ public class ConceptNode {
 	 *
 	 */
 	public ConceptNode(String name, NODE_TYPE type, String url, String label, RenderingStyle style) {
-		this(name, type, url, label);
+		this(name, type, url, label, "");
+		this.style = style;
+	}
+
+	/**
+	 *
+	 */
+	public ConceptNode(String name, NODE_TYPE type, String url, String label, String clazz, RenderingStyle style) {
+		this(name, type, url, label, clazz);
 		this.style = style;
 	}
 
@@ -109,6 +121,10 @@ public class ConceptNode {
 		return name;
 	}
 
+	public String getClazz() {
+		return clazz;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) return false;
@@ -121,5 +137,9 @@ public class ConceptNode {
 	@Override
 	public int hashCode() {
 		return name.hashCode();
+	}
+
+	public void setClazz(String clazz) {
+		this.clazz = clazz;
 	}
 }

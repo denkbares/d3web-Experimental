@@ -33,8 +33,6 @@ import de.knowwe.visualization.util.IncludeUtils;
 import de.knowwe.visualization.util.IncludeUtils.FILE_TYPE;
 
 /**
- * 
- * 
  * @author JohannaLatt
  * @created 25.06.2013
  */
@@ -178,10 +176,10 @@ public class D3Renderer {
 
 	/**
 	 * Writes the JSON source for the wheel visualization.
-	 * 
-	 * @created 20.06.2013
+	 *
 	 * @param data
-	 * @param the main concept on which the data bases on
+	 * @param the  main concept on which the data bases on
+	 * @created 20.06.2013
 	 */
 	private static void writeJSONWheelSource(SubGraphData data, String concept) throws IllegalArgumentException {
 		jsonSource = "{\n";
@@ -220,9 +218,9 @@ public class D3Renderer {
 
 	/**
 	 * Adds the children of the given HierarchyNode to the jsonSource
-	 * 
-	 * @created 25.06.2013
+	 *
 	 * @param root
+	 * @created 25.06.2013
 	 */
 	private static void addChildrenToSource(HierarchyNode root) {
 		jsonSource += ",\n\"children\": [\n";
@@ -266,16 +264,16 @@ public class D3Renderer {
 
 	/**
 	 * Writes the JSON source for the force visualization.
-	 * 
-	 * @created 08.07.2013
+	 *
 	 * @param data
+	 * @created 08.07.2013
 	 */
 	private static void writeJSONForceSource(SubGraphData data) {
 		List<String> links = new ArrayList<String>();
 
 		// SOURCE
 		arraySource = "[\n";
-		Iterator<Edge> iterator = data.getEdges().iterator();
+		Iterator<Edge> iterator = data.getAllEdges().iterator();
 		while (iterator.hasNext()) {
 			Edge next = iterator.next();
 			String p = next.getPredicate();

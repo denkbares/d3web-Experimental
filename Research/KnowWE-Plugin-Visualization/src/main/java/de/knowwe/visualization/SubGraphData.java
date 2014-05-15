@@ -19,8 +19,9 @@
 package de.knowwe.visualization;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,30 +34,100 @@ import java.util.Set;
 public class SubGraphData {
 
 	private final Map<String, ConceptNode> concepts;
-	private final Set<Edge> edges;
+	private final Map<ConceptNode, Set<Edge>> clusters;
 
 	/**
 	 *
 	 */
 	public SubGraphData() {
 		concepts = new LinkedHashMap<String, ConceptNode>();
-		edges = new LinkedHashSet<Edge>();
+		clusters = new HashMap<ConceptNode, Set<Edge>>();
+		clusters.put(ConceptNode.DEFAULT_CLUSTER_NODE, new HashSet<Edge>());
+	}
+
+	public void createCluster(ConceptNode node) {
+		clusters.put(node, new HashSet<Edge>());
+	}
+
+	public Map<ConceptNode, Set<Edge>> getClusters() {
+		return clusters;
+	}
+
+	public void addEdgeToCluster(ConceptNode node, Edge e) {
+		if (clusters.get(node) == null) {
+			createCluster(node);
+		}
+		final Set<Edge> set = clusters.get(node);
+		set.add(e);
 	}
 
 	public Collection<ConceptNode> getConceptDeclarations() {
 		return concepts.values();
 	}
 
+	/**
+	 * removes all concepts from the concept set, which are not used within the edges of the default level.
+	 */
+	public void clearIsolatedNodesFromDefaultLevel() {
+		Set<ConceptNode> usedNodes = new HashSet<ConceptNode>();
+		final Set<Edge> defaultLevelEdges = clusters.get(ConceptNode.DEFAULT_CLUSTER_NODE);
+		for (Edge edge : defaultLevelEdges) {
+			usedNodes.add(edge.getSubject());
+			usedNodes.add(edge.getObject());
+		}
+		Collection<String> keysToRemove = new HashSet<String>();
+		for (Map.Entry<String, ConceptNode> nodeEntry : concepts.entrySet()) {
+			if (!usedNodes.contains(nodeEntry.getValue())) {
+				keysToRemove.add(nodeEntry.getKey());
+			}
+		}
+		for (String key : keysToRemove) {
+			concepts.remove(key);
+		}
+	}
+
 	public ConceptNode getConcept(String name) {
 		return concepts.get(name);
 	}
 
-	public Set<Edge> getEdges() {
-		return edges;
+	public Set<Edge> getAllOutoingEdgesFor(ConceptNode node) {
+		Set<Edge> result = new HashSet<Edge>();
+		final Set<Edge> defaultLevelEdges = clusters.get(ConceptNode.DEFAULT_CLUSTER_NODE);
+		for (Edge edge : defaultLevelEdges) {
+			if (edge.getSubject().equals(node)) {
+				result.add(edge);
+			}
+		}
+		final Set<Edge> cluster = clusters.get(node);
+		if (cluster != null) {
+			result.addAll(cluster);
+		}
+		return result;
+	}
+
+	public Set<Edge> getAllEdges() {
+		Set<Edge> allEdges = new HashSet<Edge>();
+		for (ConceptNode conceptNode : clusters.keySet()) {
+			allEdges.addAll(clusters.get(conceptNode));
+		}
+		return allEdges;
 	}
 
 	public void addEdge(Edge e) {
-		edges.add(e);
+		clusters.get(ConceptNode.DEFAULT_CLUSTER_NODE).add(e);
+	}
+
+	public void removeEdge(Edge e) {
+		final Set<Edge> defaultLevelEdges = clusters.get(ConceptNode.DEFAULT_CLUSTER_NODE);
+		if (defaultLevelEdges.contains(e)) {
+			defaultLevelEdges.remove(e);
+		}
+		final Set<Edge> cluster = clusters.get(e.getSubject());
+		if (cluster != null) {
+			if (cluster.contains(e)) {
+				cluster.remove(e);
+			}
+		}
 	}
 
 	public void addConcept(ConceptNode n) {

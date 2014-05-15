@@ -111,7 +111,7 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 	 * its subclasses are added to the graph.
 	 * 
 	 * @created 21.10.2013
-	 * @param concept
+	 * @param type
 	 */
 	private void addAllMatchingConceptTypes(Type type) {
 		List<Type> children = type.getChildrenTypes();
@@ -150,7 +150,7 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 		// the main concept is inserted
 		ConceptNode conceptNode = new ConceptNode(concept.getName() + concept.hashCode(),
 				NODE_TYPE.INSTANCE,
-				concept.getName(), concept.getName());
+				concept.getName(), concept.getName(), "");
 		conceptNode.setRoot(true);
 		data.addConcept(conceptNode);
 	}
@@ -222,14 +222,14 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 
 		toNode = data.getConcept(toName);
 		if (toNode == null) {
-			toNode = new ConceptNode(toName, type, createConceptURL(toLabel), toLabel);
+			toNode = new ConceptNode(toName, type, createConceptURL(toLabel), toLabel, "");
 			data.addConcept(toNode);
 		}
 		toNode.setOuter(false);
 
 		fromNode = data.getConcept(fromName);
 		if (fromNode == null) {
-			fromNode = new ConceptNode(fromName, type, createConceptURL(fromLabel), fromLabel);
+			fromNode = new ConceptNode(fromName, type, createConceptURL(fromLabel), fromLabel, "");
 			data.addConcept(fromNode);
 		}
 		fromNode.setOuter(false);
@@ -255,19 +255,19 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 		if (toNode == null) {
 			toNode = new ConceptNode(toName, NODE_TYPE.UNDEFINED,
 					createConceptURL(toLabel),
-					toLabel);
+					toLabel, "");
 		}
 
 		ConceptNode fromNode = data.getConcept(fromName);
 		if (fromNode == null) {
 			fromNode = new ConceptNode(fromName, NODE_TYPE.UNDEFINED,
 					createConceptURL(fromLabel),
-					fromLabel);
+					fromLabel, "");
 		}
 
 		Edge edge = new Edge(fromNode, "", toNode);
 
-		boolean edgeIsNew = !data.getEdges().contains(edge);
+		boolean edgeIsNew = !data.getAllEdges().contains(edge);
 
 		if (showOutgoingEdges()) {
 			if (nodeIsNew) {

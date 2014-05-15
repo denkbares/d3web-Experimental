@@ -27,9 +27,8 @@ import de.knowwe.visualization.Edge;
 import de.knowwe.visualization.SubGraphData;
 
 /**
- * Builds a hierarchy tree based on the data-map given and with the given main
- * concept as root node
- * 
+ * Builds a hierarchy tree based on the data-map given and with the given main concept as root node
+ *
  * @author JohannaLatt
  * @created 25.06.2013
  */
@@ -55,14 +54,13 @@ public class HierarchyTree {
 	}
 
 	/**
-	 * Loops through the data given and recursively adds all children of the
-	 * given HierarchyNode to the tree
-	 * 
-	 * @created 25.06.2013
+	 * Loops through the data given and recursively adds all children of the given HierarchyNode to the tree
+	 *
 	 * @param hn
+	 * @created 25.06.2013
 	 */
 	private void addChildren(HierarchyNode hn) {
-		Iterator<Edge> iterator = data.getEdges().iterator();
+		Iterator<Edge> iterator = data.getAllEdges().iterator();
 		while (iterator.hasNext()) {
 			Edge next = iterator.next();
 			// if next is a child of the HierarchyNode
@@ -72,7 +70,9 @@ public class HierarchyTree {
 				if (treeHasNode(conceptChild)) {
 					child = getHierarchyNode(conceptChild);
 				}
-				else child = new HierarchyNode(conceptChild);
+				else {
+					child = new HierarchyNode(conceptChild);
+				}
 
 				if (!hn.hasChild(child)) {
 					hn.addChild(child);
@@ -93,9 +93,9 @@ public class HierarchyTree {
 
 	/**
 	 * Adds the given HierarchyNode to the flat list representation of the tree
-	 * 
-	 * @created 25.06.2013
+	 *
 	 * @param hn
+	 * @created 25.06.2013
 	 */
 	private void addNodeToTreeList(HierarchyNode hn) {
 		containedNodes.add(hn);
@@ -103,12 +103,11 @@ public class HierarchyTree {
 	}
 
 	/**
-	 * Checks if the tree already contains a HierarchyNode with the given
-	 * ConceptNode as source
-	 * 
-	 * @created 25.06.2013
+	 * Checks if the tree already contains a HierarchyNode with the given ConceptNode as source
+	 *
 	 * @param cn
 	 * @return
+	 * @created 25.06.2013
 	 */
 	private boolean treeHasNode(ConceptNode cn) {
 		for (int i = 0; i < containedNodes.size(); i++) {
@@ -121,12 +120,12 @@ public class HierarchyTree {
 	}
 
 	/**
-	 * Loops through all the HierarchyNodes contained in the tree and returns
-	 * the HierarchyNode with the given ConceptNode as source if there is one
-	 * 
-	 * @created 25.06.2013
+	 * Loops through all the HierarchyNodes contained in the tree and returns the HierarchyNode with the given
+	 * ConceptNode as source if there is one
+	 *
 	 * @param cn
 	 * @return
+	 * @created 25.06.2013
 	 */
 	private HierarchyNode getHierarchyNode(ConceptNode cn) {
 		for (int i = 0; i < containedNodes.size(); i++) {

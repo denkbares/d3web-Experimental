@@ -102,6 +102,10 @@ public class Utils {
 	}
 
 	public static ConceptNode createNode(Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, SubGraphData data, Node toURI, boolean insertNewNode) {
+		return createNode(parameters, rdfRepository, uriProvider, section, data, toURI, insertNewNode, null);
+	}
+
+	public static ConceptNode createNode(Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, SubGraphData data, Node toURI, boolean insertNewNode, String clazz) {
 		ConceptNode visNode = null;
 
 		GraphDataBuilder.NODE_TYPE type = GraphDataBuilder.NODE_TYPE.UNDEFINED;
@@ -116,12 +120,21 @@ public class Utils {
 		try {
 			toLiteral = toURI.asLiteral();
 			//add a key to identifier to have distinguish between concepts and literals, e.g., <lns:Q> and "Q"
-			identifier = toLiteral.toString() + "ONTOVIS-LITERAL";
+			identifier = toLiteral.toString().replace("\"", "") + "ONTOVIS-LITERAL";
 			type = GraphDataBuilder.NODE_TYPE.LITERAL;
 			label = toLiteral.toString();
 			if (label.contains("@")) {
 				String lang = label.substring(label.indexOf('@') + 1);
 				label = "\"" + label.substring(0, label.indexOf('@')) + "\"" + " (" + lang + ")";
+			}
+			else if (label.contains("^^")) {
+				if (label.contains("#")) {
+					String dataType = label.substring(label.lastIndexOf('#') + 1);
+					label = "\"" + label.substring(0, label.indexOf("^^")) + "\"" + " (" + dataType + ")";
+				}
+				else {
+					label = "\"" + label.substring(0, label.indexOf("^^")) + "\"";
+				}
 			}
 			else {
 				label = Strings.quote(label);
@@ -202,9 +215,15 @@ public class Utils {
 				Utils.setClassColorCoding(toURI, style, parameters, rdfRepository);
 				visNode = new ConceptNode(identifier, type, createConceptURL(identifier, parameters,
 						section,
-						uriProvider), label, style);
+						uriProvider), label, clazz, style);
 				if (insertNewNode) {
 					data.addConcept(visNode);
+				}
+			}
+			else {
+				if (clazz != null && clazz.length() > 0) {
+					// we found a type-triple and add the clazz attribute to the already existing node
+					visNode.setClazz(clazz);
 				}
 			}
 			return visNode;
