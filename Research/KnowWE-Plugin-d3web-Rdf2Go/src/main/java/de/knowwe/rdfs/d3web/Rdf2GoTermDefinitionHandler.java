@@ -23,9 +23,10 @@ public class Rdf2GoTermDefinitionHandler extends OntologyCompileScript<D3webTerm
 	public void compile(OntologyCompiler compiler, Section<D3webTermDefinition<NamedObject>> section) throws CompilerMessage {
 
 		Identifier termIdentifier = section.get().getTermIdentifier(section);
+		Identifier lnsIdentifier = new Identifier(new Identifier("lns"), termIdentifier.getPathElements());
 
 		compiler.getTerminologyManager().registerTermDefinition(
-				compiler, section, section.get().getTermObjectClass(section), termIdentifier);
+				compiler, section, section.get().getTermObjectClass(section), lnsIdentifier);
 
 		String externalForm = Rdf2GoUtils.getCleanedExternalForm(termIdentifier);
 
