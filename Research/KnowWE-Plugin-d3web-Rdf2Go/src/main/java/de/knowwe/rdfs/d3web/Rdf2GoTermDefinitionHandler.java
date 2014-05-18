@@ -14,6 +14,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.CompilerMessage;
 import de.knowwe.ontology.compile.OntologyCompileScript;
 import de.knowwe.ontology.compile.OntologyCompiler;
+import de.knowwe.ontology.kdom.resource.Resource;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
@@ -26,7 +27,7 @@ public class Rdf2GoTermDefinitionHandler extends OntologyCompileScript<D3webTerm
 		Identifier lnsIdentifier = new Identifier(new Identifier("lns"), termIdentifier.getPathElements());
 
 		compiler.getTerminologyManager().registerTermDefinition(
-				compiler, section, section.get().getTermObjectClass(section), lnsIdentifier);
+				compiler, section, Resource.class, lnsIdentifier);
 
 		String externalForm = Rdf2GoUtils.getCleanedExternalForm(termIdentifier);
 
