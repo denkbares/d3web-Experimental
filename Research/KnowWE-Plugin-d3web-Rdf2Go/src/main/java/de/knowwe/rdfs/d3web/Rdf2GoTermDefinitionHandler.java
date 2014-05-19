@@ -24,10 +24,12 @@ public class Rdf2GoTermDefinitionHandler extends OntologyCompileScript<D3webTerm
 	public void compile(OntologyCompiler compiler, Section<D3webTermDefinition<NamedObject>> section) throws CompilerMessage {
 
 		Identifier termIdentifier = section.get().getTermIdentifier(section);
-		Identifier lnsIdentifier = new Identifier(new Identifier("lns"), termIdentifier.getPathElements());
+		Identifier lnsIdentifier = getLnsIdentifier(termIdentifier);
 
 		compiler.getTerminologyManager().registerTermDefinition(
 				compiler, section, Resource.class, lnsIdentifier);
+		compiler.getTerminologyManager().registerTermDefinition(
+				compiler, section, section.get().getTermObjectClass(section), termIdentifier);
 
 		String externalForm = Rdf2GoUtils.getCleanedExternalForm(termIdentifier);
 
@@ -48,11 +50,19 @@ public class Rdf2GoTermDefinitionHandler extends OntologyCompileScript<D3webTerm
 		core.addStatements(section, Rdf2GoUtils.toArray(statements));
 	}
 
+	public static Identifier getLnsIdentifier(Identifier termIdentifier) {
+		return new Identifier(new Identifier("lns"), termIdentifier.getPathElements());
+	}
+
 	@Override
 	public void destroy(OntologyCompiler compiler, Section<D3webTermDefinition<NamedObject>> section) {
 		compiler.getRdf2GoCore().removeStatementsForSection(section);
 		Identifier termIdentifier = section.get().getTermIdentifier(section);
+		Identifier lnsIdentifier = getLnsIdentifier(termIdentifier);
+
 		compiler.getTerminologyManager().unregisterTermDefinition(
+				compiler, section, Resource.class, lnsIdentifier);
+		compiler.getTerminologyManager().registerTermDefinition(
 				compiler, section, section.get().getTermObjectClass(section), termIdentifier);
 	}
 
