@@ -62,7 +62,7 @@ public class Rdf2GoTermDefinitionHandler extends OntologyCompileScript<D3webTerm
 
 		compiler.getTerminologyManager().unregisterTermDefinition(
 				compiler, section, Resource.class, lnsIdentifier);
-		compiler.getTerminologyManager().registerTermDefinition(
+		compiler.getTerminologyManager().unregisterTermDefinition(
 				compiler, section, section.get().getTermObjectClass(section), termIdentifier);
 	}
 
