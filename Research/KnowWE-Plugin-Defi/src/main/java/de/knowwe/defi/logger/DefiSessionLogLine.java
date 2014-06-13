@@ -37,12 +37,14 @@ public class DefiSessionLogLine {
 	private final static String NO_DATA = "--";
 
 	/** Separator S used in session log **/
-	private final String S = DefiSessionEventLogger.getSeparator();
+	private final static String S = DefiSessionEventLogger.getSeparator();
 	private final String SU = DefiSessionEventLogger.getSeparatorUnicode();
 	/** Regex to find session log line **/
 	private final String MATCH_ME = "^((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\"
 			+ S + "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S + "((?!\\"
 			+ S + ").)+\\" + S + "((?!\\" + S + ").)+$";
+	private final static String HEADER = "Benutzer" + S + "Logindatum" + S + "Loginzeit" + S
+			+ "Logoutdatum" + S + "Logoutzeit" + S + "Timeout";
 
 	public DefiSessionLogLine(String s) {
 		if (!s.matches(MATCH_ME)) throw new IllegalArgumentException(
@@ -145,6 +147,10 @@ public class DefiSessionLogLine {
 	@Override
 	public String toString() {
 		return user + S + loginDate + S + loginTime + S + logOutDate + S + logOutTime + S + timeout;
+	}
+
+	public static String getHeader() {
+		return HEADER;
 	}
 
 }

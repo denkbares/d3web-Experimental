@@ -41,13 +41,16 @@ public class DefiPageRateLogLine {
 	private final static String NO_DATA = "--";
 
 	/** Separator S used in rate log **/
-	private final String S = DefiPageRateEventLogger.getSeparator();
+	private final static String S = DefiPageRateEventLogger.getSeparator();
 	private final String SU = DefiPageRateEventLogger.getSeparatorUnicode();
 	/** Regex to find rate log line **/
 	private final String MATCH_ME = "^((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S
 			+ "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\"
 			+ S + "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S
 			+ "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+$";
+	private final static String HEADER = "ID" + S + "Seite" + S + "Benutzer" + S
+			+ "Datum" + S + "Echter Wert" + S + "Wert" + S + "Label" + S + "Diskutiert" + S
+			+ "Geschlossen";
 
 	public DefiPageRateLogLine(String s) {
 		if (!s.matches(MATCH_ME)) throw new IllegalArgumentException(
@@ -173,5 +176,9 @@ public class DefiPageRateLogLine {
 	public String toString() {
 		return id + S + page + S + user + S + date + S + realvalue + S + value + S + label + S
 				+ discussed + S + closed;
+	}
+
+	public static String getHeader() {
+		return HEADER;
 	}
 }

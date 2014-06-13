@@ -61,7 +61,6 @@
 	margin-bottom: 5px;
 }
 </style>
-
 <div id="login_defi"> 
 <br />
 <h2>Willkommen im ICD-Forum</h2><h2>Benutzeranmeldung f&uuml;r registrierte Teilnehmer</h2>
@@ -125,7 +124,10 @@
 <div class="hinweis"><h5>Hinweis:</h5> 
 Als registrierter Teilnehmer der Studie haben Sie Ihren Benutzernamen
  und Ihr Passwort per Post erhalten. Sollten Sie diese Daten verloren haben, setzen Sie sich bitte 
- umgehend mit uns in Verbindung!</div>
+ umgehend mit uns in Verbindung!
+ <br><br>
+ ICD-Forum ist optimiert f&uuml;r Mozilla Firefox - Sie k&ouml;nnen den Browser <a target="_blank" href="http://www.mozilla.org/de/firefox/new/">hier</a> herunterladen
+ </div>
 </wiki:Tab>
 
 </wiki:TabbedSection>

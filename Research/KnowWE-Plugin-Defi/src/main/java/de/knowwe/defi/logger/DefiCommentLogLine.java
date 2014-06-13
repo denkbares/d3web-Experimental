@@ -38,13 +38,15 @@ public class DefiCommentLogLine {
 
 	private final static String NO_DATA = "--";
 	/** Separator S used in comment log **/
-	private final String S = DefiCommentEventLogger.getSeparator();
+	private final static String S = DefiCommentEventLogger.getSeparator();
 	private final String SU = DefiCommentEventLogger.getSeperatorUnicode();
 	/** Regex to find comment log line **/
 	private final String MATCH_ME = "^((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S
 			+ "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\"
 			+ S + "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S + "((?!\\"
 			+ S + ").)+$";
+	private final static String HEADER = "Benutzer" + S + "Nachricht" + S + "Datum" + S + "Zeit"
+			+ S + "Adressat" + S + "Vorgänger" + S + "Einheit" + S + "Thema";
 
 	/**
 	 * @param user comment's author
@@ -149,6 +151,10 @@ public class DefiCommentLogLine {
 	public String toString() {
 		return user + S + msg + S + date + S + time + S + adressee + S + response + S
 				+ unit + S + topic;
+	}
+
+	public static String getHeader() {
+		return HEADER;
 	}
 
 }

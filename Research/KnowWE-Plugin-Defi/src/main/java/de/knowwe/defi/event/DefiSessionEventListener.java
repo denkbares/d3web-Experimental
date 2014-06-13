@@ -40,9 +40,16 @@ import de.knowwe.defi.logger.DefiSessionLogLine;
 public class DefiSessionEventListener implements WikiEventListener {
 
 	public DefiSessionEventListener() {
-		ServletContext context = Environment.getInstance().getContext();
-		WikiEngine en = WikiEngine.getInstance(context, null);
-		WikiEventManager.addWikiEventListener(en.getAuthenticationManager(), this);
+		// TODO:
+		// "java.lang.NullPointerException: Used WikiConnector can not provide a ServletContext"
+		try {
+			ServletContext context = Environment.getInstance().getContext();
+			WikiEngine en = WikiEngine.getInstance(context, null);
+			WikiEventManager.addWikiEventListener(en.getAuthenticationManager(), this);
+		}
+		catch (Exception e) {
+
+		}
 	}
 
 	@Override

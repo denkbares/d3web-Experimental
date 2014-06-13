@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2013 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.defi.logger;
 
@@ -52,12 +52,19 @@ public class DefiCommentEventLogger {
 	}
 
 	private static void writeToForumLog(String logLine) {
+
 		BufferedWriter out = null;
 		try {
 			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(PATH, true),
 					ENCODING));
-				out.write(logLine);
+
+			if ((new File(PATH)).length() == 0) {
+				out.write(DefiCommentLogLine.getHeader());
 				out.newLine();
+			}
+
+			out.write(logLine);
+			out.newLine();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -78,6 +85,11 @@ public class DefiCommentEventLogger {
 		try {
 			br = new BufferedReader(new InputStreamReader(
 					(new FileInputStream(new File(PATH))), ENCODING));
+
+			// skip header
+			br.readLine();
+
+			// read log
 			while ((line = br.readLine()) != null) {
 				loglines.add(new DefiCommentLogLine(line));
 			}

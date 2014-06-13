@@ -36,12 +36,14 @@ public class DefiPageLogLine {
 
 	private final static String NO_DATA = "--";
 	/** Separator S used in page log **/
-	private final String S = DefiPageEventLogger.getSeparator();
+	private final static String S = DefiPageEventLogger.getSeparator();
 	private final String SU = DefiPageEventLogger.getSeparatorUnicode();
 	/** Regex to find page log line **/
 	private final String MATCH_ME = "^((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\"
 			+ S + "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+\\" + S
 			+ "((?!\\" + S + ").)+\\" + S + "((?!\\" + S + ").)+$";
+	private final static String HEADER = "Benutzer" + S + "Seite" + S + "Startdatum" + S
+			+ "Startzeit" + S + "Enddatum" + S + "Endzeit";
 
 	public DefiPageLogLine(String s) {
 		if (!s.matches(MATCH_ME)) throw new IllegalArgumentException(
@@ -120,5 +122,9 @@ public class DefiPageLogLine {
 	public String toString() {
 		return user + S + page + S + startDate + S + startTime + S + endDate + S
 				+ endTime;
+	}
+
+	public static String getHeader() {
+		return HEADER;
 	}
 }

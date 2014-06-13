@@ -84,6 +84,11 @@ public class DefiPageRateEventLogger {
 		try {
 			br = new BufferedReader(new InputStreamReader(
 					(new FileInputStream(new File(PATH))), ENCODING));
+
+			// skip header
+			br.readLine();
+
+			// read log
 			while ((line = br.readLine()) != null) {
 				loglines.add(new DefiPageRateLogLine(line));
 			}
@@ -108,6 +113,12 @@ public class DefiPageRateEventLogger {
 		try {
 			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(PATH, append),
 					ENCODING));
+
+			if ((new File(PATH)).length() == 0) {
+				out.write(DefiPageRateLogLine.getHeader());
+				out.newLine();
+			}
+
 			for (DefiPageRateLogLine line : list) {
 				out.write(line.toString());
 				out.newLine();

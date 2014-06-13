@@ -85,6 +85,11 @@ public class DefiOtherEventsLogger {
 		try {
 			br = new BufferedReader(new InputStreamReader(
 					(new FileInputStream(new File(PATH))), ENCODING));
+
+			// skip header
+			br.readLine();
+
+			// read log
 			while ((line = br.readLine()) != null) {
 				if (line.startsWith(prefix)) loglines.add(line);
 			}

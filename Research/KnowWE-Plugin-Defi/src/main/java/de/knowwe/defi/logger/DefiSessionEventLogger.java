@@ -81,6 +81,12 @@ public class DefiSessionEventLogger {
 		try {
 			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(PATH, append),
 					ENCODING));
+
+			if ((new File(PATH)).length() == 0) {
+				out.write(DefiSessionLogLine.getHeader());
+				out.newLine();
+			}
+
 			for (String line : logLines) {
 				out.write(line);
 				out.newLine();
@@ -134,6 +140,11 @@ public class DefiSessionEventLogger {
 		try {
 			br = new BufferedReader(new InputStreamReader(
 					(new FileInputStream(new File(PATH))), ENCODING));
+
+			// skip header
+			br.readLine();
+
+			// read log
 			while ((line = br.readLine()) != null) {
 				loglines.add(new DefiSessionLogLine(line));
 			}
