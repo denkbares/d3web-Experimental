@@ -24,7 +24,8 @@
 <%
 	final String WELCOME_PAGE = "Startseite";
 	final String WELCOME_PAGE_FIRSTTIME = WELCOME_PAGE + "_firstTime";
-	final String BUTTON_ID = "firstpage";
+	final String WELCOME_PAGE_BUTTON = "firstpage";
+	final String OLD_BROWSER_BUTTON = "oldbrowser";
 %>
 <fmt:setLocale value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default" />
@@ -77,21 +78,60 @@
 		newChatMsg = true;
 	}
 	
+	// if user has old browser and is on the welcome page
+	if (user.getTitle().equals(WELCOME_PAGE) || user.getTitle().equals(WELCOME_PAGE_FIRSTTIME)) {
+		if (!ReadbuttonUtilities.isPageRated(OLD_BROWSER_BUTTON, user.getUserName())) {
+%>
+<script type="text/javascript">
+	if(!document.URL.match(/Login.jsp/)) {
+		function get_browser(){
+			var N=navigator.appName, ua=navigator.userAgent, tem;
+			var M=ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
+			if(M && (tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+			M=M? [M[1], M[2]]: [N, navigator.appVersion, '-?'];
+			return M[0];
+		}
+		function get_browser_version(){
+			var N=navigator.appName, ua=navigator.userAgent, tem;
+			var M=ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
+			if(M && (tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+			M=M? [M[1], M[2]]: [N, navigator.appVersion, '-?'];
+			return M[1];
+		}
+		var browser=get_browser();
+		var browser_version= parseFloat(get_browser_version());
+		var oldBrowserPage = "Browser";
+		
+		if (browser == "Firefox" && browser_version < 25) {
+			window.location.href = "Wiki.jsp?page=" + oldBrowserPage;
+		} else if (browser == "Chrome" && browser_version < 25) {
+			window.location.href = "Wiki.jsp?page=" + oldBrowserPage;
+		} else if (browser == "MSIE" && browser_version < 9) {
+			window.location.href = "Wiki.jsp?page=" + oldBrowserPage;
+		} else if (browser == "Safari" && browser_version < 5) {
+			window.location.href = "Wiki.jsp?page=" + oldBrowserPage;
+		}
+	}	
+</script>
+<%
+		}
+	}
+	
 	// if user has visited welcomepage, redirect him to welcomepage_firsttime
 	boolean welcomePage_firstTime = false;
 	if (user.getTitle().equals(WELCOME_PAGE)) {
-		welcomePage_firstTime = !ReadbuttonUtilities.isPageRated(BUTTON_ID, user.getUserName());
+		welcomePage_firstTime = !ReadbuttonUtilities.isPageRated(WELCOME_PAGE_BUTTON, user.getUserName());
 	}
 	if(welcomePage_firstTime) {
 %>
 <script type="text/javascript">
-	if(!document.URL.match(/Login.jsp/))
+	if(!document.URL.match(/Login.jsp/)) {
 		window.location.href = "Wiki.jsp?page=<%=WELCOME_PAGE_FIRSTTIME%>";
+	}	
 </script>
 <%
 	}
 %>
-
 <div id="header">
 
 	<div class="titlebox">
