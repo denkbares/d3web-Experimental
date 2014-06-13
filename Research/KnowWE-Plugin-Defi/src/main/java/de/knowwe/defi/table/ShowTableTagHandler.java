@@ -99,7 +99,8 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 
 		// tables can be configured to only support single versions using the
 		// single-attribute, then no additionalTable-button is rendered
-		if (previousInputExists && !singleTableVersion) {
+		// if (previousInputExists && !singleTableVersion) {
+		if (!singleTableVersion) {
 			string.appendHtml("<input type='button' onclick=\"additionalTable('"
 					+ myTable.getID() + "','" + user.getUserName()
 					+ "','" + tableid

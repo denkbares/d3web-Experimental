@@ -76,9 +76,7 @@ public class InsertAdditionalTableVersionAction extends AbstractAction {
 		// insert new markup into page
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		String oldText = contentSectionForTableID.getText();
-		String completeNewText = oldText.substring(0,
-				oldText.length() - 2)
-				+ newContent + "\n-";
+		String completeNewText = oldText.substring(0, oldText.length() - 3) + newContent + "-\n";
 		nodesMap.put(contentSectionForTableID.getID(),
 				completeNewText);
 		ReplaceSectionUtils.replaceSections(context, nodesMap);

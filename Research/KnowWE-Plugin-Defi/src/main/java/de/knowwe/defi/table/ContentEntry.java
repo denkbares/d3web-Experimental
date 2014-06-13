@@ -42,7 +42,7 @@ class ContentEntry extends AbstractType {
 
 	public static String getContent(Section<ContentEntry> s) {
 		// workaround, because InputContent only matches a single line.
-		return s.getText().replaceFirst("INPUT\\d*:", "").trim().replace("\n", "\t\n");
+		return s.getText().replaceFirst("INPUT\\d*:", "").trim();
 
 // Section<InputContent> sec = Sections.findChildOfType(s,
 		// InputContent.class);

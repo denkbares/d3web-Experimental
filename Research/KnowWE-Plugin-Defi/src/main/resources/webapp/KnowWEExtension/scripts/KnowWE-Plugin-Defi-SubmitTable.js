@@ -2,6 +2,7 @@
 function submitTable(kdomid,user,tableid,versions) {
 	
 	var tableElement = _KS('#'+kdomid);
+	var submitInfoSpan = jq$('#' + kdomid).children('span[id^=\'tableSubmit_\']');
 	var inputs = _KS('textarea',tableElement);
 	var text = ''+versions+'#';
 	 var len = inputs.length;
@@ -28,7 +29,7 @@ function submitTable(kdomid,user,tableid,versions) {
             response : {
                 action : 'insert',
                 ids : [ 'tableSubmit_'+tableid ],
-                fn : function(){ setTimeout ( 'document.location.reload()', 5000 ); }
+                fn : function(){ setTimeout(function() {submitInfoSpan.empty();}, 5000); }
             }
         }
 
