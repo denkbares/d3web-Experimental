@@ -18,9 +18,7 @@
  */
 package de.knowwe.d3webviz.dependency;
 
-import de.knowwe.core.compile.packaging.PackageAnnotationNameType;
 import de.knowwe.core.compile.packaging.PackageManager;
-import de.knowwe.core.compile.packaging.PackageTerm;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -39,11 +37,7 @@ public class D3webDependenciesType extends DefaultMarkupType {
 
 	static {
 		m = new DefaultMarkup("d3webDependencies");
-		m.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME);
-		m.addAnnotationNameType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
-				new PackageAnnotationNameType());
-		m.addAnnotationContentType(PackageManager.PACKAGE_ATTRIBUTE_NAME,
-				new PackageTerm());
+		PackageManager.addPackageAnnotation(m);
 		m.addAnnotation(ANNOTATION_SHOW_TYPE, false, "true", "false");
 		m.addAnnotation(ANNOTATION_SHOW_ALL, false, "true", "false");
 		m.addAnnotation(ANNOTATION_IGNORE);
