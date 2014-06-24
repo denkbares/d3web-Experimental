@@ -4,6 +4,7 @@ import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.renderer.AsynchronRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
 import de.knowwe.visualization.GraphDataBuilder;
@@ -83,8 +84,7 @@ public class OntoVisType extends DefaultMarkupType {
 
 	public OntoVisType() {
 		super(MARKUP);
-		//this.setRenderer(new AsynchronRenderer(new OntoVisTypeRenderer()));
-		this.setRenderer(new OntoVisTypeRenderer());
-	}
+        this.setRenderer(new AsynchronRenderer(new OntoVisTypeRenderer()));
+    }
 
 }
