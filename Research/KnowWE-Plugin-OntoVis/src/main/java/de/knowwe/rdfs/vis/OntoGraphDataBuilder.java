@@ -19,19 +19,6 @@
  */
 package de.knowwe.rdfs.vis;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.model.QueryResultTable;
-import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.Node;
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
-
 import de.d3web.strings.Strings;
 import de.d3web.utils.Log;
 import de.knowwe.core.kdom.parsing.Section;
@@ -42,6 +29,16 @@ import de.knowwe.rdfs.vis.util.Utils;
 import de.knowwe.visualization.ConceptNode;
 import de.knowwe.visualization.Edge;
 import de.knowwe.visualization.GraphDataBuilder;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
+import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.*;
 
 /**
  * @author Johanna Latt
@@ -56,6 +53,12 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 	private Set<Node> expandedPredecessors = new HashSet<Node>();
 	private Set<Node> expandedSuccessors = new HashSet<Node>();
+
+    private List<String> queries = new ArrayList<String>();
+    private int asks = 0;
+
+    private String propertyFilterExpression = null;
+    private String nodeFilterExpression = null;
 
 	/**
 	 * Allows to create a new Ontology Rendering Core. For each rendering task a new one should be created.
@@ -85,14 +88,12 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		}
 
 		NODE_TYPE result = NODE_TYPE.UNDEFINED;
+        asks++;
 
-		String askClass = "ASK { <" + conceptURI.toString()
-				+ "> rdf:type rdfs:Class}";
-		if (rdfRepository.sparqlAsk(askClass)) return NODE_TYPE.CLASS;
+        if (Rdf2GoUtils.isClass(rdfRepository, conceptURI.asURI())) return NODE_TYPE.CLASS;
 
-		String askProperty = "ASK { <" + conceptURI.toString()
-				+ "> rdf:type rdf:Property}";
-		if (rdfRepository.sparqlAsk(askProperty)) return NODE_TYPE.PROPERTY;
+        asks++;
+        if (Rdf2GoUtils.isProperty(rdfRepository, conceptURI.asURI())) return NODE_TYPE.PROPERTY;
 
 		return result;
 	}
@@ -124,8 +125,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 	@Override
 	public void selectGraphData() {
-
-		String concept = getParameterMap().get(CONCEPT);
+        final long l = System.currentTimeMillis();
+        queries.clear();
+        String concept = getParameterMap().get(CONCEPT);
 		String conceptNameEncoded = null;
 
 		String url;
@@ -156,7 +158,16 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 		SubpropertyEliminator.eliminateSubproperties(data, rdfRepository);
 		data.clearIsolatedNodesFromDefaultLevel();
-	}
+
+        System.out.println("Zeit: " + (System.currentTimeMillis() - l));
+
+        for (String query : queries) {
+            System.out.println(query);
+        }
+        System.out.println();
+        System.out.println("ASKS: " + asks);
+        System.out.println("Queries: " + queries.size());
+    }
 
 	@Override
 	public void insertMainConcept(Node conceptURI) {
@@ -198,8 +209,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 		String query = "SELECT ?y ?z WHERE { <"
 				+ conceptURI.asURI().toString()
-				+ "> ?y ?z.}";
-		ClosableIterator<QueryRow> result =
+                + "> ?y ?z. " + predicateFilter() + nodeFilter("?z") + "}";
+        queries.add(query);
+        ClosableIterator<QueryRow> result =
 				rdfRepository.sparqlSelectIt(
 						query);
 		while (result.hasNext()) {
@@ -226,8 +238,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		}
 	}
 
-	@Override
-	public void addPredecessors(Node conceptURI) {
+
+    @Override
+    public void addPredecessors(Node conceptURI) {
 		if (expandedPredecessors.contains(conceptURI)) {
 			// already expanded
 			return;
@@ -235,8 +248,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		expandedPredecessors.add(conceptURI);
 
 		String query = "SELECT ?x ?y WHERE { ?x ?y <"
-				+ conceptURI.asURI().toString() + "> . }";
-		ClosableIterator<QueryRow> result =
+                + conceptURI.asURI().toString() + "> . " + predicateFilter() + nodeFilter("?x") + "}";
+        queries.add(query);
+        ClosableIterator<QueryRow> result =
 				rdfRepository.sparqlSelectIt(
 						query);
 		while (result.hasNext()) {
@@ -272,8 +286,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 		String query = "SELECT ?y ?z WHERE { <"
 				+ conceptURI.asURI().toString()
-				+ "> ?y ?z.}";
-		ClosableIterator<QueryRow> result =
+                + "> ?y ?z. " + predicateFilter() + "}";
+        queries.add(query);
+        ClosableIterator<QueryRow> result =
 				rdfRepository.sparqlSelectIt(
 						query);
 		while (result.hasNext()) {
@@ -295,6 +310,61 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 		return checkTripleFilters(query, y, z, nodeType, false);
 	}
 
+    private String predicateFilter() {
+        if (propertyFilterExpression != null) {
+            return propertyFilterExpression;
+        }
+        if (getExcludedRelations().size() == 0) {
+            propertyFilterExpression = " FILTER (true)";
+            return propertyFilterExpression;
+        }
+        StringBuffer filterExp = new StringBuffer();
+
+        filterExp.append("FILTER (");
+
+        Iterator<String> iter = getExcludedRelations().iterator();
+        while (iter.hasNext()) {
+            filterExp.append(" ?y != " + iter.next());
+            if (iter.hasNext()) {
+                filterExp.append(" && ");
+            }
+        }
+        filterExp.append("). ");
+
+        this.propertyFilterExpression = filterExp.toString();
+        return propertyFilterExpression;
+    }
+
+    private String nodeFilter(String variable) {
+        return " FILTER (true).";
+
+
+/*
+        if(nodeFilterExpression != null) {
+            return nodeFilterExpression;
+        }
+        if(getExcludedNodes().size() == 0) {
+            nodeFilterExpression = " FILTER (true).";
+            return nodeFilterExpression;
+        }
+        StringBuffer filterExp = new StringBuffer();
+
+        filterExp.append("FILTER (");
+
+        Iterator<String> iter = getExcludedNodes().iterator();
+        while(iter.hasNext()) {
+            filterExp.append(" "+variable+" != "+iter.next());
+            if(iter.hasNext()) {
+                filterExp.append( " && ");
+            }
+        }
+        filterExp.append("). ");
+
+        this.nodeFilterExpression = filterExp.toString();
+        return nodeFilterExpression;
+*/
+    }
+
 	private boolean checkTripleFilters(String query, String y, String z, NODE_TYPE nodeType, boolean labelsOnly) {
 		if (y == null) {
 			Log.severe("Variable y of query was null: " + query);
@@ -305,7 +375,8 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 			return true;
 		}
 		if (excludedRelation(y)) {
-			return true;
+            // this filter is already contained in the sparql query
+            return true;
 		}
 		if (excludedNode(z)) {
 			return true;
@@ -339,8 +410,9 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 		String query = "SELECT ?x ?y WHERE { ?x ?y <"
 				+ conceptURI.asURI().toString()
-				+ ">}";
-		QueryResultTable resultTable = rdfRepository.sparqlSelect(
+                + ">. " + predicateFilter() + "}";
+        queries.add(query);
+        QueryResultTable resultTable = rdfRepository.sparqlSelect(
 				query);
 
 		ClosableIterator<QueryRow> result = resultTable.iterator();

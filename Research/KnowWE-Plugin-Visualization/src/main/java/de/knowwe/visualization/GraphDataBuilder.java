@@ -19,14 +19,6 @@
  */
 package de.knowwe.visualization;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import de.d3web.strings.Identifier;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
@@ -34,6 +26,10 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.visualization.d3.D3VisualizationRenderer;
 import de.knowwe.visualization.dot.DOTVisualizationRenderer;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.*;
 
 /**
  * @param <T> The type of data the graph is supposed to visualize
@@ -281,26 +277,28 @@ public abstract class GraphDataBuilder<T extends Object> {
 	/**
 	 * @created 20.08.2012
 	 */
-	private void getExcludedRelations() {
-		excludedRelations = new ArrayList<String>();
+    protected List<String> getExcludedRelations() {
+        excludedRelations = new ArrayList<String>();
 		String exclude = parameters.get(EXCLUDED_RELATIONS);
 		if (exclude != null) {
 			String[] array = exclude.split(",");
 			excludedRelations = Arrays.asList(array);
 		}
-	}
+        return excludedRelations;
+    }
 
 	/**
 	 * @created 20.08.2012
 	 */
-	private void getExcludedNodes() {
-		excludedNodes = new ArrayList<String>();
+    protected List<String> getExcludedNodes() {
+        excludedNodes = new ArrayList<String>();
 		String exclude = parameters.get(EXCLUDED_NODES);
 		if (exclude != null) {
 			String[] array = exclude.split(",");
 			excludedNodes = Arrays.asList(array);
 		}
-	}
+        return excludedNodes;
+    }
 
 	/**
 	 * @created 24.11.2013

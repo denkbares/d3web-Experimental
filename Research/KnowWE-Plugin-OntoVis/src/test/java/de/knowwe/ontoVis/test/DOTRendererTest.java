@@ -1,26 +1,21 @@
 package de.knowwe.ontoVis.test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.ontoware.rdf2go.RDF2Go;
-import org.ontoware.rdf2go.model.Model;
-
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.strings.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.RuleSet;
 import de.knowwe.rdf2go.modelfactory.OWLIMLiteModelFactory;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.ontoware.rdf2go.RDF2Go;
+import org.ontoware.rdf2go.model.Model;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -84,9 +79,9 @@ public class DOTRendererTest {
 
 		parameterMap.put(OntoGraphDataBuilder.CONCEPT, "OP-Methoden");
 
-		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "label,owl:sameAs");
+        parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "rdfs:label,owl:sameAs");
 
-		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,WissassConcept");
+        parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,lns:WissassConcept");
 
 		parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, "690");
 
@@ -149,7 +144,7 @@ public class DOTRendererTest {
 
 		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "rdfs:subClassOf,owl:sameAs");
 
-		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,WissassConcept,Class,owl:Thing");
+        parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,WissassConcept,owl:Class,rdfs:Class,owl:Thing");
 
 		parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, "2");
 		parameterMap.put(OntoGraphDataBuilder.REQUESTED_HEIGHT, "2");
