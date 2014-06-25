@@ -19,11 +19,6 @@
  */
 package de.knowwe.typevis;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -32,259 +27,263 @@ import de.knowwe.visualization.ConceptNode;
 import de.knowwe.visualization.Edge;
 import de.knowwe.visualization.GraphDataBuilder;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Johanna Latt
  * @created 10.10.2013
  */
 public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 
-	private int depth = 0;
+    private int depth = 0;
 
-	private String concept;
+    private String concept;
 
-	// list of all instances of the requested type and its subclasses
-	private List<Type> conceptTypes;
-	// list of already visited types to prevent endless loops
-	private List<Type> visited;
+    // list of all instances of the requested type and its subclasses
+    private List<Type> conceptTypes;
+    // list of already visited types to prevent endless loops
+    private List<Type> visited;
 
-	private Class<?> visTypeClass;
-	// whether the class of the requested concept could be found or not
-	private boolean couldFindClass = true;
+    private Class<?> visTypeClass;
+    // whether the class of the requested concept could be found or not
+    private boolean couldFindClass = true;
 
-	public TypeGraphDataBuilder(String realPath, Section<?> section, Map<String, String> parameters, LinkToTermDefinitionProvider uriProvider) {
-		initialiseData(realPath, section, parameters, uriProvider);
-	}
+    public TypeGraphDataBuilder(String realPath, Section<?> section, Map<String, String> parameters, LinkToTermDefinitionProvider uriProvider) {
+        initialiseData(realPath, section, parameters, uriProvider);
+    }
 
-	@Override
-	public void selectGraphData() {
-		getConceptName();
+    @Override
+    public void selectGraphData() {
+        getConceptName();
 
-		findClassOfConcept();
-		findChildAndSubclassTypes();
+        findClassOfConcept();
+        findChildAndSubclassTypes();
 
-		for (Type t : conceptTypes) {
-			insertMainConcept(t);
-			// if requested, the successors are added to the source
-			if (requestedDepth > 0) {
-				addSuccessors(t);
-			}
-		}
-	}
+        for (Type t : conceptTypes) {
+            insertMainConcept(t);
+            // if requested, the successors are added to the source
+            if (requestedDepth > 0) {
+                addSuccessors(t);
+            }
+        }
+    }
 
-	/**
-	 * Get the concept name without the package declaration.
-	 * 
-	 * @created 30.10.2013
-	 */
-	private void getConceptName() {
-		String conceptWithPackageDeclaration = getEncodedConceptName();
+    /**
+     * Get the concept name without the package declaration.
+     *
+     * @created 30.10.2013
+     */
+    private void getConceptName() {
+        String conceptWithPackageDeclaration = getEncodedConceptName();
 
-		// get concept name without package declaration (if existant)
-		String[] parts = conceptWithPackageDeclaration.split("\\.");
-		concept = parts[parts.length - 1];
-	}
+        // get concept name without package declaration (if existant)
+        String[] parts = conceptWithPackageDeclaration.split("\\.");
+        concept = parts[parts.length - 1];
+    }
 
-	private void findClassOfConcept() {
-		try {
-			visTypeClass = Class.forName(getEncodedConceptName());
-		}
-		catch (ClassNotFoundException e) {
-			couldFindClass = false;
-			e.printStackTrace();
-		}
-	}
+    private void findClassOfConcept() {
+        try {
+            visTypeClass = Class.forName(getEncodedConceptName());
+        } catch (ClassNotFoundException e) {
+            couldFindClass = false;
+            e.printStackTrace();
+        }
+    }
 
-	private void findChildAndSubclassTypes() {
-		conceptTypes = new LinkedList<Type>();
-		visited = new LinkedList<Type>();
+    private void findChildAndSubclassTypes() {
+        conceptTypes = new LinkedList<Type>();
+        visited = new LinkedList<Type>();
 
-		RootType rt = RootType.getInstance();
-		if (rt.getName().equals(concept)) conceptTypes.add(rt);
+        RootType rt = RootType.getInstance();
+        if (rt.getName().equals(concept)) conceptTypes.add(rt);
 
-		addAllMatchingConceptTypes(rt);
-	}
+        addAllMatchingConceptTypes(rt);
+    }
 
-	/**
-	 * Recursively finds all Types in the type hierarchy that match the
-	 * requested type-String or any subclass of it. Those are added to the
-	 * conceptType-List. Furthermore the predecessors of the requested type and
-	 * its subclasses are added to the graph.
-	 * 
-	 * @created 21.10.2013
-	 * @param type
-	 */
-	private void addAllMatchingConceptTypes(Type type) {
-		List<Type> children = type.getChildrenTypes();
-		if (children == null) return;
+    /**
+     * Recursively finds all Types in the type hierarchy that match the
+     * requested type-String or any subclass of it. Those are added to the
+     * conceptType-List. Furthermore the predecessors of the requested type and
+     * its subclasses are added to the graph.
+     *
+     * @param type
+     * @created 21.10.2013
+     */
+    private void addAllMatchingConceptTypes(Type type) {
+        List<Type> children = type.getChildrenTypes();
+        if (children == null) return;
 
-		Iterator<Type> it = children.iterator();
-		while (it.hasNext()) {
-			Type child = it.next();
+        Iterator<Type> it = children.iterator();
+        while (it.hasNext()) {
+            Type child = it.next();
 
-			// prevent endless loops
-			if (visited.contains(child)) continue;
-			visited.add(child);
+            // prevent endless loops
+            if (visited.contains(child)) continue;
+            visited.add(child);
 
-			// check for inheritance
-			if (couldFindClass) {
-				Class<?> currentTreeTypeClass = child.getClass();
-				if (visTypeClass.isAssignableFrom(currentTreeTypeClass)) {
-					conceptTypes.add(child);
-					// add predecessor
-					addConcept(type, child, null, NODE_TYPE.INSTANCE);
-				}
-			}
+            // check for inheritance
+            if (couldFindClass) {
+                Class<?> currentTreeTypeClass = child.getClass();
+                if (visTypeClass.isAssignableFrom(currentTreeTypeClass)) {
+                    conceptTypes.add(child);
+                    // add predecessor
+                    addConcept(type, child, null, NODE_TYPE.INSTANCE);
+                }
+            }
 
-			if (child.getName().equals(concept) && !conceptTypes.contains(child)) {
-				conceptTypes.add(child);
-				// add predecessor
-				addConcept(type, child, null, NODE_TYPE.INSTANCE);
-			}
+            if (child.getName().equals(concept) && !conceptTypes.contains(child)) {
+                conceptTypes.add(child);
+                // add predecessor
+                addConcept(type, child, null, NODE_TYPE.INSTANCE);
+            }
 
-			addAllMatchingConceptTypes(child);
-		}
-	}
+            addAllMatchingConceptTypes(child);
+        }
+    }
 
-	@Override
-	public void insertMainConcept(Type concept) {
-		// the main concept is inserted
-		ConceptNode conceptNode = new ConceptNode(concept.getName() + concept.hashCode(),
-				NODE_TYPE.INSTANCE,
-				concept.getName(), concept.getName(), "");
-		conceptNode.setRoot(true);
-		data.addConcept(conceptNode);
-	}
+    public void insertMainConcept(Type concept) {
+        // the main concept is inserted
+        ConceptNode conceptNode = new ConceptNode(concept.getName() + concept.hashCode(),
+                NODE_TYPE.INSTANCE,
+                concept.getName(), concept.getName(), "");
+        conceptNode.setRoot(true);
+        data.addConcept(conceptNode);
+    }
 
-	@Override
-	public void addSuccessors(Type concept) {
-		List<Type> children = concept.getChildrenTypes();
-		if (children == null) return;
-		Iterator<Type> it = children.iterator();
-		loop: while (it.hasNext()) {
-			Type child = it.next();
+    @Override
+    public void addSuccessors(Type concept) {
+        List<Type> children = concept.getChildrenTypes();
+        if (children == null) return;
+        Iterator<Type> it = children.iterator();
+        loop:
+        while (it.hasNext()) {
+            Type child = it.next();
 
-			if (excludedNode(child.getName())) {
-				continue loop;
-			}
+            if (excludedNode(child.getName())) {
+                continue loop;
+            }
 
-			addConcept(concept, child, null, NODE_TYPE.INSTANCE);
+            addConcept(concept, child, null, NODE_TYPE.INSTANCE);
 
-			depth++;
-			if (depth < requestedDepth) {
-				addSuccessors(child);
-			}
-			if (depth == requestedDepth) {
-				addOutgoingEdgesSuccessors(child);
-			}
-			depth--;
-		}
-	}
+            depth++;
+            if (depth < requestedDepth) {
+                addSuccessors(child);
+            }
+            if (depth == requestedDepth) {
+                addOutgoingEdgesSuccessors(child);
+            }
+            depth--;
+        }
+    }
 
-	/**
-	 * Not possible in Type-Tree
-	 */
-	@Override
-	public void addPredecessors(Type concept) {
-	}
+    /**
+     * Not possible in Type-Tree
+     */
+    @Override
+    public void addPredecessors(Type concept) {
+    }
 
-	@Override
-	public void addOutgoingEdgesSuccessors(Type concept) {
-		List<Type> children = concept.getChildrenTypes();
-		if (children == null) return;
-		Iterator<Type> it = children.iterator();
-		loop: while (it.hasNext()) {
-			Type child = it.next();
+    @Override
+    public void addOutgoingEdgesSuccessors(Type concept) {
+        List<Type> children = concept.getChildrenTypes();
+        if (children == null) return;
+        Iterator<Type> it = children.iterator();
+        loop:
+        while (it.hasNext()) {
+            Type child = it.next();
 
-			if (excludedNode(child.getName())) {
-				continue loop;
-			}
+            if (excludedNode(child.getName())) {
+                continue loop;
+            }
 
-			addOuterConcept(concept, child, null, false);
-		}
-	}
+            addOuterConcept(concept, child, null, false);
+        }
+    }
 
-	/**
-	 * Not possible in Type-Tree
-	 */
-	@Override
-	public void addOutgoingEdgesPredecessors(Type concept) {
-	}
+    /**
+     * Not possible in Type-Tree
+     */
+    @Override
+    public void addOutgoingEdgesPredecessors(Type concept) {
+    }
 
-	@Override
-	public void addConcept(Type fromType, Type toType, Type relation, de.knowwe.visualization.GraphDataBuilder.NODE_TYPE type) {
-		String fromLabel = fromType.getName();
-		String toLabel = toType.getName();
-		String fromName = fromLabel + fromType.hashCode();
-		String toName = toLabel + toType.hashCode();
+    @Override
+    public void addConcept(Type fromType, Type toType, Type relation, de.knowwe.visualization.GraphDataBuilder.NODE_TYPE type) {
+        String fromLabel = fromType.getName();
+        String toLabel = toType.getName();
+        String fromName = fromLabel + fromType.hashCode();
+        String toName = toLabel + toType.hashCode();
 
-		ConceptNode toNode = null;
-		ConceptNode fromNode = null;
+        ConceptNode toNode = null;
+        ConceptNode fromNode = null;
 
-		toNode = data.getConcept(toName);
-		if (toNode == null) {
-			toNode = new ConceptNode(toName, type, createConceptURL(toLabel), toLabel, "");
-			data.addConcept(toNode);
-		}
-		toNode.setOuter(false);
+        toNode = data.getConcept(toName);
+        if (toNode == null) {
+            toNode = new ConceptNode(toName, type, createConceptURL(toLabel), toLabel, "");
+            data.addConcept(toNode);
+        }
+        toNode.setOuter(false);
 
-		fromNode = data.getConcept(fromName);
-		if (fromNode == null) {
-			fromNode = new ConceptNode(fromName, type, createConceptURL(fromLabel), fromLabel, "");
-			data.addConcept(fromNode);
-		}
-		fromNode.setOuter(false);
+        fromNode = data.getConcept(fromName);
+        if (fromNode == null) {
+            fromNode = new ConceptNode(fromName, type, createConceptURL(fromLabel), fromLabel, "");
+            data.addConcept(fromNode);
+        }
+        fromNode.setOuter(false);
 
-		Edge newLineRelationsKey = new Edge(fromNode, "", toNode);
-		data.addEdge(newLineRelationsKey);
-	}
+        Edge newLineRelationsKey = new Edge(fromNode, "", toNode);
+        data.addEdge(newLineRelationsKey);
+    }
 
-	@Override
-	public void addOuterConcept(Type fromType, Type toType, Type relation, boolean predecessor) {
-		String fromLabel = fromType.getName();
-		String toLabel = toType.getName();
-		String fromName = fromLabel + fromType.hashCode();
-		String toName = toLabel + toType.hashCode();
+    @Override
+    public void addOuterConcept(Type fromType, Type toType, Type relation, boolean predecessor) {
+        String fromLabel = fromType.getName();
+        String toLabel = toType.getName();
+        String fromName = fromLabel + fromType.hashCode();
+        String toName = toLabel + toType.hashCode();
 
-		if (toLabel.equals("")) {
-			return;
-		}
+        if (toLabel.equals("")) {
+            return;
+        }
 
-		boolean nodeIsNew = !data.getConceptDeclarations().contains(new ConceptNode(toName));
+        boolean nodeIsNew = !data.getConceptDeclarations().contains(new ConceptNode(toName));
 
-		ConceptNode toNode = data.getConcept(toName);
-		if (toNode == null) {
-			toNode = new ConceptNode(toName, NODE_TYPE.UNDEFINED,
-					createConceptURL(toLabel),
-					toLabel, "");
-		}
+        ConceptNode toNode = data.getConcept(toName);
+        if (toNode == null) {
+            toNode = new ConceptNode(toName, NODE_TYPE.UNDEFINED,
+                    createConceptURL(toLabel),
+                    toLabel, "");
+        }
 
-		ConceptNode fromNode = data.getConcept(fromName);
-		if (fromNode == null) {
-			fromNode = new ConceptNode(fromName, NODE_TYPE.UNDEFINED,
-					createConceptURL(fromLabel),
-					fromLabel, "");
-		}
+        ConceptNode fromNode = data.getConcept(fromName);
+        if (fromNode == null) {
+            fromNode = new ConceptNode(fromName, NODE_TYPE.UNDEFINED,
+                    createConceptURL(fromLabel),
+                    fromLabel, "");
+        }
 
-		Edge edge = new Edge(fromNode, "", toNode);
+        Edge edge = new Edge(fromNode, "", toNode);
 
-		boolean edgeIsNew = !data.getAllEdges().contains(edge);
+        boolean edgeIsNew = !data.getAllEdges().contains(edge);
 
-		if (showOutgoingEdges()) {
-			if (nodeIsNew) {
-				toNode.setOuter(true);
-				data.addConcept(toNode);
-			}
-			if (edgeIsNew) {
-				data.addEdge(edge);
-			}
-		}
-		else {
-			// do not show outgoing edges
-			if (!nodeIsNew) {
-				// but show if its node is internal one already
-				data.addEdge(edge);
-			}
-		}
-	}
+        if (showOutgoingEdges()) {
+            if (nodeIsNew) {
+                toNode.setOuter(true);
+                data.addConcept(toNode);
+            }
+            if (edgeIsNew) {
+                data.addEdge(edge);
+            }
+        } else {
+            // do not show outgoing edges
+            if (!nodeIsNew) {
+                // but show if its node is internal one already
+                data.addEdge(edge);
+            }
+        }
+    }
 
 }
