@@ -153,8 +153,7 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
         data.addConcept(conceptNode);
     }
 
-    @Override
-    public void addSuccessors(Type concept) {
+    private void addSuccessors(Type concept) {
         List<Type> children = concept.getChildrenTypes();
         if (children == null) return;
         Iterator<Type> it = children.iterator();
@@ -179,15 +178,8 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
         }
     }
 
-    /**
-     * Not possible in Type-Tree
-     */
-    @Override
-    public void addPredecessors(Type concept) {
-    }
 
-    @Override
-    public void addOutgoingEdgesSuccessors(Type concept) {
+    private void addOutgoingEdgesSuccessors(Type concept) {
         List<Type> children = concept.getChildrenTypes();
         if (children == null) return;
         Iterator<Type> it = children.iterator();
@@ -203,15 +195,8 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
         }
     }
 
-    /**
-     * Not possible in Type-Tree
-     */
-    @Override
-    public void addOutgoingEdgesPredecessors(Type concept) {
-    }
 
-    @Override
-    public void addConcept(Type fromType, Type toType, Type relation, de.knowwe.visualization.GraphDataBuilder.NODE_TYPE type) {
+    private void addConcept(Type fromType, Type toType, Type relation, de.knowwe.visualization.GraphDataBuilder.NODE_TYPE type) {
         String fromLabel = fromType.getName();
         String toLabel = toType.getName();
         String fromName = fromLabel + fromType.hashCode();
@@ -238,8 +223,7 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
         data.addEdge(newLineRelationsKey);
     }
 
-    @Override
-    public void addOuterConcept(Type fromType, Type toType, Type relation, boolean predecessor) {
+    private void addOuterConcept(Type fromType, Type toType, Type relation, boolean predecessor) {
         String fromLabel = fromType.getName();
         String toLabel = toType.getName();
         String fromName = fromLabel + fromType.hashCode();

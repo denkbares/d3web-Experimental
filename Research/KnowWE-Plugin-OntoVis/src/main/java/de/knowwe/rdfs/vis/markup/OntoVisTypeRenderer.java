@@ -69,7 +69,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
         String exclude = OntoVisType.getAnnotation(section,
                 OntoVisType.ANNOTATION_EXCLUDERELATIONS);
-        parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, exclude);
+        parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, exclude + ",onto:_checkChain2,onto:_checkChain1");
 
         String excludeNodes = OntoVisType.getAnnotation(section,
                 OntoVisType.ANNOTATION_EXCLUDENODES);

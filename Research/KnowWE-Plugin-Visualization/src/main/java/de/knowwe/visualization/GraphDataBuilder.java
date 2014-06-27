@@ -354,54 +354,6 @@ public abstract class GraphDataBuilder<T extends Object> {
     }
 
 
-    /**
-     * Method, that recursively adds all successors of the requested concept up to the chosen depth.
-     *
-     * @param concept
-     * @created 26.06.2012
-     */
-    public abstract void addSuccessors(T concept);
-
-    /**
-     * @param concept
-     * @created 03.08.2012
-     */
-    public abstract void addPredecessors(T concept);
-
-    /**
-     * Adds (gray) relations to the last (successor) nodes of the graph, showing the nodes that still follow.
-     *
-     * @param concept
-     * @created 26.06.2012
-     */
-    public abstract void addOutgoingEdgesSuccessors(T concept);
-
-    /**
-     * Adds (gray) relations to the last (predecessor) nodes of the graph, showing the nodes that still follow.
-     *
-     * @param concept
-     * @created 26.06.2012
-     */
-    public abstract void addOutgoingEdgesPredecessors(T concept);
-
-    /**
-     * @param from
-     * @param to
-     * @param relation between from --> to
-     * @param type     (instance, class, property, undefined)
-     * @created 20.08.2012
-     */
-    public abstract void addConcept(T from, T to, T relation, NODE_TYPE type);
-
-    /**
-     * @param from
-     * @param to
-     * @param relation    between from --> to
-     * @param predecessor (if predecessor or successor is added to the graph)
-     * @created 20.08.2012
-     */
-    public abstract void addOuterConcept(T from, T to, T relation, boolean predecessor);
-
     public String createConceptURL(String to) {
         if (parameters.get(LINK_MODE) != null) {
             if (parameters.get(LINK_MODE).equals(LINK_MODE_BROWSE)) {

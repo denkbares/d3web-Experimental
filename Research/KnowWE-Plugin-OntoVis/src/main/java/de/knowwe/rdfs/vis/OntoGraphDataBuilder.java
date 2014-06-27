@@ -30,6 +30,7 @@ import de.knowwe.visualization.ConceptNode;
 import de.knowwe.visualization.Edge;
 import de.knowwe.visualization.GraphDataBuilder;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
@@ -76,53 +77,15 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         return Utils.getConceptName(uri, this.rdfRepository);
     }
 
-    private NODE_TYPE getConceptType(Node conceptURI) {
-        if (isLiteral(conceptURI)) {
-            return NODE_TYPE.LITERAL;
-        }
-        if (isBlankNode(conceptURI)) {
-            return NODE_TYPE.BLANKNODE;
-        }
 
-        NODE_TYPE result = NODE_TYPE.UNDEFINED;
-
-        if (Rdf2GoUtils.isClass(rdfRepository, conceptURI.asURI())) return NODE_TYPE.CLASS;
-
-        if (Rdf2GoUtils.isProperty(rdfRepository, conceptURI.asURI())) return NODE_TYPE.PROPERTY;
-
-        return result;
-    }
-
-    /**
-     * @param zURI the original node
-     * @return literal representation of the specified node
-     * @created 24.04.2013
-     */
-    private boolean isLiteral(Node zURI) {
-        try {
-            zURI.asLiteral();
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private boolean isBlankNode(Node zURI) {
-        try {
-            zURI.asBlankNode();
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     @Override
     public void selectGraphData() {
 
         List<URI> mainConceptURIs = new ArrayList<URI>();
         final List<String> mainConcepts = getMainConcepts();
-        for (String concept : mainConcepts) {
-
+        for (String name : mainConcepts) {
+            String concept = name.trim();
             String conceptNameEncoded = null;
 
             String url;
@@ -149,7 +112,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             insertMainConcept(conceptURI);
             // if requested, the successors are added to the source
             if (requestedDepth > 0) {
-                addSuccessors(conceptURI);
+                addSuccessors(conceptURI, null, null);
             }
         }
 
@@ -158,7 +121,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
     }
 
-    public void insertMainConcept(Node conceptURI) {
+    private void insertMainConcept(Node conceptURI) {
         String concept = getConceptName(conceptURI);
 
         String conceptLabel = Utils.getRDFSLabel(conceptURI.asURI(), rdfRepository,
@@ -178,29 +141,74 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
     }
 
-    @Override
-    public void addSuccessors(Node conceptURI) {
-        addSuccessors(conceptURI, false);
+    private void addSuccessors(Node conceptToBeExpanded, Node predecessor, Node predecessorPredicate) {
+        addSuccessors(conceptToBeExpanded, predecessor, predecessorPredicate, ExpandMode.Normal, DirectionToBlankNode.Forward);
     }
 
-    public void addSuccessors(Node conceptURI, boolean labelsOnly) {
-        // literals cannot have successors
-        if (isLiteral(conceptURI)) return;
+    final String previousBlankNodeSparqlVariableName = "previousBlankNode";
 
-        if (!labelsOnly) {
-            if (expandedSuccessors.contains(conceptURI)) {
+    private void addSuccessors(Node conceptToBeExpanded, Node previousNode, Node previousPredicate, ExpandMode mode, DirectionToBlankNode direction) {
+
+        if (Utils.isBlankNode(conceptToBeExpanded) && (previousNode == null || previousPredicate == null)) {
+            throw new IllegalArgumentException("case not considered yet!");
+        }
+
+        // literals cannot have successors
+        if (Utils.isLiteral(conceptToBeExpanded)) return;
+
+        if (mode != ExpandMode.LiteralsOnly) {
+            if (expandedSuccessors.contains(conceptToBeExpanded)) {
                 // already expanded
                 return;
             }
-            expandedSuccessors.add(conceptURI);
+            expandedSuccessors.add(conceptToBeExpanded);
         }
 
-        String query = "SELECT ?y ?z WHERE { <"
-                + conceptURI.asURI().toString()
-                + "> ?y ?z. " + predicateFilter() + nodeFilter("?z") + "}";
-        ClosableIterator<QueryRow> result =
-                rdfRepository.sparqlSelectIt(
-                        query);
+
+        String query = null;
+
+
+        if (Utils.isBlankNode(conceptToBeExpanded)) {
+            // workaround as blank nodes are not allowed explicitly in sparql query
+            if (!Utils.isBlankNode(previousNode)) {
+                if (direction == DirectionToBlankNode.Forward) {
+
+                    query = "SELECT ?y ?z WHERE { " +
+                            previousNode.toSPARQL() + " " + previousPredicate.toSPARQL() + "[ ?y ?z" + "]" +
+                            "}";
+                } else {
+                    // case: direction == DirectionToBlankNode.Backward
+                    query = "SELECT ?y ?z WHERE { [ ?y ?z" + "] " + previousPredicate.toSPARQL() + " " + previousNode.toSPARQL() + "}";
+                }
+            } else {
+                   /*
+                TODO: damn it - how to solve this case?
+                 */
+                // this solution works but is quite inefficient
+                if (direction == DirectionToBlankNode.Forward) {
+                    query = "SELECT ?y ?z ?" + previousBlankNodeSparqlVariableName + " WHERE { ?" + previousBlankNodeSparqlVariableName + " " + previousPredicate.toSPARQL() + "[ ?y ?z" + "]" +
+                            "}";
+                } else {
+                    // case: direction == DirectionToBlankNode.Backward
+                    query = "SELECT ?y ?z ?" + previousBlankNodeSparqlVariableName + " WHERE { [ ?y ?z" + "] " + previousPredicate.toSPARQL() + " ?" + previousBlankNodeSparqlVariableName + ". }";
+                }
+                // like this we only can show the first element of a list for instance
+                //return;
+            }
+        } else {
+            query = "SELECT ?y ?z WHERE { "
+                    + conceptToBeExpanded.toSPARQL()
+                    + " ?y ?z. " + predicateFilter() + nodeFilter("?z") + "}";
+        }
+        ClosableIterator<QueryRow> result = null;
+        try {
+            result =
+                    rdfRepository.sparqlSelectIt(
+                            query);
+        } catch (ModelRuntimeException exception) {
+            Log.severe("invalid query: " + query + " /n" + exception.toString());
+        }
+
         while (result.hasNext()) {
             QueryRow row = result.next();
             Node yURI = row.getValue("y");
@@ -208,34 +216,75 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
             Node zURI = row.getValue("z");
             String z = getConceptName(zURI);
-            NODE_TYPE nodeType = getConceptType(zURI);
-            if (checkTripleFilters(query, y, z, nodeType, labelsOnly)) continue;
+            NODE_TYPE nodeType = Utils.getConceptType(zURI, rdfRepository);
 
-            addConcept(conceptURI, zURI, yURI, nodeType);
+            // check blank node sequence case
+            final Node previousBlankNode = row.getValue(previousBlankNodeSparqlVariableName);
+            if (previousBlankNode != null) {
+                // here we check for the right blank node, quit all the others
+                if (!previousBlankNode.asBlankNode().toString().equals(previousNode.asBlankNode().toString())) {
+                    continue;
+                }
+            }
+
+            if (checkTripleFilters(query, y, z, nodeType, mode)) continue;
+
+            addConcept(conceptToBeExpanded, zURI, yURI, nodeType);
 
             depth++;
             if (depth < requestedDepth) {
-                addSuccessors(zURI);
+                addSuccessors(zURI, conceptToBeExpanded, yURI);
             }
             if (depth == requestedDepth) {
                 addOutgoingEdgesSuccessors(zURI);
-                addSuccessors(zURI, true);
+                addOutgoingEdgesPredecessors(zURI);
+                addSuccessors(zURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, DirectionToBlankNode.Forward);
             }
             depth--;
         }
     }
 
+    private void addPredecessors(Node conceptToBeExpanded) {
+        addPredecessors(conceptToBeExpanded, null, null, null);
+    }
 
-    @Override
-    public void addPredecessors(Node conceptURI) {
-        if (expandedPredecessors.contains(conceptURI)) {
+    private void addPredecessors(Node conceptToBeExpanded, Node previousNode, Node previousPredicate, DirectionToBlankNode direction) {
+        if (Utils.isBlankNode(conceptToBeExpanded) && (previousNode == null || previousPredicate == null || direction == null)) {
+            throw new IllegalArgumentException("case not considered yet!");
+        }
+
+        if (expandedPredecessors.contains(conceptToBeExpanded)) {
             // already expanded
             return;
         }
-        expandedPredecessors.add(conceptURI);
+        expandedPredecessors.add(conceptToBeExpanded);
 
-        String query = "SELECT ?x ?y WHERE { ?x ?y <"
-                + conceptURI.asURI().toString() + "> . " + predicateFilter() + nodeFilter("?x") + "}";
+        String query = null;
+        if (Utils.isBlankNode(conceptToBeExpanded)) {
+            // workaround as blank nodes are not allowed explicitly in sparql query
+            if (!Utils.isBlankNode(previousNode)) {
+                // TODO: consider direction to blank node
+                query = "SELECT ?x ?y WHERE { ?bNode " + previousPredicate.toSPARQL() + " " + previousNode.toSPARQL() + "." +
+                        "?x ?y ?bNode." +
+                        "}";
+            } else {
+                /*
+                TODO: damn it - how to solve this case?
+                 */
+
+                // this works but is quite inefficient
+                query = "SELECT ?x ?y ?" + previousBlankNodeSparqlVariableName + " WHERE { ?bNode " + previousPredicate.toSPARQL() + " ?" + previousBlankNodeSparqlVariableName + "." +
+                        "?x ?y ?bNode." +
+                        "}";
+
+
+                // like this we only can show the first element of a list for instance
+                //return;
+            }
+        } else {
+            query = "SELECT ?x ?y WHERE { ?x ?y "
+                    + conceptToBeExpanded.toSPARQL() + " . " + predicateFilter() + nodeFilter("?x") + "}";
+        }
         ClosableIterator<QueryRow> result =
                 rdfRepository.sparqlSelectIt(
                         query);
@@ -243,36 +292,58 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             QueryRow row = result.next();
             Node xURI = row.getValue("x");
             String x = getConceptName(xURI);
+            NODE_TYPE nodeType = Utils.getConceptType(xURI, rdfRepository);
 
             Node yURI = row.getValue("y");
             String y = getConceptName(yURI);
-            NODE_TYPE nodeType = getConceptType(xURI);
+
+            // check blank node sequence case
+            final Node previousBlankNode = row.getValue(previousBlankNodeSparqlVariableName);
+            if (previousBlankNode != null) {
+                // here we check for the right blank node, quit all the others
+                if (!previousBlankNode.asBlankNode().toString().equals(previousNode.asBlankNode().toString())) {
+                    continue;
+                }
+            }
 
             if (checkTripleFilters(query, y, x, nodeType)) continue;
 
             height++;
             if (height < requestedHeight) {
-                addPredecessors(xURI);
-                addSuccessors(xURI, true);
+                addPredecessors(xURI, conceptToBeExpanded, yURI, DirectionToBlankNode.Backward);
+                addSuccessors(xURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, DirectionToBlankNode.Backward);
+
             }
 
             if (height == requestedHeight) {
                 addOutgoingEdgesPredecessors(xURI);
-                addSuccessors(xURI, true);
+                addOutgoingEdgesSuccessors(xURI);
+                addSuccessors(xURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, DirectionToBlankNode.Backward);
             }
             height--;
 
-            addConcept(xURI, conceptURI, yURI, nodeType);
+            addConcept(xURI, conceptToBeExpanded, yURI, nodeType);
         }
     }
 
-    @Override
-    public void addOutgoingEdgesSuccessors(Node conceptURI) {
-        if (isLiteral(conceptURI)) return;
+    /**
+     * Expands a 'fringe' node (outgoing edges).
+     * - no recursion
+     * - no new nodes are added to visualization (except for indicating existence of outgoing edges)
+     * - adds all/new edges between this node and already existing nodes
+     *
+     * @param conceptURI
+     */
+    private void addOutgoingEdgesSuccessors(Node conceptURI) {
+        if (Utils.isLiteral(conceptURI)) return;
+        /*
+        TODO: handle outgoing edges to blank nodes !
+         */
+        if (Utils.isBlankNode(conceptURI)) return;
 
-        String query = "SELECT ?y ?z WHERE { <"
-                + conceptURI.asURI().toString()
-                + "> ?y ?z. " + predicateFilter() + "}";
+        String query = "SELECT ?y ?z WHERE { "
+                + conceptURI.toSPARQL()
+                + " ?y ?z. " + predicateFilter() + "}";
         ClosableIterator<QueryRow> result =
                 rdfRepository.sparqlSelectIt(
                         query);
@@ -283,7 +354,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
             Node zURI = row.getValue("z");
             String z = getConceptName(zURI);
-            NODE_TYPE nodeType = getConceptType(zURI);
+            NODE_TYPE nodeType = Utils.getConceptType(zURI, rdfRepository);
 
             if (checkTripleFilters(query, y, z, nodeType)) continue;
 
@@ -291,8 +362,46 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         }
     }
 
+    /**
+     * Expands a 'fringe' node (ingoing edges).
+     * - no recursion
+     * - no new nodes are added to visualization (except for indicating existence of outgoing edges)
+     * - adds all/new edges between this node and already existing nodes
+     *
+     * @param conceptURI
+     */
+    private void addOutgoingEdgesPredecessors(Node conceptURI) {
+        if (Utils.isLiteral(conceptURI)) return;
+         /*
+        TODO: handle outgoing edges to blank nodes !
+         */
+        if (Utils.isBlankNode(conceptURI)) return;
+
+        String query = "SELECT ?x ?y WHERE { ?x ?y "
+                + conceptURI.toSPARQL()
+                + " . " + predicateFilter() + "}";
+        QueryResultTable resultTable = rdfRepository.sparqlSelect(
+                query);
+
+        ClosableIterator<QueryRow> result = resultTable.iterator();
+
+        while (result.hasNext()) {
+            QueryRow row = result.next();
+            Node xURI = row.getValue("x");
+            String x = getConceptName(xURI);
+            NODE_TYPE nodeType = Utils.getConceptType(xURI, rdfRepository);
+
+            Node yURI = row.getValue("y");
+            String y = getConceptName(yURI);
+
+            if (checkTripleFilters(query, y, x, nodeType)) continue;
+
+            addOuterConcept(xURI, conceptURI, yURI, true);
+        }
+    }
+
     private boolean checkTripleFilters(String query, String y, String z, NODE_TYPE nodeType) {
-        return checkTripleFilters(query, y, z, nodeType, false);
+        return checkTripleFilters(query, y, z, nodeType, ExpandMode.Normal);
     }
 
     private String predicateFilter() {
@@ -350,7 +459,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 */
     }
 
-    private boolean checkTripleFilters(String query, String y, String z, NODE_TYPE nodeType, boolean labelsOnly) {
+    private boolean checkTripleFilters(String query, String y, String z, NODE_TYPE nodeType, ExpandMode mode) {
         if (y == null) {
             Log.severe("Variable y of query was null: " + query);
             return true;
@@ -375,7 +484,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             return true;
         }
 
-        if (labelsOnly) {
+        if (mode == ExpandMode.LiteralsOnly) {
             if (nodeType.equals(NODE_TYPE.LITERAL) || isTypeRelation(y)) {
                 // only literals and type assertions are not filtered out
                 return false;
@@ -387,41 +496,14 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         return false;
     }
 
-    @Override
-    public void addOutgoingEdgesPredecessors(Node conceptURI) {
-        if (isLiteral(conceptURI)) return;
 
-        String query = "SELECT ?x ?y WHERE { ?x ?y <"
-                + conceptURI.asURI().toString()
-                + ">. " + predicateFilter() + "}";
-        QueryResultTable resultTable = rdfRepository.sparqlSelect(
-                query);
-
-        ClosableIterator<QueryRow> result = resultTable.iterator();
-
-        while (result.hasNext()) {
-            QueryRow row = result.next();
-            Node xURI = row.getValue("x");
-            String x = getConceptName(xURI);
-            NODE_TYPE nodeType = getConceptType(xURI);
-
-            Node yURI = row.getValue("y");
-            String y = getConceptName(yURI);
-
-            if (checkTripleFilters(query, y, x, nodeType)) continue;
-
-            addOuterConcept(xURI, conceptURI, yURI, true);
-        }
-    }
-
-    @Override
-    public void addConcept(Node fromURI, Node toURI, Node relationURI, NODE_TYPE type) {
+    private void addConcept(Node fromURI, Node toURI, Node relationURI, NODE_TYPE type) {
         String relation = getConceptName(relationURI);
 
 
-/*
-cluster change
- */
+        /*
+        cluster change
+        */
         String clazz = null;
         if (isTypeRelation(relation)) {
             clazz = getConceptName(toURI);
@@ -471,9 +553,19 @@ cluster change
         return false;
     }
 
-    @Override
-    public void addOuterConcept(Node fromURI, Node toURI, Node relationURI, boolean predecessor) {
-        String from = getConceptName(fromURI);
+    /**
+     * Adds a nodes expanded by a fringe node.
+     * <p/>
+     * - if the node is not part of the visualization yet it is not added (except as outer node for indicating the existence of further edges)
+     * - EXCEPT for datatype property edges which are always added to the visualization
+     * - if the node is already part of the visualization the respective edge is added
+     *
+     * @param fromURI
+     * @param toURI
+     * @param relationURI
+     * @param predecessor
+     */
+    private void addOuterConcept(Node fromURI, Node toURI, Node relationURI, boolean predecessor) {
         String to = getConceptName(toURI);
         String relation = getConceptName(relationURI);
 
@@ -483,7 +575,7 @@ cluster change
         }
 
 		/*
-		cluster change
+        cluster change
 		 */
         String clazz = null;
         if (isTypeRelation(relation)) {
@@ -520,12 +612,9 @@ cluster change
                     toNode.setOuter(true);
                     data.addConcept(toNode);
                 }
-
             }
             if (edgeIsNew) {
-
                 addEdge(edge);
-
             }
         } else {
             // do not show outgoing edges
@@ -565,5 +654,9 @@ cluster change
     private boolean isLiteralEdge(Edge edge) {
         return edge.getObject().getType().equals(NODE_TYPE.LITERAL);
     }
+
+    enum ExpandMode {Normal, LiteralsOnly}
+
+    enum DirectionToBlankNode {Forward, Backward}
 
 }
