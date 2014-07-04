@@ -5,8 +5,10 @@ import java.util.Collection;
 import de.d3web.core.inference.PSMethod;
 import de.d3web.core.inference.PropagationEntry;
 import de.d3web.core.inference.PropagationListener;
+import de.d3web.core.knowledge.Indication;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
 
 public class Rdf2GoPropagationListener implements PropagationListener {
 
@@ -15,9 +17,9 @@ public class Rdf2GoPropagationListener implements PropagationListener {
 
 	/**
 	 * Constructor for the {@link Rdf2GoPropagationListener}.
-	 * 
+	 *
 	 * @param commitAfterPropagation set this to true, if you want the Listener
-	 *        to commit the changes itself after each propagation
+	 *                               to commit the changes itself after each propagation
 	 */
 	public Rdf2GoPropagationListener(Rdf2GoSessionManager manager, boolean commitAfterPropagation) {
 		this.commitAfterPropagation = commitAfterPropagation;
@@ -37,15 +39,19 @@ public class Rdf2GoPropagationListener implements PropagationListener {
 	@Override
 	public void propagating(Session session, PSMethod psMethod, Collection<PropagationEntry> entries) {
 		// nothing to do
-	};
+	}
 
 	@Override
 	public void propagationFinished(Session session, Collection<PropagationEntry> entries) {
 		for (PropagationEntry entry : entries) {
-			TerminologyObject changedObject = entry.getObject();
+			Value value = entry.getNewValue();
+			if (value instanceof Indication) {
+				continue;
+			}
 
+			TerminologyObject changedObject = entry.getObject();
 			mgr.removeFactStatements(session, changedObject);
-			mgr.addFactAsStatements(session, changedObject, entry.getNewValue());
+			mgr.addFactAsStatements(session, changedObject, value);
 		}
 		if (commitAfterPropagation) {
 			Thread thread = new Thread() {
