@@ -45,13 +45,9 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
  */
 public abstract class Rdf2GoDashTreeTermRelationScript extends DashTreeTermRelationScript<OntologyCompiler> implements DestroyScript<OntologyCompiler, TermDefinition> {
 
-	private static final String RELATIONS_ADDED = "relationsAdded";
 
 	@Override
 	protected void createObjectRelations(Section<TermDefinition> parentSection, OntologyCompiler compiler, Identifier parentIdentifier, List<Identifier> childrenIdentifier) {
-
-		// relations already added for one of the other defining sections of the current term
-		if (parentSection.getSectionStore().getObject(compiler, RELATIONS_ADDED) != null) return;
 
 		// since we also have to destroy all defining sections, we also have to compile all defining sections
 		Collection<Section<?>> termDefiningSections = compiler.getTerminologyManager()
@@ -82,10 +78,6 @@ public abstract class Rdf2GoDashTreeTermRelationScript extends DashTreeTermRelat
 		}
 		core.addStatements(parentSection, Rdf2GoUtils.toArray(statements));
 
-		// mark so that the statements are not added multiple times (same anyway)
-		for (Section<?> termDefiningSection : termDefiningSections) {
-			termDefiningSection.getSectionStore().storeObject(compiler, RELATIONS_ADDED, true);
-		}
 	}
 
 	protected abstract URI getRootURI(Rdf2GoCore core);
