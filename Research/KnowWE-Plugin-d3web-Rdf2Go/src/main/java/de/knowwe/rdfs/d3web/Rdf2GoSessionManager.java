@@ -8,7 +8,6 @@ import java.util.Set;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.Literal;
-import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.XSD;
@@ -24,7 +23,7 @@ public class Rdf2GoSessionManager {
 
 	private final Map<TerminologyObject, Set<Statement>> statementCache = new HashMap<TerminologyObject, Set<Statement>>();
 
-	private final Rdf2GoCore core;
+	protected final Rdf2GoCore core;
 
 	public Rdf2GoSessionManager(Rdf2GoCore core) {
 		this.core = core;
@@ -34,7 +33,7 @@ public class Rdf2GoSessionManager {
 		this.core.commit();
 	}
 
-	public void addSessionToRdf2GoCore(Session session, boolean commitAfterPropagation) {
+	public void addSessionToRdf2GoCore(Session session, boolean addPropagationListener, boolean commitAfterPropagation) {
 		Set<Statement> statements = new HashSet<Statement>();
 		URI sessionIdURI = Rdf2GoD3webUtils.getSessionIdURI(core, session);
 		URI sessionURI = core.createlocalURI(Session.class.getSimpleName());
@@ -69,13 +68,25 @@ public class Rdf2GoSessionManager {
 
 		// add propagation listener update the Rdf2GoCore with the changes in
 		// the session
-		session.getPropagationManager().addListener(
-				new Rdf2GoPropagationListener(this, commitAfterPropagation));
+		if (addPropagationListener) {
+			session.getPropagationManager().addListener(
+					new Rdf2GoPropagationListener(this, commitAfterPropagation));
+		}
 
 	}
 
 	public void addFactAsStatements(Session session, TerminologyObject terminologyObject, Value value) {
 
+		Set<Statement> statements = generateFactStatements(session, terminologyObject, value);
+
+		// add fact statements to cache
+		statementCache.put(terminologyObject, statements);
+
+		// add fact statements to the core
+		core.addStatements(Rdf2GoUtils.toArray(statements));
+	}
+
+	protected Set<Statement> generateFactStatements(Session session, TerminologyObject terminologyObject, Value value) {
 		Set<Statement> statements = new HashSet<Statement>();
 
 		BlankNode factNode = core.createBlankNode();
@@ -89,25 +100,21 @@ public class Rdf2GoSessionManager {
 		Rdf2GoUtils.addStatement(core, sessionIdURI, Rdf2GoD3webUtils.getHasFactURI(core),
 				factNode, statements);
 
-		// blank node (Fact) lns:hasTerminologyObject lns:toName
+		// blank node (Fact) lns:hasTerminologyObject lns:ObjectName
 		Rdf2GoUtils.addStatement(core, factNode,
 				Rdf2GoD3webUtils.getHasTerminologyObjectURI(core), terminologyObject.getName(),
 				statements);
 
-		Node valueNode = getValueNode(value);
+		Literal valueLiteral = getValueLiteral(value);
 
-		// blank node (Fact) lns:hasValue lns:value
+		// blank node (Fact) lns:hasValue "value"
 		Rdf2GoUtils.addStatement(core, factNode,
-				Rdf2GoD3webUtils.getHasValueURI(core), valueNode, statements);
+				Rdf2GoD3webUtils.getHasValueURI(core), valueLiteral, statements);
 
-		// add fact statements to cache
-		statementCache.put(terminologyObject, statements);
-
-		// add fact statements to the core
-		core.addStatements(Rdf2GoUtils.toArray(statements));
+		return statements;
 	}
 
-	private Node getValueNode(Value value) {
+	private Literal getValueLiteral(Value value) {
 		Object object = value.getValue();
 		if (object instanceof Integer) {
 			return core.createDatatypeLiteral(object.toString(), XSD._integer);
@@ -124,12 +131,12 @@ public class Rdf2GoSessionManager {
 		return core.createDatatypeLiteral(object.toString(), XSD._string);
 	}
 
-	public void removeFactStatements(Session session, TerminologyObject terminologyObject) {
+	public void removeFactStatements(TerminologyObject terminologyObject) {
 		Set<Statement> statements = statementCache.get(terminologyObject);
 		if (statements != null) core.removeStatements(statements);
 	}
 
-	public void removeSessionFromRdf2GoCore(Session session) {
+	public void removeSessionFromRdf2GoCore() {
 		for (Set<Statement> set : statementCache.values()) {
 			core.removeStatements(set);
 		}

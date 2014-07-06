@@ -50,7 +50,7 @@ public class Rdf2GoPropagationListener implements PropagationListener {
 			}
 
 			TerminologyObject changedObject = entry.getObject();
-			mgr.removeFactStatements(session, changedObject);
+			mgr.removeFactStatements(changedObject);
 			mgr.addFactAsStatements(session, changedObject, value);
 		}
 		if (commitAfterPropagation) {
