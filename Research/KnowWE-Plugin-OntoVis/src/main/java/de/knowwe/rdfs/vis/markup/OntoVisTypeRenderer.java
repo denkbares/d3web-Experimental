@@ -67,9 +67,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
             parameterMap.put(OntoGraphDataBuilder.LANGUAGE, lang);
         }
 
-        String exclude = OntoVisType.getAnnotation(section,
-                OntoVisType.ANNOTATION_EXCLUDERELATIONS);
-        parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, exclude + ",onto:_checkChain2,onto:_checkChain1");
+		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, getExcludedRelations(user, section));
 
         String excludeNodes = OntoVisType.getAnnotation(section,
                 OntoVisType.ANNOTATION_EXCLUDENODES);
@@ -192,5 +190,31 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
         }
         return OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONCEPT);
     }
+
+	/**
+	 * Checks the excluded relations to make sure a namespace is provided.
+	 *
+	 * @created 09.07.2014
+	 */
+	private String getExcludedRelations(UserContext user, Section<?> section) {
+		String parameter = "";
+		String exclude = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_EXCLUDERELATIONS);
+		String defaultExclude = "onto:_checkChain2,onto:_checkChain1";
+
+		if (exclude != null) {
+			// Check if namespace is provided for each relation
+			String[] excludes = exclude.split(",");
+			for (String e : excludes) {
+				if (e.contains(":")) {
+					parameter = parameter + e + ",";
+				}
+			}
+			parameter += defaultExclude;
+		} else {
+		 	parameter = defaultExclude;
+		}
+		return parameter;
+	}
 
 }

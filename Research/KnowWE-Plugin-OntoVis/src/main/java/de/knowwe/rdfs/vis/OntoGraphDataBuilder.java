@@ -417,6 +417,16 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         filterExp.append("FILTER (");
 
         Iterator<String> iter = getExcludedRelations().iterator();
+		List<String> excludesWithExistingNamespace = new LinkedList<String>();
+		while (iter.hasNext()) {
+			String relation = iter.next();
+			String namespace = Rdf2GoUtils.parseKnownNamespacePrefix(rdfRepository, relation);
+		    if (relation.startsWith("onto") || namespace != null) {
+				excludesWithExistingNamespace.add(relation);
+			}
+		}
+
+		iter = excludesWithExistingNamespace.iterator();
         while (iter.hasNext()) {
             filterExp.append(" ?y != " + iter.next());
             if (iter.hasNext()) {
