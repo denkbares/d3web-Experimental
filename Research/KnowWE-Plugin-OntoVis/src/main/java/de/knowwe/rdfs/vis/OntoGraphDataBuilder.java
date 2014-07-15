@@ -220,8 +220,13 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
             // check blank node sequence case
             final Node previousBlankNode = row.getValue(previousBlankNodeSparqlVariableName);
+            // TODO what if there are multiple matches for ?previousBlankNodeSparqlVariableName - and not all are blanknodes !?
             if (previousBlankNode != null) {
                 // here we check for the right blank node, quit all the others
+                if (!Utils.isBlankNode(previousBlankNode)) {
+                    // is a completely undesired match
+                    continue;
+                }
                 if (!previousBlankNode.asBlankNode().toString().equals(previousNode.asBlankNode().toString())) {
                     continue;
                 }
