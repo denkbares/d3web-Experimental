@@ -66,9 +66,9 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 
 			parameterMap.put(OntoGraphDataBuilder.CONCEPT, def.get().getTermName(def));
 
-			parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "label");
+			parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "rdfs:label,owl:sameAs");
 
-			parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,WissassConcept");
+			parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,lns:WissassConcept");
 
 			parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, "690");
 
