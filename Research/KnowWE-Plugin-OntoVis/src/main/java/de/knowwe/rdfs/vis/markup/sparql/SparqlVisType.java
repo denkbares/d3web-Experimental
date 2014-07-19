@@ -52,19 +52,21 @@ public class SparqlVisType extends DefaultMarkupType {
 	public static final String ANNOTATION_DESIGN = "design";
 	public static final String ANNOTATION_LABELS = "labels";
 
+	public static final String ANNOTATION_CONFIG = "config";
+
 	private static final DefaultMarkup MARKUP;
 
 	private enum dot_apps {
 		dot, neato
-	};
+	}
 
 	public enum LinkMode {
 		jump, browse
-	};
+	}
 
 	public enum Visualizations {
 		wheel, force, tree
-	};
+	}
 
 	static {
 		MARKUP = new DefaultMarkup("SparqlVis");
@@ -103,6 +105,8 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_COLORS, false);
 		MARKUP.addAnnotationRenderer(OntoVisType.ANNOTATION_COLORS, NothingRenderer.getInstance());
 		MARKUP.addAnnotationRenderer(ANNOTATION_LABELS, NothingRenderer.getInstance());
+		MARKUP.addAnnotation(ANNOTATION_CONFIG, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_CONFIG, NothingRenderer.getInstance());
 
 	}
 

@@ -33,19 +33,17 @@ public class OntoVisType extends DefaultMarkupType {
 	public static final String ANNOTATION_RENDERER = "renderer";
 	public static final String ANNOTATION_VISUALIZATION = "visualization";
 
+	public static final String ANNOTATION_CONFIG = "config";
+
 	private static final DefaultMarkup MARKUP;
 
-	private enum dot_apps {
+	public enum dot_apps {
 		dot, neato
 	}
-
-	;
 
 	public enum Visualizations {
 		wheel, force
 	}
-
-	;
 
 	static {
 		MARKUP = new DefaultMarkup("Vis");
@@ -62,14 +60,13 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_SIZE, false);
 		MARKUP.addAnnotationRenderer(ANNOTATION_SIZE, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(ANNOTATION_FORMAT, false);
-		MARKUP.addAnnotation(ANNOTATION_SHOWCLASSES, false);
-		MARKUP.addAnnotation(ANNOTATION_SHOWPROPERTIES, false);
+		MARKUP.addAnnotation(ANNOTATION_SHOWCLASSES, false, "true", "false");
+		MARKUP.addAnnotation(ANNOTATION_SHOWPROPERTIES, false, "true", "false");
 		MARKUP.addAnnotation(PackageManager.MASTER_ATTRIBUTE_NAME, false);
 		MARKUP.addAnnotation(ANNOTATION_LANGUAGE, false);
 		MARKUP.addAnnotation(ANNOTATION_DOT_APP, false, dot_apps.values());
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
-		MARKUP.addAnnotation(ANNOTATION_OUTGOING_EDGES, false, new String[] {
-				"true", "false" });
+		MARKUP.addAnnotation(ANNOTATION_OUTGOING_EDGES, false, "true", "false");
 		MARKUP.addAnnotation(Rdf2GoCore.GLOBAL, false, "true", "false");
 		MARKUP.addAnnotationRenderer(Rdf2GoCore.GLOBAL, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
@@ -80,6 +77,7 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotationRenderer(SparqlVisType.ANNOTATION_RANK_DIR, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(SparqlVisType.ANNOTATION_LABELS, false, "true", "false");
 		MARKUP.addAnnotationRenderer(SparqlVisType.ANNOTATION_LABELS, NothingRenderer.getInstance());
+		MARKUP.addAnnotation(ANNOTATION_CONFIG, false);
 	}
 
 	public OntoVisType() {
