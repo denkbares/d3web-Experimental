@@ -39,7 +39,7 @@ jq$(document).ready(function() {
 
 	initCollapseTermBrowser();
 
-	initSemanticAutocompletionSlot();
+	//initSemanticAutocompletionSlot();
 
 	KNOWWE.plugin.termbrowser = {};
 
@@ -87,6 +87,7 @@ function addListenerFunctionForDropEditUpdate(func) {
 
 function initDropableMarkupSection(element) {
 	element.droppable({
+        accept: ".termline",
 		drop : function(event, ui) {
 			var termElement = ui.draggable;
 			var termnameDiv = termElement.find("div.termID");
@@ -277,7 +278,8 @@ function activateDraggables() {
 	jq$(this).draggable({
 		distance : 20,
 		opacity : 0.55,
-		revert : true
+		revert : true,
+        helper: 'clone'
 	});
 
 }
