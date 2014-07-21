@@ -19,17 +19,22 @@
  */
 package de.knowwe.visualization;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import de.d3web.strings.Identifier;
+import de.d3web.strings.Strings;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.visualization.d3.D3VisualizationRenderer;
 import de.knowwe.visualization.dot.DOTVisualizationRenderer;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.*;
 
 /**
  * @param <T> The type of data the graph is supposed to visualize
@@ -135,7 +140,8 @@ public abstract class GraphDataBuilder<T extends Object> {
         if (requestedHeightString != null) {
             try {
                 this.requestedHeight = Integer.parseInt(requestedHeightString);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -144,7 +150,8 @@ public abstract class GraphDataBuilder<T extends Object> {
         if (requestedDepthString != null) {
             try {
                 this.requestedDepth = Integer.parseInt(requestedDepthString);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -168,7 +175,8 @@ public abstract class GraphDataBuilder<T extends Object> {
         String renderer = parameters.get(GraphDataBuilder.RENDERER);
         if (renderer != null && renderer.equals(Renderer.d3.name())) {
             sourceRenderer = new D3VisualizationRenderer(data, parameters);
-        } else {
+        }
+        else {
             sourceRenderer = new DOTVisualizationRenderer(data, parameters);
         }
 
@@ -226,7 +234,8 @@ public abstract class GraphDataBuilder<T extends Object> {
         String conceptNameEncoded = null;
         try {
             conceptNameEncoded = URLEncoder.encode(concept, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
+        }
+        catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return conceptNameEncoded;
@@ -276,7 +285,7 @@ public abstract class GraphDataBuilder<T extends Object> {
     protected List<String> getExcludedRelations() {
         excludedRelations = new ArrayList<String>();
         String exclude = parameters.get(EXCLUDED_RELATIONS);
-        if (exclude != null) {
+        if (!Strings.isBlank(exclude)) {
             String[] array = exclude.split(",");
             excludedRelations = Arrays.asList(array);
         }
@@ -289,7 +298,7 @@ public abstract class GraphDataBuilder<T extends Object> {
     protected List<String> getExcludedNodes() {
         excludedNodes = new ArrayList<String>();
         String exclude = parameters.get(EXCLUDED_NODES);
-        if (exclude != null) {
+        if (!Strings.isBlank(exclude)) {
             String[] array = exclude.split(",");
             excludedNodes = Arrays.asList(array);
         }
@@ -341,18 +350,19 @@ public abstract class GraphDataBuilder<T extends Object> {
         String classes = parameters.get(SHOW_CLASSES);
         if (classes != null && classes.equals("false")) {
             showClasses = false;
-        } else {
+        }
+        else {
             showClasses = true;
         }
 
         String properties = parameters.get(SHOW_PROPERTIES);
         if (properties != null && properties.equals("false")) {
             showProperties = false;
-        } else {
+        }
+        else {
             showProperties = true;
         }
     }
-
 
     public String createConceptURL(String to) {
         if (parameters.get(LINK_MODE) != null) {
@@ -373,7 +383,8 @@ public abstract class GraphDataBuilder<T extends Object> {
         if (Environment.getInstance() != null
                 && Environment.getInstance().getWikiConnector() != null) {
             return Environment.getInstance().getWikiConnector().getBaseUrl() + "Wiki.jsp";
-        } else {
+        }
+        else {
             // for tests only
             return "http://localhost:8080/KnowWE/Wiki.jsp";
         }
@@ -467,7 +478,8 @@ public abstract class GraphDataBuilder<T extends Object> {
                 return false;
             }
             return true;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return false;
         }
     }

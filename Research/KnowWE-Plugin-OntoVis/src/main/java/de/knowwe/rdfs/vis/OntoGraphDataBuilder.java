@@ -19,6 +19,24 @@
  */
 package de.knowwe.rdfs.vis;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.exception.ModelRuntimeException;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
+import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
+
 import de.d3web.strings.Strings;
 import de.d3web.utils.Log;
 import de.knowwe.core.kdom.parsing.Section;
@@ -29,17 +47,6 @@ import de.knowwe.rdfs.vis.util.Utils;
 import de.knowwe.visualization.ConceptNode;
 import de.knowwe.visualization.Edge;
 import de.knowwe.visualization.GraphDataBuilder;
-import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.exception.ModelRuntimeException;
-import org.ontoware.rdf2go.model.QueryResultTable;
-import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.Node;
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.*;
 
 /**
  * @author Johanna Latt
@@ -77,8 +84,6 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         return Utils.getConceptName(uri, this.rdfRepository);
     }
 
-
-
     @Override
     public void selectGraphData() {
 
@@ -91,10 +96,12 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             String url;
             if (concept.contains(":")) {
                 url = Rdf2GoUtils.expandNamespace(rdfRepository, concept);
-            } else {
+            }
+            else {
                 try {
                     conceptNameEncoded = URLEncoder.encode(concept, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
+                }
+                catch (UnsupportedEncodingException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
@@ -164,9 +171,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             expandedSuccessors.add(conceptToBeExpanded);
         }
 
-
         String query = null;
-
 
         if (Utils.isBlankNode(conceptToBeExpanded)) {
             // workaround as blank nodes are not allowed explicitly in sparql query
@@ -176,26 +181,32 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
                     query = "SELECT ?y ?z WHERE { " +
                             previousNode.toSPARQL() + " " + previousPredicate.toSPARQL() + "[ ?y ?z" + "]" +
                             "}";
-                } else {
+                }
+                else {
                     // case: direction == DirectionToBlankNode.Backward
                     query = "SELECT ?y ?z WHERE { [ ?y ?z" + "] " + previousPredicate.toSPARQL() + " " + previousNode.toSPARQL() + "}";
                 }
-            } else {
+            }
+            else {
                    /*
                 TODO: damn it - how to solve this case?
                  */
                 // this solution works but is quite inefficient
                 if (direction == DirectionToBlankNode.Forward) {
-                    query = "SELECT ?y ?z ?" + previousBlankNodeSparqlVariableName + " WHERE { ?" + previousBlankNodeSparqlVariableName + " " + previousPredicate.toSPARQL() + "[ ?y ?z" + "]" +
+                    query = "SELECT ?y ?z ?" + previousBlankNodeSparqlVariableName + " WHERE { ?" + previousBlankNodeSparqlVariableName + " " + previousPredicate
+                            .toSPARQL() + "[ ?y ?z" + "]" +
                             "}";
-                } else {
+                }
+                else {
                     // case: direction == DirectionToBlankNode.Backward
-                    query = "SELECT ?y ?z ?" + previousBlankNodeSparqlVariableName + " WHERE { [ ?y ?z" + "] " + previousPredicate.toSPARQL() + " ?" + previousBlankNodeSparqlVariableName + ". }";
+                    query = "SELECT ?y ?z ?" + previousBlankNodeSparqlVariableName + " WHERE { [ ?y ?z" + "] " + previousPredicate
+                            .toSPARQL() + " ?" + previousBlankNodeSparqlVariableName + ". }";
                 }
                 // like this we only can show the first element of a list for instance
                 //return;
             }
-        } else {
+        }
+        else {
             query = "SELECT ?y ?z WHERE { "
                     + conceptToBeExpanded.toSPARQL()
                     + " ?y ?z. " + predicateFilter() + nodeFilter("?z") + "}";
@@ -205,7 +216,8 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             result =
                     rdfRepository.sparqlSelectIt(
                             query);
-        } catch (ModelRuntimeException exception) {
+        }
+        catch (ModelRuntimeException exception) {
             Log.severe("invalid query: " + query + " /n" + exception.toString());
         }
 
@@ -272,7 +284,8 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
                 query = "SELECT ?x ?y WHERE { ?bNode " + previousPredicate.toSPARQL() + " " + previousNode.toSPARQL() + "." +
                         "?x ?y ?bNode." +
                         "}";
-            } else {
+            }
+            else {
                 /*
                 TODO: damn it - how to solve this case?
                  */
@@ -282,11 +295,11 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
                         "?x ?y ?bNode." +
                         "}";
 
-
                 // like this we only can show the first element of a list for instance
                 //return;
             }
-        } else {
+        }
+        else {
             query = "SELECT ?x ?y WHERE { ?x ?y "
                     + conceptToBeExpanded.toSPARQL() + " . " + predicateFilter() + nodeFilter("?x") + "}";
         }
@@ -422,16 +435,16 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         filterExp.append("FILTER (");
 
         Iterator<String> iter = getExcludedRelations().iterator();
-		List<String> excludesWithExistingNamespace = new LinkedList<String>();
-		while (iter.hasNext()) {
-			String relation = iter.next();
-			String namespace = Rdf2GoUtils.parseKnownNamespacePrefix(rdfRepository, relation);
-		    if (relation.startsWith("onto") || namespace != null) {
-				excludesWithExistingNamespace.add(relation);
-			}
-		}
+        List<String> excludesWithExistingNamespace = new LinkedList<String>();
+        while (iter.hasNext()) {
+            String relation = iter.next();
+            String namespace = Rdf2GoUtils.parseKnownNamespacePrefix(rdfRepository, relation);
+            if (relation.startsWith("onto") || namespace != null) {
+                excludesWithExistingNamespace.add(relation);
+            }
+        }
 
-		iter = excludesWithExistingNamespace.iterator();
+        iter = excludesWithExistingNamespace.iterator();
         while (iter.hasNext()) {
             filterExp.append(" ?y != " + iter.next());
             if (iter.hasNext()) {
@@ -495,7 +508,8 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         }
         if (nodeType == NODE_TYPE.CLASS && !showClasses()) {
             return true;
-        } else if (nodeType == NODE_TYPE.PROPERTY && !showProperties()) {
+        }
+        else if (nodeType == NODE_TYPE.PROPERTY && !showProperties()) {
             return true;
         }
 
@@ -503,14 +517,14 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             if (nodeType.equals(NODE_TYPE.LITERAL) || isTypeRelation(y)) {
                 // only literals and type assertions are not filtered out
                 return false;
-            } else {
+            }
+            else {
                 return true;
             }
         }
 
         return false;
     }
-
 
     private void addConcept(Node fromURI, Node toURI, Node relationURI, NODE_TYPE type) {
         String relation = getConceptName(relationURI);
@@ -571,7 +585,8 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
     /**
      * Adds a nodes expanded by a fringe node.
      * <p/>
-     * - if the node is not part of the visualization yet it is not added (except as outer node for indicating the existence of further edges)
+     * - if the node is not part of the visualization yet it is not added (except as outer node for indicating the
+     * existence of further edges)
      * - EXCEPT for datatype property edges which are always added to the visualization
      * - if the node is already part of the visualization the respective edge is added
      *
@@ -605,7 +620,8 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         if (predecessor) {
             // from is current new one
             current = fromNode;
-        } else {
+        }
+        else {
             // to is current new one
             current = toNode;
         }
@@ -622,7 +638,8 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
                     // from is current new one
                     fromNode.setOuter(true);
                     data.addConcept(fromNode);
-                } else {
+                }
+                else {
                     // to is current new one
                     toNode.setOuter(true);
                     data.addConcept(toNode);
@@ -631,7 +648,8 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             if (edgeIsNew) {
                 addEdge(edge);
             }
-        } else {
+        }
+        else {
             // do not show outgoing edges
             if (!nodeIsNew) {
                 // but show if its node is internal one already, i.e. node would exist even without this edge
@@ -639,7 +657,8 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
                     addEdge(edge);
                 }
 
-            } else {
+            }
+            else {
                 // exception for labels:
                 // labels are shown for rim concepts even if out of scope in principle
                 if (isLiteralEdge(edge)) {
@@ -661,7 +680,8 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         if (isLiteralEdge(edge)) {
             // this is a label edge
             data.addEdgeToCluster(edge.getSubject(), edge);
-        } else {
+        }
+        else {
             data.addEdge(edge);
         }
     }
