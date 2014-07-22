@@ -21,13 +21,7 @@ package de.knowwe.rdfs.vis;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
@@ -62,7 +56,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
     private Set<Node> expandedPredecessors = new HashSet<Node>();
     private Set<Node> expandedSuccessors = new HashSet<Node>();
 
-    private String propertyFilterExpression = null;
+    private Map<Integer,String> propertyExcludeSPARQLFilterCache = new HashMap<Integer, String>();
     private String nodeFilterExpression = null;
 
     /**
@@ -149,12 +143,12 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
     }
 
     private void addSuccessors(Node conceptToBeExpanded, Node predecessor, Node predecessorPredicate) {
-        addSuccessors(conceptToBeExpanded, predecessor, predecessorPredicate, ExpandMode.Normal, DirectionToBlankNode.Forward);
+        addSuccessors(conceptToBeExpanded, predecessor, predecessorPredicate, ExpandMode.Normal, Direction.Forward);
     }
 
     final String previousBlankNodeSparqlVariableName = "previousBlankNode";
 
-    private void addSuccessors(Node conceptToBeExpanded, Node previousNode, Node previousPredicate, ExpandMode mode, DirectionToBlankNode direction) {
+    private void addSuccessors(Node conceptToBeExpanded, Node previousNode, Node previousPredicate, ExpandMode mode, Direction direction) {
 
         if (Utils.isBlankNode(conceptToBeExpanded) && (previousNode == null || previousPredicate == null)) {
             throw new IllegalArgumentException("case not considered yet!");
@@ -176,7 +170,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         if (Utils.isBlankNode(conceptToBeExpanded)) {
             // workaround as blank nodes are not allowed explicitly in sparql query
             if (!Utils.isBlankNode(previousNode)) {
-                if (direction == DirectionToBlankNode.Forward) {
+                if (direction == Direction.Forward) {
 
                     query = "SELECT ?y ?z WHERE { " +
                             previousNode.toSPARQL() + " " + previousPredicate.toSPARQL() + "[ ?y ?z" + "]" +
@@ -192,7 +186,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
                 TODO: damn it - how to solve this case?
                  */
                 // this solution works but is quite inefficient
-                if (direction == DirectionToBlankNode.Forward) {
+                if (direction == Direction.Forward) {
                     query = "SELECT ?y ?z ?" + previousBlankNodeSparqlVariableName + " WHERE { ?" + previousBlankNodeSparqlVariableName + " " + previousPredicate
                             .toSPARQL() + "[ ?y ?z" + "]" +
                             "}";
@@ -209,7 +203,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         else {
             query = "SELECT ?y ?z WHERE { "
                     + conceptToBeExpanded.toSPARQL()
-                    + " ?y ?z. " + predicateFilter() + nodeFilter("?z") + "}";
+                    + " ?y ?z. " + predicateFilter(Direction.Forward, "z") + nodeFilter("?z") + "}";
         }
         ClosableIterator<QueryRow> result = null;
         try {
@@ -255,7 +249,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             if (depth == requestedDepth) {
                 addOutgoingEdgesSuccessors(zURI);
                 addOutgoingEdgesPredecessors(zURI);
-                addSuccessors(zURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, DirectionToBlankNode.Forward);
+                addSuccessors(zURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, Direction.Forward);
             }
             depth--;
         }
@@ -265,7 +259,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         addPredecessors(conceptToBeExpanded, null, null, null);
     }
 
-    private void addPredecessors(Node conceptToBeExpanded, Node previousNode, Node previousPredicate, DirectionToBlankNode direction) {
+    private void addPredecessors(Node conceptToBeExpanded, Node previousNode, Node previousPredicate, Direction direction) {
         if (Utils.isBlankNode(conceptToBeExpanded) && (previousNode == null || previousPredicate == null || direction == null)) {
             throw new IllegalArgumentException("case not considered yet!");
         }
@@ -301,7 +295,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         }
         else {
             query = "SELECT ?x ?y WHERE { ?x ?y "
-                    + conceptToBeExpanded.toSPARQL() + " . " + predicateFilter() + nodeFilter("?x") + "}";
+                    + conceptToBeExpanded.toSPARQL() + " . " + predicateFilter(Direction.Backward, null) + nodeFilter("?x") + "}";
         }
         ClosableIterator<QueryRow> result =
                 rdfRepository.sparqlSelectIt(
@@ -328,15 +322,15 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
             height++;
             if (height < requestedHeight) {
-                addPredecessors(xURI, conceptToBeExpanded, yURI, DirectionToBlankNode.Backward);
-                addSuccessors(xURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, DirectionToBlankNode.Backward);
+                addPredecessors(xURI, conceptToBeExpanded, yURI, Direction.Backward);
+                addSuccessors(xURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, Direction.Backward);
 
             }
 
             if (height == requestedHeight) {
                 addOutgoingEdgesPredecessors(xURI);
                 addOutgoingEdgesSuccessors(xURI);
-                addSuccessors(xURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, DirectionToBlankNode.Backward);
+                addSuccessors(xURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, Direction.Backward);
             }
             height--;
 
@@ -361,7 +355,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
         String query = "SELECT ?y ?z WHERE { "
                 + conceptURI.toSPARQL()
-                + " ?y ?z. " + predicateFilter() + "}";
+                + " ?y ?z. " + predicateFilter(Direction.Forward, "z") + "}";
         ClosableIterator<QueryRow> result =
                 rdfRepository.sparqlSelectIt(
                         query);
@@ -397,7 +391,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
         String query = "SELECT ?x ?y WHERE { ?x ?y "
                 + conceptURI.toSPARQL()
-                + " . " + predicateFilter() + "}";
+                + " . " + predicateFilter(Direction.Backward, null) + "}";
         QueryResultTable resultTable = rdfRepository.sparqlSelect(
                 query);
 
@@ -422,14 +416,66 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         return checkTripleFilters(query, y, z, nodeType, ExpandMode.Normal);
     }
 
-    private String predicateFilter() {
-        if (propertyFilterExpression != null) {
-            return propertyFilterExpression;
+    private String predicateFilter(Direction dir, String objectVar) {
+        // Filter expression is cached
+        final int filterHashcode = dir.hashCode() + (objectVar == null ? 0 : objectVar.hashCode());
+        if (propertyExcludeSPARQLFilterCache.get(filterHashcode) != null) {
+            return propertyExcludeSPARQLFilterCache.get(filterHashcode);
         }
-        if (getExcludedRelations().size() == 0) {
-            propertyFilterExpression = " FILTER (true)";
-            return propertyFilterExpression;
+
+
+        if(getFilteredRelations().size() > 0) {
+            // we are in white list mode, i.e. show only "..."
+            this.propertyExcludeSPARQLFilterCache.put(filterHashcode, createExclusiveFilter(dir, objectVar));
+            return propertyExcludeSPARQLFilterCache.get(filterHashcode);
+        } else {
+            // we are in black list mode, i.e. show all but "..."
+
+            if (getExcludedRelations().size() == 0) {
+                this.propertyExcludeSPARQLFilterCache.put(filterHashcode, "FILTER (true)");
+                return propertyExcludeSPARQLFilterCache.get(filterHashcode);
+            }
+            this.propertyExcludeSPARQLFilterCache.put(filterHashcode, createExcludeFilter());
+            return propertyExcludeSPARQLFilterCache.get(filterHashcode);
+
+
         }
+
+    }
+
+    private String createExclusiveFilter(Direction dir, String objectVariable) {
+        StringBuffer filterExp = new StringBuffer();
+
+        filterExp.append("FILTER (");
+
+        Iterator<String> iter = getFilteredRelations().iterator();
+        List<String> filterRelations = new LinkedList<String>();
+        while (iter.hasNext()) {
+            String relation = iter.next();
+            String namespace = Rdf2GoUtils.parseKnownNamespacePrefix(rdfRepository, relation);
+            if (namespace != null) {
+                filterRelations.add(relation);
+            }
+        }
+
+        iter = filterRelations.iterator();
+        while (iter.hasNext()) {
+            filterExp.append(" ?y = " + iter.next());
+            if (iter.hasNext()) {
+                filterExp.append(" || ");
+            }
+        }
+        String insertDataTypeException = "";
+        if(dir == Direction.Forward) {
+            insertDataTypeException = "|| isLiteral(?"+objectVariable+") ";
+        }
+
+        filterExp.append(" "+insertDataTypeException+"  ). ");
+
+        return filterExp.toString();
+    }
+
+    private String createExcludeFilter() {
         StringBuffer filterExp = new StringBuffer();
 
         filterExp.append("FILTER (");
@@ -453,8 +499,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         }
         filterExp.append("). ");
 
-        this.propertyFilterExpression = filterExp.toString();
-        return propertyFilterExpression;
+         return filterExp.toString();
     }
 
     private String nodeFilter(String variable) {
@@ -503,9 +548,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         if (excludedNode(z)) {
             return true;
         }
-        if (!filteredClass(z) && !filteredRelation(y)) {
-            return true;
-        }
+
         if (nodeType == NODE_TYPE.CLASS && !showClasses()) {
             return true;
         }
@@ -513,6 +556,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             return true;
         }
 
+        // literals only mode for expansion of fringe nodes
         if (mode == ExpandMode.LiteralsOnly) {
             if (nodeType.equals(NODE_TYPE.LITERAL) || isTypeRelation(y)) {
                 // only literals and type assertions are not filtered out
@@ -523,7 +567,26 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             }
         }
 
+
+        if (nodeType.equals(NODE_TYPE.LITERAL) || isTypeRelation(y)) {
+            // only literals and type assertions are not filtered out
+            return false;
+        }
+
+        if (nodeType.equals(NODE_TYPE.LITERAL) || isTypeRelation(y)) {
+            // only literals and type assertions are not filtered out
+            return false;
+        }
+
+        if (isWhiteListMode() && ! (filteredClass(z) || filteredRelation(y))) {
+            return true;
+        }
+
         return false;
+    }
+
+    private boolean isWhiteListMode() {
+        return getFilteredClasses().size() > 0 || getFilteredClasses().size() > 0;
     }
 
     private void addConcept(Node fromURI, Node toURI, Node relationURI, NODE_TYPE type) {
@@ -692,6 +755,6 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
     enum ExpandMode {Normal, LiteralsOnly}
 
-    enum DirectionToBlankNode {Forward, Backward}
+    enum Direction {Forward, Backward}
 
 }

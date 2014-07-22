@@ -144,7 +144,7 @@ public class DOTRendererTest {
 
 		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "rdfs:subClassOf,owl:sameAs");
 
-        parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,WissassConcept,owl:Class,rdfs:Class,owl:Thing");
+        parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,lns:WissassConcept,owl:Class,rdfs:Class,owl:Thing");
 
 		parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, "2");
 		parameterMap.put(OntoGraphDataBuilder.REQUESTED_HEIGHT, "2");

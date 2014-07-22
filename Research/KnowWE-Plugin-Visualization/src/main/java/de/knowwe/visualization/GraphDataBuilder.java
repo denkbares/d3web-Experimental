@@ -22,8 +22,6 @@ package de.knowwe.visualization;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -103,11 +101,11 @@ public abstract class GraphDataBuilder<T extends Object> {
     public SubGraphData data;
 
     // concept and relation names which are black-listed
-    private List<String> excludedNodes;
-    private List<String> excludedRelations;
+    //private List<String> excludedNodes;
+    //private List<String> excludedRelations;
 
-    private List<String> filteredClasses;
-    private List<String> filteredRelations;
+    //private List<String> filteredClasses;
+    //private List<String> filteredRelations;
 
     protected Section<?> section;
 
@@ -249,22 +247,15 @@ public abstract class GraphDataBuilder<T extends Object> {
      * @created 20.08.2012
      */
     private void setConfigurationParameters() {
-        getSuccessors();
-        getPredecessors();
-
-        getExcludedNodes();
-        getExcludedRelations();
-
-        getFilteredClasses();
-        getFilteredRelations();
-
-        getShowAnnotations();
+        setSuccessors();
+        setPredecessors();
+        setShowAnnotations();
     }
 
     /**
      * @created 18.08.2012
      */
-    private void getPredecessors() {
+    private void setPredecessors() {
         if (isValidInt(parameters.get(REQUESTED_HEIGHT))) {
             requestedHeight = Integer.parseInt(parameters.get(REQUESTED_HEIGHT));
         }
@@ -273,7 +264,7 @@ public abstract class GraphDataBuilder<T extends Object> {
     /**
      * @created 18.08.2012
      */
-    private void getSuccessors() {
+    private void setSuccessors() {
         if (isValidInt(parameters.get(REQUESTED_DEPTH))) {
             requestedDepth = Integer.parseInt(parameters.get(REQUESTED_DEPTH));
         }
@@ -283,11 +274,22 @@ public abstract class GraphDataBuilder<T extends Object> {
      * @created 20.08.2012
      */
     protected List<String> getExcludedRelations() {
-        excludedRelations = new ArrayList<String>();
         String exclude = parameters.get(EXCLUDED_RELATIONS);
-        if (!Strings.isBlank(exclude)) {
-            String[] array = exclude.split(",");
-            excludedRelations = Arrays.asList(array);
+       return getList(exclude);
+    }
+
+    private List<String> getList(String input) {
+        List<String> excludedRelations = new ArrayList<String>();
+        if (!Strings.isBlank(input)) {
+            String[] array = input.split(",");
+            for (String item : array) {
+                String trimmedItem = item.trim();
+                if(trimmedItem.contains(":")) {
+                    excludedRelations.add(trimmedItem);
+                } else {
+                    excludedRelations.add("lns:"+trimmedItem);
+                }
+            }
         }
         return excludedRelations;
     }
@@ -296,56 +298,38 @@ public abstract class GraphDataBuilder<T extends Object> {
      * @created 20.08.2012
      */
     protected List<String> getExcludedNodes() {
-        excludedNodes = new ArrayList<String>();
         String exclude = parameters.get(EXCLUDED_NODES);
-        if (!Strings.isBlank(exclude)) {
-            String[] array = exclude.split(",");
-            excludedNodes = Arrays.asList(array);
-        }
-        return excludedNodes;
+        return getList(exclude);
     }
 
     /**
      * @created 20.08.2012
      */
     protected List<String> getMainConcepts() {
-        List<String> concepts = new ArrayList<String>();
         String value = parameters.get(CONCEPT);
-        if (value != null) {
-            String[] array = value.split(",");
-            concepts = Arrays.asList(array);
-        }
-        return concepts;
+        return getList(value);
     }
 
     /**
      * @created 24.11.2013
      */
-    private void getFilteredClasses() {
-        filteredClasses = new ArrayList<String>();
+    public List<String> getFilteredClasses() {
         String filters = parameters.get(FILTERED_CLASSES);
-        if (filters != null) {
-            String[] array = filters.split(",");
-            filteredClasses = Arrays.asList(array);
-        }
+        return getList(filters);
     }
 
     /**
      * @created 24.11.2013
      */
-    private void getFilteredRelations() {
-        filteredRelations = new ArrayList<String>();
+    public List<String> getFilteredRelations() {
         String filters = parameters.get(FILTERED_RELATIONS);
-        if (filters != null) {
-            String[] array = filters.split(",");
-            filteredRelations = Arrays.asList(array);
-        }
+        return getList(filters);
     }
 
     /**
      * @created 13.09.2012
      */
-    private void getShowAnnotations() {
+    private void setShowAnnotations() {
 
         String classes = parameters.get(SHOW_CLASSES);
         if (classes != null && classes.equals("false")) {
@@ -397,14 +381,8 @@ public abstract class GraphDataBuilder<T extends Object> {
      * @created 20.08.2012
      */
     public boolean excludedNode(String x) {
-        if (excludedNodes != null) {
-            Iterator<String> iterator = excludedNodes.iterator();
-            while (iterator.hasNext()) {
-                String next = iterator.next().trim();
-                if (x.matches(next)) return true;
-            }
-        }
-        return false;
+        // TODO: improve handling of node 'name' with respect to namespace prefix...
+        return getExcludedNodes().contains(x) || getExcludedNodes().contains("lns:"+x);
     }
 
     /**
@@ -414,14 +392,8 @@ public abstract class GraphDataBuilder<T extends Object> {
      * @created 20.08.2012
      */
     public boolean excludedRelation(String y) {
-        if (excludedRelations != null) {
-            Iterator<String> iterator = excludedRelations.iterator();
-            while (iterator.hasNext()) {
-                String next = iterator.next().trim();
-                if (y.matches(next)) return true;
-            }
-        }
-        return false;
+        // TODO: improve handling of node 'name' with respect to namespace prefix...
+        return getExcludedRelations().contains(y)|| getExcludedNodes().contains("lns:"+y);
     }
 
     /**
@@ -432,16 +404,8 @@ public abstract class GraphDataBuilder<T extends Object> {
      * @created 24.11.2013
      */
     public boolean filteredClass(String x) {
-        if (filteredClasses != null) {
-            if (filteredClasses.size() == 0 && filteredRelations.size() == 0) return true;
-            Iterator<String> iterator = filteredClasses.iterator();
-            while (iterator.hasNext()) {
-                String next = iterator.next().trim();
-                if (x.matches(next)) return true;
-            }
-            return false;
-        }
-        return true;
+        // TODO: improve handling of node 'name' with respect to namespace prefix...
+        return getFilteredClasses().contains(x)|| getFilteredClasses().contains("lns:"+x);
     }
 
     /**
@@ -452,16 +416,8 @@ public abstract class GraphDataBuilder<T extends Object> {
      * @created 24.11.2013
      */
     public boolean filteredRelation(String y) {
-        if (filteredRelations != null) {
-            if (filteredRelations.size() == 0 && filteredClasses.size() == 0) return true;
-            Iterator<String> iterator = filteredRelations.iterator();
-            while (iterator.hasNext()) {
-                String next = iterator.next().trim();
-                if (y.matches(next)) return true;
-            }
-            return false;
-        }
-        return true;
+        // TODO: improve handling of node 'name' with respect to namespace prefix...
+       return getFilteredRelations().contains(y) || getFilteredRelations().contains("lns:"+y);
     }
 
     /**
