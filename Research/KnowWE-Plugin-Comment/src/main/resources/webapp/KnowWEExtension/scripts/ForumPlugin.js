@@ -44,18 +44,16 @@ KNOWWE.plugin.comment = function(){
                 }
             
             var options = {
-                    url : KNOWWE.core.util.getURL( params ),
-                    data : text,
-                    response : {
-                        action : 'none',
-                        ids : [],
-                        fn : function() {
-                        }
-                    }
+                url : KNOWWE.core.util.getURL( params ),
+                data : text,
+				loader : true,
+                response : {
+                    fn : function() {window.location.reload();}
+                }
             }
-            setTimeout ( 'document.location.reload()', 100 );
+			setTimeout ( 'document.location.reload()', 1000 );
             document.getElementById("knowwe-plugin-comment").value = "";
-            new _KA( options ).send(); 
+			new _KA( options ).send(); 
         },
         /**
          * Adds the actions to the reply button.
