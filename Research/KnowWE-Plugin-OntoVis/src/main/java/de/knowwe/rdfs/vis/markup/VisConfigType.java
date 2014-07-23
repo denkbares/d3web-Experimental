@@ -29,7 +29,7 @@ import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
 import de.knowwe.visualization.GraphDataBuilder;
 
 /**
- * @author: Johanna
+ * @author: Johanna Latt
  * @created 13.07.2014.
  */
 public class VisConfigType extends DefaultMarkupType {
