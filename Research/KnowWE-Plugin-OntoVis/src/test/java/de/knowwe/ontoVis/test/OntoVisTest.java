@@ -33,13 +33,26 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
+import org.ontoware.rdf2go.model.node.Literal;
+import org.ontoware.rdf2go.model.node.Node;
 
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.strings.Strings;
+import de.d3web.utils.Log;
+import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.RuleSet;
 import de.knowwe.rdf2go.modelfactory.OWLIMLiteModelFactory;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
+import de.knowwe.rdfs.vis.util.Utils;
+import de.knowwe.visualization.ConceptNode;
+import de.knowwe.visualization.Edge;
+import de.knowwe.visualization.GraphVisualizationRenderer;
+import de.knowwe.visualization.SubGraphData;
+import de.knowwe.visualization.dot.DOTVisualizationRenderer;
 
 import static org.junit.Assert.assertEquals;
 
@@ -261,6 +274,128 @@ public class OntoVisTest {
 		String expectedSource = null;
 		try {
 			expectedSource = Strings.readFile(new File("src/test/resources/graph-Table.dot"));
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// the expressions do not have constant order within the dot-code
+		// therefore we need some fuzzy-compare
+
+		assertEquals(
+				"Length of generated dot-source does not match length of expected dot-source.",
+				String.valueOf(expectedSource).length(),
+				String.valueOf(generatedSource).length());
+		List<Byte> expectedBytes = asSortedByteList(expectedSource);
+		List<Byte> generatedBytes = asSortedByteList(generatedSource);
+
+		assertEquals(
+				"Generated dot-source does not match (sorted-bytes) expected dot-source.",
+				expectedBytes, generatedBytes);
+	}
+
+	@Test
+	public void test_TwoConcepts() {
+		Map<String, String> parameterMap = new HashMap<String, String>();
+
+		parameterMap.put(OntoGraphDataBuilder.CONCEPT, "si:abraham, si:maggie");
+
+		parameterMap.put(OntoGraphDataBuilder.FORMAT, "svg");
+
+		parameterMap.put(OntoGraphDataBuilder.FILTERED_RELATIONS, "si:child");
+
+		parameterMap.put(OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, "true");
+
+		parameterMap.put(OntoGraphDataBuilder.USE_LABELS, "true");
+
+		parameterMap.put(OntoGraphDataBuilder.REQUESTED_HEIGHT, "1");
+
+		parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, "0");
+
+		OntoGraphDataBuilder ontoGraphDataBuilder = new OntoGraphDataBuilder("", null,
+				parameterMap,
+				new DummyLinkToTermDefinitionProvider(), rdfRepository);
+
+		ontoGraphDataBuilder.createData();
+
+		String generatedSource = ontoGraphDataBuilder.getSource();
+		String expectedSource = null;
+		try {
+			expectedSource = Strings.readFile(new File("src/test/resources/graph-TwoConcepts.dot"));
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// the expressions do not have constant order within the dot-code
+		// therefore we need some fuzzy-compare
+
+		assertEquals(
+				"Length of generated dot-source does not match length of expected dot-source.",
+				String.valueOf(expectedSource).length(),
+				String.valueOf(generatedSource).length());
+		List<Byte> expectedBytes = asSortedByteList(expectedSource);
+		List<Byte> generatedBytes = asSortedByteList(generatedSource);
+
+		assertEquals(
+				"Generated dot-source does not match (sorted-bytes) expected dot-source.",
+				expectedBytes, generatedBytes);
+	}
+
+	@Test
+	public void test_Sparql() {
+		Map<String, String> parameterMap = new HashMap<String, String>();
+
+		String sparql = "SELECT ?x ?y ?z\nWHERE {\n?x ?y ?z . ?x rdf:type si:Human .\n}";
+
+		LinkToTermDefinitionProvider uriProvider = new DummyLinkToTermDefinitionProvider();
+
+		String sparqlString = Rdf2GoUtils.createSparqlString(rdfRepository, sparql);
+		QueryResultTable resultSet = rdfRepository.sparqlSelect(sparqlString);
+
+		SubGraphData data = new SubGraphData();
+		List<String> variables = resultSet.getVariables();
+
+		for (QueryRow row : resultSet) {
+
+			Node fromURI = row.getValue(variables.get(0));
+
+			Node relationURI = row.getValue(variables.get(1));
+
+			Node toURI = row.getValue(variables.get(2));
+
+			if (fromURI == null || toURI == null || relationURI == null) {
+				Log.warning("incomplete query result row: " + row.toString());
+				continue;
+			}
+
+			ConceptNode fromNode = Utils.createNode(parameterMap, rdfRepository, uriProvider,
+					null, data, fromURI, true);
+			String relation = Utils.getConceptName(relationURI, rdfRepository);
+
+			ConceptNode toNode = Utils.createNode(parameterMap, rdfRepository, uriProvider, null,
+					data, toURI, true);
+
+			String relationLabel = Utils.createRelationLabel(parameterMap, rdfRepository, relationURI,
+					relation);
+
+			Edge newLineRelationsKey = new Edge(fromNode, relationLabel, toNode);
+
+			data.addEdge(newLineRelationsKey);
+
+		}
+
+		String conceptName = data.getConceptDeclarations().iterator().next().getName();
+		parameterMap.put(OntoGraphDataBuilder.CONCEPT, conceptName);
+
+		GraphVisualizationRenderer graphRenderer = new DOTVisualizationRenderer(data,
+				parameterMap);
+		graphRenderer.generateSource();
+
+		String generatedSource = graphRenderer.getSource();
+		String expectedSource = null;
+		try {
+			expectedSource = Strings.readFile(new File("src/test/resources/graph-Sparql.dot"));
 		}
 		catch (IOException e) {
 			e.printStackTrace();

@@ -428,4 +428,33 @@ public class Utils {
         return style;
     }
 
+	public static String createRelationLabel(Map<String, String> parameters, Rdf2GoCore rdfRepository, Node relationURI, String relation) {
+		// is the node a literal ?
+		Literal toLiteral = null;
+		try {
+			toLiteral = relationURI.asLiteral();
+		}
+		catch (ClassCastException e) {
+			// do nothing
+		}
+
+		String relationName = relation;
+		if (toLiteral != null) {
+			relationName = toLiteral.toString();
+			if (relationName.contains("@")) {
+				relationName = relationName.substring(0, relationName.indexOf('@'));
+			}
+		}
+		else {
+			// if it is no literal look for label for the URI
+			String relationLabel = Utils.getRDFSLabel(
+					relationURI.asURI(), rdfRepository,
+					parameters.get(OntoGraphDataBuilder.LANGUAGE));
+			if (relationLabel != null) {
+				relationName = relationLabel;
+			}
+		}
+		return relationName;
+	}
+
 }

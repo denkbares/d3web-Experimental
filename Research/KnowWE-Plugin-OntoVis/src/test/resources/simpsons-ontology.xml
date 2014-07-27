@@ -430,4 +430,18 @@
 	<rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
 </rdf:Description>
 
+<rdf:Description rdf:about="http://www.example.org/ontology#grandfather">
+	<owl:propertyChainAxiom rdf:parseType="Collection">
+               <owl:ObjectProperty rdf:about="http://www.example.org/ontology#parent"/>
+               <owl:ObjectProperty rdf:about="http://www.example.org/ontology#father"/>
+       </owl:propertyChainAxiom>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.example.org/ontology#grandparent">
+	<owl:propertyChainAxiom rdf:parseType="Collection">
+               <owl:ObjectProperty rdf:about="http://www.example.org/ontology#parent"/>
+               <owl:ObjectProperty rdf:about="http://www.example.org/ontology#parent"/>
+       </owl:propertyChainAxiom>
+</rdf:Description>
+
 </rdf:RDF>

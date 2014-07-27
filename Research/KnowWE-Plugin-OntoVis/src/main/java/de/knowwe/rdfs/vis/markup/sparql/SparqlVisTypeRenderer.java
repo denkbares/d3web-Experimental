@@ -326,7 +326,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 			ConceptNode toNode = Utils.createNode(parameters, rdfRepository, uriProvider, section,
 					data, toURI, true);
 
-			String relationLabel = createRelationLabel(parameters, rdfRepository, relationURI,
+			String relationLabel = Utils.createRelationLabel(parameters, rdfRepository, relationURI,
 					relation);
 
 			Edge newLineRelationsKey = new Edge(fromNode, relationLabel, toNode);
@@ -342,37 +342,6 @@ public class SparqlVisTypeRenderer implements Renderer {
 		}
 		return data;
 	}
-
-	private String createRelationLabel(Map<String, String> parameters, Rdf2GoCore rdfRepository, Node relationURI, String relation) {
-		// is the node a literal ?
-		Literal toLiteral = null;
-		try {
-			toLiteral = relationURI.asLiteral();
-		}
-		catch (ClassCastException e) {
-			// do nothing
-		}
-
-		String relationName = relation;
-		if (toLiteral != null) {
-			relationName = toLiteral.toString();
-			if (relationName.contains("@")) {
-				relationName = relationName.substring(0, relationName.indexOf('@'));
-			}
-		}
-		else {
-			// if it is no literal look for label for the URI
-			String relationLabel = Utils.getRDFSLabel(
-					relationURI.asURI(), rdfRepository,
-					parameters.get(OntoGraphDataBuilder.LANGUAGE));
-			if (relationLabel != null) {
-				relationName = relationLabel;
-			}
-		}
-		return relationName;
-	}
-
-
 
 	private String getMaster(Section<?> section) {
 		return SparqlVisType.getAnnotation(section,
