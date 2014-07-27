@@ -11,7 +11,7 @@ graph [ rankdir="LR"]
 "Vorderkammerzugang/Schnitt"[ shape="none" fontsize="0" fontcolor="white" ];
 "Inzisionserweiterung"[ shape="none" fontsize="0" fontcolor="white" ];
 "Kapsulotomie-Rhexis"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=Kapsulotomie-Rhexis"  shape="box"  style="rounded" label="Kapsulotomie-Rhexis" ];
-"Phakoemulsifikation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=Phakoemulsifikation"  shape="box"  style="rounded,bold" label="Phakoemulsifikation" ];
+"Phakoemulsifikation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=Phakoemulsifikation"  shape="box"  style="rounded,bold" label=<<U>Phakoemulsifikation</U>> ];
 "OP-Methoden"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=OP-Methoden"  shape="box"  style="rounded" label="OP-Methoden" ];
 "Intraoperative Komplikation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=Intraoperative Komplikation"  shape="box"  style="rounded" label="Intraoperative\nKomplikation\n" ];
 "Postoperative Komplikation"[ shape="none" fontsize="0" fontcolor="white" ];

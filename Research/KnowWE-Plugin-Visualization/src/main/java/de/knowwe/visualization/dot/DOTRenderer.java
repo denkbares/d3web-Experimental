@@ -117,6 +117,7 @@ public class DOTRenderer {
             // root is rendered highlighted
             if (node.isRoot()) {
                 style.addStyle("bold");
+				style.setFontstyle(RenderingStyle.Fontstyle.UNDERLINING);
             }
 
             String label;
@@ -131,10 +132,10 @@ public class DOTRenderer {
                         parameters.get(GraphDataBuilder.USE_LABELS) != null && parameters.get(GraphDataBuilder.USE_LABELS)
                         .equals("false")) {
                     // use of labels suppressed by the user -> show concept name, i.e. uri
-                    nodeLabel = createHTMLTable(node, data);
+                    nodeLabel = createHTMLTable(node, data, style.getFontstyle());
                 } else {
-                    nodeLabel = "\"" + Utils.prepareLabel(nodeLabel) + "\"";
-                }
+					nodeLabel = createNodeLabel(nodeLabel, style.getFontstyle());
+				}
 
                 label = DOTRenderer.createDotConceptLabel(style, node.getConceptUrl(), nodeLabel, true);
             }
@@ -178,14 +179,19 @@ public class DOTRenderer {
         return dotSource.toString();
     }
 
-    private static String createHTMLTable(ConceptNode node, SubGraphData data) {
+    private static String createHTMLTable(ConceptNode node, SubGraphData data, RenderingStyle.Fontstyle f) {
         final Map<ConceptNode, Set<Edge>> clusters = data.getClusters();
         final Set<Edge> edges = clusters.get(node);
-        String nodeLabel = node.getName();
-        nodeLabel = "\"" + Utils.prepareLabel(nodeLabel) + "\"";
+        String nodeLabel = createNodeLabel(node.getName(), f);
+
         if (edges == null || edges.size() == 0) {
             return nodeLabel;
         } else {
+			// if necessary, remove now unnecessary starttag for html again
+			if (nodeLabel.startsWith("<")) {
+				nodeLabel = nodeLabel.substring(1, nodeLabel.length() - 1);
+			}
+
             // create table with cluster edges
             StringBuilder buffy = new StringBuilder();
             buffy.append("<");  // start html label
@@ -225,7 +231,27 @@ public class DOTRenderer {
         }
     }
 
-    private static void appendEdgeSource(Map<String, String> parameters, StringBuilder dotSource, Edge key) {
+	private static String createNodeLabel(String name, RenderingStyle.Fontstyle f) {
+		String nodeLabel = Utils.prepareLabel(name);
+		if (f != RenderingStyle.Fontstyle.NORMAL) {
+			nodeLabel = styleLabel(nodeLabel, f);
+		} else {
+			nodeLabel = "\"" + nodeLabel + "\"";
+		}
+		return nodeLabel;
+	}
+
+	private static String styleLabel(String targetLabel, RenderingStyle.Fontstyle f) {
+		String label = targetLabel.replace("\\n", "<BR ALIGN=\"CENTER\"/>");
+		switch (f) {
+			case BOLD: return "<<B>" + label + "</B>>";
+			case ITALIC: return "<<I>" + label + "</I>>";
+			case UNDERLINING: return "<<U>" + label + "</U>>";
+			default: return targetLabel;
+		}
+	}
+
+	private static void appendEdgeSource(Map<String, String> parameters, StringBuilder dotSource, Edge key) {
         String label = DOTRenderer.innerRelation(key.getPredicate(),
                 parameters.get(GraphDataBuilder.RELATION_COLOR_CODES));
         if (key.isOuter()) {
@@ -380,7 +406,7 @@ public class DOTRenderer {
         return newLineLabelValue;
     }
 
-    private static String getDOTApp(String user_def_app) {
+	private static String getDOTApp(String user_def_app) {
         ResourceBundle rb = ResourceBundle.getBundle("dotInstallation");
         String app = rb.getString("path");
         if (user_def_app != null) {

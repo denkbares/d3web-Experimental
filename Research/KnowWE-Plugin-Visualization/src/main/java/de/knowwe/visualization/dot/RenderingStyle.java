@@ -37,6 +37,11 @@ public class RenderingStyle {
 	private List<String> style = new ArrayList<String>();
 	private String fillcolor = "";
 	private String fontcolor = "black";
+	private Fontstyle fontstyle = Fontstyle.NORMAL;
+
+	public enum Fontstyle {
+		NORMAL, BOLD, ITALIC, UNDERLINING
+	}
 
 	public void setShape(String shape) {
 		this.shape = shape;
@@ -85,5 +90,11 @@ public class RenderingStyle {
 
 	public String getShape() {
 		return shape;
+	}
+
+	public Fontstyle getFontstyle() { return fontstyle; }
+
+	public void setFontstyle(Fontstyle f) {
+		this.fontstyle = f;
 	}
 }

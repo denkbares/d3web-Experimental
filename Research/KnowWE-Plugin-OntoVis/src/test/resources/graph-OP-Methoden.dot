@@ -6,7 +6,7 @@ graph [size="7.18676193!" rankdir="RL"]
 "Phakoemulsifikation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=Phakoemulsifikation"  shape="box"  style="rounded" label="Phakoemulsifikation" ];
 "Einsatz Viskoelastischer Substanzen"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=Einsatz Viskoelastischer Substanzen"  shape="box"  style="rounded" label="Einsatz\nViskoelastischer\nSubstanzen\n" ];
 "IOL Implantation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=IOL Implantation"  shape="box"  style="rounded" label="IOL\nImplantation\n" ];
-"OP-Methoden"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=OP-Methoden"  shape="box"  style="rounded,bold" label="OP-Methoden" ];
+"OP-Methoden"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=OP-Methoden"  shape="box"  style="rounded,bold" label=<<U>OP-Methoden</U>> ];
 "Intraoperative Komplikation"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=Intraoperative Komplikation"  shape="box"  style="rounded" label="Intraoperative\nKomplikation\n" ];
 "Kombinierte Verfahren" -> "OP-Methoden" [ label = "unterkonzept" arrowtail="normal"  color="black"  ];
 "IOL Implantation" -> "OP-Methoden" [ label = "temporalGraph" arrowtail="normal"  color="#FFCC00"  ];

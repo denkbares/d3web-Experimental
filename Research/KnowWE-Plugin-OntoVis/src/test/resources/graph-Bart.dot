@@ -5,7 +5,7 @@ graph [size="7.81169775!" rankdir="TB"]
 "si:homer"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:homer"  shape="box"  style="rounded" label="Homer\nSimpson\n" ];
 "si:marge"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:marge"  shape="box"  style="rounded" label="Marge\nSimpson\n" ];
 "si:abraham"[ shape="none" fontsize="0" fontcolor="white" ];
-"si:bart"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:bart"  shape="box"  style="rounded,bold" label="Bart Simpson" ];
+"si:bart"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:bart"  shape="box"  style="rounded,bold" label=<<U>Bart Simpson</U>> ];
 "si:homer" -> "si:lisa" [ label = "si:child" arrowtail="normal"  color="#398743"  ];
 "si:maggie" -> "si:maggie" [ label = "si:sibling" arrowtail="normal"  color="#511F7A"  ];
 "si:marge" -> "si:lisa" [ label = "si:child" arrowtail="normal"  color="#398743"  ];
