@@ -20,7 +20,7 @@ package de.knowwe.defi.userlist;
 
 import java.util.Map;
 
-import com.ecyrd.jspwiki.WikiEngine;
+import org.apache.wiki.WikiEngine;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
@@ -40,9 +40,6 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  */
 public class UserlistTaghandler extends AbstractTagHandler {
 
-	/**
-	 * @param name
-	 */
 	public UserlistTaghandler() {
 		super("userlist");
 	}

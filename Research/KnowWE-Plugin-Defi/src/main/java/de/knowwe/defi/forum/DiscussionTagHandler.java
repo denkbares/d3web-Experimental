@@ -24,11 +24,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.ecyrd.jspwiki.WikiEngine;
-import com.ecyrd.jspwiki.auth.NoSuchPrincipalException;
-import com.ecyrd.jspwiki.auth.WikiSecurityException;
-import com.ecyrd.jspwiki.auth.authorize.GroupManager;
-import com.ecyrd.jspwiki.auth.user.UserDatabase;
+import org.apache.wiki.WikiEngine;
+import org.apache.wiki.auth.NoSuchPrincipalException;
+import org.apache.wiki.auth.WikiSecurityException;
+import org.apache.wiki.auth.authorize.GroupManager;
+import org.apache.wiki.auth.user.UserDatabase;
 
 import de.d3web.strings.Strings;
 import de.knowwe.comment.forum.Forum;

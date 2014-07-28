@@ -1,12 +1,12 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="java.io.Serializable"%>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki"%>
-<%@ page import="com.ecyrd.jspwiki.*" %>
-<%@ page import="com.ecyrd.jspwiki.ui.*" %>
-<%@ page import="com.ecyrd.jspwiki.tags.*" %>
-<%@ page import="com.ecyrd.jspwiki.attachment.*" %>
-<%@ page import="com.ecyrd.jspwiki.providers.*" %>
-<%@ page import="com.ecyrd.jspwiki.filters.*" %>
+<%@ page import="org.apache.wiki.*" %>
+<%@ page import="org.apache.wiki.ui.*" %>
+<%@ page import="org.apache.wiki.tags.*" %>
+<%@ page import="org.apache.wiki.attachment.*" %>
+<%@ page import="org.apache.wiki.providers.*" %>
+<%@ page import="org.apache.wiki.filters.*" %>
 <%@ page import="org.apache.commons.lang.*" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>

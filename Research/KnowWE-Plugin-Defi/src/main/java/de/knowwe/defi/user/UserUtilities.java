@@ -31,17 +31,16 @@ import java.util.Locale;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.wiki.WikiEngine;
+import org.apache.wiki.auth.NoSuchPrincipalException;
+import org.apache.wiki.auth.WikiSecurityException;
+import org.apache.wiki.auth.authorize.GroupManager;
+import org.apache.wiki.auth.user.UserDatabase;
+import org.apache.wiki.auth.user.UserProfile;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-
-import com.ecyrd.jspwiki.WikiEngine;
-import com.ecyrd.jspwiki.auth.NoSuchPrincipalException;
-import com.ecyrd.jspwiki.auth.WikiSecurityException;
-import com.ecyrd.jspwiki.auth.authorize.GroupManager;
-import com.ecyrd.jspwiki.auth.user.UserDatabase;
-import com.ecyrd.jspwiki.auth.user.UserProfile;
 
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;

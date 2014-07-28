@@ -1,7 +1,7 @@
 <%@page import="de.knowwe.defi.event.DefiPageEvent"%>
 <%@page import="de.knowwe.core.event.EventManager"%>
-<%@page import="com.ecyrd.jspwiki.WikiContext"%>
-<%@page import="com.ecyrd.jspwiki.WikiEngine"%>
+<%@page import="org.apache.wiki.WikiContext"%>
+<%@page import="org.apache.wiki.WikiEngine"%>
 <%
 	WikiEngine wiki = WikiEngine.getInstance( getServletConfig() );
     // Create wiki context and check for authorization

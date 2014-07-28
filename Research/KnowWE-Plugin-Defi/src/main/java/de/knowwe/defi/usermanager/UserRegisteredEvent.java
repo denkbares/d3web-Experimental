@@ -18,7 +18,7 @@
  */
 package de.knowwe.defi.usermanager;
 
-import com.ecyrd.jspwiki.auth.user.UserProfile;
+import org.apache.wiki.auth.user.UserProfile;
 
 import de.knowwe.core.event.Event;
 

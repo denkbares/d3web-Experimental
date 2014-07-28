@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.ecyrd.jspwiki.WikiEngine;
+import org.apache.wiki.WikiEngine;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
@@ -51,9 +51,6 @@ public class DataTagHandler extends AbstractTagHandler {
 	private final String LOG_HEADLINE = "<h5>Download der Logs</h5><hr />";
 	private final String USERDATA_HEADLINE = "<h5>Benutzerdaten</h5><hr />";
 
-	/**
-	 * @param name
-	 */
 	public DataTagHandler() {
 		super("data");
 	}

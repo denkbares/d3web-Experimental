@@ -27,8 +27,8 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.servlet.ServletContext;
 
-import com.ecyrd.jspwiki.WikiEngine;
-import com.ecyrd.jspwiki.util.MailUtil;
+import org.apache.wiki.WikiEngine;
+import org.apache.wiki.util.MailUtil;
 
 import de.d3web.strings.Strings;
 import de.d3web.we.event.NewCommentEvent;
@@ -112,7 +112,7 @@ public class NewForumAction extends AbstractAction {
 			ServletContext sc =
 					Environment.getInstance().getWikiConnector().getServletContext();
 			WikiEngine engine = WikiEngine.getInstance(sc, null);
-			MailUtil.sendMessage(engine, mailTo, subject, nachricht);
+			MailUtil.sendMessage(engine.getWikiProperties(), mailTo, subject, nachricht);
 		}
 		catch (AddressException e) {
 		}

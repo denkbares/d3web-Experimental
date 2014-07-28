@@ -35,7 +35,6 @@ import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
 
 import de.d3web.plugin.test.InitPluginManager;
@@ -118,10 +117,10 @@ public class OntoVisTest {
 
 		ontoGraphDataBuilder.createData();
 
-		String generatedSource = ontoGraphDataBuilder.getSource();
+		String generatedSource = ontoGraphDataBuilder.getSource().trim();
 		String expectedSource = null;
 		try {
-			expectedSource = Strings.readFile(new File("src/test/resources/graph-Bart.dot"));
+			expectedSource = Strings.readFile(new File("src/test/resources/graph-Bart.dot")).trim();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -173,10 +172,10 @@ public class OntoVisTest {
 
 		ontoGraphDataBuilder.createData();
 
-		String generatedSource = ontoGraphDataBuilder.getSource();
+		String generatedSource = ontoGraphDataBuilder.getSource().trim();
 		String expectedSource = null;
 		try {
-			expectedSource = Strings.readFile(new File("src/test/resources/graph-Human.dot"));
+			expectedSource = Strings.readFile(new File("src/test/resources/graph-Human.dot")).trim();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -226,10 +225,10 @@ public class OntoVisTest {
 
 		ontoGraphDataBuilder.createData();
 
-		String generatedSource = ontoGraphDataBuilder.getSource();
+		String generatedSource = ontoGraphDataBuilder.getSource().trim();
 		String expectedSource = null;
 		try {
-			expectedSource = Strings.readFile(new File("src/test/resources/graph-Child.dot"));
+			expectedSource = Strings.readFile(new File("src/test/resources/graph-Child.dot")).trim();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -270,10 +269,10 @@ public class OntoVisTest {
 
 		ontoGraphDataBuilder.createData();
 
-		String generatedSource = ontoGraphDataBuilder.getSource();
+		String generatedSource = ontoGraphDataBuilder.getSource().trim();
 		String expectedSource = null;
 		try {
-			expectedSource = Strings.readFile(new File("src/test/resources/graph-Table.dot"));
+			expectedSource = Strings.readFile(new File("src/test/resources/graph-Table.dot")).trim();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -318,10 +317,10 @@ public class OntoVisTest {
 
 		ontoGraphDataBuilder.createData();
 
-		String generatedSource = ontoGraphDataBuilder.getSource();
+		String generatedSource = ontoGraphDataBuilder.getSource().trim();
 		String expectedSource = null;
 		try {
-			expectedSource = Strings.readFile(new File("src/test/resources/graph-TwoConcepts.dot"));
+			expectedSource = Strings.readFile(new File("src/test/resources/graph-TwoConcepts.dot")).trim();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -392,10 +391,10 @@ public class OntoVisTest {
 				parameterMap);
 		graphRenderer.generateSource();
 
-		String generatedSource = graphRenderer.getSource();
+		String generatedSource = graphRenderer.getSource().trim();
 		String expectedSource = null;
 		try {
-			expectedSource = Strings.readFile(new File("src/test/resources/graph-Sparql.dot"));
+			expectedSource = Strings.readFile(new File("src/test/resources/graph-Sparql.dot")).trim();
 		}
 		catch (IOException e) {
 			e.printStackTrace();

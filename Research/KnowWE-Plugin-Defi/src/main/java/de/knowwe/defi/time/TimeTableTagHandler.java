@@ -21,7 +21,7 @@ package de.knowwe.defi.time;
 import java.util.List;
 import java.util.Map;
 
-import com.ecyrd.jspwiki.WikiEngine;
+import org.apache.wiki.WikiEngine;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
@@ -39,9 +39,6 @@ import de.knowwe.kdom.dashtree.DashTreeElement;
  */
 public class TimeTableTagHandler extends AbstractTagHandler {
 
-	/**
-	 * @param name
-	 */
 	public TimeTableTagHandler() {
 		super("timetable");
 	}

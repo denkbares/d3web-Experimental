@@ -22,14 +22,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.wiki.WikiPage;
+import org.apache.wiki.search.SearchResult;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
-
-import com.ecyrd.jspwiki.SearchResult;
-import com.ecyrd.jspwiki.WikiPage;
 
 import de.knowwe.core.Environment;
 import de.knowwe.jspwiki.JSPWikiConnector;
@@ -84,7 +83,6 @@ public class ConceptSearchProvider implements SearchProvider {
 	/**
 	 * 
 	 * @created 17.04.2013
-	 * @param asURI
 	 */
 	private void addChildrenConcepts(URI concept, List<WikiPage> result) {
 		String sparql = "SELECT ?x WHERE { ?x lns:unterkonzept <" + concept.toString() + ">.}";

@@ -31,7 +31,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ecyrd.jspwiki.WikiEngine;
+import org.apache.wiki.WikiEngine;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;

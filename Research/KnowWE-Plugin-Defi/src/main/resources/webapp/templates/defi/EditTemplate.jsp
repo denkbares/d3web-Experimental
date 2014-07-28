@@ -1,5 +1,5 @@
 <%@ page import="java.util.HashMap"%>
-<%@ page import="com.ecyrd.jspwiki.*" %>
+<%@ page import="org.apache.wiki.*" %>
 <%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>

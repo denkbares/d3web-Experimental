@@ -27,7 +27,7 @@
 <%@page import="de.knowwe.core.kdom.parsing.Sections"%>
 <%@page import="de.knowwe.core.kdom.Article"%>
 <%@page import="de.knowwe.diaflux.type.DiaFluxType"%>
-<%@page import="com.ecyrd.jspwiki.*" %>
+<%@page import="org.apache.wiki.*" %>
 <%@page import="de.knowwe.jspwiki.*" %>
 <%@page import="java.util.*" %>
 <%@page import="de.knowwe.core.*" %>

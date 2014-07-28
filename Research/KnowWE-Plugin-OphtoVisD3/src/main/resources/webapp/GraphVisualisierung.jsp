@@ -1,5 +1,5 @@
 <%@page import="de.knowwe.core.kdom.rendering.RenderResult"%>
-<%@ page import="com.ecyrd.jspwiki.*" %>
+<%@ page import="org.apache.wiki.*" %>
 <%@ page import="de.knowwe.jspwiki.*" %>
 <%@ page import="de.knowwe.core.user.*" %>
 <%@ page import="de.knowwe.core.action.*" %>

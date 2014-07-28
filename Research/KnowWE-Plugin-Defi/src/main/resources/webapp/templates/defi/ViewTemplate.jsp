@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page import="de.knowwe.jspwiki.JSPWikiConnector"%>
 <%@ page import="java.util.HashMap"%>
-<%@ page import="com.ecyrd.jspwiki.*" %>
+<%@ page import="org.apache.wiki.*" %>
 <fmt:setBundle basename="templates.default"/>
 <%
   WikiContext c = WikiContext.findContext(pageContext);

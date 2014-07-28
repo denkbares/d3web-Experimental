@@ -21,13 +21,13 @@ package de.knowwe.defi.usermanager;
 import java.io.IOException;
 import java.security.Principal;
 
-import com.ecyrd.jspwiki.WikiEngine;
-import com.ecyrd.jspwiki.auth.NoSuchPrincipalException;
-import com.ecyrd.jspwiki.auth.WikiSecurityException;
-import com.ecyrd.jspwiki.auth.authorize.Group;
-import com.ecyrd.jspwiki.auth.authorize.GroupManager;
-import com.ecyrd.jspwiki.auth.user.UserDatabase;
-import com.ecyrd.jspwiki.auth.user.UserProfile;
+import org.apache.wiki.WikiEngine;
+import org.apache.wiki.auth.NoSuchPrincipalException;
+import org.apache.wiki.auth.WikiSecurityException;
+import org.apache.wiki.auth.authorize.Group;
+import org.apache.wiki.auth.authorize.GroupManager;
+import org.apache.wiki.auth.user.UserDatabase;
+import org.apache.wiki.auth.user.UserProfile;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;

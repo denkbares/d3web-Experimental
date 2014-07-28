@@ -1,21 +1,26 @@
 package de.knowwe.ontoVis.test;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.ontoware.rdf2go.RDF2Go;
+import org.ontoware.rdf2go.model.Model;
+
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.strings.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.RuleSet;
 import de.knowwe.rdf2go.modelfactory.OWLIMLiteModelFactory;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.ontoware.rdf2go.RDF2Go;
-import org.ontoware.rdf2go.model.Model;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -111,10 +116,10 @@ public class DOTRendererTest {
 
 		ontoGraphDataBuilder.createData();
 
-		String generatedSource = ontoGraphDataBuilder.getSource();
+		String generatedSource = ontoGraphDataBuilder.getSource().trim();
 		String expectedSource = null;
 		try {
-			expectedSource = Strings.readFile(new File("src/test/resources/graph-OP-Methoden.dot"));
+			expectedSource = Strings.readFile(new File("src/test/resources/graph-OP-Methoden.dot")).trim();
 		}
 		catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -155,10 +160,10 @@ public class DOTRendererTest {
 
 		OntoGraphDataBuilder.createData();
 
-		String generatedSource = OntoGraphDataBuilder.getSource();
+		String generatedSource = OntoGraphDataBuilder.getSource().trim();
 		String expectedSource = null;
 		try {
-			expectedSource = Strings.readFile(new File("src/test/resources/graph-Phako.dot"));
+			expectedSource = Strings.readFile(new File("src/test/resources/graph-Phako.dot")).trim();
 		}
 		catch (IOException e) {
 			// TODO Auto-generated catch block

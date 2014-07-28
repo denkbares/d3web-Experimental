@@ -26,13 +26,13 @@ import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 
-import com.ecyrd.jspwiki.WikiEngine;
-import com.ecyrd.jspwiki.WikiSession;
-import com.ecyrd.jspwiki.auth.WikiPrincipal;
-import com.ecyrd.jspwiki.event.WikiEvent;
-import com.ecyrd.jspwiki.event.WikiEventListener;
-import com.ecyrd.jspwiki.event.WikiEventManager;
-import com.ecyrd.jspwiki.event.WikiSecurityEvent;
+import org.apache.wiki.WikiEngine;
+import org.apache.wiki.WikiSession;
+import org.apache.wiki.auth.WikiPrincipal;
+import org.apache.wiki.event.WikiEvent;
+import org.apache.wiki.event.WikiEventListener;
+import org.apache.wiki.event.WikiEventManager;
+import org.apache.wiki.event.WikiSecurityEvent;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -83,9 +83,6 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 		MARKUP.addAnnotation(HTML_HOBBIES, true);
 	}
 
-	/**
-	 * @param markup
-	 */
 	public AboutMe() {
 		super(MARKUP);
 		this.setRenderer(new AboutMeRenderer());

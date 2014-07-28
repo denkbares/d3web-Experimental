@@ -20,11 +20,11 @@ package de.knowwe.defi.event;
 
 import javax.servlet.ServletContext;
 
-import com.ecyrd.jspwiki.WikiEngine;
-import com.ecyrd.jspwiki.event.WikiEvent;
-import com.ecyrd.jspwiki.event.WikiEventListener;
-import com.ecyrd.jspwiki.event.WikiEventManager;
-import com.ecyrd.jspwiki.event.WikiSecurityEvent;
+import org.apache.wiki.WikiEngine;
+import org.apache.wiki.event.WikiEvent;
+import org.apache.wiki.event.WikiEventListener;
+import org.apache.wiki.event.WikiEventManager;
+import org.apache.wiki.event.WikiSecurityEvent;
 
 import de.knowwe.core.Environment;
 import de.knowwe.defi.logger.DefiLoggerUtils;

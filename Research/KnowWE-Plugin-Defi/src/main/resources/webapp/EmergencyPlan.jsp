@@ -1,6 +1,6 @@
 <%@page import="de.knowwe.core.event.EventManager"%>
 <%@page import="de.knowwe.defi.event.DefiPageEvent"%>
-<%@page import="com.ecyrd.jspwiki.*" %>
+<%@page import="org.apache.wiki.*" %>
 <%@page import="de.knowwe.jspwiki.*" %>
 <%@page import="de.knowwe.core.*" %>
 <%@page import="de.knowwe.core.action.*" %>

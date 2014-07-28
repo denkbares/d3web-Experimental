@@ -21,11 +21,11 @@ package de.knowwe.defi.usermanager;
 import java.security.Principal;
 import java.util.Map;
 
-import com.ecyrd.jspwiki.WikiEngine;
-import com.ecyrd.jspwiki.auth.NoSuchPrincipalException;
-import com.ecyrd.jspwiki.auth.WikiSecurityException;
-import com.ecyrd.jspwiki.auth.authorize.GroupManager;
-import com.ecyrd.jspwiki.auth.user.UserDatabase;
+import org.apache.wiki.WikiEngine;
+import org.apache.wiki.auth.NoSuchPrincipalException;
+import org.apache.wiki.auth.WikiSecurityException;
+import org.apache.wiki.auth.authorize.GroupManager;
+import org.apache.wiki.auth.user.UserDatabase;
 
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.parsing.Section;
@@ -51,9 +51,6 @@ import de.knowwe.jspwiki.JSPWikiConnector;
  */
 public class UserManagerTagHandler extends AbstractTagHandler {
 
-	/**
-	 * @param name
-	 */
 	public UserManagerTagHandler() {
 		super("usermanager");
 	}

@@ -25,11 +25,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang.time.DateUtils;
-
-import com.ecyrd.jspwiki.WikiEngine;
-import com.ecyrd.jspwiki.auth.NoSuchPrincipalException;
-import com.ecyrd.jspwiki.auth.user.UserDatabase;
-import com.ecyrd.jspwiki.auth.user.UserProfile;
+import org.apache.wiki.WikiEngine;
+import org.apache.wiki.auth.NoSuchPrincipalException;
+import org.apache.wiki.auth.user.UserDatabase;
+import org.apache.wiki.auth.user.UserProfile;
 
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;

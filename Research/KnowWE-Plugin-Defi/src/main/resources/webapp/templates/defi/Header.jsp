@@ -10,7 +10,7 @@
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@page import="java.util.HashMap"%>
-<%@ page import="com.ecyrd.jspwiki.*"%>
+<%@ page import="org.apache.wiki.*"%>
 <%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
 <%@page import="de.knowwe.core.event.EventManager"%>
 <%@page import="de.knowwe.core.kdom.parsing.Section"%>

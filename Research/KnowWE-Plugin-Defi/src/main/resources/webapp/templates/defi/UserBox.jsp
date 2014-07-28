@@ -11,8 +11,8 @@
 <%@page import="de.knowwe.core.kdom.Article"%>
 <%@page import="de.knowwe.jspwiki.JSPWikiConnector"%>
 <%@page import="de.knowwe.core.Environment"%>
-<%@ page import="com.ecyrd.jspwiki.WikiContext"%>
-<%@ page import="com.ecyrd.jspwiki.WikiEngine"%>
+<%@ page import="org.apache.wiki.WikiContext"%>
+<%@ page import="org.apache.wiki.WikiEngine"%>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page import="javax.servlet.jsp.jstl.fmt.*"%>
