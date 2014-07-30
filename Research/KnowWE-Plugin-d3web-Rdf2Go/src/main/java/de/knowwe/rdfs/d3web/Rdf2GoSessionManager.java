@@ -29,13 +29,13 @@ public class Rdf2GoSessionManager {
 	private final Map<Object, Resource> agentNodeCache = new HashMap<Object, Resource>();
 
 	protected final Rdf2GoCore core;
-    private final boolean addProvExplanation;
+	private final boolean addProvExplanation;
 
-    public Rdf2GoSessionManager(Rdf2GoCore core, boolean addProvExplanation) {
+	public Rdf2GoSessionManager(Rdf2GoCore core, boolean addProvExplanation) {
 		this.core = core;
-        this.addProvExplanation = addProvExplanation;
+		this.addProvExplanation = addProvExplanation;
 
-        // we make sure prov is available as a namespace
+		// we make sure prov is available as a namespace
 		if (core.getNamespaces().get("prov") == null) {
 			core.addNamespace("prov", "http://www.w3.org/ns/prov#");
 		}
@@ -112,26 +112,30 @@ public class Rdf2GoSessionManager {
 				Rdf2GoD3webUtils.getHasValueURI(core), valueLiteral, statements);
 
 		// add PROV statements
-        if (addProvExplanation) {
-            Set<TerminologyObject> activeDerivationSources = fact.getPSMethod()
-                    .getActiveDerivationSources(fact.getTerminologyObject(), session);
-
-            for (TerminologyObject activeDerivationSource : activeDerivationSources) {
-                Fact valueFact = session.getBlackboard().getValueFact(activeDerivationSource);
-                if (valueFact == null) continue;
-                BlankNode sourceFactNode = getFactNode(valueFact);
-                // blank node (Fact) prov:wasDerivedFrom lns:sourceFactNode
-                Rdf2GoUtils.addStatement(core, factNode, getProvURI("wasDerivedFrom"), sourceFactNode, statements);
-            }
-
-            // Resource (Fact) prov:wasAttributedTo blank node (Agent)
-            Resource agentNode = getAgentNode(fact);
-            Rdf2GoUtils.addStatement(core, factNode, getProvURI("wasAttributedTo"), agentNode, statements);
-
-            // blank node (Agent) rdf:type lns:PSMethod/Section...
-            Rdf2GoUtils.addStatement(core, agentNode, RDF.type, getAgentType(fact), statements);
-        }
+		if (addProvExplanation) {
+			addProvStatements(session, fact, statements, factNode);
+		}
 		return statements;
+	}
+
+	private void addProvStatements(Session session, Fact fact, Set<Statement> statements, BlankNode factNode) {
+		Set<TerminologyObject> activeDerivationSources = fact.getPSMethod()
+				.getActiveDerivationSources(fact.getTerminologyObject(), session);
+
+		for (TerminologyObject activeDerivationSource : activeDerivationSources) {
+			Fact valueFact = session.getBlackboard().getValueFact(activeDerivationSource);
+			if (valueFact == null) continue;
+			BlankNode sourceFactNode = getFactNode(valueFact);
+			// blank node (Fact) prov:wasDerivedFrom lns:sourceFactNode
+			Rdf2GoUtils.addStatement(core, factNode, getProvURI("wasDerivedFrom"), sourceFactNode, statements);
+		}
+
+		// Resource (Fact) prov:wasAttributedTo blank node (Agent)
+		Resource agentNode = getAgentNode(fact);
+		Rdf2GoUtils.addStatement(core, factNode, getProvURI("wasAttributedTo"), agentNode, statements);
+
+		// blank node (Agent) rdf:type lns:PSMethod/Section...
+		Rdf2GoUtils.addStatement(core, agentNode, RDF.type, getAgentType(fact), statements);
 	}
 
 	private URI getAgentType(Fact fact) {
