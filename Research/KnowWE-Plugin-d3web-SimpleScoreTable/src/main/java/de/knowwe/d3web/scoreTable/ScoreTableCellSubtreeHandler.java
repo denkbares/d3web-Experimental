@@ -21,7 +21,7 @@ import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 
-public class ScoreTableCellSubtreeHandler extends D3webHandler<ScoreCell> {
+public class ScoreTableCellSubtreeHandler implements D3webHandler<ScoreCell> {
 
 	private static final String ruleStoreKey = "rule-store-key";
 

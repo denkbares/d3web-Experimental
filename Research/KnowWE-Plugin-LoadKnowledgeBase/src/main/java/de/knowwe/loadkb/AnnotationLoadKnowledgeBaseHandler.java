@@ -23,7 +23,7 @@ import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.WikiAttachment;
 import de.knowwe.core.wikiConnector.WikiConnector;
 
-public class AnnotationLoadKnowledgeBaseHandler extends D3webHandler<KnowledgeBaseType> {
+public class AnnotationLoadKnowledgeBaseHandler implements D3webHandler<KnowledgeBaseType> {
 
 	private static final String TMP_LOADED_KB_PATH = "/tmp/loadedKB";
 	public static final String ANNOTATION_LOAD = "load";

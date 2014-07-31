@@ -39,7 +39,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author jochenreutelshofer
  * @created 18.11.2012
  */
-public class CreateMonitorKnowledgeHandler extends D3webHandler<MonitorMarkupContentType> {
+public class CreateMonitorKnowledgeHandler implements D3webHandler<MonitorMarkupContentType> {
 
 	@Override
 	public Collection<Message> create(D3webCompiler compiler, Section<MonitorMarkupContentType> section) {

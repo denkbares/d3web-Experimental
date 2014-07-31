@@ -93,7 +93,7 @@ public class InlineIndicationCondition extends AbstractType {
 
 	}
 
-	static class CreateIndicationRulesHandler extends D3webHandler<InlineIndicationCondition> {
+	static class CreateIndicationRulesHandler implements D3webHandler<InlineIndicationCondition> {
 
 		@Override
 		public Collection<Message> create(D3webCompiler compiler, Section<InlineIndicationCondition> s) {

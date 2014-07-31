@@ -55,7 +55,7 @@ public class MonitorMarkupContentType extends AbstractType {
 		this.addCompileScript(new CreateMonitorKnowledgeHandler());
 	}
 
-	class CreateSquareQuestionTermHandler extends D3webHandler<MonitorMarkupContentType> {
+	class CreateSquareQuestionTermHandler implements D3webHandler<MonitorMarkupContentType> {
 
 		@Override
 		public Collection<Message> create(D3webCompiler compiler, Section<MonitorMarkupContentType> section) {
