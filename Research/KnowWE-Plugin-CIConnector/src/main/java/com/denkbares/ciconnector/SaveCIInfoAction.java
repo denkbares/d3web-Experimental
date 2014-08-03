@@ -17,6 +17,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.wikiConnector.WikiConnector;
 
@@ -53,21 +54,12 @@ public class SaveCIInfoAction extends AbstractAction {
 			e.printStackTrace();
 		}
 
-		while (Article.isArticleCurrentlyBuilding(Environment.DEFAULT_WEB, ARTICLE)) {
-			// wait...
-			try {
-				Thread.sleep(1);
-			}
-			catch (InterruptedException e) {
-				// do nothing here
-			}
-		}
+		Compilers.awaitTermination(context.getArticleManager().getCompilerManager());
 
 		// trigger rebuild
 		Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB, ARTICLE);
 		String content = article.getRootSection().getText();
-		Environment.getInstance().buildAndRegisterArticle(content, article.getTitle(),
-				Environment.DEFAULT_WEB);
+		Environment.getInstance().buildAndRegisterArticle(Environment.DEFAULT_WEB, article.getTitle(), content);
 
 	}
 
