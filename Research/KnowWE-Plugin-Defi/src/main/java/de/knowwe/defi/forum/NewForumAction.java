@@ -87,11 +87,11 @@ public class NewForumAction extends AbstractAction {
 				+ "</a>\n";
 		content += "<div style='clear:both'></div>\n";
 
-		if (pageName == "") title = "Forum zu " + " \"" + topic + "\"";
+		if (pageName.equals("")) title = "Forum zu " + " \"" + topic + "\"";
 		else title = "Forum zu " + pageName + " (" + topic + ")";
 		if (mgr.getArticle(title) == null) {
-			Environment.getInstance().buildAndRegisterArticle(content,
-					title, Environment.DEFAULT_WEB);
+			Environment.getInstance().buildAndRegisterArticle( Environment.DEFAULT_WEB,
+					title, content);
 			Environment.getInstance().getWikiConnector()
 					.createArticle(title, username, content);
 		}

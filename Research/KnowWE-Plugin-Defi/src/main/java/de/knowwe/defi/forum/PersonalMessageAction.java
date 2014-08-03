@@ -81,8 +81,8 @@ public class PersonalMessageAction extends AbstractAction {
 					+ "</a>\n";
 			content += "<div style='clear:both'></div>\n";
 
-			Environment.getInstance().buildAndRegisterArticle(content,
-					topic, Environment.DEFAULT_WEB);
+			Environment.getInstance().buildAndRegisterArticle( Environment.DEFAULT_WEB,
+					topic, content);
 			Environment.getInstance().getWikiConnector()
 					.createArticle(topic, username, content);
 		}

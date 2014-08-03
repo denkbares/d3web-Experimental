@@ -72,7 +72,9 @@ public class Rdf2GoSessionManager {
 		}
 
 		// add statements to the core
-		core.addStatements(Rdf2GoUtils.toArray(statements));
+		synchronized (core) {
+			core.addStatements(Rdf2GoUtils.toArray(statements));
+		}
 	}
 
 	public void addFactAsStatements(Session session, Fact fact) {
@@ -83,7 +85,9 @@ public class Rdf2GoSessionManager {
 		statementCache.put(fact.getTerminologyObject(), statements);
 
 		// add fact statements to the core
-		core.addStatements(Rdf2GoUtils.toArray(statements));
+		synchronized (core) {
+			core.addStatements(Rdf2GoUtils.toArray(statements));
+		}
 	}
 
 	protected Set<Statement> generateFactStatements(Session session, Fact fact) {
@@ -196,12 +200,18 @@ public class Rdf2GoSessionManager {
 
 	public void removeFactStatements(TerminologyObject terminologyObject) {
 		Set<Statement> statements = statementCache.get(terminologyObject);
-		if (statements != null) core.removeStatements(statements);
+		if (statements != null) {
+			synchronized (core) {
+				core.removeStatements(statements);
+			}
+		}
 	}
 
 	public void removeSessionFromRdf2GoCore() {
-		for (Set<Statement> set : statementCache.values()) {
-			core.removeStatements(set);
+		synchronized (core) {
+			for (Set<Statement> set : statementCache.values()) {
+				core.removeStatements(set);
+			}
 		}
 	}
 
