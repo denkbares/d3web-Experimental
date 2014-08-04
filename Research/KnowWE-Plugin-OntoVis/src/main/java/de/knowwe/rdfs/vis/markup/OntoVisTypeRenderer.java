@@ -9,6 +9,7 @@ import javax.servlet.ServletContext;
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 import de.knowwe.core.ArticleManager;
+import de.knowwe.core.Environment;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Type;
@@ -19,6 +20,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.core.utils.PackageCompileLinkToTermDefinitionProvider;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
+import de.knowwe.ontology.compile.OntologyCompiler;
 import de.knowwe.rdf2go.Rdf2GoCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
@@ -26,16 +28,22 @@ import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
 import de.knowwe.rdfs.vis.util.Utils;
 
 public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
+
 	private Rdf2GoCore rdfRepository;
 	private LinkToTermDefinitionProvider uriProvider;
 
 	@Override
 	public void renderContents(Section<?> section, UserContext user, RenderResult string) {
+		String realPath;
+		if (user != null) {
+			ServletContext servletContext = user.getServletContext();
+			if (servletContext == null) return; // at wiki startup only
 
-		ServletContext servletContext = user.getServletContext();
-		if (servletContext == null) return; // at wiki startup only
+			realPath = servletContext.getRealPath("");
+		} else {
+			realPath = Environment.getInstance().getWikiConnector().getServletContext().getRealPath("");
+		}
 
-		String realPath = servletContext.getRealPath("");
 		Map<String, String> parameterMap = new HashMap<String, String>();
 
 		Rdf2GoCompiler compiler = Compilers.getCompiler(section, Rdf2GoCompiler.class);
@@ -245,6 +253,16 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 			parameterMap.put(OntoGraphDataBuilder.CLASS_COLOR_CODES, Utils.createColorCodings(colorRelationName, rdfRepository, "rdfs:Class"));
 		}
 
+		// create file ID
+		String textHash = String.valueOf(section.getText().hashCode());
+
+		OntologyCompiler ontoCompiler = Compilers.getCompiler(section, OntologyCompiler.class);
+		String compHash = String.valueOf(ontoCompiler.getCompileSection().getTitle().hashCode());
+
+		String fileID = "_" + textHash + "_" + compHash;
+
+		parameterMap.put(OntoGraphDataBuilder.FILE_ID, fileID);
+
 		OntoGraphDataBuilder builder = new OntoGraphDataBuilder(realPath, section, parameterMap,
 				uriProvider,
 				rdfRepository);
@@ -405,9 +423,11 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @created 18.08.2012
 	 */
 	private String getConcept(UserContext user, Section<?> section) {
-		String parameter = user.getParameter("concept");
-		if (parameter != null) {
-			return parameter;
+		if (user != null) {
+			String parameter = user.getParameter("concept");
+			if (parameter != null) {
+				return parameter;
+			}
 		}
 		return OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONCEPT);
 	}

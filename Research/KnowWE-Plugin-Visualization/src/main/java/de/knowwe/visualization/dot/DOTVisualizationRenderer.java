@@ -49,8 +49,7 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 	@Override
 	public String generateSource() {
 		source = DOTRenderer.createDotSources(data, parameters);
-		DOTRenderer.createAndwriteDOTFiles(parameters.get(GraphDataBuilder.SECTION_ID), source,
-				parameters.get(GraphDataBuilder.REAL_PATH),
+		DOTRenderer.createAndwriteDOTFiles(getGraphFilePath(), source,
 				parameters.get(GraphDataBuilder.DOT_APP));
 		return source;
 	}
@@ -58,6 +57,21 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 	@Override
 	public String getHTMLIncludeSnipplet() {
 		return createHTMLOutput();
+	}
+
+	@Override
+	public String getGraphFilePath() {
+		return getFilePath() + "graph" + parameters.get(GraphDataBuilder.FILE_ID);
+	}
+
+	@Override
+	public String getFilePath() {
+		String realPath = parameters.get(GraphDataBuilder.REAL_PATH);
+		String tmpPath = FileUtils.KNOWWEEXTENSION_FOLDER + FileUtils.FILE_SEPARATOR
+				+ FileUtils.TMP_FOLDER
+				+ FileUtils.FILE_SEPARATOR;
+		String path = realPath + FileUtils.FILE_SEPARATOR + tmpPath;
+		return path;
 	}
 
 	@Override
@@ -84,15 +98,15 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 		}
 		String div_open = "<div style=\"" + style + "\">";
 		String div_close = "</div>";
-		String sectionID = parameters.get(GraphDataBuilder.SECTION_ID);
+		String fileID = parameters.get(GraphDataBuilder.FILE_ID);
 		String tmpPath = FileUtils.KNOWWEEXTENSION_FOLDER + FileUtils.TOMCAT_PATH_SEPARATOR
 				+ FileUtils.TMP_FOLDER
 				+ FileUtils.TOMCAT_PATH_SEPARATOR;
 
 		String png_default = div_open + "<img alt='graph' src='"
-				+ tmpPath + "graph" + sectionID + ".png'>" + div_close;
+				+ tmpPath + "graph" + fileID + ".png'>" + div_close;
 		String svg = div_open + "<object data='" + tmpPath
-				+ "graph" + sectionID + ".svg' type=\"image/svg+xml\">" + png_default
+				+ "graph" + fileID + ".svg' type=\"image/svg+xml\">" + png_default
 				+ "</object>" + div_close;
 		String format = parameters.get(GraphDataBuilder.FORMAT);
 		if (format == null) {

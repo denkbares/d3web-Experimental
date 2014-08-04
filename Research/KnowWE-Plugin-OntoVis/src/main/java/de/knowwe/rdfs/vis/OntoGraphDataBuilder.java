@@ -21,7 +21,14 @@ package de.knowwe.rdfs.vis;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
@@ -33,6 +40,7 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.strings.Strings;
 import de.d3web.utils.Log;
+import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -71,8 +79,15 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             throw new NullPointerException("The RDF repository can't be null!");
         }
         this.rdfRepository = rdfRepository;
-        initialiseData(realPath, section, parameters, uriProvider);
-    }
+
+		initialiseData(realPath, section, parameters, uriProvider);
+
+		if (section != null) {
+			EventManager.getInstance()
+					.registerListener(GraphReRenderer.getInstance(section.getArticleManager(), super.getSourceRenderer()
+							.getFilePath()));
+		}
+	}
 
     public String getConceptName(Node uri) {
         return Utils.getConceptName(uri, this.rdfRepository);
@@ -756,5 +771,4 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
     enum ExpandMode {Normal, LiteralsOnly}
 
     enum Direction {Forward, Backward}
-
 }

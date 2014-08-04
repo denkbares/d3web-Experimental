@@ -342,15 +342,10 @@ public class DOTRenderer {
      *
      * @created 20.08.2012
      */
-    public static void createAndwriteDOTFiles(String sectionID, String dotSource, String realPath, String user_app_path) {
-        String tmpPath = FileUtils.KNOWWEEXTENSION_FOLDER + FileUtils.FILE_SEPARATOR
-                + FileUtils.TMP_FOLDER
-                + FileUtils.FILE_SEPARATOR;
-        String path = realPath + FileUtils.FILE_SEPARATOR + tmpPath;
-
-        File dot = createFile("dot", path, sectionID);
-        File svg = createFile("svg", path, sectionID);
-        File png = createFile("png", path, sectionID);
+    public static void createAndwriteDOTFiles(String filePath, String dotSource, String user_app_path) {
+        File dot = createFile("dot", filePath);
+        File svg = createFile("svg", filePath);
+        File png = createFile("png", filePath);
 
         dot.delete();
         svg.delete();
@@ -514,9 +509,8 @@ public class DOTRenderer {
         }
     }
 
-    private static File createFile(String type, String path, String sectionID) {
-        String filename = path + "graph" + sectionID
-                + "." + type;
+    private static File createFile(String type, String path) {
+        String filename = path + "." + type;
         return new File(filename);
     }
 

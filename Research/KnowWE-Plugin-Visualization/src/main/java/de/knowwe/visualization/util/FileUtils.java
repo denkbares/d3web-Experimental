@@ -118,4 +118,16 @@ public class FileUtils {
 			System.out.println(inputLine);
 		in.close();
 	}
+
+	/**
+	 * Checks if the graph-files with the given name already exist. If that is the case, the files do not have to be
+	 * rendered again but can just be re-used.
+	 *
+	 * @return
+	 */
+	public static boolean filesAlreadyRendered(String path) {
+		if (path == null) return false;
+		File graph = new File(path + ".dot");
+		return graph.exists();
+	}
 }

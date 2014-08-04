@@ -53,4 +53,20 @@ public interface GraphVisualizationRenderer {
 	 */
 	public String getHTMLIncludeSnipplet();
 
+	/**
+	 * Returns the full path of the files that are to be created (without the file-extension but
+	 * including the file name and file ID). This is used to check if the files already exist and thus doesn't
+	 * have to be re-rendered.
+	 * @created 27.07.2014
+	 * @return
+	 */
+	public String getGraphFilePath();
+
+	/**
+	 * Returns the full path to the files that are to be created (without the file name!).
+	 * @created 27.07.2014
+	 * @return
+	 */
+	public String getFilePath();
+
 }

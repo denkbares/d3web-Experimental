@@ -11,7 +11,6 @@ import javax.servlet.ServletContext;
 
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
 
 import de.d3web.strings.Identifier;
@@ -19,6 +18,7 @@ import de.d3web.strings.Strings;
 import de.d3web.utils.Log;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
+import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
@@ -27,13 +27,13 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.Message;
-import de.knowwe.core.report.Message.Type;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.core.utils.PackageCompileLinkToTermDefinitionProvider;
 import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.ontology.compile.OntologyCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
@@ -47,6 +47,7 @@ import de.knowwe.visualization.GraphVisualizationRenderer;
 import de.knowwe.visualization.SubGraphData;
 import de.knowwe.visualization.d3.D3VisualizationRenderer;
 import de.knowwe.visualization.dot.DOTVisualizationRenderer;
+import de.knowwe.visualization.util.FileUtils;
 
 public class SparqlVisTypeRenderer implements Renderer {
 
@@ -58,21 +59,27 @@ public class SparqlVisTypeRenderer implements Renderer {
 	public void render(Section<?> content, UserContext user, RenderResult string) {
 
 		Section<SparqlVisType> section = Sections.findAncestorOfType(content,
-				SparqlVisType.class);
+					SparqlVisType.class);
 		Section<DefaultMarkupType> defMarkupSection = Sections.cast(section,
 				DefaultMarkupType.class);
+
 		core = Rdf2GoUtils.getRdf2GoCore(defMarkupSection);
-		if (core == null) {
+		if (core == null && string != null) {
 			string.appendHtmlElement("div", "");
 			return;
 		}
 
 		List<Message> messages = new ArrayList<Message>();
 
-		ServletContext servletContext = user.getServletContext();
-		if (servletContext == null) return; // at wiki startup only
+		String realPath;
+		if (user != null) {
+			ServletContext servletContext = user.getServletContext();
+			if (servletContext == null) return; // at wiki startup only
 
-		String realPath = servletContext.getRealPath("");
+			realPath = servletContext.getRealPath("");
+		} else {
+			realPath = Environment.getInstance().getWikiConnector().getServletContext().getRealPath("");
+		}
 
 		Map<String, String> parameterMap = new HashMap<String, String>();
 
@@ -121,8 +128,10 @@ public class SparqlVisTypeRenderer implements Renderer {
 						"No such layout " + layout + " found!");
 				Collection<Message> warnings = new HashSet<Message>();
 				messages.add(noSuchLayout);
-				DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, warnings,
-						string);
+				if (string != null) {
+					DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, warnings,
+							string);
+				}
 
 			}
 
@@ -258,12 +267,16 @@ public class SparqlVisTypeRenderer implements Renderer {
 				section, messages);
 
 		// read passed concept parameter from browser url if existing
-		String conceptName = user.getParameter("concept");
+		String conceptName = null;
+		if (user != null) {
+			conceptName = user.getParameter("concept");
+		}
 
 		// otherwise use annotation value
 		if (conceptName == null) {
 			conceptName = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONCEPT);
 		}
+
 		// if no concept is specified, finally take first guess
 		if (data != null && conceptName == null && data.getConceptDeclarations().size() > 0) {
 
@@ -272,6 +285,17 @@ public class SparqlVisTypeRenderer implements Renderer {
 		}
 		parameterMap.put(OntoGraphDataBuilder.CONCEPT, conceptName);
 
+		// create file ID
+		String textHash = String.valueOf(section.getText().hashCode());
+
+		OntologyCompiler ontoCompiler = Compilers.getCompiler(section, OntologyCompiler.class);
+		String compHash = String.valueOf(ontoCompiler.getCompileSection().getTitle().hashCode());
+
+		String fileID = "_" + textHash + "_" + compHash;
+
+		parameterMap.put(OntoGraphDataBuilder.FILE_ID, fileID);
+
+		// render content
 		String renderedContent = "";
 
 		if (data != null) {
@@ -284,24 +308,30 @@ public class SparqlVisTypeRenderer implements Renderer {
 				graphRenderer = new D3VisualizationRenderer(data, parameterMap);
 			}
 
-			graphRenderer.generateSource();
+			// re-use graph if possible
+			if (!FileUtils.filesAlreadyRendered(graphRenderer.getGraphFilePath())) {
+				graphRenderer.generateSource();
+			}
 			renderedContent = graphRenderer.getHTMLIncludeSnipplet();
 
 		}
-		if (messages.size() > 0) {
+		if (messages.size() > 0 && string != null) {
 			DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, messages,
 					string);
 		}
 
-		string.appendHtml(renderedContent);
+		if (string != null) {
+			string.appendHtml(renderedContent);
+		}
 
 	}
+
 
 	private SubGraphData convertToGraph(QueryResultTable resultSet, Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, List<Message> messages) {
 		SubGraphData data = new SubGraphData();
 		List<String> variables = resultSet.getVariables();
 		if (variables.size() < 3) {
-			Message m = new Message(Type.ERROR,
+			Message m = new Message(Message.Type.ERROR,
 					"A sparqlvis query requires exactly three variables!");
 			messages.add(m);
 			return null;
@@ -335,7 +365,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 
 		}
 		if (data.getConceptDeclarations().size() == 0) {
-			Message m = new Message(Type.ERROR,
+			Message m = new Message(Message.Type.ERROR,
 					"The query produced an empty result set!");
 			messages.add(m);
 			return null;
@@ -404,8 +434,10 @@ public class SparqlVisTypeRenderer implements Renderer {
 						"No such layout " + layout + " found!");
 				Collection<Message> warnings = new HashSet<Message>();
 				messages.add(noSuchLayout);
-				DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, warnings,
-						string);
+				if (string != null) {
+					DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, warnings,
+							string);
+				}
 
 			}
 
@@ -486,7 +518,5 @@ public class SparqlVisTypeRenderer implements Renderer {
 			parameterMap.put(OntoGraphDataBuilder.CLASS_COLOR_CODES, Utils.createColorCodings(colorRelationName, core, "rdfs:Class"));
 		}
 	}
-
-
 
 }

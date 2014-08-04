@@ -56,4 +56,14 @@ public class D3VisualizationRenderer implements GraphVisualizationRenderer {
 		return source;
 	}
 
+	@Override
+	public String getGraphFilePath() {
+		return null;
+	}
+
+	@Override
+	public String getFilePath() {
+		return null;
+	}
+
 }
