@@ -132,7 +132,7 @@ class CoveredPathsStrategy extends CoveredPathsStrategyShallow {
 		Collection<ComposedNode> callingActiveCompNodes = new HashSet<ComposedNode>();
 		for (StartNode node : activeStartNodes) {
 			// all composed nodes calling this startnode...
-			List<ComposedNode> callingNodes =
+			Collection<ComposedNode> callingNodes =
 					DiaFluxUtils.getCallingNodes(session.getKnowledgeBase(), node);
 
 			for (ComposedNode composedNode : callingNodes) {

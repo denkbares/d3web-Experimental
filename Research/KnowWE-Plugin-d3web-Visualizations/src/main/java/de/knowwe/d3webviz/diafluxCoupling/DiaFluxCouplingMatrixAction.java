@@ -240,7 +240,7 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 	 * @param result
 	 */
 	private static void getCallHierarchies(Flow flow, Collection<ComposedNode> currentHierarchy, Collection<Collection<ComposedNode>> result) {
-		List<ComposedNode> callingNodes = DiaFluxUtils.getCallingNodes(flow);
+		Collection<ComposedNode> callingNodes = DiaFluxUtils.getCallingNodes(flow);
 		if (callingNodes.isEmpty()) {
 			result.add(currentHierarchy);
 		}
