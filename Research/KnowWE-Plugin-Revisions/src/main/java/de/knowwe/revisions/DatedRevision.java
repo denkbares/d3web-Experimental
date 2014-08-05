@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import de.knowwe.core.DefaultArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.WikiConnector;
 
 /**
@@ -57,7 +58,7 @@ public class DatedRevision extends AbstractRevision {
 		for (Entry<String, Integer> entry : getArticleVersions().entrySet()) {
 			String title = entry.getKey();
 			int version = entry.getValue();
-			String text = Environment.getInstance().getWikiConnector().getVersion(title,
+			String text = Environment.getInstance().getWikiConnector().getArticleText(title,
 					version);
 			Article article = Article.createArticle(text, title, web);
 			articleManager.registerArticle(article);
@@ -93,7 +94,7 @@ public class DatedRevision extends AbstractRevision {
 		for (String title : titles) {
 			int version;
 			try {
-				version = wiki.getVersionAtDate(title, date);
+				version = KnowWEUtils.getVersionAtDate(title, date);
 			}
 			catch (IOException e) {
 				version = -2;

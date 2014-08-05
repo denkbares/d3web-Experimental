@@ -50,7 +50,7 @@ public class UploadedTextDiff extends AbstractAction {
 			Article uploadedArticle = RevisionManager.getRM(context).getUploadedRevision().getArticleManager().getArticle(
 					title);
 			String t1 = uploadedArticle.getRootSection().getText();
-			String t2 = Environment.getInstance().getWikiConnector().getVersion(title, -1);
+			String t2 = Environment.getInstance().getWikiConnector().getArticleText(title, -1);
 
 			String diff = SimpleTextDiff.getTextDiff(title, 0, -1, t1, t2, "\n");
 			if (!diff.isEmpty()) {

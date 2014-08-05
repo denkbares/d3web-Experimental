@@ -51,8 +51,8 @@ public class SimpleTextDiff extends AbstractAction {
 			String title = params.get("title");
 			int version = Integer.parseInt(params.get("version"));
 
-			String t1 = Environment.getInstance().getWikiConnector().getVersion(title, version);
-			String t2 = Environment.getInstance().getWikiConnector().getVersion(title, -1);
+			String t1 = Environment.getInstance().getWikiConnector().getArticleText(title, version);
+			String t2 = Environment.getInstance().getWikiConnector().getArticleText(title, -1);
 
 			String header = "<h4>Text-Diff for page '" + title + "':</h4>";
 			String diff = getTextDiff(title, version, -1, t1, t2, "\n");
