@@ -28,6 +28,10 @@ import javax.servlet.ServletContext;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.Compilers;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.ontology.compile.OntologyCompiler;
 
 /**
  * 
@@ -44,7 +48,15 @@ public class OntoVisSVGDownload extends AbstractAction {
 		String realPath = servletContext.getRealPath("");
 		String separator = System.getProperty("file.separator");
 		String tmpPath = separator + "KnowWEExtension" + separator + "tmp" + separator;
-		String path = realPath + tmpPath + "graph" + context.getParameter(Attributes.SECTION_ID)
+
+		// find graph name
+		Section<?> s = Sections.getSection(context.getParameter("SectionID"));
+		OntologyCompiler ontoCompiler = Compilers.getCompiler(s, OntologyCompiler.class);
+
+		String textHash = String.valueOf(s.getText().hashCode());
+		String compHash = String.valueOf(ontoCompiler.getCompileSection().getTitle().hashCode());
+
+		String path = realPath + tmpPath + "graph_" + textHash + "_" + compHash
 				+ ".svg";
 		File svg = new File(path);
 		String filename = svg.getName();
