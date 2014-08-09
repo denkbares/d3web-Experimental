@@ -1,5 +1,5 @@
 digraph Konzeptuebersicht {
-graph [ rankdir="LR"]
+graph [ rankdir="LR" ]
 "Vorderkammerzugang_Schnitt1"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=Vorderkammerzugang_Schnitt1"  shape="box"  style="rounded" label="Vorderkammerzugang\n_Schnitt1\n" ];
 "Patientenpositionierung-Chirurgischer Zugang"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=Patientenpositionierung-Chirurgischer Zugang"  shape="box"  style="rounded" label="Patientenpositionierung-Chirurgischer\nZugang\n" ];
 "Phako in Hinterkammer"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=Phako in Hinterkammer"  shape="box"  style="rounded" label="Phako in\nHinterkammer\n" ];

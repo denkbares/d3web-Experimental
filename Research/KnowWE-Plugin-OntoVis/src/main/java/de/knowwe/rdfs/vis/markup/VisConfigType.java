@@ -50,6 +50,8 @@ public class VisConfigType extends DefaultMarkupType {
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_FILTERCLASSES, false);
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_FILTERRELATIONS, false);
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_SIZE, false);
+		MARKUP.addAnnotation(OntoVisType.ANNOTATION_HEIGHT, false);
+		MARKUP.addAnnotation(OntoVisType.ANNOTATION_WIDTH, false);
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_FORMAT, false);
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_SHOWCLASSES, false, "true", "false");
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_SHOWPROPERTIES, false, "true", "false");

@@ -1,5 +1,5 @@
 digraph Konzeptuebersicht {
-graph [ rankdir="LR"]
+graph [ rankdir="LR" ]
 "si:burns"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:burns"  shape="box"  style="rounded" label="si:burns" ];
 "si:Human"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:Human"  shape="box"  style="bold" label="si:Human" ];
 "si:abraham"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:abraham"  shape="box"  style="rounded" label="si:abraham" ];

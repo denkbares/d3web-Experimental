@@ -38,6 +38,8 @@ public class SparqlVisType extends DefaultMarkupType {
 	public static final String ANNOTATION_CONCEPT = "concept";
 	public static final String ANNOTATION_COMMENT = "comment";
 	public static final String ANNOTATION_SIZE = "size";
+	public static final String ANNOTATION_WIDTH = "width";
+	public static final String ANNOTATION_HEIGHT = "height";
 	public static final String ANNOTATION_FORMAT = "format";
 	public static final String ANNOTATION_LANGUAGE = "language";
 	public static final String ANNOTATION_LINK_MODE = "linkMode";
@@ -75,6 +77,10 @@ public class SparqlVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_CONCEPT, false);
 		MARKUP.addAnnotation(ANNOTATION_COMMENT, false);
 		MARKUP.addAnnotation(ANNOTATION_SIZE, false);
+		MARKUP.addAnnotation(ANNOTATION_WIDTH, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_WIDTH, NothingRenderer.getInstance());
+		MARKUP.addAnnotation(ANNOTATION_HEIGHT, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_HEIGHT, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(ANNOTATION_FORMAT, false);
 		MARKUP.addAnnotation(PackageManager.MASTER_ATTRIBUTE_NAME, false);
 		MARKUP.addAnnotation(ANNOTATION_LANGUAGE, false);

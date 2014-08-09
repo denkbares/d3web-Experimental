@@ -73,6 +73,8 @@ public abstract class GraphDataBuilder<T extends Object> {
 	public static final String USE_LABELS = "use_labels";
 
 	public static final String GRAPH_SIZE = "graph_size";
+	public static final String GRAPH_WIDTH = "graph_width";
+	public static final String GRAPH_HEIGHT = "graph height";
 	public static final String RANK_DIRECTION = "rank_direction";
 	public static final String LINK_MODE = "LINK_MODE";
 	public static final String LINK_MODE_JUMP = "jump";

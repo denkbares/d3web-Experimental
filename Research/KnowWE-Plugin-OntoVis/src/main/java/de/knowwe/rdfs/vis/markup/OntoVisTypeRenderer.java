@@ -83,6 +83,18 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 			parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, size);
 		}
 
+		String width = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_WIDTH);
+		if (width != null) {
+			parameterMap.put(OntoGraphDataBuilder.GRAPH_WIDTH, width);
+		}
+
+		String height = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_HEIGHT);
+		if (height != null) {
+			parameterMap.put(OntoGraphDataBuilder.GRAPH_HEIGHT, height);
+		}
+
 		String format = OntoVisType.getAnnotation(section,
 				OntoVisType.ANNOTATION_FORMAT);
 		if (format != null) {
@@ -290,6 +302,12 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		// size
 		parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, VisConfigType.getAnnotation(section,
 				OntoVisType.ANNOTATION_SIZE));
+
+		parameterMap.put(OntoGraphDataBuilder.GRAPH_WIDTH, VisConfigType.getAnnotation(section,
+				OntoVisType.ANNOTATION_WIDTH));
+
+		parameterMap.put(OntoGraphDataBuilder.GRAPH_HEIGHT, VisConfigType.getAnnotation(section,
+				OntoVisType.ANNOTATION_HEIGHT));
 
 		// format
 		String format = VisConfigType.getAnnotation(section,

@@ -1,9 +1,9 @@
 digraph Konzeptuebersicht {
-graph [ rankdir="LR"]
+graph [ rankdir="LR" ]
 "si:gender"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:gender"  shape="hexagon" label="si:gender" ];
 "si:GenderType"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:GenderType"  shape="box"  style="bold" label="Gender" ];
-"si:Human"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:Human"  shape="box"  style="bold" label="Human" ];
-"owl:Thing"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=owl:Thing"  shape="box"  style="bold" label=<<U>owl:Thing</U>> ];
+"si:Human"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:Human"  shape="box"  style="bold" label=<<U>Human</U>> ];
+"owl:Thing"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=owl:Thing"  shape="box"  style="bold" label="owl:Thing" ];
 "si:gender" -> "si:gender" [ label = "rdfs:subPropertyOf" arrowtail="normal"  color="black"  ];
 "si:gender" -> "si:GenderType" [ label = "rdfs:domain" arrowtail="normal"  color="black"  ];
 "owl:Thing" -> "owl:Thing" [ label = "rdfs:subClassOf" arrowtail="normal"  color="#19F193"  ];

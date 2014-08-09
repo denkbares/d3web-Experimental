@@ -21,6 +21,8 @@ public class OntoVisType extends DefaultMarkupType {
 	public static final String ANNOTATION_FILTERCLASSES = "filterClasses";
 	public static final String ANNOTATION_FILTERRELATIONS = "filterRelations";
 	public static final String ANNOTATION_SIZE = "size";
+	public static final String ANNOTATION_WIDTH = "width";
+	public static final String ANNOTATION_HEIGHT = "height";
 	public static final String ANNOTATION_FORMAT = "format";
 	public static final String ANNOTATION_SHOWCLASSES = "showClasses";
 	public static final String ANNOTATION_SHOWPROPERTIES = "showProperties";
@@ -59,6 +61,10 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_FILTERRELATIONS, false);
 		MARKUP.addAnnotation(ANNOTATION_SIZE, false);
 		MARKUP.addAnnotationRenderer(ANNOTATION_SIZE, NothingRenderer.getInstance());
+		MARKUP.addAnnotation(ANNOTATION_WIDTH, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_WIDTH, NothingRenderer.getInstance());
+		MARKUP.addAnnotation(ANNOTATION_HEIGHT, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_HEIGHT, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(ANNOTATION_FORMAT, false);
 		MARKUP.addAnnotation(ANNOTATION_SHOWCLASSES, false, "true", "false");
 		MARKUP.addAnnotation(ANNOTATION_SHOWPROPERTIES, false, "true", "false");

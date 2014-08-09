@@ -148,6 +148,18 @@ public class SparqlVisTypeRenderer implements Renderer {
 			parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, size);
 		}
 
+		String height =  SparqlVisType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_HEIGHT);
+		if (height != null) {
+			parameterMap.put(OntoGraphDataBuilder.GRAPH_HEIGHT, height);
+		}
+
+		String width =  SparqlVisType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_WIDTH);
+		if (width != null) {
+			parameterMap.put(OntoGraphDataBuilder.GRAPH_WIDTH, width);
+		}
+
 		// set format (png/svg)
 		String format = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_FORMAT);
@@ -446,6 +458,12 @@ public class SparqlVisTypeRenderer implements Renderer {
 		// size
 		parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, VisConfigType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_SIZE));
+
+		parameterMap.put(OntoGraphDataBuilder.GRAPH_HEIGHT, VisConfigType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_HEIGHT));
+
+		parameterMap.put(OntoGraphDataBuilder.GRAPH_WIDTH, VisConfigType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_WIDTH));
 
 		// format
 		String format = VisConfigType.getAnnotation(section,

@@ -1,5 +1,5 @@
 digraph Konzeptuebersicht {
-graph [ rankdir="LR"]
+graph [ rankdir="LR" ]
 "si:child"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:child"  shape="hexagon"  style="bold" label=<<U>si:child</U>> ];
 "si:relatedWith"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:relatedWith"  shape="hexagon" label="si:relatedWith" ];
 "si:parent"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:parent"  shape="hexagon" label="si:parent" ];

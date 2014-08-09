@@ -1,5 +1,5 @@
 digraph Konzeptuebersicht {
-graph [size="7.18676193!" rankdir="RL"]
+graph [ size="7.18676193!" rankdir="RL" ]
 "ICCE"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ICCE"  shape="box"  style="rounded" label="ICCE" ];
 "Kombinierte Verfahren"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=Kombinierte Verfahren"  shape="box"  style="rounded" label="Kombinierte\nVerfahren\n" ];
 "ECCE"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ECCE"  shape="box"  style="rounded" label="ECCE" ];

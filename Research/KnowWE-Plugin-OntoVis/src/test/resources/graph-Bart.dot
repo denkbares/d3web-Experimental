@@ -1,5 +1,5 @@
 digraph Konzeptuebersicht {
-graph [size="7.81169775!" rankdir="TB"]
+graph [ size="7.81169775!" rankdir="TB" ]
 "si:maggie"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:maggie"  shape="box"  style="rounded" label="Maggie\nSimpson\n" ];
 "si:lisa"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:lisa"  shape="box"  style="rounded" label="Lisa Simpson" ];
 "si:homer"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:homer"  shape="box"  style="rounded" label="Homer\nSimpson\n" ];

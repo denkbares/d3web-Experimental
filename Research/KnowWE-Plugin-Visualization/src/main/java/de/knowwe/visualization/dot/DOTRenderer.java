@@ -95,6 +95,7 @@ public class DOTRenderer {
         String dotSource = "digraph " + graphtitle + " {\n";
         dotSource = insertPraefixed(dotSource, parameters);
         dotSource += DOTRenderer.setSizeAndRankDir(parameters.get(GraphDataBuilder.RANK_DIRECTION),
+				parameters.get(GraphDataBuilder.GRAPH_WIDTH), parameters.get(GraphDataBuilder.GRAPH_HEIGHT),
                 parameters.get(GraphDataBuilder.GRAPH_SIZE), data.getConceptDeclarations().size());
 
         dotSource += generateGraphSource(data, parameters);
@@ -297,39 +298,73 @@ public class DOTRenderer {
     /**
      * @created 30.10.2012
      */
-    private static String setSizeAndRankDir(String rankDirSetting, String graphSize, int numberOfConcepts) {
-        String source = "";
-        String rankDir = "LR";
+    private static String setSizeAndRankDir(String rankDirSetting, String width, String height, String graphSize, int numberOfConcepts) {
+		String rankDir = "LR";
+		String size = "";
+		String ratio = "";
 
-        if (rankDirSetting != null) {
-            rankDir = rankDirSetting;
-        }
-        if (graphSize != null) {
-            if (graphSize.matches("\\d+px")) {
-                graphSize = graphSize.substring(0, graphSize.length() - 2);
-                source += "graph [ rankdir=\"" + rankDir + "\"]\n";
-            }
-            if (graphSize.matches("\\d+")) {
-                source += "graph [size=\""
-                        + String.valueOf(Double.valueOf(graphSize) * 0.010415597) + "!\""
-                        + " rankdir=\"" + rankDir + "\"]\n";
-            } else {
-                source += "graph [size=\""
-                        + calculateAutomaticGraphSize(numberOfConcepts) + "!\""
-                        + " rankdir=\"" + rankDir + "\"]\n";
-            }
-        } else {
-            if (numberOfConcepts == 1 || numberOfConcepts == 2) {
-                source += "graph [size=\""
-                        + calculateAutomaticGraphSize(numberOfConcepts) + "!\""
-                        + " rankdir=\"" + rankDir + "\"]\n";
-            } else {
-                source += "graph [ rankdir=\"" + rankDir + "\"]\n";
-            }
+		if (rankDirSetting != null) {
+			rankDir = rankDirSetting;
+		}
 
-        }
-        return source;
-    }
+		if (width != null || height != null) {
+			if (width != null) {
+				if (width.matches("\\d+px")) {
+					width = width.substring(0, width.length() - 2);
+				}
+				if (width.matches("\\d+")) {
+					width = String.valueOf(Double.valueOf(width) * 0.010415597);
+				}
+			}
+
+			if (height != null) {
+				if (height.matches("\\d+px")) {
+					height = height.substring(0, height.length() - 2);
+				}
+				if (height.matches("\\d+")) {
+					height = String.valueOf(Double.valueOf(height) * 0.010415597);
+				}
+			}
+
+			if (height != null && width != null) {
+				// ratio = " ratio=\"" + Double.valueOf(height)/Double.valueOf(width) + "\" ";
+				ratio = "ratio=\"fill\" ";
+				size = width + "," + height + "!";
+			} else if (height != null) {
+				size = "10000000," + height + "!";
+			} else if (width != null) {
+				size = width + ",10000000!";
+			}
+		}
+		else if (graphSize != null) {
+			if (graphSize.matches("\\d+px")) {
+				graphSize = graphSize.substring(0, graphSize.length() - 2);
+			}
+			if (graphSize.matches("\\d+")) {
+				size = String.valueOf(Double.valueOf(graphSize) * 0.010415597) + "!";
+			}
+			else {
+				size = calculateAutomaticGraphSize(numberOfConcepts) + "!";
+			}
+		}
+		else {
+			if (numberOfConcepts == 1 || numberOfConcepts == 2) {
+				size = calculateAutomaticGraphSize(numberOfConcepts) + "!";
+			}
+		}
+
+		String source = "graph [ ";
+		source += "rankdir=\"" + rankDir + "\" ";
+		if (!Strings.isBlank(size)) {
+			source += "size=\"" + size + "\" ";
+		}
+		if (!Strings.isBlank(ratio)) {
+			source += ratio;
+		}
+		source += "]\n";
+
+		return source;
+	}
 
     private static String calculateAutomaticGraphSize(int numberOfConcepts) {
         if (numberOfConcepts == 1) return "1";
