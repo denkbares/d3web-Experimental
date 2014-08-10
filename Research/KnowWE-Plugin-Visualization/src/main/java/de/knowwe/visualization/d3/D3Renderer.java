@@ -97,6 +97,8 @@ public class D3Renderer {
 		htmlsource += "<script>";
 		htmlsource += " drawTree("
 				+ parameters.get(GraphDataBuilder.GRAPH_SIZE)
+				+ ", " + parameters.get(GraphDataBuilder.GRAPH_WIDTH)
+				+ ", " + parameters.get(GraphDataBuilder.GRAPH_HEIGHT)
 				+ ", " + jsonSource
 				+ ", " + "\"" + parameters.get(GraphDataBuilder.SECTION_ID) + "\""
 				+ ") ";
@@ -128,6 +130,8 @@ public class D3Renderer {
 		htmlsource += "<script>";
 		htmlsource += " drawWheel("
 				+ parameters.get(GraphDataBuilder.GRAPH_SIZE)
+				+ ", " + parameters.get(GraphDataBuilder.GRAPH_WIDTH)
+				+ ", " + parameters.get(GraphDataBuilder.GRAPH_HEIGHT)
 				+ ", " + jsonSource
 				+ ", " + "\"" + parameters.get(GraphDataBuilder.SECTION_ID) + "\""
 				+ ") ";
@@ -156,6 +160,8 @@ public class D3Renderer {
 		htmlsource += "<script>";
 		htmlsource += " drawForce("
 				+ parameters.get(GraphDataBuilder.GRAPH_SIZE)
+				+ ", " + parameters.get(GraphDataBuilder.GRAPH_WIDTH)
+				+ ", " + parameters.get(GraphDataBuilder.GRAPH_HEIGHT)
 				+ ", " + arraySource
 				+ ", " + arrayLinks
 				+ ", " + "\"" + GraphDataBuilder.createBaseURL() + "\""
@@ -178,12 +184,16 @@ public class D3Renderer {
 	 * Writes the JSON source for the wheel visualization.
 	 *
 	 * @param data
-	 * @param the  main concept on which the data bases on
+	 * @param concept main concept on which the data bases on
 	 * @created 20.06.2013
 	 */
 	private static void writeJSONWheelSource(SubGraphData data, String concept) throws IllegalArgumentException {
 		jsonSource = "{\n";
-		jsonSource += "\"concept\": \"" + concept + "\"";
+		if (concept.endsWith("\"")) {
+			jsonSource += "\"concept\": " + concept;
+		} else {
+			jsonSource += "\"concept\": \"" + concept + "\"";
+		}
 
 		ConceptNode conceptRoot = data.getConcept(concept);
 		if (conceptRoot == null) {
@@ -237,8 +247,13 @@ public class D3Renderer {
 				targetURL = Strings.encodeURL(conceptUrl);
 			}
 
+			String label = getLabel(next);
 			if (!next.isInSourceYet()) {
-				jsonSource += "{\"concept\": \"" + getLabel(next) + "\"";
+				if (label.endsWith("\"")) {
+					jsonSource += "{\"concept\": " + label;
+				} else {
+					jsonSource += "{\"concept\": \"" + label + "\"";
+				}
 				jsonSource += ",\n\"conceptUrl\": \"" + targetURL
 						+ "\" ";
 				next.setIsInSourceYet(true);
@@ -250,7 +265,11 @@ public class D3Renderer {
 			// ...otherwise only add the child but don't go further in the tree
 			// (-> endless loop)
 			else {
-				jsonSource += "{\"concept\": \"" + getLabel(next) + "\"";
+				if (label.endsWith("\"")) {
+					jsonSource += "{\"concept\": " + label;
+				} else {
+					jsonSource += "{\"concept\": \"" + label + "\"";
+				}
 				jsonSource += ",\n\"conceptUrl\": \"" + targetURL + "\"\n";
 				jsonSource += "}";
 			}
@@ -288,9 +307,23 @@ public class D3Renderer {
 				objectLabel = next.getObject().getName();
 			}
 
-			arraySource += "{source: \"" + subjectLabel + "\", ";
-			arraySource += "target: \"" + objectLabel + "\", ";
-			arraySource += "type: \"" + p + "\"}";
+			if (subjectLabel.endsWith("\"")) {
+				arraySource += "{source: " + subjectLabel + ", ";
+			} else {
+				arraySource += "{source: \"" + subjectLabel + "\", ";
+			}
+			if (objectLabel.endsWith("\"")) {
+				arraySource += "target: " + objectLabel + ", ";
+			} else {
+				arraySource += "target: \"" + objectLabel + "\", ";
+			}
+			if (p.endsWith("\"")) {
+				arraySource += "type: " + p + "}";
+			} else {
+				arraySource += "type: \"" + p + "\"}";
+			}
+
+
 			if (iterator.hasNext()) {
 				arraySource += ",";
 			}

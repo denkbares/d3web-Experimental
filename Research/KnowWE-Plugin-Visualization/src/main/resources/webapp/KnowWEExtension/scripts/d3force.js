@@ -1,4 +1,4 @@
-function drawForce(size, array, linksList, baseurl, title, sectionID) { 
+function drawForce(size, w, h, array, linksList, baseurl, title, sectionID) {
 	url = baseurl + "?page=" + title + "&concept=";
 	
 	var links = array;
@@ -13,7 +13,15 @@ function drawForce(size, array, linksList, baseurl, title, sectionID) {
 
 	var width = 650;
 	var height = width;
-	if (size != null) {
+
+	if (w != null || h != null) {
+		if (w != null) {
+			width = w;
+		}
+		if (h != null) {
+			height = h;
+		}
+	} else if (size != null) {
 		width = size;
 	}
 	

@@ -1,11 +1,21 @@
-function drawWheel(size, json, sectionID) { 
+function drawWheel(size, w, h, json, sectionID) {
 	
 	var width = 650;
-	if (size != null) {
+	var height = width;
+
+	if (w != null || h != null) {
+		if (w != null) {
+			width = w;
+		}
+		if (h != null) {
+			height = h;
+		}
+	} else if (size != null) {
 		width = size;
-	} 
-	var height = width,
-	    radius = width / 2,
+		height = size;
+	}
+
+	var radius = width / 2,
 	    padding = 5,
 	    duration = 1000, 
 	    x = d3.scale.linear().range([0, 2 * Math.PI]),

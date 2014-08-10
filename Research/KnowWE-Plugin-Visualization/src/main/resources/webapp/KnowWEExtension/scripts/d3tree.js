@@ -1,4 +1,4 @@
-function drawTree(size, jsonsource, sectionID) {
+function drawTree(size, w, h, jsonsource, sectionID) {
 	
 	// define layout 
 	
@@ -20,7 +20,14 @@ function drawTree(size, jsonsource, sectionID) {
 	 
 	 var depth;
 
-	if(size != null) {
+	if (w != null || h != null) {
+		if (w != null) {
+			width = w - margin.right - margin.left;
+		}
+		if (h != null) {
+			height = w - margin.top - margin.bottom;
+		}
+	} else if(size != null) {
 		width = size - margin.right - margin.left;
 	}
 	
