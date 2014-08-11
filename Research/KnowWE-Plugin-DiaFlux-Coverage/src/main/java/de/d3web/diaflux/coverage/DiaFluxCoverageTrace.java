@@ -133,7 +133,7 @@ public class DiaFluxCoverageTrace implements SessionObject {
 	 */
 	public void traceNodesAndEdges(Session session) {
 		DiaFluxCaseObject caseObject = DiaFluxUtils.getDiaFluxCaseObject(session);
-		Collection<SnapshotNode> enteredSnapshots = caseObject.getActivatedSnapshots(session);
+		Collection<SnapshotNode> enteredSnapshots = caseObject.getActivatedSnapshots();
 		Collection<Node> activeNodes = DiaFluxTrace.collectActiveNodes(caseObject, enteredSnapshots);
 
 		for (Node node : activeNodes) {
