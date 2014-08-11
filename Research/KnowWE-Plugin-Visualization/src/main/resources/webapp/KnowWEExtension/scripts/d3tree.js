@@ -25,7 +25,7 @@ function drawTree(size, w, h, jsonsource, sectionID) {
 			width = w - margin.right - margin.left;
 		}
 		if (h != null) {
-			height = w - margin.top - margin.bottom;
+			height = h - margin.top - margin.bottom;
 		}
 	} else if(size != null) {
 		width = size - margin.right - margin.left;
@@ -44,7 +44,7 @@ function drawTree(size, w, h, jsonsource, sectionID) {
 	
 	var svg = div.append("svg")
 				.attr("id", "svg"+sectionID)
-				.attr("min-width", width + margin.right + margin.left)
+				.attr("width", width + margin.right + margin.left)
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g")
 				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
