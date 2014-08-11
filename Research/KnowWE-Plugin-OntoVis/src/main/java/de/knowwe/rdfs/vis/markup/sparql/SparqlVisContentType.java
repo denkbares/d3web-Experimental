@@ -21,13 +21,12 @@ package de.knowwe.rdfs.vis.markup.sparql;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
-import de.knowwe.kdom.renderer.AsynchronRenderer;
 
 public class SparqlVisContentType extends AbstractType {
 
 	public SparqlVisContentType() {
 		this.setSectionFinder(AllTextFinder.getInstance());
-		this.setRenderer(new AsynchronRenderer(new SparqlVisTypeRenderer()));
+		this.setRenderer(new SwitchAsyncDelegateRenderer());
 	}
 
 }
