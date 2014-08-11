@@ -17,8 +17,6 @@
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Annotation"
 		id="LoadKBAnnotation">
-		<parameter id="class"
-			value="de.knowwe.loadkb.LoadKBAnnotation" />
 		<parameter id="name" value="load" />
 		<parameter id="description"
 			value="Offers the possibility to load a KB" />
