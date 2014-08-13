@@ -73,4 +73,26 @@
 		<parameter id="scope" value="QuestionTreeQuestionnaireDefinition" />
 	</extension>
 
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CompileScript"
+		id="Rdf2GoFlowScript">
+		<parameter id="class" value="de.knowwe.rdfs.d3web.Rdf2GoFlowScript" />
+		<parameter id="name" value="Rdf2GoFlowScript" />
+		<parameter id="description" value="Compiles information about flowcharts into the triple store." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="compilepriority" value="0" />
+		<parameter id="scope" value="FlowchartType" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CompileScript"
+		id="Rdf2GoNodeScript">
+		<parameter id="class" value="de.knowwe.rdfs.d3web.Rdf2GoNodeScript" />
+		<parameter id="name" value="Rdf2GoNodeScript" />
+		<parameter id="description" value="Compiles information about flowchart nodes into the triple store." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="compilepriority" value="0" />
+		<parameter id="scope" value="NodeType" />
+	</extension>
+
 </plugin>
