@@ -45,7 +45,6 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
  */
 public abstract class Rdf2GoDashTreeTermRelationScript extends DashTreeTermRelationScript<OntologyCompiler> implements DestroyScript<OntologyCompiler, TermDefinition> {
 
-
 	@Override
 	protected void createObjectRelations(Section<TermDefinition> parentSection, OntologyCompiler compiler, Identifier parentIdentifier, List<Identifier> childrenIdentifier) {
 
@@ -56,16 +55,19 @@ public abstract class Rdf2GoDashTreeTermRelationScript extends DashTreeTermRelat
 
 		Rdf2GoCore core = compiler.getRdf2GoCore();
 		URI parentURI = core.createlocalURI(Rdf2GoUtils.getCleanedExternalForm(parentIdentifier));
+		URI hasChildURI = core.createlocalURI("hasChild");
 		List<Statement> statements = new ArrayList<Statement>();
 		boolean hasParent = Rdf2GoD3webUtils.hasParentDashTreeElement(compiler, parentIdentifier);
 		if (!hasParent) {
 			URI rootURI = getRootURI(core);
 			Rdf2GoUtils.addStatement(core, parentURI, RDFS.subClassOf, rootURI, statements);
+			Rdf2GoUtils.addStatement(core, rootURI, hasChildURI, parentURI, statements);
 		}
 		int index = 0;
 		for (Identifier childIdentifier : childrenIdentifier) {
 			URI childURI = core.createlocalURI(Rdf2GoUtils.getCleanedExternalForm(childIdentifier));
-			Rdf2GoUtils.addStatement(core,  childURI, RDFS.subClassOf, parentURI,statements);
+			Rdf2GoUtils.addStatement(core, childURI, RDFS.subClassOf, parentURI, statements);
+			Rdf2GoUtils.addStatement(core, parentURI, hasChildURI, childURI, statements);
 
 			BlankNode indexNode = core.createBlankNode();
 			URI hasIndexInfoURI = core.createlocalURI("hasIndexInfo");
