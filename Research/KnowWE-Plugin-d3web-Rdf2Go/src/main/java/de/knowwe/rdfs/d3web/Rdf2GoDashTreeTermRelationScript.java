@@ -31,6 +31,7 @@ import org.ontoware.rdf2go.vocabulary.RDFS;
 import org.ontoware.rdf2go.vocabulary.XSD;
 
 import de.d3web.strings.Identifier;
+import de.knowwe.core.compile.CompileScript;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.DestroyScript;
 import de.knowwe.core.kdom.objects.TermDefinition;
@@ -41,7 +42,10 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
- * Created by Albrecht Striffler (denkbares GmbH) on 12.03.14.
+ * This {@link CompileScript} adds all relations defined by das trees to the triple store.
+ *
+ * @author Albrecht Striffler (denkbares GmbH)
+ * @created 12.03.14.
  */
 public abstract class Rdf2GoDashTreeTermRelationScript extends DashTreeTermRelationScript<OntologyCompiler> implements DestroyScript<OntologyCompiler, TermDefinition> {
 
