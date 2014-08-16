@@ -82,11 +82,71 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 		initialiseData(realPath, section, parameters, uriProvider);
 
+		// filter inverseOf-relations if asked (default is no filter)
+		String showInverse = parameters.get(GraphDataBuilder.SHOW_INVERSE);
+		if (showInverse != null && showInverse.equals("false")) {
+			addInverseRelationsToFilter();
+		}
+
 		if (section != null) {
 			EventManager.getInstance()
 					.registerListener(GraphReRenderer.getInstance(section.getArticleManager(), super.getSourceRenderer()
 							.getFilePath()));
 		}
+	}
+
+	private void addInverseRelationsToFilter() {
+		String newExcludedRelationsList = getParameterMap().get(GraphDataBuilder.EXCLUDED_RELATIONS);
+		if (newExcludedRelationsList == null) {
+			newExcludedRelationsList = "";
+		}
+
+		String exclude = "";
+
+		// find all inverse Relations
+		String query = "SELECT ?x ?z WHERE { ?x owl:inverseOf ?z }";
+		ClosableIterator<QueryRow> result =
+				rdfRepository.sparqlSelectIt(
+						query);
+		while (result.hasNext()) {
+			QueryRow row = result.next();
+			Node xURI = row.getValue("x");
+			String x = getConceptName(xURI);
+
+			Node zURI = row.getValue("z");
+			String z = getConceptName(zURI);
+
+			// find out which relation should be excluded
+			boolean isXFiltered = getFilteredRelations().contains(x);
+			boolean isZFiltered = getFilteredRelations().contains(z);
+
+			boolean isXExcluded = getExcludedRelations().contains(x);
+			boolean isZExcluded = getExcludedRelations().contains(z);
+
+			if (isXFiltered || isZFiltered) {
+				if (isXFiltered) {
+					exclude = z;
+				} else {
+					exclude = x;
+				}
+			} else if (isXExcluded || isZExcluded) {
+				if (isXExcluded) {
+					exclude = x;
+				} else {
+					exclude = z;
+				}
+			} else {
+				if (x.compareTo(z) < 0) {
+					exclude = z;
+				} else {
+					exclude = x;
+				}
+			}
+
+			newExcludedRelationsList += "," + exclude;
+		}
+
+		getParameterMap().put(GraphDataBuilder.EXCLUDED_RELATIONS, newExcludedRelationsList);
 	}
 
     public String getConceptName(Node uri) {
@@ -437,7 +497,6 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         if (propertyExcludeSPARQLFilterCache.get(filterHashcode) != null) {
             return propertyExcludeSPARQLFilterCache.get(filterHashcode);
         }
-
 
         if(getFilteredRelations().size() > 0) {
             // we are in white list mode, i.e. show only "..."

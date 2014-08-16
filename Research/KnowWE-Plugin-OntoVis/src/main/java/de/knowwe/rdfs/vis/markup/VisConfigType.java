@@ -60,6 +60,7 @@ public class VisConfigType extends DefaultMarkupType {
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_DOT_APP, false, OntoVisType.dot_apps.values());
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_ADD_TO_DOT, false);
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_OUTGOING_EDGES, false, "true", "false");
+		MARKUP.addAnnotation(OntoVisType.ANNOTATION_SHOWINVERSE, false, "true", "false");
 		MARKUP.addAnnotation(Rdf2GoCore.GLOBAL, false, "true", "false");
 		MARKUP.addAnnotationRenderer(Rdf2GoCore.GLOBAL, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());

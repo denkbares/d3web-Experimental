@@ -64,8 +64,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 					}
 				};
 			}
-		}
-		else {
+		} else {
 			rdfRepository = compiler.getRdf2GoCore();
 			uriProvider = new PackageCompileLinkToTermDefinitionProvider();
 		}
@@ -138,8 +137,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 			String alreadyExcluded = parameterMap.get(OntoGraphDataBuilder.EXCLUDED_RELATIONS);
 			if (alreadyExcluded == null) {
 				allExcludes = excludedRelations;
-			}
-			else {
+			} else {
 				if (!alreadyExcluded.trim().endsWith(",")) {
 					alreadyExcluded += ", ";
 				}
@@ -155,8 +153,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 			String alreadyExcluded = parameterMap.get(OntoGraphDataBuilder.EXCLUDED_NODES);
 			if (alreadyExcluded == null) {
 				allExcludes = excludeNodes;
-			}
-			else {
+			} else {
 				if (!alreadyExcluded.trim().endsWith(",")) {
 					alreadyExcluded += ", ";
 				}
@@ -172,8 +169,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 			String alreadyFiltered = parameterMap.get(OntoGraphDataBuilder.FILTERED_CLASSES);
 			if (alreadyFiltered == null) {
 				allFilters = filteredClasses;
-			}
-			else {
+			} else {
 				if (!alreadyFiltered.trim().endsWith(",")) {
 					alreadyFiltered += ", ";
 				}
@@ -189,8 +185,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 			String alreadyFiltered = parameterMap.get(OntoGraphDataBuilder.FILTERED_RELATIONS);
 			if (alreadyFiltered == null) {
 				allFilters = filteredRelations;
-			}
-			else {
+			} else {
 				if (!alreadyFiltered.trim().endsWith(",")) {
 					alreadyFiltered += ", ";
 				}
@@ -204,6 +199,11 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 				OntoVisType.ANNOTATION_OUTGOING_EDGES);
 		if (outgoingEdges != null) {
 			parameterMap.put(OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, outgoingEdges);
+		}
+
+		String showInverse = VisConfigType.getAnnotation(section, OntoVisType.ANNOTATION_SHOWINVERSE);
+		if (showInverse != null) {
+			parameterMap.put(OntoGraphDataBuilder.SHOW_INVERSE, showInverse);
 		}
 
 		String classes = OntoVisType.getAnnotation(section,
@@ -366,6 +366,10 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 				OntoVisType.ANNOTATION_OUTGOING_EDGES);
 		parameterMap.put(OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, outgoingEdges);
 
+		// inverse Realtions
+		String showInverse = VisConfigType.getAnnotation(section, OntoVisType.ANNOTATION_SHOWINVERSE);
+		parameterMap.put(OntoGraphDataBuilder.SHOW_INVERSE, showInverse);
+
 		// show classes
 		String classes = VisConfigType.getAnnotation(section,
 				OntoVisType.ANNOTATION_SHOWCLASSES);
@@ -473,8 +477,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 				}
 			}
 			parameter += defaultExclude;
-		}
-		else {
+		} else {
 			parameter = defaultExclude;
 		}
 		return parameter;

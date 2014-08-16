@@ -92,6 +92,7 @@ public abstract class GraphDataBuilder<T extends Object> {
 	public static final String CLASS_COLOR_CODES = "class_color_codes";
 
 	public static final String SHOW_OUTGOING_EDGES = "SHOW_OUTGOING_EDGES";
+	public static final String SHOW_INVERSE = "SHOW_INVERSE";
 
 	public static final String FILE_ID = "file-id";
 

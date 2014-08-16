@@ -28,6 +28,7 @@ public class OntoVisType extends DefaultMarkupType {
 	public static final String ANNOTATION_SHOWPROPERTIES = "showProperties";
 	public static final String ANNOTATION_LANGUAGE = "language";
 	public static final String ANNOTATION_OUTGOING_EDGES = "outgoingEdges";
+	public static final String ANNOTATION_SHOWINVERSE = "showInverse";
 
 	public static final String ANNOTATION_DOT_APP = "dotApp";
 	public static final String ANNOTATION_ADD_TO_DOT = "dotAddLine";
@@ -73,6 +74,7 @@ public class OntoVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_DOT_APP, false, dot_apps.values());
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
 		MARKUP.addAnnotation(ANNOTATION_OUTGOING_EDGES, false, "true", "false");
+		MARKUP.addAnnotation(ANNOTATION_SHOWINVERSE, false, "true", "false");
 		MARKUP.addAnnotation(Rdf2GoCore.GLOBAL, false, "true", "false");
 		MARKUP.addAnnotationRenderer(Rdf2GoCore.GLOBAL, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
