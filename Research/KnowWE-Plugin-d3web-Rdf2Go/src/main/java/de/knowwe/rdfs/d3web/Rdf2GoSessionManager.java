@@ -1,10 +1,12 @@
 package de.knowwe.rdfs.d3web;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.json.JSONArray;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.Literal;
@@ -18,15 +20,20 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Fact;
+import de.d3web.core.session.values.ChoiceID;
+import de.d3web.core.session.values.DateValue;
+import de.d3web.core.session.values.MultipleChoiceValue;
+import de.d3web.core.session.values.NumValue;
+import de.d3web.scoring.HeuristicRating;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class Rdf2GoSessionManager {
 
-	private final Map<TerminologyObject, Set<Statement>> statementCache = new HashMap<TerminologyObject, Set<Statement>>();
-	private final Map<TerminologyObject, BlankNode> factNodeCache = new HashMap<TerminologyObject, BlankNode>();
-	private final Map<Object, Resource> agentNodeCache = new HashMap<Object, Resource>();
+	private final Map<TerminologyObject, Set<Statement>> statementCache = new HashMap<>();
+	private final Map<TerminologyObject, BlankNode> factNodeCache = new HashMap<>();
+	private final Map<Object, Resource> agentNodeCache = new HashMap<>();
 
 	protected final Rdf2GoCore core;
 	private final boolean addProvExplanation;
@@ -42,7 +49,7 @@ public class Rdf2GoSessionManager {
 	}
 
 	public void addSessionToRdf2GoCore(Session session) {
-		Set<Statement> statements = new HashSet<Statement>();
+		Set<Statement> statements = new HashSet<>();
 		URI sessionIdURI = Rdf2GoD3webUtils.getSessionIdURI(core, session);
 		URI sessionURI = core.createlocalURI(Session.class.getSimpleName());
 
@@ -91,7 +98,7 @@ public class Rdf2GoSessionManager {
 	}
 
 	protected Set<Statement> generateFactStatements(Session session, Fact fact) {
-		Set<Statement> statements = new HashSet<Statement>();
+		Set<Statement> statements = new HashSet<>();
 
 		BlankNode factNode = getFactNode(fact);
 
@@ -182,20 +189,21 @@ public class Rdf2GoSessionManager {
 	}
 
 	private Literal getValueLiteral(Value value) {
-		Object object = value.getValue();
-		if (object instanceof Integer) {
-			return core.createDatatypeLiteral(object.toString(), XSD._integer);
+		if (value instanceof NumValue) {
+			return core.createDatatypeLiteral(((NumValue) value).getDouble().toString(), XSD._double);
 		}
-		else if (object instanceof Double) {
-			return core.createDatatypeLiteral(object.toString(), XSD._double);
+		else if (value instanceof DateValue) {
+			return core.createDatatypeLiteral(((DateValue) value).getDateString(), XSD._date);
 		}
-		else if (object instanceof Float) {
-			return core.createDatatypeLiteral(object.toString(), XSD._float);
+		else if (value instanceof MultipleChoiceValue) {
+			Collection<ChoiceID> choiceIDs = ((MultipleChoiceValue) value).getChoiceIDs();
+			JSONArray choiceArray = new JSONArray(choiceIDs);
+			return core.createDatatypeLiteral(choiceArray.toString(), XSD._date);
 		}
-		else if (object instanceof Long) {
-			return core.createDatatypeLiteral(object.toString(), XSD._long);
+		else if (value instanceof HeuristicRating) {
+			return core.createDatatypeLiteral(String.valueOf(((HeuristicRating) value).getScore()), XSD._double);
 		}
-		return core.createDatatypeLiteral(object.toString(), XSD._string);
+		return core.createDatatypeLiteral(value.toString(), XSD._string);
 	}
 
 	public void removeFactStatements(TerminologyObject terminologyObject) {
