@@ -94,7 +94,7 @@ public class DatedRevision extends AbstractRevision {
 		for (String title : titles) {
 			int version;
 			try {
-				version = KnowWEUtils.getVersionAtDate(title, date);
+				version = KnowWEUtils.getArticleVersionAtDate(title, date);
 			}
 			catch (IOException e) {
 				version = -2;
