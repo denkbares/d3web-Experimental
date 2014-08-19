@@ -32,26 +32,26 @@ import de.knowwe.diaflux.FlowchartUtils;
 public class CoverageCityRenderer implements Renderer {
 
 	@Override
-	public void render(Section<?> section, UserContext user, RenderResult bob) {
+	public void render(Section<?> section, UserContext user, RenderResult result) {
 
 		String id = section.getID();
-		bob.appendHtml("<div class=\"diafluxCity\">");
-		bob.appendHtml("<script type=\"text/javascript\" src=\"KnowWEExtension/scripts/city.js\"></script>");
-		bob.appendHtml("<script type=\"text/javascript\" src=\"KnowWEExtension/scripts/scenejs.js\"></script>");
-		bob.appendHtml("<script type=\"text/javascript\" src=\"KnowWEExtension/scripts/d3webviz.js\"></script>");
-		// bob.appendHtml("<link href=\"KnowWEExtension/css/d3webviz.css\" type=\"text/css\" rel=\"stylesheet\">");
-		bob.appendHtml("<canvas id=\"diafluxCity" + id + "\" width=\"1000\" height=\"900\">");
-		bob.appendHtml("</canvas>\n");
+		result.appendHtml("<div class=\"diafluxCity\">");
+		result.appendHtml("<script type=\"text/javascript\" src=\"KnowWEExtension/scripts/city.js\"></script>");
+		result.appendHtml("<script type=\"text/javascript\" src=\"KnowWEExtension/scripts/scenejs.js\"></script>");
+		result.appendHtml("<script type=\"text/javascript\" src=\"KnowWEExtension/scripts/d3webviz.js\"></script>");
+		// result.appendHtml("<link href=\"KnowWEExtension/css/d3webviz.css\" type=\"text/css\" rel=\"stylesheet\">");
+		result.appendHtml("<canvas id=\"diafluxCity" + id + "\" width=\"1000\" height=\"900\">");
+		result.appendHtml("</canvas>\n");
 
-		bob.appendHtml("<script type=\"text/javascript\">KNOWWE.d3webViz.createDiaFluxCity(\"" + id
+		result.appendHtml("<script type=\"text/javascript\">KNOWWE.d3webViz.createDiaFluxCity(\"" + id
 				+ "\", 'CoverageCityAction', KNOWWE.d3webViz.coveragePick);</script>");
-		bob.appendHtml("<div id='pickresult" + id + "'></div>\n");
-		bob.appendHtml("<div id='nodeId" + id + "'></div>\n");
+		result.appendHtml("<div id='pickresult" + id + "'></div>\n");
+		result.appendHtml("<div id='nodeId" + id + "'></div>\n");
 
-		bob.append(FlowchartUtils.prepareFlowchartRenderer(user, "flowDisplay" + id, null,
+		result.append(FlowchartUtils.prepareFlowchartRenderer(null, "flowDisplay" + id, user,
 				PathCoverageHighlight.COVERAGE_CITY_SCOPE, true));
 
-		bob.appendHtml("</div>\n");
+		result.appendHtml("</div>\n");
 
 	}
 }

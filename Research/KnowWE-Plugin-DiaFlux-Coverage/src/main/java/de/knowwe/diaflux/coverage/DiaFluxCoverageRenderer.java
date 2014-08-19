@@ -128,7 +128,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 		Section<FlowchartType> flowSec = FlowchartUtils.findFlowchartSection(web,
 				selectedFlow.getName());
 		builder.append(FlowchartUtils.createFlowchartRenderer(flowSec, user, "coverageContent",
-				DIA_FLUX_COVERAGE_SCOPE, true));
+				DIA_FLUX_COVERAGE_SCOPE, false));
 
 		builder.append("</div>");
 
