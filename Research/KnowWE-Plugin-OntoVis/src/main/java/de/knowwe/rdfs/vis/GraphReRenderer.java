@@ -73,28 +73,36 @@ public class GraphReRenderer implements EventListener {
 		OntologyCompiler oc = e.getCompiler();
 		String hash = String.valueOf(oc.getCompileSection().getTitle().hashCode());
 
-		// delete all graph-files that are based on this compiler hash
-		List<File> files = findAllFilesForCompiler(fileDirPath, hash);
-		for (File f : files) {
-			f.delete();
-			// System.out.println(f.getName() + " - Deleted? " + f.delete());
-		}
+        Runnable renderJob = new Runnable() {
+            @Override
+            public void run() {
+                // delete all graph-files that are based on this compiler hash
+                List<File> files = findAllFilesForCompiler(fileDirPath, hash);
+                for (File f : files) {
+                    f.delete();
+                    // System.out.println(f.getName() + " - Deleted? " + f.delete());
+                }
 
-		// re-render all OntoVisType-sections
-		List<Section<? extends Type>> sections = Sections.findSectionsOfTypeGlobal(OntoVisType.class, am);
-		for (Section<? extends Type> s : sections) {
+                // re-render all OntoVisType-sections
+                List<Section<? extends Type>> sections = Sections.findSectionsOfTypeGlobal(OntoVisType.class, am);
+                for (Section<? extends Type> s : sections) {
 //			Section<OntoVisType> section = Sections.cast(s, OntoVisType.class);
 //			section.get().getRenderer().render(section, null, null);
-			new OntoVisTypeRenderer().renderContents(s, null, null);
-		}
+                    new OntoVisTypeRenderer().renderContents(s, null, null);
+                }
 
-		// re-render all SparqlVisType-sections
-		sections = Sections.findSectionsOfTypeGlobal(SparqlVisContentType.class, am);
-		for (Section<? extends Type> s : sections) {
+                // re-render all SparqlVisType-sections
+                sections = Sections.findSectionsOfTypeGlobal(SparqlVisContentType.class, am);
+                for (Section<? extends Type> s : sections) {
 //			Section<SparqlVisType> section = Sections.cast(s, SparqlVisType.class);
 //			section.get().getRenderer().render(section, null, null);
-			new SparqlVisTypeRenderer().render(s, null, null);
-		}
+                    new SparqlVisTypeRenderer().render(s, null, null);
+                }
+            }
+        };
+        renderJob.run();
+
+
 	}
 
 	private static List<File> findAllFilesForCompiler(String fileDirPath, String hash) {
