@@ -100,7 +100,9 @@ public class GraphReRenderer implements EventListener {
                 }
             }
         };
-        renderJob.run();
+        Thread runner = new Thread(renderJob);
+        runner.start();
+
 
 
 	}
