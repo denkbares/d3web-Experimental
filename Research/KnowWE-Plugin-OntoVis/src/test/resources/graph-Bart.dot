@@ -4,6 +4,7 @@ graph [ size="7.81169775!" rankdir="TB" ]
 "si:lisa"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:lisa"  shape="box"  style="rounded" label="Lisa Simpson" ];
 "si:homer"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:homer"  shape="box"  style="rounded" label="Homer\nSimpson\n" ];
 "si:marge"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:marge"  shape="box"  style="rounded" label="Marge\nSimpson\n" ];
+"si:abraham"[ shape="none" fontsize="0" fontcolor="white" ];
 "si:bart"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:bart"  shape="box"  style="rounded,bold" label=<<U>Bart Simpson</U>> ];
 "si:homer" -> "si:lisa" [ label = "si:child" arrowtail="normal"  color="#398743"  ];
 "si:maggie" -> "si:maggie" [ label = "si:sibling" arrowtail="normal"  color="#511F7A"  ];
@@ -20,4 +21,5 @@ graph [ size="7.81169775!" rankdir="TB" ]
 "si:bart" -> "si:bart" [ label = "si:sibling" arrowtail="normal"  color="#511F7A"  ];
 "si:lisa" -> "si:bart" [ label = "si:sibling" arrowtail="normal"  color="#511F7A"  ];
 "si:bart" -> "si:lisa" [ label = "si:sibling" arrowtail="normal"  color="#511F7A"  ];
+"si:abraham" -> "si:homer" [ label="si:child" fontcolor="#8b8989" arrowtail = "normal"  color="#8b8989" style="dashed" ];
 }

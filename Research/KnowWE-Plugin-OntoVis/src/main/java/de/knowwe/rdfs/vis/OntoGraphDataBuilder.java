@@ -562,11 +562,18 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         if (Utils.isBlankNode(conceptURI)) return;
 
 
+        String conceptFilter = "Filter(true)";
+        if(!showOutgoingEdges()) {
+            // this filter brings considerable performance boost
+            // but will dismiss outgoing edges
+            conceptFilter = conceptFilter("?z", data.getConceptDeclarations());
+        }
+
         addOutgoingSuccessorsCalls++;
 
         String query = "SELECT ?y ?z WHERE { "
                 + conceptURI.toSPARQL()
-                + " ?y ?z. " + predicateFilter(Direction.Forward, "z") +" "+ conceptFilter("?z", data.getConceptDeclarations())+"}";
+                + " ?y ?z. " + predicateFilter(Direction.Forward, "z") +" "+ conceptFilter+"}";
         ClosableIterator<QueryRow> result =
                 rdfRepository.sparqlSelectIt(
                         query);
@@ -619,10 +626,17 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
         final Collection<ConceptNode> conceptDeclarations = data.getConceptDeclarations();
 
+        String conceptFilter = "Filter(true)";
+        if(!showOutgoingEdges()) {
+            // this filter brings considerable performance boost
+            // but will dismiss outgoing edges
+            conceptFilter = conceptFilter("?x", conceptDeclarations);
+        }
+
 
         String query = "SELECT ?x ?y WHERE { ?x ?y "
                 + conceptURI.toSPARQL()
-                + " . " + predicateFilter(Direction.Backward, null) +" "+ conceptFilter("?x", conceptDeclarations)+"}";
+                + " . " + predicateFilter(Direction.Backward, null) +" "+ conceptFilter +"}";
         QueryResultTable resultTable = rdfRepository.sparqlSelect(
                 query);
 
