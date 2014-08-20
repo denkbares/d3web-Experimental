@@ -58,13 +58,13 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
     private Set<Node> expandedSuccessors = new HashSet<Node>();
     private Set<Node> literalsExpanded = new HashSet<Node>();
     private Map<Integer, String> propertyExcludeSPARQLFilterCache = new HashMap<Integer, String>();
-
+    private Set<Node> fringeNodes = new HashSet<>();
 
     private String nodeFilterExpression = null;
     /*
     For Debugging/Optimization only
      */
-    private static final boolean DEBUG_MODE = true;
+    private static final boolean DEBUG_MODE = false;
     private int addSuccessorsCalls = 0;
     private int addOutgoingSuccessorsCalls = 0;
     private int addPredecessorsCalls = 0;
@@ -198,6 +198,17 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             if (requestedDepth > 0) {
                 addSuccessors(conceptURI, null, null);
             }
+            addType(conceptURI);
+        }
+
+        //expand edges of fringe nodes
+        for (Node fringeNode : fringeNodes) {
+            addOutgoingEdgesPredecessors(fringeNode);
+            addOutgoingEdgesSuccessors(fringeNode);
+            if (!literalsExpanded.contains(fringeNode)) {
+                addLiterals(fringeNode);
+            }
+            addType(fringeNode);
         }
 
         SubpropertyEliminator.eliminateSubproperties(data, rdfRepository);
@@ -233,6 +244,46 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             allQueriesSet.addAll(succQueries);
             allQueriesSet.addAll(predQueries);
             Log.info("number of total different queries: " + allQueriesSet.size());
+        }
+    }
+
+    private void addType(Node node) {
+        String query = "SELECT ?class ?pred WHERE { "+node.toSPARQL()+" ?pred ?class . FILTER regex(str(?pred),\"type\") }";
+        ClosableIterator<QueryRow> result = null;
+        try {
+            result =
+                    rdfRepository.sparqlSelectIt(
+                            query);
+        } catch (ModelRuntimeException exception) {
+            Log.severe("invalid query: " + query + " /n" + exception.toString());
+        }
+        while (result.hasNext()) {
+            QueryRow row = result.next();
+            Node yURI = row.getValue("pred");
+            Node zURI = row.getValue("class");
+            addConcept(node, zURI, yURI);
+
+            // currently we use the first type found
+            // TODO: detect (one) most specific type from all types
+            break;
+        }
+    }
+
+    private void addLiterals(Node fringeNode) {
+        String query = "SELECT ?literal ?pred WHERE { "+fringeNode.toSPARQL()+" ?pred ?literal . FILTER isLiteral(?literal) }";
+        ClosableIterator<QueryRow> result = null;
+        try {
+            result =
+                    rdfRepository.sparqlSelectIt(
+                            query);
+        } catch (ModelRuntimeException exception) {
+            Log.severe("invalid query: " + query + " /n" + exception.toString());
+        }
+        while (result.hasNext()) {
+            QueryRow row = result.next();
+            Node yURI = row.getValue("pred");
+            Node zURI = row.getValue("literal");
+            addConcept(fringeNode, zURI, yURI);
         }
     }
 
@@ -353,20 +404,29 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
             if (checkTripleFilters(query, y, z, nodeType, mode)) continue;
 
-            addConcept(conceptToBeExpanded, zURI, yURI, nodeType);
+            addConcept(conceptToBeExpanded, zURI, yURI);
 
             depth++;
             if (depth < requestedDepth) {
                 addSuccessors(zURI, conceptToBeExpanded, yURI);
             }
+
+            /*
+            TODO: this should be done _after_ the last concept node has been added to the graph
+             */
             if (depth == requestedDepth) {
-                addOutgoingEdgesSuccessors(zURI);
-                addOutgoingEdgesPredecessors(zURI);
-                if (!literalsExpanded.contains(zURI)) {
-                    // add literals
-                    addSuccessors(zURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, Direction.Forward);
+                if(!nodeType.equals(NODE_TYPE.LITERAL)) {
+                    fringeNodes.add(zURI);
                 }
+                //addOutgoingEdgesSuccessors(zURI);
+                //addOutgoingEdgesPredecessors(zURI);
+                //if (!literalsExpanded.contains(zURI)) {
+                    // add literals
+                //    addSuccessors(zURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, Direction.Forward);
+                //}
             }
+
+
             depth--;
         }
         if (DEBUG_MODE) {
@@ -459,16 +519,24 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
             }
 
+            /*
+            TODO: this should be done _after_ the last concept node has been added to the graph
+             */
             if (height == requestedHeight) {
-                addOutgoingEdgesPredecessors(xURI);
-                addOutgoingEdgesSuccessors(xURI);
-                if (!literalsExpanded.contains(xURI)) {
-                    addSuccessors(xURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, Direction.Backward);
+                if(!nodeType.equals(NODE_TYPE.LITERAL)) {
+                    fringeNodes.add(xURI);
                 }
+                //addOutgoingEdgesPredecessors(xURI);
+                //addOutgoingEdgesSuccessors(xURI);
+                //if (!literalsExpanded.contains(xURI)) {
+                //    addSuccessors(xURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, Direction.Backward);
+                //}
             }
+
+
             height--;
 
-            addConcept(xURI, conceptToBeExpanded, yURI, nodeType);
+            addConcept(xURI, conceptToBeExpanded, yURI);
         }
         if (DEBUG_MODE) {
             predQueries.add(query);
@@ -498,12 +566,12 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
         String query = "SELECT ?y ?z WHERE { "
                 + conceptURI.toSPARQL()
-                + " ?y ?z. " + predicateFilter(Direction.Forward, "z") + "}";
+                + " ?y ?z. " + predicateFilter(Direction.Forward, "z") +" "+ conceptFilter("?z", data.getConceptDeclarations())+"}";
         ClosableIterator<QueryRow> result =
                 rdfRepository.sparqlSelectIt(
                         query);
         int count = 0;
-        List<OuterConceptCheck> results = new ArrayList<>();
+        List<OuterConceptCheck> results = new ArrayList<OuterConceptCheck>();
         while (result.hasNext()) {
             count++;
             QueryRow row = result.next();
@@ -549,9 +617,12 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
         addOutgoingPredecessorsCalls++;
 
+        final Collection<ConceptNode> conceptDeclarations = data.getConceptDeclarations();
+
+
         String query = "SELECT ?x ?y WHERE { ?x ?y "
                 + conceptURI.toSPARQL()
-                + " . " + predicateFilter(Direction.Backward, null) + "}";
+                + " . " + predicateFilter(Direction.Backward, null) +" "+ conceptFilter("?x", conceptDeclarations)+"}";
         QueryResultTable resultTable = rdfRepository.sparqlSelect(
                 query);
 
@@ -582,6 +653,37 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
                 Log.warning("Large expansion query: " + query);
             }
         }
+    }
+
+    private String conceptFilter(String variable, Collection<ConceptNode> conceptDeclarations) {
+        StringBuilder filter = new StringBuilder();
+        filter.append("FILTER (");
+        if(conceptDeclarations.size() == 0) {
+            filter.append("true");
+        } else {
+            final Iterator<ConceptNode> iterator = conceptDeclarations.iterator();
+            boolean firstIteration = true;
+            while (iterator.hasNext()) {
+                ConceptNode conceptDeclaration = iterator.next();
+                if(conceptDeclaration.getType().equals(NODE_TYPE.LITERAL)) {
+                    continue;
+                }
+                if(conceptDeclaration.getType().equals(NODE_TYPE.BLANKNODE)) {
+                    // TODO: find solution for this case
+                    continue;
+                }
+                if(firstIteration) {
+                    firstIteration = false;
+                } else {
+                    filter.append(" || ");
+                }
+                filter.append(variable +" = "+conceptDeclaration.getName() );
+            }
+
+        }
+
+        filter.append(")");
+        return filter.toString();
     }
 
     private boolean checkTripleFilters(String query, String y, String z, NODE_TYPE nodeType) {
@@ -761,7 +863,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         return getFilteredClasses().size() > 0 || getFilteredClasses().size() > 0;
     }
 
-    private void addConcept(Node fromURI, Node toURI, Node relationURI, NODE_TYPE type) {
+    private void addConcept(Node fromURI, Node toURI, Node relationURI) {
         String relation = getConceptName(relationURI);
 
 
@@ -915,6 +1017,11 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         boolean edgeIsNew = !data.getAllEdges().contains(edge);
 
         if (showOutgoingEdges()) {
+            /*
+            show outgoing-edges currently not working as for these cases this method is not called
+            for efficiency reasons.
+            Currently only missing "internal links" are created by this method.
+             */
             if (nodeIsNew) {
                 if (predecessor) {
                     // from is current new one
