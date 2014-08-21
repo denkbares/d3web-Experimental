@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.core.session.Session;
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.objects.Term;
@@ -19,8 +18,8 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class Rdf2GoD3webUtils {
 
-	public static URI getSessionIdURI(Rdf2GoCore core, Session session) {
-		return core.createlocalURI(Strings.encodeURL(session.getId()));
+	public static URI getSessionIdURI(Rdf2GoCore core, String sessionId) {
+		return core.createlocalURI(Strings.encodeURL(sessionId));
 	}
 
 	public static URI getFactURI(Rdf2GoCore core) {
