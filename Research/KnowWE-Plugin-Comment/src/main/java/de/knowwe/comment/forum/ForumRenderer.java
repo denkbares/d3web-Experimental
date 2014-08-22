@@ -92,7 +92,7 @@ public class ForumRenderer implements Renderer {
 		ret.append("<script type=text/javascript src=KnowWEExtension/scripts/ForumPlugin.js></script>\n");
 
 		ResourceBundle rb = ResourceBundle.getBundle("Forum_messages");
-		Map<String, String> forumMap = AbstractXMLType.getAttributeMapFor(sec);
+		Map<String, String> forumMap = AbstractXMLType.getAttributes(sec);
 		String topic = sec.getTitle();
 
 		String reply = user.getParameter("reply");

@@ -98,7 +98,7 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 
 		// Foren zuordnen
 		for (Section<? extends Forum> forum : DiscussionUtils.getAllForums()) {
-			Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(forum);
+			Map<String, String> mapFor = AbstractXMLType.getAttributes(forum);
 			String unit = mapFor.get("unit");
 
 			if (unit == null) errors.add(forum);
@@ -141,7 +141,7 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 				tmp.append("<tr><td>" + unitName + buildFormButton(unitName) + "<ul>");
 				for (Section<? extends Forum> forum : units) {
 					int newEntries = DiscussionUtils.getNumberOfNewEntriesInForum(forum, user);
-					Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(forum);
+					Map<String, String> mapFor = AbstractXMLType.getAttributes(forum);
 					if (unitName.equals(mapFor.get("unit"))) {
 						tmp.append("<li><a href='Wiki.jsp?page="
 								+ Strings.encodeURL(forum.getTitle())
@@ -249,7 +249,7 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 		tmp.append(buildFormButton("Sonstiges"));
 		tmp.append("<ul>");
 		for (Section<? extends Forum> forum : others) {
-			Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(forum);
+			Map<String, String> mapFor = AbstractXMLType.getAttributes(forum);
 			tmp.append("<li><a href='Wiki.jsp?page=" + Strings.encodeURL(forum.getTitle()) + "'>"
 					+ mapFor.get("topic") + "</a>");
 			int newEntries = DiscussionUtils.getNumberOfNewEntriesInForum(forum, user);

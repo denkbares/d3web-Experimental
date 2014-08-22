@@ -83,17 +83,17 @@ public class DefiCommentEventListener implements EventListener {
 		logLine.setMsg(event.getComment());
 
 		// Einheit
-		Map<String, String> mapForForum = AbstractXMLType.getAttributeMapFor(forum);
+		Map<String, String> mapForForum = AbstractXMLType.getAttributes(forum);
 		logLine.setUnit(mapForForum.get("unit"));
 		
 		// Absender (Benutzer)
-		Map<String, String> lastBoxMap = AbstractXMLType.getAttributeMapFor(lastBox);
+		Map<String, String> lastBoxMap = AbstractXMLType.getAttributes(lastBox);
 		logLine.setUser(lastBoxMap.get("name"));
 
 		// Vorgänger
 		if (previousBox == null || (logLine.getUnit().equals("chat") && boxes.size() == 2)) logLine.setResponse(NO_RESPONSE);
 		else {
-			Map<String, String> prevBoxMap = AbstractXMLType.getAttributeMapFor(previousBox);
+			Map<String, String> prevBoxMap = AbstractXMLType.getAttributes(previousBox);
 			logLine.setResponse(prevBoxMap.get("name"));
 		}
 

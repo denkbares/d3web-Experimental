@@ -52,7 +52,7 @@ public class BoxRenderer implements Renderer {
 		String date;
 
 		try {
-			Map<String, String> boxMap = AbstractXMLType.getAttributeMapFor(sec);
+			Map<String, String> boxMap = AbstractXMLType.getAttributes(sec);
 			name = boxMap.get("name");
 			date = boxMap.get("date");
 		}

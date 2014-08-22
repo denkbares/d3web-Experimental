@@ -83,11 +83,11 @@ public class DiscussionUtils {
 		int numberOfNewEntries = 0;
 		Date lastVisitDate = (lastVisit == null) ? new Date(0L) : stringToDate(lastVisit);
 		// skip first box if its a chat
-		Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(forum);
+		Map<String, String> mapFor = AbstractXMLType.getAttributes(forum);
 		int start = mapFor.get("unit").equals("chat") ? 1 : 0;
 		for (int i = start; i < boxes.size(); i++) {
 			Section<ForumBox> box = boxes.get(i);
-			Map<String, String> boxMap = AbstractXMLType.getAttributeMapFor(box);
+			Map<String, String> boxMap = AbstractXMLType.getAttributes(box);
 			Date boxDate = stringToDate(boxMap.get("date"));
 			if (!boxMap.get("name").equals(user) && boxDate.after(lastVisitDate)) numberOfNewEntries++;
 		}
@@ -101,7 +101,7 @@ public class DiscussionUtils {
 	public static Boolean userHasNewTherapistMessage(String user) {
 
 		for (Section<? extends Forum> forum : getAllForums()) {
-			Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(forum);
+			Map<String, String> mapFor = AbstractXMLType.getAttributes(forum);
 			if (!mapFor.get("unit").equals("chat")) continue;
 
 			try {
@@ -126,7 +126,7 @@ public class DiscussionUtils {
 	public static Boolean userHasNewUserMessage(String user) {
 
 		for (Section<? extends Forum> forum : getAllForums()) {
-			Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(forum);
+			Map<String, String> mapFor = AbstractXMLType.getAttributes(forum);
 			if (!mapFor.get("unit").equals("chat")) continue;
 
 			try {
