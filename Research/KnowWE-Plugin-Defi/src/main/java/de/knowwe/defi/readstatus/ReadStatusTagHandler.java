@@ -137,7 +137,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 					Environment.DEFAULT_WEB).getArticle(getPageName(s));
 
 			if (unit != null) {
-				for (Section<AbstractType> sec : Sections.findSuccessorsOfType(
+				for (Section<AbstractType> sec : Sections.successors(
 						unit.getRootSection(),
 						AbstractType.class)) {
 					if (sec.getText().matches("\\[\\{KnowWEPlugin readbutton[^}]*}]")) readbuttons.add(getReadButtonID(sec.getText()));

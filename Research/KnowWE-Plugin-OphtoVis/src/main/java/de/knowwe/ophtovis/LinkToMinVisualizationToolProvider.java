@@ -46,7 +46,7 @@ public class LinkToMinVisualizationToolProvider implements ToolProvider {
 		String termName = null;
 		@SuppressWarnings("rawtypes")
 		Section<IncrementalTermDefinition> defSection =
-				Sections.findSuccessor(section, IncrementalTermDefinition.class);
+				Sections.successor(section, IncrementalTermDefinition.class);
 
 		if (defSection != null) {
 			termName = defSection.get().getTermName(defSection);

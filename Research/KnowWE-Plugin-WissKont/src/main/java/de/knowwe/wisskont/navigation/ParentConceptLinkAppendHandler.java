@@ -55,11 +55,11 @@ public class ParentConceptLinkAppendHandler implements PageAppendHandler {
 	public void append(String web, String title, UserContext user, RenderResult result) {
 
 		Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB, title);
-		List<Section<ConceptMarkup>> conceptMarkups = Sections.findSuccessorsOfType(
+		List<Section<ConceptMarkup>> conceptMarkups = Sections.successors(
 				article.getRootSection(), ConceptMarkup.class);
 		if (conceptMarkups.size() == 1) {
 			@SuppressWarnings("rawtypes")
-			Section<IncrementalTermDefinition> def = Sections.findSuccessor(conceptMarkups.get(0),
+			Section<IncrementalTermDefinition> def = Sections.successor(conceptMarkups.get(0),
 					IncrementalTermDefinition.class);
 			URI uri = RDFSUtil.getURI(def);
 			String sparql = "SELECT ?z WHERE { <" + uri + "> lns:unterkonzept ?z.}";

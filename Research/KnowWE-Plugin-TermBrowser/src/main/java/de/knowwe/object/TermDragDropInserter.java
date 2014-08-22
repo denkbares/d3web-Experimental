@@ -51,7 +51,7 @@ public class TermDragDropInserter implements
 			Map<String, String> nodesMap = new HashMap<String, String>();
 
 			Section<DefaultMarkupType> defaultMarkupSection =
-					Sections.findAncestorOfType(
+					Sections.ancestor(
 							termRefSection,
 							DefaultMarkupType.class);
 			if (defaultMarkupSection != null) {
@@ -65,7 +65,7 @@ public class TermDragDropInserter implements
 			nodesMap.put(sectionToBeReplaced.getID(), replaceText);
 			String result = "done";
 
-			ReplaceResult replaceResult = Sections.replaceSections(context, nodesMap);
+			ReplaceResult replaceResult = Sections.replace(context, nodesMap);
 			replaceResult.sendErrors(context);
 			Map<String, String> newSectionIDs = replaceResult.getSectionMapping();
 			if (newSectionIDs != null && newSectionIDs.size() > 0) {
@@ -88,7 +88,7 @@ public class TermDragDropInserter implements
 	private String createDefaultMarkupReplaceText(Section<DefaultMarkupType> defaultMarkupSection, Section<TermReference> termRefSection, String droppedTerm) {
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		nodesMap.put(termRefSection.getID(), droppedTerm);
-		StringBuffer replacedText = Sections.collectTextAndReplaceNode(defaultMarkupSection,
+		StringBuilder replacedText = Sections.collectTextAndReplace(defaultMarkupSection,
 				nodesMap);
 		return replacedText.toString();
 	}

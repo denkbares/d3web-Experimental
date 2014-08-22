@@ -333,7 +333,7 @@ public class IncrementalCompiler implements EventListener {
 	 */
 	private void storeExternalReferencesOfKnowledgeUnits(Article lastVersionOfArticle) {
 		Section<RootType> rootSection = lastVersionOfArticle.getRootSection();
-		List<Section<KnowledgeUnit>> allKnowledgeUnits = Sections.findSuccessorsOfType(rootSection,
+		List<Section<KnowledgeUnit>> allKnowledgeUnits = Sections.successors(rootSection,
 				KnowledgeUnit.class);
 		for (Section<KnowledgeUnit> unit : allKnowledgeUnits) {
 			KnowledgeUnitCompileScript<?> compileScript = unit.get().getCompileScript();
@@ -394,7 +394,7 @@ public class IncrementalCompiler implements EventListener {
 			// recursion for complex definitions
 			Collection<Section<? extends ComplexDefinition>> referencingDefs = terminology.getReferencingDefinitions(section);
 			for (Section<? extends ComplexDefinition> ref : referencingDefs) {
-				removeRecursively(Sections.findSuccessor(ref,
+				removeRecursively(Sections.successor(ref,
 						SimpleDefinition.class));
 			}
 		}
@@ -418,7 +418,7 @@ public class IncrementalCompiler implements EventListener {
 			// recursion for complex definitions
 			Collection<Section<? extends ComplexDefinition>> referencingDefs = terminology.getReferencingDefinitions(section);
 			for (Section<? extends ComplexDefinition> ref : referencingDefs) {
-				Section<SimpleDefinition> def = Sections.findChildOfType(ref,
+				Section<SimpleDefinition> def = Sections.child(ref,
 						SimpleDefinition.class);
 
 				// beware of infinite recursion due to self recursive
@@ -498,7 +498,7 @@ public class IncrementalCompiler implements EventListener {
 		// there is exactly one
 		Section<? extends SimpleDefinition> def = termDefiningSections.iterator().next();
 
-		Section<ComplexDefinition> complexDef = Sections.findAncestorOfType(def,
+		Section<ComplexDefinition> complexDef = Sections.ancestor(def,
 				ComplexDefinition.class);
 		// all references of this complexDef (if existing) need to be in the set
 		// of valid objects

@@ -111,7 +111,7 @@ public class ReplaceSectionUtils {
 	private static Map<String, Collection<String>> getIdsByTitle(Collection<String> allIds) {
 		Map<String, Collection<String>> idsByTitle = new HashMap<String, Collection<String>>();
 		for (String id : allIds) {
-			Section<?> section = Sections.getSection(id);
+			Section<?> section = Sections.get(id);
 			String title = section == null ? null : section.getTitle();
 			Collection<String> ids = idsByTitle.get(title);
 			if (ids == null) {

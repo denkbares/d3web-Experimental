@@ -119,7 +119,7 @@ public class AnswersBlockValidator {
 	public void validateAnswersBlock(Section<Question> frage,
 			Section<AnswersBlock> answersBlock, List<Message> messages,
 			boolean evaluation) {
-		Section<QuestionType> typ = Sections.findSuccessor(frage, QuestionType.class);
+		Section<QuestionType> typ = Sections.successor(frage, QuestionType.class);
 		if (typ == null) {
 			messages.add(
 					Utils.invalidAttributeError(
@@ -173,11 +173,11 @@ public class AnswersBlockValidator {
 	private void checkText(Section<AnswersBlock> answersBlock, List<Message> messages) {
 
 		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
-		Sections.findSuccessorsOfType(answersBlock, AnswerLine.class, found);
+		Sections.successors(answersBlock, AnswerLine.class, found);
 
 		Section<AnswerText> antwortText = null;
 		for (Section<AnswerLine> ans : found) {
-			antwortText = Sections.findSuccessor(ans, AnswerText.class);
+			antwortText = Sections.successor(ans, AnswerText.class);
 			if (antwortText == null) messages.add(Utils.missingContentWarning(
 					"Antwort hat keinen Antwort-Text"));
 			else if (antwortText.getText().trim().length() == 0) messages.add(Utils.missingContentWarning(
@@ -196,11 +196,11 @@ public class AnswersBlockValidator {
 	private void checkErklaerung(Section<AnswersBlock> answersBlock, List<Message> messages) {
 
 		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
-		Sections.findSuccessorsOfType(answersBlock, AnswerLine.class, found);
+		Sections.successors(answersBlock, AnswerLine.class, found);
 
 		Section<AnswerExplanation> antwortErklaerung = null;
 		for (Section<AnswerLine> ans : found) {
-			antwortErklaerung = Sections.findSuccessor(ans, AnswerExplanation.class);
+			antwortErklaerung = Sections.successor(ans, AnswerExplanation.class);
 			if (antwortErklaerung != null) if (antwortErklaerung.getText().trim().length() == 0) messages.add(Utils.missingContentWarning(
 					"Antwort-Erklärung enthält keinen Text"));
 		}
@@ -220,7 +220,7 @@ public class AnswersBlockValidator {
 			boolean evaluation) {
 
 		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
-		Sections.findSuccessorsOfType(answersBlock, AnswerLine.class, found);
+		Sections.successors(answersBlock, AnswerLine.class, found);
 
 		if (found.size() < minAnswers) {
 			messages.add(Utils.invalidArgumentError("Weniger als " + minAnswers
@@ -234,7 +234,7 @@ public class AnswersBlockValidator {
 		Section<AnswerMark> weight = null;
 		String content = "";
 		for (Section<AnswerLine> ans : found) {
-			weight = Sections.findSuccessor(ans, AnswerMark.class);
+			weight = Sections.successor(ans, AnswerMark.class);
 			content = weight.getText().substring(1, weight.getText().length() - 1).trim();
 
 			if (content.equals("+") || content.equals("1")) {
@@ -283,14 +283,14 @@ public class AnswersBlockValidator {
 		this.checkText(answersBlock, messages);
 
 		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
-		Sections.findSuccessorsOfType(answersBlock, AnswerLine.class, found);
+		Sections.successors(answersBlock, AnswerLine.class, found);
 
 		Section<AnswerText> antwortText = null;
 		Section<AnswerTextArgument> arg = null;
 		String antString = "";
 		String c = "";
 		for (Section<AnswerLine> ans : found) {
-			antwortText = Sections.findSuccessor(ans, AnswerText.class);
+			antwortText = Sections.successor(ans, AnswerText.class);
 
 			if ((antwortText == null)) continue;
 
@@ -310,7 +310,7 @@ public class AnswersBlockValidator {
 			}
 
 			// Test the Argument
-			arg = Sections.findSuccessor(ans, AnswerTextArgument.class);
+			arg = Sections.successor(ans, AnswerTextArgument.class);
 			if (arg != null) {
 				c = arg.getText().trim().substring(1,
 						arg.getText().trim().length() - 1);
@@ -380,12 +380,12 @@ public class AnswersBlockValidator {
 
 	private void checkNumanswersBlock(Section<AnswersBlock> answersBlock, List<Message> messages) {
 		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
-		Sections.findSuccessorsOfType(answersBlock, AnswerLine.class, found);
+		Sections.successors(answersBlock, AnswerLine.class, found);
 
 		Section<AnswerText> antwortText = null;
 		String antString = "";
 		for (Section<AnswerLine> ans : found) {
-			antwortText = Sections.findSuccessor(ans, AnswerText.class);
+			antwortText = Sections.successor(ans, AnswerText.class);
 			antString = antwortText.getText().trim();
 			String[] interval = antString.split("[ ]+");
 
@@ -438,7 +438,7 @@ public class AnswersBlockValidator {
 	 */
 	private void checkPraefixPostfix(Section<AnswersBlock> answersBlock, List<Message> messages) {
 		List<Section<Praefix>> found = new ArrayList<Section<Praefix>>();
-		Sections.findSuccessorsOfType(answersBlock, Praefix.class, found);
+		Sections.successors(answersBlock, Praefix.class, found);
 		if (found.size() > 1) messages.add(Messages.error(Utils.getBundle().getString(
 				"DOUBLE_COMPONENT")
 				+ Praefix.class.getSimpleName()));
@@ -446,7 +446,7 @@ public class AnswersBlockValidator {
 				Praefix.class.getSimpleName()));
 
 		List<Section<Postfix>> found2 = new ArrayList<Section<Postfix>>();
-		Sections.findSuccessorsOfType(answersBlock, Postfix.class, found2);
+		Sections.successors(answersBlock, Postfix.class, found2);
 		if (found2.size() > 1) messages.add(Messages.error(Postfix.class.getSimpleName()));
 		if (found2.size() == 0) messages.add(Utils.missingComponentWarning(
 				Postfix.class.getSimpleName()));
@@ -460,7 +460,7 @@ public class AnswersBlockValidator {
 	 */
 	private void checkHeading(Section<AnswersBlock> answersBlock, List<Message> messages) {
 		List<Section<Heading>> found = new ArrayList<Section<Heading>>();
-		Sections.findSuccessorsOfType(answersBlock, Heading.class, found);
+		Sections.successors(answersBlock, Heading.class, found);
 		if (found.size() > 1) messages.add(Messages.error(Utils.getBundle().getString(
 				"DOUBLE_COMPONENT") +
 				Heading.class.getSimpleName()));

@@ -141,7 +141,7 @@ public class WordBasedRenamingAction extends AbstractAction {
 			Article article = iter.next();
 
 			if (article.getTitle().equals(articleTitle)) {
-				Section<?> section = Sections.getSection(sectionID);
+				Section<?> section = Sections.get(sectionID);
 				String context = WordBasedRenameFinding.getAdditionalContext(
 						pos, direction, curWords, length,
 						section.getText());
@@ -344,7 +344,7 @@ public class WordBasedRenamingAction extends AbstractAction {
 				int end = start + query.length();
 				int length = m.end() - m.start();
 
-				Section<?> sec = Sections.findSmallestSectionContaining(article.getRootSection(),
+				Section<?> sec = Sections.smallestSectionContaining(article.getRootSection(),
 						start, end);
 				while (sec.get() instanceof PlainText && sec.getParent() != null) {
 					sec = sec.getParent();

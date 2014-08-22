@@ -90,7 +90,7 @@ public class Restriction extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isSomeRestriction(Section<Restriction> section) {
-		return Sections.findChildOfType(section, SomeRestriction.class) != null;
+		return Sections.child(section, SomeRestriction.class) != null;
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class Restriction extends AbstractType {
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
 	public Section<SomeRestriction> getSomeRestriction(Section<Restriction> section) {
-		return Sections.findChildOfType(section, SomeRestriction.class);
+		return Sections.child(section, SomeRestriction.class);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class Restriction extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isSelfRestriction(Section<Restriction> section) {
-		return Sections.findChildOfType(section, SelfRestriction.class) != null;
+		return Sections.child(section, SelfRestriction.class) != null;
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class Restriction extends AbstractType {
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
 	public Section<SelfRestriction> getSelfRestriction(Section<Restriction> section) {
-		return Sections.findChildOfType(section, SelfRestriction.class);
+		return Sections.child(section, SelfRestriction.class);
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class Restriction extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isOnlyRestriction(Section<Restriction> section) {
-		return Sections.findChildOfType(section, OnlyRestriction.class) != null;
+		return Sections.child(section, OnlyRestriction.class) != null;
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class Restriction extends AbstractType {
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
 	public Section<OnlyRestriction> getOnlyRestriction(Section<Restriction> section) {
-		return Sections.findChildOfType(section, OnlyRestriction.class);
+		return Sections.child(section, OnlyRestriction.class);
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class Restriction extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isCardinalityRestriction(Section<Restriction> section) {
-		return Sections.findChildOfType(section, CardinalityRestriction.class) != null;
+		return Sections.child(section, CardinalityRestriction.class) != null;
 	}
 
 	/**
@@ -163,7 +163,7 @@ public class Restriction extends AbstractType {
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
 	public Section<CardinalityRestriction> getCardinalityRestriction(Section<Restriction> section) {
-		return Sections.findChildOfType(section, CardinalityRestriction.class);
+		return Sections.child(section, CardinalityRestriction.class);
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class Restriction extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isValueRestriction(Section<Restriction> section) {
-		return Sections.findChildOfType(section, ValueRestriction.class) != null;
+		return Sections.child(section, ValueRestriction.class) != null;
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class Restriction extends AbstractType {
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
 	public Section<ValueRestriction> getValueRestriction(Section<Restriction> section) {
-		return Sections.findChildOfType(section, ValueRestriction.class);
+		return Sections.child(section, ValueRestriction.class);
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class Restriction extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isTermReference(Section<Restriction> section) {
-		return Sections.findChildOfType(section, OWLTermReferenceManchester.class) != null;
+		return Sections.child(section, OWLTermReferenceManchester.class) != null;
 	}
 
 	/**
@@ -205,7 +205,7 @@ public class Restriction extends AbstractType {
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
 	public Section<OWLTermReferenceManchester> getTermReference(Section<Restriction> section) {
-		return Sections.findChildOfType(section, OWLTermReferenceManchester.class);
+		return Sections.child(section, OWLTermReferenceManchester.class);
 	}
 
 	/**
@@ -216,7 +216,7 @@ public class Restriction extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isObjectProperty(Section<Restriction> section) {
-		return Sections.findChildOfType(section, PropertyExpression.class) != null;
+		return Sections.child(section, PropertyExpression.class) != null;
 	}
 
 	/**
@@ -226,6 +226,6 @@ public class Restriction extends AbstractType {
 	 * @return The found {@link ObjectPropertyExpression} sections
 	 */
 	public Section<PropertyExpression> getObjectProperty(Section<Restriction> section) {
-		return Sections.findChildOfType(section, PropertyExpression.class);
+		return Sections.child(section, PropertyExpression.class);
 	}
 }

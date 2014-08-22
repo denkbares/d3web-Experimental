@@ -87,7 +87,7 @@ public class Evaluation extends BlockMarkupType {
 				Utils.renderKDOMReportMessageBlock(
 						Messages.getNotices(Messages.getMessagesFromSubtree(sec)), string);
 				Section<BlockMarkupContent> con =
-						Sections.findSuccessor(sec, BlockMarkupContent.class);
+						Sections.successor(sec, BlockMarkupContent.class);
 				BlockMarkupContentRenderer.getInstance().render(con, user, string);
 				string.appendHtml("<div class='Evaluationend'></div>");
 				string.appendHtml("</div>");
@@ -106,7 +106,7 @@ public class Evaluation extends BlockMarkupType {
 				 * other children - It has no children at all
 				 */
 				List<Section<?>> blockMarkupChildren =
-						Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
+						Sections.successor(s, BlockMarkupContent.class).getChildren();
 				if (blockMarkupChildren.size() == 0) {
 					messages.add(Utils.missingContentWarning(Info.class.getSimpleName()));
 				}
@@ -135,7 +135,7 @@ public class Evaluation extends BlockMarkupType {
 				List<Message> messages = new ArrayList<Message>(0);
 
 				List<Section<Question>> found = new ArrayList<Section<Question>>();
-				Sections.findSuccessorsOfType(s, Question.class, found);
+				Sections.successors(s, Question.class, found);
 				if (found.isEmpty()) {
 					messages.add(Utils.missingComponentWarning(Question.class.getSimpleName()));
 					return messages;
@@ -149,7 +149,7 @@ public class Evaluation extends BlockMarkupType {
 				 * Also validates the given AnswerBlock.
 				 */
 				List<Section<?>> children =
-						Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
+						Sections.successor(s, BlockMarkupContent.class).getChildren();
 				Section<? extends Type> actual = null;
 				boolean antwortenMissing = true;
 				boolean moreAnswersBlocks = false;
@@ -181,7 +181,7 @@ public class Evaluation extends BlockMarkupType {
 						if (!antwortenMissing) {
 							moreAnswersBlocks = true;
 							String typ =
-									Sections.findSuccessor(actual, QuestionType.class)
+									Sections.successor(actual, QuestionType.class)
 											.getText().trim();
 							if (!(AnswersBlockValidator.getInstance()
 									.getTypesMultiple().contains(typ))) {
@@ -221,7 +221,7 @@ public class Evaluation extends BlockMarkupType {
 							AnswersBlock.class.getSimpleName()));
 				}
 				String typ =
-						Sections.findSuccessor(actual, QuestionType.class)
+						Sections.successor(actual, QuestionType.class)
 								.getText().trim();
 				if (!moreAnswersBlocks && AnswersBlockValidator.getInstance()
 						.getTypesMultiple().contains(typ)) {

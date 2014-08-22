@@ -57,7 +57,7 @@ public class RDFSTestCaseLoader {
 		if (a != null) {
 
 			// Get all RDFSTestCaseSections
-			List<Section<RDFSTestCaseType>> sections = Sections.findSuccessorsOfType(
+			List<Section<RDFSTestCaseType>> sections = Sections.successors(
 					a.getRootSection(), RDFSTestCaseType.class);
 
 			if (sections != null && !sections.isEmpty()) {

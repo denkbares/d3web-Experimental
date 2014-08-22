@@ -41,13 +41,13 @@ public abstract class AbstractTermDetector implements InterestingTermDetector {
 	public Map<Identifier, Double> getWeightedTermsOfInterest(Article article, String master) {
 		Map<Identifier, Double> interestingTerms = new HashMap<Identifier, Double>();
 
-		List<Section<TermDefinition>> definitions = Sections.findSuccessorsOfType(
+		List<Section<TermDefinition>> definitions = Sections.successors(
 				article.getRootSection(), TermDefinition.class);
 		for (Section<TermDefinition> def : definitions) {
 			interestingTerms.put(def.get().getTermIdentifier(def), WEIGHT_DEFINITION);
 		}
 
-		List<Section<TermReference>> references = Sections.findSuccessorsOfType(
+		List<Section<TermReference>> references = Sections.successors(
 				article.getRootSection(), TermReference.class);
 		for (Section<TermReference> ref : references) {
 			// String termname = ref.get().getTermName(ref);

@@ -50,51 +50,51 @@ public class Literal extends AbstractType {
 	}
 
 	public boolean isFloatingPoint(Section<Literal> section) {
-		return Sections.findSuccessor(section, FloatingPointLiteral.class) != null;
+		return Sections.successor(section, FloatingPointLiteral.class) != null;
 	}
 
 	public boolean isInteger(Section<Literal> section) {
-		return Sections.findSuccessor(section, IntegerLiteral.class) != null;
+		return Sections.successor(section, IntegerLiteral.class) != null;
 	}
 
 	public boolean isDecimal(Section<Literal> section) {
-		return Sections.findSuccessor(section, DecimalLiteral.class) != null;
+		return Sections.successor(section, DecimalLiteral.class) != null;
 	}
 
 	public boolean isString(Section<Literal> section) {
-		return Sections.findSuccessor(section, StringLiteral.class) != null;
+		return Sections.successor(section, StringLiteral.class) != null;
 	}
 
 	public boolean isLanguage(Section<Literal> section) {
-		return Sections.findSuccessor(section, StringLiteralLanguage.class) != null;
+		return Sections.successor(section, StringLiteralLanguage.class) != null;
 	}
 
 	public boolean isTyped(Section<Literal> section) {
-		return Sections.findSuccessor(section, TypedLiteral.class) != null;
+		return Sections.successor(section, TypedLiteral.class) != null;
 	}
 
 	public Section<FloatingPointLiteral> getFloatingPoint(Section<Restriction> section) {
-		return Sections.findChildOfType(section, FloatingPointLiteral.class);
+		return Sections.child(section, FloatingPointLiteral.class);
 	}
 
 	public Section<IntegerLiteral> getInteger(Section<Literal> section) {
-		return Sections.findSuccessor(section, IntegerLiteral.class);
+		return Sections.successor(section, IntegerLiteral.class);
 	}
 
 	public Section<DecimalLiteral> getDecimal(Section<Literal> section) {
-		return Sections.findSuccessor(section, DecimalLiteral.class);
+		return Sections.successor(section, DecimalLiteral.class);
 	}
 
 	public Section<StringLiteral> getString(Section<Literal> section) {
-		return Sections.findSuccessor(section, StringLiteral.class);
+		return Sections.successor(section, StringLiteral.class);
 	}
 
 	public Section<StringLiteralLanguage> getLanguage(Section<Literal> section) {
-		return Sections.findSuccessor(section, StringLiteralLanguage.class);
+		return Sections.successor(section, StringLiteralLanguage.class);
 	}
 
 	public Section<TypedLiteral> getTyped(Section<Literal> section) {
-		return Sections.findSuccessor(section, TypedLiteral.class);
+		return Sections.successor(section, TypedLiteral.class);
 	}
 
 }

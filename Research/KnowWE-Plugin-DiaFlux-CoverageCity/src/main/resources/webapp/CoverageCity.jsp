@@ -15,7 +15,6 @@
 <%@page import="de.d3web.diaFlux.inference.DiaFluxUtils"%>
 <%@page import="de.knowwe.d3webviz.diafluxCity.GLCity"%>
 <%@page import="de.knowwe.d3webviz.diafluxCity.GLBuilding"%>
-<%@page import="de.d3web.diaflux.coverage.CoverageResult"%>
 <%@page import="de.d3web.core.knowledge.KnowledgeBase"%>
 <%@page import="de.knowwe.diaflux.coverage.DiaFluxCoverageType"%>
 <%@page import="de.knowwe.kdom.defaultMarkup.DefaultMarkupType"%>
@@ -58,7 +57,7 @@
 	}
 	
 	String kdomID = parameters.get("kdomID");
-	Section coverageSection = Sections.getSection(kdomID);
+	Section coverageSection = Sections.get(kdomID);
 	
 	if (coverageSection == null){
 		out.println("<h3>Coverage not found. Please try opening this windows again.</h3>");

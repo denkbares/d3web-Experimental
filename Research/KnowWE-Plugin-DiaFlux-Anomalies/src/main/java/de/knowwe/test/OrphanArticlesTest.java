@@ -79,7 +79,7 @@ public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 
 		for (Article article : manager.getArticles()) {
 			List<Section<LinkType>> links =
-					Sections.findSuccessorsOfType(article.getRootSection(),
+					Sections.successors(article.getRootSection(),
 							LinkType.class);
 			for (Section<LinkType> section : links) {
 				titles.remove(LinkType.getLink(section).toLowerCase());

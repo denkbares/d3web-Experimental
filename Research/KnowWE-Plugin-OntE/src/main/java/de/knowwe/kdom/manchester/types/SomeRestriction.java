@@ -75,7 +75,7 @@ public class SomeRestriction extends AbstractType {
 
 	public boolean isObjectPropertyExpression(Section<SomeRestriction> section) {
 
-		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
+		Section<Keyword> keyword = Sections.successor(section, Keyword.class);
 		if (keyword != null) {
 			return keyword.getText().equals(ManchesterSyntaxKeywords.SOME.getKeyword());
 		}
@@ -84,7 +84,7 @@ public class SomeRestriction extends AbstractType {
 
 	public boolean isDataPropertyExpression(Section<SomeRestriction> section) {
 
-		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
+		Section<Keyword> keyword = Sections.successor(section, Keyword.class);
 		if (keyword != null) {
 			return keyword.getText().equals(ManchesterSyntaxKeywords.SOME_.getKeyword());
 		}
@@ -92,15 +92,15 @@ public class SomeRestriction extends AbstractType {
 	}
 
 	public Section<PropertyExpression> getObjectProperty(Section<SomeRestriction> section) {
-		return Sections.findChildOfType(section, PropertyExpression.class);
+		return Sections.child(section, PropertyExpression.class);
 	}
 
 	public Section<ManchesterClassExpression> getManchesterClassExpression(Section<SomeRestriction> section) {
-		return Sections.findChildOfType(section, ManchesterClassExpression.class);
+		return Sections.child(section, ManchesterClassExpression.class);
 	}
 
 	public Section<DataRangeExpression> getDataRangeExpression(Section<SomeRestriction> section) {
-		return Sections.findChildOfType(section, DataRangeExpression.class);
+		return Sections.child(section, DataRangeExpression.class);
 	}
 
 }

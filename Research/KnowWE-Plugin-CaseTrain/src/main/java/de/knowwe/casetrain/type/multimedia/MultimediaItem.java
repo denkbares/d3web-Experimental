@@ -59,7 +59,7 @@ public class MultimediaItem extends AbstractType {
 		// Environment.getInstance().getWikiConnector()
 		// .getAttachmentFilenamesForPage(article.getTitle());
 		// Section<MultimediaItemContent> multimediaItemURL =
-		// Sections.findChildOfType(s,
+		// Sections.child(s,
 		// MultimediaItemContent.class);
 		// if(!attachments.contains(multimediaItemURL.getOriginalText().trim()))
 		// {

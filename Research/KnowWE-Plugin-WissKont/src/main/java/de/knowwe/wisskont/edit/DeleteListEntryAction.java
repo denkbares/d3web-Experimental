@@ -57,14 +57,14 @@ public class DeleteListEntryAction extends AbstractAction {
 		// comma to be deleted (if so)
 		Map<String, String> myTmpReplacementMap = new HashMap<String, String>();
 		myTmpReplacementMap.put(kdomid, "");
-		Section<?> entryToBeDeletedCorrupted = Sections.getSection(kdomid);
-		// the getSection-method is not reliable in this context, as the
+		Section<?> entryToBeDeletedCorrupted = Sections.get(kdomid);
+		// the get-method is not reliable in this context, as the
 		// section-map seems not to be maintained correctly
 		// therefore the correct up-to-date section is retrieved other way
 
 		String title = entryToBeDeletedCorrupted.getTitle();
 		Section<? extends Type> entryToBeDeleted = SectionUtils.findSection(title, kdomid);
-		Section<RelationMarkup> relationMarkup = Sections.findAncestorOfType(entryToBeDeleted,
+		Section<RelationMarkup> relationMarkup = Sections.ancestor(entryToBeDeleted,
 				RelationMarkup.class);
 
 		{
@@ -78,7 +78,7 @@ public class DeleteListEntryAction extends AbstractAction {
 			while (iterator.hasNext()) {
 				Section<?> last = next;
 				next = iterator.next();
-				if (Sections.getSubtreePostOrder(next).contains(entryToBeDeleted)) {
+				if (Sections.successors(next).contains(entryToBeDeleted)) {
 					previousSection = last;
 					if (iterator.hasNext()) {
 						subsequentSection = iterator.next();
@@ -108,7 +108,7 @@ public class DeleteListEntryAction extends AbstractAction {
 		String result = "";
 		Map<String, String> replacementMap = new HashMap<String, String>();
 		replacementMap.put(relationMarkup.getID(), replacementText.toString());
-		ReplaceResult replaceResult = Sections.replaceSections(context, replacementMap);
+		ReplaceResult replaceResult = Sections.replace(context, replacementMap);
 		replaceResult.sendErrors(context);
 		Map<String, String> newSectionIDs = replaceResult.getSectionMapping();
 		if (newSectionIDs != null && newSectionIDs.size() > 0) {

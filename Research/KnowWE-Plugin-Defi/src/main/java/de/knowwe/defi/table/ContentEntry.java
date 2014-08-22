@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 class ContentEntry extends AbstractType {
 
 	public static int getNumber(Section<ContentEntry> s) {
-		Section<InputHead> section = Sections.findChildOfType(s, InputHead.class);
+		Section<InputHead> section = Sections.child(s, InputHead.class);
 		if (section != null) {
 			String numString = section.getText().substring(5,
 					section.getText().indexOf(':'));
@@ -44,7 +44,7 @@ class ContentEntry extends AbstractType {
 		// workaround, because InputContent only matches a single line.
 		return s.getText().replaceFirst("INPUT\\d*:", "").trim();
 
-// Section<InputContent> sec = Sections.findChildOfType(s,
+// Section<InputContent> sec = Sections.child(s,
 		// InputContent.class);
 		// if (sec != null) return sec.getText();
 		// return null;

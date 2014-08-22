@@ -29,7 +29,7 @@ public class KnowledgeUnitInstantEditToolProvider extends InstantEditToolProvide
 
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
-		Section<Editable> knowledgeUnit = Sections.findAncestorOfType(section,
+		Section<Editable> knowledgeUnit = Sections.ancestor(section,
 				Editable.class);
 		if (knowledgeUnit == null) return new Tool[] {};
 

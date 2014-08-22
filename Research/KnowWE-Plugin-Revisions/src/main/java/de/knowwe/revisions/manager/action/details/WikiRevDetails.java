@@ -48,7 +48,7 @@ public class WikiRevDetails extends AbstractWikiRevDetails {
 			// try to get revision comment and add it
 			String comment = null;
 			@SuppressWarnings("unchecked")
-			Section<RevisionType> section = (Section<RevisionType>) Sections.getSection(sectionId);
+			Section<RevisionType> section = (Section<RevisionType>) Sections.get(sectionId);
 			if (section != null) {
 				comment = RevisionType.getRevisionComment(section);
 			}

@@ -74,7 +74,7 @@ public class ClassFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<Cl
 
 		if (type.hasSubClassOf(section)) { // Handle SubClassOf
 			Section<?> desc = type.getSubClassOf(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
@@ -97,7 +97,7 @@ public class ClassFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<Cl
 
 		if (type.hasDisjointWith(section)) { // Handle DisjointWith
 			Section<?> desc = type.getDisjointWith(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
@@ -120,7 +120,7 @@ public class ClassFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<Cl
 
 		if (type.hasEquivalentTo(section)) { // Handle EquivalentTo
 			Section<?> desc = type.getEquivalentTo(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
@@ -143,7 +143,7 @@ public class ClassFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<Cl
 
 		if (type.hasDisjointUnionOf(section)) { // Handle DisjointunionOf
 			Section<?> desc = type.getDisjointUnionOf(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {

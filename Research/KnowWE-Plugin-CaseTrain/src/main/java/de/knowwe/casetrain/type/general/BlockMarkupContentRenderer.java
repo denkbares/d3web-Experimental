@@ -20,6 +20,7 @@ package de.knowwe.casetrain.type.general;
 
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.kdom.parsing.Section;
@@ -55,7 +56,7 @@ public class BlockMarkupContentRenderer implements Renderer {
 		String tString = "";
 
 		// Only 1 title here
-		List<Section<Title>> titl = Sections.findChildrenOfType(sec, Title.class);
+		List<Section<Title>> titl = Sections.children(sec, Title.class);
 		if (!titl.isEmpty()) {
 			tString = titl.get(0).getText().trim();
 		}
@@ -80,8 +81,9 @@ public class BlockMarkupContentRenderer implements Renderer {
 		// Dont ask why I use this hack here!
 		// DelegateRenderer should find the SubblockMarkupRender, but in fact
 		// it does NOT! Johannes
-		Class<?>[] array = { Title.class };
-		List<Section<?>> secsWithoutTitle = Sections.getChildrenExceptExactType(sec, array);
+		List<Section<?>> secsWithoutTitle = sec.getChildren()
+				.stream().filter(section -> !section.get().getClass().equals(Title.class))
+				.collect(Collectors.toList());
 		for (Section<?> s : secsWithoutTitle) {
 			s.get().getRenderer().render(s, user, string);
 		}
@@ -89,7 +91,6 @@ public class BlockMarkupContentRenderer implements Renderer {
 		string.append("/%\r\n");
 
 		string.appendHtml("</pre>");
-		return;
 	}
 
 }

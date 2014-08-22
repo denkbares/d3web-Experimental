@@ -65,7 +65,7 @@ public class TermBrowserAction extends AbstractAction {
 				PackageCompiler.class);
 		for (PackageCompiler ontologyCompiler : compilers) {
 			Section<? extends PackageCompileType> compileSection = ontologyCompiler.getCompileSection();
-			Section<DefaultMarkupType> defaultMarkup = Sections.findAncestorOfType(compileSection,
+			Section<DefaultMarkupType> defaultMarkup = Sections.ancestor(compileSection,
 					DefaultMarkupType.class);
 			if ((defaultMarkup.getText().contains(master) || defaultMarkup.getTitle().equals(master))
 					&& ontologyCompiler instanceof Rdf2GoCompiler) {

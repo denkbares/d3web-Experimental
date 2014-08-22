@@ -166,12 +166,12 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 			List<Section<ConceptMarkup>> conecptDefinitions = MarkupUtils.getConecptDefinitionForLocalPage(section);
 			if (conecptDefinitions.size() != 1) return;
 			Section<ConceptMarkup> conceptMarkup = conecptDefinitions.get(0);
-			Section<TermDefinition> mainTerm = Sections.findSuccessor(conceptMarkup,
+			Section<TermDefinition> mainTerm = Sections.successor(conceptMarkup,
 					TermDefinition.class);
 			String termName = mainTerm.get().getTermName(mainTerm);
 			TerminologyObject foundObject = manager.search(termName);
 			if (foundObject == null) {
-				Section<NumericalValueMarkerType> numMarker = Sections.findSuccessor(
+				Section<NumericalValueMarkerType> numMarker = Sections.successor(
 						section, NumericalValueMarkerType.class);
 				if (numMarker != null) {
 					createQuestionNum(section, manager, termName);
@@ -237,7 +237,7 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 	 * @param termName
 	 */
 	public static Question createQuestionOCWithValues(Section<ValuesMarkup> section, TerminologyManager manager, String termName) {
-		List<Section<ValueDefinitionListElement>> values = Sections.findSuccessorsOfType(
+		List<Section<ValueDefinitionListElement>> values = Sections.successors(
 				section, ValueDefinitionListElement.class);
 
 		TerminologyObject questionnaire = manager.search(KnowledgeBaseInstantiation.PATIENTENDATEN);
@@ -245,7 +245,7 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 			QuestionOC question = new QuestionOC((QASet) questionnaire, termName);
 
 			for (Section<ValueDefinitionListElement> listElement : values) {
-				Section<Term> answerTerm = Sections.findSuccessor(listElement, Term.class);
+				Section<Term> answerTerm = Sections.successor(listElement, Term.class);
 				String answerName = answerTerm.get().getTermName(answerTerm);
 				question.addAlternative(new Choice(getShortAnswerName(termName, answerName)));
 			}

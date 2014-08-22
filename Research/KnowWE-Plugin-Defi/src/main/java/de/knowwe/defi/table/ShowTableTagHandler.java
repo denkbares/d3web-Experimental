@@ -44,9 +44,9 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 	}
 
 	private String renderTable(Section<DefineTableMarkup> myTable, UserContext user, String tableid, boolean singleTableVersion) {
-		Section<Table> table = Sections.findSuccessor(myTable, Table.class);
+		Section<Table> table = Sections.successor(myTable, Table.class);
 
-		Section<InputFieldCellContent> inputSec = Sections.findSuccessor(table,
+		Section<InputFieldCellContent> inputSec = Sections.successor(table,
 				InputFieldCellContent.class);
 
 		boolean previousInputExists = false;
@@ -63,7 +63,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 					tableid, user.getUserName());
 			List<Section<VersionEntry>> versions = new ArrayList<Section<VersionEntry>>();
 			if (entryContentTable != null) {
-				Sections.findSuccessorsOfType(entryContentTable, VersionEntry.class,
+				Sections.successors(entryContentTable, VersionEntry.class,
 						versions);
 				versionsExisting = versions.size();
 			}
@@ -117,7 +117,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 				Environment.DEFAULT_WEB).getArticles();
 		for (Article article : articles) {
 			List<Section<DefineTableMarkup>> tables = new ArrayList<Section<DefineTableMarkup>>();
-			Sections.findSuccessorsOfType(article.getRootSection(),
+			Sections.successors(article.getRootSection(),
 					DefineTableMarkup.class,
 					tables);
 			for (Section<DefineTableMarkup> table : tables) {

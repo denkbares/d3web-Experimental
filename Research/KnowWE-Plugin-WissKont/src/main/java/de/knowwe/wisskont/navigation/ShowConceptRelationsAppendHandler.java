@@ -50,10 +50,10 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 				Environment.DEFAULT_WEB);
 		Article article = articleManager.getArticle(title);
 		Section<?> section = article.getRootSection();
-		List<Section<ConceptMarkup>> conceptMarkups = Sections.findSuccessorsOfType(
+		List<Section<ConceptMarkup>> conceptMarkups = Sections.successors(
 				article.getRootSection(), ConceptMarkup.class);
 		if (conceptMarkups.size() == 1) {
-			Section<SimpleDefinition> def = Sections.findSuccessor(conceptMarkups.get(0),
+			Section<SimpleDefinition> def = Sections.successor(conceptMarkups.get(0),
 					SimpleDefinition.class);
 			Map<String, String> parameterMap = new HashMap<String, String>();
 

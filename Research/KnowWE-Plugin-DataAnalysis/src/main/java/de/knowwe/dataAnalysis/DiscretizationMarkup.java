@@ -28,7 +28,7 @@ public class DiscretizationMarkup extends AbstractKnowledgeUnitType<Discretizati
 	}
 
 	public static double[] getDiscretizationBoundaries(Section<DiscretizationMarkup> section) throws NumberFormatException {
-		Section<IntervallContent> intervallContent = Sections.findSuccessor(section,
+		Section<IntervallContent> intervallContent = Sections.successor(section,
 				IntervallContent.class);
 		if (intervallContent == null) return null;
 		String text = intervallContent.getText();
@@ -87,7 +87,7 @@ public class DiscretizationMarkup extends AbstractKnowledgeUnitType<Discretizati
 
 		@Override
 		public void insertIntoRepository(Section<DiscretizationMarkup> section) {
-			Section<NumericalValueTermRef> term = Sections.findSuccessor(section,
+			Section<NumericalValueTermRef> term = Sections.successor(section,
 					NumericalValueTermRef.class);
 			String name = term.get().getTermName(term);
 			KnowledgeRepositoryCache.getInstance().addInsertKnowledge(new String[] {
@@ -111,7 +111,7 @@ public class DiscretizationMarkup extends AbstractKnowledgeUnitType<Discretizati
 
 		@Override
 		public void deleteFromRepository(Section<DiscretizationMarkup> section) {
-			Section<NumericalValueTermRef> term = Sections.findSuccessor(section,
+			Section<NumericalValueTermRef> term = Sections.successor(section,
 					NumericalValueTermRef.class);
 			String name = term.get().getTermName(term);
 			KnowledgeRepositoryCache.getInstance().addRemoveKnowledge(new String[] {

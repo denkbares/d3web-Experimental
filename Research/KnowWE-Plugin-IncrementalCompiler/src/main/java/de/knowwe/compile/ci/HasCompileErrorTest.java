@@ -47,11 +47,11 @@ public class HasCompileErrorTest extends AbstractTest<Article> {
 		ReferenceManager referenceManager = IncrementalCompiler.getInstance().getTerminology();
 		Section<RootType> rootSection = testObject.getRootSection();
 		Set<String> erroneousTerms = extractedErroneousTermNames(referenceManager,
-				Sections.findSuccessorsOfType(rootSection,
+				Sections.successors(rootSection,
 						IncrementalTermDefinition.class));
 
 		erroneousTerms.addAll(extractedErroneousTermNames(referenceManager,
-				Sections.findSuccessorsOfType(rootSection,
+				Sections.successors(rootSection,
 						IncrementalTermReference.class)));
 
 		if (erroneousTerms.size() == 0) {

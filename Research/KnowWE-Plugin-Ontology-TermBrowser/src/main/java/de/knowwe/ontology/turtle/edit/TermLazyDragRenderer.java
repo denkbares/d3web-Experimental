@@ -35,7 +35,7 @@ import de.knowwe.ontology.turtle.lazyRef.LazyURIReference;
 public class TermLazyDragRenderer extends TermDragRenderer {
 
 	protected String getIdentifierString(Section<?> section) {
-		Section<LazyURIReference> successor = Sections.findSuccessor(section, LazyURIReference.class);
+		Section<LazyURIReference> successor = Sections.successor(section, LazyURIReference.class);
 		Set<Identifier> potentialMatches = LazyReferenceManager.getInstance()
 				.getPotentialMatches(Compilers.getCompiler(section, OntologyCompiler.class), successor.getText());
 		if (potentialMatches != null && potentialMatches.size() > 0) {

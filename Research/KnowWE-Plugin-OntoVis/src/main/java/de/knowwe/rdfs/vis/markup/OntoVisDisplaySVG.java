@@ -25,7 +25,6 @@ import java.io.OutputStream;
 
 import javax.servlet.ServletContext;
 
-import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.compile.Compilers;
@@ -51,7 +50,7 @@ public class OntoVisDisplaySVG extends AbstractAction {
 		String tmpPath = separator + "KnowWEExtension" + separator + "tmp" + separator;
 
 		// find graph name
-		Section<?> s = Sections.getSection(sectionID);
+		Section<?> s = Sections.get(sectionID);
 		OntologyCompiler ontoCompiler = Compilers.getCompiler(s, OntologyCompiler.class);
 
 		String textHash = String.valueOf(s.getText().hashCode());

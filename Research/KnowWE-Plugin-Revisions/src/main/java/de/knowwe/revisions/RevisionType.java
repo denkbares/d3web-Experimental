@@ -67,7 +67,7 @@ public class RevisionType extends DefaultMarkupType {
 	 * @return a json data element as string
 	 */
 	public static String toTimelineString(Section<RevisionType> section) {
-		Section<DateType> dateSection = Sections.findSuccessor(section, DateType.class);
+		Section<DateType> dateSection = Sections.successor(section, DateType.class);
 
 		long time = 0;
 		try {

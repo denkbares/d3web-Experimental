@@ -73,16 +73,16 @@ public class MoveConceptDefinitionTopRefactoring extends AbstractAction {
 			Map<String, String> replacementMap = new HashMap<String, String>();
 
 			Section<RootType> rootSection = article.getRootSection();
-			Section<?> insertAfterSection = Sections.findSuccessor(rootSection, LabelMarkup.class);
-			Section<ConceptMarkup> concept = Sections.findSuccessor(rootSection,
+			Section<?> insertAfterSection = Sections.successor(rootSection, LabelMarkup.class);
+			Section<ConceptMarkup> concept = Sections.successor(rootSection,
 					ConceptMarkup.class);
 			if (insertAfterSection == null) {
-				insertAfterSection = Sections.findSuccessor(rootSection,
+				insertAfterSection = Sections.successor(rootSection,
 						ConceptMarkup.class);
 
 			}
 			if (insertAfterSection != null) {
-				Section<TermDefinition> term = Sections.findSuccessor(concept, TermDefinition.class);
+				Section<TermDefinition> term = Sections.successor(concept, TermDefinition.class);
 
 				Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
 						new Identifier(term.get().getTermName(term)));
@@ -96,7 +96,7 @@ public class MoveConceptDefinitionTopRefactoring extends AbstractAction {
 						if (!(searchRoot.get() instanceof DashSubtree)) {
 							continue;
 						}
-						Sections.findSuccessorsOfType(searchRoot,
+						Sections.successors(searchRoot,
 								TermReference.class, 4, children);
 
 						for (Section<TermReference> child : children) {
@@ -122,7 +122,7 @@ public class MoveConceptDefinitionTopRefactoring extends AbstractAction {
 					replacementMap.put(insertAfterSection.getID(), insertAfterSection.getText()
 							+ newText);
 					try {
-						Sections.replaceSections(context, replacementMap).sendErrors(context);
+						Sections.replace(context, replacementMap).sendErrors(context);
 					}
 					catch (IOException e) {
 						// TODO Auto-generated catch block

@@ -56,7 +56,7 @@ public class GetCoverageHighlightAction extends AbstractHighlightAction {
 
 		String coverageKdomid = context.getParameter("coveragesection");
 		if (coverageKdomid != null) { // coverage shown in coverage section
-			Section<DiaFluxCoverageType> coverageSec = Sections.getSection(
+			Section<DiaFluxCoverageType> coverageSec = Sections.get(
 					coverageKdomid, DiaFluxCoverageType.class);
 
 			if (coverageSec == null) return null;
@@ -67,9 +67,9 @@ public class GetCoverageHighlightAction extends AbstractHighlightAction {
 		else { // coverage shown in diaflux section
 			String flowKdomid = context.getParameter(Attributes.SECTION_ID);
 
-			Section<FlowchartType> flowchartSec = Sections.getSection(flowKdomid,
+			Section<FlowchartType> flowchartSec = Sections.get(flowKdomid,
 					FlowchartType.class);
-			Section<DiaFluxType> diaFluxSec = Sections.findAncestorOfExactType(flowchartSec,
+			Section<DiaFluxType> diaFluxSec = Sections.ancestor(flowchartSec,
 					DiaFluxType.class);
 
 			KnowledgeBase kb = FlowchartUtils.getKB(diaFluxSec);

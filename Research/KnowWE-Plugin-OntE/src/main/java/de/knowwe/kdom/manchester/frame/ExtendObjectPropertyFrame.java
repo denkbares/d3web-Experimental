@@ -28,7 +28,7 @@ public class ExtendObjectPropertyFrame extends ObjectPropertyFrame {
 	 */
 	@Override
 	public boolean hasObjectPropertyDefinition(Section<? extends DefaultFrame<?>> section) {
-		return Sections.findSuccessor(section, EntityReference.class) != null;
+		return Sections.successor(section, EntityReference.class) != null;
 	}
 
 	/**
@@ -41,6 +41,6 @@ public class ExtendObjectPropertyFrame extends ObjectPropertyFrame {
 	 */
 	@Override
 	public Section<? extends Type> getObjectPropertyDefinition(Section<? extends DefaultFrame<?>> section) {
-		return Sections.findSuccessor(section, OWLTermRef.class);
+		return Sections.successor(section, OWLTermRef.class);
 	}
 }

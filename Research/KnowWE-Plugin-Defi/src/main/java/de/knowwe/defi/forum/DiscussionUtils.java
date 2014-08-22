@@ -55,8 +55,8 @@ public class DiscussionUtils {
 		Iterator<Article> it = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB).getArticles().iterator();
 
 		while (it.hasNext()) {
-			for (Section<? extends Type> sec : Sections.getSubtreePreOrder(it.next().getRootSection())) {
-				Section<? extends Forum> forum = Sections.findSuccessor(sec, Forum.class);
+			for (Section<? extends Type> sec : Sections.successors(it.next().getRootSection())) {
+				Section<? extends Forum> forum = Sections.successor(sec, Forum.class);
 				if (forum != null && !forums.contains(forum)) forums.add(forum);
 			}
 
@@ -69,7 +69,7 @@ public class DiscussionUtils {
 	 * Get number of new entries for a forum.
 	 */
 	public static int getNumberOfNewEntriesInForum(Section<? extends Forum> forum, String user) {
-		List<Section<ForumBox>> boxes = Sections.findSuccessorsOfType(forum, ForumBox.class);
+		List<Section<ForumBox>> boxes = Sections.successors(forum, ForumBox.class);
 		HashMap<String, String> logPages = new HashMap<String, String>();
 
 		for (DefiPageLogLine logLine : DefiPageEventLogger.getLogLines()) {

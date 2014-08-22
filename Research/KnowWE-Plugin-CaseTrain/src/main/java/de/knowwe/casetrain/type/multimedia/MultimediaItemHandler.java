@@ -66,7 +66,7 @@ public class MultimediaItemHandler extends DefaultGlobalScript<MultimediaItem> {
 			attachmentFileNames.add(attachment.getFileName());
 		}
 
-		Section<MultimediaItemContent> mmI = Sections.findChildOfType(s,
+		Section<MultimediaItemContent> mmI = Sections.child(s,
 				MultimediaItemContent.class);
 
 		String t = mmI.getText().trim();

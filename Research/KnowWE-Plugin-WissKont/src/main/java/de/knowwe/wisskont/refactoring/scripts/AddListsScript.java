@@ -56,7 +56,7 @@ public class AddListsScript extends AbstractAction {
 				if (hasConceptDefinition(article)) {
 					rootSection = article.getRootSection();
 
-					Section<RelationMarkup> someRelationMarkup = Sections.findSuccessor(
+					Section<RelationMarkup> someRelationMarkup = Sections.successor(
 							rootSection, RelationMarkup.class);
 					if (someRelationMarkup == null) {
 						// should not happen
@@ -67,7 +67,7 @@ public class AddListsScript extends AbstractAction {
 					String newParentText = createReplaceText(parentSection) + "\n";
 					replacementMap.put(parentSection.getID(), newParentText);
 					try {
-						Sections.replaceSections(context, replacementMap);
+						Sections.replace(context, replacementMap);
 					}
 					catch (IOException e) {
 						// TODO Auto-generated catch block
@@ -114,7 +114,7 @@ public class AddListsScript extends AbstractAction {
 				/*
 				 * if this is the last list item, append all missing ones
 				 */
-				List<Section<RelationMarkup>> listMarkups = Sections.findSuccessorsOfType(
+				List<Section<RelationMarkup>> listMarkups = Sections.successors(
 						parentSection, RelationMarkup.class);
 				if (child == listMarkups.get(listMarkups.size() - 1)) {
 					isLastList = true;
@@ -140,7 +140,7 @@ public class AddListsScript extends AbstractAction {
 	}
 
 	private boolean containsMarkupSection(Class<? extends Type> clazz, Section<? extends Type> parentSection) {
-		return Sections.findSuccessor(parentSection, clazz) != null;
+		return Sections.successor(parentSection, clazz) != null;
 	}
 
 	private static boolean hasConceptDefinition(Article a) {
@@ -148,9 +148,9 @@ public class AddListsScript extends AbstractAction {
 	}
 
 	private static String getConceptName(Article a) {
-		Section<ConceptMarkup> def = Sections.findSuccessor(a.getRootSection(), ConceptMarkup.class);
+		Section<ConceptMarkup> def = Sections.successor(a.getRootSection(), ConceptMarkup.class);
 		if (def != null) {
-			Section<SimpleDefinition> termDef = Sections.findSuccessor(def, SimpleDefinition.class);
+			Section<SimpleDefinition> termDef = Sections.successor(def, SimpleDefinition.class);
 			return termDef.get().getTermName(termDef);
 		}
 		return null;

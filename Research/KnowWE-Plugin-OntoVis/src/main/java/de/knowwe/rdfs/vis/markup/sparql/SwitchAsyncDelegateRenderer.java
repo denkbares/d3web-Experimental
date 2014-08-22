@@ -46,8 +46,8 @@ public class SwitchAsyncDelegateRenderer implements Renderer {
     @Override
     public void render(Section<?> content, UserContext user, RenderResult result) {
         // switch according to renderer annotation (d3/dot)
-        Section<SparqlVisType> section = Sections.findAncestorOfType(content,
-                SparqlVisType.class);
+        Section<SparqlVisType> section = Sections.ancestor(content,
+				SparqlVisType.class);
         Section<DefaultMarkupType> defMarkupSection = Sections.cast(section,
                 DefaultMarkupType.class);
 

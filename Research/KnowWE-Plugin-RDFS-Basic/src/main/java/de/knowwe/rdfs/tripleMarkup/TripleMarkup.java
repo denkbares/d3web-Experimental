@@ -47,28 +47,28 @@ public class TripleMarkup extends AbstractKnowledgeUnitType<TripleMarkup> implem
 	}
 
 	public static Section<? extends SimpleReference> getSubject(Section<TripleMarkup> section) {
-		Section<TripleMarkupContent> content = Sections.findSuccessor(section,
+		Section<TripleMarkupContent> content = Sections.successor(section,
 				TripleMarkupContent.class);
 		if (content != null) {
-			return Sections.findSuccessor(content, SimpleTurtleSubject.class);
+			return Sections.successor(content, SimpleTurtleSubject.class);
 		}
 		return null;
 	}
 
 	public static Section<? extends SimpleReference> getPredicate(Section<TripleMarkup> section) {
-		Section<TripleMarkupContent> content = Sections.findSuccessor(section,
+		Section<TripleMarkupContent> content = Sections.successor(section,
 				TripleMarkupContent.class);
 		if (content != null) {
-			return Sections.findSuccessor(content, SimpleTurtlePredicate.class);
+			return Sections.successor(content, SimpleTurtlePredicate.class);
 		}
 		return null;
 	}
 
 	public static Section<? extends SimpleReference> getObject(Section<TripleMarkup> section) {
-		Section<TripleMarkupContent> content = Sections.findSuccessor(section,
+		Section<TripleMarkupContent> content = Sections.successor(section,
 				TripleMarkupContent.class);
 		if (content != null) {
-			return Sections.findSuccessor(content, SimpleTurtleObjectRef.class);
+			return Sections.successor(content, SimpleTurtleObjectRef.class);
 		}
 		return null;
 	}

@@ -52,11 +52,11 @@ public class ListMarkupDragDropInserter implements DragDropEditInserter {
 					);
 			String result = "done";
 
-			ReplaceResult replaceResult = Sections.replaceSections(context, nodesMap);
+			ReplaceResult replaceResult = Sections.replace(context, nodesMap);
 			replaceResult.sendErrors(context);
 			Map<String, String> newSectionIDs = replaceResult.getSectionMapping();
 			if (newSectionIDs != null && newSectionIDs.size() > 0) {
-				// Section<?> sectionNewVersion = Sections.getSection();
+				// Section<?> sectionNewVersion = Sections.get();
 				result = newSectionIDs.values().iterator().next();
 			}
 
@@ -79,7 +79,7 @@ public class ListMarkupDragDropInserter implements DragDropEditInserter {
 	 * @return
 	 */
 	private String createReplaceText(Section<?> section, String termname) {
-		Section<RelationMarkupContentType> contentSection = Sections.findSuccessor(section,
+		Section<RelationMarkupContentType> contentSection = Sections.successor(section,
 				RelationMarkupContentType.class);
 		List<Section<?>> children = section.getChildren();
 		String result = "";

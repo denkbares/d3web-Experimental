@@ -122,7 +122,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public boolean hasCharacteristics(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, Characteristics.class) != null;
+		return Sections.successor(section, Characteristics.class) != null;
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public Section<Characteristics> getCharacteristics(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, Characteristics.class);
+		return Sections.successor(section, Characteristics.class);
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public boolean hasObjectPropertyDefinition(Section<? extends DefaultFrame<?>> section) {
-		return Sections.findSuccessor(section, ObjectProperty.class) != null;
+		return Sections.successor(section, ObjectProperty.class) != null;
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public Section<? extends Type> getObjectPropertyDefinition(Section<? extends DefaultFrame<?>> section) {
-		return Sections.findSuccessor(section, ObjectProperty.class);
+		return Sections.successor(section, ObjectProperty.class);
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public boolean hasDomain(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, Domain.class) != null;
+		return Sections.successor(section, Domain.class) != null;
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public Section<Domain> getDomain(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, Domain.class);
+		return Sections.successor(section, Domain.class);
 	}
 
 	/**
@@ -190,7 +190,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public boolean hasRange(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, Range.class) != null;
+		return Sections.successor(section, Range.class) != null;
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public Section<Range> getRange(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, Range.class);
+		return Sections.successor(section, Range.class);
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public boolean hasInverseOf(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, InverseOf.class) != null;
+		return Sections.successor(section, InverseOf.class) != null;
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public Section<InverseOf> getInverseOf(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, InverseOf.class);
+		return Sections.successor(section, InverseOf.class);
 	}
 
 	/**
@@ -238,7 +238,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public boolean hasSubPropertyOf(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, SubPropertyOf.class) != null;
+		return Sections.successor(section, SubPropertyOf.class) != null;
 	}
 
 	/**
@@ -250,7 +250,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public Section<SubPropertyOf> getSubPropertyOf(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, SubPropertyOf.class);
+		return Sections.successor(section, SubPropertyOf.class);
 	}
 
 	/**
@@ -262,7 +262,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public boolean hasEquivalentTo(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, EquivalentTo.class) != null;
+		return Sections.successor(section, EquivalentTo.class) != null;
 	}
 
 	/**
@@ -274,7 +274,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public Section<EquivalentTo> getEquivalentTo(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, EquivalentTo.class);
+		return Sections.successor(section, EquivalentTo.class);
 	}
 
 	/**
@@ -286,7 +286,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public boolean hasDisjointWith(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, DisjointWith.class) != null;
+		return Sections.successor(section, DisjointWith.class) != null;
 	}
 
 	/**
@@ -298,7 +298,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public Section<DisjointWith> getDisjointWith(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, DisjointWith.class);
+		return Sections.successor(section, DisjointWith.class);
 	}
 
 	/**
@@ -310,7 +310,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public boolean hasSubPropertyChain(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, SubPropertyChain.class) != null;
+		return Sections.successor(section, SubPropertyChain.class) != null;
 	}
 
 	/**
@@ -322,7 +322,7 @@ public class ObjectPropertyFrame extends DefaultFrame<ObjectPropertyFrame> imple
 	 * @return The found section
 	 */
 	public Section<SubPropertyChain> getSubPropertyChain(Section<ObjectPropertyFrame> section) {
-		return Sections.findSuccessor(section, SubPropertyChain.class);
+		return Sections.successor(section, SubPropertyChain.class);
 	}
 
 }

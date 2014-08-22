@@ -51,7 +51,7 @@ public class LoadReviewAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String kdomid = context.getParameter(Attributes.SECTION_ID);
-		Section<FlowchartType> flowSec = Sections.getSection(kdomid, FlowchartType.class);
+		Section<FlowchartType> flowSec = Sections.get(kdomid, FlowchartType.class);
 		Article article = flowSec.getArticle();
 		String flowName = FlowchartType.getFlowchartName(flowSec);
 		WikiConnector connector = Environment.getInstance().getWikiConnector();

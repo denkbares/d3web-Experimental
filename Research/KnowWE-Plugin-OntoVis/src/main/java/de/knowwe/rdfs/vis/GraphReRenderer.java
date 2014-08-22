@@ -84,7 +84,7 @@ public class GraphReRenderer implements EventListener {
                 }
 
                 // re-render all OntoVisType-sections
-                List<Section<? extends Type>> sections = Sections.findSectionsOfTypeGlobal(OntoVisType.class, am);
+                Collection<Section<? extends Type>> sections = Sections.successors(am, OntoVisType.class);
                 for (Section<? extends Type> s : sections) {
 //			Section<OntoVisType> section = Sections.cast(s, OntoVisType.class);
 //			section.get().getRenderer().render(section, null, null);
@@ -92,7 +92,7 @@ public class GraphReRenderer implements EventListener {
                 }
 
                 // re-render all SparqlVisType-sections
-                sections = Sections.findSectionsOfTypeGlobal(SparqlVisContentType.class, am);
+                sections = Sections.successors(am, SparqlVisContentType.class);
                 for (Section<? extends Type> s : sections) {
 //			Section<SparqlVisType> section = Sections.cast(s, SparqlVisType.class);
 //			section.get().getRenderer().render(section, null, null);

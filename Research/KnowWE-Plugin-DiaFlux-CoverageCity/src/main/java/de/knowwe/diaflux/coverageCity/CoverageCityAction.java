@@ -70,7 +70,7 @@ public class CoverageCityAction extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 		String sectionID = context.getParameter(Attributes.SECTION_ID);
 
-		Section<CoverageCityType> section = Sections.getSection(sectionID,
+		Section<CoverageCityType> section = Sections.get(sectionID,
 				CoverageCityType.class);
 
 		if (section == null) {

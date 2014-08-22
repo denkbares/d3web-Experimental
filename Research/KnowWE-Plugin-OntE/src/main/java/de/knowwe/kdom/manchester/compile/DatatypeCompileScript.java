@@ -57,7 +57,7 @@ public class DatatypeCompileScript extends OWLAPIKnowledgeUnitCompileScript<Data
 
 		if (type.hasEquivalentTo(section)) { // Handle EquivalentTo
 			Section<?> desc = type.getEquivalentTo(section);
-			Section<DataRangeExpression> dre = Sections.findSuccessor(desc,
+			Section<DataRangeExpression> dre = Sections.successor(desc,
 					DataRangeExpression.class);
 
 			if (dre == null) {

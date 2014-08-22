@@ -143,11 +143,11 @@ public class ManchesterSyntaxUtil {
 	}
 
 	public static boolean hasAnnotations(Section<?> section) {
-		return Sections.findSuccessor(section, Annotations.class) != null;
+		return Sections.successor(section, Annotations.class) != null;
 	}
 
 	public static List<Section<Annotation>> getAnnotations(Section<?> section) {
-		return Sections.findSuccessorsOfType(section, Annotation.class);
+		return Sections.successors(section, Annotation.class);
 	}
 
 }

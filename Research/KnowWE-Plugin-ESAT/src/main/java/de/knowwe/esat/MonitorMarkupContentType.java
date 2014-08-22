@@ -59,7 +59,7 @@ public class MonitorMarkupContentType extends AbstractType {
 
 		@Override
 		public Collection<Message> create(D3webCompiler compiler, Section<MonitorMarkupContentType> section) {
-			Section<SolutionDefinition> solutionDef = Sections.findSuccessor(section,
+			Section<SolutionDefinition> solutionDef = Sections.successor(section,
 					SolutionDefinition.class);
 			Solution solution = solutionDef.get().getTermObject(compiler, solutionDef);
 			KnowledgeBase knowledgeBase = solution.getKnowledgeBase();

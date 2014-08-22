@@ -43,7 +43,7 @@ public abstract class AbstractD3webVizAction extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 		String sectionID = context.getParameter(Attributes.SECTION_ID);
 	
-		Section<?> section = Sections.getSection(sectionID);
+		Section<?> section = Sections.get(sectionID);
 	
 		if (section == null) {
 			// TODO error handling

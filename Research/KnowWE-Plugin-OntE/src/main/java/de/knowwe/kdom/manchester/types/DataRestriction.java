@@ -72,7 +72,7 @@ public class DataRestriction extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isSomeRestriction(Section<DataRestriction> section) {
-		return Sections.findChildOfType(section, SomeRestriction.class) != null;
+		return Sections.child(section, SomeRestriction.class) != null;
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class DataRestriction extends AbstractType {
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
 	public Section<SomeRestriction> getSomeRestriction(Section<DataRestriction> section) {
-		return Sections.findChildOfType(section, SomeRestriction.class);
+		return Sections.child(section, SomeRestriction.class);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class DataRestriction extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isOnlyRestriction(Section<DataRestriction> section) {
-		return Sections.findChildOfType(section, OnlyRestriction.class) != null;
+		return Sections.child(section, OnlyRestriction.class) != null;
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class DataRestriction extends AbstractType {
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
 	public Section<OnlyRestriction> getOnlyRestriction(Section<DataRestriction> section) {
-		return Sections.findChildOfType(section, OnlyRestriction.class);
+		return Sections.child(section, OnlyRestriction.class);
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class DataRestriction extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isCardinalityRestriction(Section<DataRestriction> section) {
-		return Sections.findChildOfType(section, CardinalityRestriction.class) != null;
+		return Sections.child(section, CardinalityRestriction.class) != null;
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class DataRestriction extends AbstractType {
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
 	public Section<CardinalityRestriction> getCardinalityRestriction(Section<DataRestriction> section) {
-		return Sections.findChildOfType(section, CardinalityRestriction.class);
+		return Sections.child(section, CardinalityRestriction.class);
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class DataRestriction extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isValueRestriction(Section<DataRestriction> section) {
-		return Sections.findChildOfType(section, ValueRestriction.class) != null;
+		return Sections.child(section, ValueRestriction.class) != null;
 	}
 
 	/**
@@ -145,6 +145,6 @@ public class DataRestriction extends AbstractType {
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
 	public Section<ValueRestriction> getValueRestriction(Section<DataRestriction> section) {
-		return Sections.findChildOfType(section, ValueRestriction.class);
+		return Sections.child(section, ValueRestriction.class);
 	}
 }

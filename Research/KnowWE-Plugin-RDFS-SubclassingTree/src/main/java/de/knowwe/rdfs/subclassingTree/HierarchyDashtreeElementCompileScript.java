@@ -64,9 +64,9 @@ public class HierarchyDashtreeElementCompileScript extends
 					.getParentDashTreeElement(element);
 			if (father != null) {
 				Section<? extends Term> fatherElement = Sections
-						.findSuccessor(father, Term.class);
+						.successor(father, Term.class);
 				Section<? extends Term> childElement = Sections
-						.findSuccessor(element, Term.class);
+						.successor(element, Term.class);
 
 				URI localURI = RDFSUtil.getURI(childElement);
 				URI fatherURI = RDFSUtil.getURI(fatherElement);
@@ -79,7 +79,7 @@ public class HierarchyDashtreeElementCompileScript extends
 					URI predicate = RDFS.subClassOf;
 
 					// ..but can be overwritten by the relation annotation
-					Section<DefaultMarkupType> markup = Sections.findAncestorOfType(
+					Section<DefaultMarkupType> markup = Sections.ancestor(
 							elementContent, DefaultMarkupType.class);
 					String relationAnnotation = DefaultMarkupType.getAnnotation(markup,
 							HierarchyMarkup.RELATION_ANNOTATION_KEY);
@@ -126,7 +126,7 @@ public class HierarchyDashtreeElementCompileScript extends
 
 		// add child-DTE to ref-list
 		Section<? extends IRITermRef> childElement = Sections
-				.findSuccessor(section, IRITermRef.class);
+				.successor(section, IRITermRef.class);
 		if (childElement != null) { // can be null if this line contains a
 									// definition
 			result.add(childElement);
@@ -138,7 +138,7 @@ public class HierarchyDashtreeElementCompileScript extends
 		if (father != null) {
 
 			Section<? extends IRITermRef> fatherElement = Sections
-					.findSuccessor(father, IRITermRef.class);
+					.successor(father, IRITermRef.class);
 			if (fatherElement != null) {
 				result.add(fatherElement);
 			}

@@ -92,7 +92,7 @@ public class TripleMarkupSimple extends AbstractKnowledgeUnitType<TripleMarkupSi
 			Node predURI = null;
 			Node objURI = null;
 
-			Sections.findSuccessorsOfType(section, IRITermRef.class, found);
+			Sections.successors(section, IRITermRef.class, found);
 
 			if (found.size() == 3) {
 				Section<IRITermRef> subject = found.get(0);

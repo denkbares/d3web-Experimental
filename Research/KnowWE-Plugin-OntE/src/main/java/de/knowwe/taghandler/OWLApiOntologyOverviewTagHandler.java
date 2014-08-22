@@ -76,7 +76,7 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 		// look for DefaultFrame sections
 		for (Article article : articles) {
 
-			List<Section<DefaultFrame>> defaultFrames = Sections.findSuccessorsOfType(
+			List<Section<DefaultFrame>> defaultFrames = Sections.successors(
 					article.getRootSection(), DefaultFrame.class);
 
 			for (Section<DefaultFrame> frame : defaultFrames) {

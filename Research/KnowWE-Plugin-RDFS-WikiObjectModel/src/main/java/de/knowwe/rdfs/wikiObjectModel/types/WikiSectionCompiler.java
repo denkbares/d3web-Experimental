@@ -69,20 +69,20 @@ public class WikiSectionCompiler<T extends Type> extends AbstractKnowledgeUnitCo
 		data.add(Rdf2GoCore.getInstance().createStatement(pageURI, RDF.type,
 				WikiObjectModel.WIKI_PAGE));
 
-		Section<HeaderType> theMajorSection = Sections.findSuccessor(section, HeaderType.class);
+		Section<HeaderType> theMajorSection = Sections.successor(section, HeaderType.class);
 
 		URI sectionURI = createTriplesForSection(data, pageURI, theMajorSection, null);
 
 		List<Section<HeaderType>> mediumLevelSections = new ArrayList<Section<HeaderType>>();
 
-		Sections.findSuccessorsOfType(section, HeaderType.class, 2, mediumLevelSections);
+		Sections.successors(section, HeaderType.class, 2, mediumLevelSections);
 		mediumLevelSections.remove(section); // without itself
 
 		for (Section<HeaderType> medium : mediumLevelSections) {
 			URI mediumURI = createTriplesForSection(data, pageURI, medium, sectionURI);
 
 			List<Section<HeaderType>> minorLevelSections = new ArrayList<Section<HeaderType>>();
-			Sections.findSuccessorsOfType(medium, HeaderType.class, 2, minorLevelSections);
+			Sections.successors(medium, HeaderType.class, 2, minorLevelSections);
 			minorLevelSections.remove(medium); // without itself
 
 			for (Section<HeaderType> minor : minorLevelSections) {
@@ -112,7 +112,7 @@ public class WikiSectionCompiler<T extends Type> extends AbstractKnowledgeUnitCo
 				new URIImpl(Utils.createKDOMIDURI(currentSection))));
 
 		// hasContentKDOMID
-		Section<SectionContentType> content = Sections.findSuccessor(currentSection,
+		Section<SectionContentType> content = Sections.successor(currentSection,
 				SectionContentType.class);
 		if (content != null) {
 			data.add(Rdf2GoCore.getInstance().createStatement(currentSectionURI,

@@ -61,7 +61,7 @@ public class RenderRestrictionStart extends DefaultMarkupType {
 
 		@Override
 		public void render(Section<?> sec, UserContext user, RenderResult string) {
-			Section<GroupDeclaration> grSec = Sections.findSuccessor(sec, GroupDeclaration.class);
+			Section<GroupDeclaration> grSec = Sections.successor(sec, GroupDeclaration.class);
 			string.append(RenderRestrictionStart.createString(grSec.get().getGroup(grSec)));
 
 		}

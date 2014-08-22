@@ -71,7 +71,7 @@ public class Characteristics extends DescriptionType {
 	 */
 	public List<Section<? extends Type>> getCharacteristics(Section<Characteristics> section) {
 		List<Section<? extends Type>> list = new ArrayList<Section<? extends Type>>();
-		list.addAll(Sections.findSuccessorsOfType(section, ObjectPropertyCharacteristic.class));
+		list.addAll(Sections.successors(section, ObjectPropertyCharacteristic.class));
 		return list;
 	}
 }

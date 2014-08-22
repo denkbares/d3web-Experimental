@@ -59,7 +59,7 @@ public class TimeTableUtilities {
 		Article article = mgr.getArticle(getTimeTablePageForUser(user));
 		Section<TimeTableMarkup> timetable = null;
 
-		if (article != null) timetable = Sections.findSuccessor(article.getRootSection(),
+		if (article != null) timetable = Sections.successor(article.getRootSection(),
 				TimeTableMarkup.class);
 
 		try {
@@ -72,7 +72,7 @@ public class TimeTableUtilities {
 
 		if (article == null || timetable == null || TimeTableMarkup.getDates(timetable).size() == 0) {
 			article = buildPersonalTimeTable(userProfile);
-			timetable = Sections.findSuccessor(article.getRootSection(), TimeTableMarkup.class);
+			timetable = Sections.successor(article.getRootSection(), TimeTableMarkup.class);
 		}
 
 		dates = TimeTableMarkup.getDates(timetable);
@@ -90,7 +90,7 @@ public class TimeTableUtilities {
 		int numOfUnits = MenuUtilities.getRootUnits().size();
 
 		if (article != null) {
-			Section<TimeTableTemplateMarkup> timeTableTemplate = Sections.findSuccessor(
+			Section<TimeTableTemplateMarkup> timeTableTemplate = Sections.successor(
 					article.getRootSection(), TimeTableTemplateMarkup.class);
 			if (timeTableTemplate != null) {
 				numOfDays = TimeTableTemplateMarkup.getNumbersOfDays(timeTableTemplate);

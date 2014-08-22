@@ -102,10 +102,10 @@ public class InlineIndicationCondition extends AbstractType {
 				return Messages.asList(Messages.creationFailedWarning("Rule"));
 			}
 
-			Section<Finding> finding = Sections.findSuccessor(s, Finding.class);
+			Section<Finding> finding = Sections.successor(s, Finding.class);
 
 			@SuppressWarnings("rawtypes")
-			Section<QASetDefinition> qDef = Sections.findSuccessor(s.getParent(),
+			Section<QASetDefinition> qDef = Sections.successor(s.getParent(),
 					QASetDefinition.class);
 			Collection<Message> msgs = new HashSet<Message>();
 			if (finding != null && qDef != null) {

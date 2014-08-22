@@ -35,7 +35,7 @@ public abstract class DefaultMarkupDragDropInserter implements DragDropEditInser
 		 * replace entire defaultMarkup section and recompile...
 		 */
 		Section<DefaultMarkupType> defaultMarkupSection =
-				Sections.findAncestorOfType(s,
+				Sections.ancestor(s,
 						DefaultMarkupType.class);
 		String defaultMarkupReplaceText =
 				createDefaultMarkupReplaceText(defaultMarkupSection,
@@ -46,7 +46,7 @@ public abstract class DefaultMarkupDragDropInserter implements DragDropEditInser
 		nodesMap.put(defaultMarkupSection.getID(), defaultMarkupReplaceText);
 		String result = "done";
 
-		ReplaceResult replaceResult = Sections.replaceSections(context, nodesMap);
+		ReplaceResult replaceResult = Sections.replace(context, nodesMap);
 		replaceResult.sendErrors(context);
 		Map<String, String> newSectionIDs = replaceResult.getSectionMapping();
 		if (newSectionIDs != null && newSectionIDs.size() > 0) {
@@ -67,7 +67,7 @@ public abstract class DefaultMarkupDragDropInserter implements DragDropEditInser
 	private String createDefaultMarkupReplaceText(Section<DefaultMarkupType> defaultMarkupSection, Section<?> toBeReplaced, String replacement) {
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		nodesMap.put(toBeReplaced.getID(), replacement);
-		StringBuffer replacedText = Sections.collectTextAndReplaceNode(defaultMarkupSection,
+		StringBuilder replacedText = Sections.collectTextAndReplace(defaultMarkupSection,
 				nodesMap);
 		return replacedText.toString();
 	}

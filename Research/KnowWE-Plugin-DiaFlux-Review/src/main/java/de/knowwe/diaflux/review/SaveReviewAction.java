@@ -54,7 +54,7 @@ public class SaveReviewAction extends AbstractAction {
 			return;
 		}
 
-		Section<FlowchartType> flowSec = Sections.getSection(kdomid, FlowchartType.class);
+		Section<FlowchartType> flowSec = Sections.get(kdomid, FlowchartType.class);
 		Article article = flowSec.getArticle();
 		String flowName = FlowchartType.getFlowchartName(flowSec);
 		WikiConnector connector = Environment.getInstance().getWikiConnector();

@@ -42,7 +42,7 @@ public class PredicateDragDropInserter extends DefaultMarkupDragDropInserter {
 
 	@Override
 	protected Section<?> findSectionToBeReplaced(Section<?> s) {
-		return Sections.findAncestorOfType(s,
+		return Sections.ancestor(s,
 				PredicateSentence.class);
 	}
 
@@ -51,7 +51,7 @@ public class PredicateDragDropInserter extends DefaultMarkupDragDropInserter {
 		String[] split = dropText.split("#");
 
 		String shortURI = split[0] + ":" + Strings.encodeURL(split[1]);
-		List<Section<Object>> objects = Sections.findSuccessorsOfType(section, Object.class);
+		List<Section<Object>> objects = Sections.successors(section, Object.class);
 		String replaceText = null;
 		if (objects == null || objects.size() == 0) {
 			/*

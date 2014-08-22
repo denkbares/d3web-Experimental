@@ -37,7 +37,7 @@ import de.knowwe.rdfs.wikiObjectModel.types.SectionHeaderObjectDefinition;
 public class Utils {
 
 	public static String createAnchorURL(Section<HeaderType> sec) {
-		Section<SectionHeaderType> header = Sections.findSuccessor(sec, SectionHeaderType.class);
+		Section<SectionHeaderType> header = Sections.successor(sec, SectionHeaderType.class);
 		return createAnchorURLHeader(header);
 	}
 
@@ -66,7 +66,7 @@ public class Utils {
 	}
 
 	public static String createAnchorURLHeader(Section<SectionHeaderType> header) {
-		return createAnchorURLHeaderDefinition(Sections.findSuccessor(header,
+		return createAnchorURLHeaderDefinition(Sections.successor(header,
 				SectionHeaderObjectDefinition.class));
 
 	}
@@ -86,10 +86,10 @@ public class Utils {
 	}
 
 	public static Section<SectionHeaderObjectDefinition> getContextSectionIfExisting(Section<?> s) {
-		Section<HeaderType> section = Sections.findAncestorOfType(s,
+		Section<HeaderType> section = Sections.ancestor(s,
 				HeaderType.class);
 		if (section != null) {
-			Section<SectionHeaderObjectDefinition> headerObjectSection = Sections.findSuccessor(
+			Section<SectionHeaderObjectDefinition> headerObjectSection = Sections.successor(
 					section, SectionHeaderObjectDefinition.getGenericClass());
 			return headerObjectSection;
 

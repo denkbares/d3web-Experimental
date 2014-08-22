@@ -47,14 +47,14 @@ public class ConceptDefinitionRefactoring extends AbstractAction {
 		Collection<Article> articles = articleManager.getArticles();
 		Map<String, String> replacementMap = new HashMap<String, String>();
 		for (Article article : articles) {
-			List<Section<SimpleIRIDefintionMarkup>> defs = Sections.findSuccessorsOfType(
+			List<Section<SimpleIRIDefintionMarkup>> defs = Sections.successors(
 					article.getRootSection(), SimpleIRIDefintionMarkup.class);
 			if (defs.size() == 1) {
 				// this refactoring is only applied on pages defining exactly
 				// one term
 
 				Section<SimpleIRIDefintionMarkup> defMarkup = defs.get(0);
-				Section<SimpleDefinition> termDefinition = Sections.findSuccessor(defMarkup,
+				Section<SimpleDefinition> termDefinition = Sections.successor(defMarkup,
 						SimpleDefinition.class);
 				String termname = termDefinition.get().getTermName(termDefinition);
 				String linebreak = System.getProperty("line.separator");
@@ -64,7 +64,7 @@ public class ConceptDefinitionRefactoring extends AbstractAction {
 		}
 
 		try {
-			Sections.replaceSections(user, replacementMap).sendErrors(user);
+			Sections.replace(user, replacementMap).sendErrors(user);
 		}
 		catch (IOException e) {
 			// TODO Auto-generated catch block

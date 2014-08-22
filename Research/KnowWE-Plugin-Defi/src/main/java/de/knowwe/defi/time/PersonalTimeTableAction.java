@@ -61,7 +61,7 @@ public class PersonalTimeTableAction extends AbstractAction {
 			Map<String, String> nodesMap = new HashMap<String, String>();
 			Section<RootType> rootSection = Environment.getInstance().getArticle(
 					Environment.DEFAULT_WEB, pageName).getRootSection();
-			Section<TimeTableMarkup> timetemplate = Sections.findSuccessor(
+			Section<TimeTableMarkup> timetemplate = Sections.successor(
 					rootSection, TimeTableMarkup.class);
 			if (timetemplate == null) {
 				nodesMap.put(rootSection.getID(), rootSection.getText()

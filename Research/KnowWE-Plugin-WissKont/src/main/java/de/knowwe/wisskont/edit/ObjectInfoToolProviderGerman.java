@@ -38,13 +38,13 @@ public class ObjectInfoToolProviderGerman implements ToolProvider {
 	@Override
 	public boolean hasTools(Section<?> section, UserContext userContext) {
 		Section<SimpleDefinition> definition =
-				Sections.findSuccessor(section, SimpleDefinition.class);
+				Sections.successor(section, SimpleDefinition.class);
 		return definition != null;
 	}
 
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
-		Section<SimpleDefinition> definition = Sections.findSuccessor(section,
+		Section<SimpleDefinition> definition = Sections.successor(section,
 				SimpleDefinition.class);
 		if (definition != null) {
 			return new Tool[] { getObjectInfoPageTool(definition, userContext) };

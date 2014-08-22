@@ -72,7 +72,7 @@ public class DefiCommentEventListener implements EventListener {
 	private DefiCommentLogLine getLogLineOfForum(NewCommentEvent event) {
 		DefiCommentLogLine logLine = new DefiCommentLogLine();
 		Section<? extends Forum> forum = getForum(event.getTopic());
-		List<Section<ForumBox>> boxes = Sections.findSuccessorsOfType(forum, ForumBox.class);
+		List<Section<ForumBox>> boxes = Sections.successors(forum, ForumBox.class);
 		Section<ForumBox> lastBox = null, previousBox = null;
 		for (Section<ForumBox> box : boxes) {
 			if (lastBox != null) previousBox = lastBox;
@@ -145,7 +145,7 @@ public class DefiCommentEventListener implements EventListener {
 			article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 					Strings.decodeURL(page));
 		}
-		return Sections.findSuccessor(article.getRootSection(),
+		return Sections.successor(article.getRootSection(),
 				Forum.class);
 	}
 

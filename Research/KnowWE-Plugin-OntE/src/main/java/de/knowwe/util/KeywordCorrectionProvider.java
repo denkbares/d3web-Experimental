@@ -48,7 +48,7 @@ public class KeywordCorrectionProvider implements CorrectionProvider {
 		}
 
 		@SuppressWarnings("rawtypes")
-		Section<DefaultFrame> defaultFrame = Sections.findAncestorOfType(section,
+		Section<DefaultFrame> defaultFrame = Sections.ancestor(section,
 				DefaultFrame.class);
 
 		List<CorrectionProvider.Suggestion> suggestions = new LinkedList<CorrectionProvider.Suggestion>();

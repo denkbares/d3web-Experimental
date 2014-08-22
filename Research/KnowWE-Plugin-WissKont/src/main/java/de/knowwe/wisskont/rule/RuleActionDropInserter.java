@@ -43,8 +43,8 @@ public class RuleActionDropInserter implements DragDropEditInserter {
 	public String insert(Section<?> s, String droppedTerm, String relationKind, UserActionContext context) throws IOException {
 		if (Sections.hasType(s, RuleActionKeyType.class)) {
 			Section<RuleActionKeyType> section = Sections.cast(s, RuleActionKeyType.class);
-			Section<RuleMarkup> rule = Sections.findAncestorOfType(section, RuleMarkup.class);
-			Section<ActionArea> action = Sections.findSuccessor(rule, ActionArea.class);
+			Section<RuleMarkup> rule = Sections.ancestor(section, RuleMarkup.class);
+			Section<ActionArea> action = Sections.successor(rule, ActionArea.class);
 			Map<String, String> nodesMap = new HashMap<String, String>();
 			if (action != null && action.getText().trim().length() > 0) {
 				String replaceText = action.getText() + "; " + droppedTerm;
@@ -56,11 +56,11 @@ public class RuleActionDropInserter implements DragDropEditInserter {
 			}
 			String result = "done";
 
-			ReplaceResult replaceResult = Sections.replaceSections(context, nodesMap);
+			ReplaceResult replaceResult = Sections.replace(context, nodesMap);
 			replaceResult.sendErrors(context);
 			Map<String, String> newSectionIDs = replaceResult.getSectionMapping();
 			if (newSectionIDs != null && newSectionIDs.size() > 0) {
-				// Section<?> sectionNewVersion = Sections.getSection();
+				// Section<?> sectionNewVersion = Sections.get();
 				result = newSectionIDs.values().iterator().next();
 			}
 

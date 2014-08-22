@@ -77,20 +77,20 @@ public class OnlyRestriction extends AbstractType {
 	}
 
 	public Section<PropertyExpression> getObjectProperty(Section<OnlyRestriction> section) {
-		return Sections.findSuccessor(section, PropertyExpression.class);
+		return Sections.successor(section, PropertyExpression.class);
 	}
 
 	public Section<ManchesterClassExpression> getManchesterClassExpression(Section<OnlyRestriction> section) {
-		return Sections.findSuccessor(section, ManchesterClassExpression.class);
+		return Sections.successor(section, ManchesterClassExpression.class);
 	}
 
 	public Section<DataRangeExpression> getDataRangeExpression(Section<OnlyRestriction> section) {
-		return Sections.findChildOfType(section, DataRangeExpression.class);
+		return Sections.child(section, DataRangeExpression.class);
 	}
 
 	public boolean isObjectPropertyExpression(Section<OnlyRestriction> section) {
 
-		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
+		Section<Keyword> keyword = Sections.successor(section, Keyword.class);
 		if (keyword != null) {
 			return keyword.getText().equals(ManchesterSyntaxKeywords.ONLY.getKeyword());
 		}
@@ -99,7 +99,7 @@ public class OnlyRestriction extends AbstractType {
 
 	public boolean isDataPropertyExpression(Section<OnlyRestriction> section) {
 
-		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
+		Section<Keyword> keyword = Sections.successor(section, Keyword.class);
 		if (keyword != null) {
 			return keyword.getText().equals(ManchesterSyntaxKeywords.ONLY_.getKeyword());
 		}

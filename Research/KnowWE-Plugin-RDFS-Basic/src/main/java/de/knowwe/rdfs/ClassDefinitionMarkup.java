@@ -77,7 +77,7 @@ public class ClassDefinitionMarkup extends AbstractKnowledgeUnitType<ClassDefini
 		@Override
 		public void insertIntoRepository(Section<ClassDefinitionMarkup> section) {
 
-			Section<ClassDef> classTerm = Sections.findSuccessor(section, ClassDef.class);
+			Section<ClassDef> classTerm = Sections.successor(section, ClassDef.class);
 
 			URI classURI = RDFSUtil.getURI(classTerm);
 			Rdf2GoCore.getInstance().addStatement(

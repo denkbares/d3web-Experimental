@@ -55,7 +55,7 @@ public class SubjectDragDropInserter extends DefaultMarkupDragDropInserter {
 
 	@Override
 	protected Section<?> findSectionToBeReplaced(Section<?> s) {
-		Section<TurtleSentence> sentence = Sections.findAncestorOfType(s,
+		Section<TurtleSentence> sentence = Sections.ancestor(s,
 				TurtleSentence.class);
 		return sentence;
 	}
@@ -67,7 +67,7 @@ public class SubjectDragDropInserter extends DefaultMarkupDragDropInserter {
 
 		String shortURI = split[0] + ":" + Strings.encodeURL(split[1]);
 
-		List<Section<PredicateSentence>> predSentences = Sections.findSuccessorsOfType(section,
+		List<Section<PredicateSentence>> predSentences = Sections.successors(section,
 				PredicateSentence.class);
 		String replaceText = null;
 		if (predSentences == null || predSentences.size() == 0) {

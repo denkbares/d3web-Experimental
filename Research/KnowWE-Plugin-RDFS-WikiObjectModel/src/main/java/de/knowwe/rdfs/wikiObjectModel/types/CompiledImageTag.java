@@ -113,7 +113,7 @@ public class CompiledImageTag extends AbstractKnowledgeUnitType<CompiledImageTag
 	 */
 	public static String getAttributeValue(Section<CompiledImageTag> sec, String attributeName) {
 		Pattern p = Pattern.compile(attributeName + "\\w*?=\\w*?['|\"](.*?)['|\"]");
-		Matcher m = p.matcher(Sections.findSuccessor(sec, ImageTypeContent.class).getText());
+		Matcher m = p.matcher(Sections.successor(sec, ImageTypeContent.class).getText());
 		if (m.find()) {
 			return m.group(1);
 		}

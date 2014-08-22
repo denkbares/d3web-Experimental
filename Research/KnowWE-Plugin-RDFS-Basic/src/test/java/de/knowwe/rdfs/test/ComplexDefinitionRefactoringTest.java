@@ -101,7 +101,7 @@ public class ComplexDefinitionRefactoringTest {
 			Map<String, String> nodesMap = new HashMap<String, String>();
 			nodesMap.put(oldSection.getID(), newText);
 			UserActionContext context = TestUtils.createTestActionContext("", "");
-			Sections.replaceSections(context, nodesMap).sendErrors(context);
+			Sections.replace(context, nodesMap).sendErrors(context);
 		}
 		else {
 			Log.severe("Unable to get section with text: " +
@@ -113,7 +113,7 @@ public class ComplexDefinitionRefactoringTest {
 			sectionType) {
 		Section<?> root = getArticle().getRootSection();
 		List<Section<T>> typedSections = new LinkedList<Section<T>>();
-		Sections.findSuccessorsOfType(root, sectionType, typedSections);
+		Sections.successors(root, sectionType, typedSections);
 		for (Section<T> section : typedSections) {
 			if (section.getText().equals(text)) {
 				return section;

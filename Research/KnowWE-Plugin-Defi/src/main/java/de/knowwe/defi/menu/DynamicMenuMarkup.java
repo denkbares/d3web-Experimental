@@ -38,7 +38,7 @@ public class DynamicMenuMarkup extends DefaultMarkupType {
 			@Override
 			public void render(Section<?> sec, UserContext user, RenderResult string) {
 				string.append("<table class='menulink'>");
-				Section<ContentType> content = Sections.findChildOfType(sec,
+				Section<ContentType> content = Sections.child(sec,
 						ContentType.class);
 				DelegateRenderer.getInstance().render(content, user, string);
 				string.append("</table>");

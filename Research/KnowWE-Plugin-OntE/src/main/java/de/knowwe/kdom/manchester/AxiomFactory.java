@@ -257,7 +257,7 @@ public class AxiomFactory {
 			List<Section<NonTerminalList>> xjunctions = type.getNonTerminalListElements(section);
 			Map<OWLClassExpression, Section<? extends Type>> set = new HashMap<OWLClassExpression, Section<? extends Type>>();
 			for (Section<NonTerminalList> child : xjunctions) {
-				set.putAll(createDescriptionExpression(Sections.findSuccessor(child,
+				set.putAll(createDescriptionExpression(Sections.successor(child,
 						ManchesterClassExpression.class), messages));
 			}
 			exp.putAll(set);
@@ -268,7 +268,7 @@ public class AxiomFactory {
 		if (type.isOneOfCurlyBracket(section)) {
 			Map<OWLObject, Section<? extends Type>> set = new HashMap<OWLObject, Section<? extends Type>>();
 			Section<OneOfBracedCondition> one = type.getOneOfCurlyBracket(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(one,
+			Section<ManchesterClassExpression> mce = Sections.successor(one,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
@@ -289,7 +289,7 @@ public class AxiomFactory {
 		// ... or a BracedCondition ...
 		if (type.isBraced(section)) {
 			Section<? extends NonTerminalCondition> braced = type.getBraced(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(braced,
+			Section<ManchesterClassExpression> mce = Sections.successor(braced,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
@@ -308,7 +308,7 @@ public class AxiomFactory {
 			Map<OWLClassExpression, Section<? extends Type>> set = new HashMap<OWLClassExpression, Section<? extends Type>>();
 
 			for (Section<?> child : xjunctions) {
-				set.putAll(createDescriptionExpression(Sections.findSuccessor(child,
+				set.putAll(createDescriptionExpression(Sections.successor(child,
 						ManchesterClassExpression.class), messages));
 			}
 			if (!set.isEmpty()) {
@@ -325,7 +325,7 @@ public class AxiomFactory {
 			xjunctions = type.getDisjuncts(section);
 			Map<OWLClassExpression, Section<? extends Type>> set = new HashMap<OWLClassExpression, Section<? extends Type>>();
 			for (Section<?> child : xjunctions) {
-				set.putAll(createDescriptionExpression(Sections.findSuccessor(child,
+				set.putAll(createDescriptionExpression(Sections.successor(child,
 						ManchesterClassExpression.class), messages));
 			}
 			if (!set.isEmpty()) {
@@ -341,7 +341,7 @@ public class AxiomFactory {
 			Section<?> neg = type.getNegation(section);
 
 			Map<OWLObject, Section<? extends Type>> set = new HashMap<OWLObject, Section<? extends Type>>();
-			set.putAll(createDescriptionExpression(Sections.findSuccessor(neg,
+			set.putAll(createDescriptionExpression(Sections.successor(neg,
 					ManchesterClassExpression.class), messages));
 			if (set.size() > 0) {
 				exp.put(factory.getOWLObjectComplementOf(
@@ -363,7 +363,7 @@ public class AxiomFactory {
 
 	private static OWLClassExpression handleDataExpressionTerminals(Section<?> section, Collection<Message> messages) {
 
-		Section<DataRestriction> restrictionSection = Sections.findSuccessor(section,
+		Section<DataRestriction> restrictionSection = Sections.successor(section,
 				DataRestriction.class);
 		DataRestriction r = restrictionSection.get();
 
@@ -462,7 +462,7 @@ public class AxiomFactory {
 	 */
 	private static OWLClassExpression handleTerminals(Section<?> section, Collection<Message> messages) {
 
-		Section<Restriction> restrictionSection = Sections.findSuccessor(section, Restriction.class);
+		Section<Restriction> restrictionSection = Sections.successor(section, Restriction.class);
 		if (restrictionSection == null) {
 			return handleDataExpressionTerminals(section, messages);
 		}
@@ -559,7 +559,7 @@ public class AxiomFactory {
 						exp = handleTerminals(cardSection, messages);
 					}
 					else {
-						Section<ManchesterClassExpression> mce = Sections.findSuccessor(
+						Section<ManchesterClassExpression> mce = Sections.successor(
 								cardSection,
 								ManchesterClassExpression.class);
 
@@ -607,7 +607,7 @@ public class AxiomFactory {
 			Set<OWLObjectProperty> set = new HashSet<OWLObjectProperty>();
 
 			for (Section<NonTerminalList> child : xjunctions) {
-				set.addAll(createObjectPropertyExpression(Sections.findSuccessor(child,
+				set.addAll(createObjectPropertyExpression(Sections.successor(child,
 						ManchesterClassExpression.class)));
 			}
 			exp.addAll(set);
@@ -617,7 +617,7 @@ public class AxiomFactory {
 		if (type.isTerminal(section)) {
 			Section<? extends TerminalCondition> terminal = type.getTerminal(section);
 
-			Section<Restriction> restrictionSection = Sections.findSuccessor(terminal,
+			Section<Restriction> restrictionSection = Sections.successor(terminal,
 					Restriction.class);
 			Restriction r = restrictionSection.get();
 
@@ -648,7 +648,7 @@ public class AxiomFactory {
 			Set<OWLDataProperty> set = new HashSet<OWLDataProperty>();
 
 			for (Section<NonTerminalList> child : xjunctions) {
-				set.addAll(createDataPropertyExpression(Sections.findSuccessor(child,
+				set.addAll(createDataPropertyExpression(Sections.successor(child,
 						ManchesterClassExpression.class)));
 			}
 			exp.addAll(set);
@@ -658,7 +658,7 @@ public class AxiomFactory {
 		if (type.isTerminal(section)) {
 			Section<? extends TerminalCondition> terminal = type.getTerminal(section);
 
-			Section<Restriction> restrictionSection = Sections.findSuccessor(terminal,
+			Section<Restriction> restrictionSection = Sections.successor(terminal,
 					Restriction.class);
 			Restriction r = restrictionSection.get();
 
@@ -692,7 +692,7 @@ public class AxiomFactory {
 			List<Section<NonTerminalList>> xjunctions = type.getNonTerminalListElements(section);
 			Map<OWLDataRange, Section<? extends Type>> set = new HashMap<OWLDataRange, Section<? extends Type>>();
 			for (Section<NonTerminalList> child : xjunctions) {
-				set.putAll(createDataRangeExpression(Sections.findSuccessor(child,
+				set.putAll(createDataRangeExpression(Sections.successor(child,
 						DataRangeExpression.class), messages));
 			}
 			exp.putAll(set);
@@ -703,7 +703,7 @@ public class AxiomFactory {
 		if (type.isOneOfCurlyBracket(section)) {
 			Map<OWLObject, Section<? extends Type>> set = new HashMap<OWLObject, Section<? extends Type>>();
 			Section<OneOfBracedCondition> one = type.getOneOfCurlyBracket(section);
-			Section<DataRangeExpression> mce = Sections.findSuccessor(one,
+			Section<DataRangeExpression> mce = Sections.successor(one,
 					DataRangeExpression.class);
 
 			if (mce == null) {
@@ -725,7 +725,7 @@ public class AxiomFactory {
 		// ... or a BracedCondition ...
 		if (type.isBraced(section)) {
 			Section<? extends NonTerminalCondition> braced = type.getBraced(section);
-			Section<DataRangeExpression> mce = Sections.findSuccessor(braced,
+			Section<DataRangeExpression> mce = Sections.successor(braced,
 					DataRangeExpression.class);
 
 			if (mce == null) {
@@ -744,7 +744,7 @@ public class AxiomFactory {
 			Map<OWLDataRange, Section<? extends Type>> set = new HashMap<OWLDataRange, Section<? extends Type>>();
 
 			for (Section<?> child : xjunctions) {
-				set.putAll(createDataRangeExpression(Sections.findSuccessor(child,
+				set.putAll(createDataRangeExpression(Sections.successor(child,
 						DataRangeExpression.class), messages));
 			}
 			if (!set.isEmpty()) {
@@ -761,7 +761,7 @@ public class AxiomFactory {
 			xjunctions = type.getDisjuncts(section);
 			Map<OWLDataRange, Section<? extends Type>> set = new HashMap<OWLDataRange, Section<? extends Type>>();
 			for (Section<?> child : xjunctions) {
-				set.putAll(createDataRangeExpression(Sections.findSuccessor(child,
+				set.putAll(createDataRangeExpression(Sections.successor(child,
 						DataRangeExpression.class), messages));
 			}
 			if (!set.isEmpty()) {
@@ -777,7 +777,7 @@ public class AxiomFactory {
 			Section<?> neg = type.getNegation(section);
 
 			Map<OWLObject, Section<? extends Type>> set = new HashMap<OWLObject, Section<? extends Type>>();
-			set.putAll(createDataRangeExpression(Sections.findSuccessor(neg,
+			set.putAll(createDataRangeExpression(Sections.successor(neg,
 					DataRangeExpression.class), messages));
 			if (set.size() > 0) {
 				exp.put(factory.getOWLDataComplementOf(
@@ -808,7 +808,7 @@ public class AxiomFactory {
 	 */
 	private static OWLDataRange handleDataTerminals(Section<?> section, Collection<Message> messages) {
 
-		Section<DatatypeRestriction> restrictionSection = Sections.findSuccessor(section,
+		Section<DatatypeRestriction> restrictionSection = Sections.successor(section,
 				DatatypeRestriction.class);
 		DatatypeRestriction r = restrictionSection.get();
 
@@ -816,11 +816,11 @@ public class AxiomFactory {
 		if (r.isPredefinedDataType(restrictionSection)) {
 
 			Set<OWLFacetRestriction> owlFacetRestrictions = new HashSet<OWLFacetRestriction>();
-			Section<BraceElement> brace = Sections.findSuccessor(restrictionSection,
+			Section<BraceElement> brace = Sections.successor(restrictionSection,
 					BraceElement.class);
 			if (brace != null) { // optional facets found --> handling
 
-				List<Section<FacetRestriction>> facets = Sections.findSuccessorsOfType(brace,
+				List<Section<FacetRestriction>> facets = Sections.successors(brace,
 						FacetRestriction.class);
 				for (Section<FacetRestriction> sec : facets) {
 					OWLFacetRestriction o = createFacet(sec);
@@ -1140,11 +1140,11 @@ public class AxiomFactory {
 	 * @return
 	 */
 	public static OWLAxiom createFact(Section<?> section, OWLIndividual i, Collection<Message> messages) {
-		Section<PropertyExpression> ope = Sections.findSuccessor(section,
+		Section<PropertyExpression> ope = Sections.successor(section,
 				PropertyExpression.class);
-		Section<OWLTermReferenceManchester> ref = Sections.findSuccessor(section,
+		Section<OWLTermReferenceManchester> ref = Sections.successor(section,
 				OWLTermReferenceManchester.class);
-		Section<Literal> lit = Sections.findSuccessor(section, Literal.class);
+		Section<Literal> lit = Sections.successor(section, Literal.class);
 
 		if (ope != null) { // object property fact
 
@@ -1285,7 +1285,7 @@ public class AxiomFactory {
 	public static OWLAxiom createMiscFrameClasses(Section<MiscFrame> section, Set<OWLAnnotation> annotations, Collection<Message> messages) {
 
 		MiscFrame type = section.get();
-		List<Section<OWLTermReferenceManchester>> references = Sections.findSuccessorsOfType(
+		List<Section<OWLTermReferenceManchester>> references = Sections.successors(
 				section, OWLTermReferenceManchester.class);
 
 		if (references.isEmpty()) {
@@ -1324,7 +1324,7 @@ public class AxiomFactory {
 	public static OWLAxiom createMiscFrameIndividuals(Section<MiscFrame> section, Set<OWLAnnotation> annotations, Collection<Message> messages) {
 
 		MiscFrame type = section.get();
-		List<Section<OWLTermReferenceManchester>> references = Sections.findSuccessorsOfType(
+		List<Section<OWLTermReferenceManchester>> references = Sections.successors(
 				section, OWLTermReferenceManchester.class);
 
 		Set<OWLNamedIndividual> parts = new HashSet<OWLNamedIndividual>();
@@ -1362,7 +1362,7 @@ public class AxiomFactory {
 	public static OWLAxiom createMiscFrameObjectProperties(Section<MiscFrame> section, Set<OWLAnnotation> annotations, Collection<Message> messages) {
 
 		MiscFrame type = section.get();
-		List<Section<ObjectPropertyExpression>> references = Sections.findSuccessorsOfType(
+		List<Section<ObjectPropertyExpression>> references = Sections.successors(
 				section, ObjectPropertyExpression.class);
 
 		if (references.isEmpty()) {
@@ -1400,7 +1400,7 @@ public class AxiomFactory {
 	public static OWLAxiom createMiscFrameDataProperties(Section<MiscFrame> section, Set<OWLAnnotation> annotations, Collection<Message> messages) {
 
 		MiscFrame type = section.get();
-		List<Section<DataPropertyExpression>> references = Sections.findSuccessorsOfType(
+		List<Section<DataPropertyExpression>> references = Sections.successors(
 				section, DataPropertyExpression.class);
 
 		if (references.isEmpty()) {

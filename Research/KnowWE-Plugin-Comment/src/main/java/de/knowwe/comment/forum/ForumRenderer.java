@@ -111,7 +111,7 @@ public class ForumRenderer implements Renderer {
 			ret.append("<h2>" + title + "</h2><hr />\n");
 		}
 
-		List<Section<ForumBox>> contentSectionList = Sections.findChildrenOfType(sec,
+		List<Section<ForumBox>> contentSectionList = Sections.children(sec,
 				ForumBox.class);
 
 		if (!contentSectionList.isEmpty()) {

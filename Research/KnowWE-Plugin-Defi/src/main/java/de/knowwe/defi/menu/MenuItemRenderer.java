@@ -67,7 +67,7 @@ public class MenuItemRenderer implements Renderer {
 	@Override
 	public void render(Section<?> sec, UserContext user, RenderResult string) {
 
-		int dashLevel = DashTreeUtils.getDashLevel(Sections.findAncestorOfType(sec,
+		int dashLevel = DashTreeUtils.getDashLevel(Sections.ancestor(sec,
 				DashTreeElement.class));
 		boolean isRoot = false;
 		if (dashLevel == 0) {
@@ -102,13 +102,13 @@ public class MenuItemRenderer implements Renderer {
 		else {
 			// checken ob Einheit gewählt ist
 			Section<? extends DashTreeElement> root = DashTreeUtils.getParentDashTreeElement(sec);
-			Section<DashTreeElementContent> rootContent = Sections.findChildOfType(root,
+			Section<DashTreeElementContent> rootContent = Sections.child(root,
 					DashTreeElementContent.class);
 			if (getPageName(rootContent).equals(currentPage)) {
 				hidden = false;
 			}
 			List<Section<DynamicMenuItem>> found = new ArrayList<Section<DynamicMenuItem>>();
-			Sections.findSuccessorsOfType(root.getParent(), DynamicMenuItem.class, found);
+			Sections.successors(root.getParent(), DynamicMenuItem.class, found);
 			for (Section<DynamicMenuItem> section : found) {
 				if (pagename.equals(currentPage) || isSubpageOf(currentPage, section)) {
 					hidden = false;
@@ -148,10 +148,10 @@ public class MenuItemRenderer implements Renderer {
 	}
 
 	private boolean isSubpageOf(String currentPage, Section<?> section) {
-		Section<DashTreeElement> dtElement = Sections.findAncestorOfType(section,
+		Section<DashTreeElement> dtElement = Sections.ancestor(section,
 				DashTreeElement.class);
 		List<Section<DashTreeElementContent>> found = new ArrayList<Section<DashTreeElementContent>>();
-		Sections.findSuccessorsOfType(dtElement.getParent(),
+		Sections.successors(dtElement.getParent(),
 				DashTreeElementContent.class, found);
 
 		for (Section<DashTreeElementContent> section2 : found) {
@@ -166,7 +166,7 @@ public class MenuItemRenderer implements Renderer {
 	private boolean isFree(Section<?> sec, String user) {
 		Section<? extends Type> dashtree = sec.getParent().getParent().getParent();
 		List<Section<DynamicMenuItem>> found = new ArrayList<Section<DynamicMenuItem>>();
-		Sections.findSuccessorsOfType(dashtree, DynamicMenuItem.class, 3, found);
+		Sections.successors(dashtree, DynamicMenuItem.class, 3, found);
 
 		int unitNumber = -1;
 		for (int i = 0; i < found.size(); i++) {

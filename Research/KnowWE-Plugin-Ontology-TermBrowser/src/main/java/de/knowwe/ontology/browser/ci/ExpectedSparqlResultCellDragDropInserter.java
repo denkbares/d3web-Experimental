@@ -24,7 +24,7 @@ public class ExpectedSparqlResultCellDragDropInserter implements DragDropEditIns
 
 		Section<?> sectionToBeReplaced = s;
 		Section<DefaultMarkupType> defaultMarkupSection =
-				Sections.findAncestorOfType(s, DefaultMarkupType.class);
+				Sections.ancestor(s, DefaultMarkupType.class);
 		if (defaultMarkupSection != null) {
 			sectionToBeReplaced = defaultMarkupSection;
 		}
@@ -42,7 +42,7 @@ public class ExpectedSparqlResultCellDragDropInserter implements DragDropEditIns
 		nodesMap.put(sectionToBeReplaced.getID(), replaceText);
 		String result = "done";
 
-		ReplaceResult replaceResult = Sections.replaceSections(context, nodesMap);
+		ReplaceResult replaceResult = Sections.replace(context, nodesMap);
 		replaceResult.sendErrors(context);
 		Map<String, String> newSectionIDs = replaceResult.getSectionMapping();
 		if (newSectionIDs != null && newSectionIDs.size() > 0) {
@@ -67,7 +67,7 @@ public class ExpectedSparqlResultCellDragDropInserter implements DragDropEditIns
 	private String createDefaultMarkupReplaceText(Section<DefaultMarkupType> defaultMarkupSection, Section<?> toBeReplaced, String replacement) {
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		nodesMap.put(toBeReplaced.getID(), replacement);
-		StringBuffer replacedText = Sections.collectTextAndReplaceNode(defaultMarkupSection,
+		StringBuilder replacedText = Sections.collectTextAndReplace(defaultMarkupSection,
 				nodesMap);
 		return replacedText.toString();
 	}

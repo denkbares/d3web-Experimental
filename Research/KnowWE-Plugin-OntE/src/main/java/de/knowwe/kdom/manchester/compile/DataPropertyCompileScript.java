@@ -59,7 +59,7 @@ public class DataPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScript<
 
 		if (type.hasRange(section)) { // Handle Range
 			Section<?> desc = type.getRange(section);
-			Section<DataRangeExpression> dre = Sections.findSuccessor(desc,
+			Section<DataRangeExpression> dre = Sections.successor(desc,
 					DataRangeExpression.class);
 
 			if (dre == null) {
@@ -82,7 +82,7 @@ public class DataPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScript<
 
 		if (type.hasDomain(section)) { // Handle Domain
 			Section<?> desc = type.getDomain(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
@@ -104,7 +104,7 @@ public class DataPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScript<
 		}
 		if (type.hasSubPropertyOf(section)) { // Handle SubPropertyOf
 			Section<?> desc = type.getSubPropertyOf(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
@@ -126,7 +126,7 @@ public class DataPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScript<
 
 		if (type.hasEquivalentTo(section)) { // Handle EquivalentTo
 			Section<?> desc = type.getEquivalentTo(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 			if (mce == null) {
 				messages.add(Messages.syntaxError("EquivalentTo is empty!"));
@@ -147,7 +147,7 @@ public class DataPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScript<
 
 		if (type.hasDisjointWith(section)) { // handle DisjointWith
 			Section<?> desc = type.getDisjointWith(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {

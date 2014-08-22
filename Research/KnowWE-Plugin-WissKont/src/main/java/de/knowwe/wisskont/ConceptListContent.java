@@ -110,7 +110,7 @@ public class ConceptListContent extends AbstractType {
 					return; // do nothing
 				}
 
-				Section<Term> objectSection = Sections.findSuccessor(section,
+				Section<Term> objectSection = Sections.successor(section,
 						Term.class);
 
 				if (objectSection == null) {
@@ -123,7 +123,7 @@ public class ConceptListContent extends AbstractType {
 				if (hasError) return;
 
 				URI subjectURI = RDFSUtil.getURI(conceptDefinition);
-				Section<RelationMarkup> relationMarkup = Sections.findAncestorOfType(
+				Section<RelationMarkup> relationMarkup = Sections.ancestor(
 						section, RelationMarkup.class);
 				URI predicateURI = relationMarkup.get().getRelationURI();
 
@@ -140,7 +140,7 @@ public class ConceptListContent extends AbstractType {
 				Rdf2GoCore.getInstance().addStatements(section,
 						new Statement[] { statement });
 
-				Section<RelationMarkup> markup = Sections.findAncestorOfType(section,
+				Section<RelationMarkup> markup = Sections.ancestor(section,
 						RelationMarkup.class);
 				createD3webDerivationRule(section, conceptDefinition, objectSection, markup);
 
@@ -162,7 +162,7 @@ public class ConceptListContent extends AbstractType {
 				String objectTermName = objectSection.get().getTermName(objectSection);
 
 				Article article = conceptDefinition.getArticle();
-				Section<ValuesMarkup> values = Sections.findSuccessor(article.getRootSection(),
+				Section<ValuesMarkup> values = Sections.successor(article.getRootSection(),
 						ValuesMarkup.class);
 				if (values != null) {
 
@@ -267,7 +267,7 @@ public class ConceptListContent extends AbstractType {
 				Set<Section<? extends Term>> result = new HashSet<Section<? extends Term>>();
 				Collection<Section<ConceptMarkup>> conceptDefinitions = MarkupUtils.getConecptDefinitionForLocalPage(section);
 				for (Section<ConceptMarkup> def : conceptDefinitions) {
-					result.add(Sections.findSuccessor(def,
+					result.add(Sections.successor(def,
 							IncrementalTermDefinition.class));
 				}
 				if (conceptDefinitions.size() != 1) {

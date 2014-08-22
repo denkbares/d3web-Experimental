@@ -59,7 +59,7 @@ public class RenderRestrictionEnd extends DefaultMarkupType {
 
 		@Override
 		public void render(Section<?> sec, UserContext user, RenderResult string) {
-			Section<GroupDeclaration> groupSec = Sections.findSuccessor(sec, GroupDeclaration.class);
+			Section<GroupDeclaration> groupSec = Sections.successor(sec, GroupDeclaration.class);
 			if (groupSec != null) {
 				String group = groupSec.get().getGroup(groupSec);
 				String restrictionStartFrame = "%%tabbedSection\n%%tab-" + group + "Only\n";

@@ -68,8 +68,8 @@ public class CompileSection<T extends Type> {
 				return false;
 			}
 			else {
-				if (Sections.createTypePathToRoot(other.section).equals(
-						Sections.createTypePathToRoot(this.section))) {
+				if (Sections.typePathToRoot(other.section).equals(
+						Sections.typePathToRoot(this.section))) {
 					return true;
 				}
 			}

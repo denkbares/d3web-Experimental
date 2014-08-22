@@ -179,7 +179,7 @@ public class ReferenceManager {
 		}
 		termSet.add(section);
 		for (Section<?> ref : termSet) {
-			Section<KnowledgeUnit> compilationUnit = Sections.findAncestorOfType(ref,
+			Section<KnowledgeUnit> compilationUnit = Sections.ancestor(ref,
 					KnowledgeUnit.class);
 			if (compilationUnit != null) {
 				result.add(compilationUnit);
@@ -192,7 +192,7 @@ public class ReferenceManager {
 			// awkward
 			// maybe it can be stored and cached somehow ?
 			Section<RootType> rootSection = ref.getArticle().getRootSection();
-			List<Section<KnowledgeUnit>> allKnowledgeUnitsOfArticle = Sections.findSuccessorsOfType(
+			List<Section<KnowledgeUnit>> allKnowledgeUnitsOfArticle = Sections.successors(
 					rootSection, KnowledgeUnit.class);
 			for (Section<KnowledgeUnit> knowledge : allKnowledgeUnitsOfArticle) {
 				KnowledgeUnitCompileScript<?> compileScript = knowledge.get().getCompileScript();
@@ -279,7 +279,7 @@ public class ReferenceManager {
 		Set<Section<? extends SimpleReference>> refSet = allReferences.get(termIdentifier);
 		if (refSet == null) return result;
 		for (Section<?> ref : refSet) {
-			Section<ComplexDefinition> compilationUnit = Sections.findAncestorOfType(ref,
+			Section<ComplexDefinition> compilationUnit = Sections.ancestor(ref,
 					ComplexDefinition.class);
 			if (compilationUnit != null) {
 				result.add(compilationUnit);

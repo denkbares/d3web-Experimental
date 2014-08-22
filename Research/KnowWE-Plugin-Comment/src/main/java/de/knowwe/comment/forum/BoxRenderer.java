@@ -71,7 +71,7 @@ public class BoxRenderer implements Renderer {
 			if (name == null) name = user.getUserName();
 			if (date == null) date = ForumRenderer.getDate();
 
-			Section<XMLHead> head = Sections.findChildOfType(sec, XMLHead.class);
+			Section<XMLHead> head = Sections.child(sec, XMLHead.class);
 			head.setText("<box name=\"" + name + "\" date=\"" + date + "\">");
 
 			// save article:

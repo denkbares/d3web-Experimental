@@ -26,7 +26,7 @@ public class GetPackageName extends AbstractAction {
 		// get parameters
 		String nodeID = context.getParameter(Attributes.TARGET);
 
-		Section<DiaFluxType> diaFluxSection = (Section<DiaFluxType>) Sections.getSection(
+		Section<DiaFluxType> diaFluxSection = (Section<DiaFluxType>) Sections.get(
 				nodeID);
 		String packageName = DefaultMarkupType.getAnnotation(diaFluxSection,
 				PackageManager.PACKAGE_ATTRIBUTE_NAME);

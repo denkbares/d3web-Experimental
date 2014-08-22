@@ -92,7 +92,7 @@ public class Info extends BlockMarkupType {
 						Messages.getNotices(Messages.getMessagesFromSubtree(sec)), string);
 
 				Section<BlockMarkupContent> con =
-						Sections.findSuccessor(sec, BlockMarkupContent.class);
+						Sections.successor(sec, BlockMarkupContent.class);
 				BlockMarkupContentRenderer.getInstance().render(con, user, string);
 				string.appendHtml("<div class='Infoend'></div>");
 				string.appendHtml("</div>");
@@ -106,7 +106,7 @@ public class Info extends BlockMarkupType {
 
 				List<Message> messages = new ArrayList<Message>(0);
 
-				Section<Title> title = Sections.findSuccessor(s, Title.class);
+				Section<Title> title = Sections.successor(s, Title.class);
 				if (title == null) {
 					messages.add(Utils.missingTitleError(Info.class.getSimpleName()));
 				}
@@ -119,7 +119,7 @@ public class Info extends BlockMarkupType {
 				 * children - It has no children at all
 				 */
 				List<Section<?>> blockMarkupChildren =
-						Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
+						Sections.successor(s, BlockMarkupContent.class).getChildren();
 				if (((title != null) && (blockMarkupChildren.size() == 1))
 						|| blockMarkupChildren.size() == 0) {
 					messages.add(Utils.missingContentWarning(Info.class.getSimpleName()));
@@ -129,13 +129,13 @@ public class Info extends BlockMarkupType {
 				}
 
 				// TODO: This is right, as long as a Page contains ONLY ONE Info
-				Section<Introduction> einleitung = Sections.findSuccessor(
+				Section<Introduction> einleitung = Sections.successor(
 						s.getArticle().getRootSection(),
 						Introduction.class);
 				if (einleitung == null) {
 					messages.add(Utils.missingComponentError(Introduction.class.getSimpleName()));
 				}
-				Section<Closure> abschluss = Sections.findSuccessor(
+				Section<Closure> abschluss = Sections.successor(
 						s.getArticle().getRootSection(),
 						Closure.class);
 				if (abschluss == null) {
@@ -165,7 +165,7 @@ public class Info extends BlockMarkupType {
 				List<Message> messages = new ArrayList<Message>(0);
 
 				List<Section<Question>> found = new ArrayList<Section<Question>>();
-				Sections.findSuccessorsOfType(s, Question.class, found);
+				Sections.successors(s, Question.class, found);
 				if (found.isEmpty()) {
 					messages.add(Utils.missingComponentWarning(Question.class.getSimpleName()));
 					return messages;
@@ -182,7 +182,7 @@ public class Info extends BlockMarkupType {
 				 * antwortmöglichkeit
 				 */
 				Section<BlockMarkupContent> content =
-						Sections.findSuccessor(s, BlockMarkupContent.class);
+						Sections.successor(s, BlockMarkupContent.class);
 
 				List<Section<?>> children =
 						new ArrayList<Section<?>>(content.getChildren());
@@ -225,7 +225,7 @@ public class Info extends BlockMarkupType {
 						if (!antwortenMissing) {
 							moreAnswersBlocks = true;
 							String typ =
-									Sections.findSuccessor(actual, QuestionType.class)
+									Sections.successor(actual, QuestionType.class)
 											.getText().trim();
 							if (!(AnswersBlockValidator.getInstance()
 									.getTypesMultiple().contains(typ))) {
@@ -270,7 +270,7 @@ public class Info extends BlockMarkupType {
 							AnswersBlock.class.getSimpleName()));
 				}
 				String typ =
-						Sections.findSuccessor(actual, QuestionType.class)
+						Sections.successor(actual, QuestionType.class)
 								.getText().trim();
 				if (!moreAnswersBlocks && AnswersBlockValidator.getInstance()
 						.getTypesMultiple().contains(typ)) {

@@ -160,7 +160,7 @@ public class TermRenamingActionIncr extends AbstractAction {
 					nodesMap.put(section.getID(), replacement);
 
 				}
-				Sections.replaceSections(context,
+				Sections.replace(context,
 						nodesMap).sendErrors(context);
 				success.add(articlename);
 			}

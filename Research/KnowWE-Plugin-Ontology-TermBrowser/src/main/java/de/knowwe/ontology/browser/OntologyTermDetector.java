@@ -44,14 +44,14 @@ public class OntologyTermDetector implements InterestingTermDetector {
 	public Map<Identifier, Double> getWeightedTermsOfInterest(Article a, String master) {
 		Map<Identifier, Double> interestingTerms = new HashMap<Identifier, Double>();
 
-		List<Section<ResourceDefinition>> definitions = Sections.findSuccessorsOfType(
+		List<Section<ResourceDefinition>> definitions = Sections.successors(
 				a.getRootSection(), ResourceDefinition.class);
 		for (Section<ResourceDefinition> def : definitions) {
 			Identifier termname = def.get().getTermIdentifier(def);
 			interestingTerms.put(termname, WEIGHT_DEFINITION);
 		}
 
-		List<Section<ResourceReference>> references = Sections.findSuccessorsOfType(
+		List<Section<ResourceReference>> references = Sections.successors(
 				a.getRootSection(), ResourceReference.class);
 		for (Section<ResourceReference> ref : references) {
 			Identifier termname = ref.get().getTermIdentifier(ref);

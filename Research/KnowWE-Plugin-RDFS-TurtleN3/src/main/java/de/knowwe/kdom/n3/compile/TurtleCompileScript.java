@@ -50,7 +50,7 @@ public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<
 	public void insertIntoRepository(Section<TurtleMarkupN3> section) {
 		List<Section<TurtleObjectSection>> found = new ArrayList<Section<TurtleObjectSection>>();
 
-		Sections.findSuccessorsOfType(section, TurtleObjectSection.class, found);
+		Sections.successors(section, TurtleObjectSection.class, found);
 
 		List<Statement> triples = new ArrayList<Statement>();
 
@@ -74,7 +74,7 @@ public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<
 		// List<Section<TurtleObjectSection>> found = new
 		// ArrayList<Section<TurtleObjectSection>>();
 		//
-		// Sections.findSuccessorsOfType(blankTurtleContent,
+		// Sections.successors(blankTurtleContent,
 		// TurtleObjectSection.class,
 		// found);
 		// for (Section<TurtleObjectSection> internalObSec : found) {
@@ -83,21 +83,21 @@ public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<
 		//
 		// }
 
-		Section<TurtleObjectLiteral> literalSec = Sections.findSuccessor(
+		Section<TurtleObjectLiteral> literalSec = Sections.successor(
 				objectSec, TurtleObjectLiteral.class);
 
 		Node objURI = null;
 
-		Section<TurtleObjectBlankNode> bn = Sections.findChildOfType(objectSec,
+		Section<TurtleObjectBlankNode> bn = Sections.child(objectSec,
 				TurtleObjectBlankNode.class);
 		if (bn != null) {
-			Section<TurtleMarkupN3Content> turtleInner = Sections.findSuccessor(bn,
+			Section<TurtleMarkupN3Content> turtleInner = Sections.successor(bn,
 					TurtleMarkupN3Content.class);
 			objURI = new BlankNodeImpl(turtleInner);
 
 		}
 		else {
-			Section<TurtleObjectTerm> termSec = Sections.findSuccessor(objectSec,
+			Section<TurtleObjectTerm> termSec = Sections.successor(objectSec,
 					TurtleObjectTerm.class);
 			if (termSec != null) {
 				objURI = RDFSUtil.getURI(termSec);
@@ -107,16 +107,16 @@ public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<
 			}
 		}
 
-		Section<TurtlePredicate> predSec = Sections.findSuccessor(
+		Section<TurtlePredicate> predSec = Sections.successor(
 				objectSec.getParent(), TurtlePredicate.class);
 
 		URI predURI = RDFSUtil.getURI(predSec);
 
-		Section<TurtleSubject> subjectSec = Sections.findSuccessor(
+		Section<TurtleSubject> subjectSec = Sections.successor(
 				objectSec.getParent().getParent(), TurtleSubject.class);
 		Resource subjectURI = RDFSUtil.getURI(subjectSec);
 		if (subjectURI == null) {
-			subjectURI = new BlankNodeImpl(Sections.findSuccessor(
+			subjectURI = new BlankNodeImpl(Sections.successor(
 					objectSec.getParent().getParent().getParent(),
 					TurtleMarkupN3Content.class));
 		}

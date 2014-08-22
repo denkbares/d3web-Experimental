@@ -93,7 +93,7 @@ public class ClassFrame extends DefaultFrame<ClassFrame> implements KnowledgeUni
 	 * @return The found section
 	 */
 	public boolean hasClassDefinition(Section<? extends ClassFrame> section) {
-		return Sections.findSuccessor(section, OWLClass.class) != null;
+		return Sections.successor(section, OWLClass.class) != null;
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class ClassFrame extends DefaultFrame<ClassFrame> implements KnowledgeUni
 	 * @return The found section
 	 */
 	public Section<? extends Type> getClassDefinition(Section<? extends ClassFrame> section) {
-		return Sections.findSuccessor(section, OWLClass.class);
+		return Sections.successor(section, OWLClass.class);
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class ClassFrame extends DefaultFrame<ClassFrame> implements KnowledgeUni
 	 * @return The found section
 	 */
 	public boolean hasSubClassOf(Section<?> section) {
-		return Sections.findSuccessor(section, SubClassOf.class) != null;
+		return Sections.successor(section, SubClassOf.class) != null;
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class ClassFrame extends DefaultFrame<ClassFrame> implements KnowledgeUni
 	 * @return The found section
 	 */
 	public Section<? extends Type> getSubClassOf(Section<?> section) {
-		return Sections.findSuccessor(section, SubClassOf.class);
+		return Sections.successor(section, SubClassOf.class);
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class ClassFrame extends DefaultFrame<ClassFrame> implements KnowledgeUni
 	 * @return The found section
 	 */
 	public boolean hasEquivalentTo(Section<?> section) {
-		return Sections.findSuccessor(section, EquivalentTo.class) != null;
+		return Sections.successor(section, EquivalentTo.class) != null;
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class ClassFrame extends DefaultFrame<ClassFrame> implements KnowledgeUni
 	 * @return The found section
 	 */
 	public Section<? extends Type> getEquivalentTo(Section<?> section) {
-		return Sections.findSuccessor(section, EquivalentTo.class);
+		return Sections.successor(section, EquivalentTo.class);
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class ClassFrame extends DefaultFrame<ClassFrame> implements KnowledgeUni
 	 * @return The found section
 	 */
 	public boolean hasDisjointWith(Section<?> section) {
-		return Sections.findSuccessor(section, DisjointWith.class) != null;
+		return Sections.successor(section, DisjointWith.class) != null;
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class ClassFrame extends DefaultFrame<ClassFrame> implements KnowledgeUni
 	 * @return The found section
 	 */
 	public Section<? extends Type> getDisjointWith(Section<?> section) {
-		return Sections.findSuccessor(section, DisjointWith.class);
+		return Sections.successor(section, DisjointWith.class);
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class ClassFrame extends DefaultFrame<ClassFrame> implements KnowledgeUni
 	 * @return The found section
 	 */
 	public boolean hasDisjointUnionOf(Section<?> section) {
-		return Sections.findSuccessor(section, DisjointUnionOf.class) != null;
+		return Sections.successor(section, DisjointUnionOf.class) != null;
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class ClassFrame extends DefaultFrame<ClassFrame> implements KnowledgeUni
 	 * @return The found section
 	 */
 	public Section<? extends Type> getDisjointUnionOf(Section<?> section) {
-		return Sections.findSuccessor(section, DisjointUnionOf.class);
+		return Sections.successor(section, DisjointUnionOf.class);
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class ClassFrame extends DefaultFrame<ClassFrame> implements KnowledgeUni
 	 * @return The found section
 	 */
 	public boolean hasAnnotations(Section<ClassFrame> section) {
-		return Sections.findSuccessor(section, Annotations.class) != null;
+		return Sections.successor(section, Annotations.class) != null;
 	}
 
 	/**
@@ -220,9 +220,9 @@ public class ClassFrame extends DefaultFrame<ClassFrame> implements KnowledgeUni
 	 * @return The found section
 	 */
 	public List<Section<Annotation>> getAnnotations(Section<ClassFrame> section) {
-		Section<Annotations> a = Sections.findSuccessor(section, Annotations.class);
+		Section<Annotations> a = Sections.successor(section, Annotations.class);
 		if (a != null) {
-			return Sections.findSuccessorsOfType(a, Annotation.class);
+			return Sections.successors(a, Annotation.class);
 		}
 		return new ArrayList<Section<Annotation>>();
 	}

@@ -206,13 +206,13 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 				user.getTitle());
 		Section<TermBrowserMarkup> termBrowser = null;
 		if (article != null) {
-			termBrowser = Sections.findSuccessor(article.getRootSection(),
+			termBrowser = Sections.successor(article.getRootSection(),
 					TermBrowserMarkup.class);
 		}
 		if (termBrowser == null) {
 			Article leftMenu = KnowWEUtils.getArticleManager(user.getWeb()).getArticle(
 					"LeftMenu");
-			termBrowser = Sections.findSuccessor(leftMenu.getRootSection(),
+			termBrowser = Sections.successor(leftMenu.getRootSection(),
 					TermBrowserMarkup.class);
 		}
 		return termBrowser;

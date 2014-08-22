@@ -77,13 +77,13 @@ public class CompileUtils {
 	private static void addNonReusedSection(Section<? extends Type> section, Collection<Section<? extends Type>> result) {
 		List<Section<?>> children = section.getChildren();
 		for (Section<? extends Type> child : children) {
-			if (child.isReusedBy(child.getArticle().getTitle())) {
-				// old section
-			}
-			else {
+//			if (child.isReusedBy(child.getArticle().getTitle())) {
+//				// old section
+//			}
+//			else {
 				result.add(child);
 				addNonReusedSection(child, result);
-			}
+//			}
 		}
 
 	}
@@ -164,13 +164,13 @@ public class CompileUtils {
 
 	public static Collection<Section<Term>> getAllLocalReferencesOfCompilationUnit(Section<? extends KnowledgeUnit> section) {
 		List<Section<Term>> result = new ArrayList<Section<Term>>();
-		Sections.findSuccessorsOfType(section, Term.class, result);
+		Sections.successors(section, Term.class, result);
 		return result;
 	}
 
 	public static Collection<Section<SimpleReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition> section) {
 		List<Section<SimpleReference>> result = new ArrayList<Section<SimpleReference>>();
-		Sections.findSuccessorsOfType(section, SimpleReference.class, result);
+		Sections.successors(section, SimpleReference.class, result);
 		return result;
 	}
 

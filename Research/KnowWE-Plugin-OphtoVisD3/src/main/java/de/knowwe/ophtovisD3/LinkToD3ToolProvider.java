@@ -42,7 +42,7 @@ public class LinkToD3ToolProvider implements ToolProvider {
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		String termName = null;
-		Section<IncrementalTermDefinition> defSection = Sections.findSuccessor(
+		Section<IncrementalTermDefinition> defSection = Sections.successor(
 				section, IncrementalTermDefinition.class);
 
 		if (defSection != null) {

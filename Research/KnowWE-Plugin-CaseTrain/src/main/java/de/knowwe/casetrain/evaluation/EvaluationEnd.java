@@ -52,7 +52,7 @@ public class EvaluationEnd extends SubblockMarkup {
 				// }
 
 				Section<SubblockMarkupContent> plain =
-						Sections.findSuccessor(s, SubblockMarkupContent.class);
+						Sections.successor(s, SubblockMarkupContent.class);
 				if (plain.getText() == null || plain.getText().trim().equals("")) {
 					throw new CompilerMessage(
 							Utils.missingContentWarning(EvaluationEnd.class.getSimpleName()));

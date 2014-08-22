@@ -98,11 +98,11 @@ public class InputFieldCellContent extends AbstractType {
 
 		public static String getStoredContentForInput(Section<?> sec, int version, String username) {
 			List<Section<InputFieldCellContent>> found = new ArrayList<Section<InputFieldCellContent>>();
-			Sections.findSuccessorsOfType(sec.getParent().getParent().getParent().getParent(),
+			Sections.successors(sec.getParent().getParent().getParent().getParent(),
 					InputFieldCellContent.class,
 					found);
 			int number = found.indexOf(sec);
-			Section<DefaultMarkupType> ancestorOfType = Sections.findAncestorOfType(sec,
+			Section<DefaultMarkupType> ancestorOfType = Sections.ancestor(sec,
 					DefaultMarkupType.class);
 			String tableid = DefaultMarkupType.getAnnotation(ancestorOfType, "id");
 			String contentString = getStoredContentString(number, tableid, version,
@@ -138,7 +138,7 @@ public class InputFieldCellContent extends AbstractType {
 					Environment.DEFAULT_WEB).getArticle(dataArticleNameForUser);
 			if (article == null) return null;
 			List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
-			Sections.findSuccessorsOfType(article.getRootSection(),
+			Sections.successors(article.getRootSection(),
 					TableEntryType.class,
 					tables);
 			for (Section<TableEntryType> table : tables) {

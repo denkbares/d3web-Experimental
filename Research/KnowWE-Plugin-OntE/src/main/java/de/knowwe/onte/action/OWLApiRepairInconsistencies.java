@@ -103,7 +103,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 				nodesMap.put(section.getID(),
 						section.getText().replace(replacement,
 								createHiddenComment(replacement, possibleDelimiter, context)));
-				Sections.replaceSections(context, nodesMap).sendErrors(context);
+				Sections.replace(context, nodesMap).sendErrors(context);
 
 				// .. and finally delete the page lock
 				Environment.getInstance().getWikiConnector().unlockArticle(articlename,
@@ -159,7 +159,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 		Set<OWLObject> objects = OWLApiAxiomCache.getInstance().getStoredObjects(section,
 				OWLApiAxiomCache.STORE_EXPLANATION);
 
-		Section<ClassFrame> frame = Sections.findAncestorOfExactType(section, ClassFrame.class);
+		Section<ClassFrame> frame = Sections.ancestor(section, ClassFrame.class);
 
 		for (OWLObject owlObject : objects) {
 
@@ -192,7 +192,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 				sectionID, OWLApiAxiomCache.STORE_EXPLANATION);
 
 		// ... get father MCE, this is either a list or not ...
-		Section<ManchesterClassExpression> mce = Sections.findAncestorOfExactType(section,
+		Section<ManchesterClassExpression> mce = Sections.ancestor(section,
 				ManchesterClassExpression.class);
 
 		if (mce.get().isNonTerminalList(mce)) {
@@ -209,7 +209,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 						return null; // .. end of list
 					}
 					else {
-						return Sections.findSuccessor(children.get(index + 1),
+						return Sections.successor(children.get(index + 1),
 								Delimiter.class);
 					}
 				}

@@ -49,7 +49,7 @@ public class TermDragRenderer implements Renderer {
 	}
 
 	protected String getIdentifierString(Section<?> section) {
-		List<Section<Term>> termRefs = Sections.findSuccessorsOfType(section, Term.class);
+		List<Section<Term>> termRefs = Sections.successors(section, Term.class);
 		Section<Term> lastRefSection = termRefs.get(termRefs.size() - 1);
 		return lastRefSection.get().getTermIdentifier(lastRefSection).toExternalForm();
 	}

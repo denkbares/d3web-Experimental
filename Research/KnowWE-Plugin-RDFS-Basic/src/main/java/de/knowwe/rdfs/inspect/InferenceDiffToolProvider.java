@@ -41,14 +41,14 @@ public class InferenceDiffToolProvider implements ToolProvider {
 	@Override
 	public boolean hasTools(Section<?> section, UserContext userContext) {
 		Section<KnowledgeUnit> knowledgeUnit =
-				Sections.findAncestorOfType(section, KnowledgeUnit.class);
+				Sections.ancestor(section, KnowledgeUnit.class);
 		return knowledgeUnit != null;
 	}
 
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		Section<KnowledgeUnit> knowledgeUnit =
-				Sections.findAncestorOfType(section, KnowledgeUnit.class);
+				Sections.ancestor(section, KnowledgeUnit.class);
 		if (knowledgeUnit == null) return ToolUtils.emptyToolArray();
 		return new Tool[] { getStatementImportancePageTool(knowledgeUnit, userContext) };
 	}

@@ -86,7 +86,7 @@ public class ReviewConsistencyTest extends AbstractTest<Article> {
 	 * @return
 	 */
 	private Section<DiaFluxType> findFlow(Article testObject, String flowName) {
-		List<Section<DiaFluxType>> flows = Sections.findSuccessorsOfType(
+		List<Section<DiaFluxType>> flows = Sections.successors(
 				testObject.getRootSection(), DiaFluxType.class);
 		for (Section<DiaFluxType> flow : flows) {
 			if (DiaFluxType.getFlowchartName(flow).equals(flowName)) return flow;

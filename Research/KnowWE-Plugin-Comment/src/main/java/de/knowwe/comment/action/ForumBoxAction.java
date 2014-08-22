@@ -102,15 +102,15 @@ public class ForumBoxAction extends AbstractAction {
 					save = "<box name=\"" + context.getUserName() + "\" date=\""
 							+ ForumRenderer.getDate() + "\">" + text + "</box>\n</box>\n";
 
-					sec = Sections.getSection(reply);
-					Sections.findSuccessorsOfType(sec, XMLTail.class, found);
+					sec = Sections.get(reply);
+					Sections.successors(sec, XMLTail.class, found);
 					sec = article.getRootSection();
 				}
 				else {
 					save = "<box name=\"" + context.getUserName() + "\" date=\""
 							+ ForumRenderer.getDate() + "\">" + text + "</box>\n</forum>";
 
-					Sections.findSuccessorsOfType(Sections.findSuccessor(sec, Forum.class),
+					Sections.successors(Sections.successor(sec, Forum.class),
 							XMLTail.class, found);
 				}
 

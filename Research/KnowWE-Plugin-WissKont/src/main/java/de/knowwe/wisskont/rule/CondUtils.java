@@ -51,7 +51,7 @@ public class CondUtils {
 	 * @return
 	 */
 	public static CondNum createCondNum(Section<NumericalFinding> condNumSection) {
-		Section<Term> ref = Sections.findSuccessor(condNumSection, Term.class);
+		Section<Term> ref = Sections.successor(condNumSection, Term.class);
 
 		boolean valid = IncrementalCompiler.getInstance().getTerminology().isValid(
 				ref.get().getTermIdentifier(ref));
@@ -59,11 +59,11 @@ public class CondUtils {
 		if (!valid) return null;
 
 		Section<? extends SimpleDefinition> conceptDefinition = MarkupUtils.getConceptDefinitionGlobal(ref);
-		Section<NumericalValueMarkerType> numMarker = Sections.findSuccessor(
+		Section<NumericalValueMarkerType> numMarker = Sections.successor(
 				conceptDefinition.getArticle().getRootSection(),
 				NumericalValueMarkerType.class);
 
-		Section<ValuesMarkup> markup = Sections.findAncestorOfType(numMarker, ValuesMarkup.class);
+		Section<ValuesMarkup> markup = Sections.ancestor(numMarker, ValuesMarkup.class);
 
 		if (markup == null) return null;
 
@@ -81,9 +81,9 @@ public class CondUtils {
 			return null;
 		}
 
-		String comparator = Sections.findSuccessor(condNumSection, Comparator.class).getText();
+		String comparator = Sections.successor(condNumSection, Comparator.class).getText();
 
-		Section<Number> numberSec = Sections.findSuccessor(condNumSection, Number.class);
+		Section<Number> numberSec = Sections.successor(condNumSection, Number.class);
 		Double number = Number.getNumber(numberSec);
 
 		CondNum condNum = null;

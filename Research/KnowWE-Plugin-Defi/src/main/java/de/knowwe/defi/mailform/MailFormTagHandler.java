@@ -89,7 +89,7 @@ public class MailFormTagHandler extends AbstractTagHandler {
 	 * @return true = double id
 	 */
 	boolean checkID(String id, Article article) {
-		List<Section<?>> allNodes = Sections.getSubtreePreOrder(article.getRootSection());
+		List<Section<?>> allNodes = Sections.successors(article.getRootSection());
 		Section<?> node;
 		int count = 0;
 		id = id.substring(3);

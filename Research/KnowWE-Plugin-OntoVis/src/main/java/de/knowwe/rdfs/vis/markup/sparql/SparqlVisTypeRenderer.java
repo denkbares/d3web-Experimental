@@ -58,8 +58,8 @@ public class SparqlVisTypeRenderer implements Renderer {
 	@Override
 	public void render(Section<?> content, UserContext user, RenderResult string) {
 
-		Section<SparqlVisType> section = Sections.findAncestorOfType(content,
-					SparqlVisType.class);
+		Section<SparqlVisType> section = Sections.ancestor(content,
+				SparqlVisType.class);
 		Section<DefaultMarkupType> defMarkupSection = Sections.cast(section,
 				DefaultMarkupType.class);
 
@@ -103,7 +103,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 			for (Article article : articles) {
 				Section<RootType> rootSection = article.getRootSection();
 				// search layouttypes
-				List<Section<SparqlVisDesignType>> sparqlVisDesignSections = Sections.findSuccessorsOfType(
+				List<Section<SparqlVisDesignType>> sparqlVisDesignSections = Sections.successors(
 						rootSection, SparqlVisDesignType.class);
 
 				for (Section<SparqlVisDesignType> currentSection : sparqlVisDesignSections) {
@@ -394,9 +394,9 @@ public class SparqlVisTypeRenderer implements Renderer {
 	 * @created 13.07.2014
 	 */
 	private void findAndReadConfig(String configName, ArticleManager am, Map<String, String> parameterMap, List<Message> messages, RenderResult string) {
-		List<Section<? extends de.knowwe.core.kdom.Type>> sections = Sections.findSectionsOfTypeGlobal(VisConfigType.class, am);
+		Collection<Section<? extends de.knowwe.core.kdom.Type>> sections = Sections.successors(am, VisConfigType.class);
 		for (Section<? extends de.knowwe.core.kdom.Type> section : sections ) {
-			Section<VisConfigType> s = (Section<VisConfigType>) section;
+			Section<VisConfigType> s = Sections.cast(section, VisConfigType.class);
 			String name = VisConfigType.getAnnotation(s, VisConfigType.ANNOTATION_NAME);
 			if (name.equals(configName)) {
 				readConfig(s, parameterMap, messages, string);
@@ -421,7 +421,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 			for (Article article : articles) {
 				Section<RootType> rootSection = article.getRootSection();
 				// search layouttypes
-				List<Section<SparqlVisDesignType>> sparqlVisDesignSections = Sections.findSuccessorsOfType(
+				List<Section<SparqlVisDesignType>> sparqlVisDesignSections = Sections.successors(
 						rootSection, SparqlVisDesignType.class);
 
 				for (Section<SparqlVisDesignType> currentSection : sparqlVisDesignSections) {

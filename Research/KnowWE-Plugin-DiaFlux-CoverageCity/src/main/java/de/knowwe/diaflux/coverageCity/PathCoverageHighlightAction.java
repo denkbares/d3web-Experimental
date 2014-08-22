@@ -158,7 +158,7 @@ public class PathCoverageHighlightAction extends AbstractHighlightAction {
 	private CoverageResult getCoverageResult(UserActionContext context) {
 		String coverageKdomid = context.getParameter("coveragesection");
 
-		Section<DiaFluxCoverageType> coverageSec = Sections.getSection(
+		Section<DiaFluxCoverageType> coverageSec = Sections.get(
 				coverageKdomid, DiaFluxCoverageType.class);
 
 		return DiaFluxCoverageType.getResult(coverageSec);

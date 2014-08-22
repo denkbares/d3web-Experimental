@@ -89,7 +89,7 @@ public class DragDropEditActionManager extends AbstractAction {
 		if (mayEdit) {
 			String termname = context.getParameter("termname");
 			String targetIDString = context.getParameter("targetID");
-			Section<?> section = Sections.getSection(targetIDString);
+			Section<?> section = Sections.get(targetIDString);
 
 			if (section == null) {
 				String message = "Section not found: " + targetIDString;

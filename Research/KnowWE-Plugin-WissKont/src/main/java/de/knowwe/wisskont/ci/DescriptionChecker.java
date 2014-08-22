@@ -56,10 +56,10 @@ public class DescriptionChecker extends AbstractTest<Article> {
 	public Message execute(Article testObject, String[] args, String[]... ignores) throws InterruptedException {
 		int minDescriptionLength = Integer.parseInt(args[0]);
 
-		Section<ConceptMarkup> def = Sections.findSuccessor(testObject.getRootSection(),
+		Section<ConceptMarkup> def = Sections.successor(testObject.getRootSection(),
 				ConceptMarkup.class);
 		if (def != null) {
-			List<Section<HeaderType>> findSuccessorsOfType = Sections.findSuccessorsOfType(
+			List<Section<HeaderType>> findSuccessorsOfType = Sections.successors(
 					testObject.getRootSection(), HeaderType.class);
 			Section<HeaderType> descriptionHeader = null;
 			for (Section<HeaderType> section : findSuccessorsOfType) {

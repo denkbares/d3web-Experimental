@@ -73,7 +73,7 @@ public class DebuggerRuleboxAction extends AbstractAction {
 			for (Rule r : rules) {
 				if (r.hashCode() == ruleid) {
 					Section<RuleType> ruleSection = DebugUtilities.getRuleResource(r, session);
-					Section<ConditionContainer> cond = Sections.findSuccessor(
+					Section<ConditionContainer> cond = Sections.successor(
 							ruleSection, ConditionContainer.class);
 					ruleArticle = ruleSection.getTitle();
 					if (ruleArticle.equals("")) ruleArticle = context.getTitle();

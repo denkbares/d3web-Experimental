@@ -59,9 +59,9 @@ public class OverrideLabelRefactoring extends AbstractAction {
 		for (Article article : articles) {
 			Map<String, String> replacementMap = new HashMap<String, String>();
 
-			Section<LabelMarkup> labelMarkup = Sections.findSuccessor(article.getRootSection(),
+			Section<LabelMarkup> labelMarkup = Sections.successor(article.getRootSection(),
 					LabelMarkup.class);
-			Section<ConceptMarkup> conceptMarkup = Sections.findSuccessor(article.getRootSection(),
+			Section<ConceptMarkup> conceptMarkup = Sections.successor(article.getRootSection(),
 					ConceptMarkup.class);
 
 			if (labelMarkup != null && conceptMarkup != null) {
@@ -69,13 +69,13 @@ public class OverrideLabelRefactoring extends AbstractAction {
 				Section<? extends Type> label = children.get(2);
 				if (label != null && label.get().getName().contains("LabelType")
 						&& label.getText().contains("..")) {
-					Section<TermDefinition> def = Sections.findSuccessor(conceptMarkup,
+					Section<TermDefinition> def = Sections.successor(conceptMarkup,
 							TermDefinition.class);
 					String name = def.get().getTermName(def);
 					String cleanedName = name.replaceAll("_", " ");
 					replacementMap.put(label.getID(), cleanedName);
 					try {
-						Sections.replaceSections(context, replacementMap).sendErrors(context);
+						Sections.replace(context, replacementMap).sendErrors(context);
 					}
 					catch (IOException e) {
 						// TODO Auto-generated catch block

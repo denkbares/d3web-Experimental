@@ -65,7 +65,7 @@ public class MarkupUtils {
 		List<Section<ConceptMarkup>> conceptDefinitionMarkupSections = getConecptDefinitionForLocalPage(section);
 		if (conceptDefinitionMarkupSections.size() == 1) {
 			Section<ConceptMarkup> defSection = conceptDefinitionMarkupSections.get(0);
-			Section<IncrementalTermDefinition> termSec = Sections.findSuccessor(
+			Section<IncrementalTermDefinition> termSec = Sections.successor(
 					defSection,
 					IncrementalTermDefinition.class);
 			return termSec;
@@ -227,8 +227,8 @@ public class MarkupUtils {
 	 * @return
 	 */
 	public static List<Section<ConceptMarkup>> getConecptDefinitionForLocalPage(Section<?> section) {
-		Section<RootType> rootSection = Sections.findAncestorOfType(section, RootType.class);
-		List<Section<ConceptMarkup>> conceptDefinitionMarkupSections = Sections.findSuccessorsOfType(
+		Section<RootType> rootSection = Sections.ancestor(section, RootType.class);
+		List<Section<ConceptMarkup>> conceptDefinitionMarkupSections = Sections.successors(
 				rootSection, ConceptMarkup.class);
 		return conceptDefinitionMarkupSections;
 	}

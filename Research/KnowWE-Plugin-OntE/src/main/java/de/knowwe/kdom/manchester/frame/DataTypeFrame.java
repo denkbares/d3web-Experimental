@@ -88,7 +88,7 @@ public class DataTypeFrame extends DefaultFrame<DataTypeFrame> implements Knowle
 	 * @return The found section
 	 */
 	public boolean hasDefinition(Section<? extends DefaultFrame<?>> section) {
-		return Sections.findSuccessor(section, Datatype.class) != null;
+		return Sections.successor(section, Datatype.class) != null;
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class DataTypeFrame extends DefaultFrame<DataTypeFrame> implements Knowle
 	 * @return The found section
 	 */
 	public Section<? extends Type> getDefinition(Section<? extends DefaultFrame<?>> section) {
-		return Sections.findSuccessor(section, Datatype.class);
+		return Sections.successor(section, Datatype.class);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class DataTypeFrame extends DefaultFrame<DataTypeFrame> implements Knowle
 	 * @return The found section
 	 */
 	public boolean hasEquivalentTo(Section<? extends DefaultFrame<?>> section) {
-		return Sections.findSuccessor(section, EquivalentTo.class) != null;
+		return Sections.successor(section, EquivalentTo.class) != null;
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class DataTypeFrame extends DefaultFrame<DataTypeFrame> implements Knowle
 	 * @return The found section
 	 */
 	public Section<? extends Type> getEquivalentTo(Section<? extends DefaultFrame<?>> section) {
-		return Sections.findSuccessor(section, EquivalentTo.class);
+		return Sections.successor(section, EquivalentTo.class);
 	}
 
 }

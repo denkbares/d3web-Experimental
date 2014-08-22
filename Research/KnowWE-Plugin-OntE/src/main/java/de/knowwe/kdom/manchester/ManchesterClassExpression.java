@@ -97,7 +97,7 @@ public class ManchesterClassExpression extends CompositeCondition {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isOneOfCurlyBracket(Section<ManchesterClassExpression> section) {
-		return Sections.findChildOfType(section, OneOfBracedCondition.class) != null;
+		return Sections.child(section, OneOfBracedCondition.class) != null;
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class ManchesterClassExpression extends CompositeCondition {
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
 	public Section<OneOfBracedCondition> getOneOfCurlyBracket(Section<ManchesterClassExpression> section) {
-		return Sections.findChildOfType(section, OneOfBracedCondition.class);
+		return Sections.child(section, OneOfBracedCondition.class);
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class ManchesterClassExpression extends CompositeCondition {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isNonTerminalList(Section<ManchesterClassExpression> section) {
-		return Sections.findChildOfType(section, NonTerminalList.class) != null;
+		return Sections.child(section, NonTerminalList.class) != null;
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class ManchesterClassExpression extends CompositeCondition {
 	 * @return The found {@link NonTerminalListContent} sections
 	 */
 	public List<Section<NonTerminalList>> getNonTerminalListElements(Section<ManchesterClassExpression> section) {
-		return Sections.findChildrenOfType(section, NonTerminalList.class);
+		return Sections.children(section, NonTerminalList.class);
 	}
 
 	/**

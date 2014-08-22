@@ -65,7 +65,7 @@ public class Question extends SubblockMarkup {
 
 				List<Message> messages = new ArrayList<Message>(0);
 
-				Section<QuestionWeight> fragegewichtSection = Sections.findSuccessor(s,
+				Section<QuestionWeight> fragegewichtSection = Sections.successor(s,
 						QuestionWeight.class);
 				if (fragegewichtSection == null) {
 					messages.add(
@@ -78,14 +78,14 @@ public class Question extends SubblockMarkup {
 									bundle.getString("QUESTION_WEIGHT_WRONG")));
 				}
 
-				Section<QuestionType> typSection = Sections.findSuccessor(s, QuestionType.class);
+				Section<QuestionType> typSection = Sections.successor(s, QuestionType.class);
 				if (typSection == null) {
 					messages.add(
 							Utils.missingComponentError(
 									bundle.getString("QUESTION_TYPE")));
 				}
 
-				Section<QuestionText> fragetextSection = Sections.findSuccessor(s,
+				Section<QuestionText> fragetextSection = Sections.successor(s,
 						QuestionText.class);
 				if (fragetextSection == null) {
 					messages.add(Utils.missingComponentWarning(

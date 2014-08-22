@@ -49,7 +49,7 @@ public class ConceptRelationMarkupRefactoring {
 
 	public static void refactor(Article a, UserActionContext user) {
 		if (hasConceptDefinition(a)) {
-			List<Section<TripleMarkup>> triples = Sections.findSuccessorsOfType(a.getRootSection(),
+			List<Section<TripleMarkup>> triples = Sections.successors(a.getRootSection(),
 					TripleMarkup.class);
 			if (triples.size() == 0) return;
 
@@ -123,7 +123,7 @@ public class ConceptRelationMarkupRefactoring {
 			Section<TripleMarkup> firstTriple = triples.get(0);
 			replacementMap.put(firstTriple.getID(), overallCodeBlob);
 			try {
-				Sections.replaceSections(user, replacementMap).sendErrors(user);
+				Sections.replace(user, replacementMap).sendErrors(user);
 			}
 			catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -162,9 +162,9 @@ public class ConceptRelationMarkupRefactoring {
 	}
 
 	private static String getConceptName(Article a) {
-		Section<ConceptMarkup> def = Sections.findSuccessor(a.getRootSection(), ConceptMarkup.class);
+		Section<ConceptMarkup> def = Sections.successor(a.getRootSection(), ConceptMarkup.class);
 		if (def != null) {
-			Section<SimpleDefinition> termDef = Sections.findSuccessor(def, SimpleDefinition.class);
+			Section<SimpleDefinition> termDef = Sections.successor(def, SimpleDefinition.class);
 			return termDef.get().getTermName(termDef);
 		}
 		return null;

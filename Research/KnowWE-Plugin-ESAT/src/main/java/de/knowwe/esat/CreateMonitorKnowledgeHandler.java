@@ -44,13 +44,13 @@ public class CreateMonitorKnowledgeHandler implements D3webHandler<MonitorMarkup
 	@Override
 	public Collection<Message> create(D3webCompiler compiler, Section<MonitorMarkupContentType> section) {
 
-		Section<DefaultMarkupType> defaultMarkup = Sections.findAncestorOfType(section,
+		Section<DefaultMarkupType> defaultMarkup = Sections.ancestor(section,
 				DefaultMarkupType.class);
 
 		// set solution description
 		String solutionDescription = MonitorMarkup.getAnnotation(defaultMarkup, MonitorMarkup.NAME);
 
-		Section<SolutionDefinition> solutionDef = Sections.findSuccessor(section,
+		Section<SolutionDefinition> solutionDef = Sections.successor(section,
 				SolutionDefinition.class);
 		Solution solution = solutionDef.get().getTermObject(compiler, solutionDef);
 		solution.getInfoStore().addValue(MMInfo.DESCRIPTION, Locale.GERMAN,

@@ -57,7 +57,7 @@ public class DatatypeRestriction extends AbstractType {
 	}
 
 	public boolean isPredefinedDataType(Section<DatatypeRestriction> section) {
-		return Sections.findSuccessor(section, PredefinedOWLDatatype.class) != null;
+		return Sections.successor(section, PredefinedOWLDatatype.class) != null;
 	}
 
 	// integer|int|double|boolean|float|decimal|string
@@ -117,11 +117,11 @@ public class DatatypeRestriction extends AbstractType {
 	 * @return The found {@link PredefinedOWLDatatype} sections
 	 */
 	public Section<?> getPredefinedDataType(Section<DatatypeRestriction> section) {
-		return Sections.findChildOfType(section, PredefinedOWLDatatype.class);
+		return Sections.child(section, PredefinedOWLDatatype.class);
 	}
 
 	public boolean isLiteral(Section<DatatypeRestriction> section) {
-		return Sections.findSuccessor(section, Literal.class) != null;
+		return Sections.successor(section, Literal.class) != null;
 	}
 
 	/**
@@ -131,15 +131,15 @@ public class DatatypeRestriction extends AbstractType {
 	 * @return The found {@link Literal} sections
 	 */
 	public Section<Literal> getLiteral(Section<DatatypeRestriction> section) {
-		return Sections.findChildOfType(section, Literal.class);
+		return Sections.child(section, Literal.class);
 	}
 
 	public boolean isFacet(Section<DatatypeRestriction> section) {
-		return Sections.findSuccessor(section, FacetRestriction.class) != null;
+		return Sections.successor(section, FacetRestriction.class) != null;
 	}
 
 	public Map<Section<? extends AbstractType>, Section<Literal>> getFacets(Section<DatatypeRestriction> section) {
-		List<Section<FacetRestriction>> restrictions = Sections.findSuccessorsOfType(section,
+		List<Section<FacetRestriction>> restrictions = Sections.successors(section,
 				FacetRestriction.class);
 
 		Map<Section<? extends AbstractType>, Section<Literal>> facets = new HashMap<Section<? extends AbstractType>, Section<Literal>>();

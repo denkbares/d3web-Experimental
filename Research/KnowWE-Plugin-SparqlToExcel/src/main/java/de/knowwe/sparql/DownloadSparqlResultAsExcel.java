@@ -67,10 +67,10 @@ public class DownloadSparqlResultAsExcel extends AbstractAction {
 
 		try {
 
-			Section<?> rootSection = Sections.getSection(context.getParameter(Attributes.SECTION_ID));
-			Section<SparqlContentType> markupSection = Sections.findSuccessor(rootSection,
+			Section<?> rootSection = Sections.get(context.getParameter(Attributes.SECTION_ID));
+			Section<SparqlContentType> markupSection = Sections.successor(rootSection,
 					SparqlContentType.class);
-			Section<SparqlMarkupType> realMarkupSection = Sections.findAncestorOfType(
+			Section<SparqlMarkupType> realMarkupSection = Sections.ancestor(
 					markupSection,
 					SparqlMarkupType.class);
 			Collection<Rdf2GoCompiler> compilers = Compilers.getCompilers(realMarkupSection,

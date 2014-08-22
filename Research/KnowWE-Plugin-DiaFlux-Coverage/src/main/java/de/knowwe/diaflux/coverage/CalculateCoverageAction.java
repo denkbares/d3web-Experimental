@@ -58,7 +58,7 @@ public class CalculateCoverageAction extends AbstractAction {
 		// String coverageKdomid = context.getParameter("kdomid");
 		//
 		// Section<DiaFluxCoverageType> coverageSec =
-		// Sections.getSection(coverageKdomid,
+		// Sections.get(coverageKdomid,
 		// DiaFluxCoverageType.class);
 		//
 		// String[] packages = DefaultMarkupType.getPackages(coverageSec);
@@ -102,7 +102,7 @@ public class CalculateCoverageAction extends AbstractAction {
 		// }
 		String coverageKdomid = context.getParameter(Attributes.SECTION_ID);
 
-		Section<DiaFluxCoverageType> coverageSec = Sections.getSection(coverageKdomid,
+		Section<DiaFluxCoverageType> coverageSec = Sections.get(coverageKdomid,
 				DiaFluxCoverageType.class);
 
 		// TODO error handling

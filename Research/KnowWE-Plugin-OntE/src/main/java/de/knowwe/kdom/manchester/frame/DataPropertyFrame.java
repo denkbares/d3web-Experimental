@@ -107,7 +107,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public boolean hasDataPropertyDefinition(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, DataProperty.class) != null;
+		return Sections.successor(section, DataProperty.class) != null;
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public Section<? extends Type> getDataPropertyDefinition(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, DataProperty.class);
+		return Sections.successor(section, DataProperty.class);
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public boolean hasDomain(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, Domain.class) != null;
+		return Sections.successor(section, Domain.class) != null;
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public Section<Domain> getDomain(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, Domain.class);
+		return Sections.successor(section, Domain.class);
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public boolean hasRange(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, Range.class) != null;
+		return Sections.successor(section, Range.class) != null;
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public Section<Range> getRange(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, Range.class);
+		return Sections.successor(section, Range.class);
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public boolean hasSubPropertyOf(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, SubPropertyOf.class) != null;
+		return Sections.successor(section, SubPropertyOf.class) != null;
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public Section<SubPropertyOf> getSubPropertyOf(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, SubPropertyOf.class);
+		return Sections.successor(section, SubPropertyOf.class);
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public boolean hasEquivalentTo(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, EquivalentTo.class) != null;
+		return Sections.successor(section, EquivalentTo.class) != null;
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public Section<EquivalentTo> getEquivalentTo(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, EquivalentTo.class);
+		return Sections.successor(section, EquivalentTo.class);
 	}
 
 	/**
@@ -225,7 +225,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public boolean hasDisjointWith(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, DisjointWith.class) != null;
+		return Sections.successor(section, DisjointWith.class) != null;
 	}
 
 	/**
@@ -237,7 +237,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public Section<DisjointWith> getDisjointWith(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, DisjointWith.class);
+		return Sections.successor(section, DisjointWith.class);
 	}
 
 	/**
@@ -247,7 +247,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public boolean hasCharacteristics(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, Characteristics.class) != null;
+		return Sections.successor(section, Characteristics.class) != null;
 	}
 
 	/**
@@ -257,7 +257,7 @@ public class DataPropertyFrame extends DefaultFrame<DataPropertyFrame> implement
 	 * @return The found section
 	 */
 	public Section<Characteristics> getCharacteristics(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, Characteristics.class);
+		return Sections.successor(section, Characteristics.class);
 	}
 
 }

@@ -96,9 +96,9 @@ public class MetaData extends BlockMarkupType {
 				string.appendHtml("<th>Metadaten:</th><th></th>");
 
 				Section<BlockMarkupContent> con =
-						Sections.findSuccessor(sec, BlockMarkupContent.class);
+						Sections.successor(sec, BlockMarkupContent.class);
 				List<Section<MetaLine>> lines = new ArrayList<Section<MetaLine>>();
-				Sections.findSuccessorsOfType(con, MetaLine.class, lines);
+				Sections.successors(con, MetaLine.class, lines);
 
 				for (Section<MetaLine> l : lines) {
 					l.get().getRenderer().render(l, user, string);
@@ -117,7 +117,7 @@ public class MetaData extends BlockMarkupType {
 			public void compile(DefaultGlobalCompiler compiler, Section<MetaData> s) {
 
 				List<Message> messages = new ArrayList<Message>(0);
-				Section<Info> infoSection = Sections.findSuccessor(s.getArticle().getRootSection(),
+				Section<Info> infoSection = Sections.successor(s.getArticle().getRootSection(),
 						Info.class);
 				if (infoSection == null) {
 					messages.add(
@@ -126,7 +126,7 @@ public class MetaData extends BlockMarkupType {
 				}
 
 				List<Section<AttributeName>> atts = new ArrayList<Section<AttributeName>>();
-				Sections.findSuccessorsOfType(s, AttributeName.class, atts);
+				Sections.successors(s, AttributeName.class, atts);
 				messages.addAll(MetaAttributes.getInstance().compareAttributeList(atts));
 				Messages.storeMessages(s, getClass(), messages);
 			}

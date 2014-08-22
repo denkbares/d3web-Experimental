@@ -66,7 +66,7 @@ public class RelationMarkupRenderer extends DefaultMarkupRenderer {
 		List<String> list = new ArrayList<String>();
 		for (Section<ConceptMarkup> section : conecptDefinitions) {
 			@SuppressWarnings("rawtypes")
-			Section<IncrementalTermDefinition> def = Sections.findSuccessor(section,
+			Section<IncrementalTermDefinition> def = Sections.successor(section,
 					IncrementalTermDefinition.class);
 			list.add(def.get().getTermName(def));
 		}

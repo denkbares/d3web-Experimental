@@ -102,7 +102,7 @@ public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 	 * @return TRUE if such an section exists, FALSE otherwise
 	 */
 	public boolean hasIndividualDefinition(Section<? extends DefaultFrame<?>> section) {
-		return !Sections.findSuccessor(section, Individual.class).isEmpty();
+		return !Sections.successor(section, Individual.class).isEmpty();
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 	 * @return The found section
 	 */
 	public Section<? extends Type> getIndividualDefinition(Section<? extends DefaultFrame<?>> section) {
-		return Sections.findSuccessor(section, Individual.class);
+		return Sections.successor(section, Individual.class);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 	 * @return The found section
 	 */
 	public boolean hasFacts(Section<IndividualFrame> section) {
-		return Sections.findChildOfType(section, Facts.class) != null;
+		return Sections.child(section, Facts.class) != null;
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 	 */
 	public List<Section<? extends Type>> getFacts(Section<IndividualFrame> section) {
 		List<Section<? extends Type>> nodes = new ArrayList<Section<? extends Type>>();
-		List<Section<Fact>> items = Sections.findSuccessorsOfType(section, Fact.class);
+		List<Section<Fact>> items = Sections.successors(section, Fact.class);
 		nodes.addAll(items);
 		return nodes;
 	}
@@ -151,7 +151,7 @@ public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 	 * @return The found section
 	 */
 	public boolean hasSameAs(Section<IndividualFrame> section) {
-		return Sections.findChildOfType(section, SameAs.class) != null;
+		return Sections.child(section, SameAs.class) != null;
 	}
 
 	/**
@@ -163,9 +163,9 @@ public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 	 * @return The found section
 	 */
 	public List<Section<OWLTermReferenceManchester>> getSameAs(Section<IndividualFrame> section) {
-		Section<SameAs> sameAs = Sections.findChildOfType(section, SameAs.class);
+		Section<SameAs> sameAs = Sections.child(section, SameAs.class);
 		if (sameAs != null) {
-			return Sections.findSuccessorsOfType(sameAs, OWLTermReferenceManchester.class);
+			return Sections.successors(sameAs, OWLTermReferenceManchester.class);
 		}
 		return new ArrayList<Section<OWLTermReferenceManchester>>();
 	}
@@ -179,7 +179,7 @@ public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 	 * @return The found section
 	 */
 	public boolean hasDifferentFrom(Section<IndividualFrame> section) {
-		return Sections.findChildOfType(section, DifferentFrom.class) != null;
+		return Sections.child(section, DifferentFrom.class) != null;
 	}
 
 	/**
@@ -191,9 +191,9 @@ public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 	 * @return The found section
 	 */
 	public List<Section<OWLTermReferenceManchester>> getDifferentFrom(Section<IndividualFrame> section) {
-		Section<DifferentFrom> sameAs = Sections.findChildOfType(section, DifferentFrom.class);
+		Section<DifferentFrom> sameAs = Sections.child(section, DifferentFrom.class);
 		if (sameAs != null) {
-			return Sections.findSuccessorsOfType(sameAs, OWLTermReferenceManchester.class);
+			return Sections.successors(sameAs, OWLTermReferenceManchester.class);
 		}
 		return new ArrayList<Section<OWLTermReferenceManchester>>();
 	}
@@ -206,7 +206,7 @@ public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 	 * @return The found section
 	 */
 	public boolean hasTypes(Section<IndividualFrame> section) {
-		return Sections.findChildOfType(section, Types.class) != null;
+		return Sections.child(section, Types.class) != null;
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 	 * @return The found section
 	 */
 	public Section<Types> getTypes(Section<IndividualFrame> section) {
-		return Sections.findChildOfType(section, Types.class);
+		return Sections.child(section, Types.class);
 	}
 
 	/**
@@ -229,7 +229,7 @@ public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 	 * @return The found section
 	 */
 	public boolean hasAnnotations(Section<IndividualFrame> section) {
-		return Sections.findChildOfType(section, Annotations.class) != null;
+		return Sections.child(section, Annotations.class) != null;
 	}
 
 	/**
@@ -241,9 +241,9 @@ public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 	 * @return The found section
 	 */
 	public List<Section<Annotation>> getAnnotations(Section<IndividualFrame> section) {
-		Section<Annotations> a = Sections.findChildOfType(section, Annotations.class);
+		Section<Annotations> a = Sections.child(section, Annotations.class);
 		if (a != null) {
-			Sections.findSuccessorsOfType(a, Annotation.class);
+			Sections.successors(a, Annotation.class);
 		}
 		return new ArrayList<Section<Annotation>>();
 	}

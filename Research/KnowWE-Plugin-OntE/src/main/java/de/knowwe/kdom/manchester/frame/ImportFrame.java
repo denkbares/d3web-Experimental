@@ -72,7 +72,7 @@ public class ImportFrame extends DefaultFrame<ImportFrame> {
 	 * @return The found section
 	 */
 	public boolean hasImportIRI(Section<? extends ImportFrame> section) {
-		return Sections.findSuccessor(section, ImportIRI.class) != null;
+		return Sections.successor(section, ImportIRI.class) != null;
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class ImportFrame extends DefaultFrame<ImportFrame> {
 	 * @return The found section
 	 */
 	public Section<? extends Type> getImportIRI(Section<? extends ImportFrame> section) {
-		return Sections.findSuccessor(section, ImportIRI.class);
+		return Sections.successor(section, ImportIRI.class);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class ImportFrame extends DefaultFrame<ImportFrame> {
 	 * @return The found section
 	 */
 	public boolean hasPrefix(Section<? extends ImportFrame> section) {
-		return Sections.findSuccessor(section, ImportPrefix.class) != null;
+		return Sections.successor(section, ImportPrefix.class) != null;
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class ImportFrame extends DefaultFrame<ImportFrame> {
 	 * @return The found section
 	 */
 	public Section<? extends Type> getPrefix(Section<? extends ImportFrame> section) {
-		return Sections.findSuccessor(section, ImportPrefix.class);
+		return Sections.successor(section, ImportPrefix.class);
 	}
 }
 

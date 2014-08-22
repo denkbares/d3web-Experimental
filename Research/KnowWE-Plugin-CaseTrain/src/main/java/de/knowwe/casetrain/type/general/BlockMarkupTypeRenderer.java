@@ -65,7 +65,7 @@ public class BlockMarkupTypeRenderer implements Renderer {
 		// // + getLink(sec)
 		// + "</div>"));
 		Section<BlockMarkupContent> con =
-				Sections.findSuccessor(sec, BlockMarkupContent.class);
+				Sections.successor(sec, BlockMarkupContent.class);
 		BlockMarkupContentRenderer.getInstance().render(con, user, string);
 		string.appendHtml("</div>");
 

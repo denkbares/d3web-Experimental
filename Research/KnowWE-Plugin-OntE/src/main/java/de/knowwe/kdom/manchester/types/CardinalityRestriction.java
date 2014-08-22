@@ -82,11 +82,11 @@ public class CardinalityRestriction extends AbstractType {
 	}
 
 	public Section<PropertyExpression> getObjectProperty(Section<CardinalityRestriction> section) {
-		return Sections.findChildOfType(section, PropertyExpression.class);
+		return Sections.child(section, PropertyExpression.class);
 	}
 
 	public Integer getDigit(Section<CardinalityRestriction> section) {
-		Section<NonNegativeInteger> digit = Sections.findChildOfType(section,
+		Section<NonNegativeInteger> digit = Sections.child(section,
 				NonNegativeInteger.class);
 		if (digit != null) {
 			return Integer.parseInt(digit.getText());
@@ -95,23 +95,23 @@ public class CardinalityRestriction extends AbstractType {
 	}
 
 	public boolean hasOptionalRestriction(Section<CardinalityRestriction> section) {
-		return Sections.findChildOfType(section, Restriction.class) != null;
+		return Sections.child(section, Restriction.class) != null;
 	}
 
 	public boolean hasOptionalDataRestriction(Section<CardinalityRestriction> section) {
-		return Sections.findChildOfType(section, DataRestriction.class) != null;
+		return Sections.child(section, DataRestriction.class) != null;
 	}
 
 	public Section<Restriction> getOptionalRestriction(Section<CardinalityRestriction> section) {
-		return Sections.findChildOfType(section, Restriction.class);
+		return Sections.child(section, Restriction.class);
 	}
 
 	public Section<DataRestriction> getOptionalDataRestriction(Section<CardinalityRestriction> section) {
-		return Sections.findChildOfType(section, DataRestriction.class);
+		return Sections.child(section, DataRestriction.class);
 	}
 
 	public boolean isMinRestriction(Section<CardinalityRestriction> section) {
-		Section<Keyword> keyword = Sections.findChildOfType(section, Keyword.class);
+		Section<Keyword> keyword = Sections.child(section, Keyword.class);
 		if (keyword != null) {
 			if (keyword.get().getKeyword(keyword).equals(MIN)) {
 				return true;
@@ -121,7 +121,7 @@ public class CardinalityRestriction extends AbstractType {
 	}
 
 	public boolean isMaxRestriction(Section<CardinalityRestriction> section) {
-		Section<Keyword> keyword = Sections.findChildOfType(section, Keyword.class);
+		Section<Keyword> keyword = Sections.child(section, Keyword.class);
 		if (keyword != null) {
 			if (keyword.get().getKeyword(keyword).equals(MAX)) {
 				return true;
@@ -131,7 +131,7 @@ public class CardinalityRestriction extends AbstractType {
 	}
 
 	public boolean isExactlyRestriction(Section<CardinalityRestriction> section) {
-		Section<Keyword> keyword = Sections.findChildOfType(section, Keyword.class);
+		Section<Keyword> keyword = Sections.child(section, Keyword.class);
 		if (keyword != null) {
 			if (keyword.get().getKeyword(keyword).equals(EXACTLY)) {
 				return true;

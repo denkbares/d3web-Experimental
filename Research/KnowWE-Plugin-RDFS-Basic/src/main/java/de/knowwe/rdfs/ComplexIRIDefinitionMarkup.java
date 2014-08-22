@@ -128,8 +128,8 @@ class ComplexIRIDefinitionCompileScript extends AbstractKnowledgeUnitCompileScri
 		Node predURI = null;
 		Node objURI = null;
 
-		Sections.findSuccessorsOfType(section, SimpleReference.class, found);
-		Section<SimpleDefinition> subject = Sections.findSuccessor(section,
+		Sections.successors(section, SimpleReference.class, found);
+		Section<SimpleDefinition> subject = Sections.successor(section,
 				SimpleDefinition.class);
 
 		if (found.size() == 2) {

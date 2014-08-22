@@ -66,7 +66,7 @@ public class KeywordReplaceAction extends AbstractAction {
 
 		Map<String, String> nodesMap = new HashMap<String, String>();
 
-		Section<?> section = Sections.getSection(nodeID);
+		Section<?> section = Sections.get(nodeID);
 
 		if (!(section.get() instanceof MisspelledSyntaxConstruct)) {
 			context.sendError(500, "Invalid section type");
@@ -77,7 +77,7 @@ public class KeywordReplaceAction extends AbstractAction {
 		String newNodeText = originalText.replace(originalText, newText);
 
 		nodesMap.put(nodeID, newNodeText);
-		Sections.replaceSections(context, nodesMap).sendErrors(context);
+		Sections.replace(context, nodesMap).sendErrors(context);
 
 		context.setContentType("text/html; charset=UTF-8");
 		context.getWriter().write("done");

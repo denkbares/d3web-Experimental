@@ -84,7 +84,7 @@ public class UserlistTaghandler extends AbstractTagHandler {
 			Article article = Environment.getInstance().getArticle(
 					Environment.DEFAULT_WEB, userName);
 			Section<?> s = article.getRootSection();
-			Section<AboutMe> sec = Sections.findSuccessor(s, AboutMe.class);
+			Section<AboutMe> sec = Sections.successor(s, AboutMe.class);
 			avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
 		}
 		catch (NullPointerException e) {

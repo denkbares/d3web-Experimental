@@ -58,7 +58,7 @@ public class DescribeIndividualTagHandler extends AbstractTagHandler {
 	public final void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 
 		String content = renderContent(section, userContext, parameters);
-		Section<TagHandlerTypeContent> tagNameSection = Sections.findSuccessor(section,
+		Section<TagHandlerTypeContent> tagNameSection = Sections.successor(section,
 				TagHandlerTypeContent.class);
 		String sectionID = section.getID();
 		ToolSet tools = ToolUtils.getTools(tagNameSection, userContext);

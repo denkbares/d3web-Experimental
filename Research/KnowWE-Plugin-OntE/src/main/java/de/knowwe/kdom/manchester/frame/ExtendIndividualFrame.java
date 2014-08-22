@@ -28,7 +28,7 @@ public class ExtendIndividualFrame extends IndividualFrame {
 	 */
 	@Override
 	public boolean hasIndividualDefinition(Section<? extends DefaultFrame<?>> section) {
-		return Sections.findSuccessor(section, EntityReference.class) != null;
+		return Sections.successor(section, EntityReference.class) != null;
 	}
 
 	/**
@@ -41,6 +41,6 @@ public class ExtendIndividualFrame extends IndividualFrame {
 	 */
 	@Override
 	public Section<? extends Type> getIndividualDefinition(Section<? extends DefaultFrame<?>> section) {
-		return Sections.findSuccessor(section, OWLTermRef.class);
+		return Sections.successor(section, OWLTermRef.class);
 	}
 }

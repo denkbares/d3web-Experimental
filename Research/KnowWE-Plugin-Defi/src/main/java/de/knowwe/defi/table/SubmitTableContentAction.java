@@ -141,7 +141,7 @@ public class SubmitTableContentAction extends AbstractAction {
 
 			// submit change
 			ReplaceSectionUtils.replaceSections(context, nodesMap);
-			// Sections.replaceSections(context, nodesMap);
+			// Sections.replace(context, nodesMap);
 		}
 
 		context.getOutputStream().write(" (Wurde gespeichert)".getBytes());
@@ -167,13 +167,13 @@ public class SubmitTableContentAction extends AbstractAction {
 
 	public static Section<TableEntryContentType> findContentSectionForTableID(String tableid, Article article) {
 		List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
-		Sections.findSuccessorsOfType(article.getRootSection(),
+		Sections.successors(article.getRootSection(),
 				TableEntryType.class, tables);
 		Section<TableEntryContentType> contentSection = null;
 		for (Section<TableEntryType> section : tables) {
 			String id = DefaultMarkupType.getAnnotation(section, "tableid");
 			if (id.equals(tableid)) {
-				contentSection = Sections.findSuccessor(section,
+				contentSection = Sections.successor(section,
 						TableEntryContentType.class);
 			}
 		}

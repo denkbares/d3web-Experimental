@@ -183,7 +183,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 
 		@Override
 		protected Condition createCondition(D3webCompiler compiler, Section<WisskontChoiceFinding> section) {
-			Section<ListObjectIdentifier> concept = Sections.findSuccessor(section,
+			Section<ListObjectIdentifier> concept = Sections.successor(section,
 					ListObjectIdentifier.class);
 
 			boolean valid = IncrementalCompiler.getInstance().getTerminology().isValid(
@@ -191,7 +191,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 			if (!valid) return null;
 
 			Section<? extends SimpleDefinition> conceptDefinition = MarkupUtils.getConceptDefinitionGlobal(concept);
-			Section<ValuesMarkup> markup = Sections.findAncestorOfType(conceptDefinition,
+			Section<ValuesMarkup> markup = Sections.ancestor(conceptDefinition,
 					ValuesMarkup.class);
 
 			if (markup == null) return null;
@@ -242,14 +242,14 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 		@Override
 		public void insertIntoRepository(Section<RuleMarkup> section) {
 			// create condition
-			Section<CompositeCondition> cond = Sections.findSuccessor(section,
+			Section<CompositeCondition> cond = Sections.successor(section,
 					CompositeCondition.class);
 			if (cond == null) return;
 			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 					KnowledgeBaseInstantiation.WISSKONT_KNOWLEDGE);
 
 			// make sure that terminals are created and stored
-			List<Section<WisskontChoiceFinding>> terminals = Sections.findSuccessorsOfType(cond,
+			List<Section<WisskontChoiceFinding>> terminals = Sections.successors(cond,
 					WisskontChoiceFinding.class);
 			D3webCompiler d3webCompiler = D3webUtils.getCompiler(article);
 			for (Section<WisskontChoiceFinding> terminal : terminals) {
@@ -259,7 +259,7 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 						"cond-store-key",
 						createdCondition);
 			}
-			List<Section<NumericalFinding>> numFindingTerminals = Sections.findSuccessorsOfType(
+			List<Section<NumericalFinding>> numFindingTerminals = Sections.successors(
 					cond,
 					NumericalFinding.class);
 			for (Section<NumericalFinding> condNumSection : numFindingTerminals) {
@@ -274,10 +274,10 @@ public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {
 
 			if (d3Cond == null) return;
 
-			Section<ActionArea> actionArea = Sections.findSuccessor(section,
+			Section<ActionArea> actionArea = Sections.successor(section,
 					ActionArea.class);
 
-			List<Section<IncrementalTermReference>> targetConcepts = Sections.findSuccessorsOfType(
+			List<Section<IncrementalTermReference>> targetConcepts = Sections.successors(
 					actionArea, IncrementalTermReference.class);
 
 			Set<Rule> rules = new HashSet<Rule>();

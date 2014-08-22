@@ -40,26 +40,26 @@ public class ScoreTableCellSubtreeHandler implements D3webHandler<ScoreCell> {
 		}
 
 		// line of current score-cell
-		Section<ContentLine> line = Sections.findAncestorOfType(section, ContentLine.class);
+		Section<ContentLine> line = Sections.ancestor(section, ContentLine.class);
 
 		// condition at beginning of that line
-		Section<CondCell> condition = Sections.findSuccessor(line, CondCell.class);
+		Section<CondCell> condition = Sections.successor(line, CondCell.class);
 
 		// column index to calculate solution cell
-		int columnIndex = Sections.findSuccessorsOfType(line, ScoreCell.class).indexOf(section);
-		Section<SimpleScoreTable> table = Sections.findAncestorOfExactType(section,
+		int columnIndex = Sections.successors(line, ScoreCell.class).indexOf(section);
+		Section<SimpleScoreTable> table = Sections.ancestor(section,
 				SimpleScoreTable.class);
-		Section<HeaderLine> headerLine = Sections.findChildOfType(table, HeaderLine.class);
+		Section<HeaderLine> headerLine = Sections.child(table, HeaderLine.class);
 
 		if (headerLine == null) {
 			messages.add(Messages.error("No valid table found"));
 			return messages;
 		}
 
-		List<Section<SolutionCell>> solutionCells = Sections.findSuccessorsOfType(headerLine,
+		List<Section<SolutionCell>> solutionCells = Sections.successors(headerLine,
 				SolutionCell.class);
 		Section<? extends Type> solutionCell = solutionCells.get(columnIndex);
-		Section<Solution> solution = Sections.findSuccessor(solutionCell, Solution.class);
+		Section<Solution> solution = Sections.successor(solutionCell, Solution.class);
 
 		if (solution == null) {
 			messages.add(Messages.noSuchObjectError("Solution not found"));

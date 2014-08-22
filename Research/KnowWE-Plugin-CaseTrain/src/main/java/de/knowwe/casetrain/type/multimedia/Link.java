@@ -50,11 +50,11 @@ public class Link extends MultimediaItem {
 			@Override
 			public void render(Section<?> sec, UserContext user,
 					RenderResult string) {
-				Section<MultimediaItemContent> linkURL = Sections.findChildOfType(sec,
+				Section<MultimediaItemContent> linkURL = Sections.child(sec,
 						MultimediaItemContent.class);
 				string.appendHtml(
 						"<span title=\"Link\" class=\"casetrainlink\">");
-				Section<Url> url = Sections.findChildOfType(sec, Url.class);
+				Section<Url> url = Sections.child(sec, Url.class);
 				string.appendHtml("<a href=\"");
 				String linkString = linkURL.getText().trim();
 				if (!linkString.startsWith("http://"))

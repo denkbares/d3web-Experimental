@@ -71,11 +71,11 @@ public class CommentRenderer implements Renderer {
 			Environment instance = Environment.getInstance();
 			WikiConnector wikiConnector = instance.getWikiConnector();
 
-			String commentTag = Sections.findChildOfType(
-					Sections.findChildOfType(sec, CommentTypeTag.class), CommentTypeTagName.class).getText();
+			String commentTag = Sections.child(
+					Sections.child(sec, CommentTypeTag.class), CommentTypeTagName.class).getText();
 			String pageName;
 
-			String commentContent = Sections.findChildOfType(sec, CommentTypeContent.class).getText();
+			String commentContent = Sections.child(sec, CommentTypeContent.class).getText();
 
 			// split title and content:
 			String title = "";
@@ -87,15 +87,15 @@ public class CommentRenderer implements Renderer {
 
 			Map<String, Integer> ids = CommentModule.getIDs();
 
-			Section<?> idSec = Sections.findChildOfType(
-					Sections.findChildOfType(sec, CommentTypeTag.class), CommentTypeTagID.class);
+			Section<?> idSec = Sections.child(
+					Sections.child(sec, CommentTypeTag.class), CommentTypeTagID.class);
 			String id = idSec.getText().trim();
 
 			// add ID if not done before:
 			if (id.isEmpty()) {
 
 				int newID = ids.get(commentTag);
-				Sections.findChildOfType(idSec, PlainText.class).setText(newID + " ");
+				Sections.child(idSec, PlainText.class).setText(newID + " ");
 
 				// save id:
 				String leaveText = sec.getArticle().getRootSection().collectTextsFromLeaves();
@@ -134,11 +134,11 @@ public class CommentRenderer implements Renderer {
 					Section<?> forumSec = instance.getArticle(sec.getWeb(), pageName).getRootSection();
 
 					List<Section<XMLTail>> found = new ArrayList<Section<XMLTail>>();
-					Sections.findSuccessorsOfType(forumSec, XMLTail.class, found);
+					Sections.successors(forumSec, XMLTail.class, found);
 
 					if (found.size() != 0) {
 						Section<?> changeSec = found.get(found.size() - 1);
-						Sections.findChildOfType(changeSec, PlainText.class).setText(save);
+						Sections.child(changeSec, PlainText.class).setText(save);
 					}
 
 					StringBuilder buffi = new StringBuilder();

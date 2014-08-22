@@ -149,7 +149,7 @@ public class WikiObjectModelTesOFF {
 			kdomID = value.toString().substring(value.toString().lastIndexOf("#KDOM_") + 6);
 		}
 
-		Section<?> contentSectionOfParagraph = Sections.getSection(kdomID);
+		Section<?> contentSectionOfParagraph = Sections.get(kdomID);
 		assertTrue(contentSectionOfParagraph.getText().contains(
 				"Die Herkunft der Bezeichnung Wolpertinger ist "));
 

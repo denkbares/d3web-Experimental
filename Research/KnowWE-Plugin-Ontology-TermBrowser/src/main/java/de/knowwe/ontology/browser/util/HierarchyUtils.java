@@ -128,7 +128,7 @@ public class HierarchyUtils {
 				OntologyCompiler.class);
 		for (OntologyCompiler ontologyCompiler : compilers) {
 			Section<? extends PackageCompileType> compileSection = ontologyCompiler.getCompileSection();
-			Section<DefaultMarkupType> defaultMarkup = Sections.findAncestorOfType(compileSection,
+			Section<DefaultMarkupType> defaultMarkup = Sections.ancestor(compileSection,
 					DefaultMarkupType.class);
 			if (defaultMarkup.getText().contains(master) || defaultMarkup.getTitle().equals(master)) {
 				compiler = ontologyCompiler;

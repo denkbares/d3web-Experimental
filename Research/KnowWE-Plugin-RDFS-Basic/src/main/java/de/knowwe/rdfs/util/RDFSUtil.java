@@ -72,9 +72,9 @@ public class RDFSUtil {
 
 	public static Node createLiteral(Section<TurtleObjectLiteral> sec) {
 
-		String text = Sections.findChildOfType(sec, TurtleObjectLiteralText.class).getText();
+		String text = Sections.child(sec, TurtleObjectLiteralText.class).getText();
 
-		Section<LanguageTag> langSec = Sections.findChildOfType(sec, LanguageTag.class);
+		Section<LanguageTag> langSec = Sections.child(sec, LanguageTag.class);
 
 		if (langSec != null) {
 			String langCode = langSec.getText().substring(1); // strip @

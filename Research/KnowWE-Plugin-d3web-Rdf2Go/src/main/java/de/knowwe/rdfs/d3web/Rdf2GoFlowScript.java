@@ -83,7 +83,7 @@ public class Rdf2GoFlowScript extends OntologyCompileScript<FlowchartType> {
 	}
 
 	private Section<FlowchartTermDef> getDefinition(Section<FlowchartType> section) {
-		return Sections.findSuccessor(section, FlowchartTermDef.class);
+		return Sections.successor(section, FlowchartTermDef.class);
 	}
 
 }

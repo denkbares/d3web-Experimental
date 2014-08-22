@@ -131,7 +131,7 @@ public class Annotation extends AbstractType {
 	}
 
 	private boolean checkAnnotationType(Section<Annotation> section, String key) {
-		Section<Keyword> keywordSection = Sections.findSuccessor(section, Keyword.class);
+		Section<Keyword> keywordSection = Sections.successor(section, Keyword.class);
 		if (keywordSection != null) {
 			String keywordTerm = keywordSection.get().getKeyword(keywordSection);
 			if (keywordTerm.equals(key)) {
@@ -149,7 +149,7 @@ public class Annotation extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean hasDatatypeTag(Section<Annotation> a) {
-		if (Sections.findSuccessor(a, AnnotationDatatypeTag.class) != null) {
+		if (Sections.successor(a, AnnotationDatatypeTag.class) != null) {
 			return true;
 		}
 		return false;
@@ -163,7 +163,7 @@ public class Annotation extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean hasLanguageTag(Section<Annotation> a) {
-		if (Sections.findSuccessor(a, AnnotationLanguageTag.class) != null) {
+		if (Sections.successor(a, AnnotationLanguageTag.class) != null) {
 			return true;
 		}
 		return false;
@@ -177,7 +177,7 @@ public class Annotation extends AbstractType {
 	 * @return The found {@link AnnotationTerm} section
 	 */
 	public Section<?> getTerm(Section<Annotation> a) {
-		return Sections.findSuccessor(a, AnnotationTerm.class);
+		return Sections.successor(a, AnnotationTerm.class);
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class Annotation extends AbstractType {
 	 * @return The found {@link AnnotationDatatypeTag} section
 	 */
 	public Section<?> getDatatype(Section<Annotation> a) {
-		return Sections.findSuccessor(a, AnnotationDatatypeTag.class);
+		return Sections.successor(a, AnnotationDatatypeTag.class);
 	}
 
 	/**
@@ -199,7 +199,7 @@ public class Annotation extends AbstractType {
 	 * @return The found {@link AnnotationLanguageTag} section
 	 */
 	public Section<?> getLanguage(Section<Annotation> a) {
-		return Sections.findSuccessor(a, AnnotationLanguageTag.class);
+		return Sections.successor(a, AnnotationLanguageTag.class);
 	}
 }
 

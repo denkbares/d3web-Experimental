@@ -61,7 +61,7 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 	public Collection<Message> create(OntologyCompiler compiler, Section<PropertyDeclarationType> section) {
 
 		// get Property
-		Section<PropertyType> propertySection = Sections.findSuccessor(section,
+		Section<PropertyType> propertySection = Sections.successor(section,
 				PropertyType.class);
 		if (propertySection == null) {
 			return Messages.asList();
@@ -72,7 +72,7 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 		}
 
 		// get NamedObject
-		Section<PropertyObjectReference> namendObjectSection = Sections.findSuccessor(section,
+		Section<PropertyObjectReference> namendObjectSection = Sections.successor(section,
 				PropertyObjectReference.class);
 		if (namendObjectSection == null) {
 			return Messages.asList();
@@ -85,7 +85,7 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 		Locale locale = PropertyDeclarationHandler.getLocale(section);
 
 		// get content
-		Section<PropertyContentType> contentSection = Sections.findSuccessor(section,
+		Section<PropertyContentType> contentSection = Sections.successor(section,
 				PropertyContentType.class);
 		if (contentSection == null) {
 			return Messages.asList();
@@ -132,9 +132,9 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 	private List<Identifier> getObjectIdentifiers(OntologyCompiler compiler, Section<PropertyObjectReference> namendObjectSection) {
 		List<Identifier> objects = new ArrayList<Identifier>(1);
 		Section<PropertyObjectReference.PropertyAnswerReference> answerReferenceSection =
-				Sections.findChildOfType(namendObjectSection, PropertyObjectReference.PropertyAnswerReference.class);
+				Sections.child(namendObjectSection, PropertyObjectReference.PropertyAnswerReference.class);
 		if (answerReferenceSection != null) {
-			Section<QuestionReference> questionReferenceSection = Sections.findChildOfType(
+			Section<QuestionReference> questionReferenceSection = Sections.child(
 					namendObjectSection, QuestionReference.class);
 			Identifier answerIdentifier = answerReferenceSection.get().getTermIdentifier(answerReferenceSection);
 			if (questionReferenceSection != null && questionReferenceSection.getText().isEmpty()) {
@@ -152,7 +152,7 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 			}
 		}
 		if (objects.isEmpty()) {
-			Section<NamedObjectReference> namedObjectReference = Sections.findChildOfType(namendObjectSection,
+			Section<NamedObjectReference> namedObjectReference = Sections.child(namendObjectSection,
 					NamedObjectReference.class);
 			if (namedObjectReference != null) {
 				objects.add(namedObjectReference.get().getTermIdentifier(namedObjectReference));

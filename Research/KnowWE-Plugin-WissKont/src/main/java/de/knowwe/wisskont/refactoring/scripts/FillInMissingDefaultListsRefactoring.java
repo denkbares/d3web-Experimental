@@ -83,10 +83,10 @@ public class FillInMissingDefaultListsRefactoring extends AbstractAction {
 					replacementMap.clear();
 
 					// check if any of the four default sections already exist
-					canMarkup = Sections.findChildOfType(rootSection, CanMarkup.class);
-					mustMarkup = Sections.findChildOfType(rootSection, MustMarkup.class);
-					caveMarkup = Sections.findChildOfType(rootSection, CaveMarkup.class);
-					associationMarkup = Sections.findChildOfType(rootSection,
+					canMarkup = Sections.child(rootSection, CanMarkup.class);
+					mustMarkup = Sections.child(rootSection, MustMarkup.class);
+					caveMarkup = Sections.child(rootSection, CaveMarkup.class);
+					associationMarkup = Sections.child(rootSection,
 							AssociationMarkup.class);
 
 					if (canMarkup == null) {
@@ -97,7 +97,7 @@ public class FillInMissingDefaultListsRefactoring extends AbstractAction {
 					}
 
 					try {
-						Sections.replaceSections(context, replacementMap);
+						Sections.replace(context, replacementMap);
 					}
 					catch (IOException e) {
 						e.printStackTrace();
@@ -258,9 +258,9 @@ public class FillInMissingDefaultListsRefactoring extends AbstractAction {
 	}
 
 	private static String getConceptName(Article a) {
-		Section<ConceptMarkup> def = Sections.findSuccessor(a.getRootSection(), ConceptMarkup.class);
+		Section<ConceptMarkup> def = Sections.successor(a.getRootSection(), ConceptMarkup.class);
 		if (def != null) {
-			Section<SimpleDefinition> termDef = Sections.findSuccessor(def, SimpleDefinition.class);
+			Section<SimpleDefinition> termDef = Sections.successor(def, SimpleDefinition.class);
 			return termDef.get().getTermName(termDef);
 		}
 		return null;

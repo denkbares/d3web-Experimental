@@ -61,7 +61,7 @@ public class TimeTableAction extends AbstractAction {
 			Map<String, String> nodesMap = new HashMap<String, String>();
 			Section<RootType> rootSection = Environment.getInstance().getArticle(
 					Environment.DEFAULT_WEB, pageName).getRootSection();
-			Section<TimeTableTemplateMarkup> templateSec = Sections.findSuccessor(
+			Section<TimeTableTemplateMarkup> templateSec = Sections.successor(
 					rootSection, TimeTableTemplateMarkup.class);
 			if (templateSec == null) {
 				nodesMap.put(rootSection.getID(), rootSection.getText()

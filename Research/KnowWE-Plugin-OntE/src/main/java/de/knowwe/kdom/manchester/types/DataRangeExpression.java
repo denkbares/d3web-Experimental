@@ -61,7 +61,7 @@ public class DataRangeExpression extends CompositeCondition {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isOneOfCurlyBracket(Section<DataRangeExpression> section) {
-		return Sections.findChildOfType(section, OneOfBracedCondition.class) != null;
+		return Sections.child(section, OneOfBracedCondition.class) != null;
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class DataRangeExpression extends CompositeCondition {
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
 	public Section<OneOfBracedCondition> getOneOfCurlyBracket(Section<DataRangeExpression> section) {
-		return Sections.findChildOfType(section, OneOfBracedCondition.class);
+		return Sections.child(section, OneOfBracedCondition.class);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class DataRangeExpression extends CompositeCondition {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isNonTerminalList(Section<DataRangeExpression> section) {
-		return Sections.findChildOfType(section, NonTerminalList.class) != null;
+		return Sections.child(section, NonTerminalList.class) != null;
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class DataRangeExpression extends CompositeCondition {
 	 * @return The found {@link NonTerminalListContent} sections
 	 */
 	public List<Section<NonTerminalList>> getNonTerminalListElements(Section<DataRangeExpression> section) {
-		return Sections.findChildrenOfType(section, NonTerminalList.class);
+		return Sections.children(section, NonTerminalList.class);
 	}
 
 	/**

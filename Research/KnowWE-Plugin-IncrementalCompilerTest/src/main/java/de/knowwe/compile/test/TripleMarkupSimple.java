@@ -99,7 +99,7 @@ class TripleMarkupSimpleCompileScript extends
 		Node predURI = null;
 		Node objURI = null;
 
-		Sections.findSuccessorsOfType(section, SimpleReference.class, found);
+		Sections.successors(section, SimpleReference.class, found);
 
 		if (found.size() == 3) {
 			Section<SimpleReference> subject = found.get(0);

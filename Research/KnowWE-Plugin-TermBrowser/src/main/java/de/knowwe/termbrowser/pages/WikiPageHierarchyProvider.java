@@ -63,7 +63,7 @@ public class WikiPageHierarchyProvider implements HierarchyProvider<Identifier> 
 			return result;
 		}
 		Section<RootType> rootSection = article.getRootSection();
-		List<Section<LinkType>> successorsOfType = Sections.findSuccessorsOfType(rootSection, LinkType.class);
+		List<Section<LinkType>> successorsOfType = Sections.successors(rootSection, LinkType.class);
 		for (Section<LinkType> linkSection : successorsOfType) {
 			String targetPage = linkSection.get().getLink(linkSection);
 			result.add(new Identifier(targetPage));
@@ -78,7 +78,7 @@ public class WikiPageHierarchyProvider implements HierarchyProvider<Identifier> 
 		Iterator<Article> articleIterator = articleManager.getArticles().iterator();
 		while (articleIterator.hasNext()) {
 			Article next = articleIterator.next();
-			List<Section<LinkType>> successorsOfType = Sections.findSuccessorsOfType(next.getRootSection(), LinkType.class);
+			List<Section<LinkType>> successorsOfType = Sections.successors(next.getRootSection(), LinkType.class);
 			for (Section<LinkType> linkSection : successorsOfType) {
 				String targetPage = linkSection.get().getLink(linkSection);
 				if (targetPage.equals(term.getLastPathElement())) {

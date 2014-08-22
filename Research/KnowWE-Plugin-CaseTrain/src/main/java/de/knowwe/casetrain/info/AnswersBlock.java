@@ -59,7 +59,7 @@ public class AnswersBlock extends SubblockMarkup {
 			public void compile(DefaultGlobalCompiler compiler, Section<Question> s) throws CompilerMessage {
 
 				List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
-				Sections.findSuccessorsOfType(s, AnswerLine.class, found);
+				Sections.successors(s, AnswerLine.class, found);
 
 				if (found.isEmpty()) {
 					throw new CompilerMessage(

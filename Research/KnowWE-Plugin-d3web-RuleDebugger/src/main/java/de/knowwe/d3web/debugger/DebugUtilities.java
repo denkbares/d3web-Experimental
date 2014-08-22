@@ -174,7 +174,7 @@ public class DebugUtilities {
 		for (Article article : Environment.getInstance().getArticleManager(
 				Environment.DEFAULT_WEB).getArticles()) {
 
-			ruleSections = Sections.findSuccessorsOfType(article.getRootSection(), RuleType.class);
+			ruleSections = Sections.successors(article.getRootSection(), RuleType.class);
 			for (Section<RuleType> ruleSection : ruleSections) {
 
 				rule = RuleCompileScript.getRule(ruleCompiler, ruleSection);

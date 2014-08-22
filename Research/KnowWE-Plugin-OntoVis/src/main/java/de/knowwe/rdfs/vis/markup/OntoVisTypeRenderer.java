@@ -1,7 +1,7 @@
 package de.knowwe.rdfs.vis.markup;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -285,9 +285,9 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 	 * @created 13.07.2014
 	 */
 	private void findAndReadConfig(String configName, ArticleManager am, Map<String, String> parameterMap) {
-		List<Section<? extends Type>> sections = Sections.findSectionsOfTypeGlobal(VisConfigType.class, am);
+		Collection<Section<? extends Type>> sections = Sections.successors(am, VisConfigType.class);
 		for (Section<? extends Type> section : sections) {
-			Section<VisConfigType> s = (Section<VisConfigType>) section;
+			Section<VisConfigType> s = Sections.cast(section, VisConfigType.class);
 			String name = VisConfigType.getAnnotation(s, VisConfigType.ANNOTATION_NAME);
 			if (name.equals(configName)) {
 				readConfig(s, parameterMap);

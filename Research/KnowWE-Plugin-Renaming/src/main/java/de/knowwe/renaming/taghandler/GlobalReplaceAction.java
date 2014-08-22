@@ -86,7 +86,7 @@ public class GlobalReplaceAction extends AbstractAction {
 						+ rb.getString("KnowWE.renamingtool.msg.noarticle") + article + "</div>";
 			}
 			modifiedArticles.add(art);
-			Section<?> sec = Sections.getSection(nodeID);
+			Section<?> sec = Sections.get(nodeID);
 
 			// organize replacementRequests per sections
 			if (findingsPerSection.containsKey(sec)) {

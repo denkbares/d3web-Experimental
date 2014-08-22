@@ -53,14 +53,14 @@ public class InsertAdditionalTableVersionAction extends AbstractAction {
 
 		// find version blocks
 		List<Section<VersionEntry>> versionEntries = new ArrayList<Section<VersionEntry>>();
-		Sections.findSuccessorsOfType(contentSectionForTableID, VersionEntry.class,
+		Sections.successors(contentSectionForTableID, VersionEntry.class,
 				versionEntries);
 		int numberOfExistingVersions = versionEntries.size();
 
 		// find out number of inputs to generate
 		Section<VersionEntry> version0 = versionEntries.get(0);
 		List<Section<InputContent>> inputEntries = new ArrayList<Section<InputContent>>();
-		Sections.findSuccessorsOfType(version0, InputContent.class, inputEntries);
+		Sections.successors(version0, InputContent.class, inputEntries);
 		int numberOfInputs = inputEntries.size();
 
 		// generate empty inputs

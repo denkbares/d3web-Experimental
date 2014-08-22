@@ -67,7 +67,7 @@ public class DebuggerRuleRenderer implements Renderer {
 		Article article = Compilers.getCompilingArticles(sec).iterator().next();
 		KnowledgeBase kb = D3webUtils.getKnowledgeBase(article.getWeb(), article.getTitle());
 		Session session = SessionProvider.getSession(user, kb);
-		Section<RuleType> ruleSection = Sections.findSuccessor(sec,
+		Section<RuleType> ruleSection = Sections.successor(sec,
 				RuleType.class);
 		Rule r = null;
 		if (ruleSection != null) {
@@ -138,7 +138,7 @@ public class DebuggerRuleRenderer implements Renderer {
 
 		// handle div
 		List<Section<?>> children = condSection.getChildren();
-		if (Sections.findChildOfType(condSection, BracedCondition.class) != null) {
+		if (Sections.child(condSection, BracedCondition.class) != null) {
 
 			for (Section<? extends Type> child : children) {
 				if (child.get() instanceof BracedCondition) {

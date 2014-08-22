@@ -57,7 +57,7 @@ public class RDFSTestCaseHandler extends DefaultGlobalScript<RDFSTestCaseType> {
 		}
 
 		// Get and validate SPARQL-Query
-		Section<SPARQLQueryType> sparqlSection = Sections.findSuccessor(section,
+		Section<SPARQLQueryType> sparqlSection = Sections.successor(section,
 				SPARQLQueryType.class);
 		if (sparqlSection == null) {
 			throw CompilerMessage.error("Unable to find SPARQL-Query! Check the syntax!");
@@ -80,7 +80,7 @@ public class RDFSTestCaseHandler extends DefaultGlobalScript<RDFSTestCaseType> {
 
 		// get expected bindings
 		List<Section<ExpectedBindingType>> expectedBindings =
-				Sections.findSuccessorsOfType(section, ExpectedBindingType.class);
+				Sections.successors(section, ExpectedBindingType.class);
 
 		if (expectedBindings == null || expectedBindings.isEmpty()) {
 			throw new CompilerMessage(
@@ -91,7 +91,7 @@ public class RDFSTestCaseHandler extends DefaultGlobalScript<RDFSTestCaseType> {
 
 			// get value
 			List<Section<ValueType>> values =
-					Sections.findSuccessorsOfType(expectedBinding, ValueType.class);
+					Sections.successors(expectedBinding, ValueType.class);
 			if (values == null || values.isEmpty()) {
 				throw new CompilerMessage(
 						Messages.syntaxError("There is no value in binding: "
@@ -107,9 +107,9 @@ public class RDFSTestCaseHandler extends DefaultGlobalScript<RDFSTestCaseType> {
 		}
 
 		// check for expected findings which were not recognized...
-		Section<ExpectedBindingsType> expectedBindingsType = Sections.findSuccessor(section,
+		Section<ExpectedBindingsType> expectedBindingsType = Sections.successor(section,
 				ExpectedBindingsType.class);
-		List<Section<PlainText>> plainTexts = Sections.findChildrenOfType(expectedBindingsType,
+		List<Section<PlainText>> plainTexts = Sections.children(expectedBindingsType,
 				PlainText.class);
 		for (Section<PlainText> plainText : plainTexts) {
 			if (!plainText.getText().matches("\\s*")) {

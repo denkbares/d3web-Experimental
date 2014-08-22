@@ -41,7 +41,7 @@ public class SubblockMarkupRenderer implements Renderer {
 		// Only render the Subblock and not the
 		// PlainText surrounding it.
 		MouseOverTitleRenderer.getInstance().render(
-				Sections.findSuccessor(sec, SubblockMarkupContent.class), user,
+				Sections.successor(sec, SubblockMarkupContent.class), user,
 				string);
 		string.appendHtml("</div>");
 	}

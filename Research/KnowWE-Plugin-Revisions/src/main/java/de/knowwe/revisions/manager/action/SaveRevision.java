@@ -69,7 +69,7 @@ public class SaveRevision extends AbstractAction {
 			HashMap<String, String> sectionsMap = new HashMap<String, String>();
 			Section<RootType> s = a.getRootSection();
 			sectionsMap.put(s.getID(), s.getText().concat(markup));
-			Sections.replaceSections(context, sectionsMap).sendErrors(context);
+			Sections.replace(context, sectionsMap).sendErrors(context);
 			return "<p class=\"box ok\">Revision '" + rev + "' successfully saved.";
 		}
 		return "<p class=\"box error\">Error while saving revision.";

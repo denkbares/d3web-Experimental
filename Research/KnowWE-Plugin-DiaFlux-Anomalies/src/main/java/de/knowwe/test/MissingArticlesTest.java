@@ -78,7 +78,7 @@ public class MissingArticlesTest extends AbstractTest<ArticleManager> {
 
 		for (Article article : manager.getArticles()) {
 			List<Section<LinkType>> links =
-					Sections.findSuccessorsOfType(article.getRootSection(), LinkType.class);
+					Sections.successors(article.getRootSection(), LinkType.class);
 
 			for (Section<LinkType> link : links) {
 				// dont check external links :-)

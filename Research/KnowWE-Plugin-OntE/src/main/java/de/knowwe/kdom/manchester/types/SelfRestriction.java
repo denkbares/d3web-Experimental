@@ -71,6 +71,6 @@ public class SelfRestriction extends AbstractType {
 	}
 
 	public Section<ObjectPropertyExpression> getObjectProperty(Section<SelfRestriction> section) {
-		return Sections.findChildOfType(section, ObjectPropertyExpression.class);
+		return Sections.child(section, ObjectPropertyExpression.class);
 	}
 }

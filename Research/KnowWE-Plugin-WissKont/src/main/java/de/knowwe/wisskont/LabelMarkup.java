@@ -104,7 +104,7 @@ public class LabelMarkup extends AbstractType implements Editable {
 				Collection<Section<? extends Term>> result = new HashSet<Section<? extends Term>>();
 				List<Section<ConceptMarkup>> conecptDefinitions = MarkupUtils.getConecptDefinitionForLocalPage(section);
 				for (Section<ConceptMarkup> def : conecptDefinitions) {
-					result.add(Sections.findSuccessor(def, IncrementalTermDefinition.class));
+					result.add(Sections.successor(def, IncrementalTermDefinition.class));
 				}
 				return result;
 			}

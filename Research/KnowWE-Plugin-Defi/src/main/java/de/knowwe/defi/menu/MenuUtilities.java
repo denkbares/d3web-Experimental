@@ -47,10 +47,10 @@ public class MenuUtilities {
 				Environment.DEFAULT_WEB).getArticle("LeftMenu");
 
 		if (leftMenu != null) {
-			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
+			Section<DynamicMenuMarkup> menu = Sections.successor(
 					leftMenu.getRootSection(),
 					DynamicMenuMarkup.class);
-			if (menu != null) Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
+			if (menu != null) Sections.successors(menu, DashTreeElement.class, units);
 		}
 
 		return units;
@@ -66,10 +66,10 @@ public class MenuUtilities {
 				Environment.DEFAULT_WEB).getArticle("LeftMenu");
 
 		if (leftMenu != null) {
-			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
+			Section<DynamicMenuMarkup> menu = Sections.successor(
 					leftMenu.getRootSection(),
 					DynamicMenuMarkup.class);
-			Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
+			Sections.successors(menu, DashTreeElement.class, units);
 		}
 
 		for (Section<DashTreeElement> unit : units) {
@@ -84,7 +84,7 @@ public class MenuUtilities {
 	 */
 	public static List<Section<DashTreeElement>> getSubUnits(Section<DashTreeElement> rootUnit, List<Section<DashTreeElement>> units) {
 		List<Section<DashTreeElement>> subUnits = new LinkedList<Section<DashTreeElement>>();
-		Sections.findSuccessorsOfType(rootUnit, DashTreeElement.class, subUnits);
+		Sections.successors(rootUnit, DashTreeElement.class, subUnits);
 		boolean add = false;
 
 		for (Section<DashTreeElement> sec : units) {

@@ -28,7 +28,7 @@ public class ExtendClassFrame extends ClassFrame {
 	 */
 	@Override
 	public boolean hasClassDefinition(Section<? extends ClassFrame> section) {
-		return Sections.findSuccessor(section, EntityReference.class) != null;
+		return Sections.successor(section, EntityReference.class) != null;
 	}
 
 	/**
@@ -41,6 +41,6 @@ public class ExtendClassFrame extends ClassFrame {
 	 */
 	@Override
 	public Section<? extends Type> getClassDefinition(Section<? extends ClassFrame> section) {
-		return Sections.findSuccessor(section, OWLTermRef.class);
+		return Sections.successor(section, OWLTermRef.class);
 	}
 }

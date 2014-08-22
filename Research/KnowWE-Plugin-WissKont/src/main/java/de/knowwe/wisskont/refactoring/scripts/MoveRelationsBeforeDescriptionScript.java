@@ -76,7 +76,7 @@ public class MoveRelationsBeforeDescriptionScript extends AbstractAction {
 								+ descriptionHeader);
 						replacementMap.put(article.getRootSection().getID(), newText);
 						try {
-							Sections.replaceSections(context, replacementMap).sendErrors(context);
+							Sections.replace(context, replacementMap).sendErrors(context);
 						}
 						catch (IOException e) {
 							// TODO Auto-generated catch block

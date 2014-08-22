@@ -134,7 +134,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractKnowledgeUnitType<Ob
 			map.put(RDFSTermCategory.KEY, RDFSTermCategory.ObjectProperty);
 
 			// add domain and range information
-			List<Section<ClassRef>> classRefs = Sections.findSuccessorsOfType(
+			List<Section<ClassRef>> classRefs = Sections.successors(
 					s.getParent(), ClassRef.class);
 			if (classRefs.size() == 2) {
 				map.put(RDFS_DOMAIN_KEY,
@@ -170,11 +170,11 @@ class DomainRangeCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<Ob
 
 	@Override
 	public void insertIntoRepository(Section<ObjectPropertyDefinitionMarkup> section) {
-		List<Section<IRITermRef>> refs = Sections.findSuccessorsOfType(section,
+		List<Section<IRITermRef>> refs = Sections.successors(section,
 				IRITermRef.class);
 		if (refs.size() == 2) {
 			@SuppressWarnings("rawtypes")
-			Section<IncrementalTermDefinition> propDef = Sections.findSuccessor(
+			Section<IncrementalTermDefinition> propDef = Sections.successor(
 					section, IncrementalTermDefinition.class);
 			URI propURI = RDFSUtil.getURI(propDef);
 

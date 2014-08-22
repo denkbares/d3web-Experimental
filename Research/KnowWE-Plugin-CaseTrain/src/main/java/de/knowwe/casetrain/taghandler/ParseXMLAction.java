@@ -70,7 +70,7 @@ public class ParseXMLAction extends AbstractAction {
 		Article article = Environment.getInstance().getArticle(web, topic);
 		Section<RootType> sec = article.getRootSection();
 
-		if (Sections.findSuccessor(sec, MetaData.class) == null) {
+		if (Sections.successor(sec, MetaData.class) == null) {
 			buildi.append("<span class=\"error\">" +
 					bundle.getString("NO_CASE_PAGE") +
 					"</span>");

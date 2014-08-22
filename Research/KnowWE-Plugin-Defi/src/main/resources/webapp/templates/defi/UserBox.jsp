@@ -30,7 +30,7 @@
 		if (article != null) {
 	Section<?> s = article.getRootSection();
 	if (s != null && s.toString().contains("@avatar:")) {
-		Section<AboutMe> sec = Sections.findSuccessor(s, AboutMe.class);
+		Section<AboutMe> sec = Sections.successor(s, AboutMe.class);
 		avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
 	}
 		}

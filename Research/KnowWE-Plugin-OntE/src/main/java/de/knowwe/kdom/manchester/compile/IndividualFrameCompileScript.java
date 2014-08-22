@@ -118,7 +118,7 @@ public class IndividualFrameCompileScript extends OWLAPIKnowledgeUnitCompileScri
 		if (type.hasTypes(section)) { // Handle Types
 			Section<?> types = type.getTypes(section);
 
-			Section<ManchesterClassExpression> mce = Sections.findChildOfType(types,
+			Section<ManchesterClassExpression> mce = Sections.child(types,
 					ManchesterClassExpression.class);
 
 			if (mce.isEmpty()) {

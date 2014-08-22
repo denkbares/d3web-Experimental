@@ -28,7 +28,7 @@ public class ExtendDataPropertyFrame extends DataPropertyFrame {
 	 */
 	@Override
 	public boolean hasDataPropertyDefinition(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, EntityReference.class) != null;
+		return Sections.successor(section, EntityReference.class) != null;
 	}
 
 	/**
@@ -41,6 +41,6 @@ public class ExtendDataPropertyFrame extends DataPropertyFrame {
 	 */
 	@Override
 	public Section<? extends Type> getDataPropertyDefinition(Section<DataPropertyFrame> section) {
-		return Sections.findSuccessor(section, OWLTermRef.class);
+		return Sections.successor(section, OWLTermRef.class);
 	}
 }

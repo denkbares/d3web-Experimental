@@ -63,7 +63,7 @@ public class Introduction extends BlockMarkupType {
 
 				List<Message> messages = new ArrayList<Message>(0);
 
-				Section<Title> title = Sections.findSuccessor(s, Title.class);
+				Section<Title> title = Sections.successor(s, Title.class);
 				if (title == null) {
 					messages.add(Utils.missingTitleError(Introduction.class.getSimpleName()));
 				}
@@ -71,13 +71,13 @@ public class Introduction extends BlockMarkupType {
 					messages.add(Utils.missingTitleError(Introduction.class.getSimpleName()));
 				}
 
-				Section<PlainText> plain = Sections.findSuccessor(s, PlainText.class);
+				Section<PlainText> plain = Sections.successor(s, PlainText.class);
 				if (plain == null) {
 					messages.add(Utils.missingContentWarning(
 							Introduction.class.getSimpleName()));
 				}
 
-				Section<Image> pic = Sections.findSuccessor(s, Image.class);
+				Section<Image> pic = Sections.successor(s, Image.class);
 				if (pic == null) {
 					messages.add(Utils.missingPictureNotice(
 							Introduction.class.getSimpleName()));

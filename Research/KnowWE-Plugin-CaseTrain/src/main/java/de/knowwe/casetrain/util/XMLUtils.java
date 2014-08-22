@@ -178,12 +178,12 @@ public class XMLUtils {
 
 		List<Section<de.knowwe.casetrain.evaluation.Evaluation>> found =
 				new ArrayList<Section<de.knowwe.casetrain.evaluation.Evaluation>>();
-		Sections.findSuccessorsOfType(
+		Sections.successors(
 				articleSec, de.knowwe.casetrain.evaluation.Evaluation.class, found);
 
 		for (Section<de.knowwe.casetrain.evaluation.Evaluation> infoSec : found) {
 			List<Section<?>> childs =
-					Sections.findSuccessor(infoSec, BlockMarkupContent.class).getChildren();
+					Sections.successor(infoSec, BlockMarkupContent.class).getChildren();
 			SimpleSection simpleSec = fac.createSimpleSection();
 			simpleSec.setQuestions(fac.createBasicSectionQuestions());
 
@@ -244,7 +244,7 @@ public class XMLUtils {
 			EvaluationEnd end = fac.createCaseEvaluationEvaluationEnd();
 
 			Section<de.knowwe.casetrain.evaluation.EvaluationEnd> evoEnd =
-					Sections.findSuccessor(infoSec,
+					Sections.successor(infoSec,
 							de.knowwe.casetrain.evaluation.EvaluationEnd.class);
 
 			if (evoEnd == null) {
@@ -254,8 +254,8 @@ public class XMLUtils {
 			}
 
 			if (evoEnd != null) {
-				Section<Title> tit = Sections.findSuccessor(evoEnd, Title.class);
-				Section<PlainText> con = Sections.findSuccessor(evoEnd, PlainText.class);
+				Section<Title> tit = Sections.successor(evoEnd, Title.class);
+				Section<PlainText> con = Sections.successor(evoEnd, PlainText.class);
 				end.setTitle(XMLUtils.clearPlainText(tit));
 				// Does this work?
 				// end.getContentOrMultimediaItemOrFormula().add(XMLUtils.clearPlainText(con));
@@ -279,8 +279,8 @@ public class XMLUtils {
 
 		Section<?> introSec = null;
 
-		if (elementName.equals("Intro")) introSec = Sections.findSuccessor(sec, Introduction.class);
-		if (elementName.equals("Extro")) introSec = Sections.findSuccessor(sec, Closure.class);
+		if (elementName.equals("Intro")) introSec = Sections.successor(sec, Introduction.class);
+		if (elementName.equals("Extro")) introSec = Sections.successor(sec, Closure.class);
 
 		if (introSec == null) return;
 		XMLUtils.addTitledmmmixedcontent(c, introSec, fac);
@@ -299,13 +299,13 @@ public class XMLUtils {
 
 		if (Sections.hasType(introSec, BlockMarkupType.class)) {
 			Section<BlockMarkupContent> s =
-					Sections.findSuccessor(introSec, BlockMarkupContent.class);
+					Sections.successor(introSec, BlockMarkupContent.class);
 			contentChildren = s.getChildren();
 		}
 
 		if (Sections.hasType(introSec, SubblockMarkup.class)) {
 			Section<SubblockMarkupContent> s =
-					Sections.findSuccessor(introSec, SubblockMarkupContent.class);
+					Sections.successor(introSec, SubblockMarkupContent.class);
 			contentChildren = s.getChildren();
 		}
 
@@ -369,11 +369,11 @@ public class XMLUtils {
 			Case c, Section<RootType> articleSec, ObjectFactory fac) {
 		Metadata metaObj = fac.createCaseMetadata();
 
-		Section<MetaData> meta = Sections.findSuccessor(articleSec, MetaData.class);
+		Section<MetaData> meta = Sections.successor(articleSec, MetaData.class);
 		if (meta == null) return;
 
 		List<Section<MetaLine>> lines = new ArrayList<Section<MetaLine>>();
-		Sections.findSuccessorsOfType(meta, MetaLine.class, lines);
+		Sections.successors(meta, MetaLine.class, lines);
 
 		List<String> todos = new ArrayList<String>();
 		HashMap<String, String> scoreAtts = new HashMap<String, String>();
@@ -382,12 +382,12 @@ public class XMLUtils {
 		String attName = "";
 		String attContent = "";
 		for (Section<MetaLine> line : lines) {
-			Section<AttributeName> attributeName = Sections.findSuccessor(line,
+			Section<AttributeName> attributeName = Sections.successor(line,
 					AttributeName.class);
 			if (attributeName == null) continue;
 
 			attName = attributeName.getText().trim();
-			attContent = Sections.findSuccessor(line, AttributeContent.class).getText().trim();
+			attContent = Sections.successor(line, AttributeContent.class).getText().trim();
 
 			if (attName.equals(MetaAttributes.CASE_TODO)) {
 				todos.add(attContent);
@@ -495,10 +495,10 @@ public class XMLUtils {
 			ObjectFactory fac) {
 
 		List<Section<Info>> infoSecs = new ArrayList<Section<Info>>();
-		Sections.findSuccessorsOfType(articleSec, Info.class, infoSecs);
+		Sections.successors(articleSec, Info.class, infoSecs);
 
 		for (Section<Info> infoSec : infoSecs) {
-			List<Section<?>> childs = Sections.findSuccessor(infoSec,
+			List<Section<?>> childs = Sections.successor(infoSec,
 					BlockMarkupContent.class).getChildren();
 			SimpleSection simpleSec = fac.createSimpleSection();
 			simpleSec.setQuestions(fac.createBasicSectionQuestions());
@@ -567,7 +567,7 @@ public class XMLUtils {
 		List<JAXBElement<? extends BasicQuestion>> questionsList = questions.getOCQuestionOrMCQuestionOrHLMMCQuestion();
 
 		Section<?> frage = frageChilds.get(0);
-		Section<?> fragetyp = Sections.findSuccessor(frage, QuestionType.class);
+		Section<?> fragetyp = Sections.successor(frage, QuestionType.class);
 		String typ = fragetyp.getText().trim();
 
 		if (typ.equals(AnswersBlockValidator.OC)) {
@@ -640,8 +640,8 @@ public class XMLUtils {
 
 		Section<?> frage = frageChilds.remove(0);
 		// Section<?> fragetyp = Sections.findSuccessor(frage, FrageTyp.class);
-		Section<?> frageGewicht = Sections.findSuccessor(frage, QuestionWeight.class);
-		Section<?> frageText = Sections.findSuccessor(frage, QuestionText.class);
+		Section<?> frageGewicht = Sections.successor(frage, QuestionWeight.class);
+		Section<?> frageText = Sections.successor(frage, QuestionText.class);
 
 		String weight = frageGewicht.getText().trim();
 		question.setWeight(new BigDecimal(weight));
@@ -687,7 +687,7 @@ public class XMLUtils {
 		String postfix = null;
 		String praefix = null;
 		String heading = null;
-		for (Section<?> s : Sections.findSuccessor(
+		for (Section<?> s : Sections.successor(
 				antworten, SubblockMarkupContent.class).getChildren()) {
 
 			if (Sections.hasType(s, PlainText.class)
@@ -699,18 +699,18 @@ public class XMLUtils {
 			String negFactor = AnswerLine.getNegFactor((Section<AnswerLine>) s);
 
 			// AntwortText
-			Section<AnswerText> text = Sections.findSuccessor(s, AnswerText.class);
+			Section<AnswerText> text = Sections.successor(s, AnswerText.class);
 			String antwortText = "";
 			if (text != null) antwortText = text.getText();
 
 			// AntwortTextArgument
 			String textArgString = null;
-			Section<AnswerTextArgument> textArg = Sections.findSuccessor(s,
+			Section<AnswerTextArgument> textArg = Sections.successor(s,
 					AnswerTextArgument.class);
 			if (textArg != null) textArgString = textArg.getText().trim();
 
 			// SimpleFeedback
-			Section<AnswerExplanation> erklaerung = Sections.findSuccessor(s,
+			Section<AnswerExplanation> erklaerung = Sections.successor(s,
 					AnswerExplanation.class);
 			String erkl = null;
 			if (erklaerung != null) {
@@ -720,15 +720,15 @@ public class XMLUtils {
 
 			// Postfix Praefix Ueberschrift
 			Section<AnswersBlock.Postfix> post =
-					Sections.findSuccessor(s, AnswersBlock.Postfix.class);
+					Sections.successor(s, AnswersBlock.Postfix.class);
 			if (post != null) postfix = post.getText().trim();
 
 			Section<AnswersBlock.Praefix> prae =
-					Sections.findSuccessor(s, AnswersBlock.Praefix.class);
+					Sections.successor(s, AnswersBlock.Praefix.class);
 			if (prae != null) praefix = prae.getText().trim();
 
 			Section<AnswersBlock.Heading> head =
-					Sections.findSuccessor(s, AnswersBlock.Heading.class);
+					Sections.successor(s, AnswersBlock.Heading.class);
 			if (head != null) heading = head.getText().trim();
 
 			ants.add(new AnswerAttributeStore(posFactor, negFactor,
@@ -782,7 +782,7 @@ public class XMLUtils {
 			if (heading != null) ans.setAnswerCaption(heading);
 
 			Section<AnswersBlockWeightMark> aBWMark =
-					Sections.findSuccessor(antworten, AnswersBlockWeightMark.class);
+					Sections.successor(antworten, AnswersBlockWeightMark.class);
 			if (aBWMark != null) ans.setWeight(new BigDecimal(
 					AnswersBlock.getWeight(aBWMark.getText())));
 
@@ -826,7 +826,7 @@ public class XMLUtils {
 			if (heading != null) ans.setAnswerCaption(heading);
 
 			Section<AnswersBlockWeightMark> aBWMark =
-					Sections.findSuccessor(antworten, AnswersBlockWeightMark.class);
+					Sections.successor(antworten, AnswersBlockWeightMark.class);
 			if (aBWMark != null) ans.setWeight(new BigDecimal(
 					AnswersBlock.getWeight(aBWMark.getText())));
 
@@ -907,7 +907,7 @@ public class XMLUtils {
 
 		List<Object> itList = it.getContentOrMultimediaItemOrFormula();
 
-		for (Section<?> s : Sections.findSuccessor(sec, SubblockMarkupContent.class).getChildren()) {
+		for (Section<?> s : Sections.successor(sec, SubblockMarkupContent.class).getChildren()) {
 
 			if (Sections.hasType(s, PlainText.class)) {
 				XMLUtils.clearPlainText(s, itList);
@@ -934,7 +934,7 @@ public class XMLUtils {
 
 		List<Object> itList = it.getContent();
 
-		for (Section<?> s : Sections.findSuccessor(sec, SubblockMarkupContent.class).getChildren()) {
+		for (Section<?> s : Sections.successor(sec, SubblockMarkupContent.class).getChildren()) {
 
 			if (Sections.hasType(s, PlainText.class)) {
 				XMLUtils.clearPlainText(s, itList);

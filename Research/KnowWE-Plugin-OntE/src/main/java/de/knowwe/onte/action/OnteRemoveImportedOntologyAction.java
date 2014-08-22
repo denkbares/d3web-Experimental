@@ -21,7 +21,7 @@ public class OnteRemoveImportedOntologyAction extends AbstractAction {
 		String sectionID = context.getParameter("section");
 
 		if (sectionID != null && !sectionID.trim().isEmpty()) {
-			Section<? extends AbstractType> section = (Section<? extends AbstractType>) Sections.getSection(sectionID);
+			Section<? extends AbstractType> section = (Section<? extends AbstractType>) Sections.get(sectionID);
 			String articleName = section.getTitle();
 
 			// ... lock the page to avoid changes by other users ...
@@ -44,7 +44,7 @@ public class OnteRemoveImportedOntologyAction extends AbstractAction {
 
 				Map<String, String> nodesMap = new HashMap<String, String>();
 				nodesMap.put(section.getID(), "");
-				Sections.replaceSections(context, nodesMap).sendErrors(context);
+				Sections.replace(context, nodesMap).sendErrors(context);
 				// mgr.replaceKDOMNodesSaveAndBuild(context, articleName,
 				// nodesMap);
 

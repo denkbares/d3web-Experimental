@@ -257,7 +257,7 @@ public class GetPersonalDataAction extends AbstractAction {
 			ids.add("med" + i);
 		}
 		// last change on emergencyplan
-		for (Section<TableEntryType> table : Sections.findChildrenOfType(dataPage.getRootSection(),
+		for (Section<TableEntryType> table : Sections.children(dataPage.getRootSection(),
 				TableEntryType.class)) {
 			String id = DefaultMarkupType.getAnnotation(table, "tableid");
 			String date = DefaultMarkupType.getAnnotation(table, "date");
@@ -338,7 +338,7 @@ public class GetPersonalDataAction extends AbstractAction {
 		// UserUtilities.getDataPage(user).getRootSection();
 		// xml.append(SEP + "Bewertungen" + LS + SEP);
 		// for (Section<ReadbuttonType> readButton :
-		// Sections.findChildrenOfType(dataPage,
+		// Sections.children(dataPage,
 		// ReadbuttonType.class)) {
 		// String id = DefaultMarkupType.getAnnotation(readButton, "id");
 		// String page = DefaultMarkupType.getAnnotation(readButton, "page");

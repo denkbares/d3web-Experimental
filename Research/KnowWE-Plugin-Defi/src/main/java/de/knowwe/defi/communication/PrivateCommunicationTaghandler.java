@@ -43,7 +43,7 @@ public class PrivateCommunicationTaghandler extends AbstractTagHandler {
 		if (Environment.getInstance().getWikiConnector().doesArticleExist(forumPagename)) {
 			Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 					forumPagename);
-			forum = Sections.findSuccessor(article.getRootSection(),
+			forum = Sections.successor(article.getRootSection(),
 					Forum.class);
 		}
 

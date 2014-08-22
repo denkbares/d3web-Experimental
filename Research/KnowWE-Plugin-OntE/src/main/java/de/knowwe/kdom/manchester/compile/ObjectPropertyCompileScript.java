@@ -58,7 +58,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 
 		if (type.hasRange(section)) { // Handle Range
 			Section<?> desc = type.getRange(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
@@ -81,7 +81,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 
 		if (type.hasDomain(section)) { // Handle Domain
 			Section<?> desc = type.getDomain(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
@@ -103,7 +103,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 		}
 		if (type.hasInverseOf(section)) { // Handle InverseOf
 			Section<?> desc = type.getInverseOf(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
@@ -124,7 +124,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 		}
 		if (type.hasSubPropertyOf(section)) { // Handle SubPropertyOf
 			Section<?> desc = type.getSubPropertyOf(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
@@ -146,7 +146,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 
 		if (type.hasEquivalentTo(section)) { // Handle EquivalentTo
 			Section<?> desc = type.getEquivalentTo(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 			if (mce == null) {
 				messages.add(Messages.syntaxError("EquivalentTo is empty!"));
@@ -167,7 +167,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 
 		if (type.hasDisjointWith(section)) { // handle DisjointWith
 			Section<?> desc = type.getDisjointWith(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+			Section<ManchesterClassExpression> mce = Sections.successor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
@@ -210,7 +210,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 		if (type.hasSubPropertyChain(section)) { // Handle SubPropertyChain
 			Section<?> chain = type.getSubPropertyChain(section);
 
-			List<Section<ObjectPropertyExpression>> objectProperties = Sections.findSuccessorsOfType(
+			List<Section<ObjectPropertyExpression>> objectProperties = Sections.successors(
 					chain,
 					ObjectPropertyExpression.class);
 			if (objectProperties.isEmpty()) {
