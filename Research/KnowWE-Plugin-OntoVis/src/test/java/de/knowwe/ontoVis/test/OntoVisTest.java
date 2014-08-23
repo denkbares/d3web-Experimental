@@ -303,6 +303,10 @@ public class OntoVisTest {
 
 		parameterMap.put(OntoGraphDataBuilder.FILTERED_RELATIONS, "si:child");
 
+		parameterMap.put(OntoGraphDataBuilder.SHOW_INVERSE, "false");
+
+		parameterMap.put(OntoGraphDataBuilder.FILTERED_RELATIONS, "si:child");
+
 		parameterMap.put(OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, "true");
 
 		parameterMap.put(OntoGraphDataBuilder.USE_LABELS, "true");
@@ -414,6 +418,53 @@ public class OntoVisTest {
 				"Generated dot-source does not match (sorted-bytes) expected dot-source.",
 				expectedBytes, generatedBytes);
 	}
+
+	@Test
+	public void test_Inverse() {
+		Map<String, String> parameterMap = new HashMap<String, String>();
+
+		parameterMap.put(OntoGraphDataBuilder.CONCEPT, "si:marge");
+
+		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "rdf:type, onto:_checkChain3, owl:sameAs, si:father, si:mother, si:gender, si:livesIn");
+
+		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "owl:Thing, owl:Nothing");
+
+		parameterMap.put(OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, "false");
+
+		parameterMap.put(OntoGraphDataBuilder.USE_LABELS, "true");
+
+		parameterMap.put(OntoGraphDataBuilder.SHOW_INVERSE, "false");
+
+		OntoGraphDataBuilder ontoGraphDataBuilder = new OntoGraphDataBuilder("", null,
+				parameterMap,
+				new DummyLinkToTermDefinitionProvider(), rdfRepository);
+
+		ontoGraphDataBuilder.createData();
+
+		String generatedSource = ontoGraphDataBuilder.getSource().trim();
+		String expectedSource = null;
+		try {
+			expectedSource = Strings.readFile(new File("src/test/resources/graph-Marge.dot")).trim();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// the expressions do not have constant order within the dot-code
+		// therefore we need some fuzzy-compare
+
+		assertEquals(
+				"Length of generated dot-source does not match length of expected dot-source.",
+				String.valueOf(expectedSource).length(),
+				String.valueOf(generatedSource).length());
+		List<Byte> expectedBytes = asSortedByteList(expectedSource);
+		List<Byte> generatedBytes = asSortedByteList(generatedSource);
+
+		assertEquals(
+				"Generated dot-source does not match (sorted-bytes) expected dot-source.",
+				expectedBytes, generatedBytes);
+	}
+
 
 	private List<Byte> asSortedByteList(String expectedSource) {
 		byte[] bytes = expectedSource.getBytes();
