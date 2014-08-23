@@ -23,6 +23,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.ontology.compile.OntologyCompiler;
 import de.knowwe.rdf2go.Rdf2GoCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdfs.vis.GraphReRenderer;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
 import de.knowwe.rdfs.vis.util.Utils;
@@ -34,6 +35,20 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 
 	@Override
 	public void renderContents(Section<?> section, UserContext user, RenderResult string) {
+
+		// first check if this section is currently being rendered already (from GraphReRenderer)
+		// (only relevant if the current call to this method does not come from the GraphReRenderer itself)
+		if (GraphReRenderer.workerPool.containsKey(section.getID()) && user != null && string != null) {
+			Thread renderJob = GraphReRenderer.workerPool.get(section.getID());
+			// if that is the case, wait for the GraphReRenderer
+			try {
+				renderJob.join();
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
 		String realPath;
 		if (user != null) {
 			ServletContext servletContext = user.getServletContext();
@@ -269,6 +284,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		String textHash = String.valueOf(section.getText().hashCode());
 
 		OntologyCompiler ontoCompiler = Compilers.getCompiler(section, OntologyCompiler.class);
+		if (ontoCompiler == null) return;
 		String compHash = String.valueOf(ontoCompiler.getCompileSection().getTitle().hashCode());
 
 		String fileID = "_" + textHash + "_" + compHash;

@@ -22,8 +22,10 @@ package de.knowwe.rdfs.vis;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import de.d3web.strings.Strings;
 import de.knowwe.core.ArticleManager;
@@ -48,6 +50,8 @@ public class GraphReRenderer implements EventListener {
 	private static GraphReRenderer gr;
 	private static ArticleManager am;
 	private static String fileDirPath;
+
+	public static Map<String, Thread> workerPool = new HashMap<>();
 
 	private GraphReRenderer() {}
 
@@ -86,25 +90,40 @@ public class GraphReRenderer implements EventListener {
                 // re-render all OntoVisType-sections
                 Collection<Section<? extends Type>> sections = Sections.successors(am, OntoVisType.class);
                 for (Section<? extends Type> s : sections) {
-//			Section<OntoVisType> section = Sections.cast(s, OntoVisType.class);
-//			section.get().getRenderer().render(section, null, null);
-                    new OntoVisTypeRenderer().renderContents(s, null, null);
+					Runnable renderSection = new Runnable() {
+						@Override
+						public void run() {
+							//Section<OntoVisType> section = Sections.cast(s, OntoVisType.class);
+							//section.get().getRenderer().render(section, null, null);
+							new OntoVisTypeRenderer().renderContents(s, null, null);
+							workerPool.remove(s.getID());
+						}
+					};
+					Thread renderThread = new Thread(renderSection);
+					workerPool.put(s.getID(), renderThread);
+					renderThread.start();
                 }
 
                 // re-render all SparqlVisType-sections
                 sections = Sections.successors(am, SparqlVisContentType.class);
                 for (Section<? extends Type> s : sections) {
-//			Section<SparqlVisType> section = Sections.cast(s, SparqlVisType.class);
-//			section.get().getRenderer().render(section, null, null);
-                    new SparqlVisTypeRenderer().render(s, null, null);
+					Runnable renderSection = new Runnable() {
+						@Override
+						public void run() {
+							//Section<SparqlVisType> section = Sections.cast(s, SparqlVisType.class);
+							//section.get().getRenderer().render(section, null, null);
+							new SparqlVisTypeRenderer().render(s, null, null);
+							workerPool.remove(s.getID());
+						}
+					};
+					Thread renderThread = new Thread(renderSection);
+					workerPool.put(s.getID(), renderThread);
+					renderThread.start();
                 }
             }
         };
         Thread runner = new Thread(renderJob);
         runner.start();
-
-
-
 	}
 
 	private static List<File> findAllFilesForCompiler(String fileDirPath, String hash) {
@@ -125,4 +144,5 @@ public class GraphReRenderer implements EventListener {
 		}
 		return result;
 	}
+
 }

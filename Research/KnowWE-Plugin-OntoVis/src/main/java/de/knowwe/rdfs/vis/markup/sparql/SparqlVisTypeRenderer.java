@@ -36,6 +36,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.ontology.compile.OntologyCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
+import de.knowwe.rdfs.vis.GraphReRenderer;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 import de.knowwe.rdfs.vis.markup.OntoVisType;
 import de.knowwe.rdfs.vis.markup.VisConfigType;
@@ -57,6 +58,18 @@ public class SparqlVisTypeRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> content, UserContext user, RenderResult string) {
+		// first check if this section is currently being rendered already (from GraphReRenderer)
+		// (only relevant if the current call to this method does not come from the GraphReRenderer itself)
+		if (GraphReRenderer.workerPool.containsKey(content.getID()) && user != null && string != null) {
+			Thread renderJob = GraphReRenderer.workerPool.get(content.getID());
+			// if that is the case, wait for the GraphReRenderer
+			try {
+				renderJob.join();
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 
 		Section<SparqlVisType> section = Sections.ancestor(content,
 				SparqlVisType.class);
