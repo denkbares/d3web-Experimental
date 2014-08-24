@@ -22,10 +22,14 @@ package de.knowwe.rdfs.vis;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import de.d3web.strings.Strings;
 import de.knowwe.core.ArticleManager;
@@ -51,15 +55,19 @@ public class GraphReRenderer implements EventListener {
 	private static ArticleManager am;
 	private static String fileDirPath;
 
-	public static Map<String, Thread> workerPool = new HashMap<>();
+	public static Map<String, Future> workerPool = Collections.synchronizedMap(new HashMap<>());
+	private static ExecutorService es;
 
-	private GraphReRenderer() {}
+	private GraphReRenderer() {
+	}
 
 	public static GraphReRenderer getInstance(ArticleManager am, String fileDirPath) {
 		if (gr == null) {
 			gr = new GraphReRenderer();
 			GraphReRenderer.am = am;
 			GraphReRenderer.fileDirPath = fileDirPath;
+			es = Executors.newFixedThreadPool(Math.max(1,
+					Runtime.getRuntime().availableProcessors() - 1));
 		}
 		return gr;
 	}
@@ -77,19 +85,28 @@ public class GraphReRenderer implements EventListener {
 		OntologyCompiler oc = e.getCompiler();
 		String hash = String.valueOf(oc.getCompileSection().getTitle().hashCode());
 
-        Runnable renderJob = new Runnable() {
-            @Override
-            public void run() {
-                // delete all graph-files that are based on this compiler hash
-                List<File> files = findAllFilesForCompiler(fileDirPath, hash);
-                for (File f : files) {
-                    f.delete();
-                    // System.out.println(f.getName() + " - Deleted? " + f.delete());
-                }
+		// if the GraphReRenderer is currently still working on old rendering tasks, interrupt and
+		// cancel all of them
+		if (!workerPool.isEmpty()) {
+			for (Future f : workerPool.values()) {
+				f.cancel(true);
+			}
+			workerPool.clear();
+		}
 
-                // re-render all OntoVisType-sections
-                Collection<Section<? extends Type>> sections = Sections.successors(am, OntoVisType.class);
-                for (Section<? extends Type> s : sections) {
+		Runnable renderJob = new Runnable() {
+			@Override
+			public void run() {
+				// delete all graph-files that are based on this compiler hash
+				List<File> files = findAllFilesForCompiler(fileDirPath, hash);
+				for (File f : files) {
+					f.delete();
+					// System.out.println(f.getName() + " - Deleted? " + f.delete());
+				}
+
+				// re-render all OntoVisType-sections
+				Collection<Section<? extends Type>> sections = Sections.successors(am, OntoVisType.class);
+				for (Section<? extends Type> s : sections) {
 					Runnable renderSection = new Runnable() {
 						@Override
 						public void run() {
@@ -99,14 +116,13 @@ public class GraphReRenderer implements EventListener {
 							workerPool.remove(s.getID());
 						}
 					};
-					Thread renderThread = new Thread(renderSection);
-					workerPool.put(s.getID(), renderThread);
-					renderThread.start();
-                }
+					Future futureRenderTask = es.submit(renderSection);
+					workerPool.put(s.getID(), futureRenderTask);
+				}
 
-                // re-render all SparqlVisType-sections
-                sections = Sections.successors(am, SparqlVisContentType.class);
-                for (Section<? extends Type> s : sections) {
+				// re-render all SparqlVisType-sections
+				sections = Sections.successors(am, SparqlVisContentType.class);
+				for (Section<? extends Type> s : sections) {
 					Runnable renderSection = new Runnable() {
 						@Override
 						public void run() {
@@ -116,14 +132,13 @@ public class GraphReRenderer implements EventListener {
 							workerPool.remove(s.getID());
 						}
 					};
-					Thread renderThread = new Thread(renderSection);
-					workerPool.put(s.getID(), renderThread);
-					renderThread.start();
-                }
-            }
-        };
-        Thread runner = new Thread(renderJob);
-        runner.start();
+					Future futureRenderTask = es.submit(renderSection);
+					workerPool.put(s.getID(), futureRenderTask);
+				}
+			}
+		};
+		Thread runner = new Thread(renderJob);
+		runner.start();
 	}
 
 	private static List<File> findAllFilesForCompiler(String fileDirPath, String hash) {

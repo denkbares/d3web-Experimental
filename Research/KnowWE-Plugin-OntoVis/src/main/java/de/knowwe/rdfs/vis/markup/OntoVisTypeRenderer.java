@@ -3,6 +3,8 @@ package de.knowwe.rdfs.vis.markup;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import javax.servlet.ServletContext;
 
@@ -39,12 +41,15 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		// first check if this section is currently being rendered already (from GraphReRenderer)
 		// (only relevant if the current call to this method does not come from the GraphReRenderer itself)
 		if (GraphReRenderer.workerPool.containsKey(section.getID()) && user != null && string != null) {
-			Thread renderJob = GraphReRenderer.workerPool.get(section.getID());
+			Future renderJob = GraphReRenderer.workerPool.get(section.getID());
 			// if that is the case, wait for the GraphReRenderer
 			try {
-				renderJob.join();
+				renderJob.get();
 			}
 			catch (InterruptedException e) {
+				return;
+			}
+			catch (ExecutionException e) {
 				e.printStackTrace();
 			}
 		}
@@ -83,6 +88,8 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 			rdfRepository = compiler.getRdf2GoCore();
 			uriProvider = new PackageCompileLinkToTermDefinitionProvider();
 		}
+
+		if (Thread.currentThread().isInterrupted()) return;
 
 		// find and read config file if defined
 		String configName = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONFIG);
@@ -290,6 +297,8 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		String fileID = "_" + textHash + "_" + compHash;
 
 		parameterMap.put(OntoGraphDataBuilder.FILE_ID, fileID);
+
+		if (Thread.currentThread().isInterrupted()) return;
 
 		OntoGraphDataBuilder builder = new OntoGraphDataBuilder(realPath, section, parameterMap,
 				uriProvider,

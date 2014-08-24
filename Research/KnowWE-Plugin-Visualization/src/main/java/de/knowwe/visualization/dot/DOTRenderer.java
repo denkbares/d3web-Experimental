@@ -540,7 +540,8 @@ public class DOTRenderer {
             }
 
         } catch (InterruptedException e) {
-            Log.warning(e.getMessage(), e);
+			//Thread was interrupted by GraphReRenderer
+            //Log.warning(e.getMessage(), e);
         }
     }
 

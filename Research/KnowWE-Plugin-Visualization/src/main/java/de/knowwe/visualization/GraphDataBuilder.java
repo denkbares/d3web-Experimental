@@ -205,8 +205,12 @@ public abstract class GraphDataBuilder<T extends Object> {
 	}
 
 	public void createData() {
+		if (Thread.currentThread().isInterrupted()) return;
+
 		// select the relevant sub-graph from the overall rdf-graph
 		selectGraphData();
+
+		if (Thread.currentThread().isInterrupted()) return;
 
 		// create the source representation using the configured source-renderer
 		this.sourceRenderer.generateSource();
@@ -229,7 +233,7 @@ public abstract class GraphDataBuilder<T extends Object> {
 			// System.out.println("Could cache data for: " + parameters.get(FILE_ID));
 		}
 
-		if (builder != null) {
+		if (builder != null && !Thread.currentThread().isInterrupted()) {
 			builder.appendHtml(sourceRenderer.getHTMLIncludeSnipplet());
 		}
 	}

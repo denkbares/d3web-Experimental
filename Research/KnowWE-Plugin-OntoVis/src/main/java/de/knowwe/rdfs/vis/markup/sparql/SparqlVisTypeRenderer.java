@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import javax.servlet.ServletContext;
 
@@ -61,12 +64,15 @@ public class SparqlVisTypeRenderer implements Renderer {
 		// first check if this section is currently being rendered already (from GraphReRenderer)
 		// (only relevant if the current call to this method does not come from the GraphReRenderer itself)
 		if (GraphReRenderer.workerPool.containsKey(content.getID()) && user != null && string != null) {
-			Thread renderJob = GraphReRenderer.workerPool.get(content.getID());
+			Future renderJob = GraphReRenderer.workerPool.get(content.getID());
 			// if that is the case, wait for the GraphReRenderer
 			try {
-				renderJob.join();
+				renderJob.get();
 			}
 			catch (InterruptedException e) {
+				return;
+			}
+			catch (ExecutionException e) {
 				e.printStackTrace();
 			}
 		}
@@ -95,6 +101,8 @@ public class SparqlVisTypeRenderer implements Renderer {
 		}
 
 		Map<String, String> parameterMap = new HashMap<String, String>();
+
+		if (Thread.currentThread().isInterrupted()) return;
 
 		// find and read config file if defined
 		String configName = SparqlVisType.getAnnotation(section, SparqlVisType.ANNOTATION_CONFIG);
@@ -261,6 +269,8 @@ public class SparqlVisTypeRenderer implements Renderer {
 			parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, addToDOT);
 		}
 
+		if (Thread.currentThread().isInterrupted()) return;
+
 		LinkToTermDefinitionProvider uriProvider;
 		String globalAnnotation = DefaultMarkupType.getAnnotation(section, Rdf2GoCore.GLOBAL);
 		if (globalAnnotation != null && globalAnnotation.equals("true")) {
@@ -323,7 +333,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 		// render content
 		String renderedContent = "";
 
-		if (data != null) {
+		if (data != null && !Thread.currentThread().isInterrupted()) {
 
 			// current default source renderer is DOT
 			GraphVisualizationRenderer graphRenderer = new DOTVisualizationRenderer(data,
@@ -345,7 +355,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 					string);
 		}
 
-		if (string != null) {
+		if (string != null && !Thread.currentThread().isInterrupted()) {
 			string.appendHtml(renderedContent);
 		}
 
