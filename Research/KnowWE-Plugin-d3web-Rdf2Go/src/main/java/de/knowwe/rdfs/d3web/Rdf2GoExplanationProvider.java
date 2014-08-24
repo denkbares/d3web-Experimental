@@ -52,7 +52,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
  * Provides explanation utility methods.
- * <p/>
+ * <p>
  * Created by Albrecht Striffler (denkbares GmbH) on 22.07.14.
  */
 public class Rdf2GoExplanationProvider {
@@ -65,7 +65,7 @@ public class Rdf2GoExplanationProvider {
 		this.sessionId = sessionId;
 	}
 
-	public Collection<Fact> getSources(String objectName) {
+	public Collection<Fact> getPredecessorFacts(String objectName) {
 		Collection<Fact> facts = new ArrayList<>();
 		SparqlQuery query = new SparqlQuery().SELECT("?SourceObjectName ?SourceValue ?Agent ?AgentType ?SourceObjectType")
 				.WHERE("<lns:" + sessionId + "> lns:hasFact ?Fact")
@@ -77,7 +77,7 @@ public class Rdf2GoExplanationProvider {
 				.AND_WHERE("?OtherFact lns:hasValue ?SourceValue")
 				.AND_WHERE("?OtherFact prov:wasAttributedTo ?Agent")
 				.AND_WHERE("?Agent rdf:type ?AgentType");
-		QueryResultTable queryRows = core.sparqlSelect(query.toSparql(core), false, 100);
+		QueryResultTable queryRows = core.sparqlSelect(query.toSparql(core), false, 1000);
 		for (QueryRow queryRow : queryRows) {
 			Fact fact = new Fact();
 			fact.terminologyObject = queryRow.getValue("SourceObjectName").toString();
@@ -162,20 +162,20 @@ public class Rdf2GoExplanationProvider {
 		return fact;
 	}
 
-	public Collection<Fact> getLeafSources(String objectName) {
-		HashSet<Fact> leaves = new HashSet<>();
-		getLeafSources(getFact(objectName), leaves);
-		return leaves;
+	public Collection<Fact> getSourceFacts(String objectName) {
+		HashSet<Fact> sources = new HashSet<>();
+		getSourceFacts(getFact(objectName), sources);
+		return sources;
 	}
 
-	private void getLeafSources(Fact currentFact, Set<Fact> leaves) {
-		Collection<Fact> sources = getSources(currentFact.terminologyObject);
-		if (sources.isEmpty()) {
-			leaves.add(currentFact);
+	private void getSourceFacts(Fact currentFact, Set<Fact> sources) {
+		Collection<Fact> predecessors = getPredecessorFacts(currentFact.terminologyObject);
+		if (predecessors.isEmpty()) {
+			sources.add(currentFact);
 			return;
 		}
-		for (Fact source : sources) {
-			getLeafSources(source, leaves);
+		for (Fact predecessor : predecessors) {
+			getSourceFacts(predecessor, sources);
 		}
 	}
 
