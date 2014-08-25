@@ -22,8 +22,12 @@ import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
 import de.d3web.utils.Log;
 import de.knowwe.core.Environment;
+import de.knowwe.core.compile.Compilers;
+import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
+import de.knowwe.ontology.compile.OntologyCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
@@ -55,7 +59,7 @@ public class Utils {
     public static String getRDFSLabel(Node concept, Rdf2GoCore repo, String languageTag) {
 
         // try to find language specific label
-        String label = getLanguageSpecifcLabel(concept, repo, languageTag);
+        String label = getLanguageSpecificLabel(concept, repo, languageTag);
 
         // otherwise use standard label
         if (label == null) {
@@ -80,7 +84,7 @@ public class Utils {
      * @return
      * @created 29.04.2013
      */
-    private static String getLanguageSpecifcLabel(Node concept, Rdf2GoCore repo, String languageTag) {
+    private static String getLanguageSpecificLabel(Node concept, Rdf2GoCore repo, String languageTag) {
         if (languageTag == null) return null;
         String label = null;
 
@@ -112,7 +116,6 @@ public class Utils {
         String label = null;
         String identifier = null;
 
-
 		/*
         1. case: Node is Literal
 		 */
@@ -136,14 +139,8 @@ public class Utils {
                 label = Strings.quote(label);
             }
 
-            String url = null;
-            if (!(type == GraphDataBuilder.NODE_TYPE.LITERAL || type == GraphDataBuilder.NODE_TYPE.BLANKNODE)) {
-                url = createConceptURL(identifier, parameters,
-                        section,
-                        uriProvider);
-            }
             RenderingStyle style = Utils.getStyle(type);
-            visNode = new ConceptNode(identifier, type, url, label, style);
+            visNode = new ConceptNode(identifier, type, null, label, style);
             if (insertNewNode) {
                 data.addConcept(visNode);
             }
@@ -165,9 +162,8 @@ public class Utils {
                 type = GraphDataBuilder.NODE_TYPE.BLANKNODE;
                 label = getIdentifierBNode(bNode);
                 RenderingStyle style = Utils.getStyle(type);
-                visNode = new ConceptNode(identifier, type, createConceptURL(identifier, parameters,
-                        section,
-                        uriProvider), label, style);
+
+                visNode = new ConceptNode(identifier, type, null, label, style);
                 if (insertNewNode) {
                     data.addConcept(visNode);
                 }
@@ -209,7 +205,7 @@ public class Utils {
                 Utils.setClassColorCoding(toURI, style, parameters, rdfRepository);
                 visNode = new ConceptNode(identifier, type, createConceptURL(identifier, parameters,
                         section,
-                        uriProvider), label, clazz, style);
+                        uriProvider, uri), label, clazz, style);
                 if (insertNewNode) {
                     data.addConcept(visNode);
                 }
@@ -268,19 +264,27 @@ public class Utils {
         return color;
     }
 
-    private static String createConceptURL(String to, Map<String, String> parameters, Section<?> s, LinkToTermDefinitionProvider uriProvider) {
+    private static String createConceptURL(String to, Map<String, String> parameters, Section<?> s, LinkToTermDefinitionProvider uriProvider, URI uri) {
         if (parameters.get(OntoGraphDataBuilder.LINK_MODE) != null) {
             if (parameters.get(OntoGraphDataBuilder.LINK_MODE).equals(
                     OntoGraphDataBuilder.LINK_MODE_BROWSE)) {
-                Identifier identifier = new Identifier(to);
-                String[] identifierParts = to.split(":");
+                final OntologyCompiler compiler = Compilers.getCompiler(s, OntologyCompiler.class);
+                final String shortURI = Rdf2GoUtils.reduceNamespace(compiler.getRdf2GoCore(), uri.toString());
+                Identifier identifier = new Identifier(shortURI);
+                String[] identifierParts = shortURI.split(":");
                 if (identifierParts.length == 2) {
                     identifier = new Identifier(
                             identifierParts[0], Strings.decodeURL(identifierParts[1]));
 
                 }
-                String url = uriProvider.getLinkToTermDefinition(identifier,
-                        parameters.get(OntoGraphDataBuilder.MASTER));
+
+                final TerminologyManager terminologyManager = compiler.getTerminologyManager();
+                final Section<?> termDefiningSection = terminologyManager.getTermDefiningSection(identifier);
+                if(termDefiningSection == null) {
+                    // we have no definition found
+                    return null;
+                }
+                String url = KnowWEUtils.getURLLink(termDefiningSection);
                 if (url != null) {
                     if (!url.startsWith("http:")) {
                         url = Environment.getInstance().getWikiConnector().getBaseUrl() + url;

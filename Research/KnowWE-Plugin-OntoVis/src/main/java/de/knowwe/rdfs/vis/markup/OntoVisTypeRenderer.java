@@ -255,13 +255,17 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer {
 		}
 
 		// set link mode
-		String linkModeValue = SparqlVisType.getAnnotation(section,
+		String linkModeAnnotationValue = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_LINK_MODE);
-		if (linkModeValue == null) {
+		if (linkModeAnnotationValue != null) {
 			// default link mode is 'jump'
-			linkModeValue = SparqlVisType.LinkMode.jump.name();
-			parameterMap.put(OntoGraphDataBuilder.LINK_MODE, linkModeValue);
+            parameterMap.put(OntoGraphDataBuilder.LINK_MODE, linkModeAnnotationValue);
 		}
+        // set default if none defined yet
+        if(parameterMap.get(OntoGraphDataBuilder.LINK_MODE) == null) {
+            parameterMap.put(OntoGraphDataBuilder.LINK_MODE, SparqlVisType.LinkMode.jump.name());
+        }
+
 
 		String successors = getSuccessors(section);
 		if (successors != null) {
