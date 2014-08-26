@@ -389,7 +389,7 @@ public class DOTRenderer {
         FileUtils.writeFile(dot, dotSource);
         // create svg
 
-        String command = getDOTApp(user_app_path) + " " + dot.getAbsolutePath() +
+        String command = "nice -19n "+getDOTApp(user_app_path) + " " + dot.getAbsolutePath() +
                 " -Tsvg -o " + svg.getAbsolutePath() + "";
         if (Utils.isWindows()) {
             command = getDOTApp(user_app_path) + " \"" + dot.getAbsolutePath() +
@@ -457,6 +457,7 @@ public class DOTRenderer {
      * @created 01.08.2012
      */
     private static void prepareSVG(final File svg, final int timeout) throws IOException {
+        Log.info("Starting write SVG: "+svg.getAbsolutePath());
         try {
 
             // check if svg file is closed, otherwise wait timeout second
@@ -490,6 +491,7 @@ public class DOTRenderer {
 
             XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
             xmlOutputter.output(doc, new FileWriter(svg));
+            Log.info("Finished writing SVG: "+svg.getAbsolutePath());
         } catch (JDOMException e) {
             Log.warning(e.getMessage(), e);
         } catch (InterruptedException e) {
