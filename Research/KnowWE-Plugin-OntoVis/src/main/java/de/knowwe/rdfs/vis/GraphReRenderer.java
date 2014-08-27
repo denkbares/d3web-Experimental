@@ -22,14 +22,8 @@ package de.knowwe.rdfs.vis;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import de.d3web.strings.Strings;
 import de.knowwe.core.ArticleManager;
@@ -55,9 +49,6 @@ public class GraphReRenderer implements EventListener {
 	private static ArticleManager am;
 	private static String fileDirPath;
 
-	public static Map<String, Future> workerPool = Collections.synchronizedMap(new HashMap<>());
-	private static ExecutorService es;
-
 	private GraphReRenderer() {
 	}
 
@@ -66,8 +57,6 @@ public class GraphReRenderer implements EventListener {
 			gr = new GraphReRenderer();
 			GraphReRenderer.am = am;
 			GraphReRenderer.fileDirPath = fileDirPath;
-			es = Executors.newFixedThreadPool(Math.max(1,
-					Runtime.getRuntime().availableProcessors() - 1));
 		}
 		return gr;
 	}
@@ -87,12 +76,7 @@ public class GraphReRenderer implements EventListener {
 
 		// if the GraphReRenderer is currently still working on old rendering tasks, interrupt and
 		// cancel all of them
-		if (!workerPool.isEmpty()) {
-			for (Future f : workerPool.values()) {
-				f.cancel(true);
-			}
-			workerPool.clear();
-		}
+		PreRenderWorker.getInstance().cancelAllRunningPreRenderTasks();
 
 		// delete all graph-files that are based on this compiler hash
 		List<File> files = findAllFilesForCompiler(fileDirPath, hash);
@@ -104,33 +88,13 @@ public class GraphReRenderer implements EventListener {
 		// re-render all OntoVisType-sections
 		Collection<Section<? extends Type>> sections = Sections.successors(am, OntoVisType.class);
 		for (Section<? extends Type> s : sections) {
-			Runnable renderSection = new Runnable() {
-				@Override
-				public void run() {
-					//Section<OntoVisType> section = Sections.cast(s, OntoVisType.class);
-					//section.get().getRenderer().render(section, null, null);
-					new OntoVisTypeRenderer().renderContents(s, null, null);
-					workerPool.remove(s.getID());
-				}
-			};
-			Future futureRenderTask = es.submit(renderSection);
-			workerPool.put(s.getID(), futureRenderTask);
+			PreRenderWorker.getInstance().preRenderSection(new OntoVisTypeRenderer(), s, null, null);
 		}
 
 		// re-render all SparqlVisType-sections
 		sections = Sections.successors(am, SparqlVisContentType.class);
 		for (Section<? extends Type> s : sections) {
-			Runnable renderSection = new Runnable() {
-				@Override
-				public void run() {
-					//Section<SparqlVisType> section = Sections.cast(s, SparqlVisType.class);
-					//section.get().getRenderer().render(section, null, null);
-					new SparqlVisTypeRenderer().render(s, null, null);
-					workerPool.remove(s.getID());
-				}
-			};
-			Future futureRenderTask = es.submit(renderSection);
-			workerPool.put(s.getID(), futureRenderTask);
+			PreRenderWorker.getInstance().preRenderSection(new SparqlVisTypeRenderer(), s, null, null);
 		}
 
 	}

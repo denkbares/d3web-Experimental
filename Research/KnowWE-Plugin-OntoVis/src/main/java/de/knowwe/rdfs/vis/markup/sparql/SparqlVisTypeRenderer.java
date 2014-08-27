@@ -6,9 +6,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import javax.servlet.ServletContext;
 
@@ -39,9 +36,10 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.ontology.compile.OntologyCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
-import de.knowwe.rdfs.vis.GraphReRenderer;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
+import de.knowwe.rdfs.vis.PreRenderWorker;
 import de.knowwe.rdfs.vis.markup.OntoVisType;
+import de.knowwe.rdfs.vis.markup.PreRenderer;
 import de.knowwe.rdfs.vis.markup.VisConfigType;
 import de.knowwe.rdfs.vis.util.Utils;
 import de.knowwe.visualization.ConceptNode;
@@ -53,7 +51,7 @@ import de.knowwe.visualization.d3.D3VisualizationRenderer;
 import de.knowwe.visualization.dot.DOTVisualizationRenderer;
 import de.knowwe.visualization.util.FileUtils;
 
-public class SparqlVisTypeRenderer implements Renderer {
+public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 
 	private static final boolean SHOW_LABEL_FOR_URI = false;
 
@@ -61,22 +59,261 @@ public class SparqlVisTypeRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> content, UserContext user, RenderResult string) {
-		// first check if this section is currently being rendered already (from GraphReRenderer)
-		// (only relevant if the current call to this method does not come from the GraphReRenderer itself)
-		if (GraphReRenderer.workerPool.containsKey(content.getID()) && user != null && string != null) {
-			Future renderJob = GraphReRenderer.workerPool.get(content.getID());
-			// if that is the case, wait for the GraphReRenderer
-			try {
-				renderJob.get();
+		PreRenderWorker.getInstance().preRenderSectionAndWait(this, content, user, string);
+	}
+
+	@Override
+	public void cacheGraph(Section<?> content, RenderResult string) {
+		Section<SparqlVisType> section = Sections.ancestor(content,
+				SparqlVisType.class);
+
+		List<Message> messages = new ArrayList<Message>();
+		Map<String, String> parameterMap = new HashMap<>();
+		setFileID(section, parameterMap);
+
+		createGraphAndAppendHTMLIncludeSnipplet(string, new SubGraphData(), parameterMap, messages);
+	}
+
+	private void createGraphAndAppendHTMLIncludeSnipplet(RenderResult string, SubGraphData data, Map<String, String> parameterMap, List<Message> messages) {
+		String renderedContent = "";
+
+		if (data != null && !Thread.currentThread().isInterrupted()) {
+
+			// current default source renderer is DOT
+			GraphVisualizationRenderer graphRenderer = new DOTVisualizationRenderer(data,
+					parameterMap);
+			String renderer = parameterMap.get(OntoGraphDataBuilder.RENDERER);
+			if (renderer != null && renderer.equals(GraphDataBuilder.Renderer.d3.name())) {
+				graphRenderer = new D3VisualizationRenderer(data, parameterMap);
 			}
-			catch (InterruptedException e) {
-				return;
+
+			// re-use graph if possible
+			if (!FileUtils.filesAlreadyRendered(graphRenderer.getGraphFilePath())) {
+				graphRenderer.generateSource();
 			}
-			catch (ExecutionException e) {
-				e.printStackTrace();
-			}
+			renderedContent = graphRenderer.getHTMLIncludeSnipplet();
+
+		}
+		if (messages.size() > 0 && string != null) {
+			DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, messages,
+					string);
 		}
 
+		if (string != null && !Thread.currentThread().isInterrupted()) {
+			string.appendHtml(renderedContent);
+		}
+	}
+
+	private void setFileID(Section<?> section, Map<String, String> parameterMap) {
+		String textHash = String.valueOf(section.getText().hashCode());
+
+		OntologyCompiler ontoCompiler = Compilers.getCompiler(section, OntologyCompiler.class);
+		String compHash = String.valueOf(ontoCompiler.getCompileSection().getTitle().hashCode());
+
+		String fileID = "_" + textHash + "_" + compHash;
+
+		parameterMap.put(OntoGraphDataBuilder.FILE_ID, fileID);
+	}
+
+	private SubGraphData convertToGraph(QueryResultTable resultSet, Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, List<Message> messages) {
+		SubGraphData data = new SubGraphData();
+		List<String> variables = resultSet.getVariables();
+		if (variables.size() < 3) {
+			Message m = new Message(Message.Type.ERROR,
+					"A sparqlvis query requires exactly three variables!");
+			messages.add(m);
+			return null;
+		}
+		for (QueryRow row : resultSet) {
+
+			Node fromURI = row.getValue(variables.get(0));
+
+			Node relationURI = row.getValue(variables.get(1));
+
+			Node toURI = row.getValue(variables.get(2));
+
+			if (fromURI == null || toURI == null || relationURI == null) {
+				Log.warning("incomplete query result row: " + row.toString());
+				continue;
+			}
+
+			ConceptNode fromNode = Utils.createNode(parameters, rdfRepository, uriProvider,
+					section, data, fromURI, true);
+			String relation = Utils.getConceptName(relationURI, rdfRepository);
+
+			ConceptNode toNode = Utils.createNode(parameters, rdfRepository, uriProvider, section,
+					data, toURI, true);
+
+			String relationLabel = Utils.createRelationLabel(parameters, rdfRepository, relationURI,
+					relation);
+
+			Edge newLineRelationsKey = new Edge(fromNode, relationLabel, toNode);
+
+			data.addEdge(newLineRelationsKey);
+
+		}
+		if (data.getConceptDeclarations().size() == 0) {
+			Message m = new Message(Message.Type.ERROR,
+					"The query produced an empty result set!");
+			messages.add(m);
+			return null;
+		}
+		return data;
+	}
+
+	private String getMaster(Section<?> section) {
+		return SparqlVisType.getAnnotation(section,
+				PackageManager.MASTER_ATTRIBUTE_NAME);
+	}
+
+	/**
+	 * @created 13.07.2014
+	 */
+	private void findAndReadConfig(String configName, ArticleManager am, Map<String, String> parameterMap, List<Message> messages, RenderResult string) {
+		Collection<Section<? extends de.knowwe.core.kdom.Type>> sections = Sections.successors(am, VisConfigType.class);
+		for (Section<? extends de.knowwe.core.kdom.Type> section : sections) {
+			Section<VisConfigType> s = Sections.cast(section, VisConfigType.class);
+			String name = VisConfigType.getAnnotation(s, VisConfigType.ANNOTATION_NAME);
+			if (name.equals(configName)) {
+				readConfig(s, parameterMap, messages, string);
+			}
+		}
+	}
+
+	/**
+	 * @created 13.07.2014
+	 */
+	private void readConfig(Section<VisConfigType> section, Map<String, String> parameterMap, List<Message> messages, RenderResult string) {
+		// set css layout to be used
+		String layout = VisConfigType.getAnnotation(section, SparqlVisType.ANNOTATION_DESIGN);
+		if (layout != null) {
+
+			String cssText = null;
+
+			ArticleManager articleManager = Environment.getInstance().getArticleManager(
+					Environment.DEFAULT_WEB);
+			Collection<Article> articles = articleManager.getArticles();
+
+			for (Article article : articles) {
+				Section<RootType> rootSection = article.getRootSection();
+				// search layouttypes
+				List<Section<SparqlVisDesignType>> sparqlVisDesignSections = Sections.successors(
+						rootSection, SparqlVisDesignType.class);
+
+				for (Section<SparqlVisDesignType> currentSection : sparqlVisDesignSections) {
+
+					String currentLayout = SparqlVisDesignType.getAnnotation(currentSection,
+							SparqlVisDesignType.ANNOTATION_NAME);
+					if (currentLayout.equals(layout)) {
+
+						cssText = SparqlVisDesignType.getContentSection(currentSection).getText();
+
+					}
+
+				}
+			}
+
+			if (cssText != null) {
+
+				parameterMap.put(OntoGraphDataBuilder.D3_FORCE_VISUALISATION_STYLE, cssText);
+			} else {
+				Message noSuchLayout = new Message(Message.Type.WARNING,
+						"No such layout " + layout + " found!");
+				Collection<Message> warnings = new HashSet<Message>();
+				messages.add(noSuchLayout);
+				if (string != null) {
+					DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, warnings,
+							string);
+				}
+
+			}
+
+		}
+
+		// size
+		parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, VisConfigType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_SIZE));
+
+		parameterMap.put(OntoGraphDataBuilder.GRAPH_HEIGHT, VisConfigType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_HEIGHT));
+
+		parameterMap.put(OntoGraphDataBuilder.GRAPH_WIDTH, VisConfigType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_WIDTH));
+
+		// format
+		String format = VisConfigType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_FORMAT);
+		if (format != null) {
+			format = format.toLowerCase();
+		}
+		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
+
+		// dotApp
+		String dotApp = VisConfigType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_DOT_APP);
+		parameterMap.put(OntoGraphDataBuilder.DOT_APP, dotApp);
+
+		// renderer
+		String rendererType = VisConfigType.getAnnotation(section, SparqlVisType.ANNOTATION_RENDERER);
+		parameterMap.put(OntoGraphDataBuilder.RENDERER, rendererType);
+
+		// visualization
+		String visualization = VisConfigType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_VISUALIZATION);
+		parameterMap.put(OntoGraphDataBuilder.VISUALIZATION, visualization);
+
+		// master
+		String master = VisConfigType.getAnnotation(section,
+				PackageManager.MASTER_ATTRIBUTE_NAME);
+		if (master != null) {
+			parameterMap.put(OntoGraphDataBuilder.MASTER, master);
+		}
+
+		// language
+		String lang = VisConfigType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_LANGUAGE);
+		if (lang != null) {
+			parameterMap.put(OntoGraphDataBuilder.LANGUAGE, lang);
+		}
+
+		// labels
+		String labelValue = VisConfigType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_LABELS);
+		parameterMap.put(OntoGraphDataBuilder.USE_LABELS, labelValue);
+
+		// rank direction
+		String rankDir = VisConfigType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_RANK_DIR);
+		parameterMap.put(OntoGraphDataBuilder.RANK_DIRECTION, rankDir);
+
+		// link mode
+		String linkModeValue = VisConfigType.getAnnotation(section,
+				SparqlVisType.ANNOTATION_LINK_MODE);
+		if (linkModeValue == null) {
+			// default link mode is 'jump'
+			linkModeValue = SparqlVisType.LinkMode.jump.name();
+		}
+		parameterMap.put(OntoGraphDataBuilder.LINK_MODE, linkModeValue);
+
+		// add to dot
+		String dotAppPrefix = VisConfigType.getAnnotation(section,
+				OntoVisType.ANNOTATION_DOT_APP);
+		if (dotAppPrefix != null) {
+			parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, dotAppPrefix + "\n");
+		}
+
+		// colors
+		String colorRelationName = VisConfigType.getAnnotation(section,
+				OntoVisType.ANNOTATION_COLORS);
+
+		if (!Strings.isBlank(colorRelationName)) {
+			parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, Utils.createColorCodings(colorRelationName, core, "rdf:Property"));
+			parameterMap.put(OntoGraphDataBuilder.CLASS_COLOR_CODES, Utils.createColorCodings(colorRelationName, core, "rdfs:Class"));
+		}
+	}
+
+	@Override
+	public void preRender(Section<?> content, UserContext user, RenderResult string) {
 		Section<SparqlVisType> section = Sections.ancestor(content,
 				SparqlVisType.class);
 		Section<DefaultMarkupType> defMarkupSection = Sections.cast(section,
@@ -143,8 +380,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 			if (cssText != null) {
 
 				parameterMap.put(OntoGraphDataBuilder.D3_FORCE_VISUALISATION_STYLE, cssText);
-			}
-			else {
+			} else {
 				Message noSuchLayout = new Message(Message.Type.WARNING,
 						"No such layout " + layout + " found!");
 				Collection<Message> warnings = new HashSet<Message>();
@@ -163,19 +399,19 @@ public class SparqlVisTypeRenderer implements Renderer {
 		parameterMap.put(OntoGraphDataBuilder.SECTION_ID, section.getID());
 
 		// set panel size
-		String size =  SparqlVisType.getAnnotation(section,
+		String size = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_SIZE);
 		if (size != null) {
 			parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, size);
 		}
 
-		String height =  SparqlVisType.getAnnotation(section,
+		String height = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_HEIGHT);
 		if (height != null) {
 			parameterMap.put(OntoGraphDataBuilder.GRAPH_HEIGHT, height);
 		}
 
-		String width =  SparqlVisType.getAnnotation(section,
+		String width = SparqlVisType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_WIDTH);
 		if (width != null) {
 			parameterMap.put(OntoGraphDataBuilder.GRAPH_WIDTH, width);
@@ -288,8 +524,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 					}
 				};
 			}
-		}
-		else {
+		} else {
 			uriProvider = new PackageCompileLinkToTermDefinitionProvider();
 		}
 
@@ -321,14 +556,7 @@ public class SparqlVisTypeRenderer implements Renderer {
 		parameterMap.put(OntoGraphDataBuilder.CONCEPT, conceptName);
 
 		// create file ID
-		String textHash = String.valueOf(section.getText().hashCode());
-
-		OntologyCompiler ontoCompiler = Compilers.getCompiler(section, OntologyCompiler.class);
-		String compHash = String.valueOf(ontoCompiler.getCompileSection().getTitle().hashCode());
-
-		String fileID = "_" + textHash + "_" + compHash;
-
-		parameterMap.put(OntoGraphDataBuilder.FILE_ID, fileID);
+		setFileID(section, parameterMap);
 
 		// render content
 		String renderedContent = "";
@@ -358,206 +586,5 @@ public class SparqlVisTypeRenderer implements Renderer {
 		if (string != null && !Thread.currentThread().isInterrupted()) {
 			string.appendHtml(renderedContent);
 		}
-
 	}
-
-
-	private SubGraphData convertToGraph(QueryResultTable resultSet, Map<String, String> parameters, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider, Section<?> section, List<Message> messages) {
-		SubGraphData data = new SubGraphData();
-		List<String> variables = resultSet.getVariables();
-		if (variables.size() < 3) {
-			Message m = new Message(Message.Type.ERROR,
-					"A sparqlvis query requires exactly three variables!");
-			messages.add(m);
-			return null;
-		}
-		for (QueryRow row : resultSet) {
-
-			Node fromURI = row.getValue(variables.get(0));
-
-			Node relationURI = row.getValue(variables.get(1));
-
-			Node toURI = row.getValue(variables.get(2));
-
-			if (fromURI == null || toURI == null || relationURI == null) {
-				Log.warning("incomplete query result row: " + row.toString());
-				continue;
-			}
-
-			ConceptNode fromNode = Utils.createNode(parameters, rdfRepository, uriProvider,
-					section, data, fromURI, true);
-			String relation = Utils.getConceptName(relationURI, rdfRepository);
-
-			ConceptNode toNode = Utils.createNode(parameters, rdfRepository, uriProvider, section,
-					data, toURI, true);
-
-			String relationLabel = Utils.createRelationLabel(parameters, rdfRepository, relationURI,
-					relation);
-
-			Edge newLineRelationsKey = new Edge(fromNode, relationLabel, toNode);
-
-			data.addEdge(newLineRelationsKey);
-
-		}
-		if (data.getConceptDeclarations().size() == 0) {
-			Message m = new Message(Message.Type.ERROR,
-					"The query produced an empty result set!");
-			messages.add(m);
-			return null;
-		}
-		return data;
-	}
-
-	private String getMaster(Section<?> section) {
-		return SparqlVisType.getAnnotation(section,
-				PackageManager.MASTER_ATTRIBUTE_NAME);
-	}
-
-	/**
-	 * @created 13.07.2014
-	 */
-	private void findAndReadConfig(String configName, ArticleManager am, Map<String, String> parameterMap, List<Message> messages, RenderResult string) {
-		Collection<Section<? extends de.knowwe.core.kdom.Type>> sections = Sections.successors(am, VisConfigType.class);
-		for (Section<? extends de.knowwe.core.kdom.Type> section : sections ) {
-			Section<VisConfigType> s = Sections.cast(section, VisConfigType.class);
-			String name = VisConfigType.getAnnotation(s, VisConfigType.ANNOTATION_NAME);
-			if (name.equals(configName)) {
-				readConfig(s, parameterMap, messages, string);
-			}
-		}
-	}
-
-	/**
-	 * @created 13.07.2014
-	 */
-	private void readConfig(Section<VisConfigType> section, Map<String, String> parameterMap, List<Message> messages, RenderResult string) {
-		// set css layout to be used
-		String layout = VisConfigType.getAnnotation(section, SparqlVisType.ANNOTATION_DESIGN);
-		if (layout != null) {
-
-			String cssText = null;
-
-			ArticleManager articleManager = Environment.getInstance().getArticleManager(
-					Environment.DEFAULT_WEB);
-			Collection<Article> articles = articleManager.getArticles();
-
-			for (Article article : articles) {
-				Section<RootType> rootSection = article.getRootSection();
-				// search layouttypes
-				List<Section<SparqlVisDesignType>> sparqlVisDesignSections = Sections.successors(
-						rootSection, SparqlVisDesignType.class);
-
-				for (Section<SparqlVisDesignType> currentSection : sparqlVisDesignSections) {
-
-					String currentLayout = SparqlVisDesignType.getAnnotation(currentSection,
-							SparqlVisDesignType.ANNOTATION_NAME);
-					if (currentLayout.equals(layout)) {
-
-						cssText = SparqlVisDesignType.getContentSection(currentSection).getText();
-
-					}
-
-				}
-			}
-
-			if (cssText != null) {
-
-				parameterMap.put(OntoGraphDataBuilder.D3_FORCE_VISUALISATION_STYLE, cssText);
-			}
-			else {
-				Message noSuchLayout = new Message(Message.Type.WARNING,
-						"No such layout " + layout + " found!");
-				Collection<Message> warnings = new HashSet<Message>();
-				messages.add(noSuchLayout);
-				if (string != null) {
-					DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, warnings,
-							string);
-				}
-
-			}
-
-		}
-
-		// size
-		parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, VisConfigType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_SIZE));
-
-		parameterMap.put(OntoGraphDataBuilder.GRAPH_HEIGHT, VisConfigType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_HEIGHT));
-
-		parameterMap.put(OntoGraphDataBuilder.GRAPH_WIDTH, VisConfigType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_WIDTH));
-
-		// format
-		String format = VisConfigType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_FORMAT);
-		if (format != null) {
-			format = format.toLowerCase();
-		}
-		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
-
-		// dotApp
-		String dotApp = VisConfigType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_DOT_APP);
-		parameterMap.put(OntoGraphDataBuilder.DOT_APP, dotApp);
-
-		// renderer
-		String rendererType = VisConfigType.getAnnotation(section, SparqlVisType.ANNOTATION_RENDERER);
-		parameterMap.put(OntoGraphDataBuilder.RENDERER, rendererType);
-
-		// visualization
-		String visualization = VisConfigType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_VISUALIZATION);
-		parameterMap.put(OntoGraphDataBuilder.VISUALIZATION, visualization);
-
-		// master
-		String master = VisConfigType.getAnnotation(section,
-				PackageManager.MASTER_ATTRIBUTE_NAME);
-		if (master != null) {
-			parameterMap.put(OntoGraphDataBuilder.MASTER, master);
-		}
-
-		// language
-		String lang = VisConfigType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_LANGUAGE);
-		if (lang != null) {
-			parameterMap.put(OntoGraphDataBuilder.LANGUAGE, lang);
-		}
-
-		// labels
-		String labelValue = VisConfigType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_LABELS);
-		parameterMap.put(OntoGraphDataBuilder.USE_LABELS, labelValue);
-
-		// rank direction
-		String rankDir = VisConfigType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_RANK_DIR);
-		parameterMap.put(OntoGraphDataBuilder.RANK_DIRECTION, rankDir);
-
-		// link mode
-		String linkModeValue = VisConfigType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_LINK_MODE);
-		if (linkModeValue == null) {
-			// default link mode is 'jump'
-			linkModeValue = SparqlVisType.LinkMode.jump.name();
-		}
-		parameterMap.put(OntoGraphDataBuilder.LINK_MODE, linkModeValue);
-
-		// add to dot
-		String dotAppPrefix = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_DOT_APP);
-		if (dotAppPrefix != null) {
-			parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, dotAppPrefix + "\n");
-		}
-
-		// colors
-		String colorRelationName = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_COLORS);
-
-		if (!Strings.isBlank(colorRelationName)) {
-			parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, Utils.createColorCodings(colorRelationName, core, "rdf:Property"));
-			parameterMap.put(OntoGraphDataBuilder.CLASS_COLOR_CODES, Utils.createColorCodings(colorRelationName, core, "rdfs:Class"));
-		}
-	}
-
 }
