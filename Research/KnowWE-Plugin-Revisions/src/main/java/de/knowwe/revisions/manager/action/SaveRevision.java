@@ -27,7 +27,6 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.revisions.DateType;
@@ -67,7 +66,7 @@ public class SaveRevision extends AbstractAction {
 
 			Article a = Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
 			HashMap<String, String> sectionsMap = new HashMap<String, String>();
-			Section<RootType> s = a.getRootSection();
+			Section<?> s = a.getRootSection();
 			sectionsMap.put(s.getID(), s.getText().concat(markup));
 			Sections.replace(context, sectionsMap).sendErrors(context);
 			return "<p class=\"box ok\">Revision '" + rev + "' successfully saved.";

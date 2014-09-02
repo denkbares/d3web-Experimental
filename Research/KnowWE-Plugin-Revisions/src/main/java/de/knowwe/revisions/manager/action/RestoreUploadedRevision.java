@@ -27,7 +27,6 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.revisions.DateType;
@@ -61,7 +60,7 @@ public class RestoreUploadedRevision extends AbstractAction {
 
 		Article a = Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
 		HashMap<String, String> sectionsMap = new HashMap<String, String>();
-		Section<RootType> s = a.getRootSection();
+		Section<?> s = a.getRootSection();
 		sectionsMap.put(s.getID(), s.getText().concat(preRestoreMarkup));
 
 		String message = getSectionsToUpdate(sectionsMap, context);
@@ -75,7 +74,6 @@ public class RestoreUploadedRevision extends AbstractAction {
 	 * 
 	 * @created 15.04.2013
 	 * @param sectionsToUpdate the Map where the new Sections get written into
-	 * @param date the date of the restore
 	 * @param context
 	 * @return String containing message boxes
 	 */
@@ -99,7 +97,7 @@ public class RestoreUploadedRevision extends AbstractAction {
 				if (version != -2) {
 					// page was other version, so restore the old content
 					Article oldVersionOfCurrentArticle = aman.getArticle(title);
-					Section<RootType> s = oldVersionOfCurrentArticle.getRootSection();
+					Section<?> s = oldVersionOfCurrentArticle.getRootSection();
 					sectionsToUpdate.put(currentArticle.getRootSection().getID(), s.getText());
 					messages.append("restored to uploaded version");
 				}

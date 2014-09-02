@@ -25,7 +25,6 @@ import de.knowwe.core.ArticleManager;
 import de.knowwe.core.DefaultArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 
 /**
@@ -81,11 +80,11 @@ public class UploadedRevision extends AbstractRevision {
 
 		for (Article article : getArticleManager().getArticles()) {
 			String title = article.getTitle();
-			Section<RootType> uploadedSection = article.getRootSection();
+			Section<?> uploadedSection = article.getRootSection();
 			Article stdArticle = stdAM.getArticle(title);
 			if (stdArticle != null) {
 				unprocessedStdArticles.remove(stdArticle);
-				Section<RootType> stdSection = stdArticle.getRootSection();
+				Section<?> stdSection = stdArticle.getRootSection();
 				if (!uploadedSection.getText().equals(stdSection.getText())) {
 					result.put(article.getTitle(), 0);
 				}

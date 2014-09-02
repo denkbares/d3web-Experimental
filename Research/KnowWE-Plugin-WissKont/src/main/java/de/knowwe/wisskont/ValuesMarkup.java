@@ -74,7 +74,7 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 	 */
 	public ValuesMarkup() {
 		super(key);
-		Type contentType = de.knowwe.core.kdom.Types.findSuccessorType(this,
+		Type contentType = de.knowwe.core.kdom.Types.successor(this,
 				RelationMarkupContentType.class);
 		boolean replaced = de.knowwe.core.kdom.Types.replaceType(contentType,
 				ListObjectIdentifier.class,

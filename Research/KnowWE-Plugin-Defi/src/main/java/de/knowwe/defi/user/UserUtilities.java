@@ -109,8 +109,8 @@ public class UserUtilities {
 			// create new article
 			String newContent = "[{ALLOW view admin}]\n[{ALLOW delete " + user + "}]\n";
 			Environment.getInstance().getWikiConnector().createArticle(
-					dataPage, "Defi-system", newContent.toString());
-			Article article = Article.createArticle(newContent.toString(),
+					dataPage, "Defi-system", newContent);
+			Article article = Article.createArticle(newContent,
 					dataPage, Environment.DEFAULT_WEB, true);
 			KnowWEUtils.getArticleManager(
 					Environment.DEFAULT_WEB).registerArticle(article);
