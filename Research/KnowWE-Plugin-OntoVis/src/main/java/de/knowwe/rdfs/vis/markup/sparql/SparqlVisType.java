@@ -20,11 +20,14 @@ package de.knowwe.rdfs.vis.markup.sparql;
 
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.rendering.NothingRenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.Rdf2GoCoreCheckRenderer;
 import de.knowwe.rdfs.vis.markup.OntoVisType;
+import de.knowwe.rdfs.vis.markup.PreRenderer;
+import de.knowwe.rdfs.vis.markup.VisualizationType;
 import de.knowwe.visualization.GraphDataBuilder;
 
 /**
@@ -33,7 +36,7 @@ import de.knowwe.visualization.GraphDataBuilder;
  * @created 23.07.2013
  */
 
-public class SparqlVisType extends DefaultMarkupType {
+public class SparqlVisType extends DefaultMarkupType implements VisualizationType {
 
 	public static final String ANNOTATION_CONCEPT = "concept";
 	public static final String ANNOTATION_COMMENT = "comment";
@@ -119,6 +122,11 @@ public class SparqlVisType extends DefaultMarkupType {
 	public SparqlVisType() {
 		super(MARKUP);
 		this.setRenderer(new Rdf2GoCoreCheckRenderer());
+	}
+
+	@Override
+	public PreRenderer getPreRenderer() {
+		return new SparqlVisTypeRenderer();
 	}
 
 }

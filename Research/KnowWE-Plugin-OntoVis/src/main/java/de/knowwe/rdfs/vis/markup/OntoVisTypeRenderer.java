@@ -34,6 +34,8 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 	private LinkToTermDefinitionProvider uriProvider;
 	private String realPath;
 
+	private String format;
+
 	@Override
 	public void renderContents(Section<?> section, UserContext user, RenderResult string) {
 		PreRenderWorker.getInstance().preRenderSectionAndWait(this, section, user, string);
@@ -68,7 +70,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 				OntoVisType.ANNOTATION_HEIGHT));
 
 		// format
-		String format = VisConfigType.getAnnotation(section,
+		format = VisConfigType.getAnnotation(section,
 				OntoVisType.ANNOTATION_FORMAT);
 		if (format != null) {
 			format = format.toLowerCase();
@@ -278,6 +280,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 				OntoVisType.ANNOTATION_FORMAT);
 		if (format != null) {
 			format = format.toLowerCase();
+			this.format = format;
 			parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 		}
 
@@ -481,6 +484,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 
 		Map<String, String> parameterMap = new HashMap<>();
 		setFileID(section, parameterMap);
+		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 
 		createGraphAndAppendHTMLIncludeSnipplet(string, realPath, section, parameterMap, rdfRepository, uriProvider);
 	}

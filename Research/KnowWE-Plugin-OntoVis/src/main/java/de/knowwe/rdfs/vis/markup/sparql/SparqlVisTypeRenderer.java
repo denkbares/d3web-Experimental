@@ -57,6 +57,8 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 
 	private Rdf2GoCore core;
 
+	private String format;
+
 	@Override
 	public void render(Section<?> content, UserContext user, RenderResult string) {
 		PreRenderWorker.getInstance().preRenderSectionAndWait(this, content, user, string);
@@ -70,6 +72,7 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 		List<Message> messages = new ArrayList<Message>();
 		Map<String, String> parameterMap = new HashMap<>();
 		setFileID(section, parameterMap);
+		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 
 		createGraphAndAppendHTMLIncludeSnipplet(string, new SubGraphData(), parameterMap, messages);
 	}
@@ -241,7 +244,7 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 				SparqlVisType.ANNOTATION_WIDTH));
 
 		// format
-		String format = VisConfigType.getAnnotation(section,
+		format = VisConfigType.getAnnotation(section,
 				SparqlVisType.ANNOTATION_FORMAT);
 		if (format != null) {
 			format = format.toLowerCase();
@@ -422,6 +425,7 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 				SparqlVisType.ANNOTATION_FORMAT);
 		if (format != null) {
 			format = format.toLowerCase();
+			this.format = format;
 			parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 		}
 

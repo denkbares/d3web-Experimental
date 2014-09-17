@@ -2,6 +2,7 @@ package de.knowwe.rdfs.vis.markup;
 
 import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.rendering.NothingRenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.renderer.AsynchronRenderer;
@@ -9,7 +10,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
 import de.knowwe.visualization.GraphDataBuilder;
 
-public class OntoVisType extends DefaultMarkupType {
+public class OntoVisType extends DefaultMarkupType implements VisualizationType {
 
 	public static final String ANNOTATION_CONCEPT = "concept";
 	public static final String ANNOTATION_COLORS = "colors";
@@ -90,7 +91,12 @@ public class OntoVisType extends DefaultMarkupType {
 
 	public OntoVisType() {
 		super(MARKUP);
-        this.setRenderer(new AsynchronRenderer(new OntoVisTypeRenderer()));
+        this.setRenderer(new AsynchronRenderer(getPreRenderer()));
     }
+
+	@Override
+	public PreRenderer getPreRenderer() {
+		return new OntoVisTypeRenderer();
+	}
 
 }

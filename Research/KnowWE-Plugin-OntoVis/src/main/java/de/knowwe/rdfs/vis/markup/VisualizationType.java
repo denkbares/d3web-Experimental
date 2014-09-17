@@ -19,19 +19,13 @@
 
 package de.knowwe.rdfs.vis.markup;
 
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.RenderResult;
-import de.knowwe.core.kdom.rendering.Renderer;
-import de.knowwe.core.user.UserContext;
+import de.knowwe.core.kdom.Type;
 
 /**
  * @author Johanna Latt
- * @created 26.08.2014
+ * @created 16.09.2014
  */
-public interface PreRenderer extends Renderer {
+public interface VisualizationType extends Type {
 
-	public void preRender(Section<?> section, UserContext user, RenderResult string);
-
-	public void cacheGraph(Section<?> section, RenderResult string);
-
+	public PreRenderer getPreRenderer();
 }

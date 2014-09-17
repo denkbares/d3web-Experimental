@@ -45,13 +45,15 @@ public class PreRenderWorker {
 
 	private static Map<String, Future> workerPool;
 	private static ExecutorService es;
+	private static ExecutorService priorityes;
 
 	public static PreRenderWorker getInstance() {
 		if (prw == null) {
 			prw = new PreRenderWorker();
 			workerPool = Collections.synchronizedMap(new HashMap<>());
 			es = Executors.newFixedThreadPool(Math.max(1,
-					Runtime.getRuntime().availableProcessors() - 1));
+					Runtime.getRuntime().availableProcessors() - 2));
+			priorityes = Executors.newSingleThreadScheduledExecutor();
 		}
 		return prw;
 	}
@@ -63,15 +65,19 @@ public class PreRenderWorker {
 	 * @param section
 	 * @return
 	 */
-	public Future preRenderSection(PreRenderer r, Section<? extends Type> section, UserContext user, RenderResult string) {
+	public Future queueSectionPreRendering(PreRenderer r, Section<? extends Type> section, UserContext user, RenderResult string, boolean priority) {
 		Runnable renderSection = new Runnable() {
 			@Override
 			public void run() {
 				r.preRender(section, user, string);
-				workerPool.remove(section.getID());
 			}
 		};
-		Future futureRenderTask = es.submit(renderSection);
+		Future futureRenderTask;
+		if (priority) {
+			futureRenderTask = priorityes.submit(renderSection);
+		} else {
+			futureRenderTask = es.submit(renderSection);
+		}
 		workerPool.put(section.getID(), futureRenderTask);
 		return futureRenderTask;
 	}
@@ -92,13 +98,18 @@ public class PreRenderWorker {
 			cache = true;
 			renderJob = getRunningPreRenderTaskFor(section);
 		} else {
-			renderJob = preRenderSection(r, section, user, string);
+			renderJob = queueSectionPreRendering(r, section, user, string, true);
 		}
 
 		// wait for the rendering to complete
 		try {
 			if (renderJob != null) {
 				renderJob.get();
+
+				// if the rendering was already running the file only has to be cached now
+				if (cache) {
+					r.cacheGraph(section, string);
+				}
 			}
 		}
 		catch (InterruptedException e) {
@@ -108,10 +119,6 @@ public class PreRenderWorker {
 			e.printStackTrace();
 		}
 
-		// if the rendering was already running the file only has to be cached now
-		if (cache) {
-			r.cacheGraph(section, string);
-		}
 	}
 
 	public boolean isPreRendering(Section<? extends Type> section) {

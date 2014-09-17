@@ -34,10 +34,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.ontology.compile.OntologyCompiler;
 import de.knowwe.ontology.compile.OntologyCompilerFinishedEvent;
-import de.knowwe.rdfs.vis.markup.OntoVisType;
-import de.knowwe.rdfs.vis.markup.OntoVisTypeRenderer;
-import de.knowwe.rdfs.vis.markup.sparql.SparqlVisContentType;
-import de.knowwe.rdfs.vis.markup.sparql.SparqlVisTypeRenderer;
+import de.knowwe.rdfs.vis.markup.VisualizationType;
 
 /**
  * @author Johanna Latt
@@ -85,18 +82,15 @@ public class GraphReRenderer implements EventListener {
 			// System.out.println(f.getName() + " - Deleted? " + f.delete());
 		}
 
-		// re-render all OntoVisType-sections
-		Collection<Section<? extends Type>> sections = Sections.successors(am, OntoVisType.class);
+		// re-render all VisualizationType-sections
+		Collection<Section<? extends Type>> sections = Sections.successors(am, VisualizationType.class);
 		for (Section<? extends Type> s : sections) {
-			PreRenderWorker.getInstance().preRenderSection(new OntoVisTypeRenderer(), s, null, null);
+			if (VisualizationType.class.isInstance(s.get())) {
+				Section<VisualizationType> visSec = (Section<VisualizationType>) s;
+				PreRenderWorker.getInstance().queueSectionPreRendering(visSec.get()
+						.getPreRenderer(), s, null, null, false);
+			}
 		}
-
-		// re-render all SparqlVisType-sections
-		sections = Sections.successors(am, SparqlVisContentType.class);
-		for (Section<? extends Type> s : sections) {
-			PreRenderWorker.getInstance().preRenderSection(new SparqlVisTypeRenderer(), s, null, null);
-		}
-
 	}
 
 	private static List<File> findAllFilesForCompiler(String fileDirPath, String hash) {
