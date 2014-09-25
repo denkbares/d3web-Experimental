@@ -99,7 +99,7 @@ public class ClassMemberTagHandler extends AbstractTagHandler {
 					+ ">.}";
 			QueryResultTable classMembersTable = Rdf2GoCore.getInstance().sparqlSelect(
 					query);
-			buffy.append(SparqlResultRenderer.getInstance().renderQueryResult(classMembersTable,
+			buffy.append(SparqlResultRenderer.getInstance().getSparqlRenderResult(classMembersTable,
 					userContext));
 
 		}
