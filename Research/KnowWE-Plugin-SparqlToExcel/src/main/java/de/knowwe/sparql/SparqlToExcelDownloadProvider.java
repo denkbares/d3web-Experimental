@@ -24,6 +24,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 /**
  * 
@@ -52,7 +53,8 @@ public class SparqlToExcelDownloadProvider implements ToolProvider {
 				+ DownloadSparqlResultAsExcel.PARAM_FILENAME + "="
 				+ section.getArticle().getTitle()
 				+ ".xls'";
-		return new DefaultTool("KnowWEExtension/icons/excel.png",
+		return new DefaultTool(
+				Icon.DOCUMENT_EXCEL,
 				"Download as XLS", "Download this table as an Excel file",
 				jsAction);
 	}
