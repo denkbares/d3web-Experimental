@@ -67,30 +67,36 @@ public class GraphReRenderer implements EventListener {
 
 	@Override
 	public void notify(Event event) {
-		OntologyCompilerFinishedEvent e = (OntologyCompilerFinishedEvent) event;
-		OntologyCompiler oc = e.getCompiler();
-		String hash = String.valueOf(oc.getCompileSection().getTitle().hashCode());
+        Thread runner = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OntologyCompilerFinishedEvent e = (OntologyCompilerFinishedEvent) event;
+                OntologyCompiler oc = e.getCompiler();
+                String hash = String.valueOf(oc.getCompileSection().getTitle().hashCode());
 
-		// if the GraphReRenderer is currently still working on old rendering tasks, interrupt and
-		// cancel all of them
-		PreRenderWorker.getInstance().cancelAllRunningPreRenderTasks();
+                // if the GraphReRenderer is currently still working on old rendering tasks, interrupt and
+                // cancel all of them
+                PreRenderWorker.getInstance().cancelAllRunningPreRenderTasks();
 
-		// delete all graph-files that are based on this compiler hash
-		List<File> files = findAllFilesForCompiler(fileDirPath, hash);
-		for (File f : files) {
-			f.delete();
-			// System.out.println(f.getName() + " - Deleted? " + f.delete());
-		}
+                // delete all graph-files that are based on this compiler hash
+                List<File> files = findAllFilesForCompiler(fileDirPath, hash);
+                for (File f : files) {
+                    f.delete();
+                    // System.out.println(f.getName() + " - Deleted? " + f.delete());
+                }
 
-		// re-render all VisualizationType-sections
-		Collection<Section<? extends Type>> sections = Sections.successors(am, VisualizationType.class);
-		for (Section<? extends Type> s : sections) {
-			if (VisualizationType.class.isInstance(s.get())) {
-				Section<VisualizationType> visSec = (Section<VisualizationType>) s;
-				PreRenderWorker.getInstance().queueSectionPreRendering(visSec.get()
-						.getPreRenderer(), s, null, null, false);
-			}
-		}
+                // re-render all VisualizationType-sections
+                Collection<Section<? extends Type>> sections = Sections.successors(am, VisualizationType.class);
+                for (Section<? extends Type> s : sections) {
+                    if (VisualizationType.class.isInstance(s.get())) {
+                        Section<VisualizationType> visSec = (Section<VisualizationType>) s;
+                        PreRenderWorker.getInstance().queueSectionPreRendering(visSec.get()
+                                .getPreRenderer(), s, null, null, false);
+                    }
+                }
+            }
+        });
+		runner.start();
 	}
 
 	private static List<File> findAllFilesForCompiler(String fileDirPath, String hash) {
