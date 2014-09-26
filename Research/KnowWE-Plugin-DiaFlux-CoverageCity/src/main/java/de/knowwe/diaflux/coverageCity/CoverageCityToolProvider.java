@@ -5,6 +5,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 public class CoverageCityToolProvider implements ToolProvider {
 
@@ -17,7 +18,7 @@ public class CoverageCityToolProvider implements ToolProvider {
 		String jsAction = "javascript:window.open('" + url + "', '" + winID + "');";
 
 		return new Tool[] {
-				new DefaultTool(null, "Show CoverageCity",
+				new DefaultTool(Icon.NONE, "Show CoverageCity",
 						"Shows the city visualization of the coverage", jsAction)
 		};
 	}
