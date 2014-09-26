@@ -31,7 +31,7 @@ import de.knowwe.termbrowser.AbstractTermDetector;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 03.06.2013
  */
 public class IncrementalTermDetector extends AbstractTermDetector {

@@ -30,7 +30,7 @@ import de.knowwe.core.user.UserContext;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 07.12.2012
  */
 public class RefactorRelationsHandler extends AbstractTagHandler {

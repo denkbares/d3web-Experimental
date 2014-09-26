@@ -38,7 +38,7 @@ import de.knowwe.plugin.Instantiation;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 25.07.2013
  */
 public class KnowledgeBaseInstantiation implements Instantiation {

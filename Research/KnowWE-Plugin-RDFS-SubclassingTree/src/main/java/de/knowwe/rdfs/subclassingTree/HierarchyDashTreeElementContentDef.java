@@ -26,7 +26,7 @@ import de.knowwe.rdfs.AbstractIRITermDefinition;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 25.05.2012
  */
 public class HierarchyDashTreeElementContentDef extends DashTreeElementContent

@@ -39,7 +39,8 @@ import de.knowwe.jspwiki.types.LinkType;
 import de.knowwe.termbrowser.HierarchyProvider;
 
 /**
- * Created by jochenreutelshofer on 21.03.14.
+ * @author Jochen Reutelshöfer
+ * @created 21.03.2014
  */
 public class WikiPageHierarchyProvider implements HierarchyProvider<Identifier> {
 

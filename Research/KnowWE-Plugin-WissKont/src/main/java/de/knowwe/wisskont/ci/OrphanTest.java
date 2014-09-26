@@ -46,7 +46,7 @@ import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 22.05.2013
  */
 public class OrphanTest extends AbstractTest<Rdf2GoCore> {

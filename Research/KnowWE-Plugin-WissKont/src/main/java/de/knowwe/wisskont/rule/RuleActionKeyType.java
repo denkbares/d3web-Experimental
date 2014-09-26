@@ -28,7 +28,7 @@ import de.knowwe.termbrowser.DroppableTargetSurroundingRenderer;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 08.08.2013
  */
 public class RuleActionKeyType extends AbstractType {

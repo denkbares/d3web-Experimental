@@ -26,7 +26,7 @@ import de.knowwe.tools.ToolProvider;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 28.11.2012
  */
 public class InstantEditToolProviderGerman implements ToolProvider {

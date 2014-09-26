@@ -27,7 +27,7 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 26.10.2012
  */
 public class OWLTermRef extends IncrementalTermReference {

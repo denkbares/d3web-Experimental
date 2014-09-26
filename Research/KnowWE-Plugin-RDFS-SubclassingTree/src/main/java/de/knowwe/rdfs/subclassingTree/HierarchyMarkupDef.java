@@ -24,7 +24,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 25.05.2012
  */
 public class HierarchyMarkupDef extends DefaultMarkupType {

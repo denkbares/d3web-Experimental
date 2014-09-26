@@ -27,7 +27,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 21.06.2013
  */
 public class AnnotatedConceptsType extends AbstractType {

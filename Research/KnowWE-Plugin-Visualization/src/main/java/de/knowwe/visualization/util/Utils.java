@@ -38,7 +38,7 @@ import de.d3web.strings.Strings;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 29.11.2012
  */
 public class Utils {

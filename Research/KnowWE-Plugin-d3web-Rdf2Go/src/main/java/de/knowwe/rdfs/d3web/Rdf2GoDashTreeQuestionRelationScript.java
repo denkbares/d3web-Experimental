@@ -29,7 +29,8 @@ import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
- * Created by Albrecht Striffler (denkbares GmbH) on 12.03.14.
+ * @author Albrecht Striffler (denkbares GmbH)
+ * @created 12.03.2014
  */
 public class Rdf2GoDashTreeQuestionRelationScript extends Rdf2GoDashTreeTermRelationScript {
 

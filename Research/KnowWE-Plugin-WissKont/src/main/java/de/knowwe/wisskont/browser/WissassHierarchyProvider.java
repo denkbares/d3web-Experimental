@@ -42,7 +42,7 @@ import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 03.06.2013
  */
 public class WissassHierarchyProvider implements HierarchyProvider<Identifier> {

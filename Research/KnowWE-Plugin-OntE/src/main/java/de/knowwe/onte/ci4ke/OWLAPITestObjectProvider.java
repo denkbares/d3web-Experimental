@@ -31,7 +31,7 @@ import de.knowwe.owlapi.OWLAPIConnector;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 22.05.2012
  */
 public class OWLAPITestObjectProvider implements TestObjectProvider {

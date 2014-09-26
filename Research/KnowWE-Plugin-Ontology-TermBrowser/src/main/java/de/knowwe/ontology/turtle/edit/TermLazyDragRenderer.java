@@ -30,7 +30,8 @@ import de.knowwe.ontology.turtle.lazyRef.LazyReferenceManager;
 import de.knowwe.ontology.turtle.lazyRef.LazyURIReference;
 
 /**
- * Created by jochenreutelshofer on 25.03.14.
+ * @author Jochen Reutelshöfer
+ * @created 25.03.2014
  */
 public class TermLazyDragRenderer extends TermDragRenderer {
 

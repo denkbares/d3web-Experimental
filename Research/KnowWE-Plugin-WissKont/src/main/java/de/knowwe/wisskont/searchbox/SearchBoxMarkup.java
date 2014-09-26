@@ -33,7 +33,7 @@ import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 15.04.2013
  */
 public class SearchBoxMarkup extends DefaultMarkupType {

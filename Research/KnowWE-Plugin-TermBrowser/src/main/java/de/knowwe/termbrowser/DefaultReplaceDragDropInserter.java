@@ -36,7 +36,7 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 /**
  * Allows to completely replaces the target section with the give text.
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 20.01.2014
  */
 public class DefaultReplaceDragDropInserter implements DragDropEditInserter {

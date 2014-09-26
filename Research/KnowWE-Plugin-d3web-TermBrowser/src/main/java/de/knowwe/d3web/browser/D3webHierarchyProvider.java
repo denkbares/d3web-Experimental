@@ -47,7 +47,7 @@ import de.knowwe.termbrowser.TermBrowserMarkup;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 02.10.2013
  */
 public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {

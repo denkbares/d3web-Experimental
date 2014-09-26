@@ -20,7 +20,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
  * OntologySummaryRenderer counts and shows all classes and properties of an ontology
- * Created by Veronika Sehne on 30.04.2014.
+ * @author Veronika Sehne on 30.04.2014.
  */
 public class OntologySummaryRenderer extends DefaultMarkupRenderer {
 

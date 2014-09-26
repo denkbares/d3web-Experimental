@@ -22,7 +22,7 @@ package de.knowwe.visualization;
  * An edge in a named graph comprising a source node (predicate), a named
  * relation (predicate), and a target node (object).
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 06.12.2012
  */
 public class Edge {

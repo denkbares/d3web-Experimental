@@ -45,7 +45,7 @@ import de.knowwe.wisskont.LabelMarkup;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 06.05.2013
  */
 public class MoveConceptDefinitionTopRefactoring extends AbstractAction {

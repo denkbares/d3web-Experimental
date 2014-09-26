@@ -48,7 +48,7 @@ import de.knowwe.termbrowser.HierarchyProvider;
 import de.knowwe.termbrowser.TermBrowserMarkup;
 
 /**
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 01.10.2013
  */
 public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>, EventListener {

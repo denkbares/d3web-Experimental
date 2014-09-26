@@ -24,7 +24,7 @@ import de.knowwe.core.kdom.parsing.Section;
 /**
  * A reference that will always be invalid for the compiler.
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 28.11.2012
  */
 public class InvalidReference extends IncrementalTermReference {

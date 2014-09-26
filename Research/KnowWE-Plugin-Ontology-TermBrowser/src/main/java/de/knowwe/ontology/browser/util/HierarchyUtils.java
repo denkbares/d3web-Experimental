@@ -39,7 +39,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 01.10.2013
  */
 public class HierarchyUtils {

@@ -20,7 +20,7 @@ package de.knowwe.ontology.turtle.edit;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 21.01.2014
  */
 public class TurtleDragDropSemicolonType extends AbstractTurtleDragDropType {

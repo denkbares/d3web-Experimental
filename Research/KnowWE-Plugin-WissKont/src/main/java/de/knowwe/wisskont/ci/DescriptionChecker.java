@@ -35,7 +35,7 @@ import de.knowwe.wisskont.ConceptMarkup;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 18.10.2013
  */
 public class DescriptionChecker extends AbstractTest<Article> {

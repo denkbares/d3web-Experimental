@@ -53,7 +53,8 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 /**
  * Provides explanation utility methods.
  * <p>
- * Created by Albrecht Striffler (denkbares GmbH) on 22.07.14.
+ * @author Albrecht Striffler (denkbares GmbH)
+ * @created 22.07.2014
  */
 public class Rdf2GoExplanationProvider {
 

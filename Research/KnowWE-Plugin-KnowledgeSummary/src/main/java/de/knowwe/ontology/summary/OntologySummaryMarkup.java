@@ -5,7 +5,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * OntologySummaryMarkup shows a summary of an ontology
- * Created by Veronika Sehne on 30.04.2014.
+ * @author Veronika Sehne on 30.04.2014.
  */
 public class OntologySummaryMarkup extends DefaultMarkupType {
 

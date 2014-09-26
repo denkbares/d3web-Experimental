@@ -33,7 +33,7 @@ import de.knowwe.termbrowser.DragDropEditInserter;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 23.06.2013
  */
 public class ConceptListDropInserter implements DragDropEditInserter {

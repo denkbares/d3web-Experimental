@@ -31,7 +31,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 02.10.2013
  */
 public class DefaultTermDetector extends AbstractTermDetector {

@@ -22,7 +22,7 @@ import org.ontoware.rdf2go.model.node.URI;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 25.06.2013
  */
 public class CaveMarkup extends RelationMarkup {

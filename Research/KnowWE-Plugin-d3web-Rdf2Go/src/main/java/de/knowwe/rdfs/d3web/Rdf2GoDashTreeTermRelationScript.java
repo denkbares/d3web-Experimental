@@ -45,7 +45,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
  * This {@link CompileScript} adds all relations defined by das trees to the triple store.
  *
  * @author Albrecht Striffler (denkbares GmbH)
- * @created 12.03.14.
+ * @created 12.03.2014
  */
 public abstract class Rdf2GoDashTreeTermRelationScript extends DashTreeTermRelationScript<OntologyCompiler> implements DestroyScript<OntologyCompiler, TermDefinition> {
 

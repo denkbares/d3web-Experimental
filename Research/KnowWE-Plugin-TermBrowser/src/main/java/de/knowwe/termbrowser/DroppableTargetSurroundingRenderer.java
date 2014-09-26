@@ -27,7 +27,7 @@ import de.knowwe.kdom.renderer.SurroundingRenderer;
  * Renders an html element with a css class for making this section a
  * drop-target.
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 30.11.2012
  */
 public class DroppableTargetSurroundingRenderer implements SurroundingRenderer {

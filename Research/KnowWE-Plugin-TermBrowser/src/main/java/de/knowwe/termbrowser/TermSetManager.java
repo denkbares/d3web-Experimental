@@ -40,7 +40,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.event.PageRenderedEvent;
 
 /**
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 05.12.2012
  */
 public class TermSetManager implements EventListener {

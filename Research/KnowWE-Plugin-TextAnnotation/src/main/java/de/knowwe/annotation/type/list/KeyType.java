@@ -27,7 +27,7 @@ import de.knowwe.core.user.UserContext;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 23.06.2013
  */
 public class KeyType extends AbstractType {

@@ -30,7 +30,7 @@ import de.knowwe.kdom.renderer.SurroundingRenderer;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 30.11.2012
  */
 public class RelationMarkupContentType extends AbstractType {

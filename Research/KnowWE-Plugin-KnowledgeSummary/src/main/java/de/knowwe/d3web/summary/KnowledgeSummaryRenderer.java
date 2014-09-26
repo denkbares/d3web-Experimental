@@ -26,7 +26,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 
 /**
  * KnowledgeSummaryRenderer counts and shows all questions, solutions and rules of  a knowledgeBase
- * Created by Veronika Sehne on 23.04.2014.
+ * @author Veronika Sehne on 23.04.2014.
  */
 public class KnowledgeSummaryRenderer extends DefaultMarkupRenderer {
 	@Override

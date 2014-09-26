@@ -29,7 +29,7 @@ import de.knowwe.visualization.util.FileUtils;
  * A GraphVisualizationRenderer using DOT/GraphViz for the visualization of the
  * SubGraphData.
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 27.05.2013
  */
 public class DOTVisualizationRenderer implements GraphVisualizationRenderer {

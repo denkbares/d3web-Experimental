@@ -49,7 +49,7 @@ import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 02.07.2013
  */
 public class MaxChildrenNumberTest extends AbstractTest<Rdf2GoCore> {

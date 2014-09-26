@@ -27,7 +27,7 @@ import de.knowwe.core.user.UserContext;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 18.02.2013
  */
 public class VersionHistoryLinkHandler extends AbstractTagHandler {

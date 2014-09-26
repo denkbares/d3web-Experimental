@@ -29,7 +29,7 @@ import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquotedNonEmpty;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 23.06.2013
  */
 public class AnnotatedConceptListContent extends AbstractType {

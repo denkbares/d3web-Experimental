@@ -58,7 +58,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
  * @author Volker Belli (denkbares GmbH)
- * @created 12.08.14.
+ * @created 12.08.2014
  */
 public class Rdf2GoNodeScript extends OntologyCompileScript<NodeType> {
 

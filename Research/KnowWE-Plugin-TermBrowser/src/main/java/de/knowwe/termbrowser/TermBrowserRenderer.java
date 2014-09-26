@@ -30,7 +30,7 @@ import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 
 /**
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 10.12.2012
  */
 public class TermBrowserRenderer {

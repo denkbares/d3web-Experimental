@@ -30,7 +30,7 @@ import de.knowwe.wisskont.refactoring.scripts.ConceptRelationMarkupRefactoring;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 05.12.2012
  */
 public class RefactoringAction extends AbstractAction {

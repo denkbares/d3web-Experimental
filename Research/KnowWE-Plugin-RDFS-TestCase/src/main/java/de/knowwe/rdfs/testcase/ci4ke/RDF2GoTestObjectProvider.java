@@ -29,7 +29,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 22.05.2012
  */
 public class RDF2GoTestObjectProvider implements TestObjectProvider {

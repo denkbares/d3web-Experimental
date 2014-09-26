@@ -79,7 +79,7 @@ import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 06.08.2013
  */
 public class RuleMarkup extends AbstractKnowledgeUnitType<RuleMarkup> {

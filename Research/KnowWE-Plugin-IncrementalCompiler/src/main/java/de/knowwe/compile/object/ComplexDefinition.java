@@ -31,7 +31,7 @@ import de.knowwe.core.kdom.parsing.Section;
  * Marker Interface for a complex definition, i.e. a definition that depends on
  * other referenced terms to be valid.
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 09.05.2012
  */
 public interface ComplexDefinition extends Type {

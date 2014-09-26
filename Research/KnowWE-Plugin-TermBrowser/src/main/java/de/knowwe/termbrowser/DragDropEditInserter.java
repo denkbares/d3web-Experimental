@@ -44,7 +44,7 @@ import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 04.06.2013
  */
 public interface DragDropEditInserter {

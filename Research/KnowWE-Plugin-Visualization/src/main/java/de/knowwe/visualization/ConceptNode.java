@@ -23,7 +23,7 @@ import de.knowwe.visualization.GraphDataBuilder.NODE_TYPE;
 import de.knowwe.visualization.dot.RenderingStyle;
 
 /**
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 23.05.2013
  */
 public class ConceptNode {

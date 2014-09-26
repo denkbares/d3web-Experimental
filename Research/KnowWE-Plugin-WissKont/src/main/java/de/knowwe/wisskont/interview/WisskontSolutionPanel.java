@@ -26,7 +26,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 07.08.2013
  */
 public class WisskontSolutionPanel extends ShowSolutionsType {

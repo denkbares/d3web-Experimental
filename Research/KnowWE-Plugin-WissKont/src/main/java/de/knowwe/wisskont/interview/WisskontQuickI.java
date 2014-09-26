@@ -25,7 +25,7 @@ import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 25.07.2013
  */
 public class WisskontQuickI extends QuickInterviewMarkup {

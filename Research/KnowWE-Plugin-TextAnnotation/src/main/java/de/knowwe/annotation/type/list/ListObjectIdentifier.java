@@ -27,7 +27,7 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 22.06.2013
  */
 public class ListObjectIdentifier extends IncrementalTermReference {

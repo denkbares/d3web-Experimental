@@ -29,7 +29,7 @@ import de.knowwe.rdfs.util.RDFSUtil;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 22.06.2013
  */
 public class OIDeleteItemRenderer implements Renderer {

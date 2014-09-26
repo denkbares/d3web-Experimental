@@ -39,7 +39,7 @@ import de.knowwe.visualization.GraphDataBuilder;
 import de.knowwe.wisskont.ConceptMarkup;
 
 /**
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 29.11.2012
  */
 public class ShowConceptRelationsAppendHandler implements PageAppendHandler {

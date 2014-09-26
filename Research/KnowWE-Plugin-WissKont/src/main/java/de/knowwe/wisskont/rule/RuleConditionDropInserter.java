@@ -34,7 +34,7 @@ import de.knowwe.wisskont.rule.RuleMarkup.ConditionArea;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 08.08.2013
  */
 public class RuleConditionDropInserter implements DragDropEditInserter {

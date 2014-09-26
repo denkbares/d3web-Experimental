@@ -22,7 +22,7 @@ import org.ontoware.rdf2go.model.node.URI;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 27.11.2012
  */
 public class MustMarkup extends RelationMarkup {

@@ -22,7 +22,7 @@ import de.d3web.strings.Identifier;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 12.04.2013
  */
 public class RatedTerm implements Comparable<RatedTerm> {

@@ -35,7 +35,7 @@ import de.knowwe.termbrowser.InterestingTermDetector;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 04.10.2013
  */
 public class OntologyTermDetector implements InterestingTermDetector {

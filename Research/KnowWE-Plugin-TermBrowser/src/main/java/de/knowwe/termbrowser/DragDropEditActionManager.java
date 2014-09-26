@@ -38,7 +38,7 @@ import de.knowwe.core.utils.Scope;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 04.06.2013
  */
 public class DragDropEditActionManager extends AbstractAction {

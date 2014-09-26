@@ -35,7 +35,7 @@ import de.knowwe.wisskont.util.SectionUtils;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 19.04.2013
  */
 public class DeleteListEntryAction extends AbstractAction {

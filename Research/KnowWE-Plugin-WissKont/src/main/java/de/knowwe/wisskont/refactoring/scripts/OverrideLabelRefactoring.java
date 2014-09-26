@@ -38,7 +38,7 @@ import de.knowwe.wisskont.LabelMarkup;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 07.05.2013
  */
 public class OverrideLabelRefactoring extends AbstractAction {

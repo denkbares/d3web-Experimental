@@ -40,7 +40,7 @@ import static de.knowwe.diaflux.type.FlowchartXMLHeadType.FlowchartTermDef;
 
 /**
  * @author Volker Belli (denkbares GmbH)
- * @created 12.08.14.
+ * @created 12.08.2014
  */
 public class Rdf2GoFlowScript extends OntologyCompileScript<FlowchartType> {
 

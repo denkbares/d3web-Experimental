@@ -27,7 +27,7 @@ import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 03.05.2013
  */
 public class SectionUtils {

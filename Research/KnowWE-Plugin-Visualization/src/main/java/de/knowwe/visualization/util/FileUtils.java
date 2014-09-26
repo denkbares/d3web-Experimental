@@ -28,7 +28,7 @@ import java.io.InputStreamReader;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 23.05.2013
  */
 public class FileUtils {

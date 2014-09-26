@@ -20,7 +20,7 @@ package de.knowwe.wisskont.relationMarkup;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 06.08.2013
  */
 public class RelationMarkupUtils {

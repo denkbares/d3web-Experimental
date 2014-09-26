@@ -36,7 +36,7 @@ import de.knowwe.termbrowser.DragDropEditInserter;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 21.06.2013
  */
 public class TextAnnotationDropInserter implements DragDropEditInserter {

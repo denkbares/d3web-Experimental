@@ -32,7 +32,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 06.05.2013
  */
 public class DeleteConceptNameHeadlinesRefactoring extends AbstractAction {

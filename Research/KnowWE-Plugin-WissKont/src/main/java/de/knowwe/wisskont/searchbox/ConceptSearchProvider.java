@@ -40,7 +40,7 @@ import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 17.04.2013
  */
 public class ConceptSearchProvider implements SearchProvider {

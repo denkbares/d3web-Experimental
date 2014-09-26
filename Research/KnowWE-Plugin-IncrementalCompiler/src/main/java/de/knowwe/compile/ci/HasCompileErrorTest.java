@@ -37,7 +37,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 19.12.2012
  */
 public class HasCompileErrorTest extends AbstractTest<Article> {

@@ -46,7 +46,7 @@ import de.knowwe.rdfs.util.RDFSUtil;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 25.05.2012
  */
 public class HierarchyDashtreeElementCompileScript extends

@@ -35,7 +35,8 @@ import de.knowwe.visualization.Edge;
 import de.knowwe.visualization.SubGraphData;
 
 /**
- * Created by jochenreutelshofer on 15.05.14.
+ * @author Jochen Reutelshöfer
+ * @created 15.05.2014
  */
 public class SubpropertyEliminator {
 

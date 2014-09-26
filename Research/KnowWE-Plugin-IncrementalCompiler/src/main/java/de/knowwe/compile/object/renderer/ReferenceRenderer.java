@@ -30,7 +30,7 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 27.11.2012
  */
 /**

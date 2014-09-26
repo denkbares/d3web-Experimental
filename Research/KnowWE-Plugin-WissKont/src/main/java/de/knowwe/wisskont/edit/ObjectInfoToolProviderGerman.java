@@ -30,7 +30,7 @@ import de.knowwe.tools.ToolProvider;
 import de.knowwe.tools.ToolUtils;
 
 /**
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 28.11.2012
  */
 public class ObjectInfoToolProviderGerman implements ToolProvider {

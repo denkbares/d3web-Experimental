@@ -28,7 +28,7 @@ import de.d3web.utils.Log;
 import de.knowwe.core.user.UserContext;
 
 /**
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 01.10.2013
  */
 public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {

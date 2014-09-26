@@ -30,7 +30,7 @@ import de.knowwe.jspwiki.JSPWikiConnector;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 18.02.2013
  */
 public class AttachmentsLinkHandler extends AbstractTagHandler {

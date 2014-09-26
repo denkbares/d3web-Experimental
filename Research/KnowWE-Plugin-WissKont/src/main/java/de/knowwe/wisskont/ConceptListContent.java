@@ -67,7 +67,7 @@ import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 22.06.2013
  */
 public class ConceptListContent extends AbstractType {

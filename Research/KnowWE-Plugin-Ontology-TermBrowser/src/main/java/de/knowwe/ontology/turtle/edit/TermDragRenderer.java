@@ -31,7 +31,8 @@ import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 
 /**
- * Created by jochenreutelshofer on 25.03.14.
+ * @author Jochen Reutelshöfer
+ * @created 25.03.2014
  */
 public class TermDragRenderer implements Renderer {
 	@Override

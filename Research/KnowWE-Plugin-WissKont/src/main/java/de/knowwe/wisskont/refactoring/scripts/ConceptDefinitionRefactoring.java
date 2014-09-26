@@ -36,7 +36,7 @@ import de.knowwe.rdfs.SimpleIRIDefintionMarkup;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 05.12.2012
  */
 public class ConceptDefinitionRefactoring extends AbstractAction {

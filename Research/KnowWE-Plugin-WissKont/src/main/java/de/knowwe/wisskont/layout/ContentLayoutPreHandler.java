@@ -24,7 +24,7 @@ import de.knowwe.core.user.UserContext;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 08.05.2013
  */
 public class ContentLayoutPreHandler implements PageAppendHandler {

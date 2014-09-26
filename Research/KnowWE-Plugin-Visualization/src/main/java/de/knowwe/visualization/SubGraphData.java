@@ -28,7 +28,7 @@ import java.util.Set;
 /**
  * Contains a sub-set of a graph.
  *
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 27.05.2013
  */
 public class SubGraphData {

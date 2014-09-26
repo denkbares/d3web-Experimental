@@ -41,7 +41,7 @@ import de.knowwe.kdom.renderer.SurroundingRenderer;
  * algorithm currently does not explicitly store instantiated messages but the
  * state of a term can be asked on demand at any time
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 28.11.2012
  */
 public class ReferenceSurroundingRenderer implements SurroundingRenderer {

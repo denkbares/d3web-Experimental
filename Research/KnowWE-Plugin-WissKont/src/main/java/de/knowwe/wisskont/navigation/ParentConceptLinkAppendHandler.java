@@ -46,7 +46,7 @@ import de.knowwe.wisskont.ConceptMarkup;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 12.12.2012
  */
 public class ParentConceptLinkAppendHandler implements PageAppendHandler {

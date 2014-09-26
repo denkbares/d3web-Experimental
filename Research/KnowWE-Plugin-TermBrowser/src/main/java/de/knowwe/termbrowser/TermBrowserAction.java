@@ -42,7 +42,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 10.12.2012
  */
 public class TermBrowserAction extends AbstractAction {

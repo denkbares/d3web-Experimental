@@ -30,7 +30,8 @@ import de.knowwe.kdom.renderer.AsynchronRenderer;
 /**
  * A renderer that renders d3 visualizations synchronously and dot visualization asynchronously.
  *
- * Created by jochenreutelshofer on 11.08.14.
+ * @author Jochen Reutelshöfer
+ * @created 11.08.2014
  */
 public class SwitchAsyncDelegateRenderer implements Renderer {
 

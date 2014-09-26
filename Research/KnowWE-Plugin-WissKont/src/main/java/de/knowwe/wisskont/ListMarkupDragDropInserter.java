@@ -34,7 +34,7 @@ import de.knowwe.termbrowser.DragDropEditInserter;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 04.06.2013
  */
 public class ListMarkupDragDropInserter implements DragDropEditInserter {

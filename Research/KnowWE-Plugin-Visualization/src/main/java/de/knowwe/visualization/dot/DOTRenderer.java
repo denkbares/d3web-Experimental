@@ -43,7 +43,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 /**
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 29.04.2013
  */
 public class DOTRenderer {

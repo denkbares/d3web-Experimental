@@ -39,7 +39,7 @@ import de.knowwe.core.report.Message;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 18.11.2012
  */
 public class MonitorMarkupContentType extends AbstractType {

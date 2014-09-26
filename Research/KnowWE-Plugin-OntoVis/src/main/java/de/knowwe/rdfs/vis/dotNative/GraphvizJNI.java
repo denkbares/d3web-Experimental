@@ -20,7 +20,8 @@
 package de.knowwe.rdfs.vis.dotNative;
 
 /**
- * Created by jochenreutelshofer on 07.04.14.
+ * @author Jochen Reutelshöfer
+ * @created 07.04.2014
  */
 public class GraphvizJNI {
 

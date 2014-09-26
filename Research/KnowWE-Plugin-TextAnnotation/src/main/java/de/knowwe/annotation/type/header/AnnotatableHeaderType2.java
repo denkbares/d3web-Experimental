@@ -23,7 +23,7 @@ import de.knowwe.kdom.renderer.CompositeRenderer;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 23.06.2013
  */
 public class AnnotatableHeaderType2 extends HeaderType2 {

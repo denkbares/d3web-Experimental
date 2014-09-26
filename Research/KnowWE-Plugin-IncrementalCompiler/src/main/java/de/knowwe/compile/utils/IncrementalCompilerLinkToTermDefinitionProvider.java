@@ -28,7 +28,7 @@ import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 24.04.2013
  */
 public class IncrementalCompilerLinkToTermDefinitionProvider implements de.knowwe.core.utils.LinkToTermDefinitionProvider {

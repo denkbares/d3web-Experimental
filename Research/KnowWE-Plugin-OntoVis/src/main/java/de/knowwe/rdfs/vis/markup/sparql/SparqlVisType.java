@@ -32,7 +32,7 @@ import de.knowwe.visualization.GraphDataBuilder;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 23.07.2013
  */
 

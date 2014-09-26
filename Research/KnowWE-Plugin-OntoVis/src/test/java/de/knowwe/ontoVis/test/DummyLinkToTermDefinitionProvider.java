@@ -24,7 +24,7 @@ import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 23.05.2013
  */
 public class DummyLinkToTermDefinitionProvider implements LinkToTermDefinitionProvider {

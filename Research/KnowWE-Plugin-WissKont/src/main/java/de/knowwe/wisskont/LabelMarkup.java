@@ -43,7 +43,7 @@ import de.knowwe.wisskont.util.MarkupUtils;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 22.11.2012
  */
 public class LabelMarkup extends AbstractType implements Editable {

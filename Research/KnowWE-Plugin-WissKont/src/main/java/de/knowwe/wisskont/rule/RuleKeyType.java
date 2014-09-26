@@ -22,7 +22,7 @@ import de.knowwe.wisskont.KeyType;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 08.08.2013
  */
 public class RuleKeyType extends KeyType {

@@ -49,7 +49,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 29.11.2012
  */
 public class Utils {

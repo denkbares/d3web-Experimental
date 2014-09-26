@@ -27,7 +27,7 @@ import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 26.11.2012
  */
 public abstract class SimpleKnowledgeUnitCompileScript<T extends Type> extends AbstractKnowledgeUnitCompileScript<T> {

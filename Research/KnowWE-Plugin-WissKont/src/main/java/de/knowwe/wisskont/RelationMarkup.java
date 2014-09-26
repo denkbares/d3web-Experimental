@@ -39,7 +39,7 @@ import de.knowwe.wisskont.relationMarkup.RelationMarkupUtils;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 27.11.2012
  */
 public abstract class RelationMarkup extends AbstractType {

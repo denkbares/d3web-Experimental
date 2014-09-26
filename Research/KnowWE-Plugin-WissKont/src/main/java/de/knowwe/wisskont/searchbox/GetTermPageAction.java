@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 30.09.2013
  */
 public class GetTermPageAction extends AbstractAction {

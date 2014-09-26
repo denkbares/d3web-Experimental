@@ -22,7 +22,7 @@ import de.knowwe.compile.object.IncrementalTermDefinition;
 
 /**
  * 
- * @author jochenreutelshofer
+ * @author Jochen Reutelshöfer
  * @created 26.10.2012
  */
 public class AbstractOWLTermDefinition extends IncrementalTermDefinition<String> {
