@@ -206,11 +206,11 @@ public class DOTRenderer {
             buffy.append("</I>");
             buffy.append("</TD>");
 
-            String conceptName = nodeLabel.replace("\\n", "<BR ALIGN=\"CENTER\"/>");
+            String conceptName = nodeLabel.replace("\\n", "<BR ALIGN=\"CENTER\"/>").replace("&", "&amp;");
 
             buffy.append("<TD BORDER=\"2\">");
             buffy.append("<B>");
-            buffy.append(Strings.unquote(conceptName));
+            buffy.append(Strings.unquote(conceptName).replace("&", "&amp;"));
             buffy.append("</B>");
             buffy.append("</TD>");
             buffy.append("</TR>");
@@ -218,11 +218,11 @@ public class DOTRenderer {
             for (Edge edge : edges) {
                 buffy.append("<TR>");
                 buffy.append("<TD BORDER=\"1\">");
-                buffy.append(edge.getPredicate());
+                buffy.append(edge.getPredicate().replace("&", "&amp;"));
                 buffy.append("</TD>");
 
                 buffy.append("<TD BORDER=\"1\">");
-                buffy.append(edge.getObject().getConceptLabel());
+                buffy.append(edge.getObject().getConceptLabel().replace("&", "&amp;"));
                 buffy.append("</TD>");
                 buffy.append("</TR>");
             }
@@ -389,10 +389,24 @@ public class DOTRenderer {
         FileUtils.writeFile(dot, dotSource);
         // create svg
 
-        String command = "nice -19n "+getDOTApp(user_app_path) + " " + dot.getAbsolutePath() +
+        /*
+        We try to call the dot process at low priority not to slow down the machine
+         */
+        String lowPriorityCall = "";
+        if(Utils.isMac()) {
+            lowPriorityCall = "nice -19n ";
+        } else if (Utils.isWindows()) {
+            // TODO: find windows way to start process on low priority
+            lowPriorityCall = "";
+        } else {
+            // assume to be linux
+            lowPriorityCall = "nice -n 19 ";
+        }
+
+        String command = lowPriorityCall+getDOTApp(user_app_path) + " " + dot.getAbsolutePath() +
                 " -Tsvg -o " + svg.getAbsolutePath() + "";
         if (Utils.isWindows()) {
-            command = getDOTApp(user_app_path) + " \"" + dot.getAbsolutePath() +
+            command = lowPriorityCall+getDOTApp(user_app_path) + " \"" + dot.getAbsolutePath() +
                     "\" -Tsvg -o \"" + svg.getAbsolutePath() + "\"";
         }
 
