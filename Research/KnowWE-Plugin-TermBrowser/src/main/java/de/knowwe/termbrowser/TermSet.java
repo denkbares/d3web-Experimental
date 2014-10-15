@@ -100,6 +100,7 @@ public class TermSet {
 		Node<RatedTerm> node = terms.find(newTerm);
 		if (node != null) {
 			RatedTerm existingValuedTerm = node.getData();
+
 			existingValuedTerm.incrValue(increment);
 		}
 		else {

@@ -222,7 +222,7 @@ public class TermSetManager implements EventListener {
 		return result;
 	}
 
-	public void termSearched(UserContext user, Identifier term) {
+	public void termSearched(UserContext user, BrowserTerm term) {
 		TermSet set = null;
 		if (data.containsKey(user.getUserName())) {
 			set = data.get(user.getUserName());

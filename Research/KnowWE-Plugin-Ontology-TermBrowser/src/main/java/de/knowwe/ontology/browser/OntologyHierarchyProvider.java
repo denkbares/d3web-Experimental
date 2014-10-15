@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.d3web.collections.PartialHierarchyTree;
+import de.knowwe.termbrowser.BrowserTerm;
+import de.knowwe.termbrowser.util.TermBrowserUtils;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
@@ -112,10 +115,17 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 
 		for (String relation : relations) {
 
-			List<URI> childrenConcepts2 = HierarchyUtils.getChildrenConcepts(termURI, new URIImpl(
+			List<URI> childrenConcepts = HierarchyUtils.getChildrenConcepts(termURI, new URIImpl(
 					Rdf2GoUtils.expandNamespace(core, relation)),
 					master);
-			for (URI uri : childrenConcepts2) {
+			for (URI uri : childrenConcepts) {
+                final PartialHierarchyTree<URI> classHierarchy = Rdf2GoUtils.getClassHierarchy(core, uri);
+                URI clazz = findMostSpecificClass(classHierarchy);
+                String type = null;
+                if(clazz != null) {
+                    type = TermBrowserUtils.abbreviateTypeNameForURI(clazz.toString());
+                }
+
 				String reducedNamespace = Rdf2GoUtils.reduceNamespace(core,
 						Strings.decodeURL(uri.toString()));
 				/*
@@ -124,7 +134,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 				 */
 				if (!(isIgnored(reducedNamespace)
 						|| termID.equals(new Identifier(reducedNamespace.split(":"))))) {
-					result.add(new Identifier(reducedNamespace.split(":")));
+					result.add(new BrowserTerm(type, reducedNamespace.split(":")));
 				}
 			}
 		}
@@ -160,13 +170,19 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 
 		for (String relation : relations) {
 
-			List<URI> childrenConcepts2 = HierarchyUtils.getParentConcepts(termURI, new URIImpl(
+			List<URI> parentConcepts = HierarchyUtils.getParentConcepts(termURI, new URIImpl(
 					Rdf2GoUtils.expandNamespace(core, relation)),
 					master);
-			for (URI uri : childrenConcepts2) {
-				String reducedNamespace = Rdf2GoUtils.reduceNamespace(core,
-						Strings.decodeURL(uri.toString()));
-				result.add(new Identifier(reducedNamespace.split(":")));
+			for (URI uri : parentConcepts) {
+                String reducedNamespace = Rdf2GoUtils.reduceNamespace(core,
+                        Strings.decodeURL(uri.toString()));
+                final PartialHierarchyTree<URI> classHierarchy = Rdf2GoUtils.getClassHierarchy(core, uri);
+                URI clazz = findMostSpecificClass(classHierarchy);
+                String type = null;
+                if(clazz != null) {
+                    type = TermBrowserUtils.abbreviateTypeNameForURI(clazz.toString());
+                }
+                result.add(new BrowserTerm(type,reducedNamespace.split(":")));
 			}
 		}
 
@@ -180,7 +196,30 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 		return result;
 	}
 
-	private void addSuccessorToCache(Identifier parent, Identifier successor) {
+    private URI findMostSpecificClass(PartialHierarchyTree<URI> classHierarchy) {
+        final Set<PartialHierarchyTree.Node<URI>> nodes = classHierarchy.getNodes();
+        int maxDepth = 0;
+        PartialHierarchyTree.Node<URI> deepestLeaf = null;
+        for (PartialHierarchyTree.Node<URI> node : nodes) {
+            int depth = getDepth(node);
+            if(depth > maxDepth) {
+                maxDepth = depth;
+                deepestLeaf = node;
+            }
+        }
+        return deepestLeaf.getData();
+    }
+
+    private int getDepth(PartialHierarchyTree.Node<URI> node) {
+        int depth = 0;
+        while(node.getParent() != null) {
+            depth++;
+            node = node.getParent();
+        }
+        return depth;
+    }
+
+    private void addSuccessorToCache(Identifier parent, Identifier successor) {
 		Set<Identifier> successors = successorshipCache.get(parent);
 		if (successors == null) {
 			successors = new HashSet<Identifier>();

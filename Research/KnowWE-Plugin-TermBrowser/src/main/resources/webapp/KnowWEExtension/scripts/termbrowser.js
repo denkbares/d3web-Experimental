@@ -39,7 +39,7 @@ jq$(document).ready(function() {
 
 	initCollapseTermBrowser();
 
-	//initSemanticAutocompletionSlot();
+	initSemanticAutocompletionSlot();
 
 	KNOWWE.plugin.termbrowser = {};
 
@@ -51,6 +51,7 @@ jq$(document).ready(function() {
 function initSemanticAutocompletionSlot() {
 	window.setTimeout(function() {
 		jq$(".termbrowserframe").each(function() {
+            KNOWWE.plugin.semanticautocompletion.actions.init();
 			var termbrowserframeElement = jq$(this);
 			var inputElement = termbrowserframeElement.find(".semanticautocompletion");
 			var textboxListObject = KNOWWE.plugin.semanticautocompletion.actions.getTextboxListInstance(inputElement);
@@ -67,7 +68,8 @@ function completionItemSelected(bitObject) {
 	if (firstList) {
 		var jsonObject = jq$.parseJSON(firstList);
 		var uri = jsonObject['concept'];
-		sendTermBrowserAction(uri, 'searched');
+        var type = jsonObject['conceptClass'];
+		sendTermBrowserAction(uri, 'searched', type);
 	}
 }
 
@@ -228,11 +230,12 @@ function handleTermActionEvent(element) {
 
 }
 
-function sendTermBrowserAction(term, command) {
+function sendTermBrowserAction(term, command, type) {
 	var params = {
 		action : 'TermBrowserAction',
 		term : term,
-		command : command
+		command : command,
+        type: type
 	};
 	var options = {
 		url : KNOWWE.core.util.getURL(params),
@@ -249,6 +252,7 @@ function sendTermBrowserAction(term, command) {
 
 				initAllIconHovers();
 				initAllBrowserActionEvents();
+                initSemanticAutocompletionSlot();
 			}
 		}
 	}
