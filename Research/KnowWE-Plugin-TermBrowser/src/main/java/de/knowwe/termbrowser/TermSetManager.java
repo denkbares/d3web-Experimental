@@ -58,14 +58,14 @@ public class TermSetManager implements EventListener {
 		return instance;
 	}
 
-	private InterestingTermDetector termDetector = null;
+	private Collection<InterestingTermDetector> termDetectors = null;
 	private final Map<String, TermSet> data = new HashMap<String, TermSet>();
 
 	/**
 	 *
 	 */
 	private TermSetManager() {
-		termDetector = getPluggedTermDetector();
+		termDetectors = getPluggedTermDetectors();
 		EventManager.getInstance().registerListener(this);
 	}
 
@@ -73,14 +73,14 @@ public class TermSetManager implements EventListener {
 	 * @return
 	 * @created 05.06.2013
 	 */
-	private InterestingTermDetector getPluggedTermDetector() {
-		InterestingTermDetector h = null;
+	private Collection<InterestingTermDetector> getPluggedTermDetectors() {
+		List<InterestingTermDetector> h = new ArrayList<InterestingTermDetector>();
 		Extension[] extensions = PluginManager.getInstance().getExtensions(
 				"KnowWE-Plugin-TermBrowser", InterestingTermDetector.EXTENSION_POINT_TERM_DETECTOR);
 		for (Extension extension : extensions) {
 			Object newInstance = extension.getNewInstance();
 			if (newInstance instanceof InterestingTermDetector) {
-				h = (InterestingTermDetector) newInstance;
+				h.add((InterestingTermDetector) newInstance);
 			}
 		}
 		return h;
@@ -99,7 +99,7 @@ public class TermSetManager implements EventListener {
 		return recommendationSet.isBrowserIsCollapsed();
 	}
 
-	public Identifier getLatestAddedTerm(UserContext user) {
+	public BrowserTerm getLatestAddedTerm(UserContext user) {
 		TermSet recommendationSet = data.get(user.getUserName());
 		if (recommendationSet == null) return null;
 		return recommendationSet.getTermAddedLatest();
@@ -206,9 +206,9 @@ public class TermSetManager implements EventListener {
 		return getRatedTermListTop(user, -1);
 	}
 
-	public List<Identifier> getRankedTermList(UserContext user) {
+	public List<BrowserTerm> getRankedTermList(UserContext user) {
 		List<RatedTerm> ratedTermList = getRatedTermList(user);
-		List<Identifier> result = new ArrayList<Identifier>();
+		List<BrowserTerm> result = new ArrayList<BrowserTerm>();
 		for (RatedTerm ratedTerm : ratedTermList) {
 			result.add(ratedTerm.getTerm());
 		}
@@ -248,21 +248,23 @@ public class TermSetManager implements EventListener {
 			boolean autoCollect = TermBrowserMarkup.getCurrentTermbrowserMarkupAutoCollectFlag(user);
 
 			if (autoCollect) {
+                String master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
+                for (InterestingTermDetector termDetector : termDetectors) {
 
-				String master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
-				Map<Identifier, Double> interestingTerms = termDetector.getWeightedTermsOfInterest(
-						article,
-						master);
+                    Map<BrowserTerm, Double> interestingTerms = termDetector.getWeightedTermsOfInterest(
+                            article,
+                            master);
 
-				// we add the values for the terms filtered by the hierarchy
-				// provider
-				Collection<Identifier> filteredTerms = set.getHierarchy().filterInterestingTerms(
-						interestingTerms.keySet());
+                    // we add the values for the terms filtered by the hierarchy
+                    // provider
+                    Collection<BrowserTerm> filteredTerms = set.getHierarchy().filterInterestingTerms(
+                            interestingTerms.keySet());
 
-				for (Identifier term : filteredTerms) {
-					set.addValue(term, interestingTerms.get(term));
-				}
-			}
+                    for (BrowserTerm term : filteredTerms) {
+                        set.addValue(term, interestingTerms.get(term));
+                    }
+                }
+            }
 
 		}
 
@@ -273,7 +275,7 @@ public class TermSetManager implements EventListener {
 	 * @param term
 	 * @created 11.12.2012
 	 */
-	public void clearTerm(UserContext context, Identifier term) {
+	public void clearTerm(UserContext context, BrowserTerm term) {
 		TermSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet != null) {
 			recommendationSet.clearValue(term);
@@ -287,15 +289,15 @@ public class TermSetManager implements EventListener {
 	 * @param term
 	 * @created 11.12.2012
 	 */
-	public void expandTerm(UserActionContext context, Identifier term) {
+	public void expandTerm(UserActionContext context, BrowserTerm term) {
 		TermSet recommendationSet = findRecommendationSet(context);
 
 		// discount existing terms to make sure expanded ones are top rated
 		recommendationSet.discount(0.9);
 
 		// add children
-		List<Identifier> children = recommendationSet.getHierarchy().getChildren(term);
-		for (Identifier child : children) {
+		List<BrowserTerm> children = recommendationSet.getHierarchy().getChildren(term);
+		for (BrowserTerm child : children) {
 			recommendationSet.addValue(child, WEIGHT_EXPAND);
 		}
 		// also add some score to the expanded concept itself
@@ -308,9 +310,9 @@ public class TermSetManager implements EventListener {
 		TermSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet == null) {
 			recommendationSet = TermSet.createRecommendationSet(context);
-			Collection<Identifier> startupTerms = recommendationSet.getHierarchy().getStartupTerms();
+			Collection<BrowserTerm> startupTerms = recommendationSet.getHierarchy().getStartupTerms();
 			if (startupTerms != null) {
-				for (Identifier identifier : startupTerms) {
+				for (BrowserTerm identifier : startupTerms) {
 					recommendationSet.addValue(identifier, 1.0);
 				}
 			}
@@ -325,11 +327,11 @@ public class TermSetManager implements EventListener {
 	 * @param term
 	 * @created 03.05.2013
 	 */
-	public void collapseTerm(UserActionContext context, Identifier term) {
+	public void collapseTerm(UserActionContext context, BrowserTerm term) {
 		TermSet recommendationSet = findRecommendationSet(context);
 
-		List<Identifier> children = recommendationSet.getHierarchy().getChildren(term);
-		for (Identifier child : children) {
+		List<BrowserTerm> children = recommendationSet.getHierarchy().getChildren(term);
+		for (BrowserTerm child : children) {
 			recommendationSet.clearValue(child);
 		}
 		recommendationSet.setTermAddedLatest(null);
@@ -381,9 +383,9 @@ public class TermSetManager implements EventListener {
 			recommendationSet.clear();
 			recommendationSet.setTermAddedLatest(null);
 			TermBrowserHierarchy hierarchy = recommendationSet.getHierarchy();
-			Collection<Identifier> startupTerms = hierarchy.getStartupTerms();
+			Collection<BrowserTerm> startupTerms = hierarchy.getStartupTerms();
 			if (startupTerms != null) {
-				for (Identifier identifier : startupTerms) {
+				for (BrowserTerm identifier : startupTerms) {
 					recommendationSet.addValue(identifier, 1.0);
 				}
 			}
@@ -415,13 +417,13 @@ public class TermSetManager implements EventListener {
 	 * @param term
 	 * @created 31.05.2013
 	 */
-	public void addParentTerm(UserActionContext context, Identifier term) {
+	public void addParentTerm(UserActionContext context, BrowserTerm term) {
 		TermSet recommendationSet = findRecommendationSet(context);
-		List<Identifier> parents = recommendationSet.getHierarchy().getParents(term);
+		List<BrowserTerm> parents = recommendationSet.getHierarchy().getParents(term);
 		// there should be only one parent
 		if (parents.size() > 0) {
 			// in any case we only take the first one
-			Identifier parent = parents.get(0);
+            BrowserTerm parent = parents.get(0);
 			recommendationSet.addValue(parent, WEIGHT_EXPAND);
 			recommendationSet.setTermAddedLatest(parent);
 		}

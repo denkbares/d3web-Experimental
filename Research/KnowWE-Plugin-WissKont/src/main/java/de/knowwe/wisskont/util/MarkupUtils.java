@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.knowwe.termbrowser.BrowserTerm;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
@@ -133,11 +134,11 @@ public class MarkupUtils {
 		return parents;
 	}
 
-	public static List<Identifier> getParentConcepts(Identifier term) {
-		List<Identifier> result = new ArrayList<Identifier>();
+	public static List<BrowserTerm> getParentConcepts(BrowserTerm term) {
+		List<BrowserTerm> result = new ArrayList<BrowserTerm>();
 
 		Collection<Section<? extends SimpleDefinition>> defs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				term);
+				term.getIdentifier());
 
 		if (defs.size() > 0) {
 			Section<? extends SimpleDefinition> def = defs.iterator().next();
@@ -170,18 +171,18 @@ public class MarkupUtils {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					result.add(new Identifier(termName));
+					result.add(new BrowserTerm(new Identifier(termName)));
 				}
 			}
 		}
 		return result;
 	}
 
-	public static List<Identifier> getChildrenConcepts(Identifier term) {
-		List<Identifier> result = new ArrayList<Identifier>();
+	public static List<BrowserTerm> getChildrenConcepts(BrowserTerm term) {
+		List<BrowserTerm> result = new ArrayList<BrowserTerm>();
 
 		Collection<Section<? extends SimpleDefinition>> defs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				term);
+				term.getIdentifier());
 
 		if (defs.size() > 0) {
 			Section<? extends SimpleDefinition> def = defs.iterator().next();
@@ -213,7 +214,7 @@ public class MarkupUtils {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					result.add(new Identifier(termName));
+					result.add(new BrowserTerm(new Identifier(termName)));
 				}
 			}
 		}

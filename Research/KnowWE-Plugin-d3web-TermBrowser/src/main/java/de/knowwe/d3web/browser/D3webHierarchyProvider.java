@@ -42,6 +42,7 @@ import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.termbrowser.BrowserTerm;
 import de.knowwe.termbrowser.HierarchyProvider;
 import de.knowwe.termbrowser.TermBrowserMarkup;
 
@@ -50,7 +51,7 @@ import de.knowwe.termbrowser.TermBrowserMarkup;
  * @author Jochen Reutelshöfer
  * @created 02.10.2013
  */
-public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
+public class D3webHierarchyProvider implements HierarchyProvider<BrowserTerm> {
 
 	private final List<String> relations = new ArrayList<String>();
 	private String master = null;
@@ -58,16 +59,16 @@ public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 
 
 	@Override
-	public List<Identifier> getChildren(Identifier term) {
-		List<Identifier> childrenList = new ArrayList<Identifier>();
+	public List<BrowserTerm> getChildren(BrowserTerm term) {
+		List<BrowserTerm> childrenList = new ArrayList<BrowserTerm>();
 		TerminologyManager terminologyManager = Environment.getInstance().getTerminologyManager(
 				Environment.DEFAULT_WEB, master);
 
-		Section<?> definingSection = terminologyManager.getTermDefiningSection(term);
+		Section<?> definingSection = terminologyManager.getTermDefiningSection(term.getIdentifier());
 		if (definingSection == null || !(definingSection.get() instanceof D3webTermDefinition)) return childrenList;
 		KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB, master);
 		de.d3web.core.knowledge.TerminologyManager manager = knowledgeBase.getManager();
-		NamedObject namedObject = manager.search(term.toExternalForm());
+		NamedObject namedObject = manager.search(term.getIdentifier().toExternalForm());
 		if (namedObject == null) {
 			Section<D3webTermDefinition> def = Sections.cast(definingSection,
 					D3webTermDefinition.class);
@@ -84,11 +85,11 @@ public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 		List<NamedObject> childrenD3web = getChildrenD3web(namedObject);
 		for (NamedObject childD3web : childrenD3web) {
 			if (childD3web instanceof Choice) {
-				childrenList.add(new Identifier(new String[] {
-						((Choice) childD3web).getQuestion().getName(), childD3web.getName() }));
+				childrenList.add(new BrowserTerm(new Identifier(new String[] {
+						((Choice) childD3web).getQuestion().getName(), childD3web.getName() })));
 			}
 			else {
-				childrenList.add(new Identifier(childD3web.getName()));
+				childrenList.add(new BrowserTerm(new Identifier(childD3web.getName())));
 			}
 		}
 		return childrenList;
@@ -133,15 +134,15 @@ public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 	}
 
 	@Override
-	public List<Identifier> getParents(Identifier term) {
-		List<Identifier> parentList = new ArrayList<Identifier>();
+	public List<BrowserTerm> getParents(BrowserTerm term) {
+		List<BrowserTerm> parentList = new ArrayList<BrowserTerm>();
 		TerminologyManager terminologyManager = Environment.getInstance().getTerminologyManager(
 				Environment.DEFAULT_WEB, master);
-		Section<?> definingSection = terminologyManager.getTermDefiningSection(term);
+		Section<?> definingSection = terminologyManager.getTermDefiningSection(term.getIdentifier());
 		if (definingSection == null || !(definingSection.get() instanceof D3webTermDefinition)) return parentList;
 		KnowledgeBase knowledgeBase = D3webUtils.getKnowledgeBase(Environment.DEFAULT_WEB, master);
 		de.d3web.core.knowledge.TerminologyManager manager = knowledgeBase.getManager();
-		NamedObject namedObject = manager.search(term.toExternalForm());
+		NamedObject namedObject = manager.search(term.getIdentifier().toExternalForm());
 		if (namedObject == null) {
 			Section<D3webTermDefinition> def = Sections.cast(definingSection,
 					D3webTermDefinition.class);
@@ -159,25 +160,25 @@ public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 
 		List<NamedObject> parentsD3web = getParentsD3web(namedObject);
 		for (NamedObject parentD3web : parentsD3web) {
-			parentList.add(new Identifier(parentD3web.getName()));
+			parentList.add(new BrowserTerm(new Identifier(parentD3web.getName())));
 		}
 
 		return parentList;
 	}
 
 	@Override
-	public boolean isSuccessorOf(Identifier term1, Identifier term2) {
+	public boolean isSuccessorOf(BrowserTerm term1, BrowserTerm term2) {
 
-		NamedObject object1 = findTermForName(term1.toExternalForm());
+		NamedObject object1 = findTermForName(term1.getIdentifier().toExternalForm());
 
-		NamedObject object2 = findTermForName(term2.toExternalForm());
+		NamedObject object2 = findTermForName(term2.getIdentifier().toExternalForm());
 		return isSubObjectTrans(object1, object2);
 	}
 
 	/**
 	 * 
 	 * @created 02.10.2013
-	 * @param term1
+	 * @param term
 	 * @return
 	 */
 	private NamedObject findTermForName(String term) {
@@ -216,7 +217,7 @@ public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 	}
 
 	@Override
-	public Collection<Identifier> getAllTerms() {
+	public Collection<BrowserTerm> getAllTerms() {
 		Section<TermBrowserMarkup> termBrowserMarkup = TermBrowserMarkup.getTermBrowserMarkup(user);
 		D3webCompiler compiler = Compilers.getCompiler(termBrowserMarkup, D3webCompiler.class);
 		if (compiler == null) return Collections.emptySet();
@@ -224,22 +225,22 @@ public class D3webHierarchyProvider implements HierarchyProvider<Identifier> {
 		if (knowledgeBase == null) return Collections.emptySet();
 
 		de.d3web.core.knowledge.TerminologyManager manager = knowledgeBase.getManager();
-		Set<Identifier> result = new HashSet<Identifier>();
+		Set<BrowserTerm> result = new HashSet<BrowserTerm>();
 		Collection<TerminologyObject> allTerminologyObjects = manager.getAllTerminologyObjects();
 		for (TerminologyObject terminologyObject : allTerminologyObjects) {
-			result.add(new Identifier(terminologyObject.toString()));
+			result.add(new BrowserTerm(new Identifier(terminologyObject.toString())));
 		}
 		return result;
 	}
 
 	@Override
-	public Collection<Identifier> getStartupTerms() {
+	public Collection<BrowserTerm> getStartupTerms() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
+	public Collection<BrowserTerm> filterInterestingTerms(Collection<BrowserTerm> terms) {
 		// we do not filter until now
 		return terms;
 	}

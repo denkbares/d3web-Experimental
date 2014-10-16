@@ -38,13 +38,13 @@ public class TermSet {
 	private PartialHierarchyTree<RatedTerm> terms = null;
 	private boolean browserIsCollapsed = false;
 	private boolean graphIsCollapsed = true;
-	private Identifier addedLatest = null;
+	private BrowserTerm addedLatest = null;
 
-	public Identifier getTermAddedLatest() {
+	public BrowserTerm getTermAddedLatest() {
 		return addedLatest;
 	}
 
-	public void setTermAddedLatest(Identifier addedLatest) {
+	public void setTermAddedLatest(BrowserTerm addedLatest) {
 		this.addedLatest = addedLatest;
 	}
 
@@ -91,11 +91,11 @@ public class TermSet {
 		return new ArrayList<RatedTerm>(list);
 	}
 
-	public void clearValue(Identifier term) {
+	public void clearValue(BrowserTerm term) {
 		terms.removeNodeFromTree(new RatedTerm(term));
 	}
 
-	public void addValue(Identifier term, Double increment) {
+	public void addValue(BrowserTerm term, Double increment) {
 		RatedTerm newTerm = new RatedTerm(term);
 		Node<RatedTerm> node = terms.find(newTerm);
 		if (node != null) {

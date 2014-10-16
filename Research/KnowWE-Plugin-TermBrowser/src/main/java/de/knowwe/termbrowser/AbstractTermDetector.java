@@ -38,13 +38,13 @@ import de.knowwe.core.kdom.parsing.Sections;
 public abstract class AbstractTermDetector implements InterestingTermDetector {
 
 	@Override
-	public Map<Identifier, Double> getWeightedTermsOfInterest(Article article, String master) {
-		Map<Identifier, Double> interestingTerms = new HashMap<Identifier, Double>();
+	public Map<BrowserTerm, Double> getWeightedTermsOfInterest(Article article, String master) {
+		Map<BrowserTerm, Double> interestingTerms = new HashMap<BrowserTerm, Double>();
 
 		List<Section<TermDefinition>> definitions = Sections.successors(
 				article.getRootSection(), TermDefinition.class);
 		for (Section<TermDefinition> def : definitions) {
-			interestingTerms.put(def.get().getTermIdentifier(def), WEIGHT_DEFINITION);
+			interestingTerms.put(new BrowserTerm(def.get().getTermIdentifier(def)), WEIGHT_DEFINITION);
 		}
 
 		List<Section<TermReference>> references = Sections.successors(
@@ -53,7 +53,7 @@ public abstract class AbstractTermDetector implements InterestingTermDetector {
 			// String termname = ref.get().getTermName(ref);
 			Collection<Section<? extends TermDefinition>> termDefinitions = getDefs(ref, master);
 			if (termDefinitions.size() > 0) {
-				interestingTerms.put(ref.get().getTermIdentifier(ref), WEIGHT_REFERENCE);
+				interestingTerms.put(new BrowserTerm(ref.get().getTermIdentifier(ref)), WEIGHT_REFERENCE);
 			}
 		}
 

@@ -27,10 +27,7 @@ import de.d3web.strings.Identifier;
  */
 public class RatedTerm implements Comparable<RatedTerm> {
 
-	// public static final RatedTerm ROOT = new RatedTerm(new
-	// Identifier("TERMBROWSER_ROOT"));
-
-	private final Identifier term;
+	private final BrowserTerm term;
 	private double value;
 
 	@Override
@@ -50,7 +47,7 @@ public class RatedTerm implements Comparable<RatedTerm> {
 	/**
 	 * 
 	 */
-	public RatedTerm(Identifier term) {
+	public RatedTerm(BrowserTerm term) {
 		this.term = term;
 	}
 
@@ -62,18 +59,18 @@ public class RatedTerm implements Comparable<RatedTerm> {
 		this.value = value;
 	}
 
-	public Identifier getTerm() {
+	public BrowserTerm getTerm() {
 		return term;
 	}
 
-	public RatedTerm(Identifier term, double v) {
+	public RatedTerm(BrowserTerm term, double v) {
 		this(term);
 		value = v;
 	}
 
 	@Override
 	public int compareTo(RatedTerm o) {
-		return term.compareTo(o.term);
+		return term.getIdentifier().compareTo(o.term.getIdentifier());
 	}
 
 	/**

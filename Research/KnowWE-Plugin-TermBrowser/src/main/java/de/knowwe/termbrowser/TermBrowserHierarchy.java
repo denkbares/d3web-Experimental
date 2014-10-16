@@ -33,7 +33,7 @@ import de.knowwe.core.user.UserContext;
  */
 public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 
-	private final HierarchyProvider<Identifier> hierarchyProvider;
+	private final HierarchyProvider<BrowserTerm> hierarchyProvider;
 	private final UserContext user;
 
 	/**
@@ -52,18 +52,18 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 	 * @created 05.06.2013
 	 */
 	@SuppressWarnings("unchecked")
-	public static HierarchyProvider<Identifier> getPluggedHierarchyProvider(String provider) {
+	public static HierarchyProvider<BrowserTerm> getPluggedHierarchyProvider(String provider) {
 		Extension[] extensions = PluginManager.getInstance().getExtensions(
 				"KnowWE-Plugin-TermBrowser", HierarchyProvider.EXTENSION_POINT_HIERARCHY_PROVIDER);
 		for (Extension extension : extensions) {
 			Object newInstance = extension.getSingleton();
 			if (newInstance instanceof HierarchyProvider) {
 				if (provider == null || provider.length() == 0) {
-					return (HierarchyProvider<Identifier>) newInstance;
+					return (HierarchyProvider<BrowserTerm>) newInstance;
 				}
 				else {
 					if (newInstance.getClass().getName().endsWith(provider)) {
-						return (HierarchyProvider<Identifier>) newInstance;
+						return (HierarchyProvider<BrowserTerm>) newInstance;
 					}
 				}
 			}
@@ -73,37 +73,37 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 	}
 
 	@Override
-	public List<Identifier> getChildren(Identifier term) {
+	public List<BrowserTerm> getChildren(BrowserTerm term) {
 		this.hierarchyProvider.updateSettings(user);
 		return hierarchyProvider.getChildren(term);
 	}
 
 	@Override
-	public List<Identifier> getParents(Identifier term) {
+	public List<BrowserTerm> getParents(BrowserTerm term) {
 		this.hierarchyProvider.updateSettings(user);
 		return hierarchyProvider.getParents(term);
 	}
 
-	private boolean isSubNodeOf(Identifier term1, Identifier term2) {
+	private boolean isSubNodeOf(BrowserTerm term1, BrowserTerm term2) {
 		this.hierarchyProvider.updateSettings(user);
 		return hierarchyProvider.isSuccessorOf(term1, term2);
 	}
 
 	@Override
-	public Collection<Identifier> getAllTerms() {
+	public Collection<BrowserTerm> getAllTerms() {
 		this.hierarchyProvider.updateSettings(user);
-		Collection<Identifier> result = hierarchyProvider.getAllTerms();
+		Collection<BrowserTerm> result = hierarchyProvider.getAllTerms();
 		return result;
 	}
 
 	@Override
-	public Collection<Identifier> getStartupTerms() {
+	public Collection<BrowserTerm> getStartupTerms() {
 		this.hierarchyProvider.updateSettings(user);
 		return hierarchyProvider.getStartupTerms();
 	}
 
 	@Override
-	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
+	public Collection<BrowserTerm> filterInterestingTerms(Collection<BrowserTerm> terms) {
 		return hierarchyProvider.filterInterestingTerms(terms);
 	}
 

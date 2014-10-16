@@ -1,39 +1,38 @@
 /*
- * Copyright (C) 2013 denkbares GmbH
- * 
+ * Copyright (C) 2014 denkbares GmbH, Germany
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.termbrowser;
 
-import java.util.Map;
+package de.knowwe.termbrowser.autocompletion;
 
-import de.d3web.strings.Identifier;
-import de.knowwe.core.kdom.Article;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.RenderResult;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.termbrowser.TermBrowserMarkup;
 
 /**
- * 
- * @author Jochen Reutelshöfer
- * @created 03.06.2013
+ * @author Jochen Reutelshoefer (denkbares GmbH)
+ * @created 16.10.14.
  */
-public interface InterestingTermDetector {
+public interface AutoCompletionSlotProvider {
 
-	public static final double WEIGHT_REFERENCE = 0.0;
-	public static final double WEIGHT_DEFINITION = 1.0;
+    String EXTENSION_POINT_COMPLETION_PROVIDER = "AutoCompletionSlotProvider" ;
 
-	static final String EXTENSION_POINT_TERM_DETECTOR = "TermDetector";
+    void init(Section<TermBrowserMarkup> section, UserContext user);
 
-	Map<BrowserTerm, Double> getWeightedTermsOfInterest(Article a, String master);
+    void renderAutoCompletionSlot(RenderResult content, Section<TermBrowserMarkup> section);
 }

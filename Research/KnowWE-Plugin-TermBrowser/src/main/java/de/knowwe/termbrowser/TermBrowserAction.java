@@ -82,6 +82,10 @@ public class TermBrowserAction extends AbstractAction {
         if (type.equals("undefined")) {
             type = "";
         }
+        String label = context.getParameter("label");
+        if (label == null || label.equals("undefined")) {
+            label = "";
+        }
         String master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(context);
 
 		/*
@@ -96,19 +100,19 @@ public class TermBrowserAction extends AbstractAction {
         if (term != null) {
             if (command.equals("searched")) {
                 // update ranking weights
-                TermSetManager.getInstance().termSearched(context, createTermIdentifier(term, type));
+                TermSetManager.getInstance().termSearched(context, createTermIdentifier(term, type, label));
             } else if (command.equals("remove")) {
                 // removes this concept from the list
-                TermSetManager.getInstance().clearTerm(context, createTermIdentifier(term, type));
+                TermSetManager.getInstance().clearTerm(context, createTermIdentifier(term, type, label));
             } else if (command.equals("expand")) {
                 // adds all sub-concepts of a concept to the list
-                TermSetManager.getInstance().expandTerm(context, createTermIdentifier(term, type));
+                TermSetManager.getInstance().expandTerm(context, createTermIdentifier(term, type, label));
             } else if (command.equals("addParent")) {
                 // adds all sub-concepts of a concept to the list
-                TermSetManager.getInstance().addParentTerm(context, createTermIdentifier(term, type));
+                TermSetManager.getInstance().addParentTerm(context, createTermIdentifier(term, type, label));
             } else if (command.equals("collapse")) {
                 // removes all sub-concepts of a concepts from the list
-                TermSetManager.getInstance().collapseTerm(context, createTermIdentifier(term, type));
+                TermSetManager.getInstance().collapseTerm(context, createTermIdentifier(term, type, label));
             } else if (command.equals("collapseGraph")) {
                 // stores user's collapse state on server
                 TermSetManager.getInstance().collapseGraph(context);
@@ -159,7 +163,7 @@ public class TermBrowserAction extends AbstractAction {
     }
 
 
-    private BrowserTerm createTermIdentifier(String term, String type) {
+    private BrowserTerm createTermIdentifier(String term, String type, String label) {
         // TODO: caution: this will break if identifier names contain '#' !!
         String[] split = term.split("#");
         for (int i = 0; i < split.length; i++) {
@@ -170,7 +174,7 @@ public class TermBrowserAction extends AbstractAction {
         if (type != null && type.startsWith("http:")) {
             type = TermBrowserUtils.abbreviateTypeNameForURI(type);
         }
-        return new BrowserTerm(type, split);
+        return new BrowserTerm(type, label, split);
     }
 
 

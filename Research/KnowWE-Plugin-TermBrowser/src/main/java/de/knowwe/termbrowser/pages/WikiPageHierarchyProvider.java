@@ -36,13 +36,14 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.jspwiki.types.LinkType;
+import de.knowwe.termbrowser.BrowserTerm;
 import de.knowwe.termbrowser.HierarchyProvider;
 
 /**
  * @author Jochen Reutelshöfer
  * @created 21.03.2014
  */
-public class WikiPageHierarchyProvider implements HierarchyProvider<Identifier> {
+public class WikiPageHierarchyProvider implements HierarchyProvider<BrowserTerm> {
 
 	@Override
 	public void updateSettings(UserContext user) {
@@ -50,15 +51,15 @@ public class WikiPageHierarchyProvider implements HierarchyProvider<Identifier> 
 	}
 
 	@Override
-	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
+	public Collection<BrowserTerm> filterInterestingTerms(Collection<BrowserTerm> terms) {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public List<Identifier> getChildren(Identifier term) {
-		List<Identifier> result = new ArrayList<Identifier>();
+	public List<BrowserTerm> getChildren(BrowserTerm term) {
+		List<BrowserTerm> result = new ArrayList<BrowserTerm>();
 		ArticleManager articleManager = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
-		String pageName = term.getLastPathElement();
+		String pageName = term.getIdentifier().getLastPathElement();
 		Article article = articleManager.getArticle(pageName);
 		if (article == null) {
 			return result;
@@ -67,14 +68,14 @@ public class WikiPageHierarchyProvider implements HierarchyProvider<Identifier> 
 		List<Section<LinkType>> successorsOfType = Sections.successors(rootSection, LinkType.class);
 		for (Section<LinkType> linkSection : successorsOfType) {
 			String targetPage = linkSection.get().getLink(linkSection);
-			result.add(new Identifier(targetPage));
+			result.add(new BrowserTerm(new Identifier(targetPage)));
 		}
 
 		return result;
 	}
 
 	@Override
-	public List<Identifier> getParents(Identifier term) {
+	public List<BrowserTerm> getParents(BrowserTerm term) {
 		ArticleManager articleManager = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
 		Iterator<Article> articleIterator = articleManager.getArticles().iterator();
 		while (articleIterator.hasNext()) {
@@ -82,9 +83,9 @@ public class WikiPageHierarchyProvider implements HierarchyProvider<Identifier> 
 			List<Section<LinkType>> successorsOfType = Sections.successors(next.getRootSection(), LinkType.class);
 			for (Section<LinkType> linkSection : successorsOfType) {
 				String targetPage = linkSection.get().getLink(linkSection);
-				if (targetPage.equals(term.getLastPathElement())) {
-					List<Identifier> result = new ArrayList<Identifier>();
-					result.add(new Identifier(next.getTitle()));
+				if (targetPage.equals(term.getIdentifier().getLastPathElement())) {
+					List<BrowserTerm> result = new ArrayList<BrowserTerm>();
+					result.add(new BrowserTerm(new Identifier(next.getTitle())));
 					return result;
 				}
 
@@ -94,38 +95,37 @@ public class WikiPageHierarchyProvider implements HierarchyProvider<Identifier> 
 	}
 
 	@Override
-	public Collection<Identifier> getAllTerms() {
+	public Collection<BrowserTerm> getAllTerms() {
 		ArticleManager articleManager = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
 		Iterator<Article> articleIterator = articleManager.getArticles().iterator();
-		List<Identifier> result = new ArrayList<Identifier>();
+		List<BrowserTerm> result = new ArrayList<BrowserTerm>();
 		while (articleIterator.hasNext()) {
-			result.add(new Identifier(articleIterator.next().getTitle()));
+			result.add(new BrowserTerm(new Identifier(articleIterator.next().getTitle())));
 		}
 		return result;
 	}
 
 	@Override
-	public Collection<Identifier> getStartupTerms() {
-		List<Identifier> result = new ArrayList<Identifier>();
-		result.add(new Identifier("Main"));
+	public Collection<BrowserTerm> getStartupTerms() {
+		List<BrowserTerm> result = new ArrayList<BrowserTerm>();
+		result.add(new BrowserTerm(new Identifier("Main")));
 		return result;
 	}
 
 	@Override
-	public boolean isSuccessorOf(Identifier node1, Identifier node2) {
-		return isSubPageOf(node1, node2, new HashSet<Identifier>());
+	public boolean isSuccessorOf(BrowserTerm node1, BrowserTerm node2) {
+		return isSubPageOf(node1, node2, new HashSet<BrowserTerm>());
 	}
 
-	private boolean isSubPageOf(Identifier node1, Identifier target, Set<Identifier> terms) {
+	private boolean isSubPageOf(BrowserTerm node1, BrowserTerm target, Set<BrowserTerm> terms) {
 		terms.add(node1);
 
-		ArticleManager articleManager = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
 		if (getChildren(target).contains(node1)) {
 			return true;
 		}
 
-		List<Identifier> parents = getParents(node1);
-		for (Identifier parent : parents) {
+		List<BrowserTerm> parents = getParents(node1);
+		for (BrowserTerm parent : parents) {
 			if (parent.equals(target)) {
 				return true;
 			}

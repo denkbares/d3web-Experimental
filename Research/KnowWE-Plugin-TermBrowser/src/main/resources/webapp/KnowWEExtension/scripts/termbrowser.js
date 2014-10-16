@@ -67,9 +67,10 @@ function completionItemSelected(bitObject) {
 	var firstList = value[0];
 	if (firstList) {
 		var jsonObject = jq$.parseJSON(firstList);
-		var uri = jsonObject['concept'];
+        var uri = jsonObject['concept'];
         var type = jsonObject['conceptClass'];
-		sendTermBrowserAction(uri, 'searched', type);
+        var label = value[1];
+        sendTermBrowserAction(uri, 'searched', type, label);
 	}
 }
 
@@ -230,12 +231,13 @@ function handleTermActionEvent(element) {
 
 }
 
-function sendTermBrowserAction(term, command, type) {
+function sendTermBrowserAction(term, command, type, label) {
 	var params = {
 		action : 'TermBrowserAction',
 		term : term,
 		command : command,
-        type: type
+        type: type,
+        label: label
 	};
 	var options = {
 		url : KNOWWE.core.util.getURL(params),

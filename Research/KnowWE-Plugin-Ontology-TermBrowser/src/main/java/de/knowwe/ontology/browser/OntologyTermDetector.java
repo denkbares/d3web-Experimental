@@ -30,6 +30,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.ontology.kdom.resource.ResourceDefinition;
 import de.knowwe.ontology.kdom.resource.ResourceReference;
+import de.knowwe.termbrowser.BrowserTerm;
 import de.knowwe.termbrowser.DefaultTermDetector;
 import de.knowwe.termbrowser.InterestingTermDetector;
 
@@ -41,14 +42,14 @@ import de.knowwe.termbrowser.InterestingTermDetector;
 public class OntologyTermDetector implements InterestingTermDetector {
 
 	@Override
-	public Map<Identifier, Double> getWeightedTermsOfInterest(Article a, String master) {
-		Map<Identifier, Double> interestingTerms = new HashMap<Identifier, Double>();
+	public Map<BrowserTerm, Double> getWeightedTermsOfInterest(Article a, String master) {
+		Map<BrowserTerm, Double> interestingTerms = new HashMap<BrowserTerm, Double>();
 
 		List<Section<ResourceDefinition>> definitions = Sections.successors(
 				a.getRootSection(), ResourceDefinition.class);
 		for (Section<ResourceDefinition> def : definitions) {
 			Identifier termname = def.get().getTermIdentifier(def);
-			interestingTerms.put(termname, WEIGHT_DEFINITION);
+			interestingTerms.put(new BrowserTerm(termname), WEIGHT_DEFINITION);
 		}
 
 		List<Section<ResourceReference>> references = Sections.successors(
@@ -58,7 +59,7 @@ public class OntologyTermDetector implements InterestingTermDetector {
 			Collection<Section<? extends TermDefinition>> termDefinitions = DefaultTermDetector.getDefinitions(
 					ref, master);
 			if (termDefinitions.size() > 0) {
-				interestingTerms.put(termname, WEIGHT_REFERENCE);
+				interestingTerms.put(new BrowserTerm(termname), WEIGHT_REFERENCE);
 			}
 		}
 

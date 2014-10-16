@@ -20,19 +20,19 @@ package de.knowwe.termbrowser;
 
 import de.d3web.collections.PartialHierarchyTree;
 import de.d3web.collections.PartialHierarchyTree.Node;
-import de.d3web.strings.Identifier;
+import de.d3web.plugin.Extension;
+import de.d3web.plugin.PluginManager;
 import de.d3web.strings.Strings;
-import de.knowwe.core.compile.Compilers;
+import de.d3web.utils.Log;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
-import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.termbrowser.autocompletion.WikiPageCompletionProvider;
-import de.knowwe.termbrowser.ssc.ServiceModel;
+import de.knowwe.termbrowser.autocompletion.AutoCompletionSlotProvider;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Jochen Reutelshöfer
@@ -60,19 +60,26 @@ public class TermBrowserRenderer {
         hierarchy = new TermBrowserHierarchy(user);
     }
 
-/*
-    private OntologyCompletionProviderConfig getOntologyCompletionProviderConfig(Rdf2GoCore core, UserContext user) {
-        final String ssc = "http://denkbares.com/SemanticServiceCore#";
-        Collection<String> classes = Arrays.asList(new String[]{"http://denkbares.com/SemanticServiceCore#Wire", "http://denkbares.com/SemanticServiceCore#Unit", "http://denkbares.com/ILME#LRU", "http://denkbares.com/SemanticServiceCore#CableBundle", "http://denkbares.com/SemanticServiceCore#ConcreteComponent", "http://denkbares.com/SemanticServiceCore#HydraulicHose", "http://denkbares.com/SemanticServiceCore#Socket", "http://denkbares.com/SemanticServiceCore#UIComponent", "http://denkbares.com/ILME#STTE", "http://denkbares.com/SemanticServiceCore#Equipment", "http://denkbares.com/SemanticServiceCore#Machine", "http://denkbares.com/SemanticServiceCore#TestEquipment", "http://denkbares.com/SemanticServiceCore#MachineType", "http://denkbares.com/SemanticServiceCore#Plug", "http://denkbares.com/SemanticServiceCore#Pin", "http://denkbares.com/SemanticServiceCore#LogicalComponent", "http://denkbares.com/SemanticServiceCore#Malfunction", "http://denkbares.com/SemanticServiceCore#Context", "http://denkbares.com/SemanticServiceCore#Location", "http://denkbares.com/SemanticServiceCore#Prototype", "http://denkbares.com/SemanticServiceCore#Function"});
-        Collection<String> textProperties =
-                Arrays.asList(ServiceModel.skosPrefLabel, ServiceModel.skosAltLabel, ServiceModel.skosHiddenLabel, ServiceModel.skosLabel, ServiceModel.rdfsLabel);
-        Collection<String> altLanguages = Arrays.asList("de", "en");
-        List<String> titleProperties = Arrays.asList(ServiceModel.skosPrefLabel, ServiceModel.skosAltLabel, ServiceModel.rdfsLabel);
-        String displayLanguage = "de";
-        return new OntologyCompletionProviderConfig(classes, "<" + ssc + "type>",
-                titleProperties, textProperties, displayLanguage, altLanguages);
+    public static AutoCompletionSlotProvider getPluggedAutoCompletionProvider(String provider) {
+        Extension[] extensions = PluginManager.getInstance().getExtensions(
+                "KnowWE-Plugin-TermBrowser", AutoCompletionSlotProvider.EXTENSION_POINT_COMPLETION_PROVIDER);
+        for (Extension extension : extensions) {
+            Object newInstance = extension.getSingleton();
+            if (newInstance instanceof AutoCompletionSlotProvider) {
+                if (provider == null || provider.length() == 0) {
+                    return (AutoCompletionSlotProvider) newInstance;
+                }
+                else {
+                    if (newInstance.getClass().getName().endsWith(provider)) {
+                        return (AutoCompletionSlotProvider) newInstance;
+                    }
+                }
+            }
+        }
+        return null;
     }
-*/
+
+
     public String renderTermBrowser() {
         RenderResult string = new RenderResult(user);
         string.appendHtml("<div class='termbrowserframe'>");
@@ -114,52 +121,25 @@ public class TermBrowserRenderer {
                 renderSearchSlot(string);
             }
 
+
+
+
 			/*
              * render semantic autocompletion search slot
 			 */
             boolean renderSemanticAutocompletionSlot = false;
             {
 
-                /*
-                 * init semantic autocompletion
-				 */
-
-
                 final Section<TermBrowserMarkup> termBrowserMarkup = TermBrowserMarkup.getTermBrowserMarkup(user);
-               /* off
-                final Collection<OntologyCompiler> compilers = Compilers.getCompilers(termBrowserMarkup, OntologyCompiler.class);
-                if (compilers == null || compilers.size() == 0) return "No Ontology Compiler not found!";
-                final Rdf2GoCore core = compilers.iterator().next().getRdf2GoCore();
-
-                // CompletionProvider for the ontology
-                OntologyCompletionProviderConfig config = getOntologyCompletionProviderConfig(core, user);
-                RepositoryAdapter adapter = new Rdf2GoCoreRepositoryAdapter(core);
-                CompletionProvider ontologyCompletionProvider = new OntologyCompletionProvider(adapter, config);
-
-                // CompletionProvider for wiki pages
-                CompletionProvider pageCompletionProvider = new WikiPageCompletionProvider();
-
-                // init autocompletion
-                SemanticAutocompletionManager.initializeSemanticAutocompletion(new ArrayList<Constraint>(), termBrowserMarkup, new CompletionProvider[]{ontologyCompletionProvider, pageCompletionProvider});
+                AutoCompletionSlotProvider slot = getPluggedAutoCompletionProvider(null);
+                slot.init(termBrowserMarkup, user );
 
                 renderSemanticAutocompletionSlot = true;
 
-                */
-
-				/*
-				 * html from SemanticAutocompletionType
-				 */
                 if (renderSemanticAutocompletionSlot) {
-                    string.appendHtml("<div>");
-                    string.appendHtml("<span class='semanticautocompletionmaster' style='display:none'>");
-                    string.append(master);
-                    string.appendHtml("</span>");
-                    string.appendHtml("<input sectionId='" + termBrowserMarkup.getID() + "' type='text' name='Semantic Autocompletion' value='' class='semanticautocompletion' ");
-                    string.appendHtml("id='semanticautocompletion-");
-                    string.appendHtml(Integer.toString(termBrowserMarkup.hashCode()));
-                    string.appendHtml("' />");
-                    string.appendHtml("</div>");
+                    slot.renderAutoCompletionSlot(string, termBrowserMarkup);
                 }
+
             }
 
             int browserSize = THRESHOLD_MAX_TERM_NUMBER;
@@ -225,13 +205,13 @@ public class TermBrowserRenderer {
      */
     private String generateTermnames() {
 
-        Collection<Identifier> allTermDefinitions = hierarchy.getAllTerms();
+        Collection<BrowserTerm> allTermDefinitions = hierarchy.getAllTerms();
         StringBuilder builder = new StringBuilder();
 
         if (allTermDefinitions != null) {
 
-            for (Identifier name : allTermDefinitions) {
-                builder.append("\"").append(name.toExternalForm().replaceAll("\"", "")).append("\",\n");
+            for (BrowserTerm name : allTermDefinitions) {
+                builder.append("\"").append(name.getIdentifier().toExternalForm().replaceAll("\"", "")).append("\",\n");
             }
         }
 
@@ -273,7 +253,7 @@ public class TermBrowserRenderer {
 
     private void renderConcept(Node<RatedTerm> t, int depth, RenderResult string, LinkToTermDefinitionProvider linkProvider, String master) {
 
-        Identifier term = t.getData().getTerm();
+        BrowserTerm term = t.getData().getTerm();
         String lineStyleClass = "zebraline";
         if (!zebra) {
             zebra = true;
@@ -282,9 +262,9 @@ public class TermBrowserRenderer {
             zebra = false;
         }
 
-        String url = linkProvider.getLinkToTermDefinition(term, master);
+        String url = linkProvider.getLinkToTermDefinition(term.getIdentifier(), master);
         if (url == null) {
-            url = KnowWEUtils.getURLLink(term.getLastPathElement());
+            url = KnowWEUtils.getURLLink(term.getIdentifier().getLastPathElement());
         }
         // baseUrl + name;
         String divStyle = "";
@@ -324,7 +304,13 @@ public class TermBrowserRenderer {
                     if (url != null) {
                         string.appendHtml("<a href=\"" + url + "\">");
                     }
-                    string.appendHtml("<div class='termname' title='" + term.toExternalForm()
+                    String mouseOver = null;
+                    if(Strings.isBlank(term.getLabel())) {
+                     mouseOver =  term.getIdentifier().toExternalForm();
+                    } else {
+                        mouseOver = term.getLabel();
+                    }
+                    string.appendHtml("<div class='termname' title='" + mouseOver
                             + "' style='display:inline;"
                             + createStyle(depth)
                             + "'>");
@@ -332,7 +318,7 @@ public class TermBrowserRenderer {
 
                     // insert exact term name to be used for action calls
                     string.appendHtml("<div class='termID' >");
-                    string.append(term.toExternalForm());
+                    string.append(term.getIdentifier().toExternalForm());
                     string.appendHtml("</div>");
 
                     // insert term name
@@ -370,12 +356,12 @@ public class TermBrowserRenderer {
         string.appendHtml("</div>");
     }
 
-    private String prepareDisplayLabel(Node<RatedTerm> t, Identifier term) {
+    private String prepareDisplayLabel(Node<RatedTerm> t, BrowserTerm term) {
         String label = getLabel(term);
         if (hierarchyPrefixAbbreviation) {
             Node<RatedTerm> parent = t.getParent();
             if (parent != null) {
-                Identifier parentID = parent.getData().getTerm();
+                BrowserTerm parentID = parent.getData().getTerm();
                 String parentLabel = getLabel(parentID);
                 if (label.startsWith(parentLabel)) {
                     label = label.substring(parentLabel.length());
@@ -412,9 +398,9 @@ public class TermBrowserRenderer {
         return label;
     }
 
-    private String getLabel(Identifier term) {
-        String[] identifierParts = term.getPathElements();
-        String label = term.toExternalForm();
+    private String getLabel(BrowserTerm term) {
+        String[] identifierParts = term.getIdentifier().getPathElements();
+        String label = term.getIdentifier().toExternalForm();
         if (identifierParts.length == 2) {
             label = identifierParts[1];
         }
@@ -431,7 +417,7 @@ public class TermBrowserRenderer {
      * @param divStyle
      * @created 19.04.2013
      */
-    private void insertActionButtonsPost(RenderResult string, String url, String divStyle, Identifier term, int level) {
+    private void insertActionButtonsPost(RenderResult string, String url, String divStyle, BrowserTerm term, int level) {
         string.appendHtml("<table style='table-layout:fixed'>");
         string.appendHtml("<tr>");
         {
@@ -475,8 +461,8 @@ public class TermBrowserRenderer {
      * @created 03.05.2013
      */
     private boolean allChildrenShown(Node<RatedTerm> term) {
-        List<Identifier> childrenConcepts = hierarchy.getChildren(term.getData().getTerm());
-        for (Identifier childTerm : childrenConcepts) {
+        List<BrowserTerm> childrenConcepts = hierarchy.getChildren(term.getData().getTerm());
+        for (BrowserTerm childTerm : childrenConcepts) {
             if (!term.getChildren().contains(
                     new Node<RatedTerm>(new RatedTerm(childTerm)))) {
                 return false;
@@ -521,10 +507,10 @@ public class TermBrowserRenderer {
      * @param divStyle
      * @created 03.05.2013
      */
-    private void insertAddParentButton(RenderResult string, String divStyle, Identifier term, int level) {
+    private void insertAddParentButton(RenderResult string, String divStyle, BrowserTerm term, int level) {
         if (level == 0) {
 
-            List<Identifier> parentConcepts = hierarchy.getParents(term);
+            List<BrowserTerm> parentConcepts = hierarchy.getParents(term);
             if (parentConcepts.size() > 0) {
 
                 // add parent concept to list
@@ -546,7 +532,7 @@ public class TermBrowserRenderer {
      * @param divStyle
      * @created 03.05.2013
      */
-    private void insertObjectInfoLinkButton(RenderResult string, String divStyle, Identifier term) {
+    private void insertObjectInfoLinkButton(RenderResult string, String divStyle, BrowserTerm term) {
         // Wiki.jsp?page=ObjectInfoPage&termIdentifier="Damaged idle speed system"&objectname="Damaged idle speed system"
         // String encodedTerm = term.toString(); // maskTermForHTML(term);
         // String identifier = encodedTerm;
@@ -559,7 +545,7 @@ public class TermBrowserRenderer {
         // identifier = identifier.replace("#", "#\"");
         // }
         // String encodedIdenifier = Strings.encodeURL(identifier);
-        String linkToObjectInfoPage = KnowWEUtils.getURLLinkToObjectInfoPage(term);
+        String linkToObjectInfoPage = KnowWEUtils.getURLLinkToObjectInfoPage(term.getIdentifier());
         // String linkURL = "Wiki.jsp?page=ObjectInfoPage&termIdentifier="
         // + encodedIdenifier
         // + closingQuote + "&objectname=\"" + objectName + "\"";

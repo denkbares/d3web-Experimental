@@ -54,7 +54,7 @@ import de.knowwe.termbrowser.TermBrowserMarkup;
  * @author Jochen Reutelshöfer
  * @created 01.10.2013
  */
-public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>, EventListener {
+public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>, EventListener {
 
 	protected List<String> categories = new ArrayList<String>();
 	protected List<String> startConceptList = new ArrayList<String>();
@@ -64,7 +64,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 	protected String master = null;
 	protected UserContext user = null;
 
-	protected Map<Identifier, Set<Identifier>> successorshipCache = new HashMap<Identifier, Set<Identifier>>();
+	protected Map<BrowserTerm, Set<BrowserTerm>> successorshipCache = new HashMap<BrowserTerm, Set<BrowserTerm>>();
 
 	protected boolean mixedRelationHierarchyMode = true;
 
@@ -107,11 +107,11 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 	}
 
 	@Override
-	public List<Identifier> getChildren(Identifier termID) {
+	public List<BrowserTerm> getChildren(BrowserTerm termID) {
 		Rdf2GoCore core = getCore();
 
-		URI termURI = new URIImpl(Rdf2GoUtils.expandNamespace(core, getShortURI(termID)));
-		List<Identifier> result = new ArrayList<Identifier>();
+		URI termURI = new URIImpl(Rdf2GoUtils.expandNamespace(core, getShortURI(termID.getIdentifier())));
+		List<BrowserTerm> result = new ArrayList<BrowserTerm>();
 
 		for (String relation : relations) {
 
@@ -125,16 +125,16 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
                 if(clazz != null) {
                     type = TermBrowserUtils.abbreviateTypeNameForURI(clazz.toString());
                 }
-
 				String reducedNamespace = Rdf2GoUtils.reduceNamespace(core,
 						Strings.decodeURL(uri.toString()));
+
 				/*
 				 * we check the ignore list and we check whether the term is
 				 * child of itself
 				 */
 				if (!(isIgnored(reducedNamespace)
 						|| termID.equals(new Identifier(reducedNamespace.split(":"))))) {
-					result.add(new BrowserTerm(type, reducedNamespace.split(":")));
+					result.add(new BrowserTerm(type,  Rdf2GoUtils.getLabelRDFS(uri, core, null), reducedNamespace.split(":")));
 				}
 			}
 		}
@@ -142,9 +142,9 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 		/*
 		fill data into cache (to make isSuccessorOf-calls more efficient)
 		 */
-		Set<Identifier> successors = successorshipCache.get(termID);
+		Set<BrowserTerm> successors = successorshipCache.get(termID);
 		if (successors == null) {
-			successors = new HashSet<Identifier>();
+			successors = new HashSet<BrowserTerm>();
 			successorshipCache.put(termID, successors);
 		}
 		successors.addAll(result);
@@ -162,11 +162,11 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 	}
 
 	@Override
-	public List<Identifier> getParents(Identifier termID) {
+	public List<BrowserTerm> getParents(BrowserTerm termID) {
 		Rdf2GoCore core = getCore();
 
-		URI termURI = new URIImpl(getURIString(termID));
-		List<Identifier> result = new ArrayList<Identifier>();
+		URI termURI = new URIImpl(getURIString(termID.getIdentifier()));
+		List<BrowserTerm> result = new ArrayList<BrowserTerm>();
 
 		for (String relation : relations) {
 
@@ -182,14 +182,14 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
                 if(clazz != null) {
                     type = TermBrowserUtils.abbreviateTypeNameForURI(clazz.toString());
                 }
-                result.add(new BrowserTerm(type,reducedNamespace.split(":")));
+                result.add(new BrowserTerm(type,Rdf2GoUtils.getLabelRDFS(uri, core, null),reducedNamespace.split(":")));
 			}
 		}
 
 		/*
 		fill data into cache (to make isSuccessorOf-calls more efficient)
 		 */
-		for (Identifier parent : result) {
+		for (BrowserTerm parent : result) {
 			addSuccessorToCache(parent, termID);
 		}
 
@@ -219,25 +219,25 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
         return depth;
     }
 
-    private void addSuccessorToCache(Identifier parent, Identifier successor) {
-		Set<Identifier> successors = successorshipCache.get(parent);
+    private void addSuccessorToCache(BrowserTerm parent, BrowserTerm successor) {
+		Set<BrowserTerm> successors = successorshipCache.get(parent);
 		if (successors == null) {
-			successors = new HashSet<Identifier>();
+			successors = new HashSet<BrowserTerm>();
 			successorshipCache.put(parent, successors);
 		}
 		successors.add(successor);
 	}
 
 	@Override
-	public boolean isSuccessorOf(Identifier termID1, Identifier termID2) {
+	public boolean isSuccessorOf(BrowserTerm termID1, BrowserTerm termID2) {
 		if (successorshipCache.containsKey(termID2) && successorshipCache.get(termID2).contains(termID1)) {
 			return true;
 		}
 
 		Rdf2GoCore core = getCore();
 
-		URI term1URI = new URIImpl(getURIString(termID1));
-		URI term2URI = new URIImpl(getURIString(termID2));
+		URI term1URI = new URIImpl(getURIString(termID1.getIdentifier()));
+		URI term2URI = new URIImpl(getURIString(termID2.getIdentifier()));
 
 		for (String relation : relations) {
 			boolean is = HierarchyUtils.isSubConceptOf(term1URI, term2URI, new URIImpl(
@@ -248,8 +248,8 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 			}
 			else {
 				if (mixedRelationHierarchyMode) {
-					List<Identifier> children = getChildren(termID2);
-					for (Identifier child : children) {
+					List<BrowserTerm> children = getChildren(termID2);
+					for (BrowserTerm child : children) {
 						boolean found = isSuccessorOf(termID1, child);
 						if (found) {
 							addSuccessorToCache(termID2, termID1);
@@ -264,28 +264,34 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 	}
 
 	@Override
-	public Collection<Identifier> getAllTerms() {
+	public Collection<BrowserTerm> getAllTerms() {
 		TerminologyManager terminologyManager = HierarchyUtils.getCompiler(master).getTerminologyManager();
-		return terminologyManager.getAllDefinedTerms();
-	}
+        final Collection<BrowserTerm> result = new HashSet<BrowserTerm>();
+        final Collection<Identifier> allDefinedTerms = terminologyManager.getAllDefinedTerms();
+        for (Identifier definedTerm : allDefinedTerms) {
+            // TODO: equip BrowserTerms with types and labels here ??
+            result.add(new BrowserTerm(definedTerm));
+        }
+        return result;
+    }
 
 	@Override
-	public Collection<Identifier> getStartupTerms() {
-		List<Identifier> startConcepts = new ArrayList<Identifier>();
+	public Collection<BrowserTerm> getStartupTerms() {
+		List<BrowserTerm> startConcepts = new ArrayList<BrowserTerm>();
 		for (String startConceptName : startConceptList) {
-			startConcepts.add(new Identifier(startConceptName.split(":")));
+			startConcepts.add(new BrowserTerm(new Identifier(startConceptName.split(":"))));
 		}
 		return startConcepts;
 	}
 
 	@Override
-	public Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms) {
+	public Collection<BrowserTerm> filterInterestingTerms(Collection<BrowserTerm> terms) {
 
 		// we do not filter if no filter classes are defined
 		if (categories == null || categories.size() == 0) return terms;
 
 		Rdf2GoCore core = HierarchyUtils.getCompiler(master).getRdf2GoCore();
-		List<Identifier> resultConcepts = new ArrayList<Identifier>();
+		List<BrowserTerm> resultConcepts = new ArrayList<BrowserTerm>();
 		List<String> classes = this.categories;
 		List<URI> classURIs = new ArrayList<URI>();
 
@@ -299,8 +305,8 @@ public class OntologyHierarchyProvider implements HierarchyProvider<Identifier>,
 
 		// we check for each term whether it is instance of at least one of the
 		// filter classes
-		for (Identifier term : terms) {
-			String[] pathElements = term.getPathElements();
+		for (BrowserTerm term : terms) {
+			String[] pathElements = term.getIdentifier().getPathElements();
 			if (pathElements.length == 2) {
 				URI termURI = core.createURI(pathElements[0], pathElements[1]);
 				for (URI classURI : classURIs) {

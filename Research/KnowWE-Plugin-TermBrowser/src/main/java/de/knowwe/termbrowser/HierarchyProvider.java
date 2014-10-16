@@ -33,46 +33,46 @@ import de.knowwe.core.user.UserContext;
 public interface HierarchyProvider<T> extends PartialHierarchy<T> {
 
 	public static final String EXTENSION_POINT_HIERARCHY_PROVIDER = "HierarchyProvider";
-	
+
 	void updateSettings(UserContext user);
 
 
-	Collection<Identifier> filterInterestingTerms(Collection<Identifier> terms);
+	Collection<BrowserTerm> filterInterestingTerms(Collection<BrowserTerm> terms);
 
 	/**
 	 * Returns all children terms for the specified terms.
-	 * 
+	 *
 	 * @created 20.11.2013
 	 * @param term
 	 * @return
 	 */
-	List<Identifier> getChildren(Identifier term);
+	List<BrowserTerm> getChildren(BrowserTerm term);
 
 	/**
 	 * Returns all parent terms for the specified terms.
-	 * 
+	 *
 	 * @created 20.11.2013
 	 * @param term
 	 * @return
 	 */
-	List<Identifier> getParents(Identifier term);
+	List<BrowserTerm> getParents(BrowserTerm term);
 
 	/**
 	 * Returns all terms that are valid for this termbrowser. They are filtered
 	 * according to the categories set by setCategories().
-	 * 
+	 *
 	 * @created 20.11.2013
 	 * @return
 	 */
-	Collection<Identifier> getAllTerms();
-	
+	Collection<BrowserTerm> getAllTerms();
+
 	/**
 	 * Returns a set of terms that should be present in the termbrowser after
 	 * system startup.
-	 * 
+	 *
 	 * @created 20.11.2013
 	 * @return
 	 */
-	Collection<Identifier> getStartupTerms();
-	
+	Collection<BrowserTerm> getStartupTerms();
+
 }

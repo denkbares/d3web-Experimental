@@ -25,33 +25,77 @@ import de.d3web.strings.Identifier;
  * @author Jochen Reutelshoefer (denkbares GmbH)
  * @created 13.10.14.
  */
-public class BrowserTerm extends Identifier {
+public class BrowserTerm  {
 
     /*
      type of this term
      */
     private String type = null;
 
-    public BrowserTerm(String type, String... pathElements) {
-        super(pathElements);
+    public String getLabel() {
+        return label;
+    }
+
+    /*
+        preferred label of this term
+         */
+    private String label = null;
+
+    /*
+    identifier of the term actually represented
+     */
+    private Identifier identifier;
+
+    public BrowserTerm(String type, String label, String... pathElements) {
+        identifier = new Identifier(pathElements);
         this.type = type;
+        this.label = label;
+    }
+
+    public BrowserTerm(String type, String label, Identifier identifier) {
+        this.identifier = identifier;
+        this.type = type;
+        this.label = label;
+    }
+
+    public BrowserTerm(String type, Identifier identifier) {
+        this(type, null, identifier);
+    }
+
+    public BrowserTerm(String type, String... pathElements) {
+        this(type, null, pathElements);
+    }
+
+    public BrowserTerm(Identifier identifier) {
+        this(null, identifier);
     }
 
     public BrowserTerm(String... pathElements) {
-        super(pathElements);
+        this(null, pathElements);
     }
 
     public String getType() {
         return type;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (! (obj instanceof Identifier)) return false;
-        Identifier other = (Identifier) obj;
-        return this.toExternalForm().toLowerCase().equals(other.toExternalForm().toLowerCase());
+    public Identifier getIdentifier() {
+        return identifier;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BrowserTerm that = (BrowserTerm) o;
+
+        if (!identifier.equals(that.identifier)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return identifier.hashCode();
+    }
 }
