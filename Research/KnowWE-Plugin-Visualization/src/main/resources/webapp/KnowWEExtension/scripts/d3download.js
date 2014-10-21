@@ -24,7 +24,6 @@ function downloadSVG(sectionID) {
 	
 	var substring = svgString.substring(0,5);
 	
-	substring += " xmlns=\"http://www.w3.org/2000/svg\"";
 	substring += " xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
 	
 		
