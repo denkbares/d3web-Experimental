@@ -471,7 +471,7 @@ public class DOTRenderer {
      * @created 01.08.2012
      */
     private static void prepareSVG(final File svg, final int timeout) throws IOException {
-        Log.info("Starting write SVG: "+svg.getAbsolutePath());
+        Log.finest("Starting write SVG: "+svg.getAbsolutePath());
         try {
 
             // check if svg file is closed, otherwise wait timeout second
@@ -505,7 +505,7 @@ public class DOTRenderer {
 
             XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
             xmlOutputter.output(doc, new FileWriter(svg));
-            Log.info("Finished writing SVG: "+svg.getAbsolutePath());
+            Log.finest("Finished writing SVG: "+svg.getAbsolutePath());
         } catch (JDOMException e) {
             Log.warning(e.getMessage(), e);
         } catch (InterruptedException e) {
