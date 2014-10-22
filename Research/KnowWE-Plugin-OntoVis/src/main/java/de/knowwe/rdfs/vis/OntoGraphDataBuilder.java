@@ -226,7 +226,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             Log.info("addOutgoingSuccessorCalls: " + addOutgoingSuccessorsCalls);
             Log.info("addOutgoingPredecessorCalls: " + addOutgoingPredecessorsCalls);
             Log.info("addOuterConceptCalls: " + addOuterConceptCalls);
-            Set<OuterConceptCheck> outerSet = new HashSet<>();
+            Set<OuterConceptCheck> outerSet = new HashSet<OuterConceptCheck>();
             outerSet.addAll(checkedOuterConcepts);
             Log.info("different outer-concepts: " + outerSet.size());
 
@@ -717,7 +717,6 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             return propertyExcludeSPARQLFilterCache.get(filterHashcode);
         } else {
             // we are in black list mode, i.e. show all but "..."
-
             if (getExcludedRelations().size() == 0) {
                 this.propertyExcludeSPARQLFilterCache.put(filterHashcode, "FILTER (true)");
                 return propertyExcludeSPARQLFilterCache.get(filterHashcode);
@@ -886,7 +885,14 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         */
         String clazz = null;
         if (isTypeRelation(relation)) {
-            clazz = getConceptName(toURI);
+            /*
+            no matter what class this type relation goes to, we look for a representative/meaningful class-uri to display
+             */
+            final URI mostSpecificClass = Rdf2GoUtils.findMostSpecificClass(rdfRepository, fromURI.asURI());
+            clazz = null;
+            if(mostSpecificClass != null) {
+                clazz = getConceptName(mostSpecificClass);
+            }
         }
 
         ConceptNode toNode;
