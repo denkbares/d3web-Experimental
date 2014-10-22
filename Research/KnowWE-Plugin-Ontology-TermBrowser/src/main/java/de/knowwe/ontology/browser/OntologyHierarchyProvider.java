@@ -119,8 +119,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
 					Rdf2GoUtils.expandNamespace(core, relation)),
 					master);
 			for (URI uri : childrenConcepts) {
-                final PartialHierarchyTree<URI> classHierarchy = Rdf2GoUtils.getClassHierarchy(core, uri);
-                URI clazz = findMostSpecificClass(classHierarchy);
+                URI clazz = Rdf2GoUtils.findMostSpecificClass(core, uri);
                 String type = null;
                 if(clazz != null) {
                     type = TermBrowserUtils.abbreviateTypeNameForURI(clazz.toString());
@@ -177,7 +176,8 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
                 String reducedNamespace = Rdf2GoUtils.reduceNamespace(core,
                         Strings.decodeURL(uri.toString()));
                 final PartialHierarchyTree<URI> classHierarchy = Rdf2GoUtils.getClassHierarchy(core, uri);
-                URI clazz = findMostSpecificClass(classHierarchy);
+                URI clazz = Rdf2GoUtils.findMostSpecificClass(classHierarchy);
+
                 String type = null;
                 if(clazz != null) {
                     type = TermBrowserUtils.abbreviateTypeNameForURI(clazz.toString());
@@ -196,28 +196,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
 		return result;
 	}
 
-    private URI findMostSpecificClass(PartialHierarchyTree<URI> classHierarchy) {
-        final Set<PartialHierarchyTree.Node<URI>> nodes = classHierarchy.getNodes();
-        int maxDepth = 0;
-        PartialHierarchyTree.Node<URI> deepestLeaf = null;
-        for (PartialHierarchyTree.Node<URI> node : nodes) {
-            int depth = getDepth(node);
-            if(depth > maxDepth) {
-                maxDepth = depth;
-                deepestLeaf = node;
-            }
-        }
-        return deepestLeaf.getData();
-    }
 
-    private int getDepth(PartialHierarchyTree.Node<URI> node) {
-        int depth = 0;
-        while(node.getParent() != null) {
-            depth++;
-            node = node.getParent();
-        }
-        return depth;
-    }
 
     private void addSuccessorToCache(BrowserTerm parent, BrowserTerm successor) {
 		Set<BrowserTerm> successors = successorshipCache.get(parent);
