@@ -173,12 +173,11 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 	 * @created 13.07.2014
 	 */
 	private void findAndReadConfig(String configName, ArticleManager am, Map<String, String> parameterMap, List<Message> messages, RenderResult string) {
-		Collection<Section<? extends de.knowwe.core.kdom.Type>> sections = Sections.successors(am, VisConfigType.class);
-		for (Section<? extends de.knowwe.core.kdom.Type> section : sections) {
-			Section<VisConfigType> s = Sections.cast(section, VisConfigType.class);
-			String name = VisConfigType.getAnnotation(s, VisConfigType.ANNOTATION_NAME);
+		Collection<Section<VisConfigType>> sections = Sections.successors(am, VisConfigType.class);
+		for (Section<VisConfigType> section : sections) {
+			String name = VisConfigType.getAnnotation(section, VisConfigType.ANNOTATION_NAME);
 			if (name.equals(configName)) {
-				readConfig(s, parameterMap, messages, string);
+				readConfig(section, parameterMap, messages, string);
 			}
 		}
 	}

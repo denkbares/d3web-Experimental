@@ -12,7 +12,6 @@ import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.packaging.PackageManager;
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
@@ -45,12 +44,11 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 	 * @created 13.07.2014
 	 */
 	private void findAndReadConfig(String configName, ArticleManager am, Map<String, String> parameterMap) {
-		Collection<Section<? extends Type>> sections = Sections.successors(am, VisConfigType.class);
-		for (Section<? extends Type> section : sections) {
-			Section<VisConfigType> s = Sections.cast(section, VisConfigType.class);
-			String name = VisConfigType.getAnnotation(s, VisConfigType.ANNOTATION_NAME);
+		Collection<Section<VisConfigType>> sections = Sections.successors(am, VisConfigType.class);
+		for (Section<VisConfigType> section : sections) {
+			String name = VisConfigType.getAnnotation(section, VisConfigType.ANNOTATION_NAME);
 			if (name.equals(configName)) {
-				readConfig(s, parameterMap);
+				readConfig(section, parameterMap);
 			}
 		}
 	}

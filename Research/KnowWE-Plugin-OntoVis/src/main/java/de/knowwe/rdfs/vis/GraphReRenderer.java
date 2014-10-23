@@ -29,7 +29,6 @@ import de.d3web.strings.Strings;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.ontology.compile.OntologyCompiler;
@@ -86,13 +85,10 @@ public class GraphReRenderer implements EventListener {
                 }
 
                 // re-render all VisualizationType-sections
-                Collection<Section<? extends Type>> sections = Sections.successors(am, VisualizationType.class);
-                for (Section<? extends Type> s : sections) {
-                    if (VisualizationType.class.isInstance(s.get())) {
-                        Section<VisualizationType> visSec = (Section<VisualizationType>) s;
-                        PreRenderWorker.getInstance().queueSectionPreRendering(visSec.get()
+                Collection<Section<VisualizationType>> sections = Sections.successors(am, VisualizationType.class);
+                for (Section<VisualizationType> s : sections) {
+                        PreRenderWorker.getInstance().queueSectionPreRendering(s.get()
                                 .getPreRenderer(), s, null, null, false);
-                    }
                 }
             }
         });
