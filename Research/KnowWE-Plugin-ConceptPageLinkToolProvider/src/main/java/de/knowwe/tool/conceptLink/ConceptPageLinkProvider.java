@@ -61,7 +61,7 @@ public class ConceptPageLinkProvider implements ToolProvider {
 				"KnowWEExtension/images/dt_icon_premises.gif",
 				"<a href='Wiki.jsp?page=" + text + "'>" + "To definition" + "</a>",
 				text,
-				null);
+				Tool.CATEGORY_INFO);
 		return new Tool[] { tool };
 	}
 

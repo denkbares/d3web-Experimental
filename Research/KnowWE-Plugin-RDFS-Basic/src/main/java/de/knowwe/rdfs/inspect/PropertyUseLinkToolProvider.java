@@ -81,7 +81,8 @@ public class PropertyUseLinkToolProvider implements ToolProvider {
 				"KnowWEExtension/images/dt_icon_realisation.gif",
 				"Shows relations",
 				"Shows all asserted and derived relations of this property.",
-				jsAction);
+				jsAction,
+				Tool.CATEGORY_INFO);
 	}
 
 }

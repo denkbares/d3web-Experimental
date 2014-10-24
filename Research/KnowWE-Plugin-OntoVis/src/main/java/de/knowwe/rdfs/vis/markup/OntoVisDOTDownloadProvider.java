@@ -57,6 +57,7 @@ public class OntoVisDOTDownloadProvider implements ToolProvider {
 				"KnowWEExtension/d3web/icon/download16.gif",
 				"Download .dot",
 				"Download the .dot-file of the graph",
-				jsAction);
+				jsAction,
+				Tool.CATEGORY_DOWNLOAD);
 	}
 }

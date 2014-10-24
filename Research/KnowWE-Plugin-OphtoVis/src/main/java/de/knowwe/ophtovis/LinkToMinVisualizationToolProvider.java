@@ -62,8 +62,8 @@ public class LinkToMinVisualizationToolProvider implements ToolProvider {
 		String jsAction = "window.location.href =" +
 				"'GraphVisualisierung.jsp?concept=" + encoded + "&amp;minimized=true'";
 		return new Tool[] { new DefaultTool("KnowWEExtension/images/me.gif",
-				"MinVisualisierung",
-				"Visualisierung der Hierarchie ausgehend von diesem Konzept", jsAction) };
+				"Visualisierung minimieren",
+				"Visualisierung der Hierarchie ausgehend von diesem Konzept minimieren", jsAction) };
 	}
 
 }

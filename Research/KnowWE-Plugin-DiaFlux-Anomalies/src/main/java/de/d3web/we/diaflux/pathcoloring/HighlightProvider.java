@@ -54,14 +54,16 @@ public class HighlightProvider implements ToolProvider {
 		if (dohighlighting) {
 			return new DefaultTool(ICON, "Hide Anomalies",
 					"Highlights Anomalies in the flowchart.",
-					DiaFluxTraceHighlight.getDeactivationJSAction());
+					DiaFluxTraceHighlight.getDeactivationJSAction(),
+					Tool.CATEGORY_INFO);
 		}
 		else {
 			return new DefaultTool(
 					ICON,
 					"Show Anomalies",
 					"Highlights Anomalies in the flowchart.",
-					DiaFluxTraceHighlight.getActivationJSAction(AnomaliesHighlight.ANOMALIES_HIGHLIGHT));
+					DiaFluxTraceHighlight.getActivationJSAction(AnomaliesHighlight.ANOMALIES_HIGHLIGHT),
+					Tool.CATEGORY_INFO);
 		}
 	}
 }

@@ -84,7 +84,8 @@ public class ClassMemberLinkToolProvider implements ToolProvider {
 				"KnowWEExtension/images/dt_icon_realisation.gif",
 				"Show members",
 				"Shows all asserted and derived members of this class.",
-				jsAction);
+				jsAction,
+				Tool.CATEGORY_INFO);
 	}
 
 }

@@ -54,6 +54,7 @@ public class ImportedConceptPageLinkProvider implements ToolProvider {
 				"KnowWEExtension/d3web/icon/infoPage16.png",
 				"Jump to Import",
 				"Opens the import page for the concept.",
-				jsAction);
+				jsAction,
+				Tool.CATEGORY_INFO);
 	}
 }

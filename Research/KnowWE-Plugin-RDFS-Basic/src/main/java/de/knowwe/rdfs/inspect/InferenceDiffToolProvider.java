@@ -68,6 +68,7 @@ public class InferenceDiffToolProvider implements ToolProvider {
 				"KnowWEExtension/images/minus.png",
 				"Show inference diff for statement",
 				"Removes the selected statement from the triple store and calculates shows a diff between the data before and after the deletion to show the importance of the statement..",
-				jsAction);
+				jsAction,
+				Tool.CATEGORY_INFO);
 	}
 }

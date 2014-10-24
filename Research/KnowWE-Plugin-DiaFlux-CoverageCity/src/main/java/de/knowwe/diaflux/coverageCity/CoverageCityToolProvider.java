@@ -19,7 +19,7 @@ public class CoverageCityToolProvider implements ToolProvider {
 
 		return new Tool[] {
 				new DefaultTool(Icon.NONE, "Show CoverageCity",
-						"Shows the city visualization of the coverage", jsAction)
+						"Shows the city visualization of the coverage", jsAction, Tool.CATEGORY_INFO)
 		};
 	}
 

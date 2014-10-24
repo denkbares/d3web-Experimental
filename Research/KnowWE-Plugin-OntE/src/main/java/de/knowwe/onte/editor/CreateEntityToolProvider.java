@@ -90,7 +90,7 @@ public class CreateEntityToolProvider implements ToolProvider {
 				+ section.getText()
 				+ "'), 'OWLClass')";
 
-		return new DefaultTool(image, name, description, action);
+		return new DefaultTool(image, name, description, action, Tool.CATEGORY_EDIT);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class CreateEntityToolProvider implements ToolProvider {
 				+ section.getText()
 				+ "'), 'OWLObjectProperty')";
 
-		return new DefaultTool(image, name, description, action);
+		return new DefaultTool(image, name, description, action, Tool.CATEGORY_EDIT);
 	}
 
 	/**

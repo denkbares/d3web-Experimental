@@ -55,7 +55,8 @@ public class OntoVisSVGDownloadProvider implements ToolProvider {
 			return new DefaultTool("KnowWEExtension/d3web/icon/download16.gif",
 					"Download .svg",
 					"Download the d3 graph as an .svg-file",
-					jsAction);
+					jsAction,
+					Tool.CATEGORY_DOWNLOAD);
 		}
 
 		String jsAction = "window.location='action/OntoVisSVGDownload" +
@@ -66,7 +67,8 @@ public class OntoVisSVGDownloadProvider implements ToolProvider {
 				"KnowWEExtension/d3web/icon/download16.gif",
 				"Download .svg",
 				"Download the graph as an .svg-file",
-				jsAction);
+				jsAction,
+				Tool.CATEGORY_DOWNLOAD);
 	}
 
 }

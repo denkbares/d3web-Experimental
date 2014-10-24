@@ -56,6 +56,6 @@ public class SparqlToExcelDownloadProvider implements ToolProvider {
 		return new DefaultTool(
 				Icon.DOCUMENT_EXCEL,
 				"Download as XLS", "Download this table as an Excel file",
-				jsAction);
+				jsAction, Tool.CATEGORY_DOWNLOAD);
 	}
 }

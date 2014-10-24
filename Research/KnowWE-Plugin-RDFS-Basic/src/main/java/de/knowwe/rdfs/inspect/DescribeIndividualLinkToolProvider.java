@@ -91,6 +91,7 @@ public class DescribeIndividualLinkToolProvider implements ToolProvider {
 				"KnowWEExtension/images/dt_icon_realisation.gif",
 				"Describe individual",
 				"Shows all asserted and derived relations for this individual.",
-				jsAction);
+				jsAction,
+				Tool.CATEGORY_INFO);
 	}
 }
