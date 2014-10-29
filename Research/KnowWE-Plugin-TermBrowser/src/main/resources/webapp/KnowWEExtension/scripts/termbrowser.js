@@ -41,6 +41,12 @@ jq$(document).ready(function() {
 
 	initSemanticAutocompletionSlot();
 
+
+    // init draggable sparql result nodes after async rendering
+    KNOWWE.helper.observer.subscribe("afterRerender", function () {
+        jq$(".dragSparqlResultNode").each(activateDraggables);
+    });
+
 	KNOWWE.plugin.termbrowser = {};
 
 });
@@ -287,7 +293,6 @@ function activateDraggables() {
 		revert : true,
         helper: 'clone'
 	});
-
 }
 
 function sendAddedTerm(term, oldTargetID) {
