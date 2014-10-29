@@ -4,6 +4,7 @@
     
     <requires>
         <import plugin-id="KnowWEExtensionPoints" />
+        <import plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore" />
         <import plugin-id="KnowWE-Plugin-TermBrowser" />
     </requires>
     
@@ -15,8 +16,15 @@
             <export prefix="*" />
         </library>
     </runtime>
-    
-    
+
+    <extension plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore" point-id="SparqlResultNodeRenderer"
+               id="SparqlResultNodeDragRenderer">
+        <parameter id="class" value="de.knowwe.ontology.browser.SparqlResultNodeDragRenderer" />
+        <parameter id="name" value="SparqlResultNodeDragRenderer" />
+        <parameter id="description" value="NodeRenderer SparqlResultNodeDragRenderer" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="1" />
+    </extension>
     	
 	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="HierarchyProvider"
 		id="OntologyHierarchyProvider">
