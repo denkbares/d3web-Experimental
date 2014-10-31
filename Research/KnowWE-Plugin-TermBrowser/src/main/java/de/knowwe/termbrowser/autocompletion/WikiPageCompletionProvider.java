@@ -19,25 +19,25 @@
 
 package de.knowwe.termbrowser.autocompletion;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import com.denkbares.semanticautocompletion.Completion;
 import com.denkbares.semanticautocompletion.CompletionProvider;
 import com.denkbares.semanticautocompletion.DefaultCompletion;
 import com.denkbares.semanticautocompletion.DefaultConcept;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.utils.KnowWEUtils;
-
-import java.util.Collection;
-import java.util.HashSet;
 
 /**
- * Created by jochenreutelshofer on 16.09.14.
+ * @author Jochen Reutelshöfer (denkbares GmbH)
+ * @created 16.09.14.
  */
 public class WikiPageCompletionProvider implements CompletionProvider {
     @Override
     public Collection<Completion> getCompletions() {
         final Collection<Article> articles = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB).getArticles();
-        Collection<Completion> result = new HashSet<Completion>();
+        Collection<Completion> result = new HashSet<>();
         for (Article article : articles) {
             result.add(new DefaultCompletion(article.getTitle(), new DefaultConcept(article.getTitle(), article.getTitle(), "Page")));
         }
