@@ -6,7 +6,6 @@
 		<groupId>de.uniwue.d3web</groupId>
 		<version>0.2-SNAPSHOT</version>
 	</parent>
-	<groupId>de.uniwue.d3web</groupId>
 	<artifactId>KnowWE-Plugin-OntE</artifactId>
 	<name>KnowWE-Plugin-OntE</name>
 	<version>0.2-SNAPSHOT</version>
@@ -25,7 +24,6 @@
 							<goal>build-classpath</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>target/dependencies</outputDirectory>
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>false</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>

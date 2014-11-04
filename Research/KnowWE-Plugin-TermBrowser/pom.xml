@@ -6,7 +6,6 @@
         <groupId>de.uniwue.d3web</groupId>
         <version>0.2-SNAPSHOT</version>
     </parent>
-    <groupId>de.uniwue.d3web</groupId>
     <artifactId>KnowWE-Plugin-TermBrowser</artifactId>
     <version>0.2-SNAPSHOT</version>
     <name>KnowWE-Plugin-TermBrowser</name>
@@ -36,11 +35,11 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
+        <!--dependency>
             <groupId>com.denkbares</groupId>
             <artifactId>KnowWE-Plugin-SemanticAutocompletion</artifactId>
             <version>0.2-SNAPSHOT</version>
-        </dependency>
+        </dependency-->
 
         <dependency>
             <groupId>de.uniwue.d3web</groupId>
