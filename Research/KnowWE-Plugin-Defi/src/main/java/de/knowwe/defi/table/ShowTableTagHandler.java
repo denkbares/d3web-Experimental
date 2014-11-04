@@ -52,14 +52,14 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 		boolean previousInputExists = false;
 		int versionsExisting = 1;
 		if (inputSec != null) {
-			String content = InputFieldCellContent.InputRenderer.getStoredContentForInput(
+			String content = TableUtils.getStoredContentForInput(
 					inputSec, 0, user.getUserName());
 			if (content == null) content = "";
 			if (content.length() > 1) {
 				previousInputExists = true;
 
 			}
-			Section<TableEntryType> entryContentTable = InputFieldCellContent.InputRenderer.findTableToShow(
+			Section<TableEntryType> entryContentTable = TableUtils.findTableToShow(
 					tableid, user.getUserName());
 			List<Section<VersionEntry>> versions = new ArrayList<Section<VersionEntry>>();
 			if (entryContentTable != null) {

@@ -1,7 +1,7 @@
 <%@ page import="java.util.HashMap"%>
 <%@ page import="org.apache.wiki.*" %>
 <%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
-<%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
+<%@ taglib uri="http://jspwiki.apache.org/tags" prefix="wiki" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <fmt:setLocale value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default"/>

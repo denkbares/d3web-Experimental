@@ -66,7 +66,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 		boolean unitsOpen = false;
 
 		// Prüfe ob jeder root unit ein Zeitpunkt zugewiesen wurde
-		if (rootUnits.size() > dates.size()) {
+		if (rootUnits == null || dates == null || rootUnits.size() > dates.size()) {
 			result.appendHtml("<p>Fehler: Zu wenig Zeiteinheiten im <a href='Wiki.jsp?page=Zeitplan'>Zeitplan</a> vorhanden</p>");
 			return;
 		}

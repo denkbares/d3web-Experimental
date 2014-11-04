@@ -1,5 +1,5 @@
 <%@ page import="org.apache.wiki.*" %>
-<%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
+<%@ taglib uri="http://jspwiki.apache.org/tags" prefix="wiki" %>
 <%! 
   public void jspInit()
   {

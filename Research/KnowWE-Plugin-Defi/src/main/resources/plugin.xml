@@ -1,13 +1,16 @@
 <?xml version="1.0" ?>
 <!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
-<plugin id="KnowWE-Plugin-Defi" version="0.0.1">
+<plugin id="KnowWE-Plugin-Defi" version="0.2">
     
     <requires>
         <import plugin-id="KnowWEExtensionPoints" />
+		<import plugin-id="KnowWE-Plugin-Table" />
+		<import plugin-id="KnowWE-Plugin-Comment" />
+		<import plugin-id="KnowWE-Plugin-Tagging" />
     </requires>
     
     <runtime>
-        <library id="de.d3web" path="." type="code">
+        <library id="de.knowwe" path="." type="code">
             <export prefix="*" />
         </library>
         <library id="webapp" path="webapp/" type="resources">
@@ -33,7 +36,7 @@
 		<parameter id="name" value="TimeTableMarkup" />
 		<parameter id="description" value="Type TimeTableMarkup" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="100"  />
+		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
 		<parameter id="css" value="defi.css" />
@@ -45,7 +48,7 @@
 		<parameter id="name" value="TimeTableTemplateMarkup" />
 		<parameter id="description" value="Type TimeTableTemplateMarkup" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="100"  />
+		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />
 	</extension>
 
@@ -55,7 +58,7 @@
 		<parameter id="name" value="DefineTableMarkup" />
 		<parameter id="description" value="Type DefineTableMarkup" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="100"  />
+		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
 		<parameter id="css" value="defi.css" />
@@ -116,6 +119,16 @@
 		<parameter id="priority" value="5" />
 		<parameter id="script" value="KnowWE-Plugin-Defi-SubmitTable.js" />
 		<parameter id="css" value="defi.css" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="ShowTableContentTagHandler">
+		<parameter id="class"
+			value="de.knowwe.defi.table.ShowTableContentTagHandler" />
+		<parameter id="name" value="ShowTableContentTagHandler" />
+		<parameter id="description" value="TagHandler ShowTableContentTagHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
 	</extension>
 	
     <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"

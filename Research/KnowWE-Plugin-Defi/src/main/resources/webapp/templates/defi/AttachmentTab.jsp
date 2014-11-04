@@ -1,9 +1,7 @@
-<%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
-<%@ page import="org.apache.wiki.*" %>
-<%@ page import="org.apache.wiki.auth.*" %>
-<%@ page import="org.apache.wiki.ui.progress.*" %>
-<%@ page import="org.apache.wiki.auth.permissions.*" %>
-<%@ page import="java.security.Permission" %>
+<%@ taglib uri="http://jspwiki.apache.org/tags" prefix="wiki" %>
+<%@ page import="org.apache.wiki.WikiContext" %>
+<%@ page import="org.apache.wiki.WikiPage" %>
+<%@ page import="org.apache.wiki.util.TextUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <fmt:setLocale value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default"/>
@@ -117,7 +115,7 @@
       </wiki:Permission>
       <td class="changenote">
       <%
-         String changeNote = TextUtil.replaceEntities((String)att.getAttribute(WikiPage.CHANGENOTE));
+         String changeNote = TextUtil.replaceEntities((String) att.getAttribute(WikiPage.CHANGENOTE));
          if( changeNote != null ) {
          %><%=changeNote%><%
          }

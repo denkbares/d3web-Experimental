@@ -1,6 +1,6 @@
 <%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
 <%@page import="de.knowwe.core.Environment"%>
-<%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
+<%@ taglib uri="http://jspwiki.apache.org/tags" prefix="wiki" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page import="de.knowwe.jspwiki.JSPWikiConnector"%>
 <%@ page import="java.util.HashMap"%>

@@ -145,7 +145,7 @@ public class MenuUtilities {
 		List<Date> dates = TimeTableUtilities.getPersonalTimeTable(user);
 		Date current = new Date();
 		Date unitDate = null;
-		if (unitNumber < dates.size()) {
+		if (dates != null && unitNumber < dates.size()) {
 			unitDate = dates.get(unitNumber);
 			if (current.after(unitDate)) {
 				return true;

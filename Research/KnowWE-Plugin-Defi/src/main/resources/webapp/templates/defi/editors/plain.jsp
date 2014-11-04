@@ -1,13 +1,13 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki"%>
-<%@ page import="org.apache.wiki.*" %>
-<%@ page import="org.apache.wiki.auth.*" %>
-<%@ page import="org.apache.wiki.auth.permissions.*" %>
-<%@ page import="org.apache.wiki.tags.*" %>
+<%@ page language="java" import="org.apache.wiki.WikiContext" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://jspwiki.apache.org/tags" prefix="wiki" %>
+<%@ page import="org.apache.wiki.WikiEngine" %>
+<%@ page import="org.apache.wiki.WikiPage" %>
+<%@ page import="org.apache.wiki.auth.AuthorizationManager" %>
+<%@ page import="org.apache.wiki.auth.permissions.PagePermission" %>
 <%@ page import="org.apache.wiki.filters.SpamFilter" %>
-<%@ page import="org.apache.wiki.ui.*" %>
-<%@ page import="org.apache.wiki.rpc.*" %>
-<%@ page import="org.apache.wiki.rpc.json.*" %>
+<%@ page import="org.apache.wiki.ui.EditorManager" %>
+<%@ page import="org.apache.wiki.ui.TemplateManager" %>
+<%@ page import="org.apache.wiki.util.TextUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <fmt:setLocale value="${prefs.Language}" />
@@ -150,7 +150,8 @@
 
 	  <div id="toolextra" class="clearbox" style="display:none;">
       <span>
-      <input type="checkbox" name="tabcompletion" id="tabcompletion" <%=TextUtil.isPositive((String)session.getAttribute("tabcompletion")) ? "checked='checked'" : ""%>/>
+      <input type="checkbox" name="tabcompletion" id="tabcompletion" <%=TextUtil.isPositive((String) session
+			  .getAttribute("tabcompletion")) ? "checked='checked'" : ""%>/>
       <label for="tabcompletion" title="<fmt:message key='editor.plain.tabcompletion.title'/>"><fmt:message key="editor.plain.tabcompletion"/></label>
       </span>
       <span>

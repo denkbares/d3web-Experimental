@@ -1,7 +1,10 @@
-<%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
-<%@ page import="org.apache.wiki.*" %>
+<%@ taglib uri="http://jspwiki.apache.org/tags" prefix="wiki" %>
+<%@ page import="org.apache.wiki.WikiContext" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ page import="javax.servlet.jsp.jstl.fmt.*" %><%--CHECK why is this needed --%>
+<%@ page import="org.apache.wiki.WikiPage" %>
+<%@ page import="org.apache.wiki.WikiProvider" %>
+<%@ page import="org.apache.wiki.util.TextUtil" %>
+<%--CHECK why is this needed --%>
 <fmt:setLocale value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default"/>
 <%
@@ -14,7 +17,7 @@
 	String mainblogpage="";
 	if( pagename.indexOf("_blogentry_") != -1 )
 	{
-		blogcommentpage = TextUtil.replaceString( pagename, "blogentry", "comments" );
+		blogcommentpage = TextUtil.replaceString(pagename, "blogentry", "comments");
 		mainblogpage = pagename.substring(0, pagename.indexOf("_blogentry_"));
 	}
 %>

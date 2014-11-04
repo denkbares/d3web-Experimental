@@ -1,14 +1,18 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
-<%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki"%>
+<%@ taglib uri="http://jspwiki.apache.org/tags" prefix="wiki" %>
 <%@ page import="java.util.Properties"%>
-<%@ page import="org.apache.wiki.*" %>
-<%@ page import="org.apache.wiki.auth.*" %>
-<%@ page import="org.apache.wiki.auth.permissions.*" %>
-<%@ page import="org.apache.wiki.render.*" %>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
+<%@ page import="org.apache.wiki.WikiContext" %>
+<%@ page import="org.apache.wiki.WikiEngine" %>
+<%@ page import="org.apache.wiki.WikiPage" %>
+<%@ page import="org.apache.wiki.auth.AuthorizationManager" %>
+<%@ page import="org.apache.wiki.auth.permissions.PagePermission" %>
+<%@ page import="org.apache.wiki.filters.SpamFilter" %>
 <%@ page import="org.apache.wiki.parser.JSPWikiMarkupParser" %>
-<%@ page import="org.apache.wiki.ui.*" %>
-<%@ page import="org.apache.wiki.filters.*" %>
-<%@ page import="org.apache.commons.lang.*" %>
+<%@ page import="org.apache.wiki.render.RenderingManager" %>
+<%@ page import="org.apache.wiki.render.WysiwygEditingRenderer" %>
+<%@ page import="org.apache.wiki.ui.EditorManager" %>
+<%@ page import="org.apache.wiki.ui.TemplateManager" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <fmt:setLocale value="${prefs.Language}" />

@@ -165,6 +165,7 @@ public class TimeTableUtilities {
 			content += DateT.dateFormat.format(d) + System.getProperty("line.separator");
 		}
 		content += "%";
+		content += System.getProperty("line.separator");
 
 		return content;
 	}

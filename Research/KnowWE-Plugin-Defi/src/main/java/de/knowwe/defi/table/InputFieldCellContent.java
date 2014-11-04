@@ -18,21 +18,14 @@
  */
 package de.knowwe.defi.table;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
-import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 public class InputFieldCellContent extends AbstractType {
 
@@ -78,13 +71,13 @@ public class InputFieldCellContent extends AbstractType {
 
 		@Override
 		public void render(Section<?> sec,
-				UserContext user, RenderResult string) {
+						   UserContext user, RenderResult string) {
 			String versionString = user.getParameter(ShowTableTagHandler.VERSION_KEY);
 			int version = 0;
 			if (versionString != null) {
 				version = Integer.parseInt(versionString);
 			}
-			String contentString = getStoredContentForInput(sec, version,
+			String contentString = TableUtils.getStoredContentForInput(sec, version,
 					user.getUserName());
 			int rows = InputFieldCellContent.getHeight(sec);
 			int cols = InputFieldCellContent.getWidth(sec);
@@ -96,62 +89,7 @@ public class InputFieldCellContent extends AbstractType {
 			string.appendHtml("</textarea>");
 		}
 
-		public static String getStoredContentForInput(Section<?> sec, int version, String username) {
-			List<Section<InputFieldCellContent>> found = new ArrayList<Section<InputFieldCellContent>>();
-			Sections.successors(sec.getParent().getParent().getParent().getParent(),
-					InputFieldCellContent.class,
-					found);
-			int number = found.indexOf(sec);
-			Section<DefaultMarkupType> ancestorOfType = Sections.ancestor(sec,
-					DefaultMarkupType.class);
-			String tableid = DefaultMarkupType.getAnnotation(ancestorOfType, "id");
-			String contentString = getStoredContentString(number, tableid, version,
-					username);
-			return contentString;
-		}
-
-		private static String getStoredContentString(int number, String tableid, int version, String username) {
-			String contentString = "";
-
-			Section<TableEntryType> contentTable = findTableToShow(tableid, username);
-
-			if (contentTable != null) {
-				List<Section<VersionEntry>> versionBlocks = TableEntryType.getVersionBlocks(contentTable);
-				if (versionBlocks.size() > 0) {
-					Section<VersionEntry> versionBlock = versionBlocks.get(version);
-					List<Section<ContentEntry>> entries = VersionEntry.getEntries(
-							versionBlock);
-					for (Section<ContentEntry> section : entries) {
-						if (ContentEntry.getNumber(section) == number) {
-							contentString = ContentEntry.getContent(section);
-							break;
-						}
-					}
-				}
-			}
-			return contentString;
-		}
-
-		public static Section<TableEntryType> findTableToShow(String id, String username) {
-			String dataArticleNameForUser = SubmitTableContentAction.getDataArticleNameForUser(username);
-			Article article = KnowWEUtils.getArticleManager(
-					Environment.DEFAULT_WEB).getArticle(dataArticleNameForUser);
-			if (article == null) return null;
-			List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
-			Sections.successors(article.getRootSection(),
-					TableEntryType.class,
-					tables);
-			for (Section<TableEntryType> table : tables) {
-				String tableID = DefaultMarkupType.getAnnotation(table, "tableid");
-				if (tableID != null) {
-					if (tableID.equals(id)) {
-						return table;
-					}
-				}
-
-			}
-			return null;
-		}
 	}
+
 
 }

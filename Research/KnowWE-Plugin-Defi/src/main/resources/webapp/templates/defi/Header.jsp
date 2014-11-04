@@ -7,7 +7,7 @@
 <%@page import="java.util.ResourceBundle"%>
 <%@page import="de.knowwe.core.Environment"%>
 <%@page import="de.knowwe.jspwiki.JSPWikiConnector"%>
-<%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki"%>
+<%@ taglib uri="http://jspwiki.apache.org/tags" prefix="wiki" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@page import="java.util.HashMap"%>
 <%@ page import="org.apache.wiki.*"%>

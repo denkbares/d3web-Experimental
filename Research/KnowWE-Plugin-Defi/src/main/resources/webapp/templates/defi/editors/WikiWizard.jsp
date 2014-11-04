@@ -1,13 +1,15 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ page import="java.io.Serializable"%>
-<%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki"%>
-<%@ page import="org.apache.wiki.*" %>
-<%@ page import="org.apache.wiki.ui.*" %>
-<%@ page import="org.apache.wiki.tags.*" %>
-<%@ page import="org.apache.wiki.attachment.*" %>
-<%@ page import="org.apache.wiki.providers.*" %>
-<%@ page import="org.apache.wiki.filters.*" %>
-<%@ page import="org.apache.commons.lang.*" %>
+<%@ page language="java" import="java.util.Collection" pageEncoding="UTF-8"%>
+<%@ page import="java.util.Iterator"%>
+<%@ taglib uri="http://jspwiki.apache.org/tags" prefix="wiki" %>
+<%@ page import="org.apache.wiki.WikiContext" %>
+<%@ page import="org.apache.wiki.WikiEngine" %>
+<%@ page import="org.apache.wiki.WikiPage" %>
+<%@ page import="org.apache.wiki.attachment.Attachment" %>
+<%@ page import="org.apache.wiki.attachment.AttachmentManager" %>
+<%@ page import="org.apache.wiki.filters.SpamFilter" %>
+<%@ page import="org.apache.wiki.tags.BreadcrumbsTag" %>
+<%@ page import="org.apache.wiki.ui.EditorManager" %>
+<%@ page import="org.apache.wiki.ui.TemplateManager" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <fmt:setLocale value="${prefs['Language']}" />
