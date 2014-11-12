@@ -339,6 +339,16 @@
     </extension>
 
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="DoubleOptInConfirmationAction">
+        <parameter id="class"
+            value="de.knowwe.defi.usermanager.DoubleOptInConfirmationAction" />
+        <parameter id="name" value="DoubleOptInConfirmationAction" />
+        <parameter id="description" value="Action DoubleOptInConfirmationAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="DeleteUserAction">
         <parameter id="class"
             value="de.knowwe.defi.usermanager.DeleteUserAction" />
