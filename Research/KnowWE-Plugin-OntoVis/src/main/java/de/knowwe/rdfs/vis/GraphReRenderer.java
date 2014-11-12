@@ -45,6 +45,8 @@ public class GraphReRenderer implements EventListener {
 	private static ArticleManager am;
 	private static String fileDirPath;
 
+	public static boolean preRenderAll = false;
+
 	private GraphReRenderer() {
 	}
 
@@ -59,39 +61,38 @@ public class GraphReRenderer implements EventListener {
 
 	@Override
 	public Collection<Class<? extends Event>> getEvents() {
-		List<Class<? extends Event>> events = new ArrayList<Class<? extends Event>>();
+		List<Class<? extends Event>> events = new ArrayList<>();
 		events.add(OntologyCompilerFinishedEvent.class);
 		return events;
 	}
 
 	@Override
 	public void notify(Event event) {
-        Thread runner = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                OntologyCompilerFinishedEvent e = (OntologyCompilerFinishedEvent) event;
-                OntologyCompiler oc = e.getCompiler();
-                String hash = String.valueOf(oc.getCompileSection().getTitle().hashCode());
+		Thread runner = new Thread(() -> {
+			OntologyCompilerFinishedEvent e = (OntologyCompilerFinishedEvent) event;
+			OntologyCompiler oc = e.getCompiler();
+			String hash = String.valueOf(oc.getCompileSection().getTitle().hashCode());
 
-                // if the GraphReRenderer is currently still working on old rendering tasks, interrupt and
-                // cancel all of them
-                PreRenderWorker.getInstance().cancelAllRunningPreRenderTasks();
+			// if the GraphReRenderer is currently still working on old rendering tasks, interrupt and
+			// cancel all of them
+			PreRenderWorker.getInstance().cancelAllRunningPreRenderTasks();
 
-                // delete all graph-files that are based on this compiler hash
-                List<File> files = findAllFilesForCompiler(fileDirPath, hash);
-                for (File f : files) {
-                    f.delete();
-                    // System.out.println(f.getName() + " - Deleted? " + f.delete());
-                }
+			// delete all graph-files that are based on this compiler hash
+			List<File> files = findAllFilesForCompiler(fileDirPath, hash);
+			for (File f : files) {
+				f.delete();
+				// System.out.println(f.getName() + " - Deleted? " + f.delete());
+			}
 
-                // re-render all VisualizationType-sections
-                Collection<Section<VisualizationType>> sections = Sections.successors(am, VisualizationType.class);
-                for (Section<VisualizationType> s : sections) {
-                        PreRenderWorker.getInstance().queueSectionPreRendering(s.get()
-                                .getPreRenderer(), s, null, null, false);
-                }
-            }
-        });
+			// re-render all VisualizationType-sections
+			if (preRenderAll) {
+				Collection<Section<VisualizationType>> sections = Sections.successors(am, VisualizationType.class);
+				for (Section<VisualizationType> s : sections) {
+					PreRenderWorker.getInstance().queueSectionPreRendering(
+							s.get().getPreRenderer(), s, null, null, false);
+				}
+			}
+		});
 		runner.start();
 	}
 
@@ -103,12 +104,13 @@ public class GraphReRenderer implements EventListener {
 
 		File fileDir = new File(fileDirPath);
 		File[] files = fileDir.listFiles();
-
-		for (File f : files) {
-			String name = f.getName();
-			String nameWithoutExtension = name.split("\\.")[0];
-			if (nameWithoutExtension.endsWith(hash)) {
-				result.add(f);
+		if (files != null) {
+			for (File f : files) {
+				String name = f.getName();
+				String nameWithoutExtension = name.split("\\.")[0];
+				if (nameWithoutExtension.endsWith(hash)) {
+					result.add(f);
+				}
 			}
 		}
 		return result;
