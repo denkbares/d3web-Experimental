@@ -18,7 +18,6 @@
  */
 package de.knowwe.defi.usermanager;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.Date;
 
@@ -28,10 +27,7 @@ import org.apache.wiki.auth.authorize.Group;
 import org.apache.wiki.auth.user.UserDatabase;
 import org.apache.wiki.auth.user.UserProfile;
 
-import de.knowwe.core.Environment;
-import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.event.EventManager;
 
 
 /**
@@ -39,36 +35,18 @@ import de.knowwe.core.event.EventManager;
  * @author dupke
  * @created 05.04.2012
  */
-public class RegisterUserAction extends AbstractAction {
+public class RegisterUserAction extends AbstractRegisterUserAction {
 
 	@Override
-	public void execute(UserActionContext context) throws IOException {
-		String loginname = context.getParameter("loginname");
-		String password = context.getParameter("password");
-		String fullname = context.getParameter("fullname");
-		String email = context.getParameter("email");
-		String admin = context.getParameter("admin");
-		String responseText = fullname + " wurde erfolgreich erstellt.";
+	protected String getResponseText(UserProfile newUser) {
+		return newUser.getFullname() + " wurde erfolgreich erstellt.";
+	}
 
-		WikiEngine eng = WikiEngine.getInstance(Environment.getInstance().getContext(), null);
-		UserDatabase udb = eng.getUserManager().getUserDatabase();
-		UserProfile newUser = udb.newProfile();
-		newUser.setLoginName(loginname);
-		newUser.setPassword(password);
-		newUser.setFullname(fullname);
-		newUser.setEmail(email);
-
-		// save new user
-		try {
-			udb.save(newUser);
-			EventManager.getInstance().fireEvent(new UserRegisteredEvent(newUser));
-		}
-		catch (WikiSecurityException e) {
-			responseText = fullname + " konnte nicht angelegt werden.";
-		}
-
+	@Override
+	protected void postCreation(UserProfile newUser, WikiEngine eng, UserDatabase udb, UserActionContext context) {
 		// add to admins
-		if (admin.equals("true")) {
+		boolean admin = Boolean.valueOf(context.getParameter("admin"));
+		if (admin) {
 			try {
 				Principal userPrinc = null;
 				for (Principal princ : udb.getWikiNames()) {
@@ -87,8 +65,6 @@ public class RegisterUserAction extends AbstractAction {
 			catch (WikiSecurityException e) {
 			}
 		}
-
-		context.getResponse().getWriter().write(responseText);
 	}
 
 }

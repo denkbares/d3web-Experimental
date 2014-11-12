@@ -326,8 +326,18 @@
         <parameter id="description" value="Action RegisterUserAction" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
-    </extension>    
-    
+    </extension>
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="DoubleOptInRegisterUserAction">
+        <parameter id="class"
+            value="de.knowwe.defi.usermanager.DoubleOptInRegisterUserAction" />
+        <parameter id="name" value="DoubleOptInRegisterUserAction" />
+        <parameter id="description" value="Action DoubleOptInRegisterUserAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="DeleteUserAction">
         <parameter id="class"

@@ -1,0 +1,74 @@
+/**
+ * Copyright (C) $today.year denkbares GmbH, Germany
+ *
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
+ *
+ */
+package de.knowwe.defi.usermanager;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import org.apache.wiki.WikiEngine;
+import org.apache.wiki.auth.NoSuchPrincipalException;
+import org.apache.wiki.auth.WikiSecurityException;
+import org.apache.wiki.auth.user.UserDatabase;
+import org.apache.wiki.auth.user.UserProfile;
+
+import de.d3web.utils.Log;
+import de.knowwe.core.Environment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+
+/**
+ * @author Sebastian Furth (denkbares GmbH)
+ * @created 13.11.14
+ */
+public class DoubleOptInConfirmationAction extends AbstractAction {
+
+	public static final String PARAM_USER = "user";
+	public static final String PARAM_AUTH_TOKEN = "auth";
+
+	private static final SimpleDateFormat DF = new SimpleDateFormat("dd/MM/yyyy");
+
+	@Override
+	public void execute(UserActionContext context) throws IOException {
+		WikiEngine eng = WikiEngine.getInstance(Environment.getInstance().getContext(), null);
+		UserDatabase udb = eng.getUserManager().getUserDatabase();
+		String loginName = context.getParameter(PARAM_USER);
+		String authToken = context.getParameter(context.getParameter(PARAM_AUTH_TOKEN));
+
+		try {
+			UserProfile user = udb.findByLoginName(loginName);
+			String authKeyExpected = String.valueOf(user.getAttributes()
+					.get(DoubleOptInRegisterUserAction.KEY_ACTIVATION_TOKEN));
+			if (authKeyExpected.equals(authToken)) {
+				user.setLockExpiry(DF.parse("01/01/1900"));
+			}
+			udb.save(user);
+		}
+		catch (NoSuchPrincipalException e) {
+			Log.warning("Unable to find user with login name: " + loginName, e);
+		}
+		catch (ParseException e) {
+			Log.severe("Unable to unlock user: " + loginName, e);
+		}
+		catch (WikiSecurityException e) {
+			Log.severe("Unable to save unlocked user: " + loginName, e);
+		}
+	}
+}
