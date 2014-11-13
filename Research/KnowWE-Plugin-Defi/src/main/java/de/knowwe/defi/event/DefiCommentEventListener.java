@@ -38,7 +38,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.defi.logger.DefiCommentEventLogger;
 import de.knowwe.defi.logger.DefiCommentLogLine;
-import de.knowwe.defi.mailform.MailFormAction;
+import de.knowwe.defi.mailform.MailUtils;
 import de.knowwe.kdom.xml.AbstractXMLType;
 
 
@@ -155,7 +155,6 @@ public class DefiCommentEventListener implements EventListener {
 	 * 
 	 * @created 08.03.2011
 	 * @param topic
-	 * @param comment
 	 * @return boolean
 	 */
 	private boolean notifyMail(String topic) {
@@ -175,7 +174,8 @@ public class DefiCommentEventListener implements EventListener {
 		// don't send mails in dev-mode
 		if (rb.getString("defi.dev").equals("false")) {
 			try {
-				(new MailFormAction()).sendDefiMail(message, subject);
+				String mailTo = rb.getString("defi.mail.to");
+				MailUtils.sendDefiMail(message, subject, mailTo);
 			}
 			catch (MessagingException e) {
 				return false;

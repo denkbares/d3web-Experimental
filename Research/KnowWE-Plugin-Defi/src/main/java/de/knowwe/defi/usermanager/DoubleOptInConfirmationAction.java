@@ -42,8 +42,8 @@ public class DoubleOptInConfirmationAction extends AbstractAction {
 					.get(DoubleOptInRegisterUserAction.KEY_ACTIVATION_TOKEN));
 			if (authKeyExpected.equals(authToken)) {
 				user.setLockExpiry(DF.parse("01/01/1900"));
+				udb.save(user);
 			}
-			udb.save(user);
 		}
 		catch (NoSuchPrincipalException e) {
 			Log.warning("Unable to find user with login name: " + loginName, e);
