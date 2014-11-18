@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.json.JSONArray;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.Literal;
@@ -24,7 +23,9 @@ import de.d3web.core.session.values.ChoiceID;
 import de.d3web.core.session.values.DateValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.NumValue;
+import de.d3web.core.session.values.Unknown;
 import de.d3web.scoring.HeuristicRating;
+import de.d3web.strings.Identifier;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
@@ -207,11 +208,19 @@ public class Rdf2GoSessionHandler {
 		}
 		else if (value instanceof MultipleChoiceValue) {
 			Collection<ChoiceID> choiceIDs = ((MultipleChoiceValue) value).getChoiceIDs();
-			JSONArray choiceArray = new JSONArray(choiceIDs);
-			return core.createDatatypeLiteral(choiceArray.toString(), XSD._date);
+			String[] strings = new String[choiceIDs.size()];
+			int i = 0;
+			for (ChoiceID choiceID : choiceIDs) {
+				strings[i++] = choiceID.toString();
+			}
+			String parsableMCValue = Identifier.concatParsable(", ", strings);
+			return core.createDatatypeLiteral(parsableMCValue, XSD._date);
 		}
 		else if (value instanceof HeuristicRating) {
 			return core.createDatatypeLiteral(String.valueOf(((HeuristicRating) value).getScore()), XSD._double);
+		}
+		else if (value instanceof Unknown) {
+			return core.createDatatypeLiteral(Unknown.getInstance().getValue().toString(), XSD._string);
 		}
 		return core.createDatatypeLiteral(value.toString(), XSD._string);
 	}
