@@ -1,8 +1,10 @@
 package de.knowwe.rdfs.d3web;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,7 +34,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class Rdf2GoSessionHandler {
 
-	private final Map<String, Set<Statement>> statementCache = new HashMap<>();
+	private final Map<String, Statement[]> statementCache = new HashMap<>();
 	private Map<String, BlankNode> factNodeCache = new HashMap<>();
 	private Map<Object, Resource> agentNodeCache = new HashMap<>();
 
@@ -55,27 +57,28 @@ public class Rdf2GoSessionHandler {
 	}
 
 	public void addSessionToRdf2GoCore() {
-		Set<Statement> statements = new HashSet<>();
+		ArrayList<Statement> statementsList = new ArrayList<>();
 		URI sessionIdURI = Rdf2GoD3webUtils.getSessionIdURI(core, session.getId());
 		URI sessionURI = core.createlocalURI(Session.class.getSimpleName());
 
 		// lns:sessionId rdf:type lns:Session
-		Rdf2GoUtils.addStatement(core, sessionIdURI, RDF.type, sessionURI, statements);
+		Rdf2GoUtils.addStatement(core, sessionIdURI, RDF.type, sessionURI, statementsList);
 
 		Literal timeLiteral = core.createLiteral(Long.toString(session.getCreationDate().getTime()));
 		URI hasCreationDateURI = core.createlocalURI("hasCreationDate");
 
 		// lns:sessionId lns:hasCreationDate "time milliseconds"
 		Rdf2GoUtils.addStatement(core, sessionIdURI, hasCreationDateURI, timeLiteral,
-				statements);
+				statementsList);
 
 		URI usesKnowledgeBaseURI = core.createlocalURI("usesKnowledgeBase");
 
 		// lns:sessionId lns:usesKnowledgeBase lns:knowledgeBaseId
 		String id = session.getKnowledgeBase().getId();
 		if (id == null) id = "noId";
-		Rdf2GoUtils.addStatement(core, sessionIdURI, usesKnowledgeBaseURI, id, statements);
+		Rdf2GoUtils.addStatement(core, sessionIdURI, usesKnowledgeBaseURI, id, statementsList);
 
+		Statement[] statements = Rdf2GoUtils.toArray(statementsList);
 		statementCache.put(null, statements);
 
 		// add value facts already present in the session
@@ -86,7 +89,7 @@ public class Rdf2GoSessionHandler {
 
 		// add statements to the core
 		synchronized (core) {
-			core.addStatements(Rdf2GoUtils.toArray(statements));
+			core.addStatements(statements);
 		}
 
 		// free memory
@@ -97,19 +100,20 @@ public class Rdf2GoSessionHandler {
 
 	private void addFactAsStatements(Session session, Fact fact) {
 
-		Set<Statement> statements = generateFactStatements(session, fact);
+		Collection<Statement> statementCollection = generateFactStatements(session, fact);
+		Statement[] statements = Rdf2GoUtils.toArray(statementCollection);
 
-		// add fact statements to cache
+		// add fact statementCollection to cache
 		statementCache.put(fact.getTerminologyObject().getName(), statements);
 
-		// add fact statements to the core
+		// add fact statementCollection to the core
 		synchronized (core) {
-			core.addStatements(Rdf2GoUtils.toArray(statements));
+			core.addStatements(statements);
 		}
 	}
 
-	protected Set<Statement> generateFactStatements(Session session, Fact fact) {
-		Set<Statement> statements = new HashSet<>();
+	protected Collection<Statement> generateFactStatements(Session session, Fact fact) {
+		List<Statement> statements = new ArrayList<>();
 
 		BlankNode factNode = getFactNode(fact);
 
@@ -140,7 +144,7 @@ public class Rdf2GoSessionHandler {
 		return statements;
 	}
 
-	private void addProvStatements(Session session, Fact fact, Set<Statement> statements, BlankNode factNode) {
+	private void addProvStatements(Session session, Fact fact, Collection<Statement> statements, BlankNode factNode) {
 		Set<TerminologyObject> activeDerivationSources = fact.getPSMethod()
 				.getActiveDerivationSources(fact.getTerminologyObject(), session);
 
@@ -227,8 +231,8 @@ public class Rdf2GoSessionHandler {
 
 	public void removeSessionFromRdf2GoCore() {
 		synchronized (core) {
-			for (Set<Statement> set : statementCache.values()) {
-				core.removeStatements(set);
+			for (Statement[] statements : statementCache.values()) {
+				core.removeStatements(Arrays.asList(statements));
 			}
 		}
 	}
