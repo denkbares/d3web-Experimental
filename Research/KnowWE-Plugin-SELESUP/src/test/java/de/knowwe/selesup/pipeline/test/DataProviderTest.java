@@ -32,6 +32,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
+ * Test/Reference implementation for the {@link DataProvider} interface, using the
+ * {@link TestDataProvider} implementation.
+ *
  * @author Sebastian Furth (denkbares GmbH)
  * @created 12.11.14
  */

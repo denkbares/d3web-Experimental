@@ -18,30 +18,12 @@
  */
 package de.knowwe.selesup;
 
-import java.io.IOException;
-
 /**
  * @author Sebastian Furth (denkbares GmbH)
  * @created 29.08.14
  */
 public class DataIntegrator {
 
-
-	public static void main(String[] args) throws IOException {
-
-//		Collection<Sofa> sofas = new LinkedList<Sofa>();
-//		Collection<WikiAttachment> attachments = Environment.getInstance().getWikiConnector().getAttachments();
-//		attachments.forEach(((WikiAttachment attachment) -> sofas.add(new AttachmentSofa(attachment))));
-//
-//		Collection<Article> articles = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB).getArticles();
-//		articles.forEach((Article article) -> sofas.add(new ArticleSofa(article)));
-
-
-
-
-
-
-	}
 
 
 }

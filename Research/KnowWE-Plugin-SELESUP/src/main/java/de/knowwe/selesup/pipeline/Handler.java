@@ -19,14 +19,34 @@
 package de.knowwe.selesup.pipeline;
 
 /**
+ * Interface for a handler. A handler is a representation of a pipeline element, processing
+ * the input (of type defined by the generic parameter &lt;I&gt;) in order to produce an output
+ * (of the type defined by the generic parameter &lt;O&gt;).
+ *
+ * Please note that the usage of arrays instead of collections is recommended because of the generic
+ * parameters.
+ *
  * @author Sebastian Furth (denkbares GmbH)
  * @created 01.09.14
  */
 public interface Handler<I, O> {
 
+	/**
+	 * Processes the input of type &lt;I&gt; to produce an output of type &lt;O&gt;
+	 * @param input the data that shall be processed
+	 * @return the output data
+	 */
 	O process(I input);
 
+	/**
+	 * Returns the {@link Class} of the input data.
+	 * @return {@link Class} of the input
+	 */
 	Class<I> getInputClass();
 
+	/**
+	 * Returns the {@link Class} of the output data.
+	 * @return {@link Class} of the output
+	 */
 	Class<O> getOutputClass();
 }

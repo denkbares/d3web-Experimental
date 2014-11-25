@@ -33,8 +33,6 @@ import static org.junit.Assert.assertEquals;
  */
 public class PipelineTest {
 
-
-
 	@Test
 	public void testHandlers() {
 		String input1 = "1;2;3;4;5";

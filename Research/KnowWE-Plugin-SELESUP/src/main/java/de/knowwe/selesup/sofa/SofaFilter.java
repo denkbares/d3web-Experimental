@@ -19,7 +19,7 @@
 package de.knowwe.selesup.sofa;
 
 /**
- * The SofaFilter interface is used by the {@link de.knowwe.selesup.DataProvider}s to restrict the {@link de.knowwe.selesup.sofa.Sofa}s
+ * The SofaFilter interface is used by the {@link de.knowwe.selesup.DataProvider}s to restrict the {@link Sofa}s
  * they can handle, e.g. by restricting the type of Sofas to a specific MIME type.
  *
  * @author Sebastian Furth (denkbares GmbH)
@@ -28,9 +28,9 @@ package de.knowwe.selesup.sofa;
 public interface SofaFilter {
 
 	/**
-	 * Returns true if the SofaFilter accepts the specified {@link de.knowwe.selesup.sofa.Sofa}, false otherwise.
+	 * Returns true if the SofaFilter accepts the specified {@link Sofa}, false otherwise.
 	 *
-	 * @param sofa the {@link de.knowwe.selesup.sofa.Sofa} object that is filtered
+	 * @param sofa the {@link Sofa} object that is filtered
 	 * @return true if accepted, false otherwise
 	 */
 	boolean accept(Sofa sofa);

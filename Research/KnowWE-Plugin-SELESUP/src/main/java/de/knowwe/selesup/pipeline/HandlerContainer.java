@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
+ * Encapsulates multiple {@link Handler} instances for easier pipeline instantiation.
+ *
  * @author Sebastian Furth (denkbares GmbH)
  * @created 12.11.14
  */
@@ -29,10 +31,19 @@ public class HandlerContainer implements Iterable<Handler<?, ?>> {
 
 	private final Handler<?, ?>[] handlers;
 
+	/**
+	 * Creates a new HandlerContainer that encapsulates the specified {@link Handler} instances
+	 * in the specified order.
+	 * @param handlers the handlers that shall be encapsulated
+	 */
 	public HandlerContainer(Handler<?, ?>... handlers) {
 		this.handlers = handlers;
 	}
 
+	/**
+	 * Returns the encapsulated {@link Handler} instances.
+	 * @return the encapsulated handlers
+	 */
 	public Handler<?, ?>[] getHandlers() {
 		return handlers;
 	}
