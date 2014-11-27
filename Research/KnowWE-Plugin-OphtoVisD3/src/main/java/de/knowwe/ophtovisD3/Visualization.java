@@ -131,8 +131,6 @@ public class Visualization {
 						+ context
 						+ "/KnowWEExtension/scripts/nav_menu_jquery.js \"></script>\r\n"
 						+
-						"<script type='text/javascript' src='KnowWEExtension/scripts/jquery-autosize.min.js'></script>"
-						+
 						"<script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-helper.js'></script>"
 						+
 						"<script type='text/javascript' src='KnowWEExtension/scripts/KnowWE.js'></script>"

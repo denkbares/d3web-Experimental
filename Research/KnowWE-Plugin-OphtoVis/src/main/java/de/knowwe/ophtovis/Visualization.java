@@ -94,8 +94,6 @@ public class Visualization {
 						+ context
 						+ "/KnowWEExtension/initDefaultDesign.js \"></script>\r\n"
 						+
-						"<script type='text/javascript' src='KnowWEExtension/scripts/jquery-autosize.min.js'>"
-						+
 						"</script></script><script type='text/javascript' src='KnowWEExtension/scripts/jquery-compatibility.js'></script>"
 						+
 						"<script type='text/javascript' src='KnowWEExtension/scripts/KnowWE-helper.js'></script>"
