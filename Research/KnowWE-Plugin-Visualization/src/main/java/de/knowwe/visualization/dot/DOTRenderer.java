@@ -372,6 +372,16 @@ public class DOTRenderer {
         return null;
     }
 
+    public static void deleteVisualizationFiles(String filePrefix) {
+        File dot = createFile("dot", filePrefix);
+        File svg = createFile("svg", filePrefix);
+        File png = createFile("png", filePrefix);
+
+        dot.delete();
+        svg.delete();
+        png.delete();
+    }
+
     /**
      * The dot, svg and png files are created and written.
      *

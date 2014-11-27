@@ -329,15 +329,8 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 
 		List<Message> messages = new ArrayList<Message>();
 
-		String realPath;
-		if (user != null) {
-			ServletContext servletContext = user.getServletContext();
-			if (servletContext == null) return; // at wiki startup only
-
-			realPath = servletContext.getRealPath("");
-		} else {
-			realPath = Environment.getInstance().getWikiConnector().getServletContext().getRealPath("");
-		}
+		String realPath = getRealPath(user);
+        if (realPath == null) return; // at wiki startup only
 
 		Map<String, String> parameterMap = new HashMap<String, String>();
 
@@ -401,46 +394,22 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 		parameterMap.put(OntoGraphDataBuilder.SECTION_ID, section.getID());
 
 		// set panel size
-		String size = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_SIZE);
-		if (size != null) {
-			parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, size);
-		}
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_SIZE, section, OntoGraphDataBuilder.GRAPH_SIZE, parameterMap);
 
-		String height = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_HEIGHT);
-		if (height != null) {
-			parameterMap.put(OntoGraphDataBuilder.GRAPH_HEIGHT, height);
-		}
+        // set height
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_HEIGHT, section, OntoGraphDataBuilder.GRAPH_HEIGHT, parameterMap);
 
-		String width = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_WIDTH);
-		if (width != null) {
-			parameterMap.put(OntoGraphDataBuilder.GRAPH_WIDTH, width);
-		}
+		// set width
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_WIDTH, section, OntoGraphDataBuilder.GRAPH_WIDTH, parameterMap);
 
 		// set format (png/svg)
-		String format = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_FORMAT);
-		if (format != null) {
-			format = format.toLowerCase();
-			this.format = format;
-			parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
-		}
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_FORMAT, section, OntoGraphDataBuilder.FORMAT, parameterMap);
 
 		// additional dot source code
-		String dotApp = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_DOT_APP);
-		if (dotApp != null) {
-			parameterMap.put(OntoGraphDataBuilder.DOT_APP, dotApp);
-		}
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_DOT_APP, section, OntoGraphDataBuilder.DOT_APP, parameterMap);
 
 		// set rank direction of graph layout
-		String rankDir = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_RANK_DIR);
-		if (rankDir != null) {
-			parameterMap.put(OntoGraphDataBuilder.RANK_DIRECTION, rankDir);
-		}
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_RANK_DIR, section, OntoGraphDataBuilder.RANK_DIRECTION, parameterMap);
 
 		// set color codings if existing
 		String colorRelationName = SparqlVisType.getAnnotation(section,
@@ -451,25 +420,13 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 		}
 
 		// set flag for use of labels
-		String labelValue = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_LABELS);
-		if (labelValue != null) {
-			parameterMap.put(OntoGraphDataBuilder.USE_LABELS, labelValue);
-		}
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_LABELS, section, OntoGraphDataBuilder.USE_LABELS, parameterMap);
 
 		// set renderer
-		String rendererType = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_RENDERER);
-		if (rendererType != null) {
-			parameterMap.put(OntoGraphDataBuilder.RENDERER, rendererType);
-		}
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_RENDERER, section, OntoGraphDataBuilder.RENDERER, parameterMap);
 
 		// set visualization
-		String visualization = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_VISUALIZATION);
-		if (visualization != null) {
-			parameterMap.put(OntoGraphDataBuilder.VISUALIZATION, visualization);
-		}
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_VISUALIZATION, section, OntoGraphDataBuilder.VISUALIZATION, parameterMap);
 
 		// set master
 		String master = getMaster(section);
@@ -478,20 +435,10 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 		}
 
 		// set language
-		String lang = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_LANGUAGE);
-		if (lang != null) {
-			parameterMap.put(OntoGraphDataBuilder.LANGUAGE, lang);
-		}
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_LANGUAGE, section, OntoGraphDataBuilder.LANGUAGE, parameterMap);
 
 		// set link mode
-		String linkModeValue = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_LINK_MODE);
-		if (linkModeValue == null) {
-			// default link mode is 'jump'
-			linkModeValue = SparqlVisType.LinkMode.jump.name();
-			parameterMap.put(OntoGraphDataBuilder.LINK_MODE, linkModeValue);
-		}
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_LINK_MODE, section, OntoGraphDataBuilder.LINK_MODE, parameterMap, SparqlVisType.LinkMode.jump.name());
 
 		String addToDOT = "";
 		List<Section<? extends AnnotationContentType>> annotationSections =
@@ -590,4 +537,17 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 			string.appendHtml(renderedContent);
 		}
 	}
+
+    public static String getRealPath(UserContext user) {
+        String realPath = null;
+        if (user != null) {
+            ServletContext servletContext = user.getServletContext();
+            if (servletContext == null) return null; // at wiki startup only
+
+            realPath = servletContext.getRealPath("");
+        } else {
+            realPath = Environment.getInstance().getWikiConnector().getServletContext().getRealPath("");
+        }
+        return realPath;
+    }
 }

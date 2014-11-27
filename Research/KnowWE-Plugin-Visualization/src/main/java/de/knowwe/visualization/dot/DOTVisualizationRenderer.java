@@ -59,14 +59,21 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 		return createHTMLOutput();
 	}
 
+    public static String getGraphFilePath(String fileID, String realPath) {
+        return getFilePath(realPath) + "graph" + fileID;
+    }
+
 	@Override
 	public String getGraphFilePath() {
-		return getFilePath() + "graph" + parameters.get(GraphDataBuilder.FILE_ID);
+		return getGraphFilePath(parameters.get(GraphDataBuilder.FILE_ID), parameters.get(GraphDataBuilder.REAL_PATH));
 	}
 
 	@Override
 	public String getFilePath() {
-		String realPath = parameters.get(GraphDataBuilder.REAL_PATH);
+       return getFilePath(parameters.get(GraphDataBuilder.REAL_PATH));
+    }
+
+    public static String getFilePath(String realPath) {
 		String tmpPath = FileUtils.KNOWWEEXTENSION_FOLDER + FileUtils.FILE_SEPARATOR
 				+ FileUtils.TMP_FOLDER
 				+ FileUtils.FILE_SEPARATOR;

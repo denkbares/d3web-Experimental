@@ -25,7 +25,10 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 import de.knowwe.rdfs.vis.PreRenderWorker;
 import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
+import de.knowwe.rdfs.vis.markup.sparql.SparqlVisTypeRenderer;
 import de.knowwe.rdfs.vis.util.Utils;
+import de.knowwe.visualization.dot.DOTRenderer;
+import de.knowwe.visualization.dot.DOTVisualizationRenderer;
 
 public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRenderer {
 
@@ -37,8 +40,19 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 
 	@Override
 	public void renderContents(Section<?> section, UserContext user, RenderResult string) {
-		PreRenderWorker.getInstance().preRenderSectionAndWait(this, section, user, string);
+        PreRenderWorker.getInstance().preRenderSectionAndWait(this, section, user, string);
 	}
+
+    private boolean hasConceptParameter(UserContext user) {
+        if (user != null) {
+
+            String parameter = user.getParameter("concept");
+            if (parameter != null) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 	/**
 	 * @created 13.07.2014
@@ -76,86 +90,50 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 
 		// dot app
-		String dotApp = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_DOT_APP);
-		parameterMap.put(OntoGraphDataBuilder.DOT_APP, dotApp);
+        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_DOT_APP, section, OntoGraphDataBuilder.DOT_APP, parameterMap);
 
 		// renderer
-		String rendererType = VisConfigType.getAnnotation(section, OntoVisType.ANNOTATION_RENDERER);
-		parameterMap.put(OntoGraphDataBuilder.RENDERER, rendererType);
+        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_RENDERER, section, OntoGraphDataBuilder.RENDERER, parameterMap);
 
 		// visualization
-		String visualization = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_VISUALIZATION);
-		parameterMap.put(OntoGraphDataBuilder.VISUALIZATION, visualization);
+        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_VISUALIZATION, section, OntoGraphDataBuilder.VISUALIZATION, parameterMap);
 
 		// master
-		String master = VisConfigType.getAnnotation(section,
-				PackageManager.MASTER_ATTRIBUTE_NAME);
-		if (master != null) {
-			parameterMap.put(OntoGraphDataBuilder.MASTER, master);
-		}
+        SparqlVisType.readParameterFromAnnotation(PackageManager.MASTER_ATTRIBUTE_NAME, section, OntoGraphDataBuilder.MASTER, parameterMap);
 
 		// language
-		String lang = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_LANGUAGE);
-		if (lang != null) {
-			parameterMap.put(OntoGraphDataBuilder.LANGUAGE, lang);
-		}
+        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_LANGUAGE, section, OntoGraphDataBuilder.LANGUAGE, parameterMap);
 
 		// excludes
 		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, getExcludedRelations(section));
-
-		String excludeNodes = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_EXCLUDENODES);
-		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, excludeNodes);
+        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_EXCLUDENODES, section, OntoGraphDataBuilder.EXCLUDED_NODES, parameterMap);
 
 		// filters
-		String filteredClasses = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_FILTERCLASSES);
-		parameterMap.put(OntoGraphDataBuilder.FILTERED_CLASSES, filteredClasses);
+        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_FILTERCLASSES, section, OntoGraphDataBuilder.FILTERED_CLASSES, parameterMap);
 
-		String filteredRelations = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_FILTERRELATIONS);
-		parameterMap.put(OntoGraphDataBuilder.FILTERED_RELATIONS, filteredRelations);
+        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_FILTERRELATIONS, section, OntoGraphDataBuilder.FILTERED_RELATIONS, parameterMap);
 
 		// outgoing edges
-		String outgoingEdges = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_OUTGOING_EDGES);
-		parameterMap.put(OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, outgoingEdges);
+        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_OUTGOING_EDGES, section, OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, parameterMap);
 
-		// inverse Realtions
-		String showInverse = VisConfigType.getAnnotation(section, OntoVisType.ANNOTATION_SHOWINVERSE);
-		parameterMap.put(OntoGraphDataBuilder.SHOW_INVERSE, showInverse);
+
+		// inverse Relations
+        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_SHOWINVERSE, section, OntoGraphDataBuilder.SHOW_INVERSE, parameterMap);
 
 		// show classes
-		String classes = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_SHOWCLASSES);
-		parameterMap.put(OntoGraphDataBuilder.SHOW_CLASSES, classes);
+        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_SHOWCLASSES, section, OntoGraphDataBuilder.SHOW_CLASSES, parameterMap);
 
 		// show properties
-		String props = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_SHOWPROPERTIES);
-		parameterMap.put(OntoGraphDataBuilder.SHOW_PROPERTIES, props);
+        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_SHOWPROPERTIES, section, OntoGraphDataBuilder.SHOW_PROPERTIES, parameterMap);
 
 		// labels
-		String labelValue = VisConfigType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_LABELS);
-		parameterMap.put(OntoGraphDataBuilder.USE_LABELS, labelValue);
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_LABELS, section, OntoGraphDataBuilder.USE_LABELS, parameterMap);
 
 		// rank direction
-		String rankDir = VisConfigType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_RANK_DIR);
-		parameterMap.put(OntoGraphDataBuilder.RANK_DIRECTION, rankDir);
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_RANK_DIR, section, OntoGraphDataBuilder.RANK_DIRECTION, parameterMap);
 
 		// link mode
-		String linkModeValue = VisConfigType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_LINK_MODE);
-		if (linkModeValue == null) {
-			// default link mode is 'jump'
-			linkModeValue = SparqlVisType.LinkMode.jump.name();
-		}
-		parameterMap.put(OntoGraphDataBuilder.LINK_MODE, linkModeValue);
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_LINK_MODE, section, OntoGraphDataBuilder.LINK_MODE, parameterMap, SparqlVisType.LinkMode.jump.name());
 
 		// successors and predecessors
 		parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, getSuccessors(section));
@@ -171,7 +149,6 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 		// colors
 		String colorRelationName = VisConfigType.getAnnotation(section,
 				OntoVisType.ANNOTATION_COLORS);
-
 		if (!Strings.isBlank(colorRelationName)) {
 			parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, Utils.createColorCodings(colorRelationName, rdfRepository, "rdf:Property"));
 			parameterMap.put(OntoGraphDataBuilder.CLASS_COLOR_CODES, Utils.createColorCodings(colorRelationName, rdfRepository, "rdfs:Class"));
@@ -203,14 +180,23 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 	 * @created 18.08.2012
 	 */
 	private String getConcept(UserContext user, Section<?> section) {
-		if (user != null) {
-			String parameter = user.getParameter("concept");
-			if (parameter != null) {
-				return parameter;
-			}
-		}
-		return OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONCEPT);
+		String concept = getConceptFromRequest(user, section);
+        if(concept != null) {
+            return concept;
+        } else {
+            return OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONCEPT);
+        }
 	}
+
+    private String getConceptFromRequest(UserContext user, Section<?> section) {
+        if (user != null) {
+            String parameter = user.getParameter("concept");
+            if (parameter != null) {
+                return parameter;
+            }
+        }
+        return null;
+    }
 
 	/**
 	 * Checks the excluded relations to make sure a namespace is provided.
@@ -414,18 +400,10 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 		}
 
 		// set link mode
-		String linkModeAnnotationValue = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_LINK_MODE);
-		if (linkModeAnnotationValue != null) {
-			// default link mode is 'jump'
-			parameterMap.put(OntoGraphDataBuilder.LINK_MODE, linkModeAnnotationValue);
-		}
-		// set default if none defined yet
-		if (parameterMap.get(OntoGraphDataBuilder.LINK_MODE) == null) {
-			parameterMap.put(OntoGraphDataBuilder.LINK_MODE, SparqlVisType.LinkMode.jump.name());
-		}
+        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_LINK_MODE, section, OntoGraphDataBuilder.LINK_MODE, parameterMap, SparqlVisType.LinkMode.jump.name());
 
-		String successors = getSuccessors(section);
+
+        String successors = getSuccessors(section);
 		if (successors != null) {
 			parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, successors);
 		}
@@ -458,18 +436,24 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 	}
 
 	private void setFileID(Section<?> section, Map<String, String> parameterMap) {
-		String textHash = String.valueOf(section.getText().hashCode());
-
-		OntologyCompiler ontoCompiler = Compilers.getCompiler(section, OntologyCompiler.class);
-		if (ontoCompiler == null) return;
-		String compHash = String.valueOf(ontoCompiler.getCompileSection().getTitle().hashCode());
-
-		String fileID = "_" + textHash + "_" + compHash;
+        String fileID = getFileID(section);
+        if (fileID == null) return;
 
 		parameterMap.put(OntoGraphDataBuilder.FILE_ID, fileID);
 	}
 
-	private void createGraphAndAppendHTMLIncludeSnipplet(RenderResult string, String realPath, Section<?> section, Map<String, String> parameterMap, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider) {
+    public static String getFileID(Section<?> section) {
+        String textHash = String.valueOf(section.getText().hashCode());
+
+        OntologyCompiler ontoCompiler = Compilers.getCompiler(section, OntologyCompiler.class);
+        if (ontoCompiler == null) return null;
+        String compHash = String.valueOf(ontoCompiler.getCompileSection().getTitle().hashCode());
+
+        String fileID = "_" + textHash + "_" + compHash;
+        return fileID;
+    }
+
+    private void createGraphAndAppendHTMLIncludeSnipplet(RenderResult string, String realPath, Section<?> section, Map<String, String> parameterMap, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider) {
 		OntoGraphDataBuilder builder = new OntoGraphDataBuilder(realPath, section, parameterMap,
 				uriProvider,
 				rdfRepository);

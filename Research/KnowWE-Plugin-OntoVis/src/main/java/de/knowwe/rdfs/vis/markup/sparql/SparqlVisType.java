@@ -19,16 +19,19 @@
 package de.knowwe.rdfs.vis.markup.sparql;
 
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.NothingRenderer;
-import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.Rdf2GoCoreCheckRenderer;
+import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 import de.knowwe.rdfs.vis.markup.OntoVisType;
 import de.knowwe.rdfs.vis.markup.PreRenderer;
 import de.knowwe.rdfs.vis.markup.VisualizationType;
 import de.knowwe.visualization.GraphDataBuilder;
+
+import java.util.Map;
 
 /**
  * 
@@ -58,6 +61,30 @@ public class SparqlVisType extends DefaultMarkupType implements VisualizationTyp
 	public static final String ANNOTATION_LABELS = "labels";
 
 	public static final String ANNOTATION_CONFIG = "config";
+
+
+
+    public static void readParameterFromAnnotation(String annotationName, Section<?> section, String parameterName, Map<String, String> parameters, String defaultValue) {
+        String value = SparqlVisType.getAnnotation(section,
+                annotationName);
+        if(value != null) {
+            /*
+            Set value from annotation as parameter
+             */
+            parameters.put(parameterName, value);
+        } else {
+            /*
+            No value found in annotation, hence set default value if given
+             */
+            if(defaultValue != null) {
+                parameters.put(parameterName, defaultValue);
+            }
+        }
+    }
+
+    public static void readParameterFromAnnotation(String annotationName, Section<?> section, String parameterName, Map<String,String> parameters) {
+        readParameterFromAnnotation(annotationName, section, parameterName, parameters, null);
+    }
 
 	private static final DefaultMarkup MARKUP;
 
