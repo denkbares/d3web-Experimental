@@ -81,16 +81,14 @@ public class ScoreTableCellSubtreeHandler implements D3webHandler<ScoreCell> {
 			a.setSolution(s);
 			a.setScore(score);
 
-			Rule r = RuleFactory.createRule(a, d3webCond,
+			Rule rule = RuleFactory.createRule(a, d3webCond,
 					null, PSMethodHeuristic.class);
-			if (r == null) {
+			if (rule == null) {
 				messages.add(Messages.error("Unable to create rule for line '" + condition
 						+ "' and column '" + solution + "'"));
 			}
 			else {
-				KnowWEUtils.storeObject(article, section, ruleStoreKey, r);
-				messages.add(Messages.objectCreatedNotice(
-						"Rule"));
+				KnowWEUtils.storeObject(article, section, ruleStoreKey, rule);
 			}
 		}
 

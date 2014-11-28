@@ -132,7 +132,7 @@ public class InlineIndicationCondition extends AbstractType {
 					msgs.add(Messages.objectCreationError(Rule.class.getSimpleName()));
 				}
 				if (r != null && !(qaset instanceof QContainer && r2 == null)) {
-					return Messages.asList(Messages.objectCreatedNotice("Rule"));
+					return Messages.noMessage();
 				}
 
 			}
