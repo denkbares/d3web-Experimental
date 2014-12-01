@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import de.d3web.strings.Strings;
 import de.knowwe.core.ArticleManager;
@@ -55,6 +56,13 @@ public class GraphReRenderer implements EventListener {
 			gr = new GraphReRenderer();
 			GraphReRenderer.am = am;
 			GraphReRenderer.fileDirPath = fileDirPath;
+
+			ResourceBundle rb = ResourceBundle.getBundle("preRendering");
+			String prerender = rb.getString("prerender").trim();
+
+			if (prerender.equals("true") || prerender.equals("ja")) {
+				preRenderAll = true;
+			}
 		}
 		return gr;
 	}
