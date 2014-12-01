@@ -32,6 +32,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdfs.vis.markup.PreRenderer;
+import de.knowwe.rdfs.vis.util.Utils;
 
 /**
  * Helper class that handles the asynchronous (pre)rendering of all visualisation-sections.
@@ -78,7 +79,7 @@ public class PreRenderWorker {
 		} else {
 			futureRenderTask = es.submit(renderSection);
 		}
-		workerPool.put(section.getID(), futureRenderTask);
+		workerPool.put(Utils.getFileID(section), futureRenderTask);
 		return futureRenderTask;
 	}
 
@@ -122,12 +123,13 @@ public class PreRenderWorker {
 	}
 
 	public boolean isPreRendering(Section<? extends Type> section) {
-		return workerPool.containsKey(section.getID());
+		String fileID = Utils.getFileID(section);
+		return workerPool.containsKey(fileID);
 	}
 
 	public Future getRunningPreRenderTaskFor(Section<? extends Type> section) {
-		if (workerPool.containsKey(section.getID())) {
-			return workerPool.get(section.getID());
+		if (workerPool.containsKey(Utils.getFileID(section))) {
+			return workerPool.get(Utils.getFileID(section));
 		}
 		return null;
 	}

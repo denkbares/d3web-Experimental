@@ -436,22 +436,11 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 	}
 
 	private void setFileID(Section<?> section, Map<String, String> parameterMap) {
-        String fileID = getFileID(section);
+        String fileID = Utils.getFileID(section);
         if (fileID == null) return;
 
 		parameterMap.put(OntoGraphDataBuilder.FILE_ID, fileID);
 	}
-
-    public static String getFileID(Section<?> section) {
-        String textHash = String.valueOf(section.getText().hashCode());
-
-        OntologyCompiler ontoCompiler = Compilers.getCompiler(section, OntologyCompiler.class);
-        if (ontoCompiler == null) return null;
-        String compHash = String.valueOf(ontoCompiler.getCompileSection().getTitle().hashCode());
-
-        String fileID = "_" + textHash + "_" + compHash;
-        return fileID;
-    }
 
     private void createGraphAndAppendHTMLIncludeSnipplet(RenderResult string, String realPath, Section<?> section, Map<String, String> parameterMap, Rdf2GoCore rdfRepository, LinkToTermDefinitionProvider uriProvider) {
 		OntoGraphDataBuilder builder = new OntoGraphDataBuilder(realPath, section, parameterMap,
@@ -466,7 +455,14 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 
 		Map<String, String> parameterMap = new HashMap<>();
 		setFileID(section, parameterMap);
-		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
+
+		String format = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_FORMAT);
+		if (format != null) {
+			format = format.toLowerCase();
+			this.format = format;
+			parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
+		}
 
 		createGraphAndAppendHTMLIncludeSnipplet(string, realPath, section, parameterMap, rdfRepository, uriProvider);
 	}

@@ -72,7 +72,14 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 		List<Message> messages = new ArrayList<Message>();
 		Map<String, String> parameterMap = new HashMap<>();
 		setFileID(section, parameterMap);
-		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
+
+		String format = OntoVisType.getAnnotation(section,
+				OntoVisType.ANNOTATION_FORMAT);
+		if (format != null) {
+			format = format.toLowerCase();
+			this.format = format;
+			parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
+		}
 
 		createGraphAndAppendHTMLIncludeSnipplet(string, new SubGraphData(), parameterMap, messages);
 	}
@@ -108,12 +115,9 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 	}
 
 	private void setFileID(Section<?> section, Map<String, String> parameterMap) {
-		String textHash = String.valueOf(section.getText().hashCode());
 
-		OntologyCompiler ontoCompiler = Compilers.getCompiler(section, OntologyCompiler.class);
-		String compHash = String.valueOf(ontoCompiler.getCompileSection().getTitle().hashCode());
-
-		String fileID = "_" + textHash + "_" + compHash;
+		String fileID = Utils.getFileID(section);
+		if (fileID == null) return;
 
 		parameterMap.put(OntoGraphDataBuilder.FILE_ID, fileID);
 	}

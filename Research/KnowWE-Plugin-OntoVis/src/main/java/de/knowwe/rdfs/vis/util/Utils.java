@@ -461,4 +461,15 @@ public class Utils {
 		return relationName;
 	}
 
+	public static String getFileID(Section<?> section) {
+		String textHash = String.valueOf(section.getText().hashCode());
+
+		OntologyCompiler ontoCompiler = Compilers.getCompiler(section, OntologyCompiler.class);
+		if (ontoCompiler == null) return null;
+		String compHash = String.valueOf(ontoCompiler.getCompileSection().getTitle().hashCode());
+
+		String fileID = "_" + textHash + "_" + compHash;
+		return fileID;
+	}
+
 }
