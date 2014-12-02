@@ -101,7 +101,7 @@ public class DescribeIndividualTagHandler extends AbstractTagHandler {
 			QueryResultTable classMembersTable = Rdf2GoCore.getInstance().sparqlSelect(
 					query);
 			buffy.append(SparqlResultRenderer.getInstance().getSparqlRenderResult(classMembersTable,
-					userContext));
+					userContext, section));
 
 		}
 		return buffy.toString();
