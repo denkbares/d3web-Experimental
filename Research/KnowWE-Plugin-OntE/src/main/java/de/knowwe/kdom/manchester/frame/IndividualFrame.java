@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 
 import org.semanticweb.owlapi.model.OWLIndividual;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -102,7 +103,7 @@ public class IndividualFrame extends DefaultFrame<IndividualFrame> {
 	 * @return TRUE if such an section exists, FALSE otherwise
 	 */
 	public boolean hasIndividualDefinition(Section<? extends DefaultFrame<?>> section) {
-		return !Sections.successor(section, Individual.class).isEmpty();
+		return !Strings.isBlank(Sections.successor(section, Individual.class).getText());
 	}
 
 	/**

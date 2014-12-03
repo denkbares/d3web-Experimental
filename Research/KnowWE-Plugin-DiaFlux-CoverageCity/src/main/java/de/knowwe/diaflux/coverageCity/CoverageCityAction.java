@@ -128,7 +128,7 @@ public class CoverageCityAction extends AbstractAction {
 			}
 		}
 		result = DefaultCoverageResult.calculateResult(results, kb);
-		coverageSec.getSectionStore().storeObject(DiaFluxCoverageType.COVERAGE_RESULT, result);
+		coverageSec.storeObject(DiaFluxCoverageType.COVERAGE_RESULT, result);
 		return result;
 	}
 

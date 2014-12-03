@@ -57,7 +57,7 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 	}
 
 	public static CoverageResult getResult(Section<?> coverageSection) {
-		CoverageResult result = (CoverageResult) coverageSection.getSectionStore().getObject(
+		CoverageResult result = (CoverageResult) coverageSection.getObject(
 				COVERAGE_RESULT);
 		return result;
 

@@ -96,13 +96,13 @@ public abstract class Rdf2GoDashTreeTermRelationScript extends DashTreeTermRelat
 	@Override
 	public void destroy(OntologyCompiler compiler, Section<TermDefinition> section) {
 		compiler.getRdf2GoCore().removeStatementsForSection(section);
-		if (section.getSectionStore().getObject(compiler, RELATIONS_ADDED) == null) return;
+		if (section.getObject(compiler, RELATIONS_ADDED) == null) return;
 		Collection<Section<?>> termDefiningSections = compiler.getTerminologyManager()
 				.getTermDefiningSections(section.get().getTermIdentifier(section));
 		Compilers.addSectionsToDestroy(compiler, termDefiningSections, this.getClass());
 		// we don't exactly know where the relations were added, so we destroy all defining sections
 		for (Section<?> termDefiningSection : termDefiningSections) {
-			termDefiningSection.getSectionStore().storeObject(compiler, RELATIONS_ADDED, null);
+			termDefiningSection.storeObject(compiler, RELATIONS_ADDED, null);
 		}
 	}
 }

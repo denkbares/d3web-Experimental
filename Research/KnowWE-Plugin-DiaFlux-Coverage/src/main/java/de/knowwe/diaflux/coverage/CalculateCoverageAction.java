@@ -144,7 +144,7 @@ public class CalculateCoverageAction extends AbstractAction {
 		// storeObject??
 		System.out.println("No of coveragse;: " + results.size());
 		CoverageResult result = DefaultCoverageResult.calculateResult(results, kb);
-		coverageSec.getSectionStore().storeObject(DiaFluxCoverageType.COVERAGE_RESULT, result);
+		coverageSec.storeObject(DiaFluxCoverageType.COVERAGE_RESULT, result);
 
 		// Path2GraphViz.createPaths(kb, result.getPathCounts().keySet());
 

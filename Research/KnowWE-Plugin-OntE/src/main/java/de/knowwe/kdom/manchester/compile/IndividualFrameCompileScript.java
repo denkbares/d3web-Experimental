@@ -12,6 +12,7 @@ import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -121,7 +122,7 @@ public class IndividualFrameCompileScript extends OWLAPIKnowledgeUnitCompileScri
 			Section<ManchesterClassExpression> mce = Sections.child(types,
 					ManchesterClassExpression.class);
 
-			if (mce.isEmpty()) {
+			if (Strings.isBlank(mce.getText())) {
 				messages.add(Messages.syntaxError("Types found, but no concepts specified!"));
 			}
 
