@@ -18,13 +18,11 @@
  */
 package de.knowwe.owlapi.test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import connector.DummyConnector;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.node.URI;
@@ -32,17 +30,18 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
-
 import utils.TestUtils;
-import connector.DummyConnector;
+
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;
-import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.owlapi.RDF2GoSync;
 import de.knowwe.rdf2go.Rdf2GoCore;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test for the @link{RDF2GoSync} class.
@@ -89,9 +88,8 @@ public class RDF2GoSyncTest {
 	}
 
 	private Section<?> getDummySection() {
-		Article article = Article.createArticle("Wayne", "Juckts", "default_web");
-		return Section.createSection("Wayne Juckts", RootType.getInstance(),
-				article.getRootSection());
+		Article article = Article.createArticle("Wayne Juckts", "Juckts", "default_web");
+		return article.getRootSection();
 	}
 
 	@Test
