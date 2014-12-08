@@ -36,17 +36,18 @@ import java.net.URISyntaxException;
 public class SparqlResultNodeDragRenderer implements SparqlResultNodeRenderer {
     @Override
     public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core, RenderMode mode) {
+
         final boolean isValidURI = isURI(text);
         final String reducedURI = Rdf2GoUtils.reduceNamespace(core, text);
         StringBuilder result = new StringBuilder();
         final boolean isConceptNode = isValidURI && reducedURI != text;
-        if(isConceptNode) {
+        if(isConceptNode && mode.equals(RenderMode.HTML)) {
             String identifier = reducedURI.replace(":", "#");
             result.append("<div style='display:inline;position:static !important;' class='dragSparqlResultNode'>");
             result.append("<div class='termID'>" + identifier + "</div>");
         }
         result.append(new TermDefinitionLinkNodeRenderer().renderNode(text, variable, user, core, mode));
-        if(isConceptNode) {
+        if(isConceptNode  && mode.equals(RenderMode.HTML)) {
             result.append("</div>");
         }
         return result.toString();
