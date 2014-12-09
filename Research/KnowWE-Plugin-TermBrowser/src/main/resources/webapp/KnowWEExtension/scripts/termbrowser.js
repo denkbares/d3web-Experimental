@@ -377,8 +377,7 @@ function rerenderSection(oldTargetID, newTargetID) {
 						initDropableMarkupSection(jq$(this));
 					});
 					initDropableMarkupSection(markupBlockNew);
-					KNOWWE.core.rerendercontent
-						.animateDefaultMarkupMenu(markupBlockNew);
+					_TM.animateDefaultMarkupMenu(markupBlockNew);
 					_TM.decorateToolMenus(markupBlockNew);
 				}
 			}
