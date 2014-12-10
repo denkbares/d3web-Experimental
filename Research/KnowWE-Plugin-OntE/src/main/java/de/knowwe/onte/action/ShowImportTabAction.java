@@ -34,6 +34,7 @@ import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.toolbar.DefaultToolbarButton;
 import de.knowwe.toolbar.ToolbarButton;
 import de.knowwe.toolbar.ToolbarUtils;
+import de.knowwe.util.Icon;
 
 /**
  *
@@ -78,12 +79,11 @@ public class ShowImportTabAction extends AbstractAction {
 	}
 
 	private ToolbarButton getDeleteButton(Section<? extends AbstractType> section) {
-		String image = "KnowWEExtension/images/onte/delete.png";
 		String name = "Delete";
 		String description = "Delete selected ontology!";
 		String action = "KNOWWE.plugin.onte.actions.removeImportedOntology('"
 											+ section.getID() + "')";
 
-		return new DefaultToolbarButton(image, name, description, action);
+		return new DefaultToolbarButton(Icon.DELETE, name, description, action);
 	}
 }

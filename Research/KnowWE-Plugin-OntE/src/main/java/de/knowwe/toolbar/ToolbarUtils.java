@@ -90,10 +90,8 @@ public class ToolbarUtils {
 		html.append("\" title=\"");
 		html.append(button.getDescription());
 		html.append("\" class=\"onte-button left small\">");
-		html.append("<img src=\"KnowWEExtension/images/onte/transparent.png\" style=\"");
-		html.append("background: url('").append(button.getIconPath()).append(
-				"') no-repeat scroll center 6px transparent; height: 22px;width: 16px;");
-		html.append("\" /></a>");
+		html.append(button.getIcon().getIcon());
+		html.append("</a>");
 
 		return html.toString();
 	}

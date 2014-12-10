@@ -35,6 +35,7 @@ import de.knowwe.kdom.manchester.frame.DefaultFrame;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolSet;
 import de.knowwe.tools.ToolUtils;
+import de.knowwe.util.Icon;
 
 /**
  * Highlights elements of the Manchester OWL syntax in the article. Also wraps
@@ -154,9 +155,9 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 		ToolSet tools = ToolUtils.getTools(sec, user);
 
 		for (Tool t : tools) {
-			String icon = t.getIcon();
+			Icon icon = t.getIcon();
 			String jsAction = t.getAction();
-			boolean hasIcon = icon != null && !icon.trim().isEmpty();
+			boolean hasIcon = icon != null;
 
 			string.append("<span class=\"" + t.getClass().getSimpleName() + "\" >"
 					+ "<"
@@ -166,7 +167,7 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 							? " href=\"javascript:" + t.getAction() + ";undefined;\""
 							: "") +
 					" title=\"" + t.getDescription() + "\">" +
-					(hasIcon ? ("<img src=\"" + icon + "\" />") : "") +
+					(hasIcon ? (icon.getIcon()) : "") +
 					"</" + (jsAction == null ? "span" : "a") + ">" +
 					"</span>");
 		}

@@ -32,6 +32,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolSet;
 import de.knowwe.tools.ToolUtils;
+import de.knowwe.util.Icon;
 
 public class Utils {
 
@@ -141,9 +142,9 @@ public class Utils {
 		ToolSet tools = ToolUtils.getTools(sec, user);
 
 		for (Tool t : tools) {
-			String icon = t.getIcon();
+			Icon icon = t.getIcon();
 			String jsAction = t.getAction();
-			boolean hasIcon = icon != null && !icon.trim().isEmpty();
+			boolean hasIcon = icon != null;
 
 			string.append("<span class=\"" + t.getClass().getSimpleName() + "\" >"
 					+ "<"
@@ -153,7 +154,7 @@ public class Utils {
 							? " href=\"javascript:" + t.getAction() + ";undefined;\""
 							: "") +
 					" title=\"" + t.getDescription() + "\">" +
-					(hasIcon ? ("<img src=\"" + icon + "\" />") : "") +
+					(hasIcon ? (icon.getIcon()) : "") +
 					"</" + (jsAction == null ? "span" : "a") + ">" +
 					"</span>");
 		}
