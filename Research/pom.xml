@@ -177,18 +177,13 @@
 		<module>d3web-Plugin-Persistence-ImageQuestion</module>
 		<module>KnowWE-Plugin-Defi</module>
 		<module>KnowWE-Plugin-Renaming</module>
-		<module>KnowWE-Plugin-OntE</module>
-		<module>KnowWE-Plugin-CaseTrain</module>
 		<module>d3web-Plugin-ProKEtProperties</module>
 		<module>KnowWE-Plugin-DiaFlux-Refactoring</module>
-		<module>KnowWE-Plugin-OWLAPI</module>
-		<module>KnowWE-Plugin-Example</module>
 		<module>KnowWE-Plugin-IncrementalCompiler</module>
 		<module>KnowWE-Plugin-IncrementalCompilerTest</module>
 		<module>KnowWE-Plugin-InlineIndication</module>
 		<module>KnowWE-Plugin-DiaFlux-Coverage</module>
 		<module>KnowWE-Plugin-RDFS-Basic</module>
-		<module>KnowWE-Plugin-ConceptPageLinkToolProvider</module>
 		<module>KnowWE-Plugin-RDFS-TurtleN3</module>
 		<module>KnowWE-Plugin-d3web-SimpleScoreTable</module>
 		<module>KnowWE-Plugin-RDFS-SubclassingTree</module>
@@ -201,13 +196,11 @@
 		<module>KnowWE-Plugin-RDFS-WikiObjectModel</module>
 		<module>KnowWE-Plugin-LoadKnowledgeBase</module>
 		<module>KnowWE-Plugin-OntoVis</module>
-		<module>KnowWE-Plugin-OWLAPIConnector</module>
 		<module>KnowWE-Plugin-WikiBaseline</module>
 		<module>KnowWE-Plugin-d3web-Visualizations</module>
 		<module>KnowWE-Plugin-OphtoVis</module>
 		<module>KnowWE-Plugin-DataAnalysis</module>
 		<module>KnowWE-Plugin-ESAT</module>
-		<module>KnowWE-Plugin-CIConnector</module>
 		<module>KnowWE-Plugin-Flash</module>
 		<module>KnowWE-Plugin-SparqlToExcel</module>
 		<module>KnowWE-Plugin-Revisions</module>
