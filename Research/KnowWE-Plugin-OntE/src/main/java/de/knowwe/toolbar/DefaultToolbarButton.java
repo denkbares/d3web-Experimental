@@ -19,6 +19,8 @@
  */
 package de.knowwe.toolbar;
 
+import de.knowwe.util.Icon;
+
 /**
  * This is a default implementation of a {@link ToolbarButton}. For more
  * information about a button see {@link ToolbarButton}.
@@ -31,7 +33,7 @@ public class DefaultToolbarButton implements ToolbarButton {
 	/**
 	 * Stores the icon path of the button.
 	 */
-	private final String iconPath;
+	private final Icon icon;
 
 	/**
 	 * Stores the title of the button.
@@ -48,16 +50,16 @@ public class DefaultToolbarButton implements ToolbarButton {
 	 */
 	private final String jsAction;
 
-	public DefaultToolbarButton(String iconPath, String title, String description, String jsAction) {
-		this.iconPath = iconPath;
+	public DefaultToolbarButton(Icon icon, String title, String description, String jsAction) {
+		this.icon = icon;
 		this.title = title;
 		this.description = description;
 		this.jsAction = jsAction;
 	}
 
 	@Override
-	public String getIconPath() {
-		return iconPath;
+	public Icon getIcon() {
+		return icon;
 	}
 
 	@Override

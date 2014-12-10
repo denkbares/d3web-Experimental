@@ -24,9 +24,9 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 /**
- * 
  * @author Johanna Latt
  * @created 20.06.2012
  */
@@ -53,7 +53,7 @@ public class OntoVisDisplaySVGProvider implements ToolProvider {
 				"&amp;" + Attributes.WEB + "=" + section.getWeb() +
 				"&amp;" + Attributes.SECTION_ID + "=" + section.getID() + "'";
 		return new DefaultTool(
-				"KnowWEExtension/d3web/icon/comment16.png",
+				Icon.COMMENT,
 				"Display the .svg",
 				"Display the graph",
 				jsAction);

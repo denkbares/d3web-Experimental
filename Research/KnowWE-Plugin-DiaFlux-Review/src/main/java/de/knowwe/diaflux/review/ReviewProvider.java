@@ -24,9 +24,9 @@ import de.knowwe.diaflux.DiaFluxTraceHighlight;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 /**
- * 
  * @author Reinhard Hatko
  * @created 17.10.2012
  */
@@ -54,7 +54,7 @@ public class ReviewProvider implements ToolProvider {
 		if (highlightActive) {
 			String jsAction = DiaFluxTraceHighlight.getDeactivationJSAction();
 			return new DefaultTool(
-					ICON_PATH,
+					Icon.HIDE,
 					"Hide reviews",
 					"Hides the reviews for this flowchart.",
 					jsAction, TOOL_CATEGORY);
@@ -62,7 +62,7 @@ public class ReviewProvider implements ToolProvider {
 		else {
 			String jsAction = DiaFluxTraceHighlight.getActivationJSAction(DiaFluxReviewHighlight.REVIEW_HIGHLIGHT);
 			return new DefaultTool(
-					ICON_PATH,
+					Icon.SHOW,
 					"Show reviews",
 					"Shows the reviews for this flowchart.",
 					jsAction, TOOL_CATEGORY);

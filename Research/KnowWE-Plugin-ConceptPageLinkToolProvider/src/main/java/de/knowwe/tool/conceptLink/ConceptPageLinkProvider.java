@@ -35,6 +35,7 @@ import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
 import de.knowwe.tools.ToolUtils;
+import de.knowwe.util.Icon;
 
 public class ConceptPageLinkProvider implements ToolProvider {
 
@@ -58,7 +59,7 @@ public class ConceptPageLinkProvider implements ToolProvider {
 
 		String text = link.toString();
 		Tool tool = new DefaultTool(
-				"KnowWEExtension/images/dt_icon_premises.gif",
+				Icon.OPENPAGE,
 				"<a href='Wiki.jsp?page=" + text + "'>" + "To definition" + "</a>",
 				text,
 				Tool.CATEGORY_INFO);

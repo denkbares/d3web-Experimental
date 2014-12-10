@@ -27,7 +27,6 @@ import de.knowwe.tools.ToolProvider;
 import de.knowwe.util.Icon;
 
 /**
- * 
  * @author Stefan Plehn
  * @created 22.03.2013
  */
@@ -46,7 +45,7 @@ public class SparqlToExcelDownloadProvider implements ToolProvider {
 	}
 
 	protected Tool getDownloadExcelTool(Section<?> section,
-			UserContext userContext) {
+										UserContext userContext) {
 		// tool to provide download capability
 		String jsAction = "window.location='action/DownloadSparqlResultAsExcel" + "?"
 				+ Attributes.SECTION_ID + "=" + section.getID() + "&amp;"
@@ -54,7 +53,7 @@ public class SparqlToExcelDownloadProvider implements ToolProvider {
 				+ section.getArticle().getTitle()
 				+ ".xls'";
 		return new DefaultTool(
-				Icon.DOCUMENT_EXCEL,
+				Icon.FILE_EXCEL,
 				"Download as XLS", "Download this table as an Excel file",
 				jsAction, Tool.CATEGORY_DOWNLOAD);
 	}

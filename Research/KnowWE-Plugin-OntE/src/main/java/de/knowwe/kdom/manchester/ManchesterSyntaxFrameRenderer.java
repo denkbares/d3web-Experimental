@@ -154,7 +154,7 @@ public class ManchesterSyntaxFrameRenderer implements Renderer {
 		ToolSet tools = ToolUtils.getTools(sec, user);
 
 		for (Tool t : tools) {
-			String icon = t.getIconPath();
+			String icon = t.getIcon();
 			String jsAction = t.getAction();
 			boolean hasIcon = icon != null && !icon.trim().isEmpty();
 

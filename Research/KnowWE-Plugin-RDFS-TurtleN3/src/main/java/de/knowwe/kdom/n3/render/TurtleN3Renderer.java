@@ -38,19 +38,19 @@ public class TurtleN3Renderer implements Renderer {
 		ToolSet tools = ToolUtils.getTools(sec, user);
 
 		for (Tool t : tools) {
-			String icon = t.getIconPath();
+
 			String jsAction = t.getAction();
-			boolean hasIcon = icon != null && !icon.trim().isEmpty();
+			boolean hasIcon = t.getIcon() != null;
 
 			string.append("<span class=\"" + t.getClass().getSimpleName() + "\" >"
 					+ "<"
 					+ (jsAction == null ? "span" : "a")
 					+ " class=\"markupMenuItem\""
 					+ (jsAction != null
-							? " href=\"javascript:" + t.getAction() + ";undefined;\""
-							: "") +
+					? " href=\"javascript:" + t.getAction() + ";undefined;\""
+					: "") +
 					" title=\"" + t.getDescription() + "\">" +
-					(hasIcon ? ("<img src=\"" + icon + "\" />") : "") +
+					(hasIcon ? t.getIcon().getIconWithFixedWidth() : "") +
 					"</" + (jsAction == null ? "span" : "a") + ">" +
 					"</span>");
 		}

@@ -7,6 +7,7 @@ import de.knowwe.toolbar.DefaultToolbarButton;
 import de.knowwe.toolbar.ToolbarButton;
 import de.knowwe.toolbar.ToolbarButtonProvider;
 import de.knowwe.tools.DefaultTool;
+import de.knowwe.util.Icon;
 
 public class ExportToolbarButton implements ToolbarButtonProvider {
 
@@ -19,16 +20,15 @@ public class ExportToolbarButton implements ToolbarButtonProvider {
 	 * Returns the {@link DefaultTool} for the creation of new
 	 * {@link ClassFrame} out of unknown terms.
 	 *
-	 * @created 06.10.2011
 	 * @param section
 	 * @return
+	 * @created 06.10.2011
 	 */
 	private ToolbarButton getToolbarButton() {
-		String image = "KnowWEExtension/images/onte/emblem-downloads.png";
 		String name = "Export";
 		String description = "Exports the local ontology";
 		String action = "KNOWWE.plugin.onte.actions.showExportTab()";
 
-		return new DefaultToolbarButton(image, name, description, action);
+		return new DefaultToolbarButton(Icon.DOWNLOAD, name, description, action);
 	}
 }

@@ -24,16 +24,15 @@ import de.knowwe.diaflux.DiaFluxTraceHighlight;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 /**
  * Enables highlighting of covered nodes and edges
- * 
+ *
  * @author Reinhard Hatko
  * @created 10.10.2011
  */
 public class CoverageProvider implements ToolProvider {
-
-	private static final String ICON = "KnowWEExtension/flowchart/icon/debug16.png";
 
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
@@ -54,12 +53,12 @@ public class CoverageProvider implements ToolProvider {
 
 		String description = "Highlights covered nodes and edges in the flowchart.";
 		if (dohighlighting) {
-			return new DefaultTool(ICON, "Hide Coverage", description,
+			return new DefaultTool(Icon.DEBUG, "Hide Coverage", description,
 					DiaFluxTraceHighlight.getDeactivationJSAction(), Tool.CATEGORY_INFO);
 		}
 		else {
 			return new DefaultTool(
-					ICON,
+					Icon.DEBUG,
 					"Show Coverage",
 					description,
 					DiaFluxTraceHighlight.getActivationJSAction(DiaFluxCoverageHighlight.COVERAGE_HIGHLIGHT), Tool.CATEGORY_INFO);

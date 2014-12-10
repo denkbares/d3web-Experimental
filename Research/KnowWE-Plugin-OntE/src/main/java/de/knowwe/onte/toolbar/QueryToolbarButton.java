@@ -7,6 +7,7 @@ import de.knowwe.toolbar.DefaultToolbarButton;
 import de.knowwe.toolbar.ToolbarButton;
 import de.knowwe.toolbar.ToolbarButtonProvider;
 import de.knowwe.tools.DefaultTool;
+import de.knowwe.util.Icon;
 
 public class QueryToolbarButton implements ToolbarButtonProvider {
 
@@ -19,9 +20,9 @@ public class QueryToolbarButton implements ToolbarButtonProvider {
 	 * Returns the {@link DefaultTool} for the creation of new
 	 * {@link ClassFrame} out of unknown terms.
 	 *
-	 * @created 06.10.2011
 	 * @param section
 	 * @return
+	 * @created 06.10.2011
 	 */
 	private ToolbarButton getToolbarButton() {
 		String image = "KnowWEExtension/images/onte/system-search.png";
@@ -29,6 +30,6 @@ public class QueryToolbarButton implements ToolbarButtonProvider {
 		String description = "Query the ontology with manchester class expressions";
 		String action = "KNOWWE.plugin.onte.actions.showQueryTab()";
 
-		return new DefaultToolbarButton(image, name, description, action);
+		return new DefaultToolbarButton(Icon.SEARCH, name, description, action);
 	}
 }

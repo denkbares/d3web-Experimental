@@ -34,6 +34,7 @@ import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
 import de.knowwe.tools.ToolUtils;
+import de.knowwe.util.Icon;
 
 public class ClassMemberLinkToolProvider implements ToolProvider {
 
@@ -54,8 +55,10 @@ public class ClassMemberLinkToolProvider implements ToolProvider {
 		if (section.get() instanceof AbstractIRITermDefinition) {
 			Section<? extends AbstractIRITermDefinition> def = Sections.cast(section,
 					AbstractIRITermDefinition.class);
-			Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
-					def.get().getTermIdentifier(def));
+			Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance()
+					.getTerminology()
+					.getTermReferences(
+							def.get().getTermIdentifier(def));
 			if (termReferences != null && termReferences.size() > 0) {
 				Section<? extends SimpleReference> ref = termReferences.iterator().next();
 				if (RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class)) {
@@ -81,7 +84,7 @@ public class ClassMemberLinkToolProvider implements ToolProvider {
 				"'Wiki.jsp?page=ClassMembers&amp;objectname=' + encodeURIComponent('" +
 				objectName + "')";
 		return new DefaultTool(
-				"KnowWEExtension/images/dt_icon_realisation.gif",
+				Icon.SHOW,
 				"Show members",
 				"Shows all asserted and derived members of this class.",
 				jsAction,

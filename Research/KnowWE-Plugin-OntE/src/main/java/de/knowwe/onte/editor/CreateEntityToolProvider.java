@@ -29,6 +29,7 @@ import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
 import de.knowwe.tools.ToolUtils;
+import de.knowwe.util.Icon;
 
 /**
  * The CreateEntityToolProvider offers help with quick creation of not yet
@@ -40,7 +41,7 @@ import de.knowwe.tools.ToolUtils;
  * <li>object properties</li>
  * <li>data properties</li>
  * </ul>
- * 
+ *
  * @author Stefan Mark
  * @created 06.10.2011
  */
@@ -77,57 +78,55 @@ public class CreateEntityToolProvider implements ToolProvider {
 	/**
 	 * Returns the {@link DefaultTool} for the creation of new
 	 * {@link ClassFrame} out of unknown terms.
-	 * 
-	 * @created 06.10.2011
+	 *
 	 * @param section
 	 * @return
+	 * @created 06.10.2011
 	 */
 	private Tool getCreateClassTool(Section<? extends AbstractOWLTermDefinition> section) {
-		String image = "KnowWEExtension/images/dt_icon_realisation.png";
+		;
 		String name = "Create Class";
 		String description = "Creates a article containing a basic OWL Class Frame for adding the term to the Ontology!";
 		String action = "KnowWE.plugin.onte.actions.createEntity(urlencode('"
 				+ section.getText()
 				+ "'), 'OWLClass')";
 
-		return new DefaultTool(image, name, description, action, Tool.CATEGORY_EDIT);
+		return new DefaultTool(Icon.PREFERENCES, name, description, action, Tool.CATEGORY_EDIT);
 	}
 
 	/**
 	 * Returns the {@link DefaultTool} for the creation of new
 	 * {@link ObjectPropertyFrame} out of unknown terms.
-	 * 
-	 * @created 06.10.2011
+	 *
 	 * @param section
 	 * @return
+	 * @created 06.10.2011
 	 */
 	private Tool getCreateObjectPropertyTool(Section<? extends AbstractOWLTermDefinition> section) {
-		String image = "KnowWEExtension/images/dt_icon_realisation.png";
 		String name = "Create ObjectProperty";
 		String description = "Creates a article containing a basic OWL ObjectProperty Frame for adding the term to the Ontology!";
 		String action = "KnowWE.plugin.onte.actions.createEntity(urlencode('"
 				+ section.getText()
 				+ "'), 'OWLObjectProperty')";
 
-		return new DefaultTool(image, name, description, action, Tool.CATEGORY_EDIT);
+		return new DefaultTool(Icon.PREFERENCES, name, description, action, Tool.CATEGORY_EDIT);
 	}
 
 	/**
 	 * Returns the {@link DefaultTool} for the creation of new
 	 * {@link DataPropertyFrame} out of unknown terms.
-	 * 
-	 * @created 06.10.2011
+	 *
 	 * @param section
 	 * @return
+	 * @created 06.10.2011
 	 */
 	private Tool getCreateDataPropertyTool(Section<? extends AbstractOWLTermDefinition> section) {
-		String image = "KnowWEExtension/images/dt_icon_realisation.png";
 		String name = "Create DataProperty";
 		String description = "Creates a article containing a basic OWL DataProperty Frame for adding the term to the Ontology!";
 		String action = "KnowWE.plugin.onte.actions.createEntity(urlencode('"
 				+ section.getText()
 				+ "'), 'OWLDataProperty')";
 
-		return new DefaultTool(image, name, description, action);
+		return new DefaultTool(Icon.PREFERENCES, name, description, action);
 	}
 }

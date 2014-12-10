@@ -35,6 +35,7 @@ import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
 import de.knowwe.tools.ToolUtils;
+import de.knowwe.util.Icon;
 
 public class DescribeIndividualLinkToolProvider implements ToolProvider {
 
@@ -45,21 +46,23 @@ public class DescribeIndividualLinkToolProvider implements ToolProvider {
 			if (!RDFSUtil.isTermCategory(ref, RDFSTermCategory.ObjectProperty)
 					&& !RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class)
 					&& !RDFSUtil.isTermCategory(ref,
-							RDFSTermCategory.DataTypeProperty)) {
+					RDFSTermCategory.DataTypeProperty)) {
 				return ref;
 			}
 		}
 		if (section.get() instanceof AbstractIRITermDefinition) {
 			Section<? extends AbstractIRITermDefinition> def = Sections.cast(section,
 					AbstractIRITermDefinition.class);
-			Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
-					def.get().getTermIdentifier(def));
+			Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance()
+					.getTerminology()
+					.getTermReferences(
+							def.get().getTermIdentifier(def));
 			if (termReferences != null && termReferences.size() > 0) {
 				Section<? extends SimpleReference> ref = termReferences.iterator().next();
 				if (!RDFSUtil.isTermCategory(ref, RDFSTermCategory.ObjectProperty)
 						&& !RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class)
 						&& !RDFSUtil.isTermCategory(ref,
-								RDFSTermCategory.DataTypeProperty)) {
+						RDFSTermCategory.DataTypeProperty)) {
 					return ref;
 				}
 			}
@@ -88,7 +91,7 @@ public class DescribeIndividualLinkToolProvider implements ToolProvider {
 				+
 				objectName + "')";
 		return new DefaultTool(
-				"KnowWEExtension/images/dt_icon_realisation.gif",
+				Icon.SHOW,
 				"Describe individual",
 				"Shows all asserted and derived relations for this individual.",
 				jsAction,

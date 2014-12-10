@@ -34,6 +34,7 @@ import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
 import de.knowwe.tools.ToolUtils;
+import de.knowwe.util.Icon;
 
 public class PropertyUseLinkToolProvider implements ToolProvider {
 
@@ -78,7 +79,7 @@ public class PropertyUseLinkToolProvider implements ToolProvider {
 				"'Wiki.jsp?page=PropertyUse&amp;objectname=' + encodeURIComponent('" +
 				objectName + "')";
 		return new DefaultTool(
-				"KnowWEExtension/images/dt_icon_realisation.gif",
+				Icon.SHOW,
 				"Shows relations",
 				"Shows all asserted and derived relations of this property.",
 				jsAction,

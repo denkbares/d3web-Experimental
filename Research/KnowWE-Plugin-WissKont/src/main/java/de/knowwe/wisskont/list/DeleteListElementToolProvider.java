@@ -6,6 +6,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 public class DeleteListElementToolProvider implements ToolProvider {
 
@@ -17,11 +18,10 @@ public class DeleteListElementToolProvider implements ToolProvider {
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		String context = Environment.getInstance().getWikiConnector().getServletContext().getContextPath();
-		String iconPath = context + "/KnowWEExtension/css/images/delete_icon.png";
 		String jsAction = "sendDeleteAction('" + section.getID() + "')";
 
 		DefaultTool tool = new DefaultTool(
-				iconPath,
+				Icon.DELETE,
 				"Löschen",
 				"Diesen Begriff aus der Liste entfernen",
 				jsAction);

@@ -23,9 +23,9 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.instantedit.tools.InstantEditTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 /**
- * 
  * @author Jochen Reutelshöfer
  * @created 28.11.2012
  */
@@ -43,7 +43,7 @@ public class InstantEditToolProviderGerman implements ToolProvider {
 
 	protected Tool getQuickEditPageTool(Section<?> section, UserContext userContext) {
 		return new InstantEditTool(
-				"KnowWEExtension/images/pencil.png",
+				Icon.EDITSECTION,
 				"Editieren",
 				"Diesen Abschnitt editieren",
 				section);

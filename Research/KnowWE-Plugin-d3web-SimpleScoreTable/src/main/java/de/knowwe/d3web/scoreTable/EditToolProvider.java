@@ -5,6 +5,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.instantedit.tools.InstantEditTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 public class EditToolProvider implements ToolProvider {
 
@@ -23,7 +24,7 @@ public class EditToolProvider implements ToolProvider {
 		String jsAction = "KNOWWE.plugin.tableEditTool.supportLinks('" + section.getID()
 				+ "', false);";
 		return new InstantEditTool(
-				"KnowWEExtension/images/pencil.png",
+				Icon.EDITTABLE,
 				"Edit Table",
 				"Edit this table in a spreadsheet-like editor",
 				section,

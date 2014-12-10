@@ -19,13 +19,15 @@
  */
 package de.knowwe.toolbar;
 
+import de.knowwe.util.Icon;
+
 /**
  * This interface provides basic definition of button that can be added to a
  * toolbar and so integrated into the rendered wiki page. Each button has its
  * own action and can be set as a javascript function call. (Inspired by the
  * Tool mechanism of KnowWE, simply adapted for the usage as a toolbar in this
  * plugin).
- * 
+ *
  * @author Stefan Mark
  * @created 30.11.2011
  */
@@ -38,7 +40,7 @@ public interface ToolbarButton {
 	 *
 	 * @return String The path to the icon of the button
 	 */
-	String getIconPath();
+	Icon getIcon();
 
 	/**
 	 * Returns a title of the button indicating the action of the button. The
@@ -60,7 +62,7 @@ public interface ToolbarButton {
 	 * Returns the javascript function that should b executed if the button is
 	 * pressed by a user. Note: Quote variables within the function call with
 	 * simple opening and closing quotes. Do not use double quotes.
-	 *
+	 * <p>
 	 * E.g.: foo('value')
 	 *
 	 * @return String The javascript action to be executed

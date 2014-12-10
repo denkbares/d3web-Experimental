@@ -24,15 +24,13 @@ import de.knowwe.diaflux.DiaFluxTraceHighlight;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 /**
- * 
  * @author Roland Jerg
  * @created 08.05.2012
  */
 public class HighlightProvider implements ToolProvider {
-
-	private static final String ICON = "KnowWEExtension/flowchart/icon/debug16.png";
 
 	@Override
 	public boolean hasTools(Section<?> section, UserContext userContext) {
@@ -52,14 +50,14 @@ public class HighlightProvider implements ToolProvider {
 						AnomaliesHighlight.ANOMALIES_HIGHLIGHT);
 
 		if (dohighlighting) {
-			return new DefaultTool(ICON, "Hide Anomalies",
+			return new DefaultTool(Icon.DEBUG, "Hide Anomalies",
 					"Highlights Anomalies in the flowchart.",
 					DiaFluxTraceHighlight.getDeactivationJSAction(),
 					Tool.CATEGORY_INFO);
 		}
 		else {
 			return new DefaultTool(
-					ICON,
+					Icon.DEBUG,
 					"Show Anomalies",
 					"Highlights Anomalies in the flowchart.",
 					DiaFluxTraceHighlight.getActivationJSAction(AnomaliesHighlight.ANOMALIES_HIGHLIGHT),

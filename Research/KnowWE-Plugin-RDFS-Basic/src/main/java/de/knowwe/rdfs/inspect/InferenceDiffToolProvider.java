@@ -27,12 +27,13 @@ import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
 import de.knowwe.tools.ToolUtils;
+import de.knowwe.util.Icon;
 
 /**
  * The StatementImportanceToolProvider allows the user to determine the
  * importance of an RDFS statement. For more information see the
  * {@link InferenceDiffTagHandler}.
- * 
+ *
  * @author Stefan Mark
  * @created 31.05.2011
  */
@@ -65,7 +66,7 @@ public class InferenceDiffToolProvider implements ToolProvider {
 				+ section.getTitle()
 				+ "')";
 		return new DefaultTool(
-				"KnowWEExtension/images/minus.png",
+				Icon.MINUS,
 				"Show inference diff for statement",
 				"Removes the selected statement from the triple store and calculates shows a diff between the data before and after the deletion to show the importance of the statement..",
 				jsAction,

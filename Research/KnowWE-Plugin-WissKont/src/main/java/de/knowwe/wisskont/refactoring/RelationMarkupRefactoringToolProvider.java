@@ -25,9 +25,9 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 /**
- * 
  * @author Jochen Reutelshöfer
  * @created 05.12.2012
  */
@@ -40,15 +40,14 @@ public class RelationMarkupRefactoringToolProvider implements ToolProvider {
 
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
-		return new Tool[] { new DefaultTool("KnowWEExtension/images/dt_icon_realisation2.gif",
+		return new Tool[] { new DefaultTool(Icon.COG,
 				"Relationen umbauen",
 				"Relationen umbauen", getJSScript(userContext)) };
 	}
 
 	/**
-	 * 
-	 * @created 05.12.2012
 	 * @return
+	 * @created 05.12.2012
 	 */
 	private String getJSScript(UserContext userContext) {
 		String jsAction = "window.location='action/RefactoringAction" +

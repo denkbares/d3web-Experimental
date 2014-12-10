@@ -24,9 +24,9 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 /**
- * 
  * @author Johanna Latt
  * @created 20.06.2012
  */
@@ -52,7 +52,7 @@ public class OntoVisSVGDownloadProvider implements ToolProvider {
 		String renderer = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_RENDERER);
 		if (renderer != null && renderer.equals("d3")) {
 			String jsAction = "downloadSVG('" + section.getID() + "')";
-			return new DefaultTool("KnowWEExtension/d3web/icon/download16.gif",
+			return new DefaultTool(Icon.DOWNLOAD,
 					"Download .svg",
 					"Download the d3 graph as an .svg-file",
 					jsAction,
@@ -64,7 +64,7 @@ public class OntoVisSVGDownloadProvider implements ToolProvider {
 				"&amp;" + Attributes.WEB + "=" + section.getWeb() +
 				"&amp;" + Attributes.SECTION_ID + "=" + section.getID() + "'";
 		return new DefaultTool(
-				"KnowWEExtension/d3web/icon/download16.gif",
+				Icon.DOWNLOAD,
 				"Download .svg",
 				"Download the graph as an .svg-file",
 				jsAction,

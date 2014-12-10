@@ -25,9 +25,9 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 /**
- * 
  * @author adm_rieder
  * @created 07.11.2012
  */
@@ -52,7 +52,7 @@ public class LinkToVisualizationToolProvider implements ToolProvider {
 		String jsAction = "window.location.href = " +
 				"'GraphVisualisierung.jsp?concept=' + encodeURIComponent('" +
 				termName + "')";
-		return new Tool[] { new DefaultTool("KnowWEExtension/images/page_white_find.png",
+		return new Tool[] { new DefaultTool(Icon.SEARCH,
 				"Visualisierung",
 				"Visualisierung der Hierarchie ausgehend von diesem Konzept", jsAction) };
 	}

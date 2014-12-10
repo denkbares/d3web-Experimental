@@ -7,6 +7,7 @@ import de.knowwe.toolbar.DefaultToolbarButton;
 import de.knowwe.toolbar.ToolbarButton;
 import de.knowwe.toolbar.ToolbarButtonProvider;
 import de.knowwe.tools.DefaultTool;
+import de.knowwe.util.Icon;
 
 public class CheckConsistencyToolbarButton implements ToolbarButtonProvider {
 
@@ -19,16 +20,16 @@ public class CheckConsistencyToolbarButton implements ToolbarButtonProvider {
 	 * Returns the {@link DefaultTool} for the creation of new
 	 * {@link ClassFrame} out of unknown terms.
 	 *
-	 * @created 06.10.2011
 	 * @param section
 	 * @return
+	 * @created 06.10.2011
 	 */
 	private ToolbarButton getConsistencyToolbarButton() {
-		String image = "KnowWEExtension/images/onte/utilities-system-monitor.png";
+		;
 		String name = "Check Consistency";
 		String description = "Checks the consistency of the local ontology";
 		String action = "KNOWWE.plugin.onte.actions.checkConsistency()";
 
-		return new DefaultToolbarButton(image, name, description, action);
+		return new DefaultToolbarButton(Icon.CHECK, name, description, action);
 	}
 }

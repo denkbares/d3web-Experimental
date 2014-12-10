@@ -28,6 +28,7 @@ import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
 import de.knowwe.tools.ToolUtils;
+import de.knowwe.util.Icon;
 
 /**
  * @author Jochen Reutelshöfer
@@ -54,7 +55,7 @@ public class ObjectInfoToolProviderGerman implements ToolProvider {
 
 	protected Tool getObjectInfoPageTool(Section<? extends Term> section, UserContext userContext) {
 		return new DefaultTool(
-				"KnowWEExtension/d3web/icon/infoPage16.png",
+				Icon.INFO,
 				"Umbenennen",
 				"Öffnet eine Seite zum Umbenennen des Konzeptes in der ganzen Wissensbasis.",
 				TermInfoToolProvider.createObjectInfoJSAction(section));

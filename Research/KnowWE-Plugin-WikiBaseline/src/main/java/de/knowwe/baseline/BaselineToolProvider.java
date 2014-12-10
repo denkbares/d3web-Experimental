@@ -23,19 +23,17 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 /**
- * 
  * @author Reinhard Hatko
  * @created 26.10.2012
  */
 public class BaselineToolProvider implements ToolProvider {
 
-	private static final String ICON = "KnowWEExtension/images/baseline_add.png";
-
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext) {
-		DefaultTool addTool = new DefaultTool(ICON, "Create baseline",
+		DefaultTool addTool = new DefaultTool(Icon.PLUS, "Create baseline",
 				"Creates a new baseline to track future changes.", "Baseline.create();");
 
 		return new Tool[] { addTool };

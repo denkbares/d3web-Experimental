@@ -11,10 +11,9 @@ import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
 import de.knowwe.tools.ToolUtils;
+import de.knowwe.util.Icon;
 
 /**
- * 
- * 
  * @author Stefan Mark
  * @created 15.12.2011
  */
@@ -51,7 +50,7 @@ public class ImportedConceptPageLinkProvider implements ToolProvider {
 		String jsAction = "window.location.href = " +
 				"'Wiki.jsp?page=" + articleName + "'";
 		return new DefaultTool(
-				"KnowWEExtension/d3web/icon/infoPage16.png",
+				Icon.INFO,
 				"Jump to Import",
 				"Opens the import page for the concept.",
 				jsAction,

@@ -24,6 +24,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 /**
  * 
@@ -54,7 +55,7 @@ public class OntoVisDOTDownloadProvider implements ToolProvider {
 				"&amp;" + Attributes.SECTION_ID + "=" + section.getID() + "'";
 		;
 		return new DefaultTool(
-				"KnowWEExtension/d3web/icon/download16.gif",
+				Icon.DOWNLOAD,
 				"Download .dot",
 				"Download the .dot-file of the graph",
 				jsAction,

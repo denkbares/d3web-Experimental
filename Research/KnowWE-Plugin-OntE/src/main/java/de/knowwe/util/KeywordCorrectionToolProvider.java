@@ -42,22 +42,22 @@ public class KeywordCorrectionToolProvider implements ToolProvider {
 		Tool[] tools = new Tool[suggestions.size() + 1];
 
 		tools[0] = new DefaultTool(
-				"KnowWEExtension/images/quickfix.gif",
+				Icon.LIGHTBULB,
 				Messages.getMessageBundle().getString("KnowWE.Correction.do"),
 				"",
 				null,
 				"correct"
-				);
+		);
 
 		for (int i = 0; i < suggestions.size(); i++) {
 			tools[i + 1] = new DefaultTool(
-					"KnowWEExtension/images/correction_change.gif",
+					Icon.SHARE,
 					suggestions.get(i).getSuggestion(),
 					"",
 					"KNOWWE.plugin.onte.actions.doCorrection('" + section.getID() + "', '"
 							+ suggestions.get(i).getSuggestion() + "');",
 					"correct/item"
-					);
+			);
 		}
 		return tools;
 	}

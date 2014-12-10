@@ -25,9 +25,9 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
+import de.knowwe.util.Icon;
 
 /**
- * 
  * @author adm_rieder
  * @created 07.11.2012
  */
@@ -52,7 +52,7 @@ public class LinkToD3ToolProvider implements ToolProvider {
 		String jsAction = "window.location.href = " +
 				"'GraphVisualisierung.jsp?concept=' + encodeURIComponent('" +
 				termName + "')";
-		return new Tool[] { new DefaultTool("KnowWEExtension/images/statistics.gif",
+		return new Tool[] { new DefaultTool(Icon.STATISTICS,
 				"Visualisierung",
 				"Visualisierung mithilfe von D3", jsAction) };
 	}
