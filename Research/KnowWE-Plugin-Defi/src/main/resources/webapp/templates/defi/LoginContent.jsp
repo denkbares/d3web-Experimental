@@ -32,8 +32,7 @@
 <%-- Additional stylesheets --%>
 <link href="KnowWEExtension/css/general.css" type="text/css" rel="stylesheet">
 <link href="KnowWEExtension/css/defi.css" type="text/css" rel="stylesheet">
-<link href="KnowWEExtension/css/toolsMenuDecorator.css" type="text/css" rel="stylesheet">
-<link href="KnowWEExtension/css/defaultMarkup.css" type="text/css" rel="stylesheet">
+<link href="KnowWEExtension/css/defi-alert.css" type="text/css" rel="stylesheet">
 <style type="text/css">
 	#header {
 		border-bottom: 0;
@@ -138,6 +137,9 @@
 			und Ihr Passwort per Post erhalten. Sollten Sie diese Daten verloren haben, setzen Sie
 			sich bitte umgehend mit uns in Verbindung!
 			<br><br>
+			Falls Sie sich für das Forum registrieren möchten, können Sie dies
+			<a href="Login.jsp?tab=register">hier</a> tun.
+			<br><br>
 			ICD-Forum ist optimiert f&uuml;r Mozilla Firefox - Sie k&ouml;nnen den Browser
 			<a target="_blank" href="http://www.mozilla.org/de/firefox/new/">hier</a>
 			herunterladen.
@@ -146,10 +148,33 @@
 
 	<%-- Register new user profile --%>
 	<!--wiki:Permission permission='editProfile'-->
-	<wiki:Tab id="profile"
+	<wiki:Tab id="register"
 			  title='<%=LocaleSupport.getLocalizedMessage(pageContext, "login.register.tab")%>'>
 		<wiki:Include page='RegisterDoubleOptIn.jsp'/>
 	</wiki:Tab>
+
+	<wiki:Tab id="success" title='Registrierung erfolgreich!'>
+		<div class="hinweis"><h5>Registrierung erfolgreich!</h5>
+			Sie haben sich erfolgreich registriert. Eine Bestätigungsmail mit Aktivierungslink wurde
+			an die angegebene E-Mail Adresse gesendet. Bitte klicken Sie diesen Link, um die
+			Registrierung abzuschließen.
+			<br><br>
+			Sollten Sie keine E-Mail bekommen haben, prüfen Sie bitte zunächst Ihren Spam-Ordner und
+			kontaktieren Sie uns bei weiteren Problemen.
+			<br><br>
+			Zurück zur <a href="Login.jsp">Login-Seite</a>.
+		</div>
+	</wiki:Tab>
+
+	<wiki:Tab id="confirmed" title='Registrierung abgeschlossen!'>
+		<div class="hinweis"><h5>Registrierung abgeschlossen!</h5>
+			Glückwunsch, Sie haben die Registrierung abgeschlossen!
+			Sie können sich nun mit Ihren Zugangsdaten im Forum anmelden.
+			<br><br>
+			Zurück zur <a href="Login.jsp">Login-Seite</a>.
+		</div>
+	</wiki:Tab>
+
 	<!--/wiki:Permission-->
 
 </wiki:TabbedSection>
@@ -157,6 +182,6 @@
 <script type="text/javascript">
 	window.onload = function () {
 		if ($$('div.error').length > 0)
-			$$('div.error')[0].innerHTML = "Fehler: Ung&uuml;ltige Benutzerdaten!";
+			$$('div.error')[0].innerHTML = "Fehler: Ung&uuml;ltige Benutzerdaten!<br>Falls Sie Ihren Account noch nicht best&auml;tigt haben, pr&uuml;fen Sie bitte Ihr E-Mail-Postfach.";
 	}
 </script>

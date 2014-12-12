@@ -38,6 +38,16 @@ import de.knowwe.core.action.UserActionContext;
 public class RegisterUserAction extends AbstractRegisterUserAction {
 
 	@Override
+	protected boolean checkUnsecurePassword(String password) {
+		return false; // unsecure passwords are allowed when defined by admin
+	}
+
+	@Override
+	protected boolean checkSpam(UserActionContext context) {
+		return false;
+	}
+
+	@Override
 	protected String getResponseText(UserProfile newUser) {
 		return newUser.getFullname() + " wurde erfolgreich erstellt.";
 	}

@@ -34,7 +34,7 @@ public class DoubleOptInConfirmationAction extends AbstractAction {
 		WikiEngine eng = WikiEngine.getInstance(Environment.getInstance().getContext(), null);
 		UserDatabase udb = eng.getUserManager().getUserDatabase();
 		String loginName = context.getParameter(PARAM_USER);
-		String authToken = context.getParameter(context.getParameter(PARAM_AUTH_TOKEN));
+		String authToken = context.getParameter(PARAM_AUTH_TOKEN);
 
 		try {
 			UserProfile user = udb.findByLoginName(loginName);
@@ -55,6 +55,9 @@ public class DoubleOptInConfirmationAction extends AbstractAction {
 			Log.severe("Unable to save unlocked user: " + loginName, e);
 		}
 
-		// TODO: send redirect
+		String baseUrl = context.getRequest().getRequestURL().toString();
+		baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf(context.getRequest().getServletPath()));
+
+		context.sendRedirect(baseUrl + "/Login.jsp?tab=confirmed");
 	}
 }

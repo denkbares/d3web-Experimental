@@ -8,10 +8,13 @@ import java.util.Properties;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import org.apache.wiki.WikiEngine;
 
@@ -46,8 +49,20 @@ public class MailUtils {
 		Message msg = new MimeMessage(session);
 		msg.setFrom(new InternetAddress(from));
 		msg.setRecipients(Message.RecipientType.TO, addresses);
+		MimeBodyPart mimeBodyPart = new MimeBodyPart();
+		mimeBodyPart.setContent(message, "text/html");
+		mimeBodyPart.setHeader("Content-Type", "text/html");
 		msg.setSubject(subject);
-		msg.setText(message);
+
+		Multipart multiPart = new MimeMultipart("alternative");
+		MimeBodyPart textPart = new MimeBodyPart();
+		textPart.setText(message, "utf-8"); // todo: replace potential html with plain text
+		MimeBodyPart htmlPart = new MimeBodyPart();
+		htmlPart.setContent(message, "text/html; charset=utf-8");
+		multiPart.addBodyPart(textPart);
+		multiPart.addBodyPart(htmlPart);
+		msg.setContent(multiPart);
+
 		transport.sendMessage(msg, addresses);
 		transport.close();
 	}
