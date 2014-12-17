@@ -61,7 +61,7 @@ public class LinkToMinVisualizationToolProvider implements ToolProvider {
 		}
 		String jsAction = "window.location.href =" +
 				"'GraphVisualisierung.jsp?concept=" + encoded + "&amp;minimized=true'";
-		return new Tool[] { new DefaultTool(Icon.COLLAPSE,
+		return new Tool[] { new DefaultTool(Icon.COLLAPSE_OUTLINE,
 				"Visualisierung minimieren",
 				"Visualisierung der Hierarchie ausgehend von diesem Konzept minimieren", jsAction) };
 	}
