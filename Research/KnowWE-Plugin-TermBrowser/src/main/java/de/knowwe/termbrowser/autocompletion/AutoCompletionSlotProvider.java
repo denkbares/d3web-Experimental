@@ -19,6 +19,8 @@
 
 package de.knowwe.termbrowser.autocompletion;
 
+import java.io.IOException;
+
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
@@ -32,7 +34,7 @@ public interface AutoCompletionSlotProvider {
 
     String EXTENSION_POINT_COMPLETION_PROVIDER = "AutoCompletionSlotProvider" ;
 
-    void init(Section<TermBrowserMarkup> section, UserContext user);
+    void init(Section<TermBrowserMarkup> section, UserContext user) throws IOException;
 
     void renderAutoCompletionSlot(RenderResult content, Section<TermBrowserMarkup> section);
 }
