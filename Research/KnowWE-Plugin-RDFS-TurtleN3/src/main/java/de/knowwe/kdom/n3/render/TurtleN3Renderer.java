@@ -50,7 +50,7 @@ public class TurtleN3Renderer implements Renderer {
 					? " href=\"javascript:" + t.getAction() + ";undefined;\""
 					: "") +
 					" title=\"" + t.getDescription() + "\">" +
-					(hasIcon ? t.getIcon().getIconWithFixedWidth() : "") +
+					(hasIcon ? t.getIcon().fixWidth().toHtml() : "") +
 					"</" + (jsAction == null ? "span" : "a") + ">" +
 					"</span>");
 		}
