@@ -36,6 +36,7 @@ import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.jspwiki.types.HeaderType;
 import de.knowwe.jspwiki.types.SectionContentType;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
 import de.knowwe.rdfs.wikiObjectModel.Utils;
@@ -90,7 +91,7 @@ public class WikiSectionCompiler<T extends Type> extends AbstractKnowledgeUnitCo
 			}
 		}
 
-		Rdf2GoCore.getInstance().addStatements(section, Rdf2GoUtils.toArray(data));
+		Rdf2GoCore.getInstance().addStatements(new SectionIDSource(section), Rdf2GoUtils.toArray(data));
 	}
 
 	private URI createTriplesForSection(List<Statement> data, URI pageURI, Section<HeaderType> currentSection, URI parentSectionURI) {

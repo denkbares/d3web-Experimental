@@ -39,6 +39,7 @@ import de.knowwe.kdom.n3.TurtlePredicate;
 import de.knowwe.kdom.n3.TurtleSubject;
 import de.knowwe.rdf2go.BlankNodeImpl;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
 import de.knowwe.rdfs.literal.TurtleObjectLiteral;
@@ -59,7 +60,7 @@ public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<
 			createTriplesForObject(triples, objectSec);
 
 		}
-		Rdf2GoCore.getInstance().addStatements(section, Rdf2GoUtils.toArray(triples));
+		Rdf2GoCore.getInstance().addStatements(new SectionIDSource(section), Rdf2GoUtils.toArray(triples));
 	}
 
 	private void createTriplesForObject(List<Statement> triples, Section<TurtleObjectSection> objectSec) {

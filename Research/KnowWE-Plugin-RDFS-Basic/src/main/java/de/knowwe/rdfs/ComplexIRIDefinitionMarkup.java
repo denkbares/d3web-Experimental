@@ -42,6 +42,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.RegexSectionFinderSingle;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
@@ -158,8 +159,9 @@ class ComplexIRIDefinitionCompileScript extends AbstractKnowledgeUnitCompileScri
 			// "object URI not found"));
 		}
 
-		Rdf2GoCore.getInstance().addStatement(section,
-				subURI.asResource(), predURI.asURI(), objURI);
+		Rdf2GoCore.getInstance()
+				.addStatements(new SectionIDSource(section), Rdf2GoCore.getInstance()
+						.createStatement(subURI.asResource(), predURI.asURI(), objURI));
 
 		// return new ArrayList<KDOMReportMessage>(0);
 

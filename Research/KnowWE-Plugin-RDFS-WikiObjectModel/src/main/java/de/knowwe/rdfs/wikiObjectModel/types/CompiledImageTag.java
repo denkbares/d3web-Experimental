@@ -37,6 +37,7 @@ import de.knowwe.core.kdom.sectionFinder.AllTextFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.jspwiki.types.ImageType;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
 import de.knowwe.rdfs.wikiObjectModel.Utils;
 import de.knowwe.rdfs.wikiObjectModel.WikiObjectModel;
@@ -92,14 +93,14 @@ public class CompiledImageTag extends AbstractKnowledgeUnitType<CompiledImageTag
 			}
 
 			// is an image
-			Rdf2GoCore.getInstance().addStatement(section,
-					imageURI,
-					RDF.type, WikiObjectModel.WIKI_IMAGE);
+			Rdf2GoCore.getInstance()
+					.addStatements(new SectionIDSource(section), Rdf2GoCore.getInstance()
+							.createStatement(imageURI, RDF.type, WikiObjectModel.WIKI_IMAGE));
 
 			// image illustrates context concept
-			Rdf2GoCore.getInstance().addStatement(section,
-					imageURI,
-					WikiObjectModel.ILLUSTRATES, targetURI);
+			Rdf2GoCore.getInstance()
+					.addStatements(new SectionIDSource(section), Rdf2GoCore.getInstance()
+							.createStatement(imageURI, WikiObjectModel.ILLUSTRATES, targetURI));
 		}
 	}
 

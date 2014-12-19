@@ -78,7 +78,7 @@ public class Rdf2GoFlowScript extends OntologyCompileScript<FlowchartType> {
 
 	@Override
 	public void destroy(OntologyCompiler compiler, Section<FlowchartType> section) {
-		compiler.getRdf2GoCore().removeStatementsForSection(section);
+		compiler.getRdf2GoCore().removeStatements(section);
 		Rdf2GoD3webUtils.unregisterTermDefinition(compiler, getDefinition(section));
 	}
 

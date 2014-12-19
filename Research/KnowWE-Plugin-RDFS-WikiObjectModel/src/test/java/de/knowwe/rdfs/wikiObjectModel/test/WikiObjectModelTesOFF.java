@@ -18,8 +18,6 @@
  */
 package de.knowwe.rdfs.wikiObjectModel.test;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 
 import org.junit.AfterClass;
@@ -28,14 +26,16 @@ import org.junit.Test;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
-
 import utils.TestArticleManager;
+
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.utils.SparqlQuery;
+
+import static org.junit.Assert.assertTrue;
 
 public class WikiObjectModelTesOFF {
 
@@ -159,7 +159,6 @@ public class WikiObjectModelTesOFF {
 	public static void tearDown() {
 		// Remove the statements created in the test to avoid problems
 		Article article = TestArticleManager.getArticle(TESTFILE);
-		Rdf2GoCore.getInstance().removeStatementsForSection(article.getRootSection());
 		Rdf2GoCore.getInstance().removeAllCachedStatements();
 		// Finally remove the formerly created article
 		TestArticleManager.clear();

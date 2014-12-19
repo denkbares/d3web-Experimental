@@ -26,6 +26,7 @@ import org.ontoware.rdf2go.model.node.Node;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
 import de.knowwe.rdfs.IRITermRef;
 import de.knowwe.rdfs.literal.TurtleObjectLiteral;
@@ -67,8 +68,9 @@ class TripleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TripleM
 
 		}
 		if (subURI != null && predURI != null && objURI != null) {
-			Rdf2GoCore.getInstance().addStatement(section,
-					subURI.asResource(), predURI.asURI(), objURI);
+			Rdf2GoCore.getInstance()
+					.addStatements(new SectionIDSource(section), Rdf2GoCore.getInstance()
+							.createStatement(subURI.asResource(), predURI.asURI(), objURI));
 		}
 	}
 }

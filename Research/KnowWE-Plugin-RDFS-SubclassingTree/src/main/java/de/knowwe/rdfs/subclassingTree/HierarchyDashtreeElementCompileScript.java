@@ -39,6 +39,7 @@ import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
 import de.knowwe.rdfs.IRITermRef;
 import de.knowwe.rdfs.RDFSTermCategory;
@@ -107,8 +108,9 @@ public class HierarchyDashtreeElementCompileScript extends
 						}
 					}
 					if (Messages.getErrors(messages).size() == 0) {
-						Rdf2GoCore.getInstance().addStatement(
-								childElement, localURI, predicate, fatherURI);
+						Rdf2GoCore.getInstance()
+								.addStatements(new SectionIDSource(childElement), Rdf2GoCore.getInstance()
+										.createStatement(localURI, predicate, fatherURI));
 					}
 				}
 			}

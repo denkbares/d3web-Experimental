@@ -114,7 +114,7 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 			Rdf2GoUtils.addStatement(core, identifierURI, propertyNameURI, contentLiteral,
 					statements);
 
-			core.addStatements(compiler, Rdf2GoUtils.toArray(statements));
+			core.addStatements(section, Rdf2GoUtils.toArray(statements));
 		}
 
 		return Messages.asList();
@@ -126,7 +126,7 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 
 	@Override
 	public void destroy(OntologyCompiler compiler, Section<PropertyDeclarationType> section) {
-		compiler.getRdf2GoCore().removeStatementsForSection(section);
+		compiler.getRdf2GoCore().removeStatements(section);
 	}
 
 	private List<Identifier> getObjectIdentifiers(OntologyCompiler compiler, Section<PropertyObjectReference> namendObjectSection) {

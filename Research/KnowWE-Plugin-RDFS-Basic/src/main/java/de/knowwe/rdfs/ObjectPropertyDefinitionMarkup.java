@@ -50,6 +50,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
@@ -180,16 +181,13 @@ class DomainRangeCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<Ob
 
 			// prop domain:: arg0
 			URI objectURI = RDFSUtil.getURI(refs.get(0));
-			Rdf2GoCore.getInstance().addStatement(
-					section,
-					propURI,
-					RDFS.domain, objectURI);
+			Rdf2GoCore.getInstance()
+					.addStatements(new SectionIDSource(section), Rdf2GoCore.getInstance().createStatement(propURI, RDFS.domain, objectURI));
 
 			// prop range:: arg1
-			Rdf2GoCore.getInstance().addStatement(
-					section,
-					propURI,
-					RDFS.range, RDFSUtil.getURI(refs.get(1)));
+			Rdf2GoCore.getInstance()
+					.addStatements(new SectionIDSource(section), Rdf2GoCore.getInstance()
+							.createStatement(propURI, RDFS.range, RDFSUtil.getURI(refs.get(1))));
 
 		}
 		else {

@@ -1,7 +1,5 @@
 package de.knowwe.rdfs.test;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -11,9 +9,9 @@ import java.util.Map;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import utils.TestArticleManager;
 import utils.TestUtils;
+
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.strings.Identifier;
 import de.d3web.utils.Log;
@@ -28,6 +26,8 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
+
+import static org.junit.Assert.assertTrue;
 
 public class ComplexDefinitionRefactoringTest {
 
@@ -88,7 +88,6 @@ public class ComplexDefinitionRefactoringTest {
 	public static void tearDown() {
 		// Remove the statements created in the test to avoid problems
 		Article article = TestArticleManager.getArticle(TESTFILE);
-		Rdf2GoCore.getInstance().removeStatementsForSection(article.getRootSection());
 		Rdf2GoCore.getInstance().removeAllCachedStatements();
 		// Finally remove the formerly created article
 		TestArticleManager.clear();

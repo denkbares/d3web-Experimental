@@ -35,6 +35,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
 import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.wisskont.util.MarkupUtils;
@@ -109,8 +110,10 @@ public class ConceptMarkup extends AbstractKnowledgeUnitType<ConceptMarkup> impl
 				URI subject = RDFSUtil.getURI(termSec);
 				URI pred = RDF.type;
 
-				Rdf2GoCore.getInstance().addStatement(section, subject, pred, WISSASS_CONCEPT);
-				/*
+				Rdf2GoCore.getInstance()
+						.addStatements(new SectionIDSource(section), Rdf2GoCore.getInstance()
+								.createStatement(subject, pred, WISSASS_CONCEPT));
+	/*
 				 * finally commit triples
 				 */
 				Rdf2GoCore.getInstance().commit();

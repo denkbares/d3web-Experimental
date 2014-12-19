@@ -24,12 +24,13 @@ import de.knowwe.compile.object.SimpleKnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 
 public abstract class AbstractKnowledgeUnitCompileScriptRDFS<T extends Type> extends SimpleKnowledgeUnitCompileScript<T> {
 
 	@Override
 	public void deleteFromRepository(Section<T> section) {
-		Rdf2GoCore.getInstance().removeStatementsForSection(section);
+		Rdf2GoCore.getInstance().removeStatements(new SectionIDSource(section));
 	}
 
 }

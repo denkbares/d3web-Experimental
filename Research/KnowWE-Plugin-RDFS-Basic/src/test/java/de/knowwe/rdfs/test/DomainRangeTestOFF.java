@@ -18,20 +18,20 @@
  */
 package de.knowwe.rdfs.test;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import utils.TestArticleManager;
+
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.test.util.Query;
 import de.knowwe.rdfs.test.util.Vocabulary;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests rdfs:domain and rdfs:range with reasoning
@@ -86,7 +86,6 @@ public class DomainRangeTestOFF {
 	public static void tearDown() {
 		// Remove the statements created in the test to avoid problems
 		Article article = TestArticleManager.getArticle(TESTFILE);
-		Rdf2GoCore.getInstance().removeStatementsForSection(article.getRootSection());
 		Rdf2GoCore.getInstance().removeAllCachedStatements();
 		// Finally remove the formerly created article
 		// TestArticleManager.deleteArticle(TESTFILE);

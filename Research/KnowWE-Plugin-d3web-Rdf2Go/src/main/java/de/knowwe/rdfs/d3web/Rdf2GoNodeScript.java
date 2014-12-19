@@ -127,7 +127,7 @@ public class Rdf2GoNodeScript extends OntologyCompileScript<NodeType> {
 		Identifier identifier =
 				new Identifier(flowIdentifier, FlowchartSubTreeHandler.getNodeID(section));
 
-		compiler.getRdf2GoCore().removeStatementsForSection(section);
+		compiler.getRdf2GoCore().removeStatements(section);
 		Rdf2GoD3webUtils.unregisterTermDefinition(compiler, section, identifier, Node.class);
 	}
 }

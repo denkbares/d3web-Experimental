@@ -39,7 +39,7 @@ public class Rdf2GoTermDefinitionHandler extends OntologyCompileScript<D3webTerm
 
 	@Override
 	public void destroy(OntologyCompiler compiler, Section<D3webTermDefinition<NamedObject>> section) {
-		compiler.getRdf2GoCore().removeStatementsForSection(section);
+		compiler.getRdf2GoCore().removeStatements(section);
 		Rdf2GoD3webUtils.unregisterTermDefinition(compiler, section);
 	}
 

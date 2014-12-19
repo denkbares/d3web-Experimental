@@ -61,6 +61,7 @@ import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquotedNonEmpty;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.wisskont.dss.KnowledgeBaseInstantiation;
 import de.knowwe.wisskont.util.MarkupUtils;
@@ -137,8 +138,7 @@ public class ConceptListContent extends AbstractType {
 							);
 				}
 
-				Rdf2GoCore.getInstance().addStatements(section,
-						new Statement[] { statement });
+				Rdf2GoCore.getInstance().addStatements(new SectionIDSource(section), statement);
 
 				Section<RelationMarkup> markup = Sections.ancestor(section,
 						RelationMarkup.class);
@@ -252,7 +252,7 @@ public class ConceptListContent extends AbstractType {
 
 			@Override
 			public void deleteFromRepository(Section<ObjectSegment> section) {
-				Rdf2GoCore.getInstance().removeStatementsForSection(section);
+				Rdf2GoCore.getInstance().removeStatements(new SectionIDSource(section));
 				Object storedObject = KnowWEUtils.getStoredObject(
 						D3webUtils.getCompiler(section.getArticle()), section,
 						RULE_STORE_KEY);

@@ -35,6 +35,7 @@ import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 import de.knowwe.rdfs.util.RDFSUtil;
 
 public class TripleMarkupSimple extends AbstractKnowledgeUnitType<TripleMarkupSimple> implements
@@ -120,8 +121,9 @@ public class TripleMarkupSimple extends AbstractKnowledgeUnitType<TripleMarkupSi
 				// "object URI not found"));
 			}
 
-			Rdf2GoCore.getInstance().addStatement(section,
-					subURI.asResource(), predURI.asURI(), objURI);
+			Rdf2GoCore.getInstance()
+					.addStatements(new SectionIDSource(section), Rdf2GoCore.getInstance()
+							.createStatement(subURI.asResource(), predURI.asURI(), objURI));
 
 			// return new ArrayList<KDOMReportMessage>(0);
 

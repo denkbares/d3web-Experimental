@@ -36,6 +36,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
@@ -80,10 +81,8 @@ public class ClassDefinitionMarkup extends AbstractKnowledgeUnitType<ClassDefini
 			Section<ClassDef> classTerm = Sections.successor(section, ClassDef.class);
 
 			URI classURI = RDFSUtil.getURI(classTerm);
-			Rdf2GoCore.getInstance().addStatement(
-					section,
-					classURI,
-					RDF.type, OWL.Class);
+			Rdf2GoCore.getInstance()
+					.addStatements(new SectionIDSource(section), Rdf2GoCore.getInstance().createStatement(classURI, RDF.type, OWL.Class));
 
 		}
 

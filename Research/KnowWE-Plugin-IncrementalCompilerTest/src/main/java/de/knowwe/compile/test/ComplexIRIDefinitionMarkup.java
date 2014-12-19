@@ -43,6 +43,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.RegexSectionFinderSingle;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 
 public class ComplexIRIDefinitionMarkup extends AbstractKnowledgeUnitType<ComplexIRIDefinitionMarkup> implements ComplexDefinition {
 
@@ -127,7 +128,7 @@ class ComplexIRIDefinitionCompileScript extends SimpleKnowledgeUnitCompileScript
 
 	@Override
 	public void deleteFromRepository(Section<ComplexIRIDefinitionMarkup> section) {
-		Rdf2GoCore.getInstance().removeStatementsForSection(section);
+		Rdf2GoCore.getInstance().removeStatements(new SectionIDSource(section));
 	}
 
 	@Override
@@ -167,8 +168,9 @@ class ComplexIRIDefinitionCompileScript extends SimpleKnowledgeUnitCompileScript
 			// "object URI not found"));
 		}
 
-		Rdf2GoCore.getInstance().addStatement(section,
-				subURI.asResource(), predURI.asURI(), objURI);
+		Rdf2GoCore.getInstance()
+				.addStatements(new SectionIDSource(section), Rdf2GoCore.getInstance()
+						.createStatement(subURI.asResource(), predURI.asURI(), objURI));
 
 		// return new ArrayList<KDOMReportMessage>(0);
 

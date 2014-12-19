@@ -37,6 +37,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.SectionIDSource;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
 import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.wisskont.util.MarkupUtils;
@@ -86,8 +87,9 @@ public class LabelMarkup extends AbstractType implements Editable {
 					URI subject = RDFSUtil.getURI(termSec);
 					URI pred = RDFS.label;
 					Literal literal = Rdf2GoCore.getInstance().createLiteral(section.getText());
-					Rdf2GoCore.getInstance().addStatement(section, subject, pred, literal);
-					/*
+					Rdf2GoCore.getInstance()
+							.addStatements(new SectionIDSource(section), Rdf2GoCore.getInstance().createStatement(subject, pred, literal));
+	/*
 					 * finally commit triples
 					 */
 					Rdf2GoCore.getInstance().commit();
