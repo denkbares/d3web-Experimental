@@ -32,9 +32,11 @@ import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.ontology.compile.OntologyCompiler;
 import de.knowwe.ontology.compile.OntologyCompilerFinishedEvent;
 import de.knowwe.rdfs.vis.markup.VisualizationType;
+import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
 
 /**
  * @author Johanna Latt
@@ -92,12 +94,15 @@ public class GraphReRenderer implements EventListener {
 				// System.out.println(f.getName() + " - Deleted? " + f.delete());
 			}
 
-			// re-render all VisualizationType-sections
+			// re-render VisualizationType-sections if requested
 			if (preRenderAll) {
 				Collection<Section<VisualizationType>> sections = Sections.successors(am, VisualizationType.class);
 				for (Section<VisualizationType> s : sections) {
-					PreRenderWorker.getInstance().queueSectionPreRendering(
-							s.get().getPreRenderer(), s, null, null, false);
+					String prerender = DefaultMarkupType.getAnnotation(s, SparqlVisType.ANNOTATION_PRERENDER);
+					if (prerender != null && prerender.equals("true")) {
+						PreRenderWorker.getInstance().queueSectionPreRendering(
+								s.get().getPreRenderer(), s, null, null, false);
+					}
 				}
 			}
 		});

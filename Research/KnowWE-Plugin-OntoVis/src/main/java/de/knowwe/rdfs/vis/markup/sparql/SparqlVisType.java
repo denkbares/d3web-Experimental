@@ -62,6 +62,7 @@ public class SparqlVisType extends DefaultMarkupType implements VisualizationTyp
 
 	public static final String ANNOTATION_CONFIG = "config";
 
+	public static final String ANNOTATION_PRERENDER = "prerender";
 
 
     public static void readParameterFromAnnotation(String annotationName, Section<?> section, String parameterName, Map<String, String> parameters, String defaultValue) {
@@ -143,7 +144,8 @@ public class SparqlVisType extends DefaultMarkupType implements VisualizationTyp
 		MARKUP.addAnnotationRenderer(ANNOTATION_LABELS, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(ANNOTATION_CONFIG, false);
 		MARKUP.addAnnotationRenderer(ANNOTATION_CONFIG, NothingRenderer.getInstance());
-
+		MARKUP.addAnnotation(ANNOTATION_PRERENDER, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_PRERENDER, NothingRenderer.getInstance());
 	}
 
 	public SparqlVisType() {

@@ -39,6 +39,8 @@ public class OntoVisType extends DefaultMarkupType implements VisualizationType 
 
 	public static final String ANNOTATION_CONFIG = "config";
 
+	public static final String ANNOTATION_PRERENDER = "prerender";
+
 	private static final DefaultMarkup MARKUP;
 
 	public enum dot_apps {
@@ -87,6 +89,7 @@ public class OntoVisType extends DefaultMarkupType implements VisualizationType 
 		MARKUP.addAnnotation(SparqlVisType.ANNOTATION_LABELS, false, "true", "false");
 		MARKUP.addAnnotationRenderer(SparqlVisType.ANNOTATION_LABELS, NothingRenderer.getInstance());
 		MARKUP.addAnnotation(ANNOTATION_CONFIG, false);
+		MARKUP.addAnnotation(ANNOTATION_PRERENDER, false);
 	}
 
 	public OntoVisType() {
