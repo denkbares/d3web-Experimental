@@ -60,7 +60,7 @@ public abstract class AbstractD3webVizAction extends AbstractAction {
 		
 		context.setContentType("text/json");
 		context.getWriter().write(result);
-		
+
 	}
 
 	protected abstract String createOutput(KnowledgeBase kb, Section<?> section, UserActionContext context);

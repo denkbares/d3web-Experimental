@@ -5,7 +5,6 @@ import java.util.LinkedList;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.ophtovis.GraphBuilder;
 
 
 public class AjaxAction extends AbstractAction {
@@ -30,9 +29,9 @@ public class AjaxAction extends AbstractAction {
 		System.out.println(responseString);
 		context.setContentType("text/html; charset=UTF-8");
 		context.getWriter().write(responseString);
-		
-	
-		
+
+
+
 	}
 
 }
