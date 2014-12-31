@@ -447,7 +447,7 @@ public class DOTRenderer {
         String newLineLabelValue;
         String url = "";
         if (targetURL != null) {
-            url = "URL=\"" + Strings.encodeHtml(targetURL) + "\" ";
+           // url = "URL=\"" + Strings.encodeHtml(targetURL) + "\" ";
         }
         if (prepareLabel) {
             // prevents HTML rendering !

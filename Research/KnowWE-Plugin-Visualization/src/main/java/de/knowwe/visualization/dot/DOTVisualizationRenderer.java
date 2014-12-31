@@ -112,8 +112,9 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 
 		String png_default = div_open + "<img alt='graph' src='"
 				+ tmpPath + "graph" + fileID + ".png'>" + div_close;
+
 		String svg = div_open + "<object data='" + tmpPath
-				+ "graph" + fileID + ".svg' type=\"image/svg+xml\">" + png_default
+				+ "graph" + fileID + ".svg' onload='KNOWWE.plugin.visualization.addClickEventsToGraph(this);' type=\"image/svg+xml\">" + png_default
 				+ "</object>" + div_close;
 		String format = parameters.get(GraphDataBuilder.FORMAT);
 		if (format == null) {

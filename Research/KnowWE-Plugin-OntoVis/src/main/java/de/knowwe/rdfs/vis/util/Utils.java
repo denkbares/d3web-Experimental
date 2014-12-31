@@ -25,6 +25,7 @@ import de.knowwe.core.Environment;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.ontology.compile.OntologyCompiler;
@@ -205,7 +206,7 @@ public class Utils {
                 Utils.setClassColorCoding(toURI, style, parameters, rdfRepository);
                 visNode = new ConceptNode(identifier, type, createConceptURL(identifier, parameters,
                         section,
-                        uriProvider, uri), label, clazz, style);
+                        uriProvider, uri.toString()), label, clazz, style);
                 if (insertNewNode) {
                     data.addConcept(visNode);
                 }
@@ -264,12 +265,12 @@ public class Utils {
         return color;
     }
 
-    private static String createConceptURL(String to, Map<String, String> parameters, Section<?> s, LinkToTermDefinitionProvider uriProvider, URI uri) {
+    public static String createConceptURL(String to, Map<String, String> parameters, Section<?> s, LinkToTermDefinitionProvider uriProvider, String uri) {
         if (parameters.get(OntoGraphDataBuilder.LINK_MODE) != null) {
             if (parameters.get(OntoGraphDataBuilder.LINK_MODE).equals(
                     OntoGraphDataBuilder.LINK_MODE_BROWSE)) {
                 final OntologyCompiler compiler = Compilers.getCompiler(s, OntologyCompiler.class);
-                final String shortURI = Rdf2GoUtils.reduceNamespace(compiler.getRdf2GoCore(), uri.toString());
+                final String shortURI = Rdf2GoUtils.reduceNamespace(compiler.getRdf2GoCore(), uri);
                 Identifier identifier = new Identifier(shortURI);
                 String[] identifierParts = shortURI.split(":");
                 if (identifierParts.length == 2) {
@@ -470,6 +471,23 @@ public class Utils {
 
 		String fileID = "_" + textHash + "_" + compHash;
 		return fileID;
+	}
+
+	public static String findNewIDFromRenderResult(Sections.ReplaceResult rr) {
+		if (rr != null) {
+			Map<String, String> resultMapping = rr.getSectionMapping();
+			Collection<String> values = resultMapping.values();
+			String newID = "";
+
+			if (values.size() == 1) {
+				for (String value : values) {
+					newID = value;
+				}
+			}
+
+			return newID;
+		}
+		return "";
 	}
 
 }

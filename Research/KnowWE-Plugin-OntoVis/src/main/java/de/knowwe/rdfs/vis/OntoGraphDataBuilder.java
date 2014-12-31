@@ -205,10 +205,14 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         for (Node fringeNode : fringeNodes) {
             addOutgoingEdgesPredecessors(fringeNode);
             addOutgoingEdgesSuccessors(fringeNode);
-            if (!literalsExpanded.contains(fringeNode)) {
-                addLiterals(fringeNode);
-            }
-            addType(fringeNode);
+
+			//TODO find solution for blank node
+			if (!Utils.isBlankNode(fringeNode)) {
+				if (!literalsExpanded.contains(fringeNode)) {
+					addLiterals(fringeNode);
+				}
+				addType(fringeNode);
+			}
         }
 
         SubpropertyEliminator.eliminateSubproperties(data, rdfRepository);

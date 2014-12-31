@@ -27,11 +27,13 @@
 		<parameter id="css" value="d3force.css" />
 		<parameter id="css" value="d3tree.css" />
 		<parameter id="css" value="d3wheel.css" />
+		<parameter id="css" value="menustyling.css" />
 		<parameter id="script" value="d3.v3.js" />
 		<parameter id="script" value="d3force.js" />
 		<parameter id="script" value="d3tree.js" />
 		<parameter id="script" value="d3wheel.js" />
 		<parameter id="script" value="d3download.js" />
+		<parameter id="script" value="contextmenu.js" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -46,11 +48,13 @@
 		<parameter id="css" value="d3force.css" />
 		<parameter id="css" value="d3tree.css" />
 		<parameter id="css" value="d3wheel.css" />
+		<parameter id="css" value="menustyling.css" />
 		<parameter id="script" value="d3.v3.js" />
 		<parameter id="script" value="d3force.js" />
 		<parameter id="script" value="d3tree.js" />
 		<parameter id="script" value="d3wheel.js" />
 		<parameter id="script" value="d3download.js" />
+		<parameter id="script" value="contextmenu.js" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -152,4 +156,55 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="ExcludeCurrentConceptAction">
+		<parameter id="class"
+			value="de.knowwe.rdfs.vis.edit.ExcludeCurrentConceptAction" />
+		<parameter id="name" value="ExcludeCurrentConceptAction" />
+		<parameter id="description" value="Action ExcludeCurrentConceptAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="ExpandCurrentConceptAction">
+		<parameter id="class"
+			value="de.knowwe.rdfs.vis.edit.ExpandCurrentConceptAction" />
+		<parameter id="name" value="ExpandCurrentConceptAction" />
+		<parameter id="description" value="Action ExpandCurrentConceptAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="FindLiteralsForConceptAction">
+		<parameter id="class"
+			value="de.knowwe.rdfs.vis.edit.FindLiteralsForConceptAction" />
+		<parameter id="name" value="FindLiteralsForConceptAction" />
+		<parameter id="description" value="Action FindLiteralsForConceptAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="MakeNewVisualizationOfConceptAction">
+		<parameter id="class"
+			value="de.knowwe.rdfs.vis.edit.MakeNewVisualizationOfConceptAction" />
+		<parameter id="name" value="MakeNewVisualizationOfConceptAction" />
+		<parameter id="description" value="Action MakeNewVisualizationOfConceptAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="GoToDefinitionAction">
+		<parameter id="class"
+			value="de.knowwe.rdfs.vis.edit.GoToDefinitionAction" />
+		<parameter id="name" value="GoToDefinitionAction" />
+		<parameter id="description" value="Action GoToDefinitionAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+
 </plugin>

@@ -19,16 +19,12 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.core.utils.PackageCompileLinkToTermDefinitionProvider;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
-import de.knowwe.ontology.compile.OntologyCompiler;
 import de.knowwe.rdf2go.Rdf2GoCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 import de.knowwe.rdfs.vis.PreRenderWorker;
 import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
-import de.knowwe.rdfs.vis.markup.sparql.SparqlVisTypeRenderer;
 import de.knowwe.rdfs.vis.util.Utils;
-import de.knowwe.visualization.dot.DOTRenderer;
-import de.knowwe.visualization.dot.DOTVisualizationRenderer;
 
 public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRenderer {
 
