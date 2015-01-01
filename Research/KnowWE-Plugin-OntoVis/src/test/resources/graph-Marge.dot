@@ -1,9 +1,9 @@
 digraph Konzeptuebersicht {
 graph [ rankdir="LR" ]
-"si:bart"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:bart"  shape="box"  style="rounded" label="Bart Simpson" ];
-"si:maggie"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:maggie"  shape="box"  style="rounded" label="Maggie\nSimpson\n" ];
-"si:lisa"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:lisa"  shape="box"  style="rounded" label="Lisa Simpson" ];
-"si:marge"[ URL="http://localhost:8080/KnowWE/Wiki.jsp?page=ForTestingOnly&amp;concept=si:marge"  shape="box"  style="rounded,bold" label=<<U>Marge<BR ALIGN="CENTER"/>Simpson<BR ALIGN="CENTER"/></U>> ];
+"si:maggie"[  shape="box"  style="rounded" label="Maggie\nSimpson\n" ];
+"si:bart"[  shape="box"  style="rounded" label="Bart Simpson" ];
+"si:lisa"[  shape="box"  style="rounded" label="Lisa Simpson" ];
+"si:marge"[  shape="box"  style="rounded,bold" label=<<U>Marge<BR ALIGN="CENTER"/>Simpson<BR ALIGN="CENTER"/></U>> ];
 "si:lisa" -> "si:lisa" [ label = "si:sibling" arrowtail="normal"  color="black"  ];
 "si:maggie" -> "si:marge" [ label = "si:relatedWith" arrowtail="normal"  color="black"  ];
 "si:lisa" -> "si:marge" [ label = "si:relatedWith" arrowtail="normal"  color="black"  ];
