@@ -28,7 +28,7 @@ import de.knowwe.visualization.util.FileUtils;
 /**
  * A GraphVisualizationRenderer using DOT/GraphViz for the visualization of the
  * SubGraphData.
- * 
+ *
  * @author Jochen Reutelshöfer
  * @created 27.05.2013
  */
@@ -39,7 +39,7 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 	private String source = null;
 
 	/**
-	 * 
+	 *
 	 */
 	public DOTVisualizationRenderer(SubGraphData data, Map<String, String> parameters) {
 		this.data = data;
@@ -59,9 +59,9 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 		return createHTMLOutput();
 	}
 
-    public static String getGraphFilePath(String fileID, String realPath) {
-        return getFilePath(realPath) + "graph" + fileID;
-    }
+	public static String getGraphFilePath(String fileID, String realPath) {
+		return getFilePath(realPath) + "graph" + fileID;
+	}
 
 	@Override
 	public String getGraphFilePath() {
@@ -70,10 +70,10 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 
 	@Override
 	public String getFilePath() {
-       return getFilePath(parameters.get(GraphDataBuilder.REAL_PATH));
-    }
+		return getFilePath(parameters.get(GraphDataBuilder.REAL_PATH));
+	}
 
-    public static String getFilePath(String realPath) {
+	public static String getFilePath(String realPath) {
 		String tmpPath = FileUtils.KNOWWEEXTENSION_FOLDER + FileUtils.FILE_SEPARATOR
 				+ FileUtils.TMP_FOLDER
 				+ FileUtils.FILE_SEPARATOR;
@@ -90,7 +90,6 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 	}
 
 	/**
-	 * 
 	 * @created 03.09.2012
 	 */
 	private String createHTMLOutput() {
@@ -101,7 +100,7 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 			// no scroll-bars
 		}
 		else {
-			style += "overflow:scroll";
+			style += "overflow: auto";
 		}
 		String div_open = "<div style=\"" + style + "\">";
 		String div_close = "</div>";

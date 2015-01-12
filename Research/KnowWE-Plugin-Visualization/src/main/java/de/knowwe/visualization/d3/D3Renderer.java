@@ -54,7 +54,7 @@ public class D3Renderer {
         String visualization = parameters.get(GraphDataBuilder.VISUALIZATION);
 
         htmlsource = "<div id=\"d3" + parameters.get(GraphDataBuilder.SECTION_ID)
-                + "\" style=\"overflow:scroll\">\r\n";
+                + "\" style=\"overflow: auto\">\r\n";
 
         // include the necessary d3.js sources
         htmlsource += IncludeUtils.includeFile(FILE_TYPE.JAVASCRIPT, context
