@@ -215,6 +215,7 @@
 		<module>KnowWE-Plugin-TypeVis</module>
 		<module>KnowWE-Plugin-KnowledgeSummary</module>
 		<module>KnowWE-Plugin-SELESUP</module>
+		<module>KnowWE-Plugin-SparqlEndpoint</module>
 	</modules>
 	<repositories>
 		<repository>
