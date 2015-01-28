@@ -47,7 +47,7 @@ import de.knowwe.jspwiki.JSPAuthenticationManager;
  * - password: your KnowWE password<br>
  * <b>Important:</b><br>
  * You have to provide user name and password if your client is not already logged in into KnowWE.<br>
- * Additionally you have to be a member of the KnowWE group "Sparql Endpoint Users" to have access.<br>
+ * Additionally you have to be a member of the KnowWE group "SparqlEndpoint" to have access.<br>
  * <br>
  * Example for a full URL:<br>
  * http://localhost:8080/KnowWE/action/SparqlEndpointAction?query=SELECT%20?actorLabel%20?movieLabel%20WHERE%20{%20?actor%20lns:playedIn%20?movie.%20?actor%20rdfs:label%20?actorLabel.%20?movie%20rdfs:label%20?movieLabel.%20FILTER%20langMatches(%20lang(?movieLabel),%20%22en%22).%20}%20ORDER%20BY%20?actorLabel&package=jamesDeanMovies&user=StefanPlehn&password=test<br>
@@ -56,7 +56,7 @@ import de.knowwe.jspwiki.JSPAuthenticationManager;
 public class SparqlEndpointAction extends AbstractAction {
 
 	public static final String PACKAGE = "package";
-	public static final String GROUPNAME = "Sparql Endpoint Users";
+	public static final String GROUPNAME = "SparqlEndpoint";
 	public static final String USER = "user";
 	public static final String PASSWORD = "password";
 
