@@ -194,7 +194,8 @@
 		<module>KnowWE-Plugin-WissKont</module>
 		<module>KnowWE-Plugin-d3web-Rdf2Go</module>
 		<module>KnowWE-Plugin-RDFS-WikiObjectModel</module>
-		<module>KnowWE-Plugin-LoadKnowledgeBase</module>
+		<module>KnowWE-Plugin-LexiconInterface</module>
+        <module>KnowWE-Plugin-LoadKnowledgeBase</module>
 		<module>KnowWE-Plugin-OntoVis</module>
 		<module>KnowWE-Plugin-WikiBaseline</module>
 		<module>KnowWE-Plugin-d3web-Visualizations</module>
