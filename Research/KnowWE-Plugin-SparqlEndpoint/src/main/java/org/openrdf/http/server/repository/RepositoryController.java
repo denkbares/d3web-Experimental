@@ -62,6 +62,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.mvc.AbstractController;
 
+import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdf2go.utils.Rdf2GoUtils;
+
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.openrdf.http.protocol.Protocol.*;
 
@@ -94,7 +97,9 @@ public class RepositoryController extends AbstractController {
 			throws Exception {
 		String reqMethod = request.getMethod();
 		String queryStr = request.getParameter(QUERY_PARAM_NAME);
-		queryStr = RepositoryInterceptor.getRdf2GoCore(request).prependPrefixesToQuery(queryStr);
+		Rdf2GoCore rdf2GoCore = RepositoryInterceptor.getRdf2GoCore(request);
+		queryStr = rdf2GoCore.prependPrefixesToQuery(queryStr);
+		queryStr = Rdf2GoUtils.createSparqlString(rdf2GoCore, queryStr);
 
 		Repository repository = RepositoryInterceptor.getRepository(request);
 
