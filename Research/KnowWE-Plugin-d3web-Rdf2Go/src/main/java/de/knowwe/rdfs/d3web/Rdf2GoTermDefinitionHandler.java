@@ -31,8 +31,9 @@ public class Rdf2GoTermDefinitionHandler extends OntologyCompileScript<D3webTerm
 		List<Statement> statements = new ArrayList<Statement>();
 
 		// lns:TermIdentifier rdf:type lns:TermObjectClass
-		Rdf2GoUtils.addStatement(core, termIdentifierURI, RDF.type,
-				termObjectClass.getSimpleName(), statements);
+		Rdf2GoUtils.addStatement(core, termIdentifierURI, RDF.type,	termObjectClass.getSimpleName(), statements);
+
+		Rdf2GoUtils.addRdfsLabel(core, termIdentifierURI, statements);
 
 		core.addStatements(section, Rdf2GoUtils.toArray(statements));
 	}
