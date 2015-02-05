@@ -21,6 +21,7 @@
 package de.knowwe.lexiconinterface.provider;
 
 
+import de.knowwe.core.Environment;
 import de.knowwe.lexiconinterface.datatypes.RelationWordPair;
 import de.knowwe.lexiconinterface.datatypes.WordCategory;
 import de.knowwe.lexiconinterface.datatypes.WordClass;
@@ -41,7 +42,9 @@ public class WordNetProvider implements LexiconProvider {
     WordNetDatabase database;
 
     public WordNetProvider() {
-        System.setProperty("wordnet.database.dir", "wordnet_3.1/dict/");
+
+        //Set base dir for WordNet
+        System.setProperty("wordnet.database.dir", Environment.getInstance().getWikiConnector().getKnowWEExtensionPath()+"/dict");
         WordNetDatabase wndb = new FileDatabase();
         database = WordNetDatabase.getFileInstance();
     }

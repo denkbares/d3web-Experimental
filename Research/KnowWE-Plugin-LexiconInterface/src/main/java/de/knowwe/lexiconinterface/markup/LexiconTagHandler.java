@@ -4,6 +4,10 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.lexiconinterface.datatypes.LexiconType;
+import de.knowwe.lexiconinterface.provider.OpenThesaurusProvider;
+import de.knowwe.lexiconinterface.provider.WordNetProvider;
+import de.knowwe.lexiconinterface.relations.Relation;
 
 import java.util.Map;
 
@@ -26,22 +30,42 @@ public class LexiconTagHandler extends AbstractTagHandler {
      */
     @Override
     public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
-        String count = parameters.get("count");
+        String word = parameters.get("word");
+        String lexicon = parameters.get("lexicon");
+        String relation = parameters.get("relation");
 
-        int number = 1;
+        String resultString;
 
-        if (count != null) {
-            try {
-                number = Integer.parseInt(count);
-            }
-            catch (NumberFormatException e) {
-                // not a valid number
+        if(lexicon.equals(LexiconType.wordnet.name())){
+            WordNetProvider wnp = new WordNetProvider();
+
+            if(relation.equals(Relation.synonym.name())) {
+                resultString = wnp.getSynonyms(word).toString();
+            }else if(relation.equals(Relation.antonym.name())){
+                resultString = wnp.getAntonyms(word).toString();
+            }else{
+                resultString = " Bitte geben Sie eine gültige Relation an! ";
             }
 
-            if (number < 0) {
-                number = 1;
+
+
+        }else if(lexicon.equals(LexiconType.openthesaurus.name())){
+
+            OpenThesaurusProvider otp = new OpenThesaurusProvider();
+
+            if(relation.equals(Relation.synonym.name())) {
+                resultString = otp.getSynonyms(word).toString();
+            }else if(relation.equals(Relation.antonym.name())){
+                resultString = otp.getAntonyms(word).toString();
+            }else{
+                resultString = " Bitte geben Sie eine gültige Relation an! ";
             }
+
+        }else{
+            resultString = " Bitte geben Sie ein gültiges Lexikon an! ";
         }
-        result.appendHtml(" <b>Hello World!</b>");
+
+        result.appendHtml(resultString.substring(1, resultString.length()-1));
+
     }
 }
