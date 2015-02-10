@@ -45,13 +45,13 @@
         <parameter-def id="priority" type="number" />
     </extension-point>
 
-    <!--extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="AutoCompletionSlotProvider" id="SemanticAutoCompletionSlotProvider">
+    <extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="AutoCompletionSlotProvider" id="SemanticAutoCompletionSlotProvider">
         <parameter id="class" value="de.knowwe.termbrowser.pages.WikiPageHierarchyProvider" />
         <parameter id="name" value="WikiPageHierarchyProvider" />
         <parameter id="description" value="WikiPageHierarchyProvider" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="4" />
-    </extension-->
+    </extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action" id="DragDropEditActionManager">
 		<parameter id="class" value="de.knowwe.termbrowser.DragDropEditActionManager" />

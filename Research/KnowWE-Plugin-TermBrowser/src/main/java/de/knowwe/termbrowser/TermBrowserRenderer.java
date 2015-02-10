@@ -128,8 +128,10 @@ public class TermBrowserRenderer {
 			try {
 				final Section<TermBrowserMarkup> termBrowserMarkup = TermBrowserMarkup.getTermBrowserMarkup(user);
 				AutoCompletionSlotProvider slot = getPluggedAutoCompletionProvider(null);
-				slot.init(termBrowserMarkup, user);
-				slot.renderAutoCompletionSlot(string, termBrowserMarkup);
+				if(slot != null) {
+					slot.init(termBrowserMarkup, user);
+					slot.renderAutoCompletionSlot(string, termBrowserMarkup);
+				}
 			}
 			catch (IOException e) {
 				Log.severe("Cannot initialize semantic auto-completion due to internal error", e);
