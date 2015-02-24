@@ -70,11 +70,15 @@ public class WordNetProvider implements LexiconProvider {
      */
     @Override
     public List<String> getAntonyms(String word) {
+        Synset[] synsets = database.getSynsets(word.trim());
         List<String> antonyms = new ArrayList<>();
-        Synset[] synsets = database.getSynsets(word);
-        WordSense[] x = synsets[0].getAntonyms(synsets[0].getWordForms()[0]);
-        antonyms.add(x[0].getWordForm());
 
+        for (int i = 0; i < synsets.length; i++) {
+            WordSense[] wordSenses = synsets[i].getAntonyms(word);
+            for (int j = 0; j < wordSenses.length; j++) {
+                antonyms.add(wordSenses[j].getWordForm());
+            }
+        }
         return antonyms;
     }
 
