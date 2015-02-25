@@ -13,6 +13,7 @@ import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
 import de.knowwe.ontology.compile.OntologyCompiler;
 import de.knowwe.ontology.kdom.resource.Resource;
+import de.knowwe.rdf2go.Rdf2GoCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
@@ -60,7 +61,7 @@ public class Rdf2GoD3webUtils {
 	 * @param termSection the section referencing or defining of the term
 	 * @return the uri for the term
 	 */
-	public static URI getTermURI(OntologyCompiler compiler, Section<? extends Term> termSection) {
+	public static URI getTermURI(Rdf2GoCompiler compiler, Section<? extends Term> termSection) {
 		return getTermURI(compiler, termSection.get().getTermIdentifier(termSection));
 	}
 
@@ -72,7 +73,7 @@ public class Rdf2GoD3webUtils {
 	 * @param termIdentifier the identifier of the term
 	 * @return the uri for the term
 	 */
-	public static URI getTermURI(OntologyCompiler compiler, Identifier termIdentifier) {
+	public static URI getTermURI(Rdf2GoCompiler compiler, Identifier termIdentifier) {
 		String externalForm = Rdf2GoUtils.getCleanedExternalForm(termIdentifier);
 		return compiler.getRdf2GoCore().createlocalURI(externalForm);
 	}

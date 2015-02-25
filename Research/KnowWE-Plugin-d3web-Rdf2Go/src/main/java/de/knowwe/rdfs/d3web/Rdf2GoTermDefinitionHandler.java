@@ -6,6 +6,7 @@ import java.util.List;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
+import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.we.object.D3webTermDefinition;
@@ -33,7 +34,8 @@ public class Rdf2GoTermDefinitionHandler extends OntologyCompileScript<D3webTerm
 		// lns:TermIdentifier rdf:type lns:TermObjectClass
 		Rdf2GoUtils.addStatement(core, termIdentifierURI, RDF.type,	termObjectClass.getSimpleName(), statements);
 
-		Rdf2GoUtils.addRdfsLabel(core, termIdentifierURI, statements);
+		String termName = section.get().getTermName(section);
+		Rdf2GoUtils.addStatement(core, termIdentifierURI, RDFS.label, core.createLiteral(termName), statements);
 
 		core.addStatements(section, Rdf2GoUtils.toArray(statements));
 	}
