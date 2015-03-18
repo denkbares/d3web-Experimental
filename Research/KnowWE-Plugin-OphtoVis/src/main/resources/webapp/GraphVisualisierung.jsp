@@ -10,7 +10,7 @@
 <%@ page import="de.d3web.strings.*" %>
 <%@ page import="de.knowwe.user.*" %>
 <%@ page import="de.knowwe.ophtovis.*" %>
-<%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %><%!
+<%@ taglib uri="http://jspwiki.apache.org/tags" prefix="wiki" %><%!
 String findParam( PageContext ctx, String key )
     {
         ServletRequest req = ctx.getRequest();

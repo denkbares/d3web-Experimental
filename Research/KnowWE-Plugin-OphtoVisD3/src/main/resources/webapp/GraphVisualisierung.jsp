@@ -12,7 +12,7 @@
 <%@ page import="de.knowwe.user.*" %>
 <%@ page import="de.knowwe.ophtovisD3.*" %>
 <%@ page import="de.knowwe.ophtovisD3.Visualization" %>
-<%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %><%!
+<%@ taglib uri="http://jspwiki.apache.org/tags" prefix="wiki" %><%!
 String findParam( PageContext ctx, String key )
     {
         ServletRequest req = ctx.getRequest();

@@ -1,2 +1,2 @@
-<%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
+<%@ taglib uri="http://jspwiki.apache.org/tags" prefix="wiki" %>
 <wiki:Include page="InfoContent.jsp"/>

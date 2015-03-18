@@ -7,7 +7,7 @@
 <%@ page import="de.knowwe.core.kdom.objects.SimpleDefinition" %>
 <%@ page import="de.knowwe.core.kdom.parsing.Section" %>
 <%@ page errorPage="/Error.jsp" %>
-<%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
+<%@ taglib uri="http://jspwiki.apache.org/tags" prefix="wiki" %>
 
 <%! 
     Logger log = Logger.getLogger("JSPWikiSearch");
