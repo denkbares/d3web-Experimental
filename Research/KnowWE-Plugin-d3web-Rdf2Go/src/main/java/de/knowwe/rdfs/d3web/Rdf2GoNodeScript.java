@@ -66,25 +66,25 @@ public class Rdf2GoNodeScript extends OntologyCompileScript<NodeType> {
 	public void compile(OntologyCompiler compiler, Section<NodeType> section) throws CompilerMessage {
 		Section<FlowchartType> flowSection = Sections.ancestor(section, FlowchartType.class);
 		Identifier flowIdentifier = FlowchartType.getFlowchartTermIdentifier(flowSection);
-		Identifier identifier =
-				new Identifier(flowIdentifier, FlowchartSubTreeHandler.getNodeID(section));
-		URI termIdentifierURI =
-				Rdf2GoD3webUtils.registerTermDefinition(compiler, section, identifier, Node.class);
+		String nodeID = FlowchartSubTreeHandler.getNodeID(section);
+		Identifier identifier = new Identifier(flowIdentifier, nodeID);
+
+		URI termIdentifierURI = Rdf2GoD3webUtils.registerTermDefinition(compiler, section, identifier, Node.class);
 
 		Rdf2GoCore core = compiler.getRdf2GoCore();
 		List<Statement> statements = new ArrayList<>();
 
 		// rdf:type
+		String nodeClass = getNodeClass(section);
 		Rdf2GoUtils.addStatement(core, termIdentifierURI, RDF.type,
-				getNodeClass(section), statements);
+				nodeClass, statements);
 
 		// lns:hasFlow
 		Rdf2GoUtils.addStatement(core, termIdentifierURI, core.createlocalURI("hasFlow"),
 				Rdf2GoD3webUtils.getTermURI(compiler, flowIdentifier), statements);
 
 		// lns:hasObject
-		for (Section<D3webTermReference> reference :
-				Sections.successors(section, D3webTermReference.class)) {
+		for (Section<D3webTermReference> reference : Sections.successors(section, D3webTermReference.class)) {
 			Rdf2GoUtils.addStatement(core, termIdentifierURI, core.createlocalURI("hasObject"),
 					Rdf2GoD3webUtils.getTermURI(compiler, reference), statements);
 		}
