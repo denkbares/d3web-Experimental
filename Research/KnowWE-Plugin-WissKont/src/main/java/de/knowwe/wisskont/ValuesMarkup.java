@@ -115,9 +115,6 @@ public class ValuesMarkup extends RelationMarkup implements KnowledgeUnit {
 
 	class ValueDefinitionListElement extends IncrementalTermDefinition<String> {
 
-		/**
-		 * @param termObjectClass
-		 */
 		public ValueDefinitionListElement(Renderer r) {
 			super(String.class);
 			this.setSectionFinder(new AllTextFinderTrimmed());

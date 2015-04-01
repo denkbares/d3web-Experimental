@@ -29,9 +29,6 @@ import de.knowwe.core.kdom.parsing.Section;
  */
 public class InvalidReference extends IncrementalTermReference {
 
-	/**
-	 * @param termObjectClass
-	 */
 	public InvalidReference() {
 		super(String.class);
 	}

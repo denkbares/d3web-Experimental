@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Node;
 
-import de.d3web.strings.Strings;
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.IncrementalTermDefinition;
@@ -85,10 +84,6 @@ public class ComplexIRIDefinitionMarkup extends AbstractKnowledgeUnitType<Comple
 			this.setSectionFinder(new RegexSectionFinderSingle(Pattern.compile(REGEX), 1));
 		}
 
-		@Override
-		public String getTermName(Section<? extends Term> section) {
-			return Strings.unquote(section.getText().trim());
-		}
 	}
 
 	class Predicate extends IRITermRef {

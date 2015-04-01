@@ -21,11 +21,8 @@ package de.knowwe.compile.test;
 
 import java.util.regex.Pattern;
 
-import de.d3web.strings.Strings;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.objects.Term;
-import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.renderer.StyleRenderer;
@@ -56,11 +53,6 @@ public class SimpleIRIDefintionMarkup extends AbstractType {
 		public DefinitionTerm() {
 			super(String.class);
 			this.setSectionFinder(new AllTextFinderTrimmed());
-		}
-
-		@Override
-		public String getTermName(Section<? extends Term> s) {
-			return Strings.unquote(s.getText().trim());
 		}
 
 	}
