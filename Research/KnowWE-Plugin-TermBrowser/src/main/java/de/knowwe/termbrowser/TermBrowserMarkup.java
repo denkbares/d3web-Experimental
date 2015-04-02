@@ -20,12 +20,19 @@ package de.knowwe.termbrowser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
+import de.knowwe.core.Environment;
+import de.knowwe.core.compile.*;
+import de.knowwe.core.compile.Compiler;
 import de.knowwe.core.compile.packaging.PackageManager;
+import de.knowwe.core.compile.terminology.TermCompiler;
+import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -187,6 +194,18 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 
 	public static List<String> getCurrentTermbrowserMarkupHierarchyRelations(UserContext user) {
 		return getCommaSeparatedAnnotationList(user, HIERARCHY);
+	}
+
+	public static Collection<TerminologyManager> getTerminologyManager(UserContext user) {
+		List<TerminologyManager> managers = new ArrayList<>();
+		final Section<TermBrowserMarkup> termBrowserMarkup = getTermBrowserMarkup(user);
+		if(termBrowserMarkup != null) {
+			List<de.knowwe.core.compile.Compiler> allCompilers = termBrowserMarkup.getArticleManager()
+					.getCompilerManager()
+					.getCompilers();
+			managers.addAll(allCompilers.stream().filter(compiler -> compiler instanceof TermCompiler).map(compiler -> ((TermCompiler) compiler).getTerminologyManager()).collect(Collectors.toList()));
+		}
+		return managers;
 	}
 
 	public static List<String> getCurrentTermbrowserMarkupHierarchyCategories(UserContext user) {

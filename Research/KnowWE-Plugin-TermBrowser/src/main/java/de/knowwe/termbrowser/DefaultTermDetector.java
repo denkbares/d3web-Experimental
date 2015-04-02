@@ -28,6 +28,7 @@ import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.user.UserContext;
 
 /**
  * 
@@ -37,24 +38,25 @@ import de.knowwe.core.kdom.parsing.Sections;
 public class DefaultTermDetector extends AbstractTermDetector {
 
 	@Override
-	protected Collection<Section<? extends TermDefinition>> getDefs(Section<? extends TermReference> ref, String master) {
+	protected Collection<Section<? extends TermDefinition>> getDefs(Section<? extends TermReference> ref, UserContext user) {
 		Set<Section<? extends TermDefinition>> result = new HashSet<Section<? extends TermDefinition>>();
-		TerminologyManager terminologyManager = Environment.getInstance().getTerminologyManager(
-				Environment.DEFAULT_WEB, master);
-		Section<?> termDefiningSection = terminologyManager.getTermDefiningSection(ref.get().getTermIdentifier(
-				ref));
-		if (termDefiningSection == null) {
-			return result;
-		}
-		if (termDefiningSection.get() instanceof TermDefinition) {
-			Section<? extends TermDefinition> def = Sections.cast(termDefiningSection,
-					TermDefinition.class);
-			result.add(def);
+		final Collection<TerminologyManager> terminologyManagers = TermBrowserMarkup.getTerminologyManager(user);
+		for (TerminologyManager terminologyManager : terminologyManagers) {
+			Section<?> termDefiningSection = terminologyManager.getTermDefiningSection(ref.get().getTermIdentifier(
+					ref));
+			if (termDefiningSection == null) {
+				return result;
+			}
+			if (termDefiningSection.get() instanceof TermDefinition) {
+				Section<? extends TermDefinition> def = Sections.cast(termDefiningSection,
+						TermDefinition.class);
+				result.add(def);
+			}
 		}
 		return result;
 	}
 
-	public static Collection<Section<? extends TermDefinition>> getDefinitions(Section<? extends TermReference> ref, String master) {
-		return new DefaultTermDetector().getDefs(ref, master);
+	public static Collection<Section<? extends TermDefinition>> getDefinitions(Section<? extends TermReference> ref, UserContext user) {
+		return new DefaultTermDetector().getDefs(ref, user);
 	}
 }

@@ -83,33 +83,15 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
 		return termElements[0] + ":" + Strings.encodeURL(termElements[1]);
 	}
 
-	private String getURIString(Identifier termID) {
-		Rdf2GoCore core = getCore();
-		return Rdf2GoUtils.expandNamespace(core, getShortURI(termID));
+	private String getURIString(BrowserTerm termID) {
+		Rdf2GoCore core = getCore(termID.getUser());
+		return Rdf2GoUtils.expandNamespace(core, getShortURI(termID.getIdentifier()));
 	}
 
-	private Rdf2GoCore getCore() {
-		Rdf2GoCore core;
-		if (master == null) {
-			core = Rdf2GoCore.getInstance();
-		}
-		else {
-			Rdf2GoCompiler compiler = Compilers.getCompiler(TermBrowserMarkup.getTermBrowserMarkup(user), Rdf2GoCompiler.class);
-			if (compiler == null) {
-				core = Rdf2GoCore.getInstance(Environment.DEFAULT_WEB, master);
-			}
-			else {
-				core = compiler.getRdf2GoCore();
-			}
-
-		}
-		return core;
-	}
 
 	@Override
 	public List<BrowserTerm> getChildren(BrowserTerm termID) {
-		Rdf2GoCore core = getCore();
-
+		final Rdf2GoCore core = getCore(termID.getUser());
 		URI termURI = new URIImpl(Rdf2GoUtils.expandNamespace(core, getShortURI(termID.getIdentifier())));
 		List<BrowserTerm> result = new ArrayList<BrowserTerm>();
 
@@ -117,7 +99,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
 
 			List<URI> childrenConcepts = HierarchyUtils.getChildrenConcepts(termURI, new URIImpl(
 					Rdf2GoUtils.expandNamespace(core, relation)),
-					master);
+					core);
 			for (URI uri : childrenConcepts) {
                 URI clazz = Rdf2GoUtils.findMostSpecificClass(core, uri);
                 String type = null;
@@ -133,7 +115,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
 				 */
 				if (!(isIgnored(reducedNamespace)
 						|| termID.equals(new Identifier(reducedNamespace.split(":"))))) {
-					result.add(new BrowserTerm(type,  Rdf2GoUtils.getLabelRDFS(uri, core, null), reducedNamespace.split(":")));
+					result.add(new BrowserTerm(type,  Rdf2GoUtils.getLabelRDFS(uri, core, null), termID.getUser(), reducedNamespace.split(":")));
 				}
 			}
 		}
@@ -151,6 +133,10 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
 		return result;
 	}
 
+	private Rdf2GoCore getCore(UserContext user) {
+		return Compilers.getCompiler(TermBrowserMarkup.getTermBrowserMarkup(user), Rdf2GoCompiler.class).getRdf2GoCore();
+	}
+
 	private boolean isIgnored(String term) {
 		for (String ignoredTerm : ignoredTerms) {
 			if (term.equals(ignoredTerm)) {
@@ -162,16 +148,16 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
 
 	@Override
 	public List<BrowserTerm> getParents(BrowserTerm termID) {
-		Rdf2GoCore core = getCore();
+		Rdf2GoCore core = getCore(termID.getUser());
 
-		URI termURI = new URIImpl(getURIString(termID.getIdentifier()));
+		URI termURI = new URIImpl(getURIString(termID));
 		List<BrowserTerm> result = new ArrayList<BrowserTerm>();
 
 		for (String relation : relations) {
 
 			List<URI> parentConcepts = HierarchyUtils.getParentConcepts(termURI, new URIImpl(
 					Rdf2GoUtils.expandNamespace(core, relation)),
-					master);
+					core);
 			for (URI uri : parentConcepts) {
                 String reducedNamespace = Rdf2GoUtils.reduceNamespace(core,
                         Strings.decodeURL(uri.toString()));
@@ -182,7 +168,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
                 if(clazz != null) {
                     type = TermBrowserUtils.abbreviateTypeNameForURI(clazz.toString());
                 }
-                result.add(new BrowserTerm(type,Rdf2GoUtils.getLabelRDFS(uri, core, null),reducedNamespace.split(":")));
+                result.add(new BrowserTerm(type,Rdf2GoUtils.getLabelRDFS(uri, core, null), termID.getUser(),reducedNamespace.split(":")));
 			}
 		}
 
@@ -213,14 +199,14 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
 			return true;
 		}
 
-		Rdf2GoCore core = getCore();
+		Rdf2GoCore core = getCore(termID1.getUser());
 
-		URI term1URI = new URIImpl(getURIString(termID1.getIdentifier()));
-		URI term2URI = new URIImpl(getURIString(termID2.getIdentifier()));
+		URI term1URI = new URIImpl(getURIString(termID1));
+		URI term2URI = new URIImpl(getURIString(termID2));
 
 		for (String relation : relations) {
 			boolean is = HierarchyUtils.isSubConceptOf(term1URI, term2URI, new URIImpl(
-					Rdf2GoUtils.expandNamespace(core, relation)), master);
+					Rdf2GoUtils.expandNamespace(core, relation)), core);
 			if (is) {
 				addSuccessorToCache(termID2, termID1);
 				return true;
@@ -243,22 +229,25 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
 	}
 
 	@Override
-	public Collection<BrowserTerm> getAllTerms() {
+	public Collection<BrowserTerm> getAllTerms(UserContext user) {
+		// TODO: find solution for accessing rdf2goCore from here
 		TerminologyManager terminologyManager = HierarchyUtils.getCompiler(master).getTerminologyManager();
         final Collection<BrowserTerm> result = new HashSet<BrowserTerm>();
         final Collection<Identifier> allDefinedTerms = terminologyManager.getAllDefinedTerms();
         for (Identifier definedTerm : allDefinedTerms) {
             // TODO: equip BrowserTerms with types and labels here ??
-            result.add(new BrowserTerm(definedTerm));
+           result.add(new BrowserTerm(definedTerm, user));
         }
         return result;
     }
 
 	@Override
-	public Collection<BrowserTerm> getStartupTerms() {
+	public Collection<BrowserTerm> getStartupTerms(UserContext user) {
+
+		// TODO: find solution for accessing rdf2goCore from here
 		List<BrowserTerm> startConcepts = new ArrayList<BrowserTerm>();
 		for (String startConceptName : startConceptList) {
-			startConcepts.add(new BrowserTerm(new Identifier(startConceptName.split(":"))));
+			startConcepts.add(new BrowserTerm(new Identifier(startConceptName.split(":")),user));
 		}
 		return startConcepts;
 	}

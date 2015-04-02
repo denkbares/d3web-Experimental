@@ -22,6 +22,7 @@ import java.util.Map;
 
 import de.d3web.strings.Identifier;
 import de.knowwe.core.kdom.Article;
+import de.knowwe.core.user.UserContext;
 
 /**
  * 
@@ -35,5 +36,5 @@ public interface InterestingTermDetector {
 
 	static final String EXTENSION_POINT_TERM_DETECTOR = "TermDetector";
 
-	Map<BrowserTerm, Double> getWeightedTermsOfInterest(Article a, String master);
+	Map<BrowserTerm, Double> getWeightedTermsOfInterest(Article a, UserContext user);
 }

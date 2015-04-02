@@ -75,7 +75,10 @@ function completionItemSelected(bitObject) {
 		var jsonObject = jq$.parseJSON(firstList);
         var uri = jsonObject['concept'];
         var type = jsonObject['conceptClass'];
-        var label = value[1];
+		var label = value[1];
+		if(label.contains('(')) {
+			label = label.substring(0, label.lastIndexOf('('));
+		}
         sendTermBrowserAction(uri, 'searched', type, label);
 	}
 }
@@ -233,16 +236,21 @@ function handleTermActionEvent(element) {
 		term = term.replace(/<wbr>/g, "");
 	}
 
+
+
+
 	sendTermBrowserAction(term, command);
 
 }
 
 function sendTermBrowserAction(term, command, type, label) {
+	var sectionID = jq$('.termbrowserframe').attr('sectionid');
 	var params = {
 		action : 'TermBrowserAction',
 		term : term,
 		command : command,
         type: type,
+		sectionID : sectionID,
         label: label
 	};
 	var options = {

@@ -29,6 +29,7 @@ import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.user.UserContext;
 
 /**
  * 
@@ -38,22 +39,22 @@ import de.knowwe.core.kdom.parsing.Sections;
 public abstract class AbstractTermDetector implements InterestingTermDetector {
 
 	@Override
-	public Map<BrowserTerm, Double> getWeightedTermsOfInterest(Article article, String master) {
+	public Map<BrowserTerm, Double> getWeightedTermsOfInterest(Article article, UserContext user) {
 		Map<BrowserTerm, Double> interestingTerms = new HashMap<BrowserTerm, Double>();
 
 		List<Section<TermDefinition>> definitions = Sections.successors(
 				article.getRootSection(), TermDefinition.class);
 		for (Section<TermDefinition> def : definitions) {
-			interestingTerms.put(new BrowserTerm(def.get().getTermIdentifier(def)), WEIGHT_DEFINITION);
+			interestingTerms.put(new BrowserTerm(def.get().getTermIdentifier(def), user), WEIGHT_DEFINITION);
 		}
 
 		List<Section<TermReference>> references = Sections.successors(
 				article.getRootSection(), TermReference.class);
 		for (Section<TermReference> ref : references) {
 			// String termname = ref.get().getTermName(ref);
-			Collection<Section<? extends TermDefinition>> termDefinitions = getDefs(ref, master);
+			Collection<Section<? extends TermDefinition>> termDefinitions = getDefs(ref, user);
 			if (termDefinitions.size() > 0) {
-				interestingTerms.put(new BrowserTerm(ref.get().getTermIdentifier(ref)), WEIGHT_REFERENCE);
+				interestingTerms.put(new BrowserTerm(ref.get().getTermIdentifier(ref), user), WEIGHT_REFERENCE);
 			}
 		}
 
@@ -64,7 +65,8 @@ public abstract class AbstractTermDetector implements InterestingTermDetector {
 	 * 
 	 * @created 02.10.2013
 	 * @param ref
+	 * @param master
 	 * @return
 	 */
-	protected abstract Collection<Section<? extends TermDefinition>> getDefs(Section<? extends TermReference> ref, String master);
+	protected abstract Collection<Section<? extends TermDefinition>> getDefs(Section<? extends TermReference> ref, UserContext master);
 }

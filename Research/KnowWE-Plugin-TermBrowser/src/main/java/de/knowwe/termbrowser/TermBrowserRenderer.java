@@ -28,6 +28,8 @@ import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.d3web.strings.Strings;
 import de.d3web.utils.Log;
+import de.knowwe.core.compile.terminology.TerminologyManager;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
@@ -82,7 +84,8 @@ public class TermBrowserRenderer {
 
 	public String renderTermBrowser() {
 		RenderResult string = new RenderResult(user);
-		string.appendHtml("<div class='termbrowserframe'>");
+		final Section<TermBrowserMarkup> termBrowserMarkupSection = TermBrowserMarkup.getTermBrowserMarkup(user);
+		string.appendHtml("<div sectionid='"+termBrowserMarkupSection.getID()+"' class='termbrowserframe'>");
 
 		{
 			string.appendHtml("<div class='termbrowserheader'>");
@@ -119,14 +122,14 @@ public class TermBrowserRenderer {
 					+ "' class='ui-icon ui-icon-minus clearList hoverAction'></span>");
 
 			if (TermBrowserMarkup.getCurrentTermbrowserMarkupSearchSlotFlag(user)) {
-				renderSearchSlot(string);
+				renderSearchSlot(string, user);
 			}
 
 			/*
 			 * render semantic autocompletion search slot
 			 */
 			try {
-				final Section<TermBrowserMarkup> termBrowserMarkup = TermBrowserMarkup.getTermBrowserMarkup(user);
+				final Section<TermBrowserMarkup> termBrowserMarkup = termBrowserMarkupSection;
 				AutoCompletionSlotProvider slot = getPluggedAutoCompletionProvider(null);
 				if(slot != null) {
 					slot.init(termBrowserMarkup, user);
@@ -161,7 +164,7 @@ public class TermBrowserRenderer {
 		return string.toStringRaw();
 	}
 
-	private void renderSearchSlot(RenderResult string) {
+	private void renderSearchSlot(RenderResult string, UserContext user) {
 		string.appendHtml("<div class='ui-widget searchBox'>");
 		{
 			// search field
@@ -181,7 +184,7 @@ public class TermBrowserRenderer {
 				"jq$(document).ready(function() {" +
 				// "$(function() {" +
 				" var availableTags = [" +
-				generateTermNames() +
+				generateTermNames(user) +
 				"];" +
 				"jq$( \"#conceptSearch\" ).autocomplete({" +
 				"source: availableTags," +
@@ -194,8 +197,8 @@ public class TermBrowserRenderer {
 
 	}
 
-	private String generateTermNames() {
-		Collection<BrowserTerm> allTermDefinitions = hierarchy.getAllTerms();
+	private String generateTermNames(UserContext user) {
+		Collection<BrowserTerm> allTermDefinitions = hierarchy.getAllTerms(user);
 		StringBuilder builder = new StringBuilder();
 
 		if (allTermDefinitions != null) {
@@ -256,6 +259,17 @@ public class TermBrowserRenderer {
 		}
 
 		String url = linkProvider.getLinkToTermDefinition(term.getIdentifier(), master);
+
+		if (url == null) {
+			final Collection<TerminologyManager> terminologyManager = TermBrowserMarkup.getTerminologyManager(user);
+			for (TerminologyManager manager : terminologyManager) {
+				final Section<? extends Type> termDefiningSection = manager.getTermDefiningSection(term.getIdentifier());
+				if(termDefiningSection != null) {
+					url = KnowWEUtils.getURLLink(termDefiningSection);
+					break;
+				}
+			}
+		}
 		if (url == null) {
 			url = KnowWEUtils.getURLLink(term.getIdentifier().getLastPathElement());
 		}
@@ -292,6 +306,13 @@ public class TermBrowserRenderer {
 				{
 					string.appendHtml("<td style='width:90%;padding-left:2px;' class='termbrowser'>");
 
+					if (!Strings.isBlank(term.getType())) {
+						string.appendHtml("<div class='typename'  style='display:inline;'>");
+						string.append(term.getType());
+						string.appendHtml("</div>");
+
+					}
+
 					// using different font style depending on current hierarchy
 					// depth
 					if (url != null) {
@@ -317,14 +338,9 @@ public class TermBrowserRenderer {
 					// insert term name
 					String label = prepareDisplayLabel(t, term);
 
+
+
 					// add label for display
-					if (!Strings.isBlank(term.getType())) {
-						string.appendHtml("<div class='typename'  style='display:inline;'>");
-						string.append(term.getType());
-						string.appendHtml("</div>");
-
-					}
-
 					string.appendHtml(label);
 					string.appendHtml("</div>");
 					if (url != null) {
@@ -388,6 +404,9 @@ public class TermBrowserRenderer {
 	}
 
 	private String getLabel(BrowserTerm term) {
+		if(!Strings.isBlank(term.getLabel())) {
+			return term.getLabel();
+		}
 		String[] identifierParts = term.getIdentifier().getPathElements();
 		String label = term.getIdentifier().toExternalForm();
 		if (identifierParts.length == 2) {

@@ -20,6 +20,7 @@
 package de.knowwe.termbrowser;
 
 import de.d3web.strings.Identifier;
+import de.knowwe.core.user.UserContext;
 
 /**
  * @author Jochen Reutelshoefer (denkbares GmbH)
@@ -31,10 +32,7 @@ public class BrowserTerm  {
      type of this term
      */
     private String type = null;
-
-    public String getLabel() {
-        return label;
-    }
+    private UserContext user;
 
     /*
         preferred label of this term
@@ -46,37 +44,29 @@ public class BrowserTerm  {
      */
     private Identifier identifier;
 
-    public BrowserTerm(String type, String label, String... pathElements) {
+    public BrowserTerm(String type, String label, UserContext user, String... pathElements) {
+        this.user = user;
         identifier = new Identifier(pathElements);
         this.type = type;
         this.label = label;
     }
 
-    public BrowserTerm(String type, String label, Identifier identifier) {
+    public BrowserTerm(String type, String label, UserContext user, Identifier identifier) {
+        this.user = user;
         this.identifier = identifier;
         this.type = type;
         this.label = label;
     }
 
-    public BrowserTerm(String type, Identifier identifier) {
-        this(type, null, identifier);
-    }
-
-    public BrowserTerm(String type, String... pathElements) {
-        this(type, null, pathElements);
-    }
-
-    public BrowserTerm(Identifier identifier) {
-        this(null, identifier);
-    }
-
-    public BrowserTerm(String... pathElements) {
-        this(null, pathElements);
+    public BrowserTerm(Identifier identifier, UserContext user) {
+        this(null, null, user, identifier);
     }
 
     public String getType() {
         return type;
     }
+
+
 
     public Identifier getIdentifier() {
         return identifier;
@@ -97,5 +87,13 @@ public class BrowserTerm  {
     @Override
     public int hashCode() {
         return identifier.hashCode();
+    }
+
+    public UserContext getUser() {
+        return user;
+    }
+
+    public String getLabel() {
+        return label;
     }
 }

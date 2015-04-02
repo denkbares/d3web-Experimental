@@ -253,7 +253,7 @@ public class TermSetManager implements EventListener {
 
                     Map<BrowserTerm, Double> interestingTerms = termDetector.getWeightedTermsOfInterest(
                             article,
-                            master);
+                            user);
 
                     // we add the values for the terms filtered by the hierarchy
                     // provider
@@ -310,7 +310,7 @@ public class TermSetManager implements EventListener {
 		TermSet recommendationSet = data.get(context.getUserName());
 		if (recommendationSet == null) {
 			recommendationSet = TermSet.createRecommendationSet(context);
-			Collection<BrowserTerm> startupTerms = recommendationSet.getHierarchy().getStartupTerms();
+			Collection<BrowserTerm> startupTerms = recommendationSet.getHierarchy().getStartupTerms(context);
 			if (startupTerms != null) {
 				for (BrowserTerm identifier : startupTerms) {
 					recommendationSet.addValue(identifier, 1.0);
@@ -383,7 +383,7 @@ public class TermSetManager implements EventListener {
 			recommendationSet.clear();
 			recommendationSet.setTermAddedLatest(null);
 			TermBrowserHierarchy hierarchy = recommendationSet.getHierarchy();
-			Collection<BrowserTerm> startupTerms = hierarchy.getStartupTerms();
+			Collection<BrowserTerm> startupTerms = hierarchy.getStartupTerms(context);
 			if (startupTerms != null) {
 				for (BrowserTerm identifier : startupTerms) {
 					recommendationSet.addValue(identifier, 1.0);

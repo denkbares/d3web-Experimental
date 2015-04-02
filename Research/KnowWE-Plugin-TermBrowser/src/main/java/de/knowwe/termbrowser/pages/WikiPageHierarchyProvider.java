@@ -68,7 +68,7 @@ public class WikiPageHierarchyProvider implements HierarchyProvider<BrowserTerm>
 		List<Section<LinkType>> successorsOfType = Sections.successors(rootSection, LinkType.class);
 		for (Section<LinkType> linkSection : successorsOfType) {
 			String targetPage = linkSection.get().getLink(linkSection);
-			result.add(new BrowserTerm(new Identifier(targetPage)));
+			result.add(new BrowserTerm(new Identifier(targetPage), term.getUser()));
 		}
 
 		return result;
@@ -85,7 +85,7 @@ public class WikiPageHierarchyProvider implements HierarchyProvider<BrowserTerm>
 				String targetPage = linkSection.get().getLink(linkSection);
 				if (targetPage.equals(term.getIdentifier().getLastPathElement())) {
 					List<BrowserTerm> result = new ArrayList<BrowserTerm>();
-					result.add(new BrowserTerm(new Identifier(next.getTitle())));
+					result.add(new BrowserTerm(new Identifier(next.getTitle()), term.getUser()));
 					return result;
 				}
 
@@ -95,20 +95,20 @@ public class WikiPageHierarchyProvider implements HierarchyProvider<BrowserTerm>
 	}
 
 	@Override
-	public Collection<BrowserTerm> getAllTerms() {
+	public Collection<BrowserTerm> getAllTerms(UserContext user) {
 		ArticleManager articleManager = Environment.getInstance().getArticleManager(Environment.DEFAULT_WEB);
 		Iterator<Article> articleIterator = articleManager.getArticles().iterator();
 		List<BrowserTerm> result = new ArrayList<BrowserTerm>();
 		while (articleIterator.hasNext()) {
-			result.add(new BrowserTerm(new Identifier(articleIterator.next().getTitle())));
+			result.add(new BrowserTerm(new Identifier(articleIterator.next().getTitle()), user));
 		}
 		return result;
 	}
 
 	@Override
-	public Collection<BrowserTerm> getStartupTerms() {
+	public Collection<BrowserTerm> getStartupTerms(UserContext user) {
 		List<BrowserTerm> result = new ArrayList<BrowserTerm>();
-		result.add(new BrowserTerm(new Identifier("Main")));
+		result.add(new BrowserTerm(new Identifier("Main"), user));
 		return result;
 	}
 

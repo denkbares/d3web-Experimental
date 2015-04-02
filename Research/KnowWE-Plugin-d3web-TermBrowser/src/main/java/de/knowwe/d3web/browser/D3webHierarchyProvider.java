@@ -86,10 +86,10 @@ public class D3webHierarchyProvider implements HierarchyProvider<BrowserTerm> {
 		for (NamedObject childD3web : childrenD3web) {
 			if (childD3web instanceof Choice) {
 				childrenList.add(new BrowserTerm(new Identifier(new String[] {
-						((Choice) childD3web).getQuestion().getName(), childD3web.getName() })));
+						((Choice) childD3web).getQuestion().getName(), childD3web.getName() }), term.getUser()));
 			}
 			else {
-				childrenList.add(new BrowserTerm(new Identifier(childD3web.getName())));
+				childrenList.add(new BrowserTerm(new Identifier(childD3web.getName()),term.getUser()));
 			}
 		}
 		return childrenList;
@@ -160,7 +160,7 @@ public class D3webHierarchyProvider implements HierarchyProvider<BrowserTerm> {
 
 		List<NamedObject> parentsD3web = getParentsD3web(namedObject);
 		for (NamedObject parentD3web : parentsD3web) {
-			parentList.add(new BrowserTerm(new Identifier(parentD3web.getName())));
+			parentList.add(new BrowserTerm(new Identifier(parentD3web.getName()), term.getUser()));
 		}
 
 		return parentList;
@@ -217,7 +217,7 @@ public class D3webHierarchyProvider implements HierarchyProvider<BrowserTerm> {
 	}
 
 	@Override
-	public Collection<BrowserTerm> getAllTerms() {
+	public Collection<BrowserTerm> getAllTerms(UserContext user) {
 		Section<TermBrowserMarkup> termBrowserMarkup = TermBrowserMarkup.getTermBrowserMarkup(user);
 		D3webCompiler compiler = Compilers.getCompiler(termBrowserMarkup, D3webCompiler.class);
 		if (compiler == null) return Collections.emptySet();
@@ -228,13 +228,13 @@ public class D3webHierarchyProvider implements HierarchyProvider<BrowserTerm> {
 		Set<BrowserTerm> result = new HashSet<BrowserTerm>();
 		Collection<TerminologyObject> allTerminologyObjects = manager.getAllTerminologyObjects();
 		for (TerminologyObject terminologyObject : allTerminologyObjects) {
-			result.add(new BrowserTerm(new Identifier(terminologyObject.toString())));
+			result.add(new BrowserTerm(new Identifier(terminologyObject.toString()), user));
 		}
 		return result;
 	}
 
 	@Override
-	public Collection<BrowserTerm> getStartupTerms() {
+	public Collection<BrowserTerm> getStartupTerms(UserContext user) {
 		// TODO Auto-generated method stub
 		return null;
 	}

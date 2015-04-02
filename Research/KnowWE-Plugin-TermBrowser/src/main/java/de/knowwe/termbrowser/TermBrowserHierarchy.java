@@ -90,16 +90,16 @@ public class TermBrowserHierarchy implements HierarchyProvider<RatedTerm> {
 	}
 
 	@Override
-	public Collection<BrowserTerm> getAllTerms() {
+	public Collection<BrowserTerm> getAllTerms(UserContext user) {
 		this.hierarchyProvider.updateSettings(user);
-		Collection<BrowserTerm> result = hierarchyProvider.getAllTerms();
+		Collection<BrowserTerm> result = hierarchyProvider.getAllTerms(user);
 		return result;
 	}
 
 	@Override
-	public Collection<BrowserTerm> getStartupTerms() {
+	public Collection<BrowserTerm> getStartupTerms(UserContext user) {
 		this.hierarchyProvider.updateSettings(user);
-		return hierarchyProvider.getStartupTerms();
+		return hierarchyProvider.getStartupTerms(user);
 	}
 
 	@Override

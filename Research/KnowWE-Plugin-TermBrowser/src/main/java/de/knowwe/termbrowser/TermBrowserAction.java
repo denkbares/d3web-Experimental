@@ -79,10 +79,11 @@ public class TermBrowserAction extends AbstractAction {
         String command = context.getParameter("command");
         String term = context.getParameter("term");
         String type = context.getParameter("type");
+        String sectionId = context.getParameter("sectionID");
         if (type.equals("undefined")) {
             type = "";
         }
-        String label = context.getParameter("label");
+        String label = context.getParameter("label").trim();
         if (label == null || label.equals("undefined")) {
             label = "";
         }
@@ -92,7 +93,9 @@ public class TermBrowserAction extends AbstractAction {
          * treat case when the semantic-autocompletion slot sends full URIs
 		 */
         if (term != null && term.startsWith("http:")) {
-            Rdf2GoCore core = getCompiler(master).getRdf2GoCore();
+            final Section<?> section = Sections.get(sectionId);
+            final Rdf2GoCompiler compiler = Compilers.getCompiler(section, Rdf2GoCompiler.class);
+            Rdf2GoCore core = compiler.getRdf2GoCore();
             term = Rdf2GoUtils.reduceNamespace(core, term);
             term = term.replace(":", "#");
         }
@@ -100,19 +103,19 @@ public class TermBrowserAction extends AbstractAction {
         if (term != null) {
             if (command.equals("searched")) {
                 // update ranking weights
-                TermSetManager.getInstance().termSearched(context, createTermIdentifier(term, type, label));
+                TermSetManager.getInstance().termSearched(context, createTermIdentifier(term, type, label, context));
             } else if (command.equals("remove")) {
                 // removes this concept from the list
-                TermSetManager.getInstance().clearTerm(context, createTermIdentifier(term, type, label));
+                TermSetManager.getInstance().clearTerm(context, createTermIdentifier(term, type, label, context));
             } else if (command.equals("expand")) {
                 // adds all sub-concepts of a concept to the list
-                TermSetManager.getInstance().expandTerm(context, createTermIdentifier(term, type, label));
+                TermSetManager.getInstance().expandTerm(context, createTermIdentifier(term, type, label, context));
             } else if (command.equals("addParent")) {
                 // adds all sub-concepts of a concept to the list
-                TermSetManager.getInstance().addParentTerm(context, createTermIdentifier(term, type, label));
+                TermSetManager.getInstance().addParentTerm(context, createTermIdentifier(term, type, label, context));
             } else if (command.equals("collapse")) {
                 // removes all sub-concepts of a concepts from the list
-                TermSetManager.getInstance().collapseTerm(context, createTermIdentifier(term, type, label));
+                TermSetManager.getInstance().collapseTerm(context, createTermIdentifier(term, type, label, context));
             } else if (command.equals("collapseGraph")) {
                 // stores user's collapse state on server
                 TermSetManager.getInstance().collapseGraph(context);
@@ -163,7 +166,7 @@ public class TermBrowserAction extends AbstractAction {
     }
 
 
-    private BrowserTerm createTermIdentifier(String term, String type, String label) {
+    private BrowserTerm createTermIdentifier(String term, String type, String label, UserActionContext user) {
         // TODO: caution: this will break if identifier names contain '#' !!
         String[] split = term.split("#");
         for (int i = 0; i < split.length; i++) {
@@ -174,7 +177,7 @@ public class TermBrowserAction extends AbstractAction {
         if (type != null && type.startsWith("http:")) {
             type = TermBrowserUtils.abbreviateTypeNameForURI(type);
         }
-        return new BrowserTerm(type, label, split);
+        return new BrowserTerm(type, label, user, split);
     }
 
 

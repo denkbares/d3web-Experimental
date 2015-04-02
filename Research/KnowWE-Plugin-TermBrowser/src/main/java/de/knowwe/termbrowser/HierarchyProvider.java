@@ -64,7 +64,7 @@ public interface HierarchyProvider<T> extends PartialHierarchy<T> {
 	 * @created 20.11.2013
 	 * @return
 	 */
-	Collection<BrowserTerm> getAllTerms();
+	Collection<BrowserTerm> getAllTerms(UserContext user);
 
 	/**
 	 * Returns a set of terms that should be present in the termbrowser after
@@ -73,6 +73,6 @@ public interface HierarchyProvider<T> extends PartialHierarchy<T> {
 	 * @created 20.11.2013
 	 * @return
 	 */
-	Collection<BrowserTerm> getStartupTerms();
+	Collection<BrowserTerm> getStartupTerms(UserContext user);
 
 }

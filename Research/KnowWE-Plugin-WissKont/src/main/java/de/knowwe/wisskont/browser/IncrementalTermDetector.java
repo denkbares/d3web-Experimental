@@ -27,6 +27,7 @@ import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.termbrowser.AbstractTermDetector;
 
 /**
@@ -40,10 +41,11 @@ public class IncrementalTermDetector extends AbstractTermDetector {
 	 * 
 	 * @created 02.10.2013
 	 * @param ref
+	 * @param master
 	 * @return
 	 */
 	@Override
-	protected Collection<Section<? extends TermDefinition>> getDefs(Section<? extends TermReference> ref, String master) {
+	protected Collection<Section<? extends TermDefinition>> getDefs(Section<? extends TermReference> ref, UserContext master) {
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				ref.get().getTermIdentifier(ref));
 		Set<Section<? extends TermDefinition>> result = new HashSet<Section<? extends TermDefinition>>();

@@ -44,10 +44,10 @@ import de.knowwe.rdf2go.Rdf2GoCore;
  */
 public class HierarchyUtils {
 
-	public static boolean isDirectSubConceptOf(URI concept1, URI concept2, URI hierarchyProperty) {
+	public static boolean isDirectSubConceptOf(URI concept1, URI concept2, URI hierarchyProperty, Rdf2GoCore core) {
 		String sparql = "ASK { <" + concept1 + "> <" + hierarchyProperty.toString() + "> <"
 				+ concept2 + ">.}";
-		boolean result = Rdf2GoCore.getInstance().sparqlAsk(sparql);
+		boolean result = core.sparqlAsk(sparql);
 		return result;
 	}
 
@@ -59,8 +59,8 @@ public class HierarchyUtils {
 	 * @param hierarchyProperty
 	 * @return
 	 */
-	public static List<URI> getParentConcepts(URI term, URI hierarchyProperty, String master) {
-		return selectTripleObjects(term, hierarchyProperty, master);
+	public static List<URI> getParentConcepts(URI term, URI hierarchyProperty, Rdf2GoCore core) {
+		return selectTripleObjects(term, hierarchyProperty,  core);
 	}
 
 	/**
@@ -71,21 +71,21 @@ public class HierarchyUtils {
 	 * @param hierarchyProperty
 	 * @return
 	 */
-	public static List<URI> getChildrenConcepts(URI term, URI hierarchyProperty, String master) {
-		return selectTripleSubjects(hierarchyProperty, term, master);
+	public static List<URI> getChildrenConcepts(URI term, URI hierarchyProperty, Rdf2GoCore core) {
+		return selectTripleSubjects(hierarchyProperty, term,  core);
 	}
 
-	private static List<URI> selectTripleObjects(URI subject, URI predicate, String master) {
+	private static List<URI> selectTripleObjects(URI subject, URI predicate, Rdf2GoCore core) {
 
 		String sparql = "SELECT ?x WHERE { <" + subject.toString() + "> <"
 				+ predicate.toString() + "> ?x.}";
-		return executeSimpleSelectQuery(sparql, master);
+		return executeSimpleSelectQuery(sparql, core);
 	}
 
-	private static List<URI> selectTripleSubjects(URI predicate, URI object, String master) {
+	private static List<URI> selectTripleSubjects(URI predicate, URI object, Rdf2GoCore core) {
 		String sparql = "SELECT ?x WHERE { ?x <" + predicate.toString() + "> <"
 				+ object.toString() + ">.}";
-		return executeSimpleSelectQuery(sparql, master);
+		return executeSimpleSelectQuery(sparql,  core);
 	}
 
 	/**
@@ -94,30 +94,11 @@ public class HierarchyUtils {
 	 * @param sparql
 	 * @return
 	 */
-	private static List<URI> executeSimpleSelectQuery(String sparql, String master) {
-
-		// List<URI> result = new ArrayList<URI>();
-		Rdf2GoCore core = null;
-		if (master == null || master.trim().length() == 0) {
-			core = Rdf2GoCore.getInstance();
-		}
-		else {
-			core = getCompiler(master).getRdf2GoCore();
-		}
+	private static List<URI> executeSimpleSelectQuery(String sparql, Rdf2GoCore core) {
 
 		SparqlCache sparqlCache = SparqlCacheManager.getInstance().getCachedSparqlEndpoint(core);
 		return sparqlCache.executeSingleVariableSparqlSelectQuery(sparql);
 
-		// QueryResultTable resultTable = core.sparqlSelect(sparql);
-		//
-		// ClosableIterator<QueryRow> resultIterator = resultTable.iterator();
-		// while (resultIterator.hasNext()) {
-		// QueryRow parentConceptResult = resultIterator.next();
-		// Node value = parentConceptResult.getValue("x");
-		// String urlString = value.asURI().toString();
-		// result.add(new URIImpl(urlString));
-		// }
-		// return result;
 	}
 
 	public static OntologyCompiler getCompiler(String master) {
@@ -149,20 +130,13 @@ public class HierarchyUtils {
 	 * @param hierarchyProperty
 	 * @return
 	 */
-	public static boolean isSubConceptOf(URI concept1, URI target, URI hierarchyProperty, String master) {
+	public static boolean isSubConceptOf(URI concept1, URI target, URI hierarchyProperty, Rdf2GoCore core) {
 		return isSubConceptOfRecursive(concept1, target, new HashSet<URI>(), hierarchyProperty,
-				master);
+				core);
 	}
 
-	private static boolean isSubConceptOfRecursive(URI concept1, URI target, Set<URI> terms, URI hierarchyProperty, String master) {
+	private static boolean isSubConceptOfRecursive(URI concept1, URI target, Set<URI> terms, URI hierarchyProperty, Rdf2GoCore core) {
 		terms.add(concept1);
-		Rdf2GoCore core = null;
-		if (master == null || master.trim().length() == 0) {
-			core = Rdf2GoCore.getInstance();
-		}
-		else {
-			core = getCompiler(master).getRdf2GoCore();
-		}
 
 		// // direct ask (necessary ?)
 		// String sparqlAsk = "ASK { <" + concept1 + "> <"
@@ -183,7 +157,7 @@ public class HierarchyUtils {
 			else {
 				// beware of circles in the hierarchy network
 				if (!terms.contains(parent)) {
-					return isSubConceptOfRecursive(parent, target, terms, hierarchyProperty, master);
+					return isSubConceptOfRecursive(parent, target, terms, hierarchyProperty, core);
 				}
 			}
 		}

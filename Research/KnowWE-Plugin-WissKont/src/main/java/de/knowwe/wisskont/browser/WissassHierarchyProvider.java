@@ -84,20 +84,22 @@ public class WissassHierarchyProvider implements HierarchyProvider<BrowserTerm> 
 
 
 	@Override
-	public Collection<BrowserTerm> getAllTerms() {
+	public Collection<BrowserTerm> getAllTerms(UserContext user) {
 		Collection<Section<? extends SimpleDefinition>> allTermDefinitions =
 				IncrementalCompiler.getInstance().getTerminology().getAllTermDefinitions();
 		Set<BrowserTerm> result = new HashSet<BrowserTerm>();
 		for (Section<? extends SimpleDefinition> def : allTermDefinitions) {
-			result.add(new BrowserTerm(def.get().getTermIdentifier(def)));
+
+			//TODO: find solution
+			//result.add(new BrowserTerm(def.get().getTermIdentifier(def)));
 		}
 		return result;
 	}
 
 	@Override
-	public Collection<BrowserTerm> getStartupTerms() {
+	public Collection<BrowserTerm> getStartupTerms(UserContext context) {
 		List<BrowserTerm> startTerms = new ArrayList<BrowserTerm>();
-		startTerms.add(new BrowserTerm(new Identifier(MAIN_CONCEPT)));
+		startTerms.add(new BrowserTerm(new Identifier(MAIN_CONCEPT),context));
 		return startTerms;
 	}
 

@@ -171,7 +171,7 @@ public class MarkupUtils {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					result.add(new BrowserTerm(new Identifier(termName)));
+					result.add(new BrowserTerm(new Identifier(termName), term.getUser()));
 				}
 			}
 		}
@@ -214,7 +214,7 @@ public class MarkupUtils {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					result.add(new BrowserTerm(new Identifier(termName)));
+					result.add(new BrowserTerm(new Identifier(termName), term.getUser()));
 				}
 			}
 		}
