@@ -26,9 +26,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import connector.DummyConnector;
 import junit.framework.TestCase;
 import utils.TestUtils;
-import connector.DummyConnector;
+
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
@@ -39,7 +40,6 @@ import de.knowwe.renaming.taghandler.WordBasedRenameFinding;
 import de.knowwe.renaming.taghandler.WordBasedRenamingAction;
 import de.knowwe.renaming.test.util.SplitObjectType;
 import de.knowwe.renaming.test.util.WordObjectType;
-
 
 public class RenamingToolTest extends TestCase {
 
@@ -61,6 +61,9 @@ public class RenamingToolTest extends TestCase {
 		/**
 		 * Initialise Environment
 		 */
+		RootType rootType = RootType.getInstance();
+		rootType.addChildType(new SplitObjectType());
+		rootType.addChildType(new WordObjectType());
 		DummyConnector connector = new DummyConnector();
 		connector.setKnowWEExtensionPath(TestUtils.createKnowWEExtensionPath());
 		Environment.initInstance(connector);
@@ -72,10 +75,6 @@ public class RenamingToolTest extends TestCase {
 		 */
 		String content1 = "aaa bbb aaa ccc bbbaaa bbbaaa";
 		String content2 = "dd bbdd ccd bb b ccc bbb c dd b";
-
-		RootType rootType = RootType.getInstance();
-		rootType.addChildType(new SplitObjectType());
-		rootType.addChildType(new WordObjectType());
 
 		TestUtils.processAndUpdateArticleJunit("TestUser", content1, "Test_Article1", "default_web");
 		waitForCompilation();
