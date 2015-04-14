@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,9 +39,9 @@ import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Value;
+import de.d3web.core.session.ValueUtils;
 import de.d3web.core.session.values.ChoiceID;
 import de.d3web.core.session.values.ChoiceValue;
-import de.d3web.core.session.values.DateValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.TextValue;
@@ -117,7 +118,7 @@ public class Rdf2GoExplanationProvider {
 			return new TextValue(value);
 		}
 		else if (objectType.equals(QuestionDate.class.getSimpleName())) {
-			return DateValue.createDateValue(value);
+			return ValueUtils.createDateValue(TimeZone.getDefault(), value);
 		}
 		else if (objectType.equals(Solution.class.getSimpleName())) {
 			return new HeuristicRating(Double.parseDouble(value));

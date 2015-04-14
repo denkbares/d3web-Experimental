@@ -1,5 +1,6 @@
 package de.knowwe.rdfs.d3web;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,6 +38,8 @@ public class Rdf2GoSessionHandler {
 	private final Map<String, Statement[]> statementCache = new HashMap<>();
 	private Map<String, BlankNode> factNodeCache = new HashMap<>();
 	private Map<Object, Resource> agentNodeCache = new HashMap<>();
+
+	private final SimpleDateFormat XSD_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
 
 	private Session session;
 
@@ -208,7 +211,7 @@ public class Rdf2GoSessionHandler {
 			return core.createDatatypeLiteral(((NumValue) value).getDouble().toString(), XSD._double);
 		}
 		else if (value instanceof DateValue) {
-			return core.createDatatypeLiteral(((DateValue) value).getDateString(), XSD._date);
+			return core.createDatatypeLiteral(XSD_DATE_FORMAT.format(((DateValue) value).getDate()), XSD._date);
 		}
 		else if (value instanceof MultipleChoiceValue) {
 			Collection<ChoiceID> choiceIDs = ((MultipleChoiceValue) value).getChoiceIDs();
