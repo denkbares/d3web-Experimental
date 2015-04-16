@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -118,7 +117,7 @@ public class Rdf2GoExplanationProvider {
 			return new TextValue(value);
 		}
 		else if (objectType.equals(QuestionDate.class.getSimpleName())) {
-			return ValueUtils.createDateValue(TimeZone.getDefault(), value);
+			return ValueUtils.createDateValue(value);
 		}
 		else if (objectType.equals(Solution.class.getSimpleName())) {
 			return new HeuristicRating(Double.parseDouble(value));
