@@ -214,6 +214,11 @@ public class Utils {
                 if (clazz != null && clazz.length() > 0) {
                     // we found a type-triple and add the clazz attribute to the already existing node
                     visNode.setClazz(clazz);
+                    // re-color according to newly found clazz
+                    RenderingStyle style = Utils.getStyle(type);
+                    Utils.setClassColorCoding(toURI, style, parameters, rdfRepository);
+                    visNode.setStyle(style);
+
                 }
             }
             return visNode;
