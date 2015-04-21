@@ -117,7 +117,7 @@ public class DOTVisualizationRenderer implements GraphVisualizationRenderer {
 				+ "</object>" + div_close;
 		String format = parameters.get(GraphDataBuilder.FORMAT);
 		if (format == null) {
-			html.append(png_default);
+			html.append(svg);
 		}
 		else if (format.equals("svg")) {
 			html.append(svg);

@@ -64,7 +64,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
     /*
     For Debugging/Optimization only
      */
-    private static final boolean DEBUG_MODE = false;
+    private static final boolean DEBUG_MODE = true;
     private int addSuccessorsCalls = 0;
     private int addOutgoingSuccessorsCalls = 0;
     private int addPredecessorsCalls = 0;
@@ -206,13 +206,13 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             addOutgoingEdgesPredecessors(fringeNode);
             addOutgoingEdgesSuccessors(fringeNode);
 
-			//TODO find solution for blank node
-			if (!Utils.isBlankNode(fringeNode)) {
-				if (!literalsExpanded.contains(fringeNode)) {
-					addLiterals(fringeNode);
-				}
-				addType(fringeNode);
-			}
+            //TODO find solution for blank node
+            if (!Utils.isBlankNode(fringeNode)) {
+                if (!literalsExpanded.contains(fringeNode)) {
+                    addLiterals(fringeNode);
+                }
+                addType(fringeNode);
+            }
         }
 
         SubpropertyEliminator.eliminateSubproperties(data, rdfRepository);
@@ -252,7 +252,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
     }
 
     private void addType(Node node) {
-        String query = "SELECT ?class ?pred WHERE { "+node.toSPARQL()+" ?pred ?class . FILTER regex(str(?pred),\"type\") }";
+        String query = "SELECT ?class ?pred WHERE { " + node.toSPARQL() + " ?pred ?class . FILTER regex(str(?pred),\"type\") }";
         ClosableIterator<QueryRow> result = null;
         try {
             result =
@@ -274,7 +274,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
     }
 
     private void addLiterals(Node fringeNode) {
-        String query = "SELECT ?literal ?pred WHERE { "+fringeNode.toSPARQL()+" ?pred ?literal . FILTER isLiteral(?literal) }";
+        String query = "SELECT ?literal ?pred WHERE { " + fringeNode.toSPARQL() + " ?pred ?literal . FILTER isLiteral(?literal) }";
         ClosableIterator<QueryRow> result = null;
         try {
             result =
@@ -419,13 +419,13 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             TODO: this should be done _after_ the last concept node has been added to the graph
              */
             if (depth == requestedDepth) {
-                if(!nodeType.equals(NODE_TYPE.LITERAL)) {
+                if (!nodeType.equals(NODE_TYPE.LITERAL)) {
                     fringeNodes.add(zURI);
                 }
                 //addOutgoingEdgesSuccessors(zURI);
                 //addOutgoingEdgesPredecessors(zURI);
                 //if (!literalsExpanded.contains(zURI)) {
-                    // add literals
+                // add literals
                 //    addSuccessors(zURI, conceptToBeExpanded, yURI, ExpandMode.LiteralsOnly, Direction.Forward);
                 //}
             }
@@ -527,7 +527,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             TODO: this should be done _after_ the last concept node has been added to the graph
              */
             if (height == requestedHeight) {
-                if(!nodeType.equals(NODE_TYPE.LITERAL)) {
+                if (!nodeType.equals(NODE_TYPE.LITERAL)) {
                     fringeNodes.add(xURI);
                 }
                 //addOutgoingEdgesPredecessors(xURI);
@@ -567,7 +567,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
 
         String conceptFilter = "Filter(true)";
-        if(!showOutgoingEdges()) {
+        if (!showOutgoingEdges()) {
             // this filter brings considerable performance boost
             // but will dismiss outgoing edges
             conceptFilter = conceptFilter("?z", data.getConceptDeclarations());
@@ -577,7 +577,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
         String query = "SELECT ?y ?z WHERE { "
                 + conceptURI.toSPARQL()
-                + " ?y ?z. " + predicateFilter(Direction.Forward, "z") +" "+ conceptFilter+"}";
+                + " ?y ?z. " + predicateFilter(Direction.Forward, "z") + " " + conceptFilter + "}";
         ClosableIterator<QueryRow> result =
                 rdfRepository.sparqlSelectIt(
                         query);
@@ -631,7 +631,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
         final Collection<ConceptNode> conceptDeclarations = data.getConceptDeclarations();
 
         String conceptFilter = "Filter(true)";
-        if(!showOutgoingEdges()) {
+        if (!showOutgoingEdges()) {
             // this filter brings considerable performance boost
             // but will dismiss outgoing edges
             conceptFilter = conceptFilter("?x", conceptDeclarations);
@@ -640,7 +640,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
         String query = "SELECT ?x ?y WHERE { ?x ?y "
                 + conceptURI.toSPARQL()
-                + " . " + predicateFilter(Direction.Backward, null) +" "+ conceptFilter +"}";
+                + " . " + predicateFilter(Direction.Backward, null) + " " + conceptFilter + "}";
         QueryResultTable resultTable = rdfRepository.sparqlSelect(
                 query);
 
@@ -676,26 +676,26 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
     private String conceptFilter(String variable, Collection<ConceptNode> conceptDeclarations) {
         StringBuilder filter = new StringBuilder();
         filter.append("FILTER (");
-        if(conceptDeclarations.size() == 0) {
+        if (conceptDeclarations.size() == 0) {
             filter.append("true");
         } else {
             final Iterator<ConceptNode> iterator = conceptDeclarations.iterator();
             boolean firstIteration = true;
             while (iterator.hasNext()) {
                 ConceptNode conceptDeclaration = iterator.next();
-                if(conceptDeclaration.getType().equals(NODE_TYPE.LITERAL)) {
+                if (conceptDeclaration.getType().equals(NODE_TYPE.LITERAL)) {
                     continue;
                 }
-                if(conceptDeclaration.getType().equals(NODE_TYPE.BLANKNODE)) {
+                if (conceptDeclaration.getType().equals(NODE_TYPE.BLANKNODE)) {
                     // TODO: find solution for this case
                     continue;
                 }
-                if(firstIteration) {
+                if (firstIteration) {
                     firstIteration = false;
                 } else {
                     filter.append(" || ");
                 }
-                filter.append(variable +" = "+conceptDeclaration.getName() );
+                filter.append(variable + " = " + conceptDeclaration.getName());
             }
 
         }
@@ -894,7 +894,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
              */
             final URI mostSpecificClass = Rdf2GoUtils.findMostSpecificClass(rdfRepository, fromURI.asURI());
             clazz = null;
-            if(mostSpecificClass != null) {
+            if (mostSpecificClass != null) {
                 clazz = getConceptName(mostSpecificClass);
             }
         }
@@ -988,7 +988,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
 
     /**
      * Adds a nodes expanded by a fringe node.
-     * <p/>
+     * <p>
      * - if the node is not part of the visualization yet it is not added (except as outer node for indicating the
      * existence of further edges)
      * - EXCEPT for datatype property edges which are always added to the visualization

@@ -82,6 +82,8 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 				OntoVisType.ANNOTATION_FORMAT);
 		if (format != null) {
 			format = format.toLowerCase();
+		} else {
+			format = "svg";
 		}
 		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 

@@ -37,6 +37,11 @@ public class ConceptNode {
 	private boolean outer = false;
 	private boolean root = false;
 	private NODE_TYPE type;
+
+	public void setStyle(RenderingStyle style) {
+		this.style = style;
+	}
+
 	private RenderingStyle style = null;
 
 	public RenderingStyle getStyle() {

@@ -251,6 +251,8 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 				SparqlVisType.ANNOTATION_FORMAT);
 		if (format != null) {
 			format = format.toLowerCase();
+		}else {
+			format = "svg";
 		}
 		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 
