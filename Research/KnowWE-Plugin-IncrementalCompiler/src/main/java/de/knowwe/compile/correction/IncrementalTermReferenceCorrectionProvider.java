@@ -29,6 +29,8 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.core.compile.terminology.TermCompiler;
 import de.knowwe.core.correction.CorrectionProvider;
+import de.knowwe.core.correction.DefaultSuggestion;
+import de.knowwe.core.correction.Suggestion;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
@@ -37,8 +39,8 @@ import de.knowwe.core.utils.KnowWEUtils;
 public class IncrementalTermReferenceCorrectionProvider implements CorrectionProvider {
 
 	@Override
-	public List<CorrectionProvider.Suggestion> getSuggestions(TermCompiler compiler, Section<?> section, int threshold) {
-		List<CorrectionProvider.Suggestion> suggestions = new LinkedList<CorrectionProvider.Suggestion>();
+	public List<Suggestion> getSuggestions(TermCompiler compiler, Section<?> section, int threshold) {
+		List<Suggestion> suggestions = new LinkedList<Suggestion>();
 		if (!(section.get() instanceof SimpleReference)) {
 			return suggestions;
 		}
@@ -63,14 +65,12 @@ public class IncrementalTermReferenceCorrectionProvider implements CorrectionPro
 			/* levenstein test */
 			double score = l.score(originalText, termIdentifierElement);
 			if (score >= -threshold) {
-				suggestions.add(new CorrectionProvider.Suggestion(
-						termIdentifierElement, (int) score));
+				suggestions.add(new DefaultSuggestion(termIdentifierElement, (int) score));
 			}
 			/* infix test */
 			else if (termIdentifierElement.matches(".*" + originalTextRegex + ".*")) {
 				int infixScore = termIdentifierElement.length() - originalText.length();
-				suggestions.add(new CorrectionProvider.Suggestion(
-						termIdentifierElement, infixScore));
+				suggestions.add(new DefaultSuggestion(termIdentifierElement, infixScore));
 			}
 		}
 
