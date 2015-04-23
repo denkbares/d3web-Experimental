@@ -397,7 +397,7 @@ public class Utils {
         StringBuffer result = new StringBuffer();
 
         String query = "SELECT ?entity ?color WHERE {" +
-                "?entity rdf:type " + entityName + " ." +
+                "?entity <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> " + entityName + " ." +
                 "?entity " + relationName + " ?color" +
                 "}";
         QueryResultTable resultTable = core.sparqlSelect(query);

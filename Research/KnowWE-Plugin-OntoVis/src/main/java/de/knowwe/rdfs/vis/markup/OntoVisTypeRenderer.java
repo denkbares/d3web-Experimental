@@ -207,7 +207,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 				OntoVisType.ANNOTATION_EXCLUDERELATIONS);
 		String defaultExclude = "";
 		if (this.rdfRepository.getModelType().equals(Rdf2GoCore.Rdf2GoModel.SWIFTOWLIM)) {
-			defaultExclude += "onto:_checkChain2,onto:_checkChain1";
+			defaultExclude += "onto:_checkChain2,onto:_checkChain1,onto:_checkChain3";
 		}
 
 		if (exclude != null) {

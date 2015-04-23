@@ -64,7 +64,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
     /*
     For Debugging/Optimization only
      */
-    private static final boolean DEBUG_MODE = true;
+    private static final boolean DEBUG_MODE = false;
     private int addSuccessorsCalls = 0;
     private int addOutgoingSuccessorsCalls = 0;
     private int addPredecessorsCalls = 0;
