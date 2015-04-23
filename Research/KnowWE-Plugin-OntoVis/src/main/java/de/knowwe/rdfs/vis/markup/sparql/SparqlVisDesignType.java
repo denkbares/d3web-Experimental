@@ -26,11 +26,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 public class SparqlVisDesignType extends DefaultMarkupType {
 	
 	public static final String ANNOTATION_NAME = "name";
-	
-	
-	
 	private static final DefaultMarkup MARKUP;
-	
 	
 	static {
 		MARKUP = new DefaultMarkup("SparqlVisDesign");

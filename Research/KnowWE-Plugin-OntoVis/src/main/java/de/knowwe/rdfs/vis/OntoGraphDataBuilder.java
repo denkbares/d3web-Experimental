@@ -411,7 +411,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             addConcept(conceptToBeExpanded, zURI, yURI);
 
             depth++;
-            if (depth < requestedDepth) {
+            if (depth < requestedDepth || nodeType.equals(NODE_TYPE.BLANKNODE)) {
                 addSuccessors(zURI, conceptToBeExpanded, yURI);
             }
 
@@ -514,7 +514,7 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             if (checkTripleFilters(query, y, x, nodeType)) continue;
 
             height++;
-            if (height < requestedHeight) {
+            if (height < requestedHeight  || nodeType.equals(NODE_TYPE.BLANKNODE)) {
                 addPredecessors(xURI, conceptToBeExpanded, yURI, Direction.Backward);
                 if (!literalsExpanded.contains(xURI)) {
                     // add literals for x
@@ -892,10 +892,16 @@ public class OntoGraphDataBuilder extends GraphDataBuilder<Node> {
             /*
             no matter what class this type relation goes to, we look for a representative/meaningful class-uri to display
              */
-            final URI mostSpecificClass = Rdf2GoUtils.findMostSpecificClass(rdfRepository, fromURI.asURI());
-            clazz = null;
-            if (mostSpecificClass != null) {
-                clazz = getConceptName(mostSpecificClass);
+            try {
+
+                final URI uri = fromURI.asURI();
+                final URI mostSpecificClass = Rdf2GoUtils.findMostSpecificClass(rdfRepository, uri);
+                clazz = null;
+                if (mostSpecificClass != null) {
+                    clazz = getConceptName(mostSpecificClass);
+                }
+            } catch (ClassCastException e) {
+                // is not an URI but a BNode probably
             }
         }
 

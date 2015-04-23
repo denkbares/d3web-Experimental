@@ -310,6 +310,14 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 			parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, dotAppPrefix + "\n");
 		}
 
+		// showInverse flag
+		String inverseFlag = VisConfigType.getAnnotation(section,
+				OntoVisType.ANNOTATION_SHOWINVERSE);
+		if(inverseFlag != null) {
+			parameterMap.put(OntoGraphDataBuilder.SHOW_INVERSE, inverseFlag);
+		}
+
+
 		// colors
 		String colorRelationName = VisConfigType.getAnnotation(section,
 				OntoVisType.ANNOTATION_COLORS);
@@ -349,51 +357,9 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 			findAndReadConfig(configName.trim(), section.getArticleManager(), parameterMap, messages, string);
 		}
 
-		// set css layout to be used
-		String layout = SparqlVisType.getAnnotation(section, SparqlVisType.ANNOTATION_DESIGN);
-		if (layout != null) {
+		
+		setCSSLayoutConfig(string, section, messages, parameterMap);
 
-			String cssText = null;
-
-			ArticleManager articleManager = Environment.getInstance().getArticleManager(
-					Environment.DEFAULT_WEB);
-			Collection<Article> articles = articleManager.getArticles();
-
-			for (Article article : articles) {
-				Section<RootType> rootSection = article.getRootSection();
-				// search layouttypes
-				List<Section<SparqlVisDesignType>> sparqlVisDesignSections = Sections.successors(
-						rootSection, SparqlVisDesignType.class);
-
-				for (Section<SparqlVisDesignType> currentSection : sparqlVisDesignSections) {
-
-					String currentLayout = SparqlVisDesignType.getAnnotation(currentSection,
-							SparqlVisDesignType.ANNOTATION_NAME);
-					if (currentLayout.equals(layout)) {
-
-						cssText = SparqlVisDesignType.getContentSection(currentSection).getText();
-
-					}
-
-				}
-			}
-
-			if (cssText != null) {
-
-				parameterMap.put(OntoGraphDataBuilder.D3_FORCE_VISUALISATION_STYLE, cssText);
-			} else {
-				Message noSuchLayout = new Message(Message.Type.WARNING,
-						"No such layout " + layout + " found!");
-				Collection<Message> warnings = new HashSet<Message>();
-				messages.add(noSuchLayout);
-				if (string != null) {
-					DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, warnings,
-							string);
-				}
-
-			}
-
-		}
 
 		parameterMap.put(OntoGraphDataBuilder.REAL_PATH, realPath);
 
@@ -544,7 +510,55 @@ public class SparqlVisTypeRenderer implements Renderer, PreRenderer {
 		}
 	}
 
-    public static String getRealPath(UserContext user) {
+	private void setCSSLayoutConfig(RenderResult string, Section<SparqlVisType> section, List<Message> messages, Map<String, String> parameterMap) {
+		// set css layout to be used
+		String layout = SparqlVisType.getAnnotation(section, SparqlVisType.ANNOTATION_DESIGN);
+		if (layout != null) {
+
+			String cssText = null;
+
+			ArticleManager articleManager = Environment.getInstance().getArticleManager(
+					Environment.DEFAULT_WEB);
+			Collection<Article> articles = articleManager.getArticles();
+
+			for (Article article : articles) {
+				Section<RootType> rootSection = article.getRootSection();
+				// search layouttypes
+				List<Section<SparqlVisDesignType>> sparqlVisDesignSections = Sections.successors(
+						rootSection, SparqlVisDesignType.class);
+
+				for (Section<SparqlVisDesignType> currentSection : sparqlVisDesignSections) {
+
+					String currentLayout = SparqlVisDesignType.getAnnotation(currentSection,
+							SparqlVisDesignType.ANNOTATION_NAME);
+					if (currentLayout.equals(layout)) {
+
+						cssText = SparqlVisDesignType.getContentSection(currentSection).getText();
+
+					}
+
+				}
+			}
+
+			if (cssText != null) {
+
+				parameterMap.put(OntoGraphDataBuilder.D3_FORCE_VISUALISATION_STYLE, cssText);
+			} else {
+				Message noSuchLayout = new Message(Message.Type.WARNING,
+						"No such layout " + layout + " found!");
+				Collection<Message> warnings = new HashSet<Message>();
+				messages.add(noSuchLayout);
+				if (string != null) {
+					DefaultMarkupRenderer.renderMessagesOfType(Message.Type.WARNING, warnings,
+							string);
+				}
+
+			}
+
+		}
+	}
+
+	public static String getRealPath(UserContext user) {
         String realPath = null;
         if (user != null) {
             ServletContext servletContext = user.getServletContext();

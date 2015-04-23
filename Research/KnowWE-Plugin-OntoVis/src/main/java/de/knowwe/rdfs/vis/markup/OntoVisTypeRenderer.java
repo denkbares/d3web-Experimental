@@ -106,8 +106,6 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, getExcludedRelations(section));
         SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_EXCLUDENODES, section, OntoGraphDataBuilder.EXCLUDED_NODES, parameterMap);
 
-		// filters
-        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_FILTERCLASSES, section, OntoGraphDataBuilder.FILTERED_CLASSES, parameterMap);
 
         SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_FILTERRELATIONS, section, OntoGraphDataBuilder.FILTERED_RELATIONS, parameterMap);
 
@@ -325,22 +323,6 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 				allExcludes = alreadyExcluded + excludeNodes;
 			}
 			parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, allExcludes);
-		}
-
-		String filteredClasses = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_FILTERCLASSES);
-		if (filteredClasses != null) {
-			String allFilters;
-			String alreadyFiltered = parameterMap.get(OntoGraphDataBuilder.FILTERED_CLASSES);
-			if (alreadyFiltered == null) {
-				allFilters = filteredClasses;
-			} else {
-				if (!alreadyFiltered.trim().endsWith(",")) {
-					alreadyFiltered += ", ";
-				}
-				allFilters = alreadyFiltered + filteredClasses;
-			}
-			parameterMap.put(OntoGraphDataBuilder.FILTERED_CLASSES, allFilters);
 		}
 
 		String filteredRelations = OntoVisType.getAnnotation(section,

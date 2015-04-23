@@ -105,45 +105,65 @@ public class SparqlVisType extends DefaultMarkupType implements VisualizationTyp
 		MARKUP = new DefaultMarkup("SparqlVis");
 		SparqlVisContentType sparqlContentType = new SparqlVisContentType();
 		MARKUP.addContentType(sparqlContentType);
+
 		MARKUP.addAnnotation(ANNOTATION_CONCEPT, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_CONCEPT, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_COMMENT, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_COMMENT, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_SIZE, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_SIZE, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_WIDTH, false);
 		MARKUP.addAnnotationRenderer(ANNOTATION_WIDTH, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_HEIGHT, false);
 		MARKUP.addAnnotationRenderer(ANNOTATION_HEIGHT, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_FORMAT, false);
-		MARKUP.addAnnotation(PackageManager.MASTER_ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_FORMAT, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_LANGUAGE, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_LANGUAGE, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_DOT_APP, false, dot_apps.values());
+		MARKUP.addAnnotationRenderer(ANNOTATION_DOT_APP, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
+		MARKUP.addAnnotationRenderer(ANNOTATION_ADD_TO_DOT, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
+		MARKUP.addAnnotationRenderer(ANNOTATION_RENDERER, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
+		MARKUP.addAnnotationRenderer(ANNOTATION_VISUALIZATION, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_LINK_MODE, false, LinkMode.values());
 		MARKUP.addAnnotationRenderer(ANNOTATION_LINK_MODE, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_DESIGN, false);
 		MARKUP.addAnnotationRenderer(ANNOTATION_DESIGN, NothingRenderer.getInstance());
-		MARKUP.addAnnotationRenderer(ANNOTATION_CONCEPT, NothingRenderer.getInstance());
-		MARKUP.addAnnotationRenderer(ANNOTATION_COMMENT, NothingRenderer.getInstance());
-		MARKUP.addAnnotationRenderer(ANNOTATION_SIZE, NothingRenderer.getInstance());
-		MARKUP.addAnnotationRenderer(ANNOTATION_FORMAT, NothingRenderer.getInstance());
-		MARKUP.addAnnotationRenderer(PackageManager.MASTER_ATTRIBUTE_NAME,
-				NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(Rdf2GoCore.GLOBAL, false, "true", "false");
 		MARKUP.addAnnotationRenderer(Rdf2GoCore.GLOBAL, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_RANK_DIR, false, "LR", "RL", "TB", "BT");
 		MARKUP.addAnnotationRenderer(ANNOTATION_RANK_DIR, NothingRenderer.getInstance());
-		MARKUP.addAnnotationRenderer(ANNOTATION_LANGUAGE, NothingRenderer.getInstance());
-		MARKUP.addAnnotationRenderer(ANNOTATION_DOT_APP, NothingRenderer.getInstance());
-		MARKUP.addAnnotationRenderer(ANNOTATION_ADD_TO_DOT, NothingRenderer.getInstance());
-		MARKUP.addAnnotationRenderer(ANNOTATION_RENDERER, NothingRenderer.getInstance());
-		MARKUP.addAnnotationRenderer(ANNOTATION_VISUALIZATION, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_LABELS, false, "true", "false");
+		MARKUP.addAnnotationRenderer(ANNOTATION_LABELS, NothingRenderer.getInstance());
+
+		//MARKUP.addAnnotation(OntoVisType.ANNOTATION_SHOWINVERSE, false, "true", "false");
+		//MARKUP.addAnnotationRenderer(OntoVisType.ANNOTATION_SHOWINVERSE,NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_COLORS, false);
 		MARKUP.addAnnotationRenderer(OntoVisType.ANNOTATION_COLORS, NothingRenderer.getInstance());
-		MARKUP.addAnnotationRenderer(ANNOTATION_LABELS, NothingRenderer.getInstance());
+
+
 		MARKUP.addAnnotation(ANNOTATION_CONFIG, false);
 		MARKUP.addAnnotationRenderer(ANNOTATION_CONFIG, NothingRenderer.getInstance());
+
 		MARKUP.addAnnotation(ANNOTATION_PRERENDER, false);
 		MARKUP.addAnnotationRenderer(ANNOTATION_PRERENDER, NothingRenderer.getInstance());
 	}

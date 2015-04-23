@@ -42,12 +42,10 @@ public class VisConfigType extends DefaultMarkupType {
 		MARKUP = new DefaultMarkup("VisConfig");
 		MARKUP.addAnnotation(ANNOTATION_NAME, true);
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_COLORS, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_COMMENT, false);
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_SUCCESSORS, false);
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_PREDECESSORS, false);
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_EXCLUDENODES, false);
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_EXCLUDERELATIONS, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_FILTERCLASSES, false);
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_FILTERRELATIONS, false);
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_SIZE, false);
 		MARKUP.addAnnotation(OntoVisType.ANNOTATION_HEIGHT, false);
