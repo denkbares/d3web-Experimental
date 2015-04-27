@@ -23,7 +23,7 @@ import de.knowwe.rdf2go.Rdf2GoCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 import de.knowwe.rdfs.vis.PreRenderWorker;
-import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
+import de.knowwe.rdfs.vis.markup.sparql.SparqlVisualizationType;
 import de.knowwe.rdfs.vis.util.Utils;
 
 public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRenderer {
@@ -69,17 +69,17 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 	private void readConfig(Section<VisConfigType> section, Map<String, String> parameterMap) {
 		// size
 		parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_SIZE));
+				ConceptVisualizationType.ANNOTATION_SIZE));
 
 		parameterMap.put(OntoGraphDataBuilder.GRAPH_WIDTH, VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_WIDTH));
+				ConceptVisualizationType.ANNOTATION_WIDTH));
 
 		parameterMap.put(OntoGraphDataBuilder.GRAPH_HEIGHT, VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_HEIGHT));
+				ConceptVisualizationType.ANNOTATION_HEIGHT));
 
 		// format
 		format = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_FORMAT);
+				ConceptVisualizationType.ANNOTATION_FORMAT);
 		if (format != null) {
 			format = format.toLowerCase();
 		} else {
@@ -88,48 +88,49 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 		parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 
 		// dot app
-        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_DOT_APP, section, OntoGraphDataBuilder.DOT_APP, parameterMap);
+        SparqlVisualizationType.readParameterFromAnnotation(ConceptVisualizationType.ANNOTATION_DOT_APP, section, OntoGraphDataBuilder.DOT_APP, parameterMap);
 
 		// renderer
-        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_RENDERER, section, OntoGraphDataBuilder.RENDERER, parameterMap);
+        SparqlVisualizationType.readParameterFromAnnotation(ConceptVisualizationType.ANNOTATION_RENDERER, section, OntoGraphDataBuilder.RENDERER, parameterMap);
 
 		// visualization
-        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_VISUALIZATION, section, OntoGraphDataBuilder.VISUALIZATION, parameterMap);
+        SparqlVisualizationType.readParameterFromAnnotation(ConceptVisualizationType.ANNOTATION_VISUALIZATION, section, OntoGraphDataBuilder.VISUALIZATION, parameterMap);
 
 		// master
-        SparqlVisType.readParameterFromAnnotation(PackageManager.MASTER_ATTRIBUTE_NAME, section, OntoGraphDataBuilder.MASTER, parameterMap);
+        SparqlVisualizationType.readParameterFromAnnotation(PackageManager.MASTER_ATTRIBUTE_NAME, section, OntoGraphDataBuilder.MASTER, parameterMap);
 
 		// language
-        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_LANGUAGE, section, OntoGraphDataBuilder.LANGUAGE, parameterMap);
+        SparqlVisualizationType.readParameterFromAnnotation(ConceptVisualizationType.ANNOTATION_LANGUAGE, section, OntoGraphDataBuilder.LANGUAGE, parameterMap);
 
 		// excludes
 		parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, getExcludedRelations(section));
-        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_EXCLUDENODES, section, OntoGraphDataBuilder.EXCLUDED_NODES, parameterMap);
+        SparqlVisualizationType.readParameterFromAnnotation(ConceptVisualizationType.ANNOTATION_EXCLUDENODES, section, OntoGraphDataBuilder.EXCLUDED_NODES, parameterMap);
 
 
-        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_FILTERRELATIONS, section, OntoGraphDataBuilder.FILTERED_RELATIONS, parameterMap);
+        SparqlVisualizationType.readParameterFromAnnotation(ConceptVisualizationType.ANNOTATION_FILTERRELATIONS, section, OntoGraphDataBuilder.FILTERED_RELATIONS, parameterMap);
 
 		// outgoing edges
-        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_OUTGOING_EDGES, section, OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, parameterMap);
+        SparqlVisualizationType.readParameterFromAnnotation(ConceptVisualizationType.ANNOTATION_OUTGOING_EDGES, section, OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, parameterMap);
 
 
 		// inverse Relations
-        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_SHOWINVERSE, section, OntoGraphDataBuilder.SHOW_INVERSE, parameterMap);
+        SparqlVisualizationType.readParameterFromAnnotation(ConceptVisualizationType.ANNOTATION_SHOWINVERSE, section, OntoGraphDataBuilder.SHOW_INVERSE, parameterMap);
 
 		// show classes
-        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_SHOWCLASSES, section, OntoGraphDataBuilder.SHOW_CLASSES, parameterMap);
+        SparqlVisualizationType.readParameterFromAnnotation(ConceptVisualizationType.ANNOTATION_SHOWCLASSES, section, OntoGraphDataBuilder.SHOW_CLASSES, parameterMap);
 
 		// show properties
-        SparqlVisType.readParameterFromAnnotation(OntoVisType.ANNOTATION_SHOWPROPERTIES, section, OntoGraphDataBuilder.SHOW_PROPERTIES, parameterMap);
+        SparqlVisualizationType.readParameterFromAnnotation(ConceptVisualizationType.ANNOTATION_SHOWPROPERTIES, section, OntoGraphDataBuilder.SHOW_PROPERTIES, parameterMap);
 
 		// labels
-        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_LABELS, section, OntoGraphDataBuilder.USE_LABELS, parameterMap);
+        SparqlVisualizationType.readParameterFromAnnotation(SparqlVisualizationType.ANNOTATION_LABELS, section, OntoGraphDataBuilder.USE_LABELS, parameterMap);
 
 		// rank direction
-        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_RANK_DIR, section, OntoGraphDataBuilder.RANK_DIRECTION, parameterMap);
+        SparqlVisualizationType.readParameterFromAnnotation(SparqlVisualizationType.ANNOTATION_RANK_DIR, section, OntoGraphDataBuilder.RANK_DIRECTION, parameterMap);
 
 		// link mode
-        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_LINK_MODE, section, OntoGraphDataBuilder.LINK_MODE, parameterMap, SparqlVisType.LinkMode.jump.name());
+        SparqlVisualizationType.readParameterFromAnnotation(SparqlVisualizationType.ANNOTATION_LINK_MODE, section, OntoGraphDataBuilder.LINK_MODE, parameterMap, SparqlVisualizationType.LinkMode.jump
+				.name());
 
 		// successors and predecessors
 		parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, getSuccessors(section));
@@ -137,14 +138,14 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 
 		// add to dot
 		String dotAppPrefix = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_DOT_APP);
+				ConceptVisualizationType.ANNOTATION_DOT_APP);
 		if (dotAppPrefix != null) {
 			parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, dotAppPrefix + "\n");
 		}
 
 		// colors
 		String colorRelationName = VisConfigType.getAnnotation(section,
-				OntoVisType.ANNOTATION_COLORS);
+				ConceptVisualizationType.ANNOTATION_COLORS);
 		if (!Strings.isBlank(colorRelationName)) {
 			parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, Utils.createColorCodings(colorRelationName, rdfRepository, "rdf:Property"));
 			parameterMap.put(OntoGraphDataBuilder.CLASS_COLOR_CODES, Utils.createColorCodings(colorRelationName, rdfRepository, "rdfs:Class"));
@@ -152,7 +153,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 	}
 
 	private String getMaster(Section<?> section) {
-		return OntoVisType.getAnnotation(section,
+		return ConceptVisualizationType.getAnnotation(section,
 				PackageManager.MASTER_ATTRIBUTE_NAME);
 	}
 
@@ -160,16 +161,16 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 	 * @created 18.08.2012
 	 */
 	private String getPredecessors(Section<?> section) {
-		return OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_PREDECESSORS);
+		return ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_PREDECESSORS);
 	}
 
 	/**
 	 * @created 18.08.2012
 	 */
 	private String getSuccessors(Section<?> section) {
-		return OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_SUCCESSORS);
+		return ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_SUCCESSORS);
 	}
 
 	/**
@@ -180,7 +181,7 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
         if(concept != null) {
             return concept;
         } else {
-            return OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONCEPT);
+            return ConceptVisualizationType.getAnnotation(section, ConceptVisualizationType.ANNOTATION_CONCEPT);
         }
 	}
 
@@ -201,8 +202,8 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 	 */
 	private String getExcludedRelations(Section<?> section) {
 		String parameter = "";
-		String exclude = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_EXCLUDERELATIONS);
+		String exclude = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_EXCLUDERELATIONS);
 		String defaultExclude = "";
 		if (this.rdfRepository.getModelType().equals(Rdf2GoCore.Rdf2GoModel.SWIFTOWLIM)) {
 			defaultExclude += "onto:_checkChain2,onto:_checkChain1,onto:_checkChain3";
@@ -232,51 +233,51 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 		if (Thread.currentThread().isInterrupted()) return;
 
 		// find and read config file if defined
-		String configName = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_CONFIG);
+		String configName = ConceptVisualizationType.getAnnotation(section, ConceptVisualizationType.ANNOTATION_CONFIG);
 
 		if (configName != null) {
 			findAndReadConfig(configName.trim(), section.getArticleManager(), parameterMap);
 		}
 
-		String size = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_SIZE);
+		String size = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_SIZE);
 		if (size != null) {
 			parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, size);
 		}
 
-		String width = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_WIDTH);
+		String width = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_WIDTH);
 		if (width != null) {
 			parameterMap.put(OntoGraphDataBuilder.GRAPH_WIDTH, width);
 		}
 
-		String height = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_HEIGHT);
+		String height = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_HEIGHT);
 		if (height != null) {
 			parameterMap.put(OntoGraphDataBuilder.GRAPH_HEIGHT, height);
 		}
 
-		String format = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_FORMAT);
+		String format = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_FORMAT);
 		if (format != null) {
 			format = format.toLowerCase();
 			this.format = format;
 			parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
 		}
 
-		String dotApp = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_DOT_APP);
+		String dotApp = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_DOT_APP);
 		if (dotApp != null) {
 			parameterMap.put(OntoGraphDataBuilder.DOT_APP, dotApp);
 		}
 
-		String rendererType = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_RENDERER);
+		String rendererType = ConceptVisualizationType.getAnnotation(section, ConceptVisualizationType.ANNOTATION_RENDERER);
 		if (rendererType != null) {
 			parameterMap.put(OntoGraphDataBuilder.RENDERER, rendererType);
 		}
 
-		String visualization = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_VISUALIZATION);
+		String visualization = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_VISUALIZATION);
 		if (visualization != null) {
 			parameterMap.put(OntoGraphDataBuilder.VISUALIZATION, visualization);
 		}
@@ -288,8 +289,8 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 			parameterMap.put(OntoGraphDataBuilder.MASTER, master);
 		}
 
-		String lang = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_LANGUAGE);
+		String lang = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_LANGUAGE);
 		if (lang != null) {
 			parameterMap.put(OntoGraphDataBuilder.LANGUAGE, lang);
 		}
@@ -309,8 +310,8 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 			parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, allExcludes);
 		}
 
-		String excludeNodes = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_EXCLUDENODES);
+		String excludeNodes = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_EXCLUDENODES);
 		if (excludeNodes != null) {
 			String allExcludes;
 			String alreadyExcluded = parameterMap.get(OntoGraphDataBuilder.EXCLUDED_NODES);
@@ -325,8 +326,8 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 			parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, allExcludes);
 		}
 
-		String filteredRelations = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_FILTERRELATIONS);
+		String filteredRelations = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_FILTERRELATIONS);
 		if (filteredRelations != null) {
 			String allFilters;
 			String alreadyFiltered = parameterMap.get(OntoGraphDataBuilder.FILTERED_RELATIONS);
@@ -342,45 +343,46 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 			parameterMap.put(OntoGraphDataBuilder.FILTERED_RELATIONS, allFilters);
 		}
 
-		String outgoingEdges = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_OUTGOING_EDGES);
+		String outgoingEdges = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_OUTGOING_EDGES);
 		if (outgoingEdges != null) {
 			parameterMap.put(OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, outgoingEdges);
 		}
 
-		String showInverse = VisConfigType.getAnnotation(section, OntoVisType.ANNOTATION_SHOWINVERSE);
+		String showInverse = VisConfigType.getAnnotation(section, ConceptVisualizationType.ANNOTATION_SHOWINVERSE);
 		if (showInverse != null) {
 			parameterMap.put(OntoGraphDataBuilder.SHOW_INVERSE, showInverse);
 		}
 
-		String classes = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_SHOWCLASSES);
+		String classes = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_SHOWCLASSES);
 		if (classes != null) {
 			parameterMap.put(OntoGraphDataBuilder.SHOW_CLASSES, classes);
 		}
 
-		String props = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_SHOWPROPERTIES);
+		String props = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_SHOWPROPERTIES);
 		if (props != null) {
 			parameterMap.put(OntoGraphDataBuilder.SHOW_PROPERTIES, props);
 		}
 
 		// set flag for use of labels
-		String labelValue = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_LABELS);
+		String labelValue = SparqlVisualizationType.getAnnotation(section,
+				SparqlVisualizationType.ANNOTATION_LABELS);
 		if (labelValue != null) {
 			parameterMap.put(OntoGraphDataBuilder.USE_LABELS, labelValue);
 		}
 
 		// set rank direction of graph layout
-		String rankDir = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_RANK_DIR);
+		String rankDir = SparqlVisualizationType.getAnnotation(section,
+				SparqlVisualizationType.ANNOTATION_RANK_DIR);
 		if (rankDir != null) {
 			parameterMap.put(OntoGraphDataBuilder.RANK_DIRECTION, rankDir);
 		}
 
 		// set link mode
-        SparqlVisType.readParameterFromAnnotation(SparqlVisType.ANNOTATION_LINK_MODE, section, OntoGraphDataBuilder.LINK_MODE, parameterMap, SparqlVisType.LinkMode.jump.name());
+        SparqlVisualizationType.readParameterFromAnnotation(SparqlVisualizationType.ANNOTATION_LINK_MODE, section, OntoGraphDataBuilder.LINK_MODE, parameterMap, SparqlVisualizationType.LinkMode.jump
+				.name());
 
 
         String successors = getSuccessors(section);
@@ -393,14 +395,14 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 			parameterMap.put(OntoGraphDataBuilder.REQUESTED_HEIGHT, predecessors);
 		}
 
-		String dotAppPrefix = SparqlVisType.getAnnotation(section,
-				SparqlVisType.ANNOTATION_DOT_APP);
+		String dotAppPrefix = SparqlVisualizationType.getAnnotation(section,
+				SparqlVisualizationType.ANNOTATION_DOT_APP);
 		if (dotAppPrefix != null) {
 			parameterMap.put(OntoGraphDataBuilder.ADD_TO_DOT, dotAppPrefix + "\n");
 		}
 
-		String colorRelationName = SparqlVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_COLORS);
+		String colorRelationName = SparqlVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_COLORS);
 
 		if (!Strings.isBlank(colorRelationName)) {
 			parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, Utils.createColorCodings(colorRelationName, rdfRepository, "rdf:Property"));
@@ -436,8 +438,8 @@ public class OntoVisTypeRenderer extends DefaultMarkupRenderer implements PreRen
 		Map<String, String> parameterMap = new HashMap<>();
 		setFileID(section, parameterMap);
 
-		String format = OntoVisType.getAnnotation(section,
-				OntoVisType.ANNOTATION_FORMAT);
+		String format = ConceptVisualizationType.getAnnotation(section,
+				ConceptVisualizationType.ANNOTATION_FORMAT);
 		if (format != null) {
 			format = format.toLowerCase();
 			this.format = format;

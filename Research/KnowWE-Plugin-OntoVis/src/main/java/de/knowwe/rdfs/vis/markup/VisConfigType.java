@@ -25,8 +25,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
-import de.knowwe.visualization.GraphDataBuilder;
+import de.knowwe.rdfs.vis.markup.sparql.SparqlVisualizationType;
 
 /**
  * @author: Johanna Latt
@@ -41,32 +40,32 @@ public class VisConfigType extends DefaultMarkupType {
 	static {
 		MARKUP = new DefaultMarkup("VisConfig");
 		MARKUP.addAnnotation(ANNOTATION_NAME, true);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_COLORS, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_SUCCESSORS, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_PREDECESSORS, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_EXCLUDENODES, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_EXCLUDERELATIONS, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_FILTERRELATIONS, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_SIZE, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_HEIGHT, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_WIDTH, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_FORMAT, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_SHOWCLASSES, false, "true", "false");
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_SHOWPROPERTIES, false, "true", "false");
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_COLORS, false);
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_SUCCESSORS, false);
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_PREDECESSORS, false);
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_EXCLUDENODES, false);
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_EXCLUDERELATIONS, false);
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_FILTERRELATIONS, false);
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_SIZE, false);
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_HEIGHT, false);
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_WIDTH, false);
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_FORMAT, false);
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_SHOWCLASSES, false, "true", "false");
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_SHOWPROPERTIES, false, "true", "false");
 		MARKUP.addAnnotation(PackageManager.MASTER_ATTRIBUTE_NAME, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_LANGUAGE, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_DOT_APP, false, OntoVisType.dot_apps.values());
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_ADD_TO_DOT, false);
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_OUTGOING_EDGES, false, "true", "false");
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_SHOWINVERSE, false, "true", "false");
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_LANGUAGE, false);
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_DOT_APP, false, ConceptVisualizationType.DotApps.values());
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_ADD_TO_DOT, false);
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_OUTGOING_EDGES, false, "true", "false");
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_SHOWINVERSE, false, "true", "false");
 		MARKUP.addAnnotation(Rdf2GoCore.GLOBAL, false, "true", "false");
 		MARKUP.addAnnotationRenderer(Rdf2GoCore.GLOBAL, NothingRenderer.getInstance());
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
-		MARKUP.addAnnotation(OntoVisType.ANNOTATION_VISUALIZATION, false, OntoVisType.Visualizations.values());
-		MARKUP.addAnnotation(SparqlVisType.ANNOTATION_LINK_MODE, false, SparqlVisType.LinkMode.values());
-		MARKUP.addAnnotation(SparqlVisType.ANNOTATION_RANK_DIR, false, "LR", "RL", "TB", "BT");
-		MARKUP.addAnnotation(SparqlVisType.ANNOTATION_LABELS, false, "true", "false");
-		MARKUP.addAnnotation(SparqlVisType.ANNOTATION_DESIGN, false);
+		//MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
+		MARKUP.addAnnotation(ConceptVisualizationType.ANNOTATION_VISUALIZATION, false, ConceptVisualizationType.Visualizations.values());
+		MARKUP.addAnnotation(SparqlVisualizationType.ANNOTATION_LINK_MODE, false, SparqlVisualizationType.LinkMode.values());
+		MARKUP.addAnnotation(SparqlVisualizationType.ANNOTATION_RANK_DIR, false, "LR", "RL", "TB", "BT");
+		MARKUP.addAnnotation(SparqlVisualizationType.ANNOTATION_LABELS, false, "true", "false");
+		MARKUP.addAnnotation(SparqlVisualizationType.ANNOTATION_DESIGN, false);
 	}
 
 	public VisConfigType() {

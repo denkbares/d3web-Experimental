@@ -14,13 +14,22 @@
 			<export prefix="*" />
 		</library>
 	</runtime>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="OntoVisType">
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type" id="ConceptVisType">
 		<parameter id="class"
-			value="de.knowwe.rdfs.vis.markup.OntoVisType" />
-		<parameter id="name" value="de.knowwe.rdfs.vis.markup.OntoVisType" />
-		<parameter id="description" value="KnowWEObjectType de.knowwe.rdfs.vis.OntoVisTypelloKnowWEType" />
+			value="de.knowwe.rdfs.vis.markup.ConceptVisType" />
+		<parameter id="name" value="de.knowwe.rdfs.vis.markup.ConceptVisType" />
+		<parameter id="description" value="Compatibility backup for ConceptVisualizationType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type" id="ConceptVisualizationType">
+		<parameter id="class"
+			value="de.knowwe.rdfs.vis.markup.ConceptVisualizationType" />
+		<parameter id="name" value="de.knowwe.rdfs.vis.markup.ConceptVisualizationType" />
+		<parameter id="description" value="Visualizes concepts" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
@@ -35,13 +44,23 @@
 		<parameter id="script" value="d3download.js" />
 		<parameter id="script" value="contextmenu.js" />
 	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="SparqlVisType">
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type" id="SparqlVisType">
 		<parameter id="class"
 			value="de.knowwe.rdfs.vis.markup.sparql.SparqlVisType" />
 		<parameter id="name" value="SparqlVisType" />
-		<parameter id="description" value="KnowWEObjectType SparqlVisType" />
+		<parameter id="description" value="Compatibility backup for SparqlVisualizationType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="SparqlVisualizationType">
+		<parameter id="class"
+			value="de.knowwe.rdfs.vis.markup.sparql.SparqlVisualizationType" />
+		<parameter id="name" value="SparqlVisualizationType" />
+		<parameter id="description" value="Visualizes based on SPARQL SELECT" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />

@@ -49,7 +49,7 @@ public class OntoVisSVGDownloadProvider implements ToolProvider {
 	protected Tool getDownloadTool(Section<?> section, UserContext userContext) {
 		// tool to provide download capability
 
-		String renderer = OntoVisType.getAnnotation(section, OntoVisType.ANNOTATION_RENDERER);
+		String renderer = ConceptVisualizationType.getAnnotation(section, ConceptVisualizationType.ANNOTATION_RENDERER);
 		if (renderer != null && renderer.equals("d3")) {
 			String jsAction = "downloadSVG('" + section.getID() + "')";
 			return new DefaultTool(Icon.DOWNLOAD,

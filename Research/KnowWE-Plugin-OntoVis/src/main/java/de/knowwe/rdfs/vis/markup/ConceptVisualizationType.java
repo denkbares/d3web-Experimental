@@ -1,16 +1,13 @@
 package de.knowwe.rdfs.vis.markup;
 
-import de.knowwe.core.compile.packaging.PackageManager;
 import de.knowwe.core.kdom.rendering.NothingRenderer;
-import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.renderer.AsynchronRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
-import de.knowwe.visualization.GraphDataBuilder;
+import de.knowwe.rdfs.vis.markup.sparql.SparqlVisualizationType;
 
-public class OntoVisType extends DefaultMarkupType implements VisualizationType {
+public class ConceptVisualizationType extends DefaultMarkupType implements VisualizationType {
 
 	public static final String ANNOTATION_CONCEPT = "concept";
 	public static final String ANNOTATION_COLORS = "colors";
@@ -39,9 +36,8 @@ public class OntoVisType extends DefaultMarkupType implements VisualizationType 
 
 	public static final String ANNOTATION_PRERENDER = "prerender";
 
-	private static final DefaultMarkup MARKUP;
 
-	public enum dot_apps {
+	public enum DotApps {
 		dot, neato
 	}
 
@@ -49,8 +45,13 @@ public class OntoVisType extends DefaultMarkupType implements VisualizationType 
 		wheel, force
 	}
 
-	static {
-		MARKUP = new DefaultMarkup("Vis");
+	public ConceptVisualizationType() {
+		applyMarkup(createMarkup());
+        this.setRenderer(new AsynchronRenderer(getPreRenderer()));
+    }
+
+	protected DefaultMarkup createMarkup() {
+		DefaultMarkup MARKUP = new DefaultMarkup(getMarkupName());
 		MARKUP.addAnnotation(ANNOTATION_CONCEPT, true);
 
 		MARKUP.addAnnotation(ANNOTATION_COLORS, false);
@@ -76,7 +77,7 @@ public class OntoVisType extends DefaultMarkupType implements VisualizationType 
 		MARKUP.addAnnotation(ANNOTATION_SHOWPROPERTIES, false, "true", "false");
 		MARKUP.addAnnotation(ANNOTATION_LANGUAGE, false);
 
-		MARKUP.addAnnotation(ANNOTATION_DOT_APP, false, dot_apps.values());
+		MARKUP.addAnnotation(ANNOTATION_DOT_APP, false, DotApps.values());
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
 
 		MARKUP.addAnnotation(ANNOTATION_OUTGOING_EDGES, false, "true", "false");
@@ -85,27 +86,27 @@ public class OntoVisType extends DefaultMarkupType implements VisualizationType 
 		MARKUP.addAnnotation(Rdf2GoCore.GLOBAL, false, "true", "false");
 		MARKUP.addAnnotationRenderer(Rdf2GoCore.GLOBAL, NothingRenderer.getInstance());
 
-		MARKUP.addAnnotation(ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
+		//MARKUP.addAnnotation(ANNOTATION_RENDERER, false, GraphDataBuilder.Renderer.values());
 		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
 
-		MARKUP.addAnnotation(SparqlVisType.ANNOTATION_LINK_MODE, false, SparqlVisType.LinkMode.values());
-		MARKUP.addAnnotationRenderer(SparqlVisType.ANNOTATION_LINK_MODE, NothingRenderer.getInstance());
+		MARKUP.addAnnotation(SparqlVisualizationType.ANNOTATION_LINK_MODE, false, SparqlVisualizationType.LinkMode.values());
+		MARKUP.addAnnotationRenderer(SparqlVisualizationType.ANNOTATION_LINK_MODE, NothingRenderer.getInstance());
 
-		MARKUP.addAnnotation(SparqlVisType.ANNOTATION_RANK_DIR, false, "LR", "RL", "TB", "BT");
-		MARKUP.addAnnotationRenderer(SparqlVisType.ANNOTATION_RANK_DIR, NothingRenderer.getInstance());
+		MARKUP.addAnnotation(SparqlVisualizationType.ANNOTATION_RANK_DIR, false, "LR", "RL", "TB", "BT");
+		MARKUP.addAnnotationRenderer(SparqlVisualizationType.ANNOTATION_RANK_DIR, NothingRenderer.getInstance());
 
-		MARKUP.addAnnotation(SparqlVisType.ANNOTATION_LABELS, false, "true", "false");
-		MARKUP.addAnnotationRenderer(SparqlVisType.ANNOTATION_LABELS, NothingRenderer.getInstance());
+		MARKUP.addAnnotation(SparqlVisualizationType.ANNOTATION_LABELS, false, "true", "false");
+		MARKUP.addAnnotationRenderer(SparqlVisualizationType.ANNOTATION_LABELS, NothingRenderer.getInstance());
 
 
 		MARKUP.addAnnotation(ANNOTATION_CONFIG, false);
 		MARKUP.addAnnotation(ANNOTATION_PRERENDER, false);
+		return MARKUP;
 	}
 
-	public OntoVisType() {
-		super(MARKUP);
-        this.setRenderer(new AsynchronRenderer(getPreRenderer()));
-    }
+	protected String getMarkupName() {
+		return "ConceptVisualization";
+	}
 
 	@Override
 	public PreRenderer getPreRenderer() {

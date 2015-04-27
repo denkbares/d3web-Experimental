@@ -36,7 +36,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.ontology.compile.OntologyCompiler;
 import de.knowwe.ontology.compile.OntologyCompilerFinishedEvent;
 import de.knowwe.rdfs.vis.markup.VisualizationType;
-import de.knowwe.rdfs.vis.markup.sparql.SparqlVisType;
+import de.knowwe.rdfs.vis.markup.sparql.SparqlVisualizationType;
 
 /**
  * @author Johanna Latt
@@ -98,7 +98,7 @@ public class GraphReRenderer implements EventListener {
 			if (preRenderAll) {
 				Collection<Section<VisualizationType>> sections = Sections.successors(am, VisualizationType.class);
 				for (Section<VisualizationType> s : sections) {
-					String prerender = DefaultMarkupType.getAnnotation(s, SparqlVisType.ANNOTATION_PRERENDER);
+					String prerender = DefaultMarkupType.getAnnotation(s, SparqlVisualizationType.ANNOTATION_PRERENDER);
 					if (prerender != null && prerender.equals("true")) {
 						PreRenderWorker.getInstance().queueSectionPreRendering(
 								s.get().getPreRenderer(), s, null, null, false);

@@ -16,38 +16,29 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.rdfs.vis.markup.sparql;
 
-import java.util.Map;
+package de.knowwe.rdfs.vis.markup;
 
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.sparql.Rdf2GoCoreCheckRenderer;
-import de.knowwe.rdfs.vis.markup.ConceptVisualizationType;
-import de.knowwe.rdfs.vis.markup.PreRenderer;
-import de.knowwe.rdfs.vis.markup.VisualizationType;
-import de.knowwe.visualization.GraphDataBuilder;
 
 /**
- * Provides backwards compatibility for SparqlVisualization.
+ * Provides backwards compativility for ConceptVisualization.
  *
  * @author Albrecht Striffler (denkbares GmbH)
  * @created 27.04.15
  */
-public class SparqlVisType extends SparqlVisualizationType {
+public class ConceptVisType extends ConceptVisualizationType {
+
 
 	@Override
-	public DefaultMarkup createMarkup() {
+	protected DefaultMarkup createMarkup() {
 		DefaultMarkup markup = super.createMarkup();
-		markup.setDeprecated("SparqlVisualization");
+		markup.setDeprecated("ConceptVisualization");
 		return markup;
 	}
 
 	@Override
 	protected String getMarkupName() {
-		return "SparqlVis";
+		return "Vis";
 	}
 }

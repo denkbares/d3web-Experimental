@@ -215,9 +215,11 @@ public class DOTRenderer {
 			// header row with actual node clazz and name
 			buffy.append("<TR>");
 			buffy.append("<TD BORDER=\"2\">");
-			buffy.append("<I>");
-			buffy.append(node.getClazz());
-			buffy.append("</I>");
+			if (!Strings.isBlank(node.getClazz())) {
+				buffy.append("<I>");
+				buffy.append(node.getClazz());
+				buffy.append("</I>");
+			}
 			buffy.append("</TD>");
 
 			String conceptName = nodeLabel.replace("\\n", "<BR ALIGN=\"CENTER\"/>").replace("&", "&amp;");

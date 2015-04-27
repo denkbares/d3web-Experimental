@@ -36,25 +36,25 @@ import de.knowwe.kdom.renderer.AsynchronRenderer;
 public class SwitchAsyncDelegateRenderer implements Renderer {
 
 
-    private final SparqlVisTypeRenderer visRenderer;
+    private final SparqlVisualizationTypeRenderer visRenderer;
     private final AsynchronRenderer asynchronRenderer;
 
     public SwitchAsyncDelegateRenderer() {
-        visRenderer = new SparqlVisTypeRenderer();
+        visRenderer = new SparqlVisualizationTypeRenderer();
         asynchronRenderer = new AsynchronRenderer(visRenderer);
     }
 
     @Override
     public void render(Section<?> content, UserContext user, RenderResult result) {
         // switch according to renderer annotation (d3/dot)
-        Section<SparqlVisType> section = Sections.ancestor(content,
-				SparqlVisType.class);
+        Section<SparqlVisualizationType> section = Sections.ancestor(content,
+				SparqlVisualizationType.class);
         Section<DefaultMarkupType> defMarkupSection = Sections.cast(section,
                 DefaultMarkupType.class);
 
         // set renderer
-        String rendererType = SparqlVisType.getAnnotation(defMarkupSection,
-                SparqlVisType.ANNOTATION_RENDERER);
+        String rendererType = SparqlVisualizationType.getAnnotation(defMarkupSection,
+                SparqlVisualizationType.ANNOTATION_RENDERER);
 
         if(rendererType != null && rendererType.equals("d3")) {
             visRenderer.render(content, user, result);
