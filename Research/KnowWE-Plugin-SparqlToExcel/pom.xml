@@ -20,7 +20,7 @@
   	</dependency>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
-  		<artifactId>KnowWE-Plugin-Rdf2GoSemanticCore</artifactId>
+  		<artifactId>KnowWE-Plugin-Ontology-MarkupSet</artifactId>
   		<version>0.2-SNAPSHOT</version>
   	</dependency>
   </dependencies>

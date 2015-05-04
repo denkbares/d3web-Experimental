@@ -37,7 +37,7 @@ import de.knowwe.core.taghandler.TagHandlerTypeContent;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.sparql.SparqlResultRenderer;
+import de.knowwe.ontology.sparql.SparqlResultRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.tools.ToolSet;
 import de.knowwe.tools.ToolUtils;

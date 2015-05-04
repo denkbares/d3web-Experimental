@@ -41,8 +41,8 @@ import de.knowwe.notification.NotificationManager;
 import de.knowwe.notification.StandardNotification;
 import de.knowwe.rdf2go.Rdf2GoCompiler;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.sparql.SparqlContentType;
-import de.knowwe.rdf2go.sparql.SparqlMarkupType;
+import de.knowwe.ontology.sparql.SparqlContentType;
+import de.knowwe.ontology.sparql.SparqlMarkupType;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**

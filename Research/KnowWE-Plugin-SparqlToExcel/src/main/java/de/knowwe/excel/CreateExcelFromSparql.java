@@ -39,8 +39,8 @@ import org.ontoware.rdf2go.model.node.Node;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.sparql.RenderMode;
-import de.knowwe.rdf2go.sparql.SparqlResultRenderer;
+import de.knowwe.ontology.sparql.RenderMode;
+import de.knowwe.ontology.sparql.SparqlResultRenderer;
 
 /**
  * 

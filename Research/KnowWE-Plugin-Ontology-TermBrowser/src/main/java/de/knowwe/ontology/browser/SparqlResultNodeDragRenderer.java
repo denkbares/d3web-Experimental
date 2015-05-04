@@ -21,9 +21,9 @@ package de.knowwe.ontology.browser;
 
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.sparql.RenderMode;
-import de.knowwe.rdf2go.sparql.SparqlResultNodeRenderer;
-import de.knowwe.rdf2go.sparql.TermDefinitionLinkNodeRenderer;
+import de.knowwe.ontology.sparql.RenderMode;
+import de.knowwe.ontology.sparql.SparqlResultNodeRenderer;
+import de.knowwe.ontology.sparql.TermDefinitionLinkNodeRenderer;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 import java.net.URI;
