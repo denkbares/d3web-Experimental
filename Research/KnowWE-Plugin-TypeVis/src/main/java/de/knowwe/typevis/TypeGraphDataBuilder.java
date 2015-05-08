@@ -19,24 +19,23 @@
  */
 package de.knowwe.typevis;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
 import de.knowwe.visualization.ConceptNode;
+import de.knowwe.visualization.Config;
 import de.knowwe.visualization.Edge;
 import de.knowwe.visualization.GraphDataBuilder;
-
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Johanna Latt
  * @created 10.10.2013
  */
-public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
+public class TypeGraphDataBuilder extends GraphDataBuilder {
 
     private int depth = 0;
 
@@ -51,8 +50,8 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
     // whether the class of the requested concept could be found or not
     private boolean couldFindClass = true;
 
-    public TypeGraphDataBuilder(String realPath, Section<?> section, Map<String, String> parameters, LinkToTermDefinitionProvider uriProvider) {
-        initialiseData(realPath, section, parameters, uriProvider);
+    public TypeGraphDataBuilder(Section<?> section, Config config, LinkToTermDefinitionProvider uriProvider) {
+        initialiseData(section, config, uriProvider);
     }
 
     @Override
@@ -65,7 +64,7 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
         for (Type t : conceptTypes) {
             insertMainConcept(t);
             // if requested, the successors are added to the source
-            if (requestedDepth > 0) {
+            if (config.getSuccessors() > 0) {
                 addSuccessors(t);
             }
         }
@@ -77,7 +76,7 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
      * @created 30.10.2013
      */
     private void getConceptName() {
-        String conceptWithPackageDeclaration = getEncodedConceptName();
+        String conceptWithPackageDeclaration = config.getConcepts().iterator().next();
 
         // get concept name without package declaration (if existant)
         String[] parts = conceptWithPackageDeclaration.split("\\.");
@@ -86,7 +85,7 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 
     private void findClassOfConcept() {
         try {
-            visTypeClass = Class.forName(getEncodedConceptName());
+            visTypeClass = Class.forName(config.getConcepts().iterator().next());
         } catch (ClassNotFoundException e) {
             couldFindClass = false;
             e.printStackTrace();
@@ -94,8 +93,8 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
     }
 
     private void findChildAndSubclassTypes() {
-        conceptTypes = new LinkedList<Type>();
-        visited = new LinkedList<Type>();
+        conceptTypes = new LinkedList<>();
+        visited = new LinkedList<>();
 
         RootType rt = RootType.getInstance();
         if (rt.getName().equals(concept)) conceptTypes.add(rt);
@@ -109,17 +108,13 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
      * conceptType-List. Furthermore the predecessors of the requested type and
      * its subclasses are added to the graph.
      *
-     * @param type
      * @created 21.10.2013
      */
     private void addAllMatchingConceptTypes(Type type) {
         List<Type> children = type.getChildrenTypes();
         if (children == null) return;
 
-        Iterator<Type> it = children.iterator();
-        while (it.hasNext()) {
-            Type child = it.next();
-
+        for (Type child : children) {
             // prevent endless loops
             if (visited.contains(child)) continue;
             visited.add(child);
@@ -130,14 +125,14 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
                 if (visTypeClass.isAssignableFrom(currentTreeTypeClass)) {
                     conceptTypes.add(child);
                     // add predecessor
-                    addConcept(type, child, null, NODE_TYPE.INSTANCE);
+                    addConcept(type, child, NODE_TYPE.INSTANCE);
                 }
             }
 
             if (child.getName().equals(concept) && !conceptTypes.contains(child)) {
                 conceptTypes.add(child);
                 // add predecessor
-                addConcept(type, child, null, NODE_TYPE.INSTANCE);
+                addConcept(type, child, NODE_TYPE.INSTANCE);
             }
 
             addAllMatchingConceptTypes(child);
@@ -156,22 +151,18 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
     private void addSuccessors(Type concept) {
         List<Type> children = concept.getChildrenTypes();
         if (children == null) return;
-        Iterator<Type> it = children.iterator();
-        loop:
-        while (it.hasNext()) {
-            Type child = it.next();
-
+        for (Type child : children) {
             if (excludedNode(child.getName())) {
-                continue loop;
+                continue;
             }
 
-            addConcept(concept, child, null, NODE_TYPE.INSTANCE);
+            addConcept(concept, child, NODE_TYPE.INSTANCE);
 
             depth++;
-            if (depth < requestedDepth) {
+            if (depth < config.getSuccessors()) {
                 addSuccessors(child);
             }
-            if (depth == requestedDepth) {
+            if (depth == config.getSuccessors()) {
                 addOutgoingEdgesSuccessors(child);
             }
             depth--;
@@ -182,28 +173,24 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
     private void addOutgoingEdgesSuccessors(Type concept) {
         List<Type> children = concept.getChildrenTypes();
         if (children == null) return;
-        Iterator<Type> it = children.iterator();
-        loop:
-        while (it.hasNext()) {
-            Type child = it.next();
-
+        for (Type child : children) {
             if (excludedNode(child.getName())) {
-                continue loop;
+                continue;
             }
 
-            addOuterConcept(concept, child, null, false);
+            addOuterConcept(concept, child);
         }
     }
 
 
-    private void addConcept(Type fromType, Type toType, Type relation, de.knowwe.visualization.GraphDataBuilder.NODE_TYPE type) {
+    private void addConcept(Type fromType, Type toType, NODE_TYPE type) {
         String fromLabel = fromType.getName();
         String toLabel = toType.getName();
         String fromName = fromLabel + fromType.hashCode();
         String toName = toLabel + toType.hashCode();
 
-        ConceptNode toNode = null;
-        ConceptNode fromNode = null;
+        ConceptNode toNode;
+        ConceptNode fromNode;
 
         toNode = data.getConcept(toName);
         if (toNode == null) {
@@ -223,7 +210,7 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
         data.addEdge(newLineRelationsKey);
     }
 
-    private void addOuterConcept(Type fromType, Type toType, Type relation, boolean predecessor) {
+    private void addOuterConcept(Type fromType, Type toType) {
         String fromLabel = fromType.getName();
         String toLabel = toType.getName();
         String fromName = fromLabel + fromType.hashCode();
@@ -253,7 +240,7 @@ public class TypeGraphDataBuilder extends GraphDataBuilder<Type> {
 
         boolean edgeIsNew = !data.getAllEdges().contains(edge);
 
-        if (showOutgoingEdges()) {
+        if (config.isShowOutgoingEdges()) {
             if (nodeIsNew) {
                 toNode.setOuter(true);
                 data.addConcept(toNode);

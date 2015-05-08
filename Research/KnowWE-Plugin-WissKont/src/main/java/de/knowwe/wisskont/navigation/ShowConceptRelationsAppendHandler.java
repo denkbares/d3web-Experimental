@@ -18,9 +18,7 @@
  */
 package de.knowwe.wisskont.navigation;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.knowwe.compile.utils.IncrementalCompilerLinkToTermDefinitionProvider;
 import de.knowwe.core.ArticleManager;
@@ -35,7 +33,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.vis.OntoGraphDataBuilder;
 import de.knowwe.termbrowser.TermSetManager;
-import de.knowwe.visualization.GraphDataBuilder;
+import de.knowwe.visualization.Config;
 import de.knowwe.wisskont.ConceptMarkup;
 
 /**
@@ -55,32 +53,23 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 		if (conceptMarkups.size() == 1) {
 			Section<SimpleDefinition> def = Sections.successor(conceptMarkups.get(0),
 					SimpleDefinition.class);
-			Map<String, String> parameterMap = new HashMap<String, String>();
 
-			// parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE,
-			// OntoVisType.getAnnotation(section,
-			// OntoVisType.ANNOTATION_SIZE));
+			Config config = new Config();
+			config.addConcept(def.get().getTermName(def));
 
-			String format = "svg";
-			parameterMap.put(OntoGraphDataBuilder.FORMAT, format);
+			config.addExcludeRelations("rdfs:label", "owl:sameAs");
 
-			parameterMap.put(OntoGraphDataBuilder.CONCEPT, def.get().getTermName(def));
+			config.addExcludeNodes("rdfs:Resource", "lns:WissassConcept");
 
-			parameterMap.put(OntoGraphDataBuilder.EXCLUDED_RELATIONS, "rdfs:label,owl:sameAs");
+			config.setSize("690");
 
-			parameterMap.put(OntoGraphDataBuilder.EXCLUDED_NODES, "rdfs:Resource,lns:WissassConcept");
+			config.setRankDir(Config.RankDir.RL);
 
-			parameterMap.put(OntoGraphDataBuilder.GRAPH_SIZE, "690");
+			config.setLinkMode(Config.LinkMode.BROWSE);
 
-			parameterMap.put(OntoGraphDataBuilder.RANK_DIRECTION, "RL");
+			config.setShowOutgoingEdges(false);
 
-			parameterMap.put(OntoGraphDataBuilder.LINK_MODE, OntoGraphDataBuilder.LINK_MODE_BROWSE);
-
-			parameterMap.put(OntoGraphDataBuilder.SHOW_OUTGOING_EDGES, "false");
-
-			parameterMap.put(OntoGraphDataBuilder.SHOW_CLASSES, "false");
-
-			parameterMap.put(OntoGraphDataBuilder.SHOW_SCROLLBAR, "false");
+			config.setShowClasses(false);
 
 			// which kind of visualization ???
 			// parameterMap.put(OntoGraphDataBuilder.RENDERER,
@@ -88,7 +77,7 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 			// parameterMap.put(OntoGraphDataBuilder.VISUALIZATION,
 			// OntoVisType.Visualizations.force.name());
 
-			parameterMap.put(OntoGraphDataBuilder.RENDERER, GraphDataBuilder.Renderer.dot.name());
+			config.setRenderer(Config.Renderer.DOT);
 
 			String colorCodes = "";
 			colorCodes += "kann #009900;"; // green
@@ -97,7 +86,7 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 			colorCodes += "assoziation blue;";
 			colorCodes += "cave purple";
 
-			parameterMap.put(OntoGraphDataBuilder.RELATION_COLOR_CODES, colorCodes);
+			config.setRelationColors(colorCodes);
 
 			boolean collapsed = TermSetManager.getInstance().graphIsCollapsed(user);
 			String stylePlus = "";
@@ -111,10 +100,7 @@ public class ShowConceptRelationsAppendHandler implements PageAppendHandler {
 				stylePlus = "display:none;";
 			}
 
-			parameterMap.put(OntoGraphDataBuilder.REQUESTED_DEPTH, "1");
-			parameterMap.put(OntoGraphDataBuilder.REQUESTED_HEIGHT, "1");
-			OntoGraphDataBuilder OntoGraphDataBuilder = new OntoGraphDataBuilder(
-					user.getServletContext().getRealPath(""), section, parameterMap,
+			OntoGraphDataBuilder OntoGraphDataBuilder = new OntoGraphDataBuilder(section, config,
 					new IncrementalCompilerLinkToTermDefinitionProvider(), Rdf2GoCore.getInstance());
 			result.appendHtml("<div class='termgraph'>");
 			result.appendHtml("<div class='termgraphHeader'>");
