@@ -35,11 +35,10 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class Rdf2GoSessionHandler {
 
+	private static final SimpleDateFormat XSD_DATE_FORMAT = Rdf2GoUtils.getXsdDateFormat();
 	private final Map<String, Statement[]> statementCache = new HashMap<>();
 	private Map<String, BlankNode> factNodeCache = new HashMap<>();
 	private Map<Object, Resource> agentNodeCache = new HashMap<>();
-
-	private final SimpleDateFormat XSD_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
 
 	private Session session;
 
