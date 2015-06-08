@@ -15,7 +15,7 @@
 	UserProfile profile = manager.getUserProfile(wikiContext.getWikiSession());
 %>
 <script type='text/javascript' src='KnowWEExtension/scripts/jquery-2.1.0.min.js'></script>
-<script type='text/javascript' src='KnowWEExtension/scripts/jquery-ui-1.10.4.custom.min.js'></script>
+<script type='text/javascript' src='KnowWEExtension/scripts/jquery-ui.min.js'></script>
 <script type='text/javascript' src='KnowWEExtension/scripts/jquery-treeTable.js'></script>
 <script type='text/javascript' src='KnowWEExtension/scripts/jquery-tooltipster.js'></script>
 <script type='text/javascript' src='KnowWEExtension/scripts/jquery-plugin-collection.js'></script>
@@ -135,7 +135,7 @@
 	<tr>
 		<td>&nbsp;</td>
 		<td>
-			<button type="button" onclick="javascript:registerUserDoubleOptIn();">Registrieren</button>
+			<button type="button" onclick="registerUserDoubleOptIn();">Registrieren</button>
 			<wiki:UserCheck status="assertionsAllowed">
 				<div class="formhelp"><fmt:message key="prefs.cookie.info"/></div>
 			</wiki:UserCheck>
