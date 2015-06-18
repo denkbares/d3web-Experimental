@@ -29,7 +29,6 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
- * 
  * @author Reinhard Hatko
  * @created 05.08.2011
  */
@@ -43,23 +42,17 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 		MARKUP = new DefaultMarkup("DiaFluxCoverage");
 		MARKUP.addContentType(new FlowchartType());
 		PackageManager.addPackageAnnotation(MARKUP);
-
 	}
 
 	public DiaFluxCoverageType() {
 		super(MARKUP);
-		ResourceLoader.getInstance().add("diafluxcoverage.js",
-				ResourceLoader.RESOURCE_SCRIPT);
+		ResourceLoader.getInstance().add("diafluxcoverage.js");
 
 		setRenderer(new DiaFluxCoverageRenderer());
-
 		SessionFactory.addPropagationListener(DiaFluxCoverageTrace.LISTENER);
 	}
 
 	public static CoverageResult getResult(Section<?> coverageSection) {
-		CoverageResult result = (CoverageResult) coverageSection.getObject(
-				COVERAGE_RESULT);
-		return result;
-
+		return (CoverageResult) coverageSection.getObject(COVERAGE_RESULT);
 	}
 }
