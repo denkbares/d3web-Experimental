@@ -24,13 +24,14 @@ import java.util.List;
 import jxl.Cell;
 import jxl.CellView;
 import jxl.write.Label;
+import jxl.write.Number;
+import jxl.write.WritableCell;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
-
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
@@ -38,12 +39,11 @@ import org.ontoware.rdf2go.model.node.Node;
 
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.ontology.sparql.RenderMode;
 import de.knowwe.ontology.sparql.SparqlResultRenderer;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
- * 
  * @author Stefan Plehn
  * @created 23.03.2013
  */
@@ -69,13 +69,21 @@ public class CreateExcelFromSparql {
 			for (int i = 0; i < variables.size(); i++) {
 				Node node = queryRow.getValue(variables.get(i));
 				if (node != null) {
-					String erg = SparqlResultRenderer.getInstance().renderNode(node,
+					String result = SparqlResultRenderer.getInstance().renderNode(node,
 							variables.get(i), false, user, core, RenderMode.PlainText);
-					erg = RenderResult.unmask(erg, user);
-					erg = erg.replace("&nbsp;", " ");
+					result = RenderResult.unmask(result, user);
+					result = result.replace("&nbsp;", " ");
 					WritableCellFormat format = new WritableCellFormat();
 					format.setWrap(true);
-					s.addCell(new Label(i, row, erg, format));
+					WritableCell cell;
+					try {
+						double doubleResult = Double.parseDouble(result);
+						cell = new Number(i, row, doubleResult);
+					}
+					catch (NumberFormatException e) {
+						cell = new Label(i, row, result, format);
+					}
+					s.addCell(cell);
 
 				}
 			}
