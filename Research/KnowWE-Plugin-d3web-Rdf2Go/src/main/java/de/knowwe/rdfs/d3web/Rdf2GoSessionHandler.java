@@ -207,7 +207,7 @@ public class Rdf2GoSessionHandler {
 
 	private Literal getValueLiteral(Value value) {
 		if (value instanceof NumValue) {
-			return core.createDatatypeLiteral(((NumValue) value).getDouble().toString(), XSD._double);
+			return core.createDatatypeLiteral(getDoubleAsString(((NumValue) value).getDouble()), XSD._double);
 		}
 		else if (value instanceof DateValue) {
 			return core.createDatatypeLiteral(XSD_DATE_FORMAT.format(((DateValue) value).getDate()), XSD._date);
@@ -223,12 +223,19 @@ public class Rdf2GoSessionHandler {
 			return core.createDatatypeLiteral(parsableMCValue, XSD._date);
 		}
 		else if (value instanceof HeuristicRating) {
-			return core.createDatatypeLiteral(String.valueOf(((HeuristicRating) value).getScore()), XSD._double);
+			return core.createDatatypeLiteral(getDoubleAsString(((HeuristicRating) value).getScore()), XSD._double);
 		}
 		else if (value instanceof Unknown) {
 			return core.createDatatypeLiteral(Unknown.getInstance().getValue().toString(), XSD._string);
 		}
 		return core.createDatatypeLiteral(value.toString(), XSD._string);
+	}
+
+	private String getDoubleAsString(Double doubleValue) {
+		if (doubleValue.equals(Double.POSITIVE_INFINITY)) return "INF";
+		if (doubleValue.equals(Double.NEGATIVE_INFINITY)) return "-INF";
+		if (doubleValue.equals(Double.NaN)) return "NaN";
+		return doubleValue.toString();
 	}
 
 	public void removeSessionFromRdf2GoCore() {
