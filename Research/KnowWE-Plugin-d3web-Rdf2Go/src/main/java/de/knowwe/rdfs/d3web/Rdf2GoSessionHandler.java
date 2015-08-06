@@ -35,7 +35,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class Rdf2GoSessionHandler {
 
-	private static final SimpleDateFormat XSD_DATE_FORMAT = Rdf2GoUtils.getXsdDateFormat();
+	private static final SimpleDateFormat XSD_DATE_FORMAT = Rdf2GoUtils.getXsdDateTimeFormat();
 	private final Map<String, Statement[]> statementCache = new HashMap<>();
 	private Map<String, BlankNode> factNodeCache = new HashMap<>();
 	private Map<Object, Resource> agentNodeCache = new HashMap<>();
@@ -207,10 +207,10 @@ public class Rdf2GoSessionHandler {
 
 	private Literal getValueLiteral(Value value) {
 		if (value instanceof NumValue) {
-			return core.createDatatypeLiteral(getDoubleAsString(((NumValue) value).getDouble()), XSD._double);
+			return Rdf2GoUtils.createDoubleLiteral(core, ((NumValue) value).getDouble());
 		}
 		else if (value instanceof DateValue) {
-			return core.createDatatypeLiteral(XSD_DATE_FORMAT.format(((DateValue) value).getDate()), XSD._date);
+			return Rdf2GoUtils.createDateTimeLiteral(core, ((DateValue) value).getDate());
 		}
 		else if (value instanceof MultipleChoiceValue) {
 			Collection<ChoiceID> choiceIDs = ((MultipleChoiceValue) value).getChoiceIDs();
@@ -220,22 +220,15 @@ public class Rdf2GoSessionHandler {
 				strings[i++] = choiceID.toString();
 			}
 			String parsableMCValue = Identifier.concatParsable(", ", strings);
-			return core.createDatatypeLiteral(parsableMCValue, XSD._date);
+			return core.createDatatypeLiteral(parsableMCValue, XSD._string);
 		}
 		else if (value instanceof HeuristicRating) {
-			return core.createDatatypeLiteral(getDoubleAsString(((HeuristicRating) value).getScore()), XSD._double);
+			return Rdf2GoUtils.createDoubleLiteral(core, ((HeuristicRating) value).getScore());
 		}
 		else if (value instanceof Unknown) {
 			return core.createDatatypeLiteral(Unknown.getInstance().getValue().toString(), XSD._string);
 		}
 		return core.createDatatypeLiteral(value.toString(), XSD._string);
-	}
-
-	private String getDoubleAsString(Double doubleValue) {
-		if (doubleValue.equals(Double.POSITIVE_INFINITY)) return "INF";
-		if (doubleValue.equals(Double.NEGATIVE_INFINITY)) return "-INF";
-		if (doubleValue.equals(Double.NaN)) return "NaN";
-		return doubleValue.toString();
 	}
 
 	public void removeSessionFromRdf2GoCore() {
