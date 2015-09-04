@@ -4,8 +4,10 @@ import java.util.Collection;
 
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
+import de.d3web.we.object.D3webTermReference;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
@@ -57,7 +59,7 @@ public class Rdf2GoD3webUtils {
 	 * Returns the local (lns) uri used for that term in the compilers the
 	 * core.
 	 *
-	 * @param compiler the compiler the term is (or will be) registered for
+	 * @param compiler    the compiler the term is (or will be) registered for
 	 * @param termSection the section referencing or defining of the term
 	 * @return the uri for the term
 	 */
@@ -69,7 +71,7 @@ public class Rdf2GoD3webUtils {
 	 * Returns the local (lns) uri used for that term in the compilers the
 	 * core.
 	 *
-	 * @param compiler the compiler the term is (or will be) registered for
+	 * @param compiler       the compiler the term is (or will be) registered for
 	 * @param termIdentifier the identifier of the term
 	 * @return the uri for the term
 	 */
@@ -85,7 +87,7 @@ public class Rdf2GoD3webUtils {
 	 * core.
 	 *
 	 * @param compiler the compiler to register the term definition for
-	 * @param section the section defining the term
+	 * @param section  the section defining the term
 	 * @return the lns uri of the registered term
 	 */
 	public static URI registerTermDefinition(OntologyCompiler compiler, Section<? extends TermDefinition> section) {
@@ -100,27 +102,33 @@ public class Rdf2GoD3webUtils {
 	 * The method also returns the local (lns) uri created for that term using the compilers the
 	 * core.
 	 *
-	 * @param compiler the compiler to register the term definition for
-	 * @param section the section defining the term
+	 * @param compiler       the compiler to register the term definition for
+	 * @param section        the section defining the term
 	 * @param termIdentifier the term identifier
-	 * @param termClass the class to register the object to
+	 * @param termClass      the class to register the object to
 	 * @return the lns uri of the registered term
 	 */
 	public static URI registerTermDefinition(OntologyCompiler compiler, Section<?> section, Identifier termIdentifier, Class<?> termClass) {
 		Identifier lnsIdentifier = getLnsIdentifier(termIdentifier);
-		compiler.getTerminologyManager().registerTermDefinition(
-				compiler, section, Resource.class, lnsIdentifier);
-		compiler.getTerminologyManager().registerTermDefinition(
-				compiler, section, termClass, termIdentifier);
+		compiler.getTerminologyManager().registerTermDefinition(compiler, section, Resource.class, lnsIdentifier);
+		compiler.getTerminologyManager().registerTermDefinition(compiler, section, termClass, termIdentifier);
 
 		return getTermURI(compiler, termIdentifier);
+	}
+
+	public static void registerTermReference(OntologyCompiler compiler, Section<D3webTermReference<NamedObject>> section) {
+		Identifier termIdentifier = section.get(Term::getTermIdentifier);
+		compiler.getTerminologyManager()
+				.registerTermReference(compiler, section, Resource.class, getLnsIdentifier(termIdentifier));
+		compiler.getTerminologyManager()
+				.registerTermReference(compiler, section, section.get(D3webTermReference::getTermObjectClass), termIdentifier);
 	}
 
 	/**
 	 * Unregisters the term definitions previously registered by the {#registerTermDefinition} method.
 	 *
 	 * @param compiler the compiler to unregister the term definition for
-	 * @param section the section originally defining the term
+	 * @param section  the section originally defining the term
 	 */
 	public static void unregisterTermDefinition(OntologyCompiler compiler, Section<? extends TermDefinition> section) {
 		Identifier termIdentifier = section.get().getTermIdentifier(section);
@@ -128,13 +136,21 @@ public class Rdf2GoD3webUtils {
 		unregisterTermDefinition(compiler, section, termIdentifier, termClass);
 	}
 
+	public static void unregisterTermReference(OntologyCompiler compiler, Section<D3webTermReference<NamedObject>> section) {
+		Identifier termIdentifier = section.get().getTermIdentifier(section);
+		compiler.getTerminologyManager()
+				.unregisterTermReference(compiler, section, Resource.class, Rdf2GoD3webUtils.getLnsIdentifier(termIdentifier));
+		compiler.getTerminologyManager()
+				.unregisterTermReference(compiler, section, section.get(Term::getTermObjectClass), termIdentifier);
+	}
+
 	/**
 	 * Unregisters the term definitions previously registered by the {#registerTermDefinition} method.
 	 *
-	 * @param compiler the compiler to unregister the term definition for
-	 * @param section the section originally defining the term
+	 * @param compiler       the compiler to unregister the term definition for
+	 * @param section        the section originally defining the term
 	 * @param termIdentifier the term identifier
-	 * @param termClass the class the object was registered to
+	 * @param termClass      the class the object was registered to
 	 */
 	public static void unregisterTermDefinition(OntologyCompiler compiler, Section<?> section, Identifier termIdentifier, Class<?> termClass) {
 		Identifier lnsIdentifier = Rdf2GoD3webUtils.getLnsIdentifier(termIdentifier);
@@ -147,4 +163,5 @@ public class Rdf2GoD3webUtils {
 	public static Identifier getLnsIdentifier(Identifier termIdentifier) {
 		return new Identifier(new Identifier("lns"), termIdentifier.getPathElements());
 	}
+
 }

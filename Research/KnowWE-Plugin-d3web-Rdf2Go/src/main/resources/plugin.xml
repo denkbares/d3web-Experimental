@@ -23,10 +23,18 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="compilepriority" value="-200" />
-		<parameter id="scope" value="QuestionDefinition" />
-		<parameter id="scope" value="QuestionnaireDefinition" />
-		<parameter id="scope" value="SolutionDefinition" />
-		<parameter id="scope" value="AnswerDefinition" />
+		<parameter id="scope" value="D3webTermDefinition" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CompileScript"
+		id="Rdf2GoTermReferenceHandler">
+		<parameter id="class" value="de.knowwe.rdfs.d3web.Rdf2GoTermReferenceHandler" />
+		<parameter id="name" value="Rdf2GoTermReferenceHandler" />
+		<parameter id="description" value="Handler Rdf2GoTermReferenceHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="compilepriority" value="-300" />
+		<parameter id="scope" value="D3webTermReference" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="CompileScript"

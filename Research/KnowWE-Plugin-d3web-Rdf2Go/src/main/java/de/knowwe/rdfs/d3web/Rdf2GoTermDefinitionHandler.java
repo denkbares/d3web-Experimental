@@ -46,5 +46,4 @@ public class Rdf2GoTermDefinitionHandler extends OntologyCompileScript<D3webTerm
 		Rdf2GoD3webUtils.unregisterTermDefinition(compiler, section);
 	}
 
-
 }
