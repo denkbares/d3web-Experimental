@@ -25,14 +25,11 @@ public class Rdf2GoTermDefinitionHandler extends OntologyCompileScript<D3webTerm
 		URI termIdentifierURI = Rdf2GoD3webUtils.registerTermDefinition(compiler, section);
 		Class<?> termObjectClass = section.get().getTermObjectClass(section);
 
-		// URI hasInstanceURI =
-		// Rdf2GoCore.getInstance().createlocalURI("hasInstance");
-
 		Rdf2GoCore core = compiler.getRdf2GoCore();
-		List<Statement> statements = new ArrayList<Statement>();
+		List<Statement> statements = new ArrayList<>();
 
 		// lns:TermIdentifier rdf:type lns:TermObjectClass
-		Rdf2GoUtils.addStatement(core, termIdentifierURI, RDF.type,	termObjectClass.getSimpleName(), statements);
+		Rdf2GoUtils.addStatement(core, termIdentifierURI, RDF.type, termObjectClass.getSimpleName(), statements);
 
 		String termName = section.get().getTermName(section);
 		Rdf2GoUtils.addStatement(core, termIdentifierURI, RDFS.label, core.createLiteral(termName), statements);

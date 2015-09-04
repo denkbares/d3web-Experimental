@@ -38,6 +38,28 @@
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="CompileScript"
+		id="Rdf2GoResourceDefinitionHandler">
+		<parameter id="class" value="de.knowwe.rdfs.d3web.Rdf2GoResourceDefinitionHandler" />
+		<parameter id="name" value="Rdf2GoResourceDefinitionHandler" />
+		<parameter id="description" value="Handler Rdf2GoResourceDefinitionHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="compilepriority" value="-200" />
+		<parameter id="scope" value="ResourceDefinition" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CompileScript"
+		id="Rdf2GoResourceReferenceHandler">
+		<parameter id="class" value="de.knowwe.rdfs.d3web.Rdf2GoResourceReferenceHandler" />
+		<parameter id="name" value="Rdf2GoResourceReferenceHandler" />
+		<parameter id="description" value="Handler Rdf2GoResourceReferenceHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="compilepriority" value="-300" />
+		<parameter id="scope" value="ResourceReference" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CompileScript"
 		id="Rdf2GoPropertyHandler">
 		<parameter id="class" value="de.knowwe.rdfs.d3web.Rdf2GoPropertyHandler" />
 		<parameter id="name" value="Rdf2GoPropertyHandler" />
