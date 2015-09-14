@@ -30,8 +30,8 @@ public class ScoreTableCellSubtreeHandler implements D3webHandler<ScoreCell> {
 	}
 
 	@Override
-	public Collection<Message> create(D3webCompiler article,
-			Section<ScoreCell> section) {
+	public Collection<Message> create(D3webCompiler compiler,
+									  Section<ScoreCell> section) {
 
 		List<Message> messages = new ArrayList<Message>();
 
@@ -45,7 +45,7 @@ public class ScoreTableCellSubtreeHandler implements D3webHandler<ScoreCell> {
 		// condition at beginning of that line
 		Section<CondCell> condition = Sections.successor(line, CondCell.class);
 
-		// column index to calculate solution cell
+		// column index to calculate solutionSection cell
 		int columnIndex = Sections.successors(line, ScoreCell.class).indexOf(section);
 		Section<SimpleScoreTable> table = Sections.ancestor(section,
 				SimpleScoreTable.class);
@@ -59,36 +59,38 @@ public class ScoreTableCellSubtreeHandler implements D3webHandler<ScoreCell> {
 		List<Section<SolutionCell>> solutionCells = Sections.successors(headerLine,
 				SolutionCell.class);
 		Section<? extends Type> solutionCell = solutionCells.get(columnIndex);
-		Section<Solution> solution = Sections.successor(solutionCell, Solution.class);
+		Section<Solution> solutionSection = Sections.successor(solutionCell, Solution.class);
 
-		if (solution == null) {
+		if (solutionSection == null) {
 			messages.add(Messages.noSuchObjectError("Solution not found"));
 		}
 		if (condition == null) {
 			messages.add(Messages.noSuchObjectError("Condition not found"));
 		}
 
-		if (solution != null && condition != null) {
-			de.d3web.core.knowledge.terminology.Solution s = solution.get().getTermObject(article,
-					solution);
+		if (solutionSection != null && condition != null) {
+			de.d3web.core.knowledge.terminology.Solution solution = solutionSection.get().getTermObject(compiler,
+					solutionSection);
 
-			Condition d3webCond = KDOMConditionFactory.createCondition(article, condition);
+			if (solution == null) return messages;
+
+			Condition d3webCond = KDOMConditionFactory.createCondition(compiler, condition);
 
 			Score score = D3webUtils.getScoreForString(section.getText().trim());
 			if (score == null) return messages;
 
-			ActionHeuristicPS a = new ActionHeuristicPS();
-			a.setSolution(s);
-			a.setScore(score);
+			ActionHeuristicPS action = new ActionHeuristicPS();
+			action.setSolution(solution);
+			action.setScore(score);
 
-			Rule rule = RuleFactory.createRule(a, d3webCond,
+			Rule rule = RuleFactory.createRule(action, d3webCond,
 					null, PSMethodHeuristic.class);
 			if (rule == null) {
 				messages.add(Messages.error("Unable to create rule for line '" + condition
-						+ "' and column '" + solution + "'"));
+						+ "' and column '" + solutionSection + "'"));
 			}
 			else {
-				KnowWEUtils.storeObject(article, section, ruleStoreKey, rule);
+				KnowWEUtils.storeObject(compiler, section, ruleStoreKey, rule);
 			}
 		}
 
