@@ -1,6 +1,5 @@
 package de.knowwe.rdfs.d3web;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,7 +34,6 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 public class Rdf2GoSessionHandler {
 
-	private static final SimpleDateFormat XSD_DATE_FORMAT = Rdf2GoUtils.getXsdDateTimeFormat();
 	private final Map<String, Statement[]> statementCache = new HashMap<>();
 	private Map<String, BlankNode> factNodeCache = new HashMap<>();
 	private Map<Object, Resource> agentNodeCache = new HashMap<>();
