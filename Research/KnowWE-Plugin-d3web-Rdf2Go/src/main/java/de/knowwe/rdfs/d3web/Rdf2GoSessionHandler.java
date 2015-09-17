@@ -1,5 +1,6 @@
 package de.knowwe.rdfs.d3web;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.BlankNode;
@@ -18,6 +20,13 @@ import org.ontoware.rdf2go.vocabulary.XSD;
 
 import de.d3web.core.inference.PSMethod;
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.QuestionDate;
+import de.d3web.core.knowledge.terminology.QuestionMC;
+import de.d3web.core.knowledge.terminology.QuestionNum;
+import de.d3web.core.knowledge.terminology.QuestionOC;
+import de.d3web.core.knowledge.terminology.QuestionText;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Fact;
@@ -25,15 +34,20 @@ import de.d3web.core.session.values.ChoiceID;
 import de.d3web.core.session.values.DateValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.NumValue;
+import de.d3web.core.session.values.TextValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.scoring.HeuristicRating;
 import de.d3web.strings.Identifier;
+import de.d3web.utils.Log;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
+import static java.util.stream.Collectors.toList;
+
 public class Rdf2GoSessionHandler {
 
+	public static final String MC_SEPARATOR = ", ";
 	private final Map<String, Statement[]> statementCache = new HashMap<>();
 	private Map<String, BlankNode> factNodeCache = new HashMap<>();
 	private Map<Object, Resource> agentNodeCache = new HashMap<>();
@@ -131,7 +145,7 @@ public class Rdf2GoSessionHandler {
 				Rdf2GoD3webUtils.getHasTerminologyObjectURI(core), fact.getTerminologyObject().getName(),
 				statements);
 
-		Literal valueLiteral = getValueLiteral(fact.getValue());
+		Literal valueLiteral = valueToLiteral(core, fact.getValue());
 
 		// blank node (Fact) lns:hasValue "value"
 		Rdf2GoUtils.addStatement(core, factNode,
@@ -203,7 +217,7 @@ public class Rdf2GoSessionHandler {
 		return factNode;
 	}
 
-	private Literal getValueLiteral(Value value) {
+	public static Literal valueToLiteral(Rdf2GoCore core, Value value) {
 		if (value instanceof NumValue) {
 			return Rdf2GoUtils.createDoubleLiteral(core, ((NumValue) value).getDouble());
 		}
@@ -217,7 +231,7 @@ public class Rdf2GoSessionHandler {
 			for (ChoiceID choiceID : choiceIDs) {
 				strings[i++] = choiceID.toString();
 			}
-			String parsableMCValue = Identifier.concatParsable(", ", strings);
+			String parsableMCValue = Identifier.concatParsable(MC_SEPARATOR, strings);
 			return core.createDatatypeLiteral(parsableMCValue, XSD._string);
 		}
 		else if (value instanceof HeuristicRating) {
@@ -228,6 +242,36 @@ public class Rdf2GoSessionHandler {
 		}
 		return core.createDatatypeLiteral(value.toString(), XSD._string);
 	}
+
+	public static Value literalToValue(Question question, Literal literal) {
+		String valueString = literal.getValue();
+		if (valueString.equals(Unknown.getInstance().getValue().toString())) {
+			return Unknown.getInstance();
+		}
+		if (question instanceof QuestionNum) {
+			return new NumValue(Double.parseDouble(valueString));
+		} else if (question instanceof QuestionOC) {
+			return KnowledgeBaseUtils.findValue(question, valueString);
+		} else if (question instanceof QuestionMC) {
+			String[] valueStrings = Identifier.parseConcat(MC_SEPARATOR, valueString);
+			List<ChoiceID> collect = Stream.of(valueStrings).map(ChoiceID::new).collect(toList());
+			return new MultipleChoiceValue(collect);
+		} else if (question instanceof QuestionText) {
+			return new TextValue(valueString);
+		} else if (question instanceof QuestionDate) {
+			try {
+				return new DateValue(Rdf2GoUtils.createDateFromDateTimeLiteral(literal));
+			}
+			catch (ParseException e) {
+				// should not happen!
+				Log.severe("Unable to parse date from xsd:dateTime literal '" + valueString + "'");
+				return Unknown.getInstance();
+			}
+		}
+		throw new IllegalArgumentException("Question type '" + question.getClass().getName() + "' no supported");
+	}
+
+
 
 	public void removeSessionFromRdf2GoCore() {
 		synchronized (core) {
