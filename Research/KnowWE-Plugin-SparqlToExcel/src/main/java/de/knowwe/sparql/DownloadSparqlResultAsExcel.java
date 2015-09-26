@@ -26,9 +26,9 @@ import jxl.Workbook;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
-
 import org.ontoware.rdf2go.model.QueryResultTable;
 
+import de.d3web.utils.Log;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -39,14 +39,13 @@ import de.knowwe.core.report.Message.Type;
 import de.knowwe.excel.CreateExcelFromSparql;
 import de.knowwe.notification.NotificationManager;
 import de.knowwe.notification.StandardNotification;
-import de.knowwe.rdf2go.Rdf2GoCompiler;
-import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.ontology.sparql.SparqlContentType;
 import de.knowwe.ontology.sparql.SparqlMarkupType;
+import de.knowwe.rdf2go.Rdf2GoCompiler;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
- * 
  * @author Stefan Plehn
  * @created 22.03.2013
  */
@@ -63,43 +62,40 @@ public class DownloadSparqlResultAsExcel extends AbstractAction {
 		context.setHeader("Content-Disposition", "attachment; filename=\""
 				+ filename + "\"");
 
-		WritableWorkbook workbook = null;
-
 		try {
-
+			// find query
 			Section<?> rootSection = Sections.get(context.getParameter(Attributes.SECTION_ID));
-			Section<SparqlContentType> markupSection = Sections.successor(rootSection,
-					SparqlContentType.class);
-			Section<SparqlMarkupType> realMarkupSection = Sections.ancestor(
-					markupSection,
-					SparqlMarkupType.class);
-			Collection<Rdf2GoCompiler> compilers = Compilers.getCompilers(realMarkupSection,
-					Rdf2GoCompiler.class);
+			Section<SparqlContentType> querySection = Sections.successor(rootSection, SparqlContentType.class);
+			if (querySection == null) {
+				context.sendError(410, "Query not found, probably the page has been edited while you visiting it. Please reload the page and try again, or contact the administrator if the error persists.");
+				return;
+			}
+
+			Section<SparqlMarkupType> markupSection = Sections.ancestor(querySection, SparqlMarkupType.class);
+			Collection<Rdf2GoCompiler> compilers = Compilers.getCompilers(markupSection, Rdf2GoCompiler.class);
 			if (!compilers.isEmpty()) {
 				Rdf2GoCore core = compilers.iterator().next().getRdf2GoCore();
-				String sparql = Rdf2GoUtils.createSparqlString(core, markupSection.getText());
+				String sparql = Rdf2GoUtils.createSparqlString(core, querySection.getText());
 				QueryResultTable resultSet = core.sparqlSelect(sparql);
 
 				OutputStream outputStream = context.getOutputStream();
-
-				workbook = Workbook.createWorkbook(outputStream);
-				workbook = CreateExcelFromSparql.addSparqlResultAsSheet(workbook, resultSet,
-						context, core);
-
+				WritableWorkbook workbook = Workbook.createWorkbook(outputStream);
+				try {
+					CreateExcelFromSparql.addSparqlResultAsSheet(workbook, resultSet, context, core);
+					workbook.write();
+				}
+				finally {
+					workbook.close();
+				}
 			}
-			workbook.write();
-			workbook.close();
 
 		}
 		catch (RowsExceededException e) {
-			NotificationManager notificationManager = NotificationManager.getNotificationManager(context);
-			notificationManager.addNotification(new StandardNotification(
-					"The maximum number of rows permitted on a worksheet been exceeded", Type.ERROR));
+			NotificationManager.addNotification(context, new StandardNotification(
+					"The maximum number of rows permitted on a worksheet been exceeded.", Type.ERROR));
 		}
 		catch (WriteException e) {
-			e.printStackTrace();
+			Log.severe("error creating excel workbook", e);
 		}
-
 	}
-
 }

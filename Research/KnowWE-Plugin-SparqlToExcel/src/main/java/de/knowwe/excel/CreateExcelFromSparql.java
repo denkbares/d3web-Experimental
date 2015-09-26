@@ -31,12 +31,12 @@ import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
-import jxl.write.biff.RowsExceededException;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
 
+import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.ontology.sparql.RenderMode;
@@ -49,7 +49,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
  */
 public class CreateExcelFromSparql {
 
-	public static WritableWorkbook addSparqlResultAsSheet(WritableWorkbook wb, QueryResultTable qrt, UserContext user, Rdf2GoCore core) throws RowsExceededException, WriteException, UnsupportedEncodingException {
+	public static void addSparqlResultAsSheet(WritableWorkbook wb, QueryResultTable qrt, UserContext user, Rdf2GoCore core) throws WriteException, UnsupportedEncodingException {
 
 		WritableSheet s = wb.createSheet("Result", 0);
 
@@ -63,9 +63,7 @@ public class CreateExcelFromSparql {
 
 		int row = 1;
 		while (iterator.hasNext()) {
-
 			QueryRow queryRow = iterator.next();
-
 			for (int i = 0; i < variables.size(); i++) {
 				Node node = queryRow.getValue(variables.get(i));
 				if (node != null) {
@@ -84,14 +82,11 @@ public class CreateExcelFromSparql {
 						cell = new Label(i, row, result, format);
 					}
 					s.addCell(cell);
-
 				}
 			}
 			row++;
-
 		}
 		sheetAutoFitColumns(s);
-		return wb;
 	}
 
 	public static void sheetAutoFitColumns(WritableSheet sheet) {
@@ -102,10 +97,10 @@ public class CreateExcelFromSparql {
 			if (cells.length == 0) continue;
 
 			// Find the widest cell in the column.
-			for (int j = 0; j < cells.length; j++) {
-				if (cells[j].getContents().length() > longestStrLen) {
-					String str = cells[j].getContents();
-					if (str == null || str.isEmpty()) continue;
+			for (Cell cell : cells) {
+				if (cell.getContents().length() > longestStrLen) {
+					String str = cell.getContents();
+					if (Strings.isBlank(str)) continue;
 					longestStrLen = str.trim().length();
 				}
 			}
@@ -126,8 +121,6 @@ public class CreateExcelFromSparql {
 
 	private static WritableCellFormat getBoldCellFormat() throws WriteException {
 		WritableFont boldFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD);
-		WritableCellFormat cellFormat = new WritableCellFormat(boldFont);
-		return cellFormat;
+		return new WritableCellFormat(boldFont);
 	}
-
 }
