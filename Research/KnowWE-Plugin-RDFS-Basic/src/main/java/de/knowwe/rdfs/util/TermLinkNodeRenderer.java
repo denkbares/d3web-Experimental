@@ -2,6 +2,8 @@ package de.knowwe.rdfs.util;
 
 import java.util.Collection;
 
+import org.ontoware.rdf2go.model.node.Node;
+
 import de.d3web.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.utils.CompileUtils;
@@ -16,7 +18,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 public class TermLinkNodeRenderer implements SparqlResultNodeRenderer {
 
 	@Override
-	public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core, RenderMode mode) {
+	public String renderNode(Node node, String text, String variable, UserContext user, Rdf2GoCore core, RenderMode mode) {
 		String termName = Rdf2GoUtils.trimNamespace(core, text);
 		Identifier identifier = new Identifier(termName);
 		Collection<Section<? extends SimpleDefinition>> termDefinitions =

@@ -29,13 +29,15 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.ontoware.rdf2go.model.node.Node;
+
 /**
  * @author Jochen Reutelshoefer (denkbares GmbH)
  * @created 28.10.14.
  */
 public class SparqlResultNodeDragRenderer implements SparqlResultNodeRenderer {
     @Override
-    public String renderNode(String text, String variable, UserContext user, Rdf2GoCore core, RenderMode mode) {
+    public String renderNode(Node node, String text, String variable, UserContext user, Rdf2GoCore core, RenderMode mode) {
 
         final boolean isValidURI = isURI(text);
         final String reducedURI = Rdf2GoUtils.reduceNamespace(core, text);
@@ -46,7 +48,7 @@ public class SparqlResultNodeDragRenderer implements SparqlResultNodeRenderer {
             result.append("<div style='display:inline;position:static !important;' class='dragSparqlResultNode'>");
             result.append("<div class='termID'>" + identifier + "</div>");
         }
-        result.append(new TermDefinitionLinkNodeRenderer().renderNode(text, variable, user, core, mode));
+        result.append(new TermDefinitionLinkNodeRenderer().renderNode(node, text, variable, user, core, mode));
         if(isConceptNode  && mode.equals(RenderMode.HTML)) {
             result.append("</div>");
         }
