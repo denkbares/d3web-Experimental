@@ -191,9 +191,11 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 			// Gibt es neue Nachrichten im Chat?
 			boolean newEntry = false;
 			String chatTopic = "Persoenliche Nachrichten(" + names[0] + "," + names[1] + ")";
+			String chatTopic2 = "Persoenliche Nachrichten(" + names[1] + "," + names[0] + ")";
 			Section<? extends Forum> forum = null;
 			for (Section<? extends Forum> chat : chats) {
-				if (chatTopic.equals(chat.getTitle())) {
+				String chatTitle = chat.getTitle();
+				if (chatTopic.equals(chatTitle) || chatTopic2.equals(chatTitle)) {
 					forum = chat;
 					break;
 				}
