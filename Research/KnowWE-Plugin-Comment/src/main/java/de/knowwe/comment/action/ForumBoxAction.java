@@ -25,7 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import de.d3web.strings.Strings;
+import de.d3web.utils.Log;
 import de.d3web.we.event.NewCommentEvent;
 import de.knowwe.comment.forum.Forum;
 import de.knowwe.comment.forum.ForumRenderer;
@@ -46,16 +49,6 @@ public class ForumBoxAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-
-		String result = perform(context);
-		if (result != null && context.getWriter() != null) {
-			context.setContentType("text/html; charset=UTF-8");
-			context.getWriter().write(result);
-		}
-
-	}
-
-	private String perform(UserActionContext context) {
 
 		Map<String, String> map = context.getParameters();
 
@@ -97,7 +90,7 @@ public class ForumBoxAction extends AbstractAction {
 				String save = "";
 
 				String reply = map.get("reply");
-				if (reply != null && reply != "") {
+				if (reply != null && !reply.isEmpty()) {
 
 					save = "<box name=\"" + context.getUserName() + "\" date=\""
 							+ ForumRenderer.getDate() + "\">" + text + "</box>\n</box>\n";
@@ -114,29 +107,35 @@ public class ForumBoxAction extends AbstractAction {
 							XMLTail.class, found);
 				}
 
-				if (found.size() != 0 && save != "") {
+				if (found.size() != 0 && !save.isEmpty()) {
 					Section<?> changeSec = found.get(found.size() - 1);
-					changeSec.setText(save);
+					try {
+						Sections.replace(context, changeSec.getID(), save);
+					}
+					catch (IOException e) {
+						Log.severe("Error while saving section content", e);
+						context.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errow while saving message");
+					}
+//					changeSec.setText(save);
 				}
 
-				StringBuilder buffi = new StringBuilder();
-				sec.collectTextsFromLeaves(buffi);
-				Environment.getInstance().getWikiConnector().writeArticleToWikiPersistence(
-						topic, buffi.toString(), context);
+//				StringBuilder buffi = new StringBuilder();
+//				sec.collectTextsFromLeaves(buffi);
+//				Environment.getInstance().getWikiConnector().writeArticleToWikiPersistence(
+//						topic, buffi.toString(), context);
 
 				// fire new comment event
 				EventManager.getInstance().fireEvent(
 						new NewCommentEvent(Strings.decodeHtml(text), topic));
 
-				String refreshUrl = Environment.getInstance().getWikiConnector().getBaseUrl();
-				refreshUrl += "Wiki.jsp?page=" + topic;
+				return;
 
-				return "{\"msg\" : \"success\", \"url\" : \"" + refreshUrl + "\"}";
 			}
-			return "{\"msg\" : \"error: no text found\"}";
+
+			context.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error: no text found!");
 		}
 
-		return "{\"msg\" : \"error\"}";
+		context.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Sorry, something went wrong.");
 	}
 
 }
