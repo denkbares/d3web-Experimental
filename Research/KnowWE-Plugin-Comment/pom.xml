@@ -8,7 +8,6 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 	
-	<groupId>de.uniwue.d3web</groupId>
 	<artifactId>KnowWE-Plugin-Comment</artifactId>
 	<name>KnowWE-Plugin-Comment</name>
 	<version>0.2-SNAPSHOT</version>
@@ -39,13 +38,6 @@
 			<version>${project.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>6.0.20</version>
-			<type>jar</type>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>
