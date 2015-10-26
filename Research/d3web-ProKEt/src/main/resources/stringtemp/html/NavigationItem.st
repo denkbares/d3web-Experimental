@@ -1,1 +1,0 @@
-<li id="nav-$fullId$" class="navigation-item $if(class)$ $class$$endif$"><a href="$link$" title="$title$">$title$</a>$if(navlist)$<ul>$navlist$</ul>$endif$</li>

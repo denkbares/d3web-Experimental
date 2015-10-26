@@ -1,1 +1,0 @@
-$if(tooltip)$<div id="tt-$fullId$" class="tooltip tt-$fullId$">$tooltip$</div>$endif$

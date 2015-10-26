@@ -68,11 +68,6 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 	/**
 	 * 
 	 * @created 13.09.2011
-	 * @param user
-	 * @param string
-	 * @param section
-	 * @param result
-	 * @param session
 	 */
 	private void renderResult(UserContext user, RenderResult string, Section<?> section, CoverageResult result) {
 		KnowledgeBase kb = result.getKb();

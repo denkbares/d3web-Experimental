@@ -1,1 +1,0 @@
-$if(image)$<img src="img/$image$" alt="image" />$endif$

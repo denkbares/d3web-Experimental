@@ -1,3 +1,0 @@
-#sendall {
-	display: none;
-}
