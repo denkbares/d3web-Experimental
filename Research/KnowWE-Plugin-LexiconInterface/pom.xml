@@ -1,49 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>Research</artifactId>
-        <groupId>de.uniwue.d3web</groupId>
-        <version>0.2-SNAPSHOT</version>
-    </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.uniwue.d3web</groupId>
-    <artifactId>KnowWE-Plugin-LexiconInterface</artifactId>
-    <version>0.2-SNAPSHOT</version>
-    <name>KnowWE-Plugin-LexiconInterface</name>
-    <description>Lexicon Interface for accessing Lexicas like WordNet and OpenThesaurus</description>
-    <dependencies>
+	<parent>
+		<artifactId>Research</artifactId>
+		<groupId>de.uniwue.d3web</groupId>
+		<version>0.2-SNAPSHOT</version>
+	</parent>
 
-        <dependency>
-            <groupId>de.uniwue.d3web</groupId>
-            <artifactId>KnowWE-core</artifactId>
-            <version>0.2-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.extjwnl</groupId>
-            <artifactId>extjwnl</artifactId>
-            <version>1.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.extjwnl</groupId>
-            <artifactId>extjwnl-data-wn31</artifactId>
-            <version>1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.18</version>
-        </dependency>
-        <dependency>
-        <groupId>jaws-bin</groupId>
-        <artifactId>jaws-bin</artifactId>
-        <version>jaws-bin</version>
-        </dependency>
+	<artifactId>KnowWE-Plugin-LexiconInterface</artifactId>
+	<version>0.2-SNAPSHOT</version>
+	<name>KnowWE-Plugin-LexiconInterface</name>
+	<description>Lexicon Interface for accessing lexica like WordNet and OpenThesaurus</description>
 
-    </dependencies>
-
+	<dependencies>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-core</artifactId>
+			<version>0.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.extjwnl</groupId>
+			<artifactId>extjwnl</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.extjwnl</groupId>
+			<artifactId>extjwnl-data-wn31</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.18</version>
+		</dependency>
+		<dependency>
+			<groupId>jaws-bin</groupId>
+			<artifactId>jaws-bin</artifactId>
+			<version>jaws-bin</version>
+		</dependency>
+	</dependencies>
 </project>

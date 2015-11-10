@@ -1,41 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <artifactId>Research</artifactId>
     <groupId>de.uniwue.d3web</groupId>
     <version>0.2-SNAPSHOT</version>
   </parent>
-  <groupId>de.uniwue.d3web</groupId>
-  <artifactId>KnowWE-Plugin-LoadKnowledgeBase</artifactId>
+
+	<artifactId>KnowWE-Plugin-LoadKnowledgeBase</artifactId>
   <version>0.2-SNAPSHOT</version>
   <name>KnowWE-Plugin-LoadKnowledgeBase</name>
   <description>Plugin for loading KnowledgeBases</description>
-  <dependencies>
+
+	<dependencies>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
   		<artifactId>KnowWE-core</artifactId>
   		<version>0.2-SNAPSHOT</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
   	</dependency>
-  	<dependency>
-  		<groupId>de.uniwue.d3web</groupId>
-  		<artifactId>d3web</artifactId>
-  		<version>0.2-SNAPSHOT</version>
-  		<type>pom</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
+		<dependency>
   		<groupId>de.uniwue.d3web</groupId>
   		<artifactId>KnowWE-Plugin-d3web-basic</artifactId>
   		<version>0.2-SNAPSHOT</version>
-  		<scope>compile</scope>
   	</dependency>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
   		<artifactId>KnowWE-Plugin-JSPWiki-Connector</artifactId>
   		<version>0.2-SNAPSHOT</version>
-  		<scope>compile</scope>
   	</dependency>
   </dependencies>
 </project>

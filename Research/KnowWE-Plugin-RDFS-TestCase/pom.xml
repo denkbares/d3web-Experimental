@@ -1,12 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<artifactId>Research</artifactId>
 		<groupId>de.uniwue.d3web</groupId>
 		<version>0.2-SNAPSHOT</version>
-		<relativePath>..</relativePath>
 	</parent>
+
 	<artifactId>KnowWE-Plugin-RDFS-TestCase</artifactId>
 	<name>KnowWE-Plugin-RDFS-TestCase</name>
 	<description>Plugin providing functionality for RDFS test cases</description>
@@ -17,16 +18,6 @@
 			<plugin>
 				<groupId>de.uniwue.maven.plugins</groupId>
 				<artifactId>knowwe-versionator</artifactId>
-				<version>${versionatorVersion}</version>
-				<executions>
-					<execution>
-						<id>versionate-plugin</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>versionate-plugin</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -51,25 +42,21 @@
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-CI4KE</artifactId>
 			<version>${project.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-InstantEdit</artifactId>
 			<version>${project.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-RDFS-Basic</artifactId>
 			<version>${project.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-RDFS-TurtleN3</artifactId>
 			<version>${project.version}</version>
-			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 

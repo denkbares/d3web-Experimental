@@ -2,31 +2,37 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>de.uniwue.d3web</groupId>
 	<artifactId>Research</artifactId>
 	<packaging>pom</packaging>
 	<name>Research</name>
 	<version>0.2-SNAPSHOT</version>
-	<url>http://www.d3web.de/</url>
+	<url>https://www.d3web.de/</url>
+
 	<issueManagement>
-		<system>Bugzilla</system>
-		<url>https://tickets.denkbares.com/</url>
+		<system>Phabricator</system>
+		<url>https://dev.denkbares.com/</url>
 	</issueManagement>
+
 	<ciManagement>
-		<system>Hudson</system>
-		<url>https://isci.informatik.uni-wuerzburg.de/hudson/</url>
+		<system>Jenkins</system>
+		<url>https://ci.denkbares.com/</url>
 	</ciManagement>
+
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License, version 3</name>
 			<url>http://www.gnu.org/licenses/lgpl.txt</url>
 		</license>
 	</licenses>
+
 	<build>
 		<defaultGoal>package</defaultGoal>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -37,6 +43,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19</version>
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
 				</configuration>
@@ -98,37 +105,42 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
+				<!-- Set Versionator Version -->
 				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-dependency-plugin
-										</artifactId>
-										<versionRange>
-											[2.1,)
-										</versionRange>
-										<goals>
-											<goal>build-classpath</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
+					<groupId>de.uniwue.maven.plugins</groupId>
+					<artifactId>knowwe-versionator</artifactId>
+					<version>1.9</version>
+					<executions>
+						<execution>
+							<id>versionate-plugin</id>
+							<phase>prepare-package</phase>
+							<goals>
+								<goal>versionate-plugin</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<!-- Generate Dependency List for JPF -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.10</version>
+					<executions>
+						<execution>
+							<id>copy-dependencies</id>
+							<phase>test-compile</phase>
+							<goals>
+								<goal>build-classpath</goal>
+							</goals>
+							<configuration>
+								<overWriteReleases>false</overWriteReleases>
+								<overWriteSnapshots>false</overWriteSnapshots>
+								<overWriteIfNewer>true</overWriteIfNewer>
+								<pathSeparator>;</pathSeparator>
+								<outputFile>target/dependencies/output.txt</outputFile>
+							</configuration>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -161,6 +173,7 @@
 			</plugin>
 		</plugins>
 	</reporting>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.clover.encoding>UTF-8</maven.clover.encoding>
@@ -169,9 +182,9 @@
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.surefire.reportsPath>target/surefire-reports</sonar.surefire.reportsPath>
 		<sonar.clover.reportPath>target/site/clover/clover.xml</sonar.clover.reportPath>
-		<versionatorVersion>1.7</versionatorVersion>
 		<d3webCoreVersion>0.2-SNAPSHOT</d3webCoreVersion>
 	</properties>
+
 	<modules>
 		<module>KnowWE-Plugin-Comment</module>
 		<module>d3web-Plugin-Persistence-ImageQuestion</module>
@@ -215,6 +228,18 @@
 		<module>KnowWE-Plugin-SELESUP</module>
 		<module>KnowWE-Plugin-SparqlEndpoint</module>
 	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.10</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<repositories>
 		<repository>
 			<id>infovi-artifactory</id>
@@ -231,13 +256,28 @@
 				<checksumPolicy>ignore</checksumPolicy>
 			</snapshots>
 		</repository>
+		<repository>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>ignore</checksumPolicy>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<id>des-repo-public</id>
+			<name>Denkbares Public Repository</name>
+			<url>https://repo.denkbares.com/repo-public/</url>
+		</repository>
 	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
-			<id>contrib</id>
-			<url>http://isci.informatik.uni-wuerzburg.de:8080/artifactory/infovi-contrib/</url>
+			<id>des-plugins-public</id>
+			<url>https://repo.denkbares.com/plugins-public/</url>
 		</pluginRepository>
 	</pluginRepositories>
+
 	<distributionManagement>
 		<snapshotRepository>
 			<id>knowwe-snapshots</id>
@@ -251,6 +291,7 @@
 		<developerConnection>scm:svn:https://isci.informatik.uni-wuerzburg.de/svn/Research/trunk/Research</developerConnection>
 		<url>scm:svn:https://isci.informatik.uni-wuerzburg.de/svn/Research/trunk/Research</url>
 	</scm>
+
 	<organization>
 		<name>Universität Würzburg</name>
 		<url>http://uni-wuerzburg.de/</url>
