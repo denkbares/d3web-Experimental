@@ -242,28 +242,14 @@
 
 	<repositories>
 		<repository>
-			<id>infovi-artifactory</id>
-			<url>http://isci.informatik.uni-wuerzburg.de:8080/artifactory/repo/</url>
-		</repository>
-		<repository>
-			<id>knowwe-snapshots</id>
-			<url>http://isci.informatik.uni-wuerzburg.de:8080/artifactory/knowwe-snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<updatePolicy>interval:120</updatePolicy>
-				<checksumPolicy>ignore</checksumPolicy>
-			</snapshots>
-		</repository>
-		<repository>
 			<snapshots>
 				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
+				<updatePolicy>interval:60</updatePolicy>
 				<checksumPolicy>ignore</checksumPolicy>
 			</snapshots>
 			<releases>
 				<enabled>true</enabled>
+				<updatePolicy>interval:60</updatePolicy>
 			</releases>
 			<id>des-repo-public</id>
 			<name>Denkbares Public Repository</name>
@@ -277,14 +263,6 @@
 			<url>https://repo.denkbares.com/plugins-public/</url>
 		</pluginRepository>
 	</pluginRepositories>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>knowwe-snapshots</id>
-			<name>d3web Snapshots</name>
-			<url>http://isci.informatik.uni-wuerzburg.de:8080/artifactory/knowwe-snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
 
 	<scm>
 		<connection>scm:svn:https://isci.informatik.uni-wuerzburg.de/svn/Research/trunk/Research</connection>
