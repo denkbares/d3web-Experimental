@@ -19,6 +19,7 @@
 package de.knowwe.defi.table;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import de.knowwe.core.Environment;
@@ -29,36 +30,41 @@ import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
+ * Util methods for handling DEFI tables
+ *
  * @author Sebastian Furth (denkbares GmbH)
  * @created 03.11.14
  */
 public class TableUtils {
 
+	public static String getStoredContentForTable(Section<TableEntryType> table) {
+		if (table != null) {
+			List<Section<ContentEntry>> entries = Sections.successors(table, ContentEntry.class);
+			if (entries != null && !entries.isEmpty()) {
+				Section<ContentEntry> lastEntry = entries.get(entries.size() - 1);
+				return ContentEntry.getContent(lastEntry);
+			}
+		}
+		return null;
+	}
+
 	public static String getStoredContentForInput(Section<?> sec, int version, String username) {
-		List<Section<InputFieldCellContent>> found = new ArrayList<Section<InputFieldCellContent>>();
-		Sections.successors(sec.getParent().getParent().getParent().getParent(),
-				InputFieldCellContent.class,
-				found);
+		List<Section<InputFieldCellContent>> found = new ArrayList<>();
+		Sections.successors(sec.getParent().getParent().getParent().getParent(), InputFieldCellContent.class, found);
 		int number = found.indexOf(sec);
-		Section<DefaultMarkupType> ancestorOfType = Sections.ancestor(sec,
-				DefaultMarkupType.class);
+		Section<DefaultMarkupType> ancestorOfType = Sections.ancestor(sec, DefaultMarkupType.class);
 		String tableid = DefaultMarkupType.getAnnotation(ancestorOfType, "id");
-		String contentString = getStoredContentString(number, tableid, version,
-				username);
-		return contentString;
+		return getStoredContentString(number, tableid, version, username);
 	}
 
 	public static String getStoredContentString(int number, String tableid, int version, String username) {
-
-		Section<TableEntryType> contentTable = findTableToShow(tableid, username);
-
+		Section<TableEntryType> contentTable = findTableEntry(tableid, username);
 		String contentString = "";
 		if (contentTable != null) {
 			List<Section<VersionEntry>> versionBlocks = TableEntryType.getVersionBlocks(contentTable);
 			if (versionBlocks.size() > 0) {
 				Section<VersionEntry> versionBlock = versionBlocks.get(version);
-				List<Section<ContentEntry>> entries = VersionEntry.getEntries(
-						versionBlock);
+				List<Section<ContentEntry>> entries = VersionEntry.getEntries(versionBlock);
 				for (Section<ContentEntry> section : entries) {
 					if (ContentEntry.getNumber(section) == number) {
 						contentString = ContentEntry.getContent(section);
@@ -70,23 +76,32 @@ public class TableUtils {
 		return contentString;
 	}
 
-	public static Section<TableEntryType> findTableToShow(String id, String username) {
+	public static Section<TableEntryType> findTableEntry(String id, String username) {
 		String dataArticleNameForUser = SubmitTableContentAction.getDataArticleNameForUser(username);
-		Article article = KnowWEUtils.getArticleManager(
-				Environment.DEFAULT_WEB).getArticle(dataArticleNameForUser);
+		Article article = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB).getArticle(dataArticleNameForUser);
 		if (article == null) return null;
-		List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
-		Sections.successors(article.getRootSection(),
-				TableEntryType.class,
-				tables);
+		List<Section<TableEntryType>> tables = new ArrayList<>();
+		Sections.successors(article.getRootSection(), TableEntryType.class, tables);
 		for (Section<TableEntryType> table : tables) {
 			String tableID = DefaultMarkupType.getAnnotation(table, "tableid");
-			if (tableID != null) {
-				if (tableID.equals(id)) {
+			if (tableID != null && tableID.equals(id)) {
+				return table;
+			}
+		}
+		return null;
+	}
+
+	public static Section<DefineTableMarkup> findTableDefintion(String id) {
+		Collection<Article> articles = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB).getArticles();
+		for (Article article : articles) {
+			List<Section<DefineTableMarkup>> tables = new ArrayList<>();
+			Sections.successors(article.getRootSection(), DefineTableMarkup.class, tables);
+			for (Section<DefineTableMarkup> table : tables) {
+				String tableID = DefaultMarkupType.getAnnotation(table, "id");
+				if (tableID != null && tableID.equals(id)) {
 					return table;
 				}
 			}
-
 		}
 		return null;
 	}

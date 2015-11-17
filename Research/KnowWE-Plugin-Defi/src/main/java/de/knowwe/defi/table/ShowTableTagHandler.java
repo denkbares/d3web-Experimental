@@ -19,20 +19,15 @@
 package de.knowwe.defi.table;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.core.Environment;
-import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.table.Table;
 
 public class ShowTableTagHandler extends AbstractTagHandler {
@@ -59,7 +54,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 				previousInputExists = true;
 
 			}
-			Section<TableEntryType> entryContentTable = TableUtils.findTableToShow(
+			Section<TableEntryType> entryContentTable = TableUtils.findTableEntry(
 					tableid, user.getUserName());
 			List<Section<VersionEntry>> versions = new ArrayList<Section<VersionEntry>>();
 			if (entryContentTable != null) {
@@ -112,26 +107,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 		return string.toStringRaw();
 	}
 
-	private Section<DefineTableMarkup> findTableToShow(String id) {
-		Collection<Article> articles = KnowWEUtils.getArticleManager(
-				Environment.DEFAULT_WEB).getArticles();
-		for (Article article : articles) {
-			List<Section<DefineTableMarkup>> tables = new ArrayList<Section<DefineTableMarkup>>();
-			Sections.successors(article.getRootSection(),
-					DefineTableMarkup.class,
-					tables);
-			for (Section<DefineTableMarkup> table : tables) {
-				String tableID = DefaultMarkupType.getAnnotation(table, "id");
-				if (tableID != null) {
-					if (tableID.equals(id)) {
-						return table;
-					}
-				}
 
-			}
-		}
-		return null;
-	}
 
 	@Override
 	public void render(Section<?> section, UserContext userContext,
@@ -142,7 +118,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 			result.append("Error: no table id specified!");
 			return;
 		}
-		Section<DefineTableMarkup> myTable = findTableToShow(id);
+		Section<DefineTableMarkup> myTable = TableUtils.findTableDefintion(id);
 
 		if (myTable != null) {
 			result.append(renderTable(myTable, userContext, id, singleVersionTable));

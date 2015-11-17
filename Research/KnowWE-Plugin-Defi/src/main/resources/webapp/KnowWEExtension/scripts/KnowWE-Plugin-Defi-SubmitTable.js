@@ -29,7 +29,10 @@ function submitTable(kdomid,user,tableid,versions) {
             response : {
                 action : 'insert',
                 ids : [ 'tableSubmit_'+tableid ],
-                fn : function(){ setTimeout(function() {submitInfoSpan.empty();}, 5000); }
+                fn : function() {
+                    setTimeout(function() {submitInfoSpan.empty();}, 5000);
+                    KNOWWE.helper.observer.notify('update');
+                }
             }
         }
 
