@@ -81,7 +81,7 @@ public class SparqlEndpointAction extends AbstractAction {
 		}
 		if (!wikiConnector.userIsMemberOfGroup(GROUPNAME, context.getRequest())) {
 			context.sendError(HttpServletResponse.SC_FORBIDDEN,
-					"You are not allowed to use this sparql endpoint. Please talk to a KnowWE admin.");
+					"You are not allowed to use this sparql endpoint. Please talk to your administrator.");
 		}
 
 		RepositoryController repositoryController = new RepositoryController();
@@ -99,10 +99,7 @@ public class SparqlEndpointAction extends AbstractAction {
 	private boolean hasLoginDataInParameters(HttpServletRequest request) {
 		String username = request.getParameter(USER);
 		String password = request.getParameter(PASSWORD);
-		if (username == null || password == null) {
-			return false;
-		}
-		return true;
+		return !(username == null || password == null);
 	}
 
 }
