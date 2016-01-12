@@ -269,6 +269,8 @@ function sendTermBrowserAction(term, command, type, label) {
 				initAllIconHovers();
 				initAllBrowserActionEvents();
                 initSemanticAutocompletionSlot();
+				KNOWWE.plugin.termbrowserautocompletion.actions.init()
+				KNOWWE.plugin.termbrowserautocompletion.initSemanticAutocompletionSlot();
 			}
 		}
 	}

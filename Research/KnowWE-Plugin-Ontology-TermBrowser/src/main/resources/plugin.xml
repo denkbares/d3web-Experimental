@@ -165,4 +165,12 @@
 	</extension>
 
 
+	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="AutoCompletionSlotProvider" id="OntologyAutoCompletionSlotProvider">
+		<parameter id="class" value="de.knowwe.ontology.autocompletion.OntologyCompletionSlotProvider" />
+		<parameter id="name" value="OntologyCompletionSlotProvider" />
+		<parameter id="description" value="OntologyCompletionSlotProvider" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+
 </plugin>

@@ -35,7 +35,7 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.LinkToTermDefinitionProvider;
-import de.knowwe.termbrowser.autocompletion.AutoCompletionSlotProvider;
+import de.knowwe.core.completion.AutoCompletionSlotProvider;
 
 /**
  * @author Jochen Reutelshöfer
@@ -124,6 +124,7 @@ public class TermBrowserRenderer {
 			if (TermBrowserMarkup.getCurrentTermbrowserMarkupSearchSlotFlag(user)) {
 				renderSearchSlot(string, user);
 			}
+
 
 			/*
 			 * render semantic autocompletion search slot

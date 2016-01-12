@@ -21,16 +21,26 @@
 			<artifactId>KnowWE-core</artifactId>
 			<version>0.2-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-Plugin-Core</artifactId>
+			<version>0.2-SNAPSHOT</version>
+		</dependency>
 		<!-- <dependency>
 			  <groupId>de.uniwue.d3web</groupId>
 			  <artifactId>KnowWE-Plugin-OntoVis</artifactId>
 			  <version>0.2-SNAPSHOT</version>
-		  </dependency>
+		  </dependency-->
 		<dependency>
 			<groupId>com.denkbares</groupId>
 			<artifactId>KnowWE-Plugin-SemanticAutocompletion</artifactId>
 			<version>0.2-SNAPSHOT</version>
-		</dependency-->
+		</dependency>
+		<dependency>
+			<groupId>com.denkbares</groupId>
+			<artifactId>KnowWE-Plugin-SemanticAutocompletion</artifactId>
+			<version>0.2-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-Rdf2GoSemanticCore</artifactId>
