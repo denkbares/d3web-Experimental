@@ -66,9 +66,12 @@ public class BrowserTerm  {
         return type;
     }
 
+	@Override
+	public String toString() {
+		return label + "("+identifier+")";
+	}
 
-
-    public Identifier getIdentifier() {
+	public Identifier getIdentifier() {
         return identifier;
     }
 
