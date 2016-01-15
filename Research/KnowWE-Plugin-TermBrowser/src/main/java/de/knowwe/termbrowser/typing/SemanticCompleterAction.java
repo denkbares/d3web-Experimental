@@ -57,7 +57,11 @@ public class SemanticCompleterAction extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 		String phrase = context.getParameter("search");
 		String master = context.getParameter("master");
-		TermBrowserCompletionManager completionManager = TermBrowserCompletionManager.getInstance(getCompiler(context));
+
+		OntologyCompiler compiler = getCompiler(context);
+		if(compiler == null) return;
+
+		TermBrowserCompletionManager completionManager = TermBrowserCompletionManager.getInstance(compiler);
 		if (completionManager == null) return;
 
 		// from here, we are sure that the sscService is available and in ready state
@@ -66,7 +70,7 @@ public class SemanticCompleterAction extends AbstractAction {
 				Pair<String, String> key = new Pair<>(master, phrase);
 				if (!key.equals(lastQueryKey)) {
 					long start = System.currentTimeMillis();
-					lastCompletions = getJSONCompletions(context, completionManager, phrase, getCompiler(context).getRdf2GoCore());
+					lastCompletions = getJSONCompletions(context, completionManager, phrase, compiler.getRdf2GoCore());
 					Log.info("Searched '" + phrase + "' in " + (System.currentTimeMillis() - start) + "ms");
 					lastQueryKey = key;
 				}

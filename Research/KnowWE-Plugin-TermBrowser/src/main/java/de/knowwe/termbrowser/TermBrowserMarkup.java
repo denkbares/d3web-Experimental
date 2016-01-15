@@ -71,7 +71,7 @@ public class TermBrowserMarkup extends DefaultMarkupType {
 
 	static {
 		MARKUP = new DefaultMarkup("termbrowser");
-		MARKUP.addAnnotation(PackageManager.MASTER_ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotation(PackageManager.PACKAGE_ATTRIBUTE_NAME, false);
 		MARKUP.addAnnotation(HIERARCHY, false);
 		MARKUP.addAnnotation(SIZE, false, Pattern.compile("[0-9]+"));
 		MARKUP.addAnnotation(CATEGORIES, false);

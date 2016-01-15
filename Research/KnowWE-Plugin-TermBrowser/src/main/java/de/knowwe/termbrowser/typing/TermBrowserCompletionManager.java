@@ -85,10 +85,11 @@ public class TermBrowserCompletionManager implements EventListener {
 
 	@NotNull
 	public CompletionResult getCompletions(String phrase, int maxResults) throws RepositoryException, IOException, InterruptedException {
-		long start = System.currentTimeMillis();
 		Locale[] locales = {Locale.ENGLISH, Locale.GERMAN};
+		long start = System.currentTimeMillis();
+		CompletionResult completionResult = getCompleter().complete(phrase, locales).limit(maxResults);
 		Log.info("Fetched completions for phrase '" + phrase + "' in " + (System.currentTimeMillis() - start) + "ms");
-		return getCompleter().complete(phrase, locales).limit(maxResults);
+		return completionResult;
 	}
 
 	public static TermBrowserCompletionManager getInstance(OntologyCompiler compiler) {
