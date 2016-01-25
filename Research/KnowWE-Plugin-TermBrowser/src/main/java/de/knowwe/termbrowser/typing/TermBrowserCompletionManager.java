@@ -26,19 +26,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
+import org.jetbrains.annotations.NotNull;
 import org.openrdf.repository.RepositoryException;
 
 import com.denkbares.semantictyping.CompletionResult;
 import com.denkbares.semantictyping.LuceneCompleter;
 import com.denkbares.semantictyping.SparqlCompletionProvider;
-import com.denkbares.util.lucene.LuceneUtils;
 import de.d3web.utils.Log;
 import de.knowwe.core.compile.CompilerRemovedEvent;
 import de.knowwe.core.event.Event;
@@ -85,7 +81,7 @@ public class TermBrowserCompletionManager implements EventListener {
 
 	@NotNull
 	public CompletionResult getCompletions(String phrase, int maxResults) throws RepositoryException, IOException, InterruptedException {
-		Locale[] locales = {Locale.ENGLISH, Locale.GERMAN};
+		Locale[] locales = { Locale.ENGLISH, Locale.GERMAN };
 		long start = System.currentTimeMillis();
 		CompletionResult completionResult = getCompleter().complete(phrase, locales).limit(maxResults);
 		Log.info("Fetched completions for phrase '" + phrase + "' in " + (System.currentTimeMillis() - start) + "ms");
@@ -134,8 +130,8 @@ public class TermBrowserCompletionManager implements EventListener {
 				"    BIND  ( \"Class\" AS ?typeName ) .\n" +
 				"  OPTIONAL {\n" +
 				"    ?uri skos:altLabel|rdfs:label|skos:prefLabel   ?label .\n" +
-						"	}\n" +
-				"    BIND ( IF (BOUND(?label), ?label, str(?uri) )  as ?name  ) .\n "+
+				"	}\n" +
+				"    BIND ( IF (BOUND(?label), ?label, str(?uri) )  as ?name  ) .\n " +
 				"    BIND (?name AS ?synonym) . \n" +
 				"    OPTIONAL { ?uri rdfs:subClassOf ?parent .  FILTER (?uri != ?parent ) .}\n" +
 				"  }";
@@ -158,7 +154,7 @@ public class TermBrowserCompletionManager implements EventListener {
 				"  OPTIONAL {\n" +
 				"    ?uri skos:altLabel|rdfs:label|skos:prefLabel   ?label .\n" +
 				"	}\n" +
-				"    BIND ( IF (BOUND (?label), ?label, str(?uri) )  as ?name  ) .\n "+
+				"    BIND ( IF (BOUND (?label), ?label, str(?uri) )  as ?name  ) .\n " +
 				"    BIND (?name AS ?synonym) . \n" +
 				"    OPTIONAL { ?uri rdfs:subPropertyOf ?parent .  FILTER (?uri != ?parent ) .}\n" +
 				"  }";
@@ -179,15 +175,15 @@ public class TermBrowserCompletionManager implements EventListener {
 				"    FILTER ( ?typeURI != rdf:Resource ) .\n" +
 				"	FILTER NOT EXISTS { ?uri rdf:type rdf:Property . } \n" +
 				"	FILTER NOT EXISTS { ?uri rdf:type rdfs:Class . } \n" +
-				"	FILTER (!isBlank(?uri)). \n"+
+				"	FILTER (!isBlank(?uri)). \n" +
 				"  OPTIONAL {\n" +
 				"    ?uri skos:altLabel|rdfs:label|skos:prefLabel   ?label .\n" +
 				"	}\n" +
-				"    BIND ( IF (BOUND (?label), ?label, str(?uri) )  as ?name  ) .\n "+
+				"    BIND ( IF (BOUND (?label), ?label, str(?uri) )  as ?name  ) .\n " +
 				"  OPTIONAL {\n" +
 				"    ?typeURI skos:altLabel|rdfs:label|skos:prefLabel   ?typeLabel .\n" +
 				"	}\n" +
-				"    BIND ( IF (BOUND (?typeLabel), ?typeLabel, str(?typeURI) )  as ?typeName  ) .\n "+
+				"    BIND ( IF (BOUND (?typeLabel), ?typeLabel, str(?typeURI) )  as ?typeName  ) .\n " +
 				"    BIND (?name AS ?synonym) . \n" +
 				"    OPTIONAL { ?uri skos:broader   ?parent .  FILTER (?uri != ?parent ) .}\n" +
 				"  }";
@@ -202,7 +198,6 @@ public class TermBrowserCompletionManager implements EventListener {
 				"    FILTER ( ?typeURI != rdf:Resource ) .\n" +
 				"  }";
 	}
-
 
 	private LuceneCompleter createLuceneCompleter(SemanticCoreWrapper core) throws IOException, InterruptedException {
 		boolean addURIasSynonym = true;

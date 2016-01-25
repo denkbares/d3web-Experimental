@@ -207,7 +207,7 @@
 		<module>KnowWE-Plugin-d3web-Rdf2Go</module>
 		<module>KnowWE-Plugin-RDFS-WikiObjectModel</module>
 		<module>KnowWE-Plugin-LexiconInterface</module>
-        <module>KnowWE-Plugin-LoadKnowledgeBase</module>
+		<module>KnowWE-Plugin-LoadKnowledgeBase</module>
 		<module>KnowWE-Plugin-WikiBaseline</module>
 		<module>KnowWE-Plugin-d3web-Visualizations</module>
 		<module>KnowWE-Plugin-OphtoVis</module>
@@ -240,6 +240,14 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>15.0</version>
+		</dependency>
+	</dependencies>
+
 	<repositories>
 		<repository>
 			<snapshots>
@@ -266,7 +274,8 @@
 
 	<scm>
 		<connection>scm:svn:https://isci.informatik.uni-wuerzburg.de/svn/Research/trunk/Research</connection>
-		<developerConnection>scm:svn:https://isci.informatik.uni-wuerzburg.de/svn/Research/trunk/Research</developerConnection>
+		<developerConnection>scm:svn:https://isci.informatik.uni-wuerzburg.de/svn/Research/trunk/Research
+		</developerConnection>
 		<url>scm:svn:https://isci.informatik.uni-wuerzburg.de/svn/Research/trunk/Research</url>
 	</scm>
 
