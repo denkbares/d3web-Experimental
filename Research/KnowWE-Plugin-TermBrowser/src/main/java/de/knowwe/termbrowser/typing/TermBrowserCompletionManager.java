@@ -205,7 +205,7 @@ public class TermBrowserCompletionManager implements EventListener {
 		SparqlCompletionProvider provider = new SparqlCompletionProvider(core.getSparqlEndpoint(), getAllQueries(), addURIasSynonym, filterOutTypeConceptsForCompletion);
 		long start = System.currentTimeMillis();
 		Directory dir = new RAMDirectory();
-		LuceneCompleter.createIndex(dir, provider);
+		LuceneCompleter.createIndex(dir, LuceneUtils.TermAnalyzer.standard, provider);
 		Log.info("Created TermBrowser Completion lucene index in " + (System.currentTimeMillis() - start) + "ms");
 		return new LuceneCompleter(DirectoryReader.open(dir), LuceneCompleter.SearchMode.INFIX_OPTIMIZED);
 	}
