@@ -35,6 +35,7 @@ import org.openrdf.repository.RepositoryException;
 import com.denkbares.semantictyping.CompletionResult;
 import com.denkbares.semantictyping.LuceneCompleter;
 import com.denkbares.semantictyping.SparqlCompletionProvider;
+import com.denkbares.util.lucene.LuceneUtils;
 import de.d3web.utils.Log;
 import de.knowwe.core.compile.CompilerRemovedEvent;
 import de.knowwe.core.event.Event;
