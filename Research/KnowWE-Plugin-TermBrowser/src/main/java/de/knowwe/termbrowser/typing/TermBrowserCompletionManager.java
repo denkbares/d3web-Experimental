@@ -37,6 +37,7 @@ import com.denkbares.semantictyping.LuceneCompleter;
 import com.denkbares.semantictyping.SparqlCompletionProvider;
 import com.denkbares.util.lucene.LuceneUtils;
 import de.d3web.utils.Log;
+import de.d3web.utils.Stopwatch;
 import de.knowwe.core.compile.CompilerRemovedEvent;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
@@ -57,6 +58,9 @@ public class TermBrowserCompletionManager implements EventListener {
 
 	private LuceneCompleter completer = null;
 
+	private boolean initializationRunning = false;
+
+
 	private static final Map<OntologyCompiler, TermBrowserCompletionManager> instances = new ConcurrentHashMap<>();
 
 	private TermBrowserCompletionManager(OntologyCompiler compiler) {
@@ -68,7 +72,8 @@ public class TermBrowserCompletionManager implements EventListener {
 		return new String[] {
 				getClassesQuery(),
 				getClassesSynonymsQuery(),
-				getInstancesQuery(),
+				getInstancesTypesQuery(),
+				getInstancesSynonyms(),
 				getInstancesSynonymsQuery(),
 				getPropertiesQuery(),
 				getPropertiesSynonymsQuery(),
@@ -102,7 +107,9 @@ public class TermBrowserCompletionManager implements EventListener {
 	public void notify(Event event) {
 		if (event instanceof OntologyCompilerFinishedEvent) {
 			if (((OntologyCompilerFinishedEvent) event).getCompiler() == compiler) {
+
 				init();
+
 			}
 		}
 		else if (event instanceof CompilerRemovedEvent) {
@@ -114,13 +121,17 @@ public class TermBrowserCompletionManager implements EventListener {
 	}
 
 	private synchronized void init() {
+		this.initializationRunning = true;
 		try {
 			SemanticCoreWrapper core = SemanticCoreWrapper.get(compiler);
+			Stopwatch watch = new Stopwatch();
 			completer = createLuceneCompleter(core);
+			watch.show("Autocompletion init took");
 		}
 		catch (RepositoryException | IOException | InterruptedException e) {
 			Log.severe("Exception while initializing EDB completions");
 		}
+		this.initializationRunning = false;
 	}
 
 	private String getClassesQuery() {
@@ -157,7 +168,7 @@ public class TermBrowserCompletionManager implements EventListener {
 				"	}\n" +
 				"    BIND ( IF (BOUND (?label), ?label, str(?uri) )  as ?name  ) .\n " +
 				"    BIND (?name AS ?synonym) . \n" +
-				"    OPTIONAL { ?uri rdfs:subPropertyOf ?parent .  FILTER (?uri != ?parent ) .}\n" +
+				"    OPTIONAL { ?uri rdfs:  ?parent .  FILTER (?uri != ?parent ) .}\n" +
 				"  }";
 	}
 
@@ -169,8 +180,24 @@ public class TermBrowserCompletionManager implements EventListener {
 				"  }";
 	}
 
-	private String getInstancesQuery() {
-		return "SELECT ?uri ?name ?typeURI ?typeName ?synonym ?parent ?priority\n" +
+	private String getInstancesTypesQuery() {
+		return "SELECT ?uri ?typeURI ?typeName ?parent ?priority\n" +
+				"  WHERE {\n" +
+				"    ?uri rdf:type|<http://denkbares.com/SemanticServiceCore#type>  \t  ?typeURI .\n" +
+				"    FILTER ( ?typeURI != rdf:Resource ) .\n" +
+				"	FILTER NOT EXISTS { ?uri rdf:type rdf:Property . } \n" +
+				"	FILTER NOT EXISTS { ?uri rdf:type rdfs:Class . } \n" +
+				"	FILTER (!isBlank(?uri)). \n" +
+				"  OPTIONAL {\n" +
+				"    ?typeURI skos:altLabel|rdfs:label|skos:prefLabel   ?typeLabel .\n" +
+				"	}\n" +
+				"    BIND ( IF (BOUND (?typeLabel), ?typeLabel, str(?typeURI) )  as ?typeName  ) .\n " +
+				"    OPTIONAL { ?uri skos:broader   ?parent .  FILTER (?uri != ?parent ) .}\n" +
+				"  }";
+	}
+
+	private String getInstancesSynonyms() {
+		return "SELECT ?uri ?name ?synonym\n" +
 				"  WHERE {\n" +
 				"    ?uri rdf:type|<http://denkbares.com/SemanticServiceCore#type>  \t  ?typeURI .\n" +
 				"    FILTER ( ?typeURI != rdf:Resource ) .\n" +
@@ -181,12 +208,7 @@ public class TermBrowserCompletionManager implements EventListener {
 				"    ?uri skos:altLabel|rdfs:label|skos:prefLabel   ?label .\n" +
 				"	}\n" +
 				"    BIND ( IF (BOUND (?label), ?label, str(?uri) )  as ?name  ) .\n " +
-				"  OPTIONAL {\n" +
-				"    ?typeURI skos:altLabel|rdfs:label|skos:prefLabel   ?typeLabel .\n" +
-				"	}\n" +
-				"    BIND ( IF (BOUND (?typeLabel), ?typeLabel, str(?typeURI) )  as ?typeName  ) .\n " +
 				"    BIND (?name AS ?synonym) . \n" +
-				"    OPTIONAL { ?uri skos:broader   ?parent .  FILTER (?uri != ?parent ) .}\n" +
 				"  }";
 	}
 
@@ -211,4 +233,7 @@ public class TermBrowserCompletionManager implements EventListener {
 		return new LuceneCompleter(DirectoryReader.open(dir), LuceneCompleter.SearchMode.INFIX_OPTIMIZED);
 	}
 
+	public boolean isInitializationRunning() {
+		return initializationRunning;
+	}
 }

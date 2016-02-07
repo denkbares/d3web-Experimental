@@ -373,7 +373,8 @@ function rerenderSection(oldTargetID, newTargetID) {
 					else {
 						markupBlockOld = jq$('#' + oldTargetID);
 					}
-					var replaceContent = this.response;
+					var jsonObject = jq$.parseJSON(this.response);
+					var replaceContent = jsonObject['html'];;
 					replaceContent = cleanStringFromTrailingLinebreaks(replaceContent);
 					markupBlockOld.replaceWith(replaceContent);
 

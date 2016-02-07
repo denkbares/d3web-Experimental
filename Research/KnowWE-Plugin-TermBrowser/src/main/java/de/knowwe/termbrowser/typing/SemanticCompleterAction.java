@@ -20,17 +20,21 @@ package de.knowwe.termbrowser.typing;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Locale;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.openrdf.repository.RepositoryException;
 
 import com.denkbares.ontology.util.Concept;
+import com.denkbares.ontology.util.DefaultConcept;
 import com.denkbares.semantictyping.Completion;
 import com.denkbares.semantictyping.CompletionResult;
+import com.denkbares.semantictyping.DefaultCompletion;
 import de.d3web.strings.Strings;
 import de.d3web.utils.Log;
 import de.d3web.utils.Pair;
@@ -51,7 +55,9 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class SemanticCompleterAction extends AbstractAction {
 
 	private Pair<String, String> lastQueryKey = null;
-	private JSONArray lastCompletions = null;
+	private JSONArray lastCompletions = new JSONArray();
+
+	private static final Object mutex = new Object();
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -63,20 +69,33 @@ public class SemanticCompleterAction extends AbstractAction {
 
 		TermBrowserCompletionManager completionManager = TermBrowserCompletionManager.getInstance(compiler);
 		if (completionManager == null) return;
+		if(completionManager.isInitializationRunning()) {
+			JSONArray result = new JSONArray();
+			Completion message = new DefaultCompletion(new DefaultConcept(phrase, "Msg" ), "Initialization running, plz wait");
+			try {
+				addCompletion(phrase,compiler.getRdf2GoCore(), Locale.ROOT, result, message);
+				context.setContentType("application/json");
+				result.write(context.getWriter());
+				return;
+			}
+			catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
 
 		// from here, we are sure that the sscService is available and in ready state
 		try {
-			synchronized (this) {
+			synchronized (mutex) {
 				Pair<String, String> key = new Pair<>(master, phrase);
 				if (!key.equals(lastQueryKey)) {
 					long start = System.currentTimeMillis();
-					lastCompletions = getJSONCompletions(context, completionManager, phrase, compiler.getRdf2GoCore());
+					lastCompletions = getJSONCompletions(completionManager, phrase, compiler.getRdf2GoCore());
 					Log.info("Searched '" + phrase + "' in " + (System.currentTimeMillis() - start) + "ms");
 					lastQueryKey = key;
 				}
+				context.setContentType("application/json");
+				lastCompletions.write(context.getWriter());
 			}
-			context.setContentType("application/json");
-			lastCompletions.write(context.getWriter());
 		}
 		catch (JSONException e) {
 			throw new IOException("Unable to transform completions to JSON", e);
@@ -104,34 +123,39 @@ public class SemanticCompleterAction extends AbstractAction {
 		return compiler;
 	}
 
-	private JSONArray getJSONCompletions(UserActionContext context, TermBrowserCompletionManager service, String phrase, Rdf2GoCore core) throws JSONException, InterruptedException, IOException, RepositoryException {
+	private JSONArray getJSONCompletions(TermBrowserCompletionManager service, String phrase, Rdf2GoCore core) throws JSONException, InterruptedException, IOException, RepositoryException {
 		CompletionResult completions = service.getCompletions(phrase, 20);
 		// TODO: get current language from wiki markup ?!
 		return toJSON(completions, phrase, core, Locale.ENGLISH);
 	}
 
 
-	private JSONArray toJSON(CompletionResult completions, String pattern, Rdf2GoCore core, Locale lang) throws JSONException {
+	private JSONArray toJSON(CompletionResult completions, String phrase, Rdf2GoCore core, Locale lang) throws JSONException {
 
-		JSONArray result = new JSONArray();int cnt = 0;
+		JSONArray result = new JSONArray();
+		int cnt = 0;
 		for (Completion c : completions) {
 			//we only take the top 50 completions to present in the front-end
 			if (cnt > 50) break;
-			String data = toJSONObject(c);
-			String html = toHTMLSpan(c, core, lang);
-			String suggestionHTML = toSuggestionHTMLSpan(c, pattern, html);
-			String plainText = getLabel(c, lang);
-
-			JSONArray completionArray = new JSONArray();
-			completionArray.put(data);
-			completionArray.put(plainText);
-			completionArray.put(html);
-			completionArray.put(suggestionHTML);
-			result.put(completionArray);
+			addCompletion(phrase, core, lang, result, c);
 			cnt++;
 		}
 
 		return result;
+	}
+
+	private void addCompletion(String phrase, Rdf2GoCore core, Locale lang, JSONArray result, Completion c) throws JSONException {
+		String data = toJSONObject(c);
+		String html = toHTMLSpan(c, core, lang);
+		String suggestionHTML = toSuggestionHTMLSpan(c, phrase, html);
+		String plainText = getLabel(c, lang);
+
+		JSONArray completionArray = new JSONArray();
+		completionArray.put(data);
+		completionArray.put(plainText);
+		completionArray.put(html);
+		completionArray.put(suggestionHTML);
+		result.put(completionArray);
 	}
 
 	/**
@@ -195,14 +219,24 @@ public class SemanticCompleterAction extends AbstractAction {
 		result.append("<span class='editableconcept' ");
 		result.append("data-conceptClass='");
 		Concept concept = completion.getConcept();
-		result.append(concept.getTypeURI());
+		@NotNull URI typeURI = concept.getTypeURI();
+		result.append(typeURI);
 		result.append("' ");
 		result.append("id='");
 		result.append(concept.getURI());
 		result.append("'>");
 		String className = concept.getTypeLabel(lang);
 		if (className == null) {
-			className = Strings.decodeURL(removeNamespace(concept.getTypeURI().toString(), core));
+			String typeUriString = "null";
+			if(typeURI!= null) {
+				typeUriString = typeURI.toString();
+			}
+			String classRaw = removeNamespace(typeUriString, core);
+			if(classRaw != null) {
+						className = Strings.decodeURL(classRaw);
+			} else {
+				className = typeUriString;
+			}
 		}
 		if (className != null && !className.isEmpty()) {
 			result.append("<span class='conceptclassname'>");
