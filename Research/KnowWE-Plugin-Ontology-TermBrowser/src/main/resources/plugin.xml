@@ -123,7 +123,31 @@
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="ObjectList" />
 	</extension>
-	
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="DroppableTableCellContent">
+		<parameter id="class"
+			value="de.knowwe.ontology.table.DroppableTableCellContent" />
+		<parameter id="name" value="DroppableTableCellContent" />
+		<parameter id="description" value="Type DroppableTableCellContent" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="OntologyTableMarkup/**/TableCellContent" />
+	</extension>
+
+
+	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
+		id="TableCellConceptDragDropInserter">
+		<parameter id="class"
+			value="de.knowwe.ontology.table.TableCellConceptDragDropInserter" />
+		<parameter id="name" value="TableCellConceptDragDropInserter" />
+		<parameter id="description" value="TableCellConceptDragDropInserter" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="1" />
+		<parameter id="scope" value="DroppableTableCellContent" />
+	</extension>
+
+
 	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
 		id="TurtleDotDragDropInserter">
 		<parameter id="class"
