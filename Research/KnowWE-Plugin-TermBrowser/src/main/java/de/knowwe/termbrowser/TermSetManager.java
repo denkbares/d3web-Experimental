@@ -147,7 +147,7 @@ public class TermSetManager implements EventListener {
 	public List<RatedTerm> getRatedTermListTop(UserContext user, int count) {
 		String username = user.getUserName();
 		if (!data.containsKey(username)) {
-			return new ArrayList<RatedTerm>(0);
+			return new ArrayList<>(0);
 		}
 		else {
 			TermSet recommendationSet = data.get(username);
@@ -174,7 +174,6 @@ public class TermSetManager implements EventListener {
 		PartialHierarchyTree.Node<RatedTerm> root = tree.getRoot();
 		PartialHierarchyTree.Node<RatedTerm> lowestNode = findLowestRatedLeaf(root);
 		tree.removeNodeFromTree(lowestNode.getData());
-
 	}
 
 	/**
@@ -248,7 +247,6 @@ public class TermSetManager implements EventListener {
 			boolean autoCollect = TermBrowserMarkup.getCurrentTermbrowserMarkupAutoCollectFlag(user);
 
 			if (autoCollect) {
-                String master = TermBrowserMarkup.getCurrentTermbrowserMarkupMaster(user);
                 for (InterestingTermDetector termDetector : termDetectors) {
 
                     Map<BrowserTerm, Double> interestingTerms = termDetector.getWeightedTermsOfInterest(

@@ -34,7 +34,6 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.strings.Identifier;
 import de.d3web.strings.Strings;
-import de.knowwe.core.Environment;
 import de.knowwe.core.compile.CompilerFinishedEvent;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.terminology.TerminologyManager;
@@ -115,7 +114,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
 				 */
 				if (!(isIgnored(reducedNamespace)
 						|| termID.equals(new Identifier(reducedNamespace.split(":"))))) {
-					result.add(new BrowserTerm(type,  Rdf2GoUtils.getLabelRDFS(uri, core, null), termID.getUser(), reducedNamespace.split(":")));
+					result.add(new BrowserTerm(type,  Rdf2GoUtils.getLabel(uri, core, null), termID.getUser(), reducedNamespace.split(":")));
 				}
 			}
 		}
@@ -168,7 +167,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
                 if(clazz != null) {
                     type = TermBrowserUtils.abbreviateTypeNameForURI(clazz.toString());
                 }
-                result.add(new BrowserTerm(type,Rdf2GoUtils.getLabelRDFS(uri, core, null), termID.getUser(),reducedNamespace.split(":")));
+                result.add(new BrowserTerm(type,Rdf2GoUtils.getLabel(uri, core, null), termID.getUser(),reducedNamespace.split(":")));
 			}
 		}
 
@@ -187,7 +186,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
     private void addSuccessorToCache(BrowserTerm parent, BrowserTerm successor) {
 		Set<BrowserTerm> successors = successorshipCache.get(parent);
 		if (successors == null) {
-			successors = new HashSet<BrowserTerm>();
+			successors = new HashSet<>();
 			successorshipCache.put(parent, successors);
 		}
 		successors.add(successor);
@@ -261,7 +260,7 @@ public class OntologyHierarchyProvider implements HierarchyProvider<BrowserTerm>
 		Rdf2GoCore core = HierarchyUtils.getCompiler(master).getRdf2GoCore();
 		List<BrowserTerm> resultConcepts = new ArrayList<BrowserTerm>();
 		List<String> classes = this.categories;
-		List<URI> classURIs = new ArrayList<URI>();
+		List<URI> classURIs = new ArrayList<>();
 
 		for (String clazz : classes) {
 			String expandedNamespace = Rdf2GoUtils.expandNamespace(
