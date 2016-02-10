@@ -69,9 +69,9 @@ public class SemanticCompleterAction extends AbstractAction {
 
 		TermBrowserCompletionManager completionManager = TermBrowserCompletionManager.getInstance(compiler);
 		if (completionManager == null) return;
-		if(completionManager.isInitializationRunning()) {
+		if(completionManager.getCompleter() == null) {
 			JSONArray result = new JSONArray();
-			Completion message = new DefaultCompletion(new DefaultConcept(phrase, "Msg" ), "Initialization running, plz wait");
+			Completion message = new DefaultCompletion(new DefaultConcept(phrase, "Msg" ), "Autocompletion Initialization running, plz wait");
 			try {
 				addCompletion(phrase,compiler.getRdf2GoCore(), Locale.ROOT, result, message);
 				context.setContentType("application/json");
@@ -83,7 +83,7 @@ public class SemanticCompleterAction extends AbstractAction {
 			}
 		}
 
-		// from here, we are sure that the sscService is available and in ready state
+		// from here, we are sure that the completion service is available and in ready state
 		try {
 			synchronized (mutex) {
 				Pair<String, String> key = new Pair<>(master, phrase);
@@ -124,8 +124,9 @@ public class SemanticCompleterAction extends AbstractAction {
 	}
 
 	private JSONArray getJSONCompletions(TermBrowserCompletionManager service, String phrase, Rdf2GoCore core) throws JSONException, InterruptedException, IOException, RepositoryException {
-		CompletionResult completions = service.getCompletions(phrase, 20);
+		Locale[] locales = { Locale.ENGLISH, Locale.GERMAN };
 		// TODO: get current language from wiki markup ?!
+		CompletionResult completions = service.getCompleter().complete(phrase, locales).limit(20);
 		return toJSON(completions, phrase, core, Locale.ENGLISH);
 	}
 

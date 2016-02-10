@@ -58,8 +58,12 @@ public class TermBrowserCompletionManager implements EventListener {
 
 	private LuceneCompleter completer = null;
 
-	private boolean initializationRunning = false;
-
+	/*
+	Index may take lot of time for large ontologies and re-indexing is
+	necessary after each KnowWE compile, therefore the old completer
+	is cached and used during re-indexing after compile
+	 */
+	private LuceneCompleter oldCompleter = null;
 
 	private static final Map<OntologyCompiler, TermBrowserCompletionManager> instances = new ConcurrentHashMap<>();
 
@@ -80,19 +84,31 @@ public class TermBrowserCompletionManager implements EventListener {
 		};
 	}
 
-	private LuceneCompleter getCompleter() {
-		if (completer == null) init();
+	/**
+	 * Returns the most up-to-date completer available,
+	 * null if none has been initialized yet
+	 *
+	 * @return LuceneCompleter
+	 */
+	public LuceneCompleter getCompleter() {
+		if (completer == null) {
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					init();
+				}
+			}).start();
+			if(oldCompleter == null) {
+				// nothing initialized yet
+				return null;
+			} else {
+				return oldCompleter;
+			}
+		}
 		return completer;
 	}
 
-	@NotNull
-	public CompletionResult getCompletions(String phrase, int maxResults) throws RepositoryException, IOException, InterruptedException {
-		Locale[] locales = { Locale.ENGLISH, Locale.GERMAN };
-		long start = System.currentTimeMillis();
-		CompletionResult completionResult = getCompleter().complete(phrase, locales).limit(maxResults);
-		Log.info("Fetched completions for phrase '" + phrase + "' in " + (System.currentTimeMillis() - start) + "ms");
-		return completionResult;
-	}
+
 
 	public static TermBrowserCompletionManager getInstance(OntologyCompiler compiler) {
 		return instances.computeIfAbsent(compiler, TermBrowserCompletionManager::new);
@@ -107,9 +123,10 @@ public class TermBrowserCompletionManager implements EventListener {
 	public void notify(Event event) {
 		if (event instanceof OntologyCompilerFinishedEvent) {
 			if (((OntologyCompilerFinishedEvent) event).getCompiler() == compiler) {
-
+				// retain outdated completer to be used during re-indexing
+				oldCompleter = completer;
+				completer = null;
 				init();
-
 			}
 		}
 		else if (event instanceof CompilerRemovedEvent) {
@@ -121,17 +138,14 @@ public class TermBrowserCompletionManager implements EventListener {
 	}
 
 	private synchronized void init() {
-		this.initializationRunning = true;
 		try {
 			SemanticCoreWrapper core = SemanticCoreWrapper.get(compiler);
-			Stopwatch watch = new Stopwatch();
 			completer = createLuceneCompleter(core);
-			watch.show("Autocompletion init took");
+			oldCompleter = null;
 		}
 		catch (RepositoryException | IOException | InterruptedException e) {
 			Log.severe("Exception while initializing EDB completions");
 		}
-		this.initializationRunning = false;
 	}
 
 	private String getClassesQuery() {
@@ -233,7 +247,4 @@ public class TermBrowserCompletionManager implements EventListener {
 		return new LuceneCompleter(DirectoryReader.open(dir), LuceneCompleter.SearchMode.INFIX_OPTIMIZED);
 	}
 
-	public boolean isInitializationRunning() {
-		return initializationRunning;
-	}
 }
