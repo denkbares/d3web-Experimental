@@ -22,6 +22,7 @@ package de.knowwe.termbrowser.typing;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -66,6 +67,8 @@ public class TermBrowserCompletionManager implements EventListener {
 	private LuceneCompleter oldCompleter = null;
 
 	private static final Map<OntologyCompiler, TermBrowserCompletionManager> instances = new ConcurrentHashMap<>();
+
+	private  boolean isInitializing = false;
 
 	private TermBrowserCompletionManager(OntologyCompiler compiler) {
 		this.compiler = compiler;
@@ -124,8 +127,12 @@ public class TermBrowserCompletionManager implements EventListener {
 		if (event instanceof OntologyCompilerFinishedEvent) {
 			if (((OntologyCompilerFinishedEvent) event).getCompiler() == compiler) {
 				// retain outdated completer to be used during re-indexing
-				oldCompleter = completer;
+				if(completer != null) {
+					// guard oldCompleter against multiple events
+					oldCompleter = completer;
+				}
 				completer = null;
+				compileEvents.put(Thread.currentThread(), System.currentTimeMillis());
 				init();
 			}
 		}
@@ -137,9 +144,25 @@ public class TermBrowserCompletionManager implements EventListener {
 		}
 	}
 
+	/*
+	As we do not know how many compile events are 'waiting' to enter the syncronized init-method,
+	we need to log information to calculated whether more re-indexing is required or not.
+	 */
+	private long indexTimestamp = System.currentTimeMillis();
+	private Map<Thread, Long> compileEvents = new HashMap<>();
+
 	private synchronized void init() {
 		try {
+			Long compileEventTimestamp = compileEvents.get(Thread.currentThread());
+			if(compileEventTimestamp != null) {
+				compileEvents.remove(Thread.currentThread());
+				if(indexTimestamp > compileEventTimestamp) {
+					// re-indexing has already been performed after this event
+					return;
+				}
+			}
 			SemanticCoreWrapper core = SemanticCoreWrapper.get(compiler);
+			indexTimestamp = System.currentTimeMillis();
 			completer = createLuceneCompleter(core);
 			oldCompleter = null;
 		}
