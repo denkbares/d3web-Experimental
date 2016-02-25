@@ -132,8 +132,18 @@ public class TermBrowserCompletionManager implements EventListener {
 					oldCompleter = completer;
 				}
 				completer = null;
-				compileEvents.put(Thread.currentThread(), System.currentTimeMillis());
-				init();
+
+				// create new thread for initialization
+				Thread initWorker = new Thread(this::init);
+
+				// interrupt old init thread
+				if(runningInitThread != null) {
+					runningInitThread.interrupt();
+				}
+				// store new init thread as running thread
+				runningInitThread = initWorker;
+				// also remeber timestamp of event
+				compileEvents.put(initWorker, System.currentTimeMillis());
 			}
 		}
 		else if (event instanceof CompilerRemovedEvent) {
@@ -150,6 +160,7 @@ public class TermBrowserCompletionManager implements EventListener {
 	 */
 	private long indexTimestamp = System.currentTimeMillis();
 	private Map<Thread, Long> compileEvents = new HashMap<>();
+	private Thread runningInitThread = null;
 
 	private synchronized void init() {
 		try {
@@ -161,10 +172,14 @@ public class TermBrowserCompletionManager implements EventListener {
 					return;
 				}
 			}
+
 			SemanticCoreWrapper core = SemanticCoreWrapper.get(compiler);
 			indexTimestamp = System.currentTimeMillis();
 			completer = createLuceneCompleter(core);
 			oldCompleter = null;
+
+			//declare finished
+			runningInitThread = null;
 		}
 		catch (RepositoryException | IOException | InterruptedException e) {
 			Log.severe("Exception while initializing EDB completions");

@@ -51,5 +51,6 @@ public class OntologyCompletionSlotProvider implements AutoCompletionSlotProvide
 				"class", "termbrowserautocompletion",
 				"id", "semanticautocompletion-" + section.hashCode()
 		);
+		string.appendHtml("</div>");
 	}
 }

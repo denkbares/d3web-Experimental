@@ -134,7 +134,9 @@ public class TermBrowserRenderer {
 				AutoCompletionSlotProvider slot = getPluggedAutoCompletionProvider(null);
 				if(slot != null) {
 					slot.init(termBrowserMarkup, user);
-					slot.renderAutoCompletionSlot(string, termBrowserMarkup);
+					if(!collapsed) {
+						slot.renderAutoCompletionSlot(string, termBrowserMarkup);
+					}
 				}
 			}
 			catch (IOException e) {
