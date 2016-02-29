@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.d3web.collections.DefaultMultiMap;
+import de.d3web.collections.MultiMap;
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.d3web.utils.Log;
@@ -45,7 +47,10 @@ public class DragDropEditActionManager extends AbstractAction {
 
 	public static final String DRAG_DROP_INSERTER = "DragDropInserter";
 
-	Map<DragDropEditInserter, Collection<Scope>> inserters = new HashMap<DragDropEditInserter, Collection<Scope>>();
+	/**
+	 * Captures the information which DragDropInserter to be called for a section of a given type.
+	 */
+	private MultiMap<DragDropEditInserter, Scope> inserters = new DefaultMultiMap<>();
 
 	/**
 	 * 
@@ -57,11 +62,9 @@ public class DragDropEditActionManager extends AbstractAction {
 			Object inserterInstance = extension.getNewInstance();
 			List<String> scopeValues = extension.getParameters("scope");
 			if (inserterInstance instanceof DragDropEditInserter) {
-				Set<Scope> scopes = new HashSet<Scope>();
 				for (String string : scopeValues) {
-					scopes.add(Scope.getScope(string));
+					inserters.put((DragDropEditInserter) inserterInstance, Scope.getScope(string));
 				}
-				inserters.put((DragDropEditInserter) inserterInstance, scopes);
 			}
 		}
 	}
@@ -98,7 +101,7 @@ public class DragDropEditActionManager extends AbstractAction {
 			}
 
 			for (DragDropEditInserter inserter : this.inserters.keySet()) {
-				Collection<Scope> scopes = this.inserters.get(inserter);
+				Collection<Scope> scopes = this.inserters.getValues(inserter);
 				for (Scope scope : scopes) {
 					List<Section<?>> match = scope.getMatchingSuccessors(section);
 					if (match.contains(section)) {

@@ -18,7 +18,7 @@
 		<parameter-def id="description" />
 		<parameter-def id="version" />
 		<parameter-def id="priority" type="number" />
-		<parameter-def id="scope" type="string" />
+		<parameter-def id="scope" multiplicity="one-or-more" type="string" />
 	</extension-point>
 
 	<extension-point id="HierarchyProvider">

@@ -25,6 +25,7 @@ import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.table.TableCellContent;
+import de.knowwe.ontology.kdom.table.OntologyTableCellEntry;
 import de.knowwe.termbrowser.DefaultMarkupDragDropInserter;
 
 /**
@@ -48,9 +49,12 @@ public class TableCellConceptDragDropInserter extends DefaultMarkupDragDropInser
 	@Override
 	protected String createReplaceTextForSelectedSection(Section<?> section, String dropText) {
 		String[] split = dropText.split("#");
-
 		String shortURI = split[0] + ":" + Strings.encodeURL(split[1]);
-		return shortURI;
+		if(Strings.isBlank(section.getText().trim())) {
+			return shortURI;
+		} else {
+			return section.getText().trim()+", "+shortURI;
+		}
 	}
 
 

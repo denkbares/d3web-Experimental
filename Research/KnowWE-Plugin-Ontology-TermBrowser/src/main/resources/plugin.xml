@@ -135,6 +135,14 @@
 		<parameter id="scope" value="OntologyTableMarkup/**/TableCellContent" />
 	</extension>
 
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Renderer" id="TermDropRendererForTableCells">
+		<parameter id="class" value="de.knowwe.termbrowser.DropTargetRenderer" />
+		<parameter id="name" value="DropTargetRendererForTableCells" />
+		<parameter id="description" value="Type DropTargetRenderer to allow to drag a term from the TermBrowser onto sections of that type" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="OntologyTableMarkup/**/OntologyTableCellEntry" />
+	</extension>
 
 	<extension plugin-id="KnowWE-Plugin-TermBrowser" point-id="DragDropInserter"
 		id="TableCellConceptDragDropInserter">
@@ -144,6 +152,7 @@
 		<parameter id="description" value="TableCellConceptDragDropInserter" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="1" />
+		<parameter id="scope" value="OntologyTableCellEntry" />
 		<parameter id="scope" value="DroppableTableCellContent" />
 	</extension>
 
