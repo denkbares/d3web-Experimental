@@ -217,11 +217,8 @@
 		<module>KnowWE-Plugin-SparqlToExcel</module>
 		<module>KnowWE-Plugin-Revisions</module>
 		<module>d3web-Plugin-Tests-ThrillSeeker</module>
-		<module>KnowWE-Plugin-TermBrowser</module>
 		<module>KnowWE-Plugin-OphtoVisD3</module>
 		<module>KnowWE-Plugin-TextAnnotation</module>
-		<module>KnowWE-Plugin-Ontology-TermBrowser</module>
-		<module>KnowWE-Plugin-d3web-TermBrowser</module>
 		<module>KnowWE-Plugin-DiaFlux-Review</module>
 		<module>KnowWE-Plugin-TypeVis</module>
 		<module>KnowWE-Plugin-KnowledgeSummary</module>
