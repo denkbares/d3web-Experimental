@@ -9,8 +9,6 @@
 	</parent>
 
 	<artifactId>KnowWE-Plugin-TextAnnotation</artifactId>
-	<version>0-SNAPSHOT</version>
-	<name>KnowWE-Plugin-TextAnnotation</name>
 	<description>Provides a mechanism for drag-and-drop annotation of wiki content paragraphs (employing the
 		KnowWE-Plugin-TermBrowser)
 	</description>
